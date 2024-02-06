@@ -303,7 +303,7 @@ namespace boost { namespace math {
 
          if(x == 0)
          {
-            BOOST_ASSERT(v != 0);
+            BOOST_MATH_ASSERT(v != 0);
             if((u == 0) || !reflect)
                *J = 0;
             else if(kind & need_j)
@@ -316,7 +316,7 @@ namespace boost { namespace math {
             else
             {
                // We shoud never get here:
-               BOOST_ASSERT(x != 0);
+               BOOST_MATH_ASSERT(x != 0);
             }
             return 1;
          }
