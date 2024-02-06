@@ -32,8 +32,8 @@ template <typename Real> auto rosenbrock_saddle(std::array<Real, 2> const &v) {
 template <class Real> Real rastrigin(std::vector<Real> const &v) {
   using std::cos;
   using boost::math::constants::two_pi;
-  Real A = 10;
-  Real y = 10 * v.size();
+  auto A = static_cast<Real>(10);
+  auto y = static_cast<Real>(10 * v.size());
   for (auto x : v) {
     y += x * x - A * cos(two_pi<Real>() * x);
   }

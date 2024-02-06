@@ -5,7 +5,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_TEST_MODULE test_cubic_b_spline
-
+#include <cmath>
 #include <random>
 #include <functional>
 #include <boost/random/uniform_real_distribution.hpp>
@@ -21,6 +21,7 @@
 #  include <stdfloat>
 #endif
 
+using std::sin;
 using boost::multiprecision::cpp_bin_float_50;
 using boost::math::constants::third;
 using boost::math::constants::half;
@@ -101,10 +102,10 @@ void test_constant_function()
 {
     std::cout << "Testing that constants are interpolated correctly by cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     std::vector<Real> v(500);
-    Real constant = 50.2;
+    const Real constant = Real(50.2);
     for (size_t i = 0; i < v.size(); ++i)
     {
-        v[i] = Real(50.2);
+        v[i] = constant;
     }
 
     Real step = static_cast<Real>(0.02);
