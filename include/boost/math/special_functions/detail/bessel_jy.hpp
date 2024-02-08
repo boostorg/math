@@ -303,8 +303,9 @@ namespace boost { namespace math {
 
          if(x == 0)
          {
-            BOOST_MATH_ASSERT(v != 0);
-            if((u == 0) || !reflect)
+            if (v == 0)
+               *J = 1; // LCOV_EXCL_LINE multiprecision case only
+            else if ((u == 0) || !reflect)
                *J = 0;
             else if(kind & need_j)
                *J = policies::raise_domain_error<T>(function, "Value of Bessel J_v(x) is complex-infinity at %1%", x, pol); // complex infinity

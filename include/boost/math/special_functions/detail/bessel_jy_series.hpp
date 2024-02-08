@@ -147,6 +147,7 @@ inline T bessel_y_small_z_series(T v, T x, T* pscale, const Policy& pol)
    T p = log(x / 2);
    T scale = 1;
    bool need_logs = (v >= max_factorial<T>::value) || (tools::log_max_value<T>() / v < fabs(p));
+
    if(!need_logs)
    {
       gam = boost::math::tgamma(v, pol);

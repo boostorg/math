@@ -243,5 +243,29 @@ void test_bessel(T, const char* name)
        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_neumann(T(121.25), T(0.25)), SC_(-2.230082612409607659174017669618188190008214736253939486007e308), tolerance);
     }
 #endif
+    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity && (std::numeric_limits<T>::min_exponent < -1072))
+    {
+       static const std::array<std::array<typename table_type<T>::type, 3>, 5> coverage_data = { {
+#if LDBL_MAX_10_EXP > 4931
+          {{ SC_(15.25), ldexp(T(1), -1071), SC_(-9.39553199265929955912687892204143267985847111378392154596e4931)}},
+#else
+          {{ SC_(15.25), ldexp(T(1), -1071), -std::numeric_limits<T>::infinity() }},
+#endif
+#if LDBL_MAX_10_EXP > 4945
+          {{ SC_(15.25), ldexp(T(1), -1074), SC_(-5.55960167798850683070863439793e+4945)}},
+#else
+          {{ SC_(15.25), ldexp(T(1), -1074), -std::numeric_limits<T>::infinity() }},
+#endif
+#if LDBL_MAX_10_EXP > 9872
+          {{ SC_(31.25), ldexp(T(1), -1045), SC_(-1.64443614527479263825137492596041426343778386094212520006e9872)}},
+#else
+          {{ SC_(31.25), ldexp(T(1), -1045), -std::numeric_limits<T>::infinity() }},
+#endif
+          {{ SC_(233), ldexp(T(1), -63), -std::numeric_limits<T>::infinity() }},
+          {{ SC_(233), ldexp(T(1), -64), -std::numeric_limits<T>::infinity() }},
+      } };
+
+       do_test_cyl_neumann_y<T>(coverage_data, name, "Extra Coverage Data");
+    }
 }
 
