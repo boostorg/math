@@ -360,7 +360,7 @@ int bessel_ik(T v, T x, T* result_I, T* result_K, int kind, const Policy& pol)
         {
            prev /= current;
            scale /= current;
-           scale_sign *= (boost::math::signbit(current) ? -1 : 1);
+           scale_sign *= ((boost::math::signbit)(current) ? -1 : 1);
            current = 1;
         }
         next = fact * current + prev;

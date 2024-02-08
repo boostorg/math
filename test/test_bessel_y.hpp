@@ -245,7 +245,7 @@ void test_bessel(T, const char* name)
 #endif
     BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity && (std::numeric_limits<T>::min_exponent < -1072))
     {
-       static const std::array<std::array<typename table_type<T>::type, 3>, 5> coverage_data = { {
+       static const std::array<std::array<T, 3>, 5> coverage_data = { {
 #if LDBL_MAX_10_EXP > 4931
           {{ SC_(15.25), ldexp(T(1), -1071), SC_(-9.39553199265929955912687892204143267985847111378392154596e4931)}},
 #else

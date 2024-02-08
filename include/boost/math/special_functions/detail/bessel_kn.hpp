@@ -75,7 +75,7 @@ T bessel_kn(int n, T x, const Policy& pol)
        }
        while(k < n);
        if (tools::max_value<T>() * scale < fabs(value))
-          return (signbit(scale) ? -1 : 1) * sign(value) * policies::raise_overflow_error<T>(function, nullptr, pol);
+          return ((boost::math::signbit)(scale) ? -1 : 1) * sign(value) * policies::raise_overflow_error<T>(function, nullptr, pol);
        value /= scale;
     }
     return value;
