@@ -129,6 +129,7 @@ void do_test_sph_neumann_y(const T& data, const char* type_name, const char* tes
 template <class T>
 void test_bessel(T, const char* name)
 {
+   using std::ldexp;
    //
    // The actual test data is rather verbose, so it's in a separate file
    //

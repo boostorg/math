@@ -130,6 +130,7 @@ void do_test_sph_neumann_y_prime(const T& data, const char* type_name, const cha
 template <class T>
 void test_bessel_prime(T, const char* name)
 {
+   using std::ldexp;
    //
    // The actual test data is rather verbose, so it's in a separate file
    //
