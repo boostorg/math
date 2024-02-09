@@ -39,7 +39,7 @@ template <typename T, typename Policy>
 T bessel_y1(T x, const Policy&);
 
 template <typename T, typename Policy>
-T bessel_y1(T x, const Policy& pol)
+T bessel_y1(T x, const Policy&)
 {
     static const T P1[] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 4.0535726612579544093e+13)),

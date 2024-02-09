@@ -246,7 +246,7 @@ void test_bessel(T, const char* name)
 #endif
     BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity && (std::numeric_limits<T>::min_exponent < -1072))
     {
-       static const std::array<std::array<T, 3>, 5> coverage_data = { {
+       static const std::array<std::array<T, 3>, 7> coverage_data = { {
 #if LDBL_MAX_10_EXP > 4931
           {{ SC_(15.25), ldexp(T(1), -1071), SC_(-9.39553199265929955912687892204143267985847111378392154596e4931)}},
 #else
@@ -264,6 +264,12 @@ void test_bessel(T, const char* name)
 #endif
           {{ SC_(233.0), ldexp(T(1), -63), -std::numeric_limits<T>::infinity() }},
           {{ SC_(233.0), ldexp(T(1), -64), -std::numeric_limits<T>::infinity() }},
+#if LDBL_MAX_10_EXP > 413
+          {{ SC_(200.25), SC_(1.25), SC_(-3.545198572052800784992190965856441074217589237581037286156e413)}},
+#else
+          {{ SC_(200.25), SC_(1.25), -std::numeric_limits<T>::infinity()}},
+#endif
+          {{ SC_(1652.25), SC_(1.25), -std::numeric_limits<T>::infinity()}},
       } };
 
        do_test_cyl_neumann_y<T>(coverage_data, name, "Extra Coverage Data");

@@ -310,14 +310,14 @@ namespace boost { namespace math {
             else if(kind & need_j)
                *J = policies::raise_domain_error<T>(function, "Value of Bessel J_v(x) is complex-infinity at %1%", x, pol); // complex infinity
             else
-               *J = std::numeric_limits<T>::quiet_NaN();  // any value will do, not using J.
+               *J = std::numeric_limits<T>::quiet_NaN();  // LCOV_EXCL_LINE, we should never get here, any value will do, not using J.
 
             if((kind & need_y) == 0)
                *Y = std::numeric_limits<T>::quiet_NaN();  // any value will do, not using Y.
             else
             {
                // We shoud never get here:
-               BOOST_MATH_ASSERT(x != 0);
+               BOOST_MATH_ASSERT(x != 0); // LCOV_EXCL_LINE
             }
             return 1;
          }
@@ -420,9 +420,9 @@ namespace boost { namespace math {
          {
             if(temme_jy(u, x, &Yu, &Yu1, pol))             // Temme series
             {
-               // domain error, this should really have already been handled, LCOV_EXCL_LINE
-               *J = *Y = Yu;
-               return 1;
+               // domain error, this should really have already been handled.
+               *J = *Y = Yu; // LCOV_EXCL_LINE
+               return 1;     // LCOV_EXCL_LINE
             }
             prev = Yu;
             current = Yu1;
