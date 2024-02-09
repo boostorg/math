@@ -26,6 +26,17 @@ void test()
    std::cout << r << std::endl;
    r = boost::math::quadrature::gauss_kronrod<T, 61>::integrate(f, 0, 1, 0, 0, &error);
    std::cout << r << std::endl;
+
+   r = boost::math::quadrature::gauss<T, 7>::integrate(f, 0, 1, &error);
+   std::cout << r << std::endl;
+   r = boost::math::quadrature::gauss<T, 15>::integrate(f, 0, 1, &error);
+   std::cout << r << std::endl;
+   r = boost::math::quadrature::gauss<T, 20>::integrate(f, 0, 1, &error);
+   std::cout << r << std::endl;
+   r = boost::math::quadrature::gauss<T, 25>::integrate(f, 0, 1, &error);
+   std::cout << r << std::endl;
+   r = boost::math::quadrature::gauss<T, 30>::integrate(f, 0, 1, &error);
+   std::cout << r << std::endl;
 }
 
 
@@ -34,6 +45,9 @@ int main()
    test<boost::multiprecision::cpp_bin_float_double>();
    test<boost::multiprecision::cpp_bin_float_double_extended>();
    test<boost::multiprecision::cpp_bin_float_quad>();
+
+   using strange = boost::multiprecision::number<boost::multiprecision::cpp_bin_float<50, boost::multiprecision::backends::digit_base_2, void, std::int16_t, -16382, 16383>, boost::multiprecision::et_off>;
+   test<strange>();
 
    return 0;
 }
