@@ -6,8 +6,9 @@ Boost Math Library
 |                  |  Master  |   Develop   |
 |------------------|----------|-------------|
 | Drone            | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg?ref=refs/heads/master)](https://drone.cpp.al/boostorg/math)          | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg)](https://drone.cpp.al/boostorg/math) |
-| Github Actions   | [![Build Status](https://github.com/boostorg/math/workflows/math/badge.svg?branch=master)](https://github.com/boostorg/math/actions) | [![Build Status](https://github.com/boostorg/math/workflows/math/badge.svg?branch=develop)](https://github.com/boostorg/math/actions) |
+| Github Actions   | [![Build Status](https://github.com/boostorg/math/workflows/CI/badge.svg?branch=master)](https://github.com/boostorg/math/actions) | [![Build Status](https://github.com/boostorg/math/workflows/CI/badge.svg?branch=develop)](https://github.com/boostorg/math/actions) |
 | Codecov          | [![codecov](https://codecov.io/gh/boostorg/math/branch/master/graph/badge.svg)](https://codecov.io/gh/boostorg/math/branch/master)             | [![codecov](https://codecov.io/gh/boostorg/math/branch/develop/graph/badge.svg)](https://codecov.io/gh/boostorg/math/branch/develop) |
+
 
 The Math library provides numerous advanced mathematical functions
 implemented in modern C++. The library focuses on providing
