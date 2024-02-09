@@ -21,7 +21,9 @@ template <class Real> void test_ackley() {
   auto rs_params = random_search_parameters<ArgType>();
   rs_params.lower_bounds = {-5, -5};
   rs_params.upper_bounds = {5, 5};
-
+  // This makes the CI a bit more robust;
+  // the computation is only deterministic with a deterministic number of threads:
+  rs_params.threads = 2;
   std::mt19937_64 gen(12345);
   auto local_minima = random_search(ackley<Real>, rs_params, gen);
   CHECK_LE(std::abs(local_minima[0]), Real(0.1));
@@ -63,6 +65,7 @@ template <class Real> void test_rosenbrock_saddle() {
   rs_params.lower_bounds = {0.5, 0.5};
   rs_params.upper_bounds = {2.048, 2.048};
   rs_params.max_function_calls = 20000;
+  rs_params.threads = 2;
   std::mt19937_64 gen(234568);
   auto local_minima = random_search(rosenbrock_saddle<Real>, rs_params, gen);
 
@@ -85,6 +88,7 @@ template <class Real> void test_rastrigin() {
   rs_params.lower_bounds.resize(3, static_cast<Real>(-5.12));
   rs_params.upper_bounds.resize(3, static_cast<Real>(5.12));
   rs_params.max_function_calls = 1000000;
+  rs_params.threads = 2;
   std::mt19937_64 gen(34567);
 
   // By definition, the value of the function which a target value is provided must be <= target_value.
@@ -102,6 +106,7 @@ void test_sphere() {
   rs_params.lower_bounds.resize(4, -1);
   rs_params.upper_bounds.resize(4, 1);
   rs_params.max_function_calls = 100000;
+  rs_params.threads = 2;
   std::mt19937_64 gen(56789);
   auto local_minima = random_search(sphere, rs_params, gen);
   for (auto x : local_minima) {
@@ -119,6 +124,7 @@ void test_three_hump_camel() {
   rs_params.lower_bounds[1] = -5.0;
   rs_params.upper_bounds[0] = 5.0;
   rs_params.upper_bounds[1] = 5.0;
+  rs_params.threads = 2;
   std::mt19937_64 gen(56789);
   auto local_minima = random_search(three_hump_camel<Real>, rs_params, gen);
   for (auto x : local_minima) {
@@ -136,6 +142,7 @@ void test_beale() {
   rs_params.lower_bounds[1] = -5.0;
   rs_params.upper_bounds[0]= 5.0;
   rs_params.upper_bounds[1]= 5.0;
+  rs_params.threads = 2;
   std::mt19937_64 gen(56789);
   auto local_minima = random_search(beale<Real>, rs_params, gen);
   CHECK_ABSOLUTE_ERROR(Real(3), local_minima[0], Real(0.1));
