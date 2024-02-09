@@ -1,10 +1,22 @@
-Boost Math Library 
-[![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg)](https://drone.cpp.al/boostorg/math)[![Build Status](https://github.com/boostorg/math/workflows/CI/badge.svg?branch=develop)](https://github.com/boostorg/math/actions)
-==================
+Boost Math Library
+============================
 
->ANNOUNCEMENT: This library now requires a compliant C++14 compiler.
+>ANNOUNCEMENT: This library requires a compliant C++14 compiler.
 
-This library is divided into several interconnected parts:
+|                  |  Master  |   Develop   |
+|------------------|----------|-------------|
+| Drone            | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg?ref=refs/heads/master)](https://drone.cpp.al/boostorg/math)          | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg)](https://drone.cpp.al/boostorg/math) |
+| Github Actions   | [![Build Status](https://github.com/boostorg/math/workflows/math/badge.svg?branch=master)](https://github.com/boostorg/math/actions) | [![Build Status](https://github.com/boostorg/math/workflows/math/badge.svg?branch=develop)](https://github.com/boostorg/math/actions) |
+| Codecov          | [![codecov](https://codecov.io/gh/boostorg/math/branch/master/graph/badge.svg)](https://codecov.io/gh/boostorg/math/branch/master)             | [![codecov](https://codecov.io/gh/boostorg/math/branch/develop/graph/badge.svg)](https://codecov.io/gh/boostorg/math/branch/develop) |
+
+The Math library provides numerous advanced mathematical functions
+implemented in modern C++. The library focuses on providing
+the utmost in syntactic and numerical correctness while providing
+high-performance. Convenient template-based, header-only code is
+used explicitly and consistently throughout the diverse collection
+of function implementations.
+
+The library is divided into several interconnected parts:
 
 ### Floating Point Utilities
 
@@ -77,15 +89,6 @@ The following compilers are tested with the CI system, and are known to work. St
 * g++ 5 or later
 * clang++ 5 or later
 * Visual Studio 2015 (14.0) or later
-
-## Build Status ##
-
-|                  |  Master  |   Develop   |
-|------------------|----------|-------------|
-| Github Actions | [![Build Status](https://github.com/boostorg/math/workflows/CI/badge.svg?branch=master)](https://github.com/boostorg/math/actions) | [![Build Status](https://github.com/boostorg/math/workflows/CI/badge.svg?branch=develop)](https://github.com/boostorg/math/actions) |
-|Drone | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg?ref=refs/heads/master)](https://drone.cpp.al/boostorg/math) | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg)](https://drone.cpp.al/boostorg/math) |
-
-
 
 ## Support, bugs and feature requests ##
 
