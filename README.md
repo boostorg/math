@@ -11,11 +11,12 @@ Boost Math Library
 
 
 The Math library provides numerous advanced mathematical functions
-implemented in modern C++. The library focuses on providing
-the utmost in syntactic and numerical correctness while providing
-high-performance. Convenient template-based, header-only code is
-used explicitly and consistently throughout the diverse collection
-of function implementations.
+implemented in modern C++. The library delivers the utmost
+in syntactic and numerical correctness while still
+maintaining high-performance.
+
+All code is header-only, facilitating easy client setup
+and use throughout the entire diverse collection of functions.
 
 The library is divided into several interconnected parts:
 
