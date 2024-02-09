@@ -110,14 +110,19 @@ void test_evaluation_condition_number()
     }
 }
 
-
 BOOST_AUTO_TEST_CASE(numerical_differentiation_test)
 {
+#if !defined(TEST) || (TEST == 1)
     test_summation_condition_number<float>();
-    test_summation_condition_number<cpp_bin_float_50>();
     test_evaluation_condition_number<float>();
     test_evaluation_condition_number<double>();
     test_evaluation_condition_number<long double>();
-    test_evaluation_condition_number<cpp_bin_float_50>();
     test_exponential_sum<double>();
+#endif
+#if !defined(TEST) || (TEST == 2)
+    test_summation_condition_number<cpp_bin_float_50>();
+#endif
+#if !defined(TEST) || (TEST == 3)
+    test_evaluation_condition_number<cpp_bin_float_50>();
+#endif
 }

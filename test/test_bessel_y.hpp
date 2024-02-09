@@ -262,8 +262,8 @@ void test_bessel(T, const char* name)
 #else
           {{ SC_(31.25), ldexp(T(1), -1045), -std::numeric_limits<T>::infinity() }},
 #endif
-          {{ SC_(233), ldexp(T(1), -63), -std::numeric_limits<T>::infinity() }},
-          {{ SC_(233), ldexp(T(1), -64), -std::numeric_limits<T>::infinity() }},
+          {{ SC_(233.0), ldexp(T(1), -63), -std::numeric_limits<T>::infinity() }},
+          {{ SC_(233.0), ldexp(T(1), -64), -std::numeric_limits<T>::infinity() }},
       } };
 
        do_test_cyl_neumann_y<T>(coverage_data, name, "Extra Coverage Data");
