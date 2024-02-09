@@ -75,6 +75,14 @@ inline T bessel_k_derivative_linear(T v, T x, const bessel_int_tag& tag, Policy 
    return result + result2;
 }
 
+template <class T, class Policy>
+inline T bessel_k_derivative_linear(T v, T x, const bessel_maybe_int_tag&, Policy pol)
+{
+   if (floor(v) == v)
+      return bessel_k_derivative_linear(v, x, bessel_int_tag(), pol);
+   return bessel_k_derivative_linear(v, x, bessel_no_int_tag(), pol);
+}
+
 template <class T, class Tag, class Policy>
 inline T bessel_y_derivative_linear(T v, T x, Tag tag, Policy pol)
 {
