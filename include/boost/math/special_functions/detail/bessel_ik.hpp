@@ -327,36 +327,7 @@ int bessel_ik(T v, T x, T* result_I, T* result_K, int kind, const Policy& pol)
     BOOST_MATH_INSTRUMENT_VARIABLE(n);
     BOOST_MATH_INSTRUMENT_VARIABLE(u);
 
-    if (x < 0)
-    {
-       *result_I = *result_K = policies::raise_domain_error<T>(function,
-            "Got x = %1% but real argument x must be non-negative, complex number result not supported.", x, pol);
-        return 1;
-    }
-    if (x == 0)
-    {
-       Iv = (v == 0) ? static_cast<T>(1) : static_cast<T>(0);
-       if(kind & need_k)
-       {
-         Kv = policies::raise_overflow_error<T>(function, nullptr, pol);
-       }
-       else
-       {
-          Kv = std::numeric_limits<T>::quiet_NaN(); // any value will do
-       }
-
-       if(reflect && (kind & need_i))
-       {
-           T z = (u + n % 2);
-           Iv = boost::math::sin_pi(z, pol) == 0 ?
-               Iv :
-               policies::raise_overflow_error<T>(function, nullptr, pol);   // reflection formula
-       }
-
-       *result_I = Iv;
-       *result_K = Kv;
-       return 0;
-    }
+    BOOST_MATH_ASSERT(x > 0); // Error handling for x <= 0 handled in cyl_bessel_i and cyl_bessel_k
 
     // x is positive until reflection
     W = 1 / x;                                 // Wronskian
@@ -389,7 +360,7 @@ int bessel_ik(T v, T x, T* result_I, T* result_K, int kind, const Policy& pol)
         {
            prev /= current;
            scale /= current;
-           scale_sign *= boost::math::sign(current);
+           scale_sign *= ((boost::math::signbit)(current) ? -1 : 1);
            current = 1;
         }
         next = fact * current + prev;

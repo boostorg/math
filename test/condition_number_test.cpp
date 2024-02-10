@@ -7,6 +7,9 @@
 #include "math_unit_test.hpp"
 #include <boost/math/special_functions/lambert_w.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
+#if !defined(TEST) || (TEST > 1)
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#endif
 
 using std::abs;
 using std::log;
@@ -101,13 +104,20 @@ void test_evaluation_condition_number()
     }
 }
 
-
 int main()
 {
+#if !defined(TEST) || (TEST == 1)
     test_summation_condition_number<float>();
     test_evaluation_condition_number<float>();
     test_evaluation_condition_number<double>();
     test_evaluation_condition_number<long double>();
     test_exponential_sum<double>();
+#endif
+#if !defined(TEST) || (TEST == 2)
+    test_summation_condition_number<boost::multiprecision::cpp_bin_float_50>();
+#endif
+#if !defined(TEST) || (TEST == 3)
+    test_evaluation_condition_number<boost::multiprecision::cpp_bin_float_50>();
+#endif
     return boost::math::test::report_errors();
 }

@@ -798,8 +798,8 @@ public:
       Real L1 = abs(result);
       for (unsigned i = non_zero_start; i < base::abscissa().size(); ++i)
       {
-         K fp = f(base::abscissa()[i]);
-         K fm = f(-base::abscissa()[i]);
+         K fp = f(static_cast<Real>(base::abscissa()[i]));
+         K fm = f(static_cast<Real>(-base::abscissa()[i]));
          result += (fp + fm) * static_cast<Real>(base::weights()[i]);
          L1 += (abs(fp) + abs(fm)) * static_cast<Real>(base::weights()[i]);
       }

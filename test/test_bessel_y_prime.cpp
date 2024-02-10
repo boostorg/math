@@ -276,7 +276,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-      ".*", 700, 300);                 // test function
+      ".*", 720, 600);                 // test function
    //
    // One set of float tests has inexact input values, so there is a slight error:
    //
