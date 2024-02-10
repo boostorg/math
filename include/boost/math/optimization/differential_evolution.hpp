@@ -35,11 +35,12 @@ namespace boost::math::optimization {
 // We provide the parameters in a struct-there are too many of them and they are too unwieldy to pass individually:
 template <typename ArgumentContainer> struct differential_evolution_parameters {
   using Real = typename ArgumentContainer::value_type;
+  using DimensionlessReal = decltype(Real()/Real());
   ArgumentContainer lower_bounds;
   ArgumentContainer upper_bounds;
   // mutation factor is also called scale factor or just F in the literature:
-  Real mutation_factor = static_cast<Real>(0.65);
-  double crossover_probability = 0.5;
+  DimensionlessReal mutation_factor = static_cast<DimensionlessReal>(0.65);
+  DimensionlessReal crossover_probability = static_cast<DimensionlessReal>(0.5);
   // Population in each generation:
   size_t NP = 500;
   size_t max_generations = 1000;
@@ -94,6 +95,7 @@ ArgumentContainer differential_evolution(
     std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr,
     std::atomic<std::invoke_result_t<Func, ArgumentContainer>> *current_minimum_cost = nullptr) {
   using Real = typename ArgumentContainer::value_type;
+  using DimensionlessReal = decltype(Real()/Real());
   using ResultType = std::invoke_result_t<Func, ArgumentContainer>;
   using std::clamp;
   using std::isnan;
@@ -159,7 +161,7 @@ ArgumentContainer differential_evolution(
     // I first tried seeding thread-local random number generators with the global generator,
     // but ThreadSanitizer didn't like it. I *suspect* there's a way around this, but
     // even if it's formally threadsafe, there's still a lot of effort to get it computationally reproducible.
-    uniform_real_distribution<Real> unif01(Real(0), Real(1));
+    uniform_real_distribution<DimensionlessReal> unif01(DimensionlessReal(0), DimensionlessReal(1));
     for (size_t i = 0; i < NP; ++i) {
       size_t r1, r2, r3;
       do {
