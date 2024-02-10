@@ -7,6 +7,9 @@
 #include "math_unit_test.hpp"
 #include <boost/math/special_functions/lambert_w.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
+#if !defined(TEST) || (TEST > 1)
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#endif
 
 using std::abs;
 using std::log;

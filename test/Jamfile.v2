@@ -181,6 +181,7 @@ test-suite special_fun :
    [ run test_bessel_y_prime.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_bessel_i_prime.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_bessel_k_prime.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
+   [ run bessel_iterator_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_beta.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_bessel_airy_zeros.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_bernoulli_constants.cpp ../../test/build//boost_unit_test_framework  ]
