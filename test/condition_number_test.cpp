@@ -114,10 +114,10 @@ int main()
     test_exponential_sum<double>();
 #endif
 #if !defined(TEST) || (TEST == 2)
-    test_summation_condition_number<cpp_bin_float_50>();
+    test_summation_condition_number<boost::multiprecision::cpp_bin_float_50>();
 #endif
 #if !defined(TEST) || (TEST == 3)
-    test_evaluation_condition_number<cpp_bin_float_50>();
+    test_evaluation_condition_number<boost::multiprecision::cpp_bin_float_50>();
 #endif
     return boost::math::test::report_errors();
 }
