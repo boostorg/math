@@ -1159,16 +1159,16 @@ private:
       Real L1 = abs(kronrod_result);
       for (unsigned i = gauss_start; i < base::abscissa().size(); i += 2)
       {
-         fp = f(base::abscissa()[i]);
-         fm = f(-base::abscissa()[i]);
+         fp = f(static_cast<Real>(base::abscissa()[i]));
+         fm = f(static_cast<Real>(-base::abscissa()[i]));
          kronrod_result += (fp + fm) * static_cast<Real>(base::weights()[i]);
          L1 += (abs(fp) + abs(fm)) * static_cast<Real>(base::weights()[i]);
          gauss_result += (fp + fm) * static_cast<Real>(gauss<Real, (N - 1) / 2>::weights()[i / 2]);
       }
       for (unsigned i = kronrod_start; i < base::abscissa().size(); i += 2)
       {
-         fp = f(base::abscissa()[i]);
-         fm = f(-base::abscissa()[i]);
+         fp = f(static_cast<Real>(base::abscissa()[i]));
+         fm = f(static_cast<Real>(-base::abscissa()[i]));
          kronrod_result += (fp + fm) * static_cast<Real>(base::weights()[i]);
          L1 += (abs(fp) + abs(fm)) * static_cast<Real>(base::weights()[i]);
       }
