@@ -37,10 +37,10 @@ struct numeric_traits<__float128>
 };
 #elif LDBL_DIG > DBL_DIG
 typedef long double largest_float;
-#define BOOST_MATH_LARGEST_FLOAT_C(x) x##L
+#define BOOST_MATH_LARGEST_FLOAT_C(x) x##L // LCOV_EXCL_LINE
 #else
 typedef double largest_float;
-#define BOOST_MATH_LARGEST_FLOAT_C(x) x
+#define BOOST_MATH_LARGEST_FLOAT_C(x) x // LCOV_EXCL_LINE
 #endif
 
 template <class T>
@@ -75,16 +75,16 @@ inline constexpr T make_big_value(largest_float, const char* s, std::false_type 
 //
 // For constants which might fit in a long double (if it's big enough):
 //
-#define BOOST_MATH_BIG_CONSTANT(T, D, x)\
-   boost::math::tools::make_big_value<T>(\
-      BOOST_MATH_LARGEST_FLOAT_C(x), \
-      BOOST_STRINGIZE(x), \
-      std::integral_constant<bool, (std::is_convertible<boost::math::tools::largest_float, T>::value) && \
-      ((D <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits) \
-          || std::is_floating_point<T>::value \
-          || (boost::math::tools::numeric_traits<T>::is_specialized && \
-          (boost::math::tools::numeric_traits<T>::digits10 <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits10))) >(), \
-      std::is_constructible<T, const char*>()) // LCOV_EXCL_LINE
+#define BOOST_MATH_BIG_CONSTANT(T, D, x)    /* LCOV_EXCL_LINE */ \
+   boost::math::tools::make_big_value<T>(   /* LCOV_EXCL_LINE */ \
+      BOOST_MATH_LARGEST_FLOAT_C(x),        /* LCOV_EXCL_LINE */ \
+      BOOST_STRINGIZE(x),                   /* LCOV_EXCL_LINE */ \
+      std::integral_constant<bool, (std::is_convertible<boost::math::tools::largest_float, T>::value) &&  /* LCOV_EXCL_LINE */ \
+      ((D <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits)               /* LCOV_EXCL_LINE */ \
+          || std::is_floating_point<T>::value                                                             /* LCOV_EXCL_LINE */ \
+          || (boost::math::tools::numeric_traits<T>::is_specialized &&                                    /* LCOV_EXCL_LINE */ \
+          (boost::math::tools::numeric_traits<T>::digits10 <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits10))) >(), /* LCOV_EXCL_LINE */ \
+      std::is_constructible<T, const char*>()) /* LCOV_EXCL_LINE */
 //
 // For constants too huge for any conceivable long double (and which generate compiler errors if we try and declare them as such):
 //
