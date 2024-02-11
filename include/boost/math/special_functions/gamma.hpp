@@ -1024,7 +1024,7 @@ inline T tgamma_small_upper_part(T a, T x, const Policy& pol, T* pgam = 0, bool 
    // Compute the full upper fraction (Q) when a is very small:
    //
 
-   T result { boost::math::tgamma1pm1(a, pol); }
+   T result { boost::math::tgamma1pm1(a, pol) };
 
    if(pgam)
       *pgam = (result + 1) / a;
