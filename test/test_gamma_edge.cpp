@@ -6,8 +6,13 @@
 #include <boost/core/lightweight_test.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 
+#include <random>
+
 namespace local
 {
+  std::mt19937 eng(static_cast<typename std::mt19937::result_type>(UINT8_C(42)));
+  std::uniform_int_distribution<int> dst_one(1, 1);
+
   template<typename NumericType>
   auto is_close_fraction(const NumericType& a,
                          const NumericType& b,
@@ -82,7 +87,7 @@ namespace local
 
       if(!result_tgamma_x_small_is_ok)
       {
-        break;
+        break; // LCOV_EXCL_LINE
       }
     }
   }
@@ -99,7 +104,31 @@ namespace local
     using local_float_type = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<250>, boost::multiprecision::et_off>;
 
     {
+      const local_float_type my_tol { std::numeric_limits<local_float_type>::epsilon() * 256 };
+
+      for(auto index = static_cast<unsigned>(UINT8_C(0)); index < static_cast<unsigned>(UINT8_C(3)); ++index)
+      {
+        static_cast<void>(index);
+
+        const local_float_type zero_ctrl { 0 };
+
+        local_float_type zero { 0 };
+
+        zero *= dst_one(eng);
+
+        const auto result_zero_is_ok = is_close_fraction(zero, zero_ctrl, my_tol);
+
+        BOOST_TEST(result_zero_is_ok);
+      }
+    }
+
+    for(auto index = static_cast<unsigned>(UINT8_C(0)); index < static_cast<unsigned>(UINT8_C(3)); ++index)
+    {
+      static_cast<void>(index);
+
       local_float_type zero { 0 };
+
+      zero *= dst_one(eng);
 
       bool domain_error_is_ok { false };
 
@@ -117,8 +146,13 @@ namespace local
       BOOST_TEST(domain_error_is_ok);
     }
 
+    for(auto index = static_cast<unsigned>(UINT8_C(0)); index < static_cast<unsigned>(UINT8_C(3)); ++index)
     {
+      static_cast<void>(index);
+
       local_float_type my_nan = std::numeric_limits<local_float_type>::quiet_NaN();
+
+      my_nan *= dst_one(eng);
 
       bool domain_error_is_ok { false };
 
@@ -136,8 +170,13 @@ namespace local
       BOOST_TEST(domain_error_is_ok);
     }
 
+    for(auto index = static_cast<unsigned>(UINT8_C(0)); index < static_cast<unsigned>(UINT8_C(3)); ++index)
     {
+      static_cast<void>(index);
+
       local_float_type my_inf = -std::numeric_limits<local_float_type>::infinity();
+
+      my_inf *= dst_one(eng);
 
       bool domain_error_is_ok { false };
 
@@ -202,8 +241,13 @@ namespace local
 
     using local_float_type = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<250>, boost::multiprecision::et_off>;
 
+    for(auto index = static_cast<unsigned>(UINT8_C(0)); index < static_cast<unsigned>(UINT8_C(3)); ++index)
     {
+      static_cast<void>(index);
+
       local_float_type zero { 0 };
+
+      zero *= dst_one(eng);
 
       bool domain_error_is_ok { false };
 
@@ -221,8 +265,13 @@ namespace local
       BOOST_TEST(domain_error_is_ok);
     }
 
+    for(auto index = static_cast<unsigned>(UINT8_C(0)); index < static_cast<unsigned>(UINT8_C(3)); ++index)
     {
+      static_cast<void>(index);
+
       local_float_type my_nan = std::numeric_limits<local_float_type>::quiet_NaN();
+
+      my_nan *= dst_one(eng);
 
       bool domain_error_is_ok { false };
 
@@ -240,8 +289,13 @@ namespace local
       BOOST_TEST(domain_error_is_ok);
     }
 
+    for(auto index = static_cast<unsigned>(UINT8_C(0)); index < static_cast<unsigned>(UINT8_C(3)); ++index)
     {
+      static_cast<void>(index);
+
       local_float_type my_inf = -std::numeric_limits<local_float_type>::infinity();
+
+      my_inf *= dst_one(eng);
 
       bool overflow_error_is_ok { false };
 
