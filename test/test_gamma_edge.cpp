@@ -155,12 +155,118 @@ namespace local
       BOOST_TEST(domain_error_is_ok);
     }
   }
+
+  auto lgamma_big_asymp() -> void
+  {
+    // This test is intended to hit the asymptotic log-gamma expansion for multiprecision.
+
+    using local_float_type = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<250>, boost::multiprecision::et_off>;
+
+    static_assert(   (std::numeric_limits<local_float_type>::digits10 >= 248)
+                  && (std::numeric_limits<local_float_type>::digits10 <= 252), "Error: Multiprecision wrong number of digits");
+
+    local_float_type big_arg_numerator { 1234567L };
+
+    // Table[N[Log[Gamma[(1234567 + n)/1000]], 260], {n, 0, 3, 1}]
+    const local_float_type ctrl0 { "7551.0278099842760398085493506933061185258592164059260052791257174648102458654516760859347475429811747227042884941464597963128452844941163716092798494933305452087249880911022309522317482008162381529082884245980549740815352929296384544778543502768128060636123031" };
+    const local_float_type ctrl1 { "7551.0349280552065308610373629214633349814110368633190642156085097598877230874250481117271260334496206128158535271616589000730715715804390525860149840442193710637326207809853649225510544815601053550751028151966244578864039961973124357117676870769851159530881598" };
+    const local_float_type ctrl2 { "7551.0420461269473499872464481408311466395059218944034402487444941839649424484440812974771163653823079980811183096059838617975730358237216549153177603277276543261570202589028877022053234067330484829335430150182956719650949866427225508960918047040961544342635607" };
+    const local_float_type ctrl3 { "7551.0491641994984965305455873077287163417673805051480753266140277293097406691212685736787897808049319210175552316063915681371903149757892763598947756743285838029800201937242960777121582844482027617050641997959480250230315703285501155035159657216828260204447321" };
+
+    const local_float_type my_tol { std::numeric_limits<local_float_type>::epsilon() * 256 };
+
+    const local_float_type lg_big0 { boost::math::lgamma(big_arg_numerator / 1000) }; ++big_arg_numerator;
+    const local_float_type lg_big1 { boost::math::lgamma(big_arg_numerator / 1000) }; ++big_arg_numerator;
+    const local_float_type lg_big2 { boost::math::lgamma(big_arg_numerator / 1000) }; ++big_arg_numerator;
+    const local_float_type lg_big3 { boost::math::lgamma(big_arg_numerator / 1000) };
+
+    const auto result_lgamma_big0_is_ok = is_close_fraction(lg_big0, ctrl0, my_tol);
+    const auto result_lgamma_big1_is_ok = is_close_fraction(lg_big1, ctrl1, my_tol);
+    const auto result_lgamma_big2_is_ok = is_close_fraction(lg_big2, ctrl2, my_tol);
+    const auto result_lgamma_big3_is_ok = is_close_fraction(lg_big3, ctrl3, my_tol);
+
+    BOOST_TEST(result_lgamma_big0_is_ok);
+    BOOST_TEST(result_lgamma_big1_is_ok);
+    BOOST_TEST(result_lgamma_big2_is_ok);
+    BOOST_TEST(result_lgamma_big3_is_ok);
+  }
+
+  auto lgamma_undefined_lanczos_known_error() -> void
+  {
+    // This test is intended to hit the lines:
+
+    // template <class T, class Policy>
+    // T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sign)    // ...
+    // ...
+    // ...for edge cases that raise errors such as domain error.
+
+    using local_float_type = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<250>, boost::multiprecision::et_off>;
+
+    {
+      local_float_type zero { 0 };
+
+      bool domain_error_is_ok { false };
+
+      try
+      {
+        boost::math::lgamma(zero);
+      }
+      catch(std::domain_error& err)
+      {
+        static_cast<void>(err.what());
+
+        domain_error_is_ok = true;
+      }
+
+      BOOST_TEST(domain_error_is_ok);
+    }
+
+    {
+      local_float_type my_nan = std::numeric_limits<local_float_type>::quiet_NaN();
+
+      bool domain_error_is_ok { false };
+
+      try
+      {
+        boost::math::lgamma(my_nan);
+      }
+      catch(std::domain_error& err)
+      {
+        static_cast<void>(err.what());
+
+        domain_error_is_ok = true;
+      }
+
+      BOOST_TEST(domain_error_is_ok);
+    }
+
+    {
+      local_float_type my_inf = -std::numeric_limits<local_float_type>::infinity();
+
+      bool overflow_error_is_ok { false };
+
+      try
+      {
+        boost::math::lgamma(my_inf);
+      }
+      catch(std::overflow_error& err)
+      {
+        static_cast<void>(err.what());
+
+        overflow_error_is_ok = true;
+      }
+
+      BOOST_TEST(overflow_error_is_ok);
+    }
+  }
 }
 
 auto main() -> int
 {
   local::tgamma_under_cbrt_epsilon();
   local::tgamma_undefined_lanczos_known_error();
+  local::lgamma_big_asymp();
+  local::lgamma_undefined_lanczos_known_error();
 
   const auto result_is_ok = (boost::report_errors() == 0);
 
