@@ -1,5 +1,6 @@
 
 //  Copyright (c) 2011 John Maddock
+//  Copyright (c) 2024 Christopher Kormanyos
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -62,7 +63,7 @@ inline T make_big_value(largest_float, const char* s, std::false_type const&, st
 template <typename T>
 inline T make_big_value(largest_float, const char*, std::false_type const&, std::false_type const&)
 {
-   static_assert(sizeof(T) == 0, "Type is unsupported in standalone mode. Please disable and try again.");
+   static_assert(sizeof(T) == 0, "Type is unsupported in standalone mode. Please disable and try again."); // LCOV_EXCL_LINE
 }
 #endif
 template <class T>
@@ -83,16 +84,15 @@ inline constexpr T make_big_value(largest_float, const char* s, std::false_type 
           || std::is_floating_point<T>::value \
           || (boost::math::tools::numeric_traits<T>::is_specialized && \
           (boost::math::tools::numeric_traits<T>::digits10 <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits10))) >(), \
-      std::is_constructible<T, const char*>())
+      std::is_constructible<T, const char*>()) // LCOV_EXCL_LINE
 //
 // For constants too huge for any conceivable long double (and which generate compiler errors if we try and declare them as such):
 //
 #define BOOST_MATH_HUGE_CONSTANT(T, D, x)\
    boost::math::tools::make_big_value<T>(0.0L, BOOST_STRINGIZE(x), \
    std::integral_constant<bool, std::is_floating_point<T>::value || (boost::math::tools::numeric_traits<T>::is_specialized && boost::math::tools::numeric_traits<T>::max_exponent <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::max_exponent && boost::math::tools::numeric_traits<T>::digits <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits)>(), \
-   std::is_constructible<T, const char*>())
+   std::is_constructible<T, const char*>()) // LCOV_EXCL_LINE
 
 }}} // namespaces
 
 #endif
-
