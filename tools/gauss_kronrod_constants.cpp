@@ -22,7 +22,7 @@ void print_gauss_constants(const char* suffix, int prec, int tag)
       "      {\n"
       "         static " << (prec > 40 ? " " : "constexpr ") << "std::array<T, " << ab.size() << "> data = {\n";
    for (unsigned i = 0; i < ab.size(); ++i)
-      std::cout << "            " << (prec > 40 ? "BOOST_MATH_HUGE_CONSTANT(T, 0, " : "") << ab[i] << (prec > 40 ? ")" : suffix) << ",\n";
+      std::cout << "            " << (prec > 40 ? "BOOST_MATH_HUGE_CONSTANT(T, " : "") << ab[i] << (prec > 40 ? ")" : suffix) << ",\n";
    std::cout <<
       "};\n"
       "         return data;\n"
@@ -31,7 +31,7 @@ void print_gauss_constants(const char* suffix, int prec, int tag)
       "      {\n"
       "         static " << (prec > 40 ? " " : "constexpr ") << "std::array<T, " << w.size() << "> data = {\n";
    for (unsigned i = 0; i < w.size(); ++i)
-      std::cout << "            " << (prec > 40 ? "BOOST_MATH_HUGE_CONSTANT(T, 0, " : "") << w[i] << (prec > 40 ? ")" : suffix) << ",\n";
+      std::cout << "            " << (prec > 40 ? "BOOST_MATH_HUGE_CONSTANT(T, " : "") << w[i] << (prec > 40 ? ")" : suffix) << ",\n";
 
    std::cout << "         };\n"
       "         return data;\n"
@@ -56,7 +56,7 @@ void print_gauss_kronrod_constants(const char* suffix, int prec, int tag)
       "         static " << (prec > 40 ? " " : "constexpr ") << "std::array<T, " << ab.size() << "> data = {\n";
 
    for (unsigned i = 0; i < ab.size(); ++i)
-      std::cout << "            " << (prec > 40 ? "BOOST_MATH_HUGE_CONSTANT(T, 0, " : "") << ab[i] << (prec > 40 ? ")" : suffix) << ",\n";
+      std::cout << "            " << (prec > 40 ? "BOOST_MATH_HUGE_CONSTANT(T, " : "") << ab[i] << (prec > 40 ? ")" : suffix) << ",\n";
 
    std::cout << "         };\n"
       "         return data;\n"
@@ -66,7 +66,7 @@ void print_gauss_kronrod_constants(const char* suffix, int prec, int tag)
       "         static " << (prec > 40 ? " " : "constexpr ") << "std::array<T, " << w.size() << "> data = {\n";
 
    for (unsigned i = 0; i < w.size(); ++i)
-      std::cout << "            " << (prec > 40 ? "BOOST_MATH_HUGE_CONSTANT(T, 0, " : "") << w[i] << (prec > 40 ? ")" : suffix) << ",\n";
+      std::cout << "            " << (prec > 40 ? "BOOST_MATH_HUGE_CONSTANT(T, " : "") << w[i] << (prec > 40 ? ")" : suffix) << ",\n";
 
    std::cout << "         };\n"
       "         return data;\n"

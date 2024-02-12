@@ -76,12 +76,12 @@ inline constexpr T make_big_value(largest_float, const char* s, std::false_type 
 //
 
 // LCOV_EXCL_START
-template <class T, const int MyDigits>
+template <class T, const int MyDigitsParam>
 inline constexpr bool constant_might_fit_in_long_double()
 {
    return    std::is_convertible<boost::math::tools::largest_float, T>::value
           && (
-                  (MyDigits <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits)
+                  (MyDigitsParam <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits)
                || std::is_floating_point<T>::value
                || (
                        boost::math::tools::numeric_traits<T>::is_specialized
@@ -91,7 +91,7 @@ inline constexpr bool constant_might_fit_in_long_double()
 }
 // LCOV_EXCL_STOP
 
-#define BOOST_MATH_BIG_CONSTANT(T, MyDigits, x) boost::math::tools::make_big_value<T>(BOOST_MATH_LARGEST_FLOAT_C(x), BOOST_STRINGIZE(x), std::integral_constant<bool, boost::math::tools::constant_might_fit_in_long_double<T, (MyDigits)>()>(), std::is_constructible<T, const char*>())
+#define BOOST_MATH_BIG_CONSTANT(T, MyDigitsMacro, xValMacro) boost::math::tools::make_big_value<T>(BOOST_MATH_LARGEST_FLOAT_C(xValMacro), BOOST_STRINGIZE(xValMacro), std::integral_constant<bool, boost::math::tools::constant_might_fit_in_long_double<T, (MyDigitsMacro)>()>(), std::is_constructible<T, const char*>())
 
 //
 // For constants too huge for any conceivable long double (and which generate compiler errors if we try and declare them as such):
@@ -110,7 +110,7 @@ inline constexpr bool constant_is_too_huge_for_long_double()
 }
 // LCOV_EXCL_STOP
 
-#define BOOST_MATH_HUGE_CONSTANT(T, D, x) boost::math::tools::make_big_value<T>(0.0L, BOOST_STRINGIZE(x), std::integral_constant<bool, boost::math::tools::constant_is_too_huge_for_long_double<T>()>(), std::is_constructible<T, const char*>())
+#define BOOST_MATH_HUGE_CONSTANT(T, xValMacro) boost::math::tools::make_big_value<T>(0.0L, BOOST_STRINGIZE(xValMacro), std::integral_constant<bool, boost::math::tools::constant_is_too_huge_for_long_double<T>()>(), std::is_constructible<T, const char*>())
 
 }}} // namespaces
 
