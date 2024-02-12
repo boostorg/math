@@ -6,14 +6,11 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_JSO_HPP
 #define BOOST_MATH_OPTIMIZATION_JSO_HPP
-#include <algorithm>
-#include <array>
 #include <atomic>
 #include <boost/math/optimization/detail/common.hpp>
 #include <cmath>
 #include <iostream>
 #include <limits>
-#include <list>
 #include <random>
 #include <sstream>
 #include <stdexcept>

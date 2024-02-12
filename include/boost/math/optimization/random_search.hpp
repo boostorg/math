@@ -6,18 +6,14 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_RANDOM_SEARCH_HPP
 #define BOOST_MATH_OPTIMIZATION_RANDOM_SEARCH_HPP
-#include <algorithm>
-#include <array>
 #include <atomic>
 #include <cmath>
 #include <limits>
-#include <list>
 #include <mutex>
 #include <random>
 #include <sstream>
 #include <stdexcept>
 #include <thread>
-#include <type_traits>
 #include <utility>
 #include <vector>
 #include <boost/math/optimization/detail/common.hpp>

@@ -6,7 +6,6 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_CMA_ES_HPP
 #define BOOST_MATH_OPTIMIZATION_CMA_ES_HPP
-#include <algorithm>
 #include <atomic>
 #include <cmath>
 #include <iostream>
@@ -14,7 +13,6 @@
 #include <random>
 #include <sstream>
 #include <stdexcept>
-#include <type_traits>
 #include <utility>
 #include <vector>
 #include <boost/math/optimization/detail/common.hpp>
@@ -273,8 +271,8 @@ ArgumentContainer cma_es(
     for (size_t k = 0; k < params.population_size; ++k) {
       auto & y = ys[k];
       auto & x = xs[k];
-      BOOST_MATH_ASSERT(x.size() == n);
-      BOOST_MATH_ASSERT(y.size() == n);
+      BOOST_MATH_ASSERT(static_cast<size_t>(x.size()) == n);
+      BOOST_MATH_ASSERT(static_cast<size_t>(y.size()) == n);
       size_t resample_counter = 0;
       do {
         // equation (39) of Figure 6:
@@ -339,7 +337,7 @@ ArgumentContainer cma_es(
     }
     // Equation (43), Figure 6: Start with C^{-1/2}<y>_{w}
     Eigen::Vector<DimensionlessReal, Eigen::Dynamic> inv_D_B_transpose_y = B.transpose()*weighted_avg_y;
-    for (size_t j = 0; j < inv_D_B_transpose_y.size(); ++j) {
+    for (long j = 0; j < inv_D_B_transpose_y.size(); ++j) {
       inv_D_B_transpose_y[j] /= D[j];
     }
     Eigen::Vector<DimensionlessReal, Eigen::Dynamic> C_inv_sqrt_y_avg = B*inv_D_B_transpose_y;
