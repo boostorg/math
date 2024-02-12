@@ -99,7 +99,7 @@ inline constexpr bool constant_might_fit_in_long_double()
 
 // LCOV_EXCL_START
 template <class T>
-inline constexpr bool constant_is_too_huge_for_long_double()
+inline constexpr bool constant_might_fit_in_largest_float()
 {
    return     std::is_floating_point<T>::value
           || (
@@ -110,7 +110,7 @@ inline constexpr bool constant_is_too_huge_for_long_double()
 }
 // LCOV_EXCL_STOP
 
-#define BOOST_MATH_HUGE_CONSTANT(T, xValMacro) boost::math::tools::make_big_value<T>(0.0L, BOOST_STRINGIZE(xValMacro), std::integral_constant<bool, boost::math::tools::constant_is_too_huge_for_long_double<T>()>(), std::is_constructible<T, const char*>())
+#define BOOST_MATH_HUGE_CONSTANT(T, xValMacro) boost::math::tools::make_big_value<T>(0.0L, BOOST_STRINGIZE(xValMacro), std::integral_constant<bool, boost::math::tools::constant_might_fit_in_largest_float<T>()>(), std::is_constructible<T, const char*>())
 
 }}} // namespaces
 
