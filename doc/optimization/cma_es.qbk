@@ -26,14 +26,14 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     };
 
     template <typename ArgumentContainer, class Func, class URBG>
-    ArgumentContainer cma_es(
-        const Func cost_function,
-        random_search_parameters<ArgumentContainer> const &params,
-        URBG &gen,
-        std::invoke_result_t<Func, ArgumentContainer> target_value = std::numeric_limits<std::invoke_result_t<Func, ArgumentContainer>>::quiet_NaN(),
-        std::atomic<bool> *cancellation = nullptr,
-        std::atomic<std::invoke_result_t<Func, ArgumentContainer>> *current_minimum_cost = nullptr,
-        std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr);
+    ArgumentContainer cma_es(const Func cost_function,
+                             cma_es_parameters<ArgumentContainer> const &params,
+                             URBG &gen,
+                             std::invoke_result_t<Func, ArgumentContainer> value_to_reach
+                               = std::numeric_limits<std::invoke_result_t<Func, ArgumentContainer>>::quiet_NaN(),
+                             std::atomic<bool> *cancellation = nullptr,
+                             std::atomic<std::invoke_result_t<Func, ArgumentContainer>> *current_minimum_cost = nullptr,
+                             std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr);
 
     } // namespaces
 ``
@@ -44,39 +44,48 @@ Our implementation attempts to follow "The CMA evolution strategy: A tutorial" e
 
 [heading Parameters]
 
-    `lower_bounds`: A container representing the lower bounds of the optimization space along each dimension. The `.size()` of the bounds should return the dimension of the problem.
-    `upper_bounds`: A container representing the upper bounds of the optimization space along each dimension. It should have the same size of `lower_bounds`, and each element should be >= the corresponding element of `lower_bounds`.
-    `initial_guess`: An optional guess for where we should start looking for solutions. This is provided for consistency with other optimization functions-it's not particularly useful for this function.
-    `max_generations`: The maximum number of generations before giving up.
-    `population_size`: The number of function calls per generation. Defaults to 4 + 4log(n), where n is the dimension.
-    `learning_rate`: Unlikely to be necessary-refer to the reference for when this should be changed.
+* `lower_bounds`: A container representing the lower bounds of the optimization space along each dimension.
+    The `.size()` of the bounds should return the dimension of the problem.
+* `upper_bounds`: A container representing the upper bounds of the optimization space along each dimension.
+    It should have the same size of `lower_bounds`, and each element should be >= the corresponding element of `lower_bounds`.
+* `initial_guess`: An optional guess for where we should start looking for solutions.
+* `max_generations`: The maximum number of generations before giving up.
+* `population_size`: The number of function calls per generation.
+    Defaults to `4 + 3log(D)`, where `D` is the dimension.
+* `learning_rate`: Unlikely to be necessary-refer to the reference for when this should be changed.
 
 [heading The function]
 
 ``
 template <typename ArgumentContainer, class Func, class URBG>
 ArgumentContainer cma_es(const Func cost_function,
-    cma_es_parameters<ArgumentContainer> const &params,
-    URBG &gen,
-    std::invoke_result_t<Func, ArgumentContainer> value_to_reach = std::numeric_limits<std::invoke_result_t<Func, ArgumentContainer>>::quiet_NaN(),
-    std::atomic<bool> *cancellation = nullptr,
-    std::atomic<std::invoke_result_t<Func, ArgumentContainer>> *current_minimum_cost = nullptr,
-    std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr)
+                         cma_es_parameters<ArgumentContainer> const &params,
+                         URBG &gen,
+                         std::invoke_result_t<Func, ArgumentContainer> value_to_reach
+                            = std::numeric_limits<std::invoke_result_t<Func, ArgumentContainer>>::quiet_NaN(),
+                         std::atomic<bool> *cancellation = nullptr,
+                         std::atomic<std::invoke_result_t<Func, ArgumentContainer>> *current_minimum_cost = nullptr,
+                         std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr)
 ``
 
 Parameters:
 
-    `cost_function`: The cost function to be minimized.
-    `params`: The parameters to the algorithm as described above.
-    `gen`: A uniform random bit generator, like `std::mt19937_64`.
-    `value_to_reach`: An optional value that, if reached, stops the optimization. This is the most robust way to terminate the calculation, but in most cases the optimal value of the cost function is unknown. If it is, use it! Physical considerations can often be used to find optimal values for cost functions.
-    `cancellation`: An optional atomic boolean to allow the user to stop the computation and gracefully return the best result found up to that point. N.B.: Cancellation is not immediate; the in-progress generation finishes.
-    `current_minimum_cost`: An optional atomic variable to store the current minimum cost during optimization. This allows developers to (e.g.) plot the progress of the minimization over time and in conjunction with the `cancellation` argument allow halting the computation when the progress stagnates.
-    `queries`: An optional vector to store intermediate results during optimization. This is useful for debugging and perhaps volume rendering of the objective function after the calculation is complete.
+* `cost_function`: The cost function to be minimized.
+* `params`: The parameters to the algorithm as described above.
+* `gen`: A uniform random bit generator, like `std::mt19937_64`.
+* `value_to_reach`: An optional value that, if reached, stops the optimization.
+    This is the most robust way to terminate the calculation, but in most cases the optimal value of the cost function is unknown.
+    If it is, use it! Physical considerations can often be used to find optimal values for cost functions.
+* `cancellation`: An optional atomic boolean to allow the user to stop the computation and gracefully return the best result found up to that point.
+    N.B.: Cancellation is not immediate; the in-progress generation finishes.
+* `current_minimum_cost`: An optional atomic variable to store the current minimum cost during optimization.
+    This allows developers to (e.g.) plot the progress of the minimization over time and in conjunction with the `cancellation` argument allow halting the computation when the progress stagnates.
+* `queries`: An optional vector to store intermediate results during optimization.
+    This is useful for debugging and perhaps volume rendering of the objective function after the calculation is complete.
 
 Returns:
 
-The argument vector corresponding to the minimum cost found by the optimization.
+The `ArgumentContainer` corresponding to the minimum cost found by the optimization.
 
 [h4:examples Examples]
 
