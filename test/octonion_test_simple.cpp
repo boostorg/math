@@ -85,6 +85,45 @@ void multiplication_test()
 
         BOOST_TEST(prod == ctrl);
     }
+
+    {
+        const boost::math::octonion<T> lhs(T(1),T(2),T(3),T(4),T(5),T(6),T(7),T(8));
+        const boost::math::octonion<T> rhs(T(1),T(1),T(1),T(1),T(1),T(1),T(1),T(1));
+
+        const boost::math::octonion<T> quot = lhs / rhs;
+
+        const boost::math::octonion<T> ctrl(T(4.5), T(0.25), T(0.5), T(0.75), T(-1), T(0.75), T(1.5), T(0.75));
+
+        BOOST_TEST(quot == ctrl);
+    }
+}
+
+template<class T>
+void division_test()
+{
+    {
+        const boost::math::octonion<T> lhs(T(1),T(2),T(3),T(4),T(5),T(6),T(7),T(8));
+        const boost::math::octonion<T> rhs(T(1),T(1),T(1),T(1),T(1),T(1),T(1),T(1));
+
+        const boost::math::octonion<T> quot = lhs / rhs;
+
+        const boost::math::octonion<T> ctrl(T(4.5), T(0.25), T(0.5), T(0.75), T(-1), T(0.75), T(1.5), T(0.75));
+
+        BOOST_TEST(quot == ctrl);
+    }
+
+    {
+        const std::complex<T> one_one(T(1), T(1));
+
+        const boost::math::octonion<T> lhs(T(1),T(2),T(3),T(4),T(5),T(6),T(7),T(8));
+        const boost::math::octonion<T> rhs(one_one, one_one, one_one, one_one);
+
+        const boost::math::octonion<T> quot = lhs / rhs;
+
+        const boost::math::octonion<T> ctrl(T(4.5), T(0.25), T(0.5), T(0.75), T(-1), T(0.75), T(1.5), T(0.75));
+
+        BOOST_TEST(quot == ctrl);
+    }
 }
 
 void octonion_original_manual_test()
@@ -349,6 +388,8 @@ auto main() -> int
 {
   multiplication_test<float>();
   multiplication_test<double>();
+
+  division_test<float>();
 
   exp_test<float>();
   exp_test<double>();
