@@ -1016,6 +1016,7 @@ test-suite misc :
    [ run  compile_test/interpolators_barycentric_rational_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run octonion_test.cpp
        ../../test/build//boost_unit_test_framework ]
+   [ run octonion_test_simple.cpp ]
    [ run quaternion_constexpr_test.cpp ]
    [ run quaternion_test.cpp
        ../../test/build//boost_unit_test_framework : : : <toolset>msvc-14.0:<debug-symbols>off [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]

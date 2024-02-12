@@ -1697,6 +1697,8 @@ namespace boost
 
     #undef    BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
+        // LCOV_EXCL_START
+        // Something like 2,100 lines of input-streaming up to line 3,800 and beyond.
 
         // Note:    the default values in the constructors of the complex and quaternions make for
         //            a very complex and ambiguous situation; we have made choices to disambiguate.
@@ -3843,6 +3845,7 @@ namespace boost
             finish:
             return(is);
         }
+        // LCOV_EXCL_STOP
 
 
         template<typename T, typename charT, class traits>
