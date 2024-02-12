@@ -1064,6 +1064,9 @@ test-suite interpolators :
    [ run jso_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run random_search_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run cma_es_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
+   [ compile compile_test/random_search_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ compile compile_test/differential_evolution_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ compile compile_test/jso_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
 ;
 
 test-suite quadrature :

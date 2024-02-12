@@ -6,21 +6,15 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_DIFFERENTIAL_EVOLUTION_HPP
 #define BOOST_MATH_OPTIMIZATION_DIFFERENTIAL_EVOLUTION_HPP
-#include <algorithm>
-#include <array>
 #include <atomic>
 #include <boost/math/optimization/detail/common.hpp>
-#include <chrono>
 #include <cmath>
-#include <future>
 #include <limits>
-#include <list>
 #include <mutex>
 #include <random>
 #include <sstream>
 #include <stdexcept>
 #include <thread>
-#include <type_traits>
 #include <utility>
 #include <vector>
 
