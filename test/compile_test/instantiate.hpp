@@ -179,6 +179,7 @@ void instantiate(RealType)
 #endif
 #endif
    int i { 1 };
+   int i_other { };
    // Deal with unused variable warnings:
    static_cast<void>(i);
    auto v1(static_cast<RealType>(0.51));
@@ -190,7 +191,6 @@ void instantiate(RealType)
    boost::math::tgamma(v1);
    boost::math::tgamma1pm1(v1);
    boost::math::lgamma(v1);
-   int i_other { };
    boost::math::lgamma(v1, &i_other);
    boost::math::digamma(v1);
    boost::math::trigamma(v1);
