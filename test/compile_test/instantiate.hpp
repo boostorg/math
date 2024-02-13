@@ -25,6 +25,7 @@
 template <class RealType>
 struct instantiate_runner_result
 {
+   static auto get_value() -> bool { return value; }
    static bool value;
 };
 

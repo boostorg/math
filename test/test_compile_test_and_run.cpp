@@ -16,7 +16,10 @@ namespace local
     #if defined(BOOST_FLOAT64_C)
 
     instantiate(static_cast<boost::float64_t>(BOOST_FLOAT64_C(1.23)));
-    BOOST_TEST(::instantiate_runner_result<boost::float64_t>::value);
+
+    volatile bool result_instantiate_and_run_is_ok = (::instantiate_runner_result<boost::float64_t>::get_value)();
+
+    BOOST_TEST(result_instantiate_and_run_is_ok);
 
     #else
 
