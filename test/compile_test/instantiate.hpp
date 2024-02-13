@@ -22,6 +22,15 @@
 #include <boost/math/concepts/distributions.hpp>
 #include <boost/concept_archetype.hpp>
 
+template <class RealType>
+struct instantiate_runner_result
+{
+   static bool value;
+};
+
+template <class RealType>
+bool instantiate_runner_result<RealType>::value { };
+
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
 
 typedef boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> > test_policy;
@@ -58,15 +67,6 @@ BOOST_MATH_DECLARE_DISTRIBUTIONS(double, test_policy)
 #  define TEST_GROUP_14
 #  define TEST_GROUP_15
 #endif
-
-template <class RealType>
-struct instantiate_runner_result
-{
-   static bool value;
-};
-
-template <class RealType>
-bool instantiate_runner_result<RealType>::value { };
 
 template <class RealType>
 void instantiate(RealType)
