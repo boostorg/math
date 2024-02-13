@@ -23,7 +23,7 @@ bool instantiate_runner_result<RealType>::value;
 
 #include <boost/math/tools/config.hpp>
 
-#ifndef BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS
+#if (!defined(BOOST_MATH_STANDALONE) && !defined(__CYGWIN__))
 
 #include <boost/math/distributions.hpp>
 
@@ -1807,14 +1807,14 @@ void instantiate_mixed(RealType)
 
 #else // Standalone mode
 
-template <typename T>
-void instantiate(T)
+template <typename RealType>
+void instantiate(RealType)
 {
    instantiate_runner_result<RealType>::value = true;
 }
 
-template <typename T>
-void instantiate_mixed(T) {}
+template <typename RealType>
+void instantiate_mixed(RealType) {}
 
 #endif // Standalone mode
 
