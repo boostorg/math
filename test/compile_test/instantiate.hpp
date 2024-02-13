@@ -926,49 +926,28 @@ void instantiate(RealType)
    boost::math::airy_ai_zero<RealType>(i, i, oi, pol);
    boost::math::airy_bi_zero<RealType>(i, i, oi, pol);
 
-   try
+   boost::math::hypergeometric_1F0(i, v2, pol);
    {
-      boost::math::hypergeometric_1F0(i, v2, pol);
-   }
-   catch(std::domain_error& err)
-   {
-      static_cast<void>(err.what());
-   }
-   try
-   {
-      boost::math::hypergeometric_1F0(v1, i, pol);
-   }
-   catch(std::domain_error& err)
-   {
-      static_cast<void>(err.what());
+      using std::floor;
+      const auto v1_special = static_cast<RealType>(floor(v1) * 2);
+
+      boost::math::hypergeometric_1F0(v1_special, i, pol);
    }
    boost::math::hypergeometric_1F0(i, i, pol);
    boost::math::hypergeometric_0F1(i, v2, pol);
    boost::math::hypergeometric_0F1(v1, i, pol);
    boost::math::hypergeometric_0F1(i, i, pol);
-   try
    {
-      boost::math::hypergeometric_2F0(i, v2, v3, pol);
+      const auto i_negate = -i;
+
+      boost::math::hypergeometric_2F0(i_negate, v2, v3, pol);
+      boost::math::hypergeometric_2F0(v1, i_negate, v3, pol);
    }
-   catch(std::overflow_error& err)
    {
-      static_cast<void>(err.what());
-   }
-   try
-   {
-      boost::math::hypergeometric_2F0(v1, i, v3, pol);
-   }
-   catch(std::overflow_error& err)
-   {
-      static_cast<void>(err.what());
-   }
-   try
-   {
-      boost::math::hypergeometric_2F0(v1, v2, i, pol);
-   }
-   catch(std::overflow_error& err)
-   {
-      static_cast<void>(err.what());
+      using std::floor;
+      const auto v1_special = static_cast<RealType>(floor(v1) * 2);
+
+      boost::math::hypergeometric_2F0(v1_special, v2, i, pol);
    }
 #if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_LAMBDAS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
    boost::math::hypergeometric_1F1(i, v2, v3, pol);
