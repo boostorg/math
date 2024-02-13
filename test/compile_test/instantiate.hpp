@@ -1489,11 +1489,14 @@ void instantiate_mixed(RealType)
 
    boost::math::policies::policy<> pol;
 
-
    boost::math::tgamma(i, pol);
    boost::math::tgamma1pm1(i, pol);
    boost::math::lgamma(i, pol);
-   boost::math::lgamma(i, &i_other, pol);
+   {
+      int i_other { i };
+
+      boost::math::lgamma(i, &i_other, pol);
+   }
    boost::math::digamma(i, pol);
    boost::math::trigamma(i, pol);
    boost::math::polygamma(i, i, pol);
@@ -1657,7 +1660,11 @@ void instantiate_mixed(RealType)
    test::tgamma(i);
    test::tgamma1pm1(i);
    test::lgamma(i);
-   test::lgamma(i, &i_other);
+   {
+      int i_other { i };
+
+      test::lgamma(i, &i_other);
+   }
    test::digamma(i);
    test::trigamma(i);
    test::polygamma(i, i);
