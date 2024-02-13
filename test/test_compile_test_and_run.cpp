@@ -13,15 +13,16 @@ namespace local
 {
   auto instantiate_runner() -> void
   {
-    volatile bool result_instantiate_and_run_is_ok { false };
     #if defined(BOOST_FLOAT64_C)
-    instantiate(BOOST_FLOAT64_C(1.23));
-    result_instantiate_and_run_is_ok = true;
-    #else
-    result_instantiate_and_run_is_ok = true;
-    #endif
 
-    BOOST_TEST(result_instantiate_and_run_is_ok);
+    instantiate(BOOST_FLOAT64_C(1.23));
+    BOOST_TEST(instantiate_runner_result<boost::float64_t>::value);
+
+    #else
+
+    BOOST_TEST(true);
+
+    #endif
   }
 }
 

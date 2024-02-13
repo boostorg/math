@@ -1,5 +1,6 @@
 //  Copyright John Maddock 2006.
 //  Copyright Paul A. Bristow 2007, 2010.
+//  Copyright Christopher Kormanyos 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -59,8 +60,19 @@ BOOST_MATH_DECLARE_DISTRIBUTIONS(double, test_policy)
 #endif
 
 template <class RealType>
+struct instantiate_runner_result
+{
+   static bool value;
+};
+
+template <class RealType>
+bool instantiate_runner_result<RealType>::value { };
+
+template <class RealType>
 void instantiate(RealType)
 {
+   instantiate_runner_result<RealType>::value = false;
+
    using namespace boost;
    using namespace boost::math;
    using namespace boost::math::concepts;
@@ -199,10 +211,14 @@ void instantiate(RealType)
    boost::math::tgamma_delta_ratio(v1, v2);
    boost::math::factorial<RealType>(i);
    boost::math::unchecked_factorial<RealType>(i);
-   i = boost::math::max_factorial<RealType>::value;
-   boost::math::double_factorial<RealType>(i);
-   boost::math::rising_factorial(v1, i);
-   boost::math::falling_factorial(v1, i);
+   {
+      const auto i_fact = boost::math::max_factorial<RealType>::value;
+
+      boost::math::double_factorial<RealType>(i_fact);
+      boost::math::rising_factorial(v1, i_fact);
+      boost::math::falling_factorial(v1, i_fact);
+   }
+   i = 4;
    boost::math::tgamma(v1, v2);
    boost::math::tgamma_lower(v1, v2);
    boost::math::gamma_p(v1, v2);
@@ -262,8 +278,11 @@ void instantiate(RealType)
    boost::math::chebyshev_t(1, v1);
    boost::math::chebyshev_u(1, v1);
    boost::math::chebyshev_t_prime(1, v1);
-   const RealType v1_other = v1;
-   boost::math::chebyshev_clenshaw_recurrence(&v1_other, 0, v2);
+   {
+      const RealType v1_other_const = v1;
+
+      boost::math::chebyshev_clenshaw_recurrence(&v1_other_const, 0, v2);
+   }
    boost::math::spherical_harmonic_r(2, 1, v1, v2);
    boost::math::spherical_harmonic_i(2, 1, v1, v2);
    boost::math::ellint_1(v1);
@@ -541,7 +560,11 @@ void instantiate(RealType)
    boost::math::chebyshev_t(1, 2 * v1);
    boost::math::chebyshev_u(1, 2 * v1);
    boost::math::chebyshev_t_prime(1, 2 * v1);
-   boost::math::chebyshev_clenshaw_recurrence(&v1_other, 0, 2 * v2);
+   {
+      const RealType v1_other_const = v1;
+
+      boost::math::chebyshev_clenshaw_recurrence(&v1_other_const, 0, 2 * v2);
+   }
    boost::math::spherical_harmonic_r(2, 1, v1 * 1, v2 + 0);
    boost::math::spherical_harmonic_i(2, 1, v1 * 1, v2 + 0);
    boost::math::ellint_1(v1 * 1);
@@ -560,7 +583,7 @@ void instantiate(RealType)
    boost::math::jacobi_zeta(v1 * 1, v2 + 0);
    boost::math::heuman_lambda(v1 * 1, v2 + 0);
    {
-      RealType v1_to_get { v1_other };
+      RealType v1_to_get { v1 };
 
       boost::math::jacobi_elliptic(v1 * 1, v2 + 0, &v1_to_get, &v2);
    }
@@ -790,7 +813,7 @@ void instantiate(RealType)
    boost::math::ellint_rg(v1, v2, v3, pol);
    boost::math::ellint_rj(v1, v2, v3, v1, pol);
    {
-      RealType v1_to_get { v1_other };
+      RealType v1_to_get { v1 };
 
       boost::math::jacobi_elliptic(v1, v2, &v1_to_get, &v2, pol);
    }
@@ -971,7 +994,7 @@ void instantiate(RealType)
    iround(v1, pol);
    lround(v1, pol);
    {
-      RealType v1_to_get { v1_other };
+      RealType v1_to_get { v1 };
 
       modf(v1, &v1_to_get, pol);
    }
@@ -1086,7 +1109,11 @@ void instantiate(RealType)
    test::chebyshev_t(1, v1);
    test::chebyshev_u(1, v1);
    test::chebyshev_t_prime(1, v1);
-   test::chebyshev_clenshaw_recurrence(&v1_other, 0, v2);
+   {
+      const RealType v1_other_const = v1;
+
+      test::chebyshev_clenshaw_recurrence(&v1_other_const, 0, v2);
+   }
    test::spherical_harmonic_r(2, 1, v1, v2);
    test::spherical_harmonic_i(2, 1, v1, v2);
    test::ellint_1(v1);
@@ -1105,7 +1132,7 @@ void instantiate(RealType)
    test::ellint_rg(v1, v2, v3);
    test::ellint_rj(v1, v2, v3, v1);
    {
-      RealType v1_to_get { v1_other };
+      RealType v1_to_get { v1 };
 
       test::jacobi_elliptic(v1, v2, &v1_to_get, &v2);
    }
@@ -1244,7 +1271,7 @@ void instantiate(RealType)
    test::iround(v1);
    test::lround(v1);
    {
-      RealType v1_to_get { v1_other };
+      RealType v1_to_get { v1 };
 
       test::modf(v1, &v1_to_get);
    }
@@ -1263,6 +1290,8 @@ void instantiate(RealType)
    test::ulp(v1);
 #endif
 #endif
+
+   instantiate_runner_result<RealType>::value = true;
 }
 
 template <class RealType>
@@ -1292,7 +1321,11 @@ void instantiate_mixed(RealType)
    boost::math::tgamma(i);
    boost::math::tgamma1pm1(i);
    boost::math::lgamma(i);
-   boost::math::lgamma(i, &i_other);
+   {
+      int i_other { i };
+
+      boost::math::lgamma(i, &i_other);
+   }
    boost::math::digamma(i);
    boost::math::trigamma(i);
    boost::math::polygamma(i, i);
