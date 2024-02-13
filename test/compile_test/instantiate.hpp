@@ -17,13 +17,15 @@ struct instantiate_runner_result
 template <class RealType>
 bool instantiate_runner_result<RealType>::value;
 
-#ifndef BOOST_MATH_ASSERT_UNDEFINED_POLICY
-#  define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
+#if defined(BOOST_MATH_ASSERT_UNDEFINED_POLICY)
+#undef BOOST_MATH_ASSERT_UNDEFINED_POLICY
 #endif
+
+#define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 
 #include <boost/math/tools/config.hpp>
 
-#if (!defined(BOOST_MATH_STANDALONE) && !defined(__CYGWIN__))
+#if !defined(BOOST_MATH_STANDALONE)
 
 #include <boost/math/distributions.hpp>
 
@@ -88,7 +90,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<bernoulli_distribution<RealType> > >();
    function_requires<DistributionConcept<beta_distribution<RealType> > >();
    function_requires<DistributionConcept<binomial_distribution<RealType> > >();
-   //function_requires<DistributionConcept<cauchy_distribution<RealType> > >();
+   function_requires<DistributionConcept<cauchy_distribution<RealType> > >();
    function_requires<DistributionConcept<chi_squared_distribution<RealType> > >();
    function_requires<DistributionConcept<exponential_distribution<RealType> > >();
    function_requires<DistributionConcept<extreme_value_distribution<RealType> > >();
@@ -125,7 +127,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<bernoulli_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<beta_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<binomial_distribution<RealType, test_policy> > >();
-   //function_requires<DistributionConcept<cauchy_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<cauchy_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<chi_squared_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<exponential_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<extreme_value_distribution<RealType, test_policy> > >();
