@@ -1,50 +1,98 @@
 // Copyright Hubert Holin 2001.
 // Copyright Christopher Kormanyos 2024
-//  Distributed under the Boost Software License, Version 1.0. (See
-//  accompanying file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
-
-#include <iomanip>
+// Distributed under the Boost Software License, Version 1.0. (See
+// accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/mpl/list.hpp>
 #include <boost/math/octonion.hpp>
 #include <boost/core/lightweight_test.hpp>
 
+#include <cstdint>
+#include <random>
+
 // test file for octonion.hpp
 
-namespace
+namespace local
 {
-    template<typename T>
-    ::boost::math::octonion<T> index_i_element(int idx)
+  std::mt19937 eng(static_cast<typename std::mt19937::result_type>(UINT8_C(42)));
+  std::uniform_int_distribution<int> dst_one(1, 1);
+
+  template<typename NumericType>
+  auto is_close_fraction(const NumericType& a,
+                         const NumericType& b,
+                         const NumericType& tol) noexcept -> bool
+  {
+    using std::fabs;
+
+    auto result_is_ok = bool { };
+
+    if(b == static_cast<NumericType>(0))
     {
-        return(
-            ::boost::math::octonion<T>(
-                        (idx == 0) ?
-                            static_cast<T>(1) :
-                            static_cast<T>(0),
-                        (idx == 1) ?
-                            static_cast<T>(1) :
-                            static_cast<T>(0),
-                        (idx == 2) ?
-                            static_cast<T>(1) :
-                            static_cast<T>(0),
-                        (idx == 3) ?
-                            static_cast<T>(1) :
-                            static_cast<T>(0),
-                        (idx == 4) ?
-                            static_cast<T>(1) :
-                            static_cast<T>(0),
-                        (idx == 5) ?
-                            static_cast<T>(1) :
-                            static_cast<T>(0),
-                        (idx == 6) ?
-                            static_cast<T>(1) :
-                            static_cast<T>(0),
-                        (idx == 7) ?
-                            static_cast<T>(1) :
-                            static_cast<T>(0)
-            ));
+      result_is_ok = (fabs(a - b) < tol);
     }
+    else
+    {
+      const auto delta = fabs(1 - (a / b));
+
+      result_is_ok = (delta < tol);
+    }
+
+    return result_is_ok;
+  }
+
+  template<typename T>
+  auto is_close_fraction(const ::boost::math::octonion<T>& a,
+                         const ::boost::math::octonion<T>& b,
+                         const T& tol) noexcept -> bool
+  {
+    using std::fabs;
+
+    bool result_is_ok { true };
+
+    result_is_ok = (is_close_fraction(a.R_component_1(), b.R_component_1(), tol) && result_is_ok);
+    result_is_ok = (is_close_fraction(a.R_component_2(), b.R_component_2(), tol) && result_is_ok);
+    result_is_ok = (is_close_fraction(a.R_component_3(), b.R_component_3(), tol) && result_is_ok);
+    result_is_ok = (is_close_fraction(a.R_component_4(), b.R_component_4(), tol) && result_is_ok);
+    result_is_ok = (is_close_fraction(a.R_component_5(), b.R_component_5(), tol) && result_is_ok);
+    result_is_ok = (is_close_fraction(a.R_component_6(), b.R_component_6(), tol) && result_is_ok);
+    result_is_ok = (is_close_fraction(a.R_component_7(), b.R_component_7(), tol) && result_is_ok);
+    result_is_ok = (is_close_fraction(a.R_component_8(), b.R_component_8(), tol) && result_is_ok);
+
+    return result_is_ok;
+  }
+
+  template<typename T>
+  ::boost::math::octonion<T> index_i_element(int idx)
+  {
+      return(
+          ::boost::math::octonion<T>(
+                      (idx == 0) ?
+                          static_cast<T>(1) :
+                          static_cast<T>(0),
+                      (idx == 1) ?
+                          static_cast<T>(1) :
+                          static_cast<T>(0),
+                      (idx == 2) ?
+                          static_cast<T>(1) :
+                          static_cast<T>(0),
+                      (idx == 3) ?
+                          static_cast<T>(1) :
+                          static_cast<T>(0),
+                      (idx == 4) ?
+                          static_cast<T>(1) :
+                          static_cast<T>(0),
+                      (idx == 5) ?
+                          static_cast<T>(1) :
+                          static_cast<T>(0),
+                      (idx == 6) ?
+                          static_cast<T>(1) :
+                          static_cast<T>(0),
+                      (idx == 7) ?
+                          static_cast<T>(1) :
+                          static_cast<T>(0)
+          ));
+  }
 }
 
 template<class T>
@@ -66,7 +114,7 @@ void multiplication_test()
 
     for    (int idx = 1; idx < 8; ++idx)
     {
-        ::boost::math::octonion<T> toto = index_i_element<T>(idx);
+        ::boost::math::octonion<T> toto = local::index_i_element<T>(idx);
 
         const T tabs { abs(toto*toto+static_cast<T>(1)) };
 
@@ -86,9 +134,13 @@ void multiplication_test()
         BOOST_TEST(prod == ctrl);
     }
 
+    for(auto i = static_cast<unsigned>(UINT8_C(0)); i < static_cast<unsigned>(UINT8_C(16)); ++i)
     {
         const boost::math::octonion<T> lhs(T(1),T(2),T(3),T(4),T(5),T(6),T(7),T(8));
-        const boost::math::octonion<T> rhs(T(1),T(1),T(1),T(1),T(1),T(1),T(1),T(1));
+
+        const boost::math::octonion<T> rhs =
+              boost::math::octonion<T> { T(1),T(1),T(1),T(1),T(1),T(1),T(1),T(1) }
+            * static_cast<T>(local::dst_one(local::eng));
 
         const boost::math::octonion<T> quot = lhs / rhs;
 
@@ -361,7 +413,7 @@ void octonion_original_manual_test()
 }
 
 template <class T>
-void exp_test()
+void elem_func_test()
 {
     using ::std::numeric_limits;
 
@@ -374,13 +426,175 @@ void exp_test()
     for(int idx = 1; idx < 8; ++idx)
     {
         ::boost::math::octonion<T> toto =
-            static_cast<T>(4)*atan(static_cast<T>(1))*index_i_element<T>(idx);
+            static_cast<T>(4)*atan(static_cast<T>(1)) * local::index_i_element<T>(idx);
 
         const T tabs { abs(exp(toto)+static_cast<T>(1)) };
 
         const auto result_exp_toto_is_ok = (tabs < 2*numeric_limits<T>::epsilon());
 
         BOOST_TEST(result_exp_toto_is_ok);
+    }
+
+    {
+        const std::complex<T> one_sixteenth_one_over_32 { T { 1 } / 16, T { 1 } / 32 };
+        const ::boost::math::octonion<T>
+            octo_small
+            {
+                          one_sixteenth_one_over_32,
+                T { 2 } * one_sixteenth_one_over_32,
+                T { 3 } * one_sixteenth_one_over_32,
+                T { 4 } * one_sixteenth_one_over_32
+            };
+
+        const auto octo_small_exp = exp(octo_small);
+
+        const auto r0 = octo_small_exp.real();
+
+        using std::exp;
+
+        BOOST_TEST(r0 < exp(one_sixteenth_one_over_32.real()));
+
+        {
+            auto octo_small_exp_inv = ::boost::math::octonion<T>(1);
+            octo_small_exp_inv /= octo_small_exp;
+
+            const auto value_cosh      = cosh(octo_small);
+            const auto value_cosh_ctrl = (octo_small_exp + octo_small_exp_inv) / T(2);
+
+            const auto result_cosh_is_ok = local::is_close_fraction(value_cosh, value_cosh_ctrl, std::numeric_limits<T>::epsilon() * 64);
+
+            BOOST_TEST(result_cosh_is_ok);
+        }
+
+        {
+            auto octo_small_exp_inv = ::boost::math::octonion<T>(1);
+            octo_small_exp_inv /= octo_small_exp;
+
+            const auto value_sinh      = sinh(octo_small);
+            const auto value_sinh_ctrl = (octo_small_exp - octo_small_exp_inv) / T(2);
+
+            const auto result_sinh_is_ok = local::is_close_fraction(value_sinh, value_sinh_ctrl, std::numeric_limits<T>::epsilon() * 64);
+
+            BOOST_TEST(result_sinh_is_ok);
+        }
+
+        {
+            const auto value_sinh      = sinh(octo_small);
+            const auto value_cosh      = cosh(octo_small);
+            const auto value_tanh      = tanh(octo_small);
+            const auto value_tanh_ctrl = value_sinh / value_cosh;
+
+            const auto result_tanh_is_ok = local::is_close_fraction(value_tanh, value_tanh_ctrl, std::numeric_limits<T>::epsilon() * 64);
+
+            BOOST_TEST(result_tanh_is_ok);
+        }
+    }
+
+    {
+        const std::complex<T> one_sixteenth_one_over_32 { T { 1 } / 16, T { 1 } / 32 };
+        const ::boost::math::octonion<T>
+            octo_small
+            {
+                          one_sixteenth_one_over_32,
+                T { 2 } * one_sixteenth_one_over_32,
+                T { 3 } * one_sixteenth_one_over_32,
+                T { 4 } * one_sixteenth_one_over_32
+            };
+
+        const auto octo_small_sin = sin(octo_small);
+
+        const auto r0 = octo_small_sin.real();
+
+        using std::sin;
+
+        BOOST_TEST(r0 > sin(one_sixteenth_one_over_32.real()));
+    }
+
+    {
+        const std::complex<T> one_sixteenth_one_over_32 { T { 1 } / 16, T { 1 } / 32 };
+        const ::boost::math::octonion<T>
+            octo_small
+            {
+                          one_sixteenth_one_over_32,
+                T { 2 } * one_sixteenth_one_over_32,
+                T { 3 } * one_sixteenth_one_over_32,
+                T { 4 } * one_sixteenth_one_over_32
+            };
+
+        const auto octo_small_cos = cos(octo_small);
+
+        const auto r0 = octo_small_cos.real();
+
+        using std::cos;
+
+        BOOST_TEST(r0 > cos(one_sixteenth_one_over_32.real()));
+    }
+
+    {
+        const std::complex<T> one_sixteenth_one_over_32 { T { 1 } / 16, T { 1 } / 32 };
+        const ::boost::math::octonion<T>
+            octo_small
+            {
+                          one_sixteenth_one_over_32,
+                T { 2 } * one_sixteenth_one_over_32,
+                T { 3 } * one_sixteenth_one_over_32,
+                T { 4 } * one_sixteenth_one_over_32
+            };
+
+        const auto octo_small_sin = sin(octo_small);
+        const auto octo_small_cos = cos(octo_small);
+        const auto octo_small_tan = tan(octo_small);
+
+        const auto octo_small_tan_ctrl = octo_small_sin / octo_small_cos;
+
+        const auto result_tan_is_ok = local::is_close_fraction(octo_small_tan, octo_small_tan_ctrl, std::numeric_limits<T>::epsilon() * 64);
+
+        BOOST_TEST(result_tan_is_ok);
+    }
+
+    for(auto i = static_cast<unsigned>(UINT8_C(0)); i < static_cast<unsigned>(UINT8_C(8)); ++i)
+    {
+        static_cast<void>(i);
+
+        ::boost::math::octonion<T> b { T {1}, T {2}, T {3}, T {4}, T {5}, T {6}, T {7}, T {8} };
+
+        b *= static_cast<T>(local::dst_one(local::eng));
+
+        {
+            ::boost::math::octonion<T> bp0      = pow(b, 0);
+            ::boost::math::octonion<T> bp0_ctrl { T { 1 } };
+
+            const auto result_b0_is_ok = local::is_close_fraction(bp0, bp0_ctrl, std::numeric_limits<T>::epsilon() * 64);
+        }
+
+        {
+            ::boost::math::octonion<T> bp1      = pow(b, 1);
+            ::boost::math::octonion<T> bp1_ctrl = b;
+
+            const auto result_b1_is_ok = local::is_close_fraction(bp1, bp1_ctrl, std::numeric_limits<T>::epsilon() * 64);
+        }
+
+        {
+            ::boost::math::octonion<T> bp2      = pow(b, 2);
+            ::boost::math::octonion<T> bp2_ctrl = b * b;
+
+            const auto result_b2_is_ok = local::is_close_fraction(bp2, bp2_ctrl, std::numeric_limits<T>::epsilon() * 64);
+        }
+
+        {
+            ::boost::math::octonion<T> bp3      = pow(b, 3);
+            ::boost::math::octonion<T> bp3_ctrl = (b * b) * b;
+
+            const auto result_b3_is_ok = local::is_close_fraction(bp3, bp3_ctrl, std::numeric_limits<T>::epsilon() * 64);
+        }
+
+        {
+            ::boost::math::octonion<T> bp4      = pow(b, 4);
+            ::boost::math::octonion<T> bp2_ctrl = b * b;
+            ::boost::math::octonion<T> bp4_ctrl = bp2_ctrl * bp2_ctrl;
+
+            const auto result_b3_is_ok = local::is_close_fraction(bp4, bp4_ctrl, std::numeric_limits<T>::epsilon() * 64);
+        }
     }
 }
 
@@ -391,8 +605,8 @@ auto main() -> int
 
   division_test<float>();
 
-  exp_test<float>();
-  exp_test<double>();
+  elem_func_test<float>();
+  elem_func_test<double>();
 
   octonion_original_manual_test();
 

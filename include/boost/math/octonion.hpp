@@ -174,6 +174,10 @@ namespace boost
             type    g;                                \
             type    h;                                \
 
+        // LCOV_EXCL_START
+        // No code coverage for the generic case, like std::complex,
+        // the The behavior of octonion is unspecified if T is not
+        // one of float, double or long double.
 
         template<typename T>
         class octonion
@@ -658,7 +662,7 @@ namespace boost
         private:
 
         };
-
+        // LCOV_EXCL_STOP
 
         // declaration of octonion specialization
 
