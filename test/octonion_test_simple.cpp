@@ -1,8 +1,8 @@
 // Copyright Hubert Holin 2001.
 // Copyright Christopher Kormanyos 2024
-//  Distributed under the Boost Software License, Version 1.0. (See
-//  accompanying file LICENSE_1_0.txt or copy at
-//  http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0. (See
+// accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #include <iomanip>
 
@@ -361,7 +361,7 @@ void octonion_original_manual_test()
 }
 
 template <class T>
-void exp_test()
+void elem_func_test()
 {
     using ::std::numeric_limits;
 
@@ -382,6 +382,46 @@ void exp_test()
 
         BOOST_TEST(result_exp_toto_is_ok);
     }
+
+    {
+        const std::complex<T> one_sixteenth_one_over_32 { T { 1 } / 16, T { 1 } / 32 };
+        const ::boost::math::octonion<T>
+            octo_small
+            {
+                          one_sixteenth_one_over_32,
+                T { 2 } * one_sixteenth_one_over_32,
+                T { 3 } * one_sixteenth_one_over_32,
+                T { 4 } * one_sixteenth_one_over_32
+            };
+
+        const auto octo_small_exp = exp(octo_small);
+
+        const auto r0 = octo_small_exp.real();
+
+        using std::exp;
+
+        BOOST_TEST(r0 < exp(one_sixteenth_one_over_32.real()));
+    }
+
+    {
+        const std::complex<T> one_sixteenth_one_over_32 { T { 1 } / 16, T { 1 } / 32 };
+        const ::boost::math::octonion<T>
+            octo_small
+            {
+                          one_sixteenth_one_over_32,
+                T { 2 } * one_sixteenth_one_over_32,
+                T { 3 } * one_sixteenth_one_over_32,
+                T { 4 } * one_sixteenth_one_over_32
+            };
+
+        const auto octo_small_sin = sin(octo_small);
+
+        const auto r0 = octo_small_sin.real();
+
+        using std::sin;
+
+        BOOST_TEST(r0 > sin(one_sixteenth_one_over_32.real()));
+    }
 }
 
 auto main() -> int
@@ -391,8 +431,8 @@ auto main() -> int
 
   division_test<float>();
 
-  exp_test<float>();
-  exp_test<double>();
+  elem_func_test<float>();
+  elem_func_test<double>();
 
   octonion_original_manual_test();
 
