@@ -29,7 +29,7 @@ struct instantiate_runner_result
 };
 
 template <class RealType>
-bool instantiate_runner_result<RealType>::value { };
+bool instantiate_runner_result<RealType>::value;
 
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
 
@@ -446,8 +446,11 @@ void instantiate(RealType)
       boost::math::modf(v1, &v1_to_get);
    }
    boost::math::modf(v1, &i_other);
-   long l_other { };
-   boost::math::modf(v1, &l_other);
+   {
+      long l_other { };
+
+      boost::math::modf(v1, &l_other);
+   }
 #ifdef BOOST_HAS_LONG_LONG
    boost::math::lltrunc(v1);
    boost::math::llround(v1);
@@ -709,8 +712,11 @@ void instantiate(RealType)
    boost::math::lround(v1 * 1);
    //boost::math::modf(v1 * 1, &v1_other);
    //boost::math::modf(v1 * 1, &i_other);
-   //long l;
-   //boost::math::modf(v1 * 1, &l_other);
+   //{
+   //   long l_other { };
+   //
+   //   boost::math::modf(v1 * 1, &l_other);
+   //}
 #ifdef BOOST_HAS_LONG_LONG
    boost::math::lltrunc(v1 * 1);
    boost::math::llround(v1 * 1);
@@ -978,7 +984,11 @@ void instantiate(RealType)
       modf(v1, &v1_to_get, pol);
    }
    modf(v1, &i_other, pol);
-   modf(v1, &l_other, pol);
+   {
+      long l_other { };
+
+      modf(v1, &l_other, pol);
+   }
 #ifdef BOOST_HAS_LONG_LONG
    using boost::math::lltrunc;
    using boost::math::llround;
@@ -1255,7 +1265,11 @@ void instantiate(RealType)
       test::modf(v1, &v1_to_get);
    }
    test::modf(v1, &i_other);
-   test::modf(v1, &l_other);
+   {
+      long l_other { };
+
+     test::modf(v1, &l_other);
+   }
 #ifdef BOOST_HAS_LONG_LONG
    test::lltrunc(v1);
    test::llround(v1);
