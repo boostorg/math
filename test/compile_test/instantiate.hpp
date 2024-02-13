@@ -8,6 +8,15 @@
 #ifndef BOOST_LIBS_MATH_TEST_INSTANTIATE_HPP
 #define BOOST_LIBS_MATH_TEST_INSTANTIATE_HPP
 
+template <class RealType>
+struct instantiate_runner_result
+{
+   static bool value;
+};
+
+template <class RealType>
+bool instantiate_runner_result<RealType>::value;
+
 #ifndef BOOST_MATH_ASSERT_UNDEFINED_POLICY
 #  define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 #endif
@@ -21,16 +30,6 @@
 #include <boost/math/special_functions.hpp>
 #include <boost/math/concepts/distributions.hpp>
 #include <boost/concept_archetype.hpp>
-
-template <class RealType>
-struct instantiate_runner_result
-{
-   static auto get_value() -> bool { return value; }
-   static bool value;
-};
-
-template <class RealType>
-bool instantiate_runner_result<RealType>::value;
 
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
 
@@ -1809,7 +1808,10 @@ void instantiate_mixed(RealType)
 #else // Standalone mode
 
 template <typename T>
-void instantiate(T) {}
+void instantiate(T)
+{
+   instantiate_runner_result<RealType>::value = true;
+}
 
 template <typename T>
 void instantiate_mixed(T) {}

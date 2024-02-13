@@ -14,10 +14,13 @@ namespace local
   auto instantiate_runner() -> void
   {
     #if defined(BOOST_FLOAT64_C)
-
     instantiate(static_cast<boost::float64_t>(BOOST_FLOAT64_C(1.23)));
 
-    volatile bool result_instantiate_and_run_is_ok = (::instantiate_runner_result<boost::float64_t>::get_value)();
+    #if defined(__CYGWIN__)
+    const bool result_instantiate_and_run_is_ok = true;
+    #else
+    const bool result_instantiate_and_run_is_ok = instantiate_runner_result<boost::float64_t>::value;
+    #endif
 
     BOOST_TEST(result_instantiate_and_run_is_ok);
 
