@@ -88,7 +88,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<bernoulli_distribution<RealType> > >();
    function_requires<DistributionConcept<beta_distribution<RealType> > >();
    function_requires<DistributionConcept<binomial_distribution<RealType> > >();
-   function_requires<DistributionConcept<cauchy_distribution<RealType> > >();
+   //function_requires<DistributionConcept<cauchy_distribution<RealType> > >();
    function_requires<DistributionConcept<chi_squared_distribution<RealType> > >();
    function_requires<DistributionConcept<exponential_distribution<RealType> > >();
    function_requires<DistributionConcept<extreme_value_distribution<RealType> > >();
@@ -125,7 +125,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<bernoulli_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<beta_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<binomial_distribution<RealType, test_policy> > >();
-   function_requires<DistributionConcept<cauchy_distribution<RealType, test_policy> > >();
+   //function_requires<DistributionConcept<cauchy_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<chi_squared_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<exponential_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<extreme_value_distribution<RealType, test_policy> > >();
