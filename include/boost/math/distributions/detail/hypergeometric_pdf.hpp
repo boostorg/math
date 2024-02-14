@@ -321,7 +321,8 @@ T hypergeometric_pdf_prime_loop_imp(hypergeometric_pdf_prime_loop_data& data, hy
             // to sidestep the issue:
             //
             hypergeometric_pdf_prime_loop_result_entry<T> t = { p, &result };
-            data.current_prime = prime(++data.prime_index);
+            ++data.prime_index;
+            data.current_prime = prime(static_cast<unsigned>(data.prime_index));
             return hypergeometric_pdf_prime_loop_imp<T>(data, t);
          }
          if((p < 1) && (tools::min_value<T>() / p > result.value))
@@ -331,12 +332,14 @@ T hypergeometric_pdf_prime_loop_imp(hypergeometric_pdf_prime_loop_data& data, hy
             // to sidestep the issue:
             //
             hypergeometric_pdf_prime_loop_result_entry<T> t = { p, &result };
-            data.current_prime = prime(++data.prime_index);
+            ++data.prime_index;
+            data.current_prime = prime(static_cast<unsigned>(data.prime_index));
             return hypergeometric_pdf_prime_loop_imp<T>(data, t);
          }
          result.value *= p;
       }
-      data.current_prime = prime(++data.prime_index);
+      ++data.prime_index;
+      data.current_prime = prime(static_cast<unsigned>(data.prime_index));
    }
    //
    // When we get to here we have run out of prime factors,
@@ -397,16 +400,16 @@ T hypergeometric_pdf_factorial_imp(std::uint64_t x, std::uint64_t r, std::uint64
    BOOST_MATH_ASSERT(N <= boost::math::max_factorial<T>::value);
    T result = boost::math::unchecked_factorial<T>(n);
    T num[3] = {
-      boost::math::unchecked_factorial<T>(r),
-      boost::math::unchecked_factorial<T>(N - n),
-      boost::math::unchecked_factorial<T>(N - r)
+      boost::math::unchecked_factorial<T>(static_cast<unsigned>(r)),
+      boost::math::unchecked_factorial<T>(static_cast<unsigned>(N - n)),
+      boost::math::unchecked_factorial<T>(static_cast<unsigned>(N - r))
    };
    T denom[5] = {
-      boost::math::unchecked_factorial<T>(N),
-      boost::math::unchecked_factorial<T>(x),
-      boost::math::unchecked_factorial<T>(n - x),
-      boost::math::unchecked_factorial<T>(r - x),
-      boost::math::unchecked_factorial<T>(N - n - r + x)
+      boost::math::unchecked_factorial<T>(static_cast<unsigned>(N)),
+      boost::math::unchecked_factorial<T>(static_cast<unsigned>(x)),
+      boost::math::unchecked_factorial<T>(static_cast<unsigned>(n - x)),
+      boost::math::unchecked_factorial<T>(static_cast<unsigned>(r - x)),
+      boost::math::unchecked_factorial<T>(static_cast<unsigned>(N - n - r + x))
    };
    std::size_t i = 0;
    std::size_t j = 0;
