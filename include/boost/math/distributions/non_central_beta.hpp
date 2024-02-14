@@ -806,24 +806,34 @@ namespace boost
       // standard_deviation provided by derived accessors.
       template <class RealType, class Policy>
       inline RealType skewness(const non_central_beta_distribution<RealType, Policy>& /*dist*/)
-      { // skewness = sqrt(l).
+      {
+         // LCOV_EXCL_START
          const char* function = "boost::math::non_central_beta_distribution<%1%>::skewness()";
-         typedef typename Policy::assert_undefined_type assert_type;
-         static_assert(assert_type::value == 0, "Assert type is undefined.");
 
-         return policies::raise_evaluation_error<RealType>(function, "This function is not yet implemented, the only sensible result is %1%.", // LCOV_EXCL_LINE
-            std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?  LCOV_EXCL_LINE
+         return
+            policies::raise_evaluation_error<RealType>
+            (
+               function,
+               "This function is not yet implemented, the only sensible result is %1%.", // LCOV_EXCL_LINE
+               std::numeric_limits<RealType>::quiet_NaN(), Policy()
+            );
+         // LCOV_EXCL_STOP
       }
 
       template <class RealType, class Policy>
       inline RealType kurtosis_excess(const non_central_beta_distribution<RealType, Policy>& /*dist*/)
       {
+         // LCOV_EXCL_START
          const char* function = "boost::math::non_central_beta_distribution<%1%>::kurtosis_excess()";
-         typedef typename Policy::assert_undefined_type assert_type;
-         static_assert(assert_type::value == 0, "Assert type is undefined.");
 
-         return policies::raise_evaluation_error<RealType>(function, "This function is not yet implemented, the only sensible result is %1%.", // LCOV_EXCL_LINE
-            std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?  LCOV_EXCL_LINE
+         return
+            policies::raise_evaluation_error<RealType>
+            (
+               function,
+               "This function is not yet implemented, the only sensible result is %1%.",
+               std::numeric_limits<RealType>::quiet_NaN(), Policy()
+            );
+         // LCOV_EXCL_STOP
       } // kurtosis_excess
 
       template <class RealType, class Policy>

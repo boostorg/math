@@ -145,6 +145,8 @@ T bessel_y0(T x, const Policy&)
 
     static const char* function = "boost::math::bessel_y0<%1%>(%1%,%1%)";
 
+    static_cast<void>(function[0U]);
+
     BOOST_MATH_ASSERT(x > 0);
 
     if (x <= 3)                       // x in (0, 3]
