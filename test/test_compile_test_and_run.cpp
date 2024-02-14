@@ -7,20 +7,19 @@
 #include <boost/core/lightweight_test.hpp>
 #include <boost/cstdfloat.hpp>
 
+#if !defined(__CYGWIN__)
 #include "compile_test/instantiate.hpp"
+#endif
 
 namespace local
 {
   auto instantiate_runner() -> void
   {
-    #if defined(BOOST_FLOAT64_C)
+    #if (defined(BOOST_FLOAT64_C) && !defined(__CYGWIN__))
+
     instantiate(static_cast<boost::float64_t>(BOOST_FLOAT64_C(1.23)));
 
-    #if defined(__CYGWIN__)
-    const bool result_instantiate_and_run_is_ok = true;
-    #else
     const bool result_instantiate_and_run_is_ok = instantiate_runner_result<boost::float64_t>::value;
-    #endif
 
     BOOST_TEST(result_instantiate_and_run_is_ok);
 
