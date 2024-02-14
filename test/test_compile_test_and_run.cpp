@@ -7,7 +7,7 @@
 #include <boost/core/lightweight_test.hpp>
 #include <boost/cstdfloat.hpp>
 
-#if !defined(__CYGWIN__)
+#if (!defined(__CYGWIN__) && !defined(BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS))
 #include "compile_test/instantiate.hpp"
 #endif
 
@@ -15,7 +15,7 @@ namespace local
 {
   auto instantiate_runner() -> void
   {
-    #if (defined(BOOST_FLOAT64_C) && !defined(__CYGWIN__))
+    #if (defined(BOOST_FLOAT64_C) && !defined(__CYGWIN__) && !defined(BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS))
 
     instantiate(static_cast<boost::float64_t>(BOOST_FLOAT64_C(1.23)));
 
