@@ -22,14 +22,10 @@ template <class RealType>
 bool instantiate_runner_result<RealType>::value;
 
 #include <boost/math/tools/config.hpp>
-
-#if !defined(BOOST_MATH_STANDALONE)
-
-#include <boost/math/distributions.hpp>
-
-#include <boost/math/special_functions.hpp>
-#include <boost/math/concepts/distributions.hpp>
 #include <boost/concept_archetype.hpp>
+#include <boost/math/distributions.hpp>
+#include <boost/math/concepts/distributions.hpp>
+#include <boost/math/special_functions.hpp>
 
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
 
@@ -1805,17 +1801,5 @@ void instantiate_mixed(RealType)
 #endif
 }
 
-#else // Standalone mode
-
-template <typename RealType>
-void instantiate(RealType)
-{
-   instantiate_runner_result<RealType>::value = true;
-}
-
-template <typename RealType>
-void instantiate_mixed(RealType) {}
-
-#endif // Standalone mode
 
 #endif // BOOST_LIBS_MATH_TEST_INSTANTIATE_HPP
