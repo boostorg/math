@@ -23,13 +23,13 @@ bool instantiate_runner_result<RealType>::value;
 
 #include <boost/math/tools/config.hpp>
 
-#if !defined(BOOST_MATH_STANDALONE)
-
+#include <boost/math/special_functions.hpp>
+#include <boost/concept_archetype.hpp>
 #include <boost/math/distributions.hpp>
 
-#include <boost/math/special_functions.hpp>
+#if !defined(BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS)
 #include <boost/math/concepts/distributions.hpp>
-#include <boost/concept_archetype.hpp>
+#endif
 
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
 
@@ -84,6 +84,7 @@ void instantiate(RealType)
    (void)ll;
 #endif
 #ifdef TEST_GROUP_1
+   #if !defined(BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS)
    function_requires<DistributionConcept<arcsine_distribution<RealType> > >();
    function_requires<DistributionConcept<bernoulli_distribution<RealType> > >();
    function_requires<DistributionConcept<beta_distribution<RealType> > >();
@@ -118,9 +119,11 @@ void instantiate(RealType)
    function_requires<DistributionConcept<triangular_distribution<RealType> > >();
    function_requires<DistributionConcept<uniform_distribution<RealType> > >();
    function_requires<DistributionConcept<weibull_distribution<RealType> > >();
+   #endif // !defined(BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS)
 #endif
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
 #ifdef TEST_GROUP_2
+   #if !defined(BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS)
    function_requires<DistributionConcept<arcsine_distribution<RealType> > >();
    function_requires<DistributionConcept<bernoulli_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<beta_distribution<RealType, test_policy> > >();
@@ -154,8 +157,10 @@ void instantiate(RealType)
    function_requires<DistributionConcept<triangular_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<uniform_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<weibull_distribution<RealType, test_policy> > >();
+   #endif // !defined(BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS)
 #endif
 #ifdef TEST_GROUP_3
+   #if !defined(BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS)
    function_requires<DistributionConcept<dist_test::arcsine > >();
    function_requires<DistributionConcept<dist_test::bernoulli > >();
    function_requires<DistributionConcept<dist_test::beta > >();
@@ -188,6 +193,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<dist_test::uniform > >();
    function_requires<DistributionConcept<dist_test::weibull > >();
    function_requires<DistributionConcept<dist_test::hypergeometric > >();
+   #endif // !defined(BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS)
 #endif
 #endif
    int i { 1 };
@@ -1805,17 +1811,5 @@ void instantiate_mixed(RealType)
 #endif
 }
 
-#else // Standalone mode
-
-template <typename RealType>
-void instantiate(RealType)
-{
-   instantiate_runner_result<RealType>::value = true;
-}
-
-template <typename RealType>
-void instantiate_mixed(RealType) {}
-
-#endif // Standalone mode
 
 #endif // BOOST_LIBS_MATH_TEST_INSTANTIATE_HPP

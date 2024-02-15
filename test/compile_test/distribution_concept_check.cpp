@@ -7,10 +7,9 @@
 
 #include <boost/math/tools/config.hpp>
 
-#if !defined(BOOST_MATH_STANDALONE)
-
-#include <boost/math/concepts/distributions.hpp>
+#ifndef BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS
 #include <boost/math/distributions.hpp>
+#include <boost/math/concepts/distributions.hpp>
 
 template <class RealType>
 void instantiate(RealType)
@@ -56,6 +55,12 @@ void instantiate(RealType)
    function_requires<DistributionConcept<weibull_distribution<RealType, custom_policy> > >();
 }
 
+#else // Standalone mode
+
+template <typename T>
+void instantiate(T) {}
+
+#endif 
 
 int main()
 {
