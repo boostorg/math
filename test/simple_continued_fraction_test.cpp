@@ -1,5 +1,6 @@
 /*
  * Copyright Nick Thompson, 2020
+ * Copyright Matt Borland, 2023
  * Use, modification and distribution are subject to the
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -131,6 +132,37 @@ void test_khinchin()
     CHECK_ULP_CLOSE(Real(2), Km1, 10);
 }
 
+template <typename Real>
+void test_git_issue_970()
+{
+    using boost::math::tools::simple_continued_fraction_coefficients;
+
+    auto coefs1 = simple_continued_fraction_coefficients(static_cast<Real>(3.14155L)); // [3; 7, 15, 2, 7, 1, 4, 2]
+    auto coefs2 = simple_continued_fraction_coefficients(static_cast<Real>(3.14165L)); // [3; 7, 16, 1, 3, 4, 2, 4]
+
+    const std::size_t max_size = (std::min)(coefs1.size(), coefs2.size());
+    std::vector<std::int64_t> coefs;
+    coefs.reserve(max_size);
+
+    for (std::size_t i = 0; i < max_size; ++i)
+    {
+        const auto c1 = coefs1[i];
+        const auto c2 = coefs2[i];
+        if (c1 == c2) 
+        {
+            coefs.emplace_back(c1);
+            continue;
+        }
+
+        coefs.emplace_back((std::min)(c1, c2) + 1);
+        break;
+    }
+
+    // Result is [3; 7, 16]
+    CHECK_EQUAL(coefs[0], static_cast<std::int64_t>(3));
+    CHECK_EQUAL(coefs[1], static_cast<std::int64_t>(7));
+    CHECK_EQUAL(coefs[2], static_cast<std::int64_t>(16));
+}
 
 int main()
 {
@@ -157,5 +189,10 @@ int main()
     test_simple<float128>();
     test_khinchin<float128>();
     #endif
+
+    test_git_issue_970<float>();
+    test_git_issue_970<double>();
+    test_git_issue_970<long double>();
+
     return boost::math::test::report_errors();
 }

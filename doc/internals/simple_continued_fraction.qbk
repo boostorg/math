@@ -1,5 +1,6 @@
 [/
   Copyright Nick Thompson, 2020
+  Copyright Matt Borland, 2023
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
@@ -19,9 +20,17 @@
         
         Real khinchin_harmonic_mean() const;
 
-        template<typename T, typename Z_>
-        friend std::ostream& operator<<(std::ostream& out, simple_continued_fraction<T, Z>& scf);
+        const std::vector<Z>& partial_denominators() const;
+
+        inline std::vector<Z>&& get_data() noexcept;
+
+        template<typename T, typename Z2>
+        friend std::ostream& operator<<(std::ostream& out, simple_continued_fraction<T, Z2>& scf);
     };
+
+    template<typename Real, typename Z = int64_t>
+    inline std::vector<Z> simple_continued_fraction_coefficients(Real x);
+
     }
 
 
@@ -46,6 +55,35 @@ This is because when examining known values like π, it creates a large number o
 
 It may be the case the a few incorrect partial convergents is harmless, but we compute continued fractions because we would like to do something with them.
 One sensible thing to do it to ask whether the number is in some sense "random"; a question that can be partially answered by computing the Khinchin geometric mean
+
+If you only require the coefficients of the simple continued fraction for example in the calculation of [@https://en.wikipedia.org/wiki/Continued_fraction#Best_rational_approximations best rational approximations] there is a free function for that.
+
+An example of this calculation follows: 
+
+    using boost::math::tools::simple_continued_fraction_coefficients;
+
+    auto coefs1 = simple_continued_fraction_coefficients(static_cast<Real>(3.14155L)); // [3; 7, 15, 2, 7, 1, 4, 2]
+    auto coefs2 = simple_continued_fraction_coefficients(static_cast<Real>(3.14165L)); // [3; 7, 16, 1, 3, 4, 2, 4]
+
+    const std::size_t max_size = (std::min)(coefs1.size(), coefs2.size());
+    std::vector<std::int64_t> coefs;
+    coefs.reserve(max_size);
+
+    for (std::size_t i = 0; i < max_size; ++i)
+    {
+        const auto c1 = coefs1[i];
+        const auto c2 = coefs2[i];
+        if (c1 == c2) 
+        {
+            coefs.emplace_back(c1);
+            continue;
+        }
+
+        coefs.emplace_back((std::min)(c1, c2) + 1);
+        break;
+    }
+
+    // Result is [3; 7, 16]
 
 [$../equations/khinchin_geometric.svg]
 
