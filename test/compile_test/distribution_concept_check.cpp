@@ -6,8 +6,11 @@
 #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 
 #include <boost/math/tools/config.hpp>
-#include <boost/math/distributions.hpp>
+
+#if !defined(BOOST_MATH_STANDALONE)
+
 #include <boost/math/concepts/distributions.hpp>
+#include <boost/math/distributions.hpp>
 
 template <class RealType>
 void instantiate(RealType)
