@@ -6,8 +6,6 @@
 #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 
 #include <boost/math/tools/config.hpp>
-
-#ifndef BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS
 #include <boost/math/distributions.hpp>
 #include <boost/math/concepts/distributions.hpp>
 
@@ -55,12 +53,6 @@ void instantiate(RealType)
    function_requires<DistributionConcept<weibull_distribution<RealType, custom_policy> > >();
 }
 
-#else // Standalone mode
-
-template <typename T>
-void instantiate(T) {}
-
-#endif 
 
 int main()
 {
