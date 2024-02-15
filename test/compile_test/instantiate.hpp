@@ -23,6 +23,8 @@ bool instantiate_runner_result<RealType>::value;
 
 #include <boost/math/tools/config.hpp>
 
+#include <boost/math/policies/policy.hpp>
+
 #include <boost/math/special_functions.hpp>
 #include <boost/concept_archetype.hpp>
 #include <boost/math/distributions.hpp>

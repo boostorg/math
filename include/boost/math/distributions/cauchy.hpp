@@ -317,6 +317,11 @@ template <class RealType, class Policy>
 inline RealType skewness(const cauchy_distribution<RealType, Policy>& /*dist*/)
 {
    // There is no skewness:
+
+   using assert_type = typename Policy::domain_error_type;
+
+   static_assert(!(assert_type::value), "Error Policy is undefined");
+
    return
       policies::raise_domain_error<RealType>
       (
