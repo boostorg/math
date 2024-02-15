@@ -24,7 +24,19 @@
 
 #else // Standalone mode - use standard library facilities
 
-#define BOOST_MATH_THROW_EXCEPTION(expr) throw expr;
+#ifdef _MSC_VER
+#  ifdef _CPPUNWIND
+#    define BOOST_MATH_THROW_EXCEPTION(expr) throw expr;
+#  else
+#    define BOOST_MATH_THROW_EXCEPTION(expr)
+#  endif
+#else
+#  ifdef __EXCEPTIONS
+#    define BOOST_MATH_THROW_EXCEPTION(expr) throw expr;
+#  else
+#    define BOOST_MATH_THROW_EXCEPTION(expr)
+#  endif
+#endif
 
 #endif // BOOST_MATH_STANDALONE
 
