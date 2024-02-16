@@ -6,23 +6,16 @@
 
 #define TEST_COMPLEX
 
-#include <boost/core/lightweight_test.hpp>
-
 #include "compile_test/instantiate.hpp"
 
-#include <limits>
-#include <type_traits>
+#include <boost/core/lightweight_test.hpp>
+#include <boost/cstdfloat.hpp>
 
 namespace local
 {
   namespace detail
   {
-    using float64_t =
-        typename std::conditional<std::numeric_limits<float>::digits == 53,
-                                  float,
-                                  typename std::conditional<std::numeric_limits<double>::digits == 53,
-                                                            double,
-                                                            long double>::type>::type;
+    using float64_t = ::boost::float64_t;
   } // namespace detail
 
   auto instantiate_runner() -> void
