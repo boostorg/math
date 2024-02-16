@@ -35,7 +35,5 @@ auto main() -> int
 {
   local::instantiate_runner();
 
-  const auto result_is_ok = (boost::report_errors() == 0);
-
-  return (result_is_ok ? 0 : -1);
+  return boost::report_errors();
 }

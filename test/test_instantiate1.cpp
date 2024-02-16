@@ -11,11 +11,12 @@ extern void other_test();
 
 int main(int argc, char* [])
 {
-   instantiate(double(0));
-
    if(argc > 10000)
    {
+      instantiate(double(0));
       instantiate_mixed(double(0));
       other_test();
    }
 }
+
+
