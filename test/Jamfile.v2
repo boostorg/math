@@ -226,7 +226,6 @@ test-suite special_fun :
    [ run test_factorials.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_gamma.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_gamma_edge.cpp ]
-   [ run test_compile_test_and_run.cpp ]
    [ run test_gamma_mp.cpp ../../test/build//boost_unit_test_framework : : : release <define>TEST=1 [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :  test_gamma_mp_1 ]
    [ run test_gamma_mp.cpp ../../test/build//boost_unit_test_framework : : : release <define>TEST=2 [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : test_gamma_mp_2 ]
    [ run test_gamma_mp.cpp ../../test/build//boost_unit_test_framework : : : release <define>TEST=3 [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : test_gamma_mp_3 ]
@@ -504,6 +503,7 @@ test-suite special_fun :
         : test_igamma_inva_real_concept  ]
    [ run test_instantiate1.cpp test_instantiate2.cpp  ]
    [ run test_instantiate1.cpp test_instantiate2.cpp  : : : <exception-handling>off : test_instantiate_no_eh ]
+   [ run test_instantiate3.cpp ]
    [ run test_jacobi.cpp pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
 

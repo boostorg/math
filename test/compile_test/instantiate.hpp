@@ -8,8 +8,8 @@
 #ifndef BOOST_LIBS_MATH_TEST_INSTANTIATE_HPP
 #define BOOST_LIBS_MATH_TEST_INSTANTIATE_HPP
 
-#if !defined(BOOST_MATH_ASSERT_UNDEFINED_POLICY)
-#define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
+#ifndef BOOST_MATH_ASSERT_UNDEFINED_POLICY
+#  define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 #endif
 
 template <class RealType>
@@ -22,6 +22,8 @@ template <class RealType>
 bool instantiate_runner_result<RealType>::value;
 
 #include <boost/math/tools/config.hpp>
+
+#include <boost/math/policies/policy.hpp>
 
 #include <boost/math/special_functions.hpp>
 #include <boost/concept_archetype.hpp>

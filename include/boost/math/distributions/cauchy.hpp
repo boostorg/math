@@ -17,9 +17,8 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
-
-#include <cmath>
 #include <utility>
+#include <cmath>
 
 namespace boost{ namespace math
 {
@@ -276,30 +275,29 @@ inline RealType quantile(const complemented2_type<cauchy_distribution<RealType, 
 
 template <class RealType, class Policy>
 inline RealType mean(const cauchy_distribution<RealType, Policy>&)
-{
-   // There is no mean:
-   return
-      policies::raise_domain_error<RealType>
-      (
-         "boost::math::mean(cauchy<%1%>&)",
-         "The Cauchy distribution does not have a mean: "
-         "the only possible return value is %1%.",
-         std::numeric_limits<RealType>::quiet_NaN(), Policy()
-      );
+{  // There is no mean:
+   typedef typename Policy::assert_undefined_type assert_type;
+   static_assert(assert_type::value == 0, "assert type is undefined");
+
+   return policies::raise_domain_error<RealType>(
+      "boost::math::mean(cauchy<%1%>&)",
+      "The Cauchy distribution does not have a mean: "
+      "the only possible return value is %1%.",
+      std::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>
 inline RealType variance(const cauchy_distribution<RealType, Policy>& /*dist*/)
 {
    // There is no variance:
-   return
-      policies::raise_domain_error<RealType>
-      (
-         "boost::math::variance(cauchy<%1%>&)",
-         "The Cauchy distribution does not have a variance: "
-         "the only possible return value is %1%.",
-         std::numeric_limits<RealType>::quiet_NaN(), Policy()
-      );
+   typedef typename Policy::assert_undefined_type assert_type;
+   static_assert(assert_type::value == 0, "assert type is undefined");
+
+   return policies::raise_domain_error<RealType>(
+      "boost::math::variance(cauchy<%1%>&)",
+      "The Cauchy distribution does not have a variance: "
+      "the only possible return value is %1%.",
+      std::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>
@@ -317,42 +315,42 @@ template <class RealType, class Policy>
 inline RealType skewness(const cauchy_distribution<RealType, Policy>& /*dist*/)
 {
    // There is no skewness:
-   return
-      policies::raise_domain_error<RealType>
-      (
-         "boost::math::skewness(cauchy<%1%>&)",
-         "The Cauchy distribution does not have a skewness: "
-         "the only possible return value is %1%.",
-         std::numeric_limits<RealType>::quiet_NaN(), Policy()
-      );
+   typedef typename Policy::assert_undefined_type assert_type;
+   static_assert(assert_type::value == 0, "assert type is undefined");
+
+   return policies::raise_domain_error<RealType>(
+      "boost::math::skewness(cauchy<%1%>&)",
+      "The Cauchy distribution does not have a skewness: "
+      "the only possible return value is %1%.",
+      std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
 }
 
 template <class RealType, class Policy>
 inline RealType kurtosis(const cauchy_distribution<RealType, Policy>& /*dist*/)
 {
    // There is no kurtosis:
-   return
-      policies::raise_domain_error<RealType>
-      (
-         "boost::math::kurtosis(cauchy<%1%>&)",
-         "The Cauchy distribution does not have a kurtosis: "
-         "the only possible return value is %1%.",
-         std::numeric_limits<RealType>::quiet_NaN(), Policy()
-      );
+   typedef typename Policy::assert_undefined_type assert_type;
+   static_assert(assert_type::value == 0, "assert type is undefined");
+
+   return policies::raise_domain_error<RealType>(
+      "boost::math::kurtosis(cauchy<%1%>&)",
+      "The Cauchy distribution does not have a kurtosis: "
+      "the only possible return value is %1%.",
+      std::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>
 inline RealType kurtosis_excess(const cauchy_distribution<RealType, Policy>& /*dist*/)
 {
    // There is no kurtosis excess:
-   return
-      policies::raise_domain_error<RealType>
-      (
-         "boost::math::kurtosis_excess(cauchy<%1%>&)",
-         "The Cauchy distribution does not have a kurtosis: "
-         "the only possible return value is %1%.",
-         std::numeric_limits<RealType>::quiet_NaN(), Policy()
-      );
+   typedef typename Policy::assert_undefined_type assert_type;
+   static_assert(assert_type::value == 0, "assert type is undefined");
+
+   return policies::raise_domain_error<RealType>(
+      "boost::math::kurtosis_excess(cauchy<%1%>&)",
+      "The Cauchy distribution does not have a kurtosis: "
+      "the only possible return value is %1%.",
+      std::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>
