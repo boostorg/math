@@ -6,21 +6,15 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_DIFFERENTIAL_EVOLUTION_HPP
 #define BOOST_MATH_OPTIMIZATION_DIFFERENTIAL_EVOLUTION_HPP
-#include <algorithm>
-#include <array>
 #include <atomic>
 #include <boost/math/optimization/detail/common.hpp>
-#include <chrono>
 #include <cmath>
-#include <future>
 #include <limits>
-#include <list>
 #include <mutex>
 #include <random>
 #include <sstream>
 #include <stdexcept>
 #include <thread>
-#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -147,6 +141,12 @@ ArgumentContainer differential_evolution(
       trial_vectors[i].resize(dimension);
     }
   }
+  std::vector<URBG> thread_generators(threads);
+  for (size_t j = 0; j < threads; ++j) {
+    thread_generators[j].seed(gen());
+  }
+  // std::vector<bool> isn't threadsafe!
+  std::vector<int> updated_indices(NP, 0);
 
   for (size_t generation = 0; generation < de_params.max_generations; ++generation) {
     if (cancellation && *cancellation) {
@@ -155,43 +155,11 @@ ArgumentContainer differential_evolution(
     if (target_attained) {
       break;
     }
-
-    // You might be tempted to parallelize the generation of trial vectors.
-    // Here's the deal: Reproducibly generating random numbers is a nightmare.
-    // I first tried seeding thread-local random number generators with the global generator,
-    // but ThreadSanitizer didn't like it. I *suspect* there's a way around this, but
-    // even if it's formally threadsafe, there's still a lot of effort to get it computationally reproducible.
-    uniform_real_distribution<DimensionlessReal> unif01(DimensionlessReal(0), DimensionlessReal(1));
-    for (size_t i = 0; i < NP; ++i) {
-      size_t r1, r2, r3;
-      do {
-        r1 = gen() % NP;
-      } while (r1 == i);
-      do {
-        r2 = gen() % NP;
-      } while (r2 == i || r2 == r1);
-      do {
-        r3 = gen() % NP;
-      } while (r3 == i || r3 == r2 || r3 == r1);
-      for (size_t j = 0; j < dimension; ++j) {
-        // See equation (4) of the reference:
-        auto guaranteed_changed_idx = gen() % dimension;
-        if (unif01(gen) < de_params.crossover_probability || j == guaranteed_changed_idx) {
-          auto tmp = population[r1][j] + de_params.mutation_factor * (population[r2][j] - population[r3][j]);
-          auto const &lb = de_params.lower_bounds[j];
-          auto const &ub = de_params.upper_bounds[j];
-          // Some others recommend regenerating the indices rather than clamping;
-          // I dunno seems like it could get stuck regenerating . . .
-          trial_vectors[i][j] = clamp(tmp, lb, ub);
-        } else {
-          trial_vectors[i][j] = population[i][j];
-        }
-      }
-    }
-
     thread_pool.resize(0);
     for (size_t j = 0; j < threads; ++j) {
       thread_pool.emplace_back([&, j]() {
+        auto& tlg = thread_generators[j];
+        uniform_real_distribution<DimensionlessReal> unif01(DimensionlessReal(0), DimensionlessReal(1));
         for (size_t i = j; i < cost.size(); i += threads) {
           if (target_attained) {
             return;
@@ -199,6 +167,32 @@ ArgumentContainer differential_evolution(
           if (cancellation && *cancellation) {
             return;
           }
+          size_t r1, r2, r3;
+          do {
+            r1 = tlg() % NP;
+          } while (r1 == i);
+          do {
+            r2 = tlg() % NP;
+          } while (r2 == i || r2 == r1);
+          do {
+            r3 = tlg() % NP;
+          } while (r3 == i || r3 == r2 || r3 == r1);
+
+          for (size_t k = 0; k < dimension; ++k) {
+            // See equation (4) of the reference:
+            auto guaranteed_changed_idx = tlg() % dimension;
+            if (unif01(tlg) < de_params.crossover_probability || k == guaranteed_changed_idx) {
+              auto tmp = population[r1][k] + de_params.mutation_factor * (population[r2][k] - population[r3][k]);
+              auto const &lb = de_params.lower_bounds[k];
+              auto const &ub = de_params.upper_bounds[k];
+              // Some others recommend regenerating the indices rather than clamping;
+              // I dunno seems like it could get stuck regenerating . . .
+              trial_vectors[i][k] = clamp(tmp, lb, ub);
+            } else {
+              trial_vectors[i][k] = population[i][k];
+            }
+          }
+
           auto const trial_cost = cost_function(trial_vectors[i]);
           if (isnan(trial_cost)) {
             continue;
@@ -215,13 +209,22 @@ ArgumentContainer differential_evolution(
             if (current_minimum_cost && cost[i] < *current_minimum_cost) {
               *current_minimum_cost = cost[i];
             }
-            population[i] = trial_vectors[i];
+            // Can't do this! It's a race condition!
+            //population[i] = trial_vectors[i];
+            // Instead mark all the indices that need to be updated:
+            updated_indices[i] = 1;
           }
         }
       });
     }
     for (auto &thread : thread_pool) {
       thread.join();
+    }
+    for (size_t i = 0; i < NP; ++i) {
+      if (updated_indices[i]) {
+        population[i] = trial_vectors[i];
+        updated_indices[i] = 0;
+      }
     }
   }
 

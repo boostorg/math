@@ -503,6 +503,7 @@ test-suite special_fun :
         : test_igamma_inva_real_concept  ]
    [ run test_instantiate1.cpp test_instantiate2.cpp  ]
    [ run test_instantiate1.cpp test_instantiate2.cpp  : : : <exception-handling>off : test_instantiate_no_eh ]
+   [ run test_instantiate3.cpp ]
    [ run test_jacobi.cpp pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
 
@@ -1016,6 +1017,7 @@ test-suite misc :
    [ run  compile_test/interpolators_barycentric_rational_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run octonion_test.cpp
        ../../test/build//boost_unit_test_framework ]
+   [ run octonion_test_simple.cpp ]
    [ run quaternion_constexpr_test.cpp ]
    [ run quaternion_test.cpp
        ../../test/build//boost_unit_test_framework : : : <toolset>msvc-14.0:<debug-symbols>off [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
@@ -1063,6 +1065,9 @@ test-suite interpolators :
    [ run jso_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run random_search_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run cma_es_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
+   [ compile compile_test/random_search_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ compile compile_test/differential_evolution_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ compile compile_test/jso_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
 ;
 
 test-suite quadrature :

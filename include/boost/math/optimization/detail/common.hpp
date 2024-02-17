@@ -6,12 +6,13 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_DETAIL_COMMON_HPP
 #define BOOST_MATH_OPTIMIZATION_DETAIL_COMMON_HPP
-#include <algorithm>
+#include <algorithm> // for std::sort
 #include <cmath>
 #include <limits>
 #include <sstream>
 #include <stdexcept>
 #include <random>
+#include <type_traits>  // for std::false_type
 
 namespace boost::math::optimization::detail {
 
@@ -114,6 +115,7 @@ std::vector<ArgumentContainer> random_initial_population(ArgumentContainer const
 template <typename ArgumentContainer>
 void validate_initial_guess(ArgumentContainer const &initial_guess, ArgumentContainer const &lower_bounds,
                             ArgumentContainer const &upper_bounds) {
+  using std::isfinite;
   std::ostringstream oss;
   auto const dimension = lower_bounds.size();
   if (initial_guess.size() != dimension) {
