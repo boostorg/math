@@ -434,9 +434,9 @@ void instantiate(RealType)
    boost::math::iround(v1);
    boost::math::lround(v1);
    {
-      RealType v1_to_get { };
+      RealType v1_other { };
 
-      boost::math::modf(v1, &v1_to_get);
+      boost::math::modf(v1, &v1_other);
    }
    {
       int i_other { };
@@ -695,26 +695,30 @@ void instantiate(RealType)
    boost::math::lround(v1 * 1);
    {
       RealType v1_other { };
+      RealType v1_1 { v1 * 1 };
 
-      boost::math::modf(v1 * 1, &v1_other);
+      boost::math::modf(v1_1, &v1_other);
    }
    {
       int i_other { };
+      RealType v1_1 { v1 * 1 };
 
-      boost::math::modf(v1 * 1, &i_other);
+      boost::math::modf(v1_1, &i_other);
    }
    {
       long l_other { };
-   
-      boost::math::modf(v1 * 1, &l_other);
+      RealType v1_1 { v1 * 1 };
+
+      boost::math::modf(v1_1, &l_other);
    }
 
    boost::math::lltrunc(v1 * 1);
    boost::math::llround(v1 * 1);
    {
       long long ll_other { };
+      RealType v1_1 { v1 * 1 };
 
-      boost::math::modf(v1 * 1, &ll_other);
+      boost::math::modf(v1_1, &ll_other);
    }
 
    boost::math::pow<2>(v1 * 1);
@@ -1242,7 +1246,7 @@ void instantiate(RealType)
    {
       long l_other { };
 
-     test::modf(v1, &l_other);
+      test::modf(v1, &l_other);
    }
 
    test::lltrunc(v1);
