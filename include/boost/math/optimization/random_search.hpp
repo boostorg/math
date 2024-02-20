@@ -6,18 +6,14 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_RANDOM_SEARCH_HPP
 #define BOOST_MATH_OPTIMIZATION_RANDOM_SEARCH_HPP
-#include <algorithm>
-#include <array>
 #include <atomic>
 #include <cmath>
 #include <limits>
-#include <list>
 #include <mutex>
 #include <random>
 #include <sstream>
 #include <stdexcept>
 #include <thread>
-#include <type_traits>
 #include <utility>
 #include <vector>
 #include <boost/math/optimization/detail/common.hpp>
@@ -60,6 +56,7 @@ ArgumentContainer random_search(
     std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr)
  {
   using Real = typename ArgumentContainer::value_type;
+  using DimensionlessReal = decltype(Real()/Real());
   using ResultType = std::invoke_result_t<Func, ArgumentContainer>;
   using std::isnan;
   using std::uniform_real_distribution;
@@ -106,7 +103,7 @@ ArgumentContainer random_search(
             break;
         }
         // Fill trial vector: 
-        uniform_real_distribution<Real> unif01(Real(0), Real(1));
+        uniform_real_distribution<DimensionlessReal> unif01(DimensionlessReal(0), DimensionlessReal(1));
         for (size_t i = 0; i < dimension; ++i) {
             trial_vector[i] = params.lower_bounds[i] + (params.upper_bounds[i] - params.lower_bounds[i])*unif01(g);
         }

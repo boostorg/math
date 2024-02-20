@@ -59,7 +59,7 @@ int main() {
   auto future = std::async(std::launch::async, f);
   std::future_status status = future.wait_for(3ms);
   while (!cancel && (status != std::future_status::ready)) {
-    status = future.wait_for(3ms);
+    status = future.wait_for(1ms);
     std::cout << "Current cost is " << current_minimum_cost << "\r";
   }
 

@@ -6,12 +6,13 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_DETAIL_COMMON_HPP
 #define BOOST_MATH_OPTIMIZATION_DETAIL_COMMON_HPP
-#include <algorithm>
+#include <algorithm> // for std::sort
 #include <cmath>
 #include <limits>
 #include <sstream>
 #include <stdexcept>
 #include <random>
+#include <type_traits>  // for std::false_type
 
 namespace boost::math::optimization::detail {
 
@@ -68,6 +69,7 @@ std::vector<ArgumentContainer> random_initial_population(ArgumentContainer const
                                                          ArgumentContainer const &upper_bounds,
                                                          size_t initial_population_size, URBG &&gen) {
   using Real = typename ArgumentContainer::value_type;
+  using DimensionlessReal = decltype(Real()/Real());
   constexpr bool has_resize = detail::has_resize_v<ArgumentContainer>;
   std::vector<ArgumentContainer> population(initial_population_size);
   auto const dimension = lower_bounds.size();
@@ -98,7 +100,7 @@ std::vector<ArgumentContainer> random_initial_population(ArgumentContainer const
   // That said, scipy uses Latin Hypercube sampling and says self-avoiding sequences are preferable.
   // So this is something that could be investigated and potentially improved.
   using std::uniform_real_distribution;
-  uniform_real_distribution<Real> dis(Real(0), Real(1));
+  uniform_real_distribution<DimensionlessReal> dis(DimensionlessReal(0), DimensionlessReal(1));
   for (size_t i = 0; i < population.size(); ++i) {
     for (size_t j = 0; j < dimension; ++j) {
       auto const &lb = lower_bounds[j];
@@ -113,6 +115,7 @@ std::vector<ArgumentContainer> random_initial_population(ArgumentContainer const
 template <typename ArgumentContainer>
 void validate_initial_guess(ArgumentContainer const &initial_guess, ArgumentContainer const &lower_bounds,
                             ArgumentContainer const &upper_bounds) {
+  using std::isfinite;
   std::ostringstream oss;
   auto const dimension = lower_bounds.size();
   if (initial_guess.size() != dimension) {
@@ -163,6 +166,7 @@ template <typename Real> std::vector<size_t> best_indices(std::vector<Real> cons
 
 template<typename RandomAccessContainer>
 auto weighted_lehmer_mean(RandomAccessContainer const & values, RandomAccessContainer const & weights) {
+  using std::isfinite;
   if (values.size() != weights.size()) {
     std::ostringstream oss;
     oss << __FILE__ << ":" << __LINE__ << ":" << __func__;
@@ -179,7 +183,7 @@ auto weighted_lehmer_mean(RandomAccessContainer const & values, RandomAccessCont
   Real numerator = 0;
   Real denominator = 0;
   for (size_t i = 0; i < values.size(); ++i) {
-    if (weights[i] < 0 || !std::isfinite(weights[i])) {
+    if (weights[i] < 0 || !isfinite(weights[i])) {
       std::ostringstream oss;
       oss << __FILE__ << ":" << __LINE__ << ":" << __func__;
       oss << ": All weights must be positive and finite, but got received weight " << weights[i] << " at index " << i << " of " << weights.size() << ".";

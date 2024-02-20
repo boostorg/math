@@ -1822,12 +1822,12 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
       "Argument z = %1% is too small (z < -std::numeric_limits<T>::min so denormalized) for Lambert W-1 branch!",
       z, pol);
   }
-  if (z == -boost::math::constants::exp_minus_one<T>()) // == singularity/branch point z = -exp(-1) = -3.6787944.
+  if (z == -boost::math::constants::exp_minus_one<T>()) // == singularity/branch point z = -exp(-1) = -0.36787944.
   { // At singularity, so return exactly -1.
     return -static_cast<T>(1);
   }
   // z is too negative for the W-1 (or W0) branch.
-  if (z < -boost::math::constants::exp_minus_one<T>()) // > singularity/branch point z = -exp(-1) = -3.6787944.
+  if (z < -boost::math::constants::exp_minus_one<T>()) // > singularity/branch point z = -exp(-1) = -0.36787944.
   {
     return policies::raise_domain_error(function,
       "Argument z = %1% is out of range (z < -exp(-1) = -3.6787944... <= 0) for Lambert W-1 (or W0) branch!",

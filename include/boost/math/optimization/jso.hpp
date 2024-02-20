@@ -6,14 +6,11 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_JSO_HPP
 #define BOOST_MATH_OPTIMIZATION_JSO_HPP
-#include <algorithm>
-#include <array>
 #include <atomic>
 #include <boost/math/optimization/detail/common.hpp>
 #include <cmath>
 #include <iostream>
 #include <limits>
-#include <list>
 #include <random>
 #include <sstream>
 #include <stdexcept>
@@ -36,6 +33,7 @@ namespace boost::math::optimization {
 // IEEE Transactions on evolutionary computation, 13(5), 945-958."
 template <typename ArgumentContainer> struct jso_parameters {
   using Real = typename ArgumentContainer::value_type;
+  using DimensionlessReal = decltype(Real()/Real());
   ArgumentContainer lower_bounds;
   ArgumentContainer upper_bounds;
   // Population in the first generation.
@@ -107,6 +105,7 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
                           std::invoke_result_t<Func, ArgumentContainer>>>
         *queries = nullptr) {
   using Real = typename ArgumentContainer::value_type;
+  using DimensionlessReal = decltype(Real()/Real());
   validate_jso_parameters(jso_params);
 
   using ResultType = std::invoke_result_t<Func, ArgumentContainer>;
@@ -116,6 +115,7 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
   using std::isnan;
   using std::max;
   using std::round;
+  using std::isfinite;
   using std::uniform_real_distribution;
 
   // Refer to the referenced paper, pseudocode on page 1313:
@@ -173,12 +173,12 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
   // last bullet, which claims this should be set to 0.3. The reference
   // implementation also does 0.3:
   size_t H = 5;
-  std::vector<Real> M_F(H, static_cast<Real>(0.3));
+  std::vector<DimensionlessReal> M_F(H, static_cast<DimensionlessReal>(0.3));
   // Algorithm 1: jSO algorithm, Line 4:
   // "Set all values in M_CR to 0.8":
-  std::vector<Real> M_CR(H, static_cast<Real>(0.8));
+  std::vector<DimensionlessReal> M_CR(H, static_cast<DimensionlessReal>(0.8));
 
-  std::uniform_real_distribution<Real> unif01(Real(0), Real(1));
+  std::uniform_real_distribution<DimensionlessReal> unif01(DimensionlessReal(0), DimensionlessReal(1));
   bool keep_going = !target_attained;
   if (cancellation && *cancellation) {
     keep_going = false;
@@ -190,8 +190,8 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
   size_t minimum_population_size = (max)(size_t(4), size_t(jso_params.threads));
   while (keep_going) {
     // Algorithm 1, jSO, Line 7:
-    std::vector<Real> S_CR;
-    std::vector<Real> S_F;
+    std::vector<DimensionlessReal> S_CR;
+    std::vector<DimensionlessReal> S_F;
     // Equation 9 of L-SHADE:
     std::vector<ResultType> delta_f;
     for (size_t i = 0; i < population.size(); ++i) {
@@ -203,20 +203,20 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
       // I confess I find it weird to store the historical memory if we're just
       // gonna ignore it, but that's what the paper and the reference
       // implementation says!
-      Real mu_F = static_cast<Real>(0.9);
-      Real mu_CR = static_cast<Real>(0.9);
+      DimensionlessReal mu_F = static_cast<DimensionlessReal>(0.9);
+      DimensionlessReal mu_CR = static_cast<DimensionlessReal>(0.9);
       if (ri != H - 1) {
         mu_F = M_F[ri];
         mu_CR = M_CR[ri];
       }
       // Algorithm 1, jSO, Line 14-18:
-      Real crossover_probability = static_cast<Real>(0);
+      DimensionlessReal crossover_probability = static_cast<DimensionlessReal>(0);
       if (mu_CR >= 0) {
         using std::normal_distribution;
-        normal_distribution<Real> normal(mu_CR, static_cast<Real>(0.1));
+        normal_distribution<DimensionlessReal> normal(mu_CR, static_cast<DimensionlessReal>(0.1));
         crossover_probability = normal(gen);
         // Clamp comes from L-SHADE description:
-        crossover_probability = clamp(crossover_probability, Real(0), Real(1));
+        crossover_probability = clamp(crossover_probability, DimensionlessReal(0), DimensionlessReal(1));
       }
       // Algorithm 1, jSO, Line 19-23:
       // Note that the pseudocode uses a "max_generations parameter",
@@ -224,24 +224,24 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
       // Since we already require specification of max_function_evaluations,
       // the pseudocode adds an unnecessary parameter.
       if (4 * function_evaluations < jso_params.max_function_evaluations) {
-        crossover_probability = (max)(crossover_probability, Real(0.7));
+        crossover_probability = (max)(crossover_probability, DimensionlessReal(0.7));
       } else if (2 * function_evaluations <
                  jso_params.max_function_evaluations) {
-        crossover_probability = (max)(crossover_probability, Real(0.6));
+        crossover_probability = (max)(crossover_probability, DimensionlessReal(0.6));
       }
 
       // Algorithm 1, jSO, Line 24-27:
       // Note the adjustments to the pseudocode given in the reference
       // implementation.
-      cauchy_distribution<Real> cauchy(mu_F, static_cast<Real>(0.1));
-      Real F;
+      cauchy_distribution<DimensionlessReal> cauchy(mu_F, static_cast<DimensionlessReal>(0.1));
+      DimensionlessReal F;
       do {
         F = cauchy(gen);
         if (F > 1) {
           F = 1;
         }
       } while (F <= 0);
-      Real threshold = static_cast<Real>(7) / static_cast<Real>(10);
+      DimensionlessReal threshold = static_cast<DimensionlessReal>(7) / static_cast<DimensionlessReal>(10);
       if ((10 * function_evaluations <
            6 * jso_params.max_function_evaluations) &&
           (F > threshold)) {
@@ -250,16 +250,16 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
       // > p value for mutation strategy linearly decreases from pmax to pmin
       // during the evolutionary process, > where pmax = 0.25 in jSO and pmin =
       // pmax/2.
-      Real p = Real(0.25) * (1 - static_cast<Real>(function_evaluations) /
+      DimensionlessReal p = DimensionlessReal(0.25) * (1 - static_cast<DimensionlessReal>(function_evaluations) /
                                      (2 * jso_params.max_function_evaluations));
       // Equation (4) of the reference:
-      Real Fw = static_cast<Real>(1.2) * F;
+      DimensionlessReal Fw = static_cast<DimensionlessReal>(1.2) * F;
       if (10 * function_evaluations < 4 * jso_params.max_function_evaluations) {
         if (10 * function_evaluations <
             2 * jso_params.max_function_evaluations) {
-          Fw = static_cast<Real>(0.7) * F;
+          Fw = static_cast<DimensionlessReal>(0.7) * F;
         } else {
-          Fw = static_cast<Real>(0.8) * F;
+          Fw = static_cast<DimensionlessReal>(0.8) * F;
         }
       }
       // Algorithm 1, jSO, Line 28:
@@ -367,13 +367,13 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
     // If there are no successful updates this generation, we do not update the
     // historical memory:
     if (S_CR.size() > 0) {
-      std::vector<Real> weights(S_CR.size(),
-                                std::numeric_limits<Real>::quiet_NaN());
+      std::vector<DimensionlessReal> weights(S_CR.size(),
+                                std::numeric_limits<DimensionlessReal>::quiet_NaN());
       ResultType delta_sum = static_cast<ResultType>(0);
       for (auto const &delta : delta_f) {
         delta_sum += delta;
       }
-      if (delta_sum <= 0 || !std::isfinite(delta_sum)) {
+      if (delta_sum <= 0 || !isfinite(delta_sum)) {
         std::ostringstream oss;
         oss << __FILE__ << ":" << __LINE__ << ":" << __func__;
         oss << "\n\tYou've hit a bug: The sum of improvements must be strictly "
