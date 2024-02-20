@@ -1020,16 +1020,10 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
       //
       T r = prefix * p[n] * j;
       sum += r;
-      if(r > 1)
-      {
-         if(fabs(r) < fabs(tools::epsilon<T>() * sum))
-            break;
-      }
-      else
-      {
-         if(fabs(r / tools::epsilon<T>()) < fabs(sum))
-            break;
-      }
+      // r is always small:
+      BOOST_ASSERT(tools::max_value<T>() * tools::epsilon<T>() > fabs(r));
+      if(fabs(r / tools::epsilon<T>()) < fabs(sum))
+         break;
    }
    return sum;
 } // template <class T, class Lanczos>T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Lanczos& l, bool normalised)
@@ -1065,11 +1059,15 @@ T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
       if(result == 0)
       {
          // OK, starting slightly above the mode didn't work,
-         // we'll have to sum the terms the old fashioned way:
+         // we'll have to sum the terms the old fashioned way.
+         // Very hard to get here, possibly only when exponent
+         // range is very limited (as with type float):
+         // LCOV_EXCL_START
          for(unsigned i = start - 1; i > k; --i)
          {
             result += static_cast<T>(pow(x, static_cast<T>(i)) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i), pol));
          }
+         // LCOV_EXCL_STOP
       }
       else
       {
@@ -1177,7 +1175,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
       // We have an arcsine distribution:
       if(p_derivative)
       {
-         *p_derivative = 1 / constants::pi<T>() * sqrt(y * x);
+         *p_derivative = 1 / (constants::pi<T>() * sqrt(y * x));
       }
       T p = invert ? asin(sqrt(y)) / constants::half_pi<T>() : asin(sqrt(x)) / constants::half_pi<T>();
       if(!normalised)
@@ -1206,7 +1204,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
       {
          *p_derivative = a * pow(x, a - 1);
       }
-      T p;
+      T p;  // LCOV_EXCL_LINE
       if(y < 0.5)
          p = invert ? T(-boost::math::expm1(a * boost::math::log1p(-y, pol), pol)) : T(exp(a * boost::math::log1p(-y, pol)));
       else
@@ -1266,7 +1264,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             else
             {
                // Sidestep on a, and then use the series representation:
-               T prefix;
+               T prefix;  // LCOV_EXCL_LINE
                if(!normalised)
                {
                   prefix = rising_factorial_ratio(T(a+b), a, 20);
@@ -1348,7 +1346,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             else
             {
                // Sidestep to improve errors:
-               T prefix;
+               T prefix;  // LCOV_EXCL_LINE
                if(!normalised)
                {
                   prefix = rising_factorial_ratio(T(a+b), a, 20);
@@ -1378,7 +1376,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
    else
    {
       // Both a,b >= 1:
-      T lambda;
+      T lambda;  // LCOV_EXCL_LINE
       if(a < b)
       {
          lambda = a - (a + b) * x;
@@ -1429,7 +1427,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             if(n == b)
                --n;
             T bbar = b - n;
-            T prefix;
+            T prefix; // LCOV_EXCL_LINE
             if(!normalised)
             {
                prefix = rising_factorial_ratio(T(a+bbar), bbar, n);
@@ -1492,7 +1490,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
          if((tools::max_value<T>() * div < *p_derivative))
          {
             // overflow, return an arbitrarily large value:
-            *p_derivative = tools::max_value<T>() / 2;
+            *p_derivative = tools::max_value<T>() / 2;   // LCOV_EXCL_LINE  Probably can only get here with denormalized x.
          }
          else
          {
