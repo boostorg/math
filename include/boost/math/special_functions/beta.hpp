@@ -1021,7 +1021,7 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
       T r = prefix * p[n] * j;
       sum += r;
       // r is always small:
-      BOOST_ASSERT(tools::max_value<T>() * tools::epsilon<T>() > fabs(r));
+      BOOST_MATH_ASSERT(tools::max_value<T>() * tools::epsilon<T>() > fabs(r));
       if(fabs(r / tools::epsilon<T>()) < fabs(sum))
          break;
    }
