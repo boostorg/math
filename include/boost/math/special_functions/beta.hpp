@@ -40,7 +40,7 @@ T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
    if(b <= 0)
       return policies::raise_domain_error<T>("boost::math::beta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got b=%1%).", b, pol);
 
-   T result;
+   T result;  // LCOV_EXCL_LINE
 
    T prefix = 1;
    T c = a + b;
@@ -222,7 +222,7 @@ T ibeta_power_terms(T a,
       return pow(x, a) * pow(y, b);
    }
 
-   T result;
+   T result;  // LCOV_EXCL_LINE
 
    T c = a + b;
 
@@ -881,8 +881,8 @@ inline T rising_factorial_ratio(T a, T b, int k)
    // it is grossly inefficient, do not use outside it's
    // intended purpose!!!
    BOOST_MATH_INSTRUMENT_VARIABLE(k);
-   if(k == 0)
-      return 1;
+   BOOST_MATH_ASSERT(k > 0);
+
    T result = 1;
    for(int i = 0; i < k; ++i)
       result *= (a+i) / (b+i);
@@ -938,14 +938,14 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
    //
    T bm1 = b - 1;
    T t = a + bm1 / 2;
-   T lx, u;
+   T lx, u;  // LCOV_EXCL_LINE
    if(y < 0.35)
       lx = boost::math::log1p(-y, pol);
    else
       lx = log(x);
    u = -t * lx;
    // and from from 9.2:
-   T prefix;
+   T prefix;  // LCOV_EXCL_LINE
    T h = regularised_gamma_prefix(b, u, pol, lanczos_type());
    if(h <= tools::min_value<T>())
       return s0;
