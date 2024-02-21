@@ -166,7 +166,7 @@ void test_spots(T)
       T val = boost::math::detail::ibeta_imp(T(0.5f), T(0.5f), T(0.25), boost::math::policies::policy<>(), false, true, &derivative);
       BOOST_CHECK_CLOSE(derivative, static_cast<T>(0.7351051938957227326817686644172925885298486404888542037324880270L), tolerance);
       BOOST_CHECK_CLOSE(val, static_cast<T>(0.3333333333333333333333333333333333333333333333333333333333333333L), tolerance);
-      BOOST_CHECK_CLOSE(boost::math::beta(T(0.5f), T(0.5f), T(0.25)), static_cast<T>(1.0471975511965977461542144610931676280657231331250352736583148641), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::beta(T(0.5f), T(0.5f), T(0.25)), static_cast<T>(1.0471975511965977461542144610931676280657231331250352736583148641L), tolerance);
       //
       // Error handling:
       //
