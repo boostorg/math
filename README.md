@@ -102,7 +102,8 @@ The full documentation is available on [boost.org](http://www.boost.org/doc/libs
 
 Defining BOOST_MATH_STANDALONE allows Boost.Math to be used without any Boost dependencies.
 Some functionality is reduced in this mode. A static_assert message will alert you
-if a particular feature has been disabled by standalone mode.
+if a particular feature has been disabled by standalone mode. Standalone mode is not designed to 
+be used with the rest of boost, and may result in compiler errors.
 
 ## Supported Compilers ##
 

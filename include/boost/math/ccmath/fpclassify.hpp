@@ -21,7 +21,7 @@
 namespace boost::math::ccmath {
 
 template <typename T, std::enable_if_t<!std::is_integral_v<T>, bool> = true>
-inline constexpr int fpclassify BOOST_PREVENT_MACRO_SUBSTITUTION(T x)
+inline constexpr int fpclassify BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {

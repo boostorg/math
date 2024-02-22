@@ -34,8 +34,8 @@ public:
    void add(const T& point){ stat.add(point); }
    // accessors:
    unsigned worst()const{ return worst_case; }
-   T min BOOST_PREVENT_MACRO_SUBSTITUTION()const{ return (stat.min)(); }
-   T max BOOST_PREVENT_MACRO_SUBSTITUTION()const{ return (stat.max)(); }
+   T min BOOST_MATH_PREVENT_MACRO_SUBSTITUTION()const{ return (stat.min)(); }
+   T max BOOST_MATH_PREVENT_MACRO_SUBSTITUTION()const{ return (stat.max)(); }
    T total()const{ return stat.total(); }
    T mean()const{ return stat.mean(); }
    std::uintmax_t count()const{ return stat.count(); }

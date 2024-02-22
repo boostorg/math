@@ -19,32 +19,32 @@
 
 namespace boost{ namespace math{ namespace tr1{
 
-template<> bool BOOST_MATH_TR1_DECL signbit<long double> BOOST_PREVENT_MACRO_SUBSTITUTION(long double x)
+template<> bool BOOST_MATH_TR1_DECL signbit<long double> BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x)
 {
    return static_cast<bool>((boost::math::signbit)(x));
 }
 
-template<> int BOOST_MATH_TR1_DECL fpclassify<long double> BOOST_PREVENT_MACRO_SUBSTITUTION(long double x)
+template<> int BOOST_MATH_TR1_DECL fpclassify<long double> BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x)
 {
    return (boost::math::fpclassify)(x);
 }
 
-template<> bool BOOST_MATH_TR1_DECL isfinite<long double> BOOST_PREVENT_MACRO_SUBSTITUTION(long double x)
+template<> bool BOOST_MATH_TR1_DECL isfinite<long double> BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x)
 {
    return (boost::math::isfinite)(x);
 }
 
-template<> bool BOOST_MATH_TR1_DECL isinf<long double> BOOST_PREVENT_MACRO_SUBSTITUTION(long double x)
+template<> bool BOOST_MATH_TR1_DECL isinf<long double> BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x)
 {
    return (boost::math::isinf)(x);
 }
 
-template<> bool BOOST_MATH_TR1_DECL isnan<long double> BOOST_PREVENT_MACRO_SUBSTITUTION(long double x)
+template<> bool BOOST_MATH_TR1_DECL isnan<long double> BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x)
 {
    return (boost::math::isnan)(x);
 }
 
-template<> bool BOOST_MATH_TR1_DECL isnormal<long double> BOOST_PREVENT_MACRO_SUBSTITUTION(long double x)
+template<> bool BOOST_MATH_TR1_DECL isnormal<long double> BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x)
 {
    return (boost::math::isnormal)(x);
 }
