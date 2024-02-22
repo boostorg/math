@@ -63,6 +63,13 @@
 #  define BOOST_MATH_NO_EXCEPTIONS
 #endif
 
+#ifdef BOOST_NO_TYPEID
+#  define BOOST_MATH_NO_TYPEID
+#endif
+#ifdef BOOST_NO_RTTI
+#  define BOOST_MATH_NO_RTTI
+#endif
+
 #else // Things from boost/config that are required, and easy to replicate
 
 #define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION
@@ -131,11 +138,11 @@
 #  include <algorithm>  // for min and max
 #  include <limits>
 #  ifndef __GXX_RTTI
-#     ifndef BOOST_NO_TYPEID
-#        define BOOST_NO_TYPEID
+#     ifndef BOOST_MATH_NO_TYPEID
+#        define BOOST_MATH_NO_TYPEID
 #     endif
-#     ifndef BOOST_NO_RTTI
-#        define BOOST_NO_RTTI
+#     ifndef BOOST_MATH_NO_RTTI
+#        define BOOST_MATH_NO_RTTI
 #     endif
 #  endif
 #endif

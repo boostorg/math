@@ -12,7 +12,7 @@
 #include <iomanip>
 #include <string>
 #include <cstring>
-#ifndef BOOST_NO_RTTI
+#ifndef BOOST_MATH_NO_RTTI
 #include <typeinfo>
 #endif
 #include <cerrno>
@@ -122,7 +122,7 @@ inline void replace_all_in_string(std::string& result, const char* what, const c
 template <class T>
 inline const char* name_of()
 {
-#ifndef BOOST_NO_RTTI
+#ifndef BOOST_MATH_NO_RTTI
    return typeid(T).name();
 #else
    return "unknown";
@@ -155,7 +155,7 @@ void raise_error(const char* pfunction, const char* message)
 
   std::string function(pfunction);
   std::string msg("Error in function ");
-#ifndef BOOST_NO_RTTI
+#ifndef BOOST_MATH_NO_RTTI
   replace_all_in_string(function, "%1%", boost::math::policies::detail::name_of<T>());
 #else
   replace_all_in_string(function, "%1%", "Unknown");
@@ -182,7 +182,7 @@ void raise_error(const char* pfunction, const char* pmessage, const T& val)
   std::string function(pfunction);
   std::string message(pmessage);
   std::string msg("Error in function ");
-#ifndef BOOST_NO_RTTI
+#ifndef BOOST_MATH_NO_RTTI
   replace_all_in_string(function, "%1%", boost::math::policies::detail::name_of<T>());
 #else
   replace_all_in_string(function, "%1%", "Unknown");
