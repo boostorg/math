@@ -42,6 +42,10 @@
 
 #define BOOST_MATH_IF_CONSTEXPR BOOST_IF_CONSTEXPR
 
+#ifdef BOOST_NO_CXX17_HDR_EXECUTION
+#  define BOOST_MATH_NO_CXX17_HDR_EXECUTION
+#endif
+
 #else // Things from boost/config that are required, and easy to replicate
 
 #define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION
@@ -65,12 +69,12 @@
 // Clang on mac provides the execution header with none of the functionality. TODO: Check back on this
 // https://en.cppreference.com/w/cpp/compiler_support "Standardization of Parallelism TS"
 #  if !__has_include(<execution>) || (defined(__APPLE__) && defined(__clang__))
-#  define BOOST_NO_CXX17_HDR_EXECUTION
+#  define BOOST_MATH_NO_CXX17_HDR_EXECUTION
 #  endif
 #else
 #  define BOOST_MATH_IF_CONSTEXPR if
 #  define BOOST_NO_CXX17_IF_CONSTEXPR
-#  define BOOST_NO_CXX17_HDR_EXECUTION
+#  define BOOST_MATH_NO_CXX17_HDR_EXECUTION
 #endif
 
 #if __cpp_lib_gcd_lcm >= 201606L
@@ -157,7 +161,7 @@
 
 // Support compilers with P0024R2 implemented without linking TBB
 // https://en.cppreference.com/w/cpp/compiler_support
-#if !defined(BOOST_NO_CXX17_HDR_EXECUTION) && defined(BOOST_HAS_THREADS)
+#if !defined(BOOST_MATH_NO_CXX17_HDR_EXECUTION)
 #  define BOOST_MATH_EXEC_COMPATIBLE
 #endif
 
