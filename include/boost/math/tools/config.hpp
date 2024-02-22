@@ -73,6 +73,9 @@
 #define BOOST_MATH_NOINLINE BOOST_NOINLINE
 #define BOOST_MATH_FORCEINLINE BOOST_FORCEINLINE
 
+#define BOOST_MATH_JOIN(X, Y) BOOST_JOIN(X, Y)
+#define BOOST_MATH_STRINGIZE(X) BOOST_STRINGIZE(X)
+
 #else // Things from boost/config that are required, and easy to replicate
 
 #define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION
