@@ -395,7 +395,7 @@ class fvar {
   friend std::ostream& operator<<(std::ostream&, fvar<RealType2, Order2> const&);
 
   // C++11 Compatibility
-#ifdef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifdef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
   template <typename RootType>
   void fvar_cpp11(std::true_type, RootType const& ca, bool const is_variable);
 
@@ -623,7 +623,7 @@ autodiff_fvar<RealType, Order, Orders...> make_fvar(RealType const& ca) {
   return autodiff_fvar<RealType, Order, Orders...>(ca, true);
 }
 
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 namespace detail {
 
 template <typename RealType, size_t Order, size_t... Is>
@@ -648,7 +648,7 @@ auto make_ftuple(RealTypes const&... ca) {
 
 namespace detail {
 
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 template <typename RealType, size_t Order>
 fvar<RealType, Order>::fvar(root_type const& ca, bool const is_variable) {
   if constexpr (is_fvar<RealType>::value) {
@@ -1023,7 +1023,7 @@ bool operator>(typename fvar<RealType, Order>::root_type const& ca, fvar<RealTyp
 
   /*** Other methods and functions ***/
 
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 // f : order -> derivative(order)/factorial(order)
 // Use this when you have the polynomial coefficients, rather than just the derivatives. E.g. See atan2().
 template <typename RealType, size_t Order>
@@ -1050,7 +1050,7 @@ template <typename RealType, size_t Order>
 template <typename Func>
 fvar<RealType, Order> fvar<RealType, Order>::apply_coefficients(size_t const order, Func const& f) const {
   fvar<RealType, Order> const epsilon = fvar<RealType, Order>(*this).set_root(0);
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
   size_t i = (std::min)(order, order_sum);
 #else  // ODR-use of static constexpr
   size_t i = order < order_sum ? order : order_sum;
@@ -1061,7 +1061,7 @@ fvar<RealType, Order> fvar<RealType, Order>::apply_coefficients(size_t const ord
   return accumulator;
 }
 
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 // f : order -> derivative(order)
 template <typename RealType, size_t Order>
 template <typename Func, typename Fvar, typename... Fvars>
@@ -1101,7 +1101,7 @@ fvar<RealType, Order> fvar<RealType, Order>::apply_coefficients_nonhorner(size_t
   fvar<RealType, Order> const epsilon = fvar<RealType, Order>(*this).set_root(0);
   fvar<RealType, Order> epsilon_i = fvar<RealType, Order>(1);  // epsilon to the power of i
   fvar<RealType, Order> accumulator = fvar<RealType, Order>(f(0u));
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
   size_t const i_max = (std::min)(order, order_sum);
 #else  // ODR-use of static constexpr
   size_t const i_max = order < order_sum ? order : order_sum;
@@ -1113,7 +1113,7 @@ fvar<RealType, Order> fvar<RealType, Order>::apply_coefficients_nonhorner(size_t
   return accumulator;
 }
 
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 // f : order -> derivative(order)
 template <typename RealType, size_t Order>
 template <typename Func, typename Fvar, typename... Fvars>
@@ -1142,7 +1142,7 @@ template <typename RealType, size_t Order>
 template <typename Func>
 fvar<RealType, Order> fvar<RealType, Order>::apply_derivatives(size_t const order, Func const& f) const {
   fvar<RealType, Order> const epsilon = fvar<RealType, Order>(*this).set_root(0);
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
   size_t i = (std::min)(order, order_sum);
 #else  // ODR-use of static constexpr
   size_t i = order < order_sum ? order : order_sum;
@@ -1153,7 +1153,7 @@ fvar<RealType, Order> fvar<RealType, Order>::apply_derivatives(size_t const orde
   return accumulator;
 }
 
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 // f : order -> derivative(order)
 template <typename RealType, size_t Order>
 template <typename Func, typename Fvar, typename... Fvars>
@@ -1194,7 +1194,7 @@ fvar<RealType, Order> fvar<RealType, Order>::apply_derivatives_nonhorner(size_t 
   fvar<RealType, Order> const epsilon = fvar<RealType, Order>(*this).set_root(0);
   fvar<RealType, Order> epsilon_i = fvar<RealType, Order>(1);  // epsilon to the power of i
   fvar<RealType, Order> accumulator = fvar<RealType, Order>(f(0u));
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
   size_t const i_max = (std::min)(order, order_sum);
 #else  // ODR-use of static constexpr
   size_t const i_max = order < order_sum ? order : order_sum;
@@ -1206,7 +1206,7 @@ fvar<RealType, Order> fvar<RealType, Order>::apply_derivatives_nonhorner(size_t 
   return accumulator;
 }
 
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 // Can throw "std::out_of_range: array::at: __n (which is 7) >= _Nm (which is 7)"
 template <typename RealType, size_t Order>
 template <typename... Orders>
@@ -1218,7 +1218,7 @@ get_type_at<RealType, sizeof...(Orders)> fvar<RealType, Order>::at(size_t order,
 }
 #endif
 
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 // Can throw "std::out_of_range: array::at: __n (which is 7) >= _Nm (which is 7)"
 template <typename RealType, size_t Order>
 template <typename... Orders>
@@ -1253,7 +1253,7 @@ RealType fvar<RealType, Order>::epsilon_inner_product(size_t z0,
   return accumulator;
 }
 
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 template <typename RealType, size_t Order>
 fvar<RealType, Order> fvar<RealType, Order>::epsilon_multiply(size_t z0,
                                                               size_t isum0,
@@ -1277,7 +1277,7 @@ fvar<RealType, Order> fvar<RealType, Order>::epsilon_multiply(size_t z0,
 }
 #endif
 
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 // When called from outside this method, z0 should be non-zero. Otherwise if z0=0 then it will give an
 // incorrect result of 0 when the root value is 0 and ca=inf, when instead the correct product is nan.
 // If z0=0 then use the regular multiply operator*() instead.
@@ -1303,7 +1303,7 @@ fvar<RealType, Order> fvar<RealType, Order>::inverse() const {
   return static_cast<root_type>(*this) == 0 ? inverse_apply() : 1 / *this;
 }
 
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 template <typename RealType, size_t Order>
 fvar<RealType, Order>& fvar<RealType, Order>::negate() {
   if constexpr (is_fvar<RealType>::value)
@@ -1326,7 +1326,7 @@ fvar<RealType, Order> fvar<RealType, Order>::inverse_apply() const {
   return apply_derivatives_nonhorner(order_sum, [&derivatives](size_t j) { return derivatives[j]; });
 }
 
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 template <typename RealType, size_t Order>
 fvar<RealType, Order>& fvar<RealType, Order>::multiply_assign_by_root_type(bool is_root,
                                                                            root_type const& ca) {
@@ -1357,7 +1357,7 @@ fvar<RealType, Order>::operator T() const {
   return static_cast<T>(static_cast<root_type>(v.front()));
 }
 
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 template <typename RealType, size_t Order>
 fvar<RealType, Order>& fvar<RealType, Order>::set_root(root_type const& root) {
   if constexpr (is_fvar<RealType>::value)
@@ -1458,7 +1458,7 @@ promote<fvar<RealType1, Order1>, fvar<RealType2, Order2>> pow(fvar<RealType1, Or
       dxydx[i + 1] = (y0 - i) * dxydx[i] / x0;
     std::array<fvar<root_type, order>, order + 1> lognx;
     lognx.front() = fvar<root_type, order>(1);
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
     lognx[1] = log(make_fvar<root_type, order>(x0));
 #else  // for compilers that compile this branch when order == 0.
     lognx[(std::min)(size_t(1), order)] = log(make_fvar<root_type, order>(x0));
@@ -1493,7 +1493,7 @@ fvar<RealType, Order> sqrt(fvar<RealType, Order> const& cr) {
   else {
     root_type numerator = root_type(0.5);
     root_type powers = 1;
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
     derivatives[1] = numerator / *derivatives;
 #else  // for compilers that compile this branch when order == 0.
     derivatives[(std::min)(size_t(1), order)] = numerator / *derivatives;
@@ -2054,7 +2054,7 @@ struct evaluation<fvar_t<double, Order>, Policy> {
 }  // namespace math
 }  // namespace boost
 
-#ifdef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifdef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 #include "autodiff_cpp11.hpp"
 #endif
 

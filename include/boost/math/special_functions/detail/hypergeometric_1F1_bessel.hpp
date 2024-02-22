@@ -84,7 +84,7 @@
            }
            else
               log_scale = 0;
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
            if constexpr (std::numeric_limits<T>::has_infinity)
            {
               if (!(boost::math::isfinite)(bessel_cache[cache_size - 1]))

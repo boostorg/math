@@ -870,7 +870,7 @@ Complex complex_newton(F g, Complex guess, int max_iterations = std::numeric_lim
 #endif
 
 
-#if !defined(BOOST_NO_CXX17_IF_CONSTEXPR)
+#if !defined(BOOST_MATH_NO_CXX17_IF_CONSTEXPR)
 // https://stackoverflow.com/questions/48979861/numerically-stable-method-for-solving-quadratic-equations/50065711
 namespace detail
 {
