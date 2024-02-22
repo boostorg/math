@@ -377,6 +377,18 @@ bool check_true(bool condition, std::string const & filename, std::string const 
   return true;
 }
 
+void report_non_throw(const std::string& file, int line)
+{
+   std::cerr << "Expected exception not thrown in test at: " << file << ":" << line << std::endl;
+   ++detail::global_error_count;
+}
+
+void report_incorrect_throw(const std::string& file, int line)
+{
+   std::cerr << "Exception of the wrong type thrown in test at: " << file << ":" << line << std::endl;
+   ++detail::global_error_count;
+}
+
 int report_errors()
 {
     if (detail::global_error_count > 0)
@@ -417,5 +429,7 @@ int report_errors()
 #define CHECK_ABSOLUTE_ERROR(X, Y, Z) boost::math::test::check_absolute_error((X), (Y), (Z), __FILE__, __func__, __LINE__)
 
 #define CHECK_TRUE(X) boost::math::test::check_true((X), __FILE__, __func__, __LINE__)
+
+#define CHECK_THROW(x, what) try{ x; boost::math::test::report_non_throw(__FILE__, __LINE__); }catch(const what&){} catch(...){ boost::math::test::report_incorrect_throw(__FILE__, __LINE__); }
 
 #endif
