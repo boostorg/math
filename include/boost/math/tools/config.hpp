@@ -55,6 +55,9 @@
 #ifdef BOOST_DISABLE_THREADS
 #  define BOOST_MATH_DISABLE_THREADS
 #endif
+#ifdef BOOST_NO_CXX11_THREAD_LOCAL
+#  define BOOST_MATH_NO_CXX11_THREAD_LOCAL
+#endif
 
 #else // Things from boost/config that are required, and easy to replicate
 
@@ -111,10 +114,7 @@
 #endif // Thread Support
 
 #ifdef BOOST_MATH_DISABLE_THREADS
-#  define BOOST_NO_CXX11_HDR_ATOMIC
-#  define BOOST_NO_CXX11_HDR_FUTURE
-#  define BOOST_NO_CXX11_HDR_THREAD
-#  define BOOST_NO_CXX11_THREAD_LOCAL
+#  define BOOST_MATH_NO_CXX11_THREAD_LOCAL
 #endif // BOOST_MATH_DISABLE_THREADS
 
 #ifdef __GNUC__

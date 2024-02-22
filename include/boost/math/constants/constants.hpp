@@ -167,7 +167,7 @@ namespace boost{ namespace math
 #  define BOOST_MATH_FLOAT128_CONSTANT_OVERLOAD(x)
 #endif
 
-#ifdef BOOST_NO_CXX11_THREAD_LOCAL
+#ifdef BOOST_MATH_NO_CXX11_THREAD_LOCAL
 #  define BOOST_MATH_PRECOMPUTE_IF_NOT_LOCAL(constant_, name)       constant_initializer<T, & BOOST_MATH_JOIN(constant_, name)<T>::get_from_variable_precision>::force_instantiate();
 #else
 #  define BOOST_MATH_PRECOMPUTE_IF_NOT_LOCAL(constant_, name)
