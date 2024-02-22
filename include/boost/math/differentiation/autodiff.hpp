@@ -2004,12 +2004,8 @@ using autodiff_root_type = typename autodiff_fvar_type<RealType, Order>::root_ty
 template <typename RealType0, size_t Order0, typename RealType1, size_t Order1>
 struct promote_args_2<detail::autodiff_fvar_type<RealType0, Order0>,
                       detail::autodiff_fvar_type<RealType1, Order1>> {
-  using type = detail::autodiff_fvar_type<typename promote_args_2<RealType0, RealType1>::type,
-#ifndef BOOST_NO_CXX14_CONSTEXPR
+  using type = detail::autodiff_fvar_type<typename promote_args_2<RealType0, RealType1>::type, 
                                           (std::max)(Order0, Order1)>;
-#else
-        Order0<Order1 ? Order1 : Order0>;
-#endif
 };
 
 template <typename RealType, size_t Order>
