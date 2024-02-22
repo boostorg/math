@@ -117,6 +117,9 @@ class uniform_distribution;
 template <class RealType, class Policy>
 class weibull_distribution;
 
+template <class RealType, class Policy>
+class von_mises_distribution;
+
 }} // namespaces
 
 #define BOOST_MATH_DECLARE_DISTRIBUTIONS(Type, Policy)\
@@ -152,6 +155,7 @@ class weibull_distribution;
    typedef boost::math::students_t_distribution<Type, Policy> students_t;\
    typedef boost::math::triangular_distribution<Type, Policy> triangular;\
    typedef boost::math::uniform_distribution<Type, Policy> uniform;\
-   typedef boost::math::weibull_distribution<Type, Policy> weibull;
+   typedef boost::math::weibull_distribution<Type, Policy> weibull; \
+   typedef boost::math::von_mises_distribution<Type, Policy> von_mises;
 
 #endif // BOOST_MATH_DISTRIBUTIONS_FWD_HPP
