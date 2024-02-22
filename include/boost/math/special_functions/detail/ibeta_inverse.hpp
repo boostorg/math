@@ -648,7 +648,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
 
                   typedef typename Policy::overflow_error_type overflow_type;
 
-                  BOOST_IF_CONSTEXPR(overflow_type::value != boost::math::policies::throw_on_error)
+                  BOOST_MATH_IF_CONSTEXPR(overflow_type::value != boost::math::policies::throw_on_error)
                      if(bet > tools::max_value<T>())
                         bet = tools::max_value<T>();
                }

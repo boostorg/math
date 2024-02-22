@@ -30,12 +30,17 @@
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/config.hpp>
 
+
+// The following are all defined as standalone macros as well
+// If Boost.Config is available just use those definitions because they are more fine-grained
 #define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION BOOST_PREVENT_MACRO_SUBSTITUTION
 
 #define BOOST_MATH_CXX14_CONSTEXPR BOOST_CXX14_CONSTEXPR
 #ifdef BOOST_NO_CXX14_CONSTEXPR
 #  define BOOST_MATH_NO_CXX14_CONSTEXPR
 #endif
+
+#define BOOST_MATH_IF_CONSTEXPR BOOST_IF_CONSTEXPR
 
 #else // Things from boost/config that are required, and easy to replicate
 
@@ -55,17 +60,17 @@
 #endif // BOOST_MATH_CXX14_CONSTEXPR
 
 #if (__cplusplus > 201700L || _MSVC_LANG > 201700L)
-#define BOOST_IF_CONSTEXPR if constexpr
+#define BOOST_MATH_IF_CONSTEXPR if constexpr
 
 // Clang on mac provides the execution header with none of the functionality. TODO: Check back on this
 // https://en.cppreference.com/w/cpp/compiler_support "Standardization of Parallelism TS"
-#if !__has_include(<execution>) || (defined(__APPLE__) && defined(__clang__))
-#define BOOST_NO_CXX17_HDR_EXECUTION
-#endif
+#  if !__has_include(<execution>) || (defined(__APPLE__) && defined(__clang__))
+#  define BOOST_NO_CXX17_HDR_EXECUTION
+#  endif
 #else
-#define BOOST_IF_CONSTEXPR if
-#define BOOST_NO_CXX17_IF_CONSTEXPR
-#define BOOST_NO_CXX17_HDR_EXECUTION
+#  define BOOST_MATH_IF_CONSTEXPR if
+#  define BOOST_NO_CXX17_IF_CONSTEXPR
+#  define BOOST_NO_CXX17_HDR_EXECUTION
 #endif
 
 #if __cpp_lib_gcd_lcm >= 201606L

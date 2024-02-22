@@ -28,7 +28,7 @@ public:
         using std::abs;
         // No need to Kahan the l1 calc; it's well conditioned:
         m_l1 += abs(x);
-        BOOST_IF_CONSTEXPR (kahan)
+        BOOST_MATH_IF_CONSTEXPR (kahan)
         {
             Real y = x - m_c;
             Real t = m_sum + y;
