@@ -16,11 +16,14 @@
 // Minimum language standard transition
 #ifdef _MSVC_LANG
 #  if _MSVC_LANG < 201402L
-#    pragma warning("The minimum language standard to use Boost.Math will be C++14 starting in July 2023 (Boost 1.82 release)");
+#    pragma warning("Boost.Math requires C++14");
+#  endif
+#  if _MSC_VER == 1900
+#    pragma warning("MSVC 14.0 has broken C++14 constexpr support. Support for this compiler will be removed in Boost 1.86")
 #  endif
 #else
 #  if __cplusplus < 201402L
-#    warning "The minimum language standard to use Boost.Math will be C++14 starting in July 2023 (Boost 1.82 release)"
+#    warning "Boost.Math requires C++14"
 #  endif
 #endif
 
