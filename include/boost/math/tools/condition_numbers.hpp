@@ -95,12 +95,12 @@ Real evaluation_condition_number(F const & f, Real const & x)
     }
     bool caught_exception = false;
     Real fp;
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
     try
     {
 #endif
         fp = finite_difference_derivative(f, x);
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
     }
     catch(...)
     {

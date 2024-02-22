@@ -542,13 +542,13 @@ namespace detail {
          last_f0 = f0;
          delta2 = delta1;
          delta1 = delta;
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
          try
 #endif
          {
             detail::unpack_tuple(f(result), f0, f1, f2);
          }
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
          catch (const std::overflow_error&)
          {
             f0 = max > 0 ? tools::max_value<T>() : -tools::min_value<T>();

@@ -145,12 +145,12 @@ namespace boost {
 
         char* my_buffer2 = nullptr;
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
         try
         {
 #endif
           my_buffer2 = new char[v + 3];
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
         }
         catch(const std::bad_alloc&)
         {

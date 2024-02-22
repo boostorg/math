@@ -59,6 +59,10 @@
 #  define BOOST_MATH_NO_CXX11_THREAD_LOCAL
 #endif
 
+#ifdef BOOST_NO_EXCEPTIONS
+#  define BOOST_MATH_NO_EXCEPTIONS
+#endif
+
 #else // Things from boost/config that are required, and easy to replicate
 
 #define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION
@@ -118,8 +122,8 @@
 #endif // BOOST_MATH_DISABLE_THREADS
 
 #ifdef __GNUC__
-#  if !defined(__EXCEPTIONS) && !defined(BOOST_NO_EXCEPTIONS)
-#     define BOOST_NO_EXCEPTIONS
+#  if !defined(__EXCEPTIONS) && !defined(BOOST_MATH_NO_EXCEPTIONS)
+#     define BOOST_MATH_NO_EXCEPTIONS
 #  endif
    //
    // Make sure we have some std lib headers included so we can detect __GXX_RTTI:

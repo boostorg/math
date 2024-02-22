@@ -196,7 +196,7 @@ struct fixed_vector : private std::allocator<T>
    {
       if(n > m_capacity)
       {
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
          BOOST_MATH_THROW_EXCEPTION(std::runtime_error("Exhausted storage for Bernoulli numbers."));
 #else
          return false;
