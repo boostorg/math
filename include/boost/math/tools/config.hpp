@@ -32,6 +32,11 @@
 
 #define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION BOOST_PREVENT_MACRO_SUBSTITUTION
 
+#define BOOST_MATH_CXX14_CONSTEXPR BOOST_CXX14_CONSTEXPR
+#ifdef BOOST_NO_CXX14_CONSTEXPR
+#  define BOOST_MATH_NO_CXX14_CONSTEXPR
+#endif
+
 #else // Things from boost/config that are required, and easy to replicate
 
 #define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION
@@ -43,11 +48,11 @@
 #define BOOST_MATH_NO_MP_TESTS
 
 #if (__cplusplus > 201400L || _MSVC_LANG > 201400L)
-#define BOOST_CXX14_CONSTEXPR constexpr
+#define BOOST_MATH_CXX14_CONSTEXPR constexpr
 #else
-#define BOOST_CXX14_CONSTEXPR
-#define BOOST_NO_CXX14_CONSTEXPR
-#endif // BOOST_CXX14_CONSTEXPR
+#define BOOST_MATH_CXX14_CONSTEXPR
+#define BOOST_MATH_NO_CXX14_CONSTEXPR
+#endif // BOOST_MATH_CXX14_CONSTEXPR
 
 #if (__cplusplus > 201700L || _MSVC_LANG > 201700L)
 #define BOOST_IF_CONSTEXPR if constexpr
@@ -588,7 +593,7 @@ namespace boost{ namespace math{
 //
 // Can we have constexpr tables?
 //
-#if (!defined(BOOST_NO_CXX14_CONSTEXPR)) || (defined(_MSC_VER) && _MSC_VER >= 1910)
+#if (!defined(BOOST_MATH_NO_CXX14_CONSTEXPR)) || (defined(_MSC_VER) && _MSC_VER >= 1910)
 #define BOOST_MATH_HAVE_CONSTEXPR_TABLES
 #define BOOST_MATH_CONSTEXPR_TABLE_FUNCTION constexpr
 #else
