@@ -84,12 +84,12 @@
 #define BOOST_MATH_HAS_CXX17_NUMERIC
 #endif
 
-#define BOOST_JOIN(X, Y) BOOST_DO_JOIN(X, Y)
-#define BOOST_DO_JOIN(X, Y) BOOST_DO_JOIN2(X,Y)
-#define BOOST_DO_JOIN2(X, Y) X##Y
+#define BOOST_MATH_JOIN(X, Y) BOOST_MATH_DO_JOIN(X, Y)
+#define BOOST_MATH_DO_JOIN(X, Y) BOOST_MATH_DO_JOIN2(X,Y)
+#define BOOST_MATH_DO_JOIN2(X, Y) X##Y
 
-#define BOOST_STRINGIZE(X) BOOST_DO_STRINGIZE(X)
-#define BOOST_DO_STRINGIZE(X) #X
+#define BOOST_MATH_STRINGIZE(X) BOOST_MATH_DO_STRINGIZE(X)
+#define BOOST_MATH_DO_STRINGIZE(X) #X
 
 #ifdef BOOST_DISABLE_THREADS // No threads, do nothing
 // Detect thread support via STL implementation
