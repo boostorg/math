@@ -49,6 +49,13 @@
 #  define BOOST_MATH_NO_CXX17_HDR_EXECUTION
 #endif
 
+#ifdef BOOST_HAS_THREADS
+#  define BOOST_MATH_HAS_THREADS
+#endif
+#ifdef BOOST_DISABLE_THREADS
+#  define BOOST_MATH_DISABLE_THREADS
+#endif
+
 #else // Things from boost/config that are required, and easy to replicate
 
 #define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION
@@ -91,24 +98,24 @@
 #define BOOST_MATH_STRINGIZE(X) BOOST_MATH_DO_STRINGIZE(X)
 #define BOOST_MATH_DO_STRINGIZE(X) #X
 
-#ifdef BOOST_DISABLE_THREADS // No threads, do nothing
+#ifdef BOOST_MATH_DISABLE_THREADS // No threads, do nothing
 // Detect thread support via STL implementation
 #elif defined(__has_include)
 #  if !__has_include(<thread>) || !__has_include(<mutex>) || !__has_include(<future>) || !__has_include(<atomic>)
-#     define BOOST_DISABLE_THREADS
+#     define BOOST_MATH_DISABLE_THREADS
 #  else
-#     define BOOST_HAS_THREADS
+#     define BOOST_MATH_HAS_THREADS
 #  endif 
 #else
-#  define BOOST_HAS_THREADS // The default assumption is that the machine has threads
+#  define BOOST_MATH_HAS_THREADS // The default assumption is that the machine has threads
 #endif // Thread Support
 
-#ifdef BOOST_DISABLE_THREADS
+#ifdef BOOST_MATH_DISABLE_THREADS
 #  define BOOST_NO_CXX11_HDR_ATOMIC
 #  define BOOST_NO_CXX11_HDR_FUTURE
 #  define BOOST_NO_CXX11_HDR_THREAD
 #  define BOOST_NO_CXX11_THREAD_LOCAL
-#endif // BOOST_DISABLE_THREADS
+#endif // BOOST_MATH_DISABLE_THREADS
 
 #ifdef __GNUC__
 #  if !defined(__EXCEPTIONS) && !defined(BOOST_NO_EXCEPTIONS)
@@ -164,7 +171,7 @@
 
 // Support compilers with P0024R2 implemented without linking TBB
 // https://en.cppreference.com/w/cpp/compiler_support
-#if !defined(BOOST_MATH_NO_CXX17_HDR_EXECUTION)
+#if !defined(BOOST_MATH_NO_CXX17_HDR_EXECUTION) && defined(BOOST_MATH_HAS_THREADS)
 #  define BOOST_MATH_EXEC_COMPATIBLE
 #endif
 
@@ -587,7 +594,7 @@ namespace boost{ namespace math{
 //
 // Thread local storage:
 //
-#ifndef BOOST_DISABLE_THREADS
+#ifndef BOOST_MATH_DISABLE_THREADS
 #  define BOOST_MATH_THREAD_LOCAL thread_local
 #else
 #  define BOOST_MATH_THREAD_LOCAL 

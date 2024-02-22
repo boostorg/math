@@ -94,7 +94,7 @@ namespace boost{ namespace math
       >;
    };
 
-#ifdef BOOST_HAS_THREADS
+#ifdef BOOST_MATH_HAS_THREADS
 #define BOOST_MATH_CONSTANT_THREAD_HELPER(name, prefix) \
       boost::once_flag f = BOOST_ONCE_INIT;\
       boost::call_once(f, &BOOST_MATH_JOIN(BOOST_MATH_JOIN(string_, get_), name)<T>);
