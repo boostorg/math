@@ -30,9 +30,11 @@
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/config.hpp>
 
+#define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION BOOST_PREVENT_MACRO_SUBSTITUTION
+
 #else // Things from boost/config that are required, and easy to replicate
 
-#define BOOST_PREVENT_MACRO_SUBSTITUTION
+#define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION
 #define BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #define BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS
 #define BOOST_MATH_NO_LEXICAL_CAST
@@ -464,13 +466,13 @@ namespace tools
 {
 
 template <class T>
-inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c) BOOST_MATH_NOEXCEPT(T)
+inline T max BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c) BOOST_MATH_NOEXCEPT(T)
 {
    return (std::max)((std::max)(a, b), c);
 }
 
 template <class T>
-inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d) BOOST_MATH_NOEXCEPT(T)
+inline T max BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d) BOOST_MATH_NOEXCEPT(T)
 {
    return (std::max)((std::max)(a, b), (std::max)(c, d));
 }
