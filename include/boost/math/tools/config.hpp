@@ -70,6 +70,8 @@
 #  define BOOST_MATH_NO_RTTI
 #endif
 
+#define BOOST_MATH_NOINLINE BOOST_NOINLINE
+
 #else // Things from boost/config that are required, and easy to replicate
 
 #define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION
@@ -147,23 +149,23 @@
 #  endif
 #endif
 
-#if !defined(BOOST_NOINLINE)
+#if !defined(BOOST_MATH_NOINLINE)
 #  if defined(_MSC_VER)
-#    define BOOST_NOINLINE __declspec(noinline)
+#    define BOOST_MATH_NOINLINE __declspec(noinline)
 #  elif defined(__GNUC__) && __GNUC__ > 3
      // Clang also defines __GNUC__ (as 4)
 #    if defined(__CUDACC__)
        // nvcc doesn't always parse __noinline__,
        // see: https://svn.boost.org/trac/boost/ticket/9392
-#      define BOOST_NOINLINE __attribute__ ((noinline))
+#      define BOOST_MATH_NOINLINE __attribute__ ((noinline))
 #    elif defined(__HIP__)
        // See https://github.com/boostorg/config/issues/392
-#      define BOOST_NOINLINE __attribute__ ((noinline))
+#      define BOOST_MATH_NOINLINE __attribute__ ((noinline))
 #    else
-#      define BOOST_NOINLINE __attribute__ ((__noinline__))
+#      define BOOST_MATH_NOINLINE __attribute__ ((__noinline__))
 #    endif
 #  else
-#    define BOOST_NOINLINE
+#    define BOOST_MATH_NOINLINE
 #  endif
 #endif
 
