@@ -20,7 +20,7 @@ int main()
     {
         boost::math::uniform_distribution<boost::multiprecision::cpp_bin_float_quad> d {0, 1};
         const auto q = boost::math::quantile(d, T(0.5));
-        assert(q == T(0.5));
+        BOOST_MATH_ASSERT(q == T(0.5));
     }
 
     return 0;
