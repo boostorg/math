@@ -33,7 +33,11 @@
 
 // The following are all defined as standalone macros as well
 // If Boost.Config is available just use those definitions because they are more fine-grained
-#define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION BOOST_PREVENT_MACRO_SUBSTITUTION
+
+// Could be defined in TR1
+#ifndef BOOST_MATH_PREVENT_MACRO_SUBSTITUTION
+#  define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION BOOST_PREVENT_MACRO_SUBSTITUTION
+#endif
 
 #define BOOST_MATH_CXX14_CONSTEXPR BOOST_CXX14_CONSTEXPR
 #ifdef BOOST_NO_CXX14_CONSTEXPR
