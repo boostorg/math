@@ -154,8 +154,7 @@ T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 2> const&)
 
     if (abs(k) > 1)
     {
-       return policies::raise_domain_error<T>(function,
-            "Got k = %1%, function requires |k| <= 1", k, pol);
+       return policies::raise_domain_error<T>(function, "Got k = %1%, function requires |k| <= 1", k, pol);
     }
     if (abs(k) == 1)
     {

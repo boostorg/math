@@ -161,5 +161,6 @@ void test_spots(T, const char* type_name)
     BOOST_CHECK_EQUAL(boost::math::ellint_2(T(-1)), T(1));
     BOOST_CHECK_THROW(boost::math::ellint_2(T(1.5)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::ellint_2(T(-1.5)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::ellint_2(T(1.5), T(1.5)), std::domain_error);
 }
 

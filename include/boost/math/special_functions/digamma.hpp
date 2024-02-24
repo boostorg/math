@@ -560,8 +560,8 @@ T digamma_imp(T x, const std::integral_constant<int, 0>* t, const Policy& pol)
       }
       result += digamma_imp_large(x, pol, t);
    }
-   // LCOV_EXCL_STOP
    return result;
+   // LCOV_EXCL_STOP
 }
 
 } // namespace detail

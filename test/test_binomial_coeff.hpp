@@ -86,7 +86,7 @@ void test_binomial(T, const char* type_name)
 #if LDBL_MAX_10_EXP > 320
    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::max_exponent10 > 320)
    {
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::binomial_coefficient<T>(1072, 522), static_cast<T>(8.5549524921358966076960008392254468438388716743112653656397e320L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::binomial_coefficient<T>(1072, 522), SC_(8.5549524921358966076960008392254468438388716743112653656397e320), tolerance);
    }
    else BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
    {
@@ -101,7 +101,7 @@ void test_binomial(T, const char* type_name)
 #if LDBL_MAX_10_EXP > 4946
    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::max_exponent10 > 4946)
    {
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::binomial_coefficient<T>(16441, 8151), static_cast<T>(5.928641856224322477306131563286843903129818155323061805272e4946L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::binomial_coefficient<T>(16441, 8151), SC_(5.928641856224322477306131563286843903129818155323061805272e4946), tolerance);
    }
    else BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
    {

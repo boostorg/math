@@ -157,8 +157,7 @@ T ellint_e_imp(T k, const Policy& pol, std::integral_constant<int, 2> const&)
 
     if (abs(k) > 1)
     {
-       return policies::raise_domain_error<T>("boost::math::ellint_e<%1%>(%1%)",
-            "Got k = %1%, function requires |k| <= 1", k, pol);
+       return policies::raise_domain_error<T>("boost::math::ellint_e<%1%>(%1%)", "Got k = %1%, function requires |k| <= 1", k, pol);
     }
     if (abs(k) == 1)
     {
