@@ -106,7 +106,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
       if(fabs(phi) > 1 / tools::epsilon<T>())
       {
          // Invalid for v > 1, this case is caught above since v > 1 implies 1/v < sin^2(phi)
-         BOOST_ASSERT(v <= 1);
+         BOOST_MATH_ASSERT(v <= 1);
          //  
          // Phi is so large that phi%pi is necessarily zero (or garbage),
          // just return the second part of the duplication formula:

@@ -777,7 +777,7 @@ BOOST_FORCEINLINE typename tools::promote_args<T>::type ellint_1(T k)
 
 // Elliptic integral (Legendre form) of the first kind
 template <class T1, class T2, class Policy>
-BOOST_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol)
+BOOST_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol)  // LCOV_EXCL_LINE gcc misses this but sees the function body, strange!
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
