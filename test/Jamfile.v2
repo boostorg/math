@@ -893,6 +893,7 @@ test-suite mp :
    [ run polynomial_concept_check.cpp ]
 
    [ run issue893.cpp ]
+   [ run git_issue_1098.cpp ]
 ;
 
 test-suite misc :

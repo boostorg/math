@@ -480,7 +480,7 @@ T ibeta_power_terms(T a,
       bool need_logs = false;
       if (a < b)
       {
-         BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+         BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
          {
             power1 = pow((x * y * c * c) / (a * b), a);
             power2 = pow((y * c) / b, b - a);
@@ -503,7 +503,7 @@ T ibeta_power_terms(T a,
       }
       else
       {
-         BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+         BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
          {
             power1 = pow((x * y * c * c) / (a * b), b);
             power2 = pow((x * c) / a, a - b);
@@ -522,7 +522,7 @@ T ibeta_power_terms(T a,
                need_logs = true;
          }
       }
-      BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+      BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
       {
          if (!(boost::math::isnormal)(power1) || !(boost::math::isnormal)(power2))
          {
