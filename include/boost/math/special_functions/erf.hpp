@@ -38,6 +38,7 @@ namespace detail
 template <class T>
 struct erf_asympt_series_t
 {
+   // LCOV_EXCL_START multiprecision case only, excluded from coverage analysis
    erf_asympt_series_t(T z) : xx(2 * -z * z), tk(1)
    {
       BOOST_MATH_STD_USING
@@ -57,6 +58,7 @@ struct erf_asympt_series_t
          result = 0;
       return r;
    }
+   // LCOV_EXCL_STOP
 private:
    T result;
    T xx;
@@ -139,6 +141,7 @@ T erf_series_near_zero_sum(const T& x, const Policy& pol)
 template <class T, class Policy, class Tag>
 T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
 {
+   // LCOV_EXCL_START multiprecision case only, excluded from coverage analysis
    BOOST_MATH_STD_USING
 
    BOOST_MATH_INSTRUMENT_CODE("Generic erf_imp called");
@@ -188,6 +191,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
    if(invert)
       result = 1 - result;
    return result;
+   // LCOV_EXCL_STOP
 }
 
 template <class T, class Policy>
@@ -198,7 +202,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
    BOOST_MATH_INSTRUMENT_CODE("53-bit precision erf_imp called");
 
    if ((boost::math::isnan)(z))
-      return policies::raise_denorm_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol);
+      return policies::raise_domain_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol);
 
    if(z < 0)
    {
@@ -230,7 +234,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          }
          else
          {
-            static const T c = BOOST_MATH_BIG_CONSTANT(T, 53, 0.003379167095512573896158903121545171688);
+            static const T c = BOOST_MATH_BIG_CONSTANT(T, 53, 0.003379167095512573896158903121545171688);  // LCOV_EXCL_LINE
             result = static_cast<T>(z * 1.125f + z * c);
          }
       }
@@ -240,7 +244,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Expected Error Term:                         1.561e-17
          // Maximum Relative Change in Control Points:   1.155e-04
          // Max Error found at double precision =        2.961182e-17
-
+         // LCOV_EXCL_START
          static const T Y = 1.044948577880859375f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.0834305892146531832907),
@@ -256,6 +260,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.00858571925074406212772),
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.000370900071787748000569),
          };
+         // LCOV_EXCL_STOP
          T zz = z * z;
          result = z * (Y + tools::evaluate_polynomial(P, zz) / tools::evaluate_polynomial(Q, zz));
       }
@@ -272,6 +277,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Expected Error Term:                         3.702e-17
          // Maximum Relative Change in Control Points:   2.845e-04
          // Max Error found at double precision =        4.841816e-17
+         // LCOV_EXCL_START
          static const T Y = 0.405935764312744140625f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 53, -0.098090592216281240205),
@@ -290,6 +296,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.0113385233577001411017),
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.337511472483094676155e-5),
          };
+         // LCOV_EXCL_STOP
          BOOST_MATH_INSTRUMENT_VARIABLE(Y);
          BOOST_MATH_INSTRUMENT_VARIABLE(P[0]);
          BOOST_MATH_INSTRUMENT_VARIABLE(Q[0]);
@@ -305,6 +312,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Maximum Deviation Found:                     3.909e-18
          // Expected Error Term:                         3.909e-18
          // Maximum Relative Change in Control Points:   9.886e-05
+         // LCOV_EXCL_START
          static const T Y = 0.50672817230224609375f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 53, -0.0243500476207698441272),
@@ -322,6 +330,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.0563921837420478160373),
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.00410369723978904575884),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - T(1.5))) / tools::evaluate_polynomial(Q, z - T(1.5));
          T hi, lo;
          int expon;
@@ -338,6 +347,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Expected Error Term:                         1.512e-17
          // Maximum Relative Change in Control Points:   2.222e-04
          // Max Error found at double precision =        2.062515e-17
+         // LCOV_EXCL_START
          static const T Y = 0.5405750274658203125f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.00295276716530971662634),
@@ -355,6 +365,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.0105982906484876531489),
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.000479411269521714493907),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - T(3.5))) / tools::evaluate_polynomial(Q, z - T(3.5));
          T hi, lo;
          int expon;
@@ -371,6 +382,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Maximum Deviation Found:                     2.860e-17
          // Expected Error Term:                         2.859e-17
          // Maximum Relative Change in Control Points:   1.357e-05
+         // LCOV_EXCL_START
          static const T Y = 0.5579090118408203125f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.00628057170626964891937),
@@ -390,6 +402,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 53, 13.5064170191802889145),
             BOOST_MATH_BIG_CONSTANT(T, 53, 5.48409182238641741584),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(1 / z)) / tools::evaluate_polynomial(Q, T(1 / z));
          T hi, lo;
          int expon;
@@ -662,8 +675,8 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
 
    if(z < 0)
    {
-      if(!invert)
-         return -erf_imp(T(-z), invert, pol, t);
+      if (!invert)
+         return -erf_imp(T(-z), invert, pol, t); // LCOV_EXCL_LINE confirmed as covered, not sure why lcov does see it.
       else if(z < -0.5)
          return 2 - erf_imp(T(-z), invert, pol, t);
       else
@@ -697,6 +710,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Maximum Deviation Found:                     6.124e-36
          // Expected Error Term:                         -6.124e-36
          // Maximum Relative Change in Control Points:   3.492e-10
+         // LCOV_EXCL_START
          static const T Y = 1.0841522216796875f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.0442269454158250738961589031215451778),
@@ -718,6 +732,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.196230608502104324965623171516808796e-5),
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.313388521582925207734229967907890146e-7),
          };
+         // LCOV_EXCL_STOP
          result = z * (Y + tools::evaluate_polynomial(P, T(z * z)) / tools::evaluate_polynomial(Q, T(z * z)));
       }
    }
@@ -733,6 +748,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Maximum Deviation Found:                     1.388e-35
          // Expected Error Term:                         1.387e-35
          // Maximum Relative Change in Control Points:   6.127e-05
+         // LCOV_EXCL_START
          static const T Y = 0.371877193450927734375f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 113, -0.0640320213544647969396032886581290455),
@@ -759,6 +775,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.226988669466501655990637599399326874e-4),
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.270666232259029102353426738909226413e-10),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 0.5f)) / tools::evaluate_polynomial(Q, T(z - 0.5f));
          T hi, lo;
          int expon;
@@ -775,6 +792,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Maximum Deviation Found:                     1.539e-35
          // Expected Error Term:                         1.538e-35
          // Maximum Relative Change in Control Points:   6.104e-05
+         // LCOV_EXCL_START
          static const T Y = 0.45658016204833984375f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 113, -0.0289965858925328393392496555094848345),
@@ -800,6 +818,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.000349871943711566546821198612518656486),
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.123749319840299552925421880481085392e-4),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 1.0f)) / tools::evaluate_polynomial(Q, T(z - 1.0f));
          T hi, lo;
          int expon;
@@ -816,6 +835,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Expected Error Term:                         1.418e-35
          // Maximum Relative Change in Control Points:   1.316e-04
          // Max Error found at long double precision =   1.998462e-35
+         // LCOV_EXCL_START
          static const T Y = 0.50250148773193359375f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 113, -0.0201233630504573402185161184151016606),
@@ -842,6 +862,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.507158721790721802724402992033269266e-5),
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.18647774409821470950544212696270639e-12),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 1.5f)) / tools::evaluate_polynomial(Q, T(z - 1.5f));
          T hi, lo;
          int expon;
@@ -858,6 +879,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Expected Error Term:                         3.575e-36
          // Maximum Relative Change in Control Points:   7.103e-05
          // Max Error found at long double precision =   5.794737e-36
+         // LCOV_EXCL_START
          static const T Y = 0.52896785736083984375f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 113, -0.00902152521745813634562524098263360074),
@@ -883,6 +905,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.686843205749767250666787987163701209e-4),
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.192093541425429248675532015101904262e-5),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 2.25f)) / tools::evaluate_polynomial(Q, T(z - 2.25f));
          T hi, lo;
          int expon;
@@ -899,6 +922,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Expected Error Term:                         -8.126e-37
          // Maximum Relative Change in Control Points:   1.363e-04
          // Max Error found at long double precision =   1.747062e-36
+         // LCOV_EXCL_START
          static const T Y = 0.54037380218505859375f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 113, -0.0033703486408887424921155540591370375),
@@ -922,6 +946,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.000144243326443913171313947613547085553),
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.407763415954267700941230249989140046e-5),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 3.0f)) / tools::evaluate_polynomial(Q, T(z - 3.0f));
          T hi, lo;
          int expon;
@@ -938,6 +963,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Expected Error Term:                         -5.803e-36
          // Maximum Relative Change in Control Points:   2.475e-05
          // Max Error found at long double precision =   1.349545e-35
+         // LCOV_EXCL_START
          static const T Y = 0.55000019073486328125f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.00118142849742309772151454518093813615),
@@ -965,6 +991,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.655068544833064069223029299070876623e-6),
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.11005507545746069573608988651927452e-7),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 4.5f)) / tools::evaluate_polynomial(Q, T(z - 4.5f));
          T hi, lo;
          int expon;
@@ -981,6 +1008,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Expected Error Term:                         1.007e-36
          // Maximum Relative Change in Control Points:   1.027e-03
          // Max Error found at long double precision =   2.646420e-36
+         // LCOV_EXCL_START
          static const T Y = 0.5574436187744140625f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.000293236907400849056269309713064107674),
@@ -1006,6 +1034,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.674128352521481412232785122943508729e-6),
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.997637501418963696542159244436245077e-8),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 6.5f)) / tools::evaluate_polynomial(Q, T(z - 6.5f));
          T hi, lo;
          int expon;
@@ -1022,6 +1051,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Expected Error Term:                         8.380e-36
          // Maximum Relative Change in Control Points:   2.632e-06
          // Max Error found at long double precision =   9.849522e-36
+         // LCOV_EXCL_START
          static const T Y = 0.56083202362060546875f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.000282420728751494363613829834891390121),
@@ -1047,6 +1077,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.164033049810404773469413526427932109e-4),
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.356615210500531410114914617294694857e-6),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z / 2 - 4.75f)) / tools::evaluate_polynomial(Q, T(z / 2 - 4.75f));
          T hi, lo;
          int expon;
@@ -1063,6 +1094,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Expected Error Term:                         -1.132e-35
          // Maximum Relative Change in Control Points:   4.674e-04
          // Max Error found at long double precision =   1.162590e-35
+         // LCOV_EXCL_START
          static const T Y = 0.5632686614990234375f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.000920922048732849448079451574171836943),
@@ -1092,6 +1124,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 113, 799.359797306084372350264298361110448),
             BOOST_MATH_BIG_CONSTANT(T, 113, 72.7415265778588087243442792401576737),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(1 / z)) / tools::evaluate_polynomial(Q, T(1 / z));
          T hi, lo;
          int expon;
@@ -1120,59 +1153,6 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
    return result;
 } // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const std::integral_constant<int, 113>& t)
 
-template <class T, class Policy, class tag>
-struct erf_initializer
-{
-   struct init
-   {
-      init()
-      {
-         do_init(tag());
-      }
-      static void do_init(const std::integral_constant<int, 0>&){}
-      static void do_init(const std::integral_constant<int, 53>&)
-      {
-         boost::math::erf(static_cast<T>(1e-12), Policy());
-         boost::math::erf(static_cast<T>(0.25), Policy());
-         boost::math::erf(static_cast<T>(1.25), Policy());
-         boost::math::erf(static_cast<T>(2.25), Policy());
-         boost::math::erf(static_cast<T>(4.25), Policy());
-         boost::math::erf(static_cast<T>(5.25), Policy());
-      }
-      static void do_init(const std::integral_constant<int, 64>&)
-      {
-         boost::math::erf(static_cast<T>(1e-12), Policy());
-         boost::math::erf(static_cast<T>(0.25), Policy());
-         boost::math::erf(static_cast<T>(1.25), Policy());
-         boost::math::erf(static_cast<T>(2.25), Policy());
-         boost::math::erf(static_cast<T>(4.25), Policy());
-         boost::math::erf(static_cast<T>(5.25), Policy());
-      }
-      static void do_init(const std::integral_constant<int, 113>&)
-      {
-         boost::math::erf(static_cast<T>(1e-22), Policy());
-         boost::math::erf(static_cast<T>(0.25), Policy());
-         boost::math::erf(static_cast<T>(1.25), Policy());
-         boost::math::erf(static_cast<T>(2.125), Policy());
-         boost::math::erf(static_cast<T>(2.75), Policy());
-         boost::math::erf(static_cast<T>(3.25), Policy());
-         boost::math::erf(static_cast<T>(5.25), Policy());
-         boost::math::erf(static_cast<T>(7.25), Policy());
-         boost::math::erf(static_cast<T>(11.25), Policy());
-         boost::math::erf(static_cast<T>(12.5), Policy());
-      }
-      void force_instantiate()const{}
-   };
-   static const init initializer;
-   static void force_instantiate()
-   {
-      initializer.force_instantiate();
-   }
-};
-
-template <class T, class Policy, class tag>
-const typename erf_initializer<T, Policy, tag>::init erf_initializer<T, Policy, tag>::initializer;
-
 } // namespace detail
 
 template <class T, class Policy>
@@ -1200,8 +1180,6 @@ inline typename tools::promote_args<T>::type erf(T z, const Policy& /* pol */)
    > tag_type;
 
    BOOST_MATH_INSTRUMENT_CODE("tag_type = " << typeid(tag_type).name());
-
-   detail::erf_initializer<value_type, forwarding_policy, tag_type>::force_instantiate(); // Force constants to be initialized before main
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::erf_imp(
       static_cast<value_type>(z),
@@ -1235,8 +1213,6 @@ inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
    > tag_type;
 
    BOOST_MATH_INSTRUMENT_CODE("tag_type = " << typeid(tag_type).name());
-
-   detail::erf_initializer<value_type, forwarding_policy, tag_type>::force_instantiate(); // Force constants to be initialized before main
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::erf_imp(
       static_cast<value_type>(z),

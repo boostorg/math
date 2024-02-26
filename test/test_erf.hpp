@@ -192,6 +192,24 @@ void test_spots(T, const char* t)
    BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(-0.5)), static_cast<T>(-0.52049987781304653768274665389196452873645157575796L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(0)), static_cast<T>(0), tolerance);
 
+   BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+   {
+      BOOST_CHECK_THROW(boost::math::erf(std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+      BOOST_CHECK_THROW(boost::math::erfc(std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+   }
+   BOOST_CHECK_THROW(boost::math::erfc_inv(T(-0.5)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::erfc_inv(T(2.1)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::erf_inv(T(-1.1)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::erf_inv(T(1.1)), std::domain_error);
+   BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+   {
+      BOOST_CHECK_EQUAL(boost::math::erfc_inv(T(0)), std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(boost::math::erfc_inv(T(2)), -std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(boost::math::erf_inv(T(1)), std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(boost::math::erf_inv(T(-1)), -std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(boost::math::erf_inv(T(0)), T(0));
+   }
+
    tolerance = boost::math::tools::epsilon<T>() * 100 * 200; // 200 eps %.
 #if defined(__CYGWIN__)
    // some platforms long double is only reliably accurate to double precision:

@@ -327,71 +327,6 @@ T erf_inv_imp(const T& p, const T& q, const Policy& pol, const std::integral_con
    return result;
 }
 
-template <class T, class Policy>
-struct erf_inv_initializer
-{
-   struct init
-   {
-      init()
-      {
-         do_init();
-      }
-      static bool is_value_non_zero(T);
-      static void do_init()
-      {
-         // If std::numeric_limits<T>::digits is zero, we must not call
-         // our initialization code here as the precision presumably
-         // varies at runtime, and will not have been set yet.
-         if(std::numeric_limits<T>::digits)
-         {
-            boost::math::erf_inv(static_cast<T>(0.25), Policy());
-            boost::math::erf_inv(static_cast<T>(0.55), Policy());
-            boost::math::erf_inv(static_cast<T>(0.95), Policy());
-            boost::math::erfc_inv(static_cast<T>(1e-15), Policy());
-            // These following initializations must not be called if
-            // type T can not hold the relevant values without
-            // underflow to zero.  We check this at runtime because
-            // some tools such as valgrind silently change the precision
-            // of T at runtime, and numeric_limits basically lies!
-            if(is_value_non_zero(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-130))))
-               boost::math::erfc_inv(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-130)), Policy());
-
-            // Some compilers choke on constants that would underflow, even in code that isn't instantiated
-            // so try and filter these cases out in the preprocessor:
-#if LDBL_MAX_10_EXP >= 800
-            if(is_value_non_zero(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-800))))
-               boost::math::erfc_inv(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-800)), Policy());
-            if(is_value_non_zero(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-900))))
-               boost::math::erfc_inv(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-900)), Policy());
-#else
-            if(is_value_non_zero(static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 64, 1e-800))))
-               boost::math::erfc_inv(static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 64, 1e-800)), Policy());
-            if(is_value_non_zero(static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 64, 1e-900))))
-               boost::math::erfc_inv(static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 64, 1e-900)), Policy());
-#endif
-         }
-      }
-      void force_instantiate()const{}
-   };
-   static const init initializer;
-   static void force_instantiate()
-   {
-      initializer.force_instantiate();
-   }
-};
-
-template <class T, class Policy>
-const typename erf_inv_initializer<T, Policy>::init erf_inv_initializer<T, Policy>::initializer;
-
-template <class T, class Policy>
-BOOST_MATH_NOINLINE bool erf_inv_initializer<T, Policy>::init::is_value_non_zero(T v)
-{
-   // This needs to be non-inline to detect whether v is non zero at runtime
-   // rather than at compile time, only relevant when running under valgrind
-   // which changes long double's to double's on the fly.
-   return v != 0;
-}
-
 } // namespace detail
 
 template <class T, class Policy>
@@ -447,8 +382,6 @@ typename tools::promote_args<T>::type erfc_inv(T z, const Policy& pol)
       policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-
-   detail::erf_inv_initializer<eval_type, forwarding_policy>::force_instantiate();
 
    //
    // And get the result, negating where required:
@@ -518,7 +451,6 @@ typename tools::promote_args<T>::type erf_inv(T z, const Policy& pol)
    //
    typedef typename policies::evaluation<result_type, Policy>::type eval_type;
 
-   detail::erf_inv_initializer<eval_type, forwarding_policy>::force_instantiate();
    //
    // And get the result, negating where required:
    //
