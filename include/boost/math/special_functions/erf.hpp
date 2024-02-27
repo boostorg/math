@@ -473,7 +473,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
       }
       else if(z < 1e-10)
       {
-         static const T c = BOOST_MATH_BIG_CONSTANT(T, 64, 0.003379167095512573896158903121545171688);
+         static const T c = BOOST_MATH_BIG_CONSTANT(T, 64, 0.003379167095512573896158903121545171688); // LCOV_EXCL_LINE
          result = z * 1.125 + z * c;
       }
       else
@@ -482,6 +482,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Maximum Deviation Found:                     4.326e-22
          // Expected Error Term:                         -4.326e-22
          // Maximum Relative Change in Control Points:   1.474e-04
+         // LCOV_EXCL_START
          static const T Y = 1.044948577880859375f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.0834305892146531988966),
@@ -499,6 +500,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.000650511752687851548735),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.189532519105655496778e-4),
          };
+         // LCOV_EXCL_STOP
          result = z * (Y + tools::evaluate_polynomial(P, T(z * z)) / tools::evaluate_polynomial(Q, T(z * z)));
       }
    }
@@ -514,6 +516,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Maximum Deviation Found:                     2.241e-20
          // Expected Error Term:                         -2.241e-20
          // Maximum Relative Change in Control Points:   5.110e-03
+         // LCOV_EXCL_START
          static const T Y = 0.405935764312744140625f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 64, -0.0980905922162812031672),
@@ -534,6 +537,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.0396649631833002269861),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.00279220237309449026796),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 0.5f)) / tools::evaluate_polynomial(Q, T(z - 0.5f));
          T hi, lo;
          int expon;
@@ -550,6 +554,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Maximum Deviation Found:                     1.495e-21
          // Expected Error Term:                         -1.494e-21
          // Maximum Relative Change in Control Points:   1.793e-04
+         // LCOV_EXCL_START
          static const T Y = 0.50672817230224609375f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 64, -0.024350047620769840217),
@@ -569,6 +574,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.0158027197831887485261),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.000897871370778031611439),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 1.5f)) / tools::evaluate_polynomial(Q, T(z - 1.5f));
          T hi, lo;
          int expon;
@@ -585,6 +591,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Expected Error Term:                         -1.106e-20
          // Maximum Relative Change in Control Points:   1.709e-04
          // Max Error found at long double precision =   1.446908e-20
+         // LCOV_EXCL_START
          static const T Y  = 0.5405750274658203125f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.0029527671653097284033),
@@ -604,6 +611,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.00221657568292893699158),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.804149464190309799804e-4),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 3.5f)) / tools::evaluate_polynomial(Q, T(z - 3.5f));
          T hi, lo;
          int expon;
@@ -620,6 +628,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          // Maximum Deviation Found:                     6.677e-21
          // Expected Error Term:                         6.676e-21
          // Maximum Relative Change in Control Points:   2.319e-05
+         // LCOV_EXCL_START
          static const T Y = 0.55825519561767578125f;
          static const T P[] = {    
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.00593438793008050214106),
@@ -643,6 +652,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 64, 104.365251479578577989),
             BOOST_MATH_BIG_CONSTANT(T, 64, 30.8365511891224291717),
          };
+         // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(1 / z)) / tools::evaluate_polynomial(Q, T(1 / z));
          T hi, lo;
          int expon;
@@ -710,8 +720,8 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
       }
       else if(z < 1e-20)
       {
-         static const T c = BOOST_MATH_BIG_CONSTANT(T, 113, 0.003379167095512573896158903121545171688);
-         result = z * 1.125 + z * c;
+         static const T c = BOOST_MATH_BIG_CONSTANT(T, 113, 0.003379167095512573896158903121545171688); // LCOV_EXCL_LINE
+         result = z * 1.125 + z * c;  // LCOV_EXCL_LINE confirmed as covered, not sure why lcov doesn't see this.
       }
       else
       {
@@ -786,12 +796,12 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          };
          // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 0.5f)) / tools::evaluate_polynomial(Q, T(z - 0.5f));
-         T hi, lo;
+         T hi, lo;  // LCOV_EXCL_LINE
          int expon;
          hi = floor(ldexp(frexp(z, &expon), 56));
          hi = ldexp(hi, expon - 56);
          lo = z - hi;
-         T sq = z * z;
+         T sq = z * z;  // LCOV_EXCL_LINE strangely not seen by lcov.
          T err_sqr = ((hi * hi - sq) + 2 * hi * lo) + lo * lo;
          result *= exp(-sq) * exp(-err_sqr) / z;
       }
@@ -829,12 +839,12 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          };
          // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 1.0f)) / tools::evaluate_polynomial(Q, T(z - 1.0f));
-         T hi, lo;
+         T hi, lo;  // LCOV_EXCL_LINE
          int expon;
          hi = floor(ldexp(frexp(z, &expon), 56));
          hi = ldexp(hi, expon - 56);
          lo = z - hi;
-         T sq = z * z;
+         T sq = z * z;  // LCOV_EXCL_LINE strangley not seen by lcov
          T err_sqr = ((hi * hi - sq) + 2 * hi * lo) + lo * lo;
          result *= exp(-sq) * exp(-err_sqr) / z;
       }
@@ -873,12 +883,12 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          };
          // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 1.5f)) / tools::evaluate_polynomial(Q, T(z - 1.5f));
-         T hi, lo;
+         T hi, lo;  // LCOV_EXCL_LINE
          int expon;
          hi = floor(ldexp(frexp(z, &expon), 56));
          hi = ldexp(hi, expon - 56);
          lo = z - hi;
-         T sq = z * z;
+         T sq = z * z;  // LCOV_EXCL_LINE strangely not seen by lcov.
          T err_sqr = ((hi * hi - sq) + 2 * hi * lo) + lo * lo;
          result *= exp(-sq) * exp(-err_sqr) / z;
       }
@@ -916,12 +926,12 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          };
          // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 2.25f)) / tools::evaluate_polynomial(Q, T(z - 2.25f));
-         T hi, lo;
+         T hi, lo;  // LCOV_EXCL_LINE
          int expon;
          hi = floor(ldexp(frexp(z, &expon), 56));
          hi = ldexp(hi, expon - 56);
          lo = z - hi;
-         T sq = z * z;
+         T sq = z * z;  // LCOV_EXCL_LINE strangely not seen by lcov.
          T err_sqr = ((hi * hi - sq) + 2 * hi * lo) + lo * lo;
          result *= exp(-sq) * exp(-err_sqr) / z;
       }
@@ -957,12 +967,12 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          };
          // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 3.0f)) / tools::evaluate_polynomial(Q, T(z - 3.0f));
-         T hi, lo;
+         T hi, lo;  // LCOV_EXCL_LINE
          int expon;
          hi = floor(ldexp(frexp(z, &expon), 56));
          hi = ldexp(hi, expon - 56);
          lo = z - hi;
-         T sq = z * z;
+         T sq = z * z;  // LCOV_EXCL_LINE strangely not seen by lcov.
          T err_sqr = ((hi * hi - sq) + 2 * hi * lo) + lo * lo;
          result *= exp(-sq) * exp(-err_sqr) / z;
       }
@@ -1002,12 +1012,12 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          };
          // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z - 4.5f)) / tools::evaluate_polynomial(Q, T(z - 4.5f));
-         T hi, lo;
+         T hi, lo; // LCOV_EXCL_LINE
          int expon;
          hi = floor(ldexp(frexp(z, &expon), 56));
          hi = ldexp(hi, expon - 56);
          lo = z - hi;
-         T sq = z * z;
+         T sq = z * z;  // LCOV_EXCL_LINE strangely not seen by lcov.
          T err_sqr = ((hi * hi - sq) + 2 * hi * lo) + lo * lo;
          result *= exp(-sq) * exp(-err_sqr) / z;
       }
@@ -1088,12 +1098,12 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          };
          // LCOV_EXCL_STOP
          result = Y + tools::evaluate_polynomial(P, T(z / 2 - 4.75f)) / tools::evaluate_polynomial(Q, T(z / 2 - 4.75f));
-         T hi, lo;
+         T hi, lo;  // LCOV_EXCL_LINE
          int expon;
          hi = floor(ldexp(frexp(z, &expon), 56));
          hi = ldexp(hi, expon - 56);
          lo = z - hi;
-         T sq = z * z;
+         T sq = z * z; // LCOV_EXCL_LINE  strangely not seen by lcov.
          T err_sqr = ((hi * hi - sq) + 2 * hi * lo) + lo * lo;
          result *= exp(-sq) * exp(-err_sqr) / z;
       }
