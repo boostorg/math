@@ -146,6 +146,9 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
 
    BOOST_MATH_INSTRUMENT_CODE("Generic erf_imp called");
 
+   if ((boost::math::isnan)(z))
+      return policies::raise_domain_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol);
+
    if(z < 0)
    {
       if(!invert)
@@ -439,6 +442,9 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
 
    BOOST_MATH_INSTRUMENT_CODE("64-bit precision erf_imp called");
 
+   if ((boost::math::isnan)(z))
+      return policies::raise_domain_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol);
+
    if(z < 0)
    {
       if(!invert)
@@ -672,6 +678,9 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
    BOOST_MATH_STD_USING
 
    BOOST_MATH_INSTRUMENT_CODE("113-bit precision erf_imp called");
+
+   if ((boost::math::isnan)(z))
+      return policies::raise_domain_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol);
 
    if(z < 0)
    {

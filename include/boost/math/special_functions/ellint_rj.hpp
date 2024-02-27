@@ -38,8 +38,6 @@ T ellint_rc1p_imp(T y, const Policy& pol)
    // Calculate RC(1, 1 + x)
    BOOST_MATH_STD_USING
 
-  static const char* function = "boost::math::ellint_rc<%1%>(%1%,%1%)";
-
    BOOST_MATH_ASSERT(y != -1);
 
    // for 1 + y < 0, the integral is singular, return Cauchy principal value

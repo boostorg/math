@@ -208,7 +208,16 @@ void test_spots(T, const char* t)
       BOOST_CHECK_EQUAL(boost::math::erf_inv(T(1)), std::numeric_limits<T>::infinity());
       BOOST_CHECK_EQUAL(boost::math::erf_inv(T(-1)), -std::numeric_limits<T>::infinity());
       BOOST_CHECK_EQUAL(boost::math::erf_inv(T(0)), T(0));
+
+      BOOST_CHECK_EQUAL(boost::math::erf(std::numeric_limits<T>::infinity()), T(1));
+      BOOST_CHECK_EQUAL(boost::math::erf(-std::numeric_limits<T>::infinity()), T(-1));
+      BOOST_CHECK_EQUAL(boost::math::erfc(std::numeric_limits<T>::infinity()), T(0));
+      BOOST_CHECK_EQUAL(boost::math::erfc(-std::numeric_limits<T>::infinity()), T(2));
    }
+   BOOST_CHECK_EQUAL(boost::math::erf(boost::math::tools::max_value<T>()), T(1));
+   BOOST_CHECK_EQUAL(boost::math::erf(-boost::math::tools::max_value<T>()), T(-1));
+   BOOST_CHECK_EQUAL(boost::math::erfc(boost::math::tools::max_value<T>()), T(0));
+   BOOST_CHECK_EQUAL(boost::math::erfc(-boost::math::tools::max_value<T>()), T(2));
 
    tolerance = boost::math::tools::epsilon<T>() * 100 * 200; // 200 eps %.
 #if defined(__CYGWIN__)
