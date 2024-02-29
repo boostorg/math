@@ -83,7 +83,14 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(acosh_test, T)
     {
        T inf = std::numeric_limits<T>::infinity();
        boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::ignore_error> > pol;
-       BOOST_CHECK_EQUAL(boost::math::asinh(inf, pol), inf);
+       BOOST_CHECK_EQUAL(boost::math::acosh(inf, pol), inf);
+    }
+    x = -1;
+    BOOST_CHECK_THROW(boost::math::acosh(x), std::domain_error);
+    if (std::numeric_limits<T>::has_quiet_NaN)
+    {
+       T n = std::numeric_limits<T>::quiet_NaN();
+       BOOST_CHECK_THROW(boost::math::acosh(n), std::domain_error);
     }
 }
 

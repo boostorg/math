@@ -293,7 +293,12 @@ void test_ca()
     Real tol = expected_error<Points>(test_ca_error_id);
     Real L1;
 
-    auto f1 = [](const Real& x) { return atan(x)/(x*(x*x + 1)) ; };
+    auto f1 = [](const Real& x) { 
+      if (x == 0) {
+         return static_cast<Real>(1);
+      }
+      return atan(x)/(x*(x*x + 1)) ;
+    };
     Real Q = gauss<Real, Points>::integrate(f1, 0, 1, &L1);
     Real Q_expected = pi<Real>()*ln_two<Real>()/8 + catalan<Real>()*half<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
@@ -415,6 +420,7 @@ void test_left_limit_infinite()
 template<class Complex>
 void test_complex_lambert_w()
 {
+    #ifndef BOOST_MATH_STANDALONE
     std::cout << "Testing that complex-valued integrands are integrated correctly by Gaussian quadrature on type " << boost::typeindex::type_id<Complex>().pretty_name() << "\n";
     typedef typename Complex::value_type Real;
     Real tol = 10e-9;
@@ -438,7 +444,6 @@ void test_complex_lambert_w()
     };
 
     //N[ProductLog[2+3*I], 150]
-    #ifndef BOOST_MATH_STANDALONE
     Complex Q = gauss<Real, 30>::integrate(lw, (Real) 0, pi<Real>());
     BOOST_CHECK_CLOSE_FRACTION(Q.real(), BOOST_MATH_TEST_VALUE(Real, 1.0900765344857908463017778267816696498710210863535777805644), tol);
     BOOST_CHECK_CLOSE_FRACTION(Q.imag(), BOOST_MATH_TEST_VALUE(Real, 0.5301397207748388014268602135741217419287056313827031782979), tol);

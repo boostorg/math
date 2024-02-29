@@ -142,6 +142,21 @@ void issue_825() {
     CHECK_NAN(roots[3]);
 }
 
+void issue_1055() {
+    double a = 1.0;
+    double b = -547.5045576653938;
+    double c = 75042.069484941996;
+    double d = 273.7522788326969;
+    double e =  0.24965766552610175;
+    std::array<double, 4> roots = boost::math::tools::quartic_roots<double>(a, b, c, d, e);
+    // This is accurate to 1e-9 on every platform *except* cygwin/g++11/c++17:
+    CHECK_ABSOLUTE_ERROR(-0.00182420203946279, roots[0], 1e-6);
+    CHECK_ABSOLUTE_ERROR(-0.00182370927680797, roots[1], 1e-6);
+    CHECK_NAN(roots[2]);
+    CHECK_NAN(roots[3]);
+}
+
+
 int main()
 {
     test_zero_coefficients<float>();
@@ -150,5 +165,6 @@ int main()
     test_zero_coefficients<long double>();
 #endif
     issue_825();
+    issue_1055();
     return boost::math::test::report_errors();
 }

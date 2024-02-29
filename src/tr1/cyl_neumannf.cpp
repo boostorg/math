@@ -11,9 +11,9 @@
 #include <boost/math/special_functions/bessel.hpp>
 #include "c_policy.hpp"
 
-extern "C" float BOOST_MATH_TR1_DECL boost_cyl_neumannf BOOST_PREVENT_MACRO_SUBSTITUTION(float nu, float x) BOOST_MATH_C99_THROW_SPEC
+extern "C" float BOOST_MATH_TR1_DECL boost_cyl_neumannf BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(float nu, float x) BOOST_MATH_C99_THROW_SPEC
 {
-   return c_policies::cyl_neumann BOOST_PREVENT_MACRO_SUBSTITUTION(nu, x);
+   return c_policies::cyl_neumann BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(nu, x);
 }
 
 

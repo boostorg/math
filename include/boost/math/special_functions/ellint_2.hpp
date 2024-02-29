@@ -189,7 +189,7 @@ T ellint_e_imp(T k, const Policy& pol, std::integral_constant<int, 2> const&)
 // existing routines.
 //
 template <typename T, typename Policy>
-BOOST_FORCEINLINE T ellint_e_imp(T k, const Policy& pol, std::integral_constant<int, 0> const&)
+BOOST_MATH_FORCEINLINE T ellint_e_imp(T k, const Policy& pol, std::integral_constant<int, 0> const&)
 {
    using std::abs;
    using namespace boost::math::tools;
@@ -428,7 +428,7 @@ BOOST_FORCEINLINE T ellint_e_imp(T k, const Policy& pol, std::integral_constant<
    }
 }
 template <typename T, typename Policy>
-BOOST_FORCEINLINE T ellint_e_imp(T k, const Policy& pol, std::integral_constant<int, 1> const&)
+BOOST_MATH_FORCEINLINE T ellint_e_imp(T k, const Policy& pol, std::integral_constant<int, 1> const&)
 {
    using std::abs;
    using namespace boost::math::tools;
@@ -702,7 +702,7 @@ BOOST_FORCEINLINE T ellint_e_imp(T k, const Policy& pol, std::integral_constant<
 }
 
 template <typename T, typename Policy>
-BOOST_FORCEINLINE typename tools::promote_args<T>::type ellint_2(T k, const Policy& pol, const std::true_type&)
+BOOST_MATH_FORCEINLINE typename tools::promote_args<T>::type ellint_2(T k, const Policy& pol, const std::true_type&)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -715,7 +715,7 @@ BOOST_FORCEINLINE typename tools::promote_args<T>::type ellint_2(T k, const Poli
 
 // Elliptic integral (Legendre form) of the second kind
 template <class T1, class T2>
-BOOST_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_2(T1 k, T2 phi, const std::false_type&)
+BOOST_MATH_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_2(T1 k, T2 phi, const std::false_type&)
 {
    return boost::math::ellint_2(k, phi, policies::policy<>());
 }
@@ -724,21 +724,21 @@ BOOST_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_2(T1 k, T2 p
 
 // Complete elliptic integral (Legendre form) of the second kind
 template <typename T>
-BOOST_FORCEINLINE typename tools::promote_args<T>::type ellint_2(T k)
+BOOST_MATH_FORCEINLINE typename tools::promote_args<T>::type ellint_2(T k)
 {
    return ellint_2(k, policies::policy<>());
 }
 
 // Elliptic integral (Legendre form) of the second kind
 template <class T1, class T2>
-BOOST_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_2(T1 k, T2 phi)
+BOOST_MATH_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_2(T1 k, T2 phi)
 {
    typedef typename policies::is_policy<T2>::type tag_type;
    return detail::ellint_2(k, phi, tag_type());
 }
 
 template <class T1, class T2, class Policy>
-BOOST_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_2(T1 k, T2 phi, const Policy& pol)
+BOOST_MATH_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_2(T1 k, T2 phi, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;

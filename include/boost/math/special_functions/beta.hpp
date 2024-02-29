@@ -331,7 +331,7 @@ T ibeta_power_terms(T a,
          {
             l += log(result);
             if(l >= tools::log_max_value<T>())
-               return policies::raise_overflow_error<T>(function, nullptr, pol);
+               return policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE we can probably never get here, probably!
             result = exp(l);
          }
          else
@@ -347,7 +347,7 @@ T ibeta_power_terms(T a,
          {
             l += log(result);
             if(l >= tools::log_max_value<T>())
-               return policies::raise_overflow_error<T>(function, nullptr, pol);
+               return policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE we can probably never get here, probably!
             result = exp(l);
          }
          else
@@ -386,7 +386,7 @@ T ibeta_power_terms(T a,
             {
                l2 += l1 + log(result);
                if(l2 >= tools::log_max_value<T>())
-                  return policies::raise_overflow_error<T>(function, nullptr, pol);
+                  return policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE we can probably never get here, probably!
                result = exp(l2);
             }
          }
@@ -404,7 +404,7 @@ T ibeta_power_terms(T a,
             {
                l2 += l1 + log(result);
                if(l2 >= tools::log_max_value<T>())
-                  return policies::raise_overflow_error<T>(function, nullptr, pol);
+                  return policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE we can probably never get here, probably!
                result = exp(l2);
             }
          }
@@ -423,9 +423,9 @@ T ibeta_power_terms(T a,
    if (0 == result)
    {
       if ((a > 1) && (x == 0))
-         return result;  // true zero
+         return result;  // true zero LCOV_EXCL_LINE we can probably never get here
       if ((b > 1) && (y == 0))
-         return result; // true zero
+         return result; // true zero LCOV_EXCL_LINE we can probably never get here
       return boost::math::policies::raise_underflow_error<T>(function, nullptr, pol);
    }
 
@@ -480,7 +480,7 @@ T ibeta_power_terms(T a,
       bool need_logs = false;
       if (a < b)
       {
-         BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+         BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
          {
             power1 = pow((x * y * c * c) / (a * b), a);
             power2 = pow((y * c) / b, b - a);
@@ -503,7 +503,7 @@ T ibeta_power_terms(T a,
       }
       else
       {
-         BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+         BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
          {
             power1 = pow((x * y * c * c) / (a * b), b);
             power2 = pow((x * c) / a, a - b);
@@ -522,7 +522,7 @@ T ibeta_power_terms(T a,
                need_logs = true;
          }
       }
-      BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+      BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
       {
          if (!(boost::math::isnormal)(power1) || !(boost::math::isnormal)(power2))
          {
@@ -666,7 +666,7 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
          result = Lanczos::lanczos_sum_expG_scaled(c) / (Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b));
 
       if (!(boost::math::isfinite)(result))
-         result = 0;
+         result = 0;  // LCOV_EXCL_LINE we can probably never get here, covered already above?
 
       T l1 = log(cgh / bgh) * (b - 0.5f);
       T l2 = log(x * cgh / agh) * a;

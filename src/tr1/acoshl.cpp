@@ -11,9 +11,9 @@
 #include <boost/math/special_functions/acosh.hpp>
 #include "c_policy.hpp"
 
-extern "C" long double BOOST_MATH_TR1_DECL boost_acoshl BOOST_PREVENT_MACRO_SUBSTITUTION(long double x) BOOST_MATH_C99_THROW_SPEC
+extern "C" long double BOOST_MATH_TR1_DECL boost_acoshl BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x) BOOST_MATH_C99_THROW_SPEC
 {
-   return c_policies::acosh BOOST_PREVENT_MACRO_SUBSTITUTION(x);
+   return c_policies::acosh BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x);
 }
 
 

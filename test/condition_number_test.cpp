@@ -2,23 +2,17 @@
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#define BOOST_TEST_MODULE condition_number_test
-
 #include <cmath>
 #include <limits>
-#include <iostream>
-#include <type_traits>
-#include <boost/math/constants/constants.hpp>
+#include "math_unit_test.hpp"
 #include <boost/math/special_functions/lambert_w.hpp>
-#include <boost/test/included/unit_test.hpp>
-#include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
+#if !defined(TEST) || (TEST > 1)
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#endif
 
 using std::abs;
-using boost::math::constants::half;
-using boost::math::constants::ln_two;
-using boost::multiprecision::cpp_bin_float_50;
+using std::log;
 using boost::math::tools::summation_condition_number;
 using boost::math::tools::evaluation_condition_number;
 
@@ -37,8 +31,8 @@ void test_summation_condition_number()
         cond -= 1/(n+1);
     }
 
-    BOOST_CHECK_CLOSE_FRACTION(cond.sum(), ln_two<Real>(), tol);
-    BOOST_TEST(cond() > 14);
+    CHECK_ABSOLUTE_ERROR(cond.sum(), log(Real(2)), tol);
+    CHECK_GE(cond(), Real(14));
 }
 
 template<class Real>
@@ -57,8 +51,8 @@ void test_exponential_sum()
             cond += term;
             term *= (x/n);
         }
-        BOOST_CHECK_CLOSE_FRACTION(exp(x), cond.sum(), eps*cond());
-        BOOST_CHECK_CLOSE_FRACTION(exp(2*abs(x)), cond(), eps*cond());
+        CHECK_ABSOLUTE_ERROR(exp(x), cond.sum(), eps*cond()*exp(x));
+        CHECK_ABSOLUTE_ERROR(exp(2*abs(x)), cond(), eps*cond()*exp(2*abs(x)));
     }
 }
 
@@ -79,21 +73,21 @@ void test_evaluation_condition_number()
     for (Real x = 1.125; x < 8; x += 0.125)
     {
         Real cond = evaluation_condition_number(f1, x);
-        BOOST_CHECK_CLOSE_FRACTION(cond, 1/log(x), tol);
+        CHECK_ABSOLUTE_ERROR(cond, 1/log(x), tol);
     }
 
     auto f2 = [](auto x) { return exp(x); };
     for (Real x = 1.125; x < 8; x += 0.125)
     {
         Real cond = evaluation_condition_number(f2, x);
-        BOOST_CHECK_CLOSE_FRACTION(cond, x, tol);
+        CHECK_ABSOLUTE_ERROR(cond, x, tol);
     }
 
     auto f3 = [](auto x) { return sin(x); };
     for (Real x = 1.125; x < 8; x += 0.125)
     {
         Real cond = evaluation_condition_number(f3, x);
-        BOOST_CHECK_CLOSE_FRACTION(cond, abs(x/tan(x)), tol);
+        CHECK_ABSOLUTE_ERROR(cond, abs(x/tan(x)), tol);
     }
 
     // Test a function which right differentiable:
@@ -102,22 +96,28 @@ void test_evaluation_condition_number()
     Real cond = evaluation_condition_number(f4, -1/e<Real>());
     if (std::is_same<Real, float>::value)
     {
-        BOOST_CHECK_GE(cond, 30);
+        CHECK_GE(cond, Real(30));
     }
     else
     {
-        BOOST_CHECK_GE(cond, 4900);
+        CHECK_GE(cond, Real(4900));
     }
 }
 
-
-BOOST_AUTO_TEST_CASE(numerical_differentiation_test)
+int main()
 {
+#if !defined(TEST) || (TEST == 1)
     test_summation_condition_number<float>();
-    test_summation_condition_number<cpp_bin_float_50>();
     test_evaluation_condition_number<float>();
     test_evaluation_condition_number<double>();
     test_evaluation_condition_number<long double>();
-    test_evaluation_condition_number<cpp_bin_float_50>();
     test_exponential_sum<double>();
+#endif
+#if !defined(TEST) || (TEST == 2)
+    test_summation_condition_number<boost::multiprecision::cpp_bin_float_50>();
+#endif
+#if !defined(TEST) || (TEST == 3)
+    test_evaluation_condition_number<boost::multiprecision::cpp_bin_float_50>();
+#endif
+    return boost::math::test::report_errors();
 }

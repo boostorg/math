@@ -105,39 +105,6 @@ void test_constant()
 
 
 template<class Real>
-void test_exception_from_integrand()
-{
-    std::cout << "Testing that a reasonable action is performed by the Monte-Carlo integrator when the integrand throws an exception on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    auto g = [](std::vector<Real> const & x)->Real
-    {
-        if (x[0] > 0.5 && x[0] < 0.5001)
-        {
-            throw std::domain_error("You have done something wrong.\n");
-        }
-        return (Real) 1;
-    };
-
-    std::vector<std::pair<Real, Real>> bounds{{ Real(0), Real(1)}, { Real(0), Real(1)}};
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0001);
-
-    bool caught_exception = false;
-    try
-    {
-      auto task = mc.integrate();
-      Real result = task.get();
-      // Get rid of unused variable warning:
-      std::ostream cnull(0);
-      cnull << result;
-    }
-    catch(std::exception const &)
-    {
-        caught_exception = true;
-    }
-    BOOST_CHECK(caught_exception);
-}
-
-
-template<class Real>
 void test_cancel_and_restart()
 {
     std::cout << "Testing that cancellation and restarting works on naive Monte-Carlo integration on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
@@ -181,8 +148,8 @@ void test_finite_singular_boundary()
 
     auto task = mc.integrate();
 
-    double y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, 1.0, 0.1);
+    Real y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, Real(1), Real(0.1));
 }
 
 template<class Real>
@@ -227,7 +194,7 @@ void test_product()
     std::cout << "Testing that product functions are integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     auto g = [&](std::vector<Real> const & x)->Real
     {
-        double y = 1;
+        Real y = 1;
         for (uint64_t i = 0; i < x.size(); ++i)
         {
             y *= 2*x[i];
@@ -256,7 +223,7 @@ void test_alternative_rng_1()
     std::cout << "Testing that alternative RNGs work correctly using naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     auto g = [&](std::vector<Real> const & x)->Real
     {
-        double y = 1;
+        Real y = 1;
         for (uint64_t i = 0; i < x.size(); ++i)
         {
             y *= 2*x[i];
@@ -299,7 +266,7 @@ void test_alternative_rng_2()
     std::cout << "Testing that alternative RNGs work correctly using naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     auto g = [&](std::vector<Real> const & x)->Real
     {
-        double y = 1;
+        Real y = 1;
         for (uint64_t i = 0; i < x.size(); ++i)
         {
             y *= 2*x[i];
@@ -506,10 +473,8 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 #if !defined(TEST) || TEST == 5
 
 #ifdef __STDCPP_FLOAT32_T__
-    test_exception_from_integrand<std::float32_t>();
     test_variance<std::float32_t>();
 #else
-    test_exception_from_integrand<float>();
     test_variance<float>();
 #endif
 

@@ -116,8 +116,7 @@ void test_bessel_zeros(RealType)
    using boost::math::isnan;
 
   BOOST_MATH_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(0), 0), std::domain_error);
-  // BOOST_MATH_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(-1), 2), std::domain_error);
-  // From 83051 negative orders are supported.
+  BOOST_MATH_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(-1.5), 0), std::domain_error);
 
   // Abuse with infinity and max.
   if (std::numeric_limits<RealType>::has_infinity)
@@ -493,7 +492,23 @@ n |
     BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-3), 4), static_cast<RealType>(14.623077742393873174076722507725200649352970569915L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-3), 5), static_cast<RealType>(17.818455232945520262553239064736739443380352162752L), tolerance);
 
-  { // Repeat rest using multiple zeros version.
+    /*
+      Table[N[BesselYZero[-5/2, n], 50], {n, 1, 5, 1}]
+      n | y_(-2.5000000000000000000000000000000000000000000000000, n)
+      1 | 5.7634591968945497914064666539527350764090876841674
+      2 | 9.0950113304763551563376983279896952524009293663831
+      3 | 12.322940970566582051969567925329726061189423834915
+      4 | 5.7634591968945497914064666539527350764090876841674
+      5 | 9.0950113304763551563376983279896952524009293663831
+    */
+
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2.5), 1), static_cast<RealType>(5.7634591968945497914064666539527350764090876841674L), tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2.5), 2), static_cast<RealType>(9.0950113304763551563376983279896952524009293663831L), tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2.5), 3), static_cast<RealType>(12.322940970566582051969567925329726061189423834915L), tolerance);
+    //BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2.5), 4), static_cast<RealType>(5.7634591968945497914064666539527350764090876841674L), tolerance);
+    //BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2.5), 5), static_cast<RealType>(9.0950113304763551563376983279896952524009293663831L), tolerance);
+    
+    { // Repeat rest using multiple zeros version.
     std::vector<RealType> zeros;
     cyl_neumann_zero(static_cast<RealType>(0.0), 1, 3, std::back_inserter(zeros) );
     BOOST_CHECK_CLOSE_FRACTION(zeros[0], static_cast<RealType>(0.89357696627916752158488710205833824122514686193001L), tolerance);

@@ -384,7 +384,7 @@ template <class T, class Policy>
 const typename erf_inv_initializer<T, Policy>::init erf_inv_initializer<T, Policy>::initializer;
 
 template <class T, class Policy>
-BOOST_NOINLINE bool erf_inv_initializer<T, Policy>::init::is_value_non_zero(T v)
+BOOST_MATH_NOINLINE bool erf_inv_initializer<T, Policy>::init::is_value_non_zero(T v)
 {
    // This needs to be non-inline to detect whether v is non zero at runtime
    // rather than at compile time, only relevant when running under valgrind

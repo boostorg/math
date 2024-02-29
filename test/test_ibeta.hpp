@@ -458,5 +458,15 @@ void test_spots(T)
             static_cast<T>(4.5),
             ldexp(static_cast<T>(1), -557)),
          static_cast<T>(5.24647512910420109893867082626308082567071751558842352760e-167L), tolerance * 20);
+
+
+      T tiny = boost::math::tools::min_value<T>() / 2;
+      T small = boost::math::tools::epsilon<T>();
+      if (tiny != 0)
+      {
+         BOOST_CHECK_EQUAL(boost::math::ibeta(tiny, small, small), 1);
+      }
+      BOOST_CHECK_EQUAL(boost::math::ibeta(static_cast<T>(2), static_cast<T>(1), static_cast<T>(0)), 0);
+      BOOST_CHECK_EQUAL(boost::math::ibeta(static_cast<T>(1), static_cast<T>(2), static_cast<T>(0)), 0);
 }
 
