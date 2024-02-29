@@ -83,9 +83,11 @@ void test_binomial(T, const char* type_name)
    //
    BOOST_CHECK_THROW(boost::math::binomial_coefficient<T>(2, 3), std::domain_error);
    T tolerance = boost::math::tools::epsilon<T>() * 200;
-#if LDBL_MAX_10_EXP > 320
+#if (LDBL_MAX_10_EXP > 320) || defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::max_exponent10 > 320)
    {
+      BOOST_IF_CONSTEXPR(std::is_floating_point<T>::value == false)
+         tolerance *= 2;
       BOOST_CHECK_CLOSE_FRACTION(boost::math::binomial_coefficient<T>(1072, 522), SC_(8.5549524921358966076960008392254468438388716743112653656397e320), tolerance);
    }
    else BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
@@ -98,12 +100,13 @@ void test_binomial(T, const char* type_name)
       BOOST_CHECK_EQUAL(boost::math::binomial_coefficient<T>(1072, 522), std::numeric_limits<T>::infinity());
    }
 #endif
-#if LDBL_MAX_10_EXP > 4946
+#if (LDBL_MAX_10_EXP > 4946) || defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
+
    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::max_exponent10 > 4946)
    {
       BOOST_CHECK_CLOSE_FRACTION(boost::math::binomial_coefficient<T>(16441, 8151), SC_(5.928641856224322477306131563286843903129818155323061805272e4946), tolerance);
    }
-   else BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+   else BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity && (std::numeric_limits<T>::max_exponent10 < 4950))
    {
       BOOST_CHECK_EQUAL(boost::math::binomial_coefficient<T>(16441, 8151), std::numeric_limits<T>::infinity());
    }

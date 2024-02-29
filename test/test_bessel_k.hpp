@@ -180,7 +180,7 @@ void test_bessel(T, const char* name)
     BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
     {
        BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(T(0), T(0)), std::numeric_limits<T>::infinity());
-       BOOST_IF_CONSTEXPR(std::numeric_limits<T>::min_exponent <= -1021)
+       BOOST_IF_CONSTEXPR(std::numeric_limits<T>::min_exponent > -1021)
        {
           BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(16, ldexp(T(1), -1021)), std::numeric_limits<T>::infinity());
        }

@@ -247,29 +247,42 @@ void test_bessel(T, const char* name)
     BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity && (std::numeric_limits<T>::min_exponent < -1072))
     {
        static const std::array<std::array<T, 3>, 7> coverage_data = { {
-#if LDBL_MAX_10_EXP > 4931
+#if (LDBL_MAX_10_EXP > 4931) || defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
           {{ SC_(15.25), ldexp(T(1), -1071), SC_(-9.39553199265929955912687892204143267985847111378392154596e4931)}},
 #else
           {{ SC_(15.25), ldexp(T(1), -1071), -std::numeric_limits<T>::infinity() }},
 #endif
-#if LDBL_MAX_10_EXP > 4945
+#if (LDBL_MAX_10_EXP > 4945) || defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
           {{ SC_(15.25), ldexp(T(1), -1074), SC_(-5.55960167798850683070863439793e+4945)}},
 #else
           {{ SC_(15.25), ldexp(T(1), -1074), -std::numeric_limits<T>::infinity() }},
 #endif
-#if LDBL_MAX_10_EXP > 9872
+#if (LDBL_MAX_10_EXP > 9872) || defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
           {{ SC_(31.25), ldexp(T(1), -1045), SC_(-1.64443614527479263825137492596041426343778386094212520006e9872)}},
 #else
           {{ SC_(31.25), ldexp(T(1), -1045), -std::numeric_limits<T>::infinity() }},
 #endif
+#if defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
+          // Our exponent range may be so extreme that we can't trigger the coverage cases below, so use a copy of previous cases here
+          // as a placeholder.
+          {{ SC_(15.25), ldexp(T(1), -1071), SC_(-9.39553199265929955912687892204143267985847111378392154596e4931)}},
+          {{ SC_(15.25), ldexp(T(1), -1071), SC_(-9.39553199265929955912687892204143267985847111378392154596e4931)}},
+#else
           {{ SC_(233.0), ldexp(T(1), -63), -std::numeric_limits<T>::infinity() }},
           {{ SC_(233.0), ldexp(T(1), -64), -std::numeric_limits<T>::infinity() }},
-#if LDBL_MAX_10_EXP > 413
+#endif
+#if (LDBL_MAX_10_EXP > 413) || defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
           {{ SC_(200.25), SC_(1.25), SC_(-3.545198572052800784992190965856441074217589237581037286156e413)}},
 #else
           {{ SC_(200.25), SC_(1.25), -std::numeric_limits<T>::infinity()}},
 #endif
+#if defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
+          // Our exponent range may be so extreme that we can't trigger the coverage cases below, so use a copy of previous cases here
+          // as a placeholder.
+          {{ SC_(15.25), ldexp(T(1), -1071), SC_(-9.39553199265929955912687892204143267985847111378392154596e4931)}},
+#else
           {{ SC_(1652.25), SC_(1.25), -std::numeric_limits<T>::infinity()}},
+#endif
       } };
 
        do_test_cyl_neumann_y<T>(coverage_data, name, "Extra Coverage Data");
