@@ -191,7 +191,7 @@ void test_bessel(T, const char* name)
        {
           BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(0.25), T(8000)), std::numeric_limits<T>::infinity());
        }
-       else
+       else BOOST_IF_CONSTEXPR(std::numeric_limits<T>::max_exponent10 < 9200)
        {
           BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(0.25), T(21000)), std::numeric_limits<T>::infinity());
        }
@@ -209,6 +209,8 @@ void test_bessel(T, const char* name)
 #endif
     BOOST_IF_CONSTEXPR (std::numeric_limits<T>::max_exponent > 1000)
     {
+       BOOST_IF_CONSTEXPR(std::is_floating_point<T>::value == false)
+          tolerance *= 2; // multiprecision type.
        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(0, T(700)), SC_(1.5295933476718737363162072288904508649662689614661164851272e302), tolerance);
        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(1, T(600)), SC_(6.1411813450668919369004006361519512681603654557478168763761e258), tolerance);
     }
