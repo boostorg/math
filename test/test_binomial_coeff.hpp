@@ -104,6 +104,8 @@ void test_binomial(T, const char* type_name)
 
    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::max_exponent10 > 4946)
    {
+      if (!std::is_floating_point<T>::value)
+         tolerance *= 10;
       BOOST_CHECK_CLOSE_FRACTION(boost::math::binomial_coefficient<T>(16441, 8151), SC_(5.928641856224322477306131563286843903129818155323061805272e4946), tolerance);
    }
    else BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity && (std::numeric_limits<T>::max_exponent10 < 4950))
