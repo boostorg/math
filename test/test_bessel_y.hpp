@@ -246,14 +246,14 @@ void test_bessel(T, const char* name)
 #endif
     BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity && (std::numeric_limits<T>::min_exponent < -1072))
     {
-       static const std::array<std::array<T, 3>, 7> coverage_data = { {
+       const std::array<std::array<T, 3>, 7> coverage_data = { {
 #if (LDBL_MAX_10_EXP > 4931) || defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
           {{ SC_(15.25), ldexp(T(1), -1071), SC_(-9.39553199265929955912687892204143267985847111378392154596e4931)}},
 #else
           {{ SC_(15.25), ldexp(T(1), -1071), -std::numeric_limits<T>::infinity() }},
 #endif
 #if (LDBL_MAX_10_EXP > 4945) || defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
-          {{ SC_(15.25), ldexp(T(1), -1074), SC_(-5.55960167798850683070863439793e+4945)}},
+          {{ SC_(15.25), ldexp(T(1), -1074), SC_(-5.5596016779885068307086343979332299344658725430873e+4945)}},
 #else
           {{ SC_(15.25), ldexp(T(1), -1074), -std::numeric_limits<T>::infinity() }},
 #endif
