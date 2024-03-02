@@ -131,14 +131,14 @@ void test_spots(T)
             ldexp(static_cast<T>(1), -557)),
          static_cast<T>(5.24647512910420109893867082626308082567071751558842352760e-167L), tolerance * 4);
 
-      if (std::numeric_limits<T>::has_quiet_NaN)
+      BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
       {
          T n = std::numeric_limits<T>::quiet_NaN();
          BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
          BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(static_cast<T>(2.125), n, static_cast<T>(0.125)), std::domain_error);
          BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(static_cast<T>(2.125), static_cast<T>(1.125), n), std::domain_error);
       }
-      if (std::numeric_limits<T>::has_infinity)
+      BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
       {
          T n = std::numeric_limits<T>::infinity();
          BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
@@ -148,5 +148,31 @@ void test_spots(T)
          BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(static_cast<T>(2.125), -n, static_cast<T>(0.125)), std::domain_error);
          BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(static_cast<T>(2.125), static_cast<T>(1.125), -n), std::domain_error);
       }
+      //
+      // Some additional tests: some of our internal root finding code uses a "back door" into
+      // ibeta in order to compute ibeta and it's derivative at the same time, we need to 
+      // exercise the special case handling in there as well as in the public interface
+      // tested above.
+      //
+      T derivative = 0;
+      boost::math::detail::ibeta_imp(T(1), T(2), T(0), boost::math::policies::policy<>(), false, true, &derivative);
+      BOOST_CHECK_EQUAL(derivative, T(1));
+      boost::math::detail::ibeta_imp(T(0.5), T(2), T(0), boost::math::policies::policy<>(), false, true, &derivative);
+      BOOST_CHECK_GT(derivative, boost::math::tools::max_value<T>() / 3); // any large value will do
+      BOOST_CHECK_LT(derivative, boost::math::tools::max_value<T>()); // But not so large that arithmetic overflows.
+      boost::math::detail::ibeta_imp(T(2.5), T(2), T(0), boost::math::policies::policy<>(), false, true, &derivative);
+      BOOST_CHECK_LT(derivative, boost::math::tools::min_value<T>() * 3); // any small value will do
+      BOOST_CHECK_GT(derivative, T(0)); // But not zero.
+      T val = boost::math::detail::ibeta_imp(T(0.5f), T(0.5f), T(0.25), boost::math::policies::policy<>(), false, true, &derivative);
+      BOOST_CHECK_CLOSE(derivative, static_cast<T>(0.7351051938957227326817686644172925885298486404888542037324880270L), tolerance);
+      BOOST_CHECK_CLOSE(val, static_cast<T>(0.3333333333333333333333333333333333333333333333333333333333333333L), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::beta(T(0.5f), T(0.5f), T(0.25)), static_cast<T>(1.0471975511965977461542144610931676280657231331250352736583148641L), tolerance);
+      //
+      // Error handling:
+      //
+      BOOST_CHECK_THROW(boost::math::ibeta_derivative(T(0), T(2), T(0.5)), std::domain_error);
+      BOOST_CHECK_THROW(boost::math::ibeta_derivative(T(-1), T(2), T(0.5)), std::domain_error);
+      BOOST_CHECK_THROW(boost::math::ibeta_derivative(T(1), T(0), T(0.5)), std::domain_error);
+      BOOST_CHECK_THROW(boost::math::ibeta_derivative(T(1), T(-1), T(0.5)), std::domain_error);
 }
 

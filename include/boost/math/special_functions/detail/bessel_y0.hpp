@@ -143,8 +143,6 @@ T bessel_y0(T x, const Policy&)
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 
-    static const char* function = "boost::math::bessel_y0<%1%>(%1%,%1%)";
-
     BOOST_MATH_ASSERT(x > 0);
 
     if (x <= 3)                       // x in (0, 3]

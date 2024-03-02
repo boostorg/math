@@ -60,7 +60,7 @@ void expected_results()
    largest_type = "(long\\s+)?double";
 #endif
 
-   if(std::numeric_limits<long double>::max_exponent > std::numeric_limits<double>::max_exponent)
+   BOOST_IF_CONSTEXPR(std::numeric_limits<long double>::max_exponent > std::numeric_limits<double>::max_exponent)
    {
       add_expected_result(
          "[^|]*",                          // compiler
@@ -83,7 +83,7 @@ void expected_results()
          largest_type,                     // test type(s)
          "[^|]*Large.*",                   // test data group
          ".*", 80000, 5000);               // test function
-      if (std::numeric_limits<long double>::digits > 100)
+      BOOST_IF_CONSTEXPR(std::numeric_limits<long double>::digits > 100)
       {
          add_expected_result(
             "[^|]*",                          // compiler

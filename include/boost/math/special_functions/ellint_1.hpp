@@ -154,8 +154,7 @@ T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 2> const&)
 
     if (abs(k) > 1)
     {
-       return policies::raise_domain_error<T>(function,
-            "Got k = %1%, function requires |k| <= 1", k, pol);
+       return policies::raise_domain_error<T>(function, "Got k = %1%, function requires |k| <= 1", k, pol);
     }
     if (abs(k) == 1)
     {
@@ -778,7 +777,7 @@ BOOST_MATH_FORCEINLINE typename tools::promote_args<T>::type ellint_1(T k)
 
 // Elliptic integral (Legendre form) of the first kind
 template <class T1, class T2, class Policy>
-BOOST_MATH_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol)
+BOOST_MATH_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol)  // LCOV_EXCL_LINE gcc misses this but sees the function body, strange!
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
