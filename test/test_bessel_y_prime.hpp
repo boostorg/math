@@ -242,5 +242,10 @@ void test_bessel_prime(T, const char* name)
        } };
        do_test_cyl_neumann_y_prime<T>(yv_prime_coverage_data, name, "y': Extra coverage data");
     }
+   static const std::array<std::array<T, 3>, 1> sph_prime_coverage_data = { {
+         // (SphericalBesselY[-1, 5/2] - (SphericalBesselY(0, 5/2)+5/2 * SphericalBesselY[1, 5/2])/(5/2))/2
+      {{ SC_(0.0), SC_(2.5), SC_(0.1112058791540732032473814343996886423728680128280382077091151343) }},
+   } };
+   do_test_sph_neumann_y_prime<T>(sph_prime_coverage_data, name, "y': Extra coverage data");
 }
 

@@ -87,7 +87,7 @@ void test_spots(T, const char* type_name)
 {
     BOOST_MATH_STD_USING
     // function values calculated on http://functions.wolfram.com/
-    static const std::array<std::array<typename table_type<T>::type, 4>, 70> data1 = {{
+    static const std::array<std::array<typename table_type<T>::type, 4>, 73> data1 = {{
         {{ SC_(1.0), SC_(-1.0), SC_(0.0), SC_(-1.557407724654902230506974807458360173087) }},
         {{ SC_(0.0), SC_(-4.0), SC_(0.4), SC_(-4.153623371196831087495427530365430979011) }},
         {{ SC_(0.0), SC_(8.0), SC_(-0.6), SC_(8.935930619078575123490612395578518914416) }},
@@ -172,6 +172,15 @@ void test_spots(T, const char* type_name)
         {{ SC_(-1.015625), SC_(0.125), SC_(4.5), SC_(0.131998693459801470974303284674812630138938285546080214149)}},
         {{ SC_(-1.015625), SC_(-0.125), SC_(4.5), SC_(-0.13199869345980147097430328467481263013893828554608021414)}},
         {{ SC_(-1.015625), SC_(-0.125), SC_(1.5), SC_(-0.12508193549646497011359938978158598001227028251706394704)}},
+        // extra coverage:
+        {{ SC_(0.25), SC_(1.5707963267948966192313216916397514420985846996875529104874722961), SC_(0.5), SC_(1.9566162791192362072797270226545548480338156697696426140010541819)}},
+        {{ SC_(-1.68105157155604675313133890866087630129903967242323562005e-4932) /*-2^-16382*/, SC_(0.5), SC_(0.5), SC_(0.5050887275786480788831082896236055222277753396479749578838439064)}},
+#if LDBL_MAX_EXP > 16382
+        {{ SC_(-2.974328738393079412714398316570017826908611717741275593681e4931) /*-2^16382*/, SC_(0.0009765625) /*2^-10*/, SC_(3.36210314311209350626267781732175260259807934484647124010e-4932)/*2^-16382*/, SC_(2.88021821995207004657845224981480071550500608128401469566e-2466)}},
+#else
+        // Duplicates test case above, since we can't have the actual case here.
+        {{ SC_(-1.68105157155604675313133890866087630129903967242323562005e-4932) /*-2^-16382*/, SC_(0.5), SC_(0.5), SC_(0.5050887275786480788831082896236055222277753396479749578838439064)}},
+#endif
     } };
 
     do_test_ellint_pi3<T>(data1, type_name, "Elliptic Integral PI: Mathworld Data");
@@ -221,4 +230,6 @@ void test_spots(T, const char* type_name)
     BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(1), T(0.5), T(2)), std::domain_error);
     BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(1), T(-0.5), T(2)), std::domain_error);
     BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(1), T(-0.5), T(-2)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(0.5), T(1.2)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(1.5), T(0.5)), std::domain_error);
 }

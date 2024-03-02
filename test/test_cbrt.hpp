@@ -83,5 +83,18 @@ void test_cbrt(T, const char* name)
 
    do_test_cbrt<T>(cbrt_data, name, "cbrt Function");
 
+   //
+   // Special cases for coverage:
+   //
+   BOOST_CHECK_EQUAL(boost::math::cbrt(T(0)), T(0));
+   BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+   {
+      BOOST_CHECK_EQUAL(boost::math::cbrt(std::numeric_limits<T>::infinity()), std::numeric_limits<T>::infinity());
+   }
+   BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+   {
+      BOOST_CHECK_THROW(boost::math::cbrt(std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+   }
+
 }
 

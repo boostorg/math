@@ -166,6 +166,33 @@ void test_erf(T, const char* name)
    {
       do_test_erfc_inv<T>(erfc_inv_big_data, name, "Inverse Erfc Function: extreme values");
    }
+
+   BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+   {
+      BOOST_CHECK_THROW(boost::math::erf(std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+      BOOST_CHECK_THROW(boost::math::erfc(std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+   }
+   BOOST_CHECK_THROW(boost::math::erfc_inv(T(-0.5)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::erfc_inv(T(2.1)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::erf_inv(T(-1.1)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::erf_inv(T(1.1)), std::domain_error);
+   BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+   {
+      BOOST_CHECK_EQUAL(boost::math::erfc_inv(T(0)), std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(boost::math::erfc_inv(T(2)), -std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(boost::math::erf_inv(T(1)), std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(boost::math::erf_inv(T(-1)), -std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(boost::math::erf_inv(T(0)), T(0));
+
+      BOOST_CHECK_EQUAL(boost::math::erf(std::numeric_limits<T>::infinity()), T(1));
+      BOOST_CHECK_EQUAL(boost::math::erf(-std::numeric_limits<T>::infinity()), T(-1));
+      BOOST_CHECK_EQUAL(boost::math::erfc(std::numeric_limits<T>::infinity()), T(0));
+      BOOST_CHECK_EQUAL(boost::math::erfc(-std::numeric_limits<T>::infinity()), T(2));
+   }
+   BOOST_CHECK_EQUAL(boost::math::erf(boost::math::tools::max_value<T>()), T(1));
+   BOOST_CHECK_EQUAL(boost::math::erf(-boost::math::tools::max_value<T>()), T(-1));
+   BOOST_CHECK_EQUAL(boost::math::erfc(boost::math::tools::max_value<T>()), T(0));
+   BOOST_CHECK_EQUAL(boost::math::erfc(-boost::math::tools::max_value<T>()), T(2));
 }
 
 template <class T>
