@@ -317,6 +317,11 @@ math_toolkit/root_comparison.html
 math_toolkit/root_comparison/cbrt_comparison.html
 math_toolkit/root_comparison/root_n_comparison.html
 math_toolkit/root_comparison/elliptic_comparison.html
+optimization.html
+math_toolkit/differential_evolution.html
+math_toolkit/jso.html
+math_toolkit/random_search.html
+math_toolkit/cma_es.html
 poly.html
 math_toolkit/polynomials.html
 math_toolkit/estrin.html

@@ -4,9 +4,9 @@
 <title>Trapezoidal Quadrature</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 4.1.1">
-<link rel="up" href="../quadrature.html" title="Chapter 13. Quadrature and Differentiation">
-<link rel="prev" href="../quadrature.html" title="Chapter 13. Quadrature and Differentiation">
+<link rel="home" href="../index.html" title="Math Toolkit 4.2.0">
+<link rel="up" href="../quadrature.html" title="Chapter 14. Quadrature and Differentiation">
+<link rel="prev" href="../quadrature.html" title="Chapter 14. Quadrature and Differentiation">
 <link rel="next" href="gauss.html" title="Gauss-Legendre quadrature">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -41,9 +41,9 @@
                  <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error_estimate</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
                  <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">);</span>
 
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">auto</span> <span class="identifier">trapezoidal</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">tol</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">max_refinements</span><span class="special">,</span>
-                 <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error_estimate</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
+                 <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error_estimate</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
 
 <span class="special">}}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -196,9 +196,9 @@
       that zero correct digits are obtained.
     </p>
 <p>
-      The final <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+      The final <a class="link" href="../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
       be used to control the behaviour of the function: how it handles errors, what
-      level of precision to use etc. Refer to the <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">policy documentation
+      level of precision to use etc. Refer to the <a class="link" href="../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">policy documentation
       for more details</a>.
     </p>
 <p>
