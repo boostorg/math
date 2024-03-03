@@ -279,6 +279,10 @@ void test_dyadic_grid()
                 CHECK_MOLLIFIED_CLOSE(Real(1), cond.sum(), 10*cond()*std::numeric_limits<Real>::epsilon());
             }
         }
+        if constexpr (std::numeric_limits<Real>::digits < 30)
+        {
+           CHECK_THROW((boost::math::daubechies_scaling_dyadic_grid<Real, i + 2, 0>)(24), std::logic_error);
+        }
     };
 
     boost::hana::for_each(std::make_index_sequence<18>(), f);
