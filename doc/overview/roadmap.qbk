@@ -8,6 +8,18 @@ All old bug reports including closed ones can be viewed on Trac
 
 Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
+[h4 Math-4.2.0 (Boost-1.85)]
+
+* Add support for [link math_toolkit.jso  Single objective real-parameter optimization: Algorithm jSO].
+* Add support for [link math_toolkit.differential_evolution Differential Evolution].
+* Lot's of code coverage and testing improvements through the special functions.
+* Make configuration macros have a BOOST_MATH_ prefix so in the event that Boost.Math is used standalone
+but with Boost.Config (and maybe other libraries) present, then there aren't macro name confilicts, see
+[@https://github.com/boostorg/math/issues/1098 1098].
+* Minor cstdfloat.hpp fixes for the latest compilers.
+* Improve the accuracy of quartic_roots, see [@https://github.com/boostorg/math/issues/1055 1055].
+* Allow non-literal types in Gauss-Kronrod, see [@https://github.com/boostorg/math/issues/1077 1077].
+
 [h4 Math-4.1.1 (Boost-1.84)]
 
 * Improve ccmath error detection.

@@ -4,9 +4,9 @@
 <title>Polynomials</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 4.1.1">
-<link rel="up" href="../poly.html" title="Chapter 11. Polynomials and Rational Functions">
-<link rel="prev" href="../poly.html" title="Chapter 11. Polynomials and Rational Functions">
+<link rel="home" href="../index.html" title="Math Toolkit 4.2.0">
+<link rel="up" href="../poly.html" title="Chapter 12. Polynomials and Rational Functions">
+<link rel="prev" href="../poly.html" title="Chapter 12. Polynomials and Rational Functions">
 <link rel="next" href="estrin.html" title="Estrin's method for polynomial evaluation">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -48,8 +48,8 @@
    <span class="identifier">polynomial</span><span class="special">(){}</span>
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
    <span class="identifier">polynomial</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">U</span><span class="special">*</span> <span class="identifier">data</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">order</span><span class="special">);</span>
-   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">I</span><span class="special">&gt;</span>
-   <span class="identifier">polynomial</span><span class="special">(</span><span class="identifier">I</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">I</span> <span class="identifier">last</span><span class="special">);</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
+   <span class="identifier">polynomial</span><span class="special">(</span><span class="identifier">Iterator</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">Iterator</span> <span class="identifier">last</span><span class="special">);</span>
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
    <span class="keyword">explicit</span> <span class="identifier">polynomial</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">U</span><span class="special">&amp;</span> <span class="identifier">point</span><span class="special">,</span>
          <span class="keyword">typename</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">enable_if</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">is_convertible</span><span class="special">&lt;</span><span class="identifier">U</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span><span class="special">*</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">);</span>

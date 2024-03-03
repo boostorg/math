@@ -4,7 +4,7 @@
 <title>Changing the Policy Defaults</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 4.1.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 4.2.0">
 <link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
 <link rel="prev" href="policy_usage.html" title="So How are Policies Used Anyway?">
 <link rel="next" href="ad_hoc_dist_policies.html" title="Setting Policies for Distributions on an Ad Hoc Basis">
@@ -173,7 +173,7 @@
 <span class="special">{</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Example error handling using Student's t function. "</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"BOOST_MATH_DOMAIN_ERROR_POLICY is set to: "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">BOOST_STRINGIZE</span><span class="special">(</span><span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+      <span class="special">&lt;&lt;</span> <span class="identifier">BOOST_MATH_STRINGIZE</span><span class="special">(</span><span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 
    <span class="keyword">double</span> <span class="identifier">degrees_of_freedom</span> <span class="special">=</span> <span class="special">-</span><span class="number">1</span><span class="special">;</span> <span class="comment">// A bad argument!</span>
    <span class="keyword">double</span> <span class="identifier">t</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>

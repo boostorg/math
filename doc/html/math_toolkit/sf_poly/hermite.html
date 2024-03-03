@@ -4,7 +4,7 @@
 <title>Hermite Polynomials</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 4.1.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 4.2.0">
 <link rel="up" href="../sf_poly.html" title="Polynomials">
 <link rel="prev" href="laguerre.html" title="Laguerre (and Associated) Polynomials">
 <link rel="next" href="chebyshev.html" title="Chebyshev Polynomials">
@@ -38,8 +38,8 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hermite</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hermite</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hermite</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hermite_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Hn</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Hnm1</span><span class="special">);</span>
@@ -59,8 +59,8 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hermite</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hermite</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hermite</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the value of the Hermite Polynomial of order <span class="emphasis"><em>n</em></span>
@@ -71,9 +71,9 @@
 
         </p></blockquote></div>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
