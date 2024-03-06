@@ -58,6 +58,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 53>&)
       // Maximum Deviation Found:                     2.006e-18
       // Expected Error Term:                         2.006e-18
       // Max error found at double precision:         2.760e-17
+      // LCOV_EXCL_START
       static const T Y = 0.66373538970947265625F;
       static const T P[6] = {
          BOOST_MATH_BIG_CONSTANT(T, 53, 0.0865197248079397976498),
@@ -75,6 +76,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 53>&)
          BOOST_MATH_BIG_CONSTANT(T, 53, 0.000131049900798434683324),
          BOOST_MATH_BIG_CONSTANT(T, 53, -0.528611029520217142048e-6)
       };
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, z)
          / tools::evaluate_polynomial(Q, z);
       result += z - log(z) - Y;
@@ -83,6 +85,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 53>&)
    {
       // Maximum Deviation Found (interpolated):      1.444e-17
       // Max error found at double precision:         3.119e-17
+      // LCOV_EXCL_START
       static const T P[11] = {
          BOOST_MATH_BIG_CONSTANT(T, 53, -0.121013190657725568138e-18),
          BOOST_MATH_BIG_CONSTANT(T, 53, -0.999999999999998811143),
@@ -110,6 +113,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 53>&)
          BOOST_MATH_BIG_CONSTANT(T, 53, 1229.20784182403048905),
          BOOST_MATH_BIG_CONSTANT(T, 53, -0.776491285282330997549)
       };
+      // LCOV_EXCL_STOP
       T recip = 1 / z;
       result = 1 + tools::evaluate_polynomial(P, recip)
          / tools::evaluate_polynomial(Q, recip);
@@ -132,7 +136,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 64>&)
       // Maximum Deviation Found:                     3.807e-20
       // Expected Error Term:                         3.807e-20
       // Max error found at long double precision:    6.249e-20
-
+      // LCOV_EXCL_START
       static const T Y = 0.66373538970947265625F;
       static const T P[6] = {
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.0865197248079397956816),
@@ -151,6 +155,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 64>&)
          BOOST_MATH_BIG_CONSTANT(T, 64, -0.202872781770207871975e-5),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.52779248094603709945e-7)
       };
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, z)
          / tools::evaluate_polynomial(Q, z);
       result += z - log(z) - Y;
@@ -159,6 +164,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 64>&)
    {
       // Maximum Deviation Found (interpolated):     2.220e-20
       // Max error found at long double precision:   1.346e-19
+      // LCOV_EXCL_START
       static const T P[14] = {
          BOOST_MATH_BIG_CONSTANT(T, 64, -0.534401189080684443046e-23),
          BOOST_MATH_BIG_CONSTANT(T, 64, -0.999999999999999999905),
@@ -191,6 +197,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 64>&)
          BOOST_MATH_BIG_CONSTANT(T, 64, 73930.2995984054930821),
          BOOST_MATH_BIG_CONSTANT(T, 64, 2063.86994219629165937)
       };
+      // LCOV_EXCL_STOP
       T recip = 1 / z;
       result = 1 + tools::evaluate_polynomial(P, recip)
          / tools::evaluate_polynomial(Q, recip);
@@ -213,7 +220,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 113>&)
       // Maximum Deviation Found:                     2.477e-35
       // Expected Error Term:                         2.477e-35
       // Max error found at long double precision:    6.810e-35
-
+      // LCOV_EXCL_START
       static const T Y = 0.66373538970947265625F;
       static const T P[10] = {
          BOOST_MATH_BIG_CONSTANT(T, 113, 0.0865197248079397956434879099175975937),
@@ -239,6 +246,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 113>&)
          BOOST_MATH_BIG_CONSTANT(T, 113, 0.369373328141051577845488477377890236e-9),
          BOOST_MATH_BIG_CONSTANT(T, 113, -0.274149801370933606409282434677600112e-12)
       };
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, z)
          / tools::evaluate_polynomial(Q, z);
       result += z - log(z) - Y;
@@ -247,7 +255,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 113>&)
    {
       // Max error in interpolated form:             5.614e-35
       // Max error found at long double precision:   7.979e-35
-
+      // LCOV_EXCL_START
       static const T Y = 0.70190334320068359375F;
 
       static const T P[16] = {
@@ -286,6 +294,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 113>&)
          BOOST_MATH_BIG_CONSTANT(T, 113, 169.845369689596739824177412096477219),
          BOOST_MATH_BIG_CONSTANT(T, 113, 2.17607292280092201170768401876895354)
       };
+      // LCOV_EXCL_STOP
       T recip = 1 / z;
       result = Y + tools::evaluate_polynomial(P, recip)
          / tools::evaluate_polynomial(Q, recip);
@@ -295,7 +304,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 113>&)
    {
       // Max error in interpolated form:             4.413e-35
       // Max error found at long double precision:   8.928e-35
-
+      // LCOV_EXCL_START
       static const T P[19] = {
          BOOST_MATH_BIG_CONSTANT(T, 113, -0.559148411832951463689610809550083986e-40),
          BOOST_MATH_BIG_CONSTANT(T, 113, -0.999999999999999999999999999999999997),
@@ -339,6 +348,7 @@ T expint_1_rational(const T& z, const std::integral_constant<int, 113>&)
          BOOST_MATH_BIG_CONSTANT(T, 113, 70242279152.8241187845178443118302693),
          BOOST_MATH_BIG_CONSTANT(T, 113, -37633302.9409263839042721539363416685)
       };
+      // LCOV_EXCL_STOP
       T recip = 1 / z;
       result = 1 + tools::evaluate_polynomial(P, recip)
          / tools::evaluate_polynomial(Q, recip);
@@ -1486,94 +1496,6 @@ T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 113>& t
    return result;
 }
 
-template <class T, class Policy, class tag>
-struct expint_i_initializer
-{
-   struct init
-   {
-      init()
-      {
-         do_init(tag());
-      }
-      static void do_init(const std::integral_constant<int, 0>&){}
-      static void do_init(const std::integral_constant<int, 53>&)
-      {
-         boost::math::expint(T(5), Policy());
-         boost::math::expint(T(7), Policy());
-         boost::math::expint(T(18), Policy());
-         boost::math::expint(T(38), Policy());
-         boost::math::expint(T(45), Policy());
-      }
-      static void do_init(const std::integral_constant<int, 64>&)
-      {
-         boost::math::expint(T(5), Policy());
-         boost::math::expint(T(7), Policy());
-         boost::math::expint(T(18), Policy());
-         boost::math::expint(T(38), Policy());
-         boost::math::expint(T(45), Policy());
-      }
-      static void do_init(const std::integral_constant<int, 113>&)
-      {
-         boost::math::expint(T(5), Policy());
-         boost::math::expint(T(7), Policy());
-         boost::math::expint(T(17), Policy());
-         boost::math::expint(T(25), Policy());
-         boost::math::expint(T(40), Policy());
-         boost::math::expint(T(50), Policy());
-         boost::math::expint(T(80), Policy());
-         boost::math::expint(T(200), Policy());
-         boost::math::expint(T(220), Policy());
-      }
-      void force_instantiate()const{}
-   };
-   static const init initializer;
-   static void force_instantiate()
-   {
-      initializer.force_instantiate();
-   }
-};
-
-template <class T, class Policy, class tag>
-const typename expint_i_initializer<T, Policy, tag>::init expint_i_initializer<T, Policy, tag>::initializer;
-
-template <class T, class Policy, class tag>
-struct expint_1_initializer
-{
-   struct init
-   {
-      init()
-      {
-         do_init(tag());
-      }
-      static void do_init(const std::integral_constant<int, 0>&){}
-      static void do_init(const std::integral_constant<int, 53>&)
-      {
-         boost::math::expint(1, T(0.5), Policy());
-         boost::math::expint(1, T(2), Policy());
-      }
-      static void do_init(const std::integral_constant<int, 64>&)
-      {
-         boost::math::expint(1, T(0.5), Policy());
-         boost::math::expint(1, T(2), Policy());
-      }
-      static void do_init(const std::integral_constant<int, 113>&)
-      {
-         boost::math::expint(1, T(0.5), Policy());
-         boost::math::expint(1, T(2), Policy());
-         boost::math::expint(1, T(6), Policy());
-      }
-      void force_instantiate()const{}
-   };
-   static const init initializer;
-   static void force_instantiate()
-   {
-      initializer.force_instantiate();
-   }
-};
-
-template <class T, class Policy, class tag>
-const typename expint_1_initializer<T, Policy, tag>::init expint_1_initializer<T, Policy, tag>::initializer;
-
 template <class T, class Policy>
 inline typename tools::promote_args<T>::type
    expint_forwarder(T z, const Policy& /*pol*/, std::true_type const&)
@@ -1593,8 +1515,6 @@ inline typename tools::promote_args<T>::type
       precision_type::value <= 64 ? 64 :
       precision_type::value <= 113 ? 113 : 0
    > tag_type;
-
-   expint_i_initializer<value_type, forwarding_policy, tag_type>::force_instantiate();
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::expint_i_imp(
       static_cast<value_type>(z),
@@ -1630,8 +1550,6 @@ inline typename tools::promote_args<T>::type
       precision_type::value <= 64 ? 64 :
       precision_type::value <= 113 ? 113 : 0
    > tag_type;
-
-   detail::expint_1_initializer<value_type, forwarding_policy, tag_type>::force_instantiate();
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::expint_imp(
       n,

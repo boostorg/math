@@ -690,7 +690,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
    BOOST_MATH_INSTRUMENT_CODE("113-bit precision erf_imp called");
 
    if ((boost::math::isnan)(z))
-      return policies::raise_domain_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol);
+      return policies::raise_domain_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol); // LCOV_EXCL_LINE checked as covered.
 
    if(z < 0)
    {

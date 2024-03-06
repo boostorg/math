@@ -89,5 +89,9 @@ void test(T, const char* type_name)
 #endif
 #endif
    }
+   if (std::numeric_limits<T>::has_quiet_NaN)
+   {
+      BOOST_MATH_CHECK_THROW(boost::math::expm1(std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+   }
 }
 
