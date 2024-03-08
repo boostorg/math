@@ -164,6 +164,7 @@ test-suite special_fun :
    [ run ccmath_fma_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
    [ run ccmath_signbit_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
    [ run log1p_expm1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
+   [ run test_expm1_extra.cpp ../../test/build//boost_unit_test_framework  : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
    [ run powm1_sqrtp1m1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_705.cpp ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_810.cpp ../../test/build//boost_unit_test_framework  ]

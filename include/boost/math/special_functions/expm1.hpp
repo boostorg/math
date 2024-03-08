@@ -160,6 +160,7 @@ T expm1_imp(T x, const std::integral_constant<int, 64>&, const P& pol)
    if(a < tools::epsilon<T>())
       return x;
 
+   // LCOV_EXCL_START
    static const float Y = 0.10281276702880859375e1f;
    static const T n[] = {
       BOOST_MATH_BIG_CONSTANT(T, 64, -0.281276702880859375e-1),
@@ -179,6 +180,7 @@ T expm1_imp(T x, const std::integral_constant<int, 64>&, const P& pol)
       BOOST_MATH_BIG_CONSTANT(T, 64, -0.387922804997682392562e-4),
       BOOST_MATH_BIG_CONSTANT(T, 64, 0.807473180049193557294e-6)
    };
+   // LCOV_EXCL_STOP
 
    T result = x * Y + x * tools::evaluate_polynomial(n, x) / tools::evaluate_polynomial(d, x);
    return result;
@@ -207,6 +209,7 @@ T expm1_imp(T x, const std::integral_constant<int, 113>&, const P& pol)
    if(a < tools::epsilon<T>())
       return x;
 
+   // LCOV_EXCL_START
    static const float Y = 0.10281276702880859375e1f;
    static const T n[] = {
       BOOST_MATH_BIG_CONSTANT(T, 113, -0.28127670288085937499999999999999999854e-1),
@@ -233,6 +236,7 @@ T expm1_imp(T x, const std::integral_constant<int, 113>&, const P& pol)
       BOOST_MATH_BIG_CONSTANT(T, 113, -0.29477341859111589208776402638429026517e-10),
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.13222065991022301420255904060628100924e-12)
    };
+   // LCOV_EXCL_STOP
 
    T result = x * Y + x * tools::evaluate_polynomial(n, x) / tools::evaluate_polynomial(d, x);
    return result;
