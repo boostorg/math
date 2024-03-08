@@ -530,7 +530,7 @@ T expint_i_imp(T z, const Policy& pol, const Tag& tag)
    if(z < 0)
       return -expint_imp(1, T(-z), pol, tag);
    if(z == 0)
-      return -policies::raise_overflow_error<T>(function, nullptr, pol);
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE confirmed covered by real_concept tests
    return expint_i_as_series(z, pol);
 }
 
@@ -766,6 +766,7 @@ T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 64>& ta
       // Expected Error Term:                         3.883e-21
       // Max Error found at long double precision =   Poly: 3.344801e-19   Cheb: 4.989937e-19
 
+      // LCOV_EXCL_START
       static const T P[11] = {
          BOOST_MATH_BIG_CONSTANT(T, 64, 2.98677224343598593764),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.25891613550886736592),
@@ -796,6 +797,8 @@ T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 64>& ta
       static const T r1 = c1 / c2;
       static const T r2 = BOOST_MATH_BIG_CONSTANT(T, 64, 0.131401834143860282009280387409357165515556574352422001206362e-16);
       static const T r = static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.372507410781366634461991866580119133535689497771654051555657435242200120636201854384926049951548942392));
+      // LCOV_EXCL_STOP
+
       T t = (z / 3) - 1;
       result = tools::evaluate_polynomial(P, t)
          / tools::evaluate_polynomial(Q, t);
@@ -815,7 +818,7 @@ T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 64>& ta
       // Maximum Deviation Found:                     2.622e-21
       // Expected Error Term:                         -2.622e-21
       // Max Error found at long double precision =   Poly: 1.208328e-20   Cheb: 1.073723e-20
-
+      // LCOV_EXCL_START
       static const T Y = 1.158985137939453125F;
       static const T P[9] = {
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.00139324086199409049399),
@@ -840,6 +843,7 @@ T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 64>& ta
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.204339282037446434827e-5),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.146951181174930425744e-7)
       };
+      // LCOV_EXCL_STOP
       T t = z / 2 - 4;
       result = Y + tools::evaluate_polynomial(P, t)
          / tools::evaluate_polynomial(Q, t);
@@ -852,7 +856,7 @@ T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 64>& ta
       // Expected Error Term:                         3.220e-20
       // Max Error found at long double precision =   Poly: 7.696841e-20   Cheb: 6.205163e-20
 
-
+      // LCOV_EXCL_START
       static const T Y = 1.0869731903076171875F;
       static const T P[10] = {
          BOOST_MATH_BIG_CONSTANT(T, 64, -0.00893891094356946995368),
@@ -878,6 +882,7 @@ T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 64>& ta
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.000577048986213535829925),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.290976943033493216793e-4)
       };
+      // LCOV_EXCL_STOP
       T t = z / 5 - 3;
       result = Y + tools::evaluate_polynomial(P, t)
          / tools::evaluate_polynomial(Q, t);
@@ -889,7 +894,7 @@ T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 64>& ta
       // Maximum Deviation Found:                     2.940e-21
       // Expected Error Term:                         -2.938e-21
       // Max Error found at long double precision =   Poly: 3.419893e-19   Cheb: 3.359874e-19
-
+      // LCOV_EXCL_START
       static const T Y = 1.03937530517578125F;
       static const T P[12] = {
          BOOST_MATH_BIG_CONSTANT(T, 64, -0.00356165148914447278177),
@@ -916,6 +921,7 @@ T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 64>& ta
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.0280128013584653182994),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.00182034930799902922549)
       };
+      // LCOV_EXCL_STOP
       T t = z / 10 - 3;
       result = Y + tools::evaluate_polynomial(P, t)
          / tools::evaluate_polynomial(Q, t);
@@ -929,7 +935,7 @@ T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 64>& ta
    {
       // Maximum Deviation Found:                     3.536e-20
       // Max Error found at long double precision =   Poly: 1.310671e-19   Cheb: 8.630943e-11
-
+      // LCOV_EXCL_START
       static const T exp40 = static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 2.35385266837019985407899910749034804508871617254555467236651e17));
       static const T Y= 1.013065338134765625F;
       static const T P[9] = {
@@ -954,6 +960,7 @@ T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 64>& ta
          BOOST_MATH_BIG_CONSTANT(T, 64, 384647824.678554961174),
          BOOST_MATH_BIG_CONSTANT(T, 64, -166288297.874583961493)
       };
+      // LCOV_EXCL_STOP
       T t = 1 / z;
       result = Y + tools::evaluate_polynomial(P, t)
          / tools::evaluate_polynomial(Q, t);
@@ -993,7 +1000,7 @@ void expint_i_imp_113a(T& result, const T& z, const Policy& pol)
    // Expected Error Term:                         -1.230e-36
    // Max Error found at long double precision =   Poly: 4.355299e-34   Cheb: 7.512581e-34
 
-
+   // LCOV_EXCL_START
    static const T P[15] = {
       BOOST_MATH_BIG_CONSTANT(T, 113, 2.98677224343598593765287235997328555),
       BOOST_MATH_BIG_CONSTANT(T, 113, -0.333256034674702967028780537349334037),
@@ -1038,6 +1045,7 @@ void expint_i_imp_113a(T& result, const T& z, const Policy& pol)
    static const T r2 = c3 / c4 / c5;
    static const T r3 = static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 0.283806480836357377069325311780969887585024578164571984232357e-31));
    static const T r = static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 0.372507410781366634461991866580119133535689497771654051555657435242200120636201854384926049951548942392));
+   // LCOV_EXCL_STOP
    T t = (z / 3) - 1;
    result = tools::evaluate_polynomial(P, t)
       / tools::evaluate_polynomial(Q, t);
@@ -1060,7 +1068,7 @@ void expint_i_113b(T& result, const T& z)
    // Maximum Deviation Found:                     7.779e-36
    // Expected Error Term:                         -7.779e-36
    // Max Error found at long double precision =   Poly: 2.576723e-35   Cheb: 1.236001e-34
-
+   // LCOV_EXCL_START
    static const T Y = 1.158985137939453125F;
    static const T P[15] = {
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.00139324086199409049282472239613554817),
@@ -1096,6 +1104,7 @@ void expint_i_113b(T& result, const T& z)
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.139007266881450521776529705677086902e-9),
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.234715286125516430792452741830364672e-11)
    };
+   // LCOV_EXCL_STOP
    T t = z / 2 - 4;
    result = Y + tools::evaluate_polynomial(P, t)
       / tools::evaluate_polynomial(Q, t);
@@ -1111,7 +1120,7 @@ void expint_i_113c(T& result, const T& z)
    // Expected Error Term:                         1.080e-34
    // Max Error found at long double precision =   Poly: 1.958294e-34   Cheb: 2.472261e-34
 
-
+   // LCOV_EXCL_START
    static const T Y = 1.091579437255859375F;
    static const T P[17] = {
       BOOST_MATH_BIG_CONSTANT(T, 113, -0.00685089599550151282724924894258520532),
@@ -1149,6 +1158,7 @@ void expint_i_113c(T& result, const T& z)
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.233593219218823384508105943657387644e-7),
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.554900353169148897444104962034267682e-9)
    };
+   // LCOV_EXCL_STOP
    T t = z / 4 - 3.5;
    result = Y + tools::evaluate_polynomial(P, t)
       / tools::evaluate_polynomial(Q, t);
@@ -1163,7 +1173,7 @@ void expint_i_113d(T& result, const T& z)
    // Maximum Deviation Found:                     3.163e-35
    // Expected Error Term:                         3.163e-35
    // Max Error found at long double precision =   Poly: 4.158110e-35   Cheb: 5.385532e-35
-
+   // LCOV_EXCL_START
    static const T Y = 1.051731109619140625F;
    static const T P[14] = {
       BOOST_MATH_BIG_CONSTANT(T, 113, -0.00144552494420652573815404828020593565),
@@ -1197,6 +1207,7 @@ void expint_i_113d(T& result, const T& z)
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.127552010539733113371132321521204458e-7),
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.25737310826983451144405899970774587e-9)
    };
+   // LCOV_EXCL_STOP
    T t = z / 4 - 5.5;
    result = Y + tools::evaluate_polynomial(P, t)
       / tools::evaluate_polynomial(Q, t);
@@ -1214,7 +1225,7 @@ void expint_i_113e(T& result, const T& z)
    // Maximum Deviation Found:                     7.972e-36
    // Expected Error Term:                         7.962e-36
    // Max Error found at long double precision =   Poly: 1.711721e-34   Cheb: 3.100018e-34
-
+   // LCOV_EXCL_START
    static const T Y = 1.032726287841796875F;
    static const T P[15] = {
       BOOST_MATH_BIG_CONSTANT(T, 113, -0.00141056919297307534690895009969373233),
@@ -1251,6 +1262,7 @@ void expint_i_113e(T& result, const T& z)
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.322153582559488797803027773591727565e-7),
       BOOST_MATH_BIG_CONSTANT(T, 113, -0.161635525318683508633792845159942312e-16)
    };
+   // LCOV_EXCL_STOP
    T t = z / 8 - 4.25;
    result = Y + tools::evaluate_polynomial(P, t)
       / tools::evaluate_polynomial(Q, t);
@@ -1268,7 +1280,7 @@ void expint_i_113f(T& result, const T& z)
    // Maximum Deviation Found:                     4.469e-36
    // Expected Error Term:                         4.468e-36
    // Max Error found at long double precision =   Poly: 1.288958e-35   Cheb: 2.304586e-35
-
+   // LCOV_EXCL_START
    static const T Y = 1.0216197967529296875F;
    static const T P[12] = {
       BOOST_MATH_BIG_CONSTANT(T, 113, -0.000322999116096627043476023926572650045),
@@ -1298,6 +1310,7 @@ void expint_i_113f(T& result, const T& z)
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.233740058688179614344680531486267142e-5),
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.498800627828842754845418576305379469e-7)
    };
+   // LCOV_EXCL_STOP
    T t = z / 7 - 7;
    result = Y + tools::evaluate_polynomial(P, t)
       / tools::evaluate_polynomial(Q, t);
@@ -1315,7 +1328,7 @@ void expint_i_113g(T& result, const T& z)
    // Maximum Deviation Found:                     5.588e-35
    // Expected Error Term:                         -5.566e-35
    // Max Error found at long double precision =   Poly: 9.976345e-35   Cheb: 8.358865e-35
-
+   // LCOV_EXCL_START
    static const T Y = 1.015148162841796875F;
    static const T P[11] = {
       BOOST_MATH_BIG_CONSTANT(T, 113, -0.000435714784725086961464589957142615216),
@@ -1343,6 +1356,7 @@ void expint_i_113g(T& result, const T& z)
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.000167479843750859222348869769094711093),
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.475673638665358075556452220192497036e-5)
    };
+   // LCOV_EXCL_STOP
    T t = z / 14 - 5;
    result = Y + tools::evaluate_polynomial(P, t)
       / tools::evaluate_polynomial(Q, t);
@@ -1360,7 +1374,7 @@ void expint_i_113h(T& result, const T& z)
    // Maximum Deviation Found:                     4.448e-36
    // Expected Error Term:                         4.445e-36
    // Max Error found at long double precision =   Poly: 2.058532e-35   Cheb: 2.165465e-27
-
+   // LCOV_EXCL_START
    static const T Y= 1.00849151611328125F;
    static const T P[9] = {
       BOOST_MATH_BIG_CONSTANT(T, 113, -0.0084915161132812500000001440233607358),
@@ -1385,6 +1399,7 @@ void expint_i_113h(T& result, const T& z)
       BOOST_MATH_BIG_CONSTANT(T, 113, 8354144.67882768405803322344185185517),
       BOOST_MATH_BIG_CONSTANT(T, 113, 355076.853106511136734454134915432571)
    };
+   // LCOV_EXCL_STOP
    T t = 1 / z;
    result = Y + tools::evaluate_polynomial(P, t)
       / tools::evaluate_polynomial(Q, t);
