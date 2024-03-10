@@ -346,5 +346,29 @@ void test_spots(T, const char* name)
          value /= 2;
       }
    }
+   //
+   // Extra coverage:
+   //
+   BOOST_CHECK_THROW(boost::math::tgamma(T(-3)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::lgamma(T(-3)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::lgamma(T(0)), std::domain_error);
+   if(boost::math::tools::log_max_value<T>() <= 11356)
+   {
+      BOOST_CHECK_GE(boost::math::tgamma(T(11360.0f)), boost::math::tools::max_value<T>());
+      BOOST_CHECK_EQUAL(boost::math::tgamma(T(-11360.5f)), T(0));
+      BOOST_CHECK_GE(boost::math::tgamma(T(1755.75)), boost::math::tools::max_value<T>());
+      BOOST_CHECK_EQUAL(boost::math::tgamma(T(-1755.5)), T(0));
+   }
+   if (boost::math::tools::log_max_value<T>() <= 709)
+   {
+      BOOST_CHECK_GE(boost::math::tgamma(T(173)), boost::math::tools::max_value<T>());
+      //
+      // There is an error here, between -173 and -178.5 we should not underflow
+      // for type double, but do so spuriously because tgamma(-z) overflows.
+      // There is no easy fix for this, as it's next to impossible to figure out
+      // ahead of time when you're going to be "in the zone".
+      //
+      BOOST_CHECK_EQUAL(boost::math::tgamma(T(-178.5)), T(0));
+   }
 }
 

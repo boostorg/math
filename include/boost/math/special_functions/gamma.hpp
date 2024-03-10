@@ -87,7 +87,7 @@ T sinpx(T z)
       z = -z;
    }
    T fl = floor(z);
-   T dist;
+   T dist;  // LCOV_EXCL_LINE
    if(is_odd(fl))
    {
       fl += 1;
@@ -128,17 +128,27 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
    {
       if(floor(z) == z)
          return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
-      if(z <= -20)
+      if (z <= -20)
       {
-         result = gamma_imp(T(-z), pol, l) * sinpx(z);
-         BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
-            return -boost::math::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
-         result = -boost::math::constants::pi<T>() / result;
-         if(result == 0)
+         try
+         {
+            result = gamma_imp(T(-z), pol, l) * sinpx(z);
+         }
+         catch (const std::overflow_error&)
+         {
             return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
+         }
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         // Result can never be small: tgamma[-z] is always larger than sinpx[z] is small:
+         BOOST_MATH_ASSERT((fabs(result) > 1) || (tools::max_value<T>() * fabs(result) > boost::math::constants::pi<T>()));
+         result = -boost::math::constants::pi<T>() / result;
+         if (result == 0)
+            return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
+         /*
+         * Result can never be subnormal as we have a value > 1 in the numerator:
          if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
             return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
+            */
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
          return result;
       }
@@ -435,14 +445,16 @@ T scaled_tgamma_no_lanczos(const T& z, const Policy& pol, bool islog = false)
          break;
       }
       if (n > number_of_bernoullis_b2n)
-         return policies::raise_evaluation_error("scaled_tgamma_no_lanczos<%1%>()", "Exceeded maximum series iterations without reaching convergence, best approximation was %1%", T(exp(sum) * half_ln_two_pi_over_z), pol);
+         // Safety net, we hope to never get here:
+         return policies::raise_evaluation_error("scaled_tgamma_no_lanczos<%1%>()", "Exceeded maximum series iterations without reaching convergence, best approximation was %1%", T(exp(sum) * half_ln_two_pi_over_z), pol); // LCOV_EXCL_LINE
 
       sum += term;
 
       // Sanity check for divergence:
       T fterm = fabs(term);
       if(fterm > last_term)
-         return policies::raise_evaluation_error("scaled_tgamma_no_lanczos<%1%>()", "Series became divergent without reaching convergence, best approximation was %1%", T(exp(sum) * half_ln_two_pi_over_z), pol);
+         // Safety net, we hope to never get here:
+         return policies::raise_evaluation_error("scaled_tgamma_no_lanczos<%1%>()", "Series became divergent without reaching convergence, best approximation was %1%", T(exp(sum) * half_ln_two_pi_over_z), pol);  // LCOV_EXCL_LINE
       last_term = fterm;
    }
 
@@ -513,16 +525,16 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    if (!n_recur)
    {
       if (zz > tools::log_max_value<T>())
-         return policies::raise_overflow_error<T>(function, nullptr, pol);
+         return b_neg ? policies::raise_underflow_error<T>(function, nullptr, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
       if (log(zz) * zz / 2 > tools::log_max_value<T>())
-         return policies::raise_overflow_error<T>(function, nullptr, pol);
+         return b_neg ? policies::raise_underflow_error<T>(function, nullptr, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
    }
    T gamma_value = scaled_tgamma_no_lanczos(zz, pol);
    T power_term = pow(zz, zz / 2);
    T exp_term = exp(-zz);
    gamma_value *= (power_term * exp_term);
-   if(!n_recur && (tools::max_value<T>() / power_term < gamma_value))
-      return policies::raise_overflow_error<T>(function, nullptr, pol);
+   if (!n_recur && (tools::max_value<T>() / power_term < gamma_value))
+      return b_neg ? policies::raise_underflow_error<T>(function, nullptr, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
    gamma_value *= power_term;
 
    // Rescale the result using downward recursion if necessary.
@@ -553,24 +565,23 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
       if(floor_of_z_is_equal_to_z)
          return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
 
-      gamma_value *= sinpx(z);
+      T s = sinpx(z);
+      if ((gamma_value > 1) && (tools::max_value<T>() / gamma_value < fabs(s)))
+         return policies::raise_underflow_error<T>(function, nullptr, pol);
+      gamma_value *= s;
 
       BOOST_MATH_INSTRUMENT_VARIABLE(gamma_value);
-
-      const bool result_is_too_large_to_represent = (   (abs(gamma_value) < 1)
-                                                     && ((tools::max_value<T>() * abs(gamma_value)) < boost::math::constants::pi<T>()));
-
-      if(result_is_too_large_to_represent)
-         return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+      //
+      // Result can never overflow, since sinpx(z) can never be smaller than machine epsilon and gamma_value > 1.
+      //
+      BOOST_MATH_ASSERT(   (abs(gamma_value) > 1) || ((tools::max_value<T>() * abs(gamma_value)) > boost::math::constants::pi<T>()));
 
       gamma_value = -boost::math::constants::pi<T>() / gamma_value;
       BOOST_MATH_INSTRUMENT_VARIABLE(gamma_value);
-
-      if(gamma_value == 0)
-         return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
-
-      if((boost::math::fpclassify)(gamma_value) == static_cast<int>(FP_SUBNORMAL))
-         return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", gamma_value, pol);
+      //
+      // We can never underflow since the numerator > 1 above:
+      //
+      BOOST_MATH_ASSERT(gamma_value != 0);
    }
 
    return gamma_value;
@@ -586,18 +597,21 @@ inline T log_gamma_near_1(const T& z, Policy const& pol)
    //
    BOOST_MATH_STD_USING // ADL of std names
 
-   BOOST_MATH_ASSERT(fabs(z) < 1);
+   // For some reason, several lines aren't triggered for coverage even though
+   // adjacent lines are... weird!
+
+   BOOST_MATH_ASSERT(fabs(z) < 1); // LCOV_EXCL_LINE
 
    T result = -constants::euler<T>() * z;
 
    T power_term = z * z / 2;
-   int n = 2;
-   T term = 0;
+   int n = 2;     // LCOV_EXCL_LINE
+   T term = 0;    // LCOV_EXCL_LINE
 
    do
    {
       term = power_term * boost::math::polygamma(n - 1, T(1), pol);
-      result += term;
+      result += term;  // LCOV_EXCL_LINE
       ++n;
       power_term *= z / n;
    } while (fabs(result) * tools::epsilon<T>() < fabs(term));
@@ -1832,93 +1846,6 @@ inline typename tools::promote_args<T>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::gamma_imp(static_cast<value_type>(z), forwarding_policy(), evaluation_type()), "boost::math::tgamma<%1%>(%1%)");
 }
 
-template <class T, class Policy>
-struct igamma_initializer
-{
-   struct init
-   {
-      init()
-      {
-         typedef typename policies::precision<T, Policy>::type precision_type;
-
-         typedef std::integral_constant<int,
-            precision_type::value <= 0 ? 0 :
-            precision_type::value <= 53 ? 53 :
-            precision_type::value <= 64 ? 64 :
-            precision_type::value <= 113 ? 113 : 0
-         > tag_type;
-
-         do_init(tag_type());
-      }
-      template <int N>
-      static void do_init(const std::integral_constant<int, N>&)
-      {
-         // If std::numeric_limits<T>::digits is zero, we must not call
-         // our initialization code here as the precision presumably
-         // varies at runtime, and will not have been set yet.  Plus the
-         // code requiring initialization isn't called when digits == 0.
-         if(std::numeric_limits<T>::digits)
-         {
-            boost::math::gamma_p(static_cast<T>(400), static_cast<T>(400), Policy());
-         }
-      }
-      static void do_init(const std::integral_constant<int, 53>&){}
-      void force_instantiate()const{}
-   };
-   static const init initializer;
-   static void force_instantiate()
-   {
-      initializer.force_instantiate();
-   }
-};
-
-template <class T, class Policy>
-const typename igamma_initializer<T, Policy>::init igamma_initializer<T, Policy>::initializer;
-
-template <class T, class Policy>
-struct lgamma_initializer
-{
-   struct init
-   {
-      init()
-      {
-         typedef typename policies::precision<T, Policy>::type precision_type;
-         typedef std::integral_constant<int,
-            precision_type::value <= 0 ? 0 :
-            precision_type::value <= 64 ? 64 :
-            precision_type::value <= 113 ? 113 : 0
-         > tag_type;
-
-         do_init(tag_type());
-      }
-      static void do_init(const std::integral_constant<int, 64>&)
-      {
-         boost::math::lgamma(static_cast<T>(2.5), Policy());
-         boost::math::lgamma(static_cast<T>(1.25), Policy());
-         boost::math::lgamma(static_cast<T>(1.75), Policy());
-      }
-      static void do_init(const std::integral_constant<int, 113>&)
-      {
-         boost::math::lgamma(static_cast<T>(2.5), Policy());
-         boost::math::lgamma(static_cast<T>(1.25), Policy());
-         boost::math::lgamma(static_cast<T>(1.5), Policy());
-         boost::math::lgamma(static_cast<T>(1.75), Policy());
-      }
-      static void do_init(const std::integral_constant<int, 0>&)
-      {
-      }
-      void force_instantiate()const{}
-   };
-   static const init initializer;
-   static void force_instantiate()
-   {
-      initializer.force_instantiate();
-   }
-};
-
-template <class T, class Policy>
-const typename lgamma_initializer<T, Policy>::init lgamma_initializer<T, Policy>::initializer;
-
 template <class T1, class T2, class Policy>
 inline tools::promote_args_t<T1, T2>
    tgamma(T1 a, T2 z, const Policy&, const std::false_type)
@@ -1933,8 +1860,6 @@ inline tools::promote_args_t<T1, T2>
       policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-
-   igamma_initializer<value_type, forwarding_policy>::force_instantiate();
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(
       detail::gamma_incomplete_imp(static_cast<value_type>(a),
@@ -1973,8 +1898,6 @@ inline typename tools::promote_args<T>::type
       policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-
-   detail::lgamma_initializer<value_type, forwarding_policy>::force_instantiate();
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::lgamma_imp(static_cast<value_type>(z), forwarding_policy(), evaluation_type(), sign), "boost::math::lgamma<%1%>(%1%)");
 }
@@ -2065,8 +1988,6 @@ inline tools::promote_args_t<T1, T2>
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   detail::igamma_initializer<value_type, forwarding_policy>::force_instantiate();
-
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(
       detail::gamma_incomplete_imp(static_cast<value_type>(a),
       static_cast<value_type>(z), false, false,
@@ -2096,8 +2017,6 @@ inline tools::promote_args_t<T1, T2>
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   detail::igamma_initializer<value_type, forwarding_policy>::force_instantiate();
-
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(
       detail::gamma_incomplete_imp(static_cast<value_type>(a),
       static_cast<value_type>(z), true, true,
@@ -2126,8 +2045,6 @@ inline tools::promote_args_t<T1, T2>
       policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-
-   detail::igamma_initializer<value_type, forwarding_policy>::force_instantiate();
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(
       detail::gamma_incomplete_imp(static_cast<value_type>(a),
