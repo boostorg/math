@@ -5,7 +5,7 @@
 
 import testing ;
 import pch ;
-import ../../config/checks/config : requires ;
+import config : requires ;
 
 project  
     : requirements 
@@ -121,5 +121,3 @@ lib boost_math_c99l : ../src/tr1/$(C99_SOURCES)l.cpp pch
          <include>../src/tr1
          [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
    ;
-
-boost-install boost_math_c99 boost_math_c99f boost_math_c99l boost_math_tr1 boost_math_tr1f boost_math_tr1l ;

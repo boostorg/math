@@ -12,7 +12,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/beta.hpp>
-#include "libs/math/test/test_beta.hpp"
+#include "test_beta.hpp"
 
 void expected_results()
 {

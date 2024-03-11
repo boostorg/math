@@ -10,7 +10,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/special_functions/bernoulli.hpp>
-#include <libs/math/test/table_type.hpp>
+#include <table_type.hpp>
 #include <boost/math/tools/test.hpp>
 #include <iostream>
 #include <iomanip>

@@ -7,7 +7,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/laguerre.hpp>
-#include "libs/math/test/test_laguerre.hpp"
+#include "test_laguerre.hpp"
 
 void expected_results()
 {
