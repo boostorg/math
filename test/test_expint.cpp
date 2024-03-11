@@ -79,7 +79,7 @@ void expected_results()
       "float|double|long double",    // test type(s)
       ".*Ei.*",                      // test data group
       ".*", 6, 3);                   // test function
-   if(std::numeric_limits<long double>::digits > 100)
+   BOOST_IF_CONSTEXPR (std::numeric_limits<long double>::digits > 100)
    {
       add_expected_result(
          ".*",                          // compiler
