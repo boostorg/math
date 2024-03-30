@@ -8,16 +8,16 @@ import project ;
 project /boost/math
     : common-requirements
         <include>include
-        <source>/boost/assert//boost_assert
-        <source>/boost/concept_check//boost_concept_check
-        <source>/boost/config//boost_config
-        <source>/boost/core//boost_core
-        <source>/boost/integer//boost_integer
-        <source>/boost/lexical_cast//boost_lexical_cast
-        <source>/boost/predef//boost_predef
-        <source>/boost/random//boost_random
-        <source>/boost/static_assert//boost_static_assert
-        <source>/boost/throw_exception//boost_throw_exception
+        <library>/boost/assert//boost_assert
+        <library>/boost/concept_check//boost_concept_check
+        <library>/boost/config//boost_config
+        <library>/boost/core//boost_core
+        <library>/boost/integer//boost_integer
+        <library>/boost/lexical_cast//boost_lexical_cast
+        <library>/boost/predef//boost_predef
+        <library>/boost/random//boost_random
+        <library>/boost/static_assert//boost_static_assert
+        <library>/boost/throw_exception//boost_throw_exception
     ;
 
 explicit
