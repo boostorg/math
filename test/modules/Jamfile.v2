@@ -22,7 +22,7 @@ project
       <include>../../../..
       <toolset>msvc:<cxxstd>latest
       <toolset>gcc:<cxxflags>-fmodules-ts
-      <toolset>gcc:<cxxstd>20
+      <toolset>gcc:<cxxstd>23
     ;
 
 obj core : ../../module/core.cxx :  <toolset>msvc:<cxxflags>-interface ;

@@ -11,6 +11,7 @@
 #include <tuple>
 #include <complex>
 #include <array>
+#include <cstdint>
 
 import boost.math.core;
 
