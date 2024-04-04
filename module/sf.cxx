@@ -1,4 +1,5 @@
 //  (C) Copyright John Maddock 2022.
+//  (C) Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -9,7 +10,15 @@ module;
 #define BOOST_MATH_AS_MODULE
 #define BOOST_MATH_STANDALONE
 
+#if defined(__cpp_lib_modules) && __cpp_lib_modules >= 202207L
+
+import std;
+import std.compat;
+
+#else
+
 #include <cmath>
+#include <climits>
 #include <algorithm>
 #include <type_traits>
 #include <cstdint>
@@ -17,6 +26,9 @@ module;
 #include <mutex>
 #include <vector>
 #include <string>
+
+#endif
+
 #include <boost/math/tools/promotion.hpp>
 
 

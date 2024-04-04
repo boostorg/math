@@ -18,6 +18,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <vector>
 #include <type_traits>
+#include <climits>
 #endif
 
 #ifndef BOOST_MATH_AS_MODULE
