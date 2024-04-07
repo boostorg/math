@@ -10,7 +10,9 @@
 #ifndef BOOST_MATH_TOOLS_COMPLEX_HPP
 #define BOOST_MATH_TOOLS_COMPLEX_HPP
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <utility>
+#endif
 #include <boost/math/tools/is_detected.hpp>
 
 namespace boost {

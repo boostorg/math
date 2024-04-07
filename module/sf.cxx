@@ -26,6 +26,8 @@ import std.compat;
 #include <mutex>
 #include <vector>
 #include <string>
+#include <stdexcept>
+#include <complex>
 
 #endif
 
