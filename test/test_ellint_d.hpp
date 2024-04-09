@@ -84,7 +84,7 @@ void test_spots(T, const char* type_name)
     BOOST_MATH_STD_USING
     // Function values calculated on http://functions.wolfram.com/
     // Note that Mathematica's EllipticE accepts k^2 as the second parameter.
-    static const std::array<std::array<T, 3>, 11> data1 = {{
+    static const std::array<std::array<T, 3>, 12> data1 = {{
        { { SC_(0.5), SC_(0.5), SC_(0.040348098248931543984282958654503585) } },
         {{ SC_(0), SC_(0.5), SC_(0) }},
         { { SC_(1), SC_(0.5), SC_(0.28991866293419922467977188008516755) } },
@@ -94,6 +94,7 @@ void test_spots(T, const char* type_name)
         { { SC_(-10), T(0.5), SC_(-5.2996914501577855803123384771117708) } },
         { { SC_(10), SC_(-0.5), SC_(5.2996914501577855803123384771117708) } },
         { { SC_(0.125), SC_(1.5), SC_(0.000655956467603362564458676111698495009248974444516843) } },
+        { { SC_(1.208925819614629174706176e24) /* 2^80 */, SC_(0.5), SC_(672000998924580555450487.42418840712)}},
     }};
 
     do_test_ellint_d2<T>(data1, type_name, "Elliptic Integral E: Mathworld Data");
@@ -120,5 +121,10 @@ void test_spots(T, const char* type_name)
     BOOST_MATH_CHECK_THROW(boost::math::ellint_d(T(-1)), std::domain_error);
     BOOST_MATH_CHECK_THROW(boost::math::ellint_d(T(1.5)), std::domain_error);
     BOOST_MATH_CHECK_THROW(boost::math::ellint_d(T(-1.5)), std::domain_error);
+    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+    {
+       BOOST_CHECK_EQUAL(boost::math::ellint_d(T(0.5), std::numeric_limits<T>::infinity()), std::numeric_limits<T>::infinity());
+    }
+    BOOST_MATH_CHECK_THROW(boost::math::ellint_d(T(1.5), T(1.0)), std::domain_error);
 }
 

@@ -11,6 +11,7 @@
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
+#if !defined(TEST) || (TEST == 1)
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
    test_spots(0.0F);
 #endif
@@ -21,8 +22,17 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_spots(boost::math::concepts::real_concept(0.1));
 #endif
 #endif
+#endif
+#if !defined(TEST) || (TEST == 2)
+   #if defined(BOOST_MATH_RUN_MP_TESTS)
    test_spots(boost::multiprecision::cpp_bin_float_quad());
+   #endif
+#endif
+#if (!defined(TEST) || (TEST == 3))
+   #if defined(BOOST_MATH_RUN_MP_TESTS)
    test_spots(boost::multiprecision::cpp_dec_float_50());
+   #endif
+#endif
 }
 
 

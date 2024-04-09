@@ -21,6 +21,7 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
+#include <boost/math/special_functions/next.hpp>  // for has_denorm_now
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/tools/test.hpp> // for real_concept
@@ -268,6 +269,12 @@ void test_spots(RealType)
       // tolerance is 50 eps expressed as a percent:
       //
       tolerance = boost::math::tools::epsilon<RealType>() * 5000;
+      //
+      // But higher error rates at 128 bit precision?
+      //
+      if (boost::math::tools::digits<RealType>() > 100)
+         tolerance *= 500;
+
       BOOST_CHECK_CLOSE(boost::math::quantile(
          students_t_distribution<RealType>(2.00390625L),                     // degrees_of_freedom.
          static_cast<RealType>(0.5625L)),                                    //  probability.
@@ -384,7 +391,7 @@ void test_spots(RealType)
          //
          // Bug cases:
          //
-         if (std::numeric_limits<RealType>::is_specialized && std::numeric_limits<RealType>::has_denorm)
+         if (std::numeric_limits<RealType>::is_specialized && boost::math::detail::has_denorm_now<RealType>())
          {
             BOOST_CHECK_THROW(boost::math::quantile(students_t_distribution<RealType>((std::numeric_limits<RealType>::min)() / 2), static_cast<RealType>(0.0025f)), std::overflow_error);
          }

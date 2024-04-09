@@ -6,11 +6,13 @@
 #ifndef BOOST_MATH_CCMATH_DIV_HPP
 #define BOOST_MATH_CCMATH_DIV_HPP
 
-#include <cmath>
-#include <cstdlib>
 #include <cinttypes>
 #include <cstdint>
-#include <type_traits>
+#include <boost/math/ccmath/detail/config.hpp>
+
+#ifdef BOOST_MATH_NO_CCMATH
+#error "The header <boost/math/div.hpp> can only be used in C++17 and later."
+#endif
 
 namespace boost::math::ccmath {
 
@@ -20,7 +22,7 @@ template <typename ReturnType, typename Z>
 inline constexpr ReturnType div_impl(const Z x, const Z y) noexcept
 {
     // std::div_t/ldiv_t/lldiv_t/imaxdiv_t can be defined as either { Z quot; Z rem; }; or { Z rem; Z quot; };
-    // so don't use braced initialziation to guarantee compatibility
+    // so don't use braced initialization to guarantee compatibility
     ReturnType ans {0, 0};
 
     ans.quot = x / y;

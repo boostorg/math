@@ -80,6 +80,8 @@ module;
 
 export module boost.math.core;
 
+#pragma warning(disable:5244)
+
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -91,4 +93,3 @@ export module boost.math.core;
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/rational.hpp>
-

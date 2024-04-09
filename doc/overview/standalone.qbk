@@ -7,7 +7,7 @@ In order to do this you must either:
 * Define `BOOST_MATH_STANDALONE` on the compiler command line.  This will force the library into standalone mode even when other Boost headers are present.
 
 Note that once the library is in standalone mode, you must have a conforming C++11 compiler as no allowances will be made for possible compiler defects
-which would otherwise be detected by Boost.Config.  In addition, if you use a section of the library which makes (possibly optionsal) use of features from
+which would otherwise be detected by Boost.Config.  In addition, if you use a section of the library which makes (possibly optional) use of features from
 later C++ standards, then support for that later standard version becomes pretty much mandatory.  In other words, if you hit issues, try upping your compiler's
 conformance level to C++17 if you can.
 

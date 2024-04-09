@@ -374,6 +374,15 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(special_cases, RealT, test_types)
     BOOST_CHECK_CLOSE(boost::math::mode(hexp2), boost::math::mode(exp2), tol);
 }
 
+// Test C++20 ranges (Currently only GCC10 has full support to P0896R4)
+#if (__cplusplus > 202000L || _MSVC_LANG > 202000L) && __has_include(<ranges>) && __GNUC__ >= 10
+// Support for ranges is broken using gcc 11.1
+#if __GNUC__ != 11
+#include <ranges>
+#include <array>
+#endif
+#endif
+
 BOOST_AUTO_TEST_CASE_TEMPLATE(error_cases, RealT, test_types)
 {
    typedef boost::math::hyperexponential_distribution<RealT> dist_t;
@@ -393,8 +402,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(error_cases, RealT, test_types)
    #if (__cplusplus > 202000L || _MSVC_LANG > 202000L) && __has_include(<ranges>) && __GNUC__ >= 10
    // Support for ranges is broken using gcc 11.1
    #if __GNUC__ != 11
-   #include <ranges>
-   #include <array>
 
    std::array<RealT, 2> probs_array {1,2};
    std::array<RealT, 3> rates_array {1,2,3};

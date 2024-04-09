@@ -17,6 +17,7 @@
 #include <boost/math/distributions/detail/generic_mode.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
+#include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/roots.hpp> // for root finding.
 #include <boost/math/tools/series.hpp>
 
@@ -48,7 +49,7 @@ namespace boost
             // k to zero, when l2 is small, as forward iteration
             // is unstable:
             //
-            int k = itrunc(l2);
+            long long k = lltrunc(l2);
             if(k == 0)
                k = 1;
                // Starting Poisson weight:
@@ -75,7 +76,7 @@ namespace boost
             //
             T last_term = 0;
             std::uintmax_t count = k;
-            for(int i = k; i >= 0; --i)
+            for(auto i = k; i >= 0; --i)
             {
                T term = beta * pois;
                sum += term;
@@ -86,10 +87,15 @@ namespace boost
                }
                pois *= i / l2;
                beta += xterm;
-               xterm *= (a + i - 1) / (x * (a + b + i - 2));
+
+               if (a + b + i != 2)
+               {
+                  xterm *= (a + i - 1) / (x * (a + b + i - 2));
+               }
+               
                last_term = term;
             }
-            for(int i = k + 1; ; ++i)
+            for(auto i = k + 1; ; ++i)
             {
                poisf *= l2 / i;
                xtermf *= (x * (a + b + i - 2)) / (a + i - 1);
@@ -103,9 +109,7 @@ namespace boost
                }
                if(static_cast<std::uintmax_t>(count + i - k) > max_iter)
                {
-                  return policies::raise_evaluation_error(
-                     "cdf(non_central_beta_distribution<%1%>, %1%)",
-                     "Series did not converge, closest value was %1%", sum, pol);
+                  return policies::raise_evaluation_error("cdf(non_central_beta_distribution<%1%>, %1%)", "Series did not converge, closest value was %1%", sum, pol); // LCOV_EXCL_LINE
                }
             }
             return sum;
@@ -126,7 +130,7 @@ namespace boost
             // k is the starting point for iteration, and is the
             // maximum of the poisson weighting term:
             //
-            int k = itrunc(l2);
+            long long k = lltrunc(l2);
             T pois;
             if(k <= 30)
             {
@@ -169,7 +173,7 @@ namespace boost
             //
             T last_term = 0;
             std::uintmax_t count = 0;
-            for(int i = k + 1; ; ++i)
+            for(auto i = k + 1; ; ++i)
             {
                poisf *= l2 / i;
                xtermf *= (x * (a + b + i - 2)) / (a + i - 1);
@@ -184,13 +188,11 @@ namespace boost
                }
                if(static_cast<std::uintmax_t>(i - k) > max_iter)
                {
-                  return policies::raise_evaluation_error(
-                     "cdf(non_central_beta_distribution<%1%>, %1%)",
-                     "Series did not converge, closest value was %1%", sum, pol);
+                  return policies::raise_evaluation_error("cdf(non_central_beta_distribution<%1%>, %1%)", "Series did not converge, closest value was %1%", sum, pol); // LCOV_EXCL_LINE
                }
                last_term = term;
             }
-            for(int i = k; i >= 0; --i)
+            for(auto i = k; i >= 0; --i)
             {
                T term = beta * pois;
                sum += term;
@@ -200,13 +202,14 @@ namespace boost
                }
                if(static_cast<std::uintmax_t>(count + k - i) > max_iter)
                {
-                  return policies::raise_evaluation_error(
-                     "cdf(non_central_beta_distribution<%1%>, %1%)",
-                     "Series did not converge, closest value was %1%", sum, pol);
+                  return policies::raise_evaluation_error("cdf(non_central_beta_distribution<%1%>, %1%)", "Series did not converge, closest value was %1%", sum, pol); // LCOV_EXCL_LINE
                }
                pois *= i / l2;
                beta -= xterm;
-               xterm *= (a + i - 1) / (x * (a + b + i - 2));
+               if (a + b + i - 2 != 0)
+               {
+                   xterm *= (a + i - 1) / (x * (a + b + i - 2));
+               }
             }
             return sum;
          }
@@ -315,7 +318,7 @@ namespace boost
                {
                   if(count == 0)
                   {
-                     b = policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, pol);
+                     b = policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, pol); // LCOV_EXCL_LINE
                      return std::make_pair(a, b);
                   }
                   //
@@ -353,7 +356,7 @@ namespace boost
                   }
                   if(count == 0)
                   {
-                     a = policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, pol);
+                     a = policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, pol); // LCOV_EXCL_LINE
                      return std::make_pair(a, b);
                   }
                   //
@@ -424,7 +427,7 @@ namespace boost
                static_cast<value_type>(p),
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
             //
             // Special cases first:
             //
@@ -499,12 +502,14 @@ namespace boost
 
             if(max_iter >= policies::get_max_root_iterations<Policy>())
             {
+               // LCOV_EXCL_START
                return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
                   " either there is no answer to quantile of the non central beta distribution"
                   " or the answer is infinite.  Current best guess is %1%",
                   policies::checked_narrowing_cast<RealType, forwarding_policy>(
                      result,
                      function), Policy());
+               // LCOV_EXCL_STOP
             }
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result,
@@ -530,7 +535,7 @@ namespace boost
             // k is the starting point for iteration, and is the
             // maximum of the poisson weighting term:
             //
-            int k = itrunc(l2);
+            long long k = lltrunc(l2);
             // Starting Poisson weight:
             T pois = gamma_p_derivative(T(k+1), l2, pol);
             // Starting beta term:
@@ -545,7 +550,7 @@ namespace boost
             // Stable backwards recursion first:
             //
             std::uintmax_t count = k;
-            for(int i = k; i >= 0; --i)
+            for(auto i = k; i >= 0; --i)
             {
                T term = beta * pois;
                sum += term;
@@ -555,9 +560,13 @@ namespace boost
                   break;
                }
                pois *= i / l2;
-               beta *= (a + i - 1) / (x * (a + i + b - 1));
+
+               if (a + b + i != 1)
+               {
+                  beta *= (a + i - 1) / (x * (a + i + b - 1));
+               }
             }
-            for(int i = k + 1; ; ++i)
+            for(auto i = k + 1; ; ++i)
             {
                poisf *= l2 / i;
                betaf *= x * (a + b + i - 1) / (a + i - 1);
@@ -570,9 +579,7 @@ namespace boost
                }
                if(static_cast<std::uintmax_t>(count + i - k) > max_iter)
                {
-                  return policies::raise_evaluation_error(
-                     "pdf(non_central_beta_distribution<%1%>, %1%)",
-                     "Series did not converge, closest value was %1%", sum, pol);
+                  return policies::raise_evaluation_error("pdf(non_central_beta_distribution<%1%>, %1%)", "Series did not converge, closest value was %1%", sum, pol); // LCOV_EXCL_LINE
                }
             }
             return sum;
@@ -614,7 +621,7 @@ namespace boost
                static_cast<value_type>(x),
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
 
             if(l == 0)
                return pdf(boost::math::beta_distribution<RealType, Policy>(dist.alpha(), dist.beta()), x);
@@ -751,7 +758,7 @@ namespace boost
                l,
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
          RealType c = a + b + l / 2;
          RealType mean = 1 - (b / c) * (1 + l / (2 * c * c));
          return detail::generic_find_mode_01(
@@ -804,10 +811,8 @@ namespace boost
          typedef typename Policy::assert_undefined_type assert_type;
          static_assert(assert_type::value == 0, "Assert type is undefined.");
 
-         return policies::raise_evaluation_error<RealType>(
-            function,
-            "This function is not yet implemented, the only sensible result is %1%.",
-            std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
+         return policies::raise_evaluation_error<RealType>(function, "This function is not yet implemented, the only sensible result is %1%.", // LCOV_EXCL_LINE
+            std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?  LCOV_EXCL_LINE
       }
 
       template <class RealType, class Policy>
@@ -817,10 +822,8 @@ namespace boost
          typedef typename Policy::assert_undefined_type assert_type;
          static_assert(assert_type::value == 0, "Assert type is undefined.");
 
-         return policies::raise_evaluation_error<RealType>(
-            function,
-            "This function is not yet implemented, the only sensible result is %1%.",
-            std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
+         return policies::raise_evaluation_error<RealType>(function, "This function is not yet implemented, the only sensible result is %1%.", // LCOV_EXCL_LINE
+            std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?  LCOV_EXCL_LINE
       } // kurtosis_excess
 
       template <class RealType, class Policy>
@@ -862,7 +865,7 @@ namespace boost
                x,
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
 
          if(l == 0)
             return cdf(beta_distribution<RealType, Policy>(a, b), x);
@@ -899,7 +902,7 @@ namespace boost
                x,
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
 
          if(l == 0)
             return cdf(complement(beta_distribution<RealType, Policy>(a, b), x));

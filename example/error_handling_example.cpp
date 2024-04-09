@@ -79,7 +79,7 @@ int main()
 {
    cout << "Example error handling using Student's t function. " << endl;
    cout << "BOOST_MATH_DOMAIN_ERROR_POLICY is set to: "
-      << BOOST_STRINGIZE(BOOST_MATH_DOMAIN_ERROR_POLICY) << endl;
+      << BOOST_MATH_STRINGIZE(BOOST_MATH_DOMAIN_ERROR_POLICY) << endl;
 
    double degrees_of_freedom = -1; // A bad argument!
    double t = 10;

@@ -41,10 +41,10 @@ int main()
 
     // Now we can evaluate the spline wherever we please.
     std::mt19937 gen;
-    boost::random::uniform_real_distribution<double> absissa(0, v.size()*step);
+    boost::random::uniform_real_distribution<double> abscissa(0, v.size()*step);
     for (size_t i = 0; i < 10; ++i)
     {
-        double x = absissa(gen);
+        double x = abscissa(gen);
         std::cout << "sin(" << x << ") = " << sin(x) << ", spline interpolation gives " << spline(x) << std::endl;
         std::cout << "cos(" << x << ") = " << cos(x) << ", spline derivative interpolation gives " << spline.prime(x) << std::endl;
     }

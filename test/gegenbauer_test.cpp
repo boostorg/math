@@ -17,6 +17,10 @@
 using boost::multiprecision::float128;
 #endif
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 using std::abs;
 using boost::math::gegenbauer;
 using boost::math::gegenbauer_derivative;
@@ -26,7 +30,7 @@ void test_parity()
 {
     std::mt19937 gen(323723);
     std::uniform_real_distribution<Real> xdis(-1, +1);
-    std::uniform_real_distribution<Real> lambdadis(-0.5, 1);
+    std::uniform_real_distribution<Real> lambdadis(Real(-0.5), 1);
 
     for(unsigned n = 0; n < 50; ++n) {
         unsigned calls = 50;
@@ -79,7 +83,7 @@ void test_cubic()
 template<class Real>
 void test_derivative()
 {
-    Real lambda = 0.5;
+    Real lambda = Real(0.5);
     auto c3_prime = [&](Real x) { return 2*lambda*(lambda+1)*(-1 + 2*(lambda+2)*x*x); };
     auto c3_double_prime = [&](Real x) { return 8*lambda*(lambda+1)*(lambda+2)*x; };
     Real x = -1;
@@ -102,33 +106,51 @@ void test_derivative()
 
 int main()
 {
+    #ifdef __STDCPP_FLOAT32_T__
+
+    test_parity<std::float32_t>();
+    test_quadratic<std::float32_t>();
+    test_derivative<std::float32_t>();
+
+    #else
+    
     test_parity<float>();
-    test_parity<double>();
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_parity<long double>();
-#endif
-
     test_quadratic<float>();
-    test_quadratic<double>();
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_quadratic<long double>();
-#endif
-
-    test_cubic<double>();
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_cubic<long double>();
-#endif
-
     test_derivative<float>();
-    test_derivative<double>();
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_derivative<long double>();
-#endif
 
-#ifdef BOOST_HAS_FLOAT128
+    #endif
+
+    #ifdef __STDCPP_FLOAT64_T__
+
+    test_parity<std::float64_t>();
+    test_quadratic<std::float64_t>();
+    test_cubic<std::float64_t>();
+    test_derivative<std::float64_t>();
+
+    #else
+
+    test_parity<double>();
+    test_quadratic<double>();
+    test_cubic<double>();
+    test_derivative<double>();
+
+    #endif
+
+    #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+    
+    test_parity<long double>();
+    test_quadratic<long double>();
+    test_cubic<long double>();
+    test_derivative<long double>();
+    
+    #endif
+
+    #ifdef BOOST_HAS_FLOAT128
+    
     test_quadratic<boost::multiprecision::float128>();
     test_cubic<boost::multiprecision::float128>();
-#endif
+    
+    #endif
 
     return boost::math::test::report_errors();
 }

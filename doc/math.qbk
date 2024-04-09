@@ -9,7 +9,7 @@
     ]
     [authors [Agrawal, Nikhar], [Bikineev, Anton], [Borland, Matthew], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Miller, Evan], [Murphy, Jeremy W.], [Pulver, Matthew], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [Thompson, Nicholas], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
     [/last-revision $Date$]
-    [version 3.3.0]
+    [version 4.2.0]
 ]
 
 [template mathpart[id title]
@@ -615,6 +615,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include statistics/runs_test.qbk]
 [include statistics/ljung_box.qbk]
 [include statistics/linear_regression.qbk]
+[include statistics/chatterjee_correlation.qbk]
 [endmathpart] [/section:statistics Statistics]
 
 [mathpart vector_functionals Vector Functionals -  Norms]
@@ -723,9 +724,16 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [mathpart root_finding Root Finding \& Minimization Algorithms]
 [include roots/roots_overview.qbk]
 [endmathpart] [/mathpart roots Root Finding Algorithms]
+[mathpart optimization Optimization]
+[include optimization/differential_evolution.qbk]
+[include optimization/jso.qbk]
+[include optimization/random_search.qbk]
+[include optimization/cma_es.qbk]
+[endmathpart] [/mathpart optimization Optimization]
 
 [mathpart poly Polynomials and Rational Functions]
 [include internals/polynomial.qbk]
+[include internals/estrin.qbk]
 [include internals/rational.qbk]
 [endmathpart]
 

@@ -79,7 +79,7 @@ is used.
 */
 #ifndef BOOST_MATH_AS_MODULE
 #if defined(_MSC_VER) || defined(BOOST_BORLANDC)
-#include <float.h>
+#include <cfloat>
 #endif
 #ifdef BOOST_MATH_USE_FLOAT128
 #ifdef __has_include
@@ -131,7 +131,7 @@ inline bool is_nan_helper(T, const std::false_type&)
 {
    return false;
 }
-#if defined(BOOST_MATH_USE_FLOAT128) 
+#if defined(BOOST_MATH_USE_FLOAT128)
 #if defined(BOOST_MATH_HAS_QUADMATH_H)
 inline bool is_nan_helper(__float128 f, const std::true_type&) { return ::isnanq(f); }
 inline bool is_nan_helper(__float128 f, const std::false_type&) { return ::isnanq(f); }
@@ -152,14 +152,14 @@ namespace detail{
 
 #ifdef BOOST_MATH_USE_STD_FPCLASSIFY
 template <class T>
-inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const native_tag&)
+inline int fpclassify_imp /**/(T t, const native_tag&)
 {
    return (std::fpclassify)(t);
 }
 #endif
 
 template <class T>
-inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const generic_tag<true>&)
+inline int fpclassify_imp /**/(T t, const generic_tag<true>&)
 {
    BOOST_MATH_INSTRUMENT_VARIABLE(t);
 
@@ -195,7 +195,7 @@ inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const generic_tag<true>&)
 }
 
 template <class T>
-inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const generic_tag<false>&)
+inline int fpclassify_imp /**/(T t, const generic_tag<false>&)
 {
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    if(std::numeric_limits<T>::is_specialized)
@@ -211,7 +211,7 @@ inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const generic_tag<false>&)
 }
 
 template<class T>
-int fpclassify_imp BOOST_NO_MACRO_EXPAND(T x, ieee_copy_all_bits_tag)
+int fpclassify_imp /**/(T x, ieee_copy_all_bits_tag)
 {
    typedef typename fp_traits<T>::type traits;
 
@@ -240,7 +240,7 @@ int fpclassify_imp BOOST_NO_MACRO_EXPAND(T x, ieee_copy_all_bits_tag)
 }
 
 template<class T>
-int fpclassify_imp BOOST_NO_MACRO_EXPAND(T x, ieee_copy_leading_bits_tag)
+int fpclassify_imp /**/(T x, ieee_copy_leading_bits_tag)
 {
    typedef typename fp_traits<T>::type traits;
 
@@ -267,7 +267,7 @@ int fpclassify_imp BOOST_NO_MACRO_EXPAND(T x, ieee_copy_leading_bits_tag)
 }
 
 #if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && (defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY) || defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS))
-inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
+inline int fpclassify_imp /**/(long double t, const native_tag&)
 {
    return boost::math::detail::fpclassify_imp(t, generic_tag<true>());
 }
@@ -276,13 +276,13 @@ inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(long double t, const native_tag&
 }  // namespace detail
 
 BOOST_MATH_MODULE_EXPORT template <class T>
-inline int fpclassify BOOST_NO_MACRO_EXPAND(T t)
+inline int fpclassify /**/(T t)
 {
    typedef typename detail::fp_traits<T>::type traits;
    typedef typename traits::method method;
    typedef typename tools::promote_args_permissive<T>::type value_type;
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   if(std::numeric_limits<T>::is_specialized && detail::is_generic_tag_false(static_cast<method*>(0)))
+   if(std::numeric_limits<T>::is_specialized && detail::is_generic_tag_false(static_cast<method*>(nullptr)))
       return detail::fpclassify_imp(static_cast<value_type>(t), detail::generic_tag<true>());
    return detail::fpclassify_imp(static_cast<value_type>(t), method());
 #else
@@ -292,13 +292,13 @@ inline int fpclassify BOOST_NO_MACRO_EXPAND(T t)
 
 #ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 BOOST_MATH_MODULE_EXPORT template <>
-inline int fpclassify<long double> BOOST_NO_MACRO_EXPAND(long double t)
+inline int fpclassify<long double> /**/(long double t)
 {
    typedef detail::fp_traits<long double>::type traits;
    typedef traits::method method;
    typedef long double value_type;
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   if(std::numeric_limits<long double>::is_specialized && detail::is_generic_tag_false(static_cast<method*>(0)))
+   if(std::numeric_limits<long double>::is_specialized && detail::is_generic_tag_false(static_cast<method*>(nullptr)))
       return detail::fpclassify_imp(static_cast<value_type>(t), detail::generic_tag<true>());
    return detail::fpclassify_imp(static_cast<value_type>(t), method());
 #else
@@ -346,7 +346,7 @@ namespace detail {
     }
 
 #if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
-inline bool isfinite_impl BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
+inline bool isfinite_impl /**/(long double t, const native_tag&)
 {
    return boost::math::detail::isfinite_impl(t, generic_tag<true>());
 }
@@ -417,7 +417,7 @@ namespace detail {
     }
 
 #if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
-inline bool isnormal_impl BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
+inline bool isnormal_impl /**/(long double t, const native_tag&)
 {
    return boost::math::detail::isnormal_impl(t, generic_tag<true>());
 }
@@ -506,7 +506,7 @@ namespace detail {
     }
 
 #if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
-inline bool isinf_impl BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
+inline bool isinf_impl /**/(long double t, const native_tag&)
 {
    return boost::math::detail::isinf_impl(t, generic_tag<true>());
 }
@@ -614,9 +614,9 @@ inline bool (isnan)(T x)
 }
 
 #ifdef isnan
-BOOST_MATH_MODULE_EXPORT template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
-BOOST_MATH_MODULE_EXPORT template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
-BOOST_MATH_MODULE_EXPORT template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
+BOOST_MATH_MODULE_EXPORT template <> inline bool isnan /**/<float>(float t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
+BOOST_MATH_MODULE_EXPORT template <> inline bool isnan /**/<double>(double t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
+BOOST_MATH_MODULE_EXPORT template <> inline bool isnan /**/<long double>(long double t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
 #elif defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
 BOOST_MATH_MODULE_EXPORT template<>
 inline bool (isnan)(long double x)

@@ -30,3 +30,4 @@ build.ninja
 
 # Modules
 *.gcm
+a.out

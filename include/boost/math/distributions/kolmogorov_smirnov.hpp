@@ -140,7 +140,7 @@ RealType kolmogorov_smirnov_pdf_small_x(RealType x, RealType n, const Policy&) {
     if (x2n*x2n == 0.0) {
         return static_cast<RealType>(0);
     }
-    while (1) {
+    while (true) {
         delta = exp(-RealType(i+0.5)*RealType(i+0.5)*pi2/(2*x2n)) * (RealType(i+0.5)*RealType(i+0.5)*pi2 - x2n);
 
         if (delta == 0.0)
@@ -164,7 +164,7 @@ inline RealType kolmogorov_smirnov_pdf_large_x(RealType x, RealType n, const Pol
     RealType value = RealType(0), delta = RealType(0), last_delta = RealType(0);
     RealType eps = policies::get_epsilon<RealType, Policy>();
     int i = 1;
-    while (1) {
+    while (true) {
         delta = 8*x*i*i*exp(-2*i*i*x*x*n);
 
         if (delta == 0.0)
@@ -184,7 +184,7 @@ inline RealType kolmogorov_smirnov_pdf_large_x(RealType x, RealType n, const Pol
     return value * n;
 }
 
-}; // detail
+} // detail
 
 template <class RealType = double, class Policy = policies::policy<> >
     class kolmogorov_smirnov_distribution
@@ -379,10 +379,16 @@ inline RealType quantile(const kolmogorov_smirnov_distribution<RealType, Policy>
 
    RealType k = detail::kolmogorov_smirnov_quantile_guess(p) / sqrt(n);
    const int get_digits = policies::digits<RealType, Policy>();// get digits from policy,
-   std::uintmax_t m = policies::get_max_root_iterations<Policy>(); // and max iterations.
+   std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>(); // and max iterations.
 
-   return tools::newton_raphson_iterate(detail::kolmogorov_smirnov_quantile_functor<RealType, Policy>(dist, p),
-           k, RealType(0), boost::math::tools::max_value<RealType>(), get_digits, m);
+   RealType result = tools::newton_raphson_iterate(detail::kolmogorov_smirnov_quantile_functor<RealType, Policy>(dist, p),
+           k, RealType(0), RealType(1), get_digits, max_iter);
+   if (max_iter >= policies::get_max_root_iterations<Policy>())
+   {
+      return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:" // LCOV_EXCL_LINE
+         " either there is no answer to quantile or the answer is infinite.  Current best guess is %1%", result, Policy()); // LCOV_EXCL_LINE
+   }
+   return result;
 } // quantile
 
 template <class RealType, class Policy>
@@ -403,11 +409,17 @@ inline RealType quantile(const complemented2_type<kolmogorov_smirnov_distributio
    RealType k = detail::kolmogorov_smirnov_quantile_guess(RealType(1-p)) / sqrt(n);
 
    const int get_digits = policies::digits<RealType, Policy>();// get digits from policy,
-   std::uintmax_t m = policies::get_max_root_iterations<Policy>(); // and max iterations.
+   std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>(); // and max iterations.
 
-   return tools::newton_raphson_iterate(
+   RealType result = tools::newton_raphson_iterate(
            detail::kolmogorov_smirnov_complementary_quantile_functor<RealType, Policy>(dist, p),
-           k, RealType(0), boost::math::tools::max_value<RealType>(), get_digits, m);
+           k, RealType(0), RealType(1), get_digits, max_iter);
+   if (max_iter >= policies::get_max_root_iterations<Policy>())
+   {
+      return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:" // LCOV_EXCL_LINE
+         " either there is no answer to quantile or the answer is infinite.  Current best guess is %1%", result, Policy()); // LCOV_EXCL_LINE
+   }
+   return result;
 } // quantile (complemented)
 
 template <class RealType, class Policy>

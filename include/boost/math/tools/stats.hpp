@@ -24,8 +24,7 @@ public:
       : m_min(tools::max_value<T>()),
         m_max(-tools::max_value<T>()),
         m_total(0),
-        m_squared_total(0),
-        m_count(0)
+        m_squared_total(0)
    {}
    void add(const T& val)
    {
@@ -37,8 +36,8 @@ public:
       ++m_count;
       m_squared_total += val*val;
    }
-   T min BOOST_PREVENT_MACRO_SUBSTITUTION()const{ return m_min; }
-   T max BOOST_PREVENT_MACRO_SUBSTITUTION()const{ return m_max; }
+   T min BOOST_MATH_PREVENT_MACRO_SUBSTITUTION()const{ return m_min; }
+   T max BOOST_MATH_PREVENT_MACRO_SUBSTITUTION()const{ return m_max; }
    T total()const{ return m_total; }
    T mean()const{ return m_total / static_cast<T>(m_count); }
    std::uintmax_t count()const{ return m_count; }
@@ -77,7 +76,7 @@ public:
    }
 private:
    T m_min, m_max, m_total, m_squared_total;
-   std::uintmax_t m_count;
+   std::uintmax_t m_count{0};
 };
 
 } // namespace tools

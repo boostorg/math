@@ -3,7 +3,10 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_OVERFLOW_ERROR_POLICY
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+#endif
+
 #include <boost/math/concepts/real_concept.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
@@ -44,7 +47,7 @@
       }
 
 template <class RealType>
-RealType naive_pdf(RealType v, RealType delta, RealType x)
+RealType naive_pdf(RealType, RealType, RealType)
 {
 }
 
@@ -107,7 +110,7 @@ RealType naive_kurtosis_excess(RealType v, RealType delta)
       / ((-4 + v) * (-2 + v));
    r /= (1 + delta*delta)*v / (-2 + v) - delta*delta*v *tgr*tgr / 2;
    r /= (1 + delta*delta)*v / (-2 + v) - delta*delta*v *tgr*tgr / 2;
-   return r;
+   return r - static_cast<RealType>(3);
 }
 
 float naive_kurtosis_excess(float v, float delta)
@@ -139,7 +142,7 @@ void test_spot(
       BOOST_CHECK_CLOSE(
          skewness(dist), naive_skewness(df, ncp), tol * 10 * tolerance_tgamma_extra);
       BOOST_CHECK_CLOSE(
-         kurtosis_excess(dist), naive_kurtosis_excess(df, ncp), tol * 50 * tolerance_tgamma_extra);
+         kurtosis_excess(dist), naive_kurtosis_excess(df, ncp), tol * 350 * tolerance_tgamma_extra);
       BOOST_CHECK_CLOSE(
          kurtosis(dist), 3 + naive_kurtosis_excess(df, ncp), tol * 50 * tolerance_tgamma_extra);
    }
@@ -302,6 +305,30 @@ void test_spots(RealType)
    BOOST_MATH_CHECK_THROW(pdf(boost::math::non_central_t_distribution<RealType>(-1, 1), 0), std::domain_error);
    BOOST_MATH_CHECK_THROW(quantile(boost::math::non_central_t_distribution<RealType>(1, 1), -1), std::domain_error);
    BOOST_MATH_CHECK_THROW(quantile(boost::math::non_central_t_distribution<RealType>(1, 1), 2), std::domain_error);
+   //
+   // Some special error handling tests, if the non-centrality param is too large
+   // then we have no evaluation method and should get a domain_error:
+   //
+   using std::ldexp;
+   using distro1 = boost::math::non_central_t_distribution<RealType>;
+   using distro2 = boost::math::non_central_t_distribution<RealType, boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error>>>;
+   using de = std::domain_error;
+   BOOST_MATH_CHECK_THROW(distro1(2, ldexp(RealType(1), 100)), de);
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   {
+      distro2 d2(2, ldexp(RealType(1), 100));
+      BOOST_CHECK(boost::math::isnan(pdf(d2, 0.5)));
+      BOOST_CHECK(boost::math::isnan(cdf(d2, 0.5)));
+   }
+
+   // Bug cases, 
+   // https://github.com/scipy/scipy/issues/19348
+   //
+   {
+      distro1 d(8.0f, 8.5f);
+      BOOST_CHECK_CLOSE(pdf(d, -1), static_cast<RealType>(6.1747948083757028903541988987716621647020752431287e-20), 2e-5);  // Can we do better on accuracy here?
+   }
+
 } // template <class RealType>void test_spots(RealType)
 
 template <class T>
@@ -517,8 +544,8 @@ void test_big_df(RealType)
       BOOST_CHECK_EQUAL(variance(maxdf), 1);
       BOOST_CHECK_EQUAL(skewness(infdf), 0);
       BOOST_CHECK_EQUAL(skewness(maxdf), 0);
-      BOOST_CHECK_EQUAL(kurtosis_excess(infdf), 3);
-      BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(maxdf), static_cast<RealType>(3), tolerance);
+      BOOST_CHECK_EQUAL(kurtosis_excess(infdf), 1);
+      BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(maxdf), static_cast<RealType>(1), tolerance);
 
       // Bad df examples.
 #ifndef BOOST_NO_EXCEPTIONS

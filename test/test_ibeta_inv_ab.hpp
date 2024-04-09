@@ -212,5 +212,29 @@ void test_beta(T, const char* name)
    test_inverses2<T>(ibeta_inva_data, name, "Inverse incomplete beta");
    }
 #endif
+   //
+   // Special spot tests and bug reports:
+   //
+   if (std::numeric_limits<T>::has_quiet_NaN)
+   {
+      T n = std::numeric_limits<T>::quiet_NaN();
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inva(n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inva(static_cast<T>(2.125), n, static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inva(static_cast<T>(2.125), static_cast<T>(1.125), n), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(2.125), n, static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(2.125), static_cast<T>(1.125), n), std::domain_error);
+   }
+   if (std::numeric_limits<T>::has_infinity)
+   {
+      T n = std::numeric_limits<T>::infinity();
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(2.125), n, static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(2.125), static_cast<T>(1.125), n), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(-n), static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(2.125), static_cast<T>(-n), static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(2.125), static_cast<T>(1.125), static_cast<T>(-n)), std::domain_error);
+   }
+
 }
 

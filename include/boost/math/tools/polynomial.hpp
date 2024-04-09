@@ -283,7 +283,7 @@ public:
    typedef typename std::vector<T>::size_type size_type;
 
    // construct:
-   polynomial(){}
+   polynomial()= default;
 
    template <class U>
    polynomial(const U* data, unsigned order)
@@ -292,15 +292,15 @@ public:
        normalize();
    }
 
-   template <class I>
-   polynomial(I first, I last)
+   template <class Iterator>
+   polynomial(Iterator first, Iterator last)
       : m_data(first, last)
    {
        normalize();
    }
 
-   template <class I>
-   polynomial(I first, unsigned length)
+   template <class Iterator>
+   polynomial(Iterator first, unsigned length)
       : m_data(first, std::next(first, length + 1))
    {
        normalize();
@@ -360,7 +360,7 @@ public:
    size_type degree() const
    {
        if (size() == 0)
-           throw std::logic_error("degree() is undefined for the zero polynomial.");
+          BOOST_MATH_THROW_EXCEPTION(std::logic_error("degree() is undefined for the zero polynomial."));
        return m_data.size() - 1;
    }
    value_type& operator[](size_type i)
@@ -379,7 +379,7 @@ public:
 
    T operator()(T z) const
    {
-      return m_data.size() > 0 ? boost::math::tools::evaluate_polynomial(&m_data[0], z, m_data.size()) : T(0);
+      return m_data.size() > 0 ? boost::math::tools::evaluate_polynomial((m_data).data(), z, m_data.size()) : T(0);
    }
    std::vector<T> chebyshev() const
    {

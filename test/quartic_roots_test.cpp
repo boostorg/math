@@ -109,19 +109,51 @@ void test_zero_coefficients()
             root = static_cast<Real>(dis(gen));
         }
         std::sort(r.begin(), r.end());
-        Real a = 1;
-        Real b = -(r[0] + r[1] + r[2] + r[3]);
-        Real c = r[0]*r[1] + r[0]*r[2] + r[0]*r[3] + r[1]*r[2] + r[1]*r[3] + r[2]*r[3];
-        Real d = -(r[0]*r[1]*r[2] + r[0]*r[1]*r[3] + r[0]*r[2]*r[3] + r[1]*r[2]*r[3]);
-        Real e = r[0]*r[1]*r[2]*r[3];
+        a = 1;
+        b = -(r[0] + r[1] + r[2] + r[3]);
+        c = r[0]*r[1] + r[0]*r[2] + r[0]*r[3] + r[1]*r[2] + r[1]*r[3] + r[2]*r[3];
+        d = -(r[0]*r[1]*r[2] + r[0]*r[1]*r[3] + r[0]*r[2]*r[3] + r[1]*r[2]*r[3]);
+        e = r[0]*r[1]*r[2]*r[3];
 
-        auto roots = quartic_roots(a, b, c, d, e);
+        roots = quartic_roots(a, b, c, d, e);
         // I could check the condition number here, but this is fine right?
         CHECK_ULP_CLOSE(r[0], roots[0], 160);
         CHECK_ULP_CLOSE(r[1], roots[1], 260);
-        CHECK_ULP_CLOSE(r[2], roots[2], 160);
+        CHECK_ULP_CLOSE(r[2], roots[2], 220);
         CHECK_ULP_CLOSE(r[3], roots[3], 160);
     }
+}
+
+void issue_825() {
+    using std::sqrt;
+    using std::cbrt;
+    double a = 1;
+    double b = 1;
+    double c = 1;
+    double d = 1;
+    double e = -4;
+    std::array<double, 4> roots = boost::math::tools::quartic_roots<double>(a, b, c, d, e);
+    // The real roots are 1 and -1.6506
+    // Wolfram alpha: Roots[x^4 + x^3 + x^2 + x == 4]
+    double expected = (-2  - cbrt(25/(3*sqrt(6.0) - 7)) + cbrt(5*(3*sqrt(6.0) - 7)))/3;
+    CHECK_ULP_CLOSE(expected, roots[0], 5);
+    CHECK_ULP_CLOSE(1.0, roots[1], 5);
+    CHECK_NAN(roots[2]);
+    CHECK_NAN(roots[3]);
+}
+
+void issue_1055() {
+    double a = 1.0;
+    double b = -547.5045576653938;
+    double c = 75042.069484941996;
+    double d = 273.7522788326969;
+    double e =  0.24965766552610175;
+    std::array<double, 4> roots = boost::math::tools::quartic_roots<double>(a, b, c, d, e);
+    // This is accurate to 1e-9 on every platform *except* cygwin/g++11/c++17:
+    CHECK_ABSOLUTE_ERROR(-0.00182420203946279, roots[0], 1e-6);
+    CHECK_ABSOLUTE_ERROR(-0.00182370927680797, roots[1], 1e-6);
+    CHECK_NAN(roots[2]);
+    CHECK_NAN(roots[3]);
 }
 
 
@@ -132,5 +164,7 @@ int main()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_zero_coefficients<long double>();
 #endif
+    issue_825();
+    issue_1055();
     return boost::math::test::report_errors();
 }

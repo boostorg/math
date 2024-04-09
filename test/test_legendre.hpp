@@ -17,6 +17,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/array.hpp>
+#include <boost/type_index.hpp>
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"

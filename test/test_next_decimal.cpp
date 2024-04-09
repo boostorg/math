@@ -61,7 +61,7 @@ void test_value(const T& val, const char* name)
    }
    BOOST_CHECK_EQUAL(float_distance(float_advance(val, 4), val), -4);
    BOOST_CHECK_EQUAL(float_distance(float_advance(val, -4), val), 4);
-   if(std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present))
+   if(std::numeric_limits<T>::is_specialized && boost::math::detail::has_denorm_now<T>())
    {
       BOOST_CHECK_EQUAL(float_distance(float_advance(float_next(float_next(val)), 4), float_next(float_next(val))), -4);
       BOOST_CHECK_EQUAL(float_distance(float_advance(float_next(float_next(val)), -4), float_next(float_next(val))), 4);
@@ -132,7 +132,7 @@ void test_values(const T& val, const char* name)
    test_value(T(-boost::math::tools::epsilon<T>()), name);
    test_value(boost::math::tools::min_value<T>(), name);
    test_value(T(-boost::math::tools::min_value<T>()), name);
-   if (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present) && ((std::numeric_limits<T>::min)() / 2 != 0))
+   if (std::numeric_limits<T>::is_specialized && boost::math::detail::has_denorm_now<T>() && ((std::numeric_limits<T>::min)() / 2 != 0))
    {
       test_value(z, name);
       test_value(T(-z), name);
@@ -142,7 +142,7 @@ void test_values(const T& val, const char* name)
    test_value(radix, name);
    test_value(T(-radix), name);
 
-   if(std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present) && ((std::numeric_limits<T>::min)() / 2 != 0))
+   if(std::numeric_limits<T>::is_specialized && boost::math::detail::has_denorm_now<T>() && ((std::numeric_limits<T>::min)() / 2 != 0))
    {
       test_value(std::numeric_limits<T>::denorm_min(), name);
       test_value(T(-std::numeric_limits<T>::denorm_min()), name);

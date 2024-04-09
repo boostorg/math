@@ -13,8 +13,8 @@
 #pragma once
 #endif
 
-#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/special_functions/math_fwd.hpp>
 #endif
 #include <boost/math/special_functions/detail/fp_traits.hpp>
@@ -162,7 +162,7 @@ BOOST_MATH_MODULE_EXPORT template<class T> int (signbit)(T x)
 }
 
 BOOST_MATH_MODULE_EXPORT template <class T>
-inline int sign BOOST_NO_MACRO_EXPAND(const T& z)
+inline int sign /**/(const T& z)
 {
    return (z == 0) ? 0 : (boost::math::signbit)(z) ? -1 : 1;
 }
@@ -179,7 +179,7 @@ BOOST_MATH_MODULE_EXPORT template <class T> typename tools::promote_args_permiss
 
 BOOST_MATH_MODULE_EXPORT template <class T, class U>
 inline typename tools::promote_args_permissive<T, U>::type 
-   copysign BOOST_NO_MACRO_EXPAND(const T& x, const U& y)
+   copysign /**/(const T& x, const U& y)
 {
    BOOST_MATH_STD_USING
    typedef typename tools::promote_args_permissive<T, U>::type result_type;

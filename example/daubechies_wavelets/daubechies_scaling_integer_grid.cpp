@@ -173,7 +173,7 @@ int main()
        << "#ifndef BOOST_MATH_DAUBECHIES_SCALING_INTEGER_GRID_HPP\n"
        << "#define BOOST_MATH_DAUBECHIES_SCALING_INTEGER_GRID_HPP\n"
        << "#include <array>\n"
-       << "#include <float.h>\n"
+       << "#include <cfloat>\n"
        << "#include <boost/config.hpp>\n"
        << "/*\n"
        << "In order to keep the character count as small as possible and speed up\n"

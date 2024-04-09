@@ -25,11 +25,8 @@ T binomial_coefficient(unsigned n, unsigned k, const Policy& pol)
    BOOST_MATH_STD_USING
    static const char* function = "boost::math::binomial_coefficient<%1%>(unsigned, unsigned)";
    if(k > n)
-      return policies::raise_domain_error<T>(
-         function, 
-         "The binomial coefficient is undefined for k > n, but got k = %1%.",
-         static_cast<T>(k), pol);
-   T result;
+      return policies::raise_domain_error<T>(function, "The binomial coefficient is undefined for k > n, but got k = %1%.", static_cast<T>(k), pol);
+   T result;  // LCOV_EXCL_LINE
    if((k == 0) || (k == n))
       return static_cast<T>(1);
    if((k == 1) || (k == n-1))
@@ -46,11 +43,11 @@ T binomial_coefficient(unsigned n, unsigned k, const Policy& pol)
    {
       // Use the beta function:
       if(k < n - k)
-         result = k * beta(static_cast<T>(k), static_cast<T>(n-k+1), pol);
+         result = static_cast<T>(k * beta(static_cast<T>(k), static_cast<T>(n-k+1), pol));
       else
-         result = (n - k) * beta(static_cast<T>(k+1), static_cast<T>(n-k), pol);
+         result = static_cast<T>((n - k) * beta(static_cast<T>(k+1), static_cast<T>(n-k), pol));
       if(result == 0)
-         return policies::raise_overflow_error<T>(function, 0, pol);
+         return policies::raise_overflow_error<T>(function, nullptr, pol);
       result = 1 / result;
    }
    // convert to nearest integer:

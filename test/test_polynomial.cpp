@@ -7,13 +7,17 @@
 #define BOOST_TEST_MAIN
 #include <boost/array.hpp>
 #include <boost/math/tools/polynomial.hpp>
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/integer/common_factor_rt.hpp>
+#endif
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/joint_view.hpp>
 #include <boost/test/unit_test.hpp>
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
+#endif
 #include <utility>
 #include <array>
 #include <list>
@@ -271,7 +275,7 @@ typedef boost::mpl::list<int, long> large_integral_test_types;
 typedef boost::mpl::list<> mp_integral_test_types;
 #elif defined(TEST2)
 typedef boost::mpl::list<
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500) && !defined(BOOST_MATH_STANDALONE)
    boost::multiprecision::cpp_int
 #endif
 > integral_test_types;
@@ -287,13 +291,13 @@ typedef large_integral_test_types mp_integral_test_types;
 typedef boost::mpl::list<double, long double> non_integral_test_types;
 #elif defined(TEST2)
 typedef boost::mpl::list<
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500) && !defined(BOOST_MATH_STANDALONE)
    boost::multiprecision::cpp_rational
 #endif
 > non_integral_test_types;
 #elif defined(TEST3)
 typedef boost::mpl::list<
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500) && !defined(BOOST_MATH_STANDALONE)
    boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50
 #endif
 > non_integral_test_types;

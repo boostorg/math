@@ -171,5 +171,27 @@ void test_bessel(T, const char* name)
     do_test_cyl_bessel_k<T>(bessel_k_int_data, name, "Bessel Kn: Random Data");
 #include "bessel_k_data.ipp"
     do_test_cyl_bessel_k<T>(bessel_k_data, name, "Bessel Kv: Random Data");
+
+    //
+    // Extra test coverage:
+    //
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(2), T(-1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(2.2), T(-1)), std::domain_error);
+    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+    {
+       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(T(0), T(0)), std::numeric_limits<T>::infinity());
+       BOOST_IF_CONSTEXPR((std::numeric_limits<T>::min_exponent < -1021) && (std::numeric_limits<T>::max_exponent <= 16384))
+       {
+          BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(16, ldexp(T(1), -1021)), std::numeric_limits<T>::infinity());
+       }
+    }
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(1.25), T(0)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(-1.25), T(0)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(-1), T(0)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(1), T(0)), std::domain_error);
 }
+
+
+
+
 

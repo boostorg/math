@@ -6,9 +6,12 @@
 #ifndef BOOST_MATH_CCMATH_ISFINITE
 #define BOOST_MATH_CCMATH_ISFINITE
 
-#include <cmath>
-#include <type_traits>
-#include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/ccmath/detail/config.hpp>
+
+#ifdef BOOST_MATH_NO_CCMATH
+#error "The header <boost/math/isfinite.hpp> can only be used in C++17 and later."
+#endif
+
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 

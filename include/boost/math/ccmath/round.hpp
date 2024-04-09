@@ -6,10 +6,13 @@
 #ifndef BOOST_MATH_CCMATH_ROUND_HPP
 #define BOOST_MATH_CCMATH_ROUND_HPP
 
-#include <cmath>
-#include <type_traits>
 #include <stdexcept>
-#include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/ccmath/detail/config.hpp>
+
+#ifdef BOOST_MATH_NO_CCMATH
+#error "The header <boost/math/round.hpp> can only be used in C++17 and later."
+#endif
+
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>

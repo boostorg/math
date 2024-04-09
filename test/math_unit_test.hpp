@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <cmath> // for std::isnan
 #include <string>
+#include <type_traits>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/trunc.hpp>
@@ -90,7 +91,11 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
     using boost::math::lltrunc;
     // Of course integers can be expected values, and they are exact:
     if (!std::is_integral<PreciseReal>::value) {
-        BOOST_MATH_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
+    if (boost::math::isnan(expected1)) {
+        std::ostringstream oss;
+        oss << "Error in CHECK_ULP_CLOSE: Expected value cannot be a nan. Callsite: " << filename << ":" << function << ":" << line << "."; 
+        throw std::domain_error(oss.str());
+    }
         if (sizeof(PreciseReal) < sizeof(Real)) {
             std::ostringstream err;
             err << "\n\tThe expected number must be computed in higher (or equal) precision than the number being tested.\n";
@@ -100,7 +105,7 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
         }
     }
 
-    if (isnan(computed))
+    if (boost::math::isnan(computed))
     {
         std::ios_base::fmtflags f( std::cerr.flags() );
         std::cerr << std::setprecision(3);
@@ -151,26 +156,28 @@ bool check_le(Real lesser, Real greater, std::string const & filename, std::stri
     using std::abs;
     using std::isnan;
 
-    if (isnan(lesser))
-    {
-        std::ios_base::fmtflags f( std::cerr.flags() );
-        std::cerr << std::setprecision(3);
-        std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
-                  << " \033[0m Lesser value is a nan\n";
-        std::cerr.flags(f);
-        ++detail::global_error_count;
-        return false;
-    }
+    if (std::is_floating_point<Real>::value) {
+        if (boost::math::isnan(lesser))
+        {
+            std::ios_base::fmtflags f( std::cerr.flags() );
+            std::cerr << std::setprecision(3);
+            std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
+                    << " \033[0m Lesser value is a nan\n";
+            std::cerr.flags(f);
+            ++detail::global_error_count;
+            return false;
+        }
 
-    if (isnan(greater))
-    {
-        std::ios_base::fmtflags f( std::cerr.flags() );
-        std::cerr << std::setprecision(3);
-        std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
-                  << " \033[0m Greater value is a nan\n";
-        std::cerr.flags(f);
-        ++detail::global_error_count;
-        return false;
+        if (boost::math::isnan(greater))
+        {
+            std::ios_base::fmtflags f( std::cerr.flags() );
+            std::cerr << std::setprecision(3);
+            std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
+                    << " \033[0m Greater value is a nan\n";
+            std::cerr.flags(f);
+            ++detail::global_error_count;
+            return false;
+        }
     }
 
     if (lesser > greater)
@@ -357,6 +364,31 @@ bool check_equal(Real x, Real y, std::string const & filename, std::string const
 }
 
 
+bool check_true(bool condition, std::string const & filename, std::string const & function, int line)
+{
+  if (!condition) {
+    std::ios_base::fmtflags f( std::cerr.flags() );
+    std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << "\n";
+    std::cerr << "\033[0m  Boolean condition is not satisfied:\n";
+    std::cerr.flags(f);
+    ++detail::global_error_count;
+    return false;
+  }
+  return true;
+}
+
+void report_non_throw(const std::string& file, int line)
+{
+   std::cerr << "Expected exception not thrown in test at: " << file << ":" << line << std::endl;
+   ++detail::global_error_count;
+}
+
+void report_incorrect_throw(const std::string& file, int line)
+{
+   std::cerr << "Exception of the wrong type thrown in test at: " << file << ":" << line << std::endl;
+   ++detail::global_error_count;
+}
+
 int report_errors()
 {
     if (detail::global_error_count > 0)
@@ -384,6 +416,8 @@ int report_errors()
 
 #define CHECK_ULP_CLOSE(X, Y, Z) boost::math::test::check_ulp_close((X), (Y), (Z), __FILE__, __func__, __LINE__)
 
+#define CHECK_GE(X, Y) boost::math::test::check_le((Y), (X), __FILE__, __func__, __LINE__)
+
 #define CHECK_LE(X, Y) boost::math::test::check_le((X), (Y), __FILE__, __func__, __LINE__)
 
 #define CHECK_NAN(X) boost::math::test::check_nan((X), __FILE__, __func__, __LINE__)
@@ -393,5 +427,9 @@ int report_errors()
 #define CHECK_CONDITIONED_ERROR(V, W, X, Y, Z) boost::math::test::check_conditioned_error((V), (W), (X), (Y), (Z), __FILE__, __func__, __LINE__)
 
 #define CHECK_ABSOLUTE_ERROR(X, Y, Z) boost::math::test::check_absolute_error((X), (Y), (Z), __FILE__, __func__, __LINE__)
+
+#define CHECK_TRUE(X) boost::math::test::check_true((X), __FILE__, __func__, __LINE__)
+
+#define CHECK_THROW(x, what) try{ x; boost::math::test::report_non_throw(__FILE__, __LINE__); }catch(const what&){} catch(...){ boost::math::test::report_incorrect_throw(__FILE__, __LINE__); }
 
 #endif

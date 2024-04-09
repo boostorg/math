@@ -716,6 +716,15 @@ void test_spots(RealType T)
 
    check_out_of_range<boost::math::binomial_distribution<RealType> >(1, 1); // (All) valid constructor parameter values.
 
+   // See bug reported here: https://github.com/boostorg/math/pull/1007
+   {
+      using namespace boost::math::policies;
+      typedef policy<discrete_quantile<integer_round_outwards> > Policy;
+      binomial_distribution<RealType, Policy> dist(9079765771874083840, 0.561815);
+      // Accuracy is not too important here; the main purpose is to
+      // make sure it is not stuck.
+      BOOST_CHECK_CLOSE(quantile(dist, 0.0365346), 5101148604445670400, 1e12);
+   }
 
 } // template <class RealType>void test_spots(RealType)
 

@@ -40,7 +40,7 @@ T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
    if(b <= 0)
       return policies::raise_domain_error<T>("boost::math::beta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got b=%1%).", b, pol);
 
-   T result;
+   T result;  // LCOV_EXCL_LINE
 
    T prefix = 1;
    T c = a + b;
@@ -222,7 +222,7 @@ T ibeta_power_terms(T a,
       return pow(x, a) * pow(y, b);
    }
 
-   T result;
+   T result;  // LCOV_EXCL_LINE
 
    T c = a + b;
 
@@ -230,7 +230,10 @@ T ibeta_power_terms(T a,
    T agh = static_cast<T>(a + Lanczos::g() - 0.5f);
    T bgh = static_cast<T>(b + Lanczos::g() - 0.5f);
    T cgh = static_cast<T>(c + Lanczos::g() - 0.5f);
-   result = Lanczos::lanczos_sum_expG_scaled(c) / (Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b));
+   if ((a < tools::min_value<T>()) || (b < tools::min_value<T>()))
+      result = 0;  // denominator overflows in this case
+   else
+      result = Lanczos::lanczos_sum_expG_scaled(c) / (Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b));
    result *= prefix;
    // combine with the leftover terms from the Lanczos approximation:
    result *= sqrt(bgh / boost::math::constants::e<T>());
@@ -328,7 +331,7 @@ T ibeta_power_terms(T a,
          {
             l += log(result);
             if(l >= tools::log_max_value<T>())
-               return policies::raise_overflow_error<T>(function, 0, pol);
+               return policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE we can probably never get here, probably!
             result = exp(l);
          }
          else
@@ -344,7 +347,7 @@ T ibeta_power_terms(T a,
          {
             l += log(result);
             if(l >= tools::log_max_value<T>())
-               return policies::raise_overflow_error<T>(function, 0, pol);
+               return policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE we can probably never get here, probably!
             result = exp(l);
          }
          else
@@ -373,7 +376,7 @@ T ibeta_power_terms(T a,
          if(a < b)
          {
             T p1 = pow(b2, b / a);
-            T l3 = a * (log(b1) + log(p1));
+            T l3 = (b1 != 0) && (p1 != 0) ? (a * (log(b1) + log(p1))) : tools::max_value<T>(); // arbitrary large value if the logs would fail!
             if((l3 < tools::log_max_value<T>())
                && (l3 > tools::log_min_value<T>()))
             {
@@ -383,24 +386,25 @@ T ibeta_power_terms(T a,
             {
                l2 += l1 + log(result);
                if(l2 >= tools::log_max_value<T>())
-                  return policies::raise_overflow_error<T>(function, 0, pol);
+                  return policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE we can probably never get here, probably!
                result = exp(l2);
             }
          }
          else
          {
-            T p1 = pow(b1, a / b);
-            T l3 = (log(p1) + log(b2)) * b;
+            // This protects against spurious overflow in a/b:
+            T p1 = (b1 < 1) && (b < 1) && (tools::max_value<T>() * b < a) ? static_cast<T>(0) : static_cast<T>(pow(b1, a / b));
+            T l3 = (p1 != 0) && (b2 != 0) ? (log(p1) + log(b2)) * b : tools::max_value<T>();  // arbitrary large value if the logs would fail!
             if((l3 < tools::log_max_value<T>())
                && (l3 > tools::log_min_value<T>()))
             {
                result *= pow(p1 * b2, b);
             }
-            else
+            else if(result != 0)  // we can elude the calculation below if we're already going to be zero
             {
                l2 += l1 + log(result);
                if(l2 >= tools::log_max_value<T>())
-                  return policies::raise_overflow_error<T>(function, 0, pol);
+                  return policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE we can probably never get here, probably!
                result = exp(l2);
             }
          }
@@ -415,6 +419,15 @@ T ibeta_power_terms(T a,
    }
 
    BOOST_MATH_INSTRUMENT_VARIABLE(result);
+
+   if (0 == result)
+   {
+      if ((a > 1) && (x == 0))
+         return result;  // true zero LCOV_EXCL_LINE we can probably never get here
+      if ((b > 1) && (y == 0))
+         return result; // true zero LCOV_EXCL_LINE we can probably never get here
+      return boost::math::policies::raise_underflow_error<T>(function, nullptr, pol);
+   }
 
    return result;
 }
@@ -464,20 +477,108 @@ T ibeta_power_terms(T a,
    if ((shift_a == 0) && (shift_b == 0))
    {
       T power1, power2;
+      bool need_logs = false;
       if (a < b)
       {
-         power1 = pow((x * y * c * c) / (a * b), a);
-         power2 = pow((y * c) / b, b - a);
+         BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+         {
+            power1 = pow((x * y * c * c) / (a * b), a);
+            power2 = pow((y * c) / b, b - a);
+         }
+         else
+         {
+            // We calculate these logs purely so we can check for overflow in the power functions
+            T l1 = log((x * y * c * c) / (a * b));
+            T l2 = log((y * c) / b);
+            if ((l1 * a > tools::log_min_value<T>()) && (l1 * a < tools::log_max_value<T>()) && (l2 * (b - a) < tools::log_max_value<T>()) && (l2 * (b - a) > tools::log_min_value<T>()))
+            {
+               power1 = pow((x * y * c * c) / (a * b), a);
+               power2 = pow((y * c) / b, b - a);
+            }
+            else
+            {
+               need_logs = true;
+            }
+         }
       }
       else
       {
-         power1 = pow((x * y * c * c) / (a * b), b);
-         power2 = pow((x * c) / a, a - b);
+         BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+         {
+            power1 = pow((x * y * c * c) / (a * b), b);
+            power2 = pow((x * c) / a, a - b);
+         }
+         else
+         {
+            // We calculate these logs purely so we can check for overflow in the power functions
+            T l1 = log((x * y * c * c) / (a * b)) * b;
+            T l2 = log((x * c) / a) * (a - b);
+            if ((l1 * a > tools::log_min_value<T>()) && (l1 * a < tools::log_max_value<T>()) && (l2 * (b - a) < tools::log_max_value<T>()) && (l2 * (b - a) > tools::log_min_value<T>()))
+            {
+               power1 = pow((x * y * c * c) / (a * b), b);
+               power2 = pow((x * c) / a, a - b);
+            }
+            else
+               need_logs = true;
+         }
       }
-      if (!(boost::math::isnormal)(power1) || !(boost::math::isnormal)(power2))
+      BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
       {
-         // We have to use logs :(
-         return prefix * exp(a * log(x * c / a) + b * log(y * c / b)) * scaled_tgamma_no_lanczos(c, pol) / (scaled_tgamma_no_lanczos(a, pol) * scaled_tgamma_no_lanczos(b, pol));
+         if (!(boost::math::isnormal)(power1) || !(boost::math::isnormal)(power2))
+         {
+            need_logs = true;
+         }
+      }
+      if (need_logs)
+      {
+         //
+         // We want:
+         //
+         // (xc / a)^a (yc / b)^b
+         //
+         // But we know that one or other term will over / underflow and combining the logs will be next to useless as that will cause significant cancellation.
+         // If we assume b > a and express z ^ b as(z ^ b / a) ^ a with z = (yc / b) then we can move one power term inside the other :
+         //
+         // ((xc / a) * (yc / b)^(b / a))^a
+         //
+         // However, we're not quite there yet, as the term being exponentiated is quite likely to be close to unity, so let:
+         //
+         // xc / a = 1 + (xb - ya) / a
+         //
+         // analogously let :
+         //
+         // 1 + p = (yc / b) ^ (b / a) = 1 + expm1((b / a) * log1p((ya - xb) / b))
+         //
+         // so putting the two together we have :
+         //
+         // exp(a * log1p((xb - ya) / a + p + p(xb - ya) / a))
+         //
+         // Analogously, when a > b we can just swap all the terms around.
+         // 
+         // Finally, there are a few cases (x or y is unity) when the above logic can't be used
+         // or where there is no logarithmic cancellation and accuracy is better just using
+         // the regular formula:
+         //
+         T xc_a = x * c / a;
+         T yc_b = y * c / b;
+         if ((x == 1) || (y == 1) || (fabs(xc_a - 1) > 0.25) || (fabs(yc_b - 1) > 0.25))
+         {
+            // The above logic fails, the result is almost certainly zero:
+            power1 = exp(log(xc_a) * a + log(yc_b) * b);
+            power2 = 1;
+         }
+         else if (b > a)
+         {
+            T p = boost::math::expm1((b / a) * boost::math::log1p((y * a - x * b) / b));
+            power1 = exp(a * boost::math::log1p((x * b - y * a) / a + p * (x * c / a)));
+            power2 = 1;
+         }
+         else
+         {
+            T p = boost::math::expm1((a / b) * boost::math::log1p((x * b - y * a) / a));
+            power1 = exp(b * boost::math::log1p((y * a - x * b) / b + p * (y * c / b)));
+            power2 = 1;
+         }
       }
       return prefix * power1 * power2 * scaled_tgamma_no_lanczos(c, pol) / (scaled_tgamma_no_lanczos(a, pol) * scaled_tgamma_no_lanczos(b, pol));
    }
@@ -559,7 +660,13 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
       T agh = static_cast<T>(a + Lanczos::g() - 0.5f);
       T bgh = static_cast<T>(b + Lanczos::g() - 0.5f);
       T cgh = static_cast<T>(c + Lanczos::g() - 0.5f);
-      result = Lanczos::lanczos_sum_expG_scaled(c) / (Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b));
+      if ((a < tools::min_value<T>()) || (b < tools::min_value<T>()))
+         result = 0;  // denorms cause overflow in the Lanzos series, result will be zero anyway
+      else
+         result = Lanczos::lanczos_sum_expG_scaled(c) / (Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b));
+
+      if (!(boost::math::isfinite)(result))
+         result = 0;  // LCOV_EXCL_LINE we can probably never get here, covered already above?
 
       T l1 = log(cgh / bgh) * (b - 0.5f);
       T l2 = log(x * cgh / agh) * a;
@@ -574,7 +681,7 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
          if(a * b < bgh * 10)
             result *= exp((b - 0.5f) * boost::math::log1p(a / bgh, pol));
          else
-            result *= pow(cgh / bgh, b - 0.5f);
+            result *= pow(cgh / bgh, T(b - T(0.5)));
          result *= pow(x * cgh / agh, a);
          result *= sqrt(agh / boost::math::constants::e<T>());
 
@@ -589,10 +696,13 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
          //
          // Oh dear, we need logs, and this *will* cancel:
          //
-         result = log(result) + l1 + l2 + (log(agh) - 1) / 2;
-         if(p_derivative)
-            *p_derivative = exp(result + b * log(y));
-         result = exp(result);
+         if (result != 0)  // elude calculation when result will be zero.
+         {
+            result = log(result) + l1 + l2 + (log(agh) - 1) / 2;
+            if (p_derivative)
+               *p_derivative = exp(result + b * log(y));
+            result = exp(result);
+         }
       }
    }
    else
@@ -771,8 +881,8 @@ inline T rising_factorial_ratio(T a, T b, int k)
    // it is grossly inefficient, do not use outside it's
    // intended purpose!!!
    BOOST_MATH_INSTRUMENT_VARIABLE(k);
-   if(k == 0)
-      return 1;
+   BOOST_MATH_ASSERT(k > 0);
+
    T result = 1;
    for(int i = 0; i < k; ++i)
       result *= (a+i) / (b+i);
@@ -828,14 +938,14 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
    //
    T bm1 = b - 1;
    T t = a + bm1 / 2;
-   T lx, u;
+   T lx, u;  // LCOV_EXCL_LINE
    if(y < 0.35)
       lx = boost::math::log1p(-y, pol);
    else
       lx = log(x);
    u = -t * lx;
    // and from from 9.2:
-   T prefix;
+   T prefix;  // LCOV_EXCL_LINE
    T h = regularised_gamma_prefix(b, u, pol, lanczos_type());
    if(h <= tools::min_value<T>())
       return s0;
@@ -910,16 +1020,10 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
       //
       T r = prefix * p[n] * j;
       sum += r;
-      if(r > 1)
-      {
-         if(fabs(r) < fabs(tools::epsilon<T>() * sum))
-            break;
-      }
-      else
-      {
-         if(fabs(r / tools::epsilon<T>()) < fabs(sum))
-            break;
-      }
+      // r is always small:
+      BOOST_MATH_ASSERT(tools::max_value<T>() * tools::epsilon<T>() > fabs(r));
+      if(fabs(r / tools::epsilon<T>()) < fabs(sum))
+         break;
    }
    return sum;
 } // template <class T, class Lanczos>T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Lanczos& l, bool normalised)
@@ -951,15 +1055,19 @@ T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
       int start = itrunc(n * x);
       if(start <= k + 1)
          start = itrunc(k + 2);
-      result = pow(x, start) * pow(y, n - start) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(start), pol);
+      result = static_cast<T>(pow(x, T(start)) * pow(y, n - T(start)) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(start), pol));
       if(result == 0)
       {
          // OK, starting slightly above the mode didn't work,
-         // we'll have to sum the terms the old fashioned way:
+         // we'll have to sum the terms the old fashioned way.
+         // Very hard to get here, possibly only when exponent
+         // range is very limited (as with type float):
+         // LCOV_EXCL_START
          for(unsigned i = start - 1; i > k; --i)
          {
-            result += pow(x, (int)i) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i), pol);
+            result += static_cast<T>(pow(x, static_cast<T>(i)) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i), pol));
          }
+         // LCOV_EXCL_STOP
       }
       else
       {
@@ -1008,11 +1116,15 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
 
    BOOST_MATH_ASSERT((p_derivative == 0) || normalised);
 
+   if(!(boost::math::isfinite)(a))
+      return policies::raise_domain_error<T>(function, "The argument a to the incomplete beta function must be finite (got a=%1%).", a, pol);
+   if(!(boost::math::isfinite)(b))
+      return policies::raise_domain_error<T>(function, "The argument b to the incomplete beta function must be finite (got b=%1%).", b, pol);
+   if (!(0 <= x && x <= 1))
+      return policies::raise_domain_error<T>(function, "The argument x to the incomplete beta function must be in [0,1] (got x=%1%).", x, pol);
+
    if(p_derivative)
       *p_derivative = -1; // value not set.
-
-   if((x < 0) || (x > 1))
-      return policies::raise_domain_error<T>(function, "Parameter x outside the range [0,1] in the incomplete beta function (got x=%1%).", x, pol);
 
    if(normalised)
    {
@@ -1063,7 +1175,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
       // We have an arcsine distribution:
       if(p_derivative)
       {
-         *p_derivative = 1 / constants::pi<T>() * sqrt(y * x);
+         *p_derivative = 1 / (constants::pi<T>() * sqrt(y * x));
       }
       T p = invert ? asin(sqrt(y)) / constants::half_pi<T>() : asin(sqrt(x)) / constants::half_pi<T>();
       if(!normalised)
@@ -1092,7 +1204,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
       {
          *p_derivative = a * pow(x, a - 1);
       }
-      T p;
+      T p;  // LCOV_EXCL_LINE
       if(y < 0.5)
          p = invert ? T(-boost::math::expm1(a * boost::math::log1p(-y, pol), pol)) : T(exp(a * boost::math::log1p(-y, pol)));
       else
@@ -1152,7 +1264,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             else
             {
                // Sidestep on a, and then use the series representation:
-               T prefix;
+               T prefix;  // LCOV_EXCL_LINE
                if(!normalised)
                {
                   prefix = rising_factorial_ratio(T(a+b), a, 20);
@@ -1234,7 +1346,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             else
             {
                // Sidestep to improve errors:
-               T prefix;
+               T prefix;  // LCOV_EXCL_LINE
                if(!normalised)
                {
                   prefix = rising_factorial_ratio(T(a+b), a, 20);
@@ -1264,7 +1376,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
    else
    {
       // Both a,b >= 1:
-      T lambda;
+      T lambda;  // LCOV_EXCL_LINE
       if(a < b)
       {
          lambda = a - (a + b) * x;
@@ -1315,7 +1427,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             if(n == b)
                --n;
             T bbar = b - n;
-            T prefix;
+            T prefix; // LCOV_EXCL_LINE
             if(!normalised)
             {
                prefix = rising_factorial_ratio(T(a+bbar), bbar, n);
@@ -1324,7 +1436,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             {
                prefix = 1;
             }
-            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(0));
+            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(nullptr));
             fract = beta_small_b_large_a_series(a,  bbar, x, y, fract, T(1), pol, normalised);
             fract /= prefix;
             BOOST_MATH_INSTRUMENT_VARIABLE(fract);
@@ -1341,8 +1453,8 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
                --n;
                bbar += 1;
             }
-            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(0));
-            fract += ibeta_a_step(a, bbar, x, y, 20, pol, normalised, static_cast<T*>(0));
+            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(nullptr));
+            fract += ibeta_a_step(a, bbar, x, y, 20, pol, normalised, static_cast<T*>(nullptr));
             if(invert)
                fract -= 1;  // Note this line would need changing if we ever enable this branch in non-normalized case
             fract = beta_small_b_large_a_series(T(a+20),  bbar, x, y, fract, T(1), pol, normalised);
@@ -1378,7 +1490,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
          if((tools::max_value<T>() * div < *p_derivative))
          {
             // overflow, return an arbitrarily large value:
-            *p_derivative = tools::max_value<T>() / 2;
+            *p_derivative = tools::max_value<T>() / 2;   // LCOV_EXCL_LINE  Probably can only get here with denormalized x.
          }
          else
          {
@@ -1392,7 +1504,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
 template <class T, class Policy>
 inline T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised)
 {
-   return ibeta_imp(a, b, x, pol, inv, normalised, static_cast<T*>(0));
+   return ibeta_imp(a, b, x, pol, inv, normalised, static_cast<T*>(nullptr));
 }
 
 template <class T, class Policy>
@@ -1402,35 +1514,49 @@ T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
    //
    // start with the usual error checks:
    //
+   if (!(boost::math::isfinite)(a))
+      return policies::raise_domain_error<T>(function, "The argument a to the incomplete beta function must be finite (got a=%1%).", a, pol);
+   if (!(boost::math::isfinite)(b))
+      return policies::raise_domain_error<T>(function, "The argument b to the incomplete beta function must be finite (got b=%1%).", b, pol);
+   if (!(0 <= x && x <= 1))
+      return policies::raise_domain_error<T>(function, "The argument x to the incomplete beta function must be in [0,1] (got x=%1%).", x, pol);
+
    if(a <= 0)
       return policies::raise_domain_error<T>(function, "The argument a to the incomplete beta function must be greater than zero (got a=%1%).", a, pol);
    if(b <= 0)
       return policies::raise_domain_error<T>(function, "The argument b to the incomplete beta function must be greater than zero (got b=%1%).", b, pol);
-   if((x < 0) || (x > 1))
-      return policies::raise_domain_error<T>(function, "Parameter x outside the range [0,1] in the incomplete beta function (got x=%1%).", x, pol);
    //
    // Now the corner cases:
    //
    if(x == 0)
    {
       return (a > 1) ? 0 :
-         (a == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, 0, pol);
+         (a == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
    }
    else if(x == 1)
    {
       return (b > 1) ? 0 :
-         (b == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, 0, pol);
+         (b == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
    }
    //
    // Now the regular cases:
    //
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
    T y = (1 - x) * x;
-   T f1 = ibeta_power_terms<T>(a, b, x, 1 - x, lanczos_type(), true, pol, 1 / y, function);
+   T f1;
+   if (!(boost::math::isinf)(1 / y))
+   {
+      f1 = ibeta_power_terms<T>(a, b, x, 1 - x, lanczos_type(), true, pol, 1 / y, function);
+   }
+   else
+   {
+      return (a > 1) ? 0 : (a == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
+   }
+
    return f1;
 }
 //
-// Some forwarding functions that dis-ambiguate the third argument type:
+// Some forwarding functions that disambiguate the third argument type:
 //
 template <class RT1, class RT2, class Policy>
 inline typename tools::promote_args<RT1, RT2>::type
@@ -1466,8 +1592,9 @@ template <class RT1, class RT2, class A>
 inline typename tools::promote_args<RT1, RT2, A>::type
    beta(RT1 a, RT2 b, A arg)
 {
-   typedef typename policies::is_policy<A>::type tag;
-   return boost::math::detail::beta(a, b, arg, static_cast<tag*>(0));
+   using tag = typename policies::is_policy<A>::type;
+   using ReturnType = tools::promote_args_t<RT1, RT2, A>;
+   return static_cast<ReturnType>(boost::math::detail::beta(a, b, arg, static_cast<tag*>(nullptr)));
 }
 
 template <class RT1, class RT2>

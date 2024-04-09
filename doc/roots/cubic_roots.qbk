@@ -10,7 +10,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 [heading Synopsis]
 
 ```
-#include <boost/math/roots/cubic_roots.hpp>
+#include <boost/math/tools/cubic_roots.hpp>
 
 namespace boost::math::tools {
 
@@ -92,13 +92,13 @@ int main() {
 
 This prints:
 
-```
-The roots of  x³ - 6x² + 11x - 6 are {1, 2, 3}.
-The roots of  x³ - 3x - 2 are {-1, -1, 2}.
-The real roots of x³ - 3x² + x - 3 are {3, nan, nan}.
-The real root of x³ +6.28x² + 2.3x + 3.6 is -5.99656.
+[pre
+The roots of  x[super 3] - 6x[super 2] + 11x - 6 are {1, 2, 3}.
+The roots of  x[super 3] - 3x - 2 are {-1, -1, 2}.
+The real roots of x[super 3] - 3x[super 2] + x - 3 are {3, nan, nan}.
+The real root of x[super 3] +6.28x[super 2] + 2.3x + 3.6 is -5.99656.
 The residual is -1.56586e-14, and the expected residual is 4.64155e-14. This is an expected accuracy.
-```
+]
 
 [heading Performance and Accuracy]
 

@@ -78,9 +78,27 @@ void test_spots2(T, const char* type_name)
 }
 
 template <class T>
+void test_spots_bugs(T, const char* type_name)
+{
+   static const std::array<std::array<T, 4>, 7> hypergeometric_1F1_bugs = { {
+    // Found while investigating https://github.com/boostorg/math/issues/1034
+    {{ 21156.0f, 21156.0f, 11322, SC_(11322.0)}},
+    {{ 21156.0f, 21155.0f, 11322, SC_(11322.428655862323560632951631114666466652986288119296800531328684)}},
+    {{ 21156.0f, 21154.0f, 11322, SC_(11322.857338938931770780542471014439235046236959098048505808665509)}},
+    {{ 21156.0f, 21154.5f, 11322, SC_(11322.642993998700652342915766513423502332460377941025163971463001)}},
+    {{ 21156.0f, 21155.0f - 1.0f / 128, 11322, SC_(11322.43200484338133063401686149227756707)}},
+    {{ 21156.0f, 21154.5f - 1.0f / 128, 11322, SC_(11322.646343086066466097278446364687150256282052775170519455915995)}},
+    {{ 21156.0f, 21154.0f + 1.0f / 128, 11322, SC_(11322.85398974691465958225700429672975704)}},
+   } };
+
+   do_test_1F1<T>(hypergeometric_1F1_bugs, type_name, "Large random values - log - bug cases");
+}
+
+template <class T>
 void test_spots(T z, const char* type_name)
 {
    test_spots1(z, type_name);
+   test_spots_bugs(z, type_name);
 #ifdef TEST_UNSOLVED
    test_spots2(z, type_name);
 #endif

@@ -176,5 +176,49 @@ void test_bessel(T, const char* name)
 
     if(0 != static_cast<T>(ldexp(0.5, -700)))
       do_test_cyl_bessel_i<T>(iv_large_data, name, "Bessel Iv: Mathworld Data (large values)");
+
+    //
+    // Special cases for full coverage:
+    //
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_i(T(-2.5), T(-2.5)), std::domain_error);
+    BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(0), T(0)), T(1));
+    BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(10), T(0)), T(0));
+    BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(-10), T(0)), T(0));
+    BOOST_IF_CONSTEXPR (std::numeric_limits<T>::has_infinity)
+    {
+       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(-10.5), T(0)), std::numeric_limits<T>::infinity());
+       BOOST_IF_CONSTEXPR(std::numeric_limits<T>::max_exponent < 11356)
+       {
+          BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(0.25), T(8000)), std::numeric_limits<T>::infinity());
+       }
+       else BOOST_IF_CONSTEXPR(std::numeric_limits<T>::max_exponent10 < 9200)
+       {
+          BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(0.25), T(21000)), std::numeric_limits<T>::infinity());
+       }
+    }
+    T tolerance = boost::math::tools::epsilon<T>() * 100;
+    if ((boost::math::tools::digits<T>() <= std::numeric_limits<double>::digits) && (std::numeric_limits<T>::max_exponent > 1000))
+    {
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(T(0.5), T(710)), SC_(3.3447452278080108123142599104927325061327359278058601201179e306), tolerance);
+    }
+#if LDBL_MAX_EXP >= 11356
+    BOOST_IF_CONSTEXPR (std::numeric_limits<T>::max_exponent >= 11356)
+    {
+       T mul = std::is_floating_point<T>::value ? 1 : 10;
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(T(0.5), T(11357)), SC_(7.173138695269929329584326974917488634629578339622112563648e4929), tolerance * mul);
+    }
+#endif
+    BOOST_IF_CONSTEXPR (std::numeric_limits<T>::max_exponent > 1000)
+    {
+       BOOST_IF_CONSTEXPR(std::is_floating_point<T>::value == false)
+          tolerance *= 4; // multiprecision type.
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(0, T(700)), SC_(1.5295933476718737363162072288904508649662689614661164851272e302), tolerance);
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(1, T(600)), SC_(6.1411813450668919369004006361519512681603654557478168763761e258), tolerance);
+    }
+    else BOOST_IF_CONSTEXPR(std::numeric_limits<T>::is_specialized)
+    {
+       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(0, T(700)), std::numeric_limits<T>::infinity());
+       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(1, T(600)), std::numeric_limits<T>::infinity());
+    }
 }
 
