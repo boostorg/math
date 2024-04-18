@@ -685,11 +685,21 @@ namespace boost{ namespace math{
     const RealType search_max = support(dist).second;
 
     const int get_digits = policies::digits<RealType, Policy>();// get digits from policy,
+    
     std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>(); // and max iterations.
+    std::uintmax_t comparison_max_iter = max_iter;
+
+    // Shape 200 takes ~150 steps and 250 takes >200 which is the default policy
+    if (shape > 200)
+    {
+      // Shape equal to std::numeric_limits<double>:max() takes 1044 steps to converge
+      max_iter = 1100U;
+      comparison_max_iter = max_iter;
+    }
 
     result = tools::newton_raphson_iterate(detail::skew_normal_quantile_functor<RealType, Policy>(dist, p), result,
       search_min, search_max, get_digits, max_iter);
-    if (max_iter >= policies::get_max_root_iterations<Policy>())
+    if (max_iter >= comparison_max_iter)
     {
        return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time: either there is no answer to quantile" // LCOV_EXCL_LINE
           " or the answer is infinite.  Current best guess is %1%", result, Policy());  // LCOV_EXCL_LINE
