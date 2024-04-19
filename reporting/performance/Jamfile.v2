@@ -16,7 +16,7 @@ import ../../../config/checks/config : requires ;
 using quickbook ;
 using auto-index ;
 
-import ../../../predef/check/predef
+import ../../../predef/tools/check/predef
     : check require
     : predef-check predef-require ;
 
