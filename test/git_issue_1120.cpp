@@ -31,8 +31,8 @@ int main()
    using scipy_policy = boost::math::policies::policy<boost::math::policies::promote_double<false>>;
 
    std::mt19937 gen;
-   std::uniform_real<> location(-3, 3);
-   std::uniform_real<> scale(0.001, 3);
+   std::uniform_real_distribution<double> location(-3, 3);
+   std::uniform_real_distribution<double> scale(0.001, 3);
 
    for (unsigned skew = 50; skew < 2000; skew += 43)
    {
