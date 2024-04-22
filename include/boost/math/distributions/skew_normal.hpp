@@ -618,32 +618,6 @@ namespace boost{ namespace math{
     return factor * y*y / (x*x);
   }
 
-  namespace detail
-  {
-
-    template <class RealType, class Policy>
-    struct skew_normal_quantile_functor
-    {
-      skew_normal_quantile_functor(const boost::math::skew_normal_distribution<RealType, Policy> dist, RealType const& p)
-        : distribution(dist), prob(p)
-      {
-      }
-
-      boost::math::tuple<RealType, RealType> operator()(RealType const& x)
-      {
-        RealType c = cdf(distribution, x);
-        RealType fx = c - prob;  // Difference cdf - value - to minimize.
-        RealType dx = pdf(distribution, x); // pdf is 1st derivative.
-        // return both function evaluation difference f(x) and 1st derivative f'(x).
-        return boost::math::make_tuple(fx, dx);
-      }
-    private:
-      const boost::math::skew_normal_distribution<RealType, Policy> distribution;
-      RealType prob;
-    };
-
-  } // namespace detail
-
   template <class RealType, class Policy>
   inline RealType quantile(const skew_normal_distribution<RealType, Policy>& dist, const RealType& p)
   {
@@ -724,6 +698,18 @@ namespace boost{ namespace math{
 #endif
 
     result = (p_result.first + p_result.second) / 2;
+
+    //
+    // Try one last Newton step, just to close up the interval:
+    //
+    RealType step = fun(result) / pdf(dist, result);
+
+    if (result - step <= p_result.first)
+       result = p_result.first;
+    else if (result - step >= p_result.second)
+       result = p_result.second;
+    else
+       result -= step;
 
     if (max_iter >= policies::get_max_root_iterations<Policy>())
     {
