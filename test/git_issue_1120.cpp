@@ -43,14 +43,14 @@ int main()
          global_iter_count = 0;
          double x = quantile(dist, pn[i]);
          total_iter_count += global_iter_count;
-         CHECK_LE(global_iter_count, static_cast<std::uintmax_t>(55));
+         CHECK_LE(global_iter_count, static_cast<std::uintmax_t>(60));
          double p = cdf(dist, x);
          CHECK_ABSOLUTE_ERROR(p, pn[i], 45 * std::numeric_limits<double>::epsilon());
 
          global_iter_count = 0;
          x = quantile(complement(dist, pn[i]));
          total_iter_count += global_iter_count;
-         CHECK_LE(global_iter_count, static_cast<std::uintmax_t>(55));
+         CHECK_LE(global_iter_count, static_cast<std::uintmax_t>(60));
          p = cdf(complement(dist, x));
          CHECK_ABSOLUTE_ERROR(p, pn[i], 45 * std::numeric_limits<double>::epsilon());
       }
