@@ -195,3 +195,15 @@ jobs:
       - name: Upload coverage
         if: matrix.coverage
         run: ci/codecov.sh "upload"
+        env:
+          BOOST_CI_CODECOV_IO_UPLOAD: skip
+
+      - name: Upload coverage
+        if: matrix.coverage
+        uses: codecov/codecov-action@v4
+        with:
+          disable_search: true
+          file: coverage.info
+          name: Github Actions
+          token: ${{secrets.CODECOV_TOKEN}}
+          verbose: true
