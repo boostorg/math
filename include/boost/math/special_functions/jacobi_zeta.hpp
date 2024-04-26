@@ -51,10 +51,6 @@ T jacobi_zeta_imp(T phi, T k, const Policy& pol, T kp)
        result = sinp * (boost::math::sign)(cosp);  // We get here by simplifying JacobiZeta[w, 1] in Mathematica, and the fact that 0 <= phi.
     else
     {
-       typedef std::integral_constant<int,
-          std::is_floating_point<T>::value&& std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 54) ? 0 :
-          std::is_floating_point<T>::value && std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 64) ? 1 : 2
-       > precision_tag_type;
        result = k2 * sinp * cosp * sqrt(one_minus_ks2) * ellint_rj_imp(T(0), kp, T(1), one_minus_ks2, pol) / (3 * ellint_k_imp(k, pol, kp));
     }
     return invert ? T(-result) : result;

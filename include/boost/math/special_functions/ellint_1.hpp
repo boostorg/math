@@ -77,11 +77,6 @@ T ellint_f_imp(T phi, T k, const Policy& pol, T one_minus_k2)
     {
        // Phi is so large that phi%pi is necessarily zero (or garbage),
        // just return the second part of the duplication formula:
-       typedef std::integral_constant<int,
-          std::is_floating_point<T>::value&& std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 54) ? 0 :
-          std::is_floating_point<T>::value && std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 64) ? 1 : 2
-       > precision_tag_type;
-
        result = 2 * phi * ellint_k_imp(k, pol, one_minus_k2) / constants::pi<T>();
        BOOST_MATH_INSTRUMENT_VARIABLE(result);
     }
