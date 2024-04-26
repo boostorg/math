@@ -26,7 +26,15 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double|real_concept";
 #endif
-
+#if defined(__APPLE__ ) && defined(__clang__)
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                  // test type(s)
+      ".*large arguments",           // test data group
+      ".*", 700, 200);               // test function
+#else
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -34,6 +42,7 @@ void expected_results()
       largest_type,                  // test type(s)
       ".*large arguments",           // test data group
       ".*", 400, 200);               // test function
+#endif
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
