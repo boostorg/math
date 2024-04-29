@@ -401,7 +401,7 @@ namespace boost
       }
       if(k == 0)
       {
-        return log(p); // success_fraction
+        return std::log(p); // success_fraction
       }
       //RealType q = 1 - p;  // Bad for small p
       //RealType probability = 1 - std::pow(q, k+1);
