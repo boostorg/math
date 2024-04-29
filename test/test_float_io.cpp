@@ -301,7 +301,7 @@ void test()
          std::ios_base::fixed | std::ios_base::showpos}};
 
    std::array<std::array<const char*, 13 * 9>, 40> string_data = {{
-#include "libs/math/test/string_data.ipp"
+#include "string_data.ipp"
    }};
 
    double num   = 123456789.0;
