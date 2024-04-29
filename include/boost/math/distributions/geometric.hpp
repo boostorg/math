@@ -384,6 +384,7 @@ namespace boost
     inline RealType logcdf(const geometric_distribution<RealType, Policy>& dist, const RealType& k)
     { // Cumulative Distribution Function of geometric.
       using std::pow;
+      using std::log;
       static const char* function = "boost::math::logcdf(const geometric_distribution<%1%>&, %1%)";
 
       // k argument may be integral, signed, or unsigned, or floating point.
@@ -401,7 +402,7 @@ namespace boost
       }
       if(k == 0)
       {
-        return std::log(p); // success_fraction
+        return log(p); // success_fraction
       }
       //RealType q = 1 - p;  // Bad for small p
       //RealType probability = 1 - std::pow(q, k+1);
