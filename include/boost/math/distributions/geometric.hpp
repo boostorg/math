@@ -385,6 +385,7 @@ namespace boost
     { // Cumulative Distribution Function of geometric.
       using std::pow;
       using std::log;
+      using std::exp;
       static const char* function = "boost::math::logcdf(const geometric_distribution<%1%>&, %1%)";
 
       // k argument may be integral, signed, or unsigned, or floating point.
