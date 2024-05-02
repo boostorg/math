@@ -125,7 +125,7 @@ T ellint_f_imp(T phi, T k, const Policy& pol, T one_minus_k2)
           T c_minus_one = cosp / sinp;
           T cross = fabs(c / (k * k));
           T arg2;
-          if ((cross > 0.9) && (cross < 1.1))
+          if ((cross > 0.9f) && (cross < 1.1f))
              arg2 = c_minus_one + one_minus_k2;
           else
              arg2 = c - k * k;
