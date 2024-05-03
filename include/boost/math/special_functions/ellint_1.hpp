@@ -123,12 +123,17 @@ T ellint_f_imp(T phi, T k, const Policy& pol, T one_minus_k2)
           //
           T c = 1 / sinp;
           T c_minus_one = cosp / sinp;
-          T cross = fabs(c / (k * k));
           T arg2;
-          if ((cross > 0.9f) && (cross < 1.1f))
-             arg2 = c_minus_one + one_minus_k2;
+          if (k != 0)
+          {
+             T cross = fabs(c / (k * k));
+             if ((cross > 0.9f) && (cross < 1.1f))
+                arg2 = c_minus_one + one_minus_k2;
+             else
+                arg2 = c - k * k;
+          }
           else
-             arg2 = c - k * k;
+             arg2 = c;
           result = static_cast<T>(s * ellint_rf_imp(c_minus_one, arg2, c, pol));
        }
        else
