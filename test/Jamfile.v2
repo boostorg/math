@@ -54,6 +54,7 @@ project
       <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
       <toolset>msvc-7.1:<pch>off
       <toolset>clang-6.0.0:<pch>off  # added to see effect.
+      <toolset>clang:<cxxflags>-Wno-literal-range  # warning: magnitude of floating-point constant too small for type 'long double' [-Wliteral-range]
       <toolset>gcc,<target-os>windows:<pch>off
       <toolset>borland:<runtime-link>static
       # <toolset>msvc:<cxxflags>/wd4506 has no effect?
