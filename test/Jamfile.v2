@@ -58,6 +58,7 @@ project
       <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
       <toolset>msvc-7.1:<pch>off
       <toolset>clang-6.0.0:<pch>off  # added to see effect.
+      <toolset>clang:<cxxflags>-Wno-literal-range  # warning: magnitude of floating-point constant too small for type 'long double' [-Wliteral-range]
       <toolset>gcc,<target-os>windows:<pch>off
       <toolset>borland:<runtime-link>static
       # <toolset>msvc:<cxxflags>/wd4506 has no effect?
@@ -883,6 +884,7 @@ test-suite distribution_tests :
    [ run scipy_issue_18302.cpp /boost/test//boost_unit_test_framework  ]
    [ run scipy_issue_18511.cpp /boost/test//boost_unit_test_framework ]
    [ compile scipy_issue_19762.cpp ]
+   [ run git_issue_1120.cpp ]
 ;
 
 test-suite new_floats : 
