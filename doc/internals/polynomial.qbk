@@ -48,7 +48,8 @@
 
       T operator()(T z) const;
 
-
+      // Only available if Eigen library is available:
+      std::vector<std::complex<T>> roots() const;
 
       // modify:
       void set_zero();
@@ -183,11 +184,20 @@ for output
 
 The source code is at [@../../example/polynomial_arithmetic.cpp polynomial_arithmetic.cpp]
 
-[endsect] [/section:polynomials Polynomials]
+[h4 Roots]
+
+Polynomial roots are recovered by the eigenvalues of the companion matrix.
+This requires that the Eigen C++ library to be available; otherwise calling `.roots()` is a compile-time error.
+In addition, the polynomial coefficients must be of floating point type, or a static assertion will fail.
+
+[endsect]
+
+[/section:polynomials Polynomials]
 
 [/
   Copyright 2006 John Maddock and Paul A. Bristow.
   Copyright 2015 Jeremy William Murphy.
+  Copyright 2024 Nick Thompson.
 
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
