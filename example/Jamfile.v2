@@ -7,6 +7,7 @@
 
 # bring in the rules for testing
 import testing ;
+import-search /boost/config/checks ;
 import config : requires ;
 
 project

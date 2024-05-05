@@ -12,6 +12,7 @@ import testing ;
 import modules ;
 import path ;
 import pch ;
+import-search /boost/config/checks ;
 import config : requires ;
 
 local ntl-path = [ modules.peek : NTL_PATH ] ;
@@ -887,7 +888,7 @@ test-suite distribution_tests :
    [ run git_issue_1120.cpp ]
 ;
 
-test-suite new_floats : 
+test-suite new_floats :
    [ compile compile_test/float32.cpp ]
    [ compile compile_test/float64.cpp ]
    [ compile compile_test/float128.cpp ]

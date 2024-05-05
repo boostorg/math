@@ -5,6 +5,7 @@
 
 import testing ;
 import pch ;
+import-search /boost/config/checks ;
 import config : requires ;
 
 project

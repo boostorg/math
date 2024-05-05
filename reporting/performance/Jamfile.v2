@@ -12,6 +12,7 @@ import testing ;
 import modules ;
 import path ;
 import pch ;
+import-search /boost/config/checks ;
 import config : requires ;
 using quickbook ;
 using auto-index ;

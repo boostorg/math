@@ -1,6 +1,6 @@
 # Copyright John Maddock 2010
-# Distributed under the Boost Software License, Version 1.0. 
-# (See accompanying file LICENSE_1_0.txt or copy at 
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt.
 # \math_toolkit\libs\math\test\jamfile.v2
 # Runs all math toolkit tests, functions & distributions,
@@ -9,22 +9,23 @@
 # bring in the rules for testing
 import modules ;
 import path ;
+import-search /boost/config/checks ;
 import config : requires ;
 
-project  
-    : requirements 
+project
+    : requirements
       <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>darwin:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070,4069
-      <toolset>intel-win:<cxxflags>-nologo 
-      <toolset>intel-win:<linkflags>-nologo 
+      <toolset>intel-win:<cxxflags>-nologo
+      <toolset>intel-win:<linkflags>-nologo
       <toolset>msvc:<warnings>all
       <toolset>msvc:<asynch-exceptions>on
       <toolset>msvc:<cxxflags>/wd4996
-      <toolset>msvc:<cxxflags>/wd4512 
-      <toolset>msvc:<cxxflags>/wd4610 
-      <toolset>msvc:<cxxflags>/wd4510 
-      <toolset>msvc:<cxxflags>/wd4127 
+      <toolset>msvc:<cxxflags>/wd4512
+      <toolset>msvc:<cxxflags>/wd4610
+      <toolset>msvc:<cxxflags>/wd4510
+      <toolset>msvc:<cxxflags>/wd4127
       <toolset>msvc:<cxxflags>/wd4701 # needed for lexical cast - temporary.
       <link>static
       <toolset>borland:<runtime-link>static
@@ -58,8 +59,8 @@ exe laguerre_data : laguerre_data.cpp ;
 install laguerre_data_install : laguerre_data : <location>bin ;
 
 exe bessel_derivative_data : bessel_derivative_data.cpp /boost/test//boost_test :
-[ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ] 
-[ check-target-builds /boost/multiprecision/config//has_mpfr : <source>mpfr : <build>no ] 
+[ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ]
+[ check-target-builds /boost/multiprecision/config//has_mpfr : <source>mpfr : <build>no ]
 [ check-target-builds ../config//is_ci_standalone_run : <build>no ] ;
 install bessel_derivative_data_install : bessel_derivative_data : <location>bin ;
 
@@ -69,12 +70,12 @@ install ellint_k_data_install : ellint_k_data : <location>bin ;
 exe hyp_0f2_data : hyp_0f2_data.cpp ;
 install hyp_0f2_data_install : hyp_0f2_data : <location>bin ;
 
-exe hypergeometric_dist_data : hypergeometric_dist_data.cpp : 
-[ check-target-builds ../config//is_ci_standalone_run : <build>no ] 
+exe hypergeometric_dist_data : hypergeometric_dist_data.cpp :
+[ check-target-builds ../config//is_ci_standalone_run : <build>no ]
 [ requires cxx11_hdr_random ] ;
 install hypergeometric_dist_data_install : hypergeometric_dist_data : <location>bin ;
 
-exe legendre_data : legendre_data.cpp : 
+exe legendre_data : legendre_data.cpp :
 [ check-target-builds ../config//is_ci_standalone_run : <build>no ] ;
 install legendre_data_install : legendre_data : <location>bin ;
 
@@ -85,10 +86,10 @@ install beta_data_install : beta_data : <location>bin ;
 exe ellint_pi2_data : ellint_pi2_data.cpp /boost/test//boost_test ;
 install ellint_pi2_data_install : ellint_pi2_data : <location>bin ;
 
-exe hyp_1f1_big_data : hyp_1f1_big_data.cpp : 
-[ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ] 
-[ check-target-builds /boost/multiprecision/config//has_mpfr : <source>mpfr : <build>no ] 
-[ check-target-builds /boost/multiprecision/config//has_mpfi : <source>gmp <source>mpfr <source>mpfi : <build>no ] 
+exe hyp_1f1_big_data : hyp_1f1_big_data.cpp :
+[ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ]
+[ check-target-builds /boost/multiprecision/config//has_mpfr : <source>mpfr : <build>no ]
+[ check-target-builds /boost/multiprecision/config//has_mpfi : <source>gmp <source>mpfr <source>mpfi : <build>no ]
 [ requires cxx11_decltype ] ;
 install hyp_1f1_big_data_install : hyp_1f1_big_data : <location>bin ;
 
@@ -105,10 +106,10 @@ install carlson_ellint_data_install : carlson_ellint_data : <location>bin ;
 exe ellint_pi3_data : ellint_pi3_data.cpp /boost/test//boost_test ;
 install ellint_pi3_data_install : ellint_pi3_data : <location>bin ;
 
-exe hyp_1f1_data : hyp_1f1_data.cpp : 
-[ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ] 
-[ check-target-builds /boost/multiprecision/config//has_mpfr : <source>mpfr : <build>no ] 
-[ check-target-builds /boost/multiprecision/config//has_mpfi : <source>gmp <source>mpfr <source>mpfi : <build>no ] 
+exe hyp_1f1_data : hyp_1f1_data.cpp :
+[ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ]
+[ check-target-builds /boost/multiprecision/config//has_mpfr : <source>mpfr : <build>no ]
+[ check-target-builds /boost/multiprecision/config//has_mpfi : <source>gmp <source>mpfr <source>mpfi : <build>no ]
 [ requires cxx11_decltype ] ;
 install hyp_1f1_data_install : hyp_1f1_data : <location>bin ;
 
@@ -125,10 +126,10 @@ install cbrt_data_install : cbrt_data : <location>bin ;
 exe erf_data : erf_data.cpp : [ check-target-builds /boost/multiprecision/config//has_float128 : <source>quadmath : <build>no ] ;
 install erf_data_install : erf_data : <location>bin ;
 
-exe hyp_1f1_log_big_data : hyp_1f1_log_big_data.cpp : 
-[ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ] 
-[ check-target-builds /boost/multiprecision/config//has_mpfr : <source>mpfr : <build>no ] 
-[ check-target-builds /boost/multiprecision/config//has_mpfi : <source>gmp <source>mpfr <source>mpfi : <build>no ] 
+exe hyp_1f1_log_big_data : hyp_1f1_log_big_data.cpp :
+[ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ]
+[ check-target-builds /boost/multiprecision/config//has_mpfr : <source>mpfr : <build>no ]
+[ check-target-builds /boost/multiprecision/config//has_mpfi : <source>gmp <source>mpfr <source>mpfi : <build>no ]
 [ requires cxx11_decltype ] ;
 install hyp_1f1_log_big_data_install : hyp_1f1_log_big_data : <location>bin ;
 
@@ -145,18 +146,18 @@ install digamma_data_install : digamma_data : <location>bin ;
 exe expint_data : expint_data.cpp ;
 install expint_data_install : expint_data : <location>bin ;
 
-exe hyp_1f1_reg_big_data : hyp_1f1_reg_big_data.cpp : 
-[ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ] 
-[ check-target-builds /boost/multiprecision/config//has_mpfr : <source>mpfr : <build>no ] 
-[ check-target-builds /boost/multiprecision/config//has_mpfi : <source>gmp <source>mpfr <source>mpfi : <build>no ] 
+exe hyp_1f1_reg_big_data : hyp_1f1_reg_big_data.cpp :
+[ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ]
+[ check-target-builds /boost/multiprecision/config//has_mpfr : <source>mpfr : <build>no ]
+[ check-target-builds /boost/multiprecision/config//has_mpfi : <source>gmp <source>mpfr <source>mpfi : <build>no ]
 [ requires cxx11_decltype ] ;
 install hyp_1f1_reg_big_data_install : hyp_1f1_reg_big_data : <location>bin ;
 
 exe ibeta_invab_data : ibeta_invab_data.cpp : [ check-target-builds /boost/multiprecision/config//has_float128 : <source>quadmath : <build>no ] ;
 install ibeta_invab_data_install : ibeta_invab_data : <location>bin ;
 
-exe tgamma_large_data : tgamma_large_data.cpp /boost/test//boost_test : 
-[ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ] 
+exe tgamma_large_data : tgamma_large_data.cpp /boost/test//boost_test :
+[ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ]
 [ check-target-builds /boost/multiprecision/config//has_mpfr : <source>mpfr : <build>no ] ;
 install tgamma_large_data_install : tgamma_large_data : <location>bin ;
 
@@ -172,7 +173,7 @@ install hyp_1f2_data_install : hyp_1f2_data : <location>bin ;
 exe igamma_data : igamma_data.cpp : [ check-target-builds /boost/multiprecision/config//has_float128 : <source>quadmath : <build>no ] ;
 install igamma_data_install : igamma_data : <location>bin ;
 
-exe tgamma_ratio_data : tgamma_ratio_data.cpp : 
+exe tgamma_ratio_data : tgamma_ratio_data.cpp :
 [ check-target-builds ../config//is_ci_standalone_run : <build>no ] ;
 install tgamma_ratio_data_install : tgamma_ratio_data : <location>bin ;
 
@@ -216,8 +217,8 @@ install generate_test_values_install : generate_test_values : <location>bin ;
 exe igamma_temme_large_coef : igamma_temme_large_coef.cpp ;
 install igamma_temme_large_coef_install : igamma_temme_large_coef : <location>bin ;
 
-exe lanczos_generator : lanczos_generator.cpp /boost/chrono//boost_chrono /boost/system//boost_system : 
-[ check-target-builds /boost/multiprecision/config//has_float128 : <source>quadmath : <build>no ] 
+exe lanczos_generator : lanczos_generator.cpp /boost/chrono//boost_chrono /boost/system//boost_system :
+[ check-target-builds /boost/multiprecision/config//has_float128 : <source>quadmath : <build>no ]
 [ requires cxx11_nullptr ] ;
 install lanczos_generator_install : lanczos_generator : <location>bin ;
 
