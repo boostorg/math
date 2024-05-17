@@ -61,8 +61,8 @@ namespace boost
 
             while (beta * pois == 0)
             {
-               if (k == 0)
-                  break;
+               if ((k == 0) || (pois == 0))
+                  return init_val;
                k /= 2;
                pois = gamma_p_derivative(T(k + 1), d2, pol)
                   * tgamma_delta_ratio(T(k + 1), T(0.5f))

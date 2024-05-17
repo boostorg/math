@@ -65,8 +65,8 @@ namespace boost
 
             while (beta * pois == 0)
             {
-               if (k == 0)
-                  break;
+               if ((k == 0) || (pois == 0))
+                  return init_val;
                k /= 2;
                pois = gamma_p_derivative(T(k + 1), l2, pol);
                beta = x < y
@@ -556,8 +556,8 @@ namespace boost
 
             while (beta * pois == 0)
             {
-               if (k == 0) 
-                  return beta;  // Nothing else we can do!
+               if ((k == 0) || (pois == 0))
+                  return 0;  // Nothing else we can do!
                //
                // We only get here when a+k and b are large and x is small,
                // in that case reduce k (bisect) until both terms are finite:
