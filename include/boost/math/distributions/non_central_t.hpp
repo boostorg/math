@@ -58,6 +58,20 @@ namespace boost
             beta = x < y
                ? detail::ibeta_imp(T(k + 1), T(v / 2), x, pol, false, true, &xterm)
                : detail::ibeta_imp(T(v / 2), T(k + 1), y, pol, true, true, &xterm);
+
+            while (beta * pois == 0)
+            {
+               if ((k == 0) || (pois == 0))
+                  return init_val;
+               k /= 2;
+               pois = gamma_p_derivative(T(k + 1), d2, pol)
+                  * tgamma_delta_ratio(T(k + 1), T(0.5f))
+                  * delta / constants::root_two<T>();
+               beta = x < y
+                  ? detail::ibeta_imp(T(k + 1), T(v / 2), x, pol, false, true, &xterm)
+                  : detail::ibeta_imp(T(v / 2), T(k + 1), y, pol, true, true, &xterm);
+            }
+
             xterm *= y / (v / 2 + k);
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;
@@ -262,7 +276,13 @@ namespace boost
                }
                else
                   result = 0;
-               result += cdf(boost::math::normal_distribution<T, Policy>(), -delta);
+               if (invert)
+               {
+                  result = cdf(complement(boost::math::normal_distribution<T, Policy>(), -delta)) - result;
+                  invert = false;
+               }
+               else
+                  result += cdf(boost::math::normal_distribution<T, Policy>(), -delta);
             }
             else
             {
@@ -398,10 +418,25 @@ namespace boost
                ? ibeta_derivative(T(k + 1), n / 2, x, pol)
                : ibeta_derivative(n / 2, T(k + 1), y, pol);
             BOOST_MATH_INSTRUMENT_VARIABLE(xterm);
+
+            while (xterm * pois == 0)
+            {
+               if (k == 0)
+                  return init_val;
+               k /= 2;
+               pois = gamma_p_derivative(T(k + 1), d2, pol)
+                  * tgamma_delta_ratio(T(k + 1), T(0.5f))
+                  * delta / constants::root_two<T>();
+               BOOST_MATH_INSTRUMENT_VARIABLE(pois);
+               // Starting beta term:
+               xterm = x < y
+                  ? ibeta_derivative(T(k + 1), n / 2, x, pol)
+                  : ibeta_derivative(n / 2, T(k + 1), y, pol);
+               BOOST_MATH_INSTRUMENT_VARIABLE(xterm);
+            }
+
             T poisf(pois), xtermf(xterm);
             T sum = init_val;
-            if((pois == 0) || (xterm == 0))
-               return init_val;
 
             //
             // Backwards recursion first, this is the stable
@@ -461,7 +496,7 @@ namespace boost
                t = -t;
                delta = -delta;
             }
-            if(t == 0)
+            if(t * t == 0)
             {
                //
                // Handle this as a special case, using the formula

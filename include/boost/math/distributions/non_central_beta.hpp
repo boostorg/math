@@ -63,6 +63,17 @@ namespace boost
                ? detail::ibeta_imp(T(a + k), b, x, pol, false, true, &xterm)
                : detail::ibeta_imp(b, T(a + k), y, pol, true, true, &xterm);
 
+            while (beta * pois == 0)
+            {
+               if ((k == 0) || (pois == 0))
+                  return init_val;
+               k /= 2;
+               pois = gamma_p_derivative(T(k + 1), l2, pol);
+               beta = x < y
+                  ? detail::ibeta_imp(T(a + k), b, x, pol, false, true, &xterm)
+                  : detail::ibeta_imp(b, T(a + k), y, pol, true, true, &xterm);
+            }
+
             xterm *= y / (a + b + k - 1);
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;
@@ -542,6 +553,24 @@ namespace boost
             T beta = x < y ?
                ibeta_derivative(a + k, b, x, pol)
                : ibeta_derivative(b, a + k, y, pol);
+
+            while (beta * pois == 0)
+            {
+               if ((k == 0) || (pois == 0))
+                  return 0;  // Nothing else we can do!
+               //
+               // We only get here when a+k and b are large and x is small,
+               // in that case reduce k (bisect) until both terms are finite:
+               //
+               k /= 2;
+               pois = gamma_p_derivative(T(k + 1), l2, pol);
+               // Starting beta term:
+               beta = x < y ?
+                  ibeta_derivative(a + k, b, x, pol)
+                  : ibeta_derivative(b, a + k, y, pol);
+            }
+
+
             T sum = 0;
             T poisf(pois);
             T betaf(beta);
