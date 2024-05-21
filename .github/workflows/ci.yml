@@ -185,7 +185,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        toolset: [ msvc-14.0, msvc-14.2 ]
+        toolset: [ msvc-14.2 ]
         standard: [ 14, 17 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
