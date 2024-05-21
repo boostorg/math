@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++-13, g++-14, clang++-17, clang++-18 ]
+        compiler: [ g++-13, g++-14, clang++-16, clang++-17, clang++-18 ]
         standard: [ c++20, c++23 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
@@ -48,7 +48,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y g++-13 g++-14 clang-17 clang-18 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-13 g++-14 clang-16 clang-17 clang-18 libgmp-dev libmpfr-dev libfftw3-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -84,7 +84,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++-12, clang++-14, clang++-15, clang++-16 ]
+        compiler: [ g++-12, clang++-14, clang++-15 ]
         standard: [ c++14, c++17 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
@@ -108,7 +108,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y g++-12 clang-14 clang-15 clang-16 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-12 clang-14 clang-15 libgmp-dev libmpfr-dev libfftw3-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
