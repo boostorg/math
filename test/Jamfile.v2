@@ -172,6 +172,7 @@ test-suite special_fun :
    [ run git_issue_961.cpp ]
    [ run git_issue_1006.cpp ]
    [ run git_issue_184.cpp ]
+   [ run git_issue_1137.cpp ]
    [ run special_functions_test.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_airy.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_bessel_j.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
