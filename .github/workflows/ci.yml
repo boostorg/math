@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++-13, g++-14, clang++-16, clang++-17, clang++-18 ]
+        compiler: [ g++-14, clang++-16, clang++-17, clang++-18 ]
         standard: [ c++20 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
