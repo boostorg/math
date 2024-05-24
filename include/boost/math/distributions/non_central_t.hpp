@@ -59,7 +59,7 @@ namespace boost
                ? detail::ibeta_imp(T(k + 1), T(v / 2), x, pol, false, true, &xterm)
                : detail::ibeta_imp(T(v / 2), T(k + 1), y, pol, true, true, &xterm);
 
-            while (beta * pois < tools::min_value<T>())
+            while (fabs(beta * pois) < tools::min_value<T>())
             {
                if ((k == 0) || (pois == 0))
                   return init_val;
