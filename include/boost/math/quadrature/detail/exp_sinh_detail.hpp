@@ -198,11 +198,27 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         if (!have_first_j && (I1_last == I1))
         {
            // No change to the sum, disregard these values on the LHS:
-           min_abscissa = m_abscissas[1][i];
-           first_j = i;
+           if ((i < m_abscissas[1].size() - 1) && (m_abscissas[1][i + 1] > max_abscissa))
+           {
+              // The summit is so high, that we found nothing in this row which added to the integral!!
+              have_first_j = true;
+           }
+           else
+           {
+              min_abscissa = m_abscissas[1][i];
+              first_j = i;
+           }
         }
         else
            have_first_j = true;
+    }
+
+    if (I0 == static_cast<Real>(0))
+    {
+       // We failed to find anything, is the integral zero, or have we just not found it yet?
+       // We'll try one more level, if that still finds nothing then it'll terminate.
+       min_abscissa = 0;
+       max_abscissa = boost::math::tools::max_value<Real>();
     }
 
     I1 *= half<Real>();
