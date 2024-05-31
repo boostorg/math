@@ -424,10 +424,10 @@ namespace boost
             // We only call this routine when we know that the series form of 1F1 is cheap to evaluate,
             // so no need to call the whole 1F1 function, just the series will do:
             //
-            T Av = hypergeometric_1F1_generic_series((v + 1) / 2, boost::math::constants::half<T>(), mu * mu * x * x / (2 * (x * x + v)), pol, scale, function);
+            T Av = hypergeometric_1F1_generic_series(static_cast<T>((v + 1) / 2), boost::math::constants::half<T>(), static_cast<T>(mu * mu * x * x / (2 * (x * x + v))), pol, scale, function);
             Av = ldexp(Av, static_cast<int>(scale));
             scale = 0;
-            T Bv = hypergeometric_1F1_generic_series(v / 2 + T(1), T(3) / 2, mu * mu * x * x / (2 * (x * x + v)), pol, scale, function);
+            T Bv = hypergeometric_1F1_generic_series(static_cast<T>(v / 2 + T(1)), static_cast<T>(T(3) / 2), static_cast<T>(mu * mu * x * x / (2 * (x * x + v))), pol, scale, function);
             Bv = ldexp(Bv, static_cast<int>(scale));
             Bv *= boost::math::tgamma_delta_ratio(v / 2 + T(1), -constants::half<T>(), pol);
             Bv *= boost::math::constants::root_two<T>() * mu * x / sqrt(x * x + v);

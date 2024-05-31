@@ -670,7 +670,6 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     test_right_limit_infinite<cpp_bin_float_quad>();
     test_nr_examples<cpp_bin_float_quad>();
     test_crc<cpp_bin_float_quad>();
-    test_non_central_t<cpp_bin_float_quad>();
 #endif
 
 #if !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)

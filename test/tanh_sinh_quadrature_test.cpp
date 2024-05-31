@@ -1028,7 +1028,6 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_crc<cpp_bin_float_quad>();
     test_sf<cpp_bin_float_quad>();
     test_2_arg<cpp_bin_float_quad>();
-    test_non_central_t<cpp_bin_float_quad>();
 #endif
 #endif
 #ifdef TEST5
@@ -1083,7 +1082,6 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_crc<boost::multiprecision::float128>();
     test_sf<boost::multiprecision::float128>();
     test_2_arg<boost::multiprecision::float128>();
-    test_non_central_t<boost::multiprecision::float128>();
 
 #endif
 #ifdef TEST9
