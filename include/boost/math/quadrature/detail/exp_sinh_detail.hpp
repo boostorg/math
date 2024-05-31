@@ -259,7 +259,7 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         err = abs(I0 - I1);
         //std::cout << "Estimate:        " << I1 << " Error estimate at level " << i  << " = " << err << std::endl;
         // Use L1_I1 here to make it work with both complex and real valued integrands:
-        if (!isfinite(L1_I1))
+        if (!(boost::math::isfinite)(L1_I1))
         {
             return static_cast<K>(policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and returned %1%. Please ensure your function evaluates to a finite number over its entire domain.", I1, Policy()));
         }
