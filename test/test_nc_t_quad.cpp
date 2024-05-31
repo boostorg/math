@@ -58,6 +58,13 @@ void expected_results()
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
+      "cpp_bin_float_quad",                         // test type(s)
+      "[^|]*PDF",                  // test data group
+      "[^|]*", static_cast<std::uintmax_t>(1 / boost::math::tools::root_epsilon<boost::multiprecision::cpp_bin_float_quad>()), static_cast<std::uintmax_t>(1 / boost::math::tools::root_epsilon<boost::multiprecision::cpp_bin_float_quad>())); // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
       "cpp_bin_float_quad",             // test type(s)
       "[^|]*",                          // test data group
       "[^|]*", 250, 50);                // test function
