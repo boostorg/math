@@ -354,6 +354,12 @@ T nct_cdf(T df, T nc, T x)
 }
 
 template <class T>
+T nct_pdf(T df, T nc, T x)
+{
+   return pdf(boost::math::non_central_t_distribution<T>(df, nc), x);
+}
+
+template <class T>
 T nct_ccdf(T df, T nc, T x)
 {
    return cdf(complement(boost::math::non_central_t_distribution<T>(df, nc), x));
@@ -397,6 +403,27 @@ void do_test_nc_t(T& data, const char* type_name, const char* test)
 
    std::cout << std::endl;
 #endif
+}
+
+template <typename Real, typename T>
+void do_test_nc_t_pdf(T& data, const char* type_name, const char* test)
+{
+   typedef Real                   value_type;
+
+   std::cout << "Testing: " << test << std::endl;
+
+   value_type(*fp1)(value_type, value_type, value_type) = nct_pdf;
+
+   boost::math::tools::test_result<value_type> result;
+
+   result = boost::math::tools::test_hetero<Real>(
+      data,
+      bind_func<Real>(fp1, 0, 1, 2),
+      extract_result<Real>(3));
+   handle_test_result(result, data[result.worst()], result.worst(),
+      type_name, "non central t PDF", test);
+
+   std::cout << std::endl;
 }
 
 template <typename Real, typename T>
@@ -522,6 +549,9 @@ void test_accuracy(T, const char* type_name)
 #include "nct_asym.ipp"
       do_test_nc_t<T>(nct_asym, type_name, "Non Central T (large parameters)");
       quantile_sanity_check<T>(nct_asym, type_name, "Non Central T (large parameters)");
+
+#include "nc_t_pdf_data.ipp"
+      do_test_nc_t_pdf<T>(nc_t_pdf_data, type_name, "Non Central T PDF");
    }
 }
 

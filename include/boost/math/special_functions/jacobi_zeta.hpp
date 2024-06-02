@@ -43,7 +43,6 @@ T jacobi_zeta_imp(T phi, T k, const Policy& pol, T kp)
     T result;
     T sinp = sin(phi);
     T cosp = cos(phi);
-    T s2 = sinp * sinp;
     T c2 = cosp * cosp;
     T one_minus_ks2 = kp + c2 - kp * c2;
     T k2 = k * k;
