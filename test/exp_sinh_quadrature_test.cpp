@@ -644,7 +644,7 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     test_right_limit_infinite<std::float64_t>();
     test_nr_examples<std::float64_t>();
     test_crc<std::float64_t>();
-    test_non_central_t<float64_t>();
+    test_non_central_t<std::float64_t>();
 #else
     test_left_limit_infinite<double>();
     test_right_limit_infinite<double>();

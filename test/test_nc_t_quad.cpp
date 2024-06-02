@@ -40,6 +40,14 @@ using std::endl;
 #include <limits>
 using std::numeric_limits;
 
+#if defined(__GNUC__) && (__GNUC__ < 13) && (defined(__CYGWIN__) || defined(_WIN32))
+//
+// We either get an internal compiler error, or worse, the compiler prints nothing at all
+// and exits with an error code :(
+//
+# define DISABLE_THIS_TEST
+#endif
+
 
 void expected_results()
 {
@@ -83,10 +91,12 @@ BOOST_AUTO_TEST_CASE( test_main )
   BOOST_MATH_CONTROL_FP;
    // Basic sanity-check spot values.
    expected_results();
+#ifndef DISABLE_THIS_TEST
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1920)
    test_spots(boost::multiprecision::cpp_bin_float_quad(0));
 #endif
    test_accuracy(boost::multiprecision::cpp_bin_float_quad(0), "cpp_bin_float_quad");
+#endif
    // double precision tests only:
    //test_big_df(boost::multiprecision::cpp_bin_float_quad(0));
 } // BOOST_AUTO_TEST_CASE( test_main )
