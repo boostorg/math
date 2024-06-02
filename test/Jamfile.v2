@@ -900,7 +900,7 @@ test-suite new_floats :
 
 test-suite mp :
 
-   [ run test_nc_t_quad.cpp  pch /boost/test//boost_unit_test_framework : : : release <use>float128_type ]
+   [ run test_nc_t_quad.cpp  pch /boost/test//boost_unit_test_framework : : : release <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run test_polynomial.cpp /boost/test//boost_unit_test_framework : : : <define>TEST1 : test_polynomial_1  ]
    [ run test_polynomial.cpp /boost/test//boost_unit_test_framework : : : <define>TEST2 : test_polynomial_2  ]
    [ run test_polynomial.cpp /boost/test//boost_unit_test_framework : : : <define>TEST3 : test_polynomial_3  ]
