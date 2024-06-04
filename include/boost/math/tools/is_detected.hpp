@@ -8,7 +8,9 @@
 #ifndef BOOST_MATH_TOOLS_IS_DETECTED_HPP
 #define BOOST_MATH_TOOLS_IS_DETECTED_HPP
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <type_traits>
+#endif
 
 namespace boost { namespace math { namespace tools {
 

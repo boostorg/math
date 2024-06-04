@@ -12,17 +12,20 @@
 #pragma warning(disable:4702) // Unreachable code (release mode only warning)
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <cmath>
 #include <cstdint>
 #include <limits>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/tools/series.hpp>
-#include <boost/math/tools/rational.hpp>
-#include <boost/math/tools/big_constant.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
-#include <boost/math/tools/assert.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/tools/rational.hpp>
+#endif
+#include <boost/math/tools/promotion.hpp>
+#include <boost/math/tools/series.hpp>
+#include <boost/math/tools/big_constant.hpp>
+#include <boost/math/tools/assert.hpp>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -35,6 +38,11 @@
 #endif
 
 namespace boost{ namespace math{
+
+#ifdef BOOST_MATH_AS_MODULE
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
+typename tools::promote_args<T>::type log1p(T x, const Policy&);
+#endif
 
 namespace detail
 {
@@ -293,7 +301,7 @@ const typename log1p_initializer<T, Policy, tag>::init log1p_initializer<T, Poli
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type log1p(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -327,7 +335,7 @@ inline typename tools::promote_args<T>::type log1p(T x, const Policy&)
 
 #if defined(BOOST_HAS_LOG1P) && !(defined(__osf__) && defined(__DECCXX_VER))
 #  ifdef BOOST_MATH_USE_C99
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 inline float log1p(float x, const Policy& pol)
 {
    if(x < -1)
@@ -352,7 +360,7 @@ inline long double log1p(long double x, const Policy& pol)
 }
 #endif
 #else
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 inline float log1p(float x, const Policy& pol)
 {
    if(x < -1)
@@ -364,7 +372,7 @@ inline float log1p(float x, const Policy& pol)
    return ::log1p(x);
 }
 #endif
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 inline double log1p(double x, const Policy& pol)
 {
    if(x < -1)
@@ -381,7 +389,7 @@ inline double log1p(double x, const Policy& pol)
 // that your compilers optimizer won't mess this code up!!
 // Currently tested with VC8 and Intel 9.1.
 //
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 inline double log1p(double x, const Policy& pol)
 {
    if(x < -1)
@@ -396,7 +404,7 @@ inline double log1p(double x, const Policy& pol)
    else
       return ::log(u)*(x/(u-1.0));
 }
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 inline float log1p(float x, const Policy& pol)
 {
    return static_cast<float>(boost::math::log1p(static_cast<double>(x), pol));
@@ -406,7 +414,7 @@ inline float log1p(float x, const Policy& pol)
 // For some reason this fails to compile under WinCE...
 // Needs more investigation.
 //
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 inline long double log1p(long double x, const Policy& pol)
 {
    if(x < -1)
@@ -424,7 +432,7 @@ inline long double log1p(long double x, const Policy& pol)
 #endif
 #endif
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type log1p(T x)
 {
    return boost::math::log1p(x, policies::policy<>());
@@ -432,8 +440,8 @@ inline typename tools::promote_args<T>::type log1p(T x)
 //
 // Compute log(1+x)-x:
 //
-template <class T, class Policy>
-inline typename tools::promote_args<T>::type
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
+inline typename tools::promote_args<T>::type 
    log1pmx(T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -464,7 +472,7 @@ inline typename tools::promote_args<T>::type
    return result;
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type log1pmx(T x)
 {
    return log1pmx(x, policies::policy<>());

@@ -10,11 +10,13 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/policies/error_handling.hpp>
+#endif
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/big_constant.hpp>
-#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
@@ -1059,7 +1061,7 @@ const typename zeta_initializer<T, Policy, tag>::init zeta_initializer<T, Policy
 
 } // detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type zeta(T s, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -1087,7 +1089,7 @@ inline typename tools::promote_args<T>::type zeta(T s, const Policy&)
       tag_type()), "boost::math::zeta<%1%>(%1%)");
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type zeta(T s)
 {
    return zeta(s, policies::policy<>());

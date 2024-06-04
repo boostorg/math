@@ -12,6 +12,8 @@
 #endif
 
 #include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_AS_MODULE
 #include <type_traits>
 #ifndef BOOST_MATH_STANDALONE
 
@@ -26,6 +28,7 @@
 # pragma pop_macro( "I" )
 #endif
 
+#endif
 #endif
 
 namespace boost{ namespace math{ namespace tools{

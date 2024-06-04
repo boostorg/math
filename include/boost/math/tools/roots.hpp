@@ -11,13 +11,15 @@
 #endif
 #include <boost/math/tools/complex.hpp> // test for multiprecision types in complex Newton
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <utility>
 #include <cmath>
 #include <tuple>
 #include <cstdint>
+#include <boost/math/tools/cxx03_warn.hpp>
+#endif
 
 #include <boost/math/tools/config.hpp>
-#include <boost/math/tools/cxx03_warn.hpp>
 
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/next.hpp>
@@ -127,7 +129,7 @@ void handle_zero_derivative(F f,
 
 } // namespace
 
-template <class F, class T, class Tol, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class F, class T, class Tol, class Policy>
 std::pair<T, T> bisect(F f, T min, T max, Tol tol, std::uintmax_t& max_iter, const Policy& pol) noexcept(policies::is_noexcept_error_policy<Policy>::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    T fmin = f(min);
@@ -199,13 +201,13 @@ std::pair<T, T> bisect(F f, T min, T max, Tol tol, std::uintmax_t& max_iter, con
    return std::make_pair(min, max);
 }
 
-template <class F, class T, class Tol>
+BOOST_MATH_MODULE_EXPORT template <class F, class T, class Tol>
 inline std::pair<T, T> bisect(F f, T min, T max, Tol tol, std::uintmax_t& max_iter)  noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    return bisect(f, min, max, tol, max_iter, policies::policy<>());
 }
 
-template <class F, class T, class Tol>
+BOOST_MATH_MODULE_EXPORT template <class F, class T, class Tol>
 inline std::pair<T, T> bisect(F f, T min, T max, Tol tol) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    std::uintmax_t m = (std::numeric_limits<std::uintmax_t>::max)();
@@ -213,7 +215,7 @@ inline std::pair<T, T> bisect(F f, T min, T max, Tol tol) noexcept(policies::is_
 }
 
 
-template <class F, class T>
+BOOST_MATH_MODULE_EXPORT template <class F, class T>
 T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    BOOST_MATH_STD_USING
@@ -331,7 +333,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t&
    return result;
 }
 
-template <class F, class T>
+BOOST_MATH_MODULE_EXPORT template <class F, class T>
 inline T newton_raphson_iterate(F f, T guess, T min, T max, int digits) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    std::uintmax_t m = (std::numeric_limits<std::uintmax_t>::max)();
@@ -717,13 +719,13 @@ namespace detail {
    }
 } // T second_order_root_finder
 
-template <class F, class T>
+BOOST_MATH_MODULE_EXPORT template <class F, class T>
 T halley_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    return detail::second_order_root_finder<detail::halley_step>(f, guess, min, max, digits, max_iter);
 }
 
-template <class F, class T>
+BOOST_MATH_MODULE_EXPORT template <class F, class T>
 inline T halley_iterate(F f, T guess, T min, T max, int digits) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    std::uintmax_t m = (std::numeric_limits<std::uintmax_t>::max)();
@@ -755,13 +757,13 @@ namespace detail {
 
 }
 
-template <class F, class T>
+BOOST_MATH_MODULE_EXPORT template <class F, class T>
 T schroder_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    return detail::second_order_root_finder<detail::schroder_stepper>(f, guess, min, max, digits, max_iter);
 }
 
-template <class F, class T>
+BOOST_MATH_MODULE_EXPORT template <class F, class T>
 inline T schroder_iterate(F f, T guess, T min, T max, int digits) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    std::uintmax_t m = (std::numeric_limits<std::uintmax_t>::max)();
@@ -770,13 +772,13 @@ inline T schroder_iterate(F f, T guess, T min, T max, int digits) noexcept(polic
 //
 // These two are the old spelling of this function, retained for backwards compatibility just in case:
 //
-template <class F, class T>
+BOOST_MATH_MODULE_EXPORT template <class F, class T>
 T schroeder_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    return detail::second_order_root_finder<detail::schroder_stepper>(f, guess, min, max, digits, max_iter);
 }
 
-template <class F, class T>
+BOOST_MATH_MODULE_EXPORT template <class F, class T>
 inline T schroeder_iterate(F f, T guess, T min, T max, int digits) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    std::uintmax_t m = (std::numeric_limits<std::uintmax_t>::max)();
@@ -790,7 +792,7 @@ inline T schroeder_iterate(F f, T guess, T min, T max, int digits) noexcept(poli
    * so this default should recover full precision even in this somewhat pathological case.
    * For isolated roots, the problem is so rapidly convergent that this doesn't matter at all.
    */
-template<class ComplexType, class F>
+BOOST_MATH_MODULE_EXPORT template<class ComplexType, class F>
 ComplexType complex_newton(F g, ComplexType guess, int max_iterations = std::numeric_limits<typename ComplexType::value_type>::digits)
 {
    typedef typename ComplexType::value_type Real;
@@ -1012,7 +1014,7 @@ std::pair<T, T> quadratic_roots_imp(T const& a, T const& b, T const& c)
 }
 }  // namespace detail
 
-template<class T1, class T2 = T1, class T3 = T1>
+BOOST_MATH_MODULE_EXPORT template<class T1, class T2 = T1, class T3 = T1>
 inline std::pair<typename tools::promote_args<T1, T2, T3>::type, typename tools::promote_args<T1, T2, T3>::type> quadratic_roots(T1 const& a, T2 const& b, T3 const& c)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type value_type;

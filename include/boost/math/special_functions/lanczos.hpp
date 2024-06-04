@@ -12,11 +12,13 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/big_constant.hpp>
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <limits>
 #include <type_traits>
 #include <cstdint>
+#endif
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //

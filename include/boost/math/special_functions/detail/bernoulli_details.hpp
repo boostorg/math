@@ -7,19 +7,26 @@
 #ifndef BOOST_MATH_BERNOULLI_DETAIL_HPP
 #define BOOST_MATH_BERNOULLI_DETAIL_HPP
 
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/throw_exception.hpp>
+#ifndef BOOST_MATH_BERNOULLI_NOTHREADS
 #include <boost/math/tools/atomic.hpp>
+#endif
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
-#include <boost/math/tools/throw_exception.hpp>
-#include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <vector>
 #include <type_traits>
+#include <climits>
+#endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #if defined(BOOST_MATH_HAS_THREADS) && !defined(BOOST_NO_CXX11_HDR_MUTEX) && !defined(BOOST_MATH_NO_ATOMIC_INT)
 #include <mutex>
 #else
 #  define BOOST_MATH_BERNOULLI_NOTHREADS
+#endif
 #endif
 
 namespace boost{ namespace math{ namespace detail{

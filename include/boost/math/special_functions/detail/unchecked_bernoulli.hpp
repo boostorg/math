@@ -11,6 +11,7 @@
 #ifndef BOOST_MATH_UNCHECKED_BERNOULLI_HPP
 #define BOOST_MATH_UNCHECKED_BERNOULLI_HPP
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <limits>
 #include <type_traits>
 #include <array>
@@ -19,6 +20,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#endif
 
 namespace boost { namespace math { 
    
@@ -78,7 +80,7 @@ struct bernoulli_imp_variant
 
 } // namespace detail
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 struct max_bernoulli_b2n : public detail::max_bernoulli_index<detail::bernoulli_imp_variant<T>::value>{};
 
 namespace detail {
@@ -1292,7 +1294,7 @@ inline T unchecked_bernoulli_imp(std::size_t n, const std::integral_constant<int
 
 } // namespace detail
 
-template<class T>
+BOOST_MATH_MODULE_EXPORT template<class T>
 inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_b2n(const std::size_t n)
 {
    typedef std::integral_constant<int, detail::bernoulli_imp_variant<T>::value> tag_type;

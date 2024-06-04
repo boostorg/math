@@ -11,11 +11,13 @@
 #pragma once
 #endif
 
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_AS_MODULE
 #include <type_traits>
 #include <boost/math/special_functions/math_fwd.hpp>
-#include <boost/math/tools/config.hpp>
-#include <boost/math/ccmath/detail/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#endif
+#include <boost/math/ccmath/detail/config.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/is_constant_evaluated.hpp>
 
@@ -26,7 +28,7 @@
 
 namespace boost{ namespace math{ namespace detail{
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline tools::promote_args_t<T> trunc(const T& v, const Policy& pol, const std::false_type&)
 {
    BOOST_MATH_STD_USING
@@ -38,7 +40,7 @@ inline tools::promote_args_t<T> trunc(const T& v, const Policy& pol, const std::
    return (v >= 0) ? static_cast<result_type>(floor(v)) : static_cast<result_type>(ceil(v));
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline tools::promote_args_t<T> trunc(const T& v, const Policy&, const std::true_type&)
 {
    return v;
@@ -46,12 +48,12 @@ inline tools::promote_args_t<T> trunc(const T& v, const Policy&, const std::true
 
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline tools::promote_args_t<T> trunc(const T& v, const Policy& pol)
 {
    return detail::trunc(v, pol, std::integral_constant<bool, detail::is_integer_for_rounding<T>::value>());
 }
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline tools::promote_args_t<T> trunc(const T& v)
 {
    return trunc(v, policies::policy<>());
@@ -69,7 +71,7 @@ inline tools::promote_args_t<T> trunc(const T& v)
 // is to avoid macro substiution from MSVC
 // https://stackoverflow.com/questions/27442885/syntax-error-with-stdnumeric-limitsmax
 //
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline int itrunc(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
@@ -110,13 +112,13 @@ inline int itrunc(const T& v, const Policy& pol)
 
    return static_cast<int>(r);
 }
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline int itrunc(const T& v)
 {
    return itrunc(v, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline long ltrunc(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
@@ -157,13 +159,13 @@ inline long ltrunc(const T& v, const Policy& pol)
 
    return static_cast<long>(r);
 }
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline long ltrunc(const T& v)
 {
    return ltrunc(v, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline long long lltrunc(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
@@ -204,20 +206,20 @@ inline long long lltrunc(const T& v, const Policy& pol)
 
    return static_cast<long long>(r);
 }
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline long long lltrunc(const T& v)
 {
    return lltrunc(v, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename std::enable_if<std::is_constructible<int, T>::value, int>::type
    iconvert(const T& v, const Policy&)
 {
    return static_cast<int>(v);
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename std::enable_if<!std::is_constructible<int, T>::value, int>::type
    iconvert(const T& v, const Policy& pol)
 {
@@ -225,14 +227,14 @@ inline typename std::enable_if<!std::is_constructible<int, T>::value, int>::type
    return itrunc(v, pol);
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename std::enable_if<std::is_constructible<long, T>::value, long>::type
    lconvert(const T& v, const Policy&)
 {
    return static_cast<long>(v);
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename std::enable_if<!std::is_constructible<long, T>::value, long>::type
    lconvert(const T& v, const Policy& pol)
 {
@@ -240,16 +242,16 @@ inline typename std::enable_if<!std::is_constructible<long, T>::value, long>::ty
    return ltrunc(v, pol);
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename std::enable_if<std::is_constructible<long long, T>::value, long long>::type
-   llconvertert(const T& v, const Policy&)
+   llconvert(const T& v, const Policy&) 
 {
    return static_cast<long long>(v);
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename std::enable_if<!std::is_constructible<long long, T>::value, long long>::type
-   llconvertert(const T& v, const Policy& pol)
+   llconvert(const T& v, const Policy& pol) 
 {
    using boost::math::lltrunc;
    return lltrunc(v, pol);

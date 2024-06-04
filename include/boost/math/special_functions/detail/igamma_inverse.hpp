@@ -11,10 +11,12 @@
 #endif
 
 #include <boost/math/tools/tuple.hpp>
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#endif
 
 namespace boost{ namespace math{
 
@@ -517,8 +519,8 @@ T gamma_q_inv_imp(T a, T q, const Policy& pol)
 
 } // namespace detail
 
-template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+BOOST_MATH_MODULE_EXPORT template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type 
    gamma_p_inv(T1 a, T2 p, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -527,8 +529,8 @@ inline typename tools::promote_args<T1, T2>::type
       static_cast<result_type>(p), pol);
 }
 
-template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+BOOST_MATH_MODULE_EXPORT template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type 
    gamma_q_inv(T1 a, T2 p, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -537,15 +539,15 @@ inline typename tools::promote_args<T1, T2>::type
       static_cast<result_type>(p), pol);
 }
 
-template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+BOOST_MATH_MODULE_EXPORT template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
    gamma_p_inv(T1 a, T2 p)
 {
    return gamma_p_inv(a, p, policies::policy<>());
 }
 
-template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+BOOST_MATH_MODULE_EXPORT template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
    gamma_q_inv(T1 a, T2 p)
 {
    return gamma_q_inv(a, p, policies::policy<>());

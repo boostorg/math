@@ -25,7 +25,9 @@ as defined above, and has member functions "scale" and "location".
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <type_traits>
+#endif
 
 namespace boost{ namespace math{ namespace tools{
 

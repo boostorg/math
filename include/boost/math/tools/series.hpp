@@ -10,9 +10,11 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <cmath>
 #include <cstdint>
 #include <limits>
+#endif
 #include <boost/math/tools/config.hpp>
 
 namespace boost{ namespace math{ namespace tools{

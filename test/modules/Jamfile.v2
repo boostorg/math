@@ -1,0 +1,36 @@
+# Copyright Daryle Walker, Hubert Holin, John Maddock 2006 - 2007
+# copyright Paul A. Bristow 2006 - 2010
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt.
+# \math_toolkit\libs\math\test\jamfile.v2
+# Runs all math toolkit tests, functions & distributions,
+# and build math examples.
+
+# bring in the rules for testing
+import testing ;
+import modules ;
+import path ;
+import pch ;
+import ../../config/checks/config : requires ;
+
+
+project
+    : requirements
+      <toolset>msvc:<warnings>all
+      <toolset>msvc:<asynch-exceptions>on
+      <include>../../../..
+      <toolset>msvc:<cxxstd>latest
+      <toolset>gcc:<cxxflags>-fmodules-ts
+      <toolset>gcc:<cxxstd>23
+    ;
+
+obj core : ../../module/core.cxx :  <toolset>msvc:<cxxflags>-interface ;
+obj constants : ../../module/constants.cxx core :  <toolset>msvc:<cxxflags>-interface <dependency>core ;
+obj special_functions : ../../module/sf.cxx constants core :  <toolset>msvc:<cxxflags>-interface <dependency>core <dependency>constants ;
+
+run test_policy.cpp core : : : <dependency>core ;
+run test_core.cpp core : : : <dependency>core ;
+run test_constants.cpp constants core : : : <dependency>constants ;
+run test_sf.cpp special_functions constants core : : : <dependency>special_functions ;
+

@@ -17,8 +17,10 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <cstdint>
 #include <boost/math/tools/toms748_solve.hpp>
+#endif
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -150,8 +152,8 @@ T gamma_inva_imp(const T& z, const T& p, const T& q, const Policy& pol)
 
 } // namespace detail
 
-template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+BOOST_MATH_MODULE_EXPORT template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type 
    gamma_p_inva(T1 x, T2 p, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -180,8 +182,8 @@ inline typename tools::promote_args<T1, T2>::type
          pol), "boost::math::gamma_p_inva<%1%>(%1%, %1%)");
 }
 
-template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+BOOST_MATH_MODULE_EXPORT template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type 
    gamma_q_inva(T1 x, T2 q, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -210,14 +212,14 @@ inline typename tools::promote_args<T1, T2>::type
          pol), "boost::math::gamma_q_inva<%1%>(%1%, %1%)");
 }
 
-template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+BOOST_MATH_MODULE_EXPORT template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
    gamma_p_inva(T1 x, T2 p)
 {
    return boost::math::gamma_p_inva(x, p, policies::policy<>());
 }
 
-template <class T1, class T2>
+BOOST_MATH_MODULE_EXPORT template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type
    gamma_q_inva(T1 x, T2 q)
 {

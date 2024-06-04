@@ -27,4 +27,7 @@ cmake-build-debug/*
 .cmake/*
 build.ninja
 .ninja*
+
+# Modules
+*.gcm
 a.out
