@@ -286,6 +286,7 @@ public:
    polynomial()= default;
 
    template <class U>
+   [[deprecated("Please use the move constructor instead, or pass the order instead of number of terms")]] 
    polynomial(const U* data, unsigned order)
       : m_data(data, data + order + 1)
    {
