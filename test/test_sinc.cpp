@@ -97,7 +97,7 @@ void test_close_to_transition()
          BOOST_CHECK_EQUAL(boost::math::sinhc_pi(-std::numeric_limits<T>::infinity()), std::numeric_limits<T>::infinity());
       }
    }
-   (boost::math::policies::policy<>::overflow_error_type::value == boost::math::policies::throw_on_error)
+   BOOST_IF_CONSTEXPR(boost::math::policies::policy<>::overflow_error_type::value == boost::math::policies::throw_on_error)
    {
       BOOST_CHECK_THROW(boost::math::sinhc_pi(boost::math::tools::max_value<T>()), std::overflow_error);
       BOOST_CHECK_THROW(boost::math::sinhc_pi(-boost::math::tools::max_value<T>()), std::overflow_error);
