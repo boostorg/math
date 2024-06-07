@@ -88,7 +88,8 @@ namespace boost
        template <class T>
        inline typename tools::promote_args<T>::type sinhc_pi(T x)
        {
-          return sinhc_pi(x, policies::policy<>());
+          typedef typename tools::promote_args<T>::type result_type;
+          return sinhc_pi(static_cast<result_type>(x), policies::policy<>());
        }
 
         template<typename T, template<typename> class U>

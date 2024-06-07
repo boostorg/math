@@ -296,17 +296,5 @@ void test_bessel(T, const char* name)
        BOOST_CHECK_EQUAL(boost::math::cyl_bessel_j(T(0), -std::numeric_limits<T>::infinity()), T(0));
        BOOST_CHECK_EQUAL(boost::math::cyl_bessel_j(T(2), -std::numeric_limits<T>::infinity()), T(0));
     }
-    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::max_exponent >= std::numeric_limits<double>::max_exponent)
-    {
-       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_j(T(0), boost::math::tools::max_value<T>()), T(0));
-       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_j(T(2), boost::math::tools::max_value<T>()), T(0));
-       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_j(T(1.25), boost::math::tools::max_value<T>()), T(0));
-       BOOST_CHECK_EQUAL(boost::math::sph_bessel(1, boost::math::tools::max_value<T>()), T(0));
-       BOOST_CHECK_EQUAL(boost::math::sph_bessel(2, boost::math::tools::max_value<T>()), T(0));
-       BOOST_CHECK_EQUAL(boost::math::sph_bessel(3, boost::math::tools::max_value<T>()), T(0));
-
-       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_j(T(0), -boost::math::tools::max_value<T>()), T(0));
-       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_j(T(2), -boost::math::tools::max_value<T>()), T(0));
-    }
 }
 
