@@ -7,6 +7,7 @@
 #include "test_sinc.hpp"
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/special_functions/next.hpp>
+#include <boost/math/special_functions/sinhc.hpp>
 
 //
 // DESCRIPTION:
@@ -80,6 +81,16 @@ void test_close_to_transition()
       BOOST_CHECK_LE(boost::math::epsilon_difference(result, expected), 3);
       val = boost::math::float_next(val);
    }
+
+   BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+   {
+      BOOST_CHECK_EQUAL(boost::math::sinc_pi(std::numeric_limits<T>::infinity()), T(0));
+      BOOST_CHECK_EQUAL(boost::math::sinc_pi(-std::numeric_limits<T>::infinity()), T(0));
+      BOOST_CHECK_THROW(boost::math::sinhc_pi(std::numeric_limits<T>::infinity()), std::overflow_error);
+      BOOST_CHECK_THROW(boost::math::sinhc_pi(-std::numeric_limits<T>::infinity()), std::overflow_error);
+   }
+   BOOST_CHECK_THROW(boost::math::sinhc_pi(boost::math::tools::max_value<T>()), std::overflow_error);
+   BOOST_CHECK_THROW(boost::math::sinhc_pi(-boost::math::tools::max_value<T>()), std::overflow_error);
 }
 
 
