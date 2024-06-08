@@ -35,7 +35,7 @@ namespace boost
         // This is the "Hyperbolic Sinus Cardinal" of index Pi.
 
         template<typename T, typename Policy>
-        inline T    sinhc_pi_imp(const T x)
+        inline T    sinhc_pi_imp(const T x, const Policy&)
         {
             using    ::std::abs;
             using    ::std::sinh;
@@ -75,14 +75,23 @@ namespace boost
                 return(result);
             }
         }
+        //
+        // Temporary fix to keep multiprecision happy.
+        // REMOVE ME!!
+        //
+        template<typename T>
+        inline T    sinhc_pi_imp(const T x)
+        {
+           return sinhc_pi_imp(x, boost::math::policies::policy<>());
+        }
 
        } // namespace detail
 
        template <class T, class Policy>
-       inline typename tools::promote_args<T>::type sinhc_pi(T x, const Policy&)
+       inline typename tools::promote_args<T>::type sinhc_pi(T x, const Policy& pol)
        {
           typedef typename tools::promote_args<T>::type result_type;
-          return policies::checked_narrowing_cast<T, Policy>(detail::sinhc_pi_imp<result_type, Policy>(static_cast<result_type>(x)), "sinhc(%1%)");
+          return policies::checked_narrowing_cast<T, Policy>(detail::sinhc_pi_imp(static_cast<result_type>(x), pol), "sinhc(%1%)");
        }
 
        template <class T>
