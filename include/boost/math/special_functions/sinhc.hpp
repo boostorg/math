@@ -75,15 +75,6 @@ namespace boost
                 return(result);
             }
         }
-        //
-        // Temporary fix to keep multiprecision happy.
-        // REMOVE ME!!
-        //
-        template<typename T>
-        inline T    sinhc_pi_imp(const T x)
-        {
-           return sinhc_pi_imp(x, boost::math::policies::policy<>());
-        }
 
        } // namespace detail
 
