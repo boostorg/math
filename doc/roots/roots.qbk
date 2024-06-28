@@ -29,8 +29,8 @@
    template <class F, class T>
    T schroder_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter);
 
-   template <class F, class Complex>
-   Complex complex_newton(F f, Complex guess, int max_iterations = std::numeric_limits<typename Complex::value_type>::digits);
+   template <class F, class ComplexType>
+   Complex complex_newton(F f, Complex guess, int max_iterations = std::numeric_limits<typename ComplexType::value_type>::digits);
 
    template<class T>
    auto quadratic_roots(T const & a, T const & b, T const & c);

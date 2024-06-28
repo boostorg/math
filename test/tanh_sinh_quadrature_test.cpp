@@ -883,6 +883,41 @@ void test_complex()
    }
 }
 
+template <class T>
+void test_non_central_t()
+{
+   //
+   // Bug case from the non-central t distribution:
+   //
+   using std::pow;
+   using std::exp;
+   using std::sqrt;
+
+   std::cout << "Testing non-central T PDF integral" << std::endl;
+
+   T x = -1.882352352142334;
+   T v = 77.384613037109375;
+   T mu = 8.1538467407226562;
+   T expected = static_cast<T>(4.5098555913703146875364186893655197e+49L);
+
+   T left = 0;
+   T right = std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+
+   boost::math::quadrature::tanh_sinh<T> integrator;
+   T err;
+   T L1;
+   std::size_t levels;
+   T integral = integrator.integrate([&x, v, mu](T y)
+      {
+         return pow(y, v) * exp(boost::math::pow<2>((y - mu * x / sqrt(x * x + v))) / -2);
+      },
+      left, right,
+      boost::math::tools::root_epsilon<T>(), &err, &L1, &levels);
+
+   T tol = 100 * boost::math::tools::epsilon<T>();
+   BOOST_CHECK_CLOSE_FRACTION(integral, expected, tol);
+}
+
 
 BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 {
@@ -944,6 +979,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_early_termination<double>();
     test_sf<double>();
     test_2_arg<double>();
+    test_non_central_t<double>();
 #endif
 #ifdef TEST2A
    #ifndef BOOST_MATH_STANDALONE
@@ -967,6 +1003,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_early_termination<long double>();
     test_sf<long double>();
     test_2_arg<long double>();
+    test_non_central_t<long double>();
 #endif
 #ifdef TEST3A
    #ifndef BOOST_MATH_STANDALONE
@@ -991,7 +1028,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_crc<cpp_bin_float_quad>();
     test_sf<cpp_bin_float_quad>();
     test_2_arg<cpp_bin_float_quad>();
-   #endif
+#endif
 #endif
 #ifdef TEST5
    #ifdef BOOST_MATH_RUN_MP_TESTS
@@ -1017,6 +1054,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_early_termination<boost::math::concepts::real_concept>();
     test_sf<boost::math::concepts::real_concept>();
     test_2_arg<boost::math::concepts::real_concept>();
+    test_non_central_t<boost::math::concepts::real_concept>();
 #endif
 #ifdef TEST6A
     test_crc<boost::math::concepts::real_concept>();
