@@ -326,6 +326,9 @@ int bessel_ik(T v, T x, T* result_I, T* result_K, int kind, const Policy& pol)
     T scale = 1;
     T scale_sign = 1;
 
+    n = iround(v, pol);
+    u = v - n;                              // -1/2 <= u < 1/2
+
     if (((kind & need_i) == 0) && (fabs(4 * v * v - 25) / (8 * x) < tools::forth_root_epsilon<T>()))
     {
        // A&S 9.7.2
@@ -337,8 +340,6 @@ int bessel_ik(T v, T x, T* result_I, T* result_K, int kind, const Policy& pol)
     }
     else
     {
-       n = iround(v, pol);
-       u = v - n;                              // -1/2 <= u < 1/2
        BOOST_MATH_INSTRUMENT_VARIABLE(n);
        BOOST_MATH_INSTRUMENT_VARIABLE(u);
 
@@ -412,7 +413,7 @@ int bessel_ik(T v, T x, T* result_I, T* result_K, int kind, const Policy& pol)
        else
           Iv = std::numeric_limits<T>::quiet_NaN(); // any value will do
     }
-    if (reflect)
+    if (reflect && (kind & need_i))
     {
         T z = (u + n % 2);
         T fact = (2 / pi<T>()) * (boost::math::sin_pi(z, pol) * Kv);

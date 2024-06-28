@@ -394,35 +394,6 @@ T trigamma_imp(T x, const std::integral_constant<int, 0>*, const Policy& pol)
 {
    return polygamma_imp(1, x, pol);
 }
-//
-// Initializer: ensure all our constants are initialized prior to the first call of main:
-//
-template <class T, class Policy>
-struct trigamma_initializer
-{
-   struct init
-   {
-      init()
-      {
-         typedef typename policies::precision<T, Policy>::type precision_type;
-         do_init(std::integral_constant<bool, precision_type::value && (precision_type::value <= 113)>());
-      }
-      void do_init(const std::true_type&)
-      {
-         boost::math::trigamma(T(2.5), Policy());
-      }
-      void do_init(const std::false_type&){}
-      void force_instantiate()const{}
-   };
-   static const init initializer;
-   static void force_instantiate()
-   {
-      initializer.force_instantiate();
-   }
-};
-
-template <class T, class Policy>
-const typename trigamma_initializer<T, Policy>::init trigamma_initializer<T, Policy>::initializer;
 
 } // namespace detail
 
@@ -445,9 +416,6 @@ inline typename tools::promote_args<T>::type
       policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-
-   // Force initialization of constants:
-   detail::trigamma_initializer<value_type, forwarding_policy>::force_instantiate();
 
    return policies::checked_narrowing_cast<result_type, Policy>(detail::trigamma_imp(
       static_cast<value_type>(x),
