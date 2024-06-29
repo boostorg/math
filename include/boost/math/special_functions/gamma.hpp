@@ -529,16 +529,16 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    if (!n_recur)
    {
       if (zz > tools::log_max_value<T>())
-         return b_neg ? policies::raise_underflow_error<T>(function, nullptr, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
+         return b_neg ? policies::raise_underflow_error<T>(function, nullptr, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE  MP only
       if (log(zz) * zz / 2 > tools::log_max_value<T>())
-         return b_neg ? policies::raise_underflow_error<T>(function, nullptr, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
+         return b_neg ? policies::raise_underflow_error<T>(function, nullptr, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE  MP only
    }
    T gamma_value = scaled_tgamma_no_lanczos(zz, pol);
    T power_term = pow(zz, zz / 2);
    T exp_term = exp(-zz);
    gamma_value *= (power_term * exp_term);
    if (!n_recur && (tools::max_value<T>() / power_term < gamma_value))
-      return b_neg ? policies::raise_underflow_error<T>(function, nullptr, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
+      return b_neg ? policies::raise_underflow_error<T>(function, nullptr, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE  MP only
    gamma_value *= power_term;
 
    // Rescale the result using downward recursion if necessary.
@@ -571,21 +571,21 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
 
       T s = sinpx(z);
       if ((gamma_value > 1) && (tools::max_value<T>() / gamma_value < fabs(s)))
-         return policies::raise_underflow_error<T>(function, nullptr, pol);
-      gamma_value *= s;
+         return policies::raise_underflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE  MP only
+      gamma_value *= s;  // LCOV_EXCL_LINE  MP only
 
       BOOST_MATH_INSTRUMENT_VARIABLE(gamma_value);
       //
       // Result can never overflow, since sinpx(z) can never be smaller than machine epsilon and gamma_value > 1.
       //
-      BOOST_MATH_ASSERT(   (abs(gamma_value) > 1) || ((tools::max_value<T>() * abs(gamma_value)) > boost::math::constants::pi<T>()));
+      BOOST_MATH_ASSERT(   (abs(gamma_value) > 1) || ((tools::max_value<T>() * abs(gamma_value)) > boost::math::constants::pi<T>()));  // LCOV_EXCL_LINE  MP only
 
       gamma_value = -boost::math::constants::pi<T>() / gamma_value;
-      BOOST_MATH_INSTRUMENT_VARIABLE(gamma_value);
+      BOOST_MATH_INSTRUMENT_VARIABLE(gamma_value);  // LCOV_EXCL_LINE  MP only
       //
       // We can never underflow since the numerator > 1 above:
       //
-      BOOST_MATH_ASSERT(gamma_value != 0);
+      BOOST_MATH_ASSERT(gamma_value != 0);  // LCOV_EXCL_LINE  MP only
    }
 
    return gamma_value;
@@ -648,7 +648,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
    if((!b_neg) && floor_of_z_is_equal_to_z && (z < boost::math::max_factorial<T>::value))
    {
       if (sign)
-         *sign = 1;
+         *sign = 1;  // LCOV_EXCL_LINE
       return log(boost::math::unchecked_factorial<T>(itrunc(z) - 1));
    }
 
@@ -665,7 +665,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
       // inefficient, but simple. The rationale is that the argument here
       // is relatively small and overflow is not expected to be likely.
       if (sign)
-         * sign = 1;
+         * sign = 1;  // // LCOV_EXCL_LINE
       if(fabs(z - 1) < 0.25)
       {
          log_gamma_value = log_gamma_near_1(T(zz - 1), pol);
@@ -679,7 +679,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
          // Reflection formula may fail if z is very close to zero, let the series
          // expansion for tgamma close to zero do the work:
          if (sign)
-            *sign = z < 0 ? -1 : 1;
+            *sign = z < 0 ? -1 : 1;  // LCOV_EXCL_LINE
          return log(abs(gamma_imp(z, pol, lanczos::undefined_lanczos())));
       }
       else
@@ -710,7 +710,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
 
       // Check if the argument of lgamma is exactly equal to a negative integer.
       if(floor_of_z_is_equal_to_z)
-         return policies::raise_pole_error<T>(function, "Evaluation of lgamma at a negative integer %1%.", z, pol);
+         return policies::raise_pole_error<T>(function, "Evaluation of lgamma at a negative integer %1%.", z, pol);  // LCOV_EXCL_LINE  MP only
 
       T t = sinpx(z);
 
@@ -720,12 +720,10 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
       }
       else
       {
-         sign_of_result = -sign_of_result;
+         sign_of_result = -sign_of_result;  // LCOV_EXCL_LINE  MP only
       }
 
-      log_gamma_value = - log_gamma_value
-                        + log(boost::math::constants::pi<T>())
-                        - log(t);
+      log_gamma_value = - log_gamma_value + log(boost::math::constants::pi<T>()) - log(t);
    }
 
    if(sign != static_cast<int*>(nullptr)) { *sign = sign_of_result; }

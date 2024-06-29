@@ -370,5 +370,10 @@ void test_spots(T, const char* name)
       //
       BOOST_CHECK_EQUAL(boost::math::tgamma(T(-178.5)), T(0));
    }
+   //
+   // Extra coverage for tgamma1pm1:
+   //
+   BOOST_CHECK_CLOSE(::boost::math::tgamma1pm1(T(-2.5)), boost::math::tgamma(T(-1.5)) - 1, tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma1pm1(T(2.5)), boost::math::tgamma(T(3.5)) - 1, tolerance);
 }
 
