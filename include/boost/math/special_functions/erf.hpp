@@ -716,7 +716,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
       //
       if(z == 0)
       {
-         result = 0;
+         result = 0; // LCOV_EXCL_LINE confirmed as covered, not sure why lcov doesn't see this.
       }
       else if(z < 1e-20)
       {
