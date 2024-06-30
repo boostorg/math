@@ -263,34 +263,6 @@ T log1p_imp(T const& x, const Policy& pol, const std::integral_constant<int, 24>
    return result;
 }
 
-template <class T, class Policy, class tag>
-struct log1p_initializer
-{
-   struct init
-   {
-      init()
-      {
-         do_init(tag());
-      }
-      template <int N>
-      static void do_init(const std::integral_constant<int, N>&){}
-      static void do_init(const std::integral_constant<int, 64>&)
-      {
-         boost::math::log1p(static_cast<T>(0.25), Policy());
-      }
-      void force_instantiate()const{}
-   };
-   static const init initializer;
-   static void force_instantiate()
-   {
-      initializer.force_instantiate();
-   }
-};
-
-template <class T, class Policy, class tag>
-const typename log1p_initializer<T, Policy, tag>::init log1p_initializer<T, Policy, tag>::initializer;
-
-
 } // namespace detail
 
 template <class T, class Policy>
@@ -311,8 +283,6 @@ inline typename tools::promote_args<T>::type log1p(T x, const Policy&)
       precision_type::value <= 53 ? 53 :
       precision_type::value <= 64 ? 64 : 0
    > tag_type;
-
-   detail::log1p_initializer<value_type, forwarding_policy, tag_type>::force_instantiate();
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(
       detail::log1p_imp(static_cast<value_type>(x), forwarding_policy(), tag_type()), "boost::math::log1p<%1%>(%1%)");

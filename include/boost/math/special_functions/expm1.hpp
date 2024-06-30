@@ -20,6 +20,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/assert.hpp>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
@@ -69,37 +70,6 @@ namespace detail
      expm1_series& operator=(const expm1_series&) = delete;
   };
 
-template <class T, class Policy, class tag>
-struct expm1_initializer
-{
-   struct init
-   {
-      init()
-      {
-         do_init(tag());
-      }
-      template <int N>
-      static void do_init(const std::integral_constant<int, N>&){}
-      static void do_init(const std::integral_constant<int, 64>&)
-      {
-         expm1(T(0.5));
-      }
-      static void do_init(const std::integral_constant<int, 113>&)
-      {
-         expm1(T(0.5));
-      }
-      void force_instantiate()const{}
-   };
-   static const init initializer;
-   static void force_instantiate()
-   {
-      initializer.force_instantiate();
-   }
-};
-
-template <class T, class Policy, class tag>
-const typename expm1_initializer<T, Policy, tag>::init expm1_initializer<T, Policy, tag>::initializer;
-
 //
 // Algorithm expm1 is part of C99, but is not yet provided by many compilers.
 //
@@ -142,6 +112,10 @@ T expm1_imp(T x, const std::integral_constant<int, 53>&, const P& pol)
    BOOST_MATH_STD_USING
 
    T a = fabs(x);
+   if ((boost::math::isnan)(a))
+   {
+      return policies::raise_domain_error<T>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", a, pol);
+   }
    if(a > T(0.5L))
    {
       if(a >= tools::log_max_value<T>())
@@ -169,6 +143,10 @@ T expm1_imp(T x, const std::integral_constant<int, 64>&, const P& pol)
    BOOST_MATH_STD_USING
 
    T a = fabs(x);
+   if ((boost::math::isnan)(a))
+   {
+      return policies::raise_domain_error<T>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", a, pol);
+   }
    if(a > T(0.5L))
    {
       if(a >= tools::log_max_value<T>())
@@ -182,6 +160,7 @@ T expm1_imp(T x, const std::integral_constant<int, 64>&, const P& pol)
    if(a < tools::epsilon<T>())
       return x;
 
+   // LCOV_EXCL_START
    static const float Y = 0.10281276702880859375e1f;
    static const T n[] = {
       BOOST_MATH_BIG_CONSTANT(T, 64, -0.281276702880859375e-1),
@@ -201,6 +180,7 @@ T expm1_imp(T x, const std::integral_constant<int, 64>&, const P& pol)
       BOOST_MATH_BIG_CONSTANT(T, 64, -0.387922804997682392562e-4),
       BOOST_MATH_BIG_CONSTANT(T, 64, 0.807473180049193557294e-6)
    };
+   // LCOV_EXCL_STOP
 
    T result = x * Y + x * tools::evaluate_polynomial(n, x) / tools::evaluate_polynomial(d, x);
    return result;
@@ -212,6 +192,10 @@ T expm1_imp(T x, const std::integral_constant<int, 113>&, const P& pol)
    BOOST_MATH_STD_USING
 
    T a = fabs(x);
+   if ((boost::math::isnan)(a))
+   {
+      return policies::raise_domain_error<T>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", a, pol);
+   }
    if(a > T(0.5L))
    {
       if(a >= tools::log_max_value<T>())
@@ -225,6 +209,7 @@ T expm1_imp(T x, const std::integral_constant<int, 113>&, const P& pol)
    if(a < tools::epsilon<T>())
       return x;
 
+   // LCOV_EXCL_START
    static const float Y = 0.10281276702880859375e1f;
    static const T n[] = {
       BOOST_MATH_BIG_CONSTANT(T, 113, -0.28127670288085937499999999999999999854e-1),
@@ -251,6 +236,7 @@ T expm1_imp(T x, const std::integral_constant<int, 113>&, const P& pol)
       BOOST_MATH_BIG_CONSTANT(T, 113, -0.29477341859111589208776402638429026517e-10),
       BOOST_MATH_BIG_CONSTANT(T, 113, 0.13222065991022301420255904060628100924e-12)
    };
+   // LCOV_EXCL_STOP
 
    T result = x * Y + x * tools::evaluate_polynomial(n, x) / tools::evaluate_polynomial(d, x);
    return result;
@@ -278,8 +264,6 @@ inline typename tools::promote_args<T>::type expm1(T x, const Policy& /* pol */)
       precision_type::value <= 113 ? 113 : 0
    > tag_type;
 
-   detail::expm1_initializer<value_type, forwarding_policy, tag_type>::force_instantiate();
-
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::expm1_imp(
       static_cast<value_type>(x),
       tag_type(), forwarding_policy()), "boost::math::expm1<%1%>(%1%)");
@@ -294,14 +278,85 @@ inline typename tools::promote_args<T>::type expm1(T x, const Policy& /* pol */)
 
 #if defined(BOOST_HAS_EXPM1) && !(defined(__osf__) && defined(__DECCXX_VER))
 #  ifdef BOOST_MATH_USE_C99
-inline float expm1(float x, const policies::policy<>&){ return ::expm1f(x); }
+template <class Policy>
+inline float expm1(float x, const Policy&)
+{ 
+   BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != boost::math::policies::ignore_error && Policy::domain_error_type::value != boost::math::policies::errno_on_error)
+   {
+      if((boost::math::isnan)(x))
+         return policies::raise_domain_error<float>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", x, Policy());
+   }
+   BOOST_MATH_IF_CONSTEXPR(Policy::overflow_error_type::value != boost::math::policies::ignore_error && Policy::overflow_error_type::value != boost::math::policies::errno_on_error)
+   {
+      if (x >= tools::log_max_value<float>())
+         return policies::raise_overflow_error<float>("boost::math::expm1<%1%>(%1%)", nullptr, Policy());
+   }
+   return ::expm1f(x); 
+}
 #     ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-inline long double expm1(long double x, const policies::policy<>&){ return ::expm1l(x); }
+template <class Policy>
+inline long double expm1(long double x, const Policy&)
+{ 
+   BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != boost::math::policies::ignore_error && Policy::domain_error_type::value != boost::math::policies::errno_on_error)
+   {
+      if ((boost::math::isnan)(x))
+         return policies::raise_domain_error<long double>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", x, Policy());
+   }
+   BOOST_MATH_IF_CONSTEXPR(Policy::overflow_error_type::value != boost::math::policies::ignore_error && Policy::overflow_error_type::value != boost::math::policies::errno_on_error)
+   {
+      if (x >= tools::log_max_value<long double>())
+         return policies::raise_overflow_error<long double>("boost::math::expm1<%1%>(%1%)", nullptr, Policy());
+   }
+   return ::expm1l(x);
+}
 #     endif
 #  else
-inline float expm1(float x, const policies::policy<>&){ return static_cast<float>(::expm1(x)); }
+template <class Policy>
+inline float expm1(float x, const Policy&)
+{ 
+   BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != boost::math::policies::ignore_error && Policy::domain_error_type::value != boost::math::policies::errno_on_error)
+   {
+      if ((boost::math::isnan)(x))
+         return policies::raise_domain_error<float>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", x, Policy());
+   }
+   BOOST_MATH_IF_CONSTEXPR(Policy::overflow_error_type::value != boost::math::policies::ignore_error && Policy::overflow_error_type::value != boost::math::policies::errno_on_error)
+   {
+      if (x >= tools::log_max_value<float>())
+         return policies::raise_overflow_error<float>("boost::math::expm1<%1%>(%1%)", nullptr, Policy());
+   }
+   return static_cast<float>(::expm1(x));
+}
+template <class Policy>
+inline typename std::enable_if<sizeof(double) == sizeof(long double), long double>::type expm1(long double x, const Policy&)
+{ 
+   BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != boost::math::policies::ignore_error && Policy::domain_error_type::value != boost::math::policies::errno_on_error)
+   {
+      if ((boost::math::isnan)(x))
+         return policies::raise_domain_error<long double>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", x, Policy());
+   }
+   BOOST_MATH_IF_CONSTEXPR(Policy::overflow_error_type::value != boost::math::policies::ignore_error && Policy::overflow_error_type::value != boost::math::policies::errno_on_error)
+   {
+      if (x >= tools::log_max_value<float>())
+         return policies::raise_overflow_error<long double>("boost::math::expm1<%1%>(%1%)", nullptr, Policy());
+   }
+   return ::expm1(x);
+}
 #  endif
-inline double expm1(double x, const policies::policy<>&){ return ::expm1(x); }
+template <class Policy>
+inline double expm1(double x, const Policy&)
+{ 
+   BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != boost::math::policies::ignore_error && Policy::domain_error_type::value != boost::math::policies::errno_on_error)
+   {
+      if ((boost::math::isnan)(x))
+         return policies::raise_domain_error<double>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", x, Policy());
+   }
+   BOOST_MATH_IF_CONSTEXPR(Policy::overflow_error_type::value != boost::math::policies::ignore_error && Policy::overflow_error_type::value != boost::math::policies::errno_on_error)
+   {
+      if (x >= tools::log_max_value<double>())
+         return policies::raise_overflow_error<double>("boost::math::expm1<%1%>(%1%)", nullptr, Policy());
+   }
+   return ::expm1(x);
+}
 #endif
 
 template <class T>
