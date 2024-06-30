@@ -12,5 +12,6 @@
 int main()
 {
    CHECK_EQUAL(boost::math::tgamma(-200.5), 0.0); // triggers internal exception handling
+   CHECK_EQUAL(boost::math::gamma_p(500.125, 1e-50), 0.0); // triggers internal exception handling
    return boost::math::test::report_errors();
 }

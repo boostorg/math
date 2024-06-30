@@ -567,7 +567,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
 
       // Check if the argument of tgamma is exactly equal to a negative integer.
       if(floor_of_z_is_equal_to_z)
-         return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
+         return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol); // LCOV_EXCL_LINE  MP only
 
       T s = sinpx(z);
       if ((gamma_value > 1) && (tools::max_value<T>() / gamma_value < fabs(s)))
@@ -689,7 +689,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
          T g = gamma_imp(zz, pol, lanczos::undefined_lanczos());
          if (sign)
          {
-            *sign = g < 0 ? -1 : 1;
+            *sign = g < 0 ? -1 : 1;  // LCOV_EXCL_LINE  MP only
          }
          log_gamma_value = log(abs(g));
       }
@@ -748,7 +748,7 @@ T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& l)
       precision_type::value <= 113 ? 113 : 0
    > tag_type;
 
-   T result;
+   T result{};
    if(dz < 0)
    {
       if(dz < T(-0.5))
@@ -848,7 +848,7 @@ T full_igamma_prefix(T a, T z, const Policy& pol)
       }
       else
       {
-         prefix = exp(alz - z);
+         prefix = exp(alz - z);  // LCOV_EXCL_LINE defensive programming, can probably never get here?
       }
    }
    else
@@ -857,6 +857,8 @@ T full_igamma_prefix(T a, T z, const Policy& pol)
       {
          prefix = pow(z, a) * exp(-z);
       }
+      // LCOV_EXCL_START
+      // Defensive programming, can probably never get here, very hard to prove though!
       else if(z/a < tools::log_max_value<T>())
       {
          prefix = pow(T(z / exp(z/a)), a);
@@ -865,13 +867,15 @@ T full_igamma_prefix(T a, T z, const Policy& pol)
       {
          prefix = exp(alz - z);
       }
+      // LCOV_EXCL_STOP
    }
    //
    // This error handling isn't very good: it happens after the fact
    // rather than before it...
+   // Typically though this method is used when the result is small, we should probably not overflow here...
    //
    if((boost::math::fpclassify)(prefix) == (int)FP_INFINITE)
-      return policies::raise_overflow_error<T>("boost::math::detail::full_igamma_prefix<%1%>(%1%, %1%)", "Result of incomplete gamma function is too large to represent.", pol);
+      return policies::raise_overflow_error<T>("boost::math::detail::full_igamma_prefix<%1%>(%1%, %1%)", "Result of incomplete gamma function is too large to represent.", pol);  // LCOV_EXCL_LINE
 
    return prefix;
 }
@@ -886,7 +890,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const Lanczos& l)
    if (z >= tools::max_value<T>())
       return 0;
    T agh = a + static_cast<T>(Lanczos::g()) - T(0.5);
-   T prefix;
+   T prefix{};
    T d = ((z - a) - static_cast<T>(Lanczos::g()) + T(0.5)) / agh;
 
    if(a < 1)
@@ -1102,7 +1106,7 @@ T finite_half_gamma_q(T a, T x, T* p_derivative, const Policy& pol)
    {
       T term = exp(-x) / sqrt(constants::pi<T>() * x);
       term *= x;
-      static const T half = T(1) / 2;
+      static const T half = T(1) / 2; // LCOV_EXCL_LINE
       term /= half;
       T sum = term;
       for(unsigned n = 2; n < a; ++n)
@@ -1190,16 +1194,24 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       {
          // This is method 4 below, done in logs:
          result = a * log(x) - x;
+         /*
+         * We do not compute derivatives in the non-regularized case.
          if(p_derivative)
             *p_derivative = exp(result);
+         */ 
+         BOOST_MATH_ASSERT(nullptr == p_derivative);
          result += log(upper_gamma_fraction(a, x, policies::get_epsilon<T, Policy>()));
       }
       else if(!invert && (a > 4 * x))
       {
          // This is method 2 below, done in logs:
          result = a * log(x) - x;
+         /*
+         * We do not compute derivatives in the non-regularized case.
          if(p_derivative)
             *p_derivative = exp(result);
+         */
+         BOOST_MATH_ASSERT(nullptr == p_derivative);
          T init_value = 0;
          result += log(detail::lower_gamma_series(a, x, pol, init_value) / a);
       }
@@ -1213,8 +1225,12 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
                // Try http://functions.wolfram.com/06.06.06.0039.01
                result = 1 + 1 / (12 * a) + 1 / (288 * a * a);
                result = log(result) - a + (a - 0.5f) * log(a) + log(boost::math::constants::root_two_pi<T>());
+               /*
+               * We do not compute derivatives in the non-regularized case.
                if(p_derivative)
                   *p_derivative = exp(a * log(x) - x);
+               */
+                  BOOST_MATH_ASSERT(nullptr == p_derivative);
             }
             else
             {
@@ -1222,8 +1238,12 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
                // range of this method, but since the result is almost certainly
                // infinite, we should probably be OK:
                result = a * log(x) - x;
+               /*
+               * We do not compute derivatives in the non-regularized case.
                if(p_derivative)
                   *p_derivative = exp(result);
+               */
+               BOOST_MATH_ASSERT(nullptr == p_derivative);
                T init_value = 0;
                result += log(detail::lower_gamma_series(a, x, pol, init_value) / a);
             }
@@ -1434,7 +1454,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       {
          // Compute Q:
          invert = !invert;
-         T g;
+         T g{};
          result = tgamma_small_upper_part(a, x, pol, &g, invert, p_derivative);
          invert = false;
          if(normalised)
@@ -1572,21 +1592,19 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos&
       }
    }
    T zgh = static_cast<T>(z + T(Lanczos::g()) - constants::half<T>());
-   T result;
+   T result{};
    if(z + delta == z)
    {
-      if (fabs(delta / zgh) < boost::math::tools::epsilon<T>())
-      {
-         // We have:
-         // result = exp((constants::half<T>() - z) * boost::math::log1p(delta / zgh, pol));
-         // 0.5 - z == -z
-         // log1p(delta / zgh) = delta / zgh = delta / z
-         // multiplying we get -delta.
-         result = exp(-delta);
-      }
-      else
-         // from the pow formula below... but this may actually be wrong, we just can't really calculate it :(
-         result = 1;
+      // Given delta < z * eps
+      // and zgh > z
+      // Then this must follow:
+      BOOST_MATH_ASSERT(fabs(delta / zgh) < boost::math::tools::epsilon<T>());
+      // We have:
+      // result = exp((constants::half<T>() - z) * boost::math::log1p(delta / zgh, pol));
+      // 0.5 - z == -z
+      // log1p(delta / zgh) = delta / zgh = delta / z
+      // multiplying we get -delta.
+      result = exp(-delta);
    }
    else
    {

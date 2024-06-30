@@ -180,4 +180,10 @@ void test_spots(T, const char*)
          BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_delta_ratio(T(200), T(ldexp(T(1), -1074))), T(1), tol);
       }
    }
+   //
+   // Coverage:
+   //
+   BOOST_CHECK_EQUAL(boost::math::tgamma_delta_ratio(T(2), T(0)), T(1))
+   BOOST_CHECK_EQUAL(boost::math::tgamma_delta_ratio(T(200), T(0)), T(1))
+   BOOST_CHECK_EQUAL(boost::math::tgamma_delta_ratio(T(2000), T(0)), T(1))
 }
