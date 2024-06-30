@@ -183,7 +183,7 @@ void test_spots(T, const char*)
    //
    // Coverage:
    //
-   BOOST_CHECK_EQUAL(boost::math::tgamma_delta_ratio(T(2), T(0)), T(1))
-   BOOST_CHECK_EQUAL(boost::math::tgamma_delta_ratio(T(200), T(0)), T(1))
-   BOOST_CHECK_EQUAL(boost::math::tgamma_delta_ratio(T(2000), T(0)), T(1))
+   BOOST_CHECK_EQUAL(boost::math::tgamma_delta_ratio(T(2), T(0)), T(1));
+   BOOST_CHECK_EQUAL(boost::math::tgamma_delta_ratio(T(200), T(0)), T(1));
+   BOOST_CHECK_EQUAL(boost::math::tgamma_delta_ratio(T(2000), T(0)), T(1));
 }
