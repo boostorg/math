@@ -63,8 +63,8 @@ T heuman_lambda_imp(T phi, T k, const Policy& pol)
           return policies::raise_domain_error<T>(function, "When 1-k^2 == 1 then phi must be < Pi/2, but got phi = %1%", phi, pol);
        }
        else
-          ratio = ellint_f_imp(phi, rkp, pol) / ellint_k_imp(rkp, pol, precision_tag_type());
-       result = ratio + ellint_k_imp(k, pol, precision_tag_type()) * jacobi_zeta_imp(phi, rkp, pol) / constants::half_pi<T>();
+          ratio = ellint_f_imp(phi, rkp, pol, k2) / ellint_k_imp(rkp, pol, k2);
+       result = ratio + ellint_k_imp(k, pol, precision_tag_type()) * jacobi_zeta_imp(phi, rkp, pol, k2) / constants::half_pi<T>();
     }
     return result;
 }

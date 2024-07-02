@@ -184,6 +184,11 @@ void test_bessel(T, const char* name)
        {
           BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(16, ldexp(T(1), -1021)), std::numeric_limits<T>::infinity());
        }
+
+       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(T(0), std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(T(1), std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(T(2), std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(T(2.25), std::numeric_limits<T>::infinity()), T(0));
     }
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(1.25), T(0)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(-1.25), T(0)), std::domain_error);

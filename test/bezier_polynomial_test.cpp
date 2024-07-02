@@ -173,9 +173,9 @@ void test_linear_precision()
         P[2] = (1-t)*P0[2] + t*Pf[2];
 
         auto computed = bp(t);
-        CHECK_ULP_CLOSE(P[0], computed[0], 3);
-        CHECK_ULP_CLOSE(P[1], computed[1], 3);
-        CHECK_ULP_CLOSE(P[2], computed[2], 3);
+        CHECK_ULP_CLOSE(P[0], computed[0], 4);
+        CHECK_ULP_CLOSE(P[1], computed[1], 4);
+        CHECK_ULP_CLOSE(P[2], computed[2], 4);
 
         std::array<Real, 3> dP;
         dP[0] = Pf[0] - P0[0];

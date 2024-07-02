@@ -299,6 +299,22 @@ void test_spots(RealType)
    BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(126, 2), 4), static_cast<RealType>(5.797932289365814702402873546466798025787e-2L), tolerance);
    BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(126, 2), 0), static_cast<RealType>(5.388394890639957139696546086044839573749e-2L), tolerance);
 
+   // Tests ultimately derived from https://github.com/scipy/scipy/issues/20693
+   BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(8, 16), 0), static_cast<RealType>(9.9467084610854116569233495190046171e-57L), tolerance);
+   BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(8, 16), boost::math::tools::min_value<RealType>()), static_cast<RealType>(9.9467084610854116569233495190046171e-57L), tolerance);
+   BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(8, 16), -boost::math::tools::min_value<RealType>()), static_cast<RealType>(9.9467084610854116569233495190046171e-57L), tolerance);
+   BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(8, 16), -0.125), static_cast<RealType>(1.4095889399390926611629593059778035e-57L), tolerance);
+   BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(8, 16), -1e-16), static_cast<RealType>(9.9467084610853952383141848485633491e-57L), tolerance);
+   BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(8, 16), 1e-16), static_cast<RealType>(9.9467084610854280755325141894744198e-57L), tolerance);
+   BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(8, 16), 0.125), static_cast<RealType>(8.7874127030564572234218759603362e-56L), tolerance);
+   BOOST_CHECK_CLOSE(cdf(boost::math::non_central_t_distribution<RealType>(8, 16), 0), static_cast<RealType>(6.3887544005380872812754825749176666e-58L), tolerance);
+   BOOST_CHECK_CLOSE(cdf(boost::math::non_central_t_distribution<RealType>(8, 16), boost::math::tools::min_value<RealType>()), static_cast<RealType>(6.3887544005380872812754825749176666e-58L), tolerance);
+   BOOST_CHECK_CLOSE(cdf(boost::math::non_central_t_distribution<RealType>(8, 16), -boost::math::tools::min_value<RealType>()), static_cast<RealType>(6.3887544005380872812754825749176666e-58L), tolerance);
+   BOOST_CHECK_CLOSE(cdf(boost::math::non_central_t_distribution<RealType>(8, 16), -0.125), static_cast<RealType>(1.0189377690928162394097857383628309e-58L), tolerance);
+   BOOST_CHECK_CLOSE(cdf(boost::math::non_central_t_distribution<RealType>(8, 16), -1e-16), static_cast<RealType>(6.3887544005380773345670214895144269e-58L), tolerance);
+   BOOST_CHECK_CLOSE(cdf(boost::math::non_central_t_distribution<RealType>(8, 16), 1e-16), static_cast<RealType>(6.3887544005380972279839436603373249e-58L), tolerance);
+   BOOST_CHECK_CLOSE(cdf(boost::math::non_central_t_distribution<RealType>(8, 16), 0.125), static_cast<RealType>(5.0299048839141484925784179651886214e-57L), tolerance);
+
    // Error handling checks:
    //check_out_of_range<boost::math::non_central_t_distribution<RealType> >(1, 1);  // Fails one check because df for this distribution *can* be infinity.
    BOOST_MATH_CHECK_THROW(pdf(boost::math::non_central_t_distribution<RealType>(0, 1), 0), std::domain_error);
@@ -335,6 +351,12 @@ template <class T>
 T nct_cdf(T df, T nc, T x)
 {
    return cdf(boost::math::non_central_t_distribution<T>(df, nc), x);
+}
+
+template <class T>
+T nct_pdf(T df, T nc, T x)
+{
+   return pdf(boost::math::non_central_t_distribution<T>(df, nc), x);
 }
 
 template <class T>
@@ -381,6 +403,27 @@ void do_test_nc_t(T& data, const char* type_name, const char* test)
 
    std::cout << std::endl;
 #endif
+}
+
+template <typename Real, typename T>
+void do_test_nc_t_pdf(T& data, const char* type_name, const char* test)
+{
+   typedef Real                   value_type;
+
+   std::cout << "Testing: " << test << std::endl;
+
+   value_type(*fp1)(value_type, value_type, value_type) = nct_pdf;
+
+   boost::math::tools::test_result<value_type> result;
+
+   result = boost::math::tools::test_hetero<Real>(
+      data,
+      bind_func<Real>(fp1, 0, 1, 2),
+      extract_result<Real>(3));
+   handle_test_result(result, data[result.worst()], result.worst(),
+      type_name, "non central t PDF", test);
+
+   std::cout << std::endl;
 }
 
 template <typename Real, typename T>
@@ -506,6 +549,9 @@ void test_accuracy(T, const char* type_name)
 #include "nct_asym.ipp"
       do_test_nc_t<T>(nct_asym, type_name, "Non Central T (large parameters)");
       quantile_sanity_check<T>(nct_asym, type_name, "Non Central T (large parameters)");
+
+#include "nc_t_pdf_data.ipp"
+      do_test_nc_t_pdf<T>(nc_t_pdf_data, type_name, "Non Central T PDF");
    }
 }
 

@@ -232,7 +232,15 @@ void test_bessel(T, const char* name)
        {
           BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(121.25), T(0.25)), -std::numeric_limits<T>::infinity());
        }
+       BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(0), std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(1), std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(2), std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(2.25), std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::sph_neumann(0, std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::sph_neumann(1, std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::sph_neumann(2, std::numeric_limits<T>::infinity()), T(0));
     }
+
     BOOST_CHECK_THROW(boost::math::cyl_neumann(T(0), T(-1)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_neumann(T(0.2), T(-1)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_neumann(T(2), T(0)), std::domain_error);

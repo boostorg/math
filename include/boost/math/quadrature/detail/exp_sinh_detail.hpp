@@ -198,11 +198,27 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         if (!have_first_j && (I1_last == I1))
         {
            // No change to the sum, disregard these values on the LHS:
-           min_abscissa = m_abscissas[1][i];
-           first_j = i;
+           if ((i < m_abscissas[1].size() - 1) && (m_abscissas[1][i + 1] > max_abscissa))
+           {
+              // The summit is so high, that we found nothing in this row which added to the integral!!
+              have_first_j = true;
+           }
+           else
+           {
+              min_abscissa = m_abscissas[1][i];
+              first_j = i;
+           }
         }
         else
            have_first_j = true;
+    }
+
+    if (I0 == static_cast<Real>(0))
+    {
+       // We failed to find anything, is the integral zero, or have we just not found it yet?
+       // We'll try one more level, if that still finds nothing then it'll terminate.
+       min_abscissa = 0;
+       max_abscissa = boost::math::tools::max_value<Real>();
     }
 
     I1 *= half<Real>();
@@ -243,7 +259,7 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         err = abs(I0 - I1);
         //std::cout << "Estimate:        " << I1 << " Error estimate at level " << i  << " = " << err << std::endl;
         // Use L1_I1 here to make it work with both complex and real valued integrands:
-        if (!isfinite(L1_I1))
+        if (!(boost::math::isfinite)(L1_I1))
         {
             return static_cast<K>(policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and returned %1%. Please ensure your function evaluates to a finite number over its entire domain.", I1, Policy()));
         }

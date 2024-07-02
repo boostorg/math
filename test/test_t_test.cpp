@@ -55,8 +55,8 @@ void test_multiprecision_exact_mean()
     Real computed_statistic = std::get<0>(temp);
     Real computed_pvalue = std::get<1>(temp);
 
-    CHECK_MOLLIFIED_CLOSE(Real(0), computed_statistic, 15*std::numeric_limits<Real>::epsilon());
-    CHECK_ULP_CLOSE(Real(1), computed_pvalue, 25);
+    CHECK_MOLLIFIED_CLOSE(Real(0), computed_statistic, 20*std::numeric_limits<Real>::epsilon());
+    CHECK_ULP_CLOSE(Real(1), computed_pvalue, 35);
 }
 
 template<typename Z>

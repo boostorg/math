@@ -72,13 +72,13 @@ constexpr auto fmin(T1 x, T2 y) noexcept
     }
 }
 
-float fminf(float x, float y) noexcept
+constexpr float fminf(float x, float y) noexcept
 {
     return boost::math::ccmath::fmin(x, y);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-long double fminl(long double x, long double y) noexcept
+constexpr long double fminl(long double x, long double y) noexcept
 {
     return boost::math::ccmath::fmin(x, y);
 }

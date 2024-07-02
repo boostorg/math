@@ -41,10 +41,12 @@ template <typename T, typename Policy>
 T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 1> const&);
 template <typename T, typename Policy>
 T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 2> const&);
+template <typename T, typename Policy>
+T ellint_k_imp(T k, const Policy& pol, T one_minus_k2);
 
 // Elliptic integral (Legendre form) of the first kind
 template <typename T, typename Policy>
-T ellint_f_imp(T phi, T k, const Policy& pol)
+T ellint_f_imp(T phi, T k, const Policy& pol, T one_minus_k2)
 {
     BOOST_MATH_STD_USING
     using namespace boost::math::tools;
@@ -75,12 +77,7 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
     {
        // Phi is so large that phi%pi is necessarily zero (or garbage),
        // just return the second part of the duplication formula:
-       typedef std::integral_constant<int,
-          std::is_floating_point<T>::value&& std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 54) ? 0 :
-          std::is_floating_point<T>::value && std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 64) ? 1 : 2
-       > precision_tag_type;
-
-       result = 2 * phi * ellint_k_imp(k, pol, precision_tag_type()) / constants::pi<T>();
+       result = 2 * phi * ellint_k_imp(k, pol, one_minus_k2) / constants::pi<T>();
        BOOST_MATH_INSTRUMENT_VARIABLE(result);
     }
     else
@@ -121,31 +118,45 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
           BOOST_MATH_ASSERT(rphi != 0); // precondition, can't be true if sin(rphi) != 0.
           //
           // Use http://dlmf.nist.gov/19.25#E5, note that
-          // c-1 simplifies to cot^2(rphi) which avoid cancellation:
+          // c-1 simplifies to cot^2(rphi) which avoids cancellation.
+          // Likewise c - k^2 is the same as (c - 1) + (1 - k^2).
           //
           T c = 1 / sinp;
-          result = static_cast<T>(s * ellint_rf_imp(T(cosp / sinp), T(c - k * k), c, pol));
+          T c_minus_one = cosp / sinp;
+          T arg2;
+          if (k != 0)
+          {
+             T cross = fabs(c / (k * k));
+             if ((cross > 0.9f) && (cross < 1.1f))
+                arg2 = c_minus_one + one_minus_k2;
+             else
+                arg2 = c - k * k;
+          }
+          else
+             arg2 = c;
+          result = static_cast<T>(s * ellint_rf_imp(c_minus_one, arg2, c, pol));
        }
        else
           result = s * sin(rphi);
        BOOST_MATH_INSTRUMENT_VARIABLE(result);
        if(m != 0)
        {
-          typedef std::integral_constant<int,
-             std::is_floating_point<T>::value&& std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 54) ? 0 :
-             std::is_floating_point<T>::value && std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 64) ? 1 : 2
-          > precision_tag_type;
-
-          result += m * ellint_k_imp(k, pol, precision_tag_type());
+          result += m * ellint_k_imp(k, pol, one_minus_k2);
           BOOST_MATH_INSTRUMENT_VARIABLE(result);
        }
     }
     return invert ? T(-result) : result;
 }
 
+template <typename T, typename Policy>
+inline T ellint_f_imp(T phi, T k, const Policy& pol)
+{
+   return ellint_f_imp(phi, k, pol, T(1 - k * k));
+}
+
 // Complete elliptic integral (Legendre form) of the first kind
 template <typename T, typename Policy>
-T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 2> const&)
+T ellint_k_imp(T k, const Policy& pol, T one_minus_k2)
 {
     BOOST_MATH_STD_USING
     using namespace boost::math::tools;
@@ -162,11 +173,15 @@ T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 2> const&)
     }
 
     T x = 0;
-    T y = 1 - k * k;
     T z = 1;
-    T value = ellint_rf_imp(x, y, z, pol);
+    T value = ellint_rf_imp(x, one_minus_k2, z, pol);
 
     return value;
+}
+template <typename T, typename Policy>
+inline T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 2> const&)
+{
+   return ellint_k_imp(k, pol, T(1 - k * k));
 }
 
 //

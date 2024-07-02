@@ -91,8 +91,7 @@ auto exp_sinh<Real, Policy>::integrate(const F& f, Real tolerance, Real* error, 
     static const char* function = "boost::math::quadrature::exp_sinh<%1%>::integrate";
     using std::abs;
     if (abs(tolerance) > 1) {
-        std::string msg = std::string(__FILE__) + ":" + std::to_string(__LINE__) + ":" + std::string(function) + ": The tolerance provided is unusually large; did you confuse it with a domain bound?";
-        throw std::domain_error(msg);
+        return policies::raise_domain_error(function, "The tolerance provided (%1%) is unusually large; did you confuse it with a domain bound?", tolerance, Policy());
     }
     return m_imp->integrate(f, error, L1, function, tolerance, levels);
 }
