@@ -40,6 +40,10 @@ python tools/boostdep/depinst/depinst.py math
 ./bootstrap.sh
 ./b2 headers
 
+if [[ $(uname) == "Linux" ]]; then
+    echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
+fi
+
 echo '==================================> BEFORE_SCRIPT'
 
 . $DRONE_BUILD_DIR/.drone/before-script.sh
