@@ -1436,7 +1436,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
                      optimised_invert = true;
                   }
                   else
-                     init_value = 0;
+                     init_value = 0;  // LCOV_EXCL_LINE  Unreachable for any "sensible" floating point type.
                }
                else
                   init_value = 0;
@@ -1546,15 +1546,18 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
    }
    if(p_derivative)
    {
-      //
-      // Need to convert prefix term to derivative:
-      //
+      /*
+      * We can never reach this:
       if((x < 1) && (tools::max_value<T>() * x < *p_derivative))
       {
          // overflow, just return an arbitrarily large value:
          *p_derivative = tools::max_value<T>() / 2;
       }
-
+      */
+      BOOST_MATH_ASSERT((x >= 1) || (tools::max_value<T>() * x >= *p_derivative));
+      //
+      // Need to convert prefix term to derivative:
+      //
       *p_derivative /= x;
    }
 
@@ -1800,7 +1803,10 @@ T tgamma_ratio_imp(T x, T y, const Policy& pol)
       //
       // Result will almost certainly overflow, try logs just in case:
       //
-      return exp(boost::math::lgamma(x, pol) - boost::math::lgamma(y, pol));
+      prefix = boost::math::lgamma(x, pol) - boost::math::lgamma(y, pol);
+      if (prefix > boost::math::tools::log_max_value<T>())
+         return policies::raise_overflow_error<T>("tgamma_ratio", nullptr, pol);
+      return exp(prefix);
    }
    //
    // Regular case, x and y both large and similar in magnitude:
