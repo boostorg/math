@@ -54,6 +54,7 @@ project
       <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
       <toolset>msvc-7.1:<pch>off
       <toolset>clang-6.0.0:<pch>off  # added to see effect.
+      <toolset>clang:<cxxflags>-Wno-literal-range  # warning: magnitude of floating-point constant too small for type 'long double' [-Wliteral-range]
       <toolset>gcc,<target-os>windows:<pch>off
       <toolset>borland:<runtime-link>static
       # <toolset>msvc:<cxxflags>/wd4506 has no effect?
@@ -171,6 +172,8 @@ test-suite special_fun :
    [ run git_issue_961.cpp ]
    [ run git_issue_1006.cpp ]
    [ run git_issue_184.cpp ]
+   [ run git_issue_1137.cpp ]
+   [ run git_issue_1139.cpp ]
    [ run special_functions_test.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_airy.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_bessel_j.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
@@ -873,6 +876,7 @@ test-suite distribution_tests :
    [ run scipy_issue_18302.cpp ../../test/build//boost_unit_test_framework  ]
    [ run scipy_issue_18511.cpp ../../test/build//boost_unit_test_framework ]
    [ compile scipy_issue_19762.cpp ]
+   [ run git_issue_1120.cpp ]
 ;
 
 test-suite new_floats : 
@@ -885,7 +889,7 @@ test-suite new_floats :
 
 test-suite mp :
 
-   [ run test_nc_t_quad.cpp  pch ../../test/build//boost_unit_test_framework : : : release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
+   [ run test_nc_t_quad.cpp  pch ../../test/build//boost_unit_test_framework : : : release <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST1 : test_polynomial_1  ]
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST2 : test_polynomial_2  ]
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST3 : test_polynomial_3  ]

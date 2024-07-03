@@ -298,7 +298,7 @@ void print_rationals(int max_order)
          "template <class T, class U, class V>\n"
          "inline V evaluate_rational_c_imp(const T* a, const U* b, const V& x, const std::integral_constant<int, " << order << ">*)\n"
          "{\n"
-         "   if(x <= 1)\n"
+         "   if((-1 <= x) && (x <= 1))\n"
          "     return static_cast<V>((";
          
          for(int bracket = 2; bracket < order; ++bracket)
@@ -393,7 +393,7 @@ void print_rationals(int max_order)
          "template <class T, class U, class V>\n"
          "inline V evaluate_rational_c_imp(const T* a, const U* b, const V& x, const std::integral_constant<int, " << order << ">*)\n"
          "{\n"
-         "   if(x <= 1)\n   {\n"
+         "   if((-1 <= x) && (x <= 1))\n   {\n"
          "      V x2 = x * x;\n"
          "      return static_cast<V>((";
 
@@ -609,7 +609,7 @@ void print_rationals(int max_order)
          "template <class T, class U, class V>\n"
          "inline V evaluate_rational_c_imp(const T* a, const U* b, const V& x, const std::integral_constant<int, " << order << ">*)\n"
          "{\n"
-         "   if(x <= 1)\n   {\n"
+         "   if((-1 <= x) && (x <= 1))\n   {\n"
          "      V x2 = x * x;\n"
          "      V t[4];\n";
 

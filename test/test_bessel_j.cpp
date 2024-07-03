@@ -181,7 +181,7 @@ void expected_results()
 
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
+   BOOST_IF_CONSTEXPR ((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
       && (std::numeric_limits<long double>::digits < 90))
    {
       // some errors spill over into type double as well:
@@ -238,7 +238,7 @@ void expected_results()
          ".*(JN|j).*|.*Tricky.*",       // test data group
          ".*", 33000, 20000);               // test function
    }
-   else if (std::numeric_limits<long double>::digits >= 90)
+   else BOOST_IF_CONSTEXPR (std::numeric_limits<long double>::digits >= 90)
    {
       add_expected_result(
          ".*",                          // compiler
