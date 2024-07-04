@@ -46,7 +46,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 64>&, co
    BOOST_MATH_STD_USING  // for ADL of std names
    T result = 0;
 
-   BOOST_ASSERT(z >= tools::root_epsilon<T>());
+   BOOST_MATH_ASSERT(z >= tools::root_epsilon<T>());
    /*
    * Can not be reached:
    * 
