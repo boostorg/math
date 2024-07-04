@@ -55,7 +55,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 64>&, co
       result = -log(z);
    }
    */
-   else if((zm1 == 0) || (zm2 == 0))
+   if((zm1 == 0) || (zm2 == 0))
    {
       // nothing to do, result is zero....
    }
@@ -251,12 +251,16 @@ T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 113>&, c
    //
    BOOST_MATH_STD_USING  // for ADL of std names
    T result = 0;
+   BOOST_MATH_ASSERT(z >= tools::root_epsilon<T>());
+   /*
+   *  Can not be reached:
    if(z < tools::epsilon<T>())
    {
       result = -log(z);
       BOOST_MATH_INSTRUMENT_CODE(result);
    }
-   else if((zm1 == 0) || (zm2 == 0))
+   */
+   if((zm1 == 0) || (zm2 == 0))
    {
       // nothing to do, result is zero....
    }
@@ -521,7 +525,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 0>&, con
       result = -log(z);
    }
    */
-   else if(z < 0.5)
+   if(z < 0.5)
    {
       // taking the log of tgamma reduces the error, no danger of overflow here:
       result = log(gamma_imp(z, pol, Lanczos()));
