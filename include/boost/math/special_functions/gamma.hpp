@@ -1806,7 +1806,11 @@ T tgamma_ratio_imp(T x, T y, const Policy& pol)
       prefix = boost::math::lgamma(x, pol) - boost::math::lgamma(y, pol);
       if (prefix > boost::math::tools::log_max_value<T>())
          return policies::raise_overflow_error<T>("tgamma_ratio", nullptr, pol);
-      return exp(prefix);
+      //
+      // This is unreachable, unless max_factorial is small compared to the exponent
+      // range of the type, ie multiprecision types only here...
+      //
+      return exp(prefix);  // LCOV_EXCL_LINE
    }
    //
    // Regular case, x and y both large and similar in magnitude:
@@ -1838,11 +1842,15 @@ T gamma_p_derivative_imp(T a, T x, const Policy& pol)
    //
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
    T f1 = detail::regularised_gamma_prefix(a, x, pol, lanczos_type());
+   /*
+   * Derivative goes to zero as x -> 0, this should be unreachable:
+   * 
    if((x < 1) && (tools::max_value<T>() * x < f1))
    {
       // overflow:
       return policies::raise_overflow_error<T>("boost::math::gamma_p_derivative<%1%>(%1%, %1%)", nullptr, pol);
    }
+   */
    if(f1 == 0)
    {
       // Underflow in calculation, use logs instead:
