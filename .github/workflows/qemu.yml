@@ -1,0 +1,204 @@
+# Copyright 2020-2021 Peter Dimov
+# Copyright 2021 Andrey Semashev
+# Copyright 2021 Alexander Grund
+# Copyright 2022 James E. King III
+# Copyright 2024 Matt Borland
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at http://boost.org/LICENSE_1_0.txt)
+---
+name: qemu
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - develop
+      - bugfix/**
+      - feature/**
+      - fix/**
+      - pr/**
+
+env:
+  GIT_FETCH_JOBS: 8
+  NET_RETRY_COUNT: 5
+  B2_CI_VERSION: 1
+  B2_VARIANT: debug,release
+  B2_LINK: shared,static
+  LCOV_BRANCH_COVERAGE: 0
+  CODECOV_NAME: Github Actions
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+
+jobs:
+  posix:
+    defaults:
+      run:
+        shell: bash
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # multiarch testing
+          - { name: PPC64LE-GCC, multiarch: yes,
+              compiler: gcc, cxxstd: '17', os: ubuntu-22.04, ccache: no, distro: alpine, edition: edge, arch: ppc64le }
+          - { name: PPC64LE-Clang, multiarch: yes,
+              compiler: clang, cxxstd: '17', os: ubuntu-22.04, ccache: no, distro: alpine, edition: edge, arch: ppc64le }
+
+
+    timeout-minutes: 360
+    runs-on: ${{matrix.os}}
+    container: ${{matrix.container}}
+    env: {B2_USE_CCACHE: 1}
+
+    steps:
+      - name: Setup environment
+        run: |
+          if [ -f "/etc/debian_version" ]; then
+              echo "DEBIAN_FRONTEND=noninteractive" >> $GITHUB_ENV
+              export DEBIAN_FRONTEND=noninteractive
+          fi
+          if [ -n "${{matrix.container}}" ] && [ -f "/etc/debian_version" ]; then
+              apt-get -o Acquire::Retries=$NET_RETRY_COUNT update
+              apt-get -o Acquire::Retries=$NET_RETRY_COUNT install -y sudo software-properties-common curl
+              # Need (newer) git, and the older Ubuntu container may require requesting the key manually using port 80
+              curl -sSL --retry ${NET_RETRY_COUNT:-5} 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE1DD270288B4E6030699E45FA1715D88E1DF1F24' | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/git-core_ubuntu_ppa.gpg
+              for i in {1..${NET_RETRY_COUNT:-3}}; do sudo -E add-apt-repository -y ppa:git-core/ppa && break || sleep 10; done
+              apt-get -o Acquire::Retries=$NET_RETRY_COUNT update
+              osver=$(lsb_release -sr | cut -f1 -d.)
+              pkgs="g++ git"
+              # Ubuntu 22+ has only Python 3 in the repos
+              if [ -n "$osver" ] && [ "$osver" -ge "22" ]; then
+                pkgs+=" python-is-python3 libpython3-dev"
+              else
+                pkgs+=" python libpython-dev"
+              fi
+              apt-get -o Acquire::Retries=$NET_RETRY_COUNT install -y $pkgs
+          fi
+          # For jobs not compatible with ccache, use "ccache: no" in the matrix
+          if [[ "${{ matrix.ccache }}" == "no" ]]; then
+              echo "B2_USE_CCACHE=0" >> $GITHUB_ENV
+          fi
+          git config --global pack.threads 0
+          if [[ "${{matrix.container}}" == "ubuntu:16.04" ]] || [[ "${{matrix.container}}" == "ubuntu:18.04" ]]; then
+            # Ubuntu 16/18 can't run Node 20, so stick to older actions: https://github.com/actions/checkout/issues/1590
+            echo "GHA_USE_NODE_20=false" >> $GITHUB_ENV
+            echo "ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true" >> $GITHUB_ENV
+          else
+            echo "GHA_USE_NODE_20=true" >> $GITHUB_ENV
+          fi
+
+      - uses: actions/checkout@v3
+        if: env.GHA_USE_NODE_20 == 'false'
+        with:
+          # For coverage builds fetch the whole history, else only 1 commit using a 'fake ternary'
+          fetch-depth: ${{ matrix.coverage && '0' || '1' }}
+      - uses: actions/checkout@v4
+        if: env.GHA_USE_NODE_20 == 'true'
+        with:
+          # For coverage builds fetch the whole history, else only 1 commit using a 'fake ternary'
+          fetch-depth: ${{ matrix.coverage && '0' || '1' }}
+
+      - name: Cache ccache
+        uses: actions/cache@v3
+        if: env.B2_USE_CCACHE && env.GHA_USE_NODE_20 == 'false'
+        with:
+          path: ~/.ccache
+          key: ${{matrix.os}}-${{matrix.container}}-${{matrix.compiler}}-${{github.sha}}
+          restore-keys: ${{matrix.os}}-${{matrix.container}}-${{matrix.compiler}}-
+
+      - name: Cache ccache
+        uses: actions/cache@v4
+        if: env.B2_USE_CCACHE && env.GHA_USE_NODE_20 == 'true'
+        with:
+          path: ~/.ccache
+          key: ${{matrix.os}}-${{matrix.container}}-${{matrix.compiler}}-${{github.sha}}
+          restore-keys: ${{matrix.os}}-${{matrix.container}}-${{matrix.compiler}}-
+
+      - name: Fetch Boost.CI
+        uses: actions/checkout@v3
+        if: env.GHA_USE_NODE_20 == 'false'
+        with:
+          repository: boostorg/boost-ci
+          ref: master
+          path: boost-ci-cloned
+
+      - name: Fetch Boost.CI
+        uses: actions/checkout@v4
+        if: env.GHA_USE_NODE_20 == 'true'
+        with:
+          repository: boostorg/boost-ci
+          ref: master
+          path: boost-ci-cloned
+
+      - name: Get CI scripts folder
+        run: |
+          # Copy ci folder if not testing Boost.CI
+          [[ "$GITHUB_REPOSITORY" =~ "boost-ci" ]] || cp -r boost-ci-cloned/ci .
+          rm -rf boost-ci-cloned
+
+      - name: Install packages
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          SOURCE_KEYS=(${{join(matrix.source_keys, ' ')}})
+          SOURCES=(${{join(matrix.sources, ' ')}})
+          # Add this by default
+          SOURCE_KEYS+=('http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x1E9377A2BA9EF27F')
+          SOURCES+=(ppa:ubuntu-toolchain-r/test)
+          
+          ci/add-apt-keys.sh "${SOURCE_KEYS[@]}"
+          # Initial update before adding sources required to get e.g. keys
+          sudo apt-get -o Acquire::Retries=$NET_RETRY_COUNT update
+          ci/add-apt-repositories.sh "${SOURCES[@]}"
+          
+          sudo apt-get -o Acquire::Retries=$NET_RETRY_COUNT update
+          if [[ -z "${{matrix.install}}" ]]; then
+              pkgs="${{matrix.compiler}}"
+              pkgs="${pkgs/gcc-/g++-}"
+          else
+              pkgs="${{matrix.install}}"
+          fi
+          sudo apt-get -o Acquire::Retries=$NET_RETRY_COUNT install -y $pkgs
+
+      - name: Setup GCC Toolchain
+        if: matrix.gcc_toolchain
+        run: |
+          GCC_TOOLCHAIN_ROOT="$HOME/gcc-toolchain"
+          echo "GCC_TOOLCHAIN_ROOT=$GCC_TOOLCHAIN_ROOT" >> $GITHUB_ENV
+          if ! command -v dpkg-architecture; then
+              apt-get install -y dpkg-dev
+          fi
+          MULTIARCH_TRIPLET="$(dpkg-architecture -qDEB_HOST_MULTIARCH)"
+          mkdir -p "$GCC_TOOLCHAIN_ROOT"
+          ln -s /usr/include "$GCC_TOOLCHAIN_ROOT/include"
+          ln -s /usr/bin "$GCC_TOOLCHAIN_ROOT/bin"
+          mkdir -p "$GCC_TOOLCHAIN_ROOT/lib/gcc/$MULTIARCH_TRIPLET"
+          ln -s "/usr/lib/gcc/$MULTIARCH_TRIPLET/${{matrix.gcc_toolchain}}" "$GCC_TOOLCHAIN_ROOT/lib/gcc/$MULTIARCH_TRIPLET/${{matrix.gcc_toolchain}}"
+
+      - name: Setup multiarch
+        if: matrix.multiarch
+        env:
+          BDDE_DISTRO: ${{matrix.distro}}
+          BDDE_EDITION: ${{matrix.edition}}
+          BDDE_ARCH: ${{matrix.arch}}
+        run: ci/github/setup_bdde.sh
+
+      - name: Setup Boost
+        env:
+          B2_ADDRESS_MODEL: ${{matrix.address-model}}
+          B2_COMPILER: ${{matrix.compiler}}
+          B2_CXXSTD: ${{matrix.cxxstd}}
+          B2_SANITIZE: ${{matrix.sanitize}}
+          B2_STDLIB: ${{matrix.stdlib}}
+          # More entries can be added in the same way, see the B2_ARGS assignment in ci/enforce.sh for the possible keys.
+          # B2_DEFINES: ${{matrix.defines}}
+          # Variables set here (to non-empty) will override the top-level environment variables, e.g.
+          # B2_VARIANT: ${{matrix.variant}}
+          # Set the (B2) target(s) to build, defaults to the test folder of the current library
+          # Can alternatively be done like this in the build step or in the build command of the build step, e.g. `run: B2_TARGETS=libs/$SELF/doc ci/build.sh`
+          # B2_TARGETS: libs/foo/test//bar
+        run: source ci/github/install.sh
+
+      - name: Run tests
+        if: '!matrix.coverity'
+        run: ci/build.sh
