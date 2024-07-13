@@ -215,5 +215,11 @@ void test_spots(T, const char* type_name)
    do_test_0F1<T>(hypergeometric_0F1_integer_data, type_name, "Integer Arguments");
    do_test_0F1<T>(hypergeometric_0F1_real_data, type_name, "Real Arguments");
    do_test_0F1<T>(hypergeometric_0F1_large_data, type_name, "Large Arguments");
+
+   //
+   // Coverage:
+   //
+   BOOST_CHECK_THROW(boost::math::hypergeometric_0F1(static_cast<T>(-1), static_cast<T>(0.5)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::hypergeometric_0F1(static_cast<T>(-20), static_cast<T>(0.5)), std::domain_error);
 }
 
