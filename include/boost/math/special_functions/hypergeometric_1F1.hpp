@@ -140,7 +140,7 @@ namespace boost { namespace math { namespace detail {
                   return hypergeometric_1F1_from_function_ratio_negative_b_forwards(a, b, z, pol, log_scaling);
                }
 #endif
-               // LCOV_EXCL_END
+               // LCOV_EXCL_STOP
             }
             //
             // We could fall back to Tricomi's approximation if we're in the transition zone

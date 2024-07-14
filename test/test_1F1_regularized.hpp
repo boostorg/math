@@ -84,7 +84,7 @@ void test_spots(T z, const char* type_name)
    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
    {
       BOOST_CHECK_EQUAL(boost::math::hypergeometric_1F1_regularized(600.25, 102.75, 11512.0), std::numeric_limits<T>::infinity());
-      BOOST_IF_CONSTEXPR(std::numeric_limits<T>::max_exponent == 16384)
+      BOOST_IF_CONSTEXPR(std::numeric_limits<long double>::max_exponent > 16000)
       {
          BOOST_CHECK_EQUAL(boost::math::hypergeometric_1F1_regularized(600.25, 102.75, 9985.0), std::numeric_limits<T>::infinity());
       }
