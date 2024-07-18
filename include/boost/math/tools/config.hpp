@@ -666,11 +666,15 @@ namespace boost{ namespace math{
 // CUDA support:
 //
 
-#ifdef __NVCC__
+#ifdef __CUDACC__
 #  define BOOST_MATH_HOST_DEVICE __host__ __device__
 #  ifndef BOOST_MATH_ENABLE_CUDA
 #    define BOOST_MATH_ENABLE_CUDA
 #  endif
+
+// We want to use force inline from CUDA instead of the host compiler
+#  undef BOOST_MATH_FORCEINLINE
+#  define BOOST_MATH_FORCEINLINE __forceinline__
 #else
 #  define BOOST_MATH_HOST_DEVICE
 #endif
