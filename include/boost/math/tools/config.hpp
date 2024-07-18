@@ -662,6 +662,31 @@ namespace boost{ namespace math{
 #define BOOST_MATH_CONSTEXPR_TABLE_FUNCTION
 #endif
 
+//
+// CUDA support:
+//
+
+#ifdef __NVCC__
+#  define BOOST_MATH_HOST_DEVICE __host__ __device__
+#  ifndef BOOST_MATH_ENABLE_CUDA
+#    define BOOST_MATH_ENABLE_CUDA
+#  endif
+#else
+#  define BOOST_MATH_HOST_DEVICE
+#endif
+
+// Static variables are not allowed with CUDA or C++20 modules
+// See if we can inline them instead
+
+#if defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L
+#  define BOOST_MATH_STATIC_CONSTEXPR inline constexpr
+#else
+#  ifndef BOOST_MATH_ENABLE_CUDA
+#    define BOOST_MATH_STATIC_CONSTEXPR static constexpr
+#  else
+#    define BOOST_MATH_STATIC_CONSTEXPR constexpr
+#  endif
+#endif
 
 #endif // BOOST_MATH_TOOLS_CONFIG_HPP
 
