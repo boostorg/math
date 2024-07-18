@@ -72,8 +72,8 @@ Returns the scale parameter of the distribution.
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
-Note however that the mapairy distribution does not have a mean,
-standard deviation, etc. See __math_undefined
+Note however that the mapairy distribution does not have a skewness,
+kurtosis, etc. See __math_undefined
 [/link math_toolkit.pol_ref.assert_undefined mathematically undefined function]
 to control whether these should fail to compile with a BOOST_STATIC_ASSERTION_FAILURE,
 which is the default.
