@@ -680,11 +680,14 @@ namespace boost{ namespace math{
 
 #if defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L
 #  define BOOST_MATH_STATIC_CONSTEXPR inline constexpr
+#  define BOOST_MATH_STATIC static
 #else
 #  ifndef BOOST_MATH_ENABLE_CUDA
 #    define BOOST_MATH_STATIC_CONSTEXPR static constexpr
+#    define BOOST_MATH_STATIC static
 #  else
 #    define BOOST_MATH_STATIC_CONSTEXPR constexpr
+#    define BOOST_MATH_STATIC constexpr
 #  endif
 #endif
 
