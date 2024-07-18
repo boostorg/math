@@ -675,8 +675,13 @@ namespace boost{ namespace math{
 // We want to use force inline from CUDA instead of the host compiler
 #  undef BOOST_MATH_FORCEINLINE
 #  define BOOST_MATH_FORCEINLINE __forceinline__
+
+// We can't use return std::numeric_limits<T>::quiet_NaN()
+#  define BOOST_MATH_QUIET_NAN(T) static_cast<T>(NAN);
+
 #else
 #  define BOOST_MATH_HOST_DEVICE
+#  define BOOST_MATH_QUIET_NAN(T) std::numeric_limits<T>::quiet_NaN();
 #endif
 
 // Static variables are not allowed with CUDA or C++20 modules
