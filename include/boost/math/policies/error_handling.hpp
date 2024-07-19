@@ -233,7 +233,9 @@ BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
            const T& ,
            const ::boost::math::policies::domain_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
+   #ifndef BOOST_MATH_SYCL_ENABLED
    errno = EDOM;
+   #endif
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
    return BOOST_MATH_QUIET_NAN(T);
@@ -353,7 +355,9 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* ,
            const  ::boost::math::policies::overflow_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
+   #ifndef BOOST_MATH_SYCL_ENABLED
    errno = ERANGE;
+   #endif
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
    return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
@@ -366,7 +370,9 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const T&,
            const  ::boost::math::policies::overflow_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
+   #ifndef BOOST_MATH_SYCL_ENABLED
    errno = ERANGE;
+   #endif
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
    return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
@@ -427,7 +433,9 @@ BOOST_MATH_GPU_ENABLED inline T raise_underflow_error(
            const char* /* message */,
            const  ::boost::math::policies::underflow_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
+   #ifndef BOOST_MATH_SYCL_ENABLED
    errno = ERANGE;
+   #endif
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
    return T(0);
@@ -477,7 +485,9 @@ BOOST_MATH_GPU_ENABLED inline T raise_denorm_error(
            const T& val,
            const  ::boost::math::policies::denorm_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
+   #ifndef BOOST_MATH_SYCL_ENABLED
    errno = ERANGE;
+   #endif
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
    return val;
@@ -528,7 +538,9 @@ BOOST_MATH_GPU_ENABLED inline T raise_evaluation_error(
            const T& val,
            const  ::boost::math::policies::evaluation_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
+   #ifndef BOOST_MATH_SYCL_ENABLED
    errno = EDOM;
+   #endif
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
    return val;
@@ -583,7 +595,9 @@ BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
            const TargetType&,
            const  ::boost::math::policies::rounding_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
+   #ifndef BOOST_MATH_SYCL_ENABLED
    errno = ERANGE;
+   #endif
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
    static_assert(std::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
@@ -638,7 +652,9 @@ BOOST_MATH_GPU_ENABLED inline T raise_indeterminate_result_error(
            const R& result,
            const ::boost::math::policies::indeterminate_result_error< ::boost::math::policies::errno_on_error>&)
 {
+   #ifndef BOOST_MATH_SYCL_ENABLED
    errno = EDOM;
+   #endif
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
    return result;
