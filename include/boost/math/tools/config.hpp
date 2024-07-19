@@ -672,6 +672,11 @@ namespace boost{ namespace math{
 #    define BOOST_MATH_ENABLE_CUDA
 #  endif
 
+// Device code can not handle exceptions
+#  ifndef BOOST_MATH_NO_EXCEPTIONS
+#    define BOOST_MATH_NO_EXCEPTIONS
+#  endif
+
 // We want to use force inline from CUDA instead of the host compiler
 #  undef BOOST_MATH_FORCEINLINE
 #  define BOOST_MATH_FORCEINLINE __forceinline__
