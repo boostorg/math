@@ -138,10 +138,26 @@ inline T log_min_value(const std::integral_constant<int, 0>& BOOST_MATH_APPEND_E
 }
 
 template <class T>
-inline constexpr T epsilon(const std::true_type& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(std::is_floating_point<T>::value)
+constexpr T epsilon(const std::true_type& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(std::is_floating_point<T>::value)
 {
    return std::numeric_limits<T>::epsilon();
 }
+
+#ifdef BOOST_MATH_ENABLE_CUDA
+
+template <>
+BOOST_MATH_HOST_DEVICE constexpr float epsilon(const std::true_type& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(float)) noexcept(true)
+{
+   return FLT_EPSILON;
+}
+
+template <>
+BOOST_MATH_HOST_DEVICE constexpr double epsilon(const std::true_type& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(double)) noexcept(true)
+{
+   return DBL_EPSILON;
+}
+
+#endif
 
 #if defined(__GNUC__) && ((LDBL_MANT_DIG == 106) || (__LDBL_MANT_DIG__ == 106))
 template <>
@@ -230,7 +246,7 @@ inline constexpr T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(
 #endif
 
 template <class T>
-inline constexpr T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) noexcept(std::is_floating_point<T>::value)
+BOOST_MATH_HOST_DEVICE constexpr T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) noexcept(std::is_floating_point<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::epsilon<T>(std::integral_constant<bool, ::std::numeric_limits<T>::is_specialized>());
