@@ -93,7 +93,7 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ../../../b2 toolset=intel ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS
+        run: ../../../b2 toolset=intel ${{ matrix.suite }} linkflags=-ltbb define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS
         working-directory: ../boost-root/libs/math/test
 
   ubuntu-noble:
