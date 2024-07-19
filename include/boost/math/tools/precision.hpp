@@ -143,16 +143,16 @@ constexpr T epsilon(const std::true_type& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TY
    return std::numeric_limits<T>::epsilon();
 }
 
-#ifdef BOOST_MATH_ENABLE_CUDA
+#ifdef BOOST_MATH_HAS_GPU_SUPPORT
 
 template <>
-BOOST_MATH_HOST_DEVICE constexpr float epsilon(const std::true_type& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(float)) noexcept(true)
+BOOST_MATH_GPU_ENABLED constexpr float epsilon(const std::true_type& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(float)) noexcept(true)
 {
    return FLT_EPSILON;
 }
 
 template <>
-BOOST_MATH_HOST_DEVICE constexpr double epsilon(const std::true_type& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(double)) noexcept(true)
+BOOST_MATH_GPU_ENABLED constexpr double epsilon(const std::true_type& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(double)) noexcept(true)
 {
    return DBL_EPSILON;
 }
@@ -246,7 +246,7 @@ inline constexpr T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(
 #endif
 
 template <class T>
-BOOST_MATH_HOST_DEVICE constexpr T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) noexcept(std::is_floating_point<T>::value)
+BOOST_MATH_GPU_ENABLED constexpr T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) noexcept(std::is_floating_point<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::epsilon<T>(std::integral_constant<bool, ::std::numeric_limits<T>::is_specialized>());

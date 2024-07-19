@@ -77,31 +77,31 @@ is used.
 
 */
 
-#ifdef BOOST_MATH_ENABLE_CUDA
+#ifdef BOOST_MATH_HAS_GPU_SUPPORT
 
 namespace boost { namespace math {
 
-template<> inline BOOST_MATH_HOST_DEVICE bool (isnan)(float x) { return x != x; }
-template<> inline BOOST_MATH_HOST_DEVICE bool (isnan)(double x) { return x != x; }
+template<> inline BOOST_MATH_GPU_ENABLED bool (isnan)(float x) { return x != x; }
+template<> inline BOOST_MATH_GPU_ENABLED bool (isnan)(double x) { return x != x; }
 
-template<> inline BOOST_MATH_HOST_DEVICE bool (isinf)(float x) { return x > FLT_MAX || x < -FLT_MAX; }
-template<> inline BOOST_MATH_HOST_DEVICE bool (isinf)(double x) { return x > DBL_MAX || x < -DBL_MAX; }
+template<> inline BOOST_MATH_GPU_ENABLED bool (isinf)(float x) { return x > FLT_MAX || x < -FLT_MAX; }
+template<> inline BOOST_MATH_GPU_ENABLED bool (isinf)(double x) { return x > DBL_MAX || x < -DBL_MAX; }
 
-template<> inline BOOST_MATH_HOST_DEVICE bool (isfinite)(float x) {  return !isnan(x) && !isinf(x);  }
-template<> inline BOOST_MATH_HOST_DEVICE bool (isfinite)(double x) {  return !isnan(x) && !isinf(x); }
+template<> inline BOOST_MATH_GPU_ENABLED bool (isfinite)(float x) {  return !isnan(x) && !isinf(x);  }
+template<> inline BOOST_MATH_GPU_ENABLED bool (isfinite)(double x) {  return !isnan(x) && !isinf(x); }
 
-template<> inline BOOST_MATH_HOST_DEVICE bool (isnormal)(float x)
+template<> inline BOOST_MATH_GPU_ENABLED bool (isnormal)(float x)
 {
    if(x < 0) x = -x;
    return (x >= FLT_MIN) && (x <= FLT_MAX);
 }
-template<> inline BOOST_MATH_HOST_DEVICE bool (isnormal)(double x)
+template<> inline BOOST_MATH_GPU_ENABLED bool (isnormal)(double x)
 {
    if(x < 0) x = -x;
    return (x >= DBL_MIN) && (x <= DBL_MAX);
 }
 
-template<> inline BOOST_MATH_HOST_DEVICE int (fpclassify)(float t)
+template<> inline BOOST_MATH_GPU_ENABLED int (fpclassify)(float t)
 {
    if((boost::math::isnan)(t))
       return FP_NAN;
@@ -125,7 +125,7 @@ template<> inline BOOST_MATH_HOST_DEVICE int (fpclassify)(float t)
    return FP_NAN;
 }
 
-template<> inline BOOST_MATH_HOST_DEVICE int (fpclassify)(double t)
+template<> inline BOOST_MATH_GPU_ENABLED int (fpclassify)(double t)
 {
    if((boost::math::isnan)(t))
       return FP_NAN;
