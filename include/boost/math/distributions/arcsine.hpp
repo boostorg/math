@@ -348,7 +348,7 @@ namespace boost
       BOOST_FPU_EXCEPTION_GUARD
       BOOST_MATH_STD_USING // For ADL of std functions.
 
-      static const char* function = "boost::math::pdf(arcsine_distribution<%1%> const&, %1%)";
+      constexpr auto function = "boost::math::pdf(arcsine_distribution<%1%> const&, %1%)";
 
       RealType lo = dist.x_min();
       RealType hi = dist.x_max();
@@ -373,7 +373,7 @@ namespace boost
     { // Cumulative Distribution Function arcsine.
       BOOST_MATH_STD_USING // For ADL of std functions.
 
-      static const char* function = "boost::math::cdf(arcsine_distribution<%1%> const&, %1%)";
+      constexpr auto function = "boost::math::cdf(arcsine_distribution<%1%> const&, %1%)";
 
       RealType x_min = dist.x_min();
       RealType x_max = dist.x_max();
@@ -405,7 +405,7 @@ namespace boost
     BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<arcsine_distribution<RealType, Policy>, RealType>& c)
     { // Complemented Cumulative Distribution Function arcsine.
       BOOST_MATH_STD_USING // For ADL of std functions.
-      static const char* function = "boost::math::cdf(arcsine_distribution<%1%> const&, %1%)";
+      constexpr auto function = "boost::math::cdf(arcsine_distribution<%1%> const&, %1%)";
 
       RealType x = c.param;
       arcsine_distribution<RealType, Policy> const& dist = c.dist;
@@ -452,7 +452,7 @@ namespace boost
 
       using boost::math::constants::half_pi;
 
-      static const char* function = "boost::math::quantile(arcsine_distribution<%1%> const&, %1%)";
+      constexpr auto function = "boost::math::quantile(arcsine_distribution<%1%> const&, %1%)";
 
       RealType result = 0; // of argument checks:
       RealType x_min = dist.x_min();
@@ -490,7 +490,7 @@ namespace boost
       BOOST_MATH_STD_USING // For ADL of std functions.
 
       using boost::math::constants::half_pi;
-      static const char* function = "boost::math::quantile(arcsine_distribution<%1%> const&, %1%)";
+      constexpr auto function = "boost::math::quantile(arcsine_distribution<%1%> const&, %1%)";
 
       // Error checks:
       RealType q = c.param;
