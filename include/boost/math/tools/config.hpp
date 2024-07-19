@@ -667,8 +667,9 @@ namespace boost{ namespace math{
 //
 
 #ifdef __CUDACC__
-#  define BOOST_MATH_GPU_ENABLED __host__ __device__
+#  define BOOST_MATH_CUDA_ENABLED __host__ __device__
 #  define BOOST_MATH_HAS_GPU_SUPPORT
+
 #  ifndef BOOST_MATH_ENABLE_CUDA
 #    define BOOST_MATH_ENABLE_CUDA
 #  endif
@@ -687,24 +688,41 @@ namespace boost{ namespace math{
 
 #elif defined(SYCL_LANGUAGE_VERSION)
 
-#  define BOOST_MATH_GPU_ENABLED SYCL_EXTERNAL
+#  define BOOST_MATH_SYCL_ENABLED SYCL_EXTERNAL
 #  define BOOST_MATH_HAS_GPU_SUPPORT
+
+#  ifndef BOOST_MATH_ENABLE_SYCL
+#    define BOOST_MATH_ENABLE_SYCL
+#  endif
 
 #  ifndef BOOST_MATH_NO_EXCEPTIONS
 #    define BOOST_MATH_NO_EXCEPTIONS
 #  endif
 
+// spir64 does not support long double
+#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+
 #  undef BOOST_MATH_FORCEINLINE
-#  define BOOST_MATH_FORCEINLINE inline 
+#  define BOOST_MATH_FORCEINLINE inline
 
 #  define BOOST_MATH_QUIET_NAN(T) static_cast<T>(NAN);
 
-#else
-
-#  define BOOST_MATH_GPU_ENABLED
-#  define BOOST_MATH_QUIET_NAN(T) std::numeric_limits<T>::quiet_NaN();
-
 #endif
+
+#ifndef BOOST_MATH_CUDA_ENABLED
+#  define BOOST_MATH_CUDA_ENABLED
+#endif
+
+#ifndef BOOST_MATH_SYCL_ENABLED
+#  define BOOST_MATH_SYCL_ENABLED
+#endif
+
+#ifndef BOOST_MATH_QUIET_NAN
+#  define BOOST_MATH_QUIET_NAN(T) std::numeric_limits<T>::quiet_NaN();
+#endif
+
+// Not all functions that allow CUDA allow SYCL (e.g. Recursion is disallowed by SYCL)
+#  define BOOST_MATH_GPU_ENABLED BOOST_MATH_CUDA_ENABLED BOOST_MATH_SYCL_ENABLED
 
 // Static variables are not allowed with CUDA or C++20 modules
 // See if we can inline them instead
