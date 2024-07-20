@@ -3,11 +3,18 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#define BOOST_TEST_MAIN
 #define BOOST_TEST_MODULE StatsHoltsmarkTest
 #include <boost/test/included/unit_test.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 
 #include <boost/math/distributions/holtsmark.hpp>
+
+#if __has_include(<stdfloat>)
+# include <stdfloat>
+#endif
+
 using boost::math::holtsmark_distribution;
 using boost::multiprecision::cpp_bin_float_quad;
 
@@ -763,6 +770,13 @@ BOOST_AUTO_TEST_CASE(holtsmark_pdf_fp64)
     do_test_holtsmark_pdf<double, 53>();
 }
 
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(holtsmark_pdf_fp64)
+{
+    do_test_holtsmark_pdf<std::float64_t, 53>();
+}
+#endif
+
 BOOST_AUTO_TEST_CASE(holtsmark_pdf_fp128)
 {
     do_test_holtsmark_pdf<cpp_bin_float_quad, 113>();
@@ -772,6 +786,13 @@ BOOST_AUTO_TEST_CASE(holtsmark_cdf_fp64)
 {
     do_test_holtsmark_cdf<double, 53>();
 }
+
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(holtsmark_cdf_fp64)
+{
+    do_test_holtsmark_cdf<std::float64_t, 53>();
+}
+#endif
 
 BOOST_AUTO_TEST_CASE(holtsmark_cdf_fp128)
 {
@@ -783,6 +804,13 @@ BOOST_AUTO_TEST_CASE(holtsmark_ccdf_fp64)
     do_test_holtsmark_ccdf<double, 53>();
 }
 
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(holtsmark_ccdf_fp64)
+{
+    do_test_holtsmark_ccdf<std::float64_t, 53>();
+}
+#endif
+
 BOOST_AUTO_TEST_CASE(holtsmark_ccdf_fp128)
 {
     do_test_holtsmark_ccdf<cpp_bin_float_quad, 113>();
@@ -792,6 +820,13 @@ BOOST_AUTO_TEST_CASE(holtsmark_quantile_nearzero_fp64)
 {
     do_test_holtsmark_quantile_nearzero<double, 53>();
 }
+
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(holtsmark_quantile_nearzero_fp64)
+{
+    do_test_holtsmark_quantile_nearzero<std::float64_t, 53>();
+}
+#endif
 
 BOOST_AUTO_TEST_CASE(holtsmark_quantile_nearzero_fp128)
 {
@@ -803,6 +838,13 @@ BOOST_AUTO_TEST_CASE(holtsmark_quantile_lower_fp64)
     do_test_holtsmark_quantile_lower<double, 53>();
 }
 
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(holtsmark_quantile_lower_fp64)
+{
+    do_test_holtsmark_quantile_lower<std::float64_t, 53>();
+}
+#endif
+
 BOOST_AUTO_TEST_CASE(holtsmark_quantile_lower_fp128)
 {
     do_test_holtsmark_quantile_lower<cpp_bin_float_quad, 113>();
@@ -813,6 +855,13 @@ BOOST_AUTO_TEST_CASE(holtsmark_quantile_upper_fp64)
     do_test_holtsmark_quantile_upper<double, 53>();
 }
 
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(holtsmark_quantile_upper_fp64)
+{
+    do_test_holtsmark_quantile_upper<std::float64_t, 53>();
+}
+#endif
+
 BOOST_AUTO_TEST_CASE(holtsmark_quantile_upper_fp128)
 {
     do_test_holtsmark_quantile_upper<cpp_bin_float_quad, 113>();
@@ -822,6 +871,13 @@ BOOST_AUTO_TEST_CASE(holtsmark_locscale_fp64)
 {
     do_test_holtsmark_locscale_param<double, 53>();
 }
+
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(holtsmark_locscale_fp64)
+{
+    do_test_holtsmark_locscale_param<std::float64_t, 53>();
+}
+#endif
 
 BOOST_AUTO_TEST_CASE(holtsmark_locscale_fp128)
 {
