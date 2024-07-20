@@ -3,11 +3,18 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#define BOOST_TEST_MAIN
 #define BOOST_TEST_MODULE StatsMapAiryTest
 #include <boost/test/included/unit_test.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 
 #include <boost/math/distributions/mapairy.hpp>
+
+#if __has_include(<stdfloat>)
+# include <stdfloat>
+#endif
+
 using boost::math::mapairy_distribution;
 using boost::multiprecision::cpp_bin_float_quad;
 
@@ -539,7 +546,6 @@ void do_test_mapairy_ccdf() {
     BOOST_CHECK_CLOSE(cdf(complement(dist, ldexp(static_cast<RealType>(1), 240))), BOOST_MATH_BIG_CONSTANT(RealType, N, 1.69868020843057108791977444476963676657007865940548e-109), tolerance);
     BOOST_CHECK_CLOSE(cdf(complement(dist, ldexp(static_cast<RealType>(1), 248))), BOOST_MATH_BIG_CONSTANT(RealType, N, 4.14716847761369894511663682805087101213398110206416e-113), tolerance);
     BOOST_CHECK_CLOSE(cdf(complement(dist, ldexp(static_cast<RealType>(1), 256))), BOOST_MATH_BIG_CONSTANT(RealType, N, 1.01249230410490696902261641309835718069677272999613e-116), tolerance);
-
     BOOST_CHECK_CLOSE(cdf(complement(dist, ldexp(static_cast<RealType>(1), 600))), BOOST_MATH_BIG_CONSTANT(RealType, N, 4.71969536983273370677446521953393512020163902133418e-272), tolerance);
 
     // The test is terminated because x is inf after this in fp64.
@@ -790,6 +796,13 @@ BOOST_AUTO_TEST_CASE(mapairy_pdf_fp64)
     do_test_mapairy_pdf<double, 53>();
 }
 
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(mapairy_pdf_fp64)
+{
+    do_test_mapairy_pdf<std::float64_t, 53>();
+}
+#endif
+
 BOOST_AUTO_TEST_CASE(mapairy_pdf_fp128)
 {
     do_test_mapairy_pdf<cpp_bin_float_quad, 113>();
@@ -799,6 +812,13 @@ BOOST_AUTO_TEST_CASE(mapairy_cdf_fp64)
 {
     do_test_mapairy_cdf<double, 53>();
 }
+
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(mapairy_cdf_fp64)
+{
+    do_test_mapairy_cdf<std::float64_t, 53>();
+}
+#endif
 
 BOOST_AUTO_TEST_CASE(mapairy_cdf_fp128)
 {
@@ -810,6 +830,13 @@ BOOST_AUTO_TEST_CASE(mapairy_ccdf_fp64)
     do_test_mapairy_ccdf<double, 53>();
 }
 
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(mapairy_ccdf_fp64)
+{
+    do_test_mapairy_ccdf<std::float64_t, 53>();
+}
+#endif
+
 BOOST_AUTO_TEST_CASE(mapairy_ccdf_fp128)
 {
     do_test_mapairy_ccdf<cpp_bin_float_quad, 113>();
@@ -819,6 +846,13 @@ BOOST_AUTO_TEST_CASE(mapairy_quantile_nearzero_fp64)
 {
     do_test_mapairy_quantile_nearzero<double, 53>();
 }
+
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(mapairy_quantile_nearzero_fp64)
+{
+    do_test_mapairy_quantile_nearzero<std::float64_t, 53>();
+}
+#endif
 
 BOOST_AUTO_TEST_CASE(mapairy_quantile_nearzero_fp128)
 {
@@ -830,6 +864,13 @@ BOOST_AUTO_TEST_CASE(mapairy_quantile_lower_fp64)
     do_test_mapairy_quantile_lower<double, 53>();
 }
 
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(mapairy_quantile_lower_fp64)
+{
+    do_test_mapairy_quantile_lower<std::float64_t, 53>();
+}
+#endif
+
 BOOST_AUTO_TEST_CASE(mapairy_quantile_lower_fp128)
 {
     do_test_mapairy_quantile_lower<cpp_bin_float_quad, 113>();
@@ -840,6 +881,13 @@ BOOST_AUTO_TEST_CASE(mapairy_quantile_upper_fp64)
     do_test_mapairy_quantile_upper<double, 53>();
 }
 
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(mapairy_quantile_upper_fp64)
+{
+    do_test_mapairy_quantile_upper<std::float64_t, 53>();
+}
+#endif
+
 BOOST_AUTO_TEST_CASE(mapairy_quantile_upper_fp128)
 {
     do_test_mapairy_quantile_upper<cpp_bin_float_quad, 113>();
@@ -849,6 +897,13 @@ BOOST_AUTO_TEST_CASE(mapairy_locscale_fp64)
 {
     do_test_mapairy_locscale_param<double, 53>();
 }
+
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_AUTO_TEST_CASE(mapairy_locscale_fp64)
+{
+    do_test_mapairy_locscale_param<std::float64_t, 53>();
+}
+#endif
 
 BOOST_AUTO_TEST_CASE(mapairy_locscale_fp128)
 {
