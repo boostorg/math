@@ -522,7 +522,9 @@ struct non_type {};
    using std::ceil;\
    using std::floor;\
    using std::log10;\
-   using std::sqrt;
+   using std::sqrt;\
+   using std::log2;\
+   using std::ilogb;
 
 #define BOOST_MATH_STD_USING BOOST_MATH_STD_USING_CORE
 

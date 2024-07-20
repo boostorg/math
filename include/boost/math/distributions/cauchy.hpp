@@ -277,7 +277,7 @@ template <class RealType, class Policy>
 inline RealType mean(const cauchy_distribution<RealType, Policy>&)
 {  // There is no mean:
    typedef typename Policy::assert_undefined_type assert_type;
-   static_assert(assert_type::value == 0, "assert type is undefined");
+   static_assert(assert_type::value == 0, "The Cauchy Distribution has no mean");
 
    return policies::raise_domain_error<RealType>(
       "boost::math::mean(cauchy<%1%>&)",
@@ -291,7 +291,7 @@ inline RealType variance(const cauchy_distribution<RealType, Policy>& /*dist*/)
 {
    // There is no variance:
    typedef typename Policy::assert_undefined_type assert_type;
-   static_assert(assert_type::value == 0, "assert type is undefined");
+   static_assert(assert_type::value == 0, "The Cauchy Distribution has no variance");
 
    return policies::raise_domain_error<RealType>(
       "boost::math::variance(cauchy<%1%>&)",
@@ -316,7 +316,7 @@ inline RealType skewness(const cauchy_distribution<RealType, Policy>& /*dist*/)
 {
    // There is no skewness:
    typedef typename Policy::assert_undefined_type assert_type;
-   static_assert(assert_type::value == 0, "assert type is undefined");
+   static_assert(assert_type::value == 0, "The Cauchy Distribution has no skewness");
 
    return policies::raise_domain_error<RealType>(
       "boost::math::skewness(cauchy<%1%>&)",
@@ -330,7 +330,7 @@ inline RealType kurtosis(const cauchy_distribution<RealType, Policy>& /*dist*/)
 {
    // There is no kurtosis:
    typedef typename Policy::assert_undefined_type assert_type;
-   static_assert(assert_type::value == 0, "assert type is undefined");
+   static_assert(assert_type::value == 0, "The Cauchy Distribution has no kurtosis");
 
    return policies::raise_domain_error<RealType>(
       "boost::math::kurtosis(cauchy<%1%>&)",
@@ -344,7 +344,7 @@ inline RealType kurtosis_excess(const cauchy_distribution<RealType, Policy>& /*d
 {
    // There is no kurtosis excess:
    typedef typename Policy::assert_undefined_type assert_type;
-   static_assert(assert_type::value == 0, "assert type is undefined");
+   static_assert(assert_type::value == 0, "The Cauchy Distribution has no kurtosis excess");
 
    return policies::raise_domain_error<RealType>(
       "boost::math::kurtosis_excess(cauchy<%1%>&)",
