@@ -13,8 +13,11 @@
 
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/tools/big_constant.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
+#include <boost/math/distributions/detail/derived_accessors.hpp>
+#include <boost/math/tools/rational.hpp>
 #include <utility>
 #include <cmath>
 
@@ -49,7 +52,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(4.19828222275972713819e14),
         };
         static const RealType Q[15] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(3.41295871011779138155e2),
             static_cast<RealType>(5.48907134827349102297e4),
             static_cast<RealType>(5.36641455324410261980e6),
@@ -69,7 +72,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
         result = tools::evaluate_polynomial(P, x) / tools::evaluate_polynomial(Q, x);
     }
     else if (x < 0.25) {
-        RealType t = x - 0.125;
+        RealType t = x - static_cast <RealType>(0.125);
 
         // Rational Approximation
         // Maximum Relative Error: 2.1471e-17
@@ -83,7 +86,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(-6.59304802132933325219e-1),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(1.98623818041545101115e1),
             static_cast<RealType>(1.52856383017632616759e2),
             static_cast<RealType>(5.70706902111659740041e2),
@@ -95,7 +98,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 0.5) {
-        RealType t = x - 0.25;
+        RealType t = x - static_cast <RealType>(0.25);
 
         // Rational Approximation
         // Maximum Relative Error: 5.3265e-17
@@ -110,7 +113,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(1.37294648777729527395e-3),
         };
         static const RealType Q[6] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(1.02879626214781666701e1),
             static_cast<RealType>(3.85125274509784615691e1),
             static_cast<RealType>(6.18474367367800231625e1),
@@ -121,7 +124,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 1) {
-        RealType t = x - 0.5;
+        RealType t = x - static_cast <RealType>(0.5);
 
         // Rational Approximation
         // Maximum Relative Error: 2.7947e-17
@@ -135,7 +138,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(-1.03693607694266081126e-4),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(6.73363440952557318819e0),
             static_cast<RealType>(1.74288966619209299976e1),
             static_cast<RealType>(2.15943268035083671893e1),
@@ -161,7 +164,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(-2.63561415158954865283e-7),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(3.04082856018856244947e0),
             static_cast<RealType>(3.52558663323956252986e0),
             static_cast<RealType>(1.94795523079701426332e0),
@@ -187,7 +190,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(-3.56598940936439037087e-9),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(1.63904431617187026619e0),
             static_cast<RealType>(1.03812003196677309121e0),
             static_cast<RealType>(3.18144310790210668797e-1),
@@ -213,7 +216,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(-1.94913182592441292094e-11),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(8.10113554189626079232e-1),
             static_cast<RealType>(2.54175325409968367580e-1),
             static_cast<RealType>(3.87119072807894983910e-2),
@@ -239,7 +242,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(-1.16300443044165216564e-13),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(4.10446485803039594111e-1),
             static_cast<RealType>(6.51887342399859289520e-2),
             static_cast<RealType>(5.02151225308643905366e-3),
@@ -265,7 +268,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(-7.42649416356965421308e-16),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(2.09203384450859785642e-1),
             static_cast<RealType>(1.69422626897631306130e-2),
             static_cast<RealType>(6.65649059670689720386e-4),
@@ -291,7 +294,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(-4.53975807317403152058e-18),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(1.05980850386474826374e-1),
             static_cast<RealType>(4.34966042652000070674e-3),
             static_cast<RealType>(8.66341538387446465700e-5),
@@ -315,7 +318,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(-4.05398011689821941383e-4),
         };
         static const RealType Q[5] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(7.00973251258577238892e-1),
             static_cast<RealType>(2.66969681258835723157e-1),
             static_cast<RealType>(5.51785147503612200456e-2),
@@ -368,7 +371,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.64877082086372991309408001661535573441e35),
         };
         static const RealType Q[28] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.18981461118065892086304195732751798634e3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.01761929839041982958990681130944341399e5),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.69465252239913021973760046507387620537e8),
@@ -401,7 +404,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
         result = tools::evaluate_polynomial(P, x) / tools::evaluate_polynomial(Q, x);
     }
     else if (x < 0.125) {
-        RealType t = x - 0.0625;
+        RealType t = x - static_cast <RealType>(0.0625);
 
         // Rational Approximation
         // Maximum Relative Error: 3.4585e-35
@@ -422,7 +425,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.05543800791717482823610940401201712196e4),
         };
         static const RealType Q[13] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.44407579416524903840331499438398472639e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.15911780811299460009161345260146251462e3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.88457596285725454686358792906273558406e4),
@@ -440,7 +443,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 0.25) {
-        RealType t = x - 0.125;
+        RealType t = x - static_cast <RealType>(0.125);
 
         // Rational Approximation
         // Maximum Relative Error: 6.9278e-35
@@ -461,7 +464,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.96874547436310030183519174847668703774e0),
         };
         static const RealType Q[13] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.63164311578114868477819520857286165076e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.34964379844144961683927306966955217328e3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.82966031793809959278519002412667883288e4),
@@ -479,7 +482,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 0.5) {
-        RealType t = x - 0.25;
+        RealType t = x - static_cast <RealType>(0.25);
 
         // Rational Approximation
         // Maximum Relative Error: 6.9378e-36
@@ -500,7 +503,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.72254289950537680833853394958874977464e-3),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.58291085070053442257438623486099473087e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.95618461039379226195473938654286975682e2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.97427161745150579714266897556974326502e3),
@@ -519,7 +522,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 1) {
-        RealType t = x - 0.5;
+        RealType t = x - static_cast <RealType>(0.5);
 
         // Rational Approximation
         // Maximum Relative Error: 6.4363e-35
@@ -540,7 +543,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.02669738424010290973023004028523684766e-7),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.46404480283267324138113869370306506431e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.54550184643308468933661600211579108422e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.63602410602063476726031476852965502123e2),
@@ -579,7 +582,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.21403900721572475664926557233205232491e-10),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.13172035933794917563324458011617112124e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.65687100738157412154132860910003018338e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.59672433683883998168388916533196510994e1),
@@ -618,7 +621,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.08663671047376684678494625068451888284e-14),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.07443397096591141329212291707948432414e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.16665031056584124503224711639009530348e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.27666060511630720485121299731204403783e0),
@@ -658,7 +661,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.37760675743046300528308203869876086823e-22),
         };
         static const RealType Q[13] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.49023284463742780238035958819642738891e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.76284367953836866133894756472541395734e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.69932155343422362573146811195224195135e-1),
@@ -697,7 +700,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.46784746963816915795587433372284530785e-25),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.16012189991825507132967712656930682478e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.95202772611563835130347051925062280272e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.23801477561401113332870463345197159418e-2),
@@ -737,7 +740,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.03558202009465610972808653993060437679e-29),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.08809672969012756295937194823378109391e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.41148083436617376855422685448827300528e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.85101541143091590863368934606849033688e-3),
@@ -777,7 +780,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -8.93970406521541790658675747195982964585e-34),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.04722757068068234153968603374387493579e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.85854131835804458353300285777969427206e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.85809281481040288085436275150792074968e-4),
@@ -811,7 +814,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.53567129749337040254350979652515879881e-7),
         };
         static const RealType Q[9] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.89815449697874475254942178935516387239e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.21223228867921988134838870379132038419e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.79514417558927397512722128659468888701e-1),
@@ -876,6 +879,8 @@ inline RealType saspoint5_pdf_imp(const saspoint5_distribution<RealType, Policy>
         precision_type::value <= 113 ? 113 : 0
     > tag_type;
 
+    static_assert(tag_type::value, "The SaS point5 distribution is only implemented for types with known precision, and 113 bits or fewer in the mantissa (ie 128 bit quad-floats");
+
     RealType u = (x - location) / scale;
 
     result = saspoint5_pdf_imp_prec(u, tag_type()) / scale;
@@ -884,7 +889,7 @@ inline RealType saspoint5_pdf_imp(const saspoint5_distribution<RealType, Policy>
 }
 
 template <class RealType>
-inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 53>& tag)
+inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -911,7 +916,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(1.70766655065405022702e9),
         };
         static const RealType Q[16] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(2.24333404643898143947e2),
             static_cast<RealType>(2.39984636687021023600e4),
             static_cast<RealType>(1.53353791432086858132e6),
@@ -932,7 +937,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
         result = tools::evaluate_polynomial(P, x) / tools::evaluate_polynomial(Q, x);
     }
     else if (x < 1) {
-        RealType t = x - 0.5;
+        RealType t = x - static_cast <RealType>(0.5);
 
         // Rational Approximation
         // Maximum Relative Error: 9.2135e-19
@@ -947,7 +952,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(-4.82051978765960490940e-5),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(5.43565383128046471592e0),
             static_cast<RealType>(1.13265160672130133152e1),
             static_cast<RealType>(1.13352316246726435292e1),
@@ -973,7 +978,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(2.60407071021044908690e-5),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(3.06221257507188300824e0),
             static_cast<RealType>(3.44827372231472308047e0),
             static_cast<RealType>(1.78166113338930668519e0),
@@ -999,7 +1004,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(1.17021346758965979212e-7),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(1.28212183177829510267e0),
             static_cast<RealType>(6.17321009406850420793e-1),
             static_cast<RealType>(1.38400318019319970893e-1),
@@ -1025,7 +1030,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(2.25932082770588727842e-9),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(6.92463563872865541733e-1),
             static_cast<RealType>(1.80720987166755982366e-1),
             static_cast<RealType>(2.20416647324531054557e-2),
@@ -1051,7 +1056,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(2.96850126180387702894e-11),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(3.55825191301363023576e-1),
             static_cast<RealType>(4.77251766176046719729e-2),
             static_cast<RealType>(2.99136605131226103925e-3),
@@ -1077,7 +1082,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(3.58808434477817122371e-13),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(1.80501347735272292079e-1),
             static_cast<RealType>(1.22807958286146936376e-2),
             static_cast<RealType>(3.90421541115275676253e-4),
@@ -1103,7 +1108,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(4.17711709622960498456e-15),
         };
         static const RealType Q[7] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(9.10198637347368265508e-2),
             static_cast<RealType>(3.12263472357578263712e-3),
             static_cast<RealType>(5.00524795130325614005e-5),
@@ -1127,7 +1132,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             static_cast<RealType>(-5.63321705854968264807e-5),
         };
         static const RealType Q[5] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(6.02536240902768558315e-1),
             static_cast<RealType>(1.99284471400121092380e-1),
             static_cast<RealType>(3.48012577961755452113e-2),
@@ -1142,7 +1147,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
 
 
 template <class RealType>
-inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 113>& tag)
+inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1183,7 +1188,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.54662474187354179772157464533408058525e33),
         };
         static const RealType Q[31] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.05231337496532137901354609636674085703e3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.43071888317491317900094470796567113997e5),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.80864482202910830302921131771345102044e8),
@@ -1219,7 +1224,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
         result = tools::evaluate_polynomial(P, x) / tools::evaluate_polynomial(Q, x);
     }
     else if (x < 0.25) {
-        RealType t = x - 0.125;
+        RealType t = x - static_cast <RealType>(0.125);
 
         // Rational Approximation
         // Maximum Relative Error: 9.6106e-35
@@ -1240,7 +1245,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.73617450590346508706222885401965820190e1),
         };
         static const RealType Q[13] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.18558935411552146390814444666395959919e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.49210559503096368944407109881023223654e3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.93959323596111340518285858313038058302e4),
@@ -1258,7 +1263,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 0.5) {
-        RealType t = x - 0.25;
+        RealType t = x - static_cast <RealType>(0.25);
 
         // Rational Approximation
         // Maximum Relative Error: 3.1519e-35
@@ -1279,7 +1284,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.73529976407853894192156335785920329181e-4),
         };
         static const RealType Q[13] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.04157569499592889296640733909653747983e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.82248883130787159161541119440215325308e2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.35191216924911901198168794737654512677e2),
@@ -1297,7 +1302,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 1) {
-        RealType t = x - 0.5;
+        RealType t = x - static_cast <RealType>(0.5);
 
         // Rational Approximation
         // Maximum Relative Error: 7.1196e-37
@@ -1319,7 +1324,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -9.76395009419307902351328300308365369814e-8),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.28073115520716780203055949058270715651e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.20245752585870752942356137496087189194e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.34548337034735803039553186623067144497e2),
@@ -1359,7 +1364,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.22093548539863254922531707899658394458e-10),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.83305694892673455436552817409325835774e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.49922543669955056754932640312490112609e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.23488972536322019584648241457582608908e1),
@@ -1399,7 +1404,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.21044098237798939057079316997065892072e-14),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.94437702178976797218081686254875998984e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.82068837586514484653828718675654460991e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.87606058269189306593797764456467061128e0),
@@ -1439,7 +1444,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.72380245500539326441037770757072641975e-18),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.51702400281458104713682413542736419584e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.01375164846907815766683647295932603968e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.92796007869834847612192314006582598557e-1),
@@ -1479,7 +1484,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.41010917905686427164414364663355769988e-22),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.31062773739451672808456319166347015167e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.35386721434011881226168110614121649232e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.39357338312443465616015226804775178232e-2),
@@ -1519,7 +1524,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.96483118060215455299182487430511998831e-26),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.77347004038951368607085827825968614455e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.27559305780716801070924630708599448466e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.05452382624230160738008550961679711827e-3),
@@ -1559,7 +1564,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.86984591055448991335081550609451649866e-30),
         };
         static const RealType Q[14] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.90112824856612652807095815199496602262e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.59291524937386142936420775839969648652e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.74245361925275011235694006013677228467e-4),
@@ -1594,7 +1599,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.35099582728548602389917143511323566818e-8),
         };
         static const RealType Q[7] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.34601617336219074065534356705298927390e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.82954035780824611941899463895040327299e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.70929001162671283123255408612494541378e-2),
@@ -1668,6 +1673,8 @@ inline RealType saspoint5_cdf_imp(const saspoint5_distribution<RealType, Policy>
         precision_type::value <= 113 ? 113 : 0
     > tag_type;
 
+    static_assert(tag_type::value, "The SaS point5 distribution is only implemented for types with known precision, and 113 bits or fewer in the mantissa (ie 128 bit quad-floats");
+
     RealType u = (x - location) / scale;
 
     result = saspoint5_cdf_imp_prec(u, complement, tag_type());
@@ -1676,7 +1683,7 @@ inline RealType saspoint5_cdf_imp(const saspoint5_distribution<RealType, Policy>
 }
 
 template <class RealType>
-inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 53>& tag)
+inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1703,7 +1710,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
                 static_cast<RealType>(-6.17325587219357123900e8),
             };
             static const RealType Q[13] = {
-                static_cast<RealType>(1),
+                static_cast<RealType>(1.),
                 static_cast<RealType>(1.63111146753825227716e2),
                 static_cast<RealType>(1.27864461509685444043e4),
                 static_cast<RealType>(6.10371533241799228037e5),
@@ -1721,7 +1728,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             result = u * tools::evaluate_polynomial(P, u) / (tools::evaluate_polynomial(Q, u) * (p * p));
         }
         else if (u < 0.25) {
-            RealType t = u - 0.125;
+            RealType t = u - static_cast <RealType>(0.125);
 
             // Rational Approximation
             // Maximum Relative Error: 2.3770e-19
@@ -1736,7 +1743,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
                 static_cast<RealType>(-7.76665288232972435969e-2),
             };
             static const RealType Q[7] = {
-                static_cast<RealType>(1),
+                static_cast<RealType>(1.),
                 static_cast<RealType>(1.72584280323876188464e1),
                 static_cast<RealType>(1.11983518800147654866e2),
                 static_cast<RealType>(3.25969893054048132145e2),
@@ -1748,7 +1755,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * (p * p));
         }
         else if (u < 0.5) {
-            RealType t = u - 0.25;
+            RealType t = u - static_cast <RealType>(0.25);
 
             // Rational Approximation
             // Maximum Relative Error: 9.2445e-18
@@ -1763,7 +1770,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
                 static_cast<RealType>(3.02683750470398342224e-3),
             };
             static const RealType Q[6] = {
-                static_cast<RealType>(1),
+                static_cast<RealType>(1.),
                 static_cast<RealType>(8.55049920135376003042e0),
                 static_cast<RealType>(2.48726119139047911316e1),
                 static_cast<RealType>(2.79519589592198994574e1),
@@ -1774,7 +1781,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * (p * p));
         }
         else {
-            RealType t = u - 0.5;
+            RealType t = u - static_cast <RealType>(0.5);
 
             // Rational Approximation
             // Maximum Relative Error: 2.2918e-20
@@ -1790,7 +1797,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
                 static_cast<RealType>(-3.63491208733876986098e-5),
             };
             static const RealType Q[8] = {
-                static_cast<RealType>(1),
+                static_cast<RealType>(1.),
                 static_cast<RealType>(6.36954463000253710936e0),
                 static_cast<RealType>(1.40601897306833147611e1),
                 static_cast<RealType>(1.33838075106916667084e1),
@@ -1821,7 +1828,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             static_cast<RealType>(6.77986548138011345849e-9),
         };
         static const RealType Q[8] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(2.39244329037830026691e0),
             static_cast<RealType>(2.12683465416376620896e0),
             static_cast<RealType>(9.02612272334554457823e-1),
@@ -1850,7 +1857,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             static_cast<RealType>(-6.40223609013005302318e-11),
         };
         static const RealType Q[8] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(8.11234548272888947555e-1),
             static_cast<RealType>(2.63525516991753831892e-1),
             static_cast<RealType>(4.77118226533147280522e-2),
@@ -1879,7 +1886,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             static_cast<RealType>(-7.82035413331699873450e-14),
         };
         static const RealType Q[8] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(3.49007782566002620811e-1),
             static_cast<RealType>(5.65303702876260444572e-2),
             static_cast<RealType>(5.54316442661801299351e-3),
@@ -1909,7 +1916,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             static_cast<RealType>(1.48083450629432857655e-18),
         };
         static const RealType Q[9] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(3.81470315977341203351e-1),
             static_cast<RealType>(6.91330250512167919573e-2),
             static_cast<RealType>(7.84712209182587717077e-3),
@@ -1939,7 +1946,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             static_cast<RealType>(-1.47102592933729597720e-22),
         };
         static const RealType Q[8] = {
-            static_cast<RealType>(1),
+            static_cast<RealType>(1.),
             static_cast<RealType>(4.34486357752330500669e-1),
             static_cast<RealType>(9.08486933075320995164e-2),
             static_cast<RealType>(1.21024289017243304241e-2),
@@ -1960,7 +1967,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
 
 
 template <class RealType>
-inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 113>& tag)
+inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -2005,7 +2012,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.32129438774563059735783287456769609571e31),
             };
             static const RealType Q[32] = {
-                BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+                BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.65910866673514847742559406762379054364e2),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.21954860438789969160116317316418373146e5),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.85684385746348850219351196129081986508e7),
@@ -2042,7 +2049,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             result = u * tools::evaluate_polynomial(P, u) / (tools::evaluate_polynomial(Q, u) * (p * p));
         }
         else if (u < 0.25) {
-            RealType t = u - 0.125;
+            RealType t = u - static_cast <RealType>(0.125);
 
             // Rational Approximation
             // Maximum Relative Error: 9.0663e-36
@@ -2062,7 +2069,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.35838723365672196069179944509778281549e1),
             };
             static const RealType Q[13] = {
-                BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+                BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.63888803456697300467924455320638435538e1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.74785179836182339383932806919167693991e2),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.15133301804008879476562749311747788645e3),
@@ -2080,7 +2087,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * (p * p));
         }
         else if (u < 0.5) {
-            RealType t = u - 0.25;
+            RealType t = u - static_cast <RealType>(0.25);
 
             // Rational Approximation
             // Maximum Relative Error: 7.1265e-35
@@ -2101,7 +2108,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.26783311530618626413866321968979725353e-3),
             };
             static const RealType Q[13] = {
-                BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+                BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.98941943311823528497840052715295329781e1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.70142252619301982454969690308614487433e2),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.17472255695869018956165466705137979540e2),
@@ -2119,7 +2126,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * (p * p));
         }
         else {
-            RealType t = u - 0.5;
+            RealType t = u - static_cast <RealType>(0.5);
 
             // Rational Approximation
             // Maximum Relative Error: 2.7048e-37
@@ -2141,7 +2148,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.66467016868206844419002547523627548705e-6),
             };
             static const RealType Q[15] = {
-                BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+                BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.01315080955831561204744043759079263546e1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.43409077070585581955481063438385546913e1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.09863540097812452102765922256432103612e2),
@@ -2187,7 +2194,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.75224691413667093006312591320754720811e-14),
         };
         static const RealType Q[17] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.59000688626663121310675150262772434285e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.37518060227321498297232252379976917550e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.96559443266702775026538144474892076437e1),
@@ -2233,7 +2240,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.48644117815971872777609922455371868747e-16),
         };
         static const RealType Q[17] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.88079839671202113888025645668230104601e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.58898753182105924446845274197682915131e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.05418719178760837974322764299800701708e-1),
@@ -2279,7 +2286,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.97289727214495789126072009268721022605e-20),
         };
         static const RealType Q[17] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.10184661848812835285809771940181522329e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.06179300560230499194426573196970342618e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.23171547302923911058112454487643162794e-2),
@@ -2325,7 +2332,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.58768205048500915346781559321978174829e-24),
         };
         static const RealType Q[17] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.27782279546086824129750042200649907991e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.86934772625607907724733810228981095894e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.18640923531164938140838239032346416143e-2),
@@ -2372,7 +2379,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.35526648761411463124801128103381691418e-26),
         };
         static const RealType Q[18] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.99582804063194774835771688139366152937e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.81210581320456331960539046132284190053e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.94358920922810097599951120081974275145e-3),
@@ -2420,7 +2427,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.98381676423023212724768510437325359364e-51),
         };
         static const RealType Q[17] = {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1),
+            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.34271731953273239691423485699928257808e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.27133013035186849140772481980360839559e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.29542078693828543560388747333519393752e-2),
@@ -2502,19 +2509,21 @@ inline RealType saspoint5_quantile_imp(const saspoint5_distribution<RealType, Po
         precision_type::value <= 113 ? 113 : 0
     > tag_type;
 
+    static_assert(tag_type::value, "The SaS point5 distribution is only implemented for types with known precision, and 113 bits or fewer in the mantissa (ie 128 bit quad-floats");
+
     result = location + scale * saspoint5_quantile_imp_prec(p, complement, tag_type());
 
     return result;
 }
 
 template <class RealType>
-inline RealType saspoint5_entropy_imp_prec(const std::integral_constant<int, 53>& tag)
+inline RealType saspoint5_entropy_imp_prec(const std::integral_constant<int, 53>&)
 {
     return static_cast<RealType>(3.63992444568030649573);
 }
 
 template <class RealType>
-inline RealType saspoint5_entropy_imp_prec(const std::integral_constant<int, 113>& tag)
+inline RealType saspoint5_entropy_imp_prec(const std::integral_constant<int, 113>&)
 {
     return BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.6399244456803064957308496039071853510);
 }
@@ -2542,6 +2551,8 @@ inline RealType saspoint5_entropy_imp(const saspoint5_distribution<RealType, Pol
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
     > tag_type;
+
+    static_assert(tag_type::value, "The SaS point5 distribution is only implemented for types with known precision, and 113 bits or fewer in the mantissa (ie 128 bit quad-floats");
 
     result = saspoint5_entropy_imp_prec<RealType>(tag_type()) + log(scale);
 
@@ -2653,11 +2664,11 @@ inline RealType mean(const saspoint5_distribution<RealType, Policy> &dist)
 {
     // There is no mean:
     typedef typename Policy::assert_undefined_type assert_type;
-    static_assert(assert_type::value == 0, "assert type is undefined");
+    static_assert(assert_type::value == 0, "The SaS point5 Distribution has no mean");
 
     return policies::raise_domain_error<RealType>(
         "boost::math::mean(saspoint5<%1%>&)",
-        "The SaSpoint5 distribution does not have a mean: "
+        "The SaS point5 distribution does not have a mean: "
         "the only possible return value is %1%.",
         std::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
@@ -2667,11 +2678,11 @@ inline RealType variance(const saspoint5_distribution<RealType, Policy>& /*dist*
 {
     // There is no variance:
     typedef typename Policy::assert_undefined_type assert_type;
-    static_assert(assert_type::value == 0, "assert type is undefined");
+    static_assert(assert_type::value == 0, "The SaS point5 Distribution has no variance");
 
     return policies::raise_domain_error<RealType>(
         "boost::math::variance(saspoint5<%1%>&)",
-        "The SaSpoint5 distribution does not have a variance: "
+        "The SaS point5 distribution does not have a variance: "
         "the only possible return value is %1%.",
         std::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
@@ -2693,11 +2704,11 @@ inline RealType skewness(const saspoint5_distribution<RealType, Policy>& /*dist*
 {
     // There is no skewness:
     typedef typename Policy::assert_undefined_type assert_type;
-    static_assert(assert_type::value == 0, "assert type is undefined");
+    static_assert(assert_type::value == 0, "The SaS point5 Distribution has no skewness");
 
     return policies::raise_domain_error<RealType>(
         "boost::math::skewness(saspoint5<%1%>&)",
-        "The SaSpoint5 distribution does not have a skewness: "
+        "The SaS point5 distribution does not have a skewness: "
         "the only possible return value is %1%.",
         std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
 }
@@ -2707,11 +2718,11 @@ inline RealType kurtosis(const saspoint5_distribution<RealType, Policy>& /*dist*
 {
     // There is no kurtosis:
     typedef typename Policy::assert_undefined_type assert_type;
-    static_assert(assert_type::value == 0, "assert type is undefined");
+    static_assert(assert_type::value == 0, "The SaS point5 Distribution has no kurtosis");
 
     return policies::raise_domain_error<RealType>(
         "boost::math::kurtosis(saspoint5<%1%>&)",
-        "The SaSpoint5 distribution does not have a kurtosis: "
+        "The SaS point5 distribution does not have a kurtosis: "
         "the only possible return value is %1%.",
         std::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
@@ -2721,11 +2732,11 @@ inline RealType kurtosis_excess(const saspoint5_distribution<RealType, Policy>& 
 {
     // There is no kurtosis excess:
     typedef typename Policy::assert_undefined_type assert_type;
-    static_assert(assert_type::value == 0, "assert type is undefined");
+    static_assert(assert_type::value == 0, "The SaS point5 Distribution has no kurtosis excess");
 
     return policies::raise_domain_error<RealType>(
         "boost::math::kurtosis_excess(saspoint5<%1%>&)",
-        "The SaSpoint5 distribution does not have a kurtosis: "
+        "The SaS point5 distribution does not have a kurtosis: "
         "the only possible return value is %1%.",
         std::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
