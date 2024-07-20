@@ -732,7 +732,7 @@ BOOST_AUTO_TEST_CASE(landau_pdf_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(landau_pdf_fp64)
+BOOST_AUTO_TEST_CASE(landau_pdf_fp64_std)
 {
     do_test_landau_pdf<std::float64_t, 53>();
 }
@@ -749,7 +749,7 @@ BOOST_AUTO_TEST_CASE(landau_cdf_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(landau_cdf_fp64)
+BOOST_AUTO_TEST_CASE(landau_cdf_fp64_std)
 {
     do_test_landau_cdf<std::float64_t, 53>();
 }
@@ -766,7 +766,7 @@ BOOST_AUTO_TEST_CASE(landau_ccdf_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(landau_ccdf_fp64)
+BOOST_AUTO_TEST_CASE(landau_ccdf_fp64_std)
 {
     do_test_landau_ccdf<std::float64_t, 53>();
 }
@@ -783,7 +783,7 @@ BOOST_AUTO_TEST_CASE(landau_quantile_nearzero_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(landau_quantile_nearzero_fp64)
+BOOST_AUTO_TEST_CASE(landau_quantile_nearzero_fp64_std)
 {
     do_test_landau_quantile_nearzero<std::float64_t, 53>();
 }
@@ -800,7 +800,7 @@ BOOST_AUTO_TEST_CASE(landau_quantile_lower_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(landau_quantile_lower_fp64)
+BOOST_AUTO_TEST_CASE(landau_quantile_lower_fp64_std)
 {
     do_test_landau_quantile_lower<std::float64_t, 53>();
 }
@@ -817,7 +817,7 @@ BOOST_AUTO_TEST_CASE(landau_quantile_upper_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(landau_quantile_upper_fp64)
+BOOST_AUTO_TEST_CASE(landau_quantile_upper_fp64_std)
 {
     do_test_landau_quantile_upper<std::float64_t, 53>();
 }
@@ -834,7 +834,7 @@ BOOST_AUTO_TEST_CASE(landau_locscale_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(landau_locscale_fp64)
+BOOST_AUTO_TEST_CASE(landau_locscale_fp64_std)
 {
     do_test_landau_locscale_param<std::float64_t, 53>();
 }
