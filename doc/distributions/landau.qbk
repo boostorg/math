@@ -30,7 +30,7 @@ with shape parameter [alpha]=1, [beta]=1.
 [@http://en.wikipedia.org/wiki/Probability_distribution probability distribution function PDF]
 given by:
 
-[equation landau_ref1]
+[equation landau_ref1]  [/f(x; \mu, c)=\frac{1}{\pi c} \int_{0}^{\infty} \exp(-t) \cos \left( t \left( \frac{x-\mu}{c}\right) + \frac{2t}{\pi} \log \left( \frac{t}{c} \right)  \right) dt]
 
 The location parameter [mu] is the location of the distribution,
 while the scale parameter [c] determines the width of the distribution,
@@ -97,6 +97,18 @@ The domain of the random variable is \[-[max_value], +[min_value]\].
 
 The error is within 4 epsilon except for the rapidly decaying left tail.
 
+Errors in the PDF at 64-bit double precision:
+
+[$../graphs/landau_pdf_accuracy_64.png]
+
+Errors in the CDF at 64-bit double precision:
+
+[$../graphs/landau_cdf_accuracy_64.png]
+
+Errors in the CDF-complement at 64-bit double precision:
+
+[$../graphs/landau_ccdf_accuracy_64.png]
+
 [h4 Implementation]
 
 See references.
@@ -110,6 +122,7 @@ DOI: 10.36227/techrxiv.171822215.53612870/v2, 2024.
 [endsect][/section:landau_dist landau]
 
 [/ landau.qbk
+  Copyright Takuma Yoshimura 2024.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
