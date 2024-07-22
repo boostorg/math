@@ -2748,7 +2748,7 @@ struct lanczos
 } // namespace boost
 
 #if !defined(_CRAYC) && !defined(__CUDACC__) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
-#if ((defined(_M_IX86_FP) && (_M_IX86_FP >= 2)) || defined(__SSE2__) || defined(_M_AMD64) || defined(_M_X64)) && !defined(_MANAGED)
+#if ((defined(_M_IX86_FP) && (_M_IX86_FP >= 2)) || defined(__SSE2__) || defined(_M_AMD64) || defined(_M_X64)) && !defined(_MANAGED) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
 #include <boost/math/special_functions/detail/lanczos_sse2.hpp>
 #endif
 #endif
