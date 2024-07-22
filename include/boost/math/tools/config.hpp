@@ -724,6 +724,27 @@ namespace boost{ namespace math{
 // Not all functions that allow CUDA allow SYCL (e.g. Recursion is disallowed by SYCL)
 #  define BOOST_MATH_GPU_ENABLED BOOST_MATH_CUDA_ENABLED BOOST_MATH_SYCL_ENABLED
 
+// Additional functions that need replaced/marked up
+#ifdef BOOST_MATH_HAS_GPU_SUPPORT
+template <class T>
+BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b; b = t; }
+template <class T>
+BOOST_MATH_GPU_ENABLED constexpr T gpu_safe_min(const T& a, const T& b) { return a < b ? a : b; }
+template <class T>
+BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { return a > b ? a : b; }
+
+#define BOOST_MATH_GPU_SAFE_SWAP(a, b) gpu_safe_swap(a, b);
+#define BOOST_MATH_GPU_SAFE_MIN(a, b) gpu_safe_min(a, b);
+#define BOOST_MATH_GPU_SAFE_MAX(a, b) gpu_safe_max(a, b);
+
+#else
+
+#define BOOST_MATH_GPU_SAFE_SWAP(a, b) std::swap(a, b);
+#define BOOST_MATH_GPU_SAFE_MIN(a, b) (std::min)(a, b);
+#define BOOST_MATH_GPU_SAFE_MAX(a, b) (std::max)(a, b);
+
+#endif
+
 // Static variables are not allowed with CUDA or C++20 modules
 // See if we can inline them instead
 
@@ -731,7 +752,7 @@ namespace boost{ namespace math{
 #  define BOOST_MATH_STATIC_CONSTEXPR inline constexpr
 #  define BOOST_MATH_STATIC static
 #else
-#  ifndef BOOST_MATH_ENABLE_CUDA
+#  ifndef BOOST_MATH_HAS_GPU_SUPPORT
 #    define BOOST_MATH_STATIC_CONSTEXPR static constexpr
 #    define BOOST_MATH_STATIC static
 #  else
