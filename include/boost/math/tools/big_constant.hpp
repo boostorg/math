@@ -12,9 +12,11 @@
 #include <boost/lexical_cast.hpp>
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <cstdlib>
 #include <type_traits>
 #include <limits>
+#endif
 
 namespace boost{ namespace math{ 
 

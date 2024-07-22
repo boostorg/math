@@ -11,21 +11,23 @@
 #ifndef _BOOST_POLYGAMMA_DETAIL_2013_07_30_HPP_
   #define _BOOST_POLYGAMMA_DETAIL_2013_07_30_HPP_
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <cmath>
 #include <limits>
 #include <string>
 #include <boost/math/policies/policy.hpp>
-#include <boost/math/special_functions/bernoulli.hpp>
 #include <boost/math/special_functions/trunc.hpp>
+#endif
+#include <boost/math/tools/assert.hpp>
+#include <boost/math/tools/config.hpp>
+#include <boost/math/special_functions/bernoulli.hpp>
 #include <boost/math/special_functions/zeta.hpp>
 #include <boost/math/special_functions/digamma.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/special_functions/cos_pi.hpp>
 #include <boost/math/special_functions/pow.hpp>
-#include <boost/math/tools/assert.hpp>
-#include <boost/math/tools/config.hpp>
 
-#ifdef BOOST_MATH_HAS_THREADS
+#if defined(BOOST_MATH_HAS_THREADS) && !defined(BOOST_MATH_AS_MODULE)
 #include <mutex>
 #endif
 

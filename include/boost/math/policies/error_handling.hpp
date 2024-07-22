@@ -9,6 +9,9 @@
 #define BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 
 #include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_AS_MODULE
+#include <boost/math/tools/throw_exception.hpp>
 #include <iomanip>
 #include <string>
 #include <cstring>
@@ -19,12 +22,12 @@
 #include <complex>
 #include <cmath>
 #include <cstdint>
-#include <boost/math/policies/policy.hpp>
-#include <boost/math/tools/precision.hpp>
-#ifndef BOOST_MATH_NO_EXCEPTIONS
 #include <stdexcept>
-#include <boost/math/tools/throw_exception.hpp>
+#include <sstream>
 #endif
+
+#include <boost/math/tools/precision.hpp>
+#include <boost/math/policies/policy.hpp>
 
 #ifdef _MSC_VER
 #  pragma warning(push) // Quiet warnings in boost/format.hpp
@@ -36,46 +39,47 @@
 // Note that this only occurs when the compiler can deduce code is unreachable,
 // for example when policy macros are used to ignore errors rather than throw.
 #endif
-#include <sstream>
 
 namespace boost{ namespace math{
 
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-
-class evaluation_error : public std::runtime_error
+BOOST_MATH_MODULE_EXPORT class evaluation_error : public std::runtime_error
 {
 public:
-   explicit evaluation_error(const std::string& s) : std::runtime_error(s){}
-};
-
-class rounding_error : public std::runtime_error
-{
-public:
-   explicit rounding_error(const std::string& s) : std::runtime_error(s){}
-};
-
+   evaluation_error(const std::string& s) : std::runtime_error(s){}
+#if defined(BOOST_MATH_AS_MODULE) && defined(__GNUC__)
+   ~evaluation_error() {}
 #endif
+};
+
+BOOST_MATH_MODULE_EXPORT class rounding_error : public std::runtime_error
+{
+public:
+   rounding_error(const std::string& s) : std::runtime_error(s){}
+#if defined(BOOST_MATH_AS_MODULE) && defined(__GNUC__)
+   ~rounding_error() {}
+#endif
+};
 
 namespace policies{
 //
 // Forward declarations of user error handlers,
 // it's up to the user to provide the definition of these:
 //
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 T user_domain_error(const char* function, const char* message, const T& val);
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 T user_pole_error(const char* function, const char* message, const T& val);
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 T user_overflow_error(const char* function, const char* message, const T& val);
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 T user_underflow_error(const char* function, const char* message, const T& val);
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 T user_denorm_error(const char* function, const char* message, const T& val);
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 T user_evaluation_error(const char* function, const char* message, const T& val);
-template <class T, class TargetType>
-TargetType user_rounding_error(const char* function, const char* message, const T& val, const TargetType& t);
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T, class TargetType>
+T user_rounding_error(const char* function, const char* message, const T& val, const TargetType& t);
+BOOST_MATH_MODULE_EXPORT template <class T>
 T user_indeterminate_result_error(const char* function, const char* message, const T& val);
 
 namespace detail
@@ -657,7 +661,7 @@ inline T raise_indeterminate_result_error(
 
 }  // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline constexpr T raise_domain_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::domain_error_type policy_type;
@@ -666,7 +670,7 @@ inline constexpr T raise_domain_error(const char* function, const char* message,
       val, policy_type());
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline constexpr T raise_pole_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::pole_error_type policy_type;
@@ -675,7 +679,7 @@ inline constexpr T raise_pole_error(const char* function, const char* message, c
       val, policy_type());
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline constexpr T raise_overflow_error(const char* function, const char* message, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::overflow_error_type policy_type;
@@ -684,7 +688,7 @@ inline constexpr T raise_overflow_error(const char* function, const char* messag
       policy_type());
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline constexpr T raise_overflow_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::overflow_error_type policy_type;
@@ -693,7 +697,7 @@ inline constexpr T raise_overflow_error(const char* function, const char* messag
       val, policy_type());
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline constexpr T raise_underflow_error(const char* function, const char* message, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::underflow_error_type policy_type;
@@ -702,7 +706,7 @@ inline constexpr T raise_underflow_error(const char* function, const char* messa
       policy_type());
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline constexpr T raise_denorm_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::denorm_error_type policy_type;
@@ -712,7 +716,7 @@ inline constexpr T raise_denorm_error(const char* function, const char* message,
       policy_type());
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline constexpr T raise_evaluation_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::evaluation_error_type policy_type;
@@ -721,7 +725,7 @@ inline constexpr T raise_evaluation_error(const char* function, const char* mess
       val, policy_type());
 }
 
-template <class T, class TargetType, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class TargetType, class Policy>
 inline constexpr TargetType raise_rounding_error(const char* function, const char* message, const T& val, const TargetType& t, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::rounding_error_type policy_type;
@@ -730,7 +734,7 @@ inline constexpr TargetType raise_rounding_error(const char* function, const cha
       val, t, policy_type());
 }
 
-template <class T, class R, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class R, class Policy>
 inline constexpr T raise_indeterminate_result_error(const char* function, const char* message, const T& val, const R& result, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::indeterminate_result_error_type policy_type;
@@ -831,8 +835,8 @@ BOOST_MATH_FORCEINLINE constexpr bool check_denorm(std::complex<T> /* val */, R*
 
 } // namespace detail
 
-template <class R, class Policy, class T>
-BOOST_MATH_FORCEINLINE R checked_narrowing_cast(T val, const char* function) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
+BOOST_MATH_MODULE_EXPORT template <class R, class Policy, class T>
+inline R checked_narrowing_cast(T val, const char* function) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    typedef typename Policy::overflow_error_type overflow_type;
    typedef typename Policy::underflow_error_type underflow_type;
@@ -851,7 +855,7 @@ BOOST_MATH_FORCEINLINE R checked_narrowing_cast(T val, const char* function) noe
    return static_cast<R>(val);
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline void check_series_iterations(const char* function, std::uintmax_t max_iter, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    if(max_iter >= policies::get_max_series_iterations<Policy>())
@@ -860,7 +864,7 @@ inline void check_series_iterations(const char* function, std::uintmax_t max_ite
          "Series evaluation exceeded %1% iterations, giving up now.", static_cast<T>(static_cast<double>(max_iter)), pol);
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline void check_root_iterations(const char* function, std::uintmax_t max_iter, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    if(max_iter >= policies::get_max_root_iterations<Policy>())

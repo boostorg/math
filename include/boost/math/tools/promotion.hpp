@@ -24,7 +24,9 @@
 #endif
 
 #include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_STANDALONE
 #include <type_traits>
+#endif
 
 #if defined __has_include
 #  if __cplusplus > 202002L || (defined(_MSVC_LANG) && _MSVC_LANG > 202002L)

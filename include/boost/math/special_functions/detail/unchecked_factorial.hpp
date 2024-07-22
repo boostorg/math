@@ -18,11 +18,13 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
+#ifndef BOOST_MATH_AS_MODULE
 #include <cmath>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 #include <array>
 #include <type_traits>
+#endif
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -37,7 +39,7 @@
 namespace boost { namespace math
 {
 // Forward declarations:
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 struct max_factorial;
 //
 // see https://github.com/boostorg/math/issues/923
@@ -45,6 +47,9 @@ struct max_factorial;
 //
 template <class T, bool = true>
 struct unchecked_factorial_data;
+
+BOOST_MATH_MODULE_EXPORT template <class RT>
+RT unchecked_factorial(unsigned int BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(RT));
 
 template <bool b>
 struct unchecked_factorial_data<float, b>
@@ -136,13 +141,13 @@ template<bool b>
 #endif
 
 // Definitions:
-template <>
+BOOST_MATH_MODULE_EXPORT template <>
 inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(float))
 {
    return unchecked_factorial_data<float>::factorials[i];
 }
 
-template <>
+BOOST_MATH_MODULE_EXPORT template <>
 struct max_factorial<float>
 {
    static constexpr unsigned value = 34;
@@ -509,13 +514,13 @@ template <bool b>
    }};
 #endif
 
-template <>
+BOOST_MATH_MODULE_EXPORT template <>
 inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION double unchecked_factorial<double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(double))
 {
    return unchecked_factorial_data<double>::factorials[i];
 }
 
-template <>
+BOOST_MATH_MODULE_EXPORT template <>
 struct max_factorial<double>
 {
    static constexpr unsigned value = 170;
@@ -882,13 +887,13 @@ template <bool b>
    }};
 #endif
 
-template <>
+BOOST_MATH_MODULE_EXPORT template <>
 inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION long double unchecked_factorial<long double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(long double))
 {
    return unchecked_factorial_data<long double>::factorials[i];
 }
 
-template <>
+BOOST_MATH_MODULE_EXPORT template <>
 struct max_factorial<long double>
 {
    static constexpr unsigned value = 170;
@@ -1263,7 +1268,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION BOOST_MATH_FLOAT128_TYPE unchecked_fa
    return unchecked_factorial_data<BOOST_MATH_FLOAT128_TYPE>::factorials[i];
 }
 
-template <>
+BOOST_MATH_MODULE_EXPORT template <>
 struct max_factorial<BOOST_MATH_FLOAT128_TYPE>
 {
    static constexpr unsigned value = 170;
@@ -1583,7 +1588,7 @@ inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, 1
 }
 #endif
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline T unchecked_factorial(unsigned i)
 {
    typedef typename boost::math::policies::precision<T, boost::math::policies::policy<> >::type tag_type;
@@ -1596,7 +1601,7 @@ inline T unchecked_factorial(unsigned i)
 #define BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
 #endif
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 struct max_factorial
 {
    static constexpr unsigned value = 

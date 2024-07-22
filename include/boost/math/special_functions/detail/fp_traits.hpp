@@ -20,10 +20,12 @@ With these techniques, the code could be simplified.
 #   define BOOST_FPCLASSIFY_VAX_FORMAT
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <cstring>
 #include <cstdint>
 #include <limits>
 #include <type_traits>
+#endif
 #include <boost/math/tools/is_standalone.hpp>
 #include <boost/math/tools/assert.hpp>
 
@@ -33,6 +35,18 @@ With these techniques, the code could be simplified.
 #include <boost/predef/other/endian.h>
 #define BOOST_MATH_ENDIAN_BIG_BYTE BOOST_ENDIAN_BIG_BYTE
 #define BOOST_MATH_ENDIAN_LITTLE_BYTE BOOST_ENDIAN_LITTLE_BYTE
+
+#elif (__cplusplus >= 202002L || _MSVC_LANG >= 202002L)
+
+#if __has_include(<bit>)
+#ifndef BOOST_MATH_STANDALONE
+#include <bit>
+#endif
+#define BOOST_MATH_ENDIAN_BIG_BYTE (std::endian::native == std::endian::big)
+#define BOOST_MATH_ENDIAN_LITTLE_BYTE (std::endian::native == std::endian::little)
+#else
+#error Missing <bit> header. Please disable standalone mode, and file an issue at https://github.com/boostorg/math
+#endif
 
 #elif defined(_WIN32)
 

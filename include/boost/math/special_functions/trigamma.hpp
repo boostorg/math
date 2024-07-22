@@ -10,12 +10,14 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/rational.hpp>
-#include <boost/math/tools/series.hpp>
-#include <boost/math/tools/promotion.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
+#endif
+#include <boost/math/tools/promotion.hpp>
+#include <boost/math/tools/series.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/special_functions/polygamma.hpp>
 
@@ -426,7 +428,7 @@ const typename trigamma_initializer<T, Policy>::init trigamma_initializer<T, Pol
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type
    trigamma(T x, const Policy&)
 {
@@ -454,7 +456,7 @@ inline typename tools::promote_args<T>::type
       static_cast<const tag_type*>(nullptr), forwarding_policy()), "boost::math::trigamma<%1%>(%1%)");
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type
    trigamma(T x)
 {
