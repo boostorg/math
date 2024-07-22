@@ -568,10 +568,10 @@ namespace boost
 
    // log1p is log(x + 1)
    template <class T>
-   tools::promote_args_t<T> log1p(T);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> log1p(T);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> log1p(T, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> log1p(T, const Policy&);
 
    // log1pmx is log(x + 1) - x
    template <class T>
