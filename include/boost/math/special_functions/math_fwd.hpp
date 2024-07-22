@@ -39,111 +39,111 @@ namespace boost
 
    // Beta functions.
    template <class RT1, class RT2>
-   tools::promote_args_t<RT1, RT2>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2>
          beta(RT1 a, RT2 b); // Beta function (2 arguments).
 
    template <class RT1, class RT2, class A>
-   tools::promote_args_t<RT1, RT2, A>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, A>
          beta(RT1 a, RT2 b, A x); // Beta function (3 arguments).
 
    template <class RT1, class RT2, class RT3, class Policy>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          beta(RT1 a, RT2 b, RT3 x, const Policy& pol); // Beta function (3 arguments).
 
    template <class RT1, class RT2, class RT3>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          betac(RT1 a, RT2 b, RT3 x);
 
    template <class RT1, class RT2, class RT3, class Policy>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          betac(RT1 a, RT2 b, RT3 x, const Policy& pol);
 
    template <class RT1, class RT2, class RT3>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta(RT1 a, RT2 b, RT3 x); // Incomplete beta function.
 
    template <class RT1, class RT2, class RT3, class Policy>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta(RT1 a, RT2 b, RT3 x, const Policy& pol); // Incomplete beta function.
 
    template <class RT1, class RT2, class RT3>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac(RT1 a, RT2 b, RT3 x); // Incomplete beta complement function.
 
    template <class RT1, class RT2, class RT3, class Policy>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac(RT1 a, RT2 b, RT3 x, const Policy& pol); // Incomplete beta complement function.
 
    template <class T1, class T2, class T3, class T4>
-   tools::promote_args_t<T1, T2, T3, T4>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3, T4>
          ibeta_inv(T1 a, T2 b, T3 p, T4* py);
 
    template <class T1, class T2, class T3, class T4, class Policy>
-   tools::promote_args_t<T1, T2, T3, T4>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3, T4>
          ibeta_inv(T1 a, T2 b, T3 p, T4* py, const Policy& pol);
 
    template <class RT1, class RT2, class RT3>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_inv(RT1 a, RT2 b, RT3 p); // Incomplete beta inverse function.
 
    template <class RT1, class RT2, class RT3, class Policy>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_inv(RT1 a, RT2 b, RT3 p, const Policy&); // Incomplete beta inverse function.
 
    template <class RT1, class RT2, class RT3>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_inva(RT1 a, RT2 b, RT3 p); // Incomplete beta inverse function.
 
    template <class RT1, class RT2, class RT3, class Policy>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_inva(RT1 a, RT2 b, RT3 p, const Policy&); // Incomplete beta inverse function.
 
    template <class RT1, class RT2, class RT3>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_invb(RT1 a, RT2 b, RT3 p); // Incomplete beta inverse function.
 
    template <class RT1, class RT2, class RT3, class Policy>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_invb(RT1 a, RT2 b, RT3 p, const Policy&); // Incomplete beta inverse function.
 
    template <class T1, class T2, class T3, class T4>
-   tools::promote_args_t<T1, T2, T3, T4>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3, T4>
          ibetac_inv(T1 a, T2 b, T3 q, T4* py);
 
    template <class T1, class T2, class T3, class T4, class Policy>
-   tools::promote_args_t<T1, T2, T3, T4>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3, T4>
          ibetac_inv(T1 a, T2 b, T3 q, T4* py, const Policy& pol);
 
    template <class RT1, class RT2, class RT3>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac_inv(RT1 a, RT2 b, RT3 q); // Incomplete beta complement inverse function.
 
    template <class RT1, class RT2, class RT3, class Policy>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac_inv(RT1 a, RT2 b, RT3 q, const Policy&); // Incomplete beta complement inverse function.
 
    template <class RT1, class RT2, class RT3>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac_inva(RT1 a, RT2 b, RT3 q); // Incomplete beta complement inverse function.
 
    template <class RT1, class RT2, class RT3, class Policy>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac_inva(RT1 a, RT2 b, RT3 q, const Policy&); // Incomplete beta complement inverse function.
 
    template <class RT1, class RT2, class RT3>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac_invb(RT1 a, RT2 b, RT3 q); // Incomplete beta complement inverse function.
 
    template <class RT1, class RT2, class RT3, class Policy>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac_invb(RT1 a, RT2 b, RT3 q, const Policy&); // Incomplete beta complement inverse function.
 
    template <class RT1, class RT2, class RT3>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_derivative(RT1 a, RT2 b, RT3 x);  // derivative of incomplete beta
 
    template <class RT1, class RT2, class RT3, class Policy>
-   tools::promote_args_t<RT1, RT2, RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_derivative(RT1 a, RT2 b, RT3 x, const Policy& pol);  // derivative of incomplete beta
 
    // Binomial:
