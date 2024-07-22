@@ -85,7 +85,8 @@ The domain of the random variable is \[-[max_value], +[min_value]\].
 
 [h4 Accuracy]
 
-The error is within 4 epsilon.
+For float64, the error is within 4 epsilons.
+For float128, the error is within 4 epsilons except the peak.
 
 [h4 Implementation]
 
