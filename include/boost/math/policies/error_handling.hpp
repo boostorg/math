@@ -337,6 +337,32 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
    return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
 }
 
+#ifdef BOOST_MATH_HAS_GPU_SUPPORT
+
+template <>
+BOOST_MATH_GPU_ENABLED constexpr float raise_overflow_error<float>(
+           const char* ,
+           const char* ,
+           const  ::boost::math::policies::overflow_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(float)
+{
+   // This may or may not do the right thing, but the user asked for the error
+   // to be ignored so here we go anyway:
+   return static_cast<float>(INFINITY);
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED constexpr double raise_overflow_error<double>(
+           const char* ,
+           const char* ,
+           const  ::boost::math::policies::overflow_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(double)
+{
+   // This may or may not do the right thing, but the user asked for the error
+   // to be ignored so here we go anyway:
+   return INFINITY;
+}
+
+#endif
+
 template <class T>
 BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
            const char* ,
