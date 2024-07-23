@@ -34,3 +34,5 @@ run test_cauchy_quan_float.cu ;
 # run test_beta_simple.cpp ;
 run test_beta_double.cu ;
 run test_beta_float.cu ;
+run test_cbrt_double.cu ;
+run test_cbrt_float.cu ;
