@@ -10,6 +10,10 @@
 # pragma warning (disable : 4180) // qualifier applied to function type has no meaning; ignored
 #endif
 
+#ifdef __CUDACC__
+#pragma nv_diag_suppress 221
+#endif
+
 #include <boost/math/concepts/real_concept.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
