@@ -4,6 +4,7 @@
 
 // Copyright Paul A. Bristow 2006.
 // Copyright John Maddock 2006.
+// Copyright Matt Borland 2024
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -26,6 +27,7 @@
 #include <vector>
 #include <complex>
 #include <type_traits>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/detail/round_fwd.hpp>
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
 #include <boost/math/policies/policy.hpp>
