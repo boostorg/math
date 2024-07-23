@@ -8,6 +8,7 @@
 #ifndef BOOST_MATH_TEST_OUT_OF_RANGE_HPP
 #define BOOST_MATH_TEST_OUT_OF_RANGE_HPP
 
+#include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/test/unit_test.hpp>
 
@@ -29,6 +30,11 @@ Checks:
 but does *not* check finite but out-of-range parameters to the constructor
 because these are specific to each distribution.
 */
+
+#if defined(BOOST_CHECK_THROW) && defined(BOOST_MATH_NO_EXCEPTIONS)
+#  undef BOOST_CHECK_THROW
+#  define BOOST_CHECK_THROW(x, y)
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(push)
