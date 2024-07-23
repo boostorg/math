@@ -36,12 +36,10 @@ BOOST_MATH_GPU_ENABLED T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
 {
    BOOST_MATH_STD_USING  // for ADL of std names
 
-   #ifndef BOOST_MATH_NO_EXCEPTIONS
    if(a <= 0)
       return policies::raise_domain_error<T>("boost::math::beta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got a=%1%).", a, pol);
    if(b <= 0)
       return policies::raise_domain_error<T>("boost::math::beta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got b=%1%).", b, pol);
-   #endif
 
    T result;  // LCOV_EXCL_LINE
 
