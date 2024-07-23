@@ -561,10 +561,10 @@ namespace boost
 
    // cbrt - cube root.
    template <class RT>
-   tools::promote_args_t<RT> cbrt(RT z);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> cbrt(RT z);
 
    template <class RT, class Policy>
-   tools::promote_args_t<RT> cbrt(RT z, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> cbrt(RT z, const Policy&);
 
    // log1p is log(x + 1)
    template <class T>
