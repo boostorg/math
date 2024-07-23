@@ -33,6 +33,40 @@ namespace policies{
 //
 // Define macros for our default policies, if they're not defined already:
 //
+
+
+//
+// Generic support for GPUs
+//
+#ifdef BOOST_MATH_HAS_GPU_SUPPORT
+#  ifndef BOOST_MATH_OVERFLOW_ERROR_POLICY
+#    define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+#  endif
+#  ifndef BOOST_MATH_PROMOTE_DOUBLE_POLICY
+#     define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
+#  endif
+#endif
+
+//
+// Refined support for sycl since it does not support errno
+//
+
+#ifdef BOOST_MATH_ENABLE_SYCL
+#  ifndef BOOST_MATH_DOMAIN_ERROR_POLICY
+#    define BOOST_MATH_DOMAIN_ERROR_POLICY ignore_error
+#  endif
+#  ifndef BOOST_MATH_POLE_ERROR_POLICY
+#     define BOOST_MATH_POLE_ERROR_POLICY ignore_error
+#  endif
+#  ifndef BOOST_MATH_EVALUATION_ERROR_POLICY
+#     define BOOST_MATH_EVALUATION_ERROR_POLICY ignore_error
+#  endif
+#  ifndef BOOST_MATH_ROUNDING_ERROR_POLICY
+#     define BOOST_MATH_ROUNDING_ERROR_POLICY ignore_error
+#  endif
+#endif
+
+//
 // Special cases for exceptions disabled first:
 //
 #ifdef BOOST_MATH_NO_EXCEPTIONS
