@@ -28,6 +28,7 @@ run test_cauchy_cdf_float.cu ;
 run test_cauchy_pdf_double.cu ;
 run test_cauchy_pdf_float.cu ;
 run test_cauchy_quan_double.cu ;
+run test_cauchy_quan_float.cu ;
 
 # Special Functions
 # run test_beta_simple.cpp ;
