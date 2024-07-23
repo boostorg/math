@@ -26,6 +26,7 @@ run test_binomial.cpp ;
 run test_cauchy_cdf_double.cu ;
 run test_cauchy_cdf_float.cu ;
 run test_cauchy_pdf_double.cu ;
+run test_cauchy_pdf_float.cu ;
 
 # Special Functions
 # run test_beta_simple.cpp ;
