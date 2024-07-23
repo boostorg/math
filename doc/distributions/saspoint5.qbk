@@ -27,7 +27,7 @@ with shape parameter [alpha]=1/2, [beta]=0.
 [@http://en.wikipedia.org/wiki/Probability_distribution probability distribution function PDF]
 given by:
 
-[equation saspoint5_ref1]
+[equation saspoint5_ref1]  [/f(x; \mu, c)=\frac{1}{2 \pi} \int_{-\infty}^{\infty} \exp( i t \mu - \sqrt{|c t|} ) e^{-i x t} dt]
 
 The location parameter [mu] is the location of the distribution,
 while the scale parameter [c] determines the width of the distribution.
@@ -85,8 +85,15 @@ The domain of the random variable is \[-[max_value], +[min_value]\].
 
 [h4 Accuracy]
 
-For float64, the error is within 4 epsilons.
-For float128, the error is within 4 epsilons except the peak.
+The error is within 4 epsilon.
+
+Errors in the PDF at 64-bit double precision:
+
+[$../graphs/saspoint5_pdf_accuracy_64.png]
+
+Errors in the CDF-complement at 64-bit double precision:
+
+[$../graphs/saspoint5_ccdf_accuracy_64.png]
 
 [h4 Implementation]
 
@@ -100,6 +107,7 @@ DOI: 10.36227/techrxiv.172055253.37208198/v1, 2024.
 [endsect][/section:saspoint5_dist saspoint5]
 
 [/ saspoint5.qbk
+  Copyright Takuma Yoshimura 2024.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
