@@ -23,6 +23,7 @@ run test_arcsine_pdf_float.cu ;
 run test_arcsine_quan_double.cu ;
 run test_arcsine_quan_float.cu ;
 run test_binomial.cpp ;
+run test_cauchy_cdf_double.cu ;
 
 # Special Functions
 # run test_beta_simple.cpp ;
