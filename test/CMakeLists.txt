@@ -15,7 +15,7 @@ if(HAVE_BOOST_TEST)
 
         enable_testing()
 
-        boost_test_jamfile(FILE cuda_jamfile LINK_LIBRARIES Boost::cuda_math Boost::assert Boost::concept_check Boost::config Boost::core Boost::integer Boost::lexical_cast Boost::multiprecision Boost::predef Boost::random Boost::static_assert Boost::throw_exception Boost::unit_test_framework )
+        boost_test_jamfile(FILE cuda_jamfile LINK_LIBRARIES Boost::math Boost::assert Boost::concept_check Boost::config Boost::core Boost::integer Boost::lexical_cast Boost::multiprecision Boost::predef Boost::random Boost::static_assert Boost::throw_exception Boost::unit_test_framework )
     elseif (BOOST_MATH_ENABLE_SYCL)
 
         message(STATUS "Building boost.cuda_math with SYCL")
@@ -25,7 +25,7 @@ if(HAVE_BOOST_TEST)
 
         enable_testing()
 
-        boost_test_jamfile(FILE sycl_jamfile LINK_LIBRARIES Boost::cuda_math Boost::assert Boost::concept_check Boost::config Boost::core Boost::integer Boost::lexical_cast Boost::multiprecision Boost::predef Boost::random Boost::static_assert Boost::throw_exception Boost::unit_test_framework sycl COMPILE_OPTIONS -fsycl )
+        boost_test_jamfile(FILE sycl_jamfile LINK_LIBRARIES Boost::math Boost::assert Boost::concept_check Boost::config Boost::core Boost::integer Boost::lexical_cast Boost::multiprecision Boost::predef Boost::random Boost::static_assert Boost::throw_exception Boost::unit_test_framework sycl COMPILE_OPTIONS -fsycl )
     else()
 
         add_subdirectory(compile_test)
