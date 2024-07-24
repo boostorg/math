@@ -122,31 +122,6 @@ template <class T>
 T get_min_shift_value();
 
 template <class T>
-struct min_shift_initializer
-{
-   struct init
-   {
-      init()
-      {
-         do_init();
-      }
-      static void do_init()
-      {
-         get_min_shift_value<T>();
-      }
-      void force_instantiate()const{}
-   };
-   static const init initializer;
-   static void force_instantiate()
-   {
-      initializer.force_instantiate();
-   }
-};
-
-template <class T>
-const typename min_shift_initializer<T>::init min_shift_initializer<T>::initializer;
-
-template <class T>
 inline T calc_min_shifted(const std::true_type&)
 {
    BOOST_MATH_STD_USING
@@ -166,8 +141,6 @@ template <class T>
 inline T get_min_shift_value()
 {
    static const T val = calc_min_shifted<T>(std::integral_constant<bool, !std::numeric_limits<T>::is_specialized || std::numeric_limits<T>::radix == 2>());
-   min_shift_initializer<T>::force_instantiate();
-
    return val;
 }
 

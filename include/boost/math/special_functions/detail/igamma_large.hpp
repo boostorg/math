@@ -88,6 +88,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, std::integral_constant<int, 64
 
    T workspace[13];
 
+   // LCOV_EXCL_START
    static const T C0[] = {
       BOOST_MATH_BIG_CONSTANT(T, 64, -0.333333333333333333333),
       BOOST_MATH_BIG_CONSTANT(T, 64, 0.0833333333333333333333),
@@ -265,6 +266,8 @@ T igamma_temme_large(T a, T x, const Policy& pol, std::integral_constant<int, 64
       BOOST_MATH_BIG_CONSTANT(T, 64, 0.00640336283380806979482),
       BOOST_MATH_BIG_CONSTANT(T, 64, -0.00404101610816766177474),
    };
+   // LCOV_EXCL_END
+
    workspace[12] = tools::evaluate_polynomial(C12, z);
 
    T result = tools::evaluate_polynomial<13, T, T>(workspace, 1/a);
@@ -293,6 +296,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, std::integral_constant<int, 53
 
    T workspace[10];
 
+   // LCOV_EXCL_START
    static const T C0[] = {
       static_cast<T>(-0.33333333333333333L),
       static_cast<T>(0.083333333333333333L),
@@ -406,6 +410,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, std::integral_constant<int, 53
       static_cast<T>(0.00083949872067208728L),
       static_cast<T>(-0.00043829709854172101L),
    };
+   // LCOV_EXCL_END
    workspace[8] = tools::evaluate_polynomial(C8, z);
    workspace[9] = static_cast<T>(-0.00059676129019274625L);
 
@@ -435,6 +440,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, std::integral_constant<int, 24
 
    T workspace[3];
 
+   // LCOV_EXCL_START
    static const T C0[] = {
       static_cast<T>(-0.333333333L),
       static_cast<T>(0.0833333333L),
@@ -461,6 +467,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, std::integral_constant<int, 24
       static_cast<T>(0.000771604938L),
    };
    workspace[2] = tools::evaluate_polynomial(C2, z);
+   // LCOV_EXCL_END
 
    T result = tools::evaluate_polynomial(workspace, 1/a);
    result *= exp(-y) / sqrt(2 * constants::pi<T>() * a);
@@ -478,6 +485,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, std::integral_constant<int, 24
 // It's use for a < 200 is not recommended, that would
 // require many more terms in the polynomials.
 //
+// LCOV_EXCL_START: 128-bit floats not deliberately tested in our coverage tests (takes too long)
 template <class T, class Policy>
 T igamma_temme_large(T a, T x, const Policy& pol, std::integral_constant<int, 113> const *)
 {
@@ -768,6 +776,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, std::integral_constant<int, 11
 
    return result;
 }
+// LCOV_EXCL_END
 
 }  // namespace detail
 }  // namespace math
