@@ -1195,7 +1195,7 @@ namespace boost
 #define BOOST_MATH_DETAIL_LL_FUNC(Policy)\
    \
    template <class T>\
-   inline T modf(const T& v, long long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline T modf(const T& v, long long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <class T>\
    BOOST_MATH_GPU_ENABLED inline long long lltrunc(const T& v){ using boost::math::lltrunc; return lltrunc(v, Policy()); }\
@@ -1616,13 +1616,13 @@ template <class OutputIterator, class T>\
    BOOST_MATH_GPU_ENABLED inline long ltrunc(const T& v){ using boost::math::ltrunc; return ltrunc(v, Policy()); }\
    \
    template <class T>\
-   inline T modf(const T& v, T* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline T modf(const T& v, T* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <class T>\
-   inline T modf(const T& v, int* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline T modf(const T& v, int* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <class T>\
-   inline T modf(const T& v, long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline T modf(const T& v, long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <int N, class T>\
    inline boost::math::tools::promote_args_t<T> pow(T v){ return boost::math::pow<N>(v, Policy()); }\

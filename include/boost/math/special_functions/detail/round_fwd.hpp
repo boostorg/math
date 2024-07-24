@@ -54,21 +54,21 @@ namespace boost
    template <class T>
    BOOST_MATH_GPU_ENABLED long long llround(const T& v);
    template <class T, class Policy>
-   T modf(const T& v, T* ipart, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED T modf(const T& v, T* ipart, const Policy& pol);
    template <class T>
-   T modf(const T& v, T* ipart);
+   BOOST_MATH_GPU_ENABLED T modf(const T& v, T* ipart);
    template <class T, class Policy>
-   T modf(const T& v, int* ipart, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED T modf(const T& v, int* ipart, const Policy& pol);
    template <class T>
-   T modf(const T& v, int* ipart);
+   BOOST_MATH_GPU_ENABLED T modf(const T& v, int* ipart);
    template <class T, class Policy>
-   T modf(const T& v, long* ipart, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED T modf(const T& v, long* ipart, const Policy& pol);
    template <class T>
-   T modf(const T& v, long* ipart);
+   BOOST_MATH_GPU_ENABLED T modf(const T& v, long* ipart);
    template <class T, class Policy>
-   T modf(const T& v, long long* ipart, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED T modf(const T& v, long long* ipart, const Policy& pol);
    template <class T>
-   T modf(const T& v, long long* ipart);
+   BOOST_MATH_GPU_ENABLED T modf(const T& v, long long* ipart);
    }
 }
 
