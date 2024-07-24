@@ -9,6 +9,7 @@ import-search /boost/config/checks ;
 import config : requires ;
 
 project
+    : common-requirements <library>$(boost_dependencies)
     : requirements
       <toolset>intel-win:<cxxflags>-nologo
       <toolset>intel-win:<linkflags>-nologo
