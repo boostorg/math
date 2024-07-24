@@ -36,3 +36,5 @@ run test_beta_double.cu ;
 run test_beta_float.cu ;
 run test_cbrt_double.cu ;
 run test_cbrt_float.cu ;
+run test_changesign_double.cu ;
+run test_changesign_float.cu ;
