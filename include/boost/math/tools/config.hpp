@@ -701,6 +701,7 @@ namespace boost{ namespace math{
 
 // spir64 does not support long double
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#  define BOOST_MATH_NO_REAL_CONCEPT_TESTS
 
 #  undef BOOST_MATH_FORCEINLINE
 #  define BOOST_MATH_FORCEINLINE inline
