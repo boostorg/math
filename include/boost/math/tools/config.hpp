@@ -662,6 +662,104 @@ namespace boost{ namespace math{
 #define BOOST_MATH_CONSTEXPR_TABLE_FUNCTION
 #endif
 
+//
+// CUDA support:
+//
+
+#ifdef __CUDACC__
+#  define BOOST_MATH_CUDA_ENABLED __host__ __device__
+#  define BOOST_MATH_HAS_GPU_SUPPORT
+
+#  ifndef BOOST_MATH_ENABLE_CUDA
+#    define BOOST_MATH_ENABLE_CUDA
+#  endif
+
+// Device code can not handle exceptions
+#  ifndef BOOST_MATH_NO_EXCEPTIONS
+#    define BOOST_MATH_NO_EXCEPTIONS
+#  endif
+
+// We want to use force inline from CUDA instead of the host compiler
+#  undef BOOST_MATH_FORCEINLINE
+#  define BOOST_MATH_FORCEINLINE __forceinline__
+
+// We can't use return std::numeric_limits<T>::quiet_NaN()
+#  define BOOST_MATH_QUIET_NAN(T) static_cast<T>(NAN);
+
+#elif defined(SYCL_LANGUAGE_VERSION)
+
+#  define BOOST_MATH_SYCL_ENABLED SYCL_EXTERNAL
+#  define BOOST_MATH_HAS_GPU_SUPPORT
+
+#  ifndef BOOST_MATH_ENABLE_SYCL
+#    define BOOST_MATH_ENABLE_SYCL
+#  endif
+
+#  ifndef BOOST_MATH_NO_EXCEPTIONS
+#    define BOOST_MATH_NO_EXCEPTIONS
+#  endif
+
+// spir64 does not support long double
+#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+
+#  undef BOOST_MATH_FORCEINLINE
+#  define BOOST_MATH_FORCEINLINE inline
+
+#  define BOOST_MATH_QUIET_NAN(T) static_cast<T>(NAN);
+
+#endif
+
+#ifndef BOOST_MATH_CUDA_ENABLED
+#  define BOOST_MATH_CUDA_ENABLED
+#endif
+
+#ifndef BOOST_MATH_SYCL_ENABLED
+#  define BOOST_MATH_SYCL_ENABLED
+#endif
+
+#ifndef BOOST_MATH_QUIET_NAN
+#  define BOOST_MATH_QUIET_NAN(T) std::numeric_limits<T>::quiet_NaN();
+#endif
+
+// Not all functions that allow CUDA allow SYCL (e.g. Recursion is disallowed by SYCL)
+#  define BOOST_MATH_GPU_ENABLED BOOST_MATH_CUDA_ENABLED BOOST_MATH_SYCL_ENABLED
+
+// Additional functions that need replaced/marked up
+#ifdef BOOST_MATH_HAS_GPU_SUPPORT
+template <class T>
+BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b; b = t; }
+template <class T>
+BOOST_MATH_GPU_ENABLED constexpr T gpu_safe_min(const T& a, const T& b) { return a < b ? a : b; }
+template <class T>
+BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { return a > b ? a : b; }
+
+#define BOOST_MATH_GPU_SAFE_SWAP(a, b) gpu_safe_swap(a, b);
+#define BOOST_MATH_GPU_SAFE_MIN(a, b) gpu_safe_min(a, b);
+#define BOOST_MATH_GPU_SAFE_MAX(a, b) gpu_safe_max(a, b);
+
+#else
+
+#define BOOST_MATH_GPU_SAFE_SWAP(a, b) std::swap(a, b);
+#define BOOST_MATH_GPU_SAFE_MIN(a, b) (std::min)(a, b);
+#define BOOST_MATH_GPU_SAFE_MAX(a, b) (std::max)(a, b);
+
+#endif
+
+// Static variables are not allowed with CUDA or C++20 modules
+// See if we can inline them instead
+
+#if defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L
+#  define BOOST_MATH_STATIC_CONSTEXPR inline constexpr
+#  define BOOST_MATH_STATIC static
+#else
+#  ifndef BOOST_MATH_HAS_GPU_SUPPORT
+#    define BOOST_MATH_STATIC_CONSTEXPR static constexpr
+#    define BOOST_MATH_STATIC static
+#  else
+#    define BOOST_MATH_STATIC_CONSTEXPR constexpr
+#    define BOOST_MATH_STATIC constexpr
+#  endif
+#endif
 
 #endif // BOOST_MATH_TOOLS_CONFIG_HPP
 

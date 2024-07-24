@@ -209,11 +209,11 @@ namespace boost{ namespace math
       constant_initializer<T, & BOOST_MATH_JOIN(constant_, name)<T>::get_from_string >::force_instantiate();\
       return get_from_string();\
    }\
-   static inline constexpr T get(const std::integral_constant<int, construct_from_float>) noexcept\
+   BOOST_MATH_GPU_ENABLED static inline constexpr T get(const std::integral_constant<int, construct_from_float>) noexcept\
    { return BOOST_MATH_JOIN(x, F); }\
-   static inline constexpr T get(const std::integral_constant<int, construct_from_double>&) noexcept\
+   BOOST_MATH_GPU_ENABLED static inline constexpr T get(const std::integral_constant<int, construct_from_double>&) noexcept\
    { return x; }\
-   static inline constexpr T get(const std::integral_constant<int, construct_from_long_double>&) noexcept\
+   BOOST_MATH_GPU_ENABLED static inline constexpr T get(const std::integral_constant<int, construct_from_long_double>&) noexcept\
    { return BOOST_MATH_JOIN(x, L); }\
    BOOST_MATH_FLOAT128_CONSTANT_OVERLOAD(x) \
    template <int N> static inline const T& get(const std::integral_constant<int, N>&)\
@@ -231,9 +231,9 @@ namespace boost{ namespace math
    \
    \
    /* The actual forwarding function: */ \
-   template <typename T, typename Policy> inline constexpr typename detail::constant_return<T, Policy>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(Policy)) BOOST_MATH_NOEXCEPT(T)\
+   template <typename T, typename Policy> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T, Policy>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(Policy)) BOOST_MATH_NOEXCEPT(T)\
    { return detail:: BOOST_MATH_JOIN(constant_, name)<T>::get(typename construction_traits<T, Policy>::type()); }\
-   template <typename T> inline constexpr typename detail::constant_return<T>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_MATH_NOEXCEPT(T)\
+   template <typename T> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_MATH_NOEXCEPT(T)\
    { return name<T, boost::math::policies::policy<> >(); }\
    \
    \
@@ -328,7 +328,7 @@ namespace boost{ namespace math
 #endif
 
 template <typename T>
-inline constexpr T tau() {  return two_pi<T>(); }
+BOOST_MATH_GPU_ENABLED inline constexpr T tau() {  return two_pi<T>(); }
 
 } // namespace constants
 } // namespace math
