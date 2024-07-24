@@ -601,7 +601,50 @@ BOOST_MATH_GPU_ENABLED constexpr TargetType raise_rounding_error(
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    return  val > 0 ? (std::numeric_limits<TargetType>::max)() : (std::numeric_limits<TargetType>::is_integer ? (std::numeric_limits<TargetType>::min)() : -(std::numeric_limits<TargetType>::max)());
    #else
-   return val > 0 ? static_cast<TargetType>(1) : -static_cast<TargetType>(1);
+   BOOST_IF_CONSTEXPR (std::is_same<TargetType, short>::value)
+   {
+      return val > 0 ? SHRT_MAX : SHRT_MIN;
+   }
+   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, int>::value)
+   {
+      return val > 0 ? INT_MAX : INT_MIN;
+   }
+   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, long>::value)
+   {
+      return val > 0 ? LONG_MAX : LONG_MIN;
+   }
+   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, long long>::value)
+   {
+      return val > 0 ? LLONG_MAX : LLONG_MIN;
+   }
+   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, unsigned short>::value)
+   {
+      return val > 0 ? USHRT_MAX : static_cast<unsigned short>(0U);
+   }
+   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, unsigned>::value)
+   {
+      return val > 0 ? UINT_MAX : 0U;
+   }
+   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, unsigned long>::value)
+   {
+      return val > 0 ? ULONG_MAX : 0UL;
+   }
+   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, unsigned long long>::value)
+   {
+      return val > 0 ? ULLONG_MAX : 0ULL;
+   }
+   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, float>::value)
+   {
+      return val > 0 ? FLT_MAX : -FLT_MAX;
+   }
+   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, double>::value)
+   {
+      return val > 0 ? DBL_MAX : -DBL_MAX;
+   }
+   else
+   {
+      return val > 0 ? static_cast<TargetType>(-1) : static_cast<TargetType>(1);
+   }
    #endif
 }
 
