@@ -1,4 +1,5 @@
 // Copyright John Maddock 2008.
+// Copyright Matt Borland 2024
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -21,21 +22,21 @@ namespace boost
    { 
 
    template <class T, class Policy>
-   typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol);
    template <class T>
-   typename tools::promote_args<T>::type trunc(const T& v);
+   BOOST_MATH_GPU_ENABLED typename tools::promote_args<T>::type trunc(const T& v);
    template <class T, class Policy>
-   int itrunc(const T& v, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED int itrunc(const T& v, const Policy& pol);
    template <class T>
-   int itrunc(const T& v);
+   BOOST_MATH_GPU_ENABLED int itrunc(const T& v);
    template <class T, class Policy>
-   long ltrunc(const T& v, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED long ltrunc(const T& v, const Policy& pol);
    template <class T>
-   long ltrunc(const T& v);
+   BOOST_MATH_GPU_ENABLED long ltrunc(const T& v);
    template <class T, class Policy>
-   long long lltrunc(const T& v, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED long long lltrunc(const T& v, const Policy& pol);
    template <class T>
-   long long lltrunc(const T& v);
+   BOOST_MATH_GPU_ENABLED long long lltrunc(const T& v);
    template <class T, class Policy>
    typename tools::promote_args<T>::type round(const T& v, const Policy& pol);
    template <class T>

@@ -1198,7 +1198,7 @@ namespace boost
    inline T modf(const T& v, long long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <class T>\
-   inline long long lltrunc(const T& v){ using boost::math::lltrunc; return lltrunc(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline long long lltrunc(const T& v){ using boost::math::lltrunc; return lltrunc(v, Policy()); }\
    \
    template <class T>\
    inline long long llround(const T& v){ using boost::math::llround; return llround(v, Policy()); }\
@@ -1607,13 +1607,13 @@ template <class OutputIterator, class T>\
    inline long lround(const T& v){ using boost::math::lround; return lround(v, Policy()); }\
    \
    template <class T>\
-   inline T trunc(const T& v){ using boost::math::trunc; return trunc(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline T trunc(const T& v){ using boost::math::trunc; return trunc(v, Policy()); }\
    \
    template <class T>\
-   inline int itrunc(const T& v){ using boost::math::itrunc; return itrunc(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline int itrunc(const T& v){ using boost::math::itrunc; return itrunc(v, Policy()); }\
    \
    template <class T>\
-   inline long ltrunc(const T& v){ using boost::math::ltrunc; return ltrunc(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline long ltrunc(const T& v){ using boost::math::ltrunc; return ltrunc(v, Policy()); }\
    \
    template <class T>\
    inline T modf(const T& v, T* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
