@@ -885,16 +885,18 @@ namespace boost
    bool isnormal BOOST_NO_MACRO_EXPAND(T t);
 
    template<class T>
-   int signbit BOOST_NO_MACRO_EXPAND(T x);
+   BOOST_MATH_GPU_ENABLED int signbit BOOST_NO_MACRO_EXPAND(T x);
 
    template <class T>
-   int sign BOOST_NO_MACRO_EXPAND(const T& z);
+   BOOST_MATH_GPU_ENABLED int sign BOOST_NO_MACRO_EXPAND(const T& z);
 
    template <class T, class U>
-   typename tools::promote_args_permissive<T, U>::type copysign BOOST_NO_MACRO_EXPAND(const T& x, const U& y);
+   BOOST_MATH_GPU_ENABLED typename tools::promote_args_permissive<T, U>::type 
+   copysign BOOST_NO_MACRO_EXPAND(const T& x, const U& y);
 
    template <class T>
-   typename tools::promote_args_permissive<T>::type changesign BOOST_NO_MACRO_EXPAND(const T& z);
+   BOOST_MATH_GPU_ENABLED typename tools::promote_args_permissive<T>::type 
+   changesign BOOST_NO_MACRO_EXPAND(const T& z);
 
    // Exponential integrals:
    namespace detail{
