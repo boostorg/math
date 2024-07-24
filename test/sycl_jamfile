@@ -17,3 +17,4 @@ run test_cauchy.cpp ;
 run test_beta_simple.cpp ;
 run test_cbrt.cpp ;
 run test_sign.cpp ;
+run test_round.cpp ;
