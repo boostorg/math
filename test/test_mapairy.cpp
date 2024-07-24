@@ -774,6 +774,12 @@ void do_test_mapairy_locscale_param() {
     );
     BOOST_CHECK_CLOSE(mode(dist_0_invcbrt18), BOOST_MATH_BIG_CONSTANT(RealType, N, -0.4432284977460014720866292801600737435), tolerance);
 
+    BOOST_CHECK_EQUAL(mean(dist_0_1), static_cast<RealType>(0));
+    BOOST_CHECK_EQUAL(mean(dist_1_3), static_cast<RealType>(1));
+    BOOST_CHECK_EQUAL(mean(dist_0_invcbrt18), static_cast<RealType>(0));
+
+    BOOST_CHECK((boost::math::isinf)(variance(dist_0_1)));
+
     BOOST_CHECK_CLOSE(pdf(dist_0_1, static_cast<RealType>(1)), BOOST_MATH_BIG_CONSTANT(RealType, N, 1.06251243013238748252181151646220197947016365256337e-1), tolerance);
     BOOST_CHECK_CLOSE(pdf(dist_1_3, static_cast<RealType>(1)), BOOST_MATH_BIG_CONSTANT(RealType, N, 1.97516171847191855609649452292217911972760948598791e-1) / 3, tolerance);
     BOOST_CHECK_CLOSE(pdf(dist_0_invcbrt18, static_cast<RealType>(1)), BOOST_MATH_BIG_CONSTANT(RealType, N, 9.29264884227495575949271548513687010027396013858107e-2), tolerance);
