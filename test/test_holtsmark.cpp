@@ -752,6 +752,11 @@ void do_test_holtsmark_locscale_param() {
     BOOST_CHECK_EQUAL(mode(dist_0_1), static_cast<RealType>(0));
     BOOST_CHECK_EQUAL(mode(dist_1_3), static_cast<RealType>(1));
 
+    BOOST_CHECK_EQUAL(mean(dist_0_1), static_cast<RealType>(0));
+    BOOST_CHECK_EQUAL(mean(dist_1_3), static_cast<RealType>(1));
+
+    BOOST_CHECK((boost::math::isinf)(variance(dist_0_1)));
+
     BOOST_CHECK_CLOSE(pdf(dist_0_1, static_cast<RealType>(1)), BOOST_MATH_BIG_CONSTANT(RealType, N, 2.02038159607840130388931544845552929991729709746772e-1), tolerance);
     BOOST_CHECK_CLOSE(pdf(dist_1_3, static_cast<RealType>(1)), BOOST_MATH_BIG_CONSTANT(RealType, N, 2.87352751452164445024482162286994868261727837966217e-1) / 3, tolerance);
 
