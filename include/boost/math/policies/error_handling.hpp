@@ -598,7 +598,11 @@ BOOST_MATH_GPU_ENABLED constexpr TargetType raise_rounding_error(
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
    static_assert(std::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
+   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    return  val > 0 ? (std::numeric_limits<TargetType>::max)() : (std::numeric_limits<TargetType>::is_integer ? (std::numeric_limits<TargetType>::min)() : -(std::numeric_limits<TargetType>::max)());
+   #else
+   return val > 0 ? static_cast<TargetType>(1) : -static_cast<TargetType>(1);
+   #endif
 }
 
 template <class T, class TargetType>
