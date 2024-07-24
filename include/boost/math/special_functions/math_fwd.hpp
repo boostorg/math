@@ -584,10 +584,10 @@ namespace boost
 
    // Exp (x) minus 1 functions.
    template <class T>
-   tools::promote_args_t<T> expm1(T);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> expm1(T);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> expm1(T, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> expm1(T, const Policy&);
 
    // Power - 1
    template <class T1, class T2>
@@ -1477,7 +1477,7 @@ namespace boost
    inline boost::math::tools::promote_args_t<T> log1pmx(T x){ return boost::math::log1pmx(x, Policy()); }\
 \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> expm1(T x){ return boost::math::expm1(x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> expm1(T x){ return boost::math::expm1(x, Policy()); }\
 \
    template <class T1, class T2>\
    inline boost::math::tools::promote_args_t<T1, T2> \
