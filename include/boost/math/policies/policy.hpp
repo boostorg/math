@@ -45,13 +45,6 @@ namespace policies{
 #  ifndef BOOST_MATH_PROMOTE_DOUBLE_POLICY
 #     define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
 #  endif
-#endif
-
-//
-// Refined support for sycl since it does not support errno
-//
-
-#ifdef BOOST_MATH_ENABLE_SYCL
 #  ifndef BOOST_MATH_DOMAIN_ERROR_POLICY
 #    define BOOST_MATH_DOMAIN_ERROR_POLICY ignore_error
 #  endif
