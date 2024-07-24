@@ -1201,7 +1201,7 @@ namespace boost
    BOOST_MATH_GPU_ENABLED inline long long lltrunc(const T& v){ using boost::math::lltrunc; return lltrunc(v, Policy()); }\
    \
    template <class T>\
-   inline long long llround(const T& v){ using boost::math::llround; return llround(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline long long llround(const T& v){ using boost::math::llround; return llround(v, Policy()); }\
 
 #  define BOOST_MATH_DETAIL_11_FUNC(Policy)\
    template <class T, class U, class V>\
@@ -1598,13 +1598,13 @@ template <class OutputIterator, class T>\
    inline boost::math::tools::promote_args_t<T> zeta(T s){ return boost::math::zeta(s, Policy()); }\
    \
    template <class T>\
-   inline T round(const T& v){ using boost::math::round; return round(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline T round(const T& v){ using boost::math::round; return round(v, Policy()); }\
    \
    template <class T>\
-   inline int iround(const T& v){ using boost::math::iround; return iround(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline int iround(const T& v){ using boost::math::iround; return iround(v, Policy()); }\
    \
    template <class T>\
-   inline long lround(const T& v){ using boost::math::lround; return lround(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline long lround(const T& v){ using boost::math::lround; return lround(v, Policy()); }\
    \
    template <class T>\
    BOOST_MATH_GPU_ENABLED inline T trunc(const T& v){ using boost::math::trunc; return trunc(v, Policy()); }\

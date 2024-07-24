@@ -38,21 +38,21 @@ namespace boost
    template <class T>
    BOOST_MATH_GPU_ENABLED long long lltrunc(const T& v);
    template <class T, class Policy>
-   typename tools::promote_args<T>::type round(const T& v, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED typename tools::promote_args<T>::type round(const T& v, const Policy& pol);
    template <class T>
-   typename tools::promote_args<T>::type round(const T& v);
+   BOOST_MATH_GPU_ENABLED typename tools::promote_args<T>::type round(const T& v);
    template <class T, class Policy>
-   int iround(const T& v, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED int iround(const T& v, const Policy& pol);
    template <class T>
-   int iround(const T& v);
+   BOOST_MATH_GPU_ENABLED int iround(const T& v);
    template <class T, class Policy>
-   long lround(const T& v, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED long lround(const T& v, const Policy& pol);
    template <class T>
-   long lround(const T& v);
+   BOOST_MATH_GPU_ENABLED long lround(const T& v);
    template <class T, class Policy>
-   long long llround(const T& v, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED long long llround(const T& v, const Policy& pol);
    template <class T>
-   long long llround(const T& v);
+   BOOST_MATH_GPU_ENABLED long long llround(const T& v);
    template <class T, class Policy>
    T modf(const T& v, T* ipart, const Policy& pol);
    template <class T>
