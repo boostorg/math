@@ -864,10 +864,10 @@ namespace boost
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> sin_pi(T x);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> cos_pi(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> cos_pi(T x, const Policy&);
 
    template <class T>
-   tools::promote_args_t<T> cos_pi(T x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> cos_pi(T x);
 
    template <class T>
    int fpclassify BOOST_NO_MACRO_EXPAND(T t);
@@ -1575,7 +1575,7 @@ template <class OutputIterator, class T>\
    BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> sin_pi(T x){ return boost::math::sin_pi(x, Policy()); }\
 \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> cos_pi(T x){ return boost::math::cos_pi(x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> cos_pi(T x){ return boost::math::cos_pi(x, Policy()); }\
 \
    using boost::math::fpclassify;\
    using boost::math::isfinite;\
