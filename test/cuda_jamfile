@@ -48,5 +48,7 @@ run test_modf_double.cu ;
 run test_modf_float.cu ;
 run test_round_double.cu ;
 run test_round_float.cu ;
+run test_trigamma_double.cu ;
+run test_trigamma_float.cu ;
 run test_trunc_double.cu ;
 run test_trunc_float.cu ;
