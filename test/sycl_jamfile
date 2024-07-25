@@ -14,6 +14,7 @@ run test_arcsine.cpp ;
 run test_cauchy.cpp ;
 
 # Special Functions
+run pow_test.cpp ;
 run test_beta_simple.cpp ;
 run test_cbrt.cpp ;
 run test_sign.cpp ;
