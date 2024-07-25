@@ -375,13 +375,20 @@ BOOST_MATH_GPU_ENABLED T trigamma_dispatch(T x, const Tag* t, const Policy& pol)
    {
       // Reflect:
       T z = 1 - x;
+
+      if(z < 1)
+      {
+         result = 1 / (z * z);
+         z += 1;
+      }
+
       // Argument reduction for tan:
       if(floor(x) == x)
       {
          return policies::raise_pole_error<T>("boost::math::trigamma<%1%>(%1%)", nullptr, (1-x), pol);
       }
       T s = fabs(x) < fabs(z) ? boost::math::sin_pi(x, pol) : boost::math::sin_pi(z, pol);
-      return -trigamma_imp(z, t, pol) + boost::math::pow<2>(constants::pi<T>()) / (s * s);
+      return result - trigamma_prec(z, t, pol) + boost::math::pow<2>(constants::pi<T>()) / (s * s);
    }
    if(x < 1)
    {
