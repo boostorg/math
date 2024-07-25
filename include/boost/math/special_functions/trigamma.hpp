@@ -359,7 +359,7 @@ T trigamma_prec(T x, const std::integral_constant<int, 113>*, const Policy&)
 }
 
 template <class T, class Tag, class Policy>
-BOOST_MATH_GPU_ENABLED T trigamma_imp(T x, const Tag* t, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T trigamma_dispatch(T x, const Tag* t, const Policy& pol)
 {
    //
    // This handles reflection of negative arguments, and all our
@@ -453,7 +453,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    // Force initialization of constants:
    detail::trigamma_initializer<value_type, forwarding_policy>::force_instantiate();
 
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::trigamma_imp(
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::trigamma_dispatch(
       static_cast<value_type>(x),
       static_cast<const tag_type*>(nullptr), forwarding_policy()), "boost::math::trigamma<%1%>(%1%)");
 }
