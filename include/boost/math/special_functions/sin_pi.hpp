@@ -1,4 +1,5 @@
 //  Copyright (c) 2007 John Maddock
+//  Copyright (c) 2024 Matt Borland
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -12,7 +13,9 @@
 
 #include <cmath>
 #include <limits>
+#include <type_traits>
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/promotion.hpp>
@@ -21,7 +24,7 @@
 namespace boost{ namespace math{ namespace detail{
 
 template <class T, class Policy>
-inline T sin_pi_imp(T x, const Policy& pol)
+BOOST_MATH_GPU_ENABLED inline T sin_pi_imp(T x, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names
    if(x < 0)
@@ -39,7 +42,7 @@ inline T sin_pi_imp(T x, const Policy& pol)
       invert = false;
 
    T rem = floor(x);
-   if(abs(floor(rem/2)*2 - rem) > std::numeric_limits<T>::epsilon())
+   if(abs(floor(rem/2)*2 - rem) > boost::math::numeric_limits<T>::epsilon())
    {
       invert = !invert;
    }
@@ -56,7 +59,7 @@ inline T sin_pi_imp(T x, const Policy& pol)
 } // namespace detail
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type sin_pi(T x, const Policy&)
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type sin_pi(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
