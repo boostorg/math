@@ -854,7 +854,7 @@ BOOST_AUTO_TEST_CASE(saspoint5_pdf_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(saspoint5_pdf_fp64)
+BOOST_AUTO_TEST_CASE(saspoint5_pdf_std64)
 {
     do_test_saspoint5_pdf<std::float64_t, 53>();
 }
@@ -871,7 +871,7 @@ BOOST_AUTO_TEST_CASE(saspoint5_cdf_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(saspoint5_cdf_fp64)
+BOOST_AUTO_TEST_CASE(saspoint5_cdf_std64)
 {
     do_test_saspoint5_cdf<std::float64_t, 53>();
 }
@@ -888,7 +888,7 @@ BOOST_AUTO_TEST_CASE(saspoint5_ccdf_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(saspoint5_ccdf_fp64)
+BOOST_AUTO_TEST_CASE(saspoint5_ccdf_std64)
 {
     do_test_saspoint5_ccdf<std::float64_t, 53>();
 }
@@ -905,7 +905,7 @@ BOOST_AUTO_TEST_CASE(saspoint5_quantile_nearzero_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(saspoint5_quantile_nearzero_fp64)
+BOOST_AUTO_TEST_CASE(saspoint5_quantile_nearzero_std64)
 {
     do_test_saspoint5_quantile_nearzero<std::float64_t, 53>();
 }
@@ -922,7 +922,7 @@ BOOST_AUTO_TEST_CASE(saspoint5_quantile_lower_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(saspoint5_quantile_lower_fp64)
+BOOST_AUTO_TEST_CASE(saspoint5_quantile_lower_std64)
 {
     do_test_saspoint5_quantile_lower<std::float64_t, 53>();
 }
@@ -939,7 +939,7 @@ BOOST_AUTO_TEST_CASE(saspoint5_quantile_upper_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(saspoint5_quantile_upper_fp64)
+BOOST_AUTO_TEST_CASE(saspoint5_quantile_upper_std64)
 {
     do_test_saspoint5_quantile_upper<std::float64_t, 53>();
 }
@@ -956,7 +956,7 @@ BOOST_AUTO_TEST_CASE(saspoint5_locscale_fp64)
 }
 
 #ifdef __STDCPP_FLOAT64_T__
-BOOST_AUTO_TEST_CASE(saspoint5_locscale_fp64)
+BOOST_AUTO_TEST_CASE(saspoint5_locscale_std64)
 {
     do_test_saspoint5_locscale_param<std::float64_t, 53>();
 }

@@ -18,6 +18,7 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 #include <boost/math/tools/rational.hpp>
+#include <boost/math/special_functions/cbrt.hpp>
 #include <utility>
 #include <cmath>
 
@@ -687,7 +688,7 @@ inline RealType holtsmark_cdf_plus_imp_prec(const RealType& x, const std::integr
         result = tools::evaluate_polynomial(P, x) / tools::evaluate_polynomial(Q, x);
     }
     else if (x < 1) {
-        RealType t = x - 0.5;
+        RealType t = x - 0.5f;
 
         // Rational Approximation
         // Maximum Relative Error: 1.6265e-18
@@ -884,7 +885,7 @@ inline RealType holtsmark_cdf_plus_imp_prec(const RealType& x, const std::integr
     }
     else {
         RealType x_cube = x * x * x;
-        RealType t = isnormal(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3);
+        RealType t = static_cast<RealType>(isnormal(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3));
 
         // Rational Approximation
         // Maximum Relative Error: 4.2897e-18

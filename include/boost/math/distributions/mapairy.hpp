@@ -18,6 +18,7 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 #include <boost/math/tools/rational.hpp>
+#include <boost/math/special_functions/cbrt.hpp>
 #include <utility>
 #include <cmath>
 
@@ -1287,7 +1288,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
     }
     else {
         RealType x_cube = x * x * x;
-        RealType t = isnormal(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3);
+        RealType t = static_cast<RealType>(isnormal(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3));
 
         // Rational Approximation
         // Maximum Relative Error: 6.2709e-17
