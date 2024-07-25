@@ -33,6 +33,7 @@
 #include <boost/math/distributions/laplace.hpp>
 #include <boost/math/distributions/logistic.hpp>
 #include <boost/math/distributions/lognormal.hpp>
+#include <boost/math/distributions/mapairy.hpp>
 #include <boost/math/distributions/negative_binomial.hpp>
 #include <boost/math/distributions/non_central_chi_squared.hpp>
 #include <boost/math/distributions/non_central_beta.hpp>

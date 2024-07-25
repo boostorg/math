@@ -76,6 +76,9 @@ template <class RealType, class Policy>
 class lognormal_distribution;
 
 template <class RealType, class Policy>
+class mapairy_distribution;
+
+template <class RealType, class Policy>
 class negative_binomial_distribution;
 
 template <class RealType, class Policy>
@@ -139,6 +142,7 @@ class weibull_distribution;
    typedef boost::math::laplace_distribution<Type, Policy> laplace;\
    typedef boost::math::logistic_distribution<Type, Policy> logistic;\
    typedef boost::math::lognormal_distribution<Type, Policy> lognormal;\
+   typedef boost::math::mapairy_distribution<Type, Policy> mapairy;\
    typedef boost::math::negative_binomial_distribution<Type, Policy> negative_binomial;\
    typedef boost::math::non_central_beta_distribution<Type, Policy> non_central_beta;\
    typedef boost::math::non_central_chi_squared_distribution<Type, Policy> non_central_chi_squared;\

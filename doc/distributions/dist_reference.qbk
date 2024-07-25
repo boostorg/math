@@ -25,6 +25,7 @@
 [include laplace.qbk]
 [include logistic.qbk]
 [include lognormal.qbk]
+[include mapairy.qbk]
 [include negative_binomial.qbk]
 [include nc_beta.qbk]
 [include nc_chi_squared.qbk]
