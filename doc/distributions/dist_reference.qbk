@@ -16,6 +16,7 @@
 [include fisher.qbk]
 [include gamma.qbk]
 [include geometric.qbk]
+[include holtsmark.qbk]
 [include hyperexponential.qbk]
 [include hypergeometric.qbk]
 [include inverse_chi_squared.qbk]

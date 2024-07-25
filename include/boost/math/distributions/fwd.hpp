@@ -49,6 +49,9 @@ template <class RealType, class Policy>
 class geometric_distribution;
 
 template <class RealType, class Policy>
+class holtsmark_distribution;
+
+template <class RealType, class Policy>
 class hyperexponential_distribution;
 
 template <class RealType, class Policy>
@@ -131,6 +134,7 @@ class weibull_distribution;
    typedef boost::math::fisher_f_distribution<Type, Policy> fisher_f;\
    typedef boost::math::gamma_distribution<Type, Policy> gamma;\
    typedef boost::math::geometric_distribution<Type, Policy> geometric;\
+   typedef boost::math::holtsmark_distribution<Type, Policy> holtsmark;\
    typedef boost::math::hypergeometric_distribution<Type, Policy> hypergeometric;\
    typedef boost::math::kolmogorov_smirnov_distribution<Type, Policy> kolmogorov_smirnov;\
    typedef boost::math::inverse_chi_squared_distribution<Type, Policy> inverse_chi_squared;\

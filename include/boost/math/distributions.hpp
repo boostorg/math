@@ -24,6 +24,7 @@
 #include <boost/math/distributions/fisher_f.hpp>
 #include <boost/math/distributions/gamma.hpp>
 #include <boost/math/distributions/geometric.hpp>
+#include <boost/math/distributions/holtsmark.hpp>
 #include <boost/math/distributions/hyperexponential.hpp>
 #include <boost/math/distributions/hypergeometric.hpp>
 #include <boost/math/distributions/inverse_chi_squared.hpp>
