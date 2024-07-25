@@ -173,7 +173,7 @@ typename tools::promote_args<RT1, RT2, RT3>::type
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   static const char* function = "boost::math::ibeta_inva<%1%>(%1%,%1%,%1%)";
+   constexpr auto function = "boost::math::ibeta_inva<%1%>(%1%,%1%,%1%)";
    if(p == 0)
    {
       return policies::raise_overflow_error<result_type>(function, 0, Policy());
@@ -185,28 +185,28 @@ typename tools::promote_args<RT1, RT2, RT3>::type
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(
       detail::ibeta_inv_ab_imp(
-         static_cast<value_type>(b), 
-         static_cast<value_type>(x), 
-         static_cast<value_type>(p), 
-         static_cast<value_type>(1 - static_cast<value_type>(p)), 
-         false, pol), 
+         static_cast<value_type>(b),
+         static_cast<value_type>(x),
+         static_cast<value_type>(p),
+         static_cast<value_type>(1 - static_cast<value_type>(p)),
+         false, pol),
       function);
 }
 
 template <class RT1, class RT2, class RT3, class Policy>
-typename tools::promote_args<RT1, RT2, RT3>::type 
+typename tools::promote_args<RT1, RT2, RT3>::type
       ibetac_inva(RT1 b, RT2 x, RT3 q, const Policy& pol)
 {
    typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename policies::normalise<
-      Policy, 
-      policies::promote_float<false>, 
-      policies::promote_double<false>, 
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   static const char* function = "boost::math::ibetac_inva<%1%>(%1%,%1%,%1%)";
+   constexpr auto function = "boost::math::ibetac_inva<%1%>(%1%,%1%,%1%)";
    if(q == 1)
    {
       return policies::raise_overflow_error<result_type>(function, 0, Policy());
@@ -218,28 +218,28 @@ typename tools::promote_args<RT1, RT2, RT3>::type
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(
       detail::ibeta_inv_ab_imp(
-         static_cast<value_type>(b), 
-         static_cast<value_type>(x), 
-         static_cast<value_type>(1 - static_cast<value_type>(q)), 
-         static_cast<value_type>(q), 
+         static_cast<value_type>(b),
+         static_cast<value_type>(x),
+         static_cast<value_type>(1 - static_cast<value_type>(q)),
+         static_cast<value_type>(q),
          false, pol),
       function);
 }
 
 template <class RT1, class RT2, class RT3, class Policy>
-typename tools::promote_args<RT1, RT2, RT3>::type 
+typename tools::promote_args<RT1, RT2, RT3>::type
       ibeta_invb(RT1 a, RT2 x, RT3 p, const Policy& pol)
 {
    typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename policies::normalise<
-      Policy, 
-      policies::promote_float<false>, 
-      policies::promote_double<false>, 
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   static const char* function = "boost::math::ibeta_invb<%1%>(%1%,%1%,%1%)";
+   constexpr auto function = "boost::math::ibeta_invb<%1%>(%1%,%1%,%1%)";
    if(p == 0)
    {
       return tools::min_value<result_type>();
@@ -251,19 +251,19 @@ typename tools::promote_args<RT1, RT2, RT3>::type
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(
       detail::ibeta_inv_ab_imp(
-         static_cast<value_type>(a), 
-         static_cast<value_type>(x), 
-         static_cast<value_type>(p), 
-         static_cast<value_type>(1 - static_cast<value_type>(p)), 
+         static_cast<value_type>(a),
+         static_cast<value_type>(x),
+         static_cast<value_type>(p),
+         static_cast<value_type>(1 - static_cast<value_type>(p)),
          true, pol),
       function);
 }
 
 template <class RT1, class RT2, class RT3, class Policy>
-typename tools::promote_args<RT1, RT2, RT3>::type 
+typename tools::promote_args<RT1, RT2, RT3>::type
       ibetac_invb(RT1 a, RT2 x, RT3 q, const Policy& pol)
 {
-   static const char* function = "boost::math::ibeta_invb<%1%>(%1%, %1%, %1%)";
+   constexpr auto function = "boost::math::ibeta_invb<%1%>(%1%, %1%, %1%)";
    typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename policies::normalise<

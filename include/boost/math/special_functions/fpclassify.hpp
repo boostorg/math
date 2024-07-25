@@ -14,6 +14,7 @@
 #include <limits>
 #include <type_traits>
 #include <cmath>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/detail/fp_traits.hpp>
@@ -75,6 +76,80 @@ at compile time, then comparison with std::numeric_limits values
 is used.
 
 */
+
+#ifdef BOOST_MATH_HAS_GPU_SUPPORT
+
+namespace boost { namespace math {
+
+template<> inline BOOST_MATH_GPU_ENABLED bool (isnan)(float x) { return x != x; }
+template<> inline BOOST_MATH_GPU_ENABLED bool (isnan)(double x) { return x != x; }
+
+template<> inline BOOST_MATH_GPU_ENABLED bool (isinf)(float x) { return x > FLT_MAX || x < -FLT_MAX; }
+template<> inline BOOST_MATH_GPU_ENABLED bool (isinf)(double x) { return x > DBL_MAX || x < -DBL_MAX; }
+
+template<> inline BOOST_MATH_GPU_ENABLED bool (isfinite)(float x) {  return !isnan(x) && !isinf(x);  }
+template<> inline BOOST_MATH_GPU_ENABLED bool (isfinite)(double x) {  return !isnan(x) && !isinf(x); }
+
+template<> inline BOOST_MATH_GPU_ENABLED bool (isnormal)(float x)
+{
+   if(x < 0) x = -x;
+   return (x >= FLT_MIN) && (x <= FLT_MAX);
+}
+template<> inline BOOST_MATH_GPU_ENABLED bool (isnormal)(double x)
+{
+   if(x < 0) x = -x;
+   return (x >= DBL_MIN) && (x <= DBL_MAX);
+}
+
+template<> inline BOOST_MATH_GPU_ENABLED int (fpclassify)(float t)
+{
+   if((boost::math::isnan)(t))
+      return FP_NAN;
+   // std::fabs broken on a few systems especially for long long!!!!
+   float at = (t < 0.0f) ? -t : t;
+
+   // Use a process of exclusion to figure out
+   // what kind of type we have, this relies on
+   // IEEE conforming reals that will treat
+   // Nan's as unordered.  Some compilers
+   // don't do this once optimisations are
+   // turned on, hence the check for nan's above.
+   if(at <= FLT_MAX)
+   {
+      if(at >= FLT_MIN)
+         return FP_NORMAL;
+      return (at != 0) ? FP_SUBNORMAL : FP_ZERO;
+   }
+   else if(at > FLT_MAX)
+      return FP_INFINITE;
+   return FP_NAN;
+}
+
+template<> inline BOOST_MATH_GPU_ENABLED int (fpclassify)(double t)
+{
+   if((boost::math::isnan)(t))
+      return FP_NAN;
+   // std::fabs broken on a few systems especially for long long!!!!
+   double at = (t < 0.0) ? -t : t;
+
+   // Use a process of exclusion to figure out
+   // what kind of type we have, this relies on
+   // IEEE conforming reals that will treat
+   // Nan's as unordered.  Some compilers
+   // don't do this once optimisations are
+   // turned on, hence the check for nan's above.
+   if(at <= DBL_MAX)
+   {
+      if(at >= DBL_MIN)
+         return FP_NORMAL;
+      return (at != 0) ? FP_SUBNORMAL : FP_ZERO;
+   }
+   else if(at > DBL_MAX)
+      return FP_INFINITE;
+   return FP_NAN;
+}
+
+#else
 
 #if defined(_MSC_VER) || defined(BOOST_BORLANDC)
 #include <cfloat>
@@ -630,6 +705,8 @@ inline bool (isnan)(__float128 x)
 {
    return ::isnanq(x);
 }
+#endif
+
 #endif
 
 } // namespace math

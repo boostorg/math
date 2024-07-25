@@ -971,7 +971,7 @@ template <class T1, class T2, class T3, class T4, class Policy>
 inline typename tools::promote_args<T1, T2, T3, T4>::type
    ibeta_inv(T1 a, T2 b, T3 p, T4* py, const Policy& pol)
 {
-   static const char* function = "boost::math::ibeta_inv<%1%>(%1%,%1%,%1%)";
+   constexpr auto function = "boost::math::ibeta_inv<%1%>(%1%,%1%,%1%)";
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2, T3, T4>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -1029,7 +1029,7 @@ template <class T1, class T2, class T3, class T4, class Policy>
 inline typename tools::promote_args<T1, T2, T3, T4>::type
    ibetac_inv(T1 a, T2 b, T3 q, T4* py, const Policy& pol)
 {
-   static const char* function = "boost::math::ibetac_inv<%1%>(%1%,%1%,%1%)";
+   constexpr auto function = "boost::math::ibetac_inv<%1%>(%1%,%1%,%1%)";
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2, T3, T4>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;

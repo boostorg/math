@@ -43,12 +43,12 @@ typedef double largest_float;
 #endif
 
 template <class T>
-inline constexpr T make_big_value(largest_float v, const char*, std::true_type const&, std::false_type const&) BOOST_MATH_NOEXCEPT(T)
+BOOST_MATH_GPU_ENABLED constexpr T make_big_value(largest_float v, const char*, std::true_type const&, std::false_type const&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(v);
 }
 template <class T>
-inline constexpr T make_big_value(largest_float v, const char*, std::true_type const&, std::true_type const&) BOOST_MATH_NOEXCEPT(T)
+BOOST_MATH_GPU_ENABLED constexpr T make_big_value(largest_float v, const char*, std::true_type const&, std::true_type const&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(v);
 }

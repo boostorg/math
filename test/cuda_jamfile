@@ -1,0 +1,30 @@
+# Copyright 2024 Matt Borland
+# Distributed under the Boost Software License, Version 1.0.
+# https://www.boost.org/LICENSE_1_0.txt
+
+import testing ;
+import ../../config/checks/config : requires ;
+
+project : requirements
+    [ requires cxx14_decltype_auto cxx14_generic_lambdas cxx14_return_type_deduction cxx14_variable_templates cxx14_constexpr ]
+    ;
+
+# Autodiff Tests
+run test_autodiff_1.cpp ;
+
+# Tools Tests
+run test_polynomial.cpp ;
+
+# Distributions
+run test_arcsine_cdf_double.cu ;
+run test_arcsine_cdf_float.cu ;
+run test_arcsine_pdf_double.cu ;
+run test_arcsine_pdf_float.cu ;
+run test_arcsine_quan_double.cu ;
+run test_arcsine_quan_float.cu ;
+run test_binomial.cpp ;
+
+# Special Functions
+# run test_beta_simple.cpp ;
+run test_beta_double.cu ;
+run test_beta_float.cu ;

@@ -23,11 +23,11 @@
 #include <boost/math/distributions/cauchy.hpp>
     using boost::math::cauchy_distribution;
 
-#include "test_out_of_range.hpp"
-
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
+
+#include "test_out_of_range.hpp"
 
 #include <iostream>
    using std::cout;

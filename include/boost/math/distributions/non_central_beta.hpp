@@ -847,7 +847,7 @@ namespace boost
       { // skewness = sqrt(l).
          const char* function = "boost::math::non_central_beta_distribution<%1%>::skewness()";
          typedef typename Policy::assert_undefined_type assert_type;
-         static_assert(assert_type::value == 0, "Assert type is undefined.");
+         static_assert(assert_type::value == 0, "The Non Central Beta Distribution has no skewness.");
 
          return policies::raise_evaluation_error<RealType>(function, "This function is not yet implemented, the only sensible result is %1%.", // LCOV_EXCL_LINE
             std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?  LCOV_EXCL_LINE
@@ -858,7 +858,7 @@ namespace boost
       {
          const char* function = "boost::math::non_central_beta_distribution<%1%>::kurtosis_excess()";
          typedef typename Policy::assert_undefined_type assert_type;
-         static_assert(assert_type::value == 0, "Assert type is undefined.");
+         static_assert(assert_type::value == 0, "The Non Central Beta Distribution has no kurtosis excess.");
 
          return policies::raise_evaluation_error<RealType>(function, "This function is not yet implemented, the only sensible result is %1%.", // LCOV_EXCL_LINE
             std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?  LCOV_EXCL_LINE

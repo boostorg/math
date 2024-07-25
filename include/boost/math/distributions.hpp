@@ -30,6 +30,7 @@
 #include <boost/math/distributions/inverse_gamma.hpp>
 #include <boost/math/distributions/inverse_gaussian.hpp>
 #include <boost/math/distributions/kolmogorov_smirnov.hpp>
+#include <boost/math/distributions/landau.hpp>
 #include <boost/math/distributions/laplace.hpp>
 #include <boost/math/distributions/logistic.hpp>
 #include <boost/math/distributions/lognormal.hpp>
