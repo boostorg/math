@@ -27,8 +27,6 @@ template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline T sin_pi_imp(T x, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names
-   if(x < 0)
-      return -sin_pi_imp(T(-x), pol);
    // sin of pi*x:
    if(x < T(0.5))
       return sin(constants::pi<T>() * x);
@@ -56,6 +54,19 @@ BOOST_MATH_GPU_ENABLED inline T sin_pi_imp(T x, const Policy& pol)
    return invert ? T(-rem) : rem;
 }
 
+template <class T, class Policy>
+BOOST_MATH_FORCEINLINE BOOST_MATH_GPU_ENABLED T sin_pi_dispatch(T x, const Policy& pol)
+{
+   if (x < 0)
+   {
+      return -sin_pi_imp(-x, pol);
+   }
+   else
+   {
+      return sin_pi_imp(x, pol);
+   }
+}
+
 } // namespace detail
 
 template <class T, class Policy>
@@ -72,7 +83,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type sin_pi(T x, 
       // We want to ignore overflows since the result is in [-1,1] and the 
       // check slows the code down considerably.
       policies::overflow_error<policies::ignore_error> >::type forwarding_policy;
-   return policies::checked_narrowing_cast<result_type, forwarding_policy>(boost::math::detail::sin_pi_imp<value_type>(x, forwarding_policy()), "sin_pi");
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(boost::math::detail::sin_pi_dispatch<value_type>(x, forwarding_policy()), "sin_pi");
 }
 
 template <class T>
