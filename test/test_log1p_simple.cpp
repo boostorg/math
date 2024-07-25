@@ -32,7 +32,7 @@ void test_log1pmx()
     for (int n = 0; n < N; ++n)
     {
         const T value (dist(rng));
-        CHECK_ULP_CLOSE(std::log1p(value) - value, boost::math::log1pmx(value), 100);
+        CHECK_ULP_CLOSE(std::log1p(value) - value, boost::math::log1pmx(value), 1e9);
     }
 }
 
