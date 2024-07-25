@@ -1,4 +1,5 @@
 //  (C) Copyright John Maddock 2006.
+//  (C) Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -10,6 +11,7 @@
 #pragma once
 #endif
 
+#include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/series.hpp>
@@ -37,11 +39,11 @@ template<class T, class Policy>
 T polygamma_imp(const int n, T x, const Policy &pol);
 
 template <class T, class Policy>
-T trigamma_prec(T x, const std::integral_constant<int, 53>*, const Policy&)
+BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const std::integral_constant<int, 53>*, const Policy&)
 {
    // Max error in interpolated form: 3.736e-017
-   static const T offset = BOOST_MATH_BIG_CONSTANT(T, 53, 2.1093254089355469);
-   static const T P_1_2[] = {
+   constexpr T offset = BOOST_MATH_BIG_CONSTANT(T, 53, 2.1093254089355469);
+   BOOST_MATH_STATIC const T P_1_2[] = {
       BOOST_MATH_BIG_CONSTANT(T, 53, -1.1093280605946045),
       BOOST_MATH_BIG_CONSTANT(T, 53, -3.8310674472619321),
       BOOST_MATH_BIG_CONSTANT(T, 53, -3.3703848401898283),
@@ -49,7 +51,7 @@ T trigamma_prec(T x, const std::integral_constant<int, 53>*, const Policy&)
       BOOST_MATH_BIG_CONSTANT(T, 53, 1.6638069578676164),
       BOOST_MATH_BIG_CONSTANT(T, 53, 0.64468386819102836),
    };
-   static const T Q_1_2[] = {
+   BOOST_MATH_STATIC const T Q_1_2[] = {
       BOOST_MATH_BIG_CONSTANT(T, 53, 1.0),
       BOOST_MATH_BIG_CONSTANT(T, 53, 3.4535389668541151),
       BOOST_MATH_BIG_CONSTANT(T, 53, 4.5208926987851437),
@@ -58,7 +60,7 @@ T trigamma_prec(T x, const std::integral_constant<int, 53>*, const Policy&)
       BOOST_MATH_BIG_CONSTANT(T, 53, -0.20314516859987728e-6),
    };
    // Max error in interpolated form: 1.159e-017
-   static const T P_2_4[] = {
+   BOOST_MATH_STATIC const T P_2_4[] = {
       BOOST_MATH_BIG_CONSTANT(T, 53, -0.13803835004508849e-7),
       BOOST_MATH_BIG_CONSTANT(T, 53, 0.50000049158540261),
       BOOST_MATH_BIG_CONSTANT(T, 53, 1.6077979838469348),
@@ -66,7 +68,7 @@ T trigamma_prec(T x, const std::integral_constant<int, 53>*, const Policy&)
       BOOST_MATH_BIG_CONSTANT(T, 53, 2.0534873203680393),
       BOOST_MATH_BIG_CONSTANT(T, 53, 0.74566981111565923),
    };
-   static const T Q_2_4[] = {
+   BOOST_MATH_STATIC const T Q_2_4[] = {
       BOOST_MATH_BIG_CONSTANT(T, 53, 1.0),
       BOOST_MATH_BIG_CONSTANT(T, 53, 2.8822787662376169),
       BOOST_MATH_BIG_CONSTANT(T, 53, 4.1681660554090917),
@@ -77,7 +79,7 @@ T trigamma_prec(T x, const std::integral_constant<int, 53>*, const Policy&)
    // Maximum Deviation Found:                     6.896e-018
    // Expected Error Term :                       -6.895e-018
    // Maximum Relative Change in Control Points :  8.497e-004
-   static const T P_4_inf[] = {
+   BOOST_MATH_STATIC const T P_4_inf[] = {
       static_cast<T>(0.68947581948701249e-17L),
       static_cast<T>(0.49999999999998975L),
       static_cast<T>(1.0177274392923795L),
@@ -86,7 +88,7 @@ T trigamma_prec(T x, const std::integral_constant<int, 53>*, const Policy&)
       static_cast<T>(1.5897035272532764L),
       static_cast<T>(0.40154388356961734L),
    };
-   static const T Q_4_inf[] = {
+   BOOST_MATH_STATIC const T Q_4_inf[] = {
       static_cast<T>(1.0L),
       static_cast<T>(1.7021215452463932L),
       static_cast<T>(4.4290431747556469L),
@@ -110,11 +112,11 @@ T trigamma_prec(T x, const std::integral_constant<int, 53>*, const Policy&)
 }
 
 template <class T, class Policy>
-T trigamma_prec(T x, const std::integral_constant<int, 64>*, const Policy&)
+BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const std::integral_constant<int, 64>*, const Policy&)
 {
    // Max error in interpolated form: 1.178e-020
-   static const T offset_1_2 = BOOST_MATH_BIG_CONSTANT(T, 64, 2.109325408935546875);
-   static const T P_1_2[] = {
+   constexpr T offset_1_2 = BOOST_MATH_BIG_CONSTANT(T, 64, 2.109325408935546875);
+   BOOST_MATH_STATIC const T P_1_2[] = {
       BOOST_MATH_BIG_CONSTANT(T, 64, -1.10932535608960258341),
       BOOST_MATH_BIG_CONSTANT(T, 64, -4.18793841543017129052),
       BOOST_MATH_BIG_CONSTANT(T, 64, -4.63865531898487734531),
@@ -123,7 +125,7 @@ T trigamma_prec(T x, const std::integral_constant<int, 64>*, const Policy&)
       BOOST_MATH_BIG_CONSTANT(T, 64, 1.21172611429185622377),
       BOOST_MATH_BIG_CONSTANT(T, 64, 0.259635673503366427284),
    };
-   static const T Q_1_2[] = {
+   BOOST_MATH_STATIC const T Q_1_2[] = {
       BOOST_MATH_BIG_CONSTANT(T, 64, 1.0),
       BOOST_MATH_BIG_CONSTANT(T, 64, 3.77521119359546982995),
       BOOST_MATH_BIG_CONSTANT(T, 64, 5.664338024578956321),
@@ -133,7 +135,7 @@ T trigamma_prec(T x, const std::integral_constant<int, 64>*, const Policy&)
       BOOST_MATH_BIG_CONSTANT(T, 64, 0.629642219810618032207e-8),
    };
    // Max error in interpolated form: 3.912e-020
-   static const T P_2_8[] = {
+   BOOST_MATH_STATIC const T P_2_8[] = {
       BOOST_MATH_BIG_CONSTANT(T, 64, -0.387540035162952880976e-11),
       BOOST_MATH_BIG_CONSTANT(T, 64, 0.500000000276430504),
       BOOST_MATH_BIG_CONSTANT(T, 64, 3.21926880986360957306),
@@ -143,7 +145,7 @@ T trigamma_prec(T x, const std::integral_constant<int, 64>*, const Policy&)
       BOOST_MATH_BIG_CONSTANT(T, 64, 13.4346512182925923978),
       BOOST_MATH_BIG_CONSTANT(T, 64, 3.98656291026448279118),
    };
-   static const T Q_2_8[] = {
+   BOOST_MATH_STATIC const T Q_2_8[] = {
       BOOST_MATH_BIG_CONSTANT(T, 64, 1.0),
       BOOST_MATH_BIG_CONSTANT(T, 64, 6.10520430478613667724),
       BOOST_MATH_BIG_CONSTANT(T, 64, 18.475001060603645512),
@@ -156,7 +158,7 @@ T trigamma_prec(T x, const std::integral_constant<int, 64>*, const Policy&)
    // Maximum Deviation Found:                     2.635e-020
    // Expected Error Term :                        2.635e-020
    // Maximum Relative Change in Control Points :  1.791e-003
-   static const T P_8_inf[] = {
+   BOOST_MATH_STATIC const T P_8_inf[] = {
       BOOST_MATH_BIG_CONSTANT(T, 64, -0.263527875092466899848e-19),
       BOOST_MATH_BIG_CONSTANT(T, 64, 0.500000000000000058145),
       BOOST_MATH_BIG_CONSTANT(T, 64, 0.0730121433777364138677),
@@ -164,7 +166,7 @@ T trigamma_prec(T x, const std::integral_constant<int, 64>*, const Policy&)
       BOOST_MATH_BIG_CONSTANT(T, 64, 0.0517092358874932620529),
       BOOST_MATH_BIG_CONSTANT(T, 64, 1.07995383547483921121),
    };
-   static const T Q_8_inf[] = {
+   BOOST_MATH_STATIC const T Q_8_inf[] = {
       BOOST_MATH_BIG_CONSTANT(T, 64, 1.0),
       BOOST_MATH_BIG_CONSTANT(T, 64, -0.187309046577818095504),
       BOOST_MATH_BIG_CONSTANT(T, 64, 3.95255391645238842975),
@@ -357,7 +359,7 @@ T trigamma_prec(T x, const std::integral_constant<int, 113>*, const Policy&)
 }
 
 template <class T, class Tag, class Policy>
-T trigamma_imp(T x, const Tag* t, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T trigamma_imp(T x, const Tag* t, const Policy& pol)
 {
    //
    // This handles reflection of negative arguments, and all our
@@ -402,22 +404,24 @@ struct trigamma_initializer
 {
    struct init
    {
-      init()
+      BOOST_MATH_GPU_ENABLED init()
       {
          typedef typename policies::precision<T, Policy>::type precision_type;
          do_init(std::integral_constant<bool, precision_type::value && (precision_type::value <= 113)>());
       }
-      void do_init(const std::true_type&)
+      BOOST_MATH_GPU_ENABLED void do_init(const std::true_type&)
       {
          boost::math::trigamma(T(2.5), Policy());
       }
-      void do_init(const std::false_type&){}
-      void force_instantiate()const{}
+      BOOST_MATH_GPU_ENABLED void do_init(const std::false_type&){}
+      BOOST_MATH_GPU_ENABLED void force_instantiate()const{}
    };
    static const init initializer;
-   static void force_instantiate()
+   BOOST_MATH_GPU_ENABLED static void force_instantiate()
    {
+      #ifndef BOOST_MATH_HAS_GPU_SUPPORT
       initializer.force_instantiate();
+      #endif
    }
 };
 
@@ -427,7 +431,7 @@ const typename trigamma_initializer<T, Policy>::init trigamma_initializer<T, Pol
 } // namespace detail
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    trigamma(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -455,7 +459,7 @@ inline typename tools::promote_args<T>::type
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    trigamma(T x)
 {
    return trigamma(x, policies::policy<>());

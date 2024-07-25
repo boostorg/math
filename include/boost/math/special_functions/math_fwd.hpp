@@ -540,10 +540,10 @@ namespace boost
 
    // trigamma:
    template <class T>
-   tools::promote_args_t<T> trigamma(T x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> trigamma(T x);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> trigamma(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> trigamma(T x, const Policy&);
 
    // polygamma:
    template <class T>
@@ -1458,7 +1458,7 @@ namespace boost
    BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> digamma(T x){ return boost::math::digamma(x, Policy()); }\
 \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> trigamma(T x){ return boost::math::trigamma(x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> trigamma(T x){ return boost::math::trigamma(x, Policy()); }\
 \
    template <class T>\
    inline boost::math::tools::promote_args_t<T> polygamma(int n, T x){ return boost::math::polygamma(n, x, Policy()); }\
