@@ -103,6 +103,9 @@ template <class RealType, class Policy>
 class rayleigh_distribution;
 
 template <class RealType, class Policy>
+class saspoint5_distribution;
+
+template <class RealType, class Policy>
 class skew_normal_distribution;
 
 template <class RealType, class Policy>
@@ -148,6 +151,7 @@ class weibull_distribution;
    typedef boost::math::pareto_distribution<Type, Policy> pareto;\
    typedef boost::math::poisson_distribution<Type, Policy> poisson;\
    typedef boost::math::rayleigh_distribution<Type, Policy> rayleigh;\
+   typedef boost::math::saspoint5_distribution<Type, Policy> saspoint5;\
    typedef boost::math::skew_normal_distribution<Type, Policy> skew_normal;\
    typedef boost::math::students_t_distribution<Type, Policy> students_t;\
    typedef boost::math::triangular_distribution<Type, Policy> triangular;\

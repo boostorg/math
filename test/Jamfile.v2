@@ -557,6 +557,7 @@ test-suite special_fun :
 
 test-suite distribution_tests :
    [ run test_arcsine.cpp pch ../../test/build//boost_unit_test_framework  ]
+   [ run test_saspoint5.cpp pch : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
    [ run test_bernoulli.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_beta_dist.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_binomial.cpp  ../../test/build//boost_unit_test_framework
@@ -1390,6 +1391,7 @@ test-suite concepts :
    [ run  compile_test/dist_nc_t_incl_test.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/dist_normal_incl_test.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/dist_poisson_incl_test.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
+   [ run  compile_test/dist_saspoint5_incl_test.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/dist_students_t_incl_test.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/dist_triangular_incl_test.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/dist_uniform_incl_test.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
