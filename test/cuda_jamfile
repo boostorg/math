@@ -38,6 +38,8 @@ run test_cbrt_double.cu ;
 run test_cbrt_float.cu ;
 run test_changesign_double.cu ;
 run test_changesign_float.cu ;
+run test_digamma_double.cu ;
+run test_digamma_float.cu ;
 run test_expm1_double.cu ;
 run test_expm1_float.cu ;
 run test_log1p_double.cu ;
