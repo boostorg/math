@@ -40,6 +40,8 @@ run test_changesign_double.cu ;
 run test_changesign_float.cu ;
 run test_expm1_double.cu ;
 run test_expm1_float.cu ;
+run test_log1p_double.cu ;
+run test_log1p_float.cu ;
 run test_modf_double.cu ;
 run test_modf_float.cu ;
 run test_round_double.cu ;
