@@ -8,6 +8,9 @@
 //  and libcu++ does not provide something analogous.
 //  Rather than using giant if else blocks make our own version of numeric limits
 
+#ifndef BOOST_MATH_TOOLS_NUMERIC_LIMITS_HPP
+#define BOOST_MATH_TOOLS_NUMERIC_LIMITS_HPP
+
 #include <boost/math/tools/config.hpp>
 #include <type_traits>
 #include <limits>
@@ -115,3 +118,5 @@ struct numeric_limits<double>
 
 } // namespace math
 } // namespace boost
+
+#endif
