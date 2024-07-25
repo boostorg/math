@@ -11,6 +11,7 @@ project : requirements
 
 # Distributions
 run test_arcsine.cpp ;
+run test_bernoulli.cpp ;
 run test_cauchy.cpp ;
 
 # Special Functions
