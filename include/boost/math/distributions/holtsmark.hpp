@@ -885,7 +885,7 @@ inline RealType holtsmark_cdf_plus_imp_prec(const RealType& x, const std::integr
     }
     else {
         RealType x_cube = x * x * x;
-        RealType t = static_cast<RealType>(isnormal(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3));
+        RealType t = static_cast<RealType>((boost::math::isnormal)(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3));
 
         // Rational Approximation
         // Maximum Relative Error: 4.2897e-18
@@ -1253,7 +1253,7 @@ inline RealType holtsmark_cdf_plus_imp_prec(const RealType& x, const std::integr
     }
     else {
         RealType x_cube = x * x * x;
-        RealType t = isnormal(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3);
+        RealType t = (boost::math::isnormal)(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3);
 
         // Rational Approximation
         // Maximum Relative Error: 5.4677e-35
@@ -1597,7 +1597,7 @@ inline RealType holtsmark_quantile_upper_imp_prec(const RealType& p, const std::
 
         RealType p_square = p * p;
 
-        if (isnormal(p_square)) {
+        if ((boost::math::isnormal)(p_square)) {
             result = 1 / (cbrt(p_square) * c);
         }
         else if (p > 0) {
@@ -2181,7 +2181,7 @@ inline RealType holtsmark_quantile_upper_imp_prec(const RealType& p, const std::
 
         RealType p_square = p * p;
 
-        if (isnormal(p_square)) {
+        if ((boost::math::isnormal)(p_square)) {
             result = 1 / (cbrt(p_square) * c);
         }
         else if (p > 0) {

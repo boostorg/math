@@ -1288,7 +1288,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
     }
     else {
         RealType x_cube = x * x * x;
-        RealType t = static_cast<RealType>(isnormal(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3));
+        RealType t = static_cast<RealType>((boost::math::isnormal)(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3));
 
         // Rational Approximation
         // Maximum Relative Error: 6.2709e-17
@@ -1598,7 +1598,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
     }
     else {
         RealType x_cube = x * x * x;
-        RealType t = isnormal(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3);
+        RealType t = (boost::math::isnormal)(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3);
 
         // Rational Approximation
         // Maximum Relative Error: 3.5865e-37
@@ -3373,7 +3373,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
     else {
         RealType p_square = p * p;
 
-        if (isnormal(p_square)) {
+        if ((boost::math::isnormal)(p_square)) {
             result = 1 / cbrt(p_square * constants::two_pi<RealType>());
         }
         else if (p > 0) {
@@ -3764,7 +3764,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
     else {
         RealType p_square = p * p;
 
-        if (isnormal(p_square)) {
+        if ((boost::math::isnormal)(p_square)) {
             result = 1 / cbrt(p_square * constants::two_pi<RealType>());
         }
         else if (p > 0) {
