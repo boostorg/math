@@ -1091,10 +1091,10 @@ namespace boost
 
    // pow:
    template <int N, typename T, class Policy>
-   BOOST_MATH_CXX14_CONSTEXPR tools::promote_args_t<T> pow(T base, const Policy& policy);
+   BOOST_MATH_GPU_ENABLED BOOST_MATH_CXX14_CONSTEXPR tools::promote_args_t<T> pow(T base, const Policy& policy);
 
    template <int N, typename T>
-   BOOST_MATH_CXX14_CONSTEXPR tools::promote_args_t<T> pow(T base);
+   BOOST_MATH_GPU_ENABLED BOOST_MATH_CXX14_CONSTEXPR tools::promote_args_t<T> pow(T base);
 
    // next:
    template <class T, class U, class Policy>
@@ -1625,7 +1625,7 @@ template <class OutputIterator, class T>\
    BOOST_MATH_GPU_ENABLED inline T modf(const T& v, long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <int N, class T>\
-   inline boost::math::tools::promote_args_t<T> pow(T v){ return boost::math::pow<N>(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> pow(T v){ return boost::math::pow<N>(v, Policy()); }\
    \
    template <class T> T nextafter(const T& a, const T& b){ return static_cast<T>(boost::math::nextafter(a, b, Policy())); }\
    template <class T> T float_next(const T& a){ return static_cast<T>(boost::math::float_next(a, Policy())); }\
