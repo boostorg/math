@@ -341,6 +341,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
     if (x < 0.0625) {
         // Rational Approximation
         // Maximum Relative Error: 8.8841e-35
+        // LCOV_EXCL_START
         static const RealType P[27] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.36619772367581343075535053490057448138e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.57459506929453385798277946154823008327e2),
@@ -400,7 +401,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.58032845332990262754766784625271262271e37),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.50461648438613634025964361513066059697e36),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, x) / tools::evaluate_polynomial(Q, x);
     }
     else if (x < 0.125) {
@@ -408,6 +409,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 3.4585e-35
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.46416716200748206779925127900698754119e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.41771273526123373239570033672829787791e1),
@@ -439,7 +441,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.63379428046258653791600947328520263412e8),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.14558538557562267533922961110917101850e8),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 0.25) {
@@ -447,6 +449,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 6.9278e-35
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.35668401768623200524372663239480799018e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.30066509937988171489091367354416214000e1),
@@ -478,7 +481,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.53513095899009948733175317927025056561e6),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.69130675750530663088963759279778748696e5),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 0.5) {
@@ -486,6 +489,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 6.9378e-36
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.95645445681747568731488283573032414811e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.83246437763964151893665752064650172391e0),
@@ -518,7 +522,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.91061555870569579915258835459255406575e2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.43045229010040855016672246098687100063e1),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 1) {
@@ -526,6 +530,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 6.4363e-35
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.70762401725206223811383500786268939645e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.19353011456197635663058525904929358535e0),
@@ -558,7 +563,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.01852843874982199859775136086676841910e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.14767043526088185802569803397824432028e-3),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 2) {
@@ -566,6 +571,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 9.1244e-35
+        // LCOV_EXCL_START
         static const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.61071469126041183247373313827161939454e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.35837460186564880289965856498718321896e-1),
@@ -597,7 +603,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.09333568224541559157192543410988474886e-6),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.59947287428695057506683902409023760438e-8),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 4) {
@@ -605,6 +611,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 8.1110e-35
+        // LCOV_EXCL_START
         static const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.91428580496513429479068747515164587814e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.69015019070193436467106672180804948494e-2),
@@ -636,7 +643,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.60041713691072903334637560080298818163e-9),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.77381528950794767694352468734042252745e-12),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 8) {
@@ -644,6 +651,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 2.5228e-35
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.65057384221262866484014802392420311075e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.92801687242885330588201777283015178448e-2),
@@ -675,7 +683,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.39524198476052364627683067034422502163e-11),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.18666081063885228839052386515073873844e-13),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 16) {
@@ -683,6 +691,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 9.6732e-36
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.60044810497290557552736366450372523266e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.27034183360438185616541260923634443241e-3),
@@ -715,7 +724,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.85519293212465087373898447546710143008e-16),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.96728437809303144188312623363453475831e-19),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 32) {
@@ -723,6 +732,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 1.0113e-35
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.54339461777955741686401041938275102207e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.17747085249877439037826121862689145081e-4),
@@ -755,7 +765,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.23639219622240634094606955067799349447e-19),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.63446235885036169537726818244420509024e-23),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 64) {
@@ -763,6 +773,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 9.7056e-36
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.55085695067883584460317653567009454037e-4),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.52919532248638251721278667010429548877e-4),
@@ -795,7 +806,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.06487673393164724939989217811068656932e-23),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.47121057452822097779067717258050172115e-27),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else {
@@ -803,6 +814,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 7.1032e-36
+        // LCOV_EXCL_START
         static const RealType P[8] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.99471140200716338969973029967190934238e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.82846732476244747063962056024672844211e-2),
@@ -824,7 +836,7 @@ inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.17497990182339853998751740288392648984e-5),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.53420609011698705803549938558385779137e-6),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t) * t / x;
     }
 
@@ -1155,6 +1167,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
     if (x < 0.125) {
         // Rational Approximation
         // Maximum Relative Error: 6.9340e-35
+        // LCOV_EXCL_START
         static const RealType P[30] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.0e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.25520067710293108163697513129883130648e2),
@@ -1220,7 +1233,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.10591353097667671736865938428051885499e35),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.26980708896893794012677171239610721832e33),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, x) / tools::evaluate_polynomial(Q, x);
     }
     else if (x < 0.25) {
@@ -1228,6 +1241,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 9.6106e-35
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.31887921568009055676985827521151969069e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.62791448964529380666250180886203090183e1),
@@ -1259,7 +1273,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.02083431572388097955901208994308271581e5),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.30401057171447074343957754855656724141e4),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 0.5) {
@@ -1267,6 +1281,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 3.1519e-35
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.87119665000174806422420129219814467874e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.60769554551148293079169764245570645155e0),
@@ -1298,7 +1313,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.06384106042490712972156545051459068443e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.27614406724572981099586665536543423891e0),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 1) {
@@ -1306,6 +1321,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 7.1196e-37
+        // LCOV_EXCL_START
         static const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.31309550000758082761278726632760756847e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.07242222531117199094690544171275415854e0),
@@ -1339,7 +1355,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.62522294286034117189844614005500278984e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.18342889744790118595835138444372660676e-3),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 2) {
@@ -1347,6 +1363,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 9.5605e-36
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.71280312689343266367958859259591541365e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.49628636612698702680819948707479820292e0),
@@ -1379,7 +1396,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.31888539972217875242352157306613891243e-6),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.85633766164682554126992822326956560433e-8),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 4) {
@@ -1387,6 +1404,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 1.1494e-35
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.13928162275383718405630406427822960090e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.90742307267701162395764574873947997211e-1),
@@ -1419,7 +1437,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.19146442700994823924806249608315505708e-10),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.59879298772002950043508762057850408213e-12),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 8) {
@@ -1427,6 +1445,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 1.9710e-35
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.63772802979087199762340235165979751298e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.31941534705372320785274994658709390116e-1),
@@ -1459,7 +1478,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.10009654621246392691126133176423833259e-13),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.48070591106986983088640496621926852293e-16),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 16) {
@@ -1467,6 +1486,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 5.2049e-36
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.22610122564874286614786819620499101143e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.30352481858382230273216195795534959290e-2),
@@ -1499,7 +1519,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.80392324086028812772385536034034039168e-17),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.34254502871215949266781048808984963366e-20),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 32) {
@@ -1507,6 +1527,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 1.7434e-35
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.03056141356415128156562790092782153630e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.15331583242023443256381237551843296356e-2),
@@ -1539,7 +1560,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.79013190225240505774959477465594797961e-20),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.46536966503325413797061462062918707370e-24),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else if (x < 64) {
@@ -1547,6 +1568,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 2.0402e-35
+        // LCOV_EXCL_START
         static const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.57333571766941514095434647381791040479e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.15416685251021339933358981066948923001e-2),
@@ -1579,7 +1601,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.77217411888267832243050973915295217582e-24),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.67397425207383164084527830512920206074e-28),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else {
@@ -1587,6 +1609,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
 
         // Rational Approximation
         // Maximum Relative Error: 9.2612e-35
+        // LCOV_EXCL_START
         static const RealType P[9] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.98942280401432677939946059934381868476e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.33908701314796522684603310107061150444e-1),
@@ -1607,7 +1630,7 @@ inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integr
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.02913299057943756875992272236063124608e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.37824426836648736125759177846682556245e-5),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t) * t;
     }
 
@@ -1978,6 +2001,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
         if (u < 0.125) {
             // Rational Approximation
             // Maximum Relative Error: 2.5675e-36
+            // LCOV_EXCL_START
             static const RealType P[31] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.36099130643975133156293056139850872219e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.03940482189350763127508703926866548690e1),
@@ -2045,7 +2069,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.96635220211386288597285960837372073054e33),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.23849744128418288892902205619933047730e32),
             };
-
+            // LCOV_EXCL_STOP
             result = u * tools::evaluate_polynomial(P, u) / (tools::evaluate_polynomial(Q, u) * (p * p));
         }
         else if (u < 0.25) {
@@ -2053,6 +2077,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
 
             // Rational Approximation
             // Maximum Relative Error: 9.0663e-36
+            // LCOV_EXCL_START
             static const RealType P[13] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.46698650748920243663487731226111319705e-2),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.39021286045890143123252180276484388346e-1),
@@ -2083,7 +2108,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.83958740186543542804045767758191509433e3),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.26637084978098507405883170227585648985e2),
             };
-
+            // LCOV_EXCL_STOP
             result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * (p * p));
         }
         else if (u < 0.5) {
@@ -2091,6 +2116,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
 
             // Rational Approximation
             // Maximum Relative Error: 7.1265e-35
+            // LCOV_EXCL_START
             static const RealType P[14] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.69627866689346442965083437425920959525e-2),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.28948812330446670380449765578224539665e-1),
@@ -2122,7 +2148,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.43813483967503071358907030110791934870e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.21327682641358836049127780506729428797e-1),
             };
-
+            // LCOV_EXCL_STOP
             result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * (p * p));
         }
         else {
@@ -2130,6 +2156,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
 
             // Rational Approximation
             // Maximum Relative Error: 2.7048e-37
+            // LCOV_EXCL_START
             static const RealType P[15] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.79518653373241051262822702930040975338e-2),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.62230291299220868262265687829866364204e-1),
@@ -2164,7 +2191,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.13088455793478303045390386135591069087e-3),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.18220605549460262119565543089703387122e-5),
             };
-
+            // LCOV_EXCL_STOP
             result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * (p * p));
         }
     }
@@ -2173,6 +2200,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
 
         // Rational Approximation
         // Maximum Relative Error: 3.8969e-35
+        // LCOV_EXCL_START
         static const RealType P[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.02395484493329839255216366819344305871e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.02703992140456336967688958960484716694e-1),
@@ -2212,7 +2240,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.44620973323561344735660659502096499899e-9),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.84398925760354259350870730551452956164e-11),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * (p * p));
     }
     else if (ilogb(p) >= -8) {
@@ -2220,6 +2248,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
 
         // Rational Approximation
         // Maximum Relative Error: 4.0176e-35
+        // LCOV_EXCL_START
         static const RealType P[17] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.39293493266195566603513288406748830312e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.75724665658983779947977436518056682748e-1),
@@ -2258,7 +2287,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.50841502849442327828534131901583916707e-13),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.19165038770000448560339443014882434202e-15),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * (p * p));
     }
     else if (ilogb(p) >= -16) {
@@ -2266,6 +2295,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
 
         // Rational Approximation
         // Maximum Relative Error: 4.1682e-36
+        // LCOV_EXCL_START
         static const RealType P[17] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.57911660613037766795694241662819364797e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.28799302413396670477035614399187456630e-1),
@@ -2304,7 +2334,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.45570688568663643410924100311054014175e-17),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.23959804461200982866930072222355142173e-19),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * (p * p));
     }
     else if (ilogb(p) >= -32) {
@@ -2312,6 +2342,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
 
         // Rational Approximation
         // Maximum Relative Error: 6.2158e-37
+        // LCOV_EXCL_START
         static const RealType P[17] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.59150086070234561732507586188017224084e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.80849532387385837583114307010320459997e-2),
@@ -2350,7 +2381,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.40555520515542383952495965093730818381e-21),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.51084407433793180162386990118245623958e-23),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * (p * p));
     }
     else if (ilogb(p) >= -64) {
@@ -2358,6 +2389,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
 
         // Rational Approximation
         // Maximum Relative Error: 9.8515e-35
+        // LCOV_EXCL_START
         static const RealType P[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.59154943017783040087729009335921759322e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.35955784629344586058432079844665517425e-2),
@@ -2398,7 +2430,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.81435584873372180820418114652670864136e-23),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.62145023253666168339801687459484937001e-25),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * (p * p));
     }
     else if (ilogb(p) >= -128) {
@@ -2406,6 +2438,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
 
         // Rational Approximation
         // Maximum Relative Error: 2.2157e-35
+        // LCOV_EXCL_START
         static const RealType P[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.59154943091895335751628149866310390641e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.91164927854420277537616294413463565970e-2),
@@ -2445,7 +2478,7 @@ inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.28628462422858135083238952377446358986e-20),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.48108558735886480298604270981393793162e-21),
         };
-
+        // LCOV_EXCL_STOP
         result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * (p * p));
     }
     else {
