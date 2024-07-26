@@ -22,6 +22,7 @@ run test_arcsine_pdf_double.cu ;
 run test_arcsine_pdf_float.cu ;
 run test_arcsine_quan_double.cu ;
 run test_arcsine_quan_float.cu ;
+run test_arcsine_range_support_double.cu ;
 run test_bernoulli_cdf_double.cu ;
 run test_bernoulli_cdf_float.cu ;
 run test_bernoulli_pdf_double.cu ;
