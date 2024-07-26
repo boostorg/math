@@ -27,6 +27,8 @@ run test_bernoulli_cdf_double.cu ;
 run test_bernoulli_cdf_float.cu ;
 run test_bernoulli_pdf_double.cu ;
 run test_bernoulli_pdf_float.cu ;
+run test_bernoulli_range_support_double.cu ;
+run test_bernoulli_range_support_float.cu ;
 run test_binomial.cpp ;
 run test_cauchy_cdf_double.cu ;
 run test_cauchy_cdf_float.cu ;
