@@ -418,6 +418,44 @@ struct numeric_limits<unsigned long long>
     BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long long denorm_min    () { return 0; }
 };
 
+template <>
+struct numeric_limits<bool>
+{
+    BOOST_MATH_STATIC constexpr bool is_specialized = std::numeric_limits<bool>::is_specialized;
+    BOOST_MATH_STATIC constexpr bool is_signed = std::numeric_limits<bool>::is_signed;
+    BOOST_MATH_STATIC constexpr bool is_integer = std::numeric_limits<bool>::is_integer;
+    BOOST_MATH_STATIC constexpr bool is_exact = std::numeric_limits<bool>::is_exact;
+    BOOST_MATH_STATIC constexpr bool has_infinity = std::numeric_limits<bool>::has_infinity;
+    BOOST_MATH_STATIC constexpr bool has_quiet_NaN = std::numeric_limits<bool>::has_quiet_NaN;
+    BOOST_MATH_STATIC constexpr bool has_signaling_NaN = std::numeric_limits<bool>::has_signaling_NaN;
+
+    BOOST_MATH_STATIC constexpr std::float_round_style round_style = std::numeric_limits<bool>::round_style;
+    BOOST_MATH_STATIC constexpr bool is_iec559 = std::numeric_limits<bool>::is_iec559;
+    BOOST_MATH_STATIC constexpr bool is_bounded = std::numeric_limits<bool>::is_bounded;
+    BOOST_MATH_STATIC constexpr bool is_modulo = std::numeric_limits<bool>::is_modulo;
+    BOOST_MATH_STATIC constexpr int digits = std::numeric_limits<bool>::digits;
+    BOOST_MATH_STATIC constexpr int digits10 = std::numeric_limits<bool>::digits10;
+    BOOST_MATH_STATIC constexpr int max_digits10 = std::numeric_limits<bool>::max_digits10;
+    BOOST_MATH_STATIC constexpr int radix = std::numeric_limits<bool>::radix;
+    BOOST_MATH_STATIC constexpr int min_exponent = std::numeric_limits<bool>::min_exponent;
+    BOOST_MATH_STATIC constexpr int min_exponent10 = std::numeric_limits<bool>::min_exponent10;
+    BOOST_MATH_STATIC constexpr int max_exponent = std::numeric_limits<bool>::max_exponent;
+    BOOST_MATH_STATIC constexpr int max_exponent10 = std::numeric_limits<bool>::max_exponent10;
+    BOOST_MATH_STATIC constexpr bool traps = std::numeric_limits<bool>::traps;
+    BOOST_MATH_STATIC constexpr bool tinyness_before = std::numeric_limits<bool>::tinyness_before;
+
+    // Member Functions
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr bool (min)         () { return false; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr bool (max)         () { return true; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr bool lowest        () { return false; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr bool epsilon       () { return false; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr bool round_error   () { return false; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr bool infinity      () { return false; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr bool quiet_NaN     () { return false; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr bool signaling_NaN () { return false; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr bool denorm_min    () { return false; }
+};
+
 #endif // BOOST_MATH_HAS_GPU_SUPPORT
 
 } // namespace math
