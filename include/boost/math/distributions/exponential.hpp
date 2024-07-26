@@ -139,7 +139,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const exponential_distribution<Rea
    constexpr auto function = "boost::math::logpdf(const exponential_distribution<%1%>&, %1%)";
 
    RealType lambda = dist.lambda();
-   RealType result = -std::numeric_limits<RealType>::infinity();
+   RealType result = -boost::math::numeric_limits<RealType>::infinity();
    if(0 == detail::verify_lambda(function, lambda, &result, Policy()))
       return result;
    if(0 == detail::verify_exp_x(function, x, &result, Policy()))
