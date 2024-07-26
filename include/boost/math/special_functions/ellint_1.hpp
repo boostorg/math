@@ -1,5 +1,6 @@
 //  Copyright (c) 2006 Xiaogang Zhang
 //  Copyright (c) 2006 John Maddock
+//  Copyright (c) 2024 Matt Borland
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -18,6 +19,7 @@
 #pragma once
 #endif
 
+#include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/ellint_rf.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -36,13 +38,13 @@ typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& 
 namespace detail{
 
 template <typename T, typename Policy>
-T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 0> const&);
+BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 0> const&);
 template <typename T, typename Policy>
-T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 1> const&);
+BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 1> const&);
 template <typename T, typename Policy>
-T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 2> const&);
+BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 2> const&);
 template <typename T, typename Policy>
-T ellint_k_imp(T k, const Policy& pol, T one_minus_k2);
+BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, T one_minus_k2);
 
 // Elliptic integral (Legendre form) of the first kind
 template <typename T, typename Policy>
@@ -760,7 +762,7 @@ BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, std::integral_cons
 }
 
 template <typename T, typename Policy>
-BOOST_MATH_FORCEINLINE typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, const std::true_type&)
+typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, const std::true_type&)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -776,7 +778,7 @@ BOOST_MATH_FORCEINLINE typename tools::promote_args<T>::type ellint_1(T k, const
 }
 
 template <class T1, class T2>
-BOOST_MATH_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const std::false_type&)
+typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const std::false_type&)
 {
    return boost::math::ellint_1(k, phi, policies::policy<>());
 }
@@ -785,14 +787,14 @@ BOOST_MATH_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_1(T1 k,
 
 // Complete elliptic integral (Legendre form) of the first kind
 template <typename T>
-BOOST_MATH_FORCEINLINE typename tools::promote_args<T>::type ellint_1(T k)
+typename tools::promote_args<T>::type ellint_1(T k)
 {
    return ellint_1(k, policies::policy<>());
 }
 
 // Elliptic integral (Legendre form) of the first kind
 template <class T1, class T2, class Policy>
-BOOST_MATH_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol)  // LCOV_EXCL_LINE gcc misses this but sees the function body, strange!
+typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol)  // LCOV_EXCL_LINE gcc misses this but sees the function body, strange!
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -800,7 +802,7 @@ BOOST_MATH_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_1(T1 k,
 }
 
 template <class T1, class T2>
-BOOST_MATH_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi)
+typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi)
 {
    typedef typename policies::is_policy<T2>::type tag_type;
    return detail::ellint_1(k, phi, tag_type());

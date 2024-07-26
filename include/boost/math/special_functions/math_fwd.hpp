@@ -4,6 +4,7 @@
 
 // Copyright Paul A. Bristow 2006.
 // Copyright John Maddock 2006.
+// Copyright Matt Borland 2024
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -26,6 +27,7 @@
 #include <vector>
 #include <complex>
 #include <type_traits>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/detail/round_fwd.hpp>
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
 #include <boost/math/policies/policy.hpp>
@@ -561,10 +563,10 @@ namespace boost
 
    // cbrt - cube root.
    template <class RT>
-   tools::promote_args_t<RT> cbrt(RT z);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> cbrt(RT z);
 
    template <class RT, class Policy>
-   tools::promote_args_t<RT> cbrt(RT z, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> cbrt(RT z, const Policy&);
 
    // log1p is log(x + 1)
    template <class T>
@@ -582,10 +584,10 @@ namespace boost
 
    // Exp (x) minus 1 functions.
    template <class T>
-   tools::promote_args_t<T> expm1(T);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> expm1(T);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> expm1(T, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> expm1(T, const Policy&);
 
    // Power - 1
    template <class T1, class T2>
@@ -883,16 +885,18 @@ namespace boost
    bool isnormal BOOST_NO_MACRO_EXPAND(T t);
 
    template<class T>
-   int signbit BOOST_NO_MACRO_EXPAND(T x);
+   BOOST_MATH_GPU_ENABLED int signbit BOOST_NO_MACRO_EXPAND(T x);
 
    template <class T>
-   int sign BOOST_NO_MACRO_EXPAND(const T& z);
+   BOOST_MATH_GPU_ENABLED int sign BOOST_NO_MACRO_EXPAND(const T& z);
 
    template <class T, class U>
-   typename tools::promote_args_permissive<T, U>::type copysign BOOST_NO_MACRO_EXPAND(const T& x, const U& y);
+   BOOST_MATH_GPU_ENABLED typename tools::promote_args_permissive<T, U>::type 
+   copysign BOOST_NO_MACRO_EXPAND(const T& x, const U& y);
 
    template <class T>
-   typename tools::promote_args_permissive<T>::type changesign BOOST_NO_MACRO_EXPAND(const T& z);
+   BOOST_MATH_GPU_ENABLED typename tools::promote_args_permissive<T>::type 
+   changesign BOOST_NO_MACRO_EXPAND(const T& z);
 
    // Exponential integrals:
    namespace detail{
@@ -1191,13 +1195,13 @@ namespace boost
 #define BOOST_MATH_DETAIL_LL_FUNC(Policy)\
    \
    template <class T>\
-   inline T modf(const T& v, long long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline T modf(const T& v, long long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <class T>\
-   inline long long lltrunc(const T& v){ using boost::math::lltrunc; return lltrunc(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline long long lltrunc(const T& v){ using boost::math::lltrunc; return lltrunc(v, Policy()); }\
    \
    template <class T>\
-   inline long long llround(const T& v){ using boost::math::llround; return llround(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline long long llround(const T& v){ using boost::math::llround; return llround(v, Policy()); }\
 
 #  define BOOST_MATH_DETAIL_11_FUNC(Policy)\
    template <class T, class U, class V>\
@@ -1473,7 +1477,7 @@ namespace boost
    inline boost::math::tools::promote_args_t<T> log1pmx(T x){ return boost::math::log1pmx(x, Policy()); }\
 \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> expm1(T x){ return boost::math::expm1(x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> expm1(T x){ return boost::math::expm1(x, Policy()); }\
 \
    template <class T1, class T2>\
    inline boost::math::tools::promote_args_t<T1, T2> \
@@ -1594,31 +1598,31 @@ template <class OutputIterator, class T>\
    inline boost::math::tools::promote_args_t<T> zeta(T s){ return boost::math::zeta(s, Policy()); }\
    \
    template <class T>\
-   inline T round(const T& v){ using boost::math::round; return round(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline T round(const T& v){ using boost::math::round; return round(v, Policy()); }\
    \
    template <class T>\
-   inline int iround(const T& v){ using boost::math::iround; return iround(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline int iround(const T& v){ using boost::math::iround; return iround(v, Policy()); }\
    \
    template <class T>\
-   inline long lround(const T& v){ using boost::math::lround; return lround(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline long lround(const T& v){ using boost::math::lround; return lround(v, Policy()); }\
    \
    template <class T>\
-   inline T trunc(const T& v){ using boost::math::trunc; return trunc(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline T trunc(const T& v){ using boost::math::trunc; return trunc(v, Policy()); }\
    \
    template <class T>\
-   inline int itrunc(const T& v){ using boost::math::itrunc; return itrunc(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline int itrunc(const T& v){ using boost::math::itrunc; return itrunc(v, Policy()); }\
    \
    template <class T>\
-   inline long ltrunc(const T& v){ using boost::math::ltrunc; return ltrunc(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline long ltrunc(const T& v){ using boost::math::ltrunc; return ltrunc(v, Policy()); }\
    \
    template <class T>\
-   inline T modf(const T& v, T* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline T modf(const T& v, T* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <class T>\
-   inline T modf(const T& v, int* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline T modf(const T& v, int* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <class T>\
-   inline T modf(const T& v, long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline T modf(const T& v, long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <int N, class T>\
    inline boost::math::tools::promote_args_t<T> pow(T v){ return boost::math::pow<N>(v, Policy()); }\
