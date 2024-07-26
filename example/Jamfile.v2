@@ -54,7 +54,7 @@ test-suite examples :
    [ run binomial_example_nag.cpp  ]
    [ run binomial_quiz_example.cpp : : : <exception-handling>off:<build>no  ]
    [ run binomial_sample_sizes.cpp  ]
-   [ run brent_minimise_example.cpp /boost/test//boost_test : : : [ requires cxx11_hdr_tuple ] ]
+   [ run brent_minimise_example.cpp /boost/test//included : : : [ requires cxx11_hdr_tuple ] ]
 
    [ run c_error_policy_example.cpp  ]
    [ run chi_square_std_dev_test.cpp : : : <exception-handling>off:<build>no  ]

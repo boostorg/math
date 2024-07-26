@@ -46,10 +46,10 @@ exe bessel_data : bessel_data.cpp :
 [ check-target-builds ../config//is_ci_standalone_run : <build>no ] ;
 install bessel_data_install : bessel_data : <location>bin ;
 
-exe ellint_f_data : ellint_f_data.cpp /boost/test//boost_test ;
+exe ellint_f_data : ellint_f_data.cpp /boost/test//included ;
 install ellint_f_data_install : ellint_f_data : <location>bin ;
 
-exe heuman_lambda_data : heuman_lambda_data.cpp /boost/test//boost_test ;
+exe heuman_lambda_data : heuman_lambda_data.cpp /boost/test//included ;
 install heuman_lambda_data_install : heuman_lambda_data : <location>bin ;
 
 exe hyp_2f2_data : hyp_2f2_data.cpp ;
@@ -58,13 +58,13 @@ install hyp_2f2_data_install : hyp_2f2_data : <location>bin ;
 exe laguerre_data : laguerre_data.cpp ;
 install laguerre_data_install : laguerre_data : <location>bin ;
 
-exe bessel_derivative_data : bessel_derivative_data.cpp /boost/test//boost_test :
+exe bessel_derivative_data : bessel_derivative_data.cpp /boost/test//included :
 [ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ]
 [ check-target-builds /boost/multiprecision/config//has_mpfr : <source>mpfr : <build>no ]
 [ check-target-builds ../config//is_ci_standalone_run : <build>no ] ;
 install bessel_derivative_data_install : bessel_derivative_data : <location>bin ;
 
-exe ellint_k_data : ellint_k_data.cpp /boost/test//boost_test ;
+exe ellint_k_data : ellint_k_data.cpp /boost/test//included ;
 install ellint_k_data_install : ellint_k_data : <location>bin ;
 
 exe hyp_0f2_data : hyp_0f2_data.cpp ;
@@ -83,7 +83,7 @@ exe beta_data : beta_data.cpp :
 [ check-target-builds ../config//is_ci_standalone_run : <build>no ] ;
 install beta_data_install : beta_data : <location>bin ;
 
-exe ellint_pi2_data : ellint_pi2_data.cpp /boost/test//boost_test ;
+exe ellint_pi2_data : ellint_pi2_data.cpp /boost/test//included ;
 install ellint_pi2_data_install : ellint_pi2_data : <location>bin ;
 
 exe hyp_1f1_big_data : hyp_1f1_big_data.cpp :
@@ -100,10 +100,10 @@ install ibeta_data_install : ibeta_data : <location>bin ;
 exe log1p_expm1_data : log1p_expm1_data.cpp ;
 install log1p_expm1_data_install : log1p_expm1_data : <location>bin ;
 
-exe carlson_ellint_data : carlson_ellint_data.cpp /boost/test//boost_test ;
+exe carlson_ellint_data : carlson_ellint_data.cpp /boost/test//included ;
 install carlson_ellint_data_install : carlson_ellint_data : <location>bin ;
 
-exe ellint_pi3_data : ellint_pi3_data.cpp /boost/test//boost_test ;
+exe ellint_pi3_data : ellint_pi3_data.cpp /boost/test//included ;
 install ellint_pi3_data_install : ellint_pi3_data : <location>bin ;
 
 exe hyp_1f1_data : hyp_1f1_data.cpp :
@@ -117,7 +117,7 @@ exe ibeta_derivative_data : ibeta_derivative_data.cpp /boost/math//testing :
 [ check-target-builds ../config//is_ci_standalone_run : <build>no ] ;
 install ibeta_derivative_data_install : ibeta_derivative_data : <location>bin ;
 
-exe sinc_data : sinc_data.cpp /boost/test//boost_test ;
+exe sinc_data : sinc_data.cpp /boost/test//included ;
 install sinc_data_install : sinc_data : <location>bin ;
 
 exe cbrt_data : cbrt_data.cpp ;
@@ -140,7 +140,7 @@ exe spherical_harmonic_data : spherical_harmonic_data.cpp :
 [ check-target-builds ../config//is_ci_standalone_run : <build>no ] ;
 install spherical_harmonic_data_install : spherical_harmonic_data : <location>bin ;
 
-exe digamma_data : digamma_data.cpp /boost/test//boost_test : [ check-target-builds /boost/multiprecision/config//has_float128 : <source>quadmath : <build>no ] ;
+exe digamma_data : digamma_data.cpp /boost/test//included : [ check-target-builds /boost/multiprecision/config//has_float128 : <source>quadmath : <build>no ] ;
 install digamma_data_install : digamma_data : <location>bin ;
 
 exe expint_data : expint_data.cpp ;
@@ -156,12 +156,12 @@ install hyp_1f1_reg_big_data_install : hyp_1f1_reg_big_data : <location>bin ;
 exe ibeta_invab_data : ibeta_invab_data.cpp : [ check-target-builds /boost/multiprecision/config//has_float128 : <source>quadmath : <build>no ] ;
 install ibeta_invab_data_install : ibeta_invab_data : <location>bin ;
 
-exe tgamma_large_data : tgamma_large_data.cpp /boost/test//boost_test :
+exe tgamma_large_data : tgamma_large_data.cpp /boost/test//included :
 [ check-target-builds /boost/multiprecision/config//has_gmp : <source>gmp : <build>no ]
 [ check-target-builds /boost/multiprecision/config//has_mpfr : <source>mpfr : <build>no ] ;
 install tgamma_large_data_install : tgamma_large_data : <location>bin ;
 
-exe ellint_d_data : ellint_d_data.cpp /boost/test//boost_test ;
+exe ellint_d_data : ellint_d_data.cpp /boost/test//included ;
 install ellint_d_data_install : ellint_d_data : <location>bin ;
 
 exe expint_i_data : expint_i_data.cpp ;
@@ -177,7 +177,7 @@ exe tgamma_ratio_data : tgamma_ratio_data.cpp :
 [ check-target-builds ../config//is_ci_standalone_run : <build>no ] ;
 install tgamma_ratio_data_install : tgamma_ratio_data : <location>bin ;
 
-exe ellint_d2_data : ellint_d2_data.cpp /boost/test//boost_test ;
+exe ellint_d2_data : ellint_d2_data.cpp /boost/test//included ;
 install ellint_d2_data_install : ellint_d2_data : <location>bin ;
 
 exe gamma_P_inva_data : gamma_P_inva_data.cpp : [ check-target-builds /boost/multiprecision/config//has_float128 : <source>quadmath : <build>no ] ;
@@ -192,7 +192,7 @@ install inv_hyp_data_install : inv_hyp_data : <location>bin ;
 exe trig_data : trig_data.cpp ;
 install trig_data_install : trig_data : <location>bin ;
 
-exe ellint_e_data : ellint_e_data.cpp /boost/test//boost_test ;
+exe ellint_e_data : ellint_e_data.cpp /boost/test//included ;
 install ellint_e_data_install : ellint_e_data : <location>bin ;
 
 exe hermite_data : hermite_data.cpp ;
@@ -201,10 +201,10 @@ install hermite_data_install : hermite_data : <location>bin ;
 exe hyp_2f1_data : hyp_2f1_data.cpp ;
 install hyp_2f1_data_install : hyp_2f1_data : <location>bin ;
 
-exe jacobi_theta_data : jacobi_theta_data.cpp /boost/test//boost_test ;
+exe jacobi_theta_data : jacobi_theta_data.cpp /boost/test//included ;
 install jacobi_theta_data_install : jacobi_theta_data : <location>bin ;
 
-exe jacobi_zeta_data : jacobi_zeta_data.cpp /boost/test//boost_test ;
+exe jacobi_zeta_data : jacobi_zeta_data.cpp /boost/test//included ;
 install jacobi_zeta_data_install : jacobi_zeta_data : <location>bin ;
 
 exe zeta_data : zeta_data.cpp :

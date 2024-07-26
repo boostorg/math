@@ -36,7 +36,7 @@ obj no_eh : noeh_support.cpp ;
 project
     : requirements
       <library>/boost/multiprecision//boost_multiprecision
-      <library>/boost/test//boost_test
+      <library>/boost/test//included
       <library>/boost/type_index//boost_type_index
       <library>/boost/ublas//boost_ublas
       $(OBJ_REMOVAL_OPTIONS)
