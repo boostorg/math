@@ -38,6 +38,14 @@ run test_cauchy_quan_double.cu ;
 run test_cauchy_quan_float.cu ;
 run test_cauchy_range_support_double.cu ;
 run test_cauchy_range_support_float.cu ;
+run test_exponential_cdf_double.cu ;
+run test_exponential_cdf_float.cu ;
+run test_exponential_pdf_double.cu ;
+run test_exponential_pdf_float.cu ;
+run test_exponential_quan_double.cu ;
+run test_exponential_quan_float.cu ;
+run test_exponential_range_support_double.cu ;
+run test_exponential_range_support_float.cu ;
 
 # Special Functions
 # run test_beta_simple.cpp ;
