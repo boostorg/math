@@ -1,5 +1,6 @@
 // Copyright John Maddock 2006, 2007.
 // Copyright Paul A. Bristow 2007.
+// Copyright Matt Borland 2024.
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -14,6 +15,7 @@
 #endif
 
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/tuple.hpp>
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/distributions/complement.hpp>
@@ -196,35 +198,35 @@ cauchy_distribution(RealType,RealType)->cauchy_distribution<typename boost::math
 #endif
 
 template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const std::pair<RealType, RealType> range(const cauchy_distribution<RealType, Policy>&)
+BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const cauchy_distribution<RealType, Policy>&)
 { // Range of permissible values for random variable x.
   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
   BOOST_MATH_IF_CONSTEXPR (std::numeric_limits<RealType>::has_infinity)
   { 
-     return std::pair<RealType, RealType>(-std::numeric_limits<RealType>::infinity(), std::numeric_limits<RealType>::infinity()); // - to + infinity.
+     return boost::math::pair<RealType, RealType>(-std::numeric_limits<RealType>::infinity(), std::numeric_limits<RealType>::infinity()); // - to + infinity.
   }
   else
   #endif
   { // Can only use max_value.
    using boost::math::tools::max_value;
-   return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max.
+   return boost::math::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max.
   }
 }
 
 template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const std::pair<RealType, RealType> support(const cauchy_distribution<RealType, Policy>& )
+BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const cauchy_distribution<RealType, Policy>& )
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
   BOOST_MATH_IF_CONSTEXPR (std::numeric_limits<RealType>::has_infinity)
   { 
-     return std::pair<RealType, RealType>(-std::numeric_limits<RealType>::infinity(), std::numeric_limits<RealType>::infinity()); // - to + infinity.
+     return boost::math::pair<RealType, RealType>(-std::numeric_limits<RealType>::infinity(), std::numeric_limits<RealType>::infinity()); // - to + infinity.
   }
   else
   #endif
   { // Can only use max_value.
      using boost::math::tools::max_value;
-     return std::pair<RealType, RealType>(-tools::max_value<RealType>(), max_value<RealType>()); // - to + max.
+     return boost::math::pair<RealType, RealType>(-tools::max_value<RealType>(), max_value<RealType>()); // - to + max.
   }
 }
 

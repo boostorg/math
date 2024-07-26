@@ -80,6 +80,7 @@
 #define BOOST_MATH_SPECIAL_BINOMIAL_HPP
 
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/tuple.hpp>
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/special_functions/beta.hpp> // for incomplete beta.
 #include <boost/math/distributions/complement.hpp> // complements
@@ -420,17 +421,17 @@ namespace boost
       #endif
 
       template <class RealType, class Policy>
-      BOOST_MATH_CUDA_ENABLED const std::pair<RealType, RealType> range(const binomial_distribution<RealType, Policy>& dist)
+      BOOST_MATH_CUDA_ENABLED const boost::math::pair<RealType, RealType> range(const binomial_distribution<RealType, Policy>& dist)
       { // Range of permissible values for random variable k.
         using boost::math::tools::max_value;
-        return std::pair<RealType, RealType>(static_cast<RealType>(0), dist.trials());
+        return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), dist.trials());
       }
 
       template <class RealType, class Policy>
-      BOOST_MATH_CUDA_ENABLED const std::pair<RealType, RealType> support(const binomial_distribution<RealType, Policy>& dist)
+      BOOST_MATH_CUDA_ENABLED const boost::math::pair<RealType, RealType> support(const binomial_distribution<RealType, Policy>& dist)
       { // Range of supported values for random variable k.
         // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-        return std::pair<RealType, RealType>(static_cast<RealType>(0),  dist.trials());
+        return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  dist.trials());
       }
 
       template <class RealType, class Policy>
