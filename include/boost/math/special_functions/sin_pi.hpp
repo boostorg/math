@@ -55,15 +55,15 @@ BOOST_MATH_GPU_ENABLED inline T sin_pi_imp(T x, const Policy& pol)
 }
 
 template <class T, class Policy>
-BOOST_MATH_FORCEINLINE BOOST_MATH_GPU_ENABLED T sin_pi_dispatch(T x, const Policy& pol)
+BOOST_MATH_GPU_ENABLED inline T sin_pi_dispatch(T x, const Policy& pol)
 {
-   if (x < 0)
+   if (x < T(0))
    {
-      return -sin_pi_imp(-x, pol);
+      return -sin_pi_imp(T(-x), pol);
    }
    else
    {
-      return sin_pi_imp(x, pol);
+      return sin_pi_imp(T(x), pol);
    }
 }
 

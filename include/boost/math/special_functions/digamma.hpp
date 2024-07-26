@@ -327,11 +327,11 @@ BOOST_MATH_GPU_ENABLED T digamma_imp_1_2(T x, const std::integral_constant<int, 
    // At double precision, max error found:  2.452e-17
    //
    // LCOV_EXCL_START
-   constexpr float Y = 0.99558162689208984F;
+   BOOST_MATH_STATIC const float Y = 0.99558162689208984F;
 
-   constexpr T root1 = T(1569415565) / 1073741824uL;
-   constexpr T root2 = (T(381566830) / 1073741824uL) / 1073741824uL;
-   constexpr T root3 = BOOST_MATH_BIG_CONSTANT(T, 53, 0.9016312093258695918615325266959189453125e-19);
+   BOOST_MATH_STATIC const T root1 = T(1569415565) / 1073741824uL;
+   BOOST_MATH_STATIC const T root2 = (T(381566830) / 1073741824uL) / 1073741824uL;
+   BOOST_MATH_STATIC const T root3 = BOOST_MATH_BIG_CONSTANT(T, 53, 0.9016312093258695918615325266959189453125e-19);
 
    BOOST_MATH_STATIC const T P[] = {
       BOOST_MATH_BIG_CONSTANT(T, 53, 0.25479851061131551),
@@ -378,16 +378,16 @@ BOOST_MATH_GPU_ENABLED inline T digamma_imp_1_2(T x, const std::integral_constan
    // At float precision, max error found:  2.008725e-008
    //
    // LCOV_EXCL_START
-   constexpr float Y = 0.99558162689208984f;
-   constexpr T root = 1532632.0f / 1048576;
-   constexpr T root_minor = static_cast<T>(0.3700660185912626595423257213284682051735604e-6L);
-   constexpr T P[] = {
+   BOOST_MATH_STATIC const float Y = 0.99558162689208984f;
+   BOOST_MATH_STATIC const T root = 1532632.0f / 1048576;
+   BOOST_MATH_STATIC const T root_minor = static_cast<T>(0.3700660185912626595423257213284682051735604e-6L);
+   BOOST_MATH_STATIC const T P[] = {
       0.25479851023250261e0f,
       -0.44981331915268368e0f,
       -0.43916936919946835e0f,
       -0.61041765350579073e-1f
    };
-   constexpr T Q[] = {
+   BOOST_MATH_STATIC const T Q[] = {
       0.1e1f,
       0.15890202430554952e1f,
       0.65341249856146947e0f,
