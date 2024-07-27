@@ -86,6 +86,15 @@ void instantiate_for_fixed_precision_only(RealType, const std::true_type&)
    function_requires<DistributionConcept<landau_distribution<RealType> > >();
    function_requires<DistributionConcept<landau_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<dist_test::landau > >();
+   function_requires<DistributionConcept<mapairy_distribution<RealType> > >();
+   function_requires<DistributionConcept<mapairy_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<dist_test::mapairy > >();
+   function_requires<DistributionConcept<holtsmark_distribution<RealType> > >();
+   function_requires<DistributionConcept<holtsmark_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<dist_test::holtsmark> >();
+   function_requires<DistributionConcept<saspoint5_distribution<RealType> > >();
+   function_requires<DistributionConcept<saspoint5_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<dist_test::saspoint5> >();
 #endif
 #endif
 }

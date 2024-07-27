@@ -1,5 +1,6 @@
 // Copyright John Maddock 2006, 2007.
 // Copyright Paul A. Bristow 2006, 2007, 2012.
+// Copyright Matt Borland 2024
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -9,6 +10,7 @@
 #ifndef BOOST_MATH_DISTRIBUTIONS_COMMON_ERROR_HANDLING_HPP
 #define BOOST_MATH_DISTRIBUTIONS_COMMON_ERROR_HANDLING_HPP
 
+#include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 // using boost::math::isfinite;
@@ -23,7 +25,7 @@ namespace boost{ namespace math{ namespace detail
 {
 
 template <class RealType, class Policy>
-inline bool check_probability(const char* function, RealType const& prob, RealType* result, const Policy& pol)
+BOOST_MATH_GPU_ENABLED inline bool check_probability(const char* function, RealType const& prob, RealType* result, const Policy& pol)
 {
    if((prob < 0) || (prob > 1) || !(boost::math::isfinite)(prob))
    {
@@ -36,7 +38,7 @@ inline bool check_probability(const char* function, RealType const& prob, RealTy
 }
 
 template <class RealType, class Policy>
-inline bool check_df(const char* function, RealType const& df, RealType* result, const Policy& pol)
+BOOST_MATH_GPU_ENABLED inline bool check_df(const char* function, RealType const& df, RealType* result, const Policy& pol)
 { //  df > 0 but NOT +infinity allowed.
    if((df <= 0) || !(boost::math::isfinite)(df))
    {
@@ -49,7 +51,7 @@ inline bool check_df(const char* function, RealType const& df, RealType* result,
 }
 
 template <class RealType, class Policy>
-inline bool check_df_gt0_to_inf(const char* function, RealType const& df, RealType* result, const Policy& pol)
+BOOST_MATH_GPU_ENABLED inline bool check_df_gt0_to_inf(const char* function, RealType const& df, RealType* result, const Policy& pol)
 {  // df > 0 or +infinity are allowed.
    if( (df <= 0) || (boost::math::isnan)(df) )
    { // is bad df <= 0 or NaN or -infinity.
@@ -63,7 +65,7 @@ inline bool check_df_gt0_to_inf(const char* function, RealType const& df, RealTy
 
 
 template <class RealType, class Policy>
-inline bool check_scale(
+BOOST_MATH_GPU_ENABLED inline bool check_scale(
       const char* function,
       RealType scale,
       RealType* result,
@@ -80,7 +82,7 @@ inline bool check_scale(
 }
 
 template <class RealType, class Policy>
-inline bool check_location(
+BOOST_MATH_GPU_ENABLED inline bool check_location(
       const char* function,
       RealType location,
       RealType* result,
@@ -97,7 +99,7 @@ inline bool check_location(
 }
 
 template <class RealType, class Policy>
-inline bool check_x(
+BOOST_MATH_GPU_ENABLED inline bool check_x(
       const char* function,
       RealType x,
       RealType* result,
@@ -118,7 +120,7 @@ inline bool check_x(
 } // bool check_x
 
 template <class RealType, class Policy>
-inline bool check_x_not_NaN(
+BOOST_MATH_GPU_ENABLED inline bool check_x_not_NaN(
   const char* function,
   RealType x,
   RealType* result,
@@ -138,7 +140,7 @@ inline bool check_x_not_NaN(
 } // bool check_x_not_NaN
 
 template <class RealType, class Policy>
-inline bool check_x_gt0(
+BOOST_MATH_GPU_ENABLED inline bool check_x_gt0(
       const char* function,
       RealType x,
       RealType* result,
@@ -159,7 +161,7 @@ inline bool check_x_gt0(
 } // bool check_x_gt0
 
 template <class RealType, class Policy>
-inline bool check_positive_x(
+BOOST_MATH_GPU_ENABLED inline bool check_positive_x(
       const char* function,
       RealType x,
       RealType* result,
@@ -179,13 +181,18 @@ inline bool check_positive_x(
 }
 
 template <class RealType, class Policy>
-inline bool check_non_centrality(
+BOOST_MATH_GPU_ENABLED inline bool check_non_centrality(
       const char* function,
       RealType ncp,
       RealType* result,
       const Policy& pol)
 {
+   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    static const RealType upper_limit = static_cast<RealType>((std::numeric_limits<long long>::max)()) - boost::math::policies::get_max_root_iterations<Policy>();
+   #else
+   constexpr RealType upper_limit = static_cast<RealType>(LONG_LONG_MAX) - boost::math::policies::get_max_root_iterations<Policy>();
+   #endif
+
    if((ncp < 0) || !(boost::math::isfinite)(ncp) || ncp > upper_limit)
    {
       *result = policies::raise_domain_error<RealType>(
@@ -197,7 +204,7 @@ inline bool check_non_centrality(
 }
 
 template <class RealType, class Policy>
-inline bool check_finite(
+BOOST_MATH_GPU_ENABLED inline bool check_finite(
       const char* function,
       RealType x,
       RealType* result,

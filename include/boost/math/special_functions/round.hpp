@@ -30,7 +30,7 @@ namespace boost{ namespace math{
 namespace detail{
 
 template <class T, class Policy>
-inline tools::promote_args_t<T> round(const T& v, const Policy& pol, const std::false_type&)
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T> round(const T& v, const Policy& pol, const std::false_type&)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
@@ -65,7 +65,7 @@ inline tools::promote_args_t<T> round(const T& v, const Policy& pol, const std::
    }
 }
 template <class T, class Policy>
-inline tools::promote_args_t<T> round(const T& v, const Policy&, const std::true_type&)
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T> round(const T& v, const Policy&, const std::true_type&)
 {
    return v;
 }
@@ -73,12 +73,12 @@ inline tools::promote_args_t<T> round(const T& v, const Policy&, const std::true
 } // namespace detail
 
 template <class T, class Policy>
-inline tools::promote_args_t<T> round(const T& v, const Policy& pol)
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T> round(const T& v, const Policy& pol)
 {
    return detail::round(v, pol, std::integral_constant<bool, detail::is_integer_for_rounding<T>::value>());
 }
 template <class T>
-inline tools::promote_args_t<T> round(const T& v)
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T> round(const T& v)
 {
    return round(v, policies::policy<>());
 }
@@ -103,7 +103,7 @@ inline int iround(const T& v, const Policy& pol)
 
    result_type r = boost::math::round(v, pol);
 
-   #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
+   #if defined(BOOST_MATH_HAS_CONSTEXPR_LDEXP) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
    if constexpr (std::is_arithmetic_v<result_type>
                  #ifdef BOOST_MATH_FLOAT128_TYPE
                  && !std::is_same_v<BOOST_MATH_FLOAT128_TYPE, result_type>
@@ -127,7 +127,7 @@ inline int iround(const T& v, const Policy& pol)
       }
    }
    #else
-   static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
+   BOOST_MATH_STATIC_LOCAL_VARIABLE const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
 
    if (r >= max_val || r < -max_val)
    {
@@ -138,20 +138,20 @@ inline int iround(const T& v, const Policy& pol)
    return static_cast<int>(r);
 }
 template <class T>
-inline int iround(const T& v)
+BOOST_MATH_GPU_ENABLED inline int iround(const T& v)
 {
    return iround(v, policies::policy<>());
 }
 
 template <class T, class Policy>
-inline long lround(const T& v, const Policy& pol)
+BOOST_MATH_GPU_ENABLED inline long lround(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
 
    result_type r = boost::math::round(v, pol);
    
-   #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
+   #if defined(BOOST_MATH_HAS_CONSTEXPR_LDEXP) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
    if constexpr (std::is_arithmetic_v<result_type>
                  #ifdef BOOST_MATH_FLOAT128_TYPE
                  && !std::is_same_v<BOOST_MATH_FLOAT128_TYPE, result_type>
@@ -175,7 +175,7 @@ inline long lround(const T& v, const Policy& pol)
       }
    }
    #else
-   static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
+   BOOST_MATH_STATIC_LOCAL_VARIABLE const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
 
    if (r >= max_val || r < -max_val)
    {
@@ -186,20 +186,20 @@ inline long lround(const T& v, const Policy& pol)
    return static_cast<long>(r);
 }
 template <class T>
-inline long lround(const T& v)
+BOOST_MATH_GPU_ENABLED inline long lround(const T& v)
 {
    return lround(v, policies::policy<>());
 }
 
 template <class T, class Policy>
-inline long long llround(const T& v, const Policy& pol)
+BOOST_MATH_GPU_ENABLED inline long long llround(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using result_type = boost::math::tools::promote_args_t<T>;
 
    result_type r = boost::math::round(v, pol);
 
-   #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
+   #if defined(BOOST_MATH_HAS_CONSTEXPR_LDEXP) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
    if constexpr (std::is_arithmetic_v<result_type>
                  #ifdef BOOST_MATH_FLOAT128_TYPE
                  && !std::is_same_v<BOOST_MATH_FLOAT128_TYPE, result_type>
@@ -223,7 +223,7 @@ inline long long llround(const T& v, const Policy& pol)
       }
    }
    #else
-   static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
+   BOOST_MATH_STATIC_LOCAL_VARIABLE const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
 
    if (r >= max_val || r < -max_val)
    {
@@ -234,7 +234,7 @@ inline long long llround(const T& v, const Policy& pol)
    return static_cast<long long>(r);
 }
 template <class T>
-inline long long llround(const T& v)
+BOOST_MATH_GPU_ENABLED inline long long llround(const T& v)
 {
    return llround(v, policies::policy<>());
 }

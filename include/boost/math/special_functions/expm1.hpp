@@ -1,4 +1,5 @@
 //  (C) Copyright John Maddock 2006.
+//  (C) Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -294,18 +295,18 @@ inline typename tools::promote_args<T>::type expm1(T x, const Policy& /* pol */)
 
 #if defined(BOOST_HAS_EXPM1) && !(defined(__osf__) && defined(__DECCXX_VER))
 #  ifdef BOOST_MATH_USE_C99
-inline float expm1(float x, const policies::policy<>&){ return ::expm1f(x); }
+BOOST_MATH_GPU_ENABLED inline float expm1(float x, const policies::policy<>&){ return ::expm1f(x); }
 #     ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline long double expm1(long double x, const policies::policy<>&){ return ::expm1l(x); }
 #     endif
 #  else
 inline float expm1(float x, const policies::policy<>&){ return static_cast<float>(::expm1(x)); }
 #  endif
-inline double expm1(double x, const policies::policy<>&){ return ::expm1(x); }
+BOOST_MATH_GPU_ENABLED inline double expm1(double x, const policies::policy<>&){ return ::expm1(x); }
 #endif
 
 template <class T>
-inline typename tools::promote_args<T>::type expm1(T x)
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type expm1(T x)
 {
    return expm1(x, policies::policy<>());
 }
