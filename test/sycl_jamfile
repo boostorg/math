@@ -17,6 +17,7 @@ run test_exponential_dist.cpp ;
 run test_holtsmark.cpp ;
 run test_landau.cpp ;
 run test_mapairy.cpp ;
+run test_saspoint5.cpp ;
 
 # Special Functions
 run pow_test.cpp ;
