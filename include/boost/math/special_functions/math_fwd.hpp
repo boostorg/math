@@ -600,10 +600,10 @@ namespace boost
 
    // sqrt(1+x) - 1
    template <class T>
-   tools::promote_args_t<T> sqrt1pm1(const T& val);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> sqrt1pm1(const T& val);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> sqrt1pm1(const T& val, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> sqrt1pm1(const T& val, const Policy&);
 
    // sinus cardinals:
    template <class T>
@@ -1484,7 +1484,7 @@ namespace boost
    powm1(const T1 a, const T2 z){ return boost::math::powm1(a, z, Policy()); }\
 \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> sqrt1pm1(const T& val){ return boost::math::sqrt1pm1(val, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> sqrt1pm1(const T& val){ return boost::math::sqrt1pm1(val, Policy()); }\
 \
    template <class T>\
    inline boost::math::tools::promote_args_t<T> sinc_pi(T x){ return boost::math::sinc_pi(x, Policy()); }\
