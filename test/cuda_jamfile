@@ -62,6 +62,12 @@ run test_mapairy_pdf_double.cu ;
 run test_mapairy_pdf_float.cu ;
 run test_mapairy_quan_double.cu ;
 run test_mapairy_quan_float.cu ;
+run test_saspoint5_cdf_double.cu ;
+run test_saspoint5_cdf_float.cu ;
+run test_saspoint5_pdf_double.cu ;
+run test_saspoint5_pdf_float.cu ;
+run test_saspoint5_quan_double.cu ;
+run test_saspoint5_quan_float.cu ;
 
 # Special Functions
 # run test_beta_simple.cpp ;
