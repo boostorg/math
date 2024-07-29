@@ -2496,7 +2496,7 @@ template <class RealType>
 BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 53>& tag)
 {
     if (p > 0.5) {
-        return saspoint5_quantile_imp_prec(1 - p, !complement, tag);
+        return !complement ? saspoint5_quantile_upper_imp_prec(1 - p, tag) : -saspoint5_quantile_upper_imp_prec(1 - p, tag);
     }
 
     return complement ? saspoint5_quantile_upper_imp_prec(p, tag) : -saspoint5_quantile_upper_imp_prec(p, tag);
@@ -2506,7 +2506,7 @@ template <class RealType>
 BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 113>& tag)
 {
     if (p > 0.5) {
-        return saspoint5_quantile_imp_prec(1 - p, !complement, tag);
+        return !complement ? saspoint5_quantile_upper_imp_prec(1 - p, tag) : -saspoint5_quantile_upper_imp_prec(1 - p, tag);
     }
 
     return complement ? saspoint5_quantile_upper_imp_prec(p, tag) : -saspoint5_quantile_upper_imp_prec(p, tag);
