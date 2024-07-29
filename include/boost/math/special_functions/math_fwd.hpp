@@ -156,14 +156,14 @@ namespace boost
 
    // erf & erfc error functions.
    template <class RT> // Error function.
-   tools::promote_args_t<RT> erf(RT z);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erf(RT z);
    template <class RT, class Policy> // Error function.
-   tools::promote_args_t<RT> erf(RT z, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erf(RT z, const Policy&);
 
    template <class RT>// Error function complement.
-   tools::promote_args_t<RT> erfc(RT z);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erfc(RT z);
    template <class RT, class Policy>// Error function complement.
-   tools::promote_args_t<RT> erfc(RT z, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erfc(RT z, const Policy&);
 
    template <class RT>// Error function inverse.
    tools::promote_args_t<RT> erf_inv(RT z);
@@ -1272,10 +1272,10 @@ namespace boost
    template <class T> T binomial_coefficient(unsigned n, unsigned k){ return ::boost::math::binomial_coefficient<T, Policy>(n, k, Policy()); }\
 \
    template <class RT>\
-   inline boost::math::tools::promote_args_t<RT> erf(RT z) { return ::boost::math::erf(z, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT> erf(RT z) { return ::boost::math::erf(z, Policy()); }\
 \
    template <class RT>\
-   inline boost::math::tools::promote_args_t<RT> erfc(RT z){ return ::boost::math::erfc(z, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT> erfc(RT z){ return ::boost::math::erfc(z, Policy()); }\
 \
    template <class RT>\
    inline boost::math::tools::promote_args_t<RT> erf_inv(RT z) { return ::boost::math::erf_inv(z, Policy()); }\
