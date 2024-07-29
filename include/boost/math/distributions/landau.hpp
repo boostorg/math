@@ -4231,8 +4231,9 @@ BOOST_MATH_GPU_ENABLED inline RealType landau_quantile_upper_imp_prec(const Real
 template <class RealType>
 BOOST_MATH_GPU_ENABLED inline RealType landau_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 53>& tag)
 {
-    if (p > 0.5) {
-        return landau_quantile_imp_prec(1 - p, !complement, tag);
+    if (p > 0.5) 
+    {
+        return !complement ? landau_quantile_upper_imp_prec(1 - p, tag) : landau_quantile_lower_imp_prec(1 - p, tag);
     }
 
     return complement ? landau_quantile_upper_imp_prec(p, tag) : landau_quantile_lower_imp_prec(p, tag);
@@ -4241,8 +4242,9 @@ BOOST_MATH_GPU_ENABLED inline RealType landau_quantile_imp_prec(const RealType& 
 template <class RealType>
 BOOST_MATH_GPU_ENABLED inline RealType landau_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 113>& tag)
 {
-    if (p > 0.5) {
-        return landau_quantile_imp_prec(1 - p, !complement, tag);
+    if (p > 0.5) 
+    {
+        return !complement ? landau_quantile_upper_imp_prec(1 - p, tag) : landau_quantile_lower_imp_prec(1 - p, tag);
     }
 
     return complement ? landau_quantile_upper_imp_prec(p, tag) : landau_quantile_lower_imp_prec(p, tag);
