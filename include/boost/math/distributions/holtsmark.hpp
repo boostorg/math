@@ -1614,7 +1614,7 @@ BOOST_MATH_GPU_ENABLED inline RealType holtsmark_quantile_upper_imp_prec(const R
         result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * cbrt(p * p));
     }
     else {
-        const static RealType c = ldexp(cbrt(constants::pi<RealType>()), 1);
+        const BOOST_MATH_STATIC_LOCAL_VARIABLE RealType c = ldexp(cbrt(constants::pi<RealType>()), 1);
 
         RealType p_square = p * p;
 
@@ -2211,7 +2211,7 @@ BOOST_MATH_GPU_ENABLED inline RealType holtsmark_quantile_upper_imp_prec(const R
         result = tools::evaluate_polynomial(P, t) / (tools::evaluate_polynomial(Q, t) * cbrt(p * p));
     }
     else {
-        const static RealType c = ldexp(cbrt(constants::pi<RealType>()), 1);
+        const BOOST_MATH_STATIC_LOCAL_VARIABLE RealType c = ldexp(cbrt(constants::pi<RealType>()), 1);
 
         RealType p_square = p * p;
 
