@@ -133,19 +133,19 @@ BOOST_MATH_GPU_ENABLED constexpr T log_min_value(const std::integral_constant<in
 // 80 and 128-bit long doubles:
 //
 template <class T>
-inline constexpr T log_max_value(const std::integral_constant<int, 16384>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(std::is_floating_point<T>::value)
+BOOST_MATH_GPU_ENABLED inline constexpr T log_max_value(const std::integral_constant<int, 16384>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(std::is_floating_point<T>::value)
 {
    return 11356.0L;
 }
 
 template <class T>
-inline constexpr T log_min_value(const std::integral_constant<int, 16384>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(std::is_floating_point<T>::value)
+BOOST_MATH_GPU_ENABLED inline constexpr T log_min_value(const std::integral_constant<int, 16384>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(std::is_floating_point<T>::value)
 {
    return -11355.0L;
 }
 
 template <class T>
-inline T log_max_value(const std::integral_constant<int, 0>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+BOOST_MATH_GPU_ENABLED inline T log_max_value(const std::integral_constant<int, 0>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    BOOST_MATH_STD_USING
 #ifdef __SUNPRO_CC
@@ -158,7 +158,7 @@ inline T log_max_value(const std::integral_constant<int, 0>& BOOST_MATH_APPEND_E
 }
 
 template <class T>
-inline T log_min_value(const std::integral_constant<int, 0>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+BOOST_MATH_GPU_ENABLED inline T log_min_value(const std::integral_constant<int, 0>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    BOOST_MATH_STD_USING
 #ifdef __SUNPRO_CC
@@ -249,7 +249,7 @@ struct log_limit_noexcept_traits : public log_limit_noexcept_traits_imp<T, std::
 #endif
 
 template <class T>
-inline constexpr T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
+BOOST_MATH_GPU_ENABLED inline constexpr T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::log_max_value<T>(typename detail::log_limit_traits<T>::tag_type());
@@ -262,7 +262,7 @@ inline constexpr T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(
 }
 
 template <class T>
-inline constexpr T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
+BOOST_MATH_GPU_ENABLED inline constexpr T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::log_min_value<T>(typename detail::log_limit_traits<T>::tag_type());

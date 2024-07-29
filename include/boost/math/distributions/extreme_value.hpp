@@ -205,7 +205,7 @@ BOOST_GPU_ENABLED inline RealType logcdf(const extreme_value_distribution<RealTy
 } // logcdf
 
 template <class RealType, class Policy>
-RealType quantile(const extreme_value_distribution<RealType, Policy>& dist, const RealType& p)
+BOOST_MATH_GPU_ENABLED RealType quantile(const extreme_value_distribution<RealType, Policy>& dist, const RealType& p)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
 
