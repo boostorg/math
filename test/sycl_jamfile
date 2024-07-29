@@ -14,6 +14,7 @@ run test_arcsine.cpp ;
 run test_bernoulli.cpp ;
 run test_cauchy.cpp ;
 run test_exponential_dist.cpp ;
+run test_extreme_value.cpp ;
 run test_holtsmark.cpp ;
 run test_landau.cpp ;
 run test_mapairy.cpp ;
