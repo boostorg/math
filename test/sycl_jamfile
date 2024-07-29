@@ -11,11 +11,16 @@ project : requirements
 
 # Distributions
 run test_arcsine.cpp ;
+run test_bernoulli.cpp ;
 run test_cauchy.cpp ;
 
 # Special Functions
+run pow_test.cpp ;
 run test_beta_simple.cpp ;
 run test_cbrt.cpp ;
 run test_sign.cpp ;
 run test_round.cpp ;
-run test_expm1_simple.cpp;
+run test_expm1_simple.cpp ;
+run test_log1p_simple.cpp ;
+run test_digamma_simple.cpp ;
+run test_trigamma.cpp ;

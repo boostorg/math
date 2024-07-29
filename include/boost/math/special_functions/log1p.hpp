@@ -114,7 +114,7 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const std::int
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
-   static const char* function = "boost::math::log1p<%1%>(%1%)";
+   constexpr auto function = "boost::math::log1p<%1%>(%1%)";
 
    if(x < -1)
       return policies::raise_domain_error<T>(
@@ -222,7 +222,7 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const std::int
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
-   static const char* function = "boost::math::log1p<%1%>(%1%)";
+   constexpr auto function = "boost::math::log1p<%1%>(%1%)";
 
    if(x < -1)
       return policies::raise_domain_error<T>(
@@ -433,12 +433,12 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1p(T x)
 // Compute log(1+x)-x:
 //
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    log1pmx(T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    BOOST_MATH_STD_USING
-   static const char* function = "boost::math::log1pmx<%1%>(%1%)";
+   constexpr auto function = "boost::math::log1pmx<%1%>(%1%)";
 
    if(x < -1)
       return policies::raise_domain_error<T>(
@@ -465,7 +465,7 @@ inline typename tools::promote_args<T>::type
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type log1pmx(T x)
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1pmx(T x)
 {
    return log1pmx(x, policies::policy<>());
 }

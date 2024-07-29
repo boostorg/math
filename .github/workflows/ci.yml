@@ -606,7 +606,7 @@ jobs:
       - name: Build tests
         run: |
           cd ../boost-root/__build__
-          cmake --build . --target tests
+          cmake --build . --target tests -j $(nproc)
       - name: Run tests
         run: |
           cd ../boost-root/__build__
@@ -663,7 +663,7 @@ jobs:
       - name: Build tests
         run: |
           cd ../boost-root/__build__
-          cmake --build . --target tests
+          cmake --build . --target tests -j $(nproc)
       # Will leave this commented out for now. GHA does not install graphics cards by default
       #- name: Run tests
       #  run: |

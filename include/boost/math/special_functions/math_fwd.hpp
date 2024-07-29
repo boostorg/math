@@ -533,17 +533,17 @@ namespace boost
 
    // digamma:
    template <class T>
-   tools::promote_args_t<T> digamma(T x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> digamma(T x);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> digamma(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> digamma(T x, const Policy&);
 
    // trigamma:
    template <class T>
-   tools::promote_args_t<T> trigamma(T x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> trigamma(T x);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> trigamma(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> trigamma(T x, const Policy&);
 
    // polygamma:
    template <class T>
@@ -577,10 +577,10 @@ namespace boost
 
    // log1pmx is log(x + 1) - x
    template <class T>
-   tools::promote_args_t<T> log1pmx(T);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> log1pmx(T);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> log1pmx(T, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> log1pmx(T, const Policy&);
 
    // Exp (x) minus 1 functions.
    template <class T>
@@ -858,16 +858,16 @@ namespace boost
                      const Policy&);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> sin_pi(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> sin_pi(T x, const Policy&);
 
    template <class T>
-   tools::promote_args_t<T> sin_pi(T x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> sin_pi(T x);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> cos_pi(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> cos_pi(T x, const Policy&);
 
    template <class T>
-   tools::promote_args_t<T> cos_pi(T x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> cos_pi(T x);
 
    template <class T>
    int fpclassify BOOST_NO_MACRO_EXPAND(T t);
@@ -1091,10 +1091,10 @@ namespace boost
 
    // pow:
    template <int N, typename T, class Policy>
-   BOOST_MATH_CXX14_CONSTEXPR tools::promote_args_t<T> pow(T base, const Policy& policy);
+   BOOST_MATH_GPU_ENABLED BOOST_MATH_CXX14_CONSTEXPR tools::promote_args_t<T> pow(T base, const Policy& policy);
 
    template <int N, typename T>
-   BOOST_MATH_CXX14_CONSTEXPR tools::promote_args_t<T> pow(T base);
+   BOOST_MATH_GPU_ENABLED BOOST_MATH_CXX14_CONSTEXPR tools::promote_args_t<T> pow(T base);
 
    // next:
    template <class T, class U, class Policy>
@@ -1455,10 +1455,10 @@ namespace boost
    inline boost::math::tools::promote_args_t<T1, T2> gamma_q_inva(T1 a, T2 q){ return boost::math::gamma_q_inva(a, q, Policy()); }\
 \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> digamma(T x){ return boost::math::digamma(x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> digamma(T x){ return boost::math::digamma(x, Policy()); }\
 \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> trigamma(T x){ return boost::math::trigamma(x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> trigamma(T x){ return boost::math::trigamma(x, Policy()); }\
 \
    template <class T>\
    inline boost::math::tools::promote_args_t<T> polygamma(int n, T x){ return boost::math::polygamma(n, x, Policy()); }\
@@ -1471,10 +1471,10 @@ namespace boost
    inline boost::math::tools::promote_args_t<RT> cbrt(RT z){ return boost::math::cbrt(z, Policy()); }\
 \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> log1p(T x){ return boost::math::log1p(x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> log1p(T x){ return boost::math::log1p(x, Policy()); }\
 \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> log1pmx(T x){ return boost::math::log1pmx(x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> log1pmx(T x){ return boost::math::log1pmx(x, Policy()); }\
 \
    template <class T>\
    BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> expm1(T x){ return boost::math::expm1(x, Policy()); }\
@@ -1572,10 +1572,10 @@ template <class OutputIterator, class T>\
    { boost::math::cyl_neumann_zero(v, start_index, number_of_zeros, out_it, Policy()); }\
 \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> sin_pi(T x){ return boost::math::sin_pi(x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> sin_pi(T x){ return boost::math::sin_pi(x, Policy()); }\
 \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> cos_pi(T x){ return boost::math::cos_pi(x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> cos_pi(T x){ return boost::math::cos_pi(x, Policy()); }\
 \
    using boost::math::fpclassify;\
    using boost::math::isfinite;\
@@ -1625,7 +1625,7 @@ template <class OutputIterator, class T>\
    BOOST_MATH_GPU_ENABLED inline T modf(const T& v, long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <int N, class T>\
-   inline boost::math::tools::promote_args_t<T> pow(T v){ return boost::math::pow<N>(v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> pow(T v){ return boost::math::pow<N>(v, Policy()); }\
    \
    template <class T> T nextafter(const T& a, const T& b){ return static_cast<T>(boost::math::nextafter(a, b, Policy())); }\
    template <class T> T float_next(const T& a){ return static_cast<T>(boost::math::float_next(a, Policy())); }\
