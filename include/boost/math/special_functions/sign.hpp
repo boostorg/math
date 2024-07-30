@@ -162,22 +162,6 @@ BOOST_MATH_GPU_ENABLED int (signbit)(T x)
    return detail::signbit_impl(static_cast<result_type>(x), method());
 }
 
-#ifndef BOOST_MATH_HAS_GPU_SUPPORT
-template<>
-BOOST_MATH_GPU_ENABLED int signbit<float>(float x)
-{
-    using std::signbit;
-    return (signbit)(x);
-}
-
-template<>
-BOOST_MATH_GPU_ENABLED int signbit<double>(double x)
-{
-    using std::signbit;
-    return (signbit)(x);
-}
-#endif
-
 template <class T>
 BOOST_MATH_GPU_ENABLED inline int sign BOOST_NO_MACRO_EXPAND(const T& z)
 {
