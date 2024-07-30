@@ -108,7 +108,7 @@ BOOST_MATH_GPU_ENABLED T sinpx(T z)
 // tgamma(z), with Lanczos support:
 //
 template <class T, class Policy, class Lanczos>
-BOOST_MATH_GPU_ENABLED T gamma_imp(T z, const Policy& pol, const Lanczos& l)
+BOOST_MATH_GPU_ENABLED T gamma_imp_final(T z, const Policy& pol, const Lanczos& l)
 {
    BOOST_MATH_STD_USING
 
@@ -127,20 +127,8 @@ BOOST_MATH_GPU_ENABLED T gamma_imp(T z, const Policy& pol, const Lanczos& l)
    if(z <= 0)
    {
       if(floor(z) == z)
-         return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
-      if(z <= -20)
       {
-         result = gamma_imp(T(-z), pol, l) * sinpx(z);
-         BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
-            return -boost::math::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
-         result = -boost::math::constants::pi<T>() / result;
-         if(result == 0)
-            return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
-         if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
-            return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
-         BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         return result;
+         return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
       }
 
       // shift z to > 1:
@@ -194,6 +182,32 @@ BOOST_MATH_GPU_ENABLED T gamma_imp(T z, const Policy& pol, const Lanczos& l)
       }
    }
    return result;
+}
+// SYCL compilers can not support recursion so we extract it into a dispatch function
+template <class T, class Policy, class Lanczos>
+BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T gamma_imp(T z, const Policy& pol, const Lanczos& l)
+{
+   BOOST_MATH_STD_USING
+   
+   if(z <= -20)
+   {
+      constexpr auto function = "boost::math::tgamma<%1%>(%1%)";
+      T result = gamma_imp_final(T(-z), pol, l) * sinpx(z);
+      BOOST_MATH_INSTRUMENT_VARIABLE(result);
+      if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
+         return -boost::math::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+      result = -boost::math::constants::pi<T>() / result;
+      if(result == 0)
+         return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
+      if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
+         return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
+      BOOST_MATH_INSTRUMENT_VARIABLE(result);
+      return result;
+   }
+   else
+   {
+      return gamma_imp_final(T(z), pol, l);
+   }
 }
 //
 // lgamma(z) with Lanczos support:
