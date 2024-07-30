@@ -183,6 +183,11 @@ BOOST_MATH_GPU_ENABLED T gamma_imp_final(T z, const Policy& pol, const Lanczos& 
    }
    return result;
 }
+
+#ifdef BOOST_MATH_ENABLE_CUDA
+#  pragma nv_diag_suppress 2190
+#endif
+
 // SYCL compilers can not support recursion so we extract it into a dispatch function
 template <class T, class Policy, class Lanczos>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T gamma_imp(T z, const Policy& pol, const Lanczos& l)
@@ -209,6 +214,11 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T gamma_imp(T z, const Policy& pol
       return gamma_imp_final(T(z), pol, l);
    }
 }
+
+#ifdef BOOST_MATH_ENABLE_CUDA
+#  pragma nv_diag_default 2190
+#endif
+
 //
 // lgamma(z) with Lanczos support:
 //
@@ -276,6 +286,10 @@ BOOST_MATH_GPU_ENABLED T lgamma_imp_final(T z, const Policy& pol, const Lanczos&
    return result;
 }
 
+#ifdef BOOST_MATH_ENABLE_CUDA
+#  pragma nv_diag_suppress 2190
+#endif
+
 template <class T, class Policy, class Lanczos>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = nullptr)
 {
@@ -316,6 +330,10 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T lgamma_imp(T z, const Policy& po
       return lgamma_imp_final(T(z), pol, l, sign);
    }
 }
+
+#ifdef BOOST_MATH_ENABLE_CUDA
+#  pragma nv_diag_default 2190
+#endif
 
 //
 // Incomplete gamma functions follow:
