@@ -1454,7 +1454,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
             precision_type::value <= 113 ? 113 : 0
          > tag_type;
 
-         result = igamma_temme_large(a, x, pol, static_cast<tag_type const*>(nullptr));
+         result = igamma_temme_large(a, x, pol, tag_type());
          if(x >= a)
             invert = !invert;
          if(p_derivative)
