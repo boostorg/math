@@ -64,10 +64,8 @@ BOOST_MATH_GPU_ENABLED inline T powm1_imp_dispatch(const T x, const T y, const P
       if (boost::math::trunc(y / 2) == y / 2)
          return powm1_imp(T(-x), T(y), pol);
    }
-   else
-   {
-      return powm1_imp(T(x), T(y), pol);
-   }
+
+   return powm1_imp(T(x), T(y), pol);
 }
 
 } // detail
