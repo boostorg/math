@@ -591,11 +591,11 @@ namespace boost
 
    // Power - 1
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
          powm1(const T1 a, const T2 z);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
          powm1(const T1 a, const T2 z, const Policy&);
 
    // sqrt(1+x) - 1
@@ -1481,7 +1481,7 @@ namespace boost
 \
    template <class T1, class T2>\
    inline boost::math::tools::promote_args_t<T1, T2> \
-   powm1(const T1 a, const T2 z){ return boost::math::powm1(a, z, Policy()); }\
+   BOOST_MATH_GPU_ENABLED powm1(const T1 a, const T2 z){ return boost::math::powm1(a, z, Policy()); }\
 \
    template <class T>\
    BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> sqrt1pm1(const T& val){ return boost::math::sqrt1pm1(val, Policy()); }\
