@@ -1,4 +1,5 @@
 //  (C) Copyright John Maddock 2006.
+//  (C) Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -10,6 +11,7 @@
 #pragma once
 #endif
 
+#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/big_constant.hpp>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
@@ -36,7 +38,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l);
 // lgamma for small arguments:
 //
 template <class T, class Policy, class Lanczos>
-T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 64>&, const Policy& /* l */, const Lanczos&)
+BOOST_GPU_ENABLED T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 64>&, const Policy& /* l */, const Lanczos&)
 {
    // This version uses rational approximations for small
    // values of z accurate enough for 64-bit mantissas
@@ -87,7 +89,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 64>&, co
       // At long double: Max error found:               1.987e-21
       // Maximum Deviation Found (approximation error): 5.900e-24
       //
-      static const T P[] = {
+      BOOST_MATH_STATIC const T P[] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.180355685678449379109e-1)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.25126649619989678683e-1)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.494103151567532234274e-1)),
@@ -96,7 +98,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 64>&, co
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.541009869215204396339e-3)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.324588649825948492091e-4))
       };
-      static const T Q[] = {
+      BOOST_MATH_STATIC const T Q[] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.1e1)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.196202987197795200688e1)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.148019669424231326694e1)),
@@ -107,7 +109,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 64>&, co
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.223352763208617092964e-6))
       };
 
-      static const float Y = 0.158963680267333984375e0f;
+      constexpr float Y = 0.158963680267333984375e0f;
 
       T r = zm2 * (z + 1);
       T R = tools::evaluate_polynomial(P, zm2);
@@ -152,9 +154,9 @@ T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 64>&, co
          // Expected Error Term:                                 3.139e-021
 
          //
-         static const float Y = 0.52815341949462890625f;
+         constexpr float Y = 0.52815341949462890625f;
 
-         static const T P[] = {
+         BOOST_MATH_STATIC const T P[] = {
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.490622454069039543534e-1)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.969117530159521214579e-1)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.414983358359495381969e0)),
@@ -163,7 +165,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 64>&, co
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.240149820648571559892e-1)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.100346687696279557415e-2))
          };
-         static const T Q[] = {
+         BOOST_MATH_STATIC const T Q[] = {
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.1e1)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.302349829846463038743e1)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.348739585360723852576e1)),
@@ -197,9 +199,9 @@ T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 64>&, co
          // Maximum Deviation Found:                           2.151e-021
          // Expected Error Term:                               2.150e-021
          //
-         static const float Y = 0.452017307281494140625f;
+         constexpr float Y = 0.452017307281494140625f;
 
-         static const T P[] = {
+         BOOST_MATH_STATIC const T P[] = {
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.292329721830270012337e-1)), 
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.144216267757192309184e0)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.142440390738631274135e0)),
@@ -207,7 +209,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 64>&, co
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.850535976868336437746e-2)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.431171342679297331241e-3))
          };
-         static const T Q[] = {
+         BOOST_MATH_STATIC const T Q[] = {
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.1e1)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.150169356054485044494e1)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.846973248876495016101e0)),
