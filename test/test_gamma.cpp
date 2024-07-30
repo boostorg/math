@@ -3,7 +3,11 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef SYCL_LANGUAGE_VERSION
 #include <pch_light.hpp>
+#endif
+
+#include <boost/math/special_functions/gamma.hpp>
 #include "test_gamma.hpp"
 
 //
