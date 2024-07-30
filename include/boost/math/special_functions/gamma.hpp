@@ -1913,7 +1913,7 @@ struct igamma_initializer
          // our initialization code here as the precision presumably
          // varies at runtime, and will not have been set yet.  Plus the
          // code requiring initialization isn't called when digits == 0.
-         BOOST_MATH_IF_CONSTEXPR (std::numeric_limits<T>::digits)
+         if (std::numeric_limits<T>::digits)
          {
             boost::math::gamma_p(static_cast<T>(400), static_cast<T>(400), Policy());
          }
