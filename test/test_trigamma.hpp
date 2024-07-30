@@ -1,4 +1,5 @@
-// Copyright John Maddock 2014
+//  Copyright John Maddock 2014
+//  Copyright Matt Borland 2024
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -9,9 +10,10 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
+#include <boost/math/special_functions/trigamma.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/tools/stats.hpp>
-#include <boost/math/tools/test.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>

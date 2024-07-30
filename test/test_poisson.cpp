@@ -53,12 +53,12 @@ void test_spots(RealType)
    // guaranteed for type RealType, eg 6 for float, 15 for double,
    // expressed as a percentage (so -2) for BOOST_CHECK_CLOSE,
 
-   int decdigits = numeric_limits<RealType>::digits10;
+   int decdigits = std::numeric_limits<RealType>::digits10;
   // May eb >15 for 80 and 128-bit FP types.
   if (decdigits <= 0)
   { // decdigits is not defined, for example real concept,
     // so assume precision of most test data is double (for example, MathCAD).
-     decdigits = numeric_limits<double>::digits10; // == 15 for 64-bit
+     decdigits = std::numeric_limits<double>::digits10; // == 15 for 64-bit
   }
   if (decdigits > 15 ) // numeric_limits<double>::digits10)
   { // 15 is the accuracy of the MathCAD test data.
@@ -644,7 +644,7 @@ BOOST_AUTO_TEST_CASE( test_main )
   test_spots(0.0); // Test double.
 #endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-  if (numeric_limits<long double>::digits10 > numeric_limits<double>::digits10)
+  if (std::numeric_limits<long double>::digits10 > std::numeric_limits<double>::digits10)
   { // long double is better than double (so not MSVC where they are same).
 #ifdef TEST_LDOUBLE
      test_spots(0.0L); // Test long double.

@@ -1,6 +1,6 @@
 //  Copyright John Maddock 2007.
 //  Copyright Paul A. Bristow 2007.
-
+//  Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -9,6 +9,7 @@
 #define BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/numeric_limits.hpp>
 #include <iomanip>
 #include <string>
 #include <cstring>
@@ -304,7 +305,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
 #else
    raise_error<std::overflow_error, T>(function, message ? message : "numeric overflow");
    // We should never get here:
-   return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
 #endif
 }
 
@@ -320,7 +321,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
 #else
    raise_error<std::overflow_error, T>(function, message ? message : "numeric overflow", val);
    // We should never get here:
-   return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
 #endif
 }
 
@@ -332,7 +333,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
 }
 
 #ifdef BOOST_MATH_HAS_GPU_SUPPORT
@@ -370,7 +371,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
 }
 
 template <class T>
@@ -382,7 +383,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
-   return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
 }
 
 template <class T>
@@ -395,7 +396,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
-   return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
 }
 
 template <class T>
@@ -404,7 +405,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* message,
            const  ::boost::math::policies::overflow_error< ::boost::math::policies::user_error>&)
 {
-   return user_overflow_error(function, message, std::numeric_limits<T>::infinity());
+   return user_overflow_error(function, message, boost::math::numeric_limits<T>::infinity());
 }
 
 template <class T>
@@ -418,7 +419,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
    std::string sval = prec_format(val);
    replace_all_in_string(m, "%1%", sval.c_str());
 
-   return user_overflow_error(function, m.c_str(), std::numeric_limits<T>::infinity());
+   return user_overflow_error(function, m.c_str(), boost::math::numeric_limits<T>::infinity());
 }
 
 template <class T>
@@ -597,55 +598,8 @@ BOOST_MATH_GPU_ENABLED constexpr TargetType raise_rounding_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   static_assert(std::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
-   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
-   return  val > 0 ? (std::numeric_limits<TargetType>::max)() : (std::numeric_limits<TargetType>::is_integer ? (std::numeric_limits<TargetType>::min)() : -(std::numeric_limits<TargetType>::max)());
-   #else
-   BOOST_IF_CONSTEXPR (std::is_same<TargetType, short>::value)
-   {
-      return val > 0 ? SHRT_MAX : SHRT_MIN;
-   }
-   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, int>::value)
-   {
-      return val > 0 ? INT_MAX : INT_MIN;
-   }
-   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, long>::value)
-   {
-      return val > 0 ? LONG_MAX : LONG_MIN;
-   }
-   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, long long>::value)
-   {
-      return val > 0 ? LLONG_MAX : LLONG_MIN;
-   }
-   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, unsigned short>::value)
-   {
-      return val > 0 ? USHRT_MAX : static_cast<unsigned short>(0U);
-   }
-   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, unsigned>::value)
-   {
-      return val > 0 ? UINT_MAX : 0U;
-   }
-   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, unsigned long>::value)
-   {
-      return val > 0 ? ULONG_MAX : 0UL;
-   }
-   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, unsigned long long>::value)
-   {
-      return val > 0 ? ULLONG_MAX : 0ULL;
-   }
-   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, float>::value)
-   {
-      return val > 0 ? FLT_MAX : -FLT_MAX;
-   }
-   else BOOST_IF_CONSTEXPR (std::is_same<TargetType, double>::value)
-   {
-      return val > 0 ? DBL_MAX : -DBL_MAX;
-   }
-   else
-   {
-      return val > 0 ? static_cast<TargetType>(-1) : static_cast<TargetType>(1);
-   }
-   #endif
+   static_assert(boost::math::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
+   return  val > 0 ? (boost::math::numeric_limits<TargetType>::max)() : (boost::math::numeric_limits<TargetType>::is_integer ? (boost::math::numeric_limits<TargetType>::min)() : -(boost::math::numeric_limits<TargetType>::max)());
 }
 
 template <class T, class TargetType>
@@ -659,8 +613,8 @@ BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
-   static_assert(std::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
-   return  val > 0 ? (std::numeric_limits<TargetType>::max)() : (std::numeric_limits<TargetType>::is_integer ? (std::numeric_limits<TargetType>::min)() : -(std::numeric_limits<TargetType>::max)());
+   static_assert(boost::math::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
+   return  val > 0 ? (boost::math::numeric_limits<TargetType>::max)() : (boost::math::numeric_limits<TargetType>::is_integer ? (boost::math::numeric_limits<TargetType>::min)() : -(boost::math::numeric_limits<TargetType>::max)());
 }
 template <class T, class TargetType>
 BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
@@ -686,7 +640,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_indeterminate_result_error(
 #else
    raise_error<std::domain_error, T>(function, message, val);
    // we never get here:
-   return std::numeric_limits<T>::quiet_NaN();
+   return boost::math::numeric_limits<T>::quiet_NaN();
 #endif
 }
 
