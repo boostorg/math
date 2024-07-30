@@ -2,7 +2,7 @@
 //  Copyright Paul A. Bristow 2007, 2013-14.
 //  Copyright Nikhar Agrawal 2013-14
 //  Copyright Christopher Kormanyos 2013-14, 2020, 2024
-
+//  Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -14,12 +14,12 @@
 #pragma once
 #endif
 
+#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/tools/assert.hpp>
-#include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
@@ -56,13 +56,13 @@ namespace boost{ namespace math{
 namespace detail{
 
 template <class T>
-inline bool is_odd(T v, const std::true_type&)
+BOOST_MATH_GPU_ENABLED inline bool is_odd(T v, const std::true_type&)
 {
    int i = static_cast<int>(v);
    return i&1;
 }
 template <class T>
-inline bool is_odd(T v, const std::false_type&)
+BOOST_MATH_GPU_ENABLED inline bool is_odd(T v, const std::false_type&)
 {
    // Oh dear can't cast T to int!
    BOOST_MATH_STD_USING
@@ -70,13 +70,13 @@ inline bool is_odd(T v, const std::false_type&)
    return static_cast<bool>(modulus != 0);
 }
 template <class T>
-inline bool is_odd(T v)
+BOOST_MATH_GPU_ENABLED inline bool is_odd(T v)
 {
    return is_odd(v, ::std::is_convertible<T, int>());
 }
 
 template <class T>
-T sinpx(T z)
+BOOST_MATH_GPU_ENABLED T sinpx(T z)
 {
    // Ad hoc function calculates x * sin(pi * x),
    // taking extra care near when x is near a whole number.
@@ -108,7 +108,7 @@ T sinpx(T z)
 // tgamma(z), with Lanczos support:
 //
 template <class T, class Policy, class Lanczos>
-T gamma_imp(T z, const Policy& pol, const Lanczos& l)
+BOOST_MATH_GPU_ENABLED T gamma_imp(T z, const Policy& pol, const Lanczos& l)
 {
    BOOST_MATH_STD_USING
 
@@ -122,7 +122,7 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
       b = true;
    }
 #endif
-   static const char* function = "boost::math::tgamma<%1%>(%1%)";
+   constexpr auto function = "boost::math::tgamma<%1%>(%1%)";
 
    if(z <= 0)
    {
@@ -199,7 +199,7 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
 // lgamma(z) with Lanczos support:
 //
 template <class T, class Policy, class Lanczos>
-T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = nullptr)
+BOOST_MATH_GPU_ENABLED T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = nullptr)
 {
 #ifdef BOOST_MATH_INSTRUMENT
    static bool b = false;
@@ -212,7 +212,7 @@ T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = nullptr)
 
    BOOST_MATH_STD_USING
 
-   static const char* function = "boost::math::lgamma<%1%>(%1%)";
+   constexpr auto function = "boost::math::lgamma<%1%>(%1%)";
 
    T result = 0;
    int sresult = 1;
@@ -291,12 +291,12 @@ private:
 public:
    typedef std::pair<T,T> result_type;
 
-   upper_incomplete_gamma_fract(T a1, T z1)
+   BOOST_MATH_GPU_ENABLED upper_incomplete_gamma_fract(T a1, T z1)
       : z(z1-a1+1), a(a1), k(0)
    {
    }
 
-   result_type operator()()
+   BOOST_MATH_GPU_ENABLED result_type operator()()
    {
       ++k;
       z += 2;
@@ -305,7 +305,7 @@ public:
 };
 
 template <class T>
-inline T upper_gamma_fraction(T a, T z, T eps)
+BOOST_MATH_GPU_ENABLED inline T upper_gamma_fraction(T a, T z, T eps)
 {
    // Multiply result by z^a * e^-z to get the full
    // upper incomplete integral.  Divide by tgamma(z)
@@ -321,9 +321,9 @@ private:
    T a, z, result;
 public:
    typedef T result_type;
-   lower_incomplete_gamma_series(T a1, T z1) : a(a1), z(z1), result(1){}
+   BOOST_MATH_GPU_ENABLED lower_incomplete_gamma_series(T a1, T z1) : a(a1), z(z1), result(1){}
 
-   T operator()()
+   BOOST_MATH_GPU_ENABLED T operator()()
    {
       T r = result;
       a += 1;
@@ -333,7 +333,7 @@ public:
 };
 
 template <class T, class Policy>
-inline T lower_gamma_series(T a, T z, const Policy& pol, T init_value = 0)
+BOOST_MATH_GPU_ENABLED inline T lower_gamma_series(T a, T z, const Policy& pol, T init_value = 0)
 {
    // Multiply result by ((z^a) * (e^-z) / a) to get the full
    // lower incomplete integral. Then divide by tgamma(a)
@@ -460,7 +460,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
 {
    BOOST_MATH_STD_USING
 
-   static const char* function = "boost::math::tgamma<%1%>(%1%)";
+   constexpr auto function = "boost::math::tgamma<%1%>(%1%)";
 
    // Check if the argument of tgamma is identically zero.
    const bool is_at_zero = (z == 0);
@@ -610,7 +610,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
 {
    BOOST_MATH_STD_USING
 
-   static const char* function = "boost::math::lgamma<%1%>(%1%)";
+   constexpr auto function = "boost::math::lgamma<%1%>(%1%)";
 
    // Check if the argument of lgamma is identically zero.
    const bool is_at_zero = (z == 0);
@@ -720,7 +720,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
 // used by the upper incomplete gamma with z < 1:
 //
 template <class T, class Policy, class Lanczos>
-T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& l)
+BOOST_MATH_GPU_ENABLED T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& l)
 {
    BOOST_MATH_STD_USING
 
@@ -789,9 +789,9 @@ struct small_gamma2_series
 {
    typedef T result_type;
 
-   small_gamma2_series(T a_, T x_) : result(-x_), x(-x_), apn(a_+1), n(1){}
+   BOOST_MATH_GPU_ENABLED small_gamma2_series(T a_, T x_) : result(-x_), x(-x_), apn(a_+1), n(1){}
 
-   T operator()()
+   BOOST_MATH_GPU_ENABLED T operator()()
    {
       T r = result / (apn);
       result *= x;
@@ -809,7 +809,7 @@ private:
 // incomplete gammas:
 //
 template <class T, class Policy>
-T full_igamma_prefix(T a, T z, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T full_igamma_prefix(T a, T z, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
@@ -864,7 +864,7 @@ T full_igamma_prefix(T a, T z, const Policy& pol)
 // most if the error occurs in this function:
 //
 template <class T, class Policy, class Lanczos>
-T regularised_gamma_prefix(T a, T z, const Policy& pol, const Lanczos& l)
+BOOST_MATH_GPU_ENABLED T regularised_gamma_prefix(T a, T z, const Policy& pol, const Lanczos& l)
 {
    BOOST_MATH_STD_USING
    if (z >= tools::max_value<T>())
@@ -1017,7 +1017,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
 // Upper gamma fraction for very small a:
 //
 template <class T, class Policy>
-inline T tgamma_small_upper_part(T a, T x, const Policy& pol, T* pgam = 0, bool invert = false, T* pderivative = 0)
+BOOST_MATH_GPU_ENABLED inline T tgamma_small_upper_part(T a, T x, const Policy& pol, T* pgam = 0, bool invert = false, T* pderivative = 0)
 {
    BOOST_MATH_STD_USING  // ADL of std functions.
    //
@@ -1047,7 +1047,7 @@ inline T tgamma_small_upper_part(T a, T x, const Policy& pol, T* pgam = 0, bool 
 // Upper gamma fraction for integer a:
 //
 template <class T, class Policy>
-inline T finite_gamma_q(T a, T x, Policy const& pol, T* pderivative = 0)
+BOOST_MATH_GPU_ENABLED inline T finite_gamma_q(T a, T x, Policy const& pol, T* pderivative = 0)
 {
    //
    // Calculates normalised Q when a is an integer:
@@ -1075,7 +1075,7 @@ inline T finite_gamma_q(T a, T x, Policy const& pol, T* pderivative = 0)
 // Upper gamma fraction for half integer a:
 //
 template <class T, class Policy>
-T finite_half_gamma_q(T a, T x, T* p_derivative, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T finite_half_gamma_q(T a, T x, T* p_derivative, const Policy& pol)
 {
    //
    // Calculates normalised Q when a is a half-integer:
@@ -1115,9 +1115,9 @@ template <class T>
 struct incomplete_tgamma_large_x_series
 {
    typedef T result_type;
-   incomplete_tgamma_large_x_series(const T& a, const T& x)
+   BOOST_MATH_GPU_ENABLED incomplete_tgamma_large_x_series(const T& a, const T& x)
       : a_poch(a - 1), z(x), term(1) {}
-   T operator()()
+   BOOST_MATH_GPU_ENABLED T operator()()
    {
       T result = term;
       term *= a_poch / z;
@@ -1128,7 +1128,7 @@ struct incomplete_tgamma_large_x_series
 };
 
 template <class T, class Policy>
-T incomplete_tgamma_large_x(const T& a, const T& x, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T incomplete_tgamma_large_x(const T& a, const T& x, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    incomplete_tgamma_large_x_series<T> s(a, x);
@@ -1143,10 +1143,10 @@ T incomplete_tgamma_large_x(const T& a, const T& x, const Policy& pol)
 // Main incomplete gamma entry point, handles all four incomplete gamma's:
 //
 template <class T, class Policy>
-T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
+BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
                        const Policy& pol, T* p_derivative)
 {
-   static const char* function = "boost::math::gamma_p<%1%>(%1%, %1%)";
+   constexpr auto function = "boost::math::gamma_p<%1%>(%1%, %1%)";
    if(a <= 0)
       return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
    if(x < 0)
@@ -1529,7 +1529,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
 // Ratios of two gamma functions:
 //
 template <class T, class Policy, class Lanczos>
-T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos& l)
+BOOST_MATH_GPU_ENABLED T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos& l)
 {
    BOOST_MATH_STD_USING
    if(z < tools::epsilon<T>())
@@ -1648,7 +1648,7 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const lanczos:
 }
 
 template <class T, class Policy>
-T tgamma_delta_ratio_imp(T z, T delta, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T tgamma_delta_ratio_imp(T z, T delta, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
@@ -1706,7 +1706,7 @@ T tgamma_delta_ratio_imp(T z, T delta, const Policy& pol)
 }
 
 template <class T, class Policy>
-T tgamma_ratio_imp(T x, T y, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
@@ -1775,7 +1775,7 @@ T tgamma_ratio_imp(T x, T y, const Policy& pol)
 }
 
 template <class T, class Policy>
-T gamma_p_derivative_imp(T a, T x, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T gamma_p_derivative_imp(T a, T x, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    //
@@ -1816,7 +1816,7 @@ T gamma_p_derivative_imp(T a, T x, const Policy& pol)
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    tgamma(T z, const Policy& /* pol */, const std::true_type)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1837,7 +1837,7 @@ struct igamma_initializer
 {
    struct init
    {
-      init()
+      BOOST_MATH_GPU_ENABLED init()
       {
          typedef typename policies::precision<T, Policy>::type precision_type;
 
@@ -1851,24 +1851,26 @@ struct igamma_initializer
          do_init(tag_type());
       }
       template <int N>
-      static void do_init(const std::integral_constant<int, N>&)
+      BOOST_MATH_GPU_ENABLED static void do_init(const std::integral_constant<int, N>&)
       {
          // If std::numeric_limits<T>::digits is zero, we must not call
          // our initialization code here as the precision presumably
          // varies at runtime, and will not have been set yet.  Plus the
          // code requiring initialization isn't called when digits == 0.
-         if(std::numeric_limits<T>::digits)
+         BOOST_MATH_IF_CONSTEXPR (std::numeric_limits<T>::digits)
          {
             boost::math::gamma_p(static_cast<T>(400), static_cast<T>(400), Policy());
          }
       }
-      static void do_init(const std::integral_constant<int, 53>&){}
+      BOOST_MATH_GPU_ENABLED static void do_init(const std::integral_constant<int, 53>&){}
       void force_instantiate()const{}
    };
-   static const init initializer;
-   static void force_instantiate()
+   BOOST_MATH_STATIC const init initializer;
+   BOOST_MATH_GPU_ENABLED static void force_instantiate()
    {
+      #ifndef BOOST_MATH_HAS_GPU_SUPPORT
       initializer.force_instantiate();
+      #endif
    }
 };
 
@@ -1880,7 +1882,7 @@ struct lgamma_initializer
 {
    struct init
    {
-      init()
+      BOOST_MATH_GPU_ENABLED init()
       {
          typedef typename policies::precision<T, Policy>::type precision_type;
          typedef std::integral_constant<int,
@@ -1891,28 +1893,30 @@ struct lgamma_initializer
 
          do_init(tag_type());
       }
-      static void do_init(const std::integral_constant<int, 64>&)
+      BOOST_MATH_GPU_ENABLED static void do_init(const std::integral_constant<int, 64>&)
       {
          boost::math::lgamma(static_cast<T>(2.5), Policy());
          boost::math::lgamma(static_cast<T>(1.25), Policy());
          boost::math::lgamma(static_cast<T>(1.75), Policy());
       }
-      static void do_init(const std::integral_constant<int, 113>&)
+      BOOST_MATH_GPU_ENABLED static void do_init(const std::integral_constant<int, 113>&)
       {
          boost::math::lgamma(static_cast<T>(2.5), Policy());
          boost::math::lgamma(static_cast<T>(1.25), Policy());
          boost::math::lgamma(static_cast<T>(1.5), Policy());
          boost::math::lgamma(static_cast<T>(1.75), Policy());
       }
-      static void do_init(const std::integral_constant<int, 0>&)
+      BOOST_MATH_GPU_ENABLED static void do_init(const std::integral_constant<int, 0>&)
       {
       }
-      void force_instantiate()const{}
+      BOOST_MATH_GPU_ENABLED void force_instantiate()const{}
    };
-   static const init initializer;
-   static void force_instantiate()
+   BOOST_MATH_STATIC const init initializer;
+   BOOST_MATH_GPU_ENABLED static void force_instantiate()
    {
+      #ifndef BOOST_MATH_HAS_GPU_SUPPORT
       initializer.force_instantiate();
+      #endif
    }
 };
 
@@ -1920,7 +1924,7 @@ template <class T, class Policy>
 const typename lgamma_initializer<T, Policy>::init lgamma_initializer<T, Policy>::initializer;
 
 template <class T1, class T2, class Policy>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma(T1 a, T2 z, const Policy&, const std::false_type)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1943,7 +1947,7 @@ inline tools::promote_args_t<T1, T2>
 }
 
 template <class T1, class T2>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma(T1 a, T2 z, const std::false_type& tag)
 {
    return tgamma(a, z, policies::policy<>(), tag);
@@ -1953,14 +1957,14 @@ inline tools::promote_args_t<T1, T2>
 } // namespace detail
 
 template <class T>
-inline typename tools::promote_args<T>::type
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    tgamma(T z)
 {
    return tgamma(z, policies::policy<>());
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    lgamma(T z, int* sign, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1980,28 +1984,28 @@ inline typename tools::promote_args<T>::type
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    lgamma(T z, int* sign)
 {
    return lgamma(z, sign, policies::policy<>());
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    lgamma(T x, const Policy& pol)
 {
    return ::boost::math::lgamma(x, nullptr, pol);
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    lgamma(T x)
 {
    return ::boost::math::lgamma(x, nullptr, policies::policy<>());
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    tgamma1pm1(T z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -2019,7 +2023,7 @@ inline typename tools::promote_args<T>::type
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    tgamma1pm1(T z)
 {
    return tgamma1pm1(z, policies::policy<>());
@@ -2029,7 +2033,7 @@ inline typename tools::promote_args<T>::type
 // Full upper incomplete gamma:
 //
 template <class T1, class T2>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma(T1 a, T2 z)
 {
    //
@@ -2041,7 +2045,7 @@ inline tools::promote_args_t<T1, T2>
    return static_cast<result_type>(detail::tgamma(a, z, maybe_policy()));
 }
 template <class T1, class T2, class Policy>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma(T1 a, T2 z, const Policy& pol)
 {
    using result_type = tools::promote_args_t<T1, T2>;
@@ -2051,7 +2055,7 @@ inline tools::promote_args_t<T1, T2>
 // Full lower incomplete gamma:
 //
 template <class T1, class T2, class Policy>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma_lower(T1 a, T2 z, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -2073,7 +2077,7 @@ inline tools::promote_args_t<T1, T2>
       forwarding_policy(), static_cast<value_type*>(nullptr)), "tgamma_lower<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma_lower(T1 a, T2 z)
 {
    return tgamma_lower(a, z, policies::policy<>());
@@ -2082,7 +2086,7 @@ inline tools::promote_args_t<T1, T2>
 // Regularised upper incomplete gamma:
 //
 template <class T1, class T2, class Policy>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    gamma_q(T1 a, T2 z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -2104,7 +2108,7 @@ inline tools::promote_args_t<T1, T2>
       forwarding_policy(), static_cast<value_type*>(nullptr)), "gamma_q<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    gamma_q(T1 a, T2 z)
 {
    return gamma_q(a, z, policies::policy<>());
@@ -2113,7 +2117,7 @@ inline tools::promote_args_t<T1, T2>
 // Regularised lower incomplete gamma:
 //
 template <class T1, class T2, class Policy>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    gamma_p(T1 a, T2 z, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -2135,7 +2139,7 @@ inline tools::promote_args_t<T1, T2>
       forwarding_policy(), static_cast<value_type*>(nullptr)), "gamma_p<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    gamma_p(T1 a, T2 z)
 {
    return gamma_p(a, z, policies::policy<>());
@@ -2143,7 +2147,7 @@ inline tools::promote_args_t<T1, T2>
 
 // ratios of gamma functions:
 template <class T1, class T2, class Policy>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma_delta_ratio(T1 z, T2 delta, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -2159,13 +2163,13 @@ inline tools::promote_args_t<T1, T2>
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(z), static_cast<value_type>(delta), forwarding_policy()), "boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma_delta_ratio(T1 z, T2 delta)
 {
    return tgamma_delta_ratio(z, delta, policies::policy<>());
 }
 template <class T1, class T2, class Policy>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma_ratio(T1 a, T2 b, const Policy&)
 {
    typedef tools::promote_args_t<T1, T2> result_type;
@@ -2180,14 +2184,14 @@ inline tools::promote_args_t<T1, T2>
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::tgamma_ratio_imp(static_cast<value_type>(a), static_cast<value_type>(b), forwarding_policy()), "boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma_ratio(T1 a, T2 b)
 {
    return tgamma_ratio(a, b, policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    gamma_p_derivative(T1 a, T2 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -2203,7 +2207,7 @@ inline tools::promote_args_t<T1, T2>
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::gamma_p_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(x), forwarding_policy()), "boost::math::gamma_p_derivative<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline tools::promote_args_t<T1, T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    gamma_p_derivative(T1 a, T2 x)
 {
    return gamma_p_derivative(a, x, policies::policy<>());
