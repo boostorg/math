@@ -1,4 +1,5 @@
-// Copyright Takuma Yoshimura 2024.
+//  Copyright Takuma Yoshimura 2024.
+//  Copyright Matt Borland 2024
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -11,6 +12,9 @@
 #pragma warning(disable : 4127) // conditional expression is constant
 #endif
 
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/numeric_limits.hpp>
+#include <boost/math/tools/tuple.hpp>
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/big_constant.hpp>
@@ -28,7 +32,7 @@ class landau_distribution;
 namespace detail {
 
 template <class RealType>
-inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -36,7 +40,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
     if (x < 1) {
         // Rational Approximation
         // Maximum Relative Error: 6.1179e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(2.62240126375351657026e-1),
             static_cast<RealType>(3.37943593381366824691e-1),
             static_cast<RealType>(1.53537606095123787618e-1),
@@ -46,7 +50,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(3.46237168332264544791e-7),
             static_cast<RealType>(2.54512306953704347532e-8),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(1.61596691542333069131e0),
             static_cast<RealType>(1.31560197919990191004e0),
@@ -63,7 +67,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 2.1560e-17
-        static const RealType P[6] = {
+        BOOST_MATH_STATIC const RealType P[6] = {
             static_cast<RealType>(1.63531240868022603476e-1),
             static_cast<RealType>(1.42818648212508067982e-1),
             static_cast<RealType>(4.95816076364679661943e-2),
@@ -71,7 +75,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(5.76649181954629544285e-4),
             static_cast<RealType>(-5.66279925274108366994e-7),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(1.41478104966077351483e0),
             static_cast<RealType>(9.41180365857002724714e-1),
@@ -88,7 +92,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 9.1732e-19
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(9.55242261334771588094e-2),
             static_cast<RealType>(6.66529732353979943139e-2),
             static_cast<RealType>(1.80958840194356287100e-2),
@@ -98,7 +102,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(4.37245276130361710865e-9),
             static_cast<RealType>(-8.10479404400603805292e-11),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(1.21670723402658089612e0),
             static_cast<RealType>(6.58224466688607822769e-1),
@@ -115,7 +119,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 7.6621e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(3.83643820409470770350e-2),
             static_cast<RealType>(1.97555000044256883088e-2),
             static_cast<RealType>(3.71748668368617282698e-3),
@@ -125,7 +129,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(5.36581791174380716937e-11),
             static_cast<RealType>(-5.50656207669255770963e-13),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(9.09290785092251223006e-1),
             static_cast<RealType>(3.49404120360701349529e-1),
@@ -142,7 +146,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 6.6311e-19
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(1.12656323880287532947e-2),
             static_cast<RealType>(2.87311140580416132088e-3),
             static_cast<RealType>(2.61788674390925516376e-4),
@@ -152,7 +156,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(4.33383971045699197233e-14),
             static_cast<RealType>(-1.75185581239955717728e-16),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(4.94430267268436822392e-1),
             static_cast<RealType>(1.00370783567964448346e-1),
@@ -169,7 +173,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 5.6459e-17
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(2.83847488747490686627e-3),
             static_cast<RealType>(4.95641151588714788287e-4),
             static_cast<RealType>(2.79159792287747766415e-5),
@@ -178,7 +182,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(-4.86595415551823027835e-14),
             static_cast<RealType>(9.68524606019510324447e-17),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(3.01847536766892219351e-1),
             static_cast<RealType>(3.63152433272831196527e-2),
@@ -195,7 +199,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 6.5205e-17
-        static const RealType P[6] = {
+        BOOST_MATH_STATIC const RealType P[6] = {
             static_cast<RealType>(6.85767880395157523315e-4),
             static_cast<RealType>(4.08288098461672797376e-5),
             static_cast<RealType>(8.10640732723079320426e-7),
@@ -203,7 +207,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(1.37951861368789813737e-11),
             static_cast<RealType>(-1.25906441382637535543e-17),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(1.23722380864018634550e-1),
             static_cast<RealType>(6.05800403141772433527e-3),
@@ -220,7 +224,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 3.5572e-17
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(6.78613480244945294595e-1),
             static_cast<RealType>(9.61675759893298556080e-1),
             static_cast<RealType>(3.45159462006746978086e-1),
@@ -229,7 +233,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(4.69867700169714338273e-4),
             static_cast<RealType>(1.76219117171149694118e-5),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(1.44693640094228656726e0),
             static_cast<RealType>(5.46298626321591162873e-1),
@@ -246,7 +250,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 5.7408e-17
-        static const RealType P[9] = {
+        BOOST_MATH_STATIC const RealType P[9] = {
             static_cast<RealType>(6.51438485661317103070e-1),
             static_cast<RealType>(2.67941671074735988081e-1),
             static_cast<RealType>(5.18564629295719783781e-2),
@@ -257,7 +261,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(3.35670921544537716055e-8),
             static_cast<RealType>(5.06987792821954864905e-10),
         };
-        static const RealType Q[9] = {
+        BOOST_MATH_STATIC const RealType Q[9] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(4.23792506680780833665e-1),
             static_cast<RealType>(8.17040643791396371682e-2),
@@ -276,7 +280,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 1.0195e-17
-        static const RealType P[10] = {
+        BOOST_MATH_STATIC const RealType P[10] = {
             static_cast<RealType>(6.36745544906925230102e-1),
             static_cast<RealType>(2.06319686601209029700e-1),
             static_cast<RealType>(3.27498059700133287053e-2),
@@ -288,7 +292,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(1.76754192209232807941e-10),
             static_cast<RealType>(-2.78616504641875874275e-17),
         };
-        static const RealType Q[9] = {
+        BOOST_MATH_STATIC const RealType Q[9] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(3.24145654925686670201e-1),
             static_cast<RealType>(5.14350019501887110402e-2),
@@ -307,7 +311,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 8.0433e-17
-        static const RealType P[9] = {
+        BOOST_MATH_STATIC const RealType P[9] = {
             static_cast<RealType>(6.36619776379492082324e-1),
             static_cast<RealType>(2.68158440168597706495e-1),
             static_cast<RealType>(5.49040993767853738389e-2),
@@ -318,7 +322,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(9.57557353473514565245e-8),
             static_cast<RealType>(5.16773829224576217348e-9),
         };
-        static const RealType Q[9] = {
+        BOOST_MATH_STATIC const RealType Q[9] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(4.21222294324039934056e-1),
             static_cast<RealType>(8.62431574655015481812e-2),
@@ -341,7 +345,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
 
 
 template <class RealType>
-inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -350,7 +354,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 7.4629e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.62240126375351657025589608183516471315e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.94698530837122818345222883832757839888e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.06728003509081587907620543204047536319e0),
@@ -366,7 +370,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.55873076454666680466531097660277995317e-11),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.80771940886011613393622410616035955976e-13),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.35771004134750535117224809381897395331e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.37002484862962406489509174332580745411e0),
@@ -390,7 +394,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 6.6684e-38
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.63531240868022603475813051802104652763e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.17803013130262393286657457221415701909e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.77780575692956605214628767143941600132e-1),
@@ -405,7 +409,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.14296339768511312584670061679121003569e-12),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.52631422678659858574974085885146420544e-15),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.48481735580594347909096198787726314434e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.91598585888012869317473155570063821216e0),
@@ -429,7 +433,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 6.3397e-35
         // LCOV_EXCL_START
-        static const RealType P[12] = {
+        BOOST_MATH_STATIC const RealType P[12] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.55242261334771588093967856464157010584e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.48866040463435403672044647455806606078e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.04241715667984551487882549843428953917e-1),
@@ -443,7 +447,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.18067019247793233704208913546277631267e-10),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.96745094401496364651919224112160111958e-12),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.07735872062601280828576861757316683396e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.00667909426245388114411629440735066799e0),
@@ -468,7 +472,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 8.0238e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.83643820409470770350079809236512802618e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.02996762669868036727057860510914079553e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.88220267784864518806154823373656292346e-2),
@@ -484,7 +488,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.11666384975358223644665199669986358056e-19),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.30202644697506464624965700043476935471e-22),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.44479208003384373099160875893986831861e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.54290037675901616362332580709754113529e-1),
@@ -508,7 +512,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 3.2541e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.12656323880287532946687856443190592955e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.31374972240605659239154788518240221417e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.10776910971729651587578902049263096117e-3),
@@ -524,7 +528,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.65525705592205245661726488519562256000e-23),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.60698835222044786453848932477732972928e-26),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.88605948104664828377228254521124685930e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.58594705700945215121673591119784576258e-1),
@@ -549,7 +553,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 4.1276e-36
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.83847488747490686627461184914507143000e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.61220392257287638364190361688188696363e-4),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.42217711448675893329072184826328300776e-4),
@@ -565,7 +569,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -6.94920633206242554892676642458535141153e-28),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.18030442958390399095902441284074544279e-31),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.65871972115253665568580046072625013145e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.74531522538358367003224536101724206626e-2),
@@ -590,7 +594,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 1.8458e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.85767880395157523314894776472286059373e-4),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.07684379950498990874449661385130414967e-4),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.29181715091139597455177955800910928786e-6),
@@ -606,7 +610,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.35979606245171162602352579985003194602e-33),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.50946115943875327149319867495704969908e-36),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.21212467547297045538111676107434471585e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.17663841151156626845609176694801024524e-2),
@@ -630,7 +634,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 2.6634e-35
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.78613480244945294594505480426643613242e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.07362312709864018864207848733814857157e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.47727521897653923649758175033206259109e-1),
@@ -645,7 +649,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.30306828175920576070486704404727265760e-11),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.05908347665846652276910544097430115068e-13),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.07218191317166728296013167220324207427e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.38908532499742180532814291654329829544e-1),
@@ -669,7 +673,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 6.1919e-36
         // LCOV_EXCL_START
-        static const RealType P[19] = {
+        BOOST_MATH_STATIC const RealType P[19] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.51438485661317103069553924870169052838e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.29652867028564588922931020456447362877e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.90557738902930002845457640269863338815e-1),
@@ -690,7 +694,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.15896012319823666881998903857141624070e-20),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.62176014448801854863922778456328119208e-25),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.79042471052521112984740498925369905803e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.55058068535501327896327971200536085268e-1),
@@ -719,7 +723,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 1.2411e-36
         // LCOV_EXCL_START
-        static const RealType P[18] = {
+        BOOST_MATH_STATIC const RealType P[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.36745544906925230101752563433306496000e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.73688900814770369626527563956988302379e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.81718746296195151971617726268038570065e-2),
@@ -739,7 +743,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.73017950634516660552375272495618707905e-22),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.68519137981001059472024985205381913202e-24),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.29948066505039082395951244410552705780e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.13730690908098361287472898564563217987e-2),
@@ -768,7 +772,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 2.0348e-35
         // LCOV_EXCL_START
-        static const RealType P[19] = {
+        BOOST_MATH_STATIC const RealType P[19] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.36619776379492082323649724050601750141e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.29818158612993476124594583743266388964e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.07736315744724186061845512973085067283e-2),
@@ -789,7 +793,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.50639358104925465711435411537609380290e-26),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.47593981758247424082096107205150226114e-40),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.60997521267746350015610841742718472657e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.40470704349086277215167519790809981379e-2),
@@ -818,7 +822,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 4.3963e-35
         // LCOV_EXCL_START
-        static const RealType P[18] = {
+        BOOST_MATH_STATIC const RealType P[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.36619772367581344984274685280416528592e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.72417390936686577479751162141499390532e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.74319117326966091295365258834959120634e-2),
@@ -838,7 +842,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.07464506614287925844993490382319608619e-21),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.60173555862875972119871402681133785088e-23),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.27912237038396638341492536677313983747e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.02138359905285600768927677649467546192e-2),
@@ -869,7 +873,7 @@ inline RealType landau_pdf_plus_imp_prec(const RealType& x, const std::integral_
 }
 
 template <class RealType>
-inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -879,7 +883,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 9.3928e-17
-        static const RealType P[9] = {
+        BOOST_MATH_STATIC const RealType P[9] = {
             static_cast<RealType>(2.21762208692280384264e-1),
             static_cast<RealType>(7.10041055270973473923e-1),
             static_cast<RealType>(8.66556480457430718380e-1),
@@ -890,7 +894,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(-2.76271972015177236271e-4),
             static_cast<RealType>(1.89483904652983701680e-5),
         };
-        static const RealType Q[8] = {
+        BOOST_MATH_STATIC const RealType Q[8] = {
             static_cast<RealType>(1),
             static_cast<RealType>(2.18155995697310361937e0),
             static_cast<RealType>(2.53173077603836285217e0),
@@ -908,7 +912,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 2.4742e-18
-        static const RealType P[11] = {
+        BOOST_MATH_STATIC const RealType P[11] = {
             static_cast<RealType>(6.50763682207511020789e-3),
             static_cast<RealType>(5.73790055136022120436e-2),
             static_cast<RealType>(2.22375662069496257066e-1),
@@ -921,7 +925,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(1.09503400950148681072e-3),
             static_cast<RealType>(-9.00045301380982997382e-5),
         };
-        static const RealType Q[11] = {
+        BOOST_MATH_STATIC const RealType Q[11] = {
             static_cast<RealType>(1),
             static_cast<RealType>(1.07919389927659014373e0),
             static_cast<RealType>(2.56142472873207168042e0),
@@ -948,7 +952,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
 
             // Rational Approximation
             // Maximum Relative Error: 5.8685e-18
-            static const RealType P[8] = {
+            BOOST_MATH_STATIC const RealType P[8] = {
                 static_cast<RealType>(6.31126317567898819465e-1),
                 static_cast<RealType>(5.28493759149515726917e-1),
                 static_cast<RealType>(3.28301410420682938866e-1),
@@ -958,7 +962,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
                 static_cast<RealType>(9.97883658430364658707e-4),
                 static_cast<RealType>(6.05131104440018116255e-5),
             };
-            static const RealType Q[8] = {
+            BOOST_MATH_STATIC const RealType Q[8] = {
                 static_cast<RealType>(1),
                 static_cast<RealType>(8.47781139548258655981e-1),
                 static_cast<RealType>(5.21797290075642096762e-1),
@@ -976,7 +980,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
 
             // Rational Approximation
             // Maximum Relative Error: 3.2532e-17
-            static const RealType P[9] = {
+            BOOST_MATH_STATIC const RealType P[9] = {
                 static_cast<RealType>(6.26864481454444278646e-1),
                 static_cast<RealType>(5.10647753508714204745e-1),
                 static_cast<RealType>(1.98551443303285119497e-1),
@@ -987,7 +991,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
                 static_cast<RealType>(4.17249760274638104772e-6),
                 static_cast<RealType>(7.73502439313710606153e-12),
             };
-            static const RealType Q[8] = {
+            BOOST_MATH_STATIC const RealType Q[8] = {
                 static_cast<RealType>(1),
                 static_cast<RealType>(8.15124079722976906223e-1),
                 static_cast<RealType>(3.16755852188961901369e-1),
@@ -1009,7 +1013,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
 }
 
 template <class RealType>
-inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1020,7 +1024,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 1.2803e-36
         // LCOV_EXCL_START
-        static const RealType P[16] = {
+        BOOST_MATH_STATIC const RealType P[16] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.21762208692280384264052188465103527015e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.07121154108880017947709737976750200391e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.34036993772851526455115746887751392080e0),
@@ -1038,7 +1042,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.98034330388999615249606466662289782222e-10),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.67931741921878993598048665757824165533e-12),
         };
-        static const RealType Q[15] = {
+        BOOST_MATH_STATIC const RealType Q[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.81019852414657529520034272090632311645e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.51602582973416348091361820936922274106e0),
@@ -1064,7 +1068,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 3.8590e-35
         // LCOV_EXCL_START
-        static const RealType P[19] = {
+        BOOST_MATH_STATIC const RealType P[19] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.50763682207511020788551990942118742910e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.35160148798611192350830963080055471564e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.85567614778755464918744664468938413626e-1),
@@ -1085,7 +1089,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.51522041748753421579496885726802106514e-8),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.28554063325397021905295499768922434904e-10),
         };
-        static const RealType Q[19] = {
+        BOOST_MATH_STATIC const RealType Q[19] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.55889733194498836168215560931863059152e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.45050534010127542130960211621894286688e0),
@@ -1121,7 +1125,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
             // Rational Approximation
             // Maximum Relative Error: 7.0019e-35
             // LCOV_EXCL_START
-            static const RealType P[18] = {
+            BOOST_MATH_STATIC const RealType P[18] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.31126317567898819464557840628449107915e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.31008645911415314700225107327351636697e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.60743397071713227215207831174512626190e-1),
@@ -1141,7 +1145,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, -6.05432616288832680241611577865488417904e-13),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.08723511461992818779941378551362882730e-14),
             };
-            static const RealType Q[16] = {
+            BOOST_MATH_STATIC const RealType Q[16] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.01021278581037282130358759075689669228e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.91783545335316986601746168681457332835e-1),
@@ -1168,7 +1172,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
             // Rational Approximation
             // Maximum Relative Error: 6.4095e-35
             // LCOV_EXCL_START
-            static const RealType P[18] = {
+            BOOST_MATH_STATIC const RealType P[18] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.26864481454444278645937156746132802908e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.35052316263030534355724898036735352905e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.46701697626917441774916114124028252971e0),
@@ -1188,7 +1192,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.53199672688507288037695102377982544434e-12),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.97283413733676690377949556457649405210e-14),
             };
-            static const RealType Q[18] = {
+            BOOST_MATH_STATIC const RealType Q[18] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.15492787140203223641846510939273526038e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.34095796298757853634036909432345998054e0),
@@ -1220,7 +1224,7 @@ inline RealType landau_pdf_minus_imp_prec(const RealType& x, const std::integral
 }
 
 template <class RealType>
-inline RealType landau_pdf_imp_prec(const RealType& x, const std::integral_constant<int, 53> &tag) {
+BOOST_MATH_GPU_ENABLED inline RealType landau_pdf_imp_prec(const RealType& x, const std::integral_constant<int, 53> &tag) {
     if (x >= 0) {
         return landau_pdf_plus_imp_prec<RealType>(x, tag);
     }
@@ -1228,12 +1232,12 @@ inline RealType landau_pdf_imp_prec(const RealType& x, const std::integral_const
         return landau_pdf_minus_imp_prec<RealType>(x, tag);
     }
     else {
-        return std::numeric_limits<RealType>::quiet_NaN();
+        return boost::math::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
 template <class RealType>
-inline RealType landau_pdf_imp_prec(const RealType& x, const std::integral_constant<int, 113>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType landau_pdf_imp_prec(const RealType& x, const std::integral_constant<int, 113>& tag) {
     if (x >= 0) {
         return landau_pdf_plus_imp_prec<RealType>(x, tag);
     }
@@ -1241,18 +1245,18 @@ inline RealType landau_pdf_imp_prec(const RealType& x, const std::integral_const
         return landau_pdf_minus_imp_prec<RealType>(x, tag);
     }
     else {
-        return std::numeric_limits<RealType>::quiet_NaN();
+        return boost::math::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
 template <class RealType, class Policy>
-inline RealType landau_pdf_imp(const landau_distribution<RealType, Policy>& dist, const RealType& x) {
+BOOST_MATH_GPU_ENABLED inline RealType landau_pdf_imp(const landau_distribution<RealType, Policy>& dist, const RealType& x) {
     //
     // This calculates the pdf of the Landau distribution and/or its complement.
     //
 
     BOOST_MATH_STD_USING // for ADL of std functions
-    static const char* function = "boost::math::pdf(landau<%1%>&, %1%)";
+    constexpr auto function = "boost::math::pdf(landau<%1%>&, %1%)";
     RealType result = 0;
     RealType location = dist.location();
     RealType scale = dist.scale();
@@ -1289,7 +1293,7 @@ inline RealType landau_pdf_imp(const landau_distribution<RealType, Policy>& dist
 }
 
 template <class RealType>
-inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1297,7 +1301,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
     if (x < 1) {
         // Rational Approximation
         // Maximum Relative Error: 2.7348e-18
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(6.34761298487625202628e-1),
             static_cast<RealType>(7.86558857265845597915e-1),
             static_cast<RealType>(4.30220871807399303399e-1),
@@ -1306,7 +1310,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(1.48926177023501002834e-3),
             static_cast<RealType>(-5.93750588554108593271e-7),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(1.65227304522196452589e0),
             static_cast<RealType>(1.29276828719607419526e0),
@@ -1323,7 +1327,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 6.1487e-17
-        static const RealType P[6] = {
+        BOOST_MATH_STATIC const RealType P[6] = {
             static_cast<RealType>(4.22133240358047652363e-1),
             static_cast<RealType>(3.48421126689016131480e-1),
             static_cast<RealType>(1.15402429637790321091e-1),
@@ -1331,7 +1335,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(1.26628667888851698698e-3),
             static_cast<RealType>(-5.75103242931559285281e-7),
         };
-        static const RealType Q[6] = {
+        BOOST_MATH_STATIC const RealType Q[6] = {
             static_cast<RealType>(1),
             static_cast<RealType>(1.21277435324167238159e0),
             static_cast<RealType>(6.38324046905267845243e-1),
@@ -1347,7 +1351,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 3.2975e-17
-        static const RealType P[6] = {
+        BOOST_MATH_STATIC const RealType P[6] = {
             static_cast<RealType>(2.95892137955791216378e-1),
             static_cast<RealType>(2.29083899043580095868e-1),
             static_cast<RealType>(7.09374171394372356009e-2),
@@ -1355,7 +1359,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(7.69674715320139398655e-4),
             static_cast<RealType>(1.63486840000680408991e-5),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(1.09704883482087441931e0),
             static_cast<RealType>(5.10139057077147935327e-1),
@@ -1372,7 +1376,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 2.6740e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(1.73159318667565938776e-1),
             static_cast<RealType>(6.95847424776057206679e-2),
             static_cast<RealType>(1.04513924567165899506e-2),
@@ -1382,7 +1386,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(-4.55493341295654514558e-11),
             static_cast<RealType>(6.71119091495929467041e-13),
         };
-        static const RealType Q[6] = {
+        BOOST_MATH_STATIC const RealType Q[6] = {
             static_cast<RealType>(1),
             static_cast<RealType>(6.23409270429130114247e-1),
             static_cast<RealType>(1.54791925441839372663e-1),
@@ -1398,7 +1402,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 7.6772e-18
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(8.90469147411748292410e-2),
             static_cast<RealType>(2.76033447621178662228e-2),
             static_cast<RealType>(3.26577485081539607943e-3),
@@ -1407,7 +1411,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(3.19415703637929092564e-8),
             static_cast<RealType>(-1.79900915228302845362e-13),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(4.36499987260915480890e-1),
             static_cast<RealType>(7.67544181756713372678e-2),
@@ -1424,7 +1428,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 1.5678e-20
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(4.35157264931262089762e-2),
             static_cast<RealType>(8.46833474333913742597e-3),
             static_cast<RealType>(6.43769318301002170686e-4),
@@ -1434,7 +1438,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(1.04851094362145160445e-11),
             static_cast<RealType>(-8.50646541795105885254e-18),
         };
-        static const RealType Q[8] = {
+        BOOST_MATH_STATIC const RealType Q[8] = {
             static_cast<RealType>(1),
             static_cast<RealType>(2.59832721225510968607e-1),
             static_cast<RealType>(2.75929030381330309762e-2),
@@ -1452,7 +1456,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 2.2534e-17
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(2.11253031965493064317e-2),
             static_cast<RealType>(1.36656844320536022509e-3),
             static_cast<RealType>(2.99036224749763963099e-5),
@@ -1461,7 +1465,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(-6.92803349600061706079e-16),
             static_cast<RealType>(5.47233092767314029032e-19),
         };
-        static const RealType Q[6] = {
+        BOOST_MATH_STATIC const RealType Q[6] = {
             static_cast<RealType>(1),
             static_cast<RealType>(9.71506209641408410168e-2),
             static_cast<RealType>(3.52744690483830496158e-3),
@@ -1477,7 +1481,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 3.8057e-17
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(6.60754766433212615409e-1),
             static_cast<RealType>(2.47190065739055522599e-1),
             static_cast<RealType>(4.17560046901040308267e-2),
@@ -1486,7 +1490,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(2.52070598577347523483e-6),
             static_cast<RealType>(-1.63741595848354479992e-8),
         };
-        static const RealType Q[6] = {
+        BOOST_MATH_STATIC const RealType Q[6] = {
             static_cast<RealType>(1),
             static_cast<RealType>(3.92836792184266080580e-1),
             static_cast<RealType>(6.64332913820571574875e-2),
@@ -1502,7 +1506,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 1.5585e-18
-        static const RealType P[9] = {
+        BOOST_MATH_STATIC const RealType P[9] = {
             static_cast<RealType>(6.44802371584831601817e-1),
             static_cast<RealType>(2.74177359656349204309e-1),
             static_cast<RealType>(5.53659240731871433983e-2),
@@ -1513,7 +1517,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(6.10941845734962836501e-8),
             static_cast<RealType>(1.39403332890347813312e-9),
         };
-        static const RealType Q[9] = {
+        BOOST_MATH_STATIC const RealType Q[9] = {
             static_cast<RealType>(1),
             static_cast<RealType>(4.32345127287830884682e-1),
             static_cast<RealType>(8.70500634789942065799e-2),
@@ -1532,7 +1536,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 8.4773e-17
-        static const RealType P[9] = {
+        BOOST_MATH_STATIC const RealType P[9] = {
             static_cast<RealType>(6.36685748306554972132e-1),
             static_cast<RealType>(2.22217783148381285219e-1),
             static_cast<RealType>(3.79173960692559280353e-2),
@@ -1543,7 +1547,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(2.18258684729250152138e-8),
             static_cast<RealType>(3.93038365129320422968e-10),
         };
-        static const RealType Q[9] = {
+        BOOST_MATH_STATIC const RealType Q[9] = {
             static_cast<RealType>(1),
             static_cast<RealType>(3.49087806008685701060e-1),
             static_cast<RealType>(5.95568283529034601477e-2),
@@ -1562,7 +1566,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
 
         // Rational Approximation
         // Maximum Relative Error: 4.1441e-17
-        static const RealType P[9] = {
+        BOOST_MATH_STATIC const RealType P[9] = {
             static_cast<RealType>(6.36619774420718062663e-1),
             static_cast<RealType>(2.68594096777677177874e-1),
             static_cast<RealType>(5.50713044649497737064e-2),
@@ -1573,7 +1577,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             static_cast<RealType>(9.65240367429172366675e-8),
             static_cast<RealType>(5.21722720068664704240e-9),
         };
-        static const RealType Q[9] = {
+        BOOST_MATH_STATIC const RealType Q[9] = {
             static_cast<RealType>(1),
             static_cast<RealType>(4.21906621389193043384e-1),
             static_cast<RealType>(8.65058026826346828750e-2),
@@ -1596,7 +1600,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
 
 
 template <class RealType>
-inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1605,7 +1609,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 2.6472e-36
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.34761298487625202628055609797763667089e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.67589195401255255724121983550745957195e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.07502511824371206858547365520593277966e0),
@@ -1621,7 +1625,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.49572523814120679048097861755172556652e-11),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.50719933268462244255954307285373705456e-13),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.05332427324361912631483249892199461926e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.46280417679002004953145547112352398783e0),
@@ -1645,7 +1649,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 1.2387e-36
         // LCOV_EXCL_START
-        static const RealType P[12] = {
+        BOOST_MATH_STATIC const RealType P[12] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.22133240358047652363270514524313049653e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.35860518549481281929441026718420080571e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.89900189271177970319691370395978805326e-1),
@@ -1659,7 +1663,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.77487285800889132325390488044487626942e-9),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.41654614425073025870130302460301244273e-13),
         };
-        static const RealType Q[12] = {
+        BOOST_MATH_STATIC const RealType Q[12] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.13058739144695658589427075788960660400e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.11792528400843967390452475642793635419e0),
@@ -1682,7 +1686,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 1.2281e-35
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.95892137955791216377776422765473500279e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.65957634570689820998348206103212047458e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.34657686985192350529330481818991619730e-1),
@@ -1697,7 +1701,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.07058773850795175564735754911699285828e-11),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.76765053309825506619419451346428518606e-16),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.89758965744489334954041814073547951925e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.65985298582650601001220682594742473012e0),
@@ -1721,7 +1725,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 5.3269e-36
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.73159318667565938775602634998889798568e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.95149372103869634275319490207451722385e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.87504411659823400690797222216564651939e-2),
@@ -1737,7 +1741,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -8.73506415766100115673754920344659223382e-19),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.66918494546396383814682000746818494148e-21),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.34854858486201481385140426291984169791e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.25379978655428608198799717171321453517e-1),
@@ -1761,7 +1765,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 4.8719e-36
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.90469147411748292410422813492550092930e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.20196598836093298098360769875443462143e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.92579652651763461802771336515384878994e-2),
@@ -1777,7 +1781,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.76962456941948786610101052244821659252e-18),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.56004343709960620209823076030906442732e-25),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.22996422556023111037354479836605618488e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.05244279198013248402385148537421114680e-1),
@@ -1802,7 +1806,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 5.3269e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.35157264931262089761621934621402648954e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.51407493866635569361305338029611888082e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.30886132894858313459359493329266696766e-3),
@@ -1818,7 +1822,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.02838174509144355795908173352005717435e-26),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.07343581702278433243268463675468320030e-30),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.13166129191902183515154099741529804400e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.58587877615076239769720197025023333190e-2),
@@ -1842,7 +1846,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 1.0937e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.11253031965493064317003259449214452745e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.66886306590939856622089350675801752704e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.77786526684921036345823450504680078696e-4),
@@ -1858,7 +1862,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.41009036423458926116066353864843586169e-31),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.04965807080681693416200699806159303323e-34),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.06133417626680943824361625182288165823e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.87991711814130682492211639336942588926e-2),
@@ -1882,7 +1886,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 3.1671e-35
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.60754766433212615408805486898847664740e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.76143516602438873568296501921670869526e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.25254763859315398784817302471631188095e-1),
@@ -1897,7 +1901,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.08894662488905377548940479566994482806e-11),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.11472306961184868827300852021969296872e-12),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.04202386226609593823214781180612848612e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.07648212684952405730772649955008739292e-1),
@@ -1921,7 +1925,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 6.8517e-35
         // LCOV_EXCL_START
-        static const RealType P[18] = {
+        BOOST_MATH_STATIC const RealType P[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.44802371584831601817146389426921705500e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.32962058761590152378007743852342151897e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.93461601407042255925193793376118641680e-1),
@@ -1941,7 +1945,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.84493774639724473576782806157757824413e-18),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.03526708437207438952843827018631758857e-20),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.88770963972332750838571146142568699263e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.60273143287476497658795203149608758815e-1),
@@ -1970,7 +1974,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 6.5315e-35
         // LCOV_EXCL_START
-        static const RealType P[18] = {
+        BOOST_MATH_STATIC const RealType P[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.36685748306554972131586673701426039950e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.75892450098649456865500477195142009984e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.77167300709199375935767980419262418694e-2),
@@ -1990,7 +1994,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.29257874466803586327275841282905821499e-23),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.06781616867813418930916928811492801723e-31),
         };
-        static const RealType Q[17] = {
+        BOOST_MATH_STATIC const RealType Q[17] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.33391038950576592915531240096703257292e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.06598147816889621749840662500099582486e-2),
@@ -2018,7 +2022,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 1.0538e-35
         // LCOV_EXCL_START
-        static const RealType P[19] = {
+        BOOST_MATH_STATIC const RealType P[19] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.36619774420718062663274858007687066488e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.30268560944740805268408378762250557522e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.09208091036436297425427953080968023835e-2),
@@ -2039,7 +2043,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.58944184323201470938493323680744408698e-26),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.35050162268451658064792430214910233545e-40),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.61705010674524952791495931314010679992e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.42782564900556152436041716057503104160e-2),
@@ -2068,7 +2072,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
         // Rational Approximation
         // Maximum Relative Error: 2.2309e-35
         // LCOV_EXCL_START
-        static const RealType P[18] = {
+        BOOST_MATH_STATIC const RealType P[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.36619772367581344040890134127619524371e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.72522424358877592972375801826826390634e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.74749058021341871895402838175268752603e-2),
@@ -2088,7 +2092,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.07931799710240978706633227327649731325e-21),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.60935135769719557933955672887720342220e-23),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.28077223152164982690351137450174450926e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.02813709168750724641877726632095676090e-2),
@@ -2119,7 +2123,7 @@ inline RealType landau_cdf_plus_imp_prec(const RealType& x, const std::integral_
 }
 
 template <class RealType>
-inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -2129,7 +2133,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 4.8279e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(9.61609610406317335842e-2),
             static_cast<RealType>(3.91836314722738553695e-1),
             static_cast<RealType>(6.79862925205625107133e-1),
@@ -2139,7 +2143,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(3.16100502353317199197e-2),
             static_cast<RealType>(3.94935603975622336575e-3),
         };
-        static const RealType Q[8] = {
+        BOOST_MATH_STATIC const RealType Q[8] = {
             static_cast<RealType>(1),
             static_cast<RealType>(1.76863983252615276767e0),
             static_cast<RealType>(1.81486018095087241378e0),
@@ -2157,7 +2161,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 2.3675e-17
-        static const RealType P[11] = {
+        BOOST_MATH_STATIC const RealType P[11] = {
             static_cast<RealType>(7.07114056489178077423e-4),
             static_cast<RealType>(7.35277969197058909845e-3),
             static_cast<RealType>(3.45402694579204809691e-2),
@@ -2170,7 +2174,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(9.46543177731050647162e-3),
             static_cast<RealType>(1.50949646857411896396e-3),
         };
-        static const RealType Q[11] = {
+        BOOST_MATH_STATIC const RealType Q[11] = {
             static_cast<RealType>(1),
             static_cast<RealType>(1.19520021153535414164e0),
             static_cast<RealType>(2.24057032777744601624e0),
@@ -2197,7 +2201,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
 
             // Rational Approximation
             // Maximum Relative Error: 6.6532e-17
-            static const RealType P[9] = {
+            BOOST_MATH_STATIC const RealType P[9] = {
                 static_cast<RealType>(3.71658823632747235572e-1),
                 static_cast<RealType>(2.81493346318174084721e-1),
                 static_cast<RealType>(1.80052521696460721846e-1),
@@ -2208,7 +2212,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
                 static_cast<RealType>(8.36993181707604609065e-6),
                 static_cast<RealType>(-8.38295154747385945293e-6),
             };
-            static const RealType Q[9] = {
+            BOOST_MATH_STATIC const RealType Q[9] = {
                 static_cast<RealType>(1),
                 static_cast<RealType>(6.62107509936390708604e-1),
                 static_cast<RealType>(4.72501892305147483696e-1),
@@ -2227,7 +2231,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
 
             // Rational Approximation
             // Maximum Relative Error: 2.6331e-17
-            static const RealType P[10] = {
+            BOOST_MATH_STATIC const RealType P[10] = {
                 static_cast<RealType>(3.97500903816385095134e-1),
                 static_cast<RealType>(5.08559630146730380854e-1),
                 static_cast<RealType>(2.99190443368166803486e-1),
@@ -2239,7 +2243,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
                 static_cast<RealType>(2.91644292826084281875e-6),
                 static_cast<RealType>(9.75453868235609527534e-12),
             };
-            static const RealType Q[9] = {
+            BOOST_MATH_STATIC const RealType Q[9] = {
                 static_cast<RealType>(1),
                 static_cast<RealType>(1.27376091725485414303e0),
                 static_cast<RealType>(7.49829208702328578188e-1),
@@ -2262,7 +2266,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
 }
 
 template <class RealType>
-inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -2273,7 +2277,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 1.2055e-36
         // LCOV_EXCL_START
-        static const RealType P[16] = {
+        BOOST_MATH_STATIC const RealType P[16] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.61609610406317335842332400044553397267e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.74152295981095898203847178356629061821e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.58642905042588731020840168744866124345e0),
@@ -2291,7 +2295,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.76463460016745893121574217030494989443e-6),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.08380585744336744543979680558024295296e-12),
         };
-        static const RealType Q[15] = {
+        BOOST_MATH_STATIC const RealType Q[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.66458574743150749245922924142120646408e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.87010262350733534202724862784081296105e0),
@@ -2317,7 +2321,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 3.4133e-36
         // LCOV_EXCL_START
-        static const RealType P[19] = {
+        BOOST_MATH_STATIC const RealType P[19] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.07114056489178077422539043012078031613e-4),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.18006784954579394004360967455655021959e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.60309646092161147676756546417366564213e-2),
@@ -2338,7 +2342,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.66563884565518965562535171848480872267e-5),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.23954896921292896539048530795544784261e-6),
         };
-        static const RealType Q[19] = {
+        BOOST_MATH_STATIC const RealType Q[19] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.77934931846682015134812629288297137499e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.85052416252910403272283619201501701345e0),
@@ -2374,7 +2378,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
             // Rational Approximation
             // Maximum Relative Error: 9.2619e-35
             // LCOV_EXCL_START
-            static const RealType P[19] = {
+            BOOST_MATH_STATIC const RealType P[19] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.71658823632747235572391863987803415545e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.20402452680758356732340074285765302037e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.53870483364594487885882489517365212394e-1),
@@ -2395,7 +2399,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.07567013469555215514702758084138467446e-12),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.84619752008414239602732630339626773669e-14),
             };
-            static const RealType Q[17] = {
+            BOOST_MATH_STATIC const RealType Q[17] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.28669950018285475182750690468224641923e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.12421557061005325313661189943328446480e-1),
@@ -2423,7 +2427,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
             // Rational Approximation
             // Maximum Relative Error: 4.9208e-35
             // LCOV_EXCL_START
-            static const RealType P[20] = {
+            BOOST_MATH_STATIC const RealType P[20] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.97500903816385095134217223320239082420e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.02058997410109156148729828665298333233e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.30492992901887465108077581566548743407e0),
@@ -2445,7 +2449,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.12671859603774617133607658779709622453e-14),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.03211544596001317143519388487481133891e-20),
             };
-            static const RealType Q[19] = {
+            BOOST_MATH_STATIC const RealType Q[19] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.56188463983858614833914386500628633184e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.27273165410457713017446497319550252691e0),
@@ -2478,7 +2482,7 @@ inline RealType landau_cdf_minus_imp_prec(const RealType& x, const std::integral
 }
 
 template <class RealType>
-inline RealType landau_cdf_imp_prec(const RealType& x, bool complement, const std::integral_constant<int, 53>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType landau_cdf_imp_prec(const RealType& x, bool complement, const std::integral_constant<int, 53>& tag) {
     if (x >= 0) {
         return complement ? landau_cdf_plus_imp_prec(x, tag) : 1 - landau_cdf_plus_imp_prec(x, tag);
     }
@@ -2486,12 +2490,12 @@ inline RealType landau_cdf_imp_prec(const RealType& x, bool complement, const st
         return complement ? 1 - landau_cdf_minus_imp_prec(x, tag) : landau_cdf_minus_imp_prec(x, tag);
     }
     else {
-        return std::numeric_limits<RealType>::quiet_NaN();
+        return boost::math::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
 template <class RealType>
-inline RealType landau_cdf_imp_prec(const RealType& x, bool complement, const std::integral_constant<int, 113>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType landau_cdf_imp_prec(const RealType& x, bool complement, const std::integral_constant<int, 113>& tag) {
     if (x >= 0) {
         return complement ? landau_cdf_plus_imp_prec(x, tag) : 1 - landau_cdf_plus_imp_prec(x, tag);
     }
@@ -2499,18 +2503,18 @@ inline RealType landau_cdf_imp_prec(const RealType& x, bool complement, const st
         return complement ? 1 - landau_cdf_minus_imp_prec(x, tag) : landau_cdf_minus_imp_prec(x, tag);
     }
     else {
-        return std::numeric_limits<RealType>::quiet_NaN();
+        return boost::math::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
 template <class RealType, class Policy>
-inline RealType landau_cdf_imp(const landau_distribution<RealType, Policy>& dist, const RealType& x, bool complement) {
+BOOST_MATH_GPU_ENABLED inline RealType landau_cdf_imp(const landau_distribution<RealType, Policy>& dist, const RealType& x, bool complement) {
     //
     // This calculates the cdf of the Landau distribution and/or its complement.
     //
 
     BOOST_MATH_STD_USING // for ADL of std functions
-    static const char* function = "boost::math::cdf(landau<%1%>&, %1%)";
+    constexpr auto function = "boost::math::cdf(landau<%1%>&, %1%)";
     RealType result = 0;
     RealType location = dist.location();
     RealType scale = dist.scale();
@@ -2547,7 +2551,7 @@ inline RealType landau_cdf_imp(const landau_distribution<RealType, Policy>& dist
 }
 
 template <class RealType>
-inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -2557,7 +2561,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Absolute Error: 3.0596e-17
-        static const RealType P[6] = {
+        BOOST_MATH_STATIC const RealType P[6] = {
             static_cast<RealType>(3.74557416577759554506e-2),
             static_cast<RealType>(3.87808262376545756299e0),
             static_cast<RealType>(4.03092288183382979104e0),
@@ -2565,7 +2569,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(-6.99689838230114367276e0),
             static_cast<RealType>(1.51123479911771488314e1),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(4.37863773851525662884e-1),
             static_cast<RealType>(-6.35020262707816744534e0),
@@ -2582,7 +2586,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Absolute Error: 5.2780e-17
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(-4.17764764050720190117e-1),
             static_cast<RealType>(1.27887601021900963655e0),
             static_cast<RealType>(1.80329928265996817279e1),
@@ -2591,7 +2595,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(-2.36192101013335692266e1),
             static_cast<RealType>(8.30396110938939237358e0),
         };
-        static const RealType Q[6] = {
+        BOOST_MATH_STATIC const RealType Q[6] = {
             static_cast<RealType>(1),
             static_cast<RealType>(5.37459525158081633669e0),
             static_cast<RealType>(2.35696607501498012129e0),
@@ -2607,7 +2611,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Absolute Error: 6.3254e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-8.77109518013577785811e-1),
             static_cast<RealType>(-1.03442936529923615496e1),
             static_cast<RealType>(-1.03389868296950570121e1),
@@ -2617,7 +2621,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(-5.38213647878547918506e2),
             static_cast<RealType>(1.99214574934960143349e2),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(1.64177607733998839003e1),
             static_cast<RealType>(8.10042194014991761178e1),
@@ -2634,7 +2638,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 3.5192e-18
-        static const RealType P[6] = {
+        BOOST_MATH_STATIC const RealType P[6] = {
             static_cast<RealType>(-8.77109518013577852585e-1),
             static_cast<RealType>(-1.08703720146608358678e0),
             static_cast<RealType>(-4.34198537684719253325e-1),
@@ -2642,7 +2646,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(-4.20721933993302797971e-3),
             static_cast<RealType>(-6.27420063107527426396e-5),
         };
-        static const RealType Q[6] = {
+        BOOST_MATH_STATIC const RealType Q[6] = {
             static_cast<RealType>(1),
             static_cast<RealType>(8.38688797993971740640e-1),
             static_cast<RealType>(2.47558526682310722526e-1),
@@ -2658,7 +2662,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 1.1196e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-1.16727296241754548410e0),
             static_cast<RealType>(-1.12325365855062172009e0),
             static_cast<RealType>(-3.96403456954867129566e-1),
@@ -2668,7 +2672,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(-1.81536405273085024830e-6),
             static_cast<RealType>(-9.65262938333207656548e-10),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(7.55271574611337871389e-1),
             static_cast<RealType>(2.16323131117540100488e-1),
@@ -2685,7 +2689,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 1.0763e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-1.78348038398799868409e0),
             static_cast<RealType>(-7.74779087785346936524e-1),
             static_cast<RealType>(-1.27121601027522656374e-1),
@@ -2695,7 +2699,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(-3.06397799506512676163e-8),
             static_cast<RealType>(-7.34821360521886161256e-12),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(3.76606062137668223823e-1),
             static_cast<RealType>(5.37821995022686641494e-2),
@@ -2712,7 +2716,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 9.9936e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-2.32474749499506229415e0),
             static_cast<RealType>(-4.81681429397597263092e-1),
             static_cast<RealType>(-3.79696253130015182335e-2),
@@ -2722,7 +2726,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(-5.04229972664978604816e-10),
             static_cast<RealType>(-5.49506755992282162712e-14),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(1.87186049570056737301e-1),
             static_cast<RealType>(1.32852903862611979806e-2),
@@ -2739,7 +2743,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 9.2449e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-2.82318656228158372998e0),
             static_cast<RealType>(-2.84346379198027589453e-1),
             static_cast<RealType>(-1.09194719815749710073e-2),
@@ -2749,7 +2753,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(-8.22634582905944543176e-12),
             static_cast<RealType>(-4.10585514777842307175e-16),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(9.29910333991046040738e-2),
             static_cast<RealType>(3.27860300729204691815e-3),
@@ -2766,7 +2770,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 8.6453e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-3.29700011190686231229e0),
             static_cast<RealType>(-1.62920309130909343601e-1),
             static_cast<RealType>(-3.07152472866757852259e-3),
@@ -2776,7 +2780,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(-1.34109445298156050256e-13),
             static_cast<RealType>(-3.08843378675512185582e-18),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(4.62324092774919223927e-2),
             static_cast<RealType>(8.10410923007867515072e-4),
@@ -2793,7 +2797,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 8.2028e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-3.75666995985336008568e0),
             static_cast<RealType>(-9.15751436135409108392e-2),
             static_cast<RealType>(-8.51745858385908954959e-4),
@@ -2803,7 +2807,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(-2.19023097542770265117e-15),
             static_cast<RealType>(-2.34270094396556916060e-20),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(2.30119177073875808729e-2),
             static_cast<RealType>(2.00787377759037971795e-4),
@@ -2820,7 +2824,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 7.8900e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-4.20826069989721597050e0),
             static_cast<RealType>(-5.07864788729928381957e-2),
             static_cast<RealType>(-2.33825872475869133650e-4),
@@ -2830,7 +2834,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(-3.58448226638949307172e-17),
             static_cast<RealType>(-1.79092368272097571876e-22),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(1.14671758705641048135e-2),
             static_cast<RealType>(4.98614103841229871806e-5),
@@ -2847,7 +2851,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 7.6777e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-4.65527239540648658214e0),
             static_cast<RealType>(-2.78834161568280967534e-2),
             static_cast<RealType>(-6.37014695368461940922e-5),
@@ -2857,7 +2861,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(-5.87602374631705229119e-19),
             static_cast<RealType>(-1.37812578498484605190e-24),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(5.72000087046224585566e-3),
             static_cast<RealType>(1.24068329655043560901e-5),
@@ -2870,7 +2874,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else{
-        result = -std::numeric_limits<RealType>::infinity();
+        result = -boost::math::numeric_limits<RealType>::infinity();
     }
 
     return result;
@@ -2878,7 +2882,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
 
 
 template <class RealType>
-inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -2889,7 +2893,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Absolute Error: 2.5723e-35
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.74557416577759248536854968412794870581e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.04379368253541440583870397314012269006e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.12622841210720956864564105821904588447e1),
@@ -2904,7 +2908,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.98534922151507267157370682137856253991e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.09159286510191893522643172277831735606e0),
         };
-        static const RealType Q[12] = {
+        BOOST_MATH_STATIC const RealType Q[12] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.86204686129323171601167115178777357431e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.43698274248278918649234376575855135232e0),
@@ -2927,7 +2931,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Absolute Error: 6.1583e-35
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.17764764050720242897742634974454113395e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.80044093802431965072543552425830082205e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.23613318632011593171919848575560968064e1),
@@ -2942,7 +2946,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.02847586753967876900858299686189155164e2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.29953583375818707785500963989580066735e1),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.27455303165341271216882778791555788609e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.41762124591820618604790027888328605963e1),
@@ -2966,7 +2970,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Absolute Error: 1.3135e-35
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -8.77109518013577849065583862782160121458e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.05813204052660740589813216397258899528e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.19628607167020425528944673039894592264e2),
@@ -2983,7 +2987,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.23815021378788622035604969476085727123e5),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.17262073948257994617723369387261569086e4),
         };
-        static const RealType Q[15] = {
+        BOOST_MATH_STATIC const RealType Q[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.94901665980514882602824575757494472790e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.54328910175180674300123471690771017388e2),
@@ -3009,7 +3013,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 2.0498e-35
         // LCOV_EXCL_START
-        static const RealType P[11] = {
+        BOOST_MATH_STATIC const RealType P[11] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -8.77109518013577849065583862782160155093e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.77585398076895266354686007069850894777e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.47522378123968853907102309276280187353e0),
@@ -3022,7 +3026,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -7.34187895701093934279414993393750297714e-8),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.64090928155753225614302094820737249510e-10),
         };
-        static const RealType Q[11] = {
+        BOOST_MATH_STATIC const RealType Q[11] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.62401464973350962823995096121206419019e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.11979822811128264831341485706314465894e0),
@@ -3044,7 +3048,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 6.7643e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.16727296241754547290632950718657117630e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.97822895738734630842909028778257589627e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.45580723831325060656664869189975355503e0),
@@ -3060,7 +3064,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -6.27785620133198676852587951604694784533e-13),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -7.89999814745618370028655821500875451178e-16),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.48772690114094395052120751771215809418e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.72281013057830222881716429522080327421e-1),
@@ -3085,7 +3089,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 6.4987e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.78348038398799867332294266481364810762e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.42913983922316889357725662957488617770e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.02077376277824482097703213549730657663e-1),
@@ -3101,7 +3105,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.65547426464916480144982028081303670013e-16),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.01788104318587272115031165074724363239e-19),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.43507070588695242714872431565299762416e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.42808541175677232789532731946043918868e-1),
@@ -3126,7 +3130,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 6.4643e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.32474749499506228416012679106564727824e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -9.11125026189437033131539969177846635890e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.56906722402983201196890012041528422765e-1),
@@ -3142,7 +3146,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.39435252454410259267870094713230289131e-20),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.32672767938414655620839066142834241506e-23),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.71913035066927544877255131988977106466e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.07499674325721771035402891723823952963e-2),
@@ -3167,7 +3171,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 6.2783e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.82318656228158372073367735499501003484e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.46261040951642110189344545942990712460e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.64741560190892266676648641695426188913e-2),
@@ -3183,7 +3187,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.14321784268659603072523892366718901165e-23),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.69804409248161357472540739283978368871e-27),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.85763741109198600677877934140774914793e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.51555423561034635648725665049090572375e-2),
@@ -3208,7 +3212,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 6.0123e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.29700011190686230364493911161520668302e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.16175031776740080906111179721128106011e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.33343982195432985864570319341790342784e-2),
@@ -3224,7 +3228,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.93656169061287808919601714139458074543e-27),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.14930159772574816086864316805656403181e-31),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.27154900915819978649344191118112870943e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.77527908332591966425460814882436207182e-3),
@@ -3249,7 +3253,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 5.7624e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.75666995985336007747791649448887723610e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.78960399079208663111712385988217075907e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.74942252057371678208959612011771010491e-3),
@@ -3265,7 +3269,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -7.50976593324256906782731237116487284834e-31),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.71308835356954147218854223581309967814e-35),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.62732785401286024270119905692156750540e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.40382961238668912455720345718267045656e-4),
@@ -3290,7 +3294,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 5.5621e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.20826069989721596260510558511263035942e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -9.97440158261228371765435988840257904642e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.03971528248920108158059927256206438162e-3),
@@ -3306,7 +3310,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.91906782399731224228792112460580813901e-34),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.42769091263044979075875010403899574987e-39),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.31008507886426704374911618340654350029e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.34370110384866123378972324145883460422e-4),
@@ -3331,7 +3335,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 5.4128e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.65527239540648657446629479052874029563e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.49609214609793557370425343404734771058e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.85355312961840000203681352424632999367e-4),
@@ -3347,7 +3351,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.90550919589933206991152832258558972394e-38),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.33785768143117121220383154455316199086e-43),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.15365252334339030944695314405853064901e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.84519641047962864523571386561993045416e-5),
@@ -3372,7 +3376,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 5.3064e-35
         //LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.09971143249822249471944441552701756051e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.00154235169065403254826962372636417554e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -7.76859552294270710004718457715250134998e-5),
@@ -3388,7 +3392,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.25433604872532935232490414753194993235e-41),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.49792182967344082832448065912949074241e-47),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.76316274347013095030195725596822418859e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.45872499993438633169552184478587544165e-5),
@@ -3413,7 +3417,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 5.2337e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.54271778755494231572464179212263718102e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.62737121212473668543011440432166267791e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.10099492629239750693134803100262740506e-5),
@@ -3429,7 +3433,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.20746149769511232987820552765701234564e-45),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -6.97544543671003989410397788518265345930e-51),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.87980995989632171985079518382705421728e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.64234691529227024725728122489224211774e-6),
@@ -3454,7 +3458,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 5.1864e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.98493298246627952401490656857159302716e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -8.76990949843357898517869703626917264559e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.65042794324685841303461715489845834903e-6),
@@ -3470,7 +3474,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -8.19893980415902021846066305054394089887e-49),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -8.85434486590981105149494168639321627061e-55),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.43932168599456260558411716919165161381e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.09851997458503734167541584552305867433e-7),
@@ -3495,7 +3499,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 5.1568e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -6.42671464308364892089984144203590292562e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.70165333325375920690660683988390032004e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.51230594210711745541592189387307516997e-6),
@@ -3511,7 +3515,7 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.09423327107440352766843873264503717048e-52),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.12386630925835960782702757402676887380e-58),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.19477412398085422408065302795208098500e-4),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.27347517804649548179786994390985841531e-7),
@@ -3531,14 +3535,14 @@ inline RealType landau_quantile_lower_imp_prec(const RealType& p, const std::int
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else {
-        result = -std::numeric_limits<RealType>::infinity();
+        result = -boost::math::numeric_limits<RealType>::infinity();
     }
 
     return result;
 }
 
 template <class RealType>
-inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -3548,7 +3552,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 5.1286e-20
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(1.31348919222343858178e0),
             static_cast<RealType>(-1.06646675961352786791e0),
             static_cast<RealType>(-1.80946160022120488884e1),
@@ -3557,7 +3561,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(4.61048467818771410732e0),
             static_cast<RealType>(-2.80957284947853532418e1),
         };
-        static const RealType Q[8] = {
+        BOOST_MATH_STATIC const RealType Q[8] = {
             static_cast<RealType>(1),
             static_cast<RealType>(4.71007453129016317772e0),
             static_cast<RealType>(1.31946404969596908872e0),
@@ -3575,7 +3579,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 3.4934e-18
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(2.55081568282045924981e0),
             static_cast<RealType>(5.38750533719526696218e0),
             static_cast<RealType>(-2.32797421725187349036e1),
@@ -3584,7 +3588,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(3.35014421131920266346e1),
             static_cast<RealType>(-1.17490458743273503838e1),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(7.52439409918350484765e0),
             static_cast<RealType>(1.34784954182866689668e1),
@@ -3601,7 +3605,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 4.0795e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(5.68160868054034111703e0),
             static_cast<RealType>(1.06098927525586705381e2),
             static_cast<RealType>(5.74509518025029027944e2),
@@ -3611,7 +3615,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(2.49195208452006100935e3),
             static_cast<RealType>(1.29413301335116683836e3),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1),
             static_cast<RealType>(2.69603865809599480308e1),
             static_cast<RealType>(2.63378422475372461819e2),
@@ -3628,7 +3632,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 4.4618e-17
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(7.10201085067542566037e-1),
             static_cast<RealType>(6.70042401812679849451e-1),
             static_cast<RealType>(2.42799404088685074098e-1),
@@ -3637,7 +3641,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(5.09172911021654842046e-4),
             static_cast<RealType>(-6.63145317984529265677e-6),
         };
-        static const RealType Q[6] = {
+        BOOST_MATH_STATIC const RealType Q[6] = {
             static_cast<RealType>(1),
             static_cast<RealType>(9.18649629646213969612e-1),
             static_cast<RealType>(3.66343989541898286306e-1),
@@ -3653,7 +3657,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 5.8994e-17
-        static const RealType P[9] = {
+        BOOST_MATH_STATIC const RealType P[9] = {
             static_cast<RealType>(7.06147398566773538296e-1),
             static_cast<RealType>(4.26802162741800814387e-1),
             static_cast<RealType>(1.32254436707168800420e-1),
@@ -3664,7 +3668,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(8.76982374043363061978e-7),
             static_cast<RealType>(-1.99744396595921347207e-8),
         };
-        static const RealType Q[9] = {
+        BOOST_MATH_STATIC const RealType Q[9] = {
             static_cast<RealType>(1),
             static_cast<RealType>(6.28190787856605587324e-1),
             static_cast<RealType>(2.10992746593815791546e-1),
@@ -3683,7 +3687,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 8.8685e-17
-        static const RealType P[9] = {
+        BOOST_MATH_STATIC const RealType P[9] = {
             static_cast<RealType>(6.48209596014908359251e-1),
             static_cast<RealType>(2.52611824671691390768e-1),
             static_cast<RealType>(4.65114070477803399291e-2),
@@ -3694,7 +3698,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(6.92614450423703079737e-9),
             static_cast<RealType>(-3.89531123166658723619e-10),
         };
-        static const RealType Q[9] = {
+        BOOST_MATH_STATIC const RealType Q[9] = {
             static_cast<RealType>(1),
             static_cast<RealType>(3.99413988076189200840e-1),
             static_cast<RealType>(7.32068638518417765776e-2),
@@ -3713,7 +3717,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 1.0253e-17
-        static const RealType P[10] = {
+        BOOST_MATH_STATIC const RealType P[10] = {
             static_cast<RealType>(6.36719010559816164896e-1),
             static_cast<RealType>(2.06504115804034148753e-1),
             static_cast<RealType>(3.28085429275407182582e-2),
@@ -3725,7 +3729,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(1.77492646969597480221e-10),
             static_cast<RealType>(-2.19331267300885448673e-17),
         };
-        static const RealType Q[9] = {
+        BOOST_MATH_STATIC const RealType Q[9] = {
             static_cast<RealType>(1),
             static_cast<RealType>(3.24422807416528490276e-1),
             static_cast<RealType>(5.15290129833049138552e-2),
@@ -3744,7 +3748,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
 
         // Rational Approximation
         // Maximum Relative Error: 8.1705e-17
-        static const RealType P[9] = {
+        BOOST_MATH_STATIC const RealType P[9] = {
             static_cast<RealType>(6.36619775525705206992e-1),
             static_cast<RealType>(2.68335698140634792041e-1),
             static_cast<RealType>(5.49803347535070103650e-2),
@@ -3755,7 +3759,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             static_cast<RealType>(9.56133960810049319917e-8),
             static_cast<RealType>(5.26850116571886385248e-9),
         };
-        static const RealType Q[9] = {
+        BOOST_MATH_STATIC const RealType Q[9] = {
             static_cast<RealType>(1),
             static_cast<RealType>(4.21500730173440590900e-1),
             static_cast<RealType>(8.63629077498258325752e-2),
@@ -3778,7 +3782,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
 
 
 template <class RealType>
-inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -3789,7 +3793,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 1.4465e-35
         // LCOV_EXCL_START
-        static const RealType P[11] = {
+        BOOST_MATH_STATIC const RealType P[11] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.08338732735341567163440035550389989556e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.27245731792290848390848202647311435023e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.29317169036386848462079766136373749420e1),
@@ -3802,7 +3806,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.42232005306623465126477816911649683789e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.24816048952817367950452675590290535540e0),
         };
-        static const RealType Q[10] = {
+        BOOST_MATH_STATIC const RealType Q[10] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.80464069267458650284548842830642770344e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -6.28240205449280944407125436342013240876e0),
@@ -3823,7 +3827,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 5.1929e-35
         // LCOV_EXCL_START
-        static const RealType P[11] = {
+        BOOST_MATH_STATIC const RealType P[11] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.31348919222343858173602105619413801018e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.02800226274700443079521563669609776285e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.02091675505570786434803291987263553778e1),
@@ -3836,7 +3840,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.26390836417639942474165178280649450755e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -6.18212484486162942333407102351878915285e0),
         };
-        static const RealType Q[10] = {
+        BOOST_MATH_STATIC const RealType Q[10] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.97802777458574322604171035748634755981e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.33277809211107726455308655998819166901e0),
@@ -3857,7 +3861,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 3.2765e-35
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.55081568282045925871949387822806890848e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.21080883686702131458668798583937913025e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.15083151599213113740932148510289036342e1),
@@ -3872,7 +3876,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -6.32825234826729794599233825734928884074e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.47352171888649528242284500266830013906e1),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.40793887011403443604922082103267036101e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.04348824299115035210088417095305744248e1),
@@ -3896,7 +3900,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 1.8007e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.68160868054034088524891526884683014057e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.85165791469635551063850795991424359350e2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.42938802867742165917839659578485422534e3),
@@ -3912,7 +3916,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.25168985723506298009849577846542992545e5),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.01179759985059408785527092464505889999e5),
         };
-        static const RealType Q[15] = {
+        BOOST_MATH_STATIC const RealType Q[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.08766677593618443545489115711858395831e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.05163374816838964338807027995515659842e2),
@@ -3938,7 +3942,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 6.1905e-36
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.10201085067542610656114408605853786551e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.04725580445598482170291458376577106746e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.35945839005443673797792325217359695272e-1),
@@ -3953,7 +3957,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.11932910013840927659486142481532276176e-8),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.64064398716881126082770692219937093427e-10),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.24909572944428286558287313527068259394e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.70912720447370835699164559729287157119e-1),
@@ -3977,7 +3981,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 8.5157e-35
         // LCOV_EXCL_START
-        static const RealType P[18] = {
+        BOOST_MATH_STATIC const RealType P[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.06147398566773479301585022897491054494e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.06137881154706023038556659418303323027e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.00274868819366386235164897614448662308e-1),
@@ -3997,7 +4001,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.57808410784300002747916947756919004207e-14),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.93860773322862111592582321183379587624e-16),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.52683694883265337797012770275040297516e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.17837082293165509684677505408307814500e0),
@@ -4026,7 +4030,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 7.6812e-36
         // LCOV_EXCL_START
-        static const RealType P[18] = {
+        BOOST_MATH_STATIC const RealType P[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.48209596014908270566135466727658374314e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.02026332003132864886056710532156370366e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.68941634461905013212266453851941196774e-1),
@@ -4046,7 +4050,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.32583227076029470589713734885690555562e-18),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.18237323554153660947807202150429686004e-20),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.38459552164692902984228821988876295376e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.21584899508575302641780901222203752951e-1),
@@ -4075,7 +4079,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 2.8388e-35
         // LCOV_EXCL_START
-        static const RealType P[18] = {
+        BOOST_MATH_STATIC const RealType P[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.36719010559816175149447242695581604280e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.14714772485724956396126176973339095223e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.47792450677638612907408723539943311437e-2),
@@ -4095,7 +4099,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.87812199530402923085142356622707924805e-22),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.76810877067601573471489978907720495511e-24),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.94373217074550329856398644558576545146e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.17462725343185049507839058445338783693e-1),
@@ -4124,7 +4128,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 1.8746e-35
         // LCOV_EXCL_START
-        static const RealType P[19] = {
+        BOOST_MATH_STATIC const RealType P[19] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.36619775525705288697351261475419832625e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.29882145587771350744255724773409752285e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.07952726597277085327360888304737411175e-2),
@@ -4145,7 +4149,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.53604301472332155307661986064796109517e-26),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.65664588229982894587678197374867153136e-40),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.61098031370834273919229478584740981117e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.40810642301361416278392589243623940154e-2),
@@ -4174,7 +4178,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
         // Rational Approximation
         // Maximum Relative Error: 3.9915e-35
         // LCOV_EXCL_START
-        static const RealType P[18] = {
+        BOOST_MATH_STATIC const RealType P[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.36619772367581344576326594951209529606e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.72456363182667891167613558295097711432e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.74486567435450138741058930951301644059e-2),
@@ -4194,7 +4198,7 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.07803703545135964499326712080667886449e-21),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.61500479431085205124031101160332446432e-23),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.27973454499231032893774072677004977154e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.02401389920613749641292661572240166038e-2),
@@ -4225,32 +4229,34 @@ inline RealType landau_quantile_upper_imp_prec(const RealType& p, const std::int
 }
 
 template <class RealType>
-inline RealType landau_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 53>& tag)
+BOOST_MATH_GPU_ENABLED inline RealType landau_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 53>& tag)
 {
-    if (p > 0.5) {
-        return landau_quantile_imp_prec(1 - p, !complement, tag);
+    if (p > 0.5) 
+    {
+        return !complement ? landau_quantile_upper_imp_prec(1 - p, tag) : landau_quantile_lower_imp_prec(1 - p, tag);
     }
 
     return complement ? landau_quantile_upper_imp_prec(p, tag) : landau_quantile_lower_imp_prec(p, tag);
 }
 
 template <class RealType>
-inline RealType landau_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 113>& tag)
+BOOST_MATH_GPU_ENABLED inline RealType landau_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 113>& tag)
 {
-    if (p > 0.5) {
-        return landau_quantile_imp_prec(1 - p, !complement, tag);
+    if (p > 0.5) 
+    {
+        return !complement ? landau_quantile_upper_imp_prec(1 - p, tag) : landau_quantile_lower_imp_prec(1 - p, tag);
     }
 
     return complement ? landau_quantile_upper_imp_prec(p, tag) : landau_quantile_lower_imp_prec(p, tag);
 }
 
 template <class RealType, class Policy>
-inline RealType landau_quantile_imp(const landau_distribution<RealType, Policy>& dist, const RealType& p, bool complement)
+BOOST_MATH_GPU_ENABLED inline RealType landau_quantile_imp(const landau_distribution<RealType, Policy>& dist, const RealType& p, bool complement)
 {
     // This routine implements the quantile for the Landau distribution,
     // the value p may be the probability, or its complement if complement=true.
 
-    static const char* function = "boost::math::quantile(landau<%1%>&, %1%)";
+    constexpr auto function = "boost::math::quantile(landau<%1%>&, %1%)";
     BOOST_MATH_STD_USING // for ADL of std functions
 
     RealType result = 0;
@@ -4287,23 +4293,23 @@ inline RealType landau_quantile_imp(const landau_distribution<RealType, Policy>&
 }
 
 template <class RealType>
-inline RealType landau_mode_imp_prec(const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_mode_imp_prec(const std::integral_constant<int, 53>&)
 {
     return static_cast<RealType>(-0.42931452986133525017);
 }
 
 template <class RealType>
-inline RealType landau_mode_imp_prec(const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_mode_imp_prec(const std::integral_constant<int, 113>&)
 {
     return BOOST_MATH_BIG_CONSTANT(RealType, 113, -0.42931452986133525016556463510885028346);
 }
 
 template <class RealType, class Policy>
-inline RealType landau_mode_imp(const landau_distribution<RealType, Policy>& dist)
+BOOST_MATH_GPU_ENABLED inline RealType landau_mode_imp(const landau_distribution<RealType, Policy>& dist)
 {
     // This implements the mode for the Landau distribution,
 
-    static const char* function = "boost::math::mode(landau<%1%>&, %1%)";
+    constexpr auto function = "boost::math::mode(landau<%1%>&, %1%)";
     BOOST_MATH_STD_USING // for ADL of std functions
 
     RealType result = 0;
@@ -4336,23 +4342,23 @@ inline RealType landau_mode_imp(const landau_distribution<RealType, Policy>& dis
 }
 
 template <class RealType>
-inline RealType landau_median_imp_prec(const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_median_imp_prec(const std::integral_constant<int, 53>&)
 {
     return static_cast<RealType>(0.57563014394507821440);
 }
 
 template <class RealType>
-inline RealType landau_median_imp_prec(const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_median_imp_prec(const std::integral_constant<int, 113>&)
 {
     return BOOST_MATH_BIG_CONSTANT(RealType, 113, 0.57563014394507821439627930892257517269);
 }
 
 template <class RealType, class Policy>
-inline RealType landau_median_imp(const landau_distribution<RealType, Policy>& dist)
+BOOST_MATH_GPU_ENABLED inline RealType landau_median_imp(const landau_distribution<RealType, Policy>& dist)
 {
     // This implements the median for the Landau distribution,
 
-    static const char* function = "boost::math::median(landau<%1%>&, %1%)";
+    constexpr auto function = "boost::math::median(landau<%1%>&, %1%)";
     BOOST_MATH_STD_USING // for ADL of std functions
 
     RealType result = 0;
@@ -4385,23 +4391,23 @@ inline RealType landau_median_imp(const landau_distribution<RealType, Policy>& d
 }
 
 template <class RealType>
-inline RealType landau_entropy_imp_prec(const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_entropy_imp_prec(const std::integral_constant<int, 53>&)
 {
     return static_cast<RealType>(2.37263644000448182448);
 }
 
 template <class RealType>
-inline RealType landau_entropy_imp_prec(const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType landau_entropy_imp_prec(const std::integral_constant<int, 113>&)
 {
     return BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.3726364400044818244844049010588577710);
 }
 
 template <class RealType, class Policy>
-inline RealType landau_entropy_imp(const landau_distribution<RealType, Policy>& dist)
+BOOST_MATH_GPU_ENABLED inline RealType landau_entropy_imp(const landau_distribution<RealType, Policy>& dist)
 {
     // This implements the entropy for the Landau distribution,
 
-    static const char* function = "boost::math::entropy(landau<%1%>&, %1%)";
+    constexpr auto function = "boost::math::entropy(landau<%1%>&, %1%)";
     BOOST_MATH_STD_USING // for ADL of std functions
 
     RealType result = 0;
@@ -4436,10 +4442,10 @@ class landau_distribution
     typedef RealType value_type;
     typedef Policy policy_type;
 
-    landau_distribution(RealType l_location = 0, RealType l_scale = 1)
+    BOOST_MATH_GPU_ENABLED landau_distribution(RealType l_location = 0, RealType l_scale = 1)
         : mu(l_location), c(l_scale)
     {
-        static const char* function = "boost::math::landau_distribution<%1%>::landau_distribution";
+        constexpr auto function = "boost::math::landau_distribution<%1%>::landau_distribution";
         RealType result = 0;
         detail::check_location(function, l_location, &result, Policy());
         detail::check_scale(function, l_scale, &result, Policy());
@@ -4448,15 +4454,15 @@ class landau_distribution
         location_bias = -2 / constants::pi<RealType>() * log(l_scale);
     } // landau_distribution
 
-    RealType location()const
+    BOOST_MATH_GPU_ENABLED RealType location()const
     {
         return mu;
     }
-    RealType scale()const
+    BOOST_MATH_GPU_ENABLED RealType scale()const
     {
         return c;
     }
-    RealType bias()const
+    BOOST_MATH_GPU_ENABLED RealType bias()const
     {
         return location_bias;
     }
@@ -4477,66 +4483,66 @@ landau_distribution(RealType, RealType) -> landau_distribution<typename boost::m
 #endif
 
 template <class RealType, class Policy>
-inline const std::pair<RealType, RealType> range(const landau_distribution<RealType, Policy>&)
+BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const landau_distribution<RealType, Policy>&)
 { // Range of permissible values for random variable x.
-    if (std::numeric_limits<RealType>::has_infinity)
+    BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
     {
-        return std::pair<RealType, RealType>(-std::numeric_limits<RealType>::infinity(), std::numeric_limits<RealType>::infinity()); // - to + infinity.
+        return boost::math::pair<RealType, RealType>(-boost::math::numeric_limits<RealType>::infinity(), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
     }
     else
     { // Can only use max_value.
         using boost::math::tools::max_value;
-        return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max.
+        return boost::math::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max.
     }
 }
 
 template <class RealType, class Policy>
-inline const std::pair<RealType, RealType> support(const landau_distribution<RealType, Policy>&)
+BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const landau_distribution<RealType, Policy>&)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-    if (std::numeric_limits<RealType>::has_infinity)
+    BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
     {
-        return std::pair<RealType, RealType>(-std::numeric_limits<RealType>::infinity(), std::numeric_limits<RealType>::infinity()); // - to + infinity.
+        return boost::math::pair<RealType, RealType>(-boost::math::numeric_limits<RealType>::infinity(), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
     }
     else
     { // Can only use max_value.
         using boost::math::tools::max_value;
-        return std::pair<RealType, RealType>(-tools::max_value<RealType>(), max_value<RealType>()); // - to + max.
+        return boost::math::pair<RealType, RealType>(-tools::max_value<RealType>(), max_value<RealType>()); // - to + max.
     }
 }
 
 template <class RealType, class Policy>
-inline RealType pdf(const landau_distribution<RealType, Policy>& dist, const RealType& x)
+BOOST_MATH_GPU_ENABLED inline RealType pdf(const landau_distribution<RealType, Policy>& dist, const RealType& x)
 {
     return detail::landau_pdf_imp(dist, x);
 } // pdf
 
 template <class RealType, class Policy>
-inline RealType cdf(const landau_distribution<RealType, Policy>& dist, const RealType& x)
+BOOST_MATH_GPU_ENABLED inline RealType cdf(const landau_distribution<RealType, Policy>& dist, const RealType& x)
 {
     return detail::landau_cdf_imp(dist, x, false);
 } // cdf
 
 template <class RealType, class Policy>
-inline RealType quantile(const landau_distribution<RealType, Policy>& dist, const RealType& p)
+BOOST_MATH_GPU_ENABLED inline RealType quantile(const landau_distribution<RealType, Policy>& dist, const RealType& p)
 {
     return detail::landau_quantile_imp(dist, p, false);
 } // quantile
 
 template <class RealType, class Policy>
-inline RealType cdf(const complemented2_type<landau_distribution<RealType, Policy>, RealType>& c)
+BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<landau_distribution<RealType, Policy>, RealType>& c)
 {
     return detail::landau_cdf_imp(c.dist, c.param, true);
 } //  cdf complement
 
 template <class RealType, class Policy>
-inline RealType quantile(const complemented2_type<landau_distribution<RealType, Policy>, RealType>& c)
+BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<landau_distribution<RealType, Policy>, RealType>& c)
 {
     return detail::landau_quantile_imp(c.dist, c.param, true);
 } // quantile complement
 
 template <class RealType, class Policy>
-inline RealType mean(const landau_distribution<RealType, Policy>&)
+BOOST_MATH_GPU_ENABLED inline RealType mean(const landau_distribution<RealType, Policy>&)
 {  // There is no mean:
     typedef typename Policy::assert_undefined_type assert_type;
     static_assert(assert_type::value == 0, "The Landau Distribution has no mean");
@@ -4545,11 +4551,11 @@ inline RealType mean(const landau_distribution<RealType, Policy>&)
         "boost::math::mean(landau<%1%>&)",
         "The Landau distribution does not have a mean: "
         "the only possible return value is %1%.",
-        std::numeric_limits<RealType>::quiet_NaN(), Policy());
+        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>
-inline RealType variance(const landau_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline RealType variance(const landau_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no variance:
     typedef typename Policy::assert_undefined_type assert_type;
@@ -4559,23 +4565,23 @@ inline RealType variance(const landau_distribution<RealType, Policy>& /*dist*/)
         "boost::math::variance(landau<%1%>&)",
         "The Landau distribution does not have a variance: "
         "the only possible return value is %1%.",
-        std::numeric_limits<RealType>::quiet_NaN(), Policy());
+        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>
-inline RealType mode(const landau_distribution<RealType, Policy>& dist)
+BOOST_MATH_GPU_ENABLED inline RealType mode(const landau_distribution<RealType, Policy>& dist)
 {
     return detail::landau_mode_imp(dist);
 }
 
 template <class RealType, class Policy>
-inline RealType median(const landau_distribution<RealType, Policy>& dist)
+BOOST_MATH_GPU_ENABLED inline RealType median(const landau_distribution<RealType, Policy>& dist)
 {
     return detail::landau_median_imp(dist);
 }
 
 template <class RealType, class Policy>
-inline RealType skewness(const landau_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline RealType skewness(const landau_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no skewness:
     typedef typename Policy::assert_undefined_type assert_type;
@@ -4585,11 +4591,11 @@ inline RealType skewness(const landau_distribution<RealType, Policy>& /*dist*/)
         "boost::math::skewness(landau<%1%>&)",
         "The Landau distribution does not have a skewness: "
         "the only possible return value is %1%.",
-        std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
+        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
 }
 
 template <class RealType, class Policy>
-inline RealType kurtosis(const landau_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const landau_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no kurtosis:
     typedef typename Policy::assert_undefined_type assert_type;
@@ -4599,11 +4605,11 @@ inline RealType kurtosis(const landau_distribution<RealType, Policy>& /*dist*/)
         "boost::math::kurtosis(landau<%1%>&)",
         "The Landau distribution does not have a kurtosis: "
         "the only possible return value is %1%.",
-        std::numeric_limits<RealType>::quiet_NaN(), Policy());
+        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>
-inline RealType kurtosis_excess(const landau_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const landau_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no kurtosis excess:
     typedef typename Policy::assert_undefined_type assert_type;
@@ -4613,11 +4619,11 @@ inline RealType kurtosis_excess(const landau_distribution<RealType, Policy>& /*d
         "boost::math::kurtosis_excess(landau<%1%>&)",
         "The Landau distribution does not have a kurtosis: "
         "the only possible return value is %1%.",
-        std::numeric_limits<RealType>::quiet_NaN(), Policy());
+        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>
-inline RealType entropy(const landau_distribution<RealType, Policy>& dist)
+BOOST_MATH_GPU_ENABLED inline RealType entropy(const landau_distribution<RealType, Policy>& dist)
 {
     return detail::landau_entropy_imp(dist);
 }

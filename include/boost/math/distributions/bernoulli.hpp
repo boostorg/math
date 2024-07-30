@@ -30,6 +30,7 @@
 
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/tuple.hpp>
 #include <boost/math/distributions/complement.hpp> // complements
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
@@ -133,17 +134,17 @@ namespace boost
     #endif
 
     template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const std::pair<RealType, RealType> range(const bernoulli_distribution<RealType, Policy>& /* dist */)
+    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const bernoulli_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable k = {0, 1}.
       using boost::math::tools::max_value;
-      return std::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
     }
 
     template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const std::pair<RealType, RealType> support(const bernoulli_distribution<RealType, Policy>& /* dist */)
+    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const bernoulli_distribution<RealType, Policy>& /* dist */)
     { // Range of supported values for random variable k = {0, 1}.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-      return std::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
     }
 
     template <class RealType, class Policy>

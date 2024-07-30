@@ -1,4 +1,5 @@
-// Copyright Takuma Yoshimura 2024.
+//  Copyright Takuma Yoshimura 2024.
+//  Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -11,6 +12,9 @@
 #pragma warning(disable : 4127) // conditional expression is constant
 #endif
 
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/numeric_limits.hpp>
+#include <boost/math/tools/tuple.hpp>
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/big_constant.hpp>
@@ -29,7 +33,7 @@ class mapairy_distribution;
 namespace detail {
 
 template <class RealType>
-inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -37,7 +41,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
     if (x < 1) {
         // Rational Approximation
         // Maximum Relative Error: 3.7591e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(1.97516171847191855610e-1),
             static_cast<RealType>(3.67488253628465083737e-2),
             static_cast<RealType>(-9.73242224038828612673e-4),
@@ -47,7 +51,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(1.04960324426666933327e-5),
             static_cast<RealType>(-6.58470237954242016920e-7),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(7.09464351647314165710e-1),
             static_cast<RealType>(3.66413036246461392316e-1),
@@ -64,7 +68,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 1.5996e-20
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(1.06251243013238748252e-1),
             static_cast<RealType>(1.38178831205785069108e-2),
             static_cast<RealType>(4.19280374368049006206e-3),
@@ -74,7 +78,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(-1.30090180307471994500e-6),
             static_cast<RealType>(5.24801123304330014713e-8),
         };
-        static const RealType Q[8] = {
+        BOOST_MATH_STATIC const RealType Q[8] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(8.10853683888611687140e-1),
             static_cast<RealType>(3.89361261627717143905e-1),
@@ -92,7 +96,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 1.1592e-17
-        static const RealType P[9] = {
+        BOOST_MATH_STATIC const RealType P[9] = {
             static_cast<RealType>(5.33842514891989443409e-2),
             static_cast<RealType>(1.23301980674903270971e-2),
             static_cast<RealType>(3.45717831433988631923e-3),
@@ -103,7 +107,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(9.15896323073109992939e-9),
             static_cast<RealType>(-3.14068002815368247985e-10),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(9.08772985520393226044e-1),
             static_cast<RealType>(4.26418573702560818267e-1),
@@ -120,7 +124,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 9.2228e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(1.58950538583133457384e-2),
             static_cast<RealType>(7.47835440063141601948e-3),
             static_cast<RealType>(1.81137244353261478410e-3),
@@ -130,7 +134,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(-1.54976465724771282989e-9),
             static_cast<RealType>(1.30762989300333026019e-11),
         };
-        static const RealType Q[8] = {
+        BOOST_MATH_STATIC const RealType Q[8] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(9.95505437381674174441e-1),
             static_cast<RealType>(4.58882737262511297099e-1),
@@ -148,7 +152,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 1.0257e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(3.22517551525042172428e-3),
             static_cast<RealType>(1.12822806030796339659e-3),
             static_cast<RealType>(1.54489389961322571031e-4),
@@ -158,7 +162,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(-2.15498112371756202097e-12),
             static_cast<RealType>(6.41838355699777435924e-15),
         };
-        static const RealType Q[8] = {
+        BOOST_MATH_STATIC const RealType Q[8] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(6.53390465399680164234e-1),
             static_cast<RealType>(1.82759048270449018482e-1),
@@ -176,7 +180,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 6.0510e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(5.82527663232857270992e-4),
             static_cast<RealType>(6.89502117025124630567e-5),
             static_cast<RealType>(2.24909795087265741433e-6),
@@ -186,7 +190,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(-1.13308546492906818388e-16),
             static_cast<RealType>(5.32472028720777735712e-19),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(2.74018883667663396766e-1),
             static_cast<RealType>(2.95901195665990089660e-2),
@@ -203,7 +207,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 7.3294e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(1.03264853379349880039e-4),
             static_cast<RealType>(5.35256306644392405447e-6),
             static_cast<RealType>(9.00657716972118816692e-8),
@@ -213,7 +217,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(7.28133811621687143754e-19),
             static_cast<RealType>(-7.38047553655951666420e-22),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(1.29920843258164337377e-1),
             static_cast<RealType>(6.75018577147646502386e-3),
@@ -230,14 +234,14 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 5.6693e-20
-        static const RealType P[5] = {
+        BOOST_MATH_STATIC const RealType P[5] = {
             static_cast<RealType>(5.98413420602149016910e-1),
             static_cast<RealType>(3.14584075817417883086e-5),
             static_cast<RealType>(1.62977928311793051895e1),
             static_cast<RealType>(-4.12903117172994371875e-4),
             static_cast<RealType>(-1.06404478702135751872e2),
         };
-        static const RealType Q[3] = {
+        BOOST_MATH_STATIC const RealType Q[3] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(5.25696892802060720079e-5),
             static_cast<RealType>(4.03600055498020483920e1),
@@ -251,7 +255,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
 
 
 template <class RealType>
-inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -260,7 +264,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 7.8308e-35
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.97516171847191855609649452292217911973e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.17531822787252717270400174744562144891e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.85115358761409188259685286269086053296e-2),
@@ -275,7 +279,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.43150486566834492207695241913522311930e-13),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.46130347604880355784938321408765318948e-13),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.11845869711743584628289654085905424438e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.80391154854347711297249357734993136108e-1),
@@ -299,7 +303,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 3.0723e-35
         // LCOV_EXCL_START
-        static const RealType P[12] = {
+        BOOST_MATH_STATIC const RealType P[12] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.06251243013238748252181151646220197947e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.92438638323563234519452281479338921158e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.83335793178622701784730867677919844599e-2),
@@ -313,7 +317,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.81756745849477762773082030302943341729e-10),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.65915115243311285178083515017249358853e-12),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.33250387018216706082200927591739589024e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.71707718560216685629188467984384070512e-1),
@@ -337,7 +341,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 4.0903e-35
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.33842514891989443409465171800884519331e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.53264053296761245408991932692426094424e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.23210520807186629205810670362048049836e-2),
@@ -352,7 +356,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.10030596535721362628619523622308581344e-11),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.19376016170255697546854583591494809062e-13),
         };
-        static const RealType Q[15] = {
+        BOOST_MATH_STATIC const RealType Q[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.52686177278870816414637961315363468426e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.19872083945442288336636376283295310445e0),
@@ -378,7 +382,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 6.5015e-35
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.58950538583133457383574346194006716984e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.25447644411503971725638816502617490834e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.47605882774114100209665040117276675598e-2),
@@ -395,7 +399,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.35248179978735448062307216459232932068e-15),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.53569375838863862590910010617140120876e-18),
         };
-        static const RealType Q[17] = {
+        BOOST_MATH_STATIC const RealType Q[17] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.94337325681904859647161946168957959628e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.77120402023938328899162557073347121463e0),
@@ -423,7 +427,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 2.0995e-35
         // LCOV_EXCL_START
-        static const RealType P[16] = {
+        BOOST_MATH_STATIC const RealType P[16] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.22517551525042172427941302520759668293e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.86576974828476461442549217748945498966e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.18419822818191546598384139622512477000e-3),
@@ -441,7 +445,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.68829978902134103249656805130103045021e-23),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.42496376687241918803028631991083570963e-26),
         };
-        static const RealType Q[16] = {
+        BOOST_MATH_STATIC const RealType Q[16] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.19213376162053391168605415200906099633e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.65578261958732385181558047087365997878e-1),
@@ -468,7 +472,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 2.0937e-35
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.82527663232857270992129793621400616909e-4),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.41696401156754081476312871174198295322e-4),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.42036620449365724707919875710197564857e-5),
@@ -485,7 +489,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -6.81390322233700529779563477285232205886e-28),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.52190981930441828041102818178755246228e-31),
         };
-        static const RealType Q[15] = {
+        BOOST_MATH_STATIC const RealType Q[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.70564782441895707961338319466546005093e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.47770566490107388849474183308889339231e-1),
@@ -511,7 +515,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 1.5856e-35
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.03264853379349880038687006045193401399e-4),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.79539964604630527636184900467871907171e-5),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.34840369549460790638336121351837912308e-6),
@@ -528,7 +532,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.69069082510020066864633718082941688708e-34),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.33468198065176301137949068264633336529e-37),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.51951069241510130465691156908893803280e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.84647597299970149588010858770320631739e-2),
@@ -553,7 +557,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 3.5081e-36
         // LCOV_EXCL_START
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.98413420602149016909919089901572802714e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.30303835860684077803651094768293625633e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.89097726237252419724261295392691855545e1),
@@ -563,7 +567,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.16343347002845084264982358165052437094e3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.59558963351172885545760841064831356701e3),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.51965956124978480521462518750569617550e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.61700833299761977287211297600922591853e2),
@@ -580,7 +584,7 @@ inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const std::integral
 }
 
 template <class RealType>
-inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -590,7 +594,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
 
         // Rational Approximation
         // Maximum Relative Error: 3.7525e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(2.76859868856746781256e-1),
             static_cast<RealType>(1.10489814676299003241e-1),
             static_cast<RealType>(-6.25690643488236678667e-3),
@@ -600,7 +604,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
             static_cast<RealType>(-2.22575633858411851032e-5),
             static_cast<RealType>(2.94270091008508492304e-6),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(4.98673671503410894284e-1),
             static_cast<RealType>(3.15907666864554716291e-1),
@@ -617,7 +621,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
 
         // Rational Approximation
         // Maximum Relative Error: 4.0995e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(2.14483832832989822788e-1),
             static_cast<RealType>(3.72789690317712876663e-1),
             static_cast<RealType>(1.86473650057086284496e-1),
@@ -627,7 +631,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
             static_cast<RealType>(4.88651392754189961173e-4),
             static_cast<RealType>(-6.13516242712196835055e-5),
         };
-        static const RealType Q[8] = {
+        BOOST_MATH_STATIC const RealType Q[8] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(1.06478618107122200489e0),
             static_cast<RealType>(4.08809060854459518663e-1),
@@ -648,7 +652,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
 
             // Rational Approximation
             // Maximum Relative Error: 2.4768e-18
-            static const RealType P[8] = {
+            BOOST_MATH_STATIC const RealType P[8] = {
                 static_cast<RealType>(2.74308494787955998605e-1),
                 static_cast<RealType>(4.87765991440983416392e-1),
                 static_cast<RealType>(3.84524365110270427617e-1),
@@ -658,7 +662,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
                 static_cast<RealType>(1.20417225696161842090e-3),
                 static_cast<RealType>(6.97462693097107007719e-5),
             };
-            static const RealType Q[8] = {
+            BOOST_MATH_STATIC const RealType Q[8] = {
                 static_cast<RealType>(1.),
                 static_cast<RealType>(1.81256903248465876424e0),
                 static_cast<RealType>(1.43959302060852067876e0),
@@ -676,7 +680,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
 
             // Rational Approximation
             // Maximum Relative Error: 1.5741e-17
-            static const RealType P[8] = {
+            BOOST_MATH_STATIC const RealType P[8] = {
                 static_cast<RealType>(2.67391547707456587286e-1),
                 static_cast<RealType>(3.39319035621314371924e-1),
                 static_cast<RealType>(1.85434799940724207230e-1),
@@ -686,7 +690,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
                 static_cast<RealType>(4.60769537123286016400e-5),
                 static_cast<RealType>(-4.92754650783224582641e-13),
             };
-            static const RealType Q[7] = {
+            BOOST_MATH_STATIC const RealType Q[7] = {
                 static_cast<RealType>(1.),
                 static_cast<RealType>(1.27271216837333318516e0),
                 static_cast<RealType>(6.96551952883867277759e-1),
@@ -703,7 +707,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
 
             // Rational Approximation
             // Maximum Relative Error: 4.6579e-17
-            static const RealType P[6] = {
+            BOOST_MATH_STATIC const RealType P[6] = {
                 static_cast<RealType>(2.66153901932100301337e-1),
                 static_cast<RealType>(1.65767350677458230714e-1),
                 static_cast<RealType>(4.19801402197670061146e-2),
@@ -711,7 +715,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
                 static_cast<RealType>(3.50811247702301287586e-4),
                 static_cast<RealType>(9.21758454778883157515e-6),
             };
-            static const RealType Q[6] = {
+            BOOST_MATH_STATIC const RealType Q[6] = {
                 static_cast<RealType>(1.),
                 static_cast<RealType>(6.23092941554668369107e-1),
                 static_cast<RealType>(1.57829914506366827914e-1),
@@ -727,14 +731,14 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
 
             // Rational Approximation
             // Maximum Relative Error: 5.2014e-17
-            static const RealType P[5] = {
+            BOOST_MATH_STATIC const RealType P[5] = {
                 static_cast<RealType>(2.65985830928929730672e-1),
                 static_cast<RealType>(7.19655029633308583205e-2),
                 static_cast<RealType>(7.26293125679558421946e-3),
                 static_cast<RealType>(3.24276402295343802262e-4),
                 static_cast<RealType>(5.40508013573989841127e-6),
             };
-            static const RealType Q[5] = {
+            BOOST_MATH_STATIC const RealType Q[5] = {
                 static_cast<RealType>(1.),
                 static_cast<RealType>(2.70578525590448009961e-1),
                 static_cast<RealType>(2.73082032706004833847e-2),
@@ -753,7 +757,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
 }
 
 template <class RealType>
-inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -764,7 +768,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
         // Rational Approximation
         // Maximum Relative Error: 5.2870e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.76859868856746781256050397658493368372e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.13037642242224438972685982606987140111e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.93206268361082760254653961897373271146e-2),
@@ -780,7 +784,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.77632857558257155545506847333166147492e-10),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.00448215148716947837105979735199471601e-11),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.69069814466926608209872727645156315374e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.89657828158127300370734997707096744077e-1),
@@ -804,7 +808,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
         // Rational Approximation
         // Maximum Relative Error: 1.1977e-35
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.14483832832989822788477500521594411868e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.75657192307644021285091474845448102656e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.40437358470633234235031852091608646844e-1),
@@ -819,7 +823,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.11130363073235247786909976446790746902e-9),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.49023728251751416730708805268921994420e-10),
         };
-        static const RealType Q[15] = {
+        BOOST_MATH_STATIC const RealType Q[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.11919889346080886194925406930280687022e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.99082771425048574611745923487528183522e-1),
@@ -848,7 +852,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
             // Rational Approximation
             // Maximum Relative Error: 5.4547e-35
             // LCOV_EXCL_START
-            static const RealType P[15] = {
+            BOOST_MATH_STATIC const RealType P[15] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.74308494787955998605105974174143750745e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.56767876568276519015214709629156760546e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.23402577465454790961498400214198520261e0),
@@ -865,7 +869,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.88118741063309731598638313174835288433e-8),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.78908322579081615215057968216358892954e-9),
             };
-            static const RealType Q[15] = {
+            BOOST_MATH_STATIC const RealType Q[15] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.15777668058369565739250784347385217839e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.58275582332060589146223977924181161908e0),
@@ -891,7 +895,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
             // Rational Approximation
             // Maximum Relative Error: 1.8813e-35
             // LCOV_EXCL_START
-            static const RealType P[15] = {
+            BOOST_MATH_STATIC const RealType P[15] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.67391547707456587286086623414017962238e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.69944730920904699720804320295067934914e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.80384452804523880914883464295008532437e-1),
@@ -908,7 +912,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.17645475312219452046348851569796494059e-9),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.06306499345515479193219487228315566344e-11),
             };
-            static const RealType Q[15] = {
+            BOOST_MATH_STATIC const RealType Q[15] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.13521398369589479131299586715604029947e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.17680254721938920978999949995837883884e0),
@@ -934,7 +938,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
             // Rational Approximation
             // Maximum Relative Error: 3.7501e-35
             // LCOV_EXCL_START
-            static const RealType P[13] = {
+            BOOST_MATH_STATIC const RealType P[13] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.66153901932100301337118653561328446399e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.52542079386371212946566450189144670788e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.17560936304516198261138159102435548430e-1),
@@ -949,7 +953,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.19214263302271253341410568192952269518e-10),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.36635313919771528255819112450043338510e-12),
             };
-            static const RealType Q[13] = {
+            BOOST_MATH_STATIC const RealType Q[13] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.32484755553196872705775494679365596205e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.17714315014480774542066462899317631393e-1),
@@ -973,7 +977,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
             // Rational Approximation
             // Maximum Relative Error: 9.2696e-36
             // LCOV_EXCL_START
-            static const RealType P[12] = {
+            BOOST_MATH_STATIC const RealType P[12] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.65985830928929730672052407058361701971e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.80409998734303497641108024806388734755e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.49286120625421787109350223436127409819e-2),
@@ -987,7 +991,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.13183856815615371136129883169639301710e-13),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.02405342795439598418033139109649640085e-35),
             };
-            static const RealType Q[11] = {
+            BOOST_MATH_STATIC const RealType Q[11] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.78286317363568496229516074305435186276e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.06519013547074134846431611115576250187e-1),
@@ -1009,7 +1013,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
             // Rational Approximation
             // Maximum Relative Error: 2.3524e-35
             // LCOV_EXCL_START
-            static const RealType P[10] = {
+            BOOST_MATH_STATIC const RealType P[10] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.65964563346442080104568381680822923977e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.77958685324702990033291591478515962894e-2),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.56419338083136866686699803771820491401e-3),
@@ -1021,7 +1025,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.85553643603397817535280932672322232325e-13),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, -7.46207029637607033398822620480584537642e-38),
             };
-            static const RealType Q[9] = {
+            BOOST_MATH_STATIC const RealType Q[9] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.54906717312241693103173902792310528801e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.84408124581401290943345932332007045483e-2),
@@ -1044,7 +1048,7 @@ inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const std::integra
 }
 
 template <class RealType>
-inline RealType mapairy_pdf_imp_prec(const RealType& x, const std::integral_constant<int, 53> &tag) {
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_imp_prec(const RealType& x, const std::integral_constant<int, 53> &tag) {
     if (x >= 0) {
         return mapairy_pdf_plus_imp_prec<RealType>(x, tag);
     }
@@ -1052,12 +1056,12 @@ inline RealType mapairy_pdf_imp_prec(const RealType& x, const std::integral_cons
         return mapairy_pdf_minus_imp_prec<RealType>(x, tag);
     }
     else {
-        return std::numeric_limits<RealType>::quiet_NaN();
+        return boost::math::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
 template <class RealType>
-inline RealType mapairy_pdf_imp_prec(const RealType& x, const std::integral_constant<int, 113>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_imp_prec(const RealType& x, const std::integral_constant<int, 113>& tag) {
     if (x >= 0) {
         return mapairy_pdf_plus_imp_prec<RealType>(x, tag);
     }
@@ -1065,18 +1069,18 @@ inline RealType mapairy_pdf_imp_prec(const RealType& x, const std::integral_cons
         return mapairy_pdf_minus_imp_prec<RealType>(x, tag);
     }
     else {
-        return std::numeric_limits<RealType>::quiet_NaN();
+        return boost::math::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
 template <class RealType, class Policy>
-inline RealType mapairy_pdf_imp(const mapairy_distribution<RealType, Policy>& dist, const RealType& x) {
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_imp(const mapairy_distribution<RealType, Policy>& dist, const RealType& x) {
     //
     // This calculates the pdf of the Map-Airy distribution and/or its complement.
     //
 
     BOOST_MATH_STD_USING // for ADL of std functions
-    static const char* function = "boost::math::pdf(mapairy<%1%>&, %1%)";
+    constexpr auto function = "boost::math::pdf(mapairy<%1%>&, %1%)";
     RealType result = 0;
     RealType location = dist.location();
     RealType scale = dist.scale();
@@ -1112,7 +1116,7 @@ inline RealType mapairy_pdf_imp(const mapairy_distribution<RealType, Policy>& di
 }
 
 template <class RealType>
-inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1120,7 +1124,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
     if (x < 1) {
         // Rational Approximation
         // Maximum Relative Error: 2.9194e-17
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(3.33333333333333333333e-1),
             static_cast<RealType>(7.49532137610545010591e-2),
             static_cast<RealType>(9.25326921848155048716e-3),
@@ -1129,7 +1133,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(8.22766804917461941348e-5),
             static_cast<RealType>(-3.97941251650023182117e-6),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(8.17408156824742736411e-1),
             static_cast<RealType>(3.57041011418415988268e-1),
@@ -1146,7 +1150,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 3.1531e-17
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(1.84196970581015939888e-1),
             static_cast<RealType>(-1.19398028299089933853e-3),
             static_cast<RealType>(1.21954054797949597854e-2),
@@ -1155,7 +1159,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(-1.33271812303025233648e-5),
             static_cast<RealType>(5.35982226125013888796e-7),
         };
-        static const RealType Q[6] = {
+        BOOST_MATH_STATIC const RealType Q[6] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(5.70352826101668448273e-1),
             static_cast<RealType>(1.98852010141232271304e-1),
@@ -1171,7 +1175,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 1.8348e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(1.07409273397524124098e-1),
             static_cast<RealType>(3.83900318969331880402e-2),
             static_cast<RealType>(1.17926652359826576790e-2),
@@ -1181,7 +1185,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(1.97360985832285866640e-8),
             static_cast<RealType>(-1.06076300080048408251e-9),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(8.54435380513870673497e-1),
             static_cast<RealType>(3.66021233157880878411e-1),
@@ -1198,7 +1202,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 2.6624e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(4.70720199535228802538e-2),
             static_cast<RealType>(2.67200763833749070079e-2),
             static_cast<RealType>(7.37400551855064729769e-3),
@@ -1208,7 +1212,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(2.03102753319827713542e-8),
             static_cast<RealType>(-5.16172854149066643529e-11),
         };
-        static const RealType Q[8] = {
+        BOOST_MATH_STATIC const RealType Q[8] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(9.05317644829451086870e-1),
             static_cast<RealType>(3.73713496637025562492e-1),
@@ -1226,7 +1230,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 2.6243e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(1.74847564444513000450e-2),
             static_cast<RealType>(6.00209162595027323742e-3),
             static_cast<RealType>(7.86550260761375576075e-4),
@@ -1236,7 +1240,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(-9.81286503831545640189e-12),
             static_cast<RealType>(2.98763969872672156104e-14),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(5.27732094554221674504e-1),
             static_cast<RealType>(1.14330643482604301178e-1),
@@ -1253,7 +1257,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 5.4684e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(6.22684103170563193015e-3),
             static_cast<RealType>(1.34714356588780958096e-3),
             static_cast<RealType>(9.51289465377874891896e-5),
@@ -1263,7 +1267,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(-6.18017115447736427379e-14),
             static_cast<RealType>(9.11626234402148561268e-17),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(3.09895694991285975774e-1),
             static_cast<RealType>(3.69874670435930773471e-2),
@@ -1280,7 +1284,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 6.5947e-17
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(2.20357145727036120652e-3),
             static_cast<RealType>(1.45412555771401325111e-4),
             static_cast<RealType>(3.27819006009093198652e-6),
@@ -1289,7 +1293,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             static_cast<RealType>(5.71421706870777687254e-14),
             static_cast<RealType>(-1.48321866072033823195e-17),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(1.12851983233980279746e-1),
             static_cast<RealType>(4.94650928817638043712e-3),
@@ -1307,13 +1311,13 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
 
         // Rational Approximation
         // Maximum Relative Error: 6.2709e-17
-        static const RealType P[4] = {
+        BOOST_MATH_STATIC const RealType P[4] = {
             static_cast<RealType>(3.98942280401432677940e-1),
             static_cast<RealType>(2.89752186412133782995e-2),
             static_cast<RealType>(4.67360459917040710474e0),
             static_cast<RealType>(-1.26770824563800250704e-1),
         };
-        static const RealType Q[3] = {
+        BOOST_MATH_STATIC const RealType Q[3] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(7.26301023103568827709e-2),
             static_cast<RealType>(1.60899894281099149848e1),
@@ -1327,7 +1331,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
 
 
 template <class RealType>
-inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1336,7 +1340,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 4.7720e-37
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.33333333333333333333333333333333333333e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.38519736580901276671338330967060054188e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.07012342772403725079487012557507575976e-2),
@@ -1352,7 +1356,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -8.23420723211833268177898025846064230665e-12),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.13807083548358335699029971528179486964e-13),
         };
-        static const RealType Q[12] = {
+        BOOST_MATH_STATIC const RealType Q[12] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.00810772528427939684296334977783425582e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.24383652800043768524894854013745098654e-1),
@@ -1375,7 +1379,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 1.6297e-35
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.84196970581015939887507434989936103587e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.23864910443500344832158256856064580005e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.72066675347648126090497588433854314742e-2),
@@ -1390,7 +1394,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.19848671456872291336347012756651759817e-11),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.00479393063394570750334218362674723065e-13),
         };
-        static const RealType Q[12] = {
+        BOOST_MATH_STATIC const RealType Q[12] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.24929390929112144560152115661603117364e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.34853762543033883106055186520573363290e-1),
@@ -1413,7 +1417,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 2.8103e-36
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.07409273397524124098315500450332255837e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.98373054365213259465522536994638631699e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.30851284606709136235419547406278197945e-2),
@@ -1429,7 +1433,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.72220647682193638971237255396233171508e-13),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.45008884108655511268690849420714428764e-15),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.42652074703683973183213296310906006173e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.03479786698331153607905223548719296572e0),
@@ -1454,7 +1458,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 7.5930e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.70720199535228802537946089633331273434e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.85220706158476482443562698303252970927e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.55090221054465759649629178911450010833e-2),
@@ -1470,7 +1474,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.73710011278079325323578951018770847628e-13),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.70140037580287364298206334732060874507e-16),
         };
-        static const RealType Q[16] = {
+        BOOST_MATH_STATIC const RealType Q[16] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.36848014038411798213992770858203510748e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.15373052017549822413011375404872359177e-1),
@@ -1497,7 +1501,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 7.3609e-35
         // LCOV_EXCL_START
-        static const RealType P[16] = {
+        BOOST_MATH_STATIC const RealType P[16] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.74847564444513000450056174922427854591e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.56842503159303803254436983444304764079e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.48504629497687889354406208309334148575e-3),
@@ -1515,7 +1519,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -7.09912208206107606750610288716869139753e-23),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.98451733054622166748935243139556132704e-26),
         };
-        static const RealType Q[15] = {
+        BOOST_MATH_STATIC const RealType Q[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.08148065380582488495702136465010348576e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.42385352331252779422725444021027377277e-1),
@@ -1541,7 +1545,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 9.7192e-35
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.22684103170563193014558918295924551173e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.55222688816852408105912768186300290291e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.60747505331765587662432023547517953629e-4),
@@ -1558,7 +1562,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -7.02156808288545876198121127510075217184e-27),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.65549196385656698597261688277898043367e-30),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.03426141030409708635168766288764563749e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.13808987755928828118915442251025992769e-1),
@@ -1583,7 +1587,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 9.7799e-35
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.20357145727036120652264700679701054983e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.95712324967981162396595365933255312698e-4),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.08619492652809635942960438372427086939e-5),
@@ -1598,7 +1602,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.15780217054514513493147192853488153246e-24),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.31961589164397397724611386366339562789e-28),
         };
-        static const RealType Q[15] = {
+        BOOST_MATH_STATIC const RealType Q[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.26440207646105117747875545474828367516e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.27872879091838733280518786463281413334e-2),
@@ -1625,7 +1629,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
         // Rational Approximation
         // Maximum Relative Error: 3.5865e-37
         // LCOV_EXCL_START
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.98942280401432677939946059934381868476e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.12426566605292130233061857505057433291e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.91574528280329492283287073127040983832e1),
@@ -1635,7 +1639,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.44343825578434751356083230369361399507e3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.07224810408790092272497403739984510394e2),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.32474438135610721926278423612948794250e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.27594461167587027771303292526448542806e2),
@@ -1652,7 +1656,7 @@ inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const std::integral
 }
 
 template <class RealType>
-inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1662,7 +1666,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
 
         // Rational Approximation
         // Maximum Relative Error: 1.6964e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(4.23238998449671083670e-1),
             static_cast<RealType>(4.95353582976475183891e-1),
             static_cast<RealType>(2.45823281826037784270e-1),
@@ -1672,7 +1676,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
             static_cast<RealType>(2.66220579589280704089e-4),
             static_cast<RealType>(3.09442180091323751049e-6),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(5.16241922223786900600e-1),
             static_cast<RealType>(2.75690727171711638879e-1),
@@ -1689,7 +1693,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
 
         // Rational Approximation
         // Maximum Relative Error: 5.8303e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(1.62598955251978523175e-1),
             static_cast<RealType>(2.30154661502402196205e-1),
             static_cast<RealType>(1.29233975368291684522e-1),
@@ -1699,7 +1703,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
             static_cast<RealType>(3.35259917978421935141e-4),
             static_cast<RealType>(1.22071311320012805777e-5),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(9.63771793313770952352e-2),
             static_cast<RealType>(2.23602260938227310054e-1),
@@ -1719,7 +1723,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
 
             // Rational Approximation
             // Maximum Relative Error: 3.6017e-18
-            static const RealType P[8] = {
+            BOOST_MATH_STATIC const RealType P[8] = {
                 static_cast<RealType>(8.31806744221966404520e-1),
                 static_cast<RealType>(1.34481067378012055850e0),
                 static_cast<RealType>(9.12139427469494995264e-1),
@@ -1729,7 +1733,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
                 static_cast<RealType>(1.89700733471520162946e-3),
                 static_cast<RealType>(1.13854052826846329787e-4),
             };
-            static const RealType Q[8] = {
+            BOOST_MATH_STATIC const RealType Q[8] = {
                 static_cast<RealType>(1.),
                 static_cast<RealType>(1.29694286517571741097e0),
                 static_cast<RealType>(7.99686735441213882518e-1),
@@ -1747,7 +1751,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
 
             // Rational Approximation
             // Maximum Relative Error: 1.3504e-17
-            static const RealType P[8] = {
+            BOOST_MATH_STATIC const RealType P[8] = {
                 static_cast<RealType>(1.10294551528734705946e0),
                 static_cast<RealType>(1.26696377028973554615e0),
                 static_cast<RealType>(6.63115985833429688941e-1),
@@ -1757,7 +1761,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
                 static_cast<RealType>(4.04328442334023561279e-4),
                 static_cast<RealType>(1.42364413902075896503e-5),
             };
-            static const RealType Q[8] = {
+            BOOST_MATH_STATIC const RealType Q[8] = {
                 static_cast<RealType>(1.),
                 static_cast<RealType>(1.09709853682665798542e0),
                 static_cast<RealType>(5.63687797989627787500e-1),
@@ -1775,7 +1779,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
 
             // Rational Approximation
             // Maximum Relative Error: 8.8272e-18
-            static const RealType P[7] = {
+            BOOST_MATH_STATIC const RealType P[7] = {
                 static_cast<RealType>(1.18246847255744057280e0),
                 static_cast<RealType>(8.41320657699741240497e-1),
                 static_cast<RealType>(2.55093097377551881478e-1),
@@ -1784,7 +1788,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
                 static_cast<RealType>(2.04688276265993954527e-4),
                 static_cast<RealType>(4.43354791268634655473e-6),
             };
-            static const RealType Q[7] = {
+            BOOST_MATH_STATIC const RealType Q[7] = {
                 static_cast<RealType>(1.),
                 static_cast<RealType>(7.07103973315808077783e-1),
                 static_cast<RealType>(2.13664682181055450396e-1),
@@ -1801,7 +1805,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
 
             // Rational Approximation
             // Maximum Relative Error: 2.6236e-18
-            static const RealType P[6] = {
+            BOOST_MATH_STATIC const RealType P[6] = {
                 static_cast<RealType>(1.19497306481411168356e0),
                 static_cast<RealType>(3.90497195765498241356e-1),
                 static_cast<RealType>(5.13120330037626853257e-2),
@@ -1809,7 +1813,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
                 static_cast<RealType>(1.12075935888344736993e-4),
                 static_cast<RealType>(1.48743616420183584738e-6),
             };
-            static const RealType Q[6] = {
+            BOOST_MATH_STATIC const RealType Q[6] = {
                 static_cast<RealType>(1.),
                 static_cast<RealType>(3.26493785348088598123e-1),
                 static_cast<RealType>(4.28813205161574223713e-2),
@@ -1829,7 +1833,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
 }
 
 template <class RealType>
-inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1840,7 +1844,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
         // Rational Approximation
         // Maximum Relative Error: 1.0688e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.23238998449671083670041452413316011920e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.14900991369455846775267187236501987891e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.19132787054572299485638029221977944555e-1),
@@ -1856,7 +1860,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.21838020977580479741299141050400953125e-9),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.46723648594704078875476888175530463986e-12),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.98700317671474659677458220091101276158e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.00405631175818416028878082789095587658e-1),
@@ -1880,7 +1884,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
         // Rational Approximation
         // Maximum Relative Error: 5.1815e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.62598955251978523174755901843430986522e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.08127698872954954678270473317137288772e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.70144997468767751317246482211703706086e-1),
@@ -1896,7 +1900,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.30746545799073289786965697800049892311e-8),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.41870129065056783732691371215602982173e-9),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.75919235734607601884356783586727272494e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.57656678936617227532275100649989944452e-1),
@@ -1924,7 +1928,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
             // Rational Approximation
             // Maximum Relative Error: 6.4678e-36
             // LCOV_EXCL_START
-            static const RealType P[16] = {
+            BOOST_MATH_STATIC const RealType P[16] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.31806744221966404520449104514474066823e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.50292887071777664663197915067642779665e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.45140067157601150721516139901304901854e0),
@@ -1942,7 +1946,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.96371756262605118060185816854433322493e-8),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.88472819535099746216179119978362211227e-10),
             };
-            static const RealType Q[16] = {
+            BOOST_MATH_STATIC const RealType Q[16] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.68923525157720774962908922391133419863e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.40714902096062779527207435671907059131e0),
@@ -1969,7 +1973,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
             // Rational Approximation
             // Maximum Relative Error: 3.5975e-36
             // LCOV_EXCL_START
-            static const RealType P[16] = {
+            BOOST_MATH_STATIC const RealType P[16] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.10294551528734705945662709421382590676e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.26135857114883288617323671166863478751e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.23504465936865651893193560109437792738e0),
@@ -1987,7 +1991,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.93965060142992479149039624149602039394e-10),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.36407983918582149239548869529460234702e-12),
             };
-            static const RealType Q[16] = {
+            BOOST_MATH_STATIC const RealType Q[16] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.99867960957804580209868321228347067213e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.94236623527818880544030470097296139679e0),
@@ -2014,7 +2018,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
             // Rational Approximation
             // Maximum Relative Error: 2.6792e-35
             // LCOV_EXCL_START
-            static const RealType P[15] = {
+            BOOST_MATH_STATIC const RealType P[15] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.18246847255744057280356900905660312795e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.77955886026107125189834586992142580148e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.24948425302263641813107623611637262126e0),
@@ -2031,7 +2035,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.15388861641344998301210173677051088515e-12),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.83956842740198388242245209024484381888e-29),
             };
-            static const RealType Q[14] = {
+            BOOST_MATH_STATIC const RealType Q[14] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.50056124032615852703112365430040751173e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.05112559537845833793684655693572118348e0),
@@ -2056,7 +2060,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
             // Rational Approximation
             // Maximum Relative Error: 2.1744e-36
             // LCOV_EXCL_START
-            static const RealType P[12] = {
+            BOOST_MATH_STATIC const RealType P[12] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.19497306481411168355692832231058399132e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.15593166681833539521403250736661720488e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.54020260738207743315755235213180652303e-1),
@@ -2070,7 +2074,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.29602226691665918537895803270497291716e-11),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.53666531487585211574942518181922132884e-14),
             };
-            static const RealType Q[12] = {
+            BOOST_MATH_STATIC const RealType Q[12] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.82230649578130958108098853863277631065e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.12412482738973738235656376802445565005e-1),
@@ -2093,7 +2097,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
             // Rational Approximation
             // Maximum Relative Error: 3.4699e-36
             // LCOV_EXCL_START
-            static const RealType P[10] = {
+            BOOST_MATH_STATIC const RealType P[10] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.19659414007358083585943280640656311534e0),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.36969140730640253987817932335415532846e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.21946928005759888612066397569236165853e-2),
@@ -2105,7 +2109,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.00054716479138657682306851175059678989e-11),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.48798342894235412426464893852098239746e-14),
             };
-            static const RealType Q[10] = {
+            BOOST_MATH_STATIC const RealType Q[10] = {
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.81588658109851219975949691772676519853e-1),
                 BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.52583331848892383968186924120872369151e-2),
@@ -2129,7 +2133,7 @@ inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const std::integra
 }
 
 template <class RealType>
-inline RealType mapairy_cdf_imp_prec(const RealType& x, bool complement, const std::integral_constant<int, 53>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_imp_prec(const RealType& x, bool complement, const std::integral_constant<int, 53>& tag) {
     if (x >= 0) {
         return complement ? mapairy_cdf_plus_imp_prec(x, tag) : 1 - mapairy_cdf_plus_imp_prec(x, tag);
     }
@@ -2137,12 +2141,12 @@ inline RealType mapairy_cdf_imp_prec(const RealType& x, bool complement, const s
         return complement ? 1 - mapairy_cdf_minus_imp_prec(x, tag) : mapairy_cdf_minus_imp_prec(x, tag);
     }
     else {
-        return std::numeric_limits<RealType>::quiet_NaN();
+        return boost::math::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
 template <class RealType>
-inline RealType mapairy_cdf_imp_prec(const RealType& x, bool complement, const std::integral_constant<int, 113>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_imp_prec(const RealType& x, bool complement, const std::integral_constant<int, 113>& tag) {
     if (x >= 0) {
         return complement ? mapairy_cdf_plus_imp_prec(x, tag) : 1 - mapairy_cdf_plus_imp_prec(x, tag);
     }
@@ -2150,18 +2154,18 @@ inline RealType mapairy_cdf_imp_prec(const RealType& x, bool complement, const s
         return complement ? 1 - mapairy_cdf_minus_imp_prec(x, tag) : mapairy_cdf_minus_imp_prec(x, tag);
     }
     else {
-        return std::numeric_limits<RealType>::quiet_NaN();
+        return boost::math::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
 template <class RealType, class Policy>
-inline RealType mapairy_cdf_imp(const mapairy_distribution<RealType, Policy>& dist, const RealType& x, bool complement) {
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_imp(const mapairy_distribution<RealType, Policy>& dist, const RealType& x, bool complement) {
     //
     // This calculates the cdf of the Map-Airy distribution and/or its complement.
     //
 
     BOOST_MATH_STD_USING // for ADL of std functions
-    static const char* function = "boost::math::cdf(mapairy<%1%>&, %1%)";
+    constexpr auto function = "boost::math::cdf(mapairy<%1%>&, %1%)";
     RealType result = 0;
     RealType location = dist.location();
     RealType scale = dist.scale();
@@ -2197,7 +2201,7 @@ inline RealType mapairy_cdf_imp(const mapairy_distribution<RealType, Policy>& di
 }
 
 template <class RealType>
-inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -2207,7 +2211,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 1.5488e-18
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(-1.17326074020471664075e0),
             static_cast<RealType>(1.51461298154568349598e0),
             static_cast<RealType>(1.19979368094343490487e1),
@@ -2216,7 +2220,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(7.17766543775229176131e0),
             static_cast<RealType>(4.79284243496552841508e0),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(1.76268072706610602584e0),
             static_cast<RealType>(-4.88492535243404839734e0),
@@ -2233,7 +2237,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 7.5181e-17
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(-1.63281240925531302762e0),
             static_cast<RealType>(-4.92351310795930780147e0),
             static_cast<RealType>(1.43448529253101759409e1),
@@ -2242,7 +2246,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(-2.87298447423841965301e1),
             static_cast<RealType>(1.31575930750093554120e1),
         };
-        static const RealType Q[6] = {
+        BOOST_MATH_STATIC const RealType Q[6] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(5.38761652244702318296e0),
             static_cast<RealType>(2.40932080746189543284e0),
@@ -2258,7 +2262,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 2.3028e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-2.18765177572396469657e0),
             static_cast<RealType>(-3.65752788934974426531e1),
             static_cast<RealType>(-1.81144810822028903904e2),
@@ -2268,7 +2272,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(-8.76285742384616909177e2),
             static_cast<RealType>(-2.33786726970025938837e2),
         };
-        static const RealType Q[8] = {
+        BOOST_MATH_STATIC const RealType Q[8] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(1.91797638291395345792e1),
             static_cast<RealType>(1.24293724082506952768e2),
@@ -2286,7 +2290,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 6.1147e-18
-        static const RealType P[6] = {
+        BOOST_MATH_STATIC const RealType P[6] = {
             static_cast<RealType>(-2.18765177572396470773e0),
             static_cast<RealType>(-2.19887766409334094428e0),
             static_cast<RealType>(-7.77080107207360785208e-1),
@@ -2294,7 +2298,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(-6.64711321022529990367e-3),
             static_cast<RealType>(-9.74212491048543799073e-5),
         };
-        static const RealType Q[6] = {
+        BOOST_MATH_STATIC const RealType Q[6] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(7.91919722132624625590e-1),
             static_cast<RealType>(2.17415447268626558639e-1),
@@ -2310,7 +2314,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 2.0508e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-2.59822399410385085335e0),
             static_cast<RealType>(-2.24306757759003016244e0),
             static_cast<RealType>(-7.36208578161752060979e-1),
@@ -2320,7 +2324,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(-3.33661282483762192446e-6),
             static_cast<RealType>(-4.19292241201527861927e-9),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(7.23065798041556418844e-1),
             static_cast<RealType>(1.96731305131315877264e-1),
@@ -2337,7 +2341,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 2.1997e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-3.67354365380697580447e0),
             static_cast<RealType>(-1.52181685844845957618e0),
             static_cast<RealType>(-2.40883948836320845233e-1),
@@ -2347,7 +2351,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(-6.12797605223700996671e-8),
             static_cast<RealType>(-3.78061321691170114390e-11),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(3.57770840766081587688e-1),
             static_cast<RealType>(4.81290550545412209056e-2),
@@ -2364,7 +2368,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 2.4331e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-4.92187819510636697128e0),
             static_cast<RealType>(-9.94924018698264727979e-1),
             static_cast<RealType>(-7.69914962772717316098e-2),
@@ -2374,7 +2378,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(-1.13886013623971006760e-9),
             static_cast<RealType>(-3.46758191090170732580e-13),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(1.77270673840643360017e-1),
             static_cast<RealType>(1.18099604045834575786e-2),
@@ -2391,7 +2395,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 2.7742e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-6.41443550638291133784e0),
             static_cast<RealType>(-6.38369359780748328332e-1),
             static_cast<RealType>(-2.43420704406734621618e-2),
@@ -2401,7 +2405,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(-2.14338367751477432622e-11),
             static_cast<RealType>(-3.23343844538964435927e-15),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(8.79845511272943785289e-2),
             static_cast<RealType>(2.90839059356197474893e-3),
@@ -2418,7 +2422,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 3.2451e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-8.23500806363233610938e0),
             static_cast<RealType>(-4.05652655284908839003e-1),
             static_cast<RealType>(-7.65978833819859622912e-3),
@@ -2428,7 +2432,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(-4.07882839359528825925e-13),
             static_cast<RealType>(-3.05720104049292610799e-17),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(4.37395212065018405474e-2),
             static_cast<RealType>(7.18654254114820140590e-4),
@@ -2445,7 +2449,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 3.8732e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-1.04845570631944023913e1),
             static_cast<RealType>(-2.56502856165700644836e-1),
             static_cast<RealType>(-2.40615394566347412600e-3),
@@ -2455,7 +2459,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(-7.83146284114485675414e-15),
             static_cast<RealType>(-2.92218240202835807955e-19),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(2.17740414929742679904e-2),
             static_cast<RealType>(1.78084231709097280884e-4),
@@ -2472,7 +2476,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 4.6946e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-1.32865827226175698181e1),
             static_cast<RealType>(-1.61802434199627472010e-1),
             static_cast<RealType>(-7.55642602577784211259e-4),
@@ -2482,7 +2486,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(-1.51422473889348610974e-16),
             static_cast<RealType>(-2.81661279271583206526e-21),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(1.08518414679241420227e-2),
             static_cast<RealType>(4.42335224797004486239e-5),
@@ -2499,7 +2503,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 5.7586e-17
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(-1.67937186583822375593e1),
             static_cast<RealType>(-1.01958138247797604098e-1),
             static_cast<RealType>(-2.37409774265951876695e-4),
@@ -2509,7 +2513,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(-2.94401318006358820268e-18),
             static_cast<RealType>(-2.73260616170245224789e-23),
         };
-        static const RealType Q[7] = {
+        BOOST_MATH_STATIC const RealType Q[7] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(5.41357843707822974161e-3),
             static_cast<RealType>(1.10082540037527566536e-5),
@@ -2522,7 +2526,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else {
-        result = -std::numeric_limits<RealType>::infinity();
+        result = -boost::math::numeric_limits<RealType>::infinity();
     }
 
     return result;
@@ -2530,7 +2534,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
 
 
 template <class RealType>
-inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -2541,7 +2545,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 4.2901e-35
         // LCOV_EXCL_START
-        static const RealType P[10] = {
+        BOOST_MATH_STATIC const RealType P[10] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -9.48344198262277235851026749871350753173e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.18249834490570496537675012473572546187e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.20191368895639224466285643454767208281e1),
@@ -2553,7 +2557,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.16683694881010716925933071465043323946e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.04356966421177683585461937085598186805e1),
         };
-        static const RealType Q[11] = {
+        BOOST_MATH_STATIC const RealType Q[11] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.75444066345435020043849341970820565274e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -9.95105673975812427406540024601734210826e0),
@@ -2575,7 +2579,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 2.8433e-36
         // LCOV_EXCL_START
-        static const RealType P[11] = {
+        BOOST_MATH_STATIC const RealType P[11] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.17326074020471664204142312429732771661e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.23412560010002723970559712941124583385e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.83665111310407767293290698145068379130e1),
@@ -2588,7 +2592,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.14713948941614711932063053969010219677e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.62979741122708118776725634304028246971e0),
         };
-        static const RealType Q[10] = {
+        BOOST_MATH_STATIC const RealType Q[10] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.10550060286464202595779024353437346419e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.15893254630199957990897452211066782021e0),
@@ -2609,7 +2613,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 5.9072e-35
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.63281240925531315038207673147576291783e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.72733898245766165408685147762489513406e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.48666841594842113608962500631836790675e1),
@@ -2624,7 +2628,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.48386631313725080746815524770260451090e2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.03293129698111279047104766073456412318e1),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.29511778027351594854005887702013466376e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.66155745848864270109281703659789474448e1),
@@ -2648,7 +2652,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 9.9092e-36
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.18765177572396470161180571018467019660e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -8.16991481696416567893311341049825218287e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.25497491118598918048058751362064598010e3),
@@ -2665,7 +2669,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.68917274690585744147547352309416731690e5),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.96914697182030973966321601422851730384e4),
         };
-        static const RealType Q[15] = {
+        BOOST_MATH_STATIC const RealType Q[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.98063872144867195074924232601423646991e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.65911346382127464683324945513128779971e2),
@@ -2691,7 +2695,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 3.9653e-35
         // LCOV_EXCL_START
-        static const RealType P[11] = {
+        BOOST_MATH_STATIC const RealType P[11] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.18765177572396470161180571018467025793e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.94718878144788678915739777385667044494e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.01760622104142726407095836139719210570e0),
@@ -2704,7 +2708,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.23852908701349250480831167491889740823e-7),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.61008160195204632725691076288641221707e-10),
         };
-        static const RealType Q[11] = {
+        BOOST_MATH_STATIC const RealType Q[11] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.59109221235949005113322202980300291082e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.07119192591092503378838510797916225920e0),
@@ -2726,7 +2730,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 6.7872e-36
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.59822399410385083283727681965013517187e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.30676107401101401386206170152508285083e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.14999782004905950712290914501961213222e0),
@@ -2743,7 +2747,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.16259632533790175212174199386945953139e-14),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.51102540845397821195190063256442894688e-18),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.51733661576324699382035973518172469602e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.01435607980568082538278883569729476204e0),
@@ -2768,7 +2772,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 7.6679e-36
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.67354365380697578246790709817724831418e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.98681625368564496421038758088088788795e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.07310677200866436332040539417232353673e0),
@@ -2785,7 +2789,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.69717198111130468014375331439613690658e-18),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.54464319402577486444841981479085908190e-22),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.56568169258142086426383908572004868200e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.52144703581828715720555168887427064424e-1),
@@ -2810,7 +2814,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 8.6323e-36
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.92187819510636694694450607724165689649e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.97763858433958798529675258052376253402e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.51315096979196319830162238831654165509e-1),
@@ -2827,7 +2831,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.46989755992471397407520449698676945629e-22),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.84098833615882764168840211033822541979e-26),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.76933186134913044021577076301874622292e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.25794095712489484166470336696962749356e-2),
@@ -2852,7 +2856,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 9.8799e-36
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -6.41443550638291131009585191506467028820e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.27887396494095561461365753577189254063e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.12752633002089885479040650194288302309e-1),
@@ -2869,7 +2873,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.62195354664281744711336666974567406606e-26),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.34400562353945663460416286570988365992e-30),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.87838171063584994806998206766890809367e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.55395225505766120991458653457272783334e-2),
@@ -2894,7 +2898,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 1.1548e-35
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -8.23500806363233607692361021471929016922e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -8.16747938711332885952564885548768072606e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.58252672740225210061031286151136185818e-2),
@@ -2911,7 +2915,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.36559452694774774399884349254686988041e-30),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -9.92396730553947142987611521115040472261e-35),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.36599681872296382199486815169747516110e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.86330544720458446620644055149504593514e-3),
@@ -2936,7 +2940,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 1.3756e-35
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.04845570631944023525776899386112795330e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.18146685146173151383718092529868406030e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.13255476532916847606354932879190731233e-2),
@@ -2953,7 +2957,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -8.02313300749670214384591200940841254958e-34),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -7.40321396496046206171642334628524367374e-39),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.67292043485384876322219919215413286868e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.61652550158809553935603664087740554258e-4),
@@ -2978,7 +2982,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 1.6639e-35
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.32865827226175697711590794217590458484e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.27551166309670994513910580518431041518e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.57161482253140058637495100797888501265e-3),
@@ -2995,7 +2999,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.20881889651487527801970182542596258873e-37),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.56848486878078288956741060120464349537e-43),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.33267370502089423930888060969568705647e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.39632352029900752622967578086289898150e-4),
@@ -3020,7 +3024,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 2.0360e-35
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.67937186583822375017526293948703697225e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.06681764321003187068904973985967908140e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.12508887240195683379004033347903251977e-3),
@@ -3037,7 +3041,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.83187517541957887917067558455828915184e-41),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.21480186561579326423946788448005430367e-47),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.16494591376838053609854716130343599036e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.97651667629616309497454026431358820357e-5),
@@ -3062,7 +3066,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 2.5130e-35
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.11959316095291435774375635827672517008e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.30292575371366023255165927527306483022e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.54260157439166096303943109715675142318e-4),
@@ -3079,7 +3083,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.78815984551154095621830792130401294111e-45),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.20516030880916148179297554212609531432e-51),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.81973541224235020744673910266545976833e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.49156990107280109344880219729275939242e-5),
@@ -3104,7 +3108,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 3.1220e-35
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.67307564006689676593687414536012112755e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -8.21005690250741024744367516466433711478e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.11537345869365655126739041291119096558e-4),
@@ -3121,7 +3125,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.25766346856943928908756472385992861288e-49),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.44601448994095786447982489957909713982e-55),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.90814053669730896497462224007523900520e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.72450689508305973756255440356759005330e-6),
@@ -3146,7 +3150,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 3.8974e-35
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.36960987939726803544369406181770745475e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.17239311695985070524235502979761682692e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.51192208811996535244435318068035492922e-5),
@@ -3163,7 +3167,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -6.51767319872105260145583037426067406953e-53),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.87159268409640967747617639113346310759e-59),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.45350026842128595165328480395513258721e-3),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.30398532102631290226106936127181928207e-7),
@@ -3188,7 +3192,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 4.8819e-35
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.24662793339079714510108682543625432532e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.25841960642102016210295419419373971750e-2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.10589156998251704634852108689102850747e-5),
@@ -3205,7 +3209,7 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -9.99466700145428173772768099494881455874e-57),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.43473066278196981345209422626769148425e-63),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.26570199429958856038191879713341034013e-4),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.32484776300757286079244074394356908390e-7),
@@ -3225,14 +3229,14 @@ inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const std::in
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else {
-        result = -std::numeric_limits<RealType>::infinity();
+        result = -boost::math::numeric_limits<RealType>::infinity();
     }
 
     return result;
 }
 
 template <class RealType>
-inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -3242,7 +3246,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Absolute Error: 1.8559e-18
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(4.81512108276093785320e-1),
             static_cast<RealType>(-2.74296316128959647914e0),
             static_cast<RealType>(-3.29973875964825685757e1),
@@ -3252,7 +3256,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(-6.66681853240657307279e1),
             static_cast<RealType>(-4.28101952511581488588e1),
         };
-        static const RealType Q[10] = {
+        BOOST_MATH_STATIC const RealType Q[10] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(8.20189490825315245036e0),
             static_cast<RealType>(1.63469912146101848441e1),
@@ -3272,7 +3276,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Absolute Error: 4.6019e-17
-        static const RealType P[7] = {
+        BOOST_MATH_STATIC const RealType P[7] = {
             static_cast<RealType>(1.70276979914029733585e0),
             static_cast<RealType>(2.09991992116646276165e1),
             static_cast<RealType>(2.26775403775298867998e1),
@@ -3281,7 +3285,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(-7.08748473959943943929e1),
             static_cast<RealType>(1.54245210917147215257e3),
         };
-        static const RealType Q[8] = {
+        BOOST_MATH_STATIC const RealType Q[8] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(2.13092357122115486375e1),
             static_cast<RealType>(1.57318281834689144053e2),
@@ -3299,7 +3303,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 1.2193e-19
-        static const RealType P[8] = {
+        BOOST_MATH_STATIC const RealType P[8] = {
             static_cast<RealType>(4.25692449785074345588e-1),
             static_cast<RealType>(3.10963501706596356267e-1),
             static_cast<RealType>(2.91357806215297069863e-2),
@@ -3309,7 +3313,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(1.59538372221030642757e-4),
             static_cast<RealType>(4.74040834029330213692e-6),
         };
-        static const RealType Q[8] = {
+        BOOST_MATH_STATIC const RealType Q[8] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(4.14801234415100707213e-1),
             static_cast<RealType>(1.04693730144480856638e-1),
@@ -3327,7 +3331,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 4.4418e-17
-        static const RealType P[11] = {
+        BOOST_MATH_STATIC const RealType P[11] = {
             static_cast<RealType>(5.07341098045260541890e-1),
             static_cast<RealType>(3.11771145411143166935e-1),
             static_cast<RealType>(1.74515601081894060888e-1),
@@ -3340,7 +3344,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(4.53513191985642134268e-6),
             static_cast<RealType>(2.62304611053075404923e-7),
         };
-        static const RealType Q[11] = {
+        BOOST_MATH_STATIC const RealType Q[11] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(5.28225379952156944029e-1),
             static_cast<RealType>(3.49662079845715371907e-1),
@@ -3361,7 +3365,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 5.7932e-17
-        static const RealType P[10] = {
+        BOOST_MATH_STATIC const RealType P[10] = {
             static_cast<RealType>(5.41774626094491510395e-1),
             static_cast<RealType>(4.11060141334529017898e-1),
             static_cast<RealType>(1.48195601801946264526e-1),
@@ -3373,7 +3377,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(7.77428184258777394627e-8),
             static_cast<RealType>(2.51255632629650930196e-14),
         };
-        static const RealType Q[9] = {
+        BOOST_MATH_STATIC const RealType Q[9] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(7.58341767924960527280e-1),
             static_cast<RealType>(2.73511775500642961539e-1),
@@ -3392,7 +3396,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
 
         // Rational Approximation
         // Maximum Relative Error: 9.0396e-17
-        static const RealType P[9] = {
+        BOOST_MATH_STATIC const RealType P[9] = {
             static_cast<RealType>(5.41926067826974905066e-1),
             static_cast<RealType>(4.86926556246548518715e-1),
             static_cast<RealType>(2.11963908288176005856e-1),
@@ -3403,7 +3407,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             static_cast<RealType>(1.50444847316426133872e-5),
             static_cast<RealType>(1.87458213915373906356e-6),
         };
-        static const RealType Q[9] = {
+        BOOST_MATH_STATIC const RealType Q[9] = {
             static_cast<RealType>(1.),
             static_cast<RealType>(8.98511036742503939380e-1),
             static_cast<RealType>(3.91130673008184655152e-1),
@@ -3427,7 +3431,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             result = 1 / (cbrt(p) * cbrt(p) * cbrt(constants::two_pi<RealType>()));
         }
         else {
-            result = std::numeric_limits<RealType>::infinity();
+            result = boost::math::numeric_limits<RealType>::infinity();
         }
     }
 
@@ -3436,7 +3440,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
 
 
 template <class RealType>
-inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -3447,7 +3451,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Absolute Error: 4.0835e-35
         // LCOV_EXCL_START
-        static const RealType P[13] = {
+        BOOST_MATH_STATIC const RealType P[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.00474815142578902619056852805926666121e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.56422290947427848191079775267512708223e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.70103710180837859003070678080056933649e1),
@@ -3462,7 +3466,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.06758225510372847658316203115073730186e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.10895417312529385966062255102265009972e0),
         };
-        static const RealType Q[12] = {
+        BOOST_MATH_STATIC const RealType Q[12] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.88252553879196710256650370298744093367e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -2.54875259600848880869571364891152935969e0),
@@ -3485,7 +3489,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Absolute Error: 5.7633e-36
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.81512108276093787175849069715334402323e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.24417080443497141096829831516758083481e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.67006165991083501886186268944009973084e1),
@@ -3501,7 +3505,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -4.42750073722992463087082849671338957023e2),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.54255748148299874514839812717054396793e2),
         };
-        static const RealType Q[13] = {
+        BOOST_MATH_STATIC const RealType Q[13] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.64823387375875361292425741663822893626e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.02973633484731117050245517938177308809e2),
@@ -3525,7 +3529,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Absolute Error: 2.1140e-36
         // LCOV_EXCL_START
-        static const RealType P[15] = {
+        BOOST_MATH_STATIC const RealType P[15] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.70276979914029738186601698003670175907e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.63126762626382548478172664328434577553e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.04190225271045202674546813475341133174e3),
@@ -3542,7 +3546,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -5.56839957539576784391036362196229047625e5),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.95604329277359828898502487252547842378e6),
         };
-        static const RealType Q[16] = {
+        BOOST_MATH_STATIC const RealType Q[16] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.79208640567193066236912382037923299779e1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.94775812217734059201656828286490832145e2),
@@ -3569,7 +3573,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 1.1409e-35
         // LCOV_EXCL_START
-        static const RealType P[14] = {
+        BOOST_MATH_STATIC const RealType P[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.25692449785074345466504245009175450649e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.75679137667345136118441108839649360362e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.06171803174020856964914440692439080669e-2),
@@ -3585,7 +3589,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.30857042700765443668305406695750760693e-9),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.10466412567107519640190849286913680449e-10),
         };
-        static const RealType Q[14] = {
+        BOOST_MATH_STATIC const RealType Q[14] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.31914248618040435028023418981527961171e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.73578090645412656850163531828709850171e-2),
@@ -3610,7 +3614,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 1.2521e-35
         // LCOV_EXCL_START
-        static const RealType P[23] = {
+        BOOST_MATH_STATIC const RealType P[23] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.07341098045260497471001948654506267614e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.16518383383878659278973043343250842753e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.10029094208424121908983949243560936013e-1),
@@ -3635,7 +3639,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.39027665085346558512961348663034579801e-14),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.05739751797738770096482688062542436470e-15),
         };
-        static const RealType Q[23] = {
+        BOOST_MATH_STATIC const RealType Q[23] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.43370372582239919321785765900615222895e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.52872159582703775260145036441128318159e-1),
@@ -3669,7 +3673,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 2.0703e-35
         // LCOV_EXCL_START
-        static const RealType P[21] = {
+        BOOST_MATH_STATIC const RealType P[21] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.41774626094491452462664949805613444094e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.96383089261273022706449773421031102175e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.16315295073029174376617863024082371446e-1),
@@ -3692,7 +3696,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.39869585157420474301450400944478312794e-18),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.82128612844034824876694595066123093042e-27),
         };
-        static const RealType Q[20] = {
+        BOOST_MATH_STATIC const RealType Q[20] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.65414405277042133067228113526697909557e0),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.32179221250476209346757936207079534440e0),
@@ -3723,7 +3727,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 3.4124e-35
         // LCOV_EXCL_START
-        static const RealType P[19] = {
+        BOOST_MATH_STATIC const RealType P[19] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.41926067826974814669251179264786585885e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.21141529920003643675474888047093566280e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.59964592861304582755436075901659426485e-1),
@@ -3744,7 +3748,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.47286214854389274681661944885238913581e-20),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.73701196181204039400706651811524874455e-34),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.77119890916406072259446489508263892540e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.95177888809731859578167185583119074026e-1),
@@ -3773,7 +3777,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
         // Rational Approximation
         // Maximum Relative Error: 2.1680e-35
         // LCOV_EXCL_START
-        static const RealType P[18] = {
+        BOOST_MATH_STATIC const RealType P[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 5.41926070139289008206183757488364846894e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.78434820569480998586988738136492447574e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.07939171933509333571821660328723436210e-1),
@@ -3793,7 +3797,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.26635728806398747570910072594323836441e-17),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.96470010392255781222480229189380065951e-18),
         };
-        static const RealType Q[18] = {
+        BOOST_MATH_STATIC const RealType Q[18] = {
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 8.82841492468725267177870050157374330523e-1),
             BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.83703946702662950408034486958999188355e-1),
@@ -3826,7 +3830,7 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
             result = 1 / (cbrt(p) * cbrt(p) * cbrt(constants::two_pi<RealType>()));
         }
         else {
-            result = std::numeric_limits<RealType>::infinity();
+            result = boost::math::numeric_limits<RealType>::infinity();
         }
     }
 
@@ -3834,32 +3838,32 @@ inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const std::in
 }
 
 template <class RealType>
-inline RealType mapairy_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 53>& tag)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 53>& tag)
 {
     if (p > 0.5) {
-        return mapairy_quantile_imp_prec(1 - p, !complement, tag);
+        return !complement ? mapairy_quantile_upper_imp_prec(1 - p, tag) : mapairy_quantile_lower_imp_prec(1 - p, tag);
     }
 
     return complement ? mapairy_quantile_upper_imp_prec(p, tag) : mapairy_quantile_lower_imp_prec(p, tag);
 }
 
 template <class RealType>
-inline RealType mapairy_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 113>& tag)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 113>& tag)
 {
     if (p > 0.5) {
-        return mapairy_quantile_imp_prec(1 - p, !complement, tag);
+        return !complement ? mapairy_quantile_upper_imp_prec(1 - p, tag) : mapairy_quantile_lower_imp_prec(1 - p, tag);
     }
 
     return complement ? mapairy_quantile_upper_imp_prec(p, tag) : mapairy_quantile_lower_imp_prec(p, tag);
 }
 
 template <class RealType, class Policy>
-inline RealType mapairy_quantile_imp(const mapairy_distribution<RealType, Policy>& dist, const RealType& p, bool complement)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_imp(const mapairy_distribution<RealType, Policy>& dist, const RealType& p, bool complement)
 {
     // This routine implements the quantile for the Map-Airy distribution,
     // the value p may be the probability, or its complement if complement=true.
 
-    static const char* function = "boost::math::quantile(mapairy<%1%>&, %1%)";
+    constexpr auto function = "boost::math::quantile(mapairy<%1%>&, %1%)";
     BOOST_MATH_STD_USING // for ADL of std functions
 
     RealType result = 0;
@@ -3895,23 +3899,23 @@ inline RealType mapairy_quantile_imp(const mapairy_distribution<RealType, Policy
 }
 
 template <class RealType>
-inline RealType mapairy_mode_imp_prec(const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_mode_imp_prec(const std::integral_constant<int, 53>&)
 {
     return static_cast<RealType>(-1.16158727113597068525);
 }
 
 template <class RealType>
-inline RealType mapairy_mode_imp_prec(const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_mode_imp_prec(const std::integral_constant<int, 113>&)
 {
     return BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.1615872711359706852500000803029112987);
 }
 
 template <class RealType, class Policy>
-inline RealType mapairy_mode_imp(const mapairy_distribution<RealType, Policy>& dist)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_mode_imp(const mapairy_distribution<RealType, Policy>& dist)
 {
     // This implements the mode for the Map-Airy distribution,
 
-    static const char* function = "boost::math::mode(mapairy<%1%>&, %1%)";
+    constexpr auto function = "boost::math::mode(mapairy<%1%>&, %1%)";
     BOOST_MATH_STD_USING // for ADL of std functions
 
     RealType result = 0;
@@ -3943,23 +3947,23 @@ inline RealType mapairy_mode_imp(const mapairy_distribution<RealType, Policy>& d
 }
 
 template <class RealType>
-inline RealType mapairy_median_imp_prec(const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_median_imp_prec(const std::integral_constant<int, 53>&)
 {
     return static_cast<RealType>(-0.71671068545502205332);
 }
 
 template <class RealType>
-inline RealType mapairy_median_imp_prec(const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_median_imp_prec(const std::integral_constant<int, 113>&)
 {
     return BOOST_MATH_BIG_CONSTANT(RealType, 113, -0.71671068545502205331700196278067230944440);
 }
 
 template <class RealType, class Policy>
-inline RealType mapairy_median_imp(const mapairy_distribution<RealType, Policy>& dist)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_median_imp(const mapairy_distribution<RealType, Policy>& dist)
 {
     // This implements the median for the Map-Airy distribution,
 
-    static const char* function = "boost::math::median(mapairy<%1%>&, %1%)";
+    constexpr auto function = "boost::math::median(mapairy<%1%>&, %1%)";
     BOOST_MATH_STD_USING // for ADL of std functions
 
     RealType result = 0;
@@ -3991,23 +3995,23 @@ inline RealType mapairy_median_imp(const mapairy_distribution<RealType, Policy>&
 }
 
 template <class RealType>
-inline RealType mapairy_entropy_imp_prec(const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_entropy_imp_prec(const std::integral_constant<int, 53>&)
 {
     return static_cast<RealType>(2.00727681841065634600);
 }
 
 template <class RealType>
-inline RealType mapairy_entropy_imp_prec(const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_entropy_imp_prec(const std::integral_constant<int, 113>&)
 {
     return BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.0072768184106563460003025875575283708);
 }
 
 template <class RealType, class Policy>
-inline RealType mapairy_entropy_imp(const mapairy_distribution<RealType, Policy>& dist)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_entropy_imp(const mapairy_distribution<RealType, Policy>& dist)
 {
     // This implements the entropy for the Map-Airy distribution,
 
-    static const char* function = "boost::math::entropy(mapairy<%1%>&, %1%)";
+    constexpr auto function = "boost::math::entropy(mapairy<%1%>&, %1%)";
     BOOST_MATH_STD_USING // for ADL of std functions
 
     RealType result = 0;
@@ -4042,20 +4046,20 @@ class mapairy_distribution
     typedef RealType value_type;
     typedef Policy policy_type;
 
-    mapairy_distribution(RealType l_location = 0, RealType l_scale = 1)
+    BOOST_MATH_GPU_ENABLED mapairy_distribution(RealType l_location = 0, RealType l_scale = 1)
         : mu(l_location), c(l_scale)
     {
-        static const char* function = "boost::math::mapairy_distribution<%1%>::mapairy_distribution";
+        constexpr auto function = "boost::math::mapairy_distribution<%1%>::mapairy_distribution";
         RealType result = 0;
         detail::check_location(function, l_location, &result, Policy());
         detail::check_scale(function, l_scale, &result, Policy());
     } // mapairy_distribution
 
-    RealType location()const
+    BOOST_MATH_GPU_ENABLED RealType location()const
     {
         return mu;
     }
-    RealType scale()const
+    BOOST_MATH_GPU_ENABLED RealType scale()const
     {
         return c;
     }
@@ -4075,90 +4079,90 @@ mapairy_distribution(RealType, RealType) -> mapairy_distribution<typename boost:
 #endif
 
 template <class RealType, class Policy>
-inline const std::pair<RealType, RealType> range(const mapairy_distribution<RealType, Policy>&)
+BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const mapairy_distribution<RealType, Policy>&)
 { // Range of permissible values for random variable x.
-    if (std::numeric_limits<RealType>::has_infinity)
+    BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
     {
-        return std::pair<RealType, RealType>(-std::numeric_limits<RealType>::infinity(), std::numeric_limits<RealType>::infinity()); // - to + infinity.
+        return boost::math::pair<RealType, RealType>(-boost::math::numeric_limits<RealType>::infinity(), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
     }
     else
     { // Can only use max_value.
         using boost::math::tools::max_value;
-        return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max.
+        return boost::math::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max.
     }
 }
 
 template <class RealType, class Policy>
-inline const std::pair<RealType, RealType> support(const mapairy_distribution<RealType, Policy>&)
+BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const mapairy_distribution<RealType, Policy>&)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-    if (std::numeric_limits<RealType>::has_infinity)
+    BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
     {
-        return std::pair<RealType, RealType>(-std::numeric_limits<RealType>::infinity(), std::numeric_limits<RealType>::infinity()); // - to + infinity.
+        return boost::math::pair<RealType, RealType>(-boost::math::numeric_limits<RealType>::infinity(), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
     }
     else
     { // Can only use max_value.
         using boost::math::tools::max_value;
-        return std::pair<RealType, RealType>(-tools::max_value<RealType>(), max_value<RealType>()); // - to + max.
+        return boost::math::pair<RealType, RealType>(-tools::max_value<RealType>(), max_value<RealType>()); // - to + max.
     }
 }
 
 template <class RealType, class Policy>
-inline RealType pdf(const mapairy_distribution<RealType, Policy>& dist, const RealType& x)
+BOOST_MATH_GPU_ENABLED inline RealType pdf(const mapairy_distribution<RealType, Policy>& dist, const RealType& x)
 {
     return detail::mapairy_pdf_imp(dist, x);
 } // pdf
 
 template <class RealType, class Policy>
-inline RealType cdf(const mapairy_distribution<RealType, Policy>& dist, const RealType& x)
+BOOST_MATH_GPU_ENABLED inline RealType cdf(const mapairy_distribution<RealType, Policy>& dist, const RealType& x)
 {
     return detail::mapairy_cdf_imp(dist, x, false);
 } // cdf
 
 template <class RealType, class Policy>
-inline RealType quantile(const mapairy_distribution<RealType, Policy>& dist, const RealType& p)
+BOOST_MATH_GPU_ENABLED inline RealType quantile(const mapairy_distribution<RealType, Policy>& dist, const RealType& p)
 {
     return detail::mapairy_quantile_imp(dist, p, false);
 } // quantile
 
 template <class RealType, class Policy>
-inline RealType cdf(const complemented2_type<mapairy_distribution<RealType, Policy>, RealType>& c)
+BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<mapairy_distribution<RealType, Policy>, RealType>& c)
 {
     return detail::mapairy_cdf_imp(c.dist, c.param, true);
 } //  cdf complement
 
 template <class RealType, class Policy>
-inline RealType quantile(const complemented2_type<mapairy_distribution<RealType, Policy>, RealType>& c)
+BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<mapairy_distribution<RealType, Policy>, RealType>& c)
 {
     return detail::mapairy_quantile_imp(c.dist, c.param, true);
 } // quantile complement
 
 template <class RealType, class Policy>
-inline RealType mean(const mapairy_distribution<RealType, Policy> &dist)
+BOOST_MATH_GPU_ENABLED inline RealType mean(const mapairy_distribution<RealType, Policy> &dist)
 {
     return dist.location();
 }
 
 template <class RealType, class Policy>
-inline RealType variance(const mapairy_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline RealType variance(const mapairy_distribution<RealType, Policy>& /*dist*/)
 {
-    return std::numeric_limits<RealType>::infinity();
+    return boost::math::numeric_limits<RealType>::infinity();
 }
 
 template <class RealType, class Policy>
-inline RealType mode(const mapairy_distribution<RealType, Policy>& dist)
+BOOST_MATH_GPU_ENABLED inline RealType mode(const mapairy_distribution<RealType, Policy>& dist)
 {
     return detail::mapairy_mode_imp(dist);
 }
 
 template <class RealType, class Policy>
-inline RealType median(const mapairy_distribution<RealType, Policy>& dist)
+BOOST_MATH_GPU_ENABLED inline RealType median(const mapairy_distribution<RealType, Policy>& dist)
 {
     return detail::mapairy_median_imp(dist);
 }
 
 template <class RealType, class Policy>
-inline RealType skewness(const mapairy_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline RealType skewness(const mapairy_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no skewness:
     typedef typename Policy::assert_undefined_type assert_type;
@@ -4168,11 +4172,11 @@ inline RealType skewness(const mapairy_distribution<RealType, Policy>& /*dist*/)
         "boost::math::skewness(mapairy<%1%>&)",
         "The Map-Airy distribution does not have a skewness: "
         "the only possible return value is %1%.",
-        std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
+        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
 }
 
 template <class RealType, class Policy>
-inline RealType kurtosis(const mapairy_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const mapairy_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no kurtosis:
     typedef typename Policy::assert_undefined_type assert_type;
@@ -4182,11 +4186,11 @@ inline RealType kurtosis(const mapairy_distribution<RealType, Policy>& /*dist*/)
         "boost::math::kurtosis(mapairy<%1%>&)",
         "The Map-Airy distribution does not have a kurtosis: "
         "the only possible return value is %1%.",
-        std::numeric_limits<RealType>::quiet_NaN(), Policy());
+        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>
-inline RealType kurtosis_excess(const mapairy_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const mapairy_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no kurtosis excess:
     typedef typename Policy::assert_undefined_type assert_type;
@@ -4196,11 +4200,11 @@ inline RealType kurtosis_excess(const mapairy_distribution<RealType, Policy>& /*
         "boost::math::kurtosis_excess(mapairy<%1%>&)",
         "The Map-Airy distribution does not have a kurtosis: "
         "the only possible return value is %1%.",
-        std::numeric_limits<RealType>::quiet_NaN(), Policy());
+        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>
-inline RealType entropy(const mapairy_distribution<RealType, Policy>& dist)
+BOOST_MATH_GPU_ENABLED inline RealType entropy(const mapairy_distribution<RealType, Policy>& dist)
 {
     return detail::mapairy_entropy_imp(dist);
 }

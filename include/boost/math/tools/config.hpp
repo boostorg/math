@@ -683,9 +683,6 @@ namespace boost{ namespace math{
 #  undef BOOST_MATH_FORCEINLINE
 #  define BOOST_MATH_FORCEINLINE __forceinline__
 
-// We can't use return std::numeric_limits<T>::quiet_NaN()
-#  define BOOST_MATH_QUIET_NAN(T) static_cast<T>(NAN);
-
 #elif defined(SYCL_LANGUAGE_VERSION)
 
 #  define BOOST_MATH_SYCL_ENABLED SYCL_EXTERNAL
@@ -706,8 +703,6 @@ namespace boost{ namespace math{
 #  undef BOOST_MATH_FORCEINLINE
 #  define BOOST_MATH_FORCEINLINE inline
 
-#  define BOOST_MATH_QUIET_NAN(T) static_cast<T>(NAN);
-
 #endif
 
 #ifndef BOOST_MATH_CUDA_ENABLED
@@ -716,10 +711,6 @@ namespace boost{ namespace math{
 
 #ifndef BOOST_MATH_SYCL_ENABLED
 #  define BOOST_MATH_SYCL_ENABLED
-#endif
-
-#ifndef BOOST_MATH_QUIET_NAN
-#  define BOOST_MATH_QUIET_NAN(T) std::numeric_limits<T>::quiet_NaN();
 #endif
 
 // Not all functions that allow CUDA allow SYCL (e.g. Recursion is disallowed by SYCL)
