@@ -30,7 +30,7 @@ namespace boost{ namespace math{ namespace detail{
 // These need forward declaring to keep GCC happy:
 //
 template <class T, class Policy, class Lanczos>
-T gamma_imp(T z, const Policy& pol, const Lanczos& l);
+BOOST_MATH_GPU_ENABLED T gamma_imp(T z, const Policy& pol, const Lanczos& l);
 template <class T, class Policy>
 T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l);
 
