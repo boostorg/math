@@ -284,7 +284,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
 // (IEEE double precision or 10^-17).
 //
 template <class T, class Policy>
-T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<int, 53>&)
 {
    BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
@@ -296,7 +296,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
 
    T workspace[10];
 
-   static const T C0[] = {
+   BOOST_MATH_STATIC const T C0[] = {
       static_cast<T>(-0.33333333333333333L),
       static_cast<T>(0.083333333333333333L),
       static_cast<T>(-0.014814814814814815L),
@@ -315,7 +315,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
    };
    workspace[0] = tools::evaluate_polynomial(C0, z);
 
-   static const T C1[] = {
+   BOOST_MATH_STATIC const T C1[] = {
       static_cast<T>(-0.0018518518518518519L),
       static_cast<T>(-0.0034722222222222222L),
       static_cast<T>(0.0026455026455026455L),
@@ -332,7 +332,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
    };
    workspace[1] = tools::evaluate_polynomial(C1, z);
 
-   static const T C2[] = {
+   BOOST_MATH_STATIC const T C2[] = {
       static_cast<T>(0.0041335978835978836L),
       static_cast<T>(-0.0026813271604938272L),
       static_cast<T>(0.00077160493827160494L),
@@ -347,7 +347,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
    };
    workspace[2] = tools::evaluate_polynomial(C2, z);
 
-   static const T C3[] = {
+   BOOST_MATH_STATIC const T C3[] = {
       static_cast<T>(0.00064943415637860082L),
       static_cast<T>(0.00022947209362139918L),
       static_cast<T>(-0.00046918949439525571L),
@@ -360,7 +360,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
    };
    workspace[3] = tools::evaluate_polynomial(C3, z);
 
-   static const T C4[] = {
+   BOOST_MATH_STATIC const T C4[] = {
       static_cast<T>(-0.0008618882909167117L),
       static_cast<T>(0.00078403922172006663L),
       static_cast<T>(-0.00029907248030319018L),
@@ -371,7 +371,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
    };
    workspace[4] = tools::evaluate_polynomial(C4, z);
 
-   static const T C5[] = {
+   BOOST_MATH_STATIC const T C5[] = {
       static_cast<T>(-0.00033679855336635815L),
       static_cast<T>(-0.69728137583658578e-4L),
       static_cast<T>(0.00027727532449593921L),
@@ -384,7 +384,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
    };
    workspace[5] = tools::evaluate_polynomial(C5, z);
 
-   static const T C6[] = {
+   BOOST_MATH_STATIC const T C6[] = {
       static_cast<T>(0.00053130793646399222L),
       static_cast<T>(-0.00059216643735369388L),
       static_cast<T>(0.00027087820967180448L),
@@ -395,7 +395,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
    };
    workspace[6] = tools::evaluate_polynomial(C6, z);
 
-   static const T C7[] = {
+   BOOST_MATH_STATIC const T C7[] = {
       static_cast<T>(0.00034436760689237767L),
       static_cast<T>(0.51717909082605922e-4L),
       static_cast<T>(-0.00033493161081142236L),
@@ -404,7 +404,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
    };
    workspace[7] = tools::evaluate_polynomial(C7, z);
 
-   static const T C8[] = {
+   BOOST_MATH_STATIC const T C8[] = {
       static_cast<T>(-0.00065262391859530942L),
       static_cast<T>(0.00083949872067208728L),
       static_cast<T>(-0.00043829709854172101L),
@@ -426,7 +426,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
 // (IEEE float precision, or 10^-8)
 //
 template <class T, class Policy>
-T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<int, 24>&)
+BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<int, 24>&)
 {
    BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
@@ -438,7 +438,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
 
    T workspace[3];
 
-   static const T C0[] = {
+   BOOST_MATH_STATIC const T C0[] = {
       static_cast<T>(-0.333333333L),
       static_cast<T>(0.0833333333L),
       static_cast<T>(-0.0148148148L),
@@ -449,7 +449,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
    };
    workspace[0] = tools::evaluate_polynomial(C0, z);
 
-   static const T C1[] = {
+   BOOST_MATH_STATIC const T C1[] = {
       static_cast<T>(-0.00185185185L),
       static_cast<T>(-0.00347222222L),
       static_cast<T>(0.00264550265L),
@@ -458,7 +458,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, const std::integral_constant<i
    };
    workspace[1] = tools::evaluate_polynomial(C1, z);
 
-   static const T C2[] = {
+   BOOST_MATH_STATIC const T C2[] = {
       static_cast<T>(0.00413359788L),
       static_cast<T>(-0.00268132716L),
       static_cast<T>(0.000771604938L),
