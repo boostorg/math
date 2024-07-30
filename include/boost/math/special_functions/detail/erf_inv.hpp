@@ -1,4 +1,5 @@
 //  (C) Copyright John Maddock 2006.
+//  (C) Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -23,7 +24,7 @@ namespace detail{
 // this version is for 80-bit long double's and smaller:
 //
 template <class T, class Policy>
-T erf_inv_imp(const T& p, const T& q, const Policy&, const std::integral_constant<int, 64>*)
+T erf_inv_imp(const T& p, const T& q, const Policy&, const std::integral_constant<int, 64>&)
 {
    BOOST_MATH_STD_USING // for ADL of std names.
 
@@ -310,12 +311,12 @@ private:
 };
 
 template <class T, class Policy>
-T erf_inv_imp(const T& p, const T& q, const Policy& pol, const std::integral_constant<int, 0>*)
+T erf_inv_imp(const T& p, const T& q, const Policy& pol, const std::integral_constant<int, 0>&)
 {
    //
    // Generic version, get a guess that's accurate to 64-bits (10^-19)
    //
-   T guess = erf_inv_imp(p, q, pol, static_cast<std::integral_constant<int, 64> const*>(nullptr));
+   T guess = erf_inv_imp(p, q, pol, std::integral_constant<int, 64>());
    T result;
    //
    // If T has more bit's than 64 in it's mantissa then we need to iterate,
@@ -401,7 +402,7 @@ typename tools::promote_args<T>::type erfc_inv(T z, const Policy& pol)
    // And get the result, negating where required:
    //
    return s * policies::checked_narrowing_cast<result_type, forwarding_policy>(
-      detail::erf_inv_imp(static_cast<eval_type>(p), static_cast<eval_type>(q), forwarding_policy(), static_cast<tag_type const*>(nullptr)), function);
+      detail::erf_inv_imp(static_cast<eval_type>(p), static_cast<eval_type>(q), forwarding_policy(), tag_type()), function);
 }
 
 template <class T, class Policy>
@@ -469,7 +470,7 @@ typename tools::promote_args<T>::type erf_inv(T z, const Policy& pol)
    // And get the result, negating where required:
    //
    return s * policies::checked_narrowing_cast<result_type, forwarding_policy>(
-      detail::erf_inv_imp(static_cast<eval_type>(p), static_cast<eval_type>(q), forwarding_policy(), static_cast<tag_type const*>(nullptr)), function);
+      detail::erf_inv_imp(static_cast<eval_type>(p), static_cast<eval_type>(q), forwarding_policy(), tag_type()), function);
 }
 
 template <class T>
