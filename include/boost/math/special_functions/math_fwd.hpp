@@ -166,14 +166,14 @@ namespace boost
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erfc(RT z, const Policy&);
 
    template <class RT>// Error function inverse.
-   tools::promote_args_t<RT> erf_inv(RT z);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erf_inv(RT z);
    template <class RT, class Policy>// Error function inverse.
-   tools::promote_args_t<RT> erf_inv(RT z, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erf_inv(RT z, const Policy& pol);
 
    template <class RT>// Error function complement inverse.
-   tools::promote_args_t<RT> erfc_inv(RT z);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erfc_inv(RT z);
    template <class RT, class Policy>// Error function complement inverse.
-   tools::promote_args_t<RT> erfc_inv(RT z, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erfc_inv(RT z, const Policy& pol);
 
    // Polynomials:
    template <class T1, class T2, class T3>
@@ -1278,10 +1278,10 @@ namespace boost
    BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT> erfc(RT z){ return ::boost::math::erfc(z, Policy()); }\
 \
    template <class RT>\
-   inline boost::math::tools::promote_args_t<RT> erf_inv(RT z) { return ::boost::math::erf_inv(z, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT> erf_inv(RT z) { return ::boost::math::erf_inv(z, Policy()); }\
 \
    template <class RT>\
-   inline boost::math::tools::promote_args_t<RT> erfc_inv(RT z){ return ::boost::math::erfc_inv(z, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT> erfc_inv(RT z){ return ::boost::math::erfc_inv(z, Policy()); }\
 \
    using boost::math::legendre_next;\
 \
