@@ -424,7 +424,7 @@ namespace boost
    template <class RT, class Policy>
    RT factorial(unsigned int, const Policy& pol);
    template <class RT>
-   RT unchecked_factorial(unsigned int BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(RT));
+   BOOST_MATH_GPU_ENABLED RT unchecked_factorial(unsigned int BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(RT));
    template <class RT>
    RT double_factorial(unsigned i);
    template <class RT, class Policy>
@@ -444,67 +444,67 @@ namespace boost
 
    // Gamma functions.
    template <class RT>
-   tools::promote_args_t<RT> tgamma(RT z);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> tgamma(RT z);
 
    template <class RT>
-   tools::promote_args_t<RT> tgamma1pm1(RT z);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> tgamma1pm1(RT z);
 
    template <class RT, class Policy>
-   tools::promote_args_t<RT> tgamma1pm1(RT z, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> tgamma1pm1(RT z, const Policy& pol);
 
    template <class RT1, class RT2>
-   tools::promote_args_t<RT1, RT2> tgamma(RT1 a, RT2 z);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> tgamma(RT1 a, RT2 z);
 
    template <class RT1, class RT2, class Policy>
-   tools::promote_args_t<RT1, RT2> tgamma(RT1 a, RT2 z, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> tgamma(RT1 a, RT2 z, const Policy& pol);
 
    template <class RT>
-   tools::promote_args_t<RT> lgamma(RT z, int* sign);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> lgamma(RT z, int* sign);
 
    template <class RT, class Policy>
-   tools::promote_args_t<RT> lgamma(RT z, int* sign, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> lgamma(RT z, int* sign, const Policy& pol);
 
    template <class RT>
-   tools::promote_args_t<RT> lgamma(RT x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> lgamma(RT x);
 
    template <class RT, class Policy>
-   tools::promote_args_t<RT> lgamma(RT x, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> lgamma(RT x, const Policy& pol);
 
    template <class RT1, class RT2>
-   tools::promote_args_t<RT1, RT2> tgamma_lower(RT1 a, RT2 z);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> tgamma_lower(RT1 a, RT2 z);
 
    template <class RT1, class RT2, class Policy>
-   tools::promote_args_t<RT1, RT2> tgamma_lower(RT1 a, RT2 z, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> tgamma_lower(RT1 a, RT2 z, const Policy&);
 
    template <class RT1, class RT2>
-   tools::promote_args_t<RT1, RT2> gamma_q(RT1 a, RT2 z);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> gamma_q(RT1 a, RT2 z);
 
    template <class RT1, class RT2, class Policy>
-   tools::promote_args_t<RT1, RT2> gamma_q(RT1 a, RT2 z, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> gamma_q(RT1 a, RT2 z, const Policy&);
 
    template <class RT1, class RT2>
-   tools::promote_args_t<RT1, RT2> gamma_p(RT1 a, RT2 z);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> gamma_p(RT1 a, RT2 z);
 
    template <class RT1, class RT2, class Policy>
-   tools::promote_args_t<RT1, RT2> gamma_p(RT1 a, RT2 z, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> gamma_p(RT1 a, RT2 z, const Policy&);
 
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2> tgamma_delta_ratio(T1 z, T2 delta);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> tgamma_delta_ratio(T1 z, T2 delta);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2> tgamma_delta_ratio(T1 z, T2 delta, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> tgamma_delta_ratio(T1 z, T2 delta, const Policy&);
 
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2> tgamma_ratio(T1 a, T2 b);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> tgamma_ratio(T1 a, T2 b);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2> tgamma_ratio(T1 a, T2 b, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> tgamma_ratio(T1 a, T2 b, const Policy&);
 
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2> gamma_p_derivative(T1 a, T2 x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_p_derivative(T1 a, T2 x);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2> gamma_p_derivative(T1 a, T2 x, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_p_derivative(T1 a, T2 x, const Policy&);
 
    // gamma inverse.
    template <class T1, class T2>
@@ -1410,37 +1410,37 @@ namespace boost
    inline boost::math::tools::promote_args_t<RT> rising_factorial(RT x, unsigned n){ return boost::math::rising_factorial(x, n, Policy()); }\
 \
    template <class RT>\
-   inline boost::math::tools::promote_args_t<RT> tgamma(RT z){ return boost::math::tgamma(z, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT> tgamma(RT z){ return boost::math::tgamma(z, Policy()); }\
 \
    template <class RT>\
-   inline boost::math::tools::promote_args_t<RT> tgamma1pm1(RT z){ return boost::math::tgamma1pm1(z, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT> tgamma1pm1(RT z){ return boost::math::tgamma1pm1(z, Policy()); }\
 \
    template <class RT1, class RT2>\
-   inline boost::math::tools::promote_args_t<RT1, RT2> tgamma(RT1 a, RT2 z){ return boost::math::tgamma(a, z, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT1, RT2> tgamma(RT1 a, RT2 z){ return boost::math::tgamma(a, z, Policy()); }\
 \
    template <class RT>\
-   inline boost::math::tools::promote_args_t<RT> lgamma(RT z, int* sign){ return boost::math::lgamma(z, sign, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT> lgamma(RT z, int* sign){ return boost::math::lgamma(z, sign, Policy()); }\
 \
    template <class RT>\
-   inline boost::math::tools::promote_args_t<RT> lgamma(RT x){ return boost::math::lgamma(x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT> lgamma(RT x){ return boost::math::lgamma(x, Policy()); }\
 \
    template <class RT1, class RT2>\
-   inline boost::math::tools::promote_args_t<RT1, RT2> tgamma_lower(RT1 a, RT2 z){ return boost::math::tgamma_lower(a, z, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT1, RT2> tgamma_lower(RT1 a, RT2 z){ return boost::math::tgamma_lower(a, z, Policy()); }\
 \
    template <class RT1, class RT2>\
-   inline boost::math::tools::promote_args_t<RT1, RT2> gamma_q(RT1 a, RT2 z){ return boost::math::gamma_q(a, z, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT1, RT2> gamma_q(RT1 a, RT2 z){ return boost::math::gamma_q(a, z, Policy()); }\
 \
    template <class RT1, class RT2>\
-   inline boost::math::tools::promote_args_t<RT1, RT2> gamma_p(RT1 a, RT2 z){ return boost::math::gamma_p(a, z, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT1, RT2> gamma_p(RT1 a, RT2 z){ return boost::math::gamma_p(a, z, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> tgamma_delta_ratio(T1 z, T2 delta){ return boost::math::tgamma_delta_ratio(z, delta, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> tgamma_delta_ratio(T1 z, T2 delta){ return boost::math::tgamma_delta_ratio(z, delta, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> tgamma_ratio(T1 a, T2 b) { return boost::math::tgamma_ratio(a, b, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> tgamma_ratio(T1 a, T2 b) { return boost::math::tgamma_ratio(a, b, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> gamma_p_derivative(T1 a, T2 x){ return boost::math::gamma_p_derivative(a, x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> gamma_p_derivative(T1 a, T2 x){ return boost::math::gamma_p_derivative(a, x, Policy()); }\
 \
    template <class T1, class T2>\
    inline boost::math::tools::promote_args_t<T1, T2> gamma_p_inv(T1 a, T2 p){ return boost::math::gamma_p_inv(a, p, Policy()); }\
