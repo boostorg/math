@@ -188,7 +188,7 @@ template <class T, class Policy, class Lanczos>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T gamma_imp(T z, const Policy& pol, const Lanczos& l)
 {
    BOOST_MATH_STD_USING
-   
+
    if(z <= -20)
    {
       constexpr auto function = "boost::math::tgamma<%1%>(%1%)";
@@ -213,7 +213,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T gamma_imp(T z, const Policy& pol
 // lgamma(z) with Lanczos support:
 //
 template <class T, class Policy, class Lanczos>
-BOOST_MATH_GPU_ENABLED T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = nullptr)
+BOOST_MATH_GPU_ENABLED T lgamma_imp_final(T z, const Policy& pol, const Lanczos& l, int* sign = nullptr)
 {
 #ifdef BOOST_MATH_INSTRUMENT
    static bool b = false;
@@ -230,25 +230,8 @@ BOOST_MATH_GPU_ENABLED T lgamma_imp(T z, const Policy& pol, const Lanczos& l, in
 
    T result = 0;
    int sresult = 1;
-   if(z <= -tools::root_epsilon<T>())
-   {
-      // reflection formula:
-      if(floor(z) == z)
-         return policies::raise_pole_error<T>(function, "Evaluation of lgamma at a negative integer %1%.", z, pol);
-
-      T t = sinpx(z);
-      z = -z;
-      if(t < 0)
-      {
-         t = -t;
-      }
-      else
-      {
-         sresult = -sresult;
-      }
-      result = log(boost::math::constants::pi<T>()) - lgamma_imp(z, pol, l) - log(t);
-   }
-   else if (z < tools::root_epsilon<T>())
+   
+   if (z < tools::root_epsilon<T>())
    {
       if (0 == z)
          return policies::raise_pole_error<T>(function, "Evaluation of lgamma at %1%.", z, pol);
@@ -291,6 +274,47 @@ BOOST_MATH_GPU_ENABLED T lgamma_imp(T z, const Policy& pol, const Lanczos& l, in
    if(sign)
       *sign = sresult;
    return result;
+}
+
+template <class T, class Policy, class Lanczos>
+BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = nullptr)
+{
+   BOOST_MATH_STD_USING
+
+   if(z <= -tools::root_epsilon<T>())
+   {
+      constexpr auto function = "boost::math::lgamma<%1%>(%1%)";
+
+      T result = 0;
+      int sresult = 1;
+
+      // reflection formula:
+      if(floor(z) == z)
+         return policies::raise_pole_error<T>(function, "Evaluation of lgamma at a negative integer %1%.", z, pol);
+
+      T t = sinpx(z);
+      z = -z;
+      if(t < 0)
+      {
+         t = -t;
+      }
+      else
+      {
+         sresult = -sresult;
+      }
+      result = log(boost::math::constants::pi<T>()) - lgamma_imp_final(T(z), pol, l) - log(t);
+
+      if(sign)
+      {
+         *sign = sresult;
+      }
+
+      return result;
+   }
+   else
+   {
+      return lgamma_imp_final(T(z), pol, l, sign);
+   }
 }
 
 //
