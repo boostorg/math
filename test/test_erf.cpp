@@ -8,6 +8,14 @@
 #include <pch_light.hpp>
 #endif
 
+#ifdef __clang__
+#  pragma clang diagnostic push 
+#  pragma clang diagnostic ignored "-Wliteral-range"
+#elif defined(__GNUC__)
+#  pragma gcc diagnostic push 
+#  pragma gcc diagnostic ignored "-Wliteral-range"
+#endif
+
 #include <boost/math/special_functions/erf.hpp>
 #include "test_erf.hpp"
 
