@@ -38,7 +38,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l);
 // lgamma for small arguments:
 //
 template <class T, class Policy, class Lanczos>
-BOOST_GPU_ENABLED T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 64>&, const Policy& /* l */, const Lanczos&)
+BOOST_MATH_GPU_ENABLED T lgamma_small_imp(T z, T zm1, T zm2, const std::integral_constant<int, 64>&, const Policy& /* l */, const Lanczos&)
 {
    // This version uses rational approximations for small
    // values of z accurate enough for 64-bit mantissas
