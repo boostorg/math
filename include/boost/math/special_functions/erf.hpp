@@ -221,7 +221,7 @@ BOOST_MATH_GPU_ENABLED T erf_imp(T z, bool invert, const Policy& pol, const std:
          prefix_multiplier = -1;
          // return -erf_imp(T(-z), invert, pol, t);
       }
-      else if(z < -0.5)
+      else if(z < T(-0.5))
       {
          prefix_adder = 2;
          // return 2 - erf_imp(T(-z), invert, pol, t);
