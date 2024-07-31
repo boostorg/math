@@ -317,7 +317,8 @@ T erf_inv_imp(const T& p, const T& q, const Policy& pol, const std::integral_con
    //
    // Generic version, get a guess that's accurate to 64-bits (10^-19)
    //
-   T guess = erf_inv_imp(p, q, pol, std::integral_constant<int, 64>());
+   using tag_type = std::integral_constant<int, 64>;
+   T guess = erf_inv_imp(p, q, pol, tag_type());
    T result;
    //
    // If T has more bit's than 64 in it's mantissa then we need to iterate,
