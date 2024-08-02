@@ -24,7 +24,7 @@
 namespace boost{ namespace math{ namespace detail{
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline T sin_pi_imp(T x, const Policy& pol)
+BOOST_MATH_GPU_ENABLED inline T sin_pi_imp(T x, const Policy&)
 {
    BOOST_MATH_STD_USING // ADL of std names
    // sin of pi*x:
