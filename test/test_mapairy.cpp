@@ -1,13 +1,14 @@
-// Copyright Takuma Yoshimura 2024.
+//  Copyright Takuma Yoshimura 2024.
+//  Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_TEST_MAIN
 #define BOOST_TEST_MODULE StatsMapAiryTest
+#include <boost/math/tools/config.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
-#include <boost/multiprecision/cpp_bin_float.hpp>
 
 #include <boost/math/distributions/mapairy.hpp>
 
@@ -16,7 +17,11 @@
 #endif
 
 using boost::math::mapairy_distribution;
+
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+#include <boost/multiprecision/cpp_bin_float.hpp>
 using boost::multiprecision::cpp_bin_float_quad;
+#endif
 
 template<class RealType, int N>
 void do_test_mapairy_pdf(){
@@ -58,9 +63,16 @@ void do_test_mapairy_pdf(){
     BOOST_CHECK_CLOSE(pdf(dist, static_cast<RealType>(-7)), BOOST_MATH_BIG_CONSTANT(RealType, N, 6.50933920988971071711086365057147867083089476835078e-12), tolerance * 10);
     BOOST_CHECK_CLOSE(pdf(dist, static_cast<RealType>(-6.5)), BOOST_MATH_BIG_CONSTANT(RealType, N, 9.93525639583557913222186453754518161964863338679333e-10), tolerance * 10);
 
+    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
     BOOST_CHECK_CLOSE(pdf(dist, static_cast<RealType>(-6)), BOOST_MATH_BIG_CONSTANT(RealType, N, 7.34369873917936310843493426518284206307542912325702e-8), tolerance);
     BOOST_CHECK_CLOSE(pdf(dist, static_cast<RealType>(-5.5)), BOOST_MATH_BIG_CONSTANT(RealType, N, 2.77757355685380561185988935905104213909281485602180e-6), tolerance);
     BOOST_CHECK_CLOSE(pdf(dist, static_cast<RealType>(-5)), BOOST_MATH_BIG_CONSTANT(RealType, N, 5.67935873875498302175093073530783568485155988744416e-5), tolerance);
+    #else
+    BOOST_CHECK_CLOSE(pdf(dist, static_cast<RealType>(-6)), BOOST_MATH_BIG_CONSTANT(RealType, N, 7.34369873917936310843493426518284206307542912325702e-8), tolerance*10);
+    BOOST_CHECK_CLOSE(pdf(dist, static_cast<RealType>(-5.5)), BOOST_MATH_BIG_CONSTANT(RealType, N, 2.77757355685380561185988935905104213909281485602180e-6), tolerance*10);
+    BOOST_CHECK_CLOSE(pdf(dist, static_cast<RealType>(-5)), BOOST_MATH_BIG_CONSTANT(RealType, N, 5.67935873875498302175093073530783568485155988744416e-5), tolerance*10);
+    #endif
+    
     BOOST_CHECK_CLOSE(pdf(dist, static_cast<RealType>(-4.5)), BOOST_MATH_BIG_CONSTANT(RealType, N, 6.63150314678587224494834533488274597847689803128076e-4), tolerance);
     BOOST_CHECK_CLOSE(pdf(dist, static_cast<RealType>(-4)), BOOST_MATH_BIG_CONSTANT(RealType, N, 4.66981984951457236403520646020207894651500649740558e-3), tolerance);
     BOOST_CHECK_CLOSE(pdf(dist, static_cast<RealType>(-3.75)), BOOST_MATH_BIG_CONSTANT(RealType, N, 1.04268591430185285447948956767040247962753669747157e-2), tolerance);
@@ -284,8 +296,14 @@ void do_test_mapairy_cdf() {
     BOOST_CHECK_CLOSE(cdf(dist, static_cast<RealType>(-6.5)), BOOST_MATH_BIG_CONSTANT(RealType, N, 1.03383983622833649608546095853620837892086215933298e-10), tolerance * 10);
     BOOST_CHECK_CLOSE(cdf(dist, static_cast<RealType>(-6)), BOOST_MATH_BIG_CONSTANT(RealType, N, 8.91537779419133030075704775849634109699414218730481e-9), tolerance * 10);
 
+    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
     BOOST_CHECK_CLOSE(cdf(dist, static_cast<RealType>(-5.5)), BOOST_MATH_BIG_CONSTANT(RealType, N, 3.98085764775551392183308859729746156105641469279537e-7), tolerance);
     BOOST_CHECK_CLOSE(cdf(dist, static_cast<RealType>(-5)), BOOST_MATH_BIG_CONSTANT(RealType, N, 9.74005376900861403666100209810033834996576655180465e-6), tolerance);
+    #else
+    BOOST_CHECK_CLOSE(cdf(dist, static_cast<RealType>(-5.5)), BOOST_MATH_BIG_CONSTANT(RealType, N, 3.98085764775551392183308859729746156105641469279537e-7), tolerance * 10);
+    BOOST_CHECK_CLOSE(cdf(dist, static_cast<RealType>(-5)), BOOST_MATH_BIG_CONSTANT(RealType, N, 9.74005376900861403666100209810033834996576655180465e-6), tolerance * 10);
+    #endif
+
     BOOST_CHECK_CLOSE(cdf(dist, static_cast<RealType>(-4.5)), BOOST_MATH_BIG_CONSTANT(RealType, N, 1.38210242545410097936371084112947842536958832190953e-4), tolerance);
     BOOST_CHECK_CLOSE(cdf(dist, static_cast<RealType>(-4)), BOOST_MATH_BIG_CONSTANT(RealType, N, 1.20388922732913226923590659641162717163243937441333e-3), tolerance);
     BOOST_CHECK_CLOSE(cdf(dist, static_cast<RealType>(-3.75)), BOOST_MATH_BIG_CONSTANT(RealType, N, 3.01190141003747964176020229987886598385662366685178e-3), tolerance);
@@ -809,10 +827,12 @@ BOOST_AUTO_TEST_CASE(mapairy_pdf_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(mapairy_pdf_fp128)
 {
     do_test_mapairy_pdf<cpp_bin_float_quad, 113>();
 }
+#endif
 
 BOOST_AUTO_TEST_CASE(mapairy_cdf_fp64)
 {
@@ -826,10 +846,12 @@ BOOST_AUTO_TEST_CASE(mapairy_cdf_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(mapairy_cdf_fp128)
 {
     do_test_mapairy_cdf<cpp_bin_float_quad, 113>();
 }
+#endif
 
 BOOST_AUTO_TEST_CASE(mapairy_ccdf_fp64)
 {
@@ -843,10 +865,12 @@ BOOST_AUTO_TEST_CASE(mapairy_ccdf_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(mapairy_ccdf_fp128)
 {
     do_test_mapairy_ccdf<cpp_bin_float_quad, 113>();
 }
+#endif
 
 BOOST_AUTO_TEST_CASE(mapairy_quantile_nearzero_fp64)
 {
@@ -860,10 +884,12 @@ BOOST_AUTO_TEST_CASE(mapairy_quantile_nearzero_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(mapairy_quantile_nearzero_fp128)
 {
     do_test_mapairy_quantile_nearzero<cpp_bin_float_quad, 113>();
 }
+#endif
 
 BOOST_AUTO_TEST_CASE(mapairy_quantile_lower_fp64)
 {
@@ -877,10 +903,12 @@ BOOST_AUTO_TEST_CASE(mapairy_quantile_lower_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(mapairy_quantile_lower_fp128)
 {
     do_test_mapairy_quantile_lower<cpp_bin_float_quad, 113>();
 }
+#endif
 
 BOOST_AUTO_TEST_CASE(mapairy_quantile_upper_fp64)
 {
@@ -894,10 +922,12 @@ BOOST_AUTO_TEST_CASE(mapairy_quantile_upper_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(mapairy_quantile_upper_fp128)
 {
     do_test_mapairy_quantile_upper<cpp_bin_float_quad, 113>();
 }
+#endif
 
 BOOST_AUTO_TEST_CASE(mapairy_locscale_fp64)
 {
@@ -911,7 +941,9 @@ BOOST_AUTO_TEST_CASE(mapairy_locscale_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(mapairy_locscale_fp128)
 {
     do_test_mapairy_locscale_param<cpp_bin_float_quad, 113>();
 }
+#endif

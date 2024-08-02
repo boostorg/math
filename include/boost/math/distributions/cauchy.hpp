@@ -1,5 +1,6 @@
 // Copyright John Maddock 2006, 2007.
 // Copyright Paul A. Bristow 2007.
+// Copyright Matt Borland 2024.
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -14,6 +15,8 @@
 #endif
 
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/tuple.hpp>
+#include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/distributions/complement.hpp>
@@ -77,11 +80,11 @@ BOOST_MATH_GPU_ENABLED RealType cdf_imp(const cauchy_distribution<RealType, Poli
       return static_cast<RealType>((complement) ? 1 : 0);
    }
    #else
-   if(std::numeric_limits<RealType>::has_infinity && x == std::numeric_limits<RealType>::infinity())
+   if(boost::math::numeric_limits<RealType>::has_infinity && x == boost::math::numeric_limits<RealType>::infinity())
    { // cdf +infinity is unity.
      return static_cast<RealType>((complement) ? 0 : 1);
    }
-   if(std::numeric_limits<RealType>::has_infinity && x == -std::numeric_limits<RealType>::infinity())
+   if(boost::math::numeric_limits<RealType>::has_infinity && x == -boost::math::numeric_limits<RealType>::infinity())
    { // cdf -infinity is zero.
      return static_cast<RealType>((complement) ? 1 : 0);
    }
@@ -196,35 +199,31 @@ cauchy_distribution(RealType,RealType)->cauchy_distribution<typename boost::math
 #endif
 
 template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const std::pair<RealType, RealType> range(const cauchy_distribution<RealType, Policy>&)
+BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const cauchy_distribution<RealType, Policy>&)
 { // Range of permissible values for random variable x.
-  #ifndef BOOST_MATH_HAS_GPU_SUPPORT
-  BOOST_MATH_IF_CONSTEXPR (std::numeric_limits<RealType>::has_infinity)
+  BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
   { 
-     return std::pair<RealType, RealType>(-std::numeric_limits<RealType>::infinity(), std::numeric_limits<RealType>::infinity()); // - to + infinity.
+     return boost::math::pair<RealType, RealType>(-boost::math::numeric_limits<RealType>::infinity(), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
   }
   else
-  #endif
   { // Can only use max_value.
    using boost::math::tools::max_value;
-   return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max.
+   return boost::math::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max.
   }
 }
 
 template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const std::pair<RealType, RealType> support(const cauchy_distribution<RealType, Policy>& )
+BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const cauchy_distribution<RealType, Policy>& )
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-  #ifndef BOOST_MATH_HAS_GPU_SUPPORT
-  BOOST_MATH_IF_CONSTEXPR (std::numeric_limits<RealType>::has_infinity)
+  BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
   { 
-     return std::pair<RealType, RealType>(-std::numeric_limits<RealType>::infinity(), std::numeric_limits<RealType>::infinity()); // - to + infinity.
+     return boost::math::pair<RealType, RealType>(-boost::math::numeric_limits<RealType>::infinity(), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
   }
   else
-  #endif
   { // Can only use max_value.
      using boost::math::tools::max_value;
-     return std::pair<RealType, RealType>(-tools::max_value<RealType>(), max_value<RealType>()); // - to + max.
+     return boost::math::pair<RealType, RealType>(-tools::max_value<RealType>(), max_value<RealType>()); // - to + max.
   }
 }
 
@@ -250,7 +249,7 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const cauchy_distribution<RealType, P
      return 0; // pdf + and - infinity is zero.
    }
    // These produce MSVC 4127 warnings, so the above used instead.
-   //if(std::numeric_limits<RealType>::has_infinity && abs(x) == std::numeric_limits<RealType>::infinity())
+   //if(boost::math::numeric_limits<RealType>::has_infinity && abs(x) == boost::math::numeric_limits<RealType>::infinity())
    //{ // pdf + and - infinity is zero.
    //  return 0;
    //}
@@ -299,7 +298,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mean(const cauchy_distribution<RealType, 
       "boost::math::mean(cauchy<%1%>&)",
       "The Cauchy distribution does not have a mean: "
       "the only possible return value is %1%.",
-      std::numeric_limits<RealType>::quiet_NaN(), Policy());
+      boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>
@@ -313,7 +312,7 @@ BOOST_MATH_GPU_ENABLED inline RealType variance(const cauchy_distribution<RealTy
       "boost::math::variance(cauchy<%1%>&)",
       "The Cauchy distribution does not have a variance: "
       "the only possible return value is %1%.",
-      std::numeric_limits<RealType>::quiet_NaN(), Policy());
+      boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>
@@ -339,7 +338,7 @@ BOOST_MATH_GPU_ENABLED inline RealType skewness(const cauchy_distribution<RealTy
       "boost::math::skewness(cauchy<%1%>&)",
       "The Cauchy distribution does not have a skewness: "
       "the only possible return value is %1%.",
-      std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
+      boost::math::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
 }
 
 template <class RealType, class Policy>
@@ -353,7 +352,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const cauchy_distribution<RealTy
       "boost::math::kurtosis(cauchy<%1%>&)",
       "The Cauchy distribution does not have a kurtosis: "
       "the only possible return value is %1%.",
-      std::numeric_limits<RealType>::quiet_NaN(), Policy());
+      boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>
@@ -367,7 +366,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const cauchy_distribution
       "boost::math::kurtosis_excess(cauchy<%1%>&)",
       "The Cauchy distribution does not have a kurtosis: "
       "the only possible return value is %1%.",
-      std::numeric_limits<RealType>::quiet_NaN(), Policy());
+      boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 template <class RealType, class Policy>

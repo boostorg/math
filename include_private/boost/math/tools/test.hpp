@@ -306,7 +306,9 @@ void test_check_throw(Val v, boost::math::rounding_error const*)
   // exception-free testing support, ideally we'd only define this in our tests,
   // but to keep things simple we really need it somewhere that's always included:
   //
-#ifdef BOOST_MATH_NO_EXCEPTIONS
+#if defined(BOOST_MATH_NO_EXCEPTIONS) && defined(BOOST_MATH_HAS_GPU_SUPPORT)
+#  define BOOST_MATH_CHECK_THROW(x, y)
+#elif defined(BOOST_MATH_NO_EXCEPTIONS) 
 #  define BOOST_MATH_CHECK_THROW(x, ExceptionType) boost::math::tools::test_check_throw(x, static_cast<ExceptionType const*>(nullptr));
 #else
 #  define BOOST_MATH_CHECK_THROW(x, y) BOOST_CHECK_THROW(x, y)

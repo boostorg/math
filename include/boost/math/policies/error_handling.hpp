@@ -211,7 +211,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
 #else
    raise_error<std::domain_error, T>(function, message, val);
    // we never get here:
-   return BOOST_MATH_QUIET_NAN(T);
+   return boost::math::numeric_limits<T>::quiet_NaN();
 #endif
 }
 
@@ -224,7 +224,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_domain_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   return BOOST_MATH_QUIET_NAN(T);
+   return boost::math::numeric_limits<T>::quiet_NaN();
 }
 
 template <class T>
@@ -237,7 +237,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
    errno = EDOM;
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
-   return BOOST_MATH_QUIET_NAN(T);
+   return boost::math::numeric_limits<T>::quiet_NaN();
 }
 
 template <class T>

@@ -1,13 +1,14 @@
-// Copyright Takuma Yoshimura 2024.
+//  Copyright Takuma Yoshimura 2024.
+//  Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_TEST_MAIN
 #define BOOST_TEST_MODULE StatsSaSpoint5Test
+#include <boost/math/tools/config.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
-#include <boost/multiprecision/cpp_bin_float.hpp>
 
 #include <boost/math/distributions/saspoint5.hpp>
 
@@ -16,7 +17,11 @@
 #endif
 
 using boost::math::saspoint5_distribution;
+
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+#include <boost/multiprecision/cpp_bin_float.hpp>
 using boost::multiprecision::cpp_bin_float_quad;
+#endif
 
 template<class RealType, int N>
 void do_test_saspoint5_pdf(){
@@ -860,10 +865,12 @@ BOOST_AUTO_TEST_CASE(saspoint5_pdf_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(saspoint5_pdf_fp128)
 {
     do_test_saspoint5_pdf<cpp_bin_float_quad, 113>();
 }
+#endif
 
 BOOST_AUTO_TEST_CASE(saspoint5_cdf_fp64)
 {
@@ -877,10 +884,12 @@ BOOST_AUTO_TEST_CASE(saspoint5_cdf_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(saspoint5_cdf_fp128)
 {
     do_test_saspoint5_cdf<cpp_bin_float_quad, 113>();
 }
+#endif
 
 BOOST_AUTO_TEST_CASE(saspoint5_ccdf_fp64)
 {
@@ -894,10 +903,12 @@ BOOST_AUTO_TEST_CASE(saspoint5_ccdf_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(saspoint5_ccdf_fp128)
 {
     do_test_saspoint5_ccdf<cpp_bin_float_quad, 113>();
 }
+#endif
 
 BOOST_AUTO_TEST_CASE(saspoint5_quantile_nearzero_fp64)
 {
@@ -911,10 +922,12 @@ BOOST_AUTO_TEST_CASE(saspoint5_quantile_nearzero_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(saspoint5_quantile_nearzero_fp128)
 {
     do_test_saspoint5_quantile_nearzero<cpp_bin_float_quad, 113>();
 }
+#endif
 
 BOOST_AUTO_TEST_CASE(saspoint5_quantile_lower_fp64)
 {
@@ -928,10 +941,12 @@ BOOST_AUTO_TEST_CASE(saspoint5_quantile_lower_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(saspoint5_quantile_lower_fp128)
 {
     do_test_saspoint5_quantile_lower<cpp_bin_float_quad, 113>();
 }
+#endif
 
 BOOST_AUTO_TEST_CASE(saspoint5_quantile_upper_fp64)
 {
@@ -945,10 +960,12 @@ BOOST_AUTO_TEST_CASE(saspoint5_quantile_upper_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(saspoint5_quantile_upper_fp128)
 {
     do_test_saspoint5_quantile_upper<cpp_bin_float_quad, 113>();
 }
+#endif
 
 BOOST_AUTO_TEST_CASE(saspoint5_locscale_fp64)
 {
@@ -962,7 +979,9 @@ BOOST_AUTO_TEST_CASE(saspoint5_locscale_std64)
 }
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 BOOST_AUTO_TEST_CASE(saspoint5_locscale_fp128)
 {
     do_test_saspoint5_locscale_param<cpp_bin_float_quad, 113>();
 }
+#endif

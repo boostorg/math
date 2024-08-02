@@ -2,6 +2,7 @@
 
 // Copyright John Maddock 2014.
 // Copyright Paul A. Bristow 2014.
+// Copyright Matt Borland 2024.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -31,6 +32,7 @@
 
 #include <cmath>
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/tuple.hpp>
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/distributions/complement.hpp> // complements.
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks.
@@ -204,17 +206,17 @@ namespace boost
     #endif
 
     template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const std::pair<RealType, RealType> range(const arcsine_distribution<RealType, Policy>&  dist)
+    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const arcsine_distribution<RealType, Policy>&  dist)
     { // Range of permissible values for random variable x.
       using boost::math::tools::max_value;
-      return std::pair<RealType, RealType>(static_cast<RealType>(dist.x_min()), static_cast<RealType>(dist.x_max()));
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(dist.x_min()), static_cast<RealType>(dist.x_max()));
     }
 
     template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const std::pair<RealType, RealType> support(const arcsine_distribution<RealType, Policy>&  dist)
+    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const arcsine_distribution<RealType, Policy>&  dist)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-      return std::pair<RealType, RealType>(static_cast<RealType>(dist.x_min()), static_cast<RealType>(dist.x_max()));
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(dist.x_min()), static_cast<RealType>(dist.x_max()));
     }
 
     template <class RealType, class Policy>
