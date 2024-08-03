@@ -12,6 +12,7 @@ import config : requires ;
 
 project
     : requirements
+      <library>/boost/math//boost_math
       <library>/boost/multiprecision//boost_multiprecision
       <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>darwin:<cxxflags>-Wno-missing-braces

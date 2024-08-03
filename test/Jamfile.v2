@@ -35,6 +35,7 @@ obj no_eh : noeh_support.cpp ;
 
 project
     : requirements
+      <library>/boost/math//boost_math
       <library>/boost/multiprecision//boost_multiprecision
       <library>/boost/test//included
       <library>/boost/type_index//boost_type_index
