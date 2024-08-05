@@ -16,6 +16,7 @@
 #  pragma GCC diagnostic ignored "-Wliteral-range"
 #endif
 
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #include <boost/math/special_functions/erf.hpp>
 #include "test_erf.hpp"
 
