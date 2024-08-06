@@ -218,6 +218,12 @@ __host__ __device__ T copysign(T x, T y)
 }
 
 template <typename T>
+__host__ __device__ float copysign(float x, float y)
+{
+    return ::copysignf(x, y);
+}
+
+template <typename T>
 __host__ __device__ T sign(T z)
 {
     return (z == 0) ? 0 : ::signbit(z) ? -1 : 1;
