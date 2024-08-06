@@ -162,7 +162,7 @@ void test_spots5(T, const char* type_name)
 template <class T>
 void test_spots6(T, const char* type_name)
 {
-   static const std::array<std::array<T, 4>, 188> hypergeometric_1F1_bugs = { {
+   static const std::array<std::array<T, 4>, 189> hypergeometric_1F1_bugs = { {
         { { static_cast<T>(17955.561660766602), static_cast<T>(9.6968994205831605e-09), static_cast<T>(-82.406154185533524), SC_(6.98056008378736714088730927132364938220428678e-11) }},
         { { static_cast<T>(17955.561660766602), static_cast<T>(-9.6968994205831605e-09), static_cast<T>(-82.406154185533524), SC_(-6.98055306629610746072607353939306734740549551e-11) }},
         { { static_cast<T>(-17955.561660766602), static_cast<T>(-9.6968994205831605e-09), static_cast<T>(82.406154185533524), SC_(-42897094853118832762870100.8669248353530950866) }} ,
@@ -399,6 +399,7 @@ void test_spots6(T, const char* type_name)
       // Uncovered code:
       { { SC_(3.125), SC_(-4.25), SC_(0.25), SC_(0.8377654489787288706170314748630804839990046835429477943509538691)}},
       { { SC_(3.125), SC_(-4.25), SC_(6.25), SC_(-1.0732328736644883882525050418994056179896661423277961620744e8)}},
+      { { SC_(-1792.0615542826642), SC_(1252.5126953125000), SC_(15.873352050781250), SC_(9.5429538115592332178745238256843491134483360764267909811922e-11)}},
    } };
    static const std::array<std::array<T, 4>, 2> hypergeometric_1F1_big_bugs = { {
 #if DBL_MAX_EXP == LDBL_MAX_EXP
