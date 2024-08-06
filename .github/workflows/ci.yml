@@ -673,7 +673,7 @@ jobs:
     strategy:
       fail-fast: false
 
-    runs-on: gpu-runner-1
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: Jimver/cuda-toolkit@v0.2.16
