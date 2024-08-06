@@ -26,9 +26,10 @@ namespace detail {
 
 #ifdef BOOST_MATH_USE_STD_FPCLASSIFY
     template<class T> 
-    inline int signbit_impl(T x, native_tag const&)
+    BOOST_MATH_GPU_ENABLED inline int signbit_impl(T x, native_tag const&)
     {
-        return (std::signbit)(x) ? 1 : 0;
+        using std::signbit;
+        return (signbit)(x) ? 1 : 0;
     }
 #endif
 
@@ -66,7 +67,7 @@ namespace detail {
 #endif
 
     template<class T>
-    inline int signbit_impl(T x, ieee_copy_all_bits_tag const&)
+    BOOST_MATH_GPU_ENABLED inline int signbit_impl(T x, ieee_copy_all_bits_tag const&)
     {
         typedef typename fp_traits<T>::type traits;
 
@@ -76,7 +77,7 @@ namespace detail {
     }
 
     template<class T> 
-    inline int signbit_impl(T x, ieee_copy_leading_bits_tag const&)
+    BOOST_MATH_GPU_ENABLED inline int signbit_impl(T x, ieee_copy_leading_bits_tag const&)
     {
         typedef typename fp_traits<T>::type traits;
 
