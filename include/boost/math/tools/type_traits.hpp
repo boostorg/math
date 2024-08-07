@@ -399,9 +399,6 @@ template <typename T>
 BOOST_MATH_INLINE_CONSTEXPR bool is_final_v = boost::math::is_final<T>::value;
 
 template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_aggregate_v = boost::math::is_aggregate<T>::value;
-
-template <typename T>
 BOOST_MATH_INLINE_CONSTEXPR bool is_signed_v = boost::math::is_signed<T>::value;
 
 template <typename T>
@@ -443,14 +440,14 @@ BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_move_constructible_v = boost::math
 template <typename T>
 BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_move_constructible_v = boost::math::is_nothrow_move_constructible<T>::value;
 
-template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_assignable_v = boost::math::is_assignable<T>::value;
+template <typename T, typename U>
+BOOST_MATH_INLINE_CONSTEXPR bool is_assignable_v = boost::math::is_assignable<T, U>::value;
 
-template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_assignable_v = boost::math::is_trivially_assignable<T>::value;
+template <typename T, typename U>
+BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_assignable_v = boost::math::is_trivially_assignable<T, U>::value;
 
-template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_assignable_v = boost::math::is_nothrow_assignable<T>::value;
+template <typename T, typename U>
+BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_assignable_v = boost::math::is_nothrow_assignable<T, U>::value;
 
 template <typename T>
 BOOST_MATH_INLINE_CONSTEXPR bool is_copy_assignable_v = boost::math::is_copy_assignable<T>::value;
