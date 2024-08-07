@@ -217,7 +217,7 @@ __host__ __device__ T copysign(T x, T y)
     return ::copysign(x, y);
 }
 
-template <typename T>
+template <>
 __host__ __device__ float copysign(float x, float y)
 {
     return ::copysignf(x, y);
