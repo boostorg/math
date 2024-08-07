@@ -2296,6 +2296,15 @@ inline __host__ __device__ T tgamma(T x, const Policy&)
    return boost::math::tgamma(x);
 }
 
+inline __host__ __device__ float lgamma(float x) { return ::lgammaf(x); }
+inline __host__ __device__ double lgamma(double x) { return ::lgamma(x); }
+
+template <typename T, typename Policy>
+inline __host__ __device__ T lgamma(T x, const Policy&)
+{
+   return boost::math::lgamma(x);
+}
+
 } // namespace math
 } // namespace boost
 
