@@ -11,6 +11,8 @@
 #pragma once
 #endif
 
+#ifndef __CUDACC_RTC__
+
 #include <boost/math/tools/is_standalone.hpp>
 
 // Minimum language standard transition
@@ -759,6 +761,25 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 #    define BOOST_MATH_STATIC_LOCAL_VARIABLE static
 #  endif
 #endif
+
+#else // Special section for CUDA NVRTC to ensure we consume no headers
+
+#ifndef BOOST_MATH_STANDALONE
+#  define BOOST_MATH_STANDALONE
+#endif
+
+#define BOOST_MATH_NVRTC_ENABLED
+
+#define BOOST_MATH_GPU_ENABLED __host__ __device__
+
+template <class T>
+BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b; b = t; }
+
+#define BOOST_MATH_GPU_SAFE_SWAP(a, b) gpu_safe_swap(a, b)
+#define BOOST_MATH_GPU_SAFE_MIN(a, b) ::min(a, b)
+#define BOOST_MATH_GPU_SAFE_MAX(a, b) ::max(a, b)
+
+#endif // NVRTC
 
 #endif // BOOST_MATH_TOOLS_CONFIG_HPP
 
