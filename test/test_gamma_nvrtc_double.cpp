@@ -24,12 +24,12 @@ const char* cuda_kernel = R"(
 typedef double float_type;
 #include <boost/math/special_functions/gamma.hpp>
 extern "C" __global__ 
-void test_gamma_kernel(const float_type *in1, const float_type*, float_type *out, int numElements)
+void test_gamma_kernel(const float_type *in1, const float_type *in2, float_type *out, int numElements)
 {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
     if (i < numElements)
     {
-        out[i] = boost::math::tgamma(in1[i]);
+        out[i] = boost::math::tgamma(in1[i]) + boost::math::lgamma(in2[i]);
     }
 }
 )";
@@ -150,7 +150,7 @@ int main()
         // Verify Result
         for (int i = 0; i < numElements; ++i) 
         {
-            auto res = boost::math::tgamma(h_in1[i]);
+            auto res = boost::math::tgamma(h_in1[i]) + boost::math::lgamma(h_in2[i]);
             if (std::isfinite(res))
             {
                 if (boost::math::epsilon_difference(res, h_out[i]) > 300)
