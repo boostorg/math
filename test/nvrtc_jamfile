@@ -10,4 +10,5 @@ project : requirements
     ;
 
 # Special Functions
-run test_gamma_nvrtc.cpp ;
+run test_gamma_nvrtc_double.cpp ;
+run test_gamma_nvrtc_float.cpp ;

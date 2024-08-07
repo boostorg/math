@@ -18,10 +18,13 @@
 #include <cuda_runtime.h>
 #include <nvrtc.h>
 
+typedef double float_type;
+
 const char* cuda_kernel = R"(
+typedef double float_type;
 #include <boost/math/special_functions/gamma.hpp>
 extern "C" __global__ 
-void test_gamma_kernel(const float *in1, const float*, float *out, int numElements)
+void test_gamma_kernel(const float_type *in1, const float_type*, float_type *out, int numElements)
 {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
     if (i < numElements)
@@ -82,7 +85,7 @@ int main()
         nvrtcAddNameExpression(prog, "test_gamma_kernel");
 
         #ifdef BOOST_MATH_NVRTC_CI_RUN
-        const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/math/boost-root/libs/math/include/"};
+        const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/cuda-math/boost-root/libs/cuda-math/include/"};
         #else
         const char* opts[] = {"--std=c++14", "--include-path=/home/mborland/Documents/boost/libs/cuda-math/include/"};
         #endif
@@ -113,36 +116,36 @@ int main()
         checkCUError(cuModuleGetFunction(&kernel, module, "test_gamma_kernel"), "Failed to get kernel function");
 
         int numElements = 5000;
-        float *h_in1, *h_in2, *h_out;
-        float *d_in1, *d_in2, *d_out;
+        float_type *h_in1, *h_in2, *h_out;
+        float_type *d_in1, *d_in2, *d_out;
 
         // Allocate memory on the host
-        h_in1 = new float[numElements];
-        h_in2 = new float[numElements];
-        h_out = new float[numElements];
+        h_in1 = new float_type[numElements];
+        h_in2 = new float_type[numElements];
+        h_out = new float_type[numElements];
 
         // Initialize input arrays
         std::mt19937_64 rng(42);
-        std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+        std::uniform_real_distribution<float_type> dist(0.0f, 1.0f);
         for (int i = 0; i < numElements; ++i) 
         {
-            h_in1[i] = static_cast<float>(dist(rng));
-            h_in2[i] = static_cast<float>(dist(rng));
+            h_in1[i] = static_cast<float_type>(dist(rng));
+            h_in2[i] = static_cast<float_type>(dist(rng));
         }
 
-        checkCUDAError(cudaMalloc(&d_in1, numElements * sizeof(float)), "Failed to allocate device memory for d_in1");
-        checkCUDAError(cudaMalloc(&d_in2, numElements * sizeof(float)), "Failed to allocate device memory for d_in2");
-        checkCUDAError(cudaMalloc(&d_out, numElements * sizeof(float)), "Failed to allocate device memory for d_out");
+        checkCUDAError(cudaMalloc(&d_in1, numElements * sizeof(float_type)), "Failed to allocate device memory for d_in1");
+        checkCUDAError(cudaMalloc(&d_in2, numElements * sizeof(float_type)), "Failed to allocate device memory for d_in2");
+        checkCUDAError(cudaMalloc(&d_out, numElements * sizeof(float_type)), "Failed to allocate device memory for d_out");
 
-        checkCUDAError(cudaMemcpy(d_in1, h_in1, numElements * sizeof(float), cudaMemcpyHostToDevice), "Failed to copy data to device for d_in1");
-        checkCUDAError(cudaMemcpy(d_in2, h_in2, numElements * sizeof(float), cudaMemcpyHostToDevice), "Failed to copy data to device for d_in2");
+        checkCUDAError(cudaMemcpy(d_in1, h_in1, numElements * sizeof(float_type), cudaMemcpyHostToDevice), "Failed to copy data to device for d_in1");
+        checkCUDAError(cudaMemcpy(d_in2, h_in2, numElements * sizeof(float_type), cudaMemcpyHostToDevice), "Failed to copy data to device for d_in2");
 
         int blockSize = 256;
         int numBlocks = (numElements + blockSize - 1) / blockSize;
         void* args[] = { &d_in1, &d_in2, &d_out, &numElements };
         checkCUError(cuLaunchKernel(kernel, numBlocks, 1, 1, blockSize, 1, 1, 0, 0, args, 0), "Kernel launch failed");
 
-        checkCUDAError(cudaMemcpy(h_out, d_out, numElements * sizeof(float), cudaMemcpyDeviceToHost), "Failed to copy data back to host for h_out");
+        checkCUDAError(cudaMemcpy(h_out, d_out, numElements * sizeof(float_type), cudaMemcpyDeviceToHost), "Failed to copy data back to host for h_out");
 
         // Verify Result
         for (int i = 0; i < numElements; ++i) 
