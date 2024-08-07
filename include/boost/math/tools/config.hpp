@@ -769,6 +769,8 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 #endif
 
 #define BOOST_MATH_NVRTC_ENABLED
+#define BOOST_MATH_CUDA_ENABLED
+#define BOOST_MATH_HAS_GPU_SUPPORT
 
 #define BOOST_MATH_GPU_ENABLED __host__ __device__
 
