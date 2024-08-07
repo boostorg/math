@@ -14,21 +14,7 @@
 #pragma once
 #endif
 
-#ifdef __CUDACC_RTC__
-
-namespace boost {
-namespace math {
-
-template <typename T>
-__host__ __device__ T tgamma(T x)
-{
-   return ::tgamma(x);
-}
-
-} // namespace math
-} // namespace boost
-
-#else
+#ifndef __CUDACC_RTC__
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/series.hpp>
@@ -2295,6 +2281,23 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
 #include <boost/math/special_functions/detail/igamma_inverse.hpp>
 #include <boost/math/special_functions/detail/gamma_inva.hpp>
 #include <boost/math/special_functions/erf.hpp>
+
+#else
+
+namespace boost {
+namespace math {
+
+inline __host__ __device__ float tgamma(float x) { return ::tgammaf(x); }
+inline __host__ __device__ double tgamma(double x) { return ::tgamma(x); }
+
+template <typename T, typename Policy>
+inline __host__ __device__ T tgamma(T x, const Policy&)
+{
+   return boost::math::tgamma(x);
+}
+
+} // namespace math
+} // namespace boost
 
 #endif // __CUDACC_RTC__
 
