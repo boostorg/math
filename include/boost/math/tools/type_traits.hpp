@@ -17,6 +17,8 @@ namespace math {
 
 #ifdef BOOST_MATH_CUDA_ENABLED
 
+#include <cuda/std/type_traits>
+
 using cuda::std::is_void;
 using cuda::std::is_integral;
 using cuda::std::enable_if_t;
@@ -32,10 +34,10 @@ using std::enable_if_t;
 #endif 
 
 template <typename T>
-BOOST_MATH_STATIC_CONSTEXPR bool is_void_v = boost::math::is_void<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_void_v = boost::math::is_void<T>::value;
 
 template <typename T>
-BOOST_MATH_STATIC_CONSTEXPR bool is_integral_v = boost::math::is_integral<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_integral_v = boost::math::is_integral<T>::value;
 
 } // namespace math
 } // namespace boost
