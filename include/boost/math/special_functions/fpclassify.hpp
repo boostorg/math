@@ -721,37 +721,40 @@ inline bool (isnan)(__float128 x)
 
 #include <boost/math/tools/type_traits.hpp>
 
-template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>> = true>
+namespace boost {
+namespace math {
+
+template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>, bool> = true>
 inline BOOST_MATH_GPU_ENABLED bool isnan(T x)
 {
    return false;
 }
 
-template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>> = true>
+template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>, bool> = true>
 inline BOOST_MATH_GPU_ENABLED bool isnan(T x)
 {
    return ::isnan(x);
 }
 
-template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>> = true>
+template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>, bool> = true>
 inline BOOST_MATH_GPU_ENABLED bool isinf(T x)
 {
    return false;
 }
 
-template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>> = true>
+template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>, bool> = true>
 inline BOOST_MATH_GPU_ENABLED bool isinf(T x)
 {
    return ::isinf(x);
 }
 
-template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>> = true>
+template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>, bool> = true>
 inline BOOST_MATH_GPU_ENABLED bool isfinite(T x)
 {
    return true;
 }
 
-template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>> = true>
+template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>, bool> = true>
 inline BOOST_MATH_GPU_ENABLED bool isfinite(T x)
 {
    return ::isfinite(x);
@@ -784,6 +787,9 @@ inline BOOST_MATH_GPU_ENABLED int fpclassify(T x)
 
    return BOOST_MATH_FP_NORMAL;
 }
+
+} // Namespace math
+} // Namespace boost
 
 #endif // BOOST_MATH_NVRTC_ENABLED
 
