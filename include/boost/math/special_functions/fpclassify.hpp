@@ -1,5 +1,6 @@
 //  Copyright John Maddock 2005-2008.
 //  Copyright (c) 2006-2008 Johan Rade
+//  Copyright (c) 2024 Matt Borland
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -11,13 +12,17 @@
 #pragma once
 #endif
 
-#include <limits>
-#include <type_traits>
-#include <cmath>
 #include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_NVRTC_ENABLED
+
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/detail/fp_traits.hpp>
+#include <limits>
+#include <type_traits>
+#include <cmath>
+
 /*!
   \file fpclassify.hpp
   \brief Classify floating-point value as normal, subnormal, zero, infinite, or NaN.
@@ -711,5 +716,76 @@ inline bool (isnan)(__float128 x)
 
 } // namespace math
 } // namespace boost
+
+#else // Special handling generally using the CUDA library
+
+#include <boost/math/tools/type_traits.hpp>
+
+template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>> = true>
+inline BOOST_MATH_GPU_ENABLED bool isnan(T x)
+{
+   return false;
+}
+
+template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>> = true>
+inline BOOST_MATH_GPU_ENABLED bool isnan(T x)
+{
+   return ::isnan(x);
+}
+
+template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>> = true>
+inline BOOST_MATH_GPU_ENABLED bool isinf(T x)
+{
+   return false;
+}
+
+template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>> = true>
+inline BOOST_MATH_GPU_ENABLED bool isinf(T x)
+{
+   return ::isinf(x);
+}
+
+template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>> = true>
+inline BOOST_MATH_GPU_ENABLED bool isfinite(T x)
+{
+   return true;
+}
+
+template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>> = true>
+inline BOOST_MATH_GPU_ENABLED bool isfinite(T x)
+{
+   return ::isfinite(x);
+}
+
+template <typename T>
+inline BOOST_MATH_GPU_ENABLED bool isnormal(T x)
+{
+   return x != static_cast<T>(0) && x != static_cast<T>(-0) && 
+            !boost::math::isnan(x) && 
+            !boost::math::isinf(x);
+}
+
+// We skip the check for FP_SUBNORMAL since they are not supported on these platforms
+template <typename T>
+inline BOOST_MATH_GPU_ENABLED int fpclassify(T x)
+{
+   if (boost::math::isnan(x))
+   {
+      return BOOST_MATH_FP_NAN;
+   }
+   else if (boost::math::isinf(x))
+   {
+      return BOOST_MATH_FP_INFINITE;
+   }
+   else if (x == static_cast<T>(0) || x == static_cast<T>(-0))
+   {
+      return BOOST_MATH_FP_ZERO;
+   }
+
+   return BOOST_MATH_FP_NORMAL;
+}
+
+#endif // BOOST_MATH_NVRTC_ENABLED
+
 #endif // BOOST_MATH_FPCLASSIFY_HPP
 
