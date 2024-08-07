@@ -196,35 +196,37 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args_permissive<T, U>::typ
 
 #else // NVRTC alias versions
 
+#include <boost/math/tools/config.hpp>
+
 namespace boost {
 namespace math {
 
 template <typename T>
-__host__ __device__ int signbit(T x)
+BOOST_MATH_GPU_ENABLED int signbit(T x)
 {
     return ::signbit(x);
 }
 
 template <typename T>
-__host__ __device__ T changesign(T x)
+BOOST_MATH_GPU_ENABLED T changesign(T x)
 {
     return -x;
 }
 
 template <typename T>
-__host__ __device__ T copysign(T x, T y)
+BOOST_MATH_GPU_ENABLED T copysign(T x, T y)
 {
     return ::copysign(x, y);
 }
 
 template <>
-__host__ __device__ float copysign(float x, float y)
+BOOST_MATH_GPU_ENABLED float copysign(float x, float y)
 {
     return ::copysignf(x, y);
 }
 
 template <typename T>
-__host__ __device__ T sign(T z)
+BOOST_MATH_GPU_ENABLED T sign(T z)
 {
     return (z == 0) ? 0 : ::signbit(z) ? -1 : 1;
 }
