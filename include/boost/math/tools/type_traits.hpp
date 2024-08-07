@@ -15,7 +15,7 @@
 namespace boost {
 namespace math {
 
-#ifdef BOOST_MATH_CUDA_ENABLED
+#ifdef BOOST_MATH_ENABLE_CUDA
 
 #include <cuda/std/type_traits>
 

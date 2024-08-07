@@ -9,7 +9,7 @@
 
 #include <boost/math/tools/config.hpp>
 
-#ifdef BOOST_MATH_CUDA_ENABLED
+#ifdef BOOST_MATH_ENABLE_CUDA
 
 #include <thrust/pair.h>
 #include <thrust/tuple.h>
