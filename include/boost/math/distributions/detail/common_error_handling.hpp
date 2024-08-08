@@ -13,6 +13,8 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/constants/constants.hpp>
+
 // using boost::math::isfinite;
 // using boost::math::isnan;
 
@@ -93,6 +95,26 @@ BOOST_MATH_GPU_ENABLED inline bool check_location(
       *result = policies::raise_domain_error<RealType>(
          function,
          "Location parameter is %1%, but must be finite!", location, pol);
+      return false;
+   }
+   return true;
+}
+
+
+template <class RealType, class Policy>
+inline bool check_angle(
+      const char* function,
+      RealType angle,
+      RealType* result,
+      const Policy& pol)
+{
+   if(!(boost::math::isfinite)(angle)
+       || angle < -boost::math::constants::pi<RealType>() 
+       || angle > +boost::math::constants::pi<RealType>())
+   {
+      *result = policies::raise_domain_error<RealType>(
+         function,
+         "Angle parameter is %1%, but must be between -pi and +pi!", angle, pol);
       return false;
    }
    return true;
