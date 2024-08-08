@@ -12,6 +12,8 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/assert.hpp>
+#include <boost/math/tools/type_traits.hpp>
+#include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <type_traits>
 #include <limits>
@@ -279,7 +281,7 @@ BOOST_MATH_GPU_ENABLED inline constexpr T log_min_value(BOOST_MATH_EXPLICIT_TEMP
 #endif
 
 template <class T>
-BOOST_MATH_GPU_ENABLED constexpr T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) noexcept(std::is_floating_point<T>::value)
+BOOST_MATH_GPU_ENABLED constexpr T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) noexcept(boost::math::is_floating_point<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::epsilon<T>(std::integral_constant<bool, ::std::numeric_limits<T>::is_specialized>());
