@@ -776,12 +776,6 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 
 #else // Special section for CUDA NVRTC to ensure we consume no STL headers
 
-// Dependency on the order of includes
-#include <nvrtc.h>
-#include <cuda.h>
-#include <cuda_runtime.h>
-#include <cuda/std/type_traits>
-
 #ifndef BOOST_MATH_STANDALONE
 #  define BOOST_MATH_STANDALONE
 #endif
@@ -791,6 +785,8 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 #define BOOST_MATH_HAS_GPU_SUPPORT
 
 #define BOOST_MATH_GPU_ENABLED __host__ __device__
+
+#define BOOST_MATH_STATIC static
 
 template <class T>
 BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b; b = t; }
