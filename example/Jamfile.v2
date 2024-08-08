@@ -14,7 +14,6 @@ project
       <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>darwin:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070
-      <toolset>intel:<cxxflags>-Qwd264,239
       <toolset>msvc:<warnings>all
       <toolset>msvc:<asynch-exceptions>on
     <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
