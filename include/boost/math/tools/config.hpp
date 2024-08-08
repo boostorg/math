@@ -784,8 +784,8 @@ template <class T>
 BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b; b = t; }
 
 #define BOOST_MATH_GPU_SAFE_SWAP(a, b) gpu_safe_swap(a, b)
-#define BOOST_MATH_GPU_SAFE_MIN(a, b) ::min(a, b)
-#define BOOST_MATH_GPU_SAFE_MAX(a, b) ::max(a, b)
+#define BOOST_MATH_GPU_SAFE_MIN(a, b) (::min)(a, b)
+#define BOOST_MATH_GPU_SAFE_MAX(a, b) (::max)(a, b)
 
 #define BOOST_MATH_FP_NAN 0
 #define BOOST_MATH_FP_INFINITE 1
