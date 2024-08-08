@@ -18,7 +18,6 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <boost/typeof/typeof.hpp>
-#include <boost/type_traits/is_same.hpp>
 #include <boost/math/tools/assert.hpp>
 
 #include <boost/math/special_functions/pow.hpp>
@@ -103,15 +102,15 @@ void test_with_big_exponents()
 
 void test_return_types()
 {
-    static_assert((is_same<BOOST_TYPEOF(pow<2>('\1')), double>::value), "Return type mismatch");
-    static_assert((is_same<BOOST_TYPEOF(pow<2>(L'\2')), double>::value), "Return type mismatch");
-    static_assert((is_same<BOOST_TYPEOF(pow<2>(3)), double>::value), "Return type mismatch");
-    static_assert((is_same<BOOST_TYPEOF(pow<2>(4u)), double>::value), "Return type mismatch");
-    static_assert((is_same<BOOST_TYPEOF(pow<2>(5ul)), double>::value), "Return type mismatch");
-    static_assert((is_same<BOOST_TYPEOF(pow<2>(6.0f)), float>::value), "Return type mismatch");
-    static_assert((is_same<BOOST_TYPEOF(pow<2>(7.0)), double>::value), "Return type mismatch");
+    static_assert((boost::math::is_same<BOOST_TYPEOF(pow<2>('\1')), double>::value), "Return type mismatch");
+    static_assert((boost::math::is_same<BOOST_TYPEOF(pow<2>(L'\2')), double>::value), "Return type mismatch");
+    static_assert((boost::math::is_same<BOOST_TYPEOF(pow<2>(3)), double>::value), "Return type mismatch");
+    static_assert((boost::math::is_same<BOOST_TYPEOF(pow<2>(4u)), double>::value), "Return type mismatch");
+    static_assert((boost::math::is_same<BOOST_TYPEOF(pow<2>(5ul)), double>::value), "Return type mismatch");
+    static_assert((boost::math::is_same<BOOST_TYPEOF(pow<2>(6.0f)), float>::value), "Return type mismatch");
+    static_assert((boost::math::is_same<BOOST_TYPEOF(pow<2>(7.0)), double>::value), "Return type mismatch");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    static_assert((is_same<BOOST_TYPEOF(pow<2>(7.0l)), long double>::value), "Return type mismatch");
+    static_assert((boost::math::is_same<BOOST_TYPEOF(pow<2>(7.0l)), long double>::value), "Return type mismatch");
 #endif
 }
 
