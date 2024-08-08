@@ -538,6 +538,7 @@ test-suite special_fun :
    [ run test_ldouble_simple.cpp ../../test/build//boost_unit_test_framework  ]
    # Needs to run in release mode, as it's rather slow:
    [ run test_next.cpp pch ../../test/build//boost_unit_test_framework : : : release  ]
+   [ run test_fast_float_distance.cpp ../../test/build//boost_unit_test_framework : : : release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" : <build>no ] ]
    [ run test_next_decimal.cpp pch ../../test/build//boost_unit_test_framework : : : release  ]
    [ run test_owens_t.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_polygamma.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
