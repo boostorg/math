@@ -11,10 +11,13 @@
 #pragma once
 #endif
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+
 #include <cmath>
 #include <cstdint>
 #include <limits>
-#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/big_constant.hpp>
@@ -313,6 +316,28 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type expm1(T x)
 
 } // namespace math
 } // namespace boost
+
+#else // Special handling for NVRTC 
+
+namespace boost {
+namespace math {
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED auto expm1(T x)
+{
+   return ::expm1(x);
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED auto expm1(float x)
+{
+   return ::expm1f(x);
+}
+
+} // Namespace math
+} // Namespace boost
+
+#endif // BOOST_MATH_HAS_NVRTC
 
 #endif // BOOST_MATH_HYPOT_INCLUDED
 
