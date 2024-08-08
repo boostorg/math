@@ -10,6 +10,7 @@ if(HAVE_BOOST_TEST)
 
         message(STATUS "Building boost.math with CUDA")
 
+        find_package(CUDA REQUIRED)
         enable_language(CUDA)
         set(CMAKE_CUDA_EXTENSIONS OFF)
 
