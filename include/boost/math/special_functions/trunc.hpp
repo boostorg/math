@@ -268,7 +268,7 @@ namespace detail {
 template <typename TargetType, typename T>
 BOOST_MATH_GPU_ENABLED TargetType integer_trunc_impl(T v)
 {
-   double r = boost::math::trunc(v, pol);
+   double r = boost::math::trunc(v);
 
    const double max_val = ldexp(1.0, boost::math::numeric_limits<TargetType>::digits);
 
