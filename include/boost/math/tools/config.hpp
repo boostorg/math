@@ -774,6 +774,9 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 #define BOOST_MATH_FP_SUBNORMAL FP_SUBNORMAL
 #define BOOST_MATH_FP_NORMAL FP_NORMAL
 
+// Missing type from NVRTC
+#define BOOST_MATH_SIZE_T std::size_t
+
 #else // Special section for CUDA NVRTC to ensure we consume no STL headers
 
 #ifndef BOOST_MATH_STANDALONE
@@ -800,6 +803,7 @@ BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b;
 #define BOOST_MATH_FP_ZERO 2
 #define BOOST_MATH_FP_SUBNORMAL 3
 #define BOOST_MATH_FP_NORMAL 4
+#define BOOST_MATH_SIZE_T unsigned long
 
 #if defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L
 #  define BOOST_MATH_INLINE_CONSTEXPR inline constexpr
