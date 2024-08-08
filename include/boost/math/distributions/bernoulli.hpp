@@ -31,6 +31,7 @@
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/tuple.hpp>
+#include <boost/math/tools/type_traits.hpp>
 #include <boost/math/distributions/complement.hpp> // complements
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
@@ -57,12 +58,12 @@ namespace boost
         return true;
       }
       template <class RealType, class Policy>
-      BOOST_MATH_GPU_ENABLED inline bool check_dist(const char* function, const RealType& p, RealType* result, const Policy& /* pol */, const std::true_type&)
+      BOOST_MATH_GPU_ENABLED inline bool check_dist(const char* function, const RealType& p, RealType* result, const Policy& /* pol */, const boost::math::true_type&)
       {
         return check_success_fraction(function, p, result, Policy());
       }
       template <class RealType, class Policy>
-      BOOST_MATH_GPU_ENABLED inline bool check_dist(const char* , const RealType& , RealType* , const Policy& /* pol */, const std::false_type&)
+      BOOST_MATH_GPU_ENABLED inline bool check_dist(const char* , const RealType& , RealType* , const Policy& /* pol */, const boost::math::false_type&)
       {
          return true;
       }
