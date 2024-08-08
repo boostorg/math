@@ -352,13 +352,28 @@ BOOST_MATH_GPU_ENABLED inline boost::math::enable_if_t<!boost::math::is_construc
 
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::enable_if_t<boost::math::is_constructible_v<long long, T>, long long>
-   llconvertert(const T& v, const Policy&)
+   llconvert(const T& v, const Policy&)
 {
    return static_cast<long long>(v);
 }
 
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename boost::math::enable_if_t<!boost::math::is_constructible_v<long long, T>, long long>
+   llconvert(const T& v, const Policy& pol)
+{
+   using boost::math::lltrunc;
+   return lltrunc(v, pol);
+}
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED [[deprecated("Use llconvert")]] inline boost::math::enable_if_t<boost::math::is_constructible_v<long long, T>, long long>
+   llconvertert(const T& v, const Policy&)
+{
+   return static_cast<long long>(v);
+}
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED [[deprecated("Use llconvert")]] inline typename boost::math::enable_if_t<!boost::math::is_constructible_v<long long, T>, long long>
    llconvertert(const T& v, const Policy& pol)
 {
    using boost::math::lltrunc;
