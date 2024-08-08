@@ -669,6 +669,12 @@ namespace boost{ namespace math{
 //
 
 #ifdef __CUDACC__
+
+// We have to get our include order correct otherwise you get compilation failures
+#include <cuda.h>
+#include <cuda_runtime.h>
+#include <cuda/std/type_traits>
+
 #  define BOOST_MATH_CUDA_ENABLED __host__ __device__
 #  define BOOST_MATH_HAS_GPU_SUPPORT
 
@@ -768,7 +774,13 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 #define BOOST_MATH_FP_SUBNORMAL FP_SUBNORMAL
 #define BOOST_MATH_FP_NORMAL FP_NORMAL
 
-#else // Special section for CUDA NVRTC to ensure we consume no headers
+#else // Special section for CUDA NVRTC to ensure we consume no STL headers
+
+// Dependency on the order of includes
+#include <nvrtc.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
+#include <cuda/std/type_traits>
 
 #ifndef BOOST_MATH_STANDALONE
 #  define BOOST_MATH_STANDALONE
