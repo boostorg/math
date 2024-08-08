@@ -33,6 +33,8 @@ template <typename T>
 struct numeric_limits 
 #ifndef BOOST_MATH_HAS_NVRTC
 : public std::numeric_limits<T> {};
+#else
+{};
 #endif
 
 #if defined(BOOST_MATH_HAS_GPU_SUPPORT) && !defined(BOOST_MATH_HAS_NVRTC)
@@ -608,15 +610,15 @@ struct numeric_limits<unsigned short>
     BOOST_MATH_STATIC constexpr bool tinyness_before = false;
 
     // Member Functions
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (min)         () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (max)         () { return 65535; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short lowest        () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short epsilon       () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short round_error   () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short infinity      () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short quiet_NaN     () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short signaling_NaN () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short denorm_min    () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned short (min)         () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned short (max)         () { return 65535U; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned short lowest        () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned short epsilon       () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned short round_error   () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned short infinity      () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned short quiet_NaN     () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned short signaling_NaN () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned short denorm_min    () { return 0; }
 };
 
 template <>
@@ -645,15 +647,15 @@ struct numeric_limits<int>
     BOOST_MATH_STATIC constexpr bool tinyness_before = false;
 
     // Member Functions
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (min)         () { return -2147483648; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (max)         () { return 2147483647; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short lowest        () { return -2147483648; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short epsilon       () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short round_error   () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short infinity      () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short quiet_NaN     () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short signaling_NaN () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short denorm_min    () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr int (min)         () { return -2147483648; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr int (max)         () { return 2147483647; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr int lowest        () { return -2147483648; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr int epsilon       () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr int round_error   () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr int infinity      () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr int quiet_NaN     () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr int signaling_NaN () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr int denorm_min    () { return 0; }
 };
 
 template <>
@@ -682,15 +684,15 @@ struct numeric_limits<unsigned int>
     BOOST_MATH_STATIC constexpr bool tinyness_before = false;
 
     // Member Functions
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (min)         () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (max)         () { return 4294967295U; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short lowest        () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short epsilon       () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short round_error   () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short infinity      () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short quiet_NaN     () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short signaling_NaN () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short denorm_min    () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned int (min)         () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned int (max)         () { return 4294967295U; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned int lowest        () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned int epsilon       () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned int round_error   () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned int infinity      () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned int quiet_NaN     () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned int signaling_NaN () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned int denorm_min    () { return 0; }
 };
 
 template <>
@@ -719,15 +721,15 @@ struct numeric_limits<long>
     BOOST_MATH_STATIC constexpr bool tinyness_before = false;
 
     // Member Functions
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (min)         () { return -9223372036854775808L; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (max)         () { return 9223372036854775807L; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short lowest        () { return -9223372036854775808L; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short epsilon       () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short round_error   () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short infinity      () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short quiet_NaN     () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short signaling_NaN () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short denorm_min    () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long (min)         () { return -9223372036854775808L; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long (max)         () { return 9223372036854775807L; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long lowest        () { return -9223372036854775808L; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long epsilon       () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long round_error   () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long infinity      () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long quiet_NaN     () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long signaling_NaN () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long denorm_min    () { return 0; }
 };
 
 template <>
@@ -756,15 +758,15 @@ struct numeric_limits<unsigned long>
     BOOST_MATH_STATIC constexpr bool tinyness_before = false;
 
     // Member Functions
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (min)         () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (max)         () { return 18446744073709551615UL; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short lowest        () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short epsilon       () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short round_error   () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short infinity      () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short quiet_NaN     () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short signaling_NaN () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short denorm_min    () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long (min)         () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long (max)         () { return 18446744073709551615UL; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long lowest        () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long epsilon       () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long round_error   () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long infinity      () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long quiet_NaN     () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long signaling_NaN () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long denorm_min    () { return 0; }
 };
 
 template <>
@@ -793,15 +795,15 @@ struct numeric_limits<long long>
     BOOST_MATH_STATIC constexpr bool tinyness_before = false;
 
     // Member Functions
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (min)         () { return -9223372036854775808LL; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (max)         () { return 9223372036854775807LL; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short lowest        () { return -9223372036854775808LL; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short epsilon       () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short round_error   () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short infinity      () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short quiet_NaN     () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short signaling_NaN () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short denorm_min    () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long long (min)         () { return -9223372036854775808LL; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long long (max)         () { return 9223372036854775807LL; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long long lowest        () { return -9223372036854775808LL; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long long epsilon       () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long long round_error   () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long long infinity      () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long long quiet_NaN     () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long long signaling_NaN () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr long long denorm_min    () { return 0; }
 };
 
 template <>
@@ -830,15 +832,15 @@ struct numeric_limits<unsigned long long>
     BOOST_MATH_STATIC constexpr bool tinyness_before = false;
 
     // Member Functions
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (min)         () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short (max)         () { return 18446744073709551615UL; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short lowest        () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short epsilon       () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short round_error   () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short infinity      () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short quiet_NaN     () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short signaling_NaN () { return 0; }
-    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr short denorm_min    () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long long (min)         () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long long (max)         () { return 18446744073709551615UL; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long long lowest        () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long long epsilon       () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long long round_error   () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long long infinity      () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long long quiet_NaN     () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long long signaling_NaN () { return 0; }
+    BOOST_MATH_GPU_ENABLED BOOST_MATH_STATIC constexpr unsigned long long denorm_min    () { return 0; }
 };
 
 template <>
