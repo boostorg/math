@@ -24,7 +24,7 @@
 #include <boost/multiprecision/mpfr.hpp>
 #include <fstream>
 
-#include <libs/math/test/table_type.hpp>
+#include <table_type.hpp>
 
 using namespace boost::math::tools;
 using namespace boost::math;
@@ -91,7 +91,7 @@ int main(int, char* [])
    boost::math::quadrature::exp_sinh<big_t> integrator(10);
    using T = float;
 
-#include <libs/math/test/nct.ipp>
+#include <nct.ipp>
 
 
    for (unsigned i = 0; i < nct.size(); ++i)
@@ -127,7 +127,7 @@ int main(int, char* [])
       std::cout << cdf << "), SC_(" << ccdf << ") }}," << std::endl;
    }
 
-#include <libs/math/test/nct_small_delta.ipp>
+#include <nct_small_delta.ipp>
    for (unsigned i = 0; i < nct_small_delta.size(); ++i)
    {
       big_t error1, error2;

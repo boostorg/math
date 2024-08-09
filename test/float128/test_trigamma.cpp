@@ -7,7 +7,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/trigamma.hpp>
-#include "libs/math/test/test_trigamma.hpp"
+#include "test_trigamma.hpp"
 
 void expected_results()
 {

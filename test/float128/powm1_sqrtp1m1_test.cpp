@@ -16,7 +16,7 @@
 
 #include "table_type.hpp"
 
-#include "libs/math/test/powm1_sqrtp1m1_test.hpp"
+#include "powm1_sqrtp1m1_test.hpp"
 
 //
 // DESCRIPTION:

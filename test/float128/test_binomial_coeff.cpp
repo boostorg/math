@@ -12,7 +12,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/binomial.hpp>
-#include "libs/math/test/test_binomial_coeff.hpp"
+#include "test_binomial_coeff.hpp"
 
 void expected_results()
 {

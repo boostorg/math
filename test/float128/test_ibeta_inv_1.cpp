@@ -7,7 +7,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/beta.hpp>
-#include "libs/math/test/test_ibeta_inv.hpp"
+#include "test_ibeta_inv.hpp"
 
 void expected_results()
 {

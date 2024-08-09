@@ -7,7 +7,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/polygamma.hpp>
-#include "libs/math/test/test_polygamma.hpp"
+#include "test_polygamma.hpp"
 
 void expected_results()
 {

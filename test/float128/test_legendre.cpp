@@ -7,7 +7,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/legendre.hpp>
-#include "libs/math/test/test_legendre.hpp"
+#include "test_legendre.hpp"
 
 void expected_results()
 {

@@ -7,10 +7,13 @@
 
 # bring in the rules for testing
 import testing ;
-import ../../config/checks/config : requires ;
+import-search /boost/config/checks ;
+import config : requires ;
 
 project
     : requirements
+      <library>/boost/math//boost_math
+      <library>/boost/multiprecision//boost_multiprecision
       <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>darwin:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070
@@ -36,7 +39,6 @@ project
       <toolset>clang:<cxxflags>-Wno-unknown-pragmas
       <toolset>clang:<cxxflags>-Wno-language-extension-token
 
-      <include>../../..
       <include>../include_private
       <exception-handling>off:<source>../test//no_eh
       [ requires cxx11_noexcept cxx11_rvalue_references sfinae_expr cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_tuple cxx11_hdr_initializer_list cxx11_hdr_chrono cxx11_thread_local cxx11_constexpr cxx11_nullptr cxx11_numeric_limits cxx11_decltype cxx11_hdr_array cxx11_hdr_atomic cxx11_hdr_type_traits cxx11_allocator cxx11_explicit_conversion_operators ]
@@ -53,7 +55,7 @@ test-suite examples :
    [ run binomial_example_nag.cpp  ]
    [ run binomial_quiz_example.cpp : : : <exception-handling>off:<build>no  ]
    [ run binomial_sample_sizes.cpp  ]
-   [ run brent_minimise_example.cpp  : : : [ requires cxx11_hdr_tuple ] ]
+   [ run brent_minimise_example.cpp /boost/test//included : : : [ requires cxx11_hdr_tuple ] ]
 
    [ run c_error_policy_example.cpp  ]
    [ run chi_square_std_dev_test.cpp : : : <exception-handling>off:<build>no  ]
@@ -93,11 +95,11 @@ test-suite examples :
 
    [ run nonfinite_num_facet.cpp  ]
    [ run nonfinite_facet_simple.cpp  ]
-   #[ run nonfinite_num_facet_serialization.cpp ../../serialization/build//boost_serialization : : : <exception-handling>off:<build>no <toolset>gcc-mingw:<link>static  ]
+   #[ run nonfinite_num_facet_serialization.cpp /boost/serialization//boost_serialization : : : <exception-handling>off:<build>no <toolset>gcc-mingw:<link>static  ]
    #[ # run lexical_cast_native.cpp  ] # Expected to fail on some (but not all) platforms.
    [ run lexical_cast_nonfinite_facets.cpp  ]
    [ run nonfinite_loopback_ok.cpp  ]
-   #[ run nonfinite_serialization_archives.cpp ../../serialization/build//boost_serialization  : : : <exception-handling>off:<build>no <toolset>gcc-mingw:<link>static  ]
+   #[ run nonfinite_serialization_archives.cpp /boost/serialization//boost_serialization  : : : <exception-handling>off:<build>no <toolset>gcc-mingw:<link>static  ]
    [ run nonfinite_facet_sstream.cpp  ]
 
    [ run constants_eg1.cpp  ]
@@ -113,7 +115,7 @@ test-suite examples :
    [ run policy_eg_6.cpp  ]
    [ run policy_eg_7.cpp  ]
    [ run policy_eg_8.cpp  ]
-   [ run policy_eg_9.cpp  ]
+   [ run policy_eg_9.cpp /boost/format//boost_format ]
    [ run policy_ref_snip1.cpp : : : <exception-handling>off:<build>no  ]
    [ run policy_ref_snip10.cpp  ]
    [ run policy_ref_snip11.cpp  ]

@@ -5,7 +5,7 @@
 
 #ifndef BOOST_MP_TABLE_TYPE
 
-#include <libs/math/test/table_type.hpp>
+#include <table_type.hpp>
 
 #define SC_(x) BOOST_FLOATMAX_C(x)
 

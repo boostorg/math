@@ -14,7 +14,7 @@
 
 #include "table_type.hpp"
 
-#include "libs/math/test/log1p_expm1_test.hpp"
+#include "log1p_expm1_test.hpp"
 
 //
 // DESCRIPTION:
