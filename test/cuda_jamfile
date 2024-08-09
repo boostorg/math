@@ -9,12 +9,6 @@ project : requirements
     [ requires cxx14_decltype_auto cxx14_generic_lambdas cxx14_return_type_deduction cxx14_variable_templates cxx14_constexpr ]
     ;
 
-# Autodiff Tests
-run test_autodiff_1.cpp ;
-
-# Tools Tests
-run test_polynomial.cpp ;
-
 # Distributions
 run test_arcsine_cdf_double.cu ;
 run test_arcsine_cdf_float.cu ;
@@ -29,7 +23,6 @@ run test_bernoulli_pdf_double.cu ;
 run test_bernoulli_pdf_float.cu ;
 run test_bernoulli_range_support_double.cu ;
 run test_bernoulli_range_support_float.cu ;
-run test_binomial.cpp ;
 run test_cauchy_cdf_double.cu ;
 run test_cauchy_cdf_float.cu ;
 run test_cauchy_pdf_double.cu ;

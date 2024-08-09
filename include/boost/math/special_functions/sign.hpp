@@ -14,6 +14,8 @@
 #pragma once
 #endif
 
+#ifndef __CUDACC_RTC__
+
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/detail/fp_traits.hpp>
@@ -192,6 +194,47 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args_permissive<T, U>::typ
 } // namespace math
 } // namespace boost
 
+#else // NVRTC alias versions
+
+#include <boost/math/tools/config.hpp>
+
+namespace boost {
+namespace math {
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED int signbit(T x)
+{
+    return ::signbit(x);
+}
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED T changesign(T x)
+{
+    return -x;
+}
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED T copysign(T x, T y)
+{
+    return ::copysign(x, y);
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED float copysign(float x, float y)
+{
+    return ::copysignf(x, y);
+}
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED T sign(T z)
+{
+    return (z == 0) ? 0 : ::signbit(z) ? -1 : 1;
+}
+
+} // namespace math
+} // namespace boost
+
+#endif // __CUDACC_RTC__
 
 #endif // BOOST_MATH_TOOLS_SIGN_HPP
 

@@ -1,4 +1,5 @@
 //  (C) Copyright John Maddock 2006.
+//  (C) Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -9,6 +10,8 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
+
+#ifndef __CUDACC_RTC__
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/rational.hpp>
@@ -170,6 +173,28 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cbrt(T z)
 
 } // namespace math
 } // namespace boost
+
+#else
+
+namespace boost {
+namespace math {
+
+template <typename T>
+__host__ __device__ T cbrt(T x)
+{
+   return ::cbrt(x);
+}
+
+template <>
+__host__ __device__ float cbrt(float x)
+{
+   return ::cbrtf(x);
+}
+
+} // namespace math
+} // namespace boost
+
+#endif // NVRTC
 
 #endif // BOOST_MATH_SF_CBRT_HPP
 

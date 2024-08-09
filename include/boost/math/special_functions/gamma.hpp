@@ -110,7 +110,7 @@ BOOST_MATH_GPU_ENABLED T sinpx(T z)
 // tgamma(z), with Lanczos support:
 //
 template <class T, class Policy, class Lanczos>
-BOOST_MATH_GPU_ENABLED T gamma_imp_final(T z, const Policy& pol, const Lanczos& l)
+BOOST_MATH_GPU_ENABLED T gamma_imp_final(T z, const Policy& pol, const Lanczos&)
 {
    BOOST_MATH_STD_USING
 
@@ -2284,16 +2284,27 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
 
 #else
 
+#include <boost/math/tools/config.hpp>
+
 namespace boost {
 namespace math {
 
-inline __host__ __device__ float tgamma(float x) { return ::tgammaf(x); }
-inline __host__ __device__ double tgamma(double x) { return ::tgamma(x); }
+inline BOOST_MATH_GPU_ENABLED float tgamma(float x) { return ::tgammaf(x); }
+inline BOOST_MATH_GPU_ENABLED double tgamma(double x) { return ::tgamma(x); }
 
 template <typename T, typename Policy>
-inline __host__ __device__ T tgamma(T x, const Policy&)
+inline BOOST_MATH_GPU_ENABLED T tgamma(T x, const Policy&)
 {
    return boost::math::tgamma(x);
+}
+
+inline BOOST_MATH_GPU_ENABLED float lgamma(float x) { return ::lgammaf(x); }
+inline BOOST_MATH_GPU_ENABLED double lgamma(double x) { return ::lgamma(x); }
+
+template <typename T, typename Policy>
+inline BOOST_MATH_GPU_ENABLED T lgamma(T x, const Policy&)
+{
+   return boost::math::lgamma(x);
 }
 
 } // namespace math

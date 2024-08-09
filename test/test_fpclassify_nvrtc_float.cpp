@@ -7,29 +7,36 @@
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
 
+// Must be included first
+#include <nvrtc.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
+
 #include <iostream>
 #include <iomanip>
 #include <vector>
 #include <random>
 #include <exception>
-#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
-#include <cuda.h>
-#include <cuda_runtime.h>
-#include <nvrtc.h>
 
 typedef float float_type;
 
 const char* cuda_kernel = R"(
 typedef float float_type;
-#include <boost/math/special_functions/gamma.hpp>
+#include <cuda/std/type_traits>
+#include <boost/math/special_functions/fpclassify.hpp>
 extern "C" __global__ 
-void test_gamma_kernel(const float_type *in1, const float_type *in2, float_type *out, int numElements)
+void test_gamma_kernel(const float_type *in1, const float_type*, float_type *out, int numElements)
 {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
     if (i < numElements)
     {
-        out[i] = boost::math::tgamma(in1[i]) + boost::math::lgamma(in2[i]);
+        out[i] = boost::math::isnan(in1[i]) + 
+                 boost::math::isinf(in1[i]) + 
+                 boost::math::isfinite(in1[i]) +
+                 boost::math::isnormal(in1[i]) +
+                 boost::math::fpclassify(in1[i]);
     }
 }
 )";
@@ -85,9 +92,9 @@ int main()
         nvrtcAddNameExpression(prog, "test_gamma_kernel");
 
         #ifdef BOOST_MATH_NVRTC_CI_RUN
-        const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/math/boost-root/libs/math/include/"};
+        const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/cuda-math/boost-root/libs/cuda-math/include/", "-I/usr/local/cuda/include"};
         #else
-        const char* opts[] = {"--std=c++14", "--include-path=/home/mborland/Documents/boost/libs/cuda-math/include/"};
+        const char* opts[] = {"--std=c++14", "--include-path=/home/mborland/Documents/boost/libs/cuda-math/include/", "-I/usr/local/cuda/include"};
         #endif
 
         // Compile the program
@@ -150,7 +157,12 @@ int main()
         // Verify Result
         for (int i = 0; i < numElements; ++i) 
         {
-            auto res = boost::math::tgamma(h_in1[i]) + boost::math::lgamma(h_in2[i]);
+            auto res = boost::math::isnan(h_in1[i]) + 
+                       boost::math::isinf(h_in1[i]) + 
+                       boost::math::isfinite(h_in1[i]) +
+                       boost::math::isnormal(h_in1[i]) +
+                       boost::math::fpclassify(h_in1[i]);
+                       
             if (std::isfinite(res))
             {
                 if (boost::math::epsilon_difference(res, h_out[i]) > 300)
