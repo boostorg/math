@@ -316,13 +316,13 @@ BOOST_MATH_GPU_ENABLED constexpr long double epsilon(BOOST_MATH_EXPLICIT_TEMPLAT
 namespace detail{
 
 template <class T>
-inline constexpr T root_epsilon_imp(const std::integral_constant<int, 24>&) noexcept(std::is_floating_point<T>::value)
+BOOST_MATH_GPU_ENABLED inline constexpr T root_epsilon_imp(const std::integral_constant<int, 24>&) noexcept(std::is_floating_point<T>::value)
 {
    return static_cast<T>(0.00034526698300124390839884978618400831996329879769945L);
 }
 
 template <class T>
-inline constexpr T root_epsilon_imp(const T*, const std::integral_constant<int, 53>&) noexcept(std::is_floating_point<T>::value)
+BOOST_MATH_GPU_ENABLED inline constexpr T root_epsilon_imp(const T*, const std::integral_constant<int, 53>&) noexcept(std::is_floating_point<T>::value)
 {
    return static_cast<T>(0.1490116119384765625e-7L);
 }
@@ -355,13 +355,13 @@ inline T root_epsilon_imp(const T*, const std::integral_constant<int, 0>&)
 }
 
 template <class T>
-inline constexpr T cbrt_epsilon_imp(const std::integral_constant<int, 24>&) noexcept(std::is_floating_point<T>::value)
+BOOST_MATH_GPU_ENABLED inline constexpr T cbrt_epsilon_imp(const std::integral_constant<int, 24>&) noexcept(std::is_floating_point<T>::value)
 {
    return static_cast<T>(0.0049215666011518482998719164346805794944150447839903L);
 }
 
 template <class T>
-inline constexpr T cbrt_epsilon_imp(const T*, const std::integral_constant<int, 53>&) noexcept(std::is_floating_point<T>::value)
+BOOST_MATH_GPU_ENABLED inline constexpr T cbrt_epsilon_imp(const T*, const std::integral_constant<int, 53>&) noexcept(std::is_floating_point<T>::value)
 {
    return static_cast<T>(6.05545445239333906078989272793696693569753008995e-6L);
 }
@@ -394,13 +394,13 @@ inline T cbrt_epsilon_imp(const T*, const std::integral_constant<int, 0>&)
 }
 
 template <class T>
-inline constexpr T forth_root_epsilon_imp(const T*, const std::integral_constant<int, 24>&) noexcept(std::is_floating_point<T>::value)
+BOOST_MATH_GPU_ENABLED inline constexpr T forth_root_epsilon_imp(const T*, const std::integral_constant<int, 24>&) noexcept(std::is_floating_point<T>::value)
 {
    return static_cast<T>(0.018581361171917516667460937040007436176452688944747L);
 }
 
 template <class T>
-inline constexpr T forth_root_epsilon_imp(const T*, const std::integral_constant<int, 53>&) noexcept(std::is_floating_point<T>::value)
+BOOST_MATH_GPU_ENABLED inline constexpr T forth_root_epsilon_imp(const T*, const std::integral_constant<int, 53>&) noexcept(std::is_floating_point<T>::value)
 {
    return static_cast<T>(0.0001220703125L);
 }
@@ -442,19 +442,19 @@ struct root_epsilon_traits
 }
 
 template <class T>
-inline constexpr T root_epsilon() noexcept(std::is_floating_point<T>::value && detail::root_epsilon_traits<T>::has_noexcept)
+BOOST_MATH_GPU_ENABLED inline constexpr T root_epsilon() noexcept(std::is_floating_point<T>::value && detail::root_epsilon_traits<T>::has_noexcept)
 {
    return detail::root_epsilon_imp(static_cast<T const*>(nullptr), typename detail::root_epsilon_traits<T>::tag_type());
 }
 
 template <class T>
-inline constexpr T cbrt_epsilon() noexcept(std::is_floating_point<T>::value && detail::root_epsilon_traits<T>::has_noexcept)
+BOOST_MATH_GPU_ENABLED inline constexpr T cbrt_epsilon() noexcept(std::is_floating_point<T>::value && detail::root_epsilon_traits<T>::has_noexcept)
 {
    return detail::cbrt_epsilon_imp(static_cast<T const*>(nullptr), typename detail::root_epsilon_traits<T>::tag_type());
 }
 
 template <class T>
-inline constexpr T forth_root_epsilon() noexcept(std::is_floating_point<T>::value && detail::root_epsilon_traits<T>::has_noexcept)
+BOOST_MATH_GPU_ENABLED inline constexpr T forth_root_epsilon() noexcept(std::is_floating_point<T>::value && detail::root_epsilon_traits<T>::has_noexcept)
 {
    return detail::forth_root_epsilon_imp(static_cast<T const*>(nullptr), typename detail::root_epsilon_traits<T>::tag_type());
 }

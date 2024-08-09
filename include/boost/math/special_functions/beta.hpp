@@ -930,7 +930,9 @@ template <>
 struct Pn_size<long double>
 {
    static constexpr unsigned value = 50; // ~35-50 digit accuracy
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
    static_assert(::boost::math::max_factorial<long double>::value >= 100, "Type does not provide for ~35-50 digits of accuracy");
+#endif
 };
 
 template <class T, class Policy>

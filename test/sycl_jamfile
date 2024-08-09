@@ -32,3 +32,5 @@ run test_expm1_simple.cpp ;
 run test_log1p_simple.cpp ;
 run test_digamma_simple.cpp ;
 run test_trigamma.cpp ;
+run test_erf.cpp ;
+run test_gamma.cpp ;

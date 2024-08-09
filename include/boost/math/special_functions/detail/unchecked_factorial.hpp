@@ -46,6 +46,8 @@ struct max_factorial;
 template <class T, bool = true>
 struct unchecked_factorial_data;
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+
 template <bool b>
 struct unchecked_factorial_data<float, b>
 {
@@ -137,16 +139,66 @@ template<bool b>
 
 // Definitions:
 template <>
-inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(float))
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(float))
 {
    return unchecked_factorial_data<float>::factorials[i];
 }
+
+#else
+
+template <>
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(float))
+{
+   constexpr float factorials[] = {
+      1.0F,
+      1.0F,
+      2.0F,
+      6.0F,
+      24.0F,
+      120.0F,
+      720.0F,
+      5040.0F,
+      40320.0F,
+      362880.0F,
+      3628800.0F,
+      39916800.0F,
+      479001600.0F,
+      6227020800.0F,
+      87178291200.0F,
+      1307674368000.0F,
+      20922789888000.0F,
+      355687428096000.0F,
+      6402373705728000.0F,
+      121645100408832000.0F,
+      0.243290200817664e19F,
+      0.5109094217170944e20F,
+      0.112400072777760768e22F,
+      0.2585201673888497664e23F,
+      0.62044840173323943936e24F,
+      0.15511210043330985984e26F,
+      0.403291461126605635584e27F,
+      0.10888869450418352160768e29F,
+      0.304888344611713860501504e30F,
+      0.8841761993739701954543616e31F,
+      0.26525285981219105863630848e33F,
+      0.822283865417792281772556288e34F,
+      0.26313083693369353016721801216e36F,
+      0.868331761881188649551819440128e37F,
+      0.29523279903960414084761860964352e39F,
+   };
+
+   return factorials[i];
+}
+
+#endif
 
 template <>
 struct max_factorial<float>
 {
    static constexpr unsigned value = 34;
 };
+
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 
 template <bool b>
 struct unchecked_factorial_data<double, b>
@@ -510,7 +562,7 @@ template <bool b>
 #endif
 
 template <>
-inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION double unchecked_factorial<double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(double))
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION double unchecked_factorial<double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(double))
 {
    return unchecked_factorial_data<double>::factorials[i];
 }
@@ -520,6 +572,62 @@ struct max_factorial<double>
 {
    static constexpr unsigned value = 170;
 };
+
+#else
+
+template <>
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION double unchecked_factorial<double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(double))
+{
+   constexpr double factorials[] = {
+      1,
+      1,
+      2,
+      6,
+      24,
+      120,
+      720,
+      5040,
+      40320,
+      362880.0,
+      3628800.0,
+      39916800.0,
+      479001600.0,
+      6227020800.0,
+      87178291200.0,
+      1307674368000.0,
+      20922789888000.0,
+      355687428096000.0,
+      6402373705728000.0,
+      121645100408832000.0,
+      0.243290200817664e19,
+      0.5109094217170944e20,
+      0.112400072777760768e22,
+      0.2585201673888497664e23,
+      0.62044840173323943936e24,
+      0.15511210043330985984e26,
+      0.403291461126605635584e27,
+      0.10888869450418352160768e29,
+      0.304888344611713860501504e30,
+      0.8841761993739701954543616e31,
+      0.26525285981219105863630848e33,
+      0.822283865417792281772556288e34,
+      0.26313083693369353016721801216e36,
+      0.868331761881188649551819440128e37,
+      0.29523279903960414084761860964352e39,
+   };
+
+   return factorials[i];
+}
+
+template <>
+struct max_factorial<double>
+{
+   static constexpr unsigned value = 34;
+};
+
+#endif
+
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 
 template <bool b>
 struct unchecked_factorial_data<long double, b>
@@ -1556,6 +1664,8 @@ inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, 0
    return factorials[i];
 }
 
+#endif // BOOST_MATH_HAS_GPU_SUPPORT
+
 template <class T>
 inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, std::numeric_limits<float>::digits>&)
 {
@@ -1567,6 +1677,8 @@ inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, s
 {
    return unchecked_factorial<double>(i);
 }
+
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 
 #if DBL_MANT_DIG != LDBL_MANT_DIG
 template <class T>
@@ -1582,6 +1694,8 @@ inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, 1
    return unchecked_factorial<BOOST_MATH_FLOAT128_TYPE>(i);
 }
 #endif
+
+#endif // BOOST_MATH_HAS_GPU_SUPPORT
 
 template <class T>
 inline T unchecked_factorial(unsigned i)
@@ -1601,9 +1715,11 @@ struct max_factorial
 {
    static constexpr unsigned value = 
       std::numeric_limits<T>::digits == std::numeric_limits<float>::digits ? max_factorial<float>::value 
-      : std::numeric_limits<T>::digits == std::numeric_limits<double>::digits ? max_factorial<double>::value 
+      : std::numeric_limits<T>::digits == std::numeric_limits<double>::digits ? max_factorial<double>::value
+      #ifndef BOOST_MATH_GPU_ENABLED 
       : std::numeric_limits<T>::digits == std::numeric_limits<long double>::digits ? max_factorial<long double>::value 
       BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
+      #endif
       : 100;
 };
 
