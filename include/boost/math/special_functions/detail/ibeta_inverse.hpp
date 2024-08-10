@@ -302,8 +302,19 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta, const Policy
    //
    // And iterate:
    //
-   x = tools::newton_raphson_iterate(
-      temme_root_finder<T>(-lu, alpha), x, lower, upper, policies::digits<T, Policy>() / 2);
+   try {
+      x = tools::newton_raphson_iterate(
+         temme_root_finder<T>(-lu, alpha), x, lower, upper, policies::digits<T, Policy>() / 2);
+   }
+   catch (const evaluation_error&)
+   {
+      // Due to numerical instability we may have cases where no root is found when
+      // in fact we should just touch the origin.  We simply ignore the error here
+      // and return our best guess for x so far...
+      // Maybe we should special case the symmetrical parameter case, but it's not clear 
+      // whether that is the only situation when problems can occur.
+      // See https://github.com/boostorg/math/issues/1169
+   }
 
    return x;
 }
@@ -318,6 +329,7 @@ template <class T, class Policy>
 T temme_method_3_ibeta_inverse(T a, T b, T p, T q, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names
+
 
    //
    // Begin by getting an initial approximation for the quantity
