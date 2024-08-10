@@ -105,14 +105,13 @@ BOOST_MATH_GPU_ENABLED RealType cdf_imp(const cauchy_distribution<RealType, Poli
 template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED RealType quantile_imp(
       const cauchy_distribution<RealType, Policy>& dist,
-      const RealType& p,
+      RealType p,
       bool complement)
 {
    // This routine implements the quantile for the Cauchy distribution,
    // the value p may be the probability, or its complement if complement=true.
    //
-   // The procedure first performs argument reduction on p to avoid error
-   // when calculating the tangent, then calculates the distance from the
+   // The procedure calculates the distance from the
    // mid-point of the distribution.  This is either added or subtracted
    // from the location parameter depending on whether `complement` is true.
    //
@@ -144,16 +143,15 @@ BOOST_MATH_GPU_ENABLED RealType quantile_imp(
       return (complement ? 1 : -1) * policies::raise_overflow_error<RealType>(function, 0, Policy());
    }
 
-   RealType P = p - floor(p);   // argument reduction of p:
-   if(P > 0.5)
+   if(p > 0.5)
    {
-      P = P - 1;
+      p = p - 1;
    }
-   if(P == 0.5)   // special case:
+   if(p == 0.5)   // special case:
    {
       return location;
    }
-   result = -scale / tan(constants::pi<RealType>() * P);
+   result = -scale / tan(constants::pi<RealType>() * p);
    return complement ? RealType(location - result) : RealType(location + result);
 } // quantile
 
