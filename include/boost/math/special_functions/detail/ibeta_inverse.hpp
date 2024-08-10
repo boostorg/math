@@ -306,7 +306,7 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta, const Policy
       x = tools::newton_raphson_iterate(
          temme_root_finder<T>(-lu, alpha), x, lower, upper, policies::digits<T, Policy>() / 2);
    }
-   catch (const evaluation_error&)
+   catch (const boost::math::evaluation_error&)
    {
       // Due to numerical instability we may have cases where no root is found when
       // in fact we should just touch the origin.  We simply ignore the error here
