@@ -199,7 +199,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int, 53>& t)
+BOOST_MATH_GPU_ENABLED T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int, 53>&)
 {
    BOOST_MATH_STD_USING
 
