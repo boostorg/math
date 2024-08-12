@@ -67,6 +67,9 @@ At `p=1` and `p=0`, the quantile function returns the result of
 quantile function returns the result of -__overflow_error and 
 +__overflow_error respectively. 
 
+In this distribution the implementation of `logcdf` is specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 The logistic distribution is implemented in terms of the `std::exp` 

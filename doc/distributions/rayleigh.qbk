@@ -77,6 +77,9 @@ distributions are supported: __usual_accessors.
 
 The domain of the random variable is \[0, max_value\].
 
+In this distribution the implementation of both `logcdf`, and `logpdf` are specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 The Rayleigh distribution is implemented in terms of the

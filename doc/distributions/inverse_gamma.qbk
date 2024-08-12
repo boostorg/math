@@ -87,6 +87,9 @@ The domain of the random variate is \[0,+[infin]\].
 [note Unlike some definitions, this implementation supports a random variate 
 equal to zero as a special case, returning zero for pdf and cdf.]
 
+In this distribution the implementation of `logpdf` is specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 The inverse gamma distribution is implemented in terms of the 

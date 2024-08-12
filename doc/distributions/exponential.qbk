@@ -57,6 +57,9 @@ that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random variable is \[0, +[infin]\].
 
+In this distribution the implementation of both `logcdf`, and `logpdf` are specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 The exponential distribution is implemented in terms of the 

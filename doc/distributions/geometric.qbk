@@ -303,6 +303,9 @@ the context of this distribution:
    ``quantile(complement(geometric(p), P))``]]
 ]
 
+In this distribution the implementation of `logcdf` is specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 This distribution is implemented using the pow and exp functions, so most results

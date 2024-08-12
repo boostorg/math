@@ -73,6 +73,9 @@ distributions are supported: __usual_accessors.
 
 The supported domain of the random variable is \[scale, [infin]\].
 
+In this distribution the implementation of `logcdf` is specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 The Pareto distribution is implemented in terms of the
