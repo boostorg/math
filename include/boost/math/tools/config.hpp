@@ -11,6 +11,8 @@
 #pragma once
 #endif
 
+#ifndef __CUDACC_RTC__
+
 #include <boost/math/tools/is_standalone.hpp>
 
 // Minimum language standard transition
@@ -741,7 +743,7 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 // See if we can inline them instead
 
 #if defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L
-#  define BOOST_MATH_STATIC_CONSTEXPR inline constexpr
+#  define BOOST_MATH_INLINE_CONSTEXPR inline constexpr
 #  define BOOST_MATH_STATIC static
 #  ifndef BOOST_MATH_HAS_GPU_SUPPORT
 #    define BOOST_MATH_STATIC_LOCAL_VARIABLE static
@@ -750,15 +752,54 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 #  endif
 #else
 #  ifndef BOOST_MATH_HAS_GPU_SUPPORT
-#    define BOOST_MATH_STATIC_CONSTEXPR static constexpr
+#    define BOOST_MATH_INLINE_CONSTEXPR static constexpr
 #    define BOOST_MATH_STATIC static
 #    define BOOST_MATH_STATIC_LOCAL_VARIABLE
 #  else
-#    define BOOST_MATH_STATIC_CONSTEXPR constexpr
+#    define BOOST_MATH_INLINE_CONSTEXPR constexpr
 #    define BOOST_MATH_STATIC constexpr
 #    define BOOST_MATH_STATIC_LOCAL_VARIABLE static
 #  endif
 #endif
+
+#define BOOST_MATH_FP_NAN FP_NAN
+#define BOOST_MATH_FP_INFINITE FP_INFINITE
+#define BOOST_MATH_FP_ZERO FP_ZERO
+#define BOOST_MATH_FP_SUBNORMAL FP_SUBNORMAL
+#define BOOST_MATH_FP_NORMAL FP_NORMAL
+
+#else // Special section for CUDA NVRTC to ensure we consume no headers
+
+#ifndef BOOST_MATH_STANDALONE
+#  define BOOST_MATH_STANDALONE
+#endif
+
+#define BOOST_MATH_NVRTC_ENABLED
+#define BOOST_MATH_ENABLE_CUDA
+#define BOOST_MATH_HAS_GPU_SUPPORT
+
+#define BOOST_MATH_GPU_ENABLED __host__ __device__
+
+template <class T>
+BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b; b = t; }
+
+#define BOOST_MATH_GPU_SAFE_SWAP(a, b) gpu_safe_swap(a, b)
+#define BOOST_MATH_GPU_SAFE_MIN(a, b) (::min)(a, b)
+#define BOOST_MATH_GPU_SAFE_MAX(a, b) (::max)(a, b)
+
+#define BOOST_MATH_FP_NAN 0
+#define BOOST_MATH_FP_INFINITE 1
+#define BOOST_MATH_FP_ZERO 2
+#define BOOST_MATH_FP_SUBNORMAL 3
+#define BOOST_MATH_FP_NORMAL 4
+
+#if defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L
+#  define BOOST_MATH_INLINE_CONSTEXPR inline constexpr
+#else
+#  define BOOST_MATH_INLINE_CONSTEXPR constexpr
+#endif
+
+#endif // NVRTC
 
 #endif // BOOST_MATH_TOOLS_CONFIG_HPP
 
