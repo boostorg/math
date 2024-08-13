@@ -793,6 +793,8 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 
 #define BOOST_MATH_STATIC static
 
+#define BOOST_MATH_NOEXCEPT(T) noexcept(boost::math::is_floating_point_v<T>)
+
 template <class T>
 BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b; b = t; }
 
