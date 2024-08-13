@@ -10,6 +10,9 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/numeric_limits.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+
 #include <iomanip>
 #include <string>
 #include <cstring>
@@ -891,6 +894,150 @@ BOOST_MATH_GPU_ENABLED std::pair<T, T> pair_from_single(const T& val) BOOST_MATH
 #endif
 
 }} // namespaces boost/math
+
+#else // Special values for NVRTC
+
+namespace boost {
+namespace math {
+namespace policies {
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED constexpr T raise_domain_error(
+           const char* ,
+           const char* ,
+           const T& ,
+           const Policy&) BOOST_MATH_NOEXCEPT(T)
+{
+   // This may or may not do the right thing, but the user asked for the error
+   // to be ignored so here we go anyway:
+   return boost::math::numeric_limits<T>::quiet_NaN();
+}
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED constexpr T raise_pole_error(
+           const char* function,
+           const char* message,
+           const T& val,
+           const  Policy&) BOOST_MATH_NOEXCEPT(T)
+{
+   return boost::math::numeric_limits<T>::quiet_NaN();
+}
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
+           const char* ,
+           const char* ,
+           const Policy&) BOOST_MATH_NOEXCEPT(T)
+{
+   // This may or may not do the right thing, but the user asked for the error
+   // to be ignored so here we go anyway:
+   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : (boost::math::numeric_limits<T>::max)();
+}
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
+           const char* ,
+           const char* ,
+           const T&,
+           const Policy&) BOOST_MATH_NOEXCEPT(T)
+{
+   // This may or may not do the right thing, but the user asked for the error
+   // to be ignored so here we go anyway:
+   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : (boost::math::numeric_limits<T>::max)();
+}
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED constexpr T raise_underflow_error(
+           const char* ,
+           const char* ,
+           const Policy&) BOOST_MATH_NOEXCEPT(T)
+{
+   // This may or may not do the right thing, but the user asked for the error
+   // to be ignored so here we go anyway:
+   return static_cast<T>(0);
+}
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline constexpr T raise_denorm_error(
+           const char* ,
+           const char* ,
+           const T& val,
+           const Policy&) BOOST_MATH_NOEXCEPT(T)
+{
+   // This may or may not do the right thing, but the user asked for the error
+   // to be ignored so here we go anyway:
+   return val;
+}
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED constexpr T raise_evaluation_error(
+           const char* ,
+           const char* ,
+           const T& val,
+           const Policy&) BOOST_MATH_NOEXCEPT(T)
+{
+   // This may or may not do the right thing, but the user asked for the error
+   // to be ignored so here we go anyway:
+   return val;
+}
+
+template <class T, class TargetType, class Policy>
+BOOST_MATH_GPU_ENABLED constexpr TargetType raise_rounding_error(
+           const char* ,
+           const char* ,
+           const T& val,
+           const TargetType&,
+           const Policy&) BOOST_MATH_NOEXCEPT(T)
+{
+   // This may or may not do the right thing, but the user asked for the error
+   // to be ignored so here we go anyway:
+   static_assert(boost::math::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
+   return  val > 0 ? (boost::math::numeric_limits<TargetType>::max)() : (boost::math::numeric_limits<TargetType>::is_integer ? (boost::math::numeric_limits<TargetType>::min)() : -(boost::math::numeric_limits<TargetType>::max)());
+}
+
+template <class T, class R, class Policy>
+BOOST_MATH_GPU_ENABLED inline constexpr T raise_indeterminate_result_error(
+           const char* ,
+           const char* ,
+           const T& ,
+           const R& result,
+           const Policy&) BOOST_MATH_NOEXCEPT(T)
+{
+   // This may or may not do the right thing, but the user asked for the error
+   // to be ignored so here we go anyway:
+   return result;
+}
+
+template <class R, class Policy, class T>
+BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE R checked_narrowing_cast(T val, const char* function) noexcept(boost::math::is_floating_point_v<R> && boost::math::is_floating_point_v<T>)
+{
+   // We only have ignore error policy so no reason to check
+   return static_cast<R>(val);
+}
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline void check_series_iterations(const char* function, BOOST_MATH_UINTMAX_T max_iter, const Policy& pol) noexcept(boost::math::is_floating_point_v<T>)
+{
+   if(max_iter >= policies::get_max_series_iterations<Policy>())
+      raise_evaluation_error<T>(
+         function,
+         "Series evaluation exceeded %1% iterations, giving up now.", static_cast<T>(static_cast<double>(max_iter)), pol);
+}
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline void check_root_iterations(const char* function, BOOST_MATH_UINTMAX_T max_iter, const Policy& pol) noexcept(boost::math::is_floating_point_v<T>)
+{
+   if(max_iter >= policies::get_max_root_iterations<Policy>())
+      raise_evaluation_error<T>(
+         function,
+         "Root finding evaluation exceeded %1% iterations, giving up now.", static_cast<T>(static_cast<double>(max_iter)), pol);
+}
+
+} // namespace policies
+} // namespace math
+} // namespace boost
+
+#endif
 
 #endif // BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 
