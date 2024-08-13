@@ -26,4 +26,6 @@ run test_round_nvrtc_double.cpp ;
 run test_round_nvrtc_float.cpp ;
 run test_sign_nvrtc_double.cpp ;
 run test_sign_nvrtc_float.cpp ;
+run test_sin_pi_nvrtc_double.cpp ;
+run test_sin_pi_nvrtc_float.cpp ;
 run test_trunc_nvrtc_double.cpp ;
