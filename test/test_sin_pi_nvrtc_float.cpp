@@ -21,7 +21,7 @@
 typedef float float_type;
 
 const char* cuda_kernel = R"(
-typedef double float_type;
+typedef float float_type;
 #include <boost/math/special_functions/sin_pi.hpp>
 extern "C" __global__ 
 void test_sin_pi_kernel(const float_type *in1, const float_type*, float_type *out, int numElements)
