@@ -135,16 +135,16 @@ namespace policies{
                                                                                                 \
    namespace detail{                                                                            \
    template <Type N>                                                                            \
-   char test_is_valid_arg(const name<N>* = nullptr);                                            \
-   char test_is_default_arg(const name<Default>* = nullptr);                                    \
+   BOOST_MATH_GPU_ENABLED char test_is_valid_arg(const name<N>* = nullptr);                     \
+   BOOST_MATH_GPU_ENABLED char test_is_default_arg(const name<Default>* = nullptr);             \
                                                                                                 \
    template <typename T>                                                                        \
    class is_##name##_imp                                                                        \
    {                                                                                            \
    private:                                                                                     \
       template <Type N>                                                                         \
-      static char test(const name<N>* = nullptr);                                               \
-      static double test(...);                                                                  \
+      BOOST_MATH_GPU_ENABLED static char test(const name<N>* = nullptr);                        \
+      BOOST_MATH_GPU_ENABLED static double test(...);                                           \
    public:                                                                                      \
       static constexpr bool value = sizeof(test(static_cast<T*>(nullptr))) == sizeof(char);     \
    };                                                                                           \
@@ -164,16 +164,16 @@ namespace policies{
                                                                                                 \
    namespace detail{                                                                            \
    template <bool N>                                                                            \
-   char test_is_valid_arg(const name<N>* = nullptr);                                            \
-   char test_is_default_arg(const name<Default>* = nullptr);                                    \
+   BOOST_MATH_GPU_ENABLED char test_is_valid_arg(const name<N>* = nullptr);                     \
+   BOOST_MATH_GPU_ENABLED char test_is_default_arg(const name<Default>* = nullptr);             \
                                                                                                 \
    template <typename T>                                                                        \
    class is_##name##_imp                                                                        \
    {                                                                                            \
    private:                                                                                     \
       template <bool N>                                                                         \
-      static char test(const name<N>* = nullptr);                                               \
-      static double test(...);                                                                  \
+      BOOST_MATH_GPU_ENABLED static char test(const name<N>* = nullptr);                        \
+      BOOST_MATH_GPU_ENABLED static double test(...);                                           \
    public:                                                                                      \
       static constexpr bool value = sizeof(test(static_cast<T*>(nullptr))) == sizeof(char);     \
    };                                                                                           \
@@ -273,10 +273,10 @@ public:
 #endif
 };
 
-double test_is_valid_arg(...);
-double test_is_default_arg(...);
-char test_is_valid_arg(const default_policy*);
-char test_is_default_arg(const default_policy*);
+BOOST_MATH_GPU_ENABLED double test_is_valid_arg(...);
+BOOST_MATH_GPU_ENABLED double test_is_default_arg(...);
+BOOST_MATH_GPU_ENABLED char test_is_valid_arg(const default_policy*);
+BOOST_MATH_GPU_ENABLED char test_is_default_arg(const default_policy*);
 
 template <typename T>
 class is_valid_policy_imp
@@ -934,8 +934,8 @@ template <class A1,
           class A9,
           class A10,
           class A11>
-char test_is_policy(const policy<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11>*);
-double test_is_policy(...);
+BOOST_MATH_GPU_ENABLED char test_is_policy(const policy<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11>*);
+BOOST_MATH_GPU_ENABLED double test_is_policy(...);
 
 template <typename P>
 class is_policy_imp
