@@ -8,8 +8,6 @@
 #define BOOST_MATH_TUPLE_HPP_INCLUDED
 
 #include <boost/math/tools/config.hpp>
-#include <boost/math/tools/cxx03_warn.hpp>
-#include <tuple>
 
 #ifdef BOOST_MATH_ENABLE_CUDA
 
@@ -35,6 +33,8 @@ using thrust::tuple_element;
 } // namespace boost
 
 #else
+
+#include <tuple>
 
 namespace boost { 
 namespace math {

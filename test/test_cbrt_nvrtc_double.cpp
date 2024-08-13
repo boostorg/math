@@ -12,24 +12,24 @@
 #include <vector>
 #include <random>
 #include <exception>
-#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/cbrt.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <nvrtc.h>
 
-typedef float float_type;
+typedef double float_type;
 
 const char* cuda_kernel = R"(
-typedef float float_type;
-#include <boost/math/special_functions/gamma.hpp>
+typedef double float_type;
+#include <boost/math/special_functions/cbrt.hpp>
 extern "C" __global__ 
-void test_gamma_kernel(const float_type *in1, const float_type *in2, float_type *out, int numElements)
+void test_cbrt_kernel(const float_type *in1, const float_type*, float_type *out, int numElements)
 {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
     if (i < numElements)
     {
-        out[i] = boost::math::tgamma(in1[i]) + boost::math::lgamma(in2[i]);
+        out[i] = boost::math::cbrt(in1[i]);
     }
 }
 )";
@@ -79,13 +79,13 @@ int main()
         nvrtcProgram prog;
         nvrtcResult res;
 
-        res = nvrtcCreateProgram(&prog, cuda_kernel, "test_gamma_kernel.cu", 0, nullptr, nullptr);
+        res = nvrtcCreateProgram(&prog, cuda_kernel, "test_cbrt_kernel.cu", 0, nullptr, nullptr);
         checkNVRTCError(res, "Failed to create NVRTC program");
 
-        nvrtcAddNameExpression(prog, "test_gamma_kernel");
+        nvrtcAddNameExpression(prog, "test_cbrt_kernel");
 
         #ifdef BOOST_MATH_NVRTC_CI_RUN
-        const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/math/boost-root/libs/math/include/"};
+        const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/cuda-math/boost-root/libs/cuda-math/include/"};
         #else
         const char* opts[] = {"--std=c++14", "--include-path=/home/mborland/Documents/boost/libs/cuda-math/include/"};
         #endif
@@ -113,7 +113,7 @@ int main()
         CUmodule module;
         CUfunction kernel;
         checkCUError(cuModuleLoadDataEx(&module, ptx, 0, 0, 0), "Failed to load module");
-        checkCUError(cuModuleGetFunction(&kernel, module, "test_gamma_kernel"), "Failed to get kernel function");
+        checkCUError(cuModuleGetFunction(&kernel, module, "test_cbrt_kernel"), "Failed to get kernel function");
 
         int numElements = 5000;
         float_type *h_in1, *h_in2, *h_out;
@@ -150,7 +150,7 @@ int main()
         // Verify Result
         for (int i = 0; i < numElements; ++i) 
         {
-            auto res = boost::math::tgamma(h_in1[i]) + boost::math::lgamma(h_in2[i]);
+            auto res = boost::math::cbrt(h_in1[i]);
             if (std::isfinite(res))
             {
                 if (boost::math::epsilon_difference(res, h_out[i]) > 300)

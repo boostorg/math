@@ -12,7 +12,7 @@
 #include <vector>
 #include <random>
 #include <exception>
-#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <cuda.h>
 #include <cuda_runtime.h>
@@ -22,14 +22,17 @@ typedef float float_type;
 
 const char* cuda_kernel = R"(
 typedef float float_type;
-#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/sign.hpp>
 extern "C" __global__ 
 void test_gamma_kernel(const float_type *in1, const float_type *in2, float_type *out, int numElements)
 {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
     if (i < numElements)
     {
-        out[i] = boost::math::tgamma(in1[i]) + boost::math::lgamma(in2[i]);
+        out[i] = boost::math::signbit(in1[i]) + 
+                 boost::math::changesign(in1[i]) + 
+                 boost::math::copysign(in1[i], in2[i]) +
+                 boost::math::sign(in1[i]);
     }
 }
 )";
@@ -85,7 +88,7 @@ int main()
         nvrtcAddNameExpression(prog, "test_gamma_kernel");
 
         #ifdef BOOST_MATH_NVRTC_CI_RUN
-        const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/math/boost-root/libs/math/include/"};
+        const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/cuda-math/boost-root/libs/cuda-math/include/"};
         #else
         const char* opts[] = {"--std=c++14", "--include-path=/home/mborland/Documents/boost/libs/cuda-math/include/"};
         #endif
@@ -150,7 +153,11 @@ int main()
         // Verify Result
         for (int i = 0; i < numElements; ++i) 
         {
-            auto res = boost::math::tgamma(h_in1[i]) + boost::math::lgamma(h_in2[i]);
+            auto res = boost::math::signbit(h_in1[i]) + 
+                       boost::math::changesign(h_in1[i]) + 
+                       boost::math::copysign(h_in1[i], h_in2[i]) +
+                       boost::math::sign(h_in1[i]);
+                       
             if (std::isfinite(res))
             {
                 if (boost::math::epsilon_difference(res, h_out[i]) > 300)

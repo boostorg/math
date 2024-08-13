@@ -10,12 +10,13 @@ if(HAVE_BOOST_TEST)
 
         message(STATUS "Building boost.math with CUDA")
 
+        find_package(CUDA REQUIRED)
         enable_language(CUDA)
         set(CMAKE_CUDA_EXTENSIONS OFF)
 
         enable_testing()
 
-        boost_test_jamfile(FILE cuda_jamfile LINK_LIBRARIES Boost::math Boost::assert Boost::concept_check Boost::config Boost::core Boost::integer Boost::lexical_cast Boost::multiprecision Boost::predef Boost::random Boost::static_assert Boost::throw_exception Boost::unit_test_framework )
+        boost_test_jamfile(FILE cuda_jamfile LINK_LIBRARIES Boost::math Boost::assert Boost::concept_check Boost::config Boost::core Boost::integer Boost::lexical_cast Boost::multiprecision Boost::predef Boost::random Boost::static_assert Boost::throw_exception Boost::unit_test_framework ${CUDA_LIBRARIES} INCLUDE_DIRECTORIES ${CUDA_INCLUDE_DIRS}  )
 
     elseif (BOOST_MATH_ENABLE_NVRTC)
 
