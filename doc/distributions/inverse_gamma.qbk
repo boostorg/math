@@ -102,12 +102,13 @@ But in general, inverse_gamma results are accurate to a few epsilon,
 [h4 Implementation]
 
 In the following table [alpha] is the shape parameter of the distribution, 
-[alpha] is its scale parameter, /x/ is the random variate, /p/ is the probability
+[beta] is its scale parameter, /x/ is the random variate, /p/ is the probability
 and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = __gamma_p_derivative([alpha], [beta]/ x, [beta]) / x * x ]]
+[[logpdf][log(pdf) = [alpha] * log([beta]) + (-[alpha]-1)*log(x) - lgamma([alpha]) - ([beta]/x) ]]
 [[cdf][Using the relation: p = __gamma_q([alpha], [beta] / x) ]]
 [[cdf complement][Using the relation: q = __gamma_p([alpha], [beta] / x) ]]
 [[quantile][Using the relation: x = [beta]/ __gamma_q_inv([alpha], p) ]]

@@ -85,6 +85,7 @@ in such cases, only a low /absolute error/ can be guaranteed.
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = e[super -(x-u)/s] / (s*(1+e[super -(x-u)/s])[super 2])]]
 [[cdf][Using the relation: p = 1/(1+e[super -(x-u)/s])]]
+[[logcdf][log(cdf) = -log1p(exp((u-x)/s)) ]]
 [[cdf complement][Using the relation: q = 1/(1+e[super (x-u)/s])]]
 [[quantile][Using the relation: x = u - s*log(1/p-1)]]
 [[quantile from the complement][Using the relation: x = u + s*log(p/1-p)]]

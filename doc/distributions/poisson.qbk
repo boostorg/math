@@ -84,6 +84,7 @@ In the following table [lambda] is the mean of the distribution,
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = e[super -[lambda]] [lambda][super k] \/ k! ]]
+[[logpdf][log(pdf) = -lgamma(k+1) + k*log([lambda]) - [lambda] if k > 0 and [lambda] > 0 ]]
 [[cdf][Using the relation: p = [Gamma](k+1, [lambda]) \/ k! = __gamma_q(k+1, [lambda])]]
 [[cdf complement][Using the relation: q = __gamma_p(k+1, [lambda]) ]]
 [[quantile][Using the relation: k = __gamma_q_inva([lambda], p) - 1]]
