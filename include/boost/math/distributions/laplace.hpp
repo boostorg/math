@@ -182,7 +182,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const laplace_distribution<RealTyp
    const RealType mu = dist.scale();
    const RealType b = dist.location();
 
-   // if b is 0 avoid divde by 0 error
+   // if b is 0 avoid divide by 0 error
    if(abs(b) < boost::math::numeric_limits<RealType>::epsilon())
    {
       result = log(pdf(dist, x));

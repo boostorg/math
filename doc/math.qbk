@@ -424,7 +424,7 @@ and use the function's name as the link text.]
 
 
 [def __usual_accessors __cdf, __pdf, __quantile, __hazard,
-   __chf, __mean, __median, __mode, __variance, __sd, __skewness,
+   __chf, __logcdf, __logpdf, __mean, __median, __mode, __variance, __sd, __skewness,
    __kurtosis, __kurtosis_excess, __range and __support]
 
 [def __real_concept [link math_toolkit.real_concepts  real concept]]

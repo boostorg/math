@@ -115,6 +115,9 @@ The domain of the random variate is \[0,+[infin]).
 [note Unlike some definitions, this implementation supports a random variate 
 equal to zero as a special case, returning zero for both pdf and cdf.]
 
+In this distribution the implementation of `logpdf` is specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 The inverse_gaussian distribution is implemented in terms of the 
@@ -134,6 +137,7 @@ are used for the inverse gaussian function.
 [table
 [[Function] [Implementation Notes] ]
 [[pdf] [ [sqrt]([lambda]/ 2[pi]x[super 3]) e[super -[lambda](x - [mu])[sup2]/ 2[mu][sup2]x]]]
+[[logpdf] [log(pdf) = (-[lambda]*pow([mu]-x, 2)/(x*[mu][super 2]) + log([lambda]) - 3*log(x) - log(2*[pi])) / 2 ]]
 [[cdf][ [Phi]{[sqrt]([lambda]/x) (x/[mu]-1)} + e[super 2[mu]/[lambda]] [Phi]{-[sqrt]([lambda]/[mu]) (1+x/[mu])} ]]
 [[cdf complement] [using complement of [Phi] above.] ]
 [[quantile][No closed form known. Estimated using a guess refined by Newton-Raphson iteration.]]

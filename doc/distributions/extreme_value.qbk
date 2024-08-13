@@ -81,6 +81,9 @@ that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random parameter is \[-[infin], +[infin]\].
 
+In this distribution the implementation of both `logcdf`, and `logpdf` are specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 The extreme value distribution is implemented in terms of the 
@@ -96,7 +99,9 @@ In the following table:
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = exp((a-x)/b) * exp(-exp((a-x)/b)) / b ]]
+[[logpdf][log(pdf) = log(1/b) + e - exp(e) ]]
 [[cdf][Using the relation: p = exp(-exp((a-x)/b)) ]]
+[[logcdf][log(cdf) = -exp((a-x)/b) ]]
 [[cdf complement][Using the relation: q = -expm1(-exp((a-x)/b)) ]]
 [[quantile][Using the relation: a - log(-log(p)) * b]]
 [[quantile from the complement][Using the relation: a - log(-log1p(-q)) * b]]

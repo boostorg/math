@@ -77,6 +77,9 @@ distributions are supported: __usual_accessors.
 
 The domain of the random variable is \[0, max_value\].
 
+In this distribution the implementation of both `logcdf`, and `logpdf` are specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 The Rayleigh distribution is implemented in terms of the
@@ -92,7 +95,9 @@ In the following table [sigma] is the sigma parameter of the distribution,
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = x * exp(-x[super 2])/2 [sigma][super 2] ]]
+[[logpdf][log(pdf) = -(x[super 2])/(2*[sigma][super 2]) - 2*log([sigma]) + log(x) ]]
 [[cdf][Using the relation: p = 1 - exp(-x[super 2]/2) [sigma][super 2]= -__expm1(-x[super 2]/2) [sigma][super 2]]]
+[[logcdf][log(cdf) = log1p(-exp(-x[super 2] / (2*[sigma][super 2]))) ]]
 [[cdf complement][Using the relation: q =  exp(-x[super 2]/ 2) * [sigma][super 2] ]]
 [[quantile][Using the relation: x = sqrt(-2 * [sigma] [super 2]) * log(1 - p)) = sqrt(-2 * [sigma] [super 2]) * __log1p(-p))]]
 [[quantile from the complement][Using the relation: x = sqrt(-2 * [sigma] [super 2]) * log(q)) ]]

@@ -67,6 +67,9 @@ At `p=1` and `p=0`, the quantile function returns the result of
 quantile function returns the result of -__overflow_error and 
 +__overflow_error respectively. 
 
+In this distribution the implementation of `logcdf` is specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 The logistic distribution is implemented in terms of the `std::exp` 
@@ -82,6 +85,7 @@ in such cases, only a low /absolute error/ can be guaranteed.
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = e[super -(x-u)/s] / (s*(1+e[super -(x-u)/s])[super 2])]]
 [[cdf][Using the relation: p = 1/(1+e[super -(x-u)/s])]]
+[[logcdf][log(cdf) = -log1p(exp((u-x)/s)) ]]
 [[cdf complement][Using the relation: q = 1/(1+e[super (x-u)/s])]]
 [[quantile][Using the relation: x = u - s*log(1/p-1)]]
 [[quantile from the complement][Using the relation: x = u + s*log(p/1-p)]]
