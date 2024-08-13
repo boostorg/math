@@ -14,6 +14,8 @@ run test_cbrt_nvrtc_double.cpp ;
 run test_cbrt_nvrtc_float.cpp ;
 run test_cos_pi_nvrtc_double.cpp ;
 run test_cos_pi_nvrtc_float.cpp ;
+run test_digamma_nvrtc_double.cpp ;
+run test_digamma_nvrtc_float.cpp ;
 run test_erf_nvrtc_double.cpp ;
 run test_erf_nvrtc_float.cpp ;
 run test_erfc_nvrtc_double.cpp ;
