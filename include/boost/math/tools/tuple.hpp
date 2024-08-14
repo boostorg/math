@@ -9,50 +9,22 @@
 
 #include <boost/math/tools/config.hpp>
 
-#ifdef BOOST_MATH_HAS_NVRTC
+#ifdef BOOST_MATH_ENABLE_CUDA
 
-namespace boost {
-namespace math {
-
-template <typename T, typename U>
-class pair
-{
-public:
-    T first;
-    U second;
-
-    BOOST_MATH_GPU_ENABLED pair(T x, U y) noexcept : first {x}, second {y} {}
-};
-
-template <typename T, typename U>
-BOOST_MATH_GPU_ENABLED auto make_pair(T x, U y) noexcept
-{
-    return pair(x, y);
-}
-
-} // namespace math
-} // namespace boost
-
-
-#elif defined(BOOST_MATH_ENABLE_CUDA)
-
-#include <thrust/pair.h>
-#include <thrust/tuple.h>
+#include <cuda/std/utility>
 
 namespace boost { 
 namespace math {
 
-using thrust::pair;
-using thrust::tuple;
+using cuda::std::pair;
+using cuda::std::tuple;
 
-using thrust::make_pair;
-using thrust::make_tuple;
+using cuda::std::make_pair;
 
-using thrust::tie;
-using thrust::get;
+using cuda::std::get;
 
-using thrust::tuple_size;
-using thrust::tuple_element;
+using cuda::std::tuple_size;
+using cuda::std::tuple_element;
 
 } // namespace math
 } // namespace boost

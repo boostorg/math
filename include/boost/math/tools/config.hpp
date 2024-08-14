@@ -674,6 +674,7 @@ namespace boost{ namespace math{
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <cuda/std/type_traits>
+#include <cuda/std/utility>
 
 #  define BOOST_MATH_CUDA_ENABLED __host__ __device__
 #  define BOOST_MATH_HAS_GPU_SUPPORT
