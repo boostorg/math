@@ -28,7 +28,7 @@ typedef float float_type;
 #include <cuda/std/type_traits>
 #include <boost/math/distributions/arcsine.hpp>
 extern "C" __global__ 
-void test_digamma_kernel(const float_type *in1, const float_type*, float_type *out, int numElements)
+void test_cauchy_kernel(const float_type *in1, const float_type*, float_type *out, int numElements)
 {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
     if (i < numElements)
@@ -83,10 +83,10 @@ int main()
         nvrtcProgram prog;
         nvrtcResult res;
 
-        res = nvrtcCreateProgram(&prog, cuda_kernel, "test_digamma_kernel.cu", 0, nullptr, nullptr);
+        res = nvrtcCreateProgram(&prog, cuda_kernel, "test_cauchy_kernel.cu", 0, nullptr, nullptr);
         checkNVRTCError(res, "Failed to create NVRTC program");
 
-        nvrtcAddNameExpression(prog, "test_digamma_kernel");
+        nvrtcAddNameExpression(prog, "test_cauchy_kernel");
 
         #ifdef BOOST_MATH_NVRTC_CI_RUN
         const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/cuda-math/boost-root/libs/cuda-math/include/", "-I/usr/local/cuda/include"};
@@ -117,7 +117,7 @@ int main()
         CUmodule module;
         CUfunction kernel;
         checkCUError(cuModuleLoadDataEx(&module, ptx, 0, 0, 0), "Failed to load module");
-        checkCUError(cuModuleGetFunction(&kernel, module, "test_digamma_kernel"), "Failed to get kernel function");
+        checkCUError(cuModuleGetFunction(&kernel, module, "test_cauchy_kernel"), "Failed to get kernel function");
 
         int numElements = 5000;
         float_type *h_in1, *h_in2, *h_out;
