@@ -803,8 +803,9 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 // we need to undef before proceeding
 #ifdef BOOST_FPU_EXCEPTION_GUARD
 #  undef BOOST_FPU_EXCEPTION_GUARD
-#  define BOOST_FPU_EXCEPTION_GUARD
 #endif
+
+#define BOOST_FPU_EXCEPTION_GUARD
 
 template <class T>
 BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b; b = t; }
