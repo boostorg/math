@@ -208,26 +208,34 @@ struct log_limit_noexcept_traits : public log_limit_noexcept_traits_imp<T, boost
 template <class T>
 BOOST_MATH_GPU_ENABLED inline constexpr T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
 {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   return detail::log_max_value<T>(typename detail::log_limit_traits<T>::tag_type());
+#ifndef BOOST_MATH_HAS_NVRTC
+   #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+      return detail::log_max_value<T>(typename detail::log_limit_traits<T>::tag_type());
+   #else
+      BOOST_MATH_ASSERT(::boost::math::numeric_limits<T>::is_specialized);
+      BOOST_MATH_STD_USING
+      static const T val = log((boost::math::numeric_limits<T>::max)());
+      return val;
+   #endif
 #else
-   BOOST_MATH_ASSERT(::boost::math::numeric_limits<T>::is_specialized);
-   BOOST_MATH_STD_USING
-   static const T val = log((boost::math::numeric_limits<T>::max)());
-   return val;
+   return log((boost::math::numeric_limits<T>::max)());
 #endif
 }
 
 template <class T>
 BOOST_MATH_GPU_ENABLED inline constexpr T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
 {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   return detail::log_min_value<T>(typename detail::log_limit_traits<T>::tag_type());
+#ifndef BOOST_MATH_HAS_NVRTC
+   #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+      return detail::log_min_value<T>(typename detail::log_limit_traits<T>::tag_type());
+   #else
+      BOOST_MATH_ASSERT(::boost::math::numeric_limits<T>::is_specialized);
+      BOOST_MATH_STD_USING
+      static const T val = log((boost::math::numeric_limits<T>::min)());
+      return val;
+   #endif
 #else
-   BOOST_MATH_ASSERT(::boost::math::numeric_limits<T>::is_specialized);
-   BOOST_MATH_STD_USING
-   static const T val = log((boost::math::numeric_limits<T>::min)());
-   return val;
+   return log((boost::math::numeric_limits<T>::min)());
 #endif
 }
 
