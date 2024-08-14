@@ -10,6 +10,7 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/numeric_limits.hpp>
+#include <boost/math/tools/type_traits.hpp>
 
 #ifndef BOOST_MATH_HAS_NVRTC
 
