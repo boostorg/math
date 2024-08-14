@@ -799,6 +799,13 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 #define BOOST_MATH_FORCEINLINE __forceinline__
 #define BOOST_MATH_STD_USING  
 
+// This should be defined to nothing but since it is not specifically a math macro
+// we need to undef before proceeding
+#ifdef BOOST_FPU_EXCEPTION_GUARD
+#  undef BOOST_FPU_EXCEPTION_GUARD
+#  define BOOST_FPU_EXCEPTION_GUARD
+#endif
+
 template <class T>
 BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b; b = t; }
 
