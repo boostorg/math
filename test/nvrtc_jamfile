@@ -12,9 +12,16 @@ project : requirements
 # Special Functions
 run test_cbrt_nvrtc_double.cpp ;
 run test_cbrt_nvrtc_float.cpp ;
+run test_expm1_nvrtc_double.cpp ;
+run test_expm1_nvrtc_float.cpp ;
 run test_fpclassify_nvrtc_double.cpp ;
 run test_fpclassify_nvrtc_float.cpp ;
 run test_gamma_nvrtc_double.cpp ;
 run test_gamma_nvrtc_float.cpp ;
+run test_log1p_nvrtc_double.cpp ;
+run test_log1p_nvrtc_float.cpp ;
+run test_round_nvrtc_double.cpp ;
+run test_round_nvrtc_float.cpp ;
 run test_sign_nvrtc_double.cpp ;
 run test_sign_nvrtc_float.cpp ;
+run test_trunc_nvrtc_double.cpp ;

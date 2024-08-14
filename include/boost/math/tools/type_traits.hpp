@@ -404,14 +404,14 @@ BOOST_MATH_INLINE_CONSTEXPR bool is_signed_v = boost::math::is_signed<T>::value;
 template <typename T>
 BOOST_MATH_INLINE_CONSTEXPR bool is_unsigned_v = boost::math::is_unsigned<T>::value;
 
-template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_constructible_v = boost::math::is_constructible<T>::value;
+template <typename T, typename... Args>
+BOOST_MATH_INLINE_CONSTEXPR bool is_constructible_v = boost::math::is_constructible<T, Args...>::value;
 
-template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_constructible_v = boost::math::is_trivially_constructible<T>::value;
+template <typename T, typename... Args>
+BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_constructible_v = boost::math::is_trivially_constructible<T, Args...>::value;
 
-template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_constructible_v = boost::math::is_nothrow_constructible<T>::value;
+template <typename T, typename... Args>
+BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_constructible_v = boost::math::is_nothrow_constructible<T, Args...>::value;
 
 template <typename T>
 BOOST_MATH_INLINE_CONSTEXPR bool is_default_constructible_v = boost::math::is_default_constructible<T>::value;

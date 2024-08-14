@@ -12,10 +12,13 @@
 #pragma warning(disable:4702) // Unreachable code (release mode only warning)
 #endif
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+
 #include <cmath>
 #include <cstdint>
 #include <limits>
-#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/big_constant.hpp>
@@ -472,6 +475,40 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1pmx(T x)
 
 } // namespace math
 } // namespace boost
+
+#else // Special handling for NVRTC platform
+
+namespace boost {
+namespace math {
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED auto log1p(T x)
+{
+   return ::log1p(x);
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED auto log1p(float x)
+{
+   return ::log1pf(x);
+}
+
+template <typename T, typename Policy>
+BOOST_MATH_GPU_ENABLED auto log1p(T x, const Policy&)
+{
+   return ::log1p(x);
+}
+
+template <typename Policy>
+BOOST_MATH_GPU_ENABLED auto log1p(float x, const Policy&)
+{
+   return ::log1pf(x);
+}
+
+} // namespace math
+} // namespace boost
+
+#endif // BOOST_MATH_HAS_NVRTC
 
 #ifdef _MSC_VER
 #pragma warning(pop)

@@ -669,6 +669,12 @@ namespace boost{ namespace math{
 //
 
 #ifdef __CUDACC__
+
+// We have to get our include order correct otherwise you get compilation failures
+#include <cuda.h>
+#include <cuda_runtime.h>
+#include <cuda/std/type_traits>
+
 #  define BOOST_MATH_CUDA_ENABLED __host__ __device__
 #  define BOOST_MATH_HAS_GPU_SUPPORT
 
@@ -768,17 +774,24 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 #define BOOST_MATH_FP_SUBNORMAL FP_SUBNORMAL
 #define BOOST_MATH_FP_NORMAL FP_NORMAL
 
-#else // Special section for CUDA NVRTC to ensure we consume no headers
+// Missing type from NVRTC
+#include <cstdint>
+#define BOOST_MATH_SIZE_T std::size_t
+#define BOOST_MATH_UINTMAX_T std::uintmax_t
+
+#else // Special section for CUDA NVRTC to ensure we consume no STL headers
 
 #ifndef BOOST_MATH_STANDALONE
 #  define BOOST_MATH_STANDALONE
 #endif
 
-#define BOOST_MATH_NVRTC_ENABLED
+#define BOOST_MATH_HAS_NVRTC
 #define BOOST_MATH_ENABLE_CUDA
 #define BOOST_MATH_HAS_GPU_SUPPORT
 
 #define BOOST_MATH_GPU_ENABLED __host__ __device__
+
+#define BOOST_MATH_STATIC static
 
 template <class T>
 BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b; b = t; }
@@ -792,6 +805,9 @@ BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b;
 #define BOOST_MATH_FP_ZERO 2
 #define BOOST_MATH_FP_SUBNORMAL 3
 #define BOOST_MATH_FP_NORMAL 4
+
+#define BOOST_MATH_SIZE_T unsigned long
+#define BOOST_MATH_UINTMAX_T unsigned long
 
 #if defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L
 #  define BOOST_MATH_INLINE_CONSTEXPR inline constexpr

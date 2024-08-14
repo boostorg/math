@@ -17,7 +17,7 @@
 #include <vector>
 #include <random>
 #include <exception>
-#include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
 
 typedef double float_type;
@@ -25,18 +25,17 @@ typedef double float_type;
 const char* cuda_kernel = R"(
 typedef double float_type;
 #include <cuda/std/type_traits>
-#include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 extern "C" __global__ 
-void test_gamma_kernel(const float_type *in1, const float_type*, float_type *out, int numElements)
+void test_trunc_kernel(const float_type *in1, const float_type*, float_type *out, int numElements)
 {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
     if (i < numElements)
     {
-        out[i] = boost::math::isnan(in1[i]) + 
-                 boost::math::isinf(in1[i]) + 
-                 boost::math::isfinite(in1[i]) +
-                 boost::math::isnormal(in1[i]) +
-                 boost::math::fpclassify(in1[i]);
+        out[i] = boost::math::trunc(in1[i]) + 
+                 boost::math::itrunc(in1[i]) +
+                 boost::math::ltrunc(in1[i]) + 
+                 boost::math::lltrunc(in1[i]);
     }
 }
 )";
@@ -86,10 +85,10 @@ int main()
         nvrtcProgram prog;
         nvrtcResult res;
 
-        res = nvrtcCreateProgram(&prog, cuda_kernel, "test_gamma_kernel.cu", 0, nullptr, nullptr);
+        res = nvrtcCreateProgram(&prog, cuda_kernel, "test_trunc_kernel.cu", 0, nullptr, nullptr);
         checkNVRTCError(res, "Failed to create NVRTC program");
 
-        nvrtcAddNameExpression(prog, "test_gamma_kernel");
+        nvrtcAddNameExpression(prog, "test_trunc_kernel");
 
         #ifdef BOOST_MATH_NVRTC_CI_RUN
         const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/cuda-math/boost-root/libs/cuda-math/include/", "-I/usr/local/cuda/include"};
@@ -120,7 +119,7 @@ int main()
         CUmodule module;
         CUfunction kernel;
         checkCUError(cuModuleLoadDataEx(&module, ptx, 0, 0, 0), "Failed to load module");
-        checkCUError(cuModuleGetFunction(&kernel, module, "test_gamma_kernel"), "Failed to get kernel function");
+        checkCUError(cuModuleGetFunction(&kernel, module, "test_trunc_kernel"), "Failed to get kernel function");
 
         int numElements = 5000;
         float_type *h_in1, *h_in2, *h_out;
@@ -133,7 +132,7 @@ int main()
 
         // Initialize input arrays
         std::mt19937_64 rng(42);
-        std::uniform_real_distribution<float_type> dist(0.0f, 1.0f);
+        std::uniform_real_distribution<float_type> dist(0.0f, 1000.0f);
         for (int i = 0; i < numElements; ++i) 
         {
             h_in1[i] = static_cast<float_type>(dist(rng));
@@ -157,11 +156,10 @@ int main()
         // Verify Result
         for (int i = 0; i < numElements; ++i) 
         {
-            auto res = boost::math::isnan(h_in1[i]) + 
-                       boost::math::isinf(h_in1[i]) + 
-                       boost::math::isfinite(h_in1[i]) +
-                       boost::math::isnormal(h_in1[i]) +
-                       boost::math::fpclassify(h_in1[i]);
+            const auto res = boost::math::trunc(h_in1[i]) + 
+                             boost::math::itrunc(h_in1[i]) +
+                             boost::math::ltrunc(h_in1[i]) + 
+                             boost::math::lltrunc(h_in1[i]);
                        
             if (std::isfinite(res))
             {

@@ -21,6 +21,7 @@
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/promotion.hpp>
+#include <boost/math/tools/type_traits.hpp>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -1875,7 +1876,7 @@ BOOST_MATH_GPU_ENABLED T gamma_p_derivative_imp(T a, T x, const Policy& pol)
 
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
-   tgamma(T z, const Policy& /* pol */, const std::true_type)
+   tgamma(T z, const Policy& /* pol */, const boost::math::true_type)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T>::type result_type;
@@ -1983,7 +1984,7 @@ const typename lgamma_initializer<T, Policy>::init lgamma_initializer<T, Policy>
 
 template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
-   tgamma(T1 a, T2 z, const Policy&, const std::false_type)
+   tgamma(T1 a, T2 z, const Policy&, const boost::math::false_type)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef tools::promote_args_t<T1, T2> result_type;
@@ -2006,7 +2007,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
 
 template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
-   tgamma(T1 a, T2 z, const std::false_type& tag)
+   tgamma(T1 a, T2 z, const boost::math::false_type& tag)
 {
    return tgamma(a, z, policies::policy<>(), tag);
 }
@@ -2107,7 +2108,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma(T1 a, T2 z, const Policy& pol)
 {
    using result_type = tools::promote_args_t<T1, T2>;
-   return static_cast<result_type>(detail::tgamma(a, z, pol, std::false_type()));
+   return static_cast<result_type>(detail::tgamma(a, z, pol, boost::math::false_type()));
 }
 //
 // Full lower incomplete gamma:

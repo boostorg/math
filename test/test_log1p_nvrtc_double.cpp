@@ -7,36 +7,29 @@
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
 
-// Must be included first
-#include <nvrtc.h>
-#include <cuda.h>
-#include <cuda_runtime.h>
-
 #include <iostream>
 #include <iomanip>
 #include <vector>
 #include <random>
 #include <exception>
-#include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
+#include <cuda.h>
+#include <cuda_runtime.h>
+#include <nvrtc.h>
 
 typedef double float_type;
 
 const char* cuda_kernel = R"(
 typedef double float_type;
-#include <cuda/std/type_traits>
-#include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/special_functions/log1p.hpp>
 extern "C" __global__ 
-void test_gamma_kernel(const float_type *in1, const float_type*, float_type *out, int numElements)
+void test_log1p_kernel(const float_type *in1, const float_type*, float_type *out, int numElements)
 {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
     if (i < numElements)
     {
-        out[i] = boost::math::isnan(in1[i]) + 
-                 boost::math::isinf(in1[i]) + 
-                 boost::math::isfinite(in1[i]) +
-                 boost::math::isnormal(in1[i]) +
-                 boost::math::fpclassify(in1[i]);
+        out[i] = boost::math::log1p(in1[i]);
     }
 }
 )";
@@ -86,15 +79,15 @@ int main()
         nvrtcProgram prog;
         nvrtcResult res;
 
-        res = nvrtcCreateProgram(&prog, cuda_kernel, "test_gamma_kernel.cu", 0, nullptr, nullptr);
+        res = nvrtcCreateProgram(&prog, cuda_kernel, "test_log1p_kernel.cu", 0, nullptr, nullptr);
         checkNVRTCError(res, "Failed to create NVRTC program");
 
-        nvrtcAddNameExpression(prog, "test_gamma_kernel");
+        nvrtcAddNameExpression(prog, "test_log1p_kernel");
 
         #ifdef BOOST_MATH_NVRTC_CI_RUN
-        const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/cuda-math/boost-root/libs/cuda-math/include/", "-I/usr/local/cuda/include"};
+        const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/cuda-math/boost-root/libs/cuda-math/include/"};
         #else
-        const char* opts[] = {"--std=c++14", "--include-path=/home/mborland/Documents/boost/libs/cuda-math/include/", "-I/usr/local/cuda/include"};
+        const char* opts[] = {"--std=c++14", "--include-path=/home/mborland/Documents/boost/libs/cuda-math/include/"};
         #endif
 
         // Compile the program
@@ -120,7 +113,7 @@ int main()
         CUmodule module;
         CUfunction kernel;
         checkCUError(cuModuleLoadDataEx(&module, ptx, 0, 0, 0), "Failed to load module");
-        checkCUError(cuModuleGetFunction(&kernel, module, "test_gamma_kernel"), "Failed to get kernel function");
+        checkCUError(cuModuleGetFunction(&kernel, module, "test_log1p_kernel"), "Failed to get kernel function");
 
         int numElements = 5000;
         float_type *h_in1, *h_in2, *h_out;
@@ -157,12 +150,7 @@ int main()
         // Verify Result
         for (int i = 0; i < numElements; ++i) 
         {
-            auto res = boost::math::isnan(h_in1[i]) + 
-                       boost::math::isinf(h_in1[i]) + 
-                       boost::math::isfinite(h_in1[i]) +
-                       boost::math::isnormal(h_in1[i]) +
-                       boost::math::fpclassify(h_in1[i]);
-                       
+            auto res = boost::math::log1p(h_in1[i]);
             if (std::isfinite(res))
             {
                 if (boost::math::epsilon_difference(res, h_out[i]) > 300)
