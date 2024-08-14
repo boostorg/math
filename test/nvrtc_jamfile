@@ -24,6 +24,13 @@ run test_bernoulli_pdf_nvrtc_float.cpp ;
 run test_bernoulli_quan_nvrtc_double.cpp ;
 run test_bernoulli_quan_nvrtc_float.cpp ;
 
+run test_cauchy_cdf_nvrtc_double.cpp ;
+run test_cauchy_cdf_nvrtc_float.cpp ;
+run test_cauchy_pdf_nvrtc_double.cpp ;
+run test_cauchy_pdf_nvrtc_float.cpp ;
+run test_cauchy_quan_nvrtc_double.cpp ;
+run test_cauchy_quan_nvrtc_float.cpp ;
+
 # Special Functions
 run test_cbrt_nvrtc_double.cpp ;
 run test_cbrt_nvrtc_float.cpp ;
