@@ -28,15 +28,19 @@
 #ifndef BOOST_MATH_SPECIAL_BERNOULLI_HPP
 #define BOOST_MATH_SPECIAL_BERNOULLI_HPP
 
-#include <boost/math/distributions/fwd.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/type_traits.hpp>
 #include <boost/math/distributions/complement.hpp> // complements
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
+#include <boost/math/policies/policy.hpp>
+#include <boost/math/policies/error_handling.hpp>
 
+#ifndef BOOST_MATH_HAS_NVRTC
 #include <utility>
+#include <boost/math/distributions/fwd.hpp>
+#endif
 
 namespace boost
 {
