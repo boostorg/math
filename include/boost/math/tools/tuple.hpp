@@ -11,6 +11,7 @@
 
 #ifdef BOOST_MATH_ENABLE_CUDA
 
+#include <boost/math/tools/type_traits.hpp>
 #include <cuda/std/utility>
 
 namespace boost { 
@@ -25,6 +26,31 @@ using cuda::std::get;
 
 using cuda::std::tuple_size;
 using cuda::std::tuple_element;
+
+namespace detail {
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED T&& forward(boost::math::remove_reference_t<T>& arg) noexcept
+{
+    return static_cast<T&&>(arg);
+}
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED T&& forward(boost::math::remove_reference_t<T>&& arg) noexcept
+{
+    static_assert(!boost::math::is_lvalue_reference<T>::value, "Cannot forward an rvalue as an lvalue.");
+    return static_cast<T&&>(arg);
+}
+
+} // namespace detail
+
+template <typename T, typename... Ts>
+BOOST_MATH_GPU_ENABLED auto make_tuple(T&& t, Ts&&... ts) 
+{
+    return cuda::std::tuple<boost::math::decay_t<T>, boost::math::decay_t<Ts>...>(
+        boost::math::detail::forward<T>(t), boost::math::detail::forward<Ts>(ts)...
+    );
+}
 
 } // namespace math
 } // namespace boost
