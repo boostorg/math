@@ -38,6 +38,13 @@ run test_exponential_pdf_nvrtc_float.cpp ;
 run test_exponential_quan_nvrtc_double.cpp ;
 run test_exponential_quan_nvrtc_float.cpp ;
 
+run test_extreme_value_cdf_nvrtc_double.cpp ;
+run test_extreme_value_cdf_nvrtc_float.cpp ;
+run test_extreme_value_pdf_nvrtc_double.cpp ;
+run test_extreme_value_pdf_nvrtc_float.cpp ;
+run test_extreme_value_quan_nvrtc_double.cpp ;
+run test_extreme_value_quan_nvrtc_float.cpp ;
+
 # Special Functions
 run test_cbrt_nvrtc_double.cpp ;
 run test_cbrt_nvrtc_float.cpp ;
