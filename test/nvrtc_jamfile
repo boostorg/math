@@ -88,7 +88,8 @@ run test_saspoint5_quan_nvrtc_double.cpp ;
 run test_saspoint5_quan_nvrtc_float.cpp ;
 
 # Special Functions
-# Beta
+run test_beta_nvrtc_double.cpp ;
+run test_beta_nvrtc_float.cpp ;
 run test_cbrt_nvrtc_double.cpp ;
 run test_cbrt_nvrtc_float.cpp ;
 run test_cos_pi_nvrtc_double.cpp ;
