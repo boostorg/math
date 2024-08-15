@@ -9,6 +9,11 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
+
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC // Disabled for now
+
 #include <boost/math/tools/complex.hpp> // test for multiprecision types in complex Newton
 
 #include <utility>
@@ -16,7 +21,6 @@
 #include <tuple>
 #include <cstdint>
 
-#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 
 #include <boost/math/special_functions/sign.hpp>
@@ -1024,5 +1028,7 @@ inline std::pair<typename tools::promote_args<T1, T2, T3>::type, typename tools:
 } // namespace tools
 } // namespace math
 } // namespace boost
+
+#endif // BOOST_MATH_HAS_NVRTC
 
 #endif // BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
