@@ -675,6 +675,7 @@ namespace boost{ namespace math{
 #include <cuda_runtime.h>
 #include <cuda/std/type_traits>
 #include <cuda/std/utility>
+#include <cuda/std/cstdint>
 
 #  define BOOST_MATH_CUDA_ENABLED __host__ __device__
 #  define BOOST_MATH_HAS_GPU_SUPPORT
@@ -826,6 +827,8 @@ BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b;
 
 #define BOOST_MATH_SIZE_T unsigned long
 #define BOOST_MATH_UINTMAX_T unsigned long
+
+#define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##SUF
 
 #if defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L
 #  define BOOST_MATH_INLINE_CONSTEXPR inline constexpr
