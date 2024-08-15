@@ -8,6 +8,12 @@
 #define BOOST_MATH_TOOLS_BIG_CONSTANT_HPP
 
 #include <boost/math/tools/config.hpp>
+
+// On NVRTC we don't need any of this
+// We just have a simple definition of the macro since the largest float
+// type on the platform is a 64-bit double
+#ifndef BOOST_MATH_HAS_NVRTC 
+
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/lexical_cast.hpp>
 #endif
@@ -93,6 +99,8 @@ inline constexpr T make_big_value(largest_float, const char* s, std::false_type 
    std::is_constructible<T, const char*>())
 
 }}} // namespaces
+
+#endif // BOOST_MATH_HAS_NVRTC
 
 #endif
 
