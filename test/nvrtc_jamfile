@@ -88,6 +88,7 @@ run test_saspoint5_quan_nvrtc_double.cpp ;
 run test_saspoint5_quan_nvrtc_float.cpp ;
 
 # Special Functions
+# Beta
 run test_cbrt_nvrtc_double.cpp ;
 run test_cbrt_nvrtc_float.cpp ;
 run test_cos_pi_nvrtc_double.cpp ;
@@ -110,10 +111,13 @@ run test_gamma_nvrtc_double.cpp ;
 run test_gamma_nvrtc_float.cpp ;
 run test_log1p_nvrtc_double.cpp ;
 run test_log1p_nvrtc_float.cpp ;
+run test_modf_nvrtc_double.cpp ;
+run test_modf_nvrtc_float.cpp ;
 run test_round_nvrtc_double.cpp ;
 run test_round_nvrtc_float.cpp ;
 run test_sign_nvrtc_double.cpp ;
 run test_sign_nvrtc_float.cpp ;
 run test_sin_pi_nvrtc_double.cpp ;
 run test_sin_pi_nvrtc_float.cpp ;
+# Trigamma
 run test_trunc_nvrtc_double.cpp ;
