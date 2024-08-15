@@ -59,6 +59,14 @@ run test_landau_pdf_nvrtc_float.cpp ;
 run test_landau_quan_nvrtc_double.cpp ;
 run test_landau_quan_nvrtc_float.cpp ;
 
+run test_laplace_cdf_nvrtc_double.cpp ;
+run test_laplace_cdf_nvrtc_float.cpp ;
+run test_laplace_pdf_nvrtc_double.cpp ;
+run test_laplace_pdf_nvrtc_float.cpp ;
+run test_laplace_quan_nvrtc_double.cpp ;
+run test_laplace_quan_nvrtc_float.cpp ;
+
+
 # Special Functions
 run test_cbrt_nvrtc_double.cpp ;
 run test_cbrt_nvrtc_float.cpp ;
