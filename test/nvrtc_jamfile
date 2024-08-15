@@ -73,6 +73,13 @@ run test_logistic_pdf_nvrtc_float.cpp ;
 run test_logistic_quan_nvrtc_double.cpp ;
 run test_logistic_quan_nvrtc_float.cpp ;
 
+run test_mapairy_cdf_nvrtc_double.cpp ;
+run test_mapairy_cdf_nvrtc_float.cpp ;
+run test_mapairy_pdf_nvrtc_double.cpp ;
+run test_mapairy_pdf_nvrtc_float.cpp ;
+run test_mapairy_quan_nvrtc_double.cpp ;
+run test_mapairy_quan_nvrtc_float.cpp ;
+
 # Special Functions
 run test_cbrt_nvrtc_double.cpp ;
 run test_cbrt_nvrtc_float.cpp ;
