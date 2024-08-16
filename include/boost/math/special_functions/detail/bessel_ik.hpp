@@ -334,6 +334,8 @@ int bessel_ik(T v, T x, T* result_I, T* result_K, int kind, const Policy& pol)
        T eight_z = 8 * x;
        Kv = 1 + (mu - 1) / eight_z + (mu - 1) * (mu - 9) / (2 * eight_z * eight_z) + (mu - 1) * (mu - 9) * (mu - 25) / (6 * eight_z * eight_z * eight_z);
        Kv *= exp(-x) * constants::root_pi<T>() / sqrt(2 * x);
+       n = 0;
+       u = 0;
     }
     else
     {
