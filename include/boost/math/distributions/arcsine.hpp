@@ -30,24 +30,27 @@
 #ifndef BOOST_MATH_DIST_ARCSINE_HPP
 #define BOOST_MATH_DIST_ARCSINE_HPP
 
-#include <cmath>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/tuple.hpp>
-#include <boost/math/distributions/fwd.hpp>
 #include <boost/math/distributions/complement.hpp> // complements.
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks.
 #include <boost/math/constants/constants.hpp>
-
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
+#include <boost/math/policies/policy.hpp>
+#include <boost/math/policies/error_handling.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/distributions/fwd.hpp>
+#include <cmath>
+#include <utility>
+#include <exception>  // For std::domain_error.
+#endif
 
 #if defined (BOOST_MSVC)
 #  pragma warning(push)
 #  pragma warning(disable: 4702) // Unreachable code,
 // in domain_error_imp in error_handling.
 #endif
-
-#include <utility>
-#include <exception>  // For std::domain_error.
 
 namespace boost
 {

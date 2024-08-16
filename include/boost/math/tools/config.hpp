@@ -674,6 +674,7 @@ namespace boost{ namespace math{
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <cuda/std/type_traits>
+#include <cuda/std/utility>
 
 #  define BOOST_MATH_CUDA_ENABLED __host__ __device__
 #  define BOOST_MATH_HAS_GPU_SUPPORT
@@ -792,12 +793,23 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 #define BOOST_MATH_GPU_ENABLED __host__ __device__
 
 #define BOOST_MATH_STATIC static
+#define BOOST_MATH_STATIC_LOCAL_VARIABLE
 
 #define BOOST_MATH_NOEXCEPT(T) noexcept(boost::math::is_floating_point_v<T>)
 #define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T) 
+#define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) 
 #define BOOST_MATH_BIG_CONSTANT(T, N, V) static_cast<T>(V)
 #define BOOST_MATH_FORCEINLINE __forceinline__
 #define BOOST_MATH_STD_USING  
+#define BOOST_MATH_IF_CONSTEXPR if constexpr
+
+// This should be defined to nothing but since it is not specifically a math macro
+// we need to undef before proceeding
+#ifdef BOOST_FPU_EXCEPTION_GUARD
+#  undef BOOST_FPU_EXCEPTION_GUARD
+#endif
+
+#define BOOST_FPU_EXCEPTION_GUARD
 
 template <class T>
 BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b; b = t; }
