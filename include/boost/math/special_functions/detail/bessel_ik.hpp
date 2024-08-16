@@ -18,6 +18,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/config.hpp>
+#include <iostream>
 
 // Modified Bessel functions of the first and second kind of fractional order
 
@@ -334,8 +335,6 @@ int bessel_ik(T v, T x, T* result_I, T* result_K, int kind, const Policy& pol)
        T eight_z = 8 * x;
        Kv = 1 + (mu - 1) / eight_z + (mu - 1) * (mu - 9) / (2 * eight_z * eight_z) + (mu - 1) * (mu - 9) * (mu - 25) / (6 * eight_z * eight_z * eight_z);
        Kv *= exp(-x) * constants::root_pi<T>() / sqrt(2 * x);
-       n = 0;
-       u = 0;
     }
     else
     {
@@ -416,6 +415,7 @@ int bessel_ik(T v, T x, T* result_I, T* result_K, int kind, const Policy& pol)
     }
     if (reflect)
     {
+        BOOST_MATH_ASSERT(fabs(v - n - u) < tools::forth_root_epsilon<T>());
         T z = (u + n % 2);
         T fact = (2 / pi<T>()) * (boost::math::sin_pi(z, pol) * Kv);
         if(fact == 0)
