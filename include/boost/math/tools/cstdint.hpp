@@ -56,6 +56,8 @@ using size_t = unsigned long;
 
 #else
 
+#include <cstdint>
+
 namespace boost {
 namespace math {
 
