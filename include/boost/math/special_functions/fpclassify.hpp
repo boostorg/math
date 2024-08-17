@@ -14,7 +14,7 @@
 
 #include <boost/math/tools/config.hpp>
 
-#ifndef BOOST_MATH_NVRTC_ENABLED
+#ifndef BOOST_MATH_HAS_NVRTC
 
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
@@ -791,7 +791,7 @@ inline BOOST_MATH_GPU_ENABLED int fpclassify(T x)
 } // Namespace math
 } // Namespace boost
 
-#endif // BOOST_MATH_NVRTC_ENABLED
+#endif // BOOST_MATH_HAS_NVRTC
 
 #endif // BOOST_MATH_FPCLASSIFY_HPP
 

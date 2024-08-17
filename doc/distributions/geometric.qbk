@@ -303,6 +303,9 @@ the context of this distribution:
    ``quantile(complement(geometric(p), P))``]]
 ]
 
+In this distribution the implementation of `logcdf` is specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 This distribution is implemented using the pow and exp functions, so most results
@@ -322,6 +325,7 @@ the expected number of failures using the quantile.
 [[Function][Implementation Notes]]
 [[pdf][pdf =  p * pow(q, k)]]
 [[cdf][cdf = 1 - q[super k=1]]]
+[[logcdf][log(cdf) = log1p(-exp(log1p(-p) * (k+1)))]]
 [[cdf complement][exp(log1p(-p) * (k+1))]]
 [[quantile][k = log1p(-x) / log1p(-p) -1]]
 [[quantile from the complement][k = log(x) / log1p(-p) -1]]

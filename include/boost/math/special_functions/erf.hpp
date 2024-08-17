@@ -11,8 +11,11 @@
 #pragma once
 #endif
 
-#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -1272,6 +1275,64 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type erfc(T z)
 
 } // namespace math
 } // namespace boost
+
+#else // Special handling for NVRTC platform
+
+namespace boost {
+namespace math {
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED auto erf(T x)
+{
+   return ::erf(x);
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED auto erf(float x)
+{
+   return ::erff(x);
+}
+
+template <typename T, typename Policy>
+BOOST_MATH_GPU_ENABLED auto erf(T x, const Policy&)
+{
+   return ::erf(x);
+}
+
+template <typename Policy>
+BOOST_MATH_GPU_ENABLED auto erf(float x, const Policy&)
+{
+   return ::erff(x);
+}
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED auto erfc(T x)
+{
+   return ::erfc(x);
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED auto erfc(float x)
+{
+   return ::erfcf(x);
+}
+
+template <typename T, typename Policy>
+BOOST_MATH_GPU_ENABLED auto erfc(T x, const Policy&)
+{
+   return ::erfc(x);
+}
+
+template <typename Policy>
+BOOST_MATH_GPU_ENABLED auto erfc(float x, const Policy&)
+{
+   return ::erfcf(x);
+}
+
+} // namespace math
+} // namespace boost
+
+#endif // BOOST_MATH_HAS_NVRTC
 
 #include <boost/math/special_functions/detail/erf_inv.hpp>
 

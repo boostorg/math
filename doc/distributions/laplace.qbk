@@ -76,6 +76,9 @@ distributions are supported: __usual_accessors.
 
 The domain of the random variable is \[-[infin],+[infin]\].
 
+In this distribution the implementation of both `logcdf`, and `logpdf` are specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 The laplace distribution is implemented in terms of the
@@ -90,11 +93,19 @@ and its complement /q = 1-p/.
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = e[super -abs(x-[mu]) \/ [sigma]] \/ (2 * [sigma]) ]]
+[[logpdf][log(pdf) = -abs(x-[mu])/[sigma] - log([sigma]) - log(2) ]]
 [[cdf][Using the relations:
 
 x <  [mu] : p =  e[super (x-[mu])/[sigma] ] \/ [sigma]
 
 x >= [mu] : p =  1 - e[super ([mu]-x)/[sigma] ] \/ [sigma]
+]]
+[[logcdf][log(cdf) = 
+
+x <  [mu] : p = ((x - [mu]) / [sigma]) - ln(2)
+
+x >= [mu] : p = log1p(-exp(([mu]-x) / [sigma]) / 2)
+
 ]]
 [[cdf complement][Using the relation:
 

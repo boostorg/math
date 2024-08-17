@@ -15,6 +15,9 @@
 #endif
 
 #include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+
 #include <type_traits>
 
 namespace boost{ namespace math{
@@ -489,6 +492,64 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type erf_inv(T z)
 
 } // namespace math
 } // namespace boost
+
+#else // Special handling for NVRTC
+
+namespace boost {
+namespace math {
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED auto erf_inv(T x)
+{
+   return ::erfinv(x);
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED auto erf_inv(float x)
+{
+   return ::erfinvf(x);
+}
+
+template <typename T, typename Policy>
+BOOST_MATH_GPU_ENABLED auto erf_inv(T x, const Policy&)
+{
+   return ::erfinv(x);
+}
+
+template <typename Policy>
+BOOST_MATH_GPU_ENABLED auto erf_inv(float x, const Policy&)
+{
+   return ::erfinvf(x);
+}
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED auto erfc_inv(T x)
+{
+   return ::erfcinv(x);
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED auto erfc_inv(float x)
+{
+   return ::erfcinvf(x);
+}
+
+template <typename T, typename Policy>
+BOOST_MATH_GPU_ENABLED auto erfc_inv(T x, const Policy&)
+{
+   return ::erfcinv(x);
+}
+
+template <typename Policy>
+BOOST_MATH_GPU_ENABLED auto erfc_inv(float x, const Policy&)
+{
+   return ::erfcinvf(x);
+}
+
+} // namespace math
+} // namespace boost
+
+#endif // BOOST_MATH_HAS_NVRTV
 
 #ifdef _MSC_VER
 #pragma warning(pop)

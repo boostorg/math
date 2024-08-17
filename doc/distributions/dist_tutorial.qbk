@@ -128,11 +128,48 @@ And quantiles are just the same:
    quantile(my_dist, p);  // Returns the value of the random variable x
                           // such that cdf(my_dist, x) == p.
 
+As are the logcdf (Natural log of the Cumulative Distribution Function):
+
+   logcdf(my_dist, x); // Returns logcdf at at point x of distribution my_dist.
+
+And the logpdf (Natural log of the Probability Density Function):
+
+   logpdf(my_dist, x); // Returns logpdf at point x of distribution my_dist.
+
 If you're wondering why these aren't member functions, it's to
 make the library more easily extensible: if you want to add additional
 generic operations - let's say the /n'th moment/ - then all you have to
 do is add the appropriate non-member functions, overloaded for each
 implemented distribution type.
+
+The logcdf and logpdf functions are minimally calculated with log(cdf(my_dist, x)),
+and log(pdf(my_dist, x)) respectively. The following distributions have specialized
+implementations of the logcdf:
+
+* Exponential
+* Extreme Value
+* Geometric
+* Laplace
+* Logistic
+* Pareto
+* Rayleigh
+* Weibull
+
+And the following distributions have specialized implementations of logpdf:
+
+* Exponential
+* Extreme Value
+* Gamma
+* Inverse Gamma
+* Inverse Gaussian
+* Laplace
+* Normal
+* Poisson
+* Rayleigh
+* Weibull
+
+These above listed specialized implementations allow a higher degree of precision
+than can be obtained through the naive generic method.
 
 [tip
 

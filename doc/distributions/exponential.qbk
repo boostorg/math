@@ -57,6 +57,9 @@ that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random variable is \[0, +[infin]\].
 
+In this distribution the implementation of both `logcdf`, and `logpdf` are specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 The exponential distribution is implemented in terms of the 
@@ -71,7 +74,9 @@ In the following table [lambda] is the parameter lambda of the distribution,
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = [lambda] * exp(-[lambda] * x) ]]
+[[logpdf][log(pdf) = -expm1(-x * [lambda]) ]]
 [[cdf][Using the relation: p = 1 - exp(-x * [lambda]) = -expm1(-x * [lambda]) ]]
+[[logcdf][log(cdf) = log1p(-exp(-x * [lambda])) ]]
 [[cdf complement][Using the relation: q = exp(-x * [lambda]) ]]
 [[quantile][Using the relation: x = -log(1-p) / [lambda] = -log1p(-p) / [lambda]]]
 [[quantile from the complement][Using the relation: x = -log(q) / [lambda]]]
