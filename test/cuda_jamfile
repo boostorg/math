@@ -171,3 +171,5 @@ run test_trigamma_float.cu ;
 
 run test_trunc_double.cu ;
 run test_trunc_float.cu ;
+run test_pow1p_double.cu ;
+run test_pow1p_float.cu ;
