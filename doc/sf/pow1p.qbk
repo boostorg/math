@@ -1,0 +1,34 @@
+[/
+  Copyright Matt Borland 2024
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:pow1p pow1p]
+
+[h4 Synopsis]
+
+    #include <boost/math/special_functions/pow1p.hpp>
+
+    namespace boost {
+    namespace math {
+
+    template <typename T1, typename T2, typename Policy>
+    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
+    pow1p(const T1 x, const T2 y, const Policy& pol)
+
+    template <typename T1, typename T2>
+    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
+    pow1p(const T1 x, const T2 y)
+
+    }} // namespaces
+
+
+The function `pow1p` computes (1 + x)[super y ] where x and y are real numbers. 
+This function is particularly useful for scenarios where adding 1 to x before raising it to the power of y is required. 
+It provides a more numerically stable and efficient way to perform this computation, especially for small values of x.
+When x is very small, directly computing (1 + x)[super y ] using standard arithmetic operations can lead to a loss of precision due to floating-point arithmetic limitations. 
+The pow1p function helps mitigate this issue by internally handling such cases more accurately.
+
+[endsect]
