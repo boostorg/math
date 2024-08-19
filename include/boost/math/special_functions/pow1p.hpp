@@ -13,6 +13,7 @@
 #include <boost/math/tools/is_detected.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/special_functions/sign.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
 // For cuda we would rather use builtin nextafter than unsupported boost::math::nextafter
