@@ -11,6 +11,7 @@
 #include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/tools/is_detected.hpp>
+#include <boost/math/tools/precision.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
@@ -60,7 +61,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
 
     // The special values follow the spec of the pow() function defined in
     // IEEE-754, Section 9.2.1.  The order of the `if` statements matters.
-    if (y == T(0)) 
+    if (abs(y) == T(0)) 
     { 
         // pow(x, +/-0)
         return T(1);
@@ -92,15 +93,15 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
 
     if (boost::math::isinf(y))
     {
-        if (boost::math::signbit(y))
+        if (boost::math::signbit(y) == 1)
         {
-            // Pow(y, -inf)
-            return (x < 0 && x > -2) ? boost::math::numeric_limits<T>::infinity() : T(0);
+            // pow(x, -inf)
+            return T(0);
         }
         else
         {
             // pow(x, +inf)
-            return (x < 0 && x > -2) ? T(0) : boost::math::numeric_limits<T>::infinity();
+            return y;
         }
     }
 
@@ -134,12 +135,6 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
     // Handle (1+x) < 0
     if (x < -1) 
     {
-        if (fmod(y, T(1)) != T(0))
-        { 
-            // y is not an integer so we have an error
-            return boost::math::policies::raise_evaluation_error<T>(function, "Y is not an integer", y, pol);
-        }
-
         // TODO(fancidev): maybe use (1+x)^y == [(1+x)^2]^(y/2)
         return pow(1+x, y);
     }
