@@ -10,6 +10,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/tools/promotion.hpp>
+#include <boost/math/tools/is_detected.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
@@ -18,6 +19,7 @@
 #ifndef BOOST_MATH_ENABLE_CUDA
 #  include <boost/math/special_functions/next.hpp>
 #  ifndef BOOST_MATH_HAS_NVRTC
+#    include <utility>
 #    include <boost/math/special_functions/math_fwd.hpp>
 #  endif // BOOST_MATH_HAS_NVRTC
 #endif // BOOST_MATH_ENABLE_CUDA
@@ -26,6 +28,29 @@ namespace boost {
 namespace math {
 
 namespace detail {
+
+#ifndef BOOST_MATH_ENABLE_CUDA
+
+template <typename T>
+using fma_t = decltype(fma(std::declval<T>(), std::declval<T>(), std::declval<T>()));
+
+template <typename T>
+constexpr bool is_fma_detected_v = boost::math::tools::is_detected<fma_t, T>::value;
+
+template <typename T, boost::math::enable_if_t<is_fma_detected_v<T>, bool> = true>
+BOOST_MATH_FORCEINLINE BOOST_MATH_GPU_ENABLED T local_fma(const T x, const T y, const T z)
+{
+    using std::fma;
+    return fma(x, y, z);
+}
+
+template <typename T, boost::math::enable_if_t<!is_fma_detected_v<T>, bool> = true>
+BOOST_MATH_FORCEINLINE BOOST_MATH_GPU_ENABLED T local_fma(const T x, const T y, const T z)
+{
+    return x * y + z;
+}
+
+#endif // BOOST_MATH_ENABLE_CUDA
 
 template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
@@ -59,7 +84,9 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
         return T(1);
     }
 
-    if (x == T(0)) { // pow(+1, y)
+    if (x == T(0))
+    { 
+        // pow(+1, y)
         return T(1);
     }
 
@@ -183,9 +210,15 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
     // w is the rounding error.  This improves accuracy when y is large.
     // Then exp(y*u) == exp(z)*exp(w).
     T z = y * u;
+
+    #ifdef BOOST_MATH_ENABLE_CUDA
     T w = fma(y, u, -z);
+    #else
+    T w = local_fma(y, u, -z);
+    #endif
+
     T term2 = exp(z) * exp(w);
-    
+
     return term1 * term2;
 }
 
