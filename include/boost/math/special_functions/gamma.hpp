@@ -14,9 +14,10 @@
 #pragma once
 #endif
 
-#ifndef __CUDACC_RTC__
-
 #include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>

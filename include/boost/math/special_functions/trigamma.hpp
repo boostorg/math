@@ -11,16 +11,22 @@
 #pragma once
 #endif
 
-#include <type_traits>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/rational.hpp>
-#include <boost/math/tools/series.hpp>
 #include <boost/math/tools/promotion.hpp>
+#include <boost/math/tools/big_constant.hpp>
+#include <boost/math/tools/type_traits.hpp>
+#include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/tools/big_constant.hpp>
+#include <boost/math/special_functions/sin_pi.hpp>
+#include <boost/math/special_functions/pow.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/polygamma.hpp>
+#include <boost/math/tools/series.hpp>
+#endif
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -36,17 +42,20 @@ namespace boost{
 namespace math{
 namespace detail{
 
+// TODO(mborland): Temporary for NVRTC
+#ifndef BOOST_MATH_HAS_NVRTC
 template<class T, class Policy>
 T polygamma_imp(const int n, T x, const Policy &pol);
 
 template <class T, class Policy>
-T trigamma_prec(T x, const Policy& pol, const std::integral_constant<int, 0>&)
+T trigamma_prec(T x, const Policy& pol, const boost::math::integral_constant<int, 0>&)
 {
    return polygamma_imp(1, x, pol);
 }
+#endif
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const boost::math::integral_constant<int, 53>&)
 {
    // Max error in interpolated form: 3.736e-017
    BOOST_MATH_STATIC const T offset = BOOST_MATH_BIG_CONSTANT(T, 53, 2.1093254089355469);
@@ -119,7 +128,7 @@ BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const std::integral_c
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const std::integral_constant<int, 64>&)
+BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const boost::math::integral_constant<int, 64>&)
 {
    // Max error in interpolated form: 1.178e-020
    BOOST_MATH_STATIC const T offset_1_2 = BOOST_MATH_BIG_CONSTANT(T, 64, 2.109325408935546875);
@@ -197,7 +206,7 @@ BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const std::integral_c
 }
 
 template <class T, class Policy>
-T trigamma_prec(T x, const Policy&, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const boost::math::integral_constant<int, 113>&)
 {
    // Max error in interpolated form: 1.916e-035
 
@@ -416,13 +425,13 @@ struct trigamma_initializer
       BOOST_MATH_GPU_ENABLED init()
       {
          typedef typename policies::precision<T, Policy>::type precision_type;
-         do_init(std::integral_constant<bool, precision_type::value && (precision_type::value <= 113)>());
+         do_init(boost::math::integral_constant<bool, precision_type::value && (precision_type::value <= 113)>());
       }
-      BOOST_MATH_GPU_ENABLED void do_init(const std::true_type&)
+      BOOST_MATH_GPU_ENABLED void do_init(const boost::math::true_type&)
       {
          boost::math::trigamma(T(2.5), Policy());
       }
-      BOOST_MATH_GPU_ENABLED void do_init(const std::false_type&){}
+      BOOST_MATH_GPU_ENABLED void do_init(const boost::math::false_type&){}
       BOOST_MATH_GPU_ENABLED void force_instantiate()const{}
    };
    static const init initializer;
@@ -446,7 +455,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename policies::precision<T, Policy>::type precision_type;
-   typedef std::integral_constant<int,
+   typedef boost::math::integral_constant<int,
       precision_type::value <= 0 ? 0 :
       precision_type::value <= 53 ? 53 :
       precision_type::value <= 64 ? 64 :

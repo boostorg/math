@@ -12,12 +12,12 @@
 
 #include <boost/math/tools/config.hpp>
 
-namespace boost {
-namespace math {
-
 #ifdef BOOST_MATH_ENABLE_CUDA
 
 #include <cuda/std/type_traits>
+
+namespace boost {
+namespace math {
 
 // Helper classes
 using cuda::std::integral_constant;
@@ -162,6 +162,9 @@ using cuda::std::underlying_type_t;
 #else // STD versions
 
 #include <type_traits>
+
+namespace boost {
+namespace math {
 
 // Helper classes
 using std::integral_constant;

@@ -11,6 +11,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/tools/type_traits.hpp>
+#include <boost/math/tools/cstdint.hpp>
 
 #ifndef BOOST_MATH_HAS_NVRTC
 
@@ -1017,7 +1018,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE R checked_narrowing_cast(T val, co
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline void check_series_iterations(const char* function, BOOST_MATH_UINTMAX_T max_iter, const Policy& pol) noexcept(boost::math::is_floating_point_v<T>)
+BOOST_MATH_GPU_ENABLED inline void check_series_iterations(const char* function, boost::math::uintmax_t max_iter, const Policy& pol) noexcept(boost::math::is_floating_point_v<T>)
 {
    if(max_iter >= policies::get_max_series_iterations<Policy>())
       raise_evaluation_error<T>(
@@ -1026,7 +1027,7 @@ BOOST_MATH_GPU_ENABLED inline void check_series_iterations(const char* function,
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline void check_root_iterations(const char* function, BOOST_MATH_UINTMAX_T max_iter, const Policy& pol) noexcept(boost::math::is_floating_point_v<T>)
+BOOST_MATH_GPU_ENABLED inline void check_root_iterations(const char* function, boost::math::uintmax_t max_iter, const Policy& pol) noexcept(boost::math::is_floating_point_v<T>)
 {
    if(max_iter >= policies::get_max_root_iterations<Policy>())
       raise_evaluation_error<T>(
