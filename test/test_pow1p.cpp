@@ -20,7 +20,9 @@ void test()
     CHECK_EQUAL(boost::math::pow1p(T(1), T(0)), T(1));
     
     // pow(0, y)
+    #ifndef BOOST_MATH_NO_EXCEPTIONS
     CHECK_THROW(boost::math::pow1p(T(-1), T(-1)), std::domain_error);
+    #endif
     CHECK_EQUAL(boost::math::pow1p(T(-1), T(1)), T(0));
 
     // pow(-1, inf)

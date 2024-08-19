@@ -18,7 +18,7 @@
 
 // For cuda we would rather use builtin nextafter than unsupported boost::math::nextafter
 // NVRTC does not support the forward declarations header
-#ifndef BOOST_MATH_ENABLE_CUDA
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 #  include <boost/math/special_functions/next.hpp>
 #  ifndef BOOST_MATH_HAS_NVRTC
 #    include <utility>
@@ -31,7 +31,7 @@ namespace math {
 
 namespace detail {
 
-#ifndef BOOST_MATH_ENABLE_CUDA
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 
 template <typename T>
 using fma_t = decltype(fma(std::declval<T>(), std::declval<T>(), std::declval<T>()));
@@ -52,7 +52,7 @@ BOOST_MATH_FORCEINLINE BOOST_MATH_GPU_ENABLED T local_fma(const T x, const T y, 
     return x * y + z;
 }
 
-#endif // BOOST_MATH_ENABLE_CUDA
+#endif // BOOST_MATH_HAS_GPU_SUPPORT
 
 template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
@@ -150,7 +150,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
         t = x - (s - T(1));
         if (t > 0) 
         {
-            #ifdef BOOST_MATH_ENABLE_CUDA
+            #ifdef BOOST_MATH_HAS_GPU_SUPPORT
             s = ::nextafter(s, T(1));
             #else
             s = boost::math::nextafter(s, T(1));
@@ -165,7 +165,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
         t = x - (s - T(1));
         if (t < 0) 
         {
-            #ifdef BOOST_MATH_ENABLE_CUDA
+            #ifdef BOOST_MATH_HAS_GPU_SUPPORT
             s = ::nextafter(s, T(0));
             #else
             s = boost::math::nextafter(s, T(0));
@@ -180,7 +180,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
         t = T(1) - (s - x);
         if (t < 0) 
         {
-            #ifdef BOOST_MATH_ENABLE_CUDA
+            #ifdef BOOST_MATH_HAS_GPU_SUPPORT
             s = ::nextafter(s, T(0));
             #else
             s = boost::math::nextafter(s, T(0));
@@ -207,7 +207,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
     // Then exp(y*u) == exp(z)*exp(w).
     T z = y * u;
 
-    #ifdef BOOST_MATH_ENABLE_CUDA
+    #ifdef BOOST_MATH_HAS_GPU_SUPPORT
     T w = fma(y, u, -z);
     #else
     T w = local_fma(y, u, -z);
