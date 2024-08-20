@@ -11,9 +11,13 @@
 #pragma once
 #endif
 
-#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/policies/policy.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/special_functions/math_fwd.hpp>
+#endif
 
 namespace boost{ namespace math{
 

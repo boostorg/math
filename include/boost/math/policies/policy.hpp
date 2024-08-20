@@ -11,6 +11,7 @@
 #include <boost/math/tools/mp.hpp>
 #include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/tools/type_traits.hpp>
+#include <boost/math/tools/cstdint.hpp>
 
 namespace boost{ namespace math{
 
@@ -313,7 +314,7 @@ public:
    };
 };
 
-template <class Seq, class T, BOOST_MATH_SIZE_T N>
+template <class Seq, class T, boost::math::size_t N>
 struct append_N
 {
    using type = typename append_N<mp::mp_push_back<Seq, T>, T, N-1>::type;
@@ -402,7 +403,7 @@ private:
    // Typelist of the arguments:
    //
    using arg_list = mp::mp_list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13>;
-   static constexpr BOOST_MATH_SIZE_T arg_list_size = mp::mp_size<arg_list>::value;
+   static constexpr boost::math::size_t arg_list_size = mp::mp_size<arg_list>::value;
 
    template<typename A, typename B, bool b>
    struct pick_arg
@@ -533,7 +534,7 @@ class normalise
 {
 private:
    using arg_list = mp::mp_list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13>;
-   static constexpr BOOST_MATH_SIZE_T arg_list_size = mp::mp_size<arg_list>::value;
+   static constexpr boost::math::size_t arg_list_size = mp::mp_size<arg_list>::value;
 
    template<typename A, typename B, bool b>
    struct pick_arg
@@ -882,7 +883,7 @@ struct series_factor_calc<T, Digits, boost::math::true_type, boost::math::false_
 {
    BOOST_MATH_GPU_ENABLED static constexpr T get() noexcept(boost::math::is_floating_point<T>::value)
    {
-      return 1 / static_cast<T>(static_cast<BOOST_MATH_UINTMAX_T>(1u) << (Digits::value - 1));
+      return 1 / static_cast<T>(static_cast<boost::math::uintmax_t>(1u) << (Digits::value - 1));
    }
 };
 template <class T, class Digits>
@@ -901,7 +902,7 @@ BOOST_MATH_GPU_ENABLED constexpr T get_epsilon_imp(boost::math::true_type const&
    static_assert(boost::math::numeric_limits<T>::radix == 2, "boost::math::numeric_limits<T>::radix == 2");
 
    typedef typename boost::math::policies::precision<T, Policy>::type p_t;
-   typedef boost::math::integral_constant<bool, p_t::value <= boost::math::numeric_limits<BOOST_MATH_UINTMAX_T>::digits> is_small_int;
+   typedef boost::math::integral_constant<bool, p_t::value <= boost::math::numeric_limits<boost::math::uintmax_t>::digits> is_small_int;
    typedef boost::math::integral_constant<bool, p_t::value >= boost::math::numeric_limits<T>::digits> is_default_value;
    return series_factor_calc<T, p_t, is_small_int, is_default_value>::get();
 }
