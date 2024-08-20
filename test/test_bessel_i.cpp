@@ -3,7 +3,13 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef SYCL_LANGUAGE_VERSION
 #include <pch_light.hpp>
+#else
+#define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
+#include <boost/math/tools/config.hpp>
+#endif
+
 #include "test_bessel_i.hpp"
 
 //
@@ -82,7 +88,11 @@ void expected_results()
       "linux",                       // platform
       largest_type,                  // test type(s)
       ".*Random.*",                    // test data group
+      #ifdef SYCL_LANGUAGE_VERSION
+      ".*", 600, 200);
+      #else
       ".*", 400, 200);               // test function
+      #endif
 
    add_expected_result(
       "GNU.*",                       // compiler
@@ -111,7 +121,11 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
+      #ifdef SYCL_LANGUAGE_VERSION
+      ".*", 400, 200);
+      #else
       ".*", 20, 10);                 // test function
+      #endif
    //
    // Set error rates a little higher for real_concept - 
    // now that we use a series approximation for small z

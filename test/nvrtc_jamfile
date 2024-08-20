@@ -90,12 +90,47 @@ run test_saspoint5_quan_nvrtc_float.cpp ;
 # Special Functions
 run test_beta_nvrtc_double.cpp ;
 run test_beta_nvrtc_float.cpp ;
+
+run test_bessel_i0_nvrtc_double.cpp ;
+run test_bessel_i0_nvrtc_float.cpp ;
+run test_bessel_i1_nvrtc_double.cpp ;
+run test_bessel_i1_nvrtc_float.cpp ;
+run test_bessel_j0_nvrtc_double.cpp ;
+run test_bessel_j0_nvrtc_float.cpp ;
+run test_bessel_j1_nvrtc_double.cpp ;
+run test_bessel_j1_nvrtc_float.cpp ;
+run test_bessel_k0_nvrtc_double.cpp ;
+run test_bessel_k0_nvrtc_float.cpp ;
+run test_bessel_k1_nvrtc_double.cpp ;
+run test_bessel_k1_nvrtc_float.cpp ;
+run test_bessel_kn_nvrtc_double.cpp ;
+run test_bessel_kn_nvrtc_float.cpp ;
+run test_bessel_y0_nvrtc_double.cpp ;
+run test_bessel_y0_nvrtc_float.cpp ;
+run test_bessel_y1_nvrtc_double.cpp ;
+run test_bessel_y1_nvrtc_float.cpp ;
+run test_cyl_bessel_i_nvrtc_double.cpp ;
+run test_cyl_bessel_i_nvrtc_float.cpp ;
+run test_cyl_bessel_j_nvrtc_double.cpp ;
+run test_cyl_bessel_j_nvrtc_float.cpp ;
+run test_cyl_bessel_k_nvrtc_double.cpp ;
+run test_cyl_bessel_k_nvrtc_float.cpp ;
+run test_sph_bessel_nvrtc_double.cpp ;
+run test_sph_bessel_nvrtc_float.cpp ;
+run test_cyl_neumann_nvrtc_double.cpp ;
+run test_cyl_neumann_nvrtc_float.cpp ;
+run test_sph_neumann_nvrtc_double.cpp ;
+run test_sph_neumann_nvrtc_float.cpp ;
+
 run test_cbrt_nvrtc_double.cpp ;
 run test_cbrt_nvrtc_float.cpp ;
+
 run test_cos_pi_nvrtc_double.cpp ;
 run test_cos_pi_nvrtc_float.cpp ;
+
 run test_digamma_nvrtc_double.cpp ;
 run test_digamma_nvrtc_float.cpp ;
+
 run test_erf_nvrtc_double.cpp ;
 run test_erf_nvrtc_float.cpp ;
 run test_erfc_nvrtc_double.cpp ;
@@ -104,22 +139,32 @@ run test_erf_inv_nvrtc_double.cpp ;
 run test_erf_inv_nvrtc_float.cpp ;
 run test_erfc_inv_nvrtc_double.cpp ;
 run test_erfc_inv_nvrtc_float.cpp ;
+
 run test_expm1_nvrtc_double.cpp ;
 run test_expm1_nvrtc_float.cpp ;
+
 run test_fpclassify_nvrtc_double.cpp ;
 run test_fpclassify_nvrtc_float.cpp ;
+
 run test_gamma_nvrtc_double.cpp ;
 run test_gamma_nvrtc_float.cpp ;
+
 run test_log1p_nvrtc_double.cpp ;
 run test_log1p_nvrtc_float.cpp ;
+
 run test_modf_nvrtc_double.cpp ;
 run test_modf_nvrtc_float.cpp ;
+
 run test_round_nvrtc_double.cpp ;
 run test_round_nvrtc_float.cpp ;
+
 run test_sign_nvrtc_double.cpp ;
 run test_sign_nvrtc_float.cpp ;
+
 run test_sin_pi_nvrtc_double.cpp ;
 run test_sin_pi_nvrtc_float.cpp ;
+
 run test_trigamma_nvrtc_double.cpp ;
 run test_trigamma_nvrtc_float.cpp ;
+
 run test_trunc_nvrtc_double.cpp ;
