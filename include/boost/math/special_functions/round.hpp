@@ -274,6 +274,30 @@ BOOST_MATH_GPU_ENABLED float round(float x, const Policy&)
 }
 
 template <typename T>
+BOOST_MATH_GPU_ENABLED int iround(T x)
+{
+   return static_cast<int>(::lround(x));
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED int iround(float x)
+{
+   return static_cast<int>(::lroundf(x));
+}
+
+template <typename T, typename Policy>
+BOOST_MATH_GPU_ENABLED int iround(T x, const Policy&)
+{
+   return static_cast<int>(::lround(x));
+}
+
+template <typename Policy>
+BOOST_MATH_GPU_ENABLED int iround(float x, const Policy&)
+{
+   return static_cast<int>(::lroundf(x));
+}
+
+template <typename T>
 BOOST_MATH_GPU_ENABLED long lround(T x)
 {
    return ::lround(x);

@@ -9,6 +9,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/bessel.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
@@ -175,6 +176,7 @@ void test_bessel(T, const char* name)
     //
     // Extra test coverage:
     //
+    #ifndef SYCL_LANGUAGE_VERSION // SYCL doesn't throw 
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(2), T(-1)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(2.2), T(-1)), std::domain_error);
     BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
@@ -194,6 +196,7 @@ void test_bessel(T, const char* name)
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(-1.25), T(0)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(-1), T(0)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(1), T(0)), std::domain_error);
+    #endif
 }
 
 

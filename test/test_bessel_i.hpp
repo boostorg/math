@@ -9,6 +9,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/bessel.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
@@ -180,7 +181,10 @@ void test_bessel(T, const char* name)
     //
     // Special cases for full coverage:
     //
+    #ifndef BOOST_MATH_NO_EXCEPTIONS
     BOOST_CHECK_THROW(boost::math::cyl_bessel_i(T(-2.5), T(-2.5)), std::domain_error);
+    #endif
+
     BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(0), T(0)), T(1));
     BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(10), T(0)), T(0));
     BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(-10), T(0)), T(0));
@@ -197,10 +201,12 @@ void test_bessel(T, const char* name)
        }
     }
     T tolerance = boost::math::tools::epsilon<T>() * 100;
+#ifndef SYCL_LANGUAGE_VERSION
     if ((boost::math::tools::digits<T>() <= std::numeric_limits<double>::digits) && (std::numeric_limits<T>::max_exponent > 1000))
     {
        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(T(0.5), T(710)), SC_(3.3447452278080108123142599104927325061327359278058601201179e306), tolerance);
     }
+#endif
 #if LDBL_MAX_EXP >= 11356
     BOOST_IF_CONSTEXPR (std::numeric_limits<T>::max_exponent >= 11356)
     {
