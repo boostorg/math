@@ -24,12 +24,16 @@
 #pragma once
 #endif
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+
 #include <vector>
 #include <complex>
 #include <type_traits>
-#include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/detail/round_fwd.hpp>
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
+#include <boost/math/tools/type_traits.hpp>
 #include <boost/math/policies/policy.hpp>
 
 #define BOOST_NO_MACRO_EXPAND /**/
@@ -420,15 +424,15 @@ namespace boost
    template <class RT>
    struct max_factorial;
    template <class RT>
-   RT factorial(unsigned int);
+   BOOST_MATH_GPU_ENABLED RT factorial(unsigned int);
    template <class RT, class Policy>
-   RT factorial(unsigned int, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED RT factorial(unsigned int, const Policy& pol);
    template <class RT>
    BOOST_MATH_GPU_ENABLED RT unchecked_factorial(unsigned int BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(RT));
    template <class RT>
-   RT double_factorial(unsigned i);
+   BOOST_MATH_GPU_ENABLED RT double_factorial(unsigned i);
    template <class RT, class Policy>
-   RT double_factorial(unsigned i, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED RT double_factorial(unsigned i, const Policy& pol);
 
    template <class RT>
    tools::promote_args_t<RT> falling_factorial(RT x, unsigned n);
@@ -554,11 +558,11 @@ namespace boost
 
    // Hypotenuse function sqrt(x ^ 2 + y ^ 2).
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
          hypot(T1 x, T2 y);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
          hypot(T1 x, T2 y, const Policy&);
 
    // cbrt - cube root.
@@ -607,10 +611,10 @@ namespace boost
 
    // sinus cardinals:
    template <class T>
-   tools::promote_args_t<T> sinc_pi(T x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> sinc_pi(T x);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> sinc_pi(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> sinc_pi(T x, const Policy&);
 
    template <class T>
    tools::promote_args_t<T> sinhc_pi(T x);
@@ -639,36 +643,36 @@ namespace boost
 
    namespace detail{
 
-      typedef std::integral_constant<int, 0> bessel_no_int_tag;      // No integer optimisation possible.
-      typedef std::integral_constant<int, 1> bessel_maybe_int_tag;   // Maybe integer optimisation.
-      typedef std::integral_constant<int, 2> bessel_int_tag;         // Definite integer optimisation.
+      typedef boost::math::integral_constant<int, 0> bessel_no_int_tag;      // No integer optimisation possible.
+      typedef boost::math::integral_constant<int, 1> bessel_maybe_int_tag;   // Maybe integer optimisation.
+      typedef boost::math::integral_constant<int, 2> bessel_int_tag;         // Definite integer optimisation.
 
       template <class T1, class T2, class Policy>
       struct bessel_traits
       {
-         using result_type = typename std::conditional<
-            std::is_integral<T1>::value,
+         using result_type = typename boost::math::conditional<
+            boost::math::is_integral<T1>::value,
             typename tools::promote_args<T2>::type,
             tools::promote_args_t<T1, T2>
          >::type;
 
          typedef typename policies::precision<result_type, Policy>::type precision_type;
 
-         using optimisation_tag = typename std::conditional<
+         using optimisation_tag = typename boost::math::conditional<
             (precision_type::value <= 0 || precision_type::value > 64),
             bessel_no_int_tag,
-            typename std::conditional<
-               std::is_integral<T1>::value,
+            typename boost::math::conditional<
+               boost::math::is_integral<T1>::value,
                bessel_int_tag,
                bessel_maybe_int_tag
             >::type
          >::type;
 
-         using optimisation_tag128 = typename std::conditional<
+         using optimisation_tag128 = typename boost::math::conditional<
             (precision_type::value <= 0 || precision_type::value > 113),
             bessel_no_int_tag,
-            typename std::conditional<
-               std::is_integral<T1>::value,
+            typename boost::math::conditional<
+               boost::math::is_integral<T1>::value,
                bessel_int_tag,
                bessel_maybe_int_tag
             >::type
@@ -678,98 +682,98 @@ namespace boost
 
    // Bessel functions:
    template <class T1, class T2, class Policy>
-   typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j(T1 v, T2 x, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j(T1 v, T2 x, const Policy& pol);
    template <class T1, class T2, class Policy>
-   typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j_prime(T1 v, T2 x, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j_prime(T1 v, T2 x, const Policy& pol);
 
    template <class T1, class T2>
-   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_j(T1 v, T2 x);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_j(T1 v, T2 x);
    template <class T1, class T2>
-   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_j_prime(T1 v, T2 x);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_j_prime(T1 v, T2 x);
 
    template <class T, class Policy>
-   typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel(unsigned v, T x, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel(unsigned v, T x, const Policy& pol);
    template <class T, class Policy>
-   typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel_prime(unsigned v, T x, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel_prime(unsigned v, T x, const Policy& pol);
 
    template <class T>
-   typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_bessel(unsigned v, T x);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_bessel(unsigned v, T x);
    template <class T>
-   typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_bessel_prime(unsigned v, T x);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_bessel_prime(unsigned v, T x);
 
    template <class T1, class T2, class Policy>
-   typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i(T1 v, T2 x, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i(T1 v, T2 x, const Policy& pol);
    template <class T1, class T2, class Policy>
-   typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i_prime(T1 v, T2 x, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i_prime(T1 v, T2 x, const Policy& pol);
 
    template <class T1, class T2>
-   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_i(T1 v, T2 x);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_i(T1 v, T2 x);
    template <class T1, class T2>
-   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_i_prime(T1 v, T2 x);
-
-   template <class T1, class T2, class Policy>
-   typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k(T1 v, T2 x, const Policy& pol);
-   template <class T1, class T2, class Policy>
-   typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k_prime(T1 v, T2 x, const Policy& pol);
-
-   template <class T1, class T2>
-   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_k(T1 v, T2 x);
-   template <class T1, class T2>
-   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_k_prime(T1 v, T2 x);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_i_prime(T1 v, T2 x);
 
    template <class T1, class T2, class Policy>
-   typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann(T1 v, T2 x, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k(T1 v, T2 x, const Policy& pol);
    template <class T1, class T2, class Policy>
-   typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann_prime(T1 v, T2 x, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k_prime(T1 v, T2 x, const Policy& pol);
 
    template <class T1, class T2>
-   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_neumann(T1 v, T2 x);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_k(T1 v, T2 x);
    template <class T1, class T2>
-   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_neumann_prime(T1 v, T2 x);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_k_prime(T1 v, T2 x);
 
-   template <class T, class Policy>
-   typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann(unsigned v, T x, const Policy& pol);
-   template <class T, class Policy>
-   typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann_prime(unsigned v, T x, const Policy& pol);
+   template <class T1, class T2, class Policy>
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann(T1 v, T2 x, const Policy& pol);
+   template <class T1, class T2, class Policy>
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann_prime(T1 v, T2 x, const Policy& pol);
 
-   template <class T>
-   typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann(unsigned v, T x);
-   template <class T>
-   typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann_prime(unsigned v, T x);
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_neumann(T1 v, T2 x);
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_neumann_prime(T1 v, T2 x);
 
    template <class T, class Policy>
-   typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_zero(T v, int m, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann(unsigned v, T x, const Policy& pol);
+   template <class T, class Policy>
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann_prime(unsigned v, T x, const Policy& pol);
 
    template <class T>
-   typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_bessel_j_zero(T v, int m);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann(unsigned v, T x);
+   template <class T>
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann_prime(unsigned v, T x);
+
+   template <class T, class Policy>
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_zero(T v, int m, const Policy& pol);
+
+   template <class T>
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_bessel_j_zero(T v, int m);
 
    template <class T, class OutputIterator>
-   OutputIterator cyl_bessel_j_zero(T v,
+   BOOST_MATH_GPU_ENABLED OutputIterator cyl_bessel_j_zero(T v,
                           int start_index,
                           unsigned number_of_zeros,
                           OutputIterator out_it);
 
    template <class T, class OutputIterator, class Policy>
-   OutputIterator cyl_bessel_j_zero(T v,
+   BOOST_MATH_GPU_ENABLED OutputIterator cyl_bessel_j_zero(T v,
                           int start_index,
                           unsigned number_of_zeros,
                           OutputIterator out_it,
                           const Policy&);
 
    template <class T, class Policy>
-   typename detail::bessel_traits<T, T, Policy>::result_type cyl_neumann_zero(T v, int m, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, Policy>::result_type cyl_neumann_zero(T v, int m, const Policy& pol);
 
    template <class T>
-   typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_neumann_zero(T v, int m);
+   BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_neumann_zero(T v, int m);
 
    template <class T, class OutputIterator>
-   OutputIterator cyl_neumann_zero(T v,
+   BOOST_MATH_GPU_ENABLED OutputIterator cyl_neumann_zero(T v,
                          int start_index,
                          unsigned number_of_zeros,
                          OutputIterator out_it);
 
    template <class T, class OutputIterator, class Policy>
-   OutputIterator cyl_neumann_zero(T v,
+   BOOST_MATH_GPU_ENABLED OutputIterator cyl_neumann_zero(T v,
                          int start_index,
                          unsigned number_of_zeros,
                          OutputIterator out_it,
@@ -1400,10 +1404,10 @@ namespace boost
 \
    using boost::math::max_factorial;\
    template <class RT>\
-   inline RT factorial(unsigned int i) { return boost::math::factorial<RT>(i, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline RT factorial(unsigned int i) { return boost::math::factorial<RT>(i, Policy()); }\
    using boost::math::unchecked_factorial;\
    template <class RT>\
-   inline RT double_factorial(unsigned i){ return boost::math::double_factorial<RT>(i, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline RT double_factorial(unsigned i){ return boost::math::double_factorial<RT>(i, Policy()); }\
    template <class RT>\
    inline boost::math::tools::promote_args_t<RT> falling_factorial(RT x, unsigned n){ return boost::math::falling_factorial(x, n, Policy()); }\
    template <class RT>\
@@ -1465,7 +1469,7 @@ namespace boost
    \
    template <class T1, class T2>\
    inline boost::math::tools::promote_args_t<T1, T2> \
-   hypot(T1 x, T2 y){ return boost::math::hypot(x, y, Policy()); }\
+   BOOST_MATH_GPU_ENABLED hypot(T1 x, T2 y){ return boost::math::hypot(x, y, Policy()); }\
 \
    template <class RT>\
    inline boost::math::tools::promote_args_t<RT> cbrt(RT z){ return boost::math::cbrt(z, Policy()); }\
@@ -1487,7 +1491,7 @@ namespace boost
    BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> sqrt1pm1(const T& val){ return boost::math::sqrt1pm1(val, Policy()); }\
 \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> sinc_pi(T x){ return boost::math::sinc_pi(x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> sinc_pi(T x){ return boost::math::sinc_pi(x, Policy()); }\
 \
    template <class T>\
    inline boost::math::tools::promote_args_t<T> sinhc_pi(T x){ return boost::math::sinhc_pi(x, Policy()); }\
@@ -1817,6 +1821,6 @@ template <class OutputIterator, class T>\
 
 
 
-
+#endif // BOOST_MATH_HAS_NVRTC
 
 #endif // BOOST_MATH_SPECIAL_MATH_FWD_HPP

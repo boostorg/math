@@ -17,12 +17,14 @@ run test_arcsine_pdf_float.cu ;
 run test_arcsine_quan_double.cu ;
 run test_arcsine_quan_float.cu ;
 run test_arcsine_range_support_double.cu ;
+
 run test_bernoulli_cdf_double.cu ;
 run test_bernoulli_cdf_float.cu ;
 run test_bernoulli_pdf_double.cu ;
 run test_bernoulli_pdf_float.cu ;
 run test_bernoulli_range_support_double.cu ;
 run test_bernoulli_range_support_float.cu ;
+
 run test_cauchy_cdf_double.cu ;
 run test_cauchy_cdf_float.cu ;
 run test_cauchy_pdf_double.cu ;
@@ -31,6 +33,7 @@ run test_cauchy_quan_double.cu ;
 run test_cauchy_quan_float.cu ;
 run test_cauchy_range_support_double.cu ;
 run test_cauchy_range_support_float.cu ;
+
 run test_exponential_cdf_double.cu ;
 run test_exponential_cdf_float.cu ;
 run test_exponential_pdf_double.cu ;
@@ -39,40 +42,47 @@ run test_exponential_quan_double.cu ;
 run test_exponential_quan_float.cu ;
 run test_exponential_range_support_double.cu ;
 run test_exponential_range_support_float.cu ;
+
 run test_extreme_value_cdf_double.cu ;
 run test_extreme_value_cdf_float.cu ;
 run test_extreme_value_pdf_double.cu ;
 run test_extreme_value_pdf_float.cu ;
 run test_extreme_value_quan_double.cu ;
 run test_extreme_value_quan_float.cu ;
+
 run test_holtsmark_cdf_double.cu ;
 run test_holtsmark_cdf_float.cu ;
 run test_holtsmark_pdf_double.cu ;
 run test_holtsmark_pdf_float.cu ;
+
 run test_landau_cdf_double.cu ;
 run test_landau_cdf_float.cu ;
 run test_landau_pdf_double.cu ;
 run test_landau_pdf_float.cu ;
 run test_landau_quan_double.cu;
 run test_landau_quan_float.cu ;
+
 run test_laplace_cdf_double.cu ;
 run test_laplace_cdf_float.cu ;
 run test_laplace_pdf_double.cu ;
 run test_laplace_pdf_float.cu ;
 run test_laplace_quan_double.cu ;
 run test_laplace_quan_float.cu ;
+
 run test_logistic_cdf_double.cu ;
 run test_logistic_cdf_float.cu ;
 run test_logistic_pdf_double.cu ;
 run test_logistic_pdf_float.cu ;
 run test_logistic_quan_double.cu ;
 run test_logistic_quan_float.cu ;
+
 run test_mapairy_cdf_double.cu ;
 run test_mapairy_cdf_float.cu ;
 run test_mapairy_pdf_double.cu ;
 run test_mapairy_pdf_float.cu ;
 run test_mapairy_quan_double.cu ;
 run test_mapairy_quan_float.cu ;
+
 run test_saspoint5_cdf_double.cu ;
 run test_saspoint5_cdf_float.cu ;
 run test_saspoint5_pdf_double.cu ;
@@ -81,17 +91,52 @@ run test_saspoint5_quan_double.cu ;
 run test_saspoint5_quan_float.cu ;
 
 # Special Functions
-# run test_beta_simple.cpp ;
 run test_beta_double.cu ;
 run test_beta_float.cu ;
+
+run test_bessel_i0_double.cu ;
+run test_bessel_i0_float.cu ;
+run test_bessel_i1_double.cu ;
+run test_bessel_i1_float.cu ;
+run test_bessel_j0_double.cu ;
+run test_bessel_j0_float.cu ;
+run test_bessel_j1_double.cu ;
+run test_bessel_j1_float.cu ;
+run test_bessel_k0_double.cu ;
+run test_bessel_k0_float.cu ;
+run test_bessel_k1_double.cu ;
+run test_bessel_k1_float.cu ;
+run test_bessel_kn_double.cu ;
+run test_bessel_kn_float.cu ;
+run test_bessel_y0_double.cu ;
+run test_bessel_y0_float.cu ;
+run test_bessel_y1_double.cu ;
+run test_bessel_y1_float.cu ;
+run test_cyl_bessel_i_double.cu ;
+run test_cyl_bessel_i_float.cu ;
+run test_cyl_bessel_j_double.cu ;
+run test_cyl_bessel_j_float.cu ;
+run test_cyl_bessel_k_double.cu ;
+run test_cyl_bessel_k_float.cu ;
+run test_sph_bessel_double.cu ;
+run test_sph_bessel_float.cu ;
+run test_cyl_neumann_double.cu ;
+run test_cyl_neumann_float.cu ;
+run test_sph_neumann_double.cu ;
+run test_sph_neumann_float.cu ;
+
 run test_cbrt_double.cu ;
 run test_cbrt_float.cu ;
+
 run test_changesign_double.cu ;
 run test_changesign_float.cu ;
+
 run test_cos_pi_double.cu ;
 run test_cos_pi_float.cu ;
+
 run test_digamma_double.cu ;
 run test_digamma_float.cu ;
+
 run test_erf_double.cu ;
 run test_erf_float.cu ;
 run test_erf_inv_double.cu ;
@@ -100,21 +145,29 @@ run test_erfc_double.cu ;
 run test_erfc_float.cu ;
 run test_erfc_inv_double.cu ;
 run test_erfc_inv_float.cu ;
+
 run test_expm1_double.cu ;
 run test_expm1_float.cu ;
+
 run test_lgamma_double.cu ;
 run test_lgamma_float.cu ;
-run test_log1p_double.cu ;
-run test_log1p_float.cu ;
-run test_modf_double.cu ;
-run test_modf_float.cu ;
-run test_round_double.cu ;
-run test_round_float.cu ;
-run test_sin_pi_double.cu ; 
-run test_sin_pi_float.cu ;
 run test_tgamma_double.cu ;
 run test_tgamma_float.cu ;
+
+run test_log1p_double.cu ;
+run test_log1p_float.cu ;
+
+run test_modf_double.cu ;
+run test_modf_float.cu ;
+
+run test_round_double.cu ;
+run test_round_float.cu ;
+
+run test_sin_pi_double.cu ; 
+run test_sin_pi_float.cu ;
+
 run test_trigamma_double.cu ;
 run test_trigamma_float.cu ;
+
 run test_trunc_double.cu ;
 run test_trunc_float.cu ;

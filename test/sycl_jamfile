@@ -25,6 +25,10 @@ run test_saspoint5.cpp ;
 # Special Functions
 run pow_test.cpp ;
 run test_beta_simple.cpp ;
+run test_bessel_i.cpp ;
+run test_bessel_j.cpp ;
+run test_bessel_k.cpp ;
+run test_bessel_y.cpp ;
 run test_cbrt.cpp ;
 run test_sign.cpp ;
 run test_round.cpp ;
