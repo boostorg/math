@@ -116,7 +116,7 @@ So recall that for `x < 0`:
 
 Substituting into the above we get:
 
-[expression p = -atan(1/x)  ; x < 0]
+[expression p = -atan(1/x) / [pi]  ; x < 0]
 
 So the procedure is to calculate the cdf for -fabs(x)
 using the above formula.  Note that to factor in the location and scale
