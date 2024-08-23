@@ -57,7 +57,7 @@ BOOST_MATH_GPU_ENABLED RealType cdf_imp(const cauchy_distribution<RealType, Poli
    //
    // Substituting into the above we get:
    //
-   // CDF = -atan(1/x)  ; x < 0
+   // CDF = -atan(1/x)/pi  ; x < 0
    //
    // So the procedure is to calculate the cdf for -fabs(x)
    // using the above formula, and then subtract from 1 when required
