@@ -128,6 +128,7 @@ test-suite special_fun :
 
    [ run hypot_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ]
    [ run pow_test.cpp ../../test/build//boost_unit_test_framework ]
+   [ run test_pow1p.cpp ]
    [ run logaddexp_test.cpp ../../test/build//boost_unit_test_framework ]
    [ run logsumexp_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_hdr_initializer_list cxx11_variadic_templates ] ]
    [ run ccmath_sqrt_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]

@@ -38,3 +38,4 @@ run test_digamma_simple.cpp ;
 run test_trigamma.cpp ;
 run test_erf.cpp ;
 run test_gamma.cpp ;
+run test_pow1p.cpp ;

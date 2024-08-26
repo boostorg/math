@@ -168,3 +168,4 @@ run test_trigamma_nvrtc_double.cpp ;
 run test_trigamma_nvrtc_float.cpp ;
 
 run test_trunc_nvrtc_double.cpp ;
+run test_pow1p_nvrtc_double.cpp ;
