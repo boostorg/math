@@ -8,6 +8,11 @@
 #include <boost/math/concepts/real_concept.hpp>
 #include <exception>
 #include <random>
+
+#if __has_include(<stdfloat>) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
+#  include <stdfloat>
+#endif
+
 #include "math_unit_test.hpp"
 
 template <typename T>
@@ -93,8 +98,17 @@ void test()
 
 int main()
 {
+    #ifdef __STDCPP_FLOAT32_T__
+    test<std::float32_t>();
+    #else
     test<float>();
+    #endif
+
+    #ifdef __STDCPP_FLOAT64_T__
+    test<std::float64_t>();
+    #else
     test<double>();
+    #endif
 
     #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test<long double>();
