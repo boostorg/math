@@ -17,13 +17,10 @@
 #include <boost/math/policies/error_handling.hpp>
 
 // For cuda we would rather use builtin nextafter than unsupported boost::math::nextafter
-// NVRTC does not support the forward declarations header
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 #  include <boost/math/special_functions/next.hpp>
-#  ifndef BOOST_MATH_HAS_NVRTC
-#    include <utility>
-#    include <boost/math/special_functions/math_fwd.hpp>
-#  endif // BOOST_MATH_HAS_NVRTC
+#  include <boost/math/special_functions/math_fwd.hpp>
+#  include <utility>
 #endif // BOOST_MATH_ENABLE_CUDA
 
 namespace boost {
@@ -52,6 +49,20 @@ BOOST_MATH_FORCEINLINE BOOST_MATH_GPU_ENABLED T local_fma(const T x, const T y, 
     return x * y + z;
 }
 
+#else
+
+template <typename T>
+BOOST_MATH_FORCEINLINE BOOST_MATH_GPU_ENABLED T local_fma(const T x, const T y, const T z)
+{
+    return ::fma(x, y, z);
+}
+
+template <>
+BOOST_MATH_FORCEINLINE BOOST_MATH_GPU_ENABLED float local_fma(const float x, const float y, const float z)
+{
+    return ::fmaf(x, y, z);
+}
+
 #endif // BOOST_MATH_HAS_GPU_SUPPORT
 
 template <typename T, typename Policy>
@@ -71,7 +82,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
     if (x == T(-1))
     { 
         // pow(+/-0, y)
-        if (boost::math::isfinite(y) && y < 0) 
+        if ((boost::math::isfinite)(y) && y < 0) 
         {
             return boost::math::policies::raise_domain_error<T>(function, "Division by 0", x, pol);
         }
@@ -80,7 +91,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
         return pow(T(0), y);
     }
 
-    if (x == T(-2) && boost::math::isinf(y)) 
+    if (x == T(-2) && (boost::math::isinf)(y)) 
     { 
         // pow(-1, +/-inf)
         return T(1);
@@ -92,9 +103,9 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
         return T(1);
     }
 
-    if (boost::math::isinf(y))
+    if ((boost::math::isinf)(y))
     {
-        if (boost::math::signbit(y) == 1)
+        if ((boost::math::signbit)(y) == 1)
         {
             // pow(x, -inf)
             return T(0);
@@ -106,7 +117,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
         }
     }
 
-    if (boost::math::isinf(x)) 
+    if ((boost::math::isinf)(x)) 
     { 
         // pow(+/-inf, y)
         return pow(x, y);
@@ -115,11 +126,11 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
     // Up to this point, (1+x) = {+/-0, +/-1, +/-inf} have been handled, and
     // and y = {+/-0, +/-inf} have been handled.  Next, we handle `nan` and
     // y = {+/-1}.
-    if (boost::math::isnan(x)) 
+    if ((boost::math::isnan)(x)) 
     {
         return x;
     }
-    else if (boost::math::isnan(y))
+    else if ((boost::math::isnan)(y))
     {
         return y;
     }
@@ -191,30 +202,46 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
     }
 
     // Because x > -1 and s is rounded toward 1, s is guaranteed to be > 0.
-    // Then (1+x)^y == (s+t)^y == (s^y)*((1+u)^y), where u := t / s.
-    // It can be shown that either both terms <= 1 or both >= 1, so
+    // Write (1+x)^y == (s+t)^y == (s^y)*((1+t/s)^y) == term1*term2.
+    // It can be shown that either both terms <= 1 or both >= 1; so
     // if the first term over/underflows, then the result over/underflows.
-    T u = t / s;
+    // And of course, term2 == 1 if t == 0.
     T term1 = pow(s, y);
-    if (term1 == T(0) || boost::math::isinf(term1))
+    if (t == T(0) || term1 == T(0) || (boost::math::isinf)(term1))
     {
         return term1;
     }
 
-    // (1+u)^y == exp(y*log(1+u)).  Since u is close to machine epsilon,
-    // log(1+u) ~= u.  Let y*u == z+w, where z is the rounded result and
-    // w is the rounding error.  This improves accuracy when y is large.
-    // Then exp(y*u) == exp(z)*exp(w).
-    T z = y * u;
+    // (1+t/s)^y == exp(y*log(1+t/s)).  The relative error of the result is
+    // equal to the absolute error of the exponent (plus the relative error
+    // of 'exp').  Therefore, when the exponent is small, it is accurately
+    // evaluated to machine epsilon using T arithmetic.  In addition, since
+    // t/s <= epsilon, log(1+t/s) is well approximated by t/s to first order.
+    T u = t / s;
+    T w = y * u;
+    if (abs(w) <= T(0.5)) 
+    {
+        T term2 = exp(w);
+        return term1 * term2;
+    }
 
-    #ifdef BOOST_MATH_HAS_GPU_SUPPORT
-    T w = fma(y, u, -z);
-    #else
-    T w = local_fma(y, u, -z);
-    #endif
+    // Now y*log(1+t/s) is large, and its relative error is "magnified" by
+    // the exponent.  To reduce the error, we use double-T arithmetic, and
+    // expand log(1+t/s) to second order.
 
-    T term2 = exp(z) * exp(w);
+    // (u + uu) ~= t/s.
+    T r1 = local_fma(-u, s, t);
+    T uu = r1 / s;
 
+    // (u + vv) ~= log(1+(u+uu)) ~= log(1+t/s).
+    T vv = local_fma(T(-0.5)*u, u, uu);
+
+    // (w + ww) ~= y*(u+vv) ~= y*log(1+t/s).
+    T r2 = local_fma(y, u, -w);
+    T ww = local_fma(y, vv, r2);
+
+    // TODO: maybe ww is small enough such that exp(ww) ~= 1+ww.
+    T term2 = exp(w) * exp(ww);
     return term1 * term2;
 }
 
