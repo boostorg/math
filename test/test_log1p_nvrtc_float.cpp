@@ -7,6 +7,11 @@
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
 
+// Must be included first
+#include <nvrtc.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
+
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -14,9 +19,6 @@
 #include <exception>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
-#include <cuda.h>
-#include <cuda_runtime.h>
-#include <nvrtc.h>
 
 typedef float float_type;
 
@@ -85,9 +87,9 @@ int main()
         nvrtcAddNameExpression(prog, "test_log1p_kernel");
 
         #ifdef BOOST_MATH_NVRTC_CI_RUN
-        const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/cuda-math/boost-root/libs/cuda-math/include/"};
+        const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/cuda-math/boost-root/libs/cuda-math/include/", "-I/usr/local/cuda/include"};
         #else
-        const char* opts[] = {"--std=c++14", "--include-path=/home/mborland/Documents/boost/libs/cuda-math/include/"};
+        const char* opts[] = {"--std=c++14", "--include-path=/home/mborland/Documents/boost/libs/cuda-math/include/", "-I/usr/local/cuda/include"};
         #endif
 
         // Compile the program

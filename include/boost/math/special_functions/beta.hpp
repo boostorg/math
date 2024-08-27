@@ -136,7 +136,7 @@ BOOST_MATH_GPU_ENABLED T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
 // Generic implementation of Beta(a,b) without Lanczos approximation support
 // (Caution this is slow!!!):
 //
-#ifndef BOOST_MATH_HAS_NVRTC
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T beta_imp(T a, T b, const lanczos::undefined_lanczos& l, const Policy& pol)
 {
@@ -461,7 +461,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
 //
 // This version is generic, slow, and does not use the Lanczos approximation.
 //
-#ifndef BOOST_MATH_HAS_NVRTC
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
                         T b,
@@ -741,7 +741,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool 
 //
 // Incomplete Beta series again, this time without Lanczos support:
 //
-#ifndef BOOST_MATH_HAS_NVRTC
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczos& l, bool normalised, T* p_derivative, T y, const Policy& pol)
 {
@@ -958,7 +958,7 @@ struct Pn_size<long double>
 #endif
 };
 
-#ifndef BOOST_MATH_HAS_NVRTC
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& pol, bool normalised)
 {
