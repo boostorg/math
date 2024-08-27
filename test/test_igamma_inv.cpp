@@ -14,7 +14,7 @@
 #  pragma GCC diagnostic push 
 #  pragma GCC diagnostic ignored "-Wliteral-range"
 #endif
-
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #include "test_igamma_inv.hpp"
 
 #if !defined(TEST_FLOAT) && !defined(TEST_DOUBLE) && !defined(TEST_LDOUBLE) && !defined(TEST_REAL_CONCEPT)
