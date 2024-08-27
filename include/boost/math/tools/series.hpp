@@ -14,6 +14,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/tools/cstdint.hpp>
+#include <boost/math/tools/type_traits.hpp>
 
 namespace boost{ namespace math{ namespace tools{
 

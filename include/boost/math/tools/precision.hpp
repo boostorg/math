@@ -290,7 +290,7 @@ template <class T, class Tag>
 BOOST_MATH_GPU_ENABLED inline T root_epsilon_imp(const T*, const Tag&)
 {
    BOOST_MATH_STD_USING
-   static const T r_eps = sqrt(tools::epsilon<T>());
+   BOOST_MATH_STATIC_LOCAL_VARIABLE const T r_eps = sqrt(tools::epsilon<T>());
    return r_eps;
 }
 

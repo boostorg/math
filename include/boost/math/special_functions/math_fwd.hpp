@@ -512,28 +512,28 @@ namespace boost
 
    // gamma inverse.
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2> gamma_p_inv(T1 a, T2 p);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_p_inv(T1 a, T2 p);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2> gamma_p_inva(T1 a, T2 p, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_p_inva(T1 a, T2 p, const Policy&);
 
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2> gamma_p_inva(T1 a, T2 p);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_p_inva(T1 a, T2 p);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2> gamma_p_inv(T1 a, T2 p, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_p_inv(T1 a, T2 p, const Policy&);
 
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2> gamma_q_inv(T1 a, T2 q);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_q_inv(T1 a, T2 q);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2> gamma_q_inv(T1 a, T2 q, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_q_inv(T1 a, T2 q, const Policy&);
 
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2> gamma_q_inva(T1 a, T2 q);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_q_inva(T1 a, T2 q);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2> gamma_q_inva(T1 a, T2 q, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_q_inva(T1 a, T2 q, const Policy&);
 
    // digamma:
    template <class T>
@@ -1447,16 +1447,16 @@ namespace boost
    BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> gamma_p_derivative(T1 a, T2 x){ return boost::math::gamma_p_derivative(a, x, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> gamma_p_inv(T1 a, T2 p){ return boost::math::gamma_p_inv(a, p, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> gamma_p_inv(T1 a, T2 p){ return boost::math::gamma_p_inv(a, p, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> gamma_p_inva(T1 a, T2 p){ return boost::math::gamma_p_inva(a, p, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> gamma_p_inva(T1 a, T2 p){ return boost::math::gamma_p_inva(a, p, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> gamma_q_inv(T1 a, T2 q){ return boost::math::gamma_q_inv(a, q, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> gamma_q_inv(T1 a, T2 q){ return boost::math::gamma_q_inv(a, q, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> gamma_q_inva(T1 a, T2 q){ return boost::math::gamma_q_inva(a, q, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> gamma_q_inva(T1 a, T2 q){ return boost::math::gamma_q_inva(a, q, Policy()); }\
 \
    template <class T>\
    BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> digamma(T x){ return boost::math::digamma(x, Policy()); }\

@@ -7,6 +7,11 @@
 #include <pch.hpp>
 #endif
 
+#ifdef __clang__
+#  pragma clang diagnostic push 
+#  pragma clang diagnostic ignored "-Wimplicit-const-int-float-conversion"
+#endif
+
 #include <boost/math/concepts/real_concept.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/math/tools/config.hpp>

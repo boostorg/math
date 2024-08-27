@@ -31,6 +31,13 @@ run test_cauchy_pdf_nvrtc_float.cpp ;
 run test_cauchy_quan_nvrtc_double.cpp ;
 run test_cauchy_quan_nvrtc_float.cpp ;
 
+run test_chi_squared_cdf_nvrtc_double.cpp ;
+run test_chi_squared_cdf_nvrtc_float.cpp ;
+run test_chi_squared_pdf_nvrtc_double.cpp ;
+run test_chi_squared_pdf_nvrtc_float.cpp ;
+run test_chi_squared_quan_nvrtc_double.cpp ;
+run test_chi_squared_quan_nvrtc_float.cpp ;
+
 run test_exponential_cdf_nvrtc_double.cpp ;
 run test_exponential_cdf_nvrtc_float.cpp ;
 run test_exponential_pdf_nvrtc_double.cpp ;
@@ -86,6 +93,13 @@ run test_saspoint5_pdf_nvrtc_double.cpp ;
 run test_saspoint5_pdf_nvrtc_float.cpp ;
 run test_saspoint5_quan_nvrtc_double.cpp ;
 run test_saspoint5_quan_nvrtc_float.cpp ;
+
+run test_weibull_cdf_nvrtc_double.cpp ;
+run test_weibull_cdf_nvrtc_float.cpp ;
+run test_weibull_pdf_nvrtc_double.cpp ;
+run test_weibull_pdf_nvrtc_float.cpp ;
+run test_weibull_quan_nvrtc_double.cpp ;
+run test_weibull_quan_nvrtc_float.cpp ;
 
 # Special Functions
 run test_beta_nvrtc_double.cpp ;
@@ -148,6 +162,12 @@ run test_fpclassify_nvrtc_float.cpp ;
 
 run test_gamma_nvrtc_double.cpp ;
 run test_gamma_nvrtc_float.cpp ;
+run test_gamma_p_derivative_nvrtc_double.cpp ;
+run test_gamma_p_derivative_nvrtc_float.cpp ;
+run test_gamma_p_inv_nvrtc_double.cpp ;
+run test_gamma_p_inv_nvrtc_float.cpp ;
+run test_tgamma_ratio_nvrtc_double.cpp ;
+run test_tgamma_ratio_nvrtc_float.cpp ;
 
 run test_log1p_nvrtc_double.cpp ;
 run test_log1p_nvrtc_float.cpp ;

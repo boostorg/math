@@ -13,6 +13,7 @@
 
 #include <boost/math/tools/type_traits.hpp>
 #include <cuda/std/utility>
+#include <cuda/std/tuple>
 
 namespace boost { 
 namespace math {
