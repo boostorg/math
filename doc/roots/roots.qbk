@@ -10,10 +10,10 @@
    namespace tools { // Note namespace boost::math::tools.
    // Newton-Raphson
    template <class F, class T>
-   T newton_raphson_iterate(F f, T guess, T min, T max, int digits);
+   BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int digits);
 
    template <class F, class T>
-   T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter);
+   BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter);
 
    // Halley
    template <class F, class T>
