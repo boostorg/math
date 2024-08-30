@@ -13,7 +13,7 @@
 #  pragma clang diagnostic ignored "-Wliteral-range"
 #elif defined(__GNUC__)
 #  pragma GCC diagnostic push 
-#  pragma GCC diagnostic ignored "-Wliteral-range"
+#  pragma GCC diagnostic ignored "-Woverflow"
 #endif
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error

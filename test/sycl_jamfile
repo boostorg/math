@@ -12,6 +12,7 @@ project : requirements
 # Distributions
 run test_arcsine.cpp ;
 run test_bernoulli.cpp ;
+run test_beta_dist.cpp ;
 run test_cauchy.cpp ;
 run test_chi_squared.cpp ;
 run test_exponential_dist.cpp ;
@@ -28,6 +29,10 @@ run test_weibull.cpp ;
 run pow_test.cpp ;
 
 run test_beta_simple.cpp ;
+run test_beta.cpp ;
+run test_ibeta.cpp ;
+run test_ibeta_inv.cpp ;
+run test_ibeta_inv_ab.cpp ;
 
 run test_bessel_i.cpp ;
 run test_bessel_j.cpp ;

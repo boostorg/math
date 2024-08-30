@@ -28,14 +28,10 @@
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
-
-#ifndef BOOST_MATH_HAS_NVRTC
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/tools/roots.hpp>
-#include <cmath>
-#endif
 
 namespace boost{ namespace math{
 
@@ -800,7 +796,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const boost::math::la
    policies::check_series_iterations<T>("boost::math::ibeta<%1%>(%1%, %1%, %1%) in ibeta_series (without lanczos)", max_iter, pol);
    return result;
 }
-
+#endif
 //
 // Continued fraction for the incomplete beta:
 //
@@ -884,7 +880,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_a_step(T a, T b, T x, T y, int k, const Policy& p
 
    return prefix;
 }
-#endif
+
 //
 // This function is only needed for the non-regular incomplete beta,
 // it computes the delta in:
@@ -958,7 +954,6 @@ struct Pn_size<long double>
 #endif
 };
 
-#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& pol, bool normalised)
 {
@@ -1060,7 +1055,7 @@ BOOST_MATH_GPU_ENABLED T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T
    }
    return sum;
 } // template <class T, class Lanczos>T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Lanczos& l, bool normalised)
-#endif
+
 //
 // For integer arguments we can relate the incomplete beta to the
 // complement of the binomial distribution cdf and use this finite sum.
@@ -1130,6 +1125,7 @@ BOOST_MATH_GPU_ENABLED T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
 // input range and select the right implementation method for
 // each domain:
 //
+
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_derivative)
 {
@@ -1749,12 +1745,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
 } // namespace math
 } // namespace boost
 
-// TODO(mborland): Get the ibeta_inv working on NVRTC
-#ifndef BOOST_MATH_HAS_NVRTC
-
 #include <boost/math/special_functions/detail/ibeta_inverse.hpp>
 #include <boost/math/special_functions/detail/ibeta_inv_ab.hpp>
-
-#endif
 
 #endif // BOOST_MATH_SPECIAL_BETA_HPP
