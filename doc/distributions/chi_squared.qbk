@@ -18,13 +18,13 @@
       typedef Policy    policy_type;
 
       // Constructor:
-      chi_squared_distribution(RealType i);
+      BOOST_MATH_GPU_ENABLED chi_squared_distribution(RealType i);
 
       // Accessor to parameter:
-      RealType degrees_of_freedom()const;
+      BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom()const;
 
       // Parameter estimation:
-      static RealType find_degrees_of_freedom(
+      BOOST_MATH_GPU_ENABLED static RealType find_degrees_of_freedom(
          RealType difference_from_mean,
          RealType alpha,
          RealType beta,
@@ -104,6 +104,8 @@ See also section on Sample sizes required in
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 (We have followed the usual restriction of the mode to degrees of freedom >= 2,
 but note that the maximum of the pdf is actually zero for degrees of freedom from 2 down to 0,
