@@ -9,28 +9,28 @@
    namespace boost{ namespace math{
    
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibeta(T1 a, T2 b, T3 x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta(T1 a, T2 b, T3 x);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibeta(T1 a, T2 b, T3 x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta(T1 a, T2 b, T3 x, const ``__Policy``&);
    
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibetac(T1 a, T2 b, T3 x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac(T1 a, T2 b, T3 x);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibetac(T1 a, T2 b, T3 x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac(T1 a, T2 b, T3 x, const ``__Policy``&);
    
    template <class T1, class T2, class T3>
-   ``__sf_result`` beta(T1 a, T2 b, T3 x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` beta(T1 a, T2 b, T3 x);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` beta(T1 a, T2 b, T3 x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` beta(T1 a, T2 b, T3 x, const ``__Policy``&);
    
    template <class T1, class T2, class T3>
-   ``__sf_result`` betac(T1 a, T2 b, T3 x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` betac(T1 a, T2 b, T3 x);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` betac(T1 a, T2 b, T3 x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` betac(T1 a, T2 b, T3 x, const ``__Policy``&);
    
    }} // namespaces
    
@@ -57,10 +57,10 @@ when T1, T2 and T3 are different types.
 [optional_policy]
 
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibeta(T1 a, T2 b, T3 x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta(T1 a, T2 b, T3 x);
 
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibeta(T1 a, T2 b, T3 x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta(T1 a, T2 b, T3 x, const ``__Policy``&);
 
 Returns the normalised incomplete beta function of a, b and x:
 
@@ -69,30 +69,30 @@ Returns the normalised incomplete beta function of a, b and x:
 [graph ibeta]
 
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibetac(T1 a, T2 b, T3 x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac(T1 a, T2 b, T3 x);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibetac(T1 a, T2 b, T3 x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac(T1 a, T2 b, T3 x, const ``__Policy``&);
    
 Returns the normalised complement of the incomplete beta function of a, b and x:
 
 [equation ibeta4]
 
    template <class T1, class T2, class T3>
-   ``__sf_result`` beta(T1 a, T2 b, T3 x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` beta(T1 a, T2 b, T3 x);
 
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` beta(T1 a, T2 b, T3 x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` beta(T1 a, T2 b, T3 x, const ``__Policy``&);
 
 Returns the full (non-normalised) incomplete beta function of a, b and x:
 
 [equation ibeta1]
 
    template <class T1, class T2, class T3>
-   ``__sf_result`` betac(T1 a, T2 b, T3 x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` betac(T1 a, T2 b, T3 x);
 
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` betac(T1 a, T2 b, T3 x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` betac(T1 a, T2 b, T3 x, const ``__Policy``&);
 
 Returns the full (non-normalised) complement of the incomplete beta function of a, b and x:
 
