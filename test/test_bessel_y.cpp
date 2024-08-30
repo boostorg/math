@@ -10,6 +10,14 @@
 #include <boost/math/tools/config.hpp>
 #endif
 
+#ifdef __clang__
+#  pragma clang diagnostic push 
+#  pragma clang diagnostic ignored "-Wliteral-range"
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic push 
+#  pragma GCC diagnostic ignored "-Wliteral-range"
+#endif
+
 #include "test_bessel_y.hpp"
 
 //

@@ -12,15 +12,17 @@
 #  pragma warning (disable : 4127) //  conditional expression is constant.
 #endif
 
-
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+#endif
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <boost/math/distributions/weibull.hpp>
     using boost::math::weibull_distribution;
-#include <boost/math/tools/test.hpp> 
+#include "../include_private/boost/math/tools/test.hpp"
 #include "test_out_of_range.hpp"
 
 #include <iostream>

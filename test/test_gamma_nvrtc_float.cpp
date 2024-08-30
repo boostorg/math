@@ -87,7 +87,7 @@ int main()
         #ifdef BOOST_MATH_NVRTC_CI_RUN
         const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/math/boost-root/libs/math/include/"};
         #else
-        const char* opts[] = {"--std=c++14", "--include-path=/home/mborland/Documents/boost/libs/cuda-math/include/"};
+        const char* opts[] = {"--std=c++14", "--include-path=/home/mborland/Documents/boost/libs/cuda-math/include/", "-I/usr/local/cuda/include"};
         #endif
 
         // Compile the program

@@ -34,6 +34,13 @@ run test_cauchy_quan_float.cu ;
 run test_cauchy_range_support_double.cu ;
 run test_cauchy_range_support_float.cu ;
 
+run test_chi_squared_cdf_double.cu ;
+run test_chi_squared_cdf_float.cu ;
+run test_chi_squared_pdf_double.cu ;
+run test_chi_squared_pdf_float.cu ;
+run test_chi_squared_quan_double.cu ;
+run test_chi_squared_quan_float.cu ;
+
 run test_exponential_cdf_double.cu ;
 run test_exponential_cdf_float.cu ;
 run test_exponential_pdf_double.cu ;
@@ -89,6 +96,13 @@ run test_saspoint5_pdf_double.cu ;
 run test_saspoint5_pdf_float.cu ;
 run test_saspoint5_quan_double.cu ;
 run test_saspoint5_quan_float.cu ;
+
+run test_weibull_cdf_double.cu ;
+run test_weibull_cdf_float.cu ;
+run test_weibull_pdf_double.cu ;
+run test_weibull_pdf_float.cu ;
+run test_weibull_quan_double.cu ;
+run test_weibull_quan_float.cu ;
 
 # Special Functions
 run test_beta_double.cu ;
@@ -153,6 +167,12 @@ run test_lgamma_double.cu ;
 run test_lgamma_float.cu ;
 run test_tgamma_double.cu ;
 run test_tgamma_float.cu ;
+run test_tgamma_ratio_double.cu ;
+run test_tgamma_ratio_float.cu ;
+run test_gamma_p_derivative_double.cu ;
+run test_gamma_p_derivative_float.cu ;
+run test_gamma_p_inv_double.cu ;
+run test_gamma_p_inv_float.cu ;
 
 run test_log1p_double.cu ;
 run test_log1p_float.cu ;
