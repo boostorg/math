@@ -8,9 +8,13 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/tools/test.hpp>
+#include <boost/math/tools/config.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 using ::boost::math::concepts::real_concept;
+#endif
 
 #include <boost/math/distributions/fisher_f.hpp> // for fisher_f_distribution
 using boost::math::fisher_f_distribution;

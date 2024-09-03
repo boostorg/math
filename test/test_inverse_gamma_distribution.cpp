@@ -14,11 +14,14 @@
 #  pragma warning (disable : 4310) // cast truncates constant value
 #endif
 
-#include <boost/math/tools/test.hpp>
+#include <boost/math/tools/config.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 using ::boost::math::concepts::real_concept;
+#endif
 
-//#include <boost/math/tools/test.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // for test_main
 #include <boost/test/tools/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION
