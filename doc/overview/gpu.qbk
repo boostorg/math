@@ -55,6 +55,8 @@ And lastly on SYCL:
 
 Once your kernel function has been written then use the framework mechanism for launching the kernel.
 
+[endsect] [/section:gpu Support for GPU programming in Boost.Math]
+
 [/ 
   Copyright 2024. Matt Borland
   Distributed under the Boost Software License, Version 1.0.
