@@ -25,6 +25,13 @@ run test_bernoulli_pdf_float.cu ;
 run test_bernoulli_range_support_double.cu ;
 run test_bernoulli_range_support_float.cu ;
 
+run test_beta_dist_cdf_double.cu ;
+run test_beta_dist_cdf_float.cu ;
+run test_beta_dist_pdf_double.cu ;
+run test_beta_dist_pdf_float.cu ;
+run test_beta_dist_quan_double.cu ;
+run test_beta_dist_quan_float.cu ;
+
 run test_cauchy_cdf_double.cu ;
 run test_cauchy_cdf_float.cu ;
 run test_cauchy_pdf_double.cu ;
@@ -107,6 +114,24 @@ run test_weibull_quan_float.cu ;
 # Special Functions
 run test_beta_double.cu ;
 run test_beta_float.cu ;
+run test_betac_double.cu ;
+run test_betac_float.cu ;
+run test_ibeta_double.cu ;
+run test_ibeta_float.cu ;
+run test_ibeta_derivative_double.cu ;
+run test_ibeta_derivative_float.cu ;
+run test_ibeta_inv_double.cu ;
+run test_ibeta_inv_float.cu ;
+run test_ibeta_inva_double.cu ;
+run test_ibeta_inva_float.cu ;
+run test_ibeta_invb_double.cu ;
+run test_ibeta_invb_float.cu ;
+run test_ibetac_inv_double.cu ;
+run test_ibetac_inv_float.cu ;
+run test_ibetac_inva_double.cu ;
+run test_ibetac_inva_float.cu ;
+run test_ibetac_invb_double.cu ;
+run test_ibetac_invb_float.cu ;
 
 run test_bessel_i0_double.cu ;
 run test_bessel_i0_float.cu ;

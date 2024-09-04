@@ -1736,43 +1736,10 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
 // Ratios of two gamma functions:
 //
 template <class T, class Policy, class Lanczos>
-BOOST_MATH_GPU_ENABLED T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos& l)
+BOOST_MATH_GPU_ENABLED T tgamma_delta_ratio_imp_lanczos_final(T z, T delta, const Policy& pol, const Lanczos&)
 {
    BOOST_MATH_STD_USING
-   if(z < tools::epsilon<T>())
-   {
-      //
-      // We get spurious numeric overflow unless we're very careful, this
-      // can occur either inside Lanczos::lanczos_sum(z) or in the
-      // final combination of terms, to avoid this, split the product up
-      // into 2 (or 3) parts:
-      //
-      // G(z) / G(L) = 1 / (z * G(L)) ; z < eps, L = z + delta = delta
-      //    z * G(L) = z * G(lim) * (G(L)/G(lim)) ; lim = largest factorial
-      //
-      if(boost::math::max_factorial<T>::value < delta)
-      {
-         T ratio = tgamma_delta_ratio_imp_lanczos(delta, T(boost::math::max_factorial<T>::value - delta), pol, l);
-         ratio *= z;
-         ratio *= boost::math::unchecked_factorial<T>(boost::math::max_factorial<T>::value - 1);
-         return 1 / ratio;
-      }
-      else
-      {
-         #ifdef BOOST_MATH_HAS_NVRTC
-         if (boost::math::is_same_v<T, float>)
-         {
-            return 1 / (z * ::tgammaf(z + delta));
-         }
-         else
-         {
-            return 1 / (z * ::tgamma(z + delta));
-         }
-         #else
-         return 1 / (z * boost::math::tgamma(z + delta, pol));
-         #endif
-      }
-   }
+
    T zgh = static_cast<T>(z + T(Lanczos::g()) - constants::half<T>());
    T result;
    if(z + delta == z)
@@ -1806,6 +1773,50 @@ BOOST_MATH_GPU_ENABLED T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Poli
    result *= pow(T(constants::e<T>() / (zgh + delta)), delta);
    return result;
 }
+
+template <class T, class Policy, class Lanczos>
+BOOST_MATH_GPU_ENABLED T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos& l)
+{
+   BOOST_MATH_STD_USING
+
+   if(z < tools::epsilon<T>())
+   {
+      //
+      // We get spurious numeric overflow unless we're very careful, this
+      // can occur either inside Lanczos::lanczos_sum(z) or in the
+      // final combination of terms, to avoid this, split the product up
+      // into 2 (or 3) parts:
+      //
+      // G(z) / G(L) = 1 / (z * G(L)) ; z < eps, L = z + delta = delta
+      //    z * G(L) = z * G(lim) * (G(L)/G(lim)) ; lim = largest factorial
+      //
+      if(boost::math::max_factorial<T>::value < delta)
+      {
+         T ratio = tgamma_delta_ratio_imp_lanczos_final(T(delta), T(boost::math::max_factorial<T>::value - delta), pol, l);
+         ratio *= z;
+         ratio *= boost::math::unchecked_factorial<T>(boost::math::max_factorial<T>::value - 1);
+         return 1 / ratio;
+      }
+      else
+      {
+         #ifdef BOOST_MATH_HAS_NVRTC
+         if (boost::math::is_same_v<T, float>)
+         {
+            return 1 / (z * ::tgammaf(z + delta));
+         }
+         else
+         {
+            return 1 / (z * ::tgamma(z + delta));
+         }
+         #else
+         return 1 / (z * boost::math::tgamma(z + delta, pol));
+         #endif
+      }
+   }
+
+   return tgamma_delta_ratio_imp_lanczos_final(T(z), T(delta), pol, l);
+}
+
 //
 // And again without Lanczos support this time:
 //

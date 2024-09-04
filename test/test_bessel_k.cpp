@@ -22,7 +22,7 @@
 #  pragma clang diagnostic ignored "-Wliteral-range"
 #elif defined(__GNUC__)
 #  pragma GCC diagnostic push 
-#  pragma GCC diagnostic ignored "-Wliteral-range"
+#  pragma GCC diagnostic ignored "-Woverflow"
 #endif
 
 #include "test_bessel_k.hpp"

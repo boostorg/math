@@ -32,9 +32,14 @@
 # pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'arg' was previously defined as a type.
 #endif
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 using ::boost::math::concepts::real_concept;
-#include <boost/math/tools/test.hpp>
+#endif
+
+#include "../include_private/boost/math/tools/test.hpp"
 
 #include <boost/math/distributions/beta.hpp> // for beta_distribution
 using boost::math::beta_distribution;
@@ -634,12 +639,13 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_CHECK_CLOSE_FRACTION(mybeta22.find_alpha(mybeta22.beta(), 0.8, cdf(mybeta22, 0.8)), mybeta22.alpha(), tol);
    BOOST_CHECK_CLOSE_FRACTION(mybeta22.find_beta(mybeta22.alpha(), 0.8, cdf(mybeta22, 0.8)), mybeta22.beta(), tol);
 
-
+   #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    beta_distribution<real_concept> rcbeta22(2, 2); // Using RealType real_concept.
    cout << "numeric_limits<real_concept>::is_specialized " << numeric_limits<real_concept>::is_specialized << endl;
    cout << "numeric_limits<real_concept>::digits " << numeric_limits<real_concept>::digits << endl;
    cout << "numeric_limits<real_concept>::digits10 " << numeric_limits<real_concept>::digits10 << endl;
    cout << "numeric_limits<real_concept>::epsilon " << numeric_limits<real_concept>::epsilon() << endl;
+   #endif
 
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
    test_spots(0.0F); // Test float.

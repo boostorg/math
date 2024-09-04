@@ -24,6 +24,13 @@ run test_bernoulli_pdf_nvrtc_float.cpp ;
 run test_bernoulli_quan_nvrtc_double.cpp ;
 run test_bernoulli_quan_nvrtc_float.cpp ;
 
+run test_beta_dist_cdf_nvrtc_double.cpp ;
+run test_beta_dist_cdf_nvrtc_float.cpp ;
+run test_beta_dist_pdf_nvrtc_double.cpp ;
+run test_beta_dist_pdf_nvrtc_float.cpp ;
+run test_beta_dist_quan_nvrtc_double.cpp ;
+run test_beta_dist_quan_nvrtc_float.cpp ;
+
 run test_cauchy_cdf_nvrtc_double.cpp ;
 run test_cauchy_cdf_nvrtc_float.cpp ;
 run test_cauchy_pdf_nvrtc_double.cpp ;
@@ -104,6 +111,26 @@ run test_weibull_quan_nvrtc_float.cpp ;
 # Special Functions
 run test_beta_nvrtc_double.cpp ;
 run test_beta_nvrtc_float.cpp ;
+run test_betac_nvrtc_double.cpp ;
+run test_betac_nvrtc_float.cpp ;
+run test_ibeta_nvrtc_double.cpp ;
+run test_ibeta_nvrtc_float.cpp ;
+run test_ibetac_nvrtc_double.cpp ;
+run test_ibetac_nvrtc_float.cpp ;
+run test_ibeta_derivative_nvrtc_double.cpp ;
+run test_ibeta_derivative_nvrtc_float.cpp ;
+run test_ibeta_inv_nvrtc_double.cpp ;
+run test_ibeta_inv_nvrtc_float.cpp ;
+run test_ibeta_inva_nvrtc_double.cpp ;
+run test_ibeta_inva_nvrtc_float.cpp ;
+run test_ibeta_invb_nvrtc_double.cpp ;
+run test_ibeta_invb_nvrtc_float.cpp ;
+run test_ibetac_inv_nvrtc_double.cpp ;
+run test_ibetac_inv_nvrtc_float.cpp ;
+run test_ibetac_inva_nvrtc_double.cpp ;
+run test_ibetac_inva_nvrtc_float.cpp ;
+run test_ibetac_invb_nvrtc_double.cpp ;
+run test_ibetac_invb_nvrtc_float.cpp ;
 
 run test_bessel_i0_nvrtc_double.cpp ;
 run test_bessel_i0_nvrtc_float.cpp ;
