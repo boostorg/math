@@ -64,10 +64,45 @@ run test_extreme_value_pdf_float.cu ;
 run test_extreme_value_quan_double.cu ;
 run test_extreme_value_quan_float.cu ;
 
+run test_fisher_f_cdf_double.cu ;
+run test_fisher_f_cdf_float.cu ;
+run test_fisher_f_pdf_double.cu ;
+run test_fisher_f_pdf_float.cu ;
+run test_fisher_f_quan_double.cu ;
+run test_fisher_f_quan_float.cu ;
+
+run test_gamma_dist_cdf_double.cu ;
+run test_gamma_dist_cdf_float.cu ;
+run test_gamma_dist_pdf_double.cu ;
+run test_gamma_dist_pdf_float.cu ;
+run test_gamma_dist_quan_double.cu ;
+run test_gamma_dist_quan_float.cu ;
+
+run test_geometric_dist_cdf_double.cu ;
+run test_geometric_dist_cdf_float.cu ;
+run test_geometric_dist_pdf_double.cu ;
+run test_geometric_dist_pdf_float.cu ;
+run test_geometric_dist_quan_double.cu ;
+run test_geometric_dist_quan_float.cu ;
+
 run test_holtsmark_cdf_double.cu ;
 run test_holtsmark_cdf_float.cu ;
 run test_holtsmark_pdf_double.cu ;
 run test_holtsmark_pdf_float.cu ;
+
+run test_inverse_chi_squared_cdf_double.cu ;
+run test_inverse_chi_squared_cdf_float.cu ;
+run test_inverse_chi_squared_pdf_double.cu ;
+run test_inverse_chi_squared_pdf_float.cu ;
+run test_inverse_chi_squared_quan_double.cu ;
+run test_inverse_chi_squared_quan_float.cu ;
+
+run test_inverse_gamma_cdf_double.cu ;
+run test_inverse_gamma_cdf_float.cu ;
+run test_inverse_gamma_pdf_double.cu ;
+run test_inverse_gamma_pdf_float.cu ;
+run test_inverse_gamma_quan_double.cu ;
+run test_inverse_gamma_quan_float.cu ;
 
 run test_landau_cdf_double.cu ;
 run test_landau_cdf_float.cu ;

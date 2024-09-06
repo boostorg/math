@@ -26,9 +26,14 @@
 #  define TEST_REAL_CONCEPT
 #endif
 
-#include <boost/math/tools/test.hpp>
+#include <boost/math/tools/config.hpp>
+
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 using ::boost::math::concepts::real_concept;
+#endif
 
 #include <boost/math/distributions/geometric.hpp> // for geometric_distribution
 using boost::math::geometric_distribution;
@@ -64,7 +69,11 @@ void test_spot( // Test a single spot value against 'known good' values.
                RealType tol,     // Test tolerance
                RealType logtol)  // Logcdf Test tolerance.
 {
-   BOOST_IF_CONSTEXPR (std::is_same<RealType, long double>::value || std::is_same<RealType, real_concept>::value)
+   BOOST_IF_CONSTEXPR (std::is_same<RealType, long double>::value 
+                       #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+                       || std::is_same<RealType, real_concept>::value
+                       #endif
+                       )
    {
      logtol *= 100;
    }
@@ -376,7 +385,9 @@ if(std::numeric_limits<RealType>::is_specialized)
   static_cast<RealType>(9.9000000000003448e-201L), //
   100 * tolerance); // Note difference
 
-    // p nearer unity.
+  // p nearer unity.
+  // On GPU this gets flushed to 0 which has an eps difference of 3.4e+38
+  #ifndef BOOST_MATH_HAS_GPU_SUPPORT
   BOOST_CHECK_CLOSE_FRACTION( //
   pdf(geometric_distribution<RealType>(static_cast<RealType>(0.9999)),
   static_cast<RealType>(10) ),  // Number of failures, k
@@ -384,6 +395,7 @@ if(std::numeric_limits<RealType>::is_specialized)
   // static_cast<float>(1.00156406e-040)
   static_cast<RealType>(9.999e-41), // exact from 100 digit calculator.
   2e3 * tolerance); // Note bigger tolerance needed.
+  #endif
 
   // Moshier Cephes 100 digits calculator says 9.999e-41
   //0.9999*pow(1-0.9999,10)

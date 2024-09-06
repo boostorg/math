@@ -23,6 +23,7 @@ using cuda::std::tuple;
 
 using cuda::std::make_pair;
 
+using cuda::std::tie;
 using cuda::std::get;
 
 using cuda::std::tuple_size;
