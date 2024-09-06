@@ -25,6 +25,7 @@
 #endif
 
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/promotion.hpp> // for argument promotion.
 
 #ifdef BOOST_MATH_HAS_NVRTC
 
@@ -44,7 +45,6 @@ beta(RT1 a, RT2 b, A arg);
 #include <complex>
 #include <type_traits>
 #include <boost/math/special_functions/detail/round_fwd.hpp>
-#include <boost/math/tools/promotion.hpp> // for argument promotion.
 #include <boost/math/tools/type_traits.hpp>
 #include <boost/math/policies/policy.hpp>
 

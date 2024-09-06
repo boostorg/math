@@ -87,7 +87,7 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type
    typedef typename Dist::value_type value_type;
    typedef typename Dist::policy_type policy_type;
 
-   static const char* function = "boost::math::do_inverse_discrete_quantile<%1%>";
+   constexpr auto function = "boost::math::do_inverse_discrete_quantile<%1%>";
 
    BOOST_MATH_STD_USING
 
@@ -310,7 +310,11 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_floor(const Dis
    //
    while(result != 0)
    {
+      #ifdef BOOST_MATH_HAS_GPU_SUPPORT
+      cc = floor(::nextafter(result, -tools::max_value<typename Dist::value_type>()));
+      #else
       cc = floor(float_prior(result));
+      #endif
       if(cc < support(d).first)
          break;
       pp = c ? cdf(complement(d, cc)) : cdf(d, cc);
@@ -343,7 +347,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_ceil(const Dist
    while(true)
    {
       #ifdef BOOST_MATH_HAS_GPU_SUPPORT
-      cc = ceil(nextafter(result, tools::max_value<typename Dist::value_type>()));
+      cc = ceil(::nextafter(result, tools::max_value<typename Dist::value_type>()));
       #else
       cc = ceil(float_next(result));
       #endif

@@ -18,13 +18,19 @@
 #  pragma warning (disable :4127) // conditional expression is constant.
 #endif
 
+#include <boost/math/tools/config.hpp>
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/next.hpp>  // for has_denorm_now
 
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
-#include <boost/math/tools/test.hpp> // for real_concept
+#endif
+
 #include "test_out_of_range.hpp"
 #include <boost/math/distributions/students_t.hpp>
     using boost::math::students_t_distribution;
@@ -35,6 +41,7 @@
    using std::setprecision;
 #include <limits>
   using std::numeric_limits;
+#include <type_traits>
 
 template <class RealType>
 RealType naive_pdf(RealType v, RealType t)
@@ -528,7 +535,10 @@ void test_spots(RealType)
 
     std::string type = typeid(RealType).name();
 //    if (type != "class boost::math::concepts::real_concept") fails for gcc
-    if (typeid(RealType) != typeid(boost::math::concepts::real_concept))
+
+    #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+    BOOST_MATH_IF_CONSTEXPR(!std::is_same<RealType, boost::math::concepts::real_concept>::value)
+    #endif
     { // Ordinary floats only.
       RealType limit = 1/ boost::math::tools::epsilon<RealType>();
       // Default policy to get full accuracy.

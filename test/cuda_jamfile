@@ -104,6 +104,13 @@ run test_inverse_gamma_pdf_float.cu ;
 run test_inverse_gamma_quan_double.cu ;
 run test_inverse_gamma_quan_float.cu ;
 
+run test_inverse_gaussian_cdf_double.cu ;
+run test_inverse_gaussian_cdf_float.cu ;
+run test_inverse_gaussian_pdf_double.cu ;
+run test_inverse_gaussian_pdf_float.cu ;
+run test_inverse_gaussian_quan_double.cu ;
+run test_inverse_gaussian_quan_float.cu ;
+
 run test_landau_cdf_double.cu ;
 run test_landau_cdf_float.cu ;
 run test_landau_pdf_double.cu ;
@@ -125,6 +132,13 @@ run test_logistic_pdf_float.cu ;
 run test_logistic_quan_double.cu ;
 run test_logistic_quan_float.cu ;
 
+run test_lognormal_cdf_double.cu ;
+run test_lognormal_cdf_float.cu ;
+run test_lognormal_pdf_double.cu ;
+run test_lognormal_pdf_float.cu ;
+run test_lognormal_quan_double.cu ;
+run test_lognormal_quan_float.cu ;
+
 run test_mapairy_cdf_double.cu ;
 run test_mapairy_cdf_float.cu ;
 run test_mapairy_pdf_double.cu ;
@@ -132,12 +146,89 @@ run test_mapairy_pdf_float.cu ;
 run test_mapairy_quan_double.cu ;
 run test_mapairy_quan_float.cu ;
 
+run test_nc_beta_cdf_double.cu ;
+run test_nc_beta_cdf_float.cu ;
+run test_nc_beta_pdf_double.cu ;
+run test_nc_beta_pdf_float.cu ;
+run test_nc_beta_quan_double.cu ;
+run test_nc_beta_quan_float.cu ;
+
+run test_nc_f_cdf_double.cu ;
+run test_nc_f_cdf_float.cu ;
+run test_nc_f_pdf_double.cu ;
+run test_nc_f_pdf_float.cu ;
+run test_nc_f_quan_double.cu ;
+run test_nc_f_quan_float.cu ;
+
+run test_nc_chi_squared_cdf_double.cu ;
+run test_nc_chi_squared_cdf_float.cu ;
+run test_nc_chi_squared_pdf_double.cu ;
+run test_nc_chi_squared_pdf_float.cu ;
+run test_nc_chi_squared_quan_double.cu ;
+run test_nc_chi_squared_quan_float.cu ;
+
+run test_negative_binomial_cdf_double.cu ;
+run test_negative_binomial_cdf_float.cu ;
+run test_negative_binomial_pdf_double.cu ;
+run test_negative_binomial_pdf_float.cu ;
+run test_negative_binomial_quan_double.cu ;
+run test_negative_binomial_quan_float.cu ;
+
+run test_normal_cdf_double.cu ;
+run test_normal_cdf_float.cu ;
+run test_normal_pdf_double.cu ;
+run test_normal_pdf_float.cu ;
+run test_normal_quan_double.cu ;
+run test_normal_quan_float.cu ;
+
+run test_pareto_cdf_double.cu ;
+run test_pareto_cdf_float.cu ;
+run test_pareto_pdf_double.cu ;
+run test_pareto_pdf_float.cu ;
+run test_pareto_quan_double.cu ;
+run test_pareto_quan_float.cu ;
+
+run test_poisson_cdf_double.cu ;
+run test_poisson_cdf_float.cu ;
+run test_poisson_pdf_double.cu ;
+run test_poisson_pdf_float.cu ;
+run test_poisson_quan_double.cu ;
+run test_poisson_quan_float.cu ;
+
+run test_rayleigh_cdf_double.cu ;
+run test_rayleigh_cdf_float.cu ;
+run test_rayleigh_pdf_double.cu ;
+run test_rayleigh_pdf_float.cu ;
+run test_rayleigh_quan_double.cu ;
+run test_rayleigh_quan_float.cu ;
+
 run test_saspoint5_cdf_double.cu ;
 run test_saspoint5_cdf_float.cu ;
 run test_saspoint5_pdf_double.cu ;
 run test_saspoint5_pdf_float.cu ;
 run test_saspoint5_quan_double.cu ;
 run test_saspoint5_quan_float.cu ;
+
+run test_students_t_cdf_double.cu ;
+run test_students_t_cdf_float.cu ;
+run test_students_t_pdf_double.cu ;
+run test_students_t_pdf_float.cu ;
+run test_students_t_quan_double.cu ;
+run test_students_t_quan_float.cu ;
+
+run test_triangular_cdf_double.cu ;
+run test_triangular_cdf_float.cu ;
+run test_triangular_pdf_double.cu ;
+run test_triangular_pdf_float.cu ;
+run test_triangular_quan_double.cu ;
+run test_triangular_quan_float.cu ;
+
+run test_uniform_cdf_double.cu ;
+run test_uniform_cdf_float.cu ;
+run test_uniform_pdf_double.cu ;
+run test_uniform_pdf_float.cu ;
+run test_uniform_quan_double.cu ;
+run test_uniform_quan_float.cu ;
 
 run test_weibull_cdf_double.cu ;
 run test_weibull_cdf_float.cu ;
