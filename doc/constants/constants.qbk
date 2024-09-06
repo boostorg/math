@@ -227,6 +227,11 @@ either construct from a decimal digit string or calculate on the fly depending u
 [[Any other value ['N]][Sets the compile time precision to ['N] bits.]]
 ]
 
+[h5 GPU Support]
+
+All Boost.Math constants are marked with `BOOST_MATH_GPU_ENABLED` and can be used on both host and device.
+Note that when running on device you are limited to using only `float` and `double` types.
+
 [h5 Custom Specializing a constant]
 
 In addition, for user-defined types that need special handling, it's possible to partially-specialize

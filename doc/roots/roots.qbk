@@ -1,4 +1,4 @@
-[section:roots_deriv Root Finding With Derivatives: Newton-Raphson, Halley & Schr'''&#xf6;'''der]
+[section:roots_deriv Root Finding With Derivatives: Newton-Raphson, Halley & Schroeder]
 
 [h4 Synopsis]
 
@@ -10,10 +10,10 @@
    namespace tools { // Note namespace boost::math::tools.
    // Newton-Raphson
    template <class F, class T>
-   T newton_raphson_iterate(F f, T guess, T min, T max, int digits);
+   BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int digits);
 
    template <class F, class T>
-   T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter);
+   BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter);
 
    // Halley
    template <class F, class T>
@@ -22,7 +22,7 @@
    template <class F, class T>
    T halley_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter);
 
-   // Schr'''&#xf6;'''der
+   // Schroeder
    template <class F, class T>
    T schroder_iterate(F f, T guess, T min, T max, int digits);
 
@@ -61,7 +61,7 @@ For second-order iterative method ([@http://en.wikipedia.org/wiki/Newton_Raphson
 
 For the third-order methods
 ([@http://en.wikipedia.org/wiki/Halley%27s_method Halley] and
-Schr'''&#xf6;'''der)
+Schroeder)
         the `tuple` should have [*three] elements containing the evaluation of
         the function and its first and second derivatives.]]
 [[T guess] [The initial starting value. A good guess is crucial to quick convergence!]]
@@ -147,7 +147,7 @@ Out of bounds steps revert to bisection of the current bounds.
 
 Under ideal conditions, the number of correct digits trebles with each iteration.
 
-[h4:schroder Schr'''&#xf6;'''der's Method]
+[h4:schroder Schroeder's Method]
 
 Given an initial guess x0 the subsequent values are computed using:
 
@@ -162,8 +162,8 @@ Out of bounds steps revert to __bisection_wikipedia of the current bounds.
 
 Under ideal conditions, the number of correct digits trebles with each iteration.
 
-This is Schr'''&#xf6;'''der's general result (equation 18 from [@http://drum.lib.umd.edu/handle/1903/577 Stewart, G. W.
-"On Infinitely Many Algorithms for Solving Equations." English translation of Schr'''&#xf6;'''der's original paper.
+This is Schroeder's general result (equation 18 from [@http://drum.lib.umd.edu/handle/1903/577 Stewart, G. W.
+"On Infinitely Many Algorithms for Solving Equations." English translation of Schroeder's original paper.
 College Park, MD: University of Maryland, Institute for Advanced Computer Studies, Department of Computer Science, 1993].)
 
 This method guarantees at least quadratic convergence (the same as Newton's method), and is known to work well in the presence of multiple roots:

@@ -9,16 +9,16 @@
    namespace boost{ namespace math{
    
    template <class T>
-   ``__sf_result`` erf_inv(T p);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` erf_inv(T p);
    
    template <class T, class ``__Policy``>
-   ``__sf_result`` erf_inv(T p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` erf_inv(T p, const ``__Policy``&);
    
    template <class T>
-   ``__sf_result`` erfc_inv(T p);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` erfc_inv(T p);
    
    template <class T, class ``__Policy``>
-   ``__sf_result`` erfc_inv(T p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` erfc_inv(T p, const ``__Policy``&);
    
    }} // namespaces
    
@@ -30,10 +30,10 @@ the return type is `double` if T is an integer type, and T otherwise.
 [h4 Description]
 
    template <class T>
-   ``__sf_result`` erf_inv(T z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` erf_inv(T z);
    
    template <class T, class ``__Policy``>
-   ``__sf_result`` erf_inv(T z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` erf_inv(T z, const ``__Policy``&);
    
 Returns the [@http://functions.wolfram.com/GammaBetaErf/InverseErf/ inverse error function]
 of z, that is a value x such that:
@@ -43,10 +43,10 @@ of z, that is a value x such that:
 [graph erf_inv]
 
    template <class T>
-   ``__sf_result`` erfc_inv(T z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` erfc_inv(T z);
    
    template <class T, class ``__Policy``>
-   ``__sf_result`` erfc_inv(T z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` erfc_inv(T z, const ``__Policy``&);
    
 Returns the inverse of the complement of the error function of z, that is a
 value x such that:

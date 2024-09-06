@@ -12,11 +12,11 @@
       typedef RealType value_type;
       typedef Policy   policy_type;
 
-      inverse_chi_squared_distribution(RealType df = 1); // Not explicitly scaled, default 1/df.
-      inverse_chi_squared_distribution(RealType df, RealType scale = 1/df);  // Scaled.
+      BOOST_MATH_GPU_ENABLED inverse_chi_squared_distribution(RealType df = 1); // Not explicitly scaled, default 1/df.
+      BOOST_MATH_GPU_ENABLED inverse_chi_squared_distribution(RealType df, RealType scale = 1/df);  // Scaled.
 
-      RealType degrees_of_freedom()const; // Default 1.
-      RealType scale()const; // Optional scale [xi] (variance), default 1/degrees_of_freedom.
+      BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom()const; // Default 1.
+      BOOST_MATH_GPU_ENABLED RealType scale()const; // Optional scale [xi] (variance), default 1/degrees_of_freedom.
    };
    
    }} // namespace boost // namespace math
@@ -99,8 +99,8 @@ varies for a few values of parameters [nu] and [xi]:
 
 [h4 Member Functions]
 
-   inverse_chi_squared_distribution(RealType df = 1); // Implicitly scaled 1/df.
-   inverse_chi_squared_distribution(RealType df = 1, RealType scale); // Explicitly scaled.
+   BOOST_MATH_GPU_ENABLED inverse_chi_squared_distribution(RealType df = 1); // Implicitly scaled 1/df.
+   BOOST_MATH_GPU_ENABLED inverse_chi_squared_distribution(RealType df = 1, RealType scale); // Explicitly scaled.
 
 Constructs an inverse chi_squared distribution with [nu] degrees of freedom ['df],
 and scale ['scale] with default value 1\/df.
@@ -108,11 +108,11 @@ and scale ['scale] with default value 1\/df.
 Requires that the degrees of freedom [nu] parameter is greater than zero, otherwise calls
 __domain_error.
 
-   RealType degrees_of_freedom()const; 
+   BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom()const; 
    
 Returns the degrees_of_freedom [nu] parameter of this distribution.
 
-   RealType scale()const; 
+   BOOST_MATH_GPU_ENABLED RealType scale()const; 
    
 Returns the scale [xi] parameter of this distribution.
 
@@ -120,6 +120,8 @@ Returns the scale [xi] parameter of this distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variate is \[0,+[infin]\].
 [note Unlike some definitions, this implementation supports a random variate 

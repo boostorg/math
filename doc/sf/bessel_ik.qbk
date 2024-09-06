@@ -5,16 +5,16 @@
 `#include <boost/math/special_functions/bessel.hpp>`
 
    template <class T1, class T2>
-   ``__sf_result`` cyl_bessel_i(T1 v, T2 x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` cyl_bessel_i(T1 v, T2 x);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` cyl_bessel_i(T1 v, T2 x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` cyl_bessel_i(T1 v, T2 x, const ``__Policy``&);
 
    template <class T1, class T2>
-   ``__sf_result`` cyl_bessel_k(T1 v, T2 x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` cyl_bessel_k(T1 v, T2 x);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` cyl_bessel_k(T1 v, T2 x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` cyl_bessel_k(T1 v, T2 x, const ``__Policy``&);
    
    
 [h4 Description]

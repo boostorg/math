@@ -557,6 +557,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include overview/standalone.qbk]
 [include overview/result_type_calc.qbk]
 [include overview/error_handling.qbk]
+[include overview/gpu.qbk]
 
 [section:compilers_overview Compilers]
 [compilers_overview]
