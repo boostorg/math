@@ -7,7 +7,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/hermite.hpp>
-#include "libs/math/test/test_hermite.hpp"
+#include "test_hermite.hpp"
 
 void expected_results()
 {
