@@ -24,12 +24,12 @@ const char* cuda_kernel = R"(
 typedef float float_type;
 #include <boost/math/special_functions/gamma.hpp>
 extern "C" __global__ 
-void test_gamma_kernel(const float_type *in1, const float_type*, float_type *out, int numElements)
+void test_gamma_kernel(const float_type *in1, const float_type *in2, float_type *out, int numElements)
 {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
     if (i < numElements)
     {
-        out[i] = boost::math::tgamma(in1[i]);
+        out[i] = boost::math::tgamma(in1[i]) + boost::math::lgamma(in2[i]);
     }
 }
 )";
@@ -87,7 +87,7 @@ int main()
         #ifdef BOOST_MATH_NVRTC_CI_RUN
         const char* opts[] = {"--std=c++14", "--gpu-architecture=compute_75", "--include-path=/home/runner/work/math/boost-root/libs/math/include/"};
         #else
-        const char* opts[] = {"--std=c++14", "--include-path=/home/mborland/Documents/boost/libs/cuda-math/include/"};
+        const char* opts[] = {"--std=c++14", "--include-path=/home/mborland/Documents/boost/libs/cuda-math/include/", "-I/usr/local/cuda/include"};
         #endif
 
         // Compile the program
@@ -150,7 +150,7 @@ int main()
         // Verify Result
         for (int i = 0; i < numElements; ++i) 
         {
-            auto res = boost::math::tgamma(h_in1[i]);
+            auto res = boost::math::tgamma(h_in1[i]) + boost::math::lgamma(h_in2[i]);
             if (std::isfinite(res))
             {
                 if (boost::math::epsilon_difference(res, h_out[i]) > 300)

@@ -28,9 +28,12 @@
 // can find the definitions referred to herein.
 //
 
-#include <cmath>
-#include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/assert.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <cmath>
+#endif
 
 #ifdef _MSC_VER
 # pragma warning(push)

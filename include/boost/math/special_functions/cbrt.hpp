@@ -1,4 +1,5 @@
 //  (C) Copyright John Maddock 2006.
+//  (C) Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -11,12 +12,15 @@
 #endif
 
 #include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+
 #include <boost/math/tools/rational.hpp>
+#include <boost/math/tools/type_traits.hpp>
+#include <boost/math/tools/cstdint.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
-#include <type_traits>
-#include <cstdint>
 
 namespace boost{ namespace math{
 
@@ -170,6 +174,39 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cbrt(T z)
 
 } // namespace math
 } // namespace boost
+
+#else // Special NVRTC handling
+
+namespace boost {
+namespace math {
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED double cbrt(T x)
+{
+   return ::cbrt(x);
+}
+
+BOOST_MATH_GPU_ENABLED inline float cbrt(float x)
+{
+   return ::cbrtf(x);
+}
+
+template <typename T, typename Policy>
+BOOST_MATH_GPU_ENABLED double cbrt(T x, const Policy&)
+{
+   return ::cbrt(x);
+}
+
+template <typename Policy>
+BOOST_MATH_GPU_ENABLED float cbrt(float x, const Policy&)
+{
+   return ::cbrtf(x);
+}
+
+} // namespace math
+} // namespace boost
+
+#endif // NVRTC
 
 #endif // BOOST_MATH_SF_CBRT_HPP
 

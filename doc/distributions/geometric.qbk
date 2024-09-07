@@ -17,28 +17,28 @@
       typedef RealType value_type;
       typedef Policy   policy_type;
       // Constructor from success_fraction:
-      geometric_distribution(RealType p);
+      BOOST_MATH_GPU_ENABLED geometric_distribution(RealType p);
       
       // Parameter accessors:
-      RealType success_fraction() const;
-      RealType successes() const;
+      BOOST_MATH_GPU_ENABLED RealType success_fraction() const;
+      BOOST_MATH_GPU_ENABLED RealType successes() const;
      
       // Bounds on success fraction:
-      static RealType find_lower_bound_on_p(
+      BOOST_MATH_GPU_ENABLED static RealType find_lower_bound_on_p(
          RealType trials, 
          RealType successes,
          RealType probability); // alpha
-      static RealType find_upper_bound_on_p(
+      BOOST_MATH_GPU_ENABLED static RealType find_upper_bound_on_p(
          RealType trials, 
          RealType successes,
          RealType probability); // alpha
          
       // Estimate min/max number of trials:
-      static RealType find_minimum_number_of_trials(
+      BOOST_MATH_GPU_ENABLED static RealType find_minimum_number_of_trials(
          RealType k,     // Number of failures.
          RealType p,     // Success fraction.
          RealType probability); // Probability threshold alpha.
-      static RealType find_maximum_number_of_trials(
+      BOOST_MATH_GPU_ENABLED static RealType find_maximum_number_of_trials(
          RealType k,     // Number of failures.
          RealType p,     // Success fraction.
          RealType probability); // Probability threshold alpha.
@@ -268,6 +268,8 @@ of observing more than k failures.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 However it's worth taking a moment to define what these actually mean in 
 the context of this distribution:
@@ -303,6 +305,9 @@ the context of this distribution:
    ``quantile(complement(geometric(p), P))``]]
 ]
 
+In this distribution the implementation of `logcdf` is specialized
+to improve numerical accuracy.
+
 [h4 Accuracy]
 
 This distribution is implemented using the pow and exp functions, so most results
@@ -322,6 +327,7 @@ the expected number of failures using the quantile.
 [[Function][Implementation Notes]]
 [[pdf][pdf =  p * pow(q, k)]]
 [[cdf][cdf = 1 - q[super k=1]]]
+[[logcdf][log(cdf) = log1p(-exp(log1p(-p) * (k+1)))]]
 [[cdf complement][exp(log1p(-p) * (k+1))]]
 [[quantile][k = log1p(-x) / log1p(-p) -1]]
 [[quantile from the complement][k = log(x) / log1p(-p) -1]]

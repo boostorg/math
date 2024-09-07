@@ -11,10 +11,13 @@
 #pragma once
 #endif
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+
 #include <cmath>
 #include <limits>
 #include <type_traits>
-#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/trunc.hpp>
@@ -94,5 +97,40 @@ inline typename tools::promote_args<T>::type sin_pi(T x)
 
 } // namespace math
 } // namespace boost
+
+#else // Special handling for NVRTC
+
+namespace boost {
+namespace math {
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED auto sin_pi(T x)
+{
+   return ::sinpi(x);
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED auto sin_pi(float x)
+{
+   return ::sinpif(x);
+}
+
+template <typename T, typename Policy>
+BOOST_MATH_GPU_ENABLED auto sin_pi(T x, const Policy&)
+{
+   return ::sinpi(x);
+}
+
+template <typename Policy>
+BOOST_MATH_GPU_ENABLED auto sin_pi(float x, const Policy&)
+{
+   return ::sinpif(x);
+}
+
+} // namespace math
+} // namespace boost
+
+#endif // BOOST_MATH_HAS_NVRTC
+
 #endif
 

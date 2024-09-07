@@ -12,6 +12,9 @@
 #endif
 
 #include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+
 #include <boost/math/ccmath/detail/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
@@ -240,5 +243,111 @@ BOOST_MATH_GPU_ENABLED inline long long llround(const T& v)
 }
 
 }} // namespaces
+
+#else // Specialized NVRTC overloads
+
+namespace boost {
+namespace math {
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED T round(T x)
+{
+   return ::round(x);
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED float round(float x)
+{
+   return ::roundf(x);
+}
+
+template <typename T, typename Policy>
+BOOST_MATH_GPU_ENABLED T round(T x, const Policy&)
+{
+   return ::round(x);
+}
+
+template <typename Policy>
+BOOST_MATH_GPU_ENABLED float round(float x, const Policy&)
+{
+   return ::roundf(x);
+}
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED int iround(T x)
+{
+   return static_cast<int>(::lround(x));
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED int iround(float x)
+{
+   return static_cast<int>(::lroundf(x));
+}
+
+template <typename T, typename Policy>
+BOOST_MATH_GPU_ENABLED int iround(T x, const Policy&)
+{
+   return static_cast<int>(::lround(x));
+}
+
+template <typename Policy>
+BOOST_MATH_GPU_ENABLED int iround(float x, const Policy&)
+{
+   return static_cast<int>(::lroundf(x));
+}
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED long lround(T x)
+{
+   return ::lround(x);
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED long lround(float x)
+{
+   return ::lroundf(x);
+}
+
+template <typename T, typename Policy>
+BOOST_MATH_GPU_ENABLED long lround(T x, const Policy&)
+{
+   return ::lround(x);
+}
+
+template <typename Policy>
+BOOST_MATH_GPU_ENABLED long lround(float x, const Policy&)
+{
+   return ::lroundf(x);
+}
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED long long llround(T x)
+{
+   return ::llround(x);
+}
+
+template <>
+BOOST_MATH_GPU_ENABLED long long llround(float x)
+{
+   return ::llroundf(x);
+}
+
+template <typename T, typename Policy>
+BOOST_MATH_GPU_ENABLED long long llround(T x, const Policy&)
+{
+   return ::llround(x);
+}
+
+template <typename Policy>
+BOOST_MATH_GPU_ENABLED long long llround(float x, const Policy&)
+{
+   return ::llroundf(x);
+}
+
+} // Namespace math
+} // Namespace boost
+
+#endif // BOOST_MATH_HAS_NVRTC
 
 #endif // BOOST_MATH_ROUND_HPP

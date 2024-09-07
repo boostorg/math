@@ -10,12 +10,14 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/tools/tuple.hpp>
-#include <boost/math/distributions/fwd.hpp>
+#include <boost/math/tools/precision.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
+#include <boost/math/policies/policy.hpp>
+#include <boost/math/policies/error_handling.hpp>
 
 //
 // This is the maximum extreme value distribution, see
@@ -24,8 +26,11 @@
 // Also known as a Fisher-Tippett distribution, a log-Weibull
 // distribution or a Gumbel distribution.
 
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/distributions/fwd.hpp>
 #include <utility>
 #include <cmath>
+#endif
 
 #ifdef _MSC_VER
 # pragma warning(push)
@@ -280,7 +285,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<extreme_v
 }
 
 template <class RealType, class Policy>
-RealType quantile(const complemented2_type<extreme_value_distribution<RealType, Policy>, RealType>& c)
+BOOST_MATH_GPU_ENABLED RealType quantile(const complemented2_type<extreme_value_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
 

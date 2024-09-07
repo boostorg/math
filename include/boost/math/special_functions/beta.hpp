@@ -11,18 +11,27 @@
 #pragma once
 #endif
 
-#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/type_traits.hpp>
+#include <boost/math/tools/assert.hpp>
+#include <boost/math/tools/precision.hpp>
+#include <boost/math/tools/numeric_limits.hpp>
+#include <boost/math/tools/tuple.hpp>
+#include <boost/math/tools/promotion.hpp>
+#include <boost/math/tools/cstdint.hpp>
 #include <boost/math/special_functions/gamma.hpp>
-#include <boost/math/special_functions/binomial.hpp>
-#include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/special_functions/lanczos.hpp>
+#include <boost/math/policies/policy.hpp>
+#include <boost/math/policies/error_handling.hpp>
+#include <boost/math/constants/constants.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/binomial.hpp>
+#include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/tools/roots.hpp>
-#include <boost/math/tools/assert.hpp>
-#include <cmath>
 
 namespace boost{ namespace math{
 
@@ -123,6 +132,7 @@ BOOST_MATH_GPU_ENABLED T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
 // Generic implementation of Beta(a,b) without Lanczos approximation support
 // (Caution this is slow!!!):
 //
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T beta_imp(T a, T b, const lanczos::undefined_lanczos& l, const Policy& pol)
 {
@@ -193,7 +203,7 @@ BOOST_MATH_GPU_ENABLED T beta_imp(T a, T b, const lanczos::undefined_lanczos& l,
    }
 
 } // template <class T>T beta_imp(T a, T b, const lanczos::undefined_lanczos& l)
-
+#endif
 
 //
 // Compute the leading power terms in the incomplete Beta:
@@ -245,11 +255,11 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
    // l1 and l2 are the base of the exponents minus one:
    T l1 = (x * b - y * agh) / agh;
    T l2 = (y * a - x * bgh) / bgh;
-   if(((std::min)(fabs(l1), fabs(l2)) < 0.2))
+   if((BOOST_MATH_GPU_SAFE_MIN(fabs(l1), fabs(l2)) < 0.2))
    {
       // when the base of the exponent is very near 1 we get really
       // gross errors unless extra care is taken:
-      if((l1 * l2 > 0) || ((std::min)(a, b) < 1))
+      if((l1 * l2 > 0) || (BOOST_MATH_GPU_SAFE_MIN(a, b) < 1))
       {
          //
          // This first branch handles the simple cases where either:
@@ -285,7 +295,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
             BOOST_MATH_INSTRUMENT_VARIABLE(result);
          }
       }
-      else if((std::max)(fabs(l1), fabs(l2)) < 0.5)
+      else if(BOOST_MATH_GPU_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
       {
          //
          // Both exponents are near one and both the exponents are
@@ -447,6 +457,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
 //
 // This version is generic, slow, and does not use the Lanczos approximation.
 //
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
                         T b,
@@ -483,7 +494,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
       bool need_logs = false;
       if (a < b)
       {
-         BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+         BOOST_MATH_IF_CONSTEXPR(boost::math::numeric_limits<T>::has_infinity)
          {
             power1 = pow((x * y * c * c) / (a * b), a);
             power2 = pow((y * c) / b, b - a);
@@ -506,7 +517,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
       }
       else
       {
-         BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+         BOOST_MATH_IF_CONSTEXPR(boost::math::numeric_limits<T>::has_infinity)
          {
             power1 = pow((x * y * c * c) / (a * b), b);
             power2 = pow((x * c) / a, a - b);
@@ -525,7 +536,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
                need_logs = true;
          }
       }
-      BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+      BOOST_MATH_IF_CONSTEXPR(boost::math::numeric_limits<T>::has_infinity)
       {
          if (!(boost::math::isnormal)(power1) || !(boost::math::isnormal)(power2))
          {
@@ -624,6 +635,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
    }
    return prefix * power1 * (power2 / bet);
 }
+
+#endif
 //
 // Series approximation to the incomplete beta:
 //
@@ -716,7 +729,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool 
    if(result < tools::min_value<T>())
       return s0; // Safeguard: series can't cope with denorms.
    ibeta_series_t<T> s(a, b, x, result);
-   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, s0);
    policies::check_series_iterations<T>("boost::math::ibeta<%1%>(%1%, %1%, %1%) in ibeta_series (with lanczos)", max_iter, pol);
    return result;
@@ -724,6 +737,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool 
 //
 // Incomplete Beta series again, this time without Lanczos support:
 //
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczos& l, bool normalised, T* p_derivative, T y, const Policy& pol)
 {
@@ -777,19 +791,19 @@ BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const boost::math::la
    if(result < tools::min_value<T>())
       return s0; // Safeguard: series can't cope with denorms.
    ibeta_series_t<T> s(a, b, x, result);
-   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, s0);
    policies::check_series_iterations<T>("boost::math::ibeta<%1%>(%1%, %1%, %1%) in ibeta_series (without lanczos)", max_iter, pol);
    return result;
 }
-
+#endif
 //
 // Continued fraction for the incomplete beta:
 //
 template <class T>
 struct ibeta_fraction2_t
 {
-   typedef std::pair<T, T> result_type;
+   typedef boost::math::pair<T, T> result_type;
 
    BOOST_MATH_GPU_ENABLED ibeta_fraction2_t(T a_, T b_, T x_, T y_) : a(a_), b(b_), x(x_), y(y_), m(0) {}
 
@@ -805,7 +819,7 @@ struct ibeta_fraction2_t
 
       ++m;
 
-      return std::make_pair(aN, bN);
+      return boost::math::make_pair(aN, bN);
    }
 
 private:
@@ -866,6 +880,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_a_step(T a, T b, T x, T y, int k, const Policy& p
 
    return prefix;
 }
+
 //
 // This function is only needed for the non-regular incomplete beta,
 // it computes the delta in:
@@ -904,11 +919,15 @@ struct Pn_size
 {
    // This is likely to be enough for ~35-50 digit accuracy
    // but it's hard to quantify exactly:
+   #ifndef BOOST_MATH_HAS_NVRTC
    static constexpr unsigned value =
       ::boost::math::max_factorial<T>::value >= 100 ? 50
    : ::boost::math::max_factorial<T>::value >= ::boost::math::max_factorial<double>::value ? 30
    : ::boost::math::max_factorial<T>::value >= ::boost::math::max_factorial<float>::value ? 15 : 1;
    static_assert(::boost::math::max_factorial<T>::value >= ::boost::math::max_factorial<float>::value, "Type does not provide for 35-50 digits of accuracy.");
+   #else
+   static constexpr unsigned value = 0; // Will never be called
+   #endif
 };
 template <>
 struct Pn_size<float>
@@ -1106,6 +1125,7 @@ BOOST_MATH_GPU_ENABLED T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
 // input range and select the right implementation method for
 // each domain:
 //
+
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_derivative)
 {
@@ -1223,7 +1243,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       return p;
    }
 
-   if((std::min)(a, b) <= 1)
+   if(BOOST_MATH_GPU_SAFE_MIN(a, b) <= 1)
    {
       if(x > 0.5)
       {
@@ -1232,10 +1252,10 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
          invert = !invert;
          BOOST_MATH_INSTRUMENT_VARIABLE(invert);
       }
-      if((std::max)(a, b) <= 1)
+      if(BOOST_MATH_GPU_SAFE_MAX(a, b) <= 1)
       {
          // Both a,b < 1:
-         if((a >= (std::min)(T(0.2), b)) || (pow(x, a) <= 0.9))
+         if((a >= BOOST_MATH_GPU_SAFE_MIN(T(0.2), b)) || (pow(x, a) <= 0.9))
          {
             if(!invert)
             {
@@ -1404,7 +1424,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
 
       if(b < 40)
       {
-         if((floor(a) == a) && (floor(b) == b) && (a < static_cast<T>((std::numeric_limits<int>::max)() - 100)) && (y != 1))
+         if((floor(a) == a) && (floor(b) == b) && (a < static_cast<T>((boost::math::numeric_limits<int>::max)() - 100)) && (y != 1))
          {
             // relate to the binomial distribution and use a finite sum:
             T k = a - 1;
@@ -1569,7 +1589,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
 //
 template <class RT1, class RT2, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2>::type
-   beta(RT1 a, RT2 b, const Policy&, const std::true_type*)
+   beta(RT1 a, RT2 b, const Policy&, const boost::math::true_type*)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<RT1, RT2>::type result_type;
@@ -1586,7 +1606,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2>::type
 }
 template <class RT1, class RT2, class RT3>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
-   beta(RT1 a, RT2 b, RT3 x, const std::false_type*)
+   beta(RT1 a, RT2 b, RT3 x, const boost::math::false_type*)
 {
    return boost::math::beta(a, b, x, policies::policy<>());
 }

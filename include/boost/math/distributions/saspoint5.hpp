@@ -15,15 +15,21 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/tools/tuple.hpp>
-#include <boost/math/distributions/fwd.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 #include <boost/math/tools/rational.hpp>
-#include <utility>
+#include <boost/math/tools/promotion.hpp>
+#include <boost/math/tools/type_traits.hpp>
+#include <boost/math/policies/policy.hpp>
+#include <boost/math/policies/error_handling.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/distributions/fwd.hpp>
 #include <cmath>
+#endif
 
 namespace boost { namespace math {
 template <class RealType, class Policy>
@@ -32,7 +38,7 @@ class saspoint5_distribution;
 namespace detail {
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -337,7 +343,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_plus_imp_prec(const RealTyp
 
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -849,14 +855,14 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_plus_imp_prec(const RealTyp
 
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_imp_prec(const RealType& x, const std::integral_constant<int, 53> &tag) {
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_imp_prec(const RealType& x, const boost::math::integral_constant<int, 53> &tag) {
     BOOST_MATH_STD_USING // for ADL of std functions
 
     return saspoint5_pdf_plus_imp_prec<RealType>(abs(x), tag);
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_imp_prec(const RealType& x, const std::integral_constant<int, 113>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_imp_prec(const RealType& x, const boost::math::integral_constant<int, 113>& tag) {
     BOOST_MATH_STD_USING // for ADL of std functions
 
     return saspoint5_pdf_plus_imp_prec<RealType>(abs(x), tag);
@@ -889,7 +895,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_imp(const saspoint5_distrib
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef std::integral_constant<int,
+    typedef boost::math::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
@@ -905,7 +911,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_imp(const saspoint5_distrib
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1163,7 +1169,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_plus_imp_prec(const RealTyp
 
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1642,7 +1648,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_plus_imp_prec(const RealTyp
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp_prec(const RealType& x, bool complement, const std::integral_constant<int, 53>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp_prec(const RealType& x, bool complement, const boost::math::integral_constant<int, 53>& tag) {
     if (x >= 0) {
         return complement ? saspoint5_cdf_plus_imp_prec(x, tag) : 1 - saspoint5_cdf_plus_imp_prec(x, tag);
     }
@@ -1655,7 +1661,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp_prec(const RealType& x,
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp_prec(const RealType& x, bool complement, const std::integral_constant<int, 113>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp_prec(const RealType& x, bool complement, const boost::math::integral_constant<int, 113>& tag) {
     if (x >= 0) {
         return complement ? saspoint5_cdf_plus_imp_prec(x, tag) : 1 - saspoint5_cdf_plus_imp_prec(x, tag);
     }
@@ -1694,7 +1700,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp(const saspoint5_distrib
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef std::integral_constant<int,
+    typedef boost::math::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
@@ -1710,7 +1716,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp(const saspoint5_distrib
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const boost::math::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1994,7 +2000,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_upper_imp_prec(const R
 
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const boost::math::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -2493,7 +2499,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_upper_imp_prec(const R
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 53>& tag)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp_prec(const RealType& p, bool complement, const boost::math::integral_constant<int, 53>& tag)
 {
     if (p > 0.5) {
         return !complement ? saspoint5_quantile_upper_imp_prec(1 - p, tag) : -saspoint5_quantile_upper_imp_prec(1 - p, tag);
@@ -2503,7 +2509,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp_prec(const RealTyp
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp_prec(const RealType& p, bool complement, const std::integral_constant<int, 113>& tag)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp_prec(const RealType& p, bool complement, const boost::math::integral_constant<int, 113>& tag)
 {
     if (p > 0.5) {
         return !complement ? saspoint5_quantile_upper_imp_prec(1 - p, tag) : -saspoint5_quantile_upper_imp_prec(1 - p, tag);
@@ -2540,7 +2546,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp(const saspoint5_di
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef std::integral_constant<int,
+    typedef boost::math::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
@@ -2554,13 +2560,13 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp(const saspoint5_di
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_entropy_imp_prec(const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_entropy_imp_prec(const boost::math::integral_constant<int, 53>&)
 {
     return static_cast<RealType>(3.63992444568030649573);
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_entropy_imp_prec(const std::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_entropy_imp_prec(const boost::math::integral_constant<int, 113>&)
 {
     return BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.6399244456803064957308496039071853510);
 }
@@ -2583,7 +2589,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_entropy_imp(const saspoint5_dis
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef std::integral_constant<int,
+    typedef boost::math::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0

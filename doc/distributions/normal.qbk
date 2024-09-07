@@ -97,6 +97,7 @@ and /s/ is its standard deviation.
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = e[super -(x-m)[super 2]\/(2s[super 2])] \/ (s * sqrt(2*pi)) ]]
+[[logpdf][log(pdf) = -log(s) - log(2*[pi])/2 - (x-mean)[super 2]/(2*s[super 2]) ]]
 [[cdf][Using the relation: p = 0.5 * __erfc(-(x-m)/(s*sqrt(2))) ]]
 [[cdf complement][Using the relation: q = 0.5 * __erfc((x-m)/(s*sqrt(2))) ]]
 [[quantile][Using the relation: x = m - s * sqrt(2) * __erfc_inv(2*p)]]

@@ -11,6 +11,8 @@
 #pragma once
 #endif
 
+#ifndef __CUDACC_RTC__
+
 #include <boost/math/tools/is_standalone.hpp>
 
 // Minimum language standard transition
@@ -667,6 +669,16 @@ namespace boost{ namespace math{
 //
 
 #ifdef __CUDACC__
+
+// We have to get our include order correct otherwise you get compilation failures
+#include <cuda.h>
+#include <cuda_runtime.h>
+#include <cuda/std/type_traits>
+#include <cuda/std/utility>
+#include <cuda/std/cstdint>
+#include <cuda/std/array>
+#include <cuda/std/tuple>
+
 #  define BOOST_MATH_CUDA_ENABLED __host__ __device__
 #  define BOOST_MATH_HAS_GPU_SUPPORT
 
@@ -723,7 +735,7 @@ BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b;
 template <class T>
 BOOST_MATH_GPU_ENABLED constexpr T gpu_safe_min(const T& a, const T& b) { return a < b ? a : b; }
 template <class T>
-BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { return a > b ? a : b; }
+BOOST_MATH_GPU_ENABLED constexpr T gpu_safe_max(const T& a, const T& b) { return a > b ? a : b; }
 
 #define BOOST_MATH_GPU_SAFE_SWAP(a, b) gpu_safe_swap(a, b)
 #define BOOST_MATH_GPU_SAFE_MIN(a, b) gpu_safe_min(a, b)
@@ -741,7 +753,7 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 // See if we can inline them instead
 
 #if defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L
-#  define BOOST_MATH_STATIC_CONSTEXPR inline constexpr
+#  define BOOST_MATH_INLINE_CONSTEXPR inline constexpr
 #  define BOOST_MATH_STATIC static
 #  ifndef BOOST_MATH_HAS_GPU_SUPPORT
 #    define BOOST_MATH_STATIC_LOCAL_VARIABLE static
@@ -750,15 +762,83 @@ BOOST_MATH_GPU_ENABLED constexpr T cuda_safe_max(const T& a, const T& b) { retur
 #  endif
 #else
 #  ifndef BOOST_MATH_HAS_GPU_SUPPORT
-#    define BOOST_MATH_STATIC_CONSTEXPR static constexpr
+#    define BOOST_MATH_INLINE_CONSTEXPR static constexpr
 #    define BOOST_MATH_STATIC static
 #    define BOOST_MATH_STATIC_LOCAL_VARIABLE
 #  else
-#    define BOOST_MATH_STATIC_CONSTEXPR constexpr
+#    define BOOST_MATH_INLINE_CONSTEXPR constexpr
 #    define BOOST_MATH_STATIC constexpr
 #    define BOOST_MATH_STATIC_LOCAL_VARIABLE static
 #  endif
 #endif
+
+#define BOOST_MATH_FP_NAN FP_NAN
+#define BOOST_MATH_FP_INFINITE FP_INFINITE
+#define BOOST_MATH_FP_ZERO FP_ZERO
+#define BOOST_MATH_FP_SUBNORMAL FP_SUBNORMAL
+#define BOOST_MATH_FP_NORMAL FP_NORMAL
+
+#else // Special section for CUDA NVRTC to ensure we consume no STL headers
+
+#ifndef BOOST_MATH_STANDALONE
+#  define BOOST_MATH_STANDALONE
+#endif
+
+#define BOOST_MATH_HAS_NVRTC
+#define BOOST_MATH_ENABLE_CUDA
+#define BOOST_MATH_HAS_GPU_SUPPORT
+
+#define BOOST_MATH_GPU_ENABLED __host__ __device__
+
+#define BOOST_MATH_STATIC static
+#define BOOST_MATH_STATIC_LOCAL_VARIABLE
+
+#define BOOST_MATH_NOEXCEPT(T) noexcept(boost::math::is_floating_point_v<T>)
+#define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T) 
+#define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) 
+#define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T) 
+#define BOOST_MATH_BIG_CONSTANT(T, N, V) static_cast<T>(V)
+#define BOOST_MATH_FORCEINLINE __forceinline__
+#define BOOST_MATH_STD_USING  
+#define BOOST_MATH_IF_CONSTEXPR if
+#define BOOST_MATH_IS_FLOAT(T) (boost::math::is_floating_point<T>::value)
+#define BOOST_MATH_CONSTEXPR_TABLE_FUNCTION constexpr
+#define BOOST_MATH_NO_EXCEPTIONS
+
+// This should be defined to nothing but since it is not specifically a math macro
+// we need to undef before proceeding
+#ifdef BOOST_FPU_EXCEPTION_GUARD
+#  undef BOOST_FPU_EXCEPTION_GUARD
+#endif
+
+#define BOOST_FPU_EXCEPTION_GUARD
+
+template <class T>
+BOOST_MATH_GPU_ENABLED constexpr void gpu_safe_swap(T& a, T& b) { T t(a); a = b; b = t; }
+
+#define BOOST_MATH_GPU_SAFE_SWAP(a, b) gpu_safe_swap(a, b)
+#define BOOST_MATH_GPU_SAFE_MIN(a, b) (::min)(a, b)
+#define BOOST_MATH_GPU_SAFE_MAX(a, b) (::max)(a, b)
+
+#define BOOST_MATH_FP_NAN 0
+#define BOOST_MATH_FP_INFINITE 1
+#define BOOST_MATH_FP_ZERO 2
+#define BOOST_MATH_FP_SUBNORMAL 3
+#define BOOST_MATH_FP_NORMAL 4
+
+#define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##SUF
+#define BOOST_MATH_INT_TABLE_TYPE(RT, IT) IT
+
+#if defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L
+#  define BOOST_MATH_INLINE_CONSTEXPR inline constexpr
+#else
+#  define BOOST_MATH_INLINE_CONSTEXPR constexpr
+#endif
+
+#define BOOST_MATH_INSTRUMENT_VARIABLE(x)
+#define BOOST_MATH_INSTRUMENT_CODE(x) 
+
+#endif // NVRTC
 
 #endif // BOOST_MATH_TOOLS_CONFIG_HPP
 

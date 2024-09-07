@@ -15,11 +15,11 @@
       typedef RealType  value_type;
       typedef Policy    policy_type;
 
-      landau_distribution(RealType location = 0, RealType scale = 1);
+      BOOST_MATH_GPU_ENABLED landau_distribution(RealType location = 0, RealType scale = 1);
 
-      RealType location()const;
-      RealType scale()const;
-      RealType bias()const;
+      BOOST_MATH_GPU_ENABLED RealType location()const;
+      BOOST_MATH_GPU_ENABLED RealType scale()const;
+      BOOST_MATH_GPU_ENABLED RealType bias()const;
    };
 
 The [@http://en.wikipedia.org/wiki/landau_distribution Landau distribution]
@@ -54,7 +54,7 @@ the distribution:
 
 [h4 Member Functions]
 
-   landau_distribution(RealType location = 0, RealType scale = 1);
+   BOOST_MATH_GPU_ENABLED landau_distribution(RealType location = 0, RealType scale = 1);
 
 Constructs a landau distribution, with location parameter /location/
 and scale parameter /scale/.  When these parameters take their default
@@ -63,15 +63,15 @@ then the result is a Standard landau Distribution.
 
 Requires scale > 0, otherwise calls __domain_error.
 
-   RealType location()const;
+   BOOST_MATH_GPU_ENABLED RealType location()const;
 
 Returns the location parameter of the distribution.
 
-   RealType scale()const;
+   BOOST_MATH_GPU_ENABLED RealType scale()const;
 
 Returns the scale parameter of the distribution.
 
-   RealType bias()const;
+   BOOST_MATH_GPU_ENABLED RealType bias()const;
 
 Returns the amount of translation by the scale parameter.
 [expression bias = - 2 / [pi] log(c)]
@@ -80,6 +80,8 @@ Returns the amount of translation by the scale parameter.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 Note however that the landau distribution does not have a mean,
 standard deviation, etc. See __math_undefined

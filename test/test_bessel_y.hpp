@@ -9,6 +9,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
@@ -241,10 +242,12 @@ void test_bessel(T, const char* name)
        BOOST_CHECK_EQUAL(boost::math::sph_neumann(2, std::numeric_limits<T>::infinity()), T(0));
     }
 
+    #ifndef BOOST_MATH_NO_EXCEPTIONS
     BOOST_CHECK_THROW(boost::math::cyl_neumann(T(0), T(-1)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_neumann(T(0.2), T(-1)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_neumann(T(2), T(0)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::sph_neumann(2, T(-2)), std::domain_error);
+    #endif
 #if LDBL_MAX_EXP > 1024
     if (std::numeric_limits<T>::max_exponent > 1024)
     {

@@ -5,7 +5,17 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "pch_light.hpp"
+#ifndef SYCL_LANGUAGE_VERSION
+#include <pch_light.hpp>
+#endif
+
+#ifdef __clang__
+#  pragma clang diagnostic push 
+#  pragma clang diagnostic ignored "-Wliteral-range"
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic push 
+#  pragma GCC diagnostic ignored "-Woverflow"
+#endif
 
 #include "test_beta.hpp"
 

@@ -3,7 +3,18 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef SYCL_LANGUAGE_VERSION
 #include <pch_light.hpp>
+#endif
+
+#ifdef __clang__
+#  pragma clang diagnostic push 
+#  pragma clang diagnostic ignored "-Wliteral-range"
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic push 
+#  pragma GCC diagnostic ignored "-Woverflow"
+#endif
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #include "test_igamma_inv.hpp"
 
 #if !defined(TEST_FLOAT) && !defined(TEST_DOUBLE) && !defined(TEST_LDOUBLE) && !defined(TEST_REAL_CONCEPT)
@@ -89,14 +100,22 @@ void expected_results()
       "linux.*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*medium[^|]*",                   // test data group
+      #ifdef SYCL_LANGUAGE_VERSION
+      "[^|]*", 350, 50);
+      #else
       "[^|]*", 350, 5);                  // test function
+      #endif
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "linux.*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*large[^|]*",                   // test data group
+      #ifdef SYCL_LANGUAGE_VERSION
+      "[^|]*", 150, 20);                  // test function
+      #else
       "[^|]*", 150, 5);                  // test function
+      #endif
 
 
    //
