@@ -197,25 +197,30 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T gamma_imp(T z, const Policy& pol
 {
    BOOST_MATH_STD_USING
 
-   if(z <= -20)
+   T result = 1;
+   constexpr auto function = "boost::math::tgamma<%1%>(%1%)";
+
+   if(z <= 0)
    {
-      constexpr auto function = "boost::math::tgamma<%1%>(%1%)";
-      T result = gamma_imp_final(T(-z), pol, l) * sinpx(z);
-      BOOST_MATH_INSTRUMENT_VARIABLE(result);
-      if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
-         return -boost::math::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
-      result = -boost::math::constants::pi<T>() / result;
-      if(result == 0)
-         return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
-      if((boost::math::fpclassify)(result) == (int)BOOST_MATH_FP_SUBNORMAL)
-         return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
-      BOOST_MATH_INSTRUMENT_VARIABLE(result);
-      return result;
+      if(floor(z) == z)
+         return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
+      if(z <= -20)
+      {
+         result = gamma_imp_final(T(-z), pol, l) * sinpx(z);
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
+            return -boost::math::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+         result = -boost::math::constants::pi<T>() / result;
+         if(result == 0)
+            return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
+         if((boost::math::fpclassify)(result) == BOOST_MATH_FP_SUBNORMAL)
+            return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         return result;
+      }
    }
-   else
-   {
-      return gamma_imp_final(T(z), pol, l);
-   }
+
+   return gamma_imp_final(T(z), pol, l);
 }
 
 #ifdef BOOST_MATH_ENABLE_CUDA
