@@ -16,11 +16,11 @@
     public:
        typedef RealType value_type;
 
-       uniform_distribution(RealType lower = 0, RealType upper = 1); // Constructor.
+       BOOST_MATH_GPU_ENABLED uniform_distribution(RealType lower = 0, RealType upper = 1); // Constructor.
           : m_lower(lower), m_upper(upper) // Default is standard uniform distribution.
        // Accessor functions.
-       RealType lower()const;
-       RealType upper()const;
+       BOOST_MATH_GPU_ENABLED RealType lower()const;
+       BOOST_MATH_GPU_ENABLED RealType upper()const;
     }; // class uniform_distribution
    
    }} // namespaces
@@ -66,7 +66,7 @@ Likewise for the CDF:
 
 [h4 Member Functions]
 
-   uniform_distribution(RealType lower = 0, RealType upper = 1);
+   BOOST_MATH_GPU_ENABLED uniform_distribution(RealType lower = 0, RealType upper = 1);
    
 Constructs a [@http://en.wikipedia.org/wiki/uniform_distribution 
 uniform distribution] with lower  /lower/ (a) and upper /upper/ (b).
@@ -74,11 +74,11 @@ uniform distribution] with lower  /lower/ (a) and upper /upper/ (b).
 Requires that the /lower/ and /upper/ parameters are both finite;
 otherwise if infinity or NaN then calls __domain_error.
 
-   RealType lower()const;
+   BOOST_MATH_GPU_ENABLED RealType lower()const;
    
 Returns the /lower/ parameter of this distribution.
    
-   RealType upper()const;
+   BOOST_MATH_GPU_ENABLED RealType upper()const;
       
 Returns the /upper/ parameter of this distribution.
 
@@ -86,6 +86,8 @@ Returns the /upper/ parameter of this distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variable is any finite value,
 but the supported range is only /lower/ <= x <= /upper/.

@@ -15,7 +15,9 @@
 // From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/NormalDistribution.html
 
+#ifndef SYCL_LANGUAGE_VERSION
 #include <pch.hpp> // include directory /libs/math/src/tr1/ is needed.
+#endif
 
 #ifdef _MSC_VER
 #  pragma warning (disable: 4127) // conditional expression is constant
@@ -23,15 +25,20 @@
 // and   if (std::numeric_limits<RealType>::has_quiet_NaN)
 #endif
 
-#include <boost/math/tools/test.hpp>
+#include <boost/math/tools/config.hpp>
+
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+#endif
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <boost/math/distributions/normal.hpp>
     using boost::math::normal_distribution;
-#include <boost/math/tools/test.hpp>
 #include "test_out_of_range.hpp"
 
 #include <iostream>

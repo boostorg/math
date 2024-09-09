@@ -24,15 +24,19 @@
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
 #endif
 
-#include <boost/math/tools/test.hpp> // for real_concept
+#include <boost/math/tools/config.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+#endif
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <boost/math/distributions/pareto.hpp>
     using boost::math::pareto_distribution;
-#include <boost/math/tools/test.hpp>
 #include "test_out_of_range.hpp"
 
 #include <iostream>
@@ -47,11 +51,13 @@
   void check_pareto(RealType scale, RealType shape, RealType x, RealType p, RealType q, RealType tol)
   {
     RealType logtol = tol * 10;
+    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
     BOOST_IF_CONSTEXPR (std::is_same<RealType, long double>::value || 
                         std::is_same<RealType, boost::math::concepts::real_concept>::value)
     {
       logtol *= 100;
     }
+    #endif
     
     BOOST_CHECK_CLOSE_FRACTION(
       ::boost::math::cdf(

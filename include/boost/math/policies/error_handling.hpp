@@ -13,6 +13,8 @@
 #include <boost/math/tools/type_traits.hpp>
 #include <boost/math/tools/cstdint.hpp>
 #include <boost/math/tools/tuple.hpp>
+#include <boost/math/policies/policy.hpp>
+#include <boost/math/tools/precision.hpp>
 
 #ifndef BOOST_MATH_HAS_NVRTC
 
@@ -26,8 +28,6 @@
 #include <complex>
 #include <cmath>
 #include <cstdint>
-#include <boost/math/policies/policy.hpp>
-#include <boost/math/tools/precision.hpp>
 #ifndef BOOST_MATH_NO_EXCEPTIONS
 #include <stdexcept>
 #include <boost/math/tools/throw_exception.hpp>

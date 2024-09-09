@@ -101,6 +101,13 @@ run test_inverse_gamma_pdf_nvrtc_float.cpp ;
 run test_inverse_gamma_quan_nvrtc_double.cpp ;
 run test_inverse_gamma_quan_nvrtc_float.cpp ;
 
+run test_inverse_gaussian_cdf_nvrtc_double.cpp ;
+run test_inverse_gaussian_cdf_nvrtc_float.cpp ;
+run test_inverse_gaussian_pdf_nvrtc_double.cpp ;
+run test_inverse_gaussian_pdf_nvrtc_float.cpp ;
+run test_inverse_gaussian_quan_nvrtc_double.cpp ;
+run test_inverse_gaussian_quan_nvrtc_float.cpp ;
+
 run test_landau_cdf_nvrtc_double.cpp ;
 run test_landau_cdf_nvrtc_float.cpp ;
 run test_landau_pdf_nvrtc_double.cpp ;
@@ -122,6 +129,13 @@ run test_logistic_pdf_nvrtc_float.cpp ;
 run test_logistic_quan_nvrtc_double.cpp ;
 run test_logistic_quan_nvrtc_float.cpp ;
 
+run test_lognormal_cdf_nvrtc_double.cpp ;
+run test_lognormal_cdf_nvrtc_float.cpp ;
+run test_lognormal_pdf_nvrtc_double.cpp ;
+run test_lognormal_pdf_nvrtc_float.cpp ;
+run test_lognormal_quan_nvrtc_double.cpp ;
+run test_lognormal_quan_nvrtc_float.cpp ;
+
 run test_mapairy_cdf_nvrtc_double.cpp ;
 run test_mapairy_cdf_nvrtc_float.cpp ;
 run test_mapairy_pdf_nvrtc_double.cpp ;
@@ -129,12 +143,89 @@ run test_mapairy_pdf_nvrtc_float.cpp ;
 run test_mapairy_quan_nvrtc_double.cpp ;
 run test_mapairy_quan_nvrtc_float.cpp ;
 
+run test_nc_beta_cdf_nvrtc_double.cpp ;
+run test_nc_beta_cdf_nvrtc_float.cpp ;
+run test_nc_beta_pdf_nvrtc_double.cpp ;
+run test_nc_beta_pdf_nvrtc_float.cpp ;
+run test_nc_beta_quan_nvrtc_double.cpp ;
+run test_nc_beta_quan_nvrtc_float.cpp ;
+
+run test_nc_chi_squared_cdf_nvrtc_double.cpp ;
+run test_nc_chi_squared_cdf_nvrtc_float.cpp ;
+run test_nc_chi_squared_pdf_nvrtc_double.cpp ;
+run test_nc_chi_squared_pdf_nvrtc_float.cpp ;
+run test_nc_chi_squared_quan_nvrtc_double.cpp ;
+run test_nc_chi_squared_quan_nvrtc_float.cpp ;
+
+run test_nc_f_cdf_nvrtc_double.cpp ; 
+run test_nc_f_cdf_nvrtc_float.cpp ;
+run test_nc_f_pdf_nvrtc_double.cpp ;
+run test_nc_f_pdf_nvrtc_float.cpp ;
+run test_nc_f_quan_nvrtc_double.cpp ;
+run test_nc_f_quan_nvrtc_float.cpp ;
+
+run test_negative_binomial_cdf_nvrtc_double.cpp ;
+run test_negative_binomial_cdf_nvrtc_float.cpp ;
+run test_negative_binomial_pdf_nvrtc_double.cpp ;
+run test_negative_binomial_pdf_nvrtc_float.cpp ;
+run test_negative_binomial_quan_nvrtc_double.cpp ;
+run test_negative_binomial_quan_nvrtc_float.cpp ;
+
+run test_normal_cdf_nvrtc_double.cpp ;
+run test_normal_cdf_nvrtc_float.cpp ;
+run test_normal_pdf_nvrtc_double.cpp ;
+run test_normal_pdf_nvrtc_float.cpp ;
+run test_normal_quan_nvrtc_double.cpp ;
+run test_normal_quan_nvrtc_float.cpp ;
+
+run test_pareto_cdf_nvrtc_double.cpp ;
+run test_pareto_cdf_nvrtc_float.cpp ;
+run test_pareto_pdf_nvrtc_double.cpp ;
+run test_pareto_pdf_nvrtc_float.cpp ;
+run test_pareto_quan_nvrtc_double.cpp ;
+run test_pareto_quan_nvrtc_float.cpp ;
+
+run test_poisson_cdf_nvrtc_double.cpp ;
+run test_poisson_cdf_nvrtc_float.cpp ;
+run test_poisson_pdf_nvrtc_double.cpp ;
+run test_poisson_pdf_nvrtc_float.cpp ;
+run test_poisson_quan_nvrtc_double.cpp ;
+run test_poisson_quan_nvrtc_float.cpp ;
+
+run test_rayleigh_cdf_nvrtc_double.cpp ;
+run test_rayleigh_cdf_nvrtc_float.cpp ;
+run test_rayleigh_pdf_nvrtc_double.cpp ;
+run test_rayleigh_pdf_nvrtc_float.cpp ;
+run test_rayleigh_quan_nvrtc_double.cpp ;
+run test_rayleigh_quan_nvrtc_float.cpp ;
+
 run test_saspoint5_cdf_nvrtc_double.cpp ;
 run test_saspoint5_cdf_nvrtc_float.cpp ;
 run test_saspoint5_pdf_nvrtc_double.cpp ;
 run test_saspoint5_pdf_nvrtc_float.cpp ;
 run test_saspoint5_quan_nvrtc_double.cpp ;
 run test_saspoint5_quan_nvrtc_float.cpp ;
+
+run test_students_t_cdf_nvrtc_double.cpp ;
+run test_students_t_cdf_nvrtc_float.cpp ;
+run test_students_t_pdf_nvrtc_double.cpp ;
+run test_students_t_pdf_nvrtc_float.cpp ;
+run test_students_t_quan_nvrtc_double.cpp ;
+run test_students_t_quan_nvrtc_float.cpp ;
+
+run test_triangular_cdf_nvrtc_double.cpp ;
+run test_triangular_cdf_nvrtc_float.cpp ;
+run test_triangular_pdf_nvrtc_double.cpp ;
+run test_triangular_pdf_nvrtc_float.cpp ;
+run test_triangular_quan_nvrtc_double.cpp ;
+run test_triangular_quan_nvrtc_float.cpp ;
+
+run test_uniform_cdf_nvrtc_double.cpp ;
+run test_uniform_cdf_nvrtc_float.cpp ;
+run test_uniform_pdf_nvrtc_double.cpp ;
+run test_uniform_pdf_nvrtc_float.cpp ;
+run test_uniform_quan_nvrtc_double.cpp ;
+run test_uniform_quan_nvrtc_float.cpp ;
 
 run test_weibull_cdf_nvrtc_double.cpp ;
 run test_weibull_cdf_nvrtc_float.cpp ;

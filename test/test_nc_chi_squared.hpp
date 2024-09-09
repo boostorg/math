@@ -80,7 +80,7 @@ void test_spot(
    boost::math::non_central_chi_squared_distribution<RealType> dist(df, ncp);
    BOOST_CHECK_CLOSE(
       cdf(dist, cs), P, tol);
-#ifndef BOOST_NO_EXCEPTIONS
+#if !defined(BOOST_NO_EXCEPTIONS) && !defined(BOOST_MATH_NO_EXCEPTIONS)
    try{
       BOOST_CHECK_CLOSE(
          pdf(dist, cs), naive_pdf(dist.degrees_of_freedom(), ncp, cs), tol * 150);
@@ -402,7 +402,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          // Sanity check mode, the accuracy of
          // the mode is at *best* the square root of the accuracy of the PDF:
          //
-#ifndef BOOST_NO_EXCEPTIONS
+#if !defined(BOOST_NO_EXCEPTIONS) && !defined(BOOST_MATH_NO_EXCEPTIONS)
          try{
             value_type m = mode(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]));
             value_type p = pdf(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]), m);
@@ -417,7 +417,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          // values to get back to the correct degrees of freedom or
          // non-centrality parameter:
          //
-#ifndef BOOST_NO_EXCEPTIONS
+#if !defined(BOOST_NO_EXCEPTIONS) && !defined(BOOST_MATH_NO_EXCEPTIONS)
          try{
 #endif
             if((data[i][3] < 0.99) && (data[i][3] != 0))
@@ -438,7 +438,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
                   boost::math::non_central_chi_squared_distribution<value_type>::find_non_centrality(boost::math::complement(data[i][0], data[i][2], data[i][4])),
                   data[i][1], precision, i);
             }
-#ifndef BOOST_NO_EXCEPTIONS
+#if !defined(BOOST_NO_EXCEPTIONS) && !defined(BOOST_MATH_NO_EXCEPTIONS)
          }
          catch(const std::exception& e)
          {

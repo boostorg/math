@@ -429,6 +429,19 @@ BOOST_MATH_GPU_ENABLED inline T find_ibeta_inv_from_t_dist(T a, T p, T /*q*/, T*
    return df / (df + t * t);
 }
 
+// NVRTC requires this forward decl because there is a header cycle between here and ibeta_inverse.hpp
+#ifdef BOOST_MATH_HAS_NVRTC
+
+} // Namespace detail
+
+template <class T1, class T2, class T3, class T4, class Policy>
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2, T3, T4>::type
+   ibeta_inv(T1 a, T2 b, T3 p, T4* py, const Policy& pol);
+
+namespace detail {
+
+#endif
+
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline T fast_students_t_quantile_imp(T df, T p, const Policy& pol, const boost::math::false_type*)
 {

@@ -8,21 +8,28 @@
 
 // test_triangular.cpp
 
+#ifndef SYCL_LANGUAGE_VERSION
 #include <pch.hpp>
+#endif
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4305) // truncation from 'long double' to 'float'
 #endif
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+#endif
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <boost/math/distributions/triangular.hpp>
 using boost::math::triangular_distribution;
-#include <boost/math/tools/test.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/special_functions/fpclassify.hpp>
 #include "test_out_of_range.hpp"
 
@@ -463,8 +470,11 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(
       mode(tridef), static_cast<RealType>(0), tolerance);
     // skewness:
+    // On device the result does not get flushed exactly to zero so the eps difference is by default huge
+    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
     BOOST_CHECK_CLOSE_FRACTION(
       median(tridef), static_cast<RealType>(0), tolerance);
+    #endif
     // https://reference.wolfram.com/language/ref/Skewness.html  skewness{-1, 0, +1} = 0
     // skewness[triangulardistribution{-1, 0, +1}] does not compute a result.
     // skewness[triangulardistribution{0, +1}] result == 0

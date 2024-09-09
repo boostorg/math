@@ -23,11 +23,24 @@ run test_geometric.cpp ;
 run test_holtsmark.cpp ;
 run test_inverse_chi_squared_distribution.cpp ;
 run test_inverse_gamma_distribution.cpp ;
+run test_inverse_gaussian.cpp ;
 run test_landau.cpp ;
 run test_laplace.cpp ;
 run test_logistic_dist.cpp ;
+run test_lognormal.cpp ;
 run test_mapairy.cpp ;
+run test_nc_beta.cpp ;
+run test_nc_chi_squared.cpp ;
+run test_nc_f.cpp ;
+run test_negative_binomial.cpp ;
+run test_normal.cpp ; 
+run test_pareto.cpp ;
+run test_poisson.cpp ;
+run test_rayleigh.cpp ;
 run test_saspoint5.cpp ;
+run test_students_t.cpp ;
+run test_triangular.cpp ;
+run test_uniform.cpp ;
 run test_weibull.cpp ;
 
 # Special Functions
