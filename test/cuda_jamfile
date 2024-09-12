@@ -9,6 +9,12 @@ project : requirements
     [ requires cxx14_decltype_auto cxx14_generic_lambdas cxx14_return_type_deduction cxx14_variable_templates cxx14_constexpr ]
     ;
 
+# Quad
+run test_exp_sinh_quad_float.cu ;
+run test_exp_sinh_quad_double.cu ;
+run test_sinh_sinh_quad_float.cu ;
+run test_sinh_sinh_quad_double.cu ;
+
 # Distributions
 run test_arcsine_cdf_double.cu ;
 run test_arcsine_cdf_float.cu ;
