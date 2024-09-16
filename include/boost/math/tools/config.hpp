@@ -789,6 +789,7 @@ BOOST_MATH_GPU_ENABLED constexpr T gpu_safe_max(const T& a, const T& b) { return
 #define BOOST_MATH_HAS_GPU_SUPPORT
 
 #define BOOST_MATH_GPU_ENABLED __host__ __device__
+#define BOOST_MATH_CUDA_ENABLED __host__ __device__
 
 #define BOOST_MATH_STATIC static
 #define BOOST_MATH_STATIC_LOCAL_VARIABLE
