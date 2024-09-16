@@ -6,6 +6,8 @@ include(BoostTestJamfile OPTIONAL RESULT_VARIABLE HAVE_BOOST_TEST)
 
 if(HAVE_BOOST_TEST)
 
+    boost_test(SOURCES check_cmake_version.cpp ARGUMENTS ${PROJECT_VERSION} LINK_LIBRARIES Boost::core Boost::config)    
+
     if (BOOST_MATH_ENABLE_CUDA)
 
         message(STATUS "Building boost.math with CUDA")
