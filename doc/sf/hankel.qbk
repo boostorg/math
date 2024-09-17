@@ -3,18 +3,36 @@
 
 [h4 Synopsis]
 
-   template <class T1, class T2>
-   std::complex<``__sf_result``> cyl_hankel_1(T1 v, T2 x);
-
-   template <class T1, class T2, class ``__Policy``>
-   std::complex<``__sf_result``> cyl_hankel_1(T1 v, T2 x, const ``__Policy``&);
+   #if !defined(__CUDACC__) && !defined(__CUDACC_RTC__)
 
    template <class T1, class T2>
-   std::complex<``__sf_result``> cyl_hankel_2(T1 v, T2 x);
+   BOOST_MATH_GPU_ENABLED std::complex<``__sf_result``> cyl_hankel_1(T1 v, T2 x);
+
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED std::complex<``__sf_result``> cyl_hankel_1(T1 v, T2 x, const ``__Policy``&);
+
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED std::complex<``__sf_result``> cyl_hankel_2(T1 v, T2 x);
    
    template <class T1, class T2, class ``__Policy``>
-   std::complex<``__sf_result``> cyl_hankel_2(T1 v, T2 x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED std::complex<``__sf_result``> cyl_hankel_2(T1 v, T2 x, const ``__Policy``&);
    
+   #else // When using cuda we use namespace cuda::std:: instead of std::
+
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED cuda::std::complex<``__sf_result``> cyl_hankel_1(T1 v, T2 x);
+
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED cuda::std::complex<``__sf_result``> cyl_hankel_1(T1 v, T2 x, const ``__Policy``&);
+
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED cuda::std::complex<``__sf_result``> cyl_hankel_2(T1 v, T2 x);
+   
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED cuda::std::complex<``__sf_result``> cyl_hankel_2(T1 v, T2 x, const ``__Policy``&);
+
+   #endif
+
    
 [h4 Description]
 
@@ -77,18 +95,35 @@ routines for integer order are used.
 
 [h4 Synopsis]
 
-   template <class T1, class T2>
-   std::complex<``__sf_result``> sph_hankel_1(T1 v, T2 x);
-
-   template <class T1, class T2, class ``__Policy``>
-   std::complex<``__sf_result``> sph_hankel_1(T1 v, T2 x, const ``__Policy``&);
+   #if !defined(__CUDACC__) && !defined(__CUDACC_RTC__)
 
    template <class T1, class T2>
-   std::complex<``__sf_result``> sph_hankel_2(T1 v, T2 x);
+   BOOST_MATH_GPU_ENABLED std::complex<``__sf_result``> sph_hankel_1(T1 v, T2 x);
+
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED std::complex<``__sf_result``> sph_hankel_1(T1 v, T2 x, const ``__Policy``&);
+
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED std::complex<``__sf_result``> sph_hankel_2(T1 v, T2 x);
    
    template <class T1, class T2, class ``__Policy``>
-   std::complex<``__sf_result``> sph_hankel_2(T1 v, T2 x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED std::complex<``__sf_result``> sph_hankel_2(T1 v, T2 x, const ``__Policy``&);
    
+   #else // When using cuda we use namespace cuda::std:: instead of std::
+
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED cuda::std::complex<``__sf_result``> sph_hankel_1(T1 v, T2 x);
+
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED cuda::std::complex<``__sf_result``> sph_hankel_1(T1 v, T2 x, const ``__Policy``&);
+
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED cuda::std::complex<``__sf_result``> sph_hankel_2(T1 v, T2 x);
+   
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED cuda::std::complex<``__sf_result``> sph_hankel_2(T1 v, T2 x, const ``__Policy``&);
+
+   #endif
    
 [h4 Description]
 

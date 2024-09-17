@@ -47,50 +47,6 @@
 
 namespace boost{ namespace math{
 
-// Since we cannot pull this in from math fwd we need a copy
-#ifdef BOOST_MATH_HAS_NVRTC
-
-namespace detail{
-
-      typedef boost::math::integral_constant<int, 0> bessel_no_int_tag;      // No integer optimisation possible.
-      typedef boost::math::integral_constant<int, 1> bessel_maybe_int_tag;   // Maybe integer optimisation.
-      typedef boost::math::integral_constant<int, 2> bessel_int_tag;         // Definite integer optimisation.
-
-      template <class T1, class T2, class Policy>
-      struct bessel_traits
-      {
-         using result_type = typename boost::math::conditional<
-            boost::math::is_integral<T1>::value,
-            typename tools::promote_args<T2>::type,
-            tools::promote_args_t<T1, T2>
-         >::type;
-
-         typedef typename policies::precision<result_type, Policy>::type precision_type;
-
-         using optimisation_tag = typename boost::math::conditional<
-            (precision_type::value <= 0 || precision_type::value > 64),
-            bessel_no_int_tag,
-            typename boost::math::conditional<
-               boost::math::is_integral<T1>::value,
-               bessel_int_tag,
-               bessel_maybe_int_tag
-            >::type
-         >::type;
-
-         using optimisation_tag128 = typename boost::math::conditional<
-            (precision_type::value <= 0 || precision_type::value > 113),
-            bessel_no_int_tag,
-            typename boost::math::conditional<
-               boost::math::is_integral<T1>::value,
-               bessel_int_tag,
-               bessel_maybe_int_tag
-            >::type
-         >::type;
-      };
-   } // detail
-
-#endif
-
 namespace detail{
 
 template <class T, class Policy>

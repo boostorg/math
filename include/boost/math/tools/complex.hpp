@@ -14,11 +14,93 @@
 #include <boost/math/tools/is_detected.hpp>
 
 #ifdef BOOST_MATH_ENABLE_CUDA
-#include <cuda/std/utility>
-#endif
 
-#ifndef BOOST_MATH_HAS_NVRTC
+#include <cuda/std/utility>
+#include <cuda/std/complex>
+
+namespace boost {
+namespace math {
+
+template <typename T>
+using complex = cuda::std::complex<T>;
+
+using cuda::std::real;
+using cuda::std::imag;
+using cuda::std::abs;
+using cuda::std::arg;
+using cuda::std::norm;
+using cuda::std::conj;
+using cuda::std::proj;
+using cuda::std::polar;
+
+using cuda::std::exp;
+using cuda::std::log;
+using cuda::std::log10;
+
+using cuda::std::pow;
+using cuda::std::sqrt;
+
+using cuda::std::sin;
+using cuda::std::cos;
+using cuda::std::tan;
+using cuda::std::asin;
+using cuda::std::acos;
+using cuda::std::atan;
+
+using cuda::std::sinh;
+using cuda::std::cosh;
+using cuda::std::tanh;
+using cuda::std::asinh;
+using cuda::std::acosh;
+using cuda::std::atanh;
+
+} // namespace math
+} // namespace boost
+
+#else
+
 #include <utility>
+#include <complex>
+
+namespace boost {
+namespace math {
+
+template <typename T>
+using complex = std::complex<T>;
+
+using std::real;
+using std::imag;
+using std::abs;
+using std::arg;
+using std::norm;
+using std::conj;
+using std::proj;
+using std::polar;
+
+using std::exp;
+using std::log;
+using std::log10;
+
+using std::pow;
+using std::sqrt;
+
+using std::sin;
+using std::cos;
+using std::tan;
+using std::asin;
+using std::acos;
+using std::atan;
+
+using std::sinh;
+using std::cosh;
+using std::tanh;
+using std::asinh;
+using std::acosh;
+using std::atanh;
+
+} // namespace math
+} // namespace boost
+
 #endif
 
 namespace boost {

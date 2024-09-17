@@ -9,9 +9,6 @@ project : requirements
     [ requires cxx14_decltype_auto cxx14_generic_lambdas cxx14_return_type_deduction cxx14_variable_templates cxx14_constexpr ]
     ;
 
-run test_heumann_lambda_nvrtc_double.cpp ;
-run test_heumann_lambda_nvrtc_float.cpp ;
-
 # Quad
 run test_exp_sinh_quad_nvrtc_float.cpp ;
 run test_exp_sinh_quad_nvrtc_double.cpp ;
@@ -306,6 +303,14 @@ run test_cyl_neumann_nvrtc_double.cpp ;
 run test_cyl_neumann_nvrtc_float.cpp ;
 run test_sph_neumann_nvrtc_double.cpp ;
 run test_sph_neumann_nvrtc_float.cpp ;
+run test_cyl_hankel_1_nvrtc_double.cpp ;
+run test_cyl_hankel_1_nvrtc_float.cpp ;
+run test_cyl_hankel_2_nvrtc_double.cpp ;
+run test_cyl_hankel_2_nvrtc_float.cpp ;
+run test_sph_hankel_1_nvrtc_double.cpp ;
+run test_sph_hankel_1_nvrtc_float.cpp ;
+run test_sph_hankel_2_nvrtc_double.cpp ;
+run test_sph_hankel_2_nvrtc_float.cpp ;
 
 run test_cbrt_nvrtc_double.cpp ;
 run test_cbrt_nvrtc_float.cpp ;
@@ -335,6 +340,11 @@ run test_ellint_d_nvrtc_double.cpp ;
 run test_ellint_d_nvrtc_float.cpp ;
 run test_jacobi_zeta_nvrtc_double.cpp ;
 run test_jacobi_zeta_nvrtc_float.cpp ;
+run test_heumann_lambda_nvrtc_double.cpp ;
+run test_heumann_lambda_nvrtc_float.cpp ;
+
+run test_expint_nvrtc_double.cpp ;
+run test_expint_nvrtc_float.cpp ;
 
 run test_expm1_nvrtc_double.cpp ;
 run test_expm1_nvrtc_float.cpp ;
@@ -350,6 +360,12 @@ run test_gamma_p_inv_nvrtc_double.cpp ;
 run test_gamma_p_inv_nvrtc_float.cpp ;
 run test_tgamma_ratio_nvrtc_double.cpp ;
 run test_tgamma_ratio_nvrtc_float.cpp ;
+
+run test_gegenbauer_nvrtc_double.cpp ;
+run test_gegenbauer_nvrtc_float.cpp ;
+
+run test_hermite_nvrtc_double.cpp ;
+run test_hermite_nvrtc_float.cpp ;
 
 run test_log1p_nvrtc_double.cpp ;
 run test_log1p_nvrtc_float.cpp ;

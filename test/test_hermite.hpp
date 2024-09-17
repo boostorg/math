@@ -11,11 +11,17 @@
 // Constants are too big for float case, but this doesn't matter for test.
 #endif
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp>
+#endif
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/hermite.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
