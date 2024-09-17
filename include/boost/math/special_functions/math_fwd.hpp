@@ -26,6 +26,8 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
+#include <boost/math/tools/type_traits.hpp>
+#include <boost/math/policies/policy.hpp>
 
 #ifdef BOOST_MATH_HAS_NVRTC
 
@@ -35,6 +37,20 @@ namespace math {
 template <class RT1, class RT2, class A>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, A>::type
 beta(RT1 a, RT2 b, A arg);
+
+namespace detail{
+
+   template <class T, class U, class V>
+   struct ellint_3_result
+   {
+      using type = typename boost::math::conditional<
+         policies::is_policy<V>::value,
+         tools::promote_args_t<T, U>,
+         tools::promote_args_t<T, U, V>
+      >::type;
+   };
+
+   } // namespace detail
 
 } // namespace math
 } // namespace boost
@@ -329,90 +345,90 @@ namespace boost
 
    // Elliptic integrals:
    template <class T1, class T2, class T3>
-   tools::promote_args_t<T1, T2, T3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
          ellint_rf(T1 x, T2 y, T3 z);
 
    template <class T1, class T2, class T3, class Policy>
-   tools::promote_args_t<T1, T2, T3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
          ellint_rf(T1 x, T2 y, T3 z, const Policy& pol);
 
    template <class T1, class T2, class T3>
-   tools::promote_args_t<T1, T2, T3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
          ellint_rd(T1 x, T2 y, T3 z);
 
    template <class T1, class T2, class T3, class Policy>
-   tools::promote_args_t<T1, T2, T3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
          ellint_rd(T1 x, T2 y, T3 z, const Policy& pol);
 
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
          ellint_rc(T1 x, T2 y);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
          ellint_rc(T1 x, T2 y, const Policy& pol);
 
    template <class T1, class T2, class T3, class T4>
-   tools::promote_args_t<T1, T2, T3, T4>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3, T4>
          ellint_rj(T1 x, T2 y, T3 z, T4 p);
 
    template <class T1, class T2, class T3, class T4, class Policy>
-   tools::promote_args_t<T1, T2, T3, T4>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3, T4>
          ellint_rj(T1 x, T2 y, T3 z, T4 p, const Policy& pol);
 
    template <class T1, class T2, class T3>
-   tools::promote_args_t<T1, T2, T3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
       ellint_rg(T1 x, T2 y, T3 z);
 
    template <class T1, class T2, class T3, class Policy>
-   tools::promote_args_t<T1, T2, T3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
       ellint_rg(T1 x, T2 y, T3 z, const Policy& pol);
 
    template <typename T>
-   tools::promote_args_t<T> ellint_2(T k);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> ellint_2(T k);
 
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2> ellint_2(T1 k, T2 phi);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_2(T1 k, T2 phi);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2> ellint_2(T1 k, T2 phi, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_2(T1 k, T2 phi, const Policy& pol);
 
    template <typename T>
-   tools::promote_args_t<T> ellint_1(T k);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> ellint_1(T k);
 
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2> ellint_1(T1 k, T2 phi);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_1(T1 k, T2 phi);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2> ellint_1(T1 k, T2 phi, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_1(T1 k, T2 phi, const Policy& pol);
 
    template <typename T>
-   tools::promote_args_t<T> ellint_d(T k);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> ellint_d(T k);
 
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2> ellint_d(T1 k, T2 phi);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_d(T1 k, T2 phi);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2> ellint_d(T1 k, T2 phi, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_d(T1 k, T2 phi, const Policy& pol);
 
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2> jacobi_zeta(T1 k, T2 phi);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> jacobi_zeta(T1 k, T2 phi);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2> jacobi_zeta(T1 k, T2 phi, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> jacobi_zeta(T1 k, T2 phi, const Policy& pol);
 
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2> heuman_lambda(T1 k, T2 phi);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> heuman_lambda(T1 k, T2 phi);
 
    template <class T1, class T2, class Policy>
-   tools::promote_args_t<T1, T2> heuman_lambda(T1 k, T2 phi, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> heuman_lambda(T1 k, T2 phi, const Policy& pol);
 
    namespace detail{
 
    template <class T, class U, class V>
    struct ellint_3_result
    {
-      using type = typename std::conditional<
+      using type = typename boost::math::conditional<
          policies::is_policy<V>::value,
          tools::promote_args_t<T, U>,
          tools::promote_args_t<T, U, V>
@@ -423,13 +439,13 @@ namespace boost
 
 
    template <class T1, class T2, class T3>
-   typename detail::ellint_3_result<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi);
+   BOOST_MATH_GPU_ENABLED typename detail::ellint_3_result<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi);
 
    template <class T1, class T2, class T3, class Policy>
-   tools::promote_args_t<T1, T2, T3> ellint_3(T1 k, T2 v, T3 phi, const Policy& pol);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3> ellint_3(T1 k, T2 v, T3 phi, const Policy& pol);
 
    template <class T1, class T2>
-   tools::promote_args_t<T1, T2> ellint_3(T1 k, T2 v);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_3(T1 k, T2 v);
 
    // Factorial functions.
    // Note: not for integral types, at present.
@@ -648,10 +664,10 @@ namespace boost
    tools::promote_args_t<T> acosh(T x, const Policy&);
 
    template<typename T>
-   tools::promote_args_t<T> atanh(T x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> atanh(T x);
 
    template<typename T, class Policy>
-   tools::promote_args_t<T> atanh(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> atanh(T x, const Policy&);
 
    namespace detail{
 
@@ -816,58 +832,58 @@ namespace boost
    std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> sph_hankel_2(T1 v, T2 x);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> airy_ai(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_ai(T x, const Policy&);
 
    template <class T>
-   tools::promote_args_t<T> airy_ai(T x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_ai(T x);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> airy_bi(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_bi(T x, const Policy&);
 
    template <class T>
-   tools::promote_args_t<T> airy_bi(T x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_bi(T x);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> airy_ai_prime(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_ai_prime(T x, const Policy&);
 
    template <class T>
-   tools::promote_args_t<T> airy_ai_prime(T x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_ai_prime(T x);
 
    template <class T, class Policy>
-   tools::promote_args_t<T> airy_bi_prime(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_bi_prime(T x, const Policy&);
 
    template <class T>
-   tools::promote_args_t<T> airy_bi_prime(T x);
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_bi_prime(T x);
 
    template <class T>
-   T airy_ai_zero(int m);
+   BOOST_MATH_GPU_ENABLED T airy_ai_zero(int m);
    template <class T, class Policy>
-   T airy_ai_zero(int m, const Policy&);
+   BOOST_MATH_GPU_ENABLED T airy_ai_zero(int m, const Policy&);
 
    template <class OutputIterator>
-   OutputIterator airy_ai_zero(
+   BOOST_MATH_GPU_ENABLED OutputIterator airy_ai_zero(
                      int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it);
    template <class OutputIterator, class Policy>
-   OutputIterator airy_ai_zero(
+   BOOST_MATH_GPU_ENABLED OutputIterator airy_ai_zero(
                      int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it,
                      const Policy&);
 
    template <class T>
-   T airy_bi_zero(int m);
+   BOOST_MATH_GPU_ENABLED T airy_bi_zero(int m);
    template <class T, class Policy>
-   T airy_bi_zero(int m, const Policy&);
+   BOOST_MATH_GPU_ENABLED T airy_bi_zero(int m, const Policy&);
 
    template <class OutputIterator>
-   OutputIterator airy_bi_zero(
+   BOOST_MATH_GPU_ENABLED OutputIterator airy_bi_zero(
                      int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it);
    template <class OutputIterator, class Policy>
-   OutputIterator airy_bi_zero(
+   BOOST_MATH_GPU_ENABLED OutputIterator airy_bi_zero(
                      int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it,
@@ -1365,54 +1381,54 @@ namespace boost
       spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi, const Policy& pol);\
 \
    template <class T1, class T2, class T3>\
-   inline boost::math::tools::promote_args_t<T1, T2, T3> \
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2, T3> \
    ellint_rf(T1 x, T2 y, T3 z){ return ::boost::math::ellint_rf(x, y, z, Policy()); }\
 \
    template <class T1, class T2, class T3>\
-   inline boost::math::tools::promote_args_t<T1, T2, T3> \
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2, T3> \
    ellint_rd(T1 x, T2 y, T3 z){ return ::boost::math::ellint_rd(x, y, z, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> \
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> \
    ellint_rc(T1 x, T2 y){ return ::boost::math::ellint_rc(x, y, Policy()); }\
 \
    template <class T1, class T2, class T3, class T4>\
-   inline boost::math::tools::promote_args_t<T1, T2, T3, T4> \
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2, T3, T4> \
    ellint_rj(T1 x, T2 y, T3 z, T4 p){ return boost::math::ellint_rj(x, y, z, p, Policy()); }\
 \
    template <class T1, class T2, class T3>\
-   inline boost::math::tools::promote_args_t<T1, T2, T3> \
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2, T3> \
    ellint_rg(T1 x, T2 y, T3 z){ return ::boost::math::ellint_rg(x, y, z, Policy()); }\
    \
    template <typename T>\
-   inline boost::math::tools::promote_args_t<T> ellint_2(T k){ return boost::math::ellint_2(k, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> ellint_2(T k){ return boost::math::ellint_2(k, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> ellint_2(T1 k, T2 phi){ return boost::math::ellint_2(k, phi, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> ellint_2(T1 k, T2 phi){ return boost::math::ellint_2(k, phi, Policy()); }\
 \
    template <typename T>\
-   inline boost::math::tools::promote_args_t<T> ellint_d(T k){ return boost::math::ellint_d(k, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> ellint_d(T k){ return boost::math::ellint_d(k, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> ellint_d(T1 k, T2 phi){ return boost::math::ellint_d(k, phi, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> ellint_d(T1 k, T2 phi){ return boost::math::ellint_d(k, phi, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> jacobi_zeta(T1 k, T2 phi){ return boost::math::jacobi_zeta(k, phi, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> jacobi_zeta(T1 k, T2 phi){ return boost::math::jacobi_zeta(k, phi, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> heuman_lambda(T1 k, T2 phi){ return boost::math::heuman_lambda(k, phi, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> heuman_lambda(T1 k, T2 phi){ return boost::math::heuman_lambda(k, phi, Policy()); }\
 \
    template <typename T>\
-   inline boost::math::tools::promote_args_t<T> ellint_1(T k){ return boost::math::ellint_1(k, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> ellint_1(T k){ return boost::math::ellint_1(k, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> ellint_1(T1 k, T2 phi){ return boost::math::ellint_1(k, phi, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> ellint_1(T1 k, T2 phi){ return boost::math::ellint_1(k, phi, Policy()); }\
 \
    template <class T1, class T2, class T3>\
-   inline boost::math::tools::promote_args_t<T1, T2, T3> ellint_3(T1 k, T2 v, T3 phi){ return boost::math::ellint_3(k, v, phi, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2, T3> ellint_3(T1 k, T2 v, T3 phi){ return boost::math::ellint_3(k, v, phi, Policy()); }\
 \
    template <class T1, class T2>\
-   inline boost::math::tools::promote_args_t<T1, T2> ellint_3(T1 k, T2 v){ return boost::math::ellint_3(k, v, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T1, T2> ellint_3(T1 k, T2 v){ return boost::math::ellint_3(k, v, Policy()); }\
 \
    using boost::math::max_factorial;\
    template <class RT>\
@@ -1515,7 +1531,7 @@ namespace boost
    inline boost::math::tools::promote_args_t<T> acosh(const T x){ return boost::math::acosh(x, Policy()); }\
 \
    template<typename T>\
-   inline boost::math::tools::promote_args_t<T> atanh(const T x){ return boost::math::atanh(x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> atanh(const T x){ return boost::math::atanh(x, Policy()); }\
 \
    template <class T1, class T2>\
    inline typename boost::math::detail::bessel_traits<T1, T2, Policy >::result_type cyl_bessel_j(T1 v, T2 x)\
@@ -1769,33 +1785,33 @@ template <class OutputIterator, class T>\
    { return boost::math::jacobi_theta4m1tau(z, q, Policy()); }\
    \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> airy_ai(T x)\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> airy_ai(T x)\
    {  return boost::math::airy_ai(x, Policy());  }\
    \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> airy_bi(T x)\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> airy_bi(T x)\
    {  return boost::math::airy_bi(x, Policy());  }\
    \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> airy_ai_prime(T x)\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> airy_ai_prime(T x)\
    {  return boost::math::airy_ai_prime(x, Policy());  }\
    \
    template <class T>\
-   inline boost::math::tools::promote_args_t<T> airy_bi_prime(T x)\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<T> airy_bi_prime(T x)\
    {  return boost::math::airy_bi_prime(x, Policy());  }\
    \
    template <class T>\
-   inline T airy_ai_zero(int m)\
+   BOOST_MATH_GPU_ENABLED inline T airy_ai_zero(int m)\
    { return boost::math::airy_ai_zero<T>(m, Policy()); }\
    template <class T, class OutputIterator>\
-   OutputIterator airy_ai_zero(int start_index, unsigned number_of_zeros, OutputIterator out_it)\
+   BOOST_MATH_GPU_ENABLED OutputIterator airy_ai_zero(int start_index, unsigned number_of_zeros, OutputIterator out_it)\
    { return boost::math::airy_ai_zero<T>(start_index, number_of_zeros, out_it, Policy()); }\
    \
    template <class T>\
-   inline T airy_bi_zero(int m)\
+   BOOST_MATH_GPU_ENABLED inline T airy_bi_zero(int m)\
    { return boost::math::airy_bi_zero<T>(m, Policy()); }\
    template <class T, class OutputIterator>\
-   OutputIterator airy_bi_zero(int start_index, unsigned number_of_zeros, OutputIterator out_it)\
+   BOOST_MATH_GPU_ENABLED OutputIterator airy_bi_zero(int start_index, unsigned number_of_zeros, OutputIterator out_it)\
    { return boost::math::airy_bi_zero<T>(start_index, number_of_zeros, out_it, Policy()); }\
    \
    template <class T>\

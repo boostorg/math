@@ -3,8 +3,9 @@
 [h4 GPU Support]
 
 Selected functions, distributions, tools, etc. support running on both host and devices.
-These functions will have the annotation `BOOST_MATH_GPU_ENABLED` next to their individual documentation.
-We test using CUDA (both NVCC and NVRTC) as well as SYCL to provide a wide range of support.
+These functions will have the annotation `BOOST_MATH_GPU_ENABLED` or `BOOST_MATH_CUDA_ENABLED` next to their individual documentation.
+Functions marked with `BOOST_MATH_GPU_ENABLED` are tested using CUDA (both NVCC and NVRTC) as well as SYCL to provide a wide range of support.
+Functions marked with `BOOST_MATH_CUDA_ENABLED` are few, but due to its restrictions SYCL is unsupported.
 
 [h4 Policies]
 

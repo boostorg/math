@@ -244,6 +244,15 @@ run test_weibull_quan_double.cu ;
 run test_weibull_quan_float.cu ;
 
 # Special Functions
+run test_airy_ai_double.cu ;
+run test_airy_ai_float.cu ;
+run test_airy_ai_prime_double.cu ;
+run test_airy_ai_prime_float.cu ;
+run test_airy_bi_double.cu ;
+run test_airy_bi_float.cu ;
+run test_airy_bi_prime_double.cu ;
+run test_airy_bi_prime_float.cu ;
+
 run test_beta_double.cu ;
 run test_beta_float.cu ;
 run test_betac_double.cu ;
@@ -307,6 +316,19 @@ run test_cos_pi_float.cu ;
 
 run test_digamma_double.cu ;
 run test_digamma_float.cu ;
+
+run test_ellint_1_double.cu ;
+run test_ellint_1_float.cu ;
+run test_ellint_2_double.cu ;
+run test_ellint_2_float.cu ;
+run test_ellint_3_double.cu ;
+run test_ellint_3_float.cu ;
+run test_ellint_d_double.cu ;
+run test_ellint_d_float.cu ;
+run test_jacobi_zeta_double.cu ;
+run test_jacobi_zeta_float.cu ;
+run test_heuman_lambda_double.cu ;
+run test_heuman_lambda_float.cu ;
 
 run test_erf_double.cu ;
 run test_erf_float.cu ;

@@ -46,6 +46,8 @@ run test_weibull.cpp ;
 # Special Functions
 run pow_test.cpp ;
 
+run test_airy.cpp ;
+
 run test_beta_simple.cpp ;
 run test_beta.cpp ;
 run test_ibeta.cpp ;
@@ -58,6 +60,12 @@ run test_bessel_k.cpp ;
 run test_bessel_y.cpp ;
 
 run test_cbrt.cpp ;
+
+run test_ellint_1.cpp ;
+run test_ellint_2.cpp ;
+run test_ellint_d.cpp ;
+run test_jacobi_zeta.cpp ;
+run test_heuman_lambda.cpp ;
 
 run test_sign.cpp ;
 
