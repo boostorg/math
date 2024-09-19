@@ -3,9 +3,13 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef SYCL_LANGUAGE_VERSION
 #include <pch_light.hpp>
+#endif
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+#include <boost/math/tools/config.hpp>
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -85,6 +89,7 @@ void test_hankel(T, const char* name)
 //
 // Instantiate a few instances to check our error handling code can cope with std::complex:
 //
+#ifndef SYCL_LANGUAGE_VERSION
 typedef boost::math::policies::policy<
    boost::math::policies::overflow_error<boost::math::policies::throw_on_error>,
    boost::math::policies::denorm_error<boost::math::policies::throw_on_error>,
@@ -120,7 +125,7 @@ typedef boost::math::policies::policy<
    boost::math::policies::indeterminate_result_error<boost::math::policies::ignore_error> > pol3;
 
 template std::complex<double> boost::math::cyl_hankel_1<double, double, pol3>(double, double, const pol3&);
-
+#endif
 
 BOOST_AUTO_TEST_CASE( test_main )
 {

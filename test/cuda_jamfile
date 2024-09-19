@@ -304,6 +304,14 @@ run test_cyl_neumann_double.cu ;
 run test_cyl_neumann_float.cu ;
 run test_sph_neumann_double.cu ;
 run test_sph_neumann_float.cu ;
+run test_cyl_hankel_1_double.cu ;
+run test_cyl_hankel_1_float.cu ;
+run test_cyl_hankel_2_double.cu ;
+run test_cyl_hankel_2_float.cu ;
+run test_sph_hankel_1_double.cu ;
+run test_sph_hankel_1_float.cu ;
+run test_sph_hankel_2_double.cu ;
+run test_sph_hankel_2_float.cu ;
 
 run test_cbrt_double.cu ;
 run test_cbrt_float.cu ;
@@ -339,8 +347,17 @@ run test_erfc_float.cu ;
 run test_erfc_inv_double.cu ;
 run test_erfc_inv_float.cu ;
 
+run test_expint_double.cu ;
+run test_expint_float.cu ;
+
 run test_expm1_double.cu ;
 run test_expm1_float.cu ;
+
+run test_gegenbauer_double.cu ;
+run test_gegenbauer_float.cu ;
+
+run test_hermite_double.cu ;
+run test_hermite_float.cu ;
 
 run test_lgamma_double.cu ;
 run test_lgamma_float.cu ;

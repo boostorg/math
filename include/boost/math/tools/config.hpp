@@ -678,6 +678,7 @@ namespace boost{ namespace math{
 #include <cuda/std/cstdint>
 #include <cuda/std/array>
 #include <cuda/std/tuple>
+#include <cuda/std/complex>
 
 #  define BOOST_MATH_CUDA_ENABLED __host__ __device__
 #  define BOOST_MATH_HAS_GPU_SUPPORT

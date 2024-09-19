@@ -71,7 +71,13 @@ run test_sign.cpp ;
 
 run test_round.cpp ;
 
+run test_expint.cpp ;
+
 run test_expm1_simple.cpp ;
+
+run gegenbauer_test.cpp ;
+
+run test_hankel.cpp ;
 
 run test_log1p_simple.cpp ;
 
@@ -85,3 +91,5 @@ run test_gamma.cpp ;
 run test_igamma.cpp ;
 run test_igamma_inv.cpp ;
 run test_igamma_inva.cpp ;
+
+run test_hermite.cpp ;
