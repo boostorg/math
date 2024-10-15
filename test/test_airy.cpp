@@ -55,7 +55,7 @@ void test_airy(T, const char* name)
    }};
 
    T tol = boost::math::tools::epsilon<T>() * 800;
-   if ((std::numeric_limits<T>::digits > 100) || (std::numeric_limits<T>::digits == 0))
+   if (boost::math::tools::digits<T>() > 100)
       tol *= 2;
 
    #ifdef SYCL_LANGUAGE_VERSION

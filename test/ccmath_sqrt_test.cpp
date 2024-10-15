@@ -4,6 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <cmath>
+#include <cstdint>
 #include <limits>
 #include <type_traits>
 #include <boost/math/ccmath/sqrt.hpp>
