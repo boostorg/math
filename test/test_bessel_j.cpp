@@ -51,7 +51,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
+   if(!boost::math::policies::promote_double<>() || boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
       largest_type = "(long\\s+)?double|real_concept";
    }
@@ -194,7 +194,7 @@ void expected_results()
 
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   BOOST_IF_CONSTEXPR ((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
+   BOOST_IF_CONSTEXPR (boost::math::policies::promote_double<>() && (std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
       && (std::numeric_limits<long double>::digits < 90))
    {
       // some errors spill over into type double as well:
@@ -251,7 +251,7 @@ void expected_results()
          ".*(JN|j).*|.*Tricky.*",       // test data group
          ".*", 33000, 20000);               // test function
    }
-   else BOOST_IF_CONSTEXPR (std::numeric_limits<long double>::digits >= 90)
+   else BOOST_IF_CONSTEXPR (boost::math::policies::promote_double<>() && std::numeric_limits<long double>::digits >= 90)
    {
       add_expected_result(
          ".*",                          // compiler
