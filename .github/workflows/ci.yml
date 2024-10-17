@@ -546,6 +546,55 @@ jobs:
       - name: Test
         run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_STANDALONE define=BOOST_MP_STANDALONE
         working-directory: ../boost-root/libs/math/test
+
+  posix-cmake-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install packages
+        if: matrix.install
+        run: sudo apt install ${{matrix.install}} libgmp-dev libmpfr-dev libfftw3-dev
+
+      - name: Setup Boost
+        run: |
+          echo GITHUB_REPOSITORY: $GITHUB_REPOSITORY
+          LIBRARY=${GITHUB_REPOSITORY#*/}
+          echo LIBRARY: $LIBRARY
+          echo "LIBRARY=$LIBRARY" >> $GITHUB_ENV
+          echo GITHUB_BASE_REF: $GITHUB_BASE_REF
+          echo GITHUB_REF: $GITHUB_REF
+          REF=${GITHUB_BASE_REF:-$GITHUB_REF}
+          REF=${REF#refs/heads/}
+          echo REF: $REF
+          BOOST_BRANCH=develop && [ "$REF" == "master" ] && BOOST_BRANCH=master || true
+          echo BOOST_BRANCH: $BOOST_BRANCH
+          cd ..
+          git clone -b $BOOST_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
+          cd boost-root
+          mkdir -p libs/$LIBRARY
+          cp -r $GITHUB_WORKSPACE/* libs/$LIBRARY
+          git submodule update --init tools/boostdep
+          python tools/boostdep/depinst/depinst.py --git_args "--jobs 3" $LIBRARY
+
+      - name: Configure
+        run: |
+          cd ../boost-root
+          mkdir __build__ && cd __build__
+          cmake -DBOOST_INCLUDE_LIBRARIES=$LIBRARY -DBUILD_TESTING=ON ..
+
+      - name: Build tests
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target tests
+
   sycl-cmake-test:
     strategy:
       fail-fast: false
