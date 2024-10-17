@@ -593,7 +593,7 @@ jobs:
       - name: Build tests
         run: |
           cd ../boost-root/__build__
-          cmake --build .
+          cmake --build . --target tests
 
   sycl-cmake-test:
     strategy:
