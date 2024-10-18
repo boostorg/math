@@ -177,7 +177,7 @@ void expected_results()
 
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
+   if(boost::math::policies::promote_double<>() && (std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
       && (std::numeric_limits<long double>::digits < 90))
    {
       // some errors spill over into type double as well:
