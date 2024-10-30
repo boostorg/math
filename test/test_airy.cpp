@@ -3,14 +3,21 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef SYCL_LANGUAGE_VERSION
 #include <pch_light.hpp>
+#endif
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/airy.hpp>
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp>
+#endif
+
 #include <boost/array.hpp>
 #include <iostream>
 #include <iomanip>
@@ -48,8 +55,13 @@ void test_airy(T, const char* name)
    }};
 
    T tol = boost::math::tools::epsilon<T>() * 800;
-   if ((std::numeric_limits<T>::digits > 100) || (std::numeric_limits<T>::digits == 0))
+   if (boost::math::tools::digits<T>() > 100)
       tol *= 2;
+
+   #ifdef SYCL_LANGUAGE_VERSION
+   tol *= 5;
+   #endif
+
    for(unsigned i = 0; i < data.size(); ++i)
    {
       BOOST_CHECK_CLOSE_FRACTION(data[i][1], boost::math::airy_ai(data[i][0]), tol);

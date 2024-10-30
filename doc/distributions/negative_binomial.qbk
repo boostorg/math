@@ -17,28 +17,28 @@
       typedef RealType value_type;
       typedef Policy   policy_type;
       // Constructor from successes and success_fraction:
-      negative_binomial_distribution(RealType r, RealType p);
+      BOOST_MATH_GPU_ENABLED negative_binomial_distribution(RealType r, RealType p);
 
       // Parameter accessors:
-      RealType success_fraction() const;
-      RealType successes() const;
+      BOOST_MATH_GPU_ENABLED RealType success_fraction() const;
+      BOOST_MATH_GPU_ENABLED RealType successes() const;
 
       // Bounds on success fraction:
-      static RealType find_lower_bound_on_p(
+      BOOST_MATH_GPU_ENABLED static RealType find_lower_bound_on_p(
          RealType trials,
          RealType successes,
          RealType probability); // alpha
-      static RealType find_upper_bound_on_p(
+      BOOST_MATH_GPU_ENABLED static RealType find_upper_bound_on_p(
          RealType trials,
          RealType successes,
          RealType probability); // alpha
 
       // Estimate min/max number of trials:
-      static RealType find_minimum_number_of_trials(
+      BOOST_MATH_GPU_ENABLED static RealType find_minimum_number_of_trials(
          RealType k,     // Number of failures.
          RealType p,     // Success fraction.
          RealType probability); // Probability threshold alpha.
-      static RealType find_maximum_number_of_trials(
+      BOOST_MATH_GPU_ENABLED static RealType find_maximum_number_of_trials(
          RealType k,     // Number of failures.
          RealType p,     // Success fraction.
          RealType probability); // Probability threshold alpha.
@@ -112,7 +112,7 @@ poisson([lambda]) = lim [sub r [rarr] [infin]] negative_binomial(r, r / ([lambda
 
 [h5 Construct]
 
-   negative_binomial_distribution(RealType r, RealType p);
+   BOOST_MATH_GPU_ENABLED negative_binomial_distribution(RealType r, RealType p);
 
 Constructor: /r/ is the total number of successes, /p/ is the
 probability of success of a single trial.
@@ -121,11 +121,11 @@ Requires: `r > 0` and `0 <= p <= 1`.
 
 [h5 Accessors]
 
-   RealType success_fraction() const; // successes / trials (0 <= p <= 1)
+   BOOST_MATH_GPU_ENABLED RealType success_fraction() const; // successes / trials (0 <= p <= 1)
 
 Returns the parameter /p/ from which this distribution was constructed.
 
-   RealType successes() const; // required successes (r > 0)
+   BOOST_MATH_GPU_ENABLED RealType successes() const; // required successes (r > 0)
 
 Returns the parameter /r/ from which this distribution was constructed.
 
@@ -134,7 +134,7 @@ see __binomial_distrib for more discussion.
 
 [h5 Lower Bound on Parameter p]
 
-      static RealType find_lower_bound_on_p(
+      BOOST_MATH_GPU_ENABLED static RealType find_lower_bound_on_p(
         RealType failures,
         RealType successes,
         RealType probability) // (0 <= alpha <= 1), 0.05 equivalent to 95% confidence.
@@ -170,7 +170,7 @@ Computational statistics and data analysis, 2005, vol. 48, no3, 605-621].
 
 [h5 Upper Bound on Parameter p]
 
-   static RealType find_upper_bound_on_p(
+   BOOST_MATH_GPU_ENABLED static RealType find_upper_bound_on_p(
       RealType trials,
       RealType successes,
       RealType alpha); // (0 <= alpha <= 1), 0.05 equivalent to 95% confidence.
@@ -206,7 +206,7 @@ Computational statistics and data analysis, 2005, vol. 48, no3, 605-621].
 
 [h5 Estimating Number of Trials to Ensure at Least a Certain Number of Failures]
 
-   static RealType find_minimum_number_of_trials(
+   BOOST_MATH_GPU_ENABLED static RealType find_minimum_number_of_trials(
       RealType k,     // number of failures.
       RealType p,     // success fraction.
       RealType alpha); // probability threshold (0.05 equivalent to 95%).
@@ -236,7 +236,7 @@ of observing k failures or fewer.
 
 [h5 Estimating Number of Trials to Ensure a Maximum Number of Failures or Less]
 
-   static RealType find_maximum_number_of_trials(
+   BOOST_MATH_GPU_ENABLED static RealType find_maximum_number_of_trials(
       RealType k,     // number of failures.
       RealType p,     // success fraction.
       RealType alpha); // probability threshold (0.05 equivalent to 95%).
@@ -266,6 +266,8 @@ of observing more than k failures.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 However it's worth taking a moment to define what these actually mean in
 the context of this distribution:

@@ -38,9 +38,9 @@ using boost::math::owens_t;
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/array.hpp>
 
-#include "libs/math/test/handle_test_result.hpp"
-#include "libs/math/test/table_type.hpp"
-#include "libs/math/test/functor.hpp"
+#include "handle_test_result.hpp"
+#include "table_type.hpp"
+#include "functor.hpp"
 #include "boost/math/tools/test_value.hpp"
 #include "test_owens_t.hpp"
 

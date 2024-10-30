@@ -5,6 +5,7 @@
 
 #include <cmath>
 #include <cfloat>
+#include <cstdint>
 #include <limits>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/core/lightweight_test.hpp>

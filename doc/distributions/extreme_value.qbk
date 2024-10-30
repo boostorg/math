@@ -14,10 +14,10 @@
    public:
       typedef RealType value_type;
 
-      extreme_value_distribution(RealType location = 0, RealType scale = 1);
+      BOOST_MATH_GPU_ENABLED extreme_value_distribution(RealType location = 0, RealType scale = 1);
 
-      RealType scale()const;
-      RealType location()const;
+      BOOST_MATH_GPU_ENABLED RealType scale()const;
+      BOOST_MATH_GPU_ENABLED RealType location()const;
    };
 
 There are various
@@ -59,18 +59,18 @@ And this graph illustrates how the PDF varies with the shape parameter:
 
 [h4 Member Functions]
 
-   extreme_value_distribution(RealType location = 0, RealType scale = 1);
+   BOOST_MATH_GPU_ENABLED extreme_value_distribution(RealType location = 0, RealType scale = 1);
    
 Constructs an Extreme Value distribution with the specified location and scale
 parameters.
 
 Requires `scale > 0`, otherwise calls __domain_error.
 
-   RealType location()const;
+   BOOST_MATH_GPU_ENABLED RealType location()const;
    
 Returns the location parameter of the distribution.
    
-   RealType scale()const;
+   BOOST_MATH_GPU_ENABLED RealType scale()const;
    
 Returns the scale parameter of the distribution.
    
@@ -78,8 +78,13 @@ Returns the scale parameter of the distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random parameter is \[-[infin], +[infin]\].
+
+In this distribution the implementation of both `logcdf`, and `logpdf` are specialized
+to improve numerical accuracy.
 
 [h4 Accuracy]
 
@@ -96,7 +101,9 @@ In the following table:
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = exp((a-x)/b) * exp(-exp((a-x)/b)) / b ]]
+[[logpdf][log(pdf) = log(1/b) + e - exp(e) ]]
 [[cdf][Using the relation: p = exp(-exp((a-x)/b)) ]]
+[[logcdf][log(cdf) = -exp((a-x)/b) ]]
 [[cdf complement][Using the relation: q = -expm1(-exp((a-x)/b)) ]]
 [[quantile][Using the relation: a - log(-log(p)) * b]]
 [[quantile from the complement][Using the relation: a - log(-log1p(-q)) * b]]

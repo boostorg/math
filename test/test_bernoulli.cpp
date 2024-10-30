@@ -2,6 +2,7 @@
 
 // Copyright John Maddock 2006.
 // Copyright  Paul A. Bristow 2007, 2012.
+// Copyright Matt Borland 2024
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -22,7 +23,7 @@
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 using ::boost::math::concepts::real_concept;
-#include <boost/math/tools/test.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
 
 #include <boost/math/distributions/bernoulli.hpp> // for bernoulli_distribution
 using boost::math::bernoulli_distribution;
@@ -74,6 +75,7 @@ void test_spots(RealType)
   BOOST_CHECK_EQUAL(bernoulli_distribution<RealType>(static_cast<RealType>(0.1L)).success_fraction(), static_cast<RealType>(0.1L));
   BOOST_CHECK_EQUAL(bernoulli_distribution<RealType>(static_cast<RealType>(0.9L)).success_fraction(), static_cast<RealType>(0.9L));
 
+#ifndef BOOST_MATH_NO_EXCEPTIONS
   BOOST_MATH_CHECK_THROW( // Constructor success_fraction outside 0 to 1.
        bernoulli_distribution<RealType>(static_cast<RealType>(2)), std::domain_error);
   BOOST_MATH_CHECK_THROW(
@@ -86,7 +88,8 @@ void test_spots(RealType)
   BOOST_MATH_CHECK_THROW(
        pdf( // pdf k neither 0 nor 1.
           bernoulli_distribution<RealType>(static_cast<RealType>(0.25L)), static_cast<RealType>(2)), std::domain_error);
- 
+#endif
+
   BOOST_CHECK_EQUAL(
     pdf( // OK k (or n)
     bernoulli_distribution<RealType>(static_cast<RealType>(0.5L)), static_cast<RealType>(0)),
@@ -134,6 +137,7 @@ void test_spots(RealType)
        static_cast<RealType>(5.11111111111111111111111111111111111111111111L),
        tolerance);
 
+#ifndef BOOST_MATH_NO_EXCEPTIONS
   BOOST_MATH_CHECK_THROW(
      quantile(
         bernoulli_distribution<RealType>(static_cast<RealType>(2)), // prob >1
@@ -154,6 +158,7 @@ void test_spots(RealType)
         bernoulli_distribution<RealType>(static_cast<RealType>(0.5L)), // k < 0
         static_cast<RealType>(2)), std::domain_error
      );
+#endif
 
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(
@@ -217,6 +222,7 @@ void test_spots(RealType)
 
    // Checks for 'bad' parameters.
    // Construction.
+   #ifndef BOOST_MATH_NO_EXCEPTIONS
    BOOST_MATH_CHECK_THROW(bernoulli_distribution<RealType>(-1), std::domain_error); // p outside 0 to 1.
    BOOST_MATH_CHECK_THROW(bernoulli_distribution<RealType>(+2), std::domain_error); // p outside 0 to 1.
 
@@ -269,7 +275,7 @@ void test_spots(RealType)
      BOOST_MATH_CHECK_THROW(quantile(w, +inf), std::domain_error); // p = + inf
      BOOST_MATH_CHECK_THROW(quantile(complement(w, +inf)), std::domain_error); // p = + inf
    } // has_infinity
-
+   #endif
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )
@@ -302,7 +308,9 @@ BOOST_AUTO_TEST_CASE( test_main )
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float.
   test_spots(0.0); // Test double.
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
+#endif
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif

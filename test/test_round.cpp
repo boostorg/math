@@ -3,12 +3,20 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef SYCL_LANGUAGE_VERSION
 #include <pch.hpp>
+#endif
+
+#ifdef __clang__
+#  pragma clang diagnostic push 
+#  pragma clang diagnostic ignored "-Wimplicit-const-int-float-conversion"
+#endif
 
 #include <boost/math/concepts/real_concept.hpp>
 #define BOOST_TEST_MAIN
+#include <boost/math/tools/config.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
 #include <boost/test/unit_test.hpp>
-#include <boost/math/tools/test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/round.hpp>
 #include <boost/math/special_functions/next.hpp>
@@ -222,6 +230,7 @@ void test_round(T, const char* name )
    //
    // Finish off by testing the error handlers:
    //
+   #ifndef BOOST_MATH_NO_EXCEPTIONS
    BOOST_MATH_CHECK_THROW(iround(static_cast<T>(1e20)), boost::math::rounding_error);
    BOOST_MATH_CHECK_THROW(iround(static_cast<T>(-1e20)), boost::math::rounding_error);
    BOOST_MATH_CHECK_THROW(lround(static_cast<T>(1e20)), boost::math::rounding_error);
@@ -314,6 +323,7 @@ void test_round(T, const char* name )
       BOOST_MATH_CHECK_THROW(llround(static_cast<T>((std::numeric_limits<boost::long_long_type>::min)()) - 1), boost::math::rounding_error);
    }
 #endif
+   #endif
    //
    // try non-throwing error handlers:
    //

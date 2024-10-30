@@ -17,10 +17,10 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   namespace boost { namespace math {
 
   template <class T1, class T2, class T3>
-  ``__sf_result`` ellint_rf(T1 x, T2 y, T3 z)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rf(T1 x, T2 y, T3 z)
 
   template <class T1, class T2, class T3, class ``__Policy``>
-  ``__sf_result`` ellint_rf(T1 x, T2 y, T3 z, const ``__Policy``&)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rf(T1 x, T2 y, T3 z, const ``__Policy``&)
 
   }} // namespaces
 
@@ -32,10 +32,10 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   namespace boost { namespace math {
 
   template <class T1, class T2, class T3>
-  ``__sf_result`` ellint_rd(T1 x, T2 y, T3 z)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rd(T1 x, T2 y, T3 z)
 
   template <class T1, class T2, class T3, class ``__Policy``>
-  ``__sf_result`` ellint_rd(T1 x, T2 y, T3 z, const ``__Policy``&)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rd(T1 x, T2 y, T3 z, const ``__Policy``&)
 
   }} // namespaces
 
@@ -47,10 +47,10 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   namespace boost { namespace math {
 
   template <class T1, class T2, class T3, class T4>
-  ``__sf_result`` ellint_rj(T1 x, T2 y, T3 z, T4 p)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rj(T1 x, T2 y, T3 z, T4 p)
 
   template <class T1, class T2, class T3, class T4, class ``__Policy``>
-  ``__sf_result`` ellint_rj(T1 x, T2 y, T3 z, T4 p, const ``__Policy``&)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rj(T1 x, T2 y, T3 z, T4 p, const ``__Policy``&)
 
   }} // namespaces
 
@@ -62,10 +62,10 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   namespace boost { namespace math {
 
   template <class T1, class T2>
-  ``__sf_result`` ellint_rc(T1 x, T2 y)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rc(T1 x, T2 y)
 
   template <class T1, class T2, class ``__Policy``>
-  ``__sf_result`` ellint_rc(T1 x, T2 y, const ``__Policy``&)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rc(T1 x, T2 y, const ``__Policy``&)
 
   }} // namespaces
 
@@ -76,10 +76,10 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   namespace boost { namespace math {
 
   template <class T1, class T2, class T3>
-  ``__sf_result`` ellint_rg(T1 x, T2 y, T3 z)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rg(T1 x, T2 y, T3 z)
 
   template <class T1, class T2, class T3, class ``__Policy``>
-  ``__sf_result`` ellint_rg(T1 x, T2 y, T3 z, const ``__Policy``&)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rg(T1 x, T2 y, T3 z, const ``__Policy``&)
 
   }} // namespaces
 
@@ -98,10 +98,10 @@ when the arguments are of different types: otherwise the return is the same type
 as the arguments.
 
   template <class T1, class T2, class T3>
-  ``__sf_result`` ellint_rf(T1 x, T2 y, T3 z)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rf(T1 x, T2 y, T3 z)
   
   template <class T1, class T2, class T3, class ``__Policy``>
-  ``__sf_result`` ellint_rf(T1 x, T2 y, T3 z, const ``__Policy``&)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rf(T1 x, T2 y, T3 z, const ``__Policy``&)
   
 Returns Carlson's Elliptic Integral ['R[sub F]]:
 
@@ -113,10 +113,10 @@ one may be zero.  Otherwise returns the result of __domain_error.
 [optional_policy]
 
   template <class T1, class T2, class T3>
-  ``__sf_result`` ellint_rd(T1 x, T2 y, T3 z)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rd(T1 x, T2 y, T3 z)
   
   template <class T1, class T2, class T3, class ``__Policy``>
-  ``__sf_result`` ellint_rd(T1 x, T2 y, T3 z, const ``__Policy``&)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rd(T1 x, T2 y, T3 z, const ``__Policy``&)
   
 Returns Carlson's elliptic integral R[sub D]:
 
@@ -128,10 +128,10 @@ zero, and that z >= 0.  Otherwise returns the result of __domain_error.
 [optional_policy]
 
   template <class T1, class T2, class T3, class T4>
-  ``__sf_result`` ellint_rj(T1 x, T2 y, T3 z, T4 p)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rj(T1 x, T2 y, T3 z, T4 p)
 
   template <class T1, class T2, class T3, class T4, class ``__Policy``>
-  ``__sf_result`` ellint_rj(T1 x, T2 y, T3 z, T4 p, const ``__Policy``&)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rj(T1 x, T2 y, T3 z, T4 p, const ``__Policy``&)
 
 Returns Carlson's elliptic integral R[sub J]:
   
@@ -149,10 +149,10 @@ using the relation:
 [equation ellint17]
 
   template <class T1, class T2>
-  ``__sf_result`` ellint_rc(T1 x, T2 y)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rc(T1 x, T2 y)
 
   template <class T1, class T2, class ``__Policy``>
-  ``__sf_result`` ellint_rc(T1 x, T2 y, const ``__Policy``&)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rc(T1 x, T2 y, const ``__Policy``&)
 
 Returns Carlson's elliptic integral R[sub C]:
   
@@ -170,10 +170,10 @@ using the relation:
 [equation ellint18]
 
   template <class T1, class T2, class T3>
-  ``__sf_result`` ellint_rg(T1 x, T2 y, T3 z)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rg(T1 x, T2 y, T3 z)
   
   template <class T1, class T2, class T3, class ``__Policy``>
-  ``__sf_result`` ellint_rg(T1 x, T2 y, T3 z, const ``__Policy``&)
+  BOOST_MATH_GPU_ENABLED ``__sf_result`` ellint_rg(T1 x, T2 y, T3 z, const ``__Policy``&)
   
 Returns Carlson's elliptic integral ['R[sub G]:]
 

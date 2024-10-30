@@ -7,7 +7,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef SYCL_LANGUAGE_VERSION
 #include <pch.hpp>
+#endif
 
 #ifdef _MSC_VER
 #pragma warning (disable:4127 4512)
@@ -20,8 +22,12 @@
 #  define TEST_REAL_CONCEPT
 #endif
 
-#include <boost/math/tools/test.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+#endif
+
 #include <boost/math/distributions/non_central_f.hpp> // for chi_squared_distribution
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // for test_main

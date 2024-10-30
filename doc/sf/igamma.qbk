@@ -9,28 +9,28 @@
    namespace boost{ namespace math{
    
    template <class T1, class T2>
-   ``__sf_result`` gamma_p(T1 a, T2 z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p(T1 a, T2 z);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` gamma_p(T1 a, T2 z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p(T1 a, T2 z, const ``__Policy``&);
    
    template <class T1, class T2>
-   ``__sf_result`` gamma_q(T1 a, T2 z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q(T1 a, T2 z);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` gamma_q(T1 a, T2 z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q(T1 a, T2 z, const ``__Policy``&);
    
    template <class T1, class T2>
-   ``__sf_result`` tgamma_lower(T1 a, T2 z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_lower(T1 a, T2 z);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` tgamma_lower(T1 a, T2 z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_lower(T1 a, T2 z, const ``__Policy``&);
    
    template <class T1, class T2>
-   ``__sf_result`` tgamma(T1 a, T2 z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma(T1 a, T2 z);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` tgamma(T1 a, T2 z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma(T1 a, T2 z, const ``__Policy``&);
    
    }} // namespaces
    
@@ -53,10 +53,10 @@ The return type of these functions is computed using the __arg_promotion_rules
 when T1 and T2 are different types, otherwise the return type is simply T1.
 
    template <class T1, class T2>
-   ``__sf_result`` gamma_p(T1 a, T2 z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p(T1 a, T2 z);
    
    template <class T1, class T2, class Policy>
-   ``__sf_result`` gamma_p(T1 a, T2 z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p(T1 a, T2 z, const ``__Policy``&);
    
 Returns the normalised lower incomplete gamma function of a and z:
 
@@ -67,10 +67,10 @@ This function changes rapidly from 0 to 1 around the point z == a:
 [graph gamma_p]
 
    template <class T1, class T2>
-   ``__sf_result`` gamma_q(T1 a, T2 z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q(T1 a, T2 z);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` gamma_q(T1 a, T2 z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q(T1 a, T2 z, const ``__Policy``&);
 
 Returns the normalised upper incomplete gamma function of a and z:
 
@@ -81,20 +81,20 @@ This function changes rapidly from 1 to 0 around the point z == a:
 [graph gamma_q]
 
    template <class T1, class T2>
-   ``__sf_result`` tgamma_lower(T1 a, T2 z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_lower(T1 a, T2 z);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` tgamma_lower(T1 a, T2 z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_lower(T1 a, T2 z, const ``__Policy``&);
 
 Returns the full (non-normalised) lower incomplete gamma function of a and z:
 
 [equation igamma2]
 
    template <class T1, class T2>
-   ``__sf_result`` tgamma(T1 a, T2 z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma(T1 a, T2 z);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` tgamma(T1 a, T2 z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma(T1 a, T2 z, const ``__Policy``&);
 
 Returns the full (non-normalised) upper incomplete gamma function of a and z:
 

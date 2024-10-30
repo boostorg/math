@@ -8,5 +8,5 @@
 //
 
 #ifndef BOOST_MATH_STANDALONE
-#include <boost/math/tools/remez.hpp>
+#include "../../include_private/boost/math/tools/remez.hpp"
 #endif

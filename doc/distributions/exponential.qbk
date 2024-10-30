@@ -15,9 +15,9 @@
       typedef RealType value_type;
       typedef Policy   policy_type;
 
-      exponential_distribution(RealType lambda = 1);
+      BOOST_MATH_GPU_ENABLED exponential_distribution(RealType lambda = 1);
 
-      RealType lambda()const;
+      BOOST_MATH_GPU_ENABLED RealType lambda()const;
    };
 
 
@@ -37,7 +37,7 @@ values of the rate parameter lambda:
 
 [h4 Member Functions]
 
-   exponential_distribution(RealType lambda = 1);
+   BOOST_MATH_GPU_ENABLED exponential_distribution(RealType lambda = 1);
    
 Constructs an
 [@http://en.wikipedia.org/wiki/Exponential_distribution Exponential distribution]
@@ -46,7 +46,7 @@ Lambda is defined as the reciprocal of the scale parameter.
 
 Requires lambda > 0, otherwise calls __domain_error.
 
-   RealType lambda()const;
+   BOOST_MATH_GPU_ENABLED RealType lambda()const;
    
 Accessor function returns the lambda parameter of the distribution.
    
@@ -54,8 +54,13 @@ Accessor function returns the lambda parameter of the distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variable is \[0, +[infin]\].
+
+In this distribution the implementation of both `logcdf`, and `logpdf` are specialized
+to improve numerical accuracy.
 
 [h4 Accuracy]
 
@@ -71,7 +76,9 @@ In the following table [lambda] is the parameter lambda of the distribution,
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = [lambda] * exp(-[lambda] * x) ]]
+[[logpdf][log(pdf) = -expm1(-x * [lambda]) ]]
 [[cdf][Using the relation: p = 1 - exp(-x * [lambda]) = -expm1(-x * [lambda]) ]]
+[[logcdf][log(cdf) = log1p(-exp(-x * [lambda])) ]]
 [[cdf complement][Using the relation: q = exp(-x * [lambda]) ]]
 [[quantile][Using the relation: x = -log(1-p) / [lambda] = -log1p(-p) / [lambda]]]
 [[quantile from the complement][Using the relation: x = -log(q) / [lambda]]]

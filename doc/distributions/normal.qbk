@@ -17,13 +17,13 @@
       typedef RealType value_type;
       typedef Policy   policy_type;
       // Construct:
-      normal_distribution(RealType mean = 0, RealType sd = 1);
+      BOOST_MATH_GPU_ENABLED normal_distribution(RealType mean = 0, RealType sd = 1);
       // Accessors:
-      RealType mean()const; // location.
-      RealType standard_deviation()const; // scale.
+      BOOST_MATH_GPU_ENABLED RealType mean()const; // location.
+      BOOST_MATH_GPU_ENABLED RealType standard_deviation()const; // scale.
       // Synonyms, provided to allow generic use of find_location and find_scale.
-      RealType location()const;
-      RealType scale()const;
+      BOOST_MATH_GPU_ENABLED RealType location()const;
+      BOOST_MATH_GPU_ENABLED RealType scale()const;
    };
 
    }} // namespaces
@@ -53,20 +53,20 @@ and illustrated by this graph
 
 [h4 Member Functions]
 
-   normal_distribution(RealType mean = 0, RealType sd = 1);
+   BOOST_MATH_GPU_ENABLED normal_distribution(RealType mean = 0, RealType sd = 1);
 
 Constructs a normal distribution with mean /mean/ and
 standard deviation /sd/.
 
 Requires /sd/ > 0, otherwise __domain_error is called.
 
-   RealType mean()const;
-   RealType location()const;
+   BOOST_MATH_GPU_ENABLED RealType mean()const;
+   BOOST_MATH_GPU_ENABLED RealType location()const;
 
 both return the /mean/ of this distribution.
 
-   RealType standard_deviation()const;
-   RealType scale()const;
+   BOOST_MATH_GPU_ENABLED RealType standard_deviation()const;
+   BOOST_MATH_GPU_ENABLED RealType scale()const;
 
 both return the /standard deviation/ of this distribution.
 (Redundant location and scale function are provided to match other similar distributions,
@@ -76,6 +76,8 @@ allowing the functions find_location and find_scale to be used generically).
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variable is \[-[max_value], +[min_value]\].
 However, the pdf of +[infin] and -[infin] = 0 is also supported,
@@ -97,6 +99,7 @@ and /s/ is its standard deviation.
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = e[super -(x-m)[super 2]\/(2s[super 2])] \/ (s * sqrt(2*pi)) ]]
+[[logpdf][log(pdf) = -log(s) - log(2*[pi])/2 - (x-mean)[super 2]/(2*s[super 2]) ]]
 [[cdf][Using the relation: p = 0.5 * __erfc(-(x-m)/(s*sqrt(2))) ]]
 [[cdf complement][Using the relation: q = 0.5 * __erfc((x-m)/(s*sqrt(2))) ]]
 [[quantile][Using the relation: x = m - s * sqrt(2) * __erfc_inv(2*p)]]

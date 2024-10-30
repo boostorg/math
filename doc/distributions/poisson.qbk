@@ -17,8 +17,8 @@
     typedef RealType value_type;
     typedef Policy   policy_type;
     
-    poisson_distribution(RealType mean = 1); // Constructor.
-    RealType mean()const; // Accessor.
+    BOOST_MATH_GPU_ENABLED poisson_distribution(RealType mean = 1); // Constructor.
+    BOOST_MATH_GPU_ENABLED RealType mean()const; // Accessor.
   }
    
   }} // namespaces boost::math
@@ -47,11 +47,11 @@ The following graph illustrates how the PDF varies with the parameter [lambda]:
 
 [h4 Member Functions]
 
-   poisson_distribution(RealType mean = 1);
+   BOOST_MATH_GPU_ENABLED poisson_distribution(RealType mean = 1);
    
 Constructs a poisson distribution with mean /mean/.
 
-   RealType mean()const;
+   BOOST_MATH_GPU_ENABLED RealType mean()const;
    
 Returns the /mean/ of this distribution.
    
@@ -59,8 +59,13 @@ Returns the /mean/ of this distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variable is \[0, [infin]\].
+
+In this distribution the implementation of `logpdf` is specialized
+to improve numerical accuracy.
 
 [h4 Accuracy]
 
@@ -81,6 +86,7 @@ In the following table [lambda] is the mean of the distribution,
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = e[super -[lambda]] [lambda][super k] \/ k! ]]
+[[logpdf][log(pdf) = -lgamma(k+1) + k*log([lambda]) - [lambda] if k > 0 and [lambda] > 0 ]]
 [[cdf][Using the relation: p = [Gamma](k+1, [lambda]) \/ k! = __gamma_q(k+1, [lambda])]]
 [[cdf complement][Using the relation: q = __gamma_p(k+1, [lambda]) ]]
 [[quantile][Using the relation: k = __gamma_q_inva([lambda], p) - 1]]

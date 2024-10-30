@@ -522,6 +522,17 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(asinh_test, T, bin_float_types) {
                     -39 / (16 * boost::math::constants::root_two<T>()), eps);
 }
 
+template<typename T>
+static T atan2_wrap(T x, T y)
+{
+    return atan2(x, y);
+}
+
+static long double atan2_wrap(long double x, long double y)
+{
+    return std::atan2(x, y);
+}
+
 BOOST_AUTO_TEST_CASE_TEMPLATE(atan2_function, T, all_float_types) {
   using test_constants = test_constants_t<T>;
   using std::atan2;
@@ -536,7 +547,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(atan2_function, T, all_float_types) {
     auto y = y_sampler.next();
 
     auto autodiff_v = atan2(make_fvar<T, m>(x), make_fvar<T, m>(y));
-    auto anchor_v = atan2(x, y);
+    auto anchor_v = atan2_wrap(x, y);
     BOOST_CHECK_CLOSE(autodiff_v, anchor_v,
                       5000 * test_constants::pct_epsilon());
   }

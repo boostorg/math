@@ -26,9 +26,13 @@
 #  define TEST_REAL_CONCEPT
 #endif
 
-#include <boost/math/tools/test.hpp> // for real_concept
+#include <boost/math/tools/config.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 using ::boost::math::concepts::real_concept;
+#endif
 
 #include <boost/math/distributions/negative_binomial.hpp> // for negative_binomial_distribution
 using boost::math::negative_binomial_distribution;

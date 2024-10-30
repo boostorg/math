@@ -18,14 +18,14 @@
       typedef Policy    policy_type;
 
       // Constructor:
-      non_central_f_distribution(RealType v1, RealType v2, RealType lambda);
+      BOOST_MATH_GPU_ENABLED non_central_f_distribution(RealType v1, RealType v2, RealType lambda);
 
       // Accessor to degrees_of_freedom parameters v1 & v2:
-      RealType degrees_of_freedom1()const;
-      RealType degrees_of_freedom2()const;
+      BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom1()const;
+      BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom2()const;
 
       // Accessor to non-centrality parameter lambda:
-      RealType non_centrality()const;
+      BOOST_MATH_GPU_ENABLED RealType non_centrality()const;
    };
    
    }} // namespaces
@@ -55,22 +55,22 @@ for different values of [lambda]:
 
 [h4 Member Functions]
 
-      non_central_f_distribution(RealType v1, RealType v2, RealType lambda);
+      BOOST_MATH_GPU_ENABLED non_central_f_distribution(RealType v1, RealType v2, RealType lambda);
       
 Constructs a non-central beta distribution with parameters /v1/ and /v2/
 and non-centrality parameter /lambda/.
 
 Requires /v1/ > 0, /v2/ > 0 and lambda >= 0, otherwise calls __domain_error.
 
-      RealType degrees_of_freedom1()const;
+      BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom1()const;
       
 Returns the parameter /v1/ from which this object was constructed.
 
-      RealType degrees_of_freedom2()const;
+      BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom2()const;
       
 Returns the parameter /v2/ from which this object was constructed.
 
-      RealType non_centrality()const;
+      BOOST_MATH_GPU_ENABLED RealType non_centrality()const;
       
 Returns the non-centrality parameter /lambda/ from which this object was constructed.
 
@@ -78,6 +78,8 @@ Returns the non-centrality parameter /lambda/ from which this object was constru
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variable is \[0, +[infin]\].
 

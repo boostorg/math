@@ -1,7 +1,7 @@
 //  Copyright Thijs van den Berg, 2008.
 //  Copyright John Maddock 2008.
 //  Copyright Paul A. Bristow 2008, 2009, 2014.
-
+//  Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -62,7 +62,7 @@ Test 8: test_extreme_function_arguments()
 
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
-#include <boost/math/tools/test.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/distributions/laplace.hpp>
 #include "test_out_of_range.hpp"

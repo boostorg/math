@@ -1,5 +1,5 @@
 // Copyright John Maddock 2006.
-
+// Copyright Matt Borland 2024.
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -7,7 +7,7 @@
 
 // test_extreme_value.cpp
 
-#include <boost/math/tools/test.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/extreme_value.hpp>
     using boost::math::extreme_value_distribution;

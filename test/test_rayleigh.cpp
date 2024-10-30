@@ -13,10 +13,15 @@
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
 #endif
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+#endif
+
 #include <boost/math/distributions/rayleigh.hpp>
     using boost::math::rayleigh_distribution;
-#include <boost/math/tools/test.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
 
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
@@ -36,11 +41,13 @@ void test_spot(RealType s, RealType x, RealType p, RealType q, RealType toleranc
 {
    RealType logtolerance = tolerance;
 
+   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    BOOST_IF_CONSTEXPR (std::is_same<RealType, long double>::value || 
                        std::is_same<RealType, boost::math::concepts::real_concept>::value)
    {
       logtolerance *= 100;
    }
+   #endif
    
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(

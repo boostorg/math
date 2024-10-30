@@ -28,6 +28,7 @@ template <class RealType> bool instantiate_mixed_runner_result<RealType>::value;
 
 #include <boost/math/special_functions.hpp>
 #include <boost/concept_archetype.hpp>
+#include <boost/concept_check.hpp>
 #include <boost/math/distributions.hpp>
 
 #if !defined(BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS)
@@ -74,6 +75,33 @@ BOOST_MATH_DECLARE_DISTRIBUTIONS(double, test_policy)
 #endif
 
 template <class RealType>
+void instantiate_for_fixed_precision_only(RealType, const std::true_type&)
+{
+   using namespace boost;
+   using namespace boost::math;
+   using namespace boost::math::concepts;
+
+#ifdef TEST_GROUP_1
+#if !defined(BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS)
+   function_requires<DistributionConcept<landau_distribution<RealType> > >();
+   function_requires<DistributionConcept<landau_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<dist_test::landau > >();
+   function_requires<DistributionConcept<mapairy_distribution<RealType> > >();
+   function_requires<DistributionConcept<mapairy_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<dist_test::mapairy > >();
+   function_requires<DistributionConcept<holtsmark_distribution<RealType> > >();
+   function_requires<DistributionConcept<holtsmark_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<dist_test::holtsmark> >();
+   function_requires<DistributionConcept<saspoint5_distribution<RealType> > >();
+   function_requires<DistributionConcept<saspoint5_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<dist_test::saspoint5> >();
+#endif
+#endif
+}
+template <class RealType>
+void instantiate_for_fixed_precision_only(RealType, const std::false_type&){}
+
+template <class RealType>
 void instantiate(RealType)
 {
    instantiate_runner_result<RealType>::value = false;
@@ -118,6 +146,9 @@ void instantiate(RealType)
    function_requires<DistributionConcept<triangular_distribution<RealType> > >();
    function_requires<DistributionConcept<uniform_distribution<RealType> > >();
    function_requires<DistributionConcept<weibull_distribution<RealType> > >();
+
+   instantiate_for_fixed_precision_only(RealType(), std::integral_constant<bool, std::numeric_limits<RealType>::is_specialized && (std::numeric_limits<RealType>::digits <= 113) && (std::numeric_limits<RealType>::radix == 2)>());
+
    #endif // !defined(BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS)
 #endif
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
