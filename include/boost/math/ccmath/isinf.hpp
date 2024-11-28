@@ -25,6 +25,7 @@ constexpr bool isinf BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x) noexcept
 #if defined(__clang_major__) && __clang_major__ >= 6
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-constant-compare"
+#pragma clang diagnostic ignored "-Wnan-infinity-disabled"
 #endif
             return x == std::numeric_limits<T>::infinity() || -x == std::numeric_limits<T>::infinity();
 #if defined(__clang_major__) && __clang_major__ >= 6
