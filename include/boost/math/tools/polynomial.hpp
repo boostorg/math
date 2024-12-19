@@ -1,5 +1,6 @@
 //  (C) Copyright John Maddock 2006.
 //  (C) Copyright Jeremy William Murphy 2015.
+//  (C) Copyright Nick Thompson 2024.
 
 
 //  Use, modification and distribution are subject to the
@@ -28,6 +29,11 @@
 #include <initializer_list>
 #include <type_traits>
 #include <iterator>
+
+#if __has_include(<Eigen/Eigenvalues>)
+#include <complex> // roots are complex numbers.
+#include <Eigen/Eigenvalues>
+#endif
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -574,6 +580,67 @@ public:
    {
       m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), [](const T& x)->bool { return x != T(0); }).base(), m_data.end());
    }
+
+#if __has_include(<Eigen/Eigenvalues>)
+   /*
+    * Polynomial root recovery by the eigenvalues of the companion matrix.
+    * N.B.: This algorithm is not the state of the art; a faster algorithm is
+    * "Fast and backward stable computation of roots of polynomials" by Aurentz et al.
+    */
+  [[nodiscard]] auto roots() const {
+    // At least as of Eigen 3.4.0, we cannot provide the eigensolver with complex numbers.
+    static_assert(std::is_floating_point<T>::value, "Roots only can be recovered for floating point coefficients.");
+    // We can only support std::complex at this time; refer to the discussion
+    // in pull request #1131:
+    using Complex = std::complex<T>;
+    if (m_data.size() == 1) {
+      return std::vector<Complex>();
+    }
+    // There is a temptation to split off the linear and quadratic case, since
+    // they are so easy. Resist the temptation! Your best unit tests will become
+    // tautological.
+    std::size_t n = m_data.size() - 1;
+    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> C(n, n);
+    C << Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>::Zero(n,n);
+    for (std::size_t i = 0; i < n; ++i) {
+      // Remember the class invariant m_data.back() != 0 from the normalize() call?
+      // Reaping blessings right here y'all:
+      C(i, n - 1) = -m_data[i] / m_data.back();
+    }
+    for (std::size_t i = 0; i < n - 1; ++i) {
+      C(i + 1, i) = 1;
+    }
+    Eigen::EigenSolver<decltype(C)> es;
+    es.compute(C, /*computeEigenvectors=*/ false);
+    auto info = es.info();
+    if (info != Eigen::ComputationInfo::Success) {
+      std::ostringstream oss;
+      oss << __FILE__ << ":" << __LINE__ << ":" << __func__ << ": Eigen's eigensolver did not succeed.";
+      switch (info) {
+        case Eigen::ComputationInfo::NumericalIssue:
+          oss << " Problem: numerical issue.";
+          break;
+        case Eigen::ComputationInfo::NoConvergence:
+          oss << " Problem: no convergence.";
+          break;
+        case Eigen::ComputationInfo::InvalidInput:
+          oss << " Problem: Invalid input.";
+          break;
+        default:
+          oss << " Problem: Unknown.";
+      }
+      BOOST_MATH_THROW_EXCEPTION(std::runtime_error(oss.str()));
+    }
+    // Don't want to expose Eigen types to the rest of the world;
+    // Eigen is a detail of this algorithm, so big sad copy:
+    auto eigen_zeros = es.eigenvalues();
+    std::vector<Complex> zeros(eigen_zeros.size());
+    for (std::size_t i = 0; i < zeros.size(); ++i) {
+      zeros[i] = eigen_zeros[i];
+    }
+    return zeros;
+  }
+#endif
 
 private:
     template <class U, class R>
