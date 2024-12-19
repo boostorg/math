@@ -214,7 +214,7 @@ void test_bessel(T, const char* name)
        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(T(0.5), T(11357)), SC_(7.173138695269929329584326974917488634629578339622112563648e4929), tolerance * mul);
     }
 #endif
-    BOOST_IF_CONSTEXPR (std::numeric_limits<T>::max_exponent > 1000)
+    BOOST_IF_CONSTEXPR (std::numeric_limits<T>::max_exponent10 > 304)
     {
        BOOST_IF_CONSTEXPR(std::is_floating_point<T>::value == false)
           tolerance *= 4; // multiprecision type.

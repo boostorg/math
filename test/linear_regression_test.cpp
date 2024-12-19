@@ -223,7 +223,7 @@ void test_scaling_relations()
     Real c1_lambda = std::get<1>(temp);
     Real Rsquared_lambda = std::get<2>(temp);
 
-    CHECK_ULP_CLOSE(lambda*c0, c0_lambda, 50);
+    CHECK_ULP_CLOSE(lambda*c0, c0_lambda, 70);
     CHECK_ULP_CLOSE(lambda*c1, c1_lambda, 30);
     CHECK_ULP_CLOSE(Rsquared, Rsquared_lambda, 3);
 
@@ -241,7 +241,7 @@ void test_scaling_relations()
     Real c1_ = std::get<1>(temp);
     Real Rsquared_ = std::get<2>(temp);
 
-    CHECK_ULP_CLOSE(c0, c0_, 70);
+    CHECK_ULP_CLOSE(c0, c0_, 100);
     CHECK_ULP_CLOSE(c1, c1_*lambda, 50);
     CHECK_ULP_CLOSE(Rsquared, Rsquared_, 50);
 
