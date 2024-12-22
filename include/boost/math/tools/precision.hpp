@@ -182,9 +182,13 @@ struct log_limit_traits
 {
    typedef typename boost::math::conditional<
       (boost::math::numeric_limits<T>::radix == 2) &&
-      (boost::math::numeric_limits<T>::max_exponent == 128
-         || boost::math::numeric_limits<T>::max_exponent == 1024
-         || boost::math::numeric_limits<T>::max_exponent == 16384),
+      (
+         (     boost::math::numeric_limits<T>::max_exponent == 128
+            || boost::math::numeric_limits<T>::max_exponent == 1024
+            || boost::math::numeric_limits<T>::max_exponent == 16384
+         )
+         && (-boost::math::numeric_limits<T>::min_exponent + 1 == boost::math::numeric_limits<T>::max_exponent)
+      ),
       boost::math::integral_constant<int, (boost::math::numeric_limits<T>::max_exponent > (boost::math::numeric_limits<int>::max)() ? (boost::math::numeric_limits<int>::max)() : static_cast<int>(boost::math::numeric_limits<T>::max_exponent))>,
       boost::math::integral_constant<int, 0>
    >::type tag_type;
