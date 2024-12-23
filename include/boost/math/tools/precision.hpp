@@ -187,7 +187,7 @@ struct log_limit_traits
             || boost::math::numeric_limits<T>::max_exponent == 1024
             || boost::math::numeric_limits<T>::max_exponent == 16384
          )
-         && (-boost::math::numeric_limits<T>::min_exponent + 1 == boost::math::numeric_limits<T>::max_exponent)
+         && (-boost::math::numeric_limits<T>::min_exponent10 + 1 == boost::math::numeric_limits<T>::max_exponent10)
       ),
       boost::math::integral_constant<int, (boost::math::numeric_limits<T>::max_exponent > (boost::math::numeric_limits<int>::max)() ? (boost::math::numeric_limits<int>::max)() : static_cast<int>(boost::math::numeric_limits<T>::max_exponent))>,
       boost::math::integral_constant<int, 0>
