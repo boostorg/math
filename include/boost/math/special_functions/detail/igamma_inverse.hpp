@@ -390,7 +390,7 @@ struct gamma_p_inverse_func
          f2 = -f2;
       }
 
-      const T rela_diff_or_diff { (fabs(1 - p / f) <= 4 * tools::epsilon<T>()) ? T { 0 } : static_cast<T>(f - p) };
+      const T rela_diff_or_diff { (fabs(1 - p / f) < tools::epsilon<T>()) ? T { 0 } : static_cast<T>(f - p) };
 
       return boost::math::make_tuple(rela_diff_or_diff, f1, f2);
    }
