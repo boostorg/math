@@ -124,6 +124,22 @@ void test_spots(RealType T)
          static_cast<RealType>(-10.0)),              // x
          static_cast<RealType>(0.031725517430553569514977118601302L),                // probability.
          tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(),
+         static_cast<RealType>(-15000000.0)),
+         static_cast<RealType>(0.000000021220659078919346664504384865488560725L),
+         tolerance); // %
+   BOOST_CHECK_CLOSE(
+      // Test the CDF at -max_value()/4.
+      // For an input x of this magnitude, the reference value is 4/|x|/pi.
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(),
+         -boost::math::tools::max_value<RealType>()/4),
+         static_cast<RealType>(4)
+                      / boost::math::tools::max_value<RealType>()
+                      / boost::math::constants::pi<RealType>(),
+         tolerance); // %
 
    //
    // Complements:
@@ -187,6 +203,22 @@ void test_spots(RealType T)
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(-10.0))),              // x
          static_cast<RealType>(0.9682744825694464304850228813987L),                // probability.
+         tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         complement(cauchy_distribution<RealType>(),
+         static_cast<RealType>(15000000.0))),
+         static_cast<RealType>(0.000000021220659078919346664504384865488560725L),
+         tolerance); // %
+   BOOST_CHECK_CLOSE(
+      // Test the complemented CDF at max_value()/4.
+      // For an input x of this magnitude, the reference value is 4/x/pi.
+      ::boost::math::cdf(
+         complement(cauchy_distribution<RealType>(),
+         boost::math::tools::max_value<RealType>()/4)),
+         static_cast<RealType>(4)
+                      / boost::math::tools::max_value<RealType>()
+                      / boost::math::constants::pi<RealType>(),
          tolerance); // %
 
    //
