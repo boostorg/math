@@ -121,6 +121,7 @@ BOOST_MATH_GPU_ENABLED T gamma_imp_final(T z, const Policy& pol, const Lanczos& 
    static bool b = false;
    if(!b)
    {
+      (void)l;  
       std::cout << "tgamma_imp called with " << typeid(z).name() << " " << typeid(l).name() << std::endl;
       b = true;
    }
