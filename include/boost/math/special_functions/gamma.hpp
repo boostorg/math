@@ -114,14 +114,15 @@ template <class T, class Policy, class Lanczos>
 BOOST_MATH_GPU_ENABLED T gamma_imp_final(T z, const Policy& pol, const Lanczos& l)
 {
    BOOST_MATH_STD_USING
+   
+   (void)l; // Suppresses unused variable warning when BOOST_MATH_INSTRUMENT is not defined
 
-   T result = 1;
+   T result = 1;  
 
 #ifdef BOOST_MATH_INSTRUMENT
    static bool b = false;
    if(!b)
    {
-      (void)l;  
       std::cout << "tgamma_imp called with " << typeid(z).name() << " " << typeid(l).name() << std::endl;
       b = true;
    }
