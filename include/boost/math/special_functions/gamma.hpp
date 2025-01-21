@@ -111,7 +111,7 @@ BOOST_MATH_GPU_ENABLED T sinpx(T z)
 // tgamma(z), with Lanczos support:
 //
 template <class T, class Policy, class Lanczos>
-BOOST_MATH_GPU_ENABLED T gamma_imp_final(T z, const Policy& pol, const Lanczos&)
+BOOST_MATH_GPU_ENABLED T gamma_imp_final(T z, const Policy& pol, const Lanczos& l)
 {
    BOOST_MATH_STD_USING
 
