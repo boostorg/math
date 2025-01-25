@@ -33,7 +33,7 @@ using boost::math::landau_distribution;
 template<class RealType, int N>
 void do_test_landau_pdf(){
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -234,7 +234,7 @@ void do_test_landau_pdf(){
 template<class RealType, int N>
 void do_test_landau_cdf() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -329,7 +329,7 @@ void do_test_landau_cdf() {
 template<class RealType, int N>
 void do_test_landau_ccdf() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -515,7 +515,7 @@ void do_test_landau_ccdf() {
 template<class RealType, int N>
 void do_test_landau_quantile_nearzero() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -564,7 +564,7 @@ void do_test_landau_quantile_nearzero() {
 template<class RealType, int N>
 void do_test_landau_quantile_lower() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -634,7 +634,7 @@ void do_test_landau_quantile_lower() {
 template<class RealType, int N>
 void do_test_landau_quantile_upper() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -688,7 +688,7 @@ void do_test_landau_quantile_upper() {
 template<class RealType, int N>
 void do_test_landau_locscale_param() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
 

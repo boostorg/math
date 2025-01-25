@@ -26,7 +26,7 @@ using boost::multiprecision::cpp_bin_float_quad;
 template<class RealType, int N>
 void do_test_saspoint5_pdf(){
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -748,7 +748,7 @@ void do_test_saspoint5_quantile_nearzero() {
 template<class RealType, int N>
 void do_test_saspoint5_quantile_lower() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -793,7 +793,7 @@ void do_test_saspoint5_quantile_lower() {
 template<class RealType, int N>
 void do_test_saspoint5_quantile_upper() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -819,7 +819,7 @@ void do_test_saspoint5_quantile_upper() {
 template<class RealType, int N>
 void do_test_saspoint5_locscale_param() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
 
