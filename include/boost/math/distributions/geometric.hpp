@@ -400,7 +400,7 @@ namespace boost
       }
       if(k == 0)
       {
-        return log(p); // success_fraction
+        return std::log(p); // success_fraction
       }
       //RealType q = 1 - p;  // Bad for small p
       //RealType probability = 1 - std::pow(q, k+1);
@@ -551,7 +551,7 @@ namespace boost
           // unless #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
        }
        // log(x) /log(1-success_fraction) -1; but use log1p in case success_fraction is small
-       result = log(x) / boost::math::log1p(-success_fraction, Policy()) - 1;
+       result = std::log(x) / boost::math::log1p(-success_fraction, Policy()) - 1;
       return result;
 
     } // quantile complement
