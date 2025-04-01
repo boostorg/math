@@ -908,7 +908,7 @@ BOOST_MATH_GPU_ENABLED T full_igamma_prefix(T a, T z, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
-   if (z > tools::max_value<T>())
+   if (z > tools::max_value<T>() || (a > 0 && z == 0))
       return 0;
 
    T alz = a * log(z);
@@ -962,7 +962,7 @@ template <class T, class Policy, class Lanczos>
 BOOST_MATH_GPU_ENABLED T regularised_gamma_prefix(T a, T z, const Policy& pol, const Lanczos& l)
 {
    BOOST_MATH_STD_USING
-   if (z >= tools::max_value<T>())
+   if (z >= tools::max_value<T>() || (a > 0 && z == 0))
       return 0;
    T agh = a + static_cast<T>(Lanczos::g()) - T(0.5);
    T prefix;
@@ -1297,7 +1297,11 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
 
    int eval_method;
 
-   if(is_int && (x > 0.6))
+   if (x == 0)
+   {
+      eval_method = 8; // do nothing
+   }
+   else if(is_int && (x > 0.6))
    {
       // calculate Q via finite sum:
       invert = !invert;
@@ -1606,6 +1610,11 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
          result *= incomplete_tgamma_large_x(a, x, pol);
       break;
    }
+   case 8:
+      // x is zero, result is zero.
+      if (p_derivative)
+         *p_derivative = 0;
+      break;
    }
 
    if(normalised && (result > 1))
@@ -1627,7 +1636,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
       #endif
       result = gam - result;
    }
-   if(p_derivative)
+   if(p_derivative && x > 0)
    {
       //
       // Need to convert prefix term to derivative:
@@ -1660,7 +1669,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
 
    T result = 0; // Just to avoid warning C4701: potentially uninitialized local variable 'result' used
 
-   if(a >= max_factorial<T>::value && !normalised)
+   if(x > 0 && a >= max_factorial<T>::value && !normalised)
    {
       //
       // When we're computing the non-normalized incomplete gamma
