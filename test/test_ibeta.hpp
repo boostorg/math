@@ -131,6 +131,19 @@ void test_beta(T, const char* name)
 
    do_test_beta<T>(ibeta_int_data, name, "Incomplete Beta Function: Small Integer Values");
 #endif
+
+#if !defined(TEST_DATA) || (TEST_DATA == 5)
+   if (std::numeric_limits<T>::is_specialized)
+   {
+#  include "ibeta_large_asym_data.ipp"
+
+      do_test_beta<T>(ibeta_large_asym_data, name, "Incomplete Beta Function: Very Large a,b Values");
+
+#  include "ibeta_asym.ipp"
+
+      do_test_beta<T>(ibeta_asym, name, "Incomplete Beta Function: Asymptotically Large a,b Values");
+   }
+#endif
 }
 
 template <class T>
