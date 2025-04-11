@@ -1171,7 +1171,7 @@ T ibeta_large_ab(T a, T b, T x, T y, bool invert, bool normalised, const Policy&
    */
    T mul = 1;
    if (!normalised)
-      mul = beta(a, b, pol);
+      mul = boost::math::beta(a, b, pol);
 
    return mul * ((invert ? (1 + boost::math::erf(-nu * sqrt((a + b) / 2), pol)) / 2 : boost::math::erfc(-nu * sqrt((a + b) / 2), pol) / 2));
 }
