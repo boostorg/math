@@ -442,7 +442,7 @@ jobs:
         run: cp -r $GITHUB_WORKSPACE/* libs/math
         working-directory: ../boost-root
       - name: Run CMake
-        run: cmake -DBUILD_TESTING=1 -DCMAKE_CXX_COMPILER=g++-10 .
+        run: cmake -DBUILD_TESTING=1 -DCMAKE_CXX_COMPILER=g++-13 .
         working-directory: ../boost-root/libs/math
       - name: Run Compile Tests
         run: make -j$((`nproc`+1))
@@ -482,7 +482,7 @@ jobs:
         run: cp -r $GITHUB_WORKSPACE/* libs/math
         working-directory: ../boost-root
       - name: Run CMake
-        run: cmake -DBUILD_TESTING=1 -DCMAKE_CXX_COMPILER=clang++-10 .
+        run: cmake -DBUILD_TESTING=1 -DCMAKE_CXX_COMPILER=clang++-19 .
         working-directory: ../boost-root/libs/math
       - name: Run Compile Tests
         run: make -j$((`nproc`+1))
