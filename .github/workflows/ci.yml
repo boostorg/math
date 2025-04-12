@@ -139,12 +139,12 @@ jobs:
         run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS
         working-directory: ../boost-root/libs/math/test
   ubuntu-focal-no-eh:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++-9, g++-11, clang++-10 ]
-        standard: [ c++14, c++17, c++2a ]
+        compiler: [ g++-13, clang++-19 ]
+        standard: [ c++14, c++17, c++20, c++23 ]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -166,7 +166,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y g++-9 g++-11 clang-9 clang-10 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-13 clang-19 libgmp-dev libmpfr-dev libfftw3-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -408,11 +408,11 @@ jobs:
       - name: Test
         run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE")/../boost-root/libs/math/test && ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER'
   standalone-compile-tests-gcc:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++-10 ]
+        compiler: [ g++-13 ]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -432,7 +432,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y g++-10 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-13 libgmp-dev libmpfr-dev libfftw3-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -442,17 +442,17 @@ jobs:
         run: cp -r $GITHUB_WORKSPACE/* libs/math
         working-directory: ../boost-root
       - name: Run CMake
-        run: cmake -DBUILD_TESTING=1 -DCMAKE_CXX_COMPILER=g++-10 .
+        run: cmake -DBUILD_TESTING=1 -DCMAKE_CXX_COMPILER=g++-13 .
         working-directory: ../boost-root/libs/math
       - name: Run Compile Tests
         run: make -j$((`nproc`+1))
         working-directory: ../boost-root/libs/math
   standalone-compile-tests-clang:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ clang++-10 ]
+        compiler: [ clang++-19 ]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -472,7 +472,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y clang-10 libgmp-dev libmpfr-dev libfftw3-dev libtbb-dev
+        run: sudo apt-get install -y clang-19 libgmp-dev libmpfr-dev libfftw3-dev libtbb-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -482,18 +482,18 @@ jobs:
         run: cp -r $GITHUB_WORKSPACE/* libs/math
         working-directory: ../boost-root
       - name: Run CMake
-        run: cmake -DBUILD_TESTING=1 -DCMAKE_CXX_COMPILER=clang++-10 .
+        run: cmake -DBUILD_TESTING=1 -DCMAKE_CXX_COMPILER=clang++-19 .
         working-directory: ../boost-root/libs/math
       - name: Run Compile Tests
         run: make -j$((`nproc`+1))
         working-directory: ../boost-root/libs/math
   standalone-gcc:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++-10 ]
-        standard: [ c++14, c++17, c++20 ]
+        compiler: [ g++-13 ]
+        standard: [ c++14, c++17, c++20, c++23 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v4
@@ -516,7 +516,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y g++-10 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-13 libgmp-dev libmpfr-dev libfftw3-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
