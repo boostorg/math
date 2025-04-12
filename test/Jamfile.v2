@@ -35,11 +35,6 @@ obj no_eh : noeh_support.cpp : <library>/boost/config//boost_config ;
 
 project
     : requirements
-      <library>/boost/math//boost_math
-      <library>/boost/multiprecision//boost_multiprecision
-      <library>/boost/test//included
-      <library>/boost/type_index//boost_type_index
-      <library>/boost/ublas//boost_ublas
       $(OBJ_REMOVAL_OPTIONS)
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070,4069
       <toolset>intel-win:<cxxflags>-nologo
