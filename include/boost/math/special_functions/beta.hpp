@@ -847,7 +847,7 @@ BOOST_MATH_GPU_ENABLED inline T ibeta_fraction2(T a, T b, T x, T y, const Policy
       return result;
 
    ibeta_fraction2_t<T> f(a, b, x, y);
-   boost::uintmax_t max_terms = boost::math::policies::get_max_series_iterations<Policy>();
+   std::uintmax_t max_terms = boost::math::policies::get_max_series_iterations<Policy>();
    T fract = boost::math::tools::continued_fraction_b(f, boost::math::policies::get_epsilon<T, Policy>(), max_terms);
    boost::math::policies::check_series_iterations<T>("boost::math::ibeta", max_terms, pol);
    BOOST_MATH_INSTRUMENT_VARIABLE(fract);
