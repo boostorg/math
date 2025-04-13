@@ -127,6 +127,20 @@ void expected_results()
       largest_type,                     // test type(s)
       "(?i).*large.*",                      // test data group
       ".*", 200000, 10000);                 // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Mac OS",                         // platform
+      largest_type,                     // test type(s)
+      "(?i).*Very Large.*",             // test data group
+      ".*", 20000000, 2000000);         // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Mac OS",                          // platform
+      largest_type,                     // test type(s)
+      "(?i).*Asymptotically Large.*",   // test data group
+      ".*", 900000000, 80000000);       // test function
    if (std::numeric_limits<long double>::digits == 64)
    {
       // 80-bit long double, errors spill over:
