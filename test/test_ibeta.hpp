@@ -133,7 +133,12 @@ void test_beta(T, const char* name)
 #endif
 
 #if !defined(TEST_DATA) || (TEST_DATA == 5)
-   if (std::numeric_limits<T>::is_specialized)
+   //
+   // We restrict these tests to types of limited precision, otherwise we exhaust our iteration limit
+   // and throw exceptions.  This includes types (ie double) which may be promoted internally to
+   // a 128-bit long double for evaluation.
+   //
+   if (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::digits <= 64) && ((std::numeric_limits<long double>::digits <= 64) || (sizeof(T) == sizeof(float))))
    {
 #  include "ibeta_large_asym_data.ipp"
 
