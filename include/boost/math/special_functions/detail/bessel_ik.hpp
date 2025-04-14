@@ -282,7 +282,7 @@ BOOST_MATH_GPU_ENABLED int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
     }
     policies::check_series_iterations<T>("boost::math::bessel_ik<%1%>(%1%,%1%) in CF2_ik", k, pol);
 
-    if(x >= tools::log_max_value<T>())
+    if(-x < tools::log_min_value<T>())
        *Kv = exp(0.5f * log(pi<T>() / (2 * x)) - x - log(S));
     else
       *Kv = sqrt(pi<T>() / (2 * x)) * exp(-x) / S;

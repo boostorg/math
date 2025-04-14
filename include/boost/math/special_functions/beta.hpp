@@ -240,21 +240,25 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
    T c = a + b;
 
    // combine power terms with Lanczos approximation:
-   T agh = static_cast<T>(a + Lanczos::g() - 0.5f);
-   T bgh = static_cast<T>(b + Lanczos::g() - 0.5f);
-   T cgh = static_cast<T>(c + Lanczos::g() - 0.5f);
+   T gh = Lanczos::g() - 0.5f;
+   T agh = static_cast<T>(a + gh);
+   T bgh = static_cast<T>(b + gh);
+   T cgh = static_cast<T>(c + gh);
    if ((a < tools::min_value<T>()) || (b < tools::min_value<T>()))
       result = 0;  // denominator overflows in this case
    else
       result = Lanczos::lanczos_sum_expG_scaled(c) / (Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b));
+   BOOST_MATH_INSTRUMENT_VARIABLE(result);
    result *= prefix;
+   BOOST_MATH_INSTRUMENT_VARIABLE(result);
    // combine with the leftover terms from the Lanczos approximation:
    result *= sqrt(bgh / boost::math::constants::e<T>());
    result *= sqrt(agh / cgh);
+   BOOST_MATH_INSTRUMENT_VARIABLE(result);
 
    // l1 and l2 are the base of the exponents minus one:
-   T l1 = (x * b - y * agh) / agh;
-   T l2 = (y * a - x * bgh) / bgh;
+   T l1 = ((x * b - y * a) - y * gh) / agh;
+   T l2 = ((y * a - x * b) - x * gh) / bgh;
    if((BOOST_MATH_GPU_SAFE_MIN(fabs(l1), fabs(l2)) < 0.2))
    {
       // when the base of the exponent is very near 1 we get really
@@ -809,9 +813,8 @@ struct ibeta_fraction2_t
 
    BOOST_MATH_GPU_ENABLED result_type operator()()
    {
-      T aN = (a + m - 1) * (a + b + m - 1) * m * (b - m) * x * x;
       T denom = (a + 2 * m - 1);
-      aN /= denom * denom;
+      T aN = (m * (a + m - 1) / denom) * ((a + b + m - 1) / denom) * (b - m) * x * x;
 
       T bN = static_cast<T>(m);
       bN += (m * (b - m) * x) / (a + 2*m - 1);
@@ -844,7 +847,9 @@ BOOST_MATH_GPU_ENABLED inline T ibeta_fraction2(T a, T b, T x, T y, const Policy
       return result;
 
    ibeta_fraction2_t<T> f(a, b, x, y);
-   T fract = boost::math::tools::continued_fraction_b(f, boost::math::policies::get_epsilon<T, Policy>());
+   std::uintmax_t max_terms = boost::math::policies::get_max_series_iterations<Policy>();
+   T fract = boost::math::tools::continued_fraction_b(f, boost::math::policies::get_epsilon<T, Policy>(), max_terms);
+   boost::math::policies::check_series_iterations<T>("boost::math::ibeta", max_terms, pol);
    BOOST_MATH_INSTRUMENT_VARIABLE(fract);
    BOOST_MATH_INSTRUMENT_VARIABLE(result);
    return result / fract;
@@ -1117,6 +1122,60 @@ BOOST_MATH_GPU_ENABLED T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
 
    return result;
 }
+
+template <class T, class Policy>
+T ibeta_large_ab(T a, T b, T x, T y, bool invert, bool normalised, const Policy& pol)
+{
+   //
+   // Large arguments, symetric case, see https://dlmf.nist.gov/8.18
+   //
+   BOOST_MATH_STD_USING
+
+   T x0 = a / (a + b);
+   T y0 = b / (a + b);
+   T nu = x0 * log(x / x0) + y0 * log(y / y0);
+   //
+   // Above compution is unstable, force nu to zero if
+   // something went wrong:
+   //
+   if ((nu > 0) || (x == x0) || (y == y0))
+      nu = 0;
+   nu = sqrt(-2 * nu);
+   //
+   // As per https://dlmf.nist.gov/8.18#E10 we need to make sure we have the correct root:
+   //
+   if ((nu != 0) && (nu / (x - x0) < 0))
+      nu = -nu;
+   //
+   // The correction term in https://dlmf.nist.gov/8.18#E9 is badly unstable, and often
+   // makes the compution worse not better, we exclude it for now:
+   /*
+   T c0 = 0;
+
+   if (nu != 0)
+   {
+      c0 = 1 / nu;
+      T lim = fabs(10 * tools::epsilon<T>() * c0);
+      c0 -= sqrt(x0 * y0) / (x - x0);
+      if(fabs(c0) < lim)
+         c0 = (1 - 2 * x0) / (3 * sqrt(x0 * y0));
+      else
+         c0 *= exp(a * log(x / x0) + b * log(y / y0));
+      c0 /= sqrt(constants::two_pi<T>() * (a + b));
+   }
+   else
+   {
+      c0 = (1 - 2 * x0) / (3 * sqrt(x0 * y0));
+      c0 /= sqrt(constants::two_pi<T>() * (a + b));
+   }
+   */
+   T mul = 1;
+   if (!normalised)
+      mul = boost::math::beta(a, b, pol);
+
+   return mul * ((invert ? (1 + boost::math::erf(-nu * sqrt((a + b) / 2), pol)) / 2 : boost::math::erfc(-nu * sqrt((a + b) / 2), pol) / 2));
+}
+
 
 
 //
@@ -1502,7 +1561,37 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       }
       else
       {
-         fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
+         // a and b both large:
+         bool use_asym = false;
+         T ma = (std::max)(a, b);
+         T xa = ma == a ? x : y;
+         T saddle = ma / (a + b);
+         T powers = 0;
+         if ((ma > 1e-5f / tools::epsilon<T>()) && (ma / (std::min)(a, b) < (xa < saddle ? 2 : 15)))
+         {
+            if (a == b)
+               use_asym = true;
+            else
+            {
+               powers = exp(log(x / (a / (a + b))) * a + log(y / (b / (a + b))) * b);
+               if (powers < tools::epsilon<T>())
+                  use_asym = true;
+            }
+         }
+         if(use_asym)
+         {
+            fract = ibeta_large_ab(a, b, x, y, invert, normalised, pol);
+            if (fract * tools::epsilon<T>() < powers)
+            {
+               // Erf approximation failed, correction term is too large, fall back:
+               fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
+            }
+            else
+               invert = false;
+         }
+         else
+            fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
+            
          BOOST_MATH_INSTRUMENT_VARIABLE(fract);
       }
    }
