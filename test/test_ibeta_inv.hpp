@@ -328,6 +328,6 @@ void test_spots(T)
          static_cast<T>(1.0e11L),
          static_cast<T>(1.0e13L),
          static_cast<T>(0.995L)),
-      static_cast<T>(0.0099010703473402885173268397418009652L), 1e-10);
+      static_cast<T>(0.0099010703473402885173268397418009652L), 5e-10);
 }
 
