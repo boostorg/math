@@ -35,11 +35,6 @@ obj no_eh : noeh_support.cpp : <library>/boost/config//boost_config ;
 
 project
     : requirements
-      <library>/boost/math//boost_math
-      <library>/boost/multiprecision//boost_multiprecision
-      <library>/boost/test//included
-      <library>/boost/type_index//boost_type_index
-      <library>/boost/ublas//boost_ublas
       $(OBJ_REMOVAL_OPTIONS)
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070,4069
       <toolset>intel-win:<cxxflags>-nologo
@@ -195,6 +190,7 @@ test-suite special_fun :
    [ run git_issue_1175.cpp ]
    [ run git_issue_1194.cpp ]
    [ run git_issue_1249.cpp /boost/test//boost_unit_test_framework  ]
+   [ run git_issue_1255.cpp ]
    [ run special_functions_test.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_airy.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
    [ run test_bessel_j.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
@@ -261,6 +257,7 @@ test-suite special_fun :
         : # requirements
           <define>TEST_FLOAT
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_float  ]
    [ run test_ibeta.cpp  test_instances//test_instances pch_light /boost/test//boost_unit_test_framework
         : # command line
@@ -268,6 +265,7 @@ test-suite special_fun :
         : # requirements
           <define>TEST_DOUBLE
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_double  ]
    [ run test_ibeta.cpp  test_instances//test_instances pch_light /boost/test//boost_unit_test_framework
         : # command line
@@ -275,6 +273,7 @@ test-suite special_fun :
         : # requirements
           <define>TEST_LDOUBLE
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_long_double  ]
    [ run test_ibeta.cpp  test_instances//test_instances pch_light /boost/test//boost_unit_test_framework
         : # command line
@@ -283,6 +282,7 @@ test-suite special_fun :
           <define>TEST_REAL_CONCEPT
           <define>TEST_DATA=1
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_real_concept1  ]
    [ run test_ibeta.cpp  test_instances//test_instances pch_light /boost/test//boost_unit_test_framework
         : # command line
@@ -291,6 +291,7 @@ test-suite special_fun :
           <define>TEST_REAL_CONCEPT
           <define>TEST_DATA=2
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_real_concept2  ]
    [ run test_ibeta.cpp  test_instances//test_instances pch_light /boost/test//boost_unit_test_framework
         : # command line
@@ -299,6 +300,7 @@ test-suite special_fun :
           <define>TEST_REAL_CONCEPT
           <define>TEST_DATA=3
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_real_concept3  ]
    [ run test_ibeta.cpp  test_instances//test_instances pch_light /boost/test//boost_unit_test_framework
         : # command line
@@ -307,6 +309,7 @@ test-suite special_fun :
           <define>TEST_REAL_CONCEPT
           <define>TEST_DATA=4
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_real_concept4  ]
 
    [ run test_ibeta_derivative.cpp  test_instances//test_instances pch_light /boost/test//boost_unit_test_framework

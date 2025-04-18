@@ -314,6 +314,13 @@ void test_spots(RealType)
       BOOST_CHECK(boost::math::isnan(pdf(d2, 0.5)));
       BOOST_CHECK(boost::math::isnan(cdf(d2, 0.5)));
    }
+   //
+   // See https://github.com/boostorg/math/issues/1198
+   //
+   if (std::numeric_limits<RealType>::max_exponent10 >= 100)
+   {
+      BOOST_CHECK_CLOSE(cdf(boost::math::non_central_f_distribution<RealType>(static_cast<RealType>(1e-100L), 3.f, 1.5f), static_cast<RealType>(1e100L)), static_cast<RealType>(0.6118152873453990639132215575213809716459L), tolerance);
+   }
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )
