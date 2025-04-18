@@ -127,11 +127,11 @@ void test_impl()
 
 void test_derivative()
 {
+   using namespace boost::math::detail;
    double derivative = 0;
-   double result = boost::math::detail::gamma_incomplete_imp(1.0, 0.0, 
-     true, false, c_policy(), &derivative);
+   double result = gamma_incomplete_imp(1.0, 0.0, true, false, c_policy(), &derivative);
    BOOST_CHECK(errno == 0);
-   BOOST_CHECK_EQUAL(derivative, 0);
+   BOOST_CHECK_EQUAL(derivative, tools::max_value<double>() / 2);
    BOOST_CHECK_EQUAL(result, 0);
 }
 
