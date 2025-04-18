@@ -6,8 +6,8 @@
 #ifndef BOOST_MATH_HANDLE_TEST_RESULT
 #define BOOST_MATH_HANDLE_TEST_RESULT
 
+#include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/tools/stats.hpp>
-#include <boost/math/tools/test.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/regex.hpp>
 #include <boost/test/test_tools.hpp>

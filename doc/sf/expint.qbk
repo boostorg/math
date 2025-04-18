@@ -11,10 +11,10 @@
    namespace boost{ namespace math{
    
    template <class T>
-   ``__sf_result`` expint(unsigned n, T z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` expint(unsigned n, T z);
    
    template <class T, class ``__Policy``>
-   ``__sf_result`` expint(unsigned n, T z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` expint(unsigned n, T z, const ``__Policy``&);
    
    }} // namespaces
    
@@ -26,10 +26,10 @@ the return type is `double` if T is an integer type, and T otherwise.
 [h4 Description]
 
    template <class T>
-   ``__sf_result`` expint(unsigned n, T z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` expint(unsigned n, T z);
    
    template <class T, class ``__Policy``>
-   ``__sf_result`` expint(unsigned n, T z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` expint(unsigned n, T z, const ``__Policy``&);
    
 Returns the [@http://mathworld.wolfram.com/En-Function.html exponential integral En]
 of z:
@@ -100,10 +100,10 @@ is used.
    namespace boost{ namespace math{
    
    template <class T>
-   ``__sf_result`` expint(T z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` expint(T z);
    
    template <class T, class ``__Policy``>
-   ``__sf_result`` expint(T z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` expint(T z, const ``__Policy``&);
    
    }} // namespaces
    
@@ -115,10 +115,10 @@ the return type is `double` if T is an integer type, and T otherwise.
 [h4 Description]
 
    template <class T>
-   ``__sf_result`` expint(T z);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` expint(T z);
    
    template <class T, class ``__Policy``>
-   ``__sf_result`` expint(T z, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` expint(T z, const ``__Policy``&);
    
 Returns the [@http://mathworld.wolfram.com/ExponentialIntegral.html exponential integral]
 of z:

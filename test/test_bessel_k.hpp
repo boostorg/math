@@ -9,6 +9,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/bessel.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
@@ -132,7 +133,7 @@ void test_bessel(T, const char* name)
         {{ SC_(-10.0), SC_(1.0), SC_(1.80713289901029454691597861302340015908245782948536080022119e8) }},
         {{ SC_(100.0), SC_(5.0), SC_(7.03986019306167654653386616796116726248616158936088056952477e115) }},
         {{ SC_(100.0), SC_(80.0), SC_(8.39287107246490782848985384895907681748152272748337807033319e-12) }},
-        {{ SC_(-1000.0), SC_(700.0), SC_(6.51561979144735818903553852606383312984409361984128221539405e-31) }},
+        {{ SC_(-129.0), SC_(200.0), SC_(3.61744436315860678558682169223740584132967454950379795115566e-71) }},
     }};
     static const std::array<std::array<typename table_type<T>::type, 3>, 11> kv_data = {{
         {{ SC_(0.5), SC_(0.875), SC_(0.558532231646608646115729767013630967055657943463362504577189) }},
@@ -175,6 +176,7 @@ void test_bessel(T, const char* name)
     //
     // Extra test coverage:
     //
+    #ifndef SYCL_LANGUAGE_VERSION // SYCL doesn't throw 
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(2), T(-1)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(2.2), T(-1)), std::domain_error);
     BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
@@ -194,6 +196,7 @@ void test_bessel(T, const char* name)
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(-1.25), T(0)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(-1), T(0)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(1), T(0)), std::domain_error);
+    #endif
 }
 
 

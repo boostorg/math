@@ -16,9 +16,9 @@
        typedef RealType  value_type;
        typedef Policy    policy_type;
 
-       bernoulli_distribution(RealType p); // Constructor.
+       BOOST_MATH_GPU_ENABLED bernoulli_distribution(RealType p); // Constructor.
        // Accessor function.
-       RealType success_fraction() const
+       BOOST_MATH_GPU_ENABLED RealType success_fraction() const
        // Probability of success (as a fraction).
     };
    }} // namespaces
@@ -51,12 +51,12 @@ and the [@http://en.wikipedia.org/wiki/Cumulative_Distribution_Function Cumulati
 
 [h4 Member Functions]
 
-   bernoulli_distribution(RealType p);
+   BOOST_MATH_GPU_ENABLED bernoulli_distribution(RealType p);
 
 Constructs a [@http://en.wikipedia.org/wiki/bernoulli_distribution
 bernoulli distribution] with success_fraction /p/.
 
-   RealType success_fraction() const
+   BOOST_MATH_GPU_ENABLED RealType success_fraction() const
 
 Returns the /success_fraction/ parameter of this distribution.
 
@@ -64,6 +64,8 @@ Returns the /success_fraction/ parameter of this distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variable is 0 and 1,
 and the useful supported range is only 0 or 1.

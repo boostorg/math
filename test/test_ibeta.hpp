@@ -8,9 +8,10 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
+#include <boost/math/special_functions/beta.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/stats.hpp>
-#include <boost/math/tools/test.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
@@ -129,6 +130,24 @@ void test_beta(T, const char* name)
 #  include "ibeta_int_data.ipp"
 
    do_test_beta<T>(ibeta_int_data, name, "Incomplete Beta Function: Small Integer Values");
+#endif
+
+#if !defined(TEST_DATA) || (TEST_DATA == 5)
+   //
+   // We restrict these tests to types of limited precision, otherwise we exhaust our iteration limit
+   // and throw exceptions.  This includes types (ie double) which may be promoted internally to
+   // a 128-bit long double for evaluation.
+   //
+   if (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::digits <= 64) && ((std::numeric_limits<long double>::digits <= 64) || (sizeof(T) == sizeof(float))))
+   {
+#  include "ibeta_large_asym_data.ipp"
+
+      do_test_beta<T>(ibeta_large_asym_data, name, "Incomplete Beta Function: Very Large a,b Values");
+
+#  include "ibeta_asym.ipp"
+
+      do_test_beta<T>(ibeta_asym, name, "Incomplete Beta Function: Asymptotically Large a,b Values");
+   }
 #endif
 }
 

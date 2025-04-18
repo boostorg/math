@@ -1,5 +1,6 @@
 // Copyright John Maddock 2006.
 // Copyright Paul A. Bristow 2007, 2009
+// Copyright Matt Borland 2024
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -9,7 +10,6 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/tools/stats.hpp>
-#include <boost/math/tools/test.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
@@ -93,7 +93,9 @@ void test_cbrt(T, const char* name)
    }
    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
    {
+      #ifndef BOOST_MATH_NO_EXCEPTIONS
       BOOST_CHECK_THROW(boost::math::cbrt(std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+      #endif
    }
 
 }

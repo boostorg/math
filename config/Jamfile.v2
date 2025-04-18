@@ -9,11 +9,11 @@ import path ;
 local ntl-path = [ modules.peek : NTL_PATH ] ;
 local gmp_path = [ modules.peek : GMP_PATH ] ;
 
-lib quadmath ;
-lib fftw3 ;
-lib fftw3f ;
-lib fftw3l ;
-lib fftw3q ;
+searched-lib quadmath ;
+searched-lib fftw3 ;
+searched-lib fftw3f ;
+searched-lib fftw3l ;
+searched-lib fftw3q ;
 
 obj has_long_double_support : has_long_double_support.cpp ;
 obj has_mpfr_class : has_mpfr_class.cpp :

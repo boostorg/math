@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include <boost/math/tools/solve.hpp>
+#include "solve.hpp"
 #include <boost/math/tools/minima.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/polynomial.hpp>

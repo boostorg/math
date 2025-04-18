@@ -1,5 +1,6 @@
 [/
 Copyright (c) 2017 Nick Thompson
+Copyright (c) 2024 Matt Borland
 Use, modification and distribution are subject to the
 Boost Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -537,6 +538,30 @@ small `exp(-x)`, and therefore [^x > -log([epsilon])], we can greatly simplify t
 This form integrates just fine over (-log([pi]/2), +[infin]) using either the `tanh_sinh` or `exp_sinh` classes.
 
 [endsect] [/section:de_caveats Caveats]
+
+[section:gpu_usage GPU Usage]
+
+``
+    #include <boost/math/quadrature/exp_sinh.hpp>
+
+    namespace boost{ namespace math{ namespace quadrature {
+
+    template <class F, class Real, class Policy = policies::policy<> >
+    __device__ auto exp_sinh_integrate(const F& f, Real a, Real b, Real tolerance, Real* error, Real* L1, boost::math::size_t* levels)
+
+    template <class F, class Real, class Policy = policies::policy<> >
+    __device__ auto exp_sinh_integrate(const F& f, Real tolerance, Real* error, Real* L1, boost::math::size_t* levels)
+
+}}}
+``
+
+Quadrature is additionally able to run on CUDA (NVCC and NVRTC) platforms.
+The major difference is outlined in the above function signatures.
+When used on device these are free standing functions instead of using OOP like on the host.
+The tables of abscissas and weights are stored in shared read only memory on the device instead of being initialized when the class is constructed.
+An example use case would be in the finite elements method computing a stiffness matrix since it would consist of many different functions.
+
+[endsect] [/section:gpu_usage Usage]
 
 [section:de_refes References]
 

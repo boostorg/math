@@ -1,6 +1,6 @@
 // Copyright 2008 Gautam Sewani
 // Copyright 2013 Paul A. Bristow
-
+// Copyright 2024 Matt Borland
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -12,11 +12,14 @@
 #endif
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_EXCEPTIONS
-#define BOOST_MATH_UNDERFLOW_ERROR_POLICY throw_on_error
-#define BOOST_MATH_OVERFLOW_ERROR_POLICY throw_on_error
+#include <boost/math/tools/config.hpp>
+
+#if !defined(BOOST_NO_EXCEPTIONS) && !defined(BOOST_MATH_NO_EXCEPTIONS)
+#  define BOOST_MATH_UNDERFLOW_ERROR_POLICY throw_on_error
+#  define BOOST_MATH_OVERFLOW_ERROR_POLICY throw_on_error
 #endif
-#include <boost/math/tools/test.hpp>
+
+#include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/logistic.hpp>
     using boost::math::logistic_distribution;

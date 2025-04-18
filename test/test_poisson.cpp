@@ -23,19 +23,24 @@
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #endif
 
+#include <boost/math/tools/config.hpp>
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
 
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+#endif
+
 #include <boost/math/distributions/poisson.hpp>
     using boost::math::poisson_distribution;
-#include <boost/math/tools/test.hpp> // for real_concept
 
 #include <boost/math/special_functions/gamma.hpp> // for (incomplete) gamma.
 //   using boost::math::qamma_Q;
 #include "table_type.hpp"
 #include "test_out_of_range.hpp"
+#include "../include_private/boost/math/tools/test.hpp"
 
 #include <iostream>
    using std::cout;
@@ -53,12 +58,12 @@ void test_spots(RealType)
    // guaranteed for type RealType, eg 6 for float, 15 for double,
    // expressed as a percentage (so -2) for BOOST_CHECK_CLOSE,
 
-   int decdigits = numeric_limits<RealType>::digits10;
+   int decdigits = std::numeric_limits<RealType>::digits10;
   // May eb >15 for 80 and 128-bit FP types.
   if (decdigits <= 0)
   { // decdigits is not defined, for example real concept,
     // so assume precision of most test data is double (for example, MathCAD).
-     decdigits = numeric_limits<double>::digits10; // == 15 for 64-bit
+     decdigits = std::numeric_limits<double>::digits10; // == 15 for 64-bit
   }
   if (decdigits > 15 ) // numeric_limits<double>::digits10)
   { // 15 is the accuracy of the MathCAD test data.
@@ -106,6 +111,7 @@ void test_spots(RealType)
   using  ::boost::math::pdf;
 
    // Check that bad arguments throw.
+   #ifndef BOOST_MATH_NO_EXCEPTIONS
    BOOST_MATH_CHECK_THROW(
    cdf(poisson_distribution<RealType>(static_cast<RealType>(0)), // mean zero is bad.
       static_cast<RealType>(0)),  // even for a good k.
@@ -155,6 +161,7 @@ void test_spots(RealType)
      quantile(complement(poisson_distribution<RealType>(static_cast<RealType>(1)), 
       static_cast<RealType>(0))),  // bad probability. 
       std::overflow_error);
+   #endif
 
   BOOST_CHECK_EQUAL(
      quantile(poisson_distribution<RealType>(static_cast<RealType>(1)), 
@@ -559,6 +566,7 @@ BOOST_AUTO_TEST_CASE( test_main )
   // poisson mydudpoisson(0.);
   // throws (if BOOST_MATH_DOMAIN_ERROR_POLICY == throw_on_error).
 
+#ifndef BOOST_MATH_NO_EXCEPTIONS
 #ifndef BOOST_NO_EXCEPTIONS
   BOOST_MATH_CHECK_THROW(poisson mydudpoisson(-1), std::domain_error);// Mean must be > 0.
   BOOST_MATH_CHECK_THROW(poisson mydudpoisson(-1), std::logic_error);// Mean must be > 0.
@@ -570,7 +578,7 @@ BOOST_AUTO_TEST_CASE( test_main )
   // BOOST_MATH_CHECK_THROW(poisson mydudpoisson(-1), std::overflow_error); // fails the check
   // because overflow_error is unrelated - except from std::exception
   BOOST_MATH_CHECK_THROW(cdf(mypoisson, -1), std::domain_error); // k must be >= 0
-
+#endif
   BOOST_CHECK_EQUAL(mean(mypoisson), 4.);
   BOOST_CHECK_CLOSE(
   pdf(mypoisson, 2.),  // k events = 2. 
@@ -644,7 +652,7 @@ BOOST_AUTO_TEST_CASE( test_main )
   test_spots(0.0); // Test double.
 #endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-  if (numeric_limits<long double>::digits10 > numeric_limits<double>::digits10)
+  if (std::numeric_limits<long double>::digits10 > std::numeric_limits<double>::digits10)
   { // long double is better than double (so not MSVC where they are same).
 #ifdef TEST_LDOUBLE
      test_spots(0.0L); // Test long double.

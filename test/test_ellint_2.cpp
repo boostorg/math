@@ -6,7 +6,10 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef SYCL_LANGUAGE_VERSION
 #include <pch_light.hpp>
+#endif
+
 #include "test_ellint_2.hpp"
 
 //
@@ -72,7 +75,11 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*",      // test data group
+      #ifdef SYCL_LANGUAGE_VERSION
+      ".*", 20, 6);  // test function
+      #else
       ".*", 15, 6);  // test function
+      #endif
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

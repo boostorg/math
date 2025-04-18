@@ -5,8 +5,15 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef SYCL_LANGUAGE_VERSION
 #include <pch_light.hpp>
-#include"test_hermite.hpp"
+#endif
+
+#ifndef BOOST_MATH_OVERFLOW_ERROR_POLICY
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+#endif
+
+#include "test_hermite.hpp"
 
 //
 // DESCRIPTION:

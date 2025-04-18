@@ -4,8 +4,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
-
+#include <boost/math/tools/config.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #define BOOST_TEST_MAIN
@@ -13,7 +12,7 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/next.hpp>  // for has_denorm_now
 #include <boost/math/tools/stats.hpp>
-#include <boost/math/tools/test.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
@@ -320,11 +319,13 @@ void test_spots(T, const char* name)
       BOOST_CHECK(sign == -1);
    }
 
+   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    if(boost::math::detail::has_denorm_now<T>() && std::numeric_limits<T>::has_infinity && (boost::math::isinf)(1 / std::numeric_limits<T>::denorm_min()))
    {
       BOOST_CHECK_EQUAL(boost::math::tgamma(-std::numeric_limits<T>::denorm_min()), -std::numeric_limits<T>::infinity());
       BOOST_CHECK_EQUAL(boost::math::tgamma(std::numeric_limits<T>::denorm_min()), std::numeric_limits<T>::infinity());
    }
+   #endif
    //
    // Extra large values for lgamma, see https://github.com/boostorg/math/issues/242
    //

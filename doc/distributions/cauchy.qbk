@@ -15,10 +15,10 @@
       typedef RealType  value_type;
       typedef Policy    policy_type;
 
-      cauchy_distribution(RealType location = 0, RealType scale = 1);
+      BOOST_MATH_GPU_ENABLED cauchy_distribution(RealType location = 0, RealType scale = 1);
       
-      RealType location()const;
-      RealType scale()const;
+      BOOST_MATH_GPU_ENABLED RealType location()const;
+      BOOST_MATH_GPU_ENABLED RealType scale()const;
    };
    
 The [@http://en.wikipedia.org/wiki/Cauchy_distribution Cauchy-Lorentz distribution]
@@ -53,7 +53,7 @@ the distribution:
 
 [h4 Member Functions]
 
-   cauchy_distribution(RealType location = 0, RealType scale = 1);
+   BOOST_MATH_GPU_ENABLED cauchy_distribution(RealType location = 0, RealType scale = 1);
    
 Constructs a Cauchy distribution, with location parameter /location/
 and scale parameter /scale/.  When these parameters take their default
@@ -62,11 +62,11 @@ then the result is a Standard Cauchy Distribution.
 
 Requires scale > 0, otherwise calls __domain_error.
    
-   RealType location()const;
+   BOOST_MATH_GPU_ENABLED RealType location()const;
    
 Returns the location parameter of the distribution.
    
-   RealType scale()const;
+   BOOST_MATH_GPU_ENABLED RealType scale()const;
    
 Returns the scale parameter of the distribution.
 
@@ -74,6 +74,8 @@ Returns the scale parameter of the distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 Note however that the Cauchy distribution does not have a mean,
 standard deviation, etc. See __math_undefined
@@ -103,28 +105,23 @@ In the following table __x0 is the location parameter of the distribution,
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][Using the relation: ['pdf = 1 / ([pi] * [gamma] * (1 + ((x - __x0) / [gamma])[super 2]) ]]]
+[[pdf][Using the relation: ['pdf = 1 / ([pi] * [gamma] * (1 + ((x - __x0) / [gamma])[super 2])) ]]]
 [[cdf and its complement][
 The cdf is normally given by:
 
 [expression p = 0.5 + atan(x)/[pi]]
 
 But that suffers from cancellation error as x -> -[infin].
-So recall that for `x < 0`:
 
-[expression atan(x) = -[pi]/2 - atan(1/x)]
+Instead, the mathematically equivalent expression based on the function atan2
+is used:
 
-Substituting into the above we get:
+[expression p = atan2(1, -x)/[pi]]
 
-[expression p = -atan(1/x)  ; x < 0]
+By symmetry, the complement is
 
-So the procedure is to calculate the cdf for -fabs(x)
-using the above formula.  Note that to factor in the location and scale
-parameters you must substitute (x - __x0) / [gamma] for x in the above.
+[expression q = atan2(1, x)/[pi]]
 
-This procedure yields the smaller of /p/ and /q/, so the result
-may need subtracting from 1 depending on whether we want the complement
-or not, and whether /x/ is less than __x0 or not.
 ]]
 [[quantile][The same procedure is used irrespective of whether we're starting
             from the probability or its complement.  First the argument /p/ is

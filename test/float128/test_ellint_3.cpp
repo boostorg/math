@@ -7,7 +7,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/ellint_3.hpp>
-#include "libs/math/test/test_ellint_3.hpp"
+#include "test_ellint_3.hpp"
 
 void expected_results()
 {

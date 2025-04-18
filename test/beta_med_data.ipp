@@ -3,6 +3,10 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifdef __CUDACC__
+#pragma nv_diag_suppress 221
+#endif
+
    static const std::array<std::array<typename table_type<T>::type, 3>, 1830> beta_med_data = { {
       {{ SC_(0.4883005917072296142578125), SC_(0.4883005917072296142578125), SC_(3.245912809500479157065104747353807392371) }}, 
       {{ SC_(3.5808107852935791015625), SC_(0.4883005917072296142578125), SC_(1.007653173802923954909901438393379243537) }}, 
