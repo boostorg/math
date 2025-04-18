@@ -683,7 +683,15 @@ BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool 
       if ((a < tools::min_value<T>()) || (b < tools::min_value<T>()))
          result = 0;  // denorms cause overflow in the Lanzos series, result will be zero anyway
       else
-         result = Lanczos::lanczos_sum_expG_scaled(c) / (Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b));
+      {
+         T l1 = Lanczos::lanczos_sum_expG_scaled(c);
+         T l2 = Lanczos::lanczos_sum_expG_scaled(a);
+         T l3 = Lanczos::lanczos_sum_expG_scaled(b);
+         if ((l2 > 1) && (l3 > 1) && (tools::max_value<T>() / l2 < l3))
+            result = (l1 / l2) / l3;
+         else
+         result = l1 / (l2 * l3);
+      }
 
       if (!(boost::math::isfinite)(result))
          result = 0;  // LCOV_EXCL_LINE we can probably never get here, covered already above?
