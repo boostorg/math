@@ -2102,7 +2102,7 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
       //
       // Result will almost certainly overflow, try logs just in case:
       //
-      BOOST_IF_CONSTEXPR(boost::math::is_same<T, float>::value || boost::math::is_same<T, double>::value)
+      BOOST_MATH_IF_CONSTEXPR(boost::math::is_same<T, float>::value || boost::math::is_same<T, double>::value)
       {
          // straight to the scene of the accident, since the result is larger than max_factorial:
          return policies::raise_overflow_error<T>("tgamma_ratio", nullptr, pol);
