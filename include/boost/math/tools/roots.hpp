@@ -385,7 +385,12 @@ namespace detail {
          BOOST_MATH_INSTRUMENT_VARIABLE(denom);
          BOOST_MATH_INSTRUMENT_VARIABLE(num);
 
-         if ((fabs(num) < 1) && (fabs(denom) >= fabs(num) * tools::max_value<T>()))
+         // denom/num overflows if:
+         //     |denom| >= |num| * max_value
+         // RHS may overflow on Apple M1, so rearrange:
+         //     |denom| * 1/max_value >= |num|
+         static const T inv_max_value = 1.0 / tools::max_value<T>();
+         if ((fabs(num) < 1) && (inv_max_value * fabs(denom) >= fabs(num)))
          {
             // possible overflow, use Newton step:
             delta = f0 / f1;
@@ -691,7 +696,9 @@ namespace detail {
          }
          else if (result > max)
          {
-            T diff = ((fabs(max) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(max))) ? T(1000) : T(result / max);
+            const T amax = fabs(max);
+            volatile const T aresult = fabs(result); // volatile: force compiler to honor data-dependency in chained bool exprs below
+            T diff = ((amax < 1) && (aresult > 1) && (tools::max_value<T>() / aresult < amax)) ? T(1000) : T(result / max);
             if (fabs(diff) < 1)
                diff = 1 / diff;
             if (!out_of_bounds_sentry && (diff > 0) && (diff < 3))
