@@ -1542,10 +1542,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
       precision_type::value <= 113 ? 113 : 0
    > tag_type;
 
-   return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::expint_i_imp(
-      static_cast<value_type>(z),
-      forwarding_policy(),
-      tag_type()), "boost::math::expint<%1%>(%1%)");
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::expint_i_imp(static_cast<value_type>(z), forwarding_policy(), tag_type()), "boost::math::expint<%1%>(%1%)");
 }
 
 template <class T>
