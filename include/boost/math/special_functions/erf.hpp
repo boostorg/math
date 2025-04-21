@@ -704,6 +704,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
 } // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const std::integral_constant<int, 64>& t)
 
 
+// LCOV_EXCL_START multiprecision case only, excluded from coverage analysis
 template <class T, class Policy>
 T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int, 113>& t)
 {
@@ -1193,6 +1194,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
 
    return result;
 } // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const std::integral_constant<int, 113>& t)
+// LCOV_EXCL_STOP
 
 } // namespace detail
 
