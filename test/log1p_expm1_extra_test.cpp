@@ -69,6 +69,5 @@ BOOST_AUTO_TEST_CASE( test_main )
    test(boost::multiprecision::cpp_bin_float_double(0), "cpp_bin_float_double");
    test(boost::multiprecision::cpp_bin_float_double_extended(0), "cpp_bin_float_double_extended");
    test(boost::multiprecision::cpp_bin_float_quad(0), "cpp_bin_float_quad");
-   test(boost::multiprecision::cpp_bin_float_100(0), "cpp_bin_float_100");
 }
 

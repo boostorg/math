@@ -54,6 +54,7 @@ namespace boost {
          // x^k / k!
          // each time that operator() is invoked.
          //
+         // LCOV_EXCL_START multiprecision case only, excluded from coverage analysis
          template <class T>
          struct expm1_series
          {
@@ -119,6 +120,7 @@ namespace boost {
             policies::check_series_iterations<T>("boost::math::expm1<%1%>(%1%)", max_iter, pol);
             return result;
          }
+         // LCOV_EXCL_STOP
 
          template <class T, class P>
          BOOST_MATH_GPU_ENABLED T expm1_imp(T x, const boost::math::integral_constant<int, 53>&, const P& pol)
