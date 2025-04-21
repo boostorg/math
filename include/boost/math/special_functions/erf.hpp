@@ -1077,6 +1077,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.997637501418963696542159244436245077e-8),
          };
          // LCOV_EXCL_STOP
+         // LCOV_EXCL_START confirmed as covered by the __float128 tests in GNU mode.
          result = Y + tools::evaluate_polynomial(P, T(z - 6.5f)) / tools::evaluate_polynomial(Q, T(z - 6.5f));
          T hi, lo;
          int expon;
@@ -1086,6 +1087,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          T sq = z * z;
          T err_sqr = ((hi * hi - sq) + 2 * hi * lo) + lo * lo;
          result *= exp(-sq) * exp(-err_sqr) / z;
+         // LCOV_EXCL_STOP
       }
       else if(z < 11.5)
       {
