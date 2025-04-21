@@ -190,7 +190,6 @@ public:
    }
    typedef T result_type;
 };
-// LCOV_EXCL_STOP
 
 template <class T, class Policy>
 inline T digamma_imp_large(T x, const Policy& pol, const boost::math::integral_constant<int, 0>*)
@@ -204,6 +203,7 @@ inline T digamma_imp_large(T x, const Policy& pol, const boost::math::integral_c
    policies::check_series_iterations<T>("boost::math::digamma<%1%>(%1%)", max_iter, pol);
    return result;
 }
+// LCOV_EXCL_STOP
 //
 // Now follow rational approximations over the range [1,2].
 //
