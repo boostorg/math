@@ -575,6 +575,7 @@ test-suite special_fun :
    [ run test_tgamma_for_issue396_part1.cpp /boost/test//boost_unit_test_framework : : : $(float128_type) <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] ]
    [ run test_tgamma_for_issue396_part2.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ]  ]
    [ run test_tgamma_ratio.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
+   [ run test_tgamma_eh.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_trig.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
    [ run test_zeta.cpp /boost/test//boost_unit_test_framework test_instances//test_instances pch_light  ]
    [ run test_sinc.cpp /boost/test//boost_unit_test_framework pch_light ]

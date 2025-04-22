@@ -131,11 +131,6 @@ BOOST_MATH_GPU_ENABLED T gamma_imp_final(T z, const Policy& pol, const Lanczos& 
 
    if(z <= 0)
    {
-      if(floor(z) == z)
-      {
-         return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
-      }
-
       // shift z to > 1:
       while(z < 0)
       {
@@ -225,7 +220,8 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T gamma_imp(T z, const Policy& pol
          {
             if ((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
             {
-               return policies::raise_overflow_error<T>(function, nullptr, pol);
+               return policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE MP only.
+
             }
          }
          else
@@ -1302,12 +1298,6 @@ template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, bool invert,
                        const Policy& pol, T* p_derivative)
 {
-   constexpr auto function = "boost::math::gamma_p<%1%>(%1%, %1%)";
-   if(a <= 0)
-      return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
-   if(x < 0)
-      return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
-
    BOOST_MATH_STD_USING
 
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
