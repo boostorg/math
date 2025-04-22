@@ -1703,7 +1703,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
       {
          // This is method 4 below, done in logs:
          result = a * log(x) - x;
-         BOOST_ASSERT(p_derivative = nullptr);
+         BOOST_MATH_ASSERT(p_derivative = nullptr);
          // Not currently used for non-normalized igamma:
          //if(p_derivative)
          //   *p_derivative = exp(result);
@@ -1713,7 +1713,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
       {
          // This is method 2 below, done in logs:
          result = a * log(x) - x;
-         BOOST_ASSERT(p_derivative = nullptr);
+         BOOST_MATH_ASSERT(p_derivative = nullptr);
          // Not currently used for non-normalized igamma:
          //if(p_derivative)
          //   *p_derivative = exp(result);
@@ -1730,7 +1730,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
                // Try http://functions.wolfram.com/06.06.06.0039.01
                result = 1 + 1 / (12 * a) + 1 / (288 * a * a);
                result = log(result) - a + (a - 0.5f) * log(a) + log(boost::math::constants::root_two_pi<T>());
-               BOOST_ASSERT(p_derivative = nullptr);
+               BOOST_MATH_ASSERT(p_derivative = nullptr);
                // Not currently used for non-normalized igamma:
                //if(p_derivative)
                //   *p_derivative = exp(a * log(x) - x);
@@ -1741,7 +1741,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
                // range of this method, but since the result is almost certainly
                // infinite, we should probably be OK:
                result = a * log(x) - x;
-               BOOST_ASSERT(p_derivative = nullptr);
+               BOOST_MATH_ASSERT(p_derivative = nullptr);
                // Not currently used for non-normalized igamma:
                //if(p_derivative)
                //   *p_derivative = exp(result);
