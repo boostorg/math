@@ -76,7 +76,6 @@ BOOST_MATH_GPU_ENABLED T ellint_rj_imp_final(T x, T y, T z, T p, const Policy& p
 {
    BOOST_MATH_STD_USING
 
-   constexpr auto function = "boost::math::ellint_rj<%1%>(%1%,%1%,%1%)";
    //
    // Special cases from http://dlmf.nist.gov/19.20#iii
    //
