@@ -350,9 +350,15 @@ void test_spots(T, const char* name)
    //
    // Extra coverage:
    //
+#ifndef BOOST_MATH_NO_EXCEPTIONS
    BOOST_CHECK_THROW(boost::math::tgamma(T(-3)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::lgamma(T(-3)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::lgamma(T(0)), std::domain_error);
+#else
+   BOOST_CHECK((boost::math::isnan)(boost::math::tgamma(T(-3))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::lgamma(T(-3))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::lgamma(T(0))));
+#endif
    if(boost::math::tools::log_max_value<T>() <= 11356)
    {
       BOOST_CHECK_GE(boost::math::tgamma(T(11360.0f)), boost::math::tools::max_value<T>());

@@ -258,6 +258,7 @@ void test_spots(T)
    //
    // Coverage:
    //
+#ifndef BOOST_MATH_NO_EXCEPTIONS
    BOOST_CHECK_THROW(boost::math::gamma_p(static_cast<T>(-1), static_cast<T>(2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::gamma_q(static_cast<T>(-1), static_cast<T>(2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::gamma_p(static_cast<T>(1), static_cast<T>(-2)), std::domain_error);
@@ -267,5 +268,16 @@ void test_spots(T)
    BOOST_CHECK_THROW(boost::math::gamma_p_derivative(static_cast<T>(-1), static_cast<T>(2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::gamma_p_derivative(static_cast<T>(1), static_cast<T>(-2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::gamma_p_derivative(static_cast<T>(0), static_cast<T>(2)), std::domain_error);
+#else
+   BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p(static_cast<T>(-1), static_cast<T>(2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::gamma_q(static_cast<T>(-1), static_cast<T>(2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p(static_cast<T>(1), static_cast<T>(-2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::gamma_q(static_cast<T>(1), static_cast<T>(-2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p(static_cast<T>(0), static_cast<T>(2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::gamma_q(static_cast<T>(0), static_cast<T>(2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p_derivative(static_cast<T>(-1), static_cast<T>(2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p_derivative(static_cast<T>(1), static_cast<T>(-2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p_derivative(static_cast<T>(0), static_cast<T>(2))));
+#endif
 }
 

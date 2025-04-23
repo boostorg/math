@@ -200,8 +200,13 @@ void test_spots(T, const char* t)
    // Extra coverage cases:
    //
    BOOST_CHECK_EQUAL(boost::math::expint(-boost::math::tools::max_value<T>()), T(0));
+#ifndef BOOST_MATH_NO_EXCEPTIONS
    BOOST_CHECK_THROW(boost::math::expint(1, T(-1)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::expint(2, T(-1)), std::domain_error);
+#else
+   BOOST_CHECK((boost::math::isnan)(boost::math::expint(1, T(-1))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::expint(2, T(-1))));
+#endif
    BOOST_CHECK_EQUAL(boost::math::expint(2, T(0)), T(1));
    BOOST_CHECK_EQUAL(boost::math::expint(3, T(0)), T(0.5));
    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
