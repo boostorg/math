@@ -406,7 +406,7 @@ BOOST_MATH_GPU_ENABLED inline std::float128_t log1p(std::float128_t x, const Pol
    }
    else
    {
-      return boost::math::detail::log1p_imp(x, pol, boost::math::integral_constant<int, 113>());
+      return boost::math::detail::log1p_imp(x, pol, boost::math::integral_constant<int, 0>());
    }
 }
 #endif
