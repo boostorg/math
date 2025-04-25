@@ -979,7 +979,7 @@ BOOST_MATH_GPU_ENABLED T full_igamma_prefix(T a, T z, const Policy& pol)
    // rather than before it...
    // Typically though this method is used when the result is small, we should probably not overflow here...
    //
-   if((boost::math::fpclassify)(prefix) == (int)FP_INFINITE)
+   if((boost::math::fpclassify)(prefix) == (int)BOOST_MATH_FP_INFINITE)
       return policies::raise_overflow_error<T>("boost::math::detail::full_igamma_prefix<%1%>(%1%, %1%)", "Result of incomplete gamma function is too large to represent.", pol);  // LCOV_EXCL_LINE
 
    return prefix;
