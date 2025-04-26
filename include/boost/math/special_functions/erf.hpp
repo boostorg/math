@@ -111,6 +111,7 @@ BOOST_MATH_GPU_ENABLED inline T erf_asymptotic_limit()
    return erf_asymptotic_limit_N(tag_type());
 }
 
+// LCOV_EXCL_START multiprecision case only, excluded from coverage analysis
 template <class T>
 struct erf_series_near_zero
 {
@@ -145,7 +146,6 @@ T erf_series_near_zero_sum(const T& x, const Policy& pol)
 template <class T, class Policy, class Tag>
 T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
 {
-   // LCOV_EXCL_START multiprecision case only, excluded from coverage analysis
    BOOST_MATH_STD_USING
 
    BOOST_MATH_INSTRUMENT_CODE("Generic erf_imp called");
@@ -198,8 +198,8 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
    if(invert)
       result = 1 - result;
    return result;
-   // LCOV_EXCL_STOP
 }
+// LCOV_EXCL_STOP
 
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int, 53>&)
@@ -224,9 +224,10 @@ BOOST_MATH_GPU_ENABLED T erf_imp(T z, bool invert, const Policy& pol, const std:
          prefix_multiplier = -1;
          // return -erf_imp(T(-z), invert, pol, t);
       }
-      else if(z < T(-0.5))
+      else if (z > T(0.5))
       {
          prefix_adder = 2;
+         prefix_multiplier = -1;
          // return 2 - erf_imp(T(-z), invert, pol, t);
       }
       else
@@ -703,6 +704,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
 } // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const std::integral_constant<int, 64>& t)
 
 
+// LCOV_EXCL_START multiprecision case only, excluded from coverage analysis
 template <class T, class Policy>
 T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int, 113>& t)
 {
@@ -711,7 +713,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
    BOOST_MATH_INSTRUMENT_CODE("113-bit precision erf_imp called");
 
    if ((boost::math::isnan)(z))
-      return policies::raise_domain_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol);
+      return policies::raise_domain_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol); // LCOV_EXCL_LINE checked as covered.
 
    if(z < 0)
    {
@@ -737,7 +739,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
       //
       if(z == 0)
       {
-         result = 0;
+         result = 0; // LCOV_EXCL_LINE confirmed as covered, not sure why lcov doesn't see this.
       }
       else if(z < 1e-20)
       {
@@ -1075,6 +1077,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 113, 0.997637501418963696542159244436245077e-8),
          };
          // LCOV_EXCL_STOP
+         // LCOV_EXCL_START confirmed as covered by the __float128 tests in GNU mode.
          result = Y + tools::evaluate_polynomial(P, T(z - 6.5f)) / tools::evaluate_polynomial(Q, T(z - 6.5f));
          T hi, lo;
          int expon;
@@ -1084,6 +1087,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          T sq = z * z;
          T err_sqr = ((hi * hi - sq) + 2 * hi * lo) + lo * lo;
          result *= exp(-sq) * exp(-err_sqr) / z;
+         // LCOV_EXCL_STOP
       }
       else if(z < 11.5)
       {
@@ -1192,6 +1196,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
 
    return result;
 } // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const std::integral_constant<int, 113>& t)
+// LCOV_EXCL_STOP
 
 } // namespace detail
 

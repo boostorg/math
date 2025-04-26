@@ -243,7 +243,7 @@ inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const generic_tag<true>&)
    // whenever possible check for Nan's first:
 #if defined(BOOST_HAS_FPCLASSIFY)  && !defined(BOOST_MATH_DISABLE_STD_FPCLASSIFY)
    if(::boost::math_detail::is_nan_helper(t, typename std::is_floating_point<T>::type()))
-      return FP_NAN;
+      return FP_NAN;  // LCOV_EXCL_LINE only called in UDT contexts (excluded from coverage checks).
 #elif defined(isnan)
    if(boost::math_detail::is_nan_helper(t, typename std::is_floating_point<T>::type()))
       return FP_NAN;
