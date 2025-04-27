@@ -97,7 +97,7 @@ inline std::string prec_format(const T& val)
 
    std::stringstream strm { };
 
-   if(prec_type::value != prec_type { 0 })
+   if(prec_type::value)
    {
       const std::streamsize prec { static_cast<std::streamsize>(2UL + (prec_type::value * 30103UL) / 100000UL) };
 
