@@ -98,7 +98,7 @@ namespace boost
                1  ,  2   , 3  ,  3  ,  5  ,  5   , 7  ,  7  , 16 ,  16  , 16 ,  16 ,  16  , 11 ,  11,
                1  ,  2   , 3   , 3   , 5  ,  5 ,  17  , 17  , 17 ,  17  , 16 ,  16 ,  16 ,  11 ,  11
             };
-            // LCOV_EXCL_END
+            // LCOV_EXCL_STOP
 
             unsigned short ihint = 14, iaint = 7;
             for(unsigned short i = 0; i != 14; i++)
@@ -129,7 +129,7 @@ namespace boost
          {
             // LCOV_EXCL_START
             static const unsigned short ord[] = {2, 3, 4, 5, 7, 10, 12, 18, 10, 20, 30, 0, 4, 7, 8, 20, 0, 0}; // 18 entries
-            // LCOV_EXCL_END
+            // LCOV_EXCL_STOP
 
             BOOST_MATH_ASSERT(icode<18);
 
@@ -142,7 +142,7 @@ namespace boost
            // method ================>>>       {1, 1, 1, 1, 1,  1,  1,  1,  2,  2,  2,  3, 4,  4,  4,  4,  5, 6}
           // LCOV_EXCL_START
           static const unsigned short ord[] = {3, 4, 5, 6, 8, 11, 13, 19, 10, 20, 30,  0, 7, 10, 11, 23,  0, 0}; // 18 entries
-          // LCOV_EXCL_END
+          // LCOV_EXCL_STOP
 
           BOOST_MATH_ASSERT(icode<18);
 
@@ -254,7 +254,7 @@ namespace boost
                static_cast<RealType>(-0.82813631607004984866E-01),  static_cast<RealType>(0.24167984735759576523E-01),
                static_cast<RealType>(-0.44676566663971825242E-02),  static_cast<RealType>(0.39141169402373836468E-03)
             };
-            // LCOV_EXCL_END
+            // LCOV_EXCL_STOP
 
             const RealType as = a*a;
             const RealType hs = h*h;
@@ -328,7 +328,7 @@ namespace boost
              BOOST_MATH_BIG_CONSTANT(RealType, 260, -1.489155613350368934073453260689881330166342484405529981510694514036264969925132e-4),
              BOOST_MATH_BIG_CONSTANT(RealType, 260, 9.072354320794357587710929507988814669454281514268844884841547607134260303118208e-6)
           };
-          // LCOV_EXCL_END
+          // LCOV_EXCL_STOP
 
           const RealType as = a*a;
           const RealType hs = h*h;
@@ -434,7 +434,7 @@ namespace boost
 
             const RealType as = a*a;
             const RealType hs = -h*h*boost::math::constants::half<RealType>();
-            // LCOV_EXCL_END
+            // LCOV_EXCL_STOP
 
             RealType val = 0;
             for(unsigned short i = 0; i < m; ++i)
@@ -505,7 +505,7 @@ namespace boost
                BOOST_MATH_BIG_CONSTANT(RealType, 64, 0.0018483371329504443947),
                BOOST_MATH_BIG_CONSTANT(RealType, 64, 0.00079623320100438873578)
           };
-          // LCOV_EXCL_END
+          // LCOV_EXCL_STOP
 
           const RealType as = a*a;
           const RealType hs = -h*h*boost::math::constants::half<RealType>();
