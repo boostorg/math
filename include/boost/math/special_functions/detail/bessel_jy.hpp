@@ -361,7 +361,8 @@ namespace boost { namespace math {
             // Truncated series evaluation for small x and v an integer,
             // much quicker in this area than temme_jy below.
             // This code is only used in the multiprecision case, otherwise
-            // we go via bessel_jn.  LCOV_EXCL_START
+            // we go via bessel_jn.
+            // LCOV_EXCL_START
             if(kind&need_j)
                Jv = bessel_j_small_z_series(v, x, pol);
             else
