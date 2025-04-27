@@ -226,7 +226,7 @@ inline T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<in
          static_cast<T>(0.00024978985622317935355L),
          static_cast<T>(-0.101855788418564031874e-4L),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, sc) / tools::evaluate_polynomial(Q, sc);
       result -= 1.2433929443359375F;
       result += (sc);
@@ -253,7 +253,7 @@ inline T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<in
          static_cast<T>(0.000255784226140488490982L),
          static_cast<T>(0.10991819782396112081e-4L),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(-sc)) / tools::evaluate_polynomial(Q, T(-sc));
       result += 1 / (-sc);
    }
@@ -280,7 +280,7 @@ inline T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<in
          static_cast<T>(0.106951867532057341359e-4L),
          static_cast<T>(0.236276623974978646399e-7L),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 2)) / tools::evaluate_polynomial(Q, T(s - 2));
       result += Y + 1 / (-sc);
    }
@@ -309,7 +309,7 @@ inline T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<in
          static_cast<T>(0.718833729365459760664e-8L),
          static_cast<T>(-0.1129200113474947419e-9L),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 4)) / tools::evaluate_polynomial(Q, T(s - 4));
       result = 1 + exp(result);
    }
@@ -339,7 +339,7 @@ inline T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<in
          static_cast<T>(-0.833378440625385520576e-10L),
          static_cast<T>(0.699841545204845636531e-12L),
         };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 7)) / tools::evaluate_polynomial(Q, T(s - 7));
       result = 1 + exp(result);
    }
@@ -368,7 +368,7 @@ inline T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<in
          static_cast<T>(0.118507153474022900583e-7L),
          static_cast<T>(0.222609483627352615142e-14L),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 15)) / tools::evaluate_polynomial(Q, T(s - 15));
       result = 1 + exp(result);
    }
@@ -412,7 +412,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 64>&
          BOOST_MATH_BIG_CONSTANT(T, 64, -0.159600883054550987633e-4),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.339770279812410586032e-6),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, sc) / tools::evaluate_polynomial(Q, sc);
       result -= 1.2433929443359375F;
       result += (sc);
@@ -441,7 +441,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 64>&
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.635994377921861930071e-5),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.226583954978371199405e-7),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(-sc)) / tools::evaluate_polynomial(Q, T(-sc));
       result += 1 / (-sc);
    }
@@ -470,7 +470,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 64>&
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.278090318191657278204e-6),
          BOOST_MATH_BIG_CONSTANT(T, 64, -0.19683620233222028478e-8),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 2)) / tools::evaluate_polynomial(Q, T(s - 2));
       result += Y + 1 / (-sc);
    }
@@ -499,7 +499,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 64>&
          BOOST_MATH_BIG_CONSTANT(T, 64, -0.927884739284359700764e-8),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.119810501805618894381e-9),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 4)) / tools::evaluate_polynomial(Q, T(s - 4));
       result = 1 + exp(result);
    }
@@ -530,7 +530,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 64>&
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.117957556472335968146e-7),
          BOOST_MATH_BIG_CONSTANT(T, 64, -0.193432300973017671137e-12),
         };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 7)) / tools::evaluate_polynomial(Q, T(s - 7));
       result = 1 + exp(result);
    }
@@ -562,7 +562,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 64>&
          BOOST_MATH_BIG_CONSTANT(T, 64, -0.939798249922234703384e-16),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.264584017421245080294e-18),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 15)) / tools::evaluate_polynomial(Q, T(s - 15));
       result = 1 + exp(result);
    }
@@ -614,7 +614,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 113>
          BOOST_MATH_BIG_CONSTANT(T, 113, -0.217062446168217797598596496310953025e-9),
          BOOST_MATH_BIG_CONSTANT(T, 113, 0.315823200002384492377987848307151168e-11),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, sc) / tools::evaluate_polynomial(Q, sc);
       result += (sc);
       result /= (sc);
@@ -649,7 +649,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 113>
          BOOST_MATH_BIG_CONSTANT(T, 113, -0.377105263588822468076813329270698909e-11),
          BOOST_MATH_BIG_CONSTANT(T, 113, -0.581926559304525152432462127383600681e-13),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(-sc)) / tools::evaluate_polynomial(Q, T(-sc));
       result += 1 / (-sc);
    }
@@ -687,7 +687,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 113>
          BOOST_MATH_BIG_CONSTANT(T, 113, 0.105677416606909614301995218444080615e-11),
          BOOST_MATH_BIG_CONSTANT(T, 113, 0.547223964564003701979951154093005354e-15),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 2)) / tools::evaluate_polynomial(Q, T(s - 2));
       result += Y + 1 / (-sc);
    }
@@ -729,7 +729,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 113>
          BOOST_MATH_BIG_CONSTANT(T, 113, -0.275363878344548055574209713637734269e-13),
          BOOST_MATH_BIG_CONSTANT(T, 113, 0.221564186807357535475441900517843892e-15),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 4)) / tools::evaluate_polynomial(Q, T(s - 4));
       result -= Y;
       result = 1 + exp(result);
@@ -770,7 +770,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 113>
          BOOST_MATH_BIG_CONSTANT(T, 113, 0.294670713571839023181857795866134957e-16),
          BOOST_MATH_BIG_CONSTANT(T, 113, -0.147003914536437243143096875069813451e-18),
         };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 6)) / tools::evaluate_polynomial(Q, T(s - 6));
       result = 1 + exp(result);
    }
@@ -810,7 +810,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 113>
          BOOST_MATH_BIG_CONSTANT(T, 113, 0.887948682401000153828241615760146728e-19),
          BOOST_MATH_BIG_CONSTANT(T, 113, -0.34980761098820347103967203948619072e-21),
         };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 10)) / tools::evaluate_polynomial(Q, T(s - 10));
       result = 1 + exp(result);
    }
@@ -850,7 +850,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 113>
          BOOST_MATH_BIG_CONSTANT(T, 113, -0.291354445847552426900293580511392459e-22),
          BOOST_MATH_BIG_CONSTANT(T, 113, 0.73614324724785855925025452085443636e-25),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 17)) / tools::evaluate_polynomial(Q, T(s - 17));
       result = 1 + exp(result);
    }
@@ -893,7 +893,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 113>
          BOOST_MATH_BIG_CONSTANT(T, 113, -0.557103423021951053707162364713587374e-31),
          BOOST_MATH_BIG_CONSTANT(T, 113, 0.618708773442584843384712258199645166e-34),
       };
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       result = tools::evaluate_polynomial(P, T(s - 30)) / tools::evaluate_polynomial(Q, T(s - 30));
       result = 1 + exp(result);
    }
@@ -915,7 +915,7 @@ T zeta_imp_odd_integer(int s, const T&, const Policy&, const std::true_type&)
    static const T results[] = {
       BOOST_MATH_BIG_CONSTANT(T, 113, 1.2020569031595942853997381615114500), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0369277551433699263313654864570342), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0083492773819228268397975498497968), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0020083928260822144178527692324121), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0004941886041194645587022825264699), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0001227133475784891467518365263574), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000305882363070204935517285106451), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000076371976378997622736002935630), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000019082127165539389256569577951), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000004769329867878064631167196044), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000001192199259653110730677887189), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000298035035146522801860637051), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000074507117898354294919810042), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000018626597235130490064039099), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000004656629065033784072989233), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000001164155017270051977592974), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000291038504449709968692943), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000072759598350574810145209), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000018189896503070659475848), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000004547473783042154026799), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000001136868407680227849349), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000284217097688930185546), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000071054273952108527129), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000017763568435791203275), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000004440892103143813364), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000001110223025141066134), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000277555756213612417), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000069388939045441537), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000017347234760475766), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000004336808690020650), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000001084202172494241), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000271050543122347), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000067762635780452), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000016940658945098), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000004235164736273), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000001058791184068), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000264697796017), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000066174449004), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000016543612251), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000004135903063), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000001033975766), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000258493941), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000064623485), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000016155871), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000004038968), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000001009742), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000000252435), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000000063109), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000000015777), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000000003944), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000000000986), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000000000247), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000000000062), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000000000015), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000000000004), BOOST_MATH_BIG_CONSTANT(T, 113, 1.0000000000000000000000000000000001),
    };
-   // LCOV_EXCL_END
+   // LCOV_EXCL_STOP
    return s > 113 ? 1 : results[(s - 3) / 2];
 }
 
@@ -929,7 +929,7 @@ T zeta_imp_odd_integer(int s, const T& sc, const Policy& pol, const std::false_t
    static BOOST_MATH_THREAD_LOCAL bool is_init = false;
    static BOOST_MATH_THREAD_LOCAL T results[50] = {};
    static BOOST_MATH_THREAD_LOCAL int digits = tools::digits<T>();
-   // LCOV_EXCL_END
+   // LCOV_EXCL_STOP
    int current_digits = tools::digits<T>();
    if(digits != current_digits)
    {

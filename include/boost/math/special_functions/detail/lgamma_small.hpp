@@ -119,7 +119,7 @@ BOOST_MATH_GPU_ENABLED T lgamma_small_imp(T z, T zm1, T zm2, const boost::math::
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.223352763208617092964e-6))
       };
 
-      // LCOV_EXCL_END
+      // LCOV_EXCL_STOP
       constexpr float Y = 0.158963680267333984375e0f;
 
       T r = zm2 * (z + 1);
@@ -185,7 +185,7 @@ BOOST_MATH_GPU_ENABLED T lgamma_small_imp(T z, T zm1, T zm2, const boost::math::
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.577039722690451849648e-1)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.195768102601107189171e-2))
          };
-         // LCOV_EXCL_END
+         // LCOV_EXCL_STOP
 
          T r = tools::evaluate_polynomial(P, zm1) / tools::evaluate_polynomial(Q, zm1);
          T prefix = zm1 * zm2;
@@ -231,7 +231,7 @@ BOOST_MATH_GPU_ENABLED T lgamma_small_imp(T z, T zm1, T zm2, const boost::math::
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.100666795539143372762e-2)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.827193521891290553639e-6))
          };
-         // LCOV_EXCL_END
+         // LCOV_EXCL_STOP
 
          T r = zm2 * zm1;
          T R = tools::evaluate_polynomial(P, T(-zm2)) / tools::evaluate_polynomial(Q, T(-zm2));
@@ -509,7 +509,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const boost::math::integral_constant<int, 
    BOOST_MATH_INSTRUMENT_CODE(result);
    return result;
 }
-// LCOV_EXCL_END
+// LCOV_EXCL_STOP
 
 template <class T, class Policy, class Lanczos>
 BOOST_MATH_GPU_ENABLED T lgamma_small_imp(T z, T zm1, T zm2, const boost::math::integral_constant<int, 0>&, const Policy& pol, const Lanczos& l)
