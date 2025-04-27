@@ -947,7 +947,7 @@ T zeta_imp_odd_integer(int s, const T& sc, const Policy& pol, const std::false_t
          results[k] = zeta_polynomial_series(arg, c_arg, pol);
       }
    }
-   unsigned index = (s - 3) / 2;
+   const unsigned index = static_cast<unsigned>((s - 3) / 2);
    return index >= sizeof(results) / sizeof(results[0]) ? zeta_polynomial_series(T(s), sc, pol): results[index];
 }
 

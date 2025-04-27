@@ -141,7 +141,7 @@ BOOST_MATH_GPU_ENABLED T gamma_imp_final(T z, const Policy& pol, const Lanczos& 
    BOOST_MATH_INSTRUMENT_VARIABLE(result);
    if((floor(z) == z) && (z < max_factorial<T>::value))
    {
-      result *= unchecked_factorial<T>(itrunc(z, pol) - 1);
+      result *= unchecked_factorial<T>(static_cast<unsigned>(itrunc(z, pol) - 1));
       BOOST_MATH_INSTRUMENT_VARIABLE(result);
    }
    else if (z < tools::root_epsilon<T>())
@@ -568,7 +568,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    // Special case handling of small factorials:
    if((!b_neg) && floor_of_z_is_equal_to_z && (z < boost::math::max_factorial<T>::value))
    {
-      return boost::math::unchecked_factorial<T>(itrunc(z) - 1);
+      return boost::math::unchecked_factorial<T>(static_cast<unsigned>(itrunc(z) - 1));
    }
 
    // Make a local, unsigned copy of the input argument.
