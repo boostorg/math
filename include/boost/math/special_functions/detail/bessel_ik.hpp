@@ -416,7 +416,7 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
        else
           Iv = boost::math::numeric_limits<T>::quiet_NaN(); // any value will do
     }
-    if (reflect)
+    if (reflect && (kind & need_i))
     {
         BOOST_MATH_ASSERT(fabs(v - n - u) < tools::forth_root_epsilon<T>());
         T z = (u + n % 2);
