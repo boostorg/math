@@ -592,10 +592,11 @@ void test_spots(RealType)
     BOOST_MATH_TEST_VALUE(RealType, -64.026509628385889681156090340691637712441162092868),
     tolerance); //                  -64.0265121
 
-  if (std::numeric_limits<RealType>::has_infinity)
-  {
-    BOOST_CHECK_EQUAL(lambert_wm1(0), -std::numeric_limits<RealType>::infinity());
-  }
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+  BOOST_CHECK_THROW(lambert_wm1(0), std::overflow_error);
+#else
+  BOOST_CHECK_EQUAL(lambert_wm1(0), -std::numeric_limits<RealType>::infinity());
+#endif
   if (std::numeric_limits<RealType>::has_quiet_NaN)
   {
     // BOOST_CHECK_EQUAL(lambert_w0(std::numeric_limits<RealType>::quiet_NaN()), +std::numeric_limits<RealType>::infinity()); // message is:
@@ -1160,8 +1161,11 @@ BOOST_AUTO_TEST_CASE( test_range_of_double_values )
   // For z = 0, W = -infinity
   if (std::numeric_limits<RealType>::has_infinity)
   {
-     BOOST_CHECK_EQUAL(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, 0.)),
-        -std::numeric_limits<RealType>::infinity());
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+     BOOST_CHECK_THROW(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, 0.)), std::overflow_error);
+#else
+     BOOST_CHECK_EQUAL(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, 0.)), -std::numeric_limits<RealType>::infinity());
+#endif
   }
 
 #elif BOOST_MATH_TEST_MULTIPRECISION == 2

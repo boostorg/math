@@ -1785,14 +1785,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
 
   if (z == static_cast<T>(0))
   { // z is exactly zero so return -std::numeric_limits<T>::infinity();
-    if (std::numeric_limits<T>::has_infinity)
-    {
-      return -std::numeric_limits<T>::infinity();
-    }
-    else
-    {
-      return -tools::max_value<T>();
-    }
+      return -policies::raise_overflow_error(function, nullptr, z, pol);
   }
   if (boost::math::detail::has_denorm_now<T>())
   { // All real types except arbitrary precision.
@@ -2115,33 +2108,43 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   } // lambert_wm1(T z)
 
   // First derivative of Lambert W0 and W-1.
+  namespace lambert_w_detail {
+     template <typename T, typename Policy>
+     inline typename tools::promote_args<T>::type
+        lambert_w0_prime(T z, const Policy& pol)
+     {
+        using result_type = typename tools::promote_args<T>::type;
+        using std::numeric_limits;
+        if (z == 0)
+        {
+           return static_cast<result_type>(1);
+        }
+        // This is the sensible choice if we regard the Lambert-W function as complex analytic.
+        // Of course on the real line, it's just undefined.
+        if (z == -boost::math::constants::exp_minus_one<result_type>())
+        {
+           return boost::math::policies::raise_overflow_error("lambert_w0_prime", nullptr, z, pol);
+        }
+        // if z < -1/e, we'll let lambert_w0 do the error handling:
+        result_type w = lambert_w0(result_type(z), pol);
+        // If w ~ -1, then presumably this can get inaccurate.
+        // Is there an accurate way to evaluate 1 + W(-1/e + eps)?
+        //  Yes: This is discussed in the Princeton Companion to Applied Mathematics,
+        // 'The Lambert-W function', Section 1.3: Series and Generating Functions.
+        // 1 + W(-1/e + x) ~ sqrt(2ex).
+        // Nick is not convinced this formula is more accurate than the naive one.
+        // However, for z != -1/e, we never get rounded to w = -1 in any precision I've tested (up to cpp_bin_float_100).
+        return w / (z * (1 + w));
+     } // lambert_w0_prime(T z)
+  }
+  // First derivative of Lambert W0 and W-1.
   template <typename T, typename Policy>
   inline typename tools::promote_args<T>::type
-  lambert_w0_prime(T z, const Policy& pol)
+     lambert_w0_prime(T z, const Policy& pol)
   {
-    using result_type = typename tools::promote_args<T>::type;
-    using std::numeric_limits;
-    if (z == 0)
-    {
-        return static_cast<result_type>(1);
-    }
-    // This is the sensible choice if we regard the Lambert-W function as complex analytic.
-    // Of course on the real line, it's just undefined.
-    if (z == - boost::math::constants::exp_minus_one<result_type>())
-    {
-       return boost::math::policies::raise_overflow_error("lambert_w0_prime", nullptr, z, pol);
-    }
-    // if z < -1/e, we'll let lambert_w0 do the error handling:
-    result_type w = lambert_w0(result_type(z), pol);
-    // If w ~ -1, then presumably this can get inaccurate.
-    // Is there an accurate way to evaluate 1 + W(-1/e + eps)?
-    //  Yes: This is discussed in the Princeton Companion to Applied Mathematics,
-    // 'The Lambert-W function', Section 1.3: Series and Generating Functions.
-    // 1 + W(-1/e + x) ~ sqrt(2ex).
-    // Nick is not convinced this formula is more accurate than the naive one.
-    // However, for z != -1/e, we never get rounded to w = -1 in any precision I've tested (up to cpp_bin_float_100).
-    return w / (z * (1 + w));
-  } // lambert_w0_prime(T z)
+     using result_type = typename tools::promote_args<T>::type;
+     return lambert_w_detail::lambert_w0_prime(static_cast<result_type>(z), pol);
+  }
 
   template <typename T>
   inline typename tools::promote_args<T>::type
