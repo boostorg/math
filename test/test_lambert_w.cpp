@@ -803,6 +803,17 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.0)),
     BOOST_MATH_TEST_VALUE(RealType, 0.0),
     tolerance);
+
+  //
+  // Extra coverage:
+  //
+  BOOST_CHECK_EQUAL(boost::math::lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, 0.0)), BOOST_MATH_TEST_VALUE(RealType, 1.0));
+#ifndef BOOST_MATH_NO_EXEPTIONS
+  BOOST_CHECK_THROW(boost::math::lambert_w0_prime(-boost::math::constants::exp_minus_one<RealType>()), std::overflow_error);
+  BOOST_CHECK_THROW(boost::math::lambert_wm1_prime(-boost::math::constants::exp_minus_one<RealType>()), std::overflow_error);
+  BOOST_CHECK_THROW(boost::math::lambert_wm1_prime(BOOST_MATH_TEST_VALUE(RealType, 0.0)), std::overflow_error);
+#endif
+
   // these fail for cpp_dec_float_50
   // 'boost::multiprecision::detail::expression<boost::multiprecision::detail::negate,boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50,int32_t,void>,boost::multiprecision::et_on>,void,void,void>'
   // : no appropriate default constructor available

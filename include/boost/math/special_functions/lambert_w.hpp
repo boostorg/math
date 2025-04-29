@@ -1775,16 +1775,12 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   // Check for edge and corner cases first:
   if ((boost::math::isnan)(z))
   {
-    return policies::raise_domain_error(function,
-      "Argument z is NaN!",
-      z, pol);
+    return policies::raise_domain_error(function, "Argument z is NaN!", z, pol);
   } // isnan
 
   if ((boost::math::isinf)(z))
   {
-    return policies::raise_domain_error(function,
-      "Argument z is infinite!",
-      z, pol);
+    return policies::raise_domain_error(function, "Argument z is infinite!", z, pol);
   } // isinf
 
   if (z == static_cast<T>(0))
@@ -1802,25 +1798,19 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   { // All real types except arbitrary precision.
     if (!(boost::math::isnormal)(z))
     { // Almost zero - might also just return infinity like z == 0 or max_value?
-      return policies::raise_overflow_error(function,
-        "Argument z =  %1% is denormalized! (must be z > (std::numeric_limits<RealType>::min)() or z == 0)",
-        z, pol);
+      return policies::raise_overflow_error(function, "Argument z =  %1% is denormalized! (must be z > (std::numeric_limits<RealType>::min)() or z == 0)", z, pol);
     }
   }
 
   if (z > static_cast<T>(0))
   { //
-    return policies::raise_domain_error(function,
-      "Argument z = %1% is out of range (z <= 0) for Lambert W-1 branch! (Try Lambert W0 branch?)",
-      z, pol);
+    return policies::raise_domain_error(function, "Argument z = %1% is out of range (z <= 0) for Lambert W-1 branch! (Try Lambert W0 branch?)", z, pol);
   }
   if (z > -boost::math::tools::min_value<T>())
   { // z is denormalized, so cannot be computed.
     // -std::numeric_limits<T>::min() is smallest for type T,
     // for example, for double: lambert_wm1(-2.2250738585072014e-308) = -714.96865723796634
-    return policies::raise_overflow_error(function,
-      "Argument z = %1% is too small (z < -std::numeric_limits<T>::min so denormalized) for Lambert W-1 branch!",
-      z, pol);
+    return policies::raise_overflow_error(function, "Argument z = %1% is too small (z < -std::numeric_limits<T>::min so denormalized) for Lambert W-1 branch!", z, pol);
   }
   if (z == -boost::math::constants::exp_minus_one<T>()) // == singularity/branch point z = -exp(-1) = -0.36787944.
   { // At singularity, so return exactly -1.
@@ -1829,17 +1819,16 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   // z is too negative for the W-1 (or W0) branch.
   if (z < -boost::math::constants::exp_minus_one<T>()) // > singularity/branch point z = -exp(-1) = -0.36787944.
   {
-    return policies::raise_domain_error(function,
-      "Argument z = %1% is out of range (z < -exp(-1) = -3.6787944... <= 0) for Lambert W-1 (or W0) branch!",
-      z, pol);
+    return policies::raise_domain_error(function, "Argument z = %1% is out of range (z < -exp(-1) = -3.6787944... <= 0) for Lambert W-1 (or W0) branch!", z, pol);
   }
   if (z < static_cast<T>(-0.35))
   { // Close to singularity/branch point z = -0.3678794411714423215955237701614608727 but on W-1 branch.
     const T p2 = 2 * (boost::math::constants::e<T>() * z + 1);
-    if (p2 == 0)
-    { // At the singularity at branch point.
-      return -1;
-    }
+    // Commented out, requires z = -1 / 2e which is greater than -0.35 so this whole branch is not taken.
+    //if (p2 == 0)
+    //{ // At the singularity at branch point.
+    //  return -1;
+    // }
     if (p2 > 0)
     {
       T w_series = lambert_w_singularity_series(T(-sqrt(p2)));
@@ -1855,9 +1844,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
       return w_series;
     }
     // Should not get here.
-    return policies::raise_domain_error(function,
-      "Argument z = %1% is out of range for Lambert W-1 branch. (Should not get here - please report!)",
-      z, pol);
+    return policies::raise_domain_error(function, "Argument z = %1% is out of range for Lambert W-1 branch. (Should not get here - please report!)", z, pol);
   } // if (z < -0.35)
 
   using lambert_w_lookup::wm1es;
@@ -2142,7 +2129,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     // Of course on the real line, it's just undefined.
     if (z == - boost::math::constants::exp_minus_one<result_type>())
     {
-        return numeric_limits<result_type>::has_infinity ? numeric_limits<result_type>::infinity() : boost::math::tools::max_value<result_type>();
+       return boost::math::policies::raise_overflow_error("lambert_w0_prime", nullptr, z, pol);
     }
     // if z < -1/e, we'll let lambert_w0 do the error handling:
     result_type w = lambert_w0(result_type(z), pol);
@@ -2176,7 +2163,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     //if (z == - boost::math::constants::exp_minus_one<result_type>())
     if (z == 0 || z == - boost::math::constants::exp_minus_one<result_type>())
     {
-        return numeric_limits<result_type>::has_infinity ? -numeric_limits<result_type>::infinity() : -boost::math::tools::max_value<result_type>();
+       return -boost::math::policies::raise_overflow_error("lambert_wm1_prime", nullptr, z, pol);
     }
 
     result_type w = lambert_wm1(z, pol);
