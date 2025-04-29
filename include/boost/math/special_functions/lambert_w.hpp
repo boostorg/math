@@ -70,14 +70,12 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 
 #include <limits>
 #include <cmath>
-#include <limits>
-#include <exception>
 #include <type_traits>
 #include <cstdint>
 
 // Needed for testing and diagnostics only.
-#include <iostream>
-#include <typeinfo>
+//#include <iostream>
+//#include <typeinfo>
 #include <boost/math/special_functions/next.hpp>  // For float_distance.
 
 using lookup_t = double; // Type for lookup table (double or float, or even long double?)
