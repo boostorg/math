@@ -1657,22 +1657,13 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
    }
    if(p_derivative)
    {
-      /*
-      * We can never reach this:
-      if((x < 1) && (tools::max_value<T>() * x < *p_derivative))
+      if((x == 0) || ((x < 1) && (tools::max_value<T>() * x < *p_derivative)))
       {
          // overflow, just return an arbitrarily large value:
          *p_derivative = tools::max_value<T>() / 2;
       }
-      */
-      BOOST_MATH_ASSERT((x >= 1) || (tools::max_value<T>() * x >= *p_derivative));
-      //
-      // Need to convert prefix term to derivative:
-      //
-      if (x > 0)
+      else
          *p_derivative /= x;
-      else 
-         *p_derivative = tools::max_value<T>() / 2;
    }
 
    return result;
