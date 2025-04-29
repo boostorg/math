@@ -311,6 +311,10 @@ void test_spots(T, const char* type_name)
     BOOST_CHECK_THROW(boost::math::jacobi_theta4m1(T(0.5), T(-0.5)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::jacobi_theta4m1(T(0.5), T(1)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::jacobi_theta4m1(T(0.5), T(1.5)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::jacobi_theta3m1(T(0.5), T(0)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::jacobi_theta3m1(T(0.5), T(-0.5)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::jacobi_theta3m1(T(0.5), T(1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::jacobi_theta3m1(T(0.5), T(1.5)), std::domain_error);
 #else
     BOOST_CHECK((boost::math::isnan)(boost::math::jacobi_theta4(T(0.5), T(0))));
     BOOST_CHECK((boost::math::isnan)(boost::math::jacobi_theta4(T(0.5), T(-0.5))));
@@ -320,6 +324,10 @@ void test_spots(T, const char* type_name)
     BOOST_CHECK((boost::math::isnan)(boost::math::jacobi_theta4m1(T(0.5), T(-0.5))));
     BOOST_CHECK((boost::math::isnan)(boost::math::jacobi_theta4m1(T(0.5), T(1))));
     BOOST_CHECK((boost::math::isnan)(boost::math::jacobi_theta4m1(T(0.5), T(1.5))));
+    BOOST_CHECK((boost::math::isnan)(boost::math::jacobi_theta3m1(T(0.5), T(0))));
+    BOOST_CHECK((boost::math::isnan)(boost::math::jacobi_theta3m1(T(0.5), T(-0.5))));
+    BOOST_CHECK((boost::math::isnan)(boost::math::jacobi_theta3m1(T(0.5), T(1))));
+    BOOST_CHECK((boost::math::isnan)(boost::math::jacobi_theta3m1(T(0.5), T(1.5))));
 #endif
 }
 
