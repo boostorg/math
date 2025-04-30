@@ -127,7 +127,7 @@ template<> inline BOOST_MATH_GPU_ENABLED int (fpclassify)(float t)
    }
    else if(at > FLT_MAX)
       return FP_INFINITE;
-   return FP_NAN;
+   return FP_NAN;    // LCOV_EXCL_LINE  should not normally be reachable.
 }
 
 template<> inline BOOST_MATH_GPU_ENABLED int (fpclassify)(double t)
