@@ -1789,19 +1789,13 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   { // All real types except arbitrary precision.
     if (!(boost::math::isnormal)(z))
     { // Almost zero - might also just return infinity like z == 0 or max_value?
-      return policies::raise_overflow_error(function, "Argument z =  %1% is denormalized! (must be z > (std::numeric_limits<RealType>::min)() or z == 0)", z, pol);
+      return -policies::raise_overflow_error(function, "Argument z =  %1% is denormalized! (must be z > (std::numeric_limits<RealType>::min)() or z == 0)", z, pol);
     }
   }
 
   if (z > static_cast<T>(0))
   { //
     return policies::raise_domain_error(function, "Argument z = %1% is out of range (z <= 0) for Lambert W-1 branch! (Try Lambert W0 branch?)", z, pol);
-  }
-  if (z > -boost::math::tools::min_value<T>())
-  { // z is denormalized, so cannot be computed.
-    // -std::numeric_limits<T>::min() is smallest for type T,
-    // for example, for double: lambert_wm1(-2.2250738585072014e-308) = -714.96865723796634
-    return policies::raise_overflow_error(function, "Argument z = %1% is too small (z < -std::numeric_limits<T>::min so denormalized) for Lambert W-1 branch!", z, pol);
   }
   if (z == -boost::math::constants::exp_minus_one<T>()) // == singularity/branch point z = -exp(-1) = -0.36787944.
   { // At singularity, so return exactly -1.
@@ -1810,7 +1804,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   // z is too negative for the W-1 (or W0) branch.
   if (z < -boost::math::constants::exp_minus_one<T>()) // > singularity/branch point z = -exp(-1) = -0.36787944.
   {
-    return policies::raise_domain_error(function, "Argument z = %1% is out of range (z < -exp(-1) = -3.6787944... <= 0) for Lambert W-1 (or W0) branch!", z, pol);
+    return policies::raise_domain_error(function, "Argument z = %1% is out of range (require -exp(-1) = -0.36787944... < z <= 0) for Lambert W-1 (or W0) branch!", z, pol);
   }
   if (z < static_cast<T>(-0.35))
   { // Close to singularity/branch point z = -0.3678794411714423215955237701614608727 but on W-1 branch.
@@ -1820,22 +1814,18 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     //{ // At the singularity at branch point.
     //  return -1;
     // }
-    if (p2 > 0)
-    {
-      T w_series = lambert_w_singularity_series(T(-sqrt(p2)));
-      if (boost::math::tools::digits<T>() > 53)
-      { // Multiprecision, so try a Halley refinement.
-        w_series = lambert_w_detail::lambert_w_halley_iterate(w_series, z);
+    BOOST_MATH_ASSERT(p2 > 0);
+    T w_series = lambert_w_singularity_series(T(-sqrt(p2)));
+    if (boost::math::tools::digits<T>() > 53)
+    { // Multiprecision, so try a Halley refinement.
+       w_series = lambert_w_detail::lambert_w_halley_iterate(w_series, z);
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_WM1_NOT_BUILTIN
-        std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
-        std::cout << "Lambert W-1 Halley updated to " << w_series << std::endl;
-        std::cout.precision(saved_precision);
+       std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
+       std::cout << "Lambert W-1 Halley updated to " << w_series << std::endl;
+       std::cout.precision(saved_precision);
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_WM1_NOT_BUILTIN
-      }
-      return w_series;
     }
-    // Should not get here.
-    return policies::raise_domain_error(function, "Argument z = %1% is out of range for Lambert W-1 branch. (Should not get here - please report!)", z, pol);
+   return w_series;
   } // if (z < -0.35)
 
   using lambert_w_lookup::wm1es;
@@ -1886,7 +1876,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_WM1_TINY
     if (policies::digits<T, Policy>() < 12)
     { // For the worst case near w = 64, the error in the 'guess' is ~0.008, ratio ~ 0.0001 or 1 in 10,000 digits 10 ~= 4, or digits2 ~= 12.
-      return guess;
+      return guess;   // LCOV_EXCL_LINE  We don't have a test type with few enough digits to trigger this.
     }
     T result = lambert_w_detail::lambert_w_halley_iterate(guess, z);
     return result;
@@ -1945,9 +1935,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     }
     // else z < g[63] == -1.0264389699511303e-26, so Lambert W-1 integer part > 64.
     // This should not now occur (should be caught by test and code above) so should be a logic_error?
-    return policies::raise_domain_error(function,
-      "Argument z = %1% is too small (< -1.026439e-26) (logic error - please report!)",
-      z, pol);
+    return policies::raise_evaluation_error(function, "Argument z = %1% is too small (< -1.026439e-26) (logic error - please report!)", z, pol);  // LCOV_EXCL_LINE
   overshot:
     {
       int nh = n / 2;
