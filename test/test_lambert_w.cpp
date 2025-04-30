@@ -352,6 +352,11 @@ void test_spots(RealType)
 #ifndef BOOST_NO_EXCEPTIONS
   BOOST_CHECK_THROW(lambert_w0<RealType>(-1.), std::domain_error);
   BOOST_CHECK_THROW(lambert_wm1<RealType>(-1.), std::domain_error);
+  BOOST_CHECK_THROW(lambert_wm1<RealType>(1.), std::domain_error);
+  if (std::numeric_limits<RealType>::has_denorm)
+  {
+     BOOST_CHECK_THROW(lambert_wm1<RealType>(-std::numeric_limits<RealType>::denorm_min()), std::overflow_error);
+  }
   if (std::numeric_limits<RealType>::has_quiet_NaN)
   {
      BOOST_CHECK_THROW(lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // Would be NaN.
