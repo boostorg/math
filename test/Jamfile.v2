@@ -546,7 +546,7 @@ test-suite special_fun :
    [ run test_lambert_w_integrals_long_double.cpp /boost/test//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] ]
    [ run test_lambert_w_integrals_double.cpp /boost/test//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] ]
    [ run test_lambert_w_integrals_float.cpp /boost/test//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] ]
-   [ run test_lambert_w_derivative.cpp /boost/test//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION  $(float128_type)  ]
+   [ run test_lambert_w_derivative.cpp /boost/test//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION  $(float128_type_gcc)  ]
 
    [ run test_legendre.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework : : : $(float128_type)  ]
    [ run chebyshev_test.cpp  : : : [ requires cxx11_inline_namespaces cxx11_unified_initialization_syntax cxx11_hdr_tuple cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_range_based_for cxx11_constexpr ] $(float128_type)  ]
