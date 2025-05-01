@@ -101,10 +101,14 @@ local float128_type_intel_quad =
 local float128_type_gcc =
     [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support"
         : <toolset>gcc:<library>quadmath <toolset>gcc:<define>BOOST_MATH_TEST_FLOAT128 ] ;
-local float128_type_floatmax =
+local float128_type_floatmax = $(float128_type_gcc) $(float128_type_intel_quad)
     [ check-target-builds ../config//has_128bit_floatmax_t "128-bit floatmax_t" : : <build>no ] ;
+#
+# DO NOT include $(float128_type_floatmax) in this macro, otherwise the whole test
+# gets disabled when std::float128_t is not available (which is most of the time!!)
+#
 local float128_type =
-    $(float128_type_intel_quad) $(float128_type_gcc) $(float128_type_floatmax) ;
+    $(float128_type_intel_quad) $(float128_type_gcc) ;
 
 test-suite special_fun :
    [ run test_1F0.cpp /boost/test//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=1 : test_1F0_1 ] # hypergeometric_pFq_checked_series.hpp uses auto, the rest are from quadrature tests.
@@ -1380,7 +1384,7 @@ rule get_float128_tests
            : # command line
            : # input files
            : # requirements
-            $(float128_type)
+            $(float128_type_floatmax)
             <define>BOOST_ALL_NO_LIB
            : $(source:B)_floatmax_t ] ;
      }
