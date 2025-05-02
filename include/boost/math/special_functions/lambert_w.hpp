@@ -764,7 +764,7 @@ T lambert_w0_small_z(const T z, const Policy&, std::integral_constant<int, 4> co
 #else
 
 template <typename T, typename Policy>
-inline T lambert_w0_small_z(const T z, const Policy& pol, std::integral_constant<int, 4> const&)
+inline T lambert_w0_small_z(const T z, const Policy& pol, std::integral_constant<int, 4> const&)  // LCOV_EXCL_LINE  body is covered, strangley this line is not.
 {
    return lambert_w0_small_z(z, pol, std::integral_constant<int, 5>());
 }
