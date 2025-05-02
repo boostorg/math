@@ -63,22 +63,19 @@ void expected_results()
    // Define the max and mean errors expected for
    // various compilers and platforms.
    //
-   const char* largest_type;
+   const char* largest_type = "(long\\s+)?double|real_concept";
+   const char* non_promoted_type = largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
-   {
-      largest_type = "(long\\s+)?double|real_concept";
-   }
-   else
+   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() != boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
       largest_type = "long double|real_concept";
+      if (boost::math::policies::promote_double<>())
+         non_promoted_type = largest_type;
    }
-#else
-   largest_type = "(long\\s+)?double|real_concept";
 #endif
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::tools::digits<long double>() == 64)
+   if(boost::math::policies::promote_double<>() && boost::math::tools::digits<long double>() == 64)
    {
       //
       // Allow a small amount of error leakage from long double to double:
@@ -117,7 +114,7 @@ void expected_results()
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
-      largest_type,                     // test type(s)
+      non_promoted_type,                // test type(s)
       "[^|]*medium[^|]*",               // test data group
       "[^|]*", 1500, 500);               // test function
    add_expected_result(
@@ -131,7 +128,7 @@ void expected_results()
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
-      largest_type,                     // test type(s)
+      non_promoted_type,                // test type(s)
       "[^|]*large[^|]*",                // test data group
       "[^|]*", 20000, 2000);             // test function
    //
