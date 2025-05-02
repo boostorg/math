@@ -399,56 +399,14 @@ T lambert_w_singularity_series(const T p)
 
   if (absp < T(0.01159))
   { // Only 6 near-singularity series terms are useful.
-    return
-      -1 +
-      p * (1 +
-        p * (q[2] +
-          p * (q[3] +
-            p * (q[4] +
-              p * (q[5] +
-                p * q[6]
-                )))));
+    return -1 + p * (1 + p * (q[2] + p * (q[3] + p * (q[4] + p * (q[5] + p * q[6])))));
   }
   else if (absp < T(0.0766)) // Use 10 near-singularity series terms.
   { // Use 10 near-singularity series terms.
-    return
-      -1 +
-      p * (1 +
-        p * (q[2] +
-          p * (q[3] +
-            p * (q[4] +
-              p * (q[5] +
-                p * (q[6] +
-                  p * (q[7] +
-                    p * (q[8] +
-                      p * (q[9] +
-                        p * q[10]
-                        )))))))));
+    return -1 + p * (1 + p * (q[2] + p * (q[3] + p * (q[4] + p * (q[5] + p * (q[6] + p * (q[7] + p * (q[8] + p * (q[9] + p * q[10])))))))));
   }
    // Use all 20 near-singularity series terms.
-    return
-      -1 +
-      p * (1 +
-        p * (q[2] +
-          p * (q[3] +
-            p * (q[4] +
-              p * (q[5] +
-                p * (q[6] +
-                  p * (q[7] +
-                    p * (q[8] +
-                      p * (q[9] +
-                        p * (q[10] +
-                          p * (q[11] +
-                            p * (q[12] +
-                              p * (q[13] +
-                                p * (q[14] +
-                                  p * (q[15] +
-                                    p * (q[16] +
-                                      p * (q[17] +
-                                        p * (q[18] +
-                                          p * (q[19] +
-                                            p * q[20] // Last Fukushima term.
-                                            )))))))))))))))))));
+    return -1 + p * (1 + p * (q[2] + p * (q[3] + p * (q[4] + p * (q[5] + p * (q[6] + p * (q[7] + p * (q[8] + p * (q[9] + p * (q[10] + p * (q[11] + p * (q[12] + p * (q[13] + p * (q[14] + p * (q[15] + p * (q[16] + p * (q[17] + p * (q[18] + p * (q[19] + p * q[20] /* Last Fukushima term.*/)))))))))))))))))));
     //                                                + // more terms for more precise T: long double ...
     //// but makes almost no difference, so don't use more terms?
     //                                          p*q[21] +
@@ -929,7 +887,7 @@ inline T lambert_w0_small_z(T z, const Policy& pol, std::integral_constant<int, 
 
   // std::streamsize prec = std::cout.precision(std::numeric_limits <T>::max_digits10);
 
-  T result = evaluate_polynomial(coeff, z);
+  T result = evaluate_polynomial(coeff, z);  // LCOV_EXCL_LINE next line covered but not this one strangely - GCOV SNAFU?
   //  template <std::size_t N, typename T, typename V>
   //  V evaluate_polynomial(const T(&poly)[N], const V& val);
   // Size of coeff found from N
@@ -1047,6 +1005,7 @@ T lambert_w_positive_rational_float(T z)
         // Maximum Deviation Found:                     2.993e-08
         // Expected Error Term : 2.993e-08
         // Maximum Relative Change in Control Points : 7.555e-04 Y offset : -8.196592331e-01
+         // LCOV_EXCL_START
          static const T Y = 8.196592331e-01f;
          static const T P[] = {
             1.803388345e-01f,
@@ -1059,11 +1018,13 @@ T lambert_w_positive_rational_float(T z)
             2.871703469e+00f,
             1.690949264e+00f,
          };
+         // LCOV_EXCL_STOP
          return z * (Y + boost::math::tools::evaluate_polynomial(P, z) / boost::math::tools::evaluate_polynomial(Q, z));
       }
       else
       { // 0.5 < z < 2
         // Max error in interpolated form: 1.018e-08
+         // LCOV_EXCL_START
          static const T Y = 5.503368378e-01f;
          static const T P[] = {
             4.493332766e-01f,
@@ -1077,6 +1038,7 @@ T lambert_w_positive_rational_float(T z)
             1.830840318e+00f,
             2.407221031e-01f,
          };
+         // LCOV_EXCL_STOP
          return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
       }
    }
@@ -1084,6 +1046,7 @@ T lambert_w_positive_rational_float(T z)
    {
       // 2 < z < 6
       // Max error in interpolated form: 2.944e-08
+      // LCOV_EXCL_START
       static const T Y = 1.162393570e+00f;
       static const T P[] = {
          -1.144183394e+00f,
@@ -1097,12 +1060,14 @@ T lambert_w_positive_rational_float(T z)
          2.295580708e-01f,
          5.477869455e-03f,
       };
+      // LCOV_EXCL_STOP
       return Y + boost::math::tools::evaluate_rational(P, Q, z);
    }
    else if (z < 18)
    {
       // 6 < z < 18
       // Max error in interpolated form: 5.893e-08
+      // LCOV_EXCL_START
       static const T Y = 1.809371948e+00f;
       static const T P[] = {
          -1.689291769e+00f,
@@ -1116,11 +1081,13 @@ T lambert_w_positive_rational_float(T z)
          4.489521292e-02f,
          4.076716763e-04f,
       };
+      // LCOV_EXCL_STOP
       return Y + boost::math::tools::evaluate_rational(P, Q, z);
    }
    else if (z < T(9897.12905874))  // 2.8 < log(z) < 9.2
    {
       // Max error in interpolated form: 1.771e-08
+      // LCOV_EXCL_START
       static const T Y = -1.402973175e+00f;
       static const T P[] = {
          1.966174312e+00f,
@@ -1135,12 +1102,14 @@ T lambert_w_positive_rational_float(T z)
          3.397187918e-03f,
          -1.321489743e-05f,
       };
+      // LCOV_EXCL_STOP
       T log_w = log(z);
       return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
    }
    else if (z < T(7.896296e+13))  // 9.2 < log(z) <= 32
    {
       // Max error in interpolated form: 5.821e-08
+      // LCOV_EXCL_START
       static const T Y = -2.735729218e+00f;
       static const T P[] = {
          3.424903470e+00f,
@@ -1155,11 +1124,13 @@ T lambert_w_positive_rational_float(T z)
          -1.357889535e-05f,
          7.312865624e-08f,
       };
+      // LCOV_EXCL_STOP
       T log_w = log(z);
       return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
    }
 
     // Max error in interpolated form: 1.491e-08
+    // LCOV_EXCL_START
     static const T Y = -4.012863159e+00f;
     static const T P[] = {
         4.431629226e+00f,
@@ -1174,6 +1145,7 @@ T lambert_w_positive_rational_float(T z)
         1.609659944e-05f,
         -5.111523436e-09f,
     };
+    // LCOV_EXCL_STOP
     T log_w = log(z);
     return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
 
@@ -1189,6 +1161,7 @@ T lambert_w_negative_rational_float(T z, const Policy& pol)
       {
          // -0.27 < z < -0.051
          // Max error in interpolated form: 5.080e-08
+         // LCOV_EXCL_START
          static const T Y = 1.255809784e+00f;
          static const T P[] = {
             -2.558083412e-01f,
@@ -1202,6 +1175,7 @@ T lambert_w_negative_rational_float(T z, const Policy& pol)
             7.914062868e+00f,
             3.501498501e+00f,
          };
+         // LCOV_EXCL_STOP
          return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
       }
       else
@@ -1213,6 +1187,7 @@ T lambert_w_negative_rational_float(T z, const Policy& pol)
    else if (z > T(-0.3578794411714423215955237701))
    { // Very close to branch singularity.
      // Max error in interpolated form: 5.269e-08
+      // LCOV_EXCL_START
       static const T Y = 1.220928431e-01f;
       static const T P[] = {
          -1.221787446e-01f,
@@ -1227,6 +1202,7 @@ T lambert_w_negative_rational_float(T z, const Policy& pol)
          -1.361804274e+03f,
          1.117826726e+03f,
       };
+      // LCOV_EXCL_STOP
       T d = z + 0.367879441171442321595523770161460867445811f;
       return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
    }
@@ -1274,6 +1250,7 @@ T lambert_w_positive_rational_double(T z)
       if (z < 0.5)
       {
          // Max error in interpolated form: 2.255e-17
+         // LCOV_EXCL_START
          static const T offset = 8.19659233093261719e-01;
          static const T P[] = {
             1.80340766906685177e-01,
@@ -1293,11 +1270,13 @@ T lambert_w_positive_rational_double(T z)
             4.03760534788374589e+00,
             2.91327346750475362e-01
          };
+         // LCOV_EXCL_STOP
          return z * (offset + boost::math::tools::evaluate_polynomial(P, z) / boost::math::tools::evaluate_polynomial(Q, z));
       }
       else
       {
          // Max error in interpolated form: 3.806e-18
+         // LCOV_EXCL_START
          static const T offset = 5.50335884094238281e-01;
          static const T P[] = {
             4.49664083944098322e-01,
@@ -1318,7 +1297,7 @@ T lambert_w_positive_rational_double(T z)
             2.29040824649748117e+00,
             2.21610620995418981e-01,
             5.70597669908194213e-03
-         };
+         };// LCOV_EXCL_STOP
          return z * (offset + boost::math::tools::evaluate_rational(P, Q, z));
       }
    }
@@ -1326,6 +1305,7 @@ T lambert_w_positive_rational_double(T z)
    {
       // 2 < z < 6
       // Max error in interpolated form: 1.216e-17
+      // LCOV_EXCL_START
       static const T Y = 1.16239356994628906e+00;
       static const T P[] = {
          -1.16230494982099475e+00,
@@ -1347,12 +1327,14 @@ T lambert_w_positive_rational_double(T z)
          9.25176499518388571e-04,
          4.43611344705509378e-06,
       };
+      // LCOV_EXCL_STOP
       return Y + boost::math::tools::evaluate_rational(P, Q, z);
    }
    else if (z < 18)
    {
       // 6 < z < 18
       // Max error in interpolated form: 1.985e-19
+      // LCOV_EXCL_START
       static const T offset = 1.80937194824218750e+00;
       static const T P[] =
       {
@@ -1377,11 +1359,13 @@ T lambert_w_positive_rational_double(T z)
          6.05713225608426678e-07,
          8.17517283816615732e-10
       };
+      // LCOV_EXCL_STOP
       return offset + boost::math::tools::evaluate_rational(P, Q, z);
    }
    else if (z < 9897.12905874)  // 2.8 < log(z) < 9.2
    {
       // Max error in interpolated form: 1.195e-18
+      // LCOV_EXCL_START
       static const T Y = -1.40297317504882812e+00;
       static const T P[] = {
          1.97011826279311924e+00,
@@ -1405,12 +1389,14 @@ T lambert_w_positive_rational_double(T z)
          1.36363515125489502e-06,
          3.44200749053237945e-09,
       };
+      // LCOV_EXCL_STOP
       T log_w = log(z);
       return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
    }
    else if (z < 7.896296e+13)  // 9.2 < log(z) <= 32
    {
       // Max error in interpolated form: 6.529e-18
+      // LCOV_EXCL_START
       static const T Y = -2.73572921752929688e+00;
       static const T P[] = {
          3.30547638424076217e+00,
@@ -1434,12 +1420,14 @@ T lambert_w_positive_rational_double(T z)
          4.97253225968548872e-09,
          3.39460723731970550e-12,
       };
+      // LCOV_EXCL_STOP
       T log_w = log(z);
       return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
    }
    else if (z < 2.6881171e+43) // 32 < log(z) < 100
    {
       // Max error in interpolated form: 2.015e-18
+      // LCOV_EXCL_START
       static const T Y = -4.01286315917968750e+00;
       static const T P[] = {
          5.07714858354309672e+00,
@@ -1463,12 +1451,14 @@ T lambert_w_positive_rational_double(T z)
          -9.35271498075378319e-11,
          -2.60648331090076845e-14,
       };
+      // LCOV_EXCL_STOP
       T log_w = log(z);
       return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
    }
    else // 100 < log(z) < 710
    {
       // Max error in interpolated form: 5.277e-18
+      // LCOV_EXCL_START
       static const T Y = -5.70115661621093750e+00;
       static const T P[] = {
          6.42275660145116698e+00,
@@ -1496,6 +1486,7 @@ T lambert_w_positive_rational_double(T z)
          1.11775518708172009e-20,
          3.78250395617836059e-25,
       };
+      // LCOV_EXCL_STOP
       T log_w = log(z);
       return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
    }
@@ -1513,6 +1504,7 @@ T lambert_w_negative_rational_double(T z, const Policy& pol)
          // Maximum Deviation Found:                     4.402e-22
          // Expected Error Term : 4.240e-22
          // Maximum Relative Change in Control Points : 4.115e-03
+         // LCOV_EXCL_START
          static const T Y = 1.08633995056152344e+00;
          static const T P[] = {
             -8.63399505615014331e-02,
@@ -1530,6 +1522,7 @@ T lambert_w_negative_rational_double(T z, const Policy& pol)
             1.31256080849023319e+01,
             2.11640324843601588e+00,
          };
+         // LCOV_EXCL_STOP
          return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
       }
       else
@@ -1544,6 +1537,7 @@ T lambert_w_negative_rational_double(T z, const Policy& pol)
       // Maximum Deviation Found:                     2.898e-20
       // Expected Error Term : 2.873e-20
       // Maximum Relative Change in Control Points : 3.779e-04
+      // LCOV_EXCL_START
       static const T Y = 1.20359611511230469e+00;
       static const T P[] = {
          -2.03596115108465635e-01,
@@ -1563,11 +1557,13 @@ T lambert_w_negative_rational_double(T z, const Policy& pol)
          2.82060127225153607e+01,
          4.10677610657724330e+00,
       };
+      // LCOV_EXCL_STOP
       return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
    }
    else if (z > -0.3178794411714423215955237)
    {
       // Max error in interpolated form: 6.996e-18
+      // LCOV_EXCL_START
       static const T Y = 3.49680423736572266e-01;
       static const T P[] = {
          -3.49729841718749014e-01,
@@ -1590,12 +1586,14 @@ T lambert_w_negative_rational_double(T z, const Policy& pol)
          -5.61719645211570871e+05,
          6.27765369292636844e+04,
       };
+      // LCOV_EXCL_STOP
       T d = z + 0.367879441171442321595523770161460867445811;
       return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
    }
    else if (z > -0.3578794411714423215955237701)
    {
       // Max error in interpolated form: 1.404e-17
+      // LCOV_EXCL_START
       static const T Y = 5.00126481056213379e-02;
       static const T  P[] = {
          -5.00173570682372162e-02,
@@ -1619,6 +1617,7 @@ T lambert_w_negative_rational_double(T z, const Policy& pol)
          -4.59414247951143131e+10,
          -1.72845216404874299e+10,
       };
+      // LCOV_EXCL_STOP
       T d = z + 0.36787944117144232159552377016146086744581113103176804;
       return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
    }
