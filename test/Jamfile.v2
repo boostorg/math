@@ -250,6 +250,7 @@ test-suite special_fun :
    [ run erf_limits_test.cpp ]
    [ run test_expint.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
    [ run test_factorials.cpp pch /boost/test//boost_unit_test_framework  ]
+   [ run test_lanczos.cpp /boost/test//boost_unit_test_framework : : : $(float128_type) ]
    [ run test_gamma.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
    [ run test_gamma_edge.cpp ]
    [ run test_gamma_mp.cpp /boost/test//boost_unit_test_framework : : : release <define>TEST=1 [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :  test_gamma_mp_1 ]
