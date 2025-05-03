@@ -68,6 +68,7 @@ int main()
    test_lanczos<double, boost::math::policies::policy<boost::math::policies::promote_double<false>>>();
    test_lanczos<long double, boost::math::policies::policy<>>();
 
+   test_lanczos<boost::multiprecision::cpp_bin_float_double, boost::math::policies::policy<>>();
    test_lanczos<boost::multiprecision::cpp_bin_float_double_extended, boost::math::policies::policy<>>();
    test_lanczos<boost::multiprecision::cpp_bin_float_quad, boost::math::policies::policy<>>();
    test_lanczos<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<130, boost::multiprecision::digit_base_2>>, boost::math::policies::policy<>>();
