@@ -184,6 +184,7 @@ test-suite special_fun :
    [ run log1p_expm1_test.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
    [ run log1p_expm1_extra_test.cpp pch_light /boost/test//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run log1p_expm1_stdfloat_test.cpp pch_light /boost/test//boost_unit_test_framework  ]
+   [ run test_log1p_simple.cpp ]
    [ run powm1_sqrtp1m1_test.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
    [ run git_issue_705.cpp /boost/test//boost_unit_test_framework  ]
    [ run git_issue_810.cpp /boost/test//boost_unit_test_framework  ]
