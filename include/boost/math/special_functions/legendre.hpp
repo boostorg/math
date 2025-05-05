@@ -209,7 +209,7 @@ std::vector<T> legendre_p_zeros_imp(int n, const Policy& pol)
         ++k;
     }
     return zeros;
-}
+}  // LCOV_EXCL_LINE
 
 } // namespace detail
 
