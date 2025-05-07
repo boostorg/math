@@ -844,8 +844,8 @@ T float_advance_imp(T val, int distance, const std::false_type&, const Policy& p
       }
       else
       {
-         limit *= std::numeric_limits<T>::radix;
-         expon++;
+         limit *= std::numeric_limits<T>::radix; // LCOV_EXCL_LINE Probably unreachable for the decimal types we have?
+         expon++;                                // LCOV_EXCL_LINE
       }
       limit_distance = float_distance(val, limit);
       if(distance && (limit_distance == 0))
