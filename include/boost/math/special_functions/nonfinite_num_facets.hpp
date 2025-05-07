@@ -493,10 +493,10 @@ namespace boost {
               return;
             }
           }
-          break;
+          break;  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
 
         default:
-          break;
+          break;  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
         }
 
         state |= std::ios_base::failbit;
@@ -533,10 +533,10 @@ namespace boost {
                 val = positive_nan<ValType>();
                 return;
             }
-            break;
+            break;  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
 
           default:
-            break;
+            break;  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
           }
         }
 

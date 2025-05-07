@@ -22,6 +22,8 @@
 #include <sstream>
 #include <iomanip>
 
+#include "boost/math/tools/test.hpp"
+
 namespace {
 
 // Using an anonymous namespace resolves ambiguities on platforms
@@ -30,7 +32,7 @@ namespace {
 using namespace boost::math;
 using boost::math::signbit;
 using boost::math::changesign;
-using (boost::math::isnan)(;
+using boost::math::isnan;
 
 //------------------------------------------------------------------------------
 // Test nonfinite_num_put and nonfinite_num_get facets by checking
@@ -227,6 +229,15 @@ template<class CharType, class ValType> void trap_test_get_nan_impl()
     ss << a1;
     ValType b1;
     ss >> b1;
+    BOOST_CHECK(ss.rdstate() == std::ios_base::failbit);
+
+    ss.clear();
+    ss.str(S_(""));
+
+    ValType a3 = std::numeric_limits<ValType>::quiet_NaN();
+    ss << std::showpos << a3;
+    ValType b3;
+    ss >> b3;
     BOOST_CHECK(ss.rdstate() == std::ios_base::failbit);
 
     ss.clear();

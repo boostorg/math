@@ -895,6 +895,7 @@ test-suite distribution_tests :
 
    [ run test_legacy_nonfinite.cpp /boost/test//boost_unit_test_framework ]
    [ run test_basic_nonfinite.cpp /boost/test//boost_unit_test_framework  ]
+   [ run test_nonfinite_io.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_lexical_cast.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_nonfinite_trap.cpp /boost/test//boost_unit_test_framework : : : <exception-handling>off:<build>no  ]
    [ run test_signed_zero.cpp /boost/test//boost_unit_test_framework  ]
