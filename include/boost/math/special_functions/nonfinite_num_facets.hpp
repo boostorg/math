@@ -523,7 +523,7 @@ namespace boost {
                 val = std::numeric_limits<ValType>::infinity();
                 return;
             }
-            break;
+            break;  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
 
           case 'd':   // 1.#IND"
             if(std::numeric_limits<ValType>::has_quiet_NaN
@@ -535,7 +535,7 @@ namespace boost {
             }
             break;  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
 
-          default:
+          default:  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
             break;  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
           }
         }
