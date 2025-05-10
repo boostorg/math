@@ -392,11 +392,7 @@ BOOST_MATH_GPU_ENABLED T trigamma_dispatch(T x, const Policy& pol, const Tag& ta
       // Reflect:
       T z = 1 - x;
 
-      if(z < 1)
-      {
-         result = 1 / (z * z);
-         z += 1;
-      }
+      BOOST_MATH_ASSERT(z >= 1);
 
       // Argument reduction for tan:
       if(floor(x) == x)
