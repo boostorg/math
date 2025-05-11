@@ -1069,6 +1069,7 @@ test-suite misc :
        quaternion_mi1.cpp
        quaternion_mi2.cpp
        /boost/test//boost_unit_test_framework ]
+   [ run test_ulp.cpp /boost/test//boost_unit_test_framework ]
 
 #   [ run __temporary_test.cpp test_instances//test_instances : : : <test-info>always_show_run_output <pch>off ]
 ;
