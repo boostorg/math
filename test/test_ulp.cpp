@@ -26,6 +26,8 @@ void test()
       BOOST_CHECK_THROW(boost::math::ulp(std::numeric_limits<T>::infinity()), std::overflow_error);
    }
    BOOST_CHECK_THROW(boost::math::ulp(boost::math::tools::max_value<T>()), std::overflow_error);
+
+   BOOST_CHECK(boost::math::ulp(static_cast<T>(0)) != 0);
 }
 
 BOOST_AUTO_TEST_CASE( test_main )

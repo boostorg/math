@@ -949,7 +949,7 @@ T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
    static const char* function = "boost::math::zeta<%1%>";
    if(sc == 0)
       return policies::raise_pole_error<T>(function, "Evaluation of zeta function at pole %1%", s, pol);
-   T result;
+   T result;  // LCOV_EXCL_LINE
    //
    // Trivial case:
    //
