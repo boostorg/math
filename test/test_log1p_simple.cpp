@@ -42,9 +42,10 @@ void test_log1pmx()
         const T value (dist2(rng));
         CHECK_ULP_CLOSE(std::log1p(value) - value, boost::math::log1pmx(value), 1e9);
     }
-
+#ifndef BOOST_MATH_NO_EXCEPTIONS
     CHECK_THROW(boost::math::log1pmx(T(-1.1)), std::domain_error);
     CHECK_THROW(boost::math::log1pmx(T(-1.0)), std::overflow_error);
+#endif
 }
 
 int main()
