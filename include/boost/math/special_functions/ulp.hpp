@@ -77,7 +77,7 @@ T ulp_imp(const T& val, const std::false_type&, const Policy& pol)
    T diff = scalbn(T(1), expon - std::numeric_limits<T>::digits);
    if(diff == 0)
       diff = detail::get_smallest_value<T>();
-   return diff;
+   return diff;  // LCOV_EXCL_LINE previous lines are covered so this one must be too.
 }
 
 }
