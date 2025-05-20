@@ -96,11 +96,9 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const & x, const Policy& pol, const boost::
    constexpr auto function = "boost::math::log1p<%1%>(%1%)";
 
    if((x < -1) || (boost::math::isnan)(x))
-      return policies::raise_domain_error<T>(
-         function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<T>(function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<T>(
-         function, nullptr, pol);
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
 
    result_type a = abs(result_type(x));
    if(a > result_type(0.5f))
@@ -126,11 +124,9 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const boost::m
    constexpr auto function = "boost::math::log1p<%1%>(%1%)";
 
    if(x < -1)
-      return policies::raise_domain_error<T>(
-         function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<T>(function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<T>(
-         function, nullptr, pol);
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
 
    T a = fabs(x);
    if(a > 0.5f)
@@ -179,11 +175,9 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const boost::m
    constexpr auto function = "boost::math::log1p<%1%>(%1%)";
 
    if(x < -1)
-      return policies::raise_domain_error<T>(
-         function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<T>(function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<T>(
-         function, nullptr, pol);
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
 
    T a = fabs(x);
    if(a > 0.5f)
@@ -301,11 +295,9 @@ template <class Policy>
 BOOST_MATH_GPU_ENABLED inline float log1p(float x, const Policy& pol)
 {
    if(x < -1)
-      return policies::raise_domain_error<float>(
-         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<float>("log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<float>(
-         "log1p<%1%>(%1%)", nullptr, pol);
+      return -policies::raise_overflow_error<float>("log1p<%1%>(%1%)", nullptr, pol);
    return std::log1p(x);
 }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
@@ -313,11 +305,9 @@ template <class Policy>
 BOOST_MATH_GPU_ENABLED inline long double log1p(long double x, const Policy& pol)
 {
    if(x < -1)
-      return policies::raise_domain_error<long double>(
-         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<long double>("log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<long double>(
-         "log1p<%1%>(%1%)", nullptr, pol);
+      return -policies::raise_overflow_error<long double>("log1p<%1%>(%1%)", nullptr, pol);
    return std::log1p(x);
 }
 #endif
@@ -325,11 +315,9 @@ template <class Policy>
 BOOST_MATH_GPU_ENABLED inline double log1p(double x, const Policy& pol)
 {
    if(x < -1)
-      return policies::raise_domain_error<double>(
-         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<double>("log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<double>(
-         "log1p<%1%>(%1%)", nullptr, pol);
+      return -policies::raise_overflow_error<double>("log1p<%1%>(%1%)", nullptr, pol);
    return std::log1p(x);
 }
 
@@ -350,11 +338,9 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    constexpr auto function = "boost::math::log1pmx<%1%>(%1%)";
 
    if(x < -1)
-      return policies::raise_domain_error<T>(
-         function, "log1pmx(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<T>(function, "log1pmx(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<T>(
-         function, nullptr, pol);
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
 
    result_type a = abs(result_type(x));
    if(a > result_type(0.95f))

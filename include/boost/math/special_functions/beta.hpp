@@ -1132,7 +1132,7 @@ BOOST_MATH_GPU_ENABLED T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
 }
 
 template <class T, class Policy>
-T ibeta_large_ab(T a, T b, T x, T y, bool invert, bool normalised, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T ibeta_large_ab(T a, T b, T x, T y, bool invert, bool normalised, const Policy& pol)
 {
    //
    // Large arguments, symetric case, see https://dlmf.nist.gov/8.18
@@ -1571,11 +1571,11 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       {
          // a and b both large:
          bool use_asym = false;
-         T ma = (std::max)(a, b);
+         T ma = BOOST_MATH_GPU_SAFE_MAX(a, b);
          T xa = ma == a ? x : y;
          T saddle = ma / (a + b);
          T powers = 0;
-         if ((ma > 1e-5f / tools::epsilon<T>()) && (ma / (std::min)(a, b) < (xa < saddle ? 2 : 15)))
+         if ((ma > 1e-5f / tools::epsilon<T>()) && (ma / BOOST_MATH_GPU_SAFE_MIN(a, b) < (xa < saddle ? 2 : 15)))
          {
             if (a == b)
                use_asym = true;

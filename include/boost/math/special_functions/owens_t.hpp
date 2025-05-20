@@ -120,6 +120,7 @@ namespace boost
             } // for(unsigned short i = 0; i != 7; i++)
 
             // interpret select array as 8x15 matrix
+            BOOST_MATH_ASSERT(iaint * 15 + ihint < (int)(sizeof(select) / sizeof(select[0])));
             return select[iaint*15 + ihint];
 
          } // unsigned short owens_t_compute_code(const RealType h, const RealType a)
@@ -810,14 +811,13 @@ namespace boost
             {
                return owens_t_znorm2(RealType(-h), pol) * owens_t_znorm2(h, pol) / 2;
             }
-            if(a >= tools::max_value<RealType>())
-            {
-               return owens_t_znorm2(RealType(fabs(h)), pol);
-            }
+            // Rationale: when a>1 we call this routine with 1/a:
+            BOOST_MATH_ASSERT(a <= 1);
             RealType val = 0; // avoid compiler warnings, 0 will be overwritten in any case
             const unsigned short icode = owens_t_compute_code(h, a);
             const unsigned short m = owens_t_get_order(icode, val /* just a dummy for the type */, pol);
             static const unsigned short meth[] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 4, 4, 4, 5, 6}; // 18 entries
+            BOOST_MATH_ASSERT(icode < sizeof(meth) / sizeof(meth[0]));
 
             // determine the appropriate method, T1 ... T6
             switch( meth[icode] )
@@ -842,8 +842,6 @@ namespace boost
             case 6: // T6
                val = owens_t_T6(h,a, pol);
                break;
-            default:
-               val = policies::raise_evaluation_error<RealType>("boost::math::owens_t", "selection routine in Owen's T function failed with h = %1%", h, pol);
             }
             return val;
          }
@@ -1047,11 +1045,6 @@ namespace boost
       {
          typedef typename tools::promote_args<T1, T2>::type result_type;
          typedef typename policies::evaluation<result_type, Policy>::type value_type;
-         typedef typename policies::precision<value_type, Policy>::type precision_type;
-         typedef std::integral_constant<int,
-            precision_type::value <= 0 ? 0 :
-            precision_type::value <= 64 ? 64 : 65
-         > tag_type;
 
          return policies::checked_narrowing_cast<result_type, Policy>(detail::owens_t(static_cast<value_type>(h), static_cast<value_type>(a), pol), "boost::math::owens_t<%1%>(%1%,%1%)");
       }

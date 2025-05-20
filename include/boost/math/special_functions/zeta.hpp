@@ -152,27 +152,29 @@ T zeta_polynomial_series(T s, T sc, Policy const &)
    //
    BOOST_MATH_STD_USING
    int n = itrunc(T(log(boost::math::tools::epsilon<T>()) / -2));
-   T sum = 0;
+   T sum = 0;  // LCOV_EXCL_LINE spurious miss as surrounding lines hit.
    T two_n = ldexp(T(1), n);
-   int ej_sign = 1;
+   int ej_sign = 1;  // LCOV_EXCL_LINE spurious miss as surrounding lines hit.
    for(int j = 0; j < n; ++j)
    {
       sum += ej_sign * -two_n / pow(T(j + 1), s);
       ej_sign = -ej_sign;
    }
-   T ej_sum = 1;
-   T ej_term = 1;
+   T ej_sum = 1;   // LCOV_EXCL_LINE spurious miss as surrounding lines hit.
+   T ej_term = 1;  // LCOV_EXCL_LINE spurious miss as surrounding lines hit.
    for(int j = n; j <= 2 * n - 1; ++j)
    {
       sum += ej_sign * (ej_sum - two_n) / pow(T(j + 1), s);
       ej_sign = -ej_sign;
       ej_term *= 2 * n - j;
       ej_term /= j - n + 1;
-      ej_sum += ej_term;
+      ej_sum += ej_term;  // LCOV_EXCL_LINE spurious miss as surrounding lines hit.
    }
    return -sum / (two_n * (-powm1(T(2), sc)));
 }
-
+//
+// MP only, verified as covered by the full tests:
+// LCOV_EXCL_START
 template <class T, class Policy>
 T zeta_imp_prec(T s, T sc, const Policy& pol, const std::integral_constant<int, 0>&)
 {
@@ -197,6 +199,7 @@ T zeta_imp_prec(T s, T sc, const Policy& pol, const std::integral_constant<int, 
 #endif
    return result;
 }
+// LCOV_EXCL_STOP
 
 template <class T, class Policy>
 inline T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 53>&)
@@ -372,13 +375,9 @@ inline T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<in
       result = tools::evaluate_polynomial(P, T(s - 15)) / tools::evaluate_polynomial(Q, T(s - 15));
       result = 1 + exp(result);
    }
-   else if(s < 56)
-   {
-      result = 1 + pow(T(2), -s);
-   }
    else
    {
-      result = 1;
+      result = 1 + pow(T(2), -s);
    }
    return result;
 }
@@ -566,13 +565,9 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 64>&
       result = tools::evaluate_polynomial(P, T(s - 15)) / tools::evaluate_polynomial(Q, T(s - 15));
       result = 1 + exp(result);
    }
-   else if(s < 63)
-   {
-      result = 1 + pow(T(2), -s);
-   }
    else
    {
-      result = 1;
+      result = 1 + pow(T(2), -s);
    }
    return result;
 }
@@ -897,13 +892,9 @@ T zeta_imp_prec(T s, T sc, const Policy&, const std::integral_constant<int, 113>
       result = tools::evaluate_polynomial(P, T(s - 30)) / tools::evaluate_polynomial(Q, T(s - 30));
       result = 1 + exp(result);
    }
-   else if(s < 117)
-   {
-      result = 1 + pow(T(2), -s);
-   }
    else
    {
-      result = 1;
+      result = 1 + pow(T(2), -s);
    }
    return result;
 }
@@ -930,11 +921,11 @@ T zeta_imp_odd_integer(int s, const T& sc, const Policy& pol, const std::false_t
    static BOOST_MATH_THREAD_LOCAL T results[50] = {};
    static BOOST_MATH_THREAD_LOCAL int digits = tools::digits<T>();
    // LCOV_EXCL_STOP
-   int current_digits = tools::digits<T>();
+   int current_digits = tools::digits<T>();  // LCOV_EXCL_LINE spurious miss as surrounding lines hit.
    if(digits != current_digits)
    {
       // Oh my precision has changed...
-      is_init = false;
+      is_init = false;  // LCOV_EXCL_LINE variable precision MP case only, not included in coverage tests.
    }
    if(!is_init)
    {
@@ -943,7 +934,7 @@ T zeta_imp_odd_integer(int s, const T& sc, const Policy& pol, const std::false_t
       for(unsigned k = 0; k < sizeof(results) / sizeof(results[0]); ++k)
       {
          T arg = k * 2 + 3;
-         T c_arg = 1 - arg;
+         T c_arg = 1 - arg;  // LCOV_EXCL_LINE spurious miss as surrounding lines hit.
          results[k] = zeta_polynomial_series(arg, c_arg, pol);
       }
    }
@@ -957,11 +948,8 @@ T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
    BOOST_MATH_STD_USING
    static const char* function = "boost::math::zeta<%1%>";
    if(sc == 0)
-      return policies::raise_pole_error<T>(
-         function,
-         "Evaluation of zeta function at pole %1%",
-         s, pol);
-   T result;
+      return policies::raise_pole_error<T>(function, "Evaluation of zeta function at pole %1%", s, pol);
+   T result;  // LCOV_EXCL_LINE
    //
    // Trivial case:
    //
@@ -1003,7 +991,7 @@ T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
 #ifndef BOOST_MATH_NO_EXCEPTIONS
       }
       catch(const boost::math::rounding_error&){} // Just fall through, s is too large to round
-      catch(const std::overflow_error&){}
+      catch(const std::overflow_error&){} // LCOV_EXCL_LINE We can only get here for "strange" MP types with small exponents and very large digit counts.
 #endif
    }
 
@@ -1026,8 +1014,13 @@ T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
             if(result > tools::log_max_value<T>())
                return sign(mult) * policies::raise_overflow_error<T>(function, nullptr, pol);
             result = exp(result);
+            //
+            // Whether this if branch can be triggered is very type dependent, we need
+            // result to be just on the verge of overflow when /s/ is very close to a
+            // half integer.
+            //
             if(tools::max_value<T>() / fabs(mult) < result)
-               return boost::math::sign(mult) * policies::raise_overflow_error<T>(function, nullptr, pol);
+               return boost::math::sign(mult) * policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE
             result *= mult;
          }
          else
