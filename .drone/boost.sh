@@ -30,6 +30,7 @@ git submodule update --init libs/headers
 git submodule update --init tools/boostdep
 cp -r $TRAVIS_BUILD_DIR/* libs/math
 python tools/boostdep/depinst/depinst.py math
+(cd libs/multiprecision && git checkout integration_check_do_not_merge)
 ./bootstrap.sh
 ./b2 headers
 

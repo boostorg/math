@@ -934,7 +934,7 @@ BOOST_MATH_GPU_ENABLED T full_igamma_prefix(T a, T z, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
-   if (z > tools::max_value<T>())
+   if (z > tools::max_value<T>() || (a > 0 && z == 0))
       return 0;
 
    T alz = a * log(z);
@@ -992,7 +992,7 @@ template <class T, class Policy, class Lanczos>
 BOOST_MATH_GPU_ENABLED T regularised_gamma_prefix(T a, T z, const Policy& pol, const Lanczos& l)
 {
    BOOST_MATH_STD_USING
-   if (z >= tools::max_value<T>())
+   if (z >= tools::max_value<T>() || (a > 0 && z == 0))
       return 0;
    T agh = a + static_cast<T>(Lanczos::g()) - T(0.5);
    T prefix{};
@@ -1321,7 +1321,11 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
 
    int eval_method;
 
-   if(is_int && (x > 0.6))
+   if (x == 0)
+   {
+      eval_method = 2;
+   }
+   else if(is_int && (x > 0.6))
    {
       // calculate Q via finite sum:
       invert = !invert;
@@ -1501,14 +1505,14 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
                #ifdef BOOST_MATH_HAS_NVRTC
                if (boost::math::is_same_v<T, float>)
                {
-                  init_value = (normalised ? 1 : ::tgammaf(a));
+                  init_value = (normalised ? T(1) : ::tgammaf(a));
                }
                else
                {
-                  init_value = (normalised ? 1 : ::tgamma(a));
+                  init_value = (normalised ? T(1) : ::tgamma(a));
                }
                #else
-               init_value = (normalised ? 1 : boost::math::tgamma(a, pol));
+               init_value = (normalised ? T(1) : boost::math::tgamma(a, pol));
                #endif
 
                if(normalised || (result >= 1) || (tools::max_value<T>() * result > init_value))
@@ -1640,32 +1644,26 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
       T gam;
       if (boost::math::is_same_v<T, float>)
       {
-         gam = normalised ? 1 : ::tgammaf(a);
+         gam = normalised ? T(1) : ::tgammaf(a);
       }
       else
       {
-         gam = normalised ? 1 : ::tgamma(a);
+         gam = normalised ? T(1) : ::tgamma(a);
       }
       #else
-      T gam = normalised ? 1 : boost::math::tgamma(a, pol);
+      T gam = normalised ? T(1) : boost::math::tgamma(a, pol);
       #endif
       result = gam - result;
    }
    if(p_derivative)
    {
-      /*
-      * We can never reach this:
-      if((x < 1) && (tools::max_value<T>() * x < *p_derivative))
+      if((x == 0) || ((x < 1) && (tools::max_value<T>() * x < *p_derivative)))
       {
          // overflow, just return an arbitrarily large value:
          *p_derivative = tools::max_value<T>() / 2;
       }
-      */
-      BOOST_MATH_ASSERT((x >= 1) || (tools::max_value<T>() * x >= *p_derivative));
-      //
-      // Need to convert prefix term to derivative:
-      //
-      *p_derivative /= x;
+      else
+         *p_derivative /= x;
    }
 
    return result;
@@ -1687,7 +1685,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
 
    T result = 0; // Just to avoid warning C4701: potentially uninitialized local variable 'result' used
 
-   if(a >= max_factorial<T>::value && !normalised)
+   if(x > 0 && a >= max_factorial<T>::value && !normalised)
    {
       //
       // When we're computing the non-normalized incomplete gamma
@@ -2143,8 +2141,8 @@ BOOST_MATH_GPU_ENABLED T gamma_p_derivative_imp(T a, T x, const Policy& pol)
    //
    if(x == 0)
    {
-      return (a > 1) ? 0 :
-         (a == 1) ? 1 : policies::raise_overflow_error<T>("boost::math::gamma_p_derivative<%1%>(%1%, %1%)", nullptr, pol);
+      return (a > 1) ? T(0) :
+         (a == 1) ? T(1) : policies::raise_overflow_error<T>("boost::math::gamma_p_derivative<%1%>(%1%, %1%)", nullptr, pol);
    }
    //
    // Normal case:
