@@ -196,6 +196,8 @@ test-suite special_fun :
    [ run git_issue_1139.cpp ]
    [ run git_issue_1175.cpp ]
    [ run git_issue_1194.cpp ]
+   # -fsanitize=integer trips over deliberate unsigned integer overflow (left shift) in multiprecision:
+   [ run git_issue_1249.cpp /boost/test//boost_unit_test_framework  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Santizer Build" : : <build>no ] ]
    [ run git_issue_1255.cpp ]
    [ run git_issue_1247.cpp ]
    [ run special_functions_test.cpp /boost/test//boost_unit_test_framework  ]
