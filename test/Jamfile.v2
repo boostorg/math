@@ -196,6 +196,7 @@ test-suite special_fun :
    [ run git_issue_1139.cpp ]
    [ run git_issue_1175.cpp ]
    [ run git_issue_1194.cpp ]
+   [ run git_issue_1249.cpp /boost/test//boost_unit_test_framework  ]
    [ run git_issue_1255.cpp ]
    [ run git_issue_1247.cpp ]
    [ run special_functions_test.cpp /boost/test//boost_unit_test_framework  ]
