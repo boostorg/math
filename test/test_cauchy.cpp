@@ -16,6 +16,12 @@
 #  pragma warning(disable: 4127) // conditional expression is constant
 #endif
 
+#ifdef SYCL_LANGUAGE_VERSION
+#define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
+#include "sycl/sycl.hpp"
+#include <boost/math/tools/config.hpp>
+#endif
+
 // #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false 
 // To compile even if Cauchy mean is used.
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
