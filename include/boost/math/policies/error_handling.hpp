@@ -63,6 +63,11 @@ public:
    explicit rounding_error(const std::string& s) : std::runtime_error(s){}
 };
 
+#else
+
+class evaluation_error {};
+class rounding_error {};
+
 #endif
 
 namespace policies{
