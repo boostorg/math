@@ -2105,7 +2105,18 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
       }
       else
       {
+         #ifdef BOOST_MATH_HAS_NVRTC
+         if (boost::math::is_same_v<T, float>)
+         {
+            prefix = ::lgammaf(x) - ::lgammaf(y);
+         }
+         else
+         {
+            prefix = ::lgamma(x) - ::lgamma(y);
+         }
+         #else
          prefix = boost::math::lgamma(x, pol) - boost::math::lgamma(y, pol);
+         #endif
          if (prefix > boost::math::tools::log_max_value<T>())
             return policies::raise_overflow_error<T>("tgamma_ratio", nullptr, pol);
          //
