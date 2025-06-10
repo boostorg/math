@@ -1570,6 +1570,9 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       }
       else
       {
+         #ifdef SYCL_LANGUAGE_VERSION
+         fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
+         #else
          // a and b both large:
          bool use_asym = false;
          T ma = BOOST_MATH_GPU_SAFE_MAX(a, b);
@@ -1602,6 +1605,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
             fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
             
          BOOST_MATH_INSTRUMENT_VARIABLE(fract);
+         #endif
       }
    }
    if(p_derivative)
