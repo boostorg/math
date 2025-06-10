@@ -48,7 +48,7 @@
 namespace boost { namespace math { namespace detail{
 
    template <typename T, int N>
-   inline BOOST_MATH_GPU_ENABLED T bessel_k1_imp(const T&, const boost::math::integral_constant<int, N>&)
+   BOOST_MATH_GPU_ENABLED inline T bessel_k1_imp(const T&, const boost::math::integral_constant<int, N>&)
    {
       BOOST_MATH_ASSERT(0);
       return 0;
@@ -498,7 +498,7 @@ namespace boost { namespace math { namespace detail{
     }
 
    template <typename T>
-   inline BOOST_MATH_GPU_ENABLED T bessel_k1(const T& x)
+   BOOST_MATH_GPU_ENABLED inline T bessel_k1(const T& x)
    {
       typedef boost::math::integral_constant<int,
          ((boost::math::numeric_limits<T>::digits == 0) || (boost::math::numeric_limits<T>::radix != 2)) ?
