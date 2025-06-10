@@ -216,7 +216,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T gamma_imp(T z, const Policy& pol
          }
 #endif
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         BOOST_MATH_IF_CONSTEXPR(!std::numeric_limits<T>::is_specialized || (std::numeric_limits<T>::digits > 64))
+         BOOST_MATH_IF_CONSTEXPR(!boost::math::numeric_limits<T>::is_specialized || (boost::math::numeric_limits<T>::digits > 64))
          {
             if ((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
             {
