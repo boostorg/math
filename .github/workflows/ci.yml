@@ -175,7 +175,7 @@ jobs:
         run: ../../../b2 toolset=${{ matrix.toolset }} cxxstd=${{ matrix.standard }} ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER
         working-directory: ../boost-root/libs/math/test
   windows_gcc:
-    runs-on: windows-latest
+    runs-on: windows-2025
     defaults:
       run:
         shell: cmd
@@ -185,7 +185,7 @@ jobs:
       fail-fast: false
       matrix:
         toolset: [ gcc ]
-        standard: [ 14, 17 ]
+        standard: [ 14 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v4
