@@ -5,6 +5,8 @@
 
 #ifndef SYCL_LANGUAGE_VERSION
 #include <pch_light.hpp>
+#else
+#include "sycl/sycl.hpp"
 #endif
 
 #ifndef BOOST_MATH_OVERFLOW_ERROR_POLICY
