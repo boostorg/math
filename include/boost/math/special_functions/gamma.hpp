@@ -216,7 +216,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T gamma_imp(T z, const Policy& pol
          }
 #endif
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         BOOST_MATH_IF_CONSTEXPR(!std::numeric_limits<T>::is_specialized || (std::numeric_limits<T>::digits > 64))
+         BOOST_MATH_IF_CONSTEXPR(!boost::math::numeric_limits<T>::is_specialized || (boost::math::numeric_limits<T>::digits > 64))
          {
             if ((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
             {
@@ -2105,7 +2105,18 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
       }
       else
       {
+         #ifdef BOOST_MATH_HAS_NVRTC
+         if (boost::math::is_same_v<T, float>)
+         {
+            prefix = ::lgammaf(x) - ::lgammaf(y);
+         }
+         else
+         {
+            prefix = ::lgamma(x) - ::lgamma(y);
+         }
+         #else
          prefix = boost::math::lgamma(x, pol) - boost::math::lgamma(y, pol);
+         #endif
          if (prefix > boost::math::tools::log_max_value<T>())
             return policies::raise_overflow_error<T>("tgamma_ratio", nullptr, pol);
          //

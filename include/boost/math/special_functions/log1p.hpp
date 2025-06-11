@@ -298,7 +298,11 @@ BOOST_MATH_GPU_ENABLED inline float log1p(float x, const Policy& pol)
       return policies::raise_domain_error<float>("log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
       return -policies::raise_overflow_error<float>("log1p<%1%>(%1%)", nullptr, pol);
+   #ifndef BOOST_MATH_HAS_NVRTC
    return std::log1p(x);
+   #else
+   return ::log1pf(x);
+   #endif
 }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 template <class Policy>
@@ -318,7 +322,11 @@ BOOST_MATH_GPU_ENABLED inline double log1p(double x, const Policy& pol)
       return policies::raise_domain_error<double>("log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
       return -policies::raise_overflow_error<double>("log1p<%1%>(%1%)", nullptr, pol);
+   #ifndef BOOST_MATH_HAS_NVRTC
    return std::log1p(x);
+   #else
+   return ::log1p(x);
+   #endif
 }
 
 template <class T>
