@@ -115,6 +115,14 @@ Currently a compiler that is fully compliant with C++14 is required to use Boost
 * clang++ 5 or later
 * Visual Studio 2015 (14.0) or later
 
+### 🪟 Windows Installation
+
+To build Boost.Math on Windows using **PowerShell** or **Command Prompt** with **VS Code + CMake**, first install dependencies via Chocolatey:
+
+```powershell
+choco install cmake visualstudio2019buildtools
+
+
 ## Support, bugs and feature requests
 
 Bugs and feature requests can be reported through the [GitHub issue tracker](https://github.com/boostorg/math/issues)
