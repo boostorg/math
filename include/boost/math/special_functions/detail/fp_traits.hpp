@@ -270,7 +270,7 @@ template<> struct fp_traits_non_native<double, double_precision>
 // long double (64 bits) -------------------------------------------------------
 
 #if defined(BOOST_NO_INT64_T) || defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)\
-   || defined(BOOST_BORLANDC) || defined(__CODEGEAR__) || (defined(__APPLE__) && defined(__aarch64__))
+   || defined(BOOST_BORLANDC) || defined(__CODEGEAR__) || (defined(__APPLE__) && defined(__aarch64__)) || defined(_MSC_VER)
 
 template<> struct fp_traits_non_native<long double, double_precision>
 {
