@@ -258,6 +258,21 @@ void test_spots(RealType)
          static_cast<RealType>(0.1)),  // probability.
          static_cast<RealType>(-1.475884049), // t
          tolerance);
+   errno = 0;
+   BOOST_CHECK_CLOSE( // Tests of df high and p low.
+      ::boost::math::cdf(
+         students_t_distribution<RealType>(1000.),  // degrees_of_freedom
+         static_cast<RealType>(-3.30028272)),  // t
+         static_cast<RealType>(0.0005), // probability.
+         tolerance);
+   BOOST_CHECK_EQUAL(errno, 0);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::quantile(
+         students_t_distribution<RealType>(1000.),  // degrees_of_freedom.
+         static_cast<RealType>(0.0005)),  //  probability.
+         static_cast<RealType>(-3.30028272),  // t.
+         tolerance);
+   BOOST_CHECK_EQUAL(errno, 0);
 
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
