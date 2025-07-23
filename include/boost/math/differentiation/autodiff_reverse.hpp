@@ -867,30 +867,6 @@ struct type_depth<rvar<T>>
     static constexpr size_t value = type_depth<T>::value + 1;
 };
 
-thread_local std::map<size_t, std::stack<gradient_tape_base*>> active_tapes; // tape manager
-
-//inline gradient_tape_base* get_active_tape(size_t depth) // returns currently active tape
-//{
-//    auto it = active_tapes.find(depth);
-//    if (it != active_tapes.end() && !it->second.empty()) {
-//        return it->second.top();
-//    }
-//    return nullptr;
-//}
-class scoped_tape_context // tape context
-{
-private:
-    size_t depth;
-
-public:
-    scoped_tape_context(gradient_tape_base& tape)
-        : depth(tape.depth())
-    {
-        active_tapes[depth].push(&tape);
-    }
-    ~scoped_tape_context() { active_tapes[depth].pop(); }
-};
-
 template<typename T>
 inline gradient_tape<T, BUFFER_SIZE>& get_active_tape()
 {
