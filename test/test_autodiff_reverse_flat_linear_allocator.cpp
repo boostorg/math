@@ -112,15 +112,17 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_test_checkpointing, T, all_f
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(vars_n_stuff, T, all_float_types)
 {
-    reverse_mode::gradient_tape<T>    tape(0);       // depth = 0 for rvar<T>
+    reverse_mode::gradient_tape<T>    tape{};        // depth = 0 for rvar<T>
     reverse_mode::scoped_tape_context context(tape); // Activate tape for current thread
 
-    reverse_mode::rvar<T> x(5.0), y(10.0);
-    auto                  z = x + y * x;
+    reverse_mode::rvar<T> x(3.0), y(2.0);
+    auto                  z = x * x * x;
     std::cout << decltype(z)::num_literals << std::endl;
     // std::cout << z.evaluate() << std::endl;
     reverse_mode::rvar<T> a(z);
     std::cout << a.evaluate() << std::endl;
     a.print_der_info();
+    a.backward();
+    std::cout << x.adjoint() << std::endl;
 }
 BOOST_AUTO_TEST_SUITE_END()

@@ -498,7 +498,6 @@ private:
     size_t                                         depth_ = 0;
     detail::flat_linear_allocator<T, buffer_size>  adjoints_;
     detail::flat_linear_allocator<T, buffer_size>  derivatives_;
-    detail::flat_linear_allocator<T*, buffer_size> argument_adjoints_; // may remove in future
 
     detail::flat_linear_allocator<gradient_node<T>, buffer_size>  gradient_nodes_;
     detail::flat_linear_allocator<gradient_node<T>*, buffer_size> argument_nodes_;
@@ -508,7 +507,6 @@ private:
     gradient_node<T>* fill_node_at_compile_time(std::true_type, gradient_node<T>* node_ptr)
     {
         node_ptr->derivatives_       = &*derivatives_.template emplace_back_n<n>();
-        node_ptr->argument_adjoints_ = &*argument_adjoints_.template emplace_back_n<n>();
         node_ptr->argument_nodes_    = &*argument_nodes_.template emplace_back_n<n>();
         return node_ptr;
     }
@@ -531,7 +529,6 @@ public:
     gradient_tape(gradient_tape&& other)
         : adjoints_(std::move(other.adjoints_))
         , derivatives_(std::move(other.derivatives_))
-        , argument_adjoints_(std::move(other.argument_adjoints_))
         , gradient_nodes_(std::move(other.gradient_nodes_))
         , argument_nodes_(std::move(other.argument_nodes_))
 
@@ -543,7 +540,6 @@ public:
         if (this != &other) {
             adjoints_          = std::move(other.adjoints_);
             derivatives_       = std::move(other.derivatives_);
-            argument_adjoints_ = std::move(other.argument_adjoints_);
             gradient_nodes_    = std::move(other.gradient_nodes_);
             argument_nodes_    = std::move(other.argument_nodes_);
         }
@@ -553,7 +549,6 @@ public:
     {
         adjoints_.clear();
         derivatives_.clear();
-        argument_adjoints_.clear();
         gradient_nodes_.clear();
         argument_nodes_.clear();
     }
@@ -577,8 +572,6 @@ public:
         node->n_                 = 1;
         node->adjoint_           = &*adjoints_.emplace_back();
         node->derivatives_       = &*derivatives_.emplace_back();
-        node->argument_adjoints_ = &*argument_adjoints_.emplace_back();
-        node->argument_nodes_    = &*argument_adjoints_.emplace_back();
 
         return node;
     };
@@ -602,7 +595,6 @@ public:
         node->adjoint_         = &*adjoints_.emplace_back();
         if (n > 0) {
             node->derivatives_       = &*derivatives_.emplace_back_n(n);
-            node->argument_adjoints_ = &*argument_adjoints_.emplace_back_n(n);
             node->argument_nodes_    = &*argument_nodes_.emplace_back_n(n);
         }
         return node;
@@ -623,7 +615,6 @@ public:
         gradient_nodes_.add_checkpoint();
         adjoints_.add_checkpoint();
         derivatives_.add_checkpoint();
-        argument_adjoints_.add_checkpoint();
         argument_nodes_.add_checkpoint();
     };
 
@@ -635,7 +626,6 @@ public:
         gradient_nodes_.rewind_to_last_checkpoint();
         adjoints_.rewind_to_last_checkpoint();
         derivatives_.rewind_to_last_checkpoint();
-        argument_adjoints_.rewind_to_last_checkpoint();
         argument_nodes_.rewind_to_last_checkpoint();
     };
     void rewind_to_checkpoint_at(
@@ -644,7 +634,6 @@ public:
         gradient_nodes_.rewind_to_checkpoint_at(index);
         adjoints_.rewind_to_checkpoint_at(index);
         derivatives_.rewind_to_checkpoint_at(index);
-        argument_adjoints_.rewind_to_checkpoint_at(index);
         argument_nodes_.rewind_to_checkpoint_at(index);
     }
 
@@ -654,7 +643,6 @@ public:
         gradient_nodes_.rewind();
         adjoints_.rewind();
         derivatives_.rewind();
-        argument_adjoints_.rewind();
         argument_nodes_.rewind();
     }
 
@@ -881,14 +869,14 @@ struct type_depth<rvar<T>>
 
 thread_local std::map<size_t, std::stack<gradient_tape_base*>> active_tapes; // tape manager
 
-inline gradient_tape_base* get_active_tape(size_t depth) // returns currently active tape
-{
-    auto it = active_tapes.find(depth);
-    if (it != active_tapes.end() && !it->second.empty()) {
-        return it->second.top();
-    }
-    return nullptr;
-}
+//inline gradient_tape_base* get_active_tape(size_t depth) // returns currently active tape
+//{
+//    auto it = active_tapes.find(depth);
+//    if (it != active_tapes.end() && !it->second.empty()) {
+//        return it->second.top();
+//    }
+//    return nullptr;
+//}
 class scoped_tape_context // tape context
 {
 private:
@@ -903,6 +891,12 @@ public:
     ~scoped_tape_context() { active_tapes[depth].pop(); }
 };
 
+template<typename T>
+inline gradient_tape<T, BUFFER_SIZE>& get_active_tape()
+{
+    static thread_local gradient_tape<T, BUFFER_SIZE> tape;
+    return tape;
+}
 template<typename T>
 class rvar : public expression<T, rvar<T>>
 {
@@ -920,35 +914,27 @@ private:
 
     void make_leaf_node()
     {
-        if (gradient_tape<T, BUFFER_SIZE>* tape = safe_cast<gradient_tape<T, BUFFER_SIZE>>(
-                get_active_tape(depth_))) {
-            node_ = tape->emplace_leaf_node();
-        }
+        gradient_tape<T, BUFFER_SIZE>& tape = get_active_tape<T>();
+        node_                               = tape.emplace_leaf_node();
     }
 
     void make_unary_node()
     {
-        if (gradient_tape<T, BUFFER_SIZE>* tape = safe_cast<gradient_tape<T, BUFFER_SIZE>>(
-                get_active_tape(depth_))) {
-            node_ = tape->emplace_active_unary_node();
-        }
+        gradient_tape<T, BUFFER_SIZE> tape = get_active_tape<T>();
+        node_                              = tape.emplace_active_unary_node();
     }
 
     void make_multi_node(size_t n)
     {
-        if (gradient_tape<T, BUFFER_SIZE>* tape = safe_cast<gradient_tape<T, BUFFER_SIZE>>(
-                get_active_tape(depth_))) {
-            node_ = tape->emplace_active_multi_node(n);
-        }
+        gradient_tape<T, BUFFER_SIZE> tape = get_active_tape<T>();
+        node_                              = tape.emplace_active_multi_node(n);
     }
 
     template<size_t n>
     void make_multi_node()
     {
-        if (gradient_tape<T, BUFFER_SIZE>* tape = safe_cast<gradient_tape<T, BUFFER_SIZE>>(
-                get_active_tape(depth_))) {
-            node_ = tape->template emplace_active_multi_node<n>();
-        }
+        gradient_tape<T, BUFFER_SIZE>& tape = get_active_tape<T>();
+        node_                               = tape.template emplace_active_multi_node<n>();
     }
 
     template<typename E>
@@ -1002,16 +988,14 @@ public:
     }
     void backward()
     {
-        if (gradient_tape<T, BUFFER_SIZE>* tape = dynamic_cast<gradient_tape<T, BUFFER_SIZE>*>(
-                get_active_tape(depth_))) {
-            auto it       = tape->find(node_);
-            *it->adjoint_ = T(1.0);
-            while (it != tape->begin()) {
-                it->backward();
-                --it;
-            }
+        gradient_tape<T, BUFFER_SIZE>& tape = get_active_tape<T>();
+        auto                           it   = tape.find(node_);
+        *it->adjoint_                       = T(1.0);
+        while (it != tape.begin()) {
             it->backward();
+            --it;
         }
+        it->backward();
     }
 };
 } // namespace reverse_mode
