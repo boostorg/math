@@ -23,7 +23,8 @@
 
 namespace mp11  = boost::mp11;
 namespace bmp   = boost::multiprecision;
-namespace rdiff = boost::math::differentiation::reverse_mode::detail;
+namespace rdiff_detail = boost::math::differentiation::reverse_mode::detail;
+namespace rdiff        = boost::math::differentiation::reverse_mode;
 
 #if defined(BOOST_USE_VALGRIND) || defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
 using bin_float_types = mp11::mp_list<float>;

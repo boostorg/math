@@ -19,8 +19,15 @@ set(HEADERS
     ${BOOST_MATH_TEST_DIRECTORY}test_autodiff_reverse.hpp
 )
 
-set(SOURCES
+set(TEST_MEMORY_ALLOCATORS
     ${BOOST_MATH_TEST_DIRECTORY}test_autodiff_reverse_flat_linear_allocator.cpp
 )
-add_executable(autodiff_reverse_tests ${SOURCES} ${HEADERS})
+
+set(TEST_CONSTRUCTORS
+    ${BOOST_MATH_TEST_DIRECTORY}test_rvar_constructors.cpp
+)
+# add_executable(autodiff_reverse_tests ${SOURCES} ${HEADERS})
+add_executable(autodiff_reverse_tests ${TEST_CONSTRUCTORS} ${HEADERS})
+# add_executable(autodiff_reverse_tests ${TEST_MEMORY_ALLOCATORS} ${HEADERS})
+
 

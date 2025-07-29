@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/mzhelyez/Documents/code/boost/libs/math/include/boost/math/differentiation/build/Imported_Kit-Debug",
+  "command": "/usr/bin/g++  -I/home/mzhelyez/Documents/code/boost/libs/math/include -g -std=gnu++14 -fdiagnostics-color=always -o CMakeFiles/autodiff_reverse_tests.dir/home/mzhelyez/Documents/code/boost/libs/math/test/test_rvar_constructors.cpp.o -c /home/mzhelyez/Documents/code/boost/libs/math/test/test_rvar_constructors.cpp",
+  "file": "/home/mzhelyez/Documents/code/boost/libs/math/test/test_rvar_constructors.cpp",
+  "output": "CMakeFiles/autodiff_reverse_tests.dir/home/mzhelyez/Documents/code/boost/libs/math/test/test_rvar_constructors.cpp.o"
+}
+]

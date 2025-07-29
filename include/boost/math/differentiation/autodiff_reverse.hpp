@@ -20,13 +20,11 @@
 #include <cstddef>
 #include <iostream>
 #include <iterator>
-#include <map>
 #include <memory>
-#include <stack>
 #include <type_traits>
 #include <vector>
-#define BUFFER_SIZE 16 //65536
-constexpr size_t MAX_DEPTH = 21;
+#define BUFFER_SIZE 65536
+//constexpr size_t MAX_DEPTH = 21;
 
 namespace boost {
 namespace math {
@@ -34,19 +32,19 @@ namespace differentiation {
 namespace reverse_mode {
 
 /* forward declarations for utitlity functions */
-template<typename T, class derived_expression>
+template<typename T, size_t order, class derived_expression>
 struct expression;
 
-template<typename T>
+template<typename T, size_t order>
 struct rvar;
 
-template<typename T, typename LHS, typename RHS, typename concrete_binary_operation>
+template<typename T, size_t order, typename LHS, typename RHS, typename concrete_binary_operation>
 struct abstract_binary_expression;
 
-template<typename T, typename ARG, typename concrete_unary_operation>
+template<typename T, size_t order, typename ARG, typename concrete_unary_operation>
 struct abstract_unary_expression;
 
-template<typename T>
+template<typename T, size_t order>
 class gradient_node; // forward declaration for tape
 
 namespace detail {
@@ -70,44 +68,46 @@ struct has_unary_sub_type : std::false_type
 template<typename T>
 struct has_unary_sub_type<T, void_t<typename T::arg_type>> : std::true_type
 {};
-template<typename T, typename Enable = void>
+
+template<typename T, size_t order, typename Enable = void>
 struct count_rvar_impl
 {
     static constexpr std::size_t value = 0;
 };
-template<typename U>
-struct count_rvar_impl<boost::math::differentiation::reverse_mode::rvar<U>>
+template<typename U, size_t order>
+struct count_rvar_impl<boost::math::differentiation::reverse_mode::rvar<U, order>, order>
 {
     static constexpr std::size_t value = 1;
 };
-template<typename T>
-struct count_rvar_impl<
-    T,
-    typename std::enable_if_t<
-        has_binary_sub_types<T>::value
-        && !std::is_same<T, boost::math::differentiation::reverse_mode::rvar<typename T::value_type>>::value
-        && !has_unary_sub_type<T>::value>>
-{
-    static constexpr std::size_t value = count_rvar_impl<typename T::lhs_type>::value
-                                         + count_rvar_impl<typename T::rhs_type>::value;
-};
-template<typename T>
-struct count_rvar_impl<
-    T,
-    typename std::enable_if_t<
-        has_unary_sub_type<T>::value
-        && !std::is_same<T, boost::math::differentiation::reverse_mode::rvar<typename T::value_type>>::value
-        && !has_binary_sub_types<T>::value>>
-{
-    static constexpr std::size_t value = count_rvar_impl<typename T::arg_type>::value;
-};
-template<typename T>
-constexpr std::size_t count_rvars = detail::count_rvar_impl<T>::value;
 
-constexpr size_t increment(size_t n)
+template<typename T, std::size_t order>
+struct count_rvar_impl<T,
+                       order,
+                       std::enable_if_t<has_binary_sub_types<T>::value
+                                        && !std::is_same<T,
+                                                         boost::math::differentiation::reverse_mode::
+                                                             rvar<typename T::value_type, order>>::value
+                                        && !has_unary_sub_type<T>::value>>
 {
-    return n + 1;
-}
+    static constexpr std::size_t value = count_rvar_impl<typename T::lhs_type, order>::value
+                                         + count_rvar_impl<typename T::rhs_type, order>::value;
+};
+
+template<typename T, size_t order>
+struct count_rvar_impl<
+    T,
+    order,
+    typename std::enable_if_t<has_unary_sub_type<T>::value
+                              && !std::is_same<T,
+                                               boost::math::differentiation::reverse_mode::
+                                                   rvar<typename T::value_type, order>>::value
+                              && !has_binary_sub_types<T>::value>>
+{
+    static constexpr std::size_t value = count_rvar_impl<typename T::arg_type, order>::value;
+};
+template<typename T, size_t order>
+constexpr std::size_t count_rvars = detail::count_rvar_impl<T, order>::value;
+
 /* memory management helps for tape */
 template<typename allocator_type, size_t buffer_size>
 class flat_linear_allocator_iterator
@@ -481,30 +481,41 @@ public:
 };
 
 }; // namespace detail
-
-/* base class to be able to store tapes for different T's
- * in case of higher order autodiff */
-class gradient_tape_base
+namespace detail {
+template<typename T, size_t N>
+struct rvar_type_impl
 {
-public:
-    virtual ~gradient_tape_base() = default;
-    virtual size_t depth() const  = 0;
+    using type = rvar<T, N>;
 };
+
+template<typename T>
+struct rvar_type_impl<T, 0>
+{
+    using type = T;
+};
+} // namespace detail
+
+/* rvar_t<T,0> decays to T
+ * otherwise its just identity rvar_t<T,N> = rvar<T,N>
+ * */
+template<typename T, size_t N>
+using rvar_t = typename detail::rvar_type_impl<T, N>::type;
+
 // manages nodes in computational graph
-template<typename T, size_t buffer_size = BUFFER_SIZE>
-class gradient_tape : public gradient_tape_base
+template<typename T, size_t order, size_t buffer_size = BUFFER_SIZE>
+class gradient_tape
 {
 private:
-    size_t                                         depth_ = 0;
-    detail::flat_linear_allocator<T, buffer_size>  adjoints_;
-    detail::flat_linear_allocator<T, buffer_size>  derivatives_;
-
-    detail::flat_linear_allocator<gradient_node<T>, buffer_size>  gradient_nodes_;
-    detail::flat_linear_allocator<gradient_node<T>*, buffer_size> argument_nodes_;
+    using inner_t = rvar_t<T, order - 1>;
+    detail::flat_linear_allocator<inner_t, buffer_size>                  adjoints_;
+    detail::flat_linear_allocator<inner_t, buffer_size>                  derivatives_;
+    detail::flat_linear_allocator<gradient_node<T, order>, buffer_size>  gradient_nodes_;
+    detail::flat_linear_allocator<gradient_node<T, order>*, buffer_size> argument_nodes_;
 
     // compile time check if emplace_back calls on zero
     template<size_t n>
-    gradient_node<T>* fill_node_at_compile_time(std::true_type, gradient_node<T>* node_ptr)
+    gradient_node<T, order>* fill_node_at_compile_time(std::true_type,
+                                                       gradient_node<T, order>* node_ptr)
     {
         node_ptr->derivatives_       = &*derivatives_.template emplace_back_n<n>();
         node_ptr->argument_nodes_    = &*argument_nodes_.template emplace_back_n<n>();
@@ -512,7 +523,8 @@ private:
     }
 
     template<size_t n>
-    gradient_node<T>* fill_node_at_compile_time(std::false_type, gradient_node<T>* node_ptr)
+    gradient_node<T, order>* fill_node_at_compile_time(std::false_type,
+                                                       gradient_node<T, order>* node_ptr)
     {
         node_ptr->derivatives_       = nullptr;
         node_ptr->argument_adjoints_ = nullptr;
@@ -522,7 +534,7 @@ private:
 
 public:
     gradient_tape() { clear(); };
-    size_t depth() const override { return depth_; };
+    //size_t depth() const override { return depth_; };
 
     gradient_tape(const gradient_tape&)            = delete;
     gradient_tape& operator=(const gradient_tape&) = delete;
@@ -554,9 +566,9 @@ public:
     }
 
     // no derivatives or arguments
-    gradient_node<T>* emplace_leaf_node()
+    gradient_node<T, order>* emplace_leaf_node()
     {
-        gradient_node<T>* node   = &*gradient_nodes_.emplace_back();
+        gradient_node<T, order>* node = &*gradient_nodes_.emplace_back();
         node->adjoint_           = &*adjoints_.emplace_back();
         node->derivatives_       = nullptr;
         node->argument_adjoints_ = nullptr;
@@ -566,9 +578,9 @@ public:
     };
 
     // single argument, single derivative
-    gradient_node<T>* emplace_active_unary_node()
+    gradient_node<T, order>* emplace_active_unary_node()
     {
-        gradient_node<T>* node   = &*gradient_nodes_.emplace_back();
+        gradient_node<T, order>* node = &*gradient_nodes_.emplace_back();
         node->n_                 = 1;
         node->adjoint_           = &*adjoints_.emplace_back();
         node->derivatives_       = &*derivatives_.emplace_back();
@@ -578,9 +590,9 @@ public:
 
     // arbitrary number of arguments/derivatives (compile time)
     template<size_t n>
-    gradient_node<T>* emplace_active_multi_node()
+    gradient_node<T, order>* emplace_active_multi_node()
     {
-        gradient_node<T>* node = &*gradient_nodes_.emplace_back();
+        gradient_node<T, order>* node = &*gradient_nodes_.emplace_back();
         node->n_               = n;
         node->adjoint_         = &*adjoints_.emplace_back();
         // emulate if constexpr
@@ -588,9 +600,9 @@ public:
     };
 
     // same as above at runtime
-    gradient_node<T>* emplace_active_multi_node(size_t n)
+    gradient_node<T, order>* emplace_active_multi_node(size_t n)
     {
-        gradient_node<T>* node = &*gradient_nodes_.emplace_back();
+        gradient_node<T, order>* node = &*gradient_nodes_.emplace_back();
         node->n_               = n;
         node->adjoint_         = &*adjoints_.emplace_back();
         if (n > 0) {
@@ -609,7 +621,7 @@ public:
     // return type is an iterator
     auto begin() { return gradient_nodes_.begin(); }
     auto end() { return gradient_nodes_.end(); }
-    auto find(gradient_node<T>* node) { return gradient_nodes_.find(node); };
+    auto find(gradient_node<T, order>* node) { return gradient_nodes_.find(node); };
     void add_checkpoint()
     {
         gradient_nodes_.add_checkpoint();
@@ -646,13 +658,12 @@ public:
         argument_nodes_.rewind();
     }
 
-    // randoma acces
-    T&       operator[](std::size_t i) { return gradient_nodes_[i]; }
-    const T& operator[](std::size_t i) const { return gradient_nodes_[i]; }
+    // random acces
+    gradient_node<T, order>&       operator[](std::size_t i) { return gradient_nodes_[i]; }
+    const gradient_node<T, order>& operator[](std::size_t i) const { return gradient_nodes_[i]; }
 };
-
 //class rvar;
-template<typename T> // no CRTP, just storage, maybe needs size_t template in the future
+template<typename T, size_t order> // no CRTP, just storage
 class gradient_node
 {
     /*
@@ -660,15 +671,16 @@ class gradient_node
      * pointers to arguments aren't needed here
      * */
 private:
-    size_t             n_;
-    T*                 adjoint_;
-    T*                 derivatives_;
-    T**                argument_adjoints_;
-    gradient_node<T>** argument_nodes_;
+    size_t n_;
+    using inner_t = rvar_t<T, order - 1>;
+    inner_t*                  adjoint_;
+    inner_t*                  derivatives_;
+    inner_t**                 argument_adjoints_;
+    gradient_node<T, order>** argument_nodes_;
 
 public:
-    friend class gradient_tape<T>;
-    friend class rvar<T>;
+    friend class gradient_tape<T, order>;
+    friend class rvar<T, order>;
 
     gradient_node() = default;
     explicit gradient_node(const size_t n)
@@ -677,29 +689,38 @@ public:
         , derivatives_(nullptr)
         , argument_adjoints_(nullptr)
     {}
-    explicit gradient_node(
-        const size_t n, T* adjoint, T* derivatives, T** argument_adjoints, rvar<T>** arguments)
+    explicit gradient_node(const size_t     n,
+                           T*               adjoint,
+                           T*               derivatives,
+                           T**              argument_adjoints,
+                           rvar<T, order>** arguments)
         : n_(n)
         , adjoint_(adjoint)
         , derivatives_(derivatives)
         , argument_adjoints_(argument_adjoints)
     {}
 
-    T get_adjoint_v() const { return *adjoint_; }
-    T get_derivative_v(size_t arg_id) const { return derivatives_[arg_id]; };
-    T get_argument_adjoint_v(size_t arg_id) const { return *argument_nodes_[arg_id]->adjoint_; }
+    inner_t get_adjoint_v() const { return *adjoint_; }
+    inner_t get_derivative_v(size_t arg_id) const { return derivatives_[arg_id]; };
+    inner_t get_argument_adjoint_v(size_t arg_id) const
+    {
+        return *argument_nodes_[arg_id]->adjoint_;
+    }
 
-    T* get_adjoint_ptr() const { return adjoint_; };
-    T* get_derivative_ptr() const { return derivatives_; };
-    T* get_argument_adjoint_ptr(size_t arg_id) const { return argument_nodes_[arg_id]->adjoint; };
+    inner_t* get_adjoint_ptr() const { return adjoint_; };
+    inner_t* get_derivative_ptr() const { return derivatives_; };
+    inner_t* get_argument_adjoint_ptr(size_t arg_id) const
+    {
+        return argument_nodes_[arg_id]->adjoint;
+    };
 
-    void update_adjoint_v(T value) { *adjoint_ = value; };
-    void update_derivative_v(size_t arg_id, T value) { derivatives_[arg_id] = value; };
-    void update_argument_adj_v(size_t arg_id, T value)
+    void update_adjoint_v(inner_t value) { *adjoint_ = value; };
+    void update_derivative_v(size_t arg_id, inner_t value) { derivatives_[arg_id] = value; };
+    void update_argument_adj_v(size_t arg_id, inner_t value)
     {
         argument_nodes_[arg_id]->update_adjoint_v(value);
     };
-    void update_argument_ptr_at(size_t arg_id, gradient_node<T>* node_ptr)
+    void update_argument_ptr_at(size_t arg_id, gradient_node<T, order>* node_ptr)
     {
         argument_nodes_[arg_id] = node_ptr;
     }
@@ -726,50 +747,57 @@ public:
         }
     }
 };
-template<typename T, class derived_expression>
+template<typename T, size_t order, class derived_expression>
 struct expression
 {
     /* @brief
      * base expression class
      * */
     static constexpr size_t num_literals = 0;
-    T evaluate() const { return static_cast<const derived_expression*>(this)->evaluate(); }
+    using inner_t                        = rvar_t<T, order - 1>;
+    inner_t evaluate() const { return static_cast<const derived_expression*>(this)->evaluate(); }
 
     template<size_t arg_index>
-    void propagatex(gradient_node<T>* node, T adj) const
+    void propagatex(gradient_node<T, order>* node, inner_t adj) const
     {
         return static_cast<const derived_expression*>(this)->template propagatex<arg_index>(node,
                                                                                             adj);
     };
 };
-template<typename T, typename LHS, typename RHS, typename concrete_binary_operation>
+template<typename T, size_t order, typename LHS, typename RHS, typename concrete_binary_operation>
 struct abstract_binary_expression
-    : public expression<T, abstract_binary_expression<T, LHS, RHS, concrete_binary_operation>>
+    : public expression<T,
+                        order,
+                        abstract_binary_expression<T, order, LHS, RHS, concrete_binary_operation>>
 {
     using lhs_type   = LHS;
     using rhs_type   = RHS;
     using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
     const lhs_type lhs;
     const rhs_type rhs;
 
-    explicit abstract_binary_expression(const expression<T, LHS>& left_hand_expr,
-                                        const expression<T, RHS>& right_hand_expr)
+    explicit abstract_binary_expression(const expression<T, order, LHS>& left_hand_expr,
+                                        const expression<T, order, RHS>& right_hand_expr)
         : lhs(static_cast<const LHS&>(left_hand_expr))
         , rhs(static_cast<const RHS&>(right_hand_expr)){};
 
-    T evaluate() const { return static_cast<const concrete_binary_operation*>(this)->evaluate(); };
+    inner_t evaluate() const
+    {
+        return static_cast<const concrete_binary_operation*>(this)->evaluate();
+    };
 
     template<size_t arg_index>
-    void propagatex(gradient_node<T>* node, T adj) const
+    void propagatex(gradient_node<T, order>* node, inner_t adj) const
     {
-        T lv        = lhs.evaluate();
-        T rv        = rhs.evaluate();
-        T v         = evaluate();
-        T partial_l = concrete_binary_operation::left_derivative(lv, rv, v);
-        T partial_r = concrete_binary_operation::right_derivative(lv, rv, v);
+        inner_t lv        = lhs.evaluate();
+        inner_t rv        = rhs.evaluate();
+        inner_t v         = evaluate();
+        inner_t partial_l = concrete_binary_operation::left_derivative(lv, rv, v);
+        inner_t partial_r = concrete_binary_operation::right_derivative(lv, rv, v);
 
-        constexpr size_t num_lhs_args = detail::count_rvars<LHS>;
-        constexpr size_t num_rhs_args = detail::count_rvars<RHS>;
+        constexpr size_t num_lhs_args = detail::count_rvars<LHS, order>;
+        constexpr size_t num_rhs_args = detail::count_rvars<RHS, order>;
 
         propagate_lhs<num_lhs_args, arg_index>(node, adj * partial_l);
         propagate_rhs<num_rhs_args, arg_index + num_lhs_args>(node, adj * partial_r);
@@ -780,7 +808,7 @@ private:
     template<std::size_t num_args,
              std::size_t arg_index_,
              typename std::enable_if<(num_args > 0), int>::type = 0>
-    void propagate_lhs(gradient_node<T>* node, T adj) const
+    void propagate_lhs(gradient_node<T, order>* node, inner_t adj) const
     {
         lhs.template propagatex<arg_index_>(node, adj);
     }
@@ -788,13 +816,13 @@ private:
     template<std::size_t num_args,
              std::size_t arg_index_,
              typename std::enable_if<(num_args == 0), int>::type = 0>
-    void propagate_lhs(gradient_node<T>*, T) const
+    void propagate_lhs(gradient_node<T, order>*, inner_t) const
     {}
 
     template<std::size_t num_args,
              std::size_t arg_index_,
              typename std::enable_if<(num_args > 0), int>::type = 0>
-    void propagate_rhs(gradient_node<T>* node, T adj) const
+    void propagate_rhs(gradient_node<T, order>* node, inner_t adj) const
     {
         rhs.template propagatex<arg_index_>(node, adj);
     }
@@ -802,159 +830,177 @@ private:
     template<std::size_t num_args,
              std::size_t arg_index_,
              typename std::enable_if<(num_args == 0), int>::type = 0>
-    void propagate_rhs(gradient_node<T>*, T) const
+    void propagate_rhs(gradient_node<T, order>*, inner_t) const
     {}
 };
-template<typename T, typename LHS, typename RHS>
-struct add_expr : public abstract_binary_expression<T, LHS, RHS, add_expr<T, LHS, RHS>>
+template<typename T, size_t order, typename ARG, typename concrete_unary_operation>
+struct abstract_unary_expression
+    : public expression<T, order, abstract_unary_expression<T, order, ARG, concrete_unary_operation>>
+{};
+
+template<typename T, size_t order, typename LHS, typename RHS>
+struct add_expr
+    : public abstract_binary_expression<T, order, LHS, RHS, add_expr<T, order, LHS, RHS>>
 {
     using lhs_type   = LHS;
     using rhs_type   = RHS;
     using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
     // Explicitly define constructor to forward to base class
-    explicit add_expr(const expression<T, LHS>& left_hand_expr,
-                      const expression<T, RHS>& right_hand_expr)
-        : abstract_binary_expression<T, LHS, RHS, add_expr<T, LHS, RHS>>(left_hand_expr,
-                                                                         right_hand_expr)
+    explicit add_expr(const expression<T, order, LHS>& left_hand_expr,
+                      const expression<T, order, RHS>& right_hand_expr)
+        : abstract_binary_expression<T, order, LHS, RHS, add_expr<T, order, LHS, RHS>>(
+              left_hand_expr, right_hand_expr)
     {}
 
-    T              evaluate() const { return this->lhs.evaluate() + this->rhs.evaluate(); }
-    static const T left_derivative(const T& l, const T& r, const T& v) { return T(1.0); }
-    static const T right_derivative(const T& l, const T& r, const T& v) { return T(1.0); }
+    inner_t              evaluate() const { return this->lhs.evaluate() + this->rhs.evaluate(); }
+    static const inner_t left_derivative(const inner_t& l, const inner_t& r, const inner_t& v)
+    {
+        return inner_t(1.0);
+    }
+    static const inner_t right_derivative(const inner_t& l, const inner_t& r, const inner_t& v)
+    {
+        return inner_t(1.0);
+    }
 };
 
-template<typename T, typename LHS, typename RHS>
-struct mult_expr : public abstract_binary_expression<T, LHS, RHS, mult_expr<T, LHS, RHS>>
+template<typename T, size_t order, typename LHS, typename RHS>
+struct mult_expr
+    : public abstract_binary_expression<T, order, LHS, RHS, mult_expr<T, order, LHS, RHS>>
 {
     using lhs_type   = LHS;
     using rhs_type   = RHS;
     using value_type = T;
-
+    using inner_t    = rvar_t<T, order - 1>;
     // Explicitly define constructor to forward to base class
-    explicit mult_expr(const expression<T, LHS>& left_hand_expr,
-                       const expression<T, RHS>& right_hand_expr)
-        : abstract_binary_expression<T, LHS, RHS, mult_expr<T, LHS, RHS>>(left_hand_expr,
-                                                                          right_hand_expr)
+    explicit mult_expr(const expression<T, order, LHS>& left_hand_expr,
+                       const expression<T, order, RHS>& right_hand_expr)
+        : abstract_binary_expression<T, order, LHS, RHS, mult_expr<T, order, LHS, RHS>>(
+              left_hand_expr, right_hand_expr)
     {}
 
-    T              evaluate() const { return this->lhs.evaluate() * this->rhs.evaluate(); };
-    static const T left_derivative(const T& l, const T& r, const T& v) { return r; };
-    static const T right_derivative(const T& l, const T& r, const T& v) { return l; };
+    inner_t              evaluate() const { return this->lhs.evaluate() * this->rhs.evaluate(); };
+    static const inner_t left_derivative(const inner_t& l, const inner_t& r, const inner_t& v)
+    {
+        return r;
+    };
+    static const inner_t right_derivative(const inner_t& l, const inner_t& r, const inner_t& v)
+    {
+        return l;
+    };
 };
 
-template<typename T, typename LHS, typename RHS>
-mult_expr<T, LHS, RHS> operator*(const expression<T, LHS>& lhs, const expression<T, RHS>& rhs)
+template<typename T, size_t order, typename LHS, typename RHS>
+mult_expr<T, order, LHS, RHS> operator*(const expression<T, order, LHS>& lhs,
+                                        const expression<T, order, RHS>& rhs)
 {
-    return mult_expr<T, LHS, RHS>(lhs, rhs);
+    return mult_expr<T, order, LHS, RHS>(lhs, rhs);
 }
-template<typename T, typename LHS, typename RHS>
-add_expr<T, LHS, RHS> operator+(const expression<T, LHS>& lhs, const expression<T, RHS>& rhs)
+template<typename T, size_t order, typename LHS, typename RHS>
+add_expr<T, order, LHS, RHS> operator+(const expression<T, order, LHS>& lhs,
+                                       const expression<T, order, RHS>& rhs)
 {
-    return add_expr<T, LHS, RHS>(lhs, rhs);
+    return add_expr<T, order, LHS, RHS>(lhs, rhs);
 }
-
-template<typename T>
-class rvar;          // forward declaration
-template<typename T> //counts variable depth, so rvar<double> = 0, rvar<rvar<double>> = 1 ...
-struct type_depth
+/****************************************************************************************************************/
+template<typename T, size_t order>
+inline gradient_tape<T, order, BUFFER_SIZE>& get_active_tape()
 {
-    static constexpr size_t value = 0;
-};
-
-template<typename T>
-struct type_depth<rvar<T>>
-{
-    static constexpr size_t value = type_depth<T>::value + 1;
-};
-
-template<typename T>
-inline gradient_tape<T, BUFFER_SIZE>& get_active_tape()
-{
-    static thread_local gradient_tape<T, BUFFER_SIZE> tape;
+    static thread_local gradient_tape<T, order, BUFFER_SIZE> tape;
     return tape;
 }
-template<typename T>
-class rvar : public expression<T, rvar<T>>
+
+template<typename T, size_t order = 1>
+class rvar : public expression<T, order, rvar<T, order>>
 {
 private:
-    friend class gradient_node<T>;
-    T  value_;
-    gradient_node<T>*       node_;
-    static constexpr size_t depth_ = type_depth<T>::value;
-
-    template<typename U>
-    U* safe_cast(gradient_tape_base* base)
-    {
-        return dynamic_cast<U*>(base);
-    }
+    using inner_t = rvar_t<T, order - 1>;
+    friend class gradient_node<T, order>;
+    inner_t                  value_;
+    gradient_node<T, order>* node_;
+    template<typename, size_t>
+    friend class rvar;
 
     void make_leaf_node()
     {
-        gradient_tape<T, BUFFER_SIZE>& tape = get_active_tape<T>();
+        gradient_tape<T, order, BUFFER_SIZE>& tape = get_active_tape<T, order>();
         node_                               = tape.emplace_leaf_node();
     }
 
     void make_unary_node()
     {
-        gradient_tape<T, BUFFER_SIZE> tape = get_active_tape<T>();
-        node_                              = tape.emplace_active_unary_node();
+        gradient_tape<T, order, BUFFER_SIZE>& tape = get_active_tape<T, order>();
+        node_                                      = tape.emplace_active_unary_node();
     }
 
     void make_multi_node(size_t n)
     {
-        gradient_tape<T, BUFFER_SIZE> tape = get_active_tape<T>();
-        node_                              = tape.emplace_active_multi_node(n);
+        gradient_tape<T, order, BUFFER_SIZE>& tape = get_active_tape<T, order>();
+        node_                                      = tape.emplace_active_multi_node(n);
     }
 
     template<size_t n>
     void make_multi_node()
     {
-        gradient_tape<T, BUFFER_SIZE>& tape = get_active_tape<T>();
-        node_                               = tape.template emplace_active_multi_node<n>();
+        gradient_tape<T, order, BUFFER_SIZE>& tape = get_active_tape<T, order>();
+        node_                                      = tape.template emplace_active_multi_node<n>();
     }
 
     template<typename E>
-    void make_rvar_from_expr(expression<T, E>& expr)
+    void make_rvar_from_expr(const expression<T, order, E>& expr)
     {
-        constexpr size_t num_node_args = detail::count_rvars<E>;
-        make_multi_node<num_node_args>();
-        expr.template propagatex<0>(node_, T(1.0));
+        make_multi_node<detail::count_rvars<E, order>>();
+        expr.template propagatex<0>(node_, inner_t(1.0));
+    }
+    T get_item_impl(std::true_type) const
+    {
+        return value_.get_item_impl(std::integral_constant<bool, (order - 1 > 1)>{});
     }
 
+    T get_item_impl(std::false_type) const { return value_; }
+
 public:
-    static constexpr size_t num_literals = 1;
+    using value_type = T;
+
     rvar()
-        : value_(0.0)
+        : value_()
     {
         make_leaf_node();
     }
     explicit rvar(const T value)
-        : value_(value)
+        : value_(inner_t{value})
     {
         make_leaf_node();
     }
-    rvar operator=(const T value)
+    rvar& operator=(T v)
     {
-        value_ = value;
+        value_ = inner_t(v);
         make_leaf_node();
     }
+
     template<size_t arg_index>
-    void propagatex(gradient_node<T>* node, T adj) const
+    void propagatex(gradient_node<T, order>* node, inner_t adj) const
     {
         node->update_derivative_v(arg_index, adj);
         node->update_argument_ptr_at(arg_index, node_);
     }
 
     template<class E>
-    rvar(expression<T, E>& expr)
+    rvar(const expression<T, order, E>& expr)
     {
         value_ = expr.evaluate();
         make_rvar_from_expr(expr);
     }
+    template<class E>
+    rvar& operator=(const expression<T, order, E>& expr)
+    {
+        value_ = expr.evaluate();
+        mnake_Rvar_from_expr(expr);
+    }
 
-    T adjoint() const { return node_->get_adjoint_v(); };
-    T evaluate() const { return value_; }; // TODO: these will be different
-    T item() const { return value_; };
+    const inner_t& adjoint() const { return *node_->get_adjoint_ptr(); }
+    const inner_t& evaluate() const { return value_; };
+    T              item() { return get_item_impl(std::integral_constant<bool, (order > 1)>{}); }
 
     void print_der_info()
     {
@@ -964,9 +1010,9 @@ public:
     }
     void backward()
     {
-        gradient_tape<T, BUFFER_SIZE>& tape = get_active_tape<T>();
-        auto                           it   = tape.find(node_);
-        *it->adjoint_                       = T(1.0);
+        gradient_tape<T, order, BUFFER_SIZE>& tape = get_active_tape<T, order>();
+        auto                                  it   = tape.find(node_);
+        it->update_adjoint_v(inner_t(1.0));
         while (it != tape.begin()) {
             it->backward();
             --it;
@@ -974,6 +1020,13 @@ public:
         it->backward();
     }
 };
+
+template<typename T, size_t num_derivatives>
+rvar<T, num_derivatives> make_rvar(T&& v)
+{
+    static_assert(num_derivatives > 0, "rvar order must be >= 1");
+    return rvar<T, num_derivatives>(std::forward<T>(v));
+}
 } // namespace reverse_mode
 } // namespace differentiation
 } // namespace math

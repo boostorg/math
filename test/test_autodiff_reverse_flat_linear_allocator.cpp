@@ -6,7 +6,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_constructors, T, all_float_t
 {
     size_t                              buffer_size = 16;
     RandomSample<T>                     rng{-1, 1};
-    rdiff::flat_linear_allocator<T, 16> float_allocator{};
+    rdiff_detail::flat_linear_allocator<T, 16> float_allocator{};
     for (size_t i = 0; i < 2 * buffer_size - buffer_size / 2; i++) {
         float_allocator.emplace_back(rng.next());
     }
@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_test_emplace, T, all_float_t
 {
     size_t                              buffer_size = 16;
     RandomSample<T>                     rng{-1, 1};
-    rdiff::flat_linear_allocator<T, 16> float_allocator{};
+    rdiff_detail::flat_linear_allocator<T, 16> float_allocator{};
     std::vector<T>                      test_vector;
 
     for (int i = 0; i < 2 * buffer_size - 1; i++) {
@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_test_checkpointing, T, all_f
 {
     size_t                              buffer_size = 16;
     RandomSample<T>                     rng{-1, 1};
-    rdiff::flat_linear_allocator<T, 16> float_allocator{};
+    rdiff_detail::flat_linear_allocator<T, 16> float_allocator{};
     std::vector<T>                      test_vector;
     std::vector<size_t>                 checkpoint_indices{2, 11, 15, 16, 17, 28};
     std::vector<T>                      expected_value_at_checkpoint;
@@ -110,19 +110,4 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_test_checkpointing, T, all_f
     BOOST_CHECK_EQUAL(float_allocator.capacity(), 2 * buffer_size);
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(vars_n_stuff, T, all_float_types)
-{
-    reverse_mode::gradient_tape<T>    tape{};        // depth = 0 for rvar<T>
-    reverse_mode::scoped_tape_context context(tape); // Activate tape for current thread
-
-    reverse_mode::rvar<T> x(3.0), y(2.0);
-    auto                  z = x * x * x;
-    std::cout << decltype(z)::num_literals << std::endl;
-    // std::cout << z.evaluate() << std::endl;
-    reverse_mode::rvar<T> a(z);
-    std::cout << a.evaluate() << std::endl;
-    a.print_der_info();
-    a.backward();
-    std::cout << x.adjoint() << std::endl;
-}
 BOOST_AUTO_TEST_SUITE_END()
