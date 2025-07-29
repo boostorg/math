@@ -7,11 +7,13 @@ set(CMAKE_CXX_STANDARD 14)
 
 enable_testing()
 
-set(BOOST_ROOT_DIRECTORY /home/mzhelyez/Documents/code/boost/)
+set(BOOST_ROOT_DIRECTORY /Users/mzhelyez/Documents/code/boost/)
 set(BOOST_MATH_DIRECTORY ${BOOST_ROOT_DIRECTORY}/libs/math/)
 set(BOOST_MATH_TEST_DIRECTORY ${BOOST_MATH_DIRECTORY}test/)
 
-include_directories(${BOOST_MATH_DIRECTORY}include)
+include_directories(${BOOST_MATH_DIRECTORY}include
+                    ${BOOST_ROOT_DIRECTORY}
+)
 
 
 set(HEADERS
@@ -26,8 +28,10 @@ set(TEST_MEMORY_ALLOCATORS
 set(TEST_CONSTRUCTORS
     ${BOOST_MATH_TEST_DIRECTORY}test_rvar_constructors.cpp
 )
-# add_executable(autodiff_reverse_tests ${SOURCES} ${HEADERS})
-add_executable(autodiff_reverse_tests ${TEST_CONSTRUCTORS} ${HEADERS})
-# add_executable(autodiff_reverse_tests ${TEST_MEMORY_ALLOCATORS} ${HEADERS})
 
+SET(TEST_BASIC_OPS ${BOOST_MATH_TEST_DIRECTORY}test_autodiff_basic_math_ops.cpp)
+# add_executable(autodiff_reverse_tests ${SOURCES} ${HEADERS})
+# add_executable(autodiff_reverse_tests ${TEST_CONSTRUCTORS} ${HEADERS})
+# add_executable(autodiff_reverse_tests ${TEST_MEMORY_ALLOCATORS} ${HEADERS})
+add_executable(autodiff_reverse_tests ${TEST_BASIC_OPS} ${HEADERS})
 

@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/mzhelyez/Documents/code/boost/libs/math/include/boost/math/differentiation/build",
+  "command": "/usr/bin/c++  -I/Users/mzhelyez/Documents/code/boost/libs/math/include -I/Users/mzhelyez/Documents/code/boost/Users/mzhelyez/Documents/code/boost/libs/test/include -std=gnu++14 -arch arm64 -o CMakeFiles/autodiff_reverse_tests.dir/Users/mzhelyez/Documents/code/boost/libs/math/test/test_rvar_constructors.cpp.o -c /Users/mzhelyez/Documents/code/boost/libs/math/test/test_rvar_constructors.cpp",
+  "file": "/Users/mzhelyez/Documents/code/boost/libs/math/test/test_rvar_constructors.cpp",
+  "output": "CMakeFiles/autodiff_reverse_tests.dir/Users/mzhelyez/Documents/code/boost/libs/math/test/test_rvar_constructors.cpp.o"
+}
+]

@@ -15,7 +15,6 @@
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/promotion.hpp>
-#include <boost/variant.hpp>
 #include <cassert>
 #include <cstddef>
 #include <iostream>
@@ -23,7 +22,7 @@
 #include <memory>
 #include <type_traits>
 #include <vector>
-#define BUFFER_SIZE 65536
+#define BUFFER_SIZE 16
 //constexpr size_t MAX_DEPTH = 21;
 
 namespace boost {
@@ -48,7 +47,8 @@ template<typename T, size_t order>
 class gradient_node; // forward declaration for tape
 
 namespace detail {
-
+template<typename...>
+using void_t = void;
 // Check if T has a 'value_type' alias
 template<typename T, typename Enable = void>
 struct has_value_type : std::false_type
@@ -557,7 +557,10 @@ public:
         }
         return *this;
     }
-    void clear()
+    ~gradient_tape() noexcept {
+        clear();
+    }
+    void clear() noexcept
     {
         adjoints_.clear();
         derivatives_.clear();
@@ -659,8 +662,8 @@ public:
     }
 
     // random acces
-    gradient_node<T, order>&       operator[](std::size_t i) { return gradient_nodes_[i]; }
-    const gradient_node<T, order>& operator[](std::size_t i) const { return gradient_nodes_[i]; }
+    gradient_node<T, order>&       operator[](size_t i) { return gradient_nodes_[i]; }
+    const gradient_node<T, order>& operator[](size_t i) const { return gradient_nodes_[i]; }
 };
 //class rvar;
 template<typename T, size_t order> // no CRTP, just storage
@@ -711,7 +714,7 @@ public:
     inner_t* get_derivative_ptr() const { return derivatives_; };
     inner_t* get_argument_adjoint_ptr(size_t arg_id) const
     {
-        return argument_nodes_[arg_id]->adjoint;
+        return argument_nodes_[arg_id]->adjoint_;
     };
 
     void update_adjoint_v(inner_t value) { *adjoint_ = value; };
@@ -730,7 +733,7 @@ public:
         if (!n_)
             return;
 
-        if (!adjoint_)
+        if (!adjoint_ || fabs(*adjoint_) < std::numeric_limits<T>::epsilon())
             return;
 
         if (!argument_nodes_)
@@ -836,12 +839,42 @@ private:
 template<typename T, size_t order, typename ARG, typename concrete_unary_operation>
 struct abstract_unary_expression
     : public expression<T, order, abstract_unary_expression<T, order, ARG, concrete_unary_operation>>
-{};
+{
+    using arg_type   = ARG;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+    const arg_type arg;
+    const T constant;
+    explicit abstract_unary_expression(const expression<T, order, ARG>& arg_expr, const T& constant)
 
+        : arg(static_cast<const ARG&>(arg_expr)), constant(constant) {};
+
+    inner_t evaluate() const
+    {
+        return static_cast<const concrete_unary_operation*>(this)->evaluate();
+    };
+
+    template<size_t arg_index>
+    void propagatex(gradient_node<T, order>* node, inner_t adj) const
+    {
+        inner_t argv        = arg.evaluate();
+        inner_t v         = evaluate();
+        inner_t partial_arg = concrete_unary_operation::derivative(argv, v, constant);
+
+        constexpr size_t num_arg_args = detail::count_rvars<ARG, order>;
+
+        arg.template propagatex<arg_index>(node, adj);
+    }
+
+};
+/****************************************************************************************************************/
 template<typename T, size_t order, typename LHS, typename RHS>
 struct add_expr
     : public abstract_binary_expression<T, order, LHS, RHS, add_expr<T, order, LHS, RHS>>
 {
+    /* @brief addition
+     * rvar+rvar
+     * */
     using lhs_type   = LHS;
     using rhs_type   = RHS;
     using value_type = T;
@@ -863,11 +896,34 @@ struct add_expr
         return inner_t(1.0);
     }
 };
+template<typename T, size_t order, typename ARG>
+struct add_const_expr : public abstract_unary_expression<T, order, ARG, add_const_expr<T, order, ARG>>
+{
+    /* @brief
+     * rvar+float or float+rvar
+     * */
+    using arg_type = ARG;
+    using value_type = T;
+    using inner_t = rvar_t<T,order-1>;
+    explicit add_const_expr(const expression<T, order, ARG>& arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, add_const_expr<T, order, ARG>>(arg_expr, v)
+    {};
 
+    inner_t evaluate() const {return this->arg.evaluate() + inner_t(this->constant);}
+    static const inner_t derivative(const inner_t& argv, const inner_t& v, const T& constant)
+    {
+        return inner_t(1.0);
+    }
+
+};
+/****************************************************************************************************************/
 template<typename T, size_t order, typename LHS, typename RHS>
 struct mult_expr
     : public abstract_binary_expression<T, order, LHS, RHS, mult_expr<T, order, LHS, RHS>>
 {
+    /* @brief multiplication
+     * rvar * rvar
+     * */
     using lhs_type   = LHS;
     using rhs_type   = RHS;
     using value_type = T;
@@ -889,25 +945,217 @@ struct mult_expr
         return l;
     };
 };
+template<typename T, size_t order, typename ARG>
+struct mult_const_expr : public abstract_unary_expression<T, order, ARG, mult_const_expr<T, order, ARG>>
+{
+    /* @brief
+     * rvar+float or float+rvar
+     * */
+    using arg_type = ARG;
+    using value_type = T;
+    using inner_t = rvar_t<T,order-1>;
 
+    explicit mult_const_expr(const expression<T, order, ARG>& arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, mult_const_expr<T, order, ARG>>(arg_expr, v)
+    {};
+
+    inner_t evaluate() const {return this->arg.evaluate() * inner_t(this->constant);}
+    static const inner_t derivative(const inner_t& argv, const inner_t& v, const T& constant)
+    {
+        return inner_t(constant);
+    }
+
+};
+/****************************************************************************************************************/
+template<typename T, size_t order, typename LHS, typename RHS>
+struct sub_expr
+    : public abstract_binary_expression<T, order, LHS, RHS, sub_expr<T, order, LHS, RHS>>
+{
+    /* @brief addition
+     * rvar-rvar
+     * */
+    using lhs_type   = LHS;
+    using rhs_type   = RHS;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+    // Explicitly define constructor to forward to base class
+    explicit sub_expr(const expression<T, order, LHS>& left_hand_expr,
+                      const expression<T, order, RHS>& right_hand_expr)
+        : abstract_binary_expression<T, order, LHS, RHS, sub_expr<T, order, LHS, RHS>>(
+              left_hand_expr, right_hand_expr)
+    {}
+
+    inner_t              evaluate() const { return this->lhs.evaluate() - this->rhs.evaluate(); }
+    static const inner_t left_derivative(const inner_t& l, const inner_t& r, const inner_t& v)
+    {
+        return inner_t(1.0);
+    }
+    static const inner_t right_derivative(const inner_t& l, const inner_t& r, const inner_t& v)
+    {
+        return inner_t(-1.0);
+    }
+};
+
+/****************************************************************************************************************/
+template<typename T, size_t order, typename LHS, typename RHS>
+struct div_expr
+    : public abstract_binary_expression<T, order, LHS, RHS, div_expr<T, order, LHS, RHS>>
+{
+    /* @brief multiplication
+     * rvar / rvar
+     * */
+    using lhs_type   = LHS;
+    using rhs_type   = RHS;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+    // Explicitly define constructor to forward to base class
+    explicit div_expr(const expression<T, order, LHS>& left_hand_expr,
+                       const expression<T, order, RHS>& right_hand_expr)
+        : abstract_binary_expression<T, order, LHS, RHS, div_expr<T, order, LHS, RHS>>(
+              left_hand_expr, right_hand_expr)
+    {}
+
+    inner_t              evaluate() const { return this->lhs.evaluate() / this->rhs.evaluate(); };
+    static const inner_t left_derivative(const inner_t& l, const inner_t& r, const inner_t& v)
+    {
+        return 1.0 / r;
+    };
+    static const inner_t right_derivative(const inner_t& l, const inner_t& r, const inner_t& v)
+    {
+        return - l / (r*r);
+    };
+};
+template<typename T, size_t order, typename ARG>
+struct inv_expr : public abstract_unary_expression<T, order, ARG, inv_expr<T, order, ARG>>
+{
+    /* @brief
+     * 1.0 / rvar
+     * */
+    using arg_type = ARG;
+    using value_type = T;
+    using inner_t = rvar_t<T,order-1>;
+
+    explicit inv_expr(const expression<T, order, ARG>& arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, inv_expr<T, order, ARG>>(arg_expr, v)
+    {};
+
+    inner_t evaluate() const {return 1.0/this->arg.evaluate();}
+    static const inner_t derivative(const inner_t& argv, const inner_t& v, const T& constant)
+    {
+        return inner_t(constant);
+    }
+
+};
+/****************************************************************************************************************/
 template<typename T, size_t order, typename LHS, typename RHS>
 mult_expr<T, order, LHS, RHS> operator*(const expression<T, order, LHS>& lhs,
                                         const expression<T, order, RHS>& rhs)
 {
     return mult_expr<T, order, LHS, RHS>(lhs, rhs);
 }
+template<typename T, size_t order, typename ARG>
+mult_const_expr<T,order,ARG> operator*(const expression<T,order,ARG>& arg, const T& v)
+{
+    return mult_const_expr<T,order,ARG>(arg, v);
+}
+template<typename T, size_t order, typename ARG>
+mult_const_expr<T,order,ARG> operator*(const T& v, const expression<T,order,ARG>& arg)
+{
+    return mult_const_expr<T,order,ARG>(arg, v);
+}
+/****************************************************************************************************************/
+/* + */
 template<typename T, size_t order, typename LHS, typename RHS>
 add_expr<T, order, LHS, RHS> operator+(const expression<T, order, LHS>& lhs,
                                        const expression<T, order, RHS>& rhs)
 {
     return add_expr<T, order, LHS, RHS>(lhs, rhs);
 }
+template<typename T, size_t order, typename ARG>
+add_const_expr<T,order,ARG> operator+(const expression<T,order,ARG>& arg, const T& v)
+{
+    return add_const_expr<T,order,ARG>(arg, v);
+}
+template<typename T, size_t order, typename ARG>
+add_const_expr<T,order,ARG> operator+(const T& v, const expression<T,order,ARG>& arg)
+{
+    return add_const_expr<T,order,ARG>(arg, v);
+}
+/****************************************************************************************************************/
+/* - */
+
+/* @brief negation (-1.0*rvar) */
+template<typename T, size_t order, typename ARG>
+mult_const_expr<T,order,ARG> operator-(const expression<T,order,ARG>& arg)
+{
+    return mult_const_expr<T,order,ARG>(arg, -1.0);
+}
+
+/* @brief subtraction rvar-rvar */
+template<typename T, size_t order, typename LHS, typename RHS>
+sub_expr<T,order,LHS,RHS> operator-(const expression<T, order, LHS>& lhs,
+                                       const expression<T, order, RHS>& rhs)
+{
+    return sub_expr<T,order,LHS,RHS>(lhs, rhs);
+}
+
+/* @brief subtraction float - rvar */
+template<typename T, size_t order, typename ARG>
+add_const_expr<T,order,ARG> operator-(const expression<T,order,ARG>& arg, const T& v)
+{
+    /* rvar - float = rvar + (-float) */
+    return add_const_expr<T,order,ARG>(arg, -1.0*v);
+}
+
+/* @brief subtraction rvar - float */
+template<typename T, size_t order, typename ARG>
+add_const_expr<T,order,ARG> operator-(const T& v, const expression<T,order,ARG>& arg)
+{
+    /* float - rvar = -rvar + float */
+    return add_const_expr<T,order,ARG>(-arg, v);
+}
+/****************************************************************************************************************/
+/* / */
+
+/* @brief negation (-1.0*rvar) */
+template<typename T, size_t order, typename ARG>
+mult_const_expr<T,order,ARG> operator-(const expression<T,order,ARG>& arg)
+{
+    return mult_const_expr<T,order,ARG>(arg, -1.0);
+}
+
+/* @brief subtraction rvar-rvar */
+template<typename T, size_t order, typename LHS, typename RHS>
+sub_expr<T,order,LHS,RHS> operator-(const expression<T, order, LHS>& lhs,
+                                       const expression<T, order, RHS>& rhs)
+{
+    return sub_expr<T,order,LHS,RHS>(lhs, rhs);
+}
+
+/* @brief subtraction float - rvar */
+template<typename T, size_t order, typename ARG>
+add_const_expr<T,order,ARG> operator-(const expression<T,order,ARG>& arg, const T& v)
+{
+    /* rvar - float = rvar + (-float) */
+    return add_const_expr<T,order,ARG>(arg, -1.0*v);
+}
+
+/* @brief subtraction rvar - float */
+template<typename T, size_t order, typename ARG>
+add_const_expr<T,order,ARG> operator-(const T& v, const expression<T,order,ARG>& arg)
+{
+    /* float - rvar = -rvar + float */
+    return add_const_expr<T,order,ARG>(-arg, v);
+}
 /****************************************************************************************************************/
 template<typename T, size_t order>
 inline gradient_tape<T, order, BUFFER_SIZE>& get_active_tape()
 {
-    static thread_local gradient_tape<T, order, BUFFER_SIZE> tape;
-    return tape;
+    //static thread_local gradient_tape<T, order, BUFFER_SIZE> tape;
+    /* something strange happens with thread local storage destruction. this fix seems to work but i don't
+     * quite understand it yet */
+    static thread_local gradient_tape<T,order, BUFFER_SIZE>* tape = new gradient_tape<T,order,BUFFER_SIZE>();
+    return *tape;
 }
 
 template<typename T, size_t order = 1>
@@ -967,7 +1215,7 @@ public:
     {
         make_leaf_node();
     }
-    explicit rvar(const T value)
+    rvar(const T value)
         : value_(inner_t{value})
     {
         make_leaf_node();
@@ -995,7 +1243,7 @@ public:
     rvar& operator=(const expression<T, order, E>& expr)
     {
         value_ = expr.evaluate();
-        mnake_Rvar_from_expr(expr);
+        make_rvar_from_expr(expr);
     }
 
     const inner_t& adjoint() const { return *node_->get_adjoint_ptr(); }
@@ -1021,11 +1269,17 @@ public:
     }
 };
 
-template<typename T, size_t num_derivatives>
-rvar<T, num_derivatives> make_rvar(T&& v)
+template<typename T, size_t order>
+rvar<T, order> make_rvar(const T v)
 {
-    static_assert(num_derivatives > 0, "rvar order must be >= 1");
-    return rvar<T, num_derivatives>(std::forward<T>(v));
+    static_assert(order > 0, "rvar order must be >= 1");
+    return rvar<T, order>(v);
+}
+template<typename T, size_t order, typename E>
+rvar<T, order> make_rvar(const expression<T, order, E>& expr)
+{
+    static_assert(order > 0, "rvar order must be >= 1");
+    return rvar<T, order>(expr);
 }
 } // namespace reverse_mode
 } // namespace differentiation

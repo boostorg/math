@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/mzhelyez/Documents/code/boost/libs/math/include/boost/math/differentiation/build/Qt_6_8_1_for_macOS-Release",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -I/Users/mzhelyez/Documents/code/boost/libs/math/include -I/Users/mzhelyez/Documents/code/boost -O3 -DNDEBUG -std=gnu++14 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.6 -fcolor-diagnostics -o CMakeFiles/autodiff_reverse_tests.dir/Users/mzhelyez/Documents/code/boost/libs/math/test/test_autodiff_basic_math_ops.cpp.o -c /Users/mzhelyez/Documents/code/boost/libs/math/test/test_autodiff_basic_math_ops.cpp",
+  "file": "/Users/mzhelyez/Documents/code/boost/libs/math/test/test_autodiff_basic_math_ops.cpp",
+  "output": "CMakeFiles/autodiff_reverse_tests.dir/Users/mzhelyez/Documents/code/boost/libs/math/test/test_autodiff_basic_math_ops.cpp.o"
+}
+]
