@@ -149,5 +149,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(division, T, all_float_types)
                         300 * std::numeric_limits<T>::epsilon());
     tape.clear();
 }
+
+template<typename T>
+T derivative_test_function(T x[6])
+{
+    auto y1 = 1.0 / (x[0] + x[1] * x[2]);
+    auto y2 = 2.0 / (x[3] - x[4] / x[5] * x[5]);
+    T    z  = y1 * y2;
+    return z;
+}
 BOOST_AUTO_TEST_SUITE_END()
 

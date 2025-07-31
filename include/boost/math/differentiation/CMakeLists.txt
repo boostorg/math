@@ -31,7 +31,7 @@ set(TEST_CONSTRUCTORS
 )
 
 SET(TEST_BASIC_OPS ${BOOST_MATH_TEST_DIRECTORY}test_autodiff_basic_math_ops.cpp)
-add_executable(autodiff_reverse_tests ${TEST_CONSTRUCTORS} ${HEADERS})
+# add_executable(autodiff_reverse_tests ${TEST_CONSTRUCTORS} ${HEADERS})
 # add_executable(autodiff_reverse_tests ${TEST_MEMORY_ALLOCATORS} ${HEADERS})
-# add_executable(autodiff_reverse_tests ${TEST_BASIC_OPS} ${HEADERS})
+add_executable(autodiff_reverse_tests ${TEST_BASIC_OPS} ${HEADERS})
 

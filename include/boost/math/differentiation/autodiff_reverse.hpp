@@ -1464,8 +1464,7 @@ rvar<T, order> make_rvar(const expression<T, order, E>& expr)
 } // namespace boost
 namespace std {
 
-// boost::math::tools::digits<RealType>() is handled by this std::numeric_limits<> specialization,
-// and similarly for max_value, min_value, log_max_value, log_min_value, and epsilon.
+// copied from forward mode
 template<typename T, size_t order>
 class numeric_limits<boost::math::differentiation::reverse_mode::rvar<T, order>>
     : public numeric_limits<
