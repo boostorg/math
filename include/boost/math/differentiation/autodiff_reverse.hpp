@@ -1173,13 +1173,109 @@ div_by_const_expr<T, order, ARG> operator/(const expression<T, order, ARG>& arg,
 }
 
 /****************************************************************************************************************/
+template<typename T, size_t order_1, size_t order_2, class E, class F>
+bool operator==(const expression<T, order_1, E>& lhs, const expression<T, order_2, F>& rhs)
+{
+    return lhs.evaluate() == rhs.evaluate();
+}
+
+template<typename T, size_t order, class E>
+bool operator==(const expression<T, order, E>& lhs, const T& rhs)
+{
+    return lhs.evaluate() == rhs;
+}
+template<typename T, size_t order, class E>
+bool operator==(const T& lhs, const expression<T, order, E>& rhs)
+{
+    return lhs == rhs.evaluate();
+}
+
+template<typename T, size_t order_1, size_t order_2, class E, class F>
+bool operator!=(const expression<T, order_1, E>& lhs, const expression<T, order_2, F>& rhs)
+{
+    return lhs.evaluate() != rhs.evaluate();
+}
+template<typename T, size_t order, class E>
+bool operator!=(const expression<T, order, E>& lhs, const T& rhs)
+{
+    return lhs.evaluate() != rhs;
+}
+template<typename T, size_t order, class E>
+bool operator!=(const T& lhs, const expression<T, order, E>& rhs)
+{
+    return lhs != rhs.value();
+}
+
+template<typename T, size_t order_1, size_t order_2, class E, class F>
+bool operator<(const expression<T, order_1, E>& lhs, const expression<T, order_2, F>& rhs)
+{
+    return lhs.value() < rhs.value();
+}
+template<typename T, size_t order, class E>
+bool operator<(const expression<T, order, E>& lhs, const T& rhs)
+{
+    return lhs.evaluate() < rhs;
+}
+template<typename T, size_t order, class E>
+bool operator<(const T& lhs, const expression<T, order, E>& rhs)
+{
+    return lhs < rhs.evaluate();
+}
+
+template<typename T, size_t order_1, size_t order_2, class E, class F>
+bool operator>(const expression<T, order_1, E>& lhs, const expression<T, order_2, F>& rhs)
+{
+    return lhs.evaluate() > rhs.evaluate();
+}
+template<typename T, size_t order, class E>
+bool operator>(const expression<T, order, E>& lhs, const T& rhs)
+{
+    return lhs.evaluate() > rhs;
+}
+template<typename T, size_t order, class E>
+bool operator>(const T& lhs, const expression<T, order, E>& rhs)
+{
+    return lhs > rhs.value();
+}
+
+template<typename T, size_t order_1, size_t order_2, class E, class F>
+bool operator<=(const expression<T, order_1, E>& lhs, const expression<T, order_2, F>& rhs)
+{
+    return lhs.value() <= rhs.value();
+}
+template<typename T, size_t order, class E>
+bool operator<=(const expression<T, order, E>& lhs, const T& rhs)
+{
+    return lhs.value() <= rhs;
+}
+template<typename T, size_t order, class E>
+bool operator<=(const T& lhs, const expression<T, order, E>& rhs)
+{
+    return lhs <= rhs.value();
+}
+
+template<typename T, size_t order_1, size_t order_2, class E, class F>
+bool operator>=(const expression<T, order_1, E>& lhs, const expression<T, order_2, F>& rhs)
+{
+    return lhs.value() >= rhs.value();
+}
+template<typename T, size_t order, class E>
+bool operator>=(const expression<T, order, E>& lhs, const T& rhs)
+{
+    return lhs.value() >= rhs;
+}
+template<typename T, size_t order, class E>
+bool operator>=(const T& lhs, const expression<T, order, E>& rhs)
+{
+    return lhs >= rhs.evaluate();
+}
 template<typename T, size_t order>
 inline gradient_tape<T, order, BUFFER_SIZE>& get_active_tape()
 {
     static thread_local gradient_tape<T, order, BUFFER_SIZE> tape;
     return tape;
 }
-
+/****************************************************************************************************************/
 template<typename T, size_t order = 1>
 class rvar : public expression<T, order, rvar<T, order>>
 {
@@ -1330,7 +1426,7 @@ public:
     /***************************************************************************************************/
     const inner_t& adjoint() const { return *node_->get_adjoint_ptr(); }
     const inner_t& evaluate() const { return value_; };
-    T              item() { return get_item_impl(std::integral_constant<bool, (order > 1)>{}); }
+    T item() const { return get_item_impl(std::integral_constant<bool, (order > 1)>{}); }
 
     void backward()
     {
@@ -1347,7 +1443,7 @@ public:
 template<typename T, size_t order>
 std::ostream& operator<<(std::ostream& os, const rvar<T, order> var)
 {
-    os << "rvar<" << order << ">" << var.item() << "," << var.adjoint() << ")";
+    os << "rvar<" << order << ">(" << var.item() << "," << var.adjoint() << ")";
     return os;
 }
 template<typename T, size_t order>
@@ -1366,5 +1462,14 @@ rvar<T, order> make_rvar(const expression<T, order, E>& expr)
 } // namespace differentiation
 } // namespace math
 } // namespace boost
+namespace std {
 
+// boost::math::tools::digits<RealType>() is handled by this std::numeric_limits<> specialization,
+// and similarly for max_value, min_value, log_max_value, log_min_value, and epsilon.
+template<typename T, size_t order>
+class numeric_limits<boost::math::differentiation::reverse_mode::rvar<T, order>>
+    : public numeric_limits<
+          typename boost::math::differentiation::reverse_mode::rvar<T, order>::value_type>
+{};
+} // namespace std
 #endif

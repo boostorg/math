@@ -248,5 +248,37 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(inplace_division, T, all_float_types)
                         300 * std::numeric_limits<T>::epsilon());
     tape.clear();
 }
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_rvar_ostream_output, T, all_float_types)
+{
+    using namespace rdiff;
+    rvar<T, 1> x = 2.0;
+    rvar<T, 1> y = 3.0;
 
+    rvar<T, 1> z = x * y;
+    z.backward();
+
+    std::ostringstream oss_x, oss_y, oss_z;
+    oss_x << x;
+    oss_y << y;
+    oss_z << z;
+
+    BOOST_CHECK_EQUAL(oss_x.str(), "rvar<1>(2,3)");
+    BOOST_CHECK_EQUAL(oss_y.str(), "rvar<1>(3,2)");
+    BOOST_CHECK_EQUAL(oss_z.str(), "rvar<1>(6,1)");
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(boost_math_tools_numeric_traits, T, all_float_types)
+{
+    using namespace rdiff;
+    using rvar_t = rvar<T, 1>;
+
+    BOOST_CHECK_EQUAL(boost::math::tools::digits<rvar_t>(), boost::math::tools::digits<T>());
+    BOOST_CHECK_EQUAL(boost::math::tools::max_value<rvar_t>(), boost::math::tools::max_value<T>());
+    BOOST_CHECK_EQUAL(boost::math::tools::min_value<rvar_t>(), boost::math::tools::min_value<T>());
+    BOOST_CHECK_EQUAL(boost::math::tools::log_max_value<rvar_t>(),
+                      boost::math::tools::log_max_value<T>());
+    BOOST_CHECK_EQUAL(boost::math::tools::log_min_value<rvar_t>(),
+                      boost::math::tools::log_min_value<T>());
+    BOOST_CHECK_EQUAL(boost::math::tools::epsilon<rvar_t>(), boost::math::tools::epsilon<T>());
+}
 BOOST_AUTO_TEST_SUITE_END()
