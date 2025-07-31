@@ -21,7 +21,7 @@ T test_add(T x[5])
 }
 BOOST_AUTO_TEST_CASE_TEMPLATE(addition, T, all_float_types)
 {
-    RandomSample<T> rng{-1,1};
+    RandomSample<T> rng{-100, 100};
     T x1_v = rng.next();
     T x2_v = rng.next();
     T test_rvar_p_rvar_v = x1_v+x2_v;
@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(addition, T, all_float_types)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(multiplication, T, all_float_types)
 {
-    RandomSample<T> rng{-1,1};
+    RandomSample<T> rng{-100, 100};
     T x1_v = rng.next();
     T x2_v = rng.next();
     T test_rvar_p_rvar_v = x1_v*x2_v;
@@ -73,11 +73,80 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(multiplication, T, all_float_types)
     BOOST_REQUIRE_EQUAL(x2.adjoint(), x1_v);
 
     tape.zero_grad();
-    auto z = x1*x1*x1*x1*x1;
-    rvar<T,1> zz(z);
+    auto       z = x1 * x1 * x1 * x1 * x1;
+    rvar<T, 1> zz(z);
     zz.backward();
-    std::cout<<x1.adjoint() -  5*x1_v*x1_v*x1_v*x1_v<<std::endl;
-    BOOST_REQUIRE_CLOSE(x1.adjoint(), 5*x1_v*x1_v*x1_v*x1_v, 300*std::numeric_limits<T>::epsilon() );
+    BOOST_REQUIRE_CLOSE(x1.adjoint(),
+                        5 * x1_v * x1_v * x1_v * x1_v,
+                        300 * std::numeric_limits<T>::epsilon());
+    tape.clear();
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(minus, T, all_float_types)
+{
+    RandomSample<T> rng{-100, 100};
+    T               x1_v               = rng.next();
+    T               x2_v               = rng.next();
+    T               test_rvar_p_rvar_v = x1_v - x2_v;
+
+    rvar<T, 1> x1 = x1_v;
+    rvar<T, 1> x2 = x2_v;
+
+    rvar<T, 1> test_rvar_p_rvar  = x1 - x2;
+    rvar<T, 1> test_rvar_p_float = x1 - x2_v;
+    rvar<T, 1> test_float_p_rvar = x1_v - x2;
+
+    BOOST_REQUIRE_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item());
+    BOOST_REQUIRE_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item());
+    BOOST_REQUIRE_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v);
+
+    gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
+    tape.zero_grad();
+    test_rvar_p_rvar.backward();
+    BOOST_REQUIRE_EQUAL(x1.adjoint(), 1.0);
+    BOOST_REQUIRE_EQUAL(x2.adjoint(), -1.0);
+
+    tape.zero_grad();
+    auto       z = -x1 - x1 - x1 - x1 - x1;
+    rvar<T, 1> zz(z);
+    zz.backward();
+    BOOST_REQUIRE_CLOSE(x1.adjoint(), -5, 300 * std::numeric_limits<T>::epsilon());
+    tape.clear();
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(division, T, all_float_types)
+{
+    RandomSample<T> rng{-1, 1};
+    T               x1_v               = rng.next();
+    T               x2_v               = rng.next();
+    T               test_rvar_p_rvar_v = x1_v / x2_v;
+
+    rvar<T, 1> x1 = x1_v;
+    rvar<T, 1> x2 = x2_v;
+
+    rvar<T, 1> test_rvar_p_rvar  = x1 / x2;
+    rvar<T, 1> test_rvar_p_float = x1 / x2_v;
+    rvar<T, 1> test_float_p_rvar = x1_v / x2;
+
+    BOOST_REQUIRE_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item());
+    BOOST_REQUIRE_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item());
+    BOOST_REQUIRE_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v);
+
+    gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
+    tape.zero_grad();
+    test_rvar_p_rvar.backward();
+    BOOST_REQUIRE_CLOSE(x1.adjoint(), 1.0 / x2_v, 300 * std::numeric_limits<T>::epsilon());
+    BOOST_REQUIRE_CLOSE(x2.adjoint(),
+                        -x1_v / (x2_v * x2_v),
+                        300 * std::numeric_limits<T>::epsilon());
+
+    tape.zero_grad();
+    auto       z = T(2.0) / x1 / x1 / x1 / x1 / x1;
+    rvar<T, 1> zz(z);
+    zz.backward();
+    BOOST_REQUIRE_CLOSE(x1.adjoint(),
+                        -10 / (x1_v * x1_v * x1_v * x1_v * x1_v * x1_v),
+                        300 * std::numeric_limits<T>::epsilon());
     tape.clear();
 }
 BOOST_AUTO_TEST_SUITE_END()

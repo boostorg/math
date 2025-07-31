@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_test_checkpointing, T, all_f
     for (int i = 0; i < 2 * buffer_size; i++) {
         T literal = rng.next();
         float_allocator.emplace_back(literal);
-        if (i == checkpoint_indices[ckp_id]) {
+        if (ckp_id < checkpoint_indices.size() && i == checkpoint_indices[ckp_id]) {
             float_allocator.add_checkpoint();
             expected_value_at_checkpoint.push_back(literal);
             ++ckp_id;
