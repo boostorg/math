@@ -199,7 +199,11 @@ public:
                 add_level<double>(i);
             }
             else if (std::is_same<Real, double>::value) {
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
                 add_level<long double>(i);
+#else
+                add_level<double>(i);
+#endif
             }
             else {
                 add_level<Real>(i);
@@ -270,7 +274,11 @@ public:
                 add_level<double>(ii);
             }
             else if (std::is_same<Real, double>::value) {
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
                 add_level<long double>(ii);
+#else
+                add_level<double>(ii);
+#endif
             }
             else {
                 add_level<Real>(ii);
@@ -468,7 +476,11 @@ public:
                 add_level<double>(i);
             }
             else if (std::is_same<Real, double>::value) {
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
                 add_level<long double>(i);
+#else
+                add_level<double>(i);
+#endif
             }
             else {
                 add_level<Real>(i);
@@ -516,7 +528,11 @@ public:
                 add_level<double>(ii);
             }
             else if (std::is_same<Real, double>::value) {
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
                 add_level<long double>(ii);
+#else
+                add_level<double>(ii);
+#endif
             }
             else {
                 add_level<Real>(ii);
