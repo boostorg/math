@@ -195,10 +195,10 @@ public:
         lweights_.reserve(levels);
 
         for (size_t i = 0; i < levels; ++i) {
-            if (std::is_same<Real, float>::value) {
+            BOOST_MATH_IF_CONSTEXPR (std::is_same<Real, float>::value) {
                 add_level<double>(i);
             }
-            else if (std::is_same<Real, double>::value) {
+            else BOOST_MATH_IF_CONSTEXPR (std::is_same<Real, double>::value) {
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
                 add_level<long double>(i);
 #else
@@ -270,10 +270,10 @@ public:
         size_t max_additional_levels = 4;
         while (big_nodes_.size() < requested_levels_ + max_additional_levels) {
             size_t ii = big_nodes_.size();
-            if (std::is_same<Real, float>::value) {
+            BOOST_MATH_IF_CONSTEXPR (std::is_same<Real, float>::value) {
                 add_level<double>(ii);
             }
-            else if (std::is_same<Real, double>::value) {
+            else BOOST_MATH_IF_CONSTEXPR (std::is_same<Real, double>::value) {
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
                 add_level<long double>(ii);
 #else
@@ -472,10 +472,10 @@ public:
         lweights_.reserve(levels);
 
         for (size_t i = 0; i < levels; ++i) {
-            if (std::is_same<Real, float>::value) {
+            BOOST_MATH_IF_CONSTEXPR (std::is_same<Real, float>::value) {
                 add_level<double>(i);
             }
-            else if (std::is_same<Real, double>::value) {
+            else BOOST_MATH_IF_CONSTEXPR (std::is_same<Real, double>::value) {
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
                 add_level<long double>(i);
 #else
@@ -524,10 +524,10 @@ public:
         size_t max_additional_levels = 4;
         while (big_nodes_.size() < requested_levels_ + max_additional_levels) {
             size_t ii = big_nodes_.size();
-            if (std::is_same<Real, float>::value) {
+            BOOST_MATH_IF_CONSTEXPR (std::is_same<Real, float>::value) {
                 add_level<double>(ii);
             }
-            else if (std::is_same<Real, double>::value) {
+            else BOOST_MATH_IF_CONSTEXPR (std::is_same<Real, double>::value) {
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
                 add_level<long double>(ii);
 #else
