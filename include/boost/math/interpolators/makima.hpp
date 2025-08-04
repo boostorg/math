@@ -17,7 +17,7 @@ namespace boost {
 namespace math {
 namespace interpolators {
 
-template<class RandomAccessContainer>
+template<class RandomAccessContainer, class Policy = policies::policy<>>
 class makima {
 public:
     using Real = typename RandomAccessContainer::value_type;
@@ -26,11 +26,15 @@ public:
            Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
            Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN())
     {
+        static const char* function = "boost::math::interpolators::makima::makima";
         using std::isnan;
         using std::abs;
         if (x.size() < 4)
         {
-            throw std::domain_error("Must be at least four data points.");
+            error_msg_ = "Must be at least four data points.";
+            boost::math::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
+            valid_ = false;
+            return;
         }
         RandomAccessContainer s(x.size(), std::numeric_limits<Real>::quiet_NaN());
         Real m2 = (y[3]-y[2])/(x[3]-x[2]);
@@ -54,14 +58,12 @@ public:
         {
             s[0] = left_endpoint_derivative;
         }
-
         w1 = abs(m2-m1) + abs(m2+m1)/2;
         w2 = abs(m0-mm1) + abs(m0+mm1)/2;
         s[1] = (w1*m0 + w2*m1)/(w1+w2);
         if (isnan(s[1])) {
             s[1] = 0;
         }
-
         for (decltype(s.size()) i = 2; i < s.size()-2; ++i) {
             Real mim2 = (y[i-1]-y[i-2])/(x[i-1]-x[i-2]);
             Real mim1 = (y[i  ]-y[i-1])/(x[i  ]-x[i-1]);
@@ -84,16 +86,12 @@ public:
         Real mn = 2*mnm1 - mnm2;
         w1 = abs(mnm1 - mnm2) + abs(mnm1+mnm2)/2;
         w2 = abs(mnm3 - mnm4) + abs(mnm3+mnm4)/2;
-
         s[n-2] = (w1*mnm3 + w2*mnm2)/(w1 + w2);
         if (isnan(s[n-2])) {
             s[n-2] = 0;
         }
-
         w1 = abs(mn - mnm1) + abs(mn+mnm1)/2;
         w2 = abs(mnm2 - mnm3) + abs(mnm2+mnm3)/2;
-
-
         if (isnan(right_endpoint_derivative))
         {
             s[n-1] = (w1*mnm2 + w2*mnm1)/(w1+w2);
@@ -107,27 +105,36 @@ public:
         }
 
         impl_ = std::make_shared<detail::cubic_hermite_detail<RandomAccessContainer>>(std::move(x), std::move(y), std::move(s));
+        valid_ = impl_->valid();
+        if ( ! valid_) {
+            error_msg_ = impl_->error_msg();
+        }
     }
 
     Real operator()(Real x) const {
+        if ( ! valid_) return std::numeric_limits<Real>::quiet_NaN();
         return impl_->operator()(x);
     }
 
     Real prime(Real x) const {
+        if ( ! valid_) return std::numeric_limits<Real>::quiet_NaN();
         return impl_->prime(x);
     }
 
     friend std::ostream& operator<<(std::ostream & os, const makima & m)
     {
+        if ( ! m.valid_) return os;
         os << *m.impl_;
         return os;
     }
 
     void push_back(Real x, Real y) {
+        if ( ! valid_) return;  // We do not realize if the object is constructed properly here.
+        static const char* function = "boost::math::interpolators::makima::push_back";
         using std::abs;
         using std::isnan;
         if (x <= impl_->x_.back()) {
-             throw std::domain_error("Calling push_back must preserve the monotonicity of the x's");
+            boost::math::policies::raise_domain_error<bool>(function, "Calling push_back must preserve the monotonicity of the x's", x, Policy());
         }
         impl_->x_.push_back(x);
         impl_->y_.push_back(y);
@@ -170,6 +177,8 @@ public:
 
 private:
     std::shared_ptr<detail::cubic_hermite_detail<RandomAccessContainer>> impl_;
+    bool valid_ = false;
+    std::string error_msg_;
 };
 
 }
