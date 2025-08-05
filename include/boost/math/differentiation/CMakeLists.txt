@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 14)
 enable_testing()#
 # add_compile_options(-fsanitize=address)
 # add_link_options(-fsanitize=address)
-set(BOOST_ROOT_DIRECTORY /home/mzhelyez/Documents/code/boost/)
+set(BOOST_ROOT_DIRECTORY /Users/mzhelyez/Documents/code/boost/)
 set(BOOST_MATH_DIRECTORY ${BOOST_ROOT_DIRECTORY}/libs/math/)
 set(BOOST_MATH_TEST_DIRECTORY ${BOOST_MATH_DIRECTORY}test/)
 
@@ -30,8 +30,16 @@ set(TEST_CONSTRUCTORS
     ${BOOST_MATH_TEST_DIRECTORY}test_rvar_constructors.cpp
 )
 
+set(TEST_COMPARISON_OPS
+    ${BOOST_MATH_TEST_DIRECTORY}test_comparison_operators.cpp
+)
+
+set(TEST_STL_SUPPORT
+    ${BOOST_MATH_TEST_DIRECTORY}test_stl_support.cpp
+)
 SET(TEST_BASIC_OPS ${BOOST_MATH_TEST_DIRECTORY}test_autodiff_basic_math_ops.cpp)
 # add_executable(autodiff_reverse_tests ${TEST_CONSTRUCTORS} ${HEADERS})
 # add_executable(autodiff_reverse_tests ${TEST_MEMORY_ALLOCATORS} ${HEADERS})
-add_executable(autodiff_reverse_tests ${TEST_BASIC_OPS} ${HEADERS})
-
+# add_executable(autodiff_reverse_tests ${TEST_BASIC_OPS} ${HEADERS})
+# add_executable(autodiff_reverse_tests ${TEST_COMPARISON_OPS} ${HEADERS})
+add_executable(autodiff_reverse_tests ${TEST_STL_SUPPORT} ${HEADERS})

@@ -21,8 +21,8 @@
 #include <cstdlib>
 #include <random>
 
-namespace mp11  = boost::mp11;
-namespace bmp   = boost::multiprecision;
+namespace mp11         = boost::mp11;
+namespace bmp          = boost::multiprecision;
 namespace rdiff_detail = boost::math::differentiation::reverse_mode::detail;
 namespace rdiff        = boost::math::differentiation::reverse_mode;
 
@@ -145,3 +145,10 @@ static_assert(std::is_same<RandomSample<bmp::uint512_t>::dist_t,
 static_assert(std::is_same<RandomSample<bmp::cpp_bin_float_50>::dist_t,
                            std::uniform_real_distribution<long double>>::value,
               "");
+
+template<typename T>
+constexpr double boost_close_tol(double scale_factor = 10000.0)
+{
+    static_assert(std::is_floating_point<T>::value, "T must be floating point");
+    return std::numeric_limits<T>::epsilon() * scale_factor * 100.0;
+}
