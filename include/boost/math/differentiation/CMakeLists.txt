@@ -12,6 +12,7 @@ set(BOOST_ROOT_DIRECTORY /Users/mzhelyez/Documents/code/boost/)
 set(BOOST_MATH_DIRECTORY ${BOOST_ROOT_DIRECTORY}/libs/math/)
 set(BOOST_MATH_TEST_DIRECTORY ${BOOST_MATH_DIRECTORY}test/)
 
+set(BOOST_MATH_EXAMPLE_DIRECTORY ${BOOST_MATH_DIRECTORY}/example)
 include_directories(${BOOST_MATH_DIRECTORY}include
                     ${BOOST_ROOT_DIRECTORY}
 )
@@ -38,8 +39,14 @@ set(TEST_STL_SUPPORT
     ${BOOST_MATH_TEST_DIRECTORY}test_stl_support.cpp
 )
 SET(TEST_BASIC_OPS ${BOOST_MATH_TEST_DIRECTORY}test_autodiff_basic_math_ops.cpp)
+SET(TEST_ADDITIONAL_BOOST_FUNCTIONS ${BOOST_MATH_TEST_DIRECTORY}test_autodiff_reverse_additional_boost_functions.cpp)
+SET(LINEAR_REGRESSION_EXAMPLE ${BOOST_MATH_EXAMPLE_DIRECTORY}/reverse_mode_linear_regression_example.cpp)
 # add_executable(autodiff_reverse_tests ${TEST_CONSTRUCTORS} ${HEADERS})
 # add_executable(autodiff_reverse_tests ${TEST_MEMORY_ALLOCATORS} ${HEADERS})
 # add_executable(autodiff_reverse_tests ${TEST_BASIC_OPS} ${HEADERS})
 # add_executable(autodiff_reverse_tests ${TEST_COMPARISON_OPS} ${HEADERS})
-add_executable(autodiff_reverse_tests ${TEST_STL_SUPPORT} ${HEADERS})
+# add_executable(autodiff_reverse_tests ${TEST_STL_SUPPORT} ${HEADERS})
+# add_executable(autodiff_reverse_tests
+#    ${TEST_ADDITIONAL_BOOST_FUNCTIONS}
+#    ${HEADERS})
+add_executable(autodiff_reverse_tests ${LINEAR_REGRESSION_EXAMPLE} ${HEADERS})

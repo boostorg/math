@@ -22,8 +22,7 @@
 #include <memory>
 #include <type_traits>
 #include <vector>
-#define BUFFER_SIZE 60000
-// constexpr size_t MAX_DEPTH = 21;
+#define BUFFER_SIZE 65536
 
 namespace boost {
 namespace math {
@@ -362,6 +361,8 @@ public:
     {
         if (total_size_ > 0) {
             checkpoints_.push_back(total_size_ - 1);
+        } else {
+            checkpoints_.push_back(0);
         }
     };
 
@@ -541,6 +542,7 @@ struct rvar_type_impl<T, 0>
  * */
 template<typename T, size_t N>
 using rvar_t = typename detail::rvar_type_impl<T, N>::type;
+
 // manages nodes in computational graph
 template<typename T, size_t order, size_t buffer_size = BUFFER_SIZE>
 class gradient_tape
@@ -801,6 +803,7 @@ struct expression
                                                                                              adj);
     };
 };
+
 template<typename T, size_t order, typename LHS, typename RHS, typename concrete_binary_operation>
 struct abstract_binary_expression
     : public expression<T,
@@ -1743,7 +1746,160 @@ struct log10_expr : public abstract_unary_expression<T, order, ARG, log10_expr<T
         return 1.0 / (argv * log(10.0));
     }
 };
+
+template<typename T, size_t order, typename ARG>
+struct acosh_expr : public abstract_unary_expression<T, order, ARG, acosh_expr<T, order, ARG>>
+{
+    /** @brief log(x)
+     *  d/dx log(x) = 1/x
+      * */
+    using arg_type   = ARG;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+
+    explicit acosh_expr(const expression<T, order, ARG> &arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, acosh_expr<T, order, ARG>>(arg_expr, v) {};
+
+    inner_t evaluate() const
+    {
+        using boost::math::acosh;
+        return acosh(this->arg.evaluate());
+    }
+    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    {
+        using std::sqrt;
+        return 1.0 / (sqrt(argv - 1) * sqrt(argv + 1));
+    }
+};
+
+template<typename T, size_t order, typename ARG>
+struct asinh_expr : public abstract_unary_expression<T, order, ARG, asinh_expr<T, order, ARG>>
+{
+    /** @brief log(x)
+     *  d/dx log(x) = 1/x
+      * */
+    using arg_type   = ARG;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+
+    explicit asinh_expr(const expression<T, order, ARG> &arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, asinh_expr<T, order, ARG>>(arg_expr, v) {};
+
+    inner_t evaluate() const
+    {
+        using boost::math::asinh;
+        return asinh(this->arg.evaluate());
+    }
+    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    {
+        using std::sqrt;
+        return 1.0 / (sqrt(1 + argv * argv));
+    }
+};
+
+template<typename T, size_t order, typename ARG>
+struct atanh_expr : public abstract_unary_expression<T, order, ARG, atanh_expr<T, order, ARG>>
+{
+    /** @brief log(x)
+     *  d/dx log(x) = 1/x
+      * */
+    using arg_type   = ARG;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+
+    explicit atanh_expr(const expression<T, order, ARG> &arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, atanh_expr<T, order, ARG>>(arg_expr, v) {};
+
+    inner_t evaluate() const
+    {
+        using boost::math::atanh;
+        return atanh(this->arg.evaluate());
+    }
+    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    {
+        using std::sqrt;
+        return 1.0 / (1 - argv * argv);
+    }
+};
+
+template<typename T, size_t order, typename ARG>
+struct digamma_expr : public abstract_unary_expression<T, order, ARG, digamma_expr<T, order, ARG>>
+{
+    /** @brief log(x)
+     *  d/dx log(x) = 1/x
+      * */
+    using arg_type   = ARG;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+
+    explicit digamma_expr(const expression<T, order, ARG> &arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, digamma_expr<T, order, ARG>>(arg_expr, v) {};
+
+    inner_t evaluate() const
+    {
+        using boost::math::digamma;
+        return digamma(this->arg.evaluate());
+    }
+    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    {
+        using boost::math::polygamma;
+        return polygamma(1, argv);
+    }
+};
+
+template<typename T, size_t order, typename ARG>
+struct polygamma_expr
+    : public abstract_unary_expression<T, order, ARG, polygamma_expr<T, order, ARG>>
+{
+    /** @brief log(x)
+     *  d/dx log(x) = 1/x
+      * */
+    using arg_type   = ARG;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+
+    explicit polygamma_expr(const expression<T, order, ARG> &arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, polygamma_expr<T, order, ARG>>(arg_expr, v) {};
+
+    inner_t evaluate() const
+    {
+        using boost::math::polygamma;
+        return polygamma(static_cast<int>(this->constant), this->arg.evaluate());
+    }
+    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    {
+        using boost::math::polygamma;
+        return polygamma(static_cast<int>(constant) + 1, argv);
+    }
+};
+
+template<typename T, size_t order, typename ARG>
+struct tgamma_expr : public abstract_unary_expression<T, order, ARG, tgamma_expr<T, order, ARG>>
+{
+    /** @brief log(x)
+     *  d/dx log(x) = 1/x
+      * */
+    using arg_type   = ARG;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+
+    explicit tgamma_expr(const expression<T, order, ARG> &arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, tgamma_expr<T, order, ARG>>(arg_expr, v) {};
+
+    inner_t evaluate() const
+    {
+        using boost::math::tgamma;
+        return tgamma(this->arg.evaluate());
+    }
+    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    {
+        using boost::math::digamma;
+        using boost::math::tgamma;
+        return tgamma(argv) * digamma(argv);
+    }
+};
 /****************************************************************************************************************/
+
 template<typename T, size_t order, typename LHS, typename RHS>
 mult_expr<T, order, LHS, RHS> operator*(const expression<T, order, LHS> &lhs,
                                         const expression<T, order, RHS> &rhs)
@@ -2254,6 +2410,44 @@ log10_expr<T, order, ARG> log10(const expression<T, order, ARG> &arg)
 {
     return log10_expr<T, order, ARG>(arg, 0.0);
 }
+template<typename T, size_t order, typename ARG>
+asinh_expr<T, order, ARG> asinh(const expression<T, order, ARG> &arg)
+{
+    return asinh_expr<T, order, ARG>(arg, 0.0);
+}
+template<typename T, size_t order, typename ARG>
+acosh_expr<T, order, ARG> acosh(const expression<T, order, ARG> &arg)
+{
+    return acosh_expr<T, order, ARG>(arg, 0.0);
+}
+template<typename T, size_t order, typename ARG>
+atanh_expr<T, order, ARG> atanh(const expression<T, order, ARG> &arg)
+{
+    return atanh_expr<T, order, ARG>(arg, 0.0);
+}
+template<typename T, size_t order, typename ARG>
+tgamma_expr<T, order, ARG> tgamma(const expression<T, order, ARG> &arg)
+{
+    return tgamma_expr<T, order, ARG>(arg, 0.0);
+}
+template<typename T, size_t order, typename ARG>
+digamma_expr<T, order, ARG> digamma(const expression<T, order, ARG> &arg)
+{
+    return digamma_expr<T, order, ARG>(arg, 0.0);
+}
+template<typename T, size_t order, typename E>
+rvar<T, order> make_rvar(const expression<T, order, E> &expr);
+
+template<typename T, size_t order, typename ARG>
+auto sin_pi(const expression<T, order, ARG> &expr)
+{
+    return sin(boost::math::constants::pi<T>() * expr);
+}
+template<typename T, size_t order, typename ARG>
+polygamma_expr<T, order, ARG> polygamma(int i, const expression<T, order, ARG> &arg)
+{
+    return polygamma_expr<T, order, ARG>(arg, static_cast<T>(i));
+}
 /****************************************************************************************************************/
 template<typename T, size_t order>
 inline gradient_tape<T, order, BUFFER_SIZE> &get_active_tape()
@@ -2358,6 +2552,7 @@ public:
     {
         make_leaf_node();
     }
+
     rvar &operator=(T v)
     {
         value_ = inner_t(v);
@@ -2679,6 +2874,13 @@ auto grad_nd(ftype &f, First first, Other... other)
 }
 } // namespace reverse_mode
 } // namespace differentiation
+template<typename T, size_t order, typename ARG, class Policy>
+auto sin_pi(const boost::math::differentiation::reverse_mode::expression<T, order, ARG> &expr,
+            const Policy &)
+{
+    return boost::math::differentiation::reverse_mode::sin_pi(expr);
+}
+
 } // namespace math
 } // namespace boost
 namespace std {
