@@ -1357,6 +1357,11 @@ test-suite autodiff :
    [ compile compile_test/diff_lanczos_smoothing_incl_test.cpp : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ requires cxx17_if_constexpr cxx17_std_apply ] $(float128_type) [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx11_inline_namespaces ] ]
 ;
 
+test-suite autodiff_reverse_specific :
+    # This rule compiles and runs your specific test file.
+    # The arguments replicate the common settings for Boost.Math tests.
+    [ run my_autodiff_reverse_test.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release $(float128_type) [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx11_inline_namespaces ] ]
+;
 #
 #  These tests are run by default when you invoke the Jamfile, but
 #  they are deliberately NOT run from the CI scripts as they soak up

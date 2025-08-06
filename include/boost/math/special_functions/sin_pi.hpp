@@ -23,6 +23,7 @@
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/differentiation/autodiff_reverse.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -94,7 +95,6 @@ inline typename tools::promote_args<T>::type sin_pi(T x)
 {
    return boost::math::sin_pi(x, policies::policy<>());
 }
-
 } // namespace math
 } // namespace boost
 
