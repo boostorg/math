@@ -84,11 +84,7 @@ BOOST_MATH_GPU_ENABLED T bessel_jn(int n, T x, const Policy& pol)
             current = value;
         }
     }
-    else if(x < 1)
-    {
-       return factor * bessel_j_small_z_series(T(n), x, pol);
-    }
-    else if((x < 5) && (n > x * x / 4))
+    else if((x < 5) || (n > x * x / 4))
     {
        return factor * bessel_j_small_z_series(T(n), x, pol);
     }
