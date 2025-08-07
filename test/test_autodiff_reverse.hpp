@@ -147,8 +147,8 @@ static_assert(std::is_same<RandomSample<bmp::cpp_bin_float_50>::dist_t,
               "");
 
 template<typename T>
-constexpr double boost_close_tol(double scale_factor = 10000.0)
+constexpr double boost_close_tol(double scale_factor = 1e4)
 {
     static_assert(std::is_floating_point<T>::value, "T must be floating point");
-    return std::numeric_limits<T>::epsilon() * scale_factor * 100.0;
+    return std::numeric_limits<T>::epsilon() * scale_factor;
 }

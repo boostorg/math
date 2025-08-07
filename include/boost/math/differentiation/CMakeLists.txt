@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 14)
 enable_testing()#
 # add_compile_options(-fsanitize=address)
 # add_link_options(-fsanitize=address)
-set(BOOST_ROOT_DIRECTORY /Users/mzhelyez/Documents/code/boost/)
+set(BOOST_ROOT_DIRECTORY /home/mzhelyez/Documents/code/boost/)
 set(BOOST_MATH_DIRECTORY ${BOOST_ROOT_DIRECTORY}/libs/math/)
 set(BOOST_MATH_TEST_DIRECTORY ${BOOST_MATH_DIRECTORY}test/)
 
@@ -45,8 +45,8 @@ SET(LINEAR_REGRESSION_EXAMPLE ${BOOST_MATH_EXAMPLE_DIRECTORY}/reverse_mode_linea
 # add_executable(autodiff_reverse_tests ${TEST_MEMORY_ALLOCATORS} ${HEADERS})
 # add_executable(autodiff_reverse_tests ${TEST_BASIC_OPS} ${HEADERS})
 # add_executable(autodiff_reverse_tests ${TEST_COMPARISON_OPS} ${HEADERS})
-# add_executable(autodiff_reverse_tests ${TEST_STL_SUPPORT} ${HEADERS})
+add_executable(autodiff_reverse_tests ${TEST_STL_SUPPORT} ${HEADERS})
 # add_executable(autodiff_reverse_tests
 #    ${TEST_ADDITIONAL_BOOST_FUNCTIONS}
 #    ${HEADERS})
-add_executable(autodiff_reverse_tests ${LINEAR_REGRESSION_EXAMPLE} ${HEADERS})
+# add_executable(autodiff_reverse_tests ${LINEAR_REGRESSION_EXAMPLE} ${HEADERS})

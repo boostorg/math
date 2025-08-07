@@ -2683,6 +2683,235 @@ public:
         it->backward();
     }
 };
+/*****************/
+template<typename T, size_t order = 1>
+class rvar_no_et : public expression<T, order, rvar<T, order>>
+{
+private:
+    using inner_t = rvar_t<T, order - 1>;
+    friend class gradient_node<T, order>;
+    inner_t                  value_;
+    gradient_node<T, order> *node_ = nullptr;
+    template<typename, size_t>
+    friend class rvar;
+    /*****************************************************************************************/
+    /**
+     * @brief implementation helpers for get_value_at
+     */
+    template<size_t target_order, size_t current_order>
+    struct get_value_at_impl
+    {
+        static_assert(target_order <= current_order, "Requested depth exceeds variable order.");
+
+        /** @return value_ at rvar_t<T,current_order - 1>
+         */
+        static auto &get(rvar<T, current_order> &v)
+        {
+            return get_value_at_impl<target_order, current_order - 1>::get(v.get_value());
+        }
+        /** @return const value_ at rvar_t<T,current_order - 1>
+         */
+        static const auto &get(const rvar<T, current_order> &v)
+        {
+            return get_value_at_impl<target_order, current_order - 1>::get(v.get_value());
+        }
+    };
+
+    /** @brief base case specialization for target_order == current order
+     */
+    template<size_t target_order>
+    struct get_value_at_impl<target_order, target_order>
+    {
+        /** @return value_ at rvar_t<T,target_order>
+         */
+        static auto       &get(rvar<T, target_order> &v) { return v; }
+        /** @return const value_ at rvar_t<T,target_order>
+         */
+        static const auto &get(const rvar<T, target_order> &v) { return v; }
+    };
+    /*****************************************************************************************/
+    void make_leaf_node()
+    {
+        gradient_tape<T, order, BUFFER_SIZE> &tape = get_active_tape<T, order>();
+        node_                                      = tape.emplace_leaf_node();
+    }
+
+    void make_unary_node()
+    {
+        gradient_tape<T, order, BUFFER_SIZE> &tape = get_active_tape<T, order>();
+        node_                                      = tape.emplace_active_unary_node();
+    }
+
+    void make_multi_node(size_t n)
+    {
+        gradient_tape<T, order, BUFFER_SIZE> &tape = get_active_tape<T, order>();
+        node_                                      = tape.emplace_active_multi_node(n);
+    }
+
+    template<size_t n>
+    void make_multi_node()
+    {
+        gradient_tape<T, order, BUFFER_SIZE> &tape = get_active_tape<T, order>();
+        node_                                      = tape.template emplace_active_multi_node<n>();
+    }
+
+    template<typename E>
+    void make_rvar_from_expr(const expression<T, order, E> &expr)
+    {
+        make_multi_node<detail::count_rvars<E, order>>();
+        expr.template propagatex<0>(node_, inner_t(1.0));
+    }
+    T get_item_impl(std::true_type) const
+    {
+        return value_.get_item_impl(std::integral_constant<bool, (order - 1 > 1)>{});
+    }
+
+    T get_item_impl(std::false_type) const { return value_; }
+
+public:
+    using value_type = T;
+    rvar()
+        : value_()
+    {
+        make_leaf_node();
+    }
+    rvar(const T value)
+        : value_(inner_t{value})
+    {
+        make_leaf_node();
+    }
+
+    rvar &operator=(T v)
+    {
+        value_ = inner_t(v);
+        if (node_ == nullptr) {
+            make_leaf_node();
+        }
+        return *this;
+    }
+    rvar(const rvar<T, order> &other)            = default;
+    rvar &operator=(const rvar<T, order> &other) = default;
+
+    template<size_t arg_index>
+    void propagatex(gradient_node<T, order> *node, inner_t adj) const
+    {
+        node->update_derivative_v(arg_index, adj);
+        node->update_argument_ptr_at(arg_index, node_);
+    }
+
+    template<class E>
+    rvar(const expression<T, order, E> &expr)
+    {
+        value_ = expr.evaluate();
+        make_rvar_from_expr(expr);
+    }
+    template<class E>
+    rvar &operator=(const expression<T, order, E> &expr)
+    {
+        value_ = expr.evaluate();
+        make_rvar_from_expr(expr);
+        return *this;
+    }
+    /***************************************************************************************************/
+    template<class E>
+    rvar<T, order> &operator+=(const expression<T, order, E> &expr)
+    {
+        *this = *this + expr;
+        return *this;
+    }
+
+    template<class E>
+    rvar<T, order> &operator*=(const expression<T, order, E> &expr)
+    {
+        *this = *this * expr;
+        return *this;
+    }
+
+    template<class E>
+    rvar<T, order> &operator-=(const expression<T, order, E> &expr)
+    {
+        *this = *this - expr;
+        return *this;
+    }
+
+    template<class E>
+    rvar<T, order> &operator/=(const expression<T, order, E> &expr)
+    {
+        *this = *this / expr;
+        return *this;
+    }
+    /***************************************************************************************************/
+    rvar<T, order> &operator+=(const T &v)
+    {
+        *this = *this + v;
+        return *this;
+    }
+
+    rvar<T, order> &operator*=(const T &v)
+    {
+        *this = *this * v;
+        return *this;
+    }
+
+    rvar<T, order> &operator-=(const T &v)
+    {
+        *this = *this - v;
+        return *this;
+    }
+
+    rvar<T, order> &operator/=(const T &v)
+    {
+        *this = *this / v;
+        return *this;
+    }
+
+    /***************************************************************************************************/
+    const inner_t &adjoint() const { return *node_->get_adjoint_ptr(); }
+    inner_t       &adjoint() { return *node_->get_adjoint_ptr(); }
+
+    const inner_t &evaluate() const { return value_; };
+    inner_t       &get_value() { return value_; };
+
+    explicit operator T() const { return item(); }
+
+    explicit operator int() const { return static_cast<int>(item()); }
+    explicit operator long() const { return static_cast<long>(item()); }
+    explicit operator long long() const { return static_cast<long long>(item()); }
+
+    /**
+     *  @brief same as evaluate but returns proper depth for higher order derivatives
+     *  @return value_ at depth N
+     */
+    template<size_t N>
+    auto &get_value_at()
+    {
+        static_assert(N <= order, "Requested depth exceeds variable order.");
+        return get_value_at_impl<N, order>::get(*this);
+    }
+    /** @brief same as above but const
+     */
+    template<size_t N>
+    const auto &get_value_at() const
+    {
+        static_assert(N <= order, "Requested depth exceeds variable order.");
+        return get_value_at_impl<N, order>::get(*this);
+    }
+
+    T item() const { return get_item_impl(std::integral_constant<bool, (order > 1)>{}); }
+
+    void backward()
+    {
+        gradient_tape<T, order, BUFFER_SIZE> &tape = get_active_tape<T, order>();
+        auto                                  it   = tape.find(node_);
+        it->update_adjoint_v(inner_t(1.0));
+        while (it != tape.begin()) {
+            it->backward();
+            --it;
+        }
+        it->backward();
+    }
+};
+/************************************/
 template<typename T, size_t order>
 std::ostream &operator<<(std::ostream &os, const rvar<T, order> var)
 {
