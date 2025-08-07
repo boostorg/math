@@ -327,7 +327,12 @@ namespace boost { namespace math {
          // x is positive until reflection
          W = T(2) / (x * pi<T>());               // Wronskian
          T Yv_scale = 1;
-         if(((kind & need_y) == 0) && ((x < 1) || ((v > x * x / 4) && (x < 5))))
+
+         const bool kind_does_not_need_y { ((kind & need_y) == 0) };
+
+         const bool x_is_lt_one { (x < 1) };
+
+         if(kind_does_not_need_y && x_is_lt_one)
          {
             //
             // This series will actually converge rapidly for all small
@@ -337,7 +342,17 @@ namespace boost { namespace math {
             Jv = bessel_j_small_z_series(v, x, pol);
             Yv = boost::math::numeric_limits<T>::quiet_NaN();
          }
-         else if((x < 1) && (u != 0) && (log(policies::get_epsilon<T, Policy>() / 2) > v * log((x/2) * (x/2) / v)))
+         else if(kind_does_not_need_y && ((x < 5) && (v > x * x / 4)))
+         {
+            //
+            // This series will actually converge rapidly for all small
+            // x - say up to x < 20 - but the first few terms are large
+            // and divergent which leads to large errors :-(
+            //
+            Jv = bessel_j_small_z_series(v, x, pol);
+            Yv = boost::math::numeric_limits<T>::quiet_NaN();
+         }
+         else if(x_is_lt_one && (u != 0) && (log(policies::get_epsilon<T, Policy>() / 2) > v * log((x/2) * (x/2) / v)))
          {
             // Evaluate using series representations.
             // This is particularly important for x << v as in this
