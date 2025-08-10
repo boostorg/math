@@ -41,12 +41,15 @@ set(TEST_STL_SUPPORT
 SET(TEST_BASIC_OPS ${BOOST_MATH_TEST_DIRECTORY}test_autodiff_basic_math_ops.cpp)
 SET(TEST_ADDITIONAL_BOOST_FUNCTIONS ${BOOST_MATH_TEST_DIRECTORY}test_autodiff_reverse_additional_boost_functions.cpp)
 SET(LINEAR_REGRESSION_EXAMPLE ${BOOST_MATH_EXAMPLE_DIRECTORY}/reverse_mode_linear_regression_example.cpp)
+SET(TEST_SPECIAL_FUNCTIONS ${BOOST_MATH_TEST_DIRECTORY}test_special_functions.cpp)
 # add_executable(autodiff_reverse_tests ${TEST_CONSTRUCTORS} ${HEADERS})
 # add_executable(autodiff_reverse_tests ${TEST_MEMORY_ALLOCATORS} ${HEADERS})
 # add_executable(autodiff_reverse_tests ${TEST_BASIC_OPS} ${HEADERS})
 # add_executable(autodiff_reverse_tests ${TEST_COMPARISON_OPS} ${HEADERS})
-add_executable(autodiff_reverse_tests ${TEST_STL_SUPPORT} ${HEADERS})
+# add_executable(autodiff_reverse_tests ${TEST_STL_SUPPORT} ${HEADERS})
 # add_executable(autodiff_reverse_tests
 #    ${TEST_ADDITIONAL_BOOST_FUNCTIONS}
 #    ${HEADERS})
 # add_executable(autodiff_reverse_tests ${LINEAR_REGRESSION_EXAMPLE} ${HEADERS})
+add_executable(autodiff_reverse_tests ${TEST_SPECIAL_FUNCTIONS} ${HEADERS}
+    eigen_support.hpp)

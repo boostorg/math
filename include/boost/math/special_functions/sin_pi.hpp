@@ -23,7 +23,6 @@
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/differentiation/autodiff_reverse.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 

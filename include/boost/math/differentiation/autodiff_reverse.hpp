@@ -16,6 +16,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <cassert>
+#include <complex>
 #include <cstddef>
 #include <iostream>
 #include <iterator>
@@ -74,7 +75,7 @@ struct count_rvar_impl
     static constexpr std::size_t value = 0;
 };
 template<typename U, size_t order>
-struct count_rvar_impl<boost::math::differentiation::reverse_mode::rvar<U, order>, order>
+struct count_rvar_impl<rvar<U, order>, order>
 {
     static constexpr std::size_t value = 1;
 };
@@ -946,10 +947,6 @@ struct add_const_expr
     using inner_t    = rvar_t<T, order - 1>;
     explicit add_const_expr(const expression<T, order, ARG> &arg_expr, const T v)
         : abstract_unary_expression<T, order, ARG, add_const_expr<T, order, ARG>>(arg_expr, v) {};
-    // explicit add_const_expr(const ARG& arg_expr, const T v)
-    //     : abstract_unary_expression<T, order, ARG, add_const_expr<T, order,
-    //     ARG>>(arg_expr, v)
-    //{}
     inner_t              evaluate() const { return this->arg.evaluate() + inner_t(this->constant); }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
@@ -968,7 +965,6 @@ struct mult_expr
     using rhs_type   = RHS;
     using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
-    // Explicitly define constructor to forward to base class
     explicit mult_expr(const expression<T, order, LHS> &left_hand_expr,
                        const expression<T, order, RHS> &right_hand_expr)
         : abstract_binary_expression<T, order, LHS, RHS, mult_expr<T, order, LHS, RHS>>(
@@ -1069,7 +1065,7 @@ struct div_by_const_expr
     : public abstract_unary_expression<T, order, ARG, div_by_const_expr<T, order, ARG>>
 {
     /* @brief
-   * rvar+float or float+rvar
+   * rvar/float
    * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1293,8 +1289,7 @@ struct expr_pow_float_expr
     : public abstract_unary_expression<T, order, ARG, expr_pow_float_expr<T, order, ARG>>
 {
     /** @brief pow(rvar,float)
-     *
-      * */
+      */
     using arg_type   = ARG;
     using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
@@ -1393,8 +1388,8 @@ struct log_expr : public abstract_unary_expression<T, order, ARG, log_expr<T, or
 template<typename T, size_t order, typename ARG>
 struct cos_expr : public abstract_unary_expression<T, order, ARG, cos_expr<T, order, ARG>>
 {
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
+    /** @brief cos(x)
+     *  d/dx cos(x) = -sin(x)
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1418,8 +1413,8 @@ struct cos_expr : public abstract_unary_expression<T, order, ARG, cos_expr<T, or
 template<typename T, size_t order, typename ARG>
 struct sin_expr : public abstract_unary_expression<T, order, ARG, sin_expr<T, order, ARG>>
 {
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
+    /** @brief sin(x)
+     *  d/dx sin(x) = cos(x)
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1443,8 +1438,8 @@ struct sin_expr : public abstract_unary_expression<T, order, ARG, sin_expr<T, or
 template<typename T, size_t order, typename ARG>
 struct tan_expr : public abstract_unary_expression<T, order, ARG, tan_expr<T, order, ARG>>
 {
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
+    /** @brief tan(x)
+     *  d/dx tan(x) = 1/cos^2(x)
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1468,8 +1463,8 @@ struct tan_expr : public abstract_unary_expression<T, order, ARG, tan_expr<T, or
 template<typename T, size_t order, typename ARG>
 struct acos_expr : public abstract_unary_expression<T, order, ARG, acos_expr<T, order, ARG>>
 {
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
+    /** @brief acos(x)
+     *  d/dx acos(x) = -1/sqrt(1-x^2)
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1493,8 +1488,8 @@ struct acos_expr : public abstract_unary_expression<T, order, ARG, acos_expr<T, 
 template<typename T, size_t order, typename ARG>
 struct asin_expr : public abstract_unary_expression<T, order, ARG, asin_expr<T, order, ARG>>
 {
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
+    /** @brief asin(x)
+     *  d/dx asin =  1/sqrt(1-x^2)
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1518,8 +1513,8 @@ struct asin_expr : public abstract_unary_expression<T, order, ARG, asin_expr<T, 
 template<typename T, size_t order, typename ARG>
 struct atan_expr : public abstract_unary_expression<T, order, ARG, atan_expr<T, order, ARG>>
 {
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
+    /** @brief atan(x)
+     *  d/dx atan(x) = 1/x^2+1
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1542,9 +1537,7 @@ template<typename T, size_t order, typename LHS, typename RHS>
 struct atan2_expr
     : public abstract_binary_expression<T, order, LHS, RHS, atan2_expr<T, order, LHS, RHS>>
 {
-    /** @brief pow(x,y)
-     *  d/dx pow(x,y) = y pow (x, y-1)
-     *  d/dy pow(x,y) = pow(x,y) log(x)
+    /** @brief atan2(x,y)
     * */
     using lhs_type   = LHS;
     using rhs_type   = RHS;
@@ -1576,8 +1569,7 @@ template<typename T, size_t order, typename ARG>
 struct atan2_left_float_expr
     : public abstract_unary_expression<T, order, ARG, atan2_left_float_expr<T, order, ARG>>
 {
-    /** @brief pow(rvar,float)
-     *
+    /** @brief atan2(float,rvar) 
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1602,7 +1594,7 @@ template<typename T, size_t order, typename ARG>
 struct atan2_right_float_expr
     : public abstract_unary_expression<T, order, ARG, atan2_right_float_expr<T, order, ARG>>
 {
-    /** @brief pow(float, rvar)
+    /** @brief atan2(rvar,float) 
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1626,8 +1618,8 @@ struct atan2_right_float_expr
 template<typename T, size_t order, typename ARG>
 struct round_expr : public abstract_unary_expression<T, order, ARG, round_expr<T, order, ARG>>
 {
-    /** @brief
-     *  d/dx
+    /** @brief round(x)
+     *  d/dx round = 0
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1651,8 +1643,8 @@ struct round_expr : public abstract_unary_expression<T, order, ARG, round_expr<T
 template<typename T, size_t order, typename ARG>
 struct sinh_expr : public abstract_unary_expression<T, order, ARG, sinh_expr<T, order, ARG>>
 {
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
+    /** @brief sinh(x)
+     *  d/dx sinh(x) = cosh
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1676,8 +1668,8 @@ struct sinh_expr : public abstract_unary_expression<T, order, ARG, sinh_expr<T, 
 template<typename T, size_t order, typename ARG>
 struct cosh_expr : public abstract_unary_expression<T, order, ARG, cosh_expr<T, order, ARG>>
 {
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
+    /** @brief cosh(x)
+     *  d/dx cosh(x) = sinh
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1700,8 +1692,8 @@ struct cosh_expr : public abstract_unary_expression<T, order, ARG, cosh_expr<T, 
 template<typename T, size_t order, typename ARG>
 struct tanh_expr : public abstract_unary_expression<T, order, ARG, tanh_expr<T, order, ARG>>
 {
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
+    /** @brief tanh(x)
+     *  d/dx tanh(x) = 1/cosh^2
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1725,8 +1717,8 @@ struct tanh_expr : public abstract_unary_expression<T, order, ARG, tanh_expr<T, 
 template<typename T, size_t order, typename ARG>
 struct log10_expr : public abstract_unary_expression<T, order, ARG, log10_expr<T, order, ARG>>
 {
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
+    /** @brief log10(x)
+     *  d/dx log10(x) = 1/(x * log(10))
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1750,8 +1742,8 @@ struct log10_expr : public abstract_unary_expression<T, order, ARG, log10_expr<T
 template<typename T, size_t order, typename ARG>
 struct acosh_expr : public abstract_unary_expression<T, order, ARG, acosh_expr<T, order, ARG>>
 {
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
+    /** @brief acosh(x)
+     *  d/dx acosh(x) = 1/(sqrt(x-1)sqrt(x+1)
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1762,7 +1754,7 @@ struct acosh_expr : public abstract_unary_expression<T, order, ARG, acosh_expr<T
 
     inner_t evaluate() const
     {
-        using boost::math::acosh;
+        using std::acosh;
         return acosh(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
@@ -1775,8 +1767,8 @@ struct acosh_expr : public abstract_unary_expression<T, order, ARG, acosh_expr<T
 template<typename T, size_t order, typename ARG>
 struct asinh_expr : public abstract_unary_expression<T, order, ARG, asinh_expr<T, order, ARG>>
 {
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
+    /** @brief asinh(x)
+     *  d/dx asinh(x) = 1/(sqrt(1+x^2))
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1787,7 +1779,7 @@ struct asinh_expr : public abstract_unary_expression<T, order, ARG, asinh_expr<T
 
     inner_t evaluate() const
     {
-        using boost::math::asinh;
+        using std::asinh;
         return asinh(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
@@ -1800,8 +1792,8 @@ struct asinh_expr : public abstract_unary_expression<T, order, ARG, asinh_expr<T
 template<typename T, size_t order, typename ARG>
 struct atanh_expr : public abstract_unary_expression<T, order, ARG, atanh_expr<T, order, ARG>>
 {
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
+    /** @brief atanh(x)
+     *  d/dx atanh(x) = 1/(1-x^2)
       * */
     using arg_type   = ARG;
     using value_type = T;
@@ -1812,7 +1804,7 @@ struct atanh_expr : public abstract_unary_expression<T, order, ARG, atanh_expr<T
 
     inner_t evaluate() const
     {
-        using boost::math::atanh;
+        using std::atanh;
         return atanh(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
@@ -1822,82 +1814,6 @@ struct atanh_expr : public abstract_unary_expression<T, order, ARG, atanh_expr<T
     }
 };
 
-template<typename T, size_t order, typename ARG>
-struct digamma_expr : public abstract_unary_expression<T, order, ARG, digamma_expr<T, order, ARG>>
-{
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
-      * */
-    using arg_type   = ARG;
-    using value_type = T;
-    using inner_t    = rvar_t<T, order - 1>;
-
-    explicit digamma_expr(const expression<T, order, ARG> &arg_expr, const T v)
-        : abstract_unary_expression<T, order, ARG, digamma_expr<T, order, ARG>>(arg_expr, v) {};
-
-    inner_t evaluate() const
-    {
-        using boost::math::digamma;
-        return digamma(this->arg.evaluate());
-    }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
-    {
-        using boost::math::polygamma;
-        return polygamma(1, argv);
-    }
-};
-
-template<typename T, size_t order, typename ARG>
-struct polygamma_expr
-    : public abstract_unary_expression<T, order, ARG, polygamma_expr<T, order, ARG>>
-{
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
-      * */
-    using arg_type   = ARG;
-    using value_type = T;
-    using inner_t    = rvar_t<T, order - 1>;
-
-    explicit polygamma_expr(const expression<T, order, ARG> &arg_expr, const T v)
-        : abstract_unary_expression<T, order, ARG, polygamma_expr<T, order, ARG>>(arg_expr, v) {};
-
-    inner_t evaluate() const
-    {
-        using boost::math::polygamma;
-        return polygamma(static_cast<int>(this->constant), this->arg.evaluate());
-    }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
-    {
-        using boost::math::polygamma;
-        return polygamma(static_cast<int>(constant) + 1, argv);
-    }
-};
-
-template<typename T, size_t order, typename ARG>
-struct tgamma_expr : public abstract_unary_expression<T, order, ARG, tgamma_expr<T, order, ARG>>
-{
-    /** @brief log(x)
-     *  d/dx log(x) = 1/x
-      * */
-    using arg_type   = ARG;
-    using value_type = T;
-    using inner_t    = rvar_t<T, order - 1>;
-
-    explicit tgamma_expr(const expression<T, order, ARG> &arg_expr, const T v)
-        : abstract_unary_expression<T, order, ARG, tgamma_expr<T, order, ARG>>(arg_expr, v) {};
-
-    inner_t evaluate() const
-    {
-        using boost::math::tgamma;
-        return tgamma(this->arg.evaluate());
-    }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
-    {
-        using boost::math::digamma;
-        using boost::math::tgamma;
-        return tgamma(argv) * digamma(argv);
-    }
-};
 /****************************************************************************************************************/
 
 template<typename T, size_t order, typename LHS, typename RHS>
@@ -2352,7 +2268,7 @@ long lround(const expression<T, order, ARG> &arg)
 {
     using boost::math::lround;
     rvar<T, order> tmp = arg.evaluate();
-    return iround(tmp.item());
+    return lround(tmp.item());
 }
 
 template<typename T, size_t order, typename ARG>
@@ -2360,7 +2276,7 @@ long long llround(const expression<T, order, ARG> &arg)
 {
     using boost::math::llround;
     rvar<T, order> tmp = arg.evaluate();
-    return iround(tmp.item());
+    return llround(tmp.item());
 }
 
 template<typename T, size_t order, typename ARG>
@@ -2425,6 +2341,98 @@ atanh_expr<T, order, ARG> atanh(const expression<T, order, ARG> &arg)
 {
     return atanh_expr<T, order, ARG>(arg, 0.0);
 }
+/****************************************************************************************************************/
+template<typename T, size_t order>
+inline gradient_tape<T, order, BUFFER_SIZE> &get_active_tape()
+{
+    static thread_local gradient_tape<T, order, BUFFER_SIZE> tape;
+    return tape;
+}
+
+/****************************************************************************************************************/
+/* boost special function overloads */
+/****************************************************************************************************************/
+/* following order in
+ * https://www.boost.org/doc/libs/1_88_0/libs/math/doc/html/special.html */
+/* 
+ * Number Series
+ * not implemented, autodiff doesn't make sense */
+template<typename T, size_t order, typename ARG>
+struct tgamma_expr : public abstract_unary_expression<T, order, ARG, tgamma_expr<T, order, ARG>>
+{
+    /** @brief acos(x)
+     *  d/dx acos(x) = -1/sqrt(1-x^2)
+      * */
+    using arg_type   = ARG;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+
+    explicit tgamma_expr(const expression<T, order, ARG> &arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, tgamma_expr<T, order, ARG>>(arg_expr, v){};
+
+    inner_t evaluate() const
+    {
+        using boost::math::tgamma;
+        return tgamma(this->arg.evaluate());
+    }
+    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    {
+        using boost::math::digamma;
+        using boost::math::tgamma;
+        return tgamma(argv) * digamma(argv);
+    }
+};
+template<typename T, size_t order, typename ARG>
+struct digamma_expr : public abstract_unary_expression<T, order, ARG, digamma_expr<T, order, ARG>>
+{
+    /** @brief acos(x)
+     *  d/dx acos(x) = -1/sqrt(1-x^2)
+      * */
+    using arg_type   = ARG;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+
+    explicit digamma_expr(const expression<T, order, ARG> &arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, digamma_expr<T, order, ARG>>(arg_expr, v){};
+
+    inner_t evaluate() const
+    {
+        using boost::math::digamma;
+        return digamma(this->arg.evaluate());
+    }
+    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    {
+        using boost::math::polygamma;
+        return polygamma(1, argv);
+    }
+};
+
+template<typename T, size_t order, typename ARG>
+struct polygamma_expr
+    : public abstract_unary_expression<T, order, ARG, polygamma_expr<T, order, ARG>>
+{
+    /** @brief acos(x)
+     *  d/dx acos(x) = -1/sqrt(1-x^2)
+      * */
+    using arg_type   = ARG;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+
+    explicit polygamma_expr(const expression<T, order, ARG> &arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, polygamma_expr<T, order, ARG>>(arg_expr, v){};
+
+    inner_t evaluate() const
+    {
+        using boost::math::polygamma;
+        return polygamma(static_cast<int>(this->constant), this->arg.evaluate());
+    }
+    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    {
+        using boost::math::polygamma;
+        return polygamma(static_cast<int>(constant) + 1, argv);
+    }
+};
+
 template<typename T, size_t order, typename ARG>
 tgamma_expr<T, order, ARG> tgamma(const expression<T, order, ARG> &arg)
 {
@@ -2435,25 +2443,29 @@ digamma_expr<T, order, ARG> digamma(const expression<T, order, ARG> &arg)
 {
     return digamma_expr<T, order, ARG>(arg, 0.0);
 }
-template<typename T, size_t order, typename E>
-rvar<T, order> make_rvar(const expression<T, order, E> &expr);
-
-template<typename T, size_t order, typename ARG>
-auto sin_pi(const expression<T, order, ARG> &expr)
-{
-    return sin(boost::math::constants::pi<T>() * expr);
-}
 template<typename T, size_t order, typename ARG>
 polygamma_expr<T, order, ARG> polygamma(int i, const expression<T, order, ARG> &arg)
 {
     return polygamma_expr<T, order, ARG>(arg, static_cast<T>(i));
 }
-/****************************************************************************************************************/
+/* extra rvar overloads are needed here because otherwise the call to
+ * tgamma/digamma/polygamma is ambiguous and may pick the boost::math overload
+ * which leads to the wrong derivative */
+
 template<typename T, size_t order>
-inline gradient_tape<T, order, BUFFER_SIZE> &get_active_tape()
+tgamma_expr<T, order, rvar<T, order>> tgamma(const rvar<T, order> &arg)
 {
-    static thread_local gradient_tape<T, order, BUFFER_SIZE> tape;
-    return tape;
+    return tgamma_expr<T, order, rvar<T, order>>(arg, 0.0);
+}
+template<typename T, size_t order>
+digamma_expr<T, order, rvar<T, order>> digamma(const rvar<T, order> &arg)
+{
+    return digamma_expr<T, order, rvar<T, order>>(arg, 0.0);
+}
+template<typename T, size_t order>
+polygamma_expr<T, order, rvar<T, order>> polygamma(int i, const rvar<T, order> &arg)
+{
+    return polygamma_expr<T, order, rvar<T, order>>(arg, static_cast<T>(i));
 }
 /****************************************************************************************************************/
 template<typename T, size_t order = 1>
@@ -2644,7 +2656,7 @@ public:
     const inner_t &evaluate() const { return value_; };
     inner_t       &get_value() { return value_; };
 
-    explicit       operator T() const { return item(); }
+    explicit operator T() const { return item(); }
 
     explicit       operator int() const { return static_cast<int>(item()); }
     explicit       operator long() const { return static_cast<long>(item()); }
@@ -2683,235 +2695,7 @@ public:
         it->backward();
     }
 };
-/*****************/
-template<typename T, size_t order = 1>
-class rvar_no_et : public expression<T, order, rvar<T, order>>
-{
-private:
-    using inner_t = rvar_t<T, order - 1>;
-    friend class gradient_node<T, order>;
-    inner_t                  value_;
-    gradient_node<T, order> *node_ = nullptr;
-    template<typename, size_t>
-    friend class rvar;
-    /*****************************************************************************************/
-    /**
-     * @brief implementation helpers for get_value_at
-     */
-    template<size_t target_order, size_t current_order>
-    struct get_value_at_impl
-    {
-        static_assert(target_order <= current_order, "Requested depth exceeds variable order.");
 
-        /** @return value_ at rvar_t<T,current_order - 1>
-         */
-        static auto &get(rvar<T, current_order> &v)
-        {
-            return get_value_at_impl<target_order, current_order - 1>::get(v.get_value());
-        }
-        /** @return const value_ at rvar_t<T,current_order - 1>
-         */
-        static const auto &get(const rvar<T, current_order> &v)
-        {
-            return get_value_at_impl<target_order, current_order - 1>::get(v.get_value());
-        }
-    };
-
-    /** @brief base case specialization for target_order == current order
-     */
-    template<size_t target_order>
-    struct get_value_at_impl<target_order, target_order>
-    {
-        /** @return value_ at rvar_t<T,target_order>
-         */
-        static auto       &get(rvar<T, target_order> &v) { return v; }
-        /** @return const value_ at rvar_t<T,target_order>
-         */
-        static const auto &get(const rvar<T, target_order> &v) { return v; }
-    };
-    /*****************************************************************************************/
-    void make_leaf_node()
-    {
-        gradient_tape<T, order, BUFFER_SIZE> &tape = get_active_tape<T, order>();
-        node_                                      = tape.emplace_leaf_node();
-    }
-
-    void make_unary_node()
-    {
-        gradient_tape<T, order, BUFFER_SIZE> &tape = get_active_tape<T, order>();
-        node_                                      = tape.emplace_active_unary_node();
-    }
-
-    void make_multi_node(size_t n)
-    {
-        gradient_tape<T, order, BUFFER_SIZE> &tape = get_active_tape<T, order>();
-        node_                                      = tape.emplace_active_multi_node(n);
-    }
-
-    template<size_t n>
-    void make_multi_node()
-    {
-        gradient_tape<T, order, BUFFER_SIZE> &tape = get_active_tape<T, order>();
-        node_                                      = tape.template emplace_active_multi_node<n>();
-    }
-
-    template<typename E>
-    void make_rvar_from_expr(const expression<T, order, E> &expr)
-    {
-        make_multi_node<detail::count_rvars<E, order>>();
-        expr.template propagatex<0>(node_, inner_t(1.0));
-    }
-    T get_item_impl(std::true_type) const
-    {
-        return value_.get_item_impl(std::integral_constant<bool, (order - 1 > 1)>{});
-    }
-
-    T get_item_impl(std::false_type) const { return value_; }
-
-public:
-    using value_type = T;
-    rvar()
-        : value_()
-    {
-        make_leaf_node();
-    }
-    rvar(const T value)
-        : value_(inner_t{value})
-    {
-        make_leaf_node();
-    }
-
-    rvar &operator=(T v)
-    {
-        value_ = inner_t(v);
-        if (node_ == nullptr) {
-            make_leaf_node();
-        }
-        return *this;
-    }
-    rvar(const rvar<T, order> &other)            = default;
-    rvar &operator=(const rvar<T, order> &other) = default;
-
-    template<size_t arg_index>
-    void propagatex(gradient_node<T, order> *node, inner_t adj) const
-    {
-        node->update_derivative_v(arg_index, adj);
-        node->update_argument_ptr_at(arg_index, node_);
-    }
-
-    template<class E>
-    rvar(const expression<T, order, E> &expr)
-    {
-        value_ = expr.evaluate();
-        make_rvar_from_expr(expr);
-    }
-    template<class E>
-    rvar &operator=(const expression<T, order, E> &expr)
-    {
-        value_ = expr.evaluate();
-        make_rvar_from_expr(expr);
-        return *this;
-    }
-    /***************************************************************************************************/
-    template<class E>
-    rvar<T, order> &operator+=(const expression<T, order, E> &expr)
-    {
-        *this = *this + expr;
-        return *this;
-    }
-
-    template<class E>
-    rvar<T, order> &operator*=(const expression<T, order, E> &expr)
-    {
-        *this = *this * expr;
-        return *this;
-    }
-
-    template<class E>
-    rvar<T, order> &operator-=(const expression<T, order, E> &expr)
-    {
-        *this = *this - expr;
-        return *this;
-    }
-
-    template<class E>
-    rvar<T, order> &operator/=(const expression<T, order, E> &expr)
-    {
-        *this = *this / expr;
-        return *this;
-    }
-    /***************************************************************************************************/
-    rvar<T, order> &operator+=(const T &v)
-    {
-        *this = *this + v;
-        return *this;
-    }
-
-    rvar<T, order> &operator*=(const T &v)
-    {
-        *this = *this * v;
-        return *this;
-    }
-
-    rvar<T, order> &operator-=(const T &v)
-    {
-        *this = *this - v;
-        return *this;
-    }
-
-    rvar<T, order> &operator/=(const T &v)
-    {
-        *this = *this / v;
-        return *this;
-    }
-
-    /***************************************************************************************************/
-    const inner_t &adjoint() const { return *node_->get_adjoint_ptr(); }
-    inner_t       &adjoint() { return *node_->get_adjoint_ptr(); }
-
-    const inner_t &evaluate() const { return value_; };
-    inner_t       &get_value() { return value_; };
-
-    explicit operator T() const { return item(); }
-
-    explicit operator int() const { return static_cast<int>(item()); }
-    explicit operator long() const { return static_cast<long>(item()); }
-    explicit operator long long() const { return static_cast<long long>(item()); }
-
-    /**
-     *  @brief same as evaluate but returns proper depth for higher order derivatives
-     *  @return value_ at depth N
-     */
-    template<size_t N>
-    auto &get_value_at()
-    {
-        static_assert(N <= order, "Requested depth exceeds variable order.");
-        return get_value_at_impl<N, order>::get(*this);
-    }
-    /** @brief same as above but const
-     */
-    template<size_t N>
-    const auto &get_value_at() const
-    {
-        static_assert(N <= order, "Requested depth exceeds variable order.");
-        return get_value_at_impl<N, order>::get(*this);
-    }
-
-    T item() const { return get_item_impl(std::integral_constant<bool, (order > 1)>{}); }
-
-    void backward()
-    {
-        gradient_tape<T, order, BUFFER_SIZE> &tape = get_active_tape<T, order>();
-        auto                                  it   = tape.find(node_);
-        it->update_adjoint_v(inner_t(1.0));
-        while (it != tape.begin()) {
-            it->backward();
-            --it;
-        }
-        it->backward();
-    }
-};
-/************************************/
 template<typename T, size_t order>
 std::ostream &operator<<(std::ostream &os, const rvar<T, order> var)
 {
@@ -3103,13 +2887,6 @@ auto grad_nd(ftype &f, First first, Other... other)
 }
 } // namespace reverse_mode
 } // namespace differentiation
-template<typename T, size_t order, typename ARG, class Policy>
-auto sin_pi(const boost::math::differentiation::reverse_mode::expression<T, order, ARG> &expr,
-            const Policy &)
-{
-    return boost::math::differentiation::reverse_mode::sin_pi(expr);
-}
-
 } // namespace math
 } // namespace boost
 namespace std {
