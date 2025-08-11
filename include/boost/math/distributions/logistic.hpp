@@ -159,7 +159,7 @@ namespace boost { namespace math {
        RealType scale = dist.scale();
        RealType location = dist.location();
        RealType result = 0; // of checks.
-       constexpr auto function = "boost::math::cdf(const logistic_distribution<%1%>&, %1%)";
+       constexpr auto function = "boost::math::logcdf(const logistic_distribution<%1%>&, %1%)";
        if(false == detail::check_scale(function, scale, &result, Policy()))
        {
           return result;
@@ -274,7 +274,7 @@ namespace boost { namespace math {
        RealType location = c.dist.location();
        RealType scale = c.dist.scale();
        RealType x = c.param;
-       constexpr auto function = "boost::math::cdf(const complement(logistic_distribution<%1%>&), %1%)";
+       constexpr auto function = "boost::math::logcdf(const complement(logistic_distribution<%1%>&), %1%)";
 
        RealType result = 0;
        if(false == detail::check_scale(function, scale, &result, Policy()))
