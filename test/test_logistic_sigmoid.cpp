@@ -6,6 +6,7 @@
 
 #include <boost/math/special_functions/logistic_sigmoid.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
 #include "math_unit_test.hpp"
 #include <array>
 #include <cfloat>
@@ -24,11 +25,11 @@ void test()
         0.75
     };
     const std::array<RealType, 5> y_values = {
-        RealType{1} / 2,
-        RealType{0.73105857863000487925115924182183627436514464016505651927636590791904045307},
-        RealType{1},
-        RealType{0.62245933120185456463890056574550847875327936530891016305943716265854500},
-        RealType{0.6791786991753929731596801157765790212342212482195760219829517436805}
+        static_cast<RealType>(1) / 2,
+        static_cast<RealType>(0.73105857863000487925115924182183627436514464016505651927636590791904045307),
+        static_cast<RealType>(1),
+        static_cast<RealType>(0.62245933120185456463890056574550847875327936530891016305943716265854500),
+        static_cast<RealType>(0.6791786991753929731596801157765790212342212482195760219829517436805)
     };
 
     for (std::size_t i = 0; i < x_values.size(); ++i)
@@ -40,7 +41,8 @@ void test()
         }
         else
         {
-            CHECK_MOLLIFIED_CLOSE(test_value, y_values[i], 1e-15);
+            RealType comparison_value = y_values[i];
+            CHECK_MOLLIFIED_CLOSE(test_value, comparison_value, static_cast<RealType>(1e-15));
         }
 
         bool fe {false};
@@ -82,6 +84,8 @@ int main()
 
     std::feclearexcept(FE_ALL_EXCEPT);
     test<boost::multiprecision::cpp_bin_float_quad>();
+
+    test<boost::multiprecision::cpp_dec_float_50>();
 
     return boost::math::test::report_errors();
 }

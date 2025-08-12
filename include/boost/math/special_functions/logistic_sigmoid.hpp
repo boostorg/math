@@ -23,11 +23,11 @@ RealType logistic_sigmoid(RealType x, const Policy&)
 
     if(-x >= tools::log_max_value<RealType>())
     {
-        return RealType{0};
+        return static_cast<RealType>(0);
     }
     if(-x <= -tools::log_max_value<RealType>())
     {
-        return RealType{1};
+        return static_cast<RealType>(1);
     }
 
     const auto res {static_cast<RealType>(1 / (1 + exp(static_cast<promoted_real_type>(-x))))};

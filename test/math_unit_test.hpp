@@ -58,7 +58,7 @@ bool check_mollified_close(Real expected, Real computed, Real tol, std::string c
     }
     using std::max;
     using std::abs;
-    Real denom = (max)(abs(expected), Real(1));
+    Real denom = (max)(Real(abs(expected)), Real(1));
     Real mollified_relative_error = abs(expected - computed)/denom;
     if (mollified_relative_error > tol)
     {
