@@ -147,8 +147,8 @@ namespace boost { namespace math {
           return result;
        }
        BOOST_MATH_STD_USING
-       RealType power = (location - x) / scale;
-       return logistic_sigmoid(-power, Policy());
+       RealType power = -(location - x) / scale;
+       return logistic_sigmoid(power, Policy());
     }
 
     template <class RealType, class Policy>
@@ -250,8 +250,8 @@ namespace boost { namespace math {
        {
           return result;
        }
-       RealType power = (x - location) / scale;
-       return logistic_sigmoid(-power, Policy());
+       RealType power = -(x - location) / scale;
+       return logistic_sigmoid(power, Policy());
     } 
 
     template <class RealType, class Policy>
