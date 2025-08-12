@@ -591,6 +591,7 @@ test-suite special_fun :
    [ run test_fibonacci.cpp /boost/test//boost_unit_test_framework ]
    [ run test_prime.cpp /boost/test//boost_unit_test_framework ]
    [ run test_logistic_sigmoid.cpp ]
+   [ run test_logit.cpp ]
 ;
 
 test-suite distribution_tests :
