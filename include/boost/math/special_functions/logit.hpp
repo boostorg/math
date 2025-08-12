@@ -30,11 +30,11 @@ RealType logit(RealType p, const Policy&)
     RealType result {};
     if (p > crossover)
     {
-        result = 2 * atanh(2 * promoted_p - 1);
+        result = static_cast<RealType>(2 * atanh(2 * promoted_p - 1));
     }
     else
     {
-        result = log((1 - promoted_p) / promoted_p);
+        result = static_cast<RealType>(log(promoted_p / (1 - promoted_p)));
     }
 
     std::fesetexceptflag(&flags, FE_ALL_EXCEPT);
