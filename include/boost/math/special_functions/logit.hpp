@@ -23,8 +23,10 @@ RealType logit(RealType p, const Policy&)
 
     using promoted_real_type = typename policies::evaluation<RealType, Policy>::type;
 
+    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
     std::fexcept_t flags;
     std::fegetexceptflag(&flags, FE_ALL_EXCEPT);
+    #endif
 
     static const RealType crossover {RealType{1}/4};
     const auto promoted_p {static_cast<promoted_real_type>(p)};
@@ -38,7 +40,9 @@ RealType logit(RealType p, const Policy&)
         result = static_cast<RealType>(log(promoted_p / (1 - promoted_p)));
     }
 
+    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
     std::fesetexceptflag(&flags, FE_ALL_EXCEPT);
+    #endif
 
     return result;
 }
