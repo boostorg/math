@@ -19,6 +19,7 @@ template <typename RealType, typename Policy>
 RealType logit(RealType p, const Policy&)
 {
     BOOST_MATH_STD_USING
+    using std::atanh;
 
     using promoted_real_type = typename policies::evaluation<RealType, Policy>::type;
 
