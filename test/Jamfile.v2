@@ -590,6 +590,7 @@ test-suite special_fun :
    [ run test_sinc.cpp /boost/test//boost_unit_test_framework pch_light ]
    [ run test_fibonacci.cpp /boost/test//boost_unit_test_framework ]
    [ run test_prime.cpp /boost/test//boost_unit_test_framework ]
+   [ run test_logistic.cpp ]
 ;
 
 test-suite distribution_tests :
