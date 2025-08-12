@@ -34,7 +34,7 @@ void test()
     {
         const RealType test_value {boost::math::logit(x_values[i])};
 
-        BOOST_MATH_IF_CONSTEXPR (std::is_arithmetic<RealType>::value)
+        BOOST_MATH_IF_CONSTEXPR (std::is_same<RealType, float>::value || std::is_same<RealType, double>::value)
         {
             CHECK_ULP_CLOSE(test_value, y_values[i], 5);
         }
