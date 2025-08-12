@@ -46,23 +46,23 @@ void test()
         bool fe {false};
         if (std::fetestexcept(FE_OVERFLOW))
         {
-            fe = true;
-            std::cerr << "FE_OVERFLOW" << std::endl;
+            fe = true;                                  // LCOV_EXCL_LINE
+            std::cerr << "FE_OVERFLOW" << std::endl;    // LCOV_EXCL_LINE
         }
         if (std::fetestexcept(FE_UNDERFLOW))
         {
-            fe = true;
-            std::cerr << "FE_UNDERFLOW" << std::endl;
+            fe = true;                                  // LCOV_EXCL_LINE
+            std::cerr << "FE_UNDERFLOW" << std::endl;   // LCOV_EXCL_LINE
         }
         if (std::fetestexcept(FE_DIVBYZERO))
         {
-            fe = true;
-            std::cerr << "FE_DIVBYZERO" << std::endl;
+            fe = true;                                  // LCOV_EXCL_LINE
+            std::cerr << "FE_DIVBYZERO" << std::endl;   // LCOV_EXCL_LINE
         }
         if (std::fetestexcept(FE_INVALID))
         {
-            fe = true;
-            std::cerr << "FE_INVALID" << std::endl;
+            fe = true;                                  // LCOV_EXCL_LINE
+            std::cerr << "FE_INVALID" << std::endl;     // LCOV_EXCL_LINE
         }
 
         CHECK_EQUAL(fe, false);
