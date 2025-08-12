@@ -10,6 +10,8 @@
 #include <array>
 #include <cfloat>
 
+#pragma STDC FENV_ACCESS ON
+
 template <typename RealType>
 void test()
 {
