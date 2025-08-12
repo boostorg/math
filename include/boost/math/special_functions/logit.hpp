@@ -9,6 +9,7 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/policy.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <cmath>
 #include <cfenv>
 
@@ -23,10 +24,10 @@ RealType logit(RealType p, const Policy&)
 
     using promoted_real_type = typename policies::evaluation<RealType, Policy>::type;
 
-    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
-    std::fexcept_t flags;
-    std::fegetexceptflag(&flags, FE_ALL_EXCEPT);
-    #endif
+    if (p < tools::min_value<RealType>())
+    {
+        return -policies::raise_overflow_error<RealType>("logit", "sub-normals will overflow ln(x/(1-x))", Policy());
+    }
 
     static const RealType crossover {RealType{1}/4};
     const auto promoted_p {static_cast<promoted_real_type>(p)};
@@ -39,10 +40,6 @@ RealType logit(RealType p, const Policy&)
     {
         result = static_cast<RealType>(log(promoted_p / (1 - promoted_p)));
     }
-
-    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
-    std::fesetexceptflag(&flags, FE_ALL_EXCEPT);
-    #endif
 
     return result;
 }

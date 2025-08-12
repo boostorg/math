@@ -8,8 +8,8 @@
 #define BOOST_MATH_SF_EXPIT_HPP
 
 #include <boost/math/policies/policy.hpp>
+#include <boost/math/tools/precision.hpp>
 #include <cmath>
-#include <cfenv>
 
 namespace boost {
 namespace math {
@@ -21,17 +21,16 @@ RealType logistic_sigmoid(RealType x, const Policy&)
 
     using promoted_real_type = typename policies::evaluation<RealType, Policy>::type;
 
-    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
-    std::fexcept_t flags;
-    std::fegetexceptflag(&flags, FE_ALL_EXCEPT);
-    #endif
+    if(-x >= tools::log_max_value<RealType>())
+    {
+        return 0;
+    }
+    if(-x <= -tools::log_max_value<RealType>())
+    {
+        return 1;
+    }
 
     const auto res {static_cast<RealType>(1 / (1 + exp(static_cast<promoted_real_type>(-x))))};
-
-    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
-    std::fesetexceptflag(&flags, FE_ALL_EXCEPT);
-    #endif
-
     return res;
 }
 

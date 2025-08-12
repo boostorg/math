@@ -148,10 +148,6 @@ namespace boost { namespace math {
        }
        BOOST_MATH_STD_USING
        RealType power = (location - x) / scale;
-       if(power > tools::log_max_value<RealType>())
-          return 0;
-       if(power < -tools::log_max_value<RealType>())
-          return 1;
        return logistic_sigmoid(-power, Policy());
     }
 
@@ -255,10 +251,6 @@ namespace boost { namespace math {
           return result;
        }
        RealType power = (x - location) / scale;
-       if(power > tools::log_max_value<RealType>())
-          return 0;
-       if(power < -tools::log_max_value<RealType>())
-          return 1;
        return logistic_sigmoid(-power, Policy());
     } 
 

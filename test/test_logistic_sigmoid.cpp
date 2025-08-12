@@ -9,6 +9,7 @@
 #include "math_unit_test.hpp"
 #include <array>
 #include <cfloat>
+#include <cfenv>
 
 #pragma STDC FENV_ACCESS ON
 

@@ -8,7 +8,8 @@
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include "math_unit_test.hpp"
 #include <array>
-#include <cfloat>
+#include <limits>
+#include <cfenv>
 
 #pragma STDC FENV_ACCESS ON
 
@@ -67,6 +68,25 @@ void test()
 
         CHECK_EQUAL(fe, false);
     }
+
+    #if defined(_CPPUNWIND) || defined(__EXCEPTIONS)
+
+    BOOST_MATH_IF_CONSTEXPR (std::is_arithmetic<RealType>::value)
+    {
+        bool thrown {false};
+        try
+        {
+            boost::math::logit(std::numeric_limits<RealType>::denorm_min());
+        }
+        catch (...)
+        {
+            thrown = true;
+        }
+
+        CHECK_EQUAL(thrown, true);
+    }
+
+    #endif // Exceptional environments
 }
 
 int main()
