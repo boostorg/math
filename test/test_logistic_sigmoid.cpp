@@ -4,7 +4,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/special_functions/logistic.hpp>
+#include <boost/math/special_functions/logistic_sigmoid.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include "math_unit_test.hpp"
 #include <array>
@@ -30,7 +30,7 @@ void test()
 
     for (std::size_t i = 0; i < x_values.size(); ++i)
     {
-        const RealType test_value {boost::math::logistic(x_values[i])};
+        const RealType test_value {boost::math::logistic_sigmoid(x_values[i])};
         BOOST_MATH_IF_CONSTEXPR (std::is_arithmetic<RealType>::value)
         {
             CHECK_ULP_CLOSE(test_value, y_values[i], 1);

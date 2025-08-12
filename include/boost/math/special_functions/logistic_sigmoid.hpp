@@ -15,7 +15,7 @@ namespace boost {
 namespace math {
 
 template <typename RealType, typename Policy>
-RealType logistic(RealType x, const Policy&)
+RealType logistic_sigmoid(RealType x, const Policy&)
 {
     BOOST_MATH_STD_USING
 
@@ -30,9 +30,9 @@ RealType logistic(RealType x, const Policy&)
 }
 
 template <typename RealType>
-RealType logistic(RealType x)
+RealType logistic_sigmoid(RealType x)
 {
-    return logistic(x, policies::policy<>());
+    return logistic_sigmoid(x, policies::policy<>());
 }
 
 } // namespace math
