@@ -146,8 +146,8 @@ namespace boost { namespace math {
        {
           return result;
        }
-       BOOST_MATH_STD_USING
-       RealType power = -(location - x) / scale;
+
+       RealType power = (x - location) / scale;
        return logistic_sigmoid(power, Policy());
     }
 
@@ -197,7 +197,6 @@ namespace boost { namespace math {
     template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const logistic_distribution<RealType, Policy>& dist, const RealType& p)
     {
-       BOOST_MATH_STD_USING
        RealType location = dist.location();
        RealType scale = dist.scale();
 
@@ -220,13 +219,12 @@ namespace boost { namespace math {
           return policies::raise_overflow_error<RealType>(function,"probability argument is 1, must be >0 and <1",Policy());
        }
 
-       return location - scale * -logit(p, Policy());
+       return location + scale * logit(p, Policy());
      } // RealType quantile(const logistic_distribution<RealType, Policy>& dist, const RealType& p)
     
     template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<logistic_distribution<RealType, Policy>, RealType>& c)
     {
-       BOOST_MATH_STD_USING
        RealType location = c.dist.location();
        RealType scale = c.dist.scale();
        RealType x = c.param;
@@ -250,7 +248,7 @@ namespace boost { namespace math {
        {
           return result;
        }
-       RealType power = -(x - location) / scale;
+       RealType power = (location - x) / scale;
        return logistic_sigmoid(power, Policy());
     } 
 
@@ -293,7 +291,6 @@ namespace boost { namespace math {
     template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<logistic_distribution<RealType, Policy>, RealType>& c)
     {
-       BOOST_MATH_STD_USING
        RealType scale = c.dist.scale();
        RealType location = c.dist.location();
        constexpr auto function = "boost::math::quantile(const complement(logistic_distribution<%1%>&), %1%)";
@@ -316,7 +313,7 @@ namespace boost { namespace math {
           return policies::raise_overflow_error<RealType>(function,"probability argument is 0, but must be >0 and <1",Policy());
        }
 
-       return location + scale * -logit(q, Policy());
+       return location - scale * logit(q, Policy());
     } 
     
     template <class RealType, class Policy>
