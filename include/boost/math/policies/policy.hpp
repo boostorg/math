@@ -1003,6 +1003,25 @@ struct is_noexcept_error_policy
       && (t8::value != throw_on_error) && (t8::value != user_error));
 };
 
+// Generate a forwarding policy to stop further promotion from occurring
+// For example if a special function for float promotes to double, we don't want the next
+// function in the call chain to then promote to long double
+template <typename Policy>
+struct make_forwarding_policy
+{
+   using type =
+          typename policies::normalise<
+             Policy,
+             policies::promote_float<false>,
+             policies::promote_double<false>,
+             policies::discrete_quantile<>,
+             policies::assert_undefined<>
+          >::type;
+};
+
+template <typename Policy>
+using make_forwarding_policy_t = typename make_forwarding_policy<Policy>::type;
+
 }}} // namespaces
 
 #endif // BOOST_MATH_POLICY_HPP
