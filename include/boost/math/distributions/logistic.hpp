@@ -147,7 +147,8 @@ namespace boost { namespace math {
           return result;
        }
 
-       RealType power = (x - location) / scale;
+       using promoted_real_type = typename policies::evaluation<RealType, Policy>::type;
+       promoted_real_type power = (static_cast<promoted_real_type>(x) - static_cast<promoted_real_type>(location)) / static_cast<promoted_real_type>(scale);
        return logistic_sigmoid(power, Policy());
     }
 
@@ -248,7 +249,9 @@ namespace boost { namespace math {
        {
           return result;
        }
-       RealType power = (location - x) / scale;
+
+       using promoted_real_type = typename policies::evaluation<RealType, Policy>::type;
+       promoted_real_type power = (static_cast<promoted_real_type>(location) - static_cast<promoted_real_type>(x)) / static_cast<promoted_real_type>(scale);
        return logistic_sigmoid(power, Policy());
     } 
 
