@@ -3,7 +3,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS YES)
 set(THIS autodiff_reverse)
 
 project(autodiff_reverse C CXX)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 enable_testing()#
 # add_compile_options(-fsanitize=address)
@@ -20,6 +20,13 @@ include_directories(${BOOST_MATH_DIRECTORY}include
 
 set(HEADERS
     ${CMAKE_SOURCE_DIR}/autodiff_reverse.hpp
+    ${CMAKE_SOURCE_DIR}/detail/reverse_mode_autodiff_basic_operator_overloads.hpp
+    ${CMAKE_SOURCE_DIR}/detail/reverse_mode_autodiff_gamma_function_overloads.hpp
+    ${CMAKE_SOURCE_DIR}/detail/reverse_mode_autodiff_helper_functions.hpp
+    ${CMAKE_SOURCE_DIR}/detail/reverse_mode_autodiff_memory_management.hpp
+    ${CMAKE_SOURCE_DIR}/detail/reverse_mode_autodiff_stl_overloads.hpp
+    ${CMAKE_SOURCE_DIR}/detail/reverse_mode_autodiff_expression_template_base.hpp
+    ${CMAKE_SOURCE_DIR}/detail/reverse_mode_autodiff_utilities.hpp
     ${BOOST_MATH_TEST_DIRECTORY}test_autodiff_reverse.hpp
 )
 
@@ -45,11 +52,15 @@ SET(TEST_SPECIAL_FUNCTIONS ${BOOST_MATH_TEST_DIRECTORY}test_special_functions.cp
 # add_executable(autodiff_reverse_tests ${TEST_CONSTRUCTORS} ${HEADERS})
 # add_executable(autodiff_reverse_tests ${TEST_MEMORY_ALLOCATORS} ${HEADERS})
 # add_executable(autodiff_reverse_tests ${TEST_BASIC_OPS} ${HEADERS})
-# add_executable(autodiff_reverse_tests ${TEST_COMPARISON_OPS} ${HEADERS})
+# add_executable(autodiff_reverse_tests ${TEST_COMPARISON_OPS} ${HEADERS}
+#     detail/reverse_mode_autodiff_comparison_operator_overloads.hpp)
 # add_executable(autodiff_reverse_tests ${TEST_STL_SUPPORT} ${HEADERS})
-# add_executable(autodiff_reverse_tests
-#    ${TEST_ADDITIONAL_BOOST_FUNCTIONS}
-#    ${HEADERS})
+add_executable(autodiff_reverse_tests
+    ${TEST_SPECIAL_FUNCTIONS}
+    ${HEADERS}
+    )
 # add_executable(autodiff_reverse_tests ${LINEAR_REGRESSION_EXAMPLE} ${HEADERS})
-add_executable(autodiff_reverse_tests ${TEST_SPECIAL_FUNCTIONS} ${HEADERS}
-    eigen_support.hpp)
+
+
+
+
