@@ -1007,7 +1007,11 @@ struct is_noexcept_error_policy
 // For example if a special function for float promotes to double, we don't want the next
 // function in the call chain to then promote to long double
 template <typename Policy>
-using make_forwarding_policy =
+struct make_forwarding_policy
+{
+   static_assert(detail::is_valid_policy<Policy>::value, "Policy must be valid to make a forwarding policy");
+
+   using type =
           typename policies::normalise<
              Policy,
              policies::promote_float<false>,
@@ -1015,6 +1019,7 @@ using make_forwarding_policy =
              policies::discrete_quantile<>,
              policies::assert_undefined<>
           >::type;
+};
 
 template <typename Policy>
 using make_forwarding_policy_t = typename make_forwarding_policy<Policy>::type;
