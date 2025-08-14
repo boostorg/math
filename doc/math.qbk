@@ -339,6 +339,10 @@ and use the function's name as the link text.]
 [def __hermite [link math_toolkit.sf_poly.hermite hermite]]
 [def __cardinal_b_splines [link math_toolkit.sf_poly.cardinal_b_splines cardinal_b_splines]]
 
+[/logistic functions]
+[def __logit [link math_toolkit.logistic.logit logit]]
+[def __logistic_sigmoid [link math_toolkit.logistic.logistic_sigmoid logistic_sigmoid]]
+
 [/Misc]
 [def __expint [link math_toolkit.expint.expint_i expint]]
 [def __spherical_harmonic [link math_toolkit.sf_poly.sph_harm spherical_harmonic]]
@@ -665,6 +669,11 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include sf/gegenbauer.qbk]
 [include sf/jacobi.qbk]
 [endsect] [/section:sf_poly Polynomials]
+
+[section:logistic Logistic Functions]
+[include sf/logit.qbk]
+[include sf/logistic_sigmoid.qbk]
+[endsect] [/section:logistic Logistic Functions]
 
 [section:bessel Bessel Functions]
 [include sf/bessel_introduction.qbk]
