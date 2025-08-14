@@ -340,6 +340,7 @@ This section lists the mathematical constants, their use(s) (and sometimes ratio
 [[pi_minus_three] [[pi]-3] [0.141593] [] ]
 [[four_minus_pi] [4 -[pi]] [0.858407] [] ]
 [[pi_pow_e] [[pi][super e]] [22.4591] [] ]
+[[log_pi] [ln([pi])] [1.14473] [] ]
 
 [[pi_sqr] [[pi][super 2]] [9.86960] [] ]
 [[pi_sqr_div_six] [[pi][super 2]/6] [1.64493] [] ]
