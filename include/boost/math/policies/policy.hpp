@@ -1009,8 +1009,6 @@ struct is_noexcept_error_policy
 template <typename Policy>
 struct make_forwarding_policy
 {
-   static_assert(detail::is_valid_policy<Policy>::value, "Policy must be valid to make a forwarding policy");
-
    using type =
           typename policies::normalise<
              Policy,
