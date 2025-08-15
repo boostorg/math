@@ -862,7 +862,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_first_derivative, T, all_float_types)
     BOOST_REQUIRE_CLOSE_FRACTION(x_ad.adjoint(), grad_f_analytical[0], boost_close_tol<T>());
     BOOST_REQUIRE_CLOSE_FRACTION(y_ad.adjoint(), grad_f_analytical[1], boost_close_tol<T>());
 
-    gradient_tape<T, 1, BUFFER_SIZE>& tape = get_active_tape<T, 1>();
+    gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
 
     /* grad test */
@@ -890,7 +890,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_second_derivative_and_hessian, T, all_
 
     T                                 fv   = test_function_1(x, y);
     rvar<T, 2>                        f_ad = test_function_1(x_ad, y_ad);
-    gradient_tape<T, 2, BUFFER_SIZE>& tape = get_active_tape<T, 2>();
+    gradient_tape<T, 2>&              tape = get_active_tape<T, 2>();
     tape.zero_grad();
 
     auto hess_analytical   = grad2_test_func_1_analytical(x, y);
@@ -920,7 +920,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_order_3_der, T, all_float_types)
 
     T                                 fv   = test_function_1(x, y);
     rvar<T, 3>                        f_ad = test_function_1(x_ad, y_ad);
-    gradient_tape<T, 3, BUFFER_SIZE>& tape = get_active_tape<T, 3>();
+    gradient_tape<T, 3>&              tape = get_active_tape<T, 3>();
     tape.zero_grad();
 
     auto                                     df3     = grad3_test_func_1_analytical(x, y);
