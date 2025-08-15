@@ -5,8 +5,8 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_basic_operator_overloads.hpp>
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_comparison_operator_overloads.hpp>
+#include <boost/math/differentiation/detail/reverse_mode_autodiff_erf_overloads.hpp>
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_expression_template_base.hpp>
-#include <boost/math/differentiation/detail/reverse_mode_autodiff_gamma_function_overloads.hpp>
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_memory_management.hpp>
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_stl_overloads.hpp>
 
@@ -98,7 +98,6 @@ public:
         typename detail::flat_linear_allocator<gradient_node<T, order> *, buffer_size>::iterator;
 
     gradient_tape() { clear(); };
-    // size_t depth() const override { return depth_; };
 
     gradient_tape(const gradient_tape &)            = delete;
     gradient_tape &operator=(const gradient_tape &) = delete;
@@ -301,125 +300,6 @@ inline gradient_tape<T, order, BOOST_MATH_BUFFER_SIZE> &get_active_tape()
     return tape;
 }
 
-/****************************************************************************************************************/
-/* boost special function overloads */
-/****************************************************************************************************************/
-/* following order in
- * https://www.boost.org/doc/libs/1_88_0/libs/math/doc/html/special.html */
-/* 
- * Number Series
- * not implemented, autodiff doesn't make sense */
-// template<typename T, size_t order, typename ARG>
-// struct tgamma_expr : public abstract_unary_expression<T, order, ARG, tgamma_expr<T, order, ARG>>
-// {
-//     /** @brief acos(x)
-//      *  d/dx acos(x) = -1/sqrt(1-x^2)
-//       * */
-//     using arg_type   = ARG;
-//     using value_type = T;
-//     using inner_t    = rvar_t<T, order - 1>;
-
-//     explicit tgamma_expr(const expression<T, order, ARG> &arg_expr, const T v)
-//         : abstract_unary_expression<T, order, ARG, tgamma_expr<T, order, ARG>>(arg_expr, v){};
-
-//     inner_t evaluate() const
-//     {
-//         using boost::math::tgamma;
-//         return tgamma(this->arg.evaluate());
-//     }
-//     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
-//     {
-//         using boost::math::digamma;
-//         using boost::math::tgamma;
-//         return tgamma(argv) * digamma(argv);
-//     }
-// };
-// template<typename T, size_t order, typename ARG>
-// struct digamma_expr : public abstract_unary_expression<T, order, ARG, digamma_expr<T, order, ARG>>
-// {
-//     /** @brief acos(x)
-//      *  d/dx acos(x) = -1/sqrt(1-x^2)
-//       * */
-//     using arg_type   = ARG;
-//     using value_type = T;
-//     using inner_t    = rvar_t<T, order - 1>;
-
-//     explicit digamma_expr(const expression<T, order, ARG> &arg_expr, const T v)
-//         : abstract_unary_expression<T, order, ARG, digamma_expr<T, order, ARG>>(arg_expr, v){};
-
-//     inner_t evaluate() const
-//     {
-//         using boost::math::digamma;
-//         return digamma(this->arg.evaluate());
-//     }
-//     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
-//     {
-//         using boost::math::polygamma;
-//         return polygamma(1, argv);
-//     }
-// };
-
-// template<typename T, size_t order, typename ARG>
-// struct polygamma_expr
-//     : public abstract_unary_expression<T, order, ARG, polygamma_expr<T, order, ARG>>
-// {
-//     /** @brief acos(x)
-//      *  d/dx acos(x) = -1/sqrt(1-x^2)
-//       * */
-//     using arg_type   = ARG;
-//     using value_type = T;
-//     using inner_t    = rvar_t<T, order - 1>;
-
-//     explicit polygamma_expr(const expression<T, order, ARG> &arg_expr, const T v)
-//         : abstract_unary_expression<T, order, ARG, polygamma_expr<T, order, ARG>>(arg_expr, v){};
-
-//     inner_t evaluate() const
-//     {
-//         using boost::math::polygamma;
-//         return polygamma(static_cast<int>(this->constant), this->arg.evaluate());
-//     }
-//     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
-//     {
-//         using boost::math::polygamma;
-//         return polygamma(static_cast<int>(constant) + 1, argv);
-//     }
-// };
-
-// template<typename T, size_t order, typename ARG>
-// tgamma_expr<T, order, ARG> tgamma(const expression<T, order, ARG> &arg)
-// {
-//     return tgamma_expr<T, order, ARG>(arg, 0.0);
-// }
-// template<typename T, size_t order, typename ARG>
-// digamma_expr<T, order, ARG> digamma(const expression<T, order, ARG> &arg)
-// {
-//     return digamma_expr<T, order, ARG>(arg, 0.0);
-// }
-// template<typename T, size_t order, typename ARG>
-// polygamma_expr<T, order, ARG> polygamma(int i, const expression<T, order, ARG> &arg)
-// {
-//     return polygamma_expr<T, order, ARG>(arg, static_cast<T>(i));
-// }
-// /* extra rvar overloads are needed here because otherwise the call to
-//  * tgamma/digamma/polygamma is ambiguous and may pick the boost::math overload
-//  * which leads to the wrong derivative */
-
-// template<typename T, size_t order>
-// tgamma_expr<T, order, rvar<T, order>> tgamma(const rvar<T, order> &arg)
-// {
-//     return tgamma_expr<T, order, rvar<T, order>>(arg, 0.0);
-// }
-// template<typename T, size_t order>
-// digamma_expr<T, order, rvar<T, order>> digamma(const rvar<T, order> &arg)
-// {
-//     return digamma_expr<T, order, rvar<T, order>>(arg, 0.0);
-// }
-// template<typename T, size_t order>
-// polygamma_expr<T, order, rvar<T, order>> polygamma(int i, const rvar<T, order> &arg)
-// {
-//     return polygamma_expr<T, order, rvar<T, order>>(arg, static_cast<T>(i));
-// }
-/****************************************************************************************************************/
 template<typename T, size_t order = 1>
 class rvar : public expression<T, order, rvar<T, order>>
 {
