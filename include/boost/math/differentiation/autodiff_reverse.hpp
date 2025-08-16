@@ -564,8 +564,8 @@ namespace detail {
 
 /** @brief helper overload for grad implementation.
  *  @return vector<rvar<T,order-1> of gradients of the autodiff graph.
- *  		specialization for autodiffing through autodiff. i.e. being able to
- *  		compute higher order grads
+ *  specialization for autodiffing through autodiff. i.e. being able to
+ *  compute higher order grads
 */
 template<typename T, size_t order>
 struct grad_op_impl
@@ -601,7 +601,7 @@ struct grad_op_impl
 };
 /** @brief helper overload for grad implementation.
  *  @return vector<T> of gradients of the autodiff graph.
- *  		base specialization for order 1 autodiff
+ *          base specialization for order 1 autodiff
 */
 template<typename T>
 struct grad_op_impl<T, 1>
@@ -621,7 +621,7 @@ struct grad_op_impl<T, 1>
 
 /** @brief helper overload for higher order autodiff
  *  @return nested vector representing N-d tensor of
- *  	higher order derivatives
+ *      higher order derivatives
  */
 template<size_t N, typename T, size_t order_1, size_t order_2, typename Enable = void>
 struct grad_nd_impl
@@ -677,9 +677,9 @@ struct rvar_order<rvar<T, order> *>
  * @brief grad computes gradient with respect to vector of pointers x
  * @param f -> computational graph
  * @param x -> variables gradients to record. Note ALL gradients of the graph
- * 			are computed simultaneously, only the ones w.r.t. x are returned
+ *             are computed simultaneously, only the ones w.r.t. x are returned
  * @return vector<rvar<T,order_1 - 1> of gradients. in the case of order_1 = 1
- * 		   rvar<T,order_1-1> decays to T
+ *            rvar<T,order_1-1> decays to T
  *
  * safe to call recursively with grad(grad(grad...
  */
@@ -706,9 +706,9 @@ auto grad(rvar<T, order_1> &f, First first, Other... other)
 }
 
 /** @brief computes hessian matrix of computational graph w.r.t.
- *  	   vector of variables x.
+ *         vector of variables x.
  *  @return std::vector<std::vector<rvar<T,order_1-2>> hessian matrix
- *  		rvar<T,2> decays to T
+ *          rvar<T,2> decays to T
  *
  *  NOT recursion safe, cannot do hess(hess(
  */
@@ -729,7 +729,7 @@ auto hess(rvar<T, order_1> &f, First first, Other... other)
 
 /** @brief comput N'th gradient of computational graph w.r.t. x
  *  @return vector<vector<.... up N nestings representing tensor
- *  		of gradients of order N
+ *          of gradients of order N
  *
  *  NOT recursively safe, cannot do grad_nd(grad_nd(... etc...
  */
