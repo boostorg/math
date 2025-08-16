@@ -311,26 +311,31 @@ namespace boost
     BOOST_MATH_GPU_ENABLED inline RealType skewness(const bernoulli_distribution<RealType, Policy>& dist)
     {
       BOOST_MATH_STD_USING; // Aid ADL for sqrt.
-      RealType p = dist.success_fraction();
-      return (1 - 2 * p) / sqrt(p * (1 - p));
+
+      using promoted_real_type = policies::evaluation_t<RealType, Policy>;
+      const promoted_real_type p = static_cast<promoted_real_type>(dist.success_fraction());
+      return static_cast<RealType>((1 - 2 * p) / sqrt(p * (1 - p)));
     }
 
     template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const bernoulli_distribution<RealType, Policy>& dist)
     {
-      RealType p = dist.success_fraction();
+      using promoted_real_type = policies::evaluation_t<RealType, Policy>;
+      promoted_real_type p = static_cast<promoted_real_type>(dist.success_fraction());
       // Note Wolfram says this is kurtosis in text, but gamma2 is the kurtosis excess,
       // and Wikipedia also says this is the kurtosis excess formula.
       // return (6 * p * p - 6 * p + 1) / (p * (1 - p));
       // But Wolfram kurtosis article gives this simpler formula for kurtosis excess:
-      return 1 / (1 - p) + 1/p -6;
+      return static_cast<RealType>(1 / (1 - p) + 1/p - 6);
     }
 
     template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const bernoulli_distribution<RealType, Policy>& dist)
     {
-      RealType p = dist.success_fraction();
-      return 1 / (1 - p) + 1/p -6 + 3;
+      using promoted_real_type = policies::evaluation_t<RealType, Policy>;
+      promoted_real_type p = static_cast<promoted_real_type>(dist.success_fraction());
+
+      return static_cast<RealType>(1 / (1 - p) + 1/p - 6 + 3);
       // Simpler than:
       // return (6 * p * p - 6 * p + 1) / (p * (1 - p)) + 3;
     }

@@ -239,7 +239,12 @@ namespace boost
       {
         return result;
       }
-      return  (x_min + x_max) / 2;
+
+      using policy_promoted_type = policies::evaluation_t<RealType, Policy>;
+      const auto promoted_x_max = static_cast<policy_promoted_type>(x_max);
+      const auto promoted_x_min = static_cast<policy_promoted_type>(x_min);
+
+      return static_cast<RealType>((promoted_x_min + promoted_x_max) / 2);
     } // mean
 
     template <class RealType, class Policy>
@@ -257,7 +262,12 @@ namespace boost
       {
         return result;
       }
-      return  (x_max - x_min) * (x_max - x_min) / 8;
+
+      using policy_promoted_type = policies::evaluation_t<RealType, Policy>;
+      const auto promoted_x_max = static_cast<policy_promoted_type>(x_max);
+      const auto promoted_x_min = static_cast<policy_promoted_type>(x_min);
+
+      return static_cast<RealType>((promoted_x_max - promoted_x_min) * (promoted_x_max - promoted_x_min) / 8);
     } // variance
 
     template <class RealType, class Policy>
@@ -286,7 +296,12 @@ namespace boost
       {
         return result;
       }
-      return  (x_min + x_max) / 2;
+
+      using policy_promoted_type = policies::evaluation_t<RealType, Policy>;
+      const auto promoted_x_max = static_cast<policy_promoted_type>(x_max);
+      const auto promoted_x_min = static_cast<policy_promoted_type>(x_min);
+      
+      return static_cast<RealType>((promoted_x_min + promoted_x_max) / 2);
     }
 
     template <class RealType, class Policy>
@@ -324,8 +339,10 @@ namespace boost
       {
         return result;
       }
-      result = -3;
-      return  result / 2;
+
+      using policy_promoted_type = policies::evaluation_t<RealType, Policy>;
+      result = static_cast<RealType>(static_cast<policy_promoted_type>(-3) / static_cast<policy_promoted_type>(2));
+      return result;
     } // kurtosis_excess
 
     template <class RealType, class Policy>
@@ -345,7 +362,9 @@ namespace boost
         return result;
       }
 
-      return 3 + kurtosis_excess(dist);
+      using policy_promoted_type = policies::evaluation_t<RealType, Policy>;
+      result = static_cast<RealType>(3 + static_cast<policy_promoted_type>(-3) / static_cast<policy_promoted_type>(2));
+      return result;
     } // kurtosis
 
     template <class RealType, class Policy>
@@ -369,8 +388,15 @@ namespace boost
       {
         return result;
       }
+
+      using policy_promoted_type = policies::evaluation_t<RealType, Policy>;
       using boost::math::constants::pi;
-      result = static_cast<RealType>(1) / (pi<RealType>() * sqrt((x - lo) * (hi - x)));
+
+      const auto promoted_lo = static_cast<policy_promoted_type>(lo);
+      const auto promoted_hi = static_cast<policy_promoted_type>(hi);
+      const auto promoted_x = static_cast<policy_promoted_type>(x);
+
+      result = static_cast<RealType>(static_cast<policy_promoted_type>(1) / (pi<policy_promoted_type>() * sqrt((promoted_x - promoted_lo) * (promoted_hi - promoted_x))));
       return result;
     } // pdf
 
@@ -402,8 +428,15 @@ namespace boost
       {
         return 1;
       }
+
+      using policy_promoted_type = policies::evaluation_t<RealType, Policy>;
       using boost::math::constants::pi;
-      result = static_cast<RealType>(2) * asin(sqrt((x - x_min) / (x_max - x_min))) / pi<RealType>();
+
+      const auto promoted_x = static_cast<policy_promoted_type>(x);
+      const auto promoted_x_max = static_cast<policy_promoted_type>(x_max);
+      const auto promoted_x_min = static_cast<policy_promoted_type>(x_min);
+
+      result = static_cast<RealType>(static_cast<policy_promoted_type>(2) * asin(sqrt((promoted_x - promoted_x_min) / (promoted_x_max - promoted_x_min))) / pi<policy_promoted_type>());
       return result;
     } // arcsine cdf
 
@@ -435,11 +468,19 @@ namespace boost
       {
         return 1;
       }
-      using boost::math::constants::pi;
+
       // Naive version x = 1 - x;
       // result = static_cast<RealType>(2) * asin(sqrt((x - x_min) / (x_max - x_min))) / pi<RealType>();
       // is less accurate, so use acos instead of asin for complement.
-      result = static_cast<RealType>(2) * acos(sqrt((x - x_min) / (x_max - x_min))) / pi<RealType>();
+
+      using policy_promoted_type = policies::evaluation_t<RealType, Policy>;
+      using boost::math::constants::pi;
+
+      const auto promoted_x = static_cast<policy_promoted_type>(x);
+      const auto promoted_x_max = static_cast<policy_promoted_type>(x_max);
+      const auto promoted_x_min = static_cast<policy_promoted_type>(x_min);
+
+      result = static_cast<RealType>(static_cast<policy_promoted_type>(2) * acos(sqrt((promoted_x - promoted_x_min) / (promoted_x_max - promoted_x_min))) / pi<policy_promoted_type>());
       return result;
     } // arcsine ccdf
 
@@ -480,9 +521,13 @@ namespace boost
         return 1;
       }
 
-      RealType sin2hpip = sin(half_pi<RealType>() * p);
-      RealType sin2hpip2 = sin2hpip * sin2hpip;
-      result = -x_min * sin2hpip2 + x_min + x_max * sin2hpip2;
+      using policy_promoted_type = policies::evaluation_t<RealType, Policy>;
+      const policy_promoted_type sin2hpip = sin(half_pi<policy_promoted_type>() * static_cast<policy_promoted_type>(p));
+      const policy_promoted_type sin2hpip2 = sin2hpip * sin2hpip;
+      const auto promoted_x_min = static_cast<policy_promoted_type>(x_min);
+      const auto promoted_x_max = static_cast<policy_promoted_type>(x_max);
+
+      result = static_cast<RealType>(-promoted_x_min * sin2hpip2 + promoted_x_min + promoted_x_max * sin2hpip2);
 
       return result;
     } // quantile
@@ -526,9 +571,13 @@ namespace boost
       //result = cos(half_pi<RealType>() * q); // for arcsine(0,1)
       //result = result * result;
       // For generalized arcsine:
-      RealType cos2hpip = cos(half_pi<RealType>() * q);
-      RealType cos2hpip2 = cos2hpip * cos2hpip;
-      result = -x_min * cos2hpip2 + x_min + x_max * cos2hpip2;
+      using policy_promoted_type = policies::evaluation_t<RealType, Policy>;
+      const policy_promoted_type cos2hpip = cos(half_pi<policy_promoted_type>() * static_cast<policy_promoted_type>(q));
+      const policy_promoted_type cos2hpip2 = cos2hpip * cos2hpip;
+      const auto promoted_x_min = static_cast<policy_promoted_type>(x_min);
+      const auto promoted_x_max = static_cast<policy_promoted_type>(x_max);
+
+      result = -promoted_x_min * cos2hpip2 + promoted_x_min + promoted_x_max * cos2hpip2;
 
       return result;
     } // Quantile Complement

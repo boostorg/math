@@ -298,15 +298,21 @@ namespace boost
     template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType mean(const beta_distribution<RealType, Policy>& dist)
     { // Mean of beta distribution = np.
-      return  dist.alpha() / (dist.alpha() + dist.beta());
+      using promoted_real_type = policies::evaluation_t<RealType, Policy>;
+      const auto a = static_cast<promoted_real_type>(dist.alpha());
+      const auto b = static_cast<promoted_real_type>(dist.beta());
+
+      return static_cast<RealType>(a / (a + b));
     } // mean
 
     template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType variance(const beta_distribution<RealType, Policy>& dist)
     { // Variance of beta distribution = np(1-p).
-      RealType a = dist.alpha();
-      RealType b = dist.beta();
-      return  (a * b) / ((a + b ) * (a + b) * (a + b + 1));
+      using promoted_real_type = policies::evaluation_t<RealType, Policy>;
+      const auto a = static_cast<promoted_real_type>(dist.alpha());
+      const auto b = static_cast<promoted_real_type>(dist.beta());
+
+      return static_cast<RealType>((a * b) / ((a + b ) * (a + b) * (a + b + 1)));
     } // variance
 
     template <class RealType, class Policy>
@@ -330,9 +336,11 @@ namespace boost
           "mode undefined for beta = %1%, must be > 1!", dist.beta(), Policy());
         return result;
       }
-      RealType a = dist.alpha();
-      RealType b = dist.beta();
-      return (a-1) / (a + b - 2);
+      using promoted_real_type = policies::evaluation_t<RealType, Policy>;
+      const auto a = static_cast<promoted_real_type>(dist.alpha());
+      const auto b = static_cast<promoted_real_type>(dist.beta());
+
+      return static_cast<RealType>((a-1) / (a + b - 2));
     } // mode
 
     //template <class RealType, class Policy>
@@ -347,20 +355,23 @@ namespace boost
     BOOST_MATH_GPU_ENABLED inline RealType skewness(const beta_distribution<RealType, Policy>& dist)
     {
       BOOST_MATH_STD_USING // ADL of std functions.
-      RealType a = dist.alpha();
-      RealType b = dist.beta();
-      return (2 * (b-a) * sqrt(a + b + 1)) / ((a + b + 2) * sqrt(a * b));
+      using promoted_real_type = policies::evaluation_t<RealType, Policy>;
+      const auto a = static_cast<promoted_real_type>(dist.alpha());
+      const auto b = static_cast<promoted_real_type>(dist.beta());
+
+      return static_cast<RealType>((2 * (b-a) * sqrt(a + b + 1)) / ((a + b + 2) * sqrt(a * b)));
     } // skewness
 
     template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const beta_distribution<RealType, Policy>& dist)
     {
-      RealType a = dist.alpha();
-      RealType b = dist.beta();
-      RealType a_2 = a * a;
-      RealType n = 6 * (a_2 * a - a_2 * (2 * b - 1) + b * b * (b + 1) - 2 * a * b * (b + 2));
-      RealType d = a * b * (a + b + 2) * (a + b + 3);
-      return  n / d;
+      using promoted_real_type = policies::evaluation_t<RealType, Policy>;
+      const auto a = static_cast<promoted_real_type>(dist.alpha());
+      const auto b = static_cast<promoted_real_type>(dist.beta());
+      const promoted_real_type a_2 = a * a;
+      const promoted_real_type n = 6 * (a_2 * a - a_2 * (2 * b - 1) + b * b * (b + 1) - 2 * a * b * (b + 2));
+      const promoted_real_type d = a * b * (a + b + 2) * (a + b + 3);
+      return static_cast<promoted_real_type>(n / d);
     } // kurtosis_excess
 
     template <class RealType, class Policy>
@@ -398,7 +409,7 @@ namespace boost
       {
         if (a == 1)
         {
-          return static_cast<RealType>(1 / beta(a, b));
+          return static_cast<RealType>(1 / beta(a, b, Policy()));
         }
         else if (a < 1)
         {
@@ -413,7 +424,7 @@ namespace boost
       {
         if (b == 1)
         {
-          return static_cast<RealType>(1 / beta(a, b));
+          return static_cast<RealType>(1 / beta(a, b, Policy()));
         }
         else if (b < 1)
         {
