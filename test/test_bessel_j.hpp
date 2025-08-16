@@ -129,7 +129,14 @@ void do_test_sph_bessel_j(const T& data, const char* type_name, const char* test
 }
 
 template<class T>
-auto test_issue1292_n() -> void
+auto test_issue1292_n() -> typename std::enable_if<(!std::is_same<T, double>::value), void>::type
+{
+    // TODO Should we try anything for non-double, non-built-in or known MP types.
+    // At the moment, do nothing.
+}
+
+template<class T>
+auto test_issue1292_n() -> typename std::enable_if<std::is_same<T, double>::value, void>::type
 {
   using local_ctrl_array_type = std::array<T, std::size_t { UINT8_C(43) }>;
 
@@ -166,7 +173,14 @@ auto test_issue1292_n() -> void
 }
 
 template<class T>
-auto test_issue1292_vu() -> void
+auto test_issue1292_vu() -> typename std::enable_if<(!std::is_same<T, double>::value), void>::type
+{
+    // TODO Should we try anything for non-double, non-built-in or known MP types.
+    // At the moment, do nothing.
+}
+
+template<class T>
+auto test_issue1292_vu() -> typename std::enable_if<std::is_same<T, double>::value, void>::type
 {
   using local_ctrl_array_type = std::array<T, std::size_t { UINT8_C(43) }>;
 
@@ -338,8 +352,8 @@ void test_bessel(T, const char* name)
     // Some special cases:
     //
 
-    test_issue1292_n<double>();
-    test_issue1292_vu<double>();
+    test_issue1292_n<T>();
+    test_issue1292_vu<T>();
 
     BOOST_CHECK_EQUAL(boost::math::sph_bessel(0, T(0)), T(1));
     BOOST_CHECK_EQUAL(boost::math::sph_bessel(1, T(0)), T(0));
