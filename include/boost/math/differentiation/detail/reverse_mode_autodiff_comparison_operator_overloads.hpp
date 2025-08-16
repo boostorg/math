@@ -1,3 +1,8 @@
+//           Copyright Maksym Zhelyenzyakov 2025-2026.
+// Distributed under the Boost Software License, Version 1.0.
+//      (See accompanying file LICENSE_1_0.txt or copy at
+//           https://www.boost.org/LICENSE_1_0.txt)
+
 #ifndef REVERSE_MODE_AUTODIFF_COMPARISON_OPERATOR_OVERLOADS_HPP
 #define REVERSE_MODE_AUTODIFF_COMPARISON_OPERATOR_OVERLOADS_HPP
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_expression_template_base.hpp>
