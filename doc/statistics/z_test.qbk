@@ -29,12 +29,6 @@ std::pair<Real, Real> two_sample_z_test(ForwardIterator begin_1, ForwardIterator
 template<typename Container, typename Real = typename Container::value_type>
 std::pair<Real, Real> two_sample_z_test(Container const & u, Container const & v);
 
-template<typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type>
-std::pair<Real, Real> paired_samples_z_test(ForwardIterator begin_1, ForwardIterator end_1, ForwardIterator begin_2, ForwardIterator begin_2);
-
-template<typename Container, typename Real = typename Container::value_type>
-std::pair<Real, Real> paired_samples_z_test(Container const & u, Container const & v);
-
 }}}
 ```
 
