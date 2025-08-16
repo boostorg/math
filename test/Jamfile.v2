@@ -1359,6 +1359,11 @@ test-suite autodiff :
    [ compile compile_test/diff_lanczos_smoothing_incl_test.cpp : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ requires cxx17_if_constexpr cxx17_std_apply ] $(float128_type) [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx11_inline_namespaces ] ]
 ;
 
+test-suite autodiff_reverse_specific :
+    # This rule compiles and runs your specific test file.
+    # The arguments replicate the common settings for Boost.Math tests.
+    [ run my_autodiff_reverse_test.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release $(float128_type) [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx11_inline_namespaces ] ]
+;
 #
 #  These tests are run by default when you invoke the Jamfile, but
 #  they are deliberately NOT run from the CI scripts as they soak up
@@ -1379,11 +1384,19 @@ test-suite long-running-tests :
    [ run test_pFq_precision.cpp ../tools//mpfr ../tools//gmp /boost/test//boost_unit_test_framework /boost/system//boost_system /boost/chrono//boost_chrono : : : [ check-target-builds ../config//has_mpfr : : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal-range ]
    [ run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 <exception-handling>off:<build>no  ]
 ;
-
 build-project ../example ;
 # Expect policy_ref_snips13 to fail (message about no Cauchy Mean).
 
 
+test-suite "test_reverse_mode_autodiff"
+    :
+        [ run test_reverse_mode_autodiff_flat_linear_allocator.cpp ]
+        [ run test_reverse_mode_autodiff_constructors.cpp ]
+        [ run test_reverse_mode_autodiff_comparison_operators.cpp ]
+        [ run test_reverse_mode_autodiff_stl_support.cpp ]
+        [ run test_reverse_mode_autodiff_basic_math_ops.cpp ]
+        [ run test_reverse_mode_autodiff_error_functions.cpp ]
+    ;
 rule get_float128_tests
 {
      local result ;
