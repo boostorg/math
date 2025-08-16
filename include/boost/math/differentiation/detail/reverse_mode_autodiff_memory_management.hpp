@@ -14,6 +14,8 @@
 #include <stddef.h>
 #include <type_traits>
 #include <vector>
+#include <boost/assert.hpp>
+
 namespace boost {
 namespace math {
 namespace differentiation {
@@ -80,25 +82,25 @@ public:
     {}
     reference operator*()
     {
-        assert(index_ >= begin_ && index_ < end_);
+        BOOST_ASSERT(index_ >= begin_ && index_ < end_);
         return (*storage_->data_[index_ / buffer_size])[index_ % buffer_size];
     }
 
     const_reference_type operator*() const
     {
-        assert(index_ >= begin_ && index_ < end_);
+        BOOST_ASSERT(index_ >= begin_ && index_ < end_);
         return (*storage_->data_[index_ / buffer_size])[index_ % buffer_size];
     }
 
     pointer operator->()
     {
-        assert(index_ >= begin_ && index_ < end_);
+        BOOST_ASSERT(index_ >= begin_ && index_ < end_);
         return &operator*();
     }
 
     const_ptr_type operator->() const
     {
-        assert(index_ >= begin_ && index_ < end_);
+        BOOST_ASSERT(index_ >= begin_ && index_ < end_);
         return &operator*();
     }
     flat_linear_allocator_iterator &operator++()
@@ -309,8 +311,8 @@ public:
         if (item_id() == 0 && total_size_ != 0) {
             allocate_buffer();
         }
-        assert(buffer_id() < data_.size());
-        assert(item_id() < buffer_size);
+        BOOST_ASSERT(buffer_id() < data_.size());
+        BOOST_ASSERT(item_id() < buffer_size);
         T *ptr = &(*data_[buffer_id()])[item_id()];
         new (ptr) T(std::forward<Args>(args)...);
         ++total_size_;
@@ -413,12 +415,12 @@ public:
    */
     T &operator[](std::size_t i)
     {
-        assert(i < total_size_);
+        BOOST_ASSERT(i < total_size_);
         return (*data_[i / buffer_size])[i % buffer_size];
     }
     const T &operator[](std::size_t i) const
     {
-        assert(i < total_size_);
+        BOOST_ASSERT(i < total_size_);
         return (*data_[i / buffer_size])[i % buffer_size];
     }
 };
