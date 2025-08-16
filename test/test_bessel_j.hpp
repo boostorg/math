@@ -285,7 +285,7 @@ void test_bessel(T, const char* name)
             SC_(0.3810550980268886849843356923521907577982), SC_(0.3648312306136669944635769493587219791343), SC_(0.3466185870197064968846647990300282094299)
         }};
 
-        const T tolerance { 128 * std::numeric_limits<T>::epsilon() };
+        const T tolerance { 128 * boost::math::tools::epsilon<T>() };
 
         int n_val { 9 };
 
@@ -321,7 +321,7 @@ void test_bessel(T, const char* name)
           SC_(0.3935910816286283019261303507307813773886), SC_(0.3799851451515116989978414766085547417497), SC_(0.3643342988837623802358278078893847672838)
        }};
 
-       const T tolerance { 128 * std::numeric_limits<T>::epsilon() };
+       const T tolerance { 128 * boost::math::tools::epsilon<T>() };
 
        const T vu_val { static_cast<T>(static_cast<T>(31) / 10) };
 
