@@ -32,10 +32,10 @@ public:
     using difference_type      = ptrdiff_t;
 
 private:
-    size_t                begin_   = 0;
-    size_t                index_   = 0;
-    size_t                end_     = 0;
     const allocator_type *storage_ = nullptr;
+    size_t                index_   = 0;
+    size_t                begin_   = 0;
+    size_t                end_     = 0;
 
 public:
     flat_linear_allocator_iterator() = default;

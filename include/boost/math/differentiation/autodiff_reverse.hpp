@@ -9,7 +9,6 @@
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_expression_template_base.hpp>
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_memory_management.hpp>
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_stl_overloads.hpp>
-
 #include <boost/math/special_functions/acosh.hpp>
 #include <boost/math/special_functions/asinh.hpp>
 #include <boost/math/special_functions/atanh.hpp>
@@ -567,6 +566,22 @@ namespace detail {
 template<typename T, size_t order>
 struct grad_op_impl
 {
+    std::vector<rvar<T, order - 1>> operator()(rvar<T, order> &f, std::vector<rvar<T, order> *> &x)
+    {
+        auto &tape = get_active_tape<T, order>();
+        tape.zero_grad();
+        f.backward();
+
+        std::vector<rvar<T, order - 1>> gradient_vector;
+        gradient_vector.reserve(x.size());
+
+        for (auto xi : x) {
+            // make a new rvar<T,order-1> holding the adjoint value
+            gradient_vector.emplace_back(xi->adjoint());
+        }
+        return gradient_vector;
+    }
+    /*
     std::vector<rvar_t<T, order - 1> *> operator()(rvar<T, order>                &f,
                                                    std::vector<rvar<T, order> *> &x)
     {
@@ -578,7 +593,7 @@ struct grad_op_impl
             gradient_vector.push_back(&(xi->adjoint()));
         }
         return gradient_vector;
-    }
+    }*/
 };
 /** @brief helper overload for grad implementation.
  *  @return vector<T> of gradients of the autodiff graph.
@@ -610,6 +625,22 @@ struct grad_nd_impl
     auto operator()(rvar<T, order_1> &f, std::vector<rvar<T, order_2> *> &x)
     {
         static_assert(N > 1, "N must be greater than 1 for this template");
+
+        auto current_grad = grad(f, x); // vector<rvar<T,order_1-1>> or vector<T>
+
+        std::vector<decltype(grad_nd_impl<N - 1, T, order_1 - 1, order_2>()(current_grad[0], x))>
+            result;
+        result.reserve(current_grad.size());
+
+        for (auto &g_i : current_grad) {
+            result.push_back(grad_nd_impl<N - 1, T, order_1 - 1, order_2>()(g_i, x));
+        }
+        return result;
+    }
+    /*
+    auto operator()(rvar<T, order_1> &f, std::vector<rvar<T, order_2> *> &x)
+    {
+        static_assert(N > 1, "N must be greater than 1 for this template");
         auto current_grad = grad(f, x);
         std::vector<decltype(grad_nd_impl<N - 1, T, order_1 - 1, order_2>()(*current_grad[0], x))>
             result;
@@ -617,7 +648,7 @@ struct grad_nd_impl
             result.push_back(grad_nd_impl<N - 1, T, order_1 - 1, order_2>()(*g_i, x));
         }
         return result;
-    }
+    }*/
 };
 /** @brief spcialization for order = 1,
  *  @return vector<rvar<T,order_1-1>> gradients */

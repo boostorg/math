@@ -150,9 +150,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(division, T, all_float_types)
 template<typename T>
 T f(T x, T y)
 {
-    //auto z1 = x / (y + x);
-    //auto z2 = y / (x - y);
-    //T    f  = z1 * z2;
     return (x * y) / ((x + y) * (x - y));
 }
 
@@ -293,7 +290,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(first_derivative, T, all_float_types)
     rvar<T, 1>      x_ad              = x;
     rvar<T, 1>      y_ad              = y;
 
-    T               fv                = f(x, y);
+    //T               fv                = f(x, y);
     rvar<T, 1>      f_ad              = f(x_ad, y_ad);
     auto            grad_f_analytical = grad_f_a(x, y);
     /* intended use case */
@@ -323,7 +320,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(second_derivative_and_hessian, T, all_float_types)
     rvar<T, 2>                        x_ad = x;
     rvar<T, 2>                        y_ad = y;
 
-    T                                 fv   = f(x, y);
+    //T                                 fv   = f(x, y);
     rvar<T, 2>                        f_ad = f(x_ad, y_ad);
     gradient_tape<T, 2, BOOST_MATH_BUFFER_SIZE>& tape = get_active_tape<T, 2>();
     tape.zero_grad();
@@ -349,7 +346,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(order_3_der, T, all_float_types)
     rvar<T, 3>                        x_ad = x;
     rvar<T, 3>                        y_ad = y;
 
-    T                                 fv   = f(x, y);
+    //T                                 fv   = f(x, y);
     rvar<T, 3>                        f_ad = f(x_ad, y_ad);
     gradient_tape<T, 3, BOOST_MATH_BUFFER_SIZE>& tape = get_active_tape<T, 3>();
     tape.zero_grad();

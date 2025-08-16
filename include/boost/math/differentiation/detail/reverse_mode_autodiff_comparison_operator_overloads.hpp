@@ -1,6 +1,5 @@
 #ifndef REVERSE_MODE_AUTODIFF_COMPARISON_OPERATOR_OVERLOADS_HPP
 #define REVERSE_MODE_AUTODIFF_COMPARISON_OPERATOR_OVERLOADS_HPP
-
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_expression_template_base.hpp>
 namespace boost {
 namespace math {
@@ -16,7 +15,7 @@ template<typename U,
          typename T,
          size_t order,
          class E,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 bool operator==(const expression<T, order, E> &lhs, const U &rhs)
 {
     return lhs.evaluate() == static_cast<T>(rhs);
@@ -25,7 +24,7 @@ template<typename U,
          typename T,
          size_t order,
          class E,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 bool operator==(const U &lhs, const expression<T, order, E> &rhs)
 {
     return lhs == rhs.evaluate();
@@ -40,7 +39,7 @@ template<typename U,
          typename T,
          size_t order,
          class E,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 bool operator!=(const expression<T, order, E> &lhs, const U &rhs)
 {
     return lhs.evaluate() != rhs;
@@ -49,7 +48,7 @@ template<typename U,
          typename T,
          size_t order,
          class E,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 bool operator!=(const U &lhs, const expression<T, order, E> &rhs)
 {
     return lhs != rhs.evaluate();
@@ -64,7 +63,7 @@ template<typename U,
          typename T,
          size_t order,
          class E,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 bool operator<(const expression<T, order, E> &lhs, const U &rhs)
 {
     return lhs.evaluate() < rhs;
@@ -73,7 +72,7 @@ template<typename U,
          typename T,
          size_t order,
          class E,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 bool operator<(const U &lhs, const expression<T, order, E> &rhs)
 {
     return lhs < rhs.evaluate();
@@ -88,7 +87,7 @@ template<typename U,
          typename T,
          size_t order,
          class E,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 bool operator>(const expression<T, order, E> &lhs, const U &rhs)
 {
     return lhs.evaluate() > rhs;
@@ -97,7 +96,7 @@ template<typename U,
          typename T,
          size_t order,
          class E,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 bool operator>(const U &lhs, const expression<T, order, E> &rhs)
 {
     return lhs > rhs.evaluate();
@@ -112,7 +111,7 @@ template<typename U,
          typename T,
          size_t order,
          class E,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 bool operator<=(const expression<T, order, E> &lhs, const U &rhs)
 {
     return lhs.evaluate() <= rhs;
@@ -121,7 +120,7 @@ template<typename U,
          typename T,
          size_t order,
          class E,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 bool operator<=(const U &lhs, const expression<T, order, E> &rhs)
 {
     return lhs <= rhs.evaluate();
@@ -136,7 +135,7 @@ template<typename U,
          typename T,
          size_t order,
          class E,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 bool operator>=(const expression<T, order, E> &lhs, const U &rhs)
 {
     return lhs.evaluate() >= rhs;
@@ -145,7 +144,7 @@ template<typename U,
          typename T,
          size_t order,
          class E,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 bool operator>=(const U &lhs, const expression<T, order, E> &rhs)
 {
     return lhs >= rhs.evaluate();

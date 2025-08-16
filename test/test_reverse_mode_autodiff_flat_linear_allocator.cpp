@@ -11,18 +11,19 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_constructors, T, all_float_t
         float_allocator.emplace_back(rng.next());
     }
 
-    BOOST_CHECK_EQUAL(float_allocator.size(), 2 * buffer_size - buffer_size / 2);
-    BOOST_CHECK_EQUAL(float_allocator.capacity(), 2 * buffer_size);
+    BOOST_CHECK_EQUAL(float_allocator.size(),
+                      static_cast<size_t>(2 * buffer_size - buffer_size / 2));
+    BOOST_CHECK_EQUAL(float_allocator.capacity(), static_cast<size_t>(2 * buffer_size));
 
     float_allocator.clear();
-    BOOST_CHECK_EQUAL(float_allocator.size(), 0);
+    BOOST_CHECK_EQUAL(float_allocator.size(), static_cast<size_t>(0));
     BOOST_CHECK_EQUAL(float_allocator.capacity(), buffer_size);
 
     for (size_t i = 0; i < 2 * buffer_size - buffer_size / 2; i++) {
         float_allocator.emplace_back(rng.next());
     }
     float_allocator.reset();
-    BOOST_CHECK_EQUAL(float_allocator.size(), 0);
+    BOOST_CHECK_EQUAL(float_allocator.size(), static_cast<size_t>(0));
     BOOST_CHECK_EQUAL(float_allocator.capacity(), 2 * buffer_size);
 
     for (size_t i = 0; i < 2 * buffer_size - buffer_size / 2; i++) {
@@ -42,20 +43,20 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_test_emplace, T, all_float_t
     rdiff_detail::flat_linear_allocator<T, 16> float_allocator{};
     std::vector<T>                      test_vector;
 
-    for (int i = 0; i < 2 * buffer_size - 1; i++) {
+    for (size_t i = 0; i < 2 * buffer_size - 1; i++) {
         test_vector.push_back(rng.next());
         float_allocator.emplace_back(test_vector[i]);
     }
 
     auto it1 = float_allocator.template emplace_back_n<4>();
-    for (int i = 0; i < 4; i++) {
+    for (size_t i = 0; i < 4; i++) {
         T literal = rng.next();
         test_vector.push_back(literal);
         *(it1 + i) = literal;
     }
 
     auto it2 = float_allocator.emplace_back_n(buffer_size);
-    for (int i = 0; i < buffer_size; i++) {
+    for (size_t i = 0; i < buffer_size; i++) {
         T literal = rng.next();
         test_vector.push_back(literal);
         *(it2 + i) = literal;
@@ -69,7 +70,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_test_emplace, T, all_float_t
             *alloc_it); // should be ok to check floats like this since they are expected to be the same.
     }
 
-    for (int i = 0; i < test_vector.size(); i++) {
+    for (size_t i = 0; i < test_vector.size(); i++) {
         BOOST_CHECK_EQUAL(test_vector[i], float_allocator[i]); // check random access aswell;
     }
 
@@ -85,7 +86,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_test_checkpointing, T, all_f
     std::vector<T>                      expected_value_at_checkpoint;
 
     size_t                              ckp_id = 0;
-    for (int i = 0; i < 2 * buffer_size; i++) {
+    for (size_t i = 0; i < 2 * buffer_size; i++) {
         T literal = rng.next();
         float_allocator.emplace_back(literal);
         if (ckp_id < checkpoint_indices.size() && i == checkpoint_indices[ckp_id]) {
@@ -94,7 +95,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_test_checkpointing, T, all_f
             ++ckp_id;
         }
     }
-    for (int i = 0; i < checkpoint_indices.size(); i++) {
+    for (size_t i = 0; i < checkpoint_indices.size(); i++) {
         auto it = float_allocator.checkpoint_at(i);
         BOOST_CHECK_EQUAL(*it, expected_value_at_checkpoint[i]);
     }

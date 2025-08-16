@@ -119,6 +119,7 @@ struct trunc_expr : public abstract_unary_expression<T, order, ARG, trunc_expr<T
 
     inner_t evaluate() const
     {
+        using boost::math::trunc;
         using std::trunc;
         return trunc(this->arg.evaluate());
     }
@@ -718,6 +719,89 @@ struct atanh_expr : public abstract_unary_expression<T, order, ARG, atanh_expr<T
         return 1.0 / (1 - argv * argv);
     }
 };
+template<typename T, size_t order, typename LHS, typename RHS>
+struct fmod_expr
+    : public abstract_binary_expression<T, order, LHS, RHS, fmod_expr<T, order, LHS, RHS>>
+{
+    /** @brief 
+    * */
+    using lhs_type   = LHS;
+    using rhs_type   = RHS;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+    // Explicitly define constructor to forward to base class
+    explicit fmod_expr(const expression<T, order, LHS> &left_hand_expr,
+                       const expression<T, order, RHS> &right_hand_expr)
+        : abstract_binary_expression<T, order, LHS, RHS, fmod_expr<T, order, LHS, RHS>>(
+              left_hand_expr, right_hand_expr)
+    {}
+
+    inner_t evaluate() const
+    {
+        using std::fmod;
+        return fmod(this->lhs.evaluate(), this->rhs.evaluate());
+    };
+    static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    {
+        return inner_t{1.0};
+    };
+    static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    {
+        using std::trunc;
+        return -1.0 * trunc(l / r);
+    };
+};
+
+template<typename T, size_t order, typename ARG>
+struct fmod_left_float_expr
+    : public abstract_unary_expression<T, order, ARG, fmod_left_float_expr<T, order, ARG>>
+{
+    /** @brief 
+      * */
+    using arg_type   = ARG;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+
+    explicit fmod_left_float_expr(const expression<T, order, ARG> &arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, fmod_left_float_expr<T, order, ARG>>(arg_expr,
+                                                                                        v){};
+
+    inner_t evaluate() const
+    {
+        using std::fmod;
+        return fmod(this->constant, this->arg.evaluate());
+    }
+    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    {
+        return -1.0 * trunc(constant / argv);
+    }
+};
+
+template<typename T, size_t order, typename ARG>
+struct fmod_right_float_expr
+    : public abstract_unary_expression<T, order, ARG, fmod_right_float_expr<T, order, ARG>>
+{
+    /** @brief
+      * */
+    using arg_type   = ARG;
+    using value_type = T;
+    using inner_t    = rvar_t<T, order - 1>;
+
+    explicit fmod_right_float_expr(const expression<T, order, ARG> &arg_expr, const T v)
+        : abstract_unary_expression<T, order, ARG, fmod_right_float_expr<T, order, ARG>>(arg_expr,
+                                                                                         v){};
+
+    inner_t evaluate() const
+    {
+        using std::fmod;
+        return fmod(this->arg.evaluate(), this->constant);
+    }
+    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    {
+        return inner_t{1.0};
+    }
+};
+/**************************************************************************************************/
 template<typename T, size_t order, typename ARG>
 fabs_expr<T, order, ARG> fabs(const expression<T, order, ARG> &arg)
 {
@@ -756,7 +840,7 @@ template<typename U,
          typename T,
          size_t order,
          typename ARG,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 expr_pow_float_expr<T, order, ARG> pow(const expression<T, order, ARG> &arg, const U &v)
 {
     return expr_pow_float_expr<T, order, ARG>(arg, static_cast<T>(v));
@@ -785,7 +869,7 @@ auto frexp(const expression<T, order, ARG> &arg, int *i)
 {
     using std::frexp;
     using std::pow;
-    T tmp = frexp(arg.evaluate(), i);
+    frexp(arg.evaluate(), i);
     return arg / pow(2.0, *i);
 }
 
@@ -861,19 +945,22 @@ trunc_expr<T, order, ARG> trunc(const expression<T, order, ARG> &arg)
 template<typename T, size_t order, typename LHS, typename RHS>
 auto fmod(const expression<T, order, LHS> &lhs, const expression<T, order, RHS> &rhs)
 {
-    return lhs - trunc(lhs / rhs) * rhs;
+    //return lhs - trunc(lhs / rhs) * rhs;
+    return fmod_expr<T, order, LHS, RHS>(lhs, rhs);
 }
 
 template<typename T, size_t order, typename ARG>
 auto fmod(const expression<T, order, ARG> &lhs, const T rhs)
 {
-    return lhs - trunc(lhs / rhs) * rhs;
+    //return lhs - trunc(lhs / rhs) * rhs;
+    return fmod_right_float_expr<T, order, ARG>(lhs, rhs);
 }
 
 template<typename T, size_t order, typename ARG>
 auto fmod(const T lhs, const expression<T, order, ARG> &rhs)
 {
-    return lhs - trunc(lhs / rhs) * rhs;
+    //return lhs - trunc(lhs / rhs) * rhs;
+    return fmod_left_float_expr<T, order, ARG>(rhs, lhs);
 }
 
 template<typename T, size_t order, typename ARG>

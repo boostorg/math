@@ -6,7 +6,7 @@
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_stl_overloads.hpp>
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_utilities.hpp>
 #include <boost/math/special_functions/erf.hpp>
-
+#include <boost/multiprecision/cpp_bin_float.hpp>
 namespace boost {
 namespace math {
 namespace differentiation {
@@ -72,8 +72,10 @@ struct erf_expr : public abstract_unary_expression<T, order, ARG, erf_expr<T, or
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
+        using multiprecision::sqrt;
         using std::exp;
-        return 2 * exp(-argv * argv) / std::sqrt(constants::pi<T>());
+        using std::sqrt;
+        return 2 * exp(-argv * argv) / sqrt(constants::pi<T>());
     }
 };
 
@@ -101,8 +103,10 @@ struct erfc_expr : public abstract_unary_expression<T, order, ARG, erfc_expr<T, 
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
+        using multiprecision::sqrt;
         using std::exp;
-        return -2 * exp(-argv * argv) / std::sqrt(constants::pi<T>());
+        using std::sqrt;
+        return -2 * exp(-argv * argv) / sqrt(constants::pi<T>());
     }
 };
 
@@ -130,14 +134,19 @@ struct erf_inv_expr : public abstract_unary_expression<T, order, ARG, erf_inv_ex
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
+        using multiprecision::exp;
+        using multiprecision::pow;
+        using multiprecision::sqrt;
+        using std::exp;
+        using std::pow;
+        using std::sqrt;
         return detail::if_functional_dispatch<(order > 1)>(
             [](auto &&x) {
-                return 0.5 * std::sqrt(constants::pi<T>())
+                return 0.5 * sqrt(constants::pi<T>())
                        * reverse_mode::exp(reverse_mode::pow(reverse_mode::erf_inv(x), 2.0));
             },
             [](auto &&x) {
-                return 0.5 * std::sqrt(constants::pi<T>())
-                       * std::exp(std::pow(boost::math::erf_inv(x), 2));
+                return 0.5 * sqrt(constants::pi<T>()) * exp(pow(boost::math::erf_inv(x), 2));
             },
             argv);
     }
@@ -167,14 +176,19 @@ struct erfc_inv_expr : public abstract_unary_expression<T, order, ARG, erfc_inv_
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
+        using multiprecision::exp;
+        using multiprecision::pow;
+        using multiprecision::sqrt;
+        using std::exp;
+        using std::pow;
+        using std::sqrt;
         return detail::if_functional_dispatch<(order > 1)>(
             [](auto &&x) {
-                return -0.5 * std::sqrt(constants::pi<T>())
+                return -0.5 * sqrt(constants::pi<T>())
                        * reverse_mode::exp(reverse_mode::pow(reverse_mode::erfc_inv(x), 2.0));
             },
             [](auto &&x) {
-                return -0.5 * std::sqrt(constants::pi<T>())
-                       * std::exp(std::pow(boost::math::erfc_inv(x), 2));
+                return -0.5 * sqrt(constants::pi<T>()) * exp(pow(boost::math::erfc_inv(x), 2));
             },
             argv);
     }

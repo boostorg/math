@@ -8,6 +8,9 @@ namespace differentiation {
 namespace reverse_mode {
 
 /* forward declarations for utitlity functions */
+struct expression_base
+{};
+
 template<typename T, size_t order, class derived_expression>
 struct expression;
 
@@ -82,14 +85,7 @@ template<typename T, size_t order>
 constexpr std::size_t count_rvars = detail::count_rvar_impl<T, order>::value;
 
 template<typename T>
-struct is_expression : std::false_type
-{};
-
-template<typename T, size_t order, typename Derived>
-struct is_expression<expression<T, order, Derived>> : std::true_type
-{};
-template<typename T, size_t order>
-struct is_expression<rvar<T, order>> : std::true_type
+struct is_expression : std::is_base_of<expression_base, typename std::decay<T>::type>
 {};
 
 template<typename T, size_t N>
@@ -108,9 +104,6 @@ struct rvar_type_impl<T, 0>
 
 template<typename T, size_t N>
 using rvar_t = typename detail::rvar_type_impl<T, N>::type;
-
-struct expression_base
-{};
 
 template<typename T, size_t order, class derived_expression>
 struct expression : expression_base

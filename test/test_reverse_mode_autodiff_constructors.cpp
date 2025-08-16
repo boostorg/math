@@ -16,7 +16,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(rvar_constructors_and_utils, T, all_float_types)
     BOOST_CHECK_EQUAL(x_value, x1.evaluate().evaluate());
     BOOST_CHECK_EQUAL(x_value, x2.evaluate().evaluate().evaluate());
 
-    auto v = x1.item();
     /* get item helper */
     BOOST_CHECK_EQUAL(x_value, x0.item());
     BOOST_CHECK_EQUAL(x_value, x1.item());
@@ -251,8 +250,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(inplace_division, T, all_float_types)
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_rvar_ostream_output, T, all_float_types)
 {
     using namespace rdiff;
-    rvar<T, 1> x = 2.0;
-    rvar<T, 1> y = 3.0;
+    rvar<T, 1> x = T{2.0};
+    rvar<T, 1> y = T{3.0};
 
     rvar<T, 1> z = x * y;
     z.backward();

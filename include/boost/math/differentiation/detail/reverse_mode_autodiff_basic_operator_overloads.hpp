@@ -219,7 +219,7 @@ template<typename U,
          typename T,
          size_t order,
          typename ARG,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 mult_const_expr<T, order, ARG> operator*(const expression<T, order, ARG> &arg, const U &v)
 {
     return mult_const_expr<T, order, ARG>(arg, static_cast<T>(v));
@@ -228,7 +228,7 @@ template<typename U,
          typename T,
          size_t order,
          typename ARG,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 mult_const_expr<T, order, ARG> operator*(const U &v, const expression<T, order, ARG> &arg)
 {
     return mult_const_expr<T, order, ARG>(arg, static_cast<T>(v));
@@ -245,7 +245,7 @@ template<typename U,
          typename T,
          size_t order,
          typename ARG,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 add_const_expr<T, order, ARG> operator+(const expression<T, order, ARG> &arg, const U &v)
 {
     return add_const_expr<T, order, ARG>(arg, static_cast<T>(v));
@@ -254,7 +254,7 @@ template<typename U,
          typename T,
          size_t order,
          typename ARG,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 add_const_expr<T, order, ARG> operator+(const U &v, const expression<T, order, ARG> &arg)
 {
     return add_const_expr<T, order, ARG>(arg, static_cast<T>(v));
@@ -284,7 +284,7 @@ template<typename U,
          typename T,
          size_t order,
          typename ARG,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 add_const_expr<T, order, ARG> operator-(const expression<T, order, ARG> &arg, const U &v)
 {
     /* rvar - float = rvar + (-float) */
@@ -299,7 +299,7 @@ template<typename U,
          typename T,
          size_t order,
          typename ARG,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 auto operator-(const U &v, const expression<T, order, ARG> &arg)
 {
     auto neg = -arg;
@@ -318,7 +318,7 @@ template<typename U,
          typename T,
          size_t order,
          typename ARG,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 const_div_by_expr<T, order, ARG> operator/(const U &v, const expression<T, order, ARG> &arg)
 {
     return const_div_by_expr<T, order, ARG>(arg, static_cast<T>(v));
@@ -328,7 +328,7 @@ template<typename U,
          typename T,
          size_t order,
          typename ARG,
-         typename = typename std::enable_if<std::is_arithmetic<U>::value>::type>
+         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
 div_by_const_expr<T, order, ARG> operator/(const expression<T, order, ARG> &arg, const U &v)
 {
     return div_by_const_expr<T, order, ARG>(arg, static_cast<T>(v));

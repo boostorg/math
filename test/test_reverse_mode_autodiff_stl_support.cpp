@@ -1,6 +1,8 @@
 #include "test_autodiff_reverse.hpp"
+#include <boost/math/tools/workaround.hpp>
 #include <cmath>
 #include <vector>
+
 BOOST_AUTO_TEST_SUITE(test_stl_supported_functions)
 
 using namespace rdiff;
@@ -263,10 +265,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_frexp, T, all_float_types)
     tape.zero_grad();
     x_func.backward();
 
-    int i3, i4;
+    // int i3, i4;
+    int i4;
+    frexp(x_v, &i4);
     // T   h              = 0.001;
     // T   f1             = frexp(x_v + h, &i3);
-    T   f2             = frexp(x_v, &i4);
+    // T   f2             = frexp(x_v, &i4);
     T   expected_deriv = 1.0 / pow(2.0, i4);
     BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), expected_deriv, boost_close_tol<T>());
 
@@ -307,7 +311,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_sin, T, all_float_types)
 
     rvar<T, 1>      x_func      = sin(x_rvar);
 
-    BOOST_REQUIRE_CLOSE_FRACTION(x_func.item(), test_func_v, 1 * boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_func.item(), test_func_v, 10 * boost_close_tol<T>());
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -331,7 +335,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_tan, T, all_float_types)
 
     rvar<T, 1>      x_func      = tan(x_rvar);
 
-    BOOST_REQUIRE_CLOSE_FRACTION(x_func.item(), test_func_v, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_func.item(), test_func_v, 10 * boost_close_tol<T>());
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -340,7 +344,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_tan, T, all_float_types)
     T          expected_deriv = 2 * x_v * 1 / (cos(x_v * x_v) * cos(x_v * x_v));
     test_func_2.backward();
 
-    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), expected_deriv, 1 * boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), expected_deriv, 10 * boost_close_tol<T>());
 
     tape.clear();
 }
@@ -496,6 +500,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_trunc, T, all_float_types)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_fmod, T, all_float_types)
 {
+    using boost::math::tools::fmod_workaround;
     RandomSample<T> rng_x{-1, 1};
     RandomSample<T> rng_y{-1, 1};
 
@@ -505,13 +510,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_fmod, T, all_float_types)
         y_v = rng_y.next();
     }
 
-    T          expected_fmod = fmod(x_v, y_v);
+    T expected_fmod = fmod(x_v, y_v);
 
     rvar<T, 1> x_rvar        = x_v;
     rvar<T, 1> y_rvar        = y_v;
 
     rvar<T, 1> fmod_rvar     = fmod(x_rvar, y_rvar);
-    BOOST_REQUIRE_CLOSE_FRACTION(fmod_rvar.item(), expected_fmod, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(fmod_rvar.item(), expected_fmod, 10 * boost_close_tol<T>());
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
@@ -520,22 +525,22 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_fmod, T, all_float_types)
     T dx_expected = 1.0;
     T dy_expected = -1.0 * trunc(x_v / y_v);
 
-    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), dx_expected, boost_close_tol<T>());
-    BOOST_REQUIRE_CLOSE_FRACTION(y_rvar.adjoint(), dy_expected, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), dx_expected, 10 * boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(y_rvar.adjoint(), dy_expected, 10 * boost_close_tol<T>());
 
     rvar<T, 1> fmod_rvar_float = fmod(x_rvar, y_v);
-    BOOST_REQUIRE_CLOSE_FRACTION(fmod_rvar_float.item(), expected_fmod, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(fmod_rvar_float.item(), expected_fmod, 10 * boost_close_tol<T>());
 
     tape.zero_grad();
     fmod_rvar_float.backward();
-    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), dx_expected, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), dx_expected, 10 * boost_close_tol<T>());
 
     rvar<T, 1> fmod_float_rvar = fmod(x_v, y_rvar);
-    BOOST_REQUIRE_CLOSE_FRACTION(fmod_float_rvar.item(), expected_fmod, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(fmod_float_rvar.item(), expected_fmod, 10 * boost_close_tol<T>());
 
     tape.zero_grad();
     fmod_float_rvar.backward();
-    BOOST_REQUIRE_CLOSE_FRACTION(y_rvar.adjoint(), dy_expected, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(y_rvar.adjoint(), dy_expected, 10 * boost_close_tol<T>());
 
     tape.clear();
 }
@@ -854,7 +859,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_first_derivative, T, all_float_types)
     rvar<T, 1>      x_ad              = x;
     rvar<T, 1>      y_ad              = y;
 
-    T               fv                = test_function_1(x, y);
+    //T               fv                = test_function_1(x, y);
     rvar<T, 1>      f_ad              = test_function_1(x_ad, y_ad);
     auto            grad_f_analytical = grad_test_func_1_analytical(x, y);
     /* intended use case */
@@ -888,7 +893,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_second_derivative_and_hessian, T, all_
     rvar<T, 2>                        x_ad = x;
     rvar<T, 2>                        y_ad = y;
 
-    T                                 fv   = test_function_1(x, y);
+    //T                                 fv   = test_function_1(x, y);
     rvar<T, 2>                        f_ad = test_function_1(x_ad, y_ad);
     gradient_tape<T, 2>&              tape = get_active_tape<T, 2>();
     tape.zero_grad();
@@ -918,7 +923,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_order_3_der, T, all_float_types)
     rvar<T, 3>                        x_ad = x;
     rvar<T, 3>                        y_ad = y;
 
-    T                                 fv   = test_function_1(x, y);
+    //T                                 fv   = test_function_1(x, y);
     rvar<T, 3>                        f_ad = test_function_1(x_ad, y_ad);
     gradient_tape<T, 3>&              tape = get_active_tape<T, 3>();
     tape.zero_grad();

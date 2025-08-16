@@ -26,9 +26,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_erf, T, all_float_types)
     auto         g4 = grad_nd<4>(y, &x);
 
     BOOST_CHECK_CLOSE(y.item(), answers[0], eps);
-    BOOST_CHECK_CLOSE(g1[0]->item(), answers[1], eps);
-    BOOST_CHECK_CLOSE(g2[0][0]->item(), answers[2], eps);
-    BOOST_CHECK_CLOSE(g3[0][0][0]->item(), answers[3], eps);
+    BOOST_CHECK_CLOSE(g1[0], answers[1], eps);
+    BOOST_CHECK_CLOSE(g2[0][0], answers[2], eps);
+    BOOST_CHECK_CLOSE(g3[0][0][0], answers[3], eps);
     BOOST_CHECK_CLOSE(g4[0][0][0][0], answers[4], eps);
 }
 
@@ -52,9 +52,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_erfc, T, all_float_types)
     auto         g4 = grad_nd<4>(y, &x);
 
     BOOST_CHECK_CLOSE(y.item(), answers[0], eps);
-    BOOST_CHECK_CLOSE(g1[0]->item(), answers[1], eps);
-    BOOST_CHECK_CLOSE(g2[0][0]->item(), answers[2], eps);
-    BOOST_CHECK_CLOSE(g3[0][0][0]->item(), answers[3], eps);
+    BOOST_CHECK_CLOSE(g1[0], answers[1], eps);
+    BOOST_CHECK_CLOSE(g2[0][0], answers[2], eps);
+    BOOST_CHECK_CLOSE(g3[0][0][0], answers[3], eps);
     BOOST_CHECK_CLOSE(g4[0][0][0][0], answers[4], eps);
 }
 
@@ -78,9 +78,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_erf_inv, T, all_float_types)
     auto         g4 = grad_nd<4>(y, &x);
 
     BOOST_CHECK_CLOSE(y.item(), answers[0], eps);
-    BOOST_CHECK_CLOSE(g1[0]->item(), answers[1], eps);
-    BOOST_CHECK_CLOSE(g2[0][0]->item(), answers[2], eps);
-    BOOST_CHECK_CLOSE(g3[0][0][0]->item(), answers[3], eps);
+    BOOST_CHECK_CLOSE(g1[0], answers[1], eps);
+    BOOST_CHECK_CLOSE(g2[0][0], answers[2], eps);
+    BOOST_CHECK_CLOSE(g3[0][0][0], answers[3], eps);
     BOOST_CHECK_CLOSE(g4[0][0][0][0], answers[4], eps);
 }
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_erfc_inv, T, all_float_types)
@@ -102,9 +102,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_erfc_inv, T, all_float_types)
     auto         g4 = grad_nd<4>(y, &x);
 
     BOOST_CHECK_CLOSE(y.item(), answers[0], eps);
-    BOOST_CHECK_CLOSE(g1[0]->item(), answers[1], eps);
-    BOOST_CHECK_CLOSE(g2[0][0]->item(), answers[2], eps);
-    BOOST_CHECK_CLOSE(g3[0][0][0]->item(), answers[3], eps);
+    BOOST_CHECK_CLOSE(g1[0], answers[1], eps);
+    BOOST_CHECK_CLOSE(g2[0][0], answers[2], eps);
+    BOOST_CHECK_CLOSE(g3[0][0][0], answers[3], eps);
     BOOST_CHECK_CLOSE(g4[0][0][0][0], answers[4], eps);
 }
 BOOST_AUTO_TEST_SUITE_END()
