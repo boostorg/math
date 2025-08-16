@@ -1,10 +1,10 @@
 #ifndef TEST_AUTODIFF_REVERSE_HPP
 #define TEST_AUTODIFF_REVERSE_HPP
-
 #ifndef BOOST_TEST_MODULE
 #define BOOST_TEST_MODULE test_autodiff
 #endif
-
+#define BOOST_MP_NO_QUAD
+#define BOOST_MATH_DISABLE_FLOAT128
 #include <boost/test/included/unit_test.hpp>
 
 #include <algorithm>
@@ -21,11 +21,12 @@
 #include <cstdlib>
 #include <random>
 
+using boost::multiprecision::cpp_bin_float_50;
+
 namespace mp11         = boost::mp11;
 namespace bmp          = boost::multiprecision;
 namespace rdiff_detail = boost::math::differentiation::reverse_mode::detail;
 namespace rdiff        = boost::math::differentiation::reverse_mode;
-
 #if defined(BOOST_USE_VALGRIND) || defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
 using bin_float_types = mp11::mp_list<float>;
 #elif defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
@@ -43,8 +44,7 @@ using multiprecision_float_types = mp11::mp_list<>;
 using multiprecision_float_types = mp11::mp_list<bmp::cpp_bin_float_50>;
 #endif
 
-using all_float_types
-    = bin_float_types; //mp11::mp_append<bin_float_types, multiprecision_float_types>;
+using all_float_types = mp11::mp_append<bin_float_types, multiprecision_float_types>;
 
 using namespace boost::math::differentiation;
 #endif // TEST_AUTODIFF_REVERSE_HPP
@@ -149,6 +149,5 @@ static_assert(std::is_same<RandomSample<bmp::cpp_bin_float_50>::dist_t,
 template<typename T>
 constexpr T boost_close_tol(T scale_factor = 1e5)
 {
-    static_assert(std::is_floating_point<T>::value, "T must be floating point");
     return std::numeric_limits<T>::epsilon() * scale_factor;
 }

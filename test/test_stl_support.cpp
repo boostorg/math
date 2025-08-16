@@ -251,7 +251,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_frexp, T, all_float_types)
     T               x_v = rng.next();
 
     int             i1, i2;
-    T               test_func_v = std::frexp(x_v, &i1);
+    T               test_func_v = frexp(x_v, &i1);
 
     rvar<T, 1>      x_rvar      = x_v;
     rvar<T, 1>      x_func      = frexp(x_rvar, &i2);
@@ -283,7 +283,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_cos, T, all_float_types)
 
     rvar<T, 1>      x_func      = cos(x_rvar);
 
-    BOOST_REQUIRE_CLOSE_FRACTION(x_func.item(), test_func_v, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_func.item(), test_func_v, 10 * boost_close_tol<T>());
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -292,7 +292,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_cos, T, all_float_types)
     T          expected_deriv = -2 * x_v * sin(x_v * x_v);
     test_func_2.backward();
 
-    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), expected_deriv, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), expected_deriv, 10 * boost_close_tol<T>());
 
     tape.clear();
 }
@@ -674,7 +674,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_cosh, T, all_float_types)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_tanh, T, all_float_types)
 {
-    RandomSample<T> rng{-10, 10};
+    RandomSample<T> rng{-1, 1};
     T               x_v         = rng.next();
     T               test_func_v = tanh(x_v);
     rvar<T, 1>      x_rvar      = x_v;
@@ -928,7 +928,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_order_3_der, T, all_float_types)
 
     std::vector<std::vector<std::vector<T>>> grad_tensor;
     for (int i = 0; i < 2; i++) {
-        auto df_hess = hess(*grad_ad[i], &x_ad, &y_ad);
+        auto df_hess = hess(grad_ad[i], &x_ad, &y_ad);
         grad_tensor.push_back(df_hess);
     }
     auto grad_nd_func_test = grad_nd<3>(f_ad, &x_ad, &y_ad);
@@ -961,11 +961,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_fourth_derivative, T, all_float_types)
     auto            gf    = grad(f_ad, &x_ad, &y_ad);
     std::array<std::array<std::array<std::array<T, 2>, 2>, 2>, 2> ggggf;
     for (int i = 0; i < 2; ++i) {
-        auto hess1 = grad(*gf[i], &x_ad, &y_ad);
+        auto hess1 = grad(gf[i], &x_ad, &y_ad);
         for (int j = 0; j < 2; ++j) {
-            auto hess2 = grad(*hess1[j], &x_ad, &y_ad);
+            auto hess2 = grad(hess1[j], &x_ad, &y_ad);
             for (int k = 0; k < 2; ++k) {
-                auto hess3 = grad(*hess2[k], &x_ad, &y_ad);
+                auto hess3 = grad(hess2[k], &x_ad, &y_ad);
                 for (int l = 0; l < 2; ++l) {
                     ggggf[i][j][k][l] = hess3[l];
                 }

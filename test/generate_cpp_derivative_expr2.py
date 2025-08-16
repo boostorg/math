@@ -80,7 +80,8 @@ def generate_cpp_tensor(expr, vars, order):
 if __name__ == "__main__":
     x, y, z = symbols('x y z')
     vars = [x, y]
-    f = sympy.log(1+sympy.sqrt(x**2))*sympy.exp(y) + sympy.Pow(x+y,2.5) - sympy.sqrt(1+x*y)
+    #f = sympy.log(1+sympy.sqrt(x**2))*sympy.exp(y) + sympy.Pow(x+y,2.5) - sympy.sqrt(1+x*y)
+    f = x/(y+x)*y/(x-y)
     order = int(sys.argv[1]) if len(sys.argv) > 1 else 2
 
     print(f"// Order-{order} derivative of f(x, y) = {f}")
