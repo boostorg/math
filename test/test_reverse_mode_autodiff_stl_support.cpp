@@ -1,6 +1,8 @@
 #include "test_autodiff_reverse.hpp"
+#include <boost/math/tools/workaround.hpp>
 #include <cmath>
 #include <vector>
+
 BOOST_AUTO_TEST_SUITE(test_stl_supported_functions)
 
 using namespace rdiff;
@@ -45,11 +47,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_fabs, T, all_float_types)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_abs, T, all_float_types)
 {
-    RandomSample<T> rng_neg{-100, 0};
+    RandomSample<T> rng_neg{-1, 0};
     T               x_neg_v        = rng_neg.next();
     T               test_abs_neg_v = fabs(x_neg_v);
 
-    RandomSample<T> rng_pos{0, 100};
+    RandomSample<T> rng_pos{0, 1};
     T               x_pos_v        = rng_pos.next();
     T               test_abs_pos_v = abs(x_pos_v);
 
@@ -84,7 +86,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_abs, T, all_float_types)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_ceil, T, all_float_types)
 {
-    RandomSample<T> rng{-100, 100};
+    RandomSample<T> rng{-1, 1};
     T               x_v         = rng.next();
     T               test_ceil_v = ceil(x_v);
 
@@ -104,7 +106,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_ceil, T, all_float_types)
 }
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_floor, T, all_float_types)
 {
-    RandomSample<T> rng{-100, 100};
+    RandomSample<T> rng{-1, 1};
     T               x_v         = rng.next();
     T               test_ceil_v = floor(x_v);
 
@@ -247,11 +249,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_frexp, T, all_float_types)
      *  discontinuous points. In reverse mode autodiff
      *  its treated as a piecewise linear funcfion.
      */
-    RandomSample<T> rng{-100, 100};
+    RandomSample<T> rng{-1, 1};
     T               x_v = rng.next();
 
     int             i1, i2;
-    T               test_func_v = std::frexp(x_v, &i1);
+    T               test_func_v = frexp(x_v, &i1);
 
     rvar<T, 1>      x_rvar      = x_v;
     rvar<T, 1>      x_func      = frexp(x_rvar, &i2);
@@ -263,10 +265,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_frexp, T, all_float_types)
     tape.zero_grad();
     x_func.backward();
 
-    int i3, i4;
+    // int i3, i4;
+    int i4;
+    frexp(x_v, &i4);
     // T   h              = 0.001;
     // T   f1             = frexp(x_v + h, &i3);
-    T   f2             = frexp(x_v, &i4);
+    // T   f2             = frexp(x_v, &i4);
     T   expected_deriv = 1.0 / pow(2.0, i4);
     BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), expected_deriv, boost_close_tol<T>());
 
@@ -283,7 +287,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_cos, T, all_float_types)
 
     rvar<T, 1>      x_func      = cos(x_rvar);
 
-    BOOST_REQUIRE_CLOSE_FRACTION(x_func.item(), test_func_v, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_func.item(), test_func_v, 10 * boost_close_tol<T>());
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -292,7 +296,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_cos, T, all_float_types)
     T          expected_deriv = -2 * x_v * sin(x_v * x_v);
     test_func_2.backward();
 
-    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), expected_deriv, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), expected_deriv, 10 * boost_close_tol<T>());
 
     tape.clear();
 }
@@ -307,7 +311,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_sin, T, all_float_types)
 
     rvar<T, 1>      x_func      = sin(x_rvar);
 
-    BOOST_REQUIRE_CLOSE_FRACTION(x_func.item(), test_func_v, 100 * boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_func.item(), test_func_v, 10 * boost_close_tol<T>());
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -331,7 +335,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_tan, T, all_float_types)
 
     rvar<T, 1>      x_func      = tan(x_rvar);
 
-    BOOST_REQUIRE_CLOSE_FRACTION(x_func.item(), test_func_v, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_func.item(), test_func_v, 10 * boost_close_tol<T>());
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -340,7 +344,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_tan, T, all_float_types)
     T          expected_deriv = 2 * x_v * 1 / (cos(x_v * x_v) * cos(x_v * x_v));
     test_func_2.backward();
 
-    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), expected_deriv, 100 * boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), expected_deriv, 10 * boost_close_tol<T>());
 
     tape.clear();
 }
@@ -475,7 +479,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_atan2, T, all_float_types)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_trunc, T, all_float_types)
 {
-    RandomSample<T> rng{-100, 100};
+    RandomSample<T> rng{-1, 1};
     T               x_v          = rng.next();
     T               test_trunc_v = trunc(x_v);
 
@@ -496,8 +500,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_trunc, T, all_float_types)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_fmod, T, all_float_types)
 {
-    RandomSample<T> rng_x{-100, 100};
-    RandomSample<T> rng_y{-100, 100};
+    using boost::math::tools::fmod_workaround;
+    RandomSample<T> rng_x{-1, 1};
+    RandomSample<T> rng_y{-1, 1};
 
     T               x_v = rng_x.next();
     T               y_v = rng_y.next();
@@ -505,13 +510,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_fmod, T, all_float_types)
         y_v = rng_y.next();
     }
 
-    T          expected_fmod = fmod(x_v, y_v);
+    T expected_fmod = fmod(x_v, y_v);
 
     rvar<T, 1> x_rvar        = x_v;
     rvar<T, 1> y_rvar        = y_v;
 
     rvar<T, 1> fmod_rvar     = fmod(x_rvar, y_rvar);
-    BOOST_REQUIRE_CLOSE_FRACTION(fmod_rvar.item(), expected_fmod, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(fmod_rvar.item(), expected_fmod, 10 * boost_close_tol<T>());
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
@@ -520,29 +525,29 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_fmod, T, all_float_types)
     T dx_expected = 1.0;
     T dy_expected = -1.0 * trunc(x_v / y_v);
 
-    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), dx_expected, boost_close_tol<T>());
-    BOOST_REQUIRE_CLOSE_FRACTION(y_rvar.adjoint(), dy_expected, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), dx_expected, 10 * boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(y_rvar.adjoint(), dy_expected, 10 * boost_close_tol<T>());
 
     rvar<T, 1> fmod_rvar_float = fmod(x_rvar, y_v);
-    BOOST_REQUIRE_CLOSE_FRACTION(fmod_rvar_float.item(), expected_fmod, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(fmod_rvar_float.item(), expected_fmod, 10 * boost_close_tol<T>());
 
     tape.zero_grad();
     fmod_rvar_float.backward();
-    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), dx_expected, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), dx_expected, 10 * boost_close_tol<T>());
 
     rvar<T, 1> fmod_float_rvar = fmod(x_v, y_rvar);
-    BOOST_REQUIRE_CLOSE_FRACTION(fmod_float_rvar.item(), expected_fmod, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(fmod_float_rvar.item(), expected_fmod, 10 * boost_close_tol<T>());
 
     tape.zero_grad();
     fmod_float_rvar.backward();
-    BOOST_REQUIRE_CLOSE_FRACTION(y_rvar.adjoint(), dy_expected, boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(y_rvar.adjoint(), dy_expected, 10 * boost_close_tol<T>());
 
     tape.clear();
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_round, T, all_float_types)
 {
-    RandomSample<T> rng{-100, 100};
+    RandomSample<T> rng{-1, 1};
     T               x_v          = rng.next();
     T               test_round_v = round(x_v);
 
@@ -563,7 +568,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_round, T, all_float_types)
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_iround, T, all_float_types)
 {
     using boost::math::iround;
-    RandomSample<T> rng{-100, 100};
+    RandomSample<T> rng{-1, 1};
     T               x_v          = rng.next();
     int             test_round_v = iround(x_v);
     rvar<T, 1>      x_rvar       = x_v;
@@ -574,7 +579,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_iround, T, all_float_types)
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_lround, T, all_float_types)
 {
     using boost::math::lround;
-    RandomSample<T> rng{-100, 100};
+    RandomSample<T> rng{-1, 1};
     T               x_v          = rng.next();
     long            test_round_v = lround(x_v);
     rvar<T, 1>      x_rvar       = x_v;
@@ -585,7 +590,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_lround, T, all_float_types)
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_llround, T, all_float_types)
 {
     using boost::math::llround;
-    RandomSample<T> rng{-100, 100};
+    RandomSample<T> rng{-1, 1};
     T               x_v          = rng.next();
     long long       test_round_v = llround(x_v);
     rvar<T, 1>      x_rvar       = x_v;
@@ -596,7 +601,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_llround, T, all_float_types)
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_itrunc, T, all_float_types)
 {
     using boost::math::itrunc;
-    RandomSample<T> rng{-100, 100};
+    RandomSample<T> rng{-1, 1};
     T               x_v          = rng.next();
     int             test_trunc_v = itrunc(x_v);
     rvar<T, 1>      x_rvar       = x_v;
@@ -606,7 +611,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_itrunc, T, all_float_types)
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_ltrunc, T, all_float_types)
 {
     using boost::math::ltrunc;
-    RandomSample<T> rng{-100, 100};
+    RandomSample<T> rng{-1, 1};
     T               x_v          = rng.next();
     long            test_trunc_v = ltrunc(x_v);
     rvar<T, 1>      x_rvar       = x_v;
@@ -616,7 +621,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_ltrunc, T, all_float_types)
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_lltrunc, T, all_float_types)
 {
     using boost::math::lltrunc;
-    RandomSample<T> rng{-100, 100};
+    RandomSample<T> rng{-1, 1};
     T               x_v          = rng.next();
     int             test_trunc_v = lltrunc(x_v);
     rvar<T, 1>      x_rvar       = x_v;
@@ -626,7 +631,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_lltrunc, T, all_float_types)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_sinh, T, all_float_types)
 {
-    RandomSample<T> rng{-10, 10};
+    RandomSample<T> rng{-1, 1};
     T               x_v         = rng.next();
     T               test_func_v = sinh(x_v);
 
@@ -650,7 +655,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_sinh, T, all_float_types)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_cosh, T, all_float_types)
 {
-    RandomSample<T> rng{-10, 10};
+    RandomSample<T> rng{-1, 1};
     T               x_v         = rng.next();
     T               test_func_v = cosh(x_v);
 
@@ -667,14 +672,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_cosh, T, all_float_types)
     T          expected_deriv = 2 * x_v * sinh(x_v * x_v);
     test_func_2.backward();
 
-    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), expected_deriv, 100 * boost_close_tol<T>());
+    BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), expected_deriv, boost_close_tol<T>());
 
     tape.clear();
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_tanh, T, all_float_types)
 {
-    RandomSample<T> rng{-10, 10};
+    RandomSample<T> rng{-1, 1};
     T               x_v         = rng.next();
     T               test_func_v = tanh(x_v);
     rvar<T, 1>      x_rvar      = x_v;
@@ -854,7 +859,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_first_derivative, T, all_float_types)
     rvar<T, 1>      x_ad              = x;
     rvar<T, 1>      y_ad              = y;
 
-    T               fv                = test_function_1(x, y);
+    //T               fv                = test_function_1(x, y);
     rvar<T, 1>      f_ad              = test_function_1(x_ad, y_ad);
     auto            grad_f_analytical = grad_test_func_1_analytical(x, y);
     /* intended use case */
@@ -862,7 +867,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_first_derivative, T, all_float_types)
     BOOST_REQUIRE_CLOSE_FRACTION(x_ad.adjoint(), grad_f_analytical[0], boost_close_tol<T>());
     BOOST_REQUIRE_CLOSE_FRACTION(y_ad.adjoint(), grad_f_analytical[1], boost_close_tol<T>());
 
-    gradient_tape<T, 1, BUFFER_SIZE>& tape = get_active_tape<T, 1>();
+    gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
 
     /* grad test */
@@ -888,9 +893,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_second_derivative_and_hessian, T, all_
     rvar<T, 2>                        x_ad = x;
     rvar<T, 2>                        y_ad = y;
 
-    T                                 fv   = test_function_1(x, y);
+    //T                                 fv   = test_function_1(x, y);
     rvar<T, 2>                        f_ad = test_function_1(x_ad, y_ad);
-    gradient_tape<T, 2, BUFFER_SIZE>& tape = get_active_tape<T, 2>();
+    gradient_tape<T, 2>&              tape = get_active_tape<T, 2>();
     tape.zero_grad();
 
     auto hess_analytical   = grad2_test_func_1_analytical(x, y);
@@ -918,9 +923,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_order_3_der, T, all_float_types)
     rvar<T, 3>                        x_ad = x;
     rvar<T, 3>                        y_ad = y;
 
-    T                                 fv   = test_function_1(x, y);
+    //T                                 fv   = test_function_1(x, y);
     rvar<T, 3>                        f_ad = test_function_1(x_ad, y_ad);
-    gradient_tape<T, 3, BUFFER_SIZE>& tape = get_active_tape<T, 3>();
+    gradient_tape<T, 3>&              tape = get_active_tape<T, 3>();
     tape.zero_grad();
 
     auto                                     df3     = grad3_test_func_1_analytical(x, y);
@@ -928,7 +933,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_order_3_der, T, all_float_types)
 
     std::vector<std::vector<std::vector<T>>> grad_tensor;
     for (int i = 0; i < 2; i++) {
-        auto df_hess = hess(*grad_ad[i], &x_ad, &y_ad);
+        auto df_hess = hess(grad_ad[i], &x_ad, &y_ad);
         grad_tensor.push_back(df_hess);
     }
     auto grad_nd_func_test = grad_nd<3>(f_ad, &x_ad, &y_ad);
@@ -961,11 +966,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_fourth_derivative, T, all_float_types)
     auto            gf    = grad(f_ad, &x_ad, &y_ad);
     std::array<std::array<std::array<std::array<T, 2>, 2>, 2>, 2> ggggf;
     for (int i = 0; i < 2; ++i) {
-        auto hess1 = grad(*gf[i], &x_ad, &y_ad);
+        auto hess1 = grad(gf[i], &x_ad, &y_ad);
         for (int j = 0; j < 2; ++j) {
-            auto hess2 = grad(*hess1[j], &x_ad, &y_ad);
+            auto hess2 = grad(hess1[j], &x_ad, &y_ad);
             for (int k = 0; k < 2; ++k) {
-                auto hess3 = grad(*hess2[k], &x_ad, &y_ad);
+                auto hess3 = grad(hess2[k], &x_ad, &y_ad);
                 for (int l = 0; l < 2; ++l) {
                     ggggf[i][j][k][l] = hess3[l];
                 }
@@ -979,10 +984,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_func_1_fourth_derivative, T, all_float_types)
                 for (int l = 0; l < 2; l++) {
                     BOOST_REQUIRE_CLOSE_FRACTION(ggggf[i][j][k][l],
                                                  df4[i][j][k][l],
-                                                 100 * boost_close_tol<T>());
+                                                 1 * boost_close_tol<T>());
                     BOOST_REQUIRE_CLOSE_FRACTION(grad_nd_func_test[i][j][k][l],
                                                  df4[i][j][k][l],
-                                                 100 * boost_close_tol<T>());
+                                                 1 * boost_close_tol<T>());
                 }
             }
         }

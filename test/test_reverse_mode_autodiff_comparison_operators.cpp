@@ -171,7 +171,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(greater_than_rvar_and_scalar, T, all_float_types)
     T          a    = T(3.14);
     T          b    = T(3.14);
     T          c    = T(2.71);
-    T          d    = T(4.0);
 
     rvar<T, 1> var1 = rvar<T, 1>(a);
     rvar<T, 2> var2 = rvar<T, 2>(a);
@@ -271,7 +270,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(greater_than_or_equal_rvar_and_scalar, T, all_floa
     T          a    = T(3.14);
     T          b    = T(3.14);
     T          c    = T(2.71);
-    T          d    = T(4.0);
 
     rvar<T, 1> var1 = rvar<T, 1>(a);
     rvar<T, 2> var2 = rvar<T, 2>(a);

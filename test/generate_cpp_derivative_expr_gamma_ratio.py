@@ -1,9 +1,42 @@
-from sympy import symbols, simplify, ccode
+from sympy import symbols, simplify, ccode, Function
 from sympy.tensor.array import derive_by_array
+from sympy.printing.cxx import CXX11CodePrinter
 import sys
 import math
 import sympy
+
+# Define a custom C++ code printer to handle special functions
+class MyCCodePrinter(CXX11CodePrinter):
+    """
+    Custom printer that handles specific SymPy functions and maps them
+    to C++ equivalents.
+    """
+    def _print_GammaFunction(self, expr):
+        """
+        Custom handler for sympy.gamma. Maps it to std::tgamma from <cmath>.
+        """
+        arg_code = self._print(expr.args[0])
+        # Use std::tgamma from the <cmath> library, which requires C++11 or later.
+        return f"std::tgamma({arg_code})"
+
+def my_ccode(expr, **settings):
+    """
+    A wrapper function to use our custom C++ code printer.
+    """
+    return MyCCodePrinter(settings).doprint(expr)
+
 def generate_cpp_tensor(expr, vars, order):
+    """
+    Generates C++ code for a tensor of derivatives of a given function.
+    
+    Args:
+        expr (sympy.Expr): The function to differentiate.
+        vars (list of sympy.Symbol): The variables to differentiate with respect to.
+        order (int): The order of the derivatives.
+
+    Returns:
+        tuple: A tuple containing the C++ return type and the function body.
+    """
     derivatives = expr
     for _ in range(order):
         derivatives = derive_by_array(derivatives, vars)
@@ -41,7 +74,8 @@ def generate_cpp_tensor(expr, vars, order):
     code_lines = []
     for var_name, expr in zip(var_names, flat_derivs):
         simplified = simplify(expr)
-        c_expr = ccode(simplified)
+        # Use our custom code generator here
+        c_expr = my_ccode(simplified)
         code_lines.append(f"    T {var_name} = static_cast<T>({c_expr});")
 
     # Now build nested vector initialization recursively matching the shape of derivatives
@@ -78,10 +112,10 @@ def generate_cpp_tensor(expr, vars, order):
     return return_type, body
 
 if __name__ == "__main__":
-    x, y, z = symbols('x y z')
+    x, y = symbols('x y')
     vars = [x, y]
-    #f = sympy.log(1+sympy.sqrt(x**2))*sympy.exp(y) + sympy.Pow(x+y,2.5) - sympy.sqrt(1+x*y)
-    f = x/(y+x)*y/(x-y)
+    # Here is the function using sympy.gamma
+    f = sympy.gamma(2 * x) / sympy.gamma(y * x)
     order = int(sys.argv[1]) if len(sys.argv) > 1 else 2
 
     print(f"// Order-{order} derivative of f(x, y) = {f}")
