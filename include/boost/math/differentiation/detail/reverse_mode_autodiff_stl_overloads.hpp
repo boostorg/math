@@ -155,10 +155,11 @@ struct exp_expr : public abstract_unary_expression<T, order, ARG, exp_expr<T, or
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-		using std::exp;
+        using std::exp;
         return exp(argv);
     }
 };
+
 template<typename T, size_t order, typename LHS, typename RHS>
 struct pow_expr
     : public abstract_binary_expression<T, order, LHS, RHS, pow_expr<T, order, LHS, RHS>>
