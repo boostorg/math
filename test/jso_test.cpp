@@ -52,14 +52,12 @@ template <class Real> void test_ackley() {
   CHECK_LE(std::abs(local_minima[0]), 10 * std::numeric_limits<Real>::epsilon());
   CHECK_LE(std::abs(local_minima[1]), 10 * std::numeric_limits<Real>::epsilon());
 
-  #if !defined(BOOST_CLANG)
   // Test that if an intial guess is the exact solution, the returned solution is the exact solution:
   std::array<Real, 2> initial_guess{0, 0};
   jso_params.initial_guess = &initial_guess;
   local_minima = jso(ack, jso_params, gen);
   CHECK_EQUAL(local_minima[0], Real(0));
   CHECK_EQUAL(local_minima[1], Real(0));
-  #endif
 }
 
 template <class Real> void test_rosenbrock_saddle() {
@@ -69,7 +67,7 @@ template <class Real> void test_rosenbrock_saddle() {
   jso_params.lower_bounds = {0.5, 0.5};
   jso_params.upper_bounds = {2.048, 2.048};
   std::mt19937_64 gen(234568);
-  auto local_minima = jso<ArgType>(rosenbrock_saddle<Real>, jso_params, gen);
+  auto local_minima = jso(rosenbrock_saddle<Real>, jso_params, gen);
 
   CHECK_ABSOLUTE_ERROR(Real(1), local_minima[0], 10 * std::numeric_limits<Real>::epsilon());
   CHECK_ABSOLUTE_ERROR(Real(1), local_minima[1], 10 * std::numeric_limits<Real>::epsilon());
