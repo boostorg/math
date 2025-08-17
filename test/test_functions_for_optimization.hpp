@@ -52,10 +52,10 @@ template <typename Real> Real ackley(std::array<Real, 2> const &v) {
   return -20 * exp(arg1) - exp(arg2 / 2) + 20 + e<Real>();
 }
 
-template <typename Real> auto rosenbrock_saddle(std::array<Real, 2> const &v) {
-  auto x = v[0];
-  auto y = v[1];
-  return 100 * (x * x - y) * (x * x - y) + (1 - x) * (1 - x);
+template <typename Real> auto rosenbrock_saddle(std::array<Real, 2> const &v) -> Real {
+  Real x { v[0] };
+  Real y { v[1] };
+  return static_cast<Real>(100 * (x * x - y) * (x * x - y) + (1 - x) * (1 - x));
 }
 
 
