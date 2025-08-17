@@ -157,14 +157,12 @@ void test_dimensioned_sphere() {
 #endif
 
 int main() {
-#if defined(__clang__) || defined(_MSC_VER)
   test_ackley<float>();
   test_ackley<double>();
   test_rosenbrock_saddle<double>();
   test_rastrigin<double>();
   test_three_hump_camel<float>();
   test_beale<double>();
-#endif
 #if BOOST_MATH_TEST_UNITS_COMPATIBILITY
   test_dimensioned_sphere();
 #endif
