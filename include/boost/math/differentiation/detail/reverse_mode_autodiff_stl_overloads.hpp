@@ -155,6 +155,7 @@ struct exp_expr : public abstract_unary_expression<T, order, ARG, exp_expr<T, or
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
+		using std::exp;
         return exp(argv);
     }
 };
