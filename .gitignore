@@ -28,6 +28,4 @@ cmake-build-debug/*
 build.ninja
 .ninja*
 a.out
-include/boost/math/differentiation/build/
-include/boost/math/differentiation/build/*
 

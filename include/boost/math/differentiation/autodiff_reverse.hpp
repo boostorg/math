@@ -5,7 +5,6 @@
 #ifndef BOOST_MATH_DIFFERENTIATION_AUTODIFF_HPP
 #define BOOST_MATH_DIFFERENTIATION_AUTODIFF_HPP
 
-#include <boost/cstdfloat.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_basic_operator_overloads.hpp>
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_comparison_operator_overloads.hpp>
@@ -24,7 +23,6 @@
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/promotion.hpp>
-#include <cassert>
 #include <cstddef>
 #include <iostream>
 #include <type_traits>
@@ -689,7 +687,7 @@ auto grad(rvar<T, order_1> &f, std::vector<rvar<T, order_2> *> &x)
     static_assert(order_1 <= order_2,
                   "variable differentiating w.r.t. must have order >= function order");
     std::vector<rvar<T, order_1> *> xx;
-    for (auto xi : x)
+    for (auto &xi : x)
         xx.push_back(&(xi->template get_value_at<order_1>()));
     return detail::grad_op_impl<T, order_1>{}(f, xx);
 }

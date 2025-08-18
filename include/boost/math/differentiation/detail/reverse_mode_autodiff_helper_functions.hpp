@@ -5,7 +5,7 @@
 #ifndef BOOST_REVERSE_MODE_AUTODIFF_HELPER_FUNCTIONS_HPP
 #define BOOST_REVERSE_MODE_AUTODIFF_HELPER_FUNCTIONS_HPP
 
-#include <stddef.h>
+#include <cstddef>
 #include <type_traits>
 namespace boost {
 namespace math {

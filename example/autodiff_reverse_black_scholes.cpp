@@ -7,16 +7,16 @@
 using namespace boost::math::differentiation::reverse_mode;
 using namespace boost::math::constants;
 
-template<typename X>
-X phi(X const& x)
+template<typename Real>
+Real phi(Real const& x)
 {
-    return one_div_root_two_pi<double>() * exp(-0.5 * x * x);
+    return one_div_root_two_pi<Real>() * exp(-0.5 * x * x);
 }
 
-template<typename X>
-X Phi(X const& x)
+template<typename Real>
+Real Phi(Real const& x)
 {
-    return 0.5 * erfc(-one_div_root_two<double>() * x);
+    return 0.5 * erfc(-one_div_root_two<Real>() * x);
 }
 
 enum class CP { call, put };
@@ -33,7 +33,7 @@ T black_scholes_option_price(CP cp, double K, T const& S, T const& sigma, T cons
     case CP::put:
         return exp(-r * tau) * K * Phi<T>(-d2) - S * Phi<T>(-d1);
     default:
-        throw std::runtime_error("Invalid CP value.");
+        throw runtime_error("Invalid CP value.");
     }
 }
 
@@ -105,7 +105,7 @@ int main()
               << "formula call delta = " << formula_call_delta << "\n"
               << "autodiff call vega  = " << call_greeks[1].item() << '\n'
               << " formula call vega  = " << formula_vega << '\n'
-              << "autodiff call theta = " << call_greeks[2].item() << '\n'
+              << "autodiff call theta = " << -call_greeks[2].item() << '\n'
               << " formula call theta = " << formula_call_theta << '\n'
               << "autodiff call rho   = " << call_greeks[3].item() << 'n'
               << " formula call rho   = " << formula_call_rho << '\n'

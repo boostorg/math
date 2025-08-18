@@ -60,9 +60,7 @@ struct erf_expr : public abstract_unary_expression<T, order, ARG, erf_expr<T, or
     * d/dx erf(x) = 2*exp(x^2)/sqrt(pi)
     *
     * */
-    using arg_type   = ARG;
-    using value_type = T;
-    using inner_t    = rvar_t<T, order - 1>;
+    using inner_t = rvar_t<T, order - 1>;
 
     explicit erf_expr(const expression<T, order, ARG> &arg_expr, const T v)
         : abstract_unary_expression<T, order, ARG, erf_expr<T, order, ARG>>(arg_expr, v){};
@@ -76,10 +74,8 @@ struct erf_expr : public abstract_unary_expression<T, order, ARG, erf_expr<T, or
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using multiprecision::sqrt;
-        using std::exp;
-        using std::sqrt;
-        return 2 * exp(-argv * argv) / sqrt(constants::pi<T>());
+        BOOST_MATH_STD_USING
+        return static_cast<T>(2.0) * exp(-argv * argv) / sqrt(constants::pi<T>());
     }
 };
 
@@ -91,9 +87,8 @@ struct erfc_expr : public abstract_unary_expression<T, order, ARG, erfc_expr<T, 
     * d/dx erf(x) = -2*exp(x^2)/sqrt(pi)
     *
     * */
-    using arg_type   = ARG;
-    using value_type = T;
-    using inner_t    = rvar_t<T, order - 1>;
+
+    using inner_t = rvar_t<T, order - 1>;
 
     explicit erfc_expr(const expression<T, order, ARG> &arg_expr, const T v)
         : abstract_unary_expression<T, order, ARG, erfc_expr<T, order, ARG>>(arg_expr, v){};
@@ -107,10 +102,8 @@ struct erfc_expr : public abstract_unary_expression<T, order, ARG, erfc_expr<T, 
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using multiprecision::sqrt;
-        using std::exp;
-        using std::sqrt;
-        return -2 * exp(-argv * argv) / sqrt(constants::pi<T>());
+        BOOST_MATH_STD_USING
+        return static_cast<T>(-2.0) * exp(-argv * argv) / sqrt(constants::pi<T>());
     }
 };
 
@@ -122,9 +115,8 @@ struct erf_inv_expr : public abstract_unary_expression<T, order, ARG, erf_inv_ex
     * d/dx erf(x) = 2*exp(x^2)/sqrt(pi)
     *
     * */
-    using arg_type   = ARG;
-    using value_type = T;
-    using inner_t    = rvar_t<T, order - 1>;
+
+    using inner_t = rvar_t<T, order - 1>;
 
     explicit erf_inv_expr(const expression<T, order, ARG> &arg_expr, const T v)
         : abstract_unary_expression<T, order, ARG, erf_inv_expr<T, order, ARG>>(arg_expr, v){};
@@ -138,19 +130,16 @@ struct erf_inv_expr : public abstract_unary_expression<T, order, ARG, erf_inv_ex
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using multiprecision::exp;
-        using multiprecision::pow;
-        using multiprecision::sqrt;
-        using std::exp;
-        using std::pow;
-        using std::sqrt;
+        BOOST_MATH_STD_USING
         return detail::if_functional_dispatch<(order > 1)>(
             [](auto &&x) {
-                return 0.5 * sqrt(constants::pi<T>())
-                       * reverse_mode::exp(reverse_mode::pow(reverse_mode::erf_inv(x), 2.0));
+                return static_cast<T>(0.5) * sqrt(constants::pi<T>())
+                       * reverse_mode::exp(
+                           reverse_mode::pow(reverse_mode::erf_inv(x), static_cast<T>(2.0)));
             },
             [](auto &&x) {
-                return 0.5 * sqrt(constants::pi<T>()) * exp(pow(boost::math::erf_inv(x), 2));
+                return static_cast<T>(0.5) * sqrt(constants::pi<T>())
+                       * exp(pow(boost::math::erf_inv(x), static_cast<T>(2.0)));
             },
             argv);
     }
@@ -164,9 +153,8 @@ struct erfc_inv_expr : public abstract_unary_expression<T, order, ARG, erfc_inv_
     * d/dx erf(x) = -2*exp(x^2)/sqrt(pi)
     *
     * */
-    using arg_type   = ARG;
-    using value_type = T;
-    using inner_t    = rvar_t<T, order - 1>;
+
+    using inner_t = rvar_t<T, order - 1>;
 
     explicit erfc_inv_expr(const expression<T, order, ARG> &arg_expr, const T v)
         : abstract_unary_expression<T, order, ARG, erfc_inv_expr<T, order, ARG>>(arg_expr, v){};
@@ -180,19 +168,16 @@ struct erfc_inv_expr : public abstract_unary_expression<T, order, ARG, erfc_inv_
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using multiprecision::exp;
-        using multiprecision::pow;
-        using multiprecision::sqrt;
-        using std::exp;
-        using std::pow;
-        using std::sqrt;
+        BOOST_MATH_STD_USING
         return detail::if_functional_dispatch<(order > 1)>(
             [](auto &&x) {
-                return -0.5 * sqrt(constants::pi<T>())
-                       * reverse_mode::exp(reverse_mode::pow(reverse_mode::erfc_inv(x), 2.0));
+                return static_cast<T>(-0.5) * sqrt(constants::pi<T>())
+                       * reverse_mode::exp(
+                           reverse_mode::pow(reverse_mode::erfc_inv(x), static_cast<T>(2.0)));
             },
             [](auto &&x) {
-                return -0.5 * sqrt(constants::pi<T>()) * exp(pow(boost::math::erfc_inv(x), 2));
+                return static_cast<T>(-0.5) * sqrt(constants::pi<T>())
+                       * exp(pow(boost::math::erfc_inv(x), static_cast<T>(2.0)));
             },
             argv);
     }

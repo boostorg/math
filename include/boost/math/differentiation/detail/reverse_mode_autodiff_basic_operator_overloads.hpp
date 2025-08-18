@@ -19,9 +19,6 @@ struct add_expr
     /* @brief addition
    * rvar+rvar
    * */
-    using lhs_type   = LHS;
-    using rhs_type   = RHS;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
     // Explicitly define constructor to forward to base class
     explicit add_expr(const expression<T, order, LHS> &left_hand_expr,
@@ -39,7 +36,7 @@ struct add_expr
     {
         return inner_t(1.0);
     }
-}; // namespace reverse_modetemplate<typenameT,size_torder,typenameLHS,typenameRHS>structadd_expr:publicabstract_binary_expression<T,order,LHS,RHS,add_expr<T,order,LHS,RHS> >
+};
 template<typename T, size_t order, typename ARG>
 struct add_const_expr
     : public abstract_unary_expression<T, order, ARG, add_const_expr<T, order, ARG>>
@@ -47,8 +44,6 @@ struct add_const_expr
     /* @brief
    * rvar+float or float+rvar
    * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
     explicit add_const_expr(const expression<T, order, ARG> &arg_expr, const T v)
         : abstract_unary_expression<T, order, ARG, add_const_expr<T, order, ARG>>(arg_expr, v){};
@@ -66,9 +61,6 @@ struct mult_expr
     /* @brief multiplication
    * rvar * rvar
    * */
-    using lhs_type   = LHS;
-    using rhs_type   = RHS;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
     explicit mult_expr(const expression<T, order, LHS> &left_hand_expr,
                        const expression<T, order, RHS> &right_hand_expr)
@@ -93,8 +85,6 @@ struct mult_const_expr
     /* @brief
    * rvar+float or float+rvar
    * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit mult_const_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -114,9 +104,6 @@ struct sub_expr
     /* @brief addition
    * rvar-rvar
    * */
-    using lhs_type   = LHS;
-    using rhs_type   = RHS;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
     // Explicitly define constructor to forward to base class
     explicit sub_expr(const expression<T, order, LHS> &left_hand_expr,
@@ -144,9 +131,6 @@ struct div_expr
     /* @brief multiplication
    * rvar / rvar
    * */
-    using lhs_type   = LHS;
-    using rhs_type   = RHS;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
     // Explicitly define constructor to forward to base class
     explicit div_expr(const expression<T, order, LHS> &left_hand_expr,
@@ -158,7 +142,7 @@ struct div_expr
     inner_t              evaluate() const { return this->lhs.evaluate() / this->rhs.evaluate(); };
     static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
     {
-        return 1.0 / r;
+        return static_cast<T>(1.0) / r;
     };
     static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
     {
@@ -172,8 +156,6 @@ struct div_by_const_expr
     /* @brief
    * rvar/float
    * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit div_by_const_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -193,8 +175,6 @@ struct const_div_by_expr
     /** @brief
     * float/rvar
     * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit const_div_by_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -270,7 +250,7 @@ add_const_expr<T, order, ARG> operator+(const U &v, const expression<T, order, A
 template<typename T, size_t order, typename ARG>
 mult_const_expr<T, order, ARG> operator-(const expression<T, order, ARG> &arg)
 {
-    return mult_const_expr<T, order, ARG>(arg, -1.0);
+    return mult_const_expr<T, order, ARG>(arg, static_cast<T>(-1.0));
 }
 
 /** @brief
@@ -292,7 +272,7 @@ template<typename U,
 add_const_expr<T, order, ARG> operator-(const expression<T, order, ARG> &arg, const U &v)
 {
     /* rvar - float = rvar + (-float) */
-    return add_const_expr<T, order, ARG>(arg, static_cast<T>(-1.0 * v));
+    return add_const_expr<T, order, ARG>(arg, static_cast<T>(-v));
 }
 
 /** @brief

@@ -8,14 +8,13 @@
 
 #include <algorithm>
 #include <array>
+#include <boost/math/tools/assert.hpp>
 #include <cassert>
+#include <cstddef>
 #include <iterator>
 #include <memory>
-#include <stddef.h>
 #include <type_traits>
 #include <vector>
-#include <boost/assert.hpp>
-
 namespace boost {
 namespace math {
 namespace differentiation {
@@ -82,25 +81,25 @@ public:
     {}
     reference operator*()
     {
-        BOOST_ASSERT(index_ >= begin_ && index_ < end_);
+        BOOST_MATH_ASSERT(index_ >= begin_ && index_ < end_);
         return (*storage_->data_[index_ / buffer_size])[index_ % buffer_size];
     }
 
     const_reference_type operator*() const
     {
-        BOOST_ASSERT(index_ >= begin_ && index_ < end_);
+        BOOST_MATH_ASSERT(index_ >= begin_ && index_ < end_);
         return (*storage_->data_[index_ / buffer_size])[index_ % buffer_size];
     }
 
     pointer operator->()
     {
-        BOOST_ASSERT(index_ >= begin_ && index_ < end_);
+        BOOST_MATH_ASSERT(index_ >= begin_ && index_ < end_);
         return &operator*();
     }
 
     const_ptr_type operator->() const
     {
-        BOOST_ASSERT(index_ >= begin_ && index_ < end_);
+        BOOST_MATH_ASSERT(index_ >= begin_ && index_ < end_);
         return &operator*();
     }
     flat_linear_allocator_iterator &operator++()
@@ -311,8 +310,8 @@ public:
         if (item_id() == 0 && total_size_ != 0) {
             allocate_buffer();
         }
-        BOOST_ASSERT(buffer_id() < data_.size());
-        BOOST_ASSERT(item_id() < buffer_size);
+        BOOST_MATH_ASSERT(buffer_id() < data_.size());
+        BOOST_MATH_ASSERT(item_id() < buffer_size);
         T *ptr = &(*data_[buffer_id()])[item_id()];
         new (ptr) T(std::forward<Args>(args)...);
         ++total_size_;
@@ -415,12 +414,12 @@ public:
    */
     T &operator[](std::size_t i)
     {
-        BOOST_ASSERT(i < total_size_);
+        BOOST_MATH_ASSERT(i < total_size_);
         return (*data_[i / buffer_size])[i % buffer_size];
     }
     const T &operator[](std::size_t i) const
     {
-        BOOST_ASSERT(i < total_size_);
+        BOOST_MATH_ASSERT(i < total_size_);
         return (*data_[i / buffer_size])[i % buffer_size];
     }
 };

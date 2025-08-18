@@ -5,7 +5,7 @@
 
 #ifndef REVERSE_MODE_AUTODIFF_EXPRESSION_TEMPLATE_BASE_HPP
 #define REVERSE_MODE_AUTODIFF_EXPRESSION_TEMPLATE_BASE_HPP
-#include <stddef.h>
+#include <cstddef>
 #include <type_traits>
 namespace boost {
 namespace math {
@@ -215,10 +215,6 @@ struct abstract_unary_expression
     explicit abstract_unary_expression(const expression<T, order, ARG> &arg_expr, const T &constant)
         : arg(static_cast<const ARG &>(arg_expr))
         , constant(constant){};
-    // explicit abstract_unary_expression(const ARG& arg_expr, const T& constant)
-    //    : arg(arg_expr)
-    //    , constant(constant)
-    //{}
     inner_t evaluate() const
     {
         return static_cast<const concrete_unary_operation *>(this)->evaluate();

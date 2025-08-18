@@ -27,8 +27,6 @@ struct fabs_expr : public abstract_unary_expression<T, order, ARG, fabs_expr<T, 
     * more correct to chose this convention over d/dx = 0  at x = 0
     * to avoid vanishing gradients
     * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit fabs_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -36,7 +34,7 @@ struct fabs_expr : public abstract_unary_expression<T, order, ARG, fabs_expr<T, 
 
     inner_t evaluate() const
     {
-        using std::fabs;
+        BOOST_MATH_STD_USING
         return fabs(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
@@ -56,8 +54,6 @@ struct ceil_expr : public abstract_unary_expression<T, order, ARG, ceil_expr<T, 
     * as with optimization its most likely intented
     * this function's derivative is 0.0;
     * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit ceil_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -65,7 +61,7 @@ struct ceil_expr : public abstract_unary_expression<T, order, ARG, ceil_expr<T, 
 
     inner_t evaluate() const
     {
-        using std::ceil;
+        BOOST_MATH_STD_USING
         return ceil(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
@@ -85,8 +81,6 @@ struct floor_expr : public abstract_unary_expression<T, order, ARG, floor_expr<T
     * as with optimization its most likely intented
     * this function's derivative is 0.0;
     * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit floor_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -94,7 +88,7 @@ struct floor_expr : public abstract_unary_expression<T, order, ARG, floor_expr<T
 
     inner_t evaluate() const
     {
-        using std::floor;
+        BOOST_MATH_STD_USING
         return floor(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
@@ -114,8 +108,6 @@ struct trunc_expr : public abstract_unary_expression<T, order, ARG, trunc_expr<T
     * as with optimization its most likely intented
     * this function's derivative is 0.0;
     * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit trunc_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -123,8 +115,7 @@ struct trunc_expr : public abstract_unary_expression<T, order, ARG, trunc_expr<T
 
     inner_t evaluate() const
     {
-        using boost::math::trunc;
-        using std::trunc;
+        BOOST_MATH_STD_USING
         return trunc(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
@@ -141,8 +132,6 @@ struct exp_expr : public abstract_unary_expression<T, order, ARG, exp_expr<T, or
     * d/dx exp(x) = exp(x)
     *
     * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit exp_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -150,12 +139,12 @@ struct exp_expr : public abstract_unary_expression<T, order, ARG, exp_expr<T, or
 
     inner_t evaluate() const
     {
-        using std::exp;
+        BOOST_MATH_STD_USING
         return exp(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::exp;
+        BOOST_MATH_STD_USING
         return exp(argv);
     }
 };
@@ -168,9 +157,6 @@ struct pow_expr
      *  d/dx pow(x,y) = y pow (x, y-1)
      *  d/dy pow(x,y) = pow(x,y) log(x)
     * */
-    using lhs_type   = LHS;
-    using rhs_type   = RHS;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
     // Explicitly define constructor to forward to base class
     explicit pow_expr(const expression<T, order, LHS> &left_hand_expr,
@@ -181,18 +167,17 @@ struct pow_expr
 
     inner_t evaluate() const
     {
-        using std::pow;
+        BOOST_MATH_STD_USING
         return pow(this->lhs.evaluate(), this->rhs.evaluate());
     };
     static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
     {
-        using std::pow;
-        return r * pow(l, r - 1);
+        BOOST_MATH_STD_USING
+        return r * pow(l, r - static_cast<T>(1.0));
     };
     static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
     {
-        using std::log;
-        using std::pow;
+        BOOST_MATH_STD_USING
         return pow(l, r) * log(l);
     };
 };
@@ -203,8 +188,6 @@ struct expr_pow_float_expr
 {
     /** @brief pow(rvar,float)
       */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit expr_pow_float_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -213,12 +196,12 @@ struct expr_pow_float_expr
 
     inner_t evaluate() const
     {
-        using std::pow;
+        BOOST_MATH_STD_USING
         return pow(this->arg.evaluate(), this->constant);
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::pow;
+        BOOST_MATH_STD_USING
         return inner_t{constant} * pow(argv, inner_t{constant - 1});
     }
 };
@@ -229,8 +212,6 @@ struct float_pow_expr_expr
 {
     /** @brief pow(float, rvar)
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit float_pow_expr_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -239,12 +220,12 @@ struct float_pow_expr_expr
 
     inner_t evaluate() const
     {
-        using std::pow;
+        BOOST_MATH_STD_USING
         return pow(this->constant, this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::pow;
+        BOOST_MATH_STD_USING
         return pow(constant, argv) * log(constant);
     }
 };
@@ -255,8 +236,6 @@ struct sqrt_expr : public abstract_unary_expression<T, order, ARG, sqrt_expr<T, 
     /** @brief  sqrt(x)
      *  d/dx sqrt(x) = 1/(2 sqrt(x))
     * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit sqrt_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -264,13 +243,13 @@ struct sqrt_expr : public abstract_unary_expression<T, order, ARG, sqrt_expr<T, 
 
     inner_t evaluate() const
     {
-        using std::sqrt;
+        BOOST_MATH_STD_USING
         return sqrt(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::sqrt;
-        return 1.0 / (2 * sqrt(argv));
+        BOOST_MATH_STD_USING
+        return static_cast<T>(1.0) / (static_cast<T>(2.0) * sqrt(argv));
     }
 };
 
@@ -280,8 +259,6 @@ struct log_expr : public abstract_unary_expression<T, order, ARG, log_expr<T, or
     /** @brief log(x)
      *  d/dx log(x) = 1/x
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit log_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -289,12 +266,12 @@ struct log_expr : public abstract_unary_expression<T, order, ARG, log_expr<T, or
 
     inner_t evaluate() const
     {
-        using std::log;
+        BOOST_MATH_STD_USING
         return log(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        return 1.0 / argv;
+        return static_cast<T>(1.0) / argv;
     }
 };
 
@@ -304,8 +281,6 @@ struct cos_expr : public abstract_unary_expression<T, order, ARG, cos_expr<T, or
     /** @brief cos(x)
      *  d/dx cos(x) = -sin(x)
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit cos_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -313,12 +288,12 @@ struct cos_expr : public abstract_unary_expression<T, order, ARG, cos_expr<T, or
 
     inner_t evaluate() const
     {
-        using std::cos;
+        BOOST_MATH_STD_USING
         return cos(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::sin;
+        BOOST_MATH_STD_USING
         return -sin(argv);
     }
 };
@@ -338,12 +313,12 @@ struct sin_expr : public abstract_unary_expression<T, order, ARG, sin_expr<T, or
 
     inner_t evaluate() const
     {
-        using std::sin;
+        BOOST_MATH_STD_USING
         return sin(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::cos;
+        BOOST_MATH_STD_USING
         return cos(argv);
     }
 };
@@ -354,8 +329,6 @@ struct tan_expr : public abstract_unary_expression<T, order, ARG, tan_expr<T, or
     /** @brief tan(x)
      *  d/dx tan(x) = 1/cos^2(x)
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit tan_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -363,13 +336,13 @@ struct tan_expr : public abstract_unary_expression<T, order, ARG, tan_expr<T, or
 
     inner_t evaluate() const
     {
-        using std::tan;
+        BOOST_MATH_STD_USING
         return tan(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::cos;
-        return 1.0 / (cos(argv) * cos(argv));
+        BOOST_MATH_STD_USING
+        return static_cast<T>(1.0) / (cos(argv) * cos(argv));
     }
 };
 
@@ -379,8 +352,6 @@ struct acos_expr : public abstract_unary_expression<T, order, ARG, acos_expr<T, 
     /** @brief acos(x)
      *  d/dx acos(x) = -1/sqrt(1-x^2)
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit acos_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -388,13 +359,13 @@ struct acos_expr : public abstract_unary_expression<T, order, ARG, acos_expr<T, 
 
     inner_t evaluate() const
     {
-        using std::acos;
+        BOOST_MATH_STD_USING
         return acos(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::sqrt;
-        return -1.0 / sqrt(1 - argv * argv);
+        BOOST_MATH_STD_USING
+        return static_cast<T>(-1.0) / sqrt(static_cast<T>(1.0) - argv * argv);
     }
 };
 
@@ -413,13 +384,13 @@ struct asin_expr : public abstract_unary_expression<T, order, ARG, asin_expr<T, 
 
     inner_t evaluate() const
     {
-        using std::asin;
+        BOOST_MATH_STD_USING
         return asin(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::sqrt;
-        return 1.0 / sqrt(1 - argv * argv);
+        BOOST_MATH_STD_USING
+        return static_cast<T>(1.0) / sqrt(static_cast<T>(1.0) - argv * argv);
     }
 };
 
@@ -429,8 +400,6 @@ struct atan_expr : public abstract_unary_expression<T, order, ARG, atan_expr<T, 
     /** @brief atan(x)
      *  d/dx atan(x) = 1/x^2+1
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit atan_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -438,12 +407,13 @@ struct atan_expr : public abstract_unary_expression<T, order, ARG, atan_expr<T, 
 
     inner_t evaluate() const
     {
-        using std::atan;
+        BOOST_MATH_STD_USING
         return atan(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        return 1.0 / (1 + argv * argv);
+        BOOST_MATH_STD_USING
+        return static_cast<T>(1.0) / (static_cast<T>(1.0) + argv * argv);
     }
 };
 template<typename T, size_t order, typename LHS, typename RHS>
@@ -452,9 +422,6 @@ struct atan2_expr
 {
     /** @brief atan2(x,y)
     * */
-    using lhs_type   = LHS;
-    using rhs_type   = RHS;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
     // Explicitly define constructor to forward to base class
     explicit atan2_expr(const expression<T, order, LHS> &left_hand_expr,
@@ -465,7 +432,7 @@ struct atan2_expr
 
     inner_t evaluate() const
     {
-        using std::atan2;
+        BOOST_MATH_STD_USING
         return atan2(this->lhs.evaluate(), this->rhs.evaluate());
     };
     static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
@@ -484,8 +451,6 @@ struct atan2_left_float_expr
 {
     /** @brief atan2(float,rvar) 
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit atan2_left_float_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -494,7 +459,7 @@ struct atan2_left_float_expr
 
     inner_t evaluate() const
     {
-        using std::atan2;
+        BOOST_MATH_STD_USING
         return atan2(this->constant, this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
@@ -509,8 +474,6 @@ struct atan2_right_float_expr
 {
     /** @brief atan2(rvar,float) 
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit atan2_right_float_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -519,7 +482,7 @@ struct atan2_right_float_expr
 
     inner_t evaluate() const
     {
-        using std::atan2;
+        BOOST_MATH_STD_USING
         return atan2(this->arg.evaluate(), this->constant);
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
@@ -534,8 +497,6 @@ struct round_expr : public abstract_unary_expression<T, order, ARG, round_expr<T
     /** @brief round(x)
      *  d/dx round = 0
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit round_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -543,7 +504,7 @@ struct round_expr : public abstract_unary_expression<T, order, ARG, round_expr<T
 
     inner_t evaluate() const
     {
-        using std::round;
+        BOOST_MATH_STD_USING
         return round(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
@@ -558,8 +519,6 @@ struct sinh_expr : public abstract_unary_expression<T, order, ARG, sinh_expr<T, 
     /** @brief sinh(x)
      *  d/dx sinh(x) = cosh
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit sinh_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -567,12 +526,12 @@ struct sinh_expr : public abstract_unary_expression<T, order, ARG, sinh_expr<T, 
 
     inner_t evaluate() const
     {
-        using std::sinh;
+        BOOST_MATH_STD_USING
         return sinh(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::cosh;
+        BOOST_MATH_STD_USING
         return cosh(argv);
     }
 };
@@ -583,8 +542,6 @@ struct cosh_expr : public abstract_unary_expression<T, order, ARG, cosh_expr<T, 
     /** @brief cosh(x)
      *  d/dx cosh(x) = sinh
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit cosh_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -592,12 +549,12 @@ struct cosh_expr : public abstract_unary_expression<T, order, ARG, cosh_expr<T, 
 
     inner_t evaluate() const
     {
-        using std::cosh;
+        BOOST_MATH_STD_USING
         return cosh(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::sinh;
+        BOOST_MATH_STD_USING
         return sinh(argv);
     }
 };
@@ -607,8 +564,6 @@ struct tanh_expr : public abstract_unary_expression<T, order, ARG, tanh_expr<T, 
     /** @brief tanh(x)
      *  d/dx tanh(x) = 1/cosh^2
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit tanh_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -616,13 +571,13 @@ struct tanh_expr : public abstract_unary_expression<T, order, ARG, tanh_expr<T, 
 
     inner_t evaluate() const
     {
-        using std::tanh;
+        BOOST_MATH_STD_USING
         return tanh(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::cosh;
-        return 1.0 / (cosh(argv) * cosh(argv));
+        BOOST_MATH_STD_USING
+        return static_cast<T>(1.0) / (cosh(argv) * cosh(argv));
     }
 };
 
@@ -632,8 +587,6 @@ struct log10_expr : public abstract_unary_expression<T, order, ARG, log10_expr<T
     /** @brief log10(x)
      *  d/dx log10(x) = 1/(x * log(10))
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit log10_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -641,13 +594,13 @@ struct log10_expr : public abstract_unary_expression<T, order, ARG, log10_expr<T
 
     inner_t evaluate() const
     {
-        using std::log10;
+        BOOST_MATH_STD_USING
         return log10(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::log;
-        return 1.0 / (argv * log(10.0));
+        BOOST_MATH_STD_USING
+        return static_cast<T>(1.0) / (argv * log(static_cast<T>(10.0)));
     }
 };
 
@@ -657,8 +610,6 @@ struct acosh_expr : public abstract_unary_expression<T, order, ARG, acosh_expr<T
     /** @brief acosh(x)
      *  d/dx acosh(x) = 1/(sqrt(x-1)sqrt(x+1)
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit acosh_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -666,13 +617,14 @@ struct acosh_expr : public abstract_unary_expression<T, order, ARG, acosh_expr<T
 
     inner_t evaluate() const
     {
-        using std::acosh;
+        BOOST_MATH_STD_USING
         return acosh(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::sqrt;
-        return 1.0 / (sqrt(argv - 1) * sqrt(argv + 1));
+        BOOST_MATH_STD_USING
+        return static_cast<T>(1.0)
+               / (sqrt(argv - static_cast<T>(1.0)) * sqrt(argv + static_cast<T>(1.0)));
     }
 };
 
@@ -682,8 +634,6 @@ struct asinh_expr : public abstract_unary_expression<T, order, ARG, asinh_expr<T
     /** @brief asinh(x)
      *  d/dx asinh(x) = 1/(sqrt(1+x^2))
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit asinh_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -691,13 +641,13 @@ struct asinh_expr : public abstract_unary_expression<T, order, ARG, asinh_expr<T
 
     inner_t evaluate() const
     {
-        using std::asinh;
+        BOOST_MATH_STD_USING
         return asinh(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::sqrt;
-        return 1.0 / (sqrt(1 + argv * argv));
+        BOOST_MATH_STD_USING
+        return static_cast<T>(1.0) / (sqrt(static_cast<T>(1.0) + argv * argv));
     }
 };
 
@@ -707,8 +657,6 @@ struct atanh_expr : public abstract_unary_expression<T, order, ARG, atanh_expr<T
     /** @brief atanh(x)
      *  d/dx atanh(x) = 1/(1-x^2)
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit atanh_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -716,13 +664,13 @@ struct atanh_expr : public abstract_unary_expression<T, order, ARG, atanh_expr<T
 
     inner_t evaluate() const
     {
-        using std::atanh;
+        BOOST_MATH_STD_USING
         return atanh(this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        using std::sqrt;
-        return 1.0 / (1 - argv * argv);
+        BOOST_MATH_STD_USING
+        return static_cast<T>(1.0) / (static_cast<T>(1.0) - argv * argv);
     }
 };
 template<typename T, size_t order, typename LHS, typename RHS>
@@ -731,9 +679,6 @@ struct fmod_expr
 {
     /** @brief 
     * */
-    using lhs_type   = LHS;
-    using rhs_type   = RHS;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
     // Explicitly define constructor to forward to base class
     explicit fmod_expr(const expression<T, order, LHS> &left_hand_expr,
@@ -744,7 +689,7 @@ struct fmod_expr
 
     inner_t evaluate() const
     {
-        using std::fmod;
+        BOOST_MATH_STD_USING
         return fmod(this->lhs.evaluate(), this->rhs.evaluate());
     };
     static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
@@ -753,8 +698,8 @@ struct fmod_expr
     };
     static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
     {
-        using std::trunc;
-        return -1.0 * trunc(l / r);
+        BOOST_MATH_STD_USING
+        return static_cast<T>(-1.0) * trunc(l / r);
     };
 };
 
@@ -764,8 +709,6 @@ struct fmod_left_float_expr
 {
     /** @brief 
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit fmod_left_float_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -774,12 +717,12 @@ struct fmod_left_float_expr
 
     inner_t evaluate() const
     {
-        using std::fmod;
+        BOOST_MATH_STD_USING
         return fmod(this->constant, this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
     {
-        return -1.0 * trunc(constant / argv);
+        return static_cast<T>(-1.0) * trunc(constant / argv);
     }
 };
 
@@ -789,8 +732,6 @@ struct fmod_right_float_expr
 {
     /** @brief
       * */
-    using arg_type   = ARG;
-    using value_type = T;
     using inner_t    = rvar_t<T, order - 1>;
 
     explicit fmod_right_float_expr(const expression<T, order, ARG> &arg_expr, const T v)
@@ -799,7 +740,7 @@ struct fmod_right_float_expr
 
     inner_t evaluate() const
     {
-        using std::fmod;
+        BOOST_MATH_STD_USING
         return fmod(this->arg.evaluate(), this->constant);
     }
     static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
@@ -811,7 +752,7 @@ struct fmod_right_float_expr
 template<typename T, size_t order, typename ARG>
 fabs_expr<T, order, ARG> fabs(const expression<T, order, ARG> &arg)
 {
-    return fabs_expr<T, order, ARG>(arg, 0.0);
+    return fabs_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 }
 template<typename T, size_t order, typename ARG>
 auto abs(const expression<T, order, ARG> &arg)
@@ -821,18 +762,18 @@ auto abs(const expression<T, order, ARG> &arg)
 template<typename T, size_t order, typename ARG>
 ceil_expr<T, order, ARG> ceil(const expression<T, order, ARG> &arg)
 {
-    return ceil_expr<T, order, ARG>(arg, 0.0);
+    return ceil_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 }
 template<typename T, size_t order, typename ARG>
 floor_expr<T, order, ARG> floor(const expression<T, order, ARG> &arg)
 {
-    return floor_expr<T, order, ARG>(arg, 0.0);
+    return floor_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 }
 
 template<typename T, size_t order, typename ARG>
 exp_expr<T, order, ARG> exp(const expression<T, order, ARG> &arg)
 {
-    return exp_expr<T, order, ARG>(arg, 0.0);
+    return exp_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 }
 
 template<typename T, size_t order, typename LHS, typename RHS>
@@ -861,66 +802,64 @@ float_pow_expr_expr<T, order, ARG> pow(const T &v, const expression<T, order, AR
 template<typename T, size_t order, typename ARG>
 log_expr<T, order, ARG> log(const expression<T, order, ARG> &arg)
 {
-    return log_expr<T, order, ARG>(arg, 0.0);
+    return log_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 };
 
 template<typename T, size_t order, typename ARG>
 sqrt_expr<T, order, ARG> sqrt(const expression<T, order, ARG> &arg)
 {
-    return sqrt_expr<T, order, ARG>(arg, 0.0);
+    return sqrt_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 };
 
 template<typename T, size_t order, typename ARG>
 auto frexp(const expression<T, order, ARG> &arg, int *i)
 {
-    using std::frexp;
-    using std::pow;
+    BOOST_MATH_STD_USING
     frexp(arg.evaluate(), i);
-    return arg / pow(2.0, *i);
+    return arg / pow(static_cast<T>(2.0), *i);
 }
 
 template<typename T, size_t order, typename ARG>
 auto ldexp(const expression<T, order, ARG> &arg, const int &i)
 {
-    using std::ldexp;
-    using std::pow;
-    return arg * pow(2.0, i);
+    BOOST_MATH_STD_USING
+    return arg * pow(static_cast<T>(2.0), i);
 }
 
 template<typename T, size_t order, typename ARG>
 cos_expr<T, order, ARG> cos(const expression<T, order, ARG> &arg)
 {
-    return cos_expr<T, order, ARG>(arg, 0.0);
+    return cos_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 };
 
 template<typename T, size_t order, typename ARG>
 sin_expr<T, order, ARG> sin(const expression<T, order, ARG> &arg)
 {
-    return sin_expr<T, order, ARG>(arg, 0.0);
+    return sin_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 };
 
 template<typename T, size_t order, typename ARG>
 tan_expr<T, order, ARG> tan(const expression<T, order, ARG> &arg)
 {
-    return tan_expr<T, order, ARG>(arg, 0.0);
+    return tan_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 };
 
 template<typename T, size_t order, typename ARG>
 acos_expr<T, order, ARG> acos(const expression<T, order, ARG> &arg)
 {
-    return acos_expr<T, order, ARG>(arg, 0.0);
+    return acos_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 };
 
 template<typename T, size_t order, typename ARG>
 asin_expr<T, order, ARG> asin(const expression<T, order, ARG> &arg)
 {
-    return asin_expr<T, order, ARG>(arg, 0.0);
+    return asin_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 };
 
 template<typename T, size_t order, typename ARG>
 atan_expr<T, order, ARG> atan(const expression<T, order, ARG> &arg)
 {
-    return atan_expr<T, order, ARG>(arg, 0.0);
+    return atan_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 };
 
 template<typename T, size_t order, typename LHS, typename RHS>
@@ -945,48 +884,43 @@ atan2_left_float_expr<T, order, ARG> atan2(const T &v, const expression<T, order
 template<typename T, size_t order, typename ARG>
 trunc_expr<T, order, ARG> trunc(const expression<T, order, ARG> &arg)
 {
-    return trunc_expr<T, order, ARG>(arg, 0.0);
+    return trunc_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 }
 
 template<typename T, size_t order, typename LHS, typename RHS>
 auto fmod(const expression<T, order, LHS> &lhs, const expression<T, order, RHS> &rhs)
 {
-    //return lhs - trunc(lhs / rhs) * rhs;
     return fmod_expr<T, order, LHS, RHS>(lhs, rhs);
 }
 
 template<typename T, size_t order, typename ARG>
 auto fmod(const expression<T, order, ARG> &lhs, const T rhs)
 {
-    //return lhs - trunc(lhs / rhs) * rhs;
     return fmod_right_float_expr<T, order, ARG>(lhs, rhs);
 }
 
 template<typename T, size_t order, typename ARG>
 auto fmod(const T lhs, const expression<T, order, ARG> &rhs)
 {
-    //return lhs - trunc(lhs / rhs) * rhs;
     return fmod_left_float_expr<T, order, ARG>(rhs, lhs);
 }
 
 template<typename T, size_t order, typename ARG>
 round_expr<T, order, ARG> round(const expression<T, order, ARG> &arg)
 {
-    return round_expr<T, order, ARG>(arg, 0.0);
+    return round_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 }
 
 template<typename T, size_t order, typename ARG>
 int iround(const expression<T, order, ARG> &arg)
 {
-    using boost::math::iround;
     rvar<T, order> tmp = arg.evaluate();
     return iround(tmp.item());
 }
 template<typename T, size_t order, typename ARG>
 long lround(const expression<T, order, ARG> &arg)
 {
-    //using boost::math::lround;
-    using std::lround;
+    BOOST_MATH_STD_USING
     rvar<T, order> tmp = arg.evaluate();
     return lround(tmp.item());
 }
@@ -994,7 +928,6 @@ long lround(const expression<T, order, ARG> &arg)
 template<typename T, size_t order, typename ARG>
 long long llround(const expression<T, order, ARG> &arg)
 {
-    using boost::math::llround;
     rvar<T, order> tmp = arg.evaluate();
     return llround(tmp.item());
 }
@@ -1002,7 +935,6 @@ long long llround(const expression<T, order, ARG> &arg)
 template<typename T, size_t order, typename ARG>
 int itrunc(const expression<T, order, ARG> &arg)
 {
-    using boost::math::itrunc;
     rvar<T, order> tmp = arg.evaluate();
     return itrunc(tmp.item());
 }
@@ -1010,7 +942,6 @@ int itrunc(const expression<T, order, ARG> &arg)
 template<typename T, size_t order, typename ARG>
 long ltrunc(const expression<T, order, ARG> &arg)
 {
-    using boost::math::ltrunc;
     rvar<T, order> tmp = arg.evaluate();
     return ltrunc(tmp.item());
 }
@@ -1018,7 +949,6 @@ long ltrunc(const expression<T, order, ARG> &arg)
 template<typename T, size_t order, typename ARG>
 long long lltrunc(const expression<T, order, ARG> &arg)
 {
-    using boost::math::lltrunc;
     rvar<T, order> tmp = arg.evaluate();
     return lltrunc(tmp.item());
 }
@@ -1026,40 +956,40 @@ long long lltrunc(const expression<T, order, ARG> &arg)
 template<typename T, size_t order, typename ARG>
 sinh_expr<T, order, ARG> sinh(const expression<T, order, ARG> &arg)
 {
-    return sinh_expr<T, order, ARG>(arg, 0.0);
+    return sinh_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 }
 
 template<typename T, size_t order, typename ARG>
 cosh_expr<T, order, ARG> cosh(const expression<T, order, ARG> &arg)
 {
-    return cosh_expr<T, order, ARG>(arg, 0.0);
+    return cosh_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 }
 
 template<typename T, size_t order, typename ARG>
 tanh_expr<T, order, ARG> tanh(const expression<T, order, ARG> &arg)
 {
-    return tanh_expr<T, order, ARG>(arg, 0.0);
+    return tanh_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 }
 
 template<typename T, size_t order, typename ARG>
 log10_expr<T, order, ARG> log10(const expression<T, order, ARG> &arg)
 {
-    return log10_expr<T, order, ARG>(arg, 0.0);
+    return log10_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 }
 template<typename T, size_t order, typename ARG>
 asinh_expr<T, order, ARG> asinh(const expression<T, order, ARG> &arg)
 {
-    return asinh_expr<T, order, ARG>(arg, 0.0);
+    return asinh_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 }
 template<typename T, size_t order, typename ARG>
 acosh_expr<T, order, ARG> acosh(const expression<T, order, ARG> &arg)
 {
-    return acosh_expr<T, order, ARG>(arg, 0.0);
+    return acosh_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 }
 template<typename T, size_t order, typename ARG>
 atanh_expr<T, order, ARG> atanh(const expression<T, order, ARG> &arg)
 {
-    return atanh_expr<T, order, ARG>(arg, 0.0);
+    return atanh_expr<T, order, ARG>(arg, static_cast<T>(0.0));
 }
 } // namespace reverse_mode
 } // namespace differentiation

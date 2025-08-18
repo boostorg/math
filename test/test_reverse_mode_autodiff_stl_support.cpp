@@ -709,7 +709,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_log10, T, all_float_types)
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     rvar<T, 1> test_func_2    = log10(x_rvar * x_rvar);
-    T          expected_deriv = 2 / (x_v * log(10));
+    T          expected_deriv = T{2.0} / (x_v * log(T{10.0}));
     test_func_2.backward();
     BOOST_REQUIRE_CLOSE_FRACTION(x_rvar.adjoint(), expected_deriv, boost_close_tol<T>());
     tape.clear();
