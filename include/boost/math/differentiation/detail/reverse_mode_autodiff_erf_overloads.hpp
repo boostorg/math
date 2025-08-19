@@ -72,7 +72,9 @@ struct erf_expr : public abstract_unary_expression<T, order, ARG, erf_expr<T, or
             [this](auto &&x) { return boost::math::erf(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return static_cast<T>(2.0) * exp(-argv * argv) / sqrt(constants::pi<T>());
@@ -100,7 +102,9 @@ struct erfc_expr : public abstract_unary_expression<T, order, ARG, erfc_expr<T, 
             [this](auto &&x) { return boost::math::erfc(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return static_cast<T>(-2.0) * exp(-argv * argv) / sqrt(constants::pi<T>());
@@ -128,7 +132,9 @@ struct erf_inv_expr : public abstract_unary_expression<T, order, ARG, erf_inv_ex
             [this](auto &&x) { return boost::math::erf_inv(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return detail::if_functional_dispatch<(order > 1)>(
@@ -166,7 +172,9 @@ struct erfc_inv_expr : public abstract_unary_expression<T, order, ARG, erfc_inv_
             [this](auto &&x) { return boost::math::erfc_inv(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return detail::if_functional_dispatch<(order > 1)>(

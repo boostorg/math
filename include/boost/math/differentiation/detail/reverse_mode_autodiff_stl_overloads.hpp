@@ -37,7 +37,9 @@ struct fabs_expr : public abstract_unary_expression<T, order, ARG, fabs_expr<T, 
         BOOST_MATH_STD_USING
         return fabs(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         return argv > 0.0 ? inner_t{1.0} : inner_t{-1.0};
     }
@@ -64,7 +66,9 @@ struct ceil_expr : public abstract_unary_expression<T, order, ARG, ceil_expr<T, 
         BOOST_MATH_STD_USING
         return ceil(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t & /*argv*/,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         return inner_t{0.0};
     }
@@ -91,7 +95,9 @@ struct floor_expr : public abstract_unary_expression<T, order, ARG, floor_expr<T
         BOOST_MATH_STD_USING
         return floor(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t & /*argv*/,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         return inner_t{0.0};
     }
@@ -118,7 +124,9 @@ struct trunc_expr : public abstract_unary_expression<T, order, ARG, trunc_expr<T
         BOOST_MATH_STD_USING
         return trunc(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t & /*argv*/,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         return inner_t{0.0};
     }
@@ -142,7 +150,9 @@ struct exp_expr : public abstract_unary_expression<T, order, ARG, exp_expr<T, or
         BOOST_MATH_STD_USING
         return exp(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return exp(argv);
@@ -170,12 +180,12 @@ struct pow_expr
         BOOST_MATH_STD_USING
         return pow(this->lhs.evaluate(), this->rhs.evaluate());
     };
-    static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t & /*v*/)
     {
         BOOST_MATH_STD_USING
         return r * pow(l, r - static_cast<T>(1.0));
     };
-    static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t & /*v*/)
     {
         BOOST_MATH_STD_USING
         return pow(l, r) * log(l);
@@ -199,7 +209,7 @@ struct expr_pow_float_expr
         BOOST_MATH_STD_USING
         return pow(this->arg.evaluate(), this->constant);
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv, const inner_t & /*v*/, const T &constant)
     {
         BOOST_MATH_STD_USING
         return inner_t{constant} * pow(argv, inner_t{constant - 1});
@@ -223,7 +233,7 @@ struct float_pow_expr_expr
         BOOST_MATH_STD_USING
         return pow(this->constant, this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv, const inner_t & /*v*/, const T &constant)
     {
         BOOST_MATH_STD_USING
         return pow(constant, argv) * log(constant);
@@ -246,7 +256,9 @@ struct sqrt_expr : public abstract_unary_expression<T, order, ARG, sqrt_expr<T, 
         BOOST_MATH_STD_USING
         return sqrt(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return static_cast<T>(1.0) / (static_cast<T>(2.0) * sqrt(argv));
@@ -269,7 +281,9 @@ struct log_expr : public abstract_unary_expression<T, order, ARG, log_expr<T, or
         BOOST_MATH_STD_USING
         return log(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         return static_cast<T>(1.0) / argv;
     }
@@ -291,7 +305,9 @@ struct cos_expr : public abstract_unary_expression<T, order, ARG, cos_expr<T, or
         BOOST_MATH_STD_USING
         return cos(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return -sin(argv);
@@ -316,7 +332,9 @@ struct sin_expr : public abstract_unary_expression<T, order, ARG, sin_expr<T, or
         BOOST_MATH_STD_USING
         return sin(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return cos(argv);
@@ -339,7 +357,9 @@ struct tan_expr : public abstract_unary_expression<T, order, ARG, tan_expr<T, or
         BOOST_MATH_STD_USING
         return tan(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return static_cast<T>(1.0) / (cos(argv) * cos(argv));
@@ -362,7 +382,9 @@ struct acos_expr : public abstract_unary_expression<T, order, ARG, acos_expr<T, 
         BOOST_MATH_STD_USING
         return acos(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return static_cast<T>(-1.0) / sqrt(static_cast<T>(1.0) - argv * argv);
@@ -387,7 +409,9 @@ struct asin_expr : public abstract_unary_expression<T, order, ARG, asin_expr<T, 
         BOOST_MATH_STD_USING
         return asin(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return static_cast<T>(1.0) / sqrt(static_cast<T>(1.0) - argv * argv);
@@ -410,7 +434,9 @@ struct atan_expr : public abstract_unary_expression<T, order, ARG, atan_expr<T, 
         BOOST_MATH_STD_USING
         return atan(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return static_cast<T>(1.0) / (static_cast<T>(1.0) + argv * argv);
@@ -435,11 +461,11 @@ struct atan2_expr
         BOOST_MATH_STD_USING
         return atan2(this->lhs.evaluate(), this->rhs.evaluate());
     };
-    static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t & /*v*/)
     {
         return r / (l * l + r * r);
     };
-    static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t & /*v*/)
     {
         return -l / (l * l + r * r);
     };
@@ -462,7 +488,7 @@ struct atan2_left_float_expr
         BOOST_MATH_STD_USING
         return atan2(this->constant, this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv, const inner_t & /*v*/, const T &constant)
     {
         return -constant / (constant * constant + argv * argv);
     }
@@ -485,7 +511,7 @@ struct atan2_right_float_expr
         BOOST_MATH_STD_USING
         return atan2(this->arg.evaluate(), this->constant);
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv, const inner_t & /*v*/, const T &constant)
     {
         return constant / (constant * constant + argv * argv);
     }
@@ -507,7 +533,9 @@ struct round_expr : public abstract_unary_expression<T, order, ARG, round_expr<T
         BOOST_MATH_STD_USING
         return round(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t & /*argv*/,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         return inner_t{0.0};
     }
@@ -529,7 +557,9 @@ struct sinh_expr : public abstract_unary_expression<T, order, ARG, sinh_expr<T, 
         BOOST_MATH_STD_USING
         return sinh(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return cosh(argv);
@@ -552,7 +582,9 @@ struct cosh_expr : public abstract_unary_expression<T, order, ARG, cosh_expr<T, 
         BOOST_MATH_STD_USING
         return cosh(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return sinh(argv);
@@ -574,7 +606,9 @@ struct tanh_expr : public abstract_unary_expression<T, order, ARG, tanh_expr<T, 
         BOOST_MATH_STD_USING
         return tanh(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return static_cast<T>(1.0) / (cosh(argv) * cosh(argv));
@@ -597,7 +631,9 @@ struct log10_expr : public abstract_unary_expression<T, order, ARG, log10_expr<T
         BOOST_MATH_STD_USING
         return log10(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return static_cast<T>(1.0) / (argv * log(static_cast<T>(10.0)));
@@ -620,7 +656,9 @@ struct acosh_expr : public abstract_unary_expression<T, order, ARG, acosh_expr<T
         BOOST_MATH_STD_USING
         return acosh(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return static_cast<T>(1.0)
@@ -644,7 +682,9 @@ struct asinh_expr : public abstract_unary_expression<T, order, ARG, asinh_expr<T
         BOOST_MATH_STD_USING
         return asinh(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return static_cast<T>(1.0) / (sqrt(static_cast<T>(1.0) + argv * argv));
@@ -667,7 +707,9 @@ struct atanh_expr : public abstract_unary_expression<T, order, ARG, atanh_expr<T
         BOOST_MATH_STD_USING
         return atanh(this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         BOOST_MATH_STD_USING
         return static_cast<T>(1.0) / (static_cast<T>(1.0) - argv * argv);
@@ -692,11 +734,13 @@ struct fmod_expr
         BOOST_MATH_STD_USING
         return fmod(this->lhs.evaluate(), this->rhs.evaluate());
     };
-    static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t left_derivative(const inner_t & /*l*/,
+                                         const inner_t & /*r*/,
+                                         const inner_t & /*v*/)
     {
         return inner_t{1.0};
     };
-    static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t & /*v*/)
     {
         BOOST_MATH_STD_USING
         return static_cast<T>(-1.0) * trunc(l / r);
@@ -720,7 +764,7 @@ struct fmod_left_float_expr
         BOOST_MATH_STD_USING
         return fmod(this->constant, this->arg.evaluate());
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv, const inner_t & /*v*/, const T &constant)
     {
         return static_cast<T>(-1.0) * trunc(constant / argv);
     }
@@ -743,7 +787,9 @@ struct fmod_right_float_expr
         BOOST_MATH_STD_USING
         return fmod(this->arg.evaluate(), this->constant);
     }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t & /*argv*/,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         return inner_t{1.0};
     }

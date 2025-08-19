@@ -28,11 +28,15 @@ struct add_expr
     {}
 
     inner_t              evaluate() const { return this->lhs.evaluate() + this->rhs.evaluate(); }
-    static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t left_derivative(const inner_t & /*l*/,
+                                         const inner_t & /*r*/,
+                                         const inner_t & /*v*/)
     {
         return inner_t(1.0);
     }
-    static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t right_derivative(const inner_t & /*l*/,
+                                          const inner_t & /*r*/,
+                                          const inner_t & /*v*/)
     {
         return inner_t(1.0);
     }
@@ -48,7 +52,9 @@ struct add_const_expr
     explicit add_const_expr(const expression<T, order, ARG> &arg_expr, const T v)
         : abstract_unary_expression<T, order, ARG, add_const_expr<T, order, ARG>>(arg_expr, v){};
     inner_t              evaluate() const { return this->arg.evaluate() + inner_t(this->constant); }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t & /*argv*/,
+                                    const inner_t & /*v*/,
+                                    const T & /*constant*/)
     {
         return inner_t(1.0);
     }
@@ -69,11 +75,15 @@ struct mult_expr
     {}
 
     inner_t              evaluate() const { return this->lhs.evaluate() * this->rhs.evaluate(); };
-    static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t left_derivative(const inner_t & /*l*/,
+                                         const inner_t &r,
+                                         const inner_t & /*v*/)
     {
         return r;
     };
-    static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t right_derivative(const inner_t &l,
+                                          const inner_t & /*r*/,
+                                          const inner_t & /*v*/)
     {
         return l;
     };
@@ -91,7 +101,9 @@ struct mult_const_expr
         : abstract_unary_expression<T, order, ARG, mult_const_expr<T, order, ARG>>(arg_expr, v){};
 
     inner_t              evaluate() const { return this->arg.evaluate() * inner_t(this->constant); }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t & /*argv*/,
+                                    const inner_t & /*v*/,
+                                    const T &constant)
     {
         return inner_t(constant);
     }
@@ -113,11 +125,15 @@ struct sub_expr
     {}
 
     inner_t              evaluate() const { return this->lhs.evaluate() - this->rhs.evaluate(); }
-    static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t left_derivative(const inner_t & /*l*/,
+                                         const inner_t & /*r*/,
+                                         const inner_t & /*v*/)
     {
         return inner_t(1.0);
     }
-    static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t right_derivative(const inner_t & /*l*/,
+                                          const inner_t & /*r*/,
+                                          const inner_t & /*v*/)
     {
         return inner_t(-1.0);
     }
@@ -140,11 +156,13 @@ struct div_expr
     {}
 
     inner_t              evaluate() const { return this->lhs.evaluate() / this->rhs.evaluate(); };
-    static const inner_t left_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t left_derivative(const inner_t & /*l*/,
+                                         const inner_t &r,
+                                         const inner_t & /*v*/)
     {
         return static_cast<T>(1.0) / r;
     };
-    static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t &v)
+    static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t & /*v*/)
     {
         return -l / (r * r);
     };
@@ -162,7 +180,9 @@ struct div_by_const_expr
         : abstract_unary_expression<T, order, ARG, div_by_const_expr<T, order, ARG>>(arg_expr, v){};
 
     inner_t              evaluate() const { return this->arg.evaluate() / inner_t(this->constant); }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t & /*argv*/,
+                                    const inner_t & /*v*/,
+                                    const T &constant)
     {
         return inner_t(1.0 / constant);
     }
@@ -181,7 +201,7 @@ struct const_div_by_expr
         : abstract_unary_expression<T, order, ARG, const_div_by_expr<T, order, ARG>>(arg_expr, v){};
 
     inner_t              evaluate() const { return inner_t(this->constant) / this->arg.evaluate(); }
-    static const inner_t derivative(const inner_t &argv, const inner_t &v, const T &constant)
+    static const inner_t derivative(const inner_t &argv, const inner_t & /*v*/, const T &constant)
     {
         return -inner_t{constant} / (argv * argv);
     }
