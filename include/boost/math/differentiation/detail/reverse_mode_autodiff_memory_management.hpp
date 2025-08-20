@@ -137,7 +137,7 @@ public:
 
     flat_linear_allocator_iterator operator+(difference_type n) const
     {
-        return flat_linear_allocator_iterator(storage_, index_ + n, begin_, end_);
+        return flat_linear_allocator_iterator(storage_, index_ + static_cast<size_t>(n), begin_, end_);
     }
 
     flat_linear_allocator_iterator &operator+=(difference_type n)
@@ -185,7 +185,7 @@ public:
         return index_ >= other.index_;
     }
 
-    bool operator!() const { return storage_ == nullptr; }
+    bool operator!() const noexcept { return storage_ == nullptr; }
 };
 /* memory management helps for tape */
 template<typename T, size_t buffer_size>
@@ -216,8 +216,8 @@ public:
     using const_iterator
         = flat_linear_allocator_iterator<const flat_linear_allocator<T, buffer_size>, buffer_size>;
 
-    size_t buffer_id() const { return total_size_ / buffer_size; }
-    size_t item_id() const { return total_size_ % buffer_size; }
+    size_t buffer_id() const noexcept { return total_size_ / buffer_size; }
+    size_t item_id() const noexcept { return total_size_ % buffer_size; }
 
 private:
     void allocate_buffer()
@@ -316,7 +316,7 @@ public:
         new (ptr) T(std::forward<Args>(args)...);
         ++total_size_;
         return iterator(this, total_size_ - 1);
-    };
+    }
     /** @brief default constructs n objects at end of
    * data structure, n known at compile time */
     template<size_t n>

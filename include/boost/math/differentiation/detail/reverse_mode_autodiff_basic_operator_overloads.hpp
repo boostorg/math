@@ -77,13 +77,13 @@ struct mult_expr
     inner_t              evaluate() const { return this->lhs.evaluate() * this->rhs.evaluate(); };
     static const inner_t left_derivative(const inner_t & /*l*/,
                                          const inner_t &r,
-                                         const inner_t & /*v*/)
+                                         const inner_t & /*v*/) noexcept
     {
         return r;
     };
     static const inner_t right_derivative(const inner_t &l,
                                           const inner_t & /*r*/,
-                                          const inner_t & /*v*/)
+                                          const inner_t & /*v*/) noexcept
     {
         return l;
     };

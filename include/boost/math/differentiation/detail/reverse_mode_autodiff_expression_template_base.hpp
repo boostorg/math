@@ -20,7 +20,7 @@ template<typename T, size_t order, class derived_expression>
 struct expression;
 
 template<typename T, size_t order>
-struct rvar;
+class rvar;
 
 template<typename T, size_t order, typename LHS, typename RHS, typename concrete_binary_operation>
 struct abstract_binary_expression;
@@ -130,7 +130,7 @@ struct expression : expression_base
     {
         return static_cast<const derived_expression *>(this)->template propagatex<arg_index>(node,
                                                                                              adj);
-    };
+    }
 };
 
 template<typename T, size_t order, typename LHS, typename RHS, typename concrete_binary_operation>
@@ -159,11 +159,11 @@ struct abstract_binary_expression
     template<size_t arg_index>
     void propagatex(gradient_node<T, order> *node, inner_t adj) const
     {
-        inner_t lv        = lhs.evaluate();
-        inner_t rv        = rhs.evaluate();
-        inner_t v         = evaluate();
-        inner_t partial_l = concrete_binary_operation::left_derivative(lv, rv, v);
-        inner_t partial_r = concrete_binary_operation::right_derivative(lv, rv, v);
+        const inner_t lv        = lhs.evaluate();
+        const inner_t rv        = rhs.evaluate();
+        const inner_t v         = evaluate();
+        const inner_t partial_l = concrete_binary_operation::left_derivative(lv, rv, v);
+        const inner_t partial_r = concrete_binary_operation::right_derivative(lv, rv, v);
 
         constexpr size_t num_lhs_args = detail::count_rvars<LHS, order>;
         constexpr size_t num_rhs_args = detail::count_rvars<RHS, order>;
