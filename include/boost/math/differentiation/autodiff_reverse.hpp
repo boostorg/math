@@ -39,7 +39,7 @@ template<typename T, size_t order, class derived_expression>
 struct expression;
 
 template<typename T, size_t order>
-struct rvar;
+class rvar;
 
 template<typename T, size_t order, typename LHS, typename RHS, typename concrete_binary_operation>
 struct abstract_binary_expression;
@@ -104,8 +104,8 @@ public:
     gradient_tape &operator=(const gradient_tape &) = delete;
     gradient_tape(gradient_tape &&other)            = delete;
     gradient_tape operator=(gradient_tape &&other)  = delete;
-    ~gradient_tape() noexcept { clear(); }
-    void clear() noexcept
+    ~gradient_tape() { clear(); }
+    void clear()
     {
         adjoints_.clear();
         derivatives_.clear();
@@ -144,7 +144,7 @@ public:
         node->adjoint_                = adjoints_.emplace_back();
         // emulate if constexpr
         return fill_node_at_compile_time<n>(std::integral_constant<bool, (n > 0)>{}, node);
-    };
+    }
 
     // same as above at runtime
     gradient_node<T, order> *emplace_active_multi_node(size_t n)
@@ -246,26 +246,26 @@ public:
         : n_(n)
         , adjoint_(adjoint)
         , derivatives_(derivatives)
-    {}
+    { static_cast<void>(arguments); }
 
     inner_t get_adjoint_v() const { return *adjoint_; }
-    inner_t get_derivative_v(size_t arg_id) const { return derivatives_[arg_id]; };
+    inner_t get_derivative_v(size_t arg_id) const { return derivatives_[static_cast<ptrdiff_t>(arg_id)]; };
     inner_t get_argument_adjoint_v(size_t arg_id) const
     {
-        return *argument_nodes_[arg_id]->adjoint_;
+        return *argument_nodes_[static_cast<ptrdiff_t>(arg_id)]->adjoint_;
     }
 
     adjoint_iterator get_adjoint_ptr() { return adjoint_; }
     adjoint_iterator get_adjoint_ptr() const { return adjoint_; };
     void             update_adjoint_v(inner_t value) { *adjoint_ = value; };
-    void update_derivative_v(size_t arg_id, inner_t value) { derivatives_[arg_id] = value; };
+    void update_derivative_v(size_t arg_id, inner_t value) { derivatives_[static_cast<ptrdiff_t>(arg_id)] = value; };
     void update_argument_adj_v(size_t arg_id, inner_t value)
     {
-        argument_nodes_[arg_id]->update_adjoint_v(value);
+        argument_nodes_[static_cast<ptrdiff_t>(arg_id)]->update_adjoint_v(value);
     };
     void update_argument_ptr_at(size_t arg_id, gradient_node<T, order> *node_ptr)
     {
-        argument_nodes_[arg_id] = node_ptr;
+        argument_nodes_[static_cast<ptrdiff_t>(arg_id)] = node_ptr;
     }
 
     void backward()
