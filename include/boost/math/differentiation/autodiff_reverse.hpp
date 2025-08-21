@@ -112,7 +112,7 @@ public:
     gradient_tape &operator=(const gradient_tape &) = delete;
     gradient_tape(gradient_tape &&other)            = delete;
     gradient_tape operator=(gradient_tape &&other)  = delete;
-    ~gradient_tape() { clear(); }
+    ~gradient_tape() noexcept { clear(); }
     void clear()
     {
         adjoints_.clear();
@@ -625,6 +625,7 @@ struct grad_op_impl<T, 1>
         tape.zero_grad();
         f.backward();
         std::vector<T> gradient_vector;
+        gradient_vector.reserve(x.size());
         for (auto &xi : x) {
             gradient_vector.push_back(xi->adjoint());
         }
@@ -701,6 +702,7 @@ auto grad(rvar<RealType, DerivativeOrder_1> &f, std::vector<rvar<RealType, Deriv
     static_assert(DerivativeOrder_1 <= DerivativeOrder_2,
                   "variable differentiating w.r.t. must have order >= function order");
     std::vector<rvar<RealType, DerivativeOrder_1> *> xx;
+    xx.reserve(x.size());
     for (auto &xi : x)
         xx.push_back(&(xi->template get_value_at<DerivativeOrder_1>()));
     return detail::grad_op_impl<RealType, DerivativeOrder_1>{}(f, xx);

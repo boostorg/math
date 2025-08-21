@@ -139,7 +139,7 @@ struct expression : expression_base
     {
         return static_cast<const DerivedExpression *>(this)->template propagatex<arg_index>(node,
                                                                                             adj);
-    };
+    }
 };
 
 template<typename RealType,
@@ -174,11 +174,11 @@ struct abstract_binary_expression
     template<size_t arg_index>
     void propagatex(gradient_node<RealType, DerivativeOrder> *node, inner_t adj) const
     {
-        inner_t lv        = lhs.evaluate();
-        inner_t rv        = rhs.evaluate();
-        inner_t v         = evaluate();
-        inner_t partial_l = ConcreteBinaryOperation::left_derivative(lv, rv, v);
-        inner_t partial_r = ConcreteBinaryOperation::right_derivative(lv, rv, v);
+        const inner_t lv        = lhs.evaluate();
+        const inner_t rv        = rhs.evaluate();
+        const inner_t v         = evaluate();
+        const inner_t partial_l = ConcreteBinaryOperation::left_derivative(lv, rv, v);
+        const inner_t partial_r = ConcreteBinaryOperation::right_derivative(lv, rv, v);
 
         constexpr size_t num_lhs_args = detail::count_rvars<LHS, DerivativeOrder>;
         constexpr size_t num_rhs_args = detail::count_rvars<RHS, DerivativeOrder>;
