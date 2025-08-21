@@ -35,40 +35,46 @@ namespace differentiation {
 namespace reverse_mode {
 
 /* forward declarations for utitlity functions */
-template<typename T, size_t order, class derived_expression>
+template<typename RealType, size_t DerivativeOrder, class DerivedExpression>
 struct expression;
 
-template<typename T, size_t order>
+template<typename RealType, size_t DerivativeOrder>
 class rvar;
 
-template<typename T, size_t order, typename LHS, typename RHS, typename concrete_binary_operation>
+template<typename RealType,
+         size_t DerivativeOrder,
+         typename LHS,
+         typename RHS,
+         typename ConcreteBinaryOperation>
 struct abstract_binary_expression;
 
-template<typename T, size_t order, typename ARG, typename concrete_unary_operation>
+template<typename RealType, size_t DerivativeOrder, typename ARG, typename ConcreteBinaryOperation>
 struct abstract_unary_expression;
 
-template<typename T, size_t order>
+template<typename RealType, size_t DerivativeOrder>
 class gradient_node; // forward declaration for tape
 // manages nodes in computational graph
-template<typename T, size_t order, size_t buffer_size = BOOST_MATH_BUFFER_SIZE>
+template<typename RealType, size_t DerivativeOrder, size_t buffer_size = BOOST_MATH_BUFFER_SIZE>
 class gradient_tape
 {
     /** @brief tape (graph) management class for autodiff
    *  holds all the data structures for autodiff */
 private:
     /* type decays to order - 1 to support higher order derivatives */
-    using inner_t = rvar_t<T, order - 1>;
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
     /* adjoints are the overall derivative, and derivatives are the "local"
    * derivative */
     detail::flat_linear_allocator<inner_t, buffer_size>                   adjoints_;
     detail::flat_linear_allocator<inner_t, buffer_size>                   derivatives_;
-    detail::flat_linear_allocator<gradient_node<T, order>, buffer_size>   gradient_nodes_;
-    detail::flat_linear_allocator<gradient_node<T, order> *, buffer_size> argument_nodes_;
+    detail::flat_linear_allocator<gradient_node<RealType, DerivativeOrder>, buffer_size>
+        gradient_nodes_;
+    detail::flat_linear_allocator<gradient_node<RealType, DerivativeOrder> *, buffer_size>
+        argument_nodes_;
 
     // compile time check if emplace_back calls on zero
     template<size_t n>
-    gradient_node<T, order> *fill_node_at_compile_time(std::true_type,
-                                                       gradient_node<T, order> *node_ptr)
+    gradient_node<RealType, DerivativeOrder> *fill_node_at_compile_time(
+        std::true_type, gradient_node<RealType, DerivativeOrder> *node_ptr)
     {
         node_ptr->derivatives_    = derivatives_.template emplace_back_n<n>();
         node_ptr->argument_nodes_ = argument_nodes_.template emplace_back_n<n>();
@@ -76,8 +82,8 @@ private:
     }
 
     template<size_t n>
-    gradient_node<T, order> *fill_node_at_compile_time(std::false_type,
-                                                       gradient_node<T, order> *node_ptr)
+    gradient_node<RealType, DerivativeOrder> *fill_node_at_compile_time(
+        std::false_type, gradient_node<RealType, DerivativeOrder> *node_ptr)
     {
         node_ptr->derivatives_       = nullptr;
         node_ptr->argument_adjoints_ = nullptr;
@@ -94,9 +100,11 @@ public:
     using derivatives_iterator =
         typename detail::flat_linear_allocator<inner_t, buffer_size>::iterator;
     using gradient_nodes_iterator =
-        typename detail::flat_linear_allocator<gradient_node<T, order>, buffer_size>::iterator;
+        typename detail::flat_linear_allocator<gradient_node<RealType, DerivativeOrder>,
+                                               buffer_size>::iterator;
     using argument_nodes_iterator =
-        typename detail::flat_linear_allocator<gradient_node<T, order> *, buffer_size>::iterator;
+        typename detail::flat_linear_allocator<gradient_node<RealType, DerivativeOrder> *,
+                                               buffer_size>::iterator;
 
     gradient_tape() { clear(); };
 
@@ -114,9 +122,9 @@ public:
     }
 
     // no derivatives or arguments
-    gradient_node<T, order> *emplace_leaf_node()
+    gradient_node<RealType, DerivativeOrder> *emplace_leaf_node()
     {
-        gradient_node<T, order> *node = &*gradient_nodes_.emplace_back();
+        gradient_node<RealType, DerivativeOrder> *node = &*gradient_nodes_.emplace_back();
         node->adjoint_                = adjoints_.emplace_back();
         node->derivatives_            = derivatives_iterator();    // nullptr;
         node->argument_nodes_         = argument_nodes_iterator(); // nullptr;
@@ -125,9 +133,9 @@ public:
     };
 
     // single argument, single derivative
-    gradient_node<T, order> *emplace_active_unary_node()
+    gradient_node<RealType, DerivativeOrder> *emplace_active_unary_node()
     {
-        gradient_node<T, order> *node = &*gradient_nodes_.emplace_back();
+        gradient_node<RealType, DerivativeOrder> *node = &*gradient_nodes_.emplace_back();
         node->n_                      = 1;
         node->adjoint_                = adjoints_.emplace_back();
         node->derivatives_            = derivatives_.emplace_back();
@@ -137,9 +145,9 @@ public:
 
     // arbitrary number of arguments/derivatives (compile time)
     template<size_t n>
-    gradient_node<T, order> *emplace_active_multi_node()
+    gradient_node<RealType, DerivativeOrder> *emplace_active_multi_node()
     {
-        gradient_node<T, order> *node = &*gradient_nodes_.emplace_back();
+        gradient_node<RealType, DerivativeOrder> *node = &*gradient_nodes_.emplace_back();
         node->n_                      = n;
         node->adjoint_                = adjoints_.emplace_back();
         // emulate if constexpr
@@ -147,9 +155,9 @@ public:
     }
 
     // same as above at runtime
-    gradient_node<T, order> *emplace_active_multi_node(size_t n)
+    gradient_node<RealType, DerivativeOrder> *emplace_active_multi_node(size_t n)
     {
-        gradient_node<T, order> *node = &*gradient_nodes_.emplace_back();
+        gradient_node<RealType, DerivativeOrder> *node = &*gradient_nodes_.emplace_back();
         node->n_                      = n;
         node->adjoint_                = adjoints_.emplace_back();
         if (n > 0) {
@@ -161,14 +169,17 @@ public:
     /* manual reset button for all adjoints */
     void zero_grad()
     {
-        const T zero = T(0.0);
+        const RealType zero = RealType(0.0);
         adjoints_.fill(zero);
     }
 
     // return type is an iterator
     auto begin() { return gradient_nodes_.begin(); }
     auto end() { return gradient_nodes_.end(); }
-    auto find(gradient_node<T, order> *node) { return gradient_nodes_.find(node); };
+    auto find(gradient_node<RealType, DerivativeOrder> *node)
+    {
+        return gradient_nodes_.find(node);
+    };
     void add_checkpoint()
     {
         gradient_nodes_.add_checkpoint();
@@ -206,11 +217,14 @@ public:
     }
 
     // random acces
-    gradient_node<T, order>       &operator[](size_t i) { return gradient_nodes_[i]; }
-    const gradient_node<T, order> &operator[](size_t i) const { return gradient_nodes_[i]; }
+    gradient_node<RealType, DerivativeOrder> &operator[](size_t i) { return gradient_nodes_[i]; }
+    const gradient_node<RealType, DerivativeOrder> &operator[](size_t i) const
+    {
+        return gradient_nodes_[i];
+    }
 };
 // class rvar;
-template<typename T, size_t order> // no CRTP, just storage
+template<typename RealType, size_t DerivativeOrder> // no CRTP, just storage
 class gradient_node
 {
     /*
@@ -218,13 +232,15 @@ class gradient_node
    * adjoints pointers to arguments aren't needed here
    * */
 public:
-    using adjoint_iterator        = typename gradient_tape<T, order>::adjoint_iterator;
-    using derivatives_iterator    = typename gradient_tape<T, order>::derivatives_iterator;
-    using argument_nodes_iterator = typename gradient_tape<T, order>::argument_nodes_iterator;
+    using adjoint_iterator = typename gradient_tape<RealType, DerivativeOrder>::adjoint_iterator;
+    using derivatives_iterator =
+        typename gradient_tape<RealType, DerivativeOrder>::derivatives_iterator;
+    using argument_nodes_iterator =
+        typename gradient_tape<RealType, DerivativeOrder>::argument_nodes_iterator;
 
 private:
     size_t n_;
-    using inner_t = rvar_t<T, order - 1>;
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
     /* these are iterators in case
    * flat linear allocator is at capacity, and needs to allocate a new block of
    * memory. */
@@ -233,8 +249,8 @@ private:
     argument_nodes_iterator argument_nodes_;
 
 public:
-    friend class gradient_tape<T, order>;
-    friend class rvar<T, order>;
+    friend class gradient_tape<RealType, DerivativeOrder>;
+    friend class rvar<RealType, DerivativeOrder>;
 
     gradient_node() = default;
     explicit gradient_node(const size_t n)
@@ -242,7 +258,10 @@ public:
         , adjoint_(nullptr)
         , derivatives_(nullptr)
     {}
-    explicit gradient_node(const size_t n, T *adjoint, T *derivatives, rvar<T, order> **arguments)
+    explicit gradient_node(const size_t                      n,
+                           RealType                         *adjoint,
+                           RealType                         *derivatives,
+                           rvar<RealType, DerivativeOrder> **arguments)
         : n_(n)
         , adjoint_(adjoint)
         , derivatives_(derivatives)
@@ -263,7 +282,7 @@ public:
     {
         argument_nodes_[static_cast<ptrdiff_t>(arg_id)]->update_adjoint_v(value);
     };
-    void update_argument_ptr_at(size_t arg_id, gradient_node<T, order> *node_ptr)
+    void update_argument_ptr_at(size_t arg_id, gradient_node<RealType, DerivativeOrder> *node_ptr)
     {
         argument_nodes_[static_cast<ptrdiff_t>(arg_id)] = node_ptr;
     }
@@ -275,7 +294,7 @@ public:
 
         using boost::math::differentiation::reverse_mode::fabs;
         using std::fabs;
-        if (!adjoint_ || fabs(*adjoint_) < 2 * std::numeric_limits<T>::epsilon())
+        if (!adjoint_ || fabs(*adjoint_) < 2 * std::numeric_limits<RealType>::epsilon())
             return;
 
         if (!argument_nodes_) // no arguments
@@ -294,21 +313,22 @@ public:
 };
 
 /****************************************************************************************************************/
-template<typename T, size_t order>
-inline gradient_tape<T, order, BOOST_MATH_BUFFER_SIZE> &get_active_tape()
+template<typename RealType, size_t DerivativeOrder>
+inline gradient_tape<RealType, DerivativeOrder, BOOST_MATH_BUFFER_SIZE> &get_active_tape()
 {
-    static BOOST_MATH_THREAD_LOCAL gradient_tape<T, order, BOOST_MATH_BUFFER_SIZE> tape;
+    static BOOST_MATH_THREAD_LOCAL gradient_tape<RealType, DerivativeOrder, BOOST_MATH_BUFFER_SIZE>
+                                   tape;
     return tape;
 }
 
-template<typename T, size_t order = 1>
-class rvar : public expression<T, order, rvar<T, order>>
+template<typename RealType, size_t DerivativeOrder = 1>
+class rvar : public expression<RealType, DerivativeOrder, rvar<RealType, DerivativeOrder>>
 {
 private:
-    using inner_t = rvar_t<T, order - 1>;
-    friend class gradient_node<T, order>;
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
+    friend class gradient_node<RealType, DerivativeOrder>;
     inner_t                  value_;
-    gradient_node<T, order> *node_ = nullptr;
+    gradient_node<RealType, DerivativeOrder> *node_ = nullptr;
     template<typename, size_t>
     friend class rvar;
     /*****************************************************************************************/
@@ -322,13 +342,13 @@ private:
 
         /** @return value_ at rvar_t<T,current_order - 1>
          */
-        static auto &get(rvar<T, current_order> &v)
+        static auto &get(rvar<RealType, current_order> &v)
         {
             return get_value_at_impl<target_order, current_order - 1>::get(v.get_value());
         }
         /** @return const value_ at rvar_t<T,current_order - 1>
          */
-        static const auto &get(const rvar<T, current_order> &v)
+        static const auto &get(const rvar<RealType, current_order> &v)
         {
             return get_value_at_impl<target_order, current_order - 1>::get(v.get_value());
         }
@@ -341,65 +361,69 @@ private:
     {
         /** @return value_ at rvar_t<T,target_order>
          */
-        static auto       &get(rvar<T, target_order> &v) { return v; }
+        static auto       &get(rvar<RealType, target_order> &v) { return v; }
         /** @return const value_ at rvar_t<T,target_order>
          */
-        static const auto &get(const rvar<T, target_order> &v) { return v; }
+        static const auto &get(const rvar<RealType, target_order> &v) { return v; }
     };
     /*****************************************************************************************/
     void make_leaf_node()
     {
-        gradient_tape<T, order, BOOST_MATH_BUFFER_SIZE> &tape = get_active_tape<T, order>();
+        gradient_tape<RealType, DerivativeOrder, BOOST_MATH_BUFFER_SIZE> &tape
+            = get_active_tape<RealType, DerivativeOrder>();
         node_                                      = tape.emplace_leaf_node();
     }
 
     void make_unary_node()
     {
-        gradient_tape<T, order, BOOST_MATH_BUFFER_SIZE> &tape = get_active_tape<T, order>();
+        gradient_tape<RealType, DerivativeOrder, BOOST_MATH_BUFFER_SIZE> &tape
+            = get_active_tape<RealType, DerivativeOrder>();
         node_                                      = tape.emplace_active_unary_node();
     }
 
     void make_multi_node(size_t n)
     {
-        gradient_tape<T, order, BOOST_MATH_BUFFER_SIZE> &tape = get_active_tape<T, order>();
+        gradient_tape<RealType, DerivativeOrder, BOOST_MATH_BUFFER_SIZE> &tape
+            = get_active_tape<RealType, DerivativeOrder>();
         node_                                      = tape.emplace_active_multi_node(n);
     }
 
     template<size_t n>
     void make_multi_node()
     {
-        gradient_tape<T, order, BOOST_MATH_BUFFER_SIZE> &tape = get_active_tape<T, order>();
+        gradient_tape<RealType, DerivativeOrder, BOOST_MATH_BUFFER_SIZE> &tape
+            = get_active_tape<RealType, DerivativeOrder>();
         node_                                      = tape.template emplace_active_multi_node<n>();
     }
 
     template<typename E>
-    void make_rvar_from_expr(const expression<T, order, E> &expr)
+    void make_rvar_from_expr(const expression<RealType, DerivativeOrder, E> &expr)
     {
-        make_multi_node<detail::count_rvars<E, order>>();
+        make_multi_node<detail::count_rvars<E, DerivativeOrder>>();
         expr.template propagatex<0>(node_, inner_t(1.0));
     }
-    T get_item_impl(std::true_type) const
+    RealType get_item_impl(std::true_type) const
     {
-        return value_.get_item_impl(std::integral_constant<bool, (order - 1 > 1)>{});
+        return value_.get_item_impl(std::integral_constant<bool, (DerivativeOrder - 1 > 1)>{});
     }
 
-    T get_item_impl(std::false_type) const { return value_; }
+    RealType get_item_impl(std::false_type) const { return value_; }
 
 public:
-    using value_type                = T;
-    static constexpr size_t order_v = order;
+    using value_type                          = RealType;
+    static constexpr size_t DerivativeOrder_v = DerivativeOrder;
     rvar()
         : value_()
     {
         make_leaf_node();
     }
-    rvar(const T value)
+    rvar(const RealType value)
         : value_(inner_t{value})
     {
         make_leaf_node();
     }
 
-    rvar &operator=(T v)
+    rvar &operator=(RealType v)
     {
         value_ = inner_t(v);
         if (node_ == nullptr) {
@@ -407,24 +431,24 @@ public:
         }
         return *this;
     }
-    rvar(const rvar<T, order> &other)            = default;
-    rvar &operator=(const rvar<T, order> &other) = default;
+    rvar(const rvar<RealType, DerivativeOrder> &other)            = default;
+    rvar &operator=(const rvar<RealType, DerivativeOrder> &other) = default;
 
     template<size_t arg_index>
-    void propagatex(gradient_node<T, order> *node, inner_t adj) const
+    void propagatex(gradient_node<RealType, DerivativeOrder> *node, inner_t adj) const
     {
         node->update_derivative_v(arg_index, adj);
         node->update_argument_ptr_at(arg_index, node_);
     }
 
     template<class E>
-    rvar(const expression<T, order, E> &expr)
+    rvar(const expression<RealType, DerivativeOrder, E> &expr)
     {
         value_ = expr.evaluate();
         make_rvar_from_expr(expr);
     }
     template<class E>
-    rvar &operator=(const expression<T, order, E> &expr)
+    rvar &operator=(const expression<RealType, DerivativeOrder, E> &expr)
     {
         value_ = expr.evaluate();
         make_rvar_from_expr(expr);
@@ -432,52 +456,52 @@ public:
     }
     /***************************************************************************************************/
     template<class E>
-    rvar<T, order> &operator+=(const expression<T, order, E> &expr)
+    rvar<RealType, DerivativeOrder> &operator+=(const expression<RealType, DerivativeOrder, E> &expr)
     {
         *this = *this + expr;
         return *this;
     }
 
     template<class E>
-    rvar<T, order> &operator*=(const expression<T, order, E> &expr)
+    rvar<RealType, DerivativeOrder> &operator*=(const expression<RealType, DerivativeOrder, E> &expr)
     {
         *this = *this * expr;
         return *this;
     }
 
     template<class E>
-    rvar<T, order> &operator-=(const expression<T, order, E> &expr)
+    rvar<RealType, DerivativeOrder> &operator-=(const expression<RealType, DerivativeOrder, E> &expr)
     {
         *this = *this - expr;
         return *this;
     }
 
     template<class E>
-    rvar<T, order> &operator/=(const expression<T, order, E> &expr)
+    rvar<RealType, DerivativeOrder> &operator/=(const expression<RealType, DerivativeOrder, E> &expr)
     {
         *this = *this / expr;
         return *this;
     }
     /***************************************************************************************************/
-    rvar<T, order> &operator+=(const T &v)
+    rvar<RealType, DerivativeOrder> &operator+=(const RealType &v)
     {
         *this = *this + v;
         return *this;
     }
 
-    rvar<T, order> &operator*=(const T &v)
+    rvar<RealType, DerivativeOrder> &operator*=(const RealType &v)
     {
         *this = *this * v;
         return *this;
     }
 
-    rvar<T, order> &operator-=(const T &v)
+    rvar<RealType, DerivativeOrder> &operator-=(const RealType &v)
     {
         *this = *this - v;
         return *this;
     }
 
-    rvar<T, order> &operator/=(const T &v)
+    rvar<RealType, DerivativeOrder> &operator/=(const RealType &v)
     {
         *this = *this / v;
         return *this;
@@ -490,7 +514,7 @@ public:
     const inner_t &evaluate() const { return value_; };
     inner_t       &get_value() { return value_; };
 
-    explicit operator T() const { return item(); }
+    explicit operator RealType() const { return item(); }
 
     explicit       operator int() const { return static_cast<int>(item()); }
     explicit       operator long() const { return static_cast<long>(item()); }
@@ -503,23 +527,27 @@ public:
     template<size_t N>
     auto &get_value_at()
     {
-        static_assert(N <= order, "Requested depth exceeds variable order.");
-        return get_value_at_impl<N, order>::get(*this);
+        static_assert(N <= DerivativeOrder, "Requested depth exceeds variable order.");
+        return get_value_at_impl<N, DerivativeOrder>::get(*this);
     }
     /** @brief same as above but const
      */
     template<size_t N>
     const auto &get_value_at() const
     {
-        static_assert(N <= order, "Requested depth exceeds variable order.");
-        return get_value_at_impl<N, order>::get(*this);
+        static_assert(N <= DerivativeOrder, "Requested depth exceeds variable order.");
+        return get_value_at_impl<N, DerivativeOrder>::get(*this);
     }
 
-    T    item() const { return get_item_impl(std::integral_constant<bool, (order > 1)>{}); }
+    RealType item() const
+    {
+        return get_item_impl(std::integral_constant<bool, (DerivativeOrder > 1)>{});
+    }
 
     void backward()
     {
-        gradient_tape<T, order, BOOST_MATH_BUFFER_SIZE> &tape = get_active_tape<T, order>();
+        gradient_tape<RealType, DerivativeOrder, BOOST_MATH_BUFFER_SIZE> &tape
+            = get_active_tape<RealType, DerivativeOrder>();
         auto                                  it   = tape.find(node_);
         it->update_adjoint_v(inner_t(1.0));
         while (it != tape.begin()) {
@@ -530,32 +558,32 @@ public:
     }
 };
 
-template<typename T, size_t order>
-std::ostream &operator<<(std::ostream &os, const rvar<T, order> var)
+template<typename RealType, size_t DerivativeOrder>
+std::ostream &operator<<(std::ostream &os, const rvar<RealType, DerivativeOrder> var)
 {
-    os << "rvar<" << order << ">(" << var.item() << "," << var.adjoint() << ")";
+    os << "rvar<" << DerivativeOrder << ">(" << var.item() << "," << var.adjoint() << ")";
     return os;
 }
 
-template<typename T, size_t order, typename E>
-std::ostream &operator<<(std::ostream &os, const expression<T, order, E> &expr)
+template<typename RealType, size_t DerivativeOrder, typename E>
+std::ostream &operator<<(std::ostream &os, const expression<RealType, DerivativeOrder, E> &expr)
 {
-    rvar<T, order> tmp = expr;
-    os << "rvar<" << order << ">(" << tmp.item() << "," << tmp.adjoint() << ")";
+    rvar<RealType, DerivativeOrder> tmp = expr;
+    os << "rvar<" << DerivativeOrder << ">(" << tmp.item() << "," << tmp.adjoint() << ")";
     return os;
 }
 
-template<typename T, size_t order>
-rvar<T, order> make_rvar(const T v)
+template<typename RealType, size_t DerivativeOrder>
+rvar<RealType, DerivativeOrder> make_rvar(const RealType v)
 {
-    static_assert(order > 0, "rvar order must be >= 1");
-    return rvar<T, order>(v);
+    static_assert(DerivativeOrder > 0, "rvar order must be >= 1");
+    return rvar<RealType, DerivativeOrder>(v);
 }
-template<typename T, size_t order, typename E>
-rvar<T, order> make_rvar(const expression<T, order, E> &expr)
+template<typename RealType, size_t DerivativeOrder, typename E>
+rvar<RealType, DerivativeOrder> make_rvar(const expression<RealType, DerivativeOrder, E> &expr)
 {
-    static_assert(order > 0, "rvar order must be >= 1");
-    return rvar<T, order>(expr);
+    static_assert(DerivativeOrder > 0, "rvar order must be >= 1");
+    return rvar<RealType, DerivativeOrder>(expr);
 }
 
 namespace detail {
@@ -565,37 +593,24 @@ namespace detail {
  *  specialization for autodiffing through autodiff. i.e. being able to
  *  compute higher order grads
 */
-template<typename T, size_t order>
+template<typename RealType, size_t DerivativeOrder>
 struct grad_op_impl
 {
-    std::vector<rvar<T, order - 1>> operator()(rvar<T, order> &f, std::vector<rvar<T, order> *> &x)
+    std::vector<rvar<RealType, DerivativeOrder - 1>> operator()(
+        rvar<RealType, DerivativeOrder> &f, std::vector<rvar<RealType, DerivativeOrder> *> &x)
     {
-        auto &tape = get_active_tape<T, order>();
+        auto &tape = get_active_tape<RealType, DerivativeOrder>();
         tape.zero_grad();
         f.backward();
 
-        std::vector<rvar<T, order - 1>> gradient_vector;
+        std::vector<rvar<RealType, DerivativeOrder - 1>> gradient_vector;
         gradient_vector.reserve(x.size());
 
-        for (auto xi : x) {
-            // make a new rvar<T,order-1> holding the adjoint value
+        for (auto &xi : x) {
             gradient_vector.emplace_back(xi->adjoint());
         }
         return gradient_vector;
     }
-    /*
-    std::vector<rvar_t<T, order - 1> *> operator()(rvar<T, order>                &f,
-                                                   std::vector<rvar<T, order> *> &x)
-    {
-        gradient_tape<T, order, BOOST_MATH_BUFFER_SIZE> &tape = get_active_tape<T, order>();
-        tape.zero_grad();
-        f.backward();
-        std::vector<rvar_t<T, order - 1> *> gradient_vector;
-        for (auto xi : x) {
-            gradient_vector.push_back(&(xi->adjoint()));
-        }
-        return gradient_vector;
-    }*/
 };
 /** @brief helper overload for grad implementation.
  *  @return vector<T> of gradients of the autodiff graph.
@@ -610,7 +625,7 @@ struct grad_op_impl<T, 1>
         tape.zero_grad();
         f.backward();
         std::vector<T> gradient_vector;
-        for (auto xi : x) {
+        for (auto &xi : x) {
             gradient_vector.push_back(xi->adjoint());
         }
         return gradient_vector;
@@ -621,52 +636,51 @@ struct grad_op_impl<T, 1>
  *  @return nested vector representing N-d tensor of
  *      higher order derivatives
  */
-template<size_t N, typename T, size_t order_1, size_t order_2, typename Enable = void>
+template<size_t N,
+         typename RealType,
+         size_t DerivativeOrder_1,
+         size_t DerivativeOrder_2,
+         typename Enable = void>
 struct grad_nd_impl
 {
-    auto operator()(rvar<T, order_1> &f, std::vector<rvar<T, order_2> *> &x)
+    auto operator()(rvar<RealType, DerivativeOrder_1>                &f,
+                    std::vector<rvar<RealType, DerivativeOrder_2> *> &x)
     {
         static_assert(N > 1, "N must be greater than 1 for this template");
 
-        auto current_grad = grad(f, x); // vector<rvar<T,order_1-1>> or vector<T>
+        auto current_grad = grad(f, x); // vector<rvar<T,DerivativeOrder_1-1>> or vector<T>
 
-        std::vector<decltype(grad_nd_impl<N - 1, T, order_1 - 1, order_2>()(current_grad[0], x))>
+        std::vector<decltype(grad_nd_impl<N - 1, RealType, DerivativeOrder_1 - 1, DerivativeOrder_2>()(
+            current_grad[0], x))>
             result;
         result.reserve(current_grad.size());
 
         for (auto &g_i : current_grad) {
-            result.push_back(grad_nd_impl<N - 1, T, order_1 - 1, order_2>()(g_i, x));
+            result.push_back(
+                grad_nd_impl<N - 1, RealType, DerivativeOrder_1 - 1, DerivativeOrder_2>()(g_i, x));
         }
         return result;
     }
-    /*
-    auto operator()(rvar<T, order_1> &f, std::vector<rvar<T, order_2> *> &x)
-    {
-        static_assert(N > 1, "N must be greater than 1 for this template");
-        auto current_grad = grad(f, x);
-        std::vector<decltype(grad_nd_impl<N - 1, T, order_1 - 1, order_2>()(*current_grad[0], x))>
-            result;
-        for (auto &g_i : current_grad) {
-            result.push_back(grad_nd_impl<N - 1, T, order_1 - 1, order_2>()(*g_i, x));
-        }
-        return result;
-    }*/
 };
 /** @brief spcialization for order = 1,
- *  @return vector<rvar<T,order_1-1>> gradients */
-template<typename T, size_t order_1, size_t order_2>
-struct grad_nd_impl<1, T, order_1, order_2>
+ *  @return vector<rvar<T,DerivativeOrder_1-1>> gradients */
+template<typename RealType, size_t DerivativeOrder_1, size_t DerivativeOrder_2>
+struct grad_nd_impl<1, RealType, DerivativeOrder_1, DerivativeOrder_2>
 {
-    auto operator()(rvar<T, order_1> &f, std::vector<rvar<T, order_2> *> &x) { return grad(f, x); }
+    auto operator()(rvar<RealType, DerivativeOrder_1>                &f,
+                    std::vector<rvar<RealType, DerivativeOrder_2> *> &x)
+    {
+        return grad(f, x);
+    }
 };
 
 template<typename ptr>
 struct rvar_order;
 
-template<typename T, size_t order>
-struct rvar_order<rvar<T, order> *>
+template<typename RealType, size_t DerivativeOrder>
+struct rvar_order<rvar<RealType, DerivativeOrder> *>
 {
-    static constexpr size_t value = order;
+    static constexpr size_t value = DerivativeOrder;
 };
 
 } // namespace detail
@@ -676,52 +690,52 @@ struct rvar_order<rvar<T, order> *>
  * @param f -> computational graph
  * @param x -> variables gradients to record. Note ALL gradients of the graph
  *             are computed simultaneously, only the ones w.r.t. x are returned
- * @return vector<rvar<T,order_1 - 1> of gradients. in the case of order_1 = 1
- *            rvar<T,order_1-1> decays to T
+ * @return vector<rvar<T,DerivativeOrder_1 - 1> of gradients. in the case of DerivativeOrder_1 = 1
+ *            rvar<T,DerivativeOrder_1-1> decays to T
  *
  * safe to call recursively with grad(grad(grad...
  */
-template<typename T, size_t order_1, size_t order_2>
-auto grad(rvar<T, order_1> &f, std::vector<rvar<T, order_2> *> &x)
+template<typename RealType, size_t DerivativeOrder_1, size_t DerivativeOrder_2>
+auto grad(rvar<RealType, DerivativeOrder_1> &f, std::vector<rvar<RealType, DerivativeOrder_2> *> &x)
 {
-    static_assert(order_1 <= order_2,
+    static_assert(DerivativeOrder_1 <= DerivativeOrder_2,
                   "variable differentiating w.r.t. must have order >= function order");
-    std::vector<rvar<T, order_1> *> xx;
+    std::vector<rvar<RealType, DerivativeOrder_1> *> xx;
     for (auto &xi : x)
-        xx.push_back(&(xi->template get_value_at<order_1>()));
-    return detail::grad_op_impl<T, order_1>{}(f, xx);
+        xx.push_back(&(xi->template get_value_at<DerivativeOrder_1>()));
+    return detail::grad_op_impl<RealType, DerivativeOrder_1>{}(f, xx);
 }
 /** @brief variadic overload of above
  */
-template<typename T, size_t order_1, typename First, typename... Other>
-auto grad(rvar<T, order_1> &f, First first, Other... other)
+template<typename RealType, size_t DerivativeOrder_1, typename First, typename... Other>
+auto grad(rvar<RealType, DerivativeOrder_1> &f, First first, Other... other)
 {
-    constexpr size_t order_2 = detail::rvar_order<First>::value;
-    static_assert(order_1 <= order_2,
+    constexpr size_t DerivativeOrder_2 = detail::rvar_order<First>::value;
+    static_assert(DerivativeOrder_1 <= DerivativeOrder_2,
                   "variable differentiating w.r.t. must have order >= function order");
-    std::vector<rvar<T, order_2> *> x_vec = {first, other...};
+    std::vector<rvar<RealType, DerivativeOrder_2> *> x_vec = {first, other...};
     return grad(f, x_vec);
 }
 
 /** @brief computes hessian matrix of computational graph w.r.t.
  *         vector of variables x.
- *  @return std::vector<std::vector<rvar<T,order_1-2>> hessian matrix
+ *  @return std::vector<std::vector<rvar<T,DerivativeOrder_1-2>> hessian matrix
  *          rvar<T,2> decays to T
  *
  *  NOT recursion safe, cannot do hess(hess(
  */
-template<typename T, size_t order_1, size_t order_2>
-auto hess(rvar<T, order_1> &f, std::vector<rvar<T, order_2> *> &x)
+template<typename RealType, size_t DerivativeOrder_1, size_t DerivativeOrder_2>
+auto hess(rvar<RealType, DerivativeOrder_1> &f, std::vector<rvar<RealType, DerivativeOrder_2> *> &x)
 {
-    return detail::grad_nd_impl<2, T, order_1, order_2>{}(f, x);
+    return detail::grad_nd_impl<2, RealType, DerivativeOrder_1, DerivativeOrder_2>{}(f, x);
 }
 /** @brief variadic overload of above
  */
-template<typename T, size_t order_1, typename First, typename... Other>
-auto hess(rvar<T, order_1> &f, First first, Other... other)
+template<typename RealType, size_t DerivativeOrder_1, typename First, typename... Other>
+auto hess(rvar<RealType, DerivativeOrder_1> &f, First first, Other... other)
 {
-    constexpr size_t                order_2 = detail::rvar_order<First>::value;
-    std::vector<rvar<T, order_2> *> x_vec   = {first, other...};
+    constexpr size_t DerivativeOrder_2                     = detail::rvar_order<First>::value;
+    std::vector<rvar<RealType, DerivativeOrder_2> *> x_vec = {first, other...};
     return hess(f, x_vec);
 }
 
@@ -731,13 +745,15 @@ auto hess(rvar<T, order_1> &f, First first, Other... other)
  *
  *  NOT recursively safe, cannot do grad_nd(grad_nd(... etc...
  */
-template<size_t N, typename T, size_t order_1, size_t order_2>
-auto grad_nd(rvar<T, order_1> &f, std::vector<rvar<T, order_2> *> &x)
+template<size_t N, typename RealType, size_t DerivativeOrder_1, size_t DerivativeOrder_2>
+auto grad_nd(rvar<RealType, DerivativeOrder_1>                &f,
+             std::vector<rvar<RealType, DerivativeOrder_2> *> &x)
 {
-    static_assert(order_1 >= N, "Function order must be at least N");
-    static_assert(order_2 >= order_1, "Variable order must be at least function order");
+    static_assert(DerivativeOrder_1 >= N, "Function order must be at least N");
+    static_assert(DerivativeOrder_2 >= DerivativeOrder_1,
+                  "Variable order must be at least function order");
 
-    return detail::grad_nd_impl<N, T, order_1, order_2>()(f, x);
+    return detail::grad_nd_impl<N, RealType, DerivativeOrder_1, DerivativeOrder_2>()(f, x);
 }
 
 /** @brief variadic overload of above
@@ -745,11 +761,11 @@ auto grad_nd(rvar<T, order_1> &f, std::vector<rvar<T, order_2> *> &x)
 template<size_t N, typename ftype, typename First, typename... Other>
 auto grad_nd(ftype &f, First first, Other... other)
 {
-    using T                                 = typename ftype::value_type;
-    constexpr size_t                order_1 = detail::rvar_order<ftype *>::value;
-    constexpr size_t                order_2 = detail::rvar_order<First>::value;
-    std::vector<rvar<T, order_2> *> x_vec   = {first, other...};
-    return detail::grad_nd_impl<N, T, order_1, order_1>{}(f, x_vec);
+    using RealType                                         = typename ftype::value_type;
+    constexpr size_t DerivativeOrder_1                     = detail::rvar_order<ftype *>::value;
+    constexpr size_t DerivativeOrder_2                     = detail::rvar_order<First>::value;
+    std::vector<rvar<RealType, DerivativeOrder_2> *> x_vec = {first, other...};
+    return detail::grad_nd_impl<N, RealType, DerivativeOrder_1, DerivativeOrder_1>{}(f, x_vec);
 }
 } // namespace reverse_mode
 } // namespace differentiation
@@ -758,10 +774,10 @@ auto grad_nd(ftype &f, First first, Other... other)
 namespace std {
 
 // copied from forward mode
-template<typename T, size_t order>
-class numeric_limits<boost::math::differentiation::reverse_mode::rvar<T, order>>
-    : public numeric_limits<
-          typename boost::math::differentiation::reverse_mode::rvar<T, order>::value_type>
+template<typename RealType, size_t DerivativeOrder>
+class numeric_limits<boost::math::differentiation::reverse_mode::rvar<RealType, DerivativeOrder>>
+    : public numeric_limits<typename boost::math::differentiation::reverse_mode::
+                                rvar<RealType, DerivativeOrder>::value_type>
 {};
 } // namespace std
 #endif

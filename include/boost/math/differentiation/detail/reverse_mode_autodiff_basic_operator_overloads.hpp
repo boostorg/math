@@ -12,19 +12,26 @@ namespace math {
 namespace differentiation {
 namespace reverse_mode {
 /****************************************************************************************************************/
-template<typename T, size_t order, typename LHS, typename RHS>
-struct add_expr
-    : public abstract_binary_expression<T, order, LHS, RHS, add_expr<T, order, LHS, RHS>>
+template<typename RealType, size_t DerivativeOrder, typename LHS, typename RHS>
+struct add_expr : public abstract_binary_expression<RealType,
+                                                    DerivativeOrder,
+                                                    LHS,
+                                                    RHS,
+                                                    add_expr<RealType, DerivativeOrder, LHS, RHS>>
 {
     /* @brief addition
    * rvar+rvar
    * */
-    using inner_t    = rvar_t<T, order - 1>;
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
     // Explicitly define constructor to forward to base class
-    explicit add_expr(const expression<T, order, LHS> &left_hand_expr,
-                      const expression<T, order, RHS> &right_hand_expr)
-        : abstract_binary_expression<T, order, LHS, RHS, add_expr<T, order, LHS, RHS>>(
-              left_hand_expr, right_hand_expr)
+    explicit add_expr(const expression<RealType, DerivativeOrder, LHS> &left_hand_expr,
+                      const expression<RealType, DerivativeOrder, RHS> &right_hand_expr)
+        : abstract_binary_expression<RealType,
+                                     DerivativeOrder,
+                                     LHS,
+                                     RHS,
+                                     add_expr<RealType, DerivativeOrder, LHS, RHS>>(left_hand_expr,
+                                                                                    right_hand_expr)
     {}
 
     inner_t              evaluate() const { return this->lhs.evaluate() + this->rhs.evaluate(); }
@@ -41,37 +48,51 @@ struct add_expr
         return inner_t(1.0);
     }
 };
-template<typename T, size_t order, typename ARG>
+template<typename RealType, size_t DerivativeOrder, typename ARG>
 struct add_const_expr
-    : public abstract_unary_expression<T, order, ARG, add_const_expr<T, order, ARG>>
+    : public abstract_unary_expression<RealType,
+                                       DerivativeOrder,
+                                       ARG,
+                                       add_const_expr<RealType, DerivativeOrder, ARG>>
 {
     /* @brief
    * rvar+float or float+rvar
    * */
-    using inner_t    = rvar_t<T, order - 1>;
-    explicit add_const_expr(const expression<T, order, ARG> &arg_expr, const T v)
-        : abstract_unary_expression<T, order, ARG, add_const_expr<T, order, ARG>>(arg_expr, v){};
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
+    explicit add_const_expr(const expression<RealType, DerivativeOrder, ARG> &arg_expr,
+                            const RealType                                    v)
+        : abstract_unary_expression<RealType,
+                                    DerivativeOrder,
+                                    ARG,
+                                    add_const_expr<RealType, DerivativeOrder, ARG>>(arg_expr, v){};
     inner_t              evaluate() const { return this->arg.evaluate() + inner_t(this->constant); }
     static const inner_t derivative(const inner_t & /*argv*/,
                                     const inner_t & /*v*/,
-                                    const T & /*constant*/)
+                                    const RealType & /*constant*/)
     {
         return inner_t(1.0);
     }
 };
 /****************************************************************************************************************/
-template<typename T, size_t order, typename LHS, typename RHS>
-struct mult_expr
-    : public abstract_binary_expression<T, order, LHS, RHS, mult_expr<T, order, LHS, RHS>>
+template<typename RealType, size_t DerivativeOrder, typename LHS, typename RHS>
+struct mult_expr : public abstract_binary_expression<RealType,
+                                                     DerivativeOrder,
+                                                     LHS,
+                                                     RHS,
+                                                     mult_expr<RealType, DerivativeOrder, LHS, RHS>>
 {
     /* @brief multiplication
    * rvar * rvar
    * */
-    using inner_t    = rvar_t<T, order - 1>;
-    explicit mult_expr(const expression<T, order, LHS> &left_hand_expr,
-                       const expression<T, order, RHS> &right_hand_expr)
-        : abstract_binary_expression<T, order, LHS, RHS, mult_expr<T, order, LHS, RHS>>(
-              left_hand_expr, right_hand_expr)
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
+    explicit mult_expr(const expression<RealType, DerivativeOrder, LHS> &left_hand_expr,
+                       const expression<RealType, DerivativeOrder, RHS> &right_hand_expr)
+        : abstract_binary_expression<RealType,
+                                     DerivativeOrder,
+                                     LHS,
+                                     RHS,
+                                     mult_expr<RealType, DerivativeOrder, LHS, RHS>>(left_hand_expr,
+                                                                                     right_hand_expr)
     {}
 
     inner_t              evaluate() const { return this->lhs.evaluate() * this->rhs.evaluate(); };
@@ -88,40 +109,54 @@ struct mult_expr
         return l;
     };
 };
-template<typename T, size_t order, typename ARG>
+template<typename RealType, size_t DerivativeOrder, typename ARG>
 struct mult_const_expr
-    : public abstract_unary_expression<T, order, ARG, mult_const_expr<T, order, ARG>>
+    : public abstract_unary_expression<RealType,
+                                       DerivativeOrder,
+                                       ARG,
+                                       mult_const_expr<RealType, DerivativeOrder, ARG>>
 {
     /* @brief
    * rvar+float or float+rvar
    * */
-    using inner_t    = rvar_t<T, order - 1>;
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
 
-    explicit mult_const_expr(const expression<T, order, ARG> &arg_expr, const T v)
-        : abstract_unary_expression<T, order, ARG, mult_const_expr<T, order, ARG>>(arg_expr, v){};
+    explicit mult_const_expr(const expression<RealType, DerivativeOrder, ARG> &arg_expr,
+                             const RealType                                    v)
+        : abstract_unary_expression<RealType,
+                                    DerivativeOrder,
+                                    ARG,
+                                    mult_const_expr<RealType, DerivativeOrder, ARG>>(arg_expr, v){};
 
     inner_t              evaluate() const { return this->arg.evaluate() * inner_t(this->constant); }
     static const inner_t derivative(const inner_t & /*argv*/,
                                     const inner_t & /*v*/,
-                                    const T &constant)
+                                    const RealType &constant)
     {
         return inner_t(constant);
     }
 };
 /****************************************************************************************************************/
-template<typename T, size_t order, typename LHS, typename RHS>
-struct sub_expr
-    : public abstract_binary_expression<T, order, LHS, RHS, sub_expr<T, order, LHS, RHS>>
+template<typename RealType, size_t DerivativeOrder, typename LHS, typename RHS>
+struct sub_expr : public abstract_binary_expression<RealType,
+                                                    DerivativeOrder,
+                                                    LHS,
+                                                    RHS,
+                                                    sub_expr<RealType, DerivativeOrder, LHS, RHS>>
 {
     /* @brief addition
    * rvar-rvar
    * */
-    using inner_t    = rvar_t<T, order - 1>;
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
     // Explicitly define constructor to forward to base class
-    explicit sub_expr(const expression<T, order, LHS> &left_hand_expr,
-                      const expression<T, order, RHS> &right_hand_expr)
-        : abstract_binary_expression<T, order, LHS, RHS, sub_expr<T, order, LHS, RHS>>(
-              left_hand_expr, right_hand_expr)
+    explicit sub_expr(const expression<RealType, DerivativeOrder, LHS> &left_hand_expr,
+                      const expression<RealType, DerivativeOrder, RHS> &right_hand_expr)
+        : abstract_binary_expression<RealType,
+                                     DerivativeOrder,
+                                     LHS,
+                                     RHS,
+                                     sub_expr<RealType, DerivativeOrder, LHS, RHS>>(left_hand_expr,
+                                                                                    right_hand_expr)
     {}
 
     inner_t              evaluate() const { return this->lhs.evaluate() - this->rhs.evaluate(); }
@@ -140,19 +175,26 @@ struct sub_expr
 };
 
 /****************************************************************************************************************/
-template<typename T, size_t order, typename LHS, typename RHS>
-struct div_expr
-    : public abstract_binary_expression<T, order, LHS, RHS, div_expr<T, order, LHS, RHS>>
+template<typename RealType, size_t DerivativeOrder, typename LHS, typename RHS>
+struct div_expr : public abstract_binary_expression<RealType,
+                                                    DerivativeOrder,
+                                                    LHS,
+                                                    RHS,
+                                                    div_expr<RealType, DerivativeOrder, LHS, RHS>>
 {
     /* @brief multiplication
    * rvar / rvar
    * */
-    using inner_t    = rvar_t<T, order - 1>;
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
     // Explicitly define constructor to forward to base class
-    explicit div_expr(const expression<T, order, LHS> &left_hand_expr,
-                      const expression<T, order, RHS> &right_hand_expr)
-        : abstract_binary_expression<T, order, LHS, RHS, div_expr<T, order, LHS, RHS>>(
-              left_hand_expr, right_hand_expr)
+    explicit div_expr(const expression<RealType, DerivativeOrder, LHS> &left_hand_expr,
+                      const expression<RealType, DerivativeOrder, RHS> &right_hand_expr)
+        : abstract_binary_expression<RealType,
+                                     DerivativeOrder,
+                                     LHS,
+                                     RHS,
+                                     div_expr<RealType, DerivativeOrder, LHS, RHS>>(left_hand_expr,
+                                                                                    right_hand_expr)
     {}
 
     inner_t              evaluate() const { return this->lhs.evaluate() / this->rhs.evaluate(); };
@@ -160,182 +202,212 @@ struct div_expr
                                          const inner_t &r,
                                          const inner_t & /*v*/)
     {
-        return static_cast<T>(1.0) / r;
+        return static_cast<RealType>(1.0) / r;
     };
     static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t & /*v*/)
     {
         return -l / (r * r);
     };
 };
-template<typename T, size_t order, typename ARG>
+template<typename RealType, size_t DerivativeOrder, typename ARG>
 struct div_by_const_expr
-    : public abstract_unary_expression<T, order, ARG, div_by_const_expr<T, order, ARG>>
+    : public abstract_unary_expression<RealType,
+                                       DerivativeOrder,
+                                       ARG,
+                                       div_by_const_expr<RealType, DerivativeOrder, ARG>>
 {
     /* @brief
    * rvar/float
    * */
-    using inner_t    = rvar_t<T, order - 1>;
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
 
-    explicit div_by_const_expr(const expression<T, order, ARG> &arg_expr, const T v)
-        : abstract_unary_expression<T, order, ARG, div_by_const_expr<T, order, ARG>>(arg_expr, v){};
+    explicit div_by_const_expr(const expression<RealType, DerivativeOrder, ARG> &arg_expr,
+                               const RealType                                    v)
+        : abstract_unary_expression<RealType,
+                                    DerivativeOrder,
+                                    ARG,
+                                    div_by_const_expr<RealType, DerivativeOrder, ARG>>(arg_expr,
+                                                                                       v){};
 
     inner_t              evaluate() const { return this->arg.evaluate() / inner_t(this->constant); }
     static const inner_t derivative(const inner_t & /*argv*/,
                                     const inner_t & /*v*/,
-                                    const T &constant)
+                                    const RealType &constant)
     {
         return inner_t(1.0 / constant);
     }
 };
 
-template<typename T, size_t order, typename ARG>
+template<typename RealType, size_t DerivativeOrder, typename ARG>
 struct const_div_by_expr
-    : public abstract_unary_expression<T, order, ARG, const_div_by_expr<T, order, ARG>>
+    : public abstract_unary_expression<RealType,
+                                       DerivativeOrder,
+                                       ARG,
+                                       const_div_by_expr<RealType, DerivativeOrder, ARG>>
 {
     /** @brief
     * float/rvar
     * */
-    using inner_t    = rvar_t<T, order - 1>;
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
 
-    explicit const_div_by_expr(const expression<T, order, ARG> &arg_expr, const T v)
-        : abstract_unary_expression<T, order, ARG, const_div_by_expr<T, order, ARG>>(arg_expr, v){};
+    explicit const_div_by_expr(const expression<RealType, DerivativeOrder, ARG> &arg_expr,
+                               const RealType                                    v)
+        : abstract_unary_expression<RealType,
+                                    DerivativeOrder,
+                                    ARG,
+                                    const_div_by_expr<RealType, DerivativeOrder, ARG>>(arg_expr,
+                                                                                       v){};
 
     inner_t              evaluate() const { return inner_t(this->constant) / this->arg.evaluate(); }
-    static const inner_t derivative(const inner_t &argv, const inner_t & /*v*/, const T &constant)
+    static const inner_t derivative(const inner_t &argv,
+                                    const inner_t & /*v*/,
+                                    const RealType &constant)
     {
         return -inner_t{constant} / (argv * argv);
     }
 };
 /****************************************************************************************************************/
 
-template<typename T, size_t order, typename LHS, typename RHS>
-mult_expr<T, order, LHS, RHS> operator*(const expression<T, order, LHS> &lhs,
-                                        const expression<T, order, RHS> &rhs)
+template<typename RealType, size_t DerivativeOrder, typename LHS, typename RHS>
+mult_expr<RealType, DerivativeOrder, LHS, RHS> operator*(
+    const expression<RealType, DerivativeOrder, LHS> &lhs,
+    const expression<RealType, DerivativeOrder, RHS> &rhs)
 {
-    return mult_expr<T, order, LHS, RHS>(lhs, rhs);
+    return mult_expr<RealType, DerivativeOrder, LHS, RHS>(lhs, rhs);
 }
 
 /** @brief type promotion is handled by casting the numeric type to
  *  the type inside expression. This is to avoid converting the
  *  entire tape in case you have something like double * rvar<float>
  *  */
-template<typename U,
-         typename T,
-         size_t order,
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
          typename ARG,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-mult_const_expr<T, order, ARG> operator*(const expression<T, order, ARG> &arg, const U &v)
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+mult_const_expr<RealType1, DerivativeOrder, ARG> operator*(
+    const expression<RealType1, DerivativeOrder, ARG> &arg, const RealType2 &v)
 {
-    return mult_const_expr<T, order, ARG>(arg, static_cast<T>(v));
+    return mult_const_expr<RealType1, DerivativeOrder, ARG>(arg, static_cast<RealType1>(v));
 }
-template<typename U,
-         typename T,
-         size_t order,
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
          typename ARG,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-mult_const_expr<T, order, ARG> operator*(const U &v, const expression<T, order, ARG> &arg)
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+mult_const_expr<RealType1, DerivativeOrder, ARG> operator*(
+    const RealType2 &v, const expression<RealType1, DerivativeOrder, ARG> &arg)
 {
-    return mult_const_expr<T, order, ARG>(arg, static_cast<T>(v));
+    return mult_const_expr<RealType1, DerivativeOrder, ARG>(arg, static_cast<RealType1>(v));
 }
 /****************************************************************************************************************/
 /* + */
-template<typename T, size_t order, typename LHS, typename RHS>
-add_expr<T, order, LHS, RHS> operator+(const expression<T, order, LHS> &lhs,
-                                       const expression<T, order, RHS> &rhs)
+template<typename RealType, size_t DerivativeOrder, typename LHS, typename RHS>
+add_expr<RealType, DerivativeOrder, LHS, RHS> operator+(
+    const expression<RealType, DerivativeOrder, LHS> &lhs,
+    const expression<RealType, DerivativeOrder, RHS> &rhs)
 {
-    return add_expr<T, order, LHS, RHS>(lhs, rhs);
+    return add_expr<RealType, DerivativeOrder, LHS, RHS>(lhs, rhs);
 }
-template<typename U,
-         typename T,
-         size_t order,
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
          typename ARG,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-add_const_expr<T, order, ARG> operator+(const expression<T, order, ARG> &arg, const U &v)
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+add_const_expr<RealType1, DerivativeOrder, ARG> operator+(
+    const expression<RealType1, DerivativeOrder, ARG> &arg, const RealType2 &v)
 {
-    return add_const_expr<T, order, ARG>(arg, static_cast<T>(v));
+    return add_const_expr<RealType1, DerivativeOrder, ARG>(arg, static_cast<RealType1>(v));
 }
-template<typename U,
-         typename T,
-         size_t order,
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
          typename ARG,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-add_const_expr<T, order, ARG> operator+(const U &v, const expression<T, order, ARG> &arg)
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+add_const_expr<RealType1, DerivativeOrder, ARG> operator+(
+    const RealType2 &v, const expression<RealType1, DerivativeOrder, ARG> &arg)
 {
-    return add_const_expr<T, order, ARG>(arg, static_cast<T>(v));
+    return add_const_expr<RealType1, DerivativeOrder, ARG>(arg, static_cast<RealType1>(v));
 }
 /****************************************************************************************************************/
 /* - overload */
 /** @brief
  *  negation (-1.0*rvar) */
-template<typename T, size_t order, typename ARG>
-mult_const_expr<T, order, ARG> operator-(const expression<T, order, ARG> &arg)
+template<typename RealType, size_t DerivativeOrder, typename ARG>
+mult_const_expr<RealType, DerivativeOrder, ARG> operator-(
+    const expression<RealType, DerivativeOrder, ARG> &arg)
 {
-    return mult_const_expr<T, order, ARG>(arg, static_cast<T>(-1.0));
+    return mult_const_expr<RealType, DerivativeOrder, ARG>(arg, static_cast<RealType>(-1.0));
 }
 
 /** @brief
  *  subtraction rvar-rvar */
-template<typename T, size_t order, typename LHS, typename RHS>
-sub_expr<T, order, LHS, RHS> operator-(const expression<T, order, LHS> &lhs,
-                                       const expression<T, order, RHS> &rhs)
+template<typename RealType, size_t DerivativeOrder, typename LHS, typename RHS>
+sub_expr<RealType, DerivativeOrder, LHS, RHS> operator-(
+    const expression<RealType, DerivativeOrder, LHS> &lhs,
+    const expression<RealType, DerivativeOrder, RHS> &rhs)
 {
-    return sub_expr<T, order, LHS, RHS>(lhs, rhs);
+    return sub_expr<RealType, DerivativeOrder, LHS, RHS>(lhs, rhs);
 }
 
 /** @brief
  *  subtraction float - rvar */
-template<typename U,
-         typename T,
-         size_t order,
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
          typename ARG,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-add_const_expr<T, order, ARG> operator-(const expression<T, order, ARG> &arg, const U &v)
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+add_const_expr<RealType1, DerivativeOrder, ARG> operator-(
+    const expression<RealType1, DerivativeOrder, ARG> &arg, const RealType2 &v)
 {
     /* rvar - float = rvar + (-float) */
-    return add_const_expr<T, order, ARG>(arg, static_cast<T>(-v));
+    return add_const_expr<RealType1, DerivativeOrder, ARG>(arg, static_cast<RealType1>(-v));
 }
 
 /** @brief
  *   subtraction float - rvar
  *  @return add_expr<neg_expr<ARG>>
  */
-template<typename U,
-         typename T,
-         size_t order,
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
          typename ARG,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-auto operator-(const U &v, const expression<T, order, ARG> &arg)
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+auto operator-(const RealType2 &v, const expression<RealType1, DerivativeOrder, ARG> &arg)
 {
     auto neg = -arg;
-    return neg + static_cast<T>(v);
+    return neg + static_cast<RealType1>(v);
 }
 /****************************************************************************************************************/
 /* / */
-template<typename T, size_t order, typename LHS, typename RHS>
-div_expr<T, order, LHS, RHS> operator/(const expression<T, order, LHS> &lhs,
-                                       const expression<T, order, RHS> &rhs)
+template<typename RealType, size_t DerivativeOrder, typename LHS, typename RHS>
+div_expr<RealType, DerivativeOrder, LHS, RHS> operator/(
+    const expression<RealType, DerivativeOrder, LHS> &lhs,
+    const expression<RealType, DerivativeOrder, RHS> &rhs)
 {
-    return div_expr<T, order, LHS, RHS>(lhs, rhs);
+    return div_expr<RealType, DerivativeOrder, LHS, RHS>(lhs, rhs);
 }
 
-template<typename U,
-         typename T,
-         size_t order,
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
          typename ARG,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-const_div_by_expr<T, order, ARG> operator/(const U &v, const expression<T, order, ARG> &arg)
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+const_div_by_expr<RealType1, DerivativeOrder, ARG> operator/(
+    const RealType2 &v, const expression<RealType1, DerivativeOrder, ARG> &arg)
 {
-    return const_div_by_expr<T, order, ARG>(arg, static_cast<T>(v));
+    return const_div_by_expr<RealType1, DerivativeOrder, ARG>(arg, static_cast<RealType1>(v));
 }
 
-template<typename U,
-         typename T,
-         size_t order,
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
          typename ARG,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-div_by_const_expr<T, order, ARG> operator/(const expression<T, order, ARG> &arg, const U &v)
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+div_by_const_expr<RealType1, DerivativeOrder, ARG> operator/(
+    const expression<RealType1, DerivativeOrder, ARG> &arg, const RealType2 &v)
 {
-    return div_by_const_expr<T, order, ARG>(arg, static_cast<T>(v));
+    return div_by_const_expr<RealType1, DerivativeOrder, ARG>(arg, static_cast<RealType1>(v));
 }
 
 } // namespace reverse_mode

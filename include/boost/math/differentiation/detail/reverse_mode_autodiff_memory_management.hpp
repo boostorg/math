@@ -188,7 +188,7 @@ public:
     bool operator!() const noexcept { return storage_ == nullptr; }
 };
 /* memory management helps for tape */
-template<typename T, size_t buffer_size>
+template<typename RealType, size_t buffer_size>
 class flat_linear_allocator
 {
     /** @brief basically a vector<array<T*, size>>
@@ -198,8 +198,8 @@ class flat_linear_allocator
 public:
     // store vector of unique pointers to arrays
     // to avoid vector reference invalidation
-    using buffer_type = std::array<T, buffer_size>;
-    using buffer_ptr  = std::unique_ptr<std::array<T, buffer_size>>;
+    using buffer_type = std::array<RealType, buffer_size>;
+    using buffer_ptr  = std::unique_ptr<std::array<RealType, buffer_size>>;
 
 private:
     std::vector<buffer_ptr> data_;
@@ -207,14 +207,16 @@ private:
     std::vector<size_t>     checkpoints_; //{0};
 
 public:
-    friend class flat_linear_allocator_iterator<flat_linear_allocator<T, buffer_size>, buffer_size>;
-    friend class flat_linear_allocator_iterator<const flat_linear_allocator<T, buffer_size>,
+    friend class flat_linear_allocator_iterator<flat_linear_allocator<RealType, buffer_size>,
                                                 buffer_size>;
-    using value_type = T;
+    friend class flat_linear_allocator_iterator<const flat_linear_allocator<RealType, buffer_size>,
+                                                buffer_size>;
+    using value_type = RealType;
     using iterator
-        = flat_linear_allocator_iterator<flat_linear_allocator<T, buffer_size>, buffer_size>;
+        = flat_linear_allocator_iterator<flat_linear_allocator<RealType, buffer_size>, buffer_size>;
     using const_iterator
-        = flat_linear_allocator_iterator<const flat_linear_allocator<T, buffer_size>, buffer_size>;
+        = flat_linear_allocator_iterator<const flat_linear_allocator<RealType, buffer_size>,
+                                         buffer_size>;
 
     size_t buffer_id() const noexcept { return total_size_ / buffer_size; }
     size_t item_id() const noexcept { return total_size_ % buffer_size; }
@@ -242,7 +244,7 @@ public:
         for (size_t i = 0; i < total_size_; ++i) {
             size_t bid = i / buffer_size;
             size_t iid = i % buffer_size;
-            (*data_[bid])[iid].~T();
+            (*data_[bid])[iid].~RealType();
         }
     }
     /** @brief
@@ -277,7 +279,7 @@ public:
     void rewind_to_last_checkpoint() { total_size_ = checkpoints_.back(); }
     void rewind_to_checkpoint_at(size_t index) { total_size_ = checkpoints_[index]; }
 
-    void fill(const T &val)
+    void fill(const RealType &val)
     {
         for (size_t i = 0; i < total_size_; ++i) {
             size_t bid         = i / buffer_size;
@@ -296,8 +298,8 @@ public:
         size_t bid = buffer_id();
         size_t iid = item_id();
 
-        T *ptr = &(*data_[bid])[iid];
-        new (ptr) T();
+        RealType *ptr = &(*data_[bid])[iid];
+        new (ptr) RealType();
         ++total_size_;
         return iterator(this, total_size_ - 1);
     };
@@ -312,8 +314,8 @@ public:
         }
         BOOST_MATH_ASSERT(buffer_id() < data_.size());
         BOOST_MATH_ASSERT(item_id() < buffer_size);
-        T *ptr = &(*data_[buffer_id()])[item_id()];
-        new (ptr) T(std::forward<Args>(args)...);
+        RealType *ptr = &(*data_[buffer_id()])[item_id()];
+        new (ptr) RealType(std::forward<Args>(args)...);
         ++total_size_;
         return iterator(this, total_size_ - 1);
     }
@@ -325,27 +327,27 @@ public:
         size_t bid = buffer_id();
         size_t iid = item_id();
         if (iid + n < buffer_size) {
-            T *ptr = &(*data_[bid])[iid];
+            RealType *ptr = &(*data_[bid])[iid];
             for (size_t i = 0; i < n; ++i) {
-                new (ptr + i) T();
+                new (ptr + i) RealType();
             }
             total_size_ += n;
             return iterator(this, total_size_ - n, total_size_ - n, total_size_);
         } else {
             size_t allocs_in_curr_buffer = buffer_size - iid;
             size_t allocs_in_next_buffer = n - (buffer_size - iid);
-            T     *ptr                   = &(*data_[bid])[iid];
+            RealType *ptr                   = &(*data_[bid])[iid];
             for (size_t i = 0; i < allocs_in_curr_buffer; ++i) {
-                new (ptr + i) T();
+                new (ptr + i) RealType();
             }
             allocate_buffer();
             bid = data_.size() - 1;
             iid = 0;
             total_size_ += n;
 
-            T *ptr2 = &(*data_[bid])[iid];
+            RealType *ptr2 = &(*data_[bid])[iid];
             for (size_t i = 0; i < allocs_in_next_buffer; i++) {
-                new (ptr2 + i) T();
+                new (ptr2 + i) RealType();
             }
             return iterator(this, total_size_ - n, total_size_ - n, total_size_);
         }
@@ -358,27 +360,27 @@ public:
         size_t bid = buffer_id();
         size_t iid = item_id();
         if (iid + n < buffer_size) {
-            T *ptr = &(*data_[bid])[iid];
+            RealType *ptr = &(*data_[bid])[iid];
             for (size_t i = 0; i < n; ++i) {
-                new (ptr + i) T();
+                new (ptr + i) RealType();
             }
             total_size_ += n;
             return iterator(this, total_size_ - n, total_size_ - n, total_size_);
         } else {
             size_t allocs_in_curr_buffer = buffer_size - iid;
             size_t allocs_in_next_buffer = n - (buffer_size - iid);
-            T     *ptr                   = &(*data_[bid])[iid];
+            RealType *ptr                   = &(*data_[bid])[iid];
             for (size_t i = 0; i < allocs_in_curr_buffer; ++i) {
-                new (ptr + i) T();
+                new (ptr + i) RealType();
             }
             allocate_buffer();
             bid = data_.size() - 1;
             iid = 0;
             total_size_ += n;
 
-            T *ptr2 = &(*data_[bid])[iid];
+            RealType *ptr2 = &(*data_[bid])[iid];
             for (size_t i = 0; i < allocs_in_next_buffer; i++) {
-                new (ptr2 + i) T();
+                new (ptr2 + i) RealType();
             }
             return iterator(this, total_size_ - n, total_size_ - n, total_size_);
         }
@@ -405,19 +407,19 @@ public:
 
     /** @brief searches for item in allocator
    *  only used to find gradient nodes for propagation */
-    iterator find(const T *const item)
+    iterator find(const RealType *const item)
     {
-        return std::find_if(begin(), end(), [&](const T &val) { return &val == item; });
+        return std::find_if(begin(), end(), [&](const RealType &val) { return &val == item; });
     }
     /** @brief vector like access,
    *  currently unused anywhere but very useful for debugging
    */
-    T &operator[](std::size_t i)
+    RealType &operator[](std::size_t i)
     {
         BOOST_MATH_ASSERT(i < total_size_);
         return (*data_[i / buffer_size])[i % buffer_size];
     }
-    const T &operator[](std::size_t i) const
+    const RealType &operator[](std::size_t i) const
     {
         BOOST_MATH_ASSERT(i < total_size_);
         return (*data_[i / buffer_size])[i % buffer_size];

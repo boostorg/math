@@ -16,73 +16,84 @@ namespace math {
 namespace differentiation {
 namespace reverse_mode {
 
-template<typename T, size_t order, typename ARG>
+template<typename RealType, size_t DerivativeOrder, typename ARG>
 struct erf_expr;
 
-template<typename T, size_t order, typename ARG>
+template<typename RealType, size_t DerivativeOrder, typename ARG>
 struct erfc_expr;
 
-template<typename T, size_t order, typename ARG>
+template<typename RealType, size_t DerivativeOrder, typename ARG>
 struct erf_inv_expr;
 
-template<typename T, size_t order, typename ARG>
+template<typename RealType, size_t DerivativeOrder, typename ARG>
 struct erfc_inv_expr;
 
-template<typename T, size_t order, typename ARG>
-erf_expr<T, order, ARG> erf(const expression<T, order, ARG> &arg)
+template<typename RealType, size_t DerivativeOrder, typename ARG>
+erf_expr<RealType, DerivativeOrder, ARG> erf(const expression<RealType, DerivativeOrder, ARG> &arg)
 {
-    return erf_expr<T, order, ARG>(arg, 0.0);
+    return erf_expr<RealType, DerivativeOrder, ARG>(arg, 0.0);
 }
 
-template<typename T, size_t order, typename ARG>
-erfc_expr<T, order, ARG> erfc(const expression<T, order, ARG> &arg)
+template<typename RealType, size_t DerivativeOrder, typename ARG>
+erfc_expr<RealType, DerivativeOrder, ARG> erfc(const expression<RealType, DerivativeOrder, ARG> &arg)
 {
-    return erfc_expr<T, order, ARG>(arg, 0.0);
+    return erfc_expr<RealType, DerivativeOrder, ARG>(arg, 0.0);
 }
 
-template<typename T, size_t order, typename ARG>
-erf_inv_expr<T, order, ARG> erf_inv(const expression<T, order, ARG> &arg)
+template<typename RealType, size_t DerivativeOrder, typename ARG>
+erf_inv_expr<RealType, DerivativeOrder, ARG> erf_inv(
+    const expression<RealType, DerivativeOrder, ARG> &arg)
 {
-    return erf_inv_expr<T, order, ARG>(arg, 0.0);
+    return erf_inv_expr<RealType, DerivativeOrder, ARG>(arg, 0.0);
 }
 
-template<typename T, size_t order, typename ARG>
-erfc_inv_expr<T, order, ARG> erfc_inv(const expression<T, order, ARG> &arg)
+template<typename RealType, size_t DerivativeOrder, typename ARG>
+erfc_inv_expr<RealType, DerivativeOrder, ARG> erfc_inv(
+    const expression<RealType, DerivativeOrder, ARG> &arg)
 {
-    return erfc_inv_expr<T, order, ARG>(arg, 0.0);
+    return erfc_inv_expr<RealType, DerivativeOrder, ARG>(arg, 0.0);
 }
 
-template<typename T, size_t order, typename ARG>
-struct erf_expr : public abstract_unary_expression<T, order, ARG, erf_expr<T, order, ARG>>
+template<typename RealType, size_t DerivativeOrder, typename ARG>
+struct erf_expr : public abstract_unary_expression<RealType,
+                                                   DerivativeOrder,
+                                                   ARG,
+                                                   erf_expr<RealType, DerivativeOrder, ARG>>
 {
     /** @brief erf(x)
     *
     * d/dx erf(x) = 2*exp(x^2)/sqrt(pi)
     *
     * */
-    using inner_t = rvar_t<T, order - 1>;
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
 
-    explicit erf_expr(const expression<T, order, ARG> &arg_expr, const T v)
-        : abstract_unary_expression<T, order, ARG, erf_expr<T, order, ARG>>(arg_expr, v){};
+    explicit erf_expr(const expression<RealType, DerivativeOrder, ARG> &arg_expr, const RealType v)
+        : abstract_unary_expression<RealType,
+                                    DerivativeOrder,
+                                    ARG,
+                                    erf_expr<RealType, DerivativeOrder, ARG>>(arg_expr, v){};
 
     inner_t evaluate() const
     {
-        return detail::if_functional_dispatch<(order > 1)>(
+        return detail::if_functional_dispatch<(DerivativeOrder > 1)>(
             [this](auto &&x) { return reverse_mode::erf(std::forward<decltype(x)>(x)); },
             [this](auto &&x) { return boost::math::erf(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv,
                                     const inner_t & /*v*/,
-                                    const T & /*constant*/)
+                                    const RealType & /*constant*/)
     {
         BOOST_MATH_STD_USING
-        return static_cast<T>(2.0) * exp(-argv * argv) / sqrt(constants::pi<T>());
+        return static_cast<RealType>(2.0) * exp(-argv * argv) / sqrt(constants::pi<RealType>());
     }
 };
 
-template<typename T, size_t order, typename ARG>
-struct erfc_expr : public abstract_unary_expression<T, order, ARG, erfc_expr<T, order, ARG>>
+template<typename RealType, size_t DerivativeOrder, typename ARG>
+struct erfc_expr : public abstract_unary_expression<RealType,
+                                                    DerivativeOrder,
+                                                    ARG,
+                                                    erfc_expr<RealType, DerivativeOrder, ARG>>
 {
     /** @brief erfc(x)
     *
@@ -90,29 +101,35 @@ struct erfc_expr : public abstract_unary_expression<T, order, ARG, erfc_expr<T, 
     *
     * */
 
-    using inner_t = rvar_t<T, order - 1>;
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
 
-    explicit erfc_expr(const expression<T, order, ARG> &arg_expr, const T v)
-        : abstract_unary_expression<T, order, ARG, erfc_expr<T, order, ARG>>(arg_expr, v){};
+    explicit erfc_expr(const expression<RealType, DerivativeOrder, ARG> &arg_expr, const RealType v)
+        : abstract_unary_expression<RealType,
+                                    DerivativeOrder,
+                                    ARG,
+                                    erfc_expr<RealType, DerivativeOrder, ARG>>(arg_expr, v){};
 
     inner_t evaluate() const
     {
-        return detail::if_functional_dispatch<(order > 1)>(
+        return detail::if_functional_dispatch<((DerivativeOrder > 1))>(
             [this](auto &&x) { return reverse_mode::erfc(std::forward<decltype(x)>(x)); },
             [this](auto &&x) { return boost::math::erfc(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv,
                                     const inner_t & /*v*/,
-                                    const T & /*constant*/)
+                                    const RealType & /*constant*/)
     {
         BOOST_MATH_STD_USING
-        return static_cast<T>(-2.0) * exp(-argv * argv) / sqrt(constants::pi<T>());
+        return static_cast<RealType>(-2.0) * exp(-argv * argv) / sqrt(constants::pi<RealType>());
     }
 };
 
-template<typename T, size_t order, typename ARG>
-struct erf_inv_expr : public abstract_unary_expression<T, order, ARG, erf_inv_expr<T, order, ARG>>
+template<typename RealType, size_t DerivativeOrder, typename ARG>
+struct erf_inv_expr : public abstract_unary_expression<RealType,
+                                                       DerivativeOrder,
+                                                       ARG,
+                                                       erf_inv_expr<RealType, DerivativeOrder, ARG>>
 {
     /** @brief erf(x)
     *
@@ -120,39 +137,47 @@ struct erf_inv_expr : public abstract_unary_expression<T, order, ARG, erf_inv_ex
     *
     * */
 
-    using inner_t = rvar_t<T, order - 1>;
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
 
-    explicit erf_inv_expr(const expression<T, order, ARG> &arg_expr, const T v)
-        : abstract_unary_expression<T, order, ARG, erf_inv_expr<T, order, ARG>>(arg_expr, v){};
+    explicit erf_inv_expr(const expression<RealType, DerivativeOrder, ARG> &arg_expr,
+                          const RealType                                    v)
+        : abstract_unary_expression<RealType,
+                                    DerivativeOrder,
+                                    ARG,
+                                    erf_inv_expr<RealType, DerivativeOrder, ARG>>(arg_expr, v){};
 
     inner_t evaluate() const
     {
-        return detail::if_functional_dispatch<(order > 1)>(
+        return detail::if_functional_dispatch<((DerivativeOrder > 1))>(
             [this](auto &&x) { return reverse_mode::erf_inv(std::forward<decltype(x)>(x)); },
             [this](auto &&x) { return boost::math::erf_inv(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv,
                                     const inner_t & /*v*/,
-                                    const T & /*constant*/)
+                                    const RealType & /*constant*/)
     {
         BOOST_MATH_STD_USING
-        return detail::if_functional_dispatch<(order > 1)>(
+        return detail::if_functional_dispatch<((DerivativeOrder > 1))>(
             [](auto &&x) {
-                return static_cast<T>(0.5) * sqrt(constants::pi<T>())
+                return static_cast<RealType>(0.5) * sqrt(constants::pi<RealType>())
                        * reverse_mode::exp(
-                           reverse_mode::pow(reverse_mode::erf_inv(x), static_cast<T>(2.0)));
+                           reverse_mode::pow(reverse_mode::erf_inv(x), static_cast<RealType>(2.0)));
             },
             [](auto &&x) {
-                return static_cast<T>(0.5) * sqrt(constants::pi<T>())
-                       * exp(pow(boost::math::erf_inv(x), static_cast<T>(2.0)));
+                return static_cast<RealType>(0.5) * sqrt(constants::pi<RealType>())
+                       * exp(pow(boost::math::erf_inv(x), static_cast<RealType>(2.0)));
             },
             argv);
     }
 };
 
-template<typename T, size_t order, typename ARG>
-struct erfc_inv_expr : public abstract_unary_expression<T, order, ARG, erfc_inv_expr<T, order, ARG>>
+template<typename RealType, size_t DerivativeOrder, typename ARG>
+struct erfc_inv_expr
+    : public abstract_unary_expression<RealType,
+                                       DerivativeOrder,
+                                       ARG,
+                                       erfc_inv_expr<RealType, DerivativeOrder, ARG>>
 {
     /** @brief erfc(x)
     *
@@ -160,32 +185,36 @@ struct erfc_inv_expr : public abstract_unary_expression<T, order, ARG, erfc_inv_
     *
     * */
 
-    using inner_t = rvar_t<T, order - 1>;
+    using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
 
-    explicit erfc_inv_expr(const expression<T, order, ARG> &arg_expr, const T v)
-        : abstract_unary_expression<T, order, ARG, erfc_inv_expr<T, order, ARG>>(arg_expr, v){};
+    explicit erfc_inv_expr(const expression<RealType, DerivativeOrder, ARG> &arg_expr,
+                           const RealType                                    v)
+        : abstract_unary_expression<RealType,
+                                    DerivativeOrder,
+                                    ARG,
+                                    erfc_inv_expr<RealType, DerivativeOrder, ARG>>(arg_expr, v){};
 
     inner_t evaluate() const
     {
-        return detail::if_functional_dispatch<(order > 1)>(
+        return detail::if_functional_dispatch<((DerivativeOrder > 1))>(
             [this](auto &&x) { return reverse_mode::erfc_inv(std::forward<decltype(x)>(x)); },
             [this](auto &&x) { return boost::math::erfc_inv(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv,
                                     const inner_t & /*v*/,
-                                    const T & /*constant*/)
+                                    const RealType & /*constant*/)
     {
         BOOST_MATH_STD_USING
-        return detail::if_functional_dispatch<(order > 1)>(
+        return detail::if_functional_dispatch<((DerivativeOrder > 1))>(
             [](auto &&x) {
-                return static_cast<T>(-0.5) * sqrt(constants::pi<T>())
-                       * reverse_mode::exp(
-                           reverse_mode::pow(reverse_mode::erfc_inv(x), static_cast<T>(2.0)));
+                return static_cast<RealType>(-0.5) * sqrt(constants::pi<RealType>())
+                       * reverse_mode::exp(reverse_mode::pow(reverse_mode::erfc_inv(x),
+                                                             static_cast<RealType>(2.0)));
             },
             [](auto &&x) {
-                return static_cast<T>(-0.5) * sqrt(constants::pi<T>())
-                       * exp(pow(boost::math::erfc_inv(x), static_cast<T>(2.0)));
+                return static_cast<RealType>(-0.5) * sqrt(constants::pi<RealType>())
+                       * exp(pow(boost::math::erfc_inv(x), static_cast<RealType>(2.0)));
             },
             argv);
     }

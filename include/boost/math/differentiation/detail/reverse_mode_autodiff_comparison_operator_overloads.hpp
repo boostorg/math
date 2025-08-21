@@ -10,147 +10,153 @@ namespace boost {
 namespace math {
 namespace differentiation {
 namespace reverse_mode {
-template<typename T, size_t order_1, size_t order_2, class E, class F>
-bool operator==(const expression<T, order_1, E> &lhs, const expression<T, order_2, F> &rhs)
+template<typename RealType, size_t DerivativeOrder1, size_t DerivativeOrder2, class LhsExpr, class RhsExpr>
+bool operator==(const expression<RealType, DerivativeOrder1, LhsExpr> &lhs,
+                const expression<RealType, DerivativeOrder2, RhsExpr> &rhs)
 {
     return lhs.evaluate() == rhs.evaluate();
 }
 
-template<typename U,
-         typename T,
-         size_t order,
-         class E,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-bool operator==(const expression<T, order, E> &lhs, const U &rhs)
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
+         class ArgExpr,
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+bool operator==(const expression<RealType1, DerivativeOrder, ArgExpr> &lhs, const RealType2 &rhs)
 {
-    return lhs.evaluate() == static_cast<T>(rhs);
+    return lhs.evaluate() == static_cast<RealType1>(rhs);
 }
-template<typename U,
-         typename T,
-         size_t order,
-         class E,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-bool operator==(const U &lhs, const expression<T, order, E> &rhs)
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
+         class ArgExpr,
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+bool operator==(const RealType2 &lhs, const expression<RealType1, DerivativeOrder, ArgExpr> &rhs)
 {
     return lhs == rhs.evaluate();
 }
 
-template<typename T, size_t order_1, size_t order_2, class E, class F>
-bool operator!=(const expression<T, order_1, E> &lhs, const expression<T, order_2, F> &rhs)
+template<typename RealType, size_t DerivativeOrder1, size_t DerivativeOrder2, class LhsExpr, class RhsExpr>
+bool operator!=(const expression<RealType, DerivativeOrder1, LhsExpr> &lhs,
+                const expression<RealType, DerivativeOrder2, RhsExpr> &rhs)
 {
     return lhs.evaluate() != rhs.evaluate();
 }
-template<typename U,
-         typename T,
-         size_t order,
-         class E,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-bool operator!=(const expression<T, order, E> &lhs, const U &rhs)
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
+         class ArgExpr,
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+bool operator!=(const expression<RealType1, DerivativeOrder, ArgExpr> &lhs, const RealType2 &rhs)
 {
     return lhs.evaluate() != rhs;
 }
-template<typename U,
-         typename T,
-         size_t order,
-         class E,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-bool operator!=(const U &lhs, const expression<T, order, E> &rhs)
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
+         class ArgExpr,
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+bool operator!=(const RealType2 &lhs, const expression<RealType1, DerivativeOrder, ArgExpr> &rhs)
 {
     return lhs != rhs.evaluate();
 }
 
-template<typename T, size_t order_1, size_t order_2, class E, class F>
-bool operator<(const expression<T, order_1, E> &lhs, const expression<T, order_2, F> &rhs)
+template<typename RealType, size_t DerivativeOrder1, size_t DerivativeOrder2, class LhsExpr, class RhsExpr>
+bool operator<(const expression<RealType, DerivativeOrder1, LhsExpr> &lhs,
+               const expression<RealType, DerivativeOrder2, RhsExpr> &rhs)
 {
     return lhs.evaluate() < rhs.evaluate();
 }
-template<typename U,
-         typename T,
-         size_t order,
-         class E,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-bool operator<(const expression<T, order, E> &lhs, const U &rhs)
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
+         class ArgExpr,
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+bool operator<(const expression<RealType1, DerivativeOrder, ArgExpr> &lhs, const RealType2 &rhs)
 {
     return lhs.evaluate() < rhs;
 }
-template<typename U,
-         typename T,
-         size_t order,
-         class E,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-bool operator<(const U &lhs, const expression<T, order, E> &rhs)
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
+         class ArgExpr,
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+bool operator<(const RealType2 &lhs, const expression<RealType1, DerivativeOrder, ArgExpr> &rhs)
 {
     return lhs < rhs.evaluate();
 }
 
-template<typename T, size_t order_1, size_t order_2, class E, class F>
-bool operator>(const expression<T, order_1, E> &lhs, const expression<T, order_2, F> &rhs)
+template<typename RealType, size_t DerivativeOrder1, size_t DerivativeOrder2, class LhsExpr, class RhsExpr>
+bool operator>(const expression<RealType, DerivativeOrder1, LhsExpr> &lhs,
+               const expression<RealType, DerivativeOrder2, RhsExpr> &rhs)
 {
     return lhs.evaluate() > rhs.evaluate();
 }
-template<typename U,
-         typename T,
-         size_t order,
-         class E,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-bool operator>(const expression<T, order, E> &lhs, const U &rhs)
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
+         class ArgExpr,
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+bool operator>(const expression<RealType1, DerivativeOrder, ArgExpr> &lhs, const RealType2 &rhs)
 {
     return lhs.evaluate() > rhs;
 }
-template<typename U,
-         typename T,
-         size_t order,
-         class E,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-bool operator>(const U &lhs, const expression<T, order, E> &rhs)
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
+         class ArgExpr,
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+bool operator>(const RealType2 &lhs, const expression<RealType1, DerivativeOrder, ArgExpr> &rhs)
 {
     return lhs > rhs.evaluate();
 }
 
-template<typename T, size_t order_1, size_t order_2, class E, class F>
-bool operator<=(const expression<T, order_1, E> &lhs, const expression<T, order_2, F> &rhs)
+template<typename RealType, size_t DerivativeOrder1, size_t DerivativeOrder2, class LhsExpr, class RhsExpr>
+bool operator<=(const expression<RealType, DerivativeOrder1, LhsExpr> &lhs,
+                const expression<RealType, DerivativeOrder2, RhsExpr> &rhs)
 {
     return lhs.evaluate() <= rhs.evaluate();
 }
-template<typename U,
-         typename T,
-         size_t order,
-         class E,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-bool operator<=(const expression<T, order, E> &lhs, const U &rhs)
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
+         class ArgExpr,
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+bool operator<=(const expression<RealType1, DerivativeOrder, ArgExpr> &lhs, const RealType2 &rhs)
 {
     return lhs.evaluate() <= rhs;
 }
-template<typename U,
-         typename T,
-         size_t order,
-         class E,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-bool operator<=(const U &lhs, const expression<T, order, E> &rhs)
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
+         class ArgExpr,
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+bool operator<=(const RealType2 &lhs, const expression<RealType1, DerivativeOrder, ArgExpr> &rhs)
 {
     return lhs <= rhs.evaluate();
 }
 
-template<typename T, size_t order_1, size_t order_2, class E, class F>
-bool operator>=(const expression<T, order_1, E> &lhs, const expression<T, order_2, F> &rhs)
+template<typename RealType, size_t DerivativeOrder1, size_t DerivativeOrder2, class LhsExpr, class RhsExpr>
+bool operator>=(const expression<RealType, DerivativeOrder1, LhsExpr> &lhs,
+                const expression<RealType, DerivativeOrder2, RhsExpr> &rhs)
 {
     return lhs.evaluate() >= rhs.evaluate();
 }
-template<typename U,
-         typename T,
-         size_t order,
-         class E,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-bool operator>=(const expression<T, order, E> &lhs, const U &rhs)
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
+         class ArgExpr,
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+bool operator>=(const expression<RealType1, DerivativeOrder, ArgExpr> &lhs, const RealType2 &rhs)
 {
     return lhs.evaluate() >= rhs;
 }
-template<typename U,
-         typename T,
-         size_t order,
-         class E,
-         typename = typename std::enable_if<!detail::is_expression<U>::value>::type>
-bool operator>=(const U &lhs, const expression<T, order, E> &rhs)
+template<typename RealType2,
+         typename RealType1,
+         size_t DerivativeOrder,
+         class ArgExpr,
+         typename = typename std::enable_if<!detail::is_expression<RealType2>::value>::type>
+bool operator>=(const RealType2 &lhs, const expression<RealType1, DerivativeOrder, ArgExpr> &rhs)
 {
     return lhs >= rhs.evaluate();
 }
