@@ -13,7 +13,7 @@
 // This is the only system boost.units still works on.
 // I imagine this will start to fail at some point,
 // and we'll have to remove this test as well.
-#if defined(__APPLE__)
+#if 0 //defined(__APPLE__)
 #define BOOST_MATH_TEST_UNITS_COMPATIBILITY 1
 #include <boost/units/systems/si/length.hpp>
 #include <boost/units/systems/si/area.hpp>

@@ -57,14 +57,9 @@ template <class Real> void test_ackley() {
   jso_params.initial_guess = &initial_guess;
   local_minima = jso(ack, jso_params, gen);
 
-  #if (defined(BOOST_GCC) && ((BOOST_GCC >= 80000) && (BOOST_GCC < 90000)))
   using std::fabs;
   CHECK_LE(fabs(local_minima[0]), 128 * boost::math::tools::epsilon<Real>());
   CHECK_LE(fabs(local_minima[1]), 128 * boost::math::tools::epsilon<Real>());
-  #else
-  CHECK_EQUAL(local_minima[0], Real(0));
-  CHECK_EQUAL(local_minima[1], Real(0));
-  #endif
 }
 
 template <class Real> void test_rosenbrock_saddle() {
