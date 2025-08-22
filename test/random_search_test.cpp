@@ -151,21 +151,6 @@ void test_beale() {
   CHECK_ABSOLUTE_ERROR(Real(1)/Real(2), local_minima[1], Real(0.1));
 }
 
-#if BOOST_MATH_TEST_UNITS_COMPATIBILITY
-void test_dimensioned_sphere() {
-  std::cout << "Testing random search on dimensioned sphere . . .\n";
-  using ArgType = std::vector<quantity<length>>;
-  auto rs_params = random_search_parameters<ArgType>();
-  rs_params.lower_bounds.resize(4, -1.0*meter);
-  rs_params.upper_bounds.resize(4, 1*meter);
-  rs_params.max_function_calls = 100000;
-  rs_params.threads = 2;
-  std::mt19937_64 gen(56789);
-  auto local_minima = random_search(dimensioned_sphere, rs_params, gen);
-}
-
-#endif
-
 int main() {
 #if defined(__clang__) || defined(_MSC_VER)
   test_ackley<float>();
@@ -174,9 +159,6 @@ int main() {
   test_rastrigin<double>();
   test_three_hump_camel<float>();
   test_beale<double>();
-#endif
-#if BOOST_MATH_TEST_UNITS_COMPATIBILITY
-  test_dimensioned_sphere();
 #endif
   test_sphere();
   return boost::math::test::report_errors();

@@ -6,37 +6,11 @@
  */
 #ifndef TEST_FUNCTIONS_FOR_OPTIMIZATION_HPP
 #define TEST_FUNCTIONS_FOR_OPTIMIZATION_HPP
+
+#include <boost/math/constants/constants.hpp>
+
 #include <array>
 #include <vector>
-#include <boost/math/constants/constants.hpp>
-#if __has_include(<boost/units/systems/si/length.hpp>)
-// This is the only system boost.units still works on.
-// I imagine this will start to fail at some point,
-// and we'll have to remove this test as well.
-#if 0 //defined(__APPLE__)
-#define BOOST_MATH_TEST_UNITS_COMPATIBILITY 1
-#include <boost/units/systems/si/length.hpp>
-#include <boost/units/systems/si/area.hpp>
-#include <boost/units/cmath.hpp>
-#include <boost/units/quantity.hpp>
-#include <boost/units/systems/si/io.hpp>
-using namespace boost::units;
-using namespace boost::units::si;
-
-// This *should* return an area, but see: https://github.com/boostorg/units/issues/58
-// This sadly prevents std::atomic<quantity<area>>.
-// Nonetheless, we *do* get some information making the argument type dimensioned,
-// even if it would be better to get the full information:
-double dimensioned_sphere(std::vector<quantity<length>> const & v) {
-  quantity<area> r(0.0*meters*meters);
-  for (auto const & x : v) {
-    r += (x * x);
-  }
-  quantity<area> scale(1.0*meters*meters);
-  return static_cast<double>(r/scale);
-}
-#endif
-#endif
 
 // Taken from: https://en.wikipedia.org/wiki/Test_functions_for_optimization
 template <typename Real> Real ackley(std::array<Real, 2> const &v) {
