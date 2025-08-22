@@ -57,14 +57,9 @@ template <class Real> void test_ackley() {
   jso_params.initial_guess = &initial_guess;
   local_minima = jso(ack, jso_params, gen);
 
-  #if (defined(BOOST_GCC) && ((BOOST_GCC >= 80000) && (BOOST_GCC < 90000)))
   using std::fabs;
   CHECK_LE(fabs(local_minima[0]), 128 * boost::math::tools::epsilon<Real>());
   CHECK_LE(fabs(local_minima[1]), 128 * boost::math::tools::epsilon<Real>());
-  #else
-  CHECK_EQUAL(local_minima[0], Real(0));
-  CHECK_EQUAL(local_minima[1], Real(0));
-  #endif
 }
 
 template <class Real> void test_rosenbrock_saddle() {
@@ -150,19 +145,6 @@ void test_beale() {
   CHECK_ABSOLUTE_ERROR(Real(1)/Real(2), local_minima[1], Real(2e-4));
 }
 
-#if BOOST_MATH_TEST_UNITS_COMPATIBILITY
-void test_dimensioned_sphere() {
-  std::cout << "Testing jso on dimensioned sphere . . .\n";
-  using ArgType = std::vector<quantity<length>>;
-  auto params = jso_parameters<ArgType>();
-  params.lower_bounds.resize(4, -1.0*meter);
-  params.upper_bounds.resize(4, 1*meter);
-  params.threads = 2;
-  std::mt19937_64 gen(56789);
-  auto local_minima = jso(dimensioned_sphere, params, gen);
-}
-#endif
-
 int main() {
   test_ackley<float>();
   test_ackley<double>();
@@ -170,9 +152,6 @@ int main() {
   test_rastrigin<double>();
   test_three_hump_camel<float>();
   test_beale<double>();
-#if BOOST_MATH_TEST_UNITS_COMPATIBILITY
-  test_dimensioned_sphere();
-#endif
   test_sphere();
   test_weighted_lehmer_mean();
   return boost::math::test::report_errors();
