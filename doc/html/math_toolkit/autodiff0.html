@@ -1,0 +1,2255 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Reverse Mode Automatic Differentiation</title>
+<link rel="stylesheet" href="../math.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
+<link rel="home" href="../index.html" title="Math Toolkit 4.2.1">
+<link rel="up" href="../quadrature.html" title="Chapter 14. Quadrature and Differentiation">
+<link rel="prev" href="autodiff.html" title="Automatic Differentiation">
+<link rel="next" href="diff0.html" title="Lanczos Smoothing Derivatives">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="autodiff.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../quadrature.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="diff0.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="math_toolkit.autodiff0"></a><a class="link" href="autodiff0.html" title="Reverse Mode Automatic Differentiation">Reverse Mode Automatic Differentiation</a>
+</h2></div></div></div>
+<h2>
+<a name="math_toolkit.autodiff0.h0"></a>
+      <span class="phrase"><a name="math_toolkit.autodiff0.synopsis"></a></span><a class="link" href="autodiff0.html#math_toolkit.autodiff0.synopsis">Synopsis</a>
+    </h2>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">differentiation</span><span class="special">/</span><span class="identifier">autodiff_reverse</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+<span class="keyword">namespace</span> <span class="identifier">math</span> <span class="special">{</span>
+<span class="keyword">namespace</span> <span class="identifier">differentiation</span> <span class="special">{</span>
+<span class="keyword">namespace</span> <span class="identifier">reverse_mode</span> <span class="special">{</span>
+
+<span class="comment">/* autodiff variable of type RealType (numeric types), stores derivatives up to DerivativeOrder*/</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">DerivativeOrder</span> <span class="special">=</span> <span class="number">1</span><span class="special">&gt;</span>
+<span class="keyword">class</span> <span class="identifier">rvar</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">expression</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">&gt;&gt;</span> <span class="special">{</span>
+  <span class="comment">// inner_t of rvar&lt;RealType, N&gt; = var&lt;RealType, N-1&gt;</span>
+  <span class="comment">// used to store graphs of N-1 order derivatives</span>
+  <span class="comment">// rvar_t&lt;RealType, 0&gt; decays to RealType</span>
+  <span class="keyword">using</span> <span class="identifier">inner_t</span> <span class="special">=</span> <span class="identifier">rvar_t</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span> <span class="special">-</span> <span class="number">1</span><span class="special">&gt;;</span>
+  <span class="comment">/* constructors */</span>
+  <span class="comment">// default</span>
+  <span class="identifier">rvar</span><span class="special">();</span>
+  <span class="comment">// construct from numeric type</span>
+  <span class="identifier">rar</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span> <span class="identifier">value</span><span class="special">);</span>
+  <span class="comment">// copy</span>
+  <span class="identifier">rvar</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">&gt;</span> <span class="identifier">other</span><span class="special">);</span>
+
+  <span class="comment">/* assignment operators */</span>
+  <span class="comment">// from numeric type</span>
+  <span class="identifier">rvar</span> <span class="special">&amp;</span><span class="keyword">operator</span><span class="special">=(</span><span class="identifier">RealType</span> <span class="identifier">v</span><span class="special">);</span>
+  <span class="comment">// from another rvar</span>
+  <span class="identifier">rvar</span> <span class="special">&amp;</span><span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">other</span><span class="special">);</span>
+  <span class="comment">// from a chain of expression templates</span>
+  <span class="identifier">rvar</span> <span class="special">&amp;</span><span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">expression</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">E</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">expr</span><span class="special">);</span>
+
+  <span class="comment">// calculate all derivatives in computational graph</span>
+  <span class="keyword">void</span> <span class="identifier">backward</span><span class="special">();</span>
+
+  <span class="comment">// get RealType value in rvar</span>
+  <span class="identifier">RealType</span> <span class="identifier">item</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+
+  <span class="comment">// get accumulated adjoint of this variable</span>
+  <span class="comment">// returns inner_t</span>
+  <span class="keyword">const</span> <span class="identifier">inner_t</span> <span class="special">&amp;</span><span class="identifier">adjoint</span><span class="special">()</span> <span class="keyword">const</span> <span class="special">{</span> <span class="keyword">return</span> <span class="special">*</span><span class="identifier">node_</span><span class="special">-&gt;</span><span class="identifier">get_adjoint_ptr</span><span class="special">();</span> <span class="special">}</span>
+  <span class="identifier">inner_t</span>       <span class="special">&amp;</span><span class="identifier">adjoint</span><span class="special">()</span> <span class="special">{</span> <span class="keyword">return</span> <span class="special">*</span><span class="identifier">node_</span><span class="special">-&gt;</span><span class="identifier">get_adjoint_ptr</span><span class="special">();</span> <span class="special">}</span>
+
+  <span class="comment">// all arithmetic and comparison operators are overloaded</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">E</span><span class="special">&gt;</span>
+  <span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="keyword">operator</span><span class="special">+=(</span><span class="keyword">const</span> <span class="identifier">expression</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">E</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">expr</span><span class="special">);</span>
+
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">E</span><span class="special">&gt;</span>
+  <span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="keyword">operator</span><span class="special">*=(</span><span class="keyword">const</span> <span class="identifier">expression</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">E</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">expr</span><span class="special">)</span>
+
+
+<span class="special">}</span>
+
+<span class="comment">// gradient tape holds the computational graph</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">buffer_size</span> <span class="special">=</span> <span class="identifier">BOOST_MATH_BUFFER_SIZE</span><span class="special">&gt;</span>
+<span class="keyword">class</span> <span class="identifier">gradient_tape</span> <span class="special">{</span>
+
+  <span class="comment">// clear tape</span>
+  <span class="keyword">void</span> <span class="identifier">clear</span><span class="special">();</span>
+
+  <span class="comment">// sets all derivatives to zero</span>
+  <span class="keyword">void</span> <span class="identifier">zero_grad</span><span class="special">();</span>
+
+  <span class="comment">// adds a checkpoint you can rewind to</span>
+  <span class="keyword">void</span> <span class="identifier">add_checkpoint</span><span class="special">();</span>
+
+  <span class="comment">// rewinds tape to last checkpoint set</span>
+  <span class="keyword">void</span> <span class="identifier">rewind_to_last_checkpoint</span><span class="special">();</span>
+  <span class="comment">// index is "checkpoint" index. so                                              // order which checkpoint was set</span>
+  <span class="keyword">void</span> <span class="identifier">rewind_to_checkpoint_at</span><span class="special">(</span><span class="identifier">size_t</span> <span class="identifier">index</span><span class="special">);</span>
+  <span class="comment">// rewind to beginning of graph without clearing the tape</span>
+  <span class="keyword">void</span> <span class="identifier">rewind</span><span class="special">();</span>
+<span class="special">}</span>
+
+<span class="comment">// tape access</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="identifier">typenametemplate</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">DerivativeOrder</span><span class="special">&gt;</span>
+<span class="keyword">inline</span> <span class="identifier">gradient_tape</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">BOOST_MATH_BUFFER_SIZE</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">get_active_tape</span><span class="special">();</span>
+
+<span class="comment">// standard math functions are overloaded using expression templates</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">LHS</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">RHS</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">add_expr</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">abstract_binary_expression</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">LHS</span><span class="special">,</span> <span class="identifier">RHS</span><span class="special">,</span> <span class="identifier">add_expr</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">LHS</span><span class="special">,</span> <span class="identifier">RHS</span><span class="special">&gt;&gt;</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">LHS</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">RHS</span><span class="special">&gt;</span> <span class="identifier">add_expr</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">LHS</span><span class="special">,</span> <span class="identifier">RHS</span><span class="special">&gt;</span> <span class="keyword">operator</span><span class="special">+(</span><span class="keyword">const</span> <span class="identifier">expression</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">LHS</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">lhs</span><span class="special">,</span><span class="keyword">const</span> <span class="identifier">expression</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">RHS</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">rhs</span><span class="special">);</span>
+
+<span class="comment">// Standard math functions are overloaded and called via argument-dependent lookup (ADL).</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">ARG</span><span class="special">&gt;</span>
+<span class="identifier">floor_expr</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">ARG</span><span class="special">&gt;</span> <span class="identifier">floor</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">expression</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span><span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">ARG</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">arg</span><span class="special">);</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">ARG</span><span class="special">&gt;</span>
+<span class="identifier">cos_expr</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">ARG</span><span class="special">&gt;</span> <span class="identifier">cos</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">expression</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span><span class="identifier">DerivativeOrder</span><span class="special">,</span> <span class="identifier">ARG</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">arg</span><span class="special">);</span>
+
+<span class="comment">// Helper gradient functions</span>
+<span class="comment">// rvar&lt;T,0&gt; decays into T</span>
+<span class="comment">// returns vector&lt;rvar&lt;T,order1_1-1&gt;&gt; of gradients</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">order_1</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">order_2</span><span class="special">&gt;</span>
+<span class="keyword">auto</span> <span class="identifier">grad</span><span class="special">(</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">order_1</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">order_2</span><span class="special">&gt;</span> <span class="special">*&gt;</span> <span class="special">&amp;</span><span class="identifier">x</span><span class="special">);</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">order_1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span><span class="special">...</span> <span class="identifier">Other</span><span class="special">&gt;</span>
+<span class="keyword">auto</span> <span class="identifier">grad</span><span class="special">(</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">order_1</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">First</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">Other</span><span class="special">...</span> <span class="identifier">other</span><span class="special">)</span>
+<span class="comment">// returns a vector&lt;vector&lt;rvar&lt;T, order_1 - 2&gt;&gt; representing the hessian matrix</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">order_1</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">order_2</span><span class="special">&gt;</span>
+<span class="keyword">auto</span> <span class="identifier">hess</span><span class="special">(</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">order_1</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">order_2</span><span class="special">&gt;</span> <span class="special">*&gt;</span> <span class="special">&amp;</span><span class="identifier">x</span><span class="special">)</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">order_1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span><span class="special">...</span> <span class="identifier">Other</span><span class="special">&gt;</span>
+<span class="keyword">auto</span> <span class="identifier">hess</span><span class="special">(</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">order_1</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">First</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">Other</span><span class="special">...</span> <span class="identifier">other</span><span class="special">)</span>
+<span class="comment">// returns N-d nested vector&lt;vector&lt; ...rvar&lt;T,order_1 - N&gt; ...</span>
+<span class="comment">// representing the tensor generalization of the N-d gradient</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="identifier">size_t</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">order_1</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">order_2</span><span class="special">&gt;</span>
+<span class="keyword">auto</span> <span class="identifier">grad_nd</span><span class="special">(</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">order_1</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">order_2</span><span class="special">&gt;</span> <span class="special">*&gt;</span> <span class="special">&amp;</span><span class="identifier">x</span><span class="special">)</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="identifier">size_t</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">ftype</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span><span class="special">...</span> <span class="identifier">Other</span><span class="special">&gt;</span>
+<span class="keyword">auto</span> <span class="identifier">grad_nd</span><span class="special">(</span><span class="identifier">ftype</span> <span class="special">&amp;</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">First</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">Other</span><span class="special">...</span> <span class="identifier">other</span><span class="special">)</span>
+<span class="comment">// ...</span>
+
+<span class="special">}</span>  <span class="comment">// namespace reverse_mode</span>
+<span class="special">}</span>  <span class="comment">// namespace differentiation</span>
+<span class="special">}</span>  <span class="comment">// namespace math</span>
+<span class="special">}</span>  <span class="comment">// namespace boost</span>
+</pre>
+<h2>
+<a name="math_toolkit.autodiff0.h1"></a>
+      <span class="phrase"><a name="math_toolkit.autodiff0.description"></a></span><a class="link" href="autodiff0.html#math_toolkit.autodiff0.description">Description</a>
+    </h2>
+<p>
+      Reverse mode autodiff is a header-only C++ library the <a href="https://en.wikipedia.org/wiki/Automatic_differentiation" target="_top">automatic
+      differentiation</a> (reverse mode) of mathematical functions. This implementation
+      builds a computational graph known as a tape, which sotres all operations and
+      their corresponding derivatives. The total gradients are then computed by reverse
+      accumulation via the chain rule.
+    </p>
+<p>
+      Consider the following function
+    </p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">T</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span><span class="identifier">y</span><span class="special">)</span>
+<span class="special">{</span>
+  <span class="keyword">return</span> <span class="identifier">x</span><span class="special">*</span><span class="identifier">y</span><span class="special">+</span><span class="identifier">sin</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
+<span class="special">}</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="special">{</span>
+  <span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span><span class="number">1</span><span class="special">&gt;</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">1.0</span><span class="special">;</span>
+  <span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span><span class="number">1</span><span class="special">&gt;</span> <span class="identifier">y</span> <span class="special">=</span> <span class="number">1.0</span><span class="special">;</span>
+  <span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span><span class="number">1</span><span class="special">&gt;</span> <span class="identifier">z</span> <span class="special">=</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span><span class="identifier">y</span><span class="special">);</span>
+  <span class="identifier">z</span><span class="special">.</span><span class="identifier">backward</span><span class="special">();</span>
+<span class="special">}</span>
+</pre>
+<p>
+      and the associated computational graph.
+    </p>
+<div class="blockquote"><blockquote class="blockquote"><div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../graphs/autodiff/autodiff_reverse_graph.svg"></span>
+        </p></blockquote></div></blockquote></div>
+<p>
+      Using reverse mode autodiff, the gradients are computed by traversing the graph
+      backward:
+    </p>
+<div class="blockquote"><blockquote class="blockquote"><div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../equations/autodiff/reverse_mode_autodiff_ex_eq.svg"></span>
+        </p></blockquote></div></blockquote></div>
+<p>
+      Some key points about reverse mode automatic differentiation:
+    </p>
+<p>
+      1. Reverse mode auto-diff is exceptionally efficient for computing the gradient
+      of functions mapping from high to low dimensional space, f : ℜ<sup>n</sup>→ℜ. Unlike finite
+      differences or forward mode autodiff which scale with the number of input variables,
+      reverse mode autodiff calculates the entire gradient vector in time proportional
+      to the original function's evaluation time.
+    </p>
+<p>
+      2. It is possible to compute higher order derivatives by applying reverse mode
+      over reverse mode differentiation. The backward function builds a new computational
+      tape over the gradient computation. This approach is conceptually sound, but
+      it can become computationally expensive very quickly. Forward mode autodiff
+      is generally preferrable when computing higher order derivatives.
+    </p>
+<p>
+      3. While reverse mode is fast for computing the gradient, it has to store all
+      the intermediate values from the forward pass to be used during the backward
+      pass. This can be a significant memory overhead, especially for deep networks
+      or complex functions.
+    </p>
+<h2>
+<a name="math_toolkit.autodiff0.h2"></a>
+      <span class="phrase"><a name="math_toolkit.autodiff0.overloaded-functions"></a></span><a class="link" href="autodiff0.html#math_toolkit.autodiff0.overloaded-functions">List
+      of overloaded functions</a>
+    </h2>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                Function
+              </p>
+            </th>
+<th>
+              <p>
+                argument types
+              </p>
+            </th>
+<th>
+              <p>
+                implementation
+              </p>
+            </th>
+<th>
+              <p>
+                return type
+              </p>
+            </th>
+<th>
+              <p>
+                left derivative
+              </p>
+            </th>
+<th>
+              <p>
+                right derivative
+              </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                +
+              </p>
+            </td>
+<td>
+              <p>
+                expression, expression
+              </p>
+            </td>
+<td>
+              <p>
+                x+y
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1.0
+              </p>
+            </td>
+<td>
+              <p>
+                1.0
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                +
+              </p>
+            </td>
+<td>
+              <p>
+                expression, float
+              </p>
+            </td>
+<td>
+              <p>
+                x+y
+              </p>
+            </td>
+<td>
+              <p>
+                expresison
+              </p>
+            </td>
+<td>
+              <p>
+                1.0
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                +
+              </p>
+            </td>
+<td>
+              <p>
+                float, expression
+              </p>
+            </td>
+<td>
+              <p>
+                x+y
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1.0
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                *
+              </p>
+            </td>
+<td>
+              <p>
+                expression, expression
+              </p>
+            </td>
+<td>
+              <p>
+                x*y
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                y
+              </p>
+            </td>
+<td>
+              <p>
+                x
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                *
+              </p>
+            </td>
+<td>
+              <p>
+                expression, float
+              </p>
+            </td>
+<td>
+              <p>
+                x*y
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                y
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                *
+              </p>
+            </td>
+<td>
+              <p>
+                float, expression
+              </p>
+            </td>
+<td>
+              <p>
+                x*y
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+            </td>
+<td>
+              <p>
+                x
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                -
+              </p>
+            </td>
+<td>
+              <p>
+                expression, expression
+              </p>
+            </td>
+<td>
+              <p>
+                x-y
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1.0
+              </p>
+            </td>
+<td>
+              <p>
+                -1.0
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                -
+              </p>
+            </td>
+<td>
+              <p>
+                expression, float
+              </p>
+            </td>
+<td>
+              <p>
+                x-y
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1.0
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                -
+              </p>
+            </td>
+<td>
+              <p>
+                float, expression
+              </p>
+            </td>
+<td>
+              <p>
+                x-y
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+            </td>
+<td>
+              <p>
+                -1.0
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                /
+              </p>
+            </td>
+<td>
+              <p>
+                expression, expression
+              </p>
+            </td>
+<td>
+              <p>
+                x/y
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1/y
+              </p>
+            </td>
+<td>
+              <p>
+                -x/(y*y)
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                /
+              </p>
+            </td>
+<td>
+              <p>
+                expression, float
+              </p>
+            </td>
+<td>
+              <p>
+                x/y
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1/y
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                /
+              </p>
+            </td>
+<td>
+              <p>
+                float, expression
+              </p>
+            </td>
+<td>
+              <p>
+                x/y
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+            </td>
+<td>
+              <p>
+                -x/(y*y)
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                fabs
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::fabs(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                x &gt; 0.0 ? 1.0 : -1.0
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                abs
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                fabs(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                x &gt; 0.0 ? 1.0 : -1.0
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ceil
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::ceil(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                0.0
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                floor
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::floor(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                0.0
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                trunc
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::trunc(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                0.0
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                exp
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::exp(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                exp(x)
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                pow
+              </p>
+            </td>
+<td>
+              <p>
+                expression, expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::pow(x,y)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                y*pow(x,y-1)
+              </p>
+            </td>
+<td>
+              <p>
+                pow(x,y)*log(x)
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                pow
+              </p>
+            </td>
+<td>
+              <p>
+                expression, float
+              </p>
+            </td>
+<td>
+              <p>
+                std::pow(x,y)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                y*pow(x,y-1)
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                pow
+              </p>
+            </td>
+<td>
+              <p>
+                float. expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::pow(x,y)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+            </td>
+<td>
+              <p>
+                pow(x,y)*log(x)
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                sqrt
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::sqrt(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1/(2 sqrt(x))
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                log
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::log(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1/x
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                cos
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::cos(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                -sin(x)
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                sin
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::sin(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                cos(x)
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                tan
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::tan(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1/(cos(x)*cos(x))
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                acos
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::acos(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                -1.0/(sqrt(1-x*x))
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                asin
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::asin(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1.0/(sqrt(1-x*x))
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                atan
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::atan(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1.0/(1+x*x)
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                atan2
+              </p>
+            </td>
+<td>
+              <p>
+                expression,expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::atan2(x,y)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                y/(x*x+y*y)
+              </p>
+            </td>
+<td>
+              <p>
+                -x/(x*x+y*y)
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                atan2
+              </p>
+            </td>
+<td>
+              <p>
+                expression,float
+              </p>
+            </td>
+<td>
+              <p>
+                std::atan2(x,y)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                y/(x*x+y*y)
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                atan2
+              </p>
+            </td>
+<td>
+              <p>
+                float,expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::atan2(x,y)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+            </td>
+<td>
+              <p>
+                -x/(x*x+y*y)
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                round
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::round(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                0.0
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                cosh
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::cosh(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                sinh(x)
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                sinh
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::sinh(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                cosh(x)
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                tanh
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::tanh(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1/(cosh(x)*cosh(x))
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                log10
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::log10(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1/(xlog(10.0)
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                acosh
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::cosh(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1.0/(sqrt(x-1)*sqrt(x+1))
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                asinh
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::sinh(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1/(sqrt(1+x*x))
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                atanh
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::tanh(x)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1/(1-x*x))
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                fmod
+              </p>
+            </td>
+<td>
+              <p>
+                expression,expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::fmod(x,y)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1.0
+              </p>
+            </td>
+<td>
+              <p>
+                -1.0/trunc(x/y)
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                fmod
+              </p>
+            </td>
+<td>
+              <p>
+                expression,float
+              </p>
+            </td>
+<td>
+              <p>
+                std::fmod(x,y)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1.0
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                fmod
+              </p>
+            </td>
+<td>
+              <p>
+                float,expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::fmod(x,y)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+            </td>
+<td>
+              <p>
+                -1.0/trunc(x/y)
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                iround
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::iround(x)
+              </p>
+            </td>
+<td>
+              <p>
+                int, this function breaks the autodiff chain
+              </p>
+            </td>
+<td>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                lround
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::lround(x)
+              </p>
+            </td>
+<td>
+              <p>
+                long, this function breaks the autodiff chain
+              </p>
+            </td>
+<td>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                llround
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::llround(x)
+              </p>
+            </td>
+<td>
+              <p>
+                long long, this function breaks the autodiff chain
+              </p>
+            </td>
+<td>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                itrunc
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::itrunc(x)
+              </p>
+            </td>
+<td>
+              <p>
+                int, this function breaks the autodiff chain
+              </p>
+            </td>
+<td>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ltrunc
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::ltrunc(x)
+              </p>
+            </td>
+<td>
+              <p>
+                long, this function breaks the autodiff chain
+              </p>
+            </td>
+<td>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                lltrunc
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                std::lltrunc(x)
+              </p>
+            </td>
+<td>
+              <p>
+                long long, this function breaks the autodiff chain
+              </p>
+            </td>
+<td>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                frexp
+              </p>
+            </td>
+<td>
+              <p>
+                expression, *int
+              </p>
+            </td>
+<td>
+              <p>
+                std::frexp(x.evaluate(),i); x/pow(2.0, *int)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                1/pow(2.0,int)
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ldexp
+              </p>
+            </td>
+<td>
+              <p>
+                expression, &amp;int
+              </p>
+            </td>
+<td>
+              <p>
+                x*pow(2,int)
+              </p>
+            </td>
+<td>
+              <p>
+                expression
+              </p>
+            </td>
+<td>
+              <p>
+                pow(2,int)
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+</tbody>
+</table></div>
+<h2>
+<a name="math_toolkit.autodiff0.h3"></a>
+      <span class="phrase"><a name="math_toolkit.autodiff0.expression_templates"></a></span><a class="link" href="autodiff0.html#math_toolkit.autodiff0.expression_templates">Example
+      1: Linear Regression</a>
+    </h2>
+<p>
+      Although autodiff is overkill for linear regression, its a useful example for
+      demonstrating a typical gradient based optimization usecase.
+    </p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">array</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">differentiation</span><span class="special">/</span><span class="identifier">autodiff_reverse</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">random</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">vector</span><span class="special">&gt;</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">differentiation</span><span class="special">::</span><span class="identifier">reverse_mode</span><span class="special">;</span>
+<span class="keyword">double</span> <span class="identifier">random_double</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">min_val</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">max_val</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">random_device</span>              <span class="identifier">rd</span><span class="special">;</span>
+    <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">mt19937</span>                    <span class="identifier">gen</span><span class="special">(</span><span class="identifier">rd</span><span class="special">());</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">uniform_real_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">min_val</span><span class="special">,</span> <span class="identifier">max_val</span><span class="special">);</span>
+    <span class="keyword">return</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">gen</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      This function generates a random double within a specified range, used to create
+      the true slope, intercept, and noisy data.
+    </p>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">noisy_linear_function</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">intercept</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">slope</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">x</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="identifier">intercept</span> <span class="special">+</span> <span class="identifier">slope</span> <span class="special">*</span> <span class="identifier">x</span> <span class="special">+</span> <span class="identifier">random_double</span><span class="special">(-</span><span class="number">0.1</span><span class="special">,</span> <span class="number">0.1</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      Above is a simple data generating function that simulates some real-world data
+      by adding a small amount of random noise to a perfect linear relationship.
+      template&lt;size_t N&gt; rvar&lt;double, 1&gt; loss(std::array&lt;double, N&gt;&amp;
+      y_target, std::array&lt;rvar&lt;double, 1&gt;, N&gt;&amp; y_fit) { rvar&lt;double,
+      1&gt; loss_v = make_rvar&lt;double, 1&gt;(0.0); for (size_t i = 0; i &lt; N;
+      ++i) { loss_v += pow(abs(y_target[i] - y_fit[i]), 2) / N; } return loss_v;
+      }
+    </p>
+<p>
+      The loss function calculates the mean-squared error. It takes true values of
+      y, and the "model's" predicted y values and computes their squared
+      difference.
+    </p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="identifier">size_t</span> <span class="identifier">N</span><span class="special">&gt;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;,</span> <span class="identifier">N</span><span class="special">&gt;</span> <span class="identifier">model</span><span class="special">(</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;&amp;</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;&amp;</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;&amp;</span> <span class="identifier">x</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;,</span> <span class="identifier">N</span><span class="special">&gt;</span> <span class="identifier">ret</span><span class="special">;</span>
+    <span class="keyword">for</span> <span class="special">(</span><span class="identifier">size_t</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="identifier">N</span><span class="special">;</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span> <span class="special">{</span>
+        <span class="identifier">ret</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">a</span> <span class="special">*</span> <span class="identifier">x</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">+</span> <span class="identifier">b</span><span class="special">;</span>
+    <span class="special">}</span>
+    <span class="keyword">return</span> <span class="identifier">ret</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+      This function represents the "linear model" we're fitting to. y =
+      ax + b. It takes slow a and intercept b as rvars and the "x" as data.
+      The returned array of rvars holds predicted y values and all calcuations are
+      tracked by the gradient tape.
+    </p>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="special">{</span>
+    <span class="comment">// 1. Generate noisy data with known slope and intercept</span>
+    <span class="keyword">double</span> <span class="identifier">slope</span> <span class="special">=</span> <span class="identifier">random_double</span><span class="special">(-</span><span class="number">5</span><span class="special">,</span> <span class="number">5</span><span class="special">);</span>
+    <span class="keyword">double</span> <span class="identifier">intercept</span> <span class="special">=</span> <span class="identifier">random_double</span><span class="special">(-</span><span class="number">5</span><span class="special">,</span> <span class="number">5</span><span class="special">);</span>
+    <span class="keyword">const</span> <span class="identifier">size_t</span> <span class="identifier">num_data_samples</span> <span class="special">=</span> <span class="number">100</span><span class="special">;</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">num_data_samples</span><span class="special">&gt;</span> <span class="identifier">noisy_data_x</span><span class="special">;</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">num_data_samples</span><span class="special">&gt;</span> <span class="identifier">noisy_data_y</span><span class="special">;</span>
+
+    <span class="keyword">for</span> <span class="special">(</span><span class="identifier">size_t</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="identifier">num_data_samples</span><span class="special">;</span> <span class="identifier">i</span><span class="special">++)</span> <span class="special">{</span>
+        <span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">random_double</span><span class="special">(-</span><span class="number">1</span><span class="special">,</span> <span class="number">1</span><span class="special">);</span>
+        <span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">noisy_linear_function</span><span class="special">(</span><span class="identifier">intercept</span><span class="special">,</span> <span class="identifier">slope</span><span class="special">,</span> <span class="identifier">x</span><span class="special">);</span>
+        <span class="identifier">noisy_data_x</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">x</span><span class="special">;</span>
+        <span class="identifier">noisy_data_y</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">y</span><span class="special">;</span>
+    <span class="special">}</span>
+</pre>
+<p>
+      Above is the data generation stage. We generate a dataset of 100 (x,y) points
+      where y us a linear function of plus some random noise. The "true"
+      slop and intercept are stored to be compared in the final result.
+    </p>
+<pre class="programlisting"><span class="comment">// 2. Initialize guess variables</span>
+<span class="keyword">double</span> <span class="identifier">slope_guess</span> <span class="special">=</span> <span class="identifier">random_double</span><span class="special">(-</span><span class="number">5</span><span class="special">,</span> <span class="number">5</span><span class="special">);</span>
+<span class="keyword">double</span> <span class="identifier">intercept_guess</span> <span class="special">=</span> <span class="identifier">random_double</span><span class="special">(-</span><span class="number">5</span><span class="special">,</span> <span class="number">5</span><span class="special">);</span>
+<span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="identifier">a</span> <span class="special">=</span> <span class="identifier">make_rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;(</span><span class="identifier">slope_guess</span><span class="special">);</span>
+<span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="identifier">b</span> <span class="special">=</span> <span class="identifier">make_rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;(</span><span class="identifier">intercept_guess</span><span class="special">);</span>
+</pre>
+<p>
+      The initialization stage: the model's parameters a and b are initialized with
+      random guesses.
+    </p>
+<pre class="programlisting"><span class="comment">// 3. Get the gradient tape and add a checkpoint</span>
+<span class="identifier">gradient_tape</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;&amp;</span> <span class="identifier">tape</span> <span class="special">=</span> <span class="identifier">get_active_tape</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;();</span>
+<span class="identifier">tape</span><span class="special">.</span><span class="identifier">add_checkpoint</span><span class="special">();</span>
+</pre>
+<p>
+      Tape management: <code class="computeroutput"><span class="identifier">get_active_tape</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span><span class="number">1</span><span class="special">&gt;</span></code> returns
+      a reference to a global tape that stores the computational graph. Checkpoints
+      are essential for gradient descent loops. They allow the tape to be "rewound"
+      at the beginning of each iteration preventing it from growing infinitely.
+    </p>
+<pre class="programlisting"><span class="comment">// 4. Initial forward pass and loss calculation</span>
+<span class="keyword">auto</span> <span class="identifier">y_fit</span> <span class="special">=</span> <span class="identifier">model</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">noisy_data_x</span><span class="special">);</span>
+<span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="identifier">loss_v</span> <span class="special">=</span> <span class="identifier">loss</span><span class="special">(</span><span class="identifier">noisy_data_y</span><span class="special">,</span> <span class="identifier">y_fit</span><span class="special">);</span>
+</pre>
+<p>
+      The model and loss functions are called. This is just to initialize y_fit and
+      loss_v to be used inside the while loop. // 5. Gradient Descent Loop double
+      learning_rate = 1e-3;
+    </p>
+<p>
+      The learning rate is a tunable parameter determining the "velocity"
+      with which we descend to a solution.
+    </p>
+<pre class="programlisting"><span class="keyword">while</span> <span class="special">(</span><span class="identifier">loss_v</span> <span class="special">&gt;</span> <span class="number">0.005</span><span class="special">)</span> <span class="special">{</span>
+    <span class="identifier">tape</span><span class="special">.</span><span class="identifier">zero_grad</span><span class="special">();</span> <span class="comment">// zero out all the adjoints</span>
+</pre>
+<p>
+      It is essentially to zero out the gradients at every iteration so as to not
+      reaccumulate them. if you were to call <code class="computeroutput"><span class="identifier">loss_v</span><span class="special">.</span><span class="identifier">backward</span><span class="special">()</span></code> a second time, the derivative calculations
+      will be incorrect.
+    </p>
+<pre class="programlisting"><span class="identifier">tape</span><span class="special">.</span><span class="identifier">rewind_to_last_checkpoint</span><span class="special">();</span> <span class="comment">// Rewind the tape for a new iteration</span>
+</pre>
+<p>
+      Rewinds the tape to right before the model and loss calculates were done. y_fit
+      = model(a, b, noisy_data_x); loss_v = loss(noisy_data_y, y_fit); loss_v.backward();
+      // backward pass Calls the model and computes the gradeints. a -= a.adjoint()
+      * learning_rate; // Update 'a' by subtracting the gradient scaled by the learning
+      rate b -= b.adjoint() * learning_rate; // Update 'b' similarly } updates <code class="computeroutput"><span class="identifier">a</span></code> and <code class="computeroutput"><span class="identifier">b</span></code>
+      based on their gradients.
+    </p>
+<pre class="programlisting">  <span class="comment">// 6. Print Results</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Autodiff Linear Regression Summary \n"</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"learning rate : "</span> <span class="special">&lt;&lt;</span> <span class="identifier">learning_rate</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"true slope: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">slope</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" regression: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">a</span><span class="special">.</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span>
+
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"relative error (slope): "</span> <span class="special">&lt;&lt;</span> <span class="identifier">relative_slope_error</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"absolute error (slope): "</span> <span class="special">&lt;&lt;</span> <span class="identifier">slope_error</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"true intercept: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">intercept</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" regression: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">b</span><span class="special">.</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"absolute error (intercept): "</span> <span class="special">&lt;&lt;</span> <span class="identifier">intercept_error</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"aelative error (intercept): "</span> <span class="special">&lt;&lt;</span> <span class="identifier">relative_intercept_error</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"-------------------------------"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+      A sample output of the above code
+    </p>
+<pre class="programlisting"><span class="identifier">Autodiff</span> <span class="identifier">Linear</span> <span class="identifier">Regression</span> <span class="identifier">Summary</span>
+<span class="identifier">learning</span> <span class="identifier">rate</span> <span class="special">:</span> <span class="number">0.001</span>
+<span class="keyword">true</span> <span class="identifier">slope</span><span class="special">:</span> <span class="number">1.15677</span> <span class="identifier">regression</span><span class="special">:</span> <span class="number">1.24685</span>
+<span class="identifier">relative</span> <span class="identifier">error</span> <span class="special">(</span><span class="identifier">slope</span><span class="special">):</span> <span class="number">0.0778782</span>
+<span class="identifier">absolute</span> <span class="identifier">error</span> <span class="special">(</span><span class="identifier">slope</span><span class="special">):</span> <span class="number">0.0900868</span>
+<span class="keyword">true</span> <span class="identifier">intercept</span><span class="special">:</span> <span class="number">2.23378</span> <span class="identifier">regression</span><span class="special">:</span> <span class="number">2.22309</span>
+<span class="identifier">absolute</span> <span class="identifier">error</span> <span class="special">(</span><span class="identifier">intercept</span><span class="special">):</span> <span class="number">0.0106901</span>
+<span class="identifier">aelative</span> <span class="identifier">error</span> <span class="special">(</span><span class="identifier">intercept</span><span class="special">):</span> <span class="number">0.00478563</span>
+<span class="special">-------------------------------</span>
+</pre>
+<h3>
+<a name="math_toolkit.autodiff0.h4"></a>
+      <span class="phrase"><a name="math_toolkit.autodiff0.example-black-scholes"></a></span><a class="link" href="autodiff0.html#math_toolkit.autodiff0.example-black-scholes">Example
+      2: Black-Scholes Option Pricing with Greeks</a>
+    </h3>
+<p>
+      Below is effectively a rewrite of the forward mode autodiff Black Scholes example.
+      Its a good example on how to compute higher oder gradients with reverse mode
+      autodiff with helper functions like <code class="computeroutput"><span class="identifier">grad</span><span class="special">()</span></code>, <code class="computeroutput"><span class="identifier">hess</span><span class="special">()</span></code>, and <code class="computeroutput"><span class="identifier">grad_nd</span><span class="special">()</span></code>
+    </p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">differentiation</span><span class="special">/</span><span class="identifier">autodiff_reverse</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">differentiation</span><span class="special">::</span><span class="identifier">reverse_mode</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">;</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
+<span class="identifier">Real</span> <span class="identifier">phi</span><span class="special">(</span><span class="identifier">Real</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="identifier">one_div_root_two_pi</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()</span> <span class="special">*</span> <span class="identifier">exp</span><span class="special">(-</span><span class="number">0.5</span> <span class="special">*</span> <span class="identifier">x</span> <span class="special">*</span> <span class="identifier">x</span><span class="special">);</span>
+<span class="special">}</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
+<span class="identifier">Real</span> <span class="identifier">Phi</span><span class="special">(</span><span class="identifier">Real</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="number">0.5</span> <span class="special">*</span> <span class="identifier">erfc</span><span class="special">(-</span><span class="identifier">one_div_root_two</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()</span> <span class="special">*</span> <span class="identifier">x</span><span class="special">);</span>
+<span class="special">}</span>
+
+<span class="keyword">enum</span> <span class="keyword">class</span> <span class="identifier">CP</span> <span class="special">{</span> <span class="identifier">call</span><span class="special">,</span> <span class="identifier">put</span> <span class="special">};</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">T</span> <span class="identifier">black_scholes_option_price</span><span class="special">(</span><span class="identifier">CP</span> <span class="identifier">cp</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">K</span><span class="special">,</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">S</span><span class="special">,</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">sigma</span><span class="special">,</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">tau</span><span class="special">,</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">r</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">std</span><span class="special">;</span>
+    <span class="keyword">auto</span> <span class="keyword">const</span> <span class="identifier">d1</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">log</span><span class="special">(</span><span class="identifier">S</span> <span class="special">/</span> <span class="identifier">K</span><span class="special">)</span> <span class="special">+</span> <span class="special">(</span><span class="identifier">r</span> <span class="special">+</span> <span class="identifier">sigma</span> <span class="special">*</span> <span class="identifier">sigma</span> <span class="special">/</span> <span class="number">2</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">tau</span><span class="special">)</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">sigma</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau</span><span class="special">));</span>
+    <span class="keyword">auto</span> <span class="keyword">const</span> <span class="identifier">d2</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">log</span><span class="special">(</span><span class="identifier">S</span> <span class="special">/</span> <span class="identifier">K</span><span class="special">)</span> <span class="special">+</span> <span class="special">(</span><span class="identifier">r</span> <span class="special">-</span> <span class="identifier">sigma</span> <span class="special">*</span> <span class="identifier">sigma</span> <span class="special">/</span> <span class="number">2</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">tau</span><span class="special">)</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">sigma</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau</span><span class="special">));</span>
+    <span class="keyword">switch</span> <span class="special">(</span><span class="identifier">cp</span><span class="special">)</span> <span class="special">{</span>
+    <span class="keyword">case</span> <span class="identifier">CP</span><span class="special">::</span><span class="identifier">call</span><span class="special">:</span>
+        <span class="keyword">return</span> <span class="identifier">S</span> <span class="special">*</span> <span class="identifier">Phi</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">d1</span><span class="special">)</span> <span class="special">-</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">r</span> <span class="special">*</span> <span class="identifier">tau</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">K</span> <span class="special">*</span> <span class="identifier">Phi</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">d2</span><span class="special">);</span>
+    <span class="keyword">case</span> <span class="identifier">CP</span><span class="special">::</span><span class="identifier">put</span><span class="special">:</span>
+        <span class="keyword">return</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">r</span> <span class="special">*</span> <span class="identifier">tau</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">K</span> <span class="special">*</span> <span class="identifier">Phi</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(-</span><span class="identifier">d2</span><span class="special">)</span> <span class="special">-</span> <span class="identifier">S</span> <span class="special">*</span> <span class="identifier">Phi</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(-</span><span class="identifier">d1</span><span class="special">);</span>
+    <span class="keyword">default</span><span class="special">:</span>
+        <span class="keyword">throw</span> <span class="identifier">runtime_error</span><span class="special">(</span><span class="string">"Invalid CP value."</span><span class="special">);</span>
+    <span class="special">}</span>
+<span class="special">}</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="special">{</span>
+    <span class="keyword">double</span> <span class="keyword">const</span>    <span class="identifier">K</span>         <span class="special">=</span> <span class="number">100.0</span><span class="special">;</span>
+    <span class="keyword">double</span>          <span class="identifier">S_val</span>     <span class="special">=</span> <span class="number">105.0</span><span class="special">;</span>
+    <span class="keyword">double</span>          <span class="identifier">sigma_val</span> <span class="special">=</span> <span class="number">5.0</span><span class="special">;</span>
+    <span class="keyword">double</span>          <span class="identifier">tau_val</span>   <span class="special">=</span> <span class="number">30.0</span> <span class="special">/</span> <span class="number">365</span><span class="special">;</span>
+    <span class="keyword">double</span>          <span class="identifier">r_val</span>     <span class="special">=</span> <span class="number">1.25</span> <span class="special">/</span> <span class="number">100</span><span class="special">;</span>
+    <span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;</span> <span class="identifier">S</span>         <span class="special">=</span> <span class="identifier">make_rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;(</span><span class="identifier">S_val</span><span class="special">);</span>
+    <span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;</span> <span class="identifier">sigma</span>     <span class="special">=</span> <span class="identifier">make_rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;(</span><span class="identifier">sigma_val</span><span class="special">);</span>
+    <span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;</span> <span class="identifier">tau</span>       <span class="special">=</span> <span class="identifier">make_rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;(</span><span class="identifier">tau_val</span><span class="special">);</span>
+    <span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;</span> <span class="identifier">r</span>         <span class="special">=</span> <span class="identifier">make_rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;(</span><span class="identifier">r_val</span><span class="special">);</span>
+
+    <span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;</span> <span class="identifier">call_price</span>
+        <span class="special">=</span> <span class="identifier">black_scholes_option_price</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;&gt;(</span><span class="identifier">CP</span><span class="special">::</span><span class="identifier">call</span><span class="special">,</span> <span class="identifier">K</span><span class="special">,</span> <span class="identifier">S</span><span class="special">,</span> <span class="identifier">sigma</span><span class="special">,</span> <span class="identifier">tau</span><span class="special">,</span> <span class="identifier">r</span><span class="special">);</span>
+    <span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;</span> <span class="identifier">put_price</span>
+        <span class="special">=</span> <span class="identifier">black_scholes_option_price</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;&gt;(</span><span class="identifier">CP</span><span class="special">::</span><span class="identifier">put</span><span class="special">,</span> <span class="identifier">K</span><span class="special">,</span> <span class="identifier">S</span><span class="special">,</span> <span class="identifier">sigma</span><span class="special">,</span> <span class="identifier">tau</span><span class="special">,</span> <span class="identifier">r</span><span class="special">);</span>
+
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">d1</span> <span class="special">=</span> <span class="special">((</span><span class="identifier">log</span><span class="special">(</span><span class="identifier">S_val</span> <span class="special">/</span> <span class="identifier">K</span><span class="special">)</span> <span class="special">+</span> <span class="special">(</span><span class="identifier">r_val</span> <span class="special">+</span> <span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sigma_val</span> <span class="special">/</span> <span class="number">2</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">tau_val</span><span class="special">)</span>
+                      <span class="special">/</span> <span class="special">(</span><span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">)));</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">d2</span> <span class="special">=</span> <span class="special">((</span><span class="identifier">log</span><span class="special">(</span><span class="identifier">S_val</span> <span class="special">/</span> <span class="identifier">K</span><span class="special">)</span> <span class="special">+</span> <span class="special">(</span><span class="identifier">r_val</span> <span class="special">-</span> <span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sigma_val</span> <span class="special">/</span> <span class="number">2</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">tau_val</span><span class="special">)</span>
+                      <span class="special">/</span> <span class="special">(</span><span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">)));</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_call_delta</span> <span class="special">=</span> <span class="special">+</span><span class="identifier">Phi</span><span class="special">(+</span><span class="identifier">d1</span><span class="special">);</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_put_delta</span>  <span class="special">=</span> <span class="special">-</span><span class="identifier">Phi</span><span class="special">(-</span><span class="identifier">d1</span><span class="special">);</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_vega</span>       <span class="special">=</span> <span class="special">(</span><span class="identifier">S_val</span> <span class="special">*</span> <span class="identifier">phi</span><span class="special">(</span><span class="identifier">d1</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">));</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_call_theta</span> <span class="special">=</span> <span class="special">(-</span><span class="identifier">S_val</span> <span class="special">*</span> <span class="identifier">phi</span><span class="special">(</span><span class="identifier">d1</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">sigma_val</span> <span class="special">/</span> <span class="special">(</span><span class="number">2</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">))</span>
+                                      <span class="special">-</span> <span class="identifier">r_val</span> <span class="special">*</span> <span class="identifier">K</span> <span class="special">*</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">r_val</span> <span class="special">*</span> <span class="identifier">tau_val</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">Phi</span><span class="special">(+</span><span class="identifier">d2</span><span class="special">));</span>
+
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_put_theta</span> <span class="special">=</span> <span class="special">(-</span><span class="identifier">S_val</span> <span class="special">*</span> <span class="identifier">phi</span><span class="special">(</span><span class="identifier">d1</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">sigma_val</span> <span class="special">/</span> <span class="special">(</span><span class="number">2</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">))</span>
+                                      <span class="special">+</span> <span class="identifier">r_val</span> <span class="special">*</span> <span class="identifier">K</span> <span class="special">*</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">r_val</span> <span class="special">*</span> <span class="identifier">tau_val</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">Phi</span><span class="special">(-</span><span class="identifier">d2</span><span class="special">));</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_call_rho</span>  <span class="special">=</span> <span class="special">(+</span><span class="identifier">K</span> <span class="special">*</span> <span class="identifier">tau_val</span> <span class="special">*</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">r_val</span> <span class="special">*</span> <span class="identifier">tau_val</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">Phi</span><span class="special">(+</span><span class="identifier">d2</span><span class="special">));</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_put_rho</span>   <span class="special">=</span> <span class="special">(-</span><span class="identifier">K</span> <span class="special">*</span> <span class="identifier">tau_val</span> <span class="special">*</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">r_val</span> <span class="special">*</span> <span class="identifier">tau_val</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">Phi</span><span class="special">(-</span><span class="identifier">d2</span><span class="special">));</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_gamma</span>     <span class="special">=</span> <span class="special">(</span><span class="identifier">phi</span><span class="special">(</span><span class="identifier">d1</span><span class="special">)</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">S_val</span> <span class="special">*</span> <span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">)));</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_vanna</span>     <span class="special">=</span> <span class="special">(-</span><span class="identifier">phi</span><span class="special">(</span><span class="identifier">d1</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">d2</span> <span class="special">/</span> <span class="identifier">sigma_val</span><span class="special">);</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_charm</span>  <span class="special">=</span> <span class="special">(</span><span class="identifier">phi</span><span class="special">(</span><span class="identifier">d1</span><span class="special">)</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">d2</span> <span class="special">*</span> <span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">)</span> <span class="special">-</span> <span class="number">2</span> <span class="special">*</span> <span class="identifier">r_val</span> <span class="special">*</span> <span class="identifier">tau_val</span><span class="special">)</span>
+                                  <span class="special">/</span> <span class="special">(</span><span class="number">2</span> <span class="special">*</span> <span class="identifier">tau_val</span> <span class="special">*</span> <span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">)));</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_vomma</span>  <span class="special">=</span> <span class="special">(</span><span class="identifier">S_val</span> <span class="special">*</span> <span class="identifier">phi</span><span class="special">(</span><span class="identifier">d1</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">d1</span> <span class="special">*</span> <span class="identifier">d2</span> <span class="special">/</span> <span class="identifier">sigma_val</span><span class="special">);</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_veta</span>   <span class="special">=</span> <span class="special">(-</span><span class="identifier">S_val</span> <span class="special">*</span> <span class="identifier">phi</span><span class="special">(</span><span class="identifier">d1</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">)</span>
+                                <span class="special">*</span> <span class="special">(</span><span class="identifier">r_val</span> <span class="special">*</span> <span class="identifier">d1</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">))</span>
+                                    <span class="special">-</span> <span class="special">(</span><span class="number">1</span> <span class="special">+</span> <span class="identifier">d1</span> <span class="special">*</span> <span class="identifier">d2</span><span class="special">)</span> <span class="special">/</span> <span class="special">(</span><span class="number">2</span> <span class="special">*</span> <span class="identifier">tau_val</span><span class="special">)));</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_speed</span>  <span class="special">=</span> <span class="special">(-</span><span class="identifier">phi</span><span class="special">(</span><span class="identifier">d1</span><span class="special">)</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">d1</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">))</span> <span class="special">+</span> <span class="number">1</span><span class="special">)</span>
+                                  <span class="special">/</span> <span class="special">(</span><span class="identifier">S_val</span> <span class="special">*</span> <span class="identifier">S_val</span> <span class="special">*</span> <span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">)));</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_zomma</span>  <span class="special">=</span> <span class="special">(</span><span class="identifier">phi</span><span class="special">(</span><span class="identifier">d1</span><span class="special">)</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">d1</span> <span class="special">*</span> <span class="identifier">d2</span> <span class="special">-</span> <span class="number">1</span><span class="special">)</span>
+                                  <span class="special">/</span> <span class="special">(</span><span class="identifier">S_val</span> <span class="special">*</span> <span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">)));</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_color</span>  <span class="special">=</span> <span class="special">(-</span><span class="identifier">phi</span><span class="special">(</span><span class="identifier">d1</span><span class="special">)</span> <span class="special">/</span> <span class="special">(</span><span class="number">2</span> <span class="special">*</span> <span class="identifier">S_val</span> <span class="special">*</span> <span class="identifier">tau_val</span> <span class="special">*</span> <span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">))</span>
+                                  <span class="special">*</span> <span class="special">(</span><span class="number">1</span>
+                                    <span class="special">+</span> <span class="special">(</span><span class="number">2</span> <span class="special">*</span> <span class="identifier">r_val</span> <span class="special">*</span> <span class="identifier">tau_val</span> <span class="special">-</span> <span class="identifier">d2</span> <span class="special">*</span> <span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">))</span> <span class="special">*</span> <span class="identifier">d1</span>
+                                          <span class="special">/</span> <span class="special">(</span><span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">tau_val</span><span class="special">))));</span>
+    <span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">formula_ultima</span> <span class="special">=</span> <span class="special">-</span><span class="identifier">formula_vega</span>
+                                  <span class="special">*</span> <span class="special">((</span><span class="identifier">d1</span> <span class="special">*</span> <span class="identifier">d2</span> <span class="special">*</span> <span class="special">(</span><span class="number">1</span> <span class="special">-</span> <span class="identifier">d1</span> <span class="special">*</span> <span class="identifier">d2</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">d1</span> <span class="special">*</span> <span class="identifier">d1</span> <span class="special">+</span> <span class="identifier">d2</span> <span class="special">*</span> <span class="identifier">d2</span><span class="special">)</span>
+                                    <span class="special">/</span> <span class="special">(</span><span class="identifier">sigma_val</span> <span class="special">*</span> <span class="identifier">sigma_val</span><span class="special">));</span>
+
+    <span class="keyword">auto</span> <span class="identifier">call_greeks</span> <span class="special">=</span> <span class="identifier">grad</span><span class="special">(</span><span class="identifier">call_price</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">S</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">sigma</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">tau</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">r</span><span class="special">);</span>
+    <span class="keyword">auto</span> <span class="identifier">put_greeks</span>  <span class="special">=</span> <span class="identifier">grad</span><span class="special">(</span><span class="identifier">put_price</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">S</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">sigma</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">tau</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">r</span><span class="special">);</span>
+</pre>
+<p>
+      <code class="computeroutput"><span class="identifier">grad</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">x</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">y</span><span class="special">,</span> <span class="special">...)</span></code>
+      returns a <code class="computeroutput"><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span><span class="identifier">N</span><span class="special">-</span><span class="number">1</span><span class="special">&gt;</span></code>
+      correspond to the gradient vector of <code class="computeroutput"><span class="identifier">f</span></code>
+      w.r.t. <code class="computeroutput"><span class="identifier">x</span></code>,<code class="computeroutput"><span class="identifier">y</span></code>,
+      etc...
+    </p>
+<pre class="programlisting"><span class="keyword">auto</span> <span class="identifier">call_greeks_2nd_order</span> <span class="special">=</span> <span class="identifier">hess</span><span class="special">(</span><span class="identifier">call_price</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">S</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">sigma</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">tau</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">r</span><span class="special">);</span>
+<span class="keyword">auto</span> <span class="identifier">put_greeks_2nd_order</span>  <span class="special">=</span> <span class="identifier">hess</span><span class="special">(</span><span class="identifier">put_price</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">S</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">sigma</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">tau</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">r</span><span class="special">);</span>
+</pre>
+<p>
+      <code class="computeroutput"><span class="identifier">hess</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">x</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">y</span><span class="special">,</span> <span class="special">...)</span></code>
+      returns a <code class="computeroutput"><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span><span class="identifier">N</span><span class="special">-</span><span class="number">1</span><span class="special">&gt;&gt;</span></code>
+      correspond to the hessian of <code class="computeroutput"><span class="identifier">f</span></code>
+      w.r.t. <code class="computeroutput"><span class="identifier">x</span></code>,<code class="computeroutput"><span class="identifier">y</span></code>,
+      etc...
+    </p>
+<pre class="programlisting"><span class="keyword">auto</span> <span class="identifier">call_greeks_3rd_order</span> <span class="special">=</span> <span class="identifier">grad_nd</span><span class="special">&lt;</span><span class="number">3</span><span class="special">&gt;(</span><span class="identifier">call_price</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">S</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">sigma</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">tau</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">r</span><span class="special">);</span>
+<span class="keyword">auto</span> <span class="identifier">put_greeks_3rd_order</span>  <span class="special">=</span> <span class="identifier">grad_nd</span><span class="special">&lt;</span><span class="number">3</span><span class="special">&gt;(</span><span class="identifier">put_price</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">S</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">sigma</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">tau</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">r</span><span class="special">);</span>
+</pre>
+<p>
+      <code class="computeroutput"><span class="identifier">grad_nd</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">f</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">x</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">y</span><span class="special">,</span> <span class="special">...)</span></code> returns
+      a <code class="computeroutput"><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span><span class="identifier">N</span><span class="special">-</span><span class="number">1</span><span class="special">&gt;&gt;...</span></code>
+      correspond to the gradient tensor of <code class="computeroutput"><span class="identifier">f</span></code>
+      w.r.t. <code class="computeroutput"><span class="identifier">x</span></code>,<code class="computeroutput"><span class="identifier">y</span></code>,
+      etc...
+    </p>
+<pre class="programlisting">    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">setprecision</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">digits10</span><span class="special">)</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff black-scholes call price = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">call_price</span><span class="special">.</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff black-scholes put price = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">put_price</span><span class="special">.</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"\n ## First-order Greeks \n"</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff call delta = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">call_greeks</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"formula call delta = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_call_delta</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff call vega  = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">call_greeks</span><span class="special">[</span><span class="number">1</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">" formula call vega  = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_vega</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff call theta = "</span> <span class="special">&lt;&lt;</span> <span class="special">-</span><span class="identifier">call_greeks</span><span class="special">[</span><span class="number">2</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">" formula call theta = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_call_theta</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff call rho   = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">call_greeks</span><span class="special">[</span><span class="number">3</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">" formula call rho   = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_call_rho</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff put delta = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">put_greeks</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">" formula put delta = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_put_delta</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff put vega  = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">put_greeks</span><span class="special">[</span><span class="number">1</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">" formula put vega  = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_vega</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff put theta = "</span> <span class="special">&lt;&lt;</span> <span class="special">-</span><span class="identifier">put_greeks</span><span class="special">[</span><span class="number">2</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">" formula put theta = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_put_theta</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff put rho   = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">put_greeks</span><span class="special">[</span><span class="number">3</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">" formula put rho   = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_put_rho</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+
+              <span class="special">&lt;&lt;</span> <span class="string">"\n## Second-order Greeks\n"</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff call gamma = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">call_greeks_2nd_order</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">0</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff put  gamma = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">put_greeks_2nd_order</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">0</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"      formula gamma = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_gamma</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff call vanna = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">call_greeks_2nd_order</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">1</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff put  vanna = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">put_greeks_2nd_order</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">1</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"      formula vanna = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_vanna</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff call charm = "</span> <span class="special">&lt;&lt;</span> <span class="special">-</span><span class="identifier">call_greeks_2nd_order</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">2</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff put  charm = "</span> <span class="special">&lt;&lt;</span> <span class="special">-</span><span class="identifier">put_greeks_2nd_order</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">2</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"      formula charm = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_charm</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff call vomma = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">call_greeks_2nd_order</span><span class="special">[</span><span class="number">1</span><span class="special">][</span><span class="number">1</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff put  vomma = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">put_greeks_2nd_order</span><span class="special">[</span><span class="number">1</span><span class="special">][</span><span class="number">1</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"      formula vomma = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_vomma</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff call veta = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">call_greeks_2nd_order</span><span class="special">[</span><span class="number">1</span><span class="special">][</span><span class="number">2</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff put  veta = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">put_greeks_2nd_order</span><span class="special">[</span><span class="number">1</span><span class="special">][</span><span class="number">2</span><span class="special">].</span><span class="identifier">item</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"      formula veta = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_veta</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+
+              <span class="special">&lt;&lt;</span> <span class="string">"\n## Third-order Greeks\n"</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff call speed = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">call_greeks_3rd_order</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">0</span><span class="special">][</span><span class="number">0</span><span class="special">]</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff put  speed = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">put_greeks_3rd_order</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">0</span><span class="special">][</span><span class="number">0</span><span class="special">]</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"      formula speed = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_speed</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff call zomma = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">call_greeks_3rd_order</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">0</span><span class="special">][</span><span class="number">1</span><span class="special">]</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff put  zomma = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">put_greeks_3rd_order</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">0</span><span class="special">][</span><span class="number">1</span><span class="special">]</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"      formula zomma = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_zomma</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff call color = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">call_greeks_3rd_order</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">0</span><span class="special">][</span><span class="number">2</span><span class="special">]</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff put  color = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">put_greeks_3rd_order</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">0</span><span class="special">][</span><span class="number">2</span><span class="special">]</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"      formula color = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_color</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff call ultima = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">call_greeks_3rd_order</span><span class="special">[</span><span class="number">1</span><span class="special">][</span><span class="number">1</span><span class="special">][</span><span class="number">1</span><span class="special">]</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"autodiff put  ultima = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">put_greeks_3rd_order</span><span class="special">[</span><span class="number">1</span><span class="special">][</span><span class="number">1</span><span class="special">][</span><span class="number">1</span><span class="special">]</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span>
+              <span class="special">&lt;&lt;</span> <span class="string">"      formula ultima = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">formula_ultima</span> <span class="special">&lt;&lt;</span> <span class="char">'\n'</span><span class="special">;</span>
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+      Some notes on the implementations of <code class="computeroutput"><span class="identifier">grad</span></code>,
+      <code class="computeroutput"><span class="identifier">hess</span></code>, and <code class="computeroutput"><span class="identifier">grad_nd</span></code>.
+      Internally these functions correctly clear the tape and zero out the gradients,
+      so manual <code class="computeroutput"><span class="identifier">tape</span><span class="special">.</span><span class="identifier">zero_grad</span><span class="special">()</span></code>
+      isn't needed. They however return copies of the adjoint values in a vector,
+      so there can be some performance overhead over using <code class="computeroutput"><span class="identifier">f</span><span class="special">.</span><span class="identifier">backward</span><span class="special">()</span></code> directly.
+    </p>
+<p>
+      <code class="computeroutput"><span class="identifier">grad</span></code>, <code class="computeroutput"><span class="identifier">hess</span></code>
+      and <code class="computeroutput"><span class="identifier">grad_nd</span></code> are each overloaded
+      twice. You can call
+    </p>
+<pre class="programlisting"><span class="identifier">grad</span><span class="special">(</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder_1</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">DerivativeOrder_2</span><span class="special">&gt;</span> <span class="special">*&gt;</span> <span class="special">&amp;</span><span class="identifier">x</span><span class="special">)</span>
+</pre>
+<p>
+      if you want to take a gradient with respect to many variables, or conveniently
+    </p>
+<pre class="programlisting"><span class="identifier">grad</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">x</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">y</span><span class="special">)</span>
+</pre>
+<p>
+      if you have only a few variables you need to take the gradient with respect
+      to. The order of operations for <code class="computeroutput"><span class="identifier">grad</span></code>
+      matters. Although something like below is generally safe:
+    </p>
+<pre class="programlisting"><span class="keyword">auto</span> <span class="identifier">gv</span> <span class="special">=</span> <span class="identifier">grad</span><span class="special">(</span><span class="identifier">f</span><span class="special">,&amp;</span><span class="identifier">x</span><span class="special">,&amp;</span><span class="identifier">y</span><span class="special">,&amp;</span><span class="identifier">z</span><span class="special">);</span>
+<span class="keyword">auto</span> <span class="identifier">hv</span> <span class="special">=</span> <span class="identifier">grad</span><span class="special">(</span><span class="identifier">gv</span><span class="special">[</span><span class="number">0</span><span class="special">],</span> <span class="special">&amp;</span><span class="identifier">x</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">y</span> <span class="special">&amp;</span><span class="identifier">z</span><span class="special">);</span>
+</pre>
+<p>
+      The code below isn't, and will produce incorrect results:
+    </p>
+<pre class="programlisting"><span class="keyword">auto</span> <span class="identifier">hv</span> <span class="special">=</span> <span class="identifier">hess</span><span class="special">(</span><span class="identifier">f</span><span class="special">,&amp;</span><span class="identifier">x</span><span class="special">,&amp;</span><span class="identifier">y</span><span class="special">,&amp;</span><span class="identifier">z</span><span class="special">)</span>
+<span class="keyword">auto</span> <span class="identifier">g3v</span> <span class="special">=</span> <span class="identifier">grad</span><span class="special">(</span><span class="identifier">hv</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">0</span><span class="special">],</span> <span class="special">&amp;</span><span class="identifier">x</span><span class="special">,&amp;</span><span class="identifier">y</span><span class="special">,&amp;</span><span class="identifier">z</span><span class="special">)</span>
+</pre>
+<p>
+      or:
+    </p>
+<pre class="programlisting"><span class="keyword">auto</span> <span class="identifier">hv</span> <span class="special">=</span> <span class="identifier">hess</span><span class="special">(</span><span class="identifier">f</span><span class="special">,&amp;</span><span class="identifier">x</span><span class="special">,&amp;</span><span class="identifier">y</span><span class="special">,&amp;</span><span class="identifier">z</span><span class="special">)</span>
+<span class="keyword">auto</span> <span class="identifier">g4v</span> <span class="special">=</span> <span class="identifier">hess</span><span class="special">(</span><span class="identifier">hv</span><span class="special">[</span><span class="number">0</span><span class="special">][</span><span class="number">0</span><span class="special">],</span> <span class="special">&amp;</span><span class="identifier">x</span><span class="special">,&amp;</span><span class="identifier">y</span><span class="special">,&amp;</span><span class="identifier">z</span><span class="special">)</span>
+</pre>
+<p>
+      When in doubt, its always preferrable to compute higher order derivatives with:
+    </p>
+<pre class="programlisting"><span class="keyword">auto</span> <span class="identifier">g4</span> <span class="special">=</span> <span class="identifier">grad_nd</span><span class="special">&lt;</span><span class="number">4</span><span class="special">&gt;(</span><span class="identifier">f</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">x</span><span class="special">,&amp;</span><span class="identifier">y</span><span class="special">,&amp;</span><span class="identifier">z</span><span class="special">)</span>
+</pre>
+<h3>
+<a name="math_toolkit.autodiff0.h5"></a>
+      <span class="phrase"><a name="math_toolkit.autodiff0.expression-templates-and-auto"></a></span><a class="link" href="autodiff0.html#math_toolkit.autodiff0.expression-templates-and-auto">Expression
+      Templates and auto</a>
+    </h3>
+<p>
+      Reverse mode autodiff is expression template based. This means that some care
+      has to be taken into considerations when writing code that uses this library.
+      For example consider the code below:
+    </p>
+<pre class="programlisting"><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">1.0</span><span class="special">;</span>
+<span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="identifier">y</span> <span class="special">=</span> <span class="number">2.0</span><span class="special">;</span>
+<span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="identifier">z</span> <span class="special">=</span> <span class="number">3.0</span><span class="special">;</span>
+<span class="keyword">auto</span> <span class="identifier">w</span> <span class="special">=</span> <span class="identifier">x</span><span class="special">+</span><span class="identifier">y</span><span class="special">*</span><span class="identifier">z</span><span class="special">;</span>
+</pre>
+<p>
+      The type of <code class="computeroutput"><span class="identifier">w</span></code> is not <code class="computeroutput"><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span><span class="number">1</span><span class="special">&gt;</span></code> but <code class="computeroutput"><span class="identifier">add_expr</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span><span class="number">1</span><span class="special">&gt;,</span><span class="identifier">mult_expr</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span><span class="number">1</span><span class="special">&gt;,</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span><span class="number">1</span><span class="special">&gt;&gt;&gt;</span></code>
+      This means that the code below will not compile:
+    </p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">T</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="identifier">x</span><span class="special">*</span><span class="identifier">x</span><span class="special">;</span>
+<span class="special">}</span>
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="special">{</span>
+    <span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">1.0</span><span class="special">;</span>
+    <span class="keyword">auto</span> <span class="identifier">v</span> <span class="special">=</span> <span class="identifier">f</span><span class="special">(</span><span class="number">2</span><span class="special">*</span><span class="identifier">x</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      due to a type mismatch. It is also preferred to use auto for type deduction
+      as often as possible. Consider the following 2 functions:
+    </p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">benchmark</span><span class="special">/</span><span class="identifier">benchmark</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">differentiation</span><span class="special">/</span><span class="identifier">autodiff_reverse</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">cmath</span><span class="special">&gt;</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">differentiation</span><span class="special">::</span><span class="identifier">reverse_mode</span><span class="special">;</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">T</span> <span class="identifier">testfunc_noauto</span><span class="special">(</span><span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">y</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">z</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">T</span> <span class="identifier">w1</span> <span class="special">=</span> <span class="identifier">log</span><span class="special">(</span><span class="number">1</span> <span class="special">+</span> <span class="identifier">abs</span><span class="special">(</span><span class="identifier">x</span><span class="special">))</span> <span class="special">*</span> <span class="identifier">exp</span><span class="special">(</span><span class="identifier">y</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">z</span><span class="special">;</span>
+    <span class="identifier">T</span> <span class="identifier">w2</span> <span class="special">=</span> <span class="identifier">pow</span><span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">y</span><span class="special">,</span> <span class="number">2.5</span><span class="special">)</span> <span class="special">/</span> <span class="identifier">z</span><span class="special">;</span>
+    <span class="identifier">T</span> <span class="identifier">w3</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="number">1</span> <span class="special">+</span> <span class="identifier">x</span> <span class="special">*</span> <span class="identifier">y</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">z</span> <span class="special">*</span> <span class="identifier">z</span><span class="special">;</span>
+    <span class="identifier">T</span> <span class="identifier">w4</span> <span class="special">=</span> <span class="identifier">w1</span> <span class="special">+</span> <span class="identifier">w2</span> <span class="special">+</span> <span class="identifier">w3</span><span class="special">;</span>
+    <span class="identifier">T</span> <span class="identifier">w5</span> <span class="special">=</span> <span class="identifier">w4</span> <span class="special">*</span> <span class="identifier">w2</span><span class="special">;</span>
+    <span class="keyword">return</span> <span class="identifier">w5</span><span class="special">;</span>
+<span class="special">}</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">T</span> <span class="identifier">testfunc_auto</span><span class="special">(</span><span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">y</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">z</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">auto</span> <span class="identifier">w1</span> <span class="special">=</span> <span class="identifier">log</span><span class="special">(</span><span class="number">1</span> <span class="special">+</span> <span class="identifier">abs</span><span class="special">(</span><span class="identifier">x</span><span class="special">))</span> <span class="special">*</span> <span class="identifier">exp</span><span class="special">(</span><span class="identifier">y</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">z</span><span class="special">;</span>
+    <span class="keyword">auto</span> <span class="identifier">w2</span> <span class="special">=</span> <span class="identifier">pow</span><span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">y</span><span class="special">,</span> <span class="number">2.5</span><span class="special">)</span> <span class="special">/</span> <span class="identifier">z</span><span class="special">;</span>
+    <span class="keyword">auto</span> <span class="identifier">w3</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="number">1</span> <span class="special">+</span> <span class="identifier">x</span> <span class="special">*</span> <span class="identifier">y</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">z</span> <span class="special">*</span> <span class="identifier">z</span><span class="special">;</span>
+    <span class="keyword">auto</span> <span class="identifier">w4</span> <span class="special">=</span> <span class="identifier">w1</span> <span class="special">+</span> <span class="identifier">w2</span> <span class="special">+</span> <span class="identifier">w3</span><span class="special">;</span>
+    <span class="keyword">auto</span> <span class="identifier">w5</span> <span class="special">=</span> <span class="identifier">w4</span> <span class="special">*</span> <span class="identifier">w2</span><span class="special">;</span>
+    <span class="keyword">return</span> <span class="identifier">w5</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+      and the corresponding benchmark:
+    </p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Func</span><span class="special">&gt;</span>
+<span class="keyword">void</span> <span class="identifier">BM_RVar</span><span class="special">(</span><span class="identifier">benchmark</span><span class="special">::</span><span class="identifier">State</span><span class="special">&amp;</span> <span class="identifier">state</span><span class="special">,</span> <span class="identifier">Func</span> <span class="identifier">f</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">using</span> <span class="identifier">T</span>    <span class="special">=</span> <span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;;</span>
+    <span class="keyword">auto</span><span class="special">&amp;</span> <span class="identifier">tape</span> <span class="special">=</span> <span class="identifier">get_active_tape</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;();</span>
+    <span class="keyword">for</span> <span class="special">(</span><span class="keyword">auto</span> <span class="identifier">_</span> <span class="special">:</span> <span class="identifier">state</span><span class="special">)</span> <span class="special">{</span>
+        <span class="identifier">tape</span><span class="special">.</span><span class="identifier">clear</span><span class="special">();</span>
+        <span class="identifier">T</span>    <span class="identifier">x</span><span class="special">(</span><span class="number">1.0</span><span class="special">),</span> <span class="identifier">y</span><span class="special">(</span><span class="number">2.0</span><span class="special">),</span> <span class="identifier">z</span><span class="special">(</span><span class="number">3.0</span><span class="special">);</span>
+        <span class="keyword">auto</span> <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span> <span class="identifier">y</span><span class="special">,</span> <span class="identifier">z</span><span class="special">);</span>
+        <span class="identifier">benchmark</span><span class="special">::</span><span class="identifier">DoNotOptimize</span><span class="special">(</span><span class="identifier">result</span><span class="special">);</span>
+        <span class="identifier">result</span><span class="special">.</span><span class="identifier">backward</span><span class="special">();</span>
+        <span class="identifier">benchmark</span><span class="special">::</span><span class="identifier">DoNotOptimize</span><span class="special">(</span><span class="identifier">x</span><span class="special">.</span><span class="identifier">adjoint</span><span class="special">());</span>
+        <span class="identifier">benchmark</span><span class="special">::</span><span class="identifier">DoNotOptimize</span><span class="special">(</span><span class="identifier">y</span><span class="special">.</span><span class="identifier">adjoint</span><span class="special">());</span>
+        <span class="identifier">benchmark</span><span class="special">::</span><span class="identifier">DoNotOptimize</span><span class="special">(</span><span class="identifier">z</span><span class="special">.</span><span class="identifier">adjoint</span><span class="special">());</span>
+    <span class="special">}</span>
+<span class="special">}</span>
+<span class="identifier">BENCHMARK</span><span class="special">([](</span><span class="identifier">benchmark</span><span class="special">::</span><span class="identifier">State</span><span class="special">&amp;</span> <span class="identifier">st</span><span class="special">)</span> <span class="special">{</span> <span class="identifier">BM_RVar</span><span class="special">(</span><span class="identifier">st</span><span class="special">,</span> <span class="identifier">testfunc_auto</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;&gt;);</span> <span class="special">});</span>
+<span class="identifier">BENCHMARK</span><span class="special">([](</span><span class="identifier">benchmark</span><span class="special">::</span><span class="identifier">State</span><span class="special">&amp;</span> <span class="identifier">st</span><span class="special">)</span> <span class="special">{</span> <span class="identifier">BM_RVar</span><span class="special">(</span><span class="identifier">st</span><span class="special">,</span> <span class="identifier">testfunc_noauto</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;&gt;);</span> <span class="special">});</span>
+<span class="identifier">BENCHMARK_MAIN</span><span class="special">();</span>
+</pre>
+<p>
+      Running this benchmark on a 13th Gen Intel(R) Core(TM) i7-13650HX, compiled
+      with <code class="computeroutput"><span class="special">-</span><span class="identifier">O3</span></code>:
+    </p>
+<pre class="programlisting"><span class="special">./</span><span class="identifier">benchmark</span> <span class="special">--</span><span class="identifier">benchmark_filter</span><span class="special">=</span><span class="identifier">testfunc_auto</span>
+
+<span class="special">--------------------------------------------------------------------------------------------------------------------</span>
+<span class="identifier">Benchmark</span>                                                                          <span class="identifier">Time</span>             <span class="identifier">CPU</span>   <span class="identifier">Iterations</span>
+<span class="special">--------------------------------------------------------------------------------------------------------------------</span>
+<span class="special">[](</span><span class="identifier">benchmark</span><span class="special">::</span><span class="identifier">State</span><span class="special">&amp;</span> <span class="identifier">st</span><span class="special">)</span> <span class="special">{</span> <span class="identifier">BM_RVar</span><span class="special">(</span><span class="identifier">st</span><span class="special">,</span> <span class="identifier">testfunc_auto</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;&gt;);</span> <span class="special">}</span>     <span class="number">199546</span> <span class="identifier">ns</span>       <span class="number">199503</span> <span class="identifier">ns</span>        <span class="number">10000</span>
+</pre>
+<p>
+      and
+    </p>
+<pre class="programlisting"><span class="special">./</span><span class="identifier">benchmark</span> <span class="special">--</span><span class="identifier">benchmark_filter</span><span class="special">=</span><span class="identifier">testfunc_noauto</span>
+
+<span class="special">----------------------------------------------------------------------------------------------------------------------</span>
+<span class="identifier">Benchmark</span>                                                                            <span class="identifier">Time</span>             <span class="identifier">CPU</span>   <span class="identifier">Iterations</span>
+<span class="special">----------------------------------------------------------------------------------------------------------------------</span>
+<span class="special">[](</span><span class="identifier">benchmark</span><span class="special">::</span><span class="identifier">State</span><span class="special">&amp;</span> <span class="identifier">st</span><span class="special">)</span> <span class="special">{</span> <span class="identifier">BM_RVar</span><span class="special">(</span><span class="identifier">st</span><span class="special">,</span> <span class="identifier">testfunc_noauto</span><span class="special">&lt;</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;&gt;);</span> <span class="special">}</span>     <span class="number">375731</span> <span class="identifier">ns</span>       <span class="number">375669</span> <span class="identifier">ns</span>        <span class="number">10000</span>
+</pre>
+<p>
+      You get nearly 2x speedup on the code that uses auto.
+    </p>
+</div>
+<div class="copyright-footer">Copyright © 2006-2021 Nikhar Agrawal, Anton Bikineev, Matthew Borland,
+      Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno
+      Lalande, John Maddock, Evan Miller, Jeremy Murphy, Matthew Pulver, Johan Råde,
+      Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle
+      Walker and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="autodiff.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../quadrature.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="diff0.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
