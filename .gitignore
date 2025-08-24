@@ -10,7 +10,7 @@ test/cuda
 **/.temps/*
 build/*
 .vscode/*
-*.svg
+#*.svg
 tools/bin/**
 .idea/*
 
