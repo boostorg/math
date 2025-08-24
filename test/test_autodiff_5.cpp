@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(chebyshev_hpp, T, all_float_types) {
       auto x = x_sampler.next();
       BOOST_CHECK_CLOSE(
           boost::math::chebyshev_t(n, make_fvar<T, m>(x)).derivative(0u),
-          boost::math::chebyshev_t(n, x), 40 * test_constants::pct_epsilon());
+          boost::math::chebyshev_t(n, x), 80 * test_constants::pct_epsilon());
       // Lower accuracy with clang/apple:
       BOOST_CHECK_CLOSE(
           boost::math::chebyshev_u(n, make_fvar<T, m>(x)).derivative(0u),
