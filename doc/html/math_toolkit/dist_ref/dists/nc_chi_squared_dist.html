@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Noncentral Chi-Squared Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="nc_beta_dist.html" title="Noncentral Beta Distribution">
@@ -45,22 +45,22 @@
    <span class="keyword">typedef</span> <span class="identifier">Policy</span>    <span class="identifier">policy_type</span><span class="special">;</span>
 
    <span class="comment">// Constructor:</span>
-   <span class="identifier">non_central_chi_squared_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">);</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">non_central_chi_squared_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">);</span>
 
    <span class="comment">// Accessor to degrees of freedom parameter v:</span>
-   <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 
    <span class="comment">// Accessor to non centrality parameter lambda:</span>
-   <span class="identifier">RealType</span> <span class="identifier">non_centrality</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">non_centrality</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 
    <span class="comment">// Parameter finders:</span>
-   <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">A</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">B</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">C</span><span class="special">&gt;</span>
-   <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">complemented3_type</span><span class="special">&lt;</span><span class="identifier">A</span><span class="special">,</span><span class="identifier">B</span><span class="special">,</span><span class="identifier">C</span><span class="special">&gt;&amp;</span> <span class="identifier">c</span><span class="special">);</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">complemented3_type</span><span class="special">&lt;</span><span class="identifier">A</span><span class="special">,</span><span class="identifier">B</span><span class="special">,</span><span class="identifier">C</span><span class="special">&gt;&amp;</span> <span class="identifier">c</span><span class="special">);</span>
 
-   <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_non_centrality</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_non_centrality</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">A</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">B</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">C</span><span class="special">&gt;</span>
-   <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_non_centrality</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">complemented3_type</span><span class="special">&lt;</span><span class="identifier">A</span><span class="special">,</span><span class="identifier">B</span><span class="special">,</span><span class="identifier">C</span><span class="special">&gt;&amp;</span> <span class="identifier">c</span><span class="special">);</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_non_centrality</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">complemented3_type</span><span class="special">&lt;</span><span class="identifier">A</span><span class="special">,</span><span class="identifier">B</span><span class="special">,</span><span class="identifier">C</span><span class="special">&gt;&amp;</span> <span class="identifier">c</span><span class="special">);</span>
 <span class="special">};</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
@@ -116,7 +116,7 @@
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.nc_chi_squared_dist.member_functions"></a></span><a class="link" href="nc_chi_squared_dist.html#math_toolkit.dist_ref.dists.nc_chi_squared_dist.member_functions">Member
           Functions</a>
         </h5>
-<pre class="programlisting"><span class="identifier">non_central_chi_squared_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">non_central_chi_squared_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">);</span>
 </pre>
 <p>
           Constructs a Chi-Squared distribution with ν degrees of freedom and non-centrality
@@ -125,24 +125,24 @@
 <p>
           Requires ν &gt; 0 and lambda &gt;= 0, otherwise calls <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
         </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
           Returns the parameter ν from which this object was constructed.
         </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">non_centrality</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">non_centrality</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
           Returns the parameter <span class="emphasis"><em>lambda</em></span> from which this object
           was constructed.
         </p>
-<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
 </pre>
 <p>
           This function returns the number of degrees of freedom ν such that: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">non_central_chi_squared</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">Policy</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">,</span> <span class="identifier">lambda</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">p</span></code>
         </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">A</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">B</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">C</span><span class="special">&gt;</span>
-<span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">complemented3_type</span><span class="special">&lt;</span><span class="identifier">A</span><span class="special">,</span><span class="identifier">B</span><span class="special">,</span><span class="identifier">C</span><span class="special">&gt;&amp;</span> <span class="identifier">c</span><span class="special">);</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">complemented3_type</span><span class="special">&lt;</span><span class="identifier">A</span><span class="special">,</span><span class="identifier">B</span><span class="special">,</span><span class="identifier">C</span><span class="special">&gt;&amp;</span> <span class="identifier">c</span><span class="special">);</span>
 </pre>
 <p>
           When called with argument <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">lambda</span><span class="special">,</span> <span class="identifier">x</span><span class="special">,</span>
@@ -152,7 +152,7 @@
 <p>
           <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">non_central_chi_squared</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">Policy</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">,</span> <span class="identifier">lambda</span><span class="special">),</span> <span class="identifier">x</span><span class="special">))</span> <span class="special">==</span> <span class="identifier">q</span></code>.
         </p>
-<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_non_centrality</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_non_centrality</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
 </pre>
 <p>
           This function returns the non centrality parameter <span class="emphasis"><em>lambda</em></span>
@@ -162,7 +162,7 @@
           <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">non_central_chi_squared</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">Policy</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">,</span> <span class="identifier">lambda</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">p</span></code>
         </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">A</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">B</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">C</span><span class="special">&gt;</span>
-<span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_non_centrality</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">complemented3_type</span><span class="special">&lt;</span><span class="identifier">A</span><span class="special">,</span><span class="identifier">B</span><span class="special">,</span><span class="identifier">C</span><span class="special">&gt;&amp;</span> <span class="identifier">c</span><span class="special">);</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_non_centrality</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">complemented3_type</span><span class="special">&lt;</span><span class="identifier">A</span><span class="special">,</span><span class="identifier">B</span><span class="special">,</span><span class="identifier">C</span><span class="special">&gt;&amp;</span> <span class="identifier">c</span><span class="special">);</span>
 </pre>
 <p>
           When called with argument <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">v</span><span class="special">,</span>
@@ -185,11 +185,13 @@
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.cdf">Cumulative Distribution Function</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.pdf">Probability Density Function</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.quantile">Quantile</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.hazard">Hazard Function</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.chf">Cumulative Hazard Function</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.median">median</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.sd">standard deviation</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.skewness">skewness</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis">kurtosis</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">kurtosis_excess</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
+          __logcdf, __logpdf, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.median">median</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.sd">standard deviation</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.skewness">skewness</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis">kurtosis</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">kurtosis_excess</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>. For this distribution
+          all non-member accessor functions are marked with <code class="computeroutput"><span class="identifier">BOOST_MATH_GPU_ENABLED</span></code>
+          and can be run on both host and device.
         </p>
 <p>
           The domain of the random variable is [0, +∞].

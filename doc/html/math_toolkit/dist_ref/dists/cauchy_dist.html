@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Cauchy-Lorentz Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="binomial_dist.html" title="Binomial Distribution">
@@ -42,10 +42,10 @@
    <span class="keyword">typedef</span> <span class="identifier">RealType</span>  <span class="identifier">value_type</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="identifier">Policy</span>    <span class="identifier">policy_type</span><span class="special">;</span>
 
-   <span class="identifier">cauchy_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">location</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">cauchy_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">location</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 
-   <span class="identifier">RealType</span> <span class="identifier">location</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
-   <span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">location</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 <span class="special">};</span>
 </pre>
 <p>
@@ -92,7 +92,7 @@
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.cauchy_dist.member_functions"></a></span><a class="link" href="cauchy_dist.html#math_toolkit.dist_ref.dists.cauchy_dist.member_functions">Member
           Functions</a>
         </h5>
-<pre class="programlisting"><span class="identifier">cauchy_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">location</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">cauchy_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">location</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 </pre>
 <p>
           Constructs a Cauchy distribution, with location parameter <span class="emphasis"><em>location</em></span>
@@ -103,12 +103,12 @@
 <p>
           Requires scale &gt; 0, otherwise calls <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
         </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">location</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">location</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
           Returns the location parameter of the distribution.
         </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
           Returns the scale parameter of the distribution.
@@ -124,11 +124,13 @@
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.cdf">Cumulative Distribution Function</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.pdf">Probability Density Function</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.quantile">Quantile</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.hazard">Hazard Function</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.chf">Cumulative Hazard Function</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.median">median</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.sd">standard deviation</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.skewness">skewness</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis">kurtosis</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">kurtosis_excess</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
+          __logcdf, __logpdf, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.median">median</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.sd">standard deviation</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.skewness">skewness</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis">kurtosis</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">kurtosis_excess</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>. For this distribution
+          all non-member accessor functions are marked with <code class="computeroutput"><span class="identifier">BOOST_MATH_GPU_ENABLED</span></code>
+          and can be run on both host and device.
         </p>
 <p>
           Note however that the Cauchy distribution does not have a mean, standard
@@ -192,7 +194,7 @@
 <td>
                   <p>
                     Using the relation: <span class="emphasis"><em>pdf = 1 / (π * γ * (1 + ((x - x<sub>0 </sub>)
-                    / γ)<sup>2</sup>) </em></span>
+                    / γ)<sup>2</sup>)) </em></span>
                   </p>
                 </td>
 </tr>
@@ -210,30 +212,21 @@
                       <span class="serif_italic">p = 0.5 + atan(x)/π</span>
                     </p></blockquote></div>
                   <p>
-                    But that suffers from cancellation error as x -&gt; -∞. So recall
-                    that for <code class="computeroutput"><span class="identifier">x</span> <span class="special">&lt;</span>
-                    <span class="number">0</span></code>:
+                    But that suffers from cancellation error as x -&gt; -∞.
+                  </p>
+                  <p>
+                    Instead, the mathematically equivalent expression based on the
+                    function atan2 is used:
                   </p>
                   <div class="blockquote"><blockquote class="blockquote"><p>
-                      <span class="serif_italic">atan(x) = -π/2 - atan(1/x)</span>
+                      <span class="serif_italic">p = atan2(1, -x)/π</span>
                     </p></blockquote></div>
                   <p>
-                    Substituting into the above we get:
+                    By symmetry, the complement is
                   </p>
                   <div class="blockquote"><blockquote class="blockquote"><p>
-                      <span class="serif_italic">p = -atan(1/x)/π ; x &lt; 0</span>
+                      <span class="serif_italic">q = atan2(1, x)/π</span>
                     </p></blockquote></div>
-                  <p>
-                    So the procedure is to calculate the cdf for -fabs(x) using the
-                    above formula. Note that to factor in the location and scale
-                    parameters you must substitute (x - x<sub>0 </sub>) / γ for x in the above.
-                  </p>
-                  <p>
-                    This procedure yields the smaller of <span class="emphasis"><em>p</em></span> and
-                    <span class="emphasis"><em>q</em></span>, so the result may need subtracting from
-                    1 depending on whether we want the complement or not, and whether
-                    <span class="emphasis"><em>x</em></span> is less than x<sub>0 </sub> or not.
-                  </p>
                 </td>
 </tr>
 <tr>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>F Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="extreme_dist.html" title="Extreme Value Distribution">
@@ -43,11 +43,11 @@
    <span class="keyword">typedef</span> <span class="identifier">RealType</span> <span class="identifier">value_type</span><span class="special">;</span>
 
    <span class="comment">// Construct:</span>
-   <span class="identifier">fisher_f_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">j</span><span class="special">);</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">fisher_f_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">j</span><span class="special">);</span>
 
    <span class="comment">// Accessors:</span>
-   <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom1</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
-   <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom2</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom1</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom2</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 <span class="special">};</span>
 
 <span class="special">}}</span> <span class="comment">//namespaces</span>
@@ -81,7 +81,7 @@
 <a name="math_toolkit.dist_ref.dists.f_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.f_dist.member_functions"></a></span><a class="link" href="f_dist.html#math_toolkit.dist_ref.dists.f_dist.member_functions">Member Functions</a>
         </h5>
-<pre class="programlisting"><span class="identifier">fisher_f_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">df1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">df2</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">fisher_f_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">df1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">df2</span><span class="special">);</span>
 </pre>
 <p>
           Constructs an F-distribution with numerator degrees of freedom <span class="emphasis"><em>df1</em></span>
@@ -92,12 +92,12 @@
           both greater than zero, otherwise <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
           is called.
         </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom1</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom1</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
           Returns the numerator degrees of freedom parameter of the distribution.
         </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom2</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom2</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
           Returns the denominator degrees of freedom parameter of the distribution.
@@ -113,11 +113,13 @@
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.cdf">Cumulative Distribution Function</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.pdf">Probability Density Function</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.quantile">Quantile</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.hazard">Hazard Function</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.chf">Cumulative Hazard Function</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.median">median</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.sd">standard deviation</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.skewness">skewness</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis">kurtosis</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">kurtosis_excess</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
+          __logcdf, __logpdf, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.median">median</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.sd">standard deviation</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.skewness">skewness</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis">kurtosis</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">kurtosis_excess</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>. For this distribution
+          all non-member accessor functions are marked with <code class="computeroutput"><span class="identifier">BOOST_MATH_GPU_ENABLED</span></code>
+          and can be run on both host and device.
         </p>
 <p>
           The domain of the random variable is [0, +∞].

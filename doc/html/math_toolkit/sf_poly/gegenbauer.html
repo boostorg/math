@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Gegenbauer Polynomials</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../sf_poly.html" title="Polynomials">
 <link rel="prev" href="cardinal_b_splines.html" title="Cardinal B-splines">
@@ -36,13 +36,13 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
-<span class="identifier">Real</span> <span class="identifier">gegenbauer</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">lambda</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">x</span><span class="special">);</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">Real</span> <span class="identifier">gegenbauer</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">lambda</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">x</span><span class="special">);</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
-<span class="identifier">Real</span> <span class="identifier">gegenbauer_prime</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">lambda</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">x</span><span class="special">);</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">Real</span> <span class="identifier">gegenbauer_prime</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">lambda</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">x</span><span class="special">);</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
-<span class="identifier">Real</span> <span class="identifier">gegenbauer_derivative</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">lambda</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">k</span><span class="special">);</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">Real</span> <span class="identifier">gegenbauer_derivative</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">lambda</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">k</span><span class="special">);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>

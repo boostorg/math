@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Generic operations common to all distributions are non-member functions</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../overview.html" title="Overview of Statistical Distributions">
 <link rel="prev" href="objects.html" title="Distributions are Objects">
@@ -47,11 +47,91 @@
                        <span class="comment">// such that cdf(my_dist, x) == p.</span>
 </pre>
 <p>
+          As are the logcdf (Natural log of the Cumulative Distribution Function):
+        </p>
+<pre class="programlisting"><span class="identifier">logcdf</span><span class="special">(</span><span class="identifier">my_dist</span><span class="special">,</span> <span class="identifier">x</span><span class="special">);</span> <span class="comment">// Returns logcdf at at point x of distribution my_dist.</span>
+</pre>
+<p>
+          And the logpdf (Natural log of the Probability Density Function):
+        </p>
+<pre class="programlisting"><span class="identifier">logpdf</span><span class="special">(</span><span class="identifier">my_dist</span><span class="special">,</span> <span class="identifier">x</span><span class="special">);</span> <span class="comment">// Returns logpdf at point x of distribution my_dist.</span>
+</pre>
+<p>
           If you're wondering why these aren't member functions, it's to make the
           library more easily extensible: if you want to add additional generic operations
           - let's say the <span class="emphasis"><em>n'th moment</em></span> - then all you have to
           do is add the appropriate non-member functions, overloaded for each implemented
           distribution type.
+        </p>
+<p>
+          The logcdf and logpdf functions are minimally calculated with log(cdf(my_dist,
+          x)), and log(pdf(my_dist, x)) respectively. The following distributions
+          have specialized implementations of the logcdf:
+        </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+              Exponential
+            </li>
+<li class="listitem">
+              Extreme Value
+            </li>
+<li class="listitem">
+              Geometric
+            </li>
+<li class="listitem">
+              Laplace
+            </li>
+<li class="listitem">
+              Logistic
+            </li>
+<li class="listitem">
+              Pareto
+            </li>
+<li class="listitem">
+              Rayleigh
+            </li>
+<li class="listitem">
+              Weibull
+            </li>
+</ul></div>
+<p>
+          And the following distributions have specialized implementations of logpdf:
+        </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+              Exponential
+            </li>
+<li class="listitem">
+              Extreme Value
+            </li>
+<li class="listitem">
+              Gamma
+            </li>
+<li class="listitem">
+              Inverse Gamma
+            </li>
+<li class="listitem">
+              Inverse Gaussian
+            </li>
+<li class="listitem">
+              Laplace
+            </li>
+<li class="listitem">
+              Normal
+            </li>
+<li class="listitem">
+              Poisson
+            </li>
+<li class="listitem">
+              Rayleigh
+            </li>
+<li class="listitem">
+              Weibull
+            </li>
+</ul></div>
+<p>
+          These above listed specialized implementations allow a higher degree of
+          precision than can be obtained through the naive generic method.
         </p>
 <div class="tip"><table border="0" summary="Tip">
 <tr>

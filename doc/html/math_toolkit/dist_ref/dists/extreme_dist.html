@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Extreme Value Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="exp_dist.html" title="Exponential Distribution">
@@ -41,10 +41,10 @@
 <span class="keyword">public</span><span class="special">:</span>
    <span class="keyword">typedef</span> <span class="identifier">RealType</span> <span class="identifier">value_type</span><span class="special">;</span>
 
-   <span class="identifier">extreme_value_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">location</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">extreme_value_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">location</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 
-   <span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
-   <span class="identifier">RealType</span> <span class="identifier">location</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">location</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 <span class="special">};</span>
 </pre>
 <p>
@@ -101,7 +101,7 @@
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.extreme_dist.member_functions"></a></span><a class="link" href="extreme_dist.html#math_toolkit.dist_ref.dists.extreme_dist.member_functions">Member
           Functions</a>
         </h5>
-<pre class="programlisting"><span class="identifier">extreme_value_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">location</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">extreme_value_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">location</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 </pre>
 <p>
           Constructs an Extreme Value distribution with the specified location and
@@ -111,12 +111,12 @@
           Requires <code class="computeroutput"><span class="identifier">scale</span> <span class="special">&gt;</span>
           <span class="number">0</span></code>, otherwise calls <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
         </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">location</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">location</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
           Returns the location parameter of the distribution.
         </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
           Returns the scale parameter of the distribution.
@@ -132,14 +132,21 @@
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.cdf">Cumulative Distribution Function</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.pdf">Probability Density Function</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.quantile">Quantile</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.hazard">Hazard Function</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.chf">Cumulative Hazard Function</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.median">median</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.sd">standard deviation</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.skewness">skewness</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis">kurtosis</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">kurtosis_excess</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
+          __logcdf, __logpdf, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.median">median</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.sd">standard deviation</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.skewness">skewness</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis">kurtosis</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">kurtosis_excess</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>. For this distribution
+          all non-member accessor functions are marked with <code class="computeroutput"><span class="identifier">BOOST_MATH_GPU_ENABLED</span></code>
+          and can be run on both host and device.
         </p>
 <p>
           The domain of the random parameter is [-∞, +∞].
+        </p>
+<p>
+          In this distribution the implementation of both <code class="computeroutput"><span class="identifier">logcdf</span></code>,
+          and <code class="computeroutput"><span class="identifier">logpdf</span></code> are specialized
+          to improve numerical accuracy.
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.extreme_dist.h2"></a>
@@ -194,12 +201,36 @@
 <tr>
 <td>
                   <p>
+                    logpdf
+                  </p>
+                </td>
+<td>
+                  <p>
+                    log(pdf) = log(1/b) + e - exp(e)
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
                     cdf
                   </p>
                 </td>
 <td>
                   <p>
                     Using the relation: p = exp(-exp((a-x)/b))
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    logcdf
+                  </p>
+                </td>
+<td>
+                  <p>
+                    log(cdf) = -exp((a-x)/b)
                   </p>
                 </td>
 </tr>

@@ -1,9 +1,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Root Finding With Derivatives: Newton-Raphson, Halley &amp; Schröder</title>
+<title>Root Finding With Derivatives: Newton-Raphson, Halley &amp; Schroeder</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../root_finding.html" title="Chapter 10. Root Finding &amp; Minimization Algorithms">
 <link rel="prev" href="roots_noderiv/implementation.html" title="Implementation">
@@ -25,8 +25,8 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="math_toolkit.roots_deriv"></a><a class="link" href="roots_deriv.html" title="Root Finding With Derivatives: Newton-Raphson, Halley &amp; Schröder">Root Finding With Derivatives:
-    Newton-Raphson, Halley &amp; Schröder</a>
+<a name="math_toolkit.roots_deriv"></a><a class="link" href="roots_deriv.html" title="Root Finding With Derivatives: Newton-Raphson, Halley &amp; Schroeder">Root Finding With Derivatives:
+    Newton-Raphson, Halley &amp; Schroeder</a>
 </h2></div></div></div>
 <h5>
 <a name="math_toolkit.roots_deriv.h0"></a>
@@ -38,10 +38,10 @@
 <span class="keyword">namespace</span> <span class="identifier">tools</span> <span class="special">{</span> <span class="comment">// Note namespace boost::math::tools.</span>
 <span class="comment">// Newton-Raphson</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="identifier">T</span> <span class="identifier">newton_raphson_iterate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">guess</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">digits</span><span class="special">);</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">T</span> <span class="identifier">newton_raphson_iterate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">guess</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">digits</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="identifier">T</span> <span class="identifier">newton_raphson_iterate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">guess</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">digits</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">T</span> <span class="identifier">newton_raphson_iterate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">guess</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">digits</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
 
 <span class="comment">// Halley</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -50,7 +50,7 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">halley_iterate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">guess</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">digits</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
 
-<span class="comment">// Schr'''&amp;#xf6;'''der</span>
+<span class="comment">// Schroeder</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">schroder_iterate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">guess</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">digits</span><span class="special">);</span>
 
@@ -111,7 +111,7 @@
           </p>
 <p>
             For the third-order methods (<a href="http://en.wikipedia.org/wiki/Halley%27s_method" target="_top">Halley</a>
-            and Schröder) the <code class="computeroutput"><span class="identifier">tuple</span></code>
+            and Schroeder) the <code class="computeroutput"><span class="identifier">tuple</span></code>
             should have <span class="bold"><strong>three</strong></span> elements containing
             the evaluation of the function and its first and second derivatives.
           </p>
@@ -270,7 +270,7 @@
     </p>
 <h5>
 <a name="math_toolkit.roots_deriv.h4"></a>
-      <span class="phrase"><a name="math_toolkit.roots_deriv.schroder"></a></span><a class="link" href="roots_deriv.html#math_toolkit.roots_deriv.schroder">Schröder's
+      <span class="phrase"><a name="math_toolkit.roots_deriv.schroder"></a></span><a class="link" href="roots_deriv.html#math_toolkit.roots_deriv.schroder">Schroeder's
       Method</a>
     </h5>
 <p>
@@ -294,10 +294,11 @@
       Under ideal conditions, the number of correct digits trebles with each iteration.
     </p>
 <p>
-      This is Schröder's general result (equation 18 from <a href="http://drum.lib.umd.edu/handle/1903/577" target="_top">Stewart,
+      This is Schroeder's general result (equation 18 from <a href="http://drum.lib.umd.edu/handle/1903/577" target="_top">Stewart,
       G. W. "On Infinitely Many Algorithms for Solving Equations." English
-      translation of Schröder's original paper. College Park, MD: University of Maryland,
-      Institute for Advanced Computer Studies, Department of Computer Science, 1993</a>.)
+      translation of Schroeder's original paper. College Park, MD: University of
+      Maryland, Institute for Advanced Computer Studies, Department of Computer Science,
+      1993</a>.)
     </p>
 <p>
       This method guarantees at least quadratic convergence (the same as Newton's

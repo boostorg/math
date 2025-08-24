@@ -72,12 +72,14 @@ int main()
 
     double          learning_rate = 1e-3;
     while (loss_v > 0.005) {
+        tape.zero_grad();
         tape.rewind_to_last_checkpoint();
         y_fit    = model(a, b, noisy_data_x);
         loss_v   = loss(noisy_data_y, y_fit);
-        auto gv  = grad(loss_v, &a, &b);
-        a       -= gv[0] * learning_rate;
-        b       -= gv[1] * learning_rate;
+        //auto gv  = grad(loss_v, &a, &b);
+        loss_v.backward();
+        a -= a.adjoint() * learning_rate;
+        b -= b.adjoint() * learning_rate;
     }
 
     double slope_error              = std::abs(slope - a.item());

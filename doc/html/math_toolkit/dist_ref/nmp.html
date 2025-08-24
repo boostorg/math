@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Non-Member Properties</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../dist_ref.html" title="Statistical Distributions Reference">
 <link rel="prev" href="../dist_ref.html" title="Statistical Distributions Reference">
@@ -63,6 +63,12 @@
           </li>
 <li class="listitem">
             <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">kurtosis_excess</a>
+          </li>
+<li class="listitem">
+            __logcdf.
+          </li>
+<li class="listitem">
+            __logpdf.
           </li>
 <li class="listitem">
             <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>.
@@ -615,6 +621,28 @@
       </p>
 <h5>
 <a name="math_toolkit.dist_ref.nmp.h19"></a>
+        <span class="phrase"><a name="math_toolkit.dist_ref.nmp.logcdf"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.logcdf">Natural
+        Log of the Cumulative Distribution Function</a>
+      </h5>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">logcdf</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
+</pre>
+<p>
+        Returns the natural log of the CDF of distribution <span class="emphasis"><em>dist</em></span>.
+      </p>
+<h5>
+<a name="math_toolkit.dist_ref.nmp.h20"></a>
+        <span class="phrase"><a name="math_toolkit.dist_ref.nmp.logpdf"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.logpdf">Natural
+        Log of the Probability Density Function</a>
+      </h5>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">logcdf</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter 22. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
+</pre>
+<p>
+        Returns the natural log of the CDF of distribution <span class="emphasis"><em>dist</em></span>.
+      </p>
+<h5>
+<a name="math_toolkit.dist_ref.nmp.h21"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.cdfPQ"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.cdfPQ">P
         and Q</a>
       </h5>
@@ -625,7 +653,7 @@
         returned by these functions.
       </p>
 <h5>
-<a name="math_toolkit.dist_ref.nmp.h20"></a>
+<a name="math_toolkit.dist_ref.nmp.h22"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.percent"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.percent">Percent
         Point Function or Percentile</a>
       </h5>
@@ -634,7 +662,7 @@
         the <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.quantile">Quantile</a>.
       </p>
 <h5>
-<a name="math_toolkit.dist_ref.nmp.h21"></a>
+<a name="math_toolkit.dist_ref.nmp.h23"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.cdf_inv"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.cdf_inv">Inverse
         CDF Function.</a>
       </h5>
@@ -643,7 +671,7 @@
         <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.quantile">Quantile</a>.
       </p>
 <h5>
-<a name="math_toolkit.dist_ref.nmp.h22"></a>
+<a name="math_toolkit.dist_ref.nmp.h24"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.survival_inv"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.survival_inv">Inverse
         Survival Function.</a>
       </h5>
@@ -652,7 +680,7 @@
         of the probability</a>.
       </p>
 <h5>
-<a name="math_toolkit.dist_ref.nmp.h23"></a>
+<a name="math_toolkit.dist_ref.nmp.h25"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.pmf"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.pmf">Probability
         Mass Function</a>
       </h5>
@@ -666,7 +694,7 @@
         Function</a> applies to continuous distributions.
       </p>
 <h5>
-<a name="math_toolkit.dist_ref.nmp.h24"></a>
+<a name="math_toolkit.dist_ref.nmp.h26"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.lower_critical"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.lower_critical">Lower
         Critical Value.</a>
       </h5>
@@ -676,7 +704,7 @@
         the <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.quantile">Quantile</a>.
       </p>
 <h5>
-<a name="math_toolkit.dist_ref.nmp.h25"></a>
+<a name="math_toolkit.dist_ref.nmp.h27"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.upper_critical"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.upper_critical">Upper
         Critical Value.</a>
       </h5>
@@ -687,7 +715,7 @@
         complement of the probability</a>.
       </p>
 <h5>
-<a name="math_toolkit.dist_ref.nmp.h26"></a>
+<a name="math_toolkit.dist_ref.nmp.h28"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.survival"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.survival">Survival
         Function</a>
       </h5>
@@ -696,7 +724,7 @@
         the Cumulative Distribution Function</a>.
       </p>
 <h5>
-<a name="math_toolkit.dist_ref.nmp.h27"></a>
+<a name="math_toolkit.dist_ref.nmp.h29"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.entropy"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.entropy">Entropy</a>
       </h5>
 <p>

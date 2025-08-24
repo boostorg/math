@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Finding Zeros of Airy Functions</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../airy.html" title="Airy Functions">
 <link rel="prev" href="bip.html" title="Airy Bi' Function">
@@ -43,24 +43,24 @@
         The signature of the single value functions are:
       </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="identifier">T</span> <span class="identifier">airy_ai_zero</span><span class="special">(</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">T</span> <span class="identifier">airy_ai_zero</span><span class="special">(</span>
          <span class="keyword">int</span> <span class="identifier">m</span><span class="special">);</span>         <span class="comment">// 1-based index of zero.</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="identifier">T</span> <span class="identifier">airy_bi_zero</span><span class="special">(</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">T</span> <span class="identifier">airy_bi_zero</span><span class="special">(</span>
          <span class="keyword">int</span> <span class="identifier">m</span><span class="special">);</span>         <span class="comment">// 1-based index of zero.</span>
 </pre>
 <p>
         and for multiple zeros:
       </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">&gt;</span>
-<span class="identifier">OutputIterator</span> <span class="identifier">airy_ai_zero</span><span class="special">(</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">OutputIterator</span> <span class="identifier">airy_ai_zero</span><span class="special">(</span>
                      <span class="keyword">int</span> <span class="identifier">start_index</span><span class="special">,</span>           <span class="comment">// 1-based index of first zero.</span>
                      <span class="keyword">unsigned</span> <span class="identifier">number_of_zeros</span><span class="special">,</span>  <span class="comment">// How many zeros to generate.</span>
                      <span class="identifier">OutputIterator</span> <span class="identifier">out_it</span><span class="special">);</span>    <span class="comment">// Destination for zeros.</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">&gt;</span>
-<span class="identifier">OutputIterator</span> <span class="identifier">airy_bi_zero</span><span class="special">(</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">OutputIterator</span> <span class="identifier">airy_bi_zero</span><span class="special">(</span>
                      <span class="keyword">int</span> <span class="identifier">start_index</span><span class="special">,</span>           <span class="comment">// 1-based index of zero.</span>
                      <span class="keyword">unsigned</span> <span class="identifier">number_of_zeros</span><span class="special">,</span>  <span class="comment">// How many zeros to generate</span>
                      <span class="identifier">OutputIterator</span> <span class="identifier">out_it</span><span class="special">);</span>    <span class="comment">// Destination for zeros.</span>
@@ -70,25 +70,25 @@
         for error handling and precision.
       </p>
 <pre class="programlisting"> <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
- <span class="identifier">T</span> <span class="identifier">airy_ai_zero</span><span class="special">(</span>
+ <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">T</span> <span class="identifier">airy_ai_zero</span><span class="special">(</span>
           <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span>          <span class="comment">// 1-based index of zero.</span>
           <span class="keyword">const</span> <span class="identifier">Policy</span><span class="special">&amp;);</span> <span class="comment">// Policy to use.</span>
 
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
- <span class="identifier">T</span> <span class="identifier">airy_bi_zero</span><span class="special">(</span>
+ <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">T</span> <span class="identifier">airy_bi_zero</span><span class="special">(</span>
           <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span>          <span class="comment">// 1-based index of zero.</span>
           <span class="keyword">const</span> <span class="identifier">Policy</span><span class="special">&amp;);</span> <span class="comment">// Policy to use.</span>
 
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">&gt;</span>
-<span class="identifier">OutputIterator</span> <span class="identifier">airy_ai_zero</span><span class="special">(</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">OutputIterator</span> <span class="identifier">airy_ai_zero</span><span class="special">(</span>
                      <span class="keyword">int</span> <span class="identifier">start_index</span><span class="special">,</span>           <span class="comment">// 1-based index of first zero.</span>
                      <span class="keyword">unsigned</span> <span class="identifier">number_of_zeros</span><span class="special">,</span>  <span class="comment">// How many zeros to generate.</span>
                      <span class="identifier">OutputIterator</span> <span class="identifier">out_it</span><span class="special">,</span>     <span class="comment">// Destination for zeros.</span>
                      <span class="keyword">const</span> <span class="identifier">Policy</span><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>        <span class="comment">// Policy to use.</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">&gt;</span>
-<span class="identifier">OutputIterator</span> <span class="identifier">airy_bi_zero</span><span class="special">(</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">OutputIterator</span> <span class="identifier">airy_bi_zero</span><span class="special">(</span>
                      <span class="keyword">int</span> <span class="identifier">start_index</span><span class="special">,</span>           <span class="comment">// 1-based index of zero.</span>
                      <span class="keyword">unsigned</span> <span class="identifier">number_of_zeros</span><span class="special">,</span>  <span class="comment">// How many zeros to generate.</span>
                      <span class="identifier">OutputIterator</span> <span class="identifier">out_it</span><span class="special">,</span>     <span class="comment">// Destination for zeros.</span>

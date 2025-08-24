@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Students t Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="skew_normal_dist.html" title="Skew Normal Distribution">
@@ -44,13 +44,13 @@
    <span class="keyword">typedef</span> <span class="identifier">Policy</span>   <span class="identifier">policy_type</span><span class="special">;</span>
 
    <span class="comment">// Constructor:</span>
-   <span class="identifier">students_t_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">students_t_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
 
    <span class="comment">// Accessor:</span>
-   <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 
    <span class="comment">// degrees of freedom estimation:</span>
-   <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span>
       <span class="identifier">RealType</span> <span class="identifier">difference_from_mean</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">,</span>
@@ -104,7 +104,7 @@
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.students_t_dist.member_functions"></a></span><a class="link" href="students_t_dist.html#math_toolkit.dist_ref.dists.students_t_dist.member_functions">Member
           Functions</a>
         </h5>
-<pre class="programlisting"><span class="identifier">students_t_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">students_t_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
 </pre>
 <p>
           Constructs a Student's t-distribution with <span class="emphasis"><em>v</em></span> degrees
@@ -116,12 +116,12 @@
           Note that non-integral degrees of freedom are supported, and are meaningful
           under certain circumstances.
         </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
           returns the number of degrees of freedom of this distribution.
         </p>
-<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span>
    <span class="identifier">RealType</span> <span class="identifier">difference_from_mean</span><span class="special">,</span>
    <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span>
    <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">,</span>
@@ -188,11 +188,13 @@
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.cdf">Cumulative Distribution Function</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.pdf">Probability Density Function</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.quantile">Quantile</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.hazard">Hazard Function</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.chf">Cumulative Hazard Function</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.median">median</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.sd">standard deviation</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.skewness">skewness</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis">kurtosis</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">kurtosis_excess</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
+          __logcdf, __logpdf, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.median">median</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.sd">standard deviation</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.skewness">skewness</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis">kurtosis</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">kurtosis_excess</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>. For this distribution
+          all non-member accessor functions are marked with <code class="computeroutput"><span class="identifier">BOOST_MATH_GPU_ENABLED</span></code>
+          and can be run on both host and device.
         </p>
 <p>
           The domain of the random variable is [-∞, +∞].

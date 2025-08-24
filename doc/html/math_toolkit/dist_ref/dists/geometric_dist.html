@@ -3,11 +3,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Geometric Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="gamma_dist.html" title="Gamma (and Erlang) Distribution">
-<link rel="next" href="hyperexponential_dist.html" title="Hyperexponential Distribution">
+<link rel="next" href="holtsmark_dist.html" title="Holtsmark Distribution">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -21,7 +21,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="gamma_dist.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="hyperexponential_dist.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="gamma_dist.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="holtsmark_dist.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
@@ -44,28 +44,28 @@
    <span class="keyword">typedef</span> <span class="identifier">RealType</span> <span class="identifier">value_type</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="identifier">Policy</span>   <span class="identifier">policy_type</span><span class="special">;</span>
    <span class="comment">// Constructor from success_fraction:</span>
-   <span class="identifier">geometric_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">geometric_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
 
    <span class="comment">// Parameter accessors:</span>
-   <span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
-   <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 
    <span class="comment">// Bounds on success fraction:</span>
-   <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
       <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// alpha</span>
-   <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
       <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// alpha</span>
 
    <span class="comment">// Estimate min/max number of trials:</span>
-   <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span>
       <span class="identifier">RealType</span> <span class="identifier">k</span><span class="special">,</span>     <span class="comment">// Number of failures.</span>
       <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">,</span>     <span class="comment">// Success fraction.</span>
       <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// Probability threshold alpha.</span>
-   <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_maximum_number_of_trials</span><span class="special">(</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_maximum_number_of_trials</span><span class="special">(</span>
       <span class="identifier">RealType</span> <span class="identifier">k</span><span class="special">,</span>     <span class="comment">// Number of failures.</span>
       <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">,</span>     <span class="comment">// Success fraction.</span>
       <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// Probability threshold alpha.</span>
@@ -469,11 +469,13 @@
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.cdf">Cumulative Distribution Function</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.pdf">Probability Density Function</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.quantile">Quantile</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.hazard">Hazard Function</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.chf">Cumulative Hazard Function</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.median">median</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.sd">standard deviation</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.skewness">skewness</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis">kurtosis</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">kurtosis_excess</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
+          __logcdf, __logpdf, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.median">median</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.sd">standard deviation</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.skewness">skewness</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis">kurtosis</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">kurtosis_excess</a>,
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>. For this distribution
+          all non-member accessor functions are marked with <code class="computeroutput"><span class="identifier">BOOST_MATH_GPU_ENABLED</span></code>
+          and can be run on both host and device.
         </p>
 <p>
           However it's worth taking a moment to define what these actually mean in
@@ -587,7 +589,11 @@
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><h5>
+<br class="table-break"><p>
+          In this distribution the implementation of <code class="computeroutput"><span class="identifier">logcdf</span></code>
+          is specialized to improve numerical accuracy.
+        </p>
+<h5>
 <a name="math_toolkit.dist_ref.dists.geometric_dist.h9"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.geometric_dist.accuracy"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.accuracy">Accuracy</a>
         </h5>
@@ -648,6 +654,18 @@
 <td>
                   <p>
                     cdf = 1 - q<sup>k=1</sup>
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    logcdf
+                  </p>
+                </td>
+<td>
+                  <p>
+                    log(cdf) = log1p(-exp(log1p(-p) * (k+1)))
                   </p>
                 </td>
 </tr>
@@ -838,7 +856,7 @@
 </div>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="gamma_dist.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="hyperexponential_dist.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="gamma_dist.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="holtsmark_dist.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

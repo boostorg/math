@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Noncentral Beta Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="negative_binomial_dist.html" title="Negative Binomial Distribution">
@@ -45,14 +45,14 @@
    <span class="keyword">typedef</span> <span class="identifier">Policy</span>    <span class="identifier">policy_type</span><span class="special">;</span>
 
    <span class="comment">// Constructor:</span>
-   <span class="identifier">non_central_beta_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">);</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">non_central_beta_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">);</span>
 
    <span class="comment">// Accessor to shape parameters:</span>
-   <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
-   <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 
    <span class="comment">// Accessor to non-centrality parameter lambda:</span>
-   <span class="identifier">RealType</span> <span class="identifier">non_centrality</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">non_centrality</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 <span class="special">};</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
@@ -103,7 +103,7 @@ is a central <span class="serif_italic">χ<sup>2</sup> </span>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.nc_beta_dist.member_functions"></a></span><a class="link" href="nc_beta_dist.html#math_toolkit.dist_ref.dists.nc_beta_dist.member_functions">Member
           Functions</a>
         </h5>
-<pre class="programlisting"><span class="identifier">non_central_beta_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">non_central_beta_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">);</span>
 </pre>
 <p>
           Constructs a noncentral beta distribution with shape parameters <span class="emphasis"><em>a</em></span>
@@ -112,19 +112,19 @@ is a central <span class="serif_italic">χ<sup>2</sup> </span>
 <p>
           Requires a &gt; 0, b &gt; 0 and lambda &gt;= 0, otherwise calls <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
         </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
           Returns the parameter <span class="emphasis"><em>a</em></span> from which this object was
           constructed.
         </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
           Returns the parameter <span class="emphasis"><em>b</em></span> from which this object was
           constructed.
         </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">non_centrality</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">non_centrality</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
           Returns the parameter <span class="emphasis"><em>lambda</em></span> from which this object
@@ -145,7 +145,9 @@ is a central <span class="serif_italic">χ<sup>2</sup> </span>
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.median">median</a>, <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.hazard">Hazard Function</a>,
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.chf">Cumulative Hazard Function</a>,
-          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
+          <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>. For this distribution
+          these functions are marked with <code class="computeroutput"><span class="identifier">BOOST_MATH_GPU_ENABLED</span></code>
+          and can be run on both host and device.
         </p>
 <p>
           Mean and variance are implemented using hypergeometric pfq functions and

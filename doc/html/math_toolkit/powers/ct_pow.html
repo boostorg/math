@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Compile Time Power of a Runtime Base</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../powers.html" title="Basic Functions">
 <link rel="prev" href="hypot.html" title="hypot">
@@ -42,10 +42,10 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span> <span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">constexpr</span> <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">pow</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">base</span><span class="special">);</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">constexpr</span> <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">pow</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">base</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">&gt;</span>
-<span class="keyword">constexpr</span> <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">pow</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">base</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Policy</span><span class="special">&amp;</span> <span class="identifier">policy</span><span class="special">);</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">constexpr</span> <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">pow</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">base</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Policy</span><span class="special">&amp;</span> <span class="identifier">policy</span><span class="special">);</span>
 
 <span class="special">}}</span>
 </pre>
