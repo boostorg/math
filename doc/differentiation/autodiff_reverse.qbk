@@ -81,7 +81,7 @@
     }
 
     // tape access
-    template<typenametemplate<typename RealType, size_t DerivativeOrder>
+    template<typename template<typename RealType, size_t DerivativeOrder>>
     inline gradient_tape<RealType, DerivativeOrder, BOOST_MATH_BUFFER_SIZE> &get_active_tape();
 
     // standard math functions are overloaded using expression templates
@@ -125,7 +125,7 @@
 [h1:description Description]
 
 Reverse mode autodiff is a header-only C++ library the [@https://en.wikipedia.org/wiki/Automatic_differentiation
-automatic differentiation] (reverse mode) of mathematical functions. This implementation builds a computational graph known as a tape, which sotres all operations and their corresponding derivatives. The total gradients are then computed by reverse accumulation via the chain rule.
+automatic differentiation] (reverse mode) of mathematical functions. This implementation builds a computational graph known as a tape, which stores all operations and their corresponding derivatives. The total gradients are then computed by reverse accumulation via the chain rule.
 
 Consider the following function
 
