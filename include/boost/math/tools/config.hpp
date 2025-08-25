@@ -655,7 +655,8 @@ namespace boost{ namespace math{
 //
 // When running windows-2022 or 2025 we see this issue again with GCC 12 and 14
 //
-#if (defined(__MINGW32__) && ((__GNUC__ < 9) || (__GNUC__ >= 12)) && !defined(__clang__))
+// See Also: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83562#c6
+#if (defined(__MINGW32__) && ((__GNUC__ < 9) || ((__GNUC__ >= 12) && __GNUC__ < 15 )) && !defined(__clang__))
 #  define BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
 #endif
 
