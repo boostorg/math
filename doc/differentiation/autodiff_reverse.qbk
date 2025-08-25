@@ -15,7 +15,13 @@
     namespace differentiation {
     namespace reverse_mode {
 
-    /* autodiff variable of type RealType (numeric types), stores derivatives up to DerivativeOrder*/
+    /* autodiff variable of type RealType (numeric types), stores derivatives up to DerivativeOrder
+    * rvar inherits from a generic expression base class
+    * expression<RealType, DerivativeOrder, rvar<RealType, DerivativeOrder>>
+    * This is a Curiously Recurring Template Pattern(CRTP)
+    * The purpose is so that rvar acts as a terminal node in an expression graph, and can be combined
+    * with other expression-based types (sums, producs, etc..) to form expression graphs.
+    */
     template<typename RealType, size_t DerivativeOrder = 1>
     class rvar : public expression<RealType, DerivativeOrder, rvar<RealType, DerivativeOrder>> {
       // inner_t of rvar<RealType, N> = var<RealType, N-1>
@@ -60,6 +66,11 @@
     }
 
     // gradient tape holds the computational graph
+    /*
+    * The expression graph is stored on a tape. The tape is closely related to the memory manegement
+    * system in the library. BOOST_MATH_BUFFER_SIZE is set to 65536. It controls the block size of the
+    * internal memory arena. Its a macro, and can be set at compile time.
+    */
     template<typename RealType, size_t DerivativeOrder, size_t buffer_size = BOOST_MATH_BUFFER_SIZE>
     class gradient_tape {
 
@@ -316,7 +327,17 @@ The model and loss functions are called. This is just to initialize y_fit and lo
       // 5. Gradient Descent Loop
       double learning_rate = 1e-3;
 
-The learning rate is a tunable parameter determining the "velocity" with which we descend to a solution.
+The learning rate controls how large a step we take in the direction of the
+negative gradient each iteration. Intuitively, it sets the "velocity" of
+descent toward a minimum.
+
+Too high: the optimization may overshoot minima, oscillate, or even diverge.
+Too low: convergence will be very slow and may stall in shallow regions.
+
+In practice, values in the range [1e-4, 1e-1] are common starting points,
+with 1e-3 being a typical safe default for many problems. The best choice
+depends on the scale of the data, the model, and the curvature of the loss
+landscape.
 
       while (loss_v > 0.005) {
           tape.zero_grad(); // zero out all the adjoints
