@@ -285,17 +285,15 @@ void test_bessel(T, const char* name)
             SC_(0.3810550980268886849843356923521907577982), SC_(0.3648312306136669944635769493587219791343), SC_(0.3466185870197064968846647990300282094299)
         }};
 
-        using value_type = table_entry_type;
-
-        const value_type tolerance { 128 * boost::math::tools::epsilon<value_type>() };
+        const T tolerance { 128 * boost::math::tools::epsilon<T>() };
 
         int n_val { 9 };
 
-        for(const value_type& ctrl: ctrl_data)
+        for(const T& ctrl: ctrl_data)
         {
-            const value_type x_val { static_cast<value_type>(static_cast<value_type>(n_val) / 10) };
+            const T x_val { static_cast<T>(static_cast<T>(n_val) / 10) };
 
-            const value_type jn_val { boost::math::cyl_bessel_j(3, x_val) };
+            const T jn_val { boost::math::cyl_bessel_j(3, x_val) };
 
             ++n_val;
 
@@ -323,19 +321,17 @@ void test_bessel(T, const char* name)
             SC_(0.3935910816286283019261303507307813773886), SC_(0.3799851451515116989978414766085547417497), SC_(0.3643342988837623802358278078893847672838)
         }};
 
-        using value_type = table_entry_type;
+        const T tolerance { 128 * boost::math::tools::epsilon<T>() };
 
-        const value_type tolerance { 128 * boost::math::tools::epsilon<value_type>() };
-
-        const value_type vu_val { static_cast<value_type>(static_cast<value_type>(31) / 10) };
+        const T vu_val { static_cast<T>(static_cast<T>(31) / 10) };
 
         int n_val { 9 };
 
-        for(const value_type& ctrl : ctrl_data)
+        for(const T& ctrl : ctrl_data)
         {
-            const value_type x_val { static_cast<value_type>(static_cast<value_type>(n_val) / 10) };
+            const T x_val { static_cast<T>(static_cast<T>(n_val) / 10) };
 
-            const value_type jn_val { boost::math::cyl_bessel_j(vu_val, x_val) };
+            const T jn_val { boost::math::cyl_bessel_j(vu_val, x_val) };
 
             ++n_val;
 
