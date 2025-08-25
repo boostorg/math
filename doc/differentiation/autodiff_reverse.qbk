@@ -165,7 +165,7 @@ Some key points about reverse mode automatic differentiation:
 
 1. Reverse mode auto-diff is exceptionally efficient for computing the gradient of functions mapping from high to low dimensional space, f : [real][super n][rarr][real]. Unlike finite differences or forward mode autodiff which scale with the number of input variables, reverse mode autodiff calculates the entire gradient vector in time proportional to the original function's evaluation time.
 
-2. It is possible to compute higher order derivatives by applying reverse mode over reverse mode differentiation. The backward function builds a new computational tape over the gradient computation. This approach is conceptually sound, but it can become computationally expensive very quickly. Forward mode autodiff is generally preferrable when computing higher order derivatives.
+2. While forward-over-reverse is often the most efficient way to obtain Hessians or Jacobian–vector products, our implementation currently supports reverse-over-reverse only. This means higher-order derivatives are available, but at a higher computational cost.It is possible to compute higher order derivatives by applying reverse mode over reverse mode differentiation. The backward function builds a new computational tape over the gradient computation. This approach is conceptually sound, but it can become computationally expensive very quickly. Forward mode autodiff is generally preferrable when computing higher order derivatives.
 
 3. While reverse mode is fast for computing the gradient, it has to store all the intermediate values from the forward pass to be used during the backward pass. This can be a significant memory overhead, especially for deep networks or complex functions.
 
