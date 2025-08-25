@@ -1,0 +1,665 @@
+[/          Copyright Maksym Zhelyeznyakov 2025-2026
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          https://www.boost.org/LICENSE_1_0.txt)]
+
+[section:autodiff Reverse Mode Automatic Differentiation]
+[template autodiff_equation[name]  '''<inlinemediaobject><imageobject><imagedata fileref="../equations/autodiff/'''[name]'''"></imagedata></imageobject></inlinemediaobject>''']
+[template autodiff_graph[name] '''<inlinemediaobject><imageobject><imagedata fileref="../graphs/autodiff/'''[name]'''"></imagedata></imageobject></inlinemediaobject>''']
+[h1:synopsis Synopsis]
+
+    #include <boost/math/differentiation/autodiff_reverse.hpp>
+    
+    namespace boost {
+    namespace math {
+    namespace differentiation {
+    namespace reverse_mode {
+
+    /* autodiff variable of type RealType (numeric types), stores derivatives up to DerivativeOrder
+    * rvar inherits from a generic expression base class
+    * expression<RealType, DerivativeOrder, rvar<RealType, DerivativeOrder>>
+    * This is a Curiously Recurring Template Pattern(CRTP)
+    * The purpose is so that rvar acts as a terminal node in an expression graph, and can be combined
+    * with other expression-based types (sums, producs, etc..) to form expression graphs.
+    */
+    template<typename RealType, size_t DerivativeOrder = 1>
+    class rvar : public expression<RealType, DerivativeOrder, rvar<RealType, DerivativeOrder>> {
+      // inner_t of rvar<RealType, N> = var<RealType, N-1>
+      // used to store graphs of N-1 order derivatives
+      // rvar_t<RealType, 0> decays to RealType
+      using inner_t = rvar_t<RealType, DerivativeOrder - 1>;
+      /* constructors */
+      // default
+      rvar();
+      // construct from numeric type
+      rvar(const RealType value);
+      // copy
+      rvar(const rvar<RealType, DerivativeOrder> other);
+
+      /* assignment operators */
+      // from numeric type
+      rvar &operator=(RealType v);
+      // from another rvar
+      rvar &operator=(const rvar<RealType, DerivativeOrder> &other);
+      // from a chain of expression templates
+      rvar &operator=(const expression<RealType, DerivativeOrder, E> &expr);
+
+      // calculate all derivatives in computational graph
+      void backward();
+
+      // get RealType value in rvar
+      RealType item() const;
+
+      // get accumulated adjoint of this variable
+      // returns inner_t
+      const inner_t &adjoint() const { return *node_->get_adjoint_ptr(); }
+      inner_t       &adjoint() { return *node_->get_adjoint_ptr(); }
+
+      // all arithmetic and comparison operators are overloaded
+      template<class E>
+      rvar<RealType, DerivativeOrder> &operator+=(const expression<RealType, DerivativeOrder, E> &expr);
+
+      template<class E>
+      rvar<RealType, DerivativeOrder> &operator*=(const expression<RealType, DerivativeOrder, E> &expr)
+
+
+    }
+
+    // gradient tape holds the computational graph
+    /*
+    * The expression graph is stored on a tape. The tape is closely related to the memory manegement
+    * system in the library. BOOST_MATH_BUFFER_SIZE is set to 65536. It controls the block size of the
+    * internal memory arena. Its a macro, and can be set at compile time.
+    */
+    template<typename RealType, size_t DerivativeOrder, size_t buffer_size = BOOST_MATH_BUFFER_SIZE>
+    class gradient_tape {
+
+      // clear tape
+      void clear();
+
+      // sets all derivatives to zero
+      void zero_grad();
+
+      // adds a checkpoint you can rewind to
+      void add_checkpoint();
+
+      // rewinds tape to last checkpoint set
+      void rewind_to_last_checkpoint();
+      // index is "checkpoint" index. so                                              // order which checkpoint was set
+      void rewind_to_checkpoint_at(size_t index);
+      // rewind to beginning of graph without clearing the tape
+      void rewind();
+    }
+
+    // tape access
+    template<typename template<typename RealType, size_t DerivativeOrder>>
+    inline gradient_tape<RealType, DerivativeOrder, BOOST_MATH_BUFFER_SIZE> &get_active_tape();
+
+    // standard math functions are overloaded using expression templates
+    template<typename RealType, size_t DerivativeOrder, typename LHS, typename RHS>
+    struct add_expr : public abstract_binary_expression<RealType, DerivativeOrder, LHS, RHS, add_expr<RealType, DerivativeOrder, LHS, RHS>>
+
+    template<typename RealType, size_t DerivativeOrder, typename LHS, typename RHS> add_expr<RealType, DerivativeOrder, LHS, RHS> operator+(const expression<RealType, DerivativeOrder, LHS> &lhs,const expression<RealType, DerivativeOrder, RHS> &rhs);
+
+    // Standard math functions are overloaded and called via argument-dependent lookup (ADL).
+    template<typename RealType, size_t DerivativeOrder, typename ARG>
+    floor_expr<RealType, DerivativeOrder, ARG> floor(const expression<RealType,DerivativeOrder, ARG> &arg);
+
+    template<typename RealType, size_t DerivativeOrder, typename ARG>
+    cos_expr<RealType, DerivativeOrder, ARG> cos(const expression<RealType,DerivativeOrder, ARG> &arg);
+
+    // Helper gradient functions
+    // rvar<T,0> decays into T
+    // returns vector<rvar<T,order1_1-1>> of gradients
+    template<typename T, size_t order_1, size_t order_2>
+    auto grad(rvar<T, order_1> &f, std::vector<rvar<T, order_2> *> &x);
+    template<typename T, size_t order_1, typename First, typename... Other>
+    auto grad(rvar<T, order_1> &f, First first, Other... other)
+    // returns a vector<vector<rvar<T, order_1 - 2>> representing the hessian matrix
+    template<typename T, size_t order_1, size_t order_2>
+    auto hess(rvar<T, order_1> &f, std::vector<rvar<T, order_2> *> &x)
+    template<typename T, size_t order_1, typename First, typename... Other>
+    auto hess(rvar<T, order_1> &f, First first, Other... other)
+    // returns N-d nested vector<vector< ...rvar<T,order_1 - N> ...
+    // representing the tensor generalization of the N-d gradient
+    template<size_t N, typename T, size_t order_1, size_t order_2>
+    auto grad_nd(rvar<T, order_1> &f, std::vector<rvar<T, order_2> *> &x)
+    template<size_t N, typename ftype, typename First, typename... Other>
+    auto grad_nd(ftype &f, First first, Other... other)
+    // ...
+    
+    }  // namespace reverse_mode
+    }  // namespace differentiation
+    }  // namespace math
+    }  // namespace boost
+
+[h1:description Description]
+
+Reverse mode autodiff is a header-only C++ library the [@https://en.wikipedia.org/wiki/Automatic_differentiation
+automatic differentiation] (reverse mode) of mathematical functions. This implementation builds a computational graph known as a tape, which stores all operations and their corresponding derivatives. The total gradients are then computed by reverse accumulation via the chain rule.
+
+Consider the following function
+
+    template<typename T>
+    T f(x,y)
+    {
+      return x*y+sin(x);
+    }
+
+    int main()
+    {
+      rvar<double,1> x = 1.0;
+      rvar<double,1> y = 1.0;
+      rvar<double,1> z = f(x,y);
+      z.backward();
+    }
+
+and the associated computational graph.
+
+[:[:[autodiff_graph autodiff_reverse_graph.svg]]]
+
+Using reverse mode autodiff, the gradients are computed by traversing the graph backward:
+[:[:[autodiff_equation reverse_mode_autodiff_ex_eq.svg]]]
+
+Some key points about reverse mode automatic differentiation:
+
+1. Reverse mode auto-diff is exceptionally efficient for computing the gradient of functions mapping from high to low dimensional space, f : [real][super n][rarr][real]. Unlike finite differences or forward mode autodiff which scale with the number of input variables, reverse mode autodiff calculates the entire gradient vector in time proportional to the original function's evaluation time.
+
+2. While forward-over-reverse is often the most efficient way to obtain Hessians or Jacobian–vector products, our implementation currently supports reverse-over-reverse only. This means higher-order derivatives are available, but at a higher computational cost.It is possible to compute higher order derivatives by applying reverse mode over reverse mode differentiation. The backward function builds a new computational tape over the gradient computation. This approach is conceptually sound, but it can become computationally expensive very quickly. Forward mode autodiff is generally preferrable when computing higher order derivatives.
+
+3. While reverse mode is fast for computing the gradient, it has to store all the intermediate values from the forward pass to be used during the backward pass. This can be a significant memory overhead, especially for deep networks or complex functions.
+
+[h1:overloaded-functions List of overloaded functions]
+[table
+    [[Function] [argument types]              [implementation]        [return type]         [left derivative] [right derivative]]
+    [[ + ]       [expression, expression]     [x+y]                   [expression]           [1.0]             [1.0]]
+    [[ + ]       [expression, float]          [x+y]                   [expresison]           [1.0]             []]
+    [[ + ]       [float, expression]          [x+y]                   [expression]           [1.0]             []]
+
+    [[ \* ]       [expression, expression]     [x*y]                  [expression]           [y]               [x]]
+    [[ \* ]       [expression, float]          [x*y]                  [expression]           [y]                []]
+    [[ \* ]       [float, expression]          [x*y]                  [expression]           []                 [x]]
+
+    [[ - ]       [expression, expression]     [x-y]                   [expression]           [1.0]             [-1.0]]
+    [[ - ]       [expression, float]          [x-y]                   [expression]           [1.0]              []]
+    [[ - ]       [float, expression]          [x-y]                   [expression]           []                [-1.0]]
+
+    [[ / ]       [expression, expression]     [x/y]                   [expression]           [1/y]             [-x/(y*y)]]
+    [[ / ]       [expression, float]          [x/y]                   [expression]           [1/y]             []]
+    [[ / ]       [float, expression]          [x/y]                   [expression]           []                [-x/(y*y)]]
+
+    [[fabs]     [expression]                  [std::fabs(x)]          [expression]           [x > 0.0 ? 1.0 : -1.0] []]
+    [[abs]      [expression]                  [fabs(x)]               [expression]           [x > 0.0 ? 1.0 : -1.0] []]
+    [[ceil]     [expression]                  [std::ceil(x)]          [expression]           [0.0]                  []]
+    [[floor]    [expression]                  [std::floor(x)]         [expression]           [0.0]                  []]
+    [[trunc]    [expression]                  [std::trunc(x)]         [expression]           [0.0]                  []]
+    [[exp]      [expression]                  [std::exp(x)]           [expression]           [exp(x)]               []]
+
+    [[pow]      [expression, expression]      [std::pow(x,y)]         [expression]           [y*pow(x,y-1)]         [pow(x,y)*log(x)]]
+    [[pow]      [expression, float]           [std::pow(x,y)]         [expression]           [y*pow(x,y-1)]         []]
+    [[pow]      [float. expression]           [std::pow(x,y)]         [expression]           []                     [pow(x,y)*log(x)]]
+
+    [[sqrt]     [expression]                  [std::sqrt(x)]          [expression]           [1/(2 sqrt(x))] []]
+    [[log]      [expression]                  [std::log(x)]           [expression]           [1/x] []]
+    [[cos]      [expression]                  [std::cos(x)]           [expression]           [-sin(x)] []]
+    [[sin]      [expression]                  [std::sin(x)]           [expression]           [cos(x)] []]
+    [[tan]      [expression]                  [std::tan(x)]           [expression]           [1/(cos(x)*cos(x))] []]
+    [[acos]     [expression]                  [std::acos(x)]          [expression]           [-1.0/(sqrt(1-x*x))] []]
+    [[asin]     [expression]                  [std::asin(x)]          [expression]           [1.0/(sqrt(1-x*x))] []]
+    [[atan]     [expression]                  [std::atan(x)]          [expression]           [1.0/(1+x*x)] []]
+    [[atan2]    [expression,expression]       [std::atan2(x,y)]       [expression]           [y/(x*x+y*y)] [-x/(x*x+y*y)]]
+    [[atan2]    [expression,float]            [std::atan2(x,y)]       [expression]           [y/(x*x+y*y)] []]
+    [[atan2]    [float,expression]            [std::atan2(x,y)]       [expression]           [] [-x/(x*x+y*y)]]
+
+     [[round]     [expression]                [std::round(x)]         [expression]           [0.0] []]
+    [[cosh]      [expression]                 [std::cosh(x)]          [expression]           [sinh(x)] []]
+    [[sinh]      [expression]                 [std::sinh(x)]          [expression]           [cosh(x)] []]
+    [[tanh]      [expression]                 [std::tanh(x)]          [expression]           [1/(cosh(x)*cosh(x))] []]
+    [[log10]      [expression]                [std::log10(x)]         [expression]           [1/(xlog(10.0)] []]
+
+    [[acosh]      [expression]                [std::cosh(x)]          [expression]           [1.0/(sqrt(x-1)*sqrt(x+1))] []]
+    [[asinh]      [expression]                [std::sinh(x)]          [expression]           [1/(sqrt(1+x*x))] []]
+    [[atanh]      [expression]                [std::tanh(x)]          [expression]           [1/(1-x*x))] []]
+    [[fmod]      [expression,expression]      [std::fmod(x,y)]        [expression]           [1.0] [-1.0/trunc(x/y)]]
+    [[fmod]      [expression,float]           [std::fmod(x,y)]        [expression]           [1.0] []]
+    [[fmod]      [float,expression]           [std::fmod(x,y)]        [expression]           [] [-1.0/trunc(x/y)]]
+
+    [[iround]      [expression]               [std::iround(x)]        [int, this function breaks the autodiff chain]   [] []]
+    [[lround]      [expression]               [std::lround(x)]        [long, this function breaks the autodiff chain]   [] []]
+    [[llround]      [expression]              [std::llround(x)]       [long long, this function breaks the autodiff chain] [] []]
+
+    [[itrunc]      [expression]               [std::itrunc(x)]        [int, this function breaks the autodiff chain]   [] []]
+    [[ltrunc]      [expression]               [std::ltrunc(x)]        [long, this function breaks the autodiff chain]   [] []]
+    [[lltrunc]      [expression]              [std::lltrunc(x)]       [long long, this function breaks the autodiff chain] [] []]
+
+    [[frexp]      [expression, *int]          [std::frexp(x.evaluate(),i); x/pow(2.0, *int) ]    [expression]   [1/pow(2.0,int)] []]
+    [[ldexp]      [expression, &int]          [ x*pow(2,int) ]        [expression]   [pow(2,int)] []]
+]
+
+[h1:expression_templates Example 1: Linear Regression]
+
+Although autodiff is overkill for linear regression, its a useful example for demonstrating a typical gradient based optimization usecase.
+
+  #include <array>
+  #include <boost/math/differentiation/autodiff_reverse.hpp>
+  #include <iostream>
+  #include <random>
+  #include <vector>
+
+  using namespace boost::math::differentiation::reverse_mode;
+  double random_double(double min_val, double max_val)
+  {
+      static std::random_device              rd;
+      static std::mt19937                    gen(rd());
+      std::uniform_real_distribution<double> dist(min_val, max_val);
+      return dist(gen);
+  }
+
+This function generates a random double within a specified range, used to create the true slope, intercept, and noisy data.
+
+  double noisy_linear_function(double intercept, double slope, double x)
+  {
+      return intercept + slope * x + random_double(-0.1, 0.1);
+  }
+
+Above is a simple data generating function that simulates some real-world data by adding a small amount of random noise to a perfect linear relationship.
+  template<size_t N>
+  rvar<double, 1> loss(std::array<double, N>& y_target, std::array<rvar<double, 1>, N>& y_fit)
+  {
+      rvar<double, 1> loss_v = make_rvar<double, 1>(0.0);
+      for (size_t i = 0; i < N; ++i) {
+          loss_v += pow(abs(y_target[i] - y_fit[i]), 2) / N;
+      }
+      return loss_v;
+  }
+
+The loss function calculates the mean-squared error. It takes true values of y, and the "model's" predicted y values and computes their squared difference.
+
+  template<size_t N>
+  std::array<rvar<double, 1>, N> model(rvar<double, 1>& a, rvar<double, 1>& b, std::array<double, N>& x)
+  {
+      std::array<rvar<double, 1>, N> ret;
+      for (size_t i = 0; i < N; ++i) {
+          ret[i] = a * x[i] + b;
+      }
+      return ret;
+  }
+
+This function represents the "linear model" we're fitting to. y = ax + b. It takes slow a and intercept b as rvars and the "x" as data. The returned array of rvars holds predicted y values and all calcuations are tracked by the gradient tape.
+
+  int main()
+  {
+      // 1. Generate noisy data with known slope and intercept
+      double slope = random_double(-5, 5);
+      double intercept = random_double(-5, 5);
+      const size_t num_data_samples = 100;
+      std::array<double, num_data_samples> noisy_data_x;
+      std::array<double, num_data_samples> noisy_data_y;
+
+      for (size_t i = 0; i < num_data_samples; i++) {
+          double x = random_double(-1, 1);
+          double y = noisy_linear_function(intercept, slope, x);
+          noisy_data_x[i] = x;
+          noisy_data_y[i] = y;
+      }
+
+Above is the data generation stage. We generate a dataset of 100 (x,y) points where y us a linear function of plus some random noise. The "true" slop and intercept are stored to be compared in the final result.
+
+      // 2. Initialize guess variables
+      double slope_guess = random_double(-5, 5);
+      double intercept_guess = random_double(-5, 5);
+      rvar<double, 1> a = make_rvar<double, 1>(slope_guess);
+      rvar<double, 1> b = make_rvar<double, 1>(intercept_guess);
+
+The initialization stage: the model's parameters a and b are initialized with random guesses.
+
+      // 3. Get the gradient tape and add a checkpoint
+      gradient_tape<double, 1>& tape = get_active_tape<double, 1>();
+      tape.add_checkpoint();
+
+Tape management: `get_active_tape<double,1>` returns a reference to a global tape that stores the computational graph. Checkpoints are essential for gradient descent loops. They allow the tape to be "rewound" at the beginning of each iteration preventing it from growing infinitely.
+
+      // 4. Initial forward pass and loss calculation
+      auto y_fit = model(a, b, noisy_data_x);
+      rvar<double, 1> loss_v = loss(noisy_data_y, y_fit);
+
+The model and loss functions are called. This is just to initialize y_fit and loss_v to be used inside the while loop.
+      // 5. Gradient Descent Loop
+      double learning_rate = 1e-3;
+
+The learning rate controls how large a step we take in the direction of the
+negative gradient each iteration. Intuitively, it sets the "velocity" of
+descent toward a minimum.
+
+Too high: the optimization may overshoot minima, oscillate, or even diverge.
+Too low: convergence will be very slow and may stall in shallow regions.
+
+In practice, values in the range [1e-4, 1e-1] are common starting points,
+with 1e-3 being a typical safe default for many problems. The best choice
+depends on the scale of the data, the model, and the curvature of the loss
+landscape.
+
+      while (loss_v > 0.005) {
+          tape.zero_grad(); // zero out all the adjoints
+
+It is essentially to zero out the gradients at every iteration so as to not reaccumulate them. if you were to call `loss_v.backward()` a second time, the derivative calculations will be incorrect.
+
+          tape.rewind_to_last_checkpoint(); // Rewind the tape for a new iteration
+
+Rewinds the tape to right before the model and loss calculates were done.
+          y_fit = model(a, b, noisy_data_x);
+          loss_v = loss(noisy_data_y, y_fit);
+          loss_v.backward(); // backward pass
+Calls the model and computes the gradeints.
+          a -= a.adjoint() * learning_rate; // Update 'a' by subtracting the gradient scaled by the learning rate
+          b -= b.adjoint() * learning_rate; // Update 'b' similarly
+      }
+updates `a` and `b` based on their gradients.
+
+      // 6. Print Results
+      std::cout << "Autodiff Linear Regression Summary \n";
+      std::cout << "learning rate : " << learning_rate << "\n";
+      std::cout << "true slope: " << slope;
+      std::cout << " regression: " << a.item() << "\n";
+
+      std::cout << "relative error (slope): " << relative_slope_error << "\n";
+      std::cout << "absolute error (slope): " << slope_error << "\n";
+      std::cout << "true intercept: " << intercept;
+      std::cout << " regression: " << b.item() << "\n";
+      std::cout << "absolute error (intercept): " << intercept_error << "\n";
+      std::cout << "aelative error (intercept): " << relative_intercept_error << "\n";
+      std::cout << "-------------------------------" << std::endl;
+    }
+A sample output of the above code
+
+  Autodiff Linear Regression Summary
+  learning rate : 0.001
+  true slope: 1.15677 regression: 1.24685
+  relative error (slope): 0.0778782
+  absolute error (slope): 0.0900868
+  true intercept: 2.23378 regression: 2.22309
+  absolute error (intercept): 0.0106901
+  aelative error (intercept): 0.00478563
+  -------------------------------
+
+[h2:example-black-scholes Example 2: Black-Scholes Option Pricing with Greeks]
+Below is effectively a rewrite of the forward mode autodiff Black Scholes example. Its a good example on how to compute higher oder gradients with reverse mode autodiff with helper functions like `grad()`, `hess()`, and `grad_nd()`
+
+  #include <boost/math/differentiation/autodiff_reverse.hpp>
+
+  using namespace boost::math::differentiation::reverse_mode;
+  using namespace boost::math::constants;
+
+  template<typename Real>
+  Real phi(Real const& x)
+  {
+      return one_div_root_two_pi<Real>() * exp(-0.5 * x * x);
+  }
+
+  template<typename Real>
+  Real Phi(Real const& x)
+  {
+      return 0.5 * erfc(-one_div_root_two<Real>() * x);
+  }
+
+  enum class CP { call, put };
+
+  template<typename T>
+  T black_scholes_option_price(CP cp, double K, T const& S, T const& sigma, T const& tau, T const& r)
+  {
+      using namespace std;
+      auto const d1 = (log(S / K) + (r + sigma * sigma / 2) * tau) / (sigma * sqrt(tau));
+      auto const d2 = (log(S / K) + (r - sigma * sigma / 2) * tau) / (sigma * sqrt(tau));
+      switch (cp) {
+      case CP::call:
+          return S * Phi<T>(d1) - exp(-r * tau) * K * Phi<T>(d2);
+      case CP::put:
+          return exp(-r * tau) * K * Phi<T>(-d2) - S * Phi<T>(-d1);
+      default:
+          throw runtime_error("Invalid CP value.");
+      }
+  }
+
+  int main()
+  {
+      double const    K         = 100.0;
+      double          S_val     = 105.0;
+      double          sigma_val = 5.0;
+      double          tau_val   = 30.0 / 365;
+      double          r_val     = 1.25 / 100;
+      rvar<double, 3> S         = make_rvar<double, 3>(S_val);
+      rvar<double, 3> sigma     = make_rvar<double, 3>(sigma_val);
+      rvar<double, 3> tau       = make_rvar<double, 3>(tau_val);
+      rvar<double, 3> r         = make_rvar<double, 3>(r_val);
+
+      rvar<double, 3> call_price
+          = black_scholes_option_price<rvar<double, 3>>(CP::call, K, S, sigma, tau, r);
+      rvar<double, 3> put_price
+          = black_scholes_option_price<rvar<double, 3>>(CP::put, K, S, sigma, tau, r);
+
+      double const d1 = ((log(S_val / K) + (r_val + sigma_val * sigma_val / 2) * tau_val)
+                        / (sigma_val * sqrt(tau_val)));
+      double const d2 = ((log(S_val / K) + (r_val - sigma_val * sigma_val / 2) * tau_val)
+                        / (sigma_val * sqrt(tau_val)));
+      double const formula_call_delta = +Phi(+d1);
+      double const formula_put_delta  = -Phi(-d1);
+      double const formula_vega       = (S_val * phi(d1) * sqrt(tau_val));
+      double const formula_call_theta = (-S_val * phi(d1) * sigma_val / (2 * sqrt(tau_val))
+                                        - r_val * K * exp(-r_val * tau_val) * Phi(+d2));
+
+      double const formula_put_theta = (-S_val * phi(d1) * sigma_val / (2 * sqrt(tau_val))
+                                        + r_val * K * exp(-r_val * tau_val) * Phi(-d2));
+      double const formula_call_rho  = (+K * tau_val * exp(-r_val * tau_val) * Phi(+d2));
+      double const formula_put_rho   = (-K * tau_val * exp(-r_val * tau_val) * Phi(-d2));
+      double const formula_gamma     = (phi(d1) / (S_val * sigma_val * sqrt(tau_val)));
+      double const formula_vanna     = (-phi(d1) * d2 / sigma_val);
+      double const formula_charm  = (phi(d1) * (d2 * sigma_val * sqrt(tau_val) - 2 * r_val * tau_val)
+                                    / (2 * tau_val * sigma_val * sqrt(tau_val)));
+      double const formula_vomma  = (S_val * phi(d1) * sqrt(tau_val) * d1 * d2 / sigma_val);
+      double const formula_veta   = (-S_val * phi(d1) * sqrt(tau_val)
+                                  * (r_val * d1 / (sigma_val * sqrt(tau_val))
+                                      - (1 + d1 * d2) / (2 * tau_val)));
+      double const formula_speed  = (-phi(d1) * (d1 / (sigma_val * sqrt(tau_val)) + 1)
+                                    / (S_val * S_val * sigma_val * sqrt(tau_val)));
+      double const formula_zomma  = (phi(d1) * (d1 * d2 - 1)
+                                    / (S_val * sigma_val * sigma_val * sqrt(tau_val)));
+      double const formula_color  = (-phi(d1) / (2 * S_val * tau_val * sigma_val * sqrt(tau_val))
+                                    * (1
+                                      + (2 * r_val * tau_val - d2 * sigma_val * sqrt(tau_val)) * d1
+                                            / (sigma_val * sqrt(tau_val))));
+      double const formula_ultima = -formula_vega
+                                    * ((d1 * d2 * (1 - d1 * d2) + d1 * d1 + d2 * d2)
+                                      / (sigma_val * sigma_val));
+
+      auto call_greeks = grad(call_price, &S, &sigma, &tau, &r);
+      auto put_greeks  = grad(put_price, &S, &sigma, &tau, &r);
+
+`grad(f, &x, &y, ...)` returns a `vector<rvar<double,N-1>` correspond to the gradient vector of `f` w.r.t. `x`,`y`, etc...
+
+      auto call_greeks_2nd_order = hess(call_price, &S, &sigma, &tau, &r);
+      auto put_greeks_2nd_order  = hess(put_price, &S, &sigma, &tau, &r);
+
+`hess(f, &x, &y, ...)` returns a `vector<vector<rvar<double,N-1>>` correspond to the hessian of `f` w.r.t. `x`,`y`, etc...
+
+      auto call_greeks_3rd_order = grad_nd<3>(call_price, &S, &sigma, &tau, &r);
+      auto put_greeks_3rd_order  = grad_nd<3>(put_price, &S, &sigma, &tau, &r);
+
+`grad_nd<N>(f, &x, &y, ...)` returns a `vector<vector<vector<rvar<double,N-1>>...` correspond to the gradient tensor of `f` w.r.t. `x`,`y`, etc...
+
+      std::cout << std::setprecision(std::numeric_limits<double>::digits10)
+                << "autodiff black-scholes call price = " << call_price.item() << "\n"
+                << "autodiff black-scholes put price = " << put_price.item() << "\n"
+                << "\n ## First-order Greeks \n"
+                << "autodiff call delta = " << call_greeks[0].item() << "\n"
+                << "formula call delta = " << formula_call_delta << "\n"
+                << "autodiff call vega  = " << call_greeks[1].item() << '\n'
+                << " formula call vega  = " << formula_vega << '\n'
+                << "autodiff call theta = " << -call_greeks[2].item() << '\n'
+                << " formula call theta = " << formula_call_theta << '\n'
+                << "autodiff call rho   = " << call_greeks[3].item() << 'n'
+                << " formula call rho   = " << formula_call_rho << '\n'
+                << '\n'
+                << "autodiff put delta = " << put_greeks[0].item() << 'n'
+                << " formula put delta = " << formula_put_delta << '\n'
+                << "autodiff put vega  = " << put_greeks[1].item() << '\n'
+                << " formula put vega  = " << formula_vega << '\n'
+                << "autodiff put theta = " << -put_greeks[2].item() << '\n'
+                << " formula put theta = " << formula_put_theta << '\n'
+                << "autodiff put rho   = " << put_greeks[3].item() << '\n'
+                << " formula put rho   = " << formula_put_rho << '\n'
+
+                << "\n## Second-order Greeks\n"
+                << "autodiff call gamma = " << call_greeks_2nd_order[0][0].item() << '\n'
+                << "autodiff put  gamma = " << put_greeks_2nd_order[0][0].item() << '\n'
+                << "      formula gamma = " << formula_gamma << '\n'
+                << "autodiff call vanna = " << call_greeks_2nd_order[0][1].item() << '\n'
+                << "autodiff put  vanna = " << put_greeks_2nd_order[0][1].item() << '\n'
+                << "      formula vanna = " << formula_vanna << '\n'
+                << "autodiff call charm = " << -call_greeks_2nd_order[0][2].item() << '\n'
+                << "autodiff put  charm = " << -put_greeks_2nd_order[0][2].item() << '\n'
+                << "      formula charm = " << formula_charm << '\n'
+                << "autodiff call vomma = " << call_greeks_2nd_order[1][1].item() << '\n'
+                << "autodiff put  vomma = " << put_greeks_2nd_order[1][1].item() << '\n'
+                << "      formula vomma = " << formula_vomma << '\n'
+                << "autodiff call veta = " << call_greeks_2nd_order[1][2].item() << '\n'
+                << "autodiff put  veta = " << put_greeks_2nd_order[1][2].item() << '\n'
+                << "      formula veta = " << formula_veta << '\n'
+
+                << "\n## Third-order Greeks\n"
+                << "autodiff call speed = " << call_greeks_3rd_order[0][0][0] << '\n'
+                << "autodiff put  speed = " << put_greeks_3rd_order[0][0][0] << '\n'
+                << "      formula speed = " << formula_speed << '\n'
+                << "autodiff call zomma = " << call_greeks_3rd_order[0][0][1] << '\n'
+                << "autodiff put  zomma = " << put_greeks_3rd_order[0][0][1] << '\n'
+                << "      formula zomma = " << formula_zomma << '\n'
+                << "autodiff call color = " << call_greeks_3rd_order[0][0][2] << '\n'
+                << "autodiff put  color = " << put_greeks_3rd_order[0][0][2] << '\n'
+                << "      formula color = " << formula_color << '\n'
+                << "autodiff call ultima = " << call_greeks_3rd_order[1][1][1] << '\n'
+                << "autodiff put  ultima = " << put_greeks_3rd_order[1][1][1] << '\n'
+                << "      formula ultima = " << formula_ultima << '\n';
+      return 0;
+  }
+
+Some notes on the implementations of `grad`, `hess`, and `grad_nd`. Internally these functions correctly clear the tape and zero out the gradients, so manual `tape.zero_grad()` isn't needed. They however return copies of the adjoint values in a vector, so there can be some performance overhead over using `f.backward()` directly.
+
+`grad`, `hess` and `grad_nd` are each overloaded twice. You can call
+
+    grad(rvar<RealType, DerivativeOrder_1> &f, std::vector<rvar<RealType, DerivativeOrder_2> *> &x)
+
+if you want to take a gradient with respect to many variables, or conveniently
+
+    grad(f, &x, &y)
+
+if you have only a few variables you need to take the gradient with respect to.
+The order of operations for `grad` matters. Although something like below is generally safe:
+
+    auto gv = grad(f,&x,&y,&z);
+    auto hv = grad(gv[0], &x, &y &z);
+
+The code below isn't, and will produce incorrect results:
+
+  auto hv = hess(f,&x,&y,&z)
+  auto g3v = grad(hv[0][0], &x,&y,&z)
+
+or:
+
+  auto hv = hess(f,&x,&y,&z)
+  auto g4v = hess(hv[0][0], &x,&y,&z)
+
+When in doubt, its always preferrable to compute higher order derivatives with:
+
+  auto g4 = grad_nd<4>(f, &x,&y,&z)
+
+[h2:expression-templates-and-auto Expression Templates and auto]
+Reverse mode autodiff is expression template based. This means that some care has to be taken into considerations when writing code that uses this library. For example consider the code below:
+
+    rvar<double, 1> x = 1.0;
+    rvar<double, 1> y = 2.0;
+    rvar<double, 1> z = 3.0;
+    auto w = x+y*z;
+
+The type of `w` is not `rvar<double,1>` but `add_expr<rvar<double,1>,mult_expr<rvar<double,1>,rvar<double,1>>>` This means that the code below will not compile:
+
+  template<typename T>
+  T f(T x)
+  {
+      return x*x;
+  }
+  int main()
+  {
+      rvar<double, 1> x = 1.0;
+      auto v = f(2*x);
+  }
+due to a type mismatch. It is also preferred to use auto for type deduction as often as possible. Consider the following 2 functions:
+
+  #include <benchmark/benchmark.h>
+  #include <boost/math/differentiation/autodiff_reverse.hpp>
+  #include <cmath>
+
+  using namespace boost::math::differentiation::reverse_mode;
+  template<typename T>
+  T testfunc_noauto(T& x, T& y, T& z)
+  {
+      T w1 = log(1 + abs(x)) * exp(y) + z;
+      T w2 = pow(x + y, 2.5) / z;
+      T w3 = sqrt(1 + x * y) * z * z;
+      T w4 = w1 + w2 + w3;
+      T w5 = w4 * w2;
+      return w5;
+  }
+
+  template<typename T>
+  T testfunc_auto(T& x, T& y, T& z)
+  {
+      auto w1 = log(1 + abs(x)) * exp(y) + z;
+      auto w2 = pow(x + y, 2.5) / z;
+      auto w3 = sqrt(1 + x * y) * z * z;
+      auto w4 = w1 + w2 + w3;
+      auto w5 = w4 * w2;
+      return w5;
+  }
+
+and the corresponding benchmark:
+
+  template<class Func>
+  void BM_RVar(benchmark::State& state, Func f)
+  {
+      using T    = rvar<double, 1>;
+      auto& tape = get_active_tape<T, 1>();
+      for (auto _ : state) {
+          tape.clear();
+          T    x(1.0), y(2.0), z(3.0);
+          auto result = f(x, y, z);
+          benchmark::DoNotOptimize(result);
+          result.backward();
+          benchmark::DoNotOptimize(x.adjoint());
+          benchmark::DoNotOptimize(y.adjoint());
+          benchmark::DoNotOptimize(z.adjoint());
+      }
+  }
+  BENCHMARK([](benchmark::State& st) { BM_RVar(st, testfunc_auto<rvar<double, 1>>); });
+  BENCHMARK([](benchmark::State& st) { BM_RVar(st, testfunc_noauto<rvar<double, 1>>); });
+  BENCHMARK_MAIN();
+
+Running this benchmark on a 13th Gen Intel(R) Core(TM) i7-13650HX, compiled with `-O3`:
+
+    ./benchmark --benchmark_filter=testfunc_auto
+
+    --------------------------------------------------------------------------------------------------------------------
+    Benchmark                                                                          Time             CPU   Iterations
+    --------------------------------------------------------------------------------------------------------------------
+    [](benchmark::State& st) { BM_RVar(st, testfunc_auto<rvar<double, 1>>); }     199546 ns       199503 ns        10000
+
+and
+
+    ./benchmark --benchmark_filter=testfunc_noauto
+
+    ----------------------------------------------------------------------------------------------------------------------
+    Benchmark                                                                            Time             CPU   Iterations
+    ----------------------------------------------------------------------------------------------------------------------
+    [](benchmark::State& st) { BM_RVar(st, testfunc_noauto<rvar<double, 1>>); }     375731 ns       375669 ns        10000
+
+You get nearly 2x speedup on the code that uses auto.
+
+[endsect]

@@ -10,7 +10,7 @@ test/cuda
 **/.temps/*
 build/*
 .vscode/*
-*.svg
+#*.svg
 tools/bin/**
 .idea/*
 
@@ -28,3 +28,4 @@ cmake-build-debug/*
 build.ninja
 .ninja*
 a.out
+
