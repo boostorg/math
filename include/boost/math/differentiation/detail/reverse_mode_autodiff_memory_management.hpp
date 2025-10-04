@@ -266,7 +266,7 @@ public:
     void add_checkpoint()
     {
         if (total_size_ > 0) {
-            checkpoints_.push_back(total_size_ - 1);
+            checkpoints_.push_back(total_size_); //- 1);
         } else {
             checkpoints_.push_back(0);
         }

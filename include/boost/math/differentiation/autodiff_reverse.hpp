@@ -580,6 +580,8 @@ public:
         }
         it->backward();
     }
+
+    void set_item(RealType value) { value_ = inner_t(value); }
 };
 
 template<typename RealType, size_t DerivativeOrder>

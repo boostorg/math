@@ -12,6 +12,16 @@
 #include <array>
 #include <vector>
 
+/* simple n-d quadratic function */
+template<typename RealType>
+RealType quadratic(std::vector<RealType> &x)
+{
+    RealType res{0.0};
+    for (auto &item : x) {
+        res += item * item;
+    }
+    return res;
+}
 // Taken from: https://en.wikipedia.org/wiki/Test_functions_for_optimization
 template <typename Real> Real ackley(std::array<Real, 2> const &v) {
   using std::sqrt;
