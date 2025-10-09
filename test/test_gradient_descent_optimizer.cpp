@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(random_initializer_test, T, all_float_types)
     T                              lr = T{1e-2};
     std::vector<rdiff::rvar<T, 1>> x(N);
 
-    auto gdopt = bopt::make_gradient_descent(
+    auto                           gdopt = bopt::make_gradient_descent(
         &quadratic<rdiff::rvar<T, 1>>,
         x,
         lr,
@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(box_constraint_test, T, all_float_types)
 
     auto gdopt = bopt::make_gradient_descent(&quadratic<rdiff::rvar<T, 1>>, x, lr);
 
-    auto res = bopt::minimize(gdopt,
+    auto res   = bopt::minimize(gdopt,
                               bopt::box_constraints<std::vector<rdiff::rvar<T, 1>>, T>(-1.0, 1.0));
 
     for (auto& xi : x) {
@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(max_iter_test, T, all_float_types)
     T                              lr = T{1e-6}; // very slow learning
     std::vector<rdiff::rvar<T, 1>> x  = {T{5}, T{5}};
 
-    auto gdopt = bopt::make_gradient_descent(&quadratic<rdiff::rvar<T, 1>>, x, lr);
+    auto   gdopt    = bopt::make_gradient_descent(&quadratic<rdiff::rvar<T, 1>>, x, lr);
 
     size_t max_iter = 50;
     auto   res      = bopt::minimize(gdopt,
@@ -121,7 +121,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(history_tracking_test, T, all_float_types)
 
     auto gdopt = bopt::make_gradient_descent(&quadratic<rdiff::rvar<T, 1>>, x, lr);
 
-    auto res = bopt::minimize(gdopt,
+    auto res   = bopt::minimize(gdopt,
                               bopt::unconstrained_policy<std::vector<rdiff::rvar<T, 1>>>{},
                               bopt::gradient_norm_convergence_policy<T>(T{1e-6}),
                               bopt::max_iter_termination_policy(1000),
@@ -137,7 +137,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(rosenbrock_test, T, all_float_types)
 
     auto gdopt = bopt::make_gradient_descent(&rosenbrock_saddle<rdiff::rvar<T, 1>>, x, lr);
 
-    auto res = bopt::minimize(gdopt,
+    auto res   = bopt::minimize(gdopt,
                               bopt::unconstrained_policy<std::array<rdiff::rvar<T, 1>, 2>>{},
                               bopt::gradient_norm_convergence_policy<T>(T{1e-4}),
                               bopt::max_iter_termination_policy(50000));
@@ -145,113 +145,113 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(rosenbrock_test, T, all_float_types)
     BOOST_REQUIRE_CLOSE(x[0].item(), T{1.0}, T{1e-1});
     BOOST_REQUIRE_CLOSE(x[1].item(), T{1.0}, T{1e-1});
 }
-BOOST_AUTO_TEST_CASE(objective_tol_convergence_test)
+BOOST_AUTO_TEST_CASE_TEMPLATE(objective_tol_convergence_test, T, all_float_types)
 {
-    using policy_t = bopt::objective_tol_convergence_policy<double>;
-    policy_t            pol(1e-3);
-    std::vector<double> dummy_grad;
+    using policy_t = bopt::objective_tol_convergence_policy<T>;
+    policy_t       pol(1e-3);
+    std::vector<T> dummy_grad;
 
     BOOST_TEST(!pol(dummy_grad, 100.0));
     BOOST_TEST(!pol(dummy_grad, 99.0));
     BOOST_TEST(pol(dummy_grad, 99.0005));
 }
 
-BOOST_AUTO_TEST_CASE(relative_objective_tol_test)
+BOOST_AUTO_TEST_CASE_TEMPLATE(relative_objective_tol_test, T, all_float_types)
 {
-    using policy_t = bopt::relative_objective_tol_policy<double>;
-    policy_t pol(1e-3);
+    using policy_t = bopt::relative_objective_tol_policy<T>;
+    policy_t       pol(1e-3);
 
-    std::vector<double> dummy_grad;
+    std::vector<T> dummy_grad;
     BOOST_TEST(!pol(dummy_grad, 1000.0));
     BOOST_TEST(!pol(dummy_grad, 1010.0));
     BOOST_TEST(pol(dummy_grad, 1010.5));
 }
 
-BOOST_AUTO_TEST_CASE(combined_policy_test)
+BOOST_AUTO_TEST_CASE_TEMPLATE(combined_policy_test, T, all_float_types)
 {
-    using pol_abs  = bopt::objective_tol_convergence_policy<double>;
-    using pol_rel  = bopt::relative_objective_tol_policy<double>;
+    using pol_abs  = bopt::objective_tol_convergence_policy<T>;
+    using pol_rel  = bopt::relative_objective_tol_policy<T>;
     using pol_comb = bopt::combined_convergence_policy<pol_abs, pol_rel>;
 
-    pol_abs  abs_pol(1e-6);
-    pol_rel  rel_pol(1e-3);
-    pol_comb comb(abs_pol, rel_pol);
+    pol_abs        abs_pol(1e-6);
+    pol_rel        rel_pol(1e-3);
+    pol_comb       comb(abs_pol, rel_pol);
 
-    std::vector<double> dummy_grad;
+    std::vector<T> dummy_grad;
 
     BOOST_TEST(!comb(dummy_grad, 100.0));
     BOOST_TEST(!comb(dummy_grad, 110.0));
     BOOST_TEST(comb(dummy_grad, 110.1));
     BOOST_TEST(comb(dummy_grad, 110.1000001));
 }
-BOOST_AUTO_TEST_CASE(nonnegativity_constraint_test)
+BOOST_AUTO_TEST_CASE_TEMPLATE(nonnegativity_constraint_test, T, all_float_types)
 {
-    std::vector<double>                                         x = {1.0, -2.0, 3.0, -4.0};
-    bopt::nonnegativity_constraint<std::vector<double>, double> proj;
+    std::vector<T>                                    x = {1.0, -2.0, 3.0, -4.0};
+    bopt::nonnegativity_constraint<std::vector<T>, T> proj;
     proj(x);
 
     for (auto& xi : x)
         BOOST_TEST(xi >= 0.0);
-    BOOST_TEST(x == std::vector<double>({1.0, 0.0, 3.0, 0.0}));
+    BOOST_TEST(x == std::vector<T>({1.0, 0.0, 3.0, 0.0}));
 }
 
-BOOST_AUTO_TEST_CASE(l2_ball_constraint_test)
+BOOST_AUTO_TEST_CASE_TEMPLATE(l2_ball_constraint_test, T, all_float_types)
 {
-    std::vector<double>                                   x = {3.0, 4.0}; // norm = 5
-    bopt::l2_ball_constraint<std::vector<double>, double> proj(1.0);
+    std::vector<T>                              x = {3.0, 4.0}; // norm = 5
+    bopt::l2_ball_constraint<std::vector<T>, T> proj(1.0);
     proj(x);
 
-    double norm = std::sqrt(x[0] * x[0] + x[1] * x[1]);
-    BOOST_TEST(std::abs(norm - 1.0) < 1e-12); // projected to unit circle
+    T norm = sqrt(x[0] * x[0] + x[1] * x[1]);
+    BOOST_TEST(abs(norm - 1.0) < 1e-12); // projected to unit circle
 }
 
-BOOST_AUTO_TEST_CASE(l1_ball_constraint_test)
+BOOST_AUTO_TEST_CASE_TEMPLATE(l1_ball_constraint_test, T, all_float_types)
 {
-    std::vector<double>                                   x = {3.0, 4.0}; // L1 norm = 7
-    bopt::l1_ball_constraint<std::vector<double>, double> proj(2.0);
+    std::vector<T>                              x = {3.0, 4.0}; // L1 norm = 7
+    bopt::l1_ball_constraint<std::vector<T>, T> proj(2.0);
     proj(x);
 
-    double norm1 = std::abs(x[0]) + std::abs(x[1]);
-    BOOST_TEST(std::abs(norm1 - 2.0) < 1e-12);
+    T norm1 = abs(x[0]) + abs(x[1]);
+    BOOST_TEST(abs(norm1 - 2.0) < T{1e-12});
 }
 
-BOOST_AUTO_TEST_CASE(simplex_constraint_test)
+BOOST_AUTO_TEST_CASE_TEMPLATE(simplex_constraint_test, T, all_float_types)
 {
-    std::vector<double> x = {-1.0, 2.0, 3.0}; // has negative and sum != 1
-    bopt::simplex_constraint<std::vector<double>, double> proj;
+    std::vector<T>                              x = {-1.0, 2.0, 3.0}; // has negative and sum != 1
+    bopt::simplex_constraint<std::vector<T>, T> proj;
     proj(x);
 
-    double sum = 0.0;
+    T sum = 0.0;
     for (auto& xi : x) {
         BOOST_TEST(xi >= 0.0); // all nonnegative
         sum += xi;
     }
-    BOOST_TEST(std::abs(sum - 1.0) < 1e-12); // normalized to sum=1
+    BOOST_TEST(abs(sum - 1.0) < 1e-12); // normalized to sum=1
 }
 
-BOOST_AUTO_TEST_CASE(unit_sphere_constraint_test)
+BOOST_AUTO_TEST_CASE_TEMPLATE(unit_sphere_constraint_test, T, all_float_types)
 {
-    std::vector<double>                                       x = {0.3, 0.4}; // norm = 0.5
-    bopt::unit_sphere_constraint<std::vector<double>, double> proj;
+    std::vector<T>                                  x = {0.3, 0.4}; // norm = 0.5
+    bopt::unit_sphere_constraint<std::vector<T>, T> proj;
     proj(x);
 
-    double norm = std::sqrt(x[0] * x[0] + x[1] * x[1]);
-    BOOST_TEST(std::abs(norm - 1.0) < 1e-12); // always projected to sphere
+    T norm = sqrt(x[0] * x[0] + x[1] * x[1]);
+    BOOST_TEST(abs(norm - 1.0) < 1e-12); // always projected to sphere
 }
 
-BOOST_AUTO_TEST_CASE(function_constraint_test)
+BOOST_AUTO_TEST_CASE_TEMPLATE(function_constraint_test, T, all_float_types)
 {
-    auto clip_to_half = [](std::vector<double>& v) {
+    auto clip_to_half = [](std::vector<T>& v) {
         for (auto& xi : v)
             if (xi > 0.5)
                 xi = 0.5;
     };
 
-    bopt::function_constraint<std::vector<double>> proj(clip_to_half);
-    std::vector<double>                            x = {0.2, 0.7, 1.5};
+    bopt::function_constraint<std::vector<T>> proj(clip_to_half);
+    std::vector<T>                            x = {0.2, 0.7, 1.5};
     proj(x);
 
-    BOOST_TEST(x == std::vector<double>({0.2, 0.5, 0.5}));
+    BOOST_TEST(x == std::vector<T>({0.2, 0.5, 0.5}));
 }
 
 template<typename RealType>
@@ -273,26 +273,16 @@ struct analytic_objective_eval_pol
 template<typename RealType>
 struct analytic_gradient_eval_pol
 {
-    std::vector<RealType> grad_container;
-    template<typename ArgumentContainer>
-    void bind(ArgumentContainer& x, std::vector<std::reference_wrapper<RealType>>& g)
-    {
-        grad_container.resize(x.size(), RealType{0.0});
-        g.clear();
-        g.reserve(x.size());
-        for (size_t i = 0; i < x.size(); ++i) {
-            g.push_back(std::ref(grad_container[i]));
-        }
-    }
     template<class Objective, class ArgumentContainer, class FunctionEvaluationPolicy>
     void operator()(Objective&&                obj_f,
                     ArgumentContainer&         x,
                     FunctionEvaluationPolicy&& f_eval_pol,
-                    RealType&                  obj_v)
+                    RealType&                  obj_v,
+                    std::vector<RealType>&     grad_container)
     {
-        // compute objective via eval policy that takes care of tape
         RealType v = f_eval_pol(obj_f, x);
         obj_v      = v;
+        grad_container.resize(x.size());
         for (size_t i = 0; i < x.size(); ++i) {
             grad_container[i] = 2 * x[i];
         }
