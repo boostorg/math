@@ -93,4 +93,28 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(custom_init_lbfgs_test, T, all_float_types)
   }
 }
 
+BOOST_AUTO_TEST_CASE_TEMPLATE(analytic_lbfgs_test, T, all_float_types)
+{
+  constexpr size_t M = 10;
+  const T eps = T{ 1e-3 };
+
+  RandomSample<T> rng{ T(-5), T(5) };
+  std::vector<T> x(3);
+  for (auto& xi : x)
+    xi = rng.next();
+
+  auto opt = bopt::make_lbfgs(&quadratic<T>,         // Objective
+                              x,                     // Arguments
+                              M,                     // History size
+                              zero_init_policy<T>{}, // Initialization
+                              analytic_objective_eval_pol<T>{}, // Function eval
+                              analytic_gradient_eval_pol<T>{},  // Gradient eval
+                              bopt::armijo_line_search_policy<T>{});
+
+  auto result = minimize(opt);
+
+  for (auto& xi : x) {
+    BOOST_REQUIRE_SMALL(xi, eps);
+  }
+}
 BOOST_AUTO_TEST_SUITE_END()

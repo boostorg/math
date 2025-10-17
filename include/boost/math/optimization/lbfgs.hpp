@@ -344,6 +344,39 @@ make_lbfgs(Objective&& obj,
     lbfgs_update_policy<RealType>{},
     std::forward<LineSearchPolicy>(lsp));
 }
+
+template<class Objective,
+         typename ArgumentContainer,
+         class InitializationPolicy,
+         class FunctionEvalPolicy,
+         class GradientEvalPolicy,
+         class LineSearchPolicy>
+auto
+make_lbfgs(Objective&& obj,
+           ArgumentContainer& x,
+           std::size_t m,
+           InitializationPolicy&& ip,
+           FunctionEvalPolicy&& fep,
+           GradientEvalPolicy&& gep,
+           LineSearchPolicy&& lsp)
+{
+  using RealType = typename argument_container_t<ArgumentContainer>::type;
+  return lbfgs<ArgumentContainer,
+               RealType,
+               std::decay_t<Objective>,
+               InitializationPolicy,
+               FunctionEvalPolicy,
+               GradientEvalPolicy,
+               LineSearchPolicy>(std::forward<Objective>(obj),
+                                 x,
+                                 m,
+                                 std::forward<InitializationPolicy>(ip),
+                                 std::forward<FunctionEvalPolicy>(fep),
+                                 std::forward<GradientEvalPolicy>(gep),
+                                 lbfgs_update_policy<RealType>{},
+                                 std::forward<LineSearchPolicy>(lsp));
+}
+
 } // namespace optimization
 } // namespace math
 } // namespace boost
