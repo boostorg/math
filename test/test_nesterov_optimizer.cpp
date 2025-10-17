@@ -9,12 +9,11 @@
 #include <boost/math/optimization/nesterov.hpp>
 namespace rdiff = boost::math::differentiation::reverse_mode;
 namespace bopt = boost::math::optimization;
-BOOST_AUTO_TEST_SUITE(basic_gradient_descent)
+BOOST_AUTO_TEST_SUITE(nesterov_descent)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(default_nesterov_test, T, all_float_types)
 {
-  size_t NITER = 5;
-  T lr = T{ 1e-3 };
+  T lr = T{ 1e-4 };
   T mu = T{ 0.95 };
   RandomSample<T> rng{ T(-10), (10) };
   std::vector<rdiff::rvar<T, 1>> x;

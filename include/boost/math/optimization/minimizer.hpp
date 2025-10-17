@@ -275,8 +275,7 @@ struct unit_sphere_constraint
 {
   void operator()(ArgumentContainer& x) const
   {
-    RealType norm2v = norm_2(x);
-    RealType norm = sqrt(norm2v);
+    RealType norm = norm_2(x);
     if (norm > RealType{ 0 }) {
       for (auto& xi : x)
         xi /= norm;

@@ -32,8 +32,9 @@ struct nesterov_update_policy
                ArgumentType>::value>::type>
   void operator()(ArgumentType& x, RealType& g, RealType& v)
   {
+    RealType v_prev = v;
     v = mu_ * v - lr_ * g;
-    x.get_value() += v;
+    x.get_value() += -mu_ * v_prev + (static_cast<RealType>(1) + mu_) * v;
   }
   template<typename ArgumentType,
            typename std::enable_if<!boost::math::differentiation::reverse_mode::
@@ -41,8 +42,9 @@ struct nesterov_update_policy
                                    int>::type = 0>
   void operator()(ArgumentType& x, RealType& g, RealType& v) const
   {
+    const RealType v_prev = v;
     v = mu_ * v - lr_ * g;
-    x += v;
+    x += -mu_ * v_prev + (static_cast<RealType>(1) + mu_) * v;
   }
   RealType lr() const noexcept { return lr_; }
   RealType mu() const noexcept { return mu_; }
