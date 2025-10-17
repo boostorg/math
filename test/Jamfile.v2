@@ -1368,6 +1368,13 @@ test-suite test_reverse_mode_autodiff
         [ run test_reverse_mode_autodiff_basic_math_ops.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
         [ run test_reverse_mode_autodiff_error_functions.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
     ;
+
+test-suite gradient_based_optimizers
+     :
+        [ run test_gradient_descent_optimizer.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
+        [ run test_nesterov_optimizer.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
+        [ run test_lbfgs.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
+     ;
 # BEGIN AUTODIFF LONG RUNNING TESTS
 test-suite autodiff-long-running-tests
     :
@@ -2355,6 +2362,6 @@ explicit no_eh_tests ;
 # Some aliases which group blocks of tests for CI testing:
 
 alias github_ci_block_1 : special_fun float128_tests distribution_tests mp misc concepts ;
-alias github_ci_block_2 : quadrature interpolators autodiff test_reverse_mode_autodiff ../example//examples ../tools ;
+alias github_ci_block_2 : quadrature interpolators autodiff test_reverse_mode_autodiff gradient_based_optimizers ../example//examples ../tools ;
 explicit github_ci_block_1 ;
 explicit github_ci_block_2 ;
