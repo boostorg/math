@@ -1,3 +1,7 @@
+//           Copyright Maksym Zhelyenzyakov 2025-2026.
+// Distributed under the Boost Software License, Version 1.0.
+//      (See accompanying file LICENSE_1_0.txt or copy at
+//           https://www.boost.org/LICENSE_1_0.txt)
 #ifndef GRADIENT_DESCENT_HPP
 #define GRADIENT_DESCENT_HPP
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
@@ -9,27 +13,31 @@ namespace boost {
 namespace math {
 namespace optimization {
 
-template <typename RealType> struct gradient_descent_update_policy {
+template<typename RealType>
+struct gradient_descent_update_policy
+{
   RealType lr_;
-  gradient_descent_update_policy(RealType lr) : lr_(lr) {};
+  gradient_descent_update_policy(RealType lr)
+    : lr_(lr) {};
 
-  template <typename ArgumentType,
-            typename = typename std::enable_if<
-                boost::math::differentiation::reverse_mode::detail::
-                    is_expression<ArgumentType>::value>::type>
-  void operator()(ArgumentType &x, RealType &g) {
+  template<typename ArgumentType,
+           typename = typename std::enable_if<
+             boost::math::differentiation::reverse_mode::detail::is_expression<
+               ArgumentType>::value>::type>
+  void operator()(ArgumentType& x, RealType& g)
+  {
     // this update effectively "mutes" the tape
     // TODO: add a tape scope guard method so that
     // you can do math on autodiff types without
     // accumulating gradients
     x.get_value() -= lr_ * g;
   }
-  template <
-      typename ArgumentType,
-      typename std::enable_if<!boost::math::differentiation::reverse_mode::
-                                  detail::is_expression<ArgumentType>::value,
-                              int>::type = 0>
-  void operator()(ArgumentType &x, RealType &g) const {
+  template<typename ArgumentType,
+           typename std::enable_if<!boost::math::differentiation::reverse_mode::
+                                     detail::is_expression<ArgumentType>::value,
+                                   int>::type = 0>
+  void operator()(ArgumentType& x, RealType& g) const
+  {
     x -= lr_ * g;
   }
 };
@@ -43,34 +51,49 @@ template <typename RealType> struct gradient_descent_update_policy {
  * general optimization framework.
  *
  * @tparam> ArgumentContainer Type of the parameter container (e.g.
- * std::vector<SomeDifferentiableType or RealType>).
+ *          std::vector<SomeDifferentiableType or RealType>).
  * @tparam> RealType          Floating-point type
  * @tparam> Objective         Objective function type (functor or callable).
  * @tparam> InitializationPolicy Policy controlling initialization of
- * differentiable variables.
+ *          differentiable variables.
  * @tparam> ObjectiveEvalPolicy  Policy defining how the objective is evaluated.
  * @tparam> GradEvalPolicy       Policy defining how the gradient is computed.
  */
 
-template <typename ArgumentContainer, typename RealType, class Objective,
-          class InitializationPolicy, class ObjectiveEvalPolicy,
-          class GradEvalPolicy>
+template<typename ArgumentContainer,
+         typename RealType,
+         class Objective,
+         class InitializationPolicy,
+         class ObjectiveEvalPolicy,
+         class GradEvalPolicy>
 class gradient_descent
-    : public abstract_optimizer<
-          ArgumentContainer, RealType, Objective, InitializationPolicy,
-          ObjectiveEvalPolicy, GradEvalPolicy,
-          gradient_descent_update_policy<RealType>,
-          gradient_descent<ArgumentContainer, RealType, Objective,
-                           InitializationPolicy, ObjectiveEvalPolicy,
-                           GradEvalPolicy>> {
-  using base_opt =
-      abstract_optimizer<ArgumentContainer, RealType, Objective,
-                         InitializationPolicy, ObjectiveEvalPolicy,
-                         GradEvalPolicy,
-                         gradient_descent_update_policy<RealType>,
-                         gradient_descent<ArgumentContainer, RealType,
-                                          Objective, InitializationPolicy,
-                                          ObjectiveEvalPolicy, GradEvalPolicy>>;
+  : public abstract_optimizer<ArgumentContainer,
+                              RealType,
+                              Objective,
+                              InitializationPolicy,
+                              ObjectiveEvalPolicy,
+                              GradEvalPolicy,
+                              gradient_descent_update_policy<RealType>,
+                              gradient_descent<ArgumentContainer,
+                                               RealType,
+                                               Objective,
+                                               InitializationPolicy,
+                                               ObjectiveEvalPolicy,
+                                               GradEvalPolicy>>
+{
+  using base_opt = abstract_optimizer<ArgumentContainer,
+                                      RealType,
+                                      Objective,
+                                      InitializationPolicy,
+                                      ObjectiveEvalPolicy,
+                                      GradEvalPolicy,
+                                      gradient_descent_update_policy<RealType>,
+                                      gradient_descent<ArgumentContainer,
+                                                       RealType,
+                                                       Objective,
+                                                       InitializationPolicy,
+                                                       ObjectiveEvalPolicy,
+                                                       GradEvalPolicy>>;
 
 public:
   using base_opt::base_opt;
@@ -106,60 +129,76 @@ public:
  *      custom learning rate
 */
 
-template <class Objective, typename ArgumentContainer, typename RealType>
-auto make_gradient_descent(Objective &&obj, ArgumentContainer &x,
-                           RealType lr = RealType{0.01}) {
-  return gradient_descent<ArgumentContainer, RealType, std::decay_t<Objective>,
+template<class Objective, typename ArgumentContainer, typename RealType>
+auto
+make_gradient_descent(Objective&& obj,
+                      ArgumentContainer& x,
+                      RealType lr = RealType{ 0.01 })
+{
+  return gradient_descent<ArgumentContainer,
+                          RealType,
+                          std::decay_t<Objective>,
                           tape_initializer_rvar<RealType>,
                           reverse_mode_function_eval_policy<RealType>,
                           reverse_mode_gradient_evaluation_policy<RealType>>(
-      std::forward<Objective>(obj), x, tape_initializer_rvar<RealType>{},
-      reverse_mode_function_eval_policy<RealType>{},
-      reverse_mode_gradient_evaluation_policy<RealType>{},
-      gradient_descent_update_policy<RealType>(lr));
+    std::forward<Objective>(obj),
+    x,
+    tape_initializer_rvar<RealType>{},
+    reverse_mode_function_eval_policy<RealType>{},
+    reverse_mode_gradient_evaluation_policy<RealType>{},
+    gradient_descent_update_policy<RealType>(lr));
 }
 
-/**
- * @brief> convenience factory
- *
- * make_gradient_descent(objective, x, learning rate, initialization policy)
- *
- *      possible initialization policies implemented:
- *              tape_initializer_rvar
- *              random_uniform_initializer_rvar
- *              costant_initializer_rvar
- *
- *      these are structs that initialize x via () operator
- * Default parameters:
- *      reverse_mode_function_eval_policy
- *      reverse_mode_gradient_evaluation_policy
- * */
-template <class Objective, typename ArgumentContainer, typename RealType,
-          class InitializationPolicy>
-auto make_gradient_descent(Objective &&obj, ArgumentContainer &x, RealType lr,
-                           InitializationPolicy &&ip) {
-  return gradient_descent<ArgumentContainer, RealType, std::decay_t<Objective>,
+template<class Objective,
+         typename ArgumentContainer,
+         typename RealType,
+         class InitializationPolicy>
+auto
+make_gradient_descent(Objective&& obj,
+                      ArgumentContainer& x,
+                      RealType lr,
+                      InitializationPolicy&& ip)
+{
+  return gradient_descent<ArgumentContainer,
+                          RealType,
+                          std::decay_t<Objective>,
                           InitializationPolicy,
                           reverse_mode_function_eval_policy<RealType>,
                           reverse_mode_gradient_evaluation_policy<RealType>>(
-      std::forward<Objective>(obj), x, std::forward<InitializationPolicy>(ip),
-      reverse_mode_function_eval_policy<RealType>{},
-      reverse_mode_gradient_evaluation_policy<RealType>{},
-      gradient_descent_update_policy<RealType>(lr));
+    std::forward<Objective>(obj),
+    x,
+    std::forward<InitializationPolicy>(ip),
+    reverse_mode_function_eval_policy<RealType>{},
+    reverse_mode_gradient_evaluation_policy<RealType>{},
+    gradient_descent_update_policy<RealType>(lr));
 }
 
-template <typename ArgumentContainer, typename RealType, class Objective,
-          class InitializationPolicy, class ObjectiveEvalPolicy,
-          class GradEvalPolicy>
-auto make_gradient_descent(Objective &&obj, ArgumentContainer &x, RealType &lr,
-                           InitializationPolicy &&ip, ObjectiveEvalPolicy &&oep,
-                           GradEvalPolicy &&gep) {
-  return gradient_descent<ArgumentContainer, RealType, std::decay_t<Objective>,
-                          InitializationPolicy, ObjectiveEvalPolicy,
+template<typename ArgumentContainer,
+         typename RealType,
+         class Objective,
+         class InitializationPolicy,
+         class ObjectiveEvalPolicy,
+         class GradEvalPolicy>
+auto
+make_gradient_descent(Objective&& obj,
+                      ArgumentContainer& x,
+                      RealType& lr,
+                      InitializationPolicy&& ip,
+                      ObjectiveEvalPolicy&& oep,
+                      GradEvalPolicy&& gep)
+{
+  return gradient_descent<ArgumentContainer,
+                          RealType,
+                          std::decay_t<Objective>,
+                          InitializationPolicy,
+                          ObjectiveEvalPolicy,
                           GradEvalPolicy>(
-      std::forward<Objective>(obj), x, std::forward<InitializationPolicy>(ip),
-      std::forward<ObjectiveEvalPolicy>(oep), std::forward<GradEvalPolicy>(gep),
-      gradient_descent_update_policy<RealType>{lr});
+    std::forward<Objective>(obj),
+    x,
+    std::forward<InitializationPolicy>(ip),
+    std::forward<ObjectiveEvalPolicy>(oep),
+    std::forward<GradEvalPolicy>(gep),
+    gradient_descent_update_policy<RealType>{ lr });
 }
 
 } // namespace optimization
