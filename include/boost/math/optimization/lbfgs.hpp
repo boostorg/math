@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "boost/math/optimization/detail/line_search_policies.hpp"
+#include <deque>
 
 namespace boost {
 namespace math {

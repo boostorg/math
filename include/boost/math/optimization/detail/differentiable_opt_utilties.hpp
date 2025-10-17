@@ -101,7 +101,7 @@ template<typename T>
 T
 norm_inf(const std::vector<T>& x)
 {
-  assert(!x.empty());
+  BOOST_ASSERT(!x.empty());
 
   T max_val = std::abs(x[0]);
   const std::size_t n = x.size();

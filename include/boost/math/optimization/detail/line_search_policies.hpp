@@ -85,7 +85,7 @@ public:
  *  Numerical Optimization, 2nd Edition,
  *  Springer, 2006.
  *
- *  Algorithm 3.5 — Line Search Algorithm (Strong Wolfe Conditions)
+ *  Algorithm 3.5 - Line Search Algorithm (Strong Wolfe Conditions)
  *  Pages 60–61
  */
 template<typename RealType>
