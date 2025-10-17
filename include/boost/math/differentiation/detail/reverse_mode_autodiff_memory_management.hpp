@@ -281,11 +281,13 @@ public:
   // adds current index as a checkpoint to be able to walk back to
   void add_checkpoint()
   {
-    if (total_size_ > 0) {
-      checkpoints_.push_back(total_size_); // - 1);
+    checkpoints_.push_back(total_size_);
+    /*
+     * if (total_size_ > 0) {
+      checkpoints_.push_back(total_size_ - 1);
     } else {
       checkpoints_.push_back(0);
-    }
+    }*/
   };
 
   /** @brief clears all checkpoints
