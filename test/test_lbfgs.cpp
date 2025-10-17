@@ -72,7 +72,6 @@ struct analytic_gradient_eval_pol
   }
 };
 
-// -- Test L-BFGS with custom initialization policy (zero_init_policy)
 BOOST_AUTO_TEST_CASE_TEMPLATE(custom_init_lbfgs_test, T, all_float_types)
 {
   constexpr size_t M = 8;
@@ -94,94 +93,4 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(custom_init_lbfgs_test, T, all_float_types)
   }
 }
 
-// // -- Test L-BFGS with analytic derivative policies
-// BOOST_AUTO_TEST_CASE_TEMPLATE(analytic_lbfgs_test, T, all_float_types)
-// {
-//   constexpr size_t M = 10;
-//   const T eps = T{ 1e-3 };
-
-//   RandomSample<T> rng{ T(-5), T(5) };
-//   std::vector<T> x(3);
-//   for (auto& xi : x)
-//     xi = rng.next();
-
-//   auto opt = bopt::make_lbfgs(
-//     &quadratic<rdiff::rvar<T, 1>>,              // Objective
-//     x,                                          // Arguments
-//     M,                                          // History size
-//     bopt::random_uniform_initializer_rvar<T>{}, // Initialization
-//     analytic_objective_eval_pol<T>{},           // Function eval
-//     analytic_gradient_eval_pol<T>{}             // Gradient eval
-//   );
-
-//   // Run optimization (manual loop or minimize wrapper)
-//   auto result = minimize(opt);
-
-//   for (auto& xi : x) {
-//     BOOST_REQUIRE_SMALL(xi, eps);
-//   }
-// }
-
-// // -- Test L-BFGS with analytic policies and custom line search
-// // (strong_wolfe_line_search_policy)
-// BOOST_AUTO_TEST_CASE_TEMPLATE(analytic_lbfgs_strong_wolfe_test,
-//                               T,
-//                               all_float_types)
-// {
-//   constexpr size_t M = 12;
-//   const T eps = T{ 1e-4 };
-
-//   RandomSample<T> rng{ T(-10), T(10) };
-//   std::vector<T> x(5);
-//   for (auto& xi : x)
-//     xi = rng.next();
-
-//   auto opt = bopt::make_lbfgs(
-//     &quadratic<T>,
-//     x,
-//     M,
-//     boost::math::optimization::random_uniform_initializer_rvar<T>{},
-//     analytic_objective_eval_pol<T>{},
-//     analytic_gradient_eval_pol<T>{},
-//     boost::math::optimization::armijo_line_search_policy<T>{});
-
-//   auto result = minimize(opt);
-
-//   for (auto& xi : x) {
-//     BOOST_REQUIRE_SMALL(xi, eps);
-//   }
-// }
-
-// // -- Test L-BFGS with random init policy (demonstrates flexible
-// initialization) template<typename RealType> struct random_init_policy
-// {
-//   RandomSample<RealType> rng{ RealType(-1), RealType(1) };
-//   void operator()(std::vector<RealType>& x) const noexcept
-//   {
-//     for (auto& xi : x)
-//       xi = rng.next();
-//   }
-// };
-
-// BOOST_AUTO_TEST_CASE_TEMPLATE(random_init_lbfgs_test, T, all_float_types)
-// {
-//   constexpr size_t M = 6;
-//   const T eps = T{ 1e-4 };
-
-//   std::vector<T> x(4);
-//   random_init_policy<T>{}(x); // Apply initialization manually
-
-//   auto opt = bopt::make_lbfgs(&quadratic<T>,
-//                               x,
-//                               M,
-//                               random_init_policy<T>{},
-//                               analytic_objective_eval_pol<T>{},
-//                               analytic_gradient_eval_pol<T>{});
-
-//   auto result = minimize(opt);
-
-//   for (auto& xi : x) {
-//     BOOST_REQUIRE_SMALL(xi, eps);
-//   }
-// }
 BOOST_AUTO_TEST_SUITE_END()
