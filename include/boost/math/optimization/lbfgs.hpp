@@ -107,7 +107,7 @@ struct lbfgs_update_policy
                ArgumentType>::value>::type>
   void operator()(ArgumentType& x, RealType pk, RealType alpha)
   {
-    x.get_value() += alpha * pk;
+      x.get_value() += alpha * pk;
   }
   template<typename ArgumentType,
            typename std::enable_if<!boost::math::differentiation::reverse_mode::
@@ -270,22 +270,22 @@ template<class Objective, typename ArgumentContainer>
 auto
 make_lbfgs(Objective&& obj, ArgumentContainer& x, std::size_t m = 10)
 {
-  using RealType = typename argument_container_t<ArgumentContainer>::type;
-  return lbfgs<ArgumentContainer,
-               RealType,
-               std::decay_t<Objective>,
-               tape_initializer_rvar<RealType>,
-               reverse_mode_function_eval_policy<RealType>,
-               reverse_mode_gradient_evaluation_policy<RealType>,
-               strong_wolfe_line_search_policy<RealType>>(
-    std::forward<Objective>(obj),
-    x,
-    m,
-    tape_initializer_rvar<RealType>{},
-    reverse_mode_function_eval_policy<RealType>{},
-    reverse_mode_gradient_evaluation_policy<RealType>{},
-    lbfgs_update_policy<RealType>{},
-    strong_wolfe_line_search_policy<RealType>{});
+    using RealType = typename argument_container_t<ArgumentContainer>::type;
+    return lbfgs<ArgumentContainer,
+                 RealType,
+                 std::decay_t<Objective>,
+                 tape_initializer_rvar<RealType>,
+                 reverse_mode_function_eval_policy<RealType>,
+                 reverse_mode_gradient_evaluation_policy<RealType>,
+                 strong_wolfe_line_search_policy<RealType>>(
+        std::forward<Objective>(obj),
+        x,
+        m,
+        tape_initializer_rvar<RealType>{},
+        reverse_mode_function_eval_policy<RealType>{},
+        reverse_mode_gradient_evaluation_policy<RealType>{},
+        lbfgs_update_policy<RealType>{},
+        strong_wolfe_line_search_policy<RealType>{});
 }
 
 template<class Objective,

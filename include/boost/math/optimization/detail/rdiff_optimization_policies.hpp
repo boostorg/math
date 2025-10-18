@@ -8,7 +8,7 @@
 #include <boost/math/differentiation/autodiff_reverse.hpp>
 #include <boost/random.hpp>
 #include <random>
-
+#include <type_traits>
 namespace boost {
 namespace math {
 namespace optimization {
@@ -75,16 +75,15 @@ struct reverse_mode_gradient_evaluation_policy
 template<typename RealType>
 struct tape_initializer_rvar
 {
-  template<class ArgumentContainer>
-  void operator()(ArgumentContainer&) const noexcept
-  {
-    static_assert(
-      std::is_same<typename ArgumentContainer::value_type,
-                   rdiff::rvar<RealType, 1>>::value,
-      "ArgumentContainer::value_type must be rdiff::rvar<RealType,1>");
-    auto& tape = rdiff::get_active_tape<RealType, 1>();
-    tape.add_checkpoint();
-  }
+    template<class ArgumentContainer>
+    void operator()(ArgumentContainer& x) const noexcept
+    {
+        static_assert(std::is_same<typename ArgumentContainer::value_type,
+                                   rdiff::rvar<RealType, 1>>::value,
+                      "ArgumentContainer::value_type must be rdiff::rvar<RealType,1>");
+        auto& tape = rdiff::get_active_tape<RealType, 1>();
+        tape.add_checkpoint();
+    }
 };
 
 template<typename RealType>

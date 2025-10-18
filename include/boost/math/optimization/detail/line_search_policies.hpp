@@ -123,7 +123,7 @@ public:
                       RealType f_x) const
   {
     RealType gTp0 = dot(g, p);
-    RealType alpha_prev = 0;
+    RealType alpha_prev{0};
     RealType f_prev = f_x;
     RealType alpha = alpha0_;
 

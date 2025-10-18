@@ -37,33 +37,36 @@ using update_policy_real_type_t =
 /** @brief> get realtype from argument container
  *  */
 template<class Container>
-struct argument_container_t;
+struct argument_container_t
+{
+    using type = typename argument_container_t<typename std::decay<Container>::type>::type;
+};
 
-template<template<typename, typename...> class Container,
-         typename ValueType,
-         typename... Args>
-struct argument_container_t<Container<ValueType, Args...>>
-{
-  using type = ValueType;
-};
-template<template<typename, typename...> class Container,
-         typename RealType,
-         int N,
-         typename... Args>
-struct argument_container_t<Container<rdiff::rvar<RealType, N>, Args...>>
-{
-  using type = RealType;
-};
 template<typename ValueType, std::size_t N>
 struct argument_container_t<std::array<ValueType, N>>
 {
-  using type = ValueType;
+    using type = ValueType;
 };
 
-template<typename RealType, int M, std::size_t N>
+template<typename RealType, std::size_t M, std::size_t N>
 struct argument_container_t<std::array<rdiff::rvar<RealType, M>, N>>
 {
-  using type = RealType;
+    using type = RealType;
+};
+
+template<template<typename, typename...> class Container, typename ValueType, typename... Args>
+struct argument_container_t<Container<ValueType, Args...>>
+{
+    using type = ValueType;
+};
+
+template<template<typename, typename...> class Container,
+         typename RealType,
+         std::size_t N,
+         typename... Args>
+struct argument_container_t<Container<rdiff::rvar<RealType, N>, Args...>>
+{
+    using type = RealType;
 };
 /******************************************************************************/
 /** @brief simple blas helpers
