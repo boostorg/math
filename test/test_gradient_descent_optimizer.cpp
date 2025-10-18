@@ -167,9 +167,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(objective_tol_convergence_test,
   policy_t pol(1e-3);
   std::vector<T> dummy_grad;
 
-  BOOST_TEST(!pol(dummy_grad, 100.0));
-  BOOST_TEST(!pol(dummy_grad, 99.0));
-  BOOST_TEST(pol(dummy_grad, 99.0005));
+  BOOST_TEST(!pol(dummy_grad, T{100.0}));
+  BOOST_TEST(!pol(dummy_grad, T{99.0}));
+  BOOST_TEST(pol(dummy_grad, T{99.0005}));
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(relative_objective_tol_test, T, all_float_types)
@@ -178,9 +178,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(relative_objective_tol_test, T, all_float_types)
   policy_t pol(1e-3);
 
   std::vector<T> dummy_grad;
-  BOOST_TEST(!pol(dummy_grad, 1000.0));
-  BOOST_TEST(!pol(dummy_grad, 1010.0));
-  BOOST_TEST(pol(dummy_grad, 1010.5));
+  BOOST_TEST(!pol(dummy_grad, T{1000.0}));
+  BOOST_TEST(!pol(dummy_grad, T{1010.0}));
+  BOOST_TEST(pol(dummy_grad, T{1010.5}));
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(combined_policy_test, T, all_float_types)
@@ -195,64 +195,67 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(combined_policy_test, T, all_float_types)
 
   std::vector<T> dummy_grad;
 
-  BOOST_TEST(!comb(dummy_grad, 100.0));
-  BOOST_TEST(!comb(dummy_grad, 110.0));
-  BOOST_TEST(comb(dummy_grad, 110.1));
-  BOOST_TEST(comb(dummy_grad, 110.1000001));
+  BOOST_TEST(!comb(dummy_grad, T{100.0}));
+  BOOST_TEST(!comb(dummy_grad, T{110.0}));
+  BOOST_TEST(comb(dummy_grad, T{110.1}));
+  BOOST_TEST(comb(dummy_grad, T{110.1000001}));
 }
 BOOST_AUTO_TEST_CASE_TEMPLATE(nonnegativity_constraint_test, T, all_float_types)
 {
-  std::vector<T> x = { 1.0, -2.0, 3.0, -4.0 };
-  bopt::nonnegativity_constraint<std::vector<T>, T> proj;
-  proj(x);
+    std::vector<T> x = {T{1.0}, T{-2.0}, T{3.0}, T{-4.0}};
 
-  for (auto& xi : x)
-    BOOST_TEST(xi >= 0.0);
-  BOOST_TEST(x == std::vector<T>({ 1.0, 0.0, 3.0, 0.0 }));
+    bopt::nonnegativity_constraint<std::vector<T>, T> proj;
+    proj(x);
+
+    for (auto& xi : x)
+        BOOST_TEST(xi >= 0.0);
+    BOOST_TEST(x == std::vector<T>({T{1.0}, T{0.0}, T{3.0}, T{0.0}}));
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(l2_ball_constraint_test, T, all_float_types)
 {
-  std::vector<T> x = { 3.0, 4.0 }; // norm = 5
-  bopt::l2_ball_constraint<std::vector<T>, T> proj(1.0);
-  proj(x);
+    std::vector<T>                              x = {T{3.0}, T{4.0}}; // norm = 5
+    bopt::l2_ball_constraint<std::vector<T>, T> proj(1.0);
+    proj(x);
 
-  T norm = sqrt(x[0] * x[0] + x[1] * x[1]);
-  BOOST_TEST(abs(norm - 1.0) < 1e-12); // projected to unit circle
+    T norm = sqrt(x[0] * x[0] + x[1] * x[1]);
+    BOOST_TEST(abs(norm - T{1.0}) < T{1e-12}); // projected to unit circle
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(l1_ball_constraint_test, T, all_float_types)
 {
-  std::vector<T> x = { 3.0, 4.0 }; // L1 norm = 7
-  bopt::l1_ball_constraint<std::vector<T>, T> proj(2.0);
-  proj(x);
+    std::vector<T> x = {T{3.0}, T{4.0}}; // L1 norm = 7
 
-  T norm1 = abs(x[0]) + abs(x[1]);
-  BOOST_TEST(abs(norm1 - 2.0) < T{ 1e-12 });
+    bopt::l1_ball_constraint<std::vector<T>, T> proj(2.0);
+    proj(x);
+
+    T norm1 = abs(x[0]) + abs(x[1]);
+    BOOST_TEST(abs(norm1 - T{2.0}) < T{1e-12});
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(simplex_constraint_test, T, all_float_types)
 {
-  std::vector<T> x = { -1.0, 2.0, 3.0 }; // has negative and sum != 1
-  bopt::simplex_constraint<std::vector<T>, T> proj;
-  proj(x);
+    std::vector<T> x = {T{-1.0}, T{2.0}, T{3.0}}; // has negative and sum != 1
 
-  T sum = 0.0;
-  for (auto& xi : x) {
-    BOOST_TEST(xi >= 0.0); // all nonnegative
-    sum += xi;
-  }
-  BOOST_TEST(abs(sum - 1.0) < 1e-12); // normalized to sum=1
+    bopt::simplex_constraint<std::vector<T>, T> proj;
+    proj(x);
+
+    T sum = 0.0;
+    for (auto& xi : x) {
+        BOOST_TEST(xi >= 0.0); // all nonnegative
+        sum += xi;
+    }
+    BOOST_TEST(abs(sum - T{1.0}) < T{1e-12}); // normalized to sum=1
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(unit_sphere_constraint_test, T, all_float_types)
 {
-  std::vector<T> x = { 0.3, 0.4 }; // norm = 0.5
-  bopt::unit_sphere_constraint<std::vector<T>, T> proj;
-  proj(x);
+    std::vector<T>                                  x = {T{0.3}, T{0.4}}; // norm = 0.5
+    bopt::unit_sphere_constraint<std::vector<T>, T> proj;
+    proj(x);
 
-  T norm = sqrt(x[0] * x[0] + x[1] * x[1]);
-  BOOST_TEST(abs(norm - 1.0) < 1e-12); // always projected to sphere
+    T norm = sqrt(x[0] * x[0] + x[1] * x[1]);
+    BOOST_TEST(abs(norm - T{1.0}) < T{1e-12}); // always projected to sphere
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(function_constraint_test, T, all_float_types)
@@ -264,10 +267,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(function_constraint_test, T, all_float_types)
   };
 
   bopt::function_constraint<std::vector<T>> proj(clip_to_half);
-  std::vector<T> x = { 0.2, 0.7, 1.5 };
+  std::vector<T>                            x = {T{0.2}, T{0.7}, T{1.5}};
   proj(x);
 
-  BOOST_TEST(x == std::vector<T>({ 0.2, 0.5, 0.5 }));
+  BOOST_TEST(x == std::vector<T>({T{0.2}, T{0.5}, T{0.5}}));
 }
 
 template<typename RealType>
