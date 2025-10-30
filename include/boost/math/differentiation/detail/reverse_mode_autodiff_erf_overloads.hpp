@@ -16,7 +16,7 @@
 
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_utilities.hpp>
 #include <boost/math/special_functions/erf.hpp>
-#include <boost/multiprecision/cpp_bin_float.hpp>
+
 namespace boost {
 namespace math {
 namespace differentiation {
