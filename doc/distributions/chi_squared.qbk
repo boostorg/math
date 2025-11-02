@@ -25,10 +25,10 @@
 
       // Parameter estimation:
       BOOST_MATH_GPU_ENABLED static RealType find_degrees_of_freedom(
-         RealType difference_from_mean,
+         RealType difference_from_variance,
          RealType alpha,
          RealType beta,
-         RealType sd,
+         RealType variance,
          RealType hint = 100);
    };
    
