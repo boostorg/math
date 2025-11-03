@@ -135,14 +135,14 @@ see __binomial_distrib for more discussion.
 [h5 Lower Bound on Parameter p]
 
       BOOST_MATH_GPU_ENABLED static RealType find_lower_bound_on_p(
-        RealType failures,
+        RealType trials,
         RealType successes,
         RealType probability) // (0 <= alpha <= 1), 0.05 equivalent to 95% confidence.
 
 Returns a *lower bound* on the success fraction:
 
 [variablelist
-[[failures][The total number of failures before the ['r]th success.]]
+[[trials][The total number of trials conducted.]]
 [[successes][The number of successes required.]]
 [[alpha][The largest acceptable probability that the true value of
          the success fraction is [*less than] the value returned.]]

@@ -26,11 +26,9 @@
       // Bounds on success fraction:
       BOOST_MATH_GPU_ENABLED static RealType find_lower_bound_on_p(
          RealType trials, 
-         RealType successes,
          RealType probability); // alpha
       BOOST_MATH_GPU_ENABLED static RealType find_upper_bound_on_p(
          RealType trials, 
-         RealType successes,
          RealType probability); // alpha
          
       // Estimate min/max number of trials:
@@ -141,8 +139,8 @@ see __binomial_distrib and __negative_binomial_distrib for more discussion.
 [h5 Lower Bound on success_fraction Parameter ['p]]
 
       static RealType find_lower_bound_on_p(
-        RealType failures, 
-        RealType probability) // (0 <= alpha <= 1), 0.05 equivalent to 95% confidence.
+        RealType trials, 
+        RealType alpha) // (0 <= alpha <= 1), 0.05 equivalent to 95% confidence.
       
 Returns a *lower bound* on the success fraction:
 
