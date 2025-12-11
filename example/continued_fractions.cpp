@@ -129,22 +129,22 @@ int main()
 
    //[cf_gr
    golden_ratio_fraction<double> func;
-   double gr = continued_fraction_a(
+   double gr = continued_fraction_b(
       func,
       std::numeric_limits<double>::epsilon());
    std::cout << "The golden ratio is: " << gr << std::endl;
    //]
 
-   std::cout << tan(0.5) << std::endl;
+   std::cout << "tan(0.5)=" << tan(0.5) << std::endl;
 
    std::complex<double> arg(3, 2);
-   std::cout << expint_as_fraction(5, arg) << std::endl;
+   std::cout << "E_5(3+2i)=" << expint_as_fraction(5, arg) << std::endl;
 
    std::complex<double> a(3, 3), z(3, 2);
-   std::cout << gamma_Q_as_fraction(a, z) << std::endl;
+   std::cout << "Gamma(3+3i, 3+2i)=" << gamma_Q_as_fraction(a, z) << std::endl;
 
    boost::multiprecision::cpp_complex_50 am(3, 3), zm(3, 2);
-   std::cout << gamma_Q_as_fraction(am, zm) << std::endl;
+   std::cout << "Gamma(3+3i, 3+2i)=" << gamma_Q_as_fraction(am, zm) << std::endl;
 
    return 0;
 }
