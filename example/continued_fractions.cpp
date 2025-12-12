@@ -115,13 +115,19 @@ inline std::complex<T> gamma_Q_as_fraction(const std::complex<T>& a, const std::
    return pow(z, a) / (exp(z) *(z - a + T(1) + boost::math::tools::continued_fraction_a(f, eps)));
 }
 //]
-inline boost::multiprecision::cpp_complex_50 gamma_Q_as_fraction(const boost::multiprecision::cpp_complex_50& a, const boost::multiprecision::cpp_complex_50& z)
+// inline boost::multiprecision::cpp_complex_50 gamma_Q_as_fraction(const boost::multiprecision::cpp_complex_50& a, const boost::multiprecision::cpp_complex_50& z)
+// {
+//    upper_incomplete_gamma_fract<boost::multiprecision::cpp_complex_50> f(a, z);
+//    boost::multiprecision::cpp_complex_50 eps(std::numeric_limits<boost::multiprecision::cpp_complex_50::value_type>::epsilon());
+//    return pow(z, a) / (exp(z) * (z - a + 1 + boost::math::tools::continued_fraction_a(f, eps)));
+// }
+template <class T>
+inline std::complex<T> log_gamma_Q_as_fraction(const std::complex<T>& a, const std::complex<T>& z)
 {
-   upper_incomplete_gamma_fract<boost::multiprecision::cpp_complex_50> f(a, z);
-   boost::multiprecision::cpp_complex_50 eps(std::numeric_limits<boost::multiprecision::cpp_complex_50::value_type>::epsilon());
-   return pow(z, a) / (exp(z) * (z - a + 1 + boost::math::tools::continued_fraction_a(f, eps)));
+   upper_incomplete_gamma_fract<std::complex<T> > f(a, z);
+   std::complex<T> eps(std::numeric_limits<T>::epsilon());
+   return a * log(z) - z - boost::math::logaddexp(log(z - a + T(1)), boost::math::tools::continued_fraction_a(f, eps, true));
 }
-
 
 int main()
 {
@@ -131,8 +137,9 @@ int main()
    golden_ratio_fraction<double> func;
    double gr = continued_fraction_b(
       func,
-      std::numeric_limits<double>::epsilon());
-   std::cout << "The golden ratio is: " << gr << std::endl;
+      std::numeric_limits<double>::epsilon(),
+      true);
+   std::cout << "The golden ratio is: " << exp(gr) << std::endl;
    //]
 
    std::cout << "tan(0.5)=" << tan(0.5) << std::endl;
@@ -143,8 +150,16 @@ int main()
    std::complex<double> a(3, 3), z(3, 2);
    std::cout << "Gamma(3+3i, 3+2i)=" << gamma_Q_as_fraction(a, z) << std::endl;
 
-   boost::multiprecision::cpp_complex_50 am(3, 3), zm(3, 2);
-   std::cout << "Gamma(3+3i, 3+2i)=" << gamma_Q_as_fraction(am, zm) << std::endl;
+   // Off in the imaginary part by a factor of 2*pi
+   std::cout << "Without log-arithmetic: ln(Gamma(3+3i, 3+2i))=" << log(gamma_Q_as_fraction(a, z)) << std::endl;
+   std::cout << "With log-arithmetic: ln(Gamma(3+3i, 3+2i))=" << log_gamma_Q_as_fraction(a, z) << std::endl;
+
+   std::complex<double> s(10, 0);
+   std::complex<double> x(1000, 0);
+   std::cout << "Gamma(10, 1000)=" << log_gamma_Q_as_fraction(s, x) << std::endl;
+
+   // boost::multiprecision::cpp_complex_50 am(3, 3), zm(3, 2);
+   // std::cout << "Gamma(3+3i, 3+2i)=" << gamma_Q_as_fraction(am, zm) << std::endl;
 
    return 0;
 }
