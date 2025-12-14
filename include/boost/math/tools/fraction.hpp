@@ -20,6 +20,7 @@
 #include <boost/math/tools/cstdint.hpp>
 #include <boost/math/special_functions/logaddexp.hpp>
 #include <limits>
+#include <iostream>
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -112,7 +113,7 @@ namespace detail {
 //
 
 template <typename Gen, typename U>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b_impl(Gen& g, const U& factor, boost::math::uintmax_t& max_terms, bool logArithmetic)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b_impl(Gen& g, const U& factor, boost::math::uintmax_t& max_terms)
       noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
       #ifndef BOOST_MATH_HAS_GPU_SUPPORT
       // SYCL can not handle this condition so we only check float on that platform
@@ -142,40 +143,68 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
    C = f;
    D = 0;
 
-   if (logArithmetic){
-      f = log(f);
-      C = log(C);
-      D = log(tiny);
-   }
+   boost::math::uintmax_t counter(max_terms);
+   do{
+      v = g();
+      D = traits::b(v) + traits::a(v) * D;
+      if(D == result_type(0))
+         D = tiny;
+      C = traits::b(v) + traits::a(v) / C;
+      if(C == zero)
+         C = tiny;
+      D = one/D;
+      delta = C*D;
+      f = f * delta;
+   }while((abs(delta - one) > terminator) && --counter);
+
+   max_terms = max_terms - counter;
+
+   return f;
+}
+
+template <typename Gen, typename U>
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type log_continued_fraction_b_impl(Gen& g, const U& factor, boost::math::uintmax_t& max_terms)
+      noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
+      #ifndef BOOST_MATH_HAS_GPU_SUPPORT
+      // SYCL can not handle this condition so we only check float on that platform
+      && noexcept(std::declval<Gen>()())
+      #endif
+      )
+{
+   BOOST_MATH_STD_USING // ADL of std names
+
+   using traits = detail::fraction_traits<Gen>;
+   using result_type = typename traits::result_type;
+   using value_type = typename traits::value_type;
+   using integer_type = typename integer_scalar_type<result_type>::type;
+   using scalar_type = typename scalar_type<result_type>::type;
+
+   integer_type const zero(0), one(1);
+
+   result_type tiny = detail::tiny_value<result_type>::get();
+   scalar_type terminator = abs(factor);
+
+   value_type v = g();
+
+   result_type f, C, D, delta;
+   f = log(traits::b(v));
+   if(f == -std::numeric_limits<result_type>::infinity())
+      f = log(tiny);
+   C = f;
+   D = log(tiny);
 
    boost::math::uintmax_t counter(max_terms);
-   if(!logArithmetic){
-      do{
-         v = g();
-         D = traits::b(v) + traits::a(v) * D;
-         if(D == result_type(0))
-            D = tiny;
-         C = traits::b(v) + traits::a(v) / C;
-         if(C == zero)
-            C = tiny;
-         D = one/D;
-         delta = C*D;
-         f = f * delta;
-      }while((abs(delta - one) > terminator) && --counter);
-   }
-   else{
-      do{
-         v = g();
-         D = -logaddexp(log(traits::b(v)), log(traits::a(v)) + D);
-         if(D == -std::numeric_limits<result_type>::infinity())
-            D = log(tiny);
-         C = logaddexp(log(traits::b(v)), log(traits::a(v)) - C);
-         if(C == -std::numeric_limits<result_type>::infinity())
-            C = log(tiny);
-         delta = C + D;
-         f = f + delta;
-      }while((abs(delta) > terminator) && --counter);
-   }
+   do{
+      v = g();
+      D = -logaddexp(log(traits::b(v)), log(traits::a(v)) + D);
+      if(D == -std::numeric_limits<result_type>::infinity())
+         D = log(tiny);
+      C = logaddexp(log(traits::b(v)), log(traits::a(v)) - C);
+      if(C == -std::numeric_limits<result_type>::infinity())
+         C = log(tiny);
+      delta = C + D;
+      f = f + delta;
+   }while((abs(delta) > terminator) && --counter);
 
    max_terms = max_terms - counter;
 
@@ -185,18 +214,18 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
 } // namespace detail
 
 template <typename Gen, typename U>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, const U& factor, boost::math::uintmax_t& max_terms, bool logArithmetic=false)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, const U& factor, boost::math::uintmax_t& max_terms)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
          #ifndef BOOST_MATH_HAS_GPU_SUPPORT
          && noexcept(std::declval<Gen>()())
          #endif
          )
 {
-   return detail::continued_fraction_b_impl(g, factor, max_terms, logArithmetic);
+   return detail::continued_fraction_b_impl(g, factor, max_terms);
 }
 
 template <typename Gen, typename U>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, const U& factor, bool logArithmetic=false)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, const U& factor)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<Gen>()())
@@ -204,11 +233,11 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
    )
 {
    boost::math::uintmax_t max_terms = (boost::math::numeric_limits<boost::math::uintmax_t>::max)();
-   return detail::continued_fraction_b_impl(g, factor, max_terms, logArithmetic);
+   return detail::continued_fraction_b_impl(g, factor, max_terms);
 }
 
 template <typename Gen>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, int bits, bool logArithmetic=false)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, int bits)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<Gen>()())
@@ -222,11 +251,11 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
 
    result_type factor = ldexp(1.0f, 1 - bits); // 1 / pow(result_type(2), bits);
    boost::math::uintmax_t max_terms = (boost::math::numeric_limits<boost::math::uintmax_t>::max)();
-   return detail::continued_fraction_b_impl(g, factor, max_terms, logArithmetic);
+   return detail::continued_fraction_b_impl(g, factor, max_terms);
 }
 
 template <typename Gen>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, int bits, boost::math::uintmax_t& max_terms, bool logArithmetic=false)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, int bits, boost::math::uintmax_t& max_terms)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<Gen>()())
@@ -239,8 +268,20 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
    using result_type = typename traits::result_type;
 
    result_type factor = ldexp(1.0f, 1 - bits); // 1 / pow(result_type(2), bits);
-   return detail::continued_fraction_b_impl(g, factor, max_terms, logArithmetic);
+   return detail::continued_fraction_b_impl(g, factor, max_terms);
 }
+
+template <typename Gen, typename U>
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type log_continued_fraction_b(Gen& g, const U& factor, boost::math::uintmax_t& max_terms)
+   noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
+         #ifndef BOOST_MATH_HAS_GPU_SUPPORT
+         && noexcept(std::declval<Gen>()())
+         #endif
+         )
+{
+   return detail::log_continued_fraction_b_impl(g, factor, max_terms);
+}
+
 
 namespace detail {
 
@@ -259,7 +300,7 @@ namespace detail {
 // Note that the first a1 and b1 returned by generator Gen are both used.
 //
 template <typename Gen, typename U>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a_impl(Gen& g, const U& factor, boost::math::uintmax_t& max_terms, bool logArithmetic=false)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a_impl(Gen& g, const U& factor, boost::math::uintmax_t& max_terms)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<Gen>()())
@@ -289,66 +330,88 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
    C = f;
    D = 0;
 
-   if (logArithmetic){
-      f = log(f);
-      C = log(C);
-      D = log(tiny);
-   }
-
    boost::math::uintmax_t counter(max_terms);
 
-   if (!logArithmetic){
-      do{
-         v = g();
-         D = traits::b(v) + traits::a(v) * D;
-         if(D == zero)
-            D = tiny;
-         C = traits::b(v) + traits::a(v) / C;
-         if(C == zero)
-            C = tiny;
-         D = one/D;
-         delta = C*D;
-         f = f * delta;
-      }while((abs(delta - one) > terminator) && --counter);
-   }
-   else{
-      do{
-         v = g();
-         D = -logaddexp(log(traits::b(v)), log(traits::a(v)) + D);
-         if(D == -std::numeric_limits<result_type>::infinity())
-            D = log(tiny);
-         C = logaddexp(log(traits::b(v)), log(traits::a(v)) - C);
-         if(C == -std::numeric_limits<result_type>::infinity())
-            C = log(tiny);
-         delta = C + D;
-         f = f + delta;
-      }while((abs(delta) > terminator) && --counter);      
-   }
+   do{
+      v = g();
+      D = traits::b(v) + traits::a(v) * D;
+      if(D == zero)
+         D = tiny;
+      C = traits::b(v) + traits::a(v) / C;
+      if(C == zero)
+         C = tiny;
+      D = one/D;
+      delta = C*D;
+      f = f * delta;
+   }while((abs(delta - one) > terminator) && --counter);
 
    max_terms = max_terms - counter;
-   if (!logArithmetic){
-      return a0/f;
-   }
-   else{
-      return log(a0) - f;
-   }
+
+   return a0/f;
 }
 
-} // namespace detail
-
 template <typename Gen, typename U>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, const U& factor, boost::math::uintmax_t& max_terms, bool logArithmetic=false)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type log_continued_fraction_a_impl(Gen& g, const U& factor, boost::math::uintmax_t& max_terms)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<Gen>()())
    #endif
    )
 {
-   return detail::continued_fraction_a_impl(g, factor, max_terms, logArithmetic);
+   BOOST_MATH_STD_USING // ADL of std names
+
+   using traits = detail::fraction_traits<Gen>;
+   using result_type = typename traits::result_type;
+   using value_type = typename traits::value_type;
+   using integer_type = typename integer_scalar_type<result_type>::type;
+   using scalar_type = typename scalar_type<result_type>::type;
+
+   integer_type const zero(0), one(1);
+
+   result_type tiny = detail::tiny_value<result_type>::get();
+   scalar_type terminator = abs(factor);
+
+   value_type v = g();
+
+   result_type f, C, D, delta, a0;
+   f = log(traits::b(v));
+   a0 = log(traits::a(v));
+   if(f == -std::numeric_limits<result_type>::infinity())
+      f = log(tiny);
+   C = f;
+   D = log(tiny);
+
+   boost::math::uintmax_t counter(max_terms);
+   do{
+      v = g();
+      D = -logaddexpcomplex(log(traits::b(v)), log(traits::a(v)) + D);
+      if(D == -std::numeric_limits<result_type>::infinity())
+         D = log(tiny);
+      C = logaddexpcomplex(log(traits::b(v)), log(traits::a(v)) - C);
+      if(C == -std::numeric_limits<result_type>::infinity())
+         C = log(tiny);
+      delta = C + D;
+      f = f + delta;
+   }while((abs(delta) > terminator) && --counter);
+
+   return a0 - f;
+}
+
+} // namespace detail
+
+template <typename Gen, typename U>
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, const U& factor, boost::math::uintmax_t& max_terms)
+   noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
+   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   && noexcept(std::declval<Gen>()())
+   #endif
+   )
+{
+   return detail::continued_fraction_a_impl(g, factor, max_terms);
 }
 
 template <typename Gen, typename U>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, const U& factor, bool logArithmetic=false)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, const U& factor)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type)
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<Gen>()())
@@ -356,11 +419,11 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
    )
 {
    boost::math::uintmax_t max_iter = (boost::math::numeric_limits<boost::math::uintmax_t>::max)();
-   return detail::continued_fraction_a_impl(g, factor, max_iter, logArithmetic);
+   return detail::continued_fraction_a_impl(g, factor, max_iter);
 }
 
 template <typename Gen>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, int bits, bool logArithmetic=false)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, int bits)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<Gen>()())
@@ -375,11 +438,11 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
    result_type factor = ldexp(1.0f, 1-bits); // 1 / pow(result_type(2), bits);
    boost::math::uintmax_t max_iter = (boost::math::numeric_limits<boost::math::uintmax_t>::max)();
 
-   return detail::continued_fraction_a_impl(g, factor, max_iter, logArithmetic);
+   return detail::continued_fraction_a_impl(g, factor, max_iter);
 }
 
 template <typename Gen>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, int bits, boost::math::uintmax_t& max_terms, bool logArithmetic=false)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, int bits, boost::math::uintmax_t& max_terms)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<Gen>()())
@@ -392,7 +455,18 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
    using result_type = typename traits::result_type;
 
    result_type factor = ldexp(1.0f, 1-bits); // 1 / pow(result_type(2), bits);
-   return detail::continued_fraction_a_impl(g, factor, max_terms, logArithmetic);
+   return detail::continued_fraction_a_impl(g, factor, max_terms);
+}
+
+template <typename Gen, typename U>
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type log_continued_fraction_a(Gen& g, const U& factor, boost::math::uintmax_t& max_terms)
+   noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
+   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   && noexcept(std::declval<Gen>()())
+   #endif
+   )
+{
+   return detail::log_continued_fraction_a_impl(g, factor, max_terms);
 }
 
 } // namespace tools

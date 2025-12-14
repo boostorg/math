@@ -7,7 +7,6 @@
 #include <limits>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <complex>
 
 namespace boost { namespace math {
 
@@ -15,7 +14,7 @@ namespace boost { namespace math {
 template <typename Real>
 Real logaddexp(Real x1, Real x2) noexcept
 {
-    using std::log;
+    using std::log1p;
     using std::exp;
     using std::abs;
     
@@ -31,6 +30,33 @@ Real logaddexp(Real x1, Real x2) noexcept
 
     const Real temp = x1 - x2;
 
+    if (temp > 0)
+    {
+        return x1 + log1p(exp(-temp));
+    }
+
+    return x2 + log1p(exp(temp));
+}
+
+template <typename T>
+T logaddexpcomplex(T x1, T x2) noexcept
+{
+    using std::log;
+    using std::exp;
+    using std::abs;
+    
+    // Validate inputs first
+    if (!(boost::math::isfinite)(x1))
+    {
+        return x1;
+    }
+    else if (!(boost::math::isfinite)(x2))
+    {
+        return x2;
+    }
+
+    const T temp = x1 - x2;
+
     if (std::real(temp) > 0)
     {
         return x1 + log(1.0 + exp(-temp));
@@ -38,5 +64,5 @@ Real logaddexp(Real x1, Real x2) noexcept
 
     return x2 + log(1.0 + exp(temp));
 }
-
-}} // Namespace boost::math
+}
+}// Namespace boost::math

@@ -35,6 +35,7 @@
 #include <boost/math/special_functions/detail/igamma_large.hpp>
 #include <boost/math/special_functions/detail/unchecked_factorial.hpp>
 #include <boost/math/special_functions/detail/lgamma_small.hpp>
+#include <boost/math/tools/fraction.hpp>
 
 // Only needed for types larger than double
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
@@ -394,6 +395,29 @@ public:
 };
 
 template <class T>
+struct complex_upper_incomplete_gamma_fract
+{
+private:
+   typedef typename T::value_type scalar_type;
+   T z, a;
+   int k;
+public:
+   typedef std::pair<T, T> result_type;
+
+   complex_upper_incomplete_gamma_fract(T a1, T z1)
+      : z(z1 - a1 + scalar_type(1)), a(a1), k(0)
+   {
+   }
+
+   result_type operator()()
+   {
+      ++k;
+      z += scalar_type(2);
+      return result_type(scalar_type(k) * (a - scalar_type(k)), z);
+   }
+};
+
+template <class T>
 BOOST_MATH_GPU_ENABLED inline T upper_gamma_fraction(T a, T z, T eps)
 {
    // Multiply result by z^a * e^-z to get the full
@@ -401,6 +425,15 @@ BOOST_MATH_GPU_ENABLED inline T upper_gamma_fraction(T a, T z, T eps)
    // to normalise.
    upper_incomplete_gamma_fract<T> f(a, z);
    return 1 / (z - a + 1 + boost::math::tools::continued_fraction_a(f, eps));
+}
+
+template <class T>
+inline std::complex<T> log_upper_gamma_fraction(const std::complex<T>& a, const std::complex<T>& z)
+{
+   complex_upper_incomplete_gamma_fract<std::complex<T> > f(a, z);
+   std::complex<T> eps(std::numeric_limits<T>::epsilon());
+   boost::math::uintmax_t max_iter = (boost::math::numeric_limits<boost::math::uintmax_t>::max)();
+   return a * log(z) - z - boost::math::logaddexpcomplex(log(z - a + T(1)), boost::math::tools::log_continued_fraction_a(f, eps, max_iter));
 }
 
 template <class T>
