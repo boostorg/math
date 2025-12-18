@@ -84,7 +84,9 @@
 
 #else // Things from boost/config that are required, and easy to replicate
 
+#if __has_include(<version>)
 #include <version>
+#endif
 
 #define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION
 #define BOOST_MATH_NO_REAL_CONCEPT_TESTS
