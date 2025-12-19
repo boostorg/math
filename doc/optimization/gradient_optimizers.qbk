@@ -1,0 +1,101 @@
+[/
+Copyright (c) 2025-2026 Maksym Zhelyeznyakov 
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:gd_opt Gradient Based Optimizers]
+
+Gradient based optimizers are algorithms that use the gradient of a funciton to iteratively find locally extreme points of functions over a set of parameters. This sections provides a description of a set of gradient optimizers. The optimizers are written with `boost::math::differentiation::reverse_mode::rvar` in mind, however if a way to evaluate the funciton and its gradient is provided, the optimizers should work in exactly the same way.
+
+[section:introduction Introduction]
+[endsect] [/section:introduction]
+
+[section:gradient_descent Gradient Desccent]
+[heading Synopsis]
+``
+	#include <boost/math/optimization/gradient_descent.hpp>
+
+	template<typename ArgumentContainer, 
+	         typename RealType,
+		 class Objective,
+		 class InitializationPolicy,
+		 class ObjectiveEvalPolicy,
+		 class GradEvalPolicy>
+	class gradient_descent {
+	  public:
+	    void step();
+	}
+
+	/* Convenience overloads  */
+	/* make gradient descent by providing 
+	 ** objective function
+	 ** variables to optimize over
+	 ** optionally learing rate 
+	 *
+	 * requires that code is written using boost::math::differentiation::rvar
+	 */
+	template<class Objective, typename ArgumentContainer, typename RealType>
+	auto make_gradient_descent(Objective&& obj, ArgumentContainer& x, RealType lr = RealType{ 0.01 });
+
+	/* make gradient descent by providing 
+	 * objective function
+	 ** variables to optimize over
+	 ** learning rate (not optional)
+	 ** initialization policy
+	 *
+	 * requires that code is written using boost::math::differentiation::rvar
+	 */
+
+	template<class Objective, typename ArgumentContainer, typename RealType, class InitializationPolicy>
+        auto make_gradient_descent(Objective&& obj,
+                                   ArgumentContainer& x,
+                                   RealType lr,
+                                   InitializationPolicy&& ip);
+	/* make gradient descent by providing
+	** objective function
+	** variables to optimize over
+	** learning rate (not optional)
+	** variable initialization policy
+	** objective evaluation policy
+	** gradient evaluation policy
+	*
+	* code does not have to use boost::math::differentiation::rvar
+	*/
+	template<typename ArgumentContainer,
+                 typename RealType,
+		 class Objective,
+         	 class InitializationPolicy,
+                 class ObjectiveEvalPolicy,
+                 class GradEvalPolicy>
+	auto make_gradient_descent(Objective&& obj,
+                      		   ArgumentContainer& x,
+                                   RealType& lr,
+                                   InitializationPolicy&& ip,
+                                   ObjectiveEvalPolicy&& oep,
+                                   GradEvalPolicy&& gep)
+``
+
+Gradient descent iteratively updates parameters `x` in the direction opposite to the gradient of the objective function (minimizing the objective). 
+``
+x[i] -= lr * g[i]
+``
+where `lr` is a user defined learning rate. For a more complete decription of the theoretical principle check [@https://en.wikipedia.org/wiki/Gradient_descent the wikipedia page]
+
+The implementation delegates:
+- the initialization of differentiable variables to an initialization policy
+- objective evaluation to an objective evaluation policy
+- the gradient computation to a gradient evaluation policy
+- the parameter updates to an update policy
+
+[endsect] [/section:gradient_descent]
+
+[section:nesterov Nesterov Gradient Desccent]
+[endsect] [/section:nesterov]
+
+[section:lbfgs L-BFGS]
+[endsect] [/section:lbfgs]
+
+
+[endsect] [/section:gd_opt]
