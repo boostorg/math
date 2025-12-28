@@ -1808,7 +1808,7 @@ T lgamma_incomplete_imp_final(T a, T x, const Policy& pol)
 
 template <class T, class Policy> 
 T lgamma_incomplete_imp(T a, T x, const Policy& pol){
-   constexpr auto function = "boost::math::lgamma_p<%1%>(%1%, %1%)";
+   constexpr auto function = "boost::math::lgamma_q<%1%>(%1%, %1%)";
    if(a <= 0)
       return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
    if(x < 0)
@@ -2434,6 +2434,29 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    gamma_q(T1 a, T2 z)
 {
    return gamma_q(a, z, policies::policy<>());
+}
+
+template <class T1, class T2, class Policy>
+inline tools::promote_args_t<T1, T2> lgamma_q(T1 a, T2 z, const Policy& /* pol */)
+{
+   typedef tools::promote_args_t<T1, T2> result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::lgamma_incomplete_imp(static_cast<value_type>(a),
+      static_cast<value_type>(z), forwarding_policy()), "lgamma_q<%1%>(%1%, %1%)");
+}
+
+template <class T1, class T2, class Policy>
+inline tools::promote_args_t<T1, T2> lgamma_q(T1 a, T2 z)
+{
+   return lgamma_q(a, z, policies::policy<>());
 }
 //
 // Regularised lower incomplete gamma:
