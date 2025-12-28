@@ -1772,6 +1772,51 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
    return gamma_incomplete_imp_final(T(a), T(x), normalised, invert, pol, p_derivative);
 }
 
+// Calculate log of incomplete gamma function
+template <class T, class Policy>
+T lgamma_incomplete_imp_final(T a, T x, const Policy& pol)
+{
+   using namespace boost::math;  // temporary until we're in the right namespace
+
+   BOOST_MATH_STD_USING_CORE
+
+   if (((x > 1000) && ((a < x) || (fabs(a - 50) / x < 1))) || ((x > tools::log_max_value<T>() - 10) && (x > a)))
+   {
+      //
+      // Take the logarithmic version of the asymtotic expansion:
+      //
+      return log(detail::incomplete_tgamma_large_x(a, x, pol)) + a * log(x) - x - lgamma(a, pol) - log(x);
+   }
+   //
+   // Can't do better than taking the log of Q, but...
+   //
+   // Figure out whether we need P or Q, since if we calculate Q and it's too close to unity
+   // we will loose precision in the result, selection logic here is extracted from gamma_incomplete_imp_final:
+   //
+   bool need_p = false;
+   if ((x < 0.5) && (T(-0.4) / log(x) < a))
+      need_p = true;
+   else if ((x < 1.1) && (x >= 0.5) && (x * 0.75f < a))
+      need_p = true;
+   else if ((x < a) && (x >= 1.1))
+      need_p = true;
+
+   if (need_p)
+      return log1p(-gamma_p(a, x, pol), pol);
+   return log(gamma_q(a, x, pol));
+}
+
+template <class T, class Policy> 
+T lgamma_incomplete_imp(T a, T x, const Policy& pol){
+   constexpr auto function = "boost::math::lgamma_p<%1%>(%1%, %1%)";
+   if(a <= 0)
+      return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
+   if(x < 0)
+      return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
+
+   // If input is valid proceed as normal
+   return lgamma_incomplete_imp_final(T(a), T(x), pol)
+}
 //
 // Ratios of two gamma functions:
 //
