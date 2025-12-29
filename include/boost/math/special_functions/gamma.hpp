@@ -1815,7 +1815,7 @@ T lgamma_incomplete_imp(T a, T x, const Policy& pol){
       return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
 
    // If input is valid proceed as normal
-   return lgamma_incomplete_imp_final(T(a), T(x), pol)
+   return lgamma_incomplete_imp_final(T(a), T(x), pol);
 }
 //
 // Ratios of two gamma functions:
@@ -2453,7 +2453,7 @@ inline tools::promote_args_t<T1, T2> lgamma_q(T1 a, T2 z, const Policy& /* pol *
       static_cast<value_type>(z), forwarding_policy()), "lgamma_q<%1%>(%1%, %1%)");
 }
 
-template <class T1, class T2, class Policy>
+template <class T1, class T2>
 inline tools::promote_args_t<T1, T2> lgamma_q(T1 a, T2 z)
 {
    return lgamma_q(a, z, policies::policy<>());
