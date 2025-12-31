@@ -141,6 +141,8 @@ void test_spot(
             quantile(dist, P), x, tol * 10);
       BOOST_CHECK_CLOSE(
             quantile(complement(dist, Q)), x, tol * 10);
+      BOOST_CHECK_CLOSE(
+            dist.find_non_centrality(a, b, P, x), ncp, tol * 10);
    }
    if(boost::math::tools::digits<RealType>() > 50)
    {

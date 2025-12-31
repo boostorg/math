@@ -22,6 +22,56 @@ namespace boost
 {
    namespace math
    {
+      namespace detail
+      {
+         /* Need to rewrite this according to `find_non_centrality` in 
+         non_central_chi_squared.hpp */
+         template <class RealType, class Policy>
+         struct non_centrality_finder_f
+         {
+            non_centrality_finder_f(const RealType x_, const RealType dfn_, const RealType dfd_, const RealType p_, bool c)
+               : x(x_), dfn(dfn_), dfd(dfd_), p(p_), comp(c) {}
+
+            RealType operator()(RealType nc) const
+            {
+               non_central_f_distribution<RealType, Policy> d(dfn, dfd, nc);
+               return comp ?
+                  RealType(p - cdf(complement(d, x)))
+                  : RealType(cdf(d, x) - p);
+            }
+         private:
+            RealType x, dfn, dfd, p;
+            bool comp; 
+         };
+         
+         template <class RealType, class Policy>
+         inline RealType find_non_centrality_f(const RealType dfn, const RealType dfd, const RealType p, const RealType x, const Policy& pol)
+         {
+            constexpr auto function = "non_central_f<%1%>::find_non_centrality";
+
+            if ( p <= 0 || p >= 1) {
+               return policies::raise_domain_error<RealType>(function, "Can't find non centrality parameter when the probability is <=0 or >=1, only possible answer is %1%", // LCOV_EXCL_LINE
+                  RealType(boost::math::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE
+            }
+            
+            RealType guess = RealType(10);                       // Starting guess.
+            RealType factor = 1;                                 // How big steps to take when searching.
+            boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+            tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
+
+            std::pair<RealType, RealType> result_bracket = tools::bracket_and_solve_root(
+                                 detail::non_centrality_finder_f<RealType, Policy>(x, dfn, dfd, p, false), guess, factor,
+                                 false, tol, max_iter, pol);
+            
+            RealType result = result_bracket.first + (result_bracket.second - result_bracket.first)/2;
+            if (max_iter >= policies::get_max_root_iterations<Policy>()) {
+               return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:" // LCOV_EXCL_LINE
+                  " or there is no answer to problem.  Current best guess is %1%", result, Policy()); // LCOV_EXCL_LINE
+            }
+            return result;
+         }
+      } // namespace detail
+
       template <class RealType = double, class Policy = policies::policy<> >
       class non_central_f_distribution
       {
@@ -57,6 +107,26 @@ namespace boost
          BOOST_MATH_GPU_ENABLED RealType non_centrality() const
          { // Private data getter function.
             return ncp;
+         }
+         static RealType find_non_centrality(const RealType dfn, const RealType dfd, const RealType p, const RealType x)
+         {
+            constexpr auto function = "non_central_f_distribution<%1%>::find_non_centrality";
+            typedef typename policies::evaluation<RealType, Policy>::type eval_type;
+            typedef typename policies::normalise<
+               Policy,
+               policies::promote_float<false>,
+               policies::promote_double<false>,
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+            eval_type result = detail::find_non_centrality_f(
+               static_cast<eval_type>(dfn),
+               static_cast<eval_type>(dfd),
+               static_cast<eval_type>(p),
+               static_cast<eval_type>(x),
+               forwarding_policy());
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               result,
+               function);
          }
       private:
          // Data member, initialized by constructor.
@@ -404,54 +474,6 @@ namespace boost
                Policy());
          return (x / (1 - x)) * (c.dist.degrees_of_freedom2() / c.dist.degrees_of_freedom1());
       } // quantile complement.
-      
-      /* Need to rewrite this according to `find_non_centrality` in 
-         non_central_chi_squared.hpp */
-      template <class RealType, class Policy>
-      struct non_centrality_finder
-      {
-         non_centrality_finder(const RealType x_, const RealType dfn_, const RealType dfd_, const RealType p_, bool c)
-            : x(x_), dfn(dfn_), dfd(dfd_), p(p_), comp(c) {}
-
-         RealType operator()(RealType nc) const
-         {
-            non_central_f_distribution<RealType, Policy> d(dfn, dfd, nc);
-            return comp ?
-               RealType(p - cdf(complement(d, x)))
-               : RealType(cdf(d, x) - p);
-         }
-      private:
-         RealType x, dfn, dfd, p;
-         bool comp; 
-      };
-
-      template <class RealType, class Policy>
-      RealType find_non_centrality(const RealType dfn, const RealType dfd, const RealType p, const RealType x, const Policy& pol)
-      {
-         constexpr auto function = "non_central_f<%1%>::find_non_centrality";
-
-         if ( p =< 0 || p >= 1) {
-            return policies::raise_domain_error<RealType>(function, "Can't find non centrality parameter when the probability is <=0 or >=1, only possible answer is %1%", // LCOV_EXCL_LINE
-               RealType(boost::math::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE
-         }
-         
-         RealType guess = RealType(10);                       // Starting guess.
-         RealType factor = 8;                                 // How big steps to take when searching.
-         boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
-         tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
-
-         std::pair<RealType, RealType> result_bracket = tools::bracket_and_solve_root(
-                              non_centrality_finder<RealType>(x, dfn, dfd, p), guess, factor,
-                              false, tol, max_iter, pol);
-
-         if (max_iter >= policies::get_max_root_iterations<Policy>()) {
-            return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:" // LCOV_EXCL_LINE
-               " or there is no answer to problem.  Current best guess is %1%", result, Policy()); // LCOV_EXCL_LINE
-         }
-         
-         RealType result = result_bracket.first + (result_bracket.second - result_bracket.first)/2;
-         return result;
-      }
    } // namespace math
 } // namespace boost
 
