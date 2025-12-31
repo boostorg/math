@@ -1774,11 +1774,18 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
 
 // Calculate log of incomplete gamma function
 template <class T, class Policy>
-T lgamma_incomplete_imp_final(T a, T x, const Policy& pol)
+T lgamma_incomplete_imp(T a, T x, const Policy& pol)
 {
    using namespace boost::math;  // temporary until we're in the right namespace
 
    BOOST_MATH_STD_USING_CORE
+
+   // Check for invalid inputs (a < 0 or x < 0)
+   constexpr auto function = "boost::math::lgamma_q<%1%>(%1%, %1%)";
+   if(a <= 0)
+      return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
+   if(x < 0)
+      return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
 
    if (((x > 1000) && ((a < x) || (fabs(a - 50) / x < 1))) || ((x > tools::log_max_value<T>() - 10) && (x > a)))
    {
@@ -1806,17 +1813,6 @@ T lgamma_incomplete_imp_final(T a, T x, const Policy& pol)
    return log(gamma_q(a, x, pol));
 }
 
-template <class T, class Policy> 
-T lgamma_incomplete_imp(T a, T x, const Policy& pol){
-   constexpr auto function = "boost::math::lgamma_q<%1%>(%1%, %1%)";
-   if(a <= 0)
-      return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
-   if(x < 0)
-      return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
-
-   // If input is valid proceed as normal
-   return lgamma_incomplete_imp_final(T(a), T(x), pol);
-}
 //
 // Ratios of two gamma functions:
 //
