@@ -260,8 +260,11 @@ void test_spots(T)
    // Check that lgamma_q returns correct values with spot values calculated via wolframalpha  log(Q[a, x])
    //
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(-84.71697591169848944613823640968965801339401810393519310714864307L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(22.5), static_cast<T>(2000)), static_cast<T>(-1883.489773203771543025750308264545743305089849873060383828767138L), tolerance * 10);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(501.25), static_cast<T>(2000)), static_cast<T>(-810.2453406781655559126505101822969531699112391075198076300675402L), tolerance * 10);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(22.5), static_cast<T>(2000)), static_cast<T>(-1883.489773203771543025750308264545743305089849873060383828767138L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(501.25), static_cast<T>(2000)), static_cast<T>(-810.2453406781655559126505101822969531699112391075198076300675402L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(20), static_cast<T>(0.25)), static_cast<T>(-2.946458104491857816330873290969917497748067639461638294404e-31L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(40), static_cast<T>(0.75)), static_cast<T>(-5.930604927955460343652485525435087275997461623988991819824e-54L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(50), static_cast<T>(2)), static_cast<T>(-5.214301903317168085381693412994550732094621576607843973832e-51L), tolerance);
    //
    // Coverage:
    //
@@ -272,6 +275,11 @@ void test_spots(T)
    BOOST_CHECK_THROW(boost::math::gamma_q(static_cast<T>(1), static_cast<T>(-2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::gamma_p(static_cast<T>(0), static_cast<T>(2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::gamma_q(static_cast<T>(0), static_cast<T>(2)), std::domain_error);
+
+   BOOST_CHECK_THROW(boost::math::lgamma_q(static_cast<T>(-1), static_cast<T>(2)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::lgamma_q(static_cast<T>(1), static_cast<T>(-2)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::lgamma_q(static_cast<T>(0), static_cast<T>(2)), std::domain_error);
+
    BOOST_CHECK_THROW(boost::math::gamma_p_derivative(static_cast<T>(-1), static_cast<T>(2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::gamma_p_derivative(static_cast<T>(1), static_cast<T>(-2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::gamma_p_derivative(static_cast<T>(0), static_cast<T>(2)), std::domain_error);
@@ -282,6 +290,11 @@ void test_spots(T)
    BOOST_CHECK((boost::math::isnan)(boost::math::gamma_q(static_cast<T>(1), static_cast<T>(-2))));
    BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p(static_cast<T>(0), static_cast<T>(2))));
    BOOST_CHECK((boost::math::isnan)(boost::math::gamma_q(static_cast<T>(0), static_cast<T>(2))));
+
+   BOOST_CHECK((boost::math::isnan)(boost::math::lgamma_q(static_cast<T>(-1), static_cast<T>(2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::lgamma_q(static_cast<T>(1), static_cast<T>(-2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::lgamma_q(static_cast<T>(0), static_cast<T>(2))));
+
    BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p_derivative(static_cast<T>(-1), static_cast<T>(2))));
    BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p_derivative(static_cast<T>(1), static_cast<T>(-2))));
    BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p_derivative(static_cast<T>(0), static_cast<T>(2))));
