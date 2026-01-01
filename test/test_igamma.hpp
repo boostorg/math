@@ -18,7 +18,7 @@
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
-
+#include <iostream>
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
@@ -265,6 +265,7 @@ void test_spots(T)
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(20), static_cast<T>(0.25)), static_cast<T>(-2.946458104491857816330873290969917497748067639461638294404e-31L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(40), static_cast<T>(0.75)), static_cast<T>(-5.930604927955460343652485525435087275997461623988991819824e-54L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(50), static_cast<T>(2)), static_cast<T>(-5.214301903317168085381693412994550732094621576607843973832e-51L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(20), static_cast<T>(999)), static_cast<T>(-907.0923609280941476865481041233627829242287760441299044050137514L), tolerance);
    //
    // Coverage:
    //
