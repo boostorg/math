@@ -261,7 +261,7 @@ void test_spots(T)
    //
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(-84.71697591169848944613823640968965801339401810393519310714864307L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(22.5), static_cast<T>(2000)), static_cast<T>(-1883.489773203771543025750308264545743305089849873060383828767138L), tolerance * 10);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(501.2), static_cast<T>(2000)), static_cast<T>(-810.2453406781655559126505101822969531699112391075198076300675402L), tolerance * 10);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(501.25), static_cast<T>(2000)), static_cast<T>(-810.2453406781655559126505101822969531699112391075198076300675402L), tolerance * 10);
    //
    // Coverage:
    //
