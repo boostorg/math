@@ -257,11 +257,11 @@ void test_spots(T)
    BOOST_CHECK_EQUAL(::boost::math::gamma_p(static_cast<T>(1770), static_cast<T>(1e-12)), 0);
 
    //
-   // Check that lgamma_q returns correct values
+   // Check that lgamma_q returns correct values with spot values calculated via wolframalpha  log(Q[a, x])
    //
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(log(1.6139305336977304790405739225035685228527400976549e-37L)), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(22.5), static_cast<T>(2000)), static_cast<T>(-1883.4897732037716195918619632721L), tolerance * 10); // calculated via mpmath
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(501.2), static_cast<T>(2000)), static_cast<T>(-810.31461624182202285737730562687L), tolerance * 10); // calculated via mpmath
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(-84.71697591169848944613823640968965801339401810393519310714864307L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(22.5), static_cast<T>(2000)), static_cast<T>(-1883.489773203771543025750308264545743305089849873060383828767138L), tolerance * 10);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(501.2), static_cast<T>(2000)), static_cast<T>(-810.2453406781655559126505101822969531699112391075198076300675402L), tolerance * 10);
    //
    // Coverage:
    //
