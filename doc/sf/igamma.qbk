@@ -21,6 +21,12 @@
    BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q(T1 a, T2 z, const ``__Policy``&);
    
    template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` lgamma_q(T1 a, T2 z);
+   
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` lgamma_q(T1 a, T2 z, const ``__Policy``&);
+
+   template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_lower(T1 a, T2 z);
    
    template <class T1, class T2, class ``__Policy``>
@@ -79,6 +85,15 @@ Returns the normalised upper incomplete gamma function of a and z:
 This function changes rapidly from 1 to 0 around the point z == a:
 
 [graph gamma_q]
+
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` lgamma_q(T1 a, T2 z);
+   
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` lgamma_q(T1 a, T2 z, const ``__Policy``&);
+
+Returns the natural log of the normalized upper incomplete gamma function 
+of a and z.  
 
    template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_lower(T1 a, T2 z);
@@ -262,6 +277,16 @@ counts in the argument to the /exp/ function.  Note that for sufficiently
 large a and x the errors will still get you eventually, although this does
 delay the inevitable much longer than other methods.  Use of /log(1+x)-x/ here
 is inspired by Temme (see references below).
+
+The natural log of the normalized upper incomplete gamma function is computed 
+as expected except when the normalized upper incomplete gamma function 
+begins to underflow. This approximately occurs at 
+
+   ((x > 1000) && ((a < x) || (fabs(a - 50) / x < 1))) || ((x > log_max_value<T>() - 10) && (x > a))
+
+in which case an expansion, for large x, of the (non-normalised) upper 
+incomplete gamma function is used. The return is then normalised by subtracting
+the log of the gamma function and adding /a log(x)-x-log(x)/.  
 
 [h4 References]
 
