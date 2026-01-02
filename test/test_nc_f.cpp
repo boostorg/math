@@ -144,7 +144,7 @@ void test_spot(
       BOOST_CHECK_CLOSE(
             dist.find_non_centrality(x, a, b, P), ncp, tol * 10);
       BOOST_CHECK_CLOSE(
-            dist.find_non_centrality(boost::math::complement(x, a, b, P)), ncp, tol * 10);
+            dist.find_non_centrality(boost::math::complement(x, a, b, Q)), ncp, tol * 10);
    }
    if(boost::math::tools::digits<RealType>() > 50)
    {

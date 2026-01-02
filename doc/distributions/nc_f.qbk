@@ -26,6 +26,11 @@
 
       // Accessor to non-centrality parameter lambda:
       BOOST_MATH_GPU_ENABLED RealType non_centrality()const;
+
+      // Parameter finders: 
+      static RealType find_non_centrality(const RealType x, const RealType v1, const RealType v2, const RealType p);
+      template <class A, class B, class C, class D>
+      static RealType find_non_centrality(const complemented3_type<A,B,C,D>& c);
    };
    
    }} // namespaces
@@ -52,6 +57,20 @@ The following graph illustrates how the distribution changes
 for different values of [lambda]:
 
 [graph nc_f_pdf]
+
+      BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(const RealType x, const RealType v1, const RealType v2, const RealType p);
+
+This function returns the non centrality parameter /lambda/ such that:
+
+`cdf(non_central_chi_squared<RealType, Policy>(v1, v2, lambda), x) == p`
+
+      template <class A, class B, class C, class D>
+      BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(const complemented4_type<A,B,C,D>& c);
+
+When called with argument `boost::math::complement(x, v1, v2, q)`
+this function returns the non centrality parameter /lambda/ such that:
+
+`cdf(complement(non_central_chi_squared<RealType, Policy>(v1, v2, lambda), x)) == q`.
 
 [h4 Member Functions]
 

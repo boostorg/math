@@ -28,23 +28,23 @@ namespace boost
          template <class RealType, class Policy>
          struct non_centrality_finder_f
          {
-            non_centrality_finder_f(const RealType x_, const RealType dfn_, const RealType dfd_, const RealType p_, bool c)
-               : x(x_), dfn(dfn_), dfd(dfd_), p(p_), comp(c) {}
+            non_centrality_finder_f(const RealType x_, const RealType v1_, const RealType v2_, const RealType p_, bool c)
+               : x(x_), v1(v1_), v2(v2_), p(p_), comp(c) {}
 
             RealType operator()(RealType nc) const
             {
-               non_central_f_distribution<RealType, Policy> d(dfn, dfd, nc);
+               non_central_f_distribution<RealType, Policy> d(v1, v2, nc);
                return comp ?
                   RealType(p - cdf(complement(d, x)))
                   : RealType(cdf(d, x) - p);
             }
          private:
-            RealType x, dfn, dfd, p;
+            RealType x, v1, v2, p;
             bool comp; 
          };
          
          template <class RealType, class Policy>
-         inline RealType find_non_centrality_f(RealType x, const RealType dfn, const RealType dfd, const RealType p, const RealType q, const Policy& pol)
+         inline RealType find_non_centrality_f(const RealType x, const RealType v1, const RealType v2, const RealType p, const RealType q, const Policy& pol)
          {
             constexpr auto function = "non_central_f<%1%>::find_non_centrality";
 
@@ -53,7 +53,7 @@ namespace boost
                   RealType(boost::math::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE
             }
 
-            non_centrality_finder_f<RealType, Policy> f(x, dfn, dfd, p < q ? p : q, p < q ? false : true);
+            non_centrality_finder_f<RealType, Policy> f(x, v1, v2, p < q ? p : q, p < q ? false : true);
             RealType guess = RealType(10);                       // Starting guess.
             RealType factor = 1;                                 // How big steps to take when searching.
             boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
@@ -107,7 +107,7 @@ namespace boost
          { // Private data getter function.
             return ncp;
          }
-         static RealType find_non_centrality(const RealType x, const RealType dfn, const RealType dfd, const RealType p)
+         static RealType find_non_centrality(const RealType x, const RealType v1, const RealType v2, const RealType p)
          {
             constexpr auto function = "non_central_f_distribution<%1%>::find_non_centrality";
             typedef typename policies::evaluation<RealType, Policy>::type eval_type;
@@ -119,8 +119,8 @@ namespace boost
                policies::assert_undefined<> >::type forwarding_policy;
             eval_type result = detail::find_non_centrality_f(
                static_cast<eval_type>(x),
-               static_cast<eval_type>(dfn),
-               static_cast<eval_type>(dfd),
+               static_cast<eval_type>(v1),
+               static_cast<eval_type>(v2),
                static_cast<eval_type>(p),
                static_cast<eval_type>(1-p),
                forwarding_policy());
@@ -129,7 +129,7 @@ namespace boost
                function);
          }
          template <class A, class B, class C, class D>
-         BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(const complemented4_type<A,B,C, D>& c)
+         static RealType find_non_centrality(const complemented4_type<A,B,C, D>& c)
          {
             constexpr auto function = "non_central_f_distribution<%1%>::find_non_centrality";
             typedef typename policies::evaluation<RealType, Policy>::type eval_type;
@@ -143,8 +143,8 @@ namespace boost
                static_cast<eval_type>(c.dist),
                static_cast<eval_type>(c.param1),
                static_cast<eval_type>(c.param2),
-               static_cast<eval_type>(c.param3),
                static_cast<eval_type>(1-c.param3),
+               static_cast<eval_type>(c.param3),
                forwarding_policy());
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result,
