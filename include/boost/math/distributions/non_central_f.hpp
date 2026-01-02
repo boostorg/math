@@ -17,6 +17,7 @@
 #include <boost/math/distributions/detail/generic_mode.hpp>
 #include <boost/math/special_functions/pow.hpp>
 #include <boost/math/policies/policy.hpp>
+#include <boost/math/distributions/complement.hpp> // complements
 
 namespace boost
 {
@@ -24,8 +25,6 @@ namespace boost
    {
       namespace detail
       {
-         /* Need to rewrite this according to `find_non_centrality` in 
-         non_central_chi_squared.hpp */
          template <class RealType, class Policy>
          struct non_centrality_finder_f
          {
@@ -123,6 +122,27 @@ namespace boost
                static_cast<eval_type>(dfd),
                static_cast<eval_type>(p),
                static_cast<eval_type>(x),
+               forwarding_policy());
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               result,
+               function);
+         }
+         template <class A, class B, class C, class D>
+         BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(const complemented4_type<A,B,C, D>& c)
+         {
+            constexpr auto function = "non_central_f_distribution<%1%>::find_non_centrality";
+            typedef typename policies::evaluation<RealType, Policy>::type eval_type;
+            typedef typename policies::normalise<
+               Policy,
+               policies::promote_float<false>,
+               policies::promote_double<false>,
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+            eval_type result = detail::find_non_centrality_f(
+               static_cast<eval_type>(c.dist),
+               static_cast<eval_type>(c.param1),
+               static_cast<eval_type>(c.param2),
+               static_cast<eval_type>(c.param3),
                forwarding_policy());
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result,
