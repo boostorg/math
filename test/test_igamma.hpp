@@ -141,8 +141,9 @@ void test_gamma(T, const char* name)
 }
 
 template <class T>
-void test_spots(T)
+void test_spots(T, const char* name = nullptr)
 {
+   std::cout << "Testing spot values with type " << name << std::endl;
    //
    // basic sanity checks, tolerance is 10 epsilon expressed as a percentage:
    //
