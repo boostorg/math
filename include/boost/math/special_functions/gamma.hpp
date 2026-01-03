@@ -1787,7 +1787,7 @@ T lgamma_incomplete_imp(T a, T x, const Policy& pol)
    if(x < 0)
       return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
 
-   if (((x > 1000) && ((a < x) || (fabs(a - 50) / x < 1))) || ((x > tools::log_max_value<T>() - 10) && (x > a)))
+   if (((x > 1000) || (x > tools::log_max_value<T>() - 10)) && (a + 50 < x))
    {
       //
       // Take the logarithmic version of the asymtotic expansion:
