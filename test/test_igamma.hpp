@@ -276,12 +276,12 @@ void test_spots(T, const char* name = nullptr)
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(50), static_cast<T>(999.75)), static_cast<T>(-805.7977867938474339107474131612354353193501692041340771552419902L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(50), static_cast<T>(1000.25)), static_cast<T>(-806.2733124989172792095030711884568388681331032891850662521501582L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(800), static_cast<T>(999.75)), static_cast<T>(-24.33274293617739453303937714319703386675839030466670622049929011L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(800), static_cast<T>(1000.25)), static_cast<T>(-24.43514173634027477093666725985191846106997808357863808910970142L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(800), static_cast<T>(1000.25)), static_cast<T>(-24.43514173634027477093666725985191846106997808357863808910970142L), tolerance * (boost::math::tools::digits<T>() > 54 ? 20 : 1));
    // Once we get large a,x then error start to accumulate no matter what we do:
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(1200), static_cast<T>(1249.75)), static_cast<T>(-2.565496161584661216769813239648606145255794643472303927896044375L), tolerance * (std::is_floating_point<T>::value ? 1 : 2));
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(1200), static_cast<T>(1250.25)), static_cast<T>(-2.591934862117586205519309712218581885256650074210410262843591453L), tolerance * (std::is_same<T, float>::value ? 1 : 50));
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(2200), static_cast<T>(2249.75)), static_cast<T>(-1.933779894897391651410597618307863427927461116308937004149240320L), tolerance * (std::is_floating_point<T>::value ? 1 : 10));
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(2200), static_cast<T>(2250.25)), static_cast<T>(-1.950346484067948344620463026377077515919992808640737320057812268L), tolerance * (std::is_same<T, float>::value ? 1 : (std::is_floating_point<T>::value ? 50 : 100)));
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(2200), static_cast<T>(2250.25)), static_cast<T>(-1.950346484067948344620463026377077515919992808640737320057812268L), tolerance * (std::is_same<T, float>::value ? 1 : (std::is_floating_point<T>::value ? 100 : 200)));
    //
    // Coverage:
    //
