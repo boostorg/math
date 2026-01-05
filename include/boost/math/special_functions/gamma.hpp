@@ -1774,7 +1774,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
 
 // Calculate log of incomplete gamma function
 template <class T, class Policy>
-T lgamma_incomplete_imp(T a, T x, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T lgamma_incomplete_imp(T a, T x, const Policy& pol)
 {
    using namespace boost::math;  // temporary until we're in the right namespace
 
@@ -2433,7 +2433,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
 }
 
 template <class T1, class T2, class Policy>
-inline tools::promote_args_t<T1, T2> lgamma_q(T1 a, T2 z, const Policy& /* pol */)
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_q(T1 a, T2 z, const Policy& /* pol */)
 {
    typedef tools::promote_args_t<T1, T2> result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -2450,7 +2450,7 @@ inline tools::promote_args_t<T1, T2> lgamma_q(T1 a, T2 z, const Policy& /* pol *
 }
 
 template <class T1, class T2>
-inline tools::promote_args_t<T1, T2> lgamma_q(T1 a, T2 z)
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_q(T1 a, T2 z)
 {
    return lgamma_q(a, z, policies::policy<>());
 }
