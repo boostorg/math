@@ -1798,7 +1798,7 @@ T lgamma_incomplete_imp(T a, T x, const Policy& pol)
    // Can't do better than taking the log of Q, but...
    //
    // Figure out whether we need P or Q, since if we calculate Q and it's too close to unity
-   // we will loose precision in the result, selection logic here is extracted from gamma_incomplete_imp_final:
+   // we will lose precision in the result, selection logic here is extracted from gamma_incomplete_imp_final:
    //
    bool need_p = false;
    if ((x < 0.5) && (T(-0.4) / log(x) < a))
