@@ -256,7 +256,6 @@ void test_spots(T, const char* name = nullptr)
    //
    BOOST_CHECK_EQUAL(::boost::math::gamma_q(static_cast<T>(1770), static_cast<T>(1e-12)), 1);
    BOOST_CHECK_EQUAL(::boost::math::gamma_p(static_cast<T>(1770), static_cast<T>(1e-12)), 0);
-
    //
    // Check that lgamma_q returns correct values with spot values calculated via wolframalpha  log(Q[a, x])
    //
@@ -266,6 +265,8 @@ void test_spots(T, const char* name = nullptr)
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(20), static_cast<T>(0.25)), static_cast<T>(-2.946458104491857816330873290969917497748067639461638294404e-31L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(40), static_cast<T>(0.75)), static_cast<T>(-5.930604927955460343652485525435087275997461623988991819824e-54L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(50), static_cast<T>(2)), static_cast<T>(-5.214301903317168085381693412994550732094621576607843973832e-51L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(500), static_cast<T>(10)), static_cast<T>(-3.79666711621207197039397438773960431648625558027046365463e-639L), tolerance * 3);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(5), static_cast<T>(1000)), static_cast<T>(-975.5430287171020511929200293377669175923128826278957569928895945L), tolerance);
    // Pairs of tests that bisect the crossover condition in our code at double and then quad precision:
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(10), static_cast<T>(698.75)), static_cast<T>(-652.5952453102824132865663191324423994628428404928732148525545721L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(10), static_cast<T>(699.25)), static_cast<T>(-653.0888168445921483147208556398158677077537551419551652934287016L), tolerance);
