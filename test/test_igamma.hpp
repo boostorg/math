@@ -263,12 +263,12 @@ void test_spots(T, const char* name = nullptr)
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(501.25), static_cast<T>(2000)), static_cast<T>(-810.2453406781655559126505101822969531699112391075198076300675402L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(20), static_cast<T>(0.25)), static_cast<T>(-2.946458104491857816330873290969917497748067639461638294404e-31L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(40), static_cast<T>(0.75)), static_cast<T>(-5.930604927955460343652485525435087275997461623988991819824e-54L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(50), static_cast<T>(2)), static_cast<T>(-5.214301903317168085381693412994550732094621576607843973832e-51L), 
 #if defined(__CYGWIN__) || defined(__MINGW32__)
-      tolerance * 2);
+   T gcc_win_mul = 2;
 #else
-      tolerance);
+   T gcc_win_mul = 1;
 #endif
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(50), static_cast<T>(2)), static_cast<T>(-5.214301903317168085381693412994550732094621576607843973832e-51L), tolerance * gcc_win_mul);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(500), static_cast<T>(10)), static_cast<T>(-3.79666711621207197039397438773960431648625558027046365463e-639L), tolerance * 3);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(5), static_cast<T>(1000)), static_cast<T>(-975.5430287171020511929200293377669175923128826278957569928895945L), tolerance);
    // Pairs of tests that bisect the crossover condition in our code at double and then quad precision:
