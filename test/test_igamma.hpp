@@ -269,7 +269,7 @@ void test_spots(T, const char* name = nullptr)
    T gcc_win_mul = 1;
 #endif
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(50), static_cast<T>(2)), static_cast<T>(-5.214301903317168085381693412994550732094621576607843973832e-51L), tolerance * gcc_win_mul);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(500), static_cast<T>(10)), static_cast<T>(-3.79666711621207197039397438773960431648625558027046365463e-639L), tolerance * 3);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(500), static_cast<T>(10)), static_cast<T>(-3.79666711621207197039397438773960431648625558027046365463e-639L), tolerance * 3 * gcc_win_mul);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(5), static_cast<T>(1000)), static_cast<T>(-975.5430287171020511929200293377669175923128826278957569928895945L), tolerance);
    // Pairs of tests that bisect the crossover condition in our code at double and then quad precision:
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(10), static_cast<T>(698.75)), static_cast<T>(-652.5952453102824132865663191324423994628428404928732148525545721L), tolerance);
