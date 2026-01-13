@@ -1291,37 +1291,6 @@ BOOST_MATH_GPU_ENABLED T incomplete_tgamma_large_x(const T& a, const T& x, const
 }
 
 //
-// Asymptotic approximation for large a, see https://dlmf.nist.gov/8.11#E4
-// 
-template <class T>
-struct incomplete_tgamma_lower_large_a_series
-{
-   typedef T result_type;
-   BOOST_MATH_GPU_ENABLED incomplete_tgamma_lower_large_a_series(const T& a, const T& x)
-      : a_poch(a + 1), z(x), term(1 / a) {}
-   BOOST_MATH_GPU_ENABLED T operator()()
-   {
-      T result = term;
-      term *= z / a_poch;
-      a_poch += 1;
-      return result;
-   }
-   T a_poch, z, term;
-};
-
-template <class T, class Policy>
-T incomplete_tgamma_lower_large_a(const T& a, const T&x, const Policy & pol)
-{
-   BOOST_MATH_STD_USING
-   incomplete_tgamma_lower_large_a_series<T> s(a, x);
-   boost::math::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-   boost::math::policies::check_series_iterations<T>("boost::math::tgamma_p<%1%>(%1%,%1%)", max_iter, pol);
-   return result;
-}
-
-
-//
 // Main incomplete gamma entry point, handles all four incomplete gamma's:
 //
 template <class T, class Policy>
@@ -1860,7 +1829,8 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol
 
    // This still needs work...
    if (a > x + 50){
-      return log(detail::incomplete_tgamma_lower_large_a(a, x, pol)) + a * log(x) - x - lgamma(a, pol);
+      std::cout << "Using approximation" << std::endl;
+      return log(detail::lower_gamma_series(a, x, pol)) - log(a) + a * log(x) - x - lgamma(a, pol);
    }
 
    //
