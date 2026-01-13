@@ -1290,6 +1290,9 @@ BOOST_MATH_GPU_ENABLED T incomplete_tgamma_large_x(const T& a, const T& x, const
    return result;
 }
 
+//
+// Asymptotic approximation for large a, see https://dlmf.nist.gov/8.11#E4
+// 
 template <class T>
 struct incomplete_tgamma_lower_large_a_series
 {
@@ -1855,8 +1858,8 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol
    if(x < 0)
       return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
 
-   // Need to change this to be more appropriate! 
-   if (a > 100){
+   // This still needs work...
+   if (a > x + 50){
       return log(detail::incomplete_tgamma_lower_large_a(a, x, pol)) + a * log(x) - x - lgamma(a, pol);
    }
 
@@ -2519,6 +2522,29 @@ template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_q(T1 a, T2 z)
 {
    return lgamma_q(a, z, policies::policy<>());
+}
+
+template <class T1, class T2, class Policy>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_p(T1 a, T2 z, const Policy& /* pol */)
+{
+   typedef tools::promote_args_t<T1, T2> result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::lgamma_incomplete_lower_imp(static_cast<value_type>(a),
+      static_cast<value_type>(z), forwarding_policy()), "lgamma_p<%1%>(%1%, %1%)");
+}
+
+template <class T1, class T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_p(T1 a, T2 z)
+{
+   return lgamma_p(a, z, policies::policy<>());
 }
 //
 // Regularised lower incomplete gamma:
