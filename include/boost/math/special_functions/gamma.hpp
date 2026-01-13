@@ -1827,9 +1827,8 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol
    if(x < 0)
       return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
 
-   // This still needs work...
-   if (a > x + 50){
-      std::cout << "Using approximation" << std::endl;
+   // Taken from conditions on Line 1354, 1368, 1709
+   if (((a > 4 * x) && (a >= max_factorial<T>::value)) || (T(-0.4) / log(x) < a) || ((x * 0.75f < a) && x < T(1.1))){
       return log(detail::lower_gamma_series(a, x, pol)) - log(a) + a * log(x) - x - lgamma(a, pol);
    }
 
