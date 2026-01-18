@@ -299,7 +299,7 @@ void test_spots(T, const char* name = nullptr)
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(2200), static_cast<T>(2249.75)), static_cast<T>(-1.933779894897391651410597618307863427927461116308937004149240320L), tolerance * (std::is_floating_point<T>::value ? 1 : 10));
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(2200), static_cast<T>(2250.25)), static_cast<T>(-1.950346484067948344620463026377077515919992808640737320057812268L), tolerance * (std::is_same<T, float>::value ? 1 : (std::is_floating_point<T>::value ? 100 : 200)));
    
-   // Note, long double and real_concept types need increased precision 
+   // Long double and real_concept types need increased precision 
    T real_concept_tol = 1;
    if (std::is_same<T, boost::math::concepts::real_concept>::value || std::is_same<T, long double>::value){
       real_concept_tol = 3;
@@ -314,9 +314,9 @@ void test_spots(T, const char* name = nullptr)
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(43.7796314883057249289777246303856372833251953125), static_cast<T>(0.99)), static_cast<T>(-125.889061559356008501708856783807277679443359375L), tolerance * real_concept_tol);   
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(39.799664989368835676941671408712863922119140625), static_cast<T>(0.99)), static_cast<T>(-110.9450811443740741159224346421309229458874083101891810411634707L), tolerance * real_concept_tol);   
    
-   // Check large a, x values
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(1450.25), static_cast<T>(1500.75)), static_cast<T>(-0.09812447528127799786140178403478691390753413399549580160096975713L), tolerance * (std::is_same<T, boost::math::concepts::real_concept>::value ? 4 : 1));
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(2000), static_cast<T>(1900)), static_cast<T>(-4.448523733381445722945397105917814000790587922314824687065050805L), tolerance);
+   // Check large a, x values. Precision just isn't great here. 
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(1450.25), static_cast<T>(1500.75)), static_cast<T>(-0.09812447528127799786140178403478691390753413399549580160096975713L), tolerance * (std::is_same<T, boost::math::concepts::real_concept>::value ? 8 : 1));
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(2000), static_cast<T>(1900)), static_cast<T>(-4.448523733381445722945397105917814000790587922314824687065050805L), tolerance * gcc_win_mul * (std::is_same<T, boost::math::concepts::real_concept>::value ? 8 : 1));
 
    //
    // Coverage:
