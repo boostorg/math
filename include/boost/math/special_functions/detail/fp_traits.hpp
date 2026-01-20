@@ -272,7 +272,7 @@ template<> struct fp_traits_non_native<double, double_precision>
 
 #if defined(BOOST_NO_INT64_T) || defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)\
    || defined(BOOST_BORLANDC) || defined(__CODEGEAR__) || (defined(__APPLE__) && defined(__aarch64__)) || defined(_MSC_VER)\
-    || (defined(__GNUC__) && defined(__aarch64__) && defined(_WIN32))
+    || (defined(__GNUC__) && defined(__aarch64__) && defined(_WIN32)) || defined(__SYCL_DEVICE_ONLY__)
 
 static_assert(LDBL_MANT_DIG == 53, "Oops, assumption that long double is a 64-bit quantity is incorrect!!");
 
