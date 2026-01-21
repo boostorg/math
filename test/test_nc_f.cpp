@@ -327,6 +327,25 @@ void test_spots(RealType)
    {
       BOOST_CHECK_CLOSE(cdf(boost::math::non_central_f_distribution<RealType>(static_cast<RealType>(1e-100L), 3.f, 1.5f), static_cast<RealType>(1e100L)), static_cast<RealType>(0.6118152873453990639132215575213809716459L), tolerance);
    }
+   
+   // Check find_non_centrality_f edge case handling 
+   // Case when nc=0
+   RealType a = 5;
+   RealType b = 2;
+   RealType nc = 0;
+   RealType x_vals[] = { 0.25, 1.25, 10, 100};
+   boost::math::non_central_f_distribution<RealType> dist_no_centrality(a, b, nc);
+   for (RealType x : x_vals)
+   {
+      RealType P = pdf(dist_no_centrality, x);
+      BOOST_CHECK_CLOSE(dist.find_non_centrality(x, a, b, P), static_cast<RealType>(0), tolerance);
+   }
+   // Case when P=1 or P=0 
+   BOOST_MATH_CHECK_THROW(dist.find_non_centrality(x, a, b, 1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist.find_non_centrality(x, a, b, 0), std::domain_error);
+   // Case when Q=1 or Q=0
+   BOOST_MATH_CHECK_THROW(dist.find_non_centrality(boost::math::complement(x, a, b, 1)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist.find_non_centrality(boost::math::complement(x, a, b, 0)), std::domain_error);
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )
