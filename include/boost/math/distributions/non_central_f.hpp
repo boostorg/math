@@ -28,10 +28,10 @@ namespace boost
          template <class RealType, class Policy>
          struct non_centrality_finder_f
          {
-            non_centrality_finder_f(const RealType x_, const RealType v1_, const RealType v2_, const RealType p_, bool c)
+            BOOST_MATH_GPU_ENABLED non_centrality_finder_f(const RealType x_, const RealType v1_, const RealType v2_, const RealType p_, const bool c)
                : x(x_), v1(v1_), v2(v2_), p(p_), comp(c) {}
 
-            RealType operator()(RealType nc) const
+            BOOST_MATH_GPU_ENABLED RealType operator()(RealType nc) const
             {
                non_central_f_distribution<RealType, Policy> d(v1, v2, nc);
                return comp ?
@@ -44,7 +44,7 @@ namespace boost
          };
          
          template <class RealType, class Policy>
-         inline RealType find_non_centrality_f(const RealType x, const RealType v1, const RealType v2, const RealType p, const RealType q, const Policy& pol)
+         BOOST_MATH_GPU_ENABLED RealType find_non_centrality_f(const RealType x, const RealType v1, const RealType v2, const RealType p, const RealType q, const Policy& pol)
          {
             constexpr auto function = "non_central_f<%1%>::find_non_centrality";
 
@@ -59,7 +59,7 @@ namespace boost
             boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
             tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
 
-            std::pair<RealType, RealType> result_bracket = tools::bracket_and_solve_root(
+            boost::math::pair<RealType, RealType> result_bracket = tools::bracket_and_solve_root(
                                  f, guess, factor, false, tol, max_iter, pol);
             
             RealType result = result_bracket.first + (result_bracket.second - result_bracket.first)/2;
@@ -107,7 +107,7 @@ namespace boost
          { // Private data getter function.
             return ncp;
          }
-         static RealType find_non_centrality(const RealType x, const RealType v1, const RealType v2, const RealType p)
+         BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(const RealType x, const RealType v1, const RealType v2, const RealType p)
          {
             constexpr auto function = "non_central_f_distribution<%1%>::find_non_centrality";
             typedef typename policies::evaluation<RealType, Policy>::type eval_type;
@@ -129,7 +129,7 @@ namespace boost
                function);
          }
          template <class A, class B, class C, class D>
-         static RealType find_non_centrality(const complemented4_type<A,B,C, D>& c)
+         BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(const complemented4_type<A,B,C, D>& c)
          {
             constexpr auto function = "non_central_f_distribution<%1%>::find_non_centrality";
             typedef typename policies::evaluation<RealType, Policy>::type eval_type;
