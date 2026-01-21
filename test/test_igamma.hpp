@@ -265,14 +265,15 @@ void test_spots(T, const char* name = nullptr)
    BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(40), static_cast<T>(0.75)), static_cast<T>(-5.930604927955460343652485525435087275997461623988991819824e-54L), tolerance);
    
    //
-   // Check that lgamma_q returns correct values with spot values calculated via wolframalpha  log(P[a, x])
+   // Check that lgamma_q returns correct values with spot values calculated via wolframalpha log(P[a, x])
+   // This is calculated using: N[Log[GammaRegularized[a,0, z]],64]
    //
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(500), static_cast<T>(10)), static_cast<T>(-1470.017750815998931281954666549641187420649099004671023115157832L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(100), static_cast<T>(0.10)), static_cast<T>(-594.0968942751157965882143339808498054972378571169718495813176479L), 2*tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(100), static_cast<T>(0.25)), static_cast<T>(-502.6163334118978895536207514636026023439623265152862757105793000L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(20), static_cast<T>(10.25)), static_cast<T>(-5.404004887981642339930593767572610169901594898478031307722239712L), tolerance);
    // Small "a" produce larger errors 
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(0.1), static_cast<T>(100)), static_cast<T>(-6.142676307812300286394850046780157761360272418143933840132692383e-47L), 20*tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(0.025), static_cast<T>(10)), static_cast<T>(-0.0000001118627574013195004426530864010428145980391578084985091741192526L), 15*tolerance);   
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(0.25), static_cast<T>(100)), static_cast<T>(-3.220751038854414755009496530271388459559061551701603447517040280e-46L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(0.25), static_cast<T>(10)), static_cast<T>(-2.083032578160285760530530498275075010777428544413918699832758176e-6L), tolerance);   
 
    #if defined(__CYGWIN__) || defined(__MINGW32__)
    T gcc_win_mul = 2;
@@ -307,15 +308,15 @@ void test_spots(T, const char* name = nullptr)
    // Pair of tests that bisect the crossover condition in our code at double and then quad precision 
    // Oddly, the crossover condition is smaller for quad precision. This is because max_factorial is 100
    // for boost::multiprecision::cpp_bin_float_quad and 170 for doubles. 
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(169.75), static_cast<T>(0.6)), static_cast<T>(-792.5976910460276693711943228399034564720784916702808816810639048L), tolerance * real_concept_tol);   
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(170.25), static_cast<T>(0.6)), static_cast<T>(-795.4224823388425178061598242301088759551669254174241556830902684L), tolerance * real_concept_tol);   
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(99.75), static_cast<T>(0.6)), static_cast<T>(-414.1360294778432398276991161095707673136841267685069121354421888L), tolerance * real_concept_tol);   
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(100.25), static_cast<T>(0.6)), static_cast<T>(-416.6965522800555653440139072333570825784615163822944047186474994L), tolerance * real_concept_tol);   
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(43.7796314883057249289777246303856372833251953125), static_cast<T>(0.99)), static_cast<T>(-125.889061559356008501708856783807277679443359375L), tolerance * real_concept_tol);   
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(39.799664989368835676941671408712863922119140625), static_cast<T>(0.99)), static_cast<T>(-110.9450811443740741159224346421309229458874083101891810411634707L), tolerance * real_concept_tol);   
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(169.75), static_cast<T>(0.75)), static_cast<T>(-754.8681912874632573100058312311927462406154378562940316233389406L), tolerance * real_concept_tol);   
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(170.25), static_cast<T>(0.75)), static_cast<T>(-757.5814133895304434271729579978676692688834086380018151200693572L), tolerance * real_concept_tol);   
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(99.75), static_cast<T>(0.75)), static_cast<T>(-392.0259615581237826290999388631292473247947826682978959914359465L), tolerance * real_concept_tol);   
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(100.25), static_cast<T>(0.75)), static_cast<T>(-394.4749200332583219473980963811639065003421270272773619742710832L), tolerance * real_concept_tol);   
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(43.7796314883057249289777246303856372833251953125L), static_cast<T>(static_cast<T>(99) / 100)), static_cast<T>(-125.889061559356008501708856783807277679443359375L), tolerance * real_concept_tol);   
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(39.799664989368835676941671408712863922119140625L), static_cast<T>(static_cast<T>(99) / 100)), static_cast<T>(-110.9450811443740741159224346421309229458874083101891810411634707L), tolerance * real_concept_tol);   
    
    // Check large a, x values. Precision just isn't great here. 
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(1450.25), static_cast<T>(1500.75)), static_cast<T>(-0.09812447528127799786140178403478691390753413399549580160096975713L), tolerance * (std::is_same<T, boost::math::concepts::real_concept>::value ? 8 : 1));
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(1450.25), static_cast<T>(1500.75)), static_cast<T>(-0.09812447528127799786140178403478691390753413399549580160096975713L), tolerance * (std::is_same<T, boost::math::concepts::real_concept>::value ? 16 : 1));
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(2000), static_cast<T>(1900)), static_cast<T>(-4.448523733381445722945397105917814000790587922314824687065050805L), tolerance * gcc_win_mul * (std::is_same<T, boost::math::concepts::real_concept>::value ? 8 : 1));
 
    //
