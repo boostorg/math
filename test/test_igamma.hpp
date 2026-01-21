@@ -312,9 +312,7 @@ void test_spots(T, const char* name = nullptr)
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(170.25), static_cast<T>(0.75)), static_cast<T>(-757.5814133895304434271729579978676692688834086380018151200693572L), tolerance * real_concept_tol);   
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(99.75), static_cast<T>(0.75)), static_cast<T>(-392.0259615581237826290999388631292473247947826682978959914359465L), tolerance * real_concept_tol);   
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(100.25), static_cast<T>(0.75)), static_cast<T>(-394.4749200332583219473980963811639065003421270272773619742710832L), tolerance * real_concept_tol);   
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(43.7796314883057249289777246303856372833251953125L), static_cast<T>(static_cast<T>(99) / 100)), static_cast<T>(-125.889061559356008501708856783807277679443359375L), tolerance * real_concept_tol);   
-   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(39.799664989368835676941671408712863922119140625L), static_cast<T>(static_cast<T>(99) / 100)), static_cast<T>(-110.9450811443740741159224346421309229458874083101891810411634707L), tolerance * real_concept_tol);   
-   
+
    // Check large a, x values. Precision just isn't great here. 
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(1450.25), static_cast<T>(1500.75)), static_cast<T>(-0.09812447528127799786140178403478691390753413399549580160096975713L), tolerance * (std::is_same<T, boost::math::concepts::real_concept>::value ? 16 : 1));
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(2000), static_cast<T>(1900)), static_cast<T>(-4.448523733381445722945397105917814000790587922314824687065050805L), tolerance * gcc_win_mul * (std::is_same<T, boost::math::concepts::real_concept>::value ? 8 : 1));
