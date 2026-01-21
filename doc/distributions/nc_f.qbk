@@ -28,9 +28,9 @@
       BOOST_MATH_GPU_ENABLED RealType non_centrality()const;
 
       // Parameter finders: 
-      static RealType find_non_centrality(const RealType x, const RealType v1, const RealType v2, const RealType p);
+      BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(const RealType x, const RealType v1, const RealType v2, const RealType p);
       template <class A, class B, class C, class D>
-      static RealType find_non_centrality(const complemented3_type<A,B,C,D>& c);
+      BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(const complemented3_type<A,B,C,D>& c);
    };
    
    }} // namespaces
