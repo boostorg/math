@@ -165,6 +165,8 @@ run test_nc_f_pdf_double.cu ;
 run test_nc_f_pdf_float.cu ;
 run test_nc_f_quan_double.cu ;
 run test_nc_f_quan_float.cu ;
+run test_nc_f_finder_double.cu ;
+run test_nc_f_finder_float.cu ;
 
 run test_nc_chi_squared_cdf_double.cu ;
 run test_nc_chi_squared_cdf_float.cu ;
