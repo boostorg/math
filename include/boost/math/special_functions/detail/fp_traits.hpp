@@ -24,6 +24,7 @@ With these techniques, the code could be simplified.
 #include <cstring>
 #include <cstdint>
 #include <limits>
+#include <climits>
 #include <type_traits>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/is_standalone.hpp>
@@ -270,7 +271,10 @@ template<> struct fp_traits_non_native<double, double_precision>
 // long double (64 bits) -------------------------------------------------------
 
 #if defined(BOOST_NO_INT64_T) || defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)\
-   || defined(BOOST_BORLANDC) || defined(__CODEGEAR__) || (defined(__APPLE__) && defined(__aarch64__)) || defined(_MSC_VER)
+   || defined(BOOST_BORLANDC) || defined(__CODEGEAR__) || (defined(__APPLE__) && defined(__aarch64__)) || defined(_MSC_VER)\
+    || (defined(__GNUC__) && defined(__aarch64__) && defined(_WIN32)) || defined(__SYCL_DEVICE_ONLY__)
+
+static_assert(LDBL_MANT_DIG == 53, "Oops, assumption that long double is a 64-bit quantity is incorrect!!");
 
 template<> struct fp_traits_non_native<long double, double_precision>
 {
@@ -304,6 +308,8 @@ private:
     || defined(__x86_64) || defined(__x86_64__) || defined(_M_X64)
 
 // Intel extended double precision format (80 bits)
+
+static_assert(LDBL_MANT_DIG == 64, "Oops, assumption that long double is an 80-bit quantity is incorrect!!");
 
 template<>
 struct fp_traits_non_native<long double, extended_double_precision>
@@ -355,6 +361,8 @@ struct fp_traits_non_native<long double, extended_double_precision>
     || defined(__ppc) || defined(__ppc__) || defined(__PPC__)
 
 // PowerPC extended double precision format (128 bits)
+
+static_assert(LDBL_MANT_DIG == 113, "Oops, assumption that long double is a 128-bit quantity is incorrect!!");
 
 template<>
 struct fp_traits_non_native<long double, extended_double_precision>
@@ -429,6 +437,8 @@ struct fp_traits_non_native<long double, extended_double_precision>
 #else
 
 // IEEE extended double precision format with 15 exponent bits (128 bits)
+
+static_assert(LDBL_MANT_DIG == 113, "Oops, assumption that long double is a 128-bit quantity is incorrect!!");
 
 template<>
 struct fp_traits_non_native<long double, extended_double_precision>
