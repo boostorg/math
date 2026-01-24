@@ -1842,9 +1842,7 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol
    // we will lose precision in the result, selection logic here is extracted from gamma_incomplete_imp_final:
    //
    bool need_p = false;
-   if ((x < 0.5) && (T(-0.4) / log(x) < a))
-      need_p = true;
-   else if ((x < 1.1) && (x >= 0.5) && (x * 0.75f < a))
+   if ((x < 1.1) && (x >= 0.5) && (x * 0.75f < a))
       need_p = true;
    else if ((x < a) && (x >= 1.1))
       need_p = true;
