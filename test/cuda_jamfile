@@ -371,6 +371,8 @@ run test_gamma_p_inv_double.cu ;
 run test_gamma_p_inv_float.cu ;
 run test_lgamma_q_double.cu ;
 run test_lgamma_q_float.cu ;
+run test_lgamma_p_double.cu ;
+run test_lgamma_p_float.cu ;
 
 run test_log1p_double.cu ;
 run test_log1p_float.cu ;
