@@ -6,10 +6,13 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ]
 
 [section:gd_opt Gradient Based Optimizers]
-
-Gradient based optimizers are algorithms that use the gradient of a funciton to iteratively find locally extreme points of functions over a set of parameters. This sections provides a description of a set of gradient optimizers. The optimizers are written with `boost::math::differentiation::reverse_mode::rvar` in mind, however if a way to evaluate the funciton and its gradient is provided, the optimizers should work in exactly the same way.
+[template autodiff_equation[name]  '''<inlinemediaobject><imageobject><imagedata fileref="../equations/autodiff/'''[name]'''"></imagedata></imageobject></inlinemediaobject>''']
+[template autodiff_graph[name] '''<inlinemediaobject><imageobject><imagedata fileref="../graphs/autodiff/'''[name]'''"></imagedata></imageobject></inlinemediaobject>''']
+[template gbo_graph[name] '''<inlinemediaobject><imageobject><imagedata fileref="../graphs/gradient_based_optimizers/'''[name]'''"></imagedata></imageobject></inlinemediaobject>''']
 
 [section:introduction Introduction]
+Gradient based optimizers are algorithms that use the gradient of a funciton to iteratively find locally extreme points of functions over a set of parameters. This sections provides a description of a set of gradient optimizers. The optimizers are written with `boost::math::differentiation::reverse_mode::rvar` in mind, however if a way to evaluate the funciton and its gradient is provided, the optimizers should work in exactly the same way.
+
 [endsect] [/section:introduction]
 
 [section:gradient_descent Gradient Desccent]
@@ -89,13 +92,1164 @@ The implementation delegates:
 - the gradient computation to a gradient evaluation policy
 - the parameter updates to an update policy
 
+The interface is intended to be pytorch-like, where a optimizer object is constructed and progressed with a `step()` method. A helper `minimize` method is also provided.
+
+[heading Parameters]
+
+* `Objective&& obj` : objective funciton to minimize
+* `ArgumentContainer& x` : variables to optimize over
+* `RealType& lr` : learning rate. A larger value takes larger steps during descent, leading to faster, but more unstable convergence. Conversely, small vaues are more stable but take longer to converge.
+* `InitializationPolicy&& ip` : Initialization policy for `ArgumentContainer`, or the initial guess. By default it is set to `tape_initializer_rvar<RealType>` which lets the user provide the "initial guess" by setting the values of `x` manually. For more info check the Policies section.
+* `ObjectiveEvalPolicy&& oep` : tells the optimizer how to evaluate the objective function. By default `reverse_mode_function_eval_policy<RealType>`.
+* `GradEvalPolicy&& gep` : tells the optimzier how to evaluate the gradient of the objective function. By default `reverse_mode_gradient_evaluation_policy<RealType>`
+
+[heading Example using a manual optimization]
+In this section we will present an example for finding optimal configurations of electrically charged particles confined to a `R = 1` sphere. This problem is also known as the [@https://en.wikipedia.org/wiki/Thomson_problem Thomson problem]. In summary, we are looking for the configuration of an N-electron system subject to the Coulomb potential confined to the $S^2$ sphere. The Coulomb potential is given by:
+
+[:[:[autodiff_equation thomson_potential.svg]]]  
+
+The code below manually minimizes the abover potential energy function for N particles over their two angular pozitions. 
+
+``
+	#include <boost/math/differentiation/autodiff_reverse.hpp>
+	#include <boost/math/optimization/gradient_descent.hpp>
+	#include <boost/math/optimization/minimizer.hpp>
+	#include <cmath>
+	#include <fstream>
+	#include <iostream>
+	#include <random>
+	#include <string>
+	namespace rdiff = boost::math::differentiation::reverse_mode;
+	namespace bopt  = boost::math::optimization;
+	double random_double(double min = 0.0, double max = 1.0)
+	{
+	    static thread_local std::mt19937       rng{std::random_device{}()};
+	    std::uniform_real_distribution<double> dist(min, max);
+	    return dist(rng);
+	}
+
+	template<typename S>
+	struct vec3
+	{
+    	/**
+     	* @brief R^3 coordinates of particle on Thomson Sphere
+     	*/
+    	S x, y, z;
+	};
+
+	template<class S>
+	static inline vec3<S> sph_to_xyz(const S& theta, const S& phi)
+	{
+	    /**
+	     * convenience overload to convert from [theta,phi] -> x, y, z
+	     */
+	    return {sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta)};
+	}
+
+	template<typename T>
+	T thomson_energy(std::vector<T>& r)
+	{
+	    const size_t N    = r.size() / 2;
+	    const T      tiny = T(1e-12);
+
+	    T E = 0;
+	    for (size_t i = 0; i < N; ++i) {
+        	const T& theta_i = r[2 * i + 0];
+	        const T& phi_i   = r[2 * i + 1];
+        	auto     ri      = sph_to_xyz(theta_i, phi_i);
+
+	        for (size_t j = i + 1; j < N; ++j) {
+        	    const T& theta_j = r[2 * j + 0];
+	            const T& phi_j   = r[2 * j + 1];
+        	    auto     rj      = sph_to_xyz(theta_j, phi_j);
+
+	            T dx = ri.x - rj.x;
+        	    T dy = ri.y - rj.y;
+		    T dz = ri.z - rj.z;
+
+	            T d2 = dx * dx + dy * dy + dz * dz + tiny;
+        	    E += 1.0 / sqrt(d2);
+        	}
+    	}
+    	return E;
+	}
+
+	template<class T>
+	std::vector<rdiff::rvar<T, 1>> init_theta_phi_uniform(size_t N, unsigned seed = 12345)
+	{
+	    const T pi = T(3.1415926535897932384626433832795);
+
+	    std::mt19937                      rng(seed);
+	    std::uniform_real_distribution<T> unif01(T(0), T(1));
+	    std::uniform_real_distribution<T> unifm11(T(-1), T(1));
+
+	    std::vector<rdiff::rvar<T, 1>> u;
+	    u.reserve(2 * N);
+
+	    for (size_t i = 0; i < N; ++i) {
+        	T z     = unifm11(rng);
+	        T phi   = (T(2) * pi) * unif01(rng) - pi;
+        	T theta = std::acos(z);
+
+	        u.emplace_back(theta);
+        	u.emplace_back(phi);
+	    }
+	    return u;
+	}
+
+	int main(int argc, char* argv[])
+	{
+	    if (argc != 2) {
+        	std::cerr << "Usage: " << argv[0] << " <N>\n";
+	        return 1;
+	    }
+
+	    const int    N      = std::stoi(argv[1]);
+	    const int    NSTEPS = 100000;
+   	    const double lr     = 1e-3;
+
+   	    auto u_ad = init_theta_phi_uniform<double>(N);
+
+    	    auto gdopt = bopt::make_gradient_descent(&thomson_energy<rdiff::rvar<double, 1>>, u_ad, lr);
+
+   	    // filenames
+   	    std::string pos_filename    = "thomson_" + std::to_string(N) + ".csv";
+  	    std::string energy_filename = "energy_" + std::to_string(N) + ".csv";
+
+            std::ofstream pos_out(pos_filename);
+            std::ofstream energy_out(energy_filename);
+
+            pos_out << "step,particle,x,y,z\n";
+            energy_out << "step,energy\n";
+
+   	    for (int step = 0; step < NSTEPS; ++step) {
+            	gdopt.step();
+            	for (int pi = 0; pi < N; ++pi) {
+                	double theta = u_ad[2 * pi + 0].item();
+                 	double phi   = u_ad[2 * pi + 1].item();
+                 	auto   r     = sph_to_xyz(theta, phi);
+                 	pos_out << step << "," << pi << "," << r.x << "," << r.y << "," << r.z << "\n";
+            	}
+        	auto E = gdopt.objective_value();
+       	 	energy_out << step << "," << E << "\n";
+    	    }
+
+    	    pos_out.close();
+            energy_out.close();
+
+    	    return 0;
+	}
+``
+The variable
+``const int    N      = std::stoi(argv[1]);``
+is the number of particles read from the command line
+``const int    NSTEPS = 100000;``
+is the number of optimization steps
+``const double lr     = 1e-3;``
+is the optimizer learning rate. Using the code the way its written, the optimizer runs for 100000 steps. Running tthe program with
+```
+	./thomson_sphere N
+``` 
+optimizes the N particle system. Below is a plot of several optimal configurations for N=2,...8 particles.
+[:[:[gbo_graph thomson_sphere_2to8.svg]]]
+
+Below is a plot of the final energy of the system, and its deviation from the theoretically predicted values. The table of theorical energy values for the problem is from [@https://en.wikipedia.org/wiki/Thomson_problem wikipedia].
+[:[:[gbo_graphi thomson_energy_error_gradient_descent.svg]]]
+
+[heading Example using minimize]
+Often, we don't want to actually implement our own stepping function, i.e. we care about certain convergence criteria. In the above example, we need to include the minimier.hpp header:
+```
+	#include <boost/math/optimization/minimizer.hpp>
+``` 
+
+and replace the optimization loop:
+```
+	 for (int step = 0; step < NSTEPS; ++step) {
+            	gdopt.step();
+            	for (int pi = 0; pi < N; ++pi) {
+                	double theta = u_ad[2 * pi + 0].item();
+                 	double phi   = u_ad[2 * pi + 1].item();
+                 	auto   r     = sph_to_xyz(theta, phi);
+                 	pos_out << step << "," << pi << "," << r.x << "," << r.y << "," << r.z << "\n";
+            	}
+        	auto E = gdopt.objective_value();
+       	 	energy_out << step << "," << E << "\n";
+    	    }
+
+```
+with
+```
+	auto result = minimize(gdopt);
+```
+minimize returns a ``optimization_result<typename Optimizer::real_type_t>``, a struct with the following fields:
+```
+	size_t num_iter;
+ 	RealType objective_value;
+	std::vector<RealType> objective_history;
+	bool converged;
+```
+
+where `num_iter` is the number of iterations the optimizer went through, `objective_value` is the final objective value, `objective_history` are the intermediate objective values, and `converged` is whether the convergence criterion was satisfied. By default, `minimize(optimizer)` uses a gradient norm convergence criterion. If norm(gradient_vector) < 1e-3, the criterion is satisfied. Maximum number of iterations is set at 100000. For more info on how to use `minimize` check the minimize docs. With default parameters, gradient descent solves the `N=2` problem in `93799` steps.
+
 [endsect] [/section:gradient_descent]
 
-[section:nesterov Nesterov Gradient Desccent]
+[section:nesterov Nesterov Accelerated Gradient Desccent]
+[heading Synopsis]
+```
+#include <boost/math/optimization/nesterov.hpp>
+
+namespace boost {
+namespace math {
+namespace optimization {
+
+namespace rdiff = boost::math::differentiation::reverse_mode;
+
+/**
+ * @brief The nesterov_accelerated_gradient class
+ *
+ * https://jlmelville.github.io/mize/nesterov.html
+ */
+template<typename ArgumentContainer,
+         typename RealType,
+         class Objective,
+         class InitializationPolicy,
+         class ObjectiveEvalPolicy,
+         class GradEvalPolicy>
+class nesterov_accelerated_gradient
+  : public abstract_optimizer<
+      ArgumentContainer,
+      RealType,
+      Objective,
+      InitializationPolicy,
+      ObjectiveEvalPolicy,
+      GradEvalPolicy,
+      nesterov_update_policy<RealType>,
+      nesterov_accelerated_gradient<ArgumentContainer,
+                                    RealType,
+                                    Objective,
+                                    InitializationPolicy,
+                                    ObjectiveEvalPolicy,
+                                    GradEvalPolicy>>
+{
+public:
+  nesterov_accelerated_gradient(Objective&& objective,
+                                ArgumentContainer& x,
+                                InitializationPolicy&& ip,
+                                ObjectiveEvalPolicy&& oep,
+                                GradEvalPolicy&& gep,
+                                nesterov_update_policy<RealType>&& up);
+  void step();
+};
+
+/* Convenience overloads  */
+/* make nesterov acelerated gradient descent by providing 
+ ** objective function
+ ** variables to optimize over
+ ** Optionally
+ *  - lr: learning rate / step size (typical: 1e-4 .. 1e-1 depending on scaling)
+ *  - mu: momentum coefficient in [0, 1) (typical: 0.8 .. 0.99)
+ */
+
+template<class Objective, typename ArgumentContainer, typename RealType>
+auto make_nag(Objective&& obj,
+              ArgumentContainer& x,
+              RealType lr = RealType{ 0.01 },
+              RealType mu = RealType{ 0.95 });
+
+/* provide initialization policy
+ * lr, and mu no longer optional
+ */
+template<class Objective,
+         typename ArgumentContainer,
+         typename RealType,
+         class InitializationPolicy>
+auto make_nag(Objective&& obj,
+         ArgumentContainer& x,
+         RealType lr,
+         RealType mu,
+         InitializationPolicy&& ip);
+
+/* provide 
+ * initilaization policy
+ * objective evaluation policy
+ * gradient evaluation policy
+ */
+template<typename ArgumentContainer,
+         typename RealType,
+         class Objective,
+         class InitializationPolicy,
+         class ObjectiveEvalPolicy,
+         class GradEvalPolicy>
+auto make_nag(Objective&& obj,
+         ArgumentContainer& x,
+         RealType lr,
+         RealType mu,
+         InitializationPolicy&& ip,
+         ObjectiveEvalPolicy&& oep,
+         GradEvalPolicy&& gep);
+
+} // namespace optimization
+} // namespace math
+} // namespace boost
+```
+
+Nesterov accelerated gradient (NAG) is a first-order optimizer that augments gradient descent with a momentum term and evaluates the gradient at a "lookahead" point. In practice this often improves convergence speed compared to vanilla gradient descent, especially in narrow valleys and ill-conditioned problems.
+
+[heading Algorithm]
+
+NAG maintains a "velocity" vector v (same shape as x). At iteration k it performs:
+```
+v = mu * v - lr * g;
+x += -mu * v_prev + (1 + mu) *v
+```
+where:
+
+lr is the learning rate / step size
+
+mu is the momentum coefficient (typically close to 1)
+
+Setting mu = 0 reduces NAG to standard gradient descent.
+[heading Parameters]
+
+* `Objective&& obj` : objective function to minimize.
+* `ArgumentContainer& x` : variables to optimize over. Updated in place.
+* `RealType lr` : learning rate. Larger values take larger steps (faster but potentially unsable). Smaller values are more stable but converge more slowly.
+* `RealType mu` : momentum coefficient in `[0,1)`. Higher values, e.g. 0.9 to 0.99, typically accelerate convergence but may require a smaller `lr`
+* `InitializationPolicy&& ip` : initialization policy for the optimizer state and variables. For NAG, this also initializes the internal momentum/velocity state. By default the optimizer uses the same initializer as gradient descent and initializes velocity to zero.
+* `ObjectiveEvalPolicy&& oep` : objective evaluation policy. By default `reverse_mode_function_eval_policy<RealType>`
+* `GradEvalPolicy&& gep` : gradient evaluation policy. By default `reverse_mode_gradient_evaluation_policy<RealType>`
+
+[heading Notes]
+* NAG uses the same policy-based design as gradient descent: initialization, objective evaluation, and gradient evaluation can be customized independently.
+* When using reverse-mode AD `rvar`, the objective should be written in terms of AD variables so gradients can be obtained automatically by the default gradient evaluation policy.
+* Typical tuning: start with `mu = 0.9` or `0.95`; if the objective oscillates or diverges, reduce `lr` (or slightly reduce `mu`).
+
+[heading Example : Thomson Sphere]
+```
+#include <boost/math/differentiation/autodiff_reverse.hpp>
+#include <boost/math/optimization/gradient_descent.hpp>
+#include <boost/math/optimization/minimizer.hpp>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <random>
+#include <string>
+namespace rdiff = boost::math::differentiation::reverse_mode;
+namespace bopt  = boost::math::optimization;
+double random_double(double min = 0.0, double max = 1.0)
+{
+    static thread_local std::mt19937       rng{std::random_device{}()};
+    std::uniform_real_distribution<double> dist(min, max);
+    return dist(rng);
+}
+
+template<typename S>
+struct vec3
+{
+    /**
+     * @brief R^3 coordinates of particle on Thomson Sphere
+     */
+    S x, y, z;
+};
+
+template<class S>
+static inline vec3<S> sph_to_xyz(const S& theta, const S& phi)
+{
+    /**
+     * convenience overload to convert from [theta,phi] -> x, y, z
+     */
+    return {sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta)};
+}
+
+template<typename T>
+T thomson_energy(std::vector<T>& r)
+{
+    /* inverse square law
+     */
+    const size_t N    = r.size() / 2;
+    const T      tiny = T(1e-12);
+
+    T E = 0;
+    for (size_t i = 0; i < N; ++i) {
+        const T& theta_i = r[2 * i + 0];
+        const T& phi_i   = r[2 * i + 1];
+        auto     ri      = sph_to_xyz(theta_i, phi_i);
+
+        for (size_t j = i + 1; j < N; ++j) {
+            const T& theta_j = r[2 * j + 0];
+            const T& phi_j   = r[2 * j + 1];
+            auto     rj      = sph_to_xyz(theta_j, phi_j);
+
+            T dx = ri.x - rj.x;
+            T dy = ri.y - rj.y;
+            T dz = ri.z - rj.z;
+
+            T d2 = dx * dx + dy * dy + dz * dz + tiny;
+            E += 1.0 / sqrt(d2);
+        }
+    }
+    return E;
+}
+
+template<class T>
+std::vector<rdiff::rvar<T, 1>> init_theta_phi_uniform(size_t N, unsigned seed = 12345)
+{
+    const T pi = T(3.1415926535897932384626433832795);
+
+    std::mt19937                      rng(seed);
+    std::uniform_real_distribution<T> unif01(T(0), T(1));
+    std::uniform_real_distribution<T> unifm11(T(-1), T(1));
+
+    std::vector<rdiff::rvar<T, 1>> u;
+    u.reserve(2 * N);
+
+    for (size_t i = 0; i < N; ++i) {
+        T z     = unifm11(rng);
+        T phi   = (T(2) * pi) * unif01(rng) - pi;
+        T theta = std::acos(z);
+
+        u.emplace_back(theta);
+        u.emplace_back(phi);
+    }
+    return u;
+}
+
+int main(int argc, char* argv[])
+{
+
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <N>\n";
+        return 1;
+    }
+
+    const int    N      = std::stoi(argv[1]);
+    const double lr     = 1e-3;
+    const double mu 	= 0.95;
+    auto u_ad = init_theta_phi_uniform<double>(N);
+
+    auto nesterov_opt = bopt::make_nag(&thomson_energy<rdiff::rvar<double, 1>>, u_ad, lr, mu);
+
+    // filenames
+    std::string pos_filename    = "thomson_" + std::to_string(N) + ".csv";
+    std::string energy_filename = "nesterov_energy_" + std::to_string(N) + ".csv";
+
+    std::ofstream pos_out(pos_filename);
+    std::ofstream energy_out(energy_filename);
+
+    energy_out << "step,energy\n";
+
+    auto result = minimize(nesterov_opt);
+    for (int pi = 0; pi < N; ++pi) {
+        double theta = u_ad[2 * pi + 0].item();
+        double phi   = u_ad[2 * pi + 1].item();
+        auto   r     = sph_to_xyz(theta, phi);
+        pos_out << pi << "," << r.x << "," << r.y << "," << r.z << "\n";
+    }
+    auto E = nesterov_opt.objective_value();
+    int i = 0;
+    for(auto& obj_hist : result.objective_history)
+    {
+        energy_out << i << "," << obj_hist << "\n";
+        ++i;
+    }
+    energy_out << "," << E << "\n";
+
+    pos_out.close();
+    energy_out.close();
+
+    return 0;
+}
+```
+
+The nesterov version of this problem converges much faster than regular gradient descent, in only `4663` iterations with default parameters, vs the `93799` iterations required by gradient descent.
+
+[:[:[gbo_graph nag_to_gd_comparison.svg]]]
+
 [endsect] [/section:nesterov]
 
 [section:lbfgs L-BFGS]
+[heading Synopsis]
+```
+#include <boost/math/optimization/lbfgs.hpp>
+
+namespace boost {
+namespace math {
+namespace optimization {
+
+namespace rdiff = boost::math::differentiation::reverse_mode;
+
+/**
+ *
+ * @brief Limited-memory BFGS (L-BFGS) optimizer
+ *
+ * The `lbfgs` class implements the Limited-memory BFGS optimization algorithm,
+ * a quasi-Newton method that approximates the inverse Hessian using a rolling
+ * window of the last `m` updates. It is suitable for medium- to large-scale
+ * optimization problems where full Hessian storage is infeasible.
+ *
+ * @tparam> ArgumentContainer: container type for parameters, e.g.
+ * std::vector<RealType>
+ * @tparam> RealType scalar floating type (e.g. double, float)
+ * @tparam> Objective: objective function. must support "f(x)" evaluation
+ * @tparam> InitializationPolicy: policy for initializing x
+ * @tparam> ObjectiveEvalPolicy: policy for computing the objective value
+ * @tparam> GradEvalPolicy: policy for computing gradients
+ * @tparam> LineaSearchPolicy: e.g. Armijo, StrongWolfe
+ *
+ * https://en.wikipedia.org/wiki/Limited-memory_BFGS
+ */
+
+template<typename ArgumentContainer,
+         typename RealType,
+         class Objective,
+         class InitializationPolicy,
+         class ObjectiveEvalPolicy,
+         class GradEvalPolicy,
+         class LineSearchPolicy>
+class lbfgs
+{
+public:
+  lbfgs(Objective&& objective,
+        ArgumentContainer& x,
+        size_t m,
+        InitializationPolicy&& ip,
+        ObjectiveEvalPolicy&& oep,
+        GradEvalPolicy&& gep,
+        lbfgs_update_policy<RealType>&& up,
+        LineSearchPolicy&& lsp);
+
+  void step();
+};
+
+/* Convenience overloads */
+/* create l-bfgs optimizer with
+ * objective function
+ * argument container
+ * optional
+ * - history size : how far to look in the past
+ */
+template<class Objective, typename ArgumentContainer>
+auto make_lbfgs(Objective&& obj, ArgumentContainer& x, std::size_t m = 10);
+
+template<class Objective,
+         typename ArgumentContainer,
+         class InitializationPolicy>
+auto make_lbfgs(Objective&& obj,
+           ArgumentContainer& x,
+           std::size_t m,
+           InitializationPolicy&& ip)
+
+/* construct lbfgs with a custom initialization and line search policy */
+template<class Objective,
+         typename ArgumentContainer,
+         class InitializationPolicy,
+         class LineSearchPolicy>
+auto make_lbfgs(Objective&& obj,
+           ArgumentContainer& x,
+           std::size_t m,
+           InitializationPolicy&& ip,
+           LineSearchPolicy&& lsp);
+
+/* construct lbfgs optimizer with:
+ * custom initialization policy
+ * function evaluation policy
+ * gradient evaluation policy
+ * line search policy
+ */
+template<class Objective,
+         typename ArgumentContainer,
+         class InitializationPolicy,
+         class FunctionEvalPolicy,
+         class GradientEvalPolicy,
+         class LineSearchPolicy>
+auto make_lbfgs(Objective&& obj,
+           ArgumentContainer& x,
+           std::size_t m,
+           InitializationPolicy&& ip,
+           FunctionEvalPolicy&& fep,
+           GradientEvalPolicy&& gep,
+           LineSearchPolicy&& lsp);
+
+} // namespace optimization
+} // namespace math
+} // namespace boost
+```
+
+LBFGS (limited memory BFGS) is a quasi-Newton optimizer that builds an approximation to the inverse Hessian using only first-order information (function values and gradients). Unlike full BFGS, it does not store or update a dense matrix; instead it maintains a fixed size history of the most recent m correction pairs and computes the search direction using a two loop recursion. In practice, LBFGS often converges in significantly fewer iterations than normal gradient based methods, especially on smooth, ill-conditioned objectives.
+
+[heading Algorithm]
+
+At each iteration k, LBFGS:
+* Evaluates the gradient g_k = grad(f(x_k)).
+* Computes a quasi-Newton search direction using the last m updates.
+* Chooses a step length alpha_k using a line search policy.
+* Updates parameters:
+```
+x_k += alpha_k p_k
+```
+* Forms the correction pairs:
+```
+s_k = x_k - x_prev y_k = g_k - g_prev
+```
+and stores up to the last `m` pairs `(s_k, y_k)`.
+
+The line search is a key part of practical LBFGS: it typically removes the need to hand-tune a learning rate and improves robustness.
+
+[heading Parameters]
+
+* `Objective&& obj` : objective function to minimize.
+* `ArgumentContainer& x` : variables to optimize over. Updated in-place.
+* `std::size_t m` : history size. Typical values are 5–20. Default is 10. Larger m can improve directions but increases memory and per-step cost.
+* `InitializationPolicy&& ip` : initialization policy for ArgumentContainer and optimizer state. For reverse-mode AD, the default typically initializes/attaches the tape and uses the user-provided initial values in x.
+* `ObjectiveEvalPolicy&& oep` : policy for evaluating the objective function value at a given x. By default this is a reverse-mode AD evaluation policy when using `rvar`.
+* `GradEvalPolicy&& gep` : policy for evaluating the gradient of the objective. By default this is a reverse-mode AD gradient evaluation policy when using `rvar`.
+* `LineSearchPolicy&& lsp` : policy for selecting the step length alpha. Default is Strong Wolfe, but Armijo is an option. 
+
+[heading Notes]
+
+* LBFGS assumes the objective is sufficiently smooth for gradients to be informative. It is typically most effective on unconstrained smooth problems.
+
+* LBFGS usually requires fewer iterations than gradient descent, but each iteration is more expensive because it performs multiple objective/gradient evaluations during line search.
+
+[heading Example : Thomson Problem]
+```
+#include <boost/math/differentiation/autodiff_reverse.hpp>
+#include <boost/math/optimization/lbfgs.hpp>
+#include <boost/math/optimization/minimizer.hpp>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <random>
+#include <string>
+namespace rdiff = boost::math::differentiation::reverse_mode;
+namespace bopt  = boost::math::optimization;
+double random_double(double min = 0.0, double max = 1.0)
+{
+    static thread_local std::mt19937       rng{std::random_device{}()};
+    std::uniform_real_distribution<double> dist(min, max);
+    return dist(rng);
+}
+
+template<typename S>
+struct vec3
+{
+    /**
+     * @brief R^3 coordinates of particle on Thomson Sphere
+     */
+    S x, y, z;
+};
+
+template<class S>
+static inline vec3<S> sph_to_xyz(const S& theta, const S& phi)
+{
+    /**
+     * convenience overload to convert from [theta,phi] -> x, y, z
+     */
+    return {sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta)};
+}
+
+template<typename T>
+T thomson_energy(std::vector<T>& r)
+{
+    /* inverse square law
+     */
+    const size_t N    = r.size() / 2;
+    const T      tiny = T(1e-12);
+
+    T E = 0;
+    for (size_t i = 0; i < N; ++i) {
+        const T& theta_i = r[2 * i + 0];
+        const T& phi_i   = r[2 * i + 1];
+        auto     ri      = sph_to_xyz(theta_i, phi_i);
+
+        for (size_t j = i + 1; j < N; ++j) {
+            const T& theta_j = r[2 * j + 0];
+            const T& phi_j   = r[2 * j + 1];
+            auto     rj      = sph_to_xyz(theta_j, phi_j);
+
+            T dx = ri.x - rj.x;
+            T dy = ri.y - rj.y;
+            T dz = ri.z - rj.z;
+
+            T d2 = dx * dx + dy * dy + dz * dz + tiny;
+            E += 1.0 / sqrt(d2);
+        }
+    }
+    return E;
+}
+
+template<class T>
+std::vector<rdiff::rvar<T, 1>> init_theta_phi_uniform(size_t N, unsigned seed = 12345)
+{
+    const T pi = T(3.1415926535897932384626433832795);
+
+    std::mt19937                      rng(seed);
+    std::uniform_real_distribution<T> unif01(T(0), T(1));
+    std::uniform_real_distribution<T> unifm11(T(-1), T(1));
+
+    std::vector<rdiff::rvar<T, 1>> u;
+    u.reserve(2 * N);
+
+    for (size_t i = 0; i < N; ++i) {
+        T z     = unifm11(rng);
+        T phi   = (T(2) * pi) * unif01(rng) - pi;
+        T theta = std::acos(z);
+
+        u.emplace_back(theta);
+        u.emplace_back(phi);
+    }
+    return u;
+}
+
+int main(int argc, char* argv[])
+{
+
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <N>\n";
+        return 1;
+    }
+
+    const int    N      = std::stoi(argv[1]);
+    auto u_ad = init_theta_phi_uniform<double>(N);
+
+    auto lbfgs_opt = bopt::make_lbfgs(&thomson_energy<rdiff::rvar<double, 1>>, u_ad);
+
+    // filenames
+    std::string pos_filename    = "thomson_" + std::to_string(N) + ".csv";
+    std::string energy_filename = "lbfgs_energy_" + std::to_string(N) + ".csv";
+
+    std::ofstream pos_out(pos_filename);
+    std::ofstream energy_out(energy_filename);
+
+    energy_out << "step,energy\n";
+
+    auto result = minimize(lbfgs_opt);
+    for (int pi = 0; pi < N; ++pi) {
+        double theta = u_ad[2 * pi + 0].item();
+        double phi   = u_ad[2 * pi + 1].item();
+        auto   r     = sph_to_xyz(theta, phi);
+        pos_out << pi << "," << r.x << "," << r.y << "," << r.z << "\n";
+    }
+    auto E = lbfgs_opt.objective_value();
+    int i = 0;
+    for(auto& obj_hist : result.objective_history)
+    {
+        energy_out << i << "," << obj_hist << "\n";
+        ++i;
+    }
+    energy_out << "," << E << "\n";
+
+    pos_out.close();
+    energy_out.close();
+
+    return 0;
+}
+```
+For the `N = 2` case, LBFGS requires only 5 iterations to converge, the nesterov version of this problem converges in `4663` iterations with default parameters, and gradient descent requires `93799` iterations. Convergence is assumed to mean the norm of the gradient is less than `1e-3`. Below is a plot showcasing the 3 different methods for the `N=20` particle case.
+
+[:[:[gbo_graph lbfgs_to_nag_and_gd_comparison.svg]]]
+
+In this case, gradient descent reaches the maximum number of iterations, and does not converge, nag converges in `150` iterations, and LBFGS converges in `67` iterations.
+
 [endsect] [/section:lbfgs]
 
+[section:minimize minimize]
+[heading Synopsis]
+```
+#include <boost/math/optimization/minimizer.hpp>
+
+namespace boost {
+namespace math {
+namespace optimization {
+template<typename RealType>
+struct optimization_result
+{
+  size_t num_iter = 0;
+  RealType objective_value;
+  std::vector<RealType> objective_history;
+  bool converged;
+};
+
+/* Minimize an objective using a given optimizer.
+ *
+ * The optimizer `opt` must expose a `step()` method and the associated
+ * typedefs:
+ *   - argument_container_t
+ *   - real_type_t
+ *
+ * The behavior of the minimization loop is controlled by policy objects:
+ *  - ConstraintPolicy: projects variables onto a feasible set 
+ *  - ConvergencePolicy: determines when convergence has been reached
+ *  - TerminationPolicy: determines when optimization must stop regardless
+ *    of convergence (e.g. max iterations)
+ *
+ * The function returns an `optimization_result` summarizing the run.
+ */
+template<class Optimizer,
+         class ConstraintPolicy =
+           unconstrained_policy<typename Optimizer::argument_container_t>,
+         class ConvergencePolicy =
+           gradient_norm_convergence_policy<typename Optimizer::real_type_t>,
+         class TerminationPolicy = max_iter_termination_policy>
+auto minimize(Optimizer& opt,
+         ConstraintPolicy project = ConstraintPolicy{},
+         ConvergencePolicy converged =
+           ConvergencePolicy{
+             static_cast<typename Optimizer::real_type_t>(1e-3) },
+         TerminationPolicy terminate = TerminationPolicy(100000),
+         bool history = true)
+```
+
+This header provides a generic driver function `minimize` that repeatedly advances an optimizer via `step()`, optionally projects parameters onto a constraint set, and stops when either a convergence criterion is met or a termination criterion triggers.
+
+[heading Parameters]
+* `Optimizer& opt` : Optimizer instance.
+* `ConstraintPolicy project` : Projection policy applied after each `step()`. Default is `unconstrained_policy` (no projection).
+* `ConvergencePolicy converged` : Stopping criterion. Default is `gradient_norm_convergence_policy(tol=1e-3)`.
+* `TerminationPolicy terminate` : Hard stop criterion. Default is `max_iter_termination_policy(100000)`.
+* `bool history` : If true, records `opt.objective_value()` after each iteration in `optimization_result::objective_history.`
+
+[heading Convergence Policies]
+Convergence policies decide when the optimization has converged. Each policy has the signature:
+```
+bool operator()(const GradientContainer& g, RealType objective_value) const;
+```
+[heading gradient_norm_convergence_policy]
+
+Stops when the Euclidean norm of the gradient falls below a tolerance:
+```
+template<typename RealType>
+struct gradient_norm_convergence_policy
+{
+explicit gradient_norm_convergence_policy(RealType tol);
+
+template<class GradientContainer>
+bool operator()(const GradientContainer& g, RealType objective_v) const;
+};
+```
+[heading objective_tol_convergence_policy]
+
+Stops when the absolute change in objective value between successive iterations drops below a tolerance:
+```
+template<typename RealType>
+struct objective_tol_convergence_policy
+{
+explicit objective_tol_convergence_policy(RealType tol);
+
+template<class GradientContainer>
+bool operator()(const GradientContainer&, RealType objective_v) const;
+};
+```
+The first call always returns false
+
+[heading relative_objective_tol_policy]
+
+Stops when the relative objective change drops below a tolerance:
+```
+template<typename RealType>
+struct relative_objective_tol_policy
+{
+explicit relative_objective_tol_policy(RealType rel_tol);
+
+template<class GradientContainer>
+bool operator()(const GradientContainer&, RealType objective_v) const;
+};
+```
+The relative change is computed as:
+```
+abs(obj - last_obj) / max(1, abs(last_obj))
+```
+
+[heading combined_convergence_policy]
+
+Combines two convergence policies and stops when either triggers:
+```
+template<class Policy1, class Policy2>
+struct combined_convergence_policy
+{
+combined_convergence_policy(Policy1 p1, Policy2 p2);
+
+template<class GradientContainer, class RealType>
+bool operator()(const GradientContainer& g, RealType obj) const;
+};
+```
+
+[heading Termination Policies]
+
+Termination policies provide a hard stop independent of convergence. Each policy has the signature:
+
+```
+bool operator()(size_t iter);
+```
+
+[heading max_iter_termination_policy]
+
+Stops after a fixed number of iterations
+```
+struct max_iter_termination_policy { explicit max_iter_termination_policy(size_t max_iter); bool operator()(size_t iter); };
+```
+
+[heading wallclock_termination_policy]
+
+Stops after a wall-clock time budget:
+```
+struct wallclock_termination_policy { explicit wallclock_termination_policy(std::chrono::milliseconds max_time); bool operator()(size_t iter) const; };
+```
+
+[heading Constraint and Projection Policies]
+
+Projection policies modify the optimizer variables after each step. Each policy has the signature:
+
+```
+void operator()(ArgumentContainer& x) const;
+```
+
+[heading unconstrained_policy]
+
+No projection; leaves parameters unchanged
+
+```
+template<typename ArgumentContainer> struct unconstrained_policy { void operator()(ArgumentContainer&); };
+```
+
+[heading box_constraints]
+
+Clamps each variable into `[min, max]`
+
+```
+template<typename ArgumentContainer, typename RealType> struct box_constraints { box_constraints(RealType min, RealType max); void operator()(ArgumentContainer& x); };
+```
+
+[heading nonnegativity_constraint]
+
+Sets anything less than `0` to `0`
+
+```
+template<typename ArgumentContainer, typename RealType> struct nonnegativity_constraint { void operator()(ArgumentContainer& x) const; };
+```
+
+[heading l2_ball_constraint]
+
+Projects onto the `L2` ball of radius `radius` by uniform scaling when needed
+
+```
+template<typename ArgumentContainer, typename RealType> struct l2_ball_constraint { explicit l2_ball_constraint(RealType radius); void operator()(ArgumentContainer& x) const; };
+```
+
+[heading l1_ball_constraint]
+
+Projects onto the `L1` ball of radius `radius` by uniform scaling
+
+```
+template<typename ArgumentContainer, typename RealType> struct l1_ball_constraint { explicit l1_ball_constraint(RealType radius); void operator()(ArgumentContainer& x) const; };
+```
+
+This is not the exact Euclidean projection onto the L1 ball; it is a simple scaling-based constraint
+
+[heading simplex_constraint]
+
+Projects onto the scaled probability simplex by clipping negatives to `0` and renormalizing to sum to `1`
+
+```
+template<typename ArgumentContainer, typename RealType> struct simplex_constraint { void operator()(ArgumentContainer& x) const; };
+```
+
+[heading function_constraint]
+
+Wraps a user-provided projection function
+
+```
+template<typename ArgumentContainer> struct function_constraint { using func_t = void (*)(ArgumentContainer&); explicit function_constraint(func_t f); void operator()(ArgumentContainer& x) const; };
+```
+
+[heading unit_sphere_constraint]
+
+Normalizes the vector to unit L2 norm
+
+```
+template<typename ArgumentContainer, typename RealType> struct unit_sphere_constraint { void operator()(ArgumentContainer& x) const; };
+```
+
+This projects onto the unit sphere (if ||x||_2 > 0)
+
+[endsect] [/section:minimize]
+
+[section:policies Reverse Mode autodiff policies]
+This header provides default policy implementations for using the gradient-based optimizers with `boost::math::differentiation::reverse_mode::rvar` These policies handle:
+
+* preparing the reverse-mode tape before evaluating an objective,
+* extracting gradients from rvar arguments after backpropagation,
+* initializing `rvar` containers and establishing tape checkpoints.
+
+[heading Synopsis]
+
+```
+#include <boost/math/optimization/detail/rdiff_optimization_policies>
+
+namespace boost {
+namespace math {
+namespace optimization {
+
+namespace rdiff = boost::math::differentiation::reverse_mode;
+
+/**
+ * @brief> function evaluation policy for reverse mode autodiff
+ * @arg objective> objective function to evaluate
+ * @arg x> argument list
+ */
+template<typename RealType>
+struct reverse_mode_function_eval_policy
+{
+  template<typename Objective, class ArgumentContainer>
+  rdiff::rvar<RealType, 1> operator()(Objective&& objective,
+                                      ArgumentContainer& x);
+};
+
+/**
+ * @brief> gradient evaluation policy
+ * @arg obj_f> objective
+ * @arg x> argument list
+ * @arg f_eval_olicy> funciton evaluation policy. These need to be
+ *                    done in tandem
+ * @arg obj_v> reference to variable inside gradient class
+ */
+template<typename RealType>
+struct reverse_mode_gradient_evaluation_policy
+{
+  template<class Objective,
+           class ArgumentContainer,
+           class FunctionEvaluationPolicy>
+  void operator()(Objective&& obj_f,
+                  ArgumentContainer& x,
+                  FunctionEvaluationPolicy&& f_eval_pol,
+                  RealType& obj_v,
+                  std::vector<RealType>& g)
+};
+ /*
+ * init policies
+ */
+
+/* default rvar policy */
+template<typename RealType>
+struct tape_initializer_rvar
+{
+    template<class ArgumentContainer>
+    void operator()(ArgumentContainer& x) const noexcept;
+};
+
+/* random uniform */
+template<typename RealType>
+struct random_uniform_initializer_rvar
+{
+  RealType low_, high_;
+  size_t seed_;
+  random_uniform_initializer_rvar(RealType low = 0,
+                                  RealType high = 1,
+                                  size_t seed = std::random_device{}());
+
+  template<class ArgumentContainer>
+  void operator()(ArgumentContainer& x) const;
+};
+
+/* constant initializer */
+template<typename RealType>
+struct costant_initializer_rvar
+{
+  RealType constant;
+  explicit costant_initializer_rvar(RealType v = 0);
+
+  template<class ArgumentContainer>
+  void operator()(ArgumentContainer& x) const;
+};
+} // namespace optimization
+} // namespace math
+} // namespace boost
+```
+
+[heading Function evaluation policies]
+
+A function evaluation policy defines how an objective is evaluated at the current parameters, and is responsible for any AD bookkeeping required before the call.
+
+[heading reverse_mode_function_eval_policy]
+```
+template<typename RealType> struct reverse_mode_function_eval_policy { template<typename Objective, class ArgumentContainer> rdiff::rvar<RealType, 1> operator()(Objective&& objective, ArgumentContainer& x); };
+```
+This policy evaluates the objective objective(x) using reverse-mode AD and ensures the active tape is in a valid state before evaluation:
+
+ArgumentContainer must contain rdiff::rvar<RealType,1> values.
+
+[heading Gradient evaluation policies]
+
+A gradient evaluation policy defines how gradients are computed and extracted into an ordinary numeric container.
+
+[heading reverse_mode_gradient_evaluation_policy]
+
+```
+template<typename RealType> struct reverse_mode_gradient_evaluation_policy { template<class Objective, class ArgumentContainer, class FunctionEvaluationPolicy> void operator()(Objective&& obj_f, ArgumentContainer& x, FunctionEvaluationPolicy&& f_eval_pol, RealType& obj_v, std::vector<RealType>& g); };
+```
+
+This policy computes the objective value and gradient using reverse-mode autodiff
+
+[heading Initialization policies]
+
+Initialization policies prepare the argument container and the reverse-mode tape for optimization. They establish tape checkpoints that are later used by function/gradient evaluation policies.
+
+[heading tape_initializer_rvar]
+
+```
+template<typename RealType> struct tape_initializer_rvar { template<class ArgumentContainer> void operator()(ArgumentContainer& x) const noexcept; };
+```
+
+This policy: 
+* statically requires `ArgumentContainer::value_type` to be `rdiff::rvar<RealType,1>`,
+* adds a checkpoint to the active reverse-mode tape via `tape.add_checkpoint()`
+
+[heading random_uniform_initializer_rvar]
+
+```
+template<typename RealType>
+struct random_uniform_initializer_rvar
+{
+random_uniform_initializer_rvar(RealType low = 0,
+RealType high = 1,
+size_t seed = std::random_device{}());
+
+template<class ArgumentContainer>
+void operator()(ArgumentContainer& x) const;
+};
+```
+
+This policy initializes each element of x independently as:
+```
+x[i] = rdiff::rvar<RealType,1>(U(low, high))
+```
+
+using
+```
+boost::random::mt19937
+```
+
+and
+ 
+```
+boost::random::uniform_real_distribution<RealType>
+```
+
+[heading costant_initializer_rvar]
+
+```
+template<typename RealType>
+struct costant_initializer_rvar
+{
+explicit costant_initializer_rvar(RealType v = 0);
+
+template<class ArgumentContainer>
+void operator()(ArgumentContainer& x) const;
+};
+```
+
+This policy initializes each element of x to the constant value v
+
+[endsect] [/section:policies]
 
 [endsect] [/section:gd_opt]

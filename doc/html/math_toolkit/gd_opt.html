@@ -1,6 +1,6 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
 <title>Gradient Based Optimizers</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
@@ -30,23 +30,18 @@
 <div class="toc"><dl class="toc">
 <dt><span class="section"><a href="gd_opt/introduction.html">Introduction</a></span></dt>
 <dt><span class="section"><a href="gd_opt/gradient_descent.html">Gradient Desccent</a></span></dt>
-<dt><span class="section"><a href="gd_opt/nesterov.html">Nesterov Gradient Desccent</a></span></dt>
+<dt><span class="section"><a href="gd_opt/nesterov.html">Nesterov Accelerated Gradient
+      Desccent</a></span></dt>
 <dt><span class="section"><a href="gd_opt/lbfgs.html">L-BFGS</a></span></dt>
+<dt><span class="section"><a href="gd_opt/minimize.html">minimize</a></span></dt>
+<dt><span class="section"><a href="gd_opt/policies.html">Reverse Mode autodiff policies</a></span></dt>
 </dl></div>
-<p>
-      Gradient based optimizers are algorithms that use the gradient of a funciton
-      to iteratively find locally extreme points of functions over a set of parameters.
-      This sections provides a description of a set of gradient optimizers. The optimizers
-      are written with <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">differentiation</span><span class="special">::</span><span class="identifier">reverse_mode</span><span class="special">::</span><span class="identifier">rvar</span></code> in
-      mind, however if a way to evaluate the funciton and its gradient is provided,
-      the optimizers should work in exactly the same way.
-    </p>
 </div>
 <div class="copyright-footer">Copyright © 2006-2021 Nikhar Agrawal, Anton Bikineev, Matthew Borland,
       Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno
       Lalande, John Maddock, Evan Miller, Jeremy Murphy, Matthew Pulver, Johan Råde,
       Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle
-      Walker and Xiaogang Zhang<p>
+      Walker, Xiaogang Zhang, and Maksym Zhelyeznyakov<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

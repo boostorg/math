@@ -323,8 +323,8 @@ minimize(Optimizer& opt,
          ConstraintPolicy project = ConstraintPolicy{},
          ConvergencePolicy converged =
            ConvergencePolicy{
-             static_cast<typename Optimizer::real_type_t>(1e-8) },
-         TerminationPolicy terminate = TerminationPolicy(10000),
+             static_cast<typename Optimizer::real_type_t>(1e-3) },
+         TerminationPolicy terminate = TerminationPolicy(100000),
          bool history = true)
 {
   return minimize_impl(opt, project, converged, terminate, history);
