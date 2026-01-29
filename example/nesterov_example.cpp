@@ -1,3 +1,7 @@
+//           Copyright Maksym Zhelyenzyakov 2026.
+// Distributed under the Boost Software License, Version 1.0.
+//      (See accompanying file LICENSE_1_0.txt or copy at
+//           https://www.boost.org/LICENSE_1_0.txt)
 #include <boost/math/differentiation/autodiff_reverse.hpp>
 #include <boost/math/optimization/gradient_descent.hpp>
 #include <boost/math/optimization/minimizer.hpp>
@@ -96,7 +100,7 @@ int main(int argc, char* argv[])
 
     const int    N      = std::stoi(argv[1]);
     const double lr     = 1e-3;
-    const double mu 	= 0.95;
+    const double mu     = 0.95;
     auto u_ad = init_theta_phi_uniform<double>(N);
 
     auto nesterov_opt = bopt::make_nag(&thomson_energy<rdiff::rvar<double, 1>>, u_ad, lr, mu);
