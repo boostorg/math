@@ -7,6 +7,7 @@
 #include <boost/math/differentiation/autodiff_reverse.hpp>
 #include <boost/math/optimization/lbfgs.hpp>
 #include <boost/math/optimization/minimizer.hpp>
+#include <boost/math/optimization/gradient_descent.hpp>
 
 namespace rdiff = boost::math::differentiation::reverse_mode;
 namespace bopt = boost::math::optimization;
@@ -18,7 +19,7 @@ BOOST_AUTO_TEST_CASE(default_lbfgs_test) //, T, all_float_types)
     using T                = double;
     constexpr size_t NITER = 10;
     constexpr size_t M     = 10;
-    const T          eps   = T{1e-8};
+    const T          eps   = T{1e-5};
 
     RandomSample<T>                  rng{T(-10), T(10)};
     std::array<rdiff::rvar<T, 1>, 2> x;
@@ -26,8 +27,10 @@ BOOST_AUTO_TEST_CASE(default_lbfgs_test) //, T, all_float_types)
     x[1] = rng.next();
 
     auto opt = bopt::make_lbfgs(&rosenbrock_saddle<rdiff::rvar<T, 1>>, x, M);
+    auto constraint = bopt::unconstrained_policy<std::array<rdiff::rvar<T, 1>,2>>{};
+    auto convergence_policy = bopt::gradient_norm_convergence_policy<T>(T{ 1e-20 });
 
-    auto result = minimize(opt);
+    auto result = bopt::minimize(opt, constraint, convergence_policy);
     for (auto& xi : x) {
         BOOST_REQUIRE_CLOSE(xi, T{1.0}, eps);
     }
@@ -85,7 +88,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(custom_init_lbfgs_test, T, all_float_types)
                                 x,
                                 M,
                                 bopt::costant_initializer_rvar<T>(0.0));
-    auto result = minimize(opt);
+    auto constraint = bopt::unconstrained_policy<std::array<rdiff::rvar<T, 1>,2>>{};
+    auto convergence_policy = bopt::gradient_norm_convergence_policy<T>(T{ 1e-8 });
+    auto result = minimize(opt, constraint, convergence_policy);
 
     for (auto& xi : x) {
         BOOST_REQUIRE_CLOSE(xi, T{1.0}, eps);

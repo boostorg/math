@@ -13,7 +13,7 @@ BOOST_AUTO_TEST_SUITE(nesterov_descent)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(default_nesterov_test, T, all_float_types)
 {
-  T lr = T{ 1e-4 };
+  T lr = T{ 1e-5 };
   T mu = T{ 0.95 };
   RandomSample<T> rng{ T(-10), (10) };
   std::vector<rdiff::rvar<T, 1>> x;
@@ -22,7 +22,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(default_nesterov_test, T, all_float_types)
   T eps = T{ 1e-8 };
   auto nag =
     bopt::make_nag(&quadratic_high_cond_2D<rdiff::rvar<T, 1>>, x, lr, mu);
-  auto z = minimize(nag);
+  auto constraint = bopt::unconstrained_policy<std::vector<rdiff::rvar<T, 1>>>{};
+  auto convergence_policy = bopt::gradient_norm_convergence_policy<T>(T{ 1e-8 });
+
+  auto z = minimize(nag, constraint, convergence_policy);
   for (auto& xi : x) {
     BOOST_REQUIRE_SMALL(xi.item(), eps);
   }
