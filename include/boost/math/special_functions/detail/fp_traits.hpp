@@ -274,7 +274,7 @@ template<> struct fp_traits_non_native<double, double_precision>
    || defined(BOOST_BORLANDC) || defined(__CODEGEAR__) || (defined(__APPLE__) && defined(__aarch64__)) || defined(_MSC_VER)\
     || (defined(__GNUC__) && defined(__aarch64__) && defined(_WIN32))\
      || (defined(__GNUC__) && (defined(__arm__) || defined(__thumb__)))\
-      || defined(__SYCL_DEVICE_ONLY__)
+      || defined(__SYCL_DEVICE_ONLY__) || (LDBL_MANT_DIG == 53)
 
 static_assert(LDBL_MANT_DIG == 53, "Oops, assumption that long double is a 64-bit quantity is incorrect!!");
 
@@ -436,7 +436,7 @@ struct fp_traits_non_native<long double, extended_double_precision>
 
 // long double (>64 bits), All other processors --------------------------------
 
-#else
+#elif (LDBL_MANT_DIG == 113)
 
 // IEEE extended double precision format with 15 exponent bits (128 bits)
 
@@ -467,6 +467,10 @@ struct fp_traits_non_native<long double, extended_double_precision>
 private:
     BOOST_MATH_STATIC constexpr int offset_ = BOOST_MATH_ENDIAN_BIG_BYTE ? 0 : 12;
 };
+
+#else
+
+// Nothing in here, we don't understand the format!
 
 #endif
 
