@@ -3,13 +3,11 @@
 //      (See accompanying file LICENSE_1_0.txt or copy at
 //           https://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef LINE_SEARCH_POLICIES_HPP
-#define LINE_SEARCH_POLICIES_HPP
+#ifndef BOOST_MATH_OPTIMIZATION_DETAIL_LINE_SEARCH_POLICIES_HPP
+#define BOOST_MATH_OPTIMIZATION_DETAIL_LINE_SEARCH_POLICIES_HPP
 
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
 #include <cmath>
-#include <iostream>
-#include <numeric>
 #include <vector>
 namespace boost {
 namespace math {

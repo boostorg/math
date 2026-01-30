@@ -2,8 +2,8 @@
 // Distributed under the Boost Software License, Version 1.0.
 //      (See accompanying file LICENSE_1_0.txt or copy at
 //           https://www.boost.org/LICENSE_1_0.txt)
-#ifndef NESTEROV_HPP
-#define NESTEROV_HPP
+#ifndef BOOST_MATH_OPTIMIZATION_NESTEROV_HPP
+#define BOOST_MATH_OPTIMIZATION_NESTEROV_HPP
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
 #include <boost/math/optimization/detail/gradient_opt_base.hpp>
 #include <boost/math/optimization/detail/rdiff_optimization_policies.hpp>

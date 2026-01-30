@@ -2,8 +2,8 @@
 // Distributed under the Boost Software License, Version 1.0.
 //      (See accompanying file LICENSE_1_0.txt or copy at
 //           https://www.boost.org/LICENSE_1_0.txt)
-#ifndef GRADIENT_OPT_BASE_HPP
-#define GRADIENT_OPT_BASE_HPP
+#ifndef BOOST_MATH_OPTIMIZATION_DETAIL_GRADIENT_OPT_BASE_HPP
+#define BOOST_MATH_OPTIMIZATION_DETAIL_GRADIENT_OPT_BASE_HPP
 #include <boost/math/differentiation/autodiff_reverse.hpp>
 
 namespace boost {

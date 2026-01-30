@@ -99,7 +99,7 @@ The interface is intended to be pytorch-like, where a optimizer object is constr
 * `Objective&& obj` : objective function to minimize
 * `ArgumentContainer& x` : variables to optimize over
 * `RealType& lr` : learning rate. A larger value takes larger steps during descent, leading to faster, but more unstable convergence. Conversely, small values are more stable but take longer to converge.
-* `InitializationPolicy&& ip` : Initialization policy for `ArgumentContainer`, or the initial guess. By default it is set to `tape_initializer_rvar<RealType>` which lets the user provide the "initial guess" by setting the values of `x` manually. For more info check the Policies section.
+* `InitializationPolicy&& ip` : Initialization policy for optimizer state and variables. Users may supply a custom initialization policy to control how the argument container and any AD specific runtime state : i.e. reverse-mode tape attachment/reset are initialized. By default, the optimizer uses the user-provided initial values in x and performs the standard reverse mode AD initialization required for gradient evaluation. Custom initialization policies are useful for randomized starts, non rvar AD types, or when gradients are supplied externally. See the reverse-mode autodiff policy documentation for the required initialization policy interface when writing custom policies.
 * `ObjectiveEvalPolicy&& oep` : tells the optimizer how to evaluate the objective function. By default `reverse_mode_function_eval_policy<RealType>`.
 * `GradEvalPolicy&& gep` : tells the optimizer how to evaluate the gradient of the objective function. By default `reverse_mode_gradient_evaluation_policy<RealType>`
 
@@ -415,7 +415,7 @@ Setting mu = 0 reduces NAG to standard gradient descent.
 * `ArgumentContainer& x` : variables to optimize over. Updated in place.
 * `RealType lr` : learning rate. Larger values take larger steps (faster but potentially unstable). Smaller values are more stable but converge more slowly.
 * `RealType mu` : momentum coefficient in `[0,1)`. Higher values, e.g. 0.9 to 0.99, typically accelerate convergence but may require a smaller `lr`
-* `InitializationPolicy&& ip` : initialization policy for the optimizer state and variables. For NAG, this also initializes the internal momentum/velocity state. By default the optimizer uses the same initializer as gradient descent and initializes velocity to zero.
+* `InitializationPolicy&& ip` : Initialization policy for optimizer state and variables. Users may supply a custom initialization policy to control how the argument container and any AD-specific runtime state : i.e. reverse-mode tape attachment/reset are initialized. By default, the optimizer uses the same initialization as gradient descent, taking the user provided initial values in x and initializing the internal momentum/velocity state to zero. Custom initialization policies are useful for randomized starts, non rvar AD types, or when gradients are supplied externally. Check the docs for Reverse Mode autodiff policies for initialization policy structure to write custom policies.
 * `ObjectiveEvalPolicy&& oep` : objective evaluation policy. By default `reverse_mode_function_eval_policy<RealType>`
 * `GradEvalPolicy&& gep` : gradient evaluation policy. By default `reverse_mode_gradient_evaluation_policy<RealType>`
 
@@ -700,11 +700,10 @@ The line search is a key part of practical LBFGS: it typically removes the need 
 * `Objective&& obj` : objective function to minimize.
 * `ArgumentContainer& x` : variables to optimize over. Updated in-place.
 * `std::size_t m` : history size. Typical values are 5–20. Default is 10. Larger m can improve directions but increases memory and per-step cost.
-* `InitializationPolicy&& ip` : initialization policy for ArgumentContainer and optimizer state. For reverse-mode AD, the default typically initializes/attaches the tape and uses the user-provided initial values in x.
+* `InitializationPolicy&& ip` : Initialization policy for optimizer state and variables. Users may supply a custom initialization policy to control how the argument container and any AD-specific runtime state : i.e. reverse-mode tape attachment/reset are initialized. By default, the optimizer uses the same initialization as gradient descent, taking the user provided initial values in x and initializing the internal momentum/velocity state to zero. Custom initialization policies are useful for randomized starts, non rvar AD types, or when gradients are supplied externally. Check the docs for Reverse Mode autodiff policies for initialization policy structure to write custom policies.
 * `ObjectiveEvalPolicy&& oep` : policy for evaluating the objective function value at a given x. By default this is a reverse-mode AD evaluation policy when using `rvar`.
 * `GradEvalPolicy&& gep` : policy for evaluating the gradient of the objective. By default this is a reverse-mode AD gradient evaluation policy when using `rvar`.
-* `LineSearchPolicy&& lsp` : policy for selecting the step length alpha. Default is Strong Wolfe, but Armijo is an option. 
-
+* `LineSearchPolicy&& lsp` : policy for selecting the step length alpha along a search direction. Determines the acceptance criteria and how many function/gradient evaluations may be performed during a step Default is Strong Wolfe, but Armijo is an option. Strong Wolfe uses both function and gradient information to ensure good curvature conditions, while Armijo relies only on function decrease and is simpler but less robust for quasi-Newton methods.
 [heading Notes]
 
 * LBFGS assumes the objective is sufficiently smooth for gradients to be informative. It is typically most effective on unconstrained smooth problems.

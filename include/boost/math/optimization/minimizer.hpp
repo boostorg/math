@@ -2,11 +2,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 //      (See accompanying file LICENSE_1_0.txt or copy at
 //           https://www.boost.org/LICENSE_1_0.txt)
-#ifndef MINIMIZER_HPP
-#define MINIMIZER_HPP
+#ifndef BOOST_MATH_OPTIMIZATION_MINIMIZER_HPP
+#define BOOST_MATH_OPTIMIZATION_MINIMIZER_HPP
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
 #include <boost/math/optimization/gradient_optimizers.hpp>
 #include <vector>
+#include <chrono>
 namespace boost {
 namespace math {
 namespace optimization {

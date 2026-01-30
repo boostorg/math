@@ -2,12 +2,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 //      (See accompanying file LICENSE_1_0.txt or copy at
 //           https://www.boost.org/LICENSE_1_0.txt)
-#ifndef GRADIENT_DESCENT_HPP
-#define GRADIENT_DESCENT_HPP
+#ifndef BOOST_MATH_OPTIMIZATION_GRADIENT_DESCENT_HPP
+#define BOOST_MATH_OPTIMIZATION_GRADIENT_DESCENT_HPP
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
 #include <boost/math/optimization/detail/gradient_opt_base.hpp>
 #include <boost/math/optimization/detail/rdiff_optimization_policies.hpp>
-namespace rdiff = boost::math::differentiation::reverse_mode;
 
 namespace boost {
 namespace math {
@@ -26,10 +25,6 @@ struct gradient_descent_update_policy
                ArgumentType>::value>::type>
   void operator()(ArgumentType& x, RealType& g)
   {
-    // this update effectively "mutes" the tape
-    // TODO: add a tape scope guard method so that
-    // you can do math on autodiff types without
-    // accumulating gradients
     x.get_value() -= lr_ * g;
   }
   template<typename ArgumentType,

@@ -2,21 +2,19 @@
 // Distributed under the Boost Software License, Version 1.0.
 //      (See accompanying file LICENSE_1_0.txt or copy at
 //           https://www.boost.org/LICENSE_1_0.txt)
-#ifndef LBFGS_HPP
-#define LBFGS_HPP
+#ifndef BOOST_MATH_OPTIMIZATION_LBFGS_HPP
+#define BOOST_MATH_OPTIMIZATION_LBFGS_HPP
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
 #include <boost/math/optimization/detail/gradient_opt_base.hpp>
 #include <boost/math/optimization/detail/rdiff_optimization_policies.hpp>
 #include <vector>
 
-#include "boost/math/optimization/detail/line_search_policies.hpp"
+#include <boost/math/optimization/detail/line_search_policies.hpp>
 #include <deque>
 
 namespace boost {
 namespace math {
 namespace optimization {
-
-namespace rdiff = boost::math::differentiation::reverse_mode;
 
 /** @brief> Helper struct for L-BFGS
  *

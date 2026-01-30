@@ -2,11 +2,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 //      (See accompanying file LICENSE_1_0.txt or copy at
 //           https://www.boost.org/LICENSE_1_0.txt)
-#ifndef DIFFERENTIABLE_OPT_UTILITIES_HPP
-#define DIFFERENTIABLE_OPT_UTILITIES_HPP
+#ifndef BOOST_MATH_OPTIMIZATION_DETAIL_DIFFERENTIABLE_OPT_UTILITIES_HPP
+#define BOOST_MATH_OPTIMIZATION_DETAIL_DIFFERENTIABLE_OPT_UTILITIES_HPP
 #include <boost/math/differentiation/autodiff_reverse.hpp>
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_real_distribution.hpp>
+#include <boost/random.hpp>
 #include <cmath>
 #include <random>
 #include <type_traits>
@@ -70,7 +69,6 @@ struct argument_container_t<Container<rdiff::rvar<RealType, N>, Args...>>
 };
 /******************************************************************************/
 /** @brief simple blas helpers
- * may optimize later if benchmarks show its needed, or just switch to Eigen
  */
 template<typename Container>
 auto
@@ -145,12 +143,6 @@ random_vector(size_t n)
 {
   /** @brief> generates a random std::vector<RealType> of size n
    * using mt19937 algorithm
-   */
-
-  /** TODO: these may need to be marked thread local
-   * in the future
-   *
-   * TODO: benchmark.
    */
   static boost::random::mt19937 rng{ std::random_device{}() };
   static boost::random::uniform_real_distribution<RealType> dist(0.0, 1.0);

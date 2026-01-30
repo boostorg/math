@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(random_initializer_test, T, all_float_types)
                                 x,
                                 lr,
                                 bopt::random_uniform_initializer_rvar<T>(
-                                  -2.0, 2.0, 1234)); // all initialized to 5
+                                  T(-2.0), T(2.0), 1234));
   for (auto& xi : x) {
     T v = xi.item();
     BOOST_TEST(v >= -2);
