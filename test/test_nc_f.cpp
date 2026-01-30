@@ -336,7 +336,7 @@ void test_spots(RealType, const char* name = nullptr)
    for (RealType x : x_vals)
    {
       RealType P = cdf(dist_no_centrality, x);
-      BOOST_CHECK(dist.find_non_centrality(x, a, b, P) < tolerance);
+      BOOST_CHECK_LE(dist.find_non_centrality(x, a, b, P), boost::math::tools::min_value<RealType>() * 10);
    }
    // Case when P=1 or P=0 
    BOOST_MATH_CHECK_THROW(dist.find_non_centrality(x, a, b, 1), std::domain_error);
