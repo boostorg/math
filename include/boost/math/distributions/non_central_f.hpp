@@ -46,8 +46,7 @@ namespace boost
          };
          
          template <class RealType, class Policy>
-         BOOST_MATH_GPU_ENABLED RealType find_non_centrality_f(const RealType x, const RealType v1, const RealType v2, const RealType p, const RealType q, const Policy& pol)
-         {
+         BOOST_MATH_GPU_ENABLED RealType find_non_centrality_f(const RealType x, const RealType v1, const RealType v2, const RealType p, const RealType q, const RealType p_q_precision, const Policy& pol)         {
             constexpr auto function = "non_central_f<%1%>::find_non_centrality";
 
             if ( p == 0 || q == 0) {
@@ -56,17 +55,20 @@ namespace boost
             }
 
             // Check if nc = 0 (which is just the F-distribution)
-            // I first tried comparing to boost::math::tools::epsilon<RealType>(),
-            // but this was never satisfied for floats or doubles. Only 
-            // long doubles would correctly return 0.
-            fisher_f_distribution<RealType, Policy> dist(v1, v2); 
-            if (boost::math::relative_difference(pdf(dist, x), p) < 1e-7){
+            non_centrality_finder_f<RealType, Policy> f(x, v1, v2, p < q ? p : q, p < q ? false : true);
+            // This occurs when the root finder would need to find a result smaller than
+            // tools::min_value (which it cannot do).  Note that we have to add in a small
+            // amount of "tolerance" since the subtraction in our termination condition
+            // implies a small amount of wobble in the result which should be of the
+            // order p * eps (note not q * eps, since q is calculated as 1-p).
+            // Also note that p_q_precision is passed down from our caller as the
+            // epsilon of the original called values, and not after possible promotion.
+            if (f(tools::min_value<RealType>()) <= 3 * p_q_precision * p){
                return 0;
             }
 
-            non_centrality_finder_f<RealType, Policy> f(x, v1, v2, p < q ? p : q, p < q ? false : true);
             RealType guess = RealType(10);                       // Starting guess.
-            RealType factor = RealType(2);                                 // How big steps to take when searching.
+            RealType factor = RealType(2);                       // How big steps to take when searching.
             boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
             tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
 
@@ -134,6 +136,7 @@ namespace boost
                static_cast<eval_type>(v2),
                static_cast<eval_type>(p),
                static_cast<eval_type>(1-p),
+               static_cast<eval_type>(tools::epsilon<RealType>()),
                forwarding_policy());
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result,
@@ -156,6 +159,7 @@ namespace boost
                static_cast<eval_type>(c.param2),
                static_cast<eval_type>(1-c.param3),
                static_cast<eval_type>(c.param3),
+               static_cast<eval_type>(tools::epsilon<RealType>()),
                forwarding_policy());
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result,

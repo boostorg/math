@@ -159,12 +159,10 @@ void test_spot(
 }
 
 template <class RealType> // Any floating-point type RealType.
-void test_spots(RealType)
+void test_spots(RealType, const char* name = nullptr)
 {
    RealType tolerance = boost::math::tools::epsilon<RealType>() * 10000;
-
-   cout << "Tolerance = " << (tolerance / 100) << "%." << endl;
-
+   std::cout << "Testing spot values with type " << name << " (Tolerance = " << (tolerance / 100) << "%)." << std::endl;
    //
    // Spot tests from Mathematica computed values:
    //
@@ -337,8 +335,8 @@ void test_spots(RealType)
    boost::math::non_central_f_distribution<RealType> dist_no_centrality(a, b, nc);
    for (RealType x : x_vals)
    {
-      RealType P = pdf(dist_no_centrality, x);
-      BOOST_CHECK_CLOSE(dist.find_non_centrality(x, a, b, P), static_cast<RealType>(0), tolerance);
+      RealType P = cdf(dist_no_centrality, x);
+      BOOST_CHECK(dist.find_non_centrality(x, a, b, P) < tolerance);
    }
    // Case when P=1 or P=0 
    BOOST_MATH_CHECK_THROW(dist.find_non_centrality(x, a, b, 1), std::domain_error);
@@ -354,12 +352,12 @@ BOOST_AUTO_TEST_CASE( test_main )
    // Basic sanity-check spot values.
    expected_results();
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
-   test_spots(0.0F); // Test float.
-   test_spots(0.0); // Test double.
+   test_spots(0.0F, "float"); // Test float.
+   test_spots(0.0, "double"); // Test double.
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   test_spots(0.0L); // Test long double.
+   test_spots(0.0L, "long double"); // Test long double.
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
-   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+   test_spots(boost::math::concepts::real_concept(0.), "real_concept"); // Test real concept.
 #endif
 #endif
 
