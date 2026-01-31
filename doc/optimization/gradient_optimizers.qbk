@@ -13,6 +13,70 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 [section:introduction Introduction]
 Gradient based optimizers are algorithms that use the gradient of a function to iteratively find locally extreme points of functions over a set of parameters. This sections provides a description of a set of gradient optimizers. The optimizers are written with `boost::math::differentiation::reverse_mode::rvar` in mind, however if a way to evaluate the funciton and its gradient is provided, the optimizers should work in exactly the same way.
 
+Below is a table that summarizes the intended usage patterns of the provided optimizers and policies, and is meant as a practical guide rather than a strict prescription:
+
+[h1:table-optimizers List of Optimizers]
+[table
+     [[Optimizer] [Order] [Uses Curvature] [Memory Cost] [Intended Problem Class] [When to Use]]
+     [[gradient descent] [first] [no] [low] [Smooth, well-scaled objectives] [Baseline method; debugging; when behavior transparency matters]]
+     [[nesterov accelerated gradient] [first] [no] [low] [Ill-conditioned or narrow-valley problems] [When plain gradient descent converges slowly or oscillates]]
+     [[L-BFGS] [quasi second order] [approximate] [medium] [Smooth, deterministic objectives] [When gradients are reliable and faster convergence is needed]]
+]
+
+[h1:table-optimizer-policies Optimizer Policies]
+[heading Initialization Policies]
+[table
+     [[Policy] [Use case] [Responsibilities]]
+     [[tape_initializer_rvar] [User initialzes all varibles manually] [initializes tape]]
+     [[random_uniform_initializer_rvar] [Initializes all variables with a random number between a min and max value] [Initializes variables. Initializes tape.]]
+     [[costant_initializer_rvar] [Initializes all variables with a constant] [Initializes variables. Initializes tape.]]
+]
+
+[heading Evaluation Policies]
+[table
+     [[Policy] [Use case] [Responsibilities]]
+     [[reverse_mode_function_eval_policy] [Default. User with boost reverse mode autodiff] [tells the optimizer how to evaluate the objective]]
+     [[reverse_mode_gradient_evaluation_policy] [Default. User with boost reverse mode autodiff] [tells the optimizer how to evaluate the gradients of an objective]]
+]
+
+These policies are intended to use with boost reverse mode autodiff. If you need to use the optimizers with a custom AD variable, or by providing the gradient of an objective manually, check the docs for policies to see how the policies are implemented.
+
+[h1:line-search-policies LBFGS line search policies]
+the table below summarizes the two line search policies provided for use with LBFGS.
+[table
+     [[Policy] [Enforced Conditions] [Per iteration cost] [Convergence] [Use case]]
+     [[Strong Wolfe] [function decrease. curvature condition] [higher] [faster] [most of the time]]
+     [[Armijo] [function decrease only] [lower] [slower] [you know what you're doing]]
+]
+[h1:minimizer-policies Minimizer Policies]
+[heading Convergence Policies]
+[table
+      [[Policy] [Criterion] [When to Use]]
+      [[gradient_norm_convergence_policy] [gradient norm < tol] [Default. Stationarity based condition]]
+      [[objective_tol_convergence_policy] [absolute difference between objective steps is small] [Well-scaled objectives]]
+      [[relative_objective_tol_policy] [relative difference between objective steps is small] [Scale-invariant convergence]]
+      [[combined_convergence_policy] [logical combination OR] [you need a combination of convergence conditions]]
+]
+
+[heading Termination Policies]
+[table
+      [[Policy] [Controls] [When to Use]]
+      [[max_iter_termination_policy] [iteration count] [Hard safety bound (almost always recommended)]]
+      [[wallclock_termination_policy] [wall clock time] [benchmarking, real-time constraints]]
+]
+
+[heading Constraint and Projection Policies]
+[table
+      [[Policy] [Constraint Type]]
+      [[unconstrained_policy] [No constraint]] 
+      [[box_constraints] [upper/lower bound clip]]
+      [[nonnegativity_constraint] [set everything below 0, to 0]]
+      [[l2_ball_constraint] [ 2-norm(x) < r]]
+      [[l1_ball_constraint] [ 1-norm(x) < r]]
+      [[simplex_constraint] [Probability simplex]]
+      [[function_constraint] [custom user provided function wrapper]]
+      [[unit_sphere_constraint] [2-norm(x) = 1]]
+]
 [endsect] [/section:introduction]
 
 [section:gradient_descent Gradient Descent]

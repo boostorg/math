@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Gradient Desccent</title>
+<title>Gradient Descent</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../gd_opt.html" title="Gradient Based Optimizers">
 <link rel="prev" href="introduction.html" title="Introduction">
-<link rel="next" href="nesterov.html" title="Nesterov Accelerated Gradient Desccent">
+<link rel="next" href="nesterov.html" title="Nesterov Accelerated Gradient Descent">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -25,7 +25,7 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.gd_opt.gradient_descent"></a><a class="link" href="gradient_descent.html" title="Gradient Desccent">Gradient Desccent</a>
+<a name="math_toolkit.gd_opt.gradient_descent"></a><a class="link" href="gradient_descent.html" title="Gradient Descent">Gradient Descent</a>
 </h3></div></div></div>
 <h5>
 <a name="math_toolkit.gd_opt.gradient_descent.h0"></a>
@@ -101,7 +101,7 @@
 </pre>
 <p>
         where <code class="computeroutput"><span class="identifier">lr</span></code> is a user defined
-        learning rate. For a more complete decription of the theoretical principle
+        learning rate. For a more complete description of the theoretical principle
         check <a href="https://en.wikipedia.org/wiki/Gradient_descent" target="_top">the wikipedia
         page</a>
       </p>
@@ -123,7 +123,7 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             <code class="computeroutput"><span class="identifier">Objective</span><span class="special">&amp;&amp;</span>
-            <span class="identifier">obj</span></code> : objective funciton to
+            <span class="identifier">obj</span></code> : objective function to
             minimize
           </li>
 <li class="listitem">
@@ -134,15 +134,21 @@
             <code class="computeroutput"><span class="identifier">RealType</span><span class="special">&amp;</span>
             <span class="identifier">lr</span></code> : learning rate. A larger
             value takes larger steps during descent, leading to faster, but more
-            unstable convergence. Conversely, small vaues are more stable but take
+            unstable convergence. Conversely, small values are more stable but take
             longer to converge.
           </li>
 <li class="listitem">
             <code class="computeroutput"><span class="identifier">InitializationPolicy</span><span class="special">&amp;&amp;</span> <span class="identifier">ip</span></code>
-            : Initialization policy for <code class="computeroutput"><span class="identifier">ArgumentContainer</span></code>,
-            or the initial guess. By default it is set to <code class="computeroutput"><span class="identifier">tape_initializer_rvar</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;</span></code> which lets the user provide the "initial
-            guess" by setting the values of <code class="computeroutput"><span class="identifier">x</span></code>
-            manually. For more info check the Policies section.
+            : Initialization policy for optimizer state and variables. Users may
+            supply a custom initialization policy to control how the argument container
+            and any AD specific runtime state : i.e. reverse-mode tape attachment/reset
+            are initialized. By default, the optimizer uses the user-provided initial
+            values in x and performs the standard reverse mode AD initialization
+            required for gradient evaluation. Custom initialization policies are
+            useful for randomized starts, non rvar AD types, or when gradients are
+            supplied externally. See the reverse-mode autodiff policy documentation
+            for the required initialization policy interface when writing custom
+            policies.
           </li>
 <li class="listitem">
             <code class="computeroutput"><span class="identifier">ObjectiveEvalPolicy</span><span class="special">&amp;&amp;</span>
@@ -151,7 +157,7 @@
           </li>
 <li class="listitem">
             <code class="computeroutput"><span class="identifier">GradEvalPolicy</span><span class="special">&amp;&amp;</span>
-            <span class="identifier">gep</span></code> : tells the optimzier how
+            <span class="identifier">gep</span></code> : tells the optimizer how
             to evaluate the gradient of the objective function. By default <code class="computeroutput"><span class="identifier">reverse_mode_gradient_evaluation_policy</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;</span></code>
           </li>
 </ul></div>
@@ -173,8 +179,8 @@
             <span class="inlinemediaobject"><img src="../../../equations/autodiff/thomson_potential.svg"></span>
           </p></blockquote></div></blockquote></div>
 <p>
-        The code below manually minimizes the abover potential energy function for
-        N particles over their two angular pozitions.
+        The code below manually minimizes the above potential energy function for
+        N particles over their two angular positions.
       </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">differentiation</span><span class="special">/</span><span class="identifier">autodiff_reverse</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">optimization</span><span class="special">/</span><span class="identifier">gradient_descent</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -319,7 +325,7 @@
 <pre class="programlisting"><span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">lr</span>     <span class="special">=</span> <span class="number">1e-3</span><span class="special">;</span></pre>
 <p>
         is the optimizer learning rate. Using the code the way its written, the optimizer
-        runs for 100000 steps. Running tthe program with
+        runs for 100000 steps. Running the program with
       </p>
 <pre class="programlisting"><span class="special">./</span><span class="identifier">thomson_sphere</span> <span class="identifier">N</span>
 </pre>
@@ -332,7 +338,7 @@
           </p></blockquote></div></blockquote></div>
 <p>
         Below is a plot of the final energy of the system, and its deviation from
-        the theoretically predicted values. The table of theorical energy values
+        the theoretically predicted values. The table of theoretical energy values
         for the problem is from <a href="https://en.wikipedia.org/wiki/Thomson_problem" target="_top">wikipedia</a>.
       </p>
 <div class="blockquote"><blockquote class="blockquote"><div class="blockquote"><blockquote class="blockquote"><p>
@@ -346,7 +352,7 @@
 <p>
         Often, we don't want to actually implement our own stepping function, i.e.
         we care about certain convergence criteria. In the above example, we need
-        to include the minimier.hpp header:
+        to include the minimizer.hpp header:
       </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">optimization</span><span class="special">/</span><span class="identifier">minimizer</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>

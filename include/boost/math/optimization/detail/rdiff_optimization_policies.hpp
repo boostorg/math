@@ -8,7 +8,6 @@
 #include <boost/math/differentiation/autodiff_reverse.hpp>
 #include <random>
 #include <type_traits>
-#include <boost/random.hpp>
 
 namespace boost {
 namespace math {
@@ -102,10 +101,10 @@ struct random_uniform_initializer_rvar
   template<class ArgumentContainer>
   void operator()(ArgumentContainer& x) const
   {
-    static boost::random::mt19937 gen{ std::random_device{}() };
-    static boost::random::uniform_real_distribution<RealType> dist(0.0, 1.0);
+    static std::mt19937 gen{ std::random_device{}() };
+    static std::uniform_real_distribution<double> dist(0.0, 1.0);
     for (auto& xi : x) {
-      xi = rdiff::rvar<RealType, 1>(dist(gen));
+      xi = rdiff::rvar<RealType, 1>(static_cast<RealType>(dist(gen)));
     }
     auto& tape = rdiff::get_active_tape<RealType, 1>();
     tape.add_checkpoint();

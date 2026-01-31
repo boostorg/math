@@ -5,7 +5,6 @@
 #ifndef BOOST_MATH_OPTIMIZATION_DETAIL_DIFFERENTIABLE_OPT_UTILITIES_HPP
 #define BOOST_MATH_OPTIMIZATION_DETAIL_DIFFERENTIABLE_OPT_UTILITIES_HPP
 #include <boost/math/differentiation/autodiff_reverse.hpp>
-#include <boost/random.hpp>
 #include <cmath>
 #include <random>
 #include <type_traits>
@@ -144,11 +143,11 @@ random_vector(size_t n)
   /** @brief> generates a random std::vector<RealType> of size n
    * using mt19937 algorithm
    */
-  static boost::random::mt19937 rng{ std::random_device{}() };
-  static boost::random::uniform_real_distribution<RealType> dist(0.0, 1.0);
+  static std::mt19937 rng{ std::random_device{}() };
+  static std::uniform_real_distribution<double> dist(0.0, 1.0);
 
   std::vector<RealType> result(n);
-  std::generate(result.begin(), result.end(), [&] { return dist(rng); });
+  std::generate(result.begin(), result.end(), [&] { return static_cast<RealType>(dist(rng)); });
   return result;
 }
 

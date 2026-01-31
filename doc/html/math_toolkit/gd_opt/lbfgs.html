@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="../../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../gd_opt.html" title="Gradient Based Optimizers">
-<link rel="prev" href="nesterov.html" title="Nesterov Accelerated Gradient Desccent">
+<link rel="prev" href="nesterov.html" title="Nesterov Accelerated Gradient Descent">
 <link rel="next" href="minimize.html" title="minimize">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -190,9 +190,15 @@
           </li>
 <li class="listitem">
             <code class="computeroutput"><span class="identifier">InitializationPolicy</span><span class="special">&amp;&amp;</span> <span class="identifier">ip</span></code>
-            : initialization policy for ArgumentContainer and optimizer state. For
-            reverse-mode AD, the default typically initializes/attaches the tape
-            and uses the user-provided initial values in x.
+            : Initialization policy for optimizer state and variables. Users may
+            supply a custom initialization policy to control how the argument container
+            and any AD-specific runtime state : i.e. reverse-mode tape attachment/reset
+            are initialized. By default, the optimizer uses the same initialization
+            as gradient descent, taking the user provided initial values in x and
+            initializing the internal momentum/velocity state to zero. Custom initialization
+            policies are useful for randomized starts, non rvar AD types, or when
+            gradients are supplied externally. Check the docs for Reverse Mode autodiff
+            policies for initialization policy structure to write custom policies.
           </li>
 <li class="listitem">
             <code class="computeroutput"><span class="identifier">ObjectiveEvalPolicy</span><span class="special">&amp;&amp;</span>
@@ -207,16 +213,21 @@
             evaluation policy when using <code class="computeroutput"><span class="identifier">rvar</span></code>.
           </li>
 <li class="listitem">
+<p class="simpara">
             <code class="computeroutput"><span class="identifier">LineSearchPolicy</span><span class="special">&amp;&amp;</span>
             <span class="identifier">lsp</span></code> : policy for selecting
-            the step length alpha. Default is Strong Wolfe, but Armijo is an option.
-          </li>
-</ul></div>
+            the step length alpha along a search direction. Determines the acceptance
+            criteria and how many function/gradient evaluations may be performed
+            during a step Default is Strong Wolfe, but Armijo is an option. Strong
+            Wolfe uses both function and gradient information to ensure good curvature
+            conditions, while Armijo relies only on function decrease and is simpler
+            but less robust for quasi-Newton methods.
+          </p>
 <h5>
 <a name="math_toolkit.gd_opt.lbfgs.h3"></a>
-        <span class="phrase"><a name="math_toolkit.gd_opt.lbfgs.notes"></a></span><a class="link" href="lbfgs.html#math_toolkit.gd_opt.lbfgs.notes">Notes</a>
-      </h5>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+            <span class="phrase"><a name="math_toolkit.gd_opt.lbfgs.notes"></a></span><a class="link" href="lbfgs.html#math_toolkit.gd_opt.lbfgs.notes">Notes</a>
+          </h5>
+</li>
 <li class="listitem">
             LBFGS assumes the objective is sufficiently smooth for gradients to be
             informative. It is typically most effective on unconstrained smooth problems.
