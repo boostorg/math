@@ -63,7 +63,7 @@ namespace boost
             // order p * eps (note not q * eps, since q is calculated as 1-p).
             // Also note that p_q_precision is passed down from our caller as the
             // epsilon of the original called values, and not after possible promotion.
-            if (f(tools::min_value<RealType>()) <= 3 * p_q_precision * p){
+            if (f(tools::min_value<RealType>()) <= 20 * p_q_precision * p){
                return 0;
             }
 

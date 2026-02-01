@@ -344,6 +344,31 @@ void test_spots(RealType, const char* name = nullptr)
    // Case when Q=1 or Q=0
    BOOST_MATH_CHECK_THROW(dist.find_non_centrality(boost::math::complement(x, a, b, 1)), std::domain_error);
    BOOST_MATH_CHECK_THROW(dist.find_non_centrality(boost::math::complement(x, a, b, 0)), std::domain_error);
+   //
+   // Test non centrality finder over a grid of values:
+   //
+   RealType values[] = { 1.25, 3.5, 6.75, 8.25 };
+   for (RealType v1 : values)
+   {
+      for (RealType v2 : values)
+      {
+         for (RealType nc : values)
+         {
+            for (RealType x : values)
+            {
+               boost::math::non_central_f_distribution<RealType> ref(v1, v2, nc);
+               RealType P = cdf(ref, x);
+               RealType Q = cdf(complement(ref, x));
+
+               RealType nc1 = ref.find_non_centrality(x, v1, v2, P);
+               RealType nc2 = ref.find_non_centrality(boost::math::complement(x, v1, v2, Q));
+
+               BOOST_CHECK_CLOSE(nc1, nc, 2 * tolerance);
+               BOOST_CHECK_CLOSE(nc2, nc, tolerance);
+            }
+         }
+      }
+   }
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )
