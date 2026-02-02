@@ -12,13 +12,35 @@
 #include <array>
 #include <vector>
 
+/* simple n-d quadratic function */
+template<typename RealType>
+RealType
+quadratic(std::vector<RealType>& x)
+{
+  RealType res{ 0.0 };
+  for (auto& item : x) {
+    res += item * item;
+  }
+  return res;
+}
+
+template<typename RealType>
+RealType
+quadratic_high_cond_2D(std::vector<RealType>& x)
+{
+  return 1000 * x[0] * x[0] + x[1] * x[1];
+}
+
 // Taken from: https://en.wikipedia.org/wiki/Test_functions_for_optimization
-template <typename Real> Real ackley(std::array<Real, 2> const &v) {
-  using std::sqrt;
+template<typename Real>
+Real
+ackley(std::array<Real, 2> const& v)
+{
+  using boost::math::constants::e;
+  using boost::math::constants::two_pi;
   using std::cos;
   using std::exp;
-  using boost::math::constants::two_pi;
-  using boost::math::constants::e;
+  using std::sqrt;
   Real x = v[0];
   Real y = v[1];
   Real arg1 = -sqrt((x * x + y * y) / 2) / 5;
@@ -26,16 +48,21 @@ template <typename Real> Real ackley(std::array<Real, 2> const &v) {
   return -20 * exp(arg1) - exp(arg2 / 2) + 20 + e<Real>();
 }
 
-template <typename Real> auto rosenbrock_saddle(std::array<Real, 2> const &v) -> Real {
-  Real x { v[0] };
-  Real y { v[1] };
+template<typename Real>
+auto
+rosenbrock_saddle(std::array<Real, 2> const& v) -> Real
+{
+  Real x{ v[0] };
+  Real y{ v[1] };
   return static_cast<Real>(100 * (x * x - y) * (x * x - y) + (1 - x) * (1 - x));
 }
 
-
-template <class Real> Real rastrigin(std::vector<Real> const &v) {
-  using std::cos;
+template<class Real>
+Real
+rastrigin(std::vector<Real> const& v)
+{
   using boost::math::constants::two_pi;
+  using std::cos;
   auto A = static_cast<Real>(10);
   auto y = static_cast<Real>(10 * v.size());
   for (auto x : v) {
@@ -46,7 +73,9 @@ template <class Real> Real rastrigin(std::vector<Real> const &v) {
 
 // Useful for testing return-type != scalar argument type,
 // and robustness to NaNs:
-double sphere(std::vector<float> const &v) {
+double
+sphere(std::vector<float> const& v)
+{
   double r = 0.0;
   for (auto x : v) {
     double x_ = static_cast<double>(x);
@@ -59,23 +88,27 @@ double sphere(std::vector<float> const &v) {
 }
 
 template<typename Real>
-Real three_hump_camel(std::array<Real, 2> const & v) {
+Real
+three_hump_camel(std::array<Real, 2> const& v)
+{
   Real x = v[0];
   Real y = v[1];
-  auto xsq = x*x;
-  return 2*xsq - (1 + Real(1)/Real(20))*xsq*xsq  + xsq*xsq*xsq/6 + x*y + y*y;
+  auto xsq = x * x;
+  return 2 * xsq - (1 + Real(1) / Real(20)) * xsq * xsq + xsq * xsq * xsq / 6 +
+         x * y + y * y;
 }
 
 // Minima occurs at (3, 1/2) with value 0:
 template<typename Real>
-Real beale(std::array<Real, 2> const & v) {
+Real
+beale(std::array<Real, 2> const& v)
+{
   Real x = v[0];
   Real y = v[1];
-  Real t1 = Real(3)/Real(2) -x + x*y;
-  Real t2 = Real(9)/Real(4) -x  + x*y*y;
-  Real t3 = Real(21)/Real(8) -x  + x*y*y*y;
-  return t1*t1 + t2*t2 + t3*t3;
+  Real t1 = Real(3) / Real(2) - x + x * y;
+  Real t2 = Real(9) / Real(4) - x + x * y * y;
+  Real t3 = Real(21) / Real(8) - x + x * y * y * y;
+  return t1 * t1 + t2 * t2 + t3 * t3;
 }
-
 
 #endif
