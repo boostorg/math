@@ -62,7 +62,7 @@ namespace boost
             // and p drops below 1e-7, the function f becomes 
             // numerically unstable. Thus, we can't find nc below this point. 
             // See PR 1345 for more details. 
-            if (abs(f(tools::min_value<RealType>()) / p) <= 1e-7){
+            if (abs(f(0) / p) <= 1e-7){
                return 0;
             }
 
