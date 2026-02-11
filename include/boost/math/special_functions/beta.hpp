@@ -1242,7 +1242,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
             }
             else
             {
-               return inv ? -std::numeric_limits<T>::infinity() : T(0);
+               return inv ? -policies::raise_overflow_error<T>(function, nullptr, pol) : T(0);
             }
             
          }
@@ -1258,7 +1258,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
             }
             else
             {
-               return inv ? T(0) : -std::numeric_limits<T>::infinity();
+               return inv ? T(0) : -policies::raise_overflow_error<T>(function, nullptr, pol);
             }
          }
       }
@@ -1283,7 +1283,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       }
       else
       {
-         return (invert ? (normalised ? 0 : log(boost::math::beta(a, b, pol))) : -std::numeric_limits<T>::infinity());
+         return (invert ? (normalised ? 0 : log(boost::math::beta(a, b, pol))) : -policies::raise_overflow_error<T>(function, nullptr, pol));
       }
    }
    if(x == 1)
@@ -1298,7 +1298,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       }
       else
       {
-         return (invert == 0 ? (normalised ? 0 : log(boost::math::beta(a, b, pol))) : -std::numeric_limits<T>::infinity());
+         return (invert == 0 ? (normalised ? 0 : log(boost::math::beta(a, b, pol))) : -policies::raise_overflow_error<T>(function, nullptr, pol));
       }
       
    }
