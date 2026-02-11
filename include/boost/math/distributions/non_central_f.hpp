@@ -59,10 +59,10 @@ namespace boost
 
             // Check if nc = 0 (which is just the F-distribution)
             // When the relative difference between the cdf with nc=0
-            // and p drops below 1e-7, the function f becomes 
+            // and p drops below 1e-6, the function f becomes 
             // numerically unstable. Thus, we can't find nc below this point. 
             // See PR 1345 for more details. 
-            if (abs(f(tools::min_value<RealType>()) / p) <= 1e-7){
+            if (abs(f(tools::min_value<RealType>()) / p) <= 1e-6){
                return 0;
             }
 
