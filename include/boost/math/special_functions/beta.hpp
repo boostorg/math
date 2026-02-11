@@ -1674,7 +1674,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
    }
    else
    {
-      return invert ? (normalised ? std::log1p(-fract) : log(boost::math::beta(a, b, pol) - fract)) : log(fract);
+      return invert ? (normalised ? boost::math::log1p(-fract) : log(boost::math::beta(a, b, pol) - fract)) : log(fract);
    }
    
 } // template <class T, class Lanczos>T ibeta_imp(T a, T b, T x, const Lanczos& l, bool inv, bool normalised)
