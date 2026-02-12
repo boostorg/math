@@ -46,8 +46,7 @@ namespace boost
          };
          
          template <class RealType, class Policy>
-         BOOST_MATH_GPU_ENABLED RealType find_non_centrality_f(const RealType x, const RealType v1, const RealType v2, const RealType p, const RealType q, const Policy& pol)         
-         {
+         BOOST_MATH_GPU_ENABLED RealType find_non_centrality_f(const RealType x, const RealType v1, const RealType v2, const RealType p, const RealType q, const RealType p_q_precision, const Policy& pol)         {
             constexpr auto function = "non_central_f<%1%>::find_non_centrality";
 
             if ( p == 0 || q == 0) {
@@ -55,14 +54,16 @@ namespace boost
                   RealType(boost::math::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE
             }
 
-            non_centrality_finder_f<RealType, Policy> f(x, v1, v2, p < q ? p : q, p < q ? false : true);
-
             // Check if nc = 0 (which is just the F-distribution)
-            // When the relative difference between the cdf with nc=0
-            // and p drops below 1e-6, the function f becomes 
-            // numerically unstable. Thus, we can't find nc below this point. 
-            // See PR 1345 for more details. 
-            if (abs(f(tools::min_value<RealType>()) / p) <= 1e-6){
+            non_centrality_finder_f<RealType, Policy> f(x, v1, v2, p < q ? p : q, p < q ? false : true);
+            // This occurs when the root finder would need to find a result smaller than
+            // tools::min_value (which it cannot do).  Note that we have to add in a small
+            // amount of "tolerance" since the subtraction in our termination condition
+            // implies a small amount of wobble in the result which should be of the
+            // order p * eps (note not q * eps, since q is calculated as 1-p).
+            // Also note that p_q_precision is passed down from our caller as the
+            // epsilon of the original called values, and not after possible promotion.
+            if (f(tools::min_value<RealType>()) <= 20 * p_q_precision * p){
                return 0;
             }
 
@@ -135,6 +136,7 @@ namespace boost
                static_cast<eval_type>(v2),
                static_cast<eval_type>(p),
                static_cast<eval_type>(1-p),
+               static_cast<eval_type>(tools::epsilon<RealType>()),
                forwarding_policy());
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result,
@@ -157,6 +159,7 @@ namespace boost
                static_cast<eval_type>(c.param2),
                static_cast<eval_type>(1-c.param3),
                static_cast<eval_type>(c.param3),
+               static_cast<eval_type>(tools::epsilon<RealType>()),
                forwarding_policy());
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result,
