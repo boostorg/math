@@ -18,8 +18,6 @@
 #include <boost/math/special_functions/pow.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/distributions/complement.hpp> // complements
-#include <boost/math/distributions/fisher_f.hpp>
-#include <boost/math/special_functions/relative_difference.hpp> 
 
 namespace boost
 {
