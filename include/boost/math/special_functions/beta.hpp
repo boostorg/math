@@ -1142,7 +1142,20 @@ BOOST_MATH_GPU_ENABLED T ibeta_large_ab(T a, T b, T x, T y, bool invert, bool no
 
    T x0 = a / (a + b);
    T y0 = b / (a + b);
-   T nu = x0 * log(x / x0) + y0 * log(y / y0);
+
+   // Expand nu about x0
+   T nu = 0;
+   for (int i=2; i<5; i++)
+   {
+      nu += pow(x-x0, i) / i * (pow(x0, -(i-1)) - pow(x0-1, -(i-1))) * pow(-1, i+1);
+   }
+   // Calculate the next term in the series
+   T remainder = pow(x-x0, 5) / 5 * (pow(x0, -4) - pow(x0-1, 4));
+
+   // If the remainder is large, then fall back to using the log formula
+   if (remainder >= tools::forth_root_epsilon<T>()){
+      nu = x0 * log(x / x0) + y0 * log(y / y0);
+   }
    //
    // Above compution is unstable, force nu to zero if
    // something went wrong:
@@ -1181,7 +1194,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_large_ab(T a, T b, T x, T y, bool invert, bool no
    T mul = 1;
    if (!normalised)
       mul = boost::math::beta(a, b, pol);
-
+   T log_erf_remainder = -0.5 * log(2 * constants::pi<T>() * (a+b)) + a * log(x / x0) + b * log((1-x) / (1-x0)) + log(abs(1/nu - sqrt(x0 * (1-x0)) / (x-x0)));
    return mul * ((invert ? (1 + boost::math::erf(-nu * sqrt((a + b) / 2), pol)) / 2 : boost::math::erfc(-nu * sqrt((a + b) / 2), pol) / 2));
 }
 
