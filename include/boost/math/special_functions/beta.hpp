@@ -1194,7 +1194,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_large_ab(T a, T b, T x, T y, bool invert, bool no
    T mul = 1;
    if (!normalised)
       mul = boost::math::beta(a, b, pol);
-   T log_erf_remainder = -0.5 * log(2 * constants::pi<T>() * (a+b)) + a * log(x / x0) + b * log((1-x) / (1-x0)) + log(abs(1/nu - sqrt(x0 * (1-x0)) / (x-x0)));
+   // T log_erf_remainder = -0.5 * log(2 * constants::pi<T>() * (a+b)) + a * log(x / x0) + b * log((1-x) / (1-x0)) + log(abs(1/nu - sqrt(x0 * (1-x0)) / (x-x0)));
    return mul * ((invert ? (1 + boost::math::erf(-nu * sqrt((a + b) / 2), pol)) / 2 : boost::math::erfc(-nu * sqrt((a + b) / 2), pol) / 2));
 }
 
@@ -1612,8 +1612,17 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
                invert = false;
          }
          else
-            fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
-            
+         {
+            try
+            {
+               fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
+            }
+            // If series converges slowly, fall back to erf approximation
+            catch (boost::math::evaluation_error& e)
+            {
+               fract = ibeta_large_ab(a, b, x, y, invert, normalised, pol);
+            }
+         }  
          BOOST_MATH_INSTRUMENT_VARIABLE(fract);
       }
    }
