@@ -39,7 +39,6 @@ else()
       Boost::lexical_cast
       Boost::predef
       Boost::random
-      Boost::static_assert
       Boost::throw_exception
   )
 

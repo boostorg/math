@@ -27,6 +27,12 @@
    BOOST_MATH_GPU_ENABLED ``__sf_result`` lgamma_q(T1 a, T2 z, const ``__Policy``&);
 
    template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` lgamma_p(T1 a, T2 z);
+   
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` lgamma_p(T1 a, T2 z, const ``__Policy``&);
+
+   template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_lower(T1 a, T2 z);
    
    template <class T1, class T2, class ``__Policy``>
@@ -71,6 +77,15 @@ Returns the normalised lower incomplete gamma function of a and z:
 This function changes rapidly from 0 to 1 around the point z == a:
 
 [graph gamma_p]
+
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` lgamma_p(T1 a, T2 z);
+   
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` lgamma_p(T1 a, T2 z, const ``__Policy``&);
+
+Returns the natural log of the normalized lower incomplete gamma function 
+of a and z.  
 
    template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q(T1 a, T2 z);
