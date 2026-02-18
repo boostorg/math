@@ -141,6 +141,10 @@ void test_spot(
             quantile(dist, P), x, tol * 10);
       BOOST_CHECK_CLOSE(
             quantile(complement(dist, Q)), x, tol * 10);
+      BOOST_CHECK_CLOSE(
+            dist.find_non_centrality(x, a, b, P), ncp, tol * 10);
+      BOOST_CHECK_CLOSE(
+            dist.find_non_centrality(boost::math::complement(x, a, b, Q)), ncp, tol * 10);
    }
    if(boost::math::tools::digits<RealType>() > 50)
    {
@@ -155,12 +159,10 @@ void test_spot(
 }
 
 template <class RealType> // Any floating-point type RealType.
-void test_spots(RealType)
+void test_spots(RealType, const char* name = nullptr)
 {
    RealType tolerance = boost::math::tools::epsilon<RealType>() * 10000;
-
-   cout << "Tolerance = " << (tolerance / 100) << "%." << endl;
-
+   std::cout << "Testing spot values with type " << name << " (Tolerance = " << (tolerance / 100) << "%)." << std::endl;
    //
    // Spot tests from Mathematica computed values:
    //
@@ -323,6 +325,50 @@ void test_spots(RealType)
    {
       BOOST_CHECK_CLOSE(cdf(boost::math::non_central_f_distribution<RealType>(static_cast<RealType>(1e-100L), 3.f, 1.5f), static_cast<RealType>(1e100L)), static_cast<RealType>(0.6118152873453990639132215575213809716459L), tolerance);
    }
+   
+   // Check find_non_centrality_f edge case handling 
+   // Case when nc=0
+   RealType a = 5;
+   RealType b = 2;
+   RealType nc = 0;
+   RealType x_vals[] = { 0.25, 1.25, 10, 100};
+   boost::math::non_central_f_distribution<RealType> dist_no_centrality(a, b, nc);
+   for (RealType x : x_vals)
+   {
+      RealType P = cdf(dist_no_centrality, x);
+      BOOST_CHECK_LE(dist.find_non_centrality(x, a, b, P), tolerance);
+   }
+   // Case when P=1 or P=0 
+   BOOST_MATH_CHECK_THROW(dist.find_non_centrality(x, a, b, 1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist.find_non_centrality(x, a, b, 0), std::domain_error);
+   // Case when Q=1 or Q=0
+   BOOST_MATH_CHECK_THROW(dist.find_non_centrality(boost::math::complement(x, a, b, 1)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist.find_non_centrality(boost::math::complement(x, a, b, 0)), std::domain_error);
+   //
+   // Test non centrality finder over a grid of values:
+   //
+   RealType values[] = { 1.25, 3.5, 6.75, 8.25 };
+   for (RealType v1 : values)
+   {
+      for (RealType v2 : values)
+      {
+         for (RealType nc : values)
+         {
+            for (RealType x : values)
+            {
+               boost::math::non_central_f_distribution<RealType> ref(v1, v2, nc);
+               RealType P = cdf(ref, x);
+               RealType Q = cdf(complement(ref, x));
+
+               RealType nc1 = ref.find_non_centrality(x, v1, v2, P);
+               RealType nc2 = ref.find_non_centrality(boost::math::complement(x, v1, v2, Q));
+
+               BOOST_CHECK_CLOSE(nc1, nc, 2 * tolerance);
+               BOOST_CHECK_CLOSE(nc2, nc, tolerance);
+            }
+         }
+      }
+   }
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )
@@ -331,12 +377,12 @@ BOOST_AUTO_TEST_CASE( test_main )
    // Basic sanity-check spot values.
    expected_results();
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
-   test_spots(0.0F); // Test float.
-   test_spots(0.0); // Test double.
+   test_spots(0.0F, "float"); // Test float.
+   test_spots(0.0, "double"); // Test double.
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   test_spots(0.0L); // Test long double.
+   test_spots(0.0L, "long double"); // Test long double.
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
-   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+   test_spots(boost::math::concepts::real_concept(0.), "real_concept"); // Test real concept.
 #endif
 #endif
 
