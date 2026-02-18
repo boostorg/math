@@ -541,6 +541,13 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          {
             BOOST_ERROR(e.what());
          }
+         // Code coverage:
+         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], boost::math::tools::epsilon<value_type>() / 2, data[i][3]), boost::math::evaluation_error);
+         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(boost::math::complement(data[i][1], boost::math::tools::epsilon<value_type>() / 2, data[i][3])), boost::math::evaluation_error);
+         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], data[i][2], value_type(0)), boost::math::evaluation_error);
+         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(boost::math::complement(data[i][1], data[i][2], value_type(0))), boost::math::evaluation_error);
+         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], data[i][2], value_type(1)), boost::math::evaluation_error);
+         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(boost::math::complement(data[i][1], data[i][2], value_type(1))), boost::math::evaluation_error);
       }
    }
 #endif

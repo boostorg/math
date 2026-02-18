@@ -751,7 +751,7 @@ namespace boost
                //
                // Can't find a thing if one of p and q is zero:
                //
-               return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom when the probability is 0 or 1, only possible answer is %1%", // LCOV_EXCL_LINE
+               return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom when the probability is 0 or 1, only possible answer is %1%",
                   RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE
             }
             if (fabs(x) < tools::epsilon<RealType>())
