@@ -487,5 +487,27 @@ void test_spots(T)
       }
       BOOST_CHECK_EQUAL(boost::math::ibeta(static_cast<T>(2), static_cast<T>(1), static_cast<T>(0)), 0);
       BOOST_CHECK_EQUAL(boost::math::ibeta(static_cast<T>(1), static_cast<T>(2), static_cast<T>(0)), 0);
+
+      // Bug testing for large a,b and x close to a / (a+b). See PR 1363.
+      // The values for a,b are just too large for floats to handle.
+      if (!std::is_same<T, float>::value)
+      {
+         T a_values[2] = {10000000272564224, 3.1622776601699636e+16};
+         T b_values[2] = {9965820922822656, 3.130654883566682e+18};
+         T delta[8] = {0, 1e-15, 1e-14, 1e-13, 1e-12, 1e-11, 1e-10, 1e-9};
+         T a, b, x;
+         for (unsigned int i=0; i<2; i++){
+            a = a_values[i];
+            b = b_values[i];
+            x = a / (a+b); // roughly the median of ibeta
+
+            
+            for (unsigned int j=0; j < 7; j++)
+            {
+               BOOST_CHECK(boost::math::ibeta(a, b, x + delta[j+1]) > boost::math::ibeta(a, b, x + delta[j]));
+               BOOST_CHECK(boost::math::ibeta(a, b, x - delta[j]) > boost::math::ibeta(a, b, x - delta[j+1]));  
+            }
+         }
+      }
 }
 
