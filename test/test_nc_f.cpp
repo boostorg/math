@@ -138,13 +138,17 @@ void test_spot(
       BOOST_CHECK_CLOSE(
          cdf(complement(dist, x)), Q, tol);
       BOOST_CHECK_CLOSE(
-            quantile(dist, P), x, tol * 10);
+         quantile(dist, P), x, tol * 10);
       BOOST_CHECK_CLOSE(
-            quantile(complement(dist, Q)), x, tol * 10);
+         quantile(complement(dist, Q)), x, tol * 10);
       BOOST_CHECK_CLOSE(
-            dist.find_non_centrality(x, a, b, P), ncp, tol * 10);
+         dist.find_non_centrality(x, a, b, P), ncp, tol * 10);
       BOOST_CHECK_CLOSE(
-            dist.find_non_centrality(boost::math::complement(x, a, b, Q)), ncp, tol * 10);
+         dist.find_non_centrality(boost::math::complement(x, a, b, Q)), ncp, tol * 10);
+      BOOST_CHECK_CLOSE(
+         dist.find_v1(x, b, ncp, P), a, tol * 10);
+      BOOST_CHECK_CLOSE(
+         dist.find_v1(boost::math::complement(x, b, ncp, Q)), a, tol * 10);
    }
    if(boost::math::tools::digits<RealType>() > 50)
    {
