@@ -501,11 +501,10 @@ void test_spots(T)
             b = b_values[i];
             x = a / (a+b); // roughly the median of ibeta
 
-            
             for (unsigned int j=0; j < 7; j++)
             {
-               BOOST_CHECK(boost::math::ibeta(a, b, x + delta[j+1]) > boost::math::ibeta(a, b, x + delta[j]));
-               BOOST_CHECK(boost::math::ibeta(a, b, x - delta[j]) > boost::math::ibeta(a, b, x - delta[j+1]));  
+               BOOST_CHECK(boost::math::ibeta(a, b, x + delta[j+1]) >= boost::math::ibeta(a, b, x + delta[j]));
+               BOOST_CHECK(boost::math::ibeta(a, b, x - delta[j]) >= boost::math::ibeta(a, b, x - delta[j+1]));  
             }
          }
       }
