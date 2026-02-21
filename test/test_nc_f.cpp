@@ -377,6 +377,18 @@ void test_spots(RealType, const char* name = nullptr)
          }
       }
    }
+   // Check find_v1/v2 edge cases
+   // Case when P=1 or P=0 
+   nc = 2;
+   BOOST_MATH_CHECK_THROW(dist.find_v1(x, b, nc, 1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist.find_v1(x, b, nc, 0), std::domain_error);
+   // Case when Q=1 or Q=0
+   BOOST_MATH_CHECK_THROW(dist.find_v1(boost::math::complement(x, b, nc, 1)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist.find_v1(boost::math::complement(x, b, nc, 0)), std::domain_error);
+   // Check very small values of x an evaluation error is thrown
+   x = boost::math::tools::epsilon<long double>() / 10;
+   BOOST_MATH_CHECK_THROW(dist.find_v1(boost::math::complement(x, b, nc, 0.5)), boost::math::evaluation_error);
+   BOOST_MATH_CHECK_THROW(dist.find_v1(x, b, nc, 0.5), boost::math::evaluation_error);
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )
