@@ -149,6 +149,10 @@ void test_spot(
          dist.find_v1(x, b, ncp, P), a, tol * 10);
       BOOST_CHECK_CLOSE(
          dist.find_v1(boost::math::complement(x, b, ncp, Q)), a, tol * 10);
+      BOOST_CHECK_CLOSE(
+         dist.find_v2(x, a, ncp, P), b, tol * 10);
+      BOOST_CHECK_CLOSE(
+         dist.find_v2(boost::math::complement(x, a, ncp, Q)), b, tol * 10);
    }
    if(boost::math::tools::digits<RealType>() > 50)
    {
