@@ -152,12 +152,13 @@ void test_beta(T, const char* name)
 }
 
 template <class T>
-void test_spots(T)
+void test_spots(T, const char* name)
 {
    //
    // basic sanity checks, tolerance is 30 epsilon expressed as a percentage:
    // Spot values are from http://functions.wolfram.com/webMathematica/FunctionEvaluation.jsp?name=BetaRegularized
    // using precision of 50 decimal digits.
+   std::cout << "Testing spot values with type " << name << std::endl;
    T tolerance = boost::math::tools::epsilon<T>() * 3000;
    if (boost::math::tools::digits<T>() > 100)
       tolerance *= 2;
@@ -503,8 +504,10 @@ void test_spots(T)
 
             for (unsigned int j=0; j < 7; j++)
             {
-               BOOST_CHECK(boost::math::ibeta(a, b, x + delta[j+1]) >= boost::math::ibeta(a, b, x + delta[j]));
-               BOOST_CHECK(boost::math::ibeta(a, b, x - delta[j]) >= boost::math::ibeta(a, b, x - delta[j+1]));  
+               BOOST_CHECK_MESSAGE(boost::math::ibeta(a, b, x + delta[j+1]) > boost::math::ibeta(a, b, x + delta[j]), 
+                  "ibeta not monotonically increasing above a/(a+b) for ibeta(" << a << ", " << b << ", " << x << "): [" << boost::math::ibeta(a, b, x - delta[j]) << " >= " << boost::math::ibeta(a, b, x - delta[j+1]) << "]");
+               BOOST_CHECK_MESSAGE(boost::math::ibeta(a, b, x - delta[j]) > boost::math::ibeta(a, b, x - delta[j+1]), 
+                  "ibeta not monotonically increasing below a/(a+b) for ibeta(" << a << ", " << b << ", " << x << "): [" << boost::math::ibeta(a, b, x - delta[j]) << " >= " << boost::math::ibeta(a, b, x - delta[j+1]) << "]");  
             }
          }
       }
