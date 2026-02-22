@@ -505,9 +505,9 @@ void test_spots(T, const char* name)
             for (unsigned int j=0; j < 7; j++)
             {
                BOOST_CHECK_MESSAGE(boost::math::ibeta(a, b, x + delta[j+1]) > boost::math::ibeta(a, b, x + delta[j]), 
-                  "ibeta not monotonically increasing above a/(a+b) for ibeta(" << a << ", " << b << ", " << x << "): [" << boost::math::ibeta(a, b, x - delta[j]) << " >= " << boost::math::ibeta(a, b, x - delta[j+1]) << "]");
+                  "ibeta not monotonically increasing above a/(a+b) for ibeta(" << a << ", " << b << ", " << x << ") and delta=" << delta[j] << ": [" << boost::math::ibeta(a, b, x + delta[j+1]) << " >= " << boost::math::ibeta(a, b, x + delta[j]) << "]");
                BOOST_CHECK_MESSAGE(boost::math::ibeta(a, b, x - delta[j]) > boost::math::ibeta(a, b, x - delta[j+1]), 
-                  "ibeta not monotonically increasing below a/(a+b) for ibeta(" << a << ", " << b << ", " << x << "): [" << boost::math::ibeta(a, b, x - delta[j]) << " >= " << boost::math::ibeta(a, b, x - delta[j+1]) << "]");  
+                  "ibeta not monotonically increasing below a/(a+b) for ibeta(" << a << ", " << b << ", " << x << ") and delta=" << delta[j] << ": [" << boost::math::ibeta(a, b, x - delta[j]) << " >= " << boost::math::ibeta(a, b, x - delta[j+1]) << "]");  
             }
          }
       }
