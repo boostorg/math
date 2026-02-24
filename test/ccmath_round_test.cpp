@@ -40,23 +40,41 @@ constexpr void test()
     static_assert(boost::math::ccmath::lround(std::numeric_limits<T>::infinity()) == 0l);
     static_assert(boost::math::ccmath::llround(std::numeric_limits<T>::infinity()) == 0ll);
 
+    static_assert(boost::math::ccmath::round(T(0.1)) == T(0));
+    static_assert(boost::math::ccmath::round(T(0.5)) == T(1));
+    static_assert(boost::math::ccmath::round(T(0.9)) == T(1));
     static_assert(boost::math::ccmath::round(T(2.3)) == T(2));
     static_assert(boost::math::ccmath::round(T(2.5)) == T(3));
     static_assert(boost::math::ccmath::round(T(2.7)) == T(3));
+    static_assert(boost::math::ccmath::round(T(-0.1)) == T(0));
+    static_assert(boost::math::ccmath::round(T(-0.5)) == T(-1));
+    static_assert(boost::math::ccmath::round(T(-0.9)) == T(-1));
     static_assert(boost::math::ccmath::round(T(-2.3)) == T(-2));
     static_assert(boost::math::ccmath::round(T(-2.5)) == T(-3));
     static_assert(boost::math::ccmath::round(T(-2.7)) == T(-3));
 
+    static_assert(boost::math::ccmath::lround(T(0.1)) == 0l);
+    static_assert(boost::math::ccmath::lround(T(0.5)) == 1l);
+    static_assert(boost::math::ccmath::lround(T(0.9)) == 1l);
     static_assert(boost::math::ccmath::lround(T(2.3)) == 2l);
     static_assert(boost::math::ccmath::lround(T(2.5)) == 3l);
     static_assert(boost::math::ccmath::lround(T(2.7)) == 3l);
+    static_assert(boost::math::ccmath::lround(T(-0.1)) == 0l);
+    static_assert(boost::math::ccmath::lround(T(-0.5)) == -1l);
+    static_assert(boost::math::ccmath::lround(T(-0.9)) == -1l);
     static_assert(boost::math::ccmath::lround(T(-2.3)) == -2l);
     static_assert(boost::math::ccmath::lround(T(-2.5)) == -3l);
     static_assert(boost::math::ccmath::lround(T(-2.7)) == -3l);
 
+    static_assert(boost::math::ccmath::llround(T(0.1)) == 0ll);
+    static_assert(boost::math::ccmath::llround(T(0.5)) == 1ll);
+    static_assert(boost::math::ccmath::llround(T(0.9)) == 1ll);
     static_assert(boost::math::ccmath::llround(T(2.3)) == 2ll);
     static_assert(boost::math::ccmath::llround(T(2.5)) == 3ll);
     static_assert(boost::math::ccmath::llround(T(2.7)) == 3ll);
+    static_assert(boost::math::ccmath::llround(T(-0.1)) == 0ll);
+    static_assert(boost::math::ccmath::llround(T(-0.5)) == -1ll);
+    static_assert(boost::math::ccmath::llround(T(-0.9)) == -1ll);
     static_assert(boost::math::ccmath::llround(T(-2.3)) == -2ll);
     static_assert(boost::math::ccmath::llround(T(-2.5)) == -3ll);
     static_assert(boost::math::ccmath::llround(T(-2.7)) == -3ll);
