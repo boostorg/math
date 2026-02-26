@@ -263,6 +263,8 @@ void instantiate(RealType)
    boost::math::tgamma_lower(v1, v2);
    boost::math::gamma_p(v1, v2);
    boost::math::gamma_q(v1, v2);
+   boost::math::lgamma_q(v1, v2);
+   boost::math::lgamma_p(v1, v2);
    boost::math::gamma_p_inv(v1, v2);
    boost::math::gamma_q_inv(v1, v2);
    boost::math::gamma_p_inva(v1, v2);
@@ -542,6 +544,8 @@ void instantiate(RealType)
    boost::math::tgamma_lower(v1 * 1, v2 - 0);
    boost::math::gamma_p(v1 * 1, v2 + 0);
    boost::math::gamma_q(v1 * 1, v2 + 0);
+   boost::math::lgamma_q(v1 * 1, v2 + 0);
+   boost::math::lgamma_p(v1 * 1, v2 + 0);
    boost::math::gamma_p_inv(v1 * 1, v2 + 0);
    boost::math::gamma_q_inv(v1 * 1, v2 + 0);
    boost::math::gamma_p_inva(v1 * 1, v2 + 0);
@@ -793,6 +797,8 @@ void instantiate(RealType)
    boost::math::tgamma_lower(v1, v2, pol);
    boost::math::gamma_p(v1, v2, pol);
    boost::math::gamma_q(v1, v2, pol);
+   boost::math::lgamma_q(v1, v2, pol);
+   boost::math::lgamma_p(v1, v2, pol);
    boost::math::gamma_p_inv(v1, v2, pol);
    boost::math::gamma_q_inv(v1, v2, pol);
    boost::math::gamma_p_inva(v1, v2, pol);
@@ -1070,6 +1076,8 @@ void instantiate(RealType)
    test::tgamma_lower(v1, v2);
    test::gamma_p(v1, v2);
    test::gamma_q(v1, v2);
+   test::lgamma_q(v1, v2);
+   test::lgamma_p(v1, v2);
    test::gamma_p_inv(v1, v2);
    test::gamma_q_inv(v1, v2);
    test::gamma_p_inva(v1, v2);
@@ -1351,6 +1359,8 @@ void instantiate_mixed(RealType)
    boost::math::gamma_p(i, s);
    boost::math::gamma_p(fr, lr);
    boost::math::gamma_q(i, s);
+   boost::math::lgamma_q(i, s);
+   boost::math::lgamma_p(i, s);
    boost::math::gamma_q(fr, lr);
    boost::math::gamma_p_inv(i, fr);
    boost::math::gamma_q_inv(s, fr);
@@ -1566,6 +1576,8 @@ void instantiate_mixed(RealType)
    boost::math::gamma_p(i, s, pol);
    boost::math::gamma_p(fr, lr, pol);
    boost::math::gamma_q(i, s, pol);
+   boost::math::lgamma_q(i, s, pol);
+   boost::math::lgamma_p(i, s, pol);
    boost::math::gamma_q(fr, lr, pol);
    boost::math::gamma_p_inv(i, fr, pol);
    boost::math::gamma_q_inv(s, fr, pol);
@@ -1777,7 +1789,11 @@ void instantiate_mixed(RealType)
    test::gamma_p(i, s);
    test::gamma_p(fr, lr);
    test::gamma_q(i, s);
+   test::lgamma_q(i, s);
+   test::lgamma_p(i, s);
    test::gamma_q(fr, lr);
+   test::lgamma_q(fr, lr);
+   test::lgamma_p(fr, lr);
    test::gamma_p_inv(i, fr);
    test::gamma_q_inv(s, fr);
    test::gamma_p_inva(i, lr);

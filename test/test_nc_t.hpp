@@ -494,7 +494,6 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          }
          catch(const boost::math::evaluation_error&) {}
 #endif
-#if 0
          //
          // Sanity check degrees-of-freedom finder, don't bother at float
          // precision though as there's not enough data in the probability
@@ -502,30 +501,53 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          // non-centrality parameter:
          //
          try{
+            Real non_centrality_precision_multiplier = 1;
+            Real df_precision_multiplier = 1;
+            if (data[i][0] > 10000)
+            {
+               non_centrality_precision_multiplier = 500;
+               df_precision_multiplier = 500;
+            }
+            if (data[i][0] > 1000000000)
+            {
+               df_precision_multiplier *= 50; // very little precision left at this point
+            }
             if((data[i][3] < 0.99) && (data[i][3] != 0))
             {
-               BOOST_CHECK_CLOSE_EX(
-                  boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], data[i][2], data[i][3]),
-                  data[i][0], precision, i);
+               if (data[i][0] < 1.0e12)  // no precision above this
+               {
+                  BOOST_CHECK_CLOSE_EX(
+                     boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], data[i][2], data[i][3]),
+                     data[i][0], precision * df_precision_multiplier, i);
+               }
                BOOST_CHECK_CLOSE_EX(
                   boost::math::non_central_t_distribution<value_type>::find_non_centrality(data[i][0], data[i][2], data[i][3]),
-                  data[i][1], precision, i);
+                  data[i][1], precision * non_centrality_precision_multiplier, i);
             }
             if((data[i][4] < 0.99) && (data[i][4] != 0))
             {
-               BOOST_CHECK_CLOSE_EX(
-                  boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(boost::math::complement(data[i][1], data[i][2], data[i][4])),
-                  data[i][0], precision, i);
+               if (data[i][0] < 1.0e12)  // no precision above this
+               {
+                  BOOST_CHECK_CLOSE_EX(
+                     boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(boost::math::complement(data[i][1], data[i][2], data[i][4])),
+                     data[i][0], precision * df_precision_multiplier, i);
+               }
                BOOST_CHECK_CLOSE_EX(
                   boost::math::non_central_t_distribution<value_type>::find_non_centrality(boost::math::complement(data[i][0], data[i][2], data[i][4])),
-                  data[i][1], precision, i);
+                  data[i][1], precision * non_centrality_precision_multiplier, i);
             }
          }
          catch(const std::exception& e)
          {
             BOOST_ERROR(e.what());
          }
-#endif
+         // Code coverage:
+         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], boost::math::tools::epsilon<value_type>() / 2, data[i][3]), boost::math::evaluation_error);
+         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(boost::math::complement(data[i][1], boost::math::tools::epsilon<value_type>() / 2, data[i][3])), boost::math::evaluation_error);
+         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], data[i][2], value_type(0)), boost::math::evaluation_error);
+         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(boost::math::complement(data[i][1], data[i][2], value_type(0))), boost::math::evaluation_error);
+         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], data[i][2], value_type(1)), boost::math::evaluation_error);
+         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(boost::math::complement(data[i][1], data[i][2], value_type(1))), boost::math::evaluation_error);
       }
    }
 #endif

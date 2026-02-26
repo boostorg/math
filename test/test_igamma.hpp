@@ -18,7 +18,6 @@
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
-
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
@@ -141,8 +140,9 @@ void test_gamma(T, const char* name)
 }
 
 template <class T>
-void test_spots(T)
+void test_spots(T, const char* name = nullptr)
 {
+   std::cout << "Testing spot values with type " << name << std::endl;
    //
    // basic sanity checks, tolerance is 10 epsilon expressed as a percentage:
    //
@@ -256,6 +256,68 @@ void test_spots(T)
    BOOST_CHECK_EQUAL(::boost::math::gamma_q(static_cast<T>(1770), static_cast<T>(1e-12)), 1);
    BOOST_CHECK_EQUAL(::boost::math::gamma_p(static_cast<T>(1770), static_cast<T>(1e-12)), 0);
    //
+   // Check that lgamma_q returns correct values with spot values calculated via wolframalpha  log(Q[a, x])
+   //
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(-84.71697591169848944613823640968965801339401810393519310714864307L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(22.5), static_cast<T>(2000)), static_cast<T>(-1883.489773203771543025750308264545743305089849873060383828767138L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(501.25), static_cast<T>(2000)), static_cast<T>(-810.2453406781655559126505101822969531699112391075198076300675402L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(20), static_cast<T>(0.25)), static_cast<T>(-2.946458104491857816330873290969917497748067639461638294404e-31L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(40), static_cast<T>(0.75)), static_cast<T>(-5.930604927955460343652485525435087275997461623988991819824e-54L), tolerance);
+   
+   //
+   // Check that lgamma_q returns correct values with spot values calculated via wolframalpha log(P[a, x])
+   // This is calculated using: N[Log[GammaRegularized[a,0, z]],64]
+   //
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(500), static_cast<T>(10)), static_cast<T>(-1470.017750815998931281954666549641187420649099004671023115157832L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(100), static_cast<T>(0.25)), static_cast<T>(-502.6163334118978895536207514636026023439623265152862757105793000L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(20), static_cast<T>(10.25)), static_cast<T>(-5.404004887981642339930593767572610169901594898478031307722239712L), tolerance);
+   // Small "a" produce larger errors 
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(0.25), static_cast<T>(100)), static_cast<T>(-3.220751038854414755009496530271388459559061551701603447517040280e-46L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(0.25), static_cast<T>(10)), static_cast<T>(-2.083032578160285760530530498275075010777428544413918699832758176e-6L), tolerance);   
+
+   #if defined(__CYGWIN__) || defined(__MINGW32__)
+   T gcc_win_mul = 2;
+#else
+   T gcc_win_mul = 1;
+#endif
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(50), static_cast<T>(2)), static_cast<T>(-5.214301903317168085381693412994550732094621576607843973832e-51L), tolerance * gcc_win_mul);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(500), static_cast<T>(10)), static_cast<T>(-3.79666711621207197039397438773960431648625558027046365463e-639L), tolerance * 3 * gcc_win_mul);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(5), static_cast<T>(1000)), static_cast<T>(-975.5430287171020511929200293377669175923128826278957569928895945L), tolerance);
+   // Pairs of tests that bisect the crossover condition in our code at double and then quad precision:
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(10), static_cast<T>(698.75)), static_cast<T>(-652.5952453102824132865663191324423994628428404928732148525545721L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(10), static_cast<T>(699.25)), static_cast<T>(-653.0888168445921483147208556398158677077537551419551652934287016L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(10), static_cast<T>(999.75)), static_cast<T>(-950.3752463850600415679327136010171192193400042422096029239012176L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(10), static_cast<T>(1000.25)), static_cast<T>(-950.8707509166152482936275883547176592196662090187561681198668099L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(50), static_cast<T>(698.75)), static_cast<T>(-522.3277960730837166223131189587863209730608668858212533099139269L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(50), static_cast<T>(699.25)), static_cast<T>(-522.7927997457481265511084805522296021540768033975669071565674196L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(50), static_cast<T>(999.75)), static_cast<T>(-805.7977867938474339107474131612354353193501692041340771552419902L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(50), static_cast<T>(1000.25)), static_cast<T>(-806.2733124989172792095030711884568388681331032891850662521501582L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(800), static_cast<T>(999.75)), static_cast<T>(-24.33274293617739453303937714319703386675839030466670622049929011L), tolerance * 2);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(800), static_cast<T>(1000.25)), static_cast<T>(-24.43514173634027477093666725985191846106997808357863808910970142L), tolerance * (boost::math::tools::digits<T>() > 54 ? 20 : 1));
+   // Once we get large a,x then error start to accumulate no matter what we do:
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(1200), static_cast<T>(1249.75)), static_cast<T>(-2.565496161584661216769813239648606145255794643472303927896044375L), tolerance * (std::is_floating_point<T>::value ? 1 : 4));
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(1200), static_cast<T>(1250.25)), static_cast<T>(-2.591934862117586205519309712218581885256650074210410262843591453L), tolerance * ((std::numeric_limits<T>::max_digits10 >= 36 || std::is_same<T, boost::math::concepts::real_concept>::value) ? 750 : (std::is_same<T, float>::value ? 1 : 50))); // Test fails on ARM64 and s390x long doubles and real_concept types unless tolerance is adjusted 
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(2200), static_cast<T>(2249.75)), static_cast<T>(-1.933779894897391651410597618307863427927461116308937004149240320L), tolerance * (std::is_floating_point<T>::value ? 1 : 10));
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_q(static_cast<T>(2200), static_cast<T>(2250.25)), static_cast<T>(-1.950346484067948344620463026377077515919992808640737320057812268L), tolerance * (std::is_same<T, float>::value ? 1 : (std::is_floating_point<T>::value ? 100 : 200)));
+   
+   // Long double and real_concept types need increased precision 
+   T real_concept_tol = 1;
+   if (std::is_same<T, boost::math::concepts::real_concept>::value || std::is_same<T, long double>::value){
+      real_concept_tol = 3;
+   }
+   // Pair of tests that bisect the crossover condition in our code at double and then quad precision 
+   // Oddly, the crossover condition is smaller for quad precision. This is because max_factorial is 100
+   // for boost::multiprecision::cpp_bin_float_quad and 170 for doubles. 
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(169.75), static_cast<T>(0.75)), static_cast<T>(-754.8681912874632573100058312311927462406154378562940316233389406L), tolerance * real_concept_tol);   
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(170.25), static_cast<T>(0.75)), static_cast<T>(-757.5814133895304434271729579978676692688834086380018151200693572L), tolerance * real_concept_tol);   
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(99.75), static_cast<T>(0.75)), static_cast<T>(-392.0259615581237826290999388631292473247947826682978959914359465L), tolerance * real_concept_tol);   
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(100.25), static_cast<T>(0.75)), static_cast<T>(-394.4749200332583219473980963811639065003421270272773619742710832L), tolerance * real_concept_tol);   
+
+   // Check large a, x values. Precision just isn't great here. 
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(1450.25), static_cast<T>(1500.75)), static_cast<T>(-0.09812447528127799786140178403478691390753413399549580160096975713L), tolerance * (std::is_same<T, boost::math::concepts::real_concept>::value ? 16 : 1));
+   BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(2000), static_cast<T>(1900)), static_cast<T>(-4.448523733381445722945397105917814000790587922314824687065050805L), tolerance * gcc_win_mul * (std::is_same<T, boost::math::concepts::real_concept>::value ? 8 : 1));
+
+   //
    // Coverage:
    //
 #ifndef BOOST_MATH_NO_EXCEPTIONS
@@ -265,6 +327,15 @@ void test_spots(T)
    BOOST_CHECK_THROW(boost::math::gamma_q(static_cast<T>(1), static_cast<T>(-2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::gamma_p(static_cast<T>(0), static_cast<T>(2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::gamma_q(static_cast<T>(0), static_cast<T>(2)), std::domain_error);
+
+   BOOST_CHECK_THROW(boost::math::lgamma_q(static_cast<T>(-1), static_cast<T>(2)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::lgamma_q(static_cast<T>(1), static_cast<T>(-2)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::lgamma_q(static_cast<T>(0), static_cast<T>(2)), std::domain_error);
+
+   BOOST_CHECK_THROW(boost::math::lgamma_p(static_cast<T>(-1), static_cast<T>(2)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::lgamma_p(static_cast<T>(1), static_cast<T>(-2)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::lgamma_p(static_cast<T>(0), static_cast<T>(2)), std::domain_error);
+
    BOOST_CHECK_THROW(boost::math::gamma_p_derivative(static_cast<T>(-1), static_cast<T>(2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::gamma_p_derivative(static_cast<T>(1), static_cast<T>(-2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::gamma_p_derivative(static_cast<T>(0), static_cast<T>(2)), std::domain_error);
@@ -275,6 +346,15 @@ void test_spots(T)
    BOOST_CHECK((boost::math::isnan)(boost::math::gamma_q(static_cast<T>(1), static_cast<T>(-2))));
    BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p(static_cast<T>(0), static_cast<T>(2))));
    BOOST_CHECK((boost::math::isnan)(boost::math::gamma_q(static_cast<T>(0), static_cast<T>(2))));
+
+   BOOST_CHECK((boost::math::isnan)(boost::math::lgamma_q(static_cast<T>(-1), static_cast<T>(2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::lgamma_q(static_cast<T>(1), static_cast<T>(-2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::lgamma_q(static_cast<T>(0), static_cast<T>(2))));
+
+   BOOST_CHECK((boost::math::isnan)(boost::math::lgamma_p(static_cast<T>(-1), static_cast<T>(2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::lgamma_p(static_cast<T>(1), static_cast<T>(-2))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::lgamma_p(static_cast<T>(0), static_cast<T>(2))));
+
    BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p_derivative(static_cast<T>(-1), static_cast<T>(2))));
    BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p_derivative(static_cast<T>(1), static_cast<T>(-2))));
    BOOST_CHECK((boost::math::isnan)(boost::math::gamma_p_derivative(static_cast<T>(0), static_cast<T>(2))));

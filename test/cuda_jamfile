@@ -165,6 +165,8 @@ run test_nc_f_pdf_double.cu ;
 run test_nc_f_pdf_float.cu ;
 run test_nc_f_quan_double.cu ;
 run test_nc_f_quan_float.cu ;
+run test_nc_f_finder_double.cu ;
+run test_nc_f_finder_float.cu ;
 
 run test_nc_chi_squared_cdf_double.cu ;
 run test_nc_chi_squared_cdf_float.cu ;
@@ -369,6 +371,10 @@ run test_gamma_p_derivative_double.cu ;
 run test_gamma_p_derivative_float.cu ;
 run test_gamma_p_inv_double.cu ;
 run test_gamma_p_inv_float.cu ;
+run test_lgamma_q_double.cu ;
+run test_lgamma_q_float.cu ;
+run test_lgamma_p_double.cu ;
+run test_lgamma_p_float.cu ;
 
 run test_log1p_double.cu ;
 run test_log1p_float.cu ;
