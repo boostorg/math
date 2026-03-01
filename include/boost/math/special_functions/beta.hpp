@@ -33,6 +33,7 @@
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/tools/roots.hpp>
+#include <iostream>
 
 namespace boost{ namespace math{
 
