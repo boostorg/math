@@ -1631,6 +1631,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
                   fract = local_result / local_fract;
                   std::cout << "Using continued fractions with number of terms: " << max_terms << std::endl;
                   std::cout << "Series converges with epsilon: " << boost::math::policies::get_epsilon<T, Policy>() << std::endl;
+                  std::cout << "Local result: " << local_result << std::endl;
+                  std::cout << "Local fract: " << local_fract << std::endl;
                }
             }
             else
