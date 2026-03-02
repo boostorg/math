@@ -1213,6 +1213,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
 {
    std::cout << std::setprecision(64) << "a= " << a << std::endl;
    std::cout << "b= " << b << std::endl;
+   std::cout << "x= " << x << std::endl;
    constexpr auto function = "boost::math::ibeta<%1%>(%1%, %1%, %1%)";
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
    BOOST_MATH_STD_USING // for ADL of std math functions.
@@ -1626,6 +1627,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
                else{
                   fract = local_result / local_fract;
                   std::cout << "Using continued fractions with number of terms: " << max_terms << std::endl;
+                  std::cout << "Series converges with epsilon: " << boost::math::policies::get_epsilon<T, Policy>() << std::endl;
                }
             }
             else
