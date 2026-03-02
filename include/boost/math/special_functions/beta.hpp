@@ -476,7 +476,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
                         const char* = "boost::math::ibeta<%1%>(%1%, %1%, %1%)")
 {
    BOOST_MATH_STD_USING
-
+   std::cout << "Not using lanczos approximation" << std::endl;
    if(!normalised)
    {
       return prefix * pow(x, a) * pow(y, b);
@@ -1616,8 +1616,6 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
             {
                ibeta_fraction2_t<T> f(a, b, x, y);
                ibeta_fraction2_t<T> g(a, b, x, y);
-               std::cout << "First (a,b) pair: (" << g().first << ", " << g().second << ")" << std::endl;
-               std::cout << "Second (a,b) pair: (" << g().first << ", " << g().second << ")" << std::endl;
                boost::math::uintmax_t max_terms = boost::math::policies::get_max_series_iterations<Policy>();
                T local_fract = boost::math::tools::continued_fraction_b(f, boost::math::policies::get_epsilon<T, Policy>(), max_terms);
                if (max_terms >= boost::math::policies::get_max_series_iterations<Policy>())
@@ -1629,8 +1627,6 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
                }
                else{
                   fract = local_result / local_fract;
-                  std::cout << "Using continued fractions with number of terms: " << max_terms << std::endl;
-                  std::cout << "Series converges with epsilon: " << boost::math::policies::get_epsilon<T, Policy>() << std::endl;
                   std::cout << "Local result: " << local_result << std::endl;
                   std::cout << "Local fract: " << local_fract << std::endl;
                }
@@ -1662,9 +1658,6 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       }
    }
    std::cout << "Fract is: " << fract << std::endl;
-   std::cout << "invert: " << invert << std::endl;
-   std::cout << "normalized: " << normalised << std::endl;
-   std::cout << "Beta(a,b): " << boost::math::beta(a, b, pol) << std::endl;
    std::cout << "ibeta(a,b)=" << (invert ? (normalised ? 1 : boost::math::beta(a, b, pol)) - fract : fract) << std::endl;
    std::cout << "===========================" << std::endl;
    return invert ? (normalised ? 1 : boost::math::beta(a, b, pol)) - fract : fract;
