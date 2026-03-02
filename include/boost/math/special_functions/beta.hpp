@@ -819,14 +819,14 @@ struct ibeta_fraction2_t
 {
    typedef boost::math::pair<T, T> result_type;
 
-   BOOST_MATH_GPU_ENABLED ibeta_fraction2_t(T a_, T b_, T x_, T y_) : a(a_), b(b_), x(x_), y(y_), m(0) {}
+   BOOST_MATH_GPU_ENABLED ibeta_fraction2_t(T a_, T b_, T x_, T y_) : a(a_), b(b_), x(x_), y(y_), m(static_cast<T>(0)) {}
 
    BOOST_MATH_GPU_ENABLED result_type operator()()
    {
       T denom = (a + 2 * m - 1);
       T aN = (m * (a + m - 1) / denom) * ((a + b + m - 1) / denom) * (b - m) * x * x;
 
-      T bN = static_cast<T>(m);
+      T bN = m;
       bN += (m * (b - m) * x) / (a + 2*m - 1);
       bN += ((a + m) * (a * y - b * x + 1 + m *(2 - x))) / (a + 2*m + 1);
 
@@ -837,7 +837,7 @@ struct ibeta_fraction2_t
 
 private:
    T a, b, x, y;
-   int m;
+   T m;
 };
 //
 // Evaluate the incomplete beta via the continued fraction representation:
