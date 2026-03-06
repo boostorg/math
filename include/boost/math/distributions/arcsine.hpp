@@ -261,6 +261,7 @@ namespace boost
         RealType cos2hpip = cos(half_pi<RealType>() * q);
         RealType cos2hpip2 = cos2hpip * cos2hpip;
         return -x_min * cos2hpip2 + x_min + x_max * cos2hpip2;
+      }
     } // namespace arcsine_detail
 
     template <class RealType = double, class Policy = policies::policy<> >
