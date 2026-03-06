@@ -238,9 +238,7 @@ namespace boost
         using boost::math::constants::half_pi;
         RealType sin2hpip = sin(half_pi<RealType>() * p);
         RealType sin2hpip2 = sin2hpip * sin2hpip;
-        result = -x_min * sin2hpip2 + x_min + x_max * sin2hpip2;
-
-        return result;
+        return -x_min * sin2hpip2 + x_min + x_max * sin2hpip2;
       }
       template <class RealType>
       BOOST_MATH_GPU_ENABLED inline RealType arcsine_cquantile(const RealType x, const RealType q, const RealType x_min, const RealType x_max)
@@ -262,9 +260,7 @@ namespace boost
         using boost::math::constants::half_pi;
         RealType cos2hpip = cos(half_pi<RealType>() * q);
         RealType cos2hpip2 = cos2hpip * cos2hpip;
-        result = -x_min * cos2hpip2 + x_min + x_max * cos2hpip2;
-
-        return result;
+        return -x_min * cos2hpip2 + x_min + x_max * cos2hpip2;
     } // namespace arcsine_detail
 
     template <class RealType = double, class Policy = policies::policy<> >
@@ -340,7 +336,7 @@ namespace boost
         return result;
       }
 
-      typedef policies::evaluation_t<RealType, Policy> policy_promoted_type;
+      typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
       return static_cast<RealType>(arcsine_detail::arcsine_mean(static_cast<policy_promoted_type>(x_min), static_cast<policy_promoted_type>(x_max)));
     } // mean
 
@@ -360,7 +356,7 @@ namespace boost
         return result;
       }
 
-      typedef policies::evaluation_t<RealType, Policy> policy_promoted_type;
+      typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
       return static_cast<RealType>(arcsine_detail::arcsine_variance(static_cast<policy_promoted_type>(x_min), static_cast<policy_promoted_type>(x_max)));
     } // variance
 
@@ -391,7 +387,7 @@ namespace boost
         return result;
       }
       // The median is the same as the mean
-      typedef policies::evaluation_t<RealType, Policy> policy_promoted_type;
+      typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
       return static_cast<RealType>(arcsine_detail::arcsine_mean(static_cast<policy_promoted_type>(x_min), static_cast<policy_promoted_type>(x_max)));
     }
 
@@ -430,7 +426,7 @@ namespace boost
       {
         return result;
       }
-      typedef policies::evaluation_t<RealType, Policy> policy_promoted_type;
+      typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
       return static_cast<RealType>(static_cast<policy_promoted_type>(-3) / static_cast<policy_promoted_type>(2));
     } // kurtosis_excess
 
@@ -450,7 +446,7 @@ namespace boost
       {
         return result;
       }
-      typedef policies::evaluation_t<RealType, Policy> policy_promoted_type;
+      typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
       return static_cast<RealType>(static_cast<policy_promoted_type>(3) / static_cast<policy_promoted_type>(2));
     } // kurtosis
 
@@ -474,7 +470,7 @@ namespace boost
       {
         return result;
       }
-      typedef policies::evaluation_t<RealType, Policy> policy_promoted_type;
+      typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
       return static_cast<RealType>(arcsine_detail::arcsine_pdf(static_cast<RealType>(x), 
                                                                static_cast<RealType>(x_min), 
                                                                static_cast<RealType>(x_max)));
@@ -497,7 +493,7 @@ namespace boost
       {
         return result;
       }
-      typedef policies::evaluation_t<RealType, Policy> policy_promoted_type;
+      typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
       return static_cast<RealType>(arcsine_detail::arcsine_cdf(static_cast<policy_promoted_type>(x), 
                                                                static_cast<policy_promoted_type>(x_min), 
                                                                static_cast<policy_promoted_type>(x_max)));
@@ -522,7 +518,7 @@ namespace boost
       {
         return result;
       }
-      typedef policies::evaluation_t<RealType, Policy> policy_promoted_type;
+      typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
       return static_cast<RealType>(arcsine_detail::arcsine_ccdf(static_cast<policy_promoted_type>(x), 
                                                                 static_cast<policy_promoted_type>(x_min), 
                                                                 static_cast<policy_promoted_type>(x_max)));
@@ -551,7 +547,7 @@ namespace boost
       {
         return result;
       }
-      typedef policies::evaluation_t<RealType, Policy> policy_promoted_type;
+      typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
       return static_cast<RealType>(arcsine_detail::arcsine_quantile(static_cast<policy_promoted_type>(x), 
                                                                     static_cast<policy_promoted_type>(p), 
                                                                     static_cast<policy_promoted_type>(x_min), 
@@ -579,13 +575,12 @@ namespace boost
       {
         return result;
       }
-      typedef policies::evaluation_t<RealType, Policy> policy_promoted_type;
+      typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
       return static_cast<RealType>(arcsine_detail::arcsine_quantile(static_cast<policy_promoted_type>(x), 
                                                                     static_cast<policy_promoted_type>(q), 
                                                                     static_cast<policy_promoted_type>(x_min), 
                                                                     static_cast<policy_promoted_type>(x_max)));
     } // Quantile Complement
-
   } // namespace math
 } // namespace boost
 
