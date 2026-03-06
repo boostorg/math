@@ -223,7 +223,7 @@ namespace boost
       }
       
       template <class RealType>
-      BOOST_MATH_GPU_ENABLED inline RealType arcsine_quantile(const RealType x, const RealType p, const RealType x_min, const RealType x_max)
+      BOOST_MATH_GPU_ENABLED inline RealType arcsine_quantile( const RealType p, const RealType x_min, const RealType x_max)
       {
         BOOST_MATH_STD_USING
         // Special cases:
@@ -241,7 +241,7 @@ namespace boost
         return -x_min * sin2hpip2 + x_min + x_max * sin2hpip2;
       }
       template <class RealType>
-      BOOST_MATH_GPU_ENABLED inline RealType arcsine_cquantile(const RealType x, const RealType q, const RealType x_min, const RealType x_max)
+      BOOST_MATH_GPU_ENABLED inline RealType arcsine_cquantile(const RealType q, const RealType x_min, const RealType x_max)
       {
         BOOST_MATH_STD_USING
         // Special cases:
@@ -460,7 +460,7 @@ namespace boost
       RealType x = xx;
 
       // Argument checks:
-      RealType result = 0; 
+      RealType result; 
       if (!arcsine_detail::check_dist_and_x(
         "boost::math::pdf(arcsine_distribution<%1%> const&, %1%)",
         x_min,
@@ -471,9 +471,9 @@ namespace boost
         return result;
       }
       typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
-      return static_cast<RealType>(arcsine_detail::arcsine_pdf(static_cast<RealType>(x), 
-                                                               static_cast<RealType>(x_min), 
-                                                               static_cast<RealType>(x_max)));
+      return static_cast<RealType>(arcsine_detail::arcsine_pdf(static_cast<policy_promoted_type>(x), 
+                                                               static_cast<policy_promoted_type>(x_min), 
+                                                               static_cast<policy_promoted_type>(x_max)));
     } // pdf
 
     template <class RealType, class Policy>
@@ -548,10 +548,9 @@ namespace boost
         return result;
       }
       typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
-      return static_cast<RealType>(arcsine_detail::arcsine_quantile(static_cast<policy_promoted_type>(x), 
-                                                                    static_cast<policy_promoted_type>(p), 
+      return static_cast<RealType>(arcsine_detail::arcsine_quantile(static_cast<policy_promoted_type>(p), 
                                                                     static_cast<policy_promoted_type>(x_min), 
-                                                                    static_cast<policy_promoted_type>(x_max)));
+                                                                    static_cast<policy_promoted_type>(x_max)));                                                              
     } // quantile
 
     template <class RealType, class Policy>
@@ -576,8 +575,7 @@ namespace boost
         return result;
       }
       typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
-      return static_cast<RealType>(arcsine_detail::arcsine_quantile(static_cast<policy_promoted_type>(x), 
-                                                                    static_cast<policy_promoted_type>(q), 
+      return static_cast<RealType>(arcsine_detail::arcsine_quantile(static_cast<policy_promoted_type>(q), 
                                                                     static_cast<policy_promoted_type>(x_min), 
                                                                     static_cast<policy_promoted_type>(x_max)));
     } // Quantile Complement
