@@ -427,8 +427,7 @@ namespace boost
       {
         return result;
       }
-      typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
-      return static_cast<RealType>(static_cast<policy_promoted_type>(-3) / static_cast<policy_promoted_type>(2));
+      return static_cast<RealType>(-1.5f);
     } // kurtosis_excess
 
     template <class RealType, class Policy>
@@ -447,8 +446,7 @@ namespace boost
       {
         return result;
       }
-      typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
-      return static_cast<RealType>(static_cast<policy_promoted_type>(3) / static_cast<policy_promoted_type>(2));
+      return static_cast<RealType>(1.5f);
     } // kurtosis
 
     template <class RealType, class Policy>
