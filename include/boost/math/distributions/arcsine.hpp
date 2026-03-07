@@ -576,7 +576,7 @@ namespace boost
         return result;
       }
       typedef typename policies::evaluation_t<RealType, Policy> policy_promoted_type;
-      return static_cast<RealType>(arcsine_detail::arcsine_quantile(static_cast<policy_promoted_type>(q), 
+      return static_cast<RealType>(arcsine_detail::arcsine_cquantile(static_cast<policy_promoted_type>(q), 
                                                                     static_cast<policy_promoted_type>(x_min), 
                                                                     static_cast<policy_promoted_type>(x_max)));
     } // Quantile Complement
