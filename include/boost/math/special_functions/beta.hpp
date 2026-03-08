@@ -33,7 +33,6 @@
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/tools/roots.hpp>
-#include <iostream>
 
 namespace boost{ namespace math{
 
@@ -476,7 +475,6 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
                         const char* = "boost::math::ibeta<%1%>(%1%, %1%, %1%)")
 {
    BOOST_MATH_STD_USING
-   std::cout << "Not using lanczos approximation" << std::endl;
    if(!normalised)
    {
       return prefix * pow(x, a) * pow(y, b);
@@ -1211,9 +1209,6 @@ BOOST_MATH_GPU_ENABLED T ibeta_large_ab(T a, T b, T x, T y, bool invert, bool no
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_derivative)
 {
-   std::cout << std::setprecision(64) << "a= " << a << std::endl;
-   std::cout << "b= " << b << std::endl;
-   std::cout << "x= " << x << std::endl;
    constexpr auto function = "boost::math::ibeta<%1%>(%1%, %1%, %1%)";
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
    BOOST_MATH_STD_USING // for ADL of std math functions.
@@ -1596,7 +1591,6 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
          {
             fract = ibeta_large_ab(a, b, x, y, invert, normalised, pol);
             invert = false;
-            std::cout << "Using Erf approximation: " << fract << std::endl;
          }
          else
          {
@@ -1623,12 +1617,9 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
                   // Continued fraction failed, fall back to asymptotic expansion:
                   fract = ibeta_large_ab(a, b, x, y, invert, normalised, pol);
                   invert = false;
-                  std::cout << "Failed continued fractions so falling back to erf" << std::endl;
                }
                else{
                   fract = local_result / local_fract;
-                  std::cout << "Local result: " << local_result << std::endl;
-                  std::cout << "Local fract: " << local_fract << std::endl;
                }
             }
             else
@@ -1657,9 +1648,6 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
          }
       }
    }
-   std::cout << "Fract is: " << fract << std::endl;
-   std::cout << "ibeta(a,b)=" << (invert ? (normalised ? 1 : boost::math::beta(a, b, pol)) - fract : fract) << std::endl;
-   std::cout << "===========================" << std::endl;
    return invert ? (normalised ? 1 : boost::math::beta(a, b, pol)) - fract : fract;
 } // template <class T, class Lanczos>T ibeta_imp(T a, T b, T x, const Lanczos& l, bool inv, bool normalised)
 
