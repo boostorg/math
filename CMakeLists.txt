@@ -52,10 +52,14 @@ option(BOOST_MATH_BUILD_WITH_LEGACY_FUNCTIONS "Build the C99 and TR1 compiled li
 if(BOOST_MATH_BUILD_WITH_LEGACY_FUNCTIONS)
 
 include(CheckCXXSourceCompiles)
-set(CMAKE_REQUIRED_LIBRARIES Boost::config)
-set(CMAKE_REQUIRED_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/include")
+get_target_property(_config_type Boost::config TYPE)
+if(_config_type STREQUAL "INTERFACE_LIBRARY")
+  get_target_property(_config_inc Boost::config INTERFACE_INCLUDE_DIRECTORIES)
+else()
+  set(_config_inc "")
+endif()
+set(CMAKE_REQUIRED_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/include" ${_config_inc})
 check_cxx_source_compiles("#include <${CMAKE_CURRENT_SOURCE_DIR}/config/has_long_double_support.cpp> \n int main() { return 0;}" BOOST_MATH_HAS_LONG_DOUBLE)
-unset(CMAKE_REQUIRED_LIBRARIES)
 unset(CMAKE_REQUIRED_INCLUDES)
 
 set(C99_SOURCES
@@ -153,6 +157,14 @@ foreach(type IN LISTS types)
     target_compile_definitions(boost_math_c99${type} PRIVATE _DARWIN_C_SOURCE)
   endif()
 endforeach()
+
+if(BOOST_SUPERPROJECT_VERSION AND NOT CMAKE_VERSION VERSION_LESS 3.13)
+  set(boost_math_legacy_targets "")
+  foreach(type IN LISTS types)
+    list(APPEND boost_math_legacy_targets boost_math_c99${type} boost_math_tr1${type})
+  endforeach()
+  boost_install(TARGETS ${boost_math_legacy_targets} VERSION "${BOOST_SUPERPROJECT_VERSION}")
+endif()
 
 endif()
 
