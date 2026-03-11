@@ -97,7 +97,7 @@ void test_spots(T, const char* type_name)
     // called a second time.
     //
 #ifndef TEST_UDT
-    static const std::array<std::array<T, 3>, 28> data1 = {{
+    static const std::array<std::array<T, 3>, 31> data1 = {{
         {{ SC_(0.0), SC_(0.0), SC_(0.0) }},
         {{ SC_(-10.0), SC_(0.0), SC_(-10.0) }},
         {{ SC_(-1.0), SC_(-1.0), SC_(-0.84147098480789650665250232163029899962256306079837) }},
@@ -127,6 +127,10 @@ void test_spots(T, const char* type_name)
         {{ -2 * boost::math::constants::pi<T>(), SC_(1.0), SC_(-4.0) }},
         {{ -(20 * boost::math::constants::pi<T>()) / 21, SC_(1.0), SC_(-1.85095773382382555307064528472278244309033056100177750424044959888147151556780639619867349409562910808166870200808) }},
         {{ -(20 * boost::math::constants::pi<T>()) / 19, SC_(1.0), SC_(-2.16459459028073389414365205908793841951217248335965412335147127404907690285247170629778731438009399303864259295133) }},
+        // Test at n * pi / 2, see https://github.com/boostorg/math/issues/1377
+        {{ boost::math::constants::half_pi<T>(), SC_(0.25), boost::math::ellint_2(static_cast<T>(0.25)) }},
+        {{ 3 * boost::math::constants::half_pi<T>(), SC_(0.25), 3 * boost::math::ellint_2(static_cast<T>(0.25)) }},
+        {{ 6 * boost::math::constants::half_pi<T>(), SC_(0.25), 6 * boost::math::ellint_2(static_cast<T>(0.25)) }},
     }};
 
     do_test_ellint_e2<T>(data1, type_name, "Elliptic Integral E: Mathworld Data");
