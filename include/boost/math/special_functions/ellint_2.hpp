@@ -136,9 +136,15 @@ BOOST_MATH_GPU_ENABLED T ellint_e_imp(T phi, T k, const Policy& pol)
              return policies::raise_domain_error<T>("boost::math::ellint_2<%1%>(%1%, %1%)", "The parameter k is out of range, got k = %1%", k, pol);
           }
           T cosp = cos(rphi);
-          T c = 1 / (sinp * sinp);
-          T cm1 = cosp * cosp / (sinp * sinp);  // c - 1
-          result = s * ((1 - k2) * ellint_rf_imp(cm1, T(c - k2), c, pol) + k2 * (1 - k2) * ellint_rd(cm1, c, T(c - k2), pol) / 3 + k2 * sqrt(cm1 / (c * (c - k2))));
+          T c = sinp * sinp;
+          if (c > tools::min_value<T>())
+          {
+             c = 1 / c;
+             T cm1 = cosp * cosp / (sinp * sinp);  // c - 1
+             result = s * ((1 - k2) * ellint_rf_imp(cm1, T(c - k2), c, pol) + k2 * (1 - k2) * ellint_rd(cm1, c, T(c - k2), pol) / 3 + k2 * sqrt(cm1 / (c * (c - k2))));
+          }
+          else
+             result = 0;
        }
        if (m != 0)
        {
