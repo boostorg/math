@@ -475,7 +475,6 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
                         const char* = "boost::math::ibeta<%1%>(%1%, %1%, %1%)")
 {
    BOOST_MATH_STD_USING
-
    if(!normalised)
    {
       return prefix * pow(x, a) * pow(y, b);
@@ -818,14 +817,14 @@ struct ibeta_fraction2_t
 {
    typedef boost::math::pair<T, T> result_type;
 
-   BOOST_MATH_GPU_ENABLED ibeta_fraction2_t(T a_, T b_, T x_, T y_) : a(a_), b(b_), x(x_), y(y_), m(0) {}
+   BOOST_MATH_GPU_ENABLED ibeta_fraction2_t(T a_, T b_, T x_, T y_) : a(a_), b(b_), x(x_), y(y_), m(static_cast<T>(0)) {}
 
    BOOST_MATH_GPU_ENABLED result_type operator()()
    {
       T denom = (a + 2 * m - 1);
       T aN = (m * (a + m - 1) / denom) * ((a + b + m - 1) / denom) * (b - m) * x * x;
 
-      T bN = static_cast<T>(m);
+      T bN = m;
       bN += (m * (b - m) * x) / (a + 2*m - 1);
       bN += ((a + m) * (a * y - b * x + 1 + m *(2 - x))) / (a + 2*m + 1);
 
@@ -836,7 +835,7 @@ struct ibeta_fraction2_t
 
 private:
    T a, b, x, y;
-   int m;
+   T m;
 };
 //
 // Evaluate the incomplete beta via the continued fraction representation:
@@ -1142,7 +1141,20 @@ BOOST_MATH_GPU_ENABLED T ibeta_large_ab(T a, T b, T x, T y, bool invert, bool no
 
    T x0 = a / (a + b);
    T y0 = b / (a + b);
-   T nu = x0 * log(x / x0) + y0 * log(y / y0);
+
+   // Expand nu about x0
+   T nu = 0;
+   for (int i=2; i<5; i++)
+   {
+      nu += pow(x-x0, i) / i * (pow(x0, -(i-1)) - pow(x0-1, -(i-1))) * pow(-1, i+1);
+   }
+   // Calculate the next term in the series
+   T remainder = pow(x-x0, 5) / 5 * (pow(x0, -4) - pow(x0-1, 4));
+
+   // If the remainder is large, then fall back to using the log formula
+   if (remainder >= tools::forth_root_epsilon<T>()){
+      nu = x0 * log(x / x0) + y0 * log(y / y0);
+   }
    //
    // Above compution is unstable, force nu to zero if
    // something went wrong:
@@ -1181,7 +1193,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_large_ab(T a, T b, T x, T y, bool invert, bool no
    T mul = 1;
    if (!normalised)
       mul = boost::math::beta(a, b, pol);
-
+   // T log_erf_remainder = -0.5 * log(2 * constants::pi<T>() * (a+b)) + a * log(x / x0) + b * log((1-x) / (1-x0)) + log(abs(1/nu - sqrt(x0 * (1-x0)) / (x-x0)));
    return mul * ((invert ? (1 + boost::math::erf(-nu * sqrt((a + b) / 2), pol)) / 2 : boost::math::erfc(-nu * sqrt((a + b) / 2), pol) / 2));
 }
 
@@ -1571,37 +1583,48 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       else
       {
          // a and b both large:
-         bool use_asym = false;
          T ma = BOOST_MATH_GPU_SAFE_MAX(a, b);
-         T xa = ma == a ? x : y;
          T saddle = ma / (a + b);
-         T powers = 0;
-         if ((ma > 1e-5f / tools::epsilon<T>()) && (ma / BOOST_MATH_GPU_SAFE_MIN(a, b) < (xa < saddle ? 2 : 15)))
-         {
-            if (a == b)
-               use_asym = true;
-            else
-            {
-               powers = exp(log(x / (a / (a + b))) * a + log(y / (b / (a + b))) * b);
-               if (powers < tools::epsilon<T>())
-                  use_asym = true;
-            }
-         }
-         if(use_asym)
+         // If ma large and x is close to saddle, use `erf` approximation in `ibeta_large_ab`. 
+         // In this case we don't need to invert
+         if ((ma > 1e-5f / tools::epsilon<T>()) && (fabs(saddle - x) < 1e-12) && (1 - saddle > 0.125))
          {
             fract = ibeta_large_ab(a, b, x, y, invert, normalised, pol);
-            if (fract * tools::epsilon<T>() < powers)
-            {
-               // Erf approximation failed, correction term is too large, fall back:
-               fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
-            }
-            else
-               invert = false;
+            invert = false;
          }
          else
-            fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
-            
-         BOOST_MATH_INSTRUMENT_VARIABLE(fract);
+         {
+            // This is the same logic that is in `ibeta_fraction2`. We have repeated 
+            // the implementation here because when x is close to saddle, the continued
+            // fraction will not converge. If this occurs, we fall back to the `erf`
+            // approximation. Simply using `ibeta_fraction2` will cause an evaluation 
+            // error to be thrown and we won't be able to use the `erf` approximation.
+            typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
+            T local_result = ibeta_power_terms(a, b, x, y, lanczos_type(), normalised, pol);
+            if (p_derivative)
+            {
+               *p_derivative = local_result;
+               BOOST_MATH_ASSERT(*p_derivative >= 0);
+            }
+            if (local_result != 0)
+            {
+               ibeta_fraction2_t<T> f(a, b, x, y);
+               ibeta_fraction2_t<T> g(a, b, x, y);
+               boost::math::uintmax_t max_terms = boost::math::policies::get_max_series_iterations<Policy>();
+               T local_fract = boost::math::tools::continued_fraction_b(f, boost::math::policies::get_epsilon<T, Policy>(), max_terms);
+               if (max_terms >= boost::math::policies::get_max_series_iterations<Policy>())
+               {
+                  // Continued fraction failed, fall back to asymptotic expansion:
+                  fract = ibeta_large_ab(a, b, x, y, invert, normalised, pol);
+                  invert = false;
+               }
+               else{
+                  fract = local_result / local_fract;
+               }
+            }
+            else
+               fract = 0;
+         }
       }
    }
    if(p_derivative)
