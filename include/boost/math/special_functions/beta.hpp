@@ -19,7 +19,6 @@
 #include <boost/math/tools/cstdint.hpp>
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/promotion.hpp>
-#include <boost/math/tools/cstdint.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/special_functions/log1p.hpp>
@@ -828,7 +827,7 @@ struct ibeta_fraction2_t
       bN += (m * (b - m) * x) / (a + 2*m - 1);
       bN += ((a + m) * (a * y - b * x + 1 + m *(2 - x))) / (a + 2*m + 1);
 
-      ++m;
+      m += 1;
 
       return boost::math::make_pair(aN, bN);
    }
@@ -1609,7 +1608,6 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
             if (local_result != 0)
             {
                ibeta_fraction2_t<T> f(a, b, x, y);
-               ibeta_fraction2_t<T> g(a, b, x, y);
                boost::math::uintmax_t max_terms = boost::math::policies::get_max_series_iterations<Policy>();
                T local_fract = boost::math::tools::continued_fraction_b(f, boost::math::policies::get_epsilon<T, Policy>(), max_terms);
                if (max_terms >= boost::math::policies::get_max_series_iterations<Policy>())
