@@ -437,11 +437,19 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(cdf(as_m2m1, -1.05), static_cast<RealType>(0.85643370687129372924905811522494428117838480010259L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(cdf(as_m2m1, -1.5), static_cast<RealType>(0.5L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(cdf(as_m2m1, -1.95), static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L), 8 * tolerance); //  Not much less accurate.
+    BOOST_CHECK_EQUAL(cdf(as_m2m1, as_m2m1.x_min()), 0);
+    BOOST_CHECK_EQUAL(cdf(as_m2m1, as_m2m1.x_max()), 1);
+    BOOST_CHECK_EQUAL(cdf(complement(as_m2m1, as_m2m1.x_min())), 1);
+    BOOST_CHECK_EQUAL(cdf(complement(as_m2m1, as_m2m1.x_max())), 0);
 
     // Quantile
     BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.85643370687129372924905811522494428117838480010259L)), -static_cast<RealType>(1.05L), 2 * tolerance); //
     BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.5L)), -static_cast<RealType>(1.5L), 2 * tolerance);                             //
     BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L)), -static_cast<RealType>(1.95L), 4 * tolerance);     //
+    BOOST_CHECK_EQUAL(quantile(as_m2m1, 1), 1);
+    BOOST_CHECK_EQUAL(quantile(as_m2m1, 0), 0); 
+    BOOST_CHECK_EQUAL(quantile(complement(as_m2m1, 1)), 0);
+    BOOST_CHECK_EQUAL(quantile(complement(as_m2m1, 0)), 1); 
 
     BOOST_CHECK_CLOSE_FRACTION(quantile(complement(as_m2m1, static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L))), -static_cast<RealType>(1.05L), 2 * tolerance); //
     BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.5L)), -static_cast<RealType>(1.5L), 2 * tolerance);                             //
