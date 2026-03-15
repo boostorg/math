@@ -453,39 +453,55 @@ void test_spots(T)
          static_cast<T>(4),
          ldexp(static_cast<T>(1 + static_cast<T>(1.0) / 1024), -351)),
       static_cast<T>(2.381008060978474962211278613067275529112106932635520021e-212L), tolerance);
-      BOOST_CHECK_CLOSE(
-         ::boost::math::beta(
-            static_cast<T>(2),
-            static_cast<T>(4),
-            ldexp(static_cast<T>(1 + static_cast<T>(1.0) / 2048), -351)),
-         static_cast<T>(2.378685692854274898232669682422430136513931911501225435e-212L), tolerance);
-      BOOST_CHECK_CLOSE(
-         ::boost::math::ibeta(
-            static_cast<T>(3),
-            static_cast<T>(5),
-            ldexp(static_cast<T>(1 + static_cast<T>(15) / 16), -268)),
-            static_cast<T>(2.386034198603463687323052353589201848077110231388968865e-240L), tolerance);
-      BOOST_CHECK_CLOSE(
-         ::boost::math::ibeta_derivative(
-            static_cast<T>(2),
-            static_cast<T>(4),
-            ldexp(static_cast<T>(1), -557)),
-         static_cast<T>(4.23957586190238472641508753637420672781472122471791800210e-167L), tolerance * 4);
-      BOOST_CHECK_CLOSE(
-         ::boost::math::ibeta_derivative(
-            static_cast<T>(2),
-            static_cast<T>(4.5),
-            ldexp(static_cast<T>(1), -557)),
-         static_cast<T>(5.24647512910420109893867082626308082567071751558842352760e-167L), tolerance * 20);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::beta(
+         static_cast<T>(2),
+         static_cast<T>(4),
+         ldexp(static_cast<T>(1 + static_cast<T>(1.0) / 2048), -351)),
+      static_cast<T>(2.378685692854274898232669682422430136513931911501225435e-212L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta(
+         static_cast<T>(3),
+         static_cast<T>(5),
+         ldexp(static_cast<T>(1 + static_cast<T>(15) / 16), -268)),
+         static_cast<T>(2.386034198603463687323052353589201848077110231388968865e-240L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_derivative(
+         static_cast<T>(2),
+         static_cast<T>(4),
+         ldexp(static_cast<T>(1), -557)),
+      static_cast<T>(4.23957586190238472641508753637420672781472122471791800210e-167L), tolerance * 4);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_derivative(
+         static_cast<T>(2),
+         static_cast<T>(4.5),
+         ldexp(static_cast<T>(1), -557)),
+      static_cast<T>(5.24647512910420109893867082626308082567071751558842352760e-167L), tolerance * 20);
 
+   // Test log_ibeta special function
+   // First check log_ibeta matches ibeta on a grid
 
-      T tiny = boost::math::tools::min_value<T>() / 2;
-      T small = boost::math::tools::epsilon<T>();
-      if (tiny != 0)
+   T a_vals[] = { 0.25, 1., 5., 10., 50.};
+   T x_vals[] = { 0.0078125, 0.0625, 0.25, 0.75};
+
+   for (T a : a_vals)
+   {
+      for (T b : a_vals)
       {
-         BOOST_CHECK_EQUAL(boost::math::ibeta(tiny, small, small), 1);
+         for (T x : x_vals)
+         {
+            BOOST_CHECK_CLOSE(exp(::boost::math::log_ibeta(a, b, x)), ::boost::math::ibeta(a, b, x), tolerance);
+         }
       }
-      BOOST_CHECK_EQUAL(boost::math::ibeta(static_cast<T>(2), static_cast<T>(1), static_cast<T>(0)), 0);
-      BOOST_CHECK_EQUAL(boost::math::ibeta(static_cast<T>(1), static_cast<T>(2), static_cast<T>(0)), 0);
+   }
+
+   T tiny = boost::math::tools::min_value<T>() / 2;
+   T small = boost::math::tools::epsilon<T>();
+   if (tiny != 0)
+   {
+      BOOST_CHECK_EQUAL(boost::math::ibeta(tiny, small, small), 1);
+   }
+   BOOST_CHECK_EQUAL(boost::math::ibeta(static_cast<T>(2), static_cast<T>(1), static_cast<T>(0)), 0);
+   BOOST_CHECK_EQUAL(boost::math::ibeta(static_cast<T>(1), static_cast<T>(2), static_cast<T>(0)), 0);
 }
 

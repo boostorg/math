@@ -1195,7 +1195,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_large_ab(T a, T b, T x, T y, bool invert, bool no
 //
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_derivative)
+BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_derivative, bool logarithm=false)
 {
    constexpr auto function = "boost::math::ibeta<%1%>(%1%, %1%, %1%)";
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
@@ -1235,12 +1235,32 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
          if(b == 0)
             return policies::raise_domain_error<T>(function, "The arguments a and b to the incomplete beta function cannot both be zero, with x=%1%.", x, pol);
          if(b > 0)
-            return static_cast<T>(inv ? 0 : 1);
+         {
+            if (!logarithm)
+            {
+               return static_cast<T>(inv ? 0 : 1);
+            }
+            else
+            {
+               return inv ? -policies::raise_overflow_error<T>(function, nullptr, pol) : T(0);
+            }
+            
+         }
+            
       }
       else if(b == 0)
       {
          if(a > 0)
-            return static_cast<T>(inv ? 1 : 0);
+         {
+            if (!logarithm)
+            {
+               return static_cast<T>(inv ? 1 : 0);
+            }
+            else
+            {
+               return inv ? T(0) : -policies::raise_overflow_error<T>(function, nullptr, pol);
+            }
+         }
       }
    }
    else
@@ -1257,7 +1277,14 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       {
          *p_derivative = (a == 1) ? (T)1 : (a < 1) ? T(tools::max_value<T>() / 2) : T(tools::min_value<T>() * 2);
       }
-      return (invert ? (normalised ? T(1) : boost::math::beta(a, b, pol)) : T(0));
+      if (!logarithm)
+      {
+         return (invert ? (normalised ? T(1) : boost::math::beta(a, b, pol)) : T(0));
+      }
+      else
+      {
+         return (invert ? (normalised ? 0 : log(boost::math::beta(a, b, pol))) : -policies::raise_overflow_error<T>(function, nullptr, pol));
+      }
    }
    if(x == 1)
    {
@@ -1265,7 +1292,15 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       {
          *p_derivative = (b == 1) ? T(1) : (b < 1) ? T(tools::max_value<T>() / 2) : T(tools::min_value<T>() * 2);
       }
-      return (invert == 0 ? (normalised ? 1 : boost::math::beta(a, b, pol)) : 0);
+      if (!logarithm)
+      {
+         return (invert == 0 ? (normalised ? 1 : boost::math::beta(a, b, pol)) : 0);
+      }
+      else
+      {
+         return (invert == 0 ? (normalised ? 0 : log(boost::math::beta(a, b, pol))) : -policies::raise_overflow_error<T>(function, nullptr, pol));
+      }
+      
    }
    if((a == 0.5f) && (b == 0.5f))
    {
@@ -1277,7 +1312,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       T p = invert ? asin(sqrt(y)) / constants::half_pi<T>() : asin(sqrt(x)) / constants::half_pi<T>();
       if(!normalised)
          p *= constants::pi<T>();
-      return p;
+      return logarithm ? log(p) : p;
    }
    if(a == 1)
    {
@@ -1294,7 +1329,15 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       {
          if(p_derivative)
             *p_derivative = 1;
-         return invert ? y : x;
+         if (!logarithm)
+         {
+            return invert ? y : x;
+         }
+         else
+         {
+            return invert ? log(y) : log(x);
+         }
+         
       }
 
       if(p_derivative)
@@ -1308,7 +1351,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
          p = invert ? T(-boost::math::powm1(x, a, pol)) : T(pow(x, a));
       if(!normalised)
          p /= a;
-      return p;
+      return logarithm ? log(p) : p;
    }
 
    if(BOOST_MATH_GPU_SAFE_MIN(a, b) <= 1)
@@ -1625,13 +1668,27 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
          }
       }
    }
-   return invert ? (normalised ? 1 : boost::math::beta(a, b, pol)) - fract : fract;
+   if (!logarithm)
+   {
+      return invert ? (normalised ? 1 : boost::math::beta(a, b, pol)) - fract : fract;
+   }
+   else
+   {
+      return invert ? (normalised ? boost::math::log1p(-fract) : log(boost::math::beta(a, b, pol) - fract)) : log(fract);
+   }
+   
 } // template <class T, class Lanczos>T ibeta_imp(T a, T b, T x, const Lanczos& l, bool inv, bool normalised)
 
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised)
 {
    return ibeta_imp(a, b, x, pol, inv, normalised, static_cast<T*>(nullptr));
+}
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline T log_ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised)
+{
+   return ibeta_imp(a, b, x, pol, inv, normalised, static_cast<T*>(nullptr), true);
 }
 
 template <class T, class Policy>
@@ -1792,6 +1849,29 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibeta(RT1 a, RT2 b, RT3 x)
 {
    return boost::math::ibeta(a, b, x, policies::policy<>());
+}
+
+template <class RT1, class RT2, class RT3, class Policy>
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
+   log_ibeta(RT1 a, RT2 b, RT3 x, const Policy&)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::log_ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), false, true), "boost::math::ibeta<%1%>(%1%,%1%,%1%)");
+}
+template <class RT1, class RT2, class RT3>
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
+   log_ibeta(RT1 a, RT2 b, RT3 x)
+{
+   return boost::math::log_ibeta(a, b, x, policies::policy<>());
 }
 
 template <class RT1, class RT2, class RT3, class Policy>
