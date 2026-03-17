@@ -380,18 +380,18 @@ BOOST_AUTO_TEST_CASE( test_main )
    gsl_set_error_handler_off();
 #endif
 #ifdef TEST_FLOAT
-   test_spots(0.0F);
+   test_spots(0.0F, "float");
 #endif
 #ifdef TEST_DOUBLE
-   test_spots(0.0);
+   test_spots(0.0, "double");
 #endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #ifdef TEST_LDOUBLE
-   test_spots(0.0L);
+   test_spots(0.0L, "long double");
 #endif
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
 #if defined(TEST_REAL_CONCEPT) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
-   test_spots(boost::math::concepts::real_concept(0.1));
+   test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 #endif
 #endif
