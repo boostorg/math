@@ -603,7 +603,7 @@ jobs:
           cmake --build .
           ctest --output-on-failure --no-tests=error
 
-  posix-cmake-install-legacy:
+  posix-cmake-install-legacy-static:
     strategy:
       fail-fast: false
       matrix:
@@ -641,6 +641,58 @@ jobs:
           cd ../boost-root
           mkdir __build__ && cd __build__
           cmake -DBOOST_INCLUDE_LIBRARIES=$LIBRARY -DBOOST_MATH_BUILD_WITH_LEGACY_FUNCTIONS=ON -DCMAKE_INSTALL_PREFIX=~/.local ..
+
+      - name: Install
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target install
+
+      - name: Use the installed library (legacy compiled)
+        run: |
+          cd ../boost-root/libs/$LIBRARY/test/cmake_install_test_legacy
+          mkdir __build__ && cd __build__
+          cmake -DCMAKE_INSTALL_PREFIX=~/.local ..
+          cmake --build .
+          ctest --output-on-failure --no-tests=error
+
+  posix-cmake-install-legacy-shared:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-15
+
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Boost
+        run: |
+          echo GITHUB_REPOSITORY: $GITHUB_REPOSITORY
+          LIBRARY=${GITHUB_REPOSITORY#*/}
+          echo LIBRARY: $LIBRARY
+          echo "LIBRARY=$LIBRARY" >> $GITHUB_ENV
+          echo GITHUB_BASE_REF: $GITHUB_BASE_REF
+          echo GITHUB_REF: $GITHUB_REF
+          REF=${GITHUB_BASE_REF:-$GITHUB_REF}
+          REF=${REF#refs/heads/}
+          echo REF: $REF
+          BOOST_BRANCH=develop && [ "$REF" == "master" ] && BOOST_BRANCH=master || true
+          echo BOOST_BRANCH: $BOOST_BRANCH
+          cd ..
+          git clone -b $BOOST_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
+          cd boost-root
+          mkdir -p libs/$LIBRARY
+          cp -r $GITHUB_WORKSPACE/* libs/$LIBRARY
+          git submodule update --init tools/boostdep
+          python tools/boostdep/depinst/depinst.py --git_args "--jobs 3" $LIBRARY
+
+      - name: Configure
+        run: |
+          cd ../boost-root
+          mkdir __build__ && cd __build__
+          cmake -DBOOST_INCLUDE_LIBRARIES=$LIBRARY -DBOOST_MATH_BUILD_WITH_LEGACY_FUNCTIONS=ON -DCMAKE_INSTALL_PREFIX=~/.local -DBUILD_SHARED_LIBS=ON ..
 
       - name: Install
         run: |
