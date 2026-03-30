@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#ifndef __CUDACC_RTC__
+#if !(defined(__CUDACC_RTC__) && defined(BOOST_MATH_ENABLE_NVRTC))
 
 #include <boost/math/tools/is_standalone.hpp>
 
@@ -678,7 +678,7 @@ namespace boost{ namespace math{
 // CUDA support:
 //
 
-#ifdef __CUDACC__
+#if defined(__CUDACC__) && defined(BOOST_MATH_ENABLE_CUDA)
 
 // We have to get our include order correct otherwise you get compilation failures
 #include <cuda.h>
