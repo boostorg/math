@@ -774,7 +774,7 @@ BOOST_MATH_GPU_ENABLED constexpr T gpu_safe_max(const T& a, const T& b) { return
 #    define BOOST_MATH_STATIC_LOCAL_VARIABLE
 #  else
 #    define BOOST_MATH_INLINE_CONSTEXPR constexpr
-#    define BOOST_MATH_STATIC constexpr
+#    define BOOST_MATH_STATIC static
 #    define BOOST_MATH_STATIC_LOCAL_VARIABLE static
 #  endif
 #endif
