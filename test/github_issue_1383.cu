@@ -12,11 +12,13 @@
 #include <boost/math/special_functions.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/numeric_limits.hpp>
+#include <boost/math/constants/constants.hpp>
 
 #include <iostream>
 #include <iomanip>
 #include <vector>
 #include <cmath>
+#include <random>
 #include "cuda_managed_ptr.hpp"
 #include "stopwatch.hpp"
 
@@ -63,9 +65,15 @@ int main()
     cuda_managed_ptr<float_type> output_vector(numElements);
 
     // Initialize the input vectors
+    // Check some of our numeric_limits for viability
+    std::mt19937_64 rng {42};
+    std::uniform_real_distribution<float_type> dist(0, boost::math::constants::pi<float_type>());
+    static_assert(boost::math::numeric_limits<float_type>::is_specialized, "Should be since it's a double");
+    static_assert(boost::math::numeric_limits<float_type>::is_signed, "Should be since it's a double");
+
     for (int i = 0; i < numElements; ++i)
     {
-        input_vector[i] = rand()/(float_type)RAND_MAX;
+        input_vector[i] = dist(rng);
     }
 
     // Launch the Vector Add CUDA Kernel
