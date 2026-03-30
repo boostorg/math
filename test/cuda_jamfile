@@ -11,6 +11,7 @@ project : requirements
 
 # Github Issues
 run github_issue_1383.cu ;
+run github_issue_1383_pt_2.cu ;
 
 # Quad
 run test_exp_sinh_quad_float.cu ;
