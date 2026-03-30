@@ -36,6 +36,7 @@ typedef double float_type;
 __global__ void cuda_test(const float_type *in, float_type *out, int numElements)
 {
     using std::cos;
+    const int i = blockDim.x * blockIdx.x + threadIdx.x;
 
     if (i < numElements)
     {
