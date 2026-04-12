@@ -548,6 +548,84 @@ void test_spots(RealType)
          static_cast<RealType>(1.0))),
          9);
 
+    // Tests for invert_probability_with_respect_to_degrees_of_freedom.
+    // Each case is derived from the CDF spot tests above: the exact df is known,
+    // so we verify that inverting CDF(x; df) = p recovers df to tight tolerance.
+    {
+       RealType tol_inv = static_cast<RealType>(1000) * boost::math::tools::epsilon<RealType>();
+
+       // df=2, x=-6.96455673428326, p=0.01
+       BOOST_CHECK_CLOSE_FRACTION(
+          students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+             static_cast<RealType>(-6.96455673428326),
+             static_cast<RealType>(0.01)),
+          static_cast<RealType>(2),
+          tol_inv);
+
+       // df=5, x=-3.36492999890721, p=0.01
+       BOOST_CHECK_CLOSE_FRACTION(
+          students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+             static_cast<RealType>(-3.36492999890721),
+             static_cast<RealType>(0.01)),
+          static_cast<RealType>(5),
+          tol_inv);
+
+       // df=5, x=-0.559429644, p=0.3
+       BOOST_CHECK_CLOSE_FRACTION(
+          students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+             static_cast<RealType>(-0.559429644),
+             static_cast<RealType>(0.3)),
+          static_cast<RealType>(5),
+          tol_inv);
+
+       // df=5, x=1.475884049, p=0.9
+       BOOST_CHECK_CLOSE_FRACTION(
+          students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+             static_cast<RealType>(1.475884049),
+             static_cast<RealType>(0.9)),
+          static_cast<RealType>(5),
+          tol_inv);
+
+       // df=5, x=-1.475884049, p=0.1
+       BOOST_CHECK_CLOSE_FRACTION(
+          students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+             static_cast<RealType>(-1.475884049),
+             static_cast<RealType>(0.1)),
+          static_cast<RealType>(5),
+          tol_inv);
+
+       // df=25, x=-5.2410429995425, p=0.00001
+       BOOST_CHECK_CLOSE_FRACTION(
+          students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+             static_cast<RealType>(-5.2410429995425),
+             static_cast<RealType>(0.00001)),
+          static_cast<RealType>(25),
+          tol_inv);
+
+       // Symmetry: positive x, p > 0.5 should give the same df.
+       // df=2, x=+6.96455673428326, p=0.99
+       BOOST_CHECK_CLOSE_FRACTION(
+          students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+             static_cast<RealType>(6.96455673428326),
+             static_cast<RealType>(0.99)),
+          static_cast<RealType>(2),
+          tol_inv);
+
+       // Domain error: p outside (0,1)
+#ifndef BOOST_NO_EXCEPTIONS
+       BOOST_MATH_CHECK_THROW(
+          students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+             static_cast<RealType>(2),
+             static_cast<RealType>(-0.1)),
+          std::domain_error);
+       BOOST_MATH_CHECK_THROW(
+          students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+             static_cast<RealType>(2),
+             static_cast<RealType>(1.1)),
+          std::domain_error);
+#endif
+    } // invert_probability_with_respect_to_degrees_of_freedom
+
     // Test for large degrees of freedom when should be same as normal.
     RealType inf = std::numeric_limits<RealType>::infinity();
     RealType nan = std::numeric_limits<RealType>::quiet_NaN();
