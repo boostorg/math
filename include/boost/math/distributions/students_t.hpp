@@ -440,6 +440,8 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::inver
          RealType exact_cdf = cdf(t_hat, x_abs);
          RealType residual = (exact_cdf > p_adj) ? (exact_cdf - p_adj) : (p_adj - exact_cdf);
          RealType relative_residual = (p_adj != 0) ? residual / p_adj : residual;
+         if (relative_residual <= tools::epsilon<RealType>() * 4)
+             return nu_hat; // Edgeworth estimate is already exact to machine precision.
          if (relative_residual <= static_cast<RealType>(0.1))
             hint = nu_hat;
       }
