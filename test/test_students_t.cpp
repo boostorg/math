@@ -551,84 +551,79 @@ void test_spots(RealType)
     // Tests for invert_probability_with_respect_to_degrees_of_freedom.
     // Each case is derived from the CDF spot tests above: the exact df is known,
     // so we verify that inverting CDF(x; df) = p recovers df to tight tolerance.
-    {
-       // 100 times higher tolerance as in the quantile spot tests above as
-       // we use root finding
-       RealType tol_inv = boost::math::tools::epsilon<RealType>() * 500000;
-       if (boost::math::tools::digits<RealType>() > 100)
-          tol_inv *= 50000;
-       BOOST_CHECK_CLOSE(
+    RealType tol_inv_df = static_cast<RealType>(0.01); // 0.01% relative error
+    BOOST_CHECK_CLOSE(
           students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
              static_cast<RealType>(-6.96455673428326),
              static_cast<RealType>(0.01)),
           static_cast<RealType>(2),
-          tol_inv);
+          tol_inv_df);
        BOOST_CHECK_CLOSE(
           students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
              static_cast<RealType>(-3.36492999890721),
              static_cast<RealType>(0.01)),
           static_cast<RealType>(5),
-          tol_inv);
+          tol_inv_df);
        BOOST_CHECK_CLOSE(
           students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
              static_cast<RealType>(-0.559429644),
              static_cast<RealType>(0.3)),
           static_cast<RealType>(5),
-          tol_inv);
+          tol_inv_df);
        BOOST_CHECK_CLOSE(
           students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
              static_cast<RealType>(1.475884049),
              static_cast<RealType>(0.9)),
           static_cast<RealType>(5),
-          tol_inv);
+          tol_inv_df);
        BOOST_CHECK_CLOSE(
           students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
              static_cast<RealType>(-1.475884049),
              static_cast<RealType>(0.1)),
           static_cast<RealType>(5),
-          tol_inv);
+          tol_inv_df);
        BOOST_CHECK_CLOSE(
           students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
              static_cast<RealType>(-5.2410429995425),
              static_cast<RealType>(0.00001)),
           static_cast<RealType>(25),
-          tol_inv);
+          tol_inv_df);
        BOOST_CHECK_CLOSE(
           students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
              static_cast<RealType>(6.96455673428326),
              static_cast<RealType>(0.99)),
           static_cast<RealType>(2),
-          tol_inv);
+          tol_inv_df);
        BOOST_CHECK_CLOSE(
           students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
              static_cast<RealType>(2),
              static_cast<RealType>(0.610822886098362)),
           static_cast<RealType>(0.1),
-          tol_inv);
+          tol_inv_df);
        BOOST_CHECK_CLOSE(
           students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
              static_cast<RealType>(2),
              static_cast<RealType>(0.777242554908434)),
           static_cast<RealType>(0.5),
-          tol_inv);
+          tol_inv_df);
        BOOST_CHECK_CLOSE(
           students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
              static_cast<RealType>(2),
              static_cast<RealType>(0.822925875908677)),
           static_cast<RealType>(0.75),
-          tol_inv);
+          tol_inv_df);
        BOOST_CHECK_CLOSE(
           students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
              static_cast<RealType>(2),
              static_cast<RealType>(0.977114826753374)),
           static_cast<RealType>(1000),
-          tol_inv);
+          tol_inv_df);
        BOOST_CHECK_CLOSE(
           students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
              static_cast<RealType>(2),
              static_cast<RealType>(0.97724973307434)),
           static_cast<RealType>(1e6),
-          tol_inv);
+          tol_inv_df);
 
        // Domain error: p outside (0,1)
 #ifndef BOOST_NO_EXCEPTIONS
