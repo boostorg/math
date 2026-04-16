@@ -622,12 +622,12 @@ void test_spots(RealType)
           static_cast<RealType>(0.977114826753374)),
        static_cast<RealType>(1000),
        tol_inv_df);
-     BOOST_CHECK_CLOSE(
-        students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
-           static_cast<RealType>(1),
-           static_cast<RealType>(0.8413326478347855)),
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+          static_cast<RealType>(1),
+          static_cast<RealType>(0.8413326478347855)),
        static_cast<RealType>(1e4),
-          tol_inv_df);
+       tol_inv_df);
 
     // Domain error: p outside (0,1)
 #ifndef BOOST_NO_EXCEPTIONS
