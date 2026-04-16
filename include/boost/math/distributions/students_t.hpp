@@ -453,7 +453,7 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::inver
    {
       // CDF(0; df) = 0.5 for all df; only solvable when p == 0.5.
       if (p_adj == static_cast<RealType>(0.5))
-         return boost::math::numeric_limits<RealType>::infinity();
+         return policies::raise_overflow_error<RealType>(function, 0, Policy());
       return policies::raise_domain_error<RealType>(
          function,
          "No degrees of freedom can satisfy CDF(0; df) == %1% (must be 0.5).",
