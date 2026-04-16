@@ -329,6 +329,81 @@ struct cdf_to_df_func
    bool comp;
 };
 
+//
+// Shared root-finding helper used by both find_degrees_of_freedom and
+// invert_probability_with_respect_to_degrees_of_freedom.
+//
+template <class RealType, class Policy, class Func>
+BOOST_MATH_GPU_ENABLED RealType solve_for_degrees_of_freedom(
+   Func f,
+   RealType hint,
+   bool rising,
+   const char* function,
+   Policy const&)
+{
+   tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
+   boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+   boost::math::pair<RealType, RealType> r = tools::bracket_and_solve_root(
+      f, hint, RealType(2), rising, tol, max_iter, Policy());
+   RealType result = r.first + (r.second - r.first) / 2;
+   if (max_iter >= policies::get_max_root_iterations<Policy>())
+   {
+      return policies::raise_evaluation_error<RealType>(function, // LCOV_EXCL_LINE
+         "Unable to locate solution in a reasonable time: either there is no answer to " // LCOV_EXCL_LINE
+         "the degrees of freedom or the answer is infinite. Current best guess is %1%", // LCOV_EXCL_LINE
+         result, Policy()); // LCOV_EXCL_LINE
+   }
+   return result;
+}
+
+//
+// Edgeworth warm-start for invert_probability_with_respect_to_degrees_of_freedom.
+// Returns the best df estimate from the quadratic Edgeworth approximation,
+// or a small fallback value (0.01) when no positive root is found.
+//
+template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED RealType approximate_df_with_edgeworth_expansion(RealType x_abs, RealType p_adj)
+{
+   BOOST_MATH_STD_USING
+   // F(x; nu) ~ cdf_normal(x) - pdf_normal(x)*(x + x^3)/(4*nu) + pdf_normal(x)*(3x + 5x^3 + 7x^5 - 3x^7)/(96*nu^2)
+   // Substituting u = 1/nu and setting F(x; nu) = p gives b*u^2 - a*u + c = 0, where:
+   //   a = pdf_normal(x) * (x + x^3) / 4
+   //   b = pdf_normal(x) * (3x + 5x^3 + 7x^5 - 3x^7) / 96
+   //   c = cdf_normal(x) - p
+   normal_distribution<RealType, Policy> std_normal(0, 1);
+   RealType pdf_val = pdf(std_normal, x_abs);
+   RealType cdf_val = cdf(std_normal, x_abs);
+
+   RealType x2 = x_abs * x_abs;
+   RealType x3 = x2 * x_abs;
+   RealType x5 = x3 * x2;
+   RealType x7 = x5 * x2;
+
+   RealType a = pdf_val * (x_abs + x3) / 4;
+   RealType b = pdf_val * (3 * x_abs + 5 * x3 + 7 * x5 - 3 * x7) / 96;
+   RealType c = cdf_val - p_adj;
+
+   RealType discriminant = a * a - 4 * b * c;
+   if (discriminant >= 0 && b != 0)
+   {
+      RealType sqrt_disc = sqrt(discriminant);
+      // Pick the smallest positive u (= largest df = 1/u).
+      RealType u1 = (a - sqrt_disc) / (2 * b);
+      RealType u2 = (a + sqrt_disc) / (2 * b);
+      RealType u = -1;
+      if (u1 > 0 && u2 > 0)
+         u = (u1 < u2) ? u1 : u2;
+      else if (u1 > 0)
+         u = u1;
+      else if (u2 > 0)
+         u = u2;
+
+      if (u > 0)
+         return 1 / u;
+   }
+   return static_cast<RealType>(0.01); // fallback
+}
+
 }  // namespace detail
 
 template <class RealType, class Policy>
@@ -353,16 +428,7 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::find_
       hint = 1;
 
    detail::sample_size_func<RealType, Policy> f(alpha, beta, sd, difference_from_mean);
-   tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
-   boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
-   boost::math::pair<RealType, RealType> r = tools::bracket_and_solve_root(f, hint, RealType(2), false, tol, max_iter, Policy());
-   RealType result = r.first + (r.second - r.first) / 2;
-   if(max_iter >= policies::get_max_root_iterations<Policy>())
-   {
-      return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time: either there is no answer to how many degrees of freedom are required" // LCOV_EXCL_LINE
-         " or the answer is infinite.  Current best guess is %1%", result, Policy()); // LCOV_EXCL_LINE
-   }
-   return result;
+   return detail::solve_for_degrees_of_freedom(f, hint, false, function, Policy());
 }
 
 template <class RealType, class Policy>
@@ -394,80 +460,15 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::inver
          p, Policy());
    }
 
-   //
-   // Step 1: Edgeworth warm start.
-   // F(x; nu) ~ Phi(x) - phi(x)(x + x^3)/(4*nu) + phi(x)(3x + 5x^3 + 7x^5 - 3x^7)/(96*nu^2)
-   // Substituting u = 1/nu and setting F(x; nu) = p gives:
-   //   B*u^2 - A*u + (Phi(x) - p) = 0
-   // where:
-   //   A = phi(x) * (x + x^3) / 4
-   //   B = phi(x) * (3x + 5x^3 + 7x^5 - 3x^7) / 96
-   //
-   normal_distribution<RealType, Policy> std_normal(0, 1);
-   RealType phi = pdf(std_normal, x_abs);
-   RealType Phi = cdf(std_normal, x_abs);
+   // Edgeworth warm start: falls back to 0.01 if no positive root was found.
+   RealType hint = detail::approximate_df_with_edgeworth_expansion<RealType, Policy>(x_abs, p_adj);
 
-   RealType x2 = x_abs * x_abs;
-   RealType x3 = x2 * x_abs;
-   RealType x5 = x3 * x2;
-   RealType x7 = x5 * x2;
-
-   RealType A = phi * (x_abs + x3) / 4;
-   RealType B = phi * (3 * x_abs + 5 * x3 + 7 * x5 - 3 * x7) / 96;
-   RealType C = Phi - p_adj;
-
-   RealType hint = static_cast<RealType>(0.01);
-   RealType discriminant = A * A - 4 * B * C;
-   if (discriminant >= 0 && B != 0)
-   {
-      RealType sqrt_disc = sqrt(discriminant);
-      // Two roots of B*u^2 - A*u + C = 0; pick the smallest positive u (largest nu = 1/u).
-      RealType u1 = (A - sqrt_disc) / (2 * B);
-      RealType u2 = (A + sqrt_disc) / (2 * B);
-      RealType u = -1;
-      if (u1 > 0 && u2 > 0)
-         u = (u1 < u2) ? u1 : u2;
-      else if (u1 > 0)
-         u = u1;
-      else if (u2 > 0)
-         u = u2;
-
-      if (u > 0)
-      {
-         RealType nu_hat = 1 / u;
-         // Step 2: validate by checking relative residual of the exact CDF.
-         students_t_distribution<RealType, Policy> t_hat(nu_hat);
-         RealType exact_cdf = cdf(t_hat, x_abs);
-         RealType residual = (exact_cdf > p_adj) ? (exact_cdf - p_adj) : (p_adj - exact_cdf);
-         RealType relative_residual = (p_adj != 0) ? residual / p_adj : residual;
-         if (relative_residual <= tools::epsilon<RealType>() * 4)
-             return nu_hat; // Edgeworth estimate is already exact to machine precision.
-         if (relative_residual <= static_cast<RealType>(0.1))
-            hint = nu_hat;
-      }
-   }
-
-   //
-   // Step 3: root-find with bracket_and_solve_root on f(df) = CDF(x; df) - p.
-   // For x > 0, CDF(x; df) is strictly increasing in df, so f is a rising function.
-   // Pass min(p_adj, q_adj) always and use the complement CDF when p_adj > q_adj
-   // to avoid catastrophic cancellation near 1 (mirrors non_centrality_finder_f).
-   //
+   // Root-find on f(df) = CDF(x; df) - p. For x > 0, CDF(x; df) is strictly
+   // increasing in df. Pass min(p_adj, q_adj) and use the complement CDF when
+   // p_adj > q_adj to avoid cancellation near 1.
    RealType q_adj = 1 - p_adj;
    detail::cdf_to_df_func<RealType, Policy> f(x_abs, p_adj < q_adj ? p_adj : q_adj, p_adj >= q_adj);
-   tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
-   boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
-   boost::math::pair<RealType, RealType> r = tools::bracket_and_solve_root(
-      f, hint, RealType(2), true, tol, max_iter, Policy());
-   RealType result = r.first + (r.second - r.first) / 2;
-   if (max_iter >= policies::get_max_root_iterations<Policy>())
-   {
-      return policies::raise_evaluation_error<RealType>(function,
-         "Unable to locate solution in a reasonable time: either there is no answer to "
-         "the degrees of freedom or the answer is infinite. Current best guess is %1%",
-         result, Policy());
-   }
-   return result;
+   return detail::solve_for_degrees_of_freedom(f, hint, true, function, Policy());
 }
 
 template <class RealType, class Policy>
