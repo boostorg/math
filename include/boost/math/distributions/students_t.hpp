@@ -285,6 +285,11 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<student
 // Parameter estimation follows:
 //
 namespace detail{
+
+// Minimum degrees-of-freedom used as the warm-start fallback when the
+// Edgeworth approximation yields no valid positive root or is inaccurate
+constexpr double df_hint_fallback = 0.01;
+
 //
 // Functors for finding degrees of freedom:
 //
@@ -358,11 +363,11 @@ BOOST_MATH_GPU_ENABLED RealType solve_for_degrees_of_freedom(
 
 //
 // Edgeworth warm-start for invert_probability_with_respect_to_degrees_of_freedom.
-// Returns the best df estimate from the quadratic Edgeworth approximation,
-// or a small fallback value (0.01) when no positive root is found.
+// On success writes a df estimate into 'result' and returns true.
+// Returns false when no positive root is found; 'result' is left unchanged.
 //
 template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED RealType approximate_df_with_edgeworth_expansion(RealType x_abs, RealType p_adj)
+BOOST_MATH_GPU_ENABLED bool approximate_df_with_edgeworth_expansion(RealType x_abs, RealType p_adj, RealType& result)
 {
    BOOST_MATH_STD_USING
    // F(x; nu) ~ cdf_normal(x) - pdf_normal(x)*(x + x^3)/(4*nu) + pdf_normal(x)*(3x + 5x^3 + 7x^5 - 3x^7)/(96*nu^2)
@@ -387,21 +392,17 @@ BOOST_MATH_GPU_ENABLED RealType approximate_df_with_edgeworth_expansion(RealType
    if (discriminant >= 0 && b != 0)
    {
       RealType sqrt_disc = sqrt(discriminant);
-      // Pick the smallest positive u (= largest df = 1/u).
-      RealType u1 = (a - sqrt_disc) / (2 * b);
-      RealType u2 = (a + sqrt_disc) / (2 * b);
-      RealType u = -1;
-      if (u1 > 0 && u2 > 0)
-         u = (u1 < u2) ? u1 : u2;
-      else if (u1 > 0)
-         u = u1;
-      else if (u2 > 0)
-         u = u2;
-
+      // The two roots of b*u^2 - a*u + c = 0. Pick the smallest positive u (= largest df = 1/u).
+      RealType u = (a - sqrt_disc) / (2 * b);
+      if (u <= 0)
+         u = (a + sqrt_disc) / (2 * b);
       if (u > 0)
-         return 1 / u;
+      {
+         result = 1 / u;
+         return true;
+      }
    }
-   return static_cast<RealType>(0.01); // fallback
+   return false;
 }
 
 }  // namespace detail
@@ -460,9 +461,19 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::inver
          p, Policy());
    }
 
-   // Edgeworth warm start: falls back to 0.01 if no positive root was found.
-   RealType hint = detail::approximate_df_with_edgeworth_expansion<RealType, Policy>(x_abs, p_adj);
-
+   // Edgeworth warm start: compute a df estimate; fall back to df_hint_fallback if it fails
+   // or is too inaccurate.
+   RealType hint = static_cast<RealType>(detail::df_hint_fallback);
+   if (detail::approximate_df_with_edgeworth_expansion<RealType, Policy>(x_abs, p_adj, hint))
+   {
+      // Check that approximation is at least somewhat close;
+      // for small degrees of freedom it does not fail but is very inaccurate.
+      students_t_distribution<RealType, Policy> t_approx(hint);
+      RealType exact_cdf = cdf(t_approx, x_abs);
+      RealType relative_error = fabs(exact_cdf - p_adj) / p_adj;
+      if (relative_error > static_cast<RealType>(0.1))
+         hint = static_cast<RealType>(detail::df_hint_fallback);
+   }
    // Root-find on f(df) = CDF(x; df) - p. For x > 0, CDF(x; df) is strictly
    // increasing in df. Pass min(p_adj, q_adj) and use the complement CDF when
    // p_adj > q_adj to avoid cancellation near 1.
