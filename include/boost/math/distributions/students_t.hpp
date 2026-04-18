@@ -367,7 +367,7 @@ BOOST_MATH_GPU_ENABLED RealType solve_for_degrees_of_freedom(
 // Returns false when no positive root is found; 'result' is left unchanged.
 //
 template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED bool approximate_df_with_edgeworth_expansion(RealType x_abs, RealType p_adj, RealType& result)
+BOOST_MATH_GPU_ENABLED bool approximate_df_with_edgeworth_expansion(RealType x, RealType p, RealType& result)
 {
    BOOST_MATH_STD_USING
    // F(x; nu) ~ cdf_normal(x) - pdf_normal(x)*(x + x^3)/(4*nu) + pdf_normal(x)*(3x + 5x^3 + 7x^5 - 3x^7)/(96*nu^2)
@@ -376,17 +376,17 @@ BOOST_MATH_GPU_ENABLED bool approximate_df_with_edgeworth_expansion(RealType x_a
    //   b = pdf_normal(x) * (3x + 5x^3 + 7x^5 - 3x^7) / 96
    //   c = cdf_normal(x) - p
    normal_distribution<RealType, Policy> std_normal(0, 1);
-   RealType pdf_val = pdf(std_normal, x_abs);
-   RealType cdf_val = cdf(std_normal, x_abs);
+   RealType pdf_val = pdf(std_normal, x);
+   RealType cdf_val = cdf(std_normal, x);
 
-   RealType x2 = x_abs * x_abs;
-   RealType x3 = x2 * x_abs;
+   RealType x2 = x * x;
+   RealType x3 = x2 * x;
    RealType x5 = x3 * x2;
    RealType x7 = x5 * x2;
 
-   RealType a = pdf_val * (x_abs + x3) / 4;
-   RealType b = pdf_val * (3 * x_abs + 5 * x3 + 7 * x5 - 3 * x7) / 96;
-   RealType c = cdf_val - p_adj;
+   RealType a = pdf_val * (x + x3) / 4;
+   RealType b = pdf_val * (3 * x + 5 * x3 + 7 * x5 - 3 * x7) / 96;
+   RealType c = cdf_val - p;
 
    RealType discriminant = a * a - 4 * b * c;
    if (discriminant >= 0 && b != 0)
@@ -446,14 +446,10 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::inver
    if (false == detail::check_probability(function, p, &error_result, Policy()))
       return error_result;
 
-   // Use symmetry: CDF(-x; df) = 1 - CDF(x; df), so always work with x >= 0.
-   RealType x_abs = (x < 0) ? -x : x;
-   RealType p_adj = (x < 0) ? (1 - p) : p;
-
-   if (x_abs == 0)
+   if (x == 0)
    {
       // CDF(0; df) = 0.5 for all df; only solvable when p == 0.5.
-      if (p_adj == static_cast<RealType>(0.5))
+      if (p == static_cast<RealType>(0.5))
          return policies::raise_overflow_error<RealType>(function, 0, Policy());
       return policies::raise_domain_error<RealType>(
          function,
@@ -462,24 +458,24 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::inver
    }
 
    // Edgeworth warm start: compute a df estimate; fall back to df_hint_fallback if it fails
-   // or is too inaccurate.
+   // or is too inaccurate
    RealType hint = static_cast<RealType>(detail::df_hint_fallback);
-   if (detail::approximate_df_with_edgeworth_expansion<RealType, Policy>(x_abs, p_adj, hint))
+   if (detail::approximate_df_with_edgeworth_expansion<RealType, Policy>(x, p, hint))
    {
       // Check that approximation is at least somewhat close;
       // for small degrees of freedom it does not fail but is very inaccurate.
       students_t_distribution<RealType, Policy> t_approx(hint);
-      RealType exact_cdf = cdf(t_approx, x_abs);
-      RealType relative_error = fabs(exact_cdf - p_adj) / p_adj;
+      RealType exact_cdf = cdf(t_approx, x);
+      RealType relative_error = fabs(exact_cdf - p) / p;
       if (relative_error > static_cast<RealType>(0.1))
          hint = static_cast<RealType>(detail::df_hint_fallback);
    }
-   // Root-find on f(df) = CDF(x; df) - p. For x > 0, CDF(x; df) is strictly
-   // increasing in df. Pass min(p_adj, q_adj) and use the complement CDF when
-   // p_adj > q_adj to avoid cancellation near 1.
-   RealType q_adj = 1 - p_adj;
-   detail::cdf_to_df_func<RealType, Policy> f(x_abs, p_adj < q_adj ? p_adj : q_adj, p_adj >= q_adj);
-   return detail::solve_for_degrees_of_freedom(f, hint, true, function, Policy());
+   // Root-find on f(df) = CDF(x; df) - p.
+   // CDF(x; df) is strictly increasing in df for x > 0, decreasing for x < 0.
+   // Use the smaller of p and q=1-p to avoid cancellation near 1.
+   RealType q = 1 - p;
+   detail::cdf_to_df_func<RealType, Policy> f(x, p < q ? p : q, p < q ? false : true);
+   return detail::solve_for_degrees_of_freedom(f, hint, x > 0, function, Policy());
 }
 
 template <class RealType, class Policy>
