@@ -628,6 +628,20 @@ void test_spots(RealType)
           static_cast<RealType>(0.8413326478347855)),
        static_cast<RealType>(1e4),
        tol_inv_df * static_cast<RealType>(5)); // Looser tolerance for ill-conditioned problem with very large df
+    // Small df case 1: Edgeworth expansion breaks down for small degrees if freedom, use fallback
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+          static_cast<RealType>(1e20),
+          static_cast<RealType>(0.5244796002843015)),
+       static_cast<RealType>(1e-3),
+       tol_inv_df);
+    // Small df case 2: Edgeworth expansion succeeds but is inaccurate, use fallback
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+          static_cast<RealType>(2.0),
+          static_cast<RealType>(0.500000000644961)),
+       static_cast<RealType>(1e-10),
+       tol_inv_df);
     // Domain error: p outside (0,1)
 #ifndef BOOST_NO_EXCEPTIONS
     BOOST_MATH_CHECK_THROW(
