@@ -628,7 +628,8 @@ void test_spots(RealType)
           static_cast<RealType>(0.8413326478347855)),
        static_cast<RealType>(1e4),
        tol_inv_df * static_cast<RealType>(5)); // Looser tolerance for ill-conditioned problem with very large df
-    // Small df edge cases where approximation becomes problematic: only meaningful for double and above.
+    // Small df edge cases where approximation becomes problematic: would need different values for float
+    // For now just test double and long double to have test overage of these code paths
     if (!std::is_same<RealType, float>::value)
     {
        // Small df case 1: Edgeworth expansion breaks down for small degrees of freedom, use fallback
