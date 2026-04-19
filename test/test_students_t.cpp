@@ -659,13 +659,13 @@ void test_spots(RealType)
           static_cast<RealType>(2),
           static_cast<RealType>(1.1)),
        std::domain_error);
-    // x == 0, p != 0.5: no df can satisfy CDF(0; df) == p → domain error
+    // x == 0, p != 0.5: no df can satisfy CDF(0; df) == p -> domain error
     BOOST_MATH_CHECK_THROW(
        students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
           static_cast<RealType>(0),
           static_cast<RealType>(0.3)),
        std::domain_error);
-    // x == 0, p == 0.5: CDF(0; df) == 0.5 for all df → overflow (infinite solutions)
+    // x == 0, p == 0.5: CDF(0; df) == 0.5 for all df -> overflow (infinite solutions)
     BOOST_MATH_CHECK_THROW(
        students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
           static_cast<RealType>(0),
