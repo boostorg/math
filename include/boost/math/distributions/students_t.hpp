@@ -19,6 +19,7 @@
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/special_functions/beta.hpp> // for ibeta(a, b, x).
 #include <boost/math/special_functions/digamma.hpp>
+#include <boost/math/special_functions/relative_difference.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/normal.hpp> 
@@ -464,10 +465,10 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::inver
    {
       // Check that approximation is at least somewhat close;
       // for small degrees of freedom it does not fail but is very inaccurate.
+      RealType relative_error_threshold = static_cast<RealType>(0.1);
       students_t_distribution<RealType, Policy> t_approx(hint);
-      RealType exact_cdf = cdf(t_approx, x);
-      RealType relative_error = fabs(exact_cdf - p) / p;
-      if (relative_error > static_cast<RealType>(0.1))
+      RealType p_approx = cdf(t_approx, x);
+      if (relative_difference(p_approx, p) > relative_error_threshold)
          hint = static_cast<RealType>(detail::df_hint_fallback);
    }
    // Root-find on f(df) = CDF(x; df) - p.
