@@ -5,7 +5,7 @@
 
 cmake_minimum_required(VERSION 3.8...3.16)
 
-project(boost_math VERSION 1.91.0 LANGUAGES CXX)
+project(boost_math VERSION 1.92.0 LANGUAGES CXX)
 
 add_library(boost_math INTERFACE)
 
