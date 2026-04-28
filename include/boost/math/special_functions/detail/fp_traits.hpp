@@ -305,9 +305,12 @@ private:
 
 // long double (>64 bits), x86 and x64 -----------------------------------------
 
-#elif defined(__i386) || defined(__i386__) || defined(_M_IX86) \
+// Andorid is a known exception because on x64 it reports LDBL_MANT_DIG == 113
+// See: https://github.com/boostorg/math/issues/1389
+
+#elif (defined(__i386) || defined(__i386__) || defined(_M_IX86) \
     || defined(__amd64) || defined(__amd64__)  || defined(_M_AMD64) \
-    || defined(__x86_64) || defined(__x86_64__) || defined(_M_X64)
+    || defined(__x86_64) || defined(__x86_64__) || defined(_M_X64)) && !defined(__ANDROID__)
 
 // Intel extended double precision format (80 bits)
 
