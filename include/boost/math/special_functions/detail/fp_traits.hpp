@@ -270,13 +270,7 @@ template<> struct fp_traits_non_native<double, double_precision>
 
 // long double (64 bits) -------------------------------------------------------
 
-#if defined(BOOST_NO_INT64_T) || defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)\
-   || defined(BOOST_BORLANDC) || defined(__CODEGEAR__) || (defined(__APPLE__) && defined(__aarch64__)) || defined(_MSC_VER)\
-    || (defined(__GNUC__) && defined(__aarch64__) && defined(_WIN32))\
-     || (defined(__GNUC__) && (defined(__arm__) || defined(__thumb__)))\
-      || defined(__SYCL_DEVICE_ONLY__) || (LDBL_MANT_DIG == 53)
-
-static_assert(LDBL_MANT_DIG == 53, "Oops, assumption that long double is a 64-bit quantity is incorrect!!");
+#if LDBL_MANT_DIG == 53 || defined(__SYCL_DEVICE_ONLY__)
 
 template<> struct fp_traits_non_native<long double, double_precision>
 {
@@ -305,13 +299,9 @@ private:
 
 // long double (>64 bits), x86 and x64 -----------------------------------------
 
-#elif defined(__i386) || defined(__i386__) || defined(_M_IX86) \
-    || defined(__amd64) || defined(__amd64__)  || defined(_M_AMD64) \
-    || defined(__x86_64) || defined(__x86_64__) || defined(_M_X64)
+#elif LDBL_MANT_DIG == 64
 
 // Intel extended double precision format (80 bits)
-
-static_assert(LDBL_MANT_DIG == 64, "Oops, assumption that long double is an 80-bit quantity is incorrect!!");
 
 template<>
 struct fp_traits_non_native<long double, extended_double_precision>
@@ -439,8 +429,6 @@ struct fp_traits_non_native<long double, extended_double_precision>
 #elif (LDBL_MANT_DIG == 113)
 
 // IEEE extended double precision format with 15 exponent bits (128 bits)
-
-static_assert(LDBL_MANT_DIG == 113, "Oops, assumption that long double is a 128-bit quantity is incorrect!!");
 
 template<>
 struct fp_traits_non_native<long double, extended_double_precision>
