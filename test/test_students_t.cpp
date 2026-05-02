@@ -647,6 +647,23 @@ void test_spots(RealType)
           static_cast<RealType>(1e-10),
           tol_inv_df);
     }
+    // Analytical test: df=1 (Cauchy) case
+    {
+       boost::math::cauchy_distribution<RealType> cauchy(0, 1);
+       RealType x = static_cast<RealType>(1.0);
+       RealType p = cdf(cauchy, x);
+       RealType df_result = students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(x, p);
+       BOOST_CHECK_EQUAL(df_result, static_cast<RealType>(1));
+    }
+    // Analytical test: df=infinity (Normal) case
+    {
+       boost::math::normal_distribution<RealType> norm(0, 1);
+       RealType x = static_cast<RealType>(1.0);
+       RealType p = cdf(norm, x);
+       RealType df_result = students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(x, p);
+       BOOST_CHECK(df_result == std::numeric_limits<RealType>::infinity());
+    }
+    
     // Domain error: p outside (0,1)
 #ifndef BOOST_NO_EXCEPTIONS
     BOOST_MATH_CHECK_THROW(

@@ -22,7 +22,8 @@
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
-#include <boost/math/distributions/normal.hpp> 
+#include <boost/math/distributions/normal.hpp>
+#include <boost/math/distributions/cauchy.hpp>
 #include <boost/math/policies/policy.hpp>
 
 #ifdef _MSC_VER
@@ -287,6 +288,19 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<student
 //
 namespace detail{
 
+// Checks if the CDF of a given distribution at x matches p within 4*epsilon. Returns df if so, else NaN.
+template <class Distribution, class RealType>
+BOOST_MATH_GPU_ENABLED RealType analytical_df_if_cdf_matches(const Distribution& dist, RealType x, RealType p, RealType df)
+{
+   RealType cdf_val = cdf(dist, x);
+   RealType epsilon_diff = epsilon_difference(cdf_val, p);
+   if (epsilon_diff < RealType(4.))
+   {
+      return df;
+   }
+   return std::numeric_limits<RealType>::quiet_NaN();
+}
+
 // Minimum degrees-of-freedom used as the warm-start fallback when the
 // Edgeworth approximation yields no valid positive root or is inaccurate
 constexpr double df_hint_fallback = 0.01;
@@ -456,6 +470,18 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::inver
          function,
          "No degrees of freedom can satisfy CDF(0; df) == %1% (must be 0.5).",
          p, Policy());
+   }
+
+   // Analytical cases: df = infinity (normal), df = 1 (cauchy)
+   boost::math::normal_distribution<RealType, Policy> norm(0, 1);
+   RealType analytical_df = detail::analytical_df_if_cdf_matches(norm, x, p, std::numeric_limits<RealType>::infinity());
+   if (!boost::math::isnan(analytical_df)) {
+      return analytical_df;
+   }
+   boost::math::cauchy_distribution<RealType> cauchy(0, 1);
+   analytical_df = detail::analytical_df_if_cdf_matches(cauchy, x, p, static_cast<RealType>(1));
+   if (!boost::math::isnan(analytical_df)) {
+      return analytical_df;
    }
 
    // Edgeworth warm start: compute a df estimate; fall back to df_hint_fallback if it fails
