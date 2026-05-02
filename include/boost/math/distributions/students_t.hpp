@@ -25,6 +25,7 @@
 #include <boost/math/distributions/normal.hpp>
 #include <boost/math/distributions/cauchy.hpp>
 #include <boost/math/policies/policy.hpp>
+#include <iostream>
 
 #ifdef _MSC_VER
 # pragma warning(push)
@@ -288,17 +289,19 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<student
 //
 namespace detail{
 
-// Checks if the CDF of a given distribution at x matches p within 4*epsilon. Returns df if so, else NaN.
+// Checks if the CDF of a given distribution at x matches p within 4 epsilon.
+// Returns true and sets result=df if so, otherwise returns false.
 template <class Distribution, class RealType>
-BOOST_MATH_GPU_ENABLED RealType analytical_df_if_cdf_matches(const Distribution& dist, RealType x, RealType p, RealType df)
+BOOST_MATH_GPU_ENABLED bool analytical_df_if_cdf_matches(const Distribution& dist, RealType x, RealType p, RealType df, RealType& result)
 {
    RealType cdf_val = cdf(dist, x);
    RealType epsilon_diff = epsilon_difference(cdf_val, p);
    if (epsilon_diff < RealType(4.))
    {
-      return df;
+      result = df;
+      return true;
    }
-   return std::numeric_limits<RealType>::quiet_NaN();
+   return false;
 }
 
 // Minimum degrees-of-freedom used as the warm-start fallback when the
@@ -473,16 +476,13 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::inver
    }
 
    // Analytical cases: df = infinity (normal), df = 1 (cauchy)
+   RealType analytical_df;
    boost::math::normal_distribution<RealType, Policy> norm(0, 1);
-   RealType analytical_df = detail::analytical_df_if_cdf_matches(norm, x, p, std::numeric_limits<RealType>::infinity());
-   if (!boost::math::isnan(analytical_df)) {
+   if (detail::analytical_df_if_cdf_matches(norm, x, p, std::numeric_limits<RealType>::infinity(), analytical_df))
       return analytical_df;
-   }
-   boost::math::cauchy_distribution<RealType> cauchy(0, 1);
-   analytical_df = detail::analytical_df_if_cdf_matches(cauchy, x, p, static_cast<RealType>(1));
-   if (!boost::math::isnan(analytical_df)) {
+   boost::math::cauchy_distribution<RealType, Policy> cauchy(0, 1);
+   if (detail::analytical_df_if_cdf_matches(cauchy, x, p, static_cast<RealType>(1), analytical_df))
       return analytical_df;
-   }
 
    // Edgeworth warm start: compute a df estimate; fall back to df_hint_fallback if it fails
    // or is too inaccurate

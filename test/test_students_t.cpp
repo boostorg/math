@@ -653,7 +653,7 @@ void test_spots(RealType)
        RealType x = static_cast<RealType>(1.0);
        RealType p = cdf(cauchy, x);
        RealType df_result = students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(x, p);
-       BOOST_CHECK_EQUAL(df_result, static_cast<RealType>(1));
+       BOOST_CHECK_EQUAL(df_result, static_cast<RealType>(1.0));
     }
     // Analytical test: df=infinity (Normal) case
     {
