@@ -369,7 +369,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const inverse_gaussian_distribut
       return result; // infinity;
    }
 
-  RealType guess = detail::guess_ig(p, 1 - p, dist.mean(), dist.scale());
+  RealType guess = detail::guess_ig(p, RealType(1 - p), dist.mean(), dist.scale());
   using boost::math::tools::max_value;
 
   RealType min = static_cast<RealType>(0); // Minimum possible value is bottom of range of distribution.
@@ -384,7 +384,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const inverse_gaussian_distribut
   //
   // Our guess is often not very good, so lets bracket the root just in case:
   //
-  RealType f0 = std::get<0>(func(guess));
+  RealType f0 = boost::math::get<0>(func(guess));
   if (f0 < 0)
      tools::detail::bracket_root_towards_max(func, guess, f0, min, max, max_iter);
   else
@@ -456,7 +456,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<inverse
    if(false == detail::check_probability(function, q, &result, Policy()))
       return result;
 
-   RealType guess = detail::guess_ig(1 - q, q, mean, scale);
+   RealType guess = detail::guess_ig(RealType(1 - q), q, mean, scale);
    // Complement.
    using boost::math::tools::max_value;
 
@@ -468,7 +468,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<inverse
   boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
   using boost::math::tools::newton_raphson_iterate;
   inverse_gaussian_quantile_complement_functor<RealType, Policy> func(c.dist, q);
-  RealType f0 = std::get<0>(func(guess));
+  RealType f0 = boost::math::get<0>(func(guess));
   if (f0 > 0)
      tools::detail::bracket_root_towards_max(func, guess, f0, min, max, max_iter);
   else
