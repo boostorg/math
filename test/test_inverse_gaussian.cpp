@@ -252,6 +252,13 @@ BOOST_AUTO_TEST_CASE( test_main )
   // but better than R that gives up completely!
   // R Error in SuppDists::qinverse_gaussian(4.87914430108515e-219, 1, 1) : Infinite value in NewtonRoot()
 
+  inverse_gaussian w_big(66.99652081);
+  BOOST_CHECK_CLOSE_FRACTION(
+     quantile(w_big, 0.97969), 591.567880739988823, 10 * tolfeweps);
+  BOOST_CHECK_CLOSE_FRACTION(
+     quantile(complement(w_big, 1 - 0.97969)), 591.567880739988823, 10 * tolfeweps);
+
+
   BOOST_CHECK_CLOSE_FRACTION(
     pdf(w11, 0.5), static_cast<double>(0.87878257893544476), tolfeweps); // pdf
   BOOST_CHECK_CLOSE_FRACTION(
