@@ -459,7 +459,7 @@ namespace detail {
          //
          // We can't have this extra recursive tidy up step on CUDA:
          //
-#ifndef BOOST_MATH_ENABLE_CUDA
+#if !defined(BOOST_MATH_ENABLE_CUDA) && !defined(BOOST_MATH_ENABLE_SYCL)
          if (multiplier > 16)
             return (guess0 - guess) + bracket_root_towards_min(f, guess, f_current, min, max, count);
 #endif
@@ -528,7 +528,7 @@ namespace detail {
          //
          // We can't have this extra recursive tidy up step on CUDA:
          //
-#ifndef BOOST_MATH_ENABLE_CUDA
+#if !defined(BOOST_MATH_ENABLE_CUDA) && !defined(BOOST_MATH_ENABLE_SYCL)
          if (multiplier > 16)
             return (guess0 - guess) + bracket_root_towards_max(f, guess, f_current, min, max, count);
 #endif
