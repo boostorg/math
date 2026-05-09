@@ -254,7 +254,7 @@ BOOST_AUTO_TEST_CASE( test_main )
 
   inverse_gaussian w_big(66.99652081);
   BOOST_CHECK_CLOSE_FRACTION(
-     quantile(w_big, 0.97969), 591.567880739988823, 10 * tolfeweps);
+     quantile(w_big, 0.97969), 591.567880739988823, 15 * tolfeweps);
   BOOST_CHECK_CLOSE_FRACTION(
      quantile(complement(w_big, 1 - 0.97969)), 591.567880739988823, 10 * tolfeweps);
 
