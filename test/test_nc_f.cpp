@@ -138,13 +138,21 @@ void test_spot(
       BOOST_CHECK_CLOSE(
          cdf(complement(dist, x)), Q, tol);
       BOOST_CHECK_CLOSE(
-            quantile(dist, P), x, tol * 10);
+         quantile(dist, P), x, tol * 10);
       BOOST_CHECK_CLOSE(
-            quantile(complement(dist, Q)), x, tol * 10);
+         quantile(complement(dist, Q)), x, tol * 10);
       BOOST_CHECK_CLOSE(
-            dist.find_non_centrality(x, a, b, P), ncp, tol * 10);
+         dist.find_non_centrality(x, a, b, P), ncp, tol * 10);
       BOOST_CHECK_CLOSE(
-            dist.find_non_centrality(boost::math::complement(x, a, b, Q)), ncp, tol * 10);
+         dist.find_non_centrality(boost::math::complement(x, a, b, Q)), ncp, tol * 10);
+      BOOST_CHECK_CLOSE(
+         dist.find_v1(x, b, ncp, P), a, tol * 10);
+      BOOST_CHECK_CLOSE(
+         dist.find_v1(boost::math::complement(x, b, ncp, Q)), a, tol * 10);
+      BOOST_CHECK_CLOSE(
+         dist.find_v2(x, a, ncp, P), b, tol * 10);
+      BOOST_CHECK_CLOSE(
+         dist.find_v2(boost::math::complement(x, a, ncp, Q)), b, tol * 10);
    }
    if(boost::math::tools::digits<RealType>() > 50)
    {
@@ -369,6 +377,18 @@ void test_spots(RealType, const char* name = nullptr)
          }
       }
    }
+   // Check find_v1/v2 edge cases
+   // Case when P=1 or P=0 
+   nc = 2;
+   BOOST_MATH_CHECK_THROW(dist.find_v1(x, b, nc, 1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist.find_v1(x, b, nc, 0), std::domain_error);
+   // Case when Q=1 or Q=0
+   BOOST_MATH_CHECK_THROW(dist.find_v1(boost::math::complement(x, b, nc, 1)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist.find_v1(boost::math::complement(x, b, nc, 0)), std::domain_error);
+   // Check very small values of x an evaluation error is thrown
+   x = boost::math::tools::epsilon<long double>() / 10;
+   BOOST_MATH_CHECK_THROW(dist.find_v1(boost::math::complement(x, b, nc, 0.5)), boost::math::evaluation_error);
+   BOOST_MATH_CHECK_THROW(dist.find_v1(x, b, nc, 0.5), boost::math::evaluation_error);
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )
