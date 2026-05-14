@@ -548,7 +548,7 @@ void test_spots(RealType)
          static_cast<RealType>(1.0))),
          9);
 
-    // Tests for invert_probability_with_respect_to_degrees_of_freedom.
+    // Tests for find_degrees_of_freedom(t, p) overload.
     // Each case is derived from the CDF spot tests above: the exact df is known,
     // so we verify that inverting CDF(x; df) = p recovers df to tight tolerance.
     // float has ~7 significant digits; large-df inversion is ill-conditioned at that precision,
@@ -557,73 +557,73 @@ void test_spots(RealType)
        ? static_cast<RealType>(0.1)   // float:  0.1%
        : static_cast<RealType>(0.01); // double+: 0.01%
     BOOST_CHECK_CLOSE(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(-6.96455673428326),
           static_cast<RealType>(0.01)),
        static_cast<RealType>(2),
        tol_inv_df);
     BOOST_CHECK_CLOSE(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(-3.36492999890721),
           static_cast<RealType>(0.01)),
        static_cast<RealType>(5),
        tol_inv_df);
     BOOST_CHECK_CLOSE(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(-0.559429644),
           static_cast<RealType>(0.3)),
        static_cast<RealType>(5),
        tol_inv_df);
     BOOST_CHECK_CLOSE(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(1.475884049),
           static_cast<RealType>(0.9)),
        static_cast<RealType>(5),
        tol_inv_df);
     BOOST_CHECK_CLOSE(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(-1.475884049),
           static_cast<RealType>(0.1)),
        static_cast<RealType>(5),
        tol_inv_df);
     BOOST_CHECK_CLOSE(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(-5.2410429995425),
           static_cast<RealType>(0.00001)),
        static_cast<RealType>(25),
        tol_inv_df);
     BOOST_CHECK_CLOSE(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(6.96455673428326),
           static_cast<RealType>(0.99)),
        static_cast<RealType>(2),
        tol_inv_df);
     BOOST_CHECK_CLOSE(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(2),
           static_cast<RealType>(0.610822886098362)),
        static_cast<RealType>(0.1),
        tol_inv_df);
     BOOST_CHECK_CLOSE(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(2),
           static_cast<RealType>(0.777242554908434)),
        static_cast<RealType>(0.5),
        tol_inv_df);
     BOOST_CHECK_CLOSE(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(2),
           static_cast<RealType>(0.822925875908677)),
        static_cast<RealType>(0.75),
        tol_inv_df);
     BOOST_CHECK_CLOSE(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(2),
           static_cast<RealType>(0.977114826753374)),
        static_cast<RealType>(1000),
        tol_inv_df);
     BOOST_CHECK_CLOSE(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(1),
           static_cast<RealType>(0.8413326478347855)),
        static_cast<RealType>(1e4),
@@ -634,14 +634,14 @@ void test_spots(RealType)
     {
        // Small df case 1: Edgeworth expansion breaks down for small degrees of freedom, use fallback
        BOOST_CHECK_CLOSE(
-          students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+          students_t_distribution<RealType>::find_degrees_of_freedom(
              static_cast<RealType>(1e20),
              static_cast<RealType>(0.5244796002843015)),
           static_cast<RealType>(1e-3),
           tol_inv_df);
        // Small df case 2: Edgeworth expansion succeeds but is inaccurate, use fallback
        BOOST_CHECK_CLOSE(
-          students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+          students_t_distribution<RealType>::find_degrees_of_freedom(
              static_cast<RealType>(2.0),
              static_cast<RealType>(0.500000000644961)),
           static_cast<RealType>(1e-10),
@@ -652,7 +652,7 @@ void test_spots(RealType)
        boost::math::cauchy_distribution<RealType> cauchy(0, 1);
        RealType x = static_cast<RealType>(1.0);
        RealType p = cdf(cauchy, x);
-       RealType df_result = students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(x, p);
+       RealType df_result = students_t_distribution<RealType>::find_degrees_of_freedom(x, p);
        BOOST_CHECK_EQUAL(df_result, static_cast<RealType>(1.0));
     }
 
@@ -660,24 +660,24 @@ void test_spots(RealType)
    // Domain error: p outside (0,1)
 #ifndef BOOST_NO_EXCEPTIONS
     BOOST_MATH_CHECK_THROW(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(2),
           static_cast<RealType>(-0.1)),
        std::domain_error);
     BOOST_MATH_CHECK_THROW(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(2),
           static_cast<RealType>(1.1)),
        std::domain_error);
     // x == 0, p != 0.5: no df can satisfy CDF(0; df) == p -> domain error
     BOOST_MATH_CHECK_THROW(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(0),
           static_cast<RealType>(0.3)),
        std::domain_error);
     // x == 0, p == 0.5: CDF(0; df) == 0.5 for all df -> overflow (infinite solutions)
     BOOST_MATH_CHECK_THROW(
-       students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
           static_cast<RealType>(0),
           static_cast<RealType>(0.5)),
        std::overflow_error);
@@ -687,7 +687,7 @@ void test_spots(RealType)
        RealType x = static_cast<RealType>(1.0);
        RealType p = cdf(norm, x);
        BOOST_MATH_CHECK_THROW(
-           students_t_distribution<RealType>::invert_probability_with_respect_to_degrees_of_freedom(x, p),
+           students_t_distribution<RealType>::find_degrees_of_freedom(x, p),
            std::overflow_error);
     }
 #endif

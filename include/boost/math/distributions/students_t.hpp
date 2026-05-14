@@ -60,8 +60,8 @@ public:
       RealType sd,
       RealType hint = 100);
 
-   BOOST_MATH_GPU_ENABLED static RealType invert_probability_with_respect_to_degrees_of_freedom(
-      RealType x,
+   BOOST_MATH_GPU_ENABLED static RealType find_degrees_of_freedom(
+      RealType t,
       RealType p);
 
 private:
@@ -344,8 +344,7 @@ struct cdf_to_df_func
 };
 
 //
-// Shared root-finding helper used by both find_degrees_of_freedom and
-// invert_probability_with_respect_to_degrees_of_freedom.
+// Shared root-finding helper used by find_degrees_of_freedom.
 //
 template <class RealType, class Policy, class Func>
 BOOST_MATH_GPU_ENABLED RealType solve_for_degrees_of_freedom(
@@ -371,7 +370,7 @@ BOOST_MATH_GPU_ENABLED RealType solve_for_degrees_of_freedom(
 }
 
 //
-// Edgeworth warm-start for invert_probability_with_respect_to_degrees_of_freedom.
+// Edgeworth warm-start for find_degrees_of_freedom(t, p).
 // On success writes a df estimate into 'result' and returns true.
 // Returns false when no positive root is found; 'result' is left unchanged.
 //
@@ -442,12 +441,12 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::find_
 }
 
 template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::invert_probability_with_respect_to_degrees_of_freedom(
-      RealType x,
+BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::find_degrees_of_freedom(
+      RealType t,
       RealType p)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
-   constexpr auto function = "boost::math::students_t_distribution<%1%>::invert_probability_with_respect_to_degrees_of_freedom";
+   constexpr auto function = "boost::math::students_t_distribution<%1%>::find_degrees_of_freedom";
    //
    // Check for domain errors:
    //
@@ -455,7 +454,7 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::inver
    if (false == detail::check_probability(function, p, &error_result, Policy()))
       return error_result;
 
-   if (x == 0)
+   if (t == 0)
    {
       // CDF(0; df) = 0.5 for all df; only solvable when p == 0.5.
       if (p == static_cast<RealType>(0.5))
@@ -468,31 +467,31 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::inver
 
    // Analytical cases: df = infinity (normal), df = 1 (cauchy)
    boost::math::normal_distribution<RealType, Policy> norm(0, 1);
-   if (detail::analytical_df_if_cdf_matches(norm, x, p))
+   if (detail::analytical_df_if_cdf_matches(norm, t, p))
       return policies::raise_overflow_error<RealType>(function, nullptr, Policy());
    boost::math::cauchy_distribution<RealType, Policy> cauchy(0, 1);
-   if (detail::analytical_df_if_cdf_matches(cauchy, x, p))
+   if (detail::analytical_df_if_cdf_matches(cauchy, t, p))
       return RealType(1);
 
    // Edgeworth warm start: compute a df estimate; fall back to df_hint_fallback if it fails
    // or is too inaccurate
    RealType hint = static_cast<RealType>(detail::df_hint_fallback);
-   if (detail::approximate_df_with_edgeworth_expansion<RealType, Policy>(x, p, hint))
+   if (detail::approximate_df_with_edgeworth_expansion<RealType, Policy>(t, p, hint))
    {
       // Check that approximation is at least somewhat close;
       // for small degrees of freedom it does not fail but is very inaccurate.
       RealType relative_error_threshold = static_cast<RealType>(0.1);
       students_t_distribution<RealType, Policy> t_approx(hint);
-      RealType p_approx = cdf(t_approx, x);
+      RealType p_approx = cdf(t_approx, t);
       if (relative_difference(p_approx, p) > relative_error_threshold)
          hint = static_cast<RealType>(detail::df_hint_fallback);
    }
-   // Root-find on f(df) = CDF(x; df) - p.
-   // CDF(x; df) is strictly increasing in df for x > 0, decreasing for x < 0.
+   // Root-find on f(df) = CDF(t; df) - p.
+   // CDF(t; df) is strictly increasing in df for t > 0, decreasing for t < 0.
    // Use the smaller of p and q=1-p to avoid cancellation near 1.
    RealType q = 1 - p;
-   detail::cdf_to_df_func<RealType, Policy> f(x, p < q ? p : q, p < q ? false : true);
-   return detail::solve_for_degrees_of_freedom(f, hint, x > 0, function, Policy());
+   detail::cdf_to_df_func<RealType, Policy> f(t, p < q ? p : q, p < q ? false : true);
+   return detail::solve_for_degrees_of_freedom(f, hint, t > 0, function, Policy());
 }
 
 template <class RealType, class Policy>
