@@ -25,7 +25,6 @@
 #include <boost/math/distributions/normal.hpp>
 #include <boost/math/distributions/cauchy.hpp>
 #include <boost/math/policies/policy.hpp>
-#include <iostream>
 
 #ifdef _MSC_VER
 # pragma warning(push)
@@ -289,19 +288,11 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<student
 //
 namespace detail{
 
-// Checks if the CDF of a given distribution at x matches p within 4 epsilon.
-// Returns true and sets result=df if so, otherwise returns false.
 template <class Distribution, class RealType>
-BOOST_MATH_GPU_ENABLED bool analytical_df_if_cdf_matches(const Distribution& dist, RealType x, RealType p, RealType df, RealType& result)
+BOOST_MATH_GPU_ENABLED inline bool analytical_df_if_cdf_matches(const Distribution& dist, RealType x, RealType p)
 {
    RealType cdf_val = cdf(dist, x);
-   RealType epsilon_diff = epsilon_difference(cdf_val, p);
-   if (epsilon_diff < RealType(4.))
-   {
-      result = df;
-      return true;
-   }
-   return false;
+   return epsilon_difference(cdf_val, p) < 4;
 }
 
 // Minimum degrees-of-freedom used as the warm-start fallback when the
@@ -468,7 +459,7 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::inver
    {
       // CDF(0; df) = 0.5 for all df; only solvable when p == 0.5.
       if (p == static_cast<RealType>(0.5))
-         return policies::raise_overflow_error<RealType>(function, 0, Policy());
+         return policies::raise_overflow_error<RealType>(function, nullptr, Policy());
       return policies::raise_domain_error<RealType>(
          function,
          "No degrees of freedom can satisfy CDF(0; df) == %1% (must be 0.5).",
@@ -476,13 +467,12 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::inver
    }
 
    // Analytical cases: df = infinity (normal), df = 1 (cauchy)
-   RealType analytical_df;
    boost::math::normal_distribution<RealType, Policy> norm(0, 1);
-   if (detail::analytical_df_if_cdf_matches(norm, x, p, std::numeric_limits<RealType>::infinity(), analytical_df))
-      return analytical_df;
+   if (detail::analytical_df_if_cdf_matches(norm, x, p))
+      return policies::raise_overflow_error<RealType>(function, nullptr, Policy());
    boost::math::cauchy_distribution<RealType, Policy> cauchy(0, 1);
-   if (detail::analytical_df_if_cdf_matches(cauchy, x, p, static_cast<RealType>(1), analytical_df))
-      return analytical_df;
+   if (detail::analytical_df_if_cdf_matches(cauchy, x, p))
+      return RealType(1);
 
    // Edgeworth warm start: compute a df estimate; fall back to df_hint_fallback if it fails
    // or is too inaccurate
