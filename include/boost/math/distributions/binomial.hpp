@@ -226,7 +226,7 @@ namespace boost
            // but zero is the best we can do:
            return 0;
         }
-        if(p == 1 || success_fraction == 1)
+        if(q == 0 || success_fraction == 1)
         {  // Probability of n or fewer successes is always one,
            // so n is the most sensible answer here:
            return trials;
