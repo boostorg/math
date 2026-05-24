@@ -111,6 +111,7 @@ namespace boost
          inline RealType find_degrees_of_freedom_f(
             const RealType x, const RealType v, const RealType nc, const bool find_v1, const RealType p, const RealType q, const Policy& pol)
          {
+            BOOST_MATH_STD_USING
             using std::fabs;
             const char* function = "non_central_f<%1%>::find_degrees_of_freedom_f";
             if((p == 0) || (q == 0))
@@ -127,6 +128,20 @@ namespace boost
                   RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE
             }
             f_degrees_of_freedom_finder<RealType, Policy> f(x, v, nc, find_v1, p < q ? p : q, p < q ? false : true);
+
+            // There are times when f has two roots - thus, two degrees of freedom can
+            // be found. We find this case by checking if the sign of f for large and 
+            // small values of v have the same sign. If the sign is the same, then there 
+            // are an even number of roots. If the signs differ, there is only one root
+            // and we can safely find the root.
+            RealType vLarge = sqrt(boost::math::tools::max_value<RealType>());
+            RealType vSmall = 1 / vLarge;
+
+            if ((f(vLarge) < 0) == (f(vSmall) < 0)){
+               return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom because two degrees of freedom can be found using the given parameters",
+                  RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE 
+            }
+
             tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
             std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
             //

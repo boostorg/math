@@ -145,14 +145,6 @@ void test_spot(
          dist.find_non_centrality(x, a, b, P), ncp, tol * 10);
       BOOST_CHECK_CLOSE(
          dist.find_non_centrality(boost::math::complement(x, a, b, Q)), ncp, tol * 10);
-      BOOST_CHECK_CLOSE(
-         dist.find_v1(x, b, ncp, P), a, tol * 10);
-      BOOST_CHECK_CLOSE(
-         dist.find_v1(boost::math::complement(x, b, ncp, Q)), a, tol * 10);
-      BOOST_CHECK_CLOSE(
-         dist.find_v2(x, a, ncp, P), b, tol * 10);
-      BOOST_CHECK_CLOSE(
-         dist.find_v2(boost::math::complement(x, a, ncp, Q)), b, tol * 10);
    }
    if(boost::math::tools::digits<RealType>() > 50)
    {
@@ -377,8 +369,22 @@ void test_spots(RealType, const char* name = nullptr)
          }
       }
    }
+   
+   // Quick spot check for finding degrees of freedom
+   RealType v1 = 5;
+   RealType v2 = 2; 
+   nc = 1;
+   x = 6;
+   boost::math::non_central_f_distribution<RealType> ref(v1, v2, nc);
+   RealType P = cdf(ref, x); 
+   BOOST_CHECK_CLOSE(ref.find_v1(x, v2, nc, P), v1, tolerance);
+
+   // Check case where two degrees of freedom solve the inversion problem
+   BOOST_MATH_CHECK_THROW(dist.find_v1(RealType(1.5), RealType(2.0), RealType(1.0), RealType(0.49845842011686358665786775091245664L)), boost::math::evaluation_error);
+   BOOST_MATH_CHECK_THROW(dist.find_v1(RealType(3.51), RealType(5), RealType(0), RealType(0.85802971653663762108266155337333L)), boost::math::evaluation_error);
+
    // Check find_v1/v2 edge cases
-   // Case when P=1 or P=0 
+   // Case when P=1 or P=0
    nc = 2;
    BOOST_MATH_CHECK_THROW(dist.find_v1(x, b, nc, 1), std::domain_error);
    BOOST_MATH_CHECK_THROW(dist.find_v1(x, b, nc, 0), std::domain_error);
@@ -389,6 +395,15 @@ void test_spots(RealType, const char* name = nullptr)
    x = boost::math::tools::epsilon<long double>() / 10;
    BOOST_MATH_CHECK_THROW(dist.find_v1(boost::math::complement(x, b, nc, 0.5)), boost::math::evaluation_error);
    BOOST_MATH_CHECK_THROW(dist.find_v1(x, b, nc, 0.5), boost::math::evaluation_error);
+
+   BOOST_MATH_CHECK_THROW(dist.find_v2(x, b, nc, 1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist.find_v2(x, b, nc, 0), std::domain_error);
+   // Case when Q=1 or Q=0
+   BOOST_MATH_CHECK_THROW(dist.find_v2(boost::math::complement(x, b, nc, 1)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist.find_v2(boost::math::complement(x, b, nc, 0)), std::domain_error);
+   // Check very small values of x an evaluation error is thrown
+   BOOST_MATH_CHECK_THROW(dist.find_v2(boost::math::complement(x, b, nc, 0.5)), boost::math::evaluation_error);
+   BOOST_MATH_CHECK_THROW(dist.find_v2(x, b, nc, 0.5), boost::math::evaluation_error);
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )
