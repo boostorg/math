@@ -370,14 +370,21 @@ void test_spots(RealType, const char* name = nullptr)
       }
    }
    
-   // Quick spot check for finding degrees of freedom
-   RealType v1 = 5;
-   RealType v2 = 2; 
-   nc = 1;
-   x = 6;
-   boost::math::non_central_f_distribution<RealType> ref(v1, v2, nc);
-   RealType P = cdf(ref, x); 
-   BOOST_CHECK_CLOSE(ref.find_v1(x, v2, nc, P), v1, tolerance);
+   // Quick spot check for finding degrees of freedom. When checking for two degrees 
+   // of freedom for real_concept types, the cdf at large/small v2 can be greater than 1 
+   // or less than 0. 
+   if (!std::is_same<RealType, boost::math::concepts::real_concept>::value){
+      RealType v1 = 10;
+      RealType v2 = 5; 
+      nc = 1;
+      x = 6;
+      boost::math::non_central_f_distribution<RealType> ref(v1, v2, nc);
+      RealType P = cdf(ref, x); 
+      BOOST_CHECK_CLOSE(ref.find_v2(x, v1, nc, P), v2, tolerance);
+      BOOST_CHECK_CLOSE(ref.find_v2(boost::math::complement(x, v1, nc, 1-P)), v2, tolerance);
+      BOOST_CHECK_CLOSE(ref.find_v1(x, v2, nc, P), v1, tolerance);
+      BOOST_CHECK_CLOSE(ref.find_v1(boost::math::complement(x, v2, nc, 1-P)), v1, tolerance);
+   }
 
    // Check case where two degrees of freedom solve the inversion problem
    BOOST_MATH_CHECK_THROW(dist.find_v1(RealType(1.5), RealType(2.0), RealType(1.0), RealType(0.49845842011686358665786775091245664L)), boost::math::evaluation_error);
