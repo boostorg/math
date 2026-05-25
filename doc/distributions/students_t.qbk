@@ -29,6 +29,11 @@
          RealType beta,
          RealType sd,
          RealType hint = 100);
+
+      // degrees of freedom inversion from a quantile and probability:
+      BOOST_MATH_GPU_ENABLED static RealType find_degrees_of_freedom(
+         RealType t,
+         RealType p);
    };
 
    }} // namespaces
@@ -106,6 +111,13 @@ For more information on this function see the
 [@http://www.itl.nist.gov/div898/handbook/prc/section2/prc222.htm
 NIST Engineering Statistics Handbook].
 
+   BOOST_MATH_GPU_ENABLED static RealType find_degrees_of_freedom(
+      RealType t,
+      RealType p);
+
+Returns the degrees of freedom [nu] such that CDF(/x/; [nu]) = /p/.
+Requires 0 < /p/ < 1 and /x/ [ne] 0, otherwise calls __domain_error.
+
 [h4 Non-member Accessors]
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all
@@ -164,6 +176,7 @@ without the subtraction implied above.]]
 [[skewness][if (v > 3) 0 else NaN ]]
 [[kurtosis][if (v > 4) 3 * (v - 2) \/ (v - 4) else NaN]]
 [[kurtosis excess][if (v > 4) 6 \/ (df - 4) else NaN]]
+[[find_degrees_of_freedom(t, p)][Uses a 2nd-order Edgeworth expansion as initial guess for a numerical root finder]]
 ]
 
 If the moment index /k/ is less than /v/, then the moment is undefined.
