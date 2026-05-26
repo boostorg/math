@@ -66,6 +66,18 @@ using std::numeric_limits;
 #endif
 
 template <class RealType>
+void test_find_alpha_beta(RealType mean, RealType variance){
+   BOOST_MATH_CHECK_THROW(beta_distribution<RealType>::find_alpha(mean, variance), std::domain_error);
+   BOOST_MATH_CHECK_THROW(beta_distribution<RealType>::find_beta(mean, variance), std::domain_error);
+}
+
+template <class RealType>
+void test_find_alpha_beta(RealType param, RealType x, RealType p){
+   BOOST_MATH_CHECK_THROW(beta_distribution<RealType>::find_alpha(param, x, p), std::domain_error);
+   BOOST_MATH_CHECK_THROW(beta_distribution<RealType>::find_beta(param, x, p), std::domain_error);
+}
+
+template <class RealType>
 void test_spot(
      RealType a,    // alpha a
      RealType b,    // beta b
@@ -175,7 +187,9 @@ void test_spots(RealType)
   using  ::boost::math::pdf;
 
   // Tests that should throw:
-  BOOST_MATH_CHECK_THROW(mode(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1))), std::domain_error);
+  BOOST_MATH_CHECK_THROW(mode(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1))), std::domain_error); // alpha = beta = 1
+  BOOST_MATH_CHECK_THROW(mode(beta_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(1))), std::domain_error); // beta = 1
+  BOOST_MATH_CHECK_THROW(mode(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(2))), std::domain_error); // alpha = 1
   // mode is undefined, and throws domain_error!
 
  // BOOST_MATH_CHECK_THROW(median(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1))), std::domain_error);
@@ -497,7 +511,19 @@ void test_spots(RealType)
    BOOST_MATH_CHECK_THROW(quantile(dist, -1), std::domain_error);
    BOOST_MATH_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
 
- // No longer allow any parameter to be NaN or inf, so all these tests should throw.
+   BOOST_MATH_CHECK_THROW(pdf(beta_distribution<RealType>(static_cast<RealType>(0.5), static_cast<RealType>(1.5)), static_cast<RealType>(0)), std::overflow_error); // alpha < 1, x = 0
+   BOOST_MATH_CHECK_THROW(pdf(beta_distribution<RealType>(static_cast<RealType>(1.5), static_cast<RealType>(0.5)), static_cast<RealType>(1)), std::overflow_error); // beta < 1, x = 1
+
+   // There aren't any upper bounds on the mean/variance. Should we add these? 
+   test_find_alpha_beta(static_cast<RealType>(-1), static_cast<RealType>(1)); // mean < 0
+   test_find_alpha_beta(static_cast<RealType>(-1), static_cast<RealType>(-1)); // var < 0
+
+   test_find_alpha_beta(static_cast<RealType>(1), static_cast<RealType>(0.5), static_cast<RealType>(-0.5)); // p < 0
+   test_find_alpha_beta(static_cast<RealType>(1), static_cast<RealType>(0.5), static_cast<RealType>(1.5)); // p > 0
+   test_find_alpha_beta(static_cast<RealType>(1), static_cast<RealType>(1.5), static_cast<RealType>(0.5)); // x > 0
+   test_find_alpha_beta(static_cast<RealType>(1), static_cast<RealType>(-0.5), static_cast<RealType>(0.5)); // x < 0
+
+   // No longer allow any parameter to be NaN or inf, so all these tests should throw.
    if (std::numeric_limits<RealType>::has_quiet_NaN)
    { 
     // Attempt to construct from non-finite should throw.
@@ -545,6 +571,37 @@ void test_spots(RealType)
      BOOST_MATH_CHECK_THROW(cdf(complement(w, +inf)), std::domain_error); // x = + inf
      BOOST_MATH_CHECK_THROW(quantile(w, +inf), std::domain_error); // p = + inf
      BOOST_MATH_CHECK_THROW(quantile(complement(w, +inf)), std::domain_error); // p = + inf
+
+     test_find_alpha_beta(static_cast<RealType>(1), static_cast<RealType>(0.5), inf); // p = inf
+     test_find_alpha_beta(inf, static_cast<RealType>(0.5)); // mean = inf
+     test_find_alpha_beta(static_cast<RealType>(0.5), inf); // var = inf
+     test_find_alpha_beta(static_cast<RealType>(1), inf, static_cast<RealType>(0.5)); // x = inf
+
+     // Check isnan policies
+     using boost::math::policies::policy;
+    
+     typedef policy<
+      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+     > ignore_all_policy;
+
+     typedef beta_distribution<RealType, ignore_all_policy> ignore_error_beta;
+
+     BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_alpha(inf, static_cast<RealType>(0.5)))); // mean = inf
+     BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_beta(inf, static_cast<RealType>(0.5)))); // mean = inf
+     BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_alpha(inf, static_cast<RealType>(0.5), static_cast<RealType>(0.5)))); // beta = inf
+     BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_beta(inf, static_cast<RealType>(0.5), static_cast<RealType>(0.5)))); // alpha = inf
+     BOOST_CHECK((boost::math::isnan)(mode(ignore_error_beta(static_cast<RealType>(2), static_cast<RealType>(1))))); // beta = 1
+     BOOST_CHECK((boost::math::isnan)(mode(ignore_error_beta(static_cast<RealType>(1), static_cast<RealType>(2))))); // alpha = 1
+     BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_beta(static_cast<RealType>(1), static_cast<RealType>(1)), 2))); // x > 1
+     BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_beta(static_cast<RealType>(1), static_cast<RealType>(1)), 2))); // x > 1
+     BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_beta(static_cast<RealType>(1), static_cast<RealType>(1)), 2)))); // x > 1
+     BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_beta(static_cast<RealType>(1), static_cast<RealType>(1)), 2))); // p > 1
+     BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_beta(static_cast<RealType>(1), static_cast<RealType>(1)), 2)))); // p > 1
    } // has_infinity
 
    // Error handling checks:
@@ -600,6 +657,8 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.5), 0.5, 2 * std::numeric_limits<double>::epsilon());
    BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.9), 0.9, 2 * std::numeric_limits<double>::epsilon());
    BOOST_CHECK_EQUAL(cdf(mybeta11, 1), 1.); // Exact unity expected.
+   BOOST_CHECK_EQUAL(cdf(complement(mybeta11, 1)), 0.0); // Exact 0 expected.
+   BOOST_CHECK_EQUAL(cdf(complement(mybeta11, 0)), 1.0); // Exact unity expected.
 
    double tol = std::numeric_limits<double>::epsilon() * 10;
    BOOST_CHECK_EQUAL(pdf(mybeta22, 1), 0); // is dome shape.
@@ -627,6 +686,11 @@ BOOST_AUTO_TEST_CASE( test_main )
    // quantile.
    BOOST_CHECK_CLOSE_FRACTION(quantile(mybeta22, 0.028), 0.1, tol);
    BOOST_CHECK_CLOSE_FRACTION(quantile(complement(mybeta22, 1 - 0.028)), 0.1, tol);
+   BOOST_CHECK_EQUAL(quantile(mybeta22, 0), 0.);
+   BOOST_CHECK_EQUAL(quantile(mybeta22, 1), 1.);
+   BOOST_CHECK_EQUAL(quantile(complement(mybeta22, 0)), 1.);
+   BOOST_CHECK_EQUAL(quantile(complement(mybeta22, 1)), 0.);
+
    BOOST_CHECK_EQUAL(kurtosis(mybeta11), 3+ kurtosis_excess(mybeta11)); // Check kurtosis_excess = kurtosis - 3;
    BOOST_CHECK_CLOSE_FRACTION(variance(mybeta22), 0.05, tol);
    BOOST_CHECK_CLOSE_FRACTION(mean(mybeta22), 0.5, tol);
