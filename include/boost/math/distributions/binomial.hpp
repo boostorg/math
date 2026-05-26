@@ -88,7 +88,7 @@
 #include <boost/math/distributions/detail/inv_discrete_quantile.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
 #include <boost/math/tools/roots.hpp> // for root finding.
-#include <iostream>
+
 #include <utility>
 
 namespace boost
