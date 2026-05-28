@@ -253,6 +253,65 @@ void test_spots(RealType)
       BOOST_CHECK_EQUAL(cdf(complement(extreme_value_distribution<RealType>(), inf)), 0);
       BOOST_CHECK_EQUAL(logcdf(extreme_value_distribution<RealType>(), -inf), 0);
       BOOST_CHECK_EQUAL(logcdf(extreme_value_distribution<RealType>(), inf), 1);
+
+      // Test NaN policy
+      using boost::math::policies::policy;
+
+      typedef policy<
+         boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+         boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+         boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+         boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+         boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+         boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+      > ignore_all_policy;
+
+      typedef boost::math::extreme_value_distribution<RealType, ignore_all_policy> ignore_error_extreme;
+
+      // PDF
+      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0))));
+      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_extreme(inf, static_cast<RealType>(1)), static_cast<RealType>(1))));
+      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(1)), std::numeric_limits<RealType>::quiet_NaN())));
+
+      // log(PDF)
+      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0))));
+      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_extreme(inf, static_cast<RealType>(1)), static_cast<RealType>(1))));
+      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(1)), std::numeric_limits<RealType>::quiet_NaN())));
+   
+      // CDF
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0))));
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_extreme(inf, static_cast<RealType>(1)), static_cast<RealType>(1))));
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(1)), std::numeric_limits<RealType>::quiet_NaN())));
+      
+      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0)))));
+      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_extreme(inf, static_cast<RealType>(1)), static_cast<RealType>(1)))));
+      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(1)), std::numeric_limits<RealType>::quiet_NaN()))));
+      
+      // log(CDF)
+      BOOST_CHECK((boost::math::isnan)(logcdf(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0))));
+      BOOST_CHECK((boost::math::isnan)(logcdf(ignore_error_extreme(inf, static_cast<RealType>(1)), static_cast<RealType>(1))));
+      BOOST_CHECK((boost::math::isnan)(logcdf(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(1)), std::numeric_limits<RealType>::quiet_NaN())));
+
+      BOOST_CHECK((boost::math::isnan)(logcdf(complement(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0)))));
+      BOOST_CHECK((boost::math::isnan)(logcdf(complement(ignore_error_extreme(inf, static_cast<RealType>(1)), static_cast<RealType>(1)))));
+      BOOST_CHECK((boost::math::isnan)(logcdf(complement(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(1)), std::numeric_limits<RealType>::quiet_NaN()))));
+   
+      // Quantile
+      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0.5))));
+      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_extreme(inf, static_cast<RealType>(1)), static_cast<RealType>(0.5))));
+      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(1)), static_cast<RealType>(-1))));
+      
+      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0.5)))));
+      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_extreme(inf, static_cast<RealType>(1)), static_cast<RealType>(0.5)))));
+      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(1)), static_cast<RealType>(-1)))));
+      
+      // Mean
+      BOOST_CHECK((boost::math::isnan)(mean(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(-1)))));
+      BOOST_CHECK((boost::math::isnan)(mean(ignore_error_extreme(inf, static_cast<RealType>(1)))));
+
+      // Standard deviation
+      BOOST_CHECK((boost::math::isnan)(standard_deviation(ignore_error_extreme(static_cast<RealType>(0), static_cast<RealType>(-1)))));
+      BOOST_CHECK((boost::math::isnan)(standard_deviation(ignore_error_extreme(inf, static_cast<RealType>(1)))));
    }
    //
    // Bug reports:
