@@ -155,7 +155,7 @@ void test_spots(RealType)
     BOOST_CHECK((boost::math::isnan)(find_location<normal_distribution<RealType> >(inf, static_cast<RealType>(0.5), static_cast<RealType>(1), ignore_all_policy())));
     BOOST_CHECK((boost::math::isnan)(find_location<normal_distribution<RealType> >(static_cast<RealType>(0), static_cast<RealType>(0.5), inf, ignore_all_policy())));
     // Negative scale does not throw. Seems weird... waiting to see if this should be fixed
-    // BOOST_CHECK((boost::math::isnan)(find_location<normal_distribution<RealType> >(static_cast<RealType>(0), static_cast<RealType>(0.5), static_cast<RealType>(-1), ignore_all_policy())));
+    BOOST_CHECK((boost::math::isnan)(find_location<normal_distribution<RealType> >(static_cast<RealType>(0), static_cast<RealType>(0.5), static_cast<RealType>(-1), ignore_all_policy())));
   
     // Complement
     BOOST_CHECK((boost::math::isnan)(find_location<normal_distribution<RealType> >(complement(static_cast<RealType>(0), static_cast<RealType>(-1), static_cast<RealType>(1), ignore_all_policy()))));
