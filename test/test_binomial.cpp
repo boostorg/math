@@ -599,7 +599,111 @@ void test_spots(RealType T)
           binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(1)),
           static_cast<RealType>(7)), static_cast<RealType>(0)
        );
+    BOOST_CHECK_EQUAL(
+       cdf(
+          complement(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0)),
+          static_cast<RealType>(7))), static_cast<RealType>(0)
+       );
+    BOOST_CHECK_EQUAL(
+       cdf(
+          complement(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(1)),
+          static_cast<RealType>(7))), static_cast<RealType>(1)
+       );
 
+     // Check Error handling and edge cases
+     BOOST_CHECK_EQUAL(binomial_distribution<RealType>::find_lower_bound_on_p(static_cast<RealType>(5),
+                                                                              static_cast<RealType>(0),
+                                                                              static_cast<RealType>(0.5)),
+                       static_cast<RealType>(0)); // success = 0 
+     BOOST_CHECK_THROW(binomial_distribution<RealType>::find_lower_bound_on_p(static_cast<RealType>(5),
+                                                                              static_cast<RealType>(2),
+                                                                              static_cast<RealType>(-0.5)),
+                       std::domain_error); // probability < 0 
+     BOOST_CHECK_THROW(binomial_distribution<RealType>::find_lower_bound_on_p(static_cast<RealType>(5),
+                                                                              static_cast<RealType>(2),
+                                                                              static_cast<RealType>(1.5)),
+                       std::domain_error); // probability > 1
+     BOOST_CHECK_EQUAL(binomial_distribution<RealType>::find_upper_bound_on_p(static_cast<RealType>(5),
+                                                                              static_cast<RealType>(5),
+                                                                              static_cast<RealType>(0.5)),
+                       static_cast<RealType>(1)); // trials = successes 
+     BOOST_CHECK_THROW(binomial_distribution<RealType>::find_upper_bound_on_p(static_cast<RealType>(5),
+                                                                              static_cast<RealType>(2),
+                                                                              static_cast<RealType>(-0.5)),
+                       std::domain_error); // probability < 0 
+     BOOST_CHECK_THROW(binomial_distribution<RealType>::find_upper_bound_on_p(static_cast<RealType>(5),
+                                                                              static_cast<RealType>(2),
+                                                                              static_cast<RealType>(1.5)),
+                       std::domain_error); // probability > 1
+     BOOST_CHECK_THROW(binomial_distribution<RealType>::find_minimum_number_of_trials(static_cast<RealType>(10),
+                                                                                      static_cast<RealType>(1.5),
+                                                                                      static_cast<RealType>(0.05)),
+                       std::domain_error); // probability > 1
+     BOOST_CHECK_THROW(binomial_distribution<RealType>::find_minimum_number_of_trials(static_cast<RealType>(10),
+                                                                                      static_cast<RealType>(-1),
+                                                                                      static_cast<RealType>(0.05)),
+                       std::domain_error); // probability < 0
+     BOOST_CHECK_THROW(binomial_distribution<RealType>::find_minimum_number_of_trials(static_cast<RealType>(10),
+                                                                                      static_cast<RealType>(0.5),
+                                                                                      static_cast<RealType>(-0.05)),
+                       std::domain_error); // alpha < 0
+     BOOST_CHECK_THROW(binomial_distribution<RealType>::find_minimum_number_of_trials(static_cast<RealType>(10),
+                                                                                      static_cast<RealType>(0.5),
+                                                                                      static_cast<RealType>(1.314)),
+                       std::domain_error); // alpha > 1
+     BOOST_CHECK_THROW(binomial_distribution<RealType>::find_maximum_number_of_trials(static_cast<RealType>(10),
+                                                                                      static_cast<RealType>(1.5),
+                                                                                      static_cast<RealType>(0.05)),
+                       std::domain_error); // probability > 1
+     BOOST_CHECK_THROW(binomial_distribution<RealType>::find_maximum_number_of_trials(static_cast<RealType>(10),
+                                                                                      static_cast<RealType>(-1),
+                                                                                      static_cast<RealType>(0.05)),
+                       std::domain_error); // probability < 0
+     BOOST_CHECK_THROW(binomial_distribution<RealType>::find_maximum_number_of_trials(static_cast<RealType>(10),
+                                                                                      static_cast<RealType>(0.5),
+                                                                                      static_cast<RealType>(-0.05)),
+                       std::domain_error); // alpha < 0
+     BOOST_CHECK_THROW(binomial_distribution<RealType>::find_maximum_number_of_trials(static_cast<RealType>(10),
+                                                                                      static_cast<RealType>(0.5),
+                                                                                      static_cast<RealType>(1.5)),
+                       std::domain_error); // alpha > 1
+
+     if (std::numeric_limits<RealType>::has_infinity)
+     {
+     // Check isnan policies
+     using boost::math::policies::policy;
+    
+     typedef policy<
+      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+     > ignore_all_policy;
+
+     typedef binomial_distribution<RealType, ignore_all_policy> ignore_error_binomial;
+
+     BOOST_CHECK((boost::math::isnan)(ignore_error_binomial::find_lower_bound_on_p(static_cast<RealType>(5),
+                                                                                             static_cast<RealType>(2),
+                                                                                             static_cast<RealType>(-0.5)))); // probability < 0
+     BOOST_CHECK((boost::math::isnan)(ignore_error_binomial::find_upper_bound_on_p(static_cast<RealType>(5),
+                                                                                             static_cast<RealType>(2),
+                                                                                             static_cast<RealType>(-0.5)))); // probability < 0
+     BOOST_CHECK((boost::math::isnan)(ignore_error_binomial::find_minimum_number_of_trials(static_cast<RealType>(10),
+                                                                                                     static_cast<RealType>(-1),
+                                                                                                     static_cast<RealType>(0.05)))); // probability < 0
+     BOOST_CHECK((boost::math::isnan)(ignore_error_binomial::find_maximum_number_of_trials(static_cast<RealType>(10),
+                                                                                                     static_cast<RealType>(-1),
+                                                                                                     static_cast<RealType>(0.05)))); // probability < 0
+     
+     BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_binomial(static_cast<RealType>(-8), static_cast<RealType>(0.25)), static_cast<RealType>(8)))); 
+     BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_binomial(static_cast<RealType>(8), static_cast<RealType>(-0.25)), static_cast<RealType>(8))));                                                                                                                                                                                                         
+     BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_binomial(static_cast<RealType>(8), static_cast<RealType>(0.25)), static_cast<RealType>(9))));
+     BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_binomial(static_cast<RealType>(8), static_cast<RealType>(0.25)), static_cast<RealType>(9))));
+     BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_binomial(static_cast<RealType>(8), static_cast<RealType>(0.25)), static_cast<RealType>(9)))));
+     BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_binomial(static_cast<RealType>(8), static_cast<RealType>(0.25)), static_cast<RealType>(-1))));
+   }
 #endif
 
   {
