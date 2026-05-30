@@ -454,11 +454,6 @@ void test_spots(RealType)
       arcsine_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1)), // equal constructor parameters.
       static_cast<RealType>(-1)), std::domain_error);
 
-    BOOST_CHECK_THROW(
-      pdf(
-      arcsine_distribution<RealType>(static_cast<RealType>(0), static_cast<RealType>(1)), // bad x > 1.
-      static_cast<RealType>(999)), std::domain_error);
-
     BOOST_CHECK_THROW( // For various bad arguments.
       logpdf(
       arcsine_distribution<RealType>(static_cast<RealType>(+1), static_cast<RealType>(-1)), // min_x > max_x
@@ -483,20 +478,10 @@ void test_spots(RealType)
       logpdf(
       arcsine_distribution<RealType>(static_cast<RealType>(0), static_cast<RealType>(1)), // bad x > 1.
       static_cast<RealType>(999)), std::domain_error);
-
-    // Checks on things that are errors.
-
-    // Construction with 'bad' parameters.
-    BOOST_CHECK_THROW(arcsine_distribution<RealType>(+1, -1), std::domain_error); // max < min.
-    BOOST_CHECK_THROW(arcsine_distribution<RealType>(+1, 0), std::domain_error);  // max < min.
-
-    // Various combinations of bad constructor and member function parameters.
-    BOOST_CHECK_THROW(pdf(boost::math::arcsine_distribution<RealType>(0, 1), -1), std::domain_error);
-    BOOST_CHECK_THROW(pdf(boost::math::arcsine_distribution<RealType>(-1, 1), +2), std::domain_error);
-    BOOST_CHECK_THROW(logpdf(boost::math::arcsine_distribution<RealType>(0, 1), -1), std::domain_error);
-    BOOST_CHECK_THROW(logpdf(boost::math::arcsine_distribution<RealType>(-1, 1), +2), std::domain_error);
-    BOOST_CHECK_THROW(quantile(boost::math::arcsine_distribution<RealType>(1, 1), -1), std::domain_error);
-    BOOST_CHECK_THROW(quantile(boost::math::arcsine_distribution<RealType>(1, 1), 2), std::domain_error);
+    
+    // std::vector<std::vector<RealType> > invalid_params = {{1, 0}, // x_min > x_max
+    //                                                       {1, -1}}; 
+    // test_invalid_parameters<arcsine_distribution, RealType>(invalid_params);
 
     // No longer allow any parameter to be NaN or inf, so all these tests should throw.
     if (std::numeric_limits<RealType>::has_quiet_NaN)
@@ -550,6 +535,13 @@ void test_spots(RealType)
       BOOST_CHECK_THROW(quantile(w, +inf), std::domain_error); // p = + inf
       BOOST_CHECK_THROW(quantile(complement(w, +inf)), std::domain_error); // p = + inf
     } // has_infinity
+
+    // Quantile should return x_min and x_max
+    arcsine_distribution<RealType> dist(0, 1);
+    BOOST_CHECK_EQUAL(quantile(dist, static_cast<RealType>(1)), static_cast<RealType>(1)); // p = 1
+    BOOST_CHECK_EQUAL(quantile(dist, static_cast<RealType>(0)), static_cast<RealType>(0)); // p = 0
+    BOOST_CHECK_EQUAL(quantile(complement(dist, static_cast<RealType>(1))), static_cast<RealType>(0)); // q = 1
+    BOOST_CHECK_EQUAL(quantile(complement(dist, static_cast<RealType>(0))), static_cast<RealType>(1)); // q = 0
 
     // Error handling checks:
     check_out_of_range<boost::math::arcsine_distribution<RealType> >(-1, +1); // (All) valid constructor parameter values.

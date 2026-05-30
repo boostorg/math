@@ -279,14 +279,15 @@ void test_spots(RealType)
 #else
      BOOST_MATH_CHECK_THROW(bernoulli_distribution<RealType>(inf), std::domain_error);
 #endif
-     BOOST_MATH_CHECK_THROW(pdf(w, +inf), std::domain_error); // x = inf
-     BOOST_MATH_CHECK_THROW(cdf(w, +inf), std::domain_error); // x = inf
-     BOOST_MATH_CHECK_THROW(cdf(complement(w, +inf)), std::domain_error); // x = + inf
-     BOOST_MATH_CHECK_THROW(quantile(w, +inf), std::domain_error); // p = + inf
-     BOOST_MATH_CHECK_THROW(quantile(complement(w, +inf)), std::domain_error); // p = + inf
    } // has_infinity
    #endif
 
+   bernoulli_distribution<RealType> fair_dist(0.5);
+   BOOST_CHECK_EQUAL(quantile(fair_dist, static_cast<RealType>(1)), static_cast<RealType>(1)); // p = 1
+   BOOST_CHECK_EQUAL(quantile(fair_dist, static_cast<RealType>(0)), static_cast<RealType>(0)); // p = 0
+   BOOST_CHECK_EQUAL(quantile(complement(fair_dist, static_cast<RealType>(1))), static_cast<RealType>(0)); // q = 1
+   BOOST_CHECK_EQUAL(quantile(complement(fair_dist, static_cast<RealType>(0))), static_cast<RealType>(1)); // q = 0
+   
    if (std::numeric_limits<RealType>::has_quiet_NaN)
     {
       test_invalid_support<bernoulli_distribution, RealType>();

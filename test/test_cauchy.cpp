@@ -26,6 +26,7 @@
 // To compile even if Cauchy mean is used.
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/cauchy.hpp>
+#include <boost/math/distributions/arcsine.hpp>
     using boost::math::cauchy_distribution;
 
 #define BOOST_TEST_MAIN
@@ -33,10 +34,18 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 
 #include "test_out_of_range.hpp"
+#include "test_dist_helpers.hpp"
+
+#if defined(BOOST_CHECK_THROW) && defined(BOOST_MATH_NO_EXCEPTIONS)
+#  undef BOOST_CHECK_THROW
+#  define BOOST_CHECK_THROW(x, y)
+#endif
 
 #include <iostream>
    using std::cout;
    using std::endl;
+#include <limits>
+using std::numeric_limits;
 
 template <class RealType>
 void test_spots(RealType T)
@@ -798,6 +807,12 @@ void test_spots(RealType T)
       BOOST_CHECK((boost::math::isnan)(boost::math::quantile(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0.25))));
       BOOST_CHECK((boost::math::isnan)(boost::math::quantile(ignore_error_cauchy(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), static_cast<RealType>(0.25))));
       BOOST_CHECK((boost::math::isnan)(boost::math::quantile(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(1)), static_cast<RealType>(-0.25))));
+   
+      if (std::numeric_limits<RealType>::has_quiet_NaN)
+      {
+         test_invalid_support<boost::math::cauchy_distribution, RealType>();
+      }
+      
    }
 
 } // template <class RealType>void test_spots(RealType)
