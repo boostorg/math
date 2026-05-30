@@ -281,7 +281,6 @@ namespace boost
           m_x_max,
           &result, Policy());
       } // arcsine_distribution constructor.
-      BOOST_MATH_GPU_ENABLED arcsine_distribution(std::vector<RealType> params) : arcsine_distribution(params[0], params[1]) {}
       // Accessor functions:
       BOOST_MATH_GPU_ENABLED RealType x_min() const
       {

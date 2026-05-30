@@ -7,6 +7,7 @@
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/test/unit_test.hpp>
+#include <boost/math/policies/policy.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 
 template <template <typename, typename> typename Distribution, class Real>
@@ -91,7 +92,6 @@ void test_invalid_support()
     BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_dist, invalid))));
 
     // NaN checks for log PDF/CDF
-    invalid = std::numeric_limits<Real>::quiet_NaN();
     BOOST_CHECK_THROW(logpdf(dist, invalid), std::domain_error);
     BOOST_CHECK_THROW(logcdf(dist, invalid), std::domain_error);
     BOOST_CHECK_THROW(logcdf(complement(dist, invalid)), std::domain_error);
@@ -115,20 +115,65 @@ void test_invalid_support()
     BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_dist, static_cast<Real>(2))))); // q > 1
 }
 
+template <class Dist, class Container>
+Dist make_distribution(const Container& c)
+{
+    using value_type = typename Dist::value_type;
+    if constexpr (std::is_constructible_v<Dist, value_type, value_type, value_type>)
+    {
+        if (c.size() >= 3)
+            return Dist(c.data()[0], c.data()[1], c.data()[2]);
+    }
+    if constexpr (std::is_constructible_v<Dist, value_type, value_type>)
+    {
+        if (c.size() >= 2)
+            return Dist(c.data()[0], c.data()[1]);
+    }
+    if constexpr (std::is_constructible_v<Dist, value_type>)
+    {
+        if (c.size() >= 1)
+            return Dist(c.data()[0]);
+    }
+    return Dist();
+}
 
-// template <template <typename...> typename Distribution, class Real>
-// void test_invalid_parameters(std::vector<std::vector<Real> > invalid_parameters)
-// {
-//     typedef Distribution<Real> dist;
+template <class Dist, class V>
+Dist make_distribution(const std::initializer_list<V>& c)
+{
+    return make_distribution<Dist, std::initializer_list<V>>(c);
+}
 
-//     std::vector<Real> params;
-//     for (unsigned i=0; i<invalid_parameters.size(); i++)
-//     {
-//         params = invalid_parameters[i];
-//         BOOST_CHECK_THROW(dist(params), std::domain_error);
-//         BOOST_CHECK_THROW(dist x(params), std::domain_error);
-//         BOOST_CHECK_THROW(boost::math::pdf(dist(params), 0.5), std::domain_error);
-//     }
-// }
+template <class Dist, class Ignore_Error_Dist, class Real>
+void test_invalid_parameters(std::vector<std::vector<Real> > invalid_parameters)
+{
+    std::vector<Real> params;
+    for (unsigned i=0; i<invalid_parameters.size(); i++)
+    {
+        params = invalid_parameters[i];
+
+        // Check functions throw with bad constructors
+        BOOST_CHECK_THROW(make_distribution<Dist>(params), std::domain_error);
+        BOOST_CHECK_THROW(pdf(make_distribution<Dist>(params), static_cast<Real>(0)), std::domain_error);
+        BOOST_CHECK_THROW(logpdf(make_distribution<Dist>(params), static_cast<Real>(0)), std::domain_error);
+        BOOST_CHECK_THROW(cdf(make_distribution<Dist>(params), static_cast<Real>(0)), std::domain_error);
+        BOOST_CHECK_THROW(cdf(complement(make_distribution<Dist>(params), static_cast<Real>(0))), std::domain_error);
+        BOOST_CHECK_THROW(logcdf(make_distribution<Dist>(params), static_cast<Real>(0)), std::domain_error);
+        BOOST_CHECK_THROW(logcdf(complement(make_distribution<Dist>(params), static_cast<Real>(0))), std::domain_error);
+        BOOST_CHECK_THROW(quantile(make_distribution<Dist>(params), static_cast<Real>(0.5)), std::domain_error);
+        BOOST_CHECK_THROW(quantile(complement(make_distribution<Dist>(params), static_cast<Real>(0.5))), std::domain_error);
+
+        // Check return NaN
+        if (std::numeric_limits<Real>::has_quiet_NaN)
+        {
+            BOOST_CHECK((boost::math::isnan)(pdf(make_distribution<Ignore_Error_Dist>(params), static_cast<Real>(0))));
+            BOOST_CHECK((boost::math::isnan)(logpdf(make_distribution<Ignore_Error_Dist>(params), static_cast<Real>(0))));
+            BOOST_CHECK((boost::math::isnan)(cdf(make_distribution<Ignore_Error_Dist>(params), static_cast<Real>(0))));
+            BOOST_CHECK((boost::math::isnan)(cdf(complement(make_distribution<Ignore_Error_Dist>(params), static_cast<Real>(0)))));
+            BOOST_CHECK((boost::math::isnan)(logcdf(make_distribution<Ignore_Error_Dist>(params), static_cast<Real>(0))));
+            BOOST_CHECK((boost::math::isnan)(logcdf(complement(make_distribution<Ignore_Error_Dist>(params), static_cast<Real>(0)))));
+        }
+
+    }
+}
 
 #endif // BOOST_MATH_TEST_DIST_HELPERS_HPP
