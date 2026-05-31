@@ -396,7 +396,7 @@ namespace boost
         k,
         &result, Policy()))
       {
-        return -boost::math::numeric_limits<RealType>::infinity();
+        return result;
       }
       if(k == 0)
       {
@@ -452,7 +452,7 @@ namespace boost
         k,
         &result, Policy()))
       {
-        return -boost::math::numeric_limits<RealType>::infinity();
+        return result;
       }
 
       return boost::math::log1p(-p, Policy()) * (k+1);

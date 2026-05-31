@@ -162,7 +162,6 @@ void test_invalid_parameters(std::vector<std::vector<Real> > invalid_parameters)
     for (unsigned i=0; i<invalid_parameters.size(); i++)
     {
         params = invalid_parameters[i];
-        std::cout << params[0] << "," << params[1] << std::endl;
         // Check functions throw with bad constructors
         BOOST_CHECK_THROW(make_distribution<Dist>(params), std::domain_error);
         BOOST_CHECK_THROW(pdf(make_distribution<Dist>(params), static_cast<Real>(0)), std::domain_error);
