@@ -600,7 +600,9 @@ void test_spots(RealType T)
 
    if (std::numeric_limits<RealType>::has_quiet_NaN)
    {
-      test_invalid_support<binomial_distribution, RealType>();
+      test_invalid_support<binomial_distribution<RealType, boost::math::policies::policy<> >, 
+                           binomial_distribution<RealType, ignore_all_policy>, 
+                           RealType>({10, 0.5});
    } // has_quiet_NaN
 
      // Check Error handling and edge cases

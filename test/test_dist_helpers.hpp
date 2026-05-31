@@ -10,23 +10,41 @@
 #include <boost/math/policies/policy.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 
-template <template <typename, typename> typename Distribution, class Real>
-void test_invalid_support()
+template <class Dist, class Container>
+Dist make_distribution(const Container& c)
 {
-    using boost::math::policies::policy;
+    using value_type = typename Dist::value_type;
+    if constexpr (std::is_constructible_v<Dist, value_type, value_type, value_type>)
+    {
+        if (c.size() >= 3)
+            return Dist(c.data()[0], c.data()[1], c.data()[2]);
+    }
+    if constexpr (std::is_constructible_v<Dist, value_type, value_type>)
+    {
+        if (c.size() >= 2)
+            return Dist(c.data()[0], c.data()[1]);
+    }
+    if constexpr (std::is_constructible_v<Dist, value_type>)
+    {
+        if (c.size() >= 1)
+            return Dist(c.data()[0]);
+    }
+    throw std::domain_error("Object not initialized!");
+}
+
+template <class Dist, class V>
+Dist make_distribution(const std::initializer_list<V>& c)
+{
+    return make_distribution<Dist, std::initializer_list<V>>(c);
+}
+
+template <class Dist, class Ignore_Error_Dist, class Real>
+void test_invalid_support(std::vector<Real> params)
+{
     using namespace boost::math;
-
-    typedef policy<
-      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
-      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
-      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
-      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
-      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
-      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
-    > ignore_all_policy;
-
-    Distribution<Real, ignore_all_policy> ignore_error_dist;
-    Distribution<Real, policy<> > dist; 
+    
+    Dist dist = make_distribution<Dist>(params); 
+    Ignore_Error_Dist ignore_error_dist = make_distribution<Ignore_Error_Dist>(params);
     
     /* We will assume that std::numeric_limits<Distribution::value_type>::has_infinity */
     std::pair<Real, Real> sup = support(dist);
@@ -137,34 +155,6 @@ void test_invalid_support()
     BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_dist, static_cast<Real>(2))))); // q > 1
 }
 
-template <class Dist, class Container>
-Dist make_distribution(const Container& c)
-{
-    using value_type = typename Dist::value_type;
-    if constexpr (std::is_constructible_v<Dist, value_type, value_type, value_type>)
-    {
-        if (c.size() >= 3)
-            return Dist(c.data()[0], c.data()[1], c.data()[2]);
-    }
-    if constexpr (std::is_constructible_v<Dist, value_type, value_type>)
-    {
-        if (c.size() >= 2)
-            return Dist(c.data()[0], c.data()[1]);
-    }
-    if constexpr (std::is_constructible_v<Dist, value_type>)
-    {
-        if (c.size() >= 1)
-            return Dist(c.data()[0]);
-    }
-    return Dist();
-}
-
-template <class Dist, class V>
-Dist make_distribution(const std::initializer_list<V>& c)
-{
-    return make_distribution<Dist, std::initializer_list<V>>(c);
-}
-
 template <class Dist, class Ignore_Error_Dist, class Real>
 void test_invalid_parameters(std::vector<std::vector<Real> > invalid_parameters)
 {
@@ -172,7 +162,7 @@ void test_invalid_parameters(std::vector<std::vector<Real> > invalid_parameters)
     for (unsigned i=0; i<invalid_parameters.size(); i++)
     {
         params = invalid_parameters[i];
-
+        std::cout << params[0] << "," << params[1] << std::endl;
         // Check functions throw with bad constructors
         BOOST_CHECK_THROW(make_distribution<Dist>(params), std::domain_error);
         BOOST_CHECK_THROW(pdf(make_distribution<Dist>(params), static_cast<Real>(0)), std::domain_error);

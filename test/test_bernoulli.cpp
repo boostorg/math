@@ -279,7 +279,9 @@ void test_spots(RealType)
    
    if (std::numeric_limits<RealType>::has_quiet_NaN)
    {
-      test_invalid_support<bernoulli_distribution, RealType>();
+      test_invalid_support<bernoulli_distribution<RealType, boost::math::policies::policy<> >, 
+                           bernoulli_distribution<RealType, ignore_all_policy>,
+                           RealType>({0.5});
    } // has_quiet_NaN
 } // template <class RealType>void test_spots(RealType)
 

@@ -133,9 +133,6 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const exponential_distribution<RealTy
       return result;
    if(0 == detail::verify_exp_x(function, x, &result, Policy()))
       return result;
-   // Workaround for VC11/12 bug:
-   if ((boost::math::isinf)(x))
-      return 0;
    result = lambda * exp(-lambda * x);
    return result;
 } // pdf
@@ -230,9 +227,6 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<exponential_
       return result;
    if(0 == detail::verify_exp_x(function, c.param, &result, Policy()))
       return result;
-   // Workaround for VC11/12 bug:
-   if (c.param >= tools::max_value<RealType>())
-      return 0;
    result = exp(-c.param * lambda);
 
    return result;
@@ -251,9 +245,6 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<exponenti
       return result;
    if(0 == detail::verify_exp_x(function, c.param, &result, Policy()))
       return result;
-   // Workaround for VC11/12 bug:
-   if (c.param >= tools::max_value<RealType>())
-      return 0;
    result = -c.param * lambda;
 
    return result;

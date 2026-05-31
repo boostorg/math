@@ -543,7 +543,9 @@ void test_spots(RealType)
 
    if (std::numeric_limits<RealType>::has_quiet_NaN)
    {
-      test_invalid_support<beta_distribution, RealType>();
+      test_invalid_support<beta_distribution<RealType, boost::math::policies::policy<> >, 
+                           beta_distribution<RealType, ignore_all_policy>, 
+                           RealType>({1, 1});
    } // has_quiet_NaN
    
    // PDF not defind for alpha < 1, x = 0 and beta < 1, x = 1
@@ -573,6 +575,8 @@ void test_spots(RealType)
 
      BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_alpha(inf, static_cast<RealType>(0.5)))); // mean = inf
      BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_beta(inf, static_cast<RealType>(0.5)))); // mean = inf
+     BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_alpha(static_cast<RealType>(0.5), inf))); // var = inf
+     BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_beta(static_cast<RealType>(0.5), inf))); // var = inf
      BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_alpha(inf, static_cast<RealType>(0.5), static_cast<RealType>(0.5)))); // beta = inf
      BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_beta(inf, static_cast<RealType>(0.5), static_cast<RealType>(0.5)))); // alpha = inf
      BOOST_CHECK((boost::math::isnan)(mode(ignore_error_beta(static_cast<RealType>(2), static_cast<RealType>(1))))); // beta = 1

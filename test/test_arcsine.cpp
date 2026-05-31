@@ -154,7 +154,9 @@ void test_ignore_policy(RealType)
     BOOST_CHECK(boost::math::isfinite(mean(ignore_error_arcsine(0, std::numeric_limits<RealType>::epsilon()))));
 
     check_support<arcsine_distribution<RealType> >(arcsine_distribution<RealType>(0, 1));
-    test_invalid_support<arcsine_distribution, RealType>();
+    test_invalid_support<arcsine_distribution<RealType, boost::math::policies::policy<> >, 
+                         arcsine_distribution<RealType, ignore_all_policy>,
+                         RealType>({0, 1});
   } // ordinary floats.
 } // template <class RealType> void test_ignore_policy(RealType)
 

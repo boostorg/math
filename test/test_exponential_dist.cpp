@@ -376,7 +376,9 @@ void test_spots(RealType T)
    } // has_infinity 
    if (std::numeric_limits<RealType>::has_quiet_NaN)
    {
-      test_invalid_support<boost::math::exponential_distribution, RealType>();
+      test_invalid_support<exponential_distribution<RealType, boost::math::policies::policy<> >, 
+                           exponential_distribution<RealType, ignore_all_policy>, 
+                           RealType>({1});
    }
 } // template <class RealType>void test_spots(RealType)
 
