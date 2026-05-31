@@ -171,6 +171,8 @@ void test_invalid_parameters(std::vector<std::vector<Real> > invalid_parameters)
             BOOST_CHECK((boost::math::isnan)(cdf(complement(make_distribution<Ignore_Error_Dist>(params), static_cast<Real>(0)))));
             BOOST_CHECK((boost::math::isnan)(logcdf(make_distribution<Ignore_Error_Dist>(params), static_cast<Real>(0))));
             BOOST_CHECK((boost::math::isnan)(logcdf(complement(make_distribution<Ignore_Error_Dist>(params), static_cast<Real>(0)))));
+            BOOST_CHECK((boost::math::isnan)(quantile(make_distribution<Ignore_Error_Dist>(params), static_cast<Real>(0.5))));
+            BOOST_CHECK((boost::math::isnan)(quantile(complement(make_distribution<Ignore_Error_Dist>(params), static_cast<Real>(0.5)))));
         }
     }
 }
