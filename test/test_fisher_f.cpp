@@ -476,7 +476,36 @@ void test_spots(RealType)
       test_invalid_parameters<fisher_f_distribution<RealType, boost::math::policies::policy<> >, 
                               fisher_f_distribution<RealType, ignore_all_policy>, 
                               RealType>(invalid_params);
+      
+      // Check moment function for bad constructors
+      BOOST_CHECK_THROW(mean(fisher_f_distribution<RealType, boost::math::policies::policy<> >(-1, 1)), std::domain_error);
+      BOOST_CHECK_THROW(mean(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, -1)), std::domain_error);
+      BOOST_CHECK_THROW(variance(fisher_f_distribution<RealType, boost::math::policies::policy<> >(-1, 1)), std::domain_error);
+      BOOST_CHECK_THROW(variance(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, -1)), std::domain_error);
+      BOOST_CHECK_THROW(mode(fisher_f_distribution<RealType, boost::math::policies::policy<> >(-1, 1)), std::domain_error);
+      BOOST_CHECK_THROW(mode(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, -1)), std::domain_error);
+      BOOST_CHECK_THROW(skewness(fisher_f_distribution<RealType, boost::math::policies::policy<> >(-1, 1)), std::domain_error);
+      BOOST_CHECK_THROW(skewness(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, -1)), std::domain_error);
+      BOOST_CHECK_THROW(kurtosis_excess(fisher_f_distribution<RealType, boost::math::policies::policy<> >(-1, 1)), std::domain_error);
+      BOOST_CHECK_THROW(kurtosis_excess(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, -1)), std::domain_error);
+      
+      BOOST_CHECK((boost::math::isnan)(mean(fisher_f_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(mean(fisher_f_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(variance(fisher_f_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(variance(fisher_f_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(mode(fisher_f_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(mode(fisher_f_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(skewness(fisher_f_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(skewness(fisher_f_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(kurtosis_excess(fisher_f_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(kurtosis_excess(fisher_f_distribution<RealType, ignore_all_policy>(1, -1))));
 
+      // Check undefined moments
+      BOOST_CHECK_THROW(mean(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, 2)), std::domain_error);
+      BOOST_CHECK_THROW(variance(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, 4)), std::domain_error);
+      BOOST_CHECK_THROW(mode(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, 2)), std::domain_error);
+      BOOST_CHECK_THROW(skewness(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, 6)), std::domain_error);
+      BOOST_CHECK_THROW(kurtosis_excess(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, 8)), std::domain_error);
    }
 
    // Check construcing with Infinity
