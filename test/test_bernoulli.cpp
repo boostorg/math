@@ -51,6 +51,8 @@ using std::setprecision;
 #include <limits>
 using std::numeric_limits;
 
+#include <vector>
+
 template <class RealType> // Any floating-point type RealType.
 void test_spots(RealType)
 { // Parameter only provides the type, float, double... value ignored.
@@ -231,56 +233,43 @@ void test_spots(RealType)
      );
 
    // Checks for 'bad' parameters.
-   // Construction.
-   #ifndef BOOST_MATH_NO_EXCEPTIONS
-   BOOST_MATH_CHECK_THROW(bernoulli_distribution<RealType>(-1), std::domain_error); // p outside 0 to 1.
-   BOOST_MATH_CHECK_THROW(bernoulli_distribution<RealType>(+2), std::domain_error); // p outside 0 to 1.
+   using boost::math::policies::policy;
 
-   // Parameters.
-   bernoulli_distribution<RealType> dist(RealType(1)); 
-   BOOST_MATH_CHECK_THROW(pdf(dist, -1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(cdf(dist, -1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(cdf(complement(dist, -1)), std::domain_error);
-   BOOST_MATH_CHECK_THROW(quantile(dist, 2), std::domain_error);
-   BOOST_MATH_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
-   BOOST_MATH_CHECK_THROW(quantile(dist, -1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
-     
-   // No longer allow any parameter to be NaN or inf, so all these tests should throw.
-   if (std::numeric_limits<RealType>::has_quiet_NaN)
-   { 
-    // Attempt to construct from non-finite should throw.
-     RealType nan = std::numeric_limits<RealType>::quiet_NaN();
-#ifndef BOOST_NO_EXCEPTIONS
-     BOOST_MATH_CHECK_THROW(bernoulli_distribution<RealType> b(nan), std::domain_error);
-#else
-     BOOST_MATH_CHECK_THROW(bernoulli_distribution<RealType>(nan), std::domain_error);
-#endif
-    // Non-finite parameters should throw.
-     bernoulli_distribution<RealType> b(RealType(1)); 
-     BOOST_MATH_CHECK_THROW(pdf(b, +nan), std::domain_error); // x = NaN
-     BOOST_MATH_CHECK_THROW(cdf(b, +nan), std::domain_error); // x = NaN
-     BOOST_MATH_CHECK_THROW(cdf(complement(b, +nan)), std::domain_error); // x = + nan
-     BOOST_MATH_CHECK_THROW(quantile(b, +nan), std::domain_error); // p = + nan
-     BOOST_MATH_CHECK_THROW(quantile(complement(b, +nan)), std::domain_error); // p = + nan
-  } // has_quiet_NaN
+    typedef policy<
+      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+    > ignore_all_policy;
 
-  if (std::numeric_limits<RealType>::has_infinity)
-  {
-     RealType inf = std::numeric_limits<RealType>::infinity(); 
-#ifndef BOOST_NO_EXCEPTIONS
-     BOOST_MATH_CHECK_THROW(bernoulli_distribution<RealType> w(inf), std::domain_error);
-#else
-     BOOST_MATH_CHECK_THROW(bernoulli_distribution<RealType>(inf), std::domain_error);
-#endif
-     bernoulli_distribution<RealType> w(RealType(1)); 
-#ifndef BOOST_NO_EXCEPTIONS
-     BOOST_MATH_CHECK_THROW(bernoulli_distribution<RealType> w(inf), std::domain_error);
-#else
-     BOOST_MATH_CHECK_THROW(bernoulli_distribution<RealType>(inf), std::domain_error);
-#endif
-   } // has_infinity
-   #endif
+    std::vector<std::vector<RealType> > invalid_params = {{-1}, // x_min > x_max
+                                                          {2}};
+    test_invalid_parameters<bernoulli_distribution<RealType, boost::math::policies::policy<> >, 
+                            bernoulli_distribution<RealType, ignore_all_policy>, 
+                            RealType>(invalid_params);
+
+    // Check constructing with NaNs
+    if (std::numeric_limits<RealType>::has_quiet_NaN){
+      // Attempt to construct from non-finite parameters should throw.
+      RealType nan = std::numeric_limits<RealType>::quiet_NaN();
+      invalid_params = {{nan}};
+      test_invalid_parameters<bernoulli_distribution<RealType, boost::math::policies::policy<> >, 
+                              bernoulli_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
+    }
+
+    // Check construcing with Infinity
+    if (std::numeric_limits<RealType>::has_infinity)
+    {
+      // Attempt to construct from non-finite should throw.
+      RealType inf = std::numeric_limits<RealType>::infinity();
+      invalid_params = {{inf}};
+      test_invalid_parameters<bernoulli_distribution<RealType, boost::math::policies::policy<> >, 
+                              bernoulli_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
+    } // has_infinity  
 
    bernoulli_distribution<RealType> fair_dist(0.5);
    BOOST_CHECK_EQUAL(quantile(fair_dist, static_cast<RealType>(1)), static_cast<RealType>(1)); // p = 1
