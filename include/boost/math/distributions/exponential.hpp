@@ -109,10 +109,15 @@ template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const exponential_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-   using boost::math::tools::max_value;
-   using boost::math::tools::min_value;
-   return boost::math::pair<RealType, RealType>(min_value<RealType>(),  max_value<RealType>());
-   // min_value<RealType>() to avoid a discontinuity at x = 0.
+   BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
+   { 
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
+   }
+   else
+   { // Can only use max_value.
+      using boost::math::tools::max_value;
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // - to + max.
+   }
 }
 
 template <class RealType, class Policy>

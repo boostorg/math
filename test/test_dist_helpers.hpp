@@ -37,6 +37,10 @@ void test_invalid_support()
     {
         if (invalid == -boost::math::tools::max_value<Real>())
             invalid = -std::numeric_limits<Real>::infinity();
+        else if (invalid == boost::math::tools::min_value<Real>())
+        {
+            invalid = -boost::math::tools::min_value<Real>();
+        }
         else
             invalid = boost::math::float_prior(invalid);
 
@@ -58,9 +62,11 @@ void test_invalid_support()
     }
     else // lower bound is -infinity
     {
-        BOOST_CHECK_EQUAL(pdf(ignore_error_dist, invalid), static_cast<Real>(0));
-        BOOST_CHECK_EQUAL(cdf(ignore_error_dist, invalid), static_cast<Real>(0));
-        BOOST_CHECK_EQUAL(cdf(complement(ignore_error_dist, invalid)), static_cast<Real>(1));
+        BOOST_CHECK_THROW(quantile(dist, static_cast<Real>(0.0)), std::overflow_error);
+        BOOST_CHECK_THROW(quantile(complement(dist, static_cast<Real>(1.0))), std::overflow_error);
+        BOOST_CHECK_EQUAL(pdf(dist, invalid), static_cast<Real>(0));
+        BOOST_CHECK_EQUAL(cdf(dist, invalid), static_cast<Real>(0));
+        BOOST_CHECK_EQUAL(cdf(complement(dist, invalid)), static_cast<Real>(1));
     }
     // Test outside upper bound:
     invalid = sup.second;
@@ -74,7 +80,7 @@ void test_invalid_support()
         BOOST_CHECK_THROW(pdf(dist, invalid), std::domain_error);
         BOOST_CHECK_THROW(cdf(dist, invalid), std::domain_error);
         BOOST_CHECK_THROW(cdf(complement(dist, invalid)), std::domain_error);
-        // Test NaN handnling
+        // Test NaN handling
         BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_dist, invalid)));
         BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_dist, invalid)));
         BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_dist, invalid))));
@@ -89,9 +95,13 @@ void test_invalid_support()
     }
     else // upper bound is +infinity
     {
-        BOOST_CHECK_EQUAL(pdf(ignore_error_dist, invalid), static_cast<Real>(0));
-        BOOST_CHECK_EQUAL(cdf(ignore_error_dist, invalid), static_cast<Real>(1));
-        BOOST_CHECK_EQUAL(cdf(complement(ignore_error_dist, invalid)), static_cast<Real>(0));
+        BOOST_CHECK_EQUAL(pdf(dist, invalid), static_cast<Real>(0));
+        BOOST_CHECK_EQUAL(cdf(dist, invalid), static_cast<Real>(1));
+        BOOST_CHECK_EQUAL(cdf(complement(dist, invalid)), static_cast<Real>(0));
+
+        // If support is infinite quantile will throw overflow error
+        BOOST_CHECK_THROW(quantile(dist, static_cast<Real>(1.0)), std::overflow_error);
+        BOOST_CHECK_THROW(quantile(complement(dist, static_cast<Real>(0.0))), std::overflow_error);
     }
 
     // NaN checks for PDF/CDF
