@@ -56,6 +56,12 @@ void test_invalid_support()
         BOOST_CHECK((boost::math::isnan)(logcdf(ignore_error_dist, invalid)));
         BOOST_CHECK((boost::math::isnan)(logcdf(complement(ignore_error_dist, invalid))));
     }
+    else // lower bound is -infinity
+    {
+        BOOST_CHECK_EQUAL(pdf(ignore_error_dist, invalid), static_cast<Real>(0));
+        BOOST_CHECK_EQUAL(cdf(ignore_error_dist, invalid), static_cast<Real>(0));
+        BOOST_CHECK_EQUAL(cdf(complement(ignore_error_dist, invalid)), static_cast<Real>(1));
+    }
     // Test outside upper bound:
     invalid = sup.second;
     if (boost::math::isfinite(invalid))
@@ -80,6 +86,12 @@ void test_invalid_support()
         BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_dist, invalid)));
         BOOST_CHECK((boost::math::isnan)(logcdf(ignore_error_dist, invalid)));
         BOOST_CHECK((boost::math::isnan)(logcdf(complement(ignore_error_dist, invalid))));
+    }
+    else // upper bound is +infinity
+    {
+        BOOST_CHECK_EQUAL(pdf(ignore_error_dist, invalid), static_cast<Real>(0));
+        BOOST_CHECK_EQUAL(cdf(ignore_error_dist, invalid), static_cast<Real>(1));
+        BOOST_CHECK_EQUAL(cdf(complement(ignore_error_dist, invalid)), static_cast<Real>(0));
     }
 
     // NaN checks for PDF/CDF

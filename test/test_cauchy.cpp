@@ -680,6 +680,12 @@ void test_spots(RealType T)
          static_cast<RealType>(1-0.039583424160566))),              // x
          static_cast<RealType>(3),  // probability.
          tolerance); // %
+   BOOST_CHECK_EQUAL(
+      ::boost::math::quantile(
+         cauchy_distribution<RealType>(-2, 0.25),
+         static_cast<RealType>(0.5)), // p
+         static_cast<RealType>(-2) // location
+      );
    /*
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
@@ -753,68 +759,50 @@ void test_spots(RealType T)
 
    check_out_of_range<boost::math::cauchy_distribution<RealType> >(0, 1); // (All) valid constructor parameter values.
 
-   if (std::numeric_limits<RealType>::has_infinity)
-   {
-      BOOST_CHECK_EQUAL(
-         boost::math::pdf(
-            cauchy_distribution<RealType>(-2, 0.25),
-            std::numeric_limits<RealType>::infinity()), // x
-            static_cast<RealType>(0) // probability
-         );
-      BOOST_CHECK_EQUAL(
-         boost::math::cdf(
-            cauchy_distribution<RealType>(-2, 0.25),
-            std::numeric_limits<RealType>::infinity()), // x
-            static_cast<RealType>(1) // probability
-         );
-      BOOST_CHECK_EQUAL(
-         boost::math::cdf(
-            cauchy_distribution<RealType>(-2, 0.25),
-            -std::numeric_limits<RealType>::infinity()), // x
-            static_cast<RealType>(0) // probability
-         );
-      BOOST_CHECK_EQUAL(
-         boost::math::quantile(
-            cauchy_distribution<RealType>(-2, 0.25),
-            static_cast<RealType>(0.5)), // p
-            static_cast<RealType>(-2) // location
-         );
+   using boost::math::policies::policy;
 
-      using boost::math::policies::policy;
+   typedef policy<
+      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+   > ignore_all_policy;
 
-      typedef policy<
-         boost::math::policies::domain_error<boost::math::policies::ignore_error>,
-         boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
-         boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
-         boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
-         boost::math::policies::pole_error<boost::math::policies::ignore_error>,
-         boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
-      > ignore_all_policy;
+   std::vector<std::vector<RealType> > invalid_params = {{0, -1}};
+   test_invalid_parameters<cauchy_distribution<RealType, boost::math::policies::policy<> >, 
+                           cauchy_distribution<RealType, ignore_all_policy>, 
+                           RealType>(invalid_params);
 
-      typedef boost::math::cauchy_distribution<RealType, ignore_all_policy> ignore_error_cauchy;
-      
-      // PDF
-      BOOST_CHECK((boost::math::isnan)(boost::math::pdf(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0))));
-      BOOST_CHECK((boost::math::isnan)(boost::math::pdf(ignore_error_cauchy(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), static_cast<RealType>(0))));
-      BOOST_CHECK((boost::math::isnan)(boost::math::pdf(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(1)), std::numeric_limits<RealType>::quiet_NaN())));
-   
-      // CDF
-      BOOST_CHECK((boost::math::isnan)(boost::math::cdf(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0))));
-      BOOST_CHECK((boost::math::isnan)(boost::math::cdf(ignore_error_cauchy(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), static_cast<RealType>(0))));
-      BOOST_CHECK((boost::math::isnan)(boost::math::cdf(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(1)), std::numeric_limits<RealType>::quiet_NaN())));
-
-      // Quantile 
-      BOOST_CHECK((boost::math::isnan)(boost::math::quantile(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0.25))));
-      BOOST_CHECK((boost::math::isnan)(boost::math::quantile(ignore_error_cauchy(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), static_cast<RealType>(0.25))));
-      BOOST_CHECK((boost::math::isnan)(boost::math::quantile(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(1)), static_cast<RealType>(-0.25))));
-   
-      if (std::numeric_limits<RealType>::has_quiet_NaN)
-      {
-         test_invalid_support<boost::math::cauchy_distribution, RealType>();
-      }
-      
+   // Check constructing with NaNs
+   if (std::numeric_limits<RealType>::has_quiet_NaN){
+      // Attempt to construct from non-finite parameters should throw.
+      RealType nan = std::numeric_limits<RealType>::quiet_NaN();
+      invalid_params = {{nan},
+                        {0, nan},
+                        {nan, 1}};
+      test_invalid_parameters<cauchy_distribution<RealType, boost::math::policies::policy<> >, 
+                              cauchy_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
    }
 
+   // Check construcing with Infinity
+   if (std::numeric_limits<RealType>::has_infinity)
+   {
+      // Attempt to construct from non-finite should throw.
+      RealType inf = std::numeric_limits<RealType>::infinity();
+      invalid_params = {{inf},
+                        {0, inf},
+                        {inf, 1}};
+      test_invalid_parameters<cauchy_distribution<RealType, boost::math::policies::policy<> >, 
+                              cauchy_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
+   } // has_infinity 
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   {
+      test_invalid_support<boost::math::cauchy_distribution, RealType>();
+   }
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE(test_main)
