@@ -843,8 +843,30 @@ if(std::numeric_limits<RealType>::is_specialized)
       test_invalid_support<geometric_distribution<RealType, boost::math::policies::policy<> >, 
                            geometric_distribution<RealType, ignore_all_policy>, 
                            RealType>({0.5});
-  }
-    //geometric::find_upper_bound_on_p(k, alpha);
+      // Check incorrect constructors for find_lower_bound_on_p
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_lower_bound_on_p(8, -0.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_lower_bound_on_p(8, 1.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_lower_bound_on_p(0, 0.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_lower_bound_on_p(-1, 0.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_upper_bound_on_p(8, -0.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_upper_bound_on_p(8, 1.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_upper_bound_on_p(0, 0.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_upper_bound_on_p(-1, 0.25)));
+
+      // Incorrect constructors for find_minimum_number_of_trials
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_minimum_number_of_trials(1, 0.25, -0.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_minimum_number_of_trials(1, 0.25, 1.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_minimum_number_of_trials(1, -0.25, 0.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_minimum_number_of_trials(1, 1.25, 0.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_minimum_number_of_trials(-1, 0.25, 0.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_maximum_number_of_trials(1, 0.25, -0.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_maximum_number_of_trials(1, 0.25, 1.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_maximum_number_of_trials(1, -0.25, 0.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_maximum_number_of_trials(1, 1.25, 0.25)));
+      BOOST_CHECK((boost::math::isnan)(geometric_distribution<RealType, ignore_all_policy>::find_maximum_number_of_trials(-1, 0.25, 0.25)));
+    }
+
+  //geometric::find_upper_bound_on_p(k, alpha);
   return;
 } // template <class RealType> void test_spots(RealType) // Any floating-point type RealType.
 
