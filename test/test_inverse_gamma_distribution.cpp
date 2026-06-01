@@ -288,7 +288,66 @@ void test_spots(RealType)
   BOOST_CHECK_EQUAL(
     cdf(complement(inverse_gamma_distribution<RealType>(3), static_cast<RealType>(0)))
     , static_cast<RealType>(1));
-
+  BOOST_MATH_CHECK_THROW(
+    pdf(
+    inverse_gamma_distribution<RealType>(static_cast<RealType>(-1)), // shape negative.
+    static_cast<RealType>(1)), std::domain_error
+    );
+  BOOST_MATH_CHECK_THROW(
+    pdf(
+    inverse_gamma_distribution<RealType>(static_cast<RealType>(8)),
+    static_cast<RealType>(-1)), std::domain_error
+    );
+  BOOST_MATH_CHECK_THROW(
+    cdf(
+    inverse_gamma_distribution<RealType>(static_cast<RealType>(-1)),
+    static_cast<RealType>(1)), std::domain_error
+    );
+  BOOST_MATH_CHECK_THROW(
+    cdf(
+    inverse_gamma_distribution<RealType>(static_cast<RealType>(8)),
+    static_cast<RealType>(-1)), std::domain_error
+    );
+  BOOST_MATH_CHECK_THROW(
+    cdf(complement(
+    inverse_gamma_distribution<RealType>(static_cast<RealType>(-1)),
+    static_cast<RealType>(1))), std::domain_error
+    );
+  BOOST_MATH_CHECK_THROW(
+    cdf(complement(
+    inverse_gamma_distribution<RealType>(static_cast<RealType>(8)),
+    static_cast<RealType>(-1))), std::domain_error
+    );
+  BOOST_MATH_CHECK_THROW(
+    quantile(
+    inverse_gamma_distribution<RealType>(static_cast<RealType>(-1)),
+    static_cast<RealType>(0.5)), std::domain_error
+    );
+  BOOST_MATH_CHECK_THROW(
+    quantile(
+    inverse_gamma_distribution<RealType>(static_cast<RealType>(8)),
+    static_cast<RealType>(-1)), std::domain_error
+    );
+  BOOST_MATH_CHECK_THROW(
+    quantile(
+    inverse_gamma_distribution<RealType>(static_cast<RealType>(8)),
+    static_cast<RealType>(1.1)), std::domain_error
+    );
+  BOOST_MATH_CHECK_THROW(
+    quantile(complement(
+    inverse_gamma_distribution<RealType>(static_cast<RealType>(-1)),
+    static_cast<RealType>(0.5))), std::domain_error
+    );
+  BOOST_MATH_CHECK_THROW(
+    quantile(complement(
+    inverse_gamma_distribution<RealType>(static_cast<RealType>(8)),
+    static_cast<RealType>(-1))), std::domain_error
+    );
+  BOOST_MATH_CHECK_THROW(
+    quantile(complement(
+    inverse_gamma_distribution<RealType>(static_cast<RealType>(8)),
+    static_cast<RealType>(1.1))), std::domain_error
+    ); 
    check_out_of_range<inverse_gamma_distribution<RealType> >(1, 1);
    
    using boost::math::policies::policy;
