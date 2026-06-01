@@ -238,9 +238,7 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE(
        entropy(dist), expected_entropy, tol2);
 
-  // Rely on default definition in derived accessors.
-
-   // error tests
+   // Error tests
    check_out_of_range<boost::math::gamma_distribution<RealType> >(1, 1);
    using boost::math::policies::policy;
 
@@ -290,6 +288,29 @@ void test_spots(RealType)
                            gamma_distribution<RealType, ignore_all_policy>, 
                            RealType>({1, 1});
    }
+
+   // Test Special Values
+   if (std::numeric_limits<RealType>::has_quiet_NaN){
+      BOOST_CHECK((boost::math::isnan)(logpdf(gamma_distribution<RealType, ignore_all_policy>(0.5,1), static_cast<RealType>(0))));
+      BOOST_CHECK((boost::math::isnan)(mean(gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(mean(gamma_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(variance(gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(variance(gamma_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(skewness(gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(skewness(gamma_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(kurtosis_excess(gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(kurtosis_excess(gamma_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(mode(gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(mode(gamma_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(mode(gamma_distribution<RealType, ignore_all_policy>(0.5, 1))));
+   }
+   BOOST_CHECK_EQUAL(pdf(gamma_distribution<RealType>(2, 1), 0), 0);
+   BOOST_CHECK_THROW(logpdf(gamma_distribution<RealType>(2, 1), static_cast<RealType>(0)), std::domain_error);
+   BOOST_CHECK_EQUAL(cdf(gamma_distribution<RealType>(2, 1), 0), 0);
+   BOOST_CHECK_EQUAL(cdf(complement(gamma_distribution<RealType>(2, 1), 0)), 1);
+
+   // More errors in moments
+
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )

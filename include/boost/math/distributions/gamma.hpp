@@ -202,9 +202,8 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const gamma_distribution<RealType,
 
    if(x == 0)
    {
-      return boost::math::numeric_limits<RealType>::quiet_NaN();
+      return policies::raise_domain_error<RealType>(function, "Random variate is %1% but must be > 0 !", x, Policy());;
    }
-
    result = -k*log(theta) + (k-1)*log(x) - lgamma(k) - (x/theta);
    
    return result;
