@@ -32,6 +32,7 @@ using boost::math::inverse_gaussian_distribution;
 using boost::math::inverse_gaussian;
 
 #include "test_out_of_range.hpp"
+#include "test_dist_helpers.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -173,6 +174,56 @@ void test_spots(RealType)
     static_cast<RealType>(10-3), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(dist),
     static_cast<RealType>(10), tolerance);
+  
+  // Check errors
+  using boost::math::policies::policy;
+
+   typedef policy<
+      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+   > ignore_all_policy;
+
+   std::vector<std::vector<RealType> > invalid_params = {{0, -1}};
+   test_invalid_parameters<inverse_gaussian_distribution<RealType, boost::math::policies::policy<> >, 
+                           inverse_gaussian_distribution<RealType, ignore_all_policy>, 
+                           RealType>(invalid_params);
+
+   // Check constructing with NaNs
+   if (std::numeric_limits<RealType>::has_quiet_NaN){
+      // Attempt to construct from non-finite parameters should throw.
+      RealType nan = std::numeric_limits<RealType>::quiet_NaN();
+      invalid_params = {{nan, 1},
+                        {1, nan},
+                        {nan, nan}};
+      test_invalid_parameters<inverse_gaussian_distribution<RealType, boost::math::policies::policy<> >, 
+                              inverse_gaussian_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
+   }
+
+   // Check construcing with Infinity
+   if (std::numeric_limits<RealType>::has_infinity)
+   {
+      // Attempt to construct from non-finite should throw.
+      RealType inf = std::numeric_limits<RealType>::infinity();
+      invalid_params = {{inf, 1},
+                        {1, inf},
+                        {1, -inf},
+                        {inf, inf}};
+      test_invalid_parameters<inverse_gaussian_distribution<RealType, boost::math::policies::policy<> >, 
+                              inverse_gaussian_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
+
+   } // has_infinity 
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   {
+      test_invalid_support<inverse_gaussian_distribution<RealType, boost::math::policies::policy<> >, 
+                           inverse_gaussian_distribution<RealType, ignore_all_policy>, 
+                           RealType>({1, 1});
+   }
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )
