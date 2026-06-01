@@ -26,7 +26,6 @@
 // To compile even if Cauchy mean is used.
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/cauchy.hpp>
-#include <boost/math/distributions/arcsine.hpp>
     using boost::math::cauchy_distribution;
 
 #define BOOST_TEST_MAIN
