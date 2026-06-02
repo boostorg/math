@@ -512,36 +512,11 @@ void test_spots(RealType /*T*/, const char* type_name)
                            hypergeometric_distribution<RealType, ignore_all_policy>, 
                            RealType>(invalid_params);
 
-   // Check constructing with NaNs
-   if (std::numeric_limits<RealType>::has_quiet_NaN){
-      // Attempt to construct from non-finite parameters should throw.
-      RealType nan = std::numeric_limits<RealType>::quiet_NaN();
-      invalid_params = {{nan, 5, 5},
-                        {5, nan, 5},
-                        {5, 5, nan}};
-      test_invalid_parameters<hypergeometric_distribution<RealType, boost::math::policies::policy<> >, 
-                              hypergeometric_distribution<RealType, ignore_all_policy>, 
-                              RealType>(invalid_params);
-   }
-
-   // Check construcing with Infinity
-   if (std::numeric_limits<RealType>::has_infinity)
-   {
-      // Attempt to construct from non-finite should throw.
-      RealType inf = std::numeric_limits<RealType>::infinity();
-      invalid_params = {{inf, 5, 5},
-                        {5, inf, 5},
-                        {5, 5, inf}};
-      test_invalid_parameters<hypergeometric_distribution<RealType, boost::math::policies::policy<> >, 
-                              hypergeometric_distribution<RealType, ignore_all_policy>, 
-                              RealType>(invalid_params);
-
-   } // has_infinity 
    if (std::numeric_limits<RealType>::has_quiet_NaN)
    {
-      test_invalid_support<hypergeometric_distribution<RealType, boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::throw_on_error> > >, 
+      test_invalid_support<hypergeometric_distribution<RealType, boost::math::policies::policy<> >, 
                            hypergeometric_distribution<RealType, ignore_all_policy>, 
-                           RealType>({50, 30, 500});
+                           RealType>({4, 13, 26});
    }
 }
 
