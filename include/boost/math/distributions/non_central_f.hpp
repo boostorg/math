@@ -14,6 +14,7 @@
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/distributions/non_central_beta.hpp>
+#include <boost/math/distributions/chi_squared.hpp>
 #include <boost/math/distributions/detail/generic_mode.hpp>
 #include <boost/math/special_functions/pow.hpp>
 #include <boost/math/policies/policy.hpp>
@@ -108,6 +109,16 @@ namespace boost
          };
 
          template <class RealType, class Policy>
+         RealType large_v2_approximation(RealType x, RealType v1, RealType p, RealType q)
+         { // For v2 -> inf approximate f_degreese_of_freedome_finder with chi squared distribution 
+           // with degrees of freedom v1 at the cdf at x * v1
+               bool comp = p < q ? false : true;
+               RealType pval =  p < q ? p : q;
+               chi_squared_distribution<RealType, Policy> d(v1);
+               return comp ? pval - cdf(complement(d, x*v1)) : cdf(d, x*v1) - pval;
+         }
+
+         template <class RealType, class Policy>
          inline RealType find_degrees_of_freedom_f(
             const RealType x, const RealType v, const RealType nc, const bool find_v1, const RealType p, const RealType q, const Policy& pol)
          {
@@ -137,7 +148,17 @@ namespace boost
             RealType vLarge = sqrt(boost::math::tools::max_value<RealType>());
             RealType vSmall = 1 / vLarge;
 
-            if ((f(vLarge) < 0) == (f(vSmall) < 0)){
+            // As v2 -> infinity, noncentral f converges to chi-squared distribution.
+            // Rather than evaluating f(vLarge), we can use the more stable chi-squared approximation
+            RealType large_difference;
+            if (find_v1)
+            {
+               large_difference = large_v2_approximation<RealType, Policy>(x, v, p, q);
+            }
+            else
+               large_difference = f(vLarge);
+
+            if ((large_difference < 0) == (f(vSmall) < 0)){
                return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom because two degrees of freedom can be found using the given parameters",
                   RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE 
             }
