@@ -14,7 +14,7 @@
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/distributions/non_central_beta.hpp>
-#include <boost/math/distributions/chi_squared.hpp>
+#include <boost/math/distributions/non_central_chi_squared.hpp>
 #include <boost/math/distributions/detail/generic_mode.hpp>
 #include <boost/math/special_functions/pow.hpp>
 #include <boost/math/policies/policy.hpp>
@@ -109,12 +109,12 @@ namespace boost
          };
 
          template <class RealType, class Policy>
-         RealType large_v2_approximation(RealType x, RealType v1, RealType p, RealType q)
+         RealType large_v2_approximation(RealType x, RealType v1, RealType p, RealType q, RealType nc)
          { // For v2 -> inf approximate f_degreese_of_freedome_finder with chi squared distribution 
            // with degrees of freedom v1 at the cdf at x * v1
                bool comp = p < q ? false : true;
                RealType pval =  p < q ? p : q;
-               chi_squared_distribution<RealType, Policy> d(v1);
+               non_central_chi_squared_distribution<RealType, Policy> d(v1, nc);
                return comp ? pval - cdf(complement(d, x*v1)) : cdf(d, x*v1) - pval;
          }
 
@@ -153,7 +153,7 @@ namespace boost
             RealType large_difference;
             if (find_v1)
             {
-               large_difference = large_v2_approximation<RealType, Policy>(x, v, p, q);
+               large_difference = large_v2_approximation<RealType, Policy>(x, v, p, q, nc);
             }
             else
                large_difference = f(vLarge);
