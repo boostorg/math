@@ -15,9 +15,12 @@
 #include <boost/math/distributions/students_t.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/concepts/real_concept.hpp>   // for real_concept
-#include <boost/multiprecision/cpp_bin_float.hpp>  // for cpp_bin_float_50
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/precision.hpp>
+
+#ifndef BOOST_MATH_STANDALONE
+#include <boost/multiprecision/cpp_bin_float.hpp>  // for cpp_bin_float_50
+#endif
 
 #include <cerrno>
 #include <cmath>
@@ -124,6 +127,8 @@ BOOST_AUTO_TEST_CASE(students_t_overflow_test)
    test_throws(boost::math::concepts::real_concept(0));
    test_no_regression(boost::math::concepts::real_concept(0));
 
+   #ifndef BOOST_MATH_STANDALONE
    test_throws(boost::multiprecision::cpp_bin_float_50(0));
    test_no_regression(boost::multiprecision::cpp_bin_float_50(0));
+   #endif
 }
