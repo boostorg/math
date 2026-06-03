@@ -14,6 +14,8 @@
 
 #include <boost/math/distributions/students_t.hpp>
 #include <boost/math/policies/policy.hpp>
+#include <boost/math/concepts/real_concept.hpp>   // for real_concept
+#include <boost/multiprecision/cpp_bin_float.hpp>  // for cpp_bin_float_50
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/precision.hpp>
 
@@ -24,8 +26,9 @@
 template <class RealType>
 RealType overflowing_deviate()
 {
+   BOOST_MATH_STD_USING  // pull in std::sqrt for built-in types via ADL
    using boost::math::tools::max_value;
-   return 2 * std::sqrt(max_value<RealType>());
+   return 2 * sqrt(max_value<RealType>());
 }
 
 template <class RealType>
@@ -114,4 +117,13 @@ BOOST_AUTO_TEST_CASE(students_t_overflow_test)
    test_no_regression(0.0F);
    test_no_regression(0.0);
    test_no_regression(0.0L);
+
+   // Non-standard types: these must compile (exercises ADL fabs) and behave.
+   // errno semantics are only meaningful for built-in types, so only the
+   // policy-driven throw and the no-regression cases are exercised here.
+   test_throws(boost::math::concepts::real_concept(0));
+   test_no_regression(boost::math::concepts::real_concept(0));
+
+   test_throws(boost::multiprecision::cpp_bin_float_50(0));
+   test_no_regression(boost::multiprecision::cpp_bin_float_50(0));
 }

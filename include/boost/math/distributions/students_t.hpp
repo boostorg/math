@@ -129,7 +129,7 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const students_t_distribution<RealTyp
    }
    else
    { // 
-     if (std::fabs(x) > sqrt(tools::max_value<RealType>()))
+     if (fabs(x) > sqrt(tools::max_value<RealType>()))
      {
         return policies::raise_overflow_error<RealType>(
            "boost::math::pdf(const students_t_distribution<%1%>&, %1%)", 0, Policy());
@@ -151,6 +151,8 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const students_t_distribution<RealTyp
 template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const students_t_distribution<RealType, Policy>& dist, const RealType& x)
 {
+   BOOST_MATH_STD_USING // for ADL of std functions
+
    RealType error_result;
    // degrees_of_freedom > 0 or infinity check:
    RealType df = dist.degrees_of_freedom();
@@ -206,7 +208,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const students_t_distribution<RealTyp
      //
      // 1 - x = t^2 / (df + t^2)
      //
-     if (std::fabs(x) > sqrt(tools::max_value<RealType>()))
+     if (fabs(x) > sqrt(tools::max_value<RealType>()))
      {
         return policies::raise_overflow_error<RealType>(
            "boost::math::cdf(const students_t_distribution<%1%>&, %1%)", 0, Policy());
