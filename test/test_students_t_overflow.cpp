@@ -14,11 +14,11 @@
 
 #include <boost/math/distributions/students_t.hpp>
 #include <boost/math/policies/policy.hpp>
-#include <boost/math/concepts/real_concept.hpp>   // for real_concept
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/precision.hpp>
 
 #ifndef BOOST_MATH_STANDALONE
+#include <boost/math/concepts/real_concept.hpp>  // for real_concept
 #include <boost/multiprecision/cpp_bin_float.hpp>  // for cpp_bin_float_50
 #endif
 
@@ -124,10 +124,12 @@ BOOST_AUTO_TEST_CASE(students_t_overflow_test)
    // Non-standard types: these must compile (exercises ADL fabs) and behave.
    // errno semantics are only meaningful for built-in types, so only the
    // policy-driven throw and the no-regression cases are exercised here.
+   // real_concept and multiprecision compute distribution constants via
+   // lexical_cast, which standalone mode disables, so both are skipped there.
+   #ifndef BOOST_MATH_STANDALONE
    test_throws(boost::math::concepts::real_concept(0));
    test_no_regression(boost::math::concepts::real_concept(0));
 
-   #ifndef BOOST_MATH_STANDALONE
    test_throws(boost::multiprecision::cpp_bin_float_50(0));
    test_no_regression(boost::multiprecision::cpp_bin_float_50(0));
    #endif
