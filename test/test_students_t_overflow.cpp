@@ -1,0 +1,117 @@
+//  Copyright Anton Leontev 2026.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0.
+//  (See accompanying file LICENSE_1_0.txt or copy at
+//   http://www.boost.org/LICENSE_1_0.txt)
+//
+//  Regression test for intermediate overflow of x*x in the Student's t
+//  distribution pdf() and cdf().
+
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
+#include <boost/math/tools/test.hpp>
+
+#include <boost/math/distributions/students_t.hpp>
+#include <boost/math/policies/policy.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/tools/precision.hpp>
+
+#include <cerrno>
+#include <cmath>
+#include <limits>
+
+template <class RealType>
+RealType overflowing_deviate()
+{
+   using boost::math::tools::max_value;
+   return 2 * std::sqrt(max_value<RealType>());
+}
+
+template <class RealType>
+void test_throws(RealType)
+{
+   using namespace boost::math;
+   using namespace boost::math::policies;
+
+   typedef policy<overflow_error<throw_on_error> > throw_policy;
+   typedef students_t_distribution<RealType, throw_policy> dist_t;
+
+   dist_t dist(static_cast<RealType>(5));
+   const RealType big = overflowing_deviate<RealType>();
+
+   BOOST_CHECK((boost::math::isfinite)(big));
+
+   BOOST_CHECK_THROW(pdf(dist,  big), std::overflow_error);
+   BOOST_CHECK_THROW(pdf(dist, -big), std::overflow_error);
+   BOOST_CHECK_THROW(cdf(dist,  big), std::overflow_error);
+   BOOST_CHECK_THROW(cdf(dist, -big), std::overflow_error);
+}
+
+template <class RealType>
+void test_errno(RealType)
+{
+   using namespace boost::math;
+   using namespace boost::math::policies;
+
+   typedef policy<overflow_error<errno_on_error> > errno_policy;
+   typedef students_t_distribution<RealType, errno_policy> dist_t;
+
+   dist_t dist(static_cast<RealType>(5));
+   const RealType big = overflowing_deviate<RealType>();
+
+   errno = 0;
+   RealType r = pdf(dist, big);
+   BOOST_CHECK_EQUAL(errno, ERANGE);
+   BOOST_CHECK(!(boost::math::isfinite)(r));
+
+   errno = 0;
+   r = cdf(dist, big);
+   BOOST_CHECK_EQUAL(errno, ERANGE);
+   BOOST_CHECK(!(boost::math::isfinite)(r));
+}
+
+template <class RealType>
+void test_no_regression(RealType)
+{
+   using namespace boost::math;
+   using namespace boost::math::policies;
+
+   typedef policy<overflow_error<errno_on_error> > errno_policy;
+   typedef students_t_distribution<RealType, errno_policy> dist_t;
+
+   dist_t dist(static_cast<RealType>(10));
+   const RealType tol = boost::math::tools::epsilon<RealType>() * 100;
+
+   errno = 0;
+   BOOST_CHECK_CLOSE_FRACTION(cdf(dist, static_cast<RealType>(0)),
+                              static_cast<RealType>(0.5), tol);
+   BOOST_CHECK_EQUAL(errno, 0);
+
+   errno = 0;
+   RealType p = pdf(dist, static_cast<RealType>(1.5));
+   BOOST_CHECK_EQUAL(errno, 0);
+   BOOST_CHECK((boost::math::isfinite)(p));
+   BOOST_CHECK(p > 0);
+
+   errno = 0;
+   RealType big_but_safe = static_cast<RealType>(1e6);
+   RealType c = cdf(dist, big_but_safe);
+   BOOST_CHECK_EQUAL(errno, 0);
+   BOOST_CHECK_CLOSE_FRACTION(c, static_cast<RealType>(1), tol);
+}
+
+BOOST_AUTO_TEST_CASE(students_t_overflow_test)
+{
+   test_throws(0.0F);
+   test_throws(0.0);
+   test_throws(0.0L);
+
+   test_errno(0.0F);
+   test_errno(0.0);
+   test_errno(0.0L);
+
+   test_no_regression(0.0F);
+   test_no_regression(0.0);
+   test_no_regression(0.0L);
+}
