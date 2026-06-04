@@ -89,21 +89,20 @@ void test_no_regression(RealType)
    dist_t dist(static_cast<RealType>(10));
    const RealType tol = boost::math::tools::epsilon<RealType>() * 100;
 
-   errno = 0;
+   // No errno assertions on these success paths: C11 7.5/3 allows any
+   // library call to set errno even on success, and under UBSan the
+   // diagnostic printer itself clobbers errno (isatty() on a redirected
+   // stderr yields ENOTTY).  Policy-driven errno semantics are verified
+   // separately in test_errno().
    BOOST_CHECK_CLOSE_FRACTION(cdf(dist, static_cast<RealType>(0)),
                               static_cast<RealType>(0.5), tol);
-   BOOST_CHECK_EQUAL(errno, 0);
 
-   errno = 0;
    RealType p = pdf(dist, static_cast<RealType>(1.5));
-   BOOST_CHECK_EQUAL(errno, 0);
    BOOST_CHECK((boost::math::isfinite)(p));
    BOOST_CHECK(p > 0);
 
-   errno = 0;
    RealType big_but_safe = static_cast<RealType>(1e6);
    RealType c = cdf(dist, big_but_safe);
-   BOOST_CHECK_EQUAL(errno, 0);
    BOOST_CHECK_CLOSE_FRACTION(c, static_cast<RealType>(1), tol);
 }
 
