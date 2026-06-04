@@ -131,8 +131,8 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const students_t_distribution<RealTyp
    { // 
      if (fabs(x) > sqrt(tools::max_value<RealType>()))
      {
-        return policies::raise_overflow_error<RealType>(
-           "boost::math::pdf(const students_t_distribution<%1%>&, %1%)", 0, Policy());
+        // Exact limit: the pdf underflows to zero long before x * x can overflow.
+        return 0;
      }
      RealType basem1 = x * x / df;
      if(basem1 < 0.125)
@@ -210,8 +210,8 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const students_t_distribution<RealTyp
      //
      if (fabs(x) > sqrt(tools::max_value<RealType>()))
      {
-        return policies::raise_overflow_error<RealType>(
-           "boost::math::cdf(const students_t_distribution<%1%>&, %1%)", 0, Policy());
+        // Exact tail values: avoids a spurious intermediate overflow in x * x below.
+        return (x < 0) ? static_cast<RealType>(0) : static_cast<RealType>(1);
      }
      RealType x2 = x * x;
      RealType probability;
