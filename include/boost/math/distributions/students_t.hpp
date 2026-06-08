@@ -25,7 +25,6 @@
 #include <boost/math/distributions/normal.hpp>
 #include <boost/math/distributions/cauchy.hpp>
 #include <boost/math/policies/policy.hpp>
-#include <iostream>
 
 #ifdef _MSC_VER
 # pragma warning(push)
