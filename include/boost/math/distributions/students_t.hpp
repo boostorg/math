@@ -25,6 +25,7 @@
 #include <boost/math/distributions/normal.hpp>
 #include <boost/math/distributions/cauchy.hpp>
 #include <boost/math/policies/policy.hpp>
+#include <iostream>
 
 #ifdef _MSC_VER
 # pragma warning(push)
@@ -58,7 +59,7 @@ public:
       RealType alpha,
       RealType beta,
       RealType sd,
-      RealType hint = 100);
+      RealType hint = 0);
 
    BOOST_MATH_GPU_ENABLED static RealType find_degrees_of_freedom(
       RealType t,
@@ -413,6 +414,30 @@ BOOST_MATH_GPU_ENABLED bool approximate_df_with_edgeworth_expansion(RealType x, 
    return false;
 }
 
+template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED RealType calculate_hill_df_guess(
+   RealType difference_from_mean,
+   RealType alpha,
+   RealType beta,
+   RealType sd)
+
+   // Hill-corrected normal approximation used as an initial guess 
+   // for find_degrees_of_freedom(difference_from_mean, alpha, beta, sd).
+   // t_p,nu approx z_p * (1 + (z_p^2 + 1) / (4*nu))
+   // nu + 1 = (sd/diff)^2 * (t_alpha + t_beta)^2
+
+{
+   BOOST_MATH_STD_USING
+   normal_distribution<RealType, Policy> n(0, 1);
+   RealType za = quantile(complement(n, alpha));
+   RealType zb = quantile(complement(n, beta));
+
+   RealType v_norm = pow((za + zb) * sd / difference_from_mean, 2) - 1;
+   RealType hint = v_norm + (za * za - za * zb + zb * zb + 1) / 2;
+
+   return (hint <= 0) ? RealType(1) : hint;
+}
+
 }  // namespace detail
 
 template <class RealType, class Policy>
@@ -434,7 +459,7 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::find_
       return error_result;
 
    if(hint <= 0)
-      hint = 1;
+      hint = detail::calculate_hill_df_guess<RealType, Policy>(difference_from_mean, alpha, beta, sd);
 
    detail::sample_size_func<RealType, Policy> f(alpha, beta, sd, difference_from_mean);
    return detail::solve_for_degrees_of_freedom(f, hint, false, function, Policy());
