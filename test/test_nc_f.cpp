@@ -399,7 +399,7 @@ void test_spots(RealType, const char* name = nullptr)
    BOOST_MATH_CHECK_THROW(dist.find_v1(boost::math::complement(x, b, nc, 1)), std::domain_error);
    BOOST_MATH_CHECK_THROW(dist.find_v1(boost::math::complement(x, b, nc, 0)), std::domain_error);
    // Check very small values of x an evaluation error is thrown
-   x = boost::math::tools::epsilon<long double>() / 10;
+   x = boost::math::tools::epsilon<RealType>() / 10;
    BOOST_MATH_CHECK_THROW(dist.find_v1(boost::math::complement(x, b, nc, 0.5)), boost::math::evaluation_error);
    BOOST_MATH_CHECK_THROW(dist.find_v1(x, b, nc, 0.5), boost::math::evaluation_error);
 
