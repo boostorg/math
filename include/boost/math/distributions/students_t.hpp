@@ -129,6 +129,11 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const students_t_distribution<RealTyp
    }
    else
    { // 
+     if (fabs(x) > sqrt(tools::max_value<RealType>()))
+     {
+        // Exact limit: the pdf underflows to zero long before x * x can overflow.
+        return 0;
+     }
      RealType basem1 = x * x / df;
      if(basem1 < 0.125)
      {
@@ -146,6 +151,8 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const students_t_distribution<RealTyp
 template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const students_t_distribution<RealType, Policy>& dist, const RealType& x)
 {
+   BOOST_MATH_STD_USING // for ADL of std functions
+
    RealType error_result;
    // degrees_of_freedom > 0 or infinity check:
    RealType df = dist.degrees_of_freedom();
@@ -201,6 +208,11 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const students_t_distribution<RealTyp
      //
      // 1 - x = t^2 / (df + t^2)
      //
+     if (fabs(x) > sqrt(tools::max_value<RealType>()))
+     {
+        // Exact tail values: avoids a spurious intermediate overflow in x * x below.
+        return (x < 0) ? static_cast<RealType>(0) : static_cast<RealType>(1);
+     }
      RealType x2 = x * x;
      RealType probability;
      if(df > 2 * x2)
