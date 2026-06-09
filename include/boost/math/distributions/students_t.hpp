@@ -315,8 +315,31 @@ struct sample_size_func
          return 1;
       }
       students_t_distribution<RealType, Policy> t(df);
-      RealType qa = quantile(complement(t, alpha));
-      RealType qb = quantile(complement(t, beta));
+      RealType qa, qb;
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+      try {
+#endif
+          qa = quantile(complement(t, alpha));
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+      }
+      catch (const std::overflow_error&)
+      {
+          // Any arbitrary large value will do, must be positive since we calculate qa * qa below:
+          return tools::max_value<RealType>();
+      }
+#endif
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+      try {
+#endif
+          qb = quantile(complement(t, beta));
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+      }
+      catch (const std::overflow_error&)
+      {
+          // Any arbitrary large value will do, will be negative if beta < 0:
+          return beta < 0 ? -tools::max_value<RealType>() : tools::max_value<RealType>();
+      }
+#endif
       qa += qb;
       qa *= qa;
       qa *= ratio;
