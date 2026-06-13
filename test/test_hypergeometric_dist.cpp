@@ -505,16 +505,25 @@ void test_spots(RealType /*T*/, const char* type_name)
       boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
    > ignore_all_policy;
 
+   typedef policy<
+      boost::math::policies::domain_error<boost::math::policies::throw_on_error>,
+      boost::math::policies::overflow_error<boost::math::policies::throw_on_error>,
+      boost::math::policies::underflow_error<boost::math::policies::throw_on_error>,
+      boost::math::policies::denorm_error<boost::math::policies::throw_on_error>,
+      boost::math::policies::pole_error<boost::math::policies::throw_on_error>,
+      boost::math::policies::evaluation_error<boost::math::policies::throw_on_error>
+   > throw_all_policy;
+
    std::vector<std::vector<RealType> > invalid_params = {{51, 40, 50}, 
                                                          {40, 51, 50},
                                                          {-1, 40, 50}};
-   test_invalid_parameters<hypergeometric_distribution<RealType, boost::math::policies::policy<> >, 
+   test_invalid_parameters<hypergeometric_distribution<RealType, throw_all_policy>, 
                            hypergeometric_distribution<RealType, ignore_all_policy>, 
                            RealType>(invalid_params);
 
    if (std::numeric_limits<RealType>::has_quiet_NaN)
    {
-      test_invalid_support<hypergeometric_distribution<RealType, boost::math::policies::policy<> >, 
+      test_invalid_support<hypergeometric_distribution<RealType, throw_all_policy>, 
                            hypergeometric_distribution<RealType, ignore_all_policy>, 
                            RealType>({4, 13, 26});
    }
