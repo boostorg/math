@@ -164,6 +164,13 @@ void test_invalid_parameters(std::vector<std::vector<Real> > invalid_parameters)
         params = invalid_parameters[i];
         // Check functions throw with bad constructors
         std::cout << params[0] << ", " << params[1] << ", " << params[2] << std::endl;
+        try 
+        { 
+            std::cout << pdf(make_distribution<Dist>(params), static_cast<Real>(0)) << std::endl;
+        }
+        catch(const std::exception &exc){
+            std::cerr << exc.what() << std::endl;
+        }
         BOOST_CHECK_THROW(make_distribution<Dist>(params), std::domain_error);
         BOOST_CHECK_THROW(pdf(make_distribution<Dist>(params), static_cast<Real>(0)), std::domain_error);
         BOOST_CHECK_THROW(logpdf(make_distribution<Dist>(params), static_cast<Real>(0)), std::domain_error);
