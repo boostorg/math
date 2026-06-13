@@ -517,12 +517,13 @@ void test_spots(RealType /*T*/, const char* type_name)
    std::vector<std::vector<RealType> > invalid_params = {{51., 40., 50.}, 
                                                          {40., 51., 50.},
                                                          {-1., 40., 50.}};
-   test_invalid_parameters<hypergeometric_distribution<RealType, throw_all_policy>, 
-                           hypergeometric_distribution<RealType, ignore_all_policy>, 
-                           RealType>(invalid_params);
 
    if (std::numeric_limits<RealType>::has_quiet_NaN)
    {
+      test_invalid_parameters<hypergeometric_distribution<RealType, throw_all_policy>, 
+                           hypergeometric_distribution<RealType, ignore_all_policy>, 
+                           RealType>(invalid_params);
+                           
       test_invalid_support<hypergeometric_distribution<RealType, throw_all_policy>, 
                            hypergeometric_distribution<RealType, ignore_all_policy>, 
                            RealType>({4, 13, 26});
