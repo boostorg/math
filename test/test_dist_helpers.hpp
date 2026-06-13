@@ -14,17 +14,17 @@ template <class Dist, class Container>
 Dist make_distribution(const Container& c)
 {
     using value_type = typename Dist::value_type;
-    if constexpr (std::is_constructible_v<Dist, value_type, value_type, value_type>)
+    if constexpr (std::is_constructible<Dist, value_type, value_type, value_type>::value)
     {
         if (c.size() >= 3)
             return Dist(c.data()[0], c.data()[1], c.data()[2]);
     }
-    if constexpr (std::is_constructible_v<Dist, value_type, value_type>)
+    if constexpr (std::is_constructible<Dist, value_type, value_type>::value)
     {
         if (c.size() >= 2)
             return Dist(c.data()[0], c.data()[1]);
     }
-    if constexpr (std::is_constructible_v<Dist, value_type>)
+    if constexpr (std::is_constructible<Dist, value_type>::value)
     {
         if (c.size() >= 1)
             return Dist(c.data()[0]);
