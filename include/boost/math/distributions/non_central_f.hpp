@@ -13,8 +13,6 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/promotion.hpp>
-#include <boost/math/distributions/fisher_f.hpp>
-#include <boost/math/distributions/chi_squared.hpp>
 #include <boost/math/distributions/non_central_beta.hpp>
 #include <boost/math/distributions/non_central_chi_squared.hpp>
 #include <boost/math/distributions/detail/generic_mode.hpp>
@@ -96,13 +94,6 @@ namespace boost
             {
                RealType v1 = find_v1 ? input_v : v; 
                RealType v2 = find_v1 ? v : input_v; 
-               if (nc == 0)
-               {
-                  fisher_f_distribution<RealType, Policy> d(v1, v2);
-                  return comp ?
-                     p - cdf(complement(d, x))
-                     : cdf(d, x) - p;
-               }
                non_central_f_distribution<RealType, Policy> d(v1, v2, nc);
                return comp ?
                   p - cdf(complement(d, x))
@@ -123,11 +114,6 @@ namespace boost
            // with degrees of freedom v1 at the cdf at x * v1
                bool comp = p < q ? false : true;
                RealType pval =  p < q ? p : q;
-               if (nc == 0)
-               {
-                  chi_squared_distribution<RealType, Policy> d(v1);
-                  return comp ? pval - cdf(complement(d, x*v1)) : cdf(d, x*v1) - pval;
-               }
                non_central_chi_squared_distribution<RealType, Policy> d(v1, nc);
                return comp ? pval - cdf(complement(d, x*v1)) : cdf(d, x*v1) - pval;
          }
