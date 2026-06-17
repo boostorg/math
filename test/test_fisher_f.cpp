@@ -413,7 +413,19 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE(
        kurtosis(dist2)
        , static_cast<RealType>(6272) * 12 / 3456 + 3, tol2);
-    // special cases:
+    
+    if (!std::is_same<RealType, boost::math::concepts::real_concept>::value)
+    {
+      RealType df1 = 10;
+      RealType df2 = 2;
+      RealType x = 6;
+      RealType P = cdf(fisher_f_distribution<RealType>(df1, df2), x);
+      BOOST_CHECK_CLOSE(fisher_f_distribution<RealType>::find_v2(x, df1, P), df2, tol2*10);
+      BOOST_CHECK_CLOSE(fisher_f_distribution<RealType>::find_v1(x, df2, P), df1, tol2*10);
+      BOOST_CHECK_CLOSE(fisher_f_distribution<RealType>::find_v1(boost::math::complement(x, df2, 1-P)), df1, tol2*10);
+      BOOST_CHECK_CLOSE(fisher_f_distribution<RealType>::find_v2(boost::math::complement(x, df1, 1-P)), df2, tol2*10);
+    }
+      // special cases:
     BOOST_MATH_CHECK_THROW(
        pdf(
           fisher_f_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1)),

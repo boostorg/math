@@ -45,7 +45,7 @@ namespace boost{ namespace math{
 
       template <class RealType, class Policy>
       inline RealType find_degrees_of_freedom_fisher_f(
-         const RealType x, const RealType v, const RealType nc, const bool find_v1, const RealType p, const RealType q, const Policy& pol)
+         const RealType x, const RealType v, const bool find_v1, const RealType p, const RealType q, const Policy& pol)
       {
          BOOST_MATH_STD_USING
          using std::fabs;
