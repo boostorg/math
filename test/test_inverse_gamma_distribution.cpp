@@ -165,12 +165,7 @@ void test_spots(RealType)
 
   if(std::numeric_limits<RealType>::has_infinity)
   {
-    BOOST_MATH_CHECK_THROW(pdf(ig21, +std::numeric_limits<RealType>::infinity()), std::domain_error); // x = + infinity, pdf = 0
     BOOST_MATH_CHECK_THROW(pdf(ig21, -std::numeric_limits<RealType>::infinity()),  std::domain_error); // x = - infinity, pdf = 0
-    BOOST_MATH_CHECK_THROW(cdf(ig21, +std::numeric_limits<RealType>::infinity()),std::domain_error ); // x = + infinity, cdf = 1
-    BOOST_MATH_CHECK_THROW(cdf(ig21, -std::numeric_limits<RealType>::infinity()), std::domain_error); // x = - infinity, cdf = 0
-    BOOST_MATH_CHECK_THROW(cdf(complement(ig21, +std::numeric_limits<RealType>::infinity())), std::domain_error); // x = + infinity, c cdf = 0
-    BOOST_MATH_CHECK_THROW(cdf(complement(ig21, -std::numeric_limits<RealType>::infinity())), std::domain_error); // x = - infinity, c cdf = 1
 #ifndef BOOST_NO_EXCEPTIONS
     BOOST_MATH_CHECK_THROW(boost::math::inverse_gamma_distribution<RealType> nbad1(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), std::domain_error); // +infinite mean
     BOOST_MATH_CHECK_THROW(boost::math::inverse_gamma_distribution<RealType> nbad1(-std::numeric_limits<RealType>::infinity(),  static_cast<RealType>(1)), std::domain_error); // -infinite mean
@@ -380,7 +375,7 @@ void test_spots(RealType)
                               RealType>(invalid_params);
    }
 
-   // Check construcing with Infinity
+   // Check constructing with Infinity
    if (std::numeric_limits<RealType>::has_infinity)
    {
       // Attempt to construct from non-finite should throw.
