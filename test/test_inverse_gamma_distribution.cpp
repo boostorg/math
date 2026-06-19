@@ -390,16 +390,22 @@ void test_spots(RealType)
                             RealType>(invalid_params);
     // Check moment functions
     BOOST_CHECK((boost::math::isnan)(mean(inverse_gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+    BOOST_CHECK((boost::math::isnan)(mean(inverse_gamma_distribution<RealType, ignore_all_policy>(1, -1))));
     BOOST_CHECK((boost::math::isnan)(mean(inverse_gamma_distribution<RealType, ignore_all_policy>(1, 0.5)))); // mean undefined for scale < 1
     BOOST_CHECK((boost::math::isnan)(variance(inverse_gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+    BOOST_CHECK((boost::math::isnan)(variance(inverse_gamma_distribution<RealType, ignore_all_policy>(1, -1))));
     BOOST_CHECK((boost::math::isnan)(variance(inverse_gamma_distribution<RealType, ignore_all_policy>(1, 1)))); // variance undefined for scale < 2
     BOOST_CHECK((boost::math::isnan)(mode(inverse_gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+    BOOST_CHECK((boost::math::isnan)(mode(inverse_gamma_distribution<RealType, ignore_all_policy>(1, -1))));
     BOOST_CHECK((boost::math::isnan)(skewness(inverse_gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+    BOOST_CHECK((boost::math::isnan)(skewness(inverse_gamma_distribution<RealType, ignore_all_policy>(1, -1))));
     BOOST_CHECK((boost::math::isnan)(skewness(inverse_gamma_distribution<RealType, ignore_all_policy>(1, 2)))); // skewness undefined for scale < 3
     BOOST_CHECK((boost::math::isnan)(kurtosis_excess(inverse_gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+    BOOST_CHECK((boost::math::isnan)(kurtosis_excess(inverse_gamma_distribution<RealType, ignore_all_policy>(1, -1))));
     BOOST_CHECK((boost::math::isnan)(kurtosis_excess(inverse_gamma_distribution<RealType, ignore_all_policy>(1, 3)))); // kursosis undefined for scale < 4
-    BOOST_CHECK((boost::math::isnan)(kurtosis_excess(inverse_gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
-    BOOST_CHECK((boost::math::isnan)(kurtosis_excess(inverse_gamma_distribution<RealType, ignore_all_policy>(1, 3)))); 
+    BOOST_CHECK((boost::math::isnan)(kurtosis(inverse_gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+    BOOST_CHECK((boost::math::isnan)(kurtosis(inverse_gamma_distribution<RealType, ignore_all_policy>(1, -1))));
+    BOOST_CHECK((boost::math::isnan)(kurtosis(inverse_gamma_distribution<RealType, ignore_all_policy>(1, 3)))); 
   } // has_infinity 
   if (std::numeric_limits<RealType>::has_quiet_NaN)
   {
