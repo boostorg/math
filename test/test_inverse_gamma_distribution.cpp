@@ -343,57 +343,70 @@ void test_spots(RealType)
     inverse_gamma_distribution<RealType>(static_cast<RealType>(8)),
     static_cast<RealType>(1.1))), std::domain_error
     ); 
-   check_out_of_range<inverse_gamma_distribution<RealType> >(1, 1);
-   
-   using boost::math::policies::policy;
 
-   typedef policy<
-      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
-      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
-      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
-      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
-      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
-      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
-   > ignore_all_policy;
+  check_out_of_range<inverse_gamma_distribution<RealType> >(1, 1);
+  
+  using boost::math::policies::policy;
 
-   std::vector<std::vector<RealType> > invalid_params = {{-1, 1}, 
-                                                         {1, -1},
-                                                         {-1, -1}};
-   test_invalid_parameters<inverse_gamma_distribution<RealType, boost::math::policies::policy<> >, 
-                           inverse_gamma_distribution<RealType, ignore_all_policy>, 
-                           RealType>(invalid_params);
+  typedef policy<
+    boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+    boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+    boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+    boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+    boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+    boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+  > ignore_all_policy;
 
-   // Check constructing with NaNs
-   if (std::numeric_limits<RealType>::has_quiet_NaN){
-      // Attempt to construct from non-finite parameters should throw.
-      RealType nan = std::numeric_limits<RealType>::quiet_NaN();
-      invalid_params = {{nan, 1},
-                        {1, nan},
-                        {nan, nan}};
-      test_invalid_parameters<inverse_gamma_distribution<RealType, boost::math::policies::policy<> >, 
-                              inverse_gamma_distribution<RealType, ignore_all_policy>, 
-                              RealType>(invalid_params);
-   }
+  std::vector<std::vector<RealType> > invalid_params = {{-1, 1}, 
+                                                        {1, -1},
+                                                        {-1, -1}};
+  test_invalid_parameters<inverse_gamma_distribution<RealType, boost::math::policies::policy<> >, 
+                          inverse_gamma_distribution<RealType, ignore_all_policy>, 
+                          RealType>(invalid_params);
 
-   // Check constructing with Infinity
-   if (std::numeric_limits<RealType>::has_infinity)
-   {
-      // Attempt to construct from non-finite should throw.
-      RealType inf = std::numeric_limits<RealType>::infinity();
-      invalid_params = {{inf, 1},
-                        {1, inf},
-                        {inf, inf}};
-      test_invalid_parameters<inverse_gamma_distribution<RealType, boost::math::policies::policy<> >, 
-                              inverse_gamma_distribution<RealType, ignore_all_policy>, 
-                              RealType>(invalid_params);
+  // Check constructing with NaNs
+  if (std::numeric_limits<RealType>::has_quiet_NaN){
+    // Attempt to construct from non-finite parameters should throw.
+    RealType nan = std::numeric_limits<RealType>::quiet_NaN();
+    invalid_params = {{nan, 1},
+                      {1, nan},
+                      {nan, nan}};
+    test_invalid_parameters<inverse_gamma_distribution<RealType, boost::math::policies::policy<> >, 
+                            inverse_gamma_distribution<RealType, ignore_all_policy>, 
+                            RealType>(invalid_params);
+  }
 
-   } // has_infinity 
-   if (std::numeric_limits<RealType>::has_quiet_NaN)
-   {
-      test_invalid_support<inverse_gamma_distribution<RealType, boost::math::policies::policy<> >, 
-                           inverse_gamma_distribution<RealType, ignore_all_policy>, 
-                           RealType>({1, 1});
-   }
+  // Check constructing with Infinity
+  if (std::numeric_limits<RealType>::has_infinity)
+  {
+    // Attempt to construct from non-finite should throw.
+    RealType inf = std::numeric_limits<RealType>::infinity();
+    BOOST_CHECK((boost::math::isinf)(logpdf(inverse_gamma_distribution<RealType, ignore_all_policy>(1, 1), 0)));
+    invalid_params = {{inf, 1},
+                      {1, inf},
+                      {inf, inf}};
+    test_invalid_parameters<inverse_gamma_distribution<RealType, boost::math::policies::policy<> >, 
+                            inverse_gamma_distribution<RealType, ignore_all_policy>, 
+                            RealType>(invalid_params);
+    // Check moment functions
+    BOOST_CHECK((boost::math::isnan)(mean(inverse_gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+    BOOST_CHECK((boost::math::isnan)(mean(inverse_gamma_distribution<RealType, ignore_all_policy>(1, 0.5)))); // mean undefined for scale < 1
+    BOOST_CHECK((boost::math::isnan)(variance(inverse_gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+    BOOST_CHECK((boost::math::isnan)(variance(inverse_gamma_distribution<RealType, ignore_all_policy>(1, 1)))); // variance undefined for scale < 2
+    BOOST_CHECK((boost::math::isnan)(mode(inverse_gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+    BOOST_CHECK((boost::math::isnan)(skewness(inverse_gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+    BOOST_CHECK((boost::math::isnan)(skewness(inverse_gamma_distribution<RealType, ignore_all_policy>(1, 2)))); // skewness undefined for scale < 3
+    BOOST_CHECK((boost::math::isnan)(kurtosis_excess(inverse_gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+    BOOST_CHECK((boost::math::isnan)(kurtosis_excess(inverse_gamma_distribution<RealType, ignore_all_policy>(1, 3)))); // kursosis undefined for scale < 4
+    BOOST_CHECK((boost::math::isnan)(kurtosis_excess(inverse_gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+    BOOST_CHECK((boost::math::isnan)(kurtosis_excess(inverse_gamma_distribution<RealType, ignore_all_policy>(1, 3)))); 
+  } // has_infinity 
+  if (std::numeric_limits<RealType>::has_quiet_NaN)
+  {
+    test_invalid_support<inverse_gamma_distribution<RealType, boost::math::policies::policy<> >, 
+                          inverse_gamma_distribution<RealType, ignore_all_policy>, 
+                          RealType>({1, 1});
+  }
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )
