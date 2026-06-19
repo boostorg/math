@@ -301,8 +301,8 @@ void test_spots_2F2(T, const char*)
 template <class T>
 void test_special_cases(T, const char*)
 {
-    typedef boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::ignore_error>> nothrow_policy;
-    typedef boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::throw_on_error>> throw_policy;
+    typedef boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::ignore_error>, boost::math::policies::promote_double<false> > nothrow_policy;
+    typedef boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::throw_on_error>, boost::math::policies::promote_double<false> > throw_policy;
     T error_rate;
     BOOST_CHECK_THROW(boost::math::hypergeometric_pFq({ 2 }, { 3 }, static_cast<T>(1e10), &error_rate, throw_policy()), std::overflow_error);
     BOOST_CHECK_THROW(boost::math::hypergeometric_pFq({ static_cast<T>(2) }, { static_cast<T>(3) }, static_cast<T>(1e10), &error_rate, throw_policy()), std::overflow_error);

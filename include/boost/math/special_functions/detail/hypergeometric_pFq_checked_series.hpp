@@ -243,6 +243,9 @@
               log_scale += log_scaling_factor;
               local_scaling += log_scaling_factor;
            }
+           /*
+           * rescaling to avoid underflow is pointless here, given that the first term is 1.
+           * 
            else if ((fabs(abs_result) < lower_limit) && (fabs(abs_result) * scaling_factor < upper_limit))
            {
               abs_result *= scaling_factor;
@@ -251,7 +254,7 @@
               log_scale -= log_scaling_factor;
               local_scaling -= log_scaling_factor;
            }
-
+           */
            if ((abs(result * tol) > abs(term)) && (abs(term0) > abs(term)))
               break;
            if (abs_result * tol > abs(result))
