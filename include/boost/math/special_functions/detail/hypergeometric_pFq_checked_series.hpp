@@ -132,11 +132,15 @@
         std::uintmax_t k = 0;
         Real upper_limit(sqrt(boost::math::tools::max_value<Real>())), diff;
         if ((tools::max_value<Real>() / fabs(z) < upper_limit))
-            upper_limit = tools::max_value<Real>() / fabs(z);
+        {
+           upper_limit = tools::max_value<Real>() / fabs(z);
+        }
         for (auto pa = aj.begin(); pa != aj.end(); ++pa)
         {
             if (tools::max_value<Real>() / fabs(*pa) < upper_limit)
-                upper_limit = tools::max_value<Real>() / fabs(*pa);
+            {
+               upper_limit = tools::max_value<Real>() / fabs(*pa);
+            }
         }
         Real lower_limit(1 / upper_limit);
         long long log_scaling_factor = lltrunc(boost::math::tools::log_max_value<Real>(), nothrow_policy()) - 2;
