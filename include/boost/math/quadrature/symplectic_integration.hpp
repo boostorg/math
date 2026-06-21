@@ -6,15 +6,15 @@
 
 typedef std::valarray<double> derivative(std::valarray<double>);
 
-template <class RealType>
-std::pair<std::valarray<RealType>, std::valarray<RealType> > second_order_yoshida(const std::valarray<RealType> p0, 
-                                                                                  const std::valarray<RealType> q0, 
-                                                                                  RealType dt, 
-                                                                                  derivative dHdp, 
-                                                                                  derivative dHdq)
+template <class RealType, class ReturnType, class Func>
+std::pair<ReturnType, ReturnType> second_order_yoshida(const ReturnType p0, 
+                                                       const ReturnType q0, 
+                                                       RealType dt, 
+                                                       Func dHdp, 
+                                                       Func dHdq)
 {
-    std::valarray<RealType> p = p0;
-    std::valarray<RealType> q = q0;
+    ReturnType p = p0;
+    ReturnType q = q0;
 
     q = q + dt / 2 * dHdp(p);
     p = p - dt * dHdq(q);
@@ -23,15 +23,15 @@ std::pair<std::valarray<RealType>, std::valarray<RealType> > second_order_yoshid
     return std::make_pair(p, q);
 }
 
-template <class RealType>
-std::pair<std::valarray<RealType>, std::valarray<RealType> > fourth_order_yoshida(const std::valarray<RealType> p0, 
-                                                                                  const std::valarray<RealType> q0, 
-                                                                                  RealType dt, 
-                                                                                  derivative dHdp, 
-                                                                                  derivative dHdq)
+template <class RealType, class ReturnType, class Func>
+std::pair<ReturnType, ReturnType> fourth_order_yoshida(const ReturnType p0, 
+                                                       const ReturnType q0, 
+                                                       const RealType dt, 
+                                                       Func dHdp, 
+                                                       Func dHdq)
 {
-    std::valarray<RealType> p = p0;
-    std::valarray<RealType> q = q0;
+    ReturnType p = p0;
+    ReturnType q = q0;
 
     RealType x0 = -(std::pow(2, 1/3) / (2 - std::pow(2, 1/3)));
     RealType x1 = 1 / (2 - std::pow(2, 1/3));
@@ -46,15 +46,15 @@ std::pair<std::valarray<RealType>, std::valarray<RealType> > fourth_order_yoshid
     return std::make_pair(p, q);
 }
 
-template <class RealType>
-std::pair<std::valarray<RealType>, std::valarray<RealType> > sixth_order_yoshida(const std::valarray<RealType> p0, 
-                                                  const std::valarray<RealType> q0, 
-                                                  RealType dt, 
-                                                  derivative dHdp, 
-                                                  derivative dHdq)
+template <class RealType, class ReturnType, class Func>
+std::pair<ReturnType, ReturnType> sixth_order_yoshida(const ReturnType p0, 
+                                                       const ReturnType q0, 
+                                                       RealType dt, 
+                                                       Func dHdp, 
+                                                       Func dHdq)
 {
-    std::valarray<RealType> p = p0;
-    std::valarray<RealType> q = q0;
+    ReturnType p = p0;
+    ReturnType q = q0;
     
     // Choosing "System A" solution
     RealType w3 = 0.784513610477560;
