@@ -6,7 +6,8 @@
 #include <vector>
 #include <cmath>
 #include <string>
-#include <algorithm>
+#include <stdexcept>
+#include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
@@ -84,14 +85,14 @@ std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltoni
                                                                                    const unsigned steps,
                                                                                    Func dHdp,
                                                                                    Func dHdq,
-                                                                                   const Policy& pol,
-                                                                                   std::string method="Y6")
+                                                                                   std::string method,
+                                                                                   const Policy& pol)
 {
     // Not sure how to make this function string nicer
     static const char* function = "boost::math::quadrature::integrate_hamiltonian(p0, q0, %1%, steps, dHdp, dHdq)";
 
     if ((dt <= 0) || !(boost::math::isfinite)(dt))
-    {   // Need to figure out what the correct return type is here
+    {
         RealType val = (boost::math::policies::raise_domain_error(function, "Time step must be positive and finite but got: dt = %1%.\n", dt, pol));
         std::vector<ReturnType> nan_vec = {ReturnType(val)};
         return std::make_pair(nan_vec, nan_vec);
@@ -112,6 +113,10 @@ std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltoni
     {
         stepper = second_order_yoshida;
     }
+    else
+    {
+        throw std::domain_error("Method must be in {'Y6', 'Y4', 'Y2'} but got: method = " + method);
+    }
 
     std::vector<ReturnType> p(steps);
     std::vector<ReturnType> q(steps);
@@ -129,5 +134,39 @@ std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltoni
     return std::make_pair(p, q);
 }
 
+template <class ReturnType, class RealType, class Func, class Policy>
+std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
+                                                                                   const ReturnType q0,
+                                                                                   const RealType dt,
+                                                                                   const unsigned steps,
+                                                                                   Func dHdp,
+                                                                                   Func dHdq,
+                                                                                   const Policy& pol)
+{
+    return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, "Y6", pol);
+}
+
+template <class ReturnType, class RealType, class Func>
+std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
+                                                                                   const ReturnType q0,
+                                                                                   const RealType dt,
+                                                                                   const unsigned steps,
+                                                                                   Func dHdp,
+                                                                                   Func dHdq,
+                                                                                   std::string method)
+{
+    return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, method, boost::math::policies::policy<>()); 
+}
+
+template <class ReturnType, class RealType, class Func>
+std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
+                                                                                   const ReturnType q0,
+                                                                                   const RealType dt,
+                                                                                   const unsigned steps,
+                                                                                   Func dHdp,
+                                                                                   Func dHdq)
+{
+    return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, "Y6", boost::math::policies::policy<>()); 
+}
 }}}
 #endif
