@@ -1341,6 +1341,7 @@ test-suite quadrature :
    [ run test_trapezoidal.cpp /boost/test//boost_unit_test_framework : : :
       release [ requires cxx11_lambdas cxx11_auto_declarations cxx11_decltype cxx11_unified_initialization_syntax cxx11_variadic_templates ]
       $(float128_type) ]
+   [ run test_symplectic.cpp /boost/test//boost_unit_test_framework ]
 ;
 
 test-suite autodiff :
