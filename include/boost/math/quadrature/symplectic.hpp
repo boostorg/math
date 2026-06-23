@@ -1,10 +1,11 @@
-/* Based on "Construction of higher order symplectic integrators" by Haruo Yoshida*/
+/* Copyright Jacob Hass, 2026*/
 
 #ifndef BOOST_MATH_QUADRATURE_SYMPLECTIC_HPP
 #define BOOST_MATH_QUADRATURE_SYMPLECTIC_HPP
 
 #include <vector>
 #include <cmath>
+#include <map>
 #include <string>
 #include <stdexcept>
 #include <boost/math/policies/policy.hpp>
@@ -101,22 +102,12 @@ std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltoni
     // Check if method is available
     std::vector<std::string> available_methods = {"Y6", "Y4", "Y2"};
 
-    std::pair<ReturnType, ReturnType> (*stepper)(ReturnType, ReturnType, RealType, Func, Func);
+    typedef std::pair<ReturnType, ReturnType> (*stepperType)(ReturnType, ReturnType, RealType, Func, Func);
 
-    if (method == "Y6"){
-        stepper = sixth_order_yoshida;
-    } 
-    else if (method == "Y4"){
-        stepper = fourth_order_yoshida;
-    }
-    else if (method == "Y2")
-    {
-        stepper = second_order_yoshida;
-    }
-    else
-    {
-        throw std::domain_error("Method must be in {'Y6', 'Y4', 'Y2'} but got: method = " + method);
-    }
+    std::map<std::string, stepperType> m{{"Y6", sixth_order_yoshida}, 
+                                         {"Y4", fourth_order_yoshida}, 
+                                         {"Y2", second_order_yoshida}};
+    stepperType stepper = m.at(method);
 
     std::vector<ReturnType> p(steps);
     std::vector<ReturnType> q(steps);

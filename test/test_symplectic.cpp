@@ -70,7 +70,7 @@ void test_invalid_parameters()
     BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(1, 0, -0.1, 10, singleton_dHdp<RealType>, singleton_dHdq<RealType>), std::domain_error);
 
     // Method not in {'Y6', 'Y4', 'Y2'}
-    BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(1, 0, 0.1, 10, singleton_dHdp<RealType>, singleton_dHdq<RealType>, "InvalidMethod"), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(1, 0, 0.1, 10, singleton_dHdp<RealType>, singleton_dHdq<RealType>, "InvalidMethod"), std::out_of_range);
 }
 
 /* Test if SHO energy fluctuations are below a given tolerance*/
