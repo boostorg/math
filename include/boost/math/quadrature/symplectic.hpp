@@ -134,18 +134,6 @@ std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltoni
     return std::make_pair(p, q);
 }
 
-template <class ReturnType, class RealType, class Func, class Policy>
-std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
-                                                                                   const ReturnType q0,
-                                                                                   const RealType dt,
-                                                                                   const unsigned steps,
-                                                                                   Func dHdp,
-                                                                                   Func dHdq,
-                                                                                   const Policy& pol)
-{
-    return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, "Y6", pol);
-}
-
 template <class ReturnType, class RealType, class Func>
 std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
                                                                                    const ReturnType q0,
