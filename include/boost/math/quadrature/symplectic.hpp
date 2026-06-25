@@ -65,9 +65,15 @@ std::pair<ReturnType, ReturnType> sixth_order_yoshida(const ReturnType p0,
     ReturnType q = q0;
     
     // Choosing "System A" solution
-    RealType w3 = 0.784513610477560;
-    RealType w2 = 0.235573213359357;
-    RealType w1 = -1.17767998417887;
+    // The following Mathematica command can calculate these coefficients to arbitrary precision
+    // FindRoot[{w0+2(w1+w2+w3)==1,
+    //           w0^3 + 2(w1^3 + w2^3+w3^3)==0, 
+    //           w0^5 + 2(w1^5 + w2^5+w3^5)==0, 
+    //           1/6(w0^2w1^3-w0^4*w1) - 1/6(w0^3w1^2-w0*w1^4)+1/6((w0+2w1)^2w2^3-(w0+2w1)(w0^3+2w1^3)w2) - 1/6((w0^3+2w1^3)w2^2-(w0+2w1)w2^4) +1/6((w0+2w1+2w2)^2w3^3-(w0+2w1+2w2)(w0^3+2w1^3+2w2^3)w3)-1/6((w0^3+2w1^3+2w2^3)w3^2-(w0+2w1+2w2)w3^4)==0}, {{w0,1.3151863206839063}, {w1,-1.17767998417887}, {w2,0.235573213359357}, {w3,0.784513610477560}}, WorkingPrecision->64]
+    RealType w1 = static_cast<RealType>(-1.17767998417887100694641568096431573463926925263459848447536851379674155618156L);
+    RealType w2 = static_cast<RealType>(0.23557321335935813368479318297853460168646808210340111900349313095621471215223L);
+    RealType w3 = static_cast<RealType>(0.78451361047755726381949763386634987577682441745149338456794779895125997479548L);
+    // w0 = 1.31518632068391121888424972823886251435195350615940796180785516777853373846773
     RealType w0 = 1 - 2 * (w1 + w2 + w3);
     std::vector<RealType> weights = { w3, w2, w1, w0, w1, w2, w3};
 
