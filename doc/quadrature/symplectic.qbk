@@ -1,0 +1,103 @@
+[/
+Copyright (c) 2026 Jacob Hass
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:symplectic Symplectic Integration]
+
+[heading Synopsis]
+
+    #include <boost/math/quadrature/symmetric.hpp>
+    namespace boost{ namespace math{ namespace quadrature {
+
+    template <class ReturnType, class RealType, class Func>
+    std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
+                                                                                       const ReturnType q0,
+                                                                                       const RealType dt,
+                                                                                       const unsigned steps,
+                                                                                       Func dHdp,
+                                                                                       Func dHdq,
+                                                                                       std::string method = "Y6")
+
+    template <class ReturnType, class RealType, class Func, class ``__Policy``>
+    std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
+                                                                                       const ReturnType q0,
+                                                                                       const RealType dt,
+                                                                                       const unsigned steps,
+                                                                                       Func dHdp,
+                                                                                       Func dHdq,
+                                                                                       std::string method,
+                                                                                       const ``__Policy``& pol)
+
+    }}} // namespaces
+
+[heading Description]
+
+The functional `integrate_hamiltonian` calculates the phase space trajectory for a given Hamiltonian.
+The trajectories are calculated using symplectic integration which preserves the energy of 
+a system. Even higher order traditional numerical integration algorithms will gain or lose 
+energy at long times. The functional implements the methods in [@https://www.sciencedirect.com/science/article/abs/pii/0375960190900923 Yoshida's] 
+landmark paper. We assume that the Hamiltonian is separable so that it can be written as `H = T(p) + V(q)`. 
+
+We now give an example for a simple harmonic oscillator with the Hamiltonian
+
+[equation harmonic_oscillator]
+
+For simplicity we will assume `k = m = 1`. Then the partial derivatives of the Hamiltonian
+with respect to `p` and `q` are 
+
+    double dHdp(double p)
+    {
+        return p;
+    }
+
+    double dHdq(double q)
+    {
+        return q;
+    }
+
+Note that the functional can be readily generalized to multiple coordinates by changing the 
+signature of `dHdp` to 
+
+    std::valarray<double> dHdp(std::valarray<double> p)
+    {
+        // calculate the partial derivatives with respect to each p_i
+    }
+
+The function must return a `valarray` type, as opposed to `std::vector`, because we must be 
+able to perform arithmetic operations on the return type. We then define the timestep size 
+and number of steps of the algorithm to go from `t=0` to `t=100`
+
+    RealType dt = 0.05;
+    RealType t_end = 100;
+    unsigned int steps = t_end / dt;
+
+Lastly, we define the initial conditions so that the oscillator starts from rest at `x=1` 
+    
+    RealType q0 = 1;
+    RealType p0 = 0;
+
+We now evolve the system using the following 
+
+    std::vector<RealType> p;
+    std::vector<RealType> q;
+
+    std::tie(p, q) = boost::math::quadrature::integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, "Y6");
+
+The ouput vectors `q, p` are the position and momentum of the system at each time. In 
+higher dimensions the output will be a vector of vectors. 
+
+The last argument that we pass to `integrate_hamiltonian`, "Y6" here, sets the integration 
+method to use. The string "Y6" stands for Yoshida's 6th order integrator. Yoshida's 2nd and 
+4th order methods are also available by passing the string "Y2", or "Y4" respectively.  
+
+[optional_policy]
+
+References:
+
+Yoshida, Haruo. [`Construction of higher order symplectic integrators], Physics Letters A, 150.5-7 (1990): 262-268.
+
+[endsect] [/section:symplectic Symplectic Integration]
+
