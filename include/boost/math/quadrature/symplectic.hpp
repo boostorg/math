@@ -28,10 +28,24 @@ std::pair<ReturnType, ReturnType> second_order_yoshida(const ReturnType p0,
     ReturnType p = p0;
     ReturnType q = q0;
 
-    q = q + dt / 2 * dHdp(p);
-    p = p - dt * dHdq(q);
-    q = q + dt / 2 * dHdp(p);
-    
+    // Half step in q
+    auto dHdp_val = dHdp(p);
+    for (unsigned i=0; i < q.size(); i++){
+        q[i] = q[i] + dt / 2 * dHdp_val[i];
+    }
+
+    // Full step in p
+    auto dHdq_val = dHdq(q);
+    for (unsigned i=0; i < p.size(); i++){
+        p[i] = p[i] - dt * dHdq_val[i];
+    }
+
+    // Half step in q
+    dHdp_val = dHdp(p);
+    for (unsigned i=0; i < q.size(); i++){
+        q[i] = q[i] + dt / 2 * dHdp_val[i];
+    }
+
     return std::make_pair(p, q);
 }
 
