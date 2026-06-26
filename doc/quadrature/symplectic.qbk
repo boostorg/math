@@ -42,7 +42,7 @@ energy at long times. The functional implements the methods in [@https://www.sci
 landmark paper. We assume that the Hamiltonian is separable so that it can be written as `H = T(p) + V(q)`. 
 
 We now give an example for a simple harmonic oscillator with the Hamiltonian
-
+[/ $H = \frac{p^2}{2m} + \frac{1}{2}kx^2$ ]
 [equation harmonic_oscillator]
 
 For simplicity we will assume `k = m = 1`. Then the partial derivatives of the Hamiltonian

@@ -93,7 +93,7 @@ void test_harmonic_oscillator(RealType tol)
     std::valarray<RealType> q_val(q.data(), q.size());
     std::valarray<RealType> energy_error = std::pow(p_val, 2) + std::pow(q_val, 2) - 1;
     std::valarray<RealType> abs_energy_error = std::abs(energy_error);
-    RealType max_error = abs_energy_error.max();
+    RealType max_error = *std::max_element(std::begin(abs_energy_error), std::end(abs_energy_error));
     std::cout << max_error << std::endl;
     BOOST_CHECK_LE(max_error, tol);
 
