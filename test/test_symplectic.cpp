@@ -7,7 +7,6 @@
 #define BOOST_TEST_MODULE symplectic_quadrature
 
 #include <algorithm>
-#include <valarray>
 #include <boost/math/tools/config.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -46,6 +45,8 @@ void test_invalid_parameters()
 template <class RealType>
 void test_harmonic_oscillator(RealType tol)
 {
+    BOOST_MATH_STD_USING;
+
     RealType dt = 0.05;
     RealType t_end = 100;
     unsigned int steps = t_end / dt;
@@ -58,15 +59,17 @@ void test_harmonic_oscillator(RealType tol)
 
     std::tie(p, q) = boost::math::quadrature::integrate_hamiltonian(p0, q0, dt, steps, vector_dHdp<RealType>, vector_dHdp<RealType>);
 
-    std::valarray<RealType> p_val(p.size());
-    std::valarray<RealType> q_val(q.size());
+    RealType p_val;
+    RealType q_val;
+    std::vector<RealType> abs_energy_error(p.size());
     for (unsigned i=0; i < p.size(); i++)
     {
-        p_val[i] = p[i][0];
-        q_val[i] = q[i][0];
+        p_val = p[i][0];
+        q_val = q[i][0];
+
+        abs_energy_error[i] = std::abs(std::pow(p_val, 2) + std::pow(q_val, 2) - 1);
     }
-    std::valarray<RealType> energy_error = std::pow(p_val, 2) + std::pow(q_val, 2) - 1;
-    std::valarray<RealType> abs_energy_error = std::abs(energy_error);
+
     RealType max_error = *std::max_element(std::begin(abs_energy_error), std::end(abs_energy_error));
     std::cout << max_error << std::endl;
     BOOST_CHECK_LE(max_error, tol);
