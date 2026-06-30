@@ -14,6 +14,7 @@
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/special_functions/beta.hpp> // for incomplete beta.
 #include <boost/math/distributions/complement.hpp> // complements
+#include <boost/math/distributions/chi_squared.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp>
 
@@ -42,6 +43,26 @@ namespace boost{ namespace math{
          RealType p;
          bool comp;
       };
+
+      template <class RealType, class Policy>
+      RealType fisher_large_v1_approximation(RealType x, RealType v, RealType p, RealType q)
+      {     // For v1 -> inf approximate f_degreese_of_freedom_finder with chi squared distribution 
+            // with degrees of freedom v2 at the cdf at v2 / x
+            bool comp = p < q ? false : true;
+            RealType pval =  p < q ? p : q;
+            chi_squared_distribution<RealType, Policy> d(v);
+            return comp ? pval - (1 - cdf(complement(d, v / x))) : (1-cdf(d, v / x)) - pval;
+      }
+
+      template <class RealType, class Policy>
+      RealType fisher_large_v2_approximation(RealType x, RealType v, RealType p, RealType q)
+      {     // For v2 -> inf approximate f_degrees_of_freedom_finder with chi squared distribution 
+            // with degrees of freedom v1 at the cdf at x * v1
+            bool comp = p < q ? false : true;
+            RealType pval =  p < q ? p : q;
+            chi_squared_distribution<RealType, Policy> d(v);
+            return comp ? pval - cdf(complement(d, v * x)) : cdf(d, v * x) - pval;
+      }
 
       template <class RealType, class Policy>
       inline RealType find_degrees_of_freedom_fisher_f(
@@ -73,7 +94,15 @@ namespace boost{ namespace math{
          RealType vLarge = sqrt(boost::math::tools::max_value<RealType>());
          RealType vSmall = 1 / vLarge;
 
-         if ((f(vLarge) < 0) == (f(vSmall) < 0)){
+         RealType large_difference;
+         if (find_v1)
+         {
+            large_difference = fisher_large_v1_approximation<RealType, Policy>(x, v, p, q);
+         }
+         else
+            large_difference = fisher_large_v2_approximation<RealType, Policy>(x, v, p, q);
+
+         if ((large_difference < 0) == (f(vSmall) < 0)){
             return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom because two degrees of freedom can be found using the given parameters",
                RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE 
          }
