@@ -8,10 +8,6 @@
 #ifndef BOOST_MATH_TEST_DIST_HELPERS_HPP
 #define BOOST_MATH_TEST_DIST_HELPERS_HPP
 
-#ifdef _MSC_VER
-#pragma once
-#endif
-
 #include <utility>
 #include <limits>
 #include <stdexcept>
