@@ -17,6 +17,16 @@
 #include <boost/math/policies/policy.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 
+#if defined(BOOST_CHECK_THROW) && defined(BOOST_MATH_NO_EXCEPTIONS)
+#  undef BOOST_CHECK_THROW
+#  define BOOST_CHECK_THROW(x, y)
+#endif
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4127)
+#endif
+
 template <class Dist, class Container>
 Dist make_distribution(const Container& c)
 {
@@ -194,5 +204,9 @@ void test_invalid_parameters(std::vector<std::vector<Real> > invalid_parameters)
         }
     }
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // BOOST_MATH_TEST_DIST_HELPERS_HPP
