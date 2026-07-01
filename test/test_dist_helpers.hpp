@@ -30,21 +30,18 @@ template <class Dist, class Container>
 Dist make_distribution(const Container& c)
 {
     using value_type = typename Dist::value_type;
-    #ifdef _MSC_VER
-    #pragma warning(push)
-    #pragma warning(disable: 4127)
-    #endif
-    BOOST_MATH_IF_CONSTEXPR(std::is_constructible<Dist, value_type, value_type, value_type>::value)
+
+    if constexpr (std::is_constructible<Dist, value_type, value_type, value_type>::value)
     {
         if (c.size() >= 3)
             return Dist(c.data()[0], c.data()[1], c.data()[2]);
     }
-    BOOST_MATH_IF_CONSTEXPR(std::is_constructible<Dist, value_type, value_type>::value)
+    if constexpr (std::is_constructible<Dist, value_type, value_type>::value)
     {
         if (c.size() >= 2)
             return Dist(c.data()[0], c.data()[1]);
     }
-    BOOST_MATH_IF_CONSTEXPR(std::is_constructible<Dist, value_type>::value)
+    if constexpr (std::is_constructible<Dist, value_type>::value)
     {
         if (c.size() >= 1)
             return Dist(c.data()[0]);
