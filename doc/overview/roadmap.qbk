@@ -17,6 +17,7 @@ Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93
 * Add improvement to Heuman Lambda precision.
 * Improve Skew Normal root finding, see [@https://github.com/boostorg/math/issues/1120 1120].
 * Lots of minor fixes and improved code coverage.
+* Add support for the M nearest-neighbour Chatterjee correlation of Lin and Han (2021), see [@https://github.com/boostorg/math/issues/990 990].
 
 [h4 Math-4.2.0 (Boost-1.85)]
 
