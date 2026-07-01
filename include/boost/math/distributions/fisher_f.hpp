@@ -51,7 +51,7 @@ namespace boost{ namespace math{
             bool comp = p < q ? false : true;
             RealType pval =  p < q ? p : q;
             chi_squared_distribution<RealType, Policy> d(v);
-            return comp ? pval - (1 - cdf(complement(d, v / x))) : (1-cdf(d, v / x)) - pval;
+            return comp ? pval - cdf(d, v / x) : cdf(complement(d, v / x)) - pval;
       }
 
       template <class RealType, class Policy>
