@@ -284,9 +284,13 @@ void test_spots(RealType)
    } // has_infinity 
    if (std::numeric_limits<RealType>::has_quiet_NaN)
    {
+       // Throwing is not allowed on SYCL devices,
+       // so we must skip this test
+       #ifndef BOOST_MATH_ENABLE_SYCL
       test_invalid_support<gamma_distribution<RealType, boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::throw_on_error> > >, 
-                           gamma_distribution<RealType, ignore_all_policy>, 
+                           gamma_distribution<RealType, ignore_all_policy>,
                            RealType>({1, 1});
+       #endif
    }
 
    // Test Special Values
