@@ -8,6 +8,10 @@
 #ifndef BOOST_MATH_TEST_DIST_HELPERS_HPP
 #define BOOST_MATH_TEST_DIST_HELPERS_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <utility>
 #include <limits>
 #include <stdexcept>
@@ -26,6 +30,10 @@ template <class Dist, class Container>
 Dist make_distribution(const Container& c)
 {
     using value_type = typename Dist::value_type;
+    #ifdef _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 4127)
+    #endif
     BOOST_MATH_IF_CONSTEXPR(std::is_constructible<Dist, value_type, value_type, value_type>::value)
     {
         if (c.size() >= 3)
@@ -41,6 +49,10 @@ Dist make_distribution(const Container& c)
         if (c.size() >= 1)
             return Dist(c.data()[0]);
     }
+    #ifdef _MSC_VER
+    #pragma warning(pop)
+    #endif
+    
     throw std::domain_error("Object not initialized!");
 }
 
