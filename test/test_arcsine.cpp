@@ -105,6 +105,7 @@ void test_ignore_policy(RealType)
         //std::cout << "pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) = " << pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) << std::endl;
         //  Outputs:  pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) = 1.#QNAN
       }
+      // PDF
       BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
       BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_arcsine(-1, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
       BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_arcsine(0, 1), static_cast <RealType>(-2))));  // x < xmin
@@ -120,9 +121,31 @@ void test_ignore_policy(RealType)
       BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(0, 1), static_cast <RealType>(+2))));  // x > x_max
       BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(-1, 1), static_cast <RealType>(+2)))); // x > x_max
 
+      // CDF
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_arcsine(-1, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_arcsine(0, 1), static_cast <RealType>(-2))));  // x < xmin
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_arcsine(-1, 1), static_cast <RealType>(-2))));  // x < xmin
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_arcsine(0, 1), static_cast <RealType>(+2))));  // x > x_max
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_arcsine(-1, 1), static_cast <RealType>(+2)))); // x > x_max
+      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity())))); // x == infinity
+      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_arcsine(0, 1), static_cast <RealType>(-2)))));  // x < xmin
+
+      // Quantile
+      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity()))); // p == infinity
+      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_arcsine(0, 1), static_cast<RealType>(-1)))); // p < 0
+      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_arcsine(0, 1), static_cast<RealType>(2)))); // p > 1
+      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity())))); // q == infinity
+      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_arcsine(0, 1), static_cast<RealType>(-1))))); // q < 0
+      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_arcsine(0, 1), static_cast<RealType>(2))))); // q > 1
+
       // Mean
       BOOST_CHECK((boost::math::isnan)(mean(ignore_error_arcsine(-nan, 0))));
       BOOST_CHECK((boost::math::isnan)(mean(ignore_error_arcsine(+nan, 0))));
+      
+      // Median
+      BOOST_CHECK((boost::math::isnan)(median(ignore_error_arcsine(-nan, 0))));
+      BOOST_CHECK((boost::math::isnan)(median(ignore_error_arcsine(+nan, 0))));
 
       if (std::numeric_limits<RealType>::has_infinity)
       {
@@ -276,7 +299,8 @@ void test_spots(RealType)
     BOOST_CHECK_EQUAL(variance(arcsine_01), 0.125); // 1/8 = 0.125
     BOOST_CHECK_CLOSE_FRACTION(standard_deviation(arcsine_01), one_div_root_two<double>() / 2, tolerance); // 1/ sqrt(s) = 0.35355339059327379
     BOOST_CHECK_EQUAL(skewness(arcsine_01), 0); //
-    BOOST_CHECK_EQUAL(kurtosis_excess(arcsine_01), -1.5); // 3/2
+    BOOST_CHECK_EQUAL(kurtosis_excess(arcsine_01), -1.5); // -3/2
+    BOOST_CHECK_EQUAL(kurtosis(arcsine_01), 1.5); // 3/2
     BOOST_CHECK_EQUAL(support(arcsine_01).first, 0); //
     BOOST_CHECK_EQUAL(range(arcsine_01).first, 0); //
     BOOST_CHECK_THROW(mode(arcsine_01), std::domain_error); //  Two modes at x_min and x_max, so throw instead.
@@ -374,8 +398,8 @@ void test_spots(RealType)
 
     BOOST_CHECK_EQUAL(variance(as_m11), 0.5); // 1 - (-1) = 2 ^ 2 = 4 /8 = 0.5
     BOOST_CHECK_EQUAL(skewness(as_m11), 0); //
-    BOOST_CHECK_EQUAL(kurtosis_excess(as_m11), -1.5); // 3/2
-
+    BOOST_CHECK_EQUAL(kurtosis_excess(as_m11), -1.5); // -3/2
+    BOOST_CHECK_EQUAL(kurtosis(as_m11), 1.5); // 3/2
 
     BOOST_CHECK_CLOSE_FRACTION(pdf(as_m11, 0.05), static_cast<RealType>(0.31870852113797122803869876869296281629727218095644L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(pdf(as_m11, 0.5), static_cast<RealType>(0.36755259694786136634088433220864629426492432024443L), tolerance);
@@ -428,7 +452,8 @@ void test_spots(RealType)
     BOOST_CHECK_EQUAL(median(as_m2m1), -1.5); // 1 / (1 + 1) = 1/2 exactly.
     BOOST_CHECK_EQUAL(variance(as_m2m1), 0.125);
     BOOST_CHECK_EQUAL(skewness(as_m2m1), 0); //
-    BOOST_CHECK_EQUAL(kurtosis_excess(as_m2m1), -1.5); // 3/2
+    BOOST_CHECK_EQUAL(kurtosis(as_m2m1), 1.5); // 3/2
+    BOOST_CHECK_EQUAL(kurtosis_excess(as_m2m1), -1.5); // -3/2
 
     BOOST_CHECK_CLOSE_FRACTION(pdf(as_m2m1, -1.95), static_cast<RealType>(1.4605059227421865250256574657088244053723856445614L), 4 * tolerance);
     BOOST_CHECK_CLOSE_FRACTION(pdf(as_m2m1, -1.5), static_cast<RealType>(0.63661977236758134307553505349005744813783858296183L), tolerance);
@@ -437,11 +462,19 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(cdf(as_m2m1, -1.05), static_cast<RealType>(0.85643370687129372924905811522494428117838480010259L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(cdf(as_m2m1, -1.5), static_cast<RealType>(0.5L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(cdf(as_m2m1, -1.95), static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L), 8 * tolerance); //  Not much less accurate.
+    BOOST_CHECK_EQUAL(cdf(as_m2m1, as_m2m1.x_min()), 0);
+    BOOST_CHECK_EQUAL(cdf(as_m2m1, as_m2m1.x_max()), 1);
+    BOOST_CHECK_EQUAL(cdf(complement(as_m2m1, as_m2m1.x_min())), 1);
+    BOOST_CHECK_EQUAL(cdf(complement(as_m2m1, as_m2m1.x_max())), 0);
 
     // Quantile
     BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.85643370687129372924905811522494428117838480010259L)), -static_cast<RealType>(1.05L), 2 * tolerance); //
     BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.5L)), -static_cast<RealType>(1.5L), 2 * tolerance);                             //
     BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L)), -static_cast<RealType>(1.95L), 4 * tolerance);     //
+    BOOST_CHECK_EQUAL(quantile(as_m2m1, 1), 1);
+    BOOST_CHECK_EQUAL(quantile(as_m2m1, 0), 0); 
+    BOOST_CHECK_EQUAL(quantile(complement(as_m2m1, 1)), 0);
+    BOOST_CHECK_EQUAL(quantile(complement(as_m2m1, 0)), 1); 
 
     BOOST_CHECK_CLOSE_FRACTION(quantile(complement(as_m2m1, static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L))), -static_cast<RealType>(1.05L), 2 * tolerance); //
     BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.5L)), -static_cast<RealType>(1.5L), 2 * tolerance);                             //
@@ -607,7 +640,8 @@ void test_spots(RealType)
     BOOST_CHECK_EQUAL(variance(as), 0.125); //0.125
     BOOST_CHECK_CLOSE_FRACTION(standard_deviation(as), one_div_root_two<double>() / 2, std::numeric_limits<double>::epsilon()); // 0.353553
     BOOST_CHECK_EQUAL(skewness(as), 0); //
-    BOOST_CHECK_EQUAL(kurtosis_excess(as), -1.5); // 3/2
+    BOOST_CHECK_EQUAL(kurtosis(as), 1.5); // 3/2
+    BOOST_CHECK_EQUAL(kurtosis_excess(as), -1.5); // -3/2
     BOOST_CHECK_EQUAL(support(as).first, 0); //
     BOOST_CHECK_EQUAL(range(as).first, 0); //
     BOOST_CHECK_THROW(mode(as), std::domain_error); //  Two modes at x_min and x_max, so throw instead.

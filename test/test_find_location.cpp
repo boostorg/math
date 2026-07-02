@@ -74,18 +74,18 @@ void test_spots(RealType)
   BOOST_MATH_CHECK_THROW(find_location<normal>(0., 2., 0.), std::domain_error); // p above 0 to 1.
   BOOST_MATH_CHECK_THROW(find_location<normal>(numeric_limits<double>::infinity(), 0.5, 0.),
     std::domain_error); // z not finite.
-  BOOST_MATH_CHECK_THROW(find_location<normal>(numeric_limits<double>::quiet_NaN(), -1., 0.),
+  BOOST_MATH_CHECK_THROW(find_location<normal>(numeric_limits<double>::quiet_NaN(), 0.5, 0.),
     std::domain_error); // z not finite
-  BOOST_MATH_CHECK_THROW(find_location<normal>(0., -1., numeric_limits<double>::quiet_NaN()),
+  BOOST_MATH_CHECK_THROW(find_location<normal>(0., 0.5, numeric_limits<double>::quiet_NaN()),
     std::domain_error); // scale not finite
 
   BOOST_MATH_CHECK_THROW(find_location<normal>(complement(0., -1., 0.)), std::domain_error); // p below 0 to 1.
   BOOST_MATH_CHECK_THROW(find_location<normal>(complement(0., 2., 0.)), std::domain_error); // p above 0 to 1.
   BOOST_MATH_CHECK_THROW(find_location<normal>(complement(numeric_limits<double>::infinity(), 0.5, 0.)),
     std::domain_error); // z not finite.
-  BOOST_MATH_CHECK_THROW(find_location<normal>(complement(numeric_limits<double>::quiet_NaN(), -1., 0.)),
+  BOOST_MATH_CHECK_THROW(find_location<normal>(complement(numeric_limits<double>::quiet_NaN(), 0.5, 0.)),
     std::domain_error); // z not finite
-  BOOST_MATH_CHECK_THROW(find_location<normal>(complement(0., -1., numeric_limits<double>::quiet_NaN())),
+  BOOST_MATH_CHECK_THROW(find_location<normal>(complement(0., 0.5, numeric_limits<double>::quiet_NaN())),
     std::domain_error); // scale not finite
 
   //// Check for ab-use with unsuitable distribution(s) when concept check implemented.
@@ -131,11 +131,39 @@ void test_spots(RealType)
   // Check that can use the complement version.
   RealType q = 1 - p; // complement.
   // cout << "find_location<normal_distribution<RealType> >(complement(z, q, sd)) = " << endl;
+  l = find_location<normal_distribution<RealType> >(complement(z, q, sd, policy<>()));
   l = find_location<normal_distribution<RealType> >(complement(z, q, sd));
 
   normal_distribution<RealType> np95pc(l, sd); // Same standard_deviation (scale) but with mean(location) shifted
   //  cout << "Normal distribution with mean = " << l << " has " << "fraction <= " << z << " = "  << cdf(np95pc, z) << endl;
   BOOST_CHECK_CLOSE_FRACTION(q, cdf(np95pc, z), tolerance);
+
+  // Test NaN handling
+  typedef policy<
+    boost::math::policies::domain_error<ignore_error>,
+    boost::math::policies::overflow_error<ignore_error>,
+    boost::math::policies::underflow_error<ignore_error>,
+    boost::math::policies::denorm_error<ignore_error>,
+    boost::math::policies::pole_error<ignore_error>,
+    boost::math::policies::evaluation_error<ignore_error>
+  > ignore_all_policy;
+
+  if (std::numeric_limits<RealType>::has_infinity)
+  {
+    RealType inf = std::numeric_limits<RealType>::infinity(); 
+    BOOST_CHECK((boost::math::isnan)(find_location<normal_distribution<RealType> >(static_cast<RealType>(0), static_cast<RealType>(-1), static_cast<RealType>(1), ignore_all_policy())));
+    BOOST_CHECK((boost::math::isnan)(find_location<normal_distribution<RealType> >(inf, static_cast<RealType>(0.5), static_cast<RealType>(1), ignore_all_policy())));
+    BOOST_CHECK((boost::math::isnan)(find_location<normal_distribution<RealType> >(static_cast<RealType>(0), static_cast<RealType>(0.5), inf, ignore_all_policy())));
+    // Negative scale does not throw. Seems weird... waiting to see if this should be fixed
+    BOOST_CHECK((boost::math::isnan)(find_location<normal_distribution<RealType> >(static_cast<RealType>(0), static_cast<RealType>(0.5), static_cast<RealType>(-1), ignore_all_policy())));
+  
+    // Complement
+    BOOST_CHECK((boost::math::isnan)(find_location<normal_distribution<RealType> >(complement(static_cast<RealType>(0), static_cast<RealType>(-1), static_cast<RealType>(1), ignore_all_policy()))));
+    BOOST_CHECK((boost::math::isnan)(find_location<normal_distribution<RealType> >(complement(inf, static_cast<RealType>(0.5), static_cast<RealType>(1), ignore_all_policy()))));
+    BOOST_CHECK((boost::math::isnan)(find_location<normal_distribution<RealType> >(complement(static_cast<RealType>(0), static_cast<RealType>(0.5), inf, ignore_all_policy()))));
+  }
+
+  
 
 } // template <class RealType>void test_spots(RealType)
 

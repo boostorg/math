@@ -699,6 +699,34 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(multiplication_test, T)
     }
 }
 
+BOOST_TEST_CASE_TEMPLATE_FUNCTION(division_test, T)
+{
+    #if     BOOST_WORKAROUND(__GNUC__, < 3)
+    #else   /* BOOST_WORKAROUND(__GNUC__, < 3) */
+    using ::std::numeric_limits;
+
+    using ::boost::math::abs;
+    #endif /* BOOST_WORKAROUND(__GNUC__, < 3) */
+
+
+    BOOST_TEST_MESSAGE("Testing division for "
+        << string_type_name<T>::_() << ".");
+
+    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+        (abs(::boost::math::octonion<T>(1,0,0,0,0,0,0,0)/
+             ::boost::math::octonion<T>(1,0,0,0,0,0,0,0)-
+             static_cast<T>(1)))
+        (numeric_limits<T>::epsilon()));
+
+    for    (int idx = 1; idx < 8; ++idx)
+    {
+        ::boost::math::octonion<T>    toto = index_i_element<T>(idx);
+
+        BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+            (abs(toto/toto-static_cast<T>(1)))
+            (numeric_limits<T>::epsilon()));
+    }
+}
 
 BOOST_TEST_CASE_TEMPLATE_FUNCTION(exp_test, T)
 {
@@ -752,6 +780,7 @@ boost::unit_test::test_suite *    init_unit_test_suite(int, char *[])
     
 #define    BOOST_OCTONION_TEST                      \
     BOOST_OCTONION_COMMON_GENERATOR(multiplication) \
+    BOOST_OCTONION_COMMON_GENERATOR(division)       \
     BOOST_OCTONION_COMMON_GENERATOR_NEAR_EPS(exp)
     
     

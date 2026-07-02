@@ -38,6 +38,10 @@ void test_constant()
     auto pchip_spline = pchip(std::move(x_copy), std::move(y_copy));
     //std::cout << "Constant value pchip spline = " << pchip_spline << "\n";
 
+    auto [lo, hi] = pchip_spline.domain();
+    CHECK_ULP_CLOSE(lo, 0, 1);
+    CHECK_ULP_CLOSE(hi, 81, 1);
+
     for (Real t = x[0]; t <= x.back(); t += Real(0.25)) {
         CHECK_ULP_CLOSE(Real(7), pchip_spline(t), 2);
         CHECK_ULP_CLOSE(Real(0), pchip_spline.prime(t), 2);
