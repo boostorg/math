@@ -33,7 +33,7 @@ construct_distribution_1(const Container& c)
 {
     if (c.size() >= 1)
     {
-        return Dist(c.data()[0]);
+        return Dist(c.begin()[0]);
     }
     throw std::domain_error("Object not initialized!");
 }
@@ -53,7 +53,7 @@ construct_distribution_2(const Container& c)
 {
     if (c.size() >= 2)
     {
-        return Dist(c.data()[0], c.data()[1]);
+        return Dist(c.begin()[0], c.begin()[1]);
     }
     return construct_distribution_1<Dist>(c);
 }
@@ -73,7 +73,7 @@ construct_distribution_3(const Container& c)
 {
     if (c.size() >= 3)
     {
-        return Dist(c.data()[0], c.data()[1], c.data()[2]);
+        return Dist(c.begin()[0], c.begin()[1], c.begin()[2]);
     }
     return construct_distribution_2<Dist>(c);
 }
