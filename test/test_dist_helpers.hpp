@@ -11,6 +11,7 @@
 #include <utility>
 #include <limits>
 #include <stdexcept>
+#include <type_traits>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/test/unit_test.hpp>
@@ -22,36 +23,74 @@
 #  define BOOST_CHECK_THROW(x, y)
 #endif
 
+namespace test_dist_helpers_detail {
+
+// Construct Dist from a single parameter when it has a one-argument
+// constructor; otherwise there is nothing lower to try, so throw.
+template <class Dist, class Container>
+typename std::enable_if<std::is_constructible<Dist, typename Dist::value_type>::value, Dist>::type
+construct_distribution_1(const Container& c)
+{
+    if (c.size() >= 1)
+    {
+        return Dist(c.data()[0]);
+    }
+    throw std::domain_error("Object not initialized!");
+}
+
+template <class Dist, class Container>
+typename std::enable_if<!std::is_constructible<Dist, typename Dist::value_type>::value, Dist>::type
+construct_distribution_1(const Container&)
+{
+    throw std::domain_error("Object not initialized!");
+}
+
+// Construct Dist from two parameters when it has a two-argument constructor
+// and enough data is present; otherwise fall back to the one-argument form.
+template <class Dist, class Container>
+typename std::enable_if<std::is_constructible<Dist, typename Dist::value_type, typename Dist::value_type>::value, Dist>::type
+construct_distribution_2(const Container& c)
+{
+    if (c.size() >= 2)
+    {
+        return Dist(c.data()[0], c.data()[1]);
+    }
+    return construct_distribution_1<Dist>(c);
+}
+
+template <class Dist, class Container>
+typename std::enable_if<!std::is_constructible<Dist, typename Dist::value_type, typename Dist::value_type>::value, Dist>::type
+construct_distribution_2(const Container& c)
+{
+    return construct_distribution_1<Dist>(c);
+}
+
+// Construct Dist from three parameters when it has a three-argument
+// constructor and enough data is present; otherwise fall back to two.
+template <class Dist, class Container>
+typename std::enable_if<std::is_constructible<Dist, typename Dist::value_type, typename Dist::value_type, typename Dist::value_type>::value, Dist>::type
+construct_distribution_3(const Container& c)
+{
+    if (c.size() >= 3)
+    {
+        return Dist(c.data()[0], c.data()[1], c.data()[2]);
+    }
+    return construct_distribution_2<Dist>(c);
+}
+
+template <class Dist, class Container>
+typename std::enable_if<!std::is_constructible<Dist, typename Dist::value_type, typename Dist::value_type, typename Dist::value_type>::value, Dist>::type
+construct_distribution_3(const Container& c)
+{
+    return construct_distribution_2<Dist>(c);
+}
+
+} // namespace test_dist_helpers_detail
+
 template <class Dist, class Container>
 Dist make_distribution(const Container& c)
 {
-    using value_type = typename Dist::value_type;
-
-    #ifdef _MSC_VER
-    #pragma warning(push)
-    #pragma warning(disable:4127) // conditional expression is constant
-    #endif
-
-    if (std::is_constructible<Dist, value_type, value_type, value_type>::value)
-    {
-        if (c.size() >= 3)
-            return Dist(c.data()[0], c.data()[1], c.data()[2]);
-    }
-    if (std::is_constructible<Dist, value_type, value_type>::value)
-    {
-        if (c.size() >= 2)
-            return Dist(c.data()[0], c.data()[1]);
-    }
-    if (std::is_constructible<Dist, value_type>::value)
-    {
-        if (c.size() >= 1)
-            return Dist(c.data()[0]);
-    }
-    #ifdef _MSC_VER
-    #pragma warning(pop)
-    #endif
-    
-    throw std::domain_error("Object not initialized!");
+    return test_dist_helpers_detail::construct_distribution_3<Dist>(c);
 }
 
 template <class Dist, class V>
