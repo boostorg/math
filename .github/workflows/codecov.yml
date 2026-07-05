@@ -92,7 +92,7 @@ jobs:
           fi
           git config --global pack.threads 0
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           # For coverage builds fetch the whole history, else only 1 commit using a 'fake ternary'
           fetch-depth: ${{ matrix.coverage && '0' || '1' }}
@@ -106,7 +106,7 @@ jobs:
           restore-keys: ${{matrix.os}}-${{matrix.container}}-${{matrix.compiler}}-
 
       - name: Fetch Boost.CI
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: boostorg/boost-ci
           ref: master
