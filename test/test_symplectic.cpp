@@ -43,9 +43,9 @@ void test_invalid_parameters()
 
 /* Test if SHO energy fluctuations are below a given tolerance*/
 template <class RealType>
-void test_harmonic_oscillator(RealType tol)
+void test_harmonic_oscillator(const RealType tol, const std::string method)
 {
-    BOOST_MATH_STD_USING;
+    BOOST_MATH_STD_USING
 
     RealType dt = 0.05;
     RealType t_end = 100;
@@ -57,7 +57,7 @@ void test_harmonic_oscillator(RealType tol)
     std::vector<std::vector<RealType> > p;
     std::vector<std::vector<RealType> > q;
 
-    std::tie(p, q) = boost::math::quadrature::integrate_hamiltonian(p0, q0, dt, steps, vector_dHdp<RealType>, vector_dHdp<RealType>);
+    std::tie(p, q) = boost::math::quadrature::integrate_hamiltonian(p0, q0, dt, steps, vector_dHdp<RealType>, vector_dHdp<RealType>, method);
 
     RealType p_val;
     RealType q_val;
@@ -71,13 +71,13 @@ void test_harmonic_oscillator(RealType tol)
     }
 
     RealType max_error = *std::max_element(std::begin(abs_energy_error), std::end(abs_energy_error));
-    std::cout << max_error << std::endl;
     BOOST_CHECK_LE(max_error, tol);
-
 }
 
 BOOST_AUTO_TEST_CASE(symplectic_quadrature)
 {
     test_invalid_parameters<double>();
-    test_harmonic_oscillator<double>(1e-10);
+    test_harmonic_oscillator<double>(1e-10, "Y6");
+    test_harmonic_oscillator<double>(7e-4, "Y4");
+    test_harmonic_oscillator<double>(7e-4, "Y2");
 }

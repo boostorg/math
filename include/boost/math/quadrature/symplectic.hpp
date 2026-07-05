@@ -56,11 +56,14 @@ std::pair<ReturnType, ReturnType> fourth_order_yoshida(const ReturnType p0,
                                                        Func dHdp, 
                                                        Func dHdq)
 {
+    BOOST_MATH_STD_USING
+    
     ReturnType p = p0;
     ReturnType q = q0;
 
-    RealType x0 = -(std::pow(2, 1/3) / (2 - std::pow(2, 1/3)));
+    // RealType x0 = -(std::pow(2, 1/3) / (2 - std::pow(2, 1/3)));
     RealType x1 = 1 / (2 - std::pow(2, 1/3));
+    RealType x0 = 1 - 2 * x1; 
 
     std::vector<RealType> weights = { x1, x0, x1 };
 
