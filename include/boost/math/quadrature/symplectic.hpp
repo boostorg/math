@@ -16,7 +16,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
-namespace boost{ namespace math {namespace quadrature { 
+namespace boost{ namespace math { namespace quadrature { namespace detail {
 
 template <class RealType, class ReturnType, class Func>
 std::pair<ReturnType, ReturnType> second_order_yoshida(const ReturnType p0, 
@@ -107,14 +107,14 @@ std::pair<ReturnType, ReturnType> sixth_order_yoshida(const ReturnType p0,
 }
 
 template <class ReturnType, class RealType, class Func, class Policy>
-std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
-                                                                                   const ReturnType q0,
-                                                                                   const RealType dt,
-                                                                                   const unsigned steps,
-                                                                                   Func dHdp,
-                                                                                   Func dHdq,
-                                                                                   std::string method,
-                                                                                   const Policy& pol)
+std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian_imp(const ReturnType p0,
+                                                                                       const ReturnType q0,
+                                                                                       const RealType dt,
+                                                                                       const unsigned steps,
+                                                                                       Func dHdp,
+                                                                                       Func dHdq,
+                                                                                       std::string method,
+                                                                                       const Policy& pol)
 {
     // Not sure how to make this function string nicer
     static const char* function = "boost::math::quadrature::integrate_hamiltonian(p0, q0, %1%, steps, dHdp, dHdq)";
@@ -150,6 +150,20 @@ std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltoni
         q[i] = q_current;
     }
     return std::make_pair(p, q);
+}
+} // namespace detail
+
+template <class ReturnType, class RealType, class Func, class Policy>
+std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
+                                                                                   const ReturnType q0,
+                                                                                   const RealType dt,
+                                                                                   const unsigned steps,
+                                                                                   Func dHdp,
+                                                                                   Func dHdq,
+                                                                                   std::string method,
+                                                                                   const Policy& pol)
+{
+    return detail::integrate_hamiltonian_imp(p0, q0, dt, steps, dHdp, dHdq, method, pol); 
 }
 
 template <class ReturnType, class RealType, class Func>
