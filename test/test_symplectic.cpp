@@ -80,4 +80,5 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
     test_harmonic_oscillator<double>(1e-10, "Y6");
     test_harmonic_oscillator<double>(7e-4, "Y4");
     test_harmonic_oscillator<double>(7e-4, "Y2");
+    test_harmonic_oscillator<double>(1e-11, "SRKNB6");
 }

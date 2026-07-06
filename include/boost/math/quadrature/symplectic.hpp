@@ -95,7 +95,7 @@ std::pair<ReturnType, ReturnType> sixth_order_yoshida(const ReturnType p0,
     RealType w2 = static_cast<RealType>(0.23557321335935813368479318297853460168646808210340111900349313095621471215223L);
     RealType w3 = static_cast<RealType>(0.78451361047755726381949763386634987577682441745149338456794779895125997479548L);
     // w0 = 1.31518632068391121888424972823886251435195350615940796180785516777853373846773
-    RealType w0 = 1 - 2 * (w1 + w2 + w3);
+    RealType w0 = 1. - 2. * (w1 + w2 + w3);
     std::vector<RealType> weights = { w3, w2, w1, w0, w1, w2, w3};
 
     for (unsigned i=0; i < weights.size(); i++)
@@ -103,6 +103,54 @@ std::pair<ReturnType, ReturnType> sixth_order_yoshida(const ReturnType p0,
         std::tie(p, q) = second_order_yoshida(p, q, weights[i] * dt, dHdp, dHdq);
     }
     
+    return std::make_pair(p, q);
+}
+
+template <class RealType, class ReturnType, class Func>
+std::pair<ReturnType, ReturnType> SRKN_b_order_6(const ReturnType p0,
+                                                 const ReturnType q0,
+                                                 RealType dt, 
+                                                 Func dHdp,
+                                                 Func dHdq)
+{ // This method implements SRKN_b^6 in Table 3 here 
+  // https://www.sciencedirect.com/science/article/pii/S0377042701004927
+
+    ReturnType p = p0;
+    ReturnType q = q0;
+    
+    RealType b1 = static_cast<RealType>(0.0829844064174052);
+    RealType b2 = static_cast<RealType>(0.396309801498368);
+    RealType b3 = static_cast<RealType>(-0.0390563049223486);
+    RealType b4 = 1. - 2. * (b1 + b2 + b3);
+
+    RealType a1 = static_cast<RealType>(0.245298957184271);
+    RealType a2 = static_cast<RealType>(0.604872665711080);
+    RealType a3 = 0.5 - (a1 + a2);
+
+    std::vector<RealType> b_weights = {b1, b2, b3, b4, b3, b2};
+    std::vector<RealType> a_weights = {a1, a2, a3, a3, a2, a1};
+    
+    RealType a, b;
+    for (unsigned int i=0; i < b_weights.size(); i++)
+    {
+        b = b_weights[i];
+        a = a_weights[i];
+        
+        auto dHdp_val = dHdp(p);
+        for (unsigned j=0; j < q.size(); j++){
+            q[j] = q[j] + b * dt * dHdp_val[j];
+        }
+        
+        auto dHdq_val = dHdq(q);
+        for (unsigned j=0; j < p.size(); j++){
+            p[j] = p[j] - a * dt * dHdq_val[j];
+        }
+    }
+    // Have to do one more step in p
+    auto dHdp_val = dHdp(p);
+    for (unsigned j=0; j < q.size(); j++){
+        q[j] = q[j] + b1 * dt * dHdp_val[j];
+    }
     return std::make_pair(p, q);
 }
 
@@ -133,7 +181,8 @@ std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltoni
 
     std::map<std::string, stepperType> m{{"Y6", sixth_order_yoshida}, 
                                          {"Y4", fourth_order_yoshida}, 
-                                         {"Y2", second_order_yoshida}};
+                                         {"Y2", second_order_yoshida},
+                                         {"SRKNB6", SRKN_b_order_6}};
     stepperType stepper = m.at(method);
 
     std::vector<ReturnType> p(steps);
