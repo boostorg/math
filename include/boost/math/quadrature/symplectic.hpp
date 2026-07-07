@@ -18,15 +18,15 @@
 
 namespace boost{ namespace math { namespace quadrature { namespace detail {
 
-template <class RealType, class ReturnType, class Func>
-std::pair<ReturnType, ReturnType> second_order_yoshida(const ReturnType p0, 
-                                                       const ReturnType q0, 
-                                                       RealType dt, 
-                                                       Func dHdp, 
-                                                       Func dHdq)
+template <typename RandomAccessContainer, class Func>
+std::pair<RandomAccessContainer, RandomAccessContainer> second_order_yoshida(const RandomAccessContainer p0, 
+                                                                             const RandomAccessContainer q0, 
+                                                                             const typename RandomAccessContainer::value_type dt, 
+                                                                             Func dHdp, 
+                                                                             Func dHdq)
 {
-    ReturnType p = p0;
-    ReturnType q = q0;
+    RandomAccessContainer p = p0;
+    RandomAccessContainer q = q0;
 
     // Half step in q
     auto dHdp_val = dHdp(p);
@@ -49,17 +49,18 @@ std::pair<ReturnType, ReturnType> second_order_yoshida(const ReturnType p0,
     return std::make_pair(p, q);
 }
 
-template <class RealType, class ReturnType, class Func>
-std::pair<ReturnType, ReturnType> fourth_order_yoshida(const ReturnType p0, 
-                                                       const ReturnType q0, 
-                                                       const RealType dt, 
-                                                       Func dHdp, 
-                                                       Func dHdq)
+template <typename RandomAccessContainer, class Func>
+std::pair<RandomAccessContainer, RandomAccessContainer> fourth_order_yoshida(const RandomAccessContainer p0, 
+                                                                             const RandomAccessContainer q0, 
+                                                                             const typename RandomAccessContainer::value_type dt, 
+                                                                             Func dHdp, 
+                                                                             Func dHdq)
 {
     BOOST_MATH_STD_USING
-    
-    ReturnType p = p0;
-    ReturnType q = q0;
+    using RealType = typename RandomAccessContainer::value_type;
+
+    RandomAccessContainer p = p0;
+    RandomAccessContainer q = q0;
 
     // RealType x0 = -(std::pow(2, 1/3) / (2 - std::pow(2, 1/3)));
     RealType x1 = 1 / (2 - std::pow(2, 1/3));
@@ -75,15 +76,17 @@ std::pair<ReturnType, ReturnType> fourth_order_yoshida(const ReturnType p0,
     return std::make_pair(p, q);
 }
 
-template <class RealType, class ReturnType, class Func>
-std::pair<ReturnType, ReturnType> sixth_order_yoshida(const ReturnType p0, 
-                                                      const ReturnType q0, 
-                                                      RealType dt, 
-                                                      Func dHdp, 
-                                                      Func dHdq)
+template <typename RandomAccessContainer, class Func>
+std::pair<RandomAccessContainer, RandomAccessContainer> sixth_order_yoshida(const RandomAccessContainer p0, 
+                                                                            const RandomAccessContainer q0, 
+                                                                            const typename RandomAccessContainer::value_type dt, 
+                                                                            Func dHdp, 
+                                                                            Func dHdq)
 {
-    ReturnType p = p0;
-    ReturnType q = q0;
+    using RealType = typename RandomAccessContainer::value_type;
+
+    RandomAccessContainer p = p0;
+    RandomAccessContainer q = q0;
     
     // Choosing "System A" solution
     // The following Mathematica command can calculate these coefficients to arbitrary precision
@@ -106,17 +109,19 @@ std::pair<ReturnType, ReturnType> sixth_order_yoshida(const ReturnType p0,
     return std::make_pair(p, q);
 }
 
-template <class RealType, class ReturnType, class Func>
-std::pair<ReturnType, ReturnType> SRKN_b_order_6(const ReturnType p0,
-                                                 const ReturnType q0,
-                                                 RealType dt, 
-                                                 Func dHdp,
-                                                 Func dHdq)
+template <typename RandomAccessContainer, class Func>
+std::pair<RandomAccessContainer, RandomAccessContainer> SRKN_b_order_6(const RandomAccessContainer p0,
+                                                                       const RandomAccessContainer q0,
+                                                                       const typename RandomAccessContainer::value_type dt, 
+                                                                       Func dHdp,
+                                                                       Func dHdq)
 { // This method implements SRKN_b^6 in Table 3 here 
   // https://www.sciencedirect.com/science/article/pii/S0377042701004927
 
-    ReturnType p = p0;
-    ReturnType q = q0;
+    using RealType = typename RandomAccessContainer::value_type;
+
+    RandomAccessContainer p = p0;
+    RandomAccessContainer q = q0;
     
     RealType b1 = static_cast<RealType>(0.0829844064174052);
     RealType b2 = static_cast<RealType>(0.396309801498368);
@@ -154,30 +159,31 @@ std::pair<ReturnType, ReturnType> SRKN_b_order_6(const ReturnType p0,
     return std::make_pair(p, q);
 }
 
-template <class ReturnType, class RealType, class Func, class Policy>
-std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian_imp(const ReturnType p0,
-                                                                                       const ReturnType q0,
-                                                                                       const RealType dt,
-                                                                                       const unsigned steps,
-                                                                                       Func dHdp,
-                                                                                       Func dHdq,
-                                                                                       std::string method,
-                                                                                       const Policy& pol)
+template <typename RandomAccessContainer, class Func, class Policy>
+std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian_imp(const RandomAccessContainer p0,
+                                                                                                             const RandomAccessContainer q0,
+                                                                                                             const typename RandomAccessContainer::value_type dt,
+                                                                                                             const unsigned steps,
+                                                                                                             Func dHdp,
+                                                                                                             Func dHdq,
+                                                                                                             std::string method,
+                                                                                                             const Policy& pol)
 {
+    using RealType = typename RandomAccessContainer::value_type;
     // Not sure how to make this function string nicer
     static const char* function = "boost::math::quadrature::integrate_hamiltonian(p0, q0, %1%, steps, dHdp, dHdq)";
 
     if ((dt <= 0) || !(boost::math::isfinite)(dt))
     {
         RealType val = (boost::math::policies::raise_domain_error(function, "Time step must be positive and finite but got: dt = %1%.\n", dt, pol));
-        std::vector<ReturnType> nan_vec = {ReturnType(val)};
+        std::vector<RandomAccessContainer> nan_vec = {RandomAccessContainer(val)};
         return std::make_pair(nan_vec, nan_vec);
     }
 
     // Check if method is available
     std::vector<std::string> available_methods = {"Y6", "Y4", "Y2"};
 
-    typedef std::pair<ReturnType, ReturnType> (*stepperType)(ReturnType, ReturnType, RealType, Func, Func);
+    typedef std::pair<RandomAccessContainer, RandomAccessContainer> (*stepperType)(RandomAccessContainer, RandomAccessContainer, RealType, Func, Func);
 
     std::map<std::string, stepperType> m{{"Y6", sixth_order_yoshida}, 
                                          {"Y4", fourth_order_yoshida}, 
@@ -185,13 +191,13 @@ std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltoni
                                          {"SRKNB6", SRKN_b_order_6}};
     stepperType stepper = m.at(method);
 
-    std::vector<ReturnType> p(steps);
-    std::vector<ReturnType> q(steps);
+    std::vector<RandomAccessContainer> p(steps);
+    std::vector<RandomAccessContainer> q(steps);
     p[0] = p0;
     q[0] = q0;
 
-    ReturnType p_current = p0;
-    ReturnType q_current = q0;
+    RandomAccessContainer p_current = p0;
+    RandomAccessContainer q_current = q0;
     for (unsigned i=1; i < steps; i++)
     {
         std::tie(p_current, q_current) = stepper(p_current, q_current, dt, dHdp, dHdq);
@@ -202,38 +208,38 @@ std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltoni
 }
 } // namespace detail
 
-template <class ReturnType, class RealType, class Func, class Policy>
-std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
-                                                                                   const ReturnType q0,
-                                                                                   const RealType dt,
-                                                                                   const unsigned steps,
-                                                                                   Func dHdp,
-                                                                                   Func dHdq,
-                                                                                   std::string method,
-                                                                                   const Policy& pol)
+template <typename RandomAccessContainer, class Func, class Policy>
+std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer p0,
+                                                                                                         const RandomAccessContainer q0,
+                                                                                                         const typename RandomAccessContainer::value_type dt,
+                                                                                                         const unsigned steps,
+                                                                                                         Func dHdp,
+                                                                                                         Func dHdq,
+                                                                                                         std::string method,
+                                                                                                         const Policy& pol)
 {
     return detail::integrate_hamiltonian_imp(p0, q0, dt, steps, dHdp, dHdq, method, pol); 
 }
 
-template <class ReturnType, class RealType, class Func>
-std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
-                                                                                   const ReturnType q0,
-                                                                                   const RealType dt,
-                                                                                   const unsigned steps,
-                                                                                   Func dHdp,
-                                                                                   Func dHdq,
-                                                                                   std::string method)
+template <typename RandomAccessContainer, class Func>
+std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer p0,
+                                                                                                         const RandomAccessContainer q0,
+                                                                                                         const typename RandomAccessContainer::value_type dt,
+                                                                                                         const unsigned steps,
+                                                                                                         Func dHdp,
+                                                                                                         Func dHdq,
+                                                                                                         std::string method)
 {
     return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, method, boost::math::policies::policy<>()); 
 }
 
-template <class ReturnType, class RealType, class Func>
-std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
-                                                                                   const ReturnType q0,
-                                                                                   const RealType dt,
-                                                                                   const unsigned steps,
-                                                                                   Func dHdp,
-                                                                                   Func dHdq)
+template <typename RandomAccessContainer, class Func>
+std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer p0,
+                                                                                                         const RandomAccessContainer q0,
+                                                                                                         const typename RandomAccessContainer::value_type dt,
+                                                                                                         const unsigned steps,
+                                                                                                         Func dHdp,
+                                                                                                         Func dHdq)
 {
     return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, "Y6", boost::math::policies::policy<>()); 
 }
