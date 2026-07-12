@@ -201,12 +201,14 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
     test_harmonic_oscillator<double>(7e-4, "Y4");
     test_harmonic_oscillator<double>(7e-4, "Y2");
     test_harmonic_oscillator<double>(1e-11, "SRKNB6");
+    test_harmonic_oscillator<double>(2e-14, "SRKNB11");
 
     // Pendulum Tests
     test_pendulum<double>(1e-10, "Y6");
     test_pendulum<double>(5e-4, "Y4");
     test_pendulum<double>(5e-4, "Y2");
     test_pendulum<double>(1e-8, "SRKNB6");
+    test_pendulum<double>(1e-10, "SRKNB11");
 
     // test_hh_model<double>(1e-16, "SRKNB11");
     // test_hh_model<double>(5e-16, "Y4");
