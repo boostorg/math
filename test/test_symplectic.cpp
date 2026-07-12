@@ -26,9 +26,9 @@ using boost::math::quadrature::integrate_hamiltonian;
 
 // Equations of motion for simple harmonic oscillator
 template <class Real>
-std::vector<Real> vector_dHdp(std::vector<Real> p) { return p; }
+Real oscillator_dHdp(Real p) { return p; }
 template <class Real>
-std::vector<Real> vector_dHdq(std::vector<Real> q) { return q; }
+Real oscillator_dHdq(Real q) { return q; }
 
 // Equations of motion for simple pendulum
 template <class Real>
@@ -48,13 +48,13 @@ std::vector<Real> pendulum_vector_dHdq(std::vector<Real> q)
 template <class RealType>
 void test_invalid_parameters()
 {
-    std::vector<RealType> q0 = {1};
-    std::vector<RealType> p0 = {0};
+    RealType q0 = 1;
+    RealType p0 = 0;
     // Negative timestep
-    BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(q0, p0, -0.1, 10, vector_dHdp<RealType>, vector_dHdq<RealType>), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(q0, p0, -0.1, 10, oscillator_dHdp<RealType>, oscillator_dHdq<RealType>), std::domain_error);
 
     // Method not in {'Y6', 'Y4', 'Y2'}
-    BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(q0, p0, 0.1, 10, vector_dHdp<RealType>, vector_dHdq<RealType>, "InvalidMethod"), std::out_of_range);
+    BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(q0, p0, 0.1, 10, oscillator_dHdp<RealType>, oscillator_dHdq<RealType>, "InvalidMethod"), std::out_of_range);
 }
 
 /* Test if SHO energy fluctuations are below a given tolerance*/
@@ -67,21 +67,21 @@ void test_harmonic_oscillator(const RealType tol, const std::string method)
     RealType t_end = 100;
     unsigned int steps = t_end / dt;
 
-    std::vector<RealType> q0 = {1};
-    std::vector<RealType> p0 = {0};
+    RealType q0 = 1;
+    RealType p0 = 0;
 
-    std::vector<std::vector<RealType> > p;
-    std::vector<std::vector<RealType> > q;
+    std::vector<RealType> p;
+    std::vector<RealType> q;
 
-    std::tie(p, q) = boost::math::quadrature::integrate_hamiltonian(p0, q0, dt, steps, vector_dHdp<RealType>, vector_dHdq<RealType>, method);
+    std::tie(p, q) = boost::math::quadrature::integrate_hamiltonian(p0, q0, dt, steps, oscillator_dHdp<RealType>, oscillator_dHdq<RealType>, method);
 
     RealType p_val;
     RealType q_val;
     std::vector<RealType> abs_energy_error(p.size());
     for (unsigned i=0; i < p.size(); i++)
     {
-        p_val = p[i][0];
-        q_val = q[i][0];
+        p_val = p[i];
+        q_val = q[i];
 
         abs_energy_error[i] = std::abs(std::pow(p_val, 2) + std::pow(q_val, 2) - 1);
     }
@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
 {
     test_invalid_parameters<double>();
     
-    // SHO Tests
+    // Simple Harmonic Oscillator Tests
     test_harmonic_oscillator<double>(1e-10, "Y6");
     test_harmonic_oscillator<double>(7e-4, "Y4");
     test_harmonic_oscillator<double>(7e-4, "Y2");

@@ -18,10 +18,64 @@
 
 namespace boost{ namespace math { namespace quadrature { namespace detail {
 
-template <typename RandomAccessContainer, class Func>
+template<typename...>
+using void_t = void;
+
+template<typename T, typename U, typename = void>
+struct has_plus : std::false_type {};
+
+template<typename T, typename U>
+struct has_plus<T, U, std::void_t<decltype(std::declval<T>() + std::declval<U>())> > : std::true_type {};
+
+template <typename T, typename U>
+typename std::enable_if<has_plus<T, U>::value, T>::type
+add(T x, U y) 
+{
+    return x + y;
+}
+
+template <typename T, typename U>
+typename std::enable_if<!has_plus<T, U>::value, T>::type
+add(T vec1, U vec2) 
+{
+    for (unsigned i=0; i < vec1.size(); i++)
+    {
+        vec1[i] = vec1[i] + vec2[i];
+    }
+    return vec1;
+}
+
+template<typename...>
+using void_t = void;
+
+template<typename T, typename U, typename = void>
+struct has_mult : std::false_type {};
+
+template<typename T, typename U>
+struct has_mult<T, U, std::void_t<decltype(std::declval<T>() * std::declval<U>())> > : std::true_type {};
+
+template <typename T, typename U>
+typename std::enable_if<has_mult<T, U>::value, T>::type
+mult_prefactor(T x, U prefactor) 
+{
+    return x * prefactor;
+}
+
+template <typename T, typename U>
+typename std::enable_if<!has_plus<T, U>::value, T>::type
+mult_prefactor(T vec1, U prefactor) 
+{
+    for (unsigned i=0; i < vec1.size(); i++)
+    {
+        vec1[i] = vec1[i] * prefactor;
+    }
+    return vec1;
+}
+
+template <typename RandomAccessContainer, typename RealType, class Func>
 std::pair<RandomAccessContainer, RandomAccessContainer> second_order_yoshida(const RandomAccessContainer p0, 
                                                                              const RandomAccessContainer q0, 
-                                                                             const typename RandomAccessContainer::value_type dt, 
+                                                                             const RealType dt, 
                                                                              Func dHdp, 
                                                                              Func dHdq)
 {
@@ -29,35 +83,31 @@ std::pair<RandomAccessContainer, RandomAccessContainer> second_order_yoshida(con
     RandomAccessContainer q = q0;
 
     // Half step in q
-    auto dHdp_val = dHdp(p);
-    for (unsigned i=0; i < q.size(); i++){
-        q[i] = q[i] + dt / 2 * dHdp_val[i];
-    }
+    RandomAccessContainer dHdp_val = dHdp(p);
+    RandomAccessContainer dq = mult_prefactor(dHdp_val, dt / 2);
+    q = add(q, dq);
 
     // Full step in p
-    auto dHdq_val = dHdq(q);
-    for (unsigned i=0; i < p.size(); i++){
-        p[i] = p[i] - dt * dHdq_val[i];
-    }
+    RandomAccessContainer dHdq_val = dHdq(q);
+    RandomAccessContainer dp = mult_prefactor(dHdq_val, -dt);
+    p = add(p, dp);
 
     // Half step in q
     dHdp_val = dHdp(p);
-    for (unsigned i=0; i < q.size(); i++){
-        q[i] = q[i] + dt / 2 * dHdp_val[i];
-    }
+    dq = mult_prefactor(dHdp_val, dt / 2);
+    q = add(q, dq);
 
     return std::make_pair(p, q);
 }
 
-template <typename RandomAccessContainer, class Func>
+template <typename RandomAccessContainer, typename RealType, class Func>
 std::pair<RandomAccessContainer, RandomAccessContainer> fourth_order_yoshida(const RandomAccessContainer p0, 
                                                                              const RandomAccessContainer q0, 
-                                                                             const typename RandomAccessContainer::value_type dt, 
+                                                                             const RealType dt, 
                                                                              Func dHdp, 
                                                                              Func dHdq)
 {
     BOOST_MATH_STD_USING
-    using RealType = typename RandomAccessContainer::value_type;
 
     RandomAccessContainer p = p0;
     RandomAccessContainer q = q0;
@@ -76,15 +126,13 @@ std::pair<RandomAccessContainer, RandomAccessContainer> fourth_order_yoshida(con
     return std::make_pair(p, q);
 }
 
-template <typename RandomAccessContainer, class Func>
+template <typename RandomAccessContainer, typename RealType, class Func>
 std::pair<RandomAccessContainer, RandomAccessContainer> sixth_order_yoshida(const RandomAccessContainer p0, 
                                                                             const RandomAccessContainer q0, 
-                                                                            const typename RandomAccessContainer::value_type dt, 
+                                                                            const RealType dt, 
                                                                             Func dHdp, 
                                                                             Func dHdq)
 {
-    using RealType = typename RandomAccessContainer::value_type;
-
     RandomAccessContainer p = p0;
     RandomAccessContainer q = q0;
     
@@ -109,16 +157,14 @@ std::pair<RandomAccessContainer, RandomAccessContainer> sixth_order_yoshida(cons
     return std::make_pair(p, q);
 }
 
-template <typename RandomAccessContainer, class Func>
+template <typename RandomAccessContainer, typename RealType, class Func>
 std::pair<RandomAccessContainer, RandomAccessContainer> SRKN_b_order_6(const RandomAccessContainer p0,
                                                                        const RandomAccessContainer q0,
-                                                                       const typename RandomAccessContainer::value_type dt, 
+                                                                       const RealType dt, 
                                                                        Func dHdp,
                                                                        Func dHdq)
 { // This method implements SRKN_b^6 in Table 3 here 
   // https://www.sciencedirect.com/science/article/pii/S0377042701004927
-
-    using RealType = typename RandomAccessContainer::value_type;
 
     RandomAccessContainer p = p0;
     RandomAccessContainer q = q0;
@@ -141,35 +187,32 @@ std::pair<RandomAccessContainer, RandomAccessContainer> SRKN_b_order_6(const Ran
         b = b_weights[i];
         a = a_weights[i];
         
-        auto dHdp_val = dHdp(p);
-        for (unsigned j=0; j < q.size(); j++){
-            q[j] = q[j] + b * dt * dHdp_val[j];
-        }
-        
-        auto dHdq_val = dHdq(q);
-        for (unsigned j=0; j < p.size(); j++){
-            p[j] = p[j] - a * dt * dHdq_val[j];
-        }
+        RandomAccessContainer dHdp_val = dHdp(p);
+        RandomAccessContainer dq = mult_prefactor(dHdp_val, dt * b);
+        q = add(q, dq);
+
+        RandomAccessContainer dHdq_val = dHdq(q);
+        RandomAccessContainer dp = mult_prefactor(dHdq_val, -a * dt);
+        p = add(p, dp);
     }
-    // Have to do one more step in p
-    auto dHdp_val = dHdp(p);
-    for (unsigned j=0; j < q.size(); j++){
-        q[j] = q[j] + b1 * dt * dHdp_val[j];
-    }
+    // Need to do one more step in q
+    RandomAccessContainer dHdp_val = dHdp(p);
+    RandomAccessContainer dq = mult_prefactor(dHdp_val, dt * b1);
+    q = add(q, dq);
+
     return std::make_pair(p, q);
 }
 
-template <typename RandomAccessContainer, class Func, class Policy>
+template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
 std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian_imp(const RandomAccessContainer p0,
                                                                                                              const RandomAccessContainer q0,
-                                                                                                             const typename RandomAccessContainer::value_type dt,
+                                                                                                             const RealType dt,
                                                                                                              const unsigned steps,
                                                                                                              Func dHdp,
                                                                                                              Func dHdq,
                                                                                                              std::string method,
                                                                                                              const Policy& pol)
 {
-    using RealType = typename RandomAccessContainer::value_type;
     // Not sure how to make this function string nicer
     static const char* function = "boost::math::quadrature::integrate_hamiltonian(p0, q0, %1%, steps, dHdp, dHdq)";
 
@@ -208,10 +251,10 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
 }
 } // namespace detail
 
-template <typename RandomAccessContainer, class Func, class Policy>
+template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
 std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer p0,
                                                                                                          const RandomAccessContainer q0,
-                                                                                                         const typename RandomAccessContainer::value_type dt,
+                                                                                                         const RealType dt,
                                                                                                          const unsigned steps,
                                                                                                          Func dHdp,
                                                                                                          Func dHdq,
@@ -221,10 +264,10 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
     return detail::integrate_hamiltonian_imp(p0, q0, dt, steps, dHdp, dHdq, method, pol); 
 }
 
-template <typename RandomAccessContainer, class Func>
+template <typename RandomAccessContainer, typename RealType, class Func>
 std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer p0,
                                                                                                          const RandomAccessContainer q0,
-                                                                                                         const typename RandomAccessContainer::value_type dt,
+                                                                                                         const RealType dt,
                                                                                                          const unsigned steps,
                                                                                                          Func dHdp,
                                                                                                          Func dHdq,
@@ -233,10 +276,10 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
     return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, method, boost::math::policies::policy<>()); 
 }
 
-template <typename RandomAccessContainer, class Func>
+template <typename RandomAccessContainer, typename RealType, class Func>
 std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer p0,
                                                                                                          const RandomAccessContainer q0,
-                                                                                                         const typename RandomAccessContainer::value_type dt,
+                                                                                                         const RealType dt,
                                                                                                          const unsigned steps,
                                                                                                          Func dHdp,
                                                                                                          Func dHdq)
