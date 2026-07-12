@@ -84,7 +84,7 @@ std::pair<RandomAccessContainer, RandomAccessContainer> second_order_yoshida(con
 
     // Half step in q
     RandomAccessContainer dHdp_val = dHdp(p);
-    RandomAccessContainer dq = mult_prefactor(dHdp_val, dt / 2);
+    RandomAccessContainer dq = mult_prefactor(dHdp_val, 0.5 * dt);
     q = add(q, dq);
 
     // Full step in p
@@ -94,7 +94,7 @@ std::pair<RandomAccessContainer, RandomAccessContainer> second_order_yoshida(con
 
     // Half step in q
     dHdp_val = dHdp(p);
-    dq = mult_prefactor(dHdp_val, dt / 2);
+    dq = mult_prefactor(dHdp_val, 0.5 * dt);
     q = add(q, dq);
 
     return std::make_pair(p, q);
@@ -113,8 +113,8 @@ std::pair<RandomAccessContainer, RandomAccessContainer> fourth_order_yoshida(con
     RandomAccessContainer q = q0;
 
     // RealType x0 = -(std::pow(2, 1/3) / (2 - std::pow(2, 1/3)));
-    RealType x1 = 1 / (2 - std::pow(2, 1/3));
-    RealType x0 = 1 - 2 * x1; 
+    RealType x1 = 1. / (2. - std::cbrt(2.));
+    RealType x0 = 1. - 2. * x1; 
 
     std::vector<RealType> weights = { x1, x0, x1 };
 
@@ -203,6 +203,57 @@ std::pair<RandomAccessContainer, RandomAccessContainer> SRKN_b_order_6(const Ran
     return std::make_pair(p, q);
 }
 
+template <typename RandomAccessContainer, typename RealType, class Func>
+std::pair<RandomAccessContainer, RandomAccessContainer> SRKN_b_order_11(const RandomAccessContainer p0,
+                                                                       const RandomAccessContainer q0,
+                                                                       const RealType dt, 
+                                                                       Func dHdp,
+                                                                       Func dHdq)
+{ // This method implements SRKN_b^11 in Table 3 here 
+  // https://www.sciencedirect.com/science/article/pii/S0377042701004927
+
+    RandomAccessContainer p = p0;
+    RandomAccessContainer q = q0;
+    
+    RealType b1 = static_cast<RealType>(0.0414649985182624);
+    RealType b2 = static_cast<RealType>(0.198128671918067);
+    RealType b3 = static_cast<RealType>(-0.0400061921041533);
+    RealType b4 = static_cast<RealType>(0.0752539843015807);
+    RealType b5 = static_cast<RealType>(-0.0115113874206879);
+    RealType b6 = 0.5 - (b1 + b2 + b3 + b4 + b5);
+
+    RealType a1 = static_cast<RealType>(0.123229775946271);
+    RealType a2 = static_cast<RealType>(0.290553797799558);
+    RealType a3 = static_cast<RealType>(-0.127049212625417);
+    RealType a4 = static_cast<RealType>(-0.246331761062075);
+    RealType a5 = static_cast<RealType>(0.357208872795928);
+    RealType a6 = 1. - 2. * (a1 + a2 + a3 + a4 + a5);
+
+    std::vector<RealType> b_weights = {b1, b2, b3, b4, b5, b6, b6, b5, b4, b3, b2};
+    std::vector<RealType> a_weights = {a1, a2, a3, a4, a5, a6, a5, a4, a3, a2, a1};
+    
+    RealType a, b;
+    for (unsigned int i=0; i < b_weights.size(); i++)
+    {
+        b = b_weights[i];
+        a = a_weights[i];
+        
+        RandomAccessContainer dHdp_val = dHdp(p);
+        RandomAccessContainer dq = mult_prefactor(dHdp_val, dt * b);
+        q = add(q, dq);
+
+        RandomAccessContainer dHdq_val = dHdq(q);
+        RandomAccessContainer dp = mult_prefactor(dHdq_val, -a * dt);
+        p = add(p, dp);
+    }
+    // Need to do one more step in q
+    RandomAccessContainer dHdp_val = dHdp(p);
+    RandomAccessContainer dq = mult_prefactor(dHdp_val, dt * b1);
+    q = add(q, dq);
+
+    return std::make_pair(p, q);
+}
+
 template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
 std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian_imp(const RandomAccessContainer p0,
                                                                                                              const RandomAccessContainer q0,
@@ -231,7 +282,8 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
     std::map<std::string, stepperType> m{{"Y6", sixth_order_yoshida}, 
                                          {"Y4", fourth_order_yoshida}, 
                                          {"Y2", second_order_yoshida},
-                                         {"SRKNB6", SRKN_b_order_6}};
+                                         {"SRKNB6", SRKN_b_order_6},
+                                         {"SRKNB11", SRKN_b_order_11}};
     stepperType stepper = m.at(method);
 
     std::vector<RandomAccessContainer> p(steps);
