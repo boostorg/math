@@ -58,8 +58,8 @@ std::vector<Real> hh_dHdq(std::vector<Real> q)
 {
     BOOST_MATH_STD_USING
     std::vector<Real> dHdq(q.size());
-    dHdq.at(0) = q.at(0) + 2 * q.at(0) * q.at(1); // x + 2*xy
-    dHdq.at(1) = q.at(1) + pow(q.at(1), 2.0) - pow(q.at(1), 2.0); // y + x^2 - y^2
+    dHdq[0] = q[0] + 2.0 * q[0] * q[1]; // x + 2*xy
+    dHdq[1] = q[1] + pow(q[0], 2.0) - pow(q[1], 2.0); // y + x^2 - y^2
     return dHdq;
 }
 
@@ -164,8 +164,8 @@ void test_hh_model(const RealType tol, const std::string method)
     RealType t_end = 100.;
     unsigned int steps = t_end / dt;
     
-    std::vector<RealType> q0 = {0.05, 0};
-    std::vector<RealType> p0 = {0, 0.025};
+    std::vector<RealType> q0 = {0.5, 0};
+    std::vector<RealType> p0 = {0, 0.25};
 
     RealType total_energy = hh_energy(p0, q0);
 
@@ -210,8 +210,9 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
     test_pendulum<double>(1e-8, "SRKNB6");
     test_pendulum<double>(1e-10, "SRKNB11");
 
-    // test_hh_model<double>(1e-16, "SRKNB11");
-    // test_hh_model<double>(5e-16, "Y4");
-    // test_hh_model<double>(5e-16, "Y2");
-    // test_hh_model<double>(1e-16, "SRKNB6");
+    test_hh_model<double>(1e-14, "SRKNB11");
+    test_hh_model<double>(1e-14, "Y6");
+    test_hh_model<double>(5e-11, "Y4");
+    test_hh_model<double>(5e-6, "Y2");
+    test_hh_model<double>(1e-13, "SRKNB6");
 }
