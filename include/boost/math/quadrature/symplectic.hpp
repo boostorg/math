@@ -25,7 +25,7 @@ template<typename T, typename U, typename = void>
 struct has_plus : std::false_type {};
 
 template<typename T, typename U>
-struct has_plus<T, U, std::void_t<decltype(std::declval<T>() + std::declval<U>())> > : std::true_type {};
+struct has_plus<T, U, void_t<decltype(std::declval<T>() + std::declval<U>())> > : std::true_type {};
 
 template <typename T, typename U>
 typename std::enable_if<has_plus<T, U>::value, T>::type
@@ -52,7 +52,7 @@ template<typename T, typename U, typename = void>
 struct has_mult : std::false_type {};
 
 template<typename T, typename U>
-struct has_mult<T, U, std::void_t<decltype(std::declval<T>() * std::declval<U>())> > : std::true_type {};
+struct has_mult<T, U, void_t<decltype(std::declval<T>() * std::declval<U>())> > : std::true_type {};
 
 template <typename T, typename U>
 typename std::enable_if<has_mult<T, U>::value, T>::type
