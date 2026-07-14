@@ -14,10 +14,7 @@
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/quadrature/symplectic.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <iostream>
-#ifdef BOOST_HAS_FLOAT128
-#include <boost/multiprecision/complex128.hpp>
-#endif
+#include <boost/multiprecision/cpp_bin_float.hpp>
 
 #if __has_include(<stdfloat>)
 #  include <stdfloat>
@@ -161,8 +158,7 @@ void test_hh_model(const RealType tol, const std::string method)
     BOOST_MATH_STD_USING
 
     RealType dt = 0.005;
-    RealType t_end = 100.;
-    unsigned int steps = t_end / dt;
+    unsigned int steps = 20000;
     
     std::vector<RealType> q0 = {0.5, 0};
     std::vector<RealType> p0 = {0, 0.25};
@@ -183,11 +179,10 @@ void test_hh_model(const RealType tol, const std::string method)
         p_val = p[i];
         q_val = q[i];
         
-        abs_energy_error[i] = std::abs(hh_energy(p_val, q_val) - total_energy);
+        abs_energy_error[i] = abs(hh_energy(p_val, q_val) - total_energy);
         sum += abs_energy_error[i];
     }
 
-    std::cout << std::setprecision(16) << sum / p.size() << std::endl;
     RealType max_error = *std::max_element(std::begin(abs_energy_error), std::end(abs_energy_error));
     BOOST_CHECK_LE(max_error, tol);
 }
@@ -196,6 +191,7 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
 {
     test_invalid_parameters<double>();
     
+    // Test doubles
     // Simple Harmonic Oscillator Tests
     test_harmonic_oscillator<double>(1e-10, "Y6");
     test_harmonic_oscillator<double>(7e-4, "Y4");
@@ -216,4 +212,14 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
     test_hh_model<double>(5e-11, "Y4");
     test_hh_model<double>(5e-6, "Y2");
     test_hh_model<double>(1e-13, "SRKNB6");
+
+    // Test floats
+    test_harmonic_oscillator<float>(6e-6, "Y6");
+    test_pendulum<float>(5e-6, "Y6");
+    test_hh_model<float>(5e-6, "Y6");
+
+    // Test long doubles
+    test_harmonic_oscillator<long double>(1e-10, "Y6");
+    test_pendulum<long double>(1e-10, "Y6");
+    test_hh_model<long double>(1e-14, "Y6");
 }
