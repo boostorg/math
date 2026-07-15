@@ -83,6 +83,17 @@ int main()
         BOOST_TEST_LT(interp, 4.1);
     }
 
+    // statistics and optimization
+    {
+        std::vector<double> data {1.0, 2.0, 3.0, 4.0, 5.0};
+        BOOST_TEST_EQ(boost::math::statistics::mean(data), 3.0);
+        BOOST_TEST_EQ(boost::math::statistics::median(data), 3.0);
+        boost::math::optimization::random_search_parameters<std::vector<double>> params {};
+        params.lower_bounds = {-1.0};
+        params.upper_bounds = {1.0};
+        static_cast<void>(params);
+    }
+
     // distributions
     {
         const boost::math::normal_distribution<> dist {};

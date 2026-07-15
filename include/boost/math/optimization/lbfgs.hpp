@@ -39,7 +39,7 @@ namespace optimization {
  *  pages 176-180
  *  algorithms 7.4/7.5
  *  */
-template<typename RealType>
+BOOST_MATH_EXPORT template<typename RealType>
 struct lbfgs_optimizer_state
 {
   size_t m = 10; // default history length
@@ -100,7 +100,7 @@ struct lbfgs_optimizer_state
 /** @brief> helper update for l-bfgs
  * x +=  alpha  * search direction
  * */
-template<typename RealType>
+BOOST_MATH_EXPORT template<typename RealType>
 struct lbfgs_update_policy
 {
   template<typename ArgumentType,
@@ -268,7 +268,7 @@ public:
   }
 };
 
-template<class Objective, typename ArgumentContainer>
+BOOST_MATH_EXPORT template<class Objective, typename ArgumentContainer>
 auto
 make_lbfgs(Objective&& obj, ArgumentContainer& x, std::size_t m = 10)
 {
@@ -290,7 +290,7 @@ make_lbfgs(Objective&& obj, ArgumentContainer& x, std::size_t m = 10)
         strong_wolfe_line_search_policy<RealType>{});
 }
 
-template<class Objective,
+BOOST_MATH_EXPORT template<class Objective,
          typename ArgumentContainer,
          class InitializationPolicy>
 auto
@@ -318,7 +318,7 @@ make_lbfgs(Objective&& obj,
     strong_wolfe_line_search_policy<RealType>{});
 }
 
-template<class Objective,
+BOOST_MATH_EXPORT template<class Objective,
          typename ArgumentContainer,
          class InitializationPolicy,
          class LineSearchPolicy>
@@ -348,7 +348,7 @@ make_lbfgs(Objective&& obj,
     std::forward<LineSearchPolicy>(lsp));
 }
 
-template<class Objective,
+BOOST_MATH_EXPORT template<class Objective,
          typename ArgumentContainer,
          class InitializationPolicy,
          class FunctionEvalPolicy,

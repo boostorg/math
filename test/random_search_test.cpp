@@ -5,9 +5,14 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/optimization/random_search.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 #include "test_functions_for_optimization.hpp"
-#include <boost/math/optimization/random_search.hpp>
 #include <random>
 #include <limits>
 using boost::math::optimization::random_search;

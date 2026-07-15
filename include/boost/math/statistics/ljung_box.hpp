@@ -16,7 +16,7 @@
 
 namespace boost::math::statistics {
 
-template<class RandomAccessIterator>
+BOOST_MATH_EXPORT template<class RandomAccessIterator>
 auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lags = -1, int64_t fit_dof = 0) {
     using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
     int64_t n = std::distance(begin, end);
@@ -63,7 +63,7 @@ auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lag
 }
 
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 auto ljung_box(RandomAccessContainer const & v, int64_t lags = -1, int64_t fit_dof = 0) {
     return ljung_box(v.begin(), v.end(), lags, fit_dof);
 }

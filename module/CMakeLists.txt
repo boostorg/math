@@ -71,6 +71,11 @@ set(BOOST_MATH_MODULE_TESTS
         git_issue_898
         cardinal_quadratic_b_spline_test
         whittaker_shannon_test
+        test_runs_test
+        linear_regression_test
+        ljung_box_test
+        differential_evolution_test
+        random_search_test
 )
 
 add_executable(module_quick_test "${CMAKE_CURRENT_SOURCE_DIR}/quick_test.cpp")

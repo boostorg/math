@@ -66,7 +66,7 @@ void validate_bounds(ArgumentContainer const &lower_bounds, ArgumentContainer co
   }
 }
 
-template <typename ArgumentContainer, class URBG>
+BOOST_MATH_TEST_EXPORT template <typename ArgumentContainer, class URBG>
 std::vector<ArgumentContainer> random_initial_population(ArgumentContainer const &lower_bounds,
                                                          ArgumentContainer const &upper_bounds,
                                                          size_t initial_population_size, URBG &&gen) {
@@ -114,7 +114,7 @@ std::vector<ArgumentContainer> random_initial_population(ArgumentContainer const
   return population;
 }
 
-template <typename ArgumentContainer>
+BOOST_MATH_TEST_EXPORT template <typename ArgumentContainer>
 void validate_initial_guess(ArgumentContainer const &initial_guess, ArgumentContainer const &lower_bounds,
                             ArgumentContainer const &upper_bounds) {
   using std::isfinite;
@@ -146,7 +146,7 @@ void validate_initial_guess(ArgumentContainer const &initial_guess, ArgumentCont
 }
 
 // Return indices corresponding to the minimum function values.
-template <typename Real> std::vector<size_t> best_indices(std::vector<Real> const &function_values) {
+BOOST_MATH_TEST_EXPORT template <typename Real> std::vector<size_t> best_indices(std::vector<Real> const &function_values) {
   using std::isnan;
   const size_t n = function_values.size();
   std::vector<size_t> indices(n);

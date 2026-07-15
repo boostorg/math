@@ -5,11 +5,16 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/statistics/ljung_box.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 #include <numeric>
 #include <utility>
 #include <random>
-#include <boost/math/statistics/ljung_box.hpp>
 
 using boost::math::statistics::ljung_box;
 

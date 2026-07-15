@@ -7,7 +7,9 @@
 #ifndef TEST_FUNCTIONS_FOR_OPTIMIZATION_HPP
 #define TEST_FUNCTIONS_FOR_OPTIMIZATION_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/constants/constants.hpp>
+#endif
 
 #include <array>
 #include <vector>

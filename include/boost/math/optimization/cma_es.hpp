@@ -40,7 +40,7 @@
 
 namespace boost::math::optimization {
 
-template <typename ArgumentContainer> struct cma_es_parameters {
+BOOST_MATH_EXPORT template <typename ArgumentContainer> struct cma_es_parameters {
   using Real = typename ArgumentContainer::value_type;
   using DimensionlessReal = decltype(Real()/Real());
   ArgumentContainer lower_bounds;
@@ -55,7 +55,7 @@ template <typename ArgumentContainer> struct cma_es_parameters {
   DimensionlessReal learning_rate = 1;
 };
 
-template <typename ArgumentContainer>
+BOOST_MATH_EXPORT template <typename ArgumentContainer>
 void validate_cma_es_parameters(cma_es_parameters<ArgumentContainer> &params) {
   using Real = typename ArgumentContainer::value_type;
   using DimensionlessReal = decltype(Real()/Real());
@@ -86,7 +86,7 @@ void validate_cma_es_parameters(cma_es_parameters<ArgumentContainer> &params) {
   }
 }
 
-template <typename ArgumentContainer, class Func, class URBG>
+BOOST_MATH_EXPORT template <typename ArgumentContainer, class Func, class URBG>
 ArgumentContainer cma_es(
     const Func cost_function,
     cma_es_parameters<ArgumentContainer> &params,

@@ -6,13 +6,18 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/statistics/linear_regression.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 #include <vector>
 #include <random>
 #include <utility>
 #include <tuple>
 #include <algorithm>
-#include <boost/math/statistics/linear_regression.hpp>
 
 using boost::math::statistics::simple_ordinary_least_squares;
 using boost::math::statistics::simple_ordinary_least_squares_with_R_squared;

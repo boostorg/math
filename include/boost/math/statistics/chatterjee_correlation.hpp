@@ -162,14 +162,14 @@ ReturnType chatterjee_correlation_mnn_seq_impl(ForwardIterator u_begin, ForwardI
 
 } // Namespace detail
 
-template <typename Container, typename Real = typename Container::value_type,
+BOOST_MATH_EXPORT template <typename Container, typename Real = typename Container::value_type,
           typename ReturnType = typename std::conditional<std::is_integral<Real>::value, double, Real>::type>
 inline ReturnType chatterjee_correlation(const Container& u, const Container& v)
 {
     return detail::chatterjee_correlation_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v));
 }
 
-template <typename Container, typename Real = typename Container::value_type,
+BOOST_MATH_EXPORT template <typename Container, typename Real = typename Container::value_type,
           typename ReturnType = typename std::conditional<std::is_integral<Real>::value, double, Real>::type>
 inline ReturnType chatterjee_correlation_mnn(const Container& u, const Container& v, std::size_t M)
 {
@@ -292,7 +292,7 @@ ReturnType chatterjee_correlation_mnn_par_impl(ExecutionPolicy&& exec, ForwardIt
 
 } // Namespace detail
 
-template <typename ExecutionPolicy, typename Container, typename Real = typename Container::value_type,
+BOOST_MATH_EXPORT template <typename ExecutionPolicy, typename Container, typename Real = typename Container::value_type,
           typename ReturnType = std::conditional_t<std::is_integral_v<Real>, double, Real>>
 inline ReturnType chatterjee_correlation(ExecutionPolicy&& exec, const Container& u, const Container& v)
 {
@@ -309,7 +309,7 @@ inline ReturnType chatterjee_correlation(ExecutionPolicy&& exec, const Container
     }
 }
 
-template <typename ExecutionPolicy, typename Container, typename Real = typename Container::value_type,
+BOOST_MATH_EXPORT template <typename ExecutionPolicy, typename Container, typename Real = typename Container::value_type,
           typename ReturnType = std::conditional_t<std::is_integral_v<Real>, double, Real>>
 inline ReturnType chatterjee_correlation_mnn(ExecutionPolicy&& exec, const Container& u, const Container& v, std::size_t M)
 {
