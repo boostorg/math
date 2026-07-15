@@ -6,7 +6,11 @@
 #ifndef BOOST_MATH_DIFFERENTIATION_AUTODIFF_HPP
 #define BOOST_MATH_DIFFERENTIATION_AUTODIFF_HPP
 
+// cstdfloat is outside the module surface and textually includes standard
+// library headers, which must not enter the module purview.
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/cstdfloat.hpp>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/special_functions/round.hpp>
