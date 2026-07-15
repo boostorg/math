@@ -18,7 +18,7 @@ namespace boost::math::interpolators::detail {
 
 
 template <class RandomAccessContainer>
-static inline RandomAccessContainer& get_bezier_storage()
+inline RandomAccessContainer& get_bezier_storage()
 {
     static thread_local RandomAccessContainer the_storage;
     return the_storage;

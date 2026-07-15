@@ -1257,7 +1257,7 @@ namespace boost
         BOOST_OCTONION_MEMBER_DIV_GENERATOR(type)
 
 
-        BOOST_MATH_EXPORT template<>
+        template<>
         class octonion<float>
         {
         public:
@@ -1315,7 +1315,7 @@ namespace boost
         };
 
 
-        BOOST_MATH_EXPORT template<>
+        template<>
         class octonion<double>
         {
         public:
@@ -1375,7 +1375,7 @@ namespace boost
         };
 
 
-        BOOST_MATH_EXPORT template<>
+        template<>
         class octonion<long double>
         {
         public:

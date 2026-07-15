@@ -80,6 +80,15 @@ set(BOOST_MATH_MODULE_TESTS
         octonion_test_simple
 )
 
+# GCC 15 compiles the module itself, but libstdc++ cannot yet mix the textual
+# standard library includes the test sources use with import std in the same
+# consumer translation unit, so only the quick test runs there. The full list
+# runs under clang/libc++.
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    message(STATUS "Boost.Math module: GCC consumer tests limited to module_quick_test")
+    set(BOOST_MATH_MODULE_TESTS)
+endif()
+
 # octonion_test_simple additionally uses Boost.MPL textually
 set(BOOST_MATH_MODULE_EXTRA_LIBS_octonion_test_simple Boost::mpl)
 

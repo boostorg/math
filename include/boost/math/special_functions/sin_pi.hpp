@@ -110,7 +110,7 @@ BOOST_MATH_GPU_ENABLED auto sin_pi(T x)
    return ::sinpi(x);
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 BOOST_MATH_GPU_ENABLED auto sin_pi(float x)
 {
    return ::sinpif(x);

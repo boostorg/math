@@ -1282,7 +1282,7 @@ BOOST_MATH_GPU_ENABLED auto erf(T x)
    return ::erf(x);
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 BOOST_MATH_GPU_ENABLED auto erf(float x)
 {
    return ::erff(x);
@@ -1306,7 +1306,7 @@ BOOST_MATH_GPU_ENABLED auto erfc(T x)
    return ::erfc(x);
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 BOOST_MATH_GPU_ENABLED auto erfc(float x)
 {
    return ::erfcf(x);

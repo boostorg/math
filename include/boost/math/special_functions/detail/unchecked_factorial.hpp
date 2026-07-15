@@ -204,7 +204,7 @@ BOOST_MATH_GPU_ENABLED inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecke
 
 #endif
 
-BOOST_MATH_EXPORT template <>
+template <>
 struct max_factorial<float>
 {
    static constexpr unsigned value = 34;
@@ -579,7 +579,7 @@ BOOST_MATH_GPU_ENABLED inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION double uncheck
    return unchecked_factorial_data<double>::factorials[i];
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 struct max_factorial<double>
 {
    static constexpr unsigned value = 170;
@@ -631,7 +631,7 @@ BOOST_MATH_GPU_ENABLED inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION double uncheck
    return factorials[i];
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 struct max_factorial<double>
 {
    static constexpr unsigned value = 34;
@@ -1008,7 +1008,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION long double unchecked_factorial<long 
    return unchecked_factorial_data<long double>::factorials[i];
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 struct max_factorial<long double>
 {
    static constexpr unsigned value = 170;
@@ -1383,7 +1383,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION BOOST_MATH_FLOAT128_TYPE unchecked_fa
    return unchecked_factorial_data<BOOST_MATH_FLOAT128_TYPE>::factorials[i];
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 struct max_factorial<BOOST_MATH_FLOAT128_TYPE>
 {
    static constexpr unsigned value = 170;

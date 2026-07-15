@@ -2428,7 +2428,7 @@ constexpr std::array<std::uint16_t, 3458> prime_data_imp<b>::a3;
       return boost::math::prime(n, boost::math::policies::policy<>());
    }
 
-   static const unsigned max_prime = 9999;
+   BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR unsigned max_prime = 9999;
 
 }} // namespace boost and math
 

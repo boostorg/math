@@ -70,7 +70,7 @@ namespace boost{
       }
 
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && (LDBL_MAX_EXP <= DBL_MAX_EXP)
-      BOOST_MATH_EXPORT template <>
+      template <>
       inline boost::math::tools::promote_args<double, double>::type relative_difference(const double& arg_a, const double& arg_b)
       {
          BOOST_MATH_STD_USING

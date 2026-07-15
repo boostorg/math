@@ -219,7 +219,7 @@ BOOST_MATH_GPU_ENABLED T copysign(T x, T y)
     return ::copysign(x, y);
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 BOOST_MATH_GPU_ENABLED float copysign(float x, float y)
 {
     return ::copysignf(x, y);

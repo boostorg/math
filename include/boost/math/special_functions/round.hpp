@@ -257,7 +257,7 @@ BOOST_MATH_GPU_ENABLED T round(T x)
    return ::round(x);
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 BOOST_MATH_GPU_ENABLED float round(float x)
 {
    return ::roundf(x);
@@ -281,7 +281,7 @@ BOOST_MATH_GPU_ENABLED int iround(T x)
    return static_cast<int>(::lround(x));
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 BOOST_MATH_GPU_ENABLED int iround(float x)
 {
    return static_cast<int>(::lroundf(x));
@@ -305,7 +305,7 @@ BOOST_MATH_GPU_ENABLED long lround(T x)
    return ::lround(x);
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 BOOST_MATH_GPU_ENABLED long lround(float x)
 {
    return ::lroundf(x);
@@ -329,7 +329,7 @@ BOOST_MATH_GPU_ENABLED long long llround(T x)
    return ::llround(x);
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 BOOST_MATH_GPU_ENABLED long long llround(float x)
 {
    return ::llroundf(x);

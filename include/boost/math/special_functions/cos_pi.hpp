@@ -103,7 +103,7 @@ BOOST_MATH_GPU_ENABLED auto cos_pi(T x)
    return ::cospi(x);
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 BOOST_MATH_GPU_ENABLED auto cos_pi(float x)
 {
    return ::cospif(x);

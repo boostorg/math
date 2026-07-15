@@ -7,12 +7,16 @@
 
 #include <boost/core/lightweight_test.hpp>
 
+// The FP_ classification macros do not cross module boundaries, so <cmath>
+// is always included textually (before any import, which is the include
+// ordering both libstdc++ and libc++ support).
+#include <cmath>
+
 // Import the STL if we can
 #if defined(__cpp_lib_modules) && __cpp_lib_modules >= 202207L
 import std;
 #else
 #include <iostream>
-#include <cmath>
 #include <vector>
 #include <complex>
 #include <limits>

@@ -897,3 +897,68 @@ jobs:
             ..
           cmake --build . --target tests
           ctest --output-on-failure --no-tests=error
+
+  cmake-module-test-gcc:
+    strategy:
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+
+    # GCC 15 (the first release with import std support and
+    # libstdc++.modules.json) is not packaged for the runner image, so the job
+    # runs in a container that ships it.
+    container: ubuntu:26.04
+
+    env:
+      GCC_VERSION: "15"
+      # Pinned so the experimental `import std` feature UUID below stays valid.
+      CMAKE_VERSION: 4.4.0
+      # CMake gates `import std` behind this UUID; it is specific to the CMake version.
+      IMPORT_STD_UUID: f35a9ac6-8463-4d38-8eec-5d6008153e7d
+
+    steps:
+      - name: Install toolchain
+        run: |
+          apt-get update
+          apt-get install -y g++-$GCC_VERSION gcc-$GCC_VERSION ninja-build wget ca-certificates git python3
+          wget -q https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-linux-x86_64.tar.gz
+          tar -xzf cmake-$CMAKE_VERSION-linux-x86_64.tar.gz -C /opt
+          echo "/opt/cmake-$CMAKE_VERSION-linux-x86_64/bin" >> "$GITHUB_PATH"
+
+      - uses: actions/checkout@v6
+
+      - name: Setup Boost
+        run: |
+          echo GITHUB_REPOSITORY: $GITHUB_REPOSITORY
+          LIBRARY=${GITHUB_REPOSITORY#*/}
+          echo LIBRARY: $LIBRARY
+          echo "LIBRARY=$LIBRARY" >> $GITHUB_ENV
+          echo GITHUB_BASE_REF: $GITHUB_BASE_REF
+          echo GITHUB_REF: $GITHUB_REF
+          REF=${GITHUB_BASE_REF:-$GITHUB_REF}
+          REF=${REF#refs/heads/}
+          echo REF: $REF
+          BOOST_BRANCH=develop && [ "$REF" == "master" ] && BOOST_BRANCH=master || true
+          echo BOOST_BRANCH: $BOOST_BRANCH
+          cd ..
+          git clone -b $BOOST_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
+          cd boost-root
+          mkdir -p libs/$LIBRARY
+          cp -r $GITHUB_WORKSPACE/* libs/$LIBRARY
+          git submodule update --init tools/boostdep
+          python3 tools/boostdep/depinst/depinst.py --git_args "--jobs 3" $LIBRARY
+
+      - name: Build with the standard library module and boost.math module, then test
+        run: |
+          cd ../boost-root
+          mkdir __build__ && cd __build__
+          cmake -G Ninja \
+            -DBOOST_INCLUDE_LIBRARIES=$LIBRARY \
+            -DBUILD_TESTING=ON \
+            -DBOOST_MATH_BUILD_MODULE=ON \
+            -DCMAKE_C_COMPILER=gcc-$GCC_VERSION \
+            -DCMAKE_CXX_COMPILER=g++-$GCC_VERSION \
+            -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD=$IMPORT_STD_UUID \
+            ..
+          cmake --build . --target tests
+          ctest --output-on-failure --no-tests=error

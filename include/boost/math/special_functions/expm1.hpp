@@ -388,7 +388,7 @@ BOOST_MATH_GPU_ENABLED auto expm1(T x)
    return ::expm1(x);
 }
 
-BOOST_MATH_EXPORT template <>
+template <>
 BOOST_MATH_GPU_ENABLED auto expm1(float x)
 {
    return ::expm1f(x);
