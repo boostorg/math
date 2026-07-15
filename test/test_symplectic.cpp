@@ -222,4 +222,7 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
     test_harmonic_oscillator<long double>(1e-10, "Y6");
     test_pendulum<long double>(1e-10, "Y6");
     test_hh_model<long double>(1e-14, "Y6");
+
+    // Test multiprecision
+    test_hh_model<boost::multiprecision::cpp_bin_float_quad>(1e-16, "Y6");
 }
