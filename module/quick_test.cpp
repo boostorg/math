@@ -52,5 +52,18 @@ int main()
         BOOST_TEST_LT(bessel_value, 0.77);
     }
 
+    // distributions
+    {
+        const boost::math::normal_distribution<> dist {};
+        BOOST_TEST_EQ(boost::math::cdf(dist, 0.0), 0.5);
+        BOOST_TEST_EQ(boost::math::median(dist), 0.0);
+        BOOST_TEST_EQ(boost::math::cdf(boost::math::complement(dist, 0.0)), 0.5);
+        const boost::math::students_t st {5.0};
+        BOOST_TEST_GT(boost::math::pdf(st, 0.0), 0.37);
+        const auto q {boost::math::quantile(boost::math::binomial(50, 0.5), 0.5)};
+        BOOST_TEST_GT(q, 24.0);
+        BOOST_TEST_LT(q, 26.0);
+    }
+
     return boost::report_errors();
 }

@@ -126,6 +126,9 @@ import std;
 // Special functions (umbrella)
 #include <boost/math/special_functions.hpp>
 
+// Statistical distributions (umbrella)
+#include <boost/math/distributions.hpp>
+
 #ifdef _MSC_VER
 #  pragma warning( pop )
 #elif defined(__clang__)

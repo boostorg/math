@@ -57,7 +57,7 @@ namespace boost{ namespace math{
 
   } // namespace detail
 
-  template <class RealType = double, class Policy = policies::policy<> >
+  BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
   class skew_normal_distribution
   {
   public:
@@ -100,18 +100,18 @@ namespace boost{ namespace math{
     RealType shape_;    // distribution shape.
   }; // class skew_normal_distribution
 
-  typedef skew_normal_distribution<double> skew_normal;
+  BOOST_MATH_EXPORT typedef skew_normal_distribution<double> skew_normal;
 
   #ifdef __cpp_deduction_guides
-  template <class RealType>
+  BOOST_MATH_EXPORT template <class RealType>
   skew_normal_distribution(RealType)->skew_normal_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-  template <class RealType>
+  BOOST_MATH_EXPORT template <class RealType>
   skew_normal_distribution(RealType,RealType)->skew_normal_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-  template <class RealType>
+  BOOST_MATH_EXPORT template <class RealType>
   skew_normal_distribution(RealType,RealType,RealType)->skew_normal_distribution<typename boost::math::tools::promote_args<RealType>::type>;
   #endif
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   inline const std::pair<RealType, RealType> range(const skew_normal_distribution<RealType, Policy>& /*dist*/)
   { // Range of permissible values for random variable x.
     using boost::math::tools::max_value;
@@ -120,7 +120,7 @@ namespace boost{ namespace math{
        std::numeric_limits<RealType>::has_infinity ? std::numeric_limits<RealType>::infinity() : max_value<RealType>()); // - to + max value.
   }
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   inline const std::pair<RealType, RealType> support(const skew_normal_distribution<RealType, Policy>& /*dist*/)
   { // Range of supported values for random variable x.
     // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -129,7 +129,7 @@ namespace boost{ namespace math{
     return std::pair<RealType, RealType>(-max_value<RealType>(),  max_value<RealType>()); // - to + max value.
   }
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   inline RealType pdf(const skew_normal_distribution<RealType, Policy>& dist, const RealType& x)
   {
     const RealType scale = dist.scale();
@@ -174,7 +174,7 @@ namespace boost{ namespace math{
     return result;
   } // pdf
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   inline RealType cdf(const skew_normal_distribution<RealType, Policy>& dist, const RealType& x)
   {
     const RealType scale = dist.scale();
@@ -223,7 +223,7 @@ namespace boost{ namespace math{
     return result;
   } // cdf
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   inline RealType cdf(const complemented2_type<skew_normal_distribution<RealType, Policy>, RealType>& c)
   {
     const RealType scale = c.dist.scale();
@@ -283,7 +283,7 @@ namespace boost{ namespace math{
     return dist.shape();
   }
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   inline RealType mean(const skew_normal_distribution<RealType, Policy>& dist)
   {
     BOOST_MATH_STD_USING  // for ADL of std functions
@@ -297,7 +297,7 @@ namespace boost{ namespace math{
     return dist.location() + dist.scale() * dist.shape() / sqrt(pi<RealType>()+pi<RealType>()*dist.shape()*dist.shape()) * root_two<RealType>();
   }
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   inline RealType variance(const skew_normal_distribution<RealType, Policy>& dist)
   {
     using namespace boost::math::constants;
@@ -460,7 +460,7 @@ namespace boost{ namespace math{
 
   } // namespace detail
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   inline RealType mode(const skew_normal_distribution<RealType, Policy>& dist)
   {
     const RealType scale = dist.scale();
@@ -586,7 +586,7 @@ namespace boost{ namespace math{
 
 
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   inline RealType skewness(const skew_normal_distribution<RealType, Policy>& dist)
   {
     BOOST_MATH_STD_USING  // for ADL of std functions
@@ -599,13 +599,13 @@ namespace boost{ namespace math{
       pow(static_cast<RealType>(1)-two_div_pi<RealType>()*delta*delta, static_cast<RealType>(1.5)));
   }
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   inline RealType kurtosis(const skew_normal_distribution<RealType, Policy>& dist)
   {
     return kurtosis_excess(dist)+static_cast<RealType>(3);
   }
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   inline RealType kurtosis_excess(const skew_normal_distribution<RealType, Policy>& dist)
   {
     using namespace boost::math::constants;
@@ -620,7 +620,7 @@ namespace boost{ namespace math{
     return factor * y*y / (x*x);
   }
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   inline RealType quantile(const skew_normal_distribution<RealType, Policy>& dist, const RealType& p)
   {
     const RealType scale = dist.scale();
@@ -722,7 +722,7 @@ namespace boost{ namespace math{
     return result;
   } // quantile
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   inline RealType quantile(const complemented2_type<skew_normal_distribution<RealType, Policy>, RealType>& c)
   {
     const RealType scale = c.dist.scale();

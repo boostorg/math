@@ -34,7 +34,7 @@
 #endif
 
 namespace boost { namespace math {
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 class saspoint5_distribution;
 
 namespace detail {
@@ -2606,7 +2606,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_entropy_imp(const saspoint5_dis
 
 } // detail
 
-template <class RealType = double, class Policy = policies::policy<> >
+BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
 class saspoint5_distribution
 {
     public:
@@ -2636,16 +2636,16 @@ class saspoint5_distribution
     RealType c;     // The scale parameter.
 };
 
-typedef saspoint5_distribution<double> saspoint5;
+BOOST_MATH_EXPORT typedef saspoint5_distribution<double> saspoint5;
 
 #ifdef __cpp_deduction_guides
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 saspoint5_distribution(RealType) -> saspoint5_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 saspoint5_distribution(RealType, RealType) -> saspoint5_distribution<typename boost::math::tools::promote_args<RealType>::type>;
 #endif
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const saspoint5_distribution<RealType, Policy>&)
 { // Range of permissible values for random variable x.
     BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
@@ -2659,7 +2659,7 @@ BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(
     }
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const saspoint5_distribution<RealType, Policy>&)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -2674,37 +2674,37 @@ BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> suppor
     }
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType pdf(const saspoint5_distribution<RealType, Policy>& dist, const RealType& x)
 {
     return detail::saspoint5_pdf_imp(dist, x);
 } // pdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const saspoint5_distribution<RealType, Policy>& dist, const RealType& x)
 {
     return detail::saspoint5_cdf_imp(dist, x, false);
 } // cdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const saspoint5_distribution<RealType, Policy>& dist, const RealType& p)
 {
     return detail::saspoint5_quantile_imp(dist, p, false);
 } // quantile
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<saspoint5_distribution<RealType, Policy>, RealType>& c)
 {
     return detail::saspoint5_cdf_imp(c.dist, c.param, true);
 } //  cdf complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<saspoint5_distribution<RealType, Policy>, RealType>& c)
 {
     return detail::saspoint5_quantile_imp(c.dist, c.param, true);
 } // quantile complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mean(const saspoint5_distribution<RealType, Policy> &dist)
 {
     // There is no mean:
@@ -2718,7 +2718,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mean(const saspoint5_distribution<RealTyp
         boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType variance(const saspoint5_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no variance:
@@ -2732,19 +2732,19 @@ BOOST_MATH_GPU_ENABLED inline RealType variance(const saspoint5_distribution<Rea
         boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mode(const saspoint5_distribution<RealType, Policy>& dist)
 {
     return dist.location();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType median(const saspoint5_distribution<RealType, Policy>& dist)
 {
     return dist.location();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType skewness(const saspoint5_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no skewness:
@@ -2758,7 +2758,7 @@ BOOST_MATH_GPU_ENABLED inline RealType skewness(const saspoint5_distribution<Rea
         boost::math::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const saspoint5_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no kurtosis:
@@ -2772,7 +2772,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const saspoint5_distribution<Rea
         boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const saspoint5_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no kurtosis excess:
@@ -2786,7 +2786,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const saspoint5_distribut
         boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType entropy(const saspoint5_distribution<RealType, Policy>& dist)
 {
     return detail::saspoint5_entropy_imp(dist);

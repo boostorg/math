@@ -45,7 +45,7 @@ namespace detail
 } // namespace detail
 
 
-template <class RealType = double, class Policy = policies::policy<> >
+BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
 class lognormal_distribution
 {
 public:
@@ -77,23 +77,23 @@ private:
    RealType m_scale;     // distribution scale.
 };
 
-typedef lognormal_distribution<double> lognormal;
+BOOST_MATH_EXPORT typedef lognormal_distribution<double> lognormal;
 
 #ifdef __cpp_deduction_guides
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 lognormal_distribution(RealType)->lognormal_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 lognormal_distribution(RealType,RealType)->lognormal_distribution<typename boost::math::tools::promote_args<RealType>::type>;
 #endif
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const lognormal_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x is >0 to +infinity.
    using boost::math::tools::max_value;
    return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const lognormal_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -101,7 +101,7 @@ BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> suppor
    return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED RealType pdf(const lognormal_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -132,7 +132,7 @@ BOOST_MATH_GPU_ENABLED RealType pdf(const lognormal_distribution<RealType, Polic
    return result;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const lognormal_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -154,7 +154,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const lognormal_distribution<RealType
    return cdf(norm, log(x));
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const lognormal_distribution<RealType, Policy>& dist, const RealType& p)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -178,7 +178,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const lognormal_distribution<Rea
    return exp(quantile(norm, p));
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<lognormal_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -200,7 +200,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<lognormal_di
    return cdf(complement(norm, log(c.param)));
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<lognormal_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -224,7 +224,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<lognorm
    return exp(quantile(complement(norm, c.param)));
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mean(const lognormal_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -241,7 +241,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mean(const lognormal_distribution<RealTyp
    return exp(mu + sigma * sigma / 2);
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType variance(const lognormal_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -258,7 +258,7 @@ BOOST_MATH_GPU_ENABLED inline RealType variance(const lognormal_distribution<Rea
    return boost::math::expm1(sigma * sigma, Policy()) * exp(2 * mu + sigma * sigma);
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mode(const lognormal_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -275,7 +275,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mode(const lognormal_distribution<RealTyp
    return exp(mu - sigma * sigma);
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType median(const lognormal_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -283,7 +283,7 @@ BOOST_MATH_GPU_ENABLED inline RealType median(const lognormal_distribution<RealT
    return exp(mu); // e^mu
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType skewness(const lognormal_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -303,7 +303,7 @@ BOOST_MATH_GPU_ENABLED inline RealType skewness(const lognormal_distribution<Rea
    return (ess + 2) * sqrt(boost::math::expm1(ss, Policy()));
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const lognormal_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -321,7 +321,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const lognormal_distribution<Rea
    return exp(4 * ss) + 2 * exp(3 * ss) + 3 * exp(2 * ss) - 3;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const lognormal_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -339,7 +339,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const lognormal_distribut
    return exp(4 * ss) + 2 * exp(3 * ss) + 3 * exp(2 * ss) - 6;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType entropy(const lognormal_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING

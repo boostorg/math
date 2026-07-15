@@ -3,9 +3,14 @@
 // Boost Software License, Version 1.0. (See accompanying file
 // LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/distributions/binomial.hpp>
+#else
+import boost.math;
+#endif
+
 #include <array>
 #include <numeric>
-#include <boost/math/distributions/binomial.hpp>
 #include "math_unit_test.hpp"
 
 int main()

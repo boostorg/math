@@ -31,7 +31,7 @@ namespace boost
    namespace math
    {
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       class non_central_beta_distribution;
 
       namespace detail{
@@ -716,7 +716,7 @@ namespace boost
 
       } // namespace detail
 
-      template <class RealType = double, class Policy = policies::policy<> >
+      BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
       class non_central_beta_distribution
       {
       public:
@@ -759,23 +759,23 @@ namespace boost
          RealType ncp; // non-centrality parameter
       }; // template <class RealType, class Policy> class non_central_beta_distribution
 
-      typedef non_central_beta_distribution<double> non_central_beta; // Reserved name of type double.
+      BOOST_MATH_EXPORT typedef non_central_beta_distribution<double> non_central_beta; // Reserved name of type double.
 
       #ifdef __cpp_deduction_guides
-      template <class RealType>
+      BOOST_MATH_EXPORT template <class RealType>
       non_central_beta_distribution(RealType,RealType,RealType)->non_central_beta_distribution<typename boost::math::tools::promote_args<RealType>::type>;
       #endif
 
       // Non-member functions to give properties of the distribution.
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const non_central_beta_distribution<RealType, Policy>& /* dist */)
       { // Range of permissible values for random variable k.
          using boost::math::tools::max_value;
          return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const non_central_beta_distribution<RealType, Policy>& /* dist */)
       { // Range of supported values for random variable k.
          // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -783,7 +783,7 @@ namespace boost
          return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline RealType mode(const non_central_beta_distribution<RealType, Policy>& dist)
       { // mode.
          constexpr auto function = "mode(non_central_beta_distribution<%1%> const&)";
@@ -820,7 +820,7 @@ namespace boost
       // prototypes retained so we can fill in the blanks
       // later:
       //
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline RealType mean(const non_central_beta_distribution<RealType, Policy>& dist)
       {
          BOOST_MATH_STD_USING
@@ -831,7 +831,7 @@ namespace boost
          return exp(-d / 2) * a * detail::hypergeometric_2F2<RealType, Policy>(1 + a, apb, a, 1 + apb, d / 2, Policy()) / apb;
       } // mean
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline RealType variance(const non_central_beta_distribution<RealType, Policy>& dist)
       { 
          //
@@ -851,7 +851,7 @@ namespace boost
 
       // RealType standard_deviation(const non_central_beta_distribution<RealType, Policy>& dist)
       // standard_deviation provided by derived accessors.
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline RealType skewness(const non_central_beta_distribution<RealType, Policy>& /*dist*/)
       { // skewness = sqrt(l).
          const char* function = "boost::math::non_central_beta_distribution<%1%>::skewness()";
@@ -862,7 +862,7 @@ namespace boost
             boost::math::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?  LCOV_EXCL_LINE
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const non_central_beta_distribution<RealType, Policy>& /*dist*/)
       {
          const char* function = "boost::math::non_central_beta_distribution<%1%>::kurtosis_excess()";
@@ -873,19 +873,19 @@ namespace boost
             boost::math::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?  LCOV_EXCL_LINE
       } // kurtosis_excess
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const non_central_beta_distribution<RealType, Policy>& dist)
       {
          return kurtosis_excess(dist) + 3;
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline RealType pdf(const non_central_beta_distribution<RealType, Policy>& dist, const RealType& x)
       { // Probability Density/Mass Function.
          return detail::nc_beta_pdf(dist, x);
       } // pdf
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED RealType cdf(const non_central_beta_distribution<RealType, Policy>& dist, const RealType& x)
       {
          const char* function = "boost::math::non_central_beta_distribution<%1%>::cdf(%1%)";
@@ -920,7 +920,7 @@ namespace boost
          return detail::non_central_beta_cdf(x, RealType(1 - x), a, b, l, false, Policy());
       } // cdf
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED RealType cdf(const complemented2_type<non_central_beta_distribution<RealType, Policy>, RealType>& c)
       { // Complemented Cumulative Distribution Function
          const char* function = "boost::math::non_central_beta_distribution<%1%>::cdf(%1%)";
@@ -957,13 +957,13 @@ namespace boost
          return detail::non_central_beta_cdf(x, RealType(1 - x), a, b, l, true, Policy());
       } // ccdf
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline RealType quantile(const non_central_beta_distribution<RealType, Policy>& dist, const RealType& p)
       { // Quantile (or Percent Point) function.
          return detail::nc_beta_quantile(dist, p, false);
       } // quantile
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<non_central_beta_distribution<RealType, Policy>, RealType>& c)
       { // Quantile (or Percent Point) function.
          return detail::nc_beta_quantile(c.dist, c.param, true);

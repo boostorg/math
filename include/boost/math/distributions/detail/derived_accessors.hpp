@@ -45,24 +45,24 @@
 
 namespace boost{ namespace math{
 
-template <class Distribution>
+BOOST_MATH_EXPORT template <class Distribution>
 BOOST_MATH_GPU_ENABLED typename Distribution::value_type variance(const Distribution& dist);
 
-template <class Distribution>
+BOOST_MATH_EXPORT template <class Distribution>
 BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type standard_deviation(const Distribution& dist)
 {
    BOOST_MATH_STD_USING  // ADL of sqrt.
    return sqrt(variance(dist));
 }
 
-template <class Distribution>
+BOOST_MATH_EXPORT template <class Distribution>
 BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type variance(const Distribution& dist)
 {
    typename Distribution::value_type result = standard_deviation(dist);
    return result * result;
 }
 
-template <class Distribution, class RealType>
+BOOST_MATH_EXPORT template <class Distribution, class RealType>
 BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type hazard(const Distribution& dist, const RealType& x)
 { // hazard function
   // http://www.itl.nist.gov/div898/handbook/eda/section3/eda362.htm#HAZ
@@ -81,7 +81,7 @@ BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type hazard(const Dis
    return d / p;
 }
 
-template <class Distribution, class RealType>
+BOOST_MATH_EXPORT template <class Distribution, class RealType>
 BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type chf(const Distribution& dist, const RealType& x)
 { // cumulative hazard function.
   // http://www.itl.nist.gov/div898/handbook/eda/section3/eda362.htm#HAZ
@@ -89,7 +89,7 @@ BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type chf(const Distri
    return -log(cdf(complement(dist, x)));
 }
 
-template <class Distribution>
+BOOST_MATH_EXPORT template <class Distribution>
 BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type coefficient_of_variation(const Distribution& dist)
 {
    typedef typename Distribution::value_type value_type;
@@ -110,33 +110,33 @@ BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type coefficient_of_v
 // argument types. We just use a typecast to forward on to the "real"
 // implementation with all arguments of the same type:
 //
-template <class Distribution, class RealType>
+BOOST_MATH_EXPORT template <class Distribution, class RealType>
 BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type pdf(const Distribution& dist, const RealType& x)
 {
    typedef typename Distribution::value_type value_type;
    return pdf(dist, static_cast<value_type>(x));
 }
-template <class Distribution, class RealType>
+BOOST_MATH_EXPORT template <class Distribution, class RealType>
 BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type logpdf(const Distribution& dist, const RealType& x)
 {
    using std::log;
    typedef typename Distribution::value_type value_type;
    return log(pdf(dist, static_cast<value_type>(x)));
 }
-template <class Distribution, class RealType>
+BOOST_MATH_EXPORT template <class Distribution, class RealType>
 BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type cdf(const Distribution& dist, const RealType& x)
 {
    typedef typename Distribution::value_type value_type;
    return cdf(dist, static_cast<value_type>(x));
 }
-template <class Distribution, class Realtype>
+BOOST_MATH_EXPORT template <class Distribution, class Realtype>
 BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type logcdf(const Distribution& dist, const Realtype& x)
 {
    using std::log;
    using value_type = typename Distribution::value_type;
    return log(cdf(dist, static_cast<value_type>(x)));
 }
-template <class Distribution, class RealType>
+BOOST_MATH_EXPORT template <class Distribution, class RealType>
 BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type quantile(const Distribution& dist, const RealType& x)
 {
    typedef typename Distribution::value_type value_type;
@@ -150,14 +150,14 @@ inline typename Distribution::value_type chf(const Distribution& dist, const Rea
    return chf(dist, static_cast<value_type>(x));
 }
 */
-template <class Distribution, class RealType>
+BOOST_MATH_EXPORT template <class Distribution, class RealType>
 BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type cdf(const complemented2_type<Distribution, RealType>& c)
 {
    typedef typename Distribution::value_type value_type;
    return cdf(complement(c.dist, static_cast<value_type>(c.param)));
 }
 
-template <class Distribution, class RealType>
+BOOST_MATH_EXPORT template <class Distribution, class RealType>
 BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type logcdf(const complemented2_type<Distribution, RealType>& c)
 {
    using std::log;
@@ -165,14 +165,14 @@ BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type logcdf(const com
    return log(cdf(complement(c.dist, static_cast<value_type>(c.param))));
 }
 
-template <class Distribution, class RealType>
+BOOST_MATH_EXPORT template <class Distribution, class RealType>
 BOOST_MATH_GPU_ENABLED inline typename Distribution::value_type quantile(const complemented2_type<Distribution, RealType>& c)
 {
    typedef typename Distribution::value_type value_type;
    return quantile(complement(c.dist, static_cast<value_type>(c.param)));
 }
 
-template <class Dist>
+BOOST_MATH_EXPORT template <class Dist>
 BOOST_MATH_GPU_ENABLED inline typename Dist::value_type median(const Dist& d)
 { // median - default definition for those distributions for which a
   // simple closed form is not known,

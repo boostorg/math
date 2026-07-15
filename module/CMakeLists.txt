@@ -59,6 +59,10 @@ set(BOOST_MATH_MODULE_TESTS
         test_log1p_simple
         git_issue_1194
         git_issue_1255
+        git_issue_1294
+        git_issue_800
+        git_issue_1120
+        scipy_issue_17146
 )
 
 add_executable(module_quick_test "${CMAKE_CURRENT_SOURCE_DIR}/quick_test.cpp")

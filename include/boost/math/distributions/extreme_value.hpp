@@ -60,7 +60,7 @@ BOOST_MATH_GPU_ENABLED inline bool verify_scale_b(const char* function, RealType
 
 } // namespace detail
 
-template <class RealType = double, class Policy = policies::policy<> >
+BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
 class extreme_value_distribution
 {
 public:
@@ -83,16 +83,16 @@ private:
    RealType m_b;
 };
 
-using extreme_value = extreme_value_distribution<double>;
+BOOST_MATH_EXPORT using extreme_value = extreme_value_distribution<double>;
 
 #ifdef __cpp_deduction_guides
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 extreme_value_distribution(RealType)->extreme_value_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 extreme_value_distribution(RealType,RealType)->extreme_value_distribution<typename boost::math::tools::promote_args<RealType>::type>;
 #endif
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const extreme_value_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
    using boost::math::tools::max_value;
@@ -101,7 +101,7 @@ BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const 
       boost::math::numeric_limits<RealType>::has_infinity ? boost::math::numeric_limits<RealType>::infinity() : max_value<RealType>());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const extreme_value_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -109,7 +109,7 @@ BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(cons
    return boost::math::pair<RealType, RealType>(-max_value<RealType>(),  max_value<RealType>());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType pdf(const extreme_value_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -134,7 +134,7 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const extreme_value_distribution<Real
    return result;
 } // pdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logpdf(const extreme_value_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -159,7 +159,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const extreme_value_distribution<R
    return result;
 } // logpdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const extreme_value_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -183,7 +183,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const extreme_value_distribution<Real
    return result;
 } // cdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logcdf(const extreme_value_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -207,7 +207,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const extreme_value_distribution<R
    return result;
 } // logcdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED RealType quantile(const extreme_value_distribution<RealType, Policy>& dist, const RealType& p)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -234,7 +234,7 @@ BOOST_MATH_GPU_ENABLED RealType quantile(const extreme_value_distribution<RealTy
    return result;
 } // quantile
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<extreme_value_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -258,7 +258,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<extreme_valu
    return result;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<extreme_value_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -282,7 +282,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<extreme_v
    return result;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED RealType quantile(const complemented2_type<extreme_value_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -310,7 +310,7 @@ BOOST_MATH_GPU_ENABLED RealType quantile(const complemented2_type<extreme_value_
    return result;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mean(const extreme_value_distribution<RealType, Policy>& dist)
 {
    RealType a = dist.location();
@@ -323,7 +323,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mean(const extreme_value_distribution<Rea
    return a + constants::euler<RealType>() * b;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType standard_deviation(const extreme_value_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING // for ADL of std functions.
@@ -337,20 +337,20 @@ BOOST_MATH_GPU_ENABLED inline RealType standard_deviation(const extreme_value_di
    return constants::pi<RealType>() * b / sqrt(static_cast<RealType>(6));
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mode(const extreme_value_distribution<RealType, Policy>& dist)
 {
    return dist.location();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType median(const extreme_value_distribution<RealType, Policy>& dist)
 {
   using constants::ln_ln_two;
    return dist.location() - dist.scale() * ln_ln_two<RealType>();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType skewness(const extreme_value_distribution<RealType, Policy>& /*dist*/)
 {
    //
@@ -360,14 +360,14 @@ BOOST_MATH_GPU_ENABLED inline RealType skewness(const extreme_value_distribution
    return static_cast<RealType>(1.1395470994046486574927930193898461120875997958366L);
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const extreme_value_distribution<RealType, Policy>& /*dist*/)
 {
    // See http://mathworld.wolfram.com/ExtremeValueDistribution.html
    return RealType(27) / 5;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const extreme_value_distribution<RealType, Policy>& /*dist*/)
 {
    // See http://mathworld.wolfram.com/ExtremeValueDistribution.html
