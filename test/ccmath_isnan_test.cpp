@@ -7,7 +7,11 @@
 #include <cfloat>
 #include <cstdint>
 #include <limits>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/ccmath/isnan.hpp>
+#else
+import boost.math;
+#endif
 #include <boost/core/lightweight_test.hpp>
 #include <boost/math/tools/config.hpp>
 

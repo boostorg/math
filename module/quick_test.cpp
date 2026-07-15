@@ -52,6 +52,11 @@ int main()
         BOOST_TEST_LT(bessel_value, 0.77);
     }
 
+    // ccmath
+    static_assert(boost::math::ccmath::abs(-1) == 1, "ccmath abs");
+    static_assert(boost::math::ccmath::isnan(0.0) == false, "ccmath isnan");
+    static_assert(boost::math::ccmath::sqrt(4.0) == 2.0, "ccmath sqrt");
+
     // distributions
     {
         const boost::math::normal_distribution<> dist {};

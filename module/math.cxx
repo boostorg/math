@@ -129,6 +129,9 @@ import std;
 // Statistical distributions (umbrella)
 #include <boost/math/distributions.hpp>
 
+// Constexpr cmath (umbrella)
+#include <boost/math/ccmath/ccmath.hpp>
+
 #ifdef _MSC_VER
 #  pragma warning( pop )
 #elif defined(__clang__)

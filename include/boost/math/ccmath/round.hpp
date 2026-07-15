@@ -71,7 +71,7 @@ inline constexpr ReturnType int_round_impl(T arg)
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr Real round(Real arg) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
@@ -88,7 +88,7 @@ inline constexpr Real round(Real arg) noexcept
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr double round(Z arg) noexcept
 {
     return boost::math::ccmath::round(static_cast<double>(arg));
@@ -106,7 +106,7 @@ inline constexpr long double roundl(long double arg) noexcept
 }
 #endif
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr long lround(Real arg)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
@@ -123,7 +123,7 @@ inline constexpr long lround(Real arg)
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr long lround(Z arg)
 {
     return boost::math::ccmath::lround(static_cast<double>(arg));
@@ -141,7 +141,7 @@ inline constexpr long lroundl(long double arg)
 }
 #endif
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr long long llround(Real arg)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
@@ -158,7 +158,7 @@ inline constexpr long long llround(Real arg)
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr long llround(Z arg)
 {
     return boost::math::ccmath::llround(static_cast<double>(arg));

@@ -45,7 +45,7 @@ constexpr T fmod_impl(T x, T y)
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr Real fmod(Real x, Real y)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
@@ -84,7 +84,7 @@ constexpr Real fmod(Real x, Real y)
     }
 }
 
-template <typename T1, typename T2>
+BOOST_MATH_EXPORT template <typename T1, typename T2>
 constexpr auto fmod(T1 x, T2 y)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))

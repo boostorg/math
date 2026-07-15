@@ -36,7 +36,7 @@ constexpr T logb_impl(T arg) noexcept
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr Real logb(Real arg) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
@@ -63,7 +63,7 @@ constexpr Real logb(Real arg) noexcept
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 constexpr double logb(Z arg) noexcept
 {
     return boost::math::ccmath::logb(static_cast<double>(arg));

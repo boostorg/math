@@ -43,7 +43,7 @@ inline constexpr Real ldexp_impl(Real arg, int exp) noexcept
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr Real ldexp(Real arg, int exp) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
@@ -60,7 +60,7 @@ inline constexpr Real ldexp(Real arg, int exp) noexcept
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr double ldexp(Z arg, int exp) noexcept
 {
     return boost::math::ccmath::ldexp(static_cast<double>(arg), exp);

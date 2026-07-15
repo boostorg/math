@@ -197,7 +197,7 @@ constexpr bool signbit_impl(T arg)
 }
 
 // Return value: true if arg is negative, false if arg is 0, NAN, or positive
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr bool signbit(Real arg)
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
@@ -211,7 +211,7 @@ constexpr bool signbit(Real arg)
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 constexpr bool signbit(Z arg)
 {
     return boost::math::ccmath::signbit(static_cast<double>(arg));

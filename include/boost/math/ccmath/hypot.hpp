@@ -50,7 +50,7 @@ constexpr T hypot_impl(T x, T y) noexcept
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr Real hypot(Real x, Real y) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
@@ -86,7 +86,7 @@ constexpr Real hypot(Real x, Real y) noexcept
     }
 }
 
-template <typename T1, typename T2>
+BOOST_MATH_EXPORT template <typename T1, typename T2>
 constexpr auto hypot(T1 x, T2 y) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
