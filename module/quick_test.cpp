@@ -14,6 +14,8 @@ import std;
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <complex>
+#include <limits>
 #endif
 
 import boost.math;
@@ -105,6 +107,32 @@ int main()
         const auto q {boost::math::quantile(boost::math::binomial(50, 0.5), 0.5)};
         BOOST_TEST_GT(q, 24.0);
         BOOST_TEST_LT(q, 26.0);
+    }
+
+    // differentiation
+    {
+        const auto derivative {boost::math::differentiation::finite_difference_derivative(
+            [](double x) { return x * x; }, 1.0)};
+        BOOST_TEST_GT(derivative, 1.99);
+        BOOST_TEST_LT(derivative, 2.01);
+        const auto x {boost::math::differentiation::make_fvar<double, 2>(3.0)};
+        const auto y {x * x};
+        BOOST_TEST_EQ(y.derivative(1), 6.0);
+        // std::numeric_limits partial specialization is reachable through the import
+        using fvar_type = decltype(x);
+        static_assert(std::numeric_limits<fvar_type>::is_specialized, "autodiff limits");
+    }
+
+    // quaternion, octonion and complex inverse trig
+    {
+        const boost::math::quaternion<double> q {1.0, 2.0, 3.0, 4.0};
+        BOOST_TEST_EQ(boost::math::norm(q), 30.0);
+        const boost::math::octonion<double> o {1.0, 1.0};
+        BOOST_TEST_GT(boost::math::abs(o), 1.41);
+        const std::complex<double> z {0.5, 0.0};
+        const auto az {boost::math::asin(z)};
+        BOOST_TEST_GT(az.real(), 0.52);
+        BOOST_TEST_LT(az.real(), 0.53);
     }
 
     return boost::report_errors();

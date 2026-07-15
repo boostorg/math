@@ -69,7 +69,7 @@ namespace detail {
     }
 }
 
-template<class F, class Real>
+BOOST_MATH_EXPORT template<class F, class Real>
 Real complex_step_derivative(const F f, Real x)
 {
     // Is it really this easy? Yes.
@@ -258,7 +258,7 @@ namespace detail {
 
 }
 
-template<class F, class Real, size_t order=6>
+BOOST_MATH_EXPORT template<class F, class Real, size_t order=6>
 inline Real finite_difference_derivative(const F f, Real x, Real* error = nullptr)
 {
    return detail::finite_difference_derivative(f, x, error, detail::fd_tag<order>());

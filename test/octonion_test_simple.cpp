@@ -5,9 +5,14 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/mpl/list.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/octonion.hpp>
+#else
+import boost.math;
+#endif
 #include <boost/core/lightweight_test.hpp>
 
+#include <complex>
 #include <cstdint>
 #include <random>
 

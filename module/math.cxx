@@ -204,6 +204,18 @@ import std;
 #include <boost/math/optimization/nesterov.hpp>
 #include <boost/math/optimization/random_search.hpp>
 
+// Differentiation. finite_difference and lanczos_smoothing must precede
+// autodiff: their unqualified detail:: references become ambiguous once
+// autodiff's inline namespace introduces a second differentiation::detail.
+#include <boost/math/differentiation/finite_difference.hpp>
+#include <boost/math/differentiation/lanczos_smoothing.hpp>
+#include <boost/math/differentiation/autodiff.hpp>
+
+// Algebra types and complex inverse trigonometric functions
+#include <boost/math/complex.hpp>
+#include <boost/math/quaternion.hpp>
+#include <boost/math/octonion.hpp>
+
 #ifdef _MSC_VER
 #  pragma warning( pop )
 #elif defined(__clang__)

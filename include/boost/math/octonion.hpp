@@ -181,7 +181,7 @@ namespace boost
         // the The behavior of octonion is unspecified if T is not
         // one of float, double or long double.
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         class octonion
         {
         public:
@@ -1257,7 +1257,7 @@ namespace boost
         BOOST_OCTONION_MEMBER_DIV_GENERATOR(type)
 
 
-        template<>
+        BOOST_MATH_EXPORT template<>
         class octonion<float>
         {
         public:
@@ -1315,7 +1315,7 @@ namespace boost
         };
 
 
-        template<>
+        BOOST_MATH_EXPORT template<>
         class octonion<double>
         {
         public:
@@ -1375,7 +1375,7 @@ namespace boost
         };
 
 
-        template<>
+        BOOST_MATH_EXPORT template<>
         class octonion<long double>
         {
         public:
@@ -1483,37 +1483,37 @@ namespace boost
         }
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_1_L(op)                                                                              \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (T const & lhs, octonion<T> const & rhs)                            \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_1_R(op)                                                                              \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (octonion<T> const & lhs, T const & rhs)                            \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_2_L(op)                                                                              \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (::std::complex<T> const & lhs, octonion<T> const & rhs)            \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_2_R(op)                                                                              \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (octonion<T> const & lhs, ::std::complex<T> const & rhs)            \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_3_L(op)                                                                              \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs) \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_3_R(op)                                                                              \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs) \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_4(op)                                                                                \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (octonion<T> const & lhs, octonion<T> const & rhs)                  \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
@@ -1546,21 +1546,21 @@ namespace boost
 #undef    BOOST_OCTONION_OPERATOR_GENERATOR_BODY
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        operator + (octonion<T> const & o)
         {
             return(o);
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        operator - (octonion<T> const & o)
         {
             return(octonion<T>(-o.R_component_1(),-o.R_component_2(),-o.R_component_3(),-o.R_component_4(),-o.R_component_5(),-o.R_component_6(),-o.R_component_7(),-o.R_component_8()));
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (T const & lhs, octonion<T> const & rhs)
         {
             return(
@@ -1576,7 +1576,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (octonion<T> const & lhs, T const & rhs)
         {
             return(
@@ -1592,7 +1592,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (::std::complex<T> const & lhs, octonion<T> const & rhs)
         {
             return(
@@ -1608,7 +1608,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (octonion<T> const & lhs, ::std::complex<T> const & rhs)
         {
             return(
@@ -1624,7 +1624,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs)
         {
             return(
@@ -1640,7 +1640,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs)
         {
             return(
@@ -1656,7 +1656,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (octonion<T> const & lhs, octonion<T> const & rhs)
         {
             return(
@@ -1677,31 +1677,31 @@ namespace boost
             return(!(lhs == rhs));            \
         }
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (T const & lhs, octonion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (octonion<T> const & lhs, T const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (::std::complex<T> const & lhs, octonion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (octonion<T> const & lhs, ::std::complex<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (octonion<T> const & lhs, octonion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
@@ -1712,7 +1712,7 @@ namespace boost
 
         // Note:    the default values in the constructors of the complex and quaternions make for
         //            a very complex and ambiguous situation; we have made choices to disambiguate.
-        template<typename T, typename charT, class traits>
+        BOOST_MATH_EXPORT template<typename T, typename charT, class traits>
         ::std::basic_istream<charT,traits> &    operator >> (    ::std::basic_istream<charT,traits> & is,
                                                                 octonion<T> & o)
         {
@@ -3858,7 +3858,7 @@ namespace boost
         // LCOV_EXCL_STOP
 
 
-        template<typename T, typename charT, class traits>
+        BOOST_MATH_EXPORT template<typename T, typename charT, class traits>
         ::std::basic_ostream<charT,traits> &    operator << (    ::std::basic_ostream<charT,traits> & os,
                                                                 octonion<T> const & o)
         {
@@ -3886,14 +3886,14 @@ namespace boost
 
         // values
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline T                                real(octonion<T> const & o)
         {
             return(o.real());
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        unreal(octonion<T> const & o)
         {
             return(o.unreal());
@@ -3915,7 +3915,7 @@ namespace boost
             temp[7] = o.R_component_8();
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline T                                sup(octonion<T> const & o)
         {
 #ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
@@ -3928,7 +3928,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline T                                l1(octonion<T> const & o)
         {
 #ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
@@ -3941,7 +3941,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline T                                abs(const octonion<T> & o)
         {
 #ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
@@ -3978,14 +3978,14 @@ namespace boost
 
         // Note:    This is the Cayley norm, not the Euclidean norm...
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline T                                norm(octonion<T> const & o)
         {
             return(real(o*conj(o)));
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        conj(octonion<T> const & o)
         {
             return(octonion<T>( +o.R_component_1(),
@@ -4003,7 +4003,7 @@ namespace boost
         //            to the complex "arg" and the quaternionic "cylindropolar".
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        spherical(T const & rho,
                                                             T const & theta,
                                                             T const & phi1,
@@ -4058,7 +4058,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        multipolar(T const & rho1,
                                                              T const & theta1,
                                                              T const & rho2,
@@ -4084,7 +4084,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        cylindrical(T const & r,
                                                               T const & angle,
                                                               T const & h1,
@@ -4104,7 +4104,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        exp(octonion<T> const & o)
         {
             using    ::std::exp;
@@ -4126,7 +4126,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        cos(octonion<T> const & o)
         {
             using    ::std::sin;
@@ -4147,7 +4147,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        sin(octonion<T> const & o)
         {
             using    ::std::sin;
@@ -4168,35 +4168,35 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        tan(octonion<T> const & o)
         {
             return(sin(o)/cos(o));
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        cosh(octonion<T> const & o)
         {
             return((exp(+o)+exp(-o))/static_cast<T>(2));
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        sinh(octonion<T> const & o)
         {
             return((exp(+o)-exp(-o))/static_cast<T>(2));
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        tanh(octonion<T> const & o)
         {
             return(sinh(o)/cosh(o));
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         octonion<T>                                pow(octonion<T> const & o,
                                                     int n)
         {

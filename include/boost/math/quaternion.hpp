@@ -65,7 +65,7 @@ namespace boost
        }
 #endif
 
-       template<typename T>
+       BOOST_MATH_EXPORT template<typename T>
         class quaternion
         {
         public:
@@ -430,84 +430,84 @@ namespace boost
         };
 
 // swap:
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_CXX14_CONSTEXPR void swap(quaternion<T>& a, quaternion<T>& b) { a.swap(b); }
         
 // operator+
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline constexpr typename std::enable_if<std::is_convertible<T2, T1>::value, quaternion<T1> >::type
 operator + (const quaternion<T1>& a, const T2& b)
 {
    return quaternion<T1>(static_cast<T1>(a.R_component_1() + b), a.R_component_2(), a.R_component_3(), a.R_component_4());
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline constexpr typename std::enable_if<std::is_convertible<T1, T2>::value, quaternion<T2> >::type
 operator + (const T1& a, const quaternion<T2>& b)
 {
    return quaternion<T2>(static_cast<T2>(b.R_component_1() + a), b.R_component_2(), b.R_component_3(), b.R_component_4());
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline BOOST_MATH_CXX14_CONSTEXPR typename std::enable_if<std::is_convertible<T2, T1>::value, quaternion<T1> >::type
 operator + (const quaternion<T1>& a, const std::complex<T2>& b)
 {
    return quaternion<T1>(a.R_component_1() + std::real(b), a.R_component_2() + std::imag(b), a.R_component_3(), a.R_component_4());
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline BOOST_MATH_CXX14_CONSTEXPR typename std::enable_if<std::is_convertible<T1, T2>::value, quaternion<T2> >::type
 operator + (const std::complex<T1>& a, const quaternion<T2>& b)
 {
    return quaternion<T1>(b.R_component_1() + std::real(a), b.R_component_2() + std::imag(a), b.R_component_3(), b.R_component_4());
 }
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline constexpr quaternion<T> operator + (const quaternion<T>& a, const quaternion<T>& b)
 {
    return quaternion<T>(a.R_component_1() + b.R_component_1(), a.R_component_2() + b.R_component_2(), a.R_component_3() + b.R_component_3(), a.R_component_4() + b.R_component_4());
 }
 // operator-
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline constexpr typename std::enable_if<std::is_convertible<T2, T1>::value, quaternion<T1> >::type
 operator - (const quaternion<T1>& a, const T2& b)
 {
    return quaternion<T1>(static_cast<T1>(a.R_component_1() - b), a.R_component_2(), a.R_component_3(), a.R_component_4());
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline constexpr typename std::enable_if<std::is_convertible<T1, T2>::value, quaternion<T2> >::type
 operator - (const T1& a, const quaternion<T2>& b)
 {
    return quaternion<T2>(static_cast<T2>(a - b.R_component_1()), -b.R_component_2(), -b.R_component_3(), -b.R_component_4());
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline BOOST_MATH_CXX14_CONSTEXPR typename std::enable_if<std::is_convertible<T2, T1>::value, quaternion<T1> >::type
 operator - (const quaternion<T1>& a, const std::complex<T2>& b)
 {
    return quaternion<T1>(a.R_component_1() - std::real(b), a.R_component_2() - std::imag(b), a.R_component_3(), a.R_component_4());
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline BOOST_MATH_CXX14_CONSTEXPR typename std::enable_if<std::is_convertible<T1, T2>::value, quaternion<T2> >::type
 operator - (const std::complex<T1>& a, const quaternion<T2>& b)
 {
    return quaternion<T1>(std::real(a) - b.R_component_1(), std::imag(a) - b.R_component_2(), -b.R_component_3(), -b.R_component_4());
 }
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline constexpr quaternion<T> operator - (const quaternion<T>& a, const quaternion<T>& b)
 {
    return quaternion<T>(a.R_component_1() - b.R_component_1(), a.R_component_2() - b.R_component_2(), a.R_component_3() - b.R_component_3(), a.R_component_4() - b.R_component_4());
 }
 
 // operator*
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline constexpr typename std::enable_if<std::is_convertible<T2, T1>::value, quaternion<T1> >::type
 operator * (const quaternion<T1>& a, const T2& b)
 {
    return quaternion<T1>(static_cast<T1>(a.R_component_1() * b), a.R_component_2() * b, a.R_component_3() * b, a.R_component_4() * b);
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline constexpr typename std::enable_if<std::is_convertible<T1, T2>::value, quaternion<T2> >::type
 operator * (const T1& a, const quaternion<T2>& b)
 {
    return quaternion<T2>(static_cast<T2>(a * b.R_component_1()), a * b.R_component_2(), a * b.R_component_3(), a * b.R_component_4());
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline BOOST_MATH_CXX14_CONSTEXPR typename std::enable_if<std::is_convertible<T2, T1>::value, quaternion<T1> >::type
 operator * (const quaternion<T1>& a, const std::complex<T2>& b)
 {
@@ -515,7 +515,7 @@ operator * (const quaternion<T1>& a, const std::complex<T2>& b)
    result *= b;
    return result;
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline BOOST_MATH_CXX14_CONSTEXPR typename std::enable_if<std::is_convertible<T1, T2>::value, quaternion<T2> >::type
 operator * (const std::complex<T1>& a, const quaternion<T2>& b)
 {
@@ -523,7 +523,7 @@ operator * (const std::complex<T1>& a, const quaternion<T2>& b)
    result *= b;
    return result;
 }
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator * (const quaternion<T>& a, const quaternion<T>& b)
 {
    quaternion<T> result(a);
@@ -532,13 +532,13 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator * (const quaternion<T>&
 }
 
 // operator/
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline constexpr typename std::enable_if<std::is_convertible<T2, T1>::value, quaternion<T1> >::type
 operator / (const quaternion<T1>& a, const T2& b)
 {
    return quaternion<T1>(a.R_component_1() / b, a.R_component_2() / b, a.R_component_3() / b, a.R_component_4() / b);
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline BOOST_MATH_CXX14_CONSTEXPR typename std::enable_if<std::is_convertible<T1, T2>::value, quaternion<T2> >::type
 operator / (const T1& a, const quaternion<T2>& b)
 {
@@ -546,7 +546,7 @@ operator / (const T1& a, const quaternion<T2>& b)
    result /= b;
    return result;
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline BOOST_MATH_CXX14_CONSTEXPR typename std::enable_if<std::is_convertible<T2, T1>::value, quaternion<T1> >::type
 operator / (const quaternion<T1>& a, const std::complex<T2>& b)
 {
@@ -554,7 +554,7 @@ operator / (const quaternion<T1>& a, const std::complex<T2>& b)
    result /= b;
    return result;
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline BOOST_MATH_CXX14_CONSTEXPR typename std::enable_if<std::is_convertible<T1, T2>::value, quaternion<T2> >::type
 operator / (const std::complex<T1>& a, const quaternion<T2>& b)
 {
@@ -562,7 +562,7 @@ operator / (const std::complex<T1>& a, const quaternion<T2>& b)
    result /= b;
    return result;
 }
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>& a, const quaternion<T>& b)
 {
    quaternion<T> result(a);
@@ -571,21 +571,21 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
 }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline constexpr const quaternion<T>&             operator + (quaternion<T> const & q)
         {
             return q;
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline constexpr quaternion<T>                    operator - (quaternion<T> const & q)
         {
             return(quaternion<T>(-q.R_component_1(),-q.R_component_2(),-q.R_component_3(),-q.R_component_4()));
         }
         
         
-        template<typename R, typename T>
+        BOOST_MATH_EXPORT template<typename R, typename T>
         inline constexpr typename std::enable_if<std::is_convertible<R, T>::value, bool>::type operator == (R const & lhs, quaternion<T> const & rhs)
         {
             return    (
@@ -597,14 +597,14 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         }
         
         
-        template<typename T, typename R>
+        BOOST_MATH_EXPORT template<typename T, typename R>
         inline constexpr typename std::enable_if<std::is_convertible<R, T>::value, bool>::type operator == (quaternion<T> const & lhs, R const & rhs)
         {
            return rhs == lhs;
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline constexpr bool                                operator == (::std::complex<T> const & lhs, quaternion<T> const & rhs)
         {
             return    (
@@ -616,14 +616,14 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline constexpr bool                                operator == (quaternion<T> const & lhs, ::std::complex<T> const & rhs)
         {
            return rhs == lhs;
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline constexpr bool                                operator == (quaternion<T> const & lhs, quaternion<T> const & rhs)
         {
             return    (
@@ -645,7 +645,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         //            a
         //            (a), (a,b), (a,b,c), (a,b,c,d)
         //            (a,(c)), (a,(c,d)), ((a)), ((a),c), ((a),(c)), ((a),(c,d)), ((a,b)), ((a,b),c), ((a,b),(c)), ((a,b),(c,d))
-        template<typename T, typename charT, class traits>
+        BOOST_MATH_EXPORT template<typename T, typename charT, class traits>
         ::std::basic_istream<charT,traits> &    operator >> (    ::std::basic_istream<charT,traits> & is,
                                                                 quaternion<T> & q)
         {
@@ -864,7 +864,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         }
         
         
-        template<typename T, typename charT, class traits>
+        BOOST_MATH_EXPORT template<typename T, typename charT, class traits>
         ::std::basic_ostream<charT,traits> &    operator << (    ::std::basic_ostream<charT,traits> & os,
                                                                 quaternion<T> const & q)
         {
@@ -885,20 +885,20 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         
         // values
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline constexpr T real(quaternion<T> const & q)
         {
             return(q.real());
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline constexpr quaternion<T> unreal(quaternion<T> const & q)
         {
             return(q.unreal());
         }
                 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline T sup(quaternion<T> const & q)
         {
             using    ::std::abs;
@@ -906,7 +906,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline T l1(quaternion<T> const & q)
         {
            using    ::std::abs;
@@ -914,7 +914,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline T abs(quaternion<T> const & q)
         {
             using    ::std::abs;
@@ -949,14 +949,14 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         
         // Note:    This is the Cayley norm, not the Euclidean norm...
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline BOOST_MATH_CXX14_CONSTEXPR T norm(quaternion<T>const  & q)
         {
             return(real(q*conj(q)));
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline constexpr quaternion<T> conj(quaternion<T> const & q)
         {
             return(quaternion<T>(   +q.R_component_1(),
@@ -966,7 +966,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline quaternion<T>                    spherical(  T const & rho,
                                                             T const & theta,
                                                             T const & phi1,
@@ -997,7 +997,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline quaternion<T>                    semipolar(  T const & rho,
                                                             T const & alpha,
                                                             T const & theta1,
@@ -1015,7 +1015,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline quaternion<T>                    multipolar( T const & rho1,
                                                             T const & theta1,
                                                             T const & rho2,
@@ -1033,7 +1033,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline quaternion<T>                    cylindrospherical(  T const & t,
                                                                     T const & radius,
                                                                     T const & longitude,
@@ -1052,7 +1052,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline quaternion<T>                    cylindrical(T const & r,
                                                             T const & angle,
                                                             T const & h1,
@@ -1072,7 +1072,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         // (please see the documentation)
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline quaternion<T>                    exp(quaternion<T> const & q)
         {
             using    ::std::exp;
@@ -1092,7 +1092,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline quaternion<T>                    cos(quaternion<T> const & q)
         {
             using    ::std::sin;
@@ -1111,7 +1111,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline quaternion<T>                    sin(quaternion<T> const & q)
         {
             using    ::std::sin;
@@ -1130,35 +1130,35 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline quaternion<T>                    tan(quaternion<T> const & q)
         {
             return(sin(q)/cos(q));
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline quaternion<T>                    cosh(quaternion<T> const & q)
         {
             return((exp(+q)+exp(-q))/static_cast<T>(2));
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline quaternion<T>                    sinh(quaternion<T> const & q)
         {
             return((exp(+q)-exp(-q))/static_cast<T>(2));
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline quaternion<T>                    tanh(quaternion<T> const & q)
         {
             return(sinh(q)/cosh(q));
         }
         
         
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         quaternion<T>                            pow(quaternion<T> const & q,
                                                     int n)
         {

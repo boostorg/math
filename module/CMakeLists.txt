@@ -76,7 +76,12 @@ set(BOOST_MATH_MODULE_TESTS
         ljung_box_test
         differential_evolution_test
         random_search_test
+        quaternion_constexpr_test
+        octonion_test_simple
 )
+
+# octonion_test_simple additionally uses Boost.MPL textually
+set(BOOST_MATH_MODULE_EXTRA_LIBS_octonion_test_simple Boost::mpl)
 
 add_executable(module_quick_test "${CMAKE_CURRENT_SOURCE_DIR}/quick_test.cpp")
 target_link_libraries(module_quick_test PRIVATE boost_math_module Boost::core)
@@ -93,6 +98,7 @@ foreach(test ${BOOST_MATH_MODULE_TESTS})
             PRIVATE
             boost_math_module
             Boost::core
+            ${BOOST_MATH_MODULE_EXTRA_LIBS_${test}}
     )
     set_target_properties(module_${test} PROPERTIES CXX_SCAN_FOR_MODULES ON CXX_MODULE_STD ON)
     add_test(NAME module_${test} COMMAND module_${test})
