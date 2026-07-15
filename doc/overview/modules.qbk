@@ -1,0 +1,48 @@
+[section:cxx20_modules Support for C++20 Modules]
+
+[h4 C++20 Modules Support]
+
+Boost.Math can be consumed as the named module `boost.math`.
+The module covers the public interface of the library: special functions, statistical distributions, constants, policies, ccmath, the public tools (root finding, minima, polynomials, rational and series evaluation, norms, condition numbers and friends), quadrature, the modern interpolators, statistics, optimization, differentiation (autodiff, finite differences and Lanczos smoothing), the complex inverse trigonometric functions, and the quaternion and octonion types.
+
+    import boost.math;
+
+    int main()
+    {
+        return boost::math::cdf(boost::math::normal_distribution<>(), 0.0) == 0.5 ? 0 : 1;
+    }
+
+Module support is completely inert unless the module is built and consumed explicitly: nothing changes for existing header users.
+
+[h4 How to build]
+
+The module interface unit lives in `libs/math/module/math.cxx` and requires a toolchain with support for the C++23 standard library module (`import std`), for example clang 20 or later with libc++, CMake 4.4 with Ninja, and the matching `CMAKE_EXPERIMENTAL_CXX_IMPORT_STD` UUID.
+From a Boost superproject checkout:
+
+    cmake -G Ninja -DBOOST_INCLUDE_LIBRARIES=math -DBUILD_TESTING=ON \
+      -DBOOST_MATH_BUILD_MODULE=ON \
+      -DCMAKE_CXX_COMPILER=clang++-20 \
+      -DCMAKE_CXX_FLAGS="-stdlib=libc++" \
+      -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD=<uuid-for-your-cmake-version> \
+      -DCMAKE_CXX_STDLIB_MODULES_JSON=/usr/lib/llvm-20/lib/libc++.modules.json ..
+    cmake --build . --target tests
+    ctest
+
+The module test suite reuses a curated subset of the regular test files, which switch from textual inclusion to `import boost.math;` when `BOOST_MATH_BUILD_MODULE` is defined.
+The `cmake-module-test` job in the library's CI runs this configuration on every commit.
+
+[h4 Limitations]
+
+* The module is always built in standalone mode, so it has no dependencies on other Boost libraries.
+* Macros do not cross module boundaries.
+  The policy configuration macros (`BOOST_MATH_DOMAIN_ERROR_POLICY` and friends) and the convenience macros `BOOST_MATH_DECLARE_DISTRIBUTIONS` and `BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS` therefore have no effect on an importing translation unit.
+  Configure policies at the call site with `boost::math::policies::make_policy` or a `policy<...>` type instead; those interfaces are fully available through the import.
+* The `user_error` policy is not supported through the module, because a user supplied `boost::math::policies::user_..._error` definition cannot attach to the module.
+* A program should consume Boost.Math either through the module or through textual includes, not both.
+  The only headers that are safe to include textually alongside the import are `boost/math/tools/config.hpp` and `boost/math/tools/assert.hpp`, which the test support headers rely on.
+* Excluded from the module: the TR1/C99 interfaces and `common_factor` headers, `boost/math/bindings`, `boost/math/concepts`, `boost/math/cstdfloat`, all deprecated headers, and the headers that require external non-Boost dependencies (`chebyshev_transform.hpp` and `interpolators/cardinal_trigonometric.hpp` need FFTW, `optimization/cma_es.hpp` needs Eigen).
+  These remain available as ordinary includes.
+* `__float128` support (`BOOST_MATH_USE_FLOAT128`) is not enabled in the module build.
+* On libc++ the parallel execution policy overloads in statistics compile out (no `<execution>` support), matching the ordinary header behavior on that standard library.
+
+[endsect] [/section:cxx20_modules Support for C++20 Modules]
