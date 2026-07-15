@@ -24,7 +24,7 @@ From a Boost superproject checkout:
     cmake -G Ninja -DBOOST_INCLUDE_LIBRARIES=math -DBUILD_TESTING=ON \
       -DBOOST_MATH_BUILD_MODULE=ON \
       -DCMAKE_CXX_COMPILER=clang++-20 \
-      -DCMAKE_CXX_FLAGS="-stdlib=libc++" \
+      -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-reserved-module-identifier" \
       -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD=<uuid-for-your-cmake-version> \
       -DCMAKE_CXX_STDLIB_MODULES_JSON=/usr/lib/llvm-20/lib/libc++.modules.json ..
     cmake --build . --target tests

@@ -891,7 +891,7 @@ jobs:
             -DBUILD_TESTING=ON \
             -DBOOST_MATH_BUILD_MODULE=ON \
             -DCMAKE_CXX_COMPILER=clang++-$LLVM_VERSION \
-            -DCMAKE_CXX_FLAGS="-stdlib=libc++" \
+            -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-reserved-module-identifier" \
             -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD=$IMPORT_STD_UUID \
             -DCMAKE_CXX_STDLIB_MODULES_JSON=/usr/lib/llvm-$LLVM_VERSION/lib/libc++.modules.json \
             ..
