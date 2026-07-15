@@ -6,6 +6,8 @@
 #ifndef BOOST_MATH_TOOLS_LUROTH_EXPANSION_HPP
 #define BOOST_MATH_TOOLS_LUROTH_EXPANSION_HPP
 
+#include <boost/math/tools/config.hpp>
+
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <ostream>
@@ -26,7 +28,7 @@
 
 namespace boost::math::tools {
 
-template<typename Real, typename Z = int64_t>
+BOOST_MATH_EXPORT template<typename Real, typename Z = int64_t>
 class luroth_expansion {
 public:
     luroth_expansion(Real x) : x_{x}
@@ -117,7 +119,7 @@ private:
 };
 
 
-template<typename Real, typename Z2>
+BOOST_MATH_EXPORT template<typename Real, typename Z2>
 std::ostream& operator<<(std::ostream& out, luroth_expansion<Real, Z2>& luroth)
 {
    constexpr const int p = std::numeric_limits<Real>::max_digits10;

@@ -5,8 +5,13 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
-#include "math_unit_test.hpp"
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/tools/cubic_roots.hpp>
+#else
+import boost.math;
+#endif
+
+#include "math_unit_test.hpp"
 #include <random>
 #include <cmath>
 #include <cfloat>

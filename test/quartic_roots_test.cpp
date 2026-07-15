@@ -5,9 +5,14 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/tools/quartic_roots.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 #include <random>
-#include <boost/math/tools/quartic_roots.hpp>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;

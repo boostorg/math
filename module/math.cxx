@@ -132,6 +132,28 @@ import std;
 // Constexpr cmath (umbrella)
 #include <boost/math/ccmath/ccmath.hpp>
 
+// Tools (curated public set)
+#include <boost/math/tools/agm.hpp>
+#include <boost/math/tools/centered_continued_fraction.hpp>
+#include <boost/math/tools/cohen_acceleration.hpp>
+#include <boost/math/tools/color_maps.hpp>
+#include <boost/math/tools/condition_numbers.hpp>
+#include <boost/math/tools/cubic_roots.hpp>
+#include <boost/math/tools/engel_expansion.hpp>
+#include <boost/math/tools/estrin.hpp>
+#include <boost/math/tools/fraction.hpp>
+#include <boost/math/tools/luroth_expansion.hpp>
+#include <boost/math/tools/minima.hpp>
+#include <boost/math/tools/norms.hpp>
+#include <boost/math/tools/polynomial.hpp>
+#include <boost/math/tools/quartic_roots.hpp>
+#include <boost/math/tools/rational.hpp>
+#include <boost/math/tools/recurrence.hpp>
+#include <boost/math/tools/roots.hpp>
+#include <boost/math/tools/series.hpp>
+#include <boost/math/tools/simple_continued_fraction.hpp>
+#include <boost/math/tools/toms748_solve.hpp>
+
 #ifdef _MSC_VER
 #  pragma warning( pop )
 #elif defined(__clang__)

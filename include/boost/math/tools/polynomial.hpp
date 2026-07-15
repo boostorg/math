@@ -33,7 +33,7 @@
 
 namespace boost{ namespace math{ namespace tools{
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED T chebyshev_coefficient(unsigned n, unsigned m)
 {
    BOOST_MATH_STD_USING
@@ -57,7 +57,7 @@ BOOST_MATH_GPU_ENABLED T chebyshev_coefficient(unsigned n, unsigned m)
    return result;
 }
 
-template <class Seq>
+BOOST_MATH_EXPORT template <class Seq>
 BOOST_MATH_GPU_ENABLED Seq polynomial_to_chebyshev(const Seq& s)
 {
    // Converts a Polynomial into Chebyshev form:
@@ -93,7 +93,7 @@ BOOST_MATH_GPU_ENABLED Seq polynomial_to_chebyshev(const Seq& s)
    return result;
 }
 
-template <class Seq, class T>
+BOOST_MATH_EXPORT template <class Seq, class T>
 BOOST_MATH_GPU_ENABLED T evaluate_chebyshev(const Seq& a, const T& x)
 {
    // Clenshaw's formula:
@@ -111,7 +111,7 @@ BOOST_MATH_GPU_ENABLED T evaluate_chebyshev(const Seq& a, const T& x)
 }
 
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 class polynomial;
 
 namespace detail {
@@ -249,13 +249,13 @@ struct minus
 /**
  * Returns the zero element for multiplication of polynomials.
  */
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED polynomial<T> zero_element(std::multiplies< polynomial<T> >)
 {
     return polynomial<T>();
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED polynomial<T> identity_element(std::multiplies< polynomial<T> >)
 {
     return polynomial<T>(T(1));
@@ -265,7 +265,7 @@ BOOST_MATH_GPU_ENABLED polynomial<T> identity_element(std::multiplies< polynomia
  * because the same amount of computation yields both.
  * This function is not defined for division by zero: user beware.
  */
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED std::pair< polynomial<T>, polynomial<T> >
 quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
@@ -276,7 +276,7 @@ quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 }
 
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 class polynomial
 {
 public:
@@ -639,7 +639,7 @@ private:
 };
 
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline polynomial<T> operator + (const polynomial<T>& a, const polynomial<T>& b)
 {
    polynomial<T> result(a);
@@ -647,26 +647,26 @@ BOOST_MATH_GPU_ENABLED inline polynomial<T> operator + (const polynomial<T>& a, 
    return result;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline polynomial<T> operator + (polynomial<T>&& a, const polynomial<T>& b)
 {
    a += b;
    return std::move(a);
 }
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline polynomial<T> operator + (const polynomial<T>& a, polynomial<T>&& b)
 {
    b += a;
    return b;
 }
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline polynomial<T> operator + (polynomial<T>&& a, polynomial<T>&& b)
 {
    a += b;
    return a;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline polynomial<T> operator - (const polynomial<T>& a, const polynomial<T>& b)
 {
    polynomial<T> result(a);
@@ -674,26 +674,26 @@ BOOST_MATH_GPU_ENABLED inline polynomial<T> operator - (const polynomial<T>& a, 
    return result;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline polynomial<T> operator - (polynomial<T>&& a, const polynomial<T>& b)
 {
    a -= b;
    return a;
 }
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline polynomial<T> operator - (const polynomial<T>& a, polynomial<T>&& b)
 {
    b -= a;
    return -b;
 }
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline polynomial<T> operator - (polynomial<T>&& a, polynomial<T>&& b)
 {
    a -= b;
    return a;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline polynomial<T> operator * (const polynomial<T>& a, const polynomial<T>& b)
 {
    polynomial<T> result;
@@ -701,94 +701,94 @@ BOOST_MATH_GPU_ENABLED inline polynomial<T> operator * (const polynomial<T>& a, 
    return result;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline polynomial<T> operator / (const polynomial<T>& a, const polynomial<T>& b)
 {
    return quotient_remainder(a, b).first;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline polynomial<T> operator % (const polynomial<T>& a, const polynomial<T>& b)
 {
    return quotient_remainder(a, b).second;
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 BOOST_MATH_GPU_ENABLED inline typename std::enable_if<std::is_constructible<T, U>::value, polynomial<T> >::type operator + (polynomial<T> a, const U& b)
 {
    a += b;
    return a;
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 BOOST_MATH_GPU_ENABLED inline typename std::enable_if<std::is_constructible<T, U>::value, polynomial<T> >::type operator - (polynomial<T> a, const U& b)
 {
    a -= b;
    return a;
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 BOOST_MATH_GPU_ENABLED inline typename std::enable_if<std::is_constructible<T, U>::value, polynomial<T> >::type operator * (polynomial<T> a, const U& b)
 {
    a *= b;
    return a;
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 BOOST_MATH_GPU_ENABLED inline typename std::enable_if<std::is_constructible<T, U>::value, polynomial<T> >::type operator / (polynomial<T> a, const U& b)
 {
    a /= b;
    return a;
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 BOOST_MATH_GPU_ENABLED inline typename std::enable_if<std::is_constructible<T, U>::value, polynomial<T> >::type operator % (const polynomial<T>&, const U&)
 {
    // Since we can always divide by a scalar, result is always an empty polynomial:
    return polynomial<T>();
 }
 
-template <class U, class T>
+BOOST_MATH_EXPORT template <class U, class T>
 BOOST_MATH_GPU_ENABLED inline typename std::enable_if<std::is_constructible<T, U>::value, polynomial<T> >::type operator + (const U& a, polynomial<T> b)
 {
    b += a;
    return b;
 }
 
-template <class U, class T>
+BOOST_MATH_EXPORT template <class U, class T>
 BOOST_MATH_GPU_ENABLED inline typename std::enable_if<std::is_constructible<T, U>::value, polynomial<T> >::type operator - (const U& a, polynomial<T> b)
 {
    b -= a;
    return -b;
 }
 
-template <class U, class T>
+BOOST_MATH_EXPORT template <class U, class T>
 BOOST_MATH_GPU_ENABLED inline typename std::enable_if<std::is_constructible<T, U>::value, polynomial<T> >::type operator * (const U& a, polynomial<T> b)
 {
    b *= a;
    return b;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED bool operator == (const polynomial<T> &a, const polynomial<T> &b)
 {
     return a.data() == b.data();
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED bool operator != (const polynomial<T> &a, const polynomial<T> &b)
 {
     return a.data() != b.data();
 }
 
-template <typename T, typename U>
+BOOST_MATH_EXPORT template <typename T, typename U>
 BOOST_MATH_GPU_ENABLED polynomial<T> operator >> (polynomial<T> a, const U& b)
 {
     a >>= b;
     return a;
 }
 
-template <typename T, typename U>
+BOOST_MATH_EXPORT template <typename T, typename U>
 BOOST_MATH_GPU_ENABLED polynomial<T> operator << (polynomial<T> a, const U& b)
 {
     a <<= b;
@@ -796,26 +796,26 @@ BOOST_MATH_GPU_ENABLED polynomial<T> operator << (polynomial<T> a, const U& b)
 }
 
 // Unary minus (negate).
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED polynomial<T> operator - (polynomial<T> a)
 {
     std::transform(a.data().begin(), a.data().end(), a.data().begin(), detail::negate());
     return a;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED bool odd(polynomial<T> const &a)
 {
     return a.size() > 0 && a[0] != static_cast<T>(0);
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED bool even(polynomial<T> const &a)
 {
     return !odd(a);
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED polynomial<T> pow(polynomial<T> base, int exp)
 {
     if (exp < 0)
@@ -839,7 +839,7 @@ BOOST_MATH_GPU_ENABLED polynomial<T> pow(polynomial<T> base, int exp)
     return result;
 }
 
-template <class charT, class traits, class T>
+BOOST_MATH_EXPORT template <class charT, class traits, class T>
 BOOST_MATH_GPU_ENABLED inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly)
 {
    os << "{ ";

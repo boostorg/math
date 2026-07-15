@@ -65,6 +65,9 @@ set(BOOST_MATH_MODULE_TESTS
         scipy_issue_17146
         ccmath_isinf_test
         ccmath_isnan_test
+        git_issue_1139
+        cubic_roots_test
+        quartic_roots_test
 )
 
 add_executable(module_quick_test "${CMAKE_CURRENT_SOURCE_DIR}/quick_test.cpp")

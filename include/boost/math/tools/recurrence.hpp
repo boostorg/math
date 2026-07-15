@@ -101,7 +101,7 @@ namespace boost {
          // factor:     Convergence criteria, should be no less than machine epsilon.
          // max_iter:   Maximum iterations to use solving the continued fraction.
          //
-         template <class Recurrence, class T>
+         BOOST_MATH_EXPORT template <class Recurrence, class T>
          T function_ratio_from_backwards_recurrence(const Recurrence& r, const T& factor, std::uintmax_t& max_iter)
          {
             detail::function_ratio_from_backwards_recurrence_fraction<Recurrence> f(r);
@@ -122,7 +122,7 @@ namespace boost {
          // factor:     Convergence criteria, should be no less than machine epsilon.
          // max_iter:   Maximum iterations to use solving the continued fraction.
          //
-         template <class Recurrence, class T>
+         BOOST_MATH_EXPORT template <class Recurrence, class T>
          T function_ratio_from_forwards_recurrence(const Recurrence& r, const T& factor, std::uintmax_t& max_iter)
          {
             boost::math::tools::detail::function_ratio_from_backwards_recurrence_fraction<boost::math::tools::detail::recurrence_reverser<Recurrence, T> > f(r);
@@ -142,7 +142,7 @@ namespace boost {
          // first: w(-1);
          // second: w(0);
          //
-         template <class NextCoefs, class T>
+         BOOST_MATH_EXPORT template <class NextCoefs, class T>
          inline T apply_recurrence_relation_forward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, long long* log_scaling = nullptr, T* previous = nullptr)
          {
             BOOST_MATH_STD_USING
@@ -198,7 +198,7 @@ namespace boost {
          // first: w(1);
          // second: w(0);
          //
-         template <class T, class NextCoefs>
+         BOOST_MATH_EXPORT template <class T, class NextCoefs>
          inline T apply_recurrence_relation_backward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, long long* log_scaling = nullptr, T* previous = nullptr)
          {
             BOOST_MATH_STD_USING
@@ -241,7 +241,7 @@ namespace boost {
             return second;
          }
 
-         template <class Recurrence>
+         BOOST_MATH_EXPORT template <class Recurrence>
          struct forward_recurrence_iterator
          {
             typedef typename std::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
@@ -283,7 +283,7 @@ namespace boost {
             int k;
          };
 
-         template <class Recurrence>
+         BOOST_MATH_EXPORT template <class Recurrence>
          struct backward_recurrence_iterator
          {
             typedef typename std::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;

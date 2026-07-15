@@ -1899,36 +1899,36 @@ color_map_(Real scalar, std::array<std::array<Real, 3>, 256> const &table) {
 }
 } // namespace detail
 
-template <typename Real = float> std::array<Real, 3> viridis(Real x) {
+BOOST_MATH_EXPORT template <typename Real = float> std::array<Real, 3> viridis(Real x) {
   return detail::color_map_<Real>(x, detail::viridis_data_<Real>);
 }
 
-template <typename Real = float> std::array<Real, 3> smooth_cool_warm(Real x) {
+BOOST_MATH_EXPORT template <typename Real = float> std::array<Real, 3> smooth_cool_warm(Real x) {
   return detail::color_map_<Real>(x, detail::smooth_cool_warm_data_<Real>);
 }
 
-template <typename Real = float> std::array<Real, 3> plasma(Real x) {
+BOOST_MATH_EXPORT template <typename Real = float> std::array<Real, 3> plasma(Real x) {
   return detail::color_map_<Real>(x, detail::plasma_data_<Real>);
 }
 
-template <typename Real = float> std::array<Real, 3> black_body(Real x) {
+BOOST_MATH_EXPORT template <typename Real = float> std::array<Real, 3> black_body(Real x) {
   return detail::color_map_<Real>(x, detail::black_body_data_<Real>);
 }
 
-template <typename Real = float> std::array<Real, 3> inferno(Real x) {
+BOOST_MATH_EXPORT template <typename Real = float> std::array<Real, 3> inferno(Real x) {
   return detail::color_map_<Real>(x, detail::inferno_data_<Real>);
 }
 
-template <typename Real = float> std::array<Real, 3> kindlmann(Real x) {
+BOOST_MATH_EXPORT template <typename Real = float> std::array<Real, 3> kindlmann(Real x) {
   return detail::color_map_<Real>(x, detail::kindlmann_data_<Real>);
 }
 
-template <typename Real = float>
+BOOST_MATH_EXPORT template <typename Real = float>
 std::array<Real, 3> extended_kindlmann(Real x) {
   return detail::color_map_<Real>(x, detail::extended_kindlmann_data_<Real>);
 }
 
-template <typename Real>
+BOOST_MATH_EXPORT template <typename Real>
 std::array<std::uint8_t, 4> to_8bit_rgba(const std::array<Real, 3> &v) {
   using std::sqrt;
   std::array<std::uint8_t, 4> pixel {};

@@ -57,6 +57,18 @@ int main()
     static_assert(boost::math::ccmath::isnan(0.0) == false, "ccmath isnan");
     static_assert(boost::math::ccmath::sqrt(4.0) == 2.0, "ccmath sqrt");
 
+    // tools
+    {
+        const double coeffs[] {1.0, 2.0, 3.0};
+        BOOST_TEST_EQ(boost::math::tools::evaluate_polynomial(coeffs, 2.0), 17.0);
+        const auto roots {boost::math::tools::cubic_roots(1.0, -6.0, 11.0, -6.0)};
+        BOOST_TEST_EQ(roots[0], 1.0);
+        BOOST_TEST_EQ(roots[2], 3.0);
+        const boost::math::tools::polynomial<double> p {{1.0, 1.0}};
+        const auto p2 {p * p};
+        BOOST_TEST_EQ(p2[1], 2.0);
+    }
+
     // distributions
     {
         const boost::math::normal_distribution<> dist {};
