@@ -16,7 +16,9 @@ Module support is completely inert unless the module is built and consumed expli
 
 [h4 How to build]
 
-The module interface unit lives in `libs/math/module/math.cxx` and requires a toolchain with support for the C++23 standard library module (`import std`), for example clang 20 or later with libc++, CMake 4.4 with Ninja, and the matching `CMAKE_EXPERIMENTAL_CXX_IMPORT_STD` UUID.
+The module is consumable from C++20 onward.
+The interface unit lives in `libs/math/module/math.cxx` and builds with any toolchain that provides the standard library module (`import std`); the standard library maintainers agreed to make `import std` available in C++20 mode as well as C++23, so a C++23 compilation mode is not required.
+The configuration exercised in CI is clang 20 or later with libc++, CMake 4.4 with Ninja, and the matching `CMAKE_EXPERIMENTAL_CXX_IMPORT_STD` UUID.
 From a Boost superproject checkout:
 
     cmake -G Ninja -DBOOST_INCLUDE_LIBRARIES=math -DBUILD_TESTING=ON \
