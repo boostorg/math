@@ -7,6 +7,8 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_QUINTIC_HERMITE_HPP
 #define BOOST_MATH_INTERPOLATORS_QUINTIC_HERMITE_HPP
+
+#include <boost/math/tools/config.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <stdexcept>
@@ -19,7 +21,7 @@ namespace boost {
 namespace math {
 namespace interpolators {
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class quintic_hermite {
 public:
     using Real = typename RandomAccessContainer::value_type;
@@ -67,7 +69,7 @@ private:
     std::shared_ptr<detail::quintic_hermite_detail<RandomAccessContainer>> impl_;
 };
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class cardinal_quintic_hermite {
 public:
     using Real = typename RandomAccessContainer::value_type;
@@ -102,7 +104,7 @@ private:
     std::shared_ptr<detail::cardinal_quintic_hermite_detail<RandomAccessContainer>> impl_;
 };
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class cardinal_quintic_hermite_aos {
 public:
     using Point = typename RandomAccessContainer::value_type;

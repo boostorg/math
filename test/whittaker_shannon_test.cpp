@@ -5,12 +5,17 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/interpolators/whittaker_shannon.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 #include <numeric>
 #include <utility>
 #include <random>
 #include <boost/core/demangle.hpp>
-#include <boost/math/interpolators/whittaker_shannon.hpp>
 
 #if __has_include(<stdfloat>)
 #  include <stdfloat>

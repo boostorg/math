@@ -5,6 +5,8 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #ifndef BOOST_MATH_INTERPOLATORS_BEZIER_POLYNOMIAL_HPP
 #define BOOST_MATH_INTERPOLATORS_BEZIER_POLYNOMIAL_HPP
+
+#include <boost/math/tools/config.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <memory>
 #endif
@@ -16,7 +18,7 @@
 
 namespace boost::math::interpolators {
 
-template <class RandomAccessContainer>
+BOOST_MATH_EXPORT template <class RandomAccessContainer>
 class bezier_polynomial
 {
 public:

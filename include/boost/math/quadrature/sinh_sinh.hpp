@@ -32,7 +32,7 @@
 
 namespace boost{ namespace math{ namespace quadrature {
 
-template<class Real, class Policy = boost::math::policies::policy<> >
+BOOST_MATH_EXPORT template<class Real, class Policy = boost::math::policies::policy<> >
 class sinh_sinh
 {
 public:

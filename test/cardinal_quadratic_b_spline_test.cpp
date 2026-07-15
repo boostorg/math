@@ -5,13 +5,18 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/interpolators/cardinal_quadratic_b_spline.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 #include <cstdint>
 #include <numeric>
 #include <utility>
 #include <vector>
 #include <limits>
-#include <boost/math/interpolators/cardinal_quadratic_b_spline.hpp>
 using boost::math::interpolators::cardinal_quadratic_b_spline;
 
 #if __has_include(<stdfloat>)

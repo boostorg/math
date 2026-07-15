@@ -19,7 +19,7 @@
 
 namespace boost{ namespace math{ namespace interpolators{
 
-template<class TimeContainer, class SpaceContainer>
+BOOST_MATH_EXPORT template<class TimeContainer, class SpaceContainer>
 class vector_barycentric_rational
 {
 public:

@@ -154,6 +154,34 @@ import std;
 #include <boost/math/tools/simple_continued_fraction.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
 
+// Quadrature
+#include <boost/math/quadrature/exp_sinh.hpp>
+#include <boost/math/quadrature/gauss.hpp>
+#include <boost/math/quadrature/gauss_kronrod.hpp>
+#include <boost/math/quadrature/naive_monte_carlo.hpp>
+#include <boost/math/quadrature/ooura_fourier_integrals.hpp>
+#include <boost/math/quadrature/sinh_sinh.hpp>
+#include <boost/math/quadrature/tanh_sinh.hpp>
+#include <boost/math/quadrature/trapezoidal.hpp>
+#include <boost/math/quadrature/wavelet_transforms.hpp>
+
+// Interpolators (the deprecated boost::math namespace shims and the FFTW
+// dependent cardinal_trigonometric interpolator are intentionally excluded)
+#include <boost/math/interpolators/barycentric_rational.hpp>
+#include <boost/math/interpolators/bezier_polynomial.hpp>
+#include <boost/math/interpolators/bilinear_uniform.hpp>
+#include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
+#include <boost/math/interpolators/cardinal_quadratic_b_spline.hpp>
+#include <boost/math/interpolators/cardinal_quintic_b_spline.hpp>
+#include <boost/math/interpolators/catmull_rom.hpp>
+#include <boost/math/interpolators/cubic_hermite.hpp>
+#include <boost/math/interpolators/makima.hpp>
+#include <boost/math/interpolators/pchip.hpp>
+#include <boost/math/interpolators/quintic_hermite.hpp>
+#include <boost/math/interpolators/septic_hermite.hpp>
+#include <boost/math/interpolators/vector_barycentric_rational.hpp>
+#include <boost/math/interpolators/whittaker_shannon.hpp>
+
 #ifdef _MSC_VER
 #  pragma warning( pop )
 #elif defined(__clang__)

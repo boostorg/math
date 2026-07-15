@@ -18,7 +18,7 @@
 
 namespace boost { namespace math { namespace quadrature {
 
-template<class Real>
+BOOST_MATH_EXPORT template<class Real>
 class ooura_fourier_sin {
 public:
     ooura_fourier_sin(const Real relative_error_tolerance = tools::root_epsilon<Real>(), size_t levels = sizeof(Real)) : impl_(std::make_shared<detail::ooura_fourier_sin_detail<Real>>(relative_error_tolerance, levels))
@@ -51,7 +51,7 @@ private:
 };
 
 
-template<class Real>
+BOOST_MATH_EXPORT template<class Real>
 class ooura_fourier_cos {
 public:
     ooura_fourier_cos(const Real relative_error_tolerance = tools::root_epsilon<Real>(), size_t levels = sizeof(Real)) : impl_(std::make_shared<detail::ooura_fourier_cos_detail<Real>>(relative_error_tolerance, levels))

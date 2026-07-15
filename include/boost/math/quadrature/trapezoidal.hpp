@@ -28,7 +28,7 @@
 
 namespace boost{ namespace math{ namespace quadrature {
 
-template<class F, class Real, class Policy>
+BOOST_MATH_EXPORT template<class F, class Real, class Policy>
 auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Real* error_estimate, Real* L1, const Policy& pol)->decltype(std::declval<F>()(std::declval<Real>()))
 {
     static const char* function = "boost::math::quadrature::trapezoidal<%1%>(F, %1%, %1%, %1%)";
@@ -117,7 +117,7 @@ auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
     return static_cast<K>(I1);
 }
 
-template<class F, class Real>
+BOOST_MATH_EXPORT template<class F, class Real>
 auto trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 12, Real* error_estimate = nullptr, Real* L1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
 {
    return trapezoidal(f, a, b, tol, max_refinements, error_estimate, L1, boost::math::policies::policy<>());

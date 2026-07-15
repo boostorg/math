@@ -13,6 +13,7 @@ import std;
 #else
 #include <iostream>
 #include <cmath>
+#include <vector>
 #endif
 
 import boost.math;
@@ -67,6 +68,19 @@ int main()
         const boost::math::tools::polynomial<double> p {{1.0, 1.0}};
         const auto p2 {p * p};
         BOOST_TEST_EQ(p2[1], 2.0);
+    }
+
+    // quadrature and interpolators
+    {
+        const auto integral {boost::math::quadrature::trapezoidal(
+            [](double x) { return x * x; }, 0.0, 1.0)};
+        BOOST_TEST_GT(integral, 0.333);
+        BOOST_TEST_LT(integral, 0.334);
+        std::vector<double> v {0.0, 1.0, 4.0, 9.0, 16.0};
+        boost::math::interpolators::cardinal_cubic_b_spline<double> spline {v.data(), v.size(), 0.0, 1.0};
+        const auto interp {spline(2.0)};
+        BOOST_TEST_GT(interp, 3.9);
+        BOOST_TEST_LT(interp, 4.1);
     }
 
     // distributions

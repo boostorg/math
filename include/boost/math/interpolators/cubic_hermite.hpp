@@ -6,6 +6,8 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_CUBIC_HERMITE_HPP
 #define BOOST_MATH_INTERPOLATORS_CUBIC_HERMITE_HPP
+
+#include <boost/math/tools/config.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <memory>
 #endif
@@ -18,7 +20,7 @@ namespace boost {
 namespace math {
 namespace interpolators {
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class cubic_hermite {
 public:
     using Real = typename RandomAccessContainer::value_type;
@@ -60,7 +62,7 @@ private:
     std::shared_ptr<detail::cubic_hermite_detail<RandomAccessContainer>> impl_;
 };
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class cardinal_cubic_hermite {
 public:
     using Real = typename RandomAccessContainer::value_type;
@@ -100,7 +102,7 @@ private:
 };
 
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class cardinal_cubic_hermite_aos {
 public:
     using Point = typename RandomAccessContainer::value_type;

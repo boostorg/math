@@ -1127,7 +1127,7 @@ public:
 
 }
 
-template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
+BOOST_MATH_EXPORT template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
 class gauss_kronrod : public detail::gauss_kronrod_detail<Real, N, detail::gauss_constant_category<Real>::value>
 {
    typedef detail::gauss_kronrod_detail<Real, N, detail::gauss_constant_category<Real>::value> base;

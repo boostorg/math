@@ -12,7 +12,7 @@
 
 namespace boost { namespace math { namespace interpolators {
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class whittaker_shannon {
 public:
 
