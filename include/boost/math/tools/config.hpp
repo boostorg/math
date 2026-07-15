@@ -11,6 +11,36 @@
 #pragma once
 #endif
 
+// C++20 named module support.
+// BOOST_MATH_BUILD_MODULE is defined when building or consuming the boost.math
+// module (module/math.cxx and the module test harness). BOOST_MATH_EXPORT marks
+// every public entity and expands to nothing in ordinary header builds.
+// BOOST_MATH_TEST_EXPORT additionally exports detail entities exercised by the
+// module test suite, and only when the module is built with
+// BOOST_MATH_EXPORT_TESTING. BOOST_MATH_INTERFACE_UNIT is defined only by
+// module/math.cxx itself and guards entities that a module consumer must
+// receive from the import rather than redeclare.
+#ifdef BOOST_MATH_BUILD_MODULE
+
+#if !defined(__cpp_inline_variables) || (__cpp_inline_variables < 201606L)
+#  error "Building the boost.math module requires inline variable support (C++17 or later)"
+#endif
+
+#define BOOST_MATH_EXPORT export
+
+#ifdef BOOST_MATH_EXPORT_TESTING
+#  define BOOST_MATH_TEST_EXPORT export
+#else
+#  define BOOST_MATH_TEST_EXPORT
+#endif
+
+#else
+
+#define BOOST_MATH_EXPORT
+#define BOOST_MATH_TEST_EXPORT
+
+#endif
+
 #if !(defined(__CUDACC_RTC__) && defined(BOOST_MATH_ENABLE_NVRTC))
 
 #include <boost/math/tools/is_standalone.hpp>

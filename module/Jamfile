@@ -1,0 +1,28 @@
+# Copyright 2026 Matt Borland
+# Distributed under the Boost Software License, Version 1.0.
+# https://www.boost.org/LICENSE_1_0.txt
+
+# bring in the rules for testing
+require-b2 5.0.1 ;
+import-search /boost/config/checks ;
+import config : requires ;
+import modules ;
+import testing ;
+import path ;
+import pch ;
+
+project
+    : requirements
+      <toolset>msvc:<warnings>all
+      <toolset>msvc:<asynch-exceptions>on
+      <toolset>msvc:<cxxstd>latest
+
+      <toolset>gcc:<cxxflags>-fmodules-ts
+      <toolset>gcc:<cxxstd>23
+
+      <toolset>clang:<cxxstd>23
+    ;
+
+obj math : math.cxx : <define>BOOST_MATH_EXPORT_TESTING <toolset>msvc:<cxxflags>-interface ;
+
+run quick_test.cpp math : : : <dependency>math ;
