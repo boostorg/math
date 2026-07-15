@@ -48,3 +48,10 @@ The `cmake-module-test` job in the library's CI runs this configuration on every
 * On libc++ the parallel execution policy overloads in statistics compile out (no `<execution>` support), matching the ordinary header behavior on that standard library.
 
 [endsect] [/section:cxx20_modules Support for C++20 Modules]
+
+[/
+  Copyright 2026 Matt Borland.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
