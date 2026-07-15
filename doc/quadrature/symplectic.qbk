@@ -39,7 +39,8 @@ The functional `integrate_hamiltonian` calculates the phase space trajectory for
 The trajectories are calculated using symplectic integration which preserves the energy of 
 a system. Even higher order traditional numerical integration algorithms will gain or lose 
 energy at long times. The functional implements the methods in [@https://www.sciencedirect.com/science/article/abs/pii/0375960190900923 Yoshida's] 
-landmark paper. We assume that the Hamiltonian is separable so that it can be written as `H = T(p) + V(q)`. 
+landmark paper and methods by [@https://www.sciencedirect.com/science/article/pii/S0377042701004927?fr=RR-2&ref=pdf_download&rr=a1b51ec059e1fbec Blanes and Moan]. 
+We assume that the Hamiltonian is separable so that it can be written as `H = T(p) + V(q)`. 
 
 We now give an example for a simple harmonic oscillator with the Hamiltonian
 [/ $H = \frac{p^2}{2m} + \frac{1}{2}kx^2$ ]
@@ -61,14 +62,12 @@ with respect to `p` and `q` are
 Note that the functional can be readily generalized to multiple coordinates by changing the 
 signature of `dHdp` to 
 
-    std::valarray<double> dHdp(std::valarray<double> p)
+    std::vector<double> dHdp(std::vector<double> p)
     {
         // calculate the partial derivatives with respect to each p_i
     }
 
-The function must return a `valarray` type, as opposed to `std::vector`, because we must be 
-able to perform arithmetic operations on the return type. We then define the timestep size 
-and number of steps of the algorithm to go from `t=0` to `t=100`
+We then define the timestep size and number of steps of the algorithm to go from `t=0` to `t=100`
 
     RealType dt = 0.05;
     RealType t_end = 100;
@@ -91,13 +90,17 @@ higher dimensions the output will be a vector of vectors.
 
 The last argument that we pass to `integrate_hamiltonian`, "Y6" here, sets the integration 
 method to use. The string "Y6" stands for Yoshida's 6th order integrator. Yoshida's 2nd and 
-4th order methods are also available by passing the string "Y2", or "Y4" respectively.  
+4th order methods are also available by passing the string "Y2", or "Y4" respectively. 
+The 4th order and 6th order symplectic Runge-Kutta-Nystrom methods from Table 3 of Blanes and Moan
+are available using the strings "SRKNB6" and "SRKNB11". 
 
 [optional_policy]
 
 References:
 
 Yoshida, Haruo. [`Construction of higher order symplectic integrators], Physics Letters A, 150.5-7 (1990): 262-268.
+
+Blanes, Sergio, and Per Christian Moan. [`Practical symplectic partitioned runge–kutta and runge–kutta–nyström methods`], Journal of Computational and Applied Mathematics 142.2 (2002): 313-330.
 
 [endsect] [/section:symplectic Symplectic Integration]
 
