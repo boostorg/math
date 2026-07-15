@@ -269,9 +269,7 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
 
     if ((dt <= 0) || !(boost::math::isfinite)(dt))
     {
-        RealType val = (boost::math::policies::raise_domain_error(function, "Time step must be positive and finite but got: dt = %1%.\n", dt, pol));
-        std::vector<RandomAccessContainer> nan_vec = {RandomAccessContainer(val)};
-        return std::make_pair(nan_vec, nan_vec);
+        boost::math::policies::raise_domain_error(function, "Time step must be positive and finite but got: dt = %1%.\n", dt, pol);
     }
 
     // Check if method is available
