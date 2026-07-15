@@ -11,6 +11,7 @@
 #include <limits>
 #endif
 
+#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE
 #  include <boost/config.hpp>
@@ -21,7 +22,7 @@
 
 namespace boost::math {
 
-template<typename Real>
+BOOST_MATH_EXPORT template<typename Real>
 inline Real rsqrt(Real const & x)
 {
     using std::sqrt;

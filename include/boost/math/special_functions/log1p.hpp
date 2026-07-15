@@ -270,7 +270,7 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const boost::m
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1p(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -293,7 +293,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1p(T x, c
       detail::log1p_imp(static_cast<value_type>(x), forwarding_policy(), tag_type()), "boost::math::log1p<%1%>(%1%)");
 }
 
-template <class Policy>
+BOOST_MATH_EXPORT template <class Policy>
 BOOST_MATH_GPU_ENABLED inline float log1p(float x, const Policy& pol)
 {
    if(x < -1)
@@ -307,7 +307,7 @@ BOOST_MATH_GPU_ENABLED inline float log1p(float x, const Policy& pol)
    #endif
 }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-template <class Policy>
+BOOST_MATH_EXPORT template <class Policy>
 BOOST_MATH_GPU_ENABLED inline long double log1p(long double x, const Policy& pol)
 {
    if(x < -1)
@@ -317,7 +317,7 @@ BOOST_MATH_GPU_ENABLED inline long double log1p(long double x, const Policy& pol
    return std::log1p(x);
 }
 #endif
-template <class Policy>
+BOOST_MATH_EXPORT template <class Policy>
 BOOST_MATH_GPU_ENABLED inline double log1p(double x, const Policy& pol)
 {
    if(x < -1)
@@ -331,7 +331,7 @@ BOOST_MATH_GPU_ENABLED inline double log1p(double x, const Policy& pol)
    #endif
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1p(T x)
 {
    return boost::math::log1p(x, policies::policy<>());
@@ -339,7 +339,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1p(T x)
 //
 // Compute log(1+x)-x:
 //
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    log1pmx(T x, const Policy& pol)
 {
@@ -369,7 +369,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    return result;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1pmx(T x)
 {
    return log1pmx(x, policies::policy<>());
@@ -379,21 +379,21 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1pmx(T x)
 // Specific width floating point types:
 //
 #ifdef __STDCPP_FLOAT32_T__
-template <class Policy>
+BOOST_MATH_EXPORT template <class Policy>
 BOOST_MATH_GPU_ENABLED inline std::float32_t log1p(std::float32_t x, const Policy& pol)
 {
    return boost::math::log1p(static_cast<float>(x), pol);
 }
 #endif
 #ifdef __STDCPP_FLOAT64_T__
-template <class Policy>
+BOOST_MATH_EXPORT template <class Policy>
 BOOST_MATH_GPU_ENABLED inline std::float64_t log1p(std::float64_t x, const Policy& pol)
 {
    return boost::math::log1p(static_cast<double>(x), pol);
 }
 #endif
 #ifdef __STDCPP_FLOAT128_T__
-template <class Policy>
+BOOST_MATH_EXPORT template <class Policy>
 BOOST_MATH_GPU_ENABLED inline std::float128_t log1p(std::float128_t x, const Policy& pol)
 {
    if constexpr (std::numeric_limits<long double>::digits == std::numeric_limits<std::float128_t>::digits)

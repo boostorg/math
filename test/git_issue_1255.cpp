@@ -6,7 +6,12 @@
 // See also: https://godbolt.org/z/nhMsKb8Yr
 
 #include <boost/core/lightweight_test.hpp>
+
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/special_functions/bessel.hpp>
+#else
+import boost.math;
+#endif
 
 #include <cmath>
 #include <limits>

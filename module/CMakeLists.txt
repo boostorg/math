@@ -54,6 +54,11 @@ message(STATUS "Boost.Math module: using 'import std;'")
 # Tests that switch to `import boost.math;` when BOOST_MATH_BUILD_MODULE is set.
 # The list grows as components are added to the module interface unit.
 set(BOOST_MATH_MODULE_TESTS
+        test_digamma_simple
+        test_expm1_simple
+        test_log1p_simple
+        git_issue_1194
+        git_issue_1255
 )
 
 add_executable(module_quick_test "${CMAKE_CURRENT_SOURCE_DIR}/quick_test.cpp")

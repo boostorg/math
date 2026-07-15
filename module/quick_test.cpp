@@ -36,5 +36,21 @@ int main()
     static_assert(boost::math::policies::is_noexcept_error_policy<
         boost::math::policies::policy<>>::value == false, "default policy throws");
 
+    // special functions
+    BOOST_TEST_EQ(boost::math::tgamma(4.0), 6.0);
+    BOOST_TEST_EQ(boost::math::sign(-3.5), -1);
+    BOOST_TEST(boost::math::isnan(std::sqrt(-1.0)));
+    BOOST_TEST_EQ(boost::math::round(2.5), 3.0);
+    BOOST_TEST_EQ(boost::math::factorial<double>(5), 120.0);
+    BOOST_TEST_EQ(boost::math::fpclassify(1.0), FP_NORMAL);
+    {
+        const auto erf_value {boost::math::erf(1.0)};
+        BOOST_TEST_GT(erf_value, 0.84);
+        BOOST_TEST_LT(erf_value, 0.85);
+        const auto bessel_value {boost::math::cyl_bessel_j(0, 1.0)};
+        BOOST_TEST_GT(bessel_value, 0.76);
+        BOOST_TEST_LT(bessel_value, 0.77);
+    }
+
     return boost::report_errors();
 }

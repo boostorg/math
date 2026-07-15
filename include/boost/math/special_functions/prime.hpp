@@ -2408,7 +2408,7 @@ constexpr std::array<std::uint16_t, 3458> prime_data_imp<b>::a3;
 
    using prime_data = prime_data_imp<true>;
 
-   template <class Policy>
+   BOOST_MATH_EXPORT template <class Policy>
    BOOST_MATH_CONSTEXPR_TABLE_FUNCTION std::uint32_t prime(unsigned n, const Policy& pol)
    {
 

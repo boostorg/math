@@ -1042,7 +1042,7 @@ namespace boost
 
       } // namespace detail
 
-      template <class T1, class T2, class Policy>
+      BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
       inline typename tools::promote_args<T1, T2>::type owens_t(T1 h, T2 a, const Policy& pol)
       {
          typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -1051,7 +1051,7 @@ namespace boost
          return policies::checked_narrowing_cast<result_type, Policy>(detail::owens_t(static_cast<value_type>(h), static_cast<value_type>(a), pol), "boost::math::owens_t<%1%>(%1%,%1%)");
       }
 
-      template <class T1, class T2>
+      BOOST_MATH_EXPORT template <class T1, class T2>
       inline typename tools::promote_args<T1, T2>::type owens_t(T1 h, T2 a)
       {
          return owens_t(h, a, policies::policy<>());

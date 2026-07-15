@@ -17,7 +17,7 @@ namespace boost { namespace math {
 
 // https://nhigham.com/2021/01/05/what-is-the-log-sum-exp-function/
 // See equation (#)
-template <typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type>
+BOOST_MATH_EXPORT template <typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type>
 Real logsumexp(ForwardIterator first, ForwardIterator last)
 {
     using std::exp;
@@ -40,13 +40,13 @@ Real logsumexp(ForwardIterator first, ForwardIterator last)
     return max_val + log1p(arg);
 }
 
-template <typename Container, typename Real = typename Container::value_type>
+BOOST_MATH_EXPORT template <typename Container, typename Real = typename Container::value_type>
 inline Real logsumexp(const Container& c)
 {
     return logsumexp(std::begin(c), std::end(c));
 }
 
-template <typename... Args, typename Real = typename std::common_type<Args...>::type, 
+BOOST_MATH_EXPORT template <typename... Args, typename Real = typename std::common_type<Args...>::type, 
           typename std::enable_if<std::is_floating_point<Real>::value, bool>::type = true>
 inline Real logsumexp(Args&& ...args)
 {

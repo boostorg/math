@@ -13,7 +13,7 @@
 namespace boost { namespace math {
 
 // Calculates log(exp(x1) + exp(x2))
-template <typename Real>
+BOOST_MATH_EXPORT template <typename Real>
 Real logaddexp(Real x1, Real x2) noexcept
 {
     using std::log1p;

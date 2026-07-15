@@ -164,7 +164,7 @@ BOOST_MATH_GPU_ENABLED int (signbit)(T x)
    return detail::signbit_impl(static_cast<result_type>(x), method());
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline int sign BOOST_NO_MACRO_EXPAND(const T& z)
 {
    return (z == 0) ? 0 : (boost::math::signbit)(z) ? -1 : 1;
@@ -181,7 +181,7 @@ BOOST_MATH_GPU_ENABLED typename tools::promote_args_permissive<T>::type (changes
    return detail::changesign_impl(static_cast<result_type>(x), method());
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args_permissive<T, U>::type 
    copysign BOOST_NO_MACRO_EXPAND(const T& x, const U& y)
 {
@@ -201,31 +201,31 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args_permissive<T, U>::typ
 namespace boost {
 namespace math {
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED int signbit(T x)
 {
     return ::signbit(x);
 }
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED T changesign(T x)
 {
     return -x;
 }
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED T copysign(T x, T y)
 {
     return ::copysign(x, y);
 }
 
-template <>
+BOOST_MATH_EXPORT template <>
 BOOST_MATH_GPU_ENABLED float copysign(float x, float y)
 {
     return ::copysignf(x, y);
 }
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED T sign(T z)
 {
     return (z == 0) ? 0 : ::signbit(z) ? -1 : 1;

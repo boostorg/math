@@ -26,7 +26,7 @@
 namespace boost{
 namespace math{
 
-template<class Real>
+BOOST_MATH_EXPORT template<class Real>
 class legendre_stieltjes
 {
 public:

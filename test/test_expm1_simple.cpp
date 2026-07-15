@@ -7,9 +7,14 @@
 #include "sycl/sycl.hpp"
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/special_functions/expm1.hpp>
+#else
+import boost.math;
+#endif
+
 #include <random>
 #include <cmath>
-#include <boost/math/special_functions/expm1.hpp>
 #include "math_unit_test.hpp"
 
 constexpr int N = 50000;

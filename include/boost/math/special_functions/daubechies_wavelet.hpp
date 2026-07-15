@@ -33,7 +33,7 @@
 
 namespace boost::math {
 
-   template<class Real, int p, int order>
+   BOOST_MATH_EXPORT template<class Real, int p, int order>
    std::vector<Real> daubechies_wavelet_dyadic_grid(int64_t j_max)
    {
       if (j_max == 0)
@@ -77,7 +77,7 @@ namespace boost::math {
    }
 
 
-   template<class Real, int p>
+   BOOST_MATH_EXPORT template<class Real, int p>
    class daubechies_wavelet {
       //
       // Some type manipulation so we know the type of the interpolator, and the vector type it requires:

@@ -27,7 +27,7 @@ namespace detail {
    constexpr double fib_bits_deno = 1.1609640474436811739351597;
 } // namespace detail
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 inline BOOST_MATH_CXX14_CONSTEXPR T unchecked_fibonacci(unsigned long long n) noexcept(std::is_fundamental<T>::value) {
     // This function is called by the rest and computes the actual nth fibonacci number
     // First few fibonacci numbers: 0 (0th), 1 (1st), 1 (2nd), 2 (3rd), ...
@@ -51,7 +51,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR T unchecked_fibonacci(unsigned long long n) no
     return a;
 }
 
-template <typename T, class Policy>
+BOOST_MATH_EXPORT template <typename T, class Policy>
 T inline BOOST_MATH_CXX14_CONSTEXPR fibonacci(unsigned long long n, const Policy &pol) {
     // check for overflow using approximation to binet's formula: F_n ~ phi^n / sqrt(5)
     if (n > 20 && n * detail::fib_bits_phi - detail::fib_bits_deno > std::numeric_limits<T>::digits)
@@ -59,13 +59,13 @@ T inline BOOST_MATH_CXX14_CONSTEXPR fibonacci(unsigned long long n, const Policy
     return unchecked_fibonacci<T>(n);
 }
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 T inline BOOST_MATH_CXX14_CONSTEXPR fibonacci(unsigned long long n) {
     return fibonacci<T>(n, policies::policy<>());
 }
 
 // generator for next fibonacci number (see examples/reciprocal_fibonacci_constant.hpp)
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 class fibonacci_generator {
   public:
     // return next fibonacci number

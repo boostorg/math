@@ -54,7 +54,7 @@ namespace boost {
 
     // class nonfinite_num_put -----------------------------------------------------
 
-    template<
+    BOOST_MATH_EXPORT template<
       class CharType,
       class OutputIterator = std::ostreambuf_iterator<CharType>
             >
@@ -231,7 +231,7 @@ namespace boost {
 
     // class nonfinite_num_get ------------------------------------------------------
 
-    template<
+    BOOST_MATH_EXPORT template<
       class CharType,
       class InputIterator = std::istreambuf_iterator<CharType>
     >

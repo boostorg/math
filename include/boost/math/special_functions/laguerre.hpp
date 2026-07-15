@@ -19,7 +19,7 @@ namespace boost{
 namespace math{
 
 // Recurrence relation for Laguerre polynomials:
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type  
    laguerre_next(unsigned n, T1 x, T2 Ln, T3 Lnm1)
 {
@@ -68,7 +68,7 @@ inline typename tools::promote_args<T>::type
 
 } // namespace detail
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline typename tools::promote_args<T>::type 
    laguerre(unsigned n, T x)
 {
@@ -76,7 +76,7 @@ inline typename tools::promote_args<T>::type
 }
 
 // Recurrence for associated polynomials:
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type  
    laguerre_next(unsigned n, unsigned l, T1 x, T2 Pl, T3 Plm1)
 {
@@ -113,7 +113,7 @@ T laguerre_imp(unsigned n, unsigned m, T x, const Policy& pol)
 
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type 
    laguerre(unsigned n, unsigned m, T x, const Policy& pol)
 {
@@ -122,7 +122,7 @@ inline typename tools::promote_args<T>::type
    return policies::checked_narrowing_cast<result_type, Policy>(detail::laguerre_imp(n, m, static_cast<value_type>(x), pol), "boost::math::laguerre<%1%>(unsigned, unsigned, %1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline typename laguerre_result<T1, T2>::type 
    laguerre(unsigned n, T1 m, T2 x)
 {

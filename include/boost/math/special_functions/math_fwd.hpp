@@ -35,7 +35,7 @@
 namespace boost {
 namespace math {
 
-template <class RT1, class RT2, class A>
+BOOST_MATH_EXPORT template <class RT1, class RT2, class A>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, A>::type
 beta(RT1 a, RT2 b, A arg);
 
@@ -121,200 +121,200 @@ namespace boost
    { // Math functions (in roughly alphabetic order).
 
    // Beta functions.
-   template <class RT1, class RT2>
+   BOOST_MATH_EXPORT template <class RT1, class RT2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2>
          beta(RT1 a, RT2 b); // Beta function (2 arguments).
 
-   template <class RT1, class RT2, class A>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class A>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, A>
          beta(RT1 a, RT2 b, A x); // Beta function (3 arguments).
 
-   template <class RT1, class RT2, class RT3, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          beta(RT1 a, RT2 b, RT3 x, const Policy& pol); // Beta function (3 arguments).
 
-   template <class RT1, class RT2, class RT3>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          betac(RT1 a, RT2 b, RT3 x);
 
-   template <class RT1, class RT2, class RT3, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          betac(RT1 a, RT2 b, RT3 x, const Policy& pol);
 
-   template <class RT1, class RT2, class RT3>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta(RT1 a, RT2 b, RT3 x); // Incomplete beta function.
 
-   template <class RT1, class RT2, class RT3, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta(RT1 a, RT2 b, RT3 x, const Policy& pol); // Incomplete beta function.
 
-   template <class RT1, class RT2, class RT3>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac(RT1 a, RT2 b, RT3 x); // Incomplete beta complement function.
 
-   template <class RT1, class RT2, class RT3, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac(RT1 a, RT2 b, RT3 x, const Policy& pol); // Incomplete beta complement function.
 
-   template <class T1, class T2, class T3, class T4>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, class T4>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3, T4>
          ibeta_inv(T1 a, T2 b, T3 p, T4* py);
 
-   template <class T1, class T2, class T3, class T4, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, class T4, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3, T4>
          ibeta_inv(T1 a, T2 b, T3 p, T4* py, const Policy& pol);
 
-   template <class RT1, class RT2, class RT3>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_inv(RT1 a, RT2 b, RT3 p); // Incomplete beta inverse function.
 
-   template <class RT1, class RT2, class RT3, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_inv(RT1 a, RT2 b, RT3 p, const Policy&); // Incomplete beta inverse function.
 
-   template <class RT1, class RT2, class RT3>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_inva(RT1 a, RT2 b, RT3 p); // Incomplete beta inverse function.
 
-   template <class RT1, class RT2, class RT3, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_inva(RT1 a, RT2 b, RT3 p, const Policy&); // Incomplete beta inverse function.
 
-   template <class RT1, class RT2, class RT3>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_invb(RT1 a, RT2 b, RT3 p); // Incomplete beta inverse function.
 
-   template <class RT1, class RT2, class RT3, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_invb(RT1 a, RT2 b, RT3 p, const Policy&); // Incomplete beta inverse function.
 
-   template <class T1, class T2, class T3, class T4>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, class T4>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3, T4>
          ibetac_inv(T1 a, T2 b, T3 q, T4* py);
 
-   template <class T1, class T2, class T3, class T4, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, class T4, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3, T4>
          ibetac_inv(T1 a, T2 b, T3 q, T4* py, const Policy& pol);
 
-   template <class RT1, class RT2, class RT3>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac_inv(RT1 a, RT2 b, RT3 q); // Incomplete beta complement inverse function.
 
-   template <class RT1, class RT2, class RT3, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac_inv(RT1 a, RT2 b, RT3 q, const Policy&); // Incomplete beta complement inverse function.
 
-   template <class RT1, class RT2, class RT3>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac_inva(RT1 a, RT2 b, RT3 q); // Incomplete beta complement inverse function.
 
-   template <class RT1, class RT2, class RT3, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac_inva(RT1 a, RT2 b, RT3 q, const Policy&); // Incomplete beta complement inverse function.
 
-   template <class RT1, class RT2, class RT3>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac_invb(RT1 a, RT2 b, RT3 q); // Incomplete beta complement inverse function.
 
-   template <class RT1, class RT2, class RT3, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac_invb(RT1 a, RT2 b, RT3 q, const Policy&); // Incomplete beta complement inverse function.
 
-   template <class RT1, class RT2, class RT3>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_derivative(RT1 a, RT2 b, RT3 x);  // derivative of incomplete beta
 
-   template <class RT1, class RT2, class RT3, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibeta_derivative(RT1 a, RT2 b, RT3 x, const Policy& pol);  // derivative of incomplete beta
 
    // Binomial:
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED T binomial_coefficient(unsigned n, unsigned k, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED T binomial_coefficient(unsigned n, unsigned k);
 
    // erf & erfc error functions.
-   template <class RT> // Error function.
+   BOOST_MATH_EXPORT template <class RT> // Error function.
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erf(RT z);
-   template <class RT, class Policy> // Error function.
+   BOOST_MATH_EXPORT template <class RT, class Policy> // Error function.
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erf(RT z, const Policy&);
 
-   template <class RT>// Error function complement.
+   BOOST_MATH_EXPORT template <class RT>// Error function complement.
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erfc(RT z);
-   template <class RT, class Policy>// Error function complement.
+   BOOST_MATH_EXPORT template <class RT, class Policy>// Error function complement.
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erfc(RT z, const Policy&);
 
-   template <class RT>// Error function inverse.
+   BOOST_MATH_EXPORT template <class RT>// Error function inverse.
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erf_inv(RT z);
-   template <class RT, class Policy>// Error function inverse.
+   BOOST_MATH_EXPORT template <class RT, class Policy>// Error function inverse.
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erf_inv(RT z, const Policy& pol);
 
-   template <class RT>// Error function complement inverse.
+   BOOST_MATH_EXPORT template <class RT>// Error function complement inverse.
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erfc_inv(RT z);
-   template <class RT, class Policy>// Error function complement inverse.
+   BOOST_MATH_EXPORT template <class RT, class Policy>// Error function complement inverse.
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> erfc_inv(RT z, const Policy& pol);
 
    // Polynomials:
-   template <class T1, class T2, class T3>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3>
    tools::promote_args_t<T1, T2, T3>
          legendre_next(unsigned l, T1 x, T2 Pl, T3 Plm1);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    tools::promote_args_t<T>
          legendre_p(int l, T x);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    tools::promote_args_t<T>
           legendre_p_prime(int l, T x);
 
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    inline std::vector<T> legendre_p_zeros(int l, const Policy& pol);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    inline std::vector<T> legendre_p_zeros(int l);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    typename std::enable_if<policies::is_policy<Policy>::value, tools::promote_args_t<T>>::type
          legendre_p(int l, T x, const Policy& pol);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    inline typename std::enable_if<policies::is_policy<Policy>::value, tools::promote_args_t<T>>::type
       legendre_p_prime(int l, T x, const Policy& pol);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    tools::promote_args_t<T>
          legendre_q(unsigned l, T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    typename std::enable_if<policies::is_policy<Policy>::value, tools::promote_args_t<T>>::type
          legendre_q(unsigned l, T x, const Policy& pol);
 
-   template <class T1, class T2, class T3>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3>
    tools::promote_args_t<T1, T2, T3>
          legendre_next(unsigned l, unsigned m, T1 x, T2 Pl, T3 Plm1);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    tools::promote_args_t<T>
          legendre_p(int l, int m, T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    tools::promote_args_t<T>
          legendre_p(int l, int m, T x, const Policy& pol);
 
-   template <class T1, class T2, class T3>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3>
    tools::promote_args_t<T1, T2, T3>
          laguerre_next(unsigned n, T1 x, T2 Ln, T3 Lnm1);
 
-   template <class T1, class T2, class T3>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3>
    tools::promote_args_t<T1, T2, T3>
       laguerre_next(unsigned n, unsigned l, T1 x, T2 Pl, T3 Plm1);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    tools::promote_args_t<T>
       laguerre(unsigned n, T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    tools::promote_args_t<T>
       laguerre(unsigned n, unsigned m, T x, const Policy& pol);
 
@@ -328,148 +328,148 @@ namespace boost
       >::type;
    };
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    typename laguerre_result<T1, T2>::type
       laguerre(unsigned n, T1 m, T2 x);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T>
       hermite(unsigned n, T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T>
       hermite(unsigned n, T x, const Policy& pol);
 
-   template <class T1, class T2, class T3>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
       hermite_next(unsigned n, T1 x, T2 Hn, T3 Hnm1);
 
-   template<class T1, class T2, class T3>
+   BOOST_MATH_EXPORT template<class T1, class T2, class T3>
    tools::promote_args_t<T1, T2, T3> chebyshev_next(T1 const & x, T2 const & Tn, T3 const & Tn_1);
 
-   template <class Real, class Policy>
+   BOOST_MATH_EXPORT template <class Real, class Policy>
    tools::promote_args_t<Real>
       chebyshev_t(unsigned n, Real const & x, const Policy&);
-   template<class Real>
+   BOOST_MATH_EXPORT template<class Real>
    tools::promote_args_t<Real> chebyshev_t(unsigned n, Real const & x);
    
-   template <class Real, class Policy>
+   BOOST_MATH_EXPORT template <class Real, class Policy>
    tools::promote_args_t<Real>
       chebyshev_u(unsigned n, Real const & x, const Policy&);
-   template<class Real>
+   BOOST_MATH_EXPORT template<class Real>
    tools::promote_args_t<Real> chebyshev_u(unsigned n, Real const & x);
 
-   template <class Real, class Policy>
+   BOOST_MATH_EXPORT template <class Real, class Policy>
    tools::promote_args_t<Real>
       chebyshev_t_prime(unsigned n, Real const & x, const Policy&);
-   template<class Real>
+   BOOST_MATH_EXPORT template<class Real>
    tools::promote_args_t<Real> chebyshev_t_prime(unsigned n, Real const & x);
 
-   template<class Real, class T2>
+   BOOST_MATH_EXPORT template<class Real, class T2>
    Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, const T2& x);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    std::complex<tools::promote_args_t<T1, T2>>
          spherical_harmonic(unsigned n, int m, T1 theta, T2 phi);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    std::complex<tools::promote_args_t<T1, T2>>
       spherical_harmonic(unsigned n, int m, T1 theta, T2 phi, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    tools::promote_args_t<T1, T2>
          spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    tools::promote_args_t<T1, T2>
       spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    tools::promote_args_t<T1, T2>
          spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    tools::promote_args_t<T1, T2>
       spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi, const Policy& pol);
 
    // Elliptic integrals:
-   template <class T1, class T2, class T3>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
          ellint_rf(T1 x, T2 y, T3 z);
 
-   template <class T1, class T2, class T3, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
          ellint_rf(T1 x, T2 y, T3 z, const Policy& pol);
 
-   template <class T1, class T2, class T3>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
          ellint_rd(T1 x, T2 y, T3 z);
 
-   template <class T1, class T2, class T3, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
          ellint_rd(T1 x, T2 y, T3 z, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
          ellint_rc(T1 x, T2 y);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
          ellint_rc(T1 x, T2 y, const Policy& pol);
 
-   template <class T1, class T2, class T3, class T4>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, class T4>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3, T4>
          ellint_rj(T1 x, T2 y, T3 z, T4 p);
 
-   template <class T1, class T2, class T3, class T4, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, class T4, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3, T4>
          ellint_rj(T1 x, T2 y, T3 z, T4 p, const Policy& pol);
 
-   template <class T1, class T2, class T3>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
       ellint_rg(T1 x, T2 y, T3 z);
 
-   template <class T1, class T2, class T3, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
       ellint_rg(T1 x, T2 y, T3 z, const Policy& pol);
 
-   template <typename T>
+   BOOST_MATH_EXPORT template <typename T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> ellint_2(T k);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_2(T1 k, T2 phi);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_2(T1 k, T2 phi, const Policy& pol);
 
-   template <typename T>
+   BOOST_MATH_EXPORT template <typename T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> ellint_1(T k);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_1(T1 k, T2 phi);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_1(T1 k, T2 phi, const Policy& pol);
 
-   template <typename T>
+   BOOST_MATH_EXPORT template <typename T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> ellint_d(T k);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_d(T1 k, T2 phi);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_d(T1 k, T2 phi, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> jacobi_zeta(T1 k, T2 phi);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> jacobi_zeta(T1 k, T2 phi, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> heuman_lambda(T1 k, T2 phi);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> heuman_lambda(T1 k, T2 phi, const Policy& pol);
 
    namespace detail{
@@ -487,255 +487,255 @@ namespace boost
    } // namespace detail
 
 
-   template <class T1, class T2, class T3>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3>
    BOOST_MATH_GPU_ENABLED typename detail::ellint_3_result<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi);
 
-   template <class T1, class T2, class T3, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3> ellint_3(T1 k, T2 v, T3 phi, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> ellint_3(T1 k, T2 v);
 
    // Factorial functions.
    // Note: not for integral types, at present.
-   template <class RT>
+   BOOST_MATH_EXPORT template <class RT>
    struct max_factorial;
-   template <class RT>
+   BOOST_MATH_EXPORT template <class RT>
    BOOST_MATH_GPU_ENABLED RT factorial(unsigned int);
-   template <class RT, class Policy>
+   BOOST_MATH_EXPORT template <class RT, class Policy>
    BOOST_MATH_GPU_ENABLED RT factorial(unsigned int, const Policy& pol);
-   template <class RT>
+   BOOST_MATH_EXPORT template <class RT>
    BOOST_MATH_GPU_ENABLED RT unchecked_factorial(unsigned int BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(RT));
-   template <class RT>
+   BOOST_MATH_EXPORT template <class RT>
    BOOST_MATH_GPU_ENABLED RT double_factorial(unsigned i);
-   template <class RT, class Policy>
+   BOOST_MATH_EXPORT template <class RT, class Policy>
    BOOST_MATH_GPU_ENABLED RT double_factorial(unsigned i, const Policy& pol);
 
-   template <class RT>
+   BOOST_MATH_EXPORT template <class RT>
    tools::promote_args_t<RT> falling_factorial(RT x, unsigned n);
 
-   template <class RT, class Policy>
+   BOOST_MATH_EXPORT template <class RT, class Policy>
    tools::promote_args_t<RT> falling_factorial(RT x, unsigned n, const Policy& pol);
 
-   template <class RT>
+   BOOST_MATH_EXPORT template <class RT>
    tools::promote_args_t<RT> rising_factorial(RT x, int n);
 
-   template <class RT, class Policy>
+   BOOST_MATH_EXPORT template <class RT, class Policy>
    tools::promote_args_t<RT> rising_factorial(RT x, int n, const Policy& pol);
 
    // Gamma functions.
-   template <class RT>
+   BOOST_MATH_EXPORT template <class RT>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> tgamma(RT z);
 
-   template <class RT>
+   BOOST_MATH_EXPORT template <class RT>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> tgamma1pm1(RT z);
 
-   template <class RT, class Policy>
+   BOOST_MATH_EXPORT template <class RT, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> tgamma1pm1(RT z, const Policy& pol);
 
-   template <class RT1, class RT2>
+   BOOST_MATH_EXPORT template <class RT1, class RT2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> tgamma(RT1 a, RT2 z);
 
-   template <class RT1, class RT2, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> tgamma(RT1 a, RT2 z, const Policy& pol);
 
-   template <class RT>
+   BOOST_MATH_EXPORT template <class RT>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> lgamma(RT z, int* sign);
 
-   template <class RT, class Policy>
+   BOOST_MATH_EXPORT template <class RT, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> lgamma(RT z, int* sign, const Policy& pol);
 
-   template <class RT>
+   BOOST_MATH_EXPORT template <class RT>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> lgamma(RT x);
 
-   template <class RT, class Policy>
+   BOOST_MATH_EXPORT template <class RT, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> lgamma(RT x, const Policy& pol);
 
-   template <class RT1, class RT2>
+   BOOST_MATH_EXPORT template <class RT1, class RT2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> tgamma_lower(RT1 a, RT2 z);
 
-   template <class RT1, class RT2, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> tgamma_lower(RT1 a, RT2 z, const Policy&);
 
-   template <class RT1, class RT2>
+   BOOST_MATH_EXPORT template <class RT1, class RT2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> gamma_q(RT1 a, RT2 z);
 
-   template <class RT1, class RT2, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> gamma_q(RT1 a, RT2 z, const Policy&);
 
-   template <class RT1, class RT2>
+   BOOST_MATH_EXPORT template <class RT1, class RT2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> lgamma_q(RT1 a, RT2 z);
 
-   template <class RT1, class RT2, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> lgamma_q(RT1 a, RT2 z, const Policy&);
 
-   template <class RT1, class RT2>
+   BOOST_MATH_EXPORT template <class RT1, class RT2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> lgamma_p(RT1 a, RT2 z);
 
-   template <class RT1, class RT2, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> lgamma_p(RT1 a, RT2 z, const Policy&);
 
-   template <class RT1, class RT2>
+   BOOST_MATH_EXPORT template <class RT1, class RT2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> gamma_p(RT1 a, RT2 z);
 
-   template <class RT1, class RT2, class Policy>
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> gamma_p(RT1 a, RT2 z, const Policy&);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> tgamma_delta_ratio(T1 z, T2 delta);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> tgamma_delta_ratio(T1 z, T2 delta, const Policy&);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> tgamma_ratio(T1 a, T2 b);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> tgamma_ratio(T1 a, T2 b, const Policy&);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_p_derivative(T1 a, T2 x);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_p_derivative(T1 a, T2 x, const Policy&);
 
    // gamma inverse.
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_p_inv(T1 a, T2 p);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_p_inva(T1 a, T2 p, const Policy&);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_p_inva(T1 a, T2 p);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_p_inv(T1 a, T2 p, const Policy&);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_q_inv(T1 a, T2 q);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_q_inv(T1 a, T2 q, const Policy&);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_q_inva(T1 a, T2 q);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2> gamma_q_inva(T1 a, T2 q, const Policy&);
 
    // digamma:
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> digamma(T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> digamma(T x, const Policy&);
 
    // trigamma:
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> trigamma(T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> trigamma(T x, const Policy&);
 
    // polygamma:
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    tools::promote_args_t<T> polygamma(int n, T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    tools::promote_args_t<T> polygamma(int n, T x, const Policy&);
 
    // Hypotenuse function sqrt(x ^ 2 + y ^ 2).
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
          hypot(T1 x, T2 y);
 
-   template <class T1, class T2, class Policy, boost::math::enable_if_t<policies::is_policy_v<Policy>, bool> = true>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy, boost::math::enable_if_t<policies::is_policy_v<Policy>, bool> = true>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
          hypot(T1 x, T2 y, const Policy&);
 
-   template <class T1, class T2, class T3, boost::math::enable_if_t<!policies::is_policy_v<T3>, bool> = true>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, boost::math::enable_if_t<!policies::is_policy_v<T3>, bool> = true>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
       hypot(T1 x, T2 y, T3 z);
 
-   template <class T1, class T2, class T3, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3>
       hypot(T1 x, T2 y, T3 z, const Policy& pol);
 
    // cbrt - cube root.
-   template <class RT>
+   BOOST_MATH_EXPORT template <class RT>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> cbrt(RT z);
 
-   template <class RT, class Policy>
+   BOOST_MATH_EXPORT template <class RT, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT> cbrt(RT z, const Policy&);
 
    // log1p is log(x + 1)
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> log1p(T);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> log1p(T, const Policy&);
 
    // log1pmx is log(x + 1) - x
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> log1pmx(T);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> log1pmx(T, const Policy&);
 
    // Exp (x) minus 1 functions.
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> expm1(T);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> expm1(T, const Policy&);
 
    // Power - 1
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
          powm1(const T1 a, const T2 z);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2>
          powm1(const T1 a, const T2 z, const Policy&);
 
    // sqrt(1+x) - 1
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> sqrt1pm1(const T& val);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> sqrt1pm1(const T& val, const Policy&);
 
    // sinus cardinals:
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> sinc_pi(T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> sinc_pi(T x, const Policy&);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    tools::promote_args_t<T> sinhc_pi(T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    tools::promote_args_t<T> sinhc_pi(T x, const Policy&);
 
    // inverse hyperbolics:
-   template<typename T>
+   BOOST_MATH_EXPORT template<typename T>
    tools::promote_args_t<T> asinh(T x);
 
-   template<typename T, class Policy>
+   BOOST_MATH_EXPORT template<typename T, class Policy>
    tools::promote_args_t<T> asinh(T x, const Policy&);
 
-   template<typename T>
+   BOOST_MATH_EXPORT template<typename T>
    tools::promote_args_t<T> acosh(T x);
 
-   template<typename T, class Policy>
+   BOOST_MATH_EXPORT template<typename T, class Policy>
    tools::promote_args_t<T> acosh(T x, const Policy&);
 
-   template<typename T>
+   BOOST_MATH_EXPORT template<typename T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> atanh(T x);
 
-   template<typename T, class Policy>
+   BOOST_MATH_EXPORT template<typename T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> atanh(T x, const Policy&);
 
    namespace detail{
@@ -778,224 +778,224 @@ namespace boost
    } // detail
 
    // Bessel functions:
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j(T1 v, T2 x, const Policy& pol);
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j_prime(T1 v, T2 x, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_j(T1 v, T2 x);
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_j_prime(T1 v, T2 x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel(unsigned v, T x, const Policy& pol);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel_prime(unsigned v, T x, const Policy& pol);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_bessel(unsigned v, T x);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_bessel_prime(unsigned v, T x);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i(T1 v, T2 x, const Policy& pol);
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i_prime(T1 v, T2 x, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_i(T1 v, T2 x);
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_i_prime(T1 v, T2 x);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k(T1 v, T2 x, const Policy& pol);
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k_prime(T1 v, T2 x, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_k(T1 v, T2 x);
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_k_prime(T1 v, T2 x);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann(T1 v, T2 x, const Policy& pol);
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann_prime(T1 v, T2 x, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_neumann(T1 v, T2 x);
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_neumann_prime(T1 v, T2 x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann(unsigned v, T x, const Policy& pol);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann_prime(unsigned v, T x, const Policy& pol);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann(unsigned v, T x);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann_prime(unsigned v, T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_zero(T v, int m, const Policy& pol);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_bessel_j_zero(T v, int m);
 
-   template <class T, class OutputIterator>
+   BOOST_MATH_EXPORT template <class T, class OutputIterator>
    BOOST_MATH_GPU_ENABLED OutputIterator cyl_bessel_j_zero(T v,
                           int start_index,
                           unsigned number_of_zeros,
                           OutputIterator out_it);
 
-   template <class T, class OutputIterator, class Policy>
+   BOOST_MATH_EXPORT template <class T, class OutputIterator, class Policy>
    BOOST_MATH_GPU_ENABLED OutputIterator cyl_bessel_j_zero(T v,
                           int start_index,
                           unsigned number_of_zeros,
                           OutputIterator out_it,
                           const Policy&);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, Policy>::result_type cyl_neumann_zero(T v, int m, const Policy& pol);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_neumann_zero(T v, int m);
 
-   template <class T, class OutputIterator>
+   BOOST_MATH_EXPORT template <class T, class OutputIterator>
    BOOST_MATH_GPU_ENABLED OutputIterator cyl_neumann_zero(T v,
                          int start_index,
                          unsigned number_of_zeros,
                          OutputIterator out_it);
 
-   template <class T, class OutputIterator, class Policy>
+   BOOST_MATH_EXPORT template <class T, class OutputIterator, class Policy>
    BOOST_MATH_GPU_ENABLED OutputIterator cyl_neumann_zero(T v,
                          int start_index,
                          unsigned number_of_zeros,
                          OutputIterator out_it,
                          const Policy&);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED boost::math::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> cyl_hankel_1(T1 v, T2 x);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED boost::math::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> cyl_hankel_1(T1 v, T2 x, const Policy& pol);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED boost::math::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> cyl_hankel_2(T1 v, T2 x, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED boost::math::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> cyl_hankel_2(T1 v, T2 x);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED boost::math::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> sph_hankel_1(T1 v, T2 x, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED boost::math::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> sph_hankel_1(T1 v, T2 x);
 
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    BOOST_MATH_GPU_ENABLED boost::math::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> sph_hankel_2(T1 v, T2 x, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    BOOST_MATH_GPU_ENABLED boost::math::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> sph_hankel_2(T1 v, T2 x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_ai(T x, const Policy&);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_ai(T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_bi(T x, const Policy&);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_bi(T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_ai_prime(T x, const Policy&);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_ai_prime(T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_bi_prime(T x, const Policy&);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> airy_bi_prime(T x);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED T airy_ai_zero(int m);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED T airy_ai_zero(int m, const Policy&);
 
-   template <class OutputIterator>
+   BOOST_MATH_EXPORT template <class OutputIterator>
    BOOST_MATH_GPU_ENABLED OutputIterator airy_ai_zero(
                      int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it);
-   template <class OutputIterator, class Policy>
+   BOOST_MATH_EXPORT template <class OutputIterator, class Policy>
    BOOST_MATH_GPU_ENABLED OutputIterator airy_ai_zero(
                      int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it,
                      const Policy&);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED T airy_bi_zero(int m);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED T airy_bi_zero(int m, const Policy&);
 
-   template <class OutputIterator>
+   BOOST_MATH_EXPORT template <class OutputIterator>
    BOOST_MATH_GPU_ENABLED OutputIterator airy_bi_zero(
                      int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it);
-   template <class OutputIterator, class Policy>
+   BOOST_MATH_EXPORT template <class OutputIterator, class Policy>
    BOOST_MATH_GPU_ENABLED OutputIterator airy_bi_zero(
                      int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it,
                      const Policy&);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> sin_pi(T x, const Policy&);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> sin_pi(T x);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> cos_pi(T x, const Policy&);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> cos_pi(T x);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED int fpclassify BOOST_NO_MACRO_EXPAND(T t);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED bool isfinite BOOST_NO_MACRO_EXPAND(T z);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED bool isinf BOOST_NO_MACRO_EXPAND(T t);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED bool isnan BOOST_NO_MACRO_EXPAND(T t);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED bool isnormal BOOST_NO_MACRO_EXPAND(T t);
 
-   template<class T>
+   BOOST_MATH_EXPORT template<class T>
    BOOST_MATH_GPU_ENABLED int signbit BOOST_NO_MACRO_EXPAND(T x);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED int sign BOOST_NO_MACRO_EXPAND(const T& z);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    BOOST_MATH_GPU_ENABLED typename tools::promote_args_permissive<T, U>::type 
    copysign BOOST_NO_MACRO_EXPAND(const T& x, const U& y);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED typename tools::promote_args_permissive<T>::type 
    changesign BOOST_NO_MACRO_EXPAND(const T& z);
 
@@ -1014,13 +1014,13 @@ namespace boost
 
    } // namespace detail
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> expint(unsigned n, T z, const Policy&);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    BOOST_MATH_GPU_ENABLED typename detail::expint_result<T, U>::type expint(T const z, U const u);
 
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T> expint(T z);
 
    // Zeta:
@@ -1028,162 +1028,162 @@ namespace boost
    tools::promote_args_t<T> zeta(T s, const Policy&);
 
    // Owen's T function:
-   template <class T1, class T2, class Policy>
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
    tools::promote_args_t<T1, T2> owens_t(T1 h, T2 a, const Policy& pol);
 
-   template <class T1, class T2>
+   BOOST_MATH_EXPORT template <class T1, class T2>
    tools::promote_args_t<T1, T2> owens_t(T1 h, T2 a);
 
    // Jacobi Functions:
-   template <class T, class U, class V, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class V, class Policy>
    tools::promote_args_t<T, U, V> jacobi_elliptic(T k, U theta, V* pcn, V* pdn, const Policy&);
 
-   template <class T, class U, class V>
+   BOOST_MATH_EXPORT template <class T, class U, class V>
    tools::promote_args_t<T, U, V> jacobi_elliptic(T k, U theta, V* pcn = 0, V* pdn = 0);
 
-   template <class U, class T, class Policy>
+   BOOST_MATH_EXPORT template <class U, class T, class Policy>
    tools::promote_args_t<T, U> jacobi_sn(U k, T theta, const Policy& pol);
 
-   template <class U, class T>
+   BOOST_MATH_EXPORT template <class U, class T>
    tools::promote_args_t<T, U> jacobi_sn(U k, T theta);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_cn(T k, U theta, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_cn(T k, U theta);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_dn(T k, U theta, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_dn(T k, U theta);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_cd(T k, U theta, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_cd(T k, U theta);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_dc(T k, U theta, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_dc(T k, U theta);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_ns(T k, U theta, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_ns(T k, U theta);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_sd(T k, U theta, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_sd(T k, U theta);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_ds(T k, U theta, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_ds(T k, U theta);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_nc(T k, U theta, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_nc(T k, U theta);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_nd(T k, U theta, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_nd(T k, U theta);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_sc(T k, U theta, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_sc(T k, U theta);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_cs(T k, U theta, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_cs(T k, U theta);
 
    // Jacobi Theta Functions:
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_theta1(T z, U q, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_theta1(T z, U q);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_theta2(T z, U q, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_theta2(T z, U q);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_theta3(T z, U q, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_theta3(T z, U q);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_theta4(T z, U q, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_theta4(T z, U q);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_theta1tau(T z, U tau, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_theta1tau(T z, U tau);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_theta2tau(T z, U tau, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_theta2tau(T z, U tau);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_theta3tau(T z, U tau, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_theta3tau(T z, U tau);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_theta4tau(T z, U tau, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_theta4tau(T z, U tau);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_theta3m1(T z, U q, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_theta3m1(T z, U q);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_theta4m1(T z, U q, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_theta4m1(T z, U q);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_theta3m1tau(T z, U tau, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_theta3m1tau(T z, U tau);
 
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> jacobi_theta4m1tau(T z, U tau, const Policy& pol);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> jacobi_theta4m1tau(T z, U tau);
 
 
@@ -1191,103 +1191,103 @@ namespace boost
    tools::promote_args_t<T> zeta(T s);
 
    // pow:
-   template <int N, typename T, class Policy>
+   BOOST_MATH_EXPORT template <int N, typename T, class Policy>
    BOOST_MATH_GPU_ENABLED BOOST_MATH_CXX14_CONSTEXPR tools::promote_args_t<T> pow(T base, const Policy& policy);
 
-   template <int N, typename T>
+   BOOST_MATH_EXPORT template <int N, typename T>
    BOOST_MATH_GPU_ENABLED BOOST_MATH_CXX14_CONSTEXPR tools::promote_args_t<T> pow(T base);
 
    // next:
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> nextafter(const T&, const U&, const Policy&);
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> nextafter(const T&, const U&);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    tools::promote_args_t<T> float_next(const T&, const Policy&);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    tools::promote_args_t<T> float_next(const T&);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    tools::promote_args_t<T> float_prior(const T&, const Policy&);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    tools::promote_args_t<T> float_prior(const T&);
-   template <class T, class U, class Policy>
+   BOOST_MATH_EXPORT template <class T, class U, class Policy>
    tools::promote_args_t<T, U> float_distance(const T&, const U&, const Policy&);
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> float_distance(const T&, const U&);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    tools::promote_args_t<T> float_advance(T val, int distance, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    tools::promote_args_t<T> float_advance(const T& val, int distance);
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    tools::promote_args_t<T> ulp(const T& val, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    tools::promote_args_t<T> ulp(const T& val);
 
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> relative_difference(const T&, const U&);
-   template <class T, class U>
+   BOOST_MATH_EXPORT template <class T, class U>
    tools::promote_args_t<T, U> epsilon_difference(const T&, const U&);
 
-   template<class T>
+   BOOST_MATH_EXPORT template<class T>
    BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_b2n(const std::size_t n);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    T bernoulli_b2n(const int i, const Policy &pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    T bernoulli_b2n(const int i);
-   template <class T, class OutputIterator, class Policy>
+   BOOST_MATH_EXPORT template <class T, class OutputIterator, class Policy>
    OutputIterator bernoulli_b2n(const int start_index,
                                        const unsigned number_of_bernoullis_b2n,
                                        OutputIterator out_it,
                                        const Policy& pol);
-   template <class T, class OutputIterator>
+   BOOST_MATH_EXPORT template <class T, class OutputIterator>
    OutputIterator bernoulli_b2n(const int start_index,
                                        const unsigned number_of_bernoullis_b2n,
                                        OutputIterator out_it);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    T tangent_t2n(const int i, const Policy &pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    T tangent_t2n(const int i);
-   template <class T, class OutputIterator, class Policy>
+   BOOST_MATH_EXPORT template <class T, class OutputIterator, class Policy>
    OutputIterator tangent_t2n(const int start_index,
                                        const unsigned number_of_bernoullis_b2n,
                                        OutputIterator out_it,
                                        const Policy& pol);
-   template <class T, class OutputIterator>
+   BOOST_MATH_EXPORT template <class T, class OutputIterator>
    OutputIterator tangent_t2n(const int start_index,
                                        const unsigned number_of_bernoullis_b2n,
                                        OutputIterator out_it);
 
    // Lambert W:
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    boost::math::tools::promote_args_t<T> lambert_w0(T z, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    boost::math::tools::promote_args_t<T> lambert_w0(T z);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    boost::math::tools::promote_args_t<T> lambert_wm1(T z, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    boost::math::tools::promote_args_t<T> lambert_wm1(T z);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    boost::math::tools::promote_args_t<T> lambert_w0_prime(T z, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    boost::math::tools::promote_args_t<T> lambert_w0_prime(T z);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    boost::math::tools::promote_args_t<T> lambert_wm1_prime(T z, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    boost::math::tools::promote_args_t<T> lambert_wm1_prime(T z);
 
    // Hypergeometrics:
-   template <class T1, class T2> tools::promote_args_t<T1, T2> hypergeometric_1F0(T1 a, T2 z);
-   template <class T1, class T2, class Policy> tools::promote_args_t<T1, T2> hypergeometric_1F0(T1 a, T2 z, const Policy&);
+   BOOST_MATH_EXPORT template <class T1, class T2> tools::promote_args_t<T1, T2> hypergeometric_1F0(T1 a, T2 z);
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy> tools::promote_args_t<T1, T2> hypergeometric_1F0(T1 a, T2 z, const Policy&);
 
-   template <class T1, class T2> tools::promote_args_t<T1, T2> hypergeometric_0F1(T1 b, T2 z);
-   template <class T1, class T2, class Policy> tools::promote_args_t<T1, T2> hypergeometric_0F1(T1 b, T2 z, const Policy&);
+   BOOST_MATH_EXPORT template <class T1, class T2> tools::promote_args_t<T1, T2> hypergeometric_0F1(T1 b, T2 z);
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy> tools::promote_args_t<T1, T2> hypergeometric_0F1(T1 b, T2 z, const Policy&);
 
-   template <class T1, class T2, class T3> tools::promote_args_t<T1, T2, T3> hypergeometric_2F0(T1 a1, T2 a2, T3 z);
-   template <class T1, class T2, class T3, class Policy> tools::promote_args_t<T1, T2, T3> hypergeometric_2F0(T1 a1, T2 a2, T3 z, const Policy&);
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3> tools::promote_args_t<T1, T2, T3> hypergeometric_2F0(T1 a1, T2 a2, T3 z);
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy> tools::promote_args_t<T1, T2, T3> hypergeometric_2F0(T1 a1, T2 a2, T3 z, const Policy&);
 
-   template <class T1, class T2, class T3> tools::promote_args_t<T1, T2, T3> hypergeometric_1F1(T1 a, T2 b, T3 z);
-   template <class T1, class T2, class T3, class Policy> tools::promote_args_t<T1, T2, T3> hypergeometric_1F1(T1 a, T2 b, T3 z, const Policy&);
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3> tools::promote_args_t<T1, T2, T3> hypergeometric_1F1(T1 a, T2 b, T3 z);
+   BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy> tools::promote_args_t<T1, T2, T3> hypergeometric_1F1(T1 a, T2 b, T3 z, const Policy&);
 
 
     } // namespace math

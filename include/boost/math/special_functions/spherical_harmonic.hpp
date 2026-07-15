@@ -150,7 +150,7 @@ std::complex<T> spherical_harmonic(unsigned n, int m, U theta, U phi, const Poli
 
 } // namespace detail
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 inline std::complex<typename tools::promote_args<T1, T2>::type> 
    spherical_harmonic(unsigned n, int m, T1 theta, T2 phi, const Policy& pol)
 {
@@ -159,14 +159,14 @@ inline std::complex<typename tools::promote_args<T1, T2>::type>
    return detail::spherical_harmonic<result_type, value_type>(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi), pol);
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline std::complex<typename tools::promote_args<T1, T2>::type> 
    spherical_harmonic(unsigned n, int m, T1 theta, T2 phi)
 {
    return boost::math::spherical_harmonic(n, m, theta, phi, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type 
    spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi, const Policy& pol)
 {
@@ -175,14 +175,14 @@ inline typename tools::promote_args<T1, T2>::type
    return policies::checked_narrowing_cast<result_type, Policy>(detail::spherical_harmonic_r(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi), pol), "boost::math::spherical_harmonic_r<%1%>(unsigned, int, %1%, %1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type 
    spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi)
 {
    return boost::math::spherical_harmonic_r(n, m, theta, phi, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type 
    spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi, const Policy& pol)
 {
@@ -191,7 +191,7 @@ inline typename tools::promote_args<T1, T2>::type
    return policies::checked_narrowing_cast<result_type, Policy>(detail::spherical_harmonic_i(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi), pol), "boost::math::spherical_harmonic_i<%1%>(unsigned, int, %1%, %1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type 
    spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi)
 {

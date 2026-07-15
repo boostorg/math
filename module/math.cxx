@@ -123,6 +123,9 @@ import std;
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
+// Special functions (umbrella)
+#include <boost/math/special_functions.hpp>
+
 #ifdef _MSC_VER
 #  pragma warning( pop )
 #elif defined(__clang__)

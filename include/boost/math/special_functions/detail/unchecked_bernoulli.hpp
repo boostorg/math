@@ -80,7 +80,7 @@ struct bernoulli_imp_variant
 
 } // namespace detail
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 struct max_bernoulli_b2n : public detail::max_bernoulli_index<detail::bernoulli_imp_variant<T>::value>{};
 
 namespace detail {
@@ -1294,7 +1294,7 @@ inline T unchecked_bernoulli_imp(std::size_t n, const std::integral_constant<int
 
 } // namespace detail
 
-template<class T>
+BOOST_MATH_EXPORT template<class T>
 inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_b2n(const std::size_t n)
 {
    typedef std::integral_constant<int, detail::bernoulli_imp_variant<T>::value> tag_type;

@@ -84,12 +84,12 @@ namespace boost
         }
        }
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline typename tools::promote_args<T>::type asinh(T x)
         {
            return boost::math::asinh(x, policies::policy<>());
         }
-        template<typename T, typename Policy>
+        BOOST_MATH_EXPORT template<typename T, typename Policy>
         inline typename tools::promote_args<T>::type asinh(T x, const Policy&)
         {
             typedef typename tools::promote_args<T>::type result_type;

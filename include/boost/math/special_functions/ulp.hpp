@@ -82,14 +82,14 @@ T ulp_imp(const T& val, const std::false_type&, const Policy& pol)
 
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type ulp(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    return detail::ulp_imp(static_cast<result_type>(val), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline typename tools::promote_args<T>::type ulp(const T& val)
 {
    return ulp(val, policies::policy<>());

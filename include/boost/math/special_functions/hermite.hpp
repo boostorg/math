@@ -21,7 +21,7 @@ namespace boost{
 namespace math{
 
 // Recurrence relation for Hermite polynomials:
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2, T3>::type 
    hermite_next(unsigned n, T1 x, T2 Hn, T3 Hnm1)
 {
@@ -54,7 +54,7 @@ BOOST_MATH_GPU_ENABLED T hermite_imp(unsigned n, T x)
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type 
    hermite(unsigned n, T x, const Policy&)
 {
@@ -63,7 +63,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    return policies::checked_narrowing_cast<result_type, Policy>(detail::hermite_imp(n, static_cast<value_type>(x)), "boost::math::hermite<%1%>(unsigned, %1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type 
    hermite(unsigned n, T x)
 {

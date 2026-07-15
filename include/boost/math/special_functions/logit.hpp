@@ -18,7 +18,7 @@
 namespace boost {
 namespace math {
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 BOOST_MATH_GPU_ENABLED RealType logit(RealType p, const Policy&)
 {
     BOOST_MATH_STD_USING
@@ -46,7 +46,7 @@ BOOST_MATH_GPU_ENABLED RealType logit(RealType p, const Policy&)
     return result;
 }
 
-template <typename RealType>
+BOOST_MATH_EXPORT template <typename RealType>
 BOOST_MATH_GPU_ENABLED RealType logit(RealType p)
 {
     return logit(p, policies::policy<>());

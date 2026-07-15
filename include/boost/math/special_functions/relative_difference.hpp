@@ -13,7 +13,7 @@
 namespace boost{
    namespace math{
 
-      template <class T, class U>
+      BOOST_MATH_EXPORT template <class T, class U>
       typename boost::math::tools::promote_args<T,U>::type relative_difference(const T& arg_a, const U& arg_b)
       {
          typedef typename boost::math::tools::promote_args<T, U>::type result_type;
@@ -70,7 +70,7 @@ namespace boost{
       }
 
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && (LDBL_MAX_EXP <= DBL_MAX_EXP)
-      template <>
+      BOOST_MATH_EXPORT template <>
       inline boost::math::tools::promote_args<double, double>::type relative_difference(const double& arg_a, const double& arg_b)
       {
          BOOST_MATH_STD_USING
@@ -119,7 +119,7 @@ namespace boost{
       }
 #endif
 
-      template <class T, class U>
+      BOOST_MATH_EXPORT template <class T, class U>
       inline typename boost::math::tools::promote_args<T, U>::type epsilon_difference(const T& arg_a, const U& arg_b)
       {
          typedef typename boost::math::tools::promote_args<T, U>::type result_type;

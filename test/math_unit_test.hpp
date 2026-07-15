@@ -13,8 +13,12 @@
 #include <string>
 #include <type_traits>
 #include <boost/math/tools/assert.hpp>
+// In module mode these declarations come from `import boost.math;`, which the
+// including test performs before this header.
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/trunc.hpp>
+#endif
 #if defined __has_include
 #  if __has_include(<cxxabi.h>)
 #define BOOST_MATH_HAS_CXX_ABI 1

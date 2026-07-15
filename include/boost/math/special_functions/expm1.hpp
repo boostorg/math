@@ -262,7 +262,7 @@ namespace boost {
 
       } // namespace detail
 
-      template <class T, class Policy>
+      BOOST_MATH_EXPORT template <class T, class Policy>
       BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type expm1(T x, const Policy& /* pol */)
       {
          typedef typename tools::promote_args<T>::type result_type;
@@ -290,7 +290,7 @@ namespace boost {
       //
       // Since we now live in a post C++11 world, we can always defer to std::expm1 when appropriate:
       //
-      template <class Policy>
+      BOOST_MATH_EXPORT template <class Policy>
       BOOST_MATH_GPU_ENABLED inline float expm1(float x, const Policy&)
       {
          BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != boost::math::policies::ignore_error && Policy::domain_error_type::value != boost::math::policies::errno_on_error)
@@ -306,7 +306,7 @@ namespace boost {
          return std::expm1(x);
       }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-      template <class Policy>
+      BOOST_MATH_EXPORT template <class Policy>
       inline long double expm1(long double x, const Policy&)
       {
          BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != boost::math::policies::ignore_error && Policy::domain_error_type::value != boost::math::policies::errno_on_error)
@@ -322,7 +322,7 @@ namespace boost {
          return std::expm1(x);
       }
 #endif
-      template <class Policy>
+      BOOST_MATH_EXPORT template <class Policy>
       BOOST_MATH_GPU_ENABLED inline double expm1(double x, const Policy&)
       {
          BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != boost::math::policies::ignore_error && Policy::domain_error_type::value != boost::math::policies::errno_on_error)
@@ -338,7 +338,7 @@ namespace boost {
          return std::expm1(x);
       }
 
-      template <class T>
+      BOOST_MATH_EXPORT template <class T>
       BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type expm1(T x)
       {
          return expm1(x, policies::policy<>());
@@ -347,21 +347,21 @@ namespace boost {
       // Specific width floating point types:
       //
 #ifdef __STDCPP_FLOAT32_T__
-      template <class Policy>
+      BOOST_MATH_EXPORT template <class Policy>
       BOOST_MATH_GPU_ENABLED inline std::float32_t expm1(std::float32_t x, const Policy& pol)
       {
          return boost::math::expm1(static_cast<float>(x), pol);
       }
 #endif
 #ifdef __STDCPP_FLOAT64_T__
-      template <class Policy>
+      BOOST_MATH_EXPORT template <class Policy>
       BOOST_MATH_GPU_ENABLED inline std::float64_t expm1(std::float64_t x, const Policy& pol)
       {
          return boost::math::expm1(static_cast<double>(x), pol);
       }
 #endif
 #ifdef __STDCPP_FLOAT128_T__
-      template <class Policy>
+      BOOST_MATH_EXPORT template <class Policy>
       BOOST_MATH_GPU_ENABLED inline std::float128_t expm1(std::float128_t x, const Policy& pol)
       {
          if constexpr (std::numeric_limits<long double>::digits == std::numeric_limits<std::float128_t>::digits)
@@ -382,25 +382,25 @@ namespace boost {
 namespace boost {
 namespace math {
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED auto expm1(T x)
 {
    return ::expm1(x);
 }
 
-template <>
+BOOST_MATH_EXPORT template <>
 BOOST_MATH_GPU_ENABLED auto expm1(float x)
 {
    return ::expm1f(x);
 }
 
-template <typename T, typename Policy>
+BOOST_MATH_EXPORT template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED auto expm1(T x, const Policy&)
 {
    return ::expm1(x);
 }
 
-template <typename Policy>
+BOOST_MATH_EXPORT template <typename Policy>
 BOOST_MATH_GPU_ENABLED auto expm1(float x, const Policy&)
 {
    return ::expm1f(x);
