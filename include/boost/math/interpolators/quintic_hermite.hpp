@@ -7,10 +7,12 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_QUINTIC_HERMITE_HPP
 #define BOOST_MATH_INTERPOLATORS_QUINTIC_HERMITE_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <stdexcept>
 #include <memory>
 #include <cstdint>
+#endif
 #include <boost/math/interpolators/detail/quintic_hermite_detail.hpp>
 
 namespace boost {

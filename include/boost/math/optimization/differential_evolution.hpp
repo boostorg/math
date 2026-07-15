@@ -6,8 +6,11 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_DIFFERENTIAL_EVOLUTION_HPP
 #define BOOST_MATH_OPTIMIZATION_DIFFERENTIAL_EVOLUTION_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <atomic>
+#endif
 #include <boost/math/optimization/detail/common.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
 #include <mutex>
@@ -17,6 +20,7 @@
 #include <thread>
 #include <utility>
 #include <vector>
+#endif
 
 namespace boost::math::optimization {
 

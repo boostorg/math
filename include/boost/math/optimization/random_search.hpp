@@ -6,6 +6,7 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_RANDOM_SEARCH_HPP
 #define BOOST_MATH_OPTIMIZATION_RANDOM_SEARCH_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <atomic>
 #include <cmath>
 #include <limits>
@@ -16,6 +17,7 @@
 #include <thread>
 #include <utility>
 #include <vector>
+#endif
 #include <boost/math/optimization/detail/common.hpp>
 
 namespace boost::math::optimization {

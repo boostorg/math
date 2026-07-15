@@ -68,10 +68,12 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 #include <boost/lexical_cast.hpp>
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <cmath>
 #include <type_traits>
 #include <cstdint>
+#endif
 
 // Needed for testing and diagnostics only.
 //#include <iostream>

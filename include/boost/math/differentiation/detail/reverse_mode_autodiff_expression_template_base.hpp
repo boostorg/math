@@ -5,8 +5,10 @@
 
 #ifndef REVERSE_MODE_AUTODIFF_EXPRESSION_TEMPLATE_BASE_HPP
 #define REVERSE_MODE_AUTODIFF_EXPRESSION_TEMPLATE_BASE_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstddef>
 #include <type_traits>
+#endif
 namespace boost {
 namespace math {
 namespace differentiation {

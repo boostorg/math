@@ -10,8 +10,10 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <vector>
+#endif
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/constants/constants.hpp>
 

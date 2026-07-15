@@ -9,8 +9,10 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_MAKIMA_HPP
 #define BOOST_MATH_INTERPOLATORS_MAKIMA_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <memory>
 #include <cmath>
+#endif
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
 
 namespace boost {

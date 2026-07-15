@@ -6,6 +6,7 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_DETAIL_COMMON_HPP
 #define BOOST_MATH_OPTIMIZATION_DETAIL_COMMON_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm> // for std::sort
 #include <cmath>
 #include <limits>
@@ -13,6 +14,7 @@
 #include <stdexcept>
 #include <random>
 #include <type_traits>  // for std::false_type
+#endif
 
 namespace boost::math::optimization::detail {
 

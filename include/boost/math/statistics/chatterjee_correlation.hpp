@@ -7,6 +7,7 @@
 #ifndef BOOST_MATH_STATISTICS_CHATTERJEE_CORRELATION_HPP
 #define BOOST_MATH_STATISTICS_CHATTERJEE_CORRELATION_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
 #include <cmath>
 #include <algorithm>
@@ -15,14 +16,17 @@
 #include <limits>
 #include <utility>
 #include <type_traits>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/statistics/detail/rank.hpp>
 
 #ifdef BOOST_MATH_EXEC_COMPATIBLE
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <execution>
 #include <future>
 #include <thread>
+#endif
 #endif
 
 namespace boost { namespace math { namespace statistics {

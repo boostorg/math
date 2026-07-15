@@ -6,9 +6,11 @@
 #ifndef BOOST_MATH_STATISTICS_LJUNG_BOX_HPP
 #define BOOST_MATH_STATISTICS_LJUNG_BOX_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <iterator>
 #include <utility>
+#endif
 #include <boost/math/distributions/chi_squared.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
 

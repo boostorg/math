@@ -9,12 +9,14 @@
 #ifndef BOOST_MATH_INTERPOLATORS_CATMULL_ROM
 #define BOOST_MATH_INTERPOLATORS_CATMULL_ROM
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <vector>
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
 #include <limits>
+#endif
 
 namespace std_workaround {
 

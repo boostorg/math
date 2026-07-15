@@ -11,11 +11,13 @@
 #ifndef BOOST_MATH_UNCHECKED_BERNOULLI_HPP
 #define BOOST_MATH_UNCHECKED_BERNOULLI_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <type_traits>
 #include <array>
 #include <cmath>
 #include <cstdint>
+#endif
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>

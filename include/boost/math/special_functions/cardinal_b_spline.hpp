@@ -6,10 +6,12 @@
 #ifndef BOOST_MATH_SPECIAL_CARDINAL_B_SPLINE_HPP
 #define BOOST_MATH_SPECIAL_CARDINAL_B_SPLINE_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <cmath>
 #include <limits>
 #include <type_traits>
+#endif
 
 namespace boost { namespace math {
 

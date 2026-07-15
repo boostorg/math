@@ -12,7 +12,9 @@
 #error "The header <boost/math/fmod.hpp> can only be used in C++17 and later."
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
+#endif
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>

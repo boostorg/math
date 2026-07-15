@@ -7,12 +7,14 @@
 
 #ifndef BOOST_MATH_SPECIAL_DAUBECHIES_WAVELET_HPP
 #define BOOST_MATH_SPECIAL_DAUBECHIES_WAVELET_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <array>
 #include <cmath>
 #include <thread>
 #include <future>
 #include <iostream>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>

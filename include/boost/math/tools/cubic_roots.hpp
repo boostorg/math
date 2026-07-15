@@ -4,8 +4,10 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #ifndef BOOST_MATH_TOOLS_CUBIC_ROOTS_HPP
 #define BOOST_MATH_TOOLS_CUBIC_ROOTS_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <array>
+#endif
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/roots.hpp>

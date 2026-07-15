@@ -16,8 +16,10 @@
  * Patterson, TNL. "The optimum addition of points to quadrature formulae." Mathematics of Computation 22.104 (1968): 847-856.
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iostream>
 #include <vector>
+#endif
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/special_functions/legendre.hpp>
 

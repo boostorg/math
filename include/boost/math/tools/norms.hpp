@@ -5,10 +5,12 @@
 
 #ifndef BOOST_MATH_TOOLS_NORMS_HPP
 #define BOOST_MATH_TOOLS_NORMS_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <iterator>
 #include <complex>
 #include <cmath>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/complex.hpp>
 

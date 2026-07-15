@@ -10,7 +10,9 @@
 
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
+#endif
 
 namespace boost {
 namespace math {

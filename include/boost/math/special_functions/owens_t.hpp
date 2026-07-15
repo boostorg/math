@@ -24,8 +24,10 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/big_constant.hpp>
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <stdexcept>
 #include <cmath>
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(push)

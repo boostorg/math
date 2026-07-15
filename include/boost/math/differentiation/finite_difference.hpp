@@ -44,7 +44,9 @@
  * 1) Squire, William, and George Trapp. "Using complex variables to estimate derivatives of real functions." Siam Review 40.1 (1998): 110-112.
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <complex>
+#endif
 #include <boost/math/special_functions/next.hpp>
 
 namespace boost{ namespace math{ namespace differentiation {

@@ -10,6 +10,7 @@
 #include <boost/math/statistics/detail/single_pass.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/assert.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <iterator>
 #include <tuple>
@@ -19,9 +20,12 @@
 #include <utility>
 #include <numeric>
 #include <list>
+#endif
 
 #ifdef BOOST_MATH_EXEC_COMPATIBLE
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <execution>
+#endif
 
 namespace boost::math::statistics {
 

@@ -104,9 +104,11 @@ namespace detail{
 
 #else
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <complex>
 #include <type_traits>
+#endif
 #include <boost/math/special_functions/detail/round_fwd.hpp>
 #include <boost/math/tools/type_traits.hpp>
 #include <boost/math/policies/policy.hpp>

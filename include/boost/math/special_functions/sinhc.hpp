@@ -19,10 +19,12 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <string>
 #include <stdexcept>
 #include <cmath>
+#endif
 
 // These are the the "Hyperbolic Sinus Cardinal" functions.
 

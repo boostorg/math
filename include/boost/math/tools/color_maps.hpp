@@ -6,18 +6,22 @@
 
 #ifndef BOOST_MATH_COLOR_MAPS_HPP
 #define BOOST_MATH_COLOR_MAPS_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm> // for std::clamp
 #include <array>     // for table data
 #include <cmath>     // for std::floor
 #include <cstdint>   // fixed width integer types
+#endif
 #include <boost/math/special_functions/fpclassify.hpp>
 
 #if __has_include("lodepng.h")
 
 #include "lodepng.h"
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iostream>
 #include <string>
 #include <vector>
+#endif
 
 namespace boost::math::tools {
 
@@ -44,7 +48,7 @@ namespace detail {
 
 // Data taken from: https://www.kennethmoreland.com/color-advice
 template <typename Real>
-static constexpr std::array<std::array<Real, 3>, 256> extended_kindlmann_data_ = {{
+BOOST_MATH_INLINE_CONSTEXPR std::array<std::array<Real, 3>, 256> extended_kindlmann_data_ = {{
     {0.0, 0.0, 0.0},
     {0.01780246283347332, 0.0008750907117329381, 0.01626889466306607},
     {0.03532931821571093, 0.001701802855992888, 0.03371323527689844},
@@ -304,7 +308,7 @@ static constexpr std::array<std::array<Real, 3>, 256> extended_kindlmann_data_ =
 }};
 
 template <typename Real>
-static constexpr std::array<std::array<Real, 3>, 256> kindlmann_data_ = {{
+BOOST_MATH_INLINE_CONSTEXPR std::array<std::array<Real, 3>, 256> kindlmann_data_ = {{
     {0.0, 0.0, 0.0},
     {0.017846074066284252, 0.0009158559874893362, 0.016056295374498146},
     {0.03572864786642702, 0.0017291229250328806, 0.03302143519907636},
@@ -564,7 +568,7 @@ static constexpr std::array<std::array<Real, 3>, 256> kindlmann_data_ = {{
 }};
 
 template <typename Real>
-static constexpr std::array<std::array<Real, 3>, 256> inferno_data_ = {{
+BOOST_MATH_INLINE_CONSTEXPR std::array<std::array<Real, 3>, 256> inferno_data_ = {{
     {0.0014619955811715805, 0.0004659913919114934, 0.013866005775115809},
     {0.0022669056023600243, 0.001269897101615975, 0.018569490325902337},
     {0.003299036110031063, 0.0022490183451722313, 0.024239243465136288},
@@ -824,7 +828,7 @@ static constexpr std::array<std::array<Real, 3>, 256> inferno_data_ = {{
 }};
 
 template <typename Real>
-static constexpr std::array<std::array<Real, 3>, 256> black_body_data_ = {{
+BOOST_MATH_INLINE_CONSTEXPR std::array<std::array<Real, 3>, 256> black_body_data_ = {{
     {0.0, 0.0, 0.0},
     {0.013038855104993618, 0.0037537033758315535, 0.002103027943341456},
     {0.02607771020998725, 0.007507406751663157, 0.004206055886683011},
@@ -1084,7 +1088,7 @@ static constexpr std::array<std::array<Real, 3>, 256> black_body_data_ = {{
 }};
 
 template <typename Real>
-static constexpr std::array<std::array<Real, 3>, 256> plasma_data_ = {{
+BOOST_MATH_INLINE_CONSTEXPR std::array<std::array<Real, 3>, 256> plasma_data_ = {{
     {0.05038205347059877, 0.029801736499741757, 0.5279751010495176},
     {0.06353382706361996, 0.028424851177690835, 0.5331235351456174},
     {0.07535267397875561, 0.027204618108821313, 0.5380072654878371},
@@ -1344,7 +1348,7 @@ static constexpr std::array<std::array<Real, 3>, 256> plasma_data_ = {{
 }};
 
 template <typename Real>
-static constexpr std::array<std::array<Real, 3>, 256> smooth_cool_warm_data_ = {
+BOOST_MATH_INLINE_CONSTEXPR std::array<std::array<Real, 3>, 256> smooth_cool_warm_data_ = {
         {{0.22999950386952345, 0.2989989340493756, 0.754000138575591},
          {0.23451750918602265, 0.30586471825124395, 0.760211287847582},
          {0.23905139222321087, 0.31271835359723077, 0.7663613706951183},
@@ -1603,7 +1607,7 @@ static constexpr std::array<std::array<Real, 3>, 256> smooth_cool_warm_data_ = {
          {0.7060001359117047, 0.015991824033980695, 0.15000007192220008}}};
 
 template <typename Real>
-static constexpr std::array<std::array<Real, 3>, 256> viridis_data_ = {
+BOOST_MATH_INLINE_CONSTEXPR std::array<std::array<Real, 3>, 256> viridis_data_ = {
     {{0.2670039853213788, 0.0048725657145795975, 0.32941506855247793},
      {0.26850981914385313, 0.009602990407952114, 0.33542640725404194},
      {0.2699440291511295, 0.014623657659867702, 0.34137927634304566},

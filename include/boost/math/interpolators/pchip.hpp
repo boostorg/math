@@ -6,8 +6,10 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_PCHIP_HPP
 #define BOOST_MATH_INTERPOLATORS_PCHIP_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <sstream>
 #include <memory>
+#endif
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
 
 namespace boost {

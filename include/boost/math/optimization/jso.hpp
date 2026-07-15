@@ -6,8 +6,11 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_JSO_HPP
 #define BOOST_MATH_OPTIMIZATION_JSO_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <atomic>
+#endif
 #include <boost/math/optimization/detail/common.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <iostream>
 #include <limits>
@@ -18,6 +21,7 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
+#endif
 
 namespace boost::math::optimization {
 

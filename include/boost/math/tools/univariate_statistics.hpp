@@ -6,9 +6,11 @@
 #ifndef BOOST_MATH_TOOLS_UNIVARIATE_STATISTICS_HPP
 #define BOOST_MATH_TOOLS_UNIVARIATE_STATISTICS_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <iterator>
 #include <tuple>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/header_deprecated.hpp>
 

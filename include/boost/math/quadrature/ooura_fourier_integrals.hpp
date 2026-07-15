@@ -11,7 +11,9 @@
  */
 #ifndef BOOST_MATH_QUADRATURE_OOURA_FOURIER_INTEGRALS_HPP
 #define BOOST_MATH_QUADRATURE_OOURA_FOURIER_INTEGRALS_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <memory>
+#endif
 #include <boost/math/quadrature/detail/ooura_fourier_integrals_detail.hpp>
 
 namespace boost { namespace math { namespace quadrature {

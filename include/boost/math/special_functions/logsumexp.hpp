@@ -3,12 +3,14 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <iterator>
 #include <utility>
 #include <algorithm>
 #include <type_traits>
 #include <initializer_list>
+#endif
 #include <boost/math/special_functions/logaddexp.hpp>
 
 namespace boost { namespace math {

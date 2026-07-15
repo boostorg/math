@@ -7,9 +7,11 @@
 #ifndef BOOST_MATH_TOOLS_ESTRIN_HPP
 #define BOOST_MATH_TOOLS_ESTRIN_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <vector>
 #include <type_traits>
+#endif
 #include <boost/math/tools/assert.hpp>
 
 namespace boost {

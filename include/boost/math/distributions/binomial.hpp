@@ -89,7 +89,9 @@
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
 #include <boost/math/tools/roots.hpp> // for root finding.
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
+#endif
 
 namespace boost
 {

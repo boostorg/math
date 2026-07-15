@@ -13,9 +13,11 @@
 #error "The header <boost/math/next.hpp> can only be used in C++17 and later."
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <stdexcept>
 #include <cfloat>
 #include <cstdint>
+#endif
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/assert.hpp>

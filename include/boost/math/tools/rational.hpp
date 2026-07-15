@@ -16,7 +16,9 @@
 #include <boost/math/tools/cstdint.hpp>
 
 #ifndef BOOST_MATH_HAS_NVRTC
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
+#endif
 #endif
 
 #if BOOST_MATH_POLY_METHOD == 1

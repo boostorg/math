@@ -5,9 +5,11 @@
 
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_RSQRT_HPP
 #define BOOST_MATH_SPECIAL_FUNCTIONS_RSQRT_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <type_traits>
 #include <limits>
+#endif
 
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE

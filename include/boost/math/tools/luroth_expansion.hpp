@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_TOOLS_LUROTH_EXPANSION_HPP
 #define BOOST_MATH_TOOLS_LUROTH_EXPANSION_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <ostream>
 #include <iomanip>
@@ -13,6 +14,7 @@
 #include <limits>
 #include <cstdint>
 #include <stdexcept>
+#endif
 
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE

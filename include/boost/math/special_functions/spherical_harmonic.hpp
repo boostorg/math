@@ -14,7 +14,9 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/tools/workaround.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <complex>
+#endif
 
 namespace boost{
 namespace math{

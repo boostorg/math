@@ -24,6 +24,7 @@
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/is_detected.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstddef>
 #include <iterator>
 #include <limits>
@@ -32,6 +33,7 @@
 #include <vector>
 #include <type_traits>
 #include <initializer_list>
+#endif
 
 
 #ifdef _MSC_VER

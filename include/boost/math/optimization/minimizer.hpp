@@ -6,8 +6,10 @@
 #define BOOST_MATH_OPTIMIZATION_MINIMIZER_HPP
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
 #include <boost/math/optimization/gradient_optimizers.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <chrono>
+#endif
 namespace boost {
 namespace math {
 namespace optimization {

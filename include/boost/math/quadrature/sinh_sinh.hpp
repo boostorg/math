@@ -24,9 +24,11 @@
 
 #ifndef BOOST_MATH_HAS_NVRTC
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
 #include <memory>
+#endif
 
 namespace boost{ namespace math{ namespace quadrature {
 

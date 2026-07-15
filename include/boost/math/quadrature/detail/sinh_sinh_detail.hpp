@@ -12,17 +12,21 @@
 
 #ifndef BOOST_MATH_HAS_NVRTC
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <string>
 #include <vector>
 #include <typeinfo>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/atomic.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 
 #ifdef BOOST_MATH_HAS_THREADS
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <mutex>
+#endif
 #endif
 
 namespace boost{ namespace math{ namespace quadrature { namespace detail{

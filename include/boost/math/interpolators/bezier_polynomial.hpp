@@ -5,7 +5,9 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #ifndef BOOST_MATH_INTERPOLATORS_BEZIER_POLYNOMIAL_HPP
 #define BOOST_MATH_INTERPOLATORS_BEZIER_POLYNOMIAL_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <memory>
+#endif
 #include <boost/math/interpolators/detail/bezier_polynomial_detail.hpp>
 
 #ifdef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES

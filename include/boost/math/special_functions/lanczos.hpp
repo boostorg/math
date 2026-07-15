@@ -19,7 +19,9 @@
 
 #ifndef BOOST_MATH_HAS_NVRTC
 #include <boost/math/tools/big_constant.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
+#endif
 #endif
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)

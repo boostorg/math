@@ -10,8 +10,10 @@
 
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <cstdint>
+#endif
 
 namespace boost{ namespace math{
 

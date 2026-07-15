@@ -13,9 +13,11 @@
 #pragma warning(disable: 4127)
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <vector>
 #include <algorithm>
+#endif
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/special_functions/legendre_stieltjes.hpp>
 #include <boost/math/quadrature/gauss.hpp>

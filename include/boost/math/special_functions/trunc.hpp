@@ -17,7 +17,9 @@
 
 #ifndef BOOST_MATH_HAS_NVRTC
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
+#endif
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/ccmath/detail/config.hpp>
 #include <boost/math/policies/error_handling.hpp>

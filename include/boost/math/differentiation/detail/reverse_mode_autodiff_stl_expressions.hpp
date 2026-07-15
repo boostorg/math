@@ -15,8 +15,10 @@
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_expression_template_base.hpp>
 #include <boost/math/special_functions/round.hpp>
 #include <boost/math/special_functions/trunc.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <complex>
+#endif
 namespace boost {
 namespace math {
 namespace differentiation {

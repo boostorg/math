@@ -9,7 +9,9 @@
 
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/precision.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
+#endif
 
 namespace boost {
 namespace math {

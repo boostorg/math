@@ -10,8 +10,10 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
 #include <cmath>
+#endif
 #include <boost/math/tools/precision.hpp>
 
 namespace boost{ namespace math{ namespace tools{

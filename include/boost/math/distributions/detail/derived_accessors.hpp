@@ -32,7 +32,9 @@
 #include <boost/math/tools/assert.hpp>
 
 #ifndef BOOST_MATH_HAS_NVRTC
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
+#endif
 #endif
 
 #ifdef _MSC_VER

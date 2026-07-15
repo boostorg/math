@@ -6,7 +6,9 @@
 #ifndef BOOST_MATH_CCMATH_ROUND_HPP
 #define BOOST_MATH_CCMATH_ROUND_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <stdexcept>
+#endif
 #include <boost/math/ccmath/detail/config.hpp>
 
 #ifdef BOOST_MATH_NO_CCMATH

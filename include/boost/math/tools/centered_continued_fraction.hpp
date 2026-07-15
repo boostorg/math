@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_TOOLS_CENTERED_CONTINUED_FRACTION_HPP
 #define BOOST_MATH_TOOLS_CENTERED_CONTINUED_FRACTION_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <cstdint>
 #include <vector>
@@ -16,6 +17,7 @@
 #include <sstream>
 #include <array>
 #include <type_traits>
+#endif
 #include <boost/math/tools/is_standalone.hpp>
 
 #ifndef BOOST_MATH_STANDALONE

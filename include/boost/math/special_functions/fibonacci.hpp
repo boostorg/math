@@ -10,8 +10,10 @@
 
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
+#endif
 
 #ifdef _MSC_VER
 #pragma once

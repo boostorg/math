@@ -18,7 +18,9 @@
 #if defined __has_include
 #  if ((__cplusplus > 202002L) || (defined(_MSVC_LANG) && (_MSVC_LANG > 202002L)))
 #    if __has_include (<stdfloat>)
+#ifndef BOOST_MATH_BUILD_MODULE
 #    include <stdfloat>
+#endif
 #    endif
 #  endif
 #endif

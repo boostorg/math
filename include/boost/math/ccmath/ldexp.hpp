@@ -13,7 +13,9 @@
 #error "The header <boost/math/ldexp.hpp> can only be used in C++17 and later."
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <stdexcept>
+#endif
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>

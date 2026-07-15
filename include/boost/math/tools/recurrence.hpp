@@ -6,9 +6,11 @@
 #ifndef BOOST_MATH_TOOLS_RECURRENCE_HPP_
 #define BOOST_MATH_TOOLS_RECURRENCE_HPP_
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
 #include <tuple>
 #include <utility>
+#endif
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/tuple.hpp>

@@ -42,9 +42,11 @@
 
 #ifndef BOOST_MATH_HAS_NVRTC
 #include <boost/math/distributions/fwd.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <utility>
 #include <exception>  // For std::domain_error.
+#endif
 #endif
 
 #if defined (BOOST_MSVC)

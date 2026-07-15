@@ -19,9 +19,11 @@
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/detail/fp_traits.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <type_traits>
 #include <cmath>
+#endif
 
 /*!
   \file fpclassify.hpp
@@ -157,7 +159,9 @@ template<> BOOST_MATH_GPU_ENABLED inline int (fpclassify)(double t)
 #else
 
 #if defined(_MSC_VER) || defined(BOOST_BORLANDC)
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cfloat>
+#endif
 #endif
 #ifdef BOOST_MATH_USE_FLOAT128
 #ifdef __has_include

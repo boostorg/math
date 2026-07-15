@@ -19,9 +19,11 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
 #include <limits>
 #include <cmath>
+#endif
 
 #if !defined(BOOST_MATH_NO_CCMATH) && !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION)
 #include <boost/math/ccmath/ldexp.hpp>

@@ -8,8 +8,10 @@
 #ifndef BOOST_MATH_STATISTICS_ANDERSON_DARLING_HPP
 #define BOOST_MATH_STATISTICS_ANDERSON_DARLING_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <algorithm>
+#endif
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/special_functions/erf.hpp>
 

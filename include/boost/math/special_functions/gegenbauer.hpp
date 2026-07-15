@@ -12,7 +12,9 @@
 #include <boost/math/tools/numeric_limits.hpp>
 
 #ifndef BOOST_MATH_NO_EXCEPTIONS
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <stdexcept>
+#endif
 #endif
 
 namespace boost { namespace math {

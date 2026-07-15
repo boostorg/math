@@ -24,8 +24,10 @@
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/distributions/detail/generic_mode.hpp> // pdf max finder.
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
 #include <algorithm> // std::lower_bound, std::distance
+#endif
 
 #ifdef BOOST_MATH_INSTRUMENT_SKEW_NORMAL_ITERATIONS
 extern std::uintmax_t global_iter_count;

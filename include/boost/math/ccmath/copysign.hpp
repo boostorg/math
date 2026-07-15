@@ -6,10 +6,12 @@
 #ifndef BOOST_MATH_CCMATH_COPYSIGN_HPP
 #define BOOST_MATH_CCMATH_COPYSIGN_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <cstdint>
 #include <limits>
 #include <type_traits>
+#endif
 #include <boost/math/tools/is_constant_evaluated.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/tools/config.hpp>

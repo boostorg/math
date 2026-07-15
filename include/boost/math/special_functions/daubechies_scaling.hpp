@@ -8,6 +8,7 @@
 #ifndef BOOST_MATH_SPECIAL_DAUBECHIES_SCALING_HPP
 #define BOOST_MATH_SPECIAL_DAUBECHIES_SCALING_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
 #include <cstring>
 #include <cmath>
@@ -17,6 +18,7 @@
 #include <future>
 #include <iostream>
 #include <memory>
+#endif
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/filters/daubechies.hpp>
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>

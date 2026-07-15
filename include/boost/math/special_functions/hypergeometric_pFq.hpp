@@ -10,8 +10,10 @@
 
 #include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
 #include <boost/math/tools/throw_exception.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <chrono>
 #include <initializer_list>
+#endif
 
 namespace boost {
    namespace math {

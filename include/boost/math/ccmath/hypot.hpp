@@ -13,7 +13,9 @@
 #error "The header <boost/math/hypot.hpp> can only be used in C++17 and later."
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
+#endif
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/ccmath/sqrt.hpp>

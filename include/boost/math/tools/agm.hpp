@@ -5,8 +5,10 @@
 
 #ifndef BOOST_MATH_TOOLS_AGM_HPP
 #define BOOST_MATH_TOOLS_AGM_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <cmath>
+#endif
 
 namespace boost { namespace math { namespace tools {
 

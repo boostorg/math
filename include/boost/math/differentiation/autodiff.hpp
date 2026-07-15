@@ -20,6 +20,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/promotion.hpp>
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -29,6 +30,7 @@
 #include <ostream>
 #include <tuple>
 #include <type_traits>
+#endif
 
 namespace boost {
 namespace math {

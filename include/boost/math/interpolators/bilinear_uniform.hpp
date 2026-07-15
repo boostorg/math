@@ -17,8 +17,10 @@
 #ifndef BOOST_MATH_INTERPOLATORS_BILINEAR_UNIFORM_HPP
 #define BOOST_MATH_INTERPOLATORS_BILINEAR_UNIFORM_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
 #include <memory>
+#endif
 #include <boost/math/interpolators/detail/bilinear_uniform_detail.hpp>
 
 namespace boost::math::interpolators {

@@ -39,7 +39,9 @@
 #include <boost/math/policies/error_handling.hpp>
 
 #ifndef BOOST_MATH_HAS_NVRTC
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
+#endif
 #include <boost/math/distributions/fwd.hpp>
 #endif
 

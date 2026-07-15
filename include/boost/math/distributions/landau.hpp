@@ -28,8 +28,10 @@
 #ifndef BOOST_MATH_HAS_NVRTC
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/tools/big_constant.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
 #include <cmath>
+#endif
 #endif
 
 namespace boost { namespace math {

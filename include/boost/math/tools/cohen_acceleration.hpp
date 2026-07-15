@@ -5,9 +5,11 @@
 
 #ifndef BOOST_MATH_TOOLS_COHEN_ACCELERATION_HPP
 #define BOOST_MATH_TOOLS_COHEN_ACCELERATION_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <cmath>
 #include <cstdint>
+#endif
 
 namespace boost::math::tools {
 

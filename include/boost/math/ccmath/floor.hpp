@@ -15,7 +15,9 @@
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
+#endif
 
 namespace boost::math::ccmath {
 

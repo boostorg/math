@@ -8,10 +8,12 @@
 
 #include <boost/math/distributions/normal.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iterator>
 #include <type_traits>
 #include <utility>
 #include <cmath>
+#endif
 
 namespace boost { namespace math { namespace statistics { namespace detail {
 

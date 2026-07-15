@@ -29,9 +29,11 @@
 #ifndef BOOST_MATH_QUADRATURE_TANH_SINH_HPP
 #define BOOST_MATH_QUADRATURE_TANH_SINH_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
 #include <memory>
+#endif
 #include <boost/math/quadrature/detail/tanh_sinh_detail.hpp>
 
 namespace boost{ namespace math{ namespace quadrature {

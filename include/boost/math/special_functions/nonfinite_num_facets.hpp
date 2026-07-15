@@ -18,10 +18,12 @@
   for Floating-Point Infinities and NaNs.
 */
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstring>
 #include <ios>
 #include <limits>
 #include <locale>
+#endif
 #include <boost/math/tools/throw_exception.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/sign.hpp>

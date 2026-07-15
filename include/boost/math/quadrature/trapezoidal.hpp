@@ -15,10 +15,12 @@
 #ifndef BOOST_MATH_QUADRATURE_TRAPEZOIDAL_HPP
 #define BOOST_MATH_QUADRATURE_TRAPEZOIDAL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
 #include <utility>
 #include <stdexcept>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/policies/error_handling.hpp>

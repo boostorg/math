@@ -10,8 +10,10 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <cfenv>
+#endif
 
 namespace boost {
 namespace math {

@@ -16,7 +16,9 @@
 #include <boost/math/distributions/detail/hypergeometric_cdf.hpp>
 #include <boost/math/distributions/detail/hypergeometric_quantile.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
+#endif
 
 namespace boost { namespace math {
 

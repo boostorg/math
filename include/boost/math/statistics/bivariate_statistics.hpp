@@ -7,6 +7,7 @@
 #ifndef BOOST_MATH_STATISTICS_BIVARIATE_STATISTICS_HPP
 #define BOOST_MATH_STATISTICS_BIVARIATE_STATISTICS_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iterator>
 #include <tuple>
 #include <type_traits>
@@ -15,13 +16,16 @@
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/config.hpp>
 
 #ifdef BOOST_MATH_EXEC_COMPATIBLE
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <execution>
 #include <future>
 #include <thread>
+#endif
 #endif
 
 namespace boost{ namespace math{ namespace statistics { namespace detail {

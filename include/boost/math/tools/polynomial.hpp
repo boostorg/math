@@ -22,12 +22,14 @@
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/math/tools/detail/is_const_iterable.hpp>
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <ostream>
 #include <algorithm>
 #include <initializer_list>
 #include <type_traits>
 #include <iterator>
+#endif
 
 namespace boost{ namespace math{ namespace tools{
 

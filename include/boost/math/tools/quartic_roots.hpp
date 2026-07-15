@@ -4,8 +4,10 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #ifndef BOOST_MATH_TOOLS_QUARTIC_ROOTS_HPP
 #define BOOST_MATH_TOOLS_QUARTIC_ROOTS_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <cmath>
+#endif
 #include <boost/math/tools/cubic_roots.hpp>
 
 namespace boost::math::tools {

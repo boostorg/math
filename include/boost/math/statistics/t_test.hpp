@@ -7,6 +7,7 @@
 #ifndef BOOST_MATH_STATISTICS_T_TEST_HPP
 #define BOOST_MATH_STATISTICS_T_TEST_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <cstddef>
 #include <iterator>
@@ -14,6 +15,7 @@
 #include <type_traits>
 #include <vector>
 #include <stdexcept>
+#endif
 #include <boost/math/distributions/students_t.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
 

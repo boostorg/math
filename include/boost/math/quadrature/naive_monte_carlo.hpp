@@ -6,6 +6,7 @@
  */
 #ifndef BOOST_MATH_QUADRATURE_NAIVE_MONTE_CARLO_HPP
 #define BOOST_MATH_QUADRATURE_NAIVE_MONTE_CARLO_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <sstream>
 #include <algorithm>
 #include <vector>
@@ -21,11 +22,14 @@
 #include <map>
 #include <type_traits>
 #include <cstdint>
+#endif
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
 #ifdef BOOST_NAIVE_MONTE_CARLO_DEBUG_FAILURES
+#ifndef BOOST_MATH_BUILD_MODULE
 #  include <iostream>
+#endif
 #endif
 
 namespace boost { namespace math { namespace quadrature {

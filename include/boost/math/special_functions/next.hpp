@@ -21,8 +21,10 @@
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/traits.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
 #include <cfloat>
+#endif
 
 
 #if !defined(_CRAYC) && !defined(BOOST_MATH_ENABLE_CUDA) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))

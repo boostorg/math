@@ -6,9 +6,13 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_CUBIC_HERMITE_HPP
 #define BOOST_MATH_INTERPOLATORS_CUBIC_HERMITE_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <memory>
+#endif
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
+#endif
 
 namespace boost {
 namespace math {

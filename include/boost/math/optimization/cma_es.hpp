@@ -6,6 +6,7 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_CMA_ES_HPP
 #define BOOST_MATH_OPTIMIZATION_CMA_ES_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <atomic>
 #include <cmath>
 #include <iostream>
@@ -15,6 +16,7 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
+#endif
 #include <boost/math/optimization/detail/common.hpp>
 #include <boost/math/tools/assert.hpp>
 #if __has_include(<Eigen/Dense>)

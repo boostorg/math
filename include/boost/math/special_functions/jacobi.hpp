@@ -6,8 +6,10 @@
 #ifndef BOOST_MATH_SPECIAL_JACOBI_HPP
 #define BOOST_MATH_SPECIAL_JACOBI_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <stdexcept>
+#endif
 
 namespace boost { namespace math {
 

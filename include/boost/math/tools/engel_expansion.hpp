@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_TOOLS_ENGEL_EXPANSION_HPP
 #define BOOST_MATH_TOOLS_ENGEL_EXPANSION_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <cstdint>
 #include <vector>
@@ -13,6 +14,7 @@
 #include <iomanip>
 #include <limits>
 #include <stdexcept>
+#endif
 
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE

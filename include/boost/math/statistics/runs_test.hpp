@@ -8,9 +8,11 @@
 #ifndef BOOST_MATH_STATISTICS_RUNS_TEST_HPP
 #define BOOST_MATH_STATISTICS_RUNS_TEST_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <algorithm>
 #include <utility>
+#endif
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/distributions/normal.hpp>
 

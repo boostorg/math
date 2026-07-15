@@ -7,7 +7,9 @@
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
 #include <boost/math/optimization/detail/gradient_opt_base.hpp>
 #include <boost/math/optimization/detail/rdiff_optimization_policies.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
+#endif
 
 namespace boost {
 namespace math {

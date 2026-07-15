@@ -12,17 +12,23 @@
 
 #include <boost/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <locale>                                    // for the "<<" operator
+#endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <complex>
 #include <iosfwd>                                    // for the "<<" and ">>" operators
 #include <sstream>                                    // for the "<<" operator
+#endif
 
 #include <boost/math/special_functions/sinc.hpp>    // for the Sinus cardinal
 #include <boost/math/special_functions/sinhc.hpp>    // for the Hyperbolic Sinus cardinal
 #include <boost/math/tools/cxx03_warn.hpp>
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
+#endif
 
 namespace boost
 {

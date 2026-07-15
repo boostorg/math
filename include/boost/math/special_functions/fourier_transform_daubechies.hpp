@@ -8,11 +8,13 @@
 
 #ifndef BOOST_MATH_SPECIAL_FOURIER_TRANSFORM_DAUBECHIES_HPP
 #define BOOST_MATH_SPECIAL_FOURIER_TRANSFORM_DAUBECHIES_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <cmath>
 #include <complex>
 #include <iostream>
 #include <limits>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/estrin.hpp>

@@ -5,8 +5,10 @@
 
 #ifndef BOOST_MATH_TOOLS_CONDITION_NUMBERS_HPP
 #define BOOST_MATH_TOOLS_CONDITION_NUMBERS_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
+#endif
 #include <boost/math/differentiation/finite_difference.hpp>
 #include <boost/math/tools/config.hpp>
 

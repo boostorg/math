@@ -5,6 +5,7 @@
 
 #ifndef BOOST_MATH_DIFFERENTIATION_LANCZOS_SMOOTHING_HPP
 #define BOOST_MATH_DIFFERENTIATION_LANCZOS_SMOOTHING_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath> // for std::abs
 #include <cstddef>
 #include <limits> // to nan initialize
@@ -13,6 +14,7 @@
 #include <cstdint>
 #include <stdexcept>
 #include <type_traits>
+#endif
 #include <boost/math/tools/assert.hpp>
 
 #include <boost/math/tools/is_standalone.hpp>

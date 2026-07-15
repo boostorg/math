@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_TOOLS_SIMPLE_CONTINUED_FRACTION_HPP
 #define BOOST_MATH_TOOLS_SIMPLE_CONTINUED_FRACTION_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <vector>
 #include <ostream>
@@ -15,6 +16,7 @@
 #include <limits>
 #include <stdexcept>
 #include <sstream>
+#endif
 
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE

@@ -11,10 +11,14 @@
 #define BOOST_MATH_CONSTANTS_INFO_INCLUDED
 
 #include <boost/math/constants/constants.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iostream>
 #include <iomanip>
+#endif
 #ifndef BOOST_MATH_NO_RTTI
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <typeinfo>
+#endif
 #endif
 
 namespace boost{ namespace math{ namespace constants{
