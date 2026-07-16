@@ -1035,11 +1035,11 @@ jobs:
           New-Item -ItemType Directory -Force -Path __build__ | Out-Null
           cd __build__
           cmake -G Ninja `
-            -DBOOST_INCLUDE_LIBRARIES=$env:LIBRARY `
+            -DBOOST_INCLUDE_LIBRARIES="$env:LIBRARY" `
             -DBUILD_TESTING=ON `
             -DBOOST_MATH_BUILD_MODULE=ON `
             -DCMAKE_CXX_COMPILER=cl `
-            -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD=$env:IMPORT_STD_UUID `
+            -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD="$env:IMPORT_STD_UUID" `
             ..
 
       # Kept as a separate step so the boost.math module build time is visible on its own.
