@@ -56,7 +56,7 @@ BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 class hyperexponential_distribution;
 
 
-namespace /*<unnamed>*/ { namespace hyperexp_detail {
+namespace hyperexp_detail {
 
 template <typename T>
 void normalize(std::vector<T>& v)
@@ -237,7 +237,7 @@ RealT quantile_impl(hyperexponential_distribution<RealT, PolicyT> const& dist, R
     return result;
 }
 
-}} // Namespace <unnamed>::hyperexp_detail
+} // Namespace hyperexp_detail
 
 
 BOOST_MATH_EXPORT template <typename RealT = double, typename PolicyT = policies::policy<> >
