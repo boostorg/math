@@ -118,6 +118,8 @@ import std;
 #  pragma clang diagnostic ignored "-Winclude-angled-in-module-purview"
 #endif
 
+extern "C++" {
+
 // Foundation components
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/policy.hpp>
@@ -215,6 +217,8 @@ import std;
 #include <boost/math/complex.hpp>
 #include <boost/math/quaternion.hpp>
 #include <boost/math/octonion.hpp>
+
+} // extern "C++"
 
 #ifdef _MSC_VER
 #  pragma warning( pop )
