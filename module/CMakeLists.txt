@@ -22,6 +22,12 @@ target_sources(boost_math_module
 target_link_libraries(boost_math_module PUBLIC Boost::math)
 target_compile_features(boost_math_module PUBLIC cxx_std_23)
 
+# The purview includes the library's angled <boost/math/...> headers by design.
+# clang-scan-deps warns on that and ignores -Wno-include-angled-in-module-purview,
+# so -w keeps the dependency-scan output clean (this glue unit's code is fully
+# warned on in the header builds).
+target_compile_options(boost_math_module PRIVATE $<$<CXX_COMPILER_ID:Clang>:-w>)
+
 # math.cppm defines BOOST_MATH_BUILD_MODULE and BOOST_MATH_STANDALONE itself,
 # but the tests link this target and need both macros too: BOOST_MATH_BUILD_MODULE
 # so they import the module instead of including the headers directly, and
@@ -82,10 +88,11 @@ set(BOOST_MATH_MODULE_TESTS
 
 # GCC 15 compiles the module itself, but libstdc++ cannot yet mix the textual
 # standard library includes the test sources use with import std in the same
-# consumer translation unit, so only the quick test runs there. The full list
-# runs under clang/libc++.
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    message(STATUS "Boost.Math module: GCC consumer tests limited to module_quick_test")
+# consumer translation unit, so only the quick test runs there. MSVC is treated
+# the same way until the full consumer suite has been validated against it. The
+# full list runs under clang/libc++.
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    message(STATUS "Boost.Math module: ${CMAKE_CXX_COMPILER_ID} consumer tests limited to module_quick_test")
     set(BOOST_MATH_MODULE_TESTS)
 endif()
 
