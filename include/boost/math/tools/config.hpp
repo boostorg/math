@@ -13,12 +13,12 @@
 
 // C++20 named module support.
 // BOOST_MATH_BUILD_MODULE is defined when building or consuming the boost.math
-// module (module/math.cxx and the module test harness). BOOST_MATH_EXPORT marks
+// module (module/math.cppm and the module test harness). BOOST_MATH_EXPORT marks
 // every public entity and expands to nothing in ordinary header builds.
 // BOOST_MATH_TEST_EXPORT additionally exports detail entities exercised by the
 // module test suite, and only when the module is built with
 // BOOST_MATH_EXPORT_TESTING. BOOST_MATH_INTERFACE_UNIT is defined only by
-// module/math.cxx itself and guards entities that a module consumer must
+// module/math.cppm itself and guards entities that a module consumer must
 // receive from the import rather than redeclare.
 #ifdef BOOST_MATH_BUILD_MODULE
 

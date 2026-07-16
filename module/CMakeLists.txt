@@ -17,12 +17,12 @@ endif()
 add_library(boost_math_module)
 target_sources(boost_math_module
         PUBLIC
-        FILE_SET math_module TYPE CXX_MODULES FILES math.cxx
+        FILE_SET math_module TYPE CXX_MODULES FILES math.cppm
 )
 target_link_libraries(boost_math_module PUBLIC Boost::math)
 target_compile_features(boost_math_module PUBLIC cxx_std_23)
 
-# math.cxx defines BOOST_MATH_BUILD_MODULE and BOOST_MATH_STANDALONE itself,
+# math.cppm defines BOOST_MATH_BUILD_MODULE and BOOST_MATH_STANDALONE itself,
 # but the tests link this target and need both macros too: BOOST_MATH_BUILD_MODULE
 # so they import the module instead of including the headers directly, and
 # BOOST_MATH_STANDALONE so any textually included support header (for example

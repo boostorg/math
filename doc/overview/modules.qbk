@@ -17,7 +17,7 @@ Module support is completely inert unless the module is built and consumed expli
 [h4 How to build]
 
 The module is consumable from C++20 onward.
-The interface unit lives in `libs/math/module/math.cxx` and builds with any toolchain that provides the standard library module (`import std`); the standard library maintainers agreed to make `import std` available in C++20 mode as well as C++23, so a C++23 compilation mode is not required.
+The interface unit lives in `libs/math/module/math.cppm` and builds with any toolchain that provides the standard library module (`import std`); the standard library maintainers agreed to make `import std` available in C++20 mode as well as C++23, so a C++23 compilation mode is not required.
 CI exercises two configurations, both with CMake 4.4, Ninja and the matching `CMAKE_EXPERIMENTAL_CXX_IMPORT_STD` UUID: clang 20 with libc++ runs the full module test suite, and GCC 15 with libstdc++ builds the module and runs the quick test (libstdc++ cannot yet mix the textual standard library includes used by the wider test sources with `import std` in the same translation unit).
 From a Boost superproject checkout:
 

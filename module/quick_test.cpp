@@ -3,7 +3,7 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 // Smoke test for the boost.math module: exercises at least one entity from
-// every component exported by module/math.cxx.
+// every component exported by module/math.cppm.
 
 #include <boost/core/lightweight_test.hpp>
 
