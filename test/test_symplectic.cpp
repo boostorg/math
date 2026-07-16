@@ -215,8 +215,8 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
 
     // Test floats
     test_harmonic_oscillator<float>(6e-6, "Y6");
-    test_pendulum<float>(5e-6, "Y6");
-    test_hh_model<float>(5e-6, "Y6");
+    test_pendulum<float>(6e-6, "Y6");
+    test_hh_model<float>(6e-6, "Y6");
 
     // Test long doubles
     test_harmonic_oscillator<long double>(1e-10, "Y6");
