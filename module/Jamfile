@@ -10,6 +10,11 @@ import modules ;
 import testing ;
 import path ;
 import pch ;
+import type ;
+
+# b2 registers the standard C++ suffixes (cpp cxx cc) but not cppm, so teach it
+# that the .cppm module interface unit is a C++ source.
+type.register-suffixes cppm : CPP ;
 
 project
     : requirements
@@ -23,6 +28,6 @@ project
       <toolset>clang:<cxxstd>23
     ;
 
-obj math : math.cxx : <define>BOOST_MATH_EXPORT_TESTING <toolset>msvc:<cxxflags>-interface ;
+obj math : math.cppm : <define>BOOST_MATH_EXPORT_TESTING <toolset>msvc:<cxxflags>-interface ;
 
 run quick_test.cpp math : : : <dependency>math ;
