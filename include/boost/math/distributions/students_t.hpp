@@ -309,7 +309,7 @@ BOOST_MATH_GPU_ENABLED inline bool analytical_df_if_cdf_matches(const Distributi
 
 // Minimum degrees-of-freedom used as the warm-start fallback when the
 // Edgeworth approximation yields no valid positive root or is inaccurate
-constexpr double df_hint_fallback = 0.01;
+BOOST_MATH_INLINE_CONSTEXPR double df_hint_fallback = 0.01;
 
 //
 // Functors for finding degrees of freedom:

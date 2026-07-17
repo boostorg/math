@@ -23,7 +23,7 @@ template <typename T, typename = void> struct has_resize : std::false_type {};
 template <typename T>
 struct has_resize<T, std::void_t<decltype(std::declval<T>().resize(size_t{}))>> : std::true_type {};
 
-template <typename T> constexpr bool has_resize_v = has_resize<T>::value;
+template <typename T> BOOST_MATH_INLINE_CONSTEXPR bool has_resize_v = has_resize<T>::value;
 
 template <typename ArgumentContainer>
 void validate_bounds(ArgumentContainer const &lower_bounds, ArgumentContainer const &upper_bounds) {

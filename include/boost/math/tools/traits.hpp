@@ -58,13 +58,13 @@ BOOST_MATH_HAS_NAMED_TRAIT(has_backend_type, backend_type)
 // C++17-esque helpers
 #if defined(__cpp_variable_templates) && __cpp_variable_templates >= 201304L
 template <typename T>
-constexpr bool has_value_type_v = has_value_type<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool has_value_type_v = has_value_type<T>::value;
 
 template <typename T>
-constexpr bool has_policy_type_v = has_policy_type<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool has_policy_type_v = has_policy_type<T>::value;
 
 template <typename T>
-constexpr bool has_backend_type_v = has_backend_type<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool has_backend_type_v = has_backend_type<T>::value;
 #endif
 
 template <typename D>
