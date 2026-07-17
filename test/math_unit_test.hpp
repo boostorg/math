@@ -6,12 +6,16 @@
 
 #ifndef BOOST_MATH_TEST_TEST_HPP
 #define BOOST_MATH_TEST_TEST_HPP
+#include <cmath>
+#if defined(BOOST_MATH_BUILD_MODULE) && defined(__cpp_lib_modules) && (__cpp_lib_modules >= 202207L)
+import std;
+#else
 #include <atomic>
 #include <iostream>
 #include <iomanip>
-#include <cmath> // for std::isnan
 #include <string>
 #include <type_traits>
+#endif
 #include <boost/math/tools/assert.hpp>
 // In module mode these declarations come from `import boost.math;`, which the
 // including test performs before this header.
