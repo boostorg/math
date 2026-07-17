@@ -187,6 +187,39 @@ void test_hh_model(const RealType tol, const std::string method)
     BOOST_CHECK_LE(max_error, tol);
 }
 
+template <typename RealType>
+void test_multiprecision_sho(const RealType tol, const std::string method)
+{
+    BOOST_MATH_STD_USING
+
+    // With this small of step size, quad precision numbers can get to tolerances of 
+    // ~1e-30 for any method whereas doubles can only get to tolerances of ~1e-17.
+    RealType dt = 0.000000005;
+    unsigned int steps = 100;
+
+    RealType q0 = 1;
+    RealType p0 = 0;
+
+    std::vector<RealType> p;
+    std::vector<RealType> q;
+
+    std::tie(p, q) = boost::math::quadrature::integrate_hamiltonian(p0, q0, dt, steps, oscillator_dHdp<RealType>, oscillator_dHdq<RealType>, method);
+
+    RealType p_val;
+    RealType q_val;
+    std::vector<RealType> abs_energy_error(p.size());
+    for (unsigned i=0; i < p.size(); i++)
+    {
+        p_val = p[i];
+        q_val = q[i];
+
+        abs_energy_error[i] = abs(pow(p_val, 2) + pow(q_val, 2) - 1);
+    }
+
+    RealType max_error = *std::max_element(std::begin(abs_energy_error), std::end(abs_energy_error));
+    BOOST_CHECK_LE(max_error, tol);
+}
+
 BOOST_AUTO_TEST_CASE(symplectic_quadrature)
 {
     test_invalid_parameters<double>();
@@ -224,5 +257,7 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
     test_hh_model<long double>(1e-14, "Y6");
 
     // Test multiprecision
-    test_hh_model<boost::multiprecision::cpp_bin_float_quad>(1e-16, "Y6");
+    test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, "Y6");
+    test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, "SRKNB6");
+    test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, "SRKNB11");
 }
