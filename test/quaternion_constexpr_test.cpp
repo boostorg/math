@@ -9,6 +9,7 @@
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/quaternion.hpp>
 #else
+import std;
 import boost.math;
 #endif
 

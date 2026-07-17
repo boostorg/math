@@ -8,6 +8,7 @@
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/octonion.hpp>
 #else
+import std;
 import boost.math;
 #endif
 #include <boost/core/lightweight_test.hpp>

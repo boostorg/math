@@ -7,7 +7,8 @@
 #ifndef BOOST_MATH_TEST_TEST_HPP
 #define BOOST_MATH_TEST_TEST_HPP
 #include <cmath>
-#if defined(BOOST_MATH_BUILD_MODULE) && defined(__cpp_lib_modules) && (__cpp_lib_modules >= 202207L)
+// A module build always consumes the standard library through `import std;`
+#ifdef BOOST_MATH_BUILD_MODULE
 import std;
 #else
 #include <atomic>
