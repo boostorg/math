@@ -84,6 +84,9 @@ set(BOOST_MATH_MODULE_TESTS
         random_search_test
         quaternion_constexpr_test
         octonion_test_simple
+        lambert_w_module_test
+        students_t_df_module_test
+        ccmath_next_module_test
 )
 
 # GCC 15 compiles the module itself, but libstdc++ cannot yet mix the textual
