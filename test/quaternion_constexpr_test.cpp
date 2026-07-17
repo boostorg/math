@@ -12,7 +12,9 @@
 import boost.math;
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <complex>
+#endif
 
 typedef boost::math::quaternion<double> qt;
 typedef std::complex<double> ct;

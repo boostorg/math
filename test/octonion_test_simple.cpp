@@ -12,9 +12,13 @@ import boost.math;
 #endif
 #include <boost/core/lightweight_test.hpp>
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <complex>
+#endif
 #include <cstdint>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <random>
+#endif
 
 // test file for octonion.hpp
 

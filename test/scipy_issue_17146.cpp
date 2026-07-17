@@ -9,8 +9,10 @@
 import boost.math;
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <numeric>
+#endif
 #include "math_unit_test.hpp"
 
 int main()

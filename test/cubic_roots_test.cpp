@@ -12,7 +12,9 @@ import boost.math;
 #endif
 
 #include "math_unit_test.hpp"
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <random>
+#endif
 #include <cmath>
 #include <cfloat>
 #ifdef BOOST_HAS_FLOAT128

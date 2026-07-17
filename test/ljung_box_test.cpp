@@ -12,9 +12,11 @@ import boost.math;
 #endif
 
 #include "math_unit_test.hpp"
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <numeric>
 #include <utility>
 #include <random>
+#endif
 
 using boost::math::statistics::ljung_box;
 

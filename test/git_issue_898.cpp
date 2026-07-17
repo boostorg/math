@@ -5,7 +5,9 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <cmath>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
+#endif
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/quadrature/tanh_sinh.hpp>
 #include <boost/math/constants/constants.hpp>

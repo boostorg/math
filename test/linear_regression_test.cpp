@@ -13,11 +13,13 @@ import boost.math;
 #endif
 
 #include "math_unit_test.hpp"
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <random>
 #include <utility>
 #include <tuple>
 #include <algorithm>
+#endif
 
 using boost::math::statistics::simple_ordinary_least_squares;
 using boost::math::statistics::simple_ordinary_least_squares_with_R_squared;

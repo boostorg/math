@@ -12,8 +12,10 @@ import boost.math;
 #endif
 
 #include "math_unit_test.hpp"
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <random>
+#endif
 
 using boost::math::statistics::runs_above_and_below_median;
 

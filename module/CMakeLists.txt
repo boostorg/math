@@ -89,12 +89,15 @@ set(BOOST_MATH_MODULE_TESTS
         ccmath_next_module_test
 )
 
-# GCC 15 compiles the module itself, but libstdc++ cannot yet mix the textual
-# standard library includes the test sources use with import std in the same
-# consumer translation unit, so only the quick test runs there. MSVC is treated
-# the same way until the full consumer suite has been validated against it. The
-# full list runs under clang/libc++.
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+# The full consumer suite runs under both clang/libc++ and GCC/libstdc++: the
+# test sources take the standard library from `import std;` in module mode (see
+# math_unit_test.hpp), so they no longer mix textual std includes with the
+# imported std that libstdc++ rejects. Running the whole list on GCC matters
+# because GCC enforces the module exposure rule (a namespace-scope entity with
+# internal linkage cannot be reached from an exported template) that clang does
+# not diagnose. MSVC stays limited to the quick test until the full suite is
+# validated against it.
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     message(STATUS "Boost.Math module: ${CMAKE_CXX_COMPILER_ID} consumer tests limited to module_quick_test")
     set(BOOST_MATH_MODULE_TESTS)
 endif()

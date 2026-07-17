@@ -13,10 +13,12 @@ import boost.math;
 
 #include "math_unit_test.hpp"
 #include <cstdint>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <numeric>
 #include <utility>
 #include <vector>
 #include <limits>
+#endif
 using boost::math::interpolators::cardinal_quadratic_b_spline;
 
 #if __has_include(<stdfloat>)

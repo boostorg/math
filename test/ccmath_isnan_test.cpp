@@ -6,7 +6,9 @@
 #include <cmath>
 #include <cfloat>
 #include <cstdint>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
+#endif
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/ccmath/isnan.hpp>
 #else

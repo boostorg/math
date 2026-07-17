@@ -13,8 +13,10 @@ import boost.math;
 
 #include "math_unit_test.hpp"
 #include "test_functions_for_optimization.hpp"
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <random>
 #include <limits>
+#endif
 using boost::math::optimization::random_search;
 using boost::math::optimization::random_search_parameters;
 

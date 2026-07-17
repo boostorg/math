@@ -13,7 +13,9 @@ import boost.math;
 
 #include "math_unit_test.hpp"
 #include "test_functions_for_optimization.hpp"
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <random>
+#endif
 
 using boost::math::optimization::differential_evolution;
 using boost::math::optimization::differential_evolution_parameters;

@@ -14,7 +14,9 @@ import boost.math;
 #endif
 
 #include <cmath>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
+#endif
 
 namespace local
 {
