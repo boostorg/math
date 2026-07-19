@@ -288,7 +288,7 @@ This function simply subtracts 3 from the kurtosis, but it makes eminently clear
 
 [heading First four moments]
 
-Simultaneously computes the first four [@https://en.wikipedia.org/wiki/Central_moment central moments] in a single pass through the data:
+Simultaneously computes the mean and the second, third, and fourth [@https://en.wikipedia.org/wiki/Central_moment central moments] in a single pass through the data:
 
     std::vector<double> v{1,2,3,4,5};
     auto [M1, M2, M3, M4] = boost::math::statistics::first_four_moments(v);
