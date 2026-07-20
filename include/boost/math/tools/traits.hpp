@@ -25,6 +25,8 @@ as defined above, and has member functions "scale" and "location".
 #pragma once
 #endif
 
+#include <boost/math/tools/config.hpp>
+
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
 #endif
