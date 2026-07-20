@@ -17,9 +17,11 @@ import boost.math;
 #include <utility>
 #include <random>
 #endif
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/core/demangle.hpp>
+#endif
 
-#if __has_include(<stdfloat>)
+#if !defined(BOOST_MATH_BUILD_MODULE) && __has_include(<stdfloat>)
 #  include <stdfloat>
 #endif
 
