@@ -577,6 +577,7 @@ struct non_type {};
 
 #define BOOST_MATH_STD_USING BOOST_MATH_STD_USING_CORE
 
+#if !defined(BOOST_MATH_BUILD_MODULE) || defined(BOOST_MATH_INTERFACE_UNIT)
 namespace boost{ namespace math{
 namespace tools
 {
@@ -611,6 +612,7 @@ struct is_integer_for_rounding
 }
 
 }} // namespace boost namespace math
+#endif
 
 #ifdef __GLIBC_PREREQ
 #  if __GLIBC_PREREQ(2,14)

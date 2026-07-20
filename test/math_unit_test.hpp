@@ -12,6 +12,8 @@
 // failure, so every std include below is confined to the non-module branch.
 #ifdef BOOST_MATH_BUILD_MODULE
 import std;
+#include <stddef.h>
+#include <stdint.h>
 #else
 #include <cmath>
 #include <atomic>
