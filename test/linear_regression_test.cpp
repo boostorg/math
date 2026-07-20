@@ -19,6 +19,7 @@ import boost.math;
 #include <utility>
 #include <tuple>
 #include <algorithm>
+#include <cstdint>
 #endif
 
 using boost::math::statistics::simple_ordinary_least_squares;
@@ -263,9 +264,9 @@ int main()
     test_line<long double>();
 #endif
     test_integer_line<int>();
-    test_integer_line<int32_t>();
-    test_integer_line<int64_t>();
-    test_integer_line<uint32_t>();
+    test_integer_line<std::int32_t>();
+    test_integer_line<std::int64_t>();
+    test_integer_line<std::uint32_t>();
 
     test_constant<float>();
     test_constant<double>();
@@ -273,9 +274,9 @@ int main()
     test_constant<long double>();
 #endif
     test_integer_constant<int>();
-    test_integer_constant<int32_t>();
-    test_integer_constant<int64_t>();
-    test_integer_constant<uint32_t>();
+    test_integer_constant<std::int32_t>();
+    test_integer_constant<std::int64_t>();
+    test_integer_constant<std::uint32_t>();
 
     test_permutation_invariance<float>();
     test_permutation_invariance<double>();
