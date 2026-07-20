@@ -166,7 +166,7 @@ BOOST_MATH_TEST_EXPORT template <typename Real> std::vector<size_t> best_indices
   return indices;
 }
 
-template<typename RandomAccessContainer>
+BOOST_MATH_TEST_EXPORT template<typename RandomAccessContainer>
 auto weighted_lehmer_mean(RandomAccessContainer const & values, RandomAccessContainer const & weights) {
   using std::isfinite;
   if (values.size() != weights.size()) {

@@ -88,6 +88,71 @@ set(BOOST_MATH_MODULE_TESTS
         students_t_df_module_test
         ccmath_next_module_test
         lambert_w_std_free_module_test
+        exp_sinh_module_test
+        lanczos_smoothing_module_test
+        finite_difference_module_test
+        signal_statistics_module_test
+        # Differentiation
+        autodiff_module_test
+        # Quadrature
+        gauss_module_test
+        gauss_kronrod_module_test
+        trapezoidal_module_test
+        sinh_sinh_module_test
+        naive_monte_carlo_module_test
+        ooura_fourier_integrals_module_test
+        wavelet_transforms_module_test
+        # Interpolators
+        cardinal_cubic_b_spline_module_test
+        cardinal_quintic_b_spline_module_test
+        barycentric_rational_module_test
+        vector_barycentric_rational_module_test
+        catmull_rom_module_test
+        pchip_module_test
+        makima_module_test
+        cubic_hermite_module_test
+        quintic_hermite_module_test
+        septic_hermite_module_test
+        bezier_polynomial_module_test
+        #bilinear_uniform_module_test # ICE on GCC-15
+        # Statistics
+        univariate_statistics_module_test
+        bivariate_statistics_module_test
+        anderson_darling_module_test
+        t_test_module_test
+        z_test_module_test
+        # Optimization
+        gradient_descent_module_test
+        lbfgs_module_test
+        nesterov_module_test
+        # Tools
+        polynomial_module_test
+        roots_module_test
+        norms_module_test
+        agm_module_test
+        estrin_module_test
+        series_module_test
+        minima_module_test
+        # Algebra
+        complex_module_test
+        # Distributions (adapted regression tests)
+        git_issue_1006
+        git_issue_1175
+        git_issue_826
+        scipy_issue_14901_ncf
+        scipy_issue_15101
+        scipy_issue_17388
+        scipy_issue_17916
+        scipy_issue_17916_nct
+        scipy_issue_18302
+        scipy_issue_18511
+        # Special functions (adapted regression tests)
+        git_issue_705
+        git_issue_810
+        test_tgamma_eh
+        # Optimization / statistics (adapted)
+        jso_test
+        test_chatterjee_correlation
 )
 
 # In module mode (BOOST_MATH_BUILD_MODULE, which also implies BOOST_MATH_STANDALONE)
