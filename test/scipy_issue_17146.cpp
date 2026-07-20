@@ -22,7 +22,7 @@ int main()
     const auto binom_dist = boost::math::binomial_distribution<double>(n, p);
     std::array<double, 3> vals {};
 
-    for (size_t i = 0; i < 2; ++i)
+    for (std::size_t i = 0; i < 2; ++i)
     {
         vals[i] = boost::math::pdf(binom_dist, i);
     }
