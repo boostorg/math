@@ -20,6 +20,20 @@
 #include <numeric>
 #include <list>
 
+namespace boost { namespace math { namespace statistics { namespace detail {
+
+// mode() can only sort a range in place when its iterators are random access and
+// writable. A const random access iterator (e.g. vector<T>::const_iterator) satisfies
+// random_access_iterator_tag but cannot be sorted through, so such ranges must instead
+// be pre-sorted by the caller.
+template<typename ForwardIterator>
+using is_sortable_iterator = std::integral_constant<bool,
+    std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>::value &&
+    std::is_assignable<typename std::iterator_traits<ForwardIterator>::reference,
+                       typename std::iterator_traits<ForwardIterator>::value_type>::value>;
+
+}}}} // namespace boost::math::statistics::detail
+
 #ifdef BOOST_MATH_EXEC_COMPATIBLE
 #include <execution>
 
@@ -628,7 +642,7 @@ inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, Forwar
 {
     if(!std::is_sorted(exec, first, last))
     {
-        if constexpr (std::is_same_v<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>)
+        if constexpr (detail::is_sortable_iterator<ForwardIterator>::value)
         {
             std::sort(exec, first, last);
         }
@@ -1137,7 +1151,7 @@ Real interquartile_range(Container& c)
 }
 
 template<class ForwardIterator, class OutputIterator,
-    enable_if_t<std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>::value, bool> = true>
+    enable_if_t<detail::is_sortable_iterator<ForwardIterator>::value, bool> = true>
 inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     if(!std::is_sorted(first, last))
@@ -1149,7 +1163,7 @@ inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIt
 }
 
 template<class ForwardIterator, class OutputIterator,
-    enable_if_t<!std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>::value, bool> = true>
+    enable_if_t<!detail::is_sortable_iterator<ForwardIterator>::value, bool> = true>
 inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     if(!std::is_sorted(first, last))
@@ -1167,7 +1181,7 @@ inline OutputIterator mode(Container& c, OutputIterator output)
 }
 
 template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
-    enable_if_t<std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>::value, bool> = true>
+    enable_if_t<detail::is_sortable_iterator<ForwardIterator>::value, bool> = true>
 inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
 {
     if (!std::is_sorted(first, last))
@@ -1181,7 +1195,7 @@ inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
 }
 
 template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
-    enable_if_t<!std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>::value, bool> = true>
+    enable_if_t<!detail::is_sortable_iterator<ForwardIterator>::value, bool> = true>
 inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
 {
     if (!std::is_sorted(first, last))
