@@ -114,7 +114,7 @@
 
 #else // Things from boost/config that are required, and easy to replicate
 
-#if __has_include(<version>)
+#if !defined(BOOST_MATH_BUILD_MODULE) && __has_include(<version>)
 #include <version>
 #endif
 
@@ -181,8 +181,13 @@
    //
    // Make sure we have some std lib headers included so we can detect __GXX_RTTI:
    //
-#  include <algorithm>  // for min and max
-#  include <limits>
+   // A module build receives these through import std; the module unit stages what
+   // its global module fragment needs. Textual inclusion after an import trips a
+   // clang concept-merge bug, so skip it here.
+#  ifndef BOOST_MATH_BUILD_MODULE
+#     include <algorithm>  // for min and max
+#     include <limits>
+#  endif
 #  ifndef __GXX_RTTI
 #     ifndef BOOST_MATH_NO_TYPEID
 #        define BOOST_MATH_NO_TYPEID
@@ -234,7 +239,7 @@
 
 // C++23
 #if __cplusplus > 202002L || (defined(_MSVC_LANG) &&_MSVC_LANG > 202002L)
-#  if defined(__GNUC__) && __GNUC__ >= 13
+#  if !defined(BOOST_MATH_BUILD_MODULE) && defined(__GNUC__) && __GNUC__ >= 13
      // libstdc++3 only defines to/from_chars for std::float128_t when one of these defines are set
      // otherwise we're right out of luck...
 #    if defined(_GLIBCXX_LDOUBLE_IS_IEEE_BINARY128) || defined(_GLIBCXX_HAVE_FLOAT128_MATH)
@@ -246,11 +251,13 @@
 #  endif
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>  // for min and max
 #include <limits>
 #include <cmath>
 #include <climits>
 #include <cfloat>
+#endif
 
 #include <boost/math/tools/user.hpp>
 
@@ -468,7 +475,9 @@ struct non_type {};
 //
 // noexcept support:
 //
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
+#endif
 #define BOOST_MATH_NOEXCEPT(T) noexcept(std::is_floating_point<T>::value)
 #define BOOST_MATH_IS_FLOAT(T) (std::is_floating_point<T>::value)
 
@@ -617,7 +626,9 @@ struct is_integer_for_rounding
 // Much more information in this message thread: https://groups.google.com/forum/#!topic/boost-list/ZT99wtIFlb4
 //
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cfenv>
+#endif
 
 #  ifdef FE_ALL_EXCEPT
 
@@ -657,7 +668,7 @@ namespace boost{ namespace math{
 #  define BOOST_MATH_INSTRUMENT_FPU
 #endif
 
-#ifdef BOOST_MATH_INSTRUMENT
+#if defined(BOOST_MATH_INSTRUMENT) && !defined(BOOST_MATH_BUILD_MODULE)
 
 #  include <iostream>
 #  include <iomanip>

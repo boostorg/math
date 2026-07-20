@@ -41,6 +41,9 @@ module;
 #include <climits>
 #include <cmath>
 #include <cstdint>
+#include <algorithm>
+#include <limits>
+#include <type_traits>
 
 // The macro hub and its helper entities are deliberately kept in the global
 // module so that consumer translation units may also include them textually
