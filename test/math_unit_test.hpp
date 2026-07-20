@@ -27,7 +27,9 @@ import std;
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #endif
-#if defined __has_include
+// <cxxabi.h> pulls <typeinfo>/bits/exception.h, which redefine std entities that
+// import std already provides; skip it in module mode (demangle then falls back).
+#if !defined(BOOST_MATH_BUILD_MODULE) && defined __has_include
 #  if __has_include(<cxxabi.h>)
 #define BOOST_MATH_HAS_CXX_ABI 1
 #    include <cxxabi.h>

@@ -5,12 +5,13 @@
 
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/special_functions/gamma.hpp>
+#include <cerrno>
 #else
 import boost.math;
+#include <errno.h>
 #endif
 
 #include "math_unit_test.hpp"
-#include <cerrno>
 
 int main()
 {
