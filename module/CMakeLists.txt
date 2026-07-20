@@ -87,19 +87,23 @@ set(BOOST_MATH_MODULE_TESTS
         lambert_w_module_test
         students_t_df_module_test
         ccmath_next_module_test
+        lambert_w_std_free_module_test
 )
 
-# The full consumer suite runs under both clang/libc++ and GCC/libstdc++: the
-# test sources take the standard library from `import std;` in module mode (see
-# math_unit_test.hpp), so they no longer mix textual std includes with the
-# imported std that libstdc++ rejects. Running the whole list on GCC matters
-# because GCC enforces the module exposure rule (a namespace-scope entity with
-# internal linkage cannot be reached from an exported template) that clang does
-# not diagnose. MSVC stays limited to the quick test until the full suite is
-# validated against it.
-if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    message(STATUS "Boost.Math module: ${CMAKE_CXX_COMPILER_ID} consumer tests limited to module_quick_test")
-    set(BOOST_MATH_MODULE_TESTS)
+# The consumers above pull the standard library in textually through
+# math_unit_test.hpp (<cmath>, <cxxabi.h>, ...) at the same time the module
+# supplies it through import std. clang with libc++ accepts that mix; GCC with
+# libstdc++ and MSVC do not yet, so those consumers build only under clang.
+#
+# lambert_w_std_free_module_test names no standard library entity, so it also
+# builds on GCC and MSVC. Running it there matters because GCC enforces the C++20
+# module exposure rule (a namespace-scope entity with internal linkage cannot be
+# reached from an exported template) that clang does not diagnose: it is what
+# turns a stray `static constexpr` lookup table into a hard error, so it guards
+# the BOOST_MATH_INLINE_CONSTEXPR fixes on the compiler that actually checks them.
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    message(STATUS "Boost.Math module: ${CMAKE_CXX_COMPILER_ID} runs the std-free consumer test (plus module_quick_test)")
+    set(BOOST_MATH_MODULE_TESTS lambert_w_std_free_module_test)
 endif()
 
 # octonion_test_simple additionally uses Boost.MPL textually
