@@ -5,7 +5,9 @@
 
 // See also: https://godbolt.org/z/nhMsKb8Yr
 
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/core/lightweight_test.hpp>
+#endif
 
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/special_functions/bessel.hpp>
@@ -13,8 +15,15 @@
 import boost.math;
 #endif
 
-#include <cmath>
+#ifdef BOOST_MATH_STANDALONE
+// Standalone/module builds cannot use Boost.Core; map lightweight_test onto math_unit_test.hpp.
+#include "math_unit_test.hpp"
+#define BOOST_TEST(expr) CHECK_TRUE((expr))
+namespace boost { inline int report_errors() { return ::boost::math::test::report_errors(); } }
+#endif
+
 #ifndef BOOST_MATH_BUILD_MODULE
+#include <cmath>
 #include <limits>
 #endif
 

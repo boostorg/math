@@ -9,10 +9,9 @@
 
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/constants/constants.hpp>
-#endif
-
 #include <array>
 #include <vector>
+#endif
 
 /* simple n-d quadratic function */
 template<typename RealType>

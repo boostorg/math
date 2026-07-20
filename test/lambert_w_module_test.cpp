@@ -15,7 +15,9 @@
 import boost.math;
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
+#endif
 #include "math_unit_test.hpp"
 
 template <class T>

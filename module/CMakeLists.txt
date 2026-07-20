@@ -90,21 +90,18 @@ set(BOOST_MATH_MODULE_TESTS
         lambert_w_std_free_module_test
 )
 
-# The consumers above pull the standard library in textually through
-# math_unit_test.hpp (<cmath>, <cxxabi.h>, ...) at the same time the module
-# supplies it through import std. clang with libc++ accepts that mix; GCC with
-# libstdc++ and MSVC do not yet, so those consumers build only under clang.
+# In module mode (BOOST_MATH_BUILD_MODULE, which also implies BOOST_MATH_STANDALONE)
+# every consumer above is written to include no standard library header and no other
+# Boost library textually: the standard library arrives through import std and
+# boost.math through the module. A textual std header pulled in after the import trips
+# a concept-merge failure on clang with libc++ and is rejected outright by GCC with
+# libstdc++ and by MSVC, so keeping the consumers std-include-free is what lets the
+# whole set build on all three toolchains rather than clang alone.
 #
-# lambert_w_std_free_module_test names no standard library entity, so it also
-# builds on GCC and MSVC. Running it there matters because GCC enforces the C++20
-# module exposure rule (a namespace-scope entity with internal linkage cannot be
-# reached from an exported template) that clang does not diagnose: it is what
-# turns a stray `static constexpr` lookup table into a hard error, so it guards
-# the BOOST_MATH_INLINE_CONSTEXPR fixes on the compiler that actually checks them.
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    message(STATUS "Boost.Math module: ${CMAKE_CXX_COMPILER_ID} runs the std-free consumer test (plus module_quick_test)")
-    set(BOOST_MATH_MODULE_TESTS lambert_w_std_free_module_test)
-endif()
+# lambert_w_std_free_module_test additionally names no standard library entity at all;
+# it is the canary for GCC's C++20 module exposure rule (a namespace-scope entity with
+# internal linkage cannot be reached from an exported template), which guards the
+# BOOST_MATH_INLINE_CONSTEXPR fixes on the compiler that actually diagnoses them.
 
 # octonion_test_simple additionally uses Boost.MPL textually
 set(BOOST_MATH_MODULE_EXTRA_LIBS_octonion_test_simple Boost::mpl)

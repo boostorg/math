@@ -6,11 +6,14 @@
 
 #ifndef BOOST_MATH_TEST_TEST_HPP
 #define BOOST_MATH_TEST_TEST_HPP
-#include <cmath>
-// A module build always consumes the standard library through `import std;`
+// A module build always consumes the standard library through `import std;`.
+// Nothing standard may be included textually in module mode: another Boost
+// header pulling in a std header after the import would trip a concept-merge
+// failure, so every std include below is confined to the non-module branch.
 #ifdef BOOST_MATH_BUILD_MODULE
 import std;
 #else
+#include <cmath>
 #include <atomic>
 #include <iostream>
 #include <iomanip>

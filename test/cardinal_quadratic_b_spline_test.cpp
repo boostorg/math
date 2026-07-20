@@ -12,8 +12,8 @@ import boost.math;
 #endif
 
 #include "math_unit_test.hpp"
-#include <cstdint>
 #ifndef BOOST_MATH_BUILD_MODULE
+#include <cstdint>
 #include <numeric>
 #include <utility>
 #include <vector>
@@ -21,7 +21,7 @@ import boost.math;
 #endif
 using boost::math::interpolators::cardinal_quadratic_b_spline;
 
-#if __has_include(<stdfloat>)
+#if !defined(BOOST_MATH_BUILD_MODULE) && __has_include(<stdfloat>)
 #  include <stdfloat>
 #endif
 
