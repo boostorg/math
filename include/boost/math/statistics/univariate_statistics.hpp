@@ -628,13 +628,13 @@ inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, Forwar
 {
     if(!std::is_sorted(exec, first, last))
     {
-        if constexpr (std::is_same_v<typename std::iterator_traits<ForwardIterator>::iterator_category(), std::random_access_iterator_tag>)
+        if constexpr (std::is_same_v<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>)
         {
             std::sort(exec, first, last);
         }
         else
         {
-            BOOST_MATH_ASSERT("Data must be sorted for sequential mode calculation");
+            BOOST_MATH_ASSERT_MSG(false, "Data must be sorted for sequential mode calculation");
         }
     }
 
@@ -1137,7 +1137,7 @@ Real interquartile_range(Container& c)
 }
 
 template<class ForwardIterator, class OutputIterator,
-    enable_if_t<std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category(), std::random_access_iterator_tag>::value, bool> = true>
+    enable_if_t<std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>::value, bool> = true>
 inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     if(!std::is_sorted(first, last))
@@ -1149,12 +1149,12 @@ inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIt
 }
 
 template<class ForwardIterator, class OutputIterator,
-    enable_if_t<!std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category(), std::random_access_iterator_tag>::value, bool> = true>
+    enable_if_t<!std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>::value, bool> = true>
 inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     if(!std::is_sorted(first, last))
     {
-        BOOST_MATH_ASSERT("Data must be sorted for mode calculation");
+        BOOST_MATH_ASSERT_MSG(false, "Data must be sorted for mode calculation");
     }
 
     return detail::mode_impl(first, last, output);
@@ -1166,9 +1166,29 @@ inline OutputIterator mode(Container& c, OutputIterator output)
     return mode(std::begin(c), std::end(c), output);
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type>
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+    enable_if_t<std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>::value, bool> = true>
 inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
 {
+    if (!std::is_sorted(first, last))
+    {
+        std::sort(first, last);
+    }
+
+    std::list<Real> modes;
+    mode(first, last, std::inserter(modes, modes.begin()));
+    return modes;
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+    enable_if_t<!std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>::value, bool> = true>
+inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
+{
+    if (!std::is_sorted(first, last))
+    {
+        BOOST_MATH_ASSERT_MSG(false, "Data must be sorted for mode calculation");
+    }
+
     std::list<Real> modes;
     mode(first, last, std::inserter(modes, modes.begin()));
     return modes;
