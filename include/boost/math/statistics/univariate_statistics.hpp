@@ -43,6 +43,8 @@ template<class ExecutionPolicy, class ForwardIterator>
 inline auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    static_assert(std::is_convertible_v<typename std::iterator_traits<ForwardIterator>::iterator_category, std::forward_iterator_tag>,
+                  "mean() requires at least a forward iterator. Input iterators such as std::istream_iterator are single-pass and produce incorrect results.");
     BOOST_MATH_ASSERT_MSG(first != last, "At least one sample is required to compute the mean.");
 
     if constexpr (std::is_integral_v<Real>)
@@ -722,6 +724,8 @@ template<class ForwardIterator, typename Real = typename std::iterator_traits<Fo
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double mean(const ForwardIterator first, const ForwardIterator last)
 {
+    static_assert(std::is_convertible<typename std::iterator_traits<ForwardIterator>::iterator_category, std::forward_iterator_tag>::value,
+                  "mean() requires at least a forward iterator. Input iterators such as std::istream_iterator are single-pass and produce incorrect results.");
     BOOST_MATH_ASSERT_MSG(first != last, "At least one sample is required to compute the mean.");
     return detail::mean_sequential_impl<double>(first, last);
 }
@@ -737,6 +741,8 @@ template<class ForwardIterator, typename Real = typename std::iterator_traits<Fo
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real mean(const ForwardIterator first, const ForwardIterator last)
 {
+    static_assert(std::is_convertible<typename std::iterator_traits<ForwardIterator>::iterator_category, std::forward_iterator_tag>::value,
+                  "mean() requires at least a forward iterator. Input iterators such as std::istream_iterator are single-pass and produce incorrect results.");
     BOOST_MATH_ASSERT_MSG(first != last, "At least one sample is required to compute the mean.");
     return detail::mean_sequential_impl<Real>(first, last);
 }
