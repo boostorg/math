@@ -1154,7 +1154,7 @@ Real interquartile_range(Container& c)
     return interquartile_range(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, class OutputIterator,
+BOOST_MATH_EXPORT template<class ForwardIterator, class OutputIterator,
     enable_if_t<detail::is_sortable_iterator<ForwardIterator>::value, bool> = true>
 inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
@@ -1166,7 +1166,7 @@ inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIt
     return detail::mode_impl(first, last, output);
 }
 
-template<class ForwardIterator, class OutputIterator,
+BOOST_MATH_EXPORT template<class ForwardIterator, class OutputIterator,
     enable_if_t<!detail::is_sortable_iterator<ForwardIterator>::value, bool> = true>
 inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
@@ -1184,7 +1184,7 @@ inline OutputIterator mode(Container& c, OutputIterator output)
     return mode(std::begin(c), std::end(c), output);
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+BOOST_MATH_EXPORT template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
     enable_if_t<detail::is_sortable_iterator<ForwardIterator>::value, bool> = true>
 inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
 {
@@ -1198,7 +1198,7 @@ inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
     return modes;
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+BOOST_MATH_EXPORT template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
     enable_if_t<!detail::is_sortable_iterator<ForwardIterator>::value, bool> = true>
 inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
 {
@@ -1212,7 +1212,7 @@ inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
     return modes;
 }
 
-template<class Container, typename Real = typename Container::value_type>
+BOOST_MATH_EXPORT template<class Container, typename Real = typename Container::value_type>
 inline std::list<Real> mode(Container& c)
 {
     return mode(std::begin(c), std::end(c));
