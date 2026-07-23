@@ -287,7 +287,7 @@ namespace boost
          template <class A, class B, class C, class D>
          BOOST_MATH_GPU_ENABLED static RealType find_v1(const complemented4_type<A,B,C, D>& c)
          {
-            constexpr auto function = "non_central_f_distribution<%1%>::find_non_centrality";
+            constexpr auto function = "non_central_f_distribution<%1%>::find_v1";
             typedef typename policies::evaluation<RealType, Policy>::type eval_type;
             typedef typename policies::normalise<
                Policy,
@@ -307,9 +307,9 @@ namespace boost
                result,
                function);
          }
-                  BOOST_MATH_GPU_ENABLED static RealType find_v2(const RealType x, const RealType v2, const RealType nc, const RealType p)
+         BOOST_MATH_GPU_ENABLED static RealType find_v2(const RealType x, const RealType v2, const RealType nc, const RealType p)
          {
-            constexpr auto function = "non_central_f_distribution<%1%>::find_v1";
+            constexpr auto function = "non_central_f_distribution<%1%>::find_v2";
             typedef typename policies::evaluation<RealType, Policy>::type eval_type;
             typedef typename policies::normalise<
                Policy,
@@ -332,7 +332,7 @@ namespace boost
          template <class A, class B, class C, class D>
          BOOST_MATH_GPU_ENABLED static RealType find_v2(const complemented4_type<A,B,C, D>& c)
          {
-            constexpr auto function = "non_central_f_distribution<%1%>::find_non_centrality";
+            constexpr auto function = "non_central_f_distribution<%1%>::find_v2";
             typedef typename policies::evaluation<RealType, Policy>::type eval_type;
             typedef typename policies::normalise<
                Policy,
