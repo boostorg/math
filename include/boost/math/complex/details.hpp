@@ -14,6 +14,7 @@
 #include <cmath>
 #include <complex>
 #include <limits>
+#include <algorithm>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -41,13 +42,12 @@ inline std::complex<T> mult_minus_i(const std::complex<T>& t)
 template <class T>
 inline T safe_max(T t)
 {
-   return std::sqrt((std::numeric_limits<T>::max)()) / t;
-}
-inline long double safe_max(long double t)
-{
-   // long double sqrt often returns infinity due to
-   // insufficient internal precision:
-   return std::sqrt((std::numeric_limits<double>::max)()) / t;
+   static const T max_val = (std::numeric_limits<T>::max)();
+   static const T min_val = (std::numeric_limits<T>::min)();
+   
+   // Prevent division by zero and overflow
+   T denominator = (std::max)(std::abs(t), min_val);
+   return std::sqrt(max_val) / denominator;
 }
 
 template <class T>
