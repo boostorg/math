@@ -60,8 +60,8 @@ namespace boost
       }
 
       //cout << "z " << z << ", p " << p << ",  quantile(Dist(), p) "
-      //<< quantile(Dist(), p) << ", z - mean " << z - location 
-      //<<", sd " << (z - location)  / quantile(Dist(), p) << endl;
+      // << quantile(Dist(), p) << ", z - mean " << z - location
+      // <<", sd " << (z - location)  / quantile(Dist(), p) << endl;
 
       //quantile(N01, 0.001) -3.09023
       //quantile(N01, 0.01) -2.32635

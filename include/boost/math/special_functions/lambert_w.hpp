@@ -778,7 +778,7 @@ struct lambert_w0_small_z_series_term
 {
   using result_type = T;
   //! \param _z Lambert W argument z.
-  //! \param -term  -pow<18>(z) / 6402373705728000uLL
+  //! \param _term  -pow<18>(z) / 6402373705728000uLL
   //! \param _k number of terms == initially 18
 
   //  Note *after* evaluating N terms, its internal state has k = N and term = (-1)^N z^N.
