@@ -54,7 +54,7 @@ template <typename RealT, typename PolicyT>
 class hyperexponential_distribution;
 
 
-namespace /*<unnamed>*/ { namespace hyperexp_detail {
+namespace /* <unnamed> */ { namespace hyperexp_detail {
 
 template <typename T>
 void normalize(std::vector<T>& v)
