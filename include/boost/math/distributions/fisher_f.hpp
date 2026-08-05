@@ -125,7 +125,7 @@ namespace boost{ namespace math{
       }
    }
 
-template <class RealType = double, class Policy = policies::policy<> >
+BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
 class fisher_f_distribution
 {
 public:
@@ -244,21 +244,21 @@ private:
    RealType m_df2;  // degrees of freedom are a real number.
 };
 
-typedef fisher_f_distribution<double> fisher_f;
+BOOST_MATH_EXPORT typedef fisher_f_distribution<double> fisher_f;
 
 #ifdef __cpp_deduction_guides
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 fisher_f_distribution(RealType,RealType)->fisher_f_distribution<typename boost::math::tools::promote_args<RealType>::type>;
 #endif
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const fisher_f_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
    using boost::math::tools::max_value;
    return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const fisher_f_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -266,7 +266,7 @@ BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> suppor
    return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED RealType pdf(const fisher_f_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -323,7 +323,7 @@ BOOST_MATH_GPU_ENABLED RealType pdf(const fisher_f_distribution<RealType, Policy
    return result;
 } // pdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const fisher_f_distribution<RealType, Policy>& dist, const RealType& x)
 {
    constexpr auto function = "boost::math::cdf(fisher_f_distribution<%1%> const&, %1%)";
@@ -358,7 +358,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const fisher_f_distribution<RealType,
       : boost::math::ibeta(df1 / 2, df2 / 2, v1x / (df2 + v1x), Policy());
 } // cdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const fisher_f_distribution<RealType, Policy>& dist, const RealType& p)
 {
    constexpr auto function = "boost::math::quantile(fisher_f_distribution<%1%> const&, %1%)";
@@ -383,7 +383,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const fisher_f_distribution<Real
    return df2 * x / (df1 * y);
 } // quantile
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<fisher_f_distribution<RealType, Policy>, RealType>& c)
 {
    constexpr auto function = "boost::math::cdf(fisher_f_distribution<%1%> const&, %1%)";
@@ -419,7 +419,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<fisher_f_dis
       : boost::math::ibetac(df1 / 2, df2 / 2, v1x / (df2 + v1x), Policy());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<fisher_f_distribution<RealType, Policy>, RealType>& c)
 {
    constexpr auto function = "boost::math::quantile(fisher_f_distribution<%1%> const&, %1%)";
@@ -443,7 +443,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<fisher_
    return df2 * x / (df1 * y);
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mean(const fisher_f_distribution<RealType, Policy>& dist)
 { // Mean of F distribution = v.
    constexpr auto function = "boost::math::mean(fisher_f_distribution<%1%> const&)";
@@ -464,7 +464,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mean(const fisher_f_distribution<RealType
    return df2 / (df2 - 2);
 } // mean
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType variance(const fisher_f_distribution<RealType, Policy>& dist)
 { // Variance of F distribution.
    constexpr auto function = "boost::math::variance(fisher_f_distribution<%1%> const&)";
@@ -485,7 +485,7 @@ BOOST_MATH_GPU_ENABLED inline RealType variance(const fisher_f_distribution<Real
    return 2 * df2 * df2 * (df1 + df2 - 2) / (df1 * (df2 - 2) * (df2 - 2) * (df2 - 4));
 } // variance
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mode(const fisher_f_distribution<RealType, Policy>& dist)
 {
    constexpr auto function = "boost::math::mode(fisher_f_distribution<%1%> const&)";
@@ -514,7 +514,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mode(const fisher_f_distribution<RealType
 
 // Now implemented via quantile(half) in derived accessors.
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType skewness(const fisher_f_distribution<RealType, Policy>& dist)
 {
    constexpr auto function = "boost::math::skewness(fisher_f_distribution<%1%> const&)";
@@ -537,16 +537,16 @@ BOOST_MATH_GPU_ENABLED inline RealType skewness(const fisher_f_distribution<Real
    return 2 * (df2 + 2 * df1 - 2) * sqrt((2 * df2 - 8) / (df1 * (df2 + df1 - 2))) / (df2 - 6);
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED RealType kurtosis_excess(const fisher_f_distribution<RealType, Policy>& dist);
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const fisher_f_distribution<RealType, Policy>& dist)
 {
    return 3 + kurtosis_excess(dist);
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const fisher_f_distribution<RealType, Policy>& dist)
 {
    constexpr auto function = "boost::math::kurtosis_excess(fisher_f_distribution<%1%> const&)";

@@ -8,10 +8,12 @@
 
 #include <boost/math/distributions/normal.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iterator>
 #include <type_traits>
 #include <utility>
 #include <cmath>
+#endif
 
 namespace boost { namespace math { namespace statistics { namespace detail {
 
@@ -90,67 +92,67 @@ ReturnType two_sample_z_test_impl(ForwardIterator begin_1, ForwardIterator end_1
 
 } // detail
 
-template<typename Real, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
+BOOST_MATH_EXPORT template<typename Real, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline auto one_sample_z_test(Real sample_mean, Real sample_variance, Real sample_size, Real assumed_mean) -> std::pair<double, double>
 {
     return detail::one_sample_z_test_impl<std::pair<double, double>>(sample_mean, sample_variance, sample_size, assumed_mean);
 }
 
-template<typename Real, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
+BOOST_MATH_EXPORT template<typename Real, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline auto one_sample_z_test(Real sample_mean, Real sample_variance, Real sample_size, Real assumed_mean) -> std::pair<Real, Real>
 {
     return detail::one_sample_z_test_impl<std::pair<Real, Real>>(sample_mean, sample_variance, sample_size, assumed_mean);
 }
 
-template<typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+BOOST_MATH_EXPORT template<typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
          typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline auto one_sample_z_test(ForwardIterator begin, ForwardIterator end, Real assumed_mean) -> std::pair<double, double>
 {
     return detail::one_sample_z_test_impl<std::pair<double, double>>(begin, end, assumed_mean);
 }
 
-template<typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+BOOST_MATH_EXPORT template<typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
          typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline auto one_sample_z_test(ForwardIterator begin, ForwardIterator end, Real assumed_mean) -> std::pair<Real, Real>
 {
     return detail::one_sample_z_test_impl<std::pair<Real, Real>>(begin, end, assumed_mean);
 }
 
-template<typename Container, typename Real = typename Container::value_type,
+BOOST_MATH_EXPORT template<typename Container, typename Real = typename Container::value_type,
          typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline auto one_sample_z_test(Container const & v, Real assumed_mean) -> std::pair<double, double>
 {
     return detail::one_sample_z_test_impl<std::pair<double, double>>(std::begin(v), std::end(v), assumed_mean);
 }
 
-template<typename Container, typename Real = typename Container::value_type,
+BOOST_MATH_EXPORT template<typename Container, typename Real = typename Container::value_type,
          typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline auto one_sample_z_test(Container const & v, Real assumed_mean) -> std::pair<Real, Real>
 {
     return detail::one_sample_z_test_impl<std::pair<Real, Real>>(std::begin(v), std::end(v), assumed_mean);
 }
 
-template<typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+BOOST_MATH_EXPORT template<typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
          typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline auto two_sample_z_test(ForwardIterator begin_1, ForwardIterator end_1, ForwardIterator begin_2, ForwardIterator end_2) -> std::pair<double, double>
 {
     return detail::two_sample_z_test_impl<std::pair<double, double>>(begin_1, end_1, begin_2, end_2);
 }
 
-template<typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+BOOST_MATH_EXPORT template<typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
          typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline auto two_sample_z_test(ForwardIterator begin_1, ForwardIterator end_1, ForwardIterator begin_2, ForwardIterator end_2) -> std::pair<Real, Real>
 {
     return detail::two_sample_z_test_impl<std::pair<Real, Real>>(begin_1, end_1, begin_2, end_2);
 }
 
-template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
+BOOST_MATH_EXPORT template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline auto two_sample_z_test(Container const & u, Container const & v) -> std::pair<double, double>
 {
     return detail::two_sample_z_test_impl<std::pair<double, double>>(std::begin(u), std::end(u), std::begin(v), std::end(v));
 }
 
-template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
+BOOST_MATH_EXPORT template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline auto two_sample_z_test(Container const & u, Container const & v) -> std::pair<Real, Real>
 {
     return detail::two_sample_z_test_impl<std::pair<Real, Real>>(std::begin(u), std::end(u), std::begin(v), std::end(v));

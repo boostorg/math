@@ -8,6 +8,7 @@
 #ifndef BOOST_MATH_SPECIAL_DAUBECHIES_SCALING_HPP
 #define BOOST_MATH_SPECIAL_DAUBECHIES_SCALING_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
 #include <cstring>
 #include <cmath>
@@ -17,6 +18,7 @@
 #include <future>
 #include <iostream>
 #include <memory>
+#endif
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/filters/daubechies.hpp>
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
@@ -33,7 +35,7 @@
 
 namespace boost::math {
 
-template<class Real, int p, int order>
+BOOST_MATH_EXPORT template<class Real, int p, int order>
 std::vector<Real> daubechies_scaling_dyadic_grid(int64_t j_max)
 {
     using std::isnan;
@@ -322,7 +324,7 @@ struct null_interpolator
 
 } // namespace detail
 
-template<class Real, int p>
+BOOST_MATH_EXPORT template<class Real, int p>
 class daubechies_scaling {
     //
     // Some type manipulation so we know the type of the interpolator, and the vector type it requires:

@@ -19,7 +19,7 @@
 
 namespace boost{ namespace math{
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T binomial_coefficient(unsigned n, unsigned k, const Policy& pol)
 {
    static_assert(!boost::math::is_integral<T>::value, "Type T must not be an integral type");
@@ -71,7 +71,7 @@ BOOST_MATH_GPU_ENABLED inline float binomial_coefficient<float, policies::policy
    return policies::checked_narrowing_cast<float, forwarding_policy>(binomial_coefficient<double>(n, k, forwarding_policy()), "boost::math::binomial_coefficient<%1%>(unsigned,unsigned)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T binomial_coefficient(unsigned n, unsigned k)
 {
    return binomial_coefficient<T>(n, k, policies::policy<>());

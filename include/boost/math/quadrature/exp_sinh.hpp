@@ -20,14 +20,16 @@
 
 #ifndef BOOST_MATH_HAS_NVRTC
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
 #include <memory>
 #include <string>
+#endif
 
 namespace boost{ namespace math{ namespace quadrature {
 
-template<class Real, class Policy = policies::policy<> >
+BOOST_MATH_EXPORT template<class Real, class Policy = policies::policy<> >
 class exp_sinh
 {
 public:

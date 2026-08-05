@@ -6,6 +6,7 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_DETAIL_COMMON_HPP
 #define BOOST_MATH_OPTIMIZATION_DETAIL_COMMON_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm> // for std::sort
 #include <cmath>
 #include <limits>
@@ -13,6 +14,7 @@
 #include <stdexcept>
 #include <random>
 #include <type_traits>  // for std::false_type
+#endif
 
 namespace boost::math::optimization::detail {
 
@@ -21,7 +23,7 @@ template <typename T, typename = void> struct has_resize : std::false_type {};
 template <typename T>
 struct has_resize<T, std::void_t<decltype(std::declval<T>().resize(size_t{}))>> : std::true_type {};
 
-template <typename T> constexpr bool has_resize_v = has_resize<T>::value;
+template <typename T> BOOST_MATH_INLINE_CONSTEXPR bool has_resize_v = has_resize<T>::value;
 
 template <typename ArgumentContainer>
 void validate_bounds(ArgumentContainer const &lower_bounds, ArgumentContainer const &upper_bounds) {
@@ -64,7 +66,7 @@ void validate_bounds(ArgumentContainer const &lower_bounds, ArgumentContainer co
   }
 }
 
-template <typename ArgumentContainer, class URBG>
+BOOST_MATH_TEST_EXPORT template <typename ArgumentContainer, class URBG>
 std::vector<ArgumentContainer> random_initial_population(ArgumentContainer const &lower_bounds,
                                                          ArgumentContainer const &upper_bounds,
                                                          size_t initial_population_size, URBG &&gen) {
@@ -112,7 +114,7 @@ std::vector<ArgumentContainer> random_initial_population(ArgumentContainer const
   return population;
 }
 
-template <typename ArgumentContainer>
+BOOST_MATH_TEST_EXPORT template <typename ArgumentContainer>
 void validate_initial_guess(ArgumentContainer const &initial_guess, ArgumentContainer const &lower_bounds,
                             ArgumentContainer const &upper_bounds) {
   using std::isfinite;
@@ -144,7 +146,7 @@ void validate_initial_guess(ArgumentContainer const &initial_guess, ArgumentCont
 }
 
 // Return indices corresponding to the minimum function values.
-template <typename Real> std::vector<size_t> best_indices(std::vector<Real> const &function_values) {
+BOOST_MATH_TEST_EXPORT template <typename Real> std::vector<size_t> best_indices(std::vector<Real> const &function_values) {
   using std::isnan;
   const size_t n = function_values.size();
   std::vector<size_t> indices(n);
@@ -164,7 +166,7 @@ template <typename Real> std::vector<size_t> best_indices(std::vector<Real> cons
   return indices;
 }
 
-template<typename RandomAccessContainer>
+BOOST_MATH_TEST_EXPORT template<typename RandomAccessContainer>
 auto weighted_lehmer_mean(RandomAccessContainer const & values, RandomAccessContainer const & weights) {
   using std::isfinite;
   if (values.size() != weights.size()) {

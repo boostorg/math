@@ -15,8 +15,10 @@
 
 #ifndef BOOST_MATH_HAS_NVRTC
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
+#endif
 #include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/trunc.hpp>
@@ -64,7 +66,7 @@ BOOST_MATH_GPU_ENABLED T cos_pi_imp(T x, const Policy&)
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cos_pi(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -81,7 +83,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cos_pi(T x, 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(boost::math::detail::cos_pi_imp<value_type>(x, forwarding_policy()), "cos_pi");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cos_pi(T x)
 {
    return boost::math::cos_pi(x, policies::policy<>());
@@ -95,7 +97,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cos_pi(T x)
 namespace boost {
 namespace math {
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED auto cos_pi(T x)
 {
    return ::cospi(x);
@@ -107,13 +109,13 @@ BOOST_MATH_GPU_ENABLED auto cos_pi(float x)
    return ::cospif(x);
 }
 
-template <typename T, typename Policy>
+BOOST_MATH_EXPORT template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED auto cos_pi(T x, const Policy&)
 {
    return ::cospi(x);
 }
 
-template <typename Policy>
+BOOST_MATH_EXPORT template <typename Policy>
 BOOST_MATH_GPU_ENABLED auto cos_pi(float x, const Policy&)
 {
    return ::cospif(x);

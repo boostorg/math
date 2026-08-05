@@ -10,8 +10,10 @@
 #ifndef BOOST_MATH_DETAIL_HYPERGEOMETRIC_SERIES_HPP
 #define BOOST_MATH_DETAIL_HYPERGEOMETRIC_SERIES_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <cstdint>
+#endif
 #include <boost/math/tools/series.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/trunc.hpp>

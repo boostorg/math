@@ -63,7 +63,7 @@ BOOST_MATH_GPU_ENABLED inline T jacobi_zeta_imp(T phi, T k, const Policy& pol)
 }
 } // detail
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -71,7 +71,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type jacobi_
    return policies::checked_narrowing_cast<result_type, Policy>(detail::jacobi_zeta_imp(static_cast<value_type>(phi), static_cast<value_type>(k), pol), "boost::math::jacobi_zeta<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi)
 {
    return boost::math::jacobi_zeta(k, phi, policies::policy<>());

@@ -1190,7 +1190,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type erf(T z, const Policy& /* pol */)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -1223,7 +1223,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type erf(T z, con
       tag_type()), "boost::math::erf<%1%>(%1%, %1%)");
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -1256,13 +1256,13 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type erfc(T z, co
       tag_type()), "boost::math::erfc<%1%>(%1%, %1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type erf(T z)
 {
    return boost::math::erf(z, policies::policy<>());
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type erfc(T z)
 {
    return boost::math::erfc(z, policies::policy<>());
@@ -1276,7 +1276,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type erfc(T z)
 namespace boost {
 namespace math {
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED auto erf(T x)
 {
    return ::erf(x);
@@ -1288,19 +1288,19 @@ BOOST_MATH_GPU_ENABLED auto erf(float x)
    return ::erff(x);
 }
 
-template <typename T, typename Policy>
+BOOST_MATH_EXPORT template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED auto erf(T x, const Policy&)
 {
    return ::erf(x);
 }
 
-template <typename Policy>
+BOOST_MATH_EXPORT template <typename Policy>
 BOOST_MATH_GPU_ENABLED auto erf(float x, const Policy&)
 {
    return ::erff(x);
 }
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED auto erfc(T x)
 {
    return ::erfc(x);
@@ -1312,13 +1312,13 @@ BOOST_MATH_GPU_ENABLED auto erfc(float x)
    return ::erfcf(x);
 }
 
-template <typename T, typename Policy>
+BOOST_MATH_EXPORT template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED auto erfc(T x, const Policy&)
 {
    return ::erfc(x);
 }
 
-template <typename Policy>
+BOOST_MATH_EXPORT template <typename Policy>
 BOOST_MATH_GPU_ENABLED auto erfc(float x, const Policy&)
 {
    return ::erfcf(x);

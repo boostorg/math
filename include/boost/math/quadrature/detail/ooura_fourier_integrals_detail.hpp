@@ -5,9 +5,11 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #ifndef BOOST_MATH_QUADRATURE_DETAIL_OOURA_FOURIER_INTEGRALS_DETAIL_HPP
 #define BOOST_MATH_QUADRATURE_DETAIL_OOURA_FOURIER_INTEGRALS_DETAIL_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility> // for std::pair.
 #include <vector>
 #include <iostream>
+#endif
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/special_functions/cos_pi.hpp>
@@ -15,8 +17,10 @@
 #include <boost/math/tools/config.hpp>
 
 #ifdef BOOST_MATH_HAS_THREADS
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <mutex>
 #include <atomic>
+#endif
 #endif
 
 namespace boost { namespace math { namespace quadrature { namespace detail {

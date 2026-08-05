@@ -132,7 +132,7 @@ namespace boost
 
     } // namespace detail
 
-    template <class RealType = double, class Policy = policies::policy<> >
+    BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
     class pareto_distribution
     {
     public:
@@ -161,24 +161,24 @@ namespace boost
       RealType m_shape;  // distribution shape (k) or alpha
     };
 
-    typedef pareto_distribution<double> pareto; // Convenience to allow pareto(2., 3.);
+    BOOST_MATH_EXPORT typedef pareto_distribution<double> pareto; // Convenience to allow pareto(2., 3.);
 
     #ifdef __cpp_deduction_guides
-    template <class RealType>
+    BOOST_MATH_EXPORT template <class RealType>
     pareto_distribution(RealType)->pareto_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-    template <class RealType>
+    BOOST_MATH_EXPORT template <class RealType>
     pareto_distribution(RealType,RealType)->pareto_distribution<typename boost::math::tools::promote_args<RealType>::type>;
     #endif
 
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const pareto_distribution<RealType, Policy>& /*dist*/)
     { // Range of permissible values for random variable x.
       using boost::math::tools::max_value;
       return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // scale zero to + infinity.
     } // range
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const pareto_distribution<RealType, Policy>& dist)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -186,7 +186,7 @@ namespace boost
       return boost::math::pair<RealType, RealType>(dist.scale(), max_value<RealType>() ); // scale to + infinity.
     } // support
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType pdf(const pareto_distribution<RealType, Policy>& dist, const RealType& x)
     {
       BOOST_MATH_STD_USING  // for ADL of std function pow.
@@ -205,7 +205,7 @@ namespace boost
       return result;
     } // pdf
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType cdf(const pareto_distribution<RealType, Policy>& dist, const RealType& x)
     {
       BOOST_MATH_STD_USING  // for ADL of std function pow.
@@ -228,7 +228,7 @@ namespace boost
       return result;
     } // cdf
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType logcdf(const pareto_distribution<RealType, Policy>& dist, const RealType& x)
     {
       BOOST_MATH_STD_USING  // for ADL of std function pow.
@@ -250,7 +250,7 @@ namespace boost
       return result;
     } // logcdf
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const pareto_distribution<RealType, Policy>& dist, const RealType& p)
     {
       BOOST_MATH_STD_USING  // for ADL of std function pow.
@@ -277,7 +277,7 @@ namespace boost
       return result;
     } // quantile
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<pareto_distribution<RealType, Policy>, RealType>& c)
     {
        BOOST_MATH_STD_USING  // for ADL of std function pow.
@@ -299,7 +299,7 @@ namespace boost
        return result;
     } // cdf complement
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<pareto_distribution<RealType, Policy>, RealType>& c)
     {
        BOOST_MATH_STD_USING  // for ADL of std function pow.
@@ -321,7 +321,7 @@ namespace boost
        return result;
     } // logcdf complement
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<pareto_distribution<RealType, Policy>, RealType>& c)
     {
       BOOST_MATH_STD_USING  // for ADL of std function pow.
@@ -348,7 +348,7 @@ namespace boost
       return result;
     } // quantile complement
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType mean(const pareto_distribution<RealType, Policy>& dist)
     {
       RealType result = 0;
@@ -368,13 +368,13 @@ namespace boost
       }
     } // mean
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType mode(const pareto_distribution<RealType, Policy>& dist)
     {
       return dist.scale();
     } // mode
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType median(const pareto_distribution<RealType, Policy>& dist)
     {
       RealType result = 0;
@@ -387,7 +387,7 @@ namespace boost
       return dist.scale() * pow(RealType(2), (1/dist.shape()));
     } // median
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType variance(const pareto_distribution<RealType, Policy>& dist)
     {
       RealType result = 0;
@@ -412,7 +412,7 @@ namespace boost
       return result;
     } // variance
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType skewness(const pareto_distribution<RealType, Policy>& dist)
     {
       BOOST_MATH_STD_USING
@@ -438,7 +438,7 @@ namespace boost
       return result;
     } // skewness
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const pareto_distribution<RealType, Policy>& dist)
     {
       RealType result = 0;
@@ -462,7 +462,7 @@ namespace boost
       return result;
     } // kurtosis
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const pareto_distribution<RealType, Policy>& dist)
     {
       RealType result = 0;
@@ -486,7 +486,7 @@ namespace boost
       return result;
     } // kurtosis_excess
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType entropy(const pareto_distribution<RealType, Policy>& dist)
     {
       BOOST_MATH_STD_USING

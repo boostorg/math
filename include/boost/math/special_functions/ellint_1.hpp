@@ -33,7 +33,7 @@
 
 namespace boost { namespace math {
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol);
 
 namespace detail{
@@ -787,7 +787,7 @@ BOOST_MATH_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k,
 } // namespace detail
 
 // Elliptic integral (Legendre form) of the first kind
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol)  // LCOV_EXCL_LINE gcc misses this but sees the function body, strange!
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -795,7 +795,7 @@ BOOST_MATH_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k,
    return policies::checked_narrowing_cast<result_type, Policy>(detail::ellint_f_imp(static_cast<value_type>(phi), static_cast<value_type>(k), pol), "boost::math::ellint_1<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi)
 {
    typedef typename policies::is_policy<T2>::type tag_type;
@@ -803,7 +803,7 @@ BOOST_MATH_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k,
 }
 
 // Complete elliptic integral (Legendre form) of the first kind
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED typename tools::promote_args<T>::type ellint_1(T k)
 {
    return ellint_1(k, policies::policy<>());

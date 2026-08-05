@@ -5,7 +5,9 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_CARDINAL_TRIGONOMETRIC_HPP
 #define BOOST_MATH_INTERPOLATORS_CARDINAL_TRIGONOMETRIC_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <memory>
+#endif
 #include <boost/math/interpolators/detail/cardinal_trigonometric_detail.hpp>
 
 namespace boost { namespace math { namespace interpolators {

@@ -35,7 +35,7 @@ namespace boost{ namespace math{
 #  pragma warning(disable:4127) // conditional expression is constant
 #endif
 
-template <class RealType = double, class Policy = policies::policy<> >
+BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
 class laplace_distribution
 {
 public:
@@ -84,18 +84,18 @@ private:
 
 //
 // Convenient type synonym for double.
-using laplace = laplace_distribution<double>;
+BOOST_MATH_EXPORT using laplace = laplace_distribution<double>;
 
 #ifdef __cpp_deduction_guides
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 laplace_distribution(RealType)->laplace_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 laplace_distribution(RealType,RealType)->laplace_distribution<typename boost::math::tools::promote_args<RealType>::type>;
 #endif
 
 //
 // Non-member functions.
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const laplace_distribution<RealType, Policy>&)
 {
   BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
@@ -110,7 +110,7 @@ BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const 
 
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const laplace_distribution<RealType, Policy>&)
 {
   BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
@@ -124,7 +124,7 @@ BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(cons
   }
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType pdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -156,7 +156,7 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const laplace_distribution<RealType, 
    return result;
 } // pdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logpdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -198,7 +198,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const laplace_distribution<RealTyp
    return result;
 } // logpdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // For ADL of std functions.
@@ -232,7 +232,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const laplace_distribution<RealType, 
    return result;
 } // cdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logcdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // For ADL of std functions.
@@ -277,7 +277,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const laplace_distribution<RealTyp
    return result;
 } // logcdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const laplace_distribution<RealType, Policy>& dist, const RealType& p)
 {
    BOOST_MATH_STD_USING // for ADL of std functions.
@@ -315,7 +315,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const laplace_distribution<RealT
 } // quantile
 
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<laplace_distribution<RealType, Policy>, RealType>& c)
 {
    // Calculate complement of cdf.
@@ -352,7 +352,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<laplace_dist
    return result;
 } // cdf complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<laplace_distribution<RealType, Policy>, RealType>& c)
 {
    // Calculate complement of logcdf.
@@ -393,7 +393,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<laplace_d
    return result;
 } // cdf complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<laplace_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING // for ADL of std functions.
@@ -428,49 +428,49 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<laplace
    return result;
 } // quantile
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mean(const laplace_distribution<RealType, Policy>& dist)
 {
    return dist.location();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType standard_deviation(const laplace_distribution<RealType, Policy>& dist)
 {
    return constants::root_two<RealType>() * dist.scale();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mode(const laplace_distribution<RealType, Policy>& dist)
 {
    return dist.location();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType median(const laplace_distribution<RealType, Policy>& dist)
 {
    return dist.location();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType skewness(const laplace_distribution<RealType, Policy>& /*dist*/)
 {
    return 0;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const laplace_distribution<RealType, Policy>& /*dist*/)
 {
    return 6;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const laplace_distribution<RealType, Policy>& /*dist*/)
 {
    return 3;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType entropy(const laplace_distribution<RealType, Policy> & dist)
 {
    using std::log;

@@ -6,6 +6,9 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_RANDOM_SEARCH_HPP
 #define BOOST_MATH_OPTIMIZATION_RANDOM_SEARCH_HPP
+
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <atomic>
 #include <cmath>
 #include <limits>
@@ -16,11 +19,12 @@
 #include <thread>
 #include <utility>
 #include <vector>
+#endif
 #include <boost/math/optimization/detail/common.hpp>
 
 namespace boost::math::optimization {
 
-template <typename ArgumentContainer> struct random_search_parameters {
+BOOST_MATH_EXPORT template <typename ArgumentContainer> struct random_search_parameters {
   using Real = typename ArgumentContainer::value_type;
   ArgumentContainer lower_bounds;
   ArgumentContainer upper_bounds;
@@ -29,7 +33,7 @@ template <typename ArgumentContainer> struct random_search_parameters {
   unsigned threads = std::thread::hardware_concurrency();
 };
 
-template <typename ArgumentContainer>
+BOOST_MATH_EXPORT template <typename ArgumentContainer>
 void validate_random_search_parameters(random_search_parameters<ArgumentContainer> const &params) {
   using std::isfinite;
   using std::isnan;
@@ -45,7 +49,7 @@ void validate_random_search_parameters(random_search_parameters<ArgumentContaine
   }
 }
 
-template <typename ArgumentContainer, class Func, class URBG>
+BOOST_MATH_EXPORT template <typename ArgumentContainer, class Func, class URBG>
 ArgumentContainer random_search(
     const Func cost_function,
     random_search_parameters<ArgumentContainer> const &params,

@@ -38,7 +38,7 @@
 
 namespace boost{ namespace math{
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    expint(unsigned n, T z, const Policy& /*pol*/);
 
@@ -1561,7 +1561,7 @@ expint_forwarder(unsigned n, T z, const boost::math::false_type&)
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    expint(unsigned n, T z, const Policy& /*pol*/)
 {
@@ -1588,7 +1588,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
       tag_type()), "boost::math::expint<%1%>(unsigned, %1%)");
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 BOOST_MATH_GPU_ENABLED inline typename detail::expint_result<T, U>::type
    expint(T const z, U const u)
 {
@@ -1596,7 +1596,7 @@ BOOST_MATH_GPU_ENABLED inline typename detail::expint_result<T, U>::type
    return detail::expint_forwarder(z, u, tag_type());
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    expint(T z)
 {

@@ -64,7 +64,7 @@
 
 namespace boost{ namespace math{
 
-template <class RealType = double, class Policy = policies::policy<> >
+BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
 class inverse_gaussian_distribution
 {
 public:
@@ -110,23 +110,23 @@ private:
    RealType m_scale;    // distribution standard deviation or scale, aka lambda.
 }; // class normal_distribution
 
-using inverse_gaussian = inverse_gaussian_distribution<double>;
+BOOST_MATH_EXPORT using inverse_gaussian = inverse_gaussian_distribution<double>;
 
 #ifdef __cpp_deduction_guides
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 inverse_gaussian_distribution(RealType)->inverse_gaussian_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 inverse_gaussian_distribution(RealType,RealType)->inverse_gaussian_distribution<typename boost::math::tools::promote_args<RealType>::type>;
 #endif
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const inverse_gaussian_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x, zero to max.
    using boost::math::tools::max_value;
    return boost::math::pair<RealType, RealType>(static_cast<RealType>(0.), max_value<RealType>()); // - to + max value.
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const inverse_gaussian_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x, zero to max.
   // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -134,7 +134,7 @@ BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(cons
    return boost::math::pair<RealType, RealType>(static_cast<RealType>(0.),  max_value<RealType>()); // - to + max value.
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType pdf(const inverse_gaussian_distribution<RealType, Policy>& dist, const RealType& x)
 { // Probability Density Function
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -171,7 +171,7 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const inverse_gaussian_distribution<R
    return result;
 } // pdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logpdf(const inverse_gaussian_distribution<RealType, Policy>& dist, const RealType& x)
 { // Probability Density Function
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -208,7 +208,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const inverse_gaussian_distributio
    return result;
 } // pdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const inverse_gaussian_distribution<RealType, Policy>& dist, const RealType& x)
 { // Cumulative Density Function.
    BOOST_MATH_STD_USING  // for ADL of std functions.
@@ -339,7 +339,7 @@ namespace detail
   }  // guess_ig
 } // namespace detail
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const inverse_gaussian_distribution<RealType, Policy>& dist, const RealType& p)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions.
@@ -401,7 +401,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const inverse_gaussian_distribut
   return result;
 } // quantile
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<inverse_gaussian_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions.
@@ -437,7 +437,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<inverse_gaus
    return result;
 } // cdf complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<inverse_gaussian_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -486,7 +486,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<inverse
   return result;
 } // quantile
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mean(const inverse_gaussian_distribution<RealType, Policy>& dist)
 { // aka mu
    return dist.mean();
@@ -504,7 +504,7 @@ BOOST_MATH_GPU_ENABLED inline RealType shape(const inverse_gaussian_distribution
    return dist.shape();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType standard_deviation(const inverse_gaussian_distribution<RealType, Policy>& dist)
 {
   BOOST_MATH_STD_USING
@@ -514,7 +514,7 @@ BOOST_MATH_GPU_ENABLED inline RealType standard_deviation(const inverse_gaussian
   return result;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mode(const inverse_gaussian_distribution<RealType, Policy>& dist)
 {
   BOOST_MATH_STD_USING
@@ -525,7 +525,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mode(const inverse_gaussian_distribution<
   return result;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType skewness(const inverse_gaussian_distribution<RealType, Policy>& dist)
 {
   BOOST_MATH_STD_USING
@@ -535,7 +535,7 @@ BOOST_MATH_GPU_ENABLED inline RealType skewness(const inverse_gaussian_distribut
   return result;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const inverse_gaussian_distribution<RealType, Policy>& dist)
 {
   RealType scale = dist.scale();
@@ -544,7 +544,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const inverse_gaussian_distribut
   return result;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const inverse_gaussian_distribution<RealType, Policy>& dist)
 {
   RealType scale = dist.scale();

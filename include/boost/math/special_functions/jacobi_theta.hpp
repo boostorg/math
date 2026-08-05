@@ -109,65 +109,65 @@
 namespace boost{ namespace math{
 
 // Simple functions - parameterized by q
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q);
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q);
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q);
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta4(T z, U q);
 
 // Simple functions - parameterized by tau (assumed imaginary)
 // q = exp(i*PI*TAU)
 // tau = -log(q)/PI
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau);
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau);
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau);
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau);
 
 // Minus one versions for small q / large tau
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q);
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q);
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau);
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau);
 
 // Policied versions - parameterized by q
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q, const Policy& pol);
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q, const Policy& pol);
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q, const Policy& pol);
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta4(T z, U q, const Policy& pol);
 
 // Policied versions - parameterized by tau
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau, const Policy& pol);
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau, const Policy& pol);
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau, const Policy& pol);
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau, const Policy& pol);
 
 // Policied m1 functions
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q, const Policy& pol);
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q, const Policy& pol);
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau, const Policy& pol);
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau, const Policy& pol);
 
 // Compare the non-oscillating component of the delta to the previous delta.
@@ -543,7 +543,7 @@ jacobi_theta4_imp(RealType z, RealType q, const Policy& pol, const char *functio
 
 // Begin public API
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -559,12 +559,12 @@ inline typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau, con
    return policies::checked_narrowing_cast<result_type, Policy>(jacobi_theta1tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau), forwarding_policy(), function), function);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau) {
     return jacobi_theta1tau(z, tau, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -580,12 +580,12 @@ inline typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q, const Po
    return policies::checked_narrowing_cast<result_type, Policy>(jacobi_theta1_imp(static_cast<result_type>(z), static_cast<result_type>(q), forwarding_policy(), function), function);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q) {
     return jacobi_theta1(z, q, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -601,12 +601,12 @@ inline typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau, con
    return policies::checked_narrowing_cast<result_type, Policy>(jacobi_theta2tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau), forwarding_policy(), function), function);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau) {
     return jacobi_theta2tau(z, tau, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -622,12 +622,12 @@ inline typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q, const Po
    return policies::checked_narrowing_cast<result_type, Policy>(jacobi_theta2_imp(static_cast<result_type>(z), static_cast<result_type>(q), forwarding_policy(), function), function);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q) {
     return jacobi_theta2(z, q, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -644,12 +644,12 @@ inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau, c
            jacobi_theta3m1tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau), forwarding_policy()), function);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau) {
     return jacobi_theta3m1tau(z, tau, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -665,13 +665,13 @@ inline typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau, con
    return policies::checked_narrowing_cast<result_type, Policy>(jacobi_theta3tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau), forwarding_policy(), function), function);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau) {
     return jacobi_theta3tau(z, tau, policies::policy<>());
 }
 
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -687,12 +687,12 @@ inline typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q, const 
    return policies::checked_narrowing_cast<result_type, Policy>(jacobi_theta3m1_imp(static_cast<result_type>(z), static_cast<result_type>(q), forwarding_policy(), function), function);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q) {
     return jacobi_theta3m1(z, q, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -708,12 +708,12 @@ inline typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q, const Po
    return policies::checked_narrowing_cast<result_type, Policy>(jacobi_theta3_imp(static_cast<result_type>(z), static_cast<result_type>(q), forwarding_policy(), function), function);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q) {
     return jacobi_theta3(z, q, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -729,12 +729,12 @@ inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau, c
    return policies::checked_narrowing_cast<result_type, Policy>(jacobi_theta4m1tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau), forwarding_policy()), function);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau) {
     return jacobi_theta4m1tau(z, tau, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -750,12 +750,12 @@ inline typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau, con
    return policies::checked_narrowing_cast<result_type, Policy>(jacobi_theta4tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau), forwarding_policy(), function), function);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau) {
     return jacobi_theta4tau(z, tau, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -771,12 +771,12 @@ inline typename tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q, const 
    return policies::checked_narrowing_cast<result_type, Policy>(jacobi_theta4m1_imp(static_cast<result_type>(z), static_cast<result_type>(q), forwarding_policy(), function), function);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q) {
     return jacobi_theta4m1(z, q, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta4(T z, U q, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -792,7 +792,7 @@ inline typename tools::promote_args<T, U>::type jacobi_theta4(T z, U q, const Po
    return policies::checked_narrowing_cast<result_type, Policy>(jacobi_theta4_imp(static_cast<result_type>(z), static_cast<result_type>(q), forwarding_policy(), function), function);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_theta4(T z, U q) {
     return jacobi_theta4(z, q, policies::policy<>());
 }

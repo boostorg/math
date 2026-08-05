@@ -590,7 +590,7 @@ T digamma_imp(T x, const boost::math::integral_constant<int, 0>* t, const Policy
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    digamma(T x, const Policy&)
 {
@@ -613,7 +613,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    return policies::checked_narrowing_cast<result_type, Policy>(detail::digamma_imp(static_cast<value_type>(x), static_cast<const tag_type*>(nullptr), forwarding_policy()), "boost::math::digamma<%1%>(%1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    digamma(T x)
 {

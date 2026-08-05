@@ -6,10 +6,12 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_CARDINAL_QUINTIC_B_SPLINE_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_CARDINAL_QUINTIC_B_SPLINE_DETAIL_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <cstdint>
 #include <vector>
 #include <utility>
+#endif
 #include <boost/math/special_functions/cardinal_b_spline.hpp>
 
 namespace boost{ namespace math{ namespace interpolators{ namespace detail{

@@ -29,7 +29,7 @@
 
 namespace boost{ namespace math{ namespace tools{
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 class eps_tolerance
 {
 public:
@@ -306,7 +306,7 @@ BOOST_MATH_GPU_ENABLED T cubic_interpolate(const T& a, const T& b, const T& d,
 
 } // namespace detail
 
-template <class F, class T, class Tol, class Policy>
+BOOST_MATH_EXPORT template <class F, class T, class Tol, class Policy>
 BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const T& fbx, Tol tol, boost::math::uintmax_t& max_iter, const Policy& pol)
 {
    //
@@ -489,13 +489,13 @@ BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> toms748_solve(F f, const T& ax, c
    return boost::math::make_pair(a, b);
 }
 
-template <class F, class T, class Tol>
+BOOST_MATH_EXPORT template <class F, class T, class Tol>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const T& fbx, Tol tol, boost::math::uintmax_t& max_iter)
 {
    return toms748_solve(f, ax, bx, fax, fbx, tol, max_iter, policies::policy<>());
 }
 
-template <class F, class T, class Tol, class Policy>
+BOOST_MATH_EXPORT template <class F, class T, class Tol, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, Tol tol, boost::math::uintmax_t& max_iter, const Policy& pol)
 {
    if (max_iter <= 2)
@@ -506,13 +506,13 @@ BOOST_MATH_GPU_ENABLED inline boost::math::pair<T, T> toms748_solve(F f, const T
    return r;
 }
 
-template <class F, class T, class Tol>
+BOOST_MATH_EXPORT template <class F, class T, class Tol>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, Tol tol, boost::math::uintmax_t& max_iter)
 {
    return toms748_solve(f, ax, bx, tol, max_iter, policies::policy<>());
 }
 
-template <class F, class T, class Tol, class Policy>
+BOOST_MATH_EXPORT template <class F, class T, class Tol, class Policy>
 BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> bracket_and_solve_root(F f, const T& guess, T factor, bool rising, Tol tol, boost::math::uintmax_t& max_iter, const Policy& pol)
 {
    BOOST_MATH_STD_USING
@@ -621,7 +621,7 @@ BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> bracket_and_solve_root(F f, const
    return r;
 }
 
-template <class F, class T, class Tol>
+BOOST_MATH_EXPORT template <class F, class T, class Tol>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, bool rising, Tol tol, boost::math::uintmax_t& max_iter)
 {
    return bracket_and_solve_root(f, guess, factor, rising, tol, max_iter, policies::policy<>());

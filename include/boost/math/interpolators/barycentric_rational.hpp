@@ -26,12 +26,14 @@
 #ifndef BOOST_MATH_INTERPOLATORS_BARYCENTRIC_RATIONAL_HPP
 #define BOOST_MATH_INTERPOLATORS_BARYCENTRIC_RATIONAL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <memory>
+#endif
 #include <boost/math/interpolators/detail/barycentric_rational_detail.hpp>
 
 namespace boost{ namespace math{ namespace interpolators{
 
-template<class Real>
+BOOST_MATH_EXPORT template<class Real>
 class barycentric_rational
 {
 public:

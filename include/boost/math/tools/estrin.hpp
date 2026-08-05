@@ -7,16 +7,18 @@
 #ifndef BOOST_MATH_TOOLS_ESTRIN_HPP
 #define BOOST_MATH_TOOLS_ESTRIN_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <vector>
 #include <type_traits>
+#endif
 #include <boost/math/tools/assert.hpp>
 
 namespace boost {
 namespace math {
 namespace tools {
 
-template <typename RandomAccessContainer1, typename RandomAccessContainer2, typename RealOrComplex>
+BOOST_MATH_EXPORT template <typename RandomAccessContainer1, typename RandomAccessContainer2, typename RealOrComplex>
 inline RealOrComplex evaluate_polynomial_estrin(RandomAccessContainer1 const &coeffs, RandomAccessContainer2 &scratch, RealOrComplex z) {
   // Does anyone care about the complex coefficients, real argument case?
   // I've never seen it used, and this static assert makes the error messages much better:
@@ -50,13 +52,13 @@ inline RealOrComplex evaluate_polynomial_estrin(RandomAccessContainer1 const &co
 }
 
 // The std::array template specialization doesn't need to allocate:
-template <typename RealOrComplex1, size_t n, typename RealOrComplex2>
+BOOST_MATH_EXPORT template <typename RealOrComplex1, size_t n, typename RealOrComplex2>
 inline RealOrComplex2 evaluate_polynomial_estrin(const std::array<RealOrComplex1, n> &coeffs, RealOrComplex2 z) {
   std::array<RealOrComplex2, (n + 1) / 2> ds;
   return evaluate_polynomial_estrin(coeffs, ds, z);
 }
 
-template <typename RandomAccessContainer, typename RealOrComplex>
+BOOST_MATH_EXPORT template <typename RandomAccessContainer, typename RealOrComplex>
 inline RealOrComplex evaluate_polynomial_estrin(const RandomAccessContainer &coeffs, RealOrComplex z) {
   auto n = coeffs.size();
   // Normally, I'd make `ds` a RandomAccessContainer, but its value type needs to be RealOrComplex,

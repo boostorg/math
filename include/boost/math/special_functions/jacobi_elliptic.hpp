@@ -114,7 +114,7 @@ T jacobi_imp(const T& x, const T& k, T* cn, T* dn, const Policy& pol, const char
 
 } // namespace detail
 
-template <class T, class U, class V, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class V, class Policy>
 inline typename tools::promote_args<T, U, V>::type jacobi_elliptic(T k, U theta, V* pcn, V* pdn, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -138,26 +138,26 @@ inline typename tools::promote_args<T, U, V>::type jacobi_elliptic(T k, U theta,
    return policies::checked_narrowing_cast<result_type, Policy>(sn, function);
 }
 
-template <class T, class U, class V>
+BOOST_MATH_EXPORT template <class T, class U, class V>
 inline typename tools::promote_args<T, U, V>::type jacobi_elliptic(T k, U theta, V* pcn, V* pdn)
 {
    return jacobi_elliptic(k, theta, pcn, pdn, policies::policy<>());
 }
 
-template <class U, class T, class Policy>
+BOOST_MATH_EXPORT template <class U, class T, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_sn(U k, T theta, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
    return jacobi_elliptic(static_cast<result_type>(k), static_cast<result_type>(theta), static_cast<result_type*>(nullptr), static_cast<result_type*>(nullptr), pol);
 }
 
-template <class U, class T>
+BOOST_MATH_EXPORT template <class U, class T>
 inline typename tools::promote_args<T, U>::type jacobi_sn(U k, T theta)
 {
    return jacobi_sn(k, theta, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_cn(T k, U theta, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -166,13 +166,13 @@ inline typename tools::promote_args<T, U>::type jacobi_cn(T k, U theta, const Po
    return cn;
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_cn(T k, U theta)
 {
    return jacobi_cn(k, theta, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_dn(T k, U theta, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -181,13 +181,13 @@ inline typename tools::promote_args<T, U>::type jacobi_dn(T k, U theta, const Po
    return dn;
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_dn(T k, U theta)
 {
    return jacobi_dn(k, theta, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_cd(T k, U theta, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -196,13 +196,13 @@ inline typename tools::promote_args<T, U>::type jacobi_cd(T k, U theta, const Po
    return cn / dn;
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_cd(T k, U theta)
 {
    return jacobi_cd(k, theta, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_dc(T k, U theta, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -211,26 +211,26 @@ inline typename tools::promote_args<T, U>::type jacobi_dc(T k, U theta, const Po
    return dn / cn;
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_dc(T k, U theta)
 {
    return jacobi_dc(k, theta, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_ns(T k, U theta, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
    return 1 / jacobi_elliptic(static_cast<result_type>(k), static_cast<result_type>(theta), static_cast<result_type*>(nullptr), static_cast<result_type*>(nullptr), pol);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_ns(T k, U theta)
 {
    return jacobi_ns(k, theta, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_sd(T k, U theta, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -239,13 +239,13 @@ inline typename tools::promote_args<T, U>::type jacobi_sd(T k, U theta, const Po
    return sn / dn;
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_sd(T k, U theta)
 {
    return jacobi_sd(k, theta, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_ds(T k, U theta, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -254,37 +254,37 @@ inline typename tools::promote_args<T, U>::type jacobi_ds(T k, U theta, const Po
    return dn / sn;
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_ds(T k, U theta)
 {
    return jacobi_ds(k, theta, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_nc(T k, U theta, const Policy& pol)
 {
    return 1 / jacobi_cn(k, theta, pol);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_nc(T k, U theta)
 {
    return jacobi_nc(k, theta, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_nd(T k, U theta, const Policy& pol)
 {
    return 1 / jacobi_dn(k, theta, pol);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_nd(T k, U theta)
 {
    return jacobi_nd(k, theta, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_sc(T k, U theta, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -293,13 +293,13 @@ inline typename tools::promote_args<T, U>::type jacobi_sc(T k, U theta, const Po
    return sn / cn;
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_sc(T k, U theta)
 {
    return jacobi_sc(k, theta, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_cs(T k, U theta, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
@@ -308,7 +308,7 @@ inline typename tools::promote_args<T, U>::type jacobi_cs(T k, U theta, const Po
    return cn / sn;
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type jacobi_cs(T k, U theta)
 {
    return jacobi_cs(k, theta, policies::policy<>());

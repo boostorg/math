@@ -86,7 +86,7 @@ namespace boost
         }
        }
 
-        template<typename T, typename Policy>
+        BOOST_MATH_EXPORT template<typename T, typename Policy>
         BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type atanh(T x, const Policy&)
         {
             typedef typename tools::promote_args<T>::type result_type;
@@ -101,7 +101,7 @@ namespace boost
               detail::atanh_imp(static_cast<value_type>(x), forwarding_policy()),
               "boost::math::atanh<%1%>(%1%)");
         }
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type atanh(T x)
         {
            return boost::math::atanh(x, policies::policy<>());
