@@ -28,21 +28,23 @@ template<typename T, typename U>
 struct has_plus<T, U, void_t<decltype(std::declval<T>() + std::declval<U>())> > : std::true_type {};
 
 template <typename T, typename U>
-typename std::enable_if<has_plus<T, U>::value, T>::type
-add(T x, U y) 
+BOOST_MATH_INLINE_CONSTEXPR bool has_plus_v = has_plus<T, U>::value;
+
+template <typename T, typename U>
+typename std::enable_if_t<has_plus_v<T, U>, void>
+add(T& x, U& y) 
 {
-    return x + y;
+    x = x + y;
 }
 
 template <typename T, typename U>
-typename std::enable_if<!has_plus<T, U>::value, T>::type
-add(T vec1, U vec2) 
+typename std::enable_if_t<!has_plus_v<T, U>, void>
+add(T& vec1, U& vec2)
 {
-    for (unsigned i=0; i < vec1.size(); i++)
+    for (std::size_t i=0; i < vec1.size(); i++)
     {
         vec1[i] = vec1[i] + vec2[i];
     }
-    return vec1;
 }
 
 template<typename...>
@@ -55,21 +57,20 @@ template<typename T, typename U>
 struct has_mult<T, U, void_t<decltype(std::declval<T>() * std::declval<U>())> > : std::true_type {};
 
 template <typename T, typename U>
-typename std::enable_if<has_mult<T, U>::value, T>::type
-mult_prefactor(T x, U prefactor) 
+typename std::enable_if<has_mult<T, U>::value, void>::type
+mult_prefactor(T& x, U prefactor) 
 {
-    return x * prefactor;
+    x = x * prefactor;
 }
 
 template <typename T, typename U>
-typename std::enable_if<!has_plus<T, U>::value, T>::type
-mult_prefactor(T vec1, U prefactor) 
+typename std::enable_if<!has_plus<T, U>::value, void>::type
+mult_prefactor(T& vec1, U prefactor) 
 {
     for (unsigned i=0; i < vec1.size(); i++)
     {
         vec1[i] = vec1[i] * prefactor;
     }
-    return vec1;
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
@@ -83,19 +84,19 @@ std::pair<RandomAccessContainer, RandomAccessContainer> second_order_yoshida(con
     RandomAccessContainer q = q0;
 
     // Half step in q
-    RandomAccessContainer dHdp_val = dHdp(p);
-    RandomAccessContainer dq = mult_prefactor(dHdp_val, 0.5 * dt);
-    q = add(q, dq);
+    RandomAccessContainer dq = dHdp(p);
+    mult_prefactor(dq, 0.5 * dt);
+    add(q, dq);
 
     // Full step in p
-    RandomAccessContainer dHdq_val = dHdq(q);
-    RandomAccessContainer dp = mult_prefactor(dHdq_val, -dt);
-    p = add(p, dp);
+    RandomAccessContainer dp = dHdq(q);
+    mult_prefactor(dp, -dt);
+    add(p, dp);
 
     // Half step in q
-    dHdp_val = dHdp(p);
-    dq = mult_prefactor(dHdp_val, 0.5 * dt);
-    q = add(q, dq);
+    dq = dHdp(p);
+    mult_prefactor(dq, 0.5 * dt);
+    add(q, dq);
 
     return std::make_pair(p, q);
 }
@@ -113,10 +114,10 @@ std::pair<RandomAccessContainer, RandomAccessContainer> fourth_order_yoshida(con
     RandomAccessContainer q = q0;
 
     // RealType x0 = -(std::pow(2, 1/3) / (2 - std::pow(2, 1/3)));
-    RealType x1 = 1. / (2. - std::cbrt(2.));
+    RealType x1 = 1. / (2. - cbrt(2.));
     RealType x0 = 1. - 2. * x1; 
 
-    std::vector<RealType> weights = { x1, x0, x1 };
+    std::array<RealType, 3> weights = { x1, x0, x1 };
 
     for (unsigned i=0; i < weights.size(); i++)
     {
@@ -147,7 +148,7 @@ std::pair<RandomAccessContainer, RandomAccessContainer> sixth_order_yoshida(cons
     RealType w3 = static_cast<RealType>(0.78451361047755726381949763386634987577682441745149338456794779895125997479548L);
     // w0 = 1.31518632068391121888424972823886251435195350615940796180785516777853373846773
     RealType w0 = 1. - 2. * (w1 + w2 + w3);
-    std::vector<RealType> weights = { w3, w2, w1, w0, w1, w2, w3};
+    std::array<RealType, 7> weights = { w3, w2, w1, w0, w1, w2, w3};
 
     for (unsigned i=0; i < weights.size(); i++)
     {
@@ -178,27 +179,27 @@ std::pair<RandomAccessContainer, RandomAccessContainer> SRKN_b_order_6(const Ran
     RealType a2 = static_cast<RealType>(0.604872665711080);
     RealType a3 = 0.5 - (a1 + a2);
 
-    std::vector<RealType> b_weights = {b1, b2, b3, b4, b3, b2};
-    std::vector<RealType> a_weights = {a1, a2, a3, a3, a2, a1};
+    std::array<RealType, 6> b_weights = {b1, b2, b3, b4, b3, b2};
+    std::array<RealType, 6> a_weights = {a1, a2, a3, a3, a2, a1};
     
     RealType a, b;
-    for (unsigned int i=0; i < b_weights.size(); i++)
+    for (std::size_t i=0; i < b_weights.size(); i++)
     {
         b = b_weights[i];
         a = a_weights[i];
         
-        RandomAccessContainer dHdp_val = dHdp(p);
-        RandomAccessContainer dq = mult_prefactor(dHdp_val, dt * b);
-        q = add(q, dq);
+        RandomAccessContainer dq = dHdp(p);
+        mult_prefactor(dq, dt * b);
+        add(q, dq);
 
-        RandomAccessContainer dHdq_val = dHdq(q);
-        RandomAccessContainer dp = mult_prefactor(dHdq_val, -a * dt);
-        p = add(p, dp);
+        RandomAccessContainer dp = dHdq(q);
+        mult_prefactor(dp, -a * dt);
+        add(p, dp);
     }
     // Need to do one more step in q
-    RandomAccessContainer dHdp_val = dHdp(p);
-    RandomAccessContainer dq = mult_prefactor(dHdp_val, dt * b1);
-    q = add(q, dq);
+    RandomAccessContainer dq = dHdp(p);
+    mult_prefactor(dq, dt * b1);
+    add(q, dq);
 
     return std::make_pair(p, q);
 }
@@ -229,8 +230,8 @@ std::pair<RandomAccessContainer, RandomAccessContainer> SRKN_b_order_11(const Ra
     RealType a5 = static_cast<RealType>(0.357208872795928);
     RealType a6 = 1. - 2. * (a1 + a2 + a3 + a4 + a5);
 
-    std::vector<RealType> b_weights = {b1, b2, b3, b4, b5, b6, b6, b5, b4, b3, b2};
-    std::vector<RealType> a_weights = {a1, a2, a3, a4, a5, a6, a5, a4, a3, a2, a1};
+    std::array<RealType, 11> b_weights = {b1, b2, b3, b4, b5, b6, b6, b5, b4, b3, b2};
+    std::array<RealType, 11> a_weights = {a1, a2, a3, a4, a5, a6, a5, a4, a3, a2, a1};
     
     RealType a, b;
     for (unsigned int i=0; i < b_weights.size(); i++)
@@ -238,18 +239,18 @@ std::pair<RandomAccessContainer, RandomAccessContainer> SRKN_b_order_11(const Ra
         b = b_weights[i];
         a = a_weights[i];
         
-        RandomAccessContainer dHdp_val = dHdp(p);
-        RandomAccessContainer dq = mult_prefactor(dHdp_val, dt * b);
-        q = add(q, dq);
+        RandomAccessContainer dq = dHdp(p);
+        mult_prefactor(dq, dt * b);
+        add(q, dq);
 
-        RandomAccessContainer dHdq_val = dHdq(q);
-        RandomAccessContainer dp = mult_prefactor(dHdq_val, -a * dt);
-        p = add(p, dp);
+        RandomAccessContainer dp = dHdq(q);
+        mult_prefactor(dp, -a * dt);
+        add(p, dp);
     }
     // Need to do one more step in q
-    RandomAccessContainer dHdp_val = dHdp(p);
-    RandomAccessContainer dq = mult_prefactor(dHdp_val, dt * b1);
-    q = add(q, dq);
+    RandomAccessContainer dq = dHdp(p);
+    mult_prefactor(dq, dt * b1);
+    add(q, dq);
 
     return std::make_pair(p, q);
 }
