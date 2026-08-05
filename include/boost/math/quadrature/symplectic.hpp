@@ -67,51 +67,38 @@ template <typename T, typename U>
 typename std::enable_if<!has_plus<T, U>::value, void>::type
 mult_prefactor(T& vec1, U prefactor) 
 {
-    for (unsigned i=0; i < vec1.size(); i++)
+    for (std::size_t i=0; i < vec1.size(); i++)
     {
         vec1[i] = vec1[i] * prefactor;
     }
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
-std::pair<RandomAccessContainer, RandomAccessContainer> second_order_yoshida(const RandomAccessContainer p0, 
-                                                                             const RandomAccessContainer q0, 
-                                                                             const RealType dt, 
-                                                                             Func dHdp, 
-                                                                             Func dHdq)
+void second_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt, 
+                          Func dHdp, Func dHdq)
 {
-    RandomAccessContainer p = p0;
-    RandomAccessContainer q = q0;
 
     // Half step in q
-    RandomAccessContainer dq = dHdp(p);
+    RandomAccessContainer dq = dHdp(p0);
     mult_prefactor(dq, 0.5 * dt);
-    add(q, dq);
+    add(q0, dq);
 
     // Full step in p
-    RandomAccessContainer dp = dHdq(q);
+    RandomAccessContainer dp = dHdq(q0);
     mult_prefactor(dp, -dt);
-    add(p, dp);
+    add(p0, dp);
 
     // Half step in q
-    dq = dHdp(p);
+    dq = dHdp(p0);
     mult_prefactor(dq, 0.5 * dt);
-    add(q, dq);
-
-    return std::make_pair(p, q);
+    add(q0, dq);
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
-std::pair<RandomAccessContainer, RandomAccessContainer> fourth_order_yoshida(const RandomAccessContainer p0, 
-                                                                             const RandomAccessContainer q0, 
-                                                                             const RealType dt, 
-                                                                             Func dHdp, 
-                                                                             Func dHdq)
+void fourth_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt, 
+                          Func dHdp, Func dHdq)
 {
     BOOST_MATH_STD_USING
-
-    RandomAccessContainer p = p0;
-    RandomAccessContainer q = q0;
 
     // RealType x0 = -(std::pow(2, 1/3) / (2 - std::pow(2, 1/3)));
     RealType x1 = 1. / (2. - cbrt(2.));
@@ -119,23 +106,16 @@ std::pair<RandomAccessContainer, RandomAccessContainer> fourth_order_yoshida(con
 
     std::array<RealType, 3> weights = { x1, x0, x1 };
 
-    for (unsigned i=0; i < weights.size(); i++)
+    for (std::size_t i=0; i < weights.size(); i++)
     {
-        std::tie(p, q) = second_order_yoshida(p, q, weights[i] * dt, dHdp, dHdq);
+        second_order_yoshida(p0, q0, weights[i] * dt, dHdp, dHdq);
     }
-    
-    return std::make_pair(p, q);
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
-std::pair<RandomAccessContainer, RandomAccessContainer> sixth_order_yoshida(const RandomAccessContainer p0, 
-                                                                            const RandomAccessContainer q0, 
-                                                                            const RealType dt, 
-                                                                            Func dHdp, 
-                                                                            Func dHdq)
+void sixth_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt, 
+                         Func dHdp, Func dHdq)
 {
-    RandomAccessContainer p = p0;
-    RandomAccessContainer q = q0;
     
     // Choosing "System A" solution
     // The following Mathematica command can calculate these coefficients to arbitrary precision
@@ -150,25 +130,17 @@ std::pair<RandomAccessContainer, RandomAccessContainer> sixth_order_yoshida(cons
     RealType w0 = 1. - 2. * (w1 + w2 + w3);
     std::array<RealType, 7> weights = { w3, w2, w1, w0, w1, w2, w3};
 
-    for (unsigned i=0; i < weights.size(); i++)
+    for (std::size_t i=0; i < weights.size(); i++)
     {
-        std::tie(p, q) = second_order_yoshida(p, q, weights[i] * dt, dHdp, dHdq);
+        second_order_yoshida(p0, q0, weights[i] * dt, dHdp, dHdq);
     }
-    
-    return std::make_pair(p, q);
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
-std::pair<RandomAccessContainer, RandomAccessContainer> SRKN_b_order_6(const RandomAccessContainer p0,
-                                                                       const RandomAccessContainer q0,
-                                                                       const RealType dt, 
-                                                                       Func dHdp,
-                                                                       Func dHdq)
+void SRKN_b_order_6(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt, 
+                    Func dHdp, Func dHdq)
 { // This method implements SRKN_b^6 in Table 3 here 
   // https://www.sciencedirect.com/science/article/pii/S0377042701004927
-
-    RandomAccessContainer p = p0;
-    RandomAccessContainer q = q0;
     
     RealType b1 = static_cast<RealType>(0.0829844064174052);
     RealType b2 = static_cast<RealType>(0.396309801498368);
@@ -188,33 +160,25 @@ std::pair<RandomAccessContainer, RandomAccessContainer> SRKN_b_order_6(const Ran
         b = b_weights[i];
         a = a_weights[i];
         
-        RandomAccessContainer dq = dHdp(p);
+        RandomAccessContainer dq = dHdp(p0);
         mult_prefactor(dq, dt * b);
-        add(q, dq);
+        add(q0, dq);
 
-        RandomAccessContainer dp = dHdq(q);
+        RandomAccessContainer dp = dHdq(q0);
         mult_prefactor(dp, -a * dt);
-        add(p, dp);
+        add(p0, dp);
     }
     // Need to do one more step in q
-    RandomAccessContainer dq = dHdp(p);
+    RandomAccessContainer dq = dHdp(p0);
     mult_prefactor(dq, dt * b1);
-    add(q, dq);
-
-    return std::make_pair(p, q);
+    add(q0, dq);
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
-std::pair<RandomAccessContainer, RandomAccessContainer> SRKN_b_order_11(const RandomAccessContainer p0,
-                                                                       const RandomAccessContainer q0,
-                                                                       const RealType dt, 
-                                                                       Func dHdp,
-                                                                       Func dHdq)
+void SRKN_b_order_11(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt, 
+                     Func dHdp, Func dHdq)
 { // This method implements SRKN_b^11 in Table 3 here 
   // https://www.sciencedirect.com/science/article/pii/S0377042701004927
-
-    RandomAccessContainer p = p0;
-    RandomAccessContainer q = q0;
     
     RealType b1 = static_cast<RealType>(0.0414649985182624);
     RealType b2 = static_cast<RealType>(0.198128671918067);
@@ -234,30 +198,28 @@ std::pair<RandomAccessContainer, RandomAccessContainer> SRKN_b_order_11(const Ra
     std::array<RealType, 11> a_weights = {a1, a2, a3, a4, a5, a6, a5, a4, a3, a2, a1};
     
     RealType a, b;
-    for (unsigned int i=0; i < b_weights.size(); i++)
+    for (std::size_t i=0; i < b_weights.size(); i++)
     {
         b = b_weights[i];
         a = a_weights[i];
         
-        RandomAccessContainer dq = dHdp(p);
+        RandomAccessContainer dq = dHdp(p0);
         mult_prefactor(dq, dt * b);
-        add(q, dq);
+        add(q0, dq);
 
-        RandomAccessContainer dp = dHdq(q);
+        RandomAccessContainer dp = dHdq(q0);
         mult_prefactor(dp, -a * dt);
-        add(p, dp);
+        add(p0, dp);
     }
     // Need to do one more step in q
-    RandomAccessContainer dq = dHdp(p);
+    RandomAccessContainer dq = dHdp(p0);
     mult_prefactor(dq, dt * b1);
-    add(q, dq);
-
-    return std::make_pair(p, q);
+    add(q0, dq);
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
-std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian_imp(const RandomAccessContainer p0,
-                                                                                                             const RandomAccessContainer q0,
+std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian_imp(RandomAccessContainer p0,
+                                                                                                             RandomAccessContainer q0,
                                                                                                              const RealType dt,
                                                                                                              const unsigned steps,
                                                                                                              Func dHdp,
@@ -276,7 +238,7 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
     // Check if method is available
     std::vector<std::string> available_methods = {"Y6", "Y4", "Y2"};
 
-    typedef std::pair<RandomAccessContainer, RandomAccessContainer> (*stepperType)(RandomAccessContainer, RandomAccessContainer, RealType, Func, Func);
+    typedef void (*stepperType)(RandomAccessContainer&, RandomAccessContainer&, RealType, Func, Func);
 
     std::map<std::string, stepperType> m{{"Y6", sixth_order_yoshida}, 
                                          {"Y4", fourth_order_yoshida}, 
@@ -290,21 +252,19 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
     p[0] = p0;
     q[0] = q0;
 
-    RandomAccessContainer p_current = p0;
-    RandomAccessContainer q_current = q0;
     for (unsigned i=1; i < steps; i++)
     {
-        std::tie(p_current, q_current) = stepper(p_current, q_current, dt, dHdp, dHdq);
-        p[i] = p_current;
-        q[i] = q_current;
+        stepper(p0, q0, dt, dHdp, dHdq);
+        p[i] = p0;
+        q[i] = q0;
     }
     return std::make_pair(p, q);
 }
 } // namespace detail
 
 template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
-std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer p0,
-                                                                                                         const RandomAccessContainer q0,
+std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer& p0,
+                                                                                                         const RandomAccessContainer& q0,
                                                                                                          const RealType dt,
                                                                                                          const unsigned steps,
                                                                                                          Func dHdp,
@@ -316,8 +276,8 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
-std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer p0,
-                                                                                                         const RandomAccessContainer q0,
+std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer& p0,
+                                                                                                         const RandomAccessContainer& q0,
                                                                                                          const RealType dt,
                                                                                                          const unsigned steps,
                                                                                                          Func dHdp,
@@ -328,8 +288,8 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
-std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer p0,
-                                                                                                         const RandomAccessContainer q0,
+std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer& p0,
+                                                                                                         const RandomAccessContainer& q0,
                                                                                                          const RealType dt,
                                                                                                          const unsigned steps,
                                                                                                          Func dHdp,
