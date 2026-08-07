@@ -271,7 +271,7 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
 } // namespace detail
 
 template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
-std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer& p0,
+BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer& p0,
                                                                                                          const RandomAccessContainer& q0,
                                                                                                          const RealType dt,
                                                                                                          const unsigned steps,
@@ -284,7 +284,7 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
-std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer& p0,
+BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer& p0,
                                                                                                          const RandomAccessContainer& q0,
                                                                                                          const RealType dt,
                                                                                                          const unsigned steps,
@@ -296,7 +296,7 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
-std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer& p0,
+BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer& p0,
                                                                                                          const RandomAccessContainer& q0,
                                                                                                          const RealType dt,
                                                                                                          const unsigned steps,
