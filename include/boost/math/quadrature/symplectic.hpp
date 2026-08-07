@@ -72,7 +72,7 @@ mult_prefactor(T& vec1, U prefactor)
 
 template <typename RandomAccessContainer, typename RealType, class Func>
 void second_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt, 
-                          Func dHdp, Func dHdq)
+                          const Func dHdp, const Func dHdq)
 {
 
     // Half step in q
@@ -93,7 +93,7 @@ void second_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, 
 
 template <typename RandomAccessContainer, typename RealType, class Func>
 void fourth_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt, 
-                          Func dHdp, Func dHdq)
+                          const Func dHdp, const Func dHdq)
 {
     BOOST_MATH_STD_USING
 
@@ -111,7 +111,7 @@ void fourth_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, 
 
 template <typename RandomAccessContainer, typename RealType, class Func>
 void sixth_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt, 
-                         Func dHdp, Func dHdq)
+                         const Func dHdp, const Func dHdq)
 {
     
     // Choosing "System A" solution
@@ -135,7 +135,7 @@ void sixth_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, c
 
 template <typename RandomAccessContainer, typename RealType, class Func>
 void SRKN_b_order_6(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt, 
-                    Func dHdp, Func dHdq)
+                    const Func dHdp, const Func dHdq)
 { // This method implements SRKN_b^6 in Table 3 here 
   // https://www.sciencedirect.com/science/article/pii/S0377042701004927
     
@@ -173,7 +173,7 @@ void SRKN_b_order_6(RandomAccessContainer& p0, RandomAccessContainer& q0, const 
 
 template <typename RandomAccessContainer, typename RealType, class Func>
 void SRKN_b_order_11(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt, 
-                     Func dHdp, Func dHdq)
+                     const Func dHdp, const Func dHdq)
 { // This method implements SRKN_b^11 in Table 3 here 
   // https://www.sciencedirect.com/science/article/pii/S0377042701004927
     
@@ -224,13 +224,13 @@ enum class available_methods
 };
 
 template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
-std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian_imp(RandomAccessContainer p0,
-                                                                                                             RandomAccessContainer q0,
+std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian_imp(RandomAccessContainer& p0,
+                                                                                                             RandomAccessContainer& q0,
                                                                                                              const RealType dt,
                                                                                                              const unsigned steps,
-                                                                                                             Func dHdp,
-                                                                                                             Func dHdq,
-                                                                                                             available_methods method,
+                                                                                                             const Func& dHdp,
+                                                                                                             const Func& dHdq,
+                                                                                                             const available_methods& method,
                                                                                                              const Policy& pol)
 {
     // Not sure how to make this function string nicer
@@ -240,9 +240,6 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
     {
         boost::math::policies::raise_domain_error(function, "Time step must be positive and finite but got: dt = %1%.\n", dt, pol);
     }
-
-    // Check if method is available
-    std::vector<std::string> available_methods = {"Y6", "Y4", "Y2"};
 
     typedef void (*stepperType)(RandomAccessContainer&, RandomAccessContainer&, RealType, Func, Func);
 
@@ -271,39 +268,40 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
 } // namespace detail
 
 template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
-BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer& p0,
-                                                                                                         const RandomAccessContainer& q0,
-                                                                                                         const RealType dt,
-                                                                                                         const unsigned steps,
-                                                                                                         Func dHdp,
-                                                                                                         Func dHdq,
-                                                                                                         detail::available_methods method,
-                                                                                                         const Policy& pol)
+BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(RandomAccessContainer p0,
+                                                                                                                           RandomAccessContainer q0,
+                                                                                                                           const RealType dt,
+                                                                                                                           const unsigned steps,
+                                                                                                                           Func dHdp,
+                                                                                                                           Func dHdq,
+                                                                                                                           detail::available_methods method,
+                                                                                                                           const Policy& pol)
 {
     return detail::integrate_hamiltonian_imp(p0, q0, dt, steps, dHdp, dHdq, method, pol); 
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
-BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer& p0,
-                                                                                                         const RandomAccessContainer& q0,
-                                                                                                         const RealType dt,
-                                                                                                         const unsigned steps,
-                                                                                                         Func dHdp,
-                                                                                                         Func dHdq,
-                                                                                                         detail::available_methods method)
+BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(RandomAccessContainer p0,
+                                                                                                                           RandomAccessContainer q0,
+                                                                                                                           const RealType dt,
+                                                                                                                           const unsigned steps,
+                                                                                                                           Func dHdp,
+                                                                                                                           Func dHdq,
+                                                                                                                           detail::available_methods method)
 {
     return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, method, boost::math::policies::policy<>()); 
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
-BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(const RandomAccessContainer& p0,
-                                                                                                         const RandomAccessContainer& q0,
-                                                                                                         const RealType dt,
-                                                                                                         const unsigned steps,
-                                                                                                         Func dHdp,
-                                                                                                         Func dHdq)
+BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(RandomAccessContainer p0,
+                                                                                                                           RandomAccessContainer q0,
+                                                                                                                           const RealType dt,
+                                                                                                                           const unsigned steps,
+                                                                                                                           Func dHdp,
+                                                                                                                           Func dHdq)
 {
     return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, detail::available_methods::Y6, boost::math::policies::policy<>()); 
 }
 }}}
+
 #endif
