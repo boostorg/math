@@ -340,7 +340,7 @@ BOOST_MATH_CUDA_ENABLED inline typename tools::promote_args<T1, T2>::type ellint
 
 } // namespace detail
 
-template <class T1, class T2, class T3, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
 BOOST_MATH_CUDA_ENABLED inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const Policy&)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
@@ -355,14 +355,14 @@ BOOST_MATH_CUDA_ENABLED inline typename tools::promote_args<T1, T2, T3>::type el
          forwarding_policy()), "boost::math::ellint_3<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 BOOST_MATH_CUDA_ENABLED typename detail::ellint_3_result<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi)
 {
    typedef typename policies::is_policy<T3>::type tag_type;
    return detail::ellint_3(k, v, phi, tag_type());
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_CUDA_ENABLED inline typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v)
 {
    return ellint_3(k, v, policies::policy<>());

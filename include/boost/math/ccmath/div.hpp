@@ -6,8 +6,10 @@
 #ifndef BOOST_MATH_CCMATH_DIV_HPP
 #define BOOST_MATH_CCMATH_DIV_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cinttypes>
 #include <cstdint>
+#endif
 #include <boost/math/ccmath/detail/config.hpp>
 
 #ifdef BOOST_MATH_NO_CCMATH
@@ -34,14 +36,14 @@ inline constexpr ReturnType div_impl(const Z x, const Z y) noexcept
 } // Namespace detail
 
 // Used for types other than built-ins (e.g. boost multiprecision)
-template <typename Z>
+BOOST_MATH_EXPORT template <typename Z>
 struct div_t
 {
     Z quot;
     Z rem;
 };
 
-template <typename Z>
+BOOST_MATH_EXPORT template <typename Z>
 inline constexpr auto div(Z x, Z y) noexcept
 {
     if constexpr (std::is_same_v<Z, int>)

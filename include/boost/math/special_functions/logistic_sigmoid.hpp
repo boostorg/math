@@ -9,12 +9,14 @@
 
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/precision.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
+#endif
 
 namespace boost {
 namespace math {
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 BOOST_MATH_GPU_ENABLED RealType logistic_sigmoid(RealType x, const Policy&)
 {
     BOOST_MATH_STD_USING
@@ -34,7 +36,7 @@ BOOST_MATH_GPU_ENABLED RealType logistic_sigmoid(RealType x, const Policy&)
     return res;
 }
 
-template <typename RealType>
+BOOST_MATH_EXPORT template <typename RealType>
 BOOST_MATH_GPU_ENABLED RealType logistic_sigmoid(RealType x)
 {
     return logistic_sigmoid(x, policies::policy<>());

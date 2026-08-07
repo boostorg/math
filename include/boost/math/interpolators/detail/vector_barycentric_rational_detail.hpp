@@ -8,12 +8,14 @@
 #ifndef BOOST_MATH_INTERPOLATORS_VECTOR_BARYCENTRIC_RATIONAL_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_VECTOR_BARYCENTRIC_RATIONAL_DETAIL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
 #include <cmath>
 #include <vector>
 #include <utility> // for std::move
 #include <limits>
 #include <algorithm>
+#endif
 #include <boost/math/tools/assert.hpp>
 
 namespace boost{ namespace math{ namespace interpolators{ namespace detail{

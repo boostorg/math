@@ -77,7 +77,7 @@ BOOST_MATH_GPU_ENABLED T heuman_lambda_imp(T phi, T k, const Policy& pol)
 
 } // detail
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -85,7 +85,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type heuman_
    return policies::checked_narrowing_cast<result_type, Policy>(detail::heuman_lambda_imp(static_cast<value_type>(phi), static_cast<value_type>(k), pol), "boost::math::heuman_lambda<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi)
 {
    return boost::math::heuman_lambda(k, phi, policies::policy<>());

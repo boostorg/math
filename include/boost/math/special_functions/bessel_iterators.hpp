@@ -39,7 +39,7 @@ namespace boost {
          };
       } // namespace detail
 
-      template <class T, class Policy = boost::math::policies::policy<> >
+      BOOST_MATH_EXPORT template <class T, class Policy = boost::math::policies::policy<> >
       struct bessel_j_backwards_iterator
       {
          typedef std::ptrdiff_t difference_type;
@@ -134,7 +134,7 @@ namespace boost {
          boost::math::tools::backward_recurrence_iterator< detail::bessel_ik_recurrence<T> > it;
       };
 
-      template <class T, class Policy = boost::math::policies::policy<> >
+      BOOST_MATH_EXPORT template <class T, class Policy = boost::math::policies::policy<> >
       struct bessel_i_forwards_iterator
       {
          typedef std::ptrdiff_t difference_type;

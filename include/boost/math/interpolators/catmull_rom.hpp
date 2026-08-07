@@ -9,12 +9,16 @@
 #ifndef BOOST_MATH_INTERPOLATORS_CATMULL_ROM
 #define BOOST_MATH_INTERPOLATORS_CATMULL_ROM
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <vector>
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
 #include <limits>
+#endif
 
 namespace std_workaround {
 
@@ -53,7 +57,7 @@ namespace boost{ namespace math{
         }
     }
 
-template <class Point, class RandomAccessContainer = std::vector<Point> >
+BOOST_MATH_EXPORT template <class Point, class RandomAccessContainer = std::vector<Point> >
 class catmull_rom
 {
    typedef typename Point::value_type value_type;

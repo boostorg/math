@@ -5,8 +5,10 @@
 
 #ifndef BOOST_MATH_SPECIAL_CHEBYSHEV_TRANSFORM_HPP
 #define BOOST_MATH_SPECIAL_CHEBYSHEV_TRANSFORM_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <type_traits>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/chebyshev.hpp>
 

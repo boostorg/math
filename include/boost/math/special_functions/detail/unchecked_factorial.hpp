@@ -41,7 +41,7 @@
 namespace boost { namespace math
 {
 // Forward declarations:
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 struct max_factorial;
 //
 // see https://github.com/boostorg/math/issues/923
@@ -53,7 +53,7 @@ struct unchecked_factorial_data;
 #ifdef BOOST_MATH_HAS_NVRTC
 
 // Need fwd decl
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED inline T unchecked_factorial(unsigned i);
 
 #endif
@@ -1687,7 +1687,7 @@ inline T unchecked_factorial_imp(unsigned i, const boost::math::integral_constan
 
 #endif // BOOST_MATH_HAS_GPU_SUPPORT
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T unchecked_factorial(unsigned i)
 {
    typedef typename boost::math::policies::precision<T, boost::math::policies::policy<> >::type tag_type;
@@ -1700,7 +1700,7 @@ BOOST_MATH_GPU_ENABLED inline T unchecked_factorial(unsigned i)
 #define BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
 #endif
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 struct max_factorial
 {
    static constexpr unsigned value = 

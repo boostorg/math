@@ -4,8 +4,10 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #ifndef BOOST_MATH_TOOLS_CUBIC_ROOTS_HPP
 #define BOOST_MATH_TOOLS_CUBIC_ROOTS_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <array>
+#endif
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/roots.hpp>
@@ -39,7 +41,7 @@ bool roots_less(const Real& lhs, const Real& rhs)
 // algorithm apparently exists: Algorithm 954: An Accurate and Efficient Cubic
 // and Quartic Equation Solver for Physical Applications However, I don't have
 // access to that paper!
-template <typename Real>
+BOOST_MATH_EXPORT template <typename Real>
 std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
     using std::abs;
     using std::acos;
@@ -145,7 +147,7 @@ std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
 // eps*|rp'(r)| (second element) for a root. Recall that for a numerically
 // computed root r satisfying r = r_0(1+eps) of a function p, |p(r)| <=
 // eps|rp'(r)|.
-template <typename Real>
+BOOST_MATH_EXPORT template <typename Real>
 std::array<Real, 2> cubic_root_residual(Real a, Real b, Real c, Real d,
                                         Real root) {
     using std::abs;
@@ -172,7 +174,7 @@ std::array<Real, 2> cubic_root_residual(Real a, Real b, Real c, Real d,
 
 // Computes the condition number of rootfinding. This is defined in Corless, A
 // Graduate Introduction to Numerical Methods, Section 3.2.1.
-template <typename Real>
+BOOST_MATH_EXPORT template <typename Real>
 Real cubic_root_condition_number(Real a, Real b, Real c, Real d, Real root) {
     using std::abs;
     using std::fma;

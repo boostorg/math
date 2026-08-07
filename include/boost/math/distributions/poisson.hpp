@@ -143,7 +143,7 @@ namespace boost
 
     } // namespace poisson_detail
 
-    template <class RealType = double, class Policy = policies::policy<> >
+    BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
     class poisson_distribution
     {
     public:
@@ -168,23 +168,23 @@ namespace boost
       RealType m_l; // mean number of occurrences.
     }; // template <class RealType, class Policy> class poisson_distribution
 
-    using poisson = poisson_distribution<double>; // Reserved name of type double.
+    BOOST_MATH_EXPORT using poisson = poisson_distribution<double>; // Reserved name of type double.
 
     #ifdef __cpp_deduction_guides
-    template <class RealType>
+    BOOST_MATH_EXPORT template <class RealType>
     poisson_distribution(RealType)->poisson_distribution<typename boost::math::tools::promote_args<RealType>::type>;
     #endif
 
     // Non-member functions to give properties of the distribution.
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const poisson_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable k.
        using boost::math::tools::max_value;
        return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // Max integer?
     }
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const poisson_distribution<RealType, Policy>& /* dist */)
     { // Range of supported values for random variable k.
        // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -192,13 +192,13 @@ namespace boost
        return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
     }
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType mean(const poisson_distribution<RealType, Policy>& dist)
     { // Mean of poisson distribution = lambda.
       return dist.mean();
     } // mean
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType mode(const poisson_distribution<RealType, Policy>& dist)
     { // mode.
       BOOST_MATH_STD_USING // ADL of std functions.
@@ -207,7 +207,7 @@ namespace boost
 
     // Median now implemented via quantile(half) in derived accessors.
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType variance(const poisson_distribution<RealType, Policy>& dist)
     { // variance.
       return dist.mean();
@@ -215,14 +215,14 @@ namespace boost
 
     // standard_deviation provided by derived accessors.
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType skewness(const poisson_distribution<RealType, Policy>& dist)
     { // skewness = sqrt(l).
       BOOST_MATH_STD_USING // ADL of std functions.
       return 1 / sqrt(dist.mean());
     }
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const poisson_distribution<RealType, Policy>& dist)
     { // skewness = sqrt(l).
       return 1 / dist.mean(); // kurtosis_excess 1/mean from Wiki & MathWorld eq 31.
@@ -231,7 +231,7 @@ namespace boost
       // whereas the true kurtosis is 3.
     } // RealType kurtosis_excess
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const poisson_distribution<RealType, Policy>& dist)
     { // kurtosis is 4th moment about the mean = u4 / sd ^ 4
       // http://en.wikipedia.org/wiki/Kurtosis
@@ -243,7 +243,7 @@ namespace boost
       // whereas the true kurtosis is 3.
     } // RealType kurtosis
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED RealType pdf(const poisson_distribution<RealType, Policy>& dist, const RealType& k)
     { // Probability Density/Mass Function.
       // Probability that there are EXACTLY k occurrences (or arrivals).
@@ -275,7 +275,7 @@ namespace boost
       return boost::math::gamma_p_derivative(k+1, mean, Policy());
     } // pdf
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED RealType logpdf(const poisson_distribution<RealType, Policy>& dist, const RealType& k)
     {
       BOOST_FPU_EXCEPTION_GUARD
@@ -311,7 +311,7 @@ namespace boost
       return result;
     }
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED RealType cdf(const poisson_distribution<RealType, Policy>& dist, const RealType& k)
     { // Cumulative Distribution Function Poisson.
       // The random variate k is the number of occurrences(or arrivals)
@@ -362,7 +362,7 @@ namespace boost
       return gamma_q(k+1, mean, Policy());
     } // binomial cdf
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED RealType cdf(const complemented2_type<poisson_distribution<RealType, Policy>, RealType>& c)
     { // Complemented Cumulative Distribution Function Poisson
       // The random variate k is the number of events, occurrences or arrivals.
@@ -412,7 +412,7 @@ namespace boost
       // CCDF = gamma_p(k+1, lambda)
     } // poisson ccdf
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const poisson_distribution<RealType, Policy>& dist, const RealType& p)
     { // Quantile (or Percent Point) Poisson function.
       // Return the number of expected events k for a given probability p.
@@ -478,7 +478,7 @@ namespace boost
          max_iter);
    } // quantile
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<poisson_distribution<RealType, Policy>, RealType>& c)
     { // Quantile (or Percent Point) of Poisson function.
       // Return the number of expected events k for a given

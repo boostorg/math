@@ -12,7 +12,9 @@
 #define BOOST_OCTONION_HPP
 
 #include <boost/math/quaternion.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <valarray>
+#endif
 
 
 namespace boost
@@ -179,7 +181,7 @@ namespace boost
         // the The behavior of octonion is unspecified if T is not
         // one of float, double or long double.
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         class octonion
         {
         public:
@@ -950,7 +952,6 @@ namespace boost
                 return(*this);                                          \
             }
 
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
     #define    BOOST_OCTONION_MEMBER_DIV_GENERATOR_2(type)                              \
             octonion<type> &            operator /= (::std::complex<type> const & rhs)  \
             {                                                                           \
@@ -992,50 +993,7 @@ namespace boost
                                                                                         \
                 return(*this);                                                          \
             }
-#else
-    #define    BOOST_OCTONION_MEMBER_DIV_GENERATOR_2(type)                              \
-            octonion<type> &            operator /= (::std::complex<type> const & rhs)  \
-            {                                                                           \
-                using    ::std::valarray;                                               \
-                                                                                        \
-                valarray<type>    tr(2);                                                \
-                                                                                        \
-                tr[0] = rhs.real();                                                     \
-                tr[1] = rhs.imag();                                                     \
-                                                                                        \
-                type            mixam = static_cast<type>(1)/(abs(tr).max)();           \
-                                                                                        \
-                tr *= mixam;                                                            \
-                                                                                        \
-                valarray<type>    tt(8);                                                \
-                                                                                        \
-                tt[0] = +a*tr[0]-b*tr[1];                                               \
-                tt[1] = -a*tr[1]+b*tr[0];                                               \
-                tt[2] = +c*tr[0]-d*tr[1];                                               \
-                tt[3] = +c*tr[1]+d*tr[0];                                               \
-                tt[4] = +e*tr[0]-f*tr[1];                                               \
-                tt[5] = +e*tr[1]+f*tr[0];                                               \
-                tt[6] = +g*tr[0]+h*tr[1];                                               \
-                tt[7] = +g*tr[1]+h*tr[0];                                               \
-                                                                                        \
-                tr *= tr;                                                               \
-                                                                                        \
-                tt *= (mixam/tr.sum());                                                 \
-                                                                                        \
-                a = tt[0];                                                              \
-                b = tt[1];                                                              \
-                c = tt[2];                                                              \
-                d = tt[3];                                                              \
-                e = tt[4];                                                              \
-                f = tt[5];                                                              \
-                g = tt[6];                                                              \
-                h = tt[7];                                                              \
-                                                                                        \
-                return(*this);                                                          \
-            }
-#endif /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
 
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
     #define    BOOST_OCTONION_MEMBER_DIV_GENERATOR_3(type)                                           \
             octonion<type> &            operator /= (::boost::math::quaternion<type> const & rhs)    \
             {                                                                                        \
@@ -1079,52 +1037,7 @@ namespace boost
                                                                                                      \
                 return(*this);                                                                       \
             }
-#else
-    #define    BOOST_OCTONION_MEMBER_DIV_GENERATOR_3(type)                                           \
-            octonion<type> &            operator /= (::boost::math::quaternion<type> const & rhs)    \
-            {                                                                                        \
-                using    ::std::valarray;                                                            \
-                                                                                                     \
-                valarray<type>    tr(4);                                                             \
-                                                                                                     \
-                tr[0] = static_cast<type>(rhs.R_component_1());                                      \
-                tr[1] = static_cast<type>(rhs.R_component_2());                                      \
-                tr[2] = static_cast<type>(rhs.R_component_3());                                      \
-                tr[3] = static_cast<type>(rhs.R_component_4());                                      \
-                                                                                                     \
-                type            mixam = static_cast<type>(1)/(abs(tr).max)();                        \
-                                                                                                     \
-                tr *= mixam;                                                                         \
-                                                                                                     \
-                valarray<type>    tt(8);                                                             \
-                                                                                                     \
-                tt[0] = +a*tr[0]+b*tr[1]+c*tr[2]+d*tr[3];                                            \
-                tt[1] = -a*tr[1]+b*tr[0]-c*tr[3]+d*tr[2];                                            \
-                tt[2] = -a*tr[2]+b*tr[3]+c*tr[0]-d*tr[1];                                            \
-                tt[3] = -a*tr[3]-b*tr[2]+c*tr[1]+d*tr[0];                                            \
-                tt[4] = +e*tr[0]-f*tr[1]-g*tr[2]-h*tr[3];                                            \
-                tt[5] = +e*tr[1]+f*tr[0]+g*tr[3]-h*tr[2];                                            \
-                tt[6] = +e*tr[2]-f*tr[3]+g*tr[0]+h*tr[1];                                            \
-                tt[7] = +e*tr[3]+f*tr[2]-g*tr[1]+h*tr[0];                                            \
-                                                                                                     \
-                tr *= tr;                                                                            \
-                                                                                                     \
-                tt *= (mixam/tr.sum());                                                              \
-                                                                                                     \
-                a = tt[0];                                                                           \
-                b = tt[1];                                                                           \
-                c = tt[2];                                                                           \
-                d = tt[3];                                                                           \
-                e = tt[4];                                                                           \
-                f = tt[5];                                                                           \
-                g = tt[6];                                                                           \
-                h = tt[7];                                                                           \
-                                                                                                     \
-                return(*this);                                                                       \
-            }
-#endif /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
 
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
     #define    BOOST_OCTONION_MEMBER_DIV_GENERATOR_4(type)                                           \
             template<typename X>                                                                     \
             octonion<type> &            operator /= (octonion<X> const & rhs)                        \
@@ -1173,55 +1086,6 @@ namespace boost
                                                                                                      \
                 return(*this);                                                                       \
             }
-#else
-    #define    BOOST_OCTONION_MEMBER_DIV_GENERATOR_4(type)                                           \
-            template<typename X>                                                                     \
-            octonion<type> &            operator /= (octonion<X> const & rhs)                        \
-            {                                                                                        \
-                using    ::std::valarray;                                                            \
-                                                                                                     \
-                valarray<type>    tr(8);                                                             \
-                                                                                                     \
-                tr[0] = static_cast<type>(rhs.R_component_1());                                      \
-                tr[1] = static_cast<type>(rhs.R_component_2());                                      \
-                tr[2] = static_cast<type>(rhs.R_component_3());                                      \
-                tr[3] = static_cast<type>(rhs.R_component_4());                                      \
-                tr[4] = static_cast<type>(rhs.R_component_5());                                      \
-                tr[5] = static_cast<type>(rhs.R_component_6());                                      \
-                tr[6] = static_cast<type>(rhs.R_component_7());                                      \
-                tr[7] = static_cast<type>(rhs.R_component_8());                                      \
-                                                                                                     \
-                type            mixam = static_cast<type>(1)/(abs(tr).max)();                        \
-                                                                                                     \
-                tr *= mixam;                                                                         \
-                                                                                                     \
-                valarray<type>    tt(8);                                                             \
-                                                                                                     \
-                tt[0] = +a*tr[0]+b*tr[1]+c*tr[2]+d*tr[3]+e*tr[4]+f*tr[5]+g*tr[6]+h*tr[7];            \
-                tt[1] = -a*tr[1]+b*tr[0]-c*tr[3]+d*tr[2]-e*tr[5]+f*tr[4]+g*tr[7]-h*tr[6];            \
-                tt[2] = -a*tr[2]+b*tr[3]+c*tr[0]-d*tr[1]-e*tr[6]-f*tr[7]+g*tr[4]+h*tr[5];            \
-                tt[3] = -a*tr[3]-b*tr[2]+c*tr[1]+d*tr[0]-e*tr[7]+f*tr[6]-g*tr[5]+h*tr[4];            \
-                tt[4] = -a*tr[4]+b*tr[5]+c*tr[6]+d*tr[7]+e*tr[0]-f*tr[1]-g*tr[2]-h*tr[3];            \
-                tt[5] = -a*tr[5]-b*tr[4]+c*tr[7]-d*tr[6]+e*tr[1]+f*tr[0]+g*tr[3]-h*tr[2];            \
-                tt[6] = -a*tr[6]-b*tr[7]-c*tr[4]+d*tr[5]+e*tr[2]-f*tr[3]+g*tr[0]+h*tr[1];            \
-                tt[7] = -a*tr[7]+b*tr[6]-c*tr[5]-d*tr[4]+e*tr[3]+f*tr[2]-g*tr[1]+h*tr[0];            \
-                                                                                                     \
-                tr *= tr;                                                                            \
-                                                                                                     \
-                tt *= (mixam/tr.sum());                                                              \
-                                                                                                     \
-                a = tt[0];                                                                           \
-                b = tt[1];                                                                           \
-                c = tt[2];                                                                           \
-                d = tt[3];                                                                           \
-                e = tt[4];                                                                           \
-                f = tt[5];                                                                           \
-                g = tt[6];                                                                           \
-                h = tt[7];                                                                           \
-                                                                                                     \
-                return(*this);                                                                       \
-            }
-#endif /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
 
 
 #define    BOOST_OCTONION_MEMBER_ADD_GENERATOR(type)       \
@@ -1481,37 +1345,37 @@ namespace boost
         }
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_1_L(op)                                                                              \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (T const & lhs, octonion<T> const & rhs)                            \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_1_R(op)                                                                              \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (octonion<T> const & lhs, T const & rhs)                            \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_2_L(op)                                                                              \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (::std::complex<T> const & lhs, octonion<T> const & rhs)            \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_2_R(op)                                                                              \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (octonion<T> const & lhs, ::std::complex<T> const & rhs)            \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_3_L(op)                                                                              \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs) \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_3_R(op)                                                                              \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs) \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_4(op)                                                                                \
-        template<typename T>                                                                                                      \
+        BOOST_MATH_EXPORT template<typename T>                                                                                                      \
         inline octonion<T>                        operator op (octonion<T> const & lhs, octonion<T> const & rhs)                  \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
@@ -1544,21 +1408,21 @@ namespace boost
 #undef    BOOST_OCTONION_OPERATOR_GENERATOR_BODY
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        operator + (octonion<T> const & o)
         {
             return(o);
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        operator - (octonion<T> const & o)
         {
             return(octonion<T>(-o.R_component_1(),-o.R_component_2(),-o.R_component_3(),-o.R_component_4(),-o.R_component_5(),-o.R_component_6(),-o.R_component_7(),-o.R_component_8()));
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (T const & lhs, octonion<T> const & rhs)
         {
             return(
@@ -1574,7 +1438,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (octonion<T> const & lhs, T const & rhs)
         {
             return(
@@ -1590,7 +1454,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (::std::complex<T> const & lhs, octonion<T> const & rhs)
         {
             return(
@@ -1606,7 +1470,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (octonion<T> const & lhs, ::std::complex<T> const & rhs)
         {
             return(
@@ -1622,7 +1486,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs)
         {
             return(
@@ -1638,7 +1502,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs)
         {
             return(
@@ -1654,7 +1518,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator == (octonion<T> const & lhs, octonion<T> const & rhs)
         {
             return(
@@ -1675,31 +1539,31 @@ namespace boost
             return(!(lhs == rhs));            \
         }
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (T const & lhs, octonion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (octonion<T> const & lhs, T const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (::std::complex<T> const & lhs, octonion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (octonion<T> const & lhs, ::std::complex<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline bool                                operator != (octonion<T> const & lhs, octonion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
@@ -1710,7 +1574,7 @@ namespace boost
 
         // Note:    the default values in the constructors of the complex and quaternions make for
         //            a very complex and ambiguous situation; we have made choices to disambiguate.
-        template<typename T, typename charT, class traits>
+        BOOST_MATH_EXPORT template<typename T, typename charT, class traits>
         ::std::basic_istream<charT,traits> &    operator >> (    ::std::basic_istream<charT,traits> & is,
                                                                 octonion<T> & o)
         {
@@ -3856,7 +3720,7 @@ namespace boost
         // LCOV_EXCL_STOP
 
 
-        template<typename T, typename charT, class traits>
+        BOOST_MATH_EXPORT template<typename T, typename charT, class traits>
         ::std::basic_ostream<charT,traits> &    operator << (    ::std::basic_ostream<charT,traits> & os,
                                                                 octonion<T> const & o)
         {
@@ -3884,14 +3748,14 @@ namespace boost
 
         // values
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline T                                real(octonion<T> const & o)
         {
             return(o.real());
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        unreal(octonion<T> const & o)
         {
             return(o.unreal());
@@ -3913,12 +3777,10 @@ namespace boost
             temp[7] = o.R_component_8();
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline T                                sup(octonion<T> const & o)
         {
-#ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
             using    ::std::abs;
-#endif    /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
 
             BOOST_OCTONION_VALARRAY_LOADER
 
@@ -3926,12 +3788,10 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline T                                l1(octonion<T> const & o)
         {
-#ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
             using    ::std::abs;
-#endif    /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
 
             BOOST_OCTONION_VALARRAY_LOADER
 
@@ -3939,12 +3799,10 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline T                                abs(const octonion<T> & o)
         {
-#ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
             using    ::std::abs;
-#endif    /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
 
             using    ::std::sqrt;
 
@@ -3976,14 +3834,14 @@ namespace boost
 
         // Note:    This is the Cayley norm, not the Euclidean norm...
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline T                                norm(octonion<T> const & o)
         {
             return(real(o*conj(o)));
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        conj(octonion<T> const & o)
         {
             return(octonion<T>( +o.R_component_1(),
@@ -4001,7 +3859,7 @@ namespace boost
         //            to the complex "arg" and the quaternionic "cylindropolar".
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        spherical(T const & rho,
                                                             T const & theta,
                                                             T const & phi1,
@@ -4056,7 +3914,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        multipolar(T const & rho1,
                                                              T const & theta1,
                                                              T const & rho2,
@@ -4082,7 +3940,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        cylindrical(T const & r,
                                                               T const & angle,
                                                               T const & h1,
@@ -4102,7 +3960,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        exp(octonion<T> const & o)
         {
             using    ::std::exp;
@@ -4124,7 +3982,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        cos(octonion<T> const & o)
         {
             using    ::std::sin;
@@ -4145,7 +4003,7 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        sin(octonion<T> const & o)
         {
             using    ::std::sin;
@@ -4166,35 +4024,35 @@ namespace boost
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        tan(octonion<T> const & o)
         {
             return(sin(o)/cos(o));
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        cosh(octonion<T> const & o)
         {
             return((exp(+o)+exp(-o))/static_cast<T>(2));
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        sinh(octonion<T> const & o)
         {
             return((exp(+o)-exp(-o))/static_cast<T>(2));
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline octonion<T>                        tanh(octonion<T> const & o)
         {
             return(sinh(o)/cosh(o));
         }
 
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         octonion<T>                                pow(octonion<T> const & o,
                                                     int n)
         {

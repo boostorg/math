@@ -21,21 +21,21 @@ namespace math {
 namespace lambert_w_detail {
 namespace lambert_w_lookup
 {
-static constexpr std::size_t  noof_sqrts = 12;
-static constexpr std::size_t  noof_halves = 12;
-static constexpr std::size_t  noof_w0es = 65;
-static constexpr std::size_t  noof_w0zs = 65;
-static constexpr std::size_t  noof_wm1es = 64;
-static constexpr std::size_t  noof_wm1zs = 64;
+BOOST_MATH_INLINE_CONSTEXPR std::size_t  noof_sqrts = 12;
+BOOST_MATH_INLINE_CONSTEXPR std::size_t  noof_halves = 12;
+BOOST_MATH_INLINE_CONSTEXPR std::size_t  noof_w0es = 65;
+BOOST_MATH_INLINE_CONSTEXPR std::size_t  noof_w0zs = 65;
+BOOST_MATH_INLINE_CONSTEXPR std::size_t  noof_wm1es = 64;
+BOOST_MATH_INLINE_CONSTEXPR std::size_t  noof_wm1zs = 64;
 
-static constexpr lookup_t halves[noof_halves] =
+BOOST_MATH_INLINE_CONSTEXPR lookup_t halves[noof_halves] =
 { // Common to Lambert W0 and W-1 (and exactly representable).
   static_cast<lookup_t>(0.5L),         static_cast<lookup_t>(0.25L),         static_cast<lookup_t>(0.125L),         static_cast<lookup_t>(0.0625L),
   static_cast<lookup_t>(0.03125L),     static_cast<lookup_t>(0.015625L),     static_cast<lookup_t>(0.0078125L),     static_cast<lookup_t>(0.00390625L),
   static_cast<lookup_t>(0.001953125L), static_cast<lookup_t>(0.0009765625L), static_cast<lookup_t>(0.00048828125L), static_cast<lookup_t>(0.000244140625L)
 }; // halves, 0.5, 0.25, ... 0.000244140625, common to W0 and W-1.
 
-static constexpr lookup_t sqrtw0s[noof_sqrts] =
+BOOST_MATH_INLINE_CONSTEXPR lookup_t sqrtw0s[noof_sqrts] =
 {  // For Lambert W0 only.
   static_cast<lookup_t>(0.6065306597126334242631173765403218567L), static_cast<lookup_t>(0.7788007830714048686684607000907199500L),
   static_cast<lookup_t>(0.8824969025845954031047175929687018290L), static_cast<lookup_t>(0.9394130628134757862473572557999761753L),
@@ -45,7 +45,7 @@ static constexpr lookup_t sqrtw0s[noof_sqrts] =
   static_cast<lookup_t>(0.9995118379398893653889967919448497792L), static_cast<lookup_t>(0.9997558891748972165136242351259789505L)
 }; // sqrtw0s
 
-static constexpr lookup_t sqrtwm1s[noof_sqrts] =
+BOOST_MATH_INLINE_CONSTEXPR lookup_t sqrtwm1s[noof_sqrts] =
 { // For Lambert W-1 only.
   static_cast<lookup_t>(1.648721270700128146848650787814163572L), static_cast<lookup_t>(1.284025416687741484073420568062436458L),
   static_cast<lookup_t>(1.133148453066826316829007227811793873L), static_cast<lookup_t>(1.064494458917859429563390594642889673L),
@@ -55,7 +55,7 @@ static constexpr lookup_t sqrtwm1s[noof_sqrts] =
   static_cast<lookup_t>(1.000488400478694473126173623807163354L), static_cast<lookup_t>(1.000244170429747854937005233924135774L)
 }; // sqrtwm1s
 
-static constexpr lookup_t w0es[noof_w0zs] =
+BOOST_MATH_INLINE_CONSTEXPR lookup_t w0es[noof_w0zs] =
 { // Fukushima e powers array e[0] = 2.718, 1., e[2] = e^-1 = 0.135, e[3] = e^-2 = 0.133 ... e[64] = 4.3596100000630809736231248158884615452e-28.
   static_cast<lookup_t>(2.7182818284590452353602874713526624978e+00L),
   static_cast<lookup_t>(1.0000000000000000000000000000000000000e+00L), static_cast<lookup_t>(3.6787944117144232159552377016146086745e-01L),
@@ -93,7 +93,7 @@ static constexpr lookup_t w0es[noof_w0zs] =
 
 }; // w0es
 
-static constexpr lookup_t w0zs[noof_w0zs] =
+BOOST_MATH_INLINE_CONSTEXPR lookup_t w0zs[noof_w0zs] =
 { // z values for W[0], W[1], W[2] ... W[64] (Fukushima array Fk).
   static_cast<lookup_t>(0.0000000000000000000000000000000000000e+00L),
   static_cast<lookup_t>(2.7182818284590452353602874713526624978e+00L), static_cast<lookup_t>(1.4778112197861300454460854921150015626e+01L), static_cast<lookup_t>(6.0256610769563003222785588963745153691e+01L), static_cast<lookup_t>(2.1839260013257695631244104481144351361e+02L),
@@ -115,7 +115,7 @@ static constexpr lookup_t w0zs[noof_w0zs] =
 
 }; // w0zs
 
-static constexpr lookup_t wm1es[noof_wm1es] =
+BOOST_MATH_INLINE_CONSTEXPR lookup_t wm1es[noof_wm1es] =
 { // Fukushima e array e[0] = e^1 = 2.718, e[1] = e^2 = 7.39 ... e[64] = 4.60718e+28.
   static_cast<lookup_t>(2.7182818284590452353602874713526624978e+00L),
   static_cast<lookup_t>(7.3890560989306502272304274605750078132e+00L), static_cast<lookup_t>(2.0085536923187667740928529654581717897e+01L), static_cast<lookup_t>(5.4598150033144239078110261202860878403e+01L), static_cast<lookup_t>(1.4841315910257660342111558004055227962e+02L),
@@ -136,7 +136,7 @@ static constexpr lookup_t wm1es[noof_wm1es] =
   static_cast<lookup_t>(8.4383566687414544890733294803731179601e+26L), static_cast<lookup_t>(2.2937831594696098790993528402686136005e+27L), static_cast<lookup_t>(6.2351490808116168829092387089284697448e+27L)
 }; // wm1es
 
-static constexpr lookup_t wm1zs[noof_wm1zs] =
+BOOST_MATH_INLINE_CONSTEXPR lookup_t wm1zs[noof_wm1zs] =
 { // Fukushima G array of z values for integral K, (Fukushima Gk) g[0] (k = -1) = 1 ... g[64] = -1.0264389699511303e-26.
   static_cast<lookup_t>(-3.6787944117144232159552377016146086745e-01L),
   static_cast<lookup_t>(-2.7067056647322538378799898994496880682e-01L), static_cast<lookup_t>(-1.4936120510359182893802724695018532990e-01L), static_cast<lookup_t>(-7.3262555554936721174872085092964968848e-02L), static_cast<lookup_t>(-3.3689734995427335483180242115742121244e-02L),

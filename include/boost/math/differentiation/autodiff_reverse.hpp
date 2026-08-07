@@ -38,10 +38,12 @@
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/promotion.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstddef>
 #include <iostream>
 #include <type_traits>
 #include <vector>
+#endif
 #define BOOST_MATH_BUFFER_SIZE 65536
 
 namespace boost {

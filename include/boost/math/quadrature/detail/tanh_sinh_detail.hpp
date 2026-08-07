@@ -7,16 +7,20 @@
 #ifndef BOOST_MATH_QUADRATURE_DETAIL_TANH_SINH_DETAIL_HPP
 #define BOOST_MATH_QUADRATURE_DETAIL_TANH_SINH_DETAIL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <vector>
 #include <typeinfo>
+#endif
 #include <boost/math/tools/atomic.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/tools/config.hpp>
 
 #ifdef BOOST_MATH_HAS_THREADS
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <mutex>
+#endif
 #endif
 
 namespace boost{ namespace math{ namespace quadrature { namespace detail{

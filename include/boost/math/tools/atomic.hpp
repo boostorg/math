@@ -11,7 +11,9 @@
 #include <boost/math/tools/cxx03_warn.hpp>
 
 #ifdef BOOST_MATH_HAS_THREADS
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <atomic>
+#endif
 
 namespace boost {
    namespace math {

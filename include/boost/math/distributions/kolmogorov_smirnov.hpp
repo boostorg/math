@@ -186,7 +186,7 @@ inline RealType kolmogorov_smirnov_pdf_large_x(RealType x, RealType n, const Pol
 
 } // detail
 
-template <class RealType = double, class Policy = policies::policy<> >
+BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
     class kolmogorov_smirnov_distribution
 {
     public:
@@ -211,10 +211,10 @@ template <class RealType = double, class Policy = policies::policy<> >
     RealType n_obs_; // positive integer
 };
 
-typedef kolmogorov_smirnov_distribution<double> kolmogorov_k; // Convenience typedef for double version.
+BOOST_MATH_EXPORT typedef kolmogorov_smirnov_distribution<double> kolmogorov_k; // Convenience typedef for double version.
 
 #ifdef __cpp_deduction_guides
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 kolmogorov_smirnov_distribution(RealType)->kolmogorov_smirnov_distribution<typename boost::math::tools::promote_args<RealType>::type>;
 #endif
 
@@ -271,14 +271,14 @@ struct kolmogorov_smirnov_negative_pdf_functor
 };
 } // namespace detail
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> range(const kolmogorov_smirnov_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
    using boost::math::tools::max_value;
    return std::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> support(const kolmogorov_smirnov_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -287,7 +287,7 @@ inline const std::pair<RealType, RealType> support(const kolmogorov_smirnov_dist
    return std::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline RealType pdf(const kolmogorov_smirnov_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -315,7 +315,7 @@ inline RealType pdf(const kolmogorov_smirnov_distribution<RealType, Policy>& dis
    return detail::kolmogorov_smirnov_pdf_large_x(x, n, Policy());
 } // pdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline RealType cdf(const kolmogorov_smirnov_distribution<RealType, Policy>& dist, const RealType& x)
 {
     BOOST_MATH_STD_USING // for ADL of std function exp.
@@ -337,7 +337,7 @@ inline RealType cdf(const kolmogorov_smirnov_distribution<RealType, Policy>& dis
    return jacobi_theta4tau(RealType(0), 2*x*x*n/constants::pi<RealType>(), Policy());
 } // cdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline RealType cdf(const complemented2_type<kolmogorov_smirnov_distribution<RealType, Policy>, RealType>& c) {
     BOOST_MATH_STD_USING // for ADL of std function exp.
     RealType x = c.param;
@@ -364,7 +364,7 @@ inline RealType cdf(const complemented2_type<kolmogorov_smirnov_distribution<Rea
    return RealType(1) - jacobi_theta4tau(RealType(0), 2*x*x*n/constants::pi<RealType>(), Policy());
 } // cdf (complemented)
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline RealType quantile(const kolmogorov_smirnov_distribution<RealType, Policy>& dist, const RealType& p)
 {
     BOOST_MATH_STD_USING
@@ -391,7 +391,7 @@ inline RealType quantile(const kolmogorov_smirnov_distribution<RealType, Policy>
    return result;
 } // quantile
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline RealType quantile(const complemented2_type<kolmogorov_smirnov_distribution<RealType, Policy>, RealType>& c) {
     BOOST_MATH_STD_USING
    static const char* function = "boost::math::quantile(const kolmogorov_smirnov_distribution<%1%>&, %1%)";
@@ -422,7 +422,7 @@ inline RealType quantile(const complemented2_type<kolmogorov_smirnov_distributio
    return result;
 } // quantile (complemented)
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline RealType mode(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
 {
     BOOST_MATH_STD_USING
@@ -440,7 +440,7 @@ inline RealType mode(const kolmogorov_smirnov_distribution<RealType, Policy>& di
 
 // Mean and variance come directly from
 // https://www.jstatsoft.org/article/view/v008i18 Section 3
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline RealType mean(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
 {
     BOOST_MATH_STD_USING
@@ -452,7 +452,7 @@ inline RealType mean(const kolmogorov_smirnov_distribution<RealType, Policy>& di
     return constants::root_half_pi<RealType>() * constants::ln_two<RealType>() / sqrt(n);
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline RealType variance(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
 {
    static const char* function = "boost::math::variance(const kolmogorov_smirnov_distribution<%1%>&)";
@@ -466,7 +466,7 @@ inline RealType variance(const kolmogorov_smirnov_distribution<RealType, Policy>
 
 // Skewness and kurtosis come from integrating the PDF
 // The alternating series pops out a Dirichlet eta function which is related to the zeta function
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline RealType skewness(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
 {
     BOOST_MATH_STD_USING
@@ -481,7 +481,7 @@ inline RealType skewness(const kolmogorov_smirnov_distribution<RealType, Policy>
     return (ex3 - 3 * mean * var - mean * mean * mean) / var / sqrt(var);
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline RealType kurtosis(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
 {
     BOOST_MATH_STD_USING
@@ -497,7 +497,7 @@ inline RealType kurtosis(const kolmogorov_smirnov_distribution<RealType, Policy>
     return (ex4 - 4 * mean * skew * var * sqrt(var) - 6 * mean * mean * var - mean * mean * mean * mean) / var / var;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline RealType kurtosis_excess(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
 {
    static const char* function = "boost::math::kurtosis_excess(const kolmogorov_smirnov_distribution<%1%>&)";

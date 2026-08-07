@@ -12,14 +12,18 @@
 #error "The header <boost/math/signbit.hpp> can only be used in C++17 and later."
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/abs.hpp>
 
 #ifdef __has_include
 #  if __has_include(<bit>)
+#ifndef BOOST_MATH_BUILD_MODULE
 #    include <bit>
+#endif
 #    if __cpp_lib_bit_cast >= 201806L
 #      define BOOST_MATH_BIT_CAST(T, x) std::bit_cast<T>(x)
 #    endif
@@ -193,7 +197,7 @@ constexpr bool signbit_impl(T arg)
 }
 
 // Return value: true if arg is negative, false if arg is 0, NAN, or positive
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr bool signbit(Real arg)
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
@@ -207,7 +211,7 @@ constexpr bool signbit(Real arg)
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 constexpr bool signbit(Z arg)
 {
     return boost::math::ccmath::signbit(static_cast<double>(arg));

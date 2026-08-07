@@ -6,10 +6,14 @@
 #ifndef BOOST_MATH_SPECIAL_CARDINAL_B_SPLINE_HPP
 #define BOOST_MATH_SPECIAL_CARDINAL_B_SPLINE_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <cmath>
 #include <limits>
 #include <type_traits>
+#endif
+
+#include <boost/math/tools/config.hpp>
 
 namespace boost { namespace math {
 
@@ -30,7 +34,7 @@ namespace detail {
   }
 }
 
-template<unsigned n, typename Real>
+BOOST_MATH_EXPORT template<unsigned n, typename Real>
 Real cardinal_b_spline(Real x) {
     static_assert(!std::is_integral<Real>::value, "Does not work with integral types.");
 
@@ -91,7 +95,7 @@ Real cardinal_b_spline(Real x) {
 }
 
 
-template<unsigned n, typename Real>
+BOOST_MATH_EXPORT template<unsigned n, typename Real>
 Real cardinal_b_spline_prime(Real x)
 {
     static_assert(!std::is_integral<Real>::value, "Cardinal B-splines do not work with integer types.");
@@ -162,7 +166,7 @@ Real cardinal_b_spline_prime(Real x)
 }
 
 
-template<unsigned n, typename Real>
+BOOST_MATH_EXPORT template<unsigned n, typename Real>
 Real cardinal_b_spline_double_prime(Real x)
 {
     static_assert(!std::is_integral<Real>::value, "Cardinal B-splines do not work with integer types.");
@@ -207,7 +211,7 @@ Real cardinal_b_spline_double_prime(Real x)
 }
 
 
-template<unsigned n, class Real>
+BOOST_MATH_EXPORT template<unsigned n, class Real>
 Real forward_cardinal_b_spline(Real x)
 {
     static_assert(!std::is_integral<Real>::value, "Cardinal B-splines do not work with integral types.");

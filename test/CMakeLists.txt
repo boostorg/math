@@ -44,6 +44,14 @@ if(HAVE_BOOST_TEST)
         enable_testing()
 
         boost_test_jamfile(FILE sycl_jamfile LINK_LIBRARIES Boost::math Boost::assert Boost::concept_check Boost::config Boost::core Boost::integer Boost::lexical_cast Boost::multiprecision Boost::predef Boost::random Boost::throw_exception Boost::unit_test_framework sycl COMPILE_DEFINITIONS BOOST_MATH_ENABLE_SYCL=1 COMPILE_OPTIONS -fsycl )
+    elseif (BOOST_MATH_BUILD_MODULE)
+
+        message(STATUS "Building boost.math as a C++20 module")
+
+        enable_testing()
+
+        add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../module" module)
+
     else()
 
         boost_test(SOURCES check_cmake_version.cpp ARGUMENTS ${PROJECT_VERSION} LINK_LIBRARIES Boost::core Boost::config)

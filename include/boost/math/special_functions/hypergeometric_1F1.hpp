@@ -706,7 +706,7 @@ namespace boost { namespace math { namespace detail {
 
 } // namespace detail
 
-template <class T1, class T2, class T3, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
 inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1(T1 a, T2 b, T3 z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -727,13 +727,13 @@ inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1(T1 a, T
       "boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1(T1 a, T2 b, T3 z)
 {
    return hypergeometric_1F1(a, b, z, policies::policy<>());
 }
 
-template <class T1, class T2, class T3, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
 inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1_regularized(T1 a, T2 b, T3 z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -754,13 +754,13 @@ inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1_regular
       "boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1_regularized(T1 a, T2 b, T3 z)
 {
    return hypergeometric_1F1_regularized(a, b, z, policies::policy<>());
 }
 
-template <class T1, class T2, class T3, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
 inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 a, T2 b, T3 z, const Policy& /* pol */)
 {
   BOOST_FPU_EXCEPTION_GUARD
@@ -782,13 +782,13 @@ inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 
     "boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 a, T2 b, T3 z)
 {
   return log_hypergeometric_1F1(a, b, z, policies::policy<>());
 }
 
-template <class T1, class T2, class T3, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
 inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 a, T2 b, T3 z, int* sign, const Policy& /* pol */)
 {
   BOOST_FPU_EXCEPTION_GUARD
@@ -810,7 +810,7 @@ inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 
     "boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 a, T2 b, T3 z, int* sign)
 {
   return log_hypergeometric_1F1(a, b, z, sign, policies::policy<>());

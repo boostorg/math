@@ -151,7 +151,7 @@ namespace boost
     // is deliberately NOT included to avoid a name clash with the beta function.
     // Use beta_distribution<> mybeta(...) to construct type double.
 
-    template <class RealType = double, class Policy = policies::policy<> >
+    BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
     class beta_distribution
     {
     public:
@@ -275,33 +275,33 @@ namespace boost
     }; // template <class RealType, class Policy> class beta_distribution
 
     #ifdef __cpp_deduction_guides
-    template <class RealType>
+    BOOST_MATH_EXPORT template <class RealType>
     beta_distribution(RealType)->beta_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-    template <class RealType>
+    BOOST_MATH_EXPORT template <class RealType>
     beta_distribution(RealType, RealType)->beta_distribution<typename boost::math::tools::promote_args<RealType>::type>;
     #endif
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const beta_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable x.
       using boost::math::tools::max_value;
       return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
     }
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const beta_distribution<RealType, Policy>&  /* dist */)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
       return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
     }
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType mean(const beta_distribution<RealType, Policy>& dist)
     { // Mean of beta distribution = np.
       return  dist.alpha() / (dist.alpha() + dist.beta());
     } // mean
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType variance(const beta_distribution<RealType, Policy>& dist)
     { // Variance of beta distribution = np(1-p).
       RealType a = dist.alpha();
@@ -309,7 +309,7 @@ namespace boost
       return  (a * b) / ((a + b ) * (a + b) * (a + b + 1));
     } // variance
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType mode(const beta_distribution<RealType, Policy>& dist)
     {
       constexpr auto function = "boost::math::mode(beta_distribution<%1%> const&)";
@@ -343,7 +343,7 @@ namespace boost
 
     //But WILL be provided by the derived accessor as quantile(0.5).
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType skewness(const beta_distribution<RealType, Policy>& dist)
     {
       BOOST_MATH_STD_USING // ADL of std functions.
@@ -352,7 +352,7 @@ namespace boost
       return (2 * (b-a) * sqrt(a + b + 1)) / ((a + b + 2) * sqrt(a * b));
     } // skewness
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const beta_distribution<RealType, Policy>& dist)
     {
       RealType a = dist.alpha();
@@ -363,13 +363,13 @@ namespace boost
       return  n / d;
     } // kurtosis_excess
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const beta_distribution<RealType, Policy>& dist)
     {
       return 3 + kurtosis_excess(dist);
     } // kurtosis
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType pdf(const beta_distribution<RealType, Policy>& dist, const RealType& x)
     { // Probability Density/Mass Function.
       BOOST_FPU_EXCEPTION_GUARD
@@ -428,7 +428,7 @@ namespace boost
       return static_cast<RealType>(ibeta_derivative(a, b, x, Policy()));
     } // pdf
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType cdf(const beta_distribution<RealType, Policy>& dist, const RealType& x)
     { // Cumulative Distribution Function beta.
       BOOST_MATH_STD_USING // for ADL of std functions
@@ -459,7 +459,7 @@ namespace boost
       return static_cast<RealType>(ibeta(a, b, x, Policy()));
     } // beta cdf
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<beta_distribution<RealType, Policy>, RealType>& c)
     { // Complemented Cumulative Distribution Function beta.
 
@@ -495,7 +495,7 @@ namespace boost
       return static_cast<RealType>(ibetac(a, b, x, Policy()));
     } // beta cdf
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const beta_distribution<RealType, Policy>& dist, const RealType& p)
     { // Quantile or Percent Point beta function or
       // Inverse Cumulative probability distribution function CDF.
@@ -530,7 +530,7 @@ namespace boost
       return static_cast<RealType>(ibeta_inv(a, b, p, static_cast<RealType*>(nullptr), Policy()));
     } // quantile
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<beta_distribution<RealType, Policy>, RealType>& c)
     { // Complement Quantile or Percent Point beta function .
       // Return the number of expected x for a given

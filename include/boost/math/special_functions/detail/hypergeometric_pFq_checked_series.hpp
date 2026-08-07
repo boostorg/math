@@ -11,8 +11,10 @@
 #  define BOOST_MATH_PFQ_MAX_B_TERMS 5
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <cstdint>
+#endif
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>

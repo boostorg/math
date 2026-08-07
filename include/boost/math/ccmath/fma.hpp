@@ -43,7 +43,7 @@ constexpr T fma_imp(const T x, const T y, const T z) noexcept
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr Real fma(Real x, Real y, Real z) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
@@ -78,7 +78,7 @@ constexpr Real fma(Real x, Real y, Real z) noexcept
     }
 }
 
-template <typename T1, typename T2, typename T3>
+BOOST_MATH_EXPORT template <typename T1, typename T2, typename T3>
 constexpr auto fma(T1 x, T2 y, T3 z) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))

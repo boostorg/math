@@ -87,7 +87,7 @@ BOOST_MATH_GPU_ENABLED T ellint_rc_imp(T x, T y, const Policy& pol)
 
 } // namespace detail
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type 
    ellint_rc(T1 x, T2 y, const Policy& pol)
 {
@@ -99,7 +99,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
          static_cast<value_type>(y), pol), "boost::math::ellint_rc<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type 
    ellint_rc(T1 x, T2 y)
 {

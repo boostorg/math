@@ -9,7 +9,9 @@
 // Linear combination for bessel derivatives are defined here
 #ifndef BOOST_MATH_SF_DETAIL_BESSEL_DERIVATIVES_LINEAR_HPP
 #define BOOST_MATH_SF_DETAIL_BESSEL_DERIVATIVES_LINEAR_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iostream>
+#endif
 #ifdef _MSC_VER
 #pragma once
 #endif

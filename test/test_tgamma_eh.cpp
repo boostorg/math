@@ -5,11 +5,17 @@
 
 #define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
 
-#include "math_unit_test.hpp"
-#include <cfenv>
-#include <iostream>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/special_functions/gamma.hpp>
+#else
+import boost.math;
+#endif
 
+#include "math_unit_test.hpp"
+
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <iostream>
+#endif
 
 int main()
 {

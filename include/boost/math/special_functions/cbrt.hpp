@@ -158,7 +158,7 @@ BOOST_MATH_GPU_ENABLED T cbrt_imp(T z, const Policy& pol)
 
 } // namespace detail
 
-template <typename T, typename Policy>
+BOOST_MATH_EXPORT template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cbrt(T z, const Policy& pol)
 {
    using result_type = typename tools::promote_args<T>::type;
@@ -166,7 +166,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cbrt(T z, co
    return static_cast<result_type>(detail::cbrt_imp(value_type(z), pol));
 }
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cbrt(T z)
 {
    return cbrt(z, policies::policy<>());
@@ -180,7 +180,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cbrt(T z)
 namespace boost {
 namespace math {
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED double cbrt(T x)
 {
    return ::cbrt(x);
@@ -191,13 +191,13 @@ BOOST_MATH_GPU_ENABLED inline float cbrt(float x)
    return ::cbrtf(x);
 }
 
-template <typename T, typename Policy>
+BOOST_MATH_EXPORT template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED double cbrt(T x, const Policy&)
 {
    return ::cbrt(x);
 }
 
-template <typename Policy>
+BOOST_MATH_EXPORT template <typename Policy>
 BOOST_MATH_GPU_ENABLED float cbrt(float x, const Policy&)
 {
    return ::cbrtf(x);

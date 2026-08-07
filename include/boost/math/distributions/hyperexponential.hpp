@@ -24,6 +24,7 @@
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/is_detected.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstddef>
 #include <iterator>
 #include <limits>
@@ -32,6 +33,7 @@
 #include <vector>
 #include <type_traits>
 #include <initializer_list>
+#endif
 
 
 #ifdef _MSC_VER
@@ -50,11 +52,11 @@ typename Dist::value_type generic_quantile(const Dist& dist, const typename Dist
 } // Namespace detail
 
 
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 class hyperexponential_distribution;
 
 
-namespace /*<unnamed>*/ { namespace hyperexp_detail {
+namespace hyperexp_detail {
 
 template <typename T>
 void normalize(std::vector<T>& v)
@@ -235,10 +237,10 @@ RealT quantile_impl(hyperexponential_distribution<RealT, PolicyT> const& dist, R
     return result;
 }
 
-}} // Namespace <unnamed>::hyperexp_detail
+} // Namespace hyperexp_detail
 
 
-template <typename RealT = double, typename PolicyT = policies::policy<> >
+BOOST_MATH_EXPORT template <typename RealT = double, typename PolicyT = policies::policy<> >
 class hyperexponential_distribution
 {
     public: typedef RealT value_type;
@@ -395,11 +397,11 @@ public: hyperexponential_distribution(std::initializer_list<RealT> l1)
 
 
 // Convenient type synonym for double.
-typedef hyperexponential_distribution<double> hyperexponential;
+BOOST_MATH_EXPORT typedef hyperexponential_distribution<double> hyperexponential;
 
 
 // Range of permissible values for random variable x
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 std::pair<RealT,RealT> range(hyperexponential_distribution<RealT,PolicyT> const&)
 {
     if (std::numeric_limits<RealT>::has_infinity)
@@ -412,13 +414,13 @@ std::pair<RealT,RealT> range(hyperexponential_distribution<RealT,PolicyT> const&
 
 // Range of supported values for random variable x.
 // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 std::pair<RealT,RealT> support(hyperexponential_distribution<RealT,PolicyT> const&)
 {
     return std::make_pair(tools::min_value<RealT>(), tools::max_value<RealT>()); // <min value> to +<max value>.
 }
 
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 RealT pdf(hyperexponential_distribution<RealT, PolicyT> const& dist, RealT const& x)
 {
     BOOST_MATH_STD_USING
@@ -444,7 +446,7 @@ RealT pdf(hyperexponential_distribution<RealT, PolicyT> const& dist, RealT const
     return result;
 }
 
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 RealT cdf(hyperexponential_distribution<RealT, PolicyT> const& dist, RealT const& x)
 {
     RealT result = 0;
@@ -468,13 +470,13 @@ RealT cdf(hyperexponential_distribution<RealT, PolicyT> const& dist, RealT const
     return result;
 }
 
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 RealT quantile(hyperexponential_distribution<RealT, PolicyT> const& dist, RealT const& p)
 {
     return hyperexp_detail::quantile_impl(dist, p , false);
 }
 
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 RealT cdf(complemented2_type<hyperexponential_distribution<RealT,PolicyT>, RealT> const& c)
 {
     RealT const& x = c.param;
@@ -502,7 +504,7 @@ RealT cdf(complemented2_type<hyperexponential_distribution<RealT,PolicyT>, RealT
 }
 
 
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 RealT quantile(complemented2_type<hyperexponential_distribution<RealT, PolicyT>, RealT> const& c)
 {
     RealT const& p = c.param;
@@ -511,7 +513,7 @@ RealT quantile(complemented2_type<hyperexponential_distribution<RealT, PolicyT>,
     return hyperexp_detail::quantile_impl(dist, p , true);
 }
 
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 RealT mean(hyperexponential_distribution<RealT, PolicyT> const& dist)
 {
     RealT result = 0;
@@ -530,7 +532,7 @@ RealT mean(hyperexponential_distribution<RealT, PolicyT> const& dist)
     return result;
 }
 
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 RealT variance(hyperexponential_distribution<RealT, PolicyT> const& dist)
 {
     RealT result = 0;
@@ -551,7 +553,7 @@ RealT variance(hyperexponential_distribution<RealT, PolicyT> const& dist)
     return result;
 }
 
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 RealT skewness(hyperexponential_distribution<RealT,PolicyT> const& dist)
 {
     BOOST_MATH_STD_USING
@@ -582,7 +584,7 @@ RealT skewness(hyperexponential_distribution<RealT,PolicyT> const& dist)
     return num / pow(den, static_cast<RealT>(1.5));
 }
 
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 RealT kurtosis(hyperexponential_distribution<RealT,PolicyT> const& dist)
 {
     const std::size_t n = dist.num_phases();
@@ -615,13 +617,13 @@ RealT kurtosis(hyperexponential_distribution<RealT,PolicyT> const& dist)
     return num/(den*den);
 }
 
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 RealT kurtosis_excess(hyperexponential_distribution<RealT,PolicyT> const& dist)
 {
     return kurtosis(dist) - 3;
 }
 
-template <typename RealT, typename PolicyT>
+BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 RealT mode(hyperexponential_distribution<RealT,PolicyT> const& /*dist*/)
 {
     return 0;

@@ -68,10 +68,12 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 #include <boost/lexical_cast.hpp>
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <cmath>
 #include <type_traits>
 #include <cstdint>
+#endif
 
 // Needed for testing and diagnostics only.
 //#include <iostream>
@@ -2022,7 +2024,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
 /////////////////////////////  User Lambert w functions. //////////////////////////////
 
 //! Lambert W0 using User-defined policy.
-  template <typename T, typename Policy>
+  BOOST_MATH_EXPORT template <typename T, typename Policy>
   inline
     typename boost::math::tools::promote_args<T>::type
     lambert_w0(T z, const Policy& pol)
@@ -2046,7 +2048,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   } // lambert_w0(T z, const Policy& pol)
 
   //! Lambert W0 using default policy.
-  template <typename T>
+  BOOST_MATH_EXPORT template <typename T>
   inline
     typename tools::promote_args<T>::type
     lambert_w0(T z)
@@ -2071,7 +2073,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     //! W-1 branch (-max(z) < z <= -1/e).
 
     //! Lambert W-1 using User-defined policy.
-  template <typename T, typename Policy>
+  BOOST_MATH_EXPORT template <typename T, typename Policy>
   inline
     typename tools::promote_args<T>::type
     lambert_wm1(T z, const Policy& pol)
@@ -2083,7 +2085,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   }
 
   //! Lambert W-1 using default policy.
-  template <typename T>
+  BOOST_MATH_EXPORT template <typename T>
   inline
     typename tools::promote_args<T>::type
     lambert_wm1(T z)
@@ -2123,7 +2125,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
      } // lambert_w0_prime(T z)
   }
   // First derivative of Lambert W0 and W-1.
-  template <typename T, typename Policy>
+  BOOST_MATH_EXPORT template <typename T, typename Policy>
   inline typename tools::promote_args<T>::type
      lambert_w0_prime(T z, const Policy& pol)
   {
@@ -2131,14 +2133,14 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
      return lambert_w_detail::lambert_w0_prime(static_cast<result_type>(z), pol);
   }
 
-  template <typename T>
+  BOOST_MATH_EXPORT template <typename T>
   inline typename tools::promote_args<T>::type
      lambert_w0_prime(T z)
   {
      return lambert_w0_prime(z, policies::policy<>());
   }
 
-  template <typename T, typename Policy>
+  BOOST_MATH_EXPORT template <typename T, typename Policy>
   inline typename tools::promote_args<T>::type
   lambert_wm1_prime(T z, const Policy& pol)
   {
@@ -2158,7 +2160,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     return w/(z*(1+w));
   } // lambert_wm1_prime(T z)
 
-  template <typename T>
+  BOOST_MATH_EXPORT template <typename T>
   inline typename tools::promote_args<T>::type
      lambert_wm1_prime(T z)
   {
