@@ -47,9 +47,6 @@ add(T& vec1, U& vec2)
     }
 }
 
-template<typename...>
-using void_t = void;
-
 template<typename T, typename U, typename = void>
 struct has_mult : std::false_type {};
 
@@ -217,6 +214,15 @@ void SRKN_b_order_11(RandomAccessContainer& p0, RandomAccessContainer& q0, const
     add(q0, dq);
 }
 
+enum class available_methods 
+{
+    Y6,
+    Y4,
+    Y2,
+    SRKNB6,
+    SRKNB11
+};
+
 template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
 std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian_imp(RandomAccessContainer p0,
                                                                                                              RandomAccessContainer q0,
@@ -224,7 +230,7 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
                                                                                                              const unsigned steps,
                                                                                                              Func dHdp,
                                                                                                              Func dHdq,
-                                                                                                             std::string method,
+                                                                                                             available_methods method,
                                                                                                              const Policy& pol)
 {
     // Not sure how to make this function string nicer
@@ -240,12 +246,14 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
 
     typedef void (*stepperType)(RandomAccessContainer&, RandomAccessContainer&, RealType, Func, Func);
 
-    std::map<std::string, stepperType> m{{"Y6", sixth_order_yoshida}, 
-                                         {"Y4", fourth_order_yoshida}, 
-                                         {"Y2", second_order_yoshida},
-                                         {"SRKNB6", SRKN_b_order_6},
-                                         {"SRKNB11", SRKN_b_order_11}};
-    stepperType stepper = m.at(method);
+    stepperType stepper; 
+    switch (method) {
+        case available_methods::Y6:       stepper = sixth_order_yoshida; break;
+        case available_methods::Y4:       stepper = fourth_order_yoshida; break;
+        case available_methods::Y2:       stepper = second_order_yoshida; break;
+        case available_methods::SRKNB6:   stepper = SRKN_b_order_6; break;
+        case available_methods::SRKNB11:  stepper = SRKN_b_order_11; break;
+    }
 
     std::vector<RandomAccessContainer> p(steps);
     std::vector<RandomAccessContainer> q(steps);
@@ -269,7 +277,7 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
                                                                                                          const unsigned steps,
                                                                                                          Func dHdp,
                                                                                                          Func dHdq,
-                                                                                                         std::string method,
+                                                                                                         detail::available_methods method,
                                                                                                          const Policy& pol)
 {
     return detail::integrate_hamiltonian_imp(p0, q0, dt, steps, dHdp, dHdq, method, pol); 
@@ -282,7 +290,7 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
                                                                                                          const unsigned steps,
                                                                                                          Func dHdp,
                                                                                                          Func dHdq,
-                                                                                                         std::string method)
+                                                                                                         detail::available_methods method)
 {
     return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, method, boost::math::policies::policy<>()); 
 }
@@ -295,7 +303,7 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
                                                                                                          Func dHdp,
                                                                                                          Func dHdq)
 {
-    return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, "Y6", boost::math::policies::policy<>()); 
+    return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, detail::available_methods::Y6, boost::math::policies::policy<>()); 
 }
 }}}
 #endif

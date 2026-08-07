@@ -21,6 +21,7 @@
 #endif
 
 using boost::math::quadrature::integrate_hamiltonian;
+using boost::math::quadrature::detail::available_methods;
 
 // Equations of motion for simple harmonic oscillator
 template <class Real>
@@ -79,14 +80,11 @@ void test_invalid_parameters()
     RealType p0 = 0;
     // Negative timestep
     BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(q0, p0, -0.1, 10, oscillator_dHdp<RealType>, oscillator_dHdq<RealType>), std::domain_error);
-
-    // Method not in {'Y6', 'Y4', 'Y2'}
-    BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(q0, p0, 0.1, 10, oscillator_dHdp<RealType>, oscillator_dHdq<RealType>, "InvalidMethod"), std::out_of_range);
 }
 
 /* Test if SHO energy fluctuations are below a given tolerance*/
 template <class RealType>
-void test_harmonic_oscillator(const RealType tol, const std::string method)
+void test_harmonic_oscillator(const RealType tol, const available_methods method)
 {
     BOOST_MATH_STD_USING
 
@@ -119,7 +117,7 @@ void test_harmonic_oscillator(const RealType tol, const std::string method)
 
 /* Test if SHO energy fluctuations are below a given tolerance*/
 template <class RealType>
-void test_pendulum(const RealType tol, const std::string method)
+void test_pendulum(const RealType tol, const available_methods method)
 {
     BOOST_MATH_STD_USING
 
@@ -153,7 +151,7 @@ void test_pendulum(const RealType tol, const std::string method)
 
 /* Test if SHO energy fluctuations are below a given tolerance*/
 template <class RealType>
-void test_hh_model(const RealType tol, const std::string method)
+void test_hh_model(const RealType tol, const available_methods method)
 {
     BOOST_MATH_STD_USING
 
@@ -188,7 +186,7 @@ void test_hh_model(const RealType tol, const std::string method)
 }
 
 template <typename RealType>
-void test_multiprecision_sho(const RealType tol, const std::string method)
+void test_multiprecision_sho(const RealType tol, const available_methods method)
 {
     BOOST_MATH_STD_USING
 
@@ -226,38 +224,38 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
     
     // Test doubles
     // Simple Harmonic Oscillator Tests
-    test_harmonic_oscillator<double>(1e-10, "Y6");
-    test_harmonic_oscillator<double>(7e-4, "Y4");
-    test_harmonic_oscillator<double>(7e-4, "Y2");
-    test_harmonic_oscillator<double>(1e-11, "SRKNB6");
-    test_harmonic_oscillator<double>(2e-14, "SRKNB11");
+    test_harmonic_oscillator<double>(1e-10, available_methods::Y6);
+    test_harmonic_oscillator<double>(7e-4, available_methods::Y4);
+    test_harmonic_oscillator<double>(7e-4, available_methods::Y2);
+    test_harmonic_oscillator<double>(1e-11, available_methods::SRKNB6);
+    test_harmonic_oscillator<double>(2e-14, available_methods::SRKNB11);
 
     // Pendulum Tests
-    test_pendulum<double>(1e-10, "Y6");
-    test_pendulum<double>(5e-4, "Y4");
-    test_pendulum<double>(5e-4, "Y2");
-    test_pendulum<double>(1e-8, "SRKNB6");
-    test_pendulum<double>(1e-10, "SRKNB11");
+    test_pendulum<double>(1e-10, available_methods::Y6);
+    test_pendulum<double>(5e-4, available_methods::Y4);
+    test_pendulum<double>(5e-4, available_methods::Y2);
+    test_pendulum<double>(1e-8, available_methods::SRKNB6);
+    test_pendulum<double>(1e-10, available_methods::SRKNB11);
 
     // Henon Heiles Model
-    test_hh_model<double>(1e-14, "SRKNB11");
-    test_hh_model<double>(1e-14, "Y6");
-    test_hh_model<double>(5e-11, "Y4");
-    test_hh_model<double>(5e-6, "Y2");
-    test_hh_model<double>(1e-13, "SRKNB6");
+    test_hh_model<double>(1e-14, available_methods::SRKNB11);
+    test_hh_model<double>(1e-14, available_methods::Y6);
+    test_hh_model<double>(5e-11, available_methods::Y4);
+    test_hh_model<double>(5e-6, available_methods::Y2);
+    test_hh_model<double>(1e-13, available_methods::SRKNB6);
 
     // Test floats
-    test_harmonic_oscillator<float>(6e-6, "Y6");
-    test_pendulum<float>(6e-6, "Y6");
-    test_hh_model<float>(6e-6, "Y6");
+    test_harmonic_oscillator<float>(6e-6, available_methods::Y6);
+    test_pendulum<float>(6e-6, available_methods::Y6);
+    test_hh_model<float>(6e-6, available_methods::Y6);
 
     // Test long doubles
-    test_harmonic_oscillator<long double>(1e-10, "Y6");
-    test_pendulum<long double>(1e-10, "Y6");
-    test_hh_model<long double>(1e-14, "Y6");
+    test_harmonic_oscillator<long double>(1e-10, available_methods::Y6);
+    test_pendulum<long double>(1e-10, available_methods::Y6);
+    test_hh_model<long double>(1e-14, available_methods::Y6);
 
     // Test multiprecision
-    test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, "Y6");
-    test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, "SRKNB6");
-    test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, "SRKNB11");
+    test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, available_methods::Y6);
+    test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, available_methods::SRKNB6);
+    test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, available_methods::SRKNB11);
 }
