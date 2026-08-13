@@ -344,6 +344,11 @@ void test_spots(RealType)
       distro1 d(8.0f, 8.5f);
       BOOST_CHECK_CLOSE(pdf(d, -1), static_cast<RealType>(6.1747948083757028903541988987716621647020752431287e-20), 2e-5);  // Can we do better on accuracy here?
    }
+   // https://github.com/boostorg/math/issues/1430
+   {
+       distro1 d(1000.f, 23.f);
+       BOOST_CHECK_CLOSE_FRACTION(cdf(d, -1), static_cast<RealType>(1.61471461239552e-127), 1e-3);
+   }
 
 } // template <class RealType>void test_spots(RealType)
 
