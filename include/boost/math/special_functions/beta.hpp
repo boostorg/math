@@ -1288,11 +1288,11 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       T p;
       if (invert)
       {
-          p = (y < 0.75) ? asin(sqrt(y)) / constants::half_pi<T>() : 1 - asin(sqrt(x)) / constants::half_pi<T>();
+          p = (y < 0.75) ? T(asin(sqrt(y)) / constants::half_pi<T>()) : T(1 - asin(sqrt(x)) / constants::half_pi<T>());
       }
       else
       {
-          p = (x > 0.75) ? 1 - asin(sqrt(y)) / constants::half_pi<T>() : asin(sqrt(x)) / constants::half_pi<T>();
+          p = (x > 0.75) ? T(1 - asin(sqrt(y)) / constants::half_pi<T>()) : T(asin(sqrt(x)) / constants::half_pi<T>());
       }
       if(!normalised)
          p *= constants::pi<T>();
