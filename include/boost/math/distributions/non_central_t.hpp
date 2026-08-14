@@ -249,8 +249,7 @@ namespace boost
                // t-Distribution". C. van Eeden. International Statistical Review, 29, 4-31.
                // "Continuous Univariate Distributions".  N.L. Johnson, S. Kotz and
                // N. Balkrishnan. 1995. John Wiley and Sons New York.
-               T result = cdf(students_t_distribution<T, Policy>(v), t - delta);
-               return invert ? 1 - result : result;
+               return invert ? cdf(complement(students_t_distribution<T, Policy>(v), t - delta)) : cdf(students_t_distribution<T, Policy>(v), t - delta);
             }
             //
             // x and y are the corresponding random
@@ -274,10 +273,11 @@ namespace boost
                //
                // Calculate p:
                //
+               T c = 0;
                if(x != 0)
                {
-                  result = non_central_beta_p(a, b, d2, x, y, pol);
-                  result = non_central_t2_p(v, delta, x, y, pol, result);
+                  c = non_central_beta_p(a, b, d2, x, y, pol);
+                  result = non_central_t2_p(v, delta, x, y, pol, c);
                   result /= 2;
                }
                else
@@ -285,6 +285,19 @@ namespace boost
                if (invert)
                {
                   result = cdf(complement(boost::math::normal_distribution<T, Policy>(), -delta)) - result;
+                  if ((x != 0) && (fabs(result / (c * tools::epsilon<T>())) < 1000))
+                  {
+                      // We've cancelled out most of the digits in the result, try A&S 26.7.9,
+                      // this is only accurate to a couple of digits at best, but it's better
+                      // than nothing when all else fails, see https://github.com/boostorg/math/issues/1430
+                      t = -t;
+                      delta = -delta;
+
+                      T z = (t * (1 - 1 / (4 * v)) - delta) / sqrt(1 + t * t / (2 * v));
+
+                      return cdf(boost::math::normal_distribution<T, Policy>(), z);
+
+                  }
                   invert = false;
                }
                else
