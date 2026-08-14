@@ -1285,7 +1285,15 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       {
          *p_derivative = 1 / (constants::pi<T>() * sqrt(y * x));
       }
-      T p = invert ? asin(sqrt(y)) / constants::half_pi<T>() : asin(sqrt(x)) / constants::half_pi<T>();
+      T p;  // LCOV_EXCL_LINE
+      if (invert)
+      {
+          p = (y < 0.75) ? T(asin(sqrt(y)) / constants::half_pi<T>()) : T(1 - asin(sqrt(x)) / constants::half_pi<T>());
+      }
+      else
+      {
+          p = (x > 0.75) ? T(1 - asin(sqrt(y)) / constants::half_pi<T>()) : T(asin(sqrt(x)) / constants::half_pi<T>());
+      }
       if(!normalised)
          p *= constants::pi<T>();
       return p;
