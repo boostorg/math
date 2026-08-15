@@ -21,7 +21,7 @@
 #endif
 
 using boost::math::quadrature::integrate_hamiltonian;
-using boost::math::quadrature::detail::available_methods;
+using boost::math::quadrature::available_methods;
 
 // Equations of motion for simple harmonic oscillator
 template <class Real>
