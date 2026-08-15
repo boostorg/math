@@ -18,7 +18,7 @@
 
 namespace boost{ namespace math { namespace quadrature { 
 
-enum class available_methods 
+BOOST_MATH_EXPORT enum class available_methods 
 {
     Y6,
     Y4,
