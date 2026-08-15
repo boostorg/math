@@ -12,25 +12,41 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     #include <boost/math/quadrature/symmetric.hpp>
     namespace boost{ namespace math{ namespace quadrature {
 
-    template <class ReturnType, class RealType, class Func>
-    std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
-                                                                                       const ReturnType q0,
-                                                                                       const RealType dt,
-                                                                                       const unsigned steps,
-                                                                                       Func dHdp,
-                                                                                       Func dHdq,
-                                                                                       std::string method = "Y6")
+    enum class available_methods 
+    {
+        Y6,
+        Y4,
+        Y2,
+        SRKNB6,
+        SRKNB11
+    };
 
-    template <class ReturnType, class RealType, class Func, class ``__Policy``>
-    std::pair<std::vector<ReturnType>, std::vector<ReturnType> > integrate_hamiltonian(const ReturnType p0,
-                                                                                       const ReturnType q0,
-                                                                                       const RealType dt,
-                                                                                       const unsigned steps,
-                                                                                       Func dHdp,
-                                                                                       Func dHdq,
-                                                                                       std::string method,
-                                                                                       const ``__Policy``& pol)
+    template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
+    std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(RandomAccessContainer p0,
+                                                                                                             RandomAccessContainer q0,
+                                                                                                             const RealType dt,
+                                                                                                             const unsigned steps,
+                                                                                                             Func dHdp,
+                                                                                                             Func dHdq,
+                                                                                                             available_methods method,
+                                                                                                             const ``__Policy&`` pol)
 
+    template <typename RandomAccessContainer, typename RealType, class Func>
+    std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(RandomAccessContainer p0,
+                                                                                                             RandomAccessContainer q0,
+                                                                                                             const RealType dt,
+                                                                                                             const unsigned steps,
+                                                                                                             Func dHdp,
+                                                                                                             Func dHdq,
+                                                                                                             available_methods method)
+                                                                                                             
+    template <typename RandomAccessContainer, typename RealType, class Func>
+    std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(RandomAccessContainer p0,
+                                                                                                             RandomAccessContainer q0,
+                                                                                                             const RealType dt,
+                                                                                                             const unsigned steps,
+                                                                                                             Func dHdp,
+                                                                                                             Func dHdq)
     }}} // namespaces
 
 [heading Description]
@@ -83,16 +99,16 @@ We now evolve the system using the following
     std::vector<RealType> p;
     std::vector<RealType> q;
 
-    std::tie(p, q) = boost::math::quadrature::integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, "Y6");
+    std::tie(p, q) = boost::math::quadrature::integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, available_methods::Y6);
 
 The ouput vectors `q, p` are the position and momentum of the system at each time. In 
 higher dimensions the output will be a vector of vectors. 
 
-The last argument that we pass to `integrate_hamiltonian`, "Y6" here, sets the integration 
-method to use. The string "Y6" stands for Yoshida's 6th order integrator. Yoshida's 2nd and 
-4th order methods are also available by passing the string "Y2", or "Y4" respectively. 
+The last argument that we pass to `integrate_hamiltonian`, `available_methods::Y6` here, sets the integration 
+method to use. The value `Y6` stands for Yoshida's 6th order integrator. Yoshida's 2nd and 
+4th order methods are also available by passing the value `Y2`, or `Y4` respectively. 
 The 4th order and 6th order symplectic Runge-Kutta-Nystrom methods from Table 3 of Blanes and Moan
-are available using the strings "SRKNB6" and "SRKNB11". 
+are available using the values `SRKNB6` and `SRKNB11`. 
 
 [optional_policy]
 

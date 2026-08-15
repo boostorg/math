@@ -16,7 +16,18 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
-namespace boost{ namespace math { namespace quadrature { namespace detail {
+namespace boost{ namespace math { namespace quadrature { 
+
+enum class available_methods 
+{
+    Y6,
+    Y4,
+    Y2,
+    SRKNB6,
+    SRKNB11
+};
+    
+namespace detail {
 
 template<typename...>
 using void_t = void;
@@ -214,15 +225,6 @@ void SRKN_b_order_11(RandomAccessContainer& p0, RandomAccessContainer& q0, const
     add(q0, dq);
 }
 
-enum class available_methods 
-{
-    Y6,
-    Y4,
-    Y2,
-    SRKNB6,
-    SRKNB11
-};
-
 template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
 std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian_imp(RandomAccessContainer& p0,
                                                                                                              RandomAccessContainer& q0,
@@ -274,7 +276,7 @@ BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<Rand
                                                                                                                            const unsigned steps,
                                                                                                                            Func dHdp,
                                                                                                                            Func dHdq,
-                                                                                                                           detail::available_methods method,
+                                                                                                                           available_methods method,
                                                                                                                            const Policy& pol)
 {
     return detail::integrate_hamiltonian_imp(p0, q0, dt, steps, dHdp, dHdq, method, pol); 
@@ -287,7 +289,7 @@ BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<Rand
                                                                                                                            const unsigned steps,
                                                                                                                            Func dHdp,
                                                                                                                            Func dHdq,
-                                                                                                                           detail::available_methods method)
+                                                                                                                           available_methods method)
 {
     return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, method, boost::math::policies::policy<>()); 
 }
@@ -300,7 +302,7 @@ BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<Rand
                                                                                                                            Func dHdp,
                                                                                                                            Func dHdq)
 {
-    return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, detail::available_methods::Y6, boost::math::policies::policy<>()); 
+    return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, available_methods::Y6, boost::math::policies::policy<>()); 
 }
 }}}
 
