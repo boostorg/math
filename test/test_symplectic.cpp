@@ -79,7 +79,11 @@ void test_invalid_parameters()
     RealType q0 = 1;
     RealType p0 = 0;
     // Negative timestep
-    BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(q0, p0, -0.1, 10, oscillator_dHdp<RealType>, oscillator_dHdq<RealType>), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(p0, q0, -0.1, 10, oscillator_dHdp<RealType>, oscillator_dHdq<RealType>), std::domain_error);
+
+    std::vector<double> p0vec = {1, 1};
+    std::vector<double> q0vec = {1};
+    BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(p0vec, q0vec, 0.1, 10, pendulum_vector_dHdp<RealType>, pendulum_vector_dHdq<RealType>), boost::math::evaluation_error);
 }
 
 /* Test if SHO energy fluctuations are below a given tolerance*/
