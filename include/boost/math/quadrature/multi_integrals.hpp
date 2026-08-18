@@ -1,3 +1,6 @@
+#ifndef BOOST_MATH_QUADRATURE_MULTI_INTEGRALS_HPP
+#define BOOST_MATH_QUADRATURE_MULTI_INTEGRALS_HPP
+
 #include <iostream>
 #include <vector>
 #include <functional>
@@ -5,16 +8,16 @@
 #include <stdexcept>
 #include <boost/math/quadrature/gauss.hpp>
 
-using namespace boost::math::quadrature;
+namespace boost { namespace math { namespace quadrature { namespace detail {
 
 // Recursive engine tracking runtime depth and coordinate state
 template <typename F, typename Integrator>
-double integrate_recursive(F& f, 
+double integrate_recursive(const F& f, 
                            const std::vector<double>& a, 
                            const std::vector<double>& b, 
                            std::vector<double>& working_coords, 
-                           size_t depth,
-                           Integrator integrate) {
+                           const size_t& depth,
+                           const Integrator& integrate) {
     double low = a[depth];
     double high = b[depth];
     
@@ -37,39 +40,36 @@ double integrate_recursive(F& f,
     return integrate(next_dimension_f, low, high);
 }
 
-// User-facing entry point supporting any size N
-template <typename F>
-double integrate_nd(F& f, const std::vector<double>& a, const std::vector<double>& b) {
+} // namespace detail
+
+template <typename F, typename Integrator>
+double integrateND(const F& f, const std::vector<double>& a, const std::vector<double>& b, const Integrator& integrate)
+{
     if (a.size() != b.size() || a.empty()) {
         throw std::invalid_argument("Limits vectors must be of equal size and non-empty.");
     }
+    
+    // Allocate the coordinate state tracking vector dynamically based on runtime size
+    std::vector<double> working_coords(a.size(), 0.0);
+    return detail::integrate_recursive(f, a, b, working_coords, 0, integrate);
+}
 
+template <typename F>
+double integrateND(const F& f, const std::vector<double>& a, const std::vector<double>& b)
+{
     typedef std::function<double(double)> func;
     typedef std::function<double(func, double, double)> f2;
 
     auto integrate = [](func f, double a, double b)
     {
-        return boost::math::quadrature::gauss<double, 20>::integrate(f, a, b);
+        return gauss<double, 20>::integrate(f, a, b);
     };
     
     // Allocate the coordinate state tracking vector dynamically based on runtime size
-    std::vector<double> working_coords(a.size(), 0.0);
-    return integrate_recursive(f, a, b, working_coords, 0, integrate);
+    std::vector<double> working_coords(a.size(), 0);
+    return integrateND(f, a, b, integrate);
 }
 
-int main() {
-    // Example: 5-Dimensional Integrand f(x₀, x₁, x₂, x₃, x₄) = x₀ * x₁ * x₂ * x₃ * x₄
-    auto integrand_5d = [](const std::vector<double>& coords) {
-        return sin(coords[0] * coords[1]);
-    };
+}}}
 
-    // Define 5D hypercube boundaries
-    std::vector<double> lower_bounds = {0.0, 0.0};
-    std::vector<double> upper_bounds = {1.0, 0.5}; // [0,1]^5
-
-    // Exact result: (0.5)^5 = 0.03125
-    double result = integrate_nd(integrand_5d, lower_bounds, upper_bounds);
-    std::cout << "5D Integrated Result: " << result << std::endl;
-
-    return 0;
-}
+#endif // BOOST_MATH_QUADRATURE_MULTI_INTEGRALS_HPP
