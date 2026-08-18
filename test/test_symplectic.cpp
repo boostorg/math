@@ -4,6 +4,12 @@
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
+#ifdef _MSC_VER
+#  pragma warning (disable : 4244) // conversion from 'double' to '_Ty', possible loss of data
+#  pragma warning (disable : 4305) // 'initializing' : truncation from 'double' to 'const float'.
+#  pragma warning (disable : 4310) // cast truncates constant value.
+#  pragma warning (disable : 4512) // assignment operator could not be generated.
+#endif
 #define BOOST_TEST_MODULE symplectic_quadrature
 
 #include <algorithm>
@@ -93,8 +99,7 @@ void test_harmonic_oscillator(const RealType tol, const available_methods method
     BOOST_MATH_STD_USING
 
     RealType dt = 0.05;
-    RealType t_end = 100;
-    unsigned int steps = t_end / dt;
+    unsigned int steps = 2000;
 
     RealType q0 = 1;
     RealType p0 = 0;
@@ -126,8 +131,7 @@ void test_pendulum(const RealType tol, const available_methods method)
     BOOST_MATH_STD_USING
 
     RealType dt = 0.05;
-    RealType t_end = 100;
-    unsigned int steps = t_end / dt;
+    unsigned int steps = 2000;
 
     std::vector<RealType> q0 = {boost::math::constants::pi<RealType>() * 0.5};
     std::vector<RealType> p0 = {0.};
