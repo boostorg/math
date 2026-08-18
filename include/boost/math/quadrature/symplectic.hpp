@@ -96,8 +96,8 @@ size_check(const T& vec1, const U& vec2, const char* function, const Policy& pol
 {
     if (vec1.size() != vec2.size())
     {
-        std::string val = "(" + std::to_string(vec1.size()) + "!=" + std::to_string(vec2.size()) + ")";
-        boost::math::policies::raise_evaluation_error(function, "Starting vectors (p0, q0) are not the same size but got %1%.\n", val, pol);
+        std::string msg = "Starting vectors (p0, q0) are not the same size but got (" + std::to_string(vec1.size()) + "!=" + std::to_string(vec2.size()) + ")";
+        boost::math::policies::raise_evaluation_error(function, msg.c_str(), 0, pol);
     }
 }
 
