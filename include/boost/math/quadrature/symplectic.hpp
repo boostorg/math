@@ -4,6 +4,11 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+// Disable warnings when defining size_check for numeric types
+#ifdef _MSC_VER
+#  pragma warning (disable : 4100) // 'function': unreferenced parameter
+#endif
+
 #ifndef BOOST_MATH_QUADRATURE_SYMPLECTIC_HPP
 #define BOOST_MATH_QUADRATURE_SYMPLECTIC_HPP
 
