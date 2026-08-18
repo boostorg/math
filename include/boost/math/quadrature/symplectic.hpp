@@ -12,6 +12,7 @@
 #include <map>
 #include <string>
 #include <stdexcept>
+#include <type_traits>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -43,14 +44,14 @@ BOOST_MATH_INLINE_CONSTEXPR bool has_plus_v = has_plus<T, U>::value;
 
 template <typename T, typename U>
 typename std::enable_if_t<has_plus_v<T, U>, void>
-add(T& x, U& y) 
+add(T& x, const U& y) 
 {
     x = x + y;
 }
 
 template <typename T, typename U>
 typename std::enable_if_t<!has_plus_v<T, U>, void>
-add(T& vec1, U& vec2)
+add(T& vec1, const U& vec2)
 {
     for (std::size_t i=0; i < vec1.size(); i++)
     {
@@ -65,14 +66,17 @@ template<typename T, typename U>
 struct has_mult<T, U, void_t<decltype(std::declval<T>() * std::declval<U>())> > : std::true_type {};
 
 template <typename T, typename U>
-typename std::enable_if<has_mult<T, U>::value, void>::type
+BOOST_MATH_INLINE_CONSTEXPR bool has_mult_v = has_mult<T, U>::value;
+
+template <typename T, typename U>
+typename std::enable_if_t<has_mult_v<T, U>, void>
 mult_prefactor(T& x, U prefactor) 
 {
     x = x * prefactor;
 }
 
 template <typename T, typename U>
-typename std::enable_if<!has_plus<T, U>::value, void>::type
+typename std::enable_if_t<!has_plus_v<T, U>, void>
 mult_prefactor(T& vec1, U prefactor) 
 {
     for (std::size_t i=0; i < vec1.size(); i++)
@@ -81,6 +85,21 @@ mult_prefactor(T& vec1, U prefactor)
     }
 }
 
+template <typename T, typename U, class Policy>
+typename std::enable_if_t<!has_plus_v<T, U>, void>
+size_check(const T& vec1, const U& vec2, const char* function, const Policy& pol)
+{
+    if (vec1.size() != vec2.size())
+    {
+        std::string val = "(" + std::to_string(vec1.size()) + "!=" + std::to_string(vec2.size()) + ")";
+        boost::math::policies::raise_evaluation_error(function, "Starting vectors (p0, q0) are not the same size but got %1%.\n", val, pol);
+    }
+}
+
+template <typename T, typename U, class Policy>
+typename std::enable_if_t<has_plus_v<T, U>, void>
+size_check(const T& vec1, const U& vec2, const char* function, const Policy& pol){    return;    }
+
 template <typename RandomAccessContainer, typename RealType, class Func>
 void second_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt, 
                           const Func dHdp, const Func dHdq)
@@ -88,7 +107,7 @@ void second_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, 
 
     // Half step in q
     RandomAccessContainer dq = dHdp(p0);
-    mult_prefactor(dq, 0.5 * dt);
+    mult_prefactor(dq, dt / RealType(2));
     add(q0, dq);
 
     // Full step in p
@@ -98,7 +117,7 @@ void second_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, 
 
     // Half step in q
     dq = dHdp(p0);
-    mult_prefactor(dq, 0.5 * dt);
+    mult_prefactor(dq, dt / RealType(2));
     add(q0, dq);
 }
 
@@ -108,9 +127,8 @@ void fourth_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, 
 {
     BOOST_MATH_STD_USING
 
-    // RealType x0 = -(std::pow(2, 1/3) / (2 - std::pow(2, 1/3)));
-    RealType x1 = 1. / (2. - cbrt(2.));
-    RealType x0 = 1. - 2. * x1; 
+    RealType x1 = RealType(1) / (RealType(2) - cbrt(RealType(2)));
+    RealType x0 = RealType(1) - RealType(2) * x1; 
 
     std::array<RealType, 3> weights = { x1, x0, x1 };
 
@@ -135,7 +153,7 @@ void sixth_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, c
     RealType w2 = static_cast<RealType>(0.23557321335935813368479318297853460168646808210340111900349313095621471215223L);
     RealType w3 = static_cast<RealType>(0.78451361047755726381949763386634987577682441745149338456794779895125997479548L);
     // w0 = 1.31518632068391121888424972823886251435195350615940796180785516777853373846773
-    RealType w0 = 1. - 2. * (w1 + w2 + w3);
+    RealType w0 = RealType(1) - RealType(2) * (w1 + w2 + w3);
     std::array<RealType, 7> weights = { w3, w2, w1, w0, w1, w2, w3};
 
     for (std::size_t i=0; i < weights.size(); i++)
@@ -153,7 +171,7 @@ void SRKN_b_order_6(RandomAccessContainer& p0, RandomAccessContainer& q0, const 
     RealType b1 = static_cast<RealType>(0.0829844064174052);
     RealType b2 = static_cast<RealType>(0.396309801498368);
     RealType b3 = static_cast<RealType>(-0.0390563049223486);
-    RealType b4 = 1. - 2. * (b1 + b2 + b3);
+    RealType b4 = 1.0 - 2.0 * (b1 + b2 + b3);
 
     RealType a1 = static_cast<RealType>(0.245298957184271);
     RealType a2 = static_cast<RealType>(0.604872665711080);
@@ -200,7 +218,7 @@ void SRKN_b_order_11(RandomAccessContainer& p0, RandomAccessContainer& q0, const
     RealType a3 = static_cast<RealType>(-0.127049212625417);
     RealType a4 = static_cast<RealType>(-0.246331761062075);
     RealType a5 = static_cast<RealType>(0.357208872795928);
-    RealType a6 = 1. - 2. * (a1 + a2 + a3 + a4 + a5);
+    RealType a6 = 1.0 - 2.0 * (a1 + a2 + a3 + a4 + a5);
 
     std::array<RealType, 11> b_weights = {b1, b2, b3, b4, b5, b6, b6, b5, b4, b3, b2};
     std::array<RealType, 11> a_weights = {a1, a2, a3, a4, a5, a6, a5, a4, a3, a2, a1};
@@ -242,6 +260,9 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
     {
         boost::math::policies::raise_domain_error(function, "Time step must be positive and finite but got: dt = %1%.\n", dt, pol);
     }
+
+    // Check that p0 and q0 have the same size
+    size_check(p0, q0, function, pol);
 
     typedef void (*stepperType)(RandomAccessContainer&, RandomAccessContainer&, RealType, Func, Func);
 
