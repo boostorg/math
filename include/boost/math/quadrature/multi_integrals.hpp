@@ -24,10 +24,10 @@ namespace boost { namespace math { namespace quadrature { namespace detail {
 template <typename F, typename Integrator, typename RealType>
 auto integrate_recursive(const F& f, 
                          const std::vector<RealType>& a, 
-                             const std::vector<RealType>& b, 
-                             std::vector<RealType>& working_coords, 
-                             const size_t& depth,
-                             const Integrator& integrate) -> decltype(f(a))
+                         const std::vector<RealType>& b, 
+                         std::vector<RealType>& working_coords, 
+                         const size_t& depth,
+                         const Integrator& integrate) -> decltype(f(a))
 {
     RealType low = a[depth];
     RealType high = b[depth];
@@ -54,7 +54,7 @@ auto integrate_recursive(const F& f,
 
 template <typename F, typename Integrator, typename RealType, class Policy>
 auto integrateND(const F& f, const std::vector<RealType>& a, const std::vector<RealType>& b, 
-                     const Integrator& integrate, const Policy& pol) -> decltype(f(a))
+                                   const Integrator& integrate, const Policy& pol) -> decltype(f(a))
 {
     static const char* function = "boost::math::quadrature::integrateND(f, a, b, integrate, pol)";
 
@@ -74,7 +74,7 @@ auto integrateND(const F& f, const std::vector<RealType>& a, const std::vector<R
 
 template <typename F, typename Integrator, typename RealType>
 auto integrateND(const F& f, const std::vector<RealType>& a, const std::vector<RealType>& b, 
-                     const Integrator& integrate) -> decltype(f(a))
+                 const Integrator& integrate) -> decltype(f(a))
 {
     return integrateND(f, a, b, integrate, boost::math::policies::policy<>());
 }

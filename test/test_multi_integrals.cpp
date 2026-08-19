@@ -17,6 +17,7 @@
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/quadrature/multi_integrals.hpp>
 #include <boost/math/quadrature/tanh_sinh.hpp>
+#include <boost/math/quadrature/trapezoidal.hpp>
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -71,13 +72,50 @@ void test_euler()
     auto integrate = [](func f, RealType a, RealType b)
     {
         return gauss_kronrod<RealType, 61>::integrate(f, a, b);
-    }; 
+    };
 
     RealType result = integrateND(f, lower_bounds, upper_bounds, integrate);
     RealType tol = boost::math::tools::epsilon<RealType>();
     // Long double precision is not good compared to other precisions
     RealType check_tol = std::is_same<long double, RealType>::value ? 3000 * tol : 4 * tol;
     BOOST_CHECK_CLOSE_FRACTION(result, boost::math::constants::euler<RealType>(), check_tol);
+}
+
+template <typename RealType>
+void test_square()
+{
+    BOOST_MATH_STD_USING 
+
+    auto f = [](const std::vector<RealType>& coords)
+    {
+        return abs(coords[0] + coords[1] + coords[2]);
+    };
+
+    typedef std::function<RealType(RealType)> func;
+    auto integrate = [](func f, RealType a, RealType b)
+    {
+        return gauss_kronrod<RealType, 61>::integrate(f, a, b);
+    }; 
+
+    std::vector<RealType> lower_bounds = {-1.0, -1.0, -1.0};
+    std::vector<RealType> upper_bounds = {1.0, 1.0, 1.0};
+
+    RealType result = integrateND(f, lower_bounds, upper_bounds, integrate);
+    RealType tol = boost::math::tools::epsilon<RealType>();
+    RealType multFactor;
+
+    // Does not seem to perform well on this integral
+    if(std::is_same_v<RealType, float>){
+        multFactor = 200;
+    }
+    else if (std::is_same_v<RealType, double>){
+        multFactor = 4 * pow(10, 6);
+    }
+    else if (std::is_same_v<RealType, long double>){
+        multFactor = 2 * pow(10, 8);
+    }
+    
+    BOOST_CHECK_CLOSE_FRACTION(result, RealType(13) / RealType(2), multFactor * tol);
 }
 
 BOOST_AUTO_TEST_CASE(multi_integrals)
@@ -97,5 +135,12 @@ BOOST_AUTO_TEST_CASE(multi_integrals)
     test_euler<double>();
     #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
         test_euler<long double>();
+    #endif
+
+    // Square integral tests
+    test_square<float>();
+    test_square<double>();
+    #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+        test_square<long double>();
     #endif
 }
