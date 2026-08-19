@@ -6,9 +6,11 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_CARDINAL_QUADRATIC_B_SPLINE_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_CARDINAL_QUADRATIC_B_SPLINE_DETAIL_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <cmath>
 #include <stdexcept>
+#endif
 
 namespace boost{ namespace math{ namespace interpolators{ namespace detail{
 

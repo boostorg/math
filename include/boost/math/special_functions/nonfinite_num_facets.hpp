@@ -18,10 +18,12 @@
   for Floating-Point Infinities and NaNs.
 */
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstring>
 #include <ios>
 #include <limits>
 #include <locale>
+#endif
 #include <boost/math/tools/throw_exception.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/sign.hpp>
@@ -52,7 +54,7 @@ namespace boost {
 
     // class nonfinite_num_put -----------------------------------------------------
 
-    template<
+    BOOST_MATH_EXPORT template<
       class CharType,
       class OutputIterator = std::ostreambuf_iterator<CharType>
             >
@@ -229,7 +231,7 @@ namespace boost {
 
     // class nonfinite_num_get ------------------------------------------------------
 
-    template<
+    BOOST_MATH_EXPORT template<
       class CharType,
       class InputIterator = std::istreambuf_iterator<CharType>
     >

@@ -5,14 +5,16 @@
 
 #ifndef BOOST_MATH_TOOLS_CONDITION_NUMBERS_HPP
 #define BOOST_MATH_TOOLS_CONDITION_NUMBERS_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
+#endif
 #include <boost/math/differentiation/finite_difference.hpp>
 #include <boost/math/tools/config.hpp>
 
 namespace boost { namespace math { namespace tools {
 
-template<class Real, bool kahan=true>
+BOOST_MATH_EXPORT template<class Real, bool kahan=true>
 class summation_condition_number {
 public:
     summation_condition_number(Real const x = 0)
@@ -80,7 +82,7 @@ private:
     Real m_c;
 };
 
-template<class F, class Real>
+BOOST_MATH_EXPORT template<class F, class Real>
 Real evaluation_condition_number(F const & f, Real const & x)
 {
     using std::abs;

@@ -5,10 +5,17 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/optimization/differential_evolution.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 #include "test_functions_for_optimization.hpp"
-#include <boost/math/optimization/differential_evolution.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <random>
+#endif
 
 using boost::math::optimization::differential_evolution;
 using boost::math::optimization::differential_evolution_parameters;

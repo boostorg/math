@@ -7,8 +7,10 @@
 #ifndef BOOST_MATH_HYPERGEOMETRIC_1F1_SCALED_SERIES_HPP
 #define BOOST_MATH_HYPERGEOMETRIC_1F1_SCALED_SERIES_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <cstdint>
+#endif
 
   namespace boost{ namespace math{ namespace detail{
 

@@ -256,8 +256,8 @@ namespace boost { namespace math {
          return 0;
       }
 
-      BOOST_MATH_STATIC const int need_j = 1;
-      BOOST_MATH_STATIC const int need_y = 2;
+      BOOST_MATH_INLINE_CONSTEXPR int need_j = 1;
+      BOOST_MATH_INLINE_CONSTEXPR int need_y = 2;
 
       // Compute J(v, x) and Y(v, x) simultaneously by Steed's method, see
       // Barnett et al, Computer Physics Communications, vol 8, 377 (1974)

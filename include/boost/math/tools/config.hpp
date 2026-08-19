@@ -11,6 +11,36 @@
 #pragma once
 #endif
 
+// C++20 named module support.
+// BOOST_MATH_BUILD_MODULE is defined when building or consuming the boost.math
+// module (module/math.cppm and the module test harness). BOOST_MATH_EXPORT marks
+// every public entity and expands to nothing in ordinary header builds.
+// BOOST_MATH_TEST_EXPORT additionally exports detail entities exercised by the
+// module test suite, and only when the module is built with
+// BOOST_MATH_EXPORT_TESTING. BOOST_MATH_INTERFACE_UNIT is defined only by
+// module/math.cppm itself and guards entities that a module consumer must
+// receive from the import rather than redeclare.
+#ifdef BOOST_MATH_BUILD_MODULE
+
+#if !defined(__cpp_inline_variables) || (__cpp_inline_variables < 201606L)
+#  error "Building the boost.math module requires inline variable support (C++17 or later)"
+#endif
+
+#define BOOST_MATH_EXPORT export
+
+#ifdef BOOST_MATH_EXPORT_TESTING
+#  define BOOST_MATH_TEST_EXPORT export
+#else
+#  define BOOST_MATH_TEST_EXPORT
+#endif
+
+#else
+
+#define BOOST_MATH_EXPORT
+#define BOOST_MATH_TEST_EXPORT
+
+#endif
+
 #if !(defined(__CUDACC_RTC__) && defined(BOOST_MATH_ENABLE_NVRTC))
 
 #include <boost/math/tools/is_standalone.hpp>
@@ -84,7 +114,7 @@
 
 #else // Things from boost/config that are required, and easy to replicate
 
-#if __has_include(<version>)
+#if !defined(BOOST_MATH_BUILD_MODULE) && __has_include(<version>)
 #include <version>
 #endif
 
@@ -151,8 +181,13 @@
    //
    // Make sure we have some std lib headers included so we can detect __GXX_RTTI:
    //
-#  include <algorithm>  // for min and max
-#  include <limits>
+   // A module build receives these through import std; the module unit stages what
+   // its global module fragment needs. Textual inclusion after an import trips a
+   // clang concept-merge bug, so skip it here.
+#  ifndef BOOST_MATH_BUILD_MODULE
+#     include <algorithm>  // for min and max
+#     include <limits>
+#  endif
 #  ifndef __GXX_RTTI
 #     ifndef BOOST_MATH_NO_TYPEID
 #        define BOOST_MATH_NO_TYPEID
@@ -204,7 +239,7 @@
 
 // C++23
 #if __cplusplus > 202002L || (defined(_MSVC_LANG) &&_MSVC_LANG > 202002L)
-#  if defined(__GNUC__) && __GNUC__ >= 13
+#  if !defined(BOOST_MATH_BUILD_MODULE) && defined(__GNUC__) && __GNUC__ >= 13
      // libstdc++3 only defines to/from_chars for std::float128_t when one of these defines are set
      // otherwise we're right out of luck...
 #    if defined(_GLIBCXX_LDOUBLE_IS_IEEE_BINARY128) || defined(_GLIBCXX_HAVE_FLOAT128_MATH)
@@ -216,11 +251,13 @@
 #  endif
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>  // for min and max
 #include <limits>
 #include <cmath>
 #include <climits>
 #include <cfloat>
+#endif
 
 #include <boost/math/tools/user.hpp>
 
@@ -438,7 +475,9 @@ struct non_type {};
 //
 // noexcept support:
 //
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
+#endif
 #define BOOST_MATH_NOEXCEPT(T) noexcept(std::is_floating_point<T>::value)
 #define BOOST_MATH_IS_FLOAT(T) (std::is_floating_point<T>::value)
 
@@ -538,6 +577,7 @@ struct non_type {};
 
 #define BOOST_MATH_STD_USING BOOST_MATH_STD_USING_CORE
 
+#if !defined(BOOST_MATH_BUILD_MODULE) || defined(BOOST_MATH_INTERFACE_UNIT)
 namespace boost{ namespace math{
 namespace tools
 {
@@ -572,6 +612,7 @@ struct is_integer_for_rounding
 }
 
 }} // namespace boost namespace math
+#endif
 
 #ifdef __GLIBC_PREREQ
 #  if __GLIBC_PREREQ(2,14)
@@ -587,7 +628,9 @@ struct is_integer_for_rounding
 // Much more information in this message thread: https://groups.google.com/forum/#!topic/boost-list/ZT99wtIFlb4
 //
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cfenv>
+#endif
 
 #  ifdef FE_ALL_EXCEPT
 
@@ -627,7 +670,7 @@ namespace boost{ namespace math{
 #  define BOOST_MATH_INSTRUMENT_FPU
 #endif
 
-#ifdef BOOST_MATH_INSTRUMENT
+#if defined(BOOST_MATH_INSTRUMENT) && !defined(BOOST_MATH_BUILD_MODULE)
 
 #  include <iostream>
 #  include <iomanip>

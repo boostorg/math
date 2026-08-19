@@ -19,10 +19,12 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <string>
 #include <stdexcept>
 #include <cmath>
+#endif
 
 // These are the the "Hyperbolic Sinus Cardinal" functions.
 
@@ -78,21 +80,21 @@ namespace boost
 
        } // namespace detail
 
-       template <class T, class Policy>
+       BOOST_MATH_EXPORT template <class T, class Policy>
        inline typename tools::promote_args<T>::type sinhc_pi(T x, const Policy& pol)
        {
           typedef typename tools::promote_args<T>::type result_type;
           return policies::checked_narrowing_cast<T, Policy>(detail::sinhc_pi_imp(static_cast<result_type>(x), pol), "sinhc(%1%)");
        }
 
-       template <class T>
+       BOOST_MATH_EXPORT template <class T>
        inline typename tools::promote_args<T>::type sinhc_pi(T x)
        {
           typedef typename tools::promote_args<T>::type result_type;
           return sinhc_pi(static_cast<result_type>(x), policies::policy<>());
        }
 
-        template<typename T, template<typename> class U>
+        BOOST_MATH_EXPORT template<typename T, template<typename> class U>
         inline U<T>    sinhc_pi(const U<T> x)
         {
             using std::abs;

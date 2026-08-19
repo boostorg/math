@@ -7,7 +7,9 @@
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
 #include <boost/math/optimization/detail/gradient_opt_base.hpp>
 #include <boost/math/optimization/detail/rdiff_optimization_policies.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
+#endif
 
 namespace boost {
 namespace math {
@@ -18,7 +20,7 @@ namespace rdiff = boost::math::differentiation::reverse_mode;
 /**
  * @brief The nesterov_update_policy class
  */
-template<typename RealType>
+BOOST_MATH_EXPORT template<typename RealType>
 struct nesterov_update_policy
 {
   RealType lr_, mu_;
@@ -128,7 +130,7 @@ public:
     }
   }
 };
-template<class Objective, typename ArgumentContainer, typename RealType>
+BOOST_MATH_EXPORT template<class Objective, typename ArgumentContainer, typename RealType>
 auto
 make_nag(Objective&& obj,
          ArgumentContainer& x,
@@ -149,7 +151,7 @@ make_nag(Objective&& obj,
     reverse_mode_gradient_evaluation_policy<RealType>{},
     nesterov_update_policy<RealType>(lr, mu));
 }
-template<class Objective,
+BOOST_MATH_EXPORT template<class Objective,
          typename ArgumentContainer,
          typename RealType,
          class InitializationPolicy>
@@ -174,7 +176,7 @@ make_nag(Objective&& obj,
     reverse_mode_gradient_evaluation_policy<RealType>{},
     nesterov_update_policy<RealType>(lr, mu));
 }
-template<typename ArgumentContainer,
+BOOST_MATH_EXPORT template<typename ArgumentContainer,
          typename RealType,
          class Objective,
          class InitializationPolicy,

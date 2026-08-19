@@ -532,7 +532,7 @@ BOOST_MATH_GPU_ENABLED inline T cyl_neumann_zero_imp(T v, int m, const Policy& p
 
 } // namespace detail
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -548,13 +548,13 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T1, T2, Policy>::re
    return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_j_imp<value_type>(v, static_cast<value_type>(x), tag_type(), forwarding_policy()), "boost::math::cyl_bessel_j<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_j(T1 v, T2 x)
 {
    return cyl_bessel_j(v, x, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel(unsigned v, T x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -569,13 +569,13 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, Policy>::resu
    return policies::checked_narrowing_cast<result_type, Policy>(detail::sph_bessel_j_imp<value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::sph_bessel<%1%>(%1%,%1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_bessel(unsigned v, T x)
 {
    return sph_bessel(v, x, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -590,13 +590,13 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T1, T2, Policy>::re
    return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_i_imp<value_type>(static_cast<value_type>(v), static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_bessel_i<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_i(T1 v, T2 x)
 {
    return cyl_bessel_i(v, x, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -612,13 +612,13 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T1, T2, Policy>::re
    return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_k_imp<value_type>(v, static_cast<value_type>(x), tag_type(), forwarding_policy()), "boost::math::cyl_bessel_k<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_k(T1 v, T2 x)
 {
    return cyl_bessel_k(v, x, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -634,13 +634,13 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T1, T2, Policy>::re
    return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_neumann_imp<value_type>(v, static_cast<value_type>(x), tag_type(), forwarding_policy()), "boost::math::cyl_neumann<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_neumann(T1 v, T2 x)
 {
    return cyl_neumann(v, x, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann(unsigned v, T x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -655,13 +655,13 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, Policy>::resu
    return policies::checked_narrowing_cast<result_type, Policy>(detail::sph_neumann_imp<value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::sph_neumann<%1%>(%1%,%1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann(unsigned v, T x)
 {
    return sph_neumann(v, x, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_zero(T v, int m, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -682,7 +682,7 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, Policy>::resu
    return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_j_zero_imp<value_type>(v, m, forwarding_policy()), "boost::math::cyl_bessel_j_zero<%1%>(%1%,%1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_bessel_j_zero(T v, int m)
 {
    static_assert(    false == boost::math::numeric_limits<T>::is_specialized
@@ -693,7 +693,7 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, policies::pol
    return cyl_bessel_j_zero<T, policies::policy<> >(v, m, policies::policy<>());
 }
 
-template <class T, class OutputIterator, class Policy>
+BOOST_MATH_EXPORT template <class T, class OutputIterator, class Policy>
 BOOST_MATH_GPU_ENABLED inline OutputIterator cyl_bessel_j_zero(T v,
                               int start_index,
                               unsigned number_of_zeros,
@@ -713,7 +713,7 @@ BOOST_MATH_GPU_ENABLED inline OutputIterator cyl_bessel_j_zero(T v,
    return out_it;
 }
 
-template <class T, class OutputIterator>
+BOOST_MATH_EXPORT template <class T, class OutputIterator>
 BOOST_MATH_GPU_ENABLED inline OutputIterator cyl_bessel_j_zero(T v,
                               int start_index,
                               unsigned number_of_zeros,
@@ -722,7 +722,7 @@ BOOST_MATH_GPU_ENABLED inline OutputIterator cyl_bessel_j_zero(T v,
    return cyl_bessel_j_zero(v, start_index, number_of_zeros, out_it, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_neumann_zero(T v, int m, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -743,7 +743,7 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, Policy>::resu
    return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_neumann_zero_imp<value_type>(v, m, forwarding_policy()), "boost::math::cyl_neumann_zero<%1%>(%1%,%1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_neumann_zero(T v, int m)
 {
    static_assert(    false == boost::math::numeric_limits<T>::is_specialized
@@ -754,7 +754,7 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, policies::pol
    return cyl_neumann_zero<T, policies::policy<> >(v, m, policies::policy<>());
 }
 
-template <class T, class OutputIterator, class Policy>
+BOOST_MATH_EXPORT template <class T, class OutputIterator, class Policy>
 BOOST_MATH_GPU_ENABLED inline OutputIterator cyl_neumann_zero(T v,
                              int start_index,
                              unsigned number_of_zeros,
@@ -774,7 +774,7 @@ BOOST_MATH_GPU_ENABLED inline OutputIterator cyl_neumann_zero(T v,
    return out_it;
 }
 
-template <class T, class OutputIterator>
+BOOST_MATH_EXPORT template <class T, class OutputIterator>
 BOOST_MATH_GPU_ENABLED inline OutputIterator cyl_neumann_zero(T v,
                              int start_index,
                              unsigned number_of_zeros,

@@ -9,15 +9,19 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_MAKIMA_HPP
 #define BOOST_MATH_INTERPOLATORS_MAKIMA_HPP
+
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <memory>
 #include <cmath>
+#endif
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
 
 namespace boost {
 namespace math {
 namespace interpolators {
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class makima {
 public:
     using Real = typename RandomAccessContainer::value_type;

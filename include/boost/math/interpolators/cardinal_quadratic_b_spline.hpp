@@ -6,13 +6,17 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_CARDINAL_QUADRATIC_B_SPLINE_HPP
 #define BOOST_MATH_INTERPOLATORS_CARDINAL_QUADRATIC_B_SPLINE_HPP
+
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <memory>
+#endif
 #include <boost/math/interpolators/detail/cardinal_quadratic_b_spline_detail.hpp>
 
 
 namespace boost{ namespace math{ namespace interpolators {
 
-template <class Real>
+BOOST_MATH_EXPORT template <class Real>
 class cardinal_quadratic_b_spline
 {
 public:

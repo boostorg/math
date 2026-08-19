@@ -11,9 +11,11 @@
 #ifndef _BOOST_POLYGAMMA_DETAIL_2013_07_30_HPP_
   #define _BOOST_POLYGAMMA_DETAIL_2013_07_30_HPP_
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
 #include <string>
+#endif
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/special_functions/bernoulli.hpp>
 #include <boost/math/special_functions/trunc.hpp>
@@ -26,7 +28,9 @@
 #include <boost/math/tools/config.hpp>
 
 #ifdef BOOST_MATH_HAS_THREADS
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <mutex>
+#endif
 #endif
 
 #ifdef _MSC_VER

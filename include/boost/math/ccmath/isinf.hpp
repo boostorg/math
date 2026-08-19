@@ -15,7 +15,7 @@
 
 namespace boost::math::ccmath {
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 constexpr bool isinf BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))

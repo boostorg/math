@@ -6,15 +6,17 @@
 #ifndef BOOST_MATH_STATISTICS_LJUNG_BOX_HPP
 #define BOOST_MATH_STATISTICS_LJUNG_BOX_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <iterator>
 #include <utility>
+#endif
 #include <boost/math/distributions/chi_squared.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
 
 namespace boost::math::statistics {
 
-template<class RandomAccessIterator>
+BOOST_MATH_EXPORT template<class RandomAccessIterator>
 auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lags = -1, int64_t fit_dof = 0) {
     using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
     int64_t n = std::distance(begin, end);
@@ -61,7 +63,7 @@ auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lag
 }
 
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 auto ljung_box(RandomAccessContainer const & v, int64_t lags = -1, int64_t fit_dof = 0) {
     return ljung_box(v.begin(), v.end(), lags, fit_dof);
 }

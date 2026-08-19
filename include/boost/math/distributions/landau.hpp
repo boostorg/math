@@ -28,12 +28,14 @@
 #ifndef BOOST_MATH_HAS_NVRTC
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/tools/big_constant.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
 #include <cmath>
 #endif
+#endif
 
 namespace boost { namespace math {
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 class landau_distribution;
 
 namespace detail {
@@ -4442,7 +4444,7 @@ BOOST_MATH_GPU_ENABLED inline RealType landau_entropy_imp(const landau_distribut
 
 } // detail
 
-template <class RealType = double, class Policy = policies::policy<> >
+BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
 class landau_distribution
 {
     public:
@@ -4481,16 +4483,16 @@ class landau_distribution
     RealType location_bias;  // = -2 / pi * log(c)
 };
 
-typedef landau_distribution<double> landau;
+BOOST_MATH_EXPORT typedef landau_distribution<double> landau;
 
 #ifdef __cpp_deduction_guides
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 landau_distribution(RealType) -> landau_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 landau_distribution(RealType, RealType) -> landau_distribution<typename boost::math::tools::promote_args<RealType>::type>;
 #endif
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const landau_distribution<RealType, Policy>&)
 { // Range of permissible values for random variable x.
     BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
@@ -4504,7 +4506,7 @@ BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(
     }
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const landau_distribution<RealType, Policy>&)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -4519,37 +4521,37 @@ BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> suppor
     }
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType pdf(const landau_distribution<RealType, Policy>& dist, const RealType& x)
 {
     return detail::landau_pdf_imp(dist, x);
 } // pdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const landau_distribution<RealType, Policy>& dist, const RealType& x)
 {
     return detail::landau_cdf_imp(dist, x, false);
 } // cdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const landau_distribution<RealType, Policy>& dist, const RealType& p)
 {
     return detail::landau_quantile_imp(dist, p, false);
 } // quantile
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<landau_distribution<RealType, Policy>, RealType>& c)
 {
     return detail::landau_cdf_imp(c.dist, c.param, true);
 } //  cdf complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<landau_distribution<RealType, Policy>, RealType>& c)
 {
     return detail::landau_quantile_imp(c.dist, c.param, true);
 } // quantile complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mean(const landau_distribution<RealType, Policy>&)
 {  // There is no mean:
     typedef typename Policy::assert_undefined_type assert_type;
@@ -4562,7 +4564,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mean(const landau_distribution<RealType, 
         boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType variance(const landau_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no variance:
@@ -4576,19 +4578,19 @@ BOOST_MATH_GPU_ENABLED inline RealType variance(const landau_distribution<RealTy
         boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mode(const landau_distribution<RealType, Policy>& dist)
 {
     return detail::landau_mode_imp(dist);
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType median(const landau_distribution<RealType, Policy>& dist)
 {
     return detail::landau_median_imp(dist);
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType skewness(const landau_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no skewness:
@@ -4602,7 +4604,7 @@ BOOST_MATH_GPU_ENABLED inline RealType skewness(const landau_distribution<RealTy
         boost::math::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const landau_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no kurtosis:
@@ -4616,7 +4618,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const landau_distribution<RealTy
         boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const landau_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no kurtosis excess:
@@ -4630,7 +4632,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const landau_distribution
         boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType entropy(const landau_distribution<RealType, Policy>& dist)
 {
     return detail::landau_entropy_imp(dist);

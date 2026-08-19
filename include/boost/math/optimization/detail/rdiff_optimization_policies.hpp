@@ -6,8 +6,10 @@
 #define BOOST_MATH_OPTIMIZATION_DETAIL_RDIFF_OPTIMIZATION_POLICIES_HPP
 
 #include <boost/math/differentiation/autodiff_reverse.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <random>
 #include <type_traits>
+#endif
 
 namespace boost {
 namespace math {

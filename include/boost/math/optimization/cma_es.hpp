@@ -6,6 +6,7 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_CMA_ES_HPP
 #define BOOST_MATH_OPTIMIZATION_CMA_ES_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <atomic>
 #include <cmath>
 #include <iostream>
@@ -15,6 +16,7 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
+#endif
 #include <boost/math/optimization/detail/common.hpp>
 #include <boost/math/tools/assert.hpp>
 #if __has_include(<Eigen/Dense>)
@@ -38,7 +40,7 @@
 
 namespace boost::math::optimization {
 
-template <typename ArgumentContainer> struct cma_es_parameters {
+BOOST_MATH_EXPORT template <typename ArgumentContainer> struct cma_es_parameters {
   using Real = typename ArgumentContainer::value_type;
   using DimensionlessReal = decltype(Real()/Real());
   ArgumentContainer lower_bounds;
@@ -53,7 +55,7 @@ template <typename ArgumentContainer> struct cma_es_parameters {
   DimensionlessReal learning_rate = 1;
 };
 
-template <typename ArgumentContainer>
+BOOST_MATH_EXPORT template <typename ArgumentContainer>
 void validate_cma_es_parameters(cma_es_parameters<ArgumentContainer> &params) {
   using Real = typename ArgumentContainer::value_type;
   using DimensionlessReal = decltype(Real()/Real());
@@ -84,7 +86,7 @@ void validate_cma_es_parameters(cma_es_parameters<ArgumentContainer> &params) {
   }
 }
 
-template <typename ArgumentContainer, class Func, class URBG>
+BOOST_MATH_EXPORT template <typename ArgumentContainer, class Func, class URBG>
 ArgumentContainer cma_es(
     const Func cost_function,
     cma_es_parameters<ArgumentContainer> &params,

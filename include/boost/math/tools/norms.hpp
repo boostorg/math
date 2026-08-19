@@ -5,10 +5,12 @@
 
 #ifndef BOOST_MATH_TOOLS_NORMS_HPP
 #define BOOST_MATH_TOOLS_NORMS_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <iterator>
 #include <complex>
 #include <cmath>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/complex.hpp>
 
@@ -24,7 +26,7 @@
 namespace boost::math::tools {
 
 // Mallat, "A Wavelet Tour of Signal Processing", equation 2.60:
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 auto total_variation(ForwardIterator first, ForwardIterator last)
 {
     using T = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -74,14 +76,14 @@ auto total_variation(ForwardIterator first, ForwardIterator last)
     }
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 inline auto total_variation(Container const & v)
 {
     return total_variation(v.cbegin(), v.cend());
 }
 
 
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 auto sup_norm(ForwardIterator first, ForwardIterator last)
 {
     BOOST_MATH_ASSERT_MSG(first != last, "At least one value is required to compute the sup norm.");
@@ -110,13 +112,13 @@ auto sup_norm(ForwardIterator first, ForwardIterator last)
     }
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 inline auto sup_norm(Container const & v)
 {
     return sup_norm(v.cbegin(), v.cend());
 }
 
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 auto l1_norm(ForwardIterator first, ForwardIterator last)
 {
     using T = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -152,14 +154,14 @@ auto l1_norm(ForwardIterator first, ForwardIterator last)
 
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 inline auto l1_norm(Container const & v)
 {
     return l1_norm(v.cbegin(), v.cend());
 }
 
 
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 auto l2_norm(ForwardIterator first, ForwardIterator last)
 {
     using T = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -228,13 +230,13 @@ auto l2_norm(ForwardIterator first, ForwardIterator last)
     }
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 inline auto l2_norm(Container const & v)
 {
     return l2_norm(v.cbegin(), v.cend());
 }
 
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 size_t l0_pseudo_norm(ForwardIterator first, ForwardIterator last)
 {
     using RealOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -249,13 +251,13 @@ size_t l0_pseudo_norm(ForwardIterator first, ForwardIterator last)
     return count;
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 inline size_t l0_pseudo_norm(Container const & v)
 {
     return l0_pseudo_norm(v.cbegin(), v.cend());
 }
 
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 size_t hamming_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator first2)
 {
     size_t count = 0;
@@ -271,13 +273,13 @@ size_t hamming_distance(ForwardIterator first1, ForwardIterator last1, ForwardIt
     return count;
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 inline size_t hamming_distance(Container const & v, Container const & w)
 {
     return hamming_distance(v.cbegin(), v.cend(), w.cbegin());
 }
 
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 auto lp_norm(ForwardIterator first, ForwardIterator last, unsigned p)
 {
     using std::abs;
@@ -356,14 +358,14 @@ auto lp_norm(ForwardIterator first, ForwardIterator last, unsigned p)
     }
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 inline auto lp_norm(Container const & v, unsigned p)
 {
     return lp_norm(v.cbegin(), v.cend(), p);
 }
 
 
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 auto lp_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator first2, unsigned p)
 {
     using std::pow;
@@ -412,14 +414,14 @@ auto lp_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator 
     }
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 inline auto lp_distance(Container const & v, Container const & w, unsigned p)
 {
     return lp_distance(v.cbegin(), v.cend(), w.cbegin(), p);
 }
 
 
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 auto l1_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator first2)
 {
     using std::abs;
@@ -482,7 +484,7 @@ auto l1_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator 
 
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 auto l1_distance(Container const & v, Container const & w)
 {
     using std::size;
@@ -491,7 +493,7 @@ auto l1_distance(Container const & v, Container const & w)
     return l1_distance(v.cbegin(), v.cend(), w.begin());
 }
 
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 auto l2_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator first2)
 {
     using std::abs;
@@ -555,7 +557,7 @@ auto l2_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator 
     }
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 auto l2_distance(Container const & v, Container const & w)
 {
     using std::size;
@@ -564,7 +566,7 @@ auto l2_distance(Container const & v, Container const & w)
     return l2_distance(v.cbegin(), v.cend(), w.begin());
 }
 
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 auto sup_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator first2)
 {
     using std::abs;
@@ -624,7 +626,7 @@ auto sup_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator
     }
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 auto sup_distance(Container const & v, Container const & w)
 {
     using std::size;

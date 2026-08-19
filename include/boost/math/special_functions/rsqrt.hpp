@@ -5,10 +5,13 @@
 
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_RSQRT_HPP
 #define BOOST_MATH_SPECIAL_FUNCTIONS_RSQRT_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <type_traits>
 #include <limits>
+#endif
 
+#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE
 #  include <boost/config.hpp>
@@ -19,7 +22,7 @@
 
 namespace boost::math {
 
-template<typename Real>
+BOOST_MATH_EXPORT template<typename Real>
 inline Real rsqrt(Real const & x)
 {
     using std::sqrt;

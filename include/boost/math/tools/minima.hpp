@@ -21,7 +21,7 @@
 
 namespace boost{ namespace math{ namespace tools{
 
-template <class F, class T>
+BOOST_MATH_EXPORT template <class F, class T>
 BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> brent_find_minima(F f, T min, T max, int bits, boost::math::uintmax_t& max_iter)
    noexcept(BOOST_MATH_IS_FLOAT(T) 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
@@ -143,7 +143,7 @@ BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> brent_find_minima(F f, T min, T m
    return boost::math::make_pair(x, fx);
 }
 
-template <class F, class T>
+BOOST_MATH_EXPORT template <class F, class T>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<T, T> brent_find_minima(F f, T min, T max, int digits)
    noexcept(BOOST_MATH_IS_FLOAT(T)
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT

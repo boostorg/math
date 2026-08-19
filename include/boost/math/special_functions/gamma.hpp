@@ -2320,7 +2320,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    lgamma(T z, int* sign, const Policy&)
 {
@@ -2338,28 +2338,28 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::lgamma_imp(static_cast<value_type>(z), forwarding_policy(), evaluation_type(), sign), "boost::math::lgamma<%1%>(%1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    lgamma(T z, int* sign)
 {
    return lgamma(z, sign, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    lgamma(T x, const Policy& pol)
 {
    return ::boost::math::lgamma(x, nullptr, pol);
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    lgamma(T x)
 {
    return ::boost::math::lgamma(x, nullptr, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    tgamma1pm1(T z, const Policy& /* pol */)
 {
@@ -2377,7 +2377,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    return policies::checked_narrowing_cast<typename boost::math::remove_cv<result_type>::type, forwarding_policy>(detail::tgammap1m1_imp(static_cast<value_type>(z), forwarding_policy(), evaluation_type()), "boost::math::tgamma1pm1<%!%>(%1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    tgamma1pm1(T z)
 {
@@ -2387,7 +2387,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
 //
 // Full upper incomplete gamma:
 //
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma(T1 a, T2 z)
 {
@@ -2399,14 +2399,14 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    using result_type = tools::promote_args_t<T1, T2>;
    return static_cast<result_type>(detail::tgamma(a, z, maybe_policy()));
 }
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma(T1 a, T2 z, const Policy& pol)
 {
    using result_type = tools::promote_args_t<T1, T2>;
    return static_cast<result_type>(detail::tgamma(a, z, pol, boost::math::false_type()));
 }
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    tgamma(T z)
 {
@@ -2415,7 +2415,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
 //
 // Full lower incomplete gamma:
 //
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma_lower(T1 a, T2 z, const Policy&)
 {
@@ -2435,7 +2435,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
       static_cast<value_type>(z), false, false,
       forwarding_policy(), static_cast<value_type*>(nullptr)), "tgamma_lower<%1%>(%1%, %1%)");
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma_lower(T1 a, T2 z)
 {
@@ -2444,7 +2444,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
 //
 // Regularised upper incomplete gamma:
 //
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    gamma_q(T1 a, T2 z, const Policy& /* pol */)
 {
@@ -2464,14 +2464,14 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
       static_cast<value_type>(z), true, true,
       forwarding_policy(), static_cast<value_type*>(nullptr)), "gamma_q<%1%>(%1%, %1%)");
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    gamma_q(T1 a, T2 z)
 {
    return gamma_q(a, z, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_q(T1 a, T2 z, const Policy& /* pol */)
 {
    typedef tools::promote_args_t<T1, T2> result_type;
@@ -2488,13 +2488,13 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_q(T1 a, T2 z,
       static_cast<value_type>(z), forwarding_policy()), "lgamma_q<%1%>(%1%, %1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_q(T1 a, T2 z)
 {
    return lgamma_q(a, z, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_p(T1 a, T2 z, const Policy& /* pol */)
 {
    typedef tools::promote_args_t<T1, T2> result_type;
@@ -2511,7 +2511,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_p(T1 a, T2 z,
       static_cast<value_type>(z), forwarding_policy()), "lgamma_p<%1%>(%1%, %1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_p(T1 a, T2 z)
 {
    return lgamma_p(a, z, policies::policy<>());
@@ -2519,7 +2519,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_p(T1 a, T2 z)
 //
 // Regularised lower incomplete gamma:
 //
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    gamma_p(T1 a, T2 z, const Policy&)
 {
@@ -2539,7 +2539,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
       static_cast<value_type>(z), true, false,
       forwarding_policy(), static_cast<value_type*>(nullptr)), "gamma_p<%1%>(%1%, %1%)");
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    gamma_p(T1 a, T2 z)
 {
@@ -2547,7 +2547,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
 }
 
 // ratios of gamma functions:
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma_delta_ratio(T1 z, T2 delta, const Policy& /* pol */)
 {
@@ -2563,13 +2563,13 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(z), static_cast<value_type>(delta), forwarding_policy()), "boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)");
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma_delta_ratio(T1 z, T2 delta)
 {
    return tgamma_delta_ratio(z, delta, policies::policy<>());
 }
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma_ratio(T1 a, T2 b, const Policy&)
 {
@@ -2584,14 +2584,14 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::tgamma_ratio_imp(static_cast<value_type>(a), static_cast<value_type>(b), forwarding_policy()), "boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)");
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma_ratio(T1 a, T2 b)
 {
    return tgamma_ratio(a, b, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    gamma_p_derivative(T1 a, T2 x, const Policy&)
 {
@@ -2607,7 +2607,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::gamma_p_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(x), forwarding_policy()), "boost::math::gamma_p_derivative<%1%>(%1%, %1%)");
 }
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    gamma_p_derivative(T1 a, T2 x)
 {

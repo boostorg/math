@@ -13,11 +13,15 @@
 #include <boost/math/tools/throw_exception.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <type_traits>
+#endif
 
 #if defined(BOOST_MATH_HAS_THREADS) && !defined(BOOST_NO_CXX11_HDR_MUTEX) && !defined(BOOST_MATH_NO_ATOMIC_INT)
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <mutex>
+#endif
 #else
 #  define BOOST_MATH_BERNOULLI_NOTHREADS
 #endif

@@ -8,7 +8,12 @@
 #include "sycl/sycl.hpp"
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/special_functions/digamma.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 
 template <class T>

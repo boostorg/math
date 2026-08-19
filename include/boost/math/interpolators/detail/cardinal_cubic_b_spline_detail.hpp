@@ -7,10 +7,12 @@
 #ifndef BOOST_MATH_INTERPOLATORS_CARDINAL_CUBIC_B_SPLINE_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_CARDINAL_CUBIC_B_SPLINE_DETAIL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <cmath>
 #include <vector>
 #include <memory>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/trunc.hpp>

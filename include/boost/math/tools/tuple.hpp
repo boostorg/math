@@ -18,16 +18,16 @@
 namespace boost { 
 namespace math {
 
-using cuda::std::pair;
-using cuda::std::tuple;
+BOOST_MATH_EXPORT using cuda::std::pair;
+BOOST_MATH_EXPORT using cuda::std::tuple;
 
-using cuda::std::make_pair;
+BOOST_MATH_EXPORT using cuda::std::make_pair;
 
-using cuda::std::tie;
-using cuda::std::get;
+BOOST_MATH_EXPORT using cuda::std::tie;
+BOOST_MATH_EXPORT using cuda::std::get;
 
-using cuda::std::tuple_size;
-using cuda::std::tuple_element;
+BOOST_MATH_EXPORT using cuda::std::tuple_size;
+BOOST_MATH_EXPORT using cuda::std::tuple_element;
 
 namespace detail {
 
@@ -59,26 +59,28 @@ BOOST_MATH_GPU_ENABLED auto make_tuple(T&& t, Ts&&... ts)
 
 #else
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <tuple>
+#endif
 
 namespace boost { 
 namespace math {
 
-using ::std::tuple;
-using ::std::pair;
+BOOST_MATH_EXPORT using ::std::tuple;
+BOOST_MATH_EXPORT using ::std::pair;
 
 // [6.1.3.2] Tuple creation functions
-using ::std::ignore;
-using ::std::make_tuple;
-using ::std::tie;
-using ::std::get;
+BOOST_MATH_EXPORT using ::std::ignore;
+BOOST_MATH_EXPORT using ::std::make_tuple;
+BOOST_MATH_EXPORT using ::std::tie;
+BOOST_MATH_EXPORT using ::std::get;
 
 // [6.1.3.3] Tuple helper classes
-using ::std::tuple_size;
-using ::std::tuple_element;
+BOOST_MATH_EXPORT using ::std::tuple_size;
+BOOST_MATH_EXPORT using ::std::tuple_element;
 
 // Pair helpers
-using ::std::make_pair;
+BOOST_MATH_EXPORT using ::std::make_pair;
 
 } // namespace math
 } // namespace boost

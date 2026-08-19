@@ -8,11 +8,13 @@
 #ifndef BOOST_MATH_INTERPOLATORS_BARYCENTRIC_RATIONAL_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_BARYCENTRIC_RATIONAL_DETAIL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <utility> // for std::move
 #include <algorithm> // for std::is_sorted
 #include <string>
 #include <cstdint>
+#endif
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/assert.hpp>
 

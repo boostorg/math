@@ -7,6 +7,7 @@
 #ifndef BOOST_MATH_STATISTICS_BIVARIATE_STATISTICS_HPP
 #define BOOST_MATH_STATISTICS_BIVARIATE_STATISTICS_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iterator>
 #include <tuple>
 #include <type_traits>
@@ -15,13 +16,16 @@
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/config.hpp>
 
 #ifdef BOOST_MATH_EXEC_COMPATIBLE
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <execution>
 #include <future>
 #include <thread>
+#endif
 #endif
 
 namespace boost{ namespace math{ namespace statistics { namespace detail {
@@ -327,7 +331,7 @@ ReturnType correlation_coefficient_parallel_impl(ForwardIterator u_begin, Forwar
 
 #ifdef BOOST_MATH_EXEC_COMPATIBLE
 
-template<typename ExecutionPolicy, typename Container, typename Real = typename Container::value_type>
+BOOST_MATH_EXPORT template<typename ExecutionPolicy, typename Container, typename Real = typename Container::value_type>
 inline auto means_and_covariance(ExecutionPolicy&& exec, Container const & u, Container const & v)
 {
     if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
@@ -362,25 +366,25 @@ inline auto means_and_covariance(ExecutionPolicy&& exec, Container const & u, Co
     }
 }
 
-template<typename Container>
+BOOST_MATH_EXPORT template<typename Container>
 inline auto means_and_covariance(Container const & u, Container const & v)
 {
     return means_and_covariance(std::execution::seq, u, v);
 }
 
-template<typename ExecutionPolicy, typename Container>
+BOOST_MATH_EXPORT template<typename ExecutionPolicy, typename Container>
 inline auto covariance(ExecutionPolicy&& exec, Container const & u, Container const & v)
 {
     return std::get<2>(means_and_covariance(exec, u, v));
 }
 
-template<typename Container>
+BOOST_MATH_EXPORT template<typename Container>
 inline auto covariance(Container const & u, Container const & v)
 {
     return covariance(std::execution::seq, u, v);
 }
 
-template<typename ExecutionPolicy, typename Container, typename Real = typename Container::value_type>
+BOOST_MATH_EXPORT template<typename ExecutionPolicy, typename Container, typename Real = typename Container::value_type>
 inline auto correlation_coefficient(ExecutionPolicy&& exec, Container const & u, Container const & v)
 {
     if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
@@ -411,7 +415,7 @@ inline auto correlation_coefficient(ExecutionPolicy&& exec, Container const & u,
     }
 }
 
-template<typename Container, typename Real = typename Container::value_type>
+BOOST_MATH_EXPORT template<typename Container, typename Real = typename Container::value_type>
 inline auto correlation_coefficient(Container const & u, Container const & v)
 {
     return correlation_coefficient(std::execution::seq, u, v);
@@ -419,7 +423,7 @@ inline auto correlation_coefficient(Container const & u, Container const & v)
 
 #else // C++11 and single threaded bindings
 
-template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
+BOOST_MATH_EXPORT template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline auto means_and_covariance(Container const & u, Container const & v) -> std::tuple<double, double, double>
 {
     using ReturnType = std::tuple<double, double, double, double>;
@@ -427,7 +431,7 @@ inline auto means_and_covariance(Container const & u, Container const & v) -> st
     return std::make_tuple(std::get<0>(temp), std::get<1>(temp), std::get<2>(temp));
 }
 
-template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
+BOOST_MATH_EXPORT template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline auto means_and_covariance(Container const & u, Container const & v) -> std::tuple<Real, Real, Real>
 {
     using ReturnType = std::tuple<Real, Real, Real, Real>;
@@ -435,28 +439,28 @@ inline auto means_and_covariance(Container const & u, Container const & v) -> st
     return std::make_tuple(std::get<0>(temp), std::get<1>(temp), std::get<2>(temp));
 }
 
-template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
+BOOST_MATH_EXPORT template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline double covariance(Container const & u, Container const & v)
 {
     using ReturnType = std::tuple<double, double, double, double>;
     return std::get<2>(detail::means_and_covariance_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
 }
 
-template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
+BOOST_MATH_EXPORT template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline Real covariance(Container const & u, Container const & v)
 {
     using ReturnType = std::tuple<Real, Real, Real, Real>;
     return std::get<2>(detail::means_and_covariance_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
 }
 
-template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
+BOOST_MATH_EXPORT template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline double correlation_coefficient(Container const & u, Container const & v)
 {
     using ReturnType = std::tuple<double, double, double, double, double, double, double>;
     return std::get<5>(detail::correlation_coefficient_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
 }
 
-template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
+BOOST_MATH_EXPORT template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline Real correlation_coefficient(Container const & u, Container const & v)
 {
     using ReturnType = std::tuple<Real, Real, Real, Real, Real, Real, Real>;

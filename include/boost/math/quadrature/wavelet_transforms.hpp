@@ -11,7 +11,7 @@
 
 namespace boost::math::quadrature {
 
-template<class F, typename Real, int p>
+BOOST_MATH_EXPORT template<class F, typename Real, int p>
 class daubechies_wavelet_transform
 {
 public:

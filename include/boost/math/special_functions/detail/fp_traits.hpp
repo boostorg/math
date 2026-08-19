@@ -21,11 +21,13 @@ With these techniques, the code could be simplified.
 #   define BOOST_FPCLASSIFY_VAX_FORMAT
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstring>
 #include <cstdint>
 #include <limits>
 #include <climits>
 #include <type_traits>
+#endif
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/is_standalone.hpp>
 #include <boost/math/tools/assert.hpp>

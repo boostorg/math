@@ -6,7 +6,11 @@
 #ifndef BOOST_MATH_DIFFERENTIATION_AUTODIFF_HPP
 #define BOOST_MATH_DIFFERENTIATION_AUTODIFF_HPP
 
+// cstdfloat is outside the module surface and textually includes standard
+// library headers, which must not enter the module purview.
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/cstdfloat.hpp>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/special_functions/round.hpp>
@@ -20,6 +24,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/promotion.hpp>
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -29,6 +34,7 @@
 #include <ostream>
 #include <tuple>
 #include <type_traits>
+#endif
 
 namespace boost {
 namespace math {
@@ -49,7 +55,7 @@ struct promote_args_n<RealType> {
 
 }  // namespace detail
 
-template <typename RealType, typename... RealTypes>
+BOOST_MATH_EXPORT template <typename RealType, typename... RealTypes>
 using promote = typename detail::promote_args_n<RealType, RealTypes...>::type;
 
 namespace detail {
@@ -615,10 +621,10 @@ struct zero : std::integral_constant<size_t, 0> {};
 
 }  // namespace detail
 
-template <typename RealType, size_t Order, size_t... Orders>
+BOOST_MATH_EXPORT template <typename RealType, size_t Order, size_t... Orders>
 using autodiff_fvar = typename detail::nest_fvar<RealType, Order, Orders...>::type;
 
-template <typename RealType, size_t Order, size_t... Orders>
+BOOST_MATH_EXPORT template <typename RealType, size_t Order, size_t... Orders>
 autodiff_fvar<RealType, Order, Orders...> make_fvar(RealType const& ca) {
   return autodiff_fvar<RealType, Order, Orders...>(ca, true);
 }
@@ -638,7 +644,7 @@ auto make_ftuple_impl(std::index_sequence<Is...>, RealTypes const&... ca) {
 
 }  // namespace detail
 
-template <typename RealType, size_t... Orders, typename... RealTypes>
+BOOST_MATH_EXPORT template <typename RealType, size_t... Orders, typename... RealTypes>
 auto make_ftuple(RealTypes const&... ca) {
   static_assert(sizeof...(Orders) == sizeof...(RealTypes),
                 "Number of Orders must match number of function parameters.");
@@ -1982,8 +1988,8 @@ namespace std {
 // boost::math::tools::digits<RealType>() is handled by this std::numeric_limits<> specialization,
 // and similarly for max_value, min_value, log_max_value, log_min_value, and epsilon.
 template <typename RealType, size_t Order>
-class numeric_limits<boost::math::differentiation::detail::fvar<RealType, Order>>
-    : public numeric_limits<typename boost::math::differentiation::detail::fvar<RealType, Order>::root_type> {
+class numeric_limits<boost::math::differentiation::autodiff_v1::detail::fvar<RealType, Order>>
+    : public numeric_limits<typename boost::math::differentiation::autodiff_v1::detail::fvar<RealType, Order>::root_type> {
 };
 
 }  // namespace std
@@ -1994,7 +2000,7 @@ namespace tools {
 namespace detail {
 
 template <typename RealType, std::size_t Order>
-using autodiff_fvar_type = differentiation::detail::fvar<RealType, Order>;
+using autodiff_fvar_type = differentiation::autodiff_v1::detail::fvar<RealType, Order>;
 
 template <typename RealType, std::size_t Order>
 using autodiff_root_type = typename autodiff_fvar_type<RealType, Order>::root_type;
@@ -2027,7 +2033,7 @@ struct promote_args<RealType0, detail::autodiff_fvar_type<RealType1, Order1>> {
   using type = detail::autodiff_fvar_type<typename promote_args<RealType0, RealType1>::type, Order1>;
 };
 
-template <typename destination_t, typename RealType, std::size_t Order>
+BOOST_MATH_EXPORT template <typename destination_t, typename RealType, std::size_t Order>
 inline constexpr destination_t real_cast(detail::autodiff_fvar_type<RealType, Order> const& from_v)
     noexcept(BOOST_MATH_IS_FLOAT(destination_t) && BOOST_MATH_IS_FLOAT(RealType)) {
   return real_cast<destination_t>(static_cast<detail::autodiff_root_type<RealType, Order>>(from_v));
@@ -2037,8 +2043,8 @@ inline constexpr destination_t real_cast(detail::autodiff_fvar_type<RealType, Or
 
 namespace policies {
 
-template <class Policy, std::size_t Order>
-using fvar_t = differentiation::detail::fvar<Policy, Order>;
+BOOST_MATH_EXPORT template <class Policy, std::size_t Order>
+using fvar_t = differentiation::autodiff_v1::detail::fvar<Policy, Order>;
 template <class Policy, std::size_t Order>
 struct evaluation<fvar_t<float, Order>, Policy> {
   using type = fvar_t<typename std::conditional<Policy::promote_float_type::value, double, float>::type, Order>;

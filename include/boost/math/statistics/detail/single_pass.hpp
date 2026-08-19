@@ -9,6 +9,7 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/assert.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <tuple>
 #include <iterator>
 #include <type_traits>
@@ -18,10 +19,13 @@
 #include <stdexcept>
 #include <functional>
 #include <vector>
+#endif
 
 #ifdef BOOST_MATH_HAS_THREADS
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <future>
 #include <thread>
+#endif
 #endif
 
 namespace boost { namespace math { namespace statistics { namespace detail {

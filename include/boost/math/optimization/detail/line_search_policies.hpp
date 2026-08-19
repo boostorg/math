@@ -7,8 +7,10 @@
 #define BOOST_MATH_OPTIMIZATION_DETAIL_LINE_SEARCH_POLICIES_HPP
 
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <vector>
+#endif
 namespace boost {
 namespace math {
 namespace optimization {

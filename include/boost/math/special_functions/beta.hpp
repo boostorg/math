@@ -1285,7 +1285,15 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
       {
          *p_derivative = 1 / (constants::pi<T>() * sqrt(y * x));
       }
-      T p = invert ? asin(sqrt(y)) / constants::half_pi<T>() : asin(sqrt(x)) / constants::half_pi<T>();
+      T p;  // LCOV_EXCL_LINE
+      if (invert)
+      {
+          p = (y < 0.75) ? T(asin(sqrt(y)) / constants::half_pi<T>()) : T(1 - asin(sqrt(x)) / constants::half_pi<T>());
+      }
+      else
+      {
+          p = (x > 0.75) ? T(1 - asin(sqrt(y)) / constants::half_pi<T>()) : T(asin(sqrt(x)) / constants::half_pi<T>());
+      }
       if(!normalised)
          p *= constants::pi<T>();
       return p;
@@ -1736,7 +1744,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
 // which Lanczos approximation to use
 // and forward to the implementation functions:
 //
-template <class RT1, class RT2, class A>
+BOOST_MATH_EXPORT template <class RT1, class RT2, class A>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, A>::type
    beta(RT1 a, RT2 b, A arg)
 {
@@ -1745,14 +1753,14 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, A>::type
    return static_cast<ReturnType>(boost::math::detail::beta(a, b, arg, static_cast<tag*>(nullptr)));
 }
 
-template <class RT1, class RT2>
+BOOST_MATH_EXPORT template <class RT1, class RT2>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2>::type
    beta(RT1 a, RT2 b)
 {
    return boost::math::beta(a, b, policies::policy<>());
 }
 
-template <class RT1, class RT2, class RT3, class Policy>
+BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
    beta(RT1 a, RT2 b, RT3 x, const Policy&)
 {
@@ -1769,7 +1777,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), false, false), "boost::math::beta<%1%>(%1%,%1%,%1%)");
 }
 
-template <class RT1, class RT2, class RT3, class Policy>
+BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
    betac(RT1 a, RT2 b, RT3 x, const Policy&)
 {
@@ -1785,14 +1793,14 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), true, false), "boost::math::betac<%1%>(%1%,%1%,%1%)");
 }
-template <class RT1, class RT2, class RT3>
+BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
    betac(RT1 a, RT2 b, RT3 x)
 {
    return boost::math::betac(a, b, x, policies::policy<>());
 }
 
-template <class RT1, class RT2, class RT3, class Policy>
+BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibeta(RT1 a, RT2 b, RT3 x, const Policy&)
 {
@@ -1808,14 +1816,14 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), false, true), "boost::math::ibeta<%1%>(%1%,%1%,%1%)");
 }
-template <class RT1, class RT2, class RT3>
+BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibeta(RT1 a, RT2 b, RT3 x)
 {
    return boost::math::ibeta(a, b, x, policies::policy<>());
 }
 
-template <class RT1, class RT2, class RT3, class Policy>
+BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibetac(RT1 a, RT2 b, RT3 x, const Policy&)
 {
@@ -1831,14 +1839,14 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), true, true), "boost::math::ibetac<%1%>(%1%,%1%,%1%)");
 }
-template <class RT1, class RT2, class RT3>
+BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibetac(RT1 a, RT2 b, RT3 x)
 {
    return boost::math::ibetac(a, b, x, policies::policy<>());
 }
 
-template <class RT1, class RT2, class RT3, class Policy>
+BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibeta_derivative(RT1 a, RT2 b, RT3 x, const Policy&)
 {
@@ -1854,7 +1862,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy()), "boost::math::ibeta_derivative<%1%>(%1%,%1%,%1%)");
 }
-template <class RT1, class RT2, class RT3>
+BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibeta_derivative(RT1 a, RT2 b, RT3 x)
 {

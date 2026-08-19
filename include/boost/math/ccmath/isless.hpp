@@ -16,7 +16,7 @@
 
 namespace boost::math::ccmath {
 
-template <typename T1, typename T2 = T1>
+BOOST_MATH_EXPORT template <typename T1, typename T2 = T1>
 inline constexpr bool isless(T1 x, T2 y) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
