@@ -72,19 +72,10 @@ auto integrateND(const F& f, const std::vector<RealType>& a, const std::vector<R
     return detail::integrate_recursive(f, a, b, working_coords, 0, integrate);
 }
 
-template <typename F, typename RealType>
-auto integrateND(const F& f, const std::vector<RealType>& a, const std::vector<RealType>& b) -> decltype(f(a))
+template <typename F, typename Integrator, typename RealType>
+auto integrateND(const F& f, const std::vector<RealType>& a, const std::vector<RealType>& b, 
+                     const Integrator& integrate) -> decltype(f(a))
 {
-    typedef decltype(f(a)) K;
-    typedef std::function<K(RealType)> func;
-
-    auto integrate = [](func f, double a, double b)
-    {
-        return gauss<double, 20>::integrate(f, a, b);
-    }; 
-    
-    // Allocate the coordinate state tracking vector dynamically based on runtime size
-    std::vector<RealType> working_coords(a.size(), 0);
     return integrateND(f, a, b, integrate, boost::math::policies::policy<>());
 }
 
