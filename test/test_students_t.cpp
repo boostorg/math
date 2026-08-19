@@ -421,6 +421,7 @@ void test_spots(RealType)
          {
             BOOST_CHECK_THROW(boost::math::quantile(students_t_distribution<RealType>((std::numeric_limits<RealType>::min)() / 2), static_cast<RealType>(0.0025f)), std::overflow_error);
          }
+         BOOST_CHECK_CLOSE(boost::math::cdf(students_t_distribution<RealType>(static_cast<RealType>(1)), ldexp(RealType(1), -30)), static_cast<RealType>(0.5000000002964491827262478614651948102240210317156775562512071908L), tolerance);
       }
 
   // Student's t pdf tests.
