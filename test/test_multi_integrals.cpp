@@ -105,13 +105,13 @@ void test_square()
     RealType multFactor;
 
     // Does not seem to perform well on this integral
-    if(std::is_same_v<RealType, float>){
+    if(std::is_same<RealType, float>::value){
         multFactor = 200;
     }
-    else if (std::is_same_v<RealType, double>){
+    else if (std::is_same<RealType, double>::value){
         multFactor = 4 * pow(10, 6);
     }
-    else if (std::is_same_v<RealType, long double>){
+    else if (std::is_same<RealType, long double>::value){
         multFactor = 2 * pow(10, 8);
     }
     

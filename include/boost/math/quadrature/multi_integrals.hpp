@@ -60,11 +60,11 @@ auto integrateND(const F& f, const std::vector<RealType>& a, const std::vector<R
 
     // Error checking on integration bounds
     if (a.empty() || b.empty()){
-        boost::math::policies::raise_evaluation_error(function, "Integration limits must not be empty.\n", 0, pol);
+        boost::math::policies::raise_evaluation_error(function, "Integration limits cannot be empty.\n", 0, pol);
     }
     if (a.size() != b.size()) {
-        std::string val = "(" + std::to_string(a.size()) + "!=" + std::to_string(b.size()) + ")";
-        boost::math::policies::raise_evaluation_error(function, "Integration limits must be the same size but got %1%.\n", val, pol);
+        std::string msg = "Integration limits must be the same size but got (" + std::to_string(a.size()) + "!=" + std::to_string(b.size()) + ")";
+        boost::math::policies::raise_evaluation_error(function, msg.c_str(), 0, pol);
     }
     
     // Allocate the coordinate state tracking vector dynamically based on runtime size
