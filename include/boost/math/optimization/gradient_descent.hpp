@@ -12,7 +12,7 @@ namespace boost {
 namespace math {
 namespace optimization {
 
-template<typename RealType>
+BOOST_MATH_EXPORT template<typename RealType>
 struct gradient_descent_update_policy
 {
   RealType lr_;
@@ -124,7 +124,7 @@ public:
  *      custom learning rate
 */
 
-template<class Objective, typename ArgumentContainer, typename RealType>
+BOOST_MATH_EXPORT template<class Objective, typename ArgumentContainer, typename RealType>
 auto
 make_gradient_descent(Objective&& obj,
                       ArgumentContainer& x,
@@ -144,7 +144,7 @@ make_gradient_descent(Objective&& obj,
     gradient_descent_update_policy<RealType>(lr));
 }
 
-template<class Objective,
+BOOST_MATH_EXPORT template<class Objective,
          typename ArgumentContainer,
          typename RealType,
          class InitializationPolicy>
@@ -168,7 +168,7 @@ make_gradient_descent(Objective&& obj,
     gradient_descent_update_policy<RealType>(lr));
 }
 
-template<typename ArgumentContainer,
+BOOST_MATH_EXPORT template<typename ArgumentContainer,
          typename RealType,
          class Objective,
          class InitializationPolicy,

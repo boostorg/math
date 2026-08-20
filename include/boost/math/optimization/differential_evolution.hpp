@@ -6,8 +6,13 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_DIFFERENTIAL_EVOLUTION_HPP
 #define BOOST_MATH_OPTIMIZATION_DIFFERENTIAL_EVOLUTION_HPP
+
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <atomic>
+#endif
 #include <boost/math/optimization/detail/common.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
 #include <mutex>
@@ -17,6 +22,7 @@
 #include <thread>
 #include <utility>
 #include <vector>
+#endif
 
 namespace boost::math::optimization {
 
@@ -27,7 +33,7 @@ namespace boost::math::optimization {
 // https://www.cp.eng.chula.ac.th/~prabhas//teaching/ec/ec2012/storn_price_de.pdf
 
 // We provide the parameters in a struct-there are too many of them and they are too unwieldy to pass individually:
-template <typename ArgumentContainer> struct differential_evolution_parameters {
+BOOST_MATH_EXPORT template <typename ArgumentContainer> struct differential_evolution_parameters {
   using Real = typename ArgumentContainer::value_type;
   using DimensionlessReal = decltype(Real()/Real());
   ArgumentContainer lower_bounds;
@@ -42,7 +48,7 @@ template <typename ArgumentContainer> struct differential_evolution_parameters {
   unsigned threads = std::thread::hardware_concurrency();
 };
 
-template <typename ArgumentContainer>
+BOOST_MATH_EXPORT template <typename ArgumentContainer>
 void validate_differential_evolution_parameters(differential_evolution_parameters<ArgumentContainer> const &de_params) {
   using std::isfinite;
   using std::isnan;
@@ -80,7 +86,7 @@ void validate_differential_evolution_parameters(differential_evolution_parameter
   }
 }
 
-template <typename ArgumentContainer, class Func, class URBG>
+BOOST_MATH_EXPORT template <typename ArgumentContainer, class Func, class URBG>
 ArgumentContainer differential_evolution(
     const Func cost_function, differential_evolution_parameters<ArgumentContainer> const &de_params, URBG &gen,
     std::invoke_result_t<Func, ArgumentContainer> target_value =

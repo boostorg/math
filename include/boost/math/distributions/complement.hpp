@@ -19,7 +19,7 @@
 //
 namespace boost{ namespace math{
 
-template <class Dist, class RealType>
+BOOST_MATH_EXPORT template <class Dist, class RealType>
 struct complemented2_type
 {
    BOOST_MATH_GPU_ENABLED complemented2_type(
@@ -35,7 +35,7 @@ private:
    complemented2_type& operator=(const complemented2_type&) = delete;
 };
 
-template <class Dist, class RealType1, class RealType2>
+BOOST_MATH_EXPORT template <class Dist, class RealType1, class RealType2>
 struct complemented3_type
 {
    BOOST_MATH_GPU_ENABLED complemented3_type(
@@ -53,7 +53,7 @@ private:
    complemented3_type& operator=(const complemented3_type&) = delete;
 };
 
-template <class Dist, class RealType1, class RealType2, class RealType3>
+BOOST_MATH_EXPORT template <class Dist, class RealType1, class RealType2, class RealType3>
 struct complemented4_type
 {
    BOOST_MATH_GPU_ENABLED complemented4_type(
@@ -74,7 +74,7 @@ private:
    complemented4_type& operator=(const complemented4_type&) = delete;
 };
 
-template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4>
+BOOST_MATH_EXPORT template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4>
 struct complemented5_type
 {
    BOOST_MATH_GPU_ENABLED complemented5_type(
@@ -98,7 +98,7 @@ private:
    complemented5_type& operator=(const complemented5_type&) = delete;
 };
 
-template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5>
+BOOST_MATH_EXPORT template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5>
 struct complemented6_type
 {
    BOOST_MATH_GPU_ENABLED complemented6_type(
@@ -125,7 +125,7 @@ private:
    complemented6_type& operator=(const complemented6_type&) = delete;
 };
 
-template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5, class RealType6>
+BOOST_MATH_EXPORT template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5, class RealType6>
 struct complemented7_type
 {
    BOOST_MATH_GPU_ENABLED complemented7_type(
@@ -155,37 +155,37 @@ private:
    complemented7_type& operator=(const complemented7_type&) = delete;
 };
 
-template <class Dist, class RealType>
+BOOST_MATH_EXPORT template <class Dist, class RealType>
 BOOST_MATH_GPU_ENABLED inline complemented2_type<Dist, RealType> complement(const Dist& d, const RealType& r)
 {
    return complemented2_type<Dist, RealType>(d, r);
 }
 
-template <class Dist, class RealType1, class RealType2>
+BOOST_MATH_EXPORT template <class Dist, class RealType1, class RealType2>
 BOOST_MATH_GPU_ENABLED inline complemented3_type<Dist, RealType1, RealType2> complement(const Dist& d, const RealType1& r1, const RealType2& r2)
 {
    return complemented3_type<Dist, RealType1, RealType2>(d, r1, r2);
 }
 
-template <class Dist, class RealType1, class RealType2, class RealType3>
+BOOST_MATH_EXPORT template <class Dist, class RealType1, class RealType2, class RealType3>
 BOOST_MATH_GPU_ENABLED inline complemented4_type<Dist, RealType1, RealType2, RealType3> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3)
 {
    return complemented4_type<Dist, RealType1, RealType2, RealType3>(d, r1, r2, r3);
 }
 
-template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4>
+BOOST_MATH_EXPORT template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4>
 BOOST_MATH_GPU_ENABLED inline complemented5_type<Dist, RealType1, RealType2, RealType3, RealType4> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3, const RealType4& r4)
 {
    return complemented5_type<Dist, RealType1, RealType2, RealType3, RealType4>(d, r1, r2, r3, r4);
 }
 
-template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5>
+BOOST_MATH_EXPORT template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5>
 BOOST_MATH_GPU_ENABLED inline complemented6_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3, const RealType4& r4, const RealType5& r5)
 {
    return complemented6_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5>(d, r1, r2, r3, r4, r5);
 }
 
-template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5, class RealType6>
+BOOST_MATH_EXPORT template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5, class RealType6>
 BOOST_MATH_GPU_ENABLED inline complemented7_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5, RealType6> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3, const RealType4& r4, const RealType5& r5, const RealType6& r6)
 {
    return complemented7_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5, RealType6>(d, r1, r2, r3, r4, r5, r6);

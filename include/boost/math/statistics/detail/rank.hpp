@@ -6,16 +6,20 @@
 #ifndef BOOST_MATH_STATISTICS_DETAIL_RANK_HPP
 #define BOOST_MATH_STATISTICS_DETAIL_RANK_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
 #include <vector>
 #include <numeric>
 #include <utility>
 #include <iterator>
 #include <algorithm>
+#endif
 #include <boost/math/tools/config.hpp>
 
 #ifdef BOOST_MATH_EXEC_COMPATIBLE
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <execution>
+#endif
 #endif
 
 namespace boost { namespace math { namespace statistics { namespace detail {

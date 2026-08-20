@@ -99,7 +99,7 @@ BOOST_MATH_GPU_ENABLED T hypot_imp(T x, T y, T z, const Policy& pol)
 
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
    hypot(T1 x, T2 y)
 {
@@ -108,7 +108,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
       static_cast<result_type>(x), static_cast<result_type>(y), policies::policy<>());
 }
 
-template <class T1, class T2, class Policy, boost::math::enable_if_t<policies::is_policy_v<Policy>, bool>>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy, boost::math::enable_if_t<policies::is_policy_v<Policy>, bool>>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
    hypot(T1 x, T2 y, const Policy& pol)
 {
@@ -117,7 +117,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
       static_cast<result_type>(x), static_cast<result_type>(y), pol);
 }
 
-template <class T1, class T2, class T3, boost::math::enable_if_t<!policies::is_policy_v<T3>, bool>>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, boost::math::enable_if_t<!policies::is_policy_v<T3>, bool>>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2, T3>
    hypot(T1 x, T2 y, T3 z)
 {
@@ -128,7 +128,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2, T3>
                             policies::policy<>());
 }
 
-template <class T1, class T2, class T3, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2, T3>
    hypot(T1 x, T2 y, T3 z, const Policy& pol)
 {

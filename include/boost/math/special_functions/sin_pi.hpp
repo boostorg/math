@@ -15,9 +15,11 @@
 
 #ifndef BOOST_MATH_HAS_NVRTC
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
 #include <type_traits>
+#endif
 #include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/trunc.hpp>
@@ -72,7 +74,7 @@ BOOST_MATH_GPU_ENABLED inline T sin_pi_dispatch(T x, const Policy& pol)
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type sin_pi(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -89,7 +91,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type sin_pi(T x, 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(boost::math::detail::sin_pi_dispatch<value_type>(x, forwarding_policy()), "sin_pi");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline typename tools::promote_args<T>::type sin_pi(T x)
 {
    return boost::math::sin_pi(x, policies::policy<>());
@@ -102,7 +104,7 @@ inline typename tools::promote_args<T>::type sin_pi(T x)
 namespace boost {
 namespace math {
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED auto sin_pi(T x)
 {
    return ::sinpi(x);
@@ -114,13 +116,13 @@ BOOST_MATH_GPU_ENABLED auto sin_pi(float x)
    return ::sinpif(x);
 }
 
-template <typename T, typename Policy>
+BOOST_MATH_EXPORT template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED auto sin_pi(T x, const Policy&)
 {
    return ::sinpi(x);
 }
 
-template <typename Policy>
+BOOST_MATH_EXPORT template <typename Policy>
 BOOST_MATH_GPU_ENABLED auto sin_pi(float x, const Policy&)
 {
    return ::sinpif(x);

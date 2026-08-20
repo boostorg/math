@@ -3,12 +3,25 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <cfloat>
 #include <cstdint>
 #include <limits>
+#endif
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/ccmath/isnan.hpp>
+#else
+import boost.math;
+#endif
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/core/lightweight_test.hpp>
+#else
+// Standalone/module builds cannot use Boost.Core; map lightweight_test onto math_unit_test.hpp.
+#include "math_unit_test.hpp"
+#define BOOST_TEST(expr) CHECK_TRUE((expr))
+namespace boost { inline int report_errors() { return ::boost::math::test::report_errors(); } }
+#endif
 #include <boost/math/tools/config.hpp>
 
 #ifdef BOOST_HAS_FLOAT128

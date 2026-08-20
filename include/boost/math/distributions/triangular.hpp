@@ -147,7 +147,7 @@ namespace boost{ namespace math
     } // bool check_triangular
   } // namespace detail
 
-  template <class RealType = double, class Policy = policies::policy<> >
+  BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
   class triangular_distribution
   {
   public:
@@ -183,32 +183,32 @@ namespace boost{ namespace math
     RealType m_upper;  // distribution upper aka b
   }; // class triangular_distribution
 
-  typedef triangular_distribution<double> triangular;
+  BOOST_MATH_EXPORT typedef triangular_distribution<double> triangular;
 
   #ifdef __cpp_deduction_guides
-  template <class RealType>
+  BOOST_MATH_EXPORT template <class RealType>
   triangular_distribution(RealType)->triangular_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-  template <class RealType>
+  BOOST_MATH_EXPORT template <class RealType>
   triangular_distribution(RealType,RealType)->triangular_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-  template <class RealType>
+  BOOST_MATH_EXPORT template <class RealType>
   triangular_distribution(RealType,RealType,RealType)->triangular_distribution<typename boost::math::tools::promote_args<RealType>::type>;
   #endif
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const triangular_distribution<RealType, Policy>& /* dist */)
   { // Range of permissible values for random variable x.
     using boost::math::tools::max_value;
     return boost::math::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
   }
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const triangular_distribution<RealType, Policy>& dist)
   { // Range of supported values for random variable x.
     // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
     return boost::math::pair<RealType, RealType>(dist.lower(), dist.upper());
   }
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED RealType pdf(const triangular_distribution<RealType, Policy>& dist, const RealType& x)
   {
     constexpr auto function = "boost::math::pdf(const triangular_distribution<%1%>&, %1%)";
@@ -246,7 +246,7 @@ namespace boost{ namespace math
     }
   } // RealType pdf(const triangular_distribution<RealType, Policy>& dist, const RealType& x)
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED inline RealType cdf(const triangular_distribution<RealType, Policy>& dist, const RealType& x)
   {
     constexpr auto function = "boost::math::cdf(const triangular_distribution<%1%>&, %1%)";
@@ -281,7 +281,7 @@ namespace boost{ namespace math
     }
   } // RealType cdf(const triangular_distribution<RealType, Policy>& dist, const RealType& x)
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED RealType quantile(const triangular_distribution<RealType, Policy>& dist, const RealType& p)
   {
     BOOST_MATH_STD_USING  // for ADL of std functions (sqrt).
@@ -324,7 +324,7 @@ namespace boost{ namespace math
 
   } // RealType quantile(const triangular_distribution<RealType, Policy>& dist, const RealType& q)
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED RealType cdf(const complemented2_type<triangular_distribution<RealType, Policy>, RealType>& c)
   {
     constexpr auto function = "boost::math::cdf(const triangular_distribution<%1%>&, %1%)";
@@ -359,7 +359,7 @@ namespace boost{ namespace math
     }
   } // RealType cdf(const complemented2_type<triangular_distribution<RealType, Policy>, RealType>& c)
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED RealType quantile(const complemented2_type<triangular_distribution<RealType, Policy>, RealType>& c)
   {
     BOOST_MATH_STD_USING  // Aid ADL for sqrt.
@@ -408,7 +408,7 @@ namespace boost{ namespace math
     return result;
   } // RealType quantile(const complemented2_type<triangular_distribution<RealType, Policy>, RealType>& c)
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED inline RealType mean(const triangular_distribution<RealType, Policy>& dist)
   {
     constexpr auto function = "boost::math::mean(const triangular_distribution<%1%>&)";
@@ -424,7 +424,7 @@ namespace boost{ namespace math
   } // RealType mean(const triangular_distribution<RealType, Policy>& dist)
 
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED inline RealType variance(const triangular_distribution<RealType, Policy>& dist)
   {
     constexpr auto function = "boost::math::mean(const triangular_distribution<%1%>&)";
@@ -439,7 +439,7 @@ namespace boost{ namespace math
     return (lower * lower + upper * upper + mode * mode - lower * upper - lower * mode - upper * mode) / 18;
   } // RealType variance(const triangular_distribution<RealType, Policy>& dist)
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED inline RealType mode(const triangular_distribution<RealType, Policy>& dist)
   {
     constexpr auto function = "boost::math::mode(const triangular_distribution<%1%>&)";
@@ -452,7 +452,7 @@ namespace boost{ namespace math
     return mode;
   } // RealType mode
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED inline RealType median(const triangular_distribution<RealType, Policy>& dist)
   {
     BOOST_MATH_STD_USING // ADL of std functions.
@@ -475,7 +475,7 @@ namespace boost{ namespace math
     }
   } // RealType mode
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED inline RealType skewness(const triangular_distribution<RealType, Policy>& dist)
   {
     BOOST_MATH_STD_USING  // for ADL of std functions
@@ -496,7 +496,7 @@ namespace boost{ namespace math
     // #11768: Skewness formula for triangular distribution is incorrect -  corrected 29 Oct 2015 for release 1.61.
   } // RealType skewness(const triangular_distribution<RealType, Policy>& dist)
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const triangular_distribution<RealType, Policy>& dist)
   { // These checks may be belt and braces as should have been checked on construction?
     constexpr auto function = "boost::math::kurtosis(const triangular_distribution<%1%>&)";
@@ -511,7 +511,7 @@ namespace boost{ namespace math
     return static_cast<RealType>(12)/5; //  12/5 = 2.4;
   } // RealType kurtosis_excess(const triangular_distribution<RealType, Policy>& dist)
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const triangular_distribution<RealType, Policy>& dist)
   { // These checks may be belt and braces as should have been checked on construction?
     constexpr auto function = "boost::math::kurtosis_excess(const triangular_distribution<%1%>&)";
@@ -527,7 +527,7 @@ namespace boost{ namespace math
     // Assuming mathworld really means kurtosis excess?  Wikipedia now corrected to match this.
   }
 
-  template <class RealType, class Policy>
+  BOOST_MATH_EXPORT template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED inline RealType entropy(const triangular_distribution<RealType, Policy>& dist)
   {
     BOOST_MATH_STD_USING

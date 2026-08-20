@@ -5,7 +5,9 @@
 #ifndef REVERSE_MODE_AUTODIFF_UTILITIES_HPP
 #define REVERSE_MODE_AUTODIFF_UTILITIES_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
+#endif
 
 namespace boost {
 namespace math {

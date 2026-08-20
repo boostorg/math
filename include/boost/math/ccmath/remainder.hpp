@@ -12,7 +12,9 @@
 #error "The header <boost/math/remainder.hpp> can only be used in C++17 and later."
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
+#endif
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
@@ -43,7 +45,7 @@ constexpr T remainder_impl(const T x, const T y)
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr Real remainder(Real x, Real y)
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
@@ -74,7 +76,7 @@ constexpr Real remainder(Real x, Real y)
     }
 }
 
-template <typename T1, typename T2>
+BOOST_MATH_EXPORT template <typename T1, typename T2>
 constexpr auto remainder(T1 x, T2 y)
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))

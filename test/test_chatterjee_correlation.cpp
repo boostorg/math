@@ -4,16 +4,24 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/statistics/chatterjee_correlation.hpp>
+#else
+import boost.math;
+#endif
+
+#include "math_unit_test.hpp"
+
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/tools/random_vector.hpp>
+#include <boost/math/constants/constants.hpp>
 #include <cstdint>
 #include <cmath>
 #include <vector>
 #include <random>
 #include <algorithm>
 #include <utility>
-#include <boost/math/statistics/chatterjee_correlation.hpp>
-#include <boost/math/tools/random_vector.hpp>
-#include <boost/math/constants/constants.hpp>
-#include "math_unit_test.hpp"
+#endif
 
 // The Chatterjee correlation is invariant under:
 // - Shuffles. (X_i, Y_i) -> (X_sigma(i), Y_sigma(i)), where sigma is a permutation.
@@ -200,7 +208,7 @@ void test_mnn_properties()
     CHECK_EQUAL(coeff1, coeff2);
 }
 
-#ifdef BOOST_MATH_EXEC_COMPATIBLE
+#if defined(BOOST_MATH_EXEC_COMPATIBLE) && !defined(BOOST_MATH_BUILD_MODULE)
 
 template <typename Real, typename ExecutionPolicy>
 void test_threaded(ExecutionPolicy&& exec)
@@ -234,6 +242,8 @@ void test_mnn_threaded(ExecutionPolicy&& exec)
 
 #endif // BOOST_MATH_EXEC_COMPATIBLE
 
+#ifndef BOOST_MATH_BUILD_MODULE
+
 template <typename Real>
 void test_paper()
 {
@@ -266,29 +276,34 @@ void test_paper()
     CHECK_MOLLIFIED_CLOSE(result, Real(0.885), 0.012);
 }
 
+#endif // BOOST_MATH_BUILD_MODULE
+
 int main(void)
 {
     properties<float>();
     properties<double>();
-    properties<long double>();
 
     test_spots<float>();
     test_spots<double>();
-    test_spots<long double>();
 
     test_mnn_spots<float>();
     test_mnn_spots<double>();
-    test_mnn_spots<long double>();
 
     test_mnn_extremal<float>();
     test_mnn_extremal<double>();
-    test_mnn_extremal<long double>();
 
     test_mnn_properties<float>();
     test_mnn_properties<double>();
-    test_mnn_properties<long double>();
 
-    #ifdef BOOST_MATH_EXEC_COMPATIBLE
+    #ifndef BOOST_MATH_BUILD_MODULE
+    properties<long double>();
+    test_spots<long double>();
+    test_mnn_spots<long double>();
+    test_mnn_extremal<long double>();
+    test_mnn_properties<long double>();
+    #endif
+
+    #if defined(BOOST_MATH_EXEC_COMPATIBLE) && !defined(BOOST_MATH_BUILD_MODULE)
 
     test_threaded<float>(std::execution::par);
     test_threaded<double>(std::execution::par);
@@ -306,9 +321,11 @@ int main(void)
 
     #endif // BOOST_MATH_EXEC_COMPATIBLE
 
+    #ifndef BOOST_MATH_BUILD_MODULE
     test_paper<float>();
     test_paper<double>();
     test_paper<long double>();
+    #endif
 
     return boost::math::test::report_errors();
 }

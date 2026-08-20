@@ -109,7 +109,7 @@ namespace boost
       } // check_dist_and_prob
     } //  namespace geometric_detail
 
-    template <class RealType = double, class Policy = policies::policy<> >
+    BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
     class geometric_distribution
     {
     public:
@@ -235,21 +235,21 @@ namespace boost
       RealType m_p; // success_fraction
     }; // template <class RealType, class Policy> class geometric_distribution
 
-    typedef geometric_distribution<double> geometric; // Reserved name of type double.
+    BOOST_MATH_EXPORT typedef geometric_distribution<double> geometric; // Reserved name of type double.
 
     #ifdef __cpp_deduction_guides
-    template <class RealType>
+    BOOST_MATH_EXPORT template <class RealType>
     geometric_distribution(RealType)->geometric_distribution<typename boost::math::tools::promote_args<RealType>::type>;
     #endif
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const geometric_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable k.
        using boost::math::tools::max_value;
        return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // max_integer?
     }
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const geometric_distribution<RealType, Policy>& /* dist */)
     { // Range of supported values for random variable k.
        // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -257,7 +257,7 @@ namespace boost
        return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>()); // max_integer?
     }
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType mean(const geometric_distribution<RealType, Policy>& dist)
     { // Mean of geometric distribution = (1-p)/p.
       return (1 - dist.success_fraction() ) / dist.success_fraction();
@@ -265,21 +265,21 @@ namespace boost
 
     // median implemented via quantile(half) in derived accessors.
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType mode(const geometric_distribution<RealType, Policy>&)
     { // Mode of geometric distribution = zero.
       BOOST_MATH_STD_USING // ADL of std functions.
       return 0;
     } // mode
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType variance(const geometric_distribution<RealType, Policy>& dist)
     { // Variance of Binomial distribution = (1-p) / p^2.
       return  (1 - dist.success_fraction())
         / (dist.success_fraction() * dist.success_fraction());
     } // variance
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType skewness(const geometric_distribution<RealType, Policy>& dist)
     { // skewness of geometric distribution = 2-p / (sqrt(r(1-p))
       BOOST_MATH_STD_USING // ADL of std functions.
@@ -287,7 +287,7 @@ namespace boost
       return (2 - p) / sqrt(1 - p);
     } // skewness
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const geometric_distribution<RealType, Policy>& dist)
     { // kurtosis of geometric distribution
       // http://en.wikipedia.org/wiki/geometric is kurtosis_excess so add 3
@@ -295,7 +295,7 @@ namespace boost
       return 3 + (p*p - 6*p + 6) / (1 - p);
     } // kurtosis
 
-     template <class RealType, class Policy>
+     BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const geometric_distribution<RealType, Policy>& dist)
     { // kurtosis excess of geometric distribution
       // http://mathworld.wolfram.com/Kurtosis.html table of kurtosis_excess
@@ -310,7 +310,7 @@ namespace boost
     // RealType chf(const geometric_distribution<RealType, Policy>& dist)
     // chf of geometric distribution provided by derived accessors.
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType pdf(const geometric_distribution<RealType, Policy>& dist, const RealType& k)
     { // Probability Density/Mass Function.
       BOOST_FPU_EXCEPTION_GUARD
@@ -348,7 +348,7 @@ namespace boost
       return result;
     } // geometric_pdf
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType cdf(const geometric_distribution<RealType, Policy>& dist, const RealType& k)
     { // Cumulative Distribution Function of geometric.
       constexpr auto function = "boost::math::cdf(const geometric_distribution<%1%>&, %1%)";
@@ -379,7 +379,7 @@ namespace boost
       return probability;
     } // cdf Cumulative Distribution Function geometric.
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType logcdf(const geometric_distribution<RealType, Policy>& dist, const RealType& k)
     { // Cumulative Distribution Function of geometric.
       BOOST_MATH_STD_USING
@@ -409,7 +409,7 @@ namespace boost
       return log1p(-exp(z), Policy());
     } // logcdf Cumulative Distribution Function geometric.
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<geometric_distribution<RealType, Policy>, RealType>& c)
     { // Complemented Cumulative Distribution Function geometric.
       BOOST_MATH_STD_USING
@@ -434,7 +434,7 @@ namespace boost
       return probability;
     } // cdf Complemented Cumulative Distribution Function geometric.
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<geometric_distribution<RealType, Policy>, RealType>& c)
     { // Complemented Cumulative Distribution Function geometric.
       BOOST_MATH_STD_USING
@@ -458,7 +458,7 @@ namespace boost
       return boost::math::log1p(-p, Policy()) * (k+1);
     } // logcdf Complemented Cumulative Distribution Function geometric.
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const geometric_distribution<RealType, Policy>& dist, const RealType& x)
     { // Quantile, percentile/100 or Percent Point geometric function.
       // Return the number of expected failures k for a given probability p.
@@ -509,7 +509,7 @@ namespace boost
       return result;
     } // RealType quantile(const geometric_distribution dist, p)
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<geometric_distribution<RealType, Policy>, RealType>& c)
     {  // Quantile or Percent Point Binomial function.
        // Return the number of expected failures k for a given

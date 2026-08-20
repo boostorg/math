@@ -344,6 +344,11 @@ void test_spots(RealType)
       distro1 d(8.0f, 8.5f);
       BOOST_CHECK_CLOSE(pdf(d, -1), static_cast<RealType>(6.1747948083757028903541988987716621647020752431287e-20), 2e-5);  // Can we do better on accuracy here?
    }
+   // https://github.com/boostorg/math/issues/1430
+   {
+       distro1 d(1000.f, 23.f);
+       BOOST_CHECK_CLOSE_FRACTION(cdf(d, -1), static_cast<RealType>(1.61471461239552e-127), 1e-3);
+   }
 
 } // template <class RealType>void test_spots(RealType)
 
@@ -542,8 +547,10 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
             BOOST_ERROR(e.what());
          }
          // Code coverage:
-         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], boost::math::tools::epsilon<value_type>() / 2, data[i][3]), boost::math::evaluation_error);
-         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(boost::math::complement(data[i][1], boost::math::tools::epsilon<value_type>() / 2, data[i][3])), boost::math::evaluation_error);
+         using no_promote_policy = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> >;
+         using no_promote_distro = boost::math::non_central_t_distribution<value_type, no_promote_policy>;
+         BOOST_CHECK_THROW(no_promote_distro::find_degrees_of_freedom(data[i][1], boost::math::tools::epsilon<value_type>() / 2, data[i][3]), boost::math::evaluation_error);
+         BOOST_CHECK_THROW(no_promote_distro::find_degrees_of_freedom(boost::math::complement(data[i][1], boost::math::tools::epsilon<value_type>() / 2, data[i][3])), boost::math::evaluation_error);
          BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], data[i][2], value_type(0)), boost::math::evaluation_error);
          BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(boost::math::complement(data[i][1], data[i][2], value_type(0))), boost::math::evaluation_error);
          BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], data[i][2], value_type(1)), boost::math::evaluation_error);

@@ -29,8 +29,10 @@ using complex = cuda::std::complex<T>;
 
 #else
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
 #include <complex>
+#endif
 
 namespace boost {
 namespace math {

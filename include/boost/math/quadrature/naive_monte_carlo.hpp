@@ -6,6 +6,7 @@
  */
 #ifndef BOOST_MATH_QUADRATURE_NAIVE_MONTE_CARLO_HPP
 #define BOOST_MATH_QUADRATURE_NAIVE_MONTE_CARLO_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <sstream>
 #include <algorithm>
 #include <vector>
@@ -21,11 +22,14 @@
 #include <map>
 #include <type_traits>
 #include <cstdint>
+#endif
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
 #ifdef BOOST_NAIVE_MONTE_CARLO_DEBUG_FAILURES
+#ifndef BOOST_MATH_BUILD_MODULE
 #  include <iostream>
+#endif
 #endif
 
 namespace boost { namespace math { namespace quadrature {
@@ -37,7 +41,7 @@ namespace detail {
                                    DOUBLE_INFINITE};
 }
 
-template<class Real, class F, class RandomNumberGenerator = std::mt19937_64, class Policy = boost::math::policies::policy<>,
+BOOST_MATH_EXPORT template<class Real, class F, class RandomNumberGenerator = std::mt19937_64, class Policy = boost::math::policies::policy<>,
          typename std::enable_if<std::is_trivially_copyable<Real>::value, bool>::type = true>
 class naive_monte_carlo
 {

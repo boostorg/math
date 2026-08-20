@@ -6,8 +6,13 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_JSO_HPP
 #define BOOST_MATH_OPTIMIZATION_JSO_HPP
+
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <atomic>
+#endif
 #include <boost/math/optimization/detail/common.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <iostream>
 #include <limits>
@@ -18,6 +23,7 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
+#endif
 
 namespace boost::math::optimization {
 
@@ -31,7 +37,7 @@ namespace boost::math::optimization {
 // to understand without also reading: Zhang, J., & Sanderson, A. C. (2009).
 // JADE: adaptive differential evolution with optional external archive.
 // IEEE Transactions on evolutionary computation, 13(5), 945-958."
-template <typename ArgumentContainer> struct jso_parameters {
+BOOST_MATH_EXPORT template <typename ArgumentContainer> struct jso_parameters {
   using Real = typename ArgumentContainer::value_type;
   using DimensionlessReal = decltype(Real()/Real());
   ArgumentContainer lower_bounds;
@@ -49,7 +55,7 @@ template <typename ArgumentContainer> struct jso_parameters {
   ArgumentContainer const *initial_guess = nullptr;
 };
 
-template <typename ArgumentContainer>
+BOOST_MATH_EXPORT template <typename ArgumentContainer>
 void validate_jso_parameters(jso_parameters<ArgumentContainer> &jso_params) {
   using std::isfinite;
   using std::isnan;
@@ -91,7 +97,7 @@ void validate_jso_parameters(jso_parameters<ArgumentContainer> &jso_params) {
   }
 }
 
-template <typename ArgumentContainer, class Func, class URBG>
+BOOST_MATH_EXPORT template <typename ArgumentContainer, class Func, class URBG>
 ArgumentContainer
 jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
     URBG &gen,

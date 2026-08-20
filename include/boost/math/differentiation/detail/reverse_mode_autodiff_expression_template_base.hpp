@@ -5,8 +5,10 @@
 
 #ifndef REVERSE_MODE_AUTODIFF_EXPRESSION_TEMPLATE_BASE_HPP
 #define REVERSE_MODE_AUTODIFF_EXPRESSION_TEMPLATE_BASE_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstddef>
 #include <type_traits>
+#endif
 namespace boost {
 namespace math {
 namespace differentiation {
@@ -96,7 +98,7 @@ struct count_rvar_impl<
         = count_rvar_impl<typename RealType::arg_type, DerivativeOrder>::value;
 };
 template<typename RealType, size_t DerivativeOrder>
-constexpr std::size_t count_rvars = detail::count_rvar_impl<RealType, DerivativeOrder>::value;
+BOOST_MATH_INLINE_CONSTEXPR std::size_t count_rvars = detail::count_rvar_impl<RealType, DerivativeOrder>::value;
 
 template<typename T>
 struct is_expression : std::is_base_of<expression_base, typename std::decay<T>::type>

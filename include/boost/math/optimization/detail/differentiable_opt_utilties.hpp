@@ -5,10 +5,12 @@
 #ifndef BOOST_MATH_OPTIMIZATION_DETAIL_DIFFERENTIABLE_OPT_UTILITIES_HPP
 #define BOOST_MATH_OPTIMIZATION_DETAIL_DIFFERENTIABLE_OPT_UTILITIES_HPP
 #include <boost/math/differentiation/autodiff_reverse.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <random>
 #include <type_traits>
 #include <vector>
+#endif
 
 namespace boost {
 namespace math {

@@ -7,7 +7,9 @@
 
 #ifndef BOOST_MATH_CALCULATE_CONSTANTS_CONSTANTS_INCLUDED
 #define BOOST_MATH_CALCULATE_CONSTANTS_CONSTANTS_INCLUDED
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
+#endif
 
 namespace boost{ namespace math{ namespace constants{ namespace detail{
 

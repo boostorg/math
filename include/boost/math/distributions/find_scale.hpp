@@ -29,7 +29,7 @@ namespace boost
     // distributions that have scale.
     // BOOST_STATIC_ASSERTs, see below, are used to enforce this.
 
-    template <class Dist, class Policy>
+    BOOST_MATH_EXPORT template <class Dist, class Policy>
     inline
       typename Dist::value_type find_scale( // For example, normal mean.
       typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
@@ -85,7 +85,7 @@ namespace boost
       return result;
     } // template <class Dist, class Policy> find_scale
 
-    template <class Dist>
+    BOOST_MATH_EXPORT template <class Dist>
     inline // with default policy.
       typename Dist::value_type find_scale( // For example, normal mean.
       typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
@@ -96,7 +96,7 @@ namespace boost
       return (find_scale<Dist>(z, p, location, policies::policy<>()));
     } // find_scale
 
-    template <class Dist, class Real1, class Real2, class Real3, class Policy>
+    BOOST_MATH_EXPORT template <class Dist, class Real1, class Real2, class Real3, class Policy>
     inline typename Dist::value_type find_scale(
       complemented4_type<Real1, Real2, Real3, Policy> const& c)
     {
@@ -146,7 +146,7 @@ namespace boost
     // So the user can start from the complement q = (1 - p) of the probability p,
     // for example, s = find_scale<normal>(complement(z, q, l));
 
-    template <class Dist, class Real1, class Real2, class Real3>
+    BOOST_MATH_EXPORT template <class Dist, class Real1, class Real2, class Real3>
     inline typename Dist::value_type find_scale(
       complemented3_type<Real1, Real2, Real3> const& c)
     {

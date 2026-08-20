@@ -5,7 +5,12 @@
 //
 // See: https://github.com/scipy/scipy/issues/17916
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/distributions/non_central_chi_squared.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 
 int main(void)

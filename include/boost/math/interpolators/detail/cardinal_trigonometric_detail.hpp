@@ -5,9 +5,11 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_DETAIL_CARDINAL_TRIGONOMETRIC_HPP
 #define BOOST_MATH_INTERPOLATORS_DETAIL_CARDINAL_TRIGONOMETRIC_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstddef>
 #include <cmath>
 #include <stdexcept>
+#endif
 #include <boost/math/constants/constants.hpp>
 
 #ifdef BOOST_HAS_FLOAT128

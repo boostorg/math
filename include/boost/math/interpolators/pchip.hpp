@@ -6,15 +6,19 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_PCHIP_HPP
 #define BOOST_MATH_INTERPOLATORS_PCHIP_HPP
+
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <sstream>
 #include <memory>
+#endif
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
 
 namespace boost {
 namespace math {
 namespace interpolators {
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class pchip {
 public:
     using Real = typename RandomAccessContainer::value_type;

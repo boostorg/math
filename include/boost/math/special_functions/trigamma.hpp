@@ -412,7 +412,7 @@ BOOST_MATH_GPU_ENABLED T trigamma_dispatch(T x, const Policy& pol, const Tag& ta
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    trigamma(T x, const Policy&)
 {
@@ -435,7 +435,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    return policies::checked_narrowing_cast<result_type, Policy>(detail::trigamma_dispatch(static_cast<value_type>(x), forwarding_policy(), tag_type()), "boost::math::trigamma<%1%>(%1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    trigamma(T x)
 {

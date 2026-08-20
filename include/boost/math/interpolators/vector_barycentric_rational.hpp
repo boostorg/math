@@ -12,12 +12,14 @@
 #ifndef BOOST_MATH_INTERPOLATORS_VECTOR_BARYCENTRIC_RATIONAL_HPP
 #define BOOST_MATH_INTERPOLATORS_VECTOR_BARYCENTRIC_RATIONAL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <memory>
+#endif
 #include <boost/math/interpolators/detail/vector_barycentric_rational_detail.hpp>
 
 namespace boost{ namespace math{ namespace interpolators{
 
-template<class TimeContainer, class SpaceContainer>
+BOOST_MATH_EXPORT template<class TimeContainer, class SpaceContainer>
 class vector_barycentric_rational
 {
 public:

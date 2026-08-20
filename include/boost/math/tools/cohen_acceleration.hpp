@@ -5,15 +5,19 @@
 
 #ifndef BOOST_MATH_TOOLS_COHEN_ACCELERATION_HPP
 #define BOOST_MATH_TOOLS_COHEN_ACCELERATION_HPP
+
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <cmath>
 #include <cstdint>
+#endif
 
 namespace boost::math::tools {
 
 // Algorithm 1 of https://people.mpim-bonn.mpg.de/zagier/files/exp-math-9/fulltext.pdf
 // Convergence Acceleration of Alternating Series: Henri Cohen, Fernando Rodriguez Villegas, and Don Zagier
-template<class G>
+BOOST_MATH_EXPORT template<class G>
 auto cohen_acceleration(G& generator, std::int64_t n = -1)
 {
     using Real = decltype(generator());

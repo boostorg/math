@@ -129,7 +129,7 @@ namespace boost
       } // check_dist_and_prob
     } //  namespace negative_binomial_detail
 
-    template <class RealType = double, class Policy = policies::policy<> >
+    BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
     class negative_binomial_distribution
     {
     public:
@@ -251,21 +251,21 @@ namespace boost
       RealType m_p; // success_fraction
     }; // template <class RealType, class Policy> class negative_binomial_distribution
 
-    typedef negative_binomial_distribution<double> negative_binomial; // Reserved name of type double.
+    BOOST_MATH_EXPORT typedef negative_binomial_distribution<double> negative_binomial; // Reserved name of type double.
 
     #ifdef __cpp_deduction_guides
-    template <class RealType>
+    BOOST_MATH_EXPORT template <class RealType>
     negative_binomial_distribution(RealType,RealType)->negative_binomial_distribution<typename boost::math::tools::promote_args<RealType>::type>;
     #endif
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const negative_binomial_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable k.
        using boost::math::tools::max_value;
        return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // max_integer?
     }
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const negative_binomial_distribution<RealType, Policy>& /* dist */)
     { // Range of supported values for random variable k.
        // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -273,7 +273,7 @@ namespace boost
        return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>()); // max_integer?
     }
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType mean(const negative_binomial_distribution<RealType, Policy>& dist)
     { // Mean of Negative Binomial distribution = r(1-p)/p.
       return dist.successes() * (1 - dist.success_fraction() ) / dist.success_fraction();
@@ -286,14 +286,14 @@ namespace boost
     //} // median
     // Now implemented via quantile(half) in derived accessors.
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType mode(const negative_binomial_distribution<RealType, Policy>& dist)
     { // Mode of Negative Binomial distribution = floor[(r-1) * (1 - p)/p]
       BOOST_MATH_STD_USING // ADL of std functions.
       return floor((dist.successes() -1) * (1 - dist.success_fraction()) / dist.success_fraction());
     } // mode
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType skewness(const negative_binomial_distribution<RealType, Policy>& dist)
     { // skewness of Negative Binomial distribution = 2-p / (sqrt(r(1-p))
       BOOST_MATH_STD_USING // ADL of std functions.
@@ -304,7 +304,7 @@ namespace boost
         sqrt(r * (1 - p));
     } // skewness
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const negative_binomial_distribution<RealType, Policy>& dist)
     { // kurtosis of Negative Binomial distribution
       // http://en.wikipedia.org/wiki/Negative_binomial is kurtosis_excess so add 3
@@ -313,7 +313,7 @@ namespace boost
       return 3 + (6 / r) + ((p * p) / (r * (1 - p)));
     } // kurtosis
 
-     template <class RealType, class Policy>
+     BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const negative_binomial_distribution<RealType, Policy>& dist)
     { // kurtosis excess of Negative Binomial distribution
       // http://mathworld.wolfram.com/Kurtosis.html table of kurtosis_excess
@@ -322,7 +322,7 @@ namespace boost
       return (6 - p * (6-p)) / (r * (1-p));
     } // kurtosis_excess
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType variance(const negative_binomial_distribution<RealType, Policy>& dist)
     { // Variance of Binomial distribution = r (1-p) / p^2.
       return  dist.successes() * (1 - dist.success_fraction())
@@ -336,7 +336,7 @@ namespace boost
     // RealType chf(const negative_binomial_distribution<RealType, Policy>& dist)
     // chf of Negative Binomial distribution provided by derived accessors.
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType pdf(const negative_binomial_distribution<RealType, Policy>& dist, const RealType& k)
     { // Probability Density/Mass Function.
       BOOST_FPU_EXCEPTION_GUARD
@@ -362,7 +362,7 @@ namespace boost
       return result;
     } // negative_binomial_pdf
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType cdf(const negative_binomial_distribution<RealType, Policy>& dist, const RealType& k)
     { // Cumulative Distribution Function of Negative Binomial.
       constexpr auto function = "boost::math::cdf(const negative_binomial_distribution<%1%>&, %1%)";
@@ -388,7 +388,7 @@ namespace boost
       return probability;
     } // cdf Cumulative Distribution Function Negative Binomial.
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<negative_binomial_distribution<RealType, Policy>, RealType>& c)
       { // Complemented Cumulative Distribution Function Negative Binomial.
 
@@ -422,7 +422,7 @@ namespace boost
       return probability;
     } // cdf Cumulative Distribution Function Negative Binomial.
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const negative_binomial_distribution<RealType, Policy>& dist, const RealType& P)
     { // Quantile, percentile/100 or Percent Point Negative Binomial function.
       // Return the number of expected failures k for a given probability p.
@@ -507,7 +507,7 @@ namespace boost
          max_iter);
     } // RealType quantile(const negative_binomial_distribution dist, p)
 
-    template <class RealType, class Policy>
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<negative_binomial_distribution<RealType, Policy>, RealType>& c)
     {  // Quantile or Percent Point Binomial function.
        // Return the number of expected failures k for a given

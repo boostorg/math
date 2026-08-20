@@ -10,8 +10,10 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <vector>
+#endif
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/constants/constants.hpp>
 
@@ -771,7 +773,7 @@ public:
 
 }
 
-template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
+BOOST_MATH_EXPORT template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
 class gauss : public detail::gauss_detail<Real, N, detail::gauss_constant_category<Real>::value>
 {
    typedef detail::gauss_detail<Real, N, detail::gauss_constant_category<Real>::value> base;

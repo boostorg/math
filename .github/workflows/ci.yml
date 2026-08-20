@@ -830,3 +830,228 @@ jobs:
       #  run: |
       #    cd ../boost-root/__build__
       #    ctest --output-on-failure --no-tests=error
+
+  cmake-module-test:
+    strategy:
+      fail-fast: false
+
+    runs-on: ubuntu-24.04
+
+    env:
+      # clang/libc++ version used to build the module. Needs a libc++ new enough to
+      # mix `import std` with textual libc++ includes (18 and 19 have std-module bugs).
+      LLVM_VERSION: "20"
+      # Pinned so the experimental `import std` feature UUID below stays valid.
+      CMAKE_VERSION: 4.4.0
+      # CMake gates `import std` behind this UUID; it is specific to the CMake version.
+      IMPORT_STD_UUID: f35a9ac6-8463-4d38-8eec-5d6008153e7d
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install toolchain
+        run: |
+          # A recent clang + libc++ (for `import std`), clang-scan-deps (module
+          # dependency scanning), Ninja (required for C++ modules) and a pinned CMake.
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh $LLVM_VERSION
+          sudo apt-get install -y clang-tools-$LLVM_VERSION libc++-$LLVM_VERSION-dev libc++abi-$LLVM_VERSION-dev ninja-build
+          wget -q https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-linux-x86_64.tar.gz
+          sudo tar -xzf cmake-$CMAKE_VERSION-linux-x86_64.tar.gz -C /opt
+          echo "/opt/cmake-$CMAKE_VERSION-linux-x86_64/bin" >> "$GITHUB_PATH"
+
+      - name: Setup Boost
+        run: |
+          echo GITHUB_REPOSITORY: $GITHUB_REPOSITORY
+          LIBRARY=${GITHUB_REPOSITORY#*/}
+          echo LIBRARY: $LIBRARY
+          echo "LIBRARY=$LIBRARY" >> $GITHUB_ENV
+          echo GITHUB_BASE_REF: $GITHUB_BASE_REF
+          echo GITHUB_REF: $GITHUB_REF
+          REF=${GITHUB_BASE_REF:-$GITHUB_REF}
+          REF=${REF#refs/heads/}
+          echo REF: $REF
+          BOOST_BRANCH=develop && [ "$REF" == "master" ] && BOOST_BRANCH=master || true
+          echo BOOST_BRANCH: $BOOST_BRANCH
+          cd ..
+          git clone -b $BOOST_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
+          cd boost-root
+          mkdir -p libs/$LIBRARY
+          cp -r $GITHUB_WORKSPACE/* libs/$LIBRARY
+          git submodule update --init tools/boostdep
+          python3 tools/boostdep/depinst/depinst.py --git_args "--jobs 3" $LIBRARY
+
+      - name: Configure
+        run: |
+          cd ../boost-root
+          mkdir __build__ && cd __build__
+          cmake -G Ninja \
+            -DBOOST_INCLUDE_LIBRARIES=$LIBRARY \
+            -DBUILD_TESTING=ON \
+            -DBOOST_MATH_BUILD_MODULE=ON \
+            -DCMAKE_CXX_COMPILER=clang++-$LLVM_VERSION \
+            -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-reserved-module-identifier" \
+            -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD=$IMPORT_STD_UUID \
+            -DCMAKE_CXX_STDLIB_MODULES_JSON=/usr/lib/llvm-$LLVM_VERSION/lib/libc++.modules.json \
+            ..
+
+      # Kept as a separate step so the boost.math module build time is visible on its own.
+      - name: Build the Boost.Math module
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target boost_math_module
+
+      - name: Build and run the tests
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target tests
+          ctest --output-on-failure --no-tests=error
+
+  cmake-module-test-gcc:
+    strategy:
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+
+    # GCC 15 (the first release with import std support and
+    # libstdc++.modules.json) is not packaged for the runner image, so the job
+    # runs in a container that ships it.
+    container: ubuntu:26.04
+
+    env:
+      GCC_VERSION: "15"
+      # Pinned so the experimental `import std` feature UUID below stays valid.
+      CMAKE_VERSION: 4.4.0
+      # CMake gates `import std` behind this UUID; it is specific to the CMake version.
+      IMPORT_STD_UUID: f35a9ac6-8463-4d38-8eec-5d6008153e7d
+
+    steps:
+      - name: Install toolchain
+        run: |
+          apt-get update
+          apt-get install -y g++-$GCC_VERSION gcc-$GCC_VERSION ninja-build wget ca-certificates git python3
+          wget -q https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-linux-x86_64.tar.gz
+          tar -xzf cmake-$CMAKE_VERSION-linux-x86_64.tar.gz -C /opt
+          echo "/opt/cmake-$CMAKE_VERSION-linux-x86_64/bin" >> "$GITHUB_PATH"
+
+      - uses: actions/checkout@v6
+
+      - name: Setup Boost
+        run: |
+          echo GITHUB_REPOSITORY: $GITHUB_REPOSITORY
+          LIBRARY=${GITHUB_REPOSITORY#*/}
+          echo LIBRARY: $LIBRARY
+          echo "LIBRARY=$LIBRARY" >> $GITHUB_ENV
+          echo GITHUB_BASE_REF: $GITHUB_BASE_REF
+          echo GITHUB_REF: $GITHUB_REF
+          REF=${GITHUB_BASE_REF:-$GITHUB_REF}
+          REF=${REF#refs/heads/}
+          echo REF: $REF
+          BOOST_BRANCH=develop && [ "$REF" == "master" ] && BOOST_BRANCH=master || true
+          echo BOOST_BRANCH: $BOOST_BRANCH
+          cd ..
+          git clone -b $BOOST_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
+          cd boost-root
+          mkdir -p libs/$LIBRARY
+          cp -r $GITHUB_WORKSPACE/* libs/$LIBRARY
+          git submodule update --init tools/boostdep
+          python3 tools/boostdep/depinst/depinst.py --git_args "--jobs 3" $LIBRARY
+
+      - name: Configure
+        run: |
+          cd ../boost-root
+          mkdir __build__ && cd __build__
+          cmake -G Ninja \
+            -DBOOST_INCLUDE_LIBRARIES=$LIBRARY \
+            -DBUILD_TESTING=ON \
+            -DBOOST_MATH_BUILD_MODULE=ON \
+            -DCMAKE_C_COMPILER=gcc-$GCC_VERSION \
+            -DCMAKE_CXX_COMPILER=g++-$GCC_VERSION \
+            -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD=$IMPORT_STD_UUID \
+            ..
+
+      # Kept as a separate step so the boost.math module build time is visible on its own.
+      - name: Build the Boost.Math module
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target boost_math_module
+
+      - name: Build and run the tests
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target tests
+          ctest --output-on-failure --no-tests=error
+
+  cmake-module-test-msvc:
+    strategy:
+      fail-fast: false
+
+    runs-on: windows-2025
+
+    env:
+      # Pinned so the experimental import std feature UUID below stays valid.
+      CMAKE_VERSION: 4.4.0
+      # CMake gates import std behind this UUID; it is specific to the CMake version.
+      IMPORT_STD_UUID: f35a9ac6-8463-4d38-8eec-5d6008153e7d
+
+    steps:
+      - uses: actions/checkout@v6
+
+      # Puts cl.exe and the MSVC INCLUDE/LIB environment on PATH for the later steps.
+      - name: Set up the MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install toolchain
+        shell: pwsh
+        run: |
+          # A pinned CMake (the import std UUID is tied to the version) and Ninja
+          # (required for C++ modules).
+          curl.exe -L -o cmake.zip "https://github.com/Kitware/CMake/releases/download/v$env:CMAKE_VERSION/cmake-$env:CMAKE_VERSION-windows-x86_64.zip"
+          Expand-Archive -Path cmake.zip -DestinationPath C:\tools
+          "C:\tools\cmake-$env:CMAKE_VERSION-windows-x86_64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append -Encoding utf8
+          choco install ninja -y
+
+      - name: Setup Boost
+        shell: pwsh
+        run: |
+          $LIBRARY = ($env:GITHUB_REPOSITORY -split '/')[-1]
+          "LIBRARY=$LIBRARY" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          $ref = if ($env:GITHUB_BASE_REF) { $env:GITHUB_BASE_REF } else { $env:GITHUB_REF }
+          $ref = $ref -replace '^refs/heads/', ''
+          $branch = if ($ref -eq 'master') { 'master' } else { 'develop' }
+          cd ..
+          git clone -b $branch --depth 1 https://github.com/boostorg/boost.git boost-root
+          cd boost-root
+          New-Item -ItemType Directory -Force -Path "libs/$LIBRARY" | Out-Null
+          Copy-Item -Recurse -Force "$env:GITHUB_WORKSPACE/*" "libs/$LIBRARY"
+          git submodule update --init tools/boostdep
+          python tools/boostdep/depinst/depinst.py --git_args "--jobs 3" $LIBRARY
+
+      - name: Configure
+        shell: pwsh
+        run: |
+          cd ../boost-root
+          New-Item -ItemType Directory -Force -Path __build__ | Out-Null
+          cd __build__
+          cmake -G Ninja `
+            -DBOOST_INCLUDE_LIBRARIES="$env:LIBRARY" `
+            -DBUILD_TESTING=ON `
+            -DBOOST_MATH_BUILD_MODULE=ON `
+            -DCMAKE_CXX_COMPILER=cl `
+            -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD="$env:IMPORT_STD_UUID" `
+            ..
+
+      # Kept as a separate step so the boost.math module build time is visible on its own.
+      - name: Build the Boost.Math module
+        shell: pwsh
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target boost_math_module
+
+      - name: Build and run the tests
+        shell: pwsh
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target tests
+          ctest --output-on-failure --no-tests=error

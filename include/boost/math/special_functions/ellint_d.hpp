@@ -35,7 +35,7 @@
 
 namespace boost { namespace math {
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_d(T1 k, T2 phi, const Policy& pol);
 
 namespace detail{
@@ -155,21 +155,21 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type ellint_
 } // detail
 
 // Complete elliptic integral (Legendre form) of the second kind
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type ellint_d(T k)
 {
    return ellint_d(k, policies::policy<>());
 }
 
 // Elliptic integral (Legendre form) of the second kind
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type ellint_d(T1 k, T2 phi)
 {
    typedef typename policies::is_policy<T2>::type tag_type;
    return detail::ellint_d(k, phi, tag_type());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type ellint_d(T1 k, T2 phi, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;

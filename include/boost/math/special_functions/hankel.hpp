@@ -104,7 +104,7 @@ BOOST_MATH_GPU_ENABLED inline boost::math::complex<T> sph_hankel_imp(T v, T x, c
 
 } // namespace detail
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> cyl_hankel_1(T1 v, T2 x, const Policy& pol)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -114,13 +114,13 @@ BOOST_MATH_GPU_ENABLED inline boost::math::complex<typename detail::bessel_trait
    return policies::checked_narrowing_cast<boost::math::complex<result_type>, Policy>(detail::hankel_imp<value_type>(v, static_cast<value_type>(x), tag_type(), pol, 1), "boost::math::cyl_hankel_1<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline boost::math::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> cyl_hankel_1(T1 v, T2 x)
 {
    return cyl_hankel_1(v, x, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> cyl_hankel_2(T1 v, T2 x, const Policy& pol)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -130,13 +130,13 @@ BOOST_MATH_GPU_ENABLED inline boost::math::complex<typename detail::bessel_trait
    return policies::checked_narrowing_cast<boost::math::complex<result_type>, Policy>(detail::hankel_imp<value_type>(v, static_cast<value_type>(x), tag_type(), pol, -1), "boost::math::cyl_hankel_1<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline boost::math::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> cyl_hankel_2(T1 v, T2 x)
 {
    return cyl_hankel_2(v, x, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> sph_hankel_1(T1 v, T2 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -152,13 +152,13 @@ BOOST_MATH_GPU_ENABLED inline boost::math::complex<typename detail::bessel_trait
    return policies::checked_narrowing_cast<boost::math::complex<result_type>, Policy>(detail::sph_hankel_imp<value_type>(static_cast<value_type>(v), static_cast<value_type>(x), forwarding_policy(), 1), "boost::math::sph_hankel_1<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline boost::math::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> sph_hankel_1(T1 v, T2 x)
 {
    return sph_hankel_1(v, x, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> sph_hankel_2(T1 v, T2 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -174,7 +174,7 @@ BOOST_MATH_GPU_ENABLED inline boost::math::complex<typename detail::bessel_trait
    return policies::checked_narrowing_cast<boost::math::complex<result_type>, Policy>(detail::sph_hankel_imp<value_type>(static_cast<value_type>(v), static_cast<value_type>(x), forwarding_policy(), -1), "boost::math::sph_hankel_1<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline boost::math::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> sph_hankel_2(T1 v, T2 x)
 {
    return sph_hankel_2(v, x, policies::policy<>());

@@ -6,7 +6,12 @@
 //
 // See: https://github.com/boostorg/math/issues/1294
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/distributions/logistic.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 
 int main()
