@@ -6,12 +6,14 @@
 
 // Disable warnings when defining size_check for numeric types
 #ifdef _MSC_VER
+#  pragma warning(push)
 #  pragma warning (disable : 4100) // 'function': unreferenced parameter
 #endif
 
 #ifndef BOOST_MATH_QUADRATURE_SYMPLECTIC_HPP
 #define BOOST_MATH_QUADRATURE_SYMPLECTIC_HPP
 
+#include <utility>
 #include <vector>
 #include <cmath>
 #include <map>
@@ -268,6 +270,9 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
 
     // Check that p0 and q0 have the same size
     size_check(p0, q0, function, pol);
+    #ifdef _MSC_VER
+        #  pragma warning(pop)
+    #endif 
 
     typedef void (*stepperType)(RandomAccessContainer&, RandomAccessContainer&, RealType, Func, Func);
 
@@ -278,6 +283,7 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
         case available_methods::Y2:       stepper = second_order_yoshida; break;
         case available_methods::SRKNB6:   stepper = SRKN_b_order_6; break;
         case available_methods::SRKNB11:  stepper = SRKN_b_order_11; break;
+        default: boost::math::policies::raise_domain_error(function, "Incorrect method recieved. Must be in `available_methods` enum class.", 0, pol);
     }
 
     std::vector<RandomAccessContainer> p(steps);
