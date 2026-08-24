@@ -107,6 +107,24 @@ template <typename T, typename U, class Policy>
 typename std::enable_if_t<has_plus_v<T, U>, void>
 size_check(const T& vec1, const U& vec2, const char* function, const Policy& pol){    return;    }
 
+// Function to initialize array of integer types of size N
+template<typename T>
+typename std::enable_if_t<has_plus_v<T, T>, std::vector<T> >
+initialize_array(const T& p0, const size_t N)
+{
+    std::vector<T> initializedArr(N);
+    return initializedArr;
+}
+
+// Function to initialize vector of vectors of size (N, p0.size())
+template<typename T>
+typename std::enable_if_t<!has_plus_v<T, T>, std::vector<T> >
+initialize_array(const T& p0, const size_t N)
+{
+    std::vector<T> initializedArr(N, T(p0.size()));
+    return initializedArr;
+}
+
 template <typename RandomAccessContainer, typename RealType, class Func>
 void second_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt, 
                           const Func dHdp, const Func dHdq)
@@ -286,8 +304,8 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
         default: boost::math::policies::raise_domain_error(function, "Incorrect method recieved. Must be in `available_methods` enum class.", 0, pol);
     }
 
-    std::vector<RandomAccessContainer> p(steps);
-    std::vector<RandomAccessContainer> q(steps);
+    std::vector<RandomAccessContainer> p = initialize_array(p0, steps);
+    std::vector<RandomAccessContainer> q = initialize_array(q0, steps);
     p[0] = p0;
     q[0] = q0;
 
