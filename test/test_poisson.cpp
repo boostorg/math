@@ -245,6 +245,8 @@ void test_spots(RealType)
       log(static_cast<RealType>(8.277463646553730E-009)), // probability.
          tolerance);
 
+   // New test cases for Loader (2000) saddle-point approximation. Probs already
+   // in log space. Values calculated using mpmath (1000-digit precision).
    BOOST_CHECK_CLOSE(
      logpdf(poisson_distribution<RealType>(static_cast<RealType>(14)), // mean 14.
       static_cast<RealType>(14)),
