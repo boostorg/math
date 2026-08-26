@@ -426,12 +426,19 @@ void test_spots(RealType)
          // We have quite limited precision in this area:
          if (boost::math::tools::digits<RealType>() > boost::math::tools::digits<float>())
          {
+             using std::ldexp;
              BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(3)), ldexp(RealType(1), -800)), static_cast<RealType>(-1.94452005735447553162080266906e+80L), 1e-8);
-             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(3)), ldexp(RealType(1), -1000)), static_cast<RealType>(-2.27760708321880957407749124767e+100), 1e-8);
-             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(5)), ldexp(RealType(1), -1000)), static_cast<RealType>(-2.52030967154944272146770707689e+60), 1e-8);
-             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(7)), ldexp(RealType(1), -1000)), static_cast<RealType>(-2.02884419021075115948274137329e+43), 1e-8);
-             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(10)), ldexp(RealType(1), -1000)), static_cast<RealType>(-3.25092256692541451558538754799e+30), 1e-8);
-             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(30)), ldexp(RealType(1), -1000)), static_cast<RealType>(-54306462721.8246714347211540407), 1e-8);
+             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(3)), ldexp(RealType(1), -1000)), static_cast<RealType>(-2.27760708321880957407749124767e+100L), 1e-8);
+             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(5)), ldexp(RealType(1), -1000)), static_cast<RealType>(-2.52030967154944272146770707689e+60L), 1e-8);
+             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(7)), ldexp(RealType(1), -1000)), static_cast<RealType>(-2.02884419021075115948274137329e+43L), 1e-8);
+             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(10)), ldexp(RealType(1), -1000)), static_cast<RealType>(-3.25092256692541451558538754799e+30L), 1e-8);
+             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(30)), ldexp(RealType(1), -1000)), static_cast<RealType>(-54306462721.8246714347211540407L), 1e-8);
+             using nopromote = boost::math::policies::policy<boost::math::policies::promote_double<false>>;
+             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType, nopromote>(static_cast<RealType>(30)), ldexp(RealType(1), -1000)), static_cast<RealType>(-54306462721.8246714347211540407L), 1e-8);
+             if (boost::math::tools::digits<RealType>() > boost::math::tools::digits<double>())
+             {
+                 BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(30)), ldexp(RealType(1), -16000)), static_cast<RealType>(-1.77766265021682828433490865393e+161L), 1e-8);
+             }
          }
       }
 
