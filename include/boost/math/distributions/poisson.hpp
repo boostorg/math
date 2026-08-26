@@ -147,12 +147,14 @@ namespace boost
         BOOST_MATH_STD_USING // for ADL of std functions.
         using boost::math::lgamma;
 
+        // Stirling's series coefficients
         const RealType S0 = RealType(1)/12;
         const RealType S1 = RealType(1)/360;
         const RealType S2 = RealType(1)/1260;
         const RealType S3 = RealType(1)/1680;
         const RealType S4 = RealType(1)/1188;
 
+        // Use Stirling's series if n is small; use the direct formula otherwise
         bool is_small = n < 15;
         if (is_small) {
           return lgamma(n + 1) - (n * log(n) - n + 0.5 * log(2 * boost::math::constants::pi<RealType>() * n));
@@ -167,9 +169,10 @@ namespace boost
       BOOST_MATH_GPU_ENABLED inline RealType bd0(const RealType& mean, const RealType& k) {
         BOOST_MATH_STD_USING // for ADL of std functions.
 
+        // Calculate v = (k - mean) / (k + mean) from Loader (2000) approximation
         bool is_close = abs(k - mean) < RealType(0.1) * (k + mean);
 
-        if (is_close) {
+        if (is_close) { // Use the series approximation if |v| < 0.1
           RealType v = (k - mean) / (k + mean);
           RealType v2 = v * v;
           RealType series_term = ((k - mean) * (k - mean)) / (k + mean);
@@ -181,6 +184,7 @@ namespace boost
           }
           return series_term;
         } else {
+          // Use the direct formula if |v| >= 0.1
           RealType direct = (k == 0) ? RealType(0) : k * log(k / mean) + mean - k;
           return direct;
         }
@@ -350,6 +354,7 @@ namespace boost
       // Special case where k and lambda are both positive
       if(k > 0 && mean > 0)
       {
+        // Use the Loader (2000) saddle-point approximation for logpdf calculation
         return -poisson_detail::stirlerr(k) - poisson_detail::bd0(mean, k) - RealType(0.5) * log(2 * boost::math::constants::pi<RealType>() * k);
       }
 
