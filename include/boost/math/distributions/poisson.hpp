@@ -50,6 +50,7 @@
 #include <boost/math/special_functions/factorials.hpp> // factorials.
 #include <boost/math/tools/roots.hpp> // for root finding.
 #include <boost/math/distributions/detail/inv_discrete_quantile.hpp>
+#include <boost/math/constants/constants.hpp>
 
 namespace boost
 {
@@ -140,6 +141,51 @@ namespace boost
         }
         return true;
       } // bool check_dist_and_prob
+
+      template <class RealType>
+      BOOST_MATH_GPU_ENABLED inline RealType stirlerr(const RealType& n) {
+        BOOST_MATH_STD_USING // for ADL of std functions.
+        using boost::math::lgamma;
+
+        const RealType S0 = RealType(1)/12;
+        const RealType S1 = RealType(1)/360;
+        const RealType S2 = RealType(1)/1260;
+        const RealType S3 = RealType(1)/1680;
+        const RealType S4 = RealType(1)/1188;
+
+        bool is_small = n < 15;
+        if (is_small) {
+          return lgamma(n + 1) - (n * log(n) - n + 0.5 * log(2 * boost::math::constants::pi<RealType>() * n));
+        } else {
+          RealType n2 = n * n;
+          return (S0 - (S1 - (S2 - (S3 - S4/n2)/n2)/n2)/n2)/n;
+        }
+
+      }
+
+      template <class RealType>
+      BOOST_MATH_GPU_ENABLED inline RealType bd0(const RealType& mean, const RealType& k) {
+        BOOST_MATH_STD_USING // for ADL of std functions.
+
+        bool is_close = abs(k - mean) < RealType(0.1) * (k + mean);
+
+        if (is_close) {
+          RealType v = (k - mean) / (k + mean);
+          RealType v2 = v * v;
+          RealType series_term = ((k - mean) * (k - mean)) / (k + mean);
+
+          RealType term = 2 * k * v;
+          for (int i = 1; i < 11; ++i) {
+            term *= v2;
+            series_term += term / (2 * i + 1);
+          }
+          return series_term;
+        } else {
+          RealType direct = (k == 0) ? RealType(0) : k * log(k / mean) + mean - k;
+          return direct;
+        }
+
+      }
 
     } // namespace poisson_detail
 
@@ -304,7 +350,7 @@ namespace boost
       // Special case where k and lambda are both positive
       if(k > 0 && mean > 0)
       {
-        return -lgamma(k+1) + k*log(mean) - mean;
+        return -poisson_detail::stirlerr(k) - poisson_detail::bd0(mean, k) - RealType(0.5) * log(2 * boost::math::constants::pi<RealType>() * k);
       }
 
       result = log(pdf(dist, k));
