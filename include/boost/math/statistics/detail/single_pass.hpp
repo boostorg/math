@@ -34,8 +34,8 @@ template<typename ReturnType, typename ForwardIterator>
 ReturnType mean_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
     const std::size_t elements {static_cast<std::size_t>(std::distance(first, last))};
-    std::valarray<ReturnType> mu {0, 0, 0, 0};
-    std::valarray<ReturnType> temp {0, 0, 0, 0};
+    std::valarray<ReturnType> mu {ReturnType(0), ReturnType(0), ReturnType(0), ReturnType(0)};
+    std::valarray<ReturnType> temp {ReturnType(0), ReturnType(0), ReturnType(0), ReturnType(0)};
     ReturnType i {1};
     const ForwardIterator end {std::next(first, elements - (elements % 4))};
     ForwardIterator it {first};
@@ -70,9 +70,9 @@ ReturnType variance_sequential_impl(ForwardIterator first, ForwardIterator last)
     using Real = typename std::tuple_element<0, ReturnType>::type;
 
     Real M = *first;
-    Real Q = 0;
-    Real k = 2;
-    Real M2 = 0;
+    Real Q = Real(0);
+    Real k = Real(2);
+    Real M2 = Real(0);
     std::size_t n = 1;
 
     for(auto it = std::next(first); it != last; ++it)
@@ -98,9 +98,9 @@ ReturnType first_four_moments_sequential_impl(ForwardIterator first, ForwardIter
     using Size = typename std::tuple_element<4, ReturnType>::type;
 
     Real M1 = *first;
-    Real M2 = 0;
-    Real M3 = 0;
-    Real M4 = 0;
+    Real M2 = Real(0);
+    Real M3 = Real(0);
+    Real M4 = Real(0);
     Size n = 2;
     for (auto it = std::next(first); it != last; ++it)
     {
@@ -215,8 +215,8 @@ ReturnType skewness_sequential_impl(ForwardIterator first, ForwardIterator last)
     BOOST_MATH_ASSERT_MSG(first != last, "At least one sample is required to compute skewness.");
     
     ReturnType M1 = *first;
-    ReturnType M2 = 0;
-    ReturnType M3 = 0;
+    ReturnType M2 = ReturnType(0);
+    ReturnType M3 = ReturnType(0);
     ReturnType n = 2;
         
     for (auto it = std::next(first); it != last; ++it)    
@@ -246,8 +246,8 @@ template<typename ReturnType, typename ForwardIterator>
 ReturnType gini_coefficient_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
     ReturnType i = 1;
-    ReturnType num = 0;
-    ReturnType denom = 0;
+    ReturnType num = ReturnType(0);
+    ReturnType denom = ReturnType(0);
 
     for(auto it = first; it != last; ++it)
     {
@@ -273,8 +273,8 @@ ReturnType gini_range_fraction(ForwardIterator first, ForwardIterator last, std:
     using Real = typename std::tuple_element<0, ReturnType>::type;
 
     std::size_t i = starting_index + 1;
-    Real num = 0;
-    Real denom = 0;
+    Real num = Real(0);
+    Real denom = Real(0);
 
     for(auto it = first; it != last; ++it)
     {
@@ -340,8 +340,8 @@ ReturnType gini_coefficient_parallel_impl(ExecutionPolicy&&, ForwardIterator fir
         return gini_range_fraction<range_tuple>(it, last, (num_threads - 1)*elements_per_thread);
     }));
 
-    ReturnType num = 0;
-    ReturnType denom = 0;
+    ReturnType num = ReturnType(0);
+    ReturnType denom = ReturnType(0);
 
     for(std::size_t i = 0; i < future_manager.size(); ++i)
     {
