@@ -49,6 +49,15 @@ struct has_plus<T, U, void_t<decltype(std::declval<T>() + std::declval<U>())> > 
 template <typename T, typename U>
 BOOST_MATH_INLINE_CONSTEXPR bool has_plus_v = has_plus<T, U>::value;
 
+template<typename T, typename = void>
+struct has_size : std::false_type {};
+
+template<typename T>
+struct has_size<T, void_t<decltype(std::declval<T>().size())> > : std::true_type {};
+
+template <typename T>
+BOOST_MATH_INLINE_CONSTEXPR bool has_size_v = has_size<T>::value;
+
 template <typename T, typename U>
 typename std::enable_if_t<has_plus_v<T, U>, void>
 add(T& x, const U& y) 
@@ -93,7 +102,7 @@ mult_prefactor(T& vec1, U prefactor)
 }
 
 template <typename T, typename U, class Policy>
-typename std::enable_if_t<!has_plus_v<T, U>, void>
+typename std::enable_if_t<(has_size_v<T> && has_size_v<U>), void>
 size_check(const T& vec1, const U& vec2, const char* function, const Policy& pol)
 {
     if (vec1.size() != vec2.size())
@@ -104,12 +113,12 @@ size_check(const T& vec1, const U& vec2, const char* function, const Policy& pol
 }
 
 template <typename T, typename U, class Policy>
-typename std::enable_if_t<has_plus_v<T, U>, void>
+typename std::enable_if_t<!(has_size_v<T> && has_size_v<U>), void>
 size_check(const T& vec1, const U& vec2, const char* function, const Policy& pol){    return;    }
 
 // Function to initialize array of integer types of size N
 template<typename T>
-typename std::enable_if_t<has_plus_v<T, T>, std::vector<T> >
+typename std::enable_if_t<!has_size_v<T>, std::vector<T> >
 initialize_array(const T& p0, const size_t N)
 {
     std::vector<T> initializedArr(N);
@@ -118,10 +127,10 @@ initialize_array(const T& p0, const size_t N)
 
 // Function to initialize vector of vectors of size (N, p0.size())
 template<typename T>
-typename std::enable_if_t<!has_plus_v<T, T>, std::vector<T> >
+typename std::enable_if_t<has_size_v<T>, std::vector<T> >
 initialize_array(const T& p0, const size_t N)
 {
-    std::vector<T> initializedArr(N, T(p0.size()));
+    std::vector<T> initializedArr(N, T(p0.size(), 0));
     return initializedArr;
 }
 
