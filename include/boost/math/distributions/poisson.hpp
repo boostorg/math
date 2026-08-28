@@ -142,31 +142,23 @@ namespace boost
         return true;
       } // bool check_dist_and_prob
 
-      template <class RealType>
-      BOOST_MATH_GPU_ENABLED inline RealType stirlerr(const RealType& n) {
+      template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline RealType stirlerr(const RealType& n, const Policy& pol) {
         BOOST_MATH_STD_USING // for ADL of std functions.
         using boost::math::lgamma;
 
-        // Stirling's series coefficients
-        const RealType S0 = RealType(1)/12;
-        const RealType S1 = RealType(1)/360;
-        const RealType S2 = RealType(1)/1260;
-        const RealType S3 = RealType(1)/1680;
-        const RealType S4 = RealType(1)/1188;
-
-        // Use Stirling's series if n is small; use the direct formula otherwise
-        bool is_small = n < 15;
-        if (is_small) {
-          return lgamma(n + 1) - (n * log(n) - n + 0.5 * log(2 * boost::math::constants::pi<RealType>() * n));
-        } else {
-          RealType n2 = n * n;
-          return (S0 - (S1 - (S2 - (S3 - S4/n2)/n2)/n2)/n2)/n;
+        // Use the direct formula for small n
+        if (n < boost::math::detail::minimum_argument_for_bernoulli_recursion<RealType>()) {
+          return lgamma(n + 1) - (n * log(n) - n + RealType(0.5) * log(RealType(2) * boost::math::constants::pi<RealType>() * n));
         }
+
+        // Use the Stirling series approximation for large n
+        return boost::math::detail::bernoulli_stirling_series<RealType>(n, pol);
 
       }
 
-      template <class RealType>
-      BOOST_MATH_GPU_ENABLED inline RealType bd0(const RealType& mean, const RealType& k) {
+      template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline RealType bd0(const RealType& mean, const RealType& k, const Policy& pol) {
         BOOST_MATH_STD_USING // for ADL of std functions.
 
         // Calculate v = (k - mean) / (k + mean) from Loader (2000) approximation
@@ -178,9 +170,24 @@ namespace boost
           RealType series_term = ((k - mean) * (k - mean)) / (k + mean);
 
           RealType term = 2 * k * v;
-          for (int i = 1; i < 11; ++i) {
-            term *= v2;
-            series_term += term / (2 * i + 1);
+          
+          // Series is trivially zero when k = mean, so skip the loop
+          if (term != RealType(0)) {
+            RealType target_epsilon = abs(term) * boost::math::tools::epsilon<RealType>();
+            const boost::math::size_t max_iterations = policies::get_max_series_iterations<Policy>();
+
+            for (boost::math::size_t i = 1U;; ++i) {
+              term *= v2;
+              RealType next = term / (2 * i + 1);
+              series_term += next;
+              // Break if the next term is less than the target epsilon
+              if (abs(next) < target_epsilon) {
+                break;
+              }
+              if (i > max_iterations) {
+                return policies::raise_evaluation_error<RealType>("bd0<%1%>()", "Series did not converge in the allotted iterations, best approximation was %1%", series_term, pol);
+              }
+            }
           }
           return series_term;
         } else {
@@ -355,7 +362,7 @@ namespace boost
       if(k > 0 && mean > 0)
       {
         // Use the Loader (2000) saddle-point approximation for logpdf calculation
-        return -poisson_detail::stirlerr(k) - poisson_detail::bd0(mean, k) - RealType(0.5) * log(2 * boost::math::constants::pi<RealType>() * k);
+        return -poisson_detail::stirlerr(k, Policy()) - poisson_detail::bd0(mean, k, Policy()) - RealType(0.5) * log(RealType(2) * boost::math::constants::pi<RealType>() * k);
       }
 
       result = log(pdf(dist, k));
