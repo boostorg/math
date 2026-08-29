@@ -767,6 +767,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [endmathpart]
 
 [mathpart quadrature Quadrature and Differentiation]
+[include quadrature/van_den_bos_unit_square.qbk]
 [include quadrature/trapezoidal.qbk]
 [include quadrature/gauss.qbk]
 [include quadrature/gauss_kronrod.qbk]

@@ -1343,6 +1343,9 @@ test-suite quadrature :
      <cxxstd>17
      [ requires cxx17_if_constexpr cxx11_auto_declarations cxx11_lambdas cxx11_hdr_array cxx11_hdr_thread ]
      <target-os>linux:<linkflags>"-pthread" ]
+   [ compile-fail test_van_den_bos_unit_square_integral_return_fail.cpp :
+     <cxxstd>17
+     [ requires cxx17_if_constexpr cxx11_auto_declarations cxx11_lambdas cxx11_hdr_array ] ]
    [ run git_issue_898.cpp ]
    [ run git_issue_1075.cpp : : : $(float128_type) ]
 

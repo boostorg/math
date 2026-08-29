@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 Nick Thompson
+ * Copyright 2026 Nicholas Thompson
  *
  * Use, modification and distribution are subject to the
  * Boost Software License, Version 1.0.
@@ -36,6 +36,7 @@
 #endif
 
 #include <Eigen/Core>
+#include <Eigen/LU>
 #include <Eigen/QR>
 
 #include <boost/math/tools/precision.hpp>
@@ -127,6 +128,32 @@ template <class Real>
 using vector_type = Eigen::Matrix<Real, Eigen::Dynamic, 1>;
 
 template <class Point, class Real, class Basis>
+auto fill_moment_values(
+    Point const& point,
+    Basis const& basis,
+    Real* values,
+    std::size_t moment_count,
+    int)
+    -> decltype(basis.evaluate(point, values, moment_count), void())
+{
+    basis.evaluate(point, values, moment_count);
+}
+
+template <class Point, class Real, class Basis>
+void fill_moment_values(
+    Point const& point,
+    Basis const& basis,
+    Real* values,
+    std::size_t moment_count,
+    long)
+{
+    for (std::size_t k = 0; k < moment_count; ++k)
+    {
+        values[k] = basis(point, k);
+    }
+}
+
+template <class Point, class Real, class Basis>
 matrix_type<Real> moment_matrix(
     std::vector<Point> const& points,
     std::vector<std::size_t> const& indices,
@@ -137,13 +164,14 @@ matrix_type<Real> moment_matrix(
         static_cast<Eigen::Index>(moment_count),
         static_cast<Eigen::Index>(indices.size()));
 
-    for (std::size_t k = 0; k < moment_count; ++k)
+    for (std::size_t j = 0; j < indices.size(); ++j)
     {
-        for (std::size_t j = 0; j < indices.size(); ++j)
-        {
-            A(static_cast<Eigen::Index>(k), static_cast<Eigen::Index>(j)) =
-                basis(points[indices[j]], k);
-        }
+        fill_moment_values<Point, Real, Basis>(
+            points[indices[j]],
+            basis,
+            A.col(static_cast<Eigen::Index>(j)).data(),
+            moment_count,
+            0);
     }
     return A;
 }
@@ -631,11 +659,18 @@ positive_cubature_rule<Point, Real> reduce_protected_basic(
         points, suffix_indices, basis, moment_count);
 
     std::vector<Real> residual = moments;
+    std::vector<Real> protected_moments(moment_count);
     for (std::size_t j = 0; j < protected_count; ++j)
     {
+        fill_moment_values<Point, Real, Basis>(
+            points[j],
+            basis,
+            protected_moments.data(),
+            moment_count,
+            0);
         for (std::size_t k = 0; k < moment_count; ++k)
         {
-            residual[k] -= weights[j] * basis(points[j], k);
+            residual[k] -= weights[j] * protected_moments[k];
         }
     }
 
@@ -657,28 +692,50 @@ positive_cubature_rule<Point, Real> reduce_protected_basic(
         is_basic[index] = 1;
     }
 
+    matrix_type<Real> B(
+        static_cast<Eigen::Index>(moment_count),
+        static_cast<Eigen::Index>(moment_count));
     matrix_type<Real> inverse;
+    const Real solve_tolerance = Real(1000) * rank_tolerance;
+
+    auto inverse_residual = [&]
+    {
+        return (B * inverse - matrix_type<Real>::Identity(
+                    static_cast<Eigen::Index>(moment_count),
+                    static_cast<Eigen::Index>(moment_count)))
+            .cwiseAbs()
+            .maxCoeff();
+    };
+
     auto rebuild_inverse = [&]
     {
-        matrix_type<Real> B(
-            static_cast<Eigen::Index>(moment_count),
-            static_cast<Eigen::Index>(moment_count));
         for (std::size_t j = 0; j < moment_count; ++j)
         {
             B.col(static_cast<Eigen::Index>(j)) =
                 A.col(static_cast<Eigen::Index>(basic[j]));
         }
 
-        Eigen::ColPivHouseholderQR<matrix_type<Real>> basis_qr(B);
-        basis_qr.setThreshold(rank_tolerance);
-        if (basis_qr.rank() != static_cast<Eigen::Index>(moment_count))
+        Eigen::PartialPivLU<matrix_type<Real>> basis_lu(B);
+        inverse = basis_lu.inverse();
+
+        if (inverse_residual() > solve_tolerance)
         {
-            throw std::runtime_error(
-                "reduce_protected_basic: pivot basis is rank deficient.");
+            Eigen::ColPivHouseholderQR<matrix_type<Real>> basis_qr(B);
+            basis_qr.setThreshold(rank_tolerance);
+            if (basis_qr.rank() != static_cast<Eigen::Index>(moment_count))
+            {
+                throw std::runtime_error(
+                    "reduce_protected_basic: pivot basis is rank deficient.");
+            }
+            inverse = basis_qr.solve(matrix_type<Real>::Identity(
+                static_cast<Eigen::Index>(moment_count),
+                static_cast<Eigen::Index>(moment_count)));
+            if (inverse_residual() > solve_tolerance)
+            {
+                throw std::runtime_error(
+                    "reduce_protected_basic: inverse residual is too large.");
+            }
         }
-        inverse = basis_qr.solve(matrix_type<Real>::Identity(
-            static_cast<Eigen::Index>(moment_count),
-            static_cast<Eigen::Index>(moment_count)));
     };
     rebuild_inverse();
 
@@ -694,7 +751,6 @@ positive_cubature_rule<Point, Real> reduce_protected_basic(
         nonbasic_weights[basic[j]] = Real(0);
     }
 
-    std::size_t pivot_count = 0;
     for (std::size_t candidate = 0; candidate < suffix_count; ++candidate)
     {
         if (is_basic[candidate])
@@ -708,8 +764,21 @@ positive_cubature_rule<Point, Real> reduce_protected_basic(
             continue;
         }
 
-        vector_type<Real> z =
-            inverse * A.col(static_cast<Eigen::Index>(candidate));
+        const auto candidate_column =
+            A.col(static_cast<Eigen::Index>(candidate));
+        vector_type<Real> z = inverse * candidate_column;
+        if ((B * z - candidate_column).cwiseAbs().maxCoeff()
+            > solve_tolerance)
+        {
+            rebuild_inverse();
+            z = inverse * candidate_column;
+            if ((B * z - candidate_column).cwiseAbs().maxCoeff()
+                > solve_tolerance)
+            {
+                throw std::runtime_error(
+                    "reduce_protected_basic: candidate solve residual is too large.");
+            }
+        }
         const Real candidate_weight = nonbasic_weights[candidate];
 
         struct boundary
@@ -842,6 +911,7 @@ positive_cubature_rule<Point, Real> reduce_protected_basic(
         is_basic[candidate] = 1;
         nonbasic_weights[candidate] = Real(0);
         basic[replaced] = candidate;
+        B.col(static_cast<Eigen::Index>(replaced)) = candidate_column;
         basic_weights = std::move(updated_weights);
         basic_weights[replaced] = updated_candidate;
 
@@ -851,11 +921,6 @@ positive_cubature_rule<Point, Real> reduce_protected_basic(
             (update * inverse.row(static_cast<Eigen::Index>(replaced))) /
             z(static_cast<Eigen::Index>(replaced));
 
-        ++pivot_count;
-        if (pivot_count % 32 == 0)
-        {
-            rebuild_inverse();
-        }
     }
 
     std::sort(basic.begin(), basic.end());
@@ -1414,7 +1479,8 @@ public:
     using multi_index_type = std::array<unsigned, Dimension>;
 
     explicit van_den_bos_legendre_basis(unsigned degree)
-        : indices_(detail::total_degree_multi_indices<Dimension>(degree))
+        : degree_(degree),
+          indices_(detail::total_degree_multi_indices<Dimension>(degree))
     {}
 
     std::size_t size() const noexcept
@@ -1433,6 +1499,42 @@ public:
         return value;
     }
 
+    void evaluate(
+        point_type const& x,
+        Real* values,
+        std::size_t count) const
+    {
+        std::array<std::vector<Real>, Dimension> polynomials;
+        for (std::size_t j = 0; j < Dimension; ++j)
+        {
+            polynomials[j].resize(degree_ + 1);
+            polynomials[j][0] = Real(1);
+            if (degree_ == 0)
+            {
+                continue;
+            }
+
+            const Real t = Real(2) * x[j] - Real(1);
+            polynomials[j][1] = t;
+            for (unsigned k = 2; k <= degree_; ++k)
+            {
+                polynomials[j][k] =
+                    (Real(2 * k - 1) * t * polynomials[j][k - 1]
+                     - Real(k - 1) * polynomials[j][k - 2]) / Real(k);
+            }
+        }
+
+        for (std::size_t k = 0; k < count; ++k)
+        {
+            Real value = Real(1);
+            for (std::size_t j = 0; j < Dimension; ++j)
+            {
+                value *= polynomials[j][indices_[k][j]];
+            }
+            values[k] = value;
+        }
+    }
+
     std::vector<Real> moments() const
     {
         std::vector<Real> result(size(), Real(0));
@@ -1449,7 +1551,111 @@ public:
     }
 
 private:
+    unsigned degree_;
     std::vector<multi_index_type> indices_;
+};
+
+// Legendre products invariant under the full symmetry group of the square.
+// Orbit weights are per-node weights, so each basis value includes the size
+// of the node's D4 orbit.
+template <class Real>
+class van_den_bos_d4_legendre_basis
+{
+public:
+    using point_type = std::array<Real, 2>;
+    using index_type = std::array<unsigned, 2>;
+
+    explicit van_den_bos_d4_legendre_basis(unsigned degree)
+    {
+        for (unsigned a = 0; a <= degree; a += 2)
+        {
+            for (unsigned b = a; b <= degree - a; b += 2)
+            {
+                indices_.push_back({{a, b}});
+            }
+        }
+    }
+
+    std::size_t size() const noexcept
+    {
+        return indices_.size();
+    }
+
+    Real operator()(point_type const& point, std::size_t k) const
+    {
+        if (k == 0)
+        {
+            return static_cast<Real>(orbit_size(point));
+        }
+
+        const auto& index = indices_[k];
+        const auto transformed = transforms(point);
+        Real sum = Real(0);
+        for (auto const& p : transformed)
+        {
+            sum += detail::shifted_legendre(index[0], p[0]) *
+                detail::shifted_legendre(index[1], p[1]);
+        }
+        return sum * static_cast<Real>(orbit_size(point)) /
+            static_cast<Real>(8);
+    }
+
+    std::vector<Real> moments() const
+    {
+        std::vector<Real> result(size(), Real(0));
+        if (!result.empty())
+        {
+            result[0] = Real(1);
+        }
+        return result;
+    }
+
+private:
+    static std::vector<point_type> transforms(point_type const& p)
+    {
+        return {
+            {{p[0], p[1]}}, {{p[1], p[0]}},
+            {{Real(1) - p[0], p[1]}},
+            {{p[1], Real(1) - p[0]}},
+            {{p[0], Real(1) - p[1]}},
+            {{Real(1) - p[1], p[0]}},
+            {{Real(1) - p[0], Real(1) - p[1]}},
+            {{Real(1) - p[1], Real(1) - p[0]}}};
+    }
+
+    static std::size_t orbit_size(point_type const& p)
+    {
+        const auto transformed = transforms(p);
+        std::size_t size = 0;
+        for (std::size_t i = 0; i < transformed.size(); ++i)
+        {
+            bool duplicate = false;
+            for (std::size_t j = 0; j < i; ++j)
+            {
+                bool equal = true;
+                for (std::size_t d = 0; d < 2; ++d)
+                {
+                    Real scale = (std::max)(Real(1), (std::max)(
+                        abs(transformed[i][d]), abs(transformed[j][d])));
+                    if (abs(transformed[i][d] - transformed[j][d]) >
+                        Real(64) * std::numeric_limits<Real>::epsilon() * scale)
+                        equal = false;
+                }
+                if (equal)
+                {
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (!duplicate)
+            {
+                ++size;
+            }
+        }
+        return size;
+    }
+
+    std::vector<index_type> indices_;
 };
 
 
@@ -1586,6 +1792,76 @@ clenshaw_curtis_tensor_rule(std::size_t n)
         }
     }
 
+    return {std::move(points), std::move(weights)};
+}
+
+// Nested Fejer type-II nodes.  The parameter is the denominator in
+// theta_j = j*pi/order, so powers of two form a nested sequence while the
+// endpoints are excluded.
+template <class Real>
+std::pair<std::vector<Real>, std::vector<Real>>
+fejer_second_rule(std::size_t order)
+{
+    using std::acos;
+    using std::cos;
+    using std::sin;
+
+    if (order < 2)
+        throw std::invalid_argument("fejer_second_rule: order must be at least 2");
+
+    const Real pi = acos(Real(-1));
+    std::vector<Real> x(order - 1);
+    std::vector<Real> w(order - 1);
+    for (std::size_t j = 1; j < order; ++j)
+    {
+        const Real theta = pi * Real(j) / Real(order);
+        x[j - 1] = (Real(1) - cos(theta)) / Real(2);
+        Real sum = Real(0);
+        for (std::size_t k = 1; k <= order / 2; ++k)
+        {
+            const std::size_t odd = 2 * k - 1;
+            sum += sin(Real(odd) * theta) / Real(odd);
+        }
+        // The factor is two on [-1,1] and one after mapping to [0,1].
+        w[j - 1] = Real(2) * sin(theta) * sum / Real(order);
+    }
+    return {std::move(x), std::move(w)};
+}
+
+template <class Real, std::size_t Dimension>
+std::pair<std::vector<std::array<Real, Dimension>>, std::vector<Real>>
+fejer_second_tensor_rule(std::size_t order)
+{
+    using point_type = std::array<Real, Dimension>;
+    auto one_dimensional = fejer_second_rule<Real>(order);
+    auto const& x = one_dimensional.first;
+    auto const& w = one_dimensional.second;
+    std::size_t count = 1;
+    for (std::size_t d = 0; d < Dimension; ++d) count *= x.size();
+    std::vector<point_type> points;
+    std::vector<Real> weights;
+    points.reserve(count);
+    weights.reserve(count);
+    std::array<std::size_t, Dimension> index{};
+    bool done = false;
+    while (!done)
+    {
+        point_type point{};
+        Real weight = Real(1);
+        for (std::size_t d = 0; d < Dimension; ++d)
+        {
+            point[d] = x[index[d]];
+            weight *= w[index[d]];
+        }
+        points.push_back(point);
+        weights.push_back(weight);
+        for (std::size_t d = Dimension; d-- > 0;)
+        {
+            if (++index[d] < x.size()) break;
+            index[d] = 0;
+            if (d == 0) done = true;
+        }
+    }
     return {std::move(points), std::move(weights)};
 }
 

@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+# Copyright Nicholas Thompson 2026.
+# Use, modification and distribution are subject to the
+# Boost Software License, Version 1.0. (See accompanying file
+# LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 # /// script
 # requires-python = ">=3.9"
 # dependencies = [
@@ -26,6 +31,17 @@ DEFAULT_TRACE = (
 )
 DEFAULT_OUTPUT = DEFAULT_TRACE.with_suffix(".png")
 
+DISPLAY_NAMES = {
+    "quadratic": "Quadratic",
+    "exp_x_plus_y": r"$e^{x+y}$",
+    "exp_xy": r"$e^{xy}$",
+    "one_over_1_plus_x_plus_y": r"$1/(1+x+y)$",
+    "complex_exp_5ixy": r"$e^{5ixy}$",
+    "cos_5xy": r"$\cos(5xy)$",
+    "sqrt_x_plus_y": r"$\sqrt{x+y}$",
+    "inv_sqrt_xy": r"$1/\sqrt{xy}$",
+}
+
 
 def parse_value(s):
     s = s.strip()
@@ -50,24 +66,22 @@ def parse_trace(path):
             }
         elif raw.startswith("VDB_LEVEL,") and current is not None:
             match = re.fullmatch(
-                r"VDB_LEVEL,level=(\d+),degree=(\d+),order=(\d+),"
-                r"nodes=(\d+),evaluations=(\d+),value=(\([^)]*\)|[^,]+),"
+                r"VDB_LEVEL,level=(\d+),nodes=(\d+),evaluations=(\d+),"
+                r"value=(\([^)]*\)|[^,]+),"
                 r"delta=([^,]+),error_estimate=(.+)",
                 raw,
             )
             if not match:
                 raise ValueError(f"cannot parse level record: {raw}")
 
-            value = parse_value(match.group(6))
+            value = parse_value(match.group(4))
             exact = cases[current]["exact"]
             actual_error = abs(value - exact)
-            error_text = match.group(8)
+            error_text = match.group(6)
             cases[current]["levels"].append({
                 "level": int(match.group(1)),
-                "degree": int(match.group(2)),
-                "order": int(match.group(3)),
-                "nodes": int(match.group(4)),
-                "evaluations": int(match.group(5)),
+                "nodes": int(match.group(2)),
+                "evaluations": int(match.group(3)),
                 "value": value,
                 "actual_error": actual_error,
                 "estimated_error": float(error_text)
@@ -109,19 +123,34 @@ def main():
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
 
-    fig, ax = plt.subplots()
+    plt.style.use("dark_background")
+    fig, ax = plt.subplots(figsize=(10.5, 6.2))
 
     for name, case in cases.items():
         xs = [row["evaluations"] for row in case["levels"]]
         ys = [max(row["actual_error"], 1e-18) for row in case["levels"]]
-        ax.plot(xs, ys, marker="o", label=name)
+        ax.plot(
+            xs,
+            ys,
+            marker="o",
+            markersize=5,
+            linewidth=1.8,
+            label=DISPLAY_NAMES.get(name, name.replace("_", " ")),
+        )
 
     ax.set_yscale("log")
     ax.set_xlabel("Function evaluations")
     ax.set_ylabel("Absolute error")
     ax.set_title("van den Bos unit-square convergence")
-    ax.grid(True, which="both", alpha=0.25)
-    ax.legend()
+    ax.grid(True, which="major", color="white", alpha=0.18)
+    ax.grid(True, which="minor", axis="y", color="white", alpha=0.07)
+    ax.legend(
+        title="Integrand",
+        loc="upper left",
+        bbox_to_anchor=(1.02, 1),
+        borderaxespad=0,
+        frameon=False,
+    )
     fig.tight_layout()
     fig.savefig(args.out, dpi=180)
     plt.close(fig)
@@ -144,7 +173,7 @@ def main():
             ax.set_yscale("log")
             ax.set_xlabel("Function evaluations")
             ax.set_ylabel("Absolute error")
-            ax.set_title(name)
+            ax.set_title(DISPLAY_NAMES.get(name, name.replace("_", " ")))
             ax.grid(True, which="both", alpha=0.25)
             ax.legend()
             fig.tight_layout()
