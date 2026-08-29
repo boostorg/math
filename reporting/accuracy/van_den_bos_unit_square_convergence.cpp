@@ -1,3 +1,8 @@
+// Copyright Nicholas Thompson 2026.
+// Use, modification and distribution are subject to the
+// Boost Software License, Version 1.0. (See accompanying file
+// LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 /*
  * Convergence trace driver for van_den_bos_unit_square.
  *
@@ -12,7 +17,6 @@
 
 #include <boost/math/quadrature/van_den_bos_unit_square.hpp>
 
-#include <array>
 #include <cmath>
 #include <complex>
 #include <cstddef>
@@ -22,7 +26,6 @@
 
 namespace {
 
-using point2 = std::array<double, 2>;
 using boost::math::quadrature::van_den_bos_unit_square;
 
 template <class F, class Exact>
@@ -35,7 +38,7 @@ void run_case(char const* name, F const& f, Exact const& exact, double tol = 1e-
     std::cout << std::setprecision(std::numeric_limits<double>::max_digits10)
               << "VDB_CASE,name=" << name << ",exact=" << exact << '\n';
     (void)van_den_bos_unit_square(
-        f, tol, 5, &error, &l1, &evaluations);
+        f, tol, &error, &l1, &evaluations);
     std::cout << "VDB_END,name=" << name
               << ",error_estimate=" << error
               << ",evaluations=" << evaluations << '\n';
@@ -69,25 +72,25 @@ int main()
 {
     run_case(
         "quadratic",
-        [](point2 const& p)
+        [](double x, double y)
         {
-            return p[0] * p[0] + p[1] * p[1] + p[0] * p[1];
+            return x * x + y * y + x * y;
         },
         11.0 / 12.0);
 
     run_case(
         "exp_x_plus_y",
-        [](point2 const& p)
+        [](double x, double y)
         {
-            return std::exp(p[0] + p[1]);
+            return std::exp(x + y);
         },
         std::pow(std::expm1(1.0), 2));
 
     run_case(
         "exp_xy",
-        [](point2 const& p)
+        [](double x, double y)
         {
-            return std::exp(p[0] * p[1]);
+            return std::exp(x * y);
         },
         [] {
             double s = 0;
@@ -107,35 +110,43 @@ int main()
 
     run_case(
         "one_over_1_plus_x_plus_y",
-        [](point2 const& p)
+        [](double x, double y)
         {
-            return 1.0 / (1.0 + p[0] + p[1]);
+            return 1.0 / (1.0 + x + y);
         },
         3.0 * std::log(3.0) - 4.0 * std::log(2.0));
 
     run_case(
         "complex_exp_5ixy",
-        [](point2 const& p)
+        [](double x, double y)
         {
-            return std::exp(std::complex<double>(0, 5 * p[0] * p[1]));
+            return std::exp(std::complex<double>(0, 5 * x * y));
         },
         exact_exp_5ixy());
 
     run_case(
         "cos_5xy",
-        [](point2 const& p)
+        [](double x, double y)
         {
-            return std::cos(5.0 * p[0] * p[1]);
+            return std::cos(5.0 * x * y);
         },
         exact_exp_5ixy().real());
 
     run_case(
         "sqrt_x_plus_y",
-        [](point2 const& p)
+        [](double x, double y)
         {
-            return std::sqrt(p[0] + p[1]);
+            return std::sqrt(x + y);
         },
         (4.0 / 15.0) * (std::pow(2.0, 2.5) - 2.0));
+
+    run_case(
+        "inv_sqrt_xy",
+        [](double x, double y)
+        {
+            return 1 / std::sqrt(x * y);
+        },
+        4.0);
 
     return 0;
 }
