@@ -91,9 +91,9 @@ template <class F>
 auto van_den_bos_unit_square(
     F const& f,
     double tolerance,
-    double* error_estimate = 0,
-    double* L1 = 0,
-    std::size_t* evaluations = 0)
+    double* error_estimate = nullptr,
+    double* L1 = nullptr,
+    std::size_t* evaluations = nullptr)
     -> decltype(f(std::declval<double>(), std::declval<double>()))
 {
     using std::abs;
