@@ -12,6 +12,7 @@
 #endif
 
 #include <boost/math/quadrature/detail/van_den_bos_unit_square_tables.hpp>
+#include <boost/math/tools/throw_exception.hpp>
 
 #include <algorithm>
 #include <array>
@@ -53,9 +54,9 @@ van_den_bos_unit_square_level(std::size_t level)
 {
     if (level >= van_den_bos_unit_square_level_count)
     {
-        throw std::out_of_range(
+        BOOST_MATH_THROW_EXCEPTION(std::out_of_range(
             "van_den_bos_unit_square: requested level exceeds "
-            "the precomputed hierarchy.");
+            "the precomputed hierarchy."));
     }
 
     return {
@@ -108,8 +109,8 @@ auto van_den_bos_unit_square(
 
     if (!(tolerance > 0))
     {
-        throw std::domain_error(
-            "van_den_bos_unit_square: tolerance must be positive.");
+        BOOST_MATH_THROW_EXCEPTION(std::domain_error(
+            "van_den_bos_unit_square: tolerance must be positive."));
     }
 
     std::vector<result_type> orbit_sums;
