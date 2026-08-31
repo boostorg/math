@@ -40,7 +40,7 @@ struct van_den_bos_unit_square_level_view
     double const* weights;
     std::size_t size;
 
-    std::array<double, 2> point(std::size_t index) const
+    std::array<double, 2> point(const std::size_t index) const
     {
         const std::array<std::uint8_t, 2>& node = node_indices[index];
         return {{
@@ -50,7 +50,7 @@ struct van_den_bos_unit_square_level_view
 };
 
 inline van_den_bos_unit_square_level_view
-van_den_bos_unit_square_level(std::size_t level)
+van_den_bos_unit_square_level(const std::size_t level)
 {
     if (level >= van_den_bos_unit_square_level_count)
     {
@@ -90,7 +90,7 @@ van_den_bos_unit_square_level(std::size_t level)
 template <class F>
 auto van_den_bos_unit_square(
     F const& f,
-    double tolerance,
+    const double tolerance,
     double* error_estimate = nullptr,
     double* L1 = nullptr,
     std::size_t* evaluations = nullptr)
