@@ -1,5 +1,6 @@
 //  Copyright 2026 Nicholas Thompson and Matt Borland
 //  Distributed under the Boost Software License, Version 1.0.
+//  https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/math/quadrature/van_den_bos_unit_square.hpp>
 #include <boost/math/constants/constants.hpp>
