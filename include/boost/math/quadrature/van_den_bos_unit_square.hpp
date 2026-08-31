@@ -97,15 +97,13 @@ auto van_den_bos_unit_square(
     -> decltype(f(std::declval<double>(), std::declval<double>()))
 {
     using std::abs;
-    typedef decltype(
-        f(std::declval<double>(), std::declval<double>())) result_type;
+    using result_type = decltype(f(std::declval<double>(), std::declval<double>()));
 
     static_assert(!std::is_integral<result_type>::value,
         "The return type cannot be integral, it must be either a real or "
         "complex floating point type.");
 
-    typedef typename std::decay<
-        decltype(abs(std::declval<result_type>()))>::type magnitude_type;
+    using magnitude_type = std::decay_t<decltype(abs(std::declval<result_type>()))>;
 
     if (!(tolerance > 0))
     {
