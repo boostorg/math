@@ -18,7 +18,6 @@
 #include <cmath>
 #include <complex>
 #include <cstddef>
-#include <iomanip>
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
@@ -27,6 +26,7 @@
 
 #ifdef BOOST_MATH_INSTRUMENT
 #include <iostream>
+#include <iomanip>
 #endif
 
 namespace boost { namespace math { namespace quadrature {
