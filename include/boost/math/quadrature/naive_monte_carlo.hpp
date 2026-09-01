@@ -395,6 +395,7 @@ private:
             // The idea is that the unstabilized additions have error sigma(f)/sqrt(N) + epsilon*N, which diverges faster than it converges!
             // Kahan summation turns this to sigma(f)/sqrt(N) + epsilon^2*N, and the random walk occurs on a timescale of 10^14 years (on current hardware)
             Real compensator = 0;
+            Real S_compensator = 0;
             std::uint64_t k = m_thread_calls[thread_index].load(std::memory_order_consume);
             while (!m_done) // relaxed load
             {
@@ -430,7 +431,11 @@ private:
                     Real y1 = term - compensator;
                     Real M2 = M1 + y1;
                     compensator = (M2 - M1) - y1;
-                    S += (f - M1)*(f - M2);
+                    Real S_term = (f - M1)*(f - M2);
+                    Real y2 = S_term - S_compensator;
+                    Real S2 = S + y2;
+                    S_compensator = (S2 - S) - y2;
+                    S = S2;
                     M1 = M2;
                 }
                 m_thread_averages[thread_index].store(M1, std::memory_order_release);
