@@ -208,7 +208,7 @@ BOOST_MATH_GPU_ENABLED int CF1_ik(T v, T x, T* fv, const Policy& pol)
 // z1 / z0 = U(v+1.5, 2v+1, 2x) / U(v+0.5, 2v+1, 2x), see
 // Thompson and Barnett, Computer Physics Communications, vol 47, 245 (1987)
 template <typename T, typename Policy>
-BOOST_MATH_GPU_ENABLED int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
+BOOST_MATH_GPU_ENABLED int CF2_ik(T v, T x, T* Kv, T* Kv1, T* Kv_scaled, T* Kv1_scaled, const Policy& pol)
 {
     BOOST_MATH_STD_USING
     using namespace boost::math::constants;
@@ -282,11 +282,17 @@ BOOST_MATH_GPU_ENABLED int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
     }
     policies::check_series_iterations<T>("boost::math::bessel_ik<%1%>(%1%,%1%) in CF2_ik", k, pol);
 
+    const T ratio = (0.5f + v + x + (v * v - 0.25f) * f) / x;
     if(-x < tools::log_min_value<T>())
        *Kv = exp(0.5f * log(pi<T>() / (2 * x)) - x - log(S));
     else
       *Kv = sqrt(pi<T>() / (2 * x)) * exp(-x) / S;
-    *Kv1 = *Kv * (0.5f + v + x + (v * v - 0.25f) * f) / x;
+    *Kv1 = *Kv * ratio;
+    if ((*Kv == 0) || (*Kv1 == 0))
+    {
+       *Kv_scaled = sqrt(pi<T>() / 2) / sqrt(x) / S;
+       *Kv1_scaled = *Kv_scaled * ratio;
+    }
     BOOST_MATH_INSTRUMENT_VARIABLE(*Kv);
     BOOST_MATH_INSTRUMENT_VARIABLE(*Kv1);
 
@@ -305,9 +311,10 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
 {
     // Kv1 = K_(v+1), fv = I_(v+1) / I_v
     // Ku1 = K_(u+1), fu = I_(u+1) / I_u
-    T u, Iv, Kv, Kv1, Ku, Ku1, fv;
+    T u, Iv, Kv, Kv1, Ku, Ku1, Ku_scaled = 0, Ku1_scaled = 0, fv;
     T W, current, prev, next;
     bool reflect = false;
+    bool use_scaled_k = false;
     unsigned n, k;
     int org_kind = kind;
     BOOST_MATH_INSTRUMENT_VARIABLE(v);
@@ -329,6 +336,7 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
 
     T scale = 1;
     T scale_sign = 1;
+    T log_scale = 0;
 
     n = iround(v, pol);
     u = v - n;                              // -1/2 <= u < 1/2
@@ -356,12 +364,13 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
        }
        else                                       // x in (2, \infty)
        {
-          CF2_ik(u, x, &Ku, &Ku1, pol);               // continued fraction CF2_ik
+          CF2_ik(u, x, &Ku, &Ku1, &Ku_scaled, &Ku1_scaled, pol); // continued fraction CF2_ik
        }
        BOOST_MATH_INSTRUMENT_VARIABLE(Ku);
        BOOST_MATH_INSTRUMENT_VARIABLE(Ku1);
-       prev = Ku;
-       current = Ku1;
+       use_scaled_k = ((kind & need_i) == 0) && (x > 2) && ((Ku == 0) || (Ku1 == 0));
+       prev = use_scaled_k ? Ku_scaled : Ku;
+       current = use_scaled_k ? Ku1_scaled : Ku1;
        for (k = 1; k <= n; k++)                   // forward recurrence for K
        {
           T fact = 2 * (u + k) / x;
@@ -376,7 +385,10 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
           if (!will_overflow && ((tools::max_value<T>() - fabs(prev)) / fact < fabs(current)))
           {
              prev /= current;
-             scale /= current;
+             if (use_scaled_k)
+                log_scale += log(current);
+             else
+                scale /= current;
              scale_sign *= ((boost::math::signbit)(current) ? -1 : 1);
              current = 1;
           }
@@ -432,7 +444,15 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
     {
         *result_I = Iv;
     }
-    if(tools::max_value<T>() * scale < Kv)
+    if (use_scaled_k)
+    {
+       const T log_Kv = log(Kv) + log_scale - x;
+       if (log_Kv > tools::log_max_value<T>())
+          *result_K = (org_kind & need_k) ? policies::raise_overflow_error<T>(function, nullptr, pol) : T(0);
+       else
+          *result_K = exp(log_Kv);
+    }
+    else if(tools::max_value<T>() * scale < Kv)
        *result_K = (org_kind & need_k) ? T(sign(Kv) * scale_sign * policies::raise_overflow_error<T>(function, nullptr, pol)) : T(0);
     else
       *result_K = Kv / scale;
