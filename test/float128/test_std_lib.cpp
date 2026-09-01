@@ -306,6 +306,16 @@ BOOST_AUTO_TEST_CASE( test_main )
       BOOST_CHECK_EQUAL(imag(pow(x, a)), 0);
    }
 
+   {
+      // https://github.com/boostorg/math/issues/979
+      const std::complex<boost::float128_t> x(BOOST_FLOAT128_C(-0.7));
+      const boost::float128_t a = BOOST_FLOAT128_C(2.3);
+      const std::complex<boost::float128_t> result = pow(x, a);
+
+      BOOST_CHECK_CLOSE_FRACTION(real(result), BOOST_FLOAT128_C(0.25878802568257011821501000150048912386011658184359), 10*tol);
+      BOOST_CHECK_CLOSE_FRACTION(imag(result), BOOST_FLOAT128_C(0.35619115978391923954991722482212002575161366849209), 10*tol);
+   }
+
    // Check x^a, where x is zero and a is finite.
    BOOST_CHECK_EQUAL(real(pow(BOOST_FLOATMAX_C(0.0), cm)), 0);
    BOOST_CHECK_EQUAL(imag(pow(BOOST_FLOATMAX_C(0.0), cm)), 0);
