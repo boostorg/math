@@ -246,6 +246,11 @@ BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int 
       return policies::raise_evaluation_error(function, "Range arguments in wrong order in boost::math::tools::newton_raphson_iterate(first arg=%1%)", min, boost::math::policies::policy<>());
    }
 
+   if (max_iter == 0)
+   {
+      return guess;
+   }
+
    T f0(0), f1, last_f0(0);
    T result = guess;
 
