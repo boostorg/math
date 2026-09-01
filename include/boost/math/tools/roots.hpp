@@ -157,7 +157,7 @@ BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> bisect(F f, T min, T max, Tol tol
    // Error checking:
    //
    constexpr auto function = "boost::math::tools::bisect<%1%>";
-   if (min >= max)
+   if (!(min < max))
    {
       return boost::math::detail::pair_from_single(policies::raise_evaluation_error(function,
          "Arguments in wrong order in boost::math::tools::bisect (first arg=%1%)", min, pol));
@@ -241,7 +241,7 @@ BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int 
    BOOST_MATH_STD_USING
 
    constexpr auto function = "boost::math::tools::newton_raphson_iterate<%1%>";
-   if (min > max)
+   if (!(min <= max))
    {
       return policies::raise_evaluation_error(function, "Range arguments in wrong order in boost::math::tools::newton_raphson_iterate(first arg=%1%)", min, boost::math::policies::policy<>());
    }
@@ -546,7 +546,7 @@ namespace detail {
         << ", digits = " << digits << ", max_iter = " << max_iter << "\n";
 #endif
       static const char* function = "boost::math::tools::halley_iterate<%1%>";
-      if (min >= max)
+      if (!(min < max))
       {
          return policies::raise_evaluation_error(function, "Range arguments in wrong order in boost::math::tools::halley_iterate(first arg=%1%)", min, boost::math::policies::policy<>());
       }

@@ -641,6 +641,34 @@ void test_solve_complex_quadratic()
 void test_failures()
 {
 #if !defined(BOOST_NO_CXX11_LAMBDAS)
+   const double nan = std::numeric_limits<double>::quiet_NaN();
+   boost::math::tools::eps_tolerance<double> tol(52);
+
+   // https://github.com/boostorg/math/issues/1010
+   // Invalid bounds must be rejected even when one endpoint is NaN.
+   BOOST_CHECK_THROW(
+      boost::math::tools::bisect([](double x) { return x; }, nan, 1.0, tol),
+      boost::math::evaluation_error);
+   BOOST_CHECK_THROW(
+      boost::math::tools::bisect([](double x) { return x; }, -1.0, nan, tol),
+      boost::math::evaluation_error);
+
+   auto newton_f = [](double x) { return std::make_pair(x, 1.0); };
+   BOOST_CHECK_THROW(
+      boost::math::tools::newton_raphson_iterate(newton_f, 0.0, nan, 1.0, 52),
+      boost::math::evaluation_error);
+   BOOST_CHECK_THROW(
+      boost::math::tools::newton_raphson_iterate(newton_f, 0.0, -1.0, nan, 52),
+      boost::math::evaluation_error);
+
+   auto second_order_f = [](double x) { return std::make_tuple(x, 1.0, 0.0); };
+   BOOST_CHECK_THROW(
+      boost::math::tools::halley_iterate(second_order_f, 0.0, nan, 1.0, 52),
+      boost::math::evaluation_error);
+   BOOST_CHECK_THROW(
+      boost::math::tools::schroder_iterate(second_order_f, 0.0, -1.0, nan, 52),
+      boost::math::evaluation_error);
+
    // There is no root:
    BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x * x + 1, 2 * x); }, 10.0, -12.0, 12.0, 52), boost::math::evaluation_error);
    BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x * x + 1, 2 * x); }, -10.0, -12.0, 12.0, 52), boost::math::evaluation_error);
