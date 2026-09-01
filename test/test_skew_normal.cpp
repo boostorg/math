@@ -496,6 +496,28 @@ BOOST_AUTO_TEST_CASE( test_main )
   BOOST_CHECK_CLOSE_FRACTION(mean(w01), static_cast<double>(0), tolfeweps); // Default mean == zero
   BOOST_CHECK_CLOSE_FRACTION(scale(w01), static_cast<double>(1), tolfeweps); // Default scale == unity
 
+  // https://github.com/boostorg/math/issues/1190
+  // Avoid cancellation in the extreme left tail (and its reflected upper tail).
+  {
+    const double tail_tolerance = 128 * numeric_limits<double>::epsilon();
+    boost::math::normal_distribution<double> std_normal;
+    const double normal_tail = cdf(std_normal, -8.0);
+    const double alpha_one_tail = normal_tail * normal_tail;
+
+    BOOST_CHECK_CLOSE_FRACTION(
+      cdf(skew_normal_distribution<double>(0, 1, 1), -8.0),
+      alpha_one_tail,
+      tail_tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(
+      cdf(complement(skew_normal_distribution<double>(0, 1, -1), 8.0)),
+      alpha_one_tail,
+      tail_tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(
+      cdf(skew_normal_distribution<double>(0, 1, 2), -6.0),
+      7.1180791906932412294852794865326109874556091859546e-43,
+      tail_tolerance);
+  }
+
   // Basic sanity-check spot values for all floating-point types..
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
