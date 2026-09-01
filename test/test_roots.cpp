@@ -668,6 +668,17 @@ void test_failures()
    BOOST_CHECK_THROW(
       boost::math::tools::schroder_iterate(second_order_f, 0.0, -1.0, nan, 52),
       boost::math::evaluation_error);
+   // https://github.com/boostorg/math/issues/1008
+   boost::math::uintmax_t max_iter = 0;
+   unsigned calls = 0;
+   auto counted_newton_f = [&calls](double x) {
+      ++calls;
+      return std::make_pair(x * x - 3, 2 * x);
+   };
+   double result = boost::math::tools::newton_raphson_iterate(counted_newton_f, 10.0, 0.0, 100.0, 52, max_iter);
+   BOOST_CHECK_EQUAL(result, 10.0);
+   BOOST_CHECK_EQUAL(max_iter, 0u);
+   BOOST_CHECK_EQUAL(calls, 0u);
 
    // There is no root:
    BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x * x + 1, 2 * x); }, 10.0, -12.0, 12.0, 52), boost::math::evaluation_error);
