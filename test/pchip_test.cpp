@@ -137,6 +137,31 @@ void test_linear()
 }
 
 template<typename Real>
+void test_partially_filled_circular_buffer()
+{
+    constexpr size_t capacity = 20;
+    constexpr size_t initial_size = 10;
+    boost::circular_buffer<Real> x_buf(capacity);
+    boost::circular_buffer<Real> y_buf(capacity);
+
+    for (size_t i = 0; i < initial_size; ++i) {
+        Real x = Real(i) + Real(0.5);
+        x_buf.push_back(x);
+        y_buf.push_back(x);
+    }
+
+    auto spline = pchip(std::move(x_buf), std::move(y_buf));
+
+    for (size_t i = initial_size; i < 100; ++i) {
+        Real x = Real(i) + Real(0.5);
+        spline.push_back(x, x);
+        Real t = Real(i) - Real(2) + Real(0.3);
+        CHECK_ULP_CLOSE(t, spline(t), 4);
+        CHECK_ULP_CLOSE(Real(1), spline.prime(t), 4);
+    }
+}
+
+template<typename Real>
 void test_interpolation_condition()
 {
     for (size_t n = 4; n < 50; ++n) {
@@ -266,6 +291,8 @@ int main()
     test_linear<long double>();
     test_interpolation_condition<long double>();
     test_monotonicity<long double>();
+
+    test_partially_filled_circular_buffer<double>();
 
     #ifdef BOOST_HAS_FLOAT128
     test_constant<float128>();
