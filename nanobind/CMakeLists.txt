@@ -44,6 +44,7 @@ set(BOOST_MATH_NB_SOURCES
   src/distributions_noncentral.cpp
   src/fft.cpp
   src/quadrature.cpp
+  src/polynomial_roots.cpp
 )
 
 nanobind_add_module(_ext NOMINSIZE ${BOOST_MATH_NB_SOURCES})

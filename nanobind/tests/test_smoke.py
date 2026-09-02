@@ -275,7 +275,7 @@ def test_array_matches_scalar(case):
 
 
 # Not elementwise, so tested on their own below.
-SIEVE = {"prime_sieve", "prime_range", "prime_count"}
+SIEVE = {"prime_sieve", "prime_range", "prime_count", "polynomial_roots", "polynomial_roots_aberth", "polynomial_roots_companion_matrix"}
 QUADRATURE = {"tanh_sinh", "exp_sinh", "sinh_sinh", "trapezoidal", "gauss", "gauss_kronrod", "gauss_hermite",
               "ooura_fourier_sin", "ooura_fourier_cos", "van_den_bos_unit_square"}
 

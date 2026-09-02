@@ -11,6 +11,7 @@
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <complex>
 #include <type_traits>
+#include <utility>
 #endif
 
 // Specialised by each Boost.Multiprecision backend; declared here so that this header does not depend on Multiprecision.
@@ -37,6 +38,13 @@ struct complex_from_real<Real, false>
 {
    using type = typename ::boost::multiprecision::complex_result_from_scalar<Real>::type;
 };
+
+template <class Real>
+using complex_from_real_t = typename complex_from_real<Real>::type;
+
+// The real type of a complex type: Real for std::complex<Real>, cpp_bin_float_50 for cpp_complex_50, and so on.
+template <class Complex>
+using real_from_complex_t = typename std::decay<decltype(std::declval<Complex const&>().real())>::type;
 
 }} BOOST_MATH_NAMESPACE_END
 

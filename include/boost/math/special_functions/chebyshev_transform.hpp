@@ -35,7 +35,7 @@ template <class Real>
 class dct_ii
 {
 public:
-   using complex_type = typename BOOST_MATH_NAMESPACE::tools::detail::complex_from_real<Real>::type;
+   using complex_type = BOOST_MATH_NAMESPACE::tools::detail::complex_from_real_t<Real>;
 
    explicit dct_ii(std::size_t n) : m_n(n), m_fft(n), m_v(n), m_V(n / 2 + 1), m_cos(n / 2 + 1), m_sin(n / 2 + 1)
    {
