@@ -4,11 +4,15 @@
 # (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt.
 # \math_toolkit\libs\math\minimax\jamfile.v2
-# Runs minimax using multiprecision, (rather than gmp and mpfr)
+# Runs minimax using Boost.Multiprecision with an MPFR backend.
 
 # bring in the rules for testing.
 import modules ;
 import path ;
+import-search /boost/config/checks ;
+
+local gmp_path = [ modules.peek : GMP_PATH ] ;
+local mpfr_path = [ modules.peek : MPFR_PATH ] ;
 
 project
     : requirements
@@ -32,15 +36,20 @@ project
       <define>BOOST_UBLAS_UNSUPPORTED_COMPILER=0
       <include>.
       <include>../include_private
+      <include>$(gmp_path)
+      <include>$(mpfr_path)
+      <search>$(gmp_path)
+      <search>$(mpfr_path)
       #<include>$(ntl-path)/include
     ;
 
-#lib mpfr : gmp : <name>mpfr ;
+searched-lib gmp : : <link>shared ;
+searched-lib mpfr : gmp : <link>shared ;
+searched-lib quadmath : : <link>shared ;
 
-#lib gmp : : <name>gmp ;
-
-# exe minimax : f.cpp main.cpp gmp mpfr ;
-exe minimax : f.cpp main.cpp ;
+exe minimax : f.cpp main.cpp mpfr
+    : [ check-target-builds ../../config//has_mpfr "MPFR support" : : <build>no ]
+      [ check-target-builds ../../config//has_float128 "GCC libquadmath and __float128 support" : <source>quadmath ]
+    ;
 
 install bin : minimax ;
-
