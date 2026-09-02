@@ -420,6 +420,13 @@ void test_spots6(T, const char* type_name)
          T val = boost::math::hypergeometric_1F1(hypergeometric_1F1_big_bugs[i][0], hypergeometric_1F1_big_bugs[i][1], hypergeometric_1F1_big_bugs[i][2]);
          BOOST_CHECK((boost::math::isinf)(val));
       }
+      // https://github.com/boostorg/math/issues/1288
+      BOOST_CHECK_EQUAL(boost::math::hypergeometric_1F1(SC_(2.0), SC_(3.0), SC_(1e30)),
+          (std::numeric_limits<double>::infinity)());
+      // This is the largest log_hypergeometric_1F1 we can currently compute, beyond this the fix for the above
+      // bug causes premature overflow.  However, there is no easy fix and Wolfram also fails in this case.  It's **hard** :(
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::log_hypergeometric_1F1(SC_(2.0), SC_(3.0), SC_(std::numeric_limits<std::int64_t>::max())),
+          SC_(9223372036854775765.02487480528339082), boost::math::tools::epsilon<T>() * 10);
    }
 }
 

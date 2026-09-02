@@ -44,8 +44,10 @@
         }
         else
         {
-           e = z > static_cast<T>((std::numeric_limits<long long>::max)()) ? (std::numeric_limits<long long>::max)() : lltrunc(z, pol);
+           e = z >= static_cast<T>((std::numeric_limits<long long>::max)()) ? (std::numeric_limits<long long>::max)() : lltrunc(z, pol);
            log_scaling += e;
+           if (z - e > tools::log_max_value<T>())
+               return policies::raise_overflow_error<T, Policy>(function, nullptr, pol);
            prefix = exp(z - e);
         }
         if ((fabs(a) < 10) && (fabs(b) < 10))

@@ -196,10 +196,6 @@ BOOST_AUTO_TEST_CASE( test_main )
 #endif
 #endif
 #if !defined(TEST) || (TEST == 3)
-   // https://github.com/boostorg/math/issues/1288
-   BOOST_CHECK_EQUAL(boost::math::hypergeometric_1F1(2.0, 3.0, 1e30),
-                     (std::numeric_limits<double>::infinity)());
-
    test_spots(0.0, "double");
 #endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
