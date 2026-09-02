@@ -425,7 +425,7 @@ void test_spots6(T, const char* type_name)
           (std::numeric_limits<double>::infinity)());
       // This is the largest log_hypergeometric_1F1 we can currently compute, beyond this the fix for the above
       // bug causes premature overflow.  However, there is no easy fix and Wolfram also fails in this case.  It's **hard** :(
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::log_hypergeometric_1F1(SC_(2.0), SC_(3.0), static_cast<T>(std::numeric_limits<std::int64_t>::max())),
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::log_hypergeometric_1F1(SC_(2.0), SC_(3.0), static_cast<T>((std::numeric_limits<std::int64_t>::max)())),
           SC_(9223372036854775765.02487480528339082), boost::math::tools::epsilon<T>() * 10);
    }
 }
