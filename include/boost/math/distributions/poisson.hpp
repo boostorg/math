@@ -50,6 +50,7 @@
 #include <boost/math/special_functions/factorials.hpp> // factorials.
 #include <boost/math/tools/roots.hpp> // for root finding.
 #include <boost/math/distributions/detail/inv_discrete_quantile.hpp>
+#include <boost/math/constants/constants.hpp>
 
 namespace boost
 {
@@ -140,6 +141,62 @@ namespace boost
         }
         return true;
       } // bool check_dist_and_prob
+
+      template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline RealType stirlerr(const RealType& n, const Policy& pol) {
+        BOOST_MATH_STD_USING // for ADL of std functions.
+        using boost::math::lgamma;
+
+        // Use the direct formula for small n
+        if (n < boost::math::detail::minimum_argument_for_bernoulli_recursion<RealType>()) {
+          return lgamma(n + 1) - (n * log(n) - n + RealType(0.5) * log(RealType(2) * boost::math::constants::pi<RealType>() * n));
+        }
+
+        // Use the Stirling series approximation for large n
+        return boost::math::detail::bernoulli_stirling_series<RealType>(n, pol);
+
+      }
+
+      template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline RealType bd0(const RealType& mean, const RealType& k, const Policy& pol) {
+        BOOST_MATH_STD_USING // for ADL of std functions.
+
+        // Calculate v = (k - mean) / (k + mean) from Loader (2000) approximation
+        bool is_close = abs(k - mean) < RealType(0.1) * (k + mean);
+
+        if (is_close) { // Use the series approximation if |v| < 0.1
+          RealType v = (k - mean) / (k + mean);
+          RealType v2 = v * v;
+          RealType series_term = ((k - mean) * (k - mean)) / (k + mean);
+
+          RealType term = 2 * k * v;
+          
+          // Series is trivially zero when k = mean, so skip the loop
+          if (term != RealType(0)) {
+            RealType target_epsilon = abs(term) * boost::math::tools::epsilon<RealType>();
+            const boost::math::size_t max_iterations = policies::get_max_series_iterations<Policy>();
+
+            for (boost::math::size_t i = 1U;; ++i) {
+              term *= v2;
+              RealType next = term / (2 * i + 1);
+              series_term += next;
+              // Break if the next term is less than the target epsilon
+              if (abs(next) < target_epsilon) {
+                break;
+              }
+              if (i > max_iterations) {
+                return policies::raise_evaluation_error<RealType>("bd0<%1%>()", "Series did not converge in the allotted iterations, best approximation was %1%", series_term, pol);
+              }
+            }
+          }
+          return series_term;
+        } else {
+          // Use the direct formula if |v| >= 0.1
+          RealType direct = (k == 0) ? RealType(0) : k * log(k / mean) + mean - k;
+          return direct;
+        }
+
+      }
 
     } // namespace poisson_detail
 
@@ -304,7 +361,8 @@ namespace boost
       // Special case where k and lambda are both positive
       if(k > 0 && mean > 0)
       {
-        return -lgamma(k+1) + k*log(mean) - mean;
+        // Use the Loader (2000) saddle-point approximation for logpdf calculation
+        return -poisson_detail::stirlerr(k, Policy()) - poisson_detail::bd0(mean, k, Policy()) - RealType(0.5) * log(RealType(2) * boost::math::constants::pi<RealType>() * k);
       }
 
       result = log(pdf(dist, k));
