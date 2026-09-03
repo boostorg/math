@@ -54,12 +54,14 @@ using boost::math::beta;
 #include <boost/test/tools/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION
 
 #include "test_out_of_range.hpp"
+#include "test_dist_helpers.hpp"
 
 #include <iostream>
 using std::cout;
 using std::endl;
 #include <limits>
 using std::numeric_limits;
+#include <vector>
 
 #if __has_include(<stdfloat>)
 # include <stdfloat>
@@ -494,23 +496,59 @@ void test_spots(RealType)
      static_cast<RealType>(1-0.5545844446520295253493059553548880128511L),  // Complement of CDF Q = 1 - P
      tolerance); // Test tolerance.
 
-    //
+   //
    // Error checks:
    // Construction with 'bad' parameters.
-   BOOST_MATH_CHECK_THROW(beta_distribution<RealType>(1, -1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(beta_distribution<RealType>(-1, 1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(beta_distribution<RealType>(1, 0), std::domain_error);
-   BOOST_MATH_CHECK_THROW(beta_distribution<RealType>(0, 1), std::domain_error);
+   using boost::math::policies::policy;
 
-   beta_distribution<> dist;
-   BOOST_MATH_CHECK_THROW(pdf(dist, -1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(cdf(dist, -1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(cdf(complement(dist, -1)), std::domain_error);
-   BOOST_MATH_CHECK_THROW(quantile(dist, -1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
-   BOOST_MATH_CHECK_THROW(quantile(dist, -1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
+   typedef policy<
+      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+   > ignore_all_policy;
 
+   std::vector<std::vector<RealType> > invalid_params = {{1, -1},
+                                                         {-1, 1},
+                                                         {1, 0},
+                                                         {0, 1}};
+   test_invalid_parameters<beta_distribution<RealType, boost::math::policies::policy<> >, 
+                           beta_distribution<RealType, ignore_all_policy>, 
+                           RealType>(invalid_params);
+
+   // Check constructing with NaNs
+   if (std::numeric_limits<RealType>::has_quiet_NaN){
+      // Attempt to construct from non-finite parameters should throw.
+      RealType nan = std::numeric_limits<RealType>::quiet_NaN();
+      invalid_params = {{nan},
+                        {1, nan}};
+      test_invalid_parameters<beta_distribution<RealType, boost::math::policies::policy<> >, 
+                              beta_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
+   }
+
+   // Check construcing with Infinity
+   if (std::numeric_limits<RealType>::has_infinity)
+   {
+      // Attempt to construct from non-finite should throw.
+      RealType inf = std::numeric_limits<RealType>::infinity();
+      invalid_params = {{inf},
+                        {1, inf}};
+      test_invalid_parameters<beta_distribution<RealType, boost::math::policies::policy<> >, 
+                              beta_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
+   } // has_infinity  
+
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   {
+      test_invalid_support<beta_distribution<RealType, boost::math::policies::policy<> >, 
+                           beta_distribution<RealType, ignore_all_policy>, 
+                           RealType>({1, 1});
+   } // has_quiet_NaN
+   
+   // PDF not defind for alpha < 1, x = 0 and beta < 1, x = 1
    BOOST_MATH_CHECK_THROW(pdf(beta_distribution<RealType>(static_cast<RealType>(0.5), static_cast<RealType>(1.5)), static_cast<RealType>(0)), std::overflow_error); // alpha < 1, x = 0
    BOOST_MATH_CHECK_THROW(pdf(beta_distribution<RealType>(static_cast<RealType>(1.5), static_cast<RealType>(0.5)), static_cast<RealType>(1)), std::overflow_error); // beta < 1, x = 1
 
@@ -523,85 +561,26 @@ void test_spots(RealType)
    test_find_alpha_beta(static_cast<RealType>(1), static_cast<RealType>(1.5), static_cast<RealType>(0.5)); // x > 0
    test_find_alpha_beta(static_cast<RealType>(1), static_cast<RealType>(-0.5), static_cast<RealType>(0.5)); // x < 0
 
-   // No longer allow any parameter to be NaN or inf, so all these tests should throw.
-   if (std::numeric_limits<RealType>::has_quiet_NaN)
-   { 
-    // Attempt to construct from non-finite should throw.
-     RealType nan = std::numeric_limits<RealType>::quiet_NaN();
-#ifndef BOOST_NO_EXCEPTIONS
-     BOOST_MATH_CHECK_THROW(beta_distribution<RealType> w(nan), std::domain_error);
-     BOOST_MATH_CHECK_THROW(beta_distribution<RealType> w(1, nan), std::domain_error);
-#else
-     BOOST_MATH_CHECK_THROW(beta_distribution<RealType>(nan), std::domain_error);
-     BOOST_MATH_CHECK_THROW(beta_distribution<RealType>(1, nan), std::domain_error);
-#endif
-     
-    // Non-finite parameters should throw.
-     beta_distribution<RealType> w(RealType(1)); 
-     BOOST_MATH_CHECK_THROW(pdf(w, +nan), std::domain_error); // x = NaN
-     BOOST_MATH_CHECK_THROW(cdf(w, +nan), std::domain_error); // x = NaN
-     BOOST_MATH_CHECK_THROW(cdf(complement(w, +nan)), std::domain_error); // x = + nan
-     BOOST_MATH_CHECK_THROW(quantile(w, +nan), std::domain_error); // p = + nan
-     BOOST_MATH_CHECK_THROW(quantile(complement(w, +nan)), std::domain_error); // p = + nan
-  } // has_quiet_NaN
-
   if (std::numeric_limits<RealType>::has_infinity)
   {
      // Attempt to construct from non-finite should throw.
      RealType inf = std::numeric_limits<RealType>::infinity(); 
-#ifndef BOOST_NO_EXCEPTIONS
-     BOOST_MATH_CHECK_THROW(beta_distribution<RealType> w(inf), std::domain_error);
-     BOOST_MATH_CHECK_THROW(beta_distribution<RealType> w(1, inf), std::domain_error);
-#else
-     BOOST_MATH_CHECK_THROW(beta_distribution<RealType>(inf), std::domain_error);
-     BOOST_MATH_CHECK_THROW(beta_distribution<RealType>(1, inf), std::domain_error);
-#endif
-
-    // Non-finite parameters should throw.
-     beta_distribution<RealType> w(RealType(1)); 
-#ifndef BOOST_NO_EXCEPTIONS
-     BOOST_MATH_CHECK_THROW(beta_distribution<RealType> w(inf), std::domain_error);
-     BOOST_MATH_CHECK_THROW(beta_distribution<RealType> w(1, inf), std::domain_error);
-#else
-     BOOST_MATH_CHECK_THROW(beta_distribution<RealType>(inf), std::domain_error);
-     BOOST_MATH_CHECK_THROW(beta_distribution<RealType>(1, inf), std::domain_error);
-#endif
-     BOOST_MATH_CHECK_THROW(pdf(w, +inf), std::domain_error); // x = inf
-     BOOST_MATH_CHECK_THROW(cdf(w, +inf), std::domain_error); // x = inf
-     BOOST_MATH_CHECK_THROW(cdf(complement(w, +inf)), std::domain_error); // x = + inf
-     BOOST_MATH_CHECK_THROW(quantile(w, +inf), std::domain_error); // p = + inf
-     BOOST_MATH_CHECK_THROW(quantile(complement(w, +inf)), std::domain_error); // p = + inf
 
      test_find_alpha_beta(static_cast<RealType>(1), static_cast<RealType>(0.5), inf); // p = inf
      test_find_alpha_beta(inf, static_cast<RealType>(0.5)); // mean = inf
      test_find_alpha_beta(static_cast<RealType>(0.5), inf); // var = inf
      test_find_alpha_beta(static_cast<RealType>(1), inf, static_cast<RealType>(0.5)); // x = inf
 
-     // Check isnan policies
-     using boost::math::policies::policy;
-    
-     typedef policy<
-      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
-      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
-      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
-      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
-      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
-      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
-     > ignore_all_policy;
-
      typedef beta_distribution<RealType, ignore_all_policy> ignore_error_beta;
 
      BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_alpha(inf, static_cast<RealType>(0.5)))); // mean = inf
      BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_beta(inf, static_cast<RealType>(0.5)))); // mean = inf
+     BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_alpha(static_cast<RealType>(0.5), inf))); // var = inf
+     BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_beta(static_cast<RealType>(0.5), inf))); // var = inf
      BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_alpha(inf, static_cast<RealType>(0.5), static_cast<RealType>(0.5)))); // beta = inf
      BOOST_CHECK((boost::math::isnan)(ignore_error_beta::find_beta(inf, static_cast<RealType>(0.5), static_cast<RealType>(0.5)))); // alpha = inf
      BOOST_CHECK((boost::math::isnan)(mode(ignore_error_beta(static_cast<RealType>(2), static_cast<RealType>(1))))); // beta = 1
      BOOST_CHECK((boost::math::isnan)(mode(ignore_error_beta(static_cast<RealType>(1), static_cast<RealType>(2))))); // alpha = 1
-     BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_beta(static_cast<RealType>(1), static_cast<RealType>(1)), 2))); // x > 1
-     BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_beta(static_cast<RealType>(1), static_cast<RealType>(1)), 2))); // x > 1
-     BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_beta(static_cast<RealType>(1), static_cast<RealType>(1)), 2)))); // x > 1
-     BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_beta(static_cast<RealType>(1), static_cast<RealType>(1)), 2))); // p > 1
-     BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_beta(static_cast<RealType>(1), static_cast<RealType>(1)), 2)))); // p > 1
    } // has_infinity
 
    // Error handling checks:
@@ -614,14 +593,6 @@ void test_spots(RealType)
    check_out_of_range<boost::math::beta_distribution<RealType> >(1, 1); // (All) valid constructor parameter values.
    #endif
    // and range and non-finite.
-
-   // Not needed??????
-   BOOST_MATH_CHECK_THROW(pdf(boost::math::beta_distribution<RealType>(0, 1), 0), std::domain_error);
-   BOOST_MATH_CHECK_THROW(pdf(boost::math::beta_distribution<RealType>(-1, 1), 0), std::domain_error);
-   BOOST_MATH_CHECK_THROW(quantile(boost::math::beta_distribution<RealType>(1, 1), -1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(quantile(boost::math::beta_distribution<RealType>(1, 1), 2), std::domain_error);
-
-
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )

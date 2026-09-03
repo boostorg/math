@@ -38,6 +38,7 @@ using boost::math::constants::one_div_root_two;
 #include <cmath>
 
 #include "test_out_of_range.hpp"
+#include "test_dist_helpers.hpp"
 
 #include <iostream>
 using std::cout;
@@ -65,21 +66,6 @@ void test_ignore_policy(RealType)
     RealType nan = std::numeric_limits<RealType>::quiet_NaN();
 
     using boost::math::policies::policy;
-    // Types of error whose action can be altered by policies:.
-    //using boost::math::policies::evaluation_error;
-    //using boost::math::policies::domain_error;
-    //using boost::math::policies::overflow_error;
-    //using boost::math::policies::underflow_error;
-    //using boost::math::policies::domain_error;
-    //using boost::math::policies::pole_error;
-
-    //// Actions on error (in enum error_policy_type):
-    //using boost::math::policies::errno_on_error;
-    //using boost::math::policies::ignore_error;
-    //using boost::math::policies::throw_on_error;
-    //using boost::math::policies::denorm_error;
-    //using boost::math::policies::pole_error;
-    //using boost::math::policies::user_error;
 
     typedef policy<
       boost::math::policies::domain_error<boost::math::policies::ignore_error>,
@@ -105,39 +91,6 @@ void test_ignore_policy(RealType)
         //std::cout << "pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) = " << pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) << std::endl;
         //  Outputs:  pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) = 1.#QNAN
       }
-      // PDF
-      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
-      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_arcsine(-1, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
-      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_arcsine(0, 1), static_cast <RealType>(-2))));  // x < xmin
-      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_arcsine(-1, 1), static_cast <RealType>(-2))));  // x < xmin
-      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_arcsine(0, 1), static_cast <RealType>(+2))));  // x > x_max
-      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_arcsine(-1, 1), static_cast <RealType>(+2)))); // x > x_max
-
-      // Logpdf
-      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
-      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(-1, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
-      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(0, 1), static_cast <RealType>(-2))));  // x < xmin
-      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(-1, 1), static_cast <RealType>(-2))));  // x < xmin
-      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(0, 1), static_cast <RealType>(+2))));  // x > x_max
-      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(-1, 1), static_cast <RealType>(+2)))); // x > x_max
-
-      // CDF
-      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
-      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_arcsine(-1, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
-      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_arcsine(0, 1), static_cast <RealType>(-2))));  // x < xmin
-      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_arcsine(-1, 1), static_cast <RealType>(-2))));  // x < xmin
-      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_arcsine(0, 1), static_cast <RealType>(+2))));  // x > x_max
-      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_arcsine(-1, 1), static_cast <RealType>(+2)))); // x > x_max
-      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity())))); // x == infinity
-      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_arcsine(0, 1), static_cast <RealType>(-2)))));  // x < xmin
-
-      // Quantile
-      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity()))); // p == infinity
-      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_arcsine(0, 1), static_cast<RealType>(-1)))); // p < 0
-      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_arcsine(0, 1), static_cast<RealType>(2)))); // p > 1
-      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity())))); // q == infinity
-      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_arcsine(0, 1), static_cast<RealType>(-1))))); // q < 0
-      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_arcsine(0, 1), static_cast<RealType>(2))))); // q > 1
 
       // Mean
       BOOST_CHECK((boost::math::isnan)(mean(ignore_error_arcsine(-nan, 0))));
@@ -201,6 +154,9 @@ void test_ignore_policy(RealType)
     BOOST_CHECK(boost::math::isfinite(mean(ignore_error_arcsine(0, std::numeric_limits<RealType>::epsilon()))));
 
     check_support<arcsine_distribution<RealType> >(arcsine_distribution<RealType>(0, 1));
+    test_invalid_support<arcsine_distribution<RealType, boost::math::policies::policy<> >, 
+                         arcsine_distribution<RealType, ignore_all_policy>,
+                         RealType>({0, 1});
   } // ordinary floats.
 } // template <class RealType> void test_ignore_policy(RealType)
 
@@ -363,7 +319,6 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(cdf(complement(arcsine_01, 0.95)), static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L), 8 * tolerance); // 2 for asin
     BOOST_CHECK_CLOSE_FRACTION(cdf(complement(arcsine_01, 0.999999)), static_cast<RealType>(1 - 0.99936338012152907551581622632042615133907872213939L), 1000000 * tolerance); // 10000 for asin, 1000000 for acos.
 
-    // Quantile.
 
     // Check 1st, 2nd and 3rd quartiles.
     BOOST_CHECK_CLOSE_FRACTION(quantile(arcsine_01, static_cast<RealType>(0.25L)), static_cast<RealType>(0.14644660940672624L), tolerance);
@@ -471,10 +426,6 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.85643370687129372924905811522494428117838480010259L)), -static_cast<RealType>(1.05L), 2 * tolerance); //
     BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.5L)), -static_cast<RealType>(1.5L), 2 * tolerance);                             //
     BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L)), -static_cast<RealType>(1.95L), 4 * tolerance);     //
-    BOOST_CHECK_EQUAL(quantile(as_m2m1, 1), 1);
-    BOOST_CHECK_EQUAL(quantile(as_m2m1, 0), 0); 
-    BOOST_CHECK_EQUAL(quantile(complement(as_m2m1, 1)), 0);
-    BOOST_CHECK_EQUAL(quantile(complement(as_m2m1, 0)), 1); 
 
     BOOST_CHECK_CLOSE_FRACTION(quantile(complement(as_m2m1, static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L))), -static_cast<RealType>(1.05L), 2 * tolerance); //
     BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.5L)), -static_cast<RealType>(1.5L), 2 * tolerance);                             //
@@ -484,133 +435,55 @@ void test_spots(RealType)
     BOOST_CHECK_THROW(mode(arcsine_distribution<RealType>(static_cast<RealType>(0), static_cast<RealType>(1))), std::domain_error);
     // mode is undefined, and must throw domain_error!
 
+    using boost::math::policies::policy;
 
-    BOOST_CHECK_THROW( // For various bad arguments.
-      pdf(
-      arcsine_distribution<RealType>(static_cast<RealType>(+1), static_cast<RealType>(-1)), // min_x > max_x
-      static_cast<RealType>(1)), std::domain_error);
+    typedef policy<
+      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+    > ignore_all_policy;
 
-    BOOST_CHECK_THROW(
-      pdf(
-      arcsine_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(0)), // bad constructor parameters.
-      static_cast<RealType>(1)), std::domain_error);
+    std::vector<std::vector<RealType> > invalid_params = {{1, 0}, // x_min > x_max
+                                                          {1, -1},
+                                                          {1, 1}};
+    test_invalid_parameters<arcsine_distribution<RealType, boost::math::policies::policy<> >, 
+                            arcsine_distribution<RealType, ignore_all_policy>, 
+                            RealType>(invalid_params);
 
-    BOOST_CHECK_THROW(
-      pdf(
-      arcsine_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(-1)), // bad constructor parameters.
-      static_cast<RealType>(1)), std::domain_error);
-
-    BOOST_CHECK_THROW(
-      pdf(
-      arcsine_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1)), // equal constructor parameters.
-      static_cast<RealType>(-1)), std::domain_error);
-
-    BOOST_CHECK_THROW(
-      pdf(
-      arcsine_distribution<RealType>(static_cast<RealType>(0), static_cast<RealType>(1)), // bad x > 1.
-      static_cast<RealType>(999)), std::domain_error);
-
-    BOOST_CHECK_THROW( // For various bad arguments.
-      logpdf(
-      arcsine_distribution<RealType>(static_cast<RealType>(+1), static_cast<RealType>(-1)), // min_x > max_x
-      static_cast<RealType>(1)), std::domain_error);
-
-    BOOST_CHECK_THROW(
-      logpdf(
-      arcsine_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(0)), // bad constructor parameters.
-      static_cast<RealType>(1)), std::domain_error);
-
-    BOOST_CHECK_THROW(
-      logpdf(
-      arcsine_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(-1)), // bad constructor parameters.
-      static_cast<RealType>(1)), std::domain_error);
-
-    BOOST_CHECK_THROW(
-      logpdf(
-      arcsine_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1)), // equal constructor parameters.
-      static_cast<RealType>(-1)), std::domain_error);
-
-    BOOST_CHECK_THROW(
-      logpdf(
-      arcsine_distribution<RealType>(static_cast<RealType>(0), static_cast<RealType>(1)), // bad x > 1.
-      static_cast<RealType>(999)), std::domain_error);
-
-    // Checks on things that are errors.
-
-    // Construction with 'bad' parameters.
-    BOOST_CHECK_THROW(arcsine_distribution<RealType>(+1, -1), std::domain_error); // max < min.
-    BOOST_CHECK_THROW(arcsine_distribution<RealType>(+1, 0), std::domain_error);  // max < min.
-
-    arcsine_distribution<> dist;
-    BOOST_CHECK_THROW(pdf(dist, -1), std::domain_error);
-    BOOST_CHECK_THROW(logpdf(dist, -1), std::domain_error);
-    BOOST_CHECK_THROW(cdf(dist, -1), std::domain_error);
-    BOOST_CHECK_THROW(cdf(complement(dist, -1)), std::domain_error);
-    BOOST_CHECK_THROW(quantile(dist, -1), std::domain_error);
-    BOOST_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
-    BOOST_CHECK_THROW(quantile(dist, -1), std::domain_error);
-    BOOST_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
-
-    // Various combinations of bad constructor and member function parameters.
-    BOOST_CHECK_THROW(pdf(boost::math::arcsine_distribution<RealType>(0, 1), -1), std::domain_error);
-    BOOST_CHECK_THROW(pdf(boost::math::arcsine_distribution<RealType>(-1, 1), +2), std::domain_error);
-    BOOST_CHECK_THROW(logpdf(boost::math::arcsine_distribution<RealType>(0, 1), -1), std::domain_error);
-    BOOST_CHECK_THROW(logpdf(boost::math::arcsine_distribution<RealType>(-1, 1), +2), std::domain_error);
-    BOOST_CHECK_THROW(quantile(boost::math::arcsine_distribution<RealType>(1, 1), -1), std::domain_error);
-    BOOST_CHECK_THROW(quantile(boost::math::arcsine_distribution<RealType>(1, 1), 2), std::domain_error);
-
-    // No longer allow any parameter to be NaN or inf, so all these tests should throw.
-    if (std::numeric_limits<RealType>::has_quiet_NaN)
-    {
+    // Check constructing with NaNs
+    if (std::numeric_limits<RealType>::has_quiet_NaN){
       // Attempt to construct from non-finite parameters should throw.
       RealType nan = std::numeric_limits<RealType>::quiet_NaN();
-#ifndef BOOST_NO_EXCEPTIONS
-      BOOST_CHECK_THROW(arcsine_distribution<RealType> w(nan), std::domain_error);
-      BOOST_CHECK_THROW(arcsine_distribution<RealType> w(1, nan), std::domain_error);
-      BOOST_CHECK_THROW(arcsine_distribution<RealType> w(nan, 1), std::domain_error);
-#else
-      BOOST_CHECK_THROW(arcsine_distribution<RealType>(nan), std::domain_error);
-      BOOST_CHECK_THROW(arcsine_distribution<RealType>(1, nan), std::domain_error);
-      BOOST_CHECK_THROW(arcsine_distribution<RealType>(nan, 1), std::domain_error);
-#endif
+      invalid_params = {{nan},
+                        {1, nan}, // x_min > x_max
+                        {nan, 1}};
+      test_invalid_parameters<arcsine_distribution<RealType, boost::math::policies::policy<> >, 
+                              arcsine_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
+    }
 
-      arcsine_distribution<RealType> w(RealType(-1), RealType(+1));
-      // NaN parameters to member functions should throw.
-      BOOST_CHECK_THROW(pdf(w, +nan), std::domain_error); // x = NaN
-      BOOST_CHECK_THROW(logpdf(w, +nan), std::domain_error); // x = NaN
-      BOOST_CHECK_THROW(cdf(w, +nan), std::domain_error); // x = NaN
-      BOOST_CHECK_THROW(cdf(complement(w, +nan)), std::domain_error); // x = + nan
-      BOOST_CHECK_THROW(quantile(w, +nan), std::domain_error); // p = + nan
-      BOOST_CHECK_THROW(quantile(complement(w, +nan)), std::domain_error); // p = + nan
-    } // has_quiet_NaN
-
+    // Check construcing with Infinity
     if (std::numeric_limits<RealType>::has_infinity)
     {
       // Attempt to construct from non-finite should throw.
       RealType inf = std::numeric_limits<RealType>::infinity();
-#ifndef BOOST_NO_EXCEPTIONS
-      BOOST_CHECK_THROW(arcsine_distribution<RealType> w(inf), std::domain_error);
-      BOOST_CHECK_THROW(arcsine_distribution<RealType> w(1, inf), std::domain_error);
-#else
-      BOOST_CHECK_THROW(arcsine_distribution<RealType>(inf), std::domain_error);
-      BOOST_CHECK_THROW(arcsine_distribution<RealType>(1, inf), std::domain_error);
-#endif
-      // Infinite parameters to member functions should throw.
-      arcsine_distribution<RealType> w(RealType(0), RealType(1));
-#ifndef BOOST_NO_EXCEPTIONS
-      BOOST_CHECK_THROW(arcsine_distribution<RealType> w(inf), std::domain_error);
-      BOOST_CHECK_THROW(arcsine_distribution<RealType> w(1, inf), std::domain_error);
-#else
-      BOOST_CHECK_THROW(arcsine_distribution<RealType>(inf), std::domain_error);
-      BOOST_CHECK_THROW(arcsine_distribution<RealType>(1, inf), std::domain_error);
-#endif
-      BOOST_CHECK_THROW(pdf(w, +inf), std::domain_error); // x = inf
-      BOOST_CHECK_THROW(logpdf(w, +inf), std::domain_error); // x = inf
-      BOOST_CHECK_THROW(cdf(w, +inf), std::domain_error); // x = inf
-      BOOST_CHECK_THROW(cdf(complement(w, +inf)), std::domain_error); // x = + inf
-      BOOST_CHECK_THROW(quantile(w, +inf), std::domain_error); // p = + inf
-      BOOST_CHECK_THROW(quantile(complement(w, +inf)), std::domain_error); // p = + inf
+      invalid_params = {{inf},
+                        {1, inf}, // x_min > x_max
+                        {inf, 1}};
+      test_invalid_parameters<arcsine_distribution<RealType, boost::math::policies::policy<> >, 
+                              arcsine_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
     } // has_infinity
+
+    // Quantile should return x_min and x_max
+    arcsine_distribution<RealType> dist(0, 1);
+    BOOST_CHECK_EQUAL(quantile(dist, static_cast<RealType>(1)), static_cast<RealType>(1)); // p = 1
+    BOOST_CHECK_EQUAL(quantile(dist, static_cast<RealType>(0)), static_cast<RealType>(0)); // p = 0
+    BOOST_CHECK_EQUAL(quantile(complement(dist, static_cast<RealType>(1))), static_cast<RealType>(0)); // q = 1
+    BOOST_CHECK_EQUAL(quantile(complement(dist, static_cast<RealType>(0))), static_cast<RealType>(1)); // q = 0
 
     // Error handling checks:
     check_out_of_range<boost::math::arcsine_distribution<RealType> >(-1, +1); // (All) valid constructor parameter values.

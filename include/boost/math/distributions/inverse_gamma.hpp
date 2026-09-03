@@ -33,58 +33,6 @@
 
 namespace boost{ namespace math
 {
-namespace detail
-{
-
-template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline bool check_inverse_gamma_shape(
-      const char* function, // inverse_gamma
-      RealType shape, // shape aka alpha
-      RealType* result, // to update, perhaps with NaN
-      const Policy& pol)
-{  // Sources say shape argument must be > 0
-   // but seems logical to allow shape zero as special case,
-   // returning pdf and cdf zero (but not < 0).
-   // (Functions like mean, variance with other limits on shape are checked
-   // in version including an operator & limit below).
-   if((shape < 0) || !(boost::math::isfinite)(shape))
-   {
-      *result = policies::raise_domain_error<RealType>(
-         function,
-         "Shape parameter is %1%, but must be >= 0 !", shape, pol);
-      return false;
-   }
-   return true;
-} //bool check_inverse_gamma_shape
-
-template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline bool check_inverse_gamma_x(
-      const char* function,
-      RealType const& x,
-      RealType* result, const Policy& pol)
-{
-   if((x < 0) || !(boost::math::isfinite)(x))
-   {
-      *result = policies::raise_domain_error<RealType>(
-         function,
-         "Random variate is %1% but must be >= 0 !", x, pol);
-      return false;
-   }
-   return true;
-}
-
-template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline bool check_inverse_gamma(
-      const char* function, // TODO swap these over, so shape is first.
-      RealType scale,  // scale aka beta
-      RealType shape, // shape aka alpha
-      RealType* result, const Policy& pol)
-{
-   return check_scale(function, scale, result, pol)
-     && check_inverse_gamma_shape(function, shape, result, pol);
-} // bool check_inverse_gamma
-
-} // namespace detail
 
 BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
 class inverse_gamma_distribution
@@ -135,17 +83,29 @@ inverse_gamma_distribution(RealType,RealType)->inverse_gamma_distribution<typena
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
 {  // Range of permissible values for random variable x.
-   using boost::math::tools::max_value;
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
+   BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
+   { 
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), boost::math::numeric_limits<RealType>::infinity()); // 0 to + infinity.
+   }
+   else
+   {
+      using boost::math::tools::max_value;
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // 0 to + max
+   }
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
-{  // Range of supported values for random variable x.
-   // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-   using boost::math::tools::max_value;
-   using boost::math::tools::min_value;
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
+{ 
+   BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
+   { 
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), boost::math::numeric_limits<RealType>::infinity()); // 0 to + infinity.
+   }
+   else
+   {
+      using boost::math::tools::max_value;
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // 0 to + max
+   }
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -167,9 +127,12 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const inverse_gamma_distribution<Real
    { // Treat random variate zero as a special case.
       return 0;
    }
-   else if(false == detail::check_inverse_gamma_x(function, x, &result, Policy()))
+   else if(false == detail::check_inverse_gamma_x_positive(function, x, &result, Policy()))
    { // x bad.
       return result;
+   }
+   else if (!(boost::math::isfinite)(x)){
+      return 0;
    }
    result = scale / x;
    if(result < tools::min_value<RealType>())
@@ -251,9 +214,13 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const inverse_gamma_distribution<Real
    { // Treat zero as a special case.
      return 0;
    }
-   else if(false == detail::check_inverse_gamma_x(function, x, &result, Policy()))
-   { // x bad
+   else if((false == detail::check_inverse_gamma_x_positive(function, x, &result, Policy())))
+   { // x bad.
       return result;
+   }
+   else if (!(boost::math::isfinite)(x))
+   {
+      return 1;
    }
    result = boost::math::gamma_q(shape, scale / x, Policy());
    // result = tgamma(shape, scale / x) / tgamma(shape); // naive using tgamma
@@ -300,11 +267,18 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<inverse_gamm
    RealType result = 0;
    if(false == detail::check_inverse_gamma(function, scale, shape, &result, Policy()))
       return result;
-   if(false == detail::check_inverse_gamma_x(function, c.param, &result, Policy()))
+   if (c.param == 0)
+   { // Treat zero as a special case.
+     return 1;
+   }
+   else if(false == detail::check_inverse_gamma_x_positive(function, c.param, &result, Policy()))
+   { // x bad.
       return result;
-
-   if(c.param == 0)
-      return 1; // Avoid division by zero
+   }
+   else if (!(boost::math::isfinite)(c.param))
+   {
+      return 0;
+   }
 
    result = gamma_p(shape, scale/c.param, Policy());
    return result;
