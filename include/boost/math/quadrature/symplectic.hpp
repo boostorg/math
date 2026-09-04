@@ -23,6 +23,7 @@
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/special_functions/cbrt.hpp>
 #include <boost/math/interpolators/cubic_hermite.hpp>
 
 namespace boost{ namespace math { namespace quadrature {
@@ -74,6 +75,43 @@ add(T& vec1, const U& vec2)
     {
         vec1[i] = vec1[i] + vec2[i];
     }
+}
+
+template <typename T, typename U>
+typename std::enable_if_t<has_plus_v<T, U>, void>
+subtract(T& x, const U& y)
+{
+    x = x - y;
+}
+
+template <typename T, typename U>
+typename std::enable_if_t<!has_plus_v<T, U>, void>
+subtract(T& vec1, const U& vec2)
+{
+    for (std::size_t i=0; i < vec1.size(); i++)
+    {
+        vec1[i] = vec1[i] - vec2[i];
+    }
+}
+
+template <typename T>
+typename std::enable_if_t<has_size_v<T>, typename T::value_type>
+l2_norm(const T& vec)
+{
+    typename T::value_type sum = 0;
+    for (std::size_t i=0; i < vec.size(); i++)
+    {
+        sum += vec[i] * vec[i];
+    }
+    return std::sqrt(sum);
+}
+
+template <typename T>
+typename std::enable_if_t<!has_size_v<T>, typename T::value_type>
+l2_norm(const T& val)
+{
+    BOOST_MATH_STD_USING;
+    return abs(val);
 }
 
 template<typename T, typename U, typename = void>
@@ -198,7 +236,7 @@ void sixth_order_yoshida(RandomAccessContainer& p0, RandomAccessContainer& q0, c
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
-void SRKN_b_order_6(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt,
+void SRKN_b_6(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt,
                     const Func dHdp, const Func dHdq)
 { // This method implements SRKN_b^6 in Table 3 here
   // https://www.sciencedirect.com/science/article/pii/S0377042701004927
@@ -236,7 +274,7 @@ void SRKN_b_order_6(RandomAccessContainer& p0, RandomAccessContainer& q0, const 
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
-void SRKN_b_order_11(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt,
+void SRKN_b_11(RandomAccessContainer& p0, RandomAccessContainer& q0, const RealType dt,
                      const Func dHdp, const Func dHdq)
 { // This method implements SRKN_b^11 in Table 3 here
   // https://www.sciencedirect.com/science/article/pii/S0377042701004927
@@ -309,8 +347,8 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
         case available_methods::Y6:       stepper = sixth_order_yoshida; break;
         case available_methods::Y4:       stepper = fourth_order_yoshida; break;
         case available_methods::Y2:       stepper = second_order_yoshida; break;
-        case available_methods::SRKNB6:   stepper = SRKN_b_order_6; break;
-        case available_methods::SRKNB11:  stepper = SRKN_b_order_11; break;
+        case available_methods::SRKNB6:   stepper = SRKN_b_6; break;
+        case available_methods::SRKNB11:  stepper = SRKN_b_11; break;
         default: boost::math::policies::raise_domain_error(function, "Incorrect method recieved. Must be in `available_methods` enum class.", 0, pol);
     }
 
@@ -327,6 +365,89 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
     }
     return std::make_pair(p, q);
 }
+
+template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
+std::pair<std::vector<RandomAccessContainer>, std::vector<RealType> > integrate_hamiltonian_adaptive(RandomAccessContainer& p0,
+                                                                                                                RandomAccessContainer& q0,
+                                                                                                                const std::vector<RealType>& times,
+                                                                                                                const Func& dHdp,
+                                                                                                                const Func& dHdq,
+                                                                                                                const RealType& tol,
+                                                                                                                const available_methods& method,
+                                                                                                                const Policy& pol)
+{
+    BOOST_MATH_STD_USING
+    // Not sure how to make this function string nicer
+    static const char* function = "boost::math::quadrature::integrate_hamiltonian(p0, q0, %1%, steps, dHdp, dHdq)";
+
+    if (!(boost::math::isfinite)(times.back()))
+    {
+        boost::math::policies::raise_domain_error(function, "Maximum time  must be positive and finite but got: tMax = %1%.\n", times.back(), pol);
+    }
+
+    if ((times.front() <= 0))
+    {
+        boost::math::policies::raise_domain_error(function, "Minimum time  must be positive and finite but got: tMin = %1%.\n", times.front(), pol);
+    }
+
+    // Check that p0 and q0 have the same size
+    size_check(p0, q0, function, pol);
+    #ifdef _MSC_VER
+        #  pragma warning(pop)
+    #endif
+
+    typedef void (*stepperType)(RandomAccessContainer&, RandomAccessContainer&, RealType, Func, Func);
+
+    stepperType stepper;
+    switch (method) {
+        case available_methods::Y6:       stepper = sixth_order_yoshida; break;
+        case available_methods::Y4:       stepper = fourth_order_yoshida; break;
+        case available_methods::SRKNB6:   stepper = SRKN_b_6; break;
+        case available_methods::SRKNB11:  stepper = SRKN_b_11; break;
+        default: boost::math::policies::raise_domain_error(function, "Incorrect method recieved. Must be in `available_methods` enum class.", 0, pol);
+    }
+
+    std::vector<RandomAccessContainer> p = { p0 };
+    std::vector<RandomAccessContainer> q = { q0 };
+
+    RealType negative_one = RealType(-1);
+    RandomAccessContainer dHdq0 = dHdq(q0);
+    mult_prefactor(dHdq0, negative_one);
+    std::vector<RandomAccessContainer> dpdt = { dHdq0 };
+
+    std::vector<RealType> time = { 0 };
+    RealType dt = 0.01;
+
+    // To calculate the error, we need to store the current values of p and q seperately
+    // from the values updated in the loop. This is because the steppers modify p and q in place
+    RandomAccessContainer ref_p;
+    RandomAccessContainer ref_q;
+    RandomAccessContainer error_vec;
+    RealType error;
+    RealType order;
+
+    while (time.back() < times.back())
+    {
+        stepper(p0, q0, dt, dHdp, dHdq);
+        p.push_back(p0);
+        q.push_back(q0);
+        time.push_back(time.back() + dt);
+
+        // Now calculate the error and adjust the time step accordingly
+        ref_p = p0;
+        ref_q = q0;
+        second_order_yoshida(ref_p, ref_q, dt, dHdp, dHdq);
+
+        subtract(ref_p, p0);
+        error = l2_norm(ref_p);
+        std::cout << dt << "," << error << "," << tol << "," << pow(tol / error, 1/(order + 1)) << std::endl;
+        dt *= pow(tol / error, 1/(order + 1));
+
+    }
+    return std::make_pair(p, time);
+}
+
+
 } // namespace detail
 
 template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
