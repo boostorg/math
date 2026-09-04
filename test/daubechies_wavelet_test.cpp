@@ -17,6 +17,7 @@
 #include <boost/hana/for_each.hpp>
 #include <boost/hana/ext/std/integer_sequence.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
+#include <boost/math/differentiation/finite_difference.hpp>
 #include <boost/math/special_functions/daubechies_wavelet.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/quadrature/trapezoidal.hpp>
@@ -118,6 +119,19 @@ void test_quadratures()
     }
 }
 
+void test_absolute_error_refinement_derivatives()
+{
+    using boost::math::differentiation::finite_difference_derivative;
+    auto psi = boost::math::daubechies_wavelet<float, 19>(-2);
+    auto value = [&](float x) { return psi(x); };
+    auto prime = [&](float x) { return psi.prime(x); };
+    float x = 0.1875f;
+    float finite_difference_prime = finite_difference_derivative<decltype(value), float, 2>(value, x);
+    float finite_difference_double_prime = finite_difference_derivative<decltype(prime), float, 2>(prime, x);
+    CHECK_MOLLIFIED_CLOSE(finite_difference_prime, psi.prime(x), 0.005f);
+    CHECK_MOLLIFIED_CLOSE(finite_difference_double_prime, psi.double_prime(x), 0.005f);
+}
+
 int main()
 {
     #ifndef __MINGW32__
@@ -129,6 +143,7 @@ int main()
          test_quadratures<float, i + 3>();
          test_quadratures<double, i + 3>();
          });
+      test_absolute_error_refinement_derivatives();
     }
     catch (std::bad_alloc)
     {
