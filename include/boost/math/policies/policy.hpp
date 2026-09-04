@@ -111,10 +111,17 @@ namespace policies{
 #define BOOST_MATH_PROMOTE_FLOAT_POLICY true
 #endif
 #ifndef BOOST_MATH_PROMOTE_DOUBLE_POLICY
-#ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-#define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
-#else
+#if !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS) \
+    && (defined(__i386) || defined(__i386__) || defined(_M_IX86) \
+    || defined(__amd64) || defined(__amd64__)  || defined(_M_AMD64) \
+    || defined(__x86_64) || defined(__x86_64__) || defined(_M_X64))
+// On non-x86 long double is expected to be either the same as double
+// or an emulated 128 bit type - promotion is not sensible.
+// On x86 long double is also rather slow these days, but changing the
+// policy there has larger compatibility concerns and is left to a later time
 #define BOOST_MATH_PROMOTE_DOUBLE_POLICY true
+#else
+#define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
 #endif
 #endif
 #ifndef BOOST_MATH_DISCRETE_QUANTILE_POLICY
