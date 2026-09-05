@@ -10,6 +10,7 @@
 #include <boost/math/tools/config.hpp>
 
 #ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/quadrature/detail/norm_quadrature_error.hpp>
 
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
@@ -53,6 +54,8 @@ public:
 
     template<class F>
     auto integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels) const ->decltype(std::declval<F>()(std::declval<Real>()));
+    template<class F, class Norm>
+    auto integrate(const F& f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels) const ->decltype(std::declval<F>()(std::declval<Real>()));
 
 private:
    const std::vector<Real>& get_abscissa_row(std::size_t n)const
@@ -270,6 +273,144 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         if (!(boost::math::isfinite)(L1_I1))
         {
             return static_cast<K>(policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and returned %1%. Please ensure your function evaluates to a finite number over its entire domain.", I1, Policy()));
+        }
+        if (err <= tolerance*L1_I1)
+        {
+            break;
+        }
+    }
+
+    if (error)
+    {
+        *error = err;
+    }
+
+    if(L1)
+    {
+        *L1 = L1_I1;
+    }
+
+    if (levels)
+    {
+       *levels = i;
+    }
+
+    return I1;
+}
+
+template<class Real, class Policy>
+template<class F, class Norm>
+auto exp_sinh_detail<Real, Policy>::integrate(const F& f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels) const ->decltype(std::declval<F>()(std::declval<Real>()))
+{
+    const auto magnitude = [&](const decltype(std::declval<F>()(std::declval<Real>()))& value) -> Real { return static_cast<Real>(norm(value)); };
+    typedef decltype(f(static_cast<Real>(0))) K;
+    using std::abs;
+    using std::floor;
+    using std::tanh;
+    using std::sinh;
+    using std::sqrt;
+    using boost::math::constants::half;
+    using boost::math::constants::half_pi;
+
+
+   //std::cout << std::setprecision(5*std::numeric_limits<Real>::digits10);
+
+    // Get the party started with two estimates of the integral:
+    Real min_abscissa{ 0 }, max_abscissa{ boost::math::tools::max_value<Real>() };
+    K I0 = zero;
+    Real L1_I0 = 0;
+    for(size_t i = 0; i < m_abscissas[0].size(); ++i)
+    {
+        K y = f(m_abscissas[0][i]);
+        K I0_last = I0;
+        I0 += y*m_weights[0][i];
+        L1_I0 += magnitude(y)*m_weights[0][i];
+        if ((magnitude(I0_last - I0) == 0) && (magnitude(I0) != 0))
+        {
+           max_abscissa = m_abscissas[0][i];
+           break;
+        }
+    }
+
+    //std::cout << "First estimate : " << I0 << std::endl;
+    K I1 = I0;
+    Real L1_I1 = L1_I0;
+    bool have_first_j = false;
+    std::size_t first_j = 0;
+    for (size_t i = 0; (i < m_abscissas[1].size()) && (m_abscissas[1][i] < max_abscissa); ++i)
+    {
+        K y = f(m_abscissas[1][i]);
+        K I1_last = I1;
+        I1 += y*m_weights[1][i];
+        L1_I1 += magnitude(y)*m_weights[1][i];
+        if (!have_first_j && (magnitude(I1_last - I1) == 0))
+        {
+           // No change to the sum, disregard these values on the LHS:
+           if ((i < m_abscissas[1].size() - 1) && (m_abscissas[1][i + 1] > max_abscissa))
+           {
+              // The summit is so high, that we found nothing in this row which added to the integral!!
+              have_first_j = true;
+           }
+           else
+           {
+              min_abscissa = m_abscissas[1][i];
+              first_j = i;
+           }
+        }
+        else
+           have_first_j = true;
+    }
+
+    if (magnitude(I0) == 0)
+    {
+       // We failed to find anything, is the integral zero, or have we just not found it yet?
+       // We'll try one more level, if that still finds nothing then it'll terminate.
+       min_abscissa = 0;
+       max_abscissa = boost::math::tools::max_value<Real>();
+    }
+
+    I1 *= half<Real>();
+    L1_I1 *= half<Real>();
+    Real err = magnitude(I0 - I1);
+    //std::cout << "Second estimate: " << I1 << " Error estimate at level " << 1 << " = " << err << std::endl;
+
+    size_t i = 2;
+    for(; i < m_abscissas.size(); ++i)
+    {
+        I0 = I1;
+        L1_I0 = L1_I1;
+
+        I1 = half<Real>()*I0;
+        L1_I1 = half<Real>()*L1_I0;
+        Real h = static_cast<Real>(1)/static_cast<Real>(1 << i);
+        K sum = zero;
+        Real absum = 0;
+
+        auto abscissas_row = get_abscissa_row(i);
+        auto weight_row = get_weight_row(i);
+
+        first_j = first_j == 0 ? 0 : 2 * first_j - 1;  // appoximate location to start looking for lowest meaningful abscissa value
+        std::size_t j = first_j;
+        while (abscissas_row[j] < min_abscissa)
+           ++j;
+        for(; (j < m_weights[i].size()) && (abscissas_row[j] < max_abscissa); ++j)
+        {
+            Real x = abscissas_row[j];
+            K y = f(x);
+            sum += y*weight_row[j];
+            Real abterm0 = magnitude(y)*weight_row[j];
+            absum += abterm0;
+        }
+
+        I1 += sum*h;
+        L1_I1 += absum*h;
+        err = magnitude(I0 - I1);
+        //std::cout << "Estimate:        " << I1 << " Error estimate at level " << i  << " = " << err << std::endl;
+        // Use L1_I1 here to make it work with both complex and real valued integrands:
+        if (!(boost::math::isfinite)(L1_I1))
+        {
+            policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and returned %1%. Please ensure your function evaluates to a finite number over its entire domain.", magnitude(I1), Policy());
+            return I1;
         }
         if (err <= tolerance*L1_I1)
         {

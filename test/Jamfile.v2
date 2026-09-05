@@ -1217,6 +1217,15 @@ test-suite quadrature :
      : : : release <define>TEST10 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_10 ]
 
+   [ run double_exponential_eigen_test.cpp : : :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax ]
+     [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
+   [ run gauss_kronrod_eigen_test.cpp : : :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax ]
+     [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
+   [ run gauss_quadrature_eigen_test.cpp : : :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax ]
+     [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
    [ run gauss_quadrature_test.cpp : : : <define>TEST1 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_quadrature_test_1 ]
    [ run gauss_quadrature_test.cpp : : : <define>TEST2 $(float128_type)

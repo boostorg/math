@@ -42,6 +42,49 @@ with no end point singularities.  For difficult functions, or those with end poi
                             Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
    };
 
+[heading Vector- and matrix-valued integrands]
+
+An additional overload accepts an explicit additive identity and a scalar norm:
+
+    template <class F, class Norm>
+    static auto integrate(F f, Real a, Real b,
+                          const decltype(f(a))& zero, Norm norm,
+                          unsigned max_depth = 15,
+                          Real tol = tools::root_epsilon<Real>(),
+                          Real* error = nullptr, Real* pL1 = nullptr)
+        -> decltype(f(a));
+
+This overload participates only when `norm(f(a))` can be explicitly converted
+to `Real`. Existing overloads and their behavior are unchanged.
+
+As with the [link math_toolkit.gauss Gauss overloads], `f` must return a concrete
+value type supporting addition, addition assignment, unary negation, and scalar
+multiplication on either side. The supplied zero and all integrand values must
+have compatible dimensions. The norm must be nonnegative and convertible to `Real`.
+For example, with Eigen:
+
+    Eigen::MatrixXcd zero = Eigen::MatrixXcd::Zero(rows, cols);
+    auto norm = [](const Eigen::MatrixXcd& m) { return m.norm(); };
+    Eigen::MatrixXcd result = boost::math::quadrature::gauss_kronrod<double, 15>::integrate(
+        f, a, b, zero, norm, 15, 1e-10);
+
+The supplied norm is used for the Gauss-Kronrod difference, the roundoff floor,
+the relative convergence test, and the L1 integral. Tolerance therefore applies
+to that norm, not separately to each matrix entry. `error` is an estimate, not a
+rigorous bound, and reaching `max_depth` does not guarantee the requested tolerance.
+In this overload, local error estimates are scaled by interval width, and by the
+additional factor in the half-infinite substitutions, to match the units of the
+returned integral. Reversing finite bounds negates the integral but leaves error
+and L1 nonnegative.
+
+Equal bounds return the supplied zero and set requested error and L1 outputs to
+zero without evaluating `f`. Invalid bounds invoke the scalar domain-error policy;
+if it returns instead of throwing, the result is `zero` multiplied by the policy's
+scalar error value, and requested error and L1 outputs receive that value. For
+floating-point Eigen matrices the standard ignore-error policy thus produces a
+matrix of NaNs with the supplied dimensions. No Eigen dependency is added to
+Boost.Math headers.
+
 [heading Description]
 
    static const RandomAccessContainer& abscissa();
