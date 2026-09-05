@@ -19,6 +19,8 @@
         
         Real khinchin_harmonic_mean() const;
 
+        const std::vector<Z>& partial_denominators() const;
+
         template<typename T, typename Z_>
         friend std::ostream& operator<<(std::ostream& out, simple_continued_fraction<T, Z>& scf);
     };
@@ -39,6 +41,36 @@ Here's a minimal working example:
 
 The class computes partial denominators while simultaneously computing convergents with the modified Lentz's algorithm.
 Once a convergent is within a few ulps of the input value, the computation stops.
+
+Finite simple continued fractions are not unique: `[a0; a1, ..., an, 1]` and
+`[a0; a1, ..., an + 1]` represent the same value.
+The class uses the shorter, canonical representation, absorbing a trailing `1` into the preceding coefficient.
+For example, `3.75` is represented as `[3; 1, 3]`, rather than `[3; 1, 2, 1]`.
+
+The `partial_denominators()` member function returns a read-only reference to the stored coefficients,
+including the integer part at index zero:
+
+    const auto& a = cfrac.partial_denominators();
+    std::cout << a.size() << " coefficients\n";
+    std::cout << a[0] << "\n";    // Integer part: 3
+    std::cout << a.at(1) << "\n"; // First partial denominator: 7
+
+The reference remains valid for the lifetime of `cfrac`.
+
+A prefix of these coefficients defines a convergent, which can be used as a rational approximation.
+For example, the first four coefficients of the expansion of π give `355/113`.
+With `#include <boost/rational.hpp>`, this can be computed by evaluating the prefix backwards:
+
+    using rational = boost::rational<std::int64_t>;
+    std::size_t n = 4; // Use the first four coefficients of cfrac above.
+    rational approximation(a.at(n - 1));
+    for (std::size_t i = n - 1; i > 0; --i) {
+        approximation = rational(a[i - 1]) + rational(1) / approximation;
+    }
+    std::cout << approximation << "\n"; // Prints: 355/113
+
+In general, choose `n` between `1` and `a.size()` and an integer type wide enough for the rational
+arithmetic, including intermediate results. Longer prefixes can overflow a fixed-width integer type.
 
 Note that every floating point number is a rational number, and this exact rational can be exactly converted to a finite continued fraction.
 This is perfectly sensible behavior, but we do not do it here.
