@@ -30,4 +30,5 @@ cmake-build-debug/*
 build.ninja
 .ninja*
 a.out
+*.patch
 
