@@ -17,6 +17,7 @@
 #include <boost/math/special_functions/owens_t.hpp> // Owen's T function
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/normal.hpp>
+#include <boost/math/quadrature/exp_sinh.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/tuple.hpp>
@@ -54,6 +55,22 @@ namespace boost{ namespace math{
       }
       return true;
     }
+
+#ifndef BOOST_MATH_HAS_NVRTC
+    template <class RealType, class Policy>
+    inline RealType skew_normal_tail_integral(RealType x, RealType shape, bool upper)
+    {
+      normal_distribution<RealType, Policy> std_normal;
+      quadrature::exp_sinh<RealType, Policy> integrator;
+      const RealType direction = upper ? static_cast<RealType>(1) : static_cast<RealType>(-1);
+      const auto integrand = [&](RealType t)->RealType
+      {
+        const RealType z = x + direction * t;
+        return static_cast<RealType>(2) * pdf(std_normal, z) * cdf(std_normal, shape * z);
+      };
+      return integrator.integrate(integrand, policies::get_epsilon<RealType, Policy>() * 8);
+    }
+#endif
 
   } // namespace detail
 
@@ -218,7 +235,16 @@ namespace boost{ namespace math{
 
     normal_distribution<RealType, Policy> std_normal;
 
-    result = cdf(std_normal, transformed_x) - owens_t(transformed_x, shape)*static_cast<RealType>(2);
+    const RealType normal_cdf = cdf(std_normal, transformed_x);
+    result = normal_cdf - owens_t(transformed_x, shape)*static_cast<RealType>(2);
+
+#ifndef BOOST_MATH_HAS_NVRTC
+    if((shape > 0) && (transformed_x < 0)
+      && (result < normal_cdf * boost::math::tools::root_epsilon<RealType>()))
+    {
+      result = detail::skew_normal_tail_integral<RealType, Policy>(transformed_x, shape, false);
+    }
+#endif
 
     return result;
   } // cdf
@@ -261,7 +287,16 @@ namespace boost{ namespace math{
 
     normal_distribution<RealType, Policy> std_normal;
 
-    result = cdf(complement(std_normal, transformed_x)) + owens_t(transformed_x, shape)*static_cast<RealType>(2);
+    const RealType normal_cdf = cdf(complement(std_normal, transformed_x));
+    result = normal_cdf + owens_t(transformed_x, shape)*static_cast<RealType>(2);
+
+#ifndef BOOST_MATH_HAS_NVRTC
+    if((shape < 0) && (transformed_x > 0)
+      && (result < normal_cdf * boost::math::tools::root_epsilon<RealType>()))
+    {
+      result = detail::skew_normal_tail_integral<RealType, Policy>(transformed_x, shape, true);
+    }
+#endif
     return result;
   } // cdf complement
 
@@ -653,11 +688,16 @@ namespace boost{ namespace math{
       - x*(static_cast<RealType>(2)*x*x-static_cast<RealType>(5))*skew*skew/static_cast<RealType>(36);
     } // if(shape != 0)
 
-    result = standard_deviation(dist)*x+mean(dist);
-
     // handle special case of non-skew normal distribution.
     if(shape == 0)
-      return result;
+      return standard_deviation(dist)*x+mean(dist);
+
+    // Search in standardized coordinates.  bracket_and_solve_root expands
+    // multiplicatively about zero, so searching in the user's location/scale
+    // can turn a good initial estimate into a very wide bracket.
+    skew_normal_distribution<RealType, Policy> standard_dist(
+       static_cast<RealType>(0), static_cast<RealType>(1), shape);
+    result = standard_deviation(standard_dist)*x+mean(standard_dist);
 
     // refine the result by numerically searching the root of (p-cdf)
 
@@ -667,12 +707,12 @@ namespace boost{ namespace math{
     if (result == 0)
        result = tools::min_value<RealType>(); // we need to be one side of zero or the other for the root finder to work.
 
-    auto fun = [&, dist, p](const RealType& x)->RealType { return cdf(dist, x) - p; };
+    auto fun = [&, standard_dist, p](const RealType& x)->RealType { return cdf(standard_dist, x) - p; };
 
     RealType f_result = fun(result);
 
     if (f_result == 0)
-       return result;
+       return location + scale * result;
 
     if (f_result * result > 0)
     {
@@ -704,7 +744,7 @@ namespace boost{ namespace math{
     //
     // Try one last Newton step, just to close up the interval:
     //
-    RealType step = fun(result) / pdf(dist, result);
+    RealType step = fun(result) / pdf(standard_dist, result);
 
     if (result - step <= p_result.first)
        result = p_result.first;
@@ -712,6 +752,8 @@ namespace boost{ namespace math{
        result = p_result.second;
     else
        result -= step;
+
+    result = location + scale * result;
 
     if (max_iter >= policies::get_max_root_iterations<Policy>())
     {
