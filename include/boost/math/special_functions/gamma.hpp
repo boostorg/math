@@ -487,14 +487,9 @@ int minimum_argument_for_bernoulli_recursion()
 }
 
 template <class T, class Policy>
-T scaled_tgamma_no_lanczos(const T& z, const Policy& pol, bool islog = false)
-{
+T bernoulli_stirling_series(const T& z, const Policy& pol) {
    BOOST_MATH_STD_USING
-   //
-   // Calculates tgamma(z) / (z/e)^z
-   // Requires that our argument is large enough for Sterling's approximation to hold.
-   // Used internally when combining gamma's of similar magnitude without logarithms.
-   //
+
    BOOST_MATH_ASSERT(minimum_argument_for_bernoulli_recursion<T>() <= z);
 
    // Perform the Bernoulli series expansion of Stirling's approximation.
@@ -527,7 +522,7 @@ T scaled_tgamma_no_lanczos(const T& z, const Policy& pol, bool islog = false)
       }
       if (n > number_of_bernoullis_b2n)
          // Safety net, we hope to never get here:
-         return policies::raise_evaluation_error("scaled_tgamma_no_lanczos<%1%>()", "Exceeded maximum series iterations without reaching convergence, best approximation was %1%", T(exp(sum) * half_ln_two_pi_over_z), pol); // LCOV_EXCL_LINE
+         return policies::raise_evaluation_error("bernoulli_stirling_series<%1%>()", "Exceeded maximum series iterations without reaching convergence, best approximation was %1%", sum, pol); // LCOV_EXCL_LINE
 
       sum += term;
 
@@ -535,9 +530,25 @@ T scaled_tgamma_no_lanczos(const T& z, const Policy& pol, bool islog = false)
       T fterm = fabs(term);
       if(fterm > last_term)
          // Safety net, we hope to never get here:
-         return policies::raise_evaluation_error("scaled_tgamma_no_lanczos<%1%>()", "Series became divergent without reaching convergence, best approximation was %1%", T(exp(sum) * half_ln_two_pi_over_z), pol);  // LCOV_EXCL_LINE
+         return policies::raise_evaluation_error("bernoulli_stirling_series<%1%>()", "Series became divergent without reaching convergence, best approximation was %1%", sum, pol);  // LCOV_EXCL_LINE
       last_term = fterm;
    }
+   return sum;
+}
+
+template <class T, class Policy>
+T scaled_tgamma_no_lanczos(const T& z, const Policy& pol, bool islog = false)
+{
+   BOOST_MATH_STD_USING
+   //
+   // Calculates tgamma(z) / (z/e)^z
+   // Requires that our argument is large enough for Sterling's approximation to hold.
+   // Used internally when combining gamma's of similar magnitude without logarithms.
+   //
+   BOOST_MATH_ASSERT(minimum_argument_for_bernoulli_recursion<T>() <= z);
+
+   T sum = bernoulli_stirling_series(z, pol);
+   const T half_ln_two_pi_over_z = sqrt(boost::math::constants::two_pi<T>() / z);
 
    // Complete Stirling's approximation.
    T scaled_gamma_value = islog ? T(sum + log(half_ln_two_pi_over_z)) : T(exp(sum) * half_ln_two_pi_over_z);
