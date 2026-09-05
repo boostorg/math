@@ -15,6 +15,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/detail/bessel_k0.hpp>
 #include <boost/math/special_functions/detail/bessel_k1.hpp>
+#include <boost/math/special_functions/detail/bessel_ik.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
@@ -60,6 +61,12 @@ BOOST_MATH_GPU_ENABLED T bessel_kn(int n, T x, const Policy& pol)
     {
        prev = bessel_k0(x);
        current = bessel_k1(x);
+       if ((prev == 0) || (current == 0))
+       {
+          T Iv, Kv;
+          bessel_ik(static_cast<T>(n), x, &Iv, &Kv, need_k, pol);
+          return Kv;
+       }
        int k = 1;
        BOOST_MATH_ASSERT(k < n);
        T scale = 1;
