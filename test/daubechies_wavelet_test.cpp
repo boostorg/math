@@ -119,17 +119,75 @@ void test_quadratures()
     }
 }
 
-void test_absolute_error_refinement_derivatives()
+// Exercise both derivative-capable interpolators at points between grid nodes.
+// Differentiating prime() checks double_prime() independently of the grid generator.
+// Use coarse grids so the finite-difference stencil fits inside an interpolation interval.
+template<class Real, int p>
+void test_refinement_derivatives(int refinements)
 {
     using boost::math::differentiation::finite_difference_derivative;
-    auto psi = boost::math::daubechies_wavelet<float, 19>(-2);
-    auto value = [&](float x) { return psi(x); };
-    auto prime = [&](float x) { return psi.prime(x); };
-    float x = 0.1875f;
-    float finite_difference_prime = finite_difference_derivative<decltype(value), float, 2>(value, x);
-    float finite_difference_double_prime = finite_difference_derivative<decltype(prime), float, 2>(prime, x);
-    CHECK_MOLLIFIED_CLOSE(finite_difference_prime, psi.prime(x), 0.005f);
-    CHECK_MOLLIFIED_CLOSE(finite_difference_double_prime, psi.double_prime(x), 0.005f);
+    auto f = boost::math::daubechies_wavelet<Real, p>(refinements);
+    auto value = [&](Real x) { return f(x); };
+    auto prime = [&](Real x) { return f.prime(x); };
+    const Real tolerance = std::is_same_v<Real, float> ? Real(0.005) : Real(0.000001);
+    for (int i = 0; i < 8; ++i)
+    {
+        Real x = Real(0) + Real(i)/8 + Real(1)/32;
+        auto d1 = finite_difference_derivative<decltype(value), Real, 2>(value, x);
+        auto d2 = finite_difference_derivative<decltype(prime), Real, 2>(prime, x);
+        if constexpr (std::is_same_v<Real, float>)
+        {
+            // The automatic float step is too large for the curvature of these
+            // interpolants. This dyadic step stays well inside the grid cell.
+            Real h = Real(1)/1024;
+            d1 = (value(x + h) - value(x - h))/(2*h);
+            d2 = (prime(x + h) - prime(x - h))/(2*h);
+        }
+        CHECK_MOLLIFIED_CLOSE(d1, f.prime(x), tolerance);
+        CHECK_MOLLIFIED_CLOSE(d2, f.double_prime(x), tolerance);
+    }
+}
+
+// At shared dyadic nodes, changing the refinement must preserve function values.
+template<class Real, int p>
+void test_explicit_refinement()
+{
+    auto coarse = boost::math::daubechies_wavelet<Real, p>(3);
+    auto fine = boost::math::daubechies_wavelet<Real, p>(4);
+    CHECK_EQUAL(true, fine.bytes() > coarse.bytes());
+    auto [a, b] = coarse.support();
+    for (Real x = a; x <= b; x += Real(1)/8)
+    {
+        CHECK_MOLLIFIED_CLOSE(coarse(x), fine(x), 32*std::numeric_limits<Real>::epsilon());
+        if constexpr (p > 2)
+        {
+            CHECK_MOLLIFIED_CLOSE(coarse.prime(x), fine.prime(x), 32*std::numeric_limits<Real>::epsilon());
+        }
+        if constexpr (p >= 6)
+        {
+            CHECK_MOLLIFIED_CLOSE(coarse.double_prime(x), fine.double_prime(x), 32*std::numeric_limits<Real>::epsilon());
+        }
+    }
+}
+
+template<class Real>
+void test_haar_wavelet()
+{
+    for (int refinements : {-2, -1, 3})
+    {
+        auto psi = boost::math::daubechies_wavelet<Real, 1>(refinements);
+        CHECK_EQUAL(Real(0), psi.support().first);
+        CHECK_EQUAL(Real(1), psi.support().second);
+        for (Real x : {Real(-1), Real(0), Real(0.5), Real(1), Real(2)})
+        {
+            CHECK_EQUAL(Real(0), psi(x));
+        }
+        CHECK_EQUAL(Real(1), psi(Real(0.25)));
+        CHECK_EQUAL(Real(-1), psi(Real(0.75)));
+        CHECK_EQUAL(Real(1), psi(std::nextafter(Real(0.5), Real(0))));
+        CHECK_EQUAL(Real(-1), psi(std::nextafter(Real(0.5), Real(1))));
+    }
+    CHECK_THROW((boost::math::daubechies_wavelet<Real, 1>(0)), std::domain_error);
 }
 
 int main()
@@ -137,13 +195,22 @@ int main()
     #ifndef __MINGW32__
     try
     {
+      test_haar_wavelet<float>();
+      test_haar_wavelet<double>();
       test_exact_value<double>();
 
       boost::hana::for_each(std::make_index_sequence<17>(), [&](auto i) {
          test_quadratures<float, i + 3>();
          test_quadratures<double, i + 3>();
          });
-      test_absolute_error_refinement_derivatives();
+      test_refinement_derivatives<float, 6>(4);
+      test_refinement_derivatives<float, 19>(-2);
+      test_refinement_derivatives<double, 6>(4);
+      test_refinement_derivatives<double, 19>(4);
+      boost::hana::for_each(std::make_index_sequence<18>(), [&](auto i) {
+         test_explicit_refinement<float, i + 2>();
+         test_explicit_refinement<double, i + 2>();
+      });
     }
     catch (std::bad_alloc)
     {

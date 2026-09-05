@@ -4,6 +4,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <array>
 #include <iostream>
 #include <unordered_map>
 #include <string>
@@ -153,11 +154,14 @@ void find_best_interpolator()
         }
 
         {
-            auto phi_copy = phi;
-            auto phi_prime_copy = phi_prime;
-            auto mh = boost::math::detail::matched_holder(std::move(phi_copy), std::move(phi_prime_copy), r, Real(0));
+            std::vector<std::array<Real, 2>> data(phi.size());
+            for (size_t i = 0; i < phi.size(); ++i)
+            {
+                data[i] = {phi[i], phi_prime[i]};
+            }
+            auto mh = boost::math::detail::matched_holder_aos(std::move(data), r, Real(0));
             Real sup = 0;
-            // call to matched_holder is unchecked, so only go to phi_dense.size() -1.
+            // call to matched_holder_aos is unchecked, so only go to phi_dense.size() -1.
             for (size_t i = 0; i < phi_dense.size() - 1; ++i)
             {
                 Real x = i*dx_dense;

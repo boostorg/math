@@ -322,7 +322,7 @@ public:
         }
         if (x == xf)
         {
-            return dy_.back()/inv_dx_;
+            return dy_.back()*inv_dx_;
         }
 
         return this->unchecked_prime(x);
@@ -337,7 +337,7 @@ public:
         Real t = s3 - ii;
         if (t==0)
         {
-            return dy_[i]/inv_dx_;
+            return dy_[i]*inv_dx_;
         }
  
         Real y0 = y_[i];
@@ -361,7 +361,7 @@ public:
         Real dydx = z0*(y1-y0)*inv_dx_;
         dydx += (z1*dy0 + z2*dy1)*inv_dx_;
         dydx += 2*t*(z3*a0 + z4*a1)*inv_dx_;
-        dydx += t*t*(z5*j0 + z6*j1);
+        dydx += t*t*(z5*j0 + z6*j1)*inv_dx_;
         return dydx;
     }
 
@@ -417,7 +417,7 @@ public:
         Real d2ydx2 = z0*(y1-y0)*inv_dx_*inv_dx_;
         d2ydx2 += (z1*dy0 + z2*dy1)*inv_dx_*inv_dx_;
         d2ydx2 += (z3*a0 + z4*a1)*2*inv_dx_*inv_dx_;
-        d2ydx2 += 6*(z5*j0 + z6*j1)/(inv_dx_*inv_dx_);
+        d2ydx2 += 6*(z5*j0 + z6*j1)*inv_dx_*inv_dx_;
 
         return d2ydx2;
     }
@@ -572,7 +572,7 @@ public:
         Real dydx = z0*(y1-y0)*inv_dx_;
         dydx += (z1*dy0 + z2*dy1)*inv_dx_;
         dydx += 2*t*(z3*a0 + z4*a1)*inv_dx_;
-        dydx += t*t*(z5*j0 + z6*j1);
+        dydx += t*t*(z5*j0 + z6*j1)*inv_dx_;
         return dydx;
     }
 
@@ -627,7 +627,7 @@ public:
         Real d2ydx2 = z0*(y1-y0)*inv_dx_*inv_dx_;
         d2ydx2 += (z1*dy0 + z2*dy1)*inv_dx_*inv_dx_;
         d2ydx2 += (z3*a0 + z4*a1)*2*inv_dx_*inv_dx_;
-        d2ydx2 += 6*(z5*j0 + z6*j1)/(inv_dx_*inv_dx_);
+        d2ydx2 += 6*(z5*j0 + z6*j1)*inv_dx_*inv_dx_;
 
         return d2ydx2;
     }
