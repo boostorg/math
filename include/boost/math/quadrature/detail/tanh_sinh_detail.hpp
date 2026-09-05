@@ -16,6 +16,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/tools/config.hpp>
+#include <boost/math/quadrature/detail/norm_quadrature_error.hpp>
 
 #ifdef BOOST_MATH_HAS_THREADS
 #ifndef BOOST_MATH_BUILD_MODULE
@@ -54,6 +55,8 @@ public:
 
     template<class F>
     decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) integrate(const F f, Real* error, Real* L1, const char* function, Real left_min_complement, Real right_min_complement, Real tolerance, std::size_t* levels) const;
+    template<class F, class Norm>
+    decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) integrate(const F f, const decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))& zero, Norm norm, Real* error, Real* L1, const char* function, Real left_min_complement, Real right_min_complement, Real tolerance, std::size_t* levels) const;
 
 private:
    const std::vector<Real>& get_abscissa_row(std::size_t n)const
@@ -534,6 +537,383 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
                }
             }
             err += endpoint_error;
+            break;
+        }
+
+        if ((truncate_left) && (max_left_position > 1))
+           --max_left_position;
+        if ((truncate_right) && (max_right_position > 1))
+           --max_right_position;
+
+    }
+    if (error)
+    {
+        *error = err;
+    }
+
+    if (L1)
+    {
+        *L1 = L1_I1;
+    }
+
+    if (levels)
+    {
+       *levels = k;
+    }
+
+    return I1;
+}
+
+template<class Real, class Policy>
+template<class F, class Norm>
+decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sinh_detail<Real, Policy>::integrate(const F f, const decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))& zero, Norm norm, Real* error, Real* L1, const char* function, Real left_min_complement, Real right_min_complement, Real tolerance, std::size_t* levels) const
+{
+    const auto magnitude = [&](const decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))& value) -> Real { return static_cast<Real>(norm(value)); };
+    using std::abs;
+    using std::fabs;
+    using std::floor;
+    using std::tanh;
+    using std::sinh;
+    using std::sqrt;
+    using boost::math::constants::half;
+    using boost::math::constants::half_pi;
+
+    //
+    // The type of the result:
+    typedef decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) result_type;
+
+    Real h = m_t_max / m_inital_row_length;
+    result_type I0 = half_pi<Real>() * f(0, 1);
+    Real L1_I0 = magnitude(I0);
+    //
+    // We maintain 4 integer values:
+    // max_left_position is the logical index of the abscissa value closest to the
+    // left endpoint of the range that we can call f(x_i) on without rounding error
+    // inside f(x_i) causing evaluation at the endpoint.
+    // max_left_index is the actual position in the current row that has a logical index
+    // no higher than max_left_position.  Remember that since we only store odd numbered
+    // indexes in each row, this may actually be one position to the left of max_left_position
+    // in the case that is even.  Then, if we only evaluate f(-x_i) for abscissa values
+    // i <= max_left_index we will never evaluate f(-x_i) at the left endpoint.
+    // max_right_position and max_right_index are defined similarly for the right boundary
+    // and are used to guard evaluation of f(x_i).
+    //
+    // max_left_position and max_right_position start off as the last element in row zero:
+    //
+    std::size_t max_left_position(m_abscissas[0].size() - 1);
+    std::size_t max_left_index, max_right_position(max_left_position), max_right_index;
+    //
+    // Decrement max_left_position and max_right_position until the complement
+    // of the abscissa value is greater than the smallest permitted (as specified
+    // by the function caller):
+    //
+    while ((max_left_position > 1) && fabs(m_abscissas[0][max_left_position]) < left_min_complement)
+       --max_left_position;
+    while ((max_right_position > 1) && fabs(m_abscissas[0][max_right_position]) < right_min_complement)
+       --max_right_position;
+    //
+    // Check for non-finite values at the end points:
+    //
+    result_type yp{ f(-1 - m_abscissas[0][max_left_position], m_abscissas[0][max_left_position]) };
+    result_type ym{ f(1 + m_abscissas[0][max_right_position], -m_abscissas[0][max_right_position]) };
+    Real tail_tolerance{ (std::max)(boost::math::tools::epsilon<Real>(), Real(tolerance * tolerance)) };
+    while (max_left_position)
+    {
+       if ((boost::math::isfinite)(magnitude(yp)))
+          break;
+       --max_left_position;
+       yp = f(-1 - m_abscissas[0][max_left_position], m_abscissas[0][max_left_position]);
+    }
+    //
+    // Also remove points which are insignificant or zero:
+    //
+    while (max_left_position > 1)
+    {
+       if (magnitude(yp * m_weights[0][max_left_position]) > abs(L1_I0 * tail_tolerance))
+          break;
+       --max_left_position;
+       yp = f(-1 - m_abscissas[0][max_left_position], m_abscissas[0][max_left_position]);
+    }
+    //
+    // Over again for the right hand side:
+    //
+    while (max_right_position)
+    {
+       if ((boost::math::isfinite)(magnitude(ym)))
+          break;
+       --max_right_position;
+       ym = f(1 + m_abscissas[0][max_right_position], -m_abscissas[0][max_right_position]);
+    }
+    while (max_right_position > 1)
+    {
+       if (magnitude(ym * m_weights[0][max_right_position]) > abs(L1_I0 * tail_tolerance))
+          break;
+       --max_right_position;
+       ym = f(1 + m_abscissas[0][max_right_position], -m_abscissas[0][max_right_position]);
+    }
+
+    if ((max_left_position == 0) || (max_right_position == 0))
+    {
+       policies::raise_evaluation_error(function, "The tanh_sinh quadrature found your function to be non-finite everywhere! Please check your function for singularities.", magnitude(ym), Policy());
+       return ym;
+    }
+
+    I0 += yp * m_weights[0][max_left_position] + ym * m_weights[0][max_right_position];
+    L1_I0 += magnitude(yp * m_weights[0][max_left_position]) + magnitude(ym * m_weights[0][max_right_position]);
+    //
+    // Assumption: left_min_complement/right_min_complement are sufficiently small that we only
+    // ever decrement through the stored values that are complements (the negative ones), and
+    // never ever hit the true abscissa values (positive stored values).
+    //
+    BOOST_MATH_ASSERT(m_abscissas[0][max_left_position] < 0);
+    BOOST_MATH_ASSERT(m_abscissas[0][max_right_position] < 0);
+
+    for(size_t i = 1; i < m_abscissas[0].size(); ++i)
+    {
+        if ((i >= max_right_position) && (i >= max_left_position))
+            break;
+        Real x = m_abscissas[0][i];
+        Real xc = x;
+        Real w = m_weights[0][i];
+        if ((boost::math::signbit)(x))
+        {
+           // We have stored x - 1:
+           x = 1 + xc;
+        }
+        else
+           xc = x - 1;
+        yp = i < max_right_position ? f(x, -xc) : zero;
+        ym = i < max_left_position ? f(-x, xc) : zero;
+        I0 += (yp + ym)*w;
+        L1_I0 += (magnitude(yp) + magnitude(ym))*w;
+    }
+    //
+    // We have:
+    // k = current row.
+    // I0 = last integral value.
+    // I1 = current integral value.
+    // L1_I0 and L1_I1 are the absolute integral values.
+    //
+    size_t k = 1;
+    result_type I1 = I0;
+    Real L1_I1 = L1_I0;
+    Real err = 0;
+    //
+    // thrash_count is a heuristic - it counts how many time the error has actually increased
+    // rather than decreased, if this gets too high we abort...
+    //
+    unsigned thrash_count = 0;
+
+    while (k < 4 || (k < m_weights.size() && k < m_max_refinements) )
+    {
+        I0 = I1;
+        L1_I0 = L1_I1;
+
+        I1 = half<Real>()*I0;
+        L1_I1 = half<Real>()*L1_I0;
+        h *= half<Real>();
+        result_type sum = zero;
+        Real absum = 0;
+        Real endpoint_error = 0;
+        auto const& abscissa_row = this->get_abscissa_row(k);
+        auto const& weight_row = this->get_weight_row(k);
+        std::size_t first_complement_index = this->get_first_complement_index(k);
+        //
+        // At the start of each new row we need to update the max left/right indexes
+        // at which we can evaluate f(x_i).  The new logical position is simply twice
+        // the old value.  The new max index is one position to the left of the new
+        // logical value (remember each row contains only odd numbered positions).
+        // Then we have to make a single check, to see if one position to the right
+        // is also in bounds (this is the new abscissa value in this row which is
+        // known to be in between a value known to be in bounds, and one known to be
+        // not in bounds).
+        // Thus, we filter which abscissa values generate a call to f(x_i), with a single
+        // floating point comparison per loop.  Everything else is integer logic.
+        //
+        BOOST_MATH_ASSERT(max_left_position);
+        max_left_index = max_left_position - 1;
+        max_left_position *= 2;
+        BOOST_MATH_ASSERT(max_right_position);
+        max_right_index = max_right_position - 1;
+        max_right_position *= 2;
+        if ((abscissa_row.size() > max_left_index + 1) && (fabs(abscissa_row[max_left_index + 1]) > left_min_complement))
+        {
+           ++max_left_position;
+           ++max_left_index;
+        }
+        if ((abscissa_row.size() > max_right_index + 1) && (fabs(abscissa_row[max_right_index + 1]) > right_min_complement))
+        {
+           ++max_right_position;
+           ++max_right_index;
+        }
+        //
+        // We also check that our endpoints don't hit singularities:
+        //
+        do
+        {
+           yp = f(-1 - abscissa_row[max_left_index], abscissa_row[max_left_index]);
+           if ((boost::math::isfinite)(magnitude(yp)))
+              break;
+           if(max_left_position <= 2)
+           {
+              policies::raise_evaluation_error(function, "The tanh_sinh quadrature found your function to be non-finite everywhere! Please check your function for singularities.", magnitude(ym), Policy());
+              return ym;
+           }
+           max_left_position -= 2;
+           --max_left_index;
+        } while (abscissa_row[max_left_index] < 0);
+        bool truncate_left(false), truncate_right(false);
+        if (abs(L1_I1 * tail_tolerance) > magnitude(yp * weight_row[max_left_index]))
+           truncate_left = true;
+        do
+        {
+           ym = f(1 + abscissa_row[max_right_index], -abscissa_row[max_right_index]);
+           if ((boost::math::isfinite)(magnitude(ym)))
+              break;
+           if (max_right_position <= 2)
+           {
+              policies::raise_evaluation_error(function, "The tanh_sinh quadrature found your function to be non-finite everywhere! Please check your function for singularities.", magnitude(ym), Policy());
+              return ym;
+           }
+           --max_right_index;
+           max_right_position -= 2;
+        } while (abscissa_row[max_right_index] < 0);
+        if (abs(L1_I1 * tail_tolerance) > magnitude(ym * weight_row[max_right_index]))
+           truncate_right = true;
+
+        sum += yp * weight_row[max_left_index] + ym * weight_row[max_right_index];
+        absum += magnitude(yp * weight_row[max_left_index]) + magnitude(ym * weight_row[max_right_index]);
+        //
+        // We estimate the error due to truncation as the value contributed by the two most extreme points.
+        // In most cases this is tiny and can be ignored, if it is significant then either the area of the
+        // integral is so far our in the tails that our exponent range can't reach it (example x^-p at double
+        // precision and p ~ 1), or our function is truncated near epsilon, and we have had to narrow our endpoints.
+        // In this latter case we may over-estimate the error, but this is the best we can do.
+        // In any event, we do not add endpoint_error to the error estimate until we terminate the main loop,
+        // otherwise it can make things appear to be non-converged, when in reality, they are as converged as they
+        // will ever be.
+        //
+        endpoint_error = absum;
+
+        for(size_t j = 0; j < weight_row.size(); ++j)
+        {
+            // If both left and right abscissa values are out of bounds at this step
+            // we can just stop this loop right now:
+            if ((j >= max_left_index) && (j >= max_right_index))
+                break;
+            Real x = abscissa_row[j];
+            Real xc = x;
+            Real w = weight_row[j];
+            if (j >= first_complement_index)
+            {
+               // We have stored x - 1:
+               BOOST_MATH_ASSERT(x < 0);
+               x = 1 + xc;
+            }
+            else
+            {
+               BOOST_MATH_ASSERT(x >= 0);
+               xc = x - 1;
+            }
+
+            yp = j >= max_right_index ? zero : f(x, -xc);
+            ym = j >= max_left_index ? zero : f(-x, xc);
+            result_type term = (yp + ym)*w;
+            sum += term;
+
+            // A question arises as to how accurately we actually need to estimate the L1 integral.
+            // For simple integrands, computing the L1 norm makes the integration 20% slower,
+            // but for more complicated integrands, this calculation is not noticeable.
+            Real abterm = (magnitude(yp) + magnitude(ym))*w;
+            absum += abterm;
+        }
+
+        I1 += sum*h;
+        L1_I1 += absum*h;
+
+        ++k;
+        Real last_err = err;
+        err = magnitude(I0 - I1);
+
+        if (!(boost::math::isfinite)(magnitude(I1)))
+        {
+            policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point and got %1%. Please narrow the bounds of integration or check your function for singularities.", magnitude(I1), Policy());
+            return I1;
+        }
+        //
+        // If the error is increasing, and we're past level 4, something bad is very likely happening:
+        //
+        if ((err * 1.5 > last_err) && (k > 4))
+        {
+           bool terminate = false;
+           if ((++thrash_count > 1) && (last_err < 1e-3))
+              // Probably just thrashing, abort:
+              terminate = true;
+           else if(thrash_count > 2)
+              // OK, terrible error, but giving up anyway!
+              terminate = true;
+           else if (last_err < boost::math::tools::root_epsilon<Real>())
+              // Trying to squeeze precision that probably isn't there, abort:
+              terminate = true;
+           else
+           {
+              // Take a look at the end points, if there's significant new area being
+              // discovered, then we're not able to get close enough to the endpoints
+              // to ever find the integral:
+              if (endpoint_error * h > err)
+                 terminate = true;
+           }
+
+           if (terminate)
+           {
+              // We could raise an evaluation_error, but since we likely have some sort of result, just return the last one
+              // (ie before the error started going up)
+              I1 = I0;
+              L1_I1 = L1_I0;
+              --k;
+              err = last_err + endpoint_error * h;
+              break;
+           }
+           // Fall through and keep going, assume we've discovered a new feature of f(x)....
+        }
+        //
+        // Termination condition:
+        // No more levels are considered once the error is less than the specified tolerance.
+        // Note however, that we always go down at least 4 levels, otherwise we risk missing
+        // features of interest in f() - imagine for example a function which flatlines, except
+        // for a very small "spike". An example would be the incomplete beta integral with large
+        // parameters.  We could keep hunting until we find something, but that would handicap
+        // integrals which really are zero.... so a compromise then!
+        //
+        if ((err <= abs(tolerance*L1_I1)) && (k >= 4))
+        {
+            //
+            // A quick sanity check: have we at some point narrowed our boundaries as a result
+            // of non-finite values?  If so let's check that the area isn't on an increasing
+            // trajectory at our new end point, and increase our error estimate by the last
+            // good value as an estimate for what we may have discarded.
+            //
+            if (max_left_index && (max_left_index < abscissa_row.size() - 1) && (abs(abscissa_row[max_left_index + 1]) > left_min_complement))
+            {
+               yp = f(-1 - abscissa_row[max_left_index], abscissa_row[max_left_index]) * weight_row[max_left_index];
+               ym = f(-1 - abscissa_row[max_left_index - 1], abscissa_row[max_left_index - 1]) * weight_row[max_left_index - 1];
+               if (magnitude(yp) > magnitude(ym))
+               {
+                  policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point and got %1%. Integration bounds were automatically narrowed, but the integral was found to be increasing at the new endpoint.  Please check your function, and consider providing a 2-argument functor.", magnitude(I1), Policy());
+                  return I1;
+               }
+            }
+            if (max_right_index && (max_right_index < abscissa_row.size() - 1) && (abs(abscissa_row[max_right_index + 1]) > right_min_complement))
+            {
+               yp = f(1 + abscissa_row[max_right_index], -abscissa_row[max_right_index]) * weight_row[max_right_index];
+               ym = f(1 + abscissa_row[max_right_index - 1], -abscissa_row[max_right_index - 1]) * weight_row[max_right_index - 1];
+               if (magnitude(yp) > magnitude(ym))
+               {
+                  policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point and got %1%. Integration bounds were automatically narrowed, but the integral was found to be increasing at the new endpoint.  Please check your function, and consider providing a 2-argument functor.", magnitude(I1), Policy());
+                  return I1;
+               }
+            }
+            err += endpoint_error * h;
             break;
         }
 
