@@ -239,8 +239,11 @@ namespace boost{ namespace math{
     result = normal_cdf - owens_t(transformed_x, shape)*static_cast<RealType>(2);
 
 #ifndef BOOST_MATH_HAS_NVRTC
+    // Subtraction magnifies the error in the normal CDF and Owen's T.
+    // Switch after losing three bits, rather than waiting until half the
+    // precision is lost: even moderate cancellation can spoil quantiles.
     if((shape > 0) && (transformed_x < 0)
-      && (result < normal_cdf * boost::math::tools::root_epsilon<RealType>()))
+      && (result < normal_cdf / static_cast<RealType>(8)))
     {
       result = detail::skew_normal_tail_integral<RealType, Policy>(transformed_x, shape, false);
     }
@@ -291,8 +294,9 @@ namespace boost{ namespace math{
     result = normal_cdf + owens_t(transformed_x, shape)*static_cast<RealType>(2);
 
 #ifndef BOOST_MATH_HAS_NVRTC
+    // The reflected tail has the same cancellation as the lower CDF.
     if((shape < 0) && (transformed_x > 0)
-      && (result < normal_cdf * boost::math::tools::root_epsilon<RealType>()))
+      && (result < normal_cdf / static_cast<RealType>(8)))
     {
       result = detail::skew_normal_tail_integral<RealType, Policy>(transformed_x, shape, true);
     }
