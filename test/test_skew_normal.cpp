@@ -518,6 +518,39 @@ BOOST_AUTO_TEST_CASE( test_main )
       tail_tolerance);
   }
 
+  // Moderate cancellation must also use the accurate tail calculation.
+  // Disable promotion so extended long double cannot mask the loss of bits.
+  {
+    typedef boost::math::policies::policy<
+      boost::math::policies::promote_double<false> > no_promote_policy;
+    typedef skew_normal_distribution<double, no_promote_policy> distribution;
+    const double tolerance = 32 * numeric_limits<double>::epsilon();
+    const distribution lower(0, 1, 4), upper(0, 1, -4);
+    // Normal CDF - 2 * Owen's T, evaluated with cpp_bin_float_100.
+    const double expected = 8.179690339064550124947048052432943616e-7;
+    BOOST_CHECK_CLOSE_FRACTION(cdf(lower, -1.0), expected, tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(cdf(complement(upper, 1.0)), expected, tolerance);
+
+    // Regression from git_issue_184: increasing probabilities must not give
+    // decreasing quantiles after the location/scale transformation.
+    const distribution shifted(573.39724735636185, 77.0, 4.0);
+    const distribution reflected(-573.39724735636185, 77.0, -4.0);
+    const double probabilities[] = {
+      0.00285612015554148, 0.00285612015554149, 0.00285612015554150
+    };
+    double previous = quantile(shifted, probabilities[0]);
+    double previous_complement = quantile(complement(reflected, probabilities[0]));
+    for (unsigned i = 1; i < 3; ++i)
+    {
+      const double current = quantile(shifted, probabilities[i]);
+      const double current_complement = quantile(complement(reflected, probabilities[i]));
+      BOOST_CHECK_LE(previous, current);
+      BOOST_CHECK_GE(previous_complement, current_complement);
+      previous = current;
+      previous_complement = current_complement;
+    }
+  }
+
   // Basic sanity-check spot values for all floating-point types..
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
