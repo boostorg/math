@@ -378,7 +378,7 @@ public:
         Real d2y1 = d2y_[i+1];
 
         Real d2ydx2 = 60*t*(1 - 3*t + 2*t*t)*(y1 - y0)*inv_dx_*inv_dx_;
-        d2ydx2 += (12*t)*((-3 + 8*t - 5*t*t)*dy0 - (2 - 7*t + 5*t*t)*dy1);
+        d2ydx2 += (12*t)*((-3 + 8*t - 5*t*t)*dy0 - (2 - 7*t + 5*t*t)*dy1)*inv_dx_*inv_dx_;
         d2ydx2 += (1 - 9*t + 18*t*t - 10*t*t*t)*d2y0*(2*inv_dx_*inv_dx_) + t*(3 - 12*t + 10*t*t)*d2y1*(2*inv_dx_*inv_dx_);
         return d2ydx2;
     }
@@ -559,7 +559,7 @@ public:
         Real d2y1 = data_[i+1][2];
 
         Real d2ydx2 = 60*t*(1 - 3*t + 2*t*t)*(y1 - y0)*inv_dx_*inv_dx_;
-        d2ydx2 += (12*t)*((-3 + 8*t - 5*t*t)*dy0 - (2 - 7*t + 5*t*t)*dy1);
+        d2ydx2 += (12*t)*((-3 + 8*t - 5*t*t)*dy0 - (2 - 7*t + 5*t*t)*dy1)*inv_dx_*inv_dx_;
         d2ydx2 += (1 - 9*t + 18*t*t - 10*t*t*t)*d2y0*(2*inv_dx_*inv_dx_) + t*(3 - 12*t + 10*t*t)*d2y1*(2*inv_dx_*inv_dx_);
         return d2ydx2;
     }
