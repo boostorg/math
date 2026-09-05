@@ -380,6 +380,64 @@ check we end up with `0 * Infinity` as the result (a NaN).
 
 [endsect] [/section:de_exp_sinh exp_sinh]
 
+[section:de_matrix Vector- and matrix-valued integrands]
+
+The CPU `exp_sinh`, `sinh_sinh`, and `tanh_sinh` classes also accept an explicit
+additive identity and scalar norm. Insert `zero, norm` after the bounds, or after
+`f` when using the default domain:
+
+    integrator.integrate(f, zero, norm, tolerance, &error, &L1, &levels);
+    integrator.integrate(f, a, b, zero, norm, tolerance, &error, &L1, &levels);
+
+The bounded form is available for `exp_sinh` and `tanh_sinh`; `sinh_sinh` always
+integrates over the whole real line. Arguments after `norm` retain their existing
+defaults. The new overloads participate only if applying `norm` to the integrand's
+result can be explicitly converted to `Real`. Existing overloads remain unchanged.
+
+For example, using Eigen with exp-sinh:
+
+    using Matrix = Eigen::Matrix<std::complex<double>, 2, 2>;
+    Matrix zero = Matrix::Zero();
+    auto f = [](double x) -> Matrix {
+        Matrix result;
+        result << std::exp(-x), 0., 0., std::exp(-2*x);
+        return result;
+    };
+    auto norm = [](const Matrix& m) { return m.stableNorm(); };
+    boost::math::quadrature::exp_sinh<double> integrator;
+    Matrix result = integrator.integrate(f, zero, norm);
+
+Return concrete owning values, with dimensions matching `zero`, rather than
+expression templates referencing temporary values. The value type must support
+addition, addition assignment, unary negation, scalar multiplication on either
+side, and multiplication assignment by a scalar. The norm must be nonnegative,
+vanish only at zero, and return a scalar convertible to `Real`. It should also
+report non-finite values for non-finite inputs; endpoint checks use this property.
+A norm implementation that avoids intermediate overflow and underflow is useful
+for the large dynamic ranges encountered near endpoints.
+
+The selected norm is used for successive-estimate errors, the L1 integral,
+tail truncation, and checks for non-finite values. Convergence compares the error
+with `tolerance * L1`; it does not impose a separate relative tolerance on every
+entry. Error estimates are not rigorous bounds, and exhausting refinement levels
+does not guarantee that the requested tolerance was reached.
+
+Both forms of the two-argument tanh-sinh integrand are supported: `f(x, xc)` may
+return a matrix, while `x` and the signed endpoint distance `xc` remain scalars.
+For the new bounded tanh-sinh overloads, equal bounds return `zero` and set requested
+error, L1, and level outputs to zero without calling `f`. Reversed finite bounds
+negate the integral; the two-argument functor receives distances for the endpoints
+in increasing order. Exp-sinh retains its requirement for a half-infinite domain.
+
+Domain errors use the scalar policy. If it returns, the result is `zero` times
+its scalar error value; requested error and L1 outputs receive that value, and
+levels is set to zero. Evaluation-error policies receive the scalar norm of the
+problematic value; a non-throwing evaluation policy returns that concrete value
+or current estimate, as appropriate. Diagnostic outputs are not specified after
+an evaluation error. GPU free-function interfaces are unchanged.
+
+[endsect]
+
 [section:de_tol Setting the Termination Condition for Integration]
 
 The integrate method for all three double-exponential quadratures supports ['tolerance] argument that acts as the

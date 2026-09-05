@@ -41,6 +41,11 @@ public:
     template<class F>
     auto integrate(const F& f, Real tol = boost::math::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const ->decltype(std::declval<F>()(std::declval<Real>()));
 
+    template<class F, class Norm>
+    auto integrate(const F& f, Real a, Real b, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const ->decltype(static_cast<Real>(norm(std::declval<F>()(std::declval<Real>()))), std::declval<F>()(std::declval<Real>()));
+    template<class F, class Norm>
+    auto integrate(const F& f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const ->decltype(static_cast<Real>(norm(std::declval<F>()(std::declval<Real>()))), std::declval<F>()(std::declval<Real>()));
+
 private:
     std::shared_ptr<detail::exp_sinh_detail<Real, Policy>> m_imp;
 };
@@ -102,6 +107,63 @@ auto exp_sinh<Real, Policy>::integrate(const F& f, Real tolerance, Real* error, 
     return m_imp->integrate(f, error, L1, function, tolerance, levels);
 }
 
+
+template<class Real, class Policy>
+template<class F, class Norm>
+auto exp_sinh<Real, Policy>::integrate(const F& f, Real a, Real b, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real tolerance, Real* error, Real* L1, std::size_t* levels) const ->decltype(static_cast<Real>(norm(std::declval<F>()(std::declval<Real>()))), std::declval<F>()(std::declval<Real>()))
+{
+    typedef decltype(f(a)) K;
+    static_assert(!std::is_integral<K>::value,
+                  "The return type cannot be integral, it must be either a real or complex floating point type.");
+    using std::abs;
+    using boost::math::constants::half;
+    using boost::math::quadrature::detail::exp_sinh_detail;
+
+    static const char* function = "boost::math::quadrature::exp_sinh<%1%>::integrate";
+
+    // Neither limit may be a NaN:
+    if((boost::math::isnan)(a) || (boost::math::isnan)(b))
+    {
+       return detail::norm_quadrature_error(zero, policies::raise_domain_error(function, "NaN supplied as one limit of integration - sorry I don't know what to do", a, Policy()), error, L1, levels);
+     }
+    // Right limit is infinite:
+    if ((boost::math::isfinite)(a) && (b >= boost::math::tools::max_value<Real>()))
+    {
+        // If a = 0, don't use an additional level of indirection:
+        if (a == static_cast<Real>(0))
+        {
+            return m_imp->integrate(f, zero, norm, error, L1, function, tolerance, levels);
+        }
+        const auto u = [&](Real t)->K { return f(t + a); };
+        return m_imp->integrate(u, zero, norm, error, L1, function, tolerance, levels);
+    }
+
+    if ((boost::math::isfinite)(b) && a <= -boost::math::tools::max_value<Real>())
+    {
+        const auto u = [&](Real t)->K { return f(b-t);};
+        return m_imp->integrate(u, zero, norm, error, L1, function, tolerance, levels);
+    }
+
+    // Infinite limits:
+    if ((a <= -boost::math::tools::max_value<Real>()) && (b >= boost::math::tools::max_value<Real>()))
+    {
+        return detail::norm_quadrature_error(zero, policies::raise_domain_error(function, "Use sinh_sinh quadrature for integration over the whole real line; exp_sinh is for half infinite integrals.", a, Policy()), error, L1, levels);
+    }
+    // If we get to here then both ends must necessarily be finite:
+    return detail::norm_quadrature_error(zero, policies::raise_domain_error(function, "Use tanh_sinh quadrature for integration over finite domains; exp_sinh is for half infinite integrals.", a, Policy()), error, L1, levels);
+}
+
+template<class Real, class Policy>
+template<class F, class Norm>
+auto exp_sinh<Real, Policy>::integrate(const F& f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real tolerance, Real* error, Real* L1, std::size_t* levels) const ->decltype(static_cast<Real>(norm(std::declval<F>()(std::declval<Real>()))), std::declval<F>()(std::declval<Real>()))
+{
+    static const char* function = "boost::math::quadrature::exp_sinh<%1%>::integrate";
+    using std::abs;
+    if (abs(tolerance) > 1) {
+        return detail::norm_quadrature_error(zero, policies::raise_domain_error(function, "The tolerance provided (%1%) is unusually large; did you confuse it with a domain bound?", tolerance, Policy()), error, L1, levels);
+    }
+    return m_imp->integrate(f, zero, norm, error, L1, function, tolerance, levels);
+}
 
 }}}
 
