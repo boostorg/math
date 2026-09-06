@@ -288,7 +288,7 @@ BOOST_MATH_GPU_ENABLED int CF2_ik(T v, T x, T* Kv, T* Kv1, T* Kv_scaled, T* Kv1_
     else
       *Kv = sqrt(pi<T>() / (2 * x)) * exp(-x) / S;
     *Kv1 = *Kv * ratio;
-    if ((*Kv == 0) || (*Kv1 == 0))
+    if ((*Kv < tools::min_value<T>()) || (*Kv1 < tools::min_value<T>()))
     {
        *Kv_scaled = sqrt(pi<T>() / 2) / sqrt(x) / S;
        *Kv1_scaled = *Kv_scaled * ratio;
@@ -336,7 +336,7 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
 
     T scale = 1;
     T scale_sign = 1;
-    T log_scale = 0;
+    int exp2_scale = 0;
 
     n = iround(v, pol);
     u = v - n;                              // -1/2 <= u < 1/2
@@ -368,7 +368,7 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
        }
        BOOST_MATH_INSTRUMENT_VARIABLE(Ku);
        BOOST_MATH_INSTRUMENT_VARIABLE(Ku1);
-       use_scaled_k = ((kind & need_i) == 0) && (x > 2) && ((Ku == 0) || (Ku1 == 0));
+       use_scaled_k = ((kind & need_i) == 0) && (x > 2) && ((Ku < tools::min_value<T>()) || (Ku1 < tools::min_value<T>()));
        prev = use_scaled_k ? Ku_scaled : Ku;
        current = use_scaled_k ? Ku1_scaled : Ku1;
        for (k = 1; k <= n; k++)                   // forward recurrence for K
@@ -384,13 +384,22 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
              : false;
           if (!will_overflow && ((tools::max_value<T>() - fabs(prev)) / fact < fabs(current)))
           {
-             prev /= current;
              if (use_scaled_k)
-                log_scale += log(current);
+             {
+                // Rescale by a power of two so no rounding error is introduced
+                int e2 = 0;
+                (void)frexp(current, &e2);
+                prev = ldexp(prev, -e2);
+                current = ldexp(current, -e2);
+                exp2_scale += e2;
+             }
              else
+             {
+                prev /= current;
                 scale /= current;
-             scale_sign *= ((boost::math::signbit)(current) ? -1 : 1);
-             current = 1;
+                scale_sign *= ((boost::math::signbit)(current) ? -1 : 1);
+                current = 1;
+             }
           }
           next = fact * current + prev;
           prev = current;
@@ -446,11 +455,36 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
     }
     if (use_scaled_k)
     {
-       const T log_Kv = log(Kv) + log_scale - x;
-       if (log_Kv > tools::log_max_value<T>())
-          *result_K = (org_kind & need_k) ? policies::raise_overflow_error<T>(function, nullptr, pol) : T(0);
-       else
-          *result_K = exp(log_Kv);
+       // Kv currently holds exp(x) * K_v(x) / 2^exp2_scale
+       int e2 = 0;
+       const T m = frexp(Kv, &e2);
+       exp2_scale += e2;
+       // Split exp(-x) into 2^j equal factors exp(-x / 2^j) that are each representable,
+       // and spread the binary exponent over them so no partial product leaves range.
+       T xr = x;
+       int parts = 1;
+       while (-xr < tools::log_min_value<T>())
+       {
+          xr /= 2;
+          parts *= 2;
+       }
+       const T factor = exp(-xr);
+       T result = m;
+       int e_rem = exp2_scale;
+       bool overflow = false;
+       for (int i = 0; i < parts; ++i)
+       {
+          const int e_i = e_rem / (parts - i);
+          e_rem -= e_i;
+          const T term = ldexp(factor, e_i);
+          if (result > tools::max_value<T>() / term)
+          {
+             overflow = true;
+             break;
+          }
+          result *= term;
+       }
+       *result_K = overflow ? ((org_kind & need_k) ? policies::raise_overflow_error<T>(function, nullptr, pol) : T(0)) : result;
     }
     else if(tools::max_value<T>() * scale < Kv)
        *result_K = (org_kind & need_k) ? T(sign(Kv) * scale_sign * policies::raise_overflow_error<T>(function, nullptr, pol)) : T(0);
