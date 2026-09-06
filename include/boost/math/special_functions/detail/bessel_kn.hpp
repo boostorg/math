@@ -61,7 +61,7 @@ BOOST_MATH_GPU_ENABLED T bessel_kn(int n, T x, const Policy& pol)
     {
        prev = bessel_k0(x);
        current = bessel_k1(x);
-       if ((prev == 0) || (current == 0))
+       if ((prev < tools::min_value<T>()) || (current < tools::min_value<T>()))
        {
           T Iv, Kv;
           bessel_ik(static_cast<T>(n), x, &Iv, &Kv, need_k, pol);
