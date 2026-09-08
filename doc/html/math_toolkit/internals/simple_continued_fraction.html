@@ -40,6 +40,8 @@
 
     <span class="identifier">Real</span> <span class="identifier">khinchin_harmonic_mean</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 
+    <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">Z</span><span class="special">&gt;&amp;</span> <span class="identifier">partial_denominators</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Z_</span><span class="special">&gt;</span>
     <span class="keyword">friend</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">&lt;&lt;(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream</span><span class="special">&amp;</span> <span class="identifier">out</span><span class="special">,</span> <span class="identifier">simple_continued_fraction</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">Z</span><span class="special">&gt;&amp;</span> <span class="identifier">scf</span><span class="special">);</span>
 <span class="special">};</span>
@@ -65,6 +67,50 @@
         The class computes partial denominators while simultaneously computing convergents
         with the modified Lentz's algorithm. Once a convergent is within a few ulps
         of the input value, the computation stops.
+      </p>
+<p>
+        Finite simple continued fractions are not unique: <code class="computeroutput"><span class="special">[</span><span class="identifier">a0</span><span class="special">;</span> <span class="identifier">a1</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">an</span><span class="special">,</span> <span class="number">1</span><span class="special">]</span></code>
+        and <code class="computeroutput"><span class="special">[</span><span class="identifier">a0</span><span class="special">;</span> <span class="identifier">a1</span><span class="special">,</span>
+        <span class="special">...,</span> <span class="identifier">an</span>
+        <span class="special">+</span> <span class="number">1</span><span class="special">]</span></code> represent the same value. The class uses
+        the shorter, canonical representation, absorbing a trailing <code class="computeroutput"><span class="number">1</span></code> into the preceding coefficient. For example,
+        <code class="computeroutput"><span class="number">3.75</span></code> is represented as <code class="computeroutput"><span class="special">[</span><span class="number">3</span><span class="special">;</span>
+        <span class="number">1</span><span class="special">,</span> <span class="number">3</span><span class="special">]</span></code>, rather
+        than <code class="computeroutput"><span class="special">[</span><span class="number">3</span><span class="special">;</span> <span class="number">1</span><span class="special">,</span>
+        <span class="number">2</span><span class="special">,</span> <span class="number">1</span><span class="special">]</span></code>.
+      </p>
+<p>
+        The <code class="computeroutput"><span class="identifier">partial_denominators</span><span class="special">()</span></code> member function returns a read-only reference
+        to the stored coefficients, including the integer part at index zero:
+      </p>
+<pre class="programlisting"><span class="keyword">const</span> <span class="keyword">auto</span><span class="special">&amp;</span> <span class="identifier">a</span> <span class="special">=</span> <span class="identifier">cfrac</span><span class="special">.</span><span class="identifier">partial_denominators</span><span class="special">();</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">a</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">" coefficients\n"</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">a</span><span class="special">[</span><span class="number">0</span><span class="special">]</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span>    <span class="comment">// Integer part: 3</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">a</span><span class="special">.</span><span class="identifier">at</span><span class="special">(</span><span class="number">1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span> <span class="comment">// First partial denominator: 7</span>
+</pre>
+<p>
+        The reference remains valid for the lifetime of <code class="computeroutput"><span class="identifier">cfrac</span></code>.
+      </p>
+<p>
+        A prefix of these coefficients defines a convergent, which can be used as
+        a rational approximation. For example, the first four coefficients of the
+        expansion of π give <code class="computeroutput"><span class="number">355</span><span class="special">/</span><span class="number">113</span></code>. With <code class="computeroutput"><span class="preprocessor">#include</span>
+        <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">rational</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>,
+        this can be computed by evaluating the prefix backwards:
+      </p>
+<pre class="programlisting"><span class="keyword">using</span> <span class="identifier">rational</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">rational</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">int64_t</span><span class="special">&gt;;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">n</span> <span class="special">=</span> <span class="number">4</span><span class="special">;</span> <span class="comment">// Use the first four coefficients of cfrac above.</span>
+<span class="identifier">rational</span> <span class="identifier">approximation</span><span class="special">(</span><span class="identifier">a</span><span class="special">.</span><span class="identifier">at</span><span class="special">(</span><span class="identifier">n</span> <span class="special">-</span> <span class="number">1</span><span class="special">));</span>
+<span class="keyword">for</span> <span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">i</span> <span class="special">=</span> <span class="identifier">n</span> <span class="special">-</span> <span class="number">1</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&gt;</span> <span class="number">0</span><span class="special">;</span> <span class="special">--</span><span class="identifier">i</span><span class="special">)</span> <span class="special">{</span>
+    <span class="identifier">approximation</span> <span class="special">=</span> <span class="identifier">rational</span><span class="special">(</span><span class="identifier">a</span><span class="special">[</span><span class="identifier">i</span> <span class="special">-</span> <span class="number">1</span><span class="special">])</span> <span class="special">+</span> <span class="identifier">rational</span><span class="special">(</span><span class="number">1</span><span class="special">)</span> <span class="special">/</span> <span class="identifier">approximation</span><span class="special">;</span>
+<span class="special">}</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">approximation</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span> <span class="comment">// Prints: 355/113</span>
+</pre>
+<p>
+        In general, choose <code class="computeroutput"><span class="identifier">n</span></code> between
+        <code class="computeroutput"><span class="number">1</span></code> and <code class="computeroutput"><span class="identifier">a</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>
+        and an integer type wide enough for the rational arithmetic, including intermediate
+        results. Longer prefixes can overflow a fixed-width integer type.
       </p>
 <p>
         Note that every floating point number is a rational number, and this exact
