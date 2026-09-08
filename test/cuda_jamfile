@@ -397,3 +397,6 @@ run test_trigamma_float.cu ;
 
 run test_trunc_double.cu ;
 run test_trunc_float.cu ;
+
+# Prime sieve (owns its own kernels)
+run test_prime_sieve_cuda.cu ;
