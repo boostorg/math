@@ -130,6 +130,7 @@ extern "C++" {
 
 // Special functions (umbrella)
 #include <boost/math/special_functions.hpp>
+#include <boost/math/special_functions/prime_sieve.hpp>
 
 // Statistical distributions (umbrella)
 #include <boost/math/distributions.hpp>
