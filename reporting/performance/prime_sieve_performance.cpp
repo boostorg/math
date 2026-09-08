@@ -1,119 +1,134 @@
-// Copyright 2020 Matt Borland
+//  (C) Copyright Matt Borland 2026.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-// Use, modification and distribution are subject to the
-// Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt
-// or copy at http://www.boost.org/LICENSE_1_0.txt)
+//  Benchmarks of boost::math::prime_sieve / prime_count against primesieve
+//  (https://github.com/kimwalisch/primesieve). Built by hand, for example:
+//
+//  clang++ -std=c++17 -O3 -march=native -DNDEBUG -DBOOST_MATH_STANDALONE -fexperimental-library \
+//      -I<boost-root>/libs/math/include -I<primesieve>/include -I/opt/homebrew/include \
+//      prime_sieve_performance.cpp <primesieve>/build/libprimesieve.a \
+//      -L/opt/homebrew/lib -lbenchmark -lpthread -o prime_sieve_performance
+//
+//  Define BOOST_MATH_BENCH_NO_PRIMESIEVE to build without the reference library.
 
 #include <boost/math/special_functions/prime_sieve.hpp>
-#include <boost/math/special_functions/detail/linear_prime_sieve.hpp>
-#include <boost/math/special_functions/detail/small_primes.hpp>
-#include <boost/multiprecision/cpp_int.hpp>
-#include <boost/multiprecision/gmp.hpp>
 #include <benchmark/benchmark.h>
+#ifndef BOOST_MATH_BENCH_NO_PRIMESIEVE
 #include <primesieve.hpp>
+#endif
+#include <cstdint>
 #include <vector>
+#include <thread>
 
-// Individual Algos
-template<typename Integer>
-void linear_sieve(benchmark::State& state)
+namespace bm = boost::math;
+
+#ifdef BOOST_MATH_PRIME_SIEVE_HAS_STD_EXECUTION
+// Policies are not default constructible in every standard library, so select them by tag
+template <bool Parallel>
+constexpr decltype(auto) policy()
 {
-    Integer upper {static_cast<Integer>(state.range(0))};
-    std::vector<Integer> primes(boost::math::prime_approximation(upper));
-    
-    for(auto _ : state)
+    if constexpr (Parallel)
     {
-        benchmark::DoNotOptimize(boost::math::detail::prime_sieve::linear_sieve(upper, primes.begin()));
+        return (std::execution::par);
     }
-    state.SetComplexityN(state.range(0));
-}
-
-template<typename Integer>
-void small_primes(benchmark::State& state)
-{
-    Integer upper {static_cast<Integer>(state.range(0))};
-    std::vector<Integer> primes(boost::math::prime_approximation(upper));
-    
-    for(auto _ : state)
+    else
     {
-        benchmark::DoNotOptimize(boost::math::detail::prime_sieve::small_primes(upper, primes.begin()));
+        return (std::execution::seq);
     }
-    state.SetComplexityN(state.range(0));
 }
 
-template<typename Integer, typename OutputIterator>
-inline OutputIterator interval_sieve_helper(Integer lower_bound, Integer upper_bound, OutputIterator out)
+template <bool Parallel>
+void count_ours(benchmark::State& state)
 {
-    boost::math::detail::prime_sieve::IntervalSieve sieve(lower_bound, upper_bound, out);
-    return out;
-}
-
-template<typename Integer>
-void interval_sieve(benchmark::State& state)
-{
-    // In practice the lower bound is never going to be less than the limit for small primes
-    Integer lower {boost::math::detail::prime_sieve::small_prime_limit<Integer>()};
-    Integer upper {static_cast<Integer>(state.range(0))};
-    std::vector<Integer> primes(boost::math::prime_approximation(upper));
-
-    for(auto _ : state)
-    {
-        benchmark::DoNotOptimize(interval_sieve_helper(lower, upper, primes.begin()));
-    }
-    state.SetComplexityN(state.range(0));
-}
-
-// Composite Algos
-template<typename Integer>
-void prime_sieve(benchmark::State& state)
-{
-    Integer upper {static_cast<Integer>(state.range(0))};
-    std::vector<Integer> primes(boost::math::prime_approximation(upper));
-
-    for(auto _ : state)
-    {
-        benchmark::DoNotOptimize(boost::math::prime_sieve(std::execution::par, upper, primes.begin()));
-    }
-    state.SetComplexityN(state.range(0));
-}
-
-// Reference Algo
-template <typename Integer>
-inline auto kimwalish_primes_helper(Integer upper, std::vector<Integer> primes) -> std::vector<Integer>
-{
-    primesieve::generate_primes(upper, &primes);
-    return primes;
-}
-
-template <typename Integer>
-void kimwalish_primes(benchmark::State& state)
-{
-    Integer upper {static_cast<Integer>(state.range(0))};
-    std::vector<Integer> primes;
+    const std::uint64_t n {static_cast<std::uint64_t>(state.range(0))};
     for (auto _ : state)
     {
-        benchmark::DoNotOptimize(kimwalish_primes_helper(upper, primes));
+        benchmark::DoNotOptimize(bm::prime_count(policy<Parallel>(), n));
     }
-    state.SetComplexityN(state.range(0));
+    state.SetItemsProcessed(static_cast<std::int64_t>(state.iterations()) * static_cast<std::int64_t>(n));
 }
 
-// Invidiual Implementations
-// Linear
-//BENCHMARK_TEMPLATE(linear_sieve, int32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 16)->Complexity(benchmark::oN);
-//BENCHMARK_TEMPLATE(linear_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 16)->Complexity(benchmark::oN);
-//BENCHMARK_TEMPLATE(linear_sieve, uint32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 16)->Complexity(benchmark::oN);
-//BENCHMARK_TEMPLATE(small_primes, int64_t)->RangeMultiplier(2)->Range(1 << 3, 1 << 10)->Complexity(benchmark::oN)->UseRealTime();
-//BENCHMARK_TEMPLATE(linear_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 3, 1 << 10)->Complexity(benchmark::oN)->UseRealTime();
-BENCHMARK_TEMPLATE(interval_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 14, 2 << 26)->Complexity();
+template <bool Parallel>
+void generate_ours(benchmark::State& state)
+{
+    const std::uint64_t n {static_cast<std::uint64_t>(state.range(0))};
+    std::vector<std::uint64_t> primes;
+    bm::prime_reserve(n, primes);
+    for (auto _ : state)
+    {
+        primes.clear();
+        bm::prime_sieve(policy<Parallel>(), n, primes);
+        benchmark::DoNotOptimize(primes.data());
+    }
+    state.SetItemsProcessed(static_cast<std::int64_t>(state.iterations()) * static_cast<std::int64_t>(n));
+}
 
-// Complete Implemenations
-//BENCHMARK_TEMPLATE(prime_sieve, int32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
-//BENCHMARK_TEMPLATE(prime_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
-//BENCHMARK_TEMPLATE(prime_sieve_wrapper, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
-BENCHMARK_TEMPLATE(prime_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
-BENCHMARK_TEMPLATE(kimwalish_primes, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime(); // Benchmark
-//BENCHMARK_TEMPLATE(prime_sieve, uint32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
-//BENCHMARK_TEMPLATE(prime_sieve, boost::multiprecision::cpp_int)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
-//BENCHMARK_TEMPLATE(prime_sieve, boost::multiprecision::mpz_int)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
+template <bool Parallel>
+void window_ours(benchmark::State& state)
+{
+    const std::uint64_t lo {static_cast<std::uint64_t>(state.range(0))};
+    const std::uint64_t width {static_cast<std::uint64_t>(state.range(1))};
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(bm::prime_count(policy<Parallel>(), lo, lo + width));
+    }
+}
+#endif
+
+#ifndef BOOST_MATH_BENCH_NO_PRIMESIEVE
+void count_primesieve(benchmark::State& state)
+{
+    const std::uint64_t n {static_cast<std::uint64_t>(state.range(0))};
+    // range(1) == 0 means all hardware threads
+    const int threads {state.range(1) == 0 ? static_cast<int>(std::thread::hardware_concurrency()) : static_cast<int>(state.range(1))};
+    primesieve::set_num_threads(threads);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(primesieve::count_primes(0, n));
+    }
+    state.SetItemsProcessed(static_cast<std::int64_t>(state.iterations()) * static_cast<std::int64_t>(n));
+}
+
+void generate_primesieve(benchmark::State& state)
+{
+    const std::uint64_t n {static_cast<std::uint64_t>(state.range(0))};
+    std::vector<std::uint64_t> primes;
+    for (auto _ : state)
+    {
+        primes.clear();
+        primesieve::generate_primes(n, &primes);
+        benchmark::DoNotOptimize(primes.data());
+    }
+    state.SetItemsProcessed(static_cast<std::int64_t>(state.iterations()) * static_cast<std::int64_t>(n));
+}
+
+void window_primesieve(benchmark::State& state)
+{
+    const std::uint64_t lo {static_cast<std::uint64_t>(state.range(0))};
+    const std::uint64_t width {static_cast<std::uint64_t>(state.range(1))};
+    primesieve::set_num_threads(1);
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(primesieve::count_primes(lo, lo + width - 1));
+    }
+}
+#endif
+
+#ifdef BOOST_MATH_PRIME_SIEVE_HAS_STD_EXECUTION
+BENCHMARK_TEMPLATE(count_ours, false)->RangeMultiplier(10)->Range(100000000, 100000000000)->Unit(benchmark::kMillisecond);
+BENCHMARK_TEMPLATE(count_ours, true)->RangeMultiplier(10)->Range(100000000, 100000000000)->Unit(benchmark::kMillisecond)->UseRealTime();
+BENCHMARK_TEMPLATE(generate_ours, false)->RangeMultiplier(10)->Range(100000000, 10000000000)->Unit(benchmark::kMillisecond);
+BENCHMARK_TEMPLATE(generate_ours, true)->RangeMultiplier(10)->Range(100000000, 10000000000)->Unit(benchmark::kMillisecond)->UseRealTime();
+BENCHMARK_TEMPLATE(window_ours, false)->Args({1000000000000, 1000000000})->Args({1000000000000000, 1000000000})->Args({1000000000000000000, 1000000000})->Unit(benchmark::kMillisecond);
+#endif
+
+#ifndef BOOST_MATH_BENCH_NO_PRIMESIEVE
+BENCHMARK(count_primesieve)->ArgsProduct({{100000000, 1000000000, 10000000000, 100000000000}, {1}})->Unit(benchmark::kMillisecond);
+BENCHMARK(count_primesieve)->ArgsProduct({{100000000, 1000000000, 10000000000, 100000000000}, {0}})->Unit(benchmark::kMillisecond)->UseRealTime();
+BENCHMARK(generate_primesieve)->RangeMultiplier(10)->Range(100000000, 10000000000)->Unit(benchmark::kMillisecond);
+BENCHMARK(window_primesieve)->Args({1000000000000, 1000000000})->Args({1000000000000000, 1000000000})->Args({1000000000000000000, 1000000000})->Unit(benchmark::kMillisecond);
+#endif
 
 BENCHMARK_MAIN();
