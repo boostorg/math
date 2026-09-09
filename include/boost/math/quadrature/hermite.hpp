@@ -23,6 +23,7 @@
    #include <boost/multiprecision/cpp_bin_float.hpp>
    #include <boost/math/constants/constants.hpp>
    #include <boost/math/special_functions/hermite.hpp>
+   #include <boost/math/tools/roots.hpp>
 
    #define EIGEN_SUPPORT
 #endif
@@ -33,10 +34,51 @@ namespace boost { namespace math{ namespace quadrature{ namespace detail {
 #if defined(EIGEN_SUPPORT) && !defined(BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND)
 
 template <typename Real>
+struct hermite_functor
+{
+   hermite_functor(unsigned const& N_) : N(N_) {};
+
+   std::pair<Real, Real> operator()(Real const& x)
+   {
+      Real fx = boost::math::hermite<Real>(N, x);
+      Real fdx = Real(2) * Real(N) * boost::math::hermite<Real>(N-1, x);
+      return std::make_pair(fx, fdx);
+   }
+
+private:
+   unsigned N;
+};
+
+template <class Real>
+Real hermite_minimizer(unsigned N, Real guess)
+{
+   Real min;
+   Real max;
+   if (guess > 0)
+   {
+      min = guess / 1.1;                    // Minimum possible value is half our guess.
+      max = guess * 1.1;                      // Maximum possible value is twice our guess.
+   }
+   else
+   {
+      min = guess * 1.1;                    // Minimum possible value is half our guess.
+      max = guess / 1.1;                      // Maximum possible value is twice our guess.
+   }
+
+   const int digits = std::numeric_limits<Real>::digits;
+   int get_digits = static_cast<int>(digits);    // Accuracy doubles with each step, so stop when we have
+                                                         // just over half the digits correct.
+   const std::uintmax_t maxit = 10000;
+   std::uintmax_t it = maxit;
+   Real result = boost::math::tools::newton_raphson_iterate(hermite_functor<Real>(N), guess, min, max, get_digits, it);
+   return result;
+}
+
+template <typename Real>
 Real factorial(unsigned n)
 {
-   Real i = 1;
-   Real factorial = 1;
+   Real i = Real(1);
+   Real factorial = Real(1);
 
    while (i <= n)
    {
@@ -77,7 +119,8 @@ public:
         // Need to account for root near 0
         if (roots(i) >= -std::numeric_limits<Real>::epsilon() * 1000)
         {
-            pos_roots.push_back(roots(i));
+            Real root = hermite_minimizer(N, roots(i));
+            pos_roots.push_back(root);
         }
       }
 
@@ -254,22 +297,22 @@ class hermite_detail<T, 10, 0>
       static std::array<storage_type, 5> const & abscissa()
       {
          static std::array<storage_type, 5> data = {
-            static_cast<storage_type>(3.42901327223704608789165025557258046e-01L),
-            static_cast<storage_type>(1.03661082978951365417749191675920910e+00L),
-            static_cast<storage_type>(1.75668364929988177345140122010615672e+00L),
-            static_cast<storage_type>(2.53273167423278979640896079775479347e+00L),
-            static_cast<storage_type>(3.43615911883773760332672549431912143e+00L),
+            static_cast<storage_type>(3.42901327223704608789165025557258031e-01L),
+            static_cast<storage_type>(1.03661082978951365417749191675920902e+00L),
+            static_cast<storage_type>(1.75668364929988177345140122010615676e+00L),
+            static_cast<storage_type>(2.53273167423278979640896079775479348e+00L),
+            static_cast<storage_type>(3.43615911883773760332672549431912138e+00L),
 };
          return data;
       }
       static std::array<storage_type, 5> const & weights()
       {
          static std::array<storage_type, 5> data = {
-            static_cast<storage_type>(6.10862633735325798783564990433419732e-01L),
-            static_cast<storage_type>(2.40138611082314686416523295005861392e-01L),
-            static_cast<storage_type>(3.38743944554810631361647312775859719e-02L),
-            static_cast<storage_type>(1.34364574678123269220156558584591379e-03L),
-            static_cast<storage_type>(7.64043285523262062915936785959522150e-06L),
+            static_cast<storage_type>(6.10862633735325798783564990433419713e-01L),
+            static_cast<storage_type>(2.40138611082314686416523295005861395e-01L),
+            static_cast<storage_type>(3.38743944554810631361647312775859737e-02L),
+            static_cast<storage_type>(1.34364574678123269220156558584591387e-03L),
+            static_cast<storage_type>(7.64043285523262062915936785959522211e-06L),
          };
          return data;
       }
@@ -284,22 +327,22 @@ class hermite_detail<T, 10, 0>
       static std::array<storage_type, 5> const & abscissa()
       {
          static std::array<storage_type, 5> data = {
-            static_cast<storage_type>(3.42901327223704608789165025557258046e-01Q),
-            static_cast<storage_type>(1.03661082978951365417749191675920910e+00Q),
-            static_cast<storage_type>(1.75668364929988177345140122010615672e+00Q),
-            static_cast<storage_type>(2.53273167423278979640896079775479347e+00Q),
-            static_cast<storage_type>(3.43615911883773760332672549431912143e+00Q),
+            static_cast<storage_type>(3.42901327223704608789165025557258031e-01Q),
+            static_cast<storage_type>(1.03661082978951365417749191675920902e+00Q),
+            static_cast<storage_type>(1.75668364929988177345140122010615676e+00Q),
+            static_cast<storage_type>(2.53273167423278979640896079775479348e+00Q),
+            static_cast<storage_type>(3.43615911883773760332672549431912138e+00Q),
 };
          return data;
       }
       static std::array<storage_type, 5> const & weights()
       {
          static std::array<storage_type, 5> data = {
-            static_cast<storage_type>(6.10862633735325798783564990433419732e-01Q),
-            static_cast<storage_type>(2.40138611082314686416523295005861392e-01Q),
-            static_cast<storage_type>(3.38743944554810631361647312775859719e-02Q),
-            static_cast<storage_type>(1.34364574678123269220156558584591379e-03Q),
-            static_cast<storage_type>(7.64043285523262062915936785959522150e-06Q),
+            static_cast<storage_type>(6.10862633735325798783564990433419713e-01Q),
+            static_cast<storage_type>(2.40138611082314686416523295005861395e-01Q),
+            static_cast<storage_type>(3.38743944554810631361647312775859737e-02Q),
+            static_cast<storage_type>(1.34364574678123269220156558584591387e-03Q),
+            static_cast<storage_type>(7.64043285523262062915936785959522211e-06Q),
          };
          return data;
       }
@@ -314,22 +357,22 @@ class hermite_detail<T, 10, 4>
       static std::array<T, 5> const & abscissa()
       {
          static std::array<T, 5> data = {
-            BOOST_MATH_HUGE_CONSTANT(T, 0, 3.4290132722370460878916502555725804574577169343357617326210300863769016299631431365924072451889514923095703125000000e-01),
-            BOOST_MATH_HUGE_CONSTANT(T, 0, 1.0366108297895136541774919167592091040917543343984240793575756300019937924949964269671909278258681297302246093750000e+00),
-            BOOST_MATH_HUGE_CONSTANT(T, 0, 1.7566836492998817734514012201061567205847985641023178720560650082445006137099596799089340493083000183105468750000000e+00),
-            BOOST_MATH_HUGE_CONSTANT(T, 0, 2.5327316742327897964089607977547934701687784149754958919647942962061508073712268185317952884361147880554199218750000e+00),
-            BOOST_MATH_HUGE_CONSTANT(T, 0, 3.4361591188377376033267254943191214342191179952800433354144214837346850421884170145858661271631717681884765625000000e+00),
+            BOOST_MATH_HUGE_CONSTANT(T, 0, 3.4290132722370460878916502555725803120830265867773062820577103907292018192312101560713520305443248063627958675235231e-01),
+            BOOST_MATH_HUGE_CONSTANT(T, 0, 1.0366108297895136541774919167592090162982561106572157244372326874036404187243878992980306028243900733070850998719429e+00),
+            BOOST_MATH_HUGE_CONSTANT(T, 0, 1.7566836492998817734514012201061567632954744937388471000872849560961705796098190771278266711469838314640623161517203e+00),
+            BOOST_MATH_HUGE_CONSTANT(T, 0, 2.5327316742327897964089607977547934803078465081567249459332874134930859380473865340227292325941771646240824732515703e+00),
+            BOOST_MATH_HUGE_CONSTANT(T, 0, 3.4361591188377376033267254943191213848406783093901772906871762944002361145649511153468627231618843292611320162500620e+00),
 };
          return data;
       }
       static std::array<T, 5> const & weights()
       {
          static std::array<T, 5> data = {
-            BOOST_MATH_HUGE_CONSTANT(T, 0, 6.1086263373532579878356499043341973238818374059758277936763908978968140237042483420282223960384726524353027343750000e-01),
-            BOOST_MATH_HUGE_CONSTANT(T, 0, 2.4013861108231468641652329500586139164344096899966477839326207760887354125331483167826718272408470511436462402343750e-01),
-            BOOST_MATH_HUGE_CONSTANT(T, 0, 3.3874394455481063136164731277585971926477457178246590999848008213597529213016723570461863346281461417675018310546875e-02),
-            BOOST_MATH_HUGE_CONSTANT(T, 0, 1.3436457467812326922015655858459137918851865251396942830563543358449043010113127527560550333873834460973739624023438e-03),
-            BOOST_MATH_HUGE_CONSTANT(T, 0, 7.6404328552326206291593678595952215021994824892912048011683019177853182368166190746930355182087168941507115960121155e-06),
+            BOOST_MATH_HUGE_CONSTANT(T, 0, 6.1086263373532579878356499043341971323859272928403754564871663738953676910082005768001121074412857938126204657377493e-01),
+            BOOST_MATH_HUGE_CONSTANT(T, 0, 2.4013861108231468641652329500586139537004249390192739899066056147994315237169314350600241149865696523148172530499056e-01),
+            BOOST_MATH_HUGE_CONSTANT(T, 0, 3.3874394455481063136164731277585973698161942481867016739715157699771381277813573402914401584449869233310982466662099e-02),
+            BOOST_MATH_HUGE_CONSTANT(T, 0, 1.3436457467812326922015655858459138698692732786257703646162498020762483818413155201782152234375992775169973716992552e-03),
+            BOOST_MATH_HUGE_CONSTANT(T, 0, 7.6404328552326206291593678595952221082891147358323631952885551280911633480005783690893185993195845416600950144409630e-06),
          };
          return data;
       }
