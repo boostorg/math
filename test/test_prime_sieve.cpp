@@ -14,6 +14,7 @@
 #include <iterator>
 #include <random>
 #include <limits>
+#include <stdexcept>
 
 using namespace boost::math;
 namespace ps = boost::math::detail::prime_sieve;
@@ -164,6 +165,11 @@ void test_ranges()
     BOOST_TEST_EQ(prime_count(1000000000000000000ull, 1000000000001000000ull, full), 24280u);
     BOOST_TEST_EQ(prime_count(1000000000000000000ull, 1000000000001000000ull, test), 24280u);
     BOOST_TEST_EQ(prime_count(1000000000000000000ull, 1000000000001000000ull), 24280u);
+    // and on low intervals, where the sieving primes themselves lie inside the window
+    for (const std::uint64_t lo : {0ull, 2ull, 7ull, 8ull, 11ull, 100ull, 1000ull, 65536ull, 1000000ull})
+    {
+        check_range(lo, lo + 20000, test);
+    }
     // forced geometries: a small segment engages the bucket sieve, a large one the medium class only
     prime_sieve_options small_segment {};
     small_segment.sieve_bytes = 16384;
@@ -208,6 +214,23 @@ void test_edge_cases()
     prime_sieve(-5, s);
     BOOST_TEST(s.empty());
 
+    // a negative lower bound must survive promotion against an unsigned upper bound
+    prime_range(-100, 10u, s);
+    BOOST_TEST_EQ(s.size(), 4u);
+    s.clear();
+    prime_range(-100LL, static_cast<std::uint64_t>(10), s);
+    BOOST_TEST_EQ(s.size(), 4u);
+    s.clear();
+    prime_range(static_cast<std::int16_t>(-1), 30u, s);
+    BOOST_TEST_EQ(s.size(), 10u);
+    s.clear();
+    prime_range(-100, 10u, std::back_inserter(s));
+    BOOST_TEST_EQ(s.size(), 4u);
+    s.clear();
+    BOOST_TEST_EQ(prime_count(-100, 10u), 4u);
+    BOOST_TEST_EQ(prime_count(-100LL, static_cast<std::uint64_t>(10)), 4u);
+    BOOST_TEST_EQ(prime_count(-100, static_cast<std::uint8_t>(10)), 4u);
+
     BOOST_TEST_EQ(prime_count(0), 0u);
     BOOST_TEST_EQ(prime_count(2), 0u);
     BOOST_TEST_EQ(prime_count(3), 1u);
@@ -241,6 +264,35 @@ void test_edge_cases()
     prime_sieve(static_cast<std::uint8_t>(255), bytes);
     BOOST_TEST_EQ(bytes.size(), 54u);
 }
+
+#ifndef BOOST_NO_EXCEPTIONS
+// Writes are counted and the iterator throws once limit values have been accepted
+struct throwing_output_iterator
+{
+    using iterator_category = std::output_iterator_tag;
+    using value_type = void;
+    using difference_type = std::ptrdiff_t;
+    using pointer = void;
+    using reference = void;
+
+    std::size_t* written {nullptr};
+    std::size_t limit {0};
+
+    throwing_output_iterator& operator*() { return *this; }
+    throwing_output_iterator& operator++() { return *this; }
+    throwing_output_iterator operator++(int) { return *this; }
+
+    template <class T>
+    throwing_output_iterator& operator=(const T&)
+    {
+        if (++*written > limit)
+        {
+            throw std::runtime_error("consumer failure");
+        }
+        return *this;
+    }
+};
+#endif
 
 void test_policies()
 {
@@ -278,6 +330,23 @@ void test_policies()
     std::vector<int> vi;
     prime_sieve(std::execution::par_unseq, 1000, vi);
     BOOST_TEST(vi.size() == 168 && vi.front() == 2 && vi.back() == 997);
+#ifndef BOOST_NO_EXCEPTIONS
+    // A throwing consumer must propagate: the workers blocked on the full output queue
+    // have to be released, or waiting on the futures never returns.
+    {
+        std::size_t written {0};
+        bool caught {false};
+        try
+        {
+            prime_range(std::execution::par, 7ull, 2000000000ull, throwing_output_iterator {&written, 1000});
+        }
+        catch (const std::runtime_error&)
+        {
+            caught = true;
+        }
+        BOOST_TEST(caught);
+    }
+#endif
 #endif
     // the CUDA tag is always accepted; without nvcc it runs on the CPU
     BOOST_TEST_EQ(prime_count(execution::cuda, 1000000ull), 78498u);
