@@ -106,7 +106,8 @@
         append to it and are the fastest way to store the primes; the output iterator
         overloads return the advanced iterator. A <code class="computeroutput"><span class="identifier">lower_bound</span></code>
         below 2 is treated as 2, negative bounds as 0, and an empty range produces
-        nothing.
+        nothing. A negative bound is clamped in its own type, so mixing a signed and
+        an unsigned bound is safe.
       </p>
 <p>
         <code class="computeroutput"><span class="identifier">Integer</span></code> may be any builtin

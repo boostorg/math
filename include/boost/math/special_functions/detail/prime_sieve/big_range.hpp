@@ -126,7 +126,7 @@ struct base_mod_generic
 // A prime equal to a candidate is left standing.
 template <class BaseMod>
 void sieve_window(std::vector<std::uint8_t>& composite, std::size_t bits, const BaseMod& base_mod,
-                  const std::vector<std::uint32_t>& primes, bool base_is_small)
+                  const std::vector<std::uint32_t>& primes, std::uint64_t small_base)
 {
     composite.assign(bits, 0);
     for (const std::uint32_t p : primes)
@@ -138,11 +138,11 @@ void sieve_window(std::vector<std::uint8_t>& composite, std::size_t bits, const 
         {
             offset += p;
         }
-        if (base_is_small && offset == 0)
+        const std::uint64_t square {static_cast<std::uint64_t>(p) * p};
+        if (small_base != 0 && small_base < square)
         {
-            // base itself could be the prime p; skip to the next odd multiple in that case
-            // (the caller only sets base_is_small when the base is at most the depth)
-            offset = 2u * p;
+            // p * p is an odd multiple of p at or above the base, so this only moves the start up
+            offset = square - small_base;
         }
         for (std::uint64_t i {offset / 2}; i < bits; i += p)
         {
@@ -173,7 +173,7 @@ void test_range_u64(std::uint64_t start, std::uint64_t stop, Consumer& consume)
     {
         const std::uint64_t remaining {(stop - base) / 2 + 1};
         const std::size_t bits {static_cast<std::size_t>((std::min)(remaining, static_cast<std::uint64_t>(window_max_bits)))};
-        sieve_window(composite, bits, base_mod_u64 {base}, primes, base <= depth);
+        sieve_window(composite, bits, base_mod_u64 {base}, primes, base);
         for (std::size_t i {0}; i < bits; ++i)
         {
             if (!composite[i])
@@ -246,11 +246,11 @@ void big_range_impl(const Integer& lower, const Integer& upper, const prime_siev
         {
             const std::uint64_t high {static_cast<std::uint64_t>((base / two64) % two64)};
             const std::uint64_t low {static_cast<std::uint64_t>(base % two64)};
-            sieve_window(composite, bits, base_mod_u128 {high, low}, primes, false);
+            sieve_window(composite, bits, base_mod_u128 {high, low}, primes, 0);
         }
         else
         {
-            sieve_window(composite, bits, base_mod_generic<Integer> {base}, primes, false);
+            sieve_window(composite, bits, base_mod_generic<Integer> {base}, primes, 0);
         }
 
         const Integer n_over_s {window_high / Integer(depth)};

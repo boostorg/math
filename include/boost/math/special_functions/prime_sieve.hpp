@@ -280,7 +280,7 @@ inline OutputIterator prime_range(ExecutionPolicy&&, Lower lower_bound, Upper up
 {
     using Integer = detail::prime_sieve::common_integer_t<Lower, Upper>;
     constexpr auto mode = detail::prime_sieve::mode_of<std::decay_t<ExecutionPolicy>>();
-    return detail::prime_sieve::range_dispatch<mode>(Integer(lower_bound), Integer(upper_bound), out, options);
+    return detail::prime_sieve::range_dispatch<mode>(detail::prime_sieve::to_common<Integer>(lower_bound), detail::prime_sieve::to_common<Integer>(upper_bound), out, options);
 }
 
 BOOST_MATH_EXPORT template <class Lower, class Upper, class OutputIterator,
@@ -289,7 +289,7 @@ BOOST_MATH_EXPORT template <class Lower, class Upper, class OutputIterator,
 inline OutputIterator prime_range(Lower lower_bound, Upper upper_bound, OutputIterator out, const prime_sieve_options& options = {})
 {
     using Integer = detail::prime_sieve::common_integer_t<Lower, Upper>;
-    return detail::prime_sieve::range_dispatch<detail::prime_sieve::exec_mode::sequential>(Integer(lower_bound), Integer(upper_bound), out, options);
+    return detail::prime_sieve::range_dispatch<detail::prime_sieve::exec_mode::sequential>(detail::prime_sieve::to_common<Integer>(lower_bound), detail::prime_sieve::to_common<Integer>(upper_bound), out, options);
 }
 
 BOOST_MATH_EXPORT template <class ExecutionPolicy, class Lower, class Upper, class T, class Alloc,
@@ -299,7 +299,7 @@ inline void prime_range(ExecutionPolicy&&, Lower lower_bound, Upper upper_bound,
 {
     using Integer = detail::prime_sieve::common_integer_t<Lower, Upper>;
     constexpr auto mode = detail::prime_sieve::mode_of<std::decay_t<ExecutionPolicy>>();
-    detail::prime_sieve::range_to_vector<mode>(Integer(lower_bound), Integer(upper_bound), out, options);
+    detail::prime_sieve::range_to_vector<mode>(detail::prime_sieve::to_common<Integer>(lower_bound), detail::prime_sieve::to_common<Integer>(upper_bound), out, options);
 }
 
 BOOST_MATH_EXPORT template <class Lower, class Upper, class T, class Alloc,
@@ -307,7 +307,7 @@ BOOST_MATH_EXPORT template <class Lower, class Upper, class T, class Alloc,
 inline void prime_range(Lower lower_bound, Upper upper_bound, std::vector<T, Alloc>& out, const prime_sieve_options& options = {})
 {
     using Integer = detail::prime_sieve::common_integer_t<Lower, Upper>;
-    detail::prime_sieve::range_to_vector<detail::prime_sieve::exec_mode::sequential>(Integer(lower_bound), Integer(upper_bound), out, options);
+    detail::prime_sieve::range_to_vector<detail::prime_sieve::exec_mode::sequential>(detail::prime_sieve::to_common<Integer>(lower_bound), detail::prime_sieve::to_common<Integer>(upper_bound), out, options);
 }
 
 BOOST_MATH_EXPORT template <class ExecutionPolicy, class Integer,
@@ -325,7 +325,7 @@ inline std::uint64_t prime_count(ExecutionPolicy&&, Lower lower_bound, Upper upp
 {
     using Integer = detail::prime_sieve::common_integer_t<Lower, Upper>;
     constexpr auto mode = detail::prime_sieve::mode_of<std::decay_t<ExecutionPolicy>>();
-    return detail::prime_sieve::count_dispatch<mode>(Integer(lower_bound), Integer(upper_bound), options);
+    return detail::prime_sieve::count_dispatch<mode>(detail::prime_sieve::to_common<Integer>(lower_bound), detail::prime_sieve::to_common<Integer>(upper_bound), options);
 }
 
 BOOST_MATH_EXPORT template <class Integer,
@@ -340,7 +340,7 @@ BOOST_MATH_EXPORT template <class Lower, class Upper,
 inline std::uint64_t prime_count(Lower lower_bound, Upper upper_bound, const prime_sieve_options& options = {})
 {
     using Integer = detail::prime_sieve::common_integer_t<Lower, Upper>;
-    return detail::prime_sieve::count_dispatch<detail::prime_sieve::exec_mode::sequential>(Integer(lower_bound), Integer(upper_bound), options);
+    return detail::prime_sieve::count_dispatch<detail::prime_sieve::exec_mode::sequential>(detail::prime_sieve::to_common<Integer>(lower_bound), detail::prime_sieve::to_common<Integer>(upper_bound), options);
 }
 
 // Reserves room for every prime below upper_bound (Dusart's bound on the prime counting function).
