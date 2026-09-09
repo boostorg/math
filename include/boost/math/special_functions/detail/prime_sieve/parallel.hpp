@@ -156,14 +156,18 @@ inline std::uint64_t parallel_count(std::uint64_t start, std::uint64_t stop, con
     futures.reserve(plan.threads);
     for (unsigned t {0}; t < plan.threads; ++t)
     {
+#ifndef BOOST_MATH_PRIME_SIEVE_NO_EXCEPTIONS
         try
+#endif
         {
             futures.push_back(std::async(std::launch::async, worker));
         }
+#ifndef BOOST_MATH_PRIME_SIEVE_NO_EXCEPTIONS
         catch (const std::system_error&)
         {
             break;
         }
+#endif
     }
     // Any chunks left over (thread creation failed) are processed here
     std::uint64_t total {worker()};
@@ -292,7 +296,9 @@ void parallel_range(std::uint64_t start, std::uint64_t stop, const prime_sieve_o
 
     auto worker = [&]()
     {
+#ifndef BOOST_MATH_PRIME_SIEVE_NO_EXCEPTIONS
         try
+#endif
         {
             segment_sieve engine {g, primes};
             std::uint64_t i {};
@@ -314,24 +320,30 @@ void parallel_range(std::uint64_t start, std::uint64_t stop, const prime_sieve_o
                 queue.publish(i);
             }
         }
+#ifndef BOOST_MATH_PRIME_SIEVE_NO_EXCEPTIONS
         catch (...)
         {
             queue.fail(std::current_exception());
         }
+#endif
     };
 
     std::vector<std::future<void>> futures;
     futures.reserve(plan.threads);
     for (unsigned t {0}; t < plan.threads; ++t)
     {
+#ifndef BOOST_MATH_PRIME_SIEVE_NO_EXCEPTIONS
         try
+#endif
         {
             futures.push_back(std::async(std::launch::async, worker));
         }
+#ifndef BOOST_MATH_PRIME_SIEVE_NO_EXCEPTIONS
         catch (const std::system_error&)
         {
             break;
         }
+#endif
     }
     if (futures.empty())
     {
@@ -341,7 +353,9 @@ void parallel_range(std::uint64_t start, std::uint64_t stop, const prime_sieve_o
         return;
     }
 
+#ifndef BOOST_MATH_PRIME_SIEVE_NO_EXCEPTIONS
     try
+#endif
     {
         for (std::uint64_t i {0}; i < plan.iters; ++i)
         {
@@ -354,6 +368,7 @@ void parallel_range(std::uint64_t start, std::uint64_t stop, const prime_sieve_o
             queue.release(i);
         }
     }
+#ifndef BOOST_MATH_PRIME_SIEVE_NO_EXCEPTIONS
     catch (...)
     {
         // The consumer threw: release the workers blocked on the full queue before waiting
@@ -365,6 +380,7 @@ void parallel_range(std::uint64_t start, std::uint64_t stop, const prime_sieve_o
         }
         throw;
     }
+#endif
     for (auto& f : futures)
     {
         f.wait();
