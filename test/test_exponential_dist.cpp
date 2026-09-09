@@ -21,6 +21,7 @@
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include "test_out_of_range.hpp"
+#include "test_dist_helpers.hpp"
 
 #include <cmath>
 #include <type_traits>
@@ -29,7 +30,7 @@
    using std::endl;
    using std::setprecision;
    using std::log;
-
+#include <vector>
 #if __has_include(<stdfloat>)
 #  include <stdfloat>
 #endif
@@ -330,80 +331,54 @@ void test_spots(RealType T)
    //
    // Things that are errors:
    //
-   exponential_distribution<RealType> dist(0.5);
-   BOOST_MATH_CHECK_THROW(
-       quantile(dist, RealType(1.0)),
-       std::overflow_error);
-   BOOST_MATH_CHECK_THROW(
-       quantile(complement(dist, RealType(0.0))),
-       std::overflow_error);
-   BOOST_MATH_CHECK_THROW(
-       pdf(dist, RealType(-1)),
-       std::domain_error);
-   BOOST_MATH_CHECK_THROW(
-       cdf(dist, RealType(-1)),
-       std::domain_error);
-   BOOST_MATH_CHECK_THROW(
-       cdf(exponential_distribution<RealType>(-1), RealType(1)),
-       std::domain_error);
-   BOOST_MATH_CHECK_THROW(
-       quantile(dist, RealType(-1)),
-       std::domain_error);
-   BOOST_MATH_CHECK_THROW(
-       quantile(dist, RealType(2)),
-       std::domain_error);
-
    check_out_of_range<exponential_distribution<RealType> >(2);
-   BOOST_MATH_CHECK_THROW(exponential_distribution<RealType>(0), std::domain_error);
-   BOOST_MATH_CHECK_THROW(exponential_distribution<RealType>(-1), std::domain_error);
-   if(std::numeric_limits<RealType>::has_infinity)
+   
+   using boost::math::policies::policy;
+
+   typedef policy<
+      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+   > ignore_all_policy;
+
+   std::vector<std::vector<RealType> > invalid_params = {{-1}, 
+                                                         {0}};
+   test_invalid_parameters<exponential_distribution<RealType, boost::math::policies::policy<> >, 
+                           exponential_distribution<RealType, ignore_all_policy>, 
+                           RealType>(invalid_params);
+
+   // Check constructing with NaNs
+   if (std::numeric_limits<RealType>::has_quiet_NaN){
+      // Attempt to construct from non-finite parameters should throw.
+      RealType nan = std::numeric_limits<RealType>::quiet_NaN();
+      invalid_params = {{nan}};
+      test_invalid_parameters<exponential_distribution<RealType, boost::math::policies::policy<> >, 
+                              exponential_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
+
+      BOOST_CHECK((boost::math::isnan)(mean(exponential_distribution<RealType, ignore_all_policy>(static_cast<RealType>(-1)))));
+      BOOST_CHECK((boost::math::isnan)(standard_deviation(exponential_distribution<RealType, ignore_all_policy>(static_cast<RealType>(-1)))));
+   }
+
+   // Check construcing with Infinity
+   if (std::numeric_limits<RealType>::has_infinity)
    {
+      // Attempt to construct from non-finite should throw.
       RealType inf = std::numeric_limits<RealType>::infinity();
-      BOOST_CHECK_EQUAL(pdf(exponential_distribution<RealType>(2), inf), 0);
-      BOOST_CHECK_EQUAL(cdf(exponential_distribution<RealType>(2), inf), 1);
-      BOOST_CHECK_EQUAL(cdf(complement(exponential_distribution<RealType>(2), inf)), 0);
+      invalid_params = {{inf}};
+      test_invalid_parameters<exponential_distribution<RealType, boost::math::policies::policy<> >, 
+                              exponential_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
 
-      // Test NaN policies
-      using boost::math::policies::policy;
-
-      typedef policy<
-         boost::math::policies::domain_error<boost::math::policies::ignore_error>,
-         boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
-         boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
-         boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
-         boost::math::policies::pole_error<boost::math::policies::ignore_error>,
-         boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
-      > ignore_all_policy;
-
-      typedef boost::math::exponential_distribution<RealType, ignore_all_policy> ignore_error_exponential;
-
-      // PDF
-      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(1))));
-      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-1))));
-      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(1))));
-      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-1))));
-
-      // CDF
-      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(1))));
-      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-1))));
-      BOOST_CHECK((boost::math::isnan)(logcdf(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(1))));
-      BOOST_CHECK((boost::math::isnan)(logcdf(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-1))));
-      
-      // Complement CDF
-      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(1)))));
-      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-1)))));
-      BOOST_CHECK((boost::math::isnan)(logcdf(complement(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(1)))));
-      BOOST_CHECK((boost::math::isnan)(logcdf(complement(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-1)))));
-
-      // Quantile
-      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(0.5))));
-      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-0.5))));
-      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(0.5)))));
-      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-0.5)))));
-
-      // Mean and Standard Deviation
-      BOOST_CHECK((boost::math::isnan)(mean(ignore_error_exponential(static_cast<RealType>(-1)))));
-      BOOST_CHECK((boost::math::isnan)(standard_deviation(ignore_error_exponential(static_cast<RealType>(-1)))));
+   } // has_infinity 
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   {
+      test_invalid_support<exponential_distribution<RealType, boost::math::policies::policy<> >, 
+                           exponential_distribution<RealType, ignore_all_policy>, 
+                           RealType>({1});
    }
 } // template <class RealType>void test_spots(RealType)
 

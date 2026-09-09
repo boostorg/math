@@ -27,12 +27,14 @@ using boost::math::fisher_f_distribution;
 #include <boost/test/unit_test.hpp> // for test_main
 #include <boost/test/tools/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
 #include "test_out_of_range.hpp"
+#include "test_dist_helpers.hpp"
 
 #include <iostream>
 using std::cout;
 using std::endl;
 #include <limits>
 using std::numeric_limits;
+#include <vector>
 
 template <class RealType>
 RealType naive_pdf(RealType df1, RealType df2, RealType x)
@@ -472,72 +474,86 @@ void test_spots(RealType)
        cdf(complement(fisher_f_distribution<RealType>(3, 3), static_cast<RealType>(0)))
        , static_cast<RealType>(1));
 
-    BOOST_MATH_CHECK_THROW(
-       pdf(
-          fisher_f_distribution<RealType>(-1, 2),
-          static_cast<RealType>(1)), std::domain_error
-       );
-    BOOST_MATH_CHECK_THROW(
-       pdf(
-          fisher_f_distribution<RealType>(1, -1),
-          static_cast<RealType>(1)), std::domain_error
-       );
-    BOOST_MATH_CHECK_THROW(
-       pdf(
-          fisher_f_distribution<RealType>(8, 2),
-          static_cast<RealType>(-1)), std::domain_error
-       );
-    BOOST_MATH_CHECK_THROW(
-       cdf(
-          fisher_f_distribution<RealType>(-1, 1),
-          static_cast<RealType>(1)), std::domain_error
-       );
-    BOOST_MATH_CHECK_THROW(
-       cdf(
-          fisher_f_distribution<RealType>(8, 4),
-          static_cast<RealType>(-1)), std::domain_error
-       );
-    BOOST_MATH_CHECK_THROW(
-       cdf(complement(
-          fisher_f_distribution<RealType>(-1, 2),
-          static_cast<RealType>(1))), std::domain_error
-       );
-    BOOST_MATH_CHECK_THROW(
-       cdf(complement(
-          fisher_f_distribution<RealType>(8, 4),
-          static_cast<RealType>(-1))), std::domain_error
-       );
-    BOOST_MATH_CHECK_THROW(
-       quantile(
-          fisher_f_distribution<RealType>(-1, 2),
-          static_cast<RealType>(0.5)), std::domain_error
-       );
-    BOOST_MATH_CHECK_THROW(
-       quantile(
-          fisher_f_distribution<RealType>(8, 8),
-          static_cast<RealType>(-1)), std::domain_error
-       );
-    BOOST_MATH_CHECK_THROW(
-       quantile(
-          fisher_f_distribution<RealType>(8, 8),
-          static_cast<RealType>(1.1)), std::domain_error
-       );
-    BOOST_MATH_CHECK_THROW(
-       quantile(complement(
-          fisher_f_distribution<RealType>(2, -1),
-          static_cast<RealType>(0.5))), std::domain_error
-       );
-    BOOST_MATH_CHECK_THROW(
-       quantile(complement(
-          fisher_f_distribution<RealType>(8, 8),
-          static_cast<RealType>(-1))), std::domain_error
-       );
-    BOOST_MATH_CHECK_THROW(
-       quantile(complement(
-          fisher_f_distribution<RealType>(8, 8),
-          static_cast<RealType>(1.1))), std::domain_error
-       );
    check_out_of_range<fisher_f_distribution<RealType> >(2, 3);
+
+   using boost::math::policies::policy;
+
+   typedef policy<
+      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+   > ignore_all_policy;
+
+   std::vector<std::vector<RealType> > invalid_params = {{-1, 1}, 
+                                                         {0, 1},
+                                                         {1, -1},
+                                                         {1, 0}};
+   test_invalid_parameters<fisher_f_distribution<RealType, boost::math::policies::policy<> >, 
+                           fisher_f_distribution<RealType, ignore_all_policy>, 
+                           RealType>(invalid_params);
+
+   // Check constructing with NaNs
+   if (std::numeric_limits<RealType>::has_quiet_NaN){
+      // Attempt to construct from non-finite parameters should throw.
+      RealType nan = std::numeric_limits<RealType>::quiet_NaN();
+      invalid_params = {{nan, 1},
+                        {1, nan}};
+      test_invalid_parameters<fisher_f_distribution<RealType, boost::math::policies::policy<> >, 
+                              fisher_f_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
+      
+      // Check moment function for bad constructors
+      BOOST_CHECK_THROW(mean(fisher_f_distribution<RealType, boost::math::policies::policy<> >(-1, 1)), std::domain_error);
+      BOOST_CHECK_THROW(mean(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, -1)), std::domain_error);
+      BOOST_CHECK_THROW(variance(fisher_f_distribution<RealType, boost::math::policies::policy<> >(-1, 1)), std::domain_error);
+      BOOST_CHECK_THROW(variance(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, -1)), std::domain_error);
+      BOOST_CHECK_THROW(mode(fisher_f_distribution<RealType, boost::math::policies::policy<> >(-1, 1)), std::domain_error);
+      BOOST_CHECK_THROW(mode(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, -1)), std::domain_error);
+      BOOST_CHECK_THROW(skewness(fisher_f_distribution<RealType, boost::math::policies::policy<> >(-1, 1)), std::domain_error);
+      BOOST_CHECK_THROW(skewness(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, -1)), std::domain_error);
+      BOOST_CHECK_THROW(kurtosis_excess(fisher_f_distribution<RealType, boost::math::policies::policy<> >(-1, 1)), std::domain_error);
+      BOOST_CHECK_THROW(kurtosis_excess(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, -1)), std::domain_error);
+      
+      BOOST_CHECK((boost::math::isnan)(mean(fisher_f_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(mean(fisher_f_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(variance(fisher_f_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(variance(fisher_f_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(mode(fisher_f_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(mode(fisher_f_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(skewness(fisher_f_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(skewness(fisher_f_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(kurtosis_excess(fisher_f_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(kurtosis_excess(fisher_f_distribution<RealType, ignore_all_policy>(1, -1))));
+
+      // Check undefined moments
+      BOOST_CHECK_THROW(mean(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, 2)), std::domain_error);
+      BOOST_CHECK_THROW(variance(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, 4)), std::domain_error);
+      BOOST_CHECK_THROW(mode(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, 2)), std::domain_error);
+      BOOST_CHECK_THROW(skewness(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, 6)), std::domain_error);
+      BOOST_CHECK_THROW(kurtosis_excess(fisher_f_distribution<RealType, boost::math::policies::policy<> >(1, 8)), std::domain_error);
+   }
+
+   // Check construcing with Infinity
+   if (std::numeric_limits<RealType>::has_infinity)
+   {
+      // Attempt to construct from non-finite should throw.
+      RealType inf = std::numeric_limits<RealType>::infinity();
+      invalid_params = {{inf, 1},
+                        {1, inf}};
+      test_invalid_parameters<fisher_f_distribution<RealType, boost::math::policies::policy<> >, 
+                              fisher_f_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
+
+   } // has_infinity 
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   {
+      test_invalid_support<fisher_f_distribution<RealType, boost::math::policies::policy<> >, 
+                           fisher_f_distribution<RealType, ignore_all_policy>, 
+                           RealType>({1, 1});
+   }
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )

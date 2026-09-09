@@ -398,6 +398,26 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(error_cases, RealT, test_types)
    BOOST_MATH_CHECK_THROW(dist_t(probs.begin(), probs.begin(), rates.begin(), rates.begin()), std::domain_error);
    BOOST_MATH_CHECK_THROW(dist_t(rates.begin(), rates.begin()), std::domain_error);
 
+   typedef boost::math::policies::policy<
+        boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+        boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+        boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+        boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+        boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+        boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+   > ignore_all_policy;
+
+   if (std::numeric_limits<RealT>::has_quiet_NaN)
+   {
+        typedef boost::math::hyperexponential_distribution<RealT, ignore_all_policy> ignore_all_hyperexp;
+        BOOST_CHECK((boost::math::isnan)(boost::math::pdf(ignore_all_hyperexp({ 0.25, 0.5, 0.25 }, { -0.5, 1.0, 1.5 }), 1)));
+        BOOST_CHECK((boost::math::isnan)(boost::math::pdf(ignore_all_hyperexp({ 0.25, 0.5, 0.25 }, { 0.5, 1.0, 1.5 }), -1)));
+        BOOST_CHECK((boost::math::isnan)(boost::math::cdf(ignore_all_hyperexp({ 0.25, 0.5, 0.25 }, { 0.5, 1.0, 1.5 }), -1)));
+        BOOST_CHECK((boost::math::isnan)(boost::math::cdf(complement(ignore_all_hyperexp({ 0.25, 0.5, 0.25 }, { 0.5, 1.0, 1.5 }), -1))));
+        BOOST_CHECK((boost::math::isnan)(boost::math::quantile(ignore_all_hyperexp({ 0.25, 0.5, 0.25 }, { 1.0, 1.5 }), -0.25)));
+        BOOST_CHECK((boost::math::isnan)(boost::math::quantile(ignore_all_hyperexp({ 0.25, 0.5, 0.25 }, { 1.0, 1.5 }), 1.25)));
+    }
+
    // Test C++20 ranges (Currently only GCC10 has full support to P0896R4)
    #if (__cplusplus > 202000L || _MSVC_LANG > 202000L) && __has_include(<ranges>) && __GNUC__ >= 10
    // Support for ranges is broken using gcc 11.1

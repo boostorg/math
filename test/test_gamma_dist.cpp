@@ -35,6 +35,7 @@
     using boost::math::gamma_distribution;
 #include "../include_private/boost/math/tools/test.hpp"
 #include "test_out_of_range.hpp"
+#include "test_dist_helpers.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -237,14 +238,82 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE(
        entropy(dist), expected_entropy, tol2);
 
-  // Rely on default definition in derived accessors.
-
-   // error tests
+   // Error tests
    check_out_of_range<boost::math::gamma_distribution<RealType> >(1, 1);
-   BOOST_MATH_CHECK_THROW(boost::math::gamma_distribution<RealType>(0, 1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(boost::math::gamma_distribution<RealType>(-1, 1), std::domain_error);
-   BOOST_MATH_CHECK_THROW(boost::math::gamma_distribution<RealType>(1, 0), std::domain_error);
-   BOOST_MATH_CHECK_THROW(boost::math::gamma_distribution<RealType>(1, -1), std::domain_error);
+   using boost::math::policies::policy;
+
+   typedef policy<
+      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+   > ignore_all_policy;
+
+   std::vector<std::vector<RealType> > invalid_params = {{-1, 1}, 
+                                                         {0, 1},
+                                                         {1, -1},
+                                                         {1, 0}};
+   test_invalid_parameters<gamma_distribution<RealType, boost::math::policies::policy<> >, 
+                           gamma_distribution<RealType, ignore_all_policy>, 
+                           RealType>(invalid_params);
+
+   // Check constructing with NaNs
+   if (std::numeric_limits<RealType>::has_quiet_NaN){
+      // Attempt to construct from non-finite parameters should throw.
+      RealType nan = std::numeric_limits<RealType>::quiet_NaN();
+      invalid_params = {{nan, 1},
+                        {1, nan}};
+      test_invalid_parameters<gamma_distribution<RealType, boost::math::policies::policy<> >, 
+                              gamma_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
+   }
+
+   // Check construcing with Infinity
+   if (std::numeric_limits<RealType>::has_infinity)
+   {
+      // Attempt to construct from non-finite should throw.
+      RealType inf = std::numeric_limits<RealType>::infinity();
+      invalid_params = {{inf, 1},
+                        {1, inf}};
+      test_invalid_parameters<gamma_distribution<RealType, boost::math::policies::policy<> >, 
+                              gamma_distribution<RealType, ignore_all_policy>, 
+                              RealType>(invalid_params);
+
+   } // has_infinity 
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   {
+       // Throwing is not allowed on SYCL devices,
+       // so we must skip this test
+       #ifndef BOOST_MATH_ENABLE_SYCL
+      test_invalid_support<gamma_distribution<RealType, boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::throw_on_error> > >, 
+                           gamma_distribution<RealType, ignore_all_policy>,
+                           RealType>({1, 1});
+       #endif
+   }
+
+   // Test Special Values
+   if (std::numeric_limits<RealType>::has_quiet_NaN){
+      BOOST_CHECK((boost::math::isnan)(logpdf(gamma_distribution<RealType, ignore_all_policy>(0.5,1), static_cast<RealType>(0))));
+      BOOST_CHECK((boost::math::isnan)(mean(gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(mean(gamma_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(variance(gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(variance(gamma_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(skewness(gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(skewness(gamma_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(kurtosis_excess(gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(kurtosis_excess(gamma_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(mode(gamma_distribution<RealType, ignore_all_policy>(-1, 1))));
+      BOOST_CHECK((boost::math::isnan)(mode(gamma_distribution<RealType, ignore_all_policy>(1, -1))));
+      BOOST_CHECK((boost::math::isnan)(mode(gamma_distribution<RealType, ignore_all_policy>(0.5, 1))));
+   }
+   BOOST_CHECK_EQUAL(pdf(gamma_distribution<RealType>(2, 1), 0), 0);
+   BOOST_CHECK_THROW(logpdf(gamma_distribution<RealType>(2, 1), static_cast<RealType>(0)), std::domain_error);
+   BOOST_CHECK_EQUAL(cdf(gamma_distribution<RealType>(2, 1), 0), 0);
+   BOOST_CHECK_EQUAL(cdf(complement(gamma_distribution<RealType>(2, 1), 0)), 1);
+
+   // More errors in moments
 
 } // template <class RealType>void test_spots(RealType)
 

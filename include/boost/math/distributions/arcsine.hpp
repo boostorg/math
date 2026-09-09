@@ -231,11 +231,11 @@ namespace boost
         // Special cases:
         if (p == 0)
         {
-          return 0;
+          return x_min;
         }
         if (p == 1)
         {
-          return 1;
+          return x_max;
         }
         using boost::math::constants::half_pi;
         RealType sin2hpip = sin(half_pi<RealType>() * p);
@@ -249,11 +249,11 @@ namespace boost
         // Special cases:
         if (q == 1)
         {
-          return 0;
+          return x_min;
         }
         if (q == 0)
         {
-          return 1;
+          return x_max;
         }
         // Naive RealType p = 1 - q; result = sin(half_pi<RealType>() * p); loses accuracy, so use a cos alternative instead.
         //result = cos(half_pi<RealType>() * q); // for arcsine(0,1)
