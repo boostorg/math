@@ -33,6 +33,7 @@
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
+#include <cstdlib>
 #include <vector>
 #include <string>
 #include <stdexcept>
@@ -51,11 +52,18 @@ inline constexpr unsigned segments_per_chunk {4369};                     // abou
 inline constexpr std::size_t chunk_bytes {static_cast<std::size_t>(segments_per_chunk) * segment_bytes};
 inline constexpr std::uint64_t chunk_numbers {static_cast<std::uint64_t>(chunk_bytes) * 30u};   // multiple of 30
 
+// Reports a failed CUDA call. Without host exceptions there is nowhere to return the
+// error to, so the message goes to stderr and the process aborts.
 inline void cuda_check(cudaError_t e, const char* what)
 {
     if (e != cudaSuccess)
     {
+#ifndef BOOST_MATH_PRIME_SIEVE_NO_EXCEPTIONS
         throw std::runtime_error(std::string("boost::math::prime_sieve CUDA error in ") + what + ": " + cudaGetErrorString(e));
+#else
+        std::fprintf(stderr, "boost::math::prime_sieve CUDA error in %s: %s\n", what, cudaGetErrorString(e));
+        std::abort();
+#endif
     }
 }
 

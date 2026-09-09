@@ -3,7 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-//  Execution policy plumbing: std::execution policies plus a CUDA tag.
+//  Execution policy plumbing: std::execution policies plus a CUDA tag, and the feature
+//  detection the rest of the sieve depends on (threads, std::execution, exceptions).
 
 #ifndef BOOST_MATH_SF_DETAIL_PRIME_SIEVE_EXECUTION_HPP
 #define BOOST_MATH_SF_DETAIL_PRIME_SIEVE_EXECUTION_HPP
@@ -13,6 +14,13 @@
 // Threads are available unless the library configuration disabled them
 #if defined(BOOST_MATH_HAS_THREADS) && !defined(BOOST_MATH_DISABLE_THREADS)
 #  define BOOST_MATH_PRIME_SIEVE_HAS_THREADS
+#endif
+
+// Whether the host compiler accepts try / catch. BOOST_MATH_NO_EXCEPTIONS is not the right
+// question here: it is forced on for CUDA and SYCL because device code cannot throw, while
+// the host code in these headers still can.
+#if defined(BOOST_NO_EXCEPTIONS) || (defined(__GNUC__) && !defined(__EXCEPTIONS)) || (defined(_MSC_VER) && !defined(_CPPUNWIND))
+#  define BOOST_MATH_PRIME_SIEVE_NO_EXCEPTIONS
 #endif
 
 // std::execution policies. Only the policy types are used, never the parallel algorithms,

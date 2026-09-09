@@ -2315,6 +2315,7 @@ alias no_eh_tests :
    sf_next_incl_test
    sf_powm1_incl_test
    sf_prime_incl_test
+   sf_prime_sieve_incl_test
    sf_relative_distance_incl_test
    sf_round_incl_test
    sf_sign_incl_test
