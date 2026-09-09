@@ -72,6 +72,11 @@ inline Integer clamp_non_negative(const Integer& x)
         return x < Integer(0) ? Integer(0) : x;
     }
 }
+template <class Integer, class Bound>
+inline Integer to_common(const Bound& x)
+{
+    return Integer(clamp_non_negative(x));
+}
 
 } // namespace boost::math::detail::prime_sieve
 

@@ -341,15 +341,29 @@ void parallel_range(std::uint64_t start, std::uint64_t stop, const prime_sieve_o
         return;
     }
 
-    for (std::uint64_t i {0}; i < plan.iters; ++i)
+    try
     {
-        std::vector<std::uint64_t>* buffer {queue.wait_ready(i)};
-        if (buffer == nullptr)
+        for (std::uint64_t i {0}; i < plan.iters; ++i)
         {
-            break;
+            std::vector<std::uint64_t>* buffer {queue.wait_ready(i)};
+            if (buffer == nullptr)
+            {
+                break;
+            }
+            consume(buffer->data(), buffer->size());
+            queue.release(i);
         }
-        consume(buffer->data(), buffer->size());
-        queue.release(i);
+    }
+    catch (...)
+    {
+        // The consumer threw: release the workers blocked on the full queue before waiting
+        // on the futures, whose destructors would otherwise block forever.
+        queue.fail(std::current_exception());
+        for (auto& f : futures)
+        {
+            f.wait();
+        }
+        throw;
     }
     for (auto& f : futures)
     {

@@ -334,6 +334,7 @@ These functions require C++17.
 storing them. Output is always in ascending order. The overloads taking a `std::vector` append to it
 and are the fastest way to store the primes; the output iterator overloads return the advanced iterator.
 A `lower_bound` below 2 is treated as 2, negative bounds as 0, and an empty range produces nothing.
+A negative bound is clamped in its own type, so mixing a signed and an unsigned bound is safe.
 
 `Integer` may be any builtin integer type or a Boost.Multiprecision integer such as `cpp_int` or `mpz_int`.
 Bounds that fit in 64 bits are sieved with a segmented sieve of Eratosthenes in the style of
