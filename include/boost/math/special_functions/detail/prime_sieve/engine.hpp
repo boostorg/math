@@ -21,7 +21,6 @@
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
 #include <cstddef>
-#include <cstring>
 #include <vector>
 #include <algorithm>
 #endif
@@ -97,10 +96,7 @@ public:
             }
 
             const std::size_t n_words {(bytes + 7) / 8};
-            if (bytes < n_words * 8)
-            {
-                std::memset(sieve + bytes, 0, n_words * 8 - bytes);
-            }
+            std::fill(sieve + bytes, sieve + n_words * 8, std::uint8_t {0});
             sink.segment(words_.data(), n_words, segment_low);
 
             if (last)
