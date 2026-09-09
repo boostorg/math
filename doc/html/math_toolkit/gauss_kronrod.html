@@ -84,6 +84,59 @@
 </pre>
 <h4>
 <a name="math_toolkit.gauss_kronrod.h1"></a>
+      <span class="phrase"><a name="math_toolkit.gauss_kronrod.vector_and_matrix_valued_integra"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.vector_and_matrix_valued_integra">Vector-
+      and matrix-valued integrands</a>
+    </h4>
+<p>
+      An additional overload accepts an explicit additive identity and a scalar norm:
+    </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Norm</span><span class="special">&gt;</span>
+<span class="keyword">static</span> <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span>
+                      <span class="keyword">const</span> <span class="keyword">decltype</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">a</span><span class="special">))&amp;</span> <span class="identifier">zero</span><span class="special">,</span> <span class="identifier">Norm</span> <span class="identifier">norm</span><span class="special">,</span>
+                      <span class="keyword">unsigned</span> <span class="identifier">max_depth</span> <span class="special">=</span> <span class="number">15</span><span class="special">,</span>
+                      <span class="identifier">Real</span> <span class="identifier">tol</span> <span class="special">=</span> <span class="identifier">tools</span><span class="special">::</span><span class="identifier">root_epsilon</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;(),</span>
+                      <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)</span>
+    <span class="special">-&gt;</span> <span class="keyword">decltype</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">a</span><span class="special">));</span>
+</pre>
+<p>
+      This overload participates only when <code class="computeroutput"><span class="identifier">norm</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">a</span><span class="special">))</span></code> can be
+      explicitly converted to <code class="computeroutput"><span class="identifier">Real</span></code>.
+      Existing overloads and their behavior are unchanged.
+    </p>
+<p>
+      As with the <a class="link" href="gauss.html" title="Gauss-Legendre quadrature">Gauss overloads</a>, <code class="computeroutput"><span class="identifier">f</span></code> must return a concrete value type supporting
+      addition, addition assignment, unary negation, and scalar multiplication on
+      either side. The supplied zero and all integrand values must have compatible
+      dimensions. The norm must be nonnegative and convertible to <code class="computeroutput"><span class="identifier">Real</span></code>.
+      For example, with Eigen:
+    </p>
+<pre class="programlisting"><span class="identifier">Eigen</span><span class="special">::</span><span class="identifier">MatrixXcd</span> <span class="identifier">zero</span> <span class="special">=</span> <span class="identifier">Eigen</span><span class="special">::</span><span class="identifier">MatrixXcd</span><span class="special">::</span><span class="identifier">Zero</span><span class="special">(</span><span class="identifier">rows</span><span class="special">,</span> <span class="identifier">cols</span><span class="special">);</span>
+<span class="keyword">auto</span> <span class="identifier">norm</span> <span class="special">=</span> <span class="special">[](</span><span class="keyword">const</span> <span class="identifier">Eigen</span><span class="special">::</span><span class="identifier">MatrixXcd</span><span class="special">&amp;</span> <span class="identifier">m</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">norm</span><span class="special">();</span> <span class="special">};</span>
+<span class="identifier">Eigen</span><span class="special">::</span><span class="identifier">MatrixXcd</span> <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quadrature</span><span class="special">::</span><span class="identifier">gauss_kronrod</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">15</span><span class="special">&gt;::</span><span class="identifier">integrate</span><span class="special">(</span>
+    <span class="identifier">f</span><span class="special">,</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">zero</span><span class="special">,</span> <span class="identifier">norm</span><span class="special">,</span> <span class="number">15</span><span class="special">,</span> <span class="number">1e-10</span><span class="special">);</span>
+</pre>
+<p>
+      The supplied norm is used for the Gauss-Kronrod difference, the roundoff floor,
+      the relative convergence test, and the L1 integral. Tolerance therefore applies
+      to that norm, not separately to each matrix entry. <code class="computeroutput"><span class="identifier">error</span></code>
+      is an estimate, not a rigorous bound, and reaching <code class="computeroutput"><span class="identifier">max_depth</span></code>
+      does not guarantee the requested tolerance. In this overload, local error estimates
+      are scaled by interval width, and by the additional factor in the half-infinite
+      substitutions, to match the units of the returned integral. Reversing finite
+      bounds negates the integral but leaves error and L1 nonnegative.
+    </p>
+<p>
+      Equal bounds return the supplied zero and set requested error and L1 outputs
+      to zero without evaluating <code class="computeroutput"><span class="identifier">f</span></code>.
+      Invalid bounds invoke the scalar domain-error policy; if it returns instead
+      of throwing, the result is <code class="computeroutput"><span class="identifier">zero</span></code>
+      multiplied by the policy's scalar error value, and requested error and L1 outputs
+      receive that value. For floating-point Eigen matrices the standard ignore-error
+      policy thus produces a matrix of NaNs with the supplied dimensions. No Eigen
+      dependency is added to Boost.Math headers.
+    </p>
+<h4>
+<a name="math_toolkit.gauss_kronrod.h2"></a>
       <span class="phrase"><a name="math_toolkit.gauss_kronrod.description"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.description">Description</a>
     </h4>
 <pre class="programlisting"><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">RandomAccessContainer</span><span class="special">&amp;</span> <span class="identifier">abscissa</span><span class="special">();</span>
@@ -130,7 +183,7 @@
       the result is likely to be ill-conditioned.
     </p>
 <h4>
-<a name="math_toolkit.gauss_kronrod.h2"></a>
+<a name="math_toolkit.gauss_kronrod.h3"></a>
       <span class="phrase"><a name="math_toolkit.gauss_kronrod.choosing_the_number_of_points"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.choosing_the_number_of_points">Choosing
       the number of points</a>
     </h4>
@@ -169,7 +222,7 @@
         </li>
 </ul></div>
 <h4>
-<a name="math_toolkit.gauss_kronrod.h3"></a>
+<a name="math_toolkit.gauss_kronrod.h4"></a>
       <span class="phrase"><a name="math_toolkit.gauss_kronrod.complex_quadrature"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.complex_quadrature">Complex
       Quadrature</a>
     </h4>
@@ -179,7 +232,7 @@
       and the complex type is deduced via the return type of the function.
     </p>
 <h4>
-<a name="math_toolkit.gauss_kronrod.h4"></a>
+<a name="math_toolkit.gauss_kronrod.h5"></a>
       <span class="phrase"><a name="math_toolkit.gauss_kronrod.examples"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.examples">Examples</a>
     </h4>
 <p>
@@ -230,7 +283,7 @@
       We still achieve 1e-15 precision, with an error estimate of 1e-10.
     </p>
 <h4>
-<a name="math_toolkit.gauss_kronrod.h5"></a>
+<a name="math_toolkit.gauss_kronrod.h6"></a>
       <span class="phrase"><a name="math_toolkit.gauss_kronrod.caveats"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.caveats">Caveats</a>
     </h4>
 <p>
@@ -251,7 +304,7 @@
       integration schemes</a> which are generally much more robust.
     </p>
 <h4>
-<a name="math_toolkit.gauss_kronrod.h6"></a>
+<a name="math_toolkit.gauss_kronrod.h7"></a>
       <span class="phrase"><a name="math_toolkit.gauss_kronrod.references"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.references">References</a>
     </h4>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
