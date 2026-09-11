@@ -7,6 +7,8 @@
 
 #include "math_unit_test.hpp"
 #include <numeric>
+#include <cfloat>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 #include <array>
@@ -554,9 +556,93 @@ void test_cardinal_derivative_scaling()
     }
 }
 
+// A std::vector whose operator[] is bounds-checked, so that reading one element past the
+// end of the data throws std::out_of_range instead of being undefined behaviour.
+template<class T>
+struct checked_vector : std::vector<T>
+{
+    using std::vector<T>::vector;
+    T & operator[](std::size_t i) { return this->at(i); }
+    T const & operator[](std::size_t i) const { return this->at(i); }
+};
+
+// Evaluates both cardinal layouts a few ulps below the right endpoint of the domain.
+// Rounding in (x - x0)/dx can place floor() on the final node even though x < xf, which
+// used to read y[n], y'[n] and y''[n] one past the end of the data.
+template<typename Real>
+void check_cardinal_endpoint(Real x0, Real dx, std::size_t n, int & rounding_cases)
+{
+    checked_vector<Real> y(n), dydx(n, Real(1)), d2ydx2(n, Real(0));
+    checked_vector<std::array<Real, 3>> data(n);
+    for (std::size_t i = 0; i < n; ++i)
+    {
+        y[i] = x0 + Real(i)*dx;
+        data[i] = {y[i], Real(1), Real(0)};
+    }
+    auto qh = cardinal_quintic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), x0, dx);
+    auto qh_aos = cardinal_quintic_hermite_aos(std::move(data), x0, dx);
+
+    Real eps = std::numeric_limits<Real>::epsilon();
+    Real x = qh.domain().second;
+    for (int k = 0; k < 8; ++k)
+    {
+        x = boost::math::nextafter(x, std::numeric_limits<Real>::lowest());
+        // Same arithmetic as the interpolator; counts the x that land on the final node.
+        using std::floor;
+        if (floor((x - x0)*(Real(1)/dx)) >= Real(n - 1))
+        {
+            ++rounding_cases;
+        }
+        bool in_bounds = true;
+        try
+        {
+            CHECK_MOLLIFIED_CLOSE(x, qh(x), 64*eps);
+            CHECK_MOLLIFIED_CLOSE(Real(1), qh.prime(x), 1024*eps);
+            CHECK_MOLLIFIED_CLOSE(Real(0), qh.double_prime(x), 4096*eps*(1 + 1/dx));
+            CHECK_MOLLIFIED_CLOSE(x, qh_aos(x), 64*eps);
+            CHECK_MOLLIFIED_CLOSE(Real(1), qh_aos.prime(x), 1024*eps);
+            CHECK_MOLLIFIED_CLOSE(Real(0), qh_aos.double_prime(x), 4096*eps*(1 + 1/dx));
+        }
+        catch (std::out_of_range const &)
+        {
+            in_bounds = false;
+        }
+        CHECK_TRUE(in_bounds);
+    }
+}
+
+// Grid found by fuzzing: in IEEE double arithmetic, x = nextafter(xf, -inf) satisfies x < xf
+// but floor((x - x0)/dx) == n - 1.
+void test_cardinal_endpoint_rounding_case()
+{
+    int rounding_cases = 0;
+    check_cardinal_endpoint<double>(-2.6660221376669786, 2.6599332164560212, 26, rounding_cases);
+#if FLT_EVAL_METHOD == 0
+    CHECK_TRUE(rounding_cases > 0);
+#endif
+}
+
+template<typename Real>
+void test_cardinal_endpoint_rounding()
+{
+    boost::random::mt19937 rng(1);
+    boost::random::uniform_real_distribution<Real> ux0(Real(-5), Real(5));
+    boost::random::uniform_real_distribution<Real> udx(Real(1)/Real(8), Real(3));
+    boost::random::uniform_real_distribution<Real> u01(Real(0), Real(1));
+    int rounding_cases = 0;
+    for (int trial = 0; trial < 2000; ++trial)
+    {
+        Real x0 = ux0(rng);
+        Real dx = udx(rng);
+        auto n = static_cast<std::size_t>(2 + 198*u01(rng));
+        check_cardinal_endpoint(x0, dx, n, rounding_cases);
+    }
+}
+
 int main()
 {
     test_cardinal_derivative_scaling();
+    test_cardinal_endpoint_rounding_case();
     #ifdef __STDCPP_FLOAT32_T__
     test_constant<std::float32_t>();
     test_linear<std::float32_t>();
@@ -570,6 +656,7 @@ int main()
     test_cardinal_quadratic<std::float32_t>();
     test_cardinal_cubic<std::float32_t>();
     test_cardinal_quartic<std::float32_t>();
+    test_cardinal_endpoint_rounding<std::float32_t>();
     #else
     test_constant<float>();
     test_linear<float>();
@@ -583,6 +670,7 @@ int main()
     test_cardinal_quadratic<float>();
     test_cardinal_cubic<float>();
     test_cardinal_quartic<float>();
+    test_cardinal_endpoint_rounding<float>();
     #endif
 
     #ifdef __STDCPP_FLOAT64_T__
@@ -598,6 +686,7 @@ int main()
     test_cardinal_quadratic<std::float64_t>();
     test_cardinal_cubic<std::float64_t>();
     test_cardinal_quartic<std::float64_t>();
+    test_cardinal_endpoint_rounding<std::float64_t>();
     #else
     test_constant<double>();
     test_linear<double>();
@@ -611,6 +700,7 @@ int main()
     test_cardinal_quadratic<double>();
     test_cardinal_cubic<double>();
     test_cardinal_quartic<double>();
+    test_cardinal_endpoint_rounding<double>();
     #endif
 
     test_constant<long double>();
@@ -625,6 +715,7 @@ int main()
     test_cardinal_quadratic<long double>();
     test_cardinal_cubic<long double>();
     test_cardinal_quartic<long double>();
+    test_cardinal_endpoint_rounding<long double>();
 
     #ifdef BOOST_HAS_FLOAT128
     test_constant<float128>();

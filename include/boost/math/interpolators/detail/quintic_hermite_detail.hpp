@@ -279,6 +279,14 @@ public:
         {
             return y_[i];
         }
+        // Rounding in (x-x0_)*inv_dx_ can place floor(s) on the final node even though
+        // x < xf, in which case index i+1 is one past the end. Evaluate on the final
+        // interval instead; t is then within a few ulps of 1.
+        if (i + 1 >= y_.size())
+        {
+            i = y_.size() - 2;
+            t = s - static_cast<Real>(i);
+        }
         Real y0 = y_[i];
         Real y1 = y_[i+1];
         Real dy0 = dy_[i];
@@ -326,6 +334,14 @@ public:
         {
             return dy_[i]*inv_dx_;
         }
+        // Rounding in (x-x0_)*inv_dx_ can place floor(s) on the final node even though
+        // x < xf, in which case index i+1 is one past the end. Evaluate on the final
+        // interval instead; t is then within a few ulps of 1.
+        if (i + 1 >= y_.size())
+        {
+            i = y_.size() - 2;
+            t = s - static_cast<Real>(i);
+        }
         Real y0 = y_[i];
         Real y1 = y_[i+1];
         Real dy0 = dy_[i];
@@ -368,6 +384,14 @@ public:
         if (t==0)
         {
             return d2y_[i]*2*inv_dx_*inv_dx_;
+        }
+        // Rounding in (x-x0_)*inv_dx_ can place floor(s) on the final node even though
+        // x < xf, in which case index i+1 is one past the end. Evaluate on the final
+        // interval instead; t is then within a few ulps of 1.
+        if (i + 1 >= y_.size())
+        {
+            i = y_.size() - 2;
+            t = s - static_cast<Real>(i);
         }
 
         Real y0 = y_[i];
@@ -462,6 +486,14 @@ public:
         {
             return data_[i][0];
         }
+        // Rounding in (x-x0_)*inv_dx_ can place floor(s) on the final node even though
+        // x < xf, in which case index i+1 is one past the end. Evaluate on the final
+        // interval instead; t is then within a few ulps of 1.
+        if (i + 1 >= data_.size())
+        {
+            i = data_.size() - 2;
+            t = s - static_cast<Real>(i);
+        }
 
         Real y0 = data_[i][0];
         Real dy0 = data_[i][1];
@@ -507,6 +539,14 @@ public:
         {
             return data_[i][1]*inv_dx_;
         }
+        // Rounding in (x-x0_)*inv_dx_ can place floor(s) on the final node even though
+        // x < xf, in which case index i+1 is one past the end. Evaluate on the final
+        // interval instead; t is then within a few ulps of 1.
+        if (i + 1 >= data_.size())
+        {
+            i = data_.size() - 2;
+            t = s - static_cast<Real>(i);
+        }
 
 
         Real y0 = data_[i][0];
@@ -550,6 +590,14 @@ public:
         Real t = s - ii;
         if (t == 0) {
             return data_[i][2]*2*inv_dx_*inv_dx_;
+        }
+        // Rounding in (x-x0_)*inv_dx_ can place floor(s) on the final node even though
+        // x < xf, in which case index i+1 is one past the end. Evaluate on the final
+        // interval instead; t is then within a few ulps of 1.
+        if (i + 1 >= data_.size())
+        {
+            i = data_.size() - 2;
+            t = s - static_cast<Real>(i);
         }
         Real y0 = data_[i][0];
         Real dy0 = data_[i][1];
