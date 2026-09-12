@@ -1,0 +1,45 @@
+[section:polynomial_roots Complex Roots of a Polynomial]
+
+``
+#include <boost/math/tools/polynomial_roots.hpp>
+``
+
+   template <class Real>
+   std::vector<std::complex<Real> >
+   polynomial_roots(std::vector<Real> coefficients,
+                    unsigned precision = std::numeric_limits<Real>::digits);
+
+`polynomial_roots` computes all finite complex roots of a polynomial with real,
+floating-point coefficients. Coefficients are supplied in ascending order, so
+`{a0, a1, ..., an}` represents
+[@https://en.wikipedia.org/wiki/Polynomial a0 + a1 z + ... + an z^n].
+The returned order is unspecified.
+
+The implementation follows the piecewise approximation strategy of Imbach and
+Moroz: a Newton-polygon sweep divides the complex plane into radial rings, the
+rings are divided into angular sectors, and low-degree Taylor polynomials are
+factored locally. Candidate roots are polished and checked against the input
+polynomial. A global Aberth iteration is used as a safety net for unresolved or
+ill-conditioned clusters.
+
+Exact leading zero coefficients are ignored. Exact trailing zero coefficients
+produce the corresponding number of roots at zero. The zero polynomial, a zero
+precision request, and non-finite coefficients cause `std::domain_error` to be
+thrown.
+
+The optional `precision` argument is measured in bits and controls the local
+approximation order. Its default is appropriate for the coefficient type.
+
+[heading Example]
+
+   std::vector<double> p{1, 0, 1}; // 1 + z^2
+   auto roots = boost::math::tools::polynomial_roots(p);
+
+The result contains approximations to `i` and `-i`.
+
+[heading References]
+
+J. Imbach and G. Moroz, "Fast evaluation and root finding for polynomials with
+floating-point coefficients", 2023.
+
+[endsect]
