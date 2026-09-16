@@ -336,6 +336,9 @@ void test_spots(RealType, const char* name = nullptr)
    for (RealType x : x_vals)
    {
       RealType P = cdf(dist_no_centrality, x);
+      RealType Q = cdf(complement(dist_no_centrality, x));
+      // Regression test for #1463: CDF and CCDF must remain complementary for nc=0.
+      BOOST_CHECK_CLOSE(P + Q, RealType(1), tolerance);
       BOOST_CHECK_LE(dist.find_non_centrality(x, a, b, P), tolerance);
    }
    // Case when P=1 or P=0 
