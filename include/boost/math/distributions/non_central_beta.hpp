@@ -257,7 +257,17 @@ namespace boost
             value_type c = a + b + l / 2;
             value_type cross = 1 - (b / c) * (1 + l / (2 * c * c));
             if(l == 0)
-               result = cdf(boost::math::beta_distribution<RealType, Policy>(a, b), x);
+            {
+               if(x < y)
+               {
+                  return invert
+                     ? cdf(complement(boost::math::beta_distribution<RealType, Policy>(a, b), x))
+                     : cdf(boost::math::beta_distribution<RealType, Policy>(a, b), x);
+               }
+               return invert
+                  ? cdf(boost::math::beta_distribution<RealType, Policy>(b, a), y)
+                  : cdf(complement(boost::math::beta_distribution<RealType, Policy>(b, a), y));
+            }
             else if(x > cross)
             {
                // Complement is the smaller of the two:
