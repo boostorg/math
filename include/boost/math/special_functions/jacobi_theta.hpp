@@ -105,6 +105,8 @@
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/special_functions/expm1.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 
 namespace boost{ namespace math{
 
@@ -171,11 +173,158 @@ BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau, const Policy& pol);
 
 // Compare the non-oscillating component of the delta to the previous delta.
-// Both are assumed to be non-negative.
+// Both are assumed to be non-negative. Written so that a NaN delta counts as
+// converged: otherwise a NaN would never satisfy the test and the summation
+// loops below would never terminate.
 template <class RealType>
 inline bool
 _jacobi_theta_converged(RealType last_delta, RealType delta, RealType eps) {
-    return delta == 0.0 || delta < eps*last_delta;
+    return !(delta > eps*last_delta);
+}
+
+template <class RealType, class Policy>
+inline bool
+_jacobi_theta_check_z(RealType z, const Policy& pol, const char* function, RealType* result) {
+    if (!(boost::math::isfinite)(z)) {
+        *result = policies::raise_domain_error<RealType>(function, "z must be finite but got %1%.", z, pol);
+        return false;
+    }
+    return true;
+}
+
+template <class RealType, class Policy>
+inline bool
+_jacobi_theta_check_tau(RealType tau, const Policy& pol, const char* function, RealType* result) {
+    // The negated comparison also rejects NaN.
+    if (!(tau > 0)) {
+        *result = policies::raise_domain_error<RealType>(function, "tau must be greater than 0 but got %1%.", tau, pol);
+        return false;
+    }
+    return true;
+}
+
+template <class RealType, class Policy>
+inline bool
+_jacobi_theta_check_q(RealType q, const Policy& pol, const char* function, RealType* result) {
+    // The negated comparison also rejects NaN.
+    if (!(q > 0 && q < 1)) {
+        *result = policies::raise_domain_error<RealType>(function, "q must be greater than 0 and less than 1 but got %1%.", q, pol);
+        return false;
+    }
+    return true;
+}
+
+// Powers of the nome for the direct Fourier series below. When the caller
+// supplies q directly we raise q to the power with pow(), which is accurate to
+// about an ulp for any exponent. Going through tau = -log(q)/pi and back via
+// exp() would multiply the rounding error by |log q|, which is exactly the
+// small-q regime the "m1" functions exist to serve.
+template <class RealType>
+struct _jacobi_theta_q_power {
+    RealType q;
+    RealType operator()(RealType exponent) const {
+        BOOST_MATH_STD_USING
+        return pow(q, exponent);
+    }
+};
+
+template <class RealType>
+struct _jacobi_theta_tau_power {
+    RealType tau;
+    RealType operator()(RealType exponent) const {
+        BOOST_MATH_STD_USING
+        return exp(-tau * constants::pi<RealType>() * exponent);
+    }
+};
+
+// Direct Fourier series (DLMF 20.2.1 - 20.2.4). These converge quickly when
+// q < exp(-Pi), i.e. tau > 1, and are used in that regime by both the q and
+// the tau parameterizations. NomePower(e) must return q^e.
+
+// = 2 * SUM (-1)^n * q^(n+1/2)^2 * sin((2n+1)z)
+template <class RealType, class NomePower, class Policy>
+inline RealType
+_jacobi_theta1_series(RealType z, const NomePower& q_pow, const Policy&) {
+    BOOST_MATH_STD_USING
+    unsigned n = 0;
+    RealType eps = policies::get_epsilon<RealType, Policy>();
+    RealType q_n = 0, last_q_n, delta, result = 0;
+
+    do {
+        last_q_n = q_n;
+        q_n = q_pow(RealType(n + 0.5)*RealType(n + 0.5));
+        delta = q_n * sin(RealType(2*n+1)*z);
+        if (n%2)
+            delta = -delta;
+
+        result += delta + delta;
+        n++;
+    } while (!_jacobi_theta_converged(last_q_n, q_n, eps));
+
+    return result;
+}
+
+// = 2 * SUM q^(n+1/2)^2 * cos((2n+1)z)
+template <class RealType, class NomePower, class Policy>
+inline RealType
+_jacobi_theta2_series(RealType z, const NomePower& q_pow, const Policy&) {
+    BOOST_MATH_STD_USING
+    unsigned n = 0;
+    RealType eps = policies::get_epsilon<RealType, Policy>();
+    RealType q_n = 0, last_q_n, delta, result = 0;
+
+    do {
+        last_q_n = q_n;
+        q_n = q_pow(RealType(n + 0.5)*RealType(n + 0.5));
+        delta = q_n * cos(RealType(2*n+1)*z);
+        result += delta + delta;
+        n++;
+    } while (!_jacobi_theta_converged(last_q_n, q_n, eps));
+
+    return result;
+}
+
+// = 2 * SUM q^n^2 * cos(2nz), n >= 1 (i.e. theta3 minus one)
+template <class RealType, class NomePower, class Policy>
+inline RealType
+_jacobi_theta3m1_series(RealType z, const NomePower& q_pow, const Policy&) {
+    BOOST_MATH_STD_USING
+    unsigned n = 1;
+    RealType eps = policies::get_epsilon<RealType, Policy>();
+    RealType q_n = 0, last_q_n, delta, result = 0;
+
+    do {
+        last_q_n = q_n;
+        q_n = q_pow(RealType(n)*RealType(n));
+        delta = q_n * cos(RealType(2*n)*z);
+        result += delta + delta;
+        n++;
+    } while (!_jacobi_theta_converged(last_q_n, q_n, eps));
+
+    return result;
+}
+
+// = 2 * SUM (-1)^n q^n^2 * cos(2nz), n >= 1 (i.e. theta4 minus one)
+template <class RealType, class NomePower, class Policy>
+inline RealType
+_jacobi_theta4m1_series(RealType z, const NomePower& q_pow, const Policy&) {
+    BOOST_MATH_STD_USING
+    unsigned n = 1;
+    RealType eps = policies::get_epsilon<RealType, Policy>();
+    RealType q_n = 0, last_q_n, delta, result = 0;
+
+    do {
+        last_q_n = q_n;
+        q_n = q_pow(RealType(n)*RealType(n));
+        delta = q_n * cos(RealType(2*n)*z);
+        if (n%2)
+            delta = -delta;
+
+        result += delta + delta;
+        n++;
+    } while (!_jacobi_theta_converged(last_q_n, q_n, eps));
+
+    return result;
 }
 
 template <class RealType>
@@ -199,29 +348,43 @@ _jacobi_theta_sum(RealType tau, RealType z_n, RealType z_increment, RealType eps
 // internal use only. They are designed to increase accuracy and reduce the
 // number of iterations required for convergence for large |q|. The z argument
 // is scaled by tau, and the summations are rewritten to be double-sided
-// following DLMF 20.13.4 and 20.13.5. The return values are scaled by
-// exp(-tau*z^2/Pi)/sqrt(tau).
+// following DLMF 20.13.4 and 20.13.5. Each term is a Gaussian
+// exp(-tau*(z - c)^2/Pi) centered at a multiple of Pi or Pi/2, and the
+// results are scaled by sqrt(tau).
 //
 // These functions are triggered when tau < 1, i.e. |q| > exp(-Pi) = 0.043
 //
 // Note that jacobi_theta4 uses the imaginary version of jacobi_theta2 (and
 // vice-versa). jacobi_theta1 and jacobi_theta3 use the imaginary versions of
 // themselves, following DLMF 20.7.30 - 20.7.33.
+
+// theta1(z|i/tau) = sqrt(tau) * SUM_{n>=0} (-1)^n [G(z - c_n) - G(z + c_n)]
+// with c_n = Pi*(n+1/2) and G(x) = exp(-tau*x^2/Pi).
+//
+// Each bracket is a difference of two Gaussians which nearly cancel when z is
+// small, so it is evaluated instead through the exact identity
+//   G(z - c) - G(z + c) = -G(z - c) * expm1(-2*tau*z*(2n+1)),
+// which keeps full relative precision all the way down to z -> 0.
+// Requires 0 <= z <= Pi/2; the caller reduces z into this range.
 template <class RealType, class Policy>
 inline RealType
-_IMAGINARY_jacobi_theta1tau(RealType z, RealType tau, const Policy&) {
+_IMAGINARY_jacobi_theta1tau(RealType z, RealType tau, const Policy& pol) {
     BOOST_MATH_STD_USING
     RealType eps = policies::get_epsilon<RealType, Policy>();
-    RealType result = RealType(0);
+    RealType result = 0, g = 0, last_g, c, pair;
+    unsigned n = 0;
 
-    // n>=0 even
-    result -= _jacobi_theta_sum(tau, RealType(z + constants::half_pi<RealType>()), constants::two_pi<RealType>(), eps);
-    // n>0 odd
-    result += _jacobi_theta_sum(tau, RealType(z + constants::half_pi<RealType>() + constants::pi<RealType>()), constants::two_pi<RealType>(), eps);
-    // n<0 odd
-    result += _jacobi_theta_sum(tau, RealType(z - constants::half_pi<RealType>()), RealType (-constants::two_pi<RealType>()), eps);
-    // n<0 even
-    result -= _jacobi_theta_sum(tau, RealType(z - constants::half_pi<RealType>() - constants::pi<RealType>()), RealType (-constants::two_pi<RealType>()), eps);
+    do {
+        last_g = g;
+        c = constants::pi<RealType>() * RealType(n + 0.5);
+        g = exp(-tau * (z - c) * (z - c) / constants::pi<RealType>());
+        pair = -g * boost::math::expm1(RealType(-2 * tau * z * RealType(2*n + 1)), pol);
+        if (n%2)
+            pair = -pair;
+
+        result += pair;
+        n++;
+    } while (!_jacobi_theta_converged(last_g, g, eps));
 
     return result * sqrt(tau);
 }
@@ -287,17 +450,18 @@ inline RealType
 jacobi_theta1tau_imp(RealType z, RealType tau, const Policy& pol, const char *function)
 {
     BOOST_MATH_STD_USING
-    unsigned n = 0;
-    RealType eps = policies::get_epsilon<RealType, Policy>();
-    RealType q_n = 0, last_q_n, delta, result = 0;
+    RealType result = 0;
 
-    if (tau <= 0.0)
-        return policies::raise_domain_error<RealType>(function, "tau must be greater than 0 but got %1%.", tau, pol);
+    if (!_jacobi_theta_check_tau(tau, pol, function, &result))
+        return result;
+    if (!_jacobi_theta_check_z(z, pol, function, &result))
+        return result;
 
     if (abs(z) == 0.0)
         return result;
 
     if (tau < 1.0) {
+        // Reduce to -Pi <= z <= Pi (theta1 has period 2*Pi)...
         z = fmod(z, constants::two_pi<RealType>());
         while (z > constants::pi<RealType>()) {
             z -= constants::two_pi<RealType>();
@@ -305,22 +469,25 @@ jacobi_theta1tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
         while (z < -constants::pi<RealType>()) {
             z += constants::two_pi<RealType>();
         }
+        // ...then to -Pi/2 <= z <= Pi/2 using theta1(z + Pi) = -theta1(z)...
+        RealType sign = 1;
+        if (z > constants::half_pi<RealType>()) {
+            z -= constants::pi<RealType>();
+            sign = -sign;
+        } else if (z < -constants::half_pi<RealType>()) {
+            z += constants::pi<RealType>();
+            sign = -sign;
+        }
+        // ...and finally to 0 <= z <= Pi/2 since theta1 is odd.
+        if (z < 0) {
+            z = -z;
+            sign = -sign;
+        }
 
-        return _IMAGINARY_jacobi_theta1tau(z, RealType(1/tau), pol);
+        return sign * _IMAGINARY_jacobi_theta1tau(z, RealType(1/tau), pol);
     }
 
-    do {
-        last_q_n = q_n;
-        q_n = exp(-tau * constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5) );
-        delta = q_n * sin(RealType(2*n+1)*z);
-        if (n%2)
-            delta = -delta;
-
-        result += delta + delta;
-        n++;
-    } while (!_jacobi_theta_converged(last_q_n, q_n, eps));
-
-    return result;
+    return _jacobi_theta1_series(z, _jacobi_theta_tau_power<RealType>{tau}, pol);
 }
 
 // First Jacobi theta function (Parameterized by q)
@@ -329,9 +496,16 @@ template <class RealType, class Policy>
 inline RealType
 jacobi_theta1_imp(RealType z, RealType q, const Policy& pol, const char *function) {
     BOOST_MATH_STD_USING
-    if (q <= 0.0 || q >= 1.0) {
-        return policies::raise_domain_error<RealType>(function, "q must be greater than 0 and less than 1 but got %1%.", q, pol);
-    }
+    RealType result = 0;
+
+    if (!_jacobi_theta_check_q(q, pol, function, &result))
+        return result;
+    if (!_jacobi_theta_check_z(z, pol, function, &result))
+        return result;
+
+    if (q < exp(-constants::pi<RealType>()))
+        return _jacobi_theta1_series(z, _jacobi_theta_q_power<RealType>{q}, pol);
+
     return jacobi_theta1tau_imp(z, RealType (-log(q)/constants::pi<RealType>()), pol, function);
 }
 
@@ -342,14 +516,15 @@ inline RealType
 jacobi_theta2tau_imp(RealType z, RealType tau, const Policy& pol, const char *function)
 {
     BOOST_MATH_STD_USING
-    unsigned n = 0;
-    RealType eps = policies::get_epsilon<RealType, Policy>();
-    RealType q_n = 0, last_q_n, delta, result = 0;
+    RealType result = 0;
 
-    if (tau <= 0.0) {
-        return policies::raise_domain_error<RealType>(function, "tau must be greater than 0 but got %1%.", tau, pol);
-    } else if (tau < 1.0 && abs(z) == 0.0) {
-        return jacobi_theta4tau(z, 1/tau, pol) / sqrt(tau);
+    if (!_jacobi_theta_check_tau(tau, pol, function, &result))
+        return result;
+    if (!_jacobi_theta_check_z(z, pol, function, &result))
+        return result;
+
+    if (tau < 1.0 && abs(z) == 0.0) {
+        return jacobi_theta4tau(z, RealType(1/tau), pol) / sqrt(tau);
     } else if (tau < 1.0) { // DLMF 20.7.31
         z = fmod(z, constants::two_pi<RealType>());
         while (z > constants::pi<RealType>()) {
@@ -362,15 +537,7 @@ jacobi_theta2tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
         return _IMAGINARY_jacobi_theta4tau(z, RealType(1/tau), pol);
     }
 
-    do {
-        last_q_n = q_n;
-        q_n = exp(-tau * constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5));
-        delta = q_n * cos(RealType(2*n+1)*z);
-        result += delta + delta;
-        n++;
-    } while (!_jacobi_theta_converged(last_q_n, q_n, eps));
-
-    return result;
+    return _jacobi_theta2_series(z, _jacobi_theta_tau_power<RealType>{tau}, pol);
 }
 
 // Second Jacobi theta function, parameterized by q
@@ -379,38 +546,17 @@ template <class RealType, class Policy>
 inline RealType
 jacobi_theta2_imp(RealType z, RealType q, const Policy& pol, const char *function) {
     BOOST_MATH_STD_USING
-    if (q <= 0.0 || q >= 1.0) {
-        return policies::raise_domain_error<RealType>(function, "q must be greater than 0 and less than 1 but got %1%.", q, pol);
-    }
+    RealType result = 0;
+
+    if (!_jacobi_theta_check_q(q, pol, function, &result))
+        return result;
+    if (!_jacobi_theta_check_z(z, pol, function, &result))
+        return result;
+
+    if (q < exp(-constants::pi<RealType>()))
+        return _jacobi_theta2_series(z, _jacobi_theta_q_power<RealType>{q}, pol);
+
     return jacobi_theta2tau_imp(z, RealType (-log(q)/constants::pi<RealType>()), pol, function);
-}
-
-// Third Jacobi theta function, minus one (Parameterized by tau - assumed imaginary)
-// This function preserves accuracy for small values of q (i.e. |q| < exp(-Pi) = 0.043)
-// For larger values of q, the minus one version usually won't help.
-// = 2 * SUM exp(i*Pi*Tau*(n)^2) * cos(2nz)
-template <class RealType, class Policy>
-inline RealType
-jacobi_theta3m1tau_imp(RealType z, RealType tau, const Policy& pol)
-{
-    BOOST_MATH_STD_USING
-
-    RealType eps = policies::get_epsilon<RealType, Policy>();
-    RealType q_n = 0, last_q_n, delta, result = 0;
-    unsigned n = 1;
-
-    if (tau < 1.0)
-        return jacobi_theta3tau(z, tau, pol) - RealType(1);
-
-    do {
-        last_q_n = q_n;
-        q_n = exp(-tau * constants::pi<RealType>() * RealType(n)*RealType(n));
-        delta = q_n * cos(RealType(2*n)*z);
-        result += delta + delta;
-        n++;
-    } while (!_jacobi_theta_converged(last_q_n, q_n, eps));
-
-    return result;
 }
 
 // Third Jacobi theta function, parameterized by tau
@@ -420,9 +566,14 @@ inline RealType
 jacobi_theta3tau_imp(RealType z, RealType tau, const Policy& pol, const char *function)
 {
     BOOST_MATH_STD_USING
-    if (tau <= 0.0) {
-        return policies::raise_domain_error<RealType>(function, "tau must be greater than 0 but got %1%.", tau, pol);
-    } else if (tau < 1.0 && abs(z) == 0.0) {
+    RealType result = 0;
+
+    if (!_jacobi_theta_check_tau(tau, pol, function, &result))
+        return result;
+    if (!_jacobi_theta_check_z(z, pol, function, &result))
+        return result;
+
+    if (tau < 1.0 && abs(z) == 0.0) {
         return jacobi_theta3tau(z, RealType(1/tau), pol) / sqrt(tau);
     } else if (tau < 1.0) { // DLMF 20.7.32
         z = fmod(z, constants::pi<RealType>());
@@ -434,7 +585,29 @@ jacobi_theta3tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
         }
         return _IMAGINARY_jacobi_theta3tau(z, RealType(1/tau), pol);
     }
-    return RealType(1) + jacobi_theta3m1tau_imp(z, tau, pol);
+    return RealType(1) + _jacobi_theta3m1_series(z, _jacobi_theta_tau_power<RealType>{tau}, pol);
+}
+
+// Third Jacobi theta function, minus one (Parameterized by tau - assumed imaginary)
+// This function preserves accuracy for small values of q (i.e. |q| < exp(-Pi) = 0.043)
+// For larger values of q, the minus one version usually won't help.
+// = 2 * SUM exp(i*Pi*Tau*(n)^2) * cos(2nz)
+template <class RealType, class Policy>
+inline RealType
+jacobi_theta3m1tau_imp(RealType z, RealType tau, const Policy& pol, const char *function)
+{
+    BOOST_MATH_STD_USING
+    RealType result = 0;
+
+    if (!_jacobi_theta_check_tau(tau, pol, function, &result))
+        return result;
+    if (!_jacobi_theta_check_z(z, pol, function, &result))
+        return result;
+
+    if (tau < 1.0)
+        return jacobi_theta3tau_imp(z, tau, pol, function) - RealType(1);
+
+    return _jacobi_theta3m1_series(z, _jacobi_theta_tau_power<RealType>{tau}, pol);
 }
 
 // Third Jacobi theta function, minus one (parameterized by q)
@@ -443,10 +616,17 @@ template <class RealType, class Policy>
 inline RealType
 jacobi_theta3m1_imp(RealType z, RealType q, const Policy& pol, const char *function) {
     BOOST_MATH_STD_USING
-    if (q <= 0.0 || q >= 1.0) {
-        return policies::raise_domain_error<RealType>(function, "q must be greater than 0 and less than 1 but got %1%.", q, pol);
-    }
-    return jacobi_theta3m1tau_imp(z, RealType (-log(q)/constants::pi<RealType>()), pol);
+    RealType result = 0;
+
+    if (!_jacobi_theta_check_q(q, pol, function, &result))
+        return result;
+    if (!_jacobi_theta_check_z(z, pol, function, &result))
+        return result;
+
+    if (q < exp(-constants::pi<RealType>()))
+        return _jacobi_theta3m1_series(z, _jacobi_theta_q_power<RealType>{q}, pol);
+
+    return jacobi_theta3m1tau_imp(z, RealType (-log(q)/constants::pi<RealType>()), pol, function);
 }
 
 // Third Jacobi theta function (parameterized by q)
@@ -455,40 +635,17 @@ template <class RealType, class Policy>
 inline RealType
 jacobi_theta3_imp(RealType z, RealType q, const Policy& pol, const char *function) {
     BOOST_MATH_STD_USING
-    if (q <= 0.0 || q >= 1.0) {
-        return policies::raise_domain_error<RealType>(function, "q must be greater than 0 and less than 1 but got %1%.", q, pol);
-    }
+    RealType result = 0;
+
+    if (!_jacobi_theta_check_q(q, pol, function, &result))
+        return result;
+    if (!_jacobi_theta_check_z(z, pol, function, &result))
+        return result;
+
+    if (q < exp(-constants::pi<RealType>()))
+        return RealType(1) + _jacobi_theta3m1_series(z, _jacobi_theta_q_power<RealType>{q}, pol);
+
     return jacobi_theta3tau_imp(z, RealType (-log(q)/constants::pi<RealType>()), pol, function);
-}
-
-// Fourth Jacobi theta function, minus one (Parameterized by tau)
-// This function preserves accuracy for small values of q (i.e. tau > 1)
-// = 2 * SUM (-1)^n exp(i*Pi*Tau*(n)^2) * cos(2nz)
-template <class RealType, class Policy>
-inline RealType
-jacobi_theta4m1tau_imp(RealType z, RealType tau, const Policy& pol)
-{
-    BOOST_MATH_STD_USING
-
-    RealType eps = policies::get_epsilon<RealType, Policy>();
-    RealType q_n = 0, last_q_n, delta, result = 0;
-    unsigned n = 1;
-
-    if (tau < 1.0)
-        return jacobi_theta4tau(z, tau, pol) - RealType(1);
-
-    do {
-        last_q_n = q_n;
-        q_n = exp(-tau * constants::pi<RealType>() * RealType(n)*RealType(n));
-        delta = q_n * cos(RealType(2*n)*z);
-        if (n%2)
-            delta = -delta;
-
-        result += delta + delta;
-        n++;
-    } while (!_jacobi_theta_converged(last_q_n, q_n, eps));
-
-    return result;
 }
 
 // Fourth Jacobi theta function (Parameterized by tau)
@@ -498,10 +655,15 @@ inline RealType
 jacobi_theta4tau_imp(RealType z, RealType tau, const Policy& pol, const char *function)
 {
     BOOST_MATH_STD_USING
-    if (tau <= 0.0) {
-        return policies::raise_domain_error<RealType>(function, "tau must be greater than 0 but got %1%.", tau, pol);
-    } else if (tau < 1.0 && abs(z) == 0.0) {
-        return jacobi_theta2tau(z, 1/tau, pol) / sqrt(tau);
+    RealType result = 0;
+
+    if (!_jacobi_theta_check_tau(tau, pol, function, &result))
+        return result;
+    if (!_jacobi_theta_check_z(z, pol, function, &result))
+        return result;
+
+    if (tau < 1.0 && abs(z) == 0.0) {
+        return jacobi_theta2tau(z, RealType(1/tau), pol) / sqrt(tau);
     } else if (tau < 1.0) { // DLMF 20.7.33
         z = fmod(z, constants::pi<RealType>());
         while (z > constants::half_pi<RealType>()) {
@@ -513,31 +675,66 @@ jacobi_theta4tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
         return _IMAGINARY_jacobi_theta2tau(z, RealType(1/tau), pol);
     }
 
-    return RealType(1) + jacobi_theta4m1tau_imp(z, tau, pol);
+    return RealType(1) + _jacobi_theta4m1_series(z, _jacobi_theta_tau_power<RealType>{tau}, pol);
+}
+
+// Fourth Jacobi theta function, minus one (Parameterized by tau)
+// This function preserves accuracy for small values of q (i.e. tau > 1)
+// = 2 * SUM (-1)^n exp(i*Pi*Tau*(n)^2) * cos(2nz)
+template <class RealType, class Policy>
+inline RealType
+jacobi_theta4m1tau_imp(RealType z, RealType tau, const Policy& pol, const char *function)
+{
+    BOOST_MATH_STD_USING
+    RealType result = 0;
+
+    if (!_jacobi_theta_check_tau(tau, pol, function, &result))
+        return result;
+    if (!_jacobi_theta_check_z(z, pol, function, &result))
+        return result;
+
+    if (tau < 1.0)
+        return jacobi_theta4tau_imp(z, tau, pol, function) - RealType(1);
+
+    return _jacobi_theta4m1_series(z, _jacobi_theta_tau_power<RealType>{tau}, pol);
 }
 
 // Fourth Jacobi theta function, minus one (Parameterized by q)
 // This function preserves accuracy for small values of q
-// = 2 * SUM q^n^2 * cos(2nz)
+// = 2 * SUM (-1)^n q^n^2 * cos(2nz)
 template <class RealType, class Policy>
 inline RealType
 jacobi_theta4m1_imp(RealType z, RealType q, const Policy& pol, const char *function) {
     BOOST_MATH_STD_USING
-    if (q <= 0.0 || q >= 1.0) {
-        return policies::raise_domain_error<RealType>(function, "q must be greater than 0 and less than 1 but got %1%.", q, pol);
-    }
-    return jacobi_theta4m1tau_imp(z, RealType (-log(q)/constants::pi<RealType>()), pol);
+    RealType result = 0;
+
+    if (!_jacobi_theta_check_q(q, pol, function, &result))
+        return result;
+    if (!_jacobi_theta_check_z(z, pol, function, &result))
+        return result;
+
+    if (q < exp(-constants::pi<RealType>()))
+        return _jacobi_theta4m1_series(z, _jacobi_theta_q_power<RealType>{q}, pol);
+
+    return jacobi_theta4m1tau_imp(z, RealType (-log(q)/constants::pi<RealType>()), pol, function);
 }
 
 // Fourth Jacobi theta function, parameterized by q
-// = 1 + 2 * SUM q^n^2 * cos(2nz)
+// = 1 + 2 * SUM (-1)^n q^n^2 * cos(2nz)
 template <class RealType, class Policy>
 inline RealType
 jacobi_theta4_imp(RealType z, RealType q, const Policy& pol, const char *function) {
     BOOST_MATH_STD_USING
-    if (q <= 0.0 || q >= 1.0) {
-        return policies::raise_domain_error<RealType>(function, "|q| must be greater than zero and less than 1, but got %1%.", q, pol);
-    }
+    RealType result = 0;
+
+    if (!_jacobi_theta_check_q(q, pol, function, &result))
+        return result;
+    if (!_jacobi_theta_check_z(z, pol, function, &result))
+        return result;
+
+    if (q < exp(-constants::pi<RealType>()))
+        return RealType(1) + _jacobi_theta4m1_series(z, _jacobi_theta_q_power<RealType>{q}, pol);
+
     return jacobi_theta4tau_imp(z, RealType(-log(q)/constants::pi<RealType>()), pol, function);
 }
 
@@ -641,7 +838,7 @@ inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau, c
    static const char* function = "boost::math::jacobi_theta3m1tau<%1%>(%1%)";
 
    return policies::checked_narrowing_cast<result_type, Policy>(
-           jacobi_theta3m1tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau), forwarding_policy()), function);
+           jacobi_theta3m1tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau), forwarding_policy(), function), function);
 }
 
 BOOST_MATH_EXPORT template <class T, class U>
@@ -726,7 +923,7 @@ inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau, c
 
    static const char* function = "boost::math::jacobi_theta4m1tau<%1%>(%1%)";
 
-   return policies::checked_narrowing_cast<result_type, Policy>(jacobi_theta4m1tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau), forwarding_policy()), function);
+   return policies::checked_narrowing_cast<result_type, Policy>(jacobi_theta4m1tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau), forwarding_policy(), function), function);
 }
 
 BOOST_MATH_EXPORT template <class T, class U>
