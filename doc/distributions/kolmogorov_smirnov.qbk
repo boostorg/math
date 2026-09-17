@@ -111,14 +111,17 @@ In the following table, /n/ is the number of observations, /x/ is the random var
 
 [table
 [[Function][Implementation Notes]]
-[[cdf][Using the relation: cdf = __jacobi_theta4tau(0, 2*x*x/[pi])]]
+[[cdf][
+When 2*x*x*n <= [pi]: __jacobi_theta4tau(0, 2*x*x*n/[pi])
+
+When 2*x*x*n > [pi]: 1 + __jacobi_theta4m1(0, q) with the nome q = exp(-2*x*x*n), whose exponent is formed with its rounding error compensated so that the theta function, which raises q to integer powers, does not amplify it]]
 [[pdf][Using a manual derivative of the CDF]]
 [[cdf complement][
 When x*x*n == 0: 1
 
 When 2*x*x*n <= [pi]: 1 - __jacobi_theta4tau(0, 2*x*x*n/[pi])
 
-When 2*x*x*n > [pi]: -__jacobi_theta4m1tau(0, 2*x*x*n/[pi])]]
+When 2*x*x*n > [pi]: -__jacobi_theta4m1(0, q), as for the cdf]]
 [[quantile][
 Using a Newton-Raphson iteration on the logarithm of the CDF, or of its
 complement, in a variable in which it is nearly linear:
