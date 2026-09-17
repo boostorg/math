@@ -167,8 +167,14 @@ BOOST_AUTO_TEST_CASE( test_main )
     }
 
     for (double q=0.0078125; q<1.0; q += 0.0078125) { // = 1/128
+        // The periodicity test shifts z by the rounded constant two_pi, which
+        // differs from the true period by about eps. For large q the theta
+        // functions are steep enough (their logarithmic derivative is of
+        // order 1/tau = -pi/ln q) that this shift changes them by more than
+        // the rounding of the evaluation itself, so allow for it.
+        double periodicity_tol = 100 * eps + 4 * constants::pi<double>() * constants::pi<double>() * eps / -log(q);
         for (double z=-8.0; z<=8.0; z += 0.125) {
-            test_periodicity(z, q, 100 * eps);
+            test_periodicity(z, q, periodicity_tol);
             test_argument_translation(z, q, 100 * eps);
             test_sums_of_squares(z, q, 100 * eps);
             // The addition formula is complicated, cut it some extra slack
@@ -188,7 +194,8 @@ BOOST_AUTO_TEST_CASE( test_main )
     test_special_values(eps);
 
     for (double s=0.125; s<3.0; s+=0.125) {
-        test_mellin_transforms(2.0 + s, eps, 3 * eps);
+        // The integrals sum thousands of theta values, so allow a few ulps
+        test_mellin_transforms(2.0 + s, eps, 6 * eps);
         test_laplace_transforms(s, eps, 4 * eps);
     }
 
