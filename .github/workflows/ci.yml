@@ -19,6 +19,83 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  intel:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [ intel ]
+        standard: [ c++20 ]
+        suite: [ github_ci_block_1, github_ci_block_2 ]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+
+      - name: Intel Apt repository
+        timeout-minutes: 1
+        run: |
+          wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2023.PUB
+          sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS-2023.PUB
+          rm GPG-PUB-KEY-INTEL-SW-PRODUCTS-2023.PUB
+          echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
+          sudo apt-get update
+
+      - name: Install Intel oneAPI compilers
+        timeout-minutes: 5
+        run: sudo apt-get install -y intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp
+
+      - name: Setup Intel oneAPI environment
+        run: |
+          source /opt/intel/oneapi/setvars.sh
+          printenv >> $GITHUB_ENV
+
+      - name: Add repository
+        continue-on-error: true
+        id: addrepo
+        run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+      - name: Retry Add Repo
+        continue-on-error: true
+        id: retry1
+        if: steps.addrepo.outcome=='failure'
+        run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+      - name: Retry Add Repo 2
+        continue-on-error: true
+        id: retry2
+        if: steps.retry1.outcome=='failure'
+        run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+      - name: Install packages
+        run: sudo apt-get install -y libgmp-dev libmpfr-dev libfftw3-dev
+      - name: Checkout main boost
+        run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
+      - name: Update tools/boostdep
+        run: git submodule update --init tools/boostdep
+        working-directory: ../boost-root
+      - name: Copy files
+        run: cp -r $GITHUB_WORKSPACE/* libs/math
+        working-directory: ../boost-root
+      - name: Install deps
+        run: python tools/boostdep/depinst/depinst.py math -I example -I tools
+        working-directory: ../boost-root
+      - name: Bootstrap
+        run: ./bootstrap.sh
+        working-directory: ../boost-root
+      - name: Generate headers
+        run: ./b2 headers
+        working-directory: ../boost-root
+      - name: Generate user config
+        run: 'echo "using intel : : icpx : <cxxflags>-std=${{ matrix.standard }} ;" > ~/user-config.jam'
+        working-directory: ../boost-root
+      - name: Config info install
+        run: ../../../b2 config_info_travis_install toolset=intel
+        working-directory: ../boost-root/libs/config/test
+      - name: Config info
+        run: ./config_info_travis
+        working-directory: ../boost-root/libs/config/test
+      - name: Test
+        run: ../../../b2 toolset=intel ${{ matrix.suite }} linkflags=-ltbb define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS
+        working-directory: ../boost-root/libs/math/test
+
   ubuntu-noble:
     runs-on: ubuntu-24.04
     strategy:
