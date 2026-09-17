@@ -192,6 +192,17 @@ BOOST_AUTO_TEST_CASE( test_main )
         test_laplace_transforms(s, eps, 4 * eps);
     }
 
+    // Laplace transforms at fixed z, for all four functions. The z values
+    // include the small-z regime where theta1 with tau < 1 used to lose
+    // precision, and the ranges cover both series branches in tau.
+    for (double a : { 0.5, 1.0, 2.0, 5.0 }) {
+        for (double z : { 1e-6, 1e-3, 0.1, 0.5, 1.0, 1.5, -0.7, 2.5, 3.0 }) {
+            test_laplace_transforms_in_z(static_cast<float>(a), static_cast<float>(z),
+                std::numeric_limits<float>::epsilon(), 25 * std::numeric_limits<float>::epsilon());
+            test_laplace_transforms_in_z(a, z, eps, 25 * eps);
+        }
+    }
+
     test_spots(0.0F, "float");
     test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
