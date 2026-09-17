@@ -391,7 +391,7 @@ struct _jacobi_theta_exponents {
         RealType dc;
         RealType c = pi_times(k * RealType(half_pis) / 2, dc);
         RealType r = z - c;
-        dz = _jacobi_theta_sum_error(z, -c, r) - dc;
+        dz = _jacobi_theta_sum_error(z, RealType(-c), r) - dc;
         return r;
     }
 
@@ -427,7 +427,7 @@ struct _jacobi_theta_exponents {
         dN += pi_hi * dP;
         RealType dQ;
         RealType Q = divide_by_a(N, dN, dQ);
-        RealType result = boost::math::expm1(-2 * Q);
+        RealType result = boost::math::expm1(RealType(-2 * Q));
         if (result == -1)
             return result;
         return result - 2 * dQ * (1 + result);
