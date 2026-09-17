@@ -203,6 +203,22 @@ inline RealType kolmogorov_smirnov_x2n_error(RealType x, RealType n, RealType u,
     return e2 + e1 * n; // x*x*n == u + err
 }
 
+// The nome q = exp(-2*x*x*n) of the theta function in the CDF, with the
+// rounding of x*x*n compensated. Passing q rather than tau = 2*x*x*n/pi
+// matters when 2*x*x*n > pi: the theta function then raises q to integer
+// powers, so nothing amplifies the rounding, whereas any rounding of tau is
+// multiplied back by the size of the exponent.
+template <class RealType>
+inline RealType kolmogorov_smirnov_nome(RealType x, RealType n) {
+    BOOST_MATH_STD_USING
+    RealType u = x * x * n;
+    RealType q = exp(-2 * u);
+    if (q == 0)
+        return q;
+    RealType err = kolmogorov_smirnov_x2n_error(x, n, u, kolmogorov_smirnov_splitter<RealType>());
+    return q * (1 - 2 * err); // exp(-2 (u + err))
+}
+
 // Returns pi^2/8 as hi + lo, where hi is exactly representable and lo is
 // its complement to about 120 bits, so that W = (pi^2/8)/u can be computed
 // without the rounding error of the constant being amplified by W. Types
@@ -573,6 +589,13 @@ inline RealType cdf(const kolmogorov_smirnov_distribution<RealType, Policy>& dis
    if (x*x*n == 0)
        return 0;
 
+   if (2*x*x*n > constants::pi<RealType>()) {
+       RealType q = detail::kolmogorov_smirnov_nome(x, n);
+       if (q == 0)
+           return 1;
+       return RealType(1) + jacobi_theta4m1(RealType(0), q, Policy());
+   }
+
    return jacobi_theta4tau(RealType(0), 2*x*x*n/constants::pi<RealType>(), Policy());
 } // cdf
 
@@ -597,8 +620,12 @@ inline RealType cdf(const complemented2_type<kolmogorov_smirnov_distribution<Rea
    if (x*x*n == 0)
        return 1;
 
-   if (2*x*x*n > constants::pi<RealType>())
-       return -jacobi_theta4m1tau(RealType(0), 2*x*x*n/constants::pi<RealType>(), Policy());
+   if (2*x*x*n > constants::pi<RealType>()) {
+       RealType q = detail::kolmogorov_smirnov_nome(x, n);
+       if (q == 0)
+           return 0;
+       return -jacobi_theta4m1(RealType(0), q, Policy());
+   }
 
    return RealType(1) - jacobi_theta4tau(RealType(0), 2*x*x*n/constants::pi<RealType>(), Policy());
 } // cdf (complemented)
