@@ -166,9 +166,12 @@ void test_reference_values(RealType)
         RealType x = static_cast<RealType>(d.x);
         BOOST_CHECK_CLOSE_FRACTION(pdf(dist, x), boost::lexical_cast<RealType>(d.pdf), 20 * eps);
         BOOST_CHECK_CLOSE_FRACTION(cdf(dist, x), boost::lexical_cast<RealType>(d.cdf), 50 * eps);
-        // The complement is computed by the Jacobi Theta function from a
-        // rounded argument, whose error is amplified by the exponent 2*x*x*n.
-        BOOST_CHECK_CLOSE_FRACTION(cdf(complement(dist, x)), boost::lexical_cast<RealType>(d.ccdf), 200 * eps);
+        // Above 2*x*x*n = pi the complement is computed from the nome with a
+        // compensated exponent; below it goes through the Jacobi Theta
+        // function with a rounded tau, whose error is amplified by the
+        // exponent.
+        RealType ccdf_tol = (2 * x * x * d.n > constants::pi<double>()) ? 10 * eps : 200 * eps;
+        BOOST_CHECK_CLOSE_FRACTION(cdf(complement(dist, x)), boost::lexical_cast<RealType>(d.ccdf), ccdf_tol);
     }
 
     // The moment constants agree with the closed forms they were computed from
