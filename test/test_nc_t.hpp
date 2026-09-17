@@ -350,6 +350,14 @@ void test_spots(RealType)
        BOOST_CHECK_CLOSE_FRACTION(cdf(d, -1), static_cast<RealType>(1.61471461239552e-127), 1e-3);
    }
 
+   // https://github.com/boostorg/math/issues/1410
+   // p=0.99 is below both limiting CDF values:
+   // Phi(2.5) and Phi(3.75).  Previously this could return a tiny,
+   // meaningless degree of freedom instead of reporting that the inverse
+   // cannot be selected uniquely.
+   BOOST_MATH_CHECK_THROW(distro1::find_degrees_of_freedom(static_cast<RealType>(-2.5), static_cast<RealType>(1.25), static_cast<RealType>(0.99)), boost::math::evaluation_error);
+   BOOST_MATH_CHECK_THROW(distro1::find_degrees_of_freedom(boost::math::complement(static_cast<RealType>(-2.5), static_cast<RealType>(1.25), static_cast<RealType>(0.01))), boost::math::evaluation_error);
+
 } // template <class RealType>void test_spots(RealType)
 
 template <class T>
