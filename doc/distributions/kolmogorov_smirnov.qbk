@@ -85,8 +85,11 @@ The CDF of the Kolmogorov-Smirnov distribution is implemented in terms of the
 fourth [link math_toolkit.jacobi_theta.jacobi_theta_overview Jacobi Theta
 function]; please refer to the accuracy ULP plots for that function.
 
-The PDF is implemented separately, and the following ULP plot illustrates its
-accuracy:
+The PDF is implemented separately: each of its two series is evaluated from a
+single exponential whose argument is corrected for the rounding of x[super 2]n
+(and, for small x, of [pi][super 2]/8 and of the division), so that its error
+does not grow with the size of the exponent. The following ULP plot illustrates
+its accuracy:
 
 [graph kolmogorov_smirnov_pdf_ulp]
 
@@ -95,6 +98,12 @@ above plot is representative for all values of /n/. Note that for present
 purposes, "accuracy" refers to deviations from the limiting approximation,
 rather than deviations from the exact distribution.
 
+The quantile is accurate to a few ulps of /x/ over the whole range of /p/,
+including small /n/ (where it exceeds unity) and probabilities down to the
+smallest normalized number. The mode, median, skewness and kurtosis are
+tabulated constants of the standardized distribution, accurate to 100 decimal
+digits, and so are exact to within the scaling by /n/.
+
 [h4 Implementation]
 
 In the following table, /n/ is the number of observations, /x/ is the random variable,
@@ -102,22 +111,42 @@ In the following table, /n/ is the number of observations, /x/ is the random var
 
 [table
 [[Function][Implementation Notes]]
-[[cdf][Using the relation: cdf = __jacobi_theta4tau(0, 2*x*x/[pi])]]
+[[cdf][
+When 2*x*x*n <= [pi]: __jacobi_theta4tau(0, 2*x*x*n/[pi])
+
+When 2*x*x*n > [pi]: 1 + __jacobi_theta4m1(0, q) with the nome q = exp(-2*x*x*n), whose exponent is formed with its rounding error compensated so that the theta function, which raises q to integer powers, does not amplify it]]
 [[pdf][Using a manual derivative of the CDF]]
 [[cdf complement][
 When x*x*n == 0: 1
 
 When 2*x*x*n <= [pi]: 1 - __jacobi_theta4tau(0, 2*x*x*n/[pi])
 
-When 2*x*x*n > [pi]: -__jacobi_theta4m1tau(0, 2*x*x*n/[pi])]]
-[[quantile][Using a Newton-Raphson iteration]]
-[[quantile from the complement][Using a Newton-Raphson iteration]]
-[[mode][Using a run-time PDF maximizer]]
+When 2*x*x*n > [pi]: -__jacobi_theta4m1(0, q), as for the cdf]]
+[[quantile][
+Using a Newton-Raphson iteration on the logarithm of the CDF, or of its
+complement, in a variable in which it is nearly linear:
+
+When p < 0.6: W = [pi][super 2]/(8x[super 2]n), where
+ln cdf = ln(4/sqrt([pi])) + ln(W)/2 - W + ln(1 + e[super -8W] + e[super -24W] + ...)
+
+When p >= 0.6: V = x[super 2]n, where
+ln(1 - cdf) = ln(2) - 2V + ln(1 - e[super -6V] + e[super -16V] - ...)
+
+The starting value inverts the first two terms of the expansion, which is
+already exact to working precision in the tails.]]
+[[quantile from the complement][As the quantile, with p = 1 - q]]
+[[mode][0.735467907916571982... / sqrt(n), a tabulated root of the derivative of the PDF]]
+[[median][0.827573555189907690... / sqrt(n), a tabulated root of cdf = 1/2]]
 [[mean][sqrt([pi]/2) * ln(2) / sqrt(n)]]
 [[variance][([pi][super 2]/12 - [pi]/2*ln[super 2](2))/n]]
-[[skewness][(9/16*sqrt([pi]/2)*[zeta](3)/n[super 3/2] - 3 * mean * variance - mean[super 2] * variance) / (variance[super 3/2])]]
-[[kurtosis][(7/720*[pi][super 4]/n[super 2] - 4 * mean * skewness * variance[super 3/2] - 6 * mean[super 2] * variance - mean[super 4]) / (variance[super 2])]]
+[[skewness][0.860426137143668255..., a tabulated evaluation of (9/16*sqrt([pi]/2)*[zeta](3) - 3 * mean * variance - mean[super 3]) / (variance[super 3/2]) with n = 1]]
+[[kurtosis][3 + 0.881618967910523670..., a tabulated evaluation of (7/720*[pi][super 4] - 4 * mean * skewness * variance[super 3/2] - 6 * mean[super 2] * variance - mean[super 4]) / (variance[super 2]) with n = 1]]
 ]
+
+The tabulated constants are accurate to 100 decimal digits; for types with more
+precision than that, the mode is refined by a Newton-Raphson iteration, the
+median is computed from the quantile, and the skewness and kurtosis are
+computed from the formulae above.
 
 [endsect] [/section:kolmogorov_smirnov_dist Kolmogorov-Smirnov]
 
