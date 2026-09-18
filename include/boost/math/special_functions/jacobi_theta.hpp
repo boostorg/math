@@ -303,19 +303,36 @@ inline RealType jacobi_theta_sum_error(RealType a, RealType b, RealType s) {
     return (a - (s - bb)) + (b - bb);
 }
 
-// Pi as hi + lo: hi is exactly representable and lo completes it to about
-// 120 bits, as five pieces of 24 significant bits each. Types with more
-// precision than that use their own rounding of pi with lo = 0.
+// Pi as hi + lo + lo2: hi holds the leading 24 bits exactly, so that hi * e
+// is exact for small integers e, and lo the following ones to the type's own
+// precision, so that hi + lo carries pi to about 24 bits beyond it. lo2 is
+// what lo could not hold, which only matters for the large multiples of the
+// argument reduction. The 16 pieces of 24 bits cover 384 bits; types with more
+// precision than that can use use their own rounding of pi with lo = 0.
 template <class RealType>
-inline RealType jacobi_theta_pi(RealType& lo) {
+inline RealType jacobi_theta_pi(RealType& lo, RealType& lo2) {
     BOOST_MATH_STD_USING
-    if (tools::digits<RealType>() > 116) {
+    if (tools::digits<RealType>() > 360) {
         lo = 0;
+        lo2 = 0;
         return constants::pi<RealType>();
     }
-    static const RealType pi_lo = ldexp(RealType(10625384), -46) + ldexp(RealType(12727492), -70) + ldexp(RealType(13001355), -94) + ldexp(RealType(8444956), -118);
-    static const RealType pi_hi = ldexp(RealType(13176794), -22);
+    static const int pieces[16] = {13176794, 10625384, 12727492, 13001355, 8444956, 13707522, 5113994, 6802548, 134078, 10894099, 10166865, 4851833, 9319428, 14544789, 1684429, 3818267};
+    static const RealType pi_hi = ldexp(RealType(pieces[0]), -22);
+    static const RealType pi_lo = [] {
+        RealType s = 0;
+        for (int i = 15; i > 0; --i)
+            s += ldexp(RealType(pieces[i]), -22 - 24 * i);
+        return s;
+    }();
+    static const RealType pi_lo2 = [] {
+        RealType r = ldexp(RealType(pieces[1]), -46) - pi_lo;
+        for (int i = 2; i < 16; ++i)
+            r += ldexp(RealType(pieces[i]), -22 - 24 * i);
+        return r;
+    }();
     lo = pi_lo;
+    lo2 = pi_lo2;
     return pi_hi;
 }
 
@@ -327,7 +344,7 @@ template <class RealType>
 struct jacobi_theta_exponents {
     RealType tau;           // only used for the scale factor 1/sqrt(tau)
     RealType splitter;
-    RealType pi_hi, pi_lo;  // pi = pi_hi + pi_lo
+    RealType pi_hi, pi_lo, pi_lo2;  // pi = pi_hi + pi_lo + pi_lo2
     RealType a_hi, a_lo;    // pi * tau = -ln(q) = a_hi + a_lo
     RealType inv_a_hi;      // 1 / a_hi, only needed when tau < 1
 
@@ -354,8 +371,10 @@ struct jacobi_theta_exponents {
         RealType p = pi_hi * e;
         RealType q = pi_lo * e;
         RealType hi = p + q;
-        // |q| << |p|, so the sum's error is simply q - (hi - p)
-        lo = (q - (hi - p)) + jacobi_theta_product_error(pi_hi, e, p, splitter);
+        // |q| << |p|, so the sum's error is simply q - (hi - p). The rounding
+        // of q itself only matters for the large multiples of the argument
+        // reduction, but it is cheap to carry.
+        lo = (q - (hi - p)) + jacobi_theta_product_error(pi_hi, e, p, splitter) + jacobi_theta_product_error(pi_lo, e, q, splitter);
         return hi;
     }
 
@@ -395,18 +414,39 @@ struct jacobi_theta_exponents {
     }
 
     // Reduces z by the nearest multiple of the period (half_pis * pi/2),
-    // returning the remainder along with its error dz (the remainder is only
-    // exact with respect to the rounded pi, and the Gaussians below amplify
-    // that error by 2z/(pi*tau)), and the multiple k for the caller's sign.
+    // returning the remainder along with its rounding dz, and in k an integer
+    // with the parity of the multiple for the caller's sign. The Gaussians
+    // below amplify an error in the argument by 2z/(pi*tau), so the multiple
+    // of pi is formed to well beyond working precision.
     RealType reduce(RealType z, int half_pis, RealType& dz, RealType& k) const {
         BOOST_MATH_STD_USING
-        RealType period = pi_hi * RealType(half_pis) / 2;
-        k = floor(z / period + RealType(0.5));
-        RealType dc;
-        RealType c = pi_times(k * RealType(half_pis) / 2, dc);
-        RealType r = z - c;
-        dz = jacobi_theta_sum_error(z, RealType(-c), r) - dc;
-        return r;
+        // The multiple is chosen with the type's full pi: pi_hi alone has only
+        // 24 bits, and its relative error times z would pick the wrong multiple
+        // once z exceeds a few times 10^7. Beyond 2^digits periods the quotient
+        // itself is rounded and a pass only gets within a few periods, so the
+        // remainder is reduced again.
+        RealType period = (pi_hi + pi_lo) * RealType(half_pis) / 2;
+        RealType reduced = z;
+        dz = 0;
+        k = 0;
+        do {
+            RealType m = floor(reduced / period + RealType(0.5));
+            RealType e = m * RealType(half_pis) / 2;
+            RealType dc;
+            RealType c = pi_times(e, dc);
+            dc += pi_lo2 * e;
+            RealType r = reduced - c; // exact, c being within a factor of two of reduced
+            RealType err = (jacobi_theta_sum_error(reduced, RealType(-c), r) - dc) + dz;
+            // err can be as large as half an ulp of z, too large for the
+            // first-order corrections applied to the terms, so it is folded
+            // into the remainder, leaving only the rounding of that.
+            reduced = r + err;
+            dz = jacobi_theta_sum_error(r, err, reduced);
+            // m may exceed the integers the type holds exactly, but such
+            // values are even, so their parity is still right.
+            k += fmod(m, RealType(2));
+        } while (abs(reduced) > period);
+        return reduced;
     }
 
     // exp(-(z + m*pi/2)^2 / (pi * tau)) for an integer m, where dz is the
@@ -449,7 +489,7 @@ struct jacobi_theta_exponents {
 
 private:
     jacobi_theta_exponents() : splitter(jacobi_theta_splitter<RealType>()) {
-        pi_hi = jacobi_theta_pi(pi_lo);
+        pi_hi = jacobi_theta_pi(pi_lo, pi_lo2);
     }
 };
 
