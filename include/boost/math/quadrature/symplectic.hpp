@@ -107,8 +107,29 @@ l2_norm(const T& vec)
 }
 
 template <typename T>
-typename std::enable_if_t<!has_size_v<T>, typename T::value_type>
+typename std::enable_if_t<!has_size_v<T>, T>
 l2_norm(const T& val)
+{
+    BOOST_MATH_STD_USING;
+    return abs(val);
+}
+
+template <typename T>
+typename std::enable_if_t<has_size_v<T>, typename T::value_type>
+avg_l2_norm(const T& vec)
+{
+    typename T::value_type sum = 0;
+    for (std::size_t i=0; i < vec.size(); i++)
+    {
+        sum += vec[i] * vec[i];
+    }
+    typename T::value_type size = vec.size();
+    return std::sqrt(sum / size);
+}
+
+template <typename T>
+typename std::enable_if_t<!has_size_v<T>, T>
+avg_l2_norm(const T& val)
 {
     BOOST_MATH_STD_USING;
     return abs(val);
@@ -131,7 +152,7 @@ mult_prefactor(T& x, U prefactor)
 }
 
 template <typename T, typename U>
-typename std::enable_if_t<!has_plus_v<T, U>, void>
+typename std::enable_if_t<!has_mult_v<T, U>, void>
 mult_prefactor(T& vec1, U prefactor)
 {
     for (std::size_t i=0; i < vec1.size(); i++)
@@ -366,28 +387,114 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
     return std::make_pair(p, q);
 }
 
-template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
-std::pair<std::vector<RandomAccessContainer>, std::vector<RealType> > integrate_hamiltonian_adaptive(RandomAccessContainer& p0,
-                                                                                                                RandomAccessContainer& q0,
-                                                                                                                const std::vector<RealType>& times,
-                                                                                                                const Func& dHdp,
-                                                                                                                const Func& dHdq,
-                                                                                                                const RealType& tol,
-                                                                                                                const available_methods& method,
-                                                                                                                const Policy& pol)
+template <typename RandomAccessContainer, typename RealType, class stepperType, class Func>
+struct error_info
+{
+    error_info(stepperType stepper_, Func& dHdp_, Func& dHdq_, unsigned order_, RealType atol_, RealType rtol_)
+    : stepper(stepper_), dHdp(dHdp_), dHdq(dHdq_), order(order_), atol(atol_), rtol(rtol_)
+    {
+        safe = RealType(0.9);
+        maxScale = RealType(2);
+        minScale = RealType(0.2);
+        rejected = true;
+    }
+
+    // Here, current_p/q represents (p, q) before a single step of size dt is made
+    // whereas next_p/q represents (p, q) after a step of size dt
+    bool success(RandomAccessContainer& current_p,
+                 RandomAccessContainer& current_q,
+                 RandomAccessContainer& next_p,
+                 RandomAccessContainer& next_q,
+                 RealType& dt)
+    {
+        RandomAccessContainer error_p = current_p;
+        RandomAccessContainer error_q = current_q;
+
+        // For the error, reference method is using two half steps
+        stepper(error_p, error_q, dt / 2, dHdp, dHdq);
+        stepper(error_p, error_q, dt / 2, dHdp, dHdq);
+
+        // Get difference in solution between one/two timesteps
+        subtract(error_p, next_p);
+        RealType error = avg_l2_norm(error_p);
+
+        // Get scale in which to reject error
+        RealType currentDistance = l2_norm(current_p);
+        RealType newDistance = l2_norm(next_p);
+        RealType tol = atol + rtol * std::max(currentDistance, newDistance);
+        error /= tol;
+
+        RealType scale;
+        if (error <= 1.0)
+        {
+            if (error == 0.0)
+            {
+                scale = maxScale;
+            }
+            else
+            {
+                scale = safe * std::pow(static_cast<RealType>(1 / error), RealType(1) / (order + 1));
+                if (scale < minScale) scale = minScale;
+                if (scale > maxScale) scale = maxScale;
+            }
+
+            if (rejected)
+            {
+                dt *= std::min(scale, 1.0);
+            }
+            else
+            {
+                dt *= scale;
+            }
+            errorOld = std::max(error, 1e-4);
+            rejected = false;
+            return true;
+        }
+        else
+        {
+            scale = std::max(safe * std::pow(static_cast<RealType>(1 / error), RealType(1) / (order + 1)), minScale);
+            dt *= scale;
+            rejected = true;
+            return false;
+        }
+    }
+
+    RealType errorOld;
+    RealType safe;
+    RealType maxScale;
+    RealType minScale;
+    bool rejected;
+    RealType atol;
+    RealType rtol;
+    unsigned order;
+    stepperType stepper;
+    Func& dHdp;
+    Func& dHdq;
+};
+
+template <typename RealType, class Func, class Policy>
+std::vector<RealType> integrate_hamiltonian_adaptive(RealType& p0,
+                                                    RealType& q0,
+                                                    const std::vector<RealType>& recordTimes,
+                                                    const Func& dHdp,
+                                                    const Func& dHdq,
+                                                    const RealType& atol,
+                                                    const RealType& rtol,
+                                                    const available_methods& method,
+                                                    const Policy& pol)
 {
     BOOST_MATH_STD_USING
     // Not sure how to make this function string nicer
     static const char* function = "boost::math::quadrature::integrate_hamiltonian(p0, q0, %1%, steps, dHdp, dHdq)";
 
-    if (!(boost::math::isfinite)(times.back()))
+    if (!(boost::math::isfinite)(recordTimes.back()))
     {
-        boost::math::policies::raise_domain_error(function, "Maximum time  must be positive and finite but got: tMax = %1%.\n", times.back(), pol);
+        boost::math::policies::raise_domain_error(function, "Maximum time  must be positive and finite but got: tMax = %1%.\n", recordTimes.back(), pol);
     }
 
-    if ((times.front() <= 0))
+    if ((recordTimes.front() <= 0))
     {
-        boost::math::policies::raise_domain_error(function, "Minimum time  must be positive and finite but got: tMin = %1%.\n", times.front(), pol);
+        boost::math::policies::raise_domain_error(function, "Minimum time  must be positive and finite but got: tMin = %1%.\n", recordTimes.front(), pol);
     }
 
     // Check that p0 and q0 have the same size
@@ -396,55 +503,81 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RealType> > integrate_
         #  pragma warning(pop)
     #endif
 
-    typedef void (*stepperType)(RandomAccessContainer&, RandomAccessContainer&, RealType, Func, Func);
+    typedef void (*stepperType)(RealType&, RealType&, RealType, Func, Func);
 
+    unsigned order;
     stepperType stepper;
     switch (method) {
-        case available_methods::Y6:       stepper = sixth_order_yoshida; break;
-        case available_methods::Y4:       stepper = fourth_order_yoshida; break;
-        case available_methods::SRKNB6:   stepper = SRKN_b_6; break;
-        case available_methods::SRKNB11:  stepper = SRKN_b_11; break;
+        case available_methods::Y2:       stepper = second_order_yoshida; order = 2; break;
+        case available_methods::Y6:       stepper = sixth_order_yoshida; order = 6; break;
+        case available_methods::Y4:       stepper = fourth_order_yoshida; order = 4; break;
+        case available_methods::SRKNB6:   stepper = SRKN_b_6; order = 4; break;
+        case available_methods::SRKNB11:  stepper = SRKN_b_11; order = 6; break;
         default: boost::math::policies::raise_domain_error(function, "Incorrect method recieved. Must be in `available_methods` enum class.", 0, pol);
     }
 
-    std::vector<RandomAccessContainer> p = { p0 };
-    std::vector<RandomAccessContainer> q = { q0 };
+    std::vector<RealType> p = { p0 };
+    std::vector<RealType> q = { q0 };
 
     RealType negative_one = RealType(-1);
-    RandomAccessContainer dHdq0 = dHdq(q0);
+    RealType dHdq0 = dHdq(q0);
     mult_prefactor(dHdq0, negative_one);
-    std::vector<RandomAccessContainer> dpdt = { dHdq0 };
 
     std::vector<RealType> time = { 0 };
     RealType dt = 0.01;
 
     // To calculate the error, we need to store the current values of p and q seperately
     // from the values updated in the loop. This is because the steppers modify p and q in place
-    RandomAccessContainer ref_p;
-    RandomAccessContainer ref_q;
-    RandomAccessContainer error_vec;
-    RealType error;
-    RealType order;
+    RealType current_p;
+    RealType current_q;
 
-    while (time.back() < times.back())
+    error_info<RealType, RealType, stepperType, Func> info(
+        stepper, dHdp, dHdq, order, atol, rtol);
+
+    while (time.back() < recordTimes.back())
     {
+        // Save p0 and q0 for error estimation step
+        current_p = p0;
+        current_q = q0;
+
+        // Step p0 and q0 forward one step
         stepper(p0, q0, dt, dHdp, dHdq);
-        p.push_back(p0);
-        q.push_back(q0);
-        time.push_back(time.back() + dt);
 
-        // Now calculate the error and adjust the time step accordingly
-        ref_p = p0;
-        ref_q = q0;
-        second_order_yoshida(ref_p, ref_q, dt, dHdp, dHdq);
-
-        subtract(ref_p, p0);
-        error = l2_norm(ref_p);
-        std::cout << dt << "," << error << "," << tol << "," << pow(tol / error, 1/(order + 1)) << std::endl;
-        dt *= pow(tol / error, 1/(order + 1));
-
+        bool stepSuccessful = info.success(current_p, current_q, p0, q0, dt);
+        if (!stepSuccessful)
+        {
+            // Reject the step and reset p0/q0 to current_p/q
+            p0 = current_p;
+            q0 = current_q;
+        }
+        else
+        {
+            // Accept the step, push back p/q and step t forward
+            p.push_back(p0);
+            q.push_back(q0);
+            time.push_back(time.back() + dt);
+            std::cout << p.back() << "," << time.back() << std::endl;
+        }
     }
-    return std::make_pair(p, time);
+
+    // Now we want to use a cubic hermite spline to get the values of p at recordTimes
+    // Get the derivative at each value of p
+    std::vector<RealType> dpdt(p.size());
+    for (std::size_t i=0; i < p.size(); i++)
+    {
+        dpdt[i] = -dHdq(p[i]);
+    }
+
+    // Form spline and get values of p
+    boost::math::interpolators::cubic_hermite<std::vector<RealType> > spline(std::move(time), std::move(p), std::move(dpdt));
+
+    std::vector<RealType> recordP(recordTimes.size());
+    for (std::size_t i=0; i < recordTimes.size(); i++)
+    {
+        recordP[i] = spline(recordTimes[i]);
+    }
+
+    return recordP;
 }
 
 
