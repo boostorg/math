@@ -58,7 +58,7 @@ When /q/ is smaller than exp(-[pi]), the Fourier series is summed directly in te
 
 Every term of the series is an exponential whose argument is a product or quotient of [tau], [pi] and a small integer, or, in the transformed series used when [tau] < 1, the square of /z/ plus a multiple of [pi]/2.
 Rounding such an argument to working precision would cost as many ulps in the term as the argument is large, so the rounding errors of [pi], of the products, of the division and of the reduction of /z/ are tracked exactly (using error-free transformations that work for any binary floating-point type) and applied as a correction factor to each term.
-The [tau] parameterization is therefore accurate to a few ulps throughout, apart from the conditioning of the function itself. In the /q/ parameterization the rounding of log(/q/) remains, and its effect grows as /q/ approaches 1.
+The [tau] parameterization is therefore accurate to a few ulps throughout, apart from the conditioning of the function itself, for /z/ up to about 1/[epsilon] (10[super 16] for `double`); beyond that the reduction of /z/ by the period loses accuracy in proportion to /z/[epsilon][super 2]. In the /q/ parameterization the rounding of log(/q/) remains, and its effect grows as /q/ approaches 1.
 As another example, if the complement of /q/ is known with great accuracy, then instead of:
 
   jacobi_theta1(x, 1-q_complement);

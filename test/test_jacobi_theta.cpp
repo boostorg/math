@@ -166,6 +166,36 @@ BOOST_AUTO_TEST_CASE( test_main )
         BOOST_CHECK_CLOSE_FRACTION(jacobi_theta4(0.3, c.q), 1 + c.theta4m1, 10 * eps);
     }
 
+
+    // The argument reduction for tau < 1 previously chose the multiple of the
+    // period from a 24-bit pi, which picked the wrong multiple for z above a
+    // few times 1e7 and returned zero from z = 1e9 on. The reduction now uses
+    // the full pi and folds its error into the remainder, so these are exact
+    // to a few ulps. Reference values: mpmath with 40 digits.
+    struct large_z_case { double z, tau, theta1, theta2, theta3, theta4; };
+    const large_z_case large_z[] = {
+        { 4e7, 0.05, -3.757318694348920055753796, -0.00001545462079485293420015852, 0.00001549605722685305986708678, 3.757318694348920055753799 },
+        { 4e7, 0.9, -0.9759572565724512898452158, -0.1607607523378354523430388, 0.8881057607381379901037041, 1.11193291050224539104741 },
+        { 1e9, 0.05, 0.00835757877707516055357722, 0.5355121416942209933299827, 0.5355121416942209992545699, 0.008357578778633724488455624 },
+        { 1e9, 0.9, 0.5350024815437516287353571, 0.8259223040518742875028426, 1.047801422217507380865766, 0.9521655733653082082851415 },
+        { 1e12, 0.05, -0.02213061047237238578451432, 0.2849830841470243476666576, 0.2849830841470244257276671, 0.02213061047253907642968685 },
+        { 1e12, 0.9, -0.5997376814987367699456432, 0.7793174854358325013985754, 1.029889184690759448919078, 0.9700680662824351299496771 },
+    };
+    for (const large_z_case& c : large_z) {
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta1tau(c.z, c.tau), c.theta1, 10 * eps);
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta2tau(c.z, c.tau), c.theta2, 10 * eps);
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta3tau(c.z, c.tau), c.theta3, 10 * eps);
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta4tau(c.z, c.tau), c.theta4, 10 * eps);
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta1tau(-c.z, c.tau), -c.theta1, 10 * eps);
+        if (c.z <= 1e9) { // exactly representable as a float
+            // Beyond 1/epsilon the reduction's accuracy degrades as z*epsilon^2,
+            // about 50 ulps at z = 1e9 in float
+            float feps = std::numeric_limits<float>::epsilon();
+            BOOST_CHECK_CLOSE_FRACTION(jacobi_theta1tau(static_cast<float>(c.z), static_cast<float>(c.tau)), static_cast<float>(c.theta1), 100 * feps);
+            BOOST_CHECK_CLOSE_FRACTION(jacobi_theta3tau(static_cast<float>(c.z), static_cast<float>(c.tau)), static_cast<float>(c.theta3), 100 * feps);
+        }
+    }
+
     for (double q=0.0078125; q<1.0; q += 0.0078125) { // = 1/128
         // The periodicity test shifts z by the rounded constant two_pi, which
         // differs from the true period by about eps. For large q the theta
