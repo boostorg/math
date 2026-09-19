@@ -425,7 +425,7 @@ struct error_info
         // Get scale in which to reject error
         RealType currentDistance = l2_norm(current_p);
         RealType newDistance = l2_norm(next_p);
-        RealType tol = atol + rtol * std::max(currentDistance, newDistance);
+        RealType tol = atol + rtol * (std::max)(currentDistance, newDistance);
         error /= tol;
 
         RealType scale;
@@ -444,19 +444,19 @@ struct error_info
 
             if (rejected)
             {
-                dt *= std::min(scale, RealType(1.0));
+                dt *= (std::min)(scale, RealType(1.0));
             }
             else
             {
                 dt *= scale;
             }
-            errorOld = std::max(error, RealType(1e-4));
+            errorOld = (std::max)(error, RealType(1e-4));
             rejected = false;
             return true;
         }
         else
         {
-            scale = std::max(safe * pow(static_cast<RealType>(1 / error), RealType(1) / (order + 1)), minScale);
+            scale = (std::max)(safe * pow(static_cast<RealType>(1 / error), RealType(1) / (order + 1)), minScale);
             dt *= scale;
             rejected = true;
             return false;
