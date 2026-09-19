@@ -259,41 +259,56 @@ inline void jacobi_theta_split(RealType t, RealType splitter, RealType& hi, Real
     lo = t - hi;
 }
 
-// Whether std::fma is actually fused. Some C libraries (newlib, and hence
-// Cygwin) implement fma(x, y, z) as x * y + z with two roundings, which would
+// result = fma(a, b, c) if the type has an fma, which is std::fma for the
+// built-in types and is found by argument-dependent lookup for the others
+// (the Boost.Multiprecision types all have one). Returns false, leaving
+// result alone, if there is none.
+namespace jacobi_theta_fma {
+using std::fma;
+
+template <class RealType>
+inline auto evaluate(const RealType& a, const RealType& b, const RealType& c, RealType& result, int) -> decltype(static_cast<void>(fma(a, b, c)), bool()) {
+    result = fma(a, b, c);
+    return true;
+}
+template <class RealType>
+inline bool evaluate(const RealType&, const RealType&, const RealType&, RealType&, long) {
+    return false;
+}
+} // namespace jacobi_theta_fma
+
+// Whether the type's fma is actually fused. Having one is no guarantee: some
+// C libraries (newlib, and hence Cygwin) implement fma(x, y, z) as x * y + z
+// with two roundings, as do the Boost.Multiprecision backends without a
+// native one (cpp_bin_float, but not mpfr_float or float128), and that would
 // silently zero every correction below. Probed once per type: (1 + eps)^2 is
 // 1 + 2 eps + eps^2, and the last term is exactly what a fused
 // fma(x, x, -(1 + 2 eps)) returns, while x * x + z rounds it away. The inputs
-// are volatile so that the compiler cannot fold the call at compile time.
+// are built from a volatile so that the compiler cannot fold the call at
+// compile time.
 template <class RealType>
 inline bool jacobi_theta_fma_is_fused() {
     static const bool fused = [] {
-        volatile RealType vx = 1 + std::numeric_limits<RealType>::epsilon();
-        volatile RealType vz = -(1 + 2 * std::numeric_limits<RealType>::epsilon());
-        RealType x = vx, z = vz;
-        return std::fma(x, x, z) != 0;
+        volatile int volatile_one = 1;
+        RealType one = static_cast<int>(volatile_one), eps = tools::epsilon<RealType>();
+        RealType x = one + eps, z = -(one + 2 * eps), eps_squared = 0;
+        return jacobi_theta_fma::evaluate(x, x, z, eps_squared, 0) && eps_squared != 0;
     }();
     return fused;
 }
 
-// The exact product a*b is ab + (return value), where ab = fl(a*b). For the
-// built-in types std::fma(a, b, -ab) is exactly this quantity, so it is used
-// where it is fused; the splitting is for other types and libraries.
+// The exact product a*b is ab + (return value), where ab = fl(a*b). A fused
+// fma(a, b, -ab) is exactly this quantity, so it is used where the type has
+// one; the splitting is for the types and libraries that do not.
 template <class RealType>
 inline RealType jacobi_theta_product_error(RealType a, RealType b, RealType ab, RealType splitter) {
+    RealType error;
+    if (jacobi_theta_fma_is_fused<RealType>() && jacobi_theta_fma::evaluate(a, b, RealType(-ab), error, 0))
+        return error;
     RealType ah, al, bh, bl;
     jacobi_theta_split(a, splitter, ah, al);
     jacobi_theta_split(b, splitter, bh, bl);
     return (((ah * bh - ab) + ah * bl) + al * bh) + al * bl;
-}
-inline float jacobi_theta_product_error(float a, float b, float ab, float splitter) {
-    return jacobi_theta_fma_is_fused<float>() ? std::fma(a, b, -ab) : jacobi_theta_product_error<float>(a, b, ab, splitter);
-}
-inline double jacobi_theta_product_error(double a, double b, double ab, double splitter) {
-    return jacobi_theta_fma_is_fused<double>() ? std::fma(a, b, -ab) : jacobi_theta_product_error<double>(a, b, ab, splitter);
-}
-inline long double jacobi_theta_product_error(long double a, long double b, long double ab, long double splitter) {
-    return jacobi_theta_fma_is_fused<long double>() ? std::fma(a, b, -ab) : jacobi_theta_product_error<long double>(a, b, ab, splitter);
 }
 
 // The exact sum a+b is s + (return value), where s = fl(a+b).
