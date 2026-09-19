@@ -39,8 +39,8 @@ Real oscillator_dHdq(Real q) { return q; }
 template <class Real>
 std::vector<Real> pendulum_vector_dHdp(std::vector<Real> p) { return p; }
 template <class Real>
-std::vector<Real> pendulum_vector_dHdq(std::vector<Real> q) 
-{ 
+std::vector<Real> pendulum_vector_dHdq(std::vector<Real> q)
+{
     BOOST_MATH_STD_USING
     std::vector<Real> q_return(q.size());
     for (unsigned i=0; i<q.size(); i++)
@@ -51,13 +51,13 @@ std::vector<Real> pendulum_vector_dHdq(std::vector<Real> q)
 }
 
 // Equations of motion for Henon Heiles potential
-template <class Real> 
-std::vector<Real> hh_dHdp(std::vector<Real> p) 
+template <class Real>
+std::vector<Real> hh_dHdp(std::vector<Real> p)
 {
     return p;
 }
 
-template <class Real> 
+template <class Real>
 std::vector<Real> hh_dHdq(std::vector<Real> q)
 {
     BOOST_MATH_STD_USING
@@ -165,7 +165,7 @@ void test_hh_model(const RealType tol, const available_methods method)
 
     RealType dt = 0.005;
     unsigned int steps = 20000;
-    
+
     std::vector<RealType> q0 = {0.5, 0};
     std::vector<RealType> p0 = {0, 0.25};
 
@@ -184,7 +184,7 @@ void test_hh_model(const RealType tol, const available_methods method)
     {
         p_val = p[i];
         q_val = q[i];
-        
+
         abs_energy_error[i] = abs(hh_energy(p_val, q_val) - total_energy);
         sum += abs_energy_error[i];
     }
@@ -198,7 +198,7 @@ void test_multiprecision_sho(const RealType tol, const available_methods method)
 {
     BOOST_MATH_STD_USING
 
-    // With this small of step size, quad precision numbers can get to tolerances of 
+    // With this small of step size, quad precision numbers can get to tolerances of
     // ~1e-30 for any method whereas doubles can only get to tolerances of ~1e-17.
     RealType dt = 0.000000005;
     unsigned int steps = 100;
@@ -226,10 +226,49 @@ void test_multiprecision_sho(const RealType tol, const available_methods method)
     BOOST_CHECK_LE(max_error, tol);
 }
 
+/* Test if SHO energy fluctuations are below a given tolerance*/
+template <class RealType>
+void test_adaptive(const RealType atol, const available_methods method)
+{
+    BOOST_MATH_STD_USING
+
+    RealType q0 = 1;
+    RealType p0 = 0;
+
+    std::vector<RealType> t;
+    std::vector<RealType> p;
+    std::vector<RealType> q;
+    std::vector<RealType> error;
+
+    std::pair<RealType, RealType> timeInterval = std::make_pair(0, 10);
+    RealType rtol = 0;
+
+    std::tie(t, p, q, error) = boost::math::quadrature::integrate_hamiltonian_adaptive(p0, q0, timeInterval, oscillator_dHdp<RealType>, oscillator_dHdq<RealType>, atol, rtol, method);
+
+    // Check that max error is less than atol
+    RealType max_error = *std::max_element(std::begin(error), std::end(error));
+
+    BOOST_CHECK_LE(max_error, atol);
+
+    // RealType p_val;
+    // RealType q_val;
+    // std::vector<RealType> abs_energy_error(p.size());
+    // for (unsigned i=0; i < p.size(); i++)
+    // {
+    //     p_val = p[i];
+    //     q_val = q[i];
+
+    //     abs_energy_error[i] = std::abs(std::pow(p_val, 2) + std::pow(q_val, 2) - 1);
+    // }
+
+    // RealType max_error = *std::max_element(std::begin(abs_energy_error), std::end(abs_energy_error));
+    // BOOST_CHECK_LE(max_error, tol);
+}
+
 BOOST_AUTO_TEST_CASE(symplectic_quadrature)
 {
     test_invalid_parameters<double>();
-    
+
     // Test doubles
     // Simple Harmonic Oscillator Tests
     test_harmonic_oscillator<double>(1e-10, available_methods::Y6);
@@ -266,4 +305,16 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
     test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, available_methods::Y6);
     test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, available_methods::SRKNB6);
     test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, available_methods::SRKNB11);
+
+    // Test Adaptive steps
+    test_adaptive<float>(1e-6, available_methods::Y6);
+    test_adaptive<double>(1e-12, available_methods::Y6);
+    test_adaptive<long double>(1e-12, available_methods::Y6);
+
+    test_adaptive<double>(1e-12, available_methods::Y2);
+    test_adaptive<double>(1e-12, available_methods::Y4);
+    test_adaptive<double>(1e-12, available_methods::SRKNB6);
+    test_adaptive<double>(1e-12, available_methods::SRKNB11);
+
+    test_adaptive<boost::multiprecision::cpp_bin_float_quad>(1e-12, available_methods::Y2);
 }

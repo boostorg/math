@@ -390,7 +390,7 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
 template <typename RandomAccessContainer, typename RealType, class stepperType, class Func>
 struct error_info
 {
-    error_info(stepperType stepper_, Func& dHdp_, Func& dHdq_, unsigned order_, RealType atol_, RealType rtol_)
+    error_info(stepperType stepper_, const Func& dHdp_, const Func& dHdq_, unsigned order_, RealType atol_, RealType rtol_)
     : stepper(stepper_), dHdp(dHdp_), dHdq(dHdq_), order(order_), atol(atol_), rtol(rtol_)
     {
         safe = RealType(0.9);
@@ -408,6 +408,8 @@ struct error_info
                  RealType& dt,
                  RealType& currentError)
     {
+        BOOST_MATH_STD_USING
+
         RandomAccessContainer error_p = current_p;
         RandomAccessContainer error_q = current_q;
 
@@ -418,13 +420,13 @@ struct error_info
         // Get difference in solution between one/two timesteps
         subtract(error_p, next_p);
         RealType error = avg_l2_norm(error_p);
+        currentError = error;
 
         // Get scale in which to reject error
         RealType currentDistance = l2_norm(current_p);
         RealType newDistance = l2_norm(next_p);
         RealType tol = atol + rtol * std::max(currentDistance, newDistance);
         error /= tol;
-        currentError = error;
 
         RealType scale;
         if (error <= 1.0)
@@ -435,55 +437,56 @@ struct error_info
             }
             else
             {
-                scale = safe * std::pow(static_cast<RealType>(1 / error), RealType(1) / (order + 1));
+                scale = safe * pow(static_cast<RealType>(1 / error), RealType(1) / (order + 1));
                 if (scale < minScale) scale = minScale;
                 if (scale > maxScale) scale = maxScale;
             }
 
             if (rejected)
             {
-                dt *= std::min(scale, 1.0);
+                dt *= std::min(scale, RealType(1.0));
             }
             else
             {
                 dt *= scale;
             }
-            errorOld = std::max(error, 1e-4);
+            errorOld = std::max(error, RealType(1e-4));
             rejected = false;
             return true;
         }
         else
         {
-            scale = std::max(safe * std::pow(static_cast<RealType>(1 / error), RealType(1) / (order + 1)), minScale);
+            scale = std::max(safe * pow(static_cast<RealType>(1 / error), RealType(1) / (order + 1)), minScale);
             dt *= scale;
             rejected = true;
             return false;
         }
     }
 
+    stepperType stepper;
+    const Func& dHdp;
+    const Func& dHdq;
+    unsigned order;
+    RealType atol;
+    RealType rtol;
+
     RealType errorOld;
     RealType safe;
     RealType maxScale;
     RealType minScale;
     bool rejected;
-    RealType atol;
-    RealType rtol;
-    unsigned order;
-    stepperType stepper;
-    Func& dHdp;
-    Func& dHdq;
 };
 
 template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
-std::tuple<std::vector<RealType>, std::vector<RealType>, std::vector<RealType> > integrate_hamiltonian_adaptive(RandomAccessContainer& p0,
-                                                                                                               RandomAccessContainer& q0,
-                                                                                                               const std::pair<RealType, RealType>& timeInterval,
-                                                                                                               const Func& dHdp,
-                                                                                                               const Func& dHdq,
-                                                                                                               const RealType& atol,
-                                                                                                               const RealType& rtol,
-                                                                                                               const available_methods& method,
-                                                                                                               const Policy& pol)
+std::tuple<std::vector<RealType>, std::vector<RealType>, std::vector<RealType>, std::vector<RealType> > integrate_hamiltonian_adaptive_imp(RandomAccessContainer& p0,
+                                                                                                                                           RandomAccessContainer& q0,
+                                                                                                                                           const std::pair<RealType, RealType>& timeInterval,
+                                                                                                                                           const Func& dHdp,
+                                                                                                                                           const Func& dHdq,
+                                                                                                                                           const RealType& atol,
+                                                                                                                                           const RealType& rtol,
+                                                                                                                                           const available_methods& method,
+                                                                                                                                           const Policy& pol)
 {
     BOOST_MATH_STD_USING
     // Not sure how to make this function string nicer
@@ -494,7 +497,7 @@ std::tuple<std::vector<RealType>, std::vector<RealType>, std::vector<RealType> >
         boost::math::policies::raise_domain_error(function, "Maximum time  must be positive and finite but got: tMax = %1%.\n", timeInterval.second, pol);
     }
 
-    if ((timeInterval.first <= 0))
+    if ((timeInterval.first < 0))
     {
         boost::math::policies::raise_domain_error(function, "Minimum time  must be positive and finite but got: tMin = %1%.\n", timeInterval.first, pol);
     }
@@ -560,11 +563,48 @@ std::tuple<std::vector<RealType>, std::vector<RealType>, std::vector<RealType> >
             error.push_back(currentError);
         }
     }
-    return std::make_tuple(time, p, error);
+    return std::make_tuple(time, p, q, error);
+}
+} // namespace detail
+
+template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
+BOOST_MATH_EXPORT std::tuple<std::vector<RealType>, std::vector<RealType>, std::vector<RealType>, std::vector<RealType> > integrate_hamiltonian_adaptive(RandomAccessContainer p0,
+                                                                                                                                                           RandomAccessContainer q0,
+                                                                                                                                                           const std::pair<RealType, RealType> timeInterval,
+                                                                                                                                                           const Func dHdp,
+                                                                                                                                                           const Func dHdq,
+                                                                                                                                                           const RealType atol,
+                                                                                                                                                           const RealType rtol,
+                                                                                                                                                           const available_methods& method,
+                                                                                                                                                           const Policy pol)
+                            {
+    return detail::integrate_hamiltonian_adaptive_imp(p0, q0, timeInterval, dHdp, dHdq, atol, rtol, method, pol);
 }
 
+template <typename RandomAccessContainer, typename RealType, class Func>
+BOOST_MATH_EXPORT std::tuple<std::vector<RealType>, std::vector<RealType>, std::vector<RealType>, std::vector<RealType> > integrate_hamiltonian_adaptive(RandomAccessContainer p0,
+                                                                                                                                                         RandomAccessContainer q0,
+                                                                                                                                                         const std::pair<RealType, RealType> timeInterval,
+                                                                                                                                                         const Func dHdp,
+                                                                                                                                                         const Func dHdq,
+                                                                                                                                                         const RealType atol,
+                                                                                                                                                         const RealType rtol,
+                                                                                                                                                         const available_methods& method)
+{
+    return detail::integrate_hamiltonian_adaptive_imp(p0, q0, timeInterval, dHdp, dHdq, atol, rtol, method, boost::math::policies::policy<>());
+}
 
-} // namespace detail
+template <typename RandomAccessContainer, typename RealType, class Func>
+BOOST_MATH_EXPORT std::tuple<std::vector<RealType>, std::vector<RealType>, std::vector<RealType>, std::vector<RealType> > integrate_hamiltonian_adaptive(RandomAccessContainer p0,
+                                                                                                                                                         RandomAccessContainer q0,
+                                                                                                                                                         const std::pair<RealType, RealType> timeInterval,
+                                                                                                                                                         const Func dHdp,
+                                                                                                                                                         const Func dHdq,
+                                                                                                                                                         const RealType atol,
+                                                                                                                                                         const RealType rtol)
+{
+    return detail::integrate_hamiltonian_adaptive_imp(p0, q0, timeInterval, dHdp, dHdq, atol, rtol, available_methods::Y6, boost::math::policies::policy<>());
+}
 
 template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
 BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer> > integrate_hamiltonian(RandomAccessContainer p0,
