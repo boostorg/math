@@ -527,6 +527,44 @@ namespace test_cstdfloat
    {
       test<boost::float128_t>();
    }
+
+#if defined(__GNUC__) && !defined(BOOST_MATH_TEST_IO_AS_INTEL_QUAD)
+   void test_hexfloat_128_func()
+   {
+      const boost::float128_t x =
+         BOOST_FLOAT128_C(3.141592653589793238462643383279502884);
+
+      std::stringstream low_precision;
+      low_precision << std::hexfloat << std::setprecision(1) << x;
+
+      std::stringstream high_precision;
+      high_precision << std::hexfloat << std::setprecision(30) << x;
+
+      // std::hexfloat ignores precision.
+      BOOST_CHECK_EQUAL(low_precision.str(), high_precision.str());
+      BOOST_CHECK_EQUAL(low_precision.str().substr(0, 2), "0x");
+      BOOST_CHECK(low_precision.str().find('p') != std::string::npos);
+
+      // The emitted representation should round-trip exactly.
+      boost::float128_t round_trip = 0;
+      low_precision.seekg(0);
+      low_precision >> round_trip;
+      BOOST_CHECK(!low_precision.fail());
+      BOOST_CHECK_EQUAL(round_trip, x);
+
+      // Extraction should also accept hexadecimal floating-point input directly.
+      std::stringstream input("0x1.8p+1");
+      boost::float128_t parsed = 0;
+      input >> parsed;
+      BOOST_CHECK(!input.fail());
+      BOOST_CHECK_EQUAL(parsed, BOOST_FLOAT128_C(3.0));
+
+      std::stringstream uppercase;
+      uppercase << std::uppercase << std::hexfloat << x;
+      BOOST_CHECK_EQUAL(uppercase.str().substr(0, 2), "0X");
+      BOOST_CHECK(uppercase.str().find('P') != std::string::npos);
+   }
+#endif
 #endif // defined (BOOST_FLOAT128_C)
 }
 
@@ -563,5 +601,9 @@ BOOST_AUTO_TEST_CASE(test_main)
    // Perform an extended check of boost::float128_t including
    // a variety of functions from the C++ standard library.
    test_cstdfloat::extend_check_128_func();
+
+#if defined(__GNUC__) && !defined(BOOST_MATH_TEST_IO_AS_INTEL_QUAD)
+   test_cstdfloat::test_hexfloat_128_func();
+#endif
 #endif // defined (BOOST_FLOAT128_C)
 }
