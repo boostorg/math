@@ -429,8 +429,10 @@ template <class RealType, class Policy>
 struct kolmogorov_smirnov_lower_quantile_functor
 {
     kolmogorov_smirnov_lower_quantile_functor(const kolmogorov_smirnov_distribution<RealType, Policy>& dist, RealType const& p)
-        : distribution(dist), log_prob(log(p)), scale(constants::pi_sqr<RealType>() / (8 * dist.number_of_observations()))
+        : distribution(dist), scale(constants::pi_sqr<RealType>() / (8 * dist.number_of_observations()))
     {
+        BOOST_MATH_STD_USING // not in scope in a member initializer
+        log_prob = log(p);
     }
 
     boost::math::tuple<RealType, RealType> operator()(RealType const& W)
@@ -452,8 +454,10 @@ template <class RealType, class Policy>
 struct kolmogorov_smirnov_upper_quantile_functor
 {
     kolmogorov_smirnov_upper_quantile_functor(const kolmogorov_smirnov_distribution<RealType, Policy>& dist, RealType const& q)
-        : distribution(dist), log_prob(log(q)), n(dist.number_of_observations())
+        : distribution(dist), n(dist.number_of_observations())
     {
+        BOOST_MATH_STD_USING // not in scope in a member initializer
+        log_prob = log(q);
     }
 
     boost::math::tuple<RealType, RealType> operator()(RealType const& V)
