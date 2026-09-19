@@ -405,7 +405,8 @@ struct error_info
                  RandomAccessContainer& current_q,
                  RandomAccessContainer& next_p,
                  RandomAccessContainer& next_q,
-                 RealType& dt)
+                 RealType& dt,
+                 RealType& currentError)
     {
         RandomAccessContainer error_p = current_p;
         RandomAccessContainer error_q = current_q;
@@ -423,6 +424,7 @@ struct error_info
         RealType newDistance = l2_norm(next_p);
         RealType tol = atol + rtol * std::max(currentDistance, newDistance);
         error /= tol;
+        currentError = error;
 
         RealType scale;
         if (error <= 1.0)
@@ -472,29 +474,29 @@ struct error_info
     Func& dHdq;
 };
 
-template <typename RealType, class Func, class Policy>
-std::vector<RealType> integrate_hamiltonian_adaptive(RealType& p0,
-                                                    RealType& q0,
-                                                    const std::vector<RealType>& recordTimes,
-                                                    const Func& dHdp,
-                                                    const Func& dHdq,
-                                                    const RealType& atol,
-                                                    const RealType& rtol,
-                                                    const available_methods& method,
-                                                    const Policy& pol)
+template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
+std::tuple<std::vector<RealType>, std::vector<RealType>, std::vector<RealType> > integrate_hamiltonian_adaptive(RandomAccessContainer& p0,
+                                                                                                               RandomAccessContainer& q0,
+                                                                                                               const std::pair<RealType, RealType>& timeInterval,
+                                                                                                               const Func& dHdp,
+                                                                                                               const Func& dHdq,
+                                                                                                               const RealType& atol,
+                                                                                                               const RealType& rtol,
+                                                                                                               const available_methods& method,
+                                                                                                               const Policy& pol)
 {
     BOOST_MATH_STD_USING
     // Not sure how to make this function string nicer
     static const char* function = "boost::math::quadrature::integrate_hamiltonian(p0, q0, %1%, steps, dHdp, dHdq)";
 
-    if (!(boost::math::isfinite)(recordTimes.back()))
+    if (!(boost::math::isfinite)(timeInterval.second))
     {
-        boost::math::policies::raise_domain_error(function, "Maximum time  must be positive and finite but got: tMax = %1%.\n", recordTimes.back(), pol);
+        boost::math::policies::raise_domain_error(function, "Maximum time  must be positive and finite but got: tMax = %1%.\n", timeInterval.second, pol);
     }
 
-    if ((recordTimes.front() <= 0))
+    if ((timeInterval.first <= 0))
     {
-        boost::math::policies::raise_domain_error(function, "Minimum time  must be positive and finite but got: tMin = %1%.\n", recordTimes.front(), pol);
+        boost::math::policies::raise_domain_error(function, "Minimum time  must be positive and finite but got: tMin = %1%.\n", timeInterval.first, pol);
     }
 
     // Check that p0 and q0 have the same size
@@ -503,7 +505,7 @@ std::vector<RealType> integrate_hamiltonian_adaptive(RealType& p0,
         #  pragma warning(pop)
     #endif
 
-    typedef void (*stepperType)(RealType&, RealType&, RealType, Func, Func);
+    typedef void (*stepperType)(RandomAccessContainer&, RandomAccessContainer&, RealType, Func, Func);
 
     unsigned order;
     stepperType stepper;
@@ -516,25 +518,24 @@ std::vector<RealType> integrate_hamiltonian_adaptive(RealType& p0,
         default: boost::math::policies::raise_domain_error(function, "Incorrect method recieved. Must be in `available_methods` enum class.", 0, pol);
     }
 
-    std::vector<RealType> p = { p0 };
-    std::vector<RealType> q = { q0 };
+    std::vector<RandomAccessContainer> p = { p0 };
+    std::vector<RandomAccessContainer> q = { q0 };
 
-    RealType negative_one = RealType(-1);
-    RealType dHdq0 = dHdq(q0);
-    mult_prefactor(dHdq0, negative_one);
-
-    std::vector<RealType> time = { 0 };
+    std::vector<RealType> time = { timeInterval.first };
     RealType dt = 0.01;
 
     // To calculate the error, we need to store the current values of p and q seperately
     // from the values updated in the loop. This is because the steppers modify p and q in place
-    RealType current_p;
-    RealType current_q;
+    RandomAccessContainer current_p;
+    RandomAccessContainer current_q;
 
-    error_info<RealType, RealType, stepperType, Func> info(
+    error_info<RandomAccessContainer, RealType, stepperType, Func> info(
         stepper, dHdp, dHdq, order, atol, rtol);
 
-    while (time.back() < recordTimes.back())
+    RealType currentError = 0;
+    std::vector<RealType> error = { currentError };
+
+    while (time.back() < timeInterval.second)
     {
         // Save p0 and q0 for error estimation step
         current_p = p0;
@@ -543,7 +544,7 @@ std::vector<RealType> integrate_hamiltonian_adaptive(RealType& p0,
         // Step p0 and q0 forward one step
         stepper(p0, q0, dt, dHdp, dHdq);
 
-        bool stepSuccessful = info.success(current_p, current_q, p0, q0, dt);
+        bool stepSuccessful = info.success(current_p, current_q, p0, q0, dt, currentError);
         if (!stepSuccessful)
         {
             // Reject the step and reset p0/q0 to current_p/q
@@ -556,28 +557,10 @@ std::vector<RealType> integrate_hamiltonian_adaptive(RealType& p0,
             p.push_back(p0);
             q.push_back(q0);
             time.push_back(time.back() + dt);
-            std::cout << p.back() << "," << time.back() << std::endl;
+            error.push_back(currentError);
         }
     }
-
-    // Now we want to use a cubic hermite spline to get the values of p at recordTimes
-    // Get the derivative at each value of p
-    std::vector<RealType> dpdt(p.size());
-    for (std::size_t i=0; i < p.size(); i++)
-    {
-        dpdt[i] = -dHdq(p[i]);
-    }
-
-    // Form spline and get values of p
-    boost::math::interpolators::cubic_hermite<std::vector<RealType> > spline(std::move(time), std::move(p), std::move(dpdt));
-
-    std::vector<RealType> recordP(recordTimes.size());
-    for (std::size_t i=0; i < recordTimes.size(); i++)
-    {
-        recordP[i] = spline(recordTimes[i]);
-    }
-
-    return recordP;
+    return std::make_tuple(time, p, error);
 }
 
 
