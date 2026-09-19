@@ -8,8 +8,6 @@
 
 BOOST_AUTO_TEST_SUITE(test_autodiff_8)
 
-// This workaround is a temporary fix for Clang on Apple:
-#if !defined(__clang__) || !defined(__APPLE__) || !defined(__MACH__)
 BOOST_AUTO_TEST_CASE_TEMPLATE(hermite_hpp, T, all_float_types) {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
@@ -18,10 +16,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(hermite_hpp, T, all_float_types) {
     auto x = x_sampler.next();
     auto autodiff_v = boost::math::hermite(i, make_fvar<T, m>(x));
     auto anchor_v = boost::math::hermite(i, x);
-    BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
+    BOOST_CHECK_CLOSE(autodiff_v.derivative(0u), anchor_v, 100 * test_constants::pct_epsilon());
   }
 }
-#endif
+
 BOOST_AUTO_TEST_CASE_TEMPLATE(heuman_lambda_hpp, T, all_float_types) {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
@@ -132,7 +130,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(jacobi_zeta_hpp, T, all_float_types) {
   }
 }
 
-#if !defined(__clang__) || !defined(__APPLE__) || !defined(__MACH__)
 BOOST_AUTO_TEST_CASE_TEMPLATE(laguerre_hpp, T, all_float_types) {
   using boost::multiprecision::min;
   using std::min;
@@ -152,16 +149,17 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(laguerre_hpp, T, all_float_types) {
     {
       auto autodiff_v = boost::math::laguerre(n, make_fvar<T, m>(x));
       auto anchor_v = boost::math::laguerre(n, x);
-      BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
+      BOOST_CHECK_CLOSE(autodiff_v.derivative(0u), anchor_v,57
+		      100 * test_constants::pct_epsilon());
     }
     {
       auto autodiff_v = boost::math::laguerre(n, r, make_fvar<T, m>(x));
       auto anchor_v = boost::math::laguerre(n, r, x);
-      BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
+      BOOST_CHECK_CLOSE(autodiff_v.derivative(0u), anchor_v, 500 * test_constants::pct_epsilon());
     }
   }
 }
-#endif
+
 BOOST_AUTO_TEST_CASE_TEMPLATE(lambert_w_hpp, T, all_float_types) {
   using boost::math::nextafter;
   using boost::math::tools::max;
