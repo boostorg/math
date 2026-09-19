@@ -111,9 +111,9 @@ be used with the rest of boost, and may result in compiler errors.
 The following compilers are tested with the CI system, and are known to work.
 Currently a compiler that is fully compliant with C++17 is required to use Boost.Math.
 
-* g++ 5 or later
-* clang++ 5 or later
-* Visual Studio 2015 (14.0) or later
+* g++ 9 or later
+* clang++ 7 or later
+* Visual Studio 2019 (16.0) or later
 
 ## Support, bugs and feature requests
 
@@ -155,7 +155,7 @@ Then move to `libs/math/test`.  You can either run all the tests listed in
 The default action for a PR or commit to a PR is for CI to run the full complement of tests. The following can be appended to the end of a commit message to modify behavior:
 
     * [ci skip] to skip all tests
-    * [linux] to test using GCC Versions 5-12 and Clang Versions 5-14 on Ubuntu LTS versions 18.04-22.04.
+    * [linux] to run the Linux compiler and architecture matrix.
     * [apple] to test Apple Clang on the latest version of MacOS.
     * [windows] to test MSVC-14.0, MSVC-14.2, MSVC-14.3, CYGWIN, and mingw on the latest version of Windows.
     * [standalone] to run standalone mode compile tests

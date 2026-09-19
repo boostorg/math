@@ -34,7 +34,7 @@ BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& 
 
    boost::math::uintmax_t counter = max_terms;
 
-   result_type result = init_value;
+   result_type result = static_cast<result_type>(init_value);
    result_type next_term;
    do{
       next_term = func();
@@ -196,7 +196,7 @@ BOOST_MATH_GPU_ENABLED inline typename Functor::result_type kahan_sum_series(Fun
    result_type factor = ldexp(result_type(1), bits);
    result_type result = func();
    result_type next_term, y, t;
-   result_type carry = 0;
+   result_type carry = static_cast<result_type>(0);
    do{
       next_term = func();
       y = next_term - carry;
