@@ -10,6 +10,7 @@ math_toolkit/standalone.html
 math_toolkit/result_type.html
 math_toolkit/error_handling.html
 math_toolkit/gpu.html
+math_toolkit/cxx20_modules.html
 math_toolkit/compilers_overview.html
 math_toolkit/config_macros.html
 math_toolkit/intro_pol_overview.html
@@ -168,6 +169,7 @@ math_toolkit/runs_test.html
 math_toolkit/ljung_box.html
 math_toolkit/linear_regression.html
 math_toolkit/chatterjee_correlation.html
+math_toolkit/chatterjee_correlation_mnn.html
 vector_functionals.html
 math_toolkit/norms.html
 special.html
@@ -175,6 +177,7 @@ math_toolkit/number_series.html
 math_toolkit/number_series/bernoulli_numbers.html
 math_toolkit/number_series/tangent_numbers.html
 math_toolkit/number_series/primes.html
+math_toolkit/number_series/prime_sieve.html
 math_toolkit/number_series/fibonacci_numbers.html
 math_toolkit/sf_gamma.html
 math_toolkit/sf_gamma/tgamma.html
@@ -357,6 +360,7 @@ math_toolkit/pchip.html
 math_toolkit/quintic_hermite.html
 math_toolkit/bilinear_uniform.html
 quadrature.html
+math_toolkit/van_den_bos_unit_square.html
 math_toolkit/trapezoidal.html
 math_toolkit/gauss.html
 math_toolkit/gauss_kronrod.html
@@ -366,6 +370,7 @@ math_toolkit/double_exponential/de_tanh_sinh.html
 math_toolkit/double_exponential/de_tanh_sinh_2_arg.html
 math_toolkit/double_exponential/de_sinh_sinh.html
 math_toolkit/double_exponential/de_exp_sinh.html
+math_toolkit/double_exponential/de_matrix.html
 math_toolkit/double_exponential/de_tol.html
 math_toolkit/double_exponential/de_levels.html
 math_toolkit/double_exponential/de_thread.html

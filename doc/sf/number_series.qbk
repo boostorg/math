@@ -259,7 +259,225 @@ Passing a value greater than `max_prime` results in a __domain_error being raise
 
 This function is `constexpr` only if the compiler supports C++14 constexpr functions.
 
-[endsect] [/section:primes]
+[endsect] [/section:primes Prime Numbers]
+
+[section:prime_sieve Prime Sieve]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/prime_sieve.hpp>
+``
+
+   namespace boost { namespace math {
+
+   namespace execution {
+      struct cuda_policy {};
+      inline constexpr cuda_policy cuda {};
+   }
+
+   enum class prime_range_strategy { automatic, full_sieve, test_survivors };
+
+   struct prime_sieve_options
+   {
+      std::size_t l1d_bytes {0};          // 0 = detect
+      std::size_t l2_bytes {0};           // 0 = detect (per core)
+      std::size_t sieve_bytes {0};        // 0 = derive from sqrt(upper) and the caches; clamped to [16 KiB, 8 MiB]
+      unsigned max_threads {0};           // 0 = std::thread::hardware_concurrency()
+      std::size_t chunk_primes {1u << 19};  // primes per parallel chunk when storing output
+      prime_range_strategy range_strategy {prime_range_strategy::automatic};
+      bool probable_prime_only {false};   // beyond 2^64: Baillie-PSW only, skip the pseudosquares test
+   };
+
+   // primes in [2, upper_bound)
+   template <class ExecutionPolicy, class Integer, class OutputIterator>
+   OutputIterator prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, OutputIterator out, const prime_sieve_options& options = {});
+   template <class Integer, class OutputIterator>
+   OutputIterator prime_sieve(Integer upper_bound, OutputIterator out, const prime_sieve_options& options = {});
+   template <class ExecutionPolicy, class Integer, class T, class Alloc>
+   void prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, std::vector<T, Alloc>& out, const prime_sieve_options& options = {});
+   template <class Integer, class T, class Alloc>
+   void prime_sieve(Integer upper_bound, std::vector<T, Alloc>& out, const prime_sieve_options& options = {});
+
+   // primes in [lower_bound, upper_bound); the bounds may have different integer types
+   template <class ExecutionPolicy, class Lower, class Upper, class OutputIterator>
+   OutputIterator prime_range(ExecutionPolicy&& policy, Lower lower_bound, Upper upper_bound, OutputIterator out, const prime_sieve_options& options = {});
+   template <class Lower, class Upper, class OutputIterator>
+   OutputIterator prime_range(Lower lower_bound, Upper upper_bound, OutputIterator out, const prime_sieve_options& options = {});
+   template <class ExecutionPolicy, class Lower, class Upper, class T, class Alloc>
+   void prime_range(ExecutionPolicy&& policy, Lower lower_bound, Upper upper_bound, std::vector<T, Alloc>& out, const prime_sieve_options& options = {});
+   template <class Lower, class Upper, class T, class Alloc>
+   void prime_range(Lower lower_bound, Upper upper_bound, std::vector<T, Alloc>& out, const prime_sieve_options& options = {});
+
+   // number of primes in [2, upper_bound) and in [lower_bound, upper_bound)
+   template <class ExecutionPolicy, class Integer>
+   std::uint64_t prime_count(ExecutionPolicy&& policy, Integer upper_bound, const prime_sieve_options& options = {});
+   template <class ExecutionPolicy, class Lower, class Upper>
+   std::uint64_t prime_count(ExecutionPolicy&& policy, Lower lower_bound, Upper upper_bound, const prime_sieve_options& options = {});
+   template <class Integer>
+   std::uint64_t prime_count(Integer upper_bound, const prime_sieve_options& options = {});
+   template <class Lower, class Upper>
+   std::uint64_t prime_count(Lower lower_bound, Upper upper_bound, const prime_sieve_options& options = {});
+
+   // reserves room for all primes below upper_bound
+   template <class Integer, class T, class Alloc>
+   void prime_reserve(Integer upper_bound, std::vector<T, Alloc>& primes);
+
+   }} // namespaces
+
+[h4 Description]
+
+These functions require C++17.
+
+`prime_sieve` produces the primes in the half-open range \[2, `upper_bound`), `prime_range` the primes in
+\[`lower_bound`, `upper_bound`), and `prime_count` returns how many primes such a range contains without
+storing them. Output is always in ascending order. The overloads taking a `std::vector` append to it
+and are the fastest way to store the primes; the output iterator overloads return the advanced iterator.
+A `lower_bound` below 2 is treated as 2, negative bounds as 0, and an empty range produces nothing.
+A negative bound is clamped in its own type, so mixing a signed and an unsigned bound is safe.
+
+`Integer` may be any builtin integer type or a Boost.Multiprecision integer such as `cpp_int` or `mpz_int`.
+Bounds that fit in 64 bits are sieved with a segmented sieve of Eratosthenes in the style of
+[@https://github.com/kimwalisch/primesieve primesieve]: one byte represents 30 integers (the eight residues
+coprime to 30), multiples of the primes up to 163 are removed by pre-computed periodic patterns, and the
+sieving primes are split into three classes (many multiples per segment, a few, or at most one) that use a
+mod 30 wheel with unrolled loops, lists sorted by wheel position, and Oliveira e Silva's bucket sieve
+(fixed 8 KiB buckets from a memory pool) respectively. Segments are sized to the L1 and L2 data caches,
+which are detected on Linux and macOS and can be overridden through `prime_sieve_options`; when big
+primes are present the largest segment (8 MiB) is used. The wheel tables and the 16 pre-sieve
+patterns (123 KB) are computed at compile time with `constexpr` on GCC and Clang; MSVC and nvcc, whose
+constexpr step limits are lower, generate the patterns on first use (define
+`BOOST_MATH_PRIME_SIEVE_RUNTIME_PRESIEVE` to force that everywhere).
+
+Short intervals at large magnitudes (roughly when the interval is narrower than `sqrt(upper_bound) / ln(upper_bound)`)
+switch automatically to a window method: the interval is sieved by the primes up to a modest depth and the
+survivors are tested with a Baillie-PSW test in Montgomery arithmetic, which is deterministic below 2[super 64].
+`prime_range_strategy` forces either method.
+
+Bounds beyond 2[super 64] use the same window method with the Lukes-Patterson-Williams pseudosquares test
+(Sorenson, ['The pseudosquares prime sieve], 2006), which is deterministic while `upper_bound` divided by the
+sieving depth stays below the largest tabulated pseudosquare (about 2.95 * 10[super 23]), and Baillie-PSW beyond
+that, for which no counterexample is known. Setting `probable_prime_only` uses Baillie-PSW everywhere and is
+roughly ten times faster. This path is intended for windows of up to about 10[super 8] integers; the
+head of a range that straddles 2[super 64] is still processed by the 64-bit engine.
+
+[h4 Execution policies]
+
+The policy overloads accept the `std::execution` policies and `boost::math::execution::cuda`:
+
+[table
+[[Policy][Effect]]
+[[`std::execution::seq`, `std::execution::unseq`, or no policy][Single threaded.]]
+[[`std::execution::par`, `std::execution::par_unseq`][The range is cut into chunks of about 200 * sqrt(`upper_bound`) integers that are handed to `max_threads` worker threads through an atomic counter; each worker owns its sieve and shares the read-only sieving primes. Output is committed in order, so the result is identical to the sequential one.]]
+[[`boost::math::execution::cuda`][When the translation unit is compiled by nvcc with `BOOST_MATH_ENABLE_CUDA` defined, the range is sieved on the GPU (`BOOST_MATH_HAS_CUDA_PRIME_SIEVE` is defined in that case). Otherwise the call runs on the CPU with the parallel policy.]]
+]
+
+The `std::execution` overloads are available when the standard library provides the policy types
+(libstdc++ 9 and later, MSVC, and libc++ with `-fexperimental-library`); no parallel algorithms and
+therefore no TBB are required. Threads are never used when Boost.Math is configured without thread support.
+
+[h4 Examples]
+
+    #include <boost/math/special_functions/prime_sieve.hpp>
+    #include <boost/multiprecision/cpp_int.hpp>
+    #include <execution>
+    #include <vector>
+    #include <list>
+    #include <iterator>
+    #include <cstdint>
+
+    // All primes below one billion, using every core
+    std::vector<std::uint64_t> primes;
+    boost::math::prime_reserve(1'000'000'000, primes);
+    boost::math::prime_sieve(std::execution::par, 1'000'000'000, primes);
+
+    // Count the primes in [10^18, 10^18 + 10^9) on one thread
+    std::uint64_t n = boost::math::prime_count(1'000'000'000'000'000'000ull, 1'000'000'001'000'000'000ull);
+
+    // Primes just above 2^64 with an arbitrary precision type
+    using boost::multiprecision::cpp_int;
+    std::vector<cpp_int> big;
+    boost::math::prime_range(cpp_int(1) << 64, (cpp_int(1) << 64) + 1'000'000, big);
+
+    // A range through any output iterator
+    std::list<int> small;
+    boost::math::prime_range(100, 1000, std::back_inserter(small));
+
+[h4 Performance]
+
+Measured with the Google Benchmark harness in `reporting/performance/prime_sieve_performance.cpp` on an
+Apple M4 Max (12 performance and 4 efficiency cores, 128 KiB L1D), Apple clang 17, `-O3 -march=native`,
+against primesieve 12.16 built from source on the same machine. Times are wall clock in milliseconds.
+
+[table
+[[Task][`boost::math`, 1 thread][primesieve, 1 thread][`boost::math`, 16 threads][primesieve, 16 threads]]
+[[count primes below 10[super 8]][2.6][3.2][0.8][]]
+[[count primes below 10[super 9]][37][44][5.4][5]]
+[[count primes below 10[super 10]][495][566][63][56]]
+[[count primes below 10[super 11]][6660][7620][744][654]]
+[[store primes below 10[super 9]][89][84][23][]]
+[[store primes below 10[super 10]][1051][1027][286][]]
+[[count a 10[super 9] window at 10[super 12]][91][108][][]]
+[[count a 10[super 9] window at 10[super 15]][167][267][][]]
+[[count a 10[super 9] window at 10[super 18]][619][732][][]]
+]
+
+The same comparison on an Intel Core i9-11900K (8 cores, 48 KiB L1D, 512 KiB L2 per core) with GCC 13,
+`-O3 -march=native`, primesieve 12.16 built from source there:
+
+[table
+[[Task][`boost::math`, 1 thread][primesieve, 1 thread][`boost::math`, 16 threads][primesieve, 16 threads]]
+[[count primes below 10[super 9]][53][51][][]]
+[[count primes below 10[super 10]][655][640][124][146]]
+[[count primes below 10[super 11]][][8392][1767][1865]]
+[[store primes below 10[super 9]][79][70][][]]
+[[count a 10[super 9] window at 10[super 12]][128][124][][]]
+[[count a 10[super 9] window at 10[super 15]][273][224][][]]
+[[count a 10[super 9] window at 10[super 18]][1037][796][][]]
+]
+
+Single threaded this library is 10 to 15 percent ahead on Apple silicon and within 2 to 3 percent of
+primesieve on x86 for whole ranges, while primesieve keeps a lead of 20 to 30 percent on x86 for
+windows at 10[super 15] and beyond (the bucket sieve is memory bound there and the Intel machine has
+a third of the memory bandwidth). With all cores this library is ahead on both machines. When compiled with
+AVX-512 VBMI2 support (`-march=native` on Ice Lake or Zen 4 and later) primes are extracted from the
+sieve with byte compression instructions; define `BOOST_MATH_PRIME_SIEVE_NO_SIMD` to keep the portable loop.
+
+Both sieves are O(n log log n) in time and use O(sqrt(n)) memory for the sieving primes (about
+four bytes per prime here) plus the segment; the multithreaded path additionally buffers at most
+2 * `max_threads` * `chunk_primes` output values.
+
+The CUDA backend was measured on an NVIDIA GeForce RTX 3060 (CUDA 13.1, `nvcc -O3 -arch=sm_86`)
+against the same code running with `std::execution::par` on that machine's Intel Core i9-11900K
+(8 cores, 16 threads). It stores 16 bytes per sieving prime on the device, so ranges up to 2[super 64]
+need about 3.3 GB of device memory.
+
+[table
+[[Task][`execution::cuda`, RTX 3060][`std::execution::par`, i9-11900K]]
+[[count primes below 10[super 9]][8][11]]
+[[count primes below 10[super 10]][72][136]]
+[[count primes below 10[super 11]][1077][1786]]
+[[count a 10[super 9] window at 10[super 12]][13][29]]
+[[count a 10[super 9] window at 10[super 15]][75][136]]
+[[count a 10[super 9] window at 10[super 18]][656][691]]
+[[count a 2[super 30] window below 2[super 64]][2371][2995]]
+[[store primes below 10[super 10]][1485][430]]
+]
+
+Counting is where the GPU pays off; storing primes is dominated by the transfer and compaction
+of the output (3.6 GB for the primes below 10[super 10]) and is faster on the CPU. Windows near
+2[super 64] are dominated by generating the 203 million sieving primes on the host.
+
+[h4 References]
+
+* Kim Walisch, [@https://github.com/kimwalisch/primesieve primesieve] and its [@https://github.com/kimwalisch/primesieve/blob/master/doc/ALGORITHMS.md algorithm notes].
+* Tomas Oliveira e Silva, [@https://sweet.ua.pt/tos/software/prime_sieve.html Fast implementation of the segmented sieve of Eratosthenes].
+* Jonathan Sorenson, [@https://link.springer.com/chapter/10.1007/11792086_15 The pseudosquares prime sieve], ANTS VII, 2006.
+* Pierre Dusart, [@https://arxiv.org/abs/1002.0442 Estimates of some functions over primes without R.H.], 2010 (the bound used by `prime_reserve`).
+* Robert Baillie and Samuel S. Wagstaff Jr., Lucas pseudoprimes, Mathematics of Computation 35 (1980).
+
+[endsect] [/section:prime_sieve Prime Sieve]
+
 
 [section:fibonacci_numbers Fibonacci Numbers]
 
