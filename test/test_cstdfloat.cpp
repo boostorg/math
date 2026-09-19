@@ -528,7 +528,7 @@ namespace test_cstdfloat
       test<boost::float128_t>();
    }
 
-#if defined(__GNUC__) && !defined(BOOST_MATH_TEST_IO_AS_INTEL_QUAD)
+#if defined(BOOST_MATH_TEST_FLOAT128)
    void test_hexfloat_128_func()
    {
       const boost::float128_t x =
@@ -602,7 +602,7 @@ BOOST_AUTO_TEST_CASE(test_main)
    // a variety of functions from the C++ standard library.
    test_cstdfloat::extend_check_128_func();
 
-#if defined(__GNUC__) && !defined(BOOST_MATH_TEST_IO_AS_INTEL_QUAD)
+#if defined(BOOST_MATH_TEST_FLOAT128)
    test_cstdfloat::test_hexfloat_128_func();
 #endif
 #endif // defined (BOOST_FLOAT128_C)

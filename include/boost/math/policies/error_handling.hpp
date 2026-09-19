@@ -871,7 +871,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE R checked_narrowing_cast(T val, co
    //
    // Most of what follows will evaluate to a no-op:
    //
-   R result = 0;
+   R result = R(0);
    if(detail::check_overflow<R>(val, &result, function, overflow_type()))
       return result;
    if(detail::check_underflow<R>(val, &result, function, underflow_type()))
