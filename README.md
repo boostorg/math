@@ -1,7 +1,7 @@
 Boost Math Library
 ============================
 
->ANNOUNCEMENT: This library requires a compliant C++14 compiler.
+>ANNOUNCEMENT: This library requires a compliant C++17 compiler.
 
 
 |                  |  Master  |   Develop   |
@@ -109,7 +109,7 @@ be used with the rest of boost, and may result in compiler errors.
 ## Supported Compilers
 
 The following compilers are tested with the CI system, and are known to work.
-Currently a compiler that is fully compliant with C++14 is required to use Boost.Math.
+Currently a compiler that is fully compliant with C++17 is required to use Boost.Math.
 
 * g++ 5 or later
 * clang++ 5 or later
@@ -182,3 +182,8 @@ using doxygen ;
 using quickbook ;
 libs/math/doc$ ../../../b2
 ```
+
+## Citation
+
+If you use Boost.Math in academic work, please cite the library using the
+citation metadata in [`CITATION.cff`](CITATION.cff).

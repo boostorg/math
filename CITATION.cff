@@ -1,0 +1,49 @@
+cff-version: 1.2.0
+message: "If you use Boost.Math in your work, please cite it using the metadata below."
+title: "Boost.Math"
+type: software
+license: BSL-1.0
+repository-code: "https://github.com/boostorg/math"
+url: "https://www.boost.org/libs/math/"
+
+authors:
+  - given-names: Nikhar
+    family-names: Agrawal
+  - given-names: Anton
+    family-names: Bikineev
+  - given-names: Matthew
+    family-names: Borland
+  - given-names: Paul A.
+    family-names: Bristow
+  - given-names: Hubert
+    family-names: Holin
+  - given-names: Marco
+    family-names: Guazzone
+  - given-names: Christopher
+    family-names: Kormanyos
+  - given-names: Bruno
+    family-names: Lalande
+  - given-names: John
+    family-names: Maddock
+  - given-names: Evan
+    family-names: Miller
+  - given-names: Jeremy W.
+    family-names: Murphy
+  - given-names: Matthew
+    family-names: Pulver
+  - given-names: Johan
+    family-names: Råde
+  - given-names: Benjamin
+    family-names: Sobotta
+  - given-names: Gautam
+    family-names: Sewani
+  - given-names: Nicholas
+    family-names: Thompson
+  - given-names: Thijs
+    family-names: van den Berg
+  - given-names: Daryle
+    family-names: Walker
+  - given-names: Xiaogang
+    family-names: Zhang
+  - given-names: Maksym
+    family-names: Zhelyeznyakov
