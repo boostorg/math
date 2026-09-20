@@ -228,8 +228,10 @@ void test_multiprecision_sho(const RealType tol, const available_methods method)
 
 /* Test if SHO energy fluctuations are below a given tolerance*/
 template <class RealType>
-void test_adaptive(const RealType atol, const available_methods method)
+void test_adaptive(const RealType atol, const available_methods method, const RealType energyError)
 {
+    using std::pow;
+    using std::abs;
     BOOST_MATH_STD_USING
 
     RealType q0 = 1;
@@ -250,19 +252,19 @@ void test_adaptive(const RealType atol, const available_methods method)
 
     BOOST_CHECK_LE(max_error, atol);
 
-    // RealType p_val;
-    // RealType q_val;
-    // std::vector<RealType> abs_energy_error(p.size());
-    // for (unsigned i=0; i < p.size(); i++)
-    // {
-    //     p_val = p[i];
-    //     q_val = q[i];
+    RealType p_val;
+    RealType q_val;
+    std::vector<RealType> abs_energy_error(p.size());
+    for (unsigned i=0; i < p.size(); i++)
+    {
+        p_val = p[i];
+        q_val = q[i];
 
-    //     abs_energy_error[i] = std::abs(std::pow(p_val, 2) + std::pow(q_val, 2) - 1);
-    // }
+        abs_energy_error[i] = abs(pow(p_val, 2) + pow(q_val, 2) - 1);
+    }
 
-    // RealType max_error = *std::max_element(std::begin(abs_energy_error), std::end(abs_energy_error));
-    // BOOST_CHECK_LE(max_error, tol);
+    RealType maxEnergyError = *std::max_element(std::begin(abs_energy_error), std::end(abs_energy_error));
+    BOOST_CHECK_LE(maxEnergyError, energyError);
 }
 
 BOOST_AUTO_TEST_CASE(symplectic_quadrature)
@@ -307,14 +309,14 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
     test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, available_methods::SRKNB11);
 
     // Test Adaptive steps
-    test_adaptive<float>(1e-6, available_methods::Y6);
-    test_adaptive<double>(1e-12, available_methods::Y6);
-    test_adaptive<long double>(1e-12, available_methods::Y6);
+    test_adaptive<float>(1e-6, available_methods::Y6, 3e-6);
+    test_adaptive<double>(1e-12, available_methods::Y6, 1e-10);
+    test_adaptive<long double>(1e-12, available_methods::Y6, 1e-10);
 
-    test_adaptive<double>(1e-12, available_methods::Y2);
-    test_adaptive<double>(1e-12, available_methods::Y4);
-    test_adaptive<double>(1e-12, available_methods::SRKNB6);
-    test_adaptive<double>(1e-12, available_methods::SRKNB11);
+    test_adaptive<double>(1e-12, available_methods::Y2, 1e-7);
+    test_adaptive<double>(1e-12, available_methods::Y4, 1e-9);
+    test_adaptive<double>(1e-12, available_methods::SRKNB6, 1e-11);
+    test_adaptive<double>(1e-12, available_methods::SRKNB11, 1e-11);
 
-    test_adaptive<boost::multiprecision::cpp_bin_float_quad>(1e-12, available_methods::Y2);
+    test_adaptive<boost::multiprecision::cpp_bin_float_quad>(1e-12, available_methods::Y2, 1e-7);
 }
