@@ -1039,7 +1039,14 @@ test-suite misc :
    [ run test_recurrence.cpp : : : <define>TEST=3 release $(float128_type) [ requires cxx11_unified_initialization_syntax cxx11_hdr_tuple cxx11_auto_declarations cxx11_decltype ]  : test_recurrence_3 ]
 
    [ run test_print_info_on_type.cpp  ]
-   [ run univariate_statistics_test.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run univariate_statistics_test.cpp /boost/test//boost_unit_test_framework
+  : : :
+    <toolset>gcc,<target-os>windows:<cxxflags>-Wa,-mbig-obj
+    <debug-symbols>off
+    <toolset>msvc:<cxxflags>/bigobj
+    [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ]
+    [ requires cxx17_if_constexpr cxx17_std_apply ]
+  ]
    [ run univariate_statistics_backwards_compatible_test.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ] ]
    [ run ooura_fourier_integral_test.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] $(float128_type) [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run empirical_cumulative_distribution_test.cpp  : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
@@ -1051,7 +1058,14 @@ test-suite misc :
    [ run quartic_roots_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_t_test.cpp : : : $(float128_type) [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ]  ]
    [ run test_z_test.cpp : : : $(float128_type) [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ]  ]
-   [ run bivariate_statistics_test.cpp : : : [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ] [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] ]
+   [ run bivariate_statistics_test.cpp
+  : : :
+    <toolset>gcc,<target-os>windows:<cxxflags>-Wa,-mbig-obj
+    <debug-symbols>off
+    <toolset>msvc:<cxxflags>/bigobj
+    [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ]
+    [ requires cxx17_if_constexpr cxx17_std_apply ]
+  ]
    [ run linear_regression_test.cpp : : : [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ]  ]
    [ run test_runs_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_chatterjee_correlation.cpp /boost/test//boost_unit_test_framework ]
@@ -1100,7 +1114,7 @@ test-suite interpolators :
    [ run cohen_acceleration_test.cpp  : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx17_if_constexpr cxx17_std_apply ]  $(float128_type) ]
    [ compile compile_test/filters_daubechies_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ]  ]
    [ compile compile_test/sf_daubechies_scaling_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ]  ]
-   [ run whittaker_shannon_test.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] ]
+   [ run whittaker_shannon_test.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] $(float128_type) ]
    [ run cardinal_quadratic_b_spline_test.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] ]
    [ run cardinal_quintic_b_spline_test.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] $(float128_type) ]
    [ run makima_test.cpp /boost/circular_buffer//boost_circular_buffer : : :  [ requires cxx17_if_constexpr cxx17_std_apply ]  $(float128_type) ]
@@ -1217,6 +1231,15 @@ test-suite quadrature :
      : : : release <define>TEST10 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_10 ]
 
+   [ run double_exponential_eigen_test.cpp : : :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax ]
+     [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
+   [ run gauss_kronrod_eigen_test.cpp : : :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax ]
+     [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
+   [ run gauss_quadrature_eigen_test.cpp : : :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax ]
+     [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
    [ run gauss_quadrature_test.cpp : : : <define>TEST1 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_quadrature_test_1 ]
    [ run gauss_quadrature_test.cpp : : : <define>TEST2 $(float128_type)
@@ -1339,6 +1362,13 @@ test-suite quadrature :
 
    [ compile compile_test/gauss_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile compile_test/gauss_kronrod_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ run test_van_den_bos_unit_square.cpp : : :
+     <cxxstd>17
+     [ requires cxx17_if_constexpr cxx11_auto_declarations cxx11_lambdas cxx11_hdr_array cxx11_hdr_thread ]
+     <target-os>linux:<linkflags>"-pthread" ]
+   [ compile-fail test_van_den_bos_unit_square_integral_return_fail.cpp :
+     <cxxstd>17
+     [ requires cxx17_if_constexpr cxx11_auto_declarations cxx11_lambdas cxx11_hdr_array ] ]
    [ run git_issue_898.cpp ]
    [ run git_issue_1075.cpp : : : $(float128_type) ]
 

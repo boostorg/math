@@ -13,6 +13,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_asym.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_rational.hpp>
@@ -637,7 +638,7 @@ namespace boost { namespace math { namespace detail {
       static const thread_local long long max_scaling = lltrunc(boost::math::tools::log_max_value<T>()) - 2;
       static const thread_local T max_scale_factor = exp(T(max_scaling));
 
-      while (log_scaling > max_scaling)
+      while (!(boost::math::isinf)(result) && (log_scaling > max_scaling))
       {
          result *= max_scale_factor;
          log_scaling -= max_scaling;

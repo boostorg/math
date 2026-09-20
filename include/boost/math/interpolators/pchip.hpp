@@ -35,7 +35,11 @@ public:
             oss << " This interpolator requires at least four data points.";
             throw std::domain_error(oss.str());
         }
-        RandomAccessContainer s(x.size(), std::numeric_limits<Real>::quiet_NaN());
+        // Preserve capacity for fixed-capacity containers such as circular_buffer.
+        RandomAccessContainer s(x);
+        for (auto& si : s) {
+            si = std::numeric_limits<Real>::quiet_NaN();
+        }
         if (isnan(left_endpoint_derivative))
         {
             // If the derivative is not specified, this seems as good a choice as any.

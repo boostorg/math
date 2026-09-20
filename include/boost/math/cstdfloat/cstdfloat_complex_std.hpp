@@ -555,7 +555,7 @@
       const bool x_im_isneg  = (x.imag() < 0);
       const bool x_im_iszero = ((x_im_isneg || (x.imag() > 0)) == false);
 
-      if(x_im_iszero)
+      if(x_im_iszero && ((x.real() >= 0) || (a == floor(a))))
       {
         using std::pow;
 

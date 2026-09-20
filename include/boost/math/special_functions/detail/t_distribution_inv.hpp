@@ -509,7 +509,14 @@ BOOST_MATH_GPU_ENABLED T fast_students_t_quantile_imp(T df, T p, const Policy& p
    // Get cdf from incomplete beta result:
    T p0 = f0 / 2  - p;
    // Get pdf from derivative:
-   T p1 = f1 * sqrt(y * xb * xb * xb / df);
+   T rxb = sqrt(xb);
+   T p1 = f1 * sqrt(y / df);
+   p1 *= rxb;
+   p1 *= rxb;
+   p1 *= rxb;
+   // If p1 has underflowed, all subsequent calculations will fail:
+   if (p1 < tools::min_value<T>())
+       return t;
    //
    // Second derivative divided by p1:
    //

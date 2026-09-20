@@ -466,7 +466,7 @@ BOOST_MATH_GPU_ENABLED RealType calculate_hill_df_guess(
    RealType za = quantile(complement(n, alpha));
    RealType zb = quantile(complement(n, beta));
 
-   RealType v_norm = pow((za + zb) * sd / difference_from_mean, 2) - 1;
+   RealType v_norm = static_cast<RealType>(pow((za + zb) * sd / difference_from_mean, 2) - 1);
    RealType hint = v_norm + (za * za - za * zb + zb * zb + 1) / 2;
 
    return (hint <= 0) ? RealType(1) : hint;

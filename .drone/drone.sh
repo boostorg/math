@@ -52,7 +52,7 @@ echo '==================================> SCRIPT'
 
 echo "using $TOOLSET : : $COMPILER : <cxxflags>-std=$CXXSTD $OPTIONS ;" > ~/user-config.jam
 (cd libs/config/test && ../../../b2 print_config_info print_math_info toolset=$TOOLSET)
-(cd libs/math/test && ../../../b2 -j3 toolset=$TOOLSET $TEST_SUITE)
+(cd libs/math/test && ../../../b2 -d0 -j3 toolset=$TOOLSET $TEST_SUITE)
 
 echo '==================================> AFTER_SUCCESS'
 

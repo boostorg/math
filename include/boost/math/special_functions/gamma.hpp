@@ -1682,7 +1682,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
    BOOST_MATH_STD_USING
 
 
-   T result = 0; // Just to avoid warning C4701: potentially uninitialized local variable 'result' used
+   T result = T(0); // Just to avoid warning C4701: potentially uninitialized local variable 'result' used
 
    if(x > 0 && a >= max_factorial<T>::value && !normalised)
    {
@@ -1714,7 +1714,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
          // Not currently used for non-normalized igamma:
          //if(p_derivative)
          //   *p_derivative = exp(result);
-         T init_value = 0;
+         T init_value = T(0);
          result += log(detail::lower_gamma_series(a, x, pol, init_value) / a);
       }
       else
@@ -1742,7 +1742,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
                // Not currently used for non-normalized igamma:
                //if(p_derivative)
                //   *p_derivative = exp(result);
-               T init_value = 0;
+               T init_value = T(0);
                result += log(detail::lower_gamma_series(a, x, pol, init_value) / a);
             }
          }

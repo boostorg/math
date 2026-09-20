@@ -288,6 +288,7 @@ public:
    BOOST_MATH_GPU_ENABLED polynomial()= default;
 
    template <class U>
+   [[deprecated("Please use the move constructor instead, or pass the order instead of number of terms")]] 
    BOOST_MATH_GPU_ENABLED polynomial(const U* data, unsigned order)
       : m_data(data, data + order + 1)
    {

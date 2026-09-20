@@ -6,7 +6,7 @@ jobs:
       - BOOST_LIBRARY=math
       - CXX_STANDARD=gnu++11
     docker:
-      - image: gcc:9
+      - image: gcc:13-bookworm
     steps:
       - checkout
       - run:
