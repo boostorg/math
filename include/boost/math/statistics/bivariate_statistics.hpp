@@ -193,8 +193,9 @@ ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIter
         return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, std::numeric_limits<Real>::quiet_NaN(), Real(i));
     }
 
+    // Take square roots before multiplying to avoid overflow or underflow in Qu*Qv.
+    Real rho = cov/(sqrt(Qu)*sqrt(Qv));
     // Make sure rho in [-1, 1], even in the presence of numerical noise.
-    Real rho = cov/sqrt(Qu*Qv);
     if (rho > 1) {
         rho = 1;
     }
@@ -313,8 +314,9 @@ ReturnType correlation_coefficient_parallel_impl(ForwardIterator u_begin, Forwar
         return std::make_tuple(mu_u_a, Qu_a, mu_v_a, Qv_a, cov_a, std::numeric_limits<Real>::quiet_NaN(), n_a);
     }
 
+    // Take square roots before multiplying to avoid overflow or underflow in Qu_a*Qv_a.
+    Real rho = cov_a/(sqrt(Qu_a)*sqrt(Qv_a));
     // Make sure rho in [-1, 1], even in the presence of numerical noise.
-    Real rho = cov_a/sqrt(Qu_a*Qv_a);
     if (rho > 1) {
         rho = 1;
     }

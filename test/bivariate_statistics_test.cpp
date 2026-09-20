@@ -38,6 +38,32 @@ using boost::multiprecision::cpp_complex_50;
 using  boost::math::statistics::means_and_covariance;
 using  boost::math::statistics::covariance;
 
+template<typename Real>
+void test_correlation_normalization_range()
+{
+    using boost::math::statistics::correlation_coefficient;
+    using std::ldexp;
+    using std::sqrt;
+
+    // Each variance is finite, but their product can overflow or underflow.
+    const int exponent = std::numeric_limits<Real>::max_exponent / 3;
+    const std::array<Real, 3> scales{{ldexp(Real(1), -exponent), Real(1), ldexp(Real(1), exponent)}};
+    const Real expected = sqrt(Real(3)) / 2;
+    const Real tol = 8 * std::numeric_limits<Real>::epsilon();
+    for (Real u_scale : scales)
+    {
+        for (Real v_scale : scales)
+        {
+            const std::array<Real, 3> u{{0, u_scale, 2 * u_scale}};
+            const std::array<Real, 3> v{{0, 0, v_scale}};
+            const std::array<Real, 3> negative_v{{0, 0, -v_scale}};
+            CHECK_MOLLIFIED_CLOSE(expected, correlation_coefficient(u, v), tol);
+            CHECK_MOLLIFIED_CLOSE(expected, correlation_coefficient(v, u), tol);
+            CHECK_MOLLIFIED_CLOSE(-expected, correlation_coefficient(u, negative_v), tol);
+        }
+    }
+}
+
 #ifndef BOOST_NO_CXX17_HDR_EXECUTION
 #include <execution>
 
@@ -302,8 +328,31 @@ void test_integer_correlation_coefficient(ExecutionPolicy&& exec)
     CHECK_LE(abs(rho_uv - sqrt(double(3))/double(2)), tol);
 }
 
+void test_parallel_correlation_normalization_range()
+{
+    using boost::math::statistics::correlation_coefficient;
+    const double scale = std::ldexp(1.0, std::numeric_limits<double>::max_exponent / 3);
+    // Exceed the parallel dispatch threshold, even on a two-thread machine.
+    std::vector<double> u(65536), v(u.size());
+    for (std::size_t i = 0; i < u.size(); ++i)
+    {
+        u[i] = (i % 4) * scale;
+        v[i] = -u[i];
+    }
+    const double tol = 1000 * std::numeric_limits<double>::epsilon();
+    CHECK_MOLLIFIED_CLOSE(1.0, correlation_coefficient(std::execution::par, u, u), tol);
+    CHECK_MOLLIFIED_CLOSE(-1.0, correlation_coefficient(std::execution::par, u, v), tol);
+}
+
 int main()
 {
+    test_correlation_normalization_range<float>();
+    test_correlation_normalization_range<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+    test_correlation_normalization_range<long double>();
+#endif
+    test_parallel_correlation_normalization_range();
+
     test_covariance<float>(std::execution::seq);
     test_covariance<float>(std::execution::par);
     test_covariance<double>(std::execution::seq);
@@ -608,6 +657,12 @@ void test_integer_correlation_coefficient()
 
 int main()
 {
+    test_correlation_normalization_range<float>();
+    test_correlation_normalization_range<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+    test_correlation_normalization_range<long double>();
+#endif
+
     test_covariance<float>();
     test_covariance<double>();
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
