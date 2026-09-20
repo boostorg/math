@@ -408,6 +408,8 @@ struct error_info
                  RealType& dt,
                  RealType& currentError)
     {
+        using std::min;
+        using std::max;
         BOOST_MATH_STD_USING
 
         RandomAccessContainer error_p = current_p;
@@ -444,19 +446,19 @@ struct error_info
 
             if (rejected)
             {
-                dt *= (std::min)(scale, RealType(1.0));
+                dt *= (min)(scale, RealType(1.0));
             }
             else
             {
                 dt *= scale;
             }
-            errorOld = (std::max)(error, RealType(1e-4));
+            errorOld = (max)(error, RealType(1e-4));
             rejected = false;
             return true;
         }
         else
         {
-            scale = (std::max)(safe * pow(static_cast<RealType>(1 / error), RealType(1) / (order + 1)), minScale);
+            scale = (max)(safe * pow(static_cast<RealType>(1 / error), RealType(1) / (order + 1)), minScale);
             dt *= scale;
             rejected = true;
             return false;
