@@ -151,6 +151,7 @@ extern "C++" {
 #include <boost/math/tools/minima.hpp>
 #include <boost/math/tools/norms.hpp>
 #include <boost/math/tools/polynomial.hpp>
+#include <boost/math/tools/polynomial_roots.hpp>
 #include <boost/math/tools/quartic_roots.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/recurrence.hpp>
