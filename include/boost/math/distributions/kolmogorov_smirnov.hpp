@@ -141,27 +141,23 @@ inline bool kolmogorov_smirnov_use_constants(const Policy&) {
 }
 
 template <class RealType>
-inline const RealType& kolmogorov_smirnov_mode_constant() {
-    static const RealType value = BOOST_MATH_BIG_CONSTANT(RealType, 1000, 0.7354679079165719820624448513051825390913503143340225122926732679283442751250018638342479353073554823);
-    return value;
+inline RealType kolmogorov_smirnov_mode_constant() {
+    return BOOST_MATH_BIG_CONSTANT(RealType, 1000, 0.7354679079165719820624448513051825390913503143340225122926732679283442751250018638342479353073554823);
 }
 
 template <class RealType>
-inline const RealType& kolmogorov_smirnov_median_constant() {
-    static const RealType value = BOOST_MATH_BIG_CONSTANT(RealType, 1000, 0.8275735551899076901138270828889768075843727832232029452002281054669822747682290224084911530683945353);
-    return value;
+inline RealType kolmogorov_smirnov_median_constant() {
+    return BOOST_MATH_BIG_CONSTANT(RealType, 1000, 0.8275735551899076901138270828889768075843727832232029452002281054669822747682290224084911530683945353);
 }
 
 template <class RealType>
-inline const RealType& kolmogorov_smirnov_skewness_constant() {
-    static const RealType value = BOOST_MATH_BIG_CONSTANT(RealType, 1000, 0.8604261371436682558667183685173007452393495203060929924698665373211030237490355834020123201092217303);
-    return value;
+inline RealType kolmogorov_smirnov_skewness_constant() {
+    return BOOST_MATH_BIG_CONSTANT(RealType, 1000, 0.8604261371436682558667183685173007452393495203060929924698665373211030237490355834020123201092217303);
 }
 
 template <class RealType>
-inline const RealType& kolmogorov_smirnov_kurtosis_excess_constant() {
-    static const RealType value = BOOST_MATH_BIG_CONSTANT(RealType, 1000, 0.8816189679105236704015538304328295408355055629289034536289160037385510119639244078254098968815665536);
-    return value;
+inline RealType kolmogorov_smirnov_kurtosis_excess_constant() {
+    return BOOST_MATH_BIG_CONSTANT(RealType, 1000, 0.8816189679105236704015538304328295408355055629289034536289160037385510119639244078254098968815665536);
 }
 
 // Splits t = hi + lo so that hi carries only the leading half of the
