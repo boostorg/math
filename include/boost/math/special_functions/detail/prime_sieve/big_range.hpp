@@ -225,7 +225,7 @@ void big_range_impl(const Integer& lower, const Integer& upper, const prime_siev
     {
         return;
     }
-    const Integer two64 {Integer(std::numeric_limits<std::uint64_t>::max()) + Integer(1)};
+    const Integer two64 {Integer((std::numeric_limits<std::uint64_t>::max)()) + Integer(1)};
     const bool fits_128 {upper < two64 * two64};
 
     const Integer total_width {upper - lower};

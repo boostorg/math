@@ -43,7 +43,7 @@ inline bool fits_u64(const Integer& x)
     }
     else
     {
-        return x <= Integer(std::numeric_limits<std::uint64_t>::max());
+        return x <= Integer((std::numeric_limits<std::uint64_t>::max)());
     }
 }
 
