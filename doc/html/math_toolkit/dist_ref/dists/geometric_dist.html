@@ -53,11 +53,9 @@
    <span class="comment">// Bounds on success fraction:</span>
    <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
       <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span>
-      <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// alpha</span>
    <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
       <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span>
-      <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// alpha</span>
 
    <span class="comment">// Estimate min/max number of trials:</span>
@@ -255,8 +253,8 @@
           Bound on success_fraction Parameter <span class="emphasis"><em>p</em></span></a>
         </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
-  <span class="identifier">RealType</span> <span class="identifier">failures</span><span class="special">,</span>
-  <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">)</span> <span class="comment">// (0 &lt;= alpha &lt;= 1), 0.05 equivalent to 95% confidence.</span>
+  <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span>
+  <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">)</span> <span class="comment">// (0 &lt;= alpha &lt;= 1), 0.05 equivalent to 95% confidence.</span>
 </pre>
 <p>
           Returns a <span class="bold"><strong>lower bound</strong></span> on the success fraction:
