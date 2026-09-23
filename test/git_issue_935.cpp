@@ -112,7 +112,9 @@ void test_policy(rounding r)
    for (double successes : { 0.5, 3.0, 5.0, 17.5 })
       for (double p : { 0.05, 0.5, 0.9 })
          check_round_trips(boost::math::negative_binomial_distribution<double, Policy>(successes, p), r);
-   for (double trials : { 5.0, 100.0 })
+   // 5.5: the binomial accepts fractional trials, so the support need not
+   // end on an integer.
+   for (double trials : { 5.0, 5.5, 100.0 })
       for (double p : { 0.1, 0.5, 0.9 })
          check_round_trips(boost::math::binomial_distribution<double, Policy>(trials, p), r);
    for (double mean : { 0.1, 4.5, 30.0 })
@@ -127,6 +129,19 @@ int main()
    double c = cdf(nb, 6.0);
    c -= 10 * (std::nextafter(c, 1.0) - c);
    CHECK_EQUAL(quantile(nb, c), 6.0);
+
+   // With fractional trials, p above cdf(floor(trials)) must not evaluate the
+   // cdf outside the support: round down gives the last integer in it, round
+   // up the next integer.
+   {
+      boost::math::binomial_distribution<double, policy<discrete_quantile<integer_round_down>>> down(5.5, 0.5);
+      boost::math::binomial_distribution<double, policy<discrete_quantile<integer_round_up>>> up(5.5, 0.5);
+      const double p = (cdf(down, 5.0) + 1) / 2;
+      CHECK_EQUAL(quantile(down, p), 5.0);
+      CHECK_EQUAL(quantile(complement(down, 1 - p)), 5.0);
+      CHECK_EQUAL(quantile(up, p), 6.0);
+      CHECK_EQUAL(quantile(complement(up, 1 - p)), 6.0);
+   }
 
    test_policy<policy<discrete_quantile<integer_round_up>>>(rounding::up);
    test_policy<policy<discrete_quantile<integer_round_down>>>(rounding::down);

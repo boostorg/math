@@ -307,10 +307,17 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type
 // as this code always has.  For the complement (c == true) read
 // "cdf(k) - p" as "p - cdf(complement(d, k))", which also increases with k.
 //
+// The support need not end on an integer (the binomial accepts fractional
+// trials), so integers above it are handled without calling the cdf: there
+// cdf(k) == 1 and cdf(complement(d, k)) == 0.
+//
 template <class Dist>
 BOOST_MATH_GPU_ENABLED inline typename Dist::value_type discrete_quantile_residual(const Dist& d, const typename Dist::value_type& k, const typename Dist::value_type& p, bool c)
 {
-   return c ? typename Dist::value_type(p - cdf(complement(d, k))) : typename Dist::value_type(cdf(d, k) - p);
+   typedef typename Dist::value_type value_type;
+   if (k > support(d).second)
+      return c ? p : value_type(1 - p);
+   return c ? value_type(p - cdf(complement(d, k))) : value_type(cdf(d, k) - p);
 }
 
 template <class Dist>
@@ -318,8 +325,9 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_floor(const Dis
 {
    BOOST_MATH_STD_USING
    typedef typename Dist::value_type value_type;
-   const value_type lo = support(d).first;
-   const value_type hi = support(d).second;
+   // Integers only: the last one in the support is floor(support.second).
+   const value_type lo = ceil(support(d).first);
+   const value_type hi = floor(support(d).second);
    value_type k = floor(result);
    if (k < lo)
       k = lo;
@@ -366,8 +374,10 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_ceil(const Dist
 {
    BOOST_MATH_STD_USING
    typedef typename Dist::value_type value_type;
-   const value_type lo = support(d).first;
-   const value_type hi = support(d).second;
+   // Integers only.  Rounding up may land one past the support (where
+   // cdf == 1) when p exceeds the cdf at the last integer in it.
+   const value_type lo = ceil(support(d).first);
+   const value_type hi = floor(support(d).second) + 1;
    value_type k = ceil(result);
    if (k < lo)
       k = lo;
