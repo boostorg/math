@@ -145,8 +145,9 @@ BOOST_MATH_GPU_ENABLED void handle_zero_derivative(F f,
 // heuristic, not a proof:
 //
 // * If f(b) has the opposite sign to f0 (the last residual) or is zero,
-//   there is certainly a root in the sliver between result and b, so the
-//   result stands.
+//   then (f being continuous, as these solvers assume throughout) there is
+//   certainly a root in the sliver between result and b, so the result
+//   stands.
 // * Otherwise f(b) must also be "not close to zero" before we complain:
 //   not much closer than f0, and not negligible next to first_f0 (the
 //   residual at the initial guess).  These thresholds absorb rounding

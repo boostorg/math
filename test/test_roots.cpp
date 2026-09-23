@@ -717,7 +717,7 @@ void test_failures()
       const double r = 0.1 * (1 + rel);
       auto g = [r](double x) { return std::make_pair(1 - r * r / (x * x), 2 * r * r / (x * x * x)); };
       auto g2 = [r](double x) { return std::make_tuple(1 - r * r / (x * x), 2 * r * r / (x * x * x), -6 * r * r / (x * x * x * x)); };
-      for (int digits : { 26, 52 })
+      for (int digits : { 5, 12, 26, 52 })
       {
          const double tol = ldexp(1.0, 2 - digits);
          BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::newton_raphson_iterate(g, 0.5, 0.1, 1.0, digits), r, tol);
