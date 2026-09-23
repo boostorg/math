@@ -422,6 +422,14 @@ BOOST_MATH_GPU_ENABLED T gamma_p_inv_imp(T a, T p, const Policy& pol)
    T lower = tools::min_value<T>();
    if(guess <= lower)
       guess = tools::min_value<T>();
+   //
+   // If the result is smaller than the smallest normal number, then the
+   // root finder has no root to converge on inside [lower, max], so check
+   // for underflow up front.  Only a tiny guess can be this far out, so
+   // the extra evaluation is rarely paid for:
+   //
+   if((guess < sqrt(lower)) && (boost::math::gamma_p(a, lower, pol) >= p))
+      return policies::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
    BOOST_MATH_INSTRUMENT_VARIABLE(guess);
    //
    // Work out how many digits to converge to, normally this is
@@ -494,6 +502,13 @@ BOOST_MATH_GPU_ENABLED T gamma_q_inv_imp(T a, T q, const Policy& pol)
    T lower = tools::min_value<T>();
    if(guess <= lower)
       guess = tools::min_value<T>();
+   //
+   // If the result is smaller than the smallest normal number, then the
+   // root finder has no root to converge on inside [lower, max], so check
+   // for underflow up front (see gamma_p_inv_imp):
+   //
+   if((guess < sqrt(lower)) && (boost::math::gamma_q(a, lower, pol) <= q))
+      return policies::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
    //
    // Work out how many digits to converge to, normally this is
    // 2/3 of the digits in T, but if the first derivative is very

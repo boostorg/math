@@ -24,13 +24,15 @@
 #endif
 
 // std::execution policies. Only the policy types are used, never the parallel algorithms,
-// so no TBB is needed. Besides the library-wide check, accept libstdc++ 9 and later, MSVC,
+// so no TBB is needed. Besides the library-wide check, accept libstdc++ 10 and later, MSVC,
 // and libc++ built with -fexperimental-library (which omits the feature-test macro).
+// libstdc++ 9 is excluded: its <execution> includes the TBB headers unconditionally, so it
+// fails to compile when TBB is not installed (10 falls back to a serial backend).
 #if defined(BOOST_MATH_EXEC_COMPATIBLE)
 #  define BOOST_MATH_PRIME_SIEVE_HAS_STD_EXECUTION
 #elif defined(BOOST_MATH_PRIME_SIEVE_HAS_THREADS) && defined(__has_include)
 #  if __has_include(<execution>)
-#    if (defined(_GLIBCXX_RELEASE) && (_GLIBCXX_RELEASE >= 9)) || (defined(_MSC_VER) && (_MSC_VER >= 1914)) || (defined(_LIBCPP_VERSION) && defined(_LIBCPP_ENABLE_EXPERIMENTAL))
+#    if (defined(_GLIBCXX_RELEASE) && (_GLIBCXX_RELEASE >= 10)) || (defined(_MSC_VER) && (_MSC_VER >= 1914)) || (defined(_LIBCPP_VERSION) && defined(_LIBCPP_ENABLE_EXPERIMENTAL))
 #      define BOOST_MATH_PRIME_SIEVE_HAS_STD_EXECUTION
 #    endif
 #  endif

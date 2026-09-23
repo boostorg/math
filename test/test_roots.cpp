@@ -712,9 +712,11 @@ void test_failures()
    // With a good guess the same functions still find the root:
    BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::newton_raphson_iterate(quartic, 0.9, 0.1, 1.1, 52), 1.0, 4 * std::numeric_limits<double>::epsilon());
    BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::halley_iterate(quartic2, 0.9, 0.1, 1.1, 52), 1.0, 4 * std::numeric_limits<double>::epsilon());
-   // A genuine root at an end of the range is still accepted:
-   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x * x - 0.01, 2 * x); }, 0.5, 0.1, 1.0, 52), 0.1, 4 * std::numeric_limits<double>::epsilon());
-   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::halley_iterate([](double x) { return std::make_tuple(x * x - 0.01, 2 * x, 2.0); }, 0.5, 0.1, 1.0, 52), 0.1, 4 * std::numeric_limits<double>::epsilon());
+   // A genuine root at an end of the range is still accepted.  The root must
+   // be exactly representable: with x^2 - 0.01 on [0.1, 1], f(0.1) rounds to
+   // a positive value without FMA, so there is no root in the range at all.
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x * x - 0.25, 2 * x); }, 0.75, 0.5, 1.0, 52), 0.5, 4 * std::numeric_limits<double>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::halley_iterate([](double x) { return std::make_tuple(x * x - 0.25, 2 * x, 2.0); }, 0.75, 0.5, 1.0, 52), 0.5, 4 * std::numeric_limits<double>::epsilon());
    BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x - 1, 1.0); }, 0.5, 0.0, 1.0, 52), 1.0, 4 * std::numeric_limits<double>::epsilon());
    // A root at, or just inside, min that is only reachable by bisecting
    // towards the bound: f = 1 - r^2/x^2 is concave, so Newton from 0.5

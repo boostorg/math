@@ -347,7 +347,7 @@ Some key points about reverse mode automatic differentiation:
 [[lambert_wm1_prime]    [False] [N/A]   [False] [N/A]   [False] [N/A]]
 [[zeta] [False] [N/A]   [True]  [False] [False] [N/A]]
 [[expint]       [False] [N/A]   [True]  [False] [False] [N/A]]
-[[hypergeometric_1F0]   [True]  [True]  [True]  [False] [False] [N/A]]
+[[hypergeometric_1F0]   [True]  [True]  [True]  [False] [True]  [N/A]]
 [[hypergeometric_0F1]   [False] [N/A]   [True]  [False] [False] [N/A]]
 [[hypergeometric_2F0]   [False] [N/A]   [True]  [False] [False] [N/A]]
 [[hypergeometric_1F1]   [False] [N/A]   [True]  [False] [False] [N/A]]
