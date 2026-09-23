@@ -233,8 +233,8 @@ namespace boost
            // so n is the most sensible answer here:
            return trials;
         }
-        if (p <= pow(1 - success_fraction, trials))
-        { // p <= pdf(dist, 0) == cdf(dist, 0)
+        if (comp ? (q >= cdf(complement(dist, RealType(0)))) : (p <= cdf(dist, RealType(0))))
+        { // Compare with the cdf itself, not pow(1 - p, n), so quantile(cdf(0)) round-trips.
           return 0; // So the only reasonable result is zero.
         } // And root finder would fail otherwise.
 

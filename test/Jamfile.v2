@@ -919,6 +919,7 @@ test-suite distribution_tests :
    [ run scipy_issue_15101.cpp /boost/test//boost_unit_test_framework ]
    [ run scipy_issue_17146.cpp /boost/test//boost_unit_test_framework  ]
    [ run scipy_issue_17388.cpp /boost/test//boost_unit_test_framework  ]
+   [ run git_issue_935.cpp ]
    [ run scipy_issue_17916.cpp /boost/test//boost_unit_test_framework  ]
    [ run scipy_issue_17916_nct.cpp /boost/test//boost_unit_test_framework  ]
    [ run scipy_issue_18302.cpp /boost/test//boost_unit_test_framework  ]

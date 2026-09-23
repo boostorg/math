@@ -458,8 +458,8 @@ namespace boost
       { // No failures are expected if P = 0.
         return 0; // Total trials will be just dist.successes.
       }
-      if (P <= pow(dist.success_fraction(), dist.successes()))
-      { // p <= pdf(dist, 0) == cdf(dist, 0)
+      if (P <= cdf(dist, RealType(0)))
+      { // Compare with the cdf itself, not pow(p, r), so quantile(cdf(0)) round-trips.
         return 0;
       }
       if(p == 0)
@@ -548,8 +548,8 @@ namespace boost
           // usually means return +std::numeric_limits<RealType>::infinity();
           // unless #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
        }
-       if (-Q <= boost::math::powm1(dist.success_fraction(), dist.successes(), Policy()))
-       {  // q <= cdf(complement(dist, 0)) == pdf(dist, 0)
+       if (Q >= cdf(complement(dist, RealType(0))))
+       {  // Compare with the cdf itself, not powm1(p, r), so quantile(complement) round-trips.
           return 0; //
        }
        if(p == 0)
