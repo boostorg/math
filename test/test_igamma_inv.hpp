@@ -230,5 +230,21 @@ void test_spots(T, const char* type_name)
    BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(10000), static_cast<T>(1.0/128)), static_cast<T>(10243.369973939134157953734588122880006091919872879L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(10000), static_cast<T>(1.0/2)), static_cast<T>(9999.6666686420474237369661574633153551436435884101L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(10000), static_cast<T>(1.0-1.0/128)), static_cast<T>(9759.8597223369324083191194574874497413261589080204L), tolerance);
+   //
+   // For small a the median is about 2^(-1/a), so this a puts it a little
+   // below the smallest normal number.  The result underflows to zero;
+   // the root finder must not report it as a failure to find a root:
+   //
+   BOOST_MATH_STD_USING
+   T a_underflow = log(static_cast<T>(0.5)) / log(boost::math::tools::min_value<T>() / 4);
+   BOOST_CHECK_EQUAL(::boost::math::gamma_p_inv(a_underflow, static_cast<T>(0.5)), static_cast<T>(0));
+   BOOST_CHECK_EQUAL(::boost::math::gamma_q_inv(a_underflow, static_cast<T>(0.5)), static_cast<T>(0));
+   if (boost::math::tools::min_value<T>() >= boost::math::tools::min_value<double>())
+   {
+      // From example/chi_square_std_dev_test.cpp, where Halley walked onto
+      // the lower bound and reported "no root found":
+      BOOST_CHECK_EQUAL(::boost::math::gamma_q_inv(static_cast<T>(0.0019582569458115118 / 2), static_cast<T>(0.5)), static_cast<T>(0));
+      BOOST_CHECK_EQUAL(::boost::math::gamma_p_inv(static_cast<T>(0.0019582569458115118 / 2), static_cast<T>(0.5)), static_cast<T>(0));
+   }
 }
 
