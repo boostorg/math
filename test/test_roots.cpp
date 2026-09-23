@@ -709,6 +709,21 @@ void test_failures()
    BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x * x - 0.01, 2 * x); }, 0.5, 0.1, 1.0, 52), 0.1, 4 * std::numeric_limits<double>::epsilon());
    BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::halley_iterate([](double x) { return std::make_tuple(x * x - 0.01, 2 * x, 2.0); }, 0.5, 0.1, 1.0, 52), 0.1, 4 * std::numeric_limits<double>::epsilon());
    BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x - 1, 1.0); }, 0.5, 0.0, 1.0, 52), 1.0, 4 * std::numeric_limits<double>::epsilon());
+   // A root at, or just inside, min that is only reachable by bisecting
+   // towards the bound: f = 1 - r^2/x^2 is concave, so Newton from 0.5
+   // overshoots below min every time.  These must not be reported as failures.
+   for (double rel : { 0.0, 1e-9, 1e-6 })
+   {
+      const double r = 0.1 * (1 + rel);
+      auto g = [r](double x) { return std::make_pair(1 - r * r / (x * x), 2 * r * r / (x * x * x)); };
+      auto g2 = [r](double x) { return std::make_tuple(1 - r * r / (x * x), 2 * r * r / (x * x * x), -6 * r * r / (x * x * x * x)); };
+      for (int digits : { 26, 52 })
+      {
+         const double tol = ldexp(1.0, 2 - digits);
+         BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::newton_raphson_iterate(g, 0.5, 0.1, 1.0, digits), r, tol);
+         BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::halley_iterate(g2, 0.5, 0.1, 1.0, digits), r, tol);
+      }
+   }
 #endif
 }
 

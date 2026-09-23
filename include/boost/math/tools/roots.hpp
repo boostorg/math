@@ -140,13 +140,23 @@ BOOST_MATH_GPU_ENABLED void handle_zero_derivative(F f,
 //
 // Call this only once the iteration has finished without observing a sign
 // change.  If the result has collapsed onto one of the original endpoints
-// b, we evaluate f(b) once.  There is no root at b, and the caller should
-// report failure, when f(b) has the same sign as f0 (the last residual),
-// is not much closer to zero than f0, and is not negligible next to
-// first_f0 (the residual at the initial guess).  The last test matters
-// once the iteration has converged and f0 is itself rounding noise.
-// A genuine root at b gives f(b) of the opposite sign or ~0, and an
-// interior result never evaluates f at all.
+// b, we evaluate f(b) once and return true (report failure) when it looks
+// as though there is no root between result and b.  This is a diagnostic
+// heuristic, not a proof:
+//
+// * If f(b) has the opposite sign to f0 (the last residual) or is zero,
+//   there is certainly a root in the sliver between result and b, so the
+//   result stands.
+// * Otherwise f(b) must also be "not close to zero" before we complain:
+//   not much closer than f0, and not negligible next to first_f0 (the
+//   residual at the initial guess).  These thresholds absorb rounding
+//   noise at a genuine root at b, where f0 is itself noise once the
+//   iteration has converged.
+//
+// We evaluate f(b) rather than f(result): when bisection approaches a
+// genuine root at b, f(result) is roughly f0 / 2 by construction, so it
+// cannot tell that case apart from a function that never reaches zero.
+// An interior result never evaluates f here at all.
 //
 template <class F, class T>
 BOOST_MATH_GPU_ENABLED bool converged_onto_endpoint_without_root(F& f, const T& result, const T& delta, const T& f0, const T& first_f0, const T& min, const T& max)
