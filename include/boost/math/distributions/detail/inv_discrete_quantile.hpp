@@ -466,7 +466,6 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type
       p = 1 - p;
       c = !c;
    }
-   typename Dist::value_type pp = c ? 1 - p : p;
    if(discrete_quantile_residual(dist, typename Dist::value_type(0), p, c) >= 0)
       return 0;  // cdf(0) >= p already: see round_to_ceil / round_to_floor.
    return do_inverse_discrete_quantile(
@@ -580,7 +579,6 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type
 {
    typedef typename Dist::value_type value_type;
    BOOST_MATH_STD_USING
-   typename Dist::value_type pp = c ? 1 - p : p;
    if(discrete_quantile_residual(dist, typename Dist::value_type(0), p, c) >= 0)
       return 0;  // cdf(0) >= p already: see round_to_ceil / round_to_floor.
    return round_to_floor(dist, do_inverse_discrete_quantile(
@@ -607,7 +605,6 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type
       boost::math::uintmax_t& max_iter)
 {
    BOOST_MATH_STD_USING
-   typename Dist::value_type pp = c ? 1 - p : p;
    if(discrete_quantile_residual(dist, typename Dist::value_type(0), p, c) >= 0)
       return 0;  // cdf(0) >= p already: see round_to_ceil / round_to_floor.
    return round_to_ceil(dist, do_inverse_discrete_quantile(
@@ -635,7 +632,6 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type
 {
    typedef typename Dist::value_type value_type;
    BOOST_MATH_STD_USING
-   typename Dist::value_type pp = c ? 1 - p : p;
    if(discrete_quantile_residual(dist, typename Dist::value_type(0), p, c) >= 0)
       return 0;  // cdf(0) >= p already: see round_to_ceil / round_to_floor.
    //
