@@ -141,6 +141,7 @@ public:
 
     std::pair<Real, Real> domain() const
     {
+        if ( ! valid_) return {0, 0};
         return impl_->domain();
     }
 
