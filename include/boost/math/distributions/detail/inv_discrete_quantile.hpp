@@ -337,7 +337,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_floor(const Dis
    // Step down until cdf(k) <= p:
    while ((gk > 0) && (k > lo))
    {
-      --k;
+      k -= 1;
       gk = discrete_quantile_residual(d, k, p, c);
    }
    // Step up while the next integer still has cdf <= p.  If it hits a run
@@ -353,7 +353,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_floor(const Dis
             return k + 1; // First member of the run.
          break;           // Already inside the run.
       }
-      ++k;
+      k += 1;
       gk = gn;
    }
    // If we started inside a run with cdf == p, move to its first member:
@@ -363,7 +363,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_floor(const Dis
       {
          if (discrete_quantile_residual(d, value_type(k - 1), p, c) < 0)
             break;
-         --k;
+         k -= 1;
       }
    }
    return k;
@@ -387,7 +387,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_ceil(const Dist
    // Step up until cdf(k) >= p:
    while ((gk < 0) && (k < hi))
    {
-      ++k;
+      k += 1;
       gk = discrete_quantile_residual(d, k, p, c);
    }
    // Step down while the previous integer still has cdf >= p.  If it hits
@@ -403,7 +403,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_ceil(const Dist
             return k - 1; // Last member of the run.
          break;           // Already inside the run.
       }
-      --k;
+      k -= 1;
       gk = gp;
    }
    // If we started inside a run with cdf == p, move to its last member:
@@ -413,7 +413,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_ceil(const Dist
       {
          if (discrete_quantile_residual(d, value_type(k + 1), p, c) > 0)
             break;
-         ++k;
+         k += 1;
       }
    }
    return k;
