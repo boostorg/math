@@ -67,6 +67,7 @@ public:
                 oss << "Abscissas must be listed in strictly increasing order x0 < x1 < ... < x_{n-1}, ";
                 oss << "but at x[" << i - 1 << "] = " << x0 << ", and x[" << i << "] = " << x1 << ".\n";
                 error_msg_ = oss.str();
+                boost::math::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
                 valid_ = false;
                 return;
             }
@@ -84,7 +85,8 @@ public:
         using std::isnan;
         if (x <= x_.back())
         {
-            return boost::math::policies::raise_domain_error<bool>(function, "Calling push_back must preserve the monotonicity of the x's", false, Policy());
+            boost::math::policies::raise_domain_error<bool>(function, "Calling push_back must preserve the monotonicity of the x's", false, Policy());
+            return;
         }
         x_.push_back(x);
         y_.push_back(y);

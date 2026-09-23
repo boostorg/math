@@ -69,7 +69,7 @@ public:
     }
 
 private:
-    std::shared_ptr<detail::cubic_hermite_detail<RandomAccessContainer>> impl_;
+    std::shared_ptr<detail::cubic_hermite_detail<RandomAccessContainer, Policy>> impl_;
 };
 
 BOOST_MATH_EXPORT template<class RandomAccessContainer, class Policy = policies::policy<>>
@@ -117,7 +117,7 @@ public:
     }
 
 private:
-    std::shared_ptr<detail::cardinal_cubic_hermite_detail<RandomAccessContainer>> impl_;
+    std::shared_ptr<detail::cardinal_cubic_hermite_detail<RandomAccessContainer, Policy>> impl_;
 };
 
 
@@ -167,7 +167,7 @@ public:
     }
 
 private:
-    std::shared_ptr<detail::cardinal_cubic_hermite_detail_aos<RandomAccessContainer>> impl_;
+    std::shared_ptr<detail::cardinal_cubic_hermite_detail_aos<RandomAccessContainer, Policy>> impl_;
 };
 
 }

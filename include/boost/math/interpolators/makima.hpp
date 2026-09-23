@@ -108,7 +108,7 @@ public:
             s[n-1] = right_endpoint_derivative;
         }
 
-        impl_ = std::make_shared<detail::cubic_hermite_detail<RandomAccessContainer>>(std::move(x), std::move(y), std::move(s));
+        impl_ = std::make_shared<detail::cubic_hermite_detail<RandomAccessContainer, Policy>>(std::move(x), std::move(y), std::move(s));
         valid_ = impl_->valid();
         if ( ! valid_) {
             error_msg_ = impl_->error_msg();
@@ -138,7 +138,8 @@ public:
         using std::abs;
         using std::isnan;
         if (x <= impl_->x_.back()) {
-            boost::math::policies::raise_domain_error<bool>(function, "Calling push_back must preserve the monotonicity of the x's", x, Policy());
+            boost::math::policies::raise_domain_error<bool>(function, "Calling push_back must preserve the monotonicity of the x's", false, Policy());
+            return;
         }
         impl_->x_.push_back(x);
         impl_->y_.push_back(y);
@@ -180,7 +181,7 @@ public:
     }
 
 private:
-    std::shared_ptr<detail::cubic_hermite_detail<RandomAccessContainer>> impl_;
+    std::shared_ptr<detail::cubic_hermite_detail<RandomAccessContainer, Policy>> impl_;
     bool valid_ = false;
     std::string error_msg_;
 };
