@@ -236,7 +236,9 @@ void test_spots(T, const char* type_name)
    // the root finder must not report it as a failure to find a root:
    //
    BOOST_MATH_STD_USING
-   T a_underflow = log(static_cast<T>(0.5)) / log(boost::math::tools::min_value<T>() / 4);
+   // Take log(min_value / 4) as log(min_value) - log(4): min_value / 4 is
+   // subnormal, and flushes to zero under fast floating-point models (icpx).
+   T a_underflow = log(static_cast<T>(0.5)) / (log(boost::math::tools::min_value<T>()) - log(static_cast<T>(4)));
    BOOST_CHECK_EQUAL(::boost::math::gamma_p_inv(a_underflow, static_cast<T>(0.5)), static_cast<T>(0));
    BOOST_CHECK_EQUAL(::boost::math::gamma_q_inv(a_underflow, static_cast<T>(0.5)), static_cast<T>(0));
    if (boost::math::tools::min_value<T>() >= boost::math::tools::min_value<double>())
