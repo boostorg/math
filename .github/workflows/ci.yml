@@ -27,6 +27,13 @@ jobs:
         compiler: [ g++-14, clang++-16, clang++-17, clang++-18 ]
         standard: [ c++20 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
+        include:
+          # C++14 is no longer tested elsewhere, but downstream libraries (e.g. Multiprecision)
+          # still include our headers in C++14 mode.  Keep one job so that breaking C++14 is a
+          # deliberate, announced decision rather than something that slips in unnoticed.
+          - compiler: g++-14
+            standard: c++14
+            suite: github_ci_block_1
     steps:
       - uses: actions/checkout@v6
         with:
