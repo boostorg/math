@@ -263,11 +263,13 @@ BOOST_AUTO_TEST_CASE( test_main )
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_values(1.0L, "long double");
 
-   // MSVC-14.3 fails with real concept on Github Actions, but the failure cannot be reproduced locally
-   // See: https://github.com/boostorg/math/pull/720
-   #if !defined(_MSC_VER) || _MSC_VER < 1930
+#if defined(_MSC_VER)
+   // In some versions of Windows Server 2022, ucrtbase!ldexp has a bug that causes the following test to fail.
+   // The exponent is volatile so that the compiler cannot fold the probe at compile time.
+   volatile int ldexp_probe_exponent = -1075;
+   if (FP_ZERO == std::fpclassify(std::ldexp(1.0L, ldexp_probe_exponent)))
+#endif
    test_values(boost::math::concepts::real_concept(0), "real_concept");
-   #endif
 #endif
 
    //
