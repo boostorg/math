@@ -479,10 +479,10 @@ public:
    }
 
    template <class U>
-   BOOST_MATH_GPU_ENABLED typename std::enable_if<std::is_constructible<T, U>::value, polynomial&>::type operator %=(const U& /*value*/)
+   BOOST_MATH_GPU_ENABLED typename std::enable_if<std::is_constructible<T, U>::value, polynomial&>::type operator %=(const U& value)
    {
-       // We can always divide by a scalar, so there is no remainder:
-       this->set_zero();
+       scalar_remainder(value, std::integral_constant<bool, std::numeric_limits<T>::is_integer>());
+       normalize();
        return *this;
    }
 
@@ -636,6 +636,21 @@ private:
        return *this;
     }
 
+    template <class U>
+    BOOST_MATH_GPU_ENABLED void scalar_remainder(const U& value, std::true_type)
+    {
+       // Copy in case value aliases one of our coefficients:
+       const U v = value;
+       std::transform(m_data.begin(), m_data.end(), m_data.begin(), [&](const T& x)->T { return static_cast<T>(x % v); });
+    }
+
+    template <class U>
+    BOOST_MATH_GPU_ENABLED void scalar_remainder(const U&, std::false_type)
+    {
+       // Over a field we can always divide by a scalar, so there is no remainder:
+       this->set_zero();
+    }
+
     std::vector<T> m_data;
 };
 
@@ -743,10 +758,10 @@ BOOST_MATH_GPU_ENABLED inline typename std::enable_if<std::is_constructible<T, U
 }
 
 BOOST_MATH_EXPORT template <class T, class U>
-BOOST_MATH_GPU_ENABLED inline typename std::enable_if<std::is_constructible<T, U>::value, polynomial<T> >::type operator % (const polynomial<T>&, const U&)
+BOOST_MATH_GPU_ENABLED inline typename std::enable_if<std::is_constructible<T, U>::value, polynomial<T> >::type operator % (polynomial<T> a, const U& b)
 {
-   // Since we can always divide by a scalar, result is always an empty polynomial:
-   return polynomial<T>();
+   a %= b;
+   return a;
 }
 
 BOOST_MATH_EXPORT template <class U, class T>
