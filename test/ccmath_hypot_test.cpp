@@ -92,6 +92,31 @@ constexpr void test_3_arg()
     static_assert(boost::math::ccmath::hypot(T(2), T(2), T(1)) == T(3));
     static_assert(boost::math::ccmath::hypot(T(2), T(-2), T(1)) == T(3));
     static_assert(boost::math::ccmath::abs(boost::math::ccmath::hypot(T(1), T(2), T(3)) - boost::math::ccmath::sqrt(T(14))) < tol);
+
+    // Zeros: no 0/0
+    static_assert(boost::math::ccmath::hypot(T(0), T(0), T(0)) == T(0));
+    static_assert(boost::math::ccmath::hypot(T(-0.0), T(-0.0), T(-0.0)) == T(0));
+    static_assert(boost::math::ccmath::hypot(T(0), T(0), T(-3)) == T(3));
+
+    // inf wins over NaN, as for the two argument version
+    if constexpr (std::numeric_limits<T>::has_quiet_NaN)
+    {
+        static_assert(boost::math::ccmath::isinf(boost::math::ccmath::hypot(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::quiet_NaN(), T(1))));
+    }
+
+    // No spurious overflow when the squares overflow
+    constexpr T big = (std::numeric_limits<T>::max)() / 4;
+    static_assert(boost::math::ccmath::abs(boost::math::ccmath::hypot(big, big, big) / (big * boost::math::ccmath::sqrt(T(3))) - 1) < tol);
+}
+
+template <typename T>
+bool test_3_arg_runtime()
+{
+    // Not constant evaluated, so this goes to std::hypot
+    volatile T x = 2;
+    volatile T y = 2;
+    volatile T z = 1;
+    return boost::math::ccmath::hypot(T(x), T(y), T(z)) == T(3);
 }
 
 int main()
@@ -113,6 +138,11 @@ int main()
     #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_3_arg<long double>();
     #endif
+
+    if (!test_3_arg_runtime<float>() || !test_3_arg_runtime<double>())
+    {
+        return 1;
+    }
 
     return 0;
 }
