@@ -38,9 +38,9 @@ using boost::math::owens_t;
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/array.hpp>
 
-#include "libs/math/test/handle_test_result.hpp"
-#include "libs/math/test/table_type.hpp"
-#include "libs/math/test/functor.hpp"
+#include "handle_test_result.hpp"
+#include "table_type.hpp"
+#include "functor.hpp"
 #include "boost/math/tools/test_value.hpp"
 #include "test_owens_t.hpp"
 
@@ -88,7 +88,21 @@ void expected_results()
    //
    // Catch all cases come last:
    //
-   if(std::numeric_limits<long double>::digits > 60)
+   if(std::numeric_limits<long double>::digits > 100)
+   {
+      //
+      // Arbitrary precision versions run out steam (and series iterations)
+      // if we push them to too many digits:
+      //
+      add_expected_result(
+         ".*",                            // compiler
+         ".*",                            // stdlib
+         ".*",                            // platform
+         largest_type,                    // test type(s)
+         ".*",      // test data group
+         "owens_t", 10000000, 1000000);  // test function
+   }
+   else if(std::numeric_limits<long double>::digits > 60)
    {
       add_expected_result(
          ".*",                            // compiler

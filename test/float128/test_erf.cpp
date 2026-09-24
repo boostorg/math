@@ -8,7 +8,7 @@
 #define TEST_UDT
 
 #include <boost/math/special_functions/erf.hpp>
-#include "libs/math/test/test_erf.hpp"
+#include "test_erf.hpp"
 
 void expected_results()
 {

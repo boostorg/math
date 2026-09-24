@@ -16,18 +16,23 @@
 #  pragma warning(disable: 4127) // conditional expression is constant
 #endif
 
+#ifdef BOOST_MATH_ENABLE_SYCL
+#define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
+#include "sycl/sycl.hpp"
+#include <boost/math/tools/config.hpp>
+#endif
+
 // #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false 
 // To compile even if Cauchy mean is used.
-#include <boost/math/tools/test.hpp>
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/cauchy.hpp>
     using boost::math::cauchy_distribution;
 
-#include "test_out_of_range.hpp"
-
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
+
+#include "test_out_of_range.hpp"
 
 #include <iostream>
    using std::cout;
@@ -38,11 +43,11 @@ void test_spots(RealType T)
 {
   // Check some bad parameters to construct the distribution,
 #ifndef BOOST_NO_EXCEPTIONS
-  BOOST_MATH_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(0, 0), std::domain_error); // zero scale.
-  BOOST_MATH_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(0, -1), std::domain_error); // negative scale (shape).
+  BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(0, 0), std::domain_error); // zero scale.
+  BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(0, -1), std::domain_error); // negative scale (shape).
 #else
-  BOOST_MATH_CHECK_THROW(boost::math::cauchy_distribution<RealType>(0, 0), std::domain_error); // zero scale.
-  BOOST_MATH_CHECK_THROW(boost::math::cauchy_distribution<RealType>(0, -1), std::domain_error); // negative scale (shape).
+  BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType>(0, 0), std::domain_error); // zero scale.
+  BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType>(0, -1), std::domain_error); // negative scale (shape).
 #endif
   cauchy_distribution<RealType> C01;
 
@@ -125,6 +130,25 @@ void test_spots(RealType T)
          static_cast<RealType>(-10.0)),              // x
          static_cast<RealType>(0.031725517430553569514977118601302L),                // probability.
          tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(),
+         static_cast<RealType>(-15000000.0)),
+         static_cast<RealType>(0.000000021220659078919346664504384865488560725L),
+         tolerance); // %
+
+   #ifndef BOOST_MATH_ENABLE_SYCL // Returns infinity
+   BOOST_CHECK_CLOSE(
+      // Test the CDF at -max_value()/4.
+      // For an input x of this magnitude, the reference value is 4/|x|/pi.
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(),
+         -boost::math::tools::max_value<RealType>()/4),
+         static_cast<RealType>(4)
+                      / boost::math::tools::max_value<RealType>()
+                      / boost::math::constants::pi<RealType>(),
+         tolerance); // %
+   #endif
 
    //
    // Complements:
@@ -189,6 +213,25 @@ void test_spots(RealType T)
          static_cast<RealType>(-10.0))),              // x
          static_cast<RealType>(0.9682744825694464304850228813987L),                // probability.
          tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         complement(cauchy_distribution<RealType>(),
+         static_cast<RealType>(15000000.0))),
+         static_cast<RealType>(0.000000021220659078919346664504384865488560725L),
+         tolerance); // %
+
+   #ifndef BOOST_MATH_ENABLE_SYCL // Returns infinity
+   BOOST_CHECK_CLOSE(
+      // Test the complemented CDF at max_value()/4.
+      // For an input x of this magnitude, the reference value is 4/x/pi.
+      ::boost::math::cdf(
+         complement(cauchy_distribution<RealType>(),
+         boost::math::tools::max_value<RealType>()/4)),
+         static_cast<RealType>(4)
+                      / boost::math::tools::max_value<RealType>()
+                      / boost::math::constants::pi<RealType>(),
+         tolerance); // %
+   #endif
 
    //
    // Quantiles:
@@ -667,45 +710,99 @@ void test_spots(RealType T)
    // To compile even if Cauchy mean is used.
    // See policy reference, mathematically undefined function policies
    //
-   //BOOST_MATH_CHECK_THROW(
+   //BOOST_CHECK_THROW(
    //    mean(dist),
    //    std::domain_error);
-   //BOOST_MATH_CHECK_THROW(
+   //BOOST_CHECK_THROW(
    //    variance(dist),
    //    std::domain_error);
-   //BOOST_MATH_CHECK_THROW(
+   //BOOST_CHECK_THROW(
    //    standard_deviation(dist),
    //    std::domain_error);
-   //BOOST_MATH_CHECK_THROW(
+   //BOOST_CHECK_THROW(
    //    kurtosis(dist),
    //    std::domain_error);
-   //BOOST_MATH_CHECK_THROW(
+   //BOOST_CHECK_THROW(
    //    kurtosis_excess(dist),
    //    std::domain_error);
-   //BOOST_MATH_CHECK_THROW(
+   //BOOST_CHECK_THROW(
    //    skewness(dist),
    //    std::domain_error);
 
-   BOOST_MATH_CHECK_THROW(
+   BOOST_CHECK_THROW(
        quantile(dist, RealType(0.0)),
        std::overflow_error);
-   BOOST_MATH_CHECK_THROW(
+   BOOST_CHECK_THROW(
        quantile(dist, RealType(1.0)),
        std::overflow_error);
-   BOOST_MATH_CHECK_THROW(
+   BOOST_CHECK_THROW(
        quantile(complement(dist, RealType(0.0))),
        std::overflow_error);
-   BOOST_MATH_CHECK_THROW(
+   BOOST_CHECK_THROW(
        quantile(complement(dist, RealType(1.0))),
        std::overflow_error);
 
    check_out_of_range<boost::math::cauchy_distribution<RealType> >(0, 1); // (All) valid constructor parameter values.
 
+   if (std::numeric_limits<RealType>::has_infinity)
+   {
+      BOOST_CHECK_EQUAL(
+         boost::math::pdf(
+            cauchy_distribution<RealType>(-2, 0.25),
+            std::numeric_limits<RealType>::infinity()), // x
+            static_cast<RealType>(0) // probability
+         );
+      BOOST_CHECK_EQUAL(
+         boost::math::cdf(
+            cauchy_distribution<RealType>(-2, 0.25),
+            std::numeric_limits<RealType>::infinity()), // x
+            static_cast<RealType>(1) // probability
+         );
+      BOOST_CHECK_EQUAL(
+         boost::math::cdf(
+            cauchy_distribution<RealType>(-2, 0.25),
+            -std::numeric_limits<RealType>::infinity()), // x
+            static_cast<RealType>(0) // probability
+         );
+      BOOST_CHECK_EQUAL(
+         boost::math::quantile(
+            cauchy_distribution<RealType>(-2, 0.25),
+            static_cast<RealType>(0.5)), // p
+            static_cast<RealType>(-2) // location
+         );
 
+      using boost::math::policies::policy;
+
+      typedef policy<
+         boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+         boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+         boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+         boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+         boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+         boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+      > ignore_all_policy;
+
+      typedef boost::math::cauchy_distribution<RealType, ignore_all_policy> ignore_error_cauchy;
+      
+      // PDF
+      BOOST_CHECK((boost::math::isnan)(boost::math::pdf(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0))));
+      BOOST_CHECK((boost::math::isnan)(boost::math::pdf(ignore_error_cauchy(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), static_cast<RealType>(0))));
+      BOOST_CHECK((boost::math::isnan)(boost::math::pdf(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(1)), std::numeric_limits<RealType>::quiet_NaN())));
+   
+      // CDF
+      BOOST_CHECK((boost::math::isnan)(boost::math::cdf(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0))));
+      BOOST_CHECK((boost::math::isnan)(boost::math::cdf(ignore_error_cauchy(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), static_cast<RealType>(0))));
+      BOOST_CHECK((boost::math::isnan)(boost::math::cdf(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(1)), std::numeric_limits<RealType>::quiet_NaN())));
+
+      // Quantile 
+      BOOST_CHECK((boost::math::isnan)(boost::math::quantile(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(-1)), static_cast<RealType>(0.25))));
+      BOOST_CHECK((boost::math::isnan)(boost::math::quantile(ignore_error_cauchy(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), static_cast<RealType>(0.25))));
+      BOOST_CHECK((boost::math::isnan)(boost::math::quantile(ignore_error_cauchy(static_cast<RealType>(0), static_cast<RealType>(1)), static_cast<RealType>(-0.25))));
+   }
 
 } // template <class RealType>void test_spots(RealType)
 
-BOOST_AUTO_TEST_CASE( test_main )
+BOOST_AUTO_TEST_CASE(test_main)
 {
   BOOST_MATH_CONTROL_FP;
    // Check that can generate cauchy distribution using the two convenience methods:

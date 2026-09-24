@@ -7,7 +7,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/expint.hpp>
-#include "libs/math/test/test_expint.hpp"
+#include "test_expint.hpp"
 
 void expected_results()
 {

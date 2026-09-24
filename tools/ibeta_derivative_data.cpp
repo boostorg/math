@@ -17,11 +17,11 @@ using namespace boost::math::tools;
 using namespace boost::math;
 using namespace std;
 
-#include <libs/math/test/table_type.hpp>
+#include <table_type.hpp>
 
 #define T double
 #define SC_(x) static_cast<double>(x)
-#include <libs/math/test/ibeta_int_data.ipp>
+#include <ibeta_int_data.ipp>
 
 int main(int, char* [])
 {

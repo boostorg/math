@@ -29,7 +29,7 @@ namespace boost
     // distributions that have scale.
     // BOOST_STATIC_ASSERTs, see below, are used to enforce this.
 
-    template <class Dist, class Policy>
+    BOOST_MATH_EXPORT template <class Dist, class Policy>
     inline
       typename Dist::value_type find_scale( // For example, normal mean.
       typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
@@ -60,8 +60,8 @@ namespace boost
       }
 
       //cout << "z " << z << ", p " << p << ",  quantile(Dist(), p) "
-      //<< quantile(Dist(), p) << ", z - mean " << z - location 
-      //<<", sd " << (z - location)  / quantile(Dist(), p) << endl;
+      // << quantile(Dist(), p) << ", z - mean " << z - location
+      // <<", sd " << (z - location)  / quantile(Dist(), p) << endl;
 
       //quantile(N01, 0.001) -3.09023
       //quantile(N01, 0.01) -2.32635
@@ -80,14 +80,12 @@ namespace boost
 
       if (result <= 0)
       { // If policy isn't to throw, return the scale <= 0.
-        policies::raise_evaluation_error<typename Dist::value_type>(function,
-          "Computed scale (%1%) is <= 0!" " Was the complement intended?",
-          result, Policy());
+        policies::raise_evaluation_error<typename Dist::value_type>(function, "Computed scale (%1%) is <= 0!" " Was the complement intended?", result, Policy()); // LCOV_EXCL_LINE
       }
       return result;
     } // template <class Dist, class Policy> find_scale
 
-    template <class Dist>
+    BOOST_MATH_EXPORT template <class Dist>
     inline // with default policy.
       typename Dist::value_type find_scale( // For example, normal mean.
       typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
@@ -98,7 +96,7 @@ namespace boost
       return (find_scale<Dist>(z, p, location, policies::policy<>()));
     } // find_scale
 
-    template <class Dist, class Real1, class Real2, class Real3, class Policy>
+    BOOST_MATH_EXPORT template <class Dist, class Real1, class Real2, class Real3, class Policy>
     inline typename Dist::value_type find_scale(
       complemented4_type<Real1, Real2, Real3, Policy> const& c)
     {
@@ -140,9 +138,7 @@ namespace boost
       //     (  z    - location) / (quantile(complement(Dist(),  q)) 
       if (result <= 0)
       { // If policy isn't to throw, return the scale <= 0.
-        policies::raise_evaluation_error<typename Dist::value_type>(function,
-          "Computed scale (%1%) is <= 0!" " Was the complement intended?",
-          result, Policy());
+        policies::raise_evaluation_error<typename Dist::value_type>(function, "Computed scale (%1%) is <= 0!" " Was the complement intended?", result, Policy()); // LCOV_EXCL_LINE
       }
       return result;
     } // template <class Dist, class Policy, class Real1, class Real2, class Real3> typename Dist::value_type find_scale
@@ -150,7 +146,7 @@ namespace boost
     // So the user can start from the complement q = (1 - p) of the probability p,
     // for example, s = find_scale<normal>(complement(z, q, l));
 
-    template <class Dist, class Real1, class Real2, class Real3>
+    BOOST_MATH_EXPORT template <class Dist, class Real1, class Real2, class Real3>
     inline typename Dist::value_type find_scale(
       complemented3_type<Real1, Real2, Real3> const& c)
     {
@@ -192,9 +188,8 @@ namespace boost
       //     (  z    - location) / (quantile(complement(Dist(),  q)) 
       if (result <= 0)
       { // If policy isn't to throw, return the scale <= 0.
-        policies::raise_evaluation_error<typename Dist::value_type>(function,
-          "Computed scale (%1%) is <= 0!" " Was the complement intended?",
-          result, policies::policy<>()); // This is only the default policy - also Want a version with Policy here.
+        policies::raise_evaluation_error<typename Dist::value_type>(function, "Computed scale (%1%) is <= 0!" " Was the complement intended?", // LCOV_EXCL_LINE
+           result, policies::policy<>()); // This is only the default policy - also Want a version with Policy here.  LCOV_EXCL_LINE
       }
       return result;
     } // template <class Dist, class Real1, class Real2, class Real3> typename Dist::value_type find_scale

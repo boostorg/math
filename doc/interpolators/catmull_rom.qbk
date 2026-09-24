@@ -24,7 +24,7 @@ namespace boost{ namespace math{
 
         catmull_rom(std::initializer_list<Point> l, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2);
 
-        Real operator()(Real s) const;
+        Point operator()(Real s) const;
 
         Real max_parameter() const;
 

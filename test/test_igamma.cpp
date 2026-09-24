@@ -3,7 +3,20 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_ENABLE_SYCL
 #include <pch_light.hpp>
+#else
+#include "sycl/sycl.hpp"
+#endif 
+
+#ifdef __clang__
+#  pragma clang diagnostic push 
+#  pragma clang diagnostic ignored "-Wliteral-range"
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic push 
+#  pragma GCC diagnostic ignored "-Woverflow"
+#endif
+
 #include "test_igamma.hpp"
 
 //
@@ -281,7 +294,7 @@ void expected_results()
    //
    // Large exponent range causes more extreme test cases to be evaluated:
    //
-   if(std::numeric_limits<long double>::max_exponent > std::numeric_limits<double>::max_exponent)
+   BOOST_IF_CONSTEXPR(std::numeric_limits<long double>::max_exponent > std::numeric_limits<double>::max_exponent)
    {
       add_expected_result(
          "[^|]*",                          // compiler
@@ -381,13 +394,13 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_MATH_CONTROL_FP;
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
-   test_spots(0.0F);
+   test_spots(0.0F, "float");
 #endif
-   test_spots(0.0);
+   test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   test_spots(0.0L);
+   test_spots(0.0L, "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-   test_spots(boost::math::concepts::real_concept(0.1));
+   test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 #endif
 

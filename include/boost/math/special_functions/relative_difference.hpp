@@ -13,7 +13,7 @@
 namespace boost{
    namespace math{
 
-      template <class T, class U>
+      BOOST_MATH_EXPORT template <class T, class U>
       typename boost::math::tools::promote_args<T,U>::type relative_difference(const T& arg_a, const U& arg_b)
       {
          typedef typename boost::math::tools::promote_args<T, U>::type result_type;
@@ -119,7 +119,7 @@ namespace boost{
       }
 #endif
 
-      template <class T, class U>
+      BOOST_MATH_EXPORT template <class T, class U>
       inline typename boost::math::tools::promote_args<T, U>::type epsilon_difference(const T& arg_a, const U& arg_b)
       {
          typedef typename boost::math::tools::promote_args<T, U>::type result_type;

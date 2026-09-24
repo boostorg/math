@@ -84,9 +84,9 @@ void test_spots(RealType)
   BOOST_MATH_CHECK_THROW(find_scale<normal>(complement(0., 2., 0.)), std::domain_error); // p above 0 to 1.
   BOOST_MATH_CHECK_THROW(find_scale<normal>(complement(numeric_limits<double>::infinity(), 0.5, 0.)),
     std::domain_error); // z not finite.
-  BOOST_MATH_CHECK_THROW(find_scale<normal>(complement(numeric_limits<double>::quiet_NaN(), -1., 0.)),
+  BOOST_MATH_CHECK_THROW(find_scale<normal>(complement(numeric_limits<double>::quiet_NaN(), 0.5, 0.)),
     std::domain_error); // z not finite
-  BOOST_MATH_CHECK_THROW(find_scale<normal>(complement(0., -1., numeric_limits<double>::quiet_NaN())),
+  BOOST_MATH_CHECK_THROW(find_scale<normal>(complement(0., 0.5, numeric_limits<double>::quiet_NaN())),
     std::domain_error); // scale not finite
 
   BOOST_MATH_CHECK_THROW(find_scale<normal>(complement(0., -1., 0.)), std::domain_error); // p below 0 to 1.
@@ -110,12 +110,36 @@ void test_spots(RealType)
 #ifndef BOOST_NO_EXCEPTIONS
   BOOST_CHECK_NO_THROW(find_scale<normal>(0, -1, 1,
     ignore_domain_policy())); // probability outside [0, 1]
-  BOOST_CHECK_NO_THROW(find_scale<normal>(numeric_limits<double>::infinity(), -1, 1,
+  BOOST_CHECK_NO_THROW(find_scale<normal>(numeric_limits<double>::infinity(), 0.5, 1,
     ignore_domain_policy())); // z not finite.
   BOOST_CHECK_NO_THROW(find_scale<normal>(complement(0, -1, 1, ignore_domain_policy()))); // probability outside [0, 1]
-  BOOST_CHECK_NO_THROW(find_scale<normal>(complement(numeric_limits<double>::infinity(), -1, 1,
+  BOOST_CHECK_NO_THROW(find_scale<normal>(complement(numeric_limits<double>::infinity(), 0.5, 1,
     ignore_domain_policy()))); // z not finite.
 #endif
+
+  // Test NaN handling
+  typedef policy<
+    boost::math::policies::domain_error<ignore_error>,
+    boost::math::policies::overflow_error<ignore_error>,
+    boost::math::policies::underflow_error<ignore_error>,
+    boost::math::policies::denorm_error<ignore_error>,
+    boost::math::policies::pole_error<ignore_error>,
+    boost::math::policies::evaluation_error<ignore_error>
+  > ignore_all_policy;
+
+  if (std::numeric_limits<RealType>::has_infinity)
+  {
+    RealType inf = std::numeric_limits<RealType>::infinity(); 
+    BOOST_CHECK((boost::math::isnan)(find_scale<normal_distribution<RealType> >(static_cast<RealType>(0), static_cast<RealType>(-1), static_cast<RealType>(1), ignore_all_policy())));
+    BOOST_CHECK((boost::math::isnan)(find_scale<normal_distribution<RealType> >(inf, static_cast<RealType>(0.5), static_cast<RealType>(1), ignore_all_policy())));
+    BOOST_CHECK((boost::math::isnan)(find_scale<normal_distribution<RealType> >(static_cast<RealType>(0), static_cast<RealType>(0.5), inf, ignore_all_policy())));
+
+    // Complement
+    BOOST_CHECK((boost::math::isnan)(find_scale<normal_distribution<RealType> >(complement(static_cast<RealType>(0), static_cast<RealType>(-1), static_cast<RealType>(1), ignore_all_policy()))));
+    BOOST_CHECK((boost::math::isnan)(find_scale<normal_distribution<RealType> >(complement(inf, static_cast<RealType>(0.5), static_cast<RealType>(1), ignore_all_policy()))));
+    BOOST_CHECK((boost::math::isnan)(find_scale<normal_distribution<RealType> >(complement(static_cast<RealType>(0), static_cast<RealType>(0.5), inf, ignore_all_policy()))));
+  }
+
   RealType l = 0.; // standard normal distribution.
   RealType sd = static_cast<RealType>(1); // normal default standard deviation = 1.
   normal_distribution<RealType> n01(l, sd); // mean(location) = 0, standard_deviation (scale) = 1.

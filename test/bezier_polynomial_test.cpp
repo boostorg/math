@@ -18,14 +18,18 @@
 using boost::multiprecision::float128;
 #endif
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 using boost::math::interpolators::bezier_polynomial;
 
 template<typename Real>
 void test_linear()
 {
     std::vector<std::array<Real, 2>> control_points(2);
-    control_points[0] = {0.0, 0.0};
-    control_points[1] = {1.0, 1.0};
+    control_points[0] = {Real(0), Real(0)};
+    control_points[1] = {Real(1), Real(1)};
     auto control_points_copy = control_points;
     auto bp = bezier_polynomial(std::move(control_points_copy));
 
@@ -54,9 +58,9 @@ template<typename Real>
 void test_quadratic()
 {
     std::vector<std::array<Real, 2>> control_points(3);
-    control_points[0] = {0.0, 0.0};
-    control_points[1] = {1.0, 1.0};
-    control_points[2] = {2.0, 2.0};
+    control_points[0] = {Real(0), Real(0)};
+    control_points[1] = {Real(1), Real(1)};
+    control_points[2] = {Real(2), Real(2)};
     auto control_points_copy = control_points;
     auto bp = bezier_polynomial(std::move(control_points_copy));
 
@@ -79,10 +83,10 @@ template<typename Real>
 void test_convex_hull()
 {
     std::vector<std::array<Real, 2>> control_points(4);
-    control_points[0] = {0.0, 0.0};
-    control_points[1] = {0.0, 1.0};
-    control_points[2] = {1.0, 1.0};
-    control_points[3] = {1.0, 0.0};
+    control_points[0] = {Real(0), Real(0)};
+    control_points[1] = {Real(0), Real(1)};
+    control_points[2] = {Real(1), Real(1)};
+    control_points[3] = {Real(1), Real(0)};
     auto bp = bezier_polynomial(std::move(control_points));
 
     for (Real t = 0; t <= 1; t += Real(1)/32) {
@@ -133,9 +137,9 @@ void test_reversal_symmetry()
     CHECK_ULP_CLOSE(control_points.back()[1], P1[1], 3);
     CHECK_ULP_CLOSE(control_points.back()[2], P1[2], 3);
 
-    for (Real t = 0; t <= 1; t += 1.0) {
+    for (Real t = 0; t <= 1; t += Real(1.0)) {
         auto P0 = bp0(t);
-        auto P1 = bp1(1.0-t);
+        auto P1 = bp1(Real(1.0)-t);
         if (!CHECK_ULP_CLOSE(P0[0], P1[0], 3)) {
             std::cerr << "  Error at t = " << t << "\n";
         }
@@ -169,9 +173,9 @@ void test_linear_precision()
         P[2] = (1-t)*P0[2] + t*Pf[2];
 
         auto computed = bp(t);
-        CHECK_ULP_CLOSE(P[0], computed[0], 3);
-        CHECK_ULP_CLOSE(P[1], computed[1], 3);
-        CHECK_ULP_CLOSE(P[2], computed[2], 3);
+        CHECK_ULP_CLOSE(P[0], computed[0], 4);
+        CHECK_ULP_CLOSE(P[1], computed[1], 4);
+        CHECK_ULP_CLOSE(P[2], computed[2], 4);
 
         std::array<Real, 3> dP;
         dP[0] = Pf[0] - P0[0];
@@ -184,21 +188,40 @@ void test_linear_precision()
 
 int main()
 {
+    #ifdef __STDCPP_FLOAT32_T__
+    test_linear<std::float32_t>();
+    test_quadratic<std::float32_t>();
+    test_convex_hull<std::float32_t>();
+    test_linear_precision<std::float32_t>();
+    test_reversal_symmetry<std::float32_t>();
+    #else
     test_linear<float>();
-    test_linear<double>();
     test_quadratic<float>();
-    test_quadratic<double>();
     test_convex_hull<float>();
-    test_convex_hull<double>();
     test_linear_precision<float>();
-    test_linear_precision<double>();
     test_reversal_symmetry<float>();
+    #endif
+
+    #ifdef __STDCPP_FLOAT64_T__
+    test_linear<std::float64_t>();
+    test_quadratic<std::float64_t>();
+    test_convex_hull<std::float64_t>();
+    test_linear_precision<std::float64_t>();
+    test_reversal_symmetry<std::float64_t>();
+    #else
+    test_linear<double>();
+    test_quadratic<double>();
+    test_convex_hull<double>();
+    test_linear_precision<double>();
     test_reversal_symmetry<double>();
-#ifdef BOOST_HAS_FLOAT128
+    #endif
+
+    #ifdef BOOST_HAS_FLOAT128
     test_linear<float128>();
     test_quadratic<float128>();
     test_convex_hull<float128>();
-#endif
+    #endif
+
     return boost::math::test::report_errors();
 }
 

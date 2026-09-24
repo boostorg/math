@@ -7,17 +7,21 @@
 #ifndef BOOST_MATH_CCMATH_NEXT_HPP
 #define BOOST_MATH_CCMATH_NEXT_HPP
 
-#include <cmath>
+#include <boost/math/ccmath/detail/config.hpp>
+
+#ifdef BOOST_MATH_NO_CCMATH
+#error "The header <boost/math/next.hpp> can only be used in C++17 and later."
+#endif
+
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <stdexcept>
 #include <cfloat>
 #include <cstdint>
-#include <limits>
-#include <type_traits>
-#include <stdexcept>
+#endif
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/tools/is_constant_evaluated.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/traits.hpp>
 #include <boost/math/tools/promotion.hpp>
@@ -101,7 +105,7 @@ constexpr T get_smallest_value(const std::false_type&)
 template <typename T>
 constexpr T get_smallest_value()
 {
-    return get_smallest_value<T>(std::integral_constant<bool, std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present)>());
+    return get_smallest_value<T>(std::integral_constant<bool, std::numeric_limits<T>::is_specialized>());
 }
 
 template <typename T>
@@ -379,7 +383,7 @@ constexpr result_type float_prior(const T& val)
 
 } // namespace detail
 
-template <typename T, typename U, typename result_type = tools::promote_args_t<T, U>>
+BOOST_MATH_EXPORT template <typename T, typename U, typename result_type = tools::promote_args_t<T, U>>
 constexpr result_type nextafter(const T& val, const U& direction)
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(val))
@@ -425,7 +429,7 @@ constexpr long double nextafterl(long double val, long double direction)
     return boost::math::ccmath::nextafter(val, direction);
 }
 
-template <typename T, typename result_type = tools::promote_args_t<T, long double>, typename return_type = std::conditional_t<std::is_integral_v<T>, double, T>>
+BOOST_MATH_EXPORT template <typename T, typename result_type = tools::promote_args_t<T, long double>, typename return_type = std::conditional_t<std::is_integral_v<T>, double, T>>
 constexpr return_type nexttoward(T val, long double direction)
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(val))

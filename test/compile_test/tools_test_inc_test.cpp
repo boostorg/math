@@ -9,7 +9,7 @@
 #include <array>
 
 #ifndef BOOST_MATH_STANDALONE
-#include <boost/math/tools/test.hpp>
+#include "../../include_private/boost/math/tools/test.hpp"
 //
 // Note this header includes no other headers, this is
 // important if this test is to be meaningful:

@@ -64,9 +64,7 @@ namespace boost { namespace math { namespace detail {
             return T(1);
 
       if ((b <= 0) && (b == floor(b)))
-         return policies::raise_pole_error<T>(
-            function,
-            "Evaluation of 0f1 with nonpositive integer b = %1%.", b, pol);
+         return policies::raise_pole_error<T>(function, "Evaluation of 0f1 with nonpositive integer b = %1%.", b, pol);
 
       if (z < -5 && b > -5)
       {
@@ -86,7 +84,7 @@ namespace boost { namespace math { namespace detail {
 
 } // namespace detail
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type hypergeometric_0F1(T1 b, T2 z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -106,7 +104,7 @@ inline typename tools::promote_args<T1, T2>::type hypergeometric_0F1(T1 b, T2 z,
       "boost::math::hypergeometric_0F1<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type hypergeometric_0F1(T1 b, T2 z)
 {
    return hypergeometric_0F1(b, z, policies::policy<>());

@@ -4,7 +4,15 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <pch_light.hpp>
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+
+#ifndef BOOST_MATH_ENABLE_SYCL
+#include <pch_light.hpp> // include /libs/math/src/
+#else
+#include "sycl/sycl.hpp"
+#endif
+
+
 #include "test_ellint_d.hpp"
 
 //

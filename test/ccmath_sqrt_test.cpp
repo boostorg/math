@@ -4,6 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <cmath>
+#include <cstdint>
 #include <limits>
 #include <type_traits>
 #include <boost/math/ccmath/sqrt.hpp>
@@ -48,7 +49,7 @@ void test_float_sqrt()
     constexpr Real tol = 2*std::numeric_limits<Real>::epsilon();
     
     constexpr Real test_val = boost::math::ccmath::sqrt(Real(2));
-    constexpr Real sqrt2 = Real(1.4142135623730950488016887l);
+    constexpr Real sqrt2 = Real(1.4142135623730950488016887242096980785696718753769480731766797379L);
     constexpr Real abs_test_error = (test_val - sqrt2) > 0 ? (test_val - sqrt2) : (sqrt2 - test_val);
     static_assert(abs_test_error < tol, "Out of tolerance");
 
@@ -115,7 +116,7 @@ int main()
     test_float_sqrt<long double>();
     #endif
 
-    #if defined(BOOST_HAS_FLOAT128) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
+    #if defined(BOOST_MATH_TEST_FLOAT128) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)  && !defined(__STRICT_ANSI__)
     test_mp_sqrt<boost::multiprecision::float128>();
     #endif
 

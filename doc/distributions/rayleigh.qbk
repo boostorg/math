@@ -18,9 +18,9 @@
       typedef RealType value_type;
       typedef Policy   policy_type;
       // Construct:
-      rayleigh_distribution(RealType sigma = 1)
+      BOOST_MATH_GPU_ENABLED rayleigh_distribution(RealType sigma = 1)
       // Accessors:
-      RealType sigma()const;
+      BOOST_MATH_GPU_ENABLED RealType sigma()const;
    };
 
    }} // namespaces
@@ -58,7 +58,7 @@ and [@http://en.wikipedia.org/wiki/Weibull_distribution Weibull] distributions a
 
 [h4 Member Functions]
 
-   rayleigh_distribution(RealType sigma = 1);
+   BOOST_MATH_GPU_ENABLED rayleigh_distribution(RealType sigma = 1);
 
 Constructs a [@http://en.wikipedia.org/wiki/Rayleigh_distribution
 Rayleigh distribution] with [sigma] /sigma/.
@@ -66,7 +66,7 @@ Rayleigh distribution] with [sigma] /sigma/.
 Requires that the [sigma] parameter is greater than zero,
 otherwise calls __domain_error.
 
-   RealType sigma()const;
+   BOOST_MATH_GPU_ENABLED RealType sigma()const;
 
 Returns the /sigma/ parameter of this distribution.
 
@@ -74,8 +74,13 @@ Returns the /sigma/ parameter of this distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variable is \[0, max_value\].
+
+In this distribution the implementation of both `logcdf`, and `logpdf` are specialized
+to improve numerical accuracy.
 
 [h4 Accuracy]
 
@@ -92,7 +97,9 @@ In the following table [sigma] is the sigma parameter of the distribution,
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = x * exp(-x[super 2])/2 [sigma][super 2] ]]
+[[logpdf][log(pdf) = -(x[super 2])/(2*[sigma][super 2]) - 2*log([sigma]) + log(x) ]]
 [[cdf][Using the relation: p = 1 - exp(-x[super 2]/2) [sigma][super 2]= -__expm1(-x[super 2]/2) [sigma][super 2]]]
+[[logcdf][log(cdf) = log1p(-exp(-x[super 2] / (2*[sigma][super 2]))) ]]
 [[cdf complement][Using the relation: q =  exp(-x[super 2]/ 2) * [sigma][super 2] ]]
 [[quantile][Using the relation: x = sqrt(-2 * [sigma] [super 2]) * log(1 - p)) = sqrt(-2 * [sigma] [super 2]) * __log1p(-p))]]
 [[quantile from the complement][Using the relation: x = sqrt(-2 * [sigma] [super 2]) * log(q)) ]]

@@ -6,20 +6,24 @@
 #ifndef BOOST_MATH_TOOLS_SIMPLE_CONTINUED_FRACTION_HPP
 #define BOOST_MATH_TOOLS_SIMPLE_CONTINUED_FRACTION_HPP
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <vector>
 #include <ostream>
-#include <iomanip>
 #include <cmath>
+#include <cstdint>
 #include <limits>
 #include <stdexcept>
 #include <sstream>
+#endif
 
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/config.hpp>
-#ifdef BOOST_NO_CXX17_IF_CONSTEXPR
-#error "The header <boost/math/norms.hpp> can only be used in C++17 and later."
+#ifdef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
+#error "The header <boost/math/tools/simple_continued_fraction.hpp> can only be used in C++17 and later."
 #endif
 #endif
 
@@ -29,10 +33,10 @@
 
 namespace boost::math::tools {
 
-template<typename Real, typename Z = int64_t>
+BOOST_MATH_EXPORT template<typename Real, typename Z = int64_t>
 class simple_continued_fraction {
 public:
-    simple_continued_fraction(Real x) : x_{x} {
+    simple_continued_fraction(Real x) {
         using std::floor;
         using std::abs;
         using std::sqrt;
@@ -40,6 +44,7 @@ public:
         if (!isfinite(x)) {
             throw std::domain_error("Cannot convert non-finites into continued fractions.");  
         }
+        const Real x0 = x;
         b_.reserve(50);
         Real bj = floor(x);
         b_.push_back(static_cast<Z>(bj));
@@ -58,7 +63,7 @@ public:
         // the "1 + i++" lets the error bound grow slowly with the number of convergents.
         // I have not worked out the error propagation of the Modified Lentz's method to see if it does indeed grow at this rate.
         // Numerical Recipes claims that no one has worked out the error analysis of the modified Lentz's method.
-        while (abs(f - x_) >= (1 + i++)*std::numeric_limits<Real>::epsilon()*abs(x_))
+        while (abs(f - x0) >= (1 + i++)*std::numeric_limits<Real>::epsilon()*abs(x0))
         {
           bj = floor(x);
           b_.push_back(static_cast<Z>(bj));
@@ -76,8 +81,11 @@ public:
        }
        // Deal with non-uniqueness of continued fractions: [a0; a1, ..., an, 1] = a0; a1, ..., an + 1].
        // The shorter representation is considered the canonical representation,
-       // so if we compute a non-canonical representation, change it to canonical:
-       if (b_.size() > 2 && b_.back() == 1) {
+       // so if we compute a non-canonical representation, change it to canonical.
+       // This includes [a0; 1] = [a0 + 1].  If the increment would overflow Z,
+       // keep the longer representation, which is still valid:
+       if (b_.size() >= 2 && b_.back() == 1
+           && (!std::numeric_limits<Z>::is_bounded || b_[b_.size() - 2] < (std::numeric_limits<Z>::max)())) {
           b_[b_.size() - 2] += 1;
           b_.resize(b_.size() - 1);
        }
@@ -140,23 +148,15 @@ public:
     }
     
     template<typename T, typename Z2>
-    friend std::ostream& operator<<(std::ostream& out, simple_continued_fraction<T, Z2>& scf);
+    friend std::ostream& operator<<(std::ostream& out, const simple_continued_fraction<T, Z2>& scf);
 
 private:
-    const Real x_;
     std::vector<Z> b_;
 };
 
 
-template<typename Real, typename Z2>
-std::ostream& operator<<(std::ostream& out, simple_continued_fraction<Real, Z2>& scf) {
-   constexpr const int p = std::numeric_limits<Real>::max_digits10;
-   if constexpr (p == 2147483647) {
-      out << std::setprecision(scf.x_.backend().precision());
-   } else {
-      out << std::setprecision(p);
-   }
-   
+BOOST_MATH_EXPORT template<typename Real, typename Z2>
+std::ostream& operator<<(std::ostream& out, const simple_continued_fraction<Real, Z2>& scf) {
    out << "[" << scf.b_.front();
    if (scf.b_.size() > 1)
    {

@@ -11,7 +11,9 @@
 #define BOOST_MATH_HAS_IS_CONST_ITERABLE
 
 #include <boost/math/tools/is_detected.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
+#endif
 
 namespace boost {
    namespace math {

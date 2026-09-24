@@ -28,24 +28,21 @@ inline T cyl_bessel_j_prime_imp(T v, T x, const Policy& pol)
    //
    // Prevent complex result:
    //
-   if (x < 0 && floor(v) != v)
-      return boost::math::policies::raise_domain_error<T>(
-         function,
-         "Got x = %1%, but function requires x >= 0", x, pol);
+   if ((x < 0) && (floor(v) != v))
+      return boost::math::policies::raise_domain_error<T>(function, "Got x = %1%, but function requires x >= 0", x, pol);
    //
    // Special cases for x == 0:
    //
    if (x == 0)
    {
       if (v == 1)
-         return 0.5;
+         return static_cast<T>(0.5);
       else if (v == -1)
-         return -0.5;
+         return static_cast<T>(-0.5);
       else if (floor(v) == v || v > 1)
          return 0;
-      else return boost::math::policies::raise_domain_error<T>(
-         function,
-         "Got x = %1%, but function is indeterminate for this order", x, pol);
+      else
+         return boost::math::policies::raise_domain_error<T>(function, "Got x = %1%, but function is indeterminate for this order", x, pol);
    }
    //
    // Special case for large x: use asymptotic expansion:
@@ -86,9 +83,7 @@ inline T sph_bessel_j_prime_imp(unsigned v, T x, const Policy& pol)
    // Prevent complex result:
    //
    if (x < 0)
-      return boost::math::policies::raise_domain_error<T>(
-         function,
-         "Got x = %1%, but function requires x >= 0.", x, pol);
+      return boost::math::policies::raise_domain_error<T>(function, "Got x = %1%, but function requires x >= 0.", x, pol);
    //
    // Special case for v == 0:
    //
@@ -99,9 +94,7 @@ inline T sph_bessel_j_prime_imp(unsigned v, T x, const Policy& pol)
    // Special case for x == 0 and v > 0:
    //
    if (x == 0)
-      return boost::math::policies::raise_domain_error<T>(
-         function,
-         "Got x = %1%, but function is indeterminate for this order", x, pol);
+      return boost::math::policies::raise_domain_error<T>(function, "Got x = %1%, but function is indeterminate for this order", x, pol);
    //
    // Default case:
    //
@@ -117,21 +110,18 @@ inline T cyl_bessel_i_prime_imp(T v, T x, const Policy& pol)
    // Prevent complex result:
    //
    if (x < 0 && floor(v) != v)
-      return boost::math::policies::raise_domain_error<T>(
-         function,
-         "Got x = %1%, but function requires x >= 0", x, pol);
+      return boost::math::policies::raise_domain_error<T>(function, "Got x = %1%, but function requires x >= 0", x, pol);
    //
    // Special cases for x == 0:
    //
    if (x == 0)
    {
       if (v == 1 || v == -1)
-         return 0.5;
+         return static_cast<T>(0.5);
       else if (floor(v) == v || v > 1)
          return 0;
-      else return boost::math::policies::raise_domain_error<T>(
-         function,
-         "Got x = %1%, but function is indeterminate for this order", x, pol);
+      else 
+         return boost::math::policies::raise_domain_error<T>(function, "Got x = %1%, but function is indeterminate for this order", x, pol);
    }
    //
    // Special case for v == 0:
@@ -151,9 +141,7 @@ inline T cyl_bessel_k_prime_imp(T v, T x, const Policy& pol)
    // Prevent complex and indeterminate results:
    //
    if (x <= 0)
-      return boost::math::policies::raise_domain_error<T>(
-         "boost::math::cyl_bessel_k_prime<%1%>(%1%,%1%)",
-         "Got x = %1%, but function requires x > 0", x, pol);
+      return boost::math::policies::raise_domain_error<T>("boost::math::cyl_bessel_k_prime<%1%>(%1%,%1%)", "Got x = %1%, but function requires x > 0", x, pol);
    //
    // Special case for v == 0:
    //
@@ -173,9 +161,7 @@ inline T cyl_neumann_prime_imp(T v, T x, const Policy& pol)
    // Prevent complex and indeterminate results:
    //
    if (x <= 0)
-      return boost::math::policies::raise_domain_error<T>(
-         "boost::math::cyl_neumann_prime<%1%>(%1%,%1%)",
-         "Got x = %1%, but function requires x > 0", x, pol);
+      return boost::math::policies::raise_domain_error<T>("boost::math::cyl_neumann_prime<%1%>(%1%,%1%)", "Got x = %1%, but function requires x > 0", x, pol);
    //
    // Special case for large x: use asymptotic expansion:
    //
@@ -208,9 +194,7 @@ inline T sph_neumann_prime_imp(unsigned v, T x, const Policy& pol)
    // Prevent complex and indeterminate result:
    //
    if (x <= 0)
-      return boost::math::policies::raise_domain_error<T>(
-         "boost::math::sph_neumann_prime<%1%>(%1%,%1%)",
-         "Got x = %1%, but function requires x > 0.", x, pol);
+      return boost::math::policies::raise_domain_error<T>("boost::math::sph_neumann_prime<%1%>(%1%,%1%)", "Got x = %1%, but function requires x > 0.", x, pol);
    //
    // Special case for v == 0:
    //
@@ -224,7 +208,7 @@ inline T sph_neumann_prime_imp(unsigned v, T x, const Policy& pol)
 
 } // namespace detail
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j_prime(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -240,13 +224,13 @@ inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j_
    return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_j_prime_imp<tag_type, value_type>(static_cast<value_type>(v), static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_bessel_j_prime<%1%,%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_j_prime(T1 v, T2 x)
 {
    return cyl_bessel_j_prime(v, x, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel_prime(unsigned v, T x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -261,13 +245,13 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel_prim
    return policies::checked_narrowing_cast<result_type, Policy>(detail::sph_bessel_j_prime_imp<value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::sph_bessel_j_prime<%1%>(%1%,%1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_bessel_prime(unsigned v, T x)
 {
    return sph_bessel_prime(v, x, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i_prime(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -282,13 +266,13 @@ inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i_
    return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_i_prime_imp<value_type>(static_cast<value_type>(v), static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_bessel_i_prime<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_i_prime(T1 v, T2 x)
 {
    return cyl_bessel_i_prime(v, x, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k_prime(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -304,13 +288,13 @@ inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k_
    return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_k_prime_imp<tag_type, value_type>(static_cast<value_type>(v), static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_bessel_k_prime<%1%,%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_k_prime(T1 v, T2 x)
 {
    return cyl_bessel_k_prime(v, x, policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann_prime(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -326,13 +310,13 @@ inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann_p
    return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_neumann_prime_imp<tag_type, value_type>(static_cast<value_type>(v), static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_neumann_prime<%1%,%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_neumann_prime(T1 v, T2 x)
 {
    return cyl_neumann_prime(v, x, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann_prime(unsigned v, T x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -347,7 +331,7 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann_pri
    return policies::checked_narrowing_cast<result_type, Policy>(detail::sph_neumann_prime_imp<value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::sph_neumann_prime<%1%>(%1%,%1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann_prime(unsigned v, T x)
 {
    return sph_neumann_prime(v, x, policies::policy<>());

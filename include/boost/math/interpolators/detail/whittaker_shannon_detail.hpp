@@ -5,7 +5,9 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #ifndef BOOST_MATH_INTERPOLATORS_WHITAKKER_SHANNON_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_WHITAKKER_SHANNON_DETAIL_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
@@ -30,6 +32,7 @@ public:
         using boost::math::constants::pi;
         using std::isfinite;
         using std::floor;
+        using std::ceil;
         Real y = 0;
         Real x = (t - m_t0)/m_h;
         Real z = x;
@@ -61,6 +64,7 @@ public:
         using boost::math::constants::pi;
         using std::isfinite;
         using std::floor;
+        using std::ceil;
 
         Real x = (t - m_t0)/m_h;
         if (ceil(x) == x) {

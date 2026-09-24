@@ -21,11 +21,11 @@
       typedef Policy    policy_type;
 
       // Constructor from two range parameters, x_min and x_max:
-      arcsine_distribution(RealType x_min = 0, RealType x_max = 1);
+      BOOST_MATH_GPU_ENABLED arcsine_distribution(RealType x_min = 0, RealType x_max = 1);
 
       // Range Parameter accessors:
-      RealType x_min() const;
-      RealType x_max() const;
+      BOOST_MATH_GPU_ENABLED RealType x_min() const;
+      BOOST_MATH_GPU_ENABLED RealType x_max() const;
    };
    }} // namespaces
 
@@ -103,8 +103,8 @@ constructs a 'Standard 01' arcsine distribution.
 
 [h5 Parameter Accessors]
 
-   RealType x_min() const;
-   RealType x_max() const;
+   BOOST_MATH_GPU_ENABLED RealType x_min() const;
+   BOOST_MATH_GPU_ENABLED RealType x_max() const;
 
 Return the parameter ['x_min] or  ['x_max] from which this distribution was constructed.
 
@@ -116,6 +116,8 @@ So, for example:
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The formulae for calculating these are shown in the table below, and at
 [@http://mathworld.wolfram.com/arcsineDistribution.html Wolfram Mathworld].

@@ -18,14 +18,14 @@
       typedef Policy    policy_type;
 
       // Constructor:
-      non_central_beta_distribution(RealType alpha, RealType beta, RealType lambda);
+      BOOST_MATH_GPU_ENABLED non_central_beta_distribution(RealType alpha, RealType beta, RealType lambda);
 
       // Accessor to shape parameters:
-      RealType alpha()const;
-      RealType beta()const;
+      BOOST_MATH_GPU_ENABLED RealType alpha()const;
+      BOOST_MATH_GPU_ENABLED RealType beta()const;
 
       // Accessor to non-centrality parameter lambda:
-      RealType non_centrality()const;
+      BOOST_MATH_GPU_ENABLED RealType non_centrality()const;
    };
 
    }} // namespaces
@@ -59,22 +59,22 @@ for different values of [lambda]:
 
 [h4 Member Functions]
 
-      non_central_beta_distribution(RealType a, RealType b, RealType lambda);
+      BOOST_MATH_GPU_ENABLED non_central_beta_distribution(RealType a, RealType b, RealType lambda);
 
 Constructs a noncentral beta distribution with shape parameters /a/ and /b/
 and non-centrality parameter /lambda/.
 
 Requires a > 0, b > 0 and lambda >= 0, otherwise calls __domain_error.
 
-      RealType alpha()const;
+      BOOST_MATH_GPU_ENABLED RealType alpha()const;
 
 Returns the parameter /a/ from which this object was constructed.
 
-      RealType beta()const;
+      BOOST_MATH_GPU_ENABLED RealType beta()const;
 
 Returns the parameter /b/ from which this object was constructed.
 
-      RealType non_centrality()const;
+      BOOST_MATH_GPU_ENABLED RealType non_centrality()const;
 
 Returns the parameter /lambda/ from which this object was constructed.
 
@@ -83,6 +83,8 @@ Returns the parameter /lambda/ from which this object was constructed.
 Most of the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 are supported: __cdf, __pdf, __quantile, __mean, __variance, __sd,
 __median, __mode, __hazard, __chf, __range and __support.
+For this distribution these functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 Mean and variance are implemented using hypergeometric pfq functions and relations given in
 [@http://reference.wolfram.com/mathematica/ref/NoncentralBetaDistribution.html Wolfram Noncentral Beta Distribution].

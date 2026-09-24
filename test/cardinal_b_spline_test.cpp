@@ -32,6 +32,9 @@ void test_box()
     CHECK_ULP_CLOSE(expected, t, 0);
     CHECK_ULP_CLOSE(expected, cardinal_b_spline_prime<0>(Real(1.1)), 0);
 
+    CHECK_EQUAL(cardinal_b_spline<0>(Real(0.5)), Real(0.5f));
+    CHECK_EQUAL(cardinal_b_spline_prime<0>(Real(0.5)), std::numeric_limits<Real>::infinity());
+
     t = cardinal_b_spline<0>(Real(-1.1));
     expected = 0;
     CHECK_ULP_CLOSE(expected, t, 0);

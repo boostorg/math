@@ -15,10 +15,10 @@
       typedef RealType value_type;
       typedef Policy   policy_type;
       // Construct:
-      logistic_distribution(RealType location = 0, RealType scale = 1);
+      BOOST_MATH_GPU_ENABLED logistic_distribution(RealType location = 0, RealType scale = 1);
       // Accessors:
-      RealType location()const; // location.
-      RealType scale()const; // scale.
+      BOOST_MATH_GPU_ENABLED RealType location()const; // location.
+      BOOST_MATH_GPU_ENABLED RealType scale()const; // scale.
       
    };
 
@@ -39,17 +39,17 @@ parameters change:
 
 [h4 Member Functions]
 
-   logistic_distribution(RealType u = 0, RealType s = 1);
+   BOOST_MATH_GPU_ENABLED logistic_distribution(RealType u = 0, RealType s = 1);
 
 Constructs a logistic distribution with location /u/ and scale /s/.
 
 Requires `scale > 0`, otherwise a __domain_error is raised.
 
-   RealType location()const;   
+   BOOST_MATH_GPU_ENABLED RealType location()const;   
 
 Returns the location of this distribution.
 
-   RealType scale()const;
+   BOOST_MATH_GPU_ENABLED RealType scale()const;
 
 Returns the scale of this distribution. 
 
@@ -57,6 +57,8 @@ Returns the scale of this distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variable is \[-\[max_value\], +\[min_value\]\]. 
 However, the pdf and cdf support inputs of +[infin] and -[infin]
@@ -66,6 +68,9 @@ At `p=1` and `p=0`, the quantile function returns the result of
 +__overflow_error and -__overflow_error, while the complement 
 quantile function returns the result of -__overflow_error and 
 +__overflow_error respectively. 
+
+In this distribution the implementation of `logcdf` is specialized
+to improve numerical accuracy.
 
 [h4 Accuracy]
 
@@ -82,6 +87,7 @@ in such cases, only a low /absolute error/ can be guaranteed.
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = e[super -(x-u)/s] / (s*(1+e[super -(x-u)/s])[super 2])]]
 [[cdf][Using the relation: p = 1/(1+e[super -(x-u)/s])]]
+[[logcdf][log(cdf) = -log1p(exp((u-x)/s)) ]]
 [[cdf complement][Using the relation: q = 1/(1+e[super (x-u)/s])]]
 [[quantile][Using the relation: x = u - s*log(1/p-1)]]
 [[quantile from the complement][Using the relation: x = u + s*log(p/1-p)]]

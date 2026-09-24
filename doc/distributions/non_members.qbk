@@ -17,6 +17,8 @@ to go straight to the function you want if you already know its name.
 * __hazard.
 * __kurtosis.
 * __kurtosis_excess
+* __logcdf.
+* __logpdf.
 * __mean.
 * __median.
 * __mode.
@@ -348,6 +350,20 @@ Kurtosis excess can have a value from -2 to + infinity.
   kurtosis = kurtosis_excess +3;
 
 The kurtosis excess of a normal distribution is zero.
+
+[h4:logcdf Natural Log of the Cumulative Distribution Function]
+
+   template <class RealType, ``__Policy``>
+   RealType logcdf(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist);
+
+Returns the natural log of the CDF of distribution /dist/.
+
+[h4:logpdf Natural Log of the Probability Density Function]
+
+   template <class RealType, ``__Policy``>
+   RealType logcdf(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist);
+
+Returns the natural log of the CDF of distribution /dist/.
 
 [h4:cdfPQ P and Q]
 

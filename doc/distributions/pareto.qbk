@@ -17,10 +17,10 @@
    public:
       typedef RealType value_type;
       // Constructor:
-      pareto_distribution(RealType scale = 1, RealType shape = 1)
+      BOOST_MATH_GPU_ENABLED pareto_distribution(RealType scale = 1, RealType shape = 1)
       // Accessors:
-      RealType scale()const;
-      RealType shape()const;
+      BOOST_MATH_GPU_ENABLED RealType scale()const;
+      BOOST_MATH_GPU_ENABLED RealType shape()const;
    };
 
    }} // namespaces
@@ -50,7 +50,7 @@ And this graph illustrates how the PDF varies with the shape parameter [alpha]:
 
 [h4 Member Functions]
 
-   pareto_distribution(RealType scale = 1, RealType shape = 1);
+   BOOST_MATH_GPU_ENABLED pareto_distribution(RealType scale = 1, RealType shape = 1);
 
 Constructs a [@http://en.wikipedia.org/wiki/pareto_distribution
 pareto distribution] with shape /shape/ and scale /scale/.
@@ -58,11 +58,11 @@ pareto distribution] with shape /shape/ and scale /scale/.
 Requires that the /shape/ and /scale/ parameters are both greater than zero,
 otherwise calls __domain_error.
 
-   RealType scale()const;
+   BOOST_MATH_GPU_ENABLED RealType scale()const;
 
 Returns the /scale/ parameter of this distribution.
 
-   RealType shape()const;
+   BOOST_MATH_GPU_ENABLED RealType shape()const;
 
 Returns the /shape/ parameter of this distribution.
 
@@ -70,8 +70,13 @@ Returns the /shape/ parameter of this distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The supported domain of the random variable is \[scale, [infin]\].
+
+In this distribution the implementation of `logcdf` is specialized
+to improve numerical accuracy.
 
 [h4 Accuracy]
 
@@ -91,6 +96,7 @@ and its complement /q = 1-p/.
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf p = [alpha][beta][super [alpha]]/x[super [alpha] +1] ]]
 [[cdf][Using the relation: cdf p = 1 - ([beta] / x)[super [alpha]] ]]
+[[logcdf][log(cdf) = log1p(-pow([beta]/x, [alpha])) ]]
 [[cdf complement][Using the relation: q = 1 - p = -([beta] / x)[super [alpha]] ]]
 [[quantile][Using the relation: x = [beta] / (1 - p)[super 1/[alpha]] ]]
 [[quantile from the complement][Using the relation: x =  [beta] / (q)[super 1/[alpha]] ]]

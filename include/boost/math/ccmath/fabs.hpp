@@ -8,11 +8,17 @@
 #ifndef BOOST_MATH_CCMATH_FABS
 #define BOOST_MATH_CCMATH_FABS
 
+#include <boost/math/ccmath/detail/config.hpp>
+
+#ifdef BOOST_MATH_NO_CCMATH
+#error "The header <boost/math/fabs.hpp> can only be used in C++17 and later."
+#endif
+
 #include <boost/math/ccmath/abs.hpp>
 
 namespace boost::math::ccmath {
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 inline constexpr auto fabs(T x) noexcept
 {
     return boost::math::ccmath::abs(x);

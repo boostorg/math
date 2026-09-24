@@ -11,9 +11,9 @@
 #include <boost/math/special_functions/sign.hpp>
 #include "c_policy.hpp"
 
-extern "C" float BOOST_MATH_TR1_DECL boost_copysignf BOOST_PREVENT_MACRO_SUBSTITUTION(float x, float y) BOOST_MATH_C99_THROW_SPEC
+extern "C" float BOOST_MATH_TR1_DECL boost_copysignf BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(float x, float y) BOOST_MATH_C99_THROW_SPEC
 {
-   return boost::math::copysign BOOST_PREVENT_MACRO_SUBSTITUTION(x, y);
+   return boost::math::copysign BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, y);
 }
 
 

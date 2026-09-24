@@ -6,7 +6,9 @@
 #ifndef BOOST_MATH_OVERFLOW_ERROR_POLICY
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #endif
-#include <boost/math/concepts/real_concept.hpp>
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+#include <boost/math/concepts/real_concept.hpp> // for real_concept
+#endif
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>

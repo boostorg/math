@@ -17,11 +17,11 @@
       typedef RealType value_type;
       
       // Construct:
-      fisher_f_distribution(const RealType& i, const RealType& j);
+      BOOST_MATH_GPU_ENABLED fisher_f_distribution(const RealType& i, const RealType& j);
       
       // Accessors:
-      RealType degrees_of_freedom1()const;
-      RealType degrees_of_freedom2()const;
+      BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom1()const;
+      BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom2()const;
    };
    
    }} //namespaces
@@ -46,7 +46,7 @@ two degrees of freedom parameters.
 
 [h4 Member Functions]
 
-      fisher_f_distribution(const RealType& df1, const RealType& df2);
+      BOOST_MATH_GPU_ENABLED fisher_f_distribution(const RealType& df1, const RealType& df2);
       
 Constructs an F-distribution with numerator degrees of freedom /df1/
 and denominator degrees of freedom /df2/.
@@ -54,11 +54,11 @@ and denominator degrees of freedom /df2/.
 Requires that /df1/ and /df2/ are both greater than zero, otherwise __domain_error
 is called.
       
-      RealType degrees_of_freedom1()const;
+      BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom1()const;
       
 Returns the numerator degrees of freedom parameter of the distribution.
 
-      RealType degrees_of_freedom2()const;
+      BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom2()const;
       
 Returns the denominator degrees of freedom parameter of the distribution.
 
@@ -66,6 +66,8 @@ Returns the denominator degrees of freedom parameter of the distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variable is \[0, +[infin]\].
 

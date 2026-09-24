@@ -2,6 +2,7 @@
 
 // Copyright John Maddock 2006.
 // Copyright  Paul A. Bristow 2007, 2012.
+// Copyright Matt Borland 2024
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -17,12 +18,16 @@
 #  pragma warning (disable : 4127) // conditional expression is constant.
 #endif
 
+#ifdef BOOST_MATH_ENABLE_SYCL
+#include "sycl/sycl.hpp"
+#endif
+
 // Default domain error policy is
 // #define BOOST_MATH_DOMAIN_ERROR_POLICY throw_on_error
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 using ::boost::math::concepts::real_concept;
-#include <boost/math/tools/test.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
 
 #include <boost/math/distributions/bernoulli.hpp> // for bernoulli_distribution
 using boost::math::bernoulli_distribution;
@@ -74,6 +79,7 @@ void test_spots(RealType)
   BOOST_CHECK_EQUAL(bernoulli_distribution<RealType>(static_cast<RealType>(0.1L)).success_fraction(), static_cast<RealType>(0.1L));
   BOOST_CHECK_EQUAL(bernoulli_distribution<RealType>(static_cast<RealType>(0.9L)).success_fraction(), static_cast<RealType>(0.9L));
 
+#ifndef BOOST_MATH_NO_EXCEPTIONS
   BOOST_MATH_CHECK_THROW( // Constructor success_fraction outside 0 to 1.
        bernoulli_distribution<RealType>(static_cast<RealType>(2)), std::domain_error);
   BOOST_MATH_CHECK_THROW(
@@ -86,7 +92,8 @@ void test_spots(RealType)
   BOOST_MATH_CHECK_THROW(
        pdf( // pdf k neither 0 nor 1.
           bernoulli_distribution<RealType>(static_cast<RealType>(0.25L)), static_cast<RealType>(2)), std::domain_error);
- 
+#endif
+
   BOOST_CHECK_EQUAL(
     pdf( // OK k (or n)
     bernoulli_distribution<RealType>(static_cast<RealType>(0.5L)), static_cast<RealType>(0)),
@@ -106,6 +113,11 @@ void test_spots(RealType)
     pdf( // OK k (or n)
     bernoulli_distribution<RealType>(static_cast<RealType>(0.4L)), static_cast<RealType>(0)),
       static_cast<RealType>(0.6L), tolerance); // Expect  1- p.
+
+  BOOST_CHECK_CLOSE_FRACTION(
+    pdf( // OK k (or n)
+    bernoulli_distribution<RealType>(static_cast<RealType>(0.4L)), static_cast<RealType>(1)),
+      static_cast<RealType>(0.4L), tolerance); // Expect  p.
 
   BOOST_CHECK_EQUAL(
        mean(bernoulli_distribution<RealType>(static_cast<RealType>(0.5L))), static_cast<RealType>(0.5L));
@@ -134,6 +146,7 @@ void test_spots(RealType)
        static_cast<RealType>(5.11111111111111111111111111111111111111111111L),
        tolerance);
 
+#ifndef BOOST_MATH_NO_EXCEPTIONS
   BOOST_MATH_CHECK_THROW(
      quantile(
         bernoulli_distribution<RealType>(static_cast<RealType>(2)), // prob >1
@@ -154,6 +167,7 @@ void test_spots(RealType)
         bernoulli_distribution<RealType>(static_cast<RealType>(0.5L)), // k < 0
         static_cast<RealType>(2)), std::domain_error
      );
+#endif
 
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(
@@ -217,6 +231,7 @@ void test_spots(RealType)
 
    // Checks for 'bad' parameters.
    // Construction.
+   #ifndef BOOST_MATH_NO_EXCEPTIONS
    BOOST_MATH_CHECK_THROW(bernoulli_distribution<RealType>(-1), std::domain_error); // p outside 0 to 1.
    BOOST_MATH_CHECK_THROW(bernoulli_distribution<RealType>(+2), std::domain_error); // p outside 0 to 1.
 
@@ -269,7 +284,47 @@ void test_spots(RealType)
      BOOST_MATH_CHECK_THROW(quantile(w, +inf), std::domain_error); // p = + inf
      BOOST_MATH_CHECK_THROW(quantile(complement(w, +inf)), std::domain_error); // p = + inf
    } // has_infinity
+   #endif
+   
+   using boost::math::policies::policy;
+   typedef policy<
+      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+    > ignore_all_policy;
 
+   typedef bernoulli_distribution<RealType, ignore_all_policy> ignore_error_bernoulli;
+
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+    {
+      // PDF
+      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_bernoulli(0.5), std::numeric_limits<RealType>::infinity()))); // k == infinity
+      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_bernoulli(0.5), 2))); // k > 1
+      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_bernoulli(0.5), static_cast<RealType>(0.5)))); // k != 0, 1
+      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_bernoulli(0.5), static_cast<RealType>(-0.5)))); // k != 0, 1
+
+      // CDF
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_bernoulli(0.5), std::numeric_limits<RealType>::infinity()))); // k == infinity
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_bernoulli(0.5), 2))); // k > 1
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_bernoulli(0.5), static_cast<RealType>(0.5)))); // k != 0, 1
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_bernoulli(0.5), static_cast<RealType>(-0.5)))); // k != 0, 1
+      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_bernoulli(0.5), std::numeric_limits<RealType>::infinity())))); // k == infinity
+      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_bernoulli(0.5), 2)))); // k > 1
+      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_bernoulli(0.5), static_cast<RealType>(0.5))))); // k != 0, 1
+      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_bernoulli(0.5), static_cast<RealType>(-0.5))))); // k != 0, 1
+
+      // // Quantile
+      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_bernoulli(0.5), std::numeric_limits<RealType>::infinity()))); // p == infinity
+      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_bernoulli(0.5), static_cast<RealType>(-1)))); // p < 0
+      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_bernoulli(0.5), static_cast<RealType>(2)))); // p > 1
+      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_bernoulli(0.5), std::numeric_limits<RealType>::infinity())))); // q == infinity
+      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_bernoulli(0.5), static_cast<RealType>(-1))))); // q < 0
+      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_bernoulli(0.5), static_cast<RealType>(2))))); // q > 1
+
+    } // has_quiet_NaN
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )
@@ -302,7 +357,9 @@ BOOST_AUTO_TEST_CASE( test_main )
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float.
   test_spots(0.0); // Test double.
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
+#endif
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif

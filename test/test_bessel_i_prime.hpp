@@ -179,5 +179,11 @@ void test_bessel(T, const char* name)
 
     if(0 != static_cast<T>(ldexp(static_cast<T>(0.5), -700)))
       do_test_cyl_bessel_i_prime<T>(iv_prime_large_data, name, "Bessel I'v: Mathworld Data (large values)");
+
+    //
+    // Special cases for extra coverage:
+    //
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_i_prime(T(2.5), T(-1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_i_prime(T(0.25), T(0)), std::domain_error);
 }
 

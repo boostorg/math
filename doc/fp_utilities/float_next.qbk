@@ -261,7 +261,7 @@ next floating-point value, but `x - u` is not necessarily the previous value.  S
 value.  The corner cases occur at power of 2 boundaries.
 * When the argument becomes very small, it may be that there is no floating-point value that
 represents one ULP.  Whether this is the case or not depends not only on whether the hardware
-may ['sometimes] support denormals (as signalled by `std::numeric_limits<FPT>::has_denorm`), but also whether these are
+may ['sometimes] support denormals (as signalled by `boost::math::detail::has_denorm_now<FPT>()`), but also whether these are
 currently enabled at runtime (for example on SSE hardware, the DAZ or FTZ flags will disable denormal support).
 In this situation, the `ulp` function may return a value that is many orders of magnitude too large.
 

@@ -104,11 +104,15 @@ BOOST_AUTO_TEST_CASE( test_main )
 
 #ifndef BOOST_MATH_NO_MP_TESTS
 #if !defined(TEST) || (TEST == 3)
+   #if defined(BOOST_MATH_RUN_MP_TESTS)
    test_spots(boost::multiprecision::cpp_bin_float_quad(), "cpp_bin_float_quad");
+   #endif
 #endif
 #if !defined(TEST) || (TEST == 4)
+   #if defined(BOOST_MATH_RUN_MP_TESTS)
    using dec_40 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<40>>;
    test_spots(dec_40(), "dec_40");
+   #endif
 #endif
 #endif
 }

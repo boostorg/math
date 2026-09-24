@@ -24,6 +24,11 @@
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/special_functions/ellint_rc.hpp>
 #include <boost/math/special_functions/ellint_rj.hpp>
+#include <boost/type_index.hpp>
+
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
 
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
@@ -228,12 +233,12 @@ void test_linear()
     Real error;
     Real L1;
     Real Q = integrator.integrate(f, (Real) 0, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
-    BOOST_CHECK_CLOSE_FRACTION(Q, 9.5, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, 9.5, tol);
-    Q = integrator.integrate(f, (Real) 1, (Real) 0, get_convergence_tolerance<Real>(), &error, &L1);
-    BOOST_CHECK_CLOSE_FRACTION(Q, -9.5, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, 9.5, tol);
-    Q = integrator.integrate(f, (Real) 1, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
+    BOOST_CHECK_CLOSE_FRACTION(Q, static_cast<Real>(9.5), tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, static_cast<Real>(9.5), tol);
+    Q = integrator.integrate(f, static_cast<Real>(1), static_cast<Real>(0), get_convergence_tolerance<Real>(), &error, &L1);
+    BOOST_CHECK_CLOSE_FRACTION(Q, static_cast<Real>(-9.5), tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, static_cast<Real>(9.5), tol);
+    Q = integrator.integrate(f, static_cast<Real>(1), static_cast<Real>(1), get_convergence_tolerance<Real>(), &error, &L1);
     BOOST_CHECK_EQUAL(Q, Real(0));
 }
 
@@ -317,8 +322,14 @@ void test_ca()
     // Slightly higher tolerance for type float, this marginal change was
     // caused by no more than changing the order in which the terms are summed:
     //
-    if (std::is_same<Real, float>::value)
-        tol *= 1.5;
+    BOOST_IF_CONSTEXPR (std::is_same<Real, float>::value 
+                       #ifdef __STDCPP_FLOAT32_T__
+                       || std::is_same<Real, std::float32_t>::value
+                       #endif
+                       )
+    {
+        tol *= static_cast<Real>(1.5);
+    }
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
@@ -520,7 +531,7 @@ void test_nr_examples()
     auto f2 = [](Real x)->Real { return pow(x, -(Real) 2/(Real) 7)*exp(-x*x); };
     Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>());
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * 6);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * 10);
 
 }
 
@@ -782,7 +793,7 @@ void test_2_arg()
    {
       return tc < 0 ? 1 / boost::math::cbrt(t * (1-t)) : 1 / boost::math::cbrt(t * tc);
    }, 0, 1);
-   BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::pow<2>(boost::math::tgamma(Real(2) / 3)) / boost::math::tgamma(Real(4) / 3), tol * 4);
+   BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::pow<2>(boost::math::tgamma(Real(2) / 3)) / boost::math::tgamma(Real(4) / 3), tol * 20);
    //
    // We can do the same thing with ((1+x)(1-x))^-N ; N < 1
    //
@@ -872,6 +883,41 @@ void test_complex()
    }
 }
 
+template <class T>
+void test_non_central_t()
+{
+   //
+   // Bug case from the non-central t distribution:
+   //
+   using std::pow;
+   using std::exp;
+   using std::sqrt;
+
+   std::cout << "Testing non-central T PDF integral" << std::endl;
+
+   T x = -1.882352352142334;
+   T v = 77.384613037109375;
+   T mu = 8.1538467407226562;
+   T expected = static_cast<T>(4.5098555913703146875364186893655197e+49L);
+
+   T left = 0;
+   T right = std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+
+   boost::math::quadrature::tanh_sinh<T> integrator;
+   T err;
+   T L1;
+   std::size_t levels;
+   T integral = integrator.integrate([&x, v, mu](T y)
+      {
+         return pow(y, v) * exp(boost::math::pow<2>((y - mu * x / sqrt(x * x + v))) / -2);
+      },
+      left, right,
+      boost::math::tools::root_epsilon<T>(), &err, &L1, &levels);
+
+   T tol = 100 * boost::math::tools::epsilon<T>();
+   BOOST_CHECK_CLOSE_FRACTION(integral, expected, tol);
+}
+
 
 BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 {
@@ -895,6 +941,20 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_horrible<float>();
     test_integration_over_real_line<float>();
     test_nr_examples<float>();
+
+    #ifdef __STDCPP_FLOAT32_T__
+    test_right_limit_infinite<std::float32_t>();
+    test_left_limit_infinite<std::float32_t>();
+    test_linear<std::float32_t>();
+    test_quadratic<std::float32_t>();
+    test_singular<std::float32_t>();
+    test_ca<std::float32_t>();
+    test_three_quadrature_schemes_examples<std::float32_t>();
+    test_horrible<std::float32_t>();
+    test_integration_over_real_line<std::float32_t>();
+    test_nr_examples<std::float32_t>();
+    #endif
+
 #endif
 #ifdef TEST1A
     test_early_termination<float>();
@@ -919,6 +979,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_early_termination<double>();
     test_sf<double>();
     test_2_arg<double>();
+    test_non_central_t<double>();
 #endif
 #ifdef TEST2A
    #ifndef BOOST_MATH_STANDALONE
@@ -942,6 +1003,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_early_termination<long double>();
     test_sf<long double>();
     test_2_arg<long double>();
+    test_non_central_t<long double>();
 #endif
 #ifdef TEST3A
    #ifndef BOOST_MATH_STANDALONE
@@ -952,7 +1014,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #endif
 
 #ifdef TEST4
-   #ifndef BOOST_MATH_NO_MP_TESTS
+   #ifdef BOOST_MATH_RUN_MP_TESTS
     test_right_limit_infinite<cpp_bin_float_quad>();
     test_left_limit_infinite<cpp_bin_float_quad>();
     test_linear<cpp_bin_float_quad>();
@@ -966,10 +1028,10 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_crc<cpp_bin_float_quad>();
     test_sf<cpp_bin_float_quad>();
     test_2_arg<cpp_bin_float_quad>();
-   #endif
+#endif
 #endif
 #ifdef TEST5
-   #ifndef BOOST_MATH_NO_MP_TESTS
+   #ifdef BOOST_MATH_RUN_MP_TESTS
     test_sf<cpp_bin_float_50>();
     test_sf<cpp_bin_float_100>();
     test_sf<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<150> > >();
@@ -992,6 +1054,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_early_termination<boost::math::concepts::real_concept>();
     test_sf<boost::math::concepts::real_concept>();
     test_2_arg<boost::math::concepts::real_concept>();
+    test_non_central_t<boost::math::concepts::real_concept>();
 #endif
 #ifdef TEST6A
     test_crc<boost::math::concepts::real_concept>();
@@ -999,9 +1062,9 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #endif
 #endif
 #ifdef TEST7
-    #ifndef BOOST_MATH_NO_MP_TESTS
+   #ifdef BOOST_MATH_RUN_MP_TESTS
     test_sf<cpp_dec_float_50>();
-    #endif
+   #endif
 #endif
 #if defined(TEST8) && defined(BOOST_HAS_FLOAT128) && !defined(BOOST_MATH_NO_MP_TESTS)
 

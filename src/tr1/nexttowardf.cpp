@@ -13,12 +13,12 @@
 
 namespace boost{ namespace math{ namespace tr1{
 
-extern "C" float BOOST_MATH_TR1_DECL boost_nexttowardf BOOST_PREVENT_MACRO_SUBSTITUTION(float x, long double y) BOOST_MATH_C99_THROW_SPEC
+extern "C" float BOOST_MATH_TR1_DECL boost_nexttowardf BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(float x, long double y) BOOST_MATH_C99_THROW_SPEC
 {
 #ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   return  (float)c_policies::nextafter BOOST_PREVENT_MACRO_SUBSTITUTION((double)x, (double)y);
+   return  (float)c_policies::nextafter BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((double)x, (double)y);
 #else
-   return  (float)c_policies::nextafter BOOST_PREVENT_MACRO_SUBSTITUTION((long double)x, y);
+   return  (float)c_policies::nextafter BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((long double)x, y);
 #endif
 }
 

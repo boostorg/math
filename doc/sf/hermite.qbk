@@ -9,13 +9,13 @@
    namespace boost{ namespace math{
    
    template <class T>
-   ``__sf_result`` hermite(unsigned n, T x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` hermite(unsigned n, T x);
    
    template <class T, class ``__Policy``>
-   ``__sf_result`` hermite(unsigned n, T x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` hermite(unsigned n, T x, const ``__Policy``&);
    
    template <class T1, class T2, class T3>
-   ``__sf_result`` hermite_next(unsigned n, T1 x, T2 Hn, T3 Hnm1);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` hermite_next(unsigned n, T1 x, T2 Hn, T3 Hnm1);
       
    }} // namespaces
 
@@ -26,10 +26,10 @@ note than when there is a single template argument the result is the same type
 as that argument or `double` if the template argument is an integer type.
 
    template <class T>
-   ``__sf_result`` hermite(unsigned n, T x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` hermite(unsigned n, T x);
    
    template <class T, class ``__Policy``>
-   ``__sf_result`` hermite(unsigned n, T x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` hermite(unsigned n, T x, const ``__Policy``&);
    
 Returns the value of the Hermite Polynomial of order /n/ at point /x/:
 
@@ -43,7 +43,7 @@ Hermite Polynomials:
 [graph hermite]
    
    template <class T1, class T2, class T3>
-   ``__sf_result`` hermite_next(unsigned n, T1 x, T2 Hn, T3 Hnm1);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` hermite_next(unsigned n, T1 x, T2 Hn, T3 Hnm1);
    
 Implements the three term recurrence relation for the Hermite
 polynomials, this function can be used to create a sequence of

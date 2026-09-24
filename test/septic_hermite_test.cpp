@@ -18,6 +18,9 @@
 using boost::multiprecision::float128;
 #endif
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
 
 using boost::math::interpolators::septic_hermite;
 using boost::math::interpolators::cardinal_septic_hermite;
@@ -39,7 +42,7 @@ void test_constant()
 
     auto sh = septic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3));
 
-    for (Real t = 0; t <= 81; t += 0.25)
+    for (Real t = 0; t <= 81; t += Real(0.25))
     {
         CHECK_ULP_CLOSE(Real(7), sh(t), 24);
         CHECK_ULP_CLOSE(Real(0), sh.prime(t), 24);
@@ -52,7 +55,7 @@ void test_constant()
     d2ydx2.resize(128, 0);
     d3ydx3.resize(128, 0);
     auto csh = cardinal_septic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), x0, dx);
-    for (Real t = x0; t <= 127; t += 0.25)
+    for (Real t = x0; t <= 127; t += Real(0.25))
     {
         CHECK_ULP_CLOSE(Real(7), csh(t), 24);
         CHECK_ULP_CLOSE(Real(0), csh.prime(t), 24);
@@ -68,7 +71,7 @@ void test_constant()
         data[i][3] = 0;
     }
     auto csh_aos = cardinal_septic_hermite_aos(std::move(data), x0, dx);
-    for (Real t = x0; t <= 127; t += 0.25)
+    for (Real t = x0; t <= 127; t += Real(0.25))
     {
         CHECK_ULP_CLOSE(Real(7), csh_aos(t), 24);
         CHECK_ULP_CLOSE(Real(0), csh_aos.prime(t), 24);
@@ -112,14 +115,14 @@ void test_linear()
 
     auto sh = septic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3));
 
-    for (Real t = 0; t <= 9; t += 0.25)
+    for (Real t = 0; t <= 9; t += Real(0.25))
     {
         CHECK_ULP_CLOSE(Real(t), sh(t), 2);
         CHECK_ULP_CLOSE(Real(1), sh.prime(t), 2);
     }
 
     boost::random::mt19937 rng;
-    boost::random::uniform_real_distribution<Real> dis(0.5,1);
+    boost::random::uniform_real_distribution<Real> dis(Real(0.5), Real(1));
     x.resize(512);
     x[0] = dis(rng);
     Real xmin = x[0];
@@ -136,7 +139,7 @@ void test_linear()
 
     sh = septic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3));
 
-    for (Real t = xmin; t <= xmax; t += 0.125)
+    for (Real t = xmin; t <= xmax; t += Real(0.125))
     {
         CHECK_ULP_CLOSE(t, sh(t), 25);
         CHECK_ULP_CLOSE(Real(1), sh.prime(t), 850);
@@ -153,7 +156,7 @@ void test_linear()
         y[i] = i;
     }
     auto csh = cardinal_septic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), x0, dx);
-    for (Real t = 0; t <= 9; t += 0.125)
+    for (Real t = 0; t <= 9; t += Real(0.125))
     {
         CHECK_ULP_CLOSE(t, csh(t), 15);
         CHECK_ULP_CLOSE(Real(1), csh.prime(t), 15);
@@ -169,7 +172,7 @@ void test_linear()
         data[i][3] = 0;
     }
     auto csh_aos = cardinal_septic_hermite_aos(std::move(data), x0, dx);
-    for (Real t = 0; t <= 9; t += 0.125)
+    for (Real t = 0; t <= 9; t += Real(0.125))
     {
         CHECK_ULP_CLOSE(t, csh_aos(t), 15);
         CHECK_ULP_CLOSE(Real(1), csh_aos.prime(t), 15);
@@ -222,14 +225,14 @@ void test_quadratic()
 
     auto sh = septic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3));
 
-    for (Real t = 0; t <= 9; t += 0.0078125)
+    for (Real t = 0; t <= 9; t += Real(0.0078125))
     {
         CHECK_ULP_CLOSE(t*t/2, sh(t), 100);
         CHECK_ULP_CLOSE(t, sh.prime(t), 32);
     }
 
     boost::random::mt19937 rng;
-    boost::random::uniform_real_distribution<Real> dis(0.5,1);
+    boost::random::uniform_real_distribution<Real> dis(Real(0.5), Real(1));
     x.resize(8);
     x[0] = dis(rng);
     Real xmin = x[0];
@@ -256,7 +259,7 @@ void test_quadratic()
 
     sh = septic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3));
 
-    for (Real t = xmin; t <= xmax; t += 0.125)
+    for (Real t = xmin; t <= xmax; t += Real(0.125))
     {
         CHECK_ULP_CLOSE(t*t/2, sh(t), 50);
         CHECK_ULP_CLOSE(t, sh.prime(t), 300);
@@ -280,7 +283,7 @@ void test_quadratic()
     Real x0 = 0;
     Real dx = 1;
     auto csh = cardinal_septic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), x0, dx);
-    for (Real t = x0; t <= 9; t += 0.125)
+    for (Real t = x0; t <= 9; t += Real(0.125))
     {
         CHECK_ULP_CLOSE(t*t/2, csh(t), 24);
         CHECK_ULP_CLOSE(t, csh.prime(t), 24);
@@ -296,7 +299,7 @@ void test_quadratic()
         data[i][3] = 0;
     }
     auto csh_aos = cardinal_septic_hermite_aos(std::move(data), x0, dx);
-    for (Real t = x0; t <= 9; t += 0.125)
+    for (Real t = x0; t <= 9; t += Real(0.125))
     {
         CHECK_ULP_CLOSE(t*t/2, csh_aos(t), 24);
         CHECK_ULP_CLOSE(t, csh_aos.prime(t), 24);
@@ -333,7 +336,7 @@ void test_cubic()
 
     auto sh = septic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3));
 
-    for (Real t = 0; t <= xmax; t += 0.0078125)
+    for (Real t = 0; t <= xmax; t += Real(0.0078125))
     {
         CHECK_ULP_CLOSE(t*t*t, sh(t), 151);
         CHECK_ULP_CLOSE(3*t*t, sh.prime(t), 151);
@@ -354,7 +357,7 @@ void test_cubic()
 
     auto csh = cardinal_septic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), x0, dx);
 
-    for (Real t = 0; t <= xmax; t += 0.0078125)
+    for (Real t = 0; t <= xmax; t += Real(0.0078125))
     {
         CHECK_ULP_CLOSE(t*t*t, csh(t), 151);
         CHECK_ULP_CLOSE(3*t*t, csh.prime(t), 151);
@@ -371,7 +374,7 @@ void test_cubic()
 
     auto csh_aos = cardinal_septic_hermite_aos(std::move(data), x0, dx);
 
-    for (Real t = 0; t <= xmax; t += 0.0078125)
+    for (Real t = 0; t <= xmax; t += Real(0.0078125))
     {
         CHECK_ULP_CLOSE(t*t*t, csh_aos(t), 151);
         CHECK_ULP_CLOSE(3*t*t, csh_aos.prime(t), 151);
@@ -411,7 +414,7 @@ void test_quartic()
 
     auto sh = septic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3));
 
-    for (Real t = 1; t <= xmax; t += 0.0078125) {
+    for (Real t = 1; t <= xmax; t += Real(0.0078125)) {
         CHECK_ULP_CLOSE(t*t*t*t, sh(t), 117);
         CHECK_ULP_CLOSE(4*t*t*t, sh.prime(t), 117);
     }
@@ -430,7 +433,7 @@ void test_quartic()
 
     auto csh = cardinal_septic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), Real(0), Real(1));
 
-    for (Real t = 1; t <= xmax; t += 0.0078125)
+    for (Real t = 1; t <= xmax; t += Real(0.0078125))
     {
         CHECK_ULP_CLOSE(t*t*t*t, csh(t), 117);
         CHECK_ULP_CLOSE(4*t*t*t, csh.prime(t), 117);
@@ -447,7 +450,7 @@ void test_quartic()
     }
 
     auto csh_aos = cardinal_septic_hermite_aos(std::move(data), Real(0), Real(1));
-    for (Real t = 1; t <= xmax; t += 0.0078125)
+    for (Real t = 1; t <= xmax; t += Real(0.0078125))
     {
         CHECK_ULP_CLOSE(t*t*t*t, csh_aos(t), 117);
         CHECK_ULP_CLOSE(4*t*t*t, csh_aos.prime(t), 117);
@@ -494,21 +497,71 @@ void test_interpolation_condition()
 }
 
 
+// Non-unit spacing exposes missing chain-rule factors in derivative evaluation.
+void test_cardinal_derivative_scaling()
+{
+    for (double dx : {0.125, 2.0})
+    {
+        std::vector<std::array<double, 4>> data(4);
+        std::vector<double> y(4), dy(4), d2y(4), d3y(4);
+        for (size_t i = 0; i < data.size(); ++i)
+        {
+            double x = -1 + i*dx;
+            data[i] = {x*x*x, 3*x*x, 6*x, 6};
+            y[i] = x*x*x;
+            dy[i] = 3*x*x;
+            d2y[i] = 6*x;
+            d3y[i] = 6;
+        }
+        auto f = boost::math::interpolators::detail::cardinal_septic_hermite_detail_aos(std::move(data), -1.0, dx);
+        auto g = boost::math::interpolators::detail::cardinal_septic_hermite_detail(std::move(y), std::move(dy), std::move(d2y), std::move(d3y), -1.0, dx);
+        for (int i = 0; i <= 24; ++i)
+        {
+            double x = -1 + i*dx/8;
+            CHECK_MOLLIFIED_CLOSE(x*x*x, f(x), 1e-12);
+            CHECK_MOLLIFIED_CLOSE(3*x*x, f.prime(x), 1e-12);
+            CHECK_MOLLIFIED_CLOSE(6*x, f.double_prime(x), 1e-12);
+            CHECK_MOLLIFIED_CLOSE(x*x*x, g(x), 1e-12);
+            CHECK_MOLLIFIED_CLOSE(3*x*x, g.prime(x), 1e-12);
+            CHECK_MOLLIFIED_CLOSE(6*x, g.double_prime(x), 1e-12);
+        }
+    }
+}
+
 int main()
 {
+    test_cardinal_derivative_scaling();
+    #ifdef __STDCPP_FLOAT32_T__
+    test_constant<std::float32_t>();
+    test_linear<std::float32_t>();
+    test_quadratic<std::float32_t>();
+    test_cubic<std::float32_t>();
+    test_quartic<std::float32_t>();
+    test_interpolation_condition<std::float32_t>();
+    #else
     test_constant<float>();
     test_linear<float>();
     test_quadratic<float>();
     test_cubic<float>();
     test_quartic<float>();
     test_interpolation_condition<float>();
+    #endif
 
+    #ifdef __STDCPP_FLOAT64_T__
+    test_constant<std::float64_t>();
+    test_linear<std::float64_t>();
+    test_quadratic<std::float64_t>();
+    test_cubic<std::float64_t>();
+    test_quartic<std::float64_t>();
+    test_interpolation_condition<std::float64_t>();
+    #else
     test_constant<double>();
     test_linear<double>();
     test_quadratic<double>();
     test_cubic<double>();
     test_quartic<double>();
     test_interpolation_condition<double>();
+    #endif
 
     test_constant<long double>();
     test_linear<long double>();
@@ -517,14 +570,14 @@ int main()
     test_quartic<long double>();
     test_interpolation_condition<long double>();
 
-#ifdef BOOST_HAS_FLOAT128
+    #ifdef BOOST_HAS_FLOAT128
     test_constant<float128>();
     test_linear<float128>();
     test_quadratic<float128>();
     test_cubic<float128>();
     test_quartic<float128>();
     test_interpolation_condition<float128>();
-#endif
+    #endif
 
     return boost::math::test::report_errors();
 }

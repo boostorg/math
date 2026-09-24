@@ -1,5 +1,6 @@
 //  Copyright John Maddock 2005-2006, 2011.
 //  Copyright Paul A. Bristow 2006-2011.
+//  Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,6 +9,9 @@
 #define BOOST_MATH_CONSTANTS_CONSTANTS_INCLUDED
 
 #include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+
 #include <boost/math/tools/cxx03_warn.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/precision.hpp>
@@ -19,8 +23,10 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
 #include <type_traits>
+#endif
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -50,7 +56,7 @@ namespace boost{ namespace math
     // (This is necessary because you can't use a numeric constant
     // since even a long double might not have enough digits).
 
-   enum construction_method
+   BOOST_MATH_EXPORT enum construction_method
    {
       construct_from_float = 1,
       construct_from_double = 2,
@@ -65,15 +71,15 @@ namespace boost{ namespace math
    // Traits class determines how to convert from string based on whether T has a constructor
    // from const char* or not:
    //
-   template <int N>
+   BOOST_MATH_EXPORT template <int N>
    struct dummy_size{};
 
    //
    // Max number of binary digits in the string representations of our constants:
    //
-   static constexpr int max_string_digits = (101 * 1000L) / 301L;
+   BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR int max_string_digits = (101 * 1000L) / 301L;
 
-   template <typename Real, typename Policy>
+   BOOST_MATH_EXPORT template <typename Real, typename Policy>
    struct construction_traits
    {
    private:
@@ -94,10 +100,10 @@ namespace boost{ namespace math
       >;
    };
 
-#ifdef BOOST_HAS_THREADS
+#ifdef BOOST_MATH_HAS_THREADS
 #define BOOST_MATH_CONSTANT_THREAD_HELPER(name, prefix) \
       boost::once_flag f = BOOST_ONCE_INIT;\
-      boost::call_once(f, &BOOST_JOIN(BOOST_JOIN(string_, get_), name)<T>);
+      boost::call_once(f, &BOOST_MATH_JOIN(BOOST_MATH_JOIN(string_, get_), name)<T>);
 #else
 #define BOOST_MATH_CONSTANT_THREAD_HELPER(name, prefix)
 #endif
@@ -125,7 +131,7 @@ namespace boost{ namespace math
          {
             initializer()
             {
-               F();
+               (F)();
             }
             void force_instantiate()const{}
          };
@@ -147,7 +153,7 @@ namespace boost{ namespace math
          {
             initializer()
             {
-               F();
+               (F)();
             }
             void force_instantiate()const{}
          };
@@ -162,20 +168,20 @@ namespace boost{ namespace math
 #ifdef BOOST_MATH_USE_FLOAT128
 #  define BOOST_MATH_FLOAT128_CONSTANT_OVERLOAD(x) \
    static inline constexpr T get(const std::integral_constant<int, construct_from_float128>&) noexcept\
-   { return BOOST_JOIN(x, Q); }
+   { return BOOST_MATH_JOIN(x, Q); }
 #else
 #  define BOOST_MATH_FLOAT128_CONSTANT_OVERLOAD(x)
 #endif
 
-#ifdef BOOST_NO_CXX11_THREAD_LOCAL
-#  define BOOST_MATH_PRECOMPUTE_IF_NOT_LOCAL(constant_, name)       constant_initializer<T, & BOOST_JOIN(constant_, name)<T>::get_from_variable_precision>::force_instantiate();
+#ifdef BOOST_MATH_NO_CXX11_THREAD_LOCAL
+#  define BOOST_MATH_PRECOMPUTE_IF_NOT_LOCAL(constant_, name)       constant_initializer<T, & BOOST_MATH_JOIN(constant_, name)<T>::get_from_variable_precision>::force_instantiate();
 #else
 #  define BOOST_MATH_PRECOMPUTE_IF_NOT_LOCAL(constant_, name)
 #endif
 
 #define BOOST_DEFINE_MATH_CONSTANT(name, x, y)\
    namespace detail{\
-   template <typename T> struct BOOST_JOIN(constant_, name){\
+   template <typename T> struct BOOST_MATH_JOIN(constant_, name){\
    private:\
    /* The default implementations come next: */ \
    static inline const T& get_from_string()\
@@ -206,19 +212,19 @@ namespace boost{ namespace math
    public:\
    static inline const T& get(const std::integral_constant<int, construct_from_string>&)\
    {\
-      constant_initializer<T, & BOOST_JOIN(constant_, name)<T>::get_from_string >::force_instantiate();\
+      constant_initializer<T, & BOOST_MATH_JOIN(constant_, name)<T>::get_from_string >::force_instantiate();\
       return get_from_string();\
    }\
-   static inline constexpr T get(const std::integral_constant<int, construct_from_float>) noexcept\
-   { return BOOST_JOIN(x, F); }\
-   static inline constexpr T get(const std::integral_constant<int, construct_from_double>&) noexcept\
+   BOOST_MATH_GPU_ENABLED static inline constexpr T get(const std::integral_constant<int, construct_from_float>) noexcept\
+   { return BOOST_MATH_JOIN(x, F); }\
+   BOOST_MATH_GPU_ENABLED static inline constexpr T get(const std::integral_constant<int, construct_from_double>&) noexcept\
    { return x; }\
-   static inline constexpr T get(const std::integral_constant<int, construct_from_long_double>&) noexcept\
-   { return BOOST_JOIN(x, L); }\
+   BOOST_MATH_GPU_ENABLED static inline constexpr T get(const std::integral_constant<int, construct_from_long_double>&) noexcept\
+   { return BOOST_MATH_JOIN(x, L); }\
    BOOST_MATH_FLOAT128_CONSTANT_OVERLOAD(x) \
    template <int N> static inline const T& get(const std::integral_constant<int, N>&)\
    {\
-      constant_initializer2<T, N, & BOOST_JOIN(constant_, name)<T>::template get_from_compute<N> >::force_instantiate();\
+      constant_initializer2<T, N, & BOOST_MATH_JOIN(constant_, name)<T>::template get_from_compute<N> >::force_instantiate();\
       return get_from_compute<N>(); \
    }\
    /* This one is for true arbitrary precision, which may well vary at runtime: */ \
@@ -231,17 +237,27 @@ namespace boost{ namespace math
    \
    \
    /* The actual forwarding function: */ \
-   template <typename T, typename Policy> inline constexpr typename detail::constant_return<T, Policy>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(Policy)) BOOST_MATH_NOEXCEPT(T)\
-   { return detail:: BOOST_JOIN(constant_, name)<T>::get(typename construction_traits<T, Policy>::type()); }\
-   template <typename T> inline constexpr typename detail::constant_return<T>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_MATH_NOEXCEPT(T)\
+   BOOST_MATH_EXPORT template <typename T, typename Policy> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T, Policy>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(Policy)) BOOST_MATH_NOEXCEPT(T)\
+   { return detail:: BOOST_MATH_JOIN(constant_, name)<T>::get(typename construction_traits<T, Policy>::type()); }\
+   BOOST_MATH_EXPORT template <typename T> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_MATH_NOEXCEPT(T)\
    { return name<T, boost::math::policies::policy<> >(); }\
    \
    \
    /* Now the namespace specific versions: */ \
-   } namespace float_constants{ static constexpr float name = BOOST_JOIN(x, F); }\
-   namespace double_constants{ static constexpr double name = x; } \
-   namespace long_double_constants{ static constexpr long double name = BOOST_JOIN(x, L); }\
+   } namespace float_constants{ BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR float name = BOOST_MATH_JOIN(x, F); }\
+   namespace double_constants{ BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR double name = x; } \
+   namespace long_double_constants{ BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR long double name = BOOST_MATH_JOIN(x, L); }\
    namespace constants{
+
+#else // NVRTC simplified macro definition
+
+#define BOOST_DEFINE_MATH_CONSTANT(name, value, str_value) template <typename T> BOOST_MATH_GPU_ENABLED constexpr T name() noexcept { return static_cast<T>(value); }
+
+namespace boost {
+namespace math {
+namespace constants {
+
+#endif
 
   BOOST_DEFINE_MATH_CONSTANT(half, 5.000000000000000000000000000000000000e-01, "5.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e-01")
   BOOST_DEFINE_MATH_CONSTANT(third, 3.333333333333333333333333333333333333e-01, "3.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333e-01")
@@ -266,6 +282,7 @@ namespace boost{ namespace math
   BOOST_DEFINE_MATH_CONSTANT(four_thirds_pi, 4.188790204786390984616857844372670512e+00, "4.18879020478639098461685784437267051226289253250014109463325945641042187504827866483737976712282275730953078202e+00")
   BOOST_DEFINE_MATH_CONSTANT(one_div_two_pi, 1.591549430918953357688837633725143620e-01, "1.59154943091895335768883763372514362034459645740456448747667344058896797634226535090113802766253085956072842727e-01")
   BOOST_DEFINE_MATH_CONSTANT(one_div_root_two_pi, 3.989422804014326779399460599343818684e-01, "3.98942280401432677939946059934381868475858631164934657665925829670657925899301838501252333907306936430302558863e-01")
+  BOOST_DEFINE_MATH_CONSTANT(log_pi, 1.144729885849400174143427351353058711e+00, "1.14472988584940017414342735135305871164729481291531157151362307147213776988482607978362327027548970770200981223e+00")
   BOOST_DEFINE_MATH_CONSTANT(root_pi, 1.772453850905516027298167483341145182e+00, "1.77245385090551602729816748334114518279754945612238712821380778985291128459103218137495065673854466541622682362e+00")
   BOOST_DEFINE_MATH_CONSTANT(root_half_pi, 1.253314137315500251207882642405522626e+00, "1.25331413731550025120788264240552262650349337030496915831496178817114682730392098747329791918902863305800498633e+00")
   BOOST_DEFINE_MATH_CONSTANT(root_two_pi, 2.506628274631000502415765284811045253e+00, "2.50662827463100050241576528481104525300698674060993831662992357634229365460784197494659583837805726611600997267e+00")
@@ -318,17 +335,15 @@ namespace boost{ namespace math
   BOOST_DEFINE_MATH_CONSTANT(one_div_pi, 0.3183098861837906715377675267450287240689192, "0.31830988618379067153776752674502872406891929148091289749533468811779359526845307018022760553250617191214568545351")
   BOOST_DEFINE_MATH_CONSTANT(two_div_root_pi, 1.12837916709551257389615890312154517168810125, "1.12837916709551257389615890312154517168810125865799771368817144342128493688298682897348732040421472688605669581272")
 
-#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
   BOOST_DEFINE_MATH_CONSTANT(first_feigenbaum, 4.66920160910299067185320382046620161725818557747576863274,  "4.6692016091029906718532038204662016172581855774757686327456513430041343302113147371386897440239480138171")
   BOOST_DEFINE_MATH_CONSTANT(plastic, 1.324717957244746025960908854478097340734404056901733364534, "1.32471795724474602596090885447809734073440405690173336453401505030282785124554759405469934798178728032991")
   BOOST_DEFINE_MATH_CONSTANT(gauss, 0.834626841674073186281429732799046808993993013490347002449, "0.83462684167407318628142973279904680899399301349034700244982737010368199270952641186969116035127532412906785")
   BOOST_DEFINE_MATH_CONSTANT(dottie, 0.739085133215160641655312087673873404013411758900757464965, "0.739085133215160641655312087673873404013411758900757464965680635773284654883547594599376106931766531849801246")
   BOOST_DEFINE_MATH_CONSTANT(reciprocal_fibonacci, 3.35988566624317755317201130291892717968890513, "3.35988566624317755317201130291892717968890513373196848649555381532513031899668338361541621645679008729704")
   BOOST_DEFINE_MATH_CONSTANT(laplace_limit, 0.662743419349181580974742097109252907056233549115022417, "0.66274341934918158097474209710925290705623354911502241752039253499097185308651127724965480259895818168")
-#endif
 
-template <typename T>
-inline constexpr T tau() {  return two_pi<T>(); }
+BOOST_MATH_EXPORT template <typename T>
+BOOST_MATH_GPU_ENABLED inline constexpr T tau() {  return two_pi<T>(); }
 
 } // namespace constants
 } // namespace math
@@ -338,8 +353,10 @@ inline constexpr T tau() {  return two_pi<T>(); }
 // We deliberately include this *after* all the declarations above,
 // that way the calculation routines can call on other constants above:
 //
+// NVRTC will not have a type that needs runtime calculation
+//
+#ifndef BOOST_MATH_HAS_NVRTC
 #include <boost/math/constants/calculate_constants.hpp>
+#endif
 
 #endif // BOOST_MATH_CONSTANTS_CONSTANTS_INCLUDED
-
-

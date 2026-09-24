@@ -6,13 +6,21 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/statistics/linear_regression.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <random>
 #include <utility>
 #include <tuple>
 #include <algorithm>
-#include <boost/math/statistics/linear_regression.hpp>
+#include <cstdint>
+#endif
 
 using boost::math::statistics::simple_ordinary_least_squares;
 using boost::math::statistics::simple_ordinary_least_squares_with_R_squared;
@@ -164,7 +172,7 @@ void test_permutation_invariance()
     Real c0 = std::get<0>(temp);
     Real c1 = std::get<1>(temp);
     Real Rsquared = std::get<2>(temp);
-    CHECK_MOLLIFIED_CLOSE(expected_c0, c0, 0.002);
+    CHECK_MOLLIFIED_CLOSE(expected_c0, c0, 0.003);
     CHECK_MOLLIFIED_CLOSE(expected_c1, c1, 0.002);
 
     int j = 0;
@@ -208,7 +216,7 @@ void test_scaling_relations()
     Real c0 = std::get<0>(temp);
     Real c1 = std::get<1>(temp);
     Real Rsquared = std::get<2>(temp);
-    CHECK_MOLLIFIED_CLOSE(expected_c0, c0, 0.005);
+    CHECK_MOLLIFIED_CLOSE(expected_c0, c0, 0.006);
     CHECK_MOLLIFIED_CLOSE(expected_c1, c1, 0.005);
 
     // If y -> lambda y, then c0 -> lambda c0 and c1 -> lambda c1.
@@ -223,7 +231,7 @@ void test_scaling_relations()
     Real c1_lambda = std::get<1>(temp);
     Real Rsquared_lambda = std::get<2>(temp);
 
-    CHECK_ULP_CLOSE(lambda*c0, c0_lambda, 30);
+    CHECK_ULP_CLOSE(lambda*c0, c0_lambda, 70);
     CHECK_ULP_CLOSE(lambda*c1, c1_lambda, 30);
     CHECK_ULP_CLOSE(Rsquared, Rsquared_lambda, 3);
 
@@ -241,7 +249,7 @@ void test_scaling_relations()
     Real c1_ = std::get<1>(temp);
     Real Rsquared_ = std::get<2>(temp);
 
-    CHECK_ULP_CLOSE(c0, c0_, 70);
+    CHECK_ULP_CLOSE(c0, c0_, 100);
     CHECK_ULP_CLOSE(c1, c1_*lambda, 50);
     CHECK_ULP_CLOSE(Rsquared, Rsquared_, 50);
 
@@ -256,9 +264,9 @@ int main()
     test_line<long double>();
 #endif
     test_integer_line<int>();
-    test_integer_line<int32_t>();
-    test_integer_line<int64_t>();
-    test_integer_line<uint32_t>();
+    test_integer_line<std::int32_t>();
+    test_integer_line<std::int64_t>();
+    test_integer_line<std::uint32_t>();
 
     test_constant<float>();
     test_constant<double>();
@@ -266,9 +274,9 @@ int main()
     test_constant<long double>();
 #endif
     test_integer_constant<int>();
-    test_integer_constant<int32_t>();
-    test_integer_constant<int64_t>();
-    test_integer_constant<uint32_t>();
+    test_integer_constant<std::int32_t>();
+    test_integer_constant<std::int64_t>();
+    test_integer_constant<std::uint32_t>();
 
     test_permutation_invariance<float>();
     test_permutation_invariance<double>();

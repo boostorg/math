@@ -13,9 +13,9 @@
 
 namespace boost{ namespace math{ namespace tr1{
 
-extern "C" long BOOST_MATH_TR1_DECL boost_lroundf BOOST_PREVENT_MACRO_SUBSTITUTION(float x) BOOST_MATH_C99_THROW_SPEC
+extern "C" long BOOST_MATH_TR1_DECL boost_lroundf BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(float x) BOOST_MATH_C99_THROW_SPEC
 {
-   return c_policies::lround BOOST_PREVENT_MACRO_SUBSTITUTION(x);
+   return c_policies::lround BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x);
 }
 
 }}}

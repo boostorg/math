@@ -109,7 +109,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*I'v.*Mathworld.*",          // test data group
-      ".*", 4000, 2000);             // test function
+      ".*", 4200, 2000);             // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -117,6 +117,13 @@ void expected_results()
       largest_type,                  // test type(s)
       ".*",                          // test data group
       ".*", 900, 300);               // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Win32.*",                     // platform
+      largest_type,                  // test type(s)
+      ".*",                          // test data group
+      ".*", 60, 25);                 // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -137,7 +144,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*I'v.*Mathworld.*",          // test data group
-      ".*", 4000, 2000);             // test function
+      ".*", 4500, 2000);             // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

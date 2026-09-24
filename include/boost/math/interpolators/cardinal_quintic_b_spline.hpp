@@ -6,14 +6,16 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_CARDINAL_QUINTIC_B_SPLINE_HPP
 #define BOOST_MATH_INTERPOLATORS_CARDINAL_QUINTIC_B_SPLINE_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <memory>
 #include <limits>
+#endif
 #include <boost/math/interpolators/detail/cardinal_quintic_b_spline_detail.hpp>
 
 
 namespace boost{ namespace math{ namespace interpolators {
 
-template <class Real>
+BOOST_MATH_EXPORT template <class Real>
 class cardinal_quintic_b_spline
 {
 public:

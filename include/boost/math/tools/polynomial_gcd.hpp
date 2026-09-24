@@ -11,8 +11,10 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <type_traits>
+#endif
 #include <boost/math/tools/is_standalone.hpp>
 #include <boost/math/tools/polynomial.hpp>
 
@@ -20,9 +22,11 @@
 #include <boost/integer/common_factor_rt.hpp>
 
 #else
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <numeric>
 #include <utility>
 #include <iterator>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/config.hpp>
 

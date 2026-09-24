@@ -10,16 +10,20 @@
 
 #ifdef __has_include
 # if __has_include(<version>)
+#ifndef BOOST_MATH_BUILD_MODULE
 #  include <version>
+#endif
 #  ifdef __cpp_lib_is_constant_evaluated
+#ifndef BOOST_MATH_BUILD_MODULE
 #   include <type_traits>
+#endif
 #   define BOOST_MATH_HAS_IS_CONSTANT_EVALUATED
 #  endif
 # endif
 #endif
 
 #ifdef __has_builtin
-#  if __has_builtin(__builtin_is_constant_evaluated) && !defined(BOOST_NO_CXX14_CONSTEXPR) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
+#  if __has_builtin(__builtin_is_constant_evaluated) && !defined(BOOST_MATH_NO_CXX14_CONSTEXPR) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
 #    define BOOST_MATH_HAS_BUILTIN_IS_CONSTANT_EVALUATED
 #  endif
 #endif
@@ -32,15 +36,15 @@
 //
 // As does GCC-9:
 //
-#if !defined(BOOST_NO_CXX14_CONSTEXPR) && (__GNUC__ >= 9) && !defined(BOOST_MATH_HAS_BUILTIN_IS_CONSTANT_EVALUATED)
+#if !defined(BOOST_MATH_NO_CXX14_CONSTEXPR) && (__GNUC__ >= 9) && !defined(BOOST_MATH_HAS_BUILTIN_IS_CONSTANT_EVALUATED)
 #  define BOOST_MATH_HAS_BUILTIN_IS_CONSTANT_EVALUATED
 #endif
 
-#if defined(BOOST_MATH_HAS_IS_CONSTANT_EVALUATED) && !defined(BOOST_NO_CXX14_CONSTEXPR)
+#if defined(BOOST_MATH_HAS_IS_CONSTANT_EVALUATED) && !defined(BOOST_MATH_NO_CXX14_CONSTEXPR)
 #  define BOOST_MATH_IS_CONSTANT_EVALUATED(x) std::is_constant_evaluated()
 #elif defined(BOOST_MATH_HAS_BUILTIN_IS_CONSTANT_EVALUATED)
 #  define BOOST_MATH_IS_CONSTANT_EVALUATED(x) __builtin_is_constant_evaluated()
-#elif !defined(BOOST_NO_CXX14_CONSTEXPR) && (__GNUC__ >= 6)
+#elif !defined(BOOST_MATH_NO_CXX14_CONSTEXPR) && (__GNUC__ >= 6)
 #  define BOOST_MATH_IS_CONSTANT_EVALUATED(x) __builtin_constant_p(x)
 #  define BOOST_MATH_USING_BUILTIN_CONSTANT_P
 #else

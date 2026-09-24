@@ -7,11 +7,15 @@
 #ifndef BOOST_MATH_CCMATH_SCALBN_HPP
 #define BOOST_MATH_CCMATH_SCALBN_HPP
 
-#include <cmath>
+#include <boost/math/ccmath/detail/config.hpp>
+
+#ifdef BOOST_MATH_NO_CCMATH
+#error "The header <boost/math/scalbn.hpp> can only be used in C++17 and later."
+#endif
+
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cfloat>
-#include <limits>
-#include <type_traits>
-#include <boost/math/tools/is_constant_evaluated.hpp>
+#endif
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
@@ -39,7 +43,7 @@ inline constexpr Real scalbn_impl(Real arg, Z exp) noexcept
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr Real scalbn(Real arg, int exp) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
@@ -56,7 +60,7 @@ inline constexpr Real scalbn(Real arg, int exp) noexcept
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr double scalbn(Z arg, int exp) noexcept
 {
     return boost::math::ccmath::scalbn(static_cast<double>(arg), exp);

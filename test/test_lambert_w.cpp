@@ -313,7 +313,7 @@ void wolfram_test_near_singularity<double>()
    double tolerance = boost::math::tools::epsilon<double>() * 5;
    if (std::numeric_limits<double>::digits >= std::numeric_limits<long double>::digits)
       tolerance *= 1e5;
-   else if (std::numeric_limits<double>::digits * 2 >= std::numeric_limits<long double>::digits)
+   else
       tolerance *= 5e4;
    double endpoint = -boost::math::constants::exp_minus_one<double>();
    for (unsigned i = 0; i < wolfram_test_near_singularity_data.size(); ++i)
@@ -352,6 +352,11 @@ void test_spots(RealType)
 #ifndef BOOST_NO_EXCEPTIONS
   BOOST_CHECK_THROW(lambert_w0<RealType>(-1.), std::domain_error);
   BOOST_CHECK_THROW(lambert_wm1<RealType>(-1.), std::domain_error);
+  BOOST_CHECK_THROW(lambert_wm1<RealType>(1.), std::domain_error);
+  if (std::numeric_limits<RealType>::has_denorm)
+  {
+     BOOST_CHECK_THROW(lambert_wm1<RealType>(-std::numeric_limits<RealType>::denorm_min()), std::overflow_error);
+  }
   if (std::numeric_limits<RealType>::has_quiet_NaN)
   {
      BOOST_CHECK_THROW(lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // Would be NaN.
@@ -491,7 +496,7 @@ void test_spots(RealType)
   }
 
   // denorm - but might be == min or zero?
-  if (std::numeric_limits<RealType>::has_denorm == true)
+  if (boost::math::detail::has_denorm_now<RealType>())
   { // Might also return infinity like z == 0?
     BOOST_CHECK_THROW(lambert_wm1(std::numeric_limits<RealType>::denorm_min()), std::overflow_error);
   }
@@ -592,10 +597,11 @@ void test_spots(RealType)
     BOOST_MATH_TEST_VALUE(RealType, -64.026509628385889681156090340691637712441162092868),
     tolerance); //                  -64.0265121
 
-  if (std::numeric_limits<RealType>::has_infinity)
-  {
-    BOOST_CHECK_EQUAL(lambert_wm1(0), -std::numeric_limits<RealType>::infinity());
-  }
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+  BOOST_CHECK_THROW(lambert_wm1(0), std::overflow_error);
+#else
+  BOOST_CHECK_EQUAL(lambert_wm1(0), -std::numeric_limits<RealType>::infinity());
+#endif
   if (std::numeric_limits<RealType>::has_quiet_NaN)
   {
     // BOOST_CHECK_EQUAL(lambert_w0(std::numeric_limits<RealType>::quiet_NaN()), +std::numeric_limits<RealType>::infinity()); // message is:
@@ -803,6 +809,17 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.0)),
     BOOST_MATH_TEST_VALUE(RealType, 0.0),
     tolerance);
+
+  //
+  // Extra coverage:
+  //
+  BOOST_CHECK_EQUAL(boost::math::lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, 0.0)), BOOST_MATH_TEST_VALUE(RealType, 1.0));
+#ifndef BOOST_MATH_NO_EXEPTIONS
+  BOOST_CHECK_THROW(boost::math::lambert_w0_prime(-boost::math::constants::exp_minus_one<RealType>()), std::overflow_error);
+  BOOST_CHECK_THROW(boost::math::lambert_wm1_prime(-boost::math::constants::exp_minus_one<RealType>()), std::overflow_error);
+  BOOST_CHECK_THROW(boost::math::lambert_wm1_prime(BOOST_MATH_TEST_VALUE(RealType, 0.0)), std::overflow_error);
+#endif
+
   // these fail for cpp_dec_float_50
   // 'boost::multiprecision::detail::expression<boost::multiprecision::detail::negate,boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50,int32_t,void>,boost::multiprecision::et_on>,void,void,void>'
   // : no appropriate default constructor available
@@ -1149,8 +1166,11 @@ BOOST_AUTO_TEST_CASE( test_range_of_double_values )
   // For z = 0, W = -infinity
   if (std::numeric_limits<RealType>::has_infinity)
   {
-     BOOST_CHECK_EQUAL(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, 0.)),
-        -std::numeric_limits<RealType>::infinity());
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+     BOOST_CHECK_THROW(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, 0.)), std::overflow_error);
+#else
+     BOOST_CHECK_EQUAL(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, 0.)), -std::numeric_limits<RealType>::infinity());
+#endif
   }
 
 #elif BOOST_MATH_TEST_MULTIPRECISION == 2

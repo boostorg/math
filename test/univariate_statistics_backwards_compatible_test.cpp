@@ -612,11 +612,7 @@ void test_median_absolute_deviation()
     v = {-1, 1};
     m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end(), 0);
     BOOST_TEST_EQ(m, 1);
-    // The median is zero, so coincides with the default:
-    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 1);
-
-    m = boost::math::statistics::median_absolute_deviation(v);
+    m = boost::math::statistics::median_absolute_deviation(v, 0);
     BOOST_TEST_EQ(m, 1);
 
 
@@ -649,6 +645,65 @@ void test_median_absolute_deviation()
     u[5] = -3;
     m = boost::math::statistics::median_absolute_deviation(u, 0);
     BOOST_TEST_EQ(m, 2);
+
+
+    v = {-1, 2, -3, 4, -5, 6, -7};
+    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 4);
+
+    g = std::mt19937(12);
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::statistics::median_absolute_deviation(v);
+    BOOST_TEST_EQ(m, 4);
+
+    v = {1, -2, -3, 3, -4, -5};
+    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 2);
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 2);
+
+    v = {-1};
+    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 0);
+
+    v = {-1, 1};
+    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 1);
+
+    m = boost::math::statistics::median_absolute_deviation(v);
+    BOOST_TEST_EQ(m, 1);
+
+
+    v = {2, -4};
+    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 3);
+
+    v = {1, -1, 1};
+    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 0);
+
+    v = {1, 2, -3};
+    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 1);
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 1);
+
+    w = {1, 2, -3};
+    m = boost::math::statistics::median_absolute_deviation(w);
+    BOOST_TEST_EQ(m, 1);
+
+    // boost.ublas vector?
+    boost::numeric::ublas::vector<Real> u2(6);
+    u2[0] = 1;
+    u2[1] = 2;
+    u2[2] = -3;
+    u2[3] = 1;
+    u2[4] = 2;
+    u2[5] = -3;
+    m = boost::math::statistics::median_absolute_deviation(u2);
+    BOOST_TEST_EQ(m, 1);
 }
 
 

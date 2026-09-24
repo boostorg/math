@@ -12,15 +12,21 @@
 #  pragma warning (disable : 4127) //  conditional expression is constant.
 #endif
 
+#ifdef BOOST_MATH_ENABLE_SYCL
+#include "sycl/sycl.hpp"
+#endif
 
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+#endif
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <boost/math/distributions/weibull.hpp>
     using boost::math::weibull_distribution;
-#include <boost/math/tools/test.hpp> 
+#include "../include_private/boost/math/tools/test.hpp"
 #include "test_out_of_range.hpp"
 
 #include <iostream>
@@ -42,12 +48,25 @@ void check_weibull(RealType shape, RealType scale, RealType x, RealType p, RealT
          p,                                             // probability.
          tol);                                          // %tolerance.
    BOOST_CHECK_CLOSE(
+      ::boost::math::logcdf(
+         weibull_distribution<RealType>(shape, scale),       // distribution.
+         x),                                            // random variable.
+         log(p),                                             // probability.
+         tol);   
+   BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(
             weibull_distribution<RealType>(shape, scale),    // distribution.
             x)),                                        // random variable.
          q,                                             // probability complement.
          tol);                                          // %tolerance.
+   BOOST_CHECK_CLOSE(
+      ::boost::math::logcdf(
+         complement(
+            weibull_distribution<RealType>(shape, scale),    // distribution.
+            x)),                                        // random variable.
+         log(q),                                             // probability complement.
+         tol);   
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          weibull_distribution<RealType>(shape, scale),       // distribution.

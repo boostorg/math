@@ -6,11 +6,14 @@
  */
 #ifndef BOOST_MATH_INTERPOLATORS_DETAIL_SEPTIC_HERMITE_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_DETAIL_SEPTIC_HERMITE_DETAIL_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <stdexcept>
 #include <sstream>
 #include <limits>
 #include <cmath>
+#include <cstdint>
+#endif
 
 namespace boost {
 namespace math {
@@ -189,7 +192,7 @@ public:
         return os;
     }
 
-    int64_t bytes()
+    std::int64_t bytes()
     {
         return 5*x_.size()*sizeof(Real) + 5*sizeof(x_);
     }
@@ -319,7 +322,7 @@ public:
         }
         if (x == xf)
         {
-            return dy_.back()/inv_dx_;
+            return dy_.back()*inv_dx_;
         }
 
         return this->unchecked_prime(x);
@@ -334,7 +337,7 @@ public:
         Real t = s3 - ii;
         if (t==0)
         {
-            return dy_[i]/inv_dx_;
+            return dy_[i]*inv_dx_;
         }
  
         Real y0 = y_[i];
@@ -358,7 +361,7 @@ public:
         Real dydx = z0*(y1-y0)*inv_dx_;
         dydx += (z1*dy0 + z2*dy1)*inv_dx_;
         dydx += 2*t*(z3*a0 + z4*a1)*inv_dx_;
-        dydx += t*t*(z5*j0 + z6*j1);
+        dydx += t*t*(z5*j0 + z6*j1)*inv_dx_;
         return dydx;
     }
 
@@ -414,12 +417,12 @@ public:
         Real d2ydx2 = z0*(y1-y0)*inv_dx_*inv_dx_;
         d2ydx2 += (z1*dy0 + z2*dy1)*inv_dx_*inv_dx_;
         d2ydx2 += (z3*a0 + z4*a1)*2*inv_dx_*inv_dx_;
-        d2ydx2 += 6*(z5*j0 + z6*j1)/(inv_dx_*inv_dx_);
+        d2ydx2 += 6*(z5*j0 + z6*j1)*inv_dx_*inv_dx_;
 
         return d2ydx2;
     }
 
-    int64_t bytes() const
+    std::int64_t bytes() const
     {
         return 4*y_.size()*sizeof(Real) + 2*sizeof(Real) + 4*sizeof(y_);
     }
@@ -569,7 +572,7 @@ public:
         Real dydx = z0*(y1-y0)*inv_dx_;
         dydx += (z1*dy0 + z2*dy1)*inv_dx_;
         dydx += 2*t*(z3*a0 + z4*a1)*inv_dx_;
-        dydx += t*t*(z5*j0 + z6*j1);
+        dydx += t*t*(z5*j0 + z6*j1)*inv_dx_;
         return dydx;
     }
 
@@ -624,12 +627,12 @@ public:
         Real d2ydx2 = z0*(y1-y0)*inv_dx_*inv_dx_;
         d2ydx2 += (z1*dy0 + z2*dy1)*inv_dx_*inv_dx_;
         d2ydx2 += (z3*a0 + z4*a1)*2*inv_dx_*inv_dx_;
-        d2ydx2 += 6*(z5*j0 + z6*j1)/(inv_dx_*inv_dx_);
+        d2ydx2 += 6*(z5*j0 + z6*j1)*inv_dx_*inv_dx_;
 
         return d2ydx2;
     }
 
-    int64_t bytes() const
+    std::int64_t bytes() const
     {
         return data_.size()*data_[0].size()*sizeof(Real) + 2*sizeof(Real) + sizeof(data_);
     }

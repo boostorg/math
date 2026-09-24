@@ -10,6 +10,10 @@
 #pragma once
 #endif
 
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/assert.hpp>
+#include <boost/math/policies/error_handling.hpp>
+#include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/detail/bessel_j0.hpp>
 #include <boost/math/special_functions/detail/bessel_j1.hpp>
 #include <boost/math/special_functions/detail/bessel_jy.hpp>
@@ -24,7 +28,7 @@
 namespace boost { namespace math { namespace detail{
 
 template <typename T, typename Policy>
-T bessel_jn(int n, T x, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T bessel_jn(int n, T x, const Policy& pol)
 {
     T value(0), factor, current, prev, next;
 
@@ -72,25 +76,15 @@ T bessel_jn(int n, T x, const Policy& pol)
     {
         prev = bessel_j0(x);
         current = bessel_j1(x);
-        policies::check_series_iterations<T>("boost::math::bessel_j_n<%1%>(%1%,%1%)", n, pol);
+        policies::check_series_iterations<T>("boost::math::bessel_j_n<%1%>(%1%,%1%)", static_cast<unsigned>(n), pol);
         for (int k = 1; k < n; k++)
         {
-            T fact = 2 * k / x;
-            //
-            // rescale if we would overflow or underflow:
-            //
-            if((fabs(fact) > 1) && ((tools::max_value<T>() - fabs(prev)) / fabs(fact) < fabs(current)))
-            {
-               scale /= current;
-               prev /= current;
-               current = 1;
-            }
-            value = fact * current - prev;
+            value = (2 * k * current / x) - prev;
             prev = current;
             current = value;
         }
     }
-    else if((x < 1) || (n > x * x / 4) || (x < 5))
+    else if((x < 5) || (n > x * x / 4))
     {
        return factor * bessel_j_small_z_series(T(n), x, pol);
     }
@@ -102,7 +96,7 @@ T bessel_jn(int n, T x, const Policy& pol)
         prev = fn;
         current = 1;
         // Check recursion won't go on too far:
-        policies::check_series_iterations<T>("boost::math::bessel_j_n<%1%>(%1%,%1%)", n, pol);
+        policies::check_series_iterations<T>("boost::math::bessel_j_n<%1%>(%1%,%1%)", static_cast<unsigned>(n), pol);
         for (int k = n; k > 0; k--)
         {
             T fact = 2 * k / x;
@@ -122,7 +116,7 @@ T bessel_jn(int n, T x, const Policy& pol)
     value *= factor;
 
     if(tools::max_value<T>() * scale < fabs(value))
-       return policies::raise_overflow_error<T>("boost::math::bessel_jn<%1%>(%1%,%1%)", nullptr, pol);
+       return policies::raise_overflow_error<T>("boost::math::bessel_jn<%1%>(%1%,%1%)", nullptr, pol); // LCOV_EXCL_LINE we should never get here!
 
     return value / scale;
 }

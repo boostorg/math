@@ -8,9 +8,12 @@
 #ifndef BOOST_MATH_CCMATH_SQRT
 #define BOOST_MATH_CCMATH_SQRT
 
-#include <cmath>
-#include <limits>
-#include <type_traits>
+#include <boost/math/ccmath/detail/config.hpp>
+
+#ifdef BOOST_MATH_NO_CCMATH
+#error "The header <boost/math/sqrt.hpp> can only be used in C++17 and later."
+#endif
+
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isinf.hpp>
@@ -40,7 +43,7 @@ constexpr Real sqrt_impl(Real x)
 
 } // namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr Real sqrt(Real x)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
@@ -66,7 +69,7 @@ constexpr Real sqrt(Real x)
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 constexpr double sqrt(Z x)
 {
     return detail::sqrt_impl<double>(static_cast<double>(x));

@@ -19,6 +19,10 @@
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #endif
 
+#ifdef BOOST_MATH_ENABLE_SYCL
+#include "sycl/sycl.hpp"
+#endif
+
 #if !defined(TEST_FLOAT) && !defined(TEST_DOUBLE) && !defined(TEST_LDOUBLE) && !defined(TEST_REAL_CONCEPT)
 #  define TEST_FLOAT
 #  define TEST_DOUBLE
@@ -26,9 +30,14 @@
 #  define TEST_REAL_CONCEPT
 #endif
 
-#include <boost/math/tools/test.hpp>
+#include <boost/math/tools/config.hpp>
+
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 using ::boost::math::concepts::real_concept;
+#endif
 
 #include <boost/math/distributions/geometric.hpp> // for geometric_distribution
 using boost::math::geometric_distribution;
@@ -48,18 +57,35 @@ using std::setprecision;
 using std::showpoint;
 #include <limits>
 using std::numeric_limits;
+#include <cmath>
+using std::log;
+using std::abs;
+#include <type_traits>
 
 template <class RealType>
 void test_spot( // Test a single spot value against 'known good' values.
-               RealType k,    // Number of failures.
-               RealType p,    // Probability of success_fraction.
-               RealType P,    // CDF probability.
-               RealType Q,    // Complement of CDF.
-               RealType tol)  // Test tolerance.
+               RealType k,       // Number of failures.
+               RealType p,       // Probability of success_fraction.
+               RealType P,       // CDF probability.
+               RealType Q,       // Complement of CDF.
+               RealType logP,    // Logcdf probability
+               RealType logQ,    // Complement of logcdf
+               RealType tol,     // Test tolerance
+               RealType logtol)  // Logcdf Test tolerance.
 {
+   BOOST_IF_CONSTEXPR (std::is_same<RealType, long double>::value 
+                       #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+                       || std::is_same<RealType, real_concept>::value
+                       #endif
+                       )
+   {
+     logtol *= 100;
+   }
+   
    boost::math::geometric_distribution<RealType> g(p);
    BOOST_CHECK_EQUAL(p, g.success_fraction());
    BOOST_CHECK_CLOSE_FRACTION(cdf(g, k), P, tol);
+   BOOST_CHECK_CLOSE_FRACTION(logcdf(g, k), logP, logtol);
 
   if((P < 0.99) && (Q < 0.99))
   {
@@ -68,6 +94,8 @@ void test_spot( // Test a single spot value against 'known good' values.
     //
     BOOST_CHECK_CLOSE_FRACTION(
       cdf(complement(g, k)), Q, tol);
+    BOOST_CHECK_CLOSE_FRACTION(
+      logcdf(complement(g, k)), logQ, logtol);
     if(k != 0)
     {
       BOOST_CHECK_CLOSE_FRACTION(
@@ -222,6 +250,9 @@ void test_spots(RealType)
   static_cast<RealType>(0.5), // Probability of success as fraction, p
   static_cast<RealType>(0.875L), // Probability of result (CDF), P
   static_cast<RealType>(0.125L),  // complement CCDF Q = 1 - P
+  static_cast<RealType>(-0.1335313926245226231463436209313499745894L),
+  static_cast<RealType>(-2.079441541679835928251696364374529704227L),
+  tolerance,
   tolerance);
 
   test_spot( //
@@ -229,6 +260,9 @@ void test_spots(RealType)
   static_cast<RealType>(0.25), // Probability of success as fraction, p
   static_cast<RealType>(0.25),   // Probability of result (CDF), P
   static_cast<RealType>(0.75),   // Q = 1 - P
+  static_cast<RealType>(-1.386294361119890618834464242916353136151L),
+  static_cast<RealType>(-0.2876820724517809274392190059938274315035L),
+  tolerance,
   tolerance);
 
   test_spot(
@@ -239,6 +273,9 @@ void test_spots(RealType)
   static_cast<RealType>(0.25),  // Probability of success, p
   static_cast<RealType>(0.95776486396789551L),  // Probability of result (CDF), P
   static_cast<RealType>(0.042235136032104499L), // Q = 1 - P
+  static_cast<RealType>(-0.04315297584768019483875419429616349387993L),
+  static_cast<RealType>(-3.164502796969590201831409065932101746539L),
+  tolerance,
   tolerance);
 
   test_spot(  //
@@ -248,6 +285,9 @@ void test_spots(RealType)
   static_cast<RealType>(0.25),     // Probability of success, p
   static_cast<RealType>(0.99999957525875771),  // Probability of result (CDF), P
   static_cast<RealType>(4.2474124232020353e-07),   // Q = 1 - P
+  static_cast<RealType>(-4.247413325227902241937783772756893037512e-7L),
+  static_cast<RealType>(-14.67178569504082729940016930568519898711L),
+  tolerance,
   tolerance);
   /*
   // This causes failures in find_upper_bound_on_p p is small branch.
@@ -266,7 +306,10 @@ void test_spots(RealType)
   static_cast<RealType>(0.99),    // Probability of success, p
   static_cast<RealType>(1), // Probability of result (CDF), P
   static_cast<RealType>(1.0000000000000364e-102),   // Q = 1 - P
-  tolerance);
+  static_cast<RealType>(-1.0000000000000364e-102L),
+  static_cast<RealType>(-std::numeric_limits<RealType>::infinity()),
+  tolerance,
+  tolerance * 100);
 
   test_spot(  // > formatC(pgeom(1,0.99, TRUE), digits=17) [1] "0.99990000000000001"
     // > formatC(pgeom(1,0.99, FALSE), digits=17) [1] "0.00010000000000000009"
@@ -274,7 +317,10 @@ void test_spots(RealType)
   static_cast<RealType>(0.99),                    // Probability of success, p
   static_cast<RealType>(0.9999),     // Probability of result (CDF), P
   static_cast<RealType>(0.0001),   // Q = 1 - P
-  tolerance);
+  static_cast<RealType>(-0.0001000050003333583353335000142869643968354L),
+  static_cast<RealType>(-9.210340371976182736071965818737456830404L),
+  tolerance,
+  tolerance * 100);
 
 if(std::numeric_limits<RealType>::is_specialized)
 { // An extreme value test that is more accurate than using negative binomial.
@@ -284,8 +330,11 @@ if(std::numeric_limits<RealType>::is_specialized)
   static_cast<RealType>(10000L), // Number of failures, k
   static_cast<RealType>(0.001L),                    // Probability of success, p
   static_cast<RealType>(0.99995487182736897L),     // Probability of result (CDF), P
-  static_cast<RealType>(4.5128172631071587e-05L),   // Q = 1 - P
-  tolerance); //
+  static_cast<RealType>(4.5128172631071587e-05L),   // Q = 1 - P,
+  static_cast<RealType>(-0.00004512919093769043386238651458397312570531L),
+  static_cast<RealType>(-10.00600383616891853492996552293751795172L),
+  tolerance,
+  tolerance * 100); //
   } // numeric_limit is specialized
  // End of single spot tests using RealType
 
@@ -340,7 +389,9 @@ if(std::numeric_limits<RealType>::is_specialized)
   static_cast<RealType>(9.9000000000003448e-201L), //
   100 * tolerance); // Note difference
 
-    // p nearer unity.
+  // p nearer unity.
+  // On GPU this gets flushed to 0 which has an eps difference of 3.4e+38
+  #ifndef BOOST_MATH_HAS_GPU_SUPPORT
   BOOST_CHECK_CLOSE_FRACTION( //
   pdf(geometric_distribution<RealType>(static_cast<RealType>(0.9999)),
   static_cast<RealType>(10) ),  // Number of failures, k
@@ -348,6 +399,7 @@ if(std::numeric_limits<RealType>::is_specialized)
   // static_cast<float>(1.00156406e-040)
   static_cast<RealType>(9.999e-41), // exact from 100 digit calculator.
   2e3 * tolerance); // Note bigger tolerance needed.
+  #endif
 
   // Moshier Cephes 100 digits calculator says 9.999e-41
   //0.9999*pow(1-0.9999,10)

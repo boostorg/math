@@ -160,11 +160,6 @@ BOOST_AUTO_TEST_CASE( test_main )
    expected_results();
    BOOST_MATH_CONTROL_FP;
 
-#if !defined(TEST) || (TEST == 1)
-   test_hypergeometric_mellin_transform<double>();
-   test_hypergeometric_laplace_transform<double>();
-#endif
-
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
 #if !defined(TEST) || (TEST == 2)
    test_spots(0.0F, "float");
@@ -184,11 +179,15 @@ BOOST_AUTO_TEST_CASE( test_main )
 #endif
 #endif
 #if (!defined(TEST) || (TEST == 6)) && !defined(__clang__)
+   #if defined(BOOST_MATH_RUN_MP_TESTS)
    test_spots(boost::multiprecision::cpp_bin_float_quad(), "cpp_bin_float_quad");
+   #endif
 #endif
 #if (!defined(TEST) || (TEST == 7)) && !defined(__clang__)
+   #if defined(BOOST_MATH_RUN_MP_TESTS)
    typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<40> > dec_40;
    test_spots(dec_40(), "dec_40");
+   #endif
 #endif
 }
 

@@ -16,6 +16,8 @@ using boost::multiprecision::mpfr_float;
 using boost::math::constants::pi;
 using boost::math::constants::zeta_three;
 
+#ifdef BOOST_MATH_RUN_MP_TESTS
+
 int main() {
     using Real = mpfr_float;
     int p = 100;
@@ -28,3 +30,12 @@ int main() {
     CHECK_ULP_CLOSE(expected, Q, 3);
     return boost::math::test::report_errors();
 }
+
+#else
+
+int main()
+{
+    return 0;
+}
+
+#endif

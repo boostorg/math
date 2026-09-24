@@ -4,6 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #ifndef BOOST_MATH_TOOLS_ULP_PLOT_HPP
 #define BOOST_MATH_TOOLS_ULP_PLOT_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
@@ -16,6 +17,7 @@
 #include <random>
 #include <limits>
 #include <stdexcept>
+#endif
 #include <boost/math/tools/is_standalone.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
 

@@ -7,10 +7,16 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_ENABLE_SYCL
 #include <pch.hpp>
+#endif
 
 #ifdef _MSC_VER
 #pragma warning (disable:4127 4512)
+#elif __GNUC__ >= 5
+#  pragma GCC diagnostic ignored "-Woverflow"
+#elif defined(__clang__)
+#  pragma clang diagnostic ignored "-Wliteral-range"
 #endif
 
 #if !defined(TEST_FLOAT) && !defined(TEST_DOUBLE) && !defined(TEST_LDOUBLE) && !defined(TEST_REAL_CONCEPT)
@@ -20,8 +26,22 @@
 #  define TEST_REAL_CONCEPT
 #endif
 
-#include <boost/math/tools/test.hpp>
+#ifndef BOOST_MATH_OVERFLOW_ERROR_POLICY
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+#endif
+
+#ifdef BOOST_MATH_ENABLE_SYCL
+#include "sycl/sycl.hpp"
+#endif
+
+#include <boost/math/tools/config.hpp>
+
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+#endif
+
 #include <boost/math/distributions/non_central_chi_squared.hpp> // for chi_squared_distribution
 #include <boost/math/special_functions/cbrt.hpp> // for chi_squared_distribution
 #define BOOST_TEST_MAIN

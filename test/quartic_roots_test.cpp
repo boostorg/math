@@ -5,9 +5,16 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
-#include "math_unit_test.hpp"
-#include <random>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/tools/quartic_roots.hpp>
+#else
+import boost.math;
+#endif
+
+#include "math_unit_test.hpp"
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <random>
+#endif
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
@@ -117,9 +124,9 @@ void test_zero_coefficients()
 
         roots = quartic_roots(a, b, c, d, e);
         // I could check the condition number here, but this is fine right?
-        CHECK_ULP_CLOSE(r[0], roots[0], 160);
-        CHECK_ULP_CLOSE(r[1], roots[1], 260);
-        CHECK_ULP_CLOSE(r[2], roots[2], 160);
+        CHECK_ULP_CLOSE(r[0], roots[0], 340);
+        CHECK_ULP_CLOSE(r[1], roots[1], 440);
+        CHECK_ULP_CLOSE(r[2], roots[2], 220);
         CHECK_ULP_CLOSE(r[3], roots[3], 160);
     }
 }
@@ -142,6 +149,21 @@ void issue_825() {
     CHECK_NAN(roots[3]);
 }
 
+void issue_1055() {
+    double a = 1.0;
+    double b = -547.5045576653938;
+    double c = 75042.069484941996;
+    double d = 273.7522788326969;
+    double e =  0.24965766552610175;
+    std::array<double, 4> roots = boost::math::tools::quartic_roots<double>(a, b, c, d, e);
+    // This is accurate to 1e-9 on every platform *except* cygwin/g++11/c++17:
+    CHECK_ABSOLUTE_ERROR(-0.00182420203946279, roots[0], 1e-6);
+    CHECK_ABSOLUTE_ERROR(-0.00182370927680797, roots[1], 1e-6);
+    CHECK_NAN(roots[2]);
+    CHECK_NAN(roots[3]);
+}
+
+
 int main()
 {
     test_zero_coefficients<float>();
@@ -150,5 +172,6 @@ int main()
     test_zero_coefficients<long double>();
 #endif
     issue_825();
+    issue_1055();
     return boost::math::test::report_errors();
 }

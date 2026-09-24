@@ -5,21 +5,16 @@
 
 #ifndef BOOST_MATH_TOOLS_CONDITION_NUMBERS_HPP
 #define BOOST_MATH_TOOLS_CONDITION_NUMBERS_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
+#endif
 #include <boost/math/differentiation/finite_difference.hpp>
+#include <boost/math/tools/config.hpp>
 
-#include <boost/math/tools/is_standalone.hpp>
-#ifndef BOOST_MATH_STANDALONE
-#include <boost/config.hpp>
-#ifdef BOOST_NO_CXX17_IF_CONSTEXPR
-#error "The header <boost/math/norms.hpp> can only be used in C++17 and later."
-#endif
-#endif
+namespace boost { namespace math { namespace tools {
 
-namespace boost::math::tools {
-
-template<class Real, bool kahan=true>
+BOOST_MATH_EXPORT template<class Real, bool kahan=true>
 class summation_condition_number {
 public:
     summation_condition_number(Real const x = 0)
@@ -35,7 +30,7 @@ public:
         using std::abs;
         // No need to Kahan the l1 calc; it's well conditioned:
         m_l1 += abs(x);
-        if constexpr(kahan)
+        BOOST_MATH_IF_CONSTEXPR (kahan)
         {
             Real y = x - m_c;
             Real t = m_sum + y;
@@ -58,7 +53,7 @@ public:
     // but is this sensible? More important is it useful?
     // In addition, it might change the condition number.
 
-    [[nodiscard]] Real operator()() const
+    Real operator()() const
     {
         using std::abs;
         if (m_sum == Real(0) && m_l1 != Real(0))
@@ -68,7 +63,7 @@ public:
         return m_l1/abs(m_sum);
     }
 
-    [[nodiscard]] Real sum() const
+    Real sum() const
     {
         // Higham, 1993, "The Accuracy of Floating Point Summation":
         // "In [17] and [18], Kahan describes a variation of compensated summation in which the final sum is also corrected
@@ -76,7 +71,7 @@ public:
         return m_sum + m_c;
     }
 
-    [[nodiscard]] Real l1_norm() const
+    Real l1_norm() const
     {
         return m_l1;
     }
@@ -87,7 +82,7 @@ private:
     Real m_c;
 };
 
-template<class F, class Real>
+BOOST_MATH_EXPORT template<class F, class Real>
 Real evaluation_condition_number(F const & f, Real const & x)
 {
     using std::abs;
@@ -102,12 +97,12 @@ Real evaluation_condition_number(F const & f, Real const & x)
     }
     bool caught_exception = false;
     Real fp;
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
     try
     {
 #endif
         fp = finite_difference_derivative(f, x);
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
     }
     catch(...)
     {
@@ -147,5 +142,5 @@ Real evaluation_condition_number(F const & f, Real const & x)
     return abs(x*fp/fx);
 }
 
-}
+}}} // Namespaces
 #endif

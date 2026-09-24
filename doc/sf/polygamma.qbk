@@ -66,7 +66,7 @@ has the general form:
 [equation polygamma3]
 
 The coefficients of the cosine terms can be calculated iteratively starting
-from ['C[sub 1,0] = -1] and then using
+from ['C[sub 0,1] = -1] and then using
 
 [equation polygamma7]
 

@@ -289,7 +289,7 @@ The domain of /W/[sub -1] is \[-/e/[super -1], 0\). Numerically,
 For example, for `double`: lambert_wm1(-2.2250738585072014e-308) = -714.96865723796634 [br]
 and for `float`: lambert_wm1(-1.17549435e-38) = -91.8567734 [br]
 
-* `z < -std::numeric_limits<T>::min()`, means that z is zero or denormalized (if `std::numeric_limits<T>::has_denorm_min == true`),
+* `z < -std::numeric_limits<T>::min()`, means that z is zero or denormalized (if `boost::math::detail::has_denorm_now<T>() == true`),
 for example: `r = lambert_wm1(-std::numeric_limits<double>::denorm_min());` and an overflow_error exception is thrown,
 and will give a message like:
 

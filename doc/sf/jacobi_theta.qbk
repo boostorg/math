@@ -53,7 +53,12 @@ A more accurate computation will take advantage of [tau]:
 
   jacobi_theta1tau(x, a / boost::math::constants::pi<T>());
 
-Internally, Boost implements the /q/ parameterization by taking the logarithm of /q/ and passing it to the [tau] parameterization; as such, using the [tau] parameterization directly will generally yield greater precision.
+Internally, when /q/ is larger than exp(-[pi]) (that is, when [tau] is less than 1), Boost implements the /q/ parameterization by taking the logarithm of /q/ and passing it to the [tau] parameterization; as such, using the [tau] parameterization directly will generally yield greater precision in that regime.
+When /q/ is smaller than exp(-[pi]), the Fourier series is summed directly in terms of /q/, and the two parameterizations are equally accurate.
+
+Every term of the series is an exponential whose argument is a product or quotient of [tau], [pi] and a small integer, or, in the transformed series used when [tau] < 1, the square of /z/ plus a multiple of [pi]/2.
+Rounding such an argument to working precision would cost as many ulps in the term as the argument is large, so the rounding errors of [pi], of the products, of the division and of the reduction of /z/ are tracked exactly (using error-free transformations that work for any binary floating-point type) and applied as a correction factor to each term.
+The [tau] parameterization is therefore accurate to a few ulps throughout, apart from the conditioning of the function itself, for /z/ up to about 1/[epsilon] (10[super 16] for `double`); beyond that the reduction of /z/ by the period loses accuracy in proportion to /z/[epsilon][super 2]. In the /q/ parameterization the rounding of log(/q/) remains, and its effect grows as /q/ approaches 1.
 As another example, if the complement of /q/ is known with great accuracy, then instead of:
 
   jacobi_theta1(x, 1-q_complement);
@@ -63,6 +68,8 @@ It is more accurate to use `__log1p` and pass in the result to the [tau] version
   jacobi_theta1tau(x, -boost::math::log1p(-q_complement) / boost::math::constants::pi<T>());
 
 Additional "minus 1" versions of the third and fourth theta functions are provided. Similar in spirit to `__expm1`, these functions return one less than the evaluated function, and yield increased accuracy when /q/ is small.
+
+All of the functions return the result of __domain_error if /z/ is not finite, if /q/ lies outside (0, 1), or if [tau] is not strictly positive. A NaN argument is treated as a domain error.
 
 [heading Testing]
 
@@ -122,11 +129,11 @@ Fixing /x/=5 and varying /q/, the ULPs plot looks like:
 
 [graph jacobi_theta1q_float]
 
-Accuracy tends to degenerate near /q/=1 (small [tau]).
+Accuracy degrades gently as /q/ approaches 1 (small [tau]), where the rounding of log(/q/) is amplified by the size of the exponents in the transformed series; the [tau] parameterization does not have this problem.
 
 [heading Implementation]
 
-The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
+When /q/ < exp(-[pi]) the series above is summed directly in /q/. Otherwise the /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
 
 If [tau] is greater than or equal to 1, the summation above is used as-is.
 However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.30] is used, defining [tau]'=-1/[tau]:
@@ -134,6 +141,8 @@ However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii D
 [equation jacobi_theta1_imaginary] [/ (-i\tau)^{1/2}\theta_1(x|\tau)=-i\exp(i\tau'x^2/\pi)\theta_1(x\tau'|\tau') ]
 
 This transformation of variables ensures that the function will always converge in a small number of iterations.
+The transformed series is a sum of differences of Gaussians centered at [plusminus][pi](/n/+1/2), which nearly cancel as /x/ approaches zero;
+each difference is therefore evaluated using `__expm1` so that full relative precision is retained for small /x/.
 
 [endsect] [/section:jacobi_theta1 Jacobi Theta Function [theta][sub 1]]
 
@@ -189,11 +198,11 @@ Fixing /x/=0.4 and varying /q/, the ULPs plot looks like:
 
 [graph jacobi_theta2q_float]
 
-Accuracy tends to degenerate near /q/=1 (small [tau]).
+Accuracy degrades gently as /q/ approaches 1 (small [tau]), where the rounding of log(/q/) is amplified by the size of the exponents in the transformed series; the [tau] parameterization does not have this problem.
 
 [heading Implementation]
 
-The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
+When /q/ < exp(-[pi]) the series above is summed directly in /q/. Otherwise the /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
 
 If [tau] is greater than or equal to 1, the summation above is used as-is.
 However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.31] is used, defining [tau]'=-1/[tau]:
@@ -271,11 +280,11 @@ Fixing /x/=0.4 and varying /q/, the ULPs plot looks like:
 
 [graph jacobi_theta3q_float]
 
-Accuracy tends to degenerate near /q/=1 (small [tau]).
+Accuracy degrades gently as /q/ approaches 1 (small [tau]), where the rounding of log(/q/) is amplified by the size of the exponents in the transformed series; the [tau] parameterization does not have this problem.
 
 [heading Implementation]
 
-The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
+When /q/ < exp(-[pi]) the series above is summed directly in /q/. Otherwise the /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
 
 If [tau] is greater than or equal to 1, the summation above is used as-is.
 However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.32] is used, defining [tau]'=-1/[tau]:
@@ -353,11 +362,11 @@ Fixing /x/=5 and varying /q/, the ULPs plot looks like:
 
 [graph jacobi_theta4q_float]
 
-Accuracy tends to degenerate near /q/=1 (small [tau]).
+Accuracy degrades gently as /q/ approaches 1 (small [tau]), where the rounding of log(/q/) is amplified by the size of the exponents in the transformed series; the [tau] parameterization does not have this problem.
 
 [heading Implementation]
 
-The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
+When /q/ < exp(-[pi]) the series above is summed directly in /q/. Otherwise the /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
 
 If [tau] is greater than or equal to 1, the summation above is used as-is.
 However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.33] is used, defining [tau]'=-1/[tau]:

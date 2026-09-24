@@ -8,10 +8,13 @@
 #ifndef BOOST_MATH_INTERPOLATORS_BARYCENTRIC_RATIONAL_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_BARYCENTRIC_RATIONAL_DETAIL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <utility> // for std::move
 #include <algorithm> // for std::is_sorted
 #include <string>
+#include <cstdint>
+#endif
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/assert.hpp>
 
@@ -100,22 +103,22 @@ template<class Real>
 void barycentric_rational_imp<Real>::calculate_weights(size_t approximation_order)
 {
     using std::abs;
-    int64_t n = m_x.size();
+    std::int64_t n = m_x.size();
     m_w.resize(n, 0);
-    for(int64_t k = 0; k < n; ++k)
+    for(std::int64_t k = 0; k < n; ++k)
     {
-        int64_t i_min = (std::max)(k - static_cast<int64_t>(approximation_order), static_cast<int64_t>(0));
-        int64_t i_max = k;
+        std::int64_t i_min = (std::max)(k - static_cast<std::int64_t>(approximation_order), static_cast<std::int64_t>(0));
+        std::int64_t i_max = k;
         if (k >= n - (std::ptrdiff_t)approximation_order)
         {
             i_max = n - approximation_order - 1;
         }
 
-        for(int64_t i = i_min; i <= i_max; ++i)
+        for(std::int64_t i = i_min; i <= i_max; ++i)
         {
             Real inv_product = 1;
-            int64_t j_max = (std::min)(static_cast<int64_t>(i + approximation_order), static_cast<int64_t>(n - 1));
-            for(int64_t j = i; j <= j_max; ++j)
+            std::int64_t j_max = (std::min)(static_cast<std::int64_t>(i + approximation_order), static_cast<std::int64_t>(n - 1));
+            for(std::int64_t j = i; j <= j_max; ++j)
             {
                 if (j == k)
                 {

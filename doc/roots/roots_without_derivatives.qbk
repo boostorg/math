@@ -373,7 +373,7 @@ The __root_finding_TOMS748 parameters are:
 [variablelist
 [[f]   [A unary functor (or C++ lambda) that is the function whose root is to be solved.
        f(x) need not be uniformly increasing or decreasing on ['x] and
-       may have multiple roots.  However, the bounds given must bracket a single root.]]
+       may have multiple roots.  However, the bounds given must bracket at least one root.]]
 [[a]   [The lower bound for the initial bracket of the root.]]
 [[b]   [The upper bound for the initial bracket of the root.
        It is a precondition that ['a < b] and that ['a] and ['b]

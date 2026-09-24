@@ -9,28 +9,28 @@
    namespace boost{ namespace math{
    
    template <class T1, class T2>
-   ``__sf_result`` gamma_q_inv(T1 a, T2 q);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q_inv(T1 a, T2 q);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` gamma_q_inv(T1 a, T2 q, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q_inv(T1 a, T2 q, const ``__Policy``&);
    
    template <class T1, class T2>
-   ``__sf_result`` gamma_p_inv(T1 a, T2 p);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p_inv(T1 a, T2 p);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` gamma_p_inv(T1 a, T2 p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p_inv(T1 a, T2 p, const ``__Policy``&);
    
    template <class T1, class T2>
-   ``__sf_result`` gamma_q_inva(T1 x, T2 q);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q_inva(T1 x, T2 q);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` gamma_q_inva(T1 x, T2 q, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q_inva(T1 x, T2 q, const ``__Policy``&);
    
    template <class T1, class T2>
-   ``__sf_result`` gamma_p_inva(T1 x, T2 p);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p_inva(T1 x, T2 p);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` gamma_p_inva(T1 x, T2 p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p_inva(T1 x, T2 p, const ``__Policy``&);
    
    }} // namespaces
    
@@ -58,40 +58,40 @@ These are implemented here as `gamma_p_inva` and `gamma_q_inva`.]
 
 
    template <class T1, class T2>
-   ``__sf_result`` gamma_q_inv(T1 a, T2 q);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q_inv(T1 a, T2 q);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` gamma_q_inv(T1 a, T2 q, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q_inv(T1 a, T2 q, const ``__Policy``&);
 
 Returns a value x such that: `q = gamma_q(a, x);`
 
 Requires: /a > 0/ and /1 >= p,q >= 0/.
 
    template <class T1, class T2>
-   ``__sf_result`` gamma_p_inv(T1 a, T2 p);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p_inv(T1 a, T2 p);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` gamma_p_inv(T1 a, T2 p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p_inv(T1 a, T2 p, const ``__Policy``&);
    
 Returns a value x such that: `p = gamma_p(a, x);`
 
 Requires: /a > 0/ and /1 >= p,q >= 0/.
 
    template <class T1, class T2>
-   ``__sf_result`` gamma_q_inva(T1 x, T2 q);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q_inva(T1 x, T2 q);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` gamma_q_inva(T1 x, T2 q, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_q_inva(T1 x, T2 q, const ``__Policy``&);
 
 Returns a value a such that: `q = gamma_q(a, x);`
 
 Requires: /x > 0/ and /1 >= p,q >= 0/.
 
    template <class T1, class T2>
-   ``__sf_result`` gamma_p_inva(T1 x, T2 p);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p_inva(T1 x, T2 p);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` gamma_p_inva(T1 x, T2 p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p_inva(T1 x, T2 p, const ``__Policy``&);
    
 Returns a value a such that: `p = gamma_p(a, x);`
 

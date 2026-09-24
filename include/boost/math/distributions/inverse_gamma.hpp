@@ -2,6 +2,7 @@
 
 //  Copyright Paul A. Bristow 2010.
 //  Copyright John Maddock 2010.
+//  Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -22,13 +23,13 @@
 // http://mathworld.wolfram.com/GammaDistribution.html
 // http://en.wikipedia.org/wiki/Gamma_distribution
 
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/tuple.hpp>
+#include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/complement.hpp>
-
-#include <utility>
-#include <cfenv>
 
 namespace boost{ namespace math
 {
@@ -36,7 +37,7 @@ namespace detail
 {
 
 template <class RealType, class Policy>
-inline bool check_inverse_gamma_shape(
+BOOST_MATH_GPU_ENABLED inline bool check_inverse_gamma_shape(
       const char* function, // inverse_gamma
       RealType shape, // shape aka alpha
       RealType* result, // to update, perhaps with NaN
@@ -57,7 +58,7 @@ inline bool check_inverse_gamma_shape(
 } //bool check_inverse_gamma_shape
 
 template <class RealType, class Policy>
-inline bool check_inverse_gamma_x(
+BOOST_MATH_GPU_ENABLED inline bool check_inverse_gamma_x(
       const char* function,
       RealType const& x,
       RealType* result, const Policy& pol)
@@ -73,7 +74,7 @@ inline bool check_inverse_gamma_x(
 }
 
 template <class RealType, class Policy>
-inline bool check_inverse_gamma(
+BOOST_MATH_GPU_ENABLED inline bool check_inverse_gamma(
       const char* function, // TODO swap these over, so shape is first.
       RealType scale,  // scale aka beta
       RealType shape, // shape aka alpha
@@ -85,14 +86,14 @@ inline bool check_inverse_gamma(
 
 } // namespace detail
 
-template <class RealType = double, class Policy = policies::policy<> >
+BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
 class inverse_gamma_distribution
 {
 public:
    using value_type = RealType;
    using policy_type = Policy;
 
-   explicit inverse_gamma_distribution(RealType l_shape = 1, RealType l_scale = 1)
+   BOOST_MATH_GPU_ENABLED explicit inverse_gamma_distribution(RealType l_shape = 1, RealType l_scale = 1)
       : m_shape(l_shape), m_scale(l_scale)
    {
       RealType result;
@@ -101,12 +102,12 @@ public:
         l_scale, l_shape, &result, Policy());
    }
 
-   RealType shape()const
+   BOOST_MATH_GPU_ENABLED RealType shape()const
    {
       return m_shape;
    }
 
-   RealType scale()const
+   BOOST_MATH_GPU_ENABLED RealType scale()const
    {
       return m_scale;
    }
@@ -118,41 +119,41 @@ private:
    RealType m_scale;     // distribution scale
 };
 
-using inverse_gamma = inverse_gamma_distribution<double>;
+BOOST_MATH_EXPORT using inverse_gamma = inverse_gamma_distribution<double>;
 // typedef - but potential clash with name of inverse gamma *function*.
 // but there is a typedef for the gamma distribution (gamma)
 
 #ifdef __cpp_deduction_guides
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 inverse_gamma_distribution(RealType)->inverse_gamma_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-template <class RealType>
+BOOST_MATH_EXPORT template <class RealType>
 inverse_gamma_distribution(RealType,RealType)->inverse_gamma_distribution<typename boost::math::tools::promote_args<RealType>::type>;
 #endif
 
 // Allow random variable x to be zero, treated as a special case (unlike some definitions).
 
-template <class RealType, class Policy>
-inline std::pair<RealType, RealType> range(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
 {  // Range of permissible values for random variable x.
    using boost::math::tools::max_value;
-   return std::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
+   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
 }
 
-template <class RealType, class Policy>
-inline std::pair<RealType, RealType> support(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
 {  // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
    using boost::math::tools::max_value;
    using boost::math::tools::min_value;
-   return std::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
+   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
 }
 
-template <class RealType, class Policy>
-inline RealType pdf(const inverse_gamma_distribution<RealType, Policy>& dist, const RealType& x)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType pdf(const inverse_gamma_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::pdf(const inverse_gamma_distribution<%1%>&, %1%)";
+   constexpr auto function = "boost::math::pdf(const inverse_gamma_distribution<%1%>&, %1%)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -194,18 +195,18 @@ inline RealType pdf(const inverse_gamma_distribution<RealType, Policy>& dist, co
    return result;
 } // pdf
 
-template <class RealType, class Policy>
-inline RealType logpdf(const inverse_gamma_distribution<RealType, Policy>& dist, const RealType& x)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType logpdf(const inverse_gamma_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
    using boost::math::lgamma;
 
-   static const char* function = "boost::math::logpdf(const inverse_gamma_distribution<%1%>&, %1%)";
+   constexpr auto function = "boost::math::logpdf(const inverse_gamma_distribution<%1%>&, %1%)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
 
-   RealType result = -std::numeric_limits<RealType>::infinity();
+   RealType result = -boost::math::numeric_limits<RealType>::infinity();
    if(false == detail::check_inverse_gamma(function, scale, shape, &result, Policy()))
    { // distribution parameters bad.
       return result;
@@ -231,12 +232,12 @@ inline RealType logpdf(const inverse_gamma_distribution<RealType, Policy>& dist,
    return shape * log(scale) + (-shape-1)*log(x) - lgamma(shape) - (scale/x);
 } // pdf
 
-template <class RealType, class Policy>
-inline RealType cdf(const inverse_gamma_distribution<RealType, Policy>& dist, const RealType& x)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType cdf(const inverse_gamma_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::cdf(const inverse_gamma_distribution<%1%>&, %1%)";
+   constexpr auto function = "boost::math::cdf(const inverse_gamma_distribution<%1%>&, %1%)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -259,13 +260,13 @@ inline RealType cdf(const inverse_gamma_distribution<RealType, Policy>& dist, co
    return result;
 } // cdf
 
-template <class RealType, class Policy>
-inline RealType quantile(const inverse_gamma_distribution<RealType, Policy>& dist, const RealType& p)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType quantile(const inverse_gamma_distribution<RealType, Policy>& dist, const RealType& p)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
    using boost::math::gamma_q_inv;
 
-   static const char* function = "boost::math::quantile(const inverse_gamma_distribution<%1%>&, %1%)";
+   constexpr auto function = "boost::math::quantile(const inverse_gamma_distribution<%1%>&, %1%)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -286,12 +287,12 @@ inline RealType quantile(const inverse_gamma_distribution<RealType, Policy>& dis
    return result;
 }
 
-template <class RealType, class Policy>
-inline RealType cdf(const complemented2_type<inverse_gamma_distribution<RealType, Policy>, RealType>& c)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<inverse_gamma_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::quantile(const gamma_distribution<%1%>&, %1%)";
+   constexpr auto function = "boost::math::quantile(const gamma_distribution<%1%>&, %1%)";
 
    RealType shape = c.dist.shape();
    RealType scale = c.dist.scale();
@@ -309,12 +310,12 @@ inline RealType cdf(const complemented2_type<inverse_gamma_distribution<RealType
    return result;
 }
 
-template <class RealType, class Policy>
-inline RealType quantile(const complemented2_type<inverse_gamma_distribution<RealType, Policy>, RealType>& c)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<inverse_gamma_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::quantile(const inverse_gamma_distribution<%1%>&, %1%)";
+   constexpr auto function = "boost::math::quantile(const inverse_gamma_distribution<%1%>&, %1%)";
 
    RealType shape = c.dist.shape();
    RealType scale = c.dist.scale();
@@ -337,12 +338,12 @@ inline RealType quantile(const complemented2_type<inverse_gamma_distribution<Rea
    return result;
 }
 
-template <class RealType, class Policy>
-inline RealType mean(const inverse_gamma_distribution<RealType, Policy>& dist)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType mean(const inverse_gamma_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::mean(const inverse_gamma_distribution<%1%>&)";
+   constexpr auto function = "boost::math::mean(const inverse_gamma_distribution<%1%>&)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -364,12 +365,12 @@ inline RealType mean(const inverse_gamma_distribution<RealType, Policy>& dist)
   return result;
 } // mean
 
-template <class RealType, class Policy>
-inline RealType variance(const inverse_gamma_distribution<RealType, Policy>& dist)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType variance(const inverse_gamma_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::variance(const inverse_gamma_distribution<%1%>&)";
+   constexpr auto function = "boost::math::variance(const inverse_gamma_distribution<%1%>&)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -390,12 +391,12 @@ inline RealType variance(const inverse_gamma_distribution<RealType, Policy>& dis
    return result;
 }
 
-template <class RealType, class Policy>
-inline RealType mode(const inverse_gamma_distribution<RealType, Policy>& dist)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType mode(const inverse_gamma_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::mode(const inverse_gamma_distribution<%1%>&)";
+   constexpr auto function = "boost::math::mode(const inverse_gamma_distribution<%1%>&)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -417,12 +418,12 @@ inline RealType mode(const inverse_gamma_distribution<RealType, Policy>& dist)
 //  return result.
 //}
 
-template <class RealType, class Policy>
-inline RealType skewness(const inverse_gamma_distribution<RealType, Policy>& dist)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType skewness(const inverse_gamma_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::skewness(const inverse_gamma_distribution<%1%>&)";
+   constexpr auto function = "boost::math::skewness(const inverse_gamma_distribution<%1%>&)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -443,12 +444,12 @@ inline RealType skewness(const inverse_gamma_distribution<RealType, Policy>& dis
    return result;
 }
 
-template <class RealType, class Policy>
-inline RealType kurtosis_excess(const inverse_gamma_distribution<RealType, Policy>& dist)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const inverse_gamma_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::kurtosis_excess(const inverse_gamma_distribution<%1%>&)";
+   constexpr auto function = "boost::math::kurtosis_excess(const inverse_gamma_distribution<%1%>&)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -469,10 +470,10 @@ inline RealType kurtosis_excess(const inverse_gamma_distribution<RealType, Polic
    return result;
 }
 
-template <class RealType, class Policy>
-inline RealType kurtosis(const inverse_gamma_distribution<RealType, Policy>& dist)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const inverse_gamma_distribution<RealType, Policy>& dist)
 {
-  static const char* function = "boost::math::kurtosis(const inverse_gamma_distribution<%1%>&)";
+  constexpr auto function = "boost::math::kurtosis(const inverse_gamma_distribution<%1%>&)";
    RealType shape = dist.shape();
    RealType scale = dist.scale();
 

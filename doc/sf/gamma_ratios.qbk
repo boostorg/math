@@ -7,26 +7,26 @@
    namespace boost{ namespace math{
    
    template <class T1, class T2>
-   ``__sf_result`` tgamma_ratio(T1 a, T2 b);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_ratio(T1 a, T2 b);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` tgamma_ratio(T1 a, T2 b, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_ratio(T1 a, T2 b, const ``__Policy``&);
    
    template <class T1, class T2>
-   ``__sf_result`` tgamma_delta_ratio(T1 a, T2 delta);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_delta_ratio(T1 a, T2 delta);
    
    template <class T1, class T2, class Policy>
-   ``__sf_result`` tgamma_delta_ratio(T1 a, T2 delta, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_delta_ratio(T1 a, T2 delta, const ``__Policy``&);
    
    }} // namespaces
    
 [h4 Description]
 
    template <class T1, class T2> 
-   ``__sf_result`` tgamma_ratio(T1 a, T2 b);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_ratio(T1 a, T2 b);
    
    template <class T1, class T2, class ``__Policy``> 
-   ``__sf_result`` tgamma_ratio(T1 a, T2 b, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_ratio(T1 a, T2 b, const ``__Policy``&);
    
 Returns the ratio of gamma functions:
 
@@ -37,10 +37,10 @@ Returns the ratio of gamma functions:
 Internally this just calls `tgamma_delta_ratio(a, b-a)`.
    
    template <class T1, class T2>
-   ``__sf_result`` tgamma_delta_ratio(T1 a, T2 delta);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_delta_ratio(T1 a, T2 delta);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` tgamma_delta_ratio(T1 a, T2 delta, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma_delta_ratio(T1 a, T2 delta, const ``__Policy``&);
    
 Returns the ratio of gamma functions:
 

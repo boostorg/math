@@ -6,14 +6,19 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_PCHIP_HPP
 #define BOOST_MATH_INTERPOLATORS_PCHIP_HPP
+
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <sstream>
 #include <memory>
+#endif
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
 
 namespace boost {
 namespace math {
 namespace interpolators {
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer, class Policy = policies::policy<>>
 class pchip {
 public:
     using Real = typename RandomAccessContainer::value_type;
@@ -25,24 +30,33 @@ public:
         using std::isnan;
         if (x.size() < 4)
         {
-            throw std::domain_error("Must be at least four data points.");
+            std::ostringstream oss;
+            oss << __FILE__ << ":" << __LINE__ << ":" << __func__;
+            oss << " This interpolator requires at least four data points.";
+            error_msg_ = oss.str();
+            boost::math::policies::raise_domain_error("boost::math::interpolators::pchip::pchip", error_msg_.c_str(), false, Policy());
+            valid_ = false;
+            return;
         }
-        RandomAccessContainer s(x.size(), std::numeric_limits<Real>::quiet_NaN());
+        // Preserve capacity for fixed-capacity containers such as circular_buffer.
+        RandomAccessContainer s(x);
+        for (auto& si : s) {
+            si = std::numeric_limits<Real>::quiet_NaN();
+        }
         if (isnan(left_endpoint_derivative))
         {
-            // O(h) finite difference derivative:
-            // This, I believe, is the only derivative guaranteed to be monotonic:
+            // If the derivative is not specified, this seems as good a choice as any.
+            // In particular, it satisfies the monotonicity constraint 0 <= |y'[0]| < 4Delta_i,
+            // where Delta_i is the secant slope:
             s[0] = (y[1]-y[0])/(x[1]-x[0]);
         }
         else
         {
             s[0] = left_endpoint_derivative;
         }
-
         for (decltype(s.size()) k = 1; k < s.size()-1; ++k) {
             Real hkm1 = x[k] - x[k-1];
             Real dkm1 = (y[k] - y[k-1])/hkm1;
-
             Real hk = x[k+1] - x[k];
             Real dk = (y[k+1] - y[k])/hk;
             Real w1 = 2*hk + hkm1;
@@ -53,11 +67,12 @@ public:
             }
             else
             {
+                // See here:
+                // https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/moler/interp.pdf
+                // Un-numbered equation just before Section 3.5:
                 s[k] = (w1+w2)/(w1/dkm1 + w2/dk);
             }
-
         }
-        // Quadratic extrapolation at the other end:
         auto n = s.size();
         if (isnan(right_endpoint_derivative))
         {
@@ -67,28 +82,38 @@ public:
         {
             s[n-1] = right_endpoint_derivative;
         }
-        impl_ = std::make_shared<detail::cubic_hermite_detail<RandomAccessContainer>>(std::move(x), std::move(y), std::move(s));
+        impl_ = std::make_shared<detail::cubic_hermite_detail<RandomAccessContainer, Policy>>(std::move(x), std::move(y), std::move(s));
+        valid_ = impl_->valid();
+        if ( ! valid_) {
+            error_msg_ = impl_->error_msg();
+        }
     }
 
     Real operator()(Real x) const {
+        if ( ! valid_) return std::numeric_limits<Real>::quiet_NaN();
         return impl_->operator()(x);
     }
 
     Real prime(Real x) const {
+        if ( ! valid_) return std::numeric_limits<Real>::quiet_NaN();
         return impl_->prime(x);
     }
 
     friend std::ostream& operator<<(std::ostream & os, const pchip & m)
     {
+        if ( ! m.valid_) return os;
         os << *m.impl_;
         return os;
     }
 
     void push_back(Real x, Real y) {
+        if ( ! valid_) return;  // We do not realize if the object is constructed properly here.
+        static const char* function = "boost::math::interpolators::pchip::push_back";
         using std::abs;
         using std::isnan;
         if (x <= impl_->x_.back()) {
-             throw std::domain_error("Calling push_back must preserve the monotonicity of the x's");
+            boost::math::policies::raise_domain_error<bool>(function, "Calling push_back must preserve the monotonicity of the x's", false, Policy());
+            return;
         }
         impl_->x_.push_back(x);
         impl_->y_.push_back(y);
@@ -114,8 +139,16 @@ public:
         }
     }
 
+    std::pair<Real, Real> domain() const
+    {
+        if ( ! valid_) return {0, 0};
+        return impl_->domain();
+    }
+
 private:
-    std::shared_ptr<detail::cubic_hermite_detail<RandomAccessContainer>> impl_;
+    std::shared_ptr<detail::cubic_hermite_detail<RandomAccessContainer, Policy>> impl_;
+    bool valid_ = false;
+    std::string error_msg_;
 };
 
 }

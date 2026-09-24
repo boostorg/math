@@ -11,9 +11,11 @@
 // that we need to implement all these functions.
 //
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <complex>
 #include <limits>
+#endif
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/constants/constants.hpp>

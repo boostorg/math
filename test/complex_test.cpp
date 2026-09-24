@@ -26,6 +26,14 @@ namespace std{ using ::sqrt; using ::tan; using ::tanh; }
 #define BOOST_TEST_MESSAGE(x)
 #endif
 
+#ifdef _MSC_VER
+#pragma warning (disable:C4996)
+#elif __GNUC__ >= 5
+#  pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(__clang__)
+#  pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 //
 // check_complex:
 // Verifies that expected value "a" and found value "b" have a relative error

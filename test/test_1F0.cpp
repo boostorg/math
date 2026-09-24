@@ -24,10 +24,14 @@ BOOST_AUTO_TEST_CASE( test_main )
 #endif
 #endif
 #if !defined(TEST) || (TEST == 2)
+   #if defined(BOOST_MATH_RUN_MP_TESTS)
    test_spots(boost::multiprecision::cpp_bin_float_quad());
+   #endif
 #endif
-#if !defined(TEST) || (TEST == 3)
+#if (!defined(TEST) || (TEST == 3))
+   #if defined(BOOST_MATH_RUN_MP_TESTS)
    test_spots(boost::multiprecision::cpp_dec_float_50());
+   #endif
 #endif
 }
 

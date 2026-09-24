@@ -6,13 +6,18 @@
 #ifndef BOOST_MATH_CCMATH_FLOOR_HPP
 #define BOOST_MATH_CCMATH_FLOOR_HPP
 
-#include <cmath>
-#include <limits>
-#include <type_traits>
-#include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/ccmath/detail/config.hpp>
+
+#ifdef BOOST_MATH_NO_CCMATH
+#error "The header <boost/math/floor.hpp> can only be used in C++17 and later."
+#endif
+
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <limits>
+#endif
 
 namespace boost::math::ccmath {
 
@@ -21,9 +26,16 @@ namespace detail {
 template <typename T>
 inline constexpr T floor_pos_impl(T arg) noexcept
 {
+    constexpr auto max_comp_val = T(1) / std::numeric_limits<T>::epsilon();
+
+    if (arg >= max_comp_val)
+    {
+        return arg;
+    }
+
     T result = 1;
 
-    if(result < arg)
+    if(result <= arg)
     {
         while(result < arg)
         {
@@ -81,7 +93,7 @@ inline constexpr T floor_impl(T arg) noexcept
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr Real floor(Real arg) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
@@ -98,7 +110,7 @@ inline constexpr Real floor(Real arg) noexcept
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr double floor(Z arg) noexcept
 {
     return boost::math::ccmath::floor(static_cast<double>(arg));

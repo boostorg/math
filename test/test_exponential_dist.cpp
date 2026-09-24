@@ -8,7 +8,11 @@
 
 // test_exponential_dist.cpp
 
-#include <boost/math/tools/test.hpp>
+#ifdef BOOST_MATH_ENABLE_SYCL
+#include "sycl/sycl.hpp"
+#endif
+
+#include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/exponential.hpp>
     using boost::math::exponential_distribution;
@@ -18,14 +22,26 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include "test_out_of_range.hpp"
 
+#include <cmath>
+#include <type_traits>
 #include <iostream>
    using std::cout;
    using std::endl;
    using std::setprecision;
+   using std::log;
+
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
 
 template <class RealType>
-void test_spot(RealType l, RealType x, RealType p, RealType q, RealType tolerance)
+void test_spot(RealType l, RealType x, RealType p, RealType q, RealType logp, RealType logq, RealType tolerance, RealType logtolerance)
 {
+   BOOST_IF_CONSTEXPR (std::is_same<RealType, long double>::value)
+   {
+      logtolerance *= 100;
+   }
+   
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          exponential_distribution<RealType>(l),
@@ -38,6 +54,18 @@ void test_spot(RealType l, RealType x, RealType p, RealType q, RealType toleranc
          x)),
          q,
          tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::logcdf(
+         exponential_distribution<RealType>(l),
+         x),
+         logp,
+         logtolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::logcdf(
+         complement(exponential_distribution<RealType>(l),
+         x)),
+         logq,
+         logtolerance); // %
    if(p < 0.999)
    {
       BOOST_CHECK_CLOSE(
@@ -82,24 +110,36 @@ void test_spots(RealType T)
       static_cast<RealType>(0.125), // x
       static_cast<RealType>(0.060586937186524213880289175377695L), // p
       static_cast<RealType>(0.93941306281347578611971082462231L), //q
+      static_cast<RealType>(log(static_cast<RealType>(0.060586937186524213880289175377695L))),
+      static_cast<RealType>(log(static_cast<RealType>(0.93941306281347578611971082462231L))),
+      tolerance,
       tolerance);
    test_spot(
       static_cast<RealType>(0.5), // lambda
       static_cast<RealType>(5), // x
       static_cast<RealType>(0.91791500137610120483047132553284L), // p
       static_cast<RealType>(0.08208499862389879516952867446716L), //q
+      static_cast<RealType>(log(static_cast<RealType>(0.91791500137610120483047132553284L))),
+      static_cast<RealType>(log(static_cast<RealType>(0.08208499862389879516952867446716L))),
+      tolerance,
       tolerance);
    test_spot(
       static_cast<RealType>(2), // lambda
       static_cast<RealType>(0.125), // x
       static_cast<RealType>(0.22119921692859513175482973302168L), // p
       static_cast<RealType>(0.77880078307140486824517026697832L), //q
+      static_cast<RealType>(log(static_cast<RealType>(0.22119921692859513175482973302168L))), // log(p)
+      static_cast<RealType>(log(static_cast<RealType>(0.77880078307140486824517026697832L))), // log(q)
+      tolerance,
       tolerance);
    test_spot(
       static_cast<RealType>(2), // lambda
       static_cast<RealType>(5), // x
       static_cast<RealType>(0.99995460007023751514846440848444L), // p
       static_cast<RealType>(4.5399929762484851535591515560551e-5L), //q
+      static_cast<RealType>(-0.00004540096037048920950444635987890882815054L),
+      static_cast<RealType>(-10.0000000000000000000000000000000000000000000L),
+      tolerance,
       tolerance);
 
    //
@@ -110,49 +150,77 @@ void test_spots(RealType T)
       static_cast<RealType>(1), // x
       static_cast<RealType>(6.321205588285580E-001L), // p
       static_cast<RealType>(1-6.321205588285580E-001L), //q
+      static_cast<RealType>(-0.4586751453870818910216436450673297018770L), // log(p)
+      static_cast<RealType>(-1.0000000000000000000000000000000000000000L),
+      tolerance,
       tolerance);
    test_spot(
       static_cast<RealType>(2), // lambda
       static_cast<RealType>(1), // x
       static_cast<RealType>(8.646647167633870E-001L), // p
       static_cast<RealType>(1-8.646647167633870E-001L), //q
+      static_cast<RealType>(-0.1454134578688590569726481500994740599617L), //log(p)
+      static_cast<RealType>(-2.000000000000000000000000000000000000000L),
+      tolerance,
       tolerance);
    test_spot(
       static_cast<RealType>(1), // lambda
       static_cast<RealType>(0.5), // x
       static_cast<RealType>(3.934693402873670E-001L), // p
       static_cast<RealType>(1-3.934693402873670E-001L), //q
+      static_cast<RealType>(-0.9327521295671885718946410001485004516325L), 
+      static_cast<RealType>(-0.5000000000000000000000000000000000000000L),
+      tolerance,
       tolerance);
    test_spot(
       static_cast<RealType>(0.1), // lambda
       static_cast<RealType>(1), // x
       static_cast<RealType>(9.516258196404040E-002L), // p
       static_cast<RealType>(1-9.516258196404040E-002L), //q
+      static_cast<RealType>(-2.352168461044090808919497187062612584712L),
+      static_cast<RealType>(-0.100000000000000000000000000000000000000L),
+      tolerance,
       tolerance);
    test_spot(
       static_cast<RealType>(10), // lambda
       static_cast<RealType>(1), // x
       static_cast<RealType>(9.999546000702380E-001L), // p
       static_cast<RealType>(1-9.999546000702380E-001L), //q
-      tolerance*10000); // we loose four digits to cancellation
+      static_cast<RealType>(-0.00004540096037048920950444635987890882815054L),
+      static_cast<RealType>(-10.0000000000000000000000000000000000000000000L),
+      tolerance*10000, // we loose four digits to cancellation
+      tolerance); 
    test_spot(
       static_cast<RealType>(0.1), // lambda
       static_cast<RealType>(10), // x
       static_cast<RealType>(6.321205588285580E-001L), // p
       static_cast<RealType>(1-6.321205588285580E-001L), //q
+      static_cast<RealType>(-0.4586751453870818910216436450673297018770L), // log(p),
+      static_cast<RealType>(-1.0000000000000000000000000000000000000000L), // log(q)
+      tolerance,
       tolerance);
    test_spot(
       static_cast<RealType>(1), // lambda
       static_cast<RealType>(0.01), // x
       static_cast<RealType>(9.950166250831950E-003L), // p
       static_cast<RealType>(1-9.950166250831950E-003L), //q
+      static_cast<RealType>(-4.610166019324896918080084954100938122002L), // log(p),
+      static_cast<RealType>(-0.010000000000000000000000000000000000000L), // log(q)
+      tolerance,
       tolerance);
    test_spot(
       static_cast<RealType>(1), // lambda
       static_cast<RealType>(0.0001), // x
       static_cast<RealType>(9.999500016666250E-005L), // p
       static_cast<RealType>(1-9.999500016666250E-005L), //q
-      tolerance);
+      static_cast<RealType>(-9.210390371559516069440021374287500922116L), // log(p),
+      static_cast<RealType>(-0.000100000000000000000000000000000000000L), // log(q)
+      tolerance,
+      std::is_same<RealType, float>::value
+      #ifdef __STDCPP_FLOAT32_T__
+      || std::is_same<RealType, std::float32_t>::value
+      #endif
+       ? tolerance * 10 : tolerance);
    /*
    // This test data appears to be erroneous, MathCad appears
    // to suffer from cancellation error as x -> 0
@@ -294,6 +362,48 @@ void test_spots(RealType T)
       BOOST_CHECK_EQUAL(pdf(exponential_distribution<RealType>(2), inf), 0);
       BOOST_CHECK_EQUAL(cdf(exponential_distribution<RealType>(2), inf), 1);
       BOOST_CHECK_EQUAL(cdf(complement(exponential_distribution<RealType>(2), inf)), 0);
+
+      // Test NaN policies
+      using boost::math::policies::policy;
+
+      typedef policy<
+         boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+         boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+         boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+         boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+         boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+         boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+      > ignore_all_policy;
+
+      typedef boost::math::exponential_distribution<RealType, ignore_all_policy> ignore_error_exponential;
+
+      // PDF
+      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(1))));
+      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-1))));
+      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(1))));
+      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-1))));
+
+      // CDF
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(1))));
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-1))));
+      BOOST_CHECK((boost::math::isnan)(logcdf(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(1))));
+      BOOST_CHECK((boost::math::isnan)(logcdf(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-1))));
+      
+      // Complement CDF
+      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(1)))));
+      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-1)))));
+      BOOST_CHECK((boost::math::isnan)(logcdf(complement(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(1)))));
+      BOOST_CHECK((boost::math::isnan)(logcdf(complement(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-1)))));
+
+      // Quantile
+      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(0.5))));
+      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-0.5))));
+      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_exponential(static_cast<RealType>(-1)), static_cast<RealType>(0.5)))));
+      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_exponential(static_cast<RealType>(1)), static_cast<RealType>(-0.5)))));
+
+      // Mean and Standard Deviation
+      BOOST_CHECK((boost::math::isnan)(mean(ignore_error_exponential(static_cast<RealType>(-1)))));
+      BOOST_CHECK((boost::math::isnan)(standard_deviation(ignore_error_exponential(static_cast<RealType>(-1)))));
    }
 } // template <class RealType>void test_spots(RealType)
 
@@ -318,6 +428,13 @@ BOOST_AUTO_TEST_CASE( test_main )
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::endl;
 #endif
+
+   #ifdef __STDCPP_FLOAT32_T__
+   test_spots(0.0F32);
+   #endif
+   #ifdef __STDCPP_FLOAT64_T__
+   test_spots(0.0F64);
+   #endif 
 
 } // BOOST_AUTO_TEST_CASE( test_main )
 

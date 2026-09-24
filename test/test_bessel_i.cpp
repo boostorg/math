@@ -3,7 +3,22 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_ENABLE_SYCL
 #include <pch_light.hpp>
+#else
+#define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
+#include "sycl/sycl.hpp"
+#include <boost/math/tools/config.hpp>
+#endif
+
+#ifdef __clang__
+#  pragma clang diagnostic push 
+#  pragma clang diagnostic ignored "-Wliteral-range"
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic push 
+#  pragma GCC diagnostic ignored "-Woverflow"
+#endif
+
 #include "test_bessel_i.hpp"
 
 //
@@ -82,7 +97,11 @@ void expected_results()
       "linux",                       // platform
       largest_type,                  // test type(s)
       ".*Random.*",                    // test data group
+      #ifdef BOOST_MATH_ENABLE_SYCL
+      ".*", 600, 200);
+      #else
       ".*", 400, 200);               // test function
+      #endif
 
    add_expected_result(
       "GNU.*",                       // compiler
@@ -111,7 +130,11 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
+      #ifdef BOOST_MATH_ENABLE_SYCL
+      ".*", 400, 200);
+      #else
       ".*", 20, 10);                 // test function
+      #endif
    //
    // Set error rates a little higher for real_concept - 
    // now that we use a series approximation for small z

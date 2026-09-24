@@ -9,6 +9,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
@@ -129,6 +130,7 @@ void do_test_sph_neumann_y(const T& data, const char* type_name, const char* tes
 template <class T>
 void test_bessel(T, const char* name)
 {
+   using std::ldexp;
    //
    // The actual test data is rather verbose, so it's in a separate file
    //
@@ -214,5 +216,87 @@ void test_bessel(T, const char* name)
 
 #include "sph_neumann_data.ipp"
     do_test_sph_neumann_y<T>(sph_neumann_data, name, "y: Random Data");
+
+    //
+    // Additional test coverage:
+    //
+    BOOST_IF_CONSTEXPR (std::numeric_limits<T>::has_infinity)
+    {
+       BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(0), T(0)), -std::numeric_limits<T>::infinity());
+       BOOST_CHECK_EQUAL(boost::math::sph_neumann(2, boost::math::tools::min_value<T>() * 1.5f), -std::numeric_limits<T>::infinity());
+       T small = 5.69289e-1645L;
+       if ((small != 0) && (std::numeric_limits<T>::max_exponent10 < 4933))
+       {
+          BOOST_CHECK_EQUAL(boost::math::sph_neumann(2, small), -std::numeric_limits<T>::infinity());
+       }
+       BOOST_IF_CONSTEXPR (std::numeric_limits<T>::max_exponent <= 1024)
+       {
+          BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(121.25), T(0.25)), -std::numeric_limits<T>::infinity());
+       }
+       BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(0), std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(1), std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(2), std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(2.25), std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::sph_neumann(0, std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::sph_neumann(1, std::numeric_limits<T>::infinity()), T(0));
+       BOOST_CHECK_EQUAL(boost::math::sph_neumann(2, std::numeric_limits<T>::infinity()), T(0));
+    }
+
+    #ifndef BOOST_MATH_NO_EXCEPTIONS
+    BOOST_CHECK_THROW(boost::math::cyl_neumann(T(0), T(-1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_neumann(T(0.2), T(-1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_neumann(T(2), T(0)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::sph_neumann(2, T(-2)), std::domain_error);
+    #endif
+#if LDBL_MAX_EXP > 1024
+    if (std::numeric_limits<T>::max_exponent > 1024)
+    {
+       T tolerance = std::numeric_limits<T>::epsilon() * 1000;
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_neumann(T(121.25), T(0.25)), SC_(-2.230082612409607659174017669618188190008214736253939486007e308), tolerance);
+    }
+#endif
+    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity && (std::numeric_limits<T>::min_exponent < -1072))
+    {
+       const std::array<std::array<T, 3>, 7> coverage_data = { {
+#if (LDBL_MAX_10_EXP > 4931) || defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
+          {{ SC_(15.25), ldexp(T(1), -1071), SC_(-9.39553199265929955912687892204143267985847111378392154596e4931)}},
+#else
+          {{ SC_(15.25), ldexp(T(1), -1071), -std::numeric_limits<T>::infinity() }},
+#endif
+#if (LDBL_MAX_10_EXP > 4945) || defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
+          {{ SC_(15.25), ldexp(T(1), -1074), SC_(-5.5596016779885068307086343979332299344658725430873e+4945)}},
+#else
+          {{ SC_(15.25), ldexp(T(1), -1074), -std::numeric_limits<T>::infinity() }},
+#endif
+#if (LDBL_MAX_10_EXP > 9872) || defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
+          {{ SC_(31.25), ldexp(T(1), -1045), SC_(-1.64443614527479263825137492596041426343778386094212520006e9872)}},
+#else
+          {{ SC_(31.25), ldexp(T(1), -1045), -std::numeric_limits<T>::infinity() }},
+#endif
+#if defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
+          // Our exponent range may be so extreme that we can't trigger the coverage cases below, so use a copy of previous cases here
+          // as a placeholder.
+          {{ SC_(15.25), ldexp(T(1), -1071), SC_(-9.39553199265929955912687892204143267985847111378392154596e4931)}},
+          {{ SC_(15.25), ldexp(T(1), -1071), SC_(-9.39553199265929955912687892204143267985847111378392154596e4931)}},
+#else
+          {{ SC_(233.0), ldexp(T(1), -63), -std::numeric_limits<T>::infinity() }},
+          {{ SC_(233.0), ldexp(T(1), -64), -std::numeric_limits<T>::infinity() }},
+#endif
+#if (LDBL_MAX_10_EXP > 413) || defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
+          {{ SC_(200.25), SC_(1.25), SC_(-3.545198572052800784992190965856441074217589237581037286156e413)}},
+#else
+          {{ SC_(200.25), SC_(1.25), -std::numeric_limits<T>::infinity()}},
+#endif
+#if defined(TEST_MPF_50) || defined(TEST_MPFR_50) || defined(TEST_CPP_DEC_FLOAT) || defined(TEST_FLOAT128) || defined(TEST_CPP_BIN_FLOAT)
+          // Our exponent range may be so extreme that we can't trigger the coverage cases below, so use a copy of previous cases here
+          // as a placeholder.
+          {{ SC_(15.25), ldexp(T(1), -1071), SC_(-9.39553199265929955912687892204143267985847111378392154596e4931)}},
+#else
+          {{ SC_(1652.25), SC_(1.25), -std::numeric_limits<T>::infinity()}},
+#endif
+      } };
+
+       do_test_cyl_neumann_y<T>(coverage_data, name, "Extra Coverage Data");
+    }
 }
 

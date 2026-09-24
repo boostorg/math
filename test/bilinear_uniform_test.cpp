@@ -16,6 +16,10 @@
 using boost::multiprecision::float128;
 #endif
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 using boost::math::interpolators::bilinear_uniform;
 
 template<class Real>
@@ -25,7 +29,7 @@ void test_four_values()
     Real y0 = 0;
     Real dx = 1;
     Real dy = 1;
-    Real value = 1.5;
+    Real value = Real(1.5);
     std::vector<Real> v(2*2, value);
     auto v_copy = v;
     auto ub = bilinear_uniform<decltype(v)>(std::move(v_copy), 2, 2, dx, dy, x0, y0);
@@ -101,9 +105,21 @@ void test_linear()
 
 int main()
 {
+    #ifdef __STDCPP_FLOAT32_T__
+    test_four_values<std::float32_t>();
+    #else
     test_four_values<float>();
+    #endif
+    
+    #ifdef __STDCPP_FLOAT64_T__
+    test_four_values<std::float64_t>();
+    test_linear<std::float64_t>();
+    #else
     test_four_values<double>();
-    test_four_values<long double>();
     test_linear<double>();
+    #endif
+
+    test_four_values<long double>();
+    
     return boost::math::test::report_errors();
 }

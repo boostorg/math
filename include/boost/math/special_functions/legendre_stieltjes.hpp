@@ -16,15 +16,17 @@
  * Patterson, TNL. "The optimum addition of points to quadrature formulae." Mathematics of Computation 22.104 (1968): 847-856.
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iostream>
 #include <vector>
+#endif
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/special_functions/legendre.hpp>
 
 namespace boost{
 namespace math{
 
-template<class Real>
+BOOST_MATH_EXPORT template<class Real>
 class legendre_stieltjes
 {
 public:
@@ -156,7 +158,7 @@ public:
 
         std::vector<Real> stieltjes_zeros;
         std::vector<Real> legendre_zeros = legendre_p_zeros<Real>(m_m - 1);
-        int k;
+        size_t k;
         if (m_m & 1)
         {
             stieltjes_zeros.resize(legendre_zeros.size() + 1, std::numeric_limits<Real>::quiet_NaN());
@@ -169,14 +171,14 @@ public:
             k = 0;
         }
 
-        while (k < (int)stieltjes_zeros.size())
+        while (k < stieltjes_zeros.size())
         {
             Real lower_bound;
             Real upper_bound;
             if (m_m & 1)
             {
                 lower_bound = legendre_zeros[k - 1];
-                if (k == (int)legendre_zeros.size())
+                if (k == legendre_zeros.size())
                 {
                     upper_bound = 1;
                 }
@@ -188,7 +190,7 @@ public:
             else
             {
                 lower_bound = legendre_zeros[k];
-                if (k == (int)legendre_zeros.size() - 1)
+                if (k == legendre_zeros.size() - 1)
                 {
                     upper_bound = 1;
                 }

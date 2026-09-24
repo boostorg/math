@@ -74,8 +74,12 @@
            {
               // We get very limited precision due to rapid denormalisation/underflow of the Bessel values, raise an exception and try something else:
               policies::raise_evaluation_error("hypergeometric_1F1_AS_13_3_7_tricomi_series<%1%>", "Underflow in Bessel functions", bessel_cache[cache_size - 1], pol);
+              // Exceptions are off if we get here, just fill the cache with NaN's and we'll let this method fail and fallback later:
+              std::fill(bessel_cache.begin(), bessel_cache.end(), std::numeric_limits<T>::quiet_NaN());
+              cache_offset = -cache_size;
+              return;
            }
-           if ((term * bessel_cache[cache_size - 1] < tools::min_value<T>() / (tools::epsilon<T>() * tools::epsilon<T>())) || !(boost::math::isfinite)(term) || (!std::numeric_limits<T>::has_infinity && (fabs(term) > tools::max_value<T>())))
+           if ((fabs(term * bessel_cache[cache_size - 1]) < tools::min_value<T>() / (tools::epsilon<T>() * tools::epsilon<T>())) || !(boost::math::isfinite)(term) || (!std::numeric_limits<T>::has_infinity && (fabs(term) > tools::max_value<T>())))
            {
               term = -log(fabs(bessel_arg)) * b_minus_1_plus_n / 2;
               log_scale = lltrunc(term);
@@ -84,19 +88,31 @@
            }
            else
               log_scale = 0;
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
            if constexpr (std::numeric_limits<T>::has_infinity)
            {
               if (!(boost::math::isfinite)(bessel_cache[cache_size - 1]))
+              {
                  policies::raise_evaluation_error("hypergeometric_1F1_AS_13_3_7_tricomi_series<%1%>", "Expected finite Bessel function result but got %1%", bessel_cache[cache_size - 1], pol);
+                 // Exceptions are off if we get here, just fill the cache with NaN's and we'll let this method fail and fallback later:
+                 std::fill(bessel_cache.begin(), bessel_cache.end(), std::numeric_limits<T>::quiet_NaN());
+              }
            }
            else
               if ((boost::math::isnan)(bessel_cache[cache_size - 1]) || (fabs(bessel_cache[cache_size - 1]) >= tools::max_value<T>()))
+              {
                  policies::raise_evaluation_error("hypergeometric_1F1_AS_13_3_7_tricomi_series<%1%>", "Expected finite Bessel function result but got %1%", bessel_cache[cache_size - 1], pol);
+                 // Exceptions are off if we get here, just fill the cache with NaN's and we'll let this method fail and fallback later:
+                 std::fill(bessel_cache.begin(), bessel_cache.end(), std::numeric_limits<T>::quiet_NaN());
+              }
 #else
            if ((std::numeric_limits<T>::has_infinity && !(boost::math::isfinite)(bessel_cache[cache_size - 1])) 
               || (!std::numeric_limits<T>::has_infinity && ((boost::math::isnan)(bessel_cache[cache_size - 1]) || (fabs(bessel_cache[cache_size - 1]) >= tools::max_value<T>()))))
+           {
               policies::raise_evaluation_error("hypergeometric_1F1_AS_13_3_7_tricomi_series<%1%>", "Expected finite Bessel function result but got %1%", bessel_cache[cache_size - 1], pol);
+              // Exceptions are off if we get here, just fill the cache with NaN's and we'll let this method fail and fallback later:
+              std::fill(bessel_cache.begin(), bessel_cache.end(), std::numeric_limits<T>::quiet_NaN());
+           }
 #endif
            cache_offset = -cache_size;
            refill_cache();
@@ -108,8 +124,13 @@
            // very small (or zero) when b == 2a:
            //
            BOOST_MATH_STD_USING
+           //
+           // Except in the multiprecision case, we have probably illiminated anything
+           // would need more than the default 64 Bessel Functions.  Anything more
+           // than that risks becoming a divergent series anyway...
+           //
            if(n - 2 - cache_offset >= cache_size)
-              refill_cache();
+              refill_cache();  // LCOV_EXCL_LINE
            T result = A_minus_2 * term * bessel_cache[n - 2 - cache_offset];
            term *= mult;
            ++n;
@@ -122,7 +143,7 @@
            if (A_minus_2 != 0)
            {
               if (n - 2 - cache_offset >= cache_size)
-                 refill_cache();
+                 refill_cache(); // LCOV_EXCL_LINE
               result += A_minus_2 * term * bessel_cache[n - 2 - cache_offset];
            }
            term *= mult;
@@ -184,7 +205,7 @@
                     //
                     if ((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_cache[j] / bessel_cache[j + 1]) < fabs(bessel_cache[j])))
                     {
-                       T rescale = pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), j + 1) * 2;
+                       T rescale = static_cast<T>(pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), T(j + 1)) * 2);
                        if (!((boost::math::isfinite)(rescale)))
                           rescale = tools::max_value<T>();
                        for (int k = j; k < cache_size; ++k)
@@ -259,7 +280,7 @@
                     //
                     if ((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_cache[j] / bessel_cache[j + 1]) < fabs(bessel_cache[j])))
                     {
-                       T rescale = pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), j + 1) * 2;
+                       T rescale = static_cast<T>(pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), T(j + 1)) * 2);
                        if (!((boost::math::isfinite)(rescale)))
                           rescale = tools::max_value<T>();
                        for (int k = j; k < cache_size; ++k)
@@ -339,15 +360,19 @@
         if(b == 2 * a)
            return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scale);
 
+#ifndef BOOST_MATH_NO_EXCEPTIONS
         try
+#endif
         {
            prefix = boost::math::tgamma(b, pol);
            prefix *= exp(z / 2);
         }
+#ifndef BOOST_MATH_NO_EXCEPTIONS
         catch (const std::runtime_error&)
         {
            use_logs = true;
         }
+#endif
         if (use_logs || (prefix == 0) || !(boost::math::isfinite)(prefix) || (!std::numeric_limits<T>::has_infinity && (fabs(prefix) >= tools::max_value<T>())))
         {
            use_logs = true;
@@ -360,12 +385,16 @@
         std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         bool retry = false;
         long long series_scale = 0;
+#ifndef BOOST_MATH_NO_EXCEPTIONS
         try
+#endif
         {
            hypergeometric_1F1_AS_13_3_7_tricomi_series<T, Policy> s(a, b, z, pol);
            series_scale = s.scale();
            log_scale += s.scale();
+#ifndef BOOST_MATH_NO_EXCEPTIONS
            try
+#endif
            {
               T norm = 0;
               result = 0;
@@ -378,6 +407,7 @@
               if (norm / fabs(result) > 1 / boost::math::tools::root_epsilon<T>())
                  retry = true;  // fatal cancellation
            }
+#ifndef BOOST_MATH_NO_EXCEPTIONS
            catch (const std::overflow_error&)
            {
               retry = true;
@@ -386,7 +416,9 @@
            {
               retry = true;
            }
+#endif
         }
+#ifndef BOOST_MATH_NO_EXCEPTIONS
         catch (const std::overflow_error&)
         {
            log_scale -= scale;
@@ -397,6 +429,7 @@
            log_scale -= scale;
            return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scale);
         }
+#endif
         if (retry)
         {
            log_scale -= scale;
@@ -546,7 +579,7 @@
               //
               if((j < cache_size - 2) && (bessel_i_cache[j + 1] != 0) && (tools::max_value<T>() / fabs(64 * bessel_i_cache[j] / bessel_i_cache[j + 1]) < fabs(bessel_i_cache[j])))
               {
-                 T rescale = pow(fabs(bessel_i_cache[j] / bessel_i_cache[j + 1]), j + 1) * 2;
+                 T rescale = static_cast<T>(pow(fabs(bessel_i_cache[j] / bessel_i_cache[j + 1]), T(j + 1)) * 2);
                  if (rescale > tools::max_value<T>())
                     rescale = tools::max_value<T>();
                  for (int k = j; k < cache_size; ++k)
@@ -579,7 +612,7 @@
         std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_6<%1%>(%1%,%1%,%1%)", max_iter, pol);
-        result *= boost::math::tgamma(b_minus_a - 0.5f, pol) * pow(z / 4, -b_minus_a + 0.5f);
+        result *= boost::math::tgamma(b_minus_a - 0.5f, pol) * pow(z / 4, -b_minus_a + T(0.5f));
         long long scale = lltrunc(z / 2);
         log_scaling += scale;
         log_scaling += s.scaling();

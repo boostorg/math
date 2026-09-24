@@ -11,9 +11,16 @@
 // This must appear *before* any #includes, and precludes pch usage:
 //
 #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
+#ifndef BOOST_MATH_OVERFLOW_ERROR_POLICY
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+#endif
 
 #ifdef _MSC_VER
 #pragma warning (disable:4127 4512)
+#elif __GNUC__ >= 5
+#  pragma GCC diagnostic ignored "-Woverflow"
+#elif defined(__clang__)
+#  pragma clang diagnostic ignored "-Wliteral-range"
 #endif
 
 #if !defined(TEST_FLOAT) && !defined(TEST_DOUBLE) && !defined(TEST_LDOUBLE) && !defined(TEST_REAL_CONCEPT)
@@ -23,7 +30,16 @@
 #  define TEST_REAL_CONCEPT
 #endif
 
+#ifdef BOOST_MATH_ENABLE_SYCL
+#include "sycl/sycl.hpp"
+#endif
+
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+#endif
+
 #include <boost/math/distributions/non_central_beta.hpp> // for chi_squared_distribution
 #include <boost/math/distributions/poisson.hpp> // for poisson_distribution
 #define BOOST_TEST_MAIN
@@ -37,6 +53,7 @@
 #include "test_ncbeta_hooks.hpp"
 #include "table_type.hpp"
 #include "test_nc_beta.hpp"
+#include "../include_private/boost/math/tools/test.hpp"
 
 #include <iostream>
 using std::cout;
@@ -113,7 +130,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*large[^|]*",                // test data group
-      "[^|]*", 30000, 4000);             // test function
+      "[^|]*", 30000, 5000);             // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -253,6 +270,22 @@ void test_spots(RealType)
    BOOST_MATH_CHECK_THROW(skewness(dist), boost::math::evaluation_error);
    BOOST_MATH_CHECK_THROW(kurtosis(dist), boost::math::evaluation_error);
    BOOST_MATH_CHECK_THROW(kurtosis_excess(dist), boost::math::evaluation_error);
+   //
+   // Some special error handling tests, if the non-centrality param is too large
+   // then we have no evaluation method and should get a domain_error:
+   //
+   using std::ldexp;
+   using distro1 = boost::math::non_central_beta_distribution<RealType>;
+   using distro2 = boost::math::non_central_beta_distribution<RealType, boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error>>>;
+   using de = std::domain_error;
+   BOOST_MATH_CHECK_THROW(distro1(2, 3, ldexp(RealType(1), 100)), de);
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   {
+      distro2 d2(2, 3, ldexp(RealType(1), 100));
+      BOOST_CHECK(boost::math::isnan(pdf(d2, 0.5)));
+      BOOST_CHECK(boost::math::isnan(cdf(d2, 0.5)));
+      BOOST_CHECK(boost::math::isnan(cdf(complement(d2, 0.5))));
+   }
 } // template <class RealType>void test_spots(RealType)
 
 

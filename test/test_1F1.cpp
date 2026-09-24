@@ -117,6 +117,16 @@ void expected_results()
 
 #endif
 
+#if (defined(__aarch64__) && !defined(__APPLE__)) || defined(__s390__)
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "double",                      // test type(s)
+      "Bug.*",                       // test data group
+      ".*", 10, 2);                  // test function
+#endif
+
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -154,6 +164,13 @@ void expected_results()
       largest_type,                  // test type(s)
       "Bug cases.*",                 // test data group
       ".*", 1500000, 430000);        // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                  // test type(s)
+      ".*negative.*",                // test data group
+      ".*", 200, 100);               // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,
@@ -195,11 +212,15 @@ BOOST_AUTO_TEST_CASE( test_main )
    // These next 2 tests take effectively "forever" to compile with clang:
    //
 #if (!defined(TEST) || (TEST == 6)) && !defined(__clang__)
+   #if defined(BOOST_MATH_RUN_MP_TESTS)
    test_spots(boost::multiprecision::cpp_bin_float_quad(), "cpp_bin_float_quad");
+   #endif
 #endif
 #if (!defined(TEST) || (TEST == 7)) && !defined(__clang__)
+   #if defined(BOOST_MATH_RUN_MP_TESTS)
    typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<40> > dec_40;
    test_spots(dec_40(), "dec_40");
+   #endif
 #endif
 }
 

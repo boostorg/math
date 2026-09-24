@@ -3,7 +3,10 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_OVERFLOW_ERROR_POLICY
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+#endif
+
 #include <boost/math/concepts/real_concept.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
@@ -77,7 +80,7 @@ void test_spot(
    boost::math::non_central_chi_squared_distribution<RealType> dist(df, ncp);
    BOOST_CHECK_CLOSE(
       cdf(dist, cs), P, tol);
-#ifndef BOOST_NO_EXCEPTIONS
+#if !defined(BOOST_NO_EXCEPTIONS) && !defined(BOOST_MATH_NO_EXCEPTIONS)
    try{
       BOOST_CHECK_CLOSE(
          pdf(dist, cs), naive_pdf(dist.degrees_of_freedom(), ncp, cs), tol * 150);
@@ -271,6 +274,22 @@ void test_spots(RealType)
    BOOST_MATH_CHECK_THROW(pdf(boost::math::non_central_chi_squared_distribution<RealType>(1, -1), 0), std::domain_error);
    BOOST_MATH_CHECK_THROW(quantile(boost::math::non_central_chi_squared_distribution<RealType>(1, 1), -1), std::domain_error);
    BOOST_MATH_CHECK_THROW(quantile(boost::math::non_central_chi_squared_distribution<RealType>(1, 1), 2), std::domain_error);
+   //
+   // Some special error handling tests, if the non-centrality param is too large
+   // then we have no evaluation method and should get a domain_error:
+   //
+   using std::ldexp;
+   using distro1 = boost::math::non_central_chi_squared_distribution<RealType>;
+   using distro2 = boost::math::non_central_chi_squared_distribution<RealType, boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error>>>;
+   using de = std::domain_error;
+   BOOST_MATH_CHECK_THROW(distro1(2, ldexp(RealType(1), 100)), de);
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   {
+      distro2 d2(2, ldexp(RealType(1), 100));
+      BOOST_CHECK(boost::math::isnan(pdf(d2, 0.5)));
+      BOOST_CHECK(boost::math::isnan(cdf(d2, 0.5)));
+      BOOST_CHECK(boost::math::isnan(cdf(complement(d2, 0.5))));
+   }
 #endif
 } // template <class RealType>void test_spots(RealType)
 
@@ -383,7 +402,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          // Sanity check mode, the accuracy of
          // the mode is at *best* the square root of the accuracy of the PDF:
          //
-#ifndef BOOST_NO_EXCEPTIONS
+#if !defined(BOOST_NO_EXCEPTIONS) && !defined(BOOST_MATH_NO_EXCEPTIONS)
          try{
             value_type m = mode(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]));
             value_type p = pdf(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]), m);
@@ -398,7 +417,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          // values to get back to the correct degrees of freedom or
          // non-centrality parameter:
          //
-#ifndef BOOST_NO_EXCEPTIONS
+#if !defined(BOOST_NO_EXCEPTIONS) && !defined(BOOST_MATH_NO_EXCEPTIONS)
          try{
 #endif
             if((data[i][3] < 0.99) && (data[i][3] != 0))
@@ -419,7 +438,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
                   boost::math::non_central_chi_squared_distribution<value_type>::find_non_centrality(boost::math::complement(data[i][0], data[i][2], data[i][4])),
                   data[i][1], precision, i);
             }
-#ifndef BOOST_NO_EXCEPTIONS
+#if !defined(BOOST_NO_EXCEPTIONS) && !defined(BOOST_MATH_NO_EXCEPTIONS)
          }
          catch(const std::exception& e)
          {

@@ -4,15 +4,15 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
-
+#include <boost/math/tools/config.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
+#include <boost/math/special_functions/next.hpp>  // for has_denorm_now
 #include <boost/math/tools/stats.hpp>
-#include <boost/math/tools/test.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
@@ -319,11 +319,13 @@ void test_spots(T, const char* name)
       BOOST_CHECK(sign == -1);
    }
 
-   if(std::numeric_limits<T>::has_denorm && std::numeric_limits<T>::has_infinity && (boost::math::isinf)(1 / std::numeric_limits<T>::denorm_min()))
+   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   if(boost::math::detail::has_denorm_now<T>() && std::numeric_limits<T>::has_infinity && (boost::math::isinf)(1 / std::numeric_limits<T>::denorm_min()))
    {
       BOOST_CHECK_EQUAL(boost::math::tgamma(-std::numeric_limits<T>::denorm_min()), -std::numeric_limits<T>::infinity());
       BOOST_CHECK_EQUAL(boost::math::tgamma(std::numeric_limits<T>::denorm_min()), std::numeric_limits<T>::infinity());
    }
+   #endif
    //
    // Extra large values for lgamma, see https://github.com/boostorg/math/issues/242
    //
@@ -336,7 +338,7 @@ void test_spots(T, const char* name)
    //
    // Super small values may cause spurious overflow:
    //
-   if (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::has_denorm)
+   if (std::numeric_limits<T>::is_specialized && boost::math::detail::has_denorm_now<T>())
    {
       T value = (std::numeric_limits<T>::min)();
       while (value != 0)
@@ -345,5 +347,40 @@ void test_spots(T, const char* name)
          value /= 2;
       }
    }
+   //
+   // Extra coverage:
+   //
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+   BOOST_CHECK_THROW(boost::math::tgamma(T(-3)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::lgamma(T(-3)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::lgamma(T(0)), std::domain_error);
+#else
+   BOOST_CHECK((boost::math::isnan)(boost::math::tgamma(T(-3))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::lgamma(T(-3))));
+   BOOST_CHECK((boost::math::isnan)(boost::math::lgamma(T(0))));
+#endif
+   if(boost::math::tools::log_max_value<T>() <= 11356)
+   {
+      BOOST_CHECK_GE(boost::math::tgamma(T(11360.0f)), boost::math::tools::max_value<T>());
+      BOOST_CHECK_EQUAL(boost::math::tgamma(T(-11360.5f)), T(0));
+      BOOST_CHECK_GE(boost::math::tgamma(T(1755.75)), boost::math::tools::max_value<T>());
+      BOOST_CHECK_EQUAL(boost::math::tgamma(T(-1755.5)), T(0));
+   }
+   if (boost::math::tools::log_max_value<T>() <= 709)
+   {
+      BOOST_CHECK_GE(boost::math::tgamma(T(173)), boost::math::tools::max_value<T>());
+      //
+      // There is an error here, between -173 and -178.5 we should not underflow
+      // for type double, but do so spuriously because tgamma(-z) overflows.
+      // There is no easy fix for this, as it's next to impossible to figure out
+      // ahead of time when you're going to be "in the zone".
+      //
+      BOOST_CHECK_EQUAL(boost::math::tgamma(T(-178.5)), T(0));
+   }
+   //
+   // Extra coverage for tgamma1pm1:
+   //
+   BOOST_CHECK_CLOSE(::boost::math::tgamma1pm1(T(-2.5)), boost::math::tgamma(T(-1.5)) - 1, tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma1pm1(T(2.5)), boost::math::tgamma(T(3.5)) - 1, tolerance);
 }
 

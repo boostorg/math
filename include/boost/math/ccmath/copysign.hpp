@@ -6,10 +6,12 @@
 #ifndef BOOST_MATH_CCMATH_COPYSIGN_HPP
 #define BOOST_MATH_CCMATH_COPYSIGN_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <cstdint>
 #include <limits>
 #include <type_traits>
+#endif
 #include <boost/math/tools/is_constant_evaluated.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/tools/config.hpp>
@@ -35,7 +37,7 @@ constexpr T copysign_impl(const T mag, const T sgn) noexcept
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr Real copysign(Real mag, Real sgn) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(mag))
@@ -49,12 +51,12 @@ constexpr Real copysign(Real mag, Real sgn) noexcept
     }
 }
 
-template <typename T1, typename T2>
+BOOST_MATH_EXPORT template <typename T1, typename T2>
 constexpr auto copysign(T1 mag, T2 sgn) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(mag))
     {        
-        using promoted_type = boost::math::tools::promote_args_2_t<T1, T2>;
+        using promoted_type = boost::math::tools::promote_args_t<T1, T2>;
         return boost::math::ccmath::copysign(static_cast<promoted_type>(mag), static_cast<promoted_type>(sgn));
     }
     else

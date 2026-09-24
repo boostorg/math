@@ -1,7 +1,7 @@
 // boost\math\distributions\non_central_chi_squared.hpp
 
 // Copyright John Maddock 2008.
-
+// Copyright Matt Borland 2024.
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -10,10 +10,14 @@
 #ifndef BOOST_MATH_SPECIAL_NON_CENTRAL_CHI_SQUARE_HPP
 #define BOOST_MATH_SPECIAL_NON_CENTRAL_CHI_SQUARE_HPP
 
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/tuple.hpp>
+#include <boost/math/tools/cstdint.hpp>
+#include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/special_functions/gamma.hpp> // for incomplete gamma. gamma_q
 #include <boost/math/special_functions/bessel.hpp> // for cyl_bessel_i
-#include <boost/math/special_functions/round.hpp> // for iround
+#include <boost/math/special_functions/round.hpp> // for llround
 #include <boost/math/distributions/complement.hpp> // complements
 #include <boost/math/distributions/chi_squared.hpp> // central distribution
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
@@ -21,19 +25,20 @@
 #include <boost/math/tools/roots.hpp> // for root finding.
 #include <boost/math/distributions/detail/generic_mode.hpp>
 #include <boost/math/distributions/detail/generic_quantile.hpp>
+#include <boost/math/policies/policy.hpp>
 
 namespace boost
 {
    namespace math
    {
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       class non_central_chi_squared_distribution;
 
       namespace detail{
 
          template <class T, class Policy>
-         T non_central_chi_square_q(T x, T f, T theta, const Policy& pol, T init_sum = 0)
+         BOOST_MATH_GPU_ENABLED T non_central_chi_square_q(T x, T f, T theta, const Policy& pol, T init_sum = 0)
          {
             //
             // Computes the complement of the Non-Central Chi-Square
@@ -62,7 +67,7 @@ namespace boost
             T lambda = theta / 2;
             T del = f / 2;
             T y = x / 2;
-            std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+            boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
             T errtol = boost::math::policies::get_epsilon<T, Policy>();
             T sum = init_sum;
             //
@@ -71,7 +76,7 @@ namespace boost
             // k is chosen as the peek of the Poisson weights, which
             // will occur *before* the largest term.
             //
-            int k = iround(lambda, pol);
+            long long k = llround(lambda, pol);
             // Forwards and backwards Poisson weights:
             T poisf = boost::math::gamma_p_derivative(static_cast<T>(1 + k), lambda, pol);
             T poisb = poisf * k / lambda;
@@ -88,8 +93,8 @@ namespace boost
             // stable direction for the gamma function
             // recurrences:
             //
-            int i;
-            for(i = k; static_cast<std::uintmax_t>(i-k) < max_iter; ++i)
+            long long i;
+            for(i = k; static_cast<boost::math::uintmax_t>(i-k) < max_iter; ++i)
             {
                T term = poisf * gamf;
                sum += term;
@@ -100,10 +105,8 @@ namespace boost
                   break;
             }
             //Error check:
-            if(static_cast<std::uintmax_t>(i-k) >= max_iter)
-               return policies::raise_evaluation_error(
-                  "cdf(non_central_chi_squared_distribution<%1%>, %1%)",
-                  "Series did not converge, closest value was %1%", sum, pol);
+            if(static_cast<boost::math::uintmax_t>(i-k) >= max_iter)
+               return policies::raise_evaluation_error("cdf(non_central_chi_squared_distribution<%1%>, %1%)", "Series did not converge, closest value was %1%", sum, pol); // LCOV_EXCL_LINE
             //
             // Now backwards iteration: the gamma
             // function recurrences are unstable in this
@@ -128,7 +131,7 @@ namespace boost
          }
 
          template <class T, class Policy>
-         T non_central_chi_square_p_ding(T x, T f, T theta, const Policy& pol, T init_sum = 0)
+         BOOST_MATH_GPU_ENABLED T non_central_chi_square_p_ding(T x, T f, T theta, const Policy& pol, T init_sum = 0)
          {
             //
             // This is an implementation of:
@@ -157,12 +160,12 @@ namespace boost
             if(sum == 0)
                return sum;
 
-            std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+            boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
             T errtol = boost::math::policies::get_epsilon<T, Policy>();
 
             int i;
             T lterm(0), term(0);
-            for(i = 1; static_cast<std::uintmax_t>(i) < max_iter; ++i)
+            for(i = 1; static_cast<boost::math::uintmax_t>(i) < max_iter; ++i)
             {
                tk = tk * x / (f + 2 * i);
                uk = uk * lambda / i;
@@ -174,16 +177,14 @@ namespace boost
                   break;
             }
             //Error check:
-            if(static_cast<std::uintmax_t>(i) >= max_iter)
-               return policies::raise_evaluation_error(
-                  "cdf(non_central_chi_squared_distribution<%1%>, %1%)",
-                  "Series did not converge, closest value was %1%", sum, pol);
+            if(static_cast<boost::math::uintmax_t>(i) >= max_iter)
+               return policies::raise_evaluation_error("cdf(non_central_chi_squared_distribution<%1%>, %1%)", "Series did not converge, closest value was %1%", sum, pol); // LCOV_EXCL_LINE
             return sum;
          }
 
 
          template <class T, class Policy>
-         T non_central_chi_square_p(T y, T n, T lambda, const Policy& pol, T init_sum)
+         BOOST_MATH_GPU_ENABLED T non_central_chi_square_p(T y, T n, T lambda, const Policy& pol, T init_sum)
          {
             //
             // This is taken more or less directly from:
@@ -202,7 +203,7 @@ namespace boost
             // Special case:
             if(y == 0)
                return 0;
-            std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+            boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
             T errtol = boost::math::policies::get_epsilon<T, Policy>();
             T errorf(0), errorb(0);
 
@@ -215,7 +216,7 @@ namespace boost
             // function, which ocurrs *after* the largest term in the
             // sum.
             //
-            int k = iround(del, pol);
+            long long k = llround(del, pol);
             T a = n / 2 + k;
             // Central chi squared term for forward iteration:
             T gamkf = boost::math::gamma_p(a, x, pol);
@@ -270,47 +271,43 @@ namespace boost
                errorf = poiskf * gamkf;
                sum += errorf;
                ++i;
-            }while((fabs(errorf / sum) > errtol) && (static_cast<std::uintmax_t>(i) < max_iter));
+            }while((fabs(errorf / sum) > errtol) && (static_cast<boost::math::uintmax_t>(i) < max_iter));
 
             //Error check:
-            if(static_cast<std::uintmax_t>(i) >= max_iter)
-               return policies::raise_evaluation_error(
-                  "cdf(non_central_chi_squared_distribution<%1%>, %1%)",
-                  "Series did not converge, closest value was %1%", sum, pol);
+            if(static_cast<boost::math::uintmax_t>(i) >= max_iter)
+               return policies::raise_evaluation_error("cdf(non_central_chi_squared_distribution<%1%>, %1%)", "Series did not converge, closest value was %1%", sum, pol); // LCOV_EXCL_LINE
 
             return sum;
          }
 
          template <class T, class Policy>
-         T non_central_chi_square_pdf(T x, T n, T lambda, const Policy& pol)
+         BOOST_MATH_GPU_ENABLED T non_central_chi_square_pdf(T x, T n, T lambda, const Policy& pol)
          {
             //
             // As above but for the PDF:
             //
             BOOST_MATH_STD_USING
-            std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+            boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
             T errtol = boost::math::policies::get_epsilon<T, Policy>();
             T x2 = x / 2;
             T n2 = n / 2;
             T l2 = lambda / 2;
             T sum = 0;
-            int k = itrunc(l2);
+            long long k = lltrunc(l2);
             T pois = gamma_p_derivative(static_cast<T>(k + 1), l2, pol) * gamma_p_derivative(static_cast<T>(n2 + k), x2);
             if(pois == 0)
                return 0;
             T poisb = pois;
-            for(int i = k; ; ++i)
+            for(long long i = k; ; ++i)
             {
                sum += pois;
                if(pois / sum < errtol)
                   break;
-               if(static_cast<std::uintmax_t>(i - k) >= max_iter)
-                  return policies::raise_evaluation_error(
-                     "pdf(non_central_chi_squared_distribution<%1%>, %1%)",
-                     "Series did not converge, closest value was %1%", sum, pol);
+               if(static_cast<boost::math::uintmax_t>(i - k) >= max_iter)
+                  return policies::raise_evaluation_error("pdf(non_central_chi_squared_distribution<%1%>, %1%)", "Series did not converge, closest value was %1%", sum, pol); // LCOV_EXCL_LINE
                pois *= l2 * x2 / ((i + 1) * (n2 + i));
             }
-            for(int i = k - 1; i >= 0; --i)
+            for(long long i = k - 1; i >= 0; --i)
             {
                poisb *= (i + 1) * (n2 + i) / (l2 * x2);
                sum += poisb;
@@ -321,7 +318,7 @@ namespace boost
          }
 
          template <class RealType, class Policy>
-         inline RealType non_central_chi_squared_cdf(RealType x, RealType k, RealType l, bool invert, const Policy&)
+         BOOST_MATH_GPU_ENABLED inline RealType non_central_chi_squared_cdf(RealType x, RealType k, RealType l, bool invert, const Policy&)
          {
             typedef typename policies::evaluation<RealType, Policy>::type value_type;
             typedef typename policies::normalise<
@@ -381,10 +378,10 @@ namespace boost
          template <class T, class Policy>
          struct nccs_quantile_functor
          {
-            nccs_quantile_functor(const non_central_chi_squared_distribution<T,Policy>& d, T t, bool c)
+            BOOST_MATH_GPU_ENABLED nccs_quantile_functor(const non_central_chi_squared_distribution<T,Policy>& d, T t, bool c)
                : dist(d), target(t), comp(c) {}
 
-            T operator()(const T& x)
+            BOOST_MATH_GPU_ENABLED T operator()(const T& x)
             {
                return comp ?
                   target - cdf(complement(dist, x))
@@ -398,10 +395,10 @@ namespace boost
          };
 
          template <class RealType, class Policy>
-         RealType nccs_quantile(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& p, bool comp)
+         BOOST_MATH_GPU_ENABLED RealType nccs_quantile(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& p, bool comp)
          {
             BOOST_MATH_STD_USING
-            static const char* function = "quantile(non_central_chi_squared_distribution<%1%>, %1%)";
+            constexpr auto function = "quantile(non_central_chi_squared_distribution<%1%>, %1%)";
             typedef typename policies::evaluation<RealType, Policy>::type value_type;
             typedef typename policies::normalise<
                Policy,
@@ -428,7 +425,7 @@ namespace boost
                static_cast<value_type>(p),
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
             //
             // Special cases get short-circuited first:
             //
@@ -489,10 +486,10 @@ namespace boost
          }
 
          template <class RealType, class Policy>
-         RealType nccs_pdf(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& x)
+         BOOST_MATH_GPU_ENABLED RealType nccs_pdf(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& x)
          {
             BOOST_MATH_STD_USING
-            static const char* function = "pdf(non_central_chi_squared_distribution<%1%>, %1%)";
+            constexpr auto function = "pdf(non_central_chi_squared_distribution<%1%>, %1%)";
             typedef typename policies::evaluation<RealType, Policy>::type value_type;
             typedef typename policies::normalise<
                Policy,
@@ -519,7 +516,7 @@ namespace boost
                (value_type)x,
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
 
          if(l == 0)
             return pdf(boost::math::chi_squared_distribution<RealType, forwarding_policy>(dist.degrees_of_freedom()), x);
@@ -553,11 +550,11 @@ namespace boost
          template <class RealType, class Policy>
          struct degrees_of_freedom_finder
          {
-            degrees_of_freedom_finder(
+            BOOST_MATH_GPU_ENABLED degrees_of_freedom_finder(
                RealType lam_, RealType x_, RealType p_, bool c)
                : lam(lam_), x(x_), p(p_), comp(c) {}
 
-            RealType operator()(const RealType& v)
+            BOOST_MATH_GPU_ENABLED RealType operator()(const RealType& v)
             {
                non_central_chi_squared_distribution<RealType, Policy> d(v, lam);
                return comp ?
@@ -572,22 +569,21 @@ namespace boost
          };
 
          template <class RealType, class Policy>
-         inline RealType find_degrees_of_freedom(
+         BOOST_MATH_GPU_ENABLED inline RealType find_degrees_of_freedom(
             RealType lam, RealType x, RealType p, RealType q, const Policy& pol)
          {
-            const char* function = "non_central_chi_squared<%1%>::find_degrees_of_freedom";
+            constexpr auto function = "non_central_chi_squared<%1%>::find_degrees_of_freedom";
             if((p == 0) || (q == 0))
             {
                //
                // Can't a thing if one of p and q is zero:
                //
-               return policies::raise_evaluation_error<RealType>(function,
-                  "Can't find degrees of freedom when the probability is 0 or 1, only possible answer is %1%",
-                  RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy());
+               return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom when the probability is 0 or 1, only possible answer is %1%", // LCOV_EXCL_LINE
+                  RealType(boost::math::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE
             }
             degrees_of_freedom_finder<RealType, Policy> f(lam, x, p < q ? p : q, p < q ? false : true);
             tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
-            std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+            boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
             //
             // Pick an initial guess that we know will give us a probability
             // right around 0.5.
@@ -595,13 +591,13 @@ namespace boost
             RealType guess = x - lam;
             if(guess < 1)
                guess = 1;
-            std::pair<RealType, RealType> ir = tools::bracket_and_solve_root(
+            boost::math::pair<RealType, RealType> ir = tools::bracket_and_solve_root(
                f, guess, RealType(2), false, tol, max_iter, pol);
             RealType result = ir.first + (ir.second - ir.first) / 2;
             if(max_iter >= policies::get_max_root_iterations<Policy>())
             {
-               return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
-                  " or there is no answer to problem.  Current best guess is %1%", result, Policy());
+               return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:" // LCOV_EXCL_LINE
+                  " or there is no answer to problem.  Current best guess is %1%", result, Policy()); // LCOV_EXCL_LINE
             }
             return result;
          }
@@ -609,11 +605,11 @@ namespace boost
          template <class RealType, class Policy>
          struct non_centrality_finder
          {
-            non_centrality_finder(
+            BOOST_MATH_GPU_ENABLED non_centrality_finder(
                RealType v_, RealType x_, RealType p_, bool c)
                : v(v_), x(x_), p(p_), comp(c) {}
 
-            RealType operator()(const RealType& lam)
+            BOOST_MATH_GPU_ENABLED RealType operator()(const RealType& lam)
             {
                non_central_chi_squared_distribution<RealType, Policy> d(v, lam);
                return comp ?
@@ -628,22 +624,21 @@ namespace boost
          };
 
          template <class RealType, class Policy>
-         inline RealType find_non_centrality(
+         BOOST_MATH_GPU_ENABLED inline RealType find_non_centrality(
             RealType v, RealType x, RealType p, RealType q, const Policy& pol)
          {
-            const char* function = "non_central_chi_squared<%1%>::find_non_centrality";
+            constexpr auto function = "non_central_chi_squared<%1%>::find_non_centrality";
             if((p == 0) || (q == 0))
             {
                //
                // Can't do a thing if one of p and q is zero:
                //
-               return policies::raise_evaluation_error<RealType>(function,
-                  "Can't find non centrality parameter when the probability is 0 or 1, only possible answer is %1%",
-                  RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy());
+               return policies::raise_evaluation_error<RealType>(function, "Can't find non centrality parameter when the probability is 0 or 1, only possible answer is %1%", // LCOV_EXCL_LINE
+                  RealType(boost::math::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE
             }
             non_centrality_finder<RealType, Policy> f(v, x, p < q ? p : q, p < q ? false : true);
             tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
-            std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+            boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
             //
             // Pick an initial guess that we know will give us a probability
             // right around 0.5.
@@ -651,29 +646,29 @@ namespace boost
             RealType guess = x - v;
             if(guess < 1)
                guess = 1;
-            std::pair<RealType, RealType> ir = tools::bracket_and_solve_root(
+            boost::math::pair<RealType, RealType> ir = tools::bracket_and_solve_root(
                f, guess, RealType(2), false, tol, max_iter, pol);
             RealType result = ir.first + (ir.second - ir.first) / 2;
             if(max_iter >= policies::get_max_root_iterations<Policy>())
             {
-               return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
-                  " or there is no answer to problem.  Current best guess is %1%", result, Policy());
+               return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:" // LCOV_EXCL_LINE
+                  " or there is no answer to problem.  Current best guess is %1%", result, Policy()); // LCOV_EXCL_LINE
             }
             return result;
          }
 
       }
 
-      template <class RealType = double, class Policy = policies::policy<> >
+      BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
       class non_central_chi_squared_distribution
       {
       public:
          typedef RealType value_type;
          typedef Policy policy_type;
 
-         non_central_chi_squared_distribution(RealType df_, RealType lambda) : df(df_), ncp(lambda)
+         BOOST_MATH_GPU_ENABLED non_central_chi_squared_distribution(RealType df_, RealType lambda) : df(df_), ncp(lambda)
          {
-            const char* function = "boost::math::non_central_chi_squared_distribution<%1%>::non_central_chi_squared_distribution(%1%,%1%)";
+            constexpr auto function = "boost::math::non_central_chi_squared_distribution<%1%>::non_central_chi_squared_distribution(%1%,%1%)";
             RealType r;
             detail::check_df(
                function,
@@ -685,17 +680,17 @@ namespace boost
                Policy());
          } // non_central_chi_squared_distribution constructor.
 
-         RealType degrees_of_freedom() const
+         BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom() const
          { // Private data getter function.
             return df;
          }
-         RealType non_centrality() const
+         BOOST_MATH_GPU_ENABLED RealType non_centrality() const
          { // Private data getter function.
             return ncp;
          }
-         static RealType find_degrees_of_freedom(RealType lam, RealType x, RealType p)
+         BOOST_MATH_GPU_ENABLED static RealType find_degrees_of_freedom(RealType lam, RealType x, RealType p)
          {
-            const char* function = "non_central_chi_squared<%1%>::find_degrees_of_freedom";
+            constexpr auto function = "non_central_chi_squared<%1%>::find_degrees_of_freedom";
             typedef typename policies::evaluation<RealType, Policy>::type eval_type;
             typedef typename policies::normalise<
                Policy,
@@ -714,9 +709,9 @@ namespace boost
                function);
          }
          template <class A, class B, class C>
-         static RealType find_degrees_of_freedom(const complemented3_type<A,B,C>& c)
+         BOOST_MATH_GPU_ENABLED static RealType find_degrees_of_freedom(const complemented3_type<A,B,C>& c)
          {
-            const char* function = "non_central_chi_squared<%1%>::find_degrees_of_freedom";
+            constexpr auto function = "non_central_chi_squared<%1%>::find_degrees_of_freedom";
             typedef typename policies::evaluation<RealType, Policy>::type eval_type;
             typedef typename policies::normalise<
                Policy,
@@ -734,9 +729,9 @@ namespace boost
                result,
                function);
          }
-         static RealType find_non_centrality(RealType v, RealType x, RealType p)
+         BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(RealType v, RealType x, RealType p)
          {
-            const char* function = "non_central_chi_squared<%1%>::find_non_centrality";
+            constexpr auto function = "non_central_chi_squared<%1%>::find_non_centrality";
             typedef typename policies::evaluation<RealType, Policy>::type eval_type;
             typedef typename policies::normalise<
                Policy,
@@ -755,9 +750,9 @@ namespace boost
                function);
          }
          template <class A, class B, class C>
-         static RealType find_non_centrality(const complemented3_type<A,B,C>& c)
+         BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(const complemented3_type<A,B,C>& c)
          {
-            const char* function = "non_central_chi_squared<%1%>::find_non_centrality";
+            constexpr auto function = "non_central_chi_squared<%1%>::find_non_centrality";
             typedef typename policies::evaluation<RealType, Policy>::type eval_type;
             typedef typename policies::normalise<
                Policy,
@@ -781,34 +776,34 @@ namespace boost
          RealType ncp; // non-centrality parameter
       }; // template <class RealType, class Policy> class non_central_chi_squared_distribution
 
-      typedef non_central_chi_squared_distribution<double> non_central_chi_squared; // Reserved name of type double.
+      BOOST_MATH_EXPORT typedef non_central_chi_squared_distribution<double> non_central_chi_squared; // Reserved name of type double.
 
       #ifdef __cpp_deduction_guides
-      template <class RealType>
+      BOOST_MATH_EXPORT template <class RealType>
       non_central_chi_squared_distribution(RealType,RealType)->non_central_chi_squared_distribution<typename boost::math::tools::promote_args<RealType>::type>;
       #endif
 
       // Non-member functions to give properties of the distribution.
 
-      template <class RealType, class Policy>
-      inline const std::pair<RealType, RealType> range(const non_central_chi_squared_distribution<RealType, Policy>& /* dist */)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const non_central_chi_squared_distribution<RealType, Policy>& /* dist */)
       { // Range of permissible values for random variable k.
          using boost::math::tools::max_value;
-         return std::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // Max integer?
+         return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // Max integer?
       }
 
-      template <class RealType, class Policy>
-      inline const std::pair<RealType, RealType> support(const non_central_chi_squared_distribution<RealType, Policy>& /* dist */)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const non_central_chi_squared_distribution<RealType, Policy>& /* dist */)
       { // Range of supported values for random variable k.
          // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
          using boost::math::tools::max_value;
-         return std::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
+         return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
       }
 
-      template <class RealType, class Policy>
-      inline RealType mean(const non_central_chi_squared_distribution<RealType, Policy>& dist)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline RealType mean(const non_central_chi_squared_distribution<RealType, Policy>& dist)
       { // Mean of poisson distribution = lambda.
-         const char* function = "boost::math::non_central_chi_squared_distribution<%1%>::mean()";
+         constexpr auto function = "boost::math::non_central_chi_squared_distribution<%1%>::mean()";
          RealType k = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
          RealType r;
@@ -821,14 +816,14 @@ namespace boost
             l,
             &r,
             Policy()))
-               return r;
+               return static_cast<RealType>(r);
          return k + l;
       } // mean
 
-      template <class RealType, class Policy>
-      inline RealType mode(const non_central_chi_squared_distribution<RealType, Policy>& dist)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline RealType mode(const non_central_chi_squared_distribution<RealType, Policy>& dist)
       { // mode.
-         static const char* function = "mode(non_central_chi_squared_distribution<%1%> const&)";
+         constexpr auto function = "mode(non_central_chi_squared_distribution<%1%> const&)";
 
          RealType k = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
@@ -842,16 +837,16 @@ namespace boost
             l,
             &r,
             Policy()))
-               return (RealType)r;
+               return static_cast<RealType>(r);
          bool asymptotic_mode = k < l/4;
          RealType starting_point = asymptotic_mode ? k + l - RealType(3) : RealType(1) + k;
          return detail::generic_find_mode(dist, starting_point, function);
       }
 
-      template <class RealType, class Policy>
-      inline RealType variance(const non_central_chi_squared_distribution<RealType, Policy>& dist)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline RealType variance(const non_central_chi_squared_distribution<RealType, Policy>& dist)
       { // variance.
-         const char* function = "boost::math::non_central_chi_squared_distribution<%1%>::variance()";
+         constexpr auto function = "boost::math::non_central_chi_squared_distribution<%1%>::variance()";
          RealType k = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
          RealType r;
@@ -864,17 +859,17 @@ namespace boost
             l,
             &r,
             Policy()))
-               return r;
+               return static_cast<RealType>(r);
          return 2 * (2 * l + k);
       }
 
       // RealType standard_deviation(const non_central_chi_squared_distribution<RealType, Policy>& dist)
       // standard_deviation provided by derived accessors.
 
-      template <class RealType, class Policy>
-      inline RealType skewness(const non_central_chi_squared_distribution<RealType, Policy>& dist)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline RealType skewness(const non_central_chi_squared_distribution<RealType, Policy>& dist)
       { // skewness = sqrt(l).
-         const char* function = "boost::math::non_central_chi_squared_distribution<%1%>::skewness()";
+         constexpr auto function = "boost::math::non_central_chi_squared_distribution<%1%>::skewness()";
          RealType k = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
          RealType r;
@@ -887,15 +882,15 @@ namespace boost
             l,
             &r,
             Policy()))
-               return r;
+               return static_cast<RealType>(r);
          BOOST_MATH_STD_USING
             return pow(2 / (k + 2 * l), RealType(3)/2) * (k + 3 * l);
       }
 
-      template <class RealType, class Policy>
-      inline RealType kurtosis_excess(const non_central_chi_squared_distribution<RealType, Policy>& dist)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const non_central_chi_squared_distribution<RealType, Policy>& dist)
       {
-         const char* function = "boost::math::non_central_chi_squared_distribution<%1%>::kurtosis_excess()";
+         constexpr auto function = "boost::math::non_central_chi_squared_distribution<%1%>::kurtosis_excess()";
          RealType k = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
          RealType r;
@@ -908,26 +903,26 @@ namespace boost
             l,
             &r,
             Policy()))
-               return r;
+               return static_cast<RealType>(r);
          return 12 * (k + 4 * l) / ((k + 2 * l) * (k + 2 * l));
       } // kurtosis_excess
 
-      template <class RealType, class Policy>
-      inline RealType kurtosis(const non_central_chi_squared_distribution<RealType, Policy>& dist)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const non_central_chi_squared_distribution<RealType, Policy>& dist)
       {
          return kurtosis_excess(dist) + 3;
       }
 
-      template <class RealType, class Policy>
-      inline RealType pdf(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& x)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline RealType pdf(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& x)
       { // Probability Density/Mass Function.
          return detail::nccs_pdf(dist, x);
       } // pdf
 
-      template <class RealType, class Policy>
-      RealType cdf(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& x)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED RealType cdf(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& x)
       {
-         const char* function = "boost::math::non_central_chi_squared_distribution<%1%>::cdf(%1%)";
+         constexpr auto function = "boost::math::non_central_chi_squared_distribution<%1%>::cdf(%1%)";
          RealType k = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
          RealType r;
@@ -946,15 +941,15 @@ namespace boost
             x,
             &r,
             Policy()))
-               return r;
+               return static_cast<RealType>(r);
 
          return detail::non_central_chi_squared_cdf(x, k, l, false, Policy());
       } // cdf
 
-      template <class RealType, class Policy>
-      RealType cdf(const complemented2_type<non_central_chi_squared_distribution<RealType, Policy>, RealType>& c)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED RealType cdf(const complemented2_type<non_central_chi_squared_distribution<RealType, Policy>, RealType>& c)
       { // Complemented Cumulative Distribution Function
-         const char* function = "boost::math::non_central_chi_squared_distribution<%1%>::cdf(%1%)";
+         constexpr auto function = "boost::math::non_central_chi_squared_distribution<%1%>::cdf(%1%)";
          non_central_chi_squared_distribution<RealType, Policy> const& dist = c.dist;
          RealType x = c.param;
          RealType k = dist.degrees_of_freedom();
@@ -975,19 +970,19 @@ namespace boost
             x,
             &r,
             Policy()))
-               return r;
+               return static_cast<RealType>(r);
 
          return detail::non_central_chi_squared_cdf(x, k, l, true, Policy());
       } // ccdf
 
-      template <class RealType, class Policy>
-      inline RealType quantile(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& p)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline RealType quantile(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& p)
       { // Quantile (or Percent Point) function.
          return detail::nccs_quantile(dist, p, false);
       } // quantile
 
-      template <class RealType, class Policy>
-      inline RealType quantile(const complemented2_type<non_central_chi_squared_distribution<RealType, Policy>, RealType>& c)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<non_central_chi_squared_distribution<RealType, Policy>, RealType>& c)
       { // Quantile (or Percent Point) function.
          return detail::nccs_quantile(c.dist, c.param, true);
       } // quantile complement.

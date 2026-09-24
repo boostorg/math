@@ -5,19 +5,22 @@
 
 #ifndef BOOST_MATH_DIFFERENTIATION_LANCZOS_SMOOTHING_HPP
 #define BOOST_MATH_DIFFERENTIATION_LANCZOS_SMOOTHING_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath> // for std::abs
 #include <cstddef>
 #include <limits> // to nan initialize
 #include <vector>
 #include <string>
+#include <cstdint>
 #include <stdexcept>
 #include <type_traits>
+#endif
 #include <boost/math/tools/assert.hpp>
 
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/config.hpp>
-#ifdef BOOST_NO_CXX17_IF_CONSTEXPR
+#ifdef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
 #error "The header <boost/math/norms.hpp> can only be used in C++17 and later."
 #endif
 #endif
@@ -251,7 +254,7 @@ std::vector<Real> acceleration_filter(std::size_t n, std::size_t p, int64_t s)
 
 } // namespace detail
 
-template <typename Real, std::size_t order = 1>
+BOOST_MATH_EXPORT template <typename Real, std::size_t order = 1>
 class discrete_lanczos_derivative {
 public:
     discrete_lanczos_derivative(Real const & spacing,

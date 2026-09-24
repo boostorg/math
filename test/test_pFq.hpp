@@ -299,6 +299,31 @@ void test_spots_2F2(T, const char*)
 }
 
 template <class T>
+void test_special_cases(T, const char*)
+{
+    typedef boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::ignore_error>, boost::math::policies::promote_double<false> > nothrow_policy;
+    typedef boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::throw_on_error>, boost::math::policies::promote_double<false> > throw_policy;
+    T error_rate;
+    BOOST_CHECK_THROW(boost::math::hypergeometric_pFq({ 2 }, { 3 }, static_cast<T>(1e10), &error_rate, throw_policy()), std::overflow_error);
+    BOOST_CHECK_THROW(boost::math::hypergeometric_pFq({ static_cast<T>(2) }, { static_cast<T>(3) }, static_cast<T>(1e10), &error_rate, throw_policy()), std::overflow_error);
+    BOOST_CHECK_THROW(boost::math::hypergeometric_pFq({ 2 }, { 3 }, boost::math::tools::max_value<T>(), &error_rate, throw_policy()), std::overflow_error);
+    BOOST_CHECK_THROW(boost::math::hypergeometric_pFq({ static_cast<T>(2) }, { static_cast<T>(3) }, boost::math::tools::max_value<T>(), &error_rate, throw_policy()), std::overflow_error);
+    BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::is_specialized)
+    {
+        // Can't figure out how to make this work with real_concept (we get an evaluation_error):
+        BOOST_CHECK_THROW(boost::math::hypergeometric_pFq({ boost::math::tools::max_value<T>() }, { static_cast<T>(3) }, static_cast<T>(0.5f), &error_rate, throw_policy()), std::overflow_error);
+    }
+    BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+    {
+        BOOST_CHECK_EQUAL(boost::math::hypergeometric_pFq({ 2 }, { 3 }, static_cast<T>(1e10), &error_rate, nothrow_policy()), std::numeric_limits<T>::infinity());
+        BOOST_CHECK_EQUAL(boost::math::hypergeometric_pFq({ static_cast<T>(2) }, { static_cast<T>(3) }, static_cast<T>(1e10), &error_rate, nothrow_policy()), std::numeric_limits<T>::infinity());
+        BOOST_CHECK_EQUAL(boost::math::hypergeometric_pFq({ 2 }, { 3 }, boost::math::tools::max_value<T>(), &error_rate, nothrow_policy()), std::numeric_limits<T>::infinity());
+        BOOST_CHECK_EQUAL(boost::math::hypergeometric_pFq({ static_cast<T>(2) }, { static_cast<T>(3) }, boost::math::tools::max_value<T>(), &error_rate, nothrow_policy()), std::numeric_limits<T>::infinity());
+        BOOST_CHECK_EQUAL(boost::math::hypergeometric_pFq({ boost::math::tools::max_value<T>() }, { static_cast<T>(3) }, static_cast<T>(0.5f), &error_rate, nothrow_policy()), std::numeric_limits<T>::infinity());
+    }
+}
+
+template <class T>
 void test_spots(T z, const char* type_name)
 {
    test_spots_1F0(z, type_name);
@@ -309,4 +334,5 @@ void test_spots(T z, const char* type_name)
    test_spots_1F2(z, type_name);
    test_spots_2F2(z, type_name);
    test_spots_2F1(z, type_name);
+   test_special_cases(z, type_name);
 }

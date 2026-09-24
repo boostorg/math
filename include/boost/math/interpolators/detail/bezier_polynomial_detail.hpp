@@ -7,16 +7,18 @@
 #ifndef BOOST_MATH_INTERPOLATORS_BEZIER_POLYNOMIAL_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_BEZIER_POLYNOMIAL_DETAIL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <stdexcept>
 #include <iostream>
 #include <string>
 #include <limits>
+#endif
 
 namespace boost::math::interpolators::detail {
 
 
 template <class RandomAccessContainer>
-static inline RandomAccessContainer& get_bezier_storage()
+inline RandomAccessContainer& get_bezier_storage()
 {
     static thread_local RandomAccessContainer the_storage;
     return the_storage;
@@ -73,7 +75,7 @@ public:
             }
         }
 
-        decasteljau_recursion(scratch_space, scratch_space.size(), t);
+        decasteljau_recursion(scratch_space, control_points_.size() - 1, t);
         return scratch_space[0];
     }
 

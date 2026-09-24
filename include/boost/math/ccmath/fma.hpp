@@ -6,20 +6,14 @@
 #ifndef BOOST_MATH_CCMATH_FMA_HPP
 #define BOOST_MATH_CCMATH_FMA_HPP
 
-#include <cmath>
-#include <limits>
-#include <type_traits>
-#include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/ccmath/detail/config.hpp>
+
+#ifdef BOOST_MATH_NO_CCMATH
+#error "The header <boost/math/fma.hpp> can only be used in C++17 and later."
+#endif
+
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
-
-#include <boost/math/tools/is_standalone.hpp>
-#ifndef BOOST_MATH_STANDALONE
-#include <boost/config.hpp>
-#ifdef BOOST_NO_CXX17_IF_CONSTEXPR
-#error "The header <boost/math/norms.hpp> can only be used in C++17 and later."
-#endif
-#endif
 
 namespace boost::math::ccmath {
 
@@ -49,7 +43,7 @@ constexpr T fma_imp(const T x, const T y, const T z) noexcept
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr Real fma(Real x, Real y, Real z) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
@@ -84,7 +78,7 @@ constexpr Real fma(Real x, Real y, Real z) noexcept
     }
 }
 
-template <typename T1, typename T2, typename T3>
+BOOST_MATH_EXPORT template <typename T1, typename T2, typename T3>
 constexpr auto fma(T1 x, T2 y, T3 z) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))

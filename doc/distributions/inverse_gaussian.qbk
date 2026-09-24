@@ -12,11 +12,11 @@
       typedef RealType value_type;
       typedef Policy   policy_type;
 
-      inverse_gaussian_distribution(RealType mean = 1, RealType scale = 1);
+      BOOST_MATH_GPU_ENABLED inverse_gaussian_distribution(RealType mean = 1, RealType scale = 1);
 
-      RealType mean()const; // mean default 1.
-      RealType scale()const; // Optional scale, default 1 (unscaled).
-      RealType shape()const; // Shape = scale/mean.
+      BOOST_MATH_GPU_ENABLED RealType mean()const; // mean default 1.
+      BOOST_MATH_GPU_ENABLED RealType scale()const; // Optional scale, default 1 (unscaled).
+      BOOST_MATH_GPU_ENABLED RealType shape()const; // Shape = scale/mean.
    };
    typedef inverse_gaussian_distribution<double> inverse_gaussian;
 
@@ -90,7 +90,7 @@ Another related parameterisation, the __wald_distrib (where mean [mu] is unity) 
 
 [h4 Member Functions]
 
-   inverse_gaussian_distribution(RealType df = 1, RealType scale = 1); // optionally scaled.
+   BOOST_MATH_GPU_ENABLED inverse_gaussian_distribution(RealType df = 1, RealType scale = 1); // optionally scaled.
 
 Constructs an inverse_gaussian distribution with [mu] mean,
 and scale [lambda], with both default values 1.
@@ -98,11 +98,11 @@ and scale [lambda], with both default values 1.
 Requires that both the mean [mu] parameter and scale [lambda] are greater than zero,
 otherwise calls __domain_error.
 
-   RealType mean()const; 
+   BOOST_MATH_GPU_ENABLED RealType mean()const; 
    
 Returns the mean [mu] parameter of this distribution.
 
-   RealType scale()const; 
+   BOOST_MATH_GPU_ENABLED RealType scale()const; 
    
 Returns the scale [lambda] parameter of this distribution.
 
@@ -110,10 +110,15 @@ Returns the scale [lambda] parameter of this distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variate is \[0,+[infin]).
 [note Unlike some definitions, this implementation supports a random variate 
 equal to zero as a special case, returning zero for both pdf and cdf.]
+
+In this distribution the implementation of `logpdf` is specialized
+to improve numerical accuracy.
 
 [h4 Accuracy]
 
@@ -134,6 +139,7 @@ are used for the inverse gaussian function.
 [table
 [[Function] [Implementation Notes] ]
 [[pdf] [ [sqrt]([lambda]/ 2[pi]x[super 3]) e[super -[lambda](x - [mu])[sup2]/ 2[mu][sup2]x]]]
+[[logpdf] [log(pdf) = (-[lambda]*pow([mu]-x, 2)/(x*[mu][super 2]) + log([lambda]) - 3*log(x) - log(2*[pi])) / 2 ]]
 [[cdf][ [Phi]{[sqrt]([lambda]/x) (x/[mu]-1)} + e[super 2[mu]/[lambda]] [Phi]{-[sqrt]([lambda]/[mu]) (1+x/[mu])} ]]
 [[cdf complement] [using complement of [Phi] above.] ]
 [[quantile][No closed form known. Estimated using a guess refined by Newton-Raphson iteration.]]

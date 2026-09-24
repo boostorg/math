@@ -6,6 +6,12 @@
 #include <pch.hpp>
 
 #define BOOST_TEST_MAIN
+
+// See: https://github.com/boostorg/math/issues/1115
+#if __has_include(<X11/X.h>)
+#  include <X11/X.h>
+#endif
+
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/test/results_collector.hpp>
@@ -438,10 +444,10 @@ void test_beta(T, const char* /* name */)
 }
 
 #if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_LAMBDAS)
-template <class Complex>
+template <class ComplexType>
 void test_complex_newton()
 {
-    typedef typename Complex::value_type Real;
+    typedef typename ComplexType::value_type Real;
     std::cout << "Testing complex Newton's Method on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     using std::abs;
     using std::sqrt;
@@ -451,11 +457,11 @@ void test_complex_newton()
 
     Real tol = std::numeric_limits<Real>::epsilon();
     // p(z) = z^2 + 1, roots: \pm i.
-    polynomial<Complex> p{{1,0}, {0, 0}, {1,0}};
-    Complex guess{1,1};
-    polynomial<Complex> p_prime = p.prime();
-    auto f = [&](Complex z) { return std::make_pair<Complex, Complex>(p(z), p_prime(z)); };
-    Complex root = complex_newton(f, guess);
+    polynomial<ComplexType> p{{1,0}, {0, 0}, {1,0}};
+    ComplexType guess{1,1};
+    polynomial<ComplexType> p_prime = p.prime();
+    auto f = [&](ComplexType z) { return std::make_pair<ComplexType, ComplexType>(p(z), p_prime(z)); };
+    ComplexType root = complex_newton(f, guess);
 
     BOOST_CHECK(abs(root.real()) <= tol);
     BOOST_CHECK_CLOSE(root.imag(), (Real)1, tol);
@@ -468,44 +474,44 @@ void test_complex_newton()
     // Test that double roots are handled correctly-as correctly as possible.
     // Convergence at a double root is not quadratic.
     // This sets p = (z-i)^2:
-    p = polynomial<Complex>({{-1,0}, {0,-2}, {1,0}});
+    p = polynomial<ComplexType>({{-1,0}, {0,-2}, {1,0}});
     p_prime = p.prime();
     guess = -guess;
-    auto g = [&](Complex z) { return std::make_pair<Complex, Complex>(p(z), p_prime(z)); };
+    auto g = [&](ComplexType z) { return std::make_pair<ComplexType, ComplexType>(p(z), p_prime(z)); };
     root = complex_newton(g, guess);
     BOOST_CHECK(abs(root.real()) < 10*sqrt(tol));
     BOOST_CHECK_CLOSE(root.imag(), (Real)1, tol);
 
     // Test that zero derivatives are handled.
     // p(z) = z^2 + iz + 1
-    p = polynomial<Complex>({{1,0}, {0,1}, {1,0}});
+    p = polynomial<ComplexType>({{1,0}, {0,1}, {1,0}});
     // p'(z) = 2z + i
     p_prime = p.prime();
-    guess = Complex(0,-boost::math::constants::half<Real>());
-    auto g2 = [&](Complex z) { return std::make_pair<Complex, Complex>(p(z), p_prime(z)); };
+    guess = ComplexType(0,-boost::math::constants::half<Real>());
+    auto g2 = [&](ComplexType z) { return std::make_pair<ComplexType, ComplexType>(p(z), p_prime(z)); };
     root = complex_newton(g2, guess);
 
     // Here's the other root, in case code changes cause it to be found:
-    //Complex expected_root1{0, half<Real>()*(sqrt(static_cast<Real>(5)) - static_cast<Real>(1))};
-    Complex expected_root2{0, -half<Real>()*(sqrt(static_cast<Real>(5)) + static_cast<Real>(1))};
+    //ComplexType expected_root1{0, half<Real>()*(sqrt(static_cast<Real>(5)) - static_cast<Real>(1))};
+    ComplexType expected_root2{0, -half<Real>()*(sqrt(static_cast<Real>(5)) + static_cast<Real>(1))};
 
     BOOST_CHECK_CLOSE(expected_root2.imag(),root.imag(), tol);
     BOOST_CHECK(abs(root.real()) < tol);
 
     // Does a zero root pass the termination criteria?
-    p = polynomial<Complex>({{0,0}, {0,0}, {1,0}});
+    p = polynomial<ComplexType>({{0,0}, {0,0}, {1,0}});
     p_prime = p.prime();
-    guess = Complex(0, -boost::math::constants::half<Real>());
-    auto g3 = [&](Complex z) { return std::make_pair<Complex, Complex>(p(z), p_prime(z)); };
+    guess = ComplexType(0, -boost::math::constants::half<Real>());
+    auto g3 = [&](ComplexType z) { return std::make_pair<ComplexType, ComplexType>(p(z), p_prime(z)); };
     root = complex_newton(g3, guess);
     BOOST_CHECK(abs(root.real()) < tol);
 
     // Does a monstrous root pass?
     Real x = -pow(static_cast<Real>(10), 20);
-    p = polynomial<Complex>({{x, x}, {1,0}});
+    p = polynomial<ComplexType>({{x, x}, {1,0}});
     p_prime = p.prime();
-    guess = Complex(0, -boost::math::constants::half<Real>());
-    auto g4 = [&](Complex z) { return std::make_pair<Complex, Complex>(p(z), p_prime(z)); };
+    guess = ComplexType(0, -boost::math::constants::half<Real>());
+    auto g4 = [&](ComplexType z) { return std::make_pair<ComplexType, ComplexType>(p(z), p_prime(z)); };
     root = complex_newton(g4, guess);
     BOOST_CHECK(abs(root.real() + x) < tol);
     BOOST_CHECK(abs(root.imag() + x) < tol);
@@ -607,24 +613,24 @@ void test_solve_int_quadratic()
     BOOST_CHECK_CLOSE(p.second, double(7), tol);
 }
 
-template<class Complex>
+template<class ComplexType>
 void test_solve_complex_quadratic()
 {
-    using Real = typename Complex::value_type;
+    using Real = typename ComplexType::value_type;
     Real tol = std::numeric_limits<Real>::epsilon();
     using boost::math::tools::quadratic_roots;
-    auto [x0, x1] = quadratic_roots<Complex>({1,0}, {0,0}, {-1,0});
+    auto [x0, x1] = quadratic_roots<ComplexType>({1,0}, {0,0}, {-1,0});
     BOOST_CHECK_CLOSE(x0.real(), Real(-1), tol);
     BOOST_CHECK_CLOSE(x1.real(), Real(1), tol);
     BOOST_CHECK_SMALL(x0.imag(), tol);
     BOOST_CHECK_SMALL(x1.imag(), tol);
 
-    auto p = quadratic_roots<Complex>({7,0}, {0,0}, {0,0});
+    auto p = quadratic_roots<ComplexType>({7,0}, {0,0}, {0,0});
     BOOST_CHECK_SMALL(p.first.real(), tol);
     BOOST_CHECK_SMALL(p.second.real(), tol);
 
     // (x-7)^2 = x^2 - 14*x + 49:
-    p = quadratic_roots<Complex>({1,0}, {-14,0}, {49,0});
+    p = quadratic_roots<ComplexType>({1,0}, {-14,0}, {49,0});
     BOOST_CHECK_CLOSE(p.first.real(), Real(7), tol);
     BOOST_CHECK_CLOSE(p.second.real(), Real(7), tol);
 
@@ -635,6 +641,45 @@ void test_solve_complex_quadratic()
 void test_failures()
 {
 #if !defined(BOOST_NO_CXX11_LAMBDAS)
+   const double nan = std::numeric_limits<double>::quiet_NaN();
+   boost::math::tools::eps_tolerance<double> tol(52);
+
+   // https://github.com/boostorg/math/issues/1010
+   // Invalid bounds must be rejected even when one endpoint is NaN.
+   BOOST_CHECK_THROW(
+      boost::math::tools::bisect([](double x) { return x; }, nan, 1.0, tol),
+      boost::math::evaluation_error);
+   BOOST_CHECK_THROW(
+      boost::math::tools::bisect([](double x) { return x; }, -1.0, nan, tol),
+      boost::math::evaluation_error);
+
+   auto newton_f = [](double x) { return std::make_pair(x, 1.0); };
+   BOOST_CHECK_THROW(
+      boost::math::tools::newton_raphson_iterate(newton_f, 0.0, nan, 1.0, 52),
+      boost::math::evaluation_error);
+   BOOST_CHECK_THROW(
+      boost::math::tools::newton_raphson_iterate(newton_f, 0.0, -1.0, nan, 52),
+      boost::math::evaluation_error);
+
+   auto second_order_f = [](double x) { return std::make_tuple(x, 1.0, 0.0); };
+   BOOST_CHECK_THROW(
+      boost::math::tools::halley_iterate(second_order_f, 0.0, nan, 1.0, 52),
+      boost::math::evaluation_error);
+   BOOST_CHECK_THROW(
+      boost::math::tools::schroder_iterate(second_order_f, 0.0, -1.0, nan, 52),
+      boost::math::evaluation_error);
+   // https://github.com/boostorg/math/issues/1008
+   boost::math::uintmax_t max_iter = 0;
+   unsigned calls = 0;
+   auto counted_newton_f = [&calls](double x) {
+      ++calls;
+      return std::make_pair(x * x - 3, 2 * x);
+   };
+   double result = boost::math::tools::newton_raphson_iterate(counted_newton_f, 10.0, 0.0, 100.0, 52, max_iter);
+   BOOST_CHECK_EQUAL(result, 10.0);
+   BOOST_CHECK_EQUAL(max_iter, 0u);
+   BOOST_CHECK_EQUAL(calls, 0u);
+
    // There is no root:
    BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x * x + 1, 2 * x); }, 10.0, -12.0, 12.0, 52), boost::math::evaluation_error);
    BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x * x + 1, 2 * x); }, -10.0, -12.0, 12.0, 52), boost::math::evaluation_error);
@@ -646,6 +691,48 @@ void test_failures()
    BOOST_CHECK_THROW(boost::math::tools::halley_iterate([](double x) { return std::make_tuple(x * x + 1, 2 * x, 2); }, -10.0, -12.0, 12.0, 52), boost::math::evaluation_error);
    // There is a root, but a bad guess takes us into a local minima:
    BOOST_CHECK_THROW(boost::math::tools::halley_iterate([](double x) { return std::make_tuple(boost::math::pow<6>(x) - 2 * boost::math::pow<4>(x) + x + 0.5, 6 * boost::math::pow<5>(x) - 8 * boost::math::pow<3>(x) + 1, 30 * boost::math::pow<4>(x) - 24 * boost::math::pow<2>(x)); }, 0.75, -20., 20., 52), boost::math::evaluation_error);
+
+   // https://github.com/boostorg/math/issues/808
+   // The root is at 1, but f has a local minimum near 0.67, so from a guess
+   // of 0.5 every out-of-bounds step heads for the lower bound.  We used to
+   // walk onto min = 0.1 and return it silently.
+   auto quartic = [](double x) { return std::make_pair((x * x - 1) * (x * x + 0.1), 2 * x * ((x * x - 1) + (x * x + 0.1))); };
+   auto quartic2 = [](double x) { return std::make_tuple((x * x - 1) * (x * x + 0.1), 2 * x * ((x * x - 1) + (x * x + 0.1)), 12 * x * x - 1.8); };
+   BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate(quartic, 0.5, 0.1, 1.1, 5), boost::math::evaluation_error);
+   BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate(quartic, 0.5, 0.1, 1.1, 52), boost::math::evaluation_error);
+   BOOST_CHECK_THROW(boost::math::tools::halley_iterate(quartic2, 0.5, 0.1, 1.1, 52), boost::math::evaluation_error);
+   BOOST_CHECK_THROW(boost::math::tools::schroder_iterate(quartic2, 0.5, 0.1, 1.1, 52), boost::math::evaluation_error);
+   // https://github.com/boostorg/math/issues/1005
+   // f(x) = x has no root in [1, 3] (or [-3, -1]); every step overshoots the
+   // same bound, and we used to return that bound as a root.
+   BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x, 1.0); }, 2.0, 1.0, 3.0, 52), boost::math::evaluation_error);
+   BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x, 1.0); }, -2.0, -3.0, -1.0, 52), boost::math::evaluation_error);
+   BOOST_CHECK_THROW(boost::math::tools::halley_iterate([](double x) { return std::make_tuple(x, 1.0, 0.0); }, 2.0, 1.0, 3.0, 52), boost::math::evaluation_error);
+   BOOST_CHECK_THROW(boost::math::tools::schroder_iterate([](double x) { return std::make_tuple(x, 1.0, 0.0); }, -2.0, -3.0, -1.0, 52), boost::math::evaluation_error);
+   // With a good guess the same functions still find the root:
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::newton_raphson_iterate(quartic, 0.9, 0.1, 1.1, 52), 1.0, 4 * std::numeric_limits<double>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::halley_iterate(quartic2, 0.9, 0.1, 1.1, 52), 1.0, 4 * std::numeric_limits<double>::epsilon());
+   // A genuine root at an end of the range is still accepted.  The root must
+   // be exactly representable: with x^2 - 0.01 on [0.1, 1], f(0.1) rounds to
+   // a positive value without FMA, so there is no root in the range at all.
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x * x - 0.25, 2 * x); }, 0.75, 0.5, 1.0, 52), 0.5, 4 * std::numeric_limits<double>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::halley_iterate([](double x) { return std::make_tuple(x * x - 0.25, 2 * x, 2.0); }, 0.75, 0.5, 1.0, 52), 0.5, 4 * std::numeric_limits<double>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x - 1, 1.0); }, 0.5, 0.0, 1.0, 52), 1.0, 4 * std::numeric_limits<double>::epsilon());
+   // A root at, or just inside, min that is only reachable by bisecting
+   // towards the bound: f = 1 - r^2/x^2 is concave, so Newton from 0.5
+   // overshoots below min every time.  These must not be reported as failures.
+   for (double rel : { 0.0, 1e-9, 1e-6 })
+   {
+      const double r = 0.1 * (1 + rel);
+      auto g = [r](double x) { return std::make_pair(1 - r * r / (x * x), 2 * r * r / (x * x * x)); };
+      auto g2 = [r](double x) { return std::make_tuple(1 - r * r / (x * x), 2 * r * r / (x * x * x), -6 * r * r / (x * x * x * x)); };
+      for (int digits : { 5, 12, 26, 52 })
+      {
+         const double tol = ldexp(1.0, 2 - digits);
+         BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::newton_raphson_iterate(g, 0.5, 0.1, 1.0, digits), r, tol);
+         BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::halley_iterate(g2, 0.5, 0.1, 1.0, digits), r, tol);
+      }
+   }
 #endif
 }
 
@@ -653,6 +740,10 @@ BOOST_AUTO_TEST_CASE( test_main )
 {
 
    test_beta(0.1, "double");
+
+   // bug reports:
+   boost::math::skew_normal_distribution<> dist(2.0, 1.0, -2.5);
+   BOOST_CHECK(boost::math::isfinite(quantile(dist, 0.075)));
 
 #if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_LAMBDAS)
    test_complex_newton<std::complex<float>>();

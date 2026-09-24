@@ -8,21 +8,15 @@
 #ifndef BOOST_MATH_CCMATH_ABS
 #define BOOST_MATH_CCMATH_ABS
 
-#include <cmath>
-#include <type_traits>
-#include <limits>
-#include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/ccmath/detail/config.hpp>
+
+#ifdef BOOST_MATH_NO_CCMATH
+#error "The header <boost/math/abs.hpp> can only be used in C++17 and later."
+#endif
+
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isinf.hpp>
-
-#include <boost/math/tools/is_standalone.hpp>
-#ifndef BOOST_MATH_STANDALONE
-#include <boost/config.hpp>
-#ifdef BOOST_NO_CXX17_IF_CONSTEXPR
-#error "The header <boost/math/norms.hpp> can only be used in C++17 and later."
-#endif
-#endif
 
 namespace boost::math::ccmath {
 
@@ -31,7 +25,7 @@ namespace detail {
 template <typename T> 
 constexpr T abs_impl(T x) noexcept
 {
-    if (boost::math::ccmath::isnan(x))
+    if ((boost::math::ccmath::isnan)(x))
     {
         return std::numeric_limits<T>::quiet_NaN();
     }
@@ -50,7 +44,7 @@ constexpr T abs_impl(T x) noexcept
 
 } // Namespace detail
 
-template <typename T, std::enable_if_t<!std::is_unsigned_v<T>, bool> = true>
+BOOST_MATH_EXPORT template <typename T, std::enable_if_t<!std::is_unsigned_v<T>, bool> = true>
 constexpr T abs(T x) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
@@ -66,7 +60,7 @@ constexpr T abs(T x) noexcept
 
 // If abs() is called with an argument of type X for which is_unsigned_v<X> is true and if X
 // cannot be converted to int by integral promotion (7.3.7), the program is ill-formed.
-template <typename T, std::enable_if_t<std::is_unsigned_v<T>, bool> = true>
+BOOST_MATH_EXPORT template <typename T, std::enable_if_t<std::is_unsigned_v<T>, bool> = true>
 constexpr T abs(T x) noexcept
 {
     if constexpr (std::is_convertible_v<T, int>)

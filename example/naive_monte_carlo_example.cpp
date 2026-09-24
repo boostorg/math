@@ -52,6 +52,7 @@ void display_progress(double progress,
 
 int main()
 {
+    using std::abs;
     double exact = 1.3932039296856768591842462603255;
     double A = 1.0 / boost::math::pow<3>(boost::math::constants::pi<double>());
     auto g = [&](std::vector<double> const & x)

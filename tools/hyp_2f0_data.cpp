@@ -46,7 +46,6 @@ int main(int, char* [])
       "This program will generate spot tests for 2F0:\n";
 
    std::string line;
-   bool cont;
 
 #if 1
    arg1 = make_periodic_param(mp_t(-20), mp_t(-1), 19);
@@ -58,6 +57,7 @@ int main(int, char* [])
 
 #else
 
+   bool cont;
    do {
       get_user_parameter_info(arg1, "a1");
       get_user_parameter_info(arg2, "a2");

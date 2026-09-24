@@ -10,8 +10,10 @@
 
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
+#endif
 
 #ifdef _MSC_VER
 #pragma once
@@ -25,15 +27,15 @@ namespace detail {
    constexpr double fib_bits_deno = 1.1609640474436811739351597;
 } // namespace detail
 
-template <typename T>
-inline BOOST_CXX14_CONSTEXPR T unchecked_fibonacci(unsigned long long n) noexcept(std::is_fundamental<T>::value) {
+BOOST_MATH_EXPORT template <typename T>
+inline BOOST_MATH_CXX14_CONSTEXPR T unchecked_fibonacci(unsigned long long n) noexcept(std::is_fundamental<T>::value) {
     // This function is called by the rest and computes the actual nth fibonacci number
     // First few fibonacci numbers: 0 (0th), 1 (1st), 1 (2nd), 2 (3rd), ...
     if (n <= 2) return n == 0 ? 0 : 1;
     /* 
      * This is based on the following identities by Dijkstra:
-     *   F(2*n)   = F(n)^2 + F(n+1)^2
-     *   F(2*n+1) = (2 * F(n) + F(n+1)) * F(n+1)
+     *   F(2*n-1) = F(n-1)^2 + F(n)^2
+     *   F(2*n)   = (2*F(n-1) + F(n)) * F(n)
      * The implementation is iterative and is unrolled version of trivial recursive implementation.
      */
     unsigned long long mask = 1;
@@ -49,21 +51,21 @@ inline BOOST_CXX14_CONSTEXPR T unchecked_fibonacci(unsigned long long n) noexcep
     return a;
 }
 
-template <typename T, class Policy>
-T inline BOOST_CXX14_CONSTEXPR fibonacci(unsigned long long n, const Policy &pol) {
+BOOST_MATH_EXPORT template <typename T, class Policy>
+T inline BOOST_MATH_CXX14_CONSTEXPR fibonacci(unsigned long long n, const Policy &pol) {
     // check for overflow using approximation to binet's formula: F_n ~ phi^n / sqrt(5)
     if (n > 20 && n * detail::fib_bits_phi - detail::fib_bits_deno > std::numeric_limits<T>::digits)
         return policies::raise_overflow_error<T>("boost::math::fibonacci<%1%>(unsigned long long)", "Possible overflow detected.", pol);
     return unchecked_fibonacci<T>(n);
 }
 
-template <typename T>
-T inline BOOST_CXX14_CONSTEXPR fibonacci(unsigned long long n) {
+BOOST_MATH_EXPORT template <typename T>
+T inline BOOST_MATH_CXX14_CONSTEXPR fibonacci(unsigned long long n) {
     return fibonacci<T>(n, policies::policy<>());
 }
 
 // generator for next fibonacci number (see examples/reciprocal_fibonacci_constant.hpp)
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 class fibonacci_generator {
   public:
     // return next fibonacci number

@@ -19,7 +19,9 @@
     "Do not #include this file directly. This should only be #included by autodiff.hpp for C++11 compatibility."
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
+#endif
 #include <boost/math/tools/mp.hpp>
 
 namespace boost {

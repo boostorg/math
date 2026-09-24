@@ -6,10 +6,12 @@
 #ifndef BOOST_MATH_CCMATH_LOGB_HPP
 #define BOOST_MATH_CCMATH_LOGB_HPP
 
-#include <cmath>
-#include <limits>
-#include <type_traits>
-#include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/ccmath/detail/config.hpp>
+
+#ifdef BOOST_MATH_NO_CCMATH
+#error "The header <boost/math/logb.hpp> can only be used in C++17 and later."
+#endif
+
 #include <boost/math/ccmath/frexp.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
@@ -34,7 +36,7 @@ constexpr T logb_impl(T arg) noexcept
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr Real logb(Real arg) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
@@ -61,7 +63,7 @@ constexpr Real logb(Real arg) noexcept
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 constexpr double logb(Z arg) noexcept
 {
     return boost::math::ccmath::logb(static_cast<double>(arg));

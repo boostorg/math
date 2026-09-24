@@ -59,7 +59,6 @@ int main(int, char* [])
       "This program will generate spot tests for 2F0:\n";
 
    std::string line;
-   bool cont;
 
    std::vector<mp_t> v;
    random_ns::mt19937 rnd;
@@ -96,5 +95,4 @@ int main(int, char* [])
    
    return 0;
 }
-
 

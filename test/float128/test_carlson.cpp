@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/ellint_rf.hpp>
 #include <boost/math/special_functions/ellint_rj.hpp>
 #include <boost/math/special_functions/ellint_rg.hpp>
-#include "libs/math/test/test_carlson.hpp"
+#include "test_carlson.hpp"
 
 void expected_results()
 {

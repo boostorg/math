@@ -9,7 +9,12 @@
 #  pragma warning (disable : 4224)
 #endif
 
+#ifndef BOOST_MATH_ENABLE_SYCL
 #include <pch_light.hpp> // include /libs/math/src/
+#else
+#include "sycl/sycl.hpp"
+#endif
+
 #include "test_cbrt.hpp"
 
 #include <boost/math/special_functions/cbrt.hpp> // Added to avoid link failure missing cbrt variants.

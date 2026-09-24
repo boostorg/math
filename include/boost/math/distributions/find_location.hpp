@@ -10,6 +10,7 @@
 
 #include <boost/math/distributions/fwd.hpp> // for all distribution signatures.
 #include <boost/math/distributions/complement.hpp>
+#include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/traits.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -27,7 +28,7 @@ namespace boost
   // Applies to normal, lognormal, extreme value, Cauchy, (and symmetrical triangular),
   // enforced by static_assert below.
 
-    template <class Dist, class Policy>
+    BOOST_MATH_EXPORT template <class Dist, class Policy>
     inline
       typename Dist::value_type find_location( // For example, normal mean.
       typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
@@ -51,10 +52,10 @@ namespace boost
        return policies::raise_domain_error<typename Dist::value_type>(
            function, "z parameter was %1%, but must be finite!", z, pol);
       }
-      if(!(boost::math::isfinite)(scale))
+      typename Dist::value_type result;
+      if(!(boost::math::detail::check_scale)(function, scale, &result, pol))
       {
-       return policies::raise_domain_error<typename Dist::value_type>(
-           function, "scale parameter was %1%, but must be finite!", scale, pol);
+       return result;
       }
         
       //cout << "z " << z << ", p " << p << ",  quantile(Dist(), p) "
@@ -62,7 +63,7 @@ namespace boost
       return z - (quantile(Dist(), p) * scale);
     } // find_location
 
-    template <class Dist>
+    BOOST_MATH_EXPORT template <class Dist>
     inline // with default policy.
       typename Dist::value_type find_location( // For example, normal mean.
       typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
@@ -76,7 +77,7 @@ namespace boost
     // So the user can start from the complement q = (1 - p) of the probability p,
     // for example, l = find_location<normal>(complement(z, q, sd));
 
-    template <class Dist, class Real1, class Real2, class Real3>
+    BOOST_MATH_EXPORT template <class Dist, class Real1, class Real2, class Real3>
     inline typename Dist::value_type find_location( // Default policy.
       complemented3_type<Real1, Real2, Real3> const& c)
     {
@@ -94,18 +95,18 @@ namespace boost
        return policies::raise_domain_error<typename Dist::value_type>(
            function, "z parameter was %1%, but must be finite!", z, policies::policy<>());
       }
+      typename Dist::value_type result;
       typename Dist::value_type scale = c.param2;
-      if(!(boost::math::isfinite)(scale))
+      if(!(boost::math::detail::check_scale)(function, scale, &result, policies::policy<>()))
       {
-       return policies::raise_domain_error<typename Dist::value_type>(
-           function, "scale parameter was %1%, but must be finite!", scale, policies::policy<>());
+       return result;
       }
        // cout << "z " << c.dist << ", quantile (Dist(), " << c.param1 << ") * scale " << c.param2 << endl;
        return z - quantile(Dist(), p) * scale;
     } // find_location complement
 
 
-    template <class Dist, class Real1, class Real2, class Real3, class Real4>
+    BOOST_MATH_EXPORT template <class Dist, class Real1, class Real2, class Real3, class Real4>
     inline typename Dist::value_type find_location( // Explicit policy.
       complemented4_type<Real1, Real2, Real3, Real4> const& c)
     {
@@ -123,11 +124,11 @@ namespace boost
        return policies::raise_domain_error<typename Dist::value_type>(
            function, "z parameter was %1%, but must be finite!", z, c.param3);
       }
+      typename Dist::value_type result;
       typename Dist::value_type scale = c.param2;
-      if(!(boost::math::isfinite)(scale))
+      if(!(boost::math::detail::check_scale)(function, scale, &result, c.param3))
       {
-       return policies::raise_domain_error<typename Dist::value_type>(
-           function, "scale parameter was %1%, but must be finite!", scale, c.param3);
+       return result;
       }
        // cout << "z " << c.dist << ", quantile (Dist(), " << c.param1 << ") * scale " << c.param2 << endl;
        return z - quantile(Dist(), p) * scale;

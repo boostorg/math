@@ -1,4 +1,5 @@
 //  (C) Copyright John Maddock 2010.
+//  (C) Copyright Matt Borland 2024.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -6,22 +7,84 @@
 #ifndef BOOST_MATH_TUPLE_HPP_INCLUDED
 #define BOOST_MATH_TUPLE_HPP_INCLUDED
 
-#include <boost/math/tools/cxx03_warn.hpp>
+#include <boost/math/tools/config.hpp>
+
+#ifdef BOOST_MATH_ENABLE_CUDA
+
+#include <boost/math/tools/type_traits.hpp>
+#include <cuda/std/utility>
+#include <cuda/std/tuple>
+
+namespace boost { 
+namespace math {
+
+BOOST_MATH_EXPORT using cuda::std::pair;
+BOOST_MATH_EXPORT using cuda::std::tuple;
+
+BOOST_MATH_EXPORT using cuda::std::make_pair;
+
+BOOST_MATH_EXPORT using cuda::std::tie;
+BOOST_MATH_EXPORT using cuda::std::get;
+
+BOOST_MATH_EXPORT using cuda::std::tuple_size;
+BOOST_MATH_EXPORT using cuda::std::tuple_element;
+
+namespace detail {
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED T&& forward(boost::math::remove_reference_t<T>& arg) noexcept
+{
+    return static_cast<T&&>(arg);
+}
+
+template <typename T>
+BOOST_MATH_GPU_ENABLED T&& forward(boost::math::remove_reference_t<T>&& arg) noexcept
+{
+    static_assert(!boost::math::is_lvalue_reference<T>::value, "Cannot forward an rvalue as an lvalue.");
+    return static_cast<T&&>(arg);
+}
+
+} // namespace detail
+
+template <typename T, typename... Ts>
+BOOST_MATH_GPU_ENABLED auto make_tuple(T&& t, Ts&&... ts) 
+{
+    return cuda::std::tuple<boost::math::decay_t<T>, boost::math::decay_t<Ts>...>(
+        boost::math::detail::forward<T>(t), boost::math::detail::forward<Ts>(ts)...
+    );
+}
+
+} // namespace math
+} // namespace boost
+
+#else
+
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <tuple>
+#endif
 
-namespace boost{ namespace math{
+namespace boost { 
+namespace math {
 
-using ::std::tuple;
+BOOST_MATH_EXPORT using ::std::tuple;
+BOOST_MATH_EXPORT using ::std::pair;
 
 // [6.1.3.2] Tuple creation functions
-using ::std::ignore;
-using ::std::make_tuple;
-using ::std::tie;
-using ::std::get;
+BOOST_MATH_EXPORT using ::std::ignore;
+BOOST_MATH_EXPORT using ::std::make_tuple;
+BOOST_MATH_EXPORT using ::std::tie;
+BOOST_MATH_EXPORT using ::std::get;
 
 // [6.1.3.3] Tuple helper classes
-using ::std::tuple_size;
-using ::std::tuple_element;
+BOOST_MATH_EXPORT using ::std::tuple_size;
+BOOST_MATH_EXPORT using ::std::tuple_element;
 
-}}
+// Pair helpers
+BOOST_MATH_EXPORT using ::std::make_pair;
+
+} // namespace math
+} // namespace boost
+
+#endif // BOOST_MATH_ENABLE_CUDA
+
 #endif

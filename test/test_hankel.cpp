@@ -3,9 +3,15 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_ENABLE_SYCL
 #include <pch_light.hpp>
+#else
+#include "sycl/sycl.hpp"
+#endif
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+#include <boost/math/tools/config.hpp>
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -57,7 +63,7 @@ void test_hankel(T, const char* name)
       {{ 4, 4, static_cast<T>(0.281129064961360106322277160229942806897088617059328870629222L), static_cast<T>(-0.488936768533842510615657398339913206218740182079627974737267L) }},
       {{ 4, -4, static_cast<T>(0.281129064961360106322277160229942806897088617059328870629222L), std::complex<T>(static_cast<T>(-0.488936768533842510615657398339913206218740182079627974737267L), static_cast<T>(0.562258129922720212644554320459885613794177234118657741258443L)) }},
       {{ -4, 4, static_cast<T>(0.281129064961360106322277160229942806897088617059328870629222L), static_cast<T>(-0.488936768533842510615657398339913206218740182079627974737267L) }},
-      {{ -4, -4, static_cast<T>(0.281129064961360106322277160229942806897088617059328870629222), std::complex<T>(static_cast<T>(-0.488936768533842510615657398339913206218740182079627974737267L), static_cast<T>(0.562258129922720212644554320459885613794177234118657741258443L)) }},
+      {{ -4, -4, static_cast<T>(0.281129064961360106322277160229942806897088617059328870629222L), std::complex<T>(static_cast<T>(-0.488936768533842510615657398339913206218740182079627974737267L), static_cast<T>(0.562258129922720212644554320459885613794177234118657741258443L)) }},
       {{ 3, 3, static_cast<T>(0.309062722255251643618260194946833149429135935993056794354475L), static_cast<T>(-0.538541616105031618004703905338594463807957863604859251481262L) }},
       {{ 3, -3, static_cast<T>(-0.309062722255251643618260194946833149429135935993056794354475L), std::complex<T>(static_cast<T>(0.538541616105031618004703905338594463807957863604859251481262L), static_cast<T>(-0.618125444510503287236520389893666298858271871986113588708949L)) }},
       {{ -3, 3, static_cast<T>(-0.309062722255251643618260194946833149429135935993056794354475L), static_cast<T>(0.538541616105031618004703905338594463807957863604859251481262L) }},
@@ -80,11 +86,24 @@ void test_hankel(T, const char* name)
             boost::math::sph_hankel_2(data[i][0].real(), data[i][1].real()));
       }
    }
+
+   BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity)
+   {
+      std::complex<T> r = boost::math::cyl_hankel_1(T(1), T(0));
+      BOOST_CHECK_EQUAL(r, std::complex<T>(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity()));
+      r = boost::math::cyl_hankel_2(T(1), T(0));
+      BOOST_CHECK_EQUAL(r, std::complex<T>(std::numeric_limits<T>::infinity(), -std::numeric_limits<T>::infinity()));
+      r = boost::math::cyl_hankel_1(T(0), T(0));
+      BOOST_CHECK_EQUAL(r, std::complex<T>(1, -std::numeric_limits<T>::infinity()));
+      r = boost::math::cyl_hankel_2(T(0), T(0));
+      BOOST_CHECK_EQUAL(r, std::complex<T>(1, std::numeric_limits<T>::infinity()));
+   }
 }
 
 //
 // Instantiate a few instances to check our error handling code can cope with std::complex:
 //
+#ifndef BOOST_MATH_ENABLE_SYCL
 typedef boost::math::policies::policy<
    boost::math::policies::overflow_error<boost::math::policies::throw_on_error>,
    boost::math::policies::denorm_error<boost::math::policies::throw_on_error>,
@@ -120,7 +139,7 @@ typedef boost::math::policies::policy<
    boost::math::policies::indeterminate_result_error<boost::math::policies::ignore_error> > pol3;
 
 template std::complex<double> boost::math::cyl_hankel_1<double, double, pol3>(double, double, const pol3&);
-
+#endif
 
 BOOST_AUTO_TEST_CASE( test_main )
 {

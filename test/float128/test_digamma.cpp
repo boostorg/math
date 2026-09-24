@@ -7,7 +7,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/digamma.hpp>
-#include "libs/math/test/test_digamma.hpp"
+#include "test_digamma.hpp"
 
 void expected_results()
 {

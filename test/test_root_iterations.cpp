@@ -299,7 +299,7 @@ BOOST_AUTO_TEST_CASE( test_main )
          result = ibeta_small_data[i][2];
          dr = boost::math::tools::halley_iterate(ibeta_roots_3<double, boost::math::policies::policy<> >(ibeta_small_data[i][0], ibeta_small_data[i][1], ibeta_small_data[i][5]), 0.5, 0.0, 1.0, 53, iters);
          BOOST_CHECK_CLOSE_FRACTION(dr, result, std::numeric_limits<double>::epsilon() * 200);
-#if defined(__PPC__) || defined(__aarch64__)
+#if defined(__PPC__) || defined(__aarch64__) || (LDBL_MANT_DIG > 100)
          BOOST_CHECK_LE(iters, 55);
 #else
          BOOST_CHECK_LE(iters, 40);

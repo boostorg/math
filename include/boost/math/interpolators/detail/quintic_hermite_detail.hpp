@@ -6,11 +6,14 @@
  */
 #ifndef BOOST_MATH_INTERPOLATORS_DETAIL_QUINTIC_HERMITE_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_DETAIL_QUINTIC_HERMITE_DETAIL_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <stdexcept>
 #include <sstream>
 #include <limits>
 #include <cmath>
+#include <cstdint>
+#endif
 
 namespace boost {
 namespace math {
@@ -193,7 +196,7 @@ public:
         return os;
     }
 
-    int64_t bytes() const
+    std::int64_t bytes() const
     {
         return 4*x_.size()*sizeof(x_);
     }
@@ -375,12 +378,12 @@ public:
         Real d2y1 = d2y_[i+1];
 
         Real d2ydx2 = 60*t*(1 - 3*t + 2*t*t)*(y1 - y0)*inv_dx_*inv_dx_;
-        d2ydx2 += (12*t)*((-3 + 8*t - 5*t*t)*dy0 - (2 - 7*t + 5*t*t)*dy1);
+        d2ydx2 += (12*t)*((-3 + 8*t - 5*t*t)*dy0 - (2 - 7*t + 5*t*t)*dy1)*inv_dx_*inv_dx_;
         d2ydx2 += (1 - 9*t + 18*t*t - 10*t*t*t)*d2y0*(2*inv_dx_*inv_dx_) + t*(3 - 12*t + 10*t*t)*d2y1*(2*inv_dx_*inv_dx_);
         return d2ydx2;
     }
 
-    int64_t bytes() const
+    std::int64_t bytes() const
     {
         return 3*y_.size()*sizeof(Real) + 2*sizeof(Real);
     }
@@ -556,12 +559,12 @@ public:
         Real d2y1 = data_[i+1][2];
 
         Real d2ydx2 = 60*t*(1 - 3*t + 2*t*t)*(y1 - y0)*inv_dx_*inv_dx_;
-        d2ydx2 += (12*t)*((-3 + 8*t - 5*t*t)*dy0 - (2 - 7*t + 5*t*t)*dy1);
+        d2ydx2 += (12*t)*((-3 + 8*t - 5*t*t)*dy0 - (2 - 7*t + 5*t*t)*dy1)*inv_dx_*inv_dx_;
         d2ydx2 += (1 - 9*t + 18*t*t - 10*t*t*t)*d2y0*(2*inv_dx_*inv_dx_) + t*(3 - 12*t + 10*t*t)*d2y1*(2*inv_dx_*inv_dx_);
         return d2ydx2;
     }
 
-    int64_t bytes() const
+    std::int64_t bytes() const
     {
         return data_.size()*data_[0].size()*sizeof(Real) + 2*sizeof(Real);
     }

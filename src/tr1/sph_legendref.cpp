@@ -11,9 +11,9 @@
 #include <boost/math/special_functions/spherical_harmonic.hpp>
 #include "c_policy.hpp"
 
-extern "C" float BOOST_MATH_TR1_DECL boost_sph_legendref BOOST_PREVENT_MACRO_SUBSTITUTION(unsigned n, unsigned m, float x) BOOST_MATH_C99_THROW_SPEC
+extern "C" float BOOST_MATH_TR1_DECL boost_sph_legendref BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(unsigned n, unsigned m, float x) BOOST_MATH_C99_THROW_SPEC
 {
-   return  (m & 1 ? -1 : 1) * c_policies::spherical_harmonic_r BOOST_PREVENT_MACRO_SUBSTITUTION(n, m, x, 0.0f);
+   return  (m & 1 ? -1 : 1) * c_policies::spherical_harmonic_r BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(n, m, x, 0.0f);
 }
 
 

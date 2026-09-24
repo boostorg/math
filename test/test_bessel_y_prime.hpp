@@ -130,6 +130,7 @@ void do_test_sph_neumann_y_prime(const T& data, const char* type_name, const cha
 template <class T>
 void test_bessel_prime(T, const char* name)
 {
+   using std::ldexp;
    //
    // The actual test data is rather verbose, so it's in a separate file
    //
@@ -217,5 +218,34 @@ void test_bessel_prime(T, const char* name)
 
 #include "sph_neumann_prime_data.ipp"
     do_test_sph_neumann_y_prime<T>(sph_neumann_prime_data, name, "y': Random Data");
+
+    //
+    // More cases for full test coverage:
+    //
+    BOOST_CHECK_THROW(boost::math::cyl_neumann_prime(T(2.5), T(0)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_neumann_prime(T(2.5), T(-1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::sph_neumann_prime(2, T(0)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::sph_neumann_prime(2, T(-1)), std::domain_error);
+
+    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity && (std::numeric_limits<T>::min_exponent < -1072))
+    {
+       static const std::array<std::array<T, 3>, 5> yv_prime_coverage_data = { {
+          {{ SC_(170.25), SC_(2), SC_(4.1990285871978876642542582761856953686528755802132926772620e306) }},
+    #if LDBL_MAX_10_EXP > 4936
+          {{ SC_(14.25), ldexp(T(1), -1072), SC_(1.830622575805420777640505999291582751497710200210963689466e4936)}},
+    #else
+          {{ SC_(14.25), ldexp(T(1), -1072), std::numeric_limits<T>::infinity() }},
+    #endif
+          {{ SC_(14.25), ldexp(T(1), -1074), std::numeric_limits<T>::infinity() }},
+          {{ SC_(15.25), ldexp(T(1), -1074), std::numeric_limits<T>::infinity() }},
+          {{ SC_(30.25), ldexp(T(1), -1045), std::numeric_limits<T>::infinity() }},
+       } };
+       do_test_cyl_neumann_y_prime<T>(yv_prime_coverage_data, name, "y': Extra coverage data");
+    }
+   static const std::array<std::array<T, 3>, 1> sph_prime_coverage_data = { {
+         // (SphericalBesselY[-1, 5/2] - (SphericalBesselY(0, 5/2)+5/2 * SphericalBesselY[1, 5/2])/(5/2))/2
+      {{ SC_(0.0), SC_(2.5), SC_(0.1112058791540732032473814343996886423728680128280382077091151343) }},
+   } };
+   do_test_sph_neumann_y_prime<T>(sph_prime_coverage_data, name, "y': Extra coverage data");
 }
 

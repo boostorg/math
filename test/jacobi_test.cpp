@@ -16,6 +16,10 @@
 using boost::multiprecision::float128;
 #endif
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 using std::abs;
 using boost::math::jacobi;
 using boost::math::jacobi_derivative;
@@ -95,28 +99,47 @@ void test_derivative()
 
 int main()
 {
-    test_to_quadratic<double>();
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_to_quadratic<long double>();
-#endif
+    #ifdef __STDCPP_FLOAT32_T__
+    
+    test_symmetry<std::float32_t>();
+    test_derivative<std::float32_t>();
+
+    #else
 
     test_symmetry<float>();
-    test_symmetry<double>();
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_symmetry<long double>();
-#endif
-
     test_derivative<float>();
-    test_derivative<double>();
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_derivative<long double>();
-#endif
 
-#ifdef BOOST_HAS_FLOAT128
+    #endif
+    
+    #ifdef __STDCPP_FLOAT64_T__
+
+    test_to_quadratic<std::float64_t>();
+    test_symmetry<std::float64_t>();
+    test_derivative<std::float64_t>();
+
+    #else
+
+    test_to_quadratic<double>();
+    test_symmetry<double>();
+    test_derivative<double>();
+
+    #endif
+
+    #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+    
+    test_to_quadratic<long double>();
+    test_symmetry<long double>();
+    test_derivative<long double>();
+    
+    #endif
+
+    #ifdef BOOST_HAS_FLOAT128
+    
     test_to_quadratic<boost::multiprecision::float128>();
     test_symmetry<boost::multiprecision::float128>();
     test_derivative<boost::multiprecision::float128>();
-#endif
+    
+    #endif
 
     return boost::math::test::report_errors();
 }

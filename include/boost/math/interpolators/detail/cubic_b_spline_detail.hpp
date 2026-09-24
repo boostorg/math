@@ -7,10 +7,12 @@
 #ifndef CUBIC_B_SPLINE_DETAIL_HPP
 #define CUBIC_B_SPLINE_DETAIL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <cmath>
 #include <vector>
 #include <memory>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 

@@ -9,11 +9,15 @@
 // Constants are too big for float case, but this doesn't matter for test.
 #endif
 
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp>
+#endif
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/ellint_1.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
 
@@ -139,11 +143,13 @@ void test_spots(T, const char* type_name)
     //
     // Test error handling:
     //
+    #ifndef BOOST_MATH_NO_EXCEPTIONS
     BOOST_CHECK_GE(boost::math::ellint_1(T(1)), boost::math::tools::max_value<T>());
     BOOST_CHECK_GE(boost::math::ellint_1(T(-1)), boost::math::tools::max_value<T>());
     BOOST_CHECK_THROW(boost::math::ellint_1(T(1.0001)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::ellint_1(T(-1.0001)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::ellint_1(T(2.2), T(0.5)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::ellint_1(T(-2.2), T(0.5)), std::domain_error);
+    #endif
 }
 

@@ -9,6 +9,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/ellint_rj.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/array.hpp>
 #include <boost/random.hpp>
@@ -219,6 +220,12 @@ void t6(T, const char* type_name)
 #include "ellint_rc_data.ipp"
 
    do_test_ellint_rc<T>(ellint_rc_data, type_name, "RC: Random data");
+
+   //
+   // Error handling:
+   //
+   BOOST_CHECK_THROW(boost::math::ellint_rc(T(-1), T(1)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::ellint_rc(T(1), T(0)), std::domain_error);
 }
 
 template <typename T>
@@ -270,6 +277,12 @@ void t12(T, const char* type_name)
 #include "ellint_rd_data.ipp"
 
    do_test_ellint_rd<T>(ellint_rd_data, type_name, "RD: Random data");
+
+   BOOST_CHECK_THROW(boost::math::ellint_rd(T(-1), T(1), T(2)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::ellint_rd(T(1), T(-1), T(2)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::ellint_rd(T(1), T(2), T(0)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::ellint_rd(T(0), T(0), T(2)), std::domain_error);
+   BOOST_CHECK_EQUAL(boost::math::ellint_rd(T(0.5), T(0), T(0.75)), boost::math::ellint_rd(T(0), T(0.5), T(0.75)));
 }
 
 template <typename T>
@@ -371,18 +384,54 @@ void test_spots(T val, const char* type_name)
    BOOST_CHECK_CLOSE(ellint_rf(T(1), T(2), T(0)), T(1.3110287771461), tolerance);
    BOOST_CHECK_CLOSE(ellint_rf(T(0.5), T(1), T(0)), T(1.8540746773014), tolerance);
    BOOST_CHECK_CLOSE(ellint_rf(T(2), T(3), T(4)), T(0.58408284167715), tolerance);
+
+   BOOST_CHECK_THROW(ellint_rf(T(-1), T(1), T(1)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rf(T(1), T(-1), T(1)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rf(T(1), T(1), T(-1)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rf(T(0), T(0), T(1)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rf(T(1), T(0), T(0)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rf(T(0), T(1), T(0)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rf(T(0), T(0), T(0)), std::domain_error);
+
+   BOOST_CHECK_EQUAL(ellint_rf(T(0), T(2), T(2)), ellint_rf(T(2), T(0), T(2)));
+   BOOST_CHECK_EQUAL(ellint_rf(T(2), T(2), T(0)), ellint_rf(T(2), T(0), T(2)));
+   BOOST_CHECK_EQUAL(ellint_rf(T(0), T(2), T(3)), ellint_rf(T(2), T(3), T(0)));
+   BOOST_CHECK_EQUAL(ellint_rf(T(0), T(2), T(3)), ellint_rf(T(3), T(2), T(0)));
+   BOOST_CHECK_EQUAL(ellint_rf(T(0), T(2), T(3)), ellint_rf(T(3), T(0), T(2)));
+   BOOST_CHECK_EQUAL(ellint_rf(T(0), T(2), T(3)), ellint_rf(T(2), T(0), T(3)));
+
    // RC:
    BOOST_CHECK_CLOSE_FRACTION(ellint_rc(T(0), T(1)/4), boost::math::constants::pi<T>(), eps2);
    BOOST_CHECK_CLOSE_FRACTION(ellint_rc(T(9)/4, T(2)), boost::math::constants::ln_two<T>(), eps2);
    BOOST_CHECK_CLOSE_FRACTION(ellint_rc(T(1) / 4, T(-2)), boost::math::constants::ln_two<T>() / 3, eps2);
+
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::detail::ellint_rc1p_imp(T(-2), boost::math::policies::policy<>()), ellint_rc(T(1), T(-1)), eps2);
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::detail::ellint_rc1p_imp(T(-0.75), boost::math::policies::policy<>()), ellint_rc(T(1), T(0.25)), eps2);
+
    // RJ:
    BOOST_CHECK_CLOSE(ellint_rj(T(0), T(1), T(2), T(3)), T(0.77688623778582), tolerance);
    BOOST_CHECK_CLOSE(ellint_rj(T(2), T(3), T(4), T(5)), T(0.14297579667157), tolerance);
    BOOST_CHECK_CLOSE(ellint_rj(T(2), T(3), T(4), T(-0.5)), T(0.24723819703052), tolerance);
    BOOST_CHECK_CLOSE(ellint_rj(T(2), T(3), T(4), T(-5)), T(-0.12711230042964), tolerance);
+
+   BOOST_CHECK_THROW(ellint_rj(T(-1), T(1), T(2), T(3)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rj(T(1), T(-1), T(2), T(3)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rj(T(1), T(2), T(-2), T(3)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rj(T(1), T(2), T(2), T(0)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rj(T(0), T(0), T(2), T(3)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rj(T(2), T(0), T(0), T(0)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rj(T(0), T(2), T(0), T(0)), std::domain_error);
+
    // RD:
    BOOST_CHECK_CLOSE(ellint_rd(T(0), T(2), T(1)), T(1.7972103521034), tolerance);
    BOOST_CHECK_CLOSE(ellint_rd(T(2), T(3), T(4)), T(0.16510527294261), tolerance);
+
+   // RG
+   BOOST_CHECK_THROW(ellint_rg(T(-1), T(1), T(2)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rg(T(-1), T(-1), T(2)), std::domain_error);
+   BOOST_CHECK_THROW(ellint_rg(T(-1), T(2), T(-1)), std::domain_error);
+   BOOST_CHECK_EQUAL(ellint_rg(T(0), T(2), T(2)), ellint_rg(T(2), T(2), T(0)));
+   BOOST_CHECK_EQUAL(ellint_rg(T(0), T(2), T(2)), ellint_rg(T(2), T(0), T(2)));
 
    // Sanity/consistency checks from Numerical Computation of Real or Complex 
    // Elliptic Integrals, B. C. Carlson: http://arxiv.org/abs/math.CA/9409227

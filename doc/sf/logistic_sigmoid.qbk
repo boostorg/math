@@ -1,0 +1,30 @@
+[/
+  Copyright Matt Borland 2025
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:logistic_sigmoid logistic_sigmoid]
+
+[h4 Synopsis]
+
+    #include <boost/math/special_functions/logistic_sigmoid.hpp>
+
+    namespace boost { namespace math {
+
+    template <typename RealType, typename Policy>
+    RealType logistic_sigmoid(RealType x, const Policy&);
+
+    template <typename RealType>
+    RealType logistic_sigmoid(RealType x)
+
+    }} // namespaces
+
+[h4 Description]
+
+Returns the [@https://en.wikipedia.org/wiki/Logistic_function logistic sigmoid function]
+This function is broadly useful, and is used to compute the CDF of the logistic distribution.
+It is also sometimes referred to as expit as it is the inverse of the logit function.
+
+[endsect]

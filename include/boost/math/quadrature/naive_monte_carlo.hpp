@@ -6,6 +6,7 @@
  */
 #ifndef BOOST_MATH_QUADRATURE_NAIVE_MONTE_CARLO_HPP
 #define BOOST_MATH_QUADRATURE_NAIVE_MONTE_CARLO_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <sstream>
 #include <algorithm>
 #include <vector>
@@ -20,7 +21,16 @@
 #include <chrono>
 #include <map>
 #include <type_traits>
+#include <cstdint>
+#endif
 #include <boost/math/policies/error_handling.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
+
+#ifdef BOOST_NAIVE_MONTE_CARLO_DEBUG_FAILURES
+#ifndef BOOST_MATH_BUILD_MODULE
+#  include <iostream>
+#endif
+#endif
 
 namespace boost { namespace math { namespace quadrature {
 
@@ -31,7 +41,7 @@ namespace detail {
                                    DOUBLE_INFINITE};
 }
 
-template<class Real, class F, class RandomNumberGenerator = std::mt19937_64, class Policy = boost::math::policies::policy<>,
+BOOST_MATH_EXPORT template<class Real, class F, class RandomNumberGenerator = std::mt19937_64, class Policy = boost::math::policies::policy<>,
          typename std::enable_if<std::is_trivially_copyable<Real>::value, bool>::type = true>
 class naive_monte_carlo
 {
@@ -40,27 +50,29 @@ public:
                       std::vector<std::pair<Real, Real>> const & bounds,
                       Real error_goal,
                       bool singular = true,
-                      uint64_t threads = std::thread::hardware_concurrency(),
-                      uint64_t seed = 0) noexcept : m_num_threads{threads}, m_seed{seed}, m_volume(1)
+                      std::uint64_t threads = std::thread::hardware_concurrency(),
+                      std::uint64_t seed = 0) noexcept : m_num_threads{threads}, m_seed{seed}, m_volume(1)
     {
         using std::numeric_limits;
         using std::sqrt;
-        uint64_t n = bounds.size();
+        using boost::math::isinf;
+
+        std::uint64_t n = bounds.size();
         m_lbs.resize(n);
         m_dxs.resize(n);
         m_limit_types.resize(n);
 
         static const char* function = "boost::math::quadrature::naive_monte_carlo<%1%>";
-        for (uint64_t i = 0; i < n; ++i)
+        for (std::uint64_t i = 0; i < n; ++i)
         {
             if (bounds[i].second <= bounds[i].first)
             {
                 boost::math::policies::raise_domain_error(function, "The upper bound is <= the lower bound.\n", bounds[i].second, Policy());
                 return;
             }
-            if (bounds[i].first == -numeric_limits<Real>::infinity())
+            if (isinf(bounds[i].first))
             {
-                if (bounds[i].second == numeric_limits<Real>::infinity())
+                if (isinf(bounds[i].second))
                 {
                     m_limit_types[i] = detail::limit_classification::DOUBLE_INFINITE;
                 }
@@ -72,7 +84,7 @@ public:
                     m_dxs[i] = numeric_limits<Real>::quiet_NaN();
                 }
             }
-            else if (bounds[i].second == numeric_limits<Real>::infinity())
+            else if (isinf(bounds[i].second))
             {
                 m_limit_types[i] = detail::limit_classification::UPPER_BOUND_INFINITE;
                 if (singular)
@@ -115,7 +127,7 @@ public:
         m_integrand = [this, &integrand](std::vector<Real> & x)->Real
         {
             Real coeff = m_volume;
-            for (uint64_t i = 0; i < x.size(); ++i)
+            for (std::uint64_t i = 0; i < x.size(); ++i)
             {
                 // Variable transformation are listed at:
                 // https://en.wikipedia.org/wiki/Numerical_integration
@@ -163,15 +175,15 @@ public:
         RandomNumberGenerator gen(seed);
         Real inv_denom = 1/static_cast<Real>(((gen.max)()-(gen.min)()));
 
-        m_num_threads = (std::max)(m_num_threads, static_cast<uint64_t>(1));
-        m_thread_calls.reset(new std::atomic<uint64_t>[threads]);
+        m_num_threads = (std::max)(m_num_threads, static_cast<std::uint64_t>(1));
+        m_thread_calls.reset(new std::atomic<std::uint64_t>[threads]);
         m_thread_Ss.reset(new std::atomic<Real>[threads]);
         m_thread_averages.reset(new std::atomic<Real>[threads]);
 
         Real avg = 0;
-        for (uint64_t i = 0; i < m_num_threads; ++i)
+        for (std::uint64_t i = 0; i < m_num_threads; ++i)
         {
-            for (uint64_t j = 0; j < m_lbs.size(); ++j)
+            for (std::uint64_t j = 0; j < m_lbs.size(); ++j)
             {
                 x[j] = (gen()-(gen.min)())*inv_denom;
             }
@@ -256,7 +268,7 @@ public:
         return m_avg.load();
     }
 
-    uint64_t calls() const
+    std::uint64_t calls() const
     {
         return m_total_calls.load();  // relaxed load
     }
@@ -265,7 +277,7 @@ private:
 
    Real m_integrate()
    {
-      uint64_t seed;
+      std::uint64_t seed;
       // If the user tells us to pick a seed, pick a seed:
       if (m_seed == 0)
       {
@@ -285,38 +297,38 @@ private:
             m_done = false;
 
 #ifdef BOOST_NAIVE_MONTE_CARLO_DEBUG_FAILURES
-            std::cout << "Failed to achieve required tolerance first time through..\n";
-            std::cout << "  variance =    " << m_variance << std::endl;
-            std::cout << "  average =     " << m_avg << std::endl;
-            std::cout << "  total calls = " << m_total_calls << std::endl;
+            std::cerr << "Failed to achieve required tolerance first time through..\n";
+            std::cerr << "  variance =    " << m_variance << std::endl;
+            std::cerr << "  average =     " << m_avg << std::endl;
+            std::cerr << "  total calls = " << m_total_calls << std::endl;
 
             for (std::size_t i = 0; i < m_num_threads; ++i)
-               std::cout << "  thread_calls[" << i << "] = " << m_thread_calls[i] << std::endl;
+               std::cerr << "  thread_calls[" << i << "] = " << m_thread_calls[i] << std::endl;
             for (std::size_t i = 0; i < m_num_threads; ++i)
-               std::cout << "  thread_averages[" << i << "] = " << m_thread_averages[i] << std::endl;
+               std::cerr << "  thread_averages[" << i << "] = " << m_thread_averages[i] << std::endl;
             for (std::size_t i = 0; i < m_num_threads; ++i)
-               std::cout << "  thread_Ss[" << i << "] = " << m_thread_Ss[i] << std::endl;
+               std::cerr << "  thread_Ss[" << i << "] = " << m_thread_Ss[i] << std::endl;
 #endif
          }
 
          std::vector<std::thread> threads(m_num_threads);
-         for (uint64_t i = 0; i < threads.size(); ++i)
+         for (std::uint64_t i = 0; i < threads.size(); ++i)
          {
             threads[i] = std::thread(&naive_monte_carlo::m_thread_monte, this, i, gen());
          }
          do {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            uint64_t total_calls = 0;
-            for (uint64_t i = 0; i < m_num_threads; ++i)
+            std::uint64_t total_calls = 0;
+            for (std::uint64_t i = 0; i < m_num_threads; ++i)
             {
-               uint64_t t_calls = m_thread_calls[i].load(std::memory_order_consume);
+               std::uint64_t t_calls = m_thread_calls[i].load(std::memory_order_consume);
                total_calls += t_calls;
             }
             Real variance = 0;
             Real avg = 0;
-            for (uint64_t i = 0; i < m_num_threads; ++i)
+            for (std::uint64_t i = 0; i < m_num_threads; ++i)
             {
-               uint64_t t_calls = m_thread_calls[i].load(std::memory_order_consume);
+               std::uint64_t t_calls = m_thread_calls[i].load(std::memory_order_consume);
                // Will this overflow? Not hard to remove . . .
                avg += m_thread_averages[i].load(std::memory_order_relaxed)*(static_cast<Real>(t_calls) / static_cast<Real>(total_calls));
                variance += m_thread_Ss[i].load(std::memory_order_relaxed);
@@ -339,18 +351,18 @@ private:
             std::rethrow_exception(m_exception);
          }
          // Incorporate their work into the final estimate:
-         uint64_t total_calls = 0;
-         for (uint64_t i = 0; i < m_num_threads; ++i)
+         std::uint64_t total_calls = 0;
+         for (std::uint64_t i = 0; i < m_num_threads; ++i)
          {
-            uint64_t t_calls = m_thread_calls[i].load(std::memory_order_consume);
+            std::uint64_t t_calls = m_thread_calls[i].load(std::memory_order_consume);
             total_calls += t_calls;
          }
          Real variance = 0;
          Real avg = 0;
 
-         for (uint64_t i = 0; i < m_num_threads; ++i)
+         for (std::uint64_t i = 0; i < m_num_threads; ++i)
          {
-            uint64_t t_calls = m_thread_calls[i].load(std::memory_order_consume);
+            std::uint64_t t_calls = m_thread_calls[i].load(std::memory_order_consume);
             // Averages weighted by the number of calls the thread made:
             avg += m_thread_averages[i].load(std::memory_order_relaxed)*(static_cast<Real>(t_calls) / static_cast<Real>(total_calls));
             variance += m_thread_Ss[i].load(std::memory_order_relaxed);
@@ -368,7 +380,7 @@ private:
       return m_avg.load(std::memory_order_consume);
     }
 
-    void m_thread_monte(uint64_t thread_index, uint64_t seed)
+    void m_thread_monte(std::uint64_t thread_index, std::uint64_t seed)
     {
         using std::numeric_limits;
         try
@@ -383,7 +395,8 @@ private:
             // The idea is that the unstabilized additions have error sigma(f)/sqrt(N) + epsilon*N, which diverges faster than it converges!
             // Kahan summation turns this to sigma(f)/sqrt(N) + epsilon^2*N, and the random walk occurs on a timescale of 10^14 years (on current hardware)
             Real compensator = 0;
-            uint64_t k = m_thread_calls[thread_index].load(std::memory_order_consume);
+            Real S_compensator = 0;
+            std::uint64_t k = m_thread_calls[thread_index].load(std::memory_order_consume);
             while (!m_done) // relaxed load
             {
                 int j = 0;
@@ -394,7 +407,7 @@ private:
                 int magic_calls_before_update = 2048;
                 while (j++ < magic_calls_before_update)
                 {
-                    for (uint64_t i = 0; i < m_lbs.size(); ++i)
+                    for (std::uint64_t i = 0; i < m_lbs.size(); ++i)
                     {
                         x[i] = (gen() - (gen.min)())*inv_denom;
                     }
@@ -405,7 +418,7 @@ private:
                         // The call to m_integrand transform x, so this error message states the correct node.
                         std::stringstream os;
                         os << "Your integrand was evaluated at {";
-                        for (uint64_t i = 0; i < x.size() -1; ++i)
+                        for (std::uint64_t i = 0; i < x.size() -1; ++i)
                         {
                              os << x[i] << ", ";
                         }
@@ -418,7 +431,11 @@ private:
                     Real y1 = term - compensator;
                     Real M2 = M1 + y1;
                     compensator = (M2 - M1) - y1;
-                    S += (f - M1)*(f - M2);
+                    Real S_term = (f - M1)*(f - M2);
+                    Real y2 = S_term - S_compensator;
+                    Real S2 = S + y2;
+                    S_compensator = (S2 - S) - y2;
+                    S = S2;
                     M1 = M2;
                 }
                 m_thread_averages[thread_index].store(M1, std::memory_order_release);
@@ -436,18 +453,18 @@ private:
     }
 
     std::function<Real(std::vector<Real> &)> m_integrand;
-    uint64_t m_num_threads;
-    std::atomic<uint64_t> m_seed;
+    std::uint64_t m_num_threads;
+    std::atomic<std::uint64_t> m_seed;
     std::atomic<Real> m_error_goal;
     std::atomic<bool> m_done{};
     std::vector<Real> m_lbs;
     std::vector<Real> m_dxs;
     std::vector<detail::limit_classification> m_limit_types;
     Real m_volume;
-    std::atomic<uint64_t> m_total_calls{};
+    std::atomic<std::uint64_t> m_total_calls{};
     // I wanted these to be vectors rather than maps,
     // but you can't resize a vector of atomics.
-    std::unique_ptr<std::atomic<uint64_t>[]> m_thread_calls;
+    std::unique_ptr<std::atomic<std::uint64_t>[]> m_thread_calls;
     std::atomic<Real> m_variance;
     std::unique_ptr<std::atomic<Real>[]> m_thread_Ss;
     std::atomic<Real> m_avg;

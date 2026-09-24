@@ -7,7 +7,7 @@
 // #includes all the files that it needs to.
 //
 #ifndef BOOST_MATH_STANDALONE
-#include <boost/math/tools/test_data.hpp>
+#include "../../include_private/boost/math/tools/test_data.hpp"
 
 #define T double
 

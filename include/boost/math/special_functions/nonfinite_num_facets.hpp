@@ -18,10 +18,12 @@
   for Floating-Point Infinities and NaNs.
 */
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstring>
 #include <ios>
 #include <limits>
 #include <locale>
+#endif
 #include <boost/math/tools/throw_exception.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/sign.hpp>
@@ -52,7 +54,7 @@ namespace boost {
 
     // class nonfinite_num_put -----------------------------------------------------
 
-    template<
+    BOOST_MATH_EXPORT template<
       class CharType,
       class OutputIterator = std::ostreambuf_iterator<CharType>
             >
@@ -229,7 +231,7 @@ namespace boost {
 
     // class nonfinite_num_get ------------------------------------------------------
 
-    template<
+    BOOST_MATH_EXPORT template<
       class CharType,
       class InputIterator = std::istreambuf_iterator<CharType>
     >
@@ -493,10 +495,10 @@ namespace boost {
               return;
             }
           }
-          break;
+          break;  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
 
         default:
-          break;
+          break;  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
         }
 
         state |= std::ios_base::failbit;
@@ -523,7 +525,7 @@ namespace boost {
                 val = std::numeric_limits<ValType>::infinity();
                 return;
             }
-            break;
+            break;  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
 
           case 'd':   // 1.#IND"
             if(std::numeric_limits<ValType>::has_quiet_NaN
@@ -533,10 +535,10 @@ namespace boost {
                 val = positive_nan<ValType>();
                 return;
             }
-            break;
+            break;  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
 
-          default:
-            break;
+          default:  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
+            break;  // LCOV_EXCL_LINE  simple fallthrough not registered as covered.
           }
         }
 

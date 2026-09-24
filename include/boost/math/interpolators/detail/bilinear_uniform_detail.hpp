@@ -7,12 +7,14 @@
 #ifndef BOOST_MATH_INTERPOLATORS_BILINEAR_UNIFORM_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_BILINEAR_UNIFORM_DETAIL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <stdexcept>
 #include <iostream>
 #include <string>
 #include <limits>
 #include <cmath>
 #include <utility>
+#endif
 
 namespace boost::math::interpolators::detail {
 

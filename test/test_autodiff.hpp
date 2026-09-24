@@ -31,15 +31,23 @@
 #include <cstdlib>
 #include <random>
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 namespace mp11 = boost::mp11;
 namespace bmp = boost::multiprecision;
 namespace diff = boost::math::differentiation::autodiff_v1::detail;
 
+
 #if defined(BOOST_USE_VALGRIND) || defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
 using bin_float_types = mp11::mp_list<float>;
+#elif defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+using bin_float_types = mp11::mp_list<std::float32_t, std::float64_t>;
 #else
 using bin_float_types = mp11::mp_list<float, double, long double>;
 #endif
+
 
 // cpp_dec_float_50 cannot be used with close_at_tolerance
 /*using multiprecision_float_types =
@@ -126,7 +134,7 @@ struct RandomSample {
 
   template <typename U, typename V>
   RandomSample(U start, V finish)
-      : rng_(std::random_device{}()),
+      : rng_(42),
         dist_(static_cast<distribution_param_t>(start),
               get_endpoint_t{}(finish)) {}
 

@@ -18,7 +18,7 @@
 namespace boost { namespace math {
 
   
-  template<class T, class Policy>
+  BOOST_MATH_EXPORT template<class T, class Policy>
   inline typename tools::promote_args<T>::type polygamma(const int n, T x, const Policy& pol)
   {
      //
@@ -71,7 +71,7 @@ namespace boost { namespace math {
         "boost::math::polygamma<%1%>(int, %1%)");
   }
 
-  template<class T>
+  BOOST_MATH_EXPORT template<class T>
   inline typename tools::promote_args<T>::type polygamma(const int n, T x)
   {
       return boost::math::polygamma(n, x, policies::policy<>());

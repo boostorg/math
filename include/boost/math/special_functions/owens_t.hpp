@@ -24,8 +24,10 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/big_constant.hpp>
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <stdexcept>
 #include <cmath>
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -70,6 +72,7 @@ namespace boost
          template<typename RealType>
          inline unsigned short owens_t_compute_code(const RealType h, const RealType a)
          {
+            // LCOV_EXCL_START
             static const RealType hrange[] =
             { 0.02f, 0.06f, 0.09f, 0.125f, 0.26f, 0.4f,  0.6f,  1.6f,  1.7f,  2.33f,  2.4f,  3.36f, 3.4f,  4.8f };
 
@@ -97,6 +100,7 @@ namespace boost
                1  ,  2   , 3  ,  3  ,  5  ,  5   , 7  ,  7  , 16 ,  16  , 16 ,  16 ,  16  , 11 ,  11,
                1  ,  2   , 3   , 3   , 5  ,  5 ,  17  , 17  , 17 ,  17  , 16 ,  16 ,  16 ,  11 ,  11
             };
+            // LCOV_EXCL_STOP
 
             unsigned short ihint = 14, iaint = 7;
             for(unsigned short i = 0; i != 14; i++)
@@ -118,6 +122,7 @@ namespace boost
             } // for(unsigned short i = 0; i != 7; i++)
 
             // interpret select array as 8x15 matrix
+            BOOST_MATH_ASSERT(iaint * 15 + ihint < (int)(sizeof(select) / sizeof(select[0])));
             return select[iaint*15 + ihint];
 
          } // unsigned short owens_t_compute_code(const RealType h, const RealType a)
@@ -125,7 +130,9 @@ namespace boost
          template<typename RealType>
          inline unsigned short owens_t_get_order_imp(const unsigned short icode, RealType, const std::integral_constant<int, 53>&)
          {
+            // LCOV_EXCL_START
             static const unsigned short ord[] = {2, 3, 4, 5, 7, 10, 12, 18, 10, 20, 30, 0, 4, 7, 8, 20, 0, 0}; // 18 entries
+            // LCOV_EXCL_STOP
 
             BOOST_MATH_ASSERT(icode<18);
 
@@ -136,7 +143,9 @@ namespace boost
          inline unsigned short owens_t_get_order_imp(const unsigned short icode, RealType, const std::integral_constant<int, 64>&)
         {
            // method ================>>>       {1, 1, 1, 1, 1,  1,  1,  1,  2,  2,  2,  3, 4,  4,  4,  4,  5, 6}
-           static const unsigned short ord[] = {3, 4, 5, 6, 8, 11, 13, 19, 10, 20, 30,  0, 7, 10, 11, 23,  0, 0}; // 18 entries
+          // LCOV_EXCL_START
+          static const unsigned short ord[] = {3, 4, 5, 6, 8, 11, 13, 19, 10, 20, 30,  0, 7, 10, 11, 23,  0, 0}; // 18 entries
+          // LCOV_EXCL_STOP
 
           BOOST_MATH_ASSERT(icode<18);
 
@@ -233,6 +242,7 @@ namespace boost
 
       const unsigned short m = 20;
 
+            // LCOV_EXCL_START
             static const RealType c2[] =
             {
                static_cast<RealType>(0.99999999999999987510),
@@ -247,6 +257,7 @@ namespace boost
                static_cast<RealType>(-0.82813631607004984866E-01),  static_cast<RealType>(0.24167984735759576523E-01),
                static_cast<RealType>(-0.44676566663971825242E-02),  static_cast<RealType>(0.39141169402373836468E-03)
             };
+            // LCOV_EXCL_STOP
 
             const RealType as = a*a;
             const RealType hs = h*h;
@@ -285,6 +296,7 @@ namespace boost
           
           const unsigned short m = 30;
 
+          // LCOV_EXCL_START
           static const RealType c2[] =
           {
              BOOST_MATH_BIG_CONSTANT(RealType, 260, 0.99999999999999999999999729978162447266851932041876728736094298092917625009873),
@@ -319,6 +331,7 @@ namespace boost
              BOOST_MATH_BIG_CONSTANT(RealType, 260, -1.489155613350368934073453260689881330166342484405529981510694514036264969925132e-4),
              BOOST_MATH_BIG_CONSTANT(RealType, 260, 9.072354320794357587710929507988814669454281514268844884841547607134260303118208e-6)
           };
+          // LCOV_EXCL_STOP
 
           const RealType as = a*a;
           const RealType hs = h*h;
@@ -404,6 +417,7 @@ namespace boost
              */
 
             const unsigned short m = 13;
+            // LCOV_EXCL_START
             static const RealType pts[] = {
                static_cast<RealType>(0.35082039676451715489E-02),
                static_cast<RealType>(0.31279042338030753740E-01),  static_cast<RealType>(0.85266826283219451090E-01),
@@ -423,6 +437,7 @@ namespace boost
 
             const RealType as = a*a;
             const RealType hs = -h*h*boost::math::constants::half<RealType>();
+            // LCOV_EXCL_STOP
 
             RealType val = 0;
             for(unsigned short i = 0; i < m; ++i)
@@ -450,6 +465,7 @@ namespace boost
             */
 
           const unsigned short m = 19;
+          // LCOV_EXCL_START
           static const RealType pts[] = {
                BOOST_MATH_BIG_CONSTANT(RealType, 64, 0.0016634282895983227941),
                BOOST_MATH_BIG_CONSTANT(RealType, 64, 0.014904509242697054183),
@@ -492,6 +508,7 @@ namespace boost
                BOOST_MATH_BIG_CONSTANT(RealType, 64, 0.0018483371329504443947),
                BOOST_MATH_BIG_CONSTANT(RealType, 64, 0.00079623320100438873578)
           };
+          // LCOV_EXCL_STOP
 
           const RealType as = a*a;
           const RealType hs = -h*h*boost::math::constants::half<RealType>();
@@ -575,12 +592,12 @@ namespace boost
             // when the last accelerated term was small enough...
             //
             int n;
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
             try
             {
 #endif
                n = itrunc(T(tools::log_max_value<T>() / 6));
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
             }
             catch(...)
             {
@@ -588,7 +605,7 @@ namespace boost
             }
 #endif
             n = (std::min)(n, 1500);
-            T d = pow(3 + sqrt(T(8)), n);
+            T d = pow(3 + sqrt(T(8)), T(n));
             d = (d + 1 / d) / 2;
             T b = -1;
             T c = -d;
@@ -693,12 +710,12 @@ namespace boost
             // when the last accelerated term was small enough...
             //
             int n;
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
             try
             {
 #endif
                n = itrunc(RealType(tools::log_max_value<RealType>() / 6));
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
             }
             catch(...)
             {
@@ -706,7 +723,7 @@ namespace boost
             }
 #endif
             n = (std::min)(n, 1500);
-            RealType d = pow(3 + sqrt(RealType(8)), n);
+            RealType d = pow(3 + sqrt(RealType(8)), RealType(n));
             d = (d + 1 / d) / 2;
             RealType b = -1;
             RealType c = -d;
@@ -796,14 +813,13 @@ namespace boost
             {
                return owens_t_znorm2(RealType(-h), pol) * owens_t_znorm2(h, pol) / 2;
             }
-            if(a >= tools::max_value<RealType>())
-            {
-               return owens_t_znorm2(RealType(fabs(h)), pol);
-            }
+            // Rationale: when a>1 we call this routine with 1/a:
+            BOOST_MATH_ASSERT(a <= 1);
             RealType val = 0; // avoid compiler warnings, 0 will be overwritten in any case
             const unsigned short icode = owens_t_compute_code(h, a);
             const unsigned short m = owens_t_get_order(icode, val /* just a dummy for the type */, pol);
             static const unsigned short meth[] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 4, 4, 4, 5, 6}; // 18 entries
+            BOOST_MATH_ASSERT(icode < sizeof(meth) / sizeof(meth[0]));
 
             // determine the appropriate method, T1 ... T6
             switch( meth[icode] )
@@ -828,8 +844,6 @@ namespace boost
             case 6: // T6
                val = owens_t_T6(h,a, pol);
                break;
-            default:
-               val = policies::raise_evaluation_error<RealType>("boost::math::owens_t", "selection routine in Owen's T function failed with h = %1%", h, pol);
             }
             return val;
          }
@@ -866,7 +880,7 @@ namespace boost
             bool have_t1(false), have_t2(false);
             if(ah < 3)
             {
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
                try
                {
 #endif
@@ -874,14 +888,14 @@ namespace boost
                   p1 = owens_t_T1_accelerated(h, a, forwarding_policy());
                   if(p1.second < target_precision)
                      return p1.first;
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
                }
                catch(const boost::math::evaluation_error&){}  // T1 may fail and throw, that's OK
 #endif
             }
             if(ah > 1)
             {
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
                try
                {
 #endif
@@ -889,7 +903,7 @@ namespace boost
                   p2 = owens_t_T2_accelerated(h, a, ah, forwarding_policy());
                   if(p2.second < target_precision)
                      return p2.first;
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
                }
                catch(const boost::math::evaluation_error&){}  // T2 may fail and throw, that's OK
 #endif
@@ -900,7 +914,7 @@ namespace boost
             //
             if(!have_t1)
             {
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
                try
                {
 #endif
@@ -908,7 +922,7 @@ namespace boost
                   p1 = owens_t_T1_accelerated(h, a, forwarding_policy());
                   if(p1.second < target_precision)
                      return p1.first;
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
                }
                catch(const boost::math::evaluation_error&){}  // T1 may fail and throw, that's OK
 #endif
@@ -919,7 +933,7 @@ namespace boost
             //
             if(!have_t2)
             {
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
                try
                {
 #endif
@@ -927,7 +941,7 @@ namespace boost
                   p2 = owens_t_T2_accelerated(h, a, ah, forwarding_policy());
                   if(p2.second < target_precision)
                      return p2.first;
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
                }
                catch(const boost::math::evaluation_error&){}  // T2 may fail and throw, that's OK
 #endif
@@ -936,12 +950,12 @@ namespace boost
             // OK, nothing left to do but try the most expensive option which is T4,
             // this is often slow to converge, but when it does converge it tends to
             // be accurate:
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
             try
             {
 #endif
                return T4_mp(h, a, pol);
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef BOOST_MATH_NO_EXCEPTIONS
             }
             catch(const boost::math::evaluation_error&){}  // T4 may fail and throw, that's OK
 #endif
@@ -949,7 +963,7 @@ namespace boost
             // Now look back at the results from T1 and T2 and see if either gave better
             // results than we could get from the 64-bit precision versions.
             //
-            if((std::min)(p1.second, p2.second) < 1e-20)
+            if((std::min)(p1.second, p2.second) < RealType(1e-20))
             {
                return p1.second < p2.second ? p1.first : p2.first;
             }
@@ -993,7 +1007,7 @@ namespace boost
             const RealType fabs_a = fabs(a);
             const RealType fabs_ah = fabs_a*h;
 
-            RealType val = 0.0; // avoid compiler warnings, 0.0 will be overwritten in any case
+            RealType val = static_cast<RealType>(0.0f); // avoid compiler warnings, 0.0 will be overwritten in any case
 
             if(fabs_a <= 1)
             {
@@ -1001,7 +1015,7 @@ namespace boost
             } // if(fabs_a <= 1.0)
             else 
             {
-               if( h <= 0.67 )
+               if( h <= RealType(0.67) )
                {
                   const RealType normh = owens_t_znorm1(h, pol);
                   const RealType normah = owens_t_znorm1(fabs_ah, pol);
@@ -1026,53 +1040,18 @@ namespace boost
             return val;
          } // RealType owens_t(RealType h, RealType a)
 
-         template <class T, class Policy, class tag>
-         struct owens_t_initializer
-         {
-            struct init
-            {
-               init()
-               {
-                  do_init(tag());
-               }
-               template <int N>
-               static void do_init(const std::integral_constant<int, N>&){}
-               static void do_init(const std::integral_constant<int, 64>&)
-               {
-                  boost::math::owens_t(static_cast<T>(7), static_cast<T>(0.96875), Policy());
-                  boost::math::owens_t(static_cast<T>(2), static_cast<T>(0.5), Policy());
-               }
-               void force_instantiate()const{}
-            };
-            static const init initializer;
-            static void force_instantiate()
-            {
-               initializer.force_instantiate();
-            }
-         };
-
-         template <class T, class Policy, class tag>
-         const typename owens_t_initializer<T, Policy, tag>::init owens_t_initializer<T, Policy, tag>::initializer;
-
       } // namespace detail
 
-      template <class T1, class T2, class Policy>
+      BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
       inline typename tools::promote_args<T1, T2>::type owens_t(T1 h, T2 a, const Policy& pol)
       {
          typedef typename tools::promote_args<T1, T2>::type result_type;
          typedef typename policies::evaluation<result_type, Policy>::type value_type;
-         typedef typename policies::precision<value_type, Policy>::type precision_type;
-         typedef std::integral_constant<int,
-            precision_type::value <= 0 ? 0 :
-            precision_type::value <= 64 ? 64 : 65
-         > tag_type;
 
-         detail::owens_t_initializer<result_type, Policy, tag_type>::force_instantiate();
-            
          return policies::checked_narrowing_cast<result_type, Policy>(detail::owens_t(static_cast<value_type>(h), static_cast<value_type>(a), pol), "boost::math::owens_t<%1%>(%1%,%1%)");
       }
 
-      template <class T1, class T2>
+      BOOST_MATH_EXPORT template <class T1, class T2>
       inline typename tools::promote_args<T1, T2>::type owens_t(T1 h, T2 a)
       {
          return owens_t(h, a, policies::policy<>());

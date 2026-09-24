@@ -94,7 +94,7 @@ namespace boost { namespace math { namespace detail {
          // http://functions.wolfram.com/07.31.03.0083.01
          int n = static_cast<int>(static_cast<std::uintmax_t>(boost::math::lltrunc(-2 * a1)));
          T smz = sqrt(-z);
-         return pow(2 / smz, -n) * boost::math::hermite(n, 1 / smz, pol);
+         return static_cast<T>(pow(2 / smz, T(-n)) * boost::math::hermite(n, 1 / smz, pol));  // Warning suppression: integer power returns at least a double
       }
 
       if (is_a1_integer && is_a2_integer)
@@ -130,7 +130,7 @@ namespace boost { namespace math { namespace detail {
 
 } // namespace detail
 
-template <class T1, class T2, class T3, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
 inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_2F0(T1 a1, T2 a2, T3 z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -151,7 +151,7 @@ inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_2F0(T1 a1, 
       "boost::math::hypergeometric_2F0<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_2F0(T1 a1, T2 a2, T3 z)
 {
    return hypergeometric_2F0(a1, a2, z, policies::policy<>());

@@ -48,6 +48,7 @@ int main()
    BOOST_CONSTANTS_GENERATE(four_thirds_pi);
    BOOST_CONSTANTS_GENERATE(one_div_two_pi);
    BOOST_CONSTANTS_GENERATE(one_div_root_two_pi);
+   BOOST_CONSTANTS_GENERATE(log_pi);
    BOOST_CONSTANTS_GENERATE(root_pi);
    BOOST_CONSTANTS_GENERATE(root_half_pi);
    BOOST_CONSTANTS_GENERATE(root_two_pi);
@@ -189,4 +190,3 @@ Output
 
 
 */
-

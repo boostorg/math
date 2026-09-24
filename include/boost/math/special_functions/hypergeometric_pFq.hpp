@@ -10,8 +10,10 @@
 
 #include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
 #include <boost/math/tools/throw_exception.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <chrono>
 #include <initializer_list>
+#endif
 
 namespace boost {
    namespace math {
@@ -43,7 +45,7 @@ namespace boost {
 
       }
 
-      template <class Seq, class Real, class Policy>
+      BOOST_MATH_EXPORT template <class Seq, class Real, class Policy>
       inline typename tools::promote_args<Real, typename Seq::value_type>::type hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* p_abs_error, const Policy& pol)
       {
          typedef typename tools::promote_args<Real, typename Seq::value_type>::type result_type;
@@ -58,32 +60,43 @@ namespace boost {
          BOOST_MATH_STD_USING
 
          long long scale = 0;
+         static const char* function = "boost::math::hypergeometric_pFq<%1%>(%1%,%1%,%1%)";
          std::pair<value_type, value_type> r = boost::math::detail::hypergeometric_pFq_checked_series_impl(aj, bj, value_type(z), pol, boost::math::detail::iteration_terminator(boost::math::policies::get_max_series_iterations<forwarding_policy>()), scale);
-         r.first *= exp(Real(scale));
-         r.second *= exp(Real(scale));
+         //
+         // Overflow check:
+         //
+         if (static_cast<Real>(scale) > tools::log_max_value<Real>())
+             return (r.first < 0 ? -1 : 1) * policies::raise_overflow_error<Real, Policy>(function, nullptr, pol);
+         Real mul = exp(Real(scale));
+         if(fabs(r.first) > 1)
+             if(tools::max_value<Real>() / fabs(r.first) < mul)
+                 return (r.first < 0 ? -1 : 1) * policies::raise_overflow_error<Real, Policy>(function, nullptr, pol);
+         r.first *= mul;
+         r.second *= mul;
          if (p_abs_error)
             *p_abs_error = static_cast<Real>(r.second) * boost::math::tools::epsilon<Real>();
-         return policies::checked_narrowing_cast<result_type, Policy>(r.first, "boost::math::hypergeometric_pFq<%1%>(%1%,%1%,%1%)");
+         return policies::checked_narrowing_cast<result_type, Policy>(r.first, function);
       }
 
-      template <class Seq, class Real>
+      BOOST_MATH_EXPORT template <class Seq, class Real>
       inline typename tools::promote_args<Real, typename Seq::value_type>::type hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* p_abs_error = 0)
       {
          return hypergeometric_pFq(aj, bj, z, p_abs_error, boost::math::policies::policy<>());
       }
 
-      template <class R, class Real, class Policy>
+      BOOST_MATH_EXPORT template <class R, class Real, class Policy>
       inline typename tools::promote_args<Real, R>::type hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* p_abs_error, const Policy& pol)
       {
          return hypergeometric_pFq<std::initializer_list<R>, Real, Policy>(aj, bj, z, p_abs_error, pol);
       }
 
-      template <class R, class Real>
+      BOOST_MATH_EXPORT template <class R, class Real>
       inline typename tools::promote_args<Real, R>::type  hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* p_abs_error = nullptr)
       {
          return hypergeometric_pFq<std::initializer_list<R>, Real>(aj, bj, z, p_abs_error);
       }
 
+#ifndef BOOST_MATH_NO_EXCEPTIONS
       template <class T>
       struct scoped_precision
       {
@@ -99,7 +112,7 @@ namespace boost {
          unsigned old_p;
       };
 
-      template <class Seq, class Real, class Policy>
+      BOOST_MATH_EXPORT template <class Seq, class Real, class Policy>
       Real hypergeometric_pFq_precision(const Seq& aj, const Seq& bj, Real z, unsigned digits10, double timeout, const Policy& pol)
       {
          unsigned current_precision = digits10 + 5;
@@ -171,23 +184,23 @@ namespace boost {
 
          return r;
       }
-      template <class Seq, class Real>
+      BOOST_MATH_EXPORT template <class Seq, class Real>
       Real hypergeometric_pFq_precision(const Seq& aj, const Seq& bj, const Real& z, unsigned digits10, double timeout = 0.5)
       {
          return hypergeometric_pFq_precision(aj, bj, z, digits10, timeout, boost::math::policies::policy<>());
       }
 
-      template <class Real, class Policy>
+      BOOST_MATH_EXPORT template <class Real, class Policy>
       Real hypergeometric_pFq_precision(const std::initializer_list<Real>& aj, const std::initializer_list<Real>& bj, const Real& z, unsigned digits10, double timeout, const Policy& pol)
       {
          return hypergeometric_pFq_precision< std::initializer_list<Real>, Real>(aj, bj, z, digits10, timeout, pol);
       }
-      template <class Real>
+      BOOST_MATH_EXPORT template <class Real>
       Real hypergeometric_pFq_precision(const std::initializer_list<Real>& aj, const std::initializer_list<Real>& bj, const Real& z, unsigned digits10, double timeout = 0.5)
       {
          return hypergeometric_pFq_precision< std::initializer_list<Real>, Real>(aj, bj, z, digits10, timeout, boost::math::policies::policy<>());
       }
-
+#endif
    }
 } // namespaces
 

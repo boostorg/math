@@ -131,7 +131,7 @@ void test_bessel(T, const char* name)
         {{ SC_(-10.0), SC_(1.0), SC_(-1.8171379399979651461891429013401068319174853467388121e9) }},
         {{ SC_(100.0), SC_(5.0), SC_(-1.4097486373570936520327835736048715219413065916411893e117) }},
         {{ SC_(100.0), SC_(80.0), SC_(-1.34557011017664184003144916855685180771861680634827508e-11) }},
-        {{ SC_(-1000.0), SC_(700.0), SC_(-1.136342773238774160870536985092768591616106526374957e-30) }},
+        {{ SC_(-129.0), SC_(200.0), SC_(-4.3110345255133348027545113739271337415489367194240537230455182e-71) }},
     }};
     static const std::array<std::array<T, 3>, 11> kv_prime_data = {{
         {{ SC_(0.5), SC_(0.875), SC_(-0.8776935068732421581818610624499915196588910540138553643355820) }},
@@ -175,5 +175,46 @@ void test_bessel(T, const char* name)
     do_test_cyl_bessel_k_prime<T>(bessel_k_prime_int_data, name, "Bessel K'n: Random Data");
 #include "bessel_k_prime_data.ipp"
     do_test_cyl_bessel_k_prime<T>(bessel_k_prime_data, name, "Bessel K'v: Random Data");
+    //
+    // Extra cases for full test coverage:
+    //
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_k_prime(T(2.5), T(0)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_k_prime(T(2), T(0)), std::domain_error);
+
+    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_infinity && std::numeric_limits<T>::min_exponent < -860)
+    {
+       static const std::array<std::array<T, 3>, 8> coverage_data = { {
+#if LDBL_MAX_10_EXP > 310
+           {{ SC_(20.0), static_cast<T>(ldexp(T(1), -45)), SC_(-3.793503044583520787322174911740831752794438746336004555076e308) }},
+           {{ SC_(20.125), static_cast<T>(ldexp(T(1), -45)), SC_(-2.979220621533376610700938325572770408419207521624698386062e310) }},
+#else
+           {{ SC_(20.0), static_cast<T>(ldexp(T(1), -45)), -std::numeric_limits<T>::infinity() }},
+           {{ SC_(20.125), static_cast<T>(ldexp(T(1), -45)), -std::numeric_limits<T>::infinity() }},
+#endif
+#if LDBL_MAX_10_EXP > 346
+           {{ SC_(20.0), static_cast<T>(ldexp(T(1), -51)), SC_(-3.227155487331667007856383940813742118802894409545345203104e346) }},
+           {{ SC_(20.125), static_cast<T>(ldexp(T(1), -51)), SC_(-4.262404050083097364466577035647085801041781477814968803189e348) }},
+#else
+           {{ SC_(20.0), static_cast<T>(ldexp(T(1), -51)), -std::numeric_limits<T>::infinity() }},
+           {{ SC_(20.125), static_cast<T>(ldexp(T(1), -51)), -std::numeric_limits<T>::infinity() }},
+#endif
+#if LDBL_MAX_10_EXP > 4971
+           {{ SC_(20.0), static_cast<T>(ldexp(T(1), -778)), SC_(-2.15657066125095338369788943003323297569772178814715617602e4942) }},
+           {{ SC_(20.125), static_cast<T>(ldexp(T(1), -778)), SC_(-6.46694658438021098575183049117626387183087801364084017400e4971) }},
+#else
+           {{ SC_(20.0), static_cast<T>(ldexp(T(1), -778)), -std::numeric_limits<T>::infinity() }},
+           {{ SC_(20.125), static_cast<T>(ldexp(T(1), -778)), -std::numeric_limits<T>::infinity() }},
+#endif
+#if LDBL_MAX_10_EXP > 5493
+           {{ SC_(20.0), static_cast<T>(ldexp(T(1), -860)), SC_(-5.09819245599453059425108127687500966644642217657888061634e5460) }},
+           {{ SC_(20.125), static_cast<T>(ldexp(T(1), -860)), SC_(-1.86169813082884487070647108868007382252541071831005047607e5493) }},
+#else
+           {{ SC_(20.0), static_cast<T>(ldexp(T(1), -860)), -std::numeric_limits<T>::infinity() }},
+           {{ SC_(20.125), static_cast<T>(ldexp(T(1), -860)), -std::numeric_limits<T>::infinity() }},
+#endif
+       } };
+       do_test_cyl_bessel_k_prime<T>(coverage_data, name, "Bessel K': Extra Coverage");
+    }
+
 }
 

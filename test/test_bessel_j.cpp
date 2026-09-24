@@ -3,7 +3,21 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_ENABLE_SYCL
 #include <pch_light.hpp>
+#else
+#define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
+#include "sycl/sycl.hpp"
+#include <boost/math/tools/config.hpp>
+#endif
+
+#ifdef __clang__
+#  pragma clang diagnostic push 
+#  pragma clang diagnostic ignored "-Wliteral-range"
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic push 
+#  pragma GCC diagnostic ignored "-Woverflow"
+#endif
 
 #include "test_bessel_j.hpp"
 
@@ -181,7 +195,7 @@ void expected_results()
 
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
+   BOOST_IF_CONSTEXPR ((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
       && (std::numeric_limits<long double>::digits < 90))
    {
       // some errors spill over into type double as well:
@@ -238,7 +252,7 @@ void expected_results()
          ".*(JN|j).*|.*Tricky.*",       // test data group
          ".*", 33000, 20000);               // test function
    }
-   else if (std::numeric_limits<long double>::digits >= 90)
+   else BOOST_IF_CONSTEXPR (std::numeric_limits<long double>::digits >= 90)
    {
       add_expected_result(
          ".*",                          // compiler
@@ -331,7 +345,3 @@ BOOST_AUTO_TEST_CASE( test_main )
       "to pass.</note>" << std::endl;
 #endif
 }
-
-
-
-

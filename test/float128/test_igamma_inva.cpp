@@ -7,7 +7,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/gamma.hpp>
-#include "libs/math/test/test_igamma_inva.hpp"
+#include "test_igamma_inva.hpp"
 
 void expected_results()
 {
