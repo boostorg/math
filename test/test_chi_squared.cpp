@@ -16,9 +16,17 @@
 #  pragma warning(disable: 4127) // conditional expression is constant
 #endif
 
-#include <boost/math/tools/test.hpp> // for real_concept
+#ifdef BOOST_MATH_ENABLE_SYCL
+#include "sycl/sycl.hpp"
+#endif
+
+#include <boost/math/tools/config.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 using ::boost::math::concepts::real_concept;
+#endif
 
 #include <boost/math/distributions/chi_squared.hpp> // for chi_squared_distribution
 #include <boost/math/distributions/non_central_chi_squared.hpp> // for chi_squared_distribution
@@ -538,6 +546,9 @@ void test_spots(RealType T)
           chi_squared_distribution<RealType>(static_cast<RealType>(8)),
           static_cast<RealType>(1.1))), std::domain_error
        );
+    BOOST_MATH_CHECK_THROW(
+       mode(chi_squared_distribution<RealType>(static_cast<RealType>(1))), std::domain_error
+       );
 
     // This first test value is taken from an example here:
     // http://www.itl.nist.gov/div898/handbook/prc/section2/prc232.htm
@@ -558,6 +569,32 @@ void test_spots(RealType T)
 
     check_out_of_range<boost::math::chi_squared_distribution<RealType> >(1); // (All) valid constructor parameter values.
 
+    // NaN handling
+    if (std::numeric_limits<RealType>::has_infinity)
+    {
+      using boost::math::policies::policy;
+
+      typedef policy<
+         boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+         boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+         boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+         boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+         boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+         boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+      > ignore_all_policy;
+
+      typedef boost::math::chi_squared_distribution<RealType, ignore_all_policy> ignore_error_chi_squared;
+
+      BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_chi_squared(static_cast<RealType>(-1)), static_cast<RealType>(1))));
+      BOOST_CHECK((boost::math::isnan)(cdf(ignore_error_chi_squared(static_cast<RealType>(-1)), static_cast<RealType>(1))));
+      BOOST_CHECK((boost::math::isnan)(cdf(complement(ignore_error_chi_squared(static_cast<RealType>(-1)), static_cast<RealType>(1)))));
+      BOOST_CHECK((boost::math::isnan)(quantile(ignore_error_chi_squared(static_cast<RealType>(-1)), static_cast<RealType>(0.5))));
+      BOOST_CHECK((boost::math::isnan)(quantile(complement(ignore_error_chi_squared(static_cast<RealType>(-1)), static_cast<RealType>(0.5)))));
+      BOOST_CHECK((boost::math::isnan)(mode(ignore_error_chi_squared(static_cast<RealType>(1)))));
+      BOOST_CHECK((boost::math::isnan)(ignore_error_chi_squared::find_degrees_of_freedom(10, -1, 0.01f, 100)));
+      BOOST_CHECK((boost::math::isnan)(ignore_error_chi_squared::find_degrees_of_freedom(10, 0.05f, -1, 100)));
+
+   }
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )

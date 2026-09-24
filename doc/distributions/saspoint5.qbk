@@ -15,10 +15,10 @@
       typedef RealType  value_type;
       typedef Policy    policy_type;
 
-      saspoint5_distribution(RealType location = 0, RealType scale = 1);
+      BOOST_MATH_GPU_ENABLED saspoint5_distribution(RealType location = 0, RealType scale = 1);
 
-      RealType location()const;
-      RealType scale()const;
+      BOOST_MATH_GPU_ENABLED RealType location()const;
+      BOOST_MATH_GPU_ENABLED RealType scale()const;
    };
 
 It is special case of a [@http://en.wikipedia.org/wiki/Stable_distribution stable distribution]
@@ -49,7 +49,7 @@ the distribution:
 
 [h4 Member Functions]
 
-   saspoint5_distribution(RealType location = 0, RealType scale = 1);
+   BOOST_MATH_GPU_ENABLED saspoint5_distribution(RealType location = 0, RealType scale = 1);
 
 Constructs a S[alpha]S Point5 distribution, with location parameter /location/
 and scale parameter /scale/.  When these parameters take their default
@@ -58,11 +58,11 @@ then the result is a Standard S[alpha]S Point5 Distribution.
 
 Requires scale > 0, otherwise calls __domain_error.
 
-   RealType location()const;
+   BOOST_MATH_GPU_ENABLED RealType location()const;
 
 Returns the location parameter of the distribution.
 
-   RealType scale()const;
+   BOOST_MATH_GPU_ENABLED RealType scale()const;
 
 Returns the scale parameter of the distribution.
 
@@ -70,6 +70,8 @@ Returns the scale parameter of the distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 Note however that the S[alpha]S Point5 distribution does not have a mean,
 standard deviation, etc. See __math_undefined

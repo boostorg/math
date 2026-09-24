@@ -11,9 +11,15 @@
 #define BOOST_MATH_CONSTANTS_INFO_INCLUDED
 
 #include <boost/math/constants/constants.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iostream>
 #include <iomanip>
+#endif
+#ifndef BOOST_MATH_NO_RTTI
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <typeinfo>
+#endif
+#endif
 
 namespace boost{ namespace math{ namespace constants{
 
@@ -22,7 +28,11 @@ namespace boost{ namespace math{ namespace constants{
       template <class T>
       const char* nameof(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T))
       {
+         #ifndef BOOST_MATH_NO_RTTI
          return typeid(T).name();
+         #else
+         return "unknown";
+         #endif
       }
       template <>
       const char* nameof<float>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(float))

@@ -65,7 +65,7 @@ int main(void)
     }
 
     // Launch the Vector Add CUDA Kernel
-    int threadsPerBlock = 512;
+    int threadsPerBlock = 256;
     int blocksPerGrid =(numElements + threadsPerBlock - 1) / threadsPerBlock;
     std::cout << "CUDA kernel launch with " << blocksPerGrid << " blocks of " << threadsPerBlock << " threads" << std::endl;
 

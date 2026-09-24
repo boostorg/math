@@ -18,7 +18,7 @@
 
 namespace boost::math::ccmath {
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 inline constexpr auto fabs(T x) noexcept
 {
     return boost::math::ccmath::abs(x);

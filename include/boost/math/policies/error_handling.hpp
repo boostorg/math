@@ -8,28 +8,40 @@
 #ifndef BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 #define BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 
+#include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/numeric_limits.hpp>
+#include <boost/math/tools/precision.hpp>
+#include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/type_traits.hpp>
-#include <boost/math/tools/cstdint.hpp>
 
 #ifndef BOOST_MATH_HAS_NVRTC
 
-#include <iomanip>
-#include <string>
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+#include <boost/math/tools/throw_exception.hpp>
+#endif
+
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <cerrno>
+#include <cmath>
+#include <complex>
+#include <cstdint>
 #include <cstring>
+#endif
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <iomanip>
+#include <sstream>
+#include <stdexcept>
+#endif
+#endif
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <string>
+#endif
 #ifndef BOOST_MATH_NO_RTTI
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <typeinfo>
 #endif
-#include <cerrno>
-#include <complex>
-#include <cmath>
-#include <cstdint>
-#include <boost/math/policies/policy.hpp>
-#include <boost/math/tools/precision.hpp>
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-#include <stdexcept>
-#include <boost/math/tools/throw_exception.hpp>
 #endif
 
 #ifdef _MSC_VER
@@ -42,23 +54,27 @@
 // Note that this only occurs when the compiler can deduce code is unreachable,
 // for example when policy macros are used to ignore errors rather than throw.
 #endif
-#include <sstream>
 
 namespace boost{ namespace math{
 
 #ifndef BOOST_MATH_NO_EXCEPTIONS
 
-class evaluation_error : public std::runtime_error
+BOOST_MATH_EXPORT class evaluation_error : public std::runtime_error
 {
 public:
    explicit evaluation_error(const std::string& s) : std::runtime_error(s){}
 };
 
-class rounding_error : public std::runtime_error
+BOOST_MATH_EXPORT class rounding_error : public std::runtime_error
 {
 public:
    explicit rounding_error(const std::string& s) : std::runtime_error(s){}
 };
+
+#else
+
+BOOST_MATH_EXPORT class evaluation_error {};
+BOOST_MATH_EXPORT class rounding_error {};
 
 #endif
 
@@ -87,18 +103,25 @@ T user_indeterminate_result_error(const char* function, const char* message, con
 namespace detail
 {
 
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+// Only used to build exception messages; relies on <sstream>
 template <class T>
 inline std::string prec_format(const T& val)
 {
-   typedef typename boost::math::policies::precision<T, boost::math::policies::policy<> >::type prec_type;
-   std::stringstream ss;
+   using prec_type = typename boost::math::policies::precision<T, boost::math::policies::policy<> >::type;
+
+   std::stringstream strm { };
+
    if(prec_type::value)
    {
-      int prec = 2 + (prec_type::value * 30103UL) / 100000UL;
-      ss << std::setprecision(prec);
+      const std::streamsize prec { static_cast<std::streamsize>(2UL + (prec_type::value * 30103UL) / 100000UL) };
+
+      strm << std::setprecision(prec);
    }
-   ss << val;
-   return ss.str();
+
+   strm << val;
+
+   return strm.str();
 }
 
 #ifdef BOOST_MATH_USE_CHARCONV_FOR_CONVERSION
@@ -111,7 +134,9 @@ inline std::string prec_format<std::float128_t>(const std::float128_t& val)
    return std::string(buffer, r.ptr);
 }
 
-#endif
+#endif // BOOST_MATH_USE_CHARCONV_FOR_CONVERSION
+
+#endif // BOOST_MATH_NO_EXCEPTIONS
 
 inline void replace_all_in_string(std::string& result, const char* what, const char* with)
 {
@@ -204,7 +229,7 @@ void raise_error(const char* pfunction, const char* pmessage, const T& val)
 }
 #endif
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
            const char* function,
            const char* message,
@@ -220,7 +245,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
 #endif
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED constexpr T raise_domain_error(
            const char* ,
            const char* ,
@@ -232,7 +257,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_domain_error(
    return boost::math::numeric_limits<T>::quiet_NaN();
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
            const char* ,
            const char* ,
@@ -245,7 +270,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
    return boost::math::numeric_limits<T>::quiet_NaN();
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
            const char* function,
            const char* message,
@@ -255,7 +280,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
    return user_domain_error(function, message, val);
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_pole_error(
            const char* function,
            const char* message,
@@ -269,7 +294,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_pole_error(
 #endif
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED constexpr T raise_pole_error(
            const char* function,
            const char* message,
@@ -279,7 +304,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_pole_error(
    return  ::boost::math::policies::detail::raise_domain_error(function, message, val,  ::boost::math::policies::domain_error< ::boost::math::policies::ignore_error>());
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED constexpr T raise_pole_error(
            const char* function,
            const char* message,
@@ -289,7 +314,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_pole_error(
    return  ::boost::math::policies::detail::raise_domain_error(function, message, val,  ::boost::math::policies::domain_error< ::boost::math::policies::errno_on_error>());
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_pole_error(
            const char* function,
            const char* message,
@@ -299,7 +324,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_pole_error(
    return user_pole_error(function, message, val);
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* function,
            const char* message,
@@ -314,7 +339,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
 #endif
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* function,
            const char* message,
@@ -330,7 +355,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
 #endif
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
            const char* ,
            const char* ,
@@ -341,7 +366,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
    return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
            const char* ,
            const char* ,
@@ -353,7 +378,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
    return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* ,
            const char* ,
@@ -365,7 +390,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
    return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* ,
            const char* ,
@@ -378,7 +403,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
    return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* function,
            const char* message,
@@ -387,7 +412,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
    return user_overflow_error(function, message, boost::math::numeric_limits<T>::infinity());
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* function,
            const char* message,
@@ -401,7 +426,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
    return user_overflow_error(function, m.c_str(), boost::math::numeric_limits<T>::infinity());
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_underflow_error(
            const char* function,
            const char* message,
@@ -416,7 +441,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_underflow_error(
 #endif
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED constexpr T raise_underflow_error(
            const char* ,
            const char* ,
@@ -427,7 +452,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_underflow_error(
    return T(0);
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_underflow_error(
            const char* /* function */,
            const char* /* message */,
@@ -439,7 +464,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_underflow_error(
    return T(0);
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_underflow_error(
            const char* function,
            const char* message,
@@ -448,7 +473,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_underflow_error(
    return user_underflow_error(function, message, T(0));
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_denorm_error(
            const char* function,
            const char* message,
@@ -464,7 +489,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_denorm_error(
 #endif
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline constexpr T raise_denorm_error(
            const char* ,
            const char* ,
@@ -476,7 +501,7 @@ BOOST_MATH_GPU_ENABLED inline constexpr T raise_denorm_error(
    return val;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_denorm_error(
            const char* ,
            const char* ,
@@ -489,7 +514,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_denorm_error(
    return val;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_denorm_error(
            const char* function,
            const char* message,
@@ -499,7 +524,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_denorm_error(
    return user_denorm_error(function, message, val);
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_evaluation_error(
            const char* function,
            const char* message,
@@ -515,7 +540,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_evaluation_error(
 #endif
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED constexpr T raise_evaluation_error(
            const char* ,
            const char* ,
@@ -527,7 +552,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_evaluation_error(
    return val;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_evaluation_error(
            const char* ,
            const char* ,
@@ -540,7 +565,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_evaluation_error(
    return val;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_evaluation_error(
            const char* function,
            const char* message,
@@ -550,7 +575,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_evaluation_error(
    return user_evaluation_error(function, message, val);
 }
 
-template <class T, class TargetType>
+BOOST_MATH_EXPORT template <class T, class TargetType>
 BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
            const char* function,
            const char* message,
@@ -567,7 +592,7 @@ BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
 #endif
 }
 
-template <class T, class TargetType>
+BOOST_MATH_EXPORT template <class T, class TargetType>
 BOOST_MATH_GPU_ENABLED constexpr TargetType raise_rounding_error(
            const char* ,
            const char* ,
@@ -581,7 +606,7 @@ BOOST_MATH_GPU_ENABLED constexpr TargetType raise_rounding_error(
    return  val > 0 ? (boost::math::numeric_limits<TargetType>::max)() : (boost::math::numeric_limits<TargetType>::is_integer ? (boost::math::numeric_limits<TargetType>::min)() : -(boost::math::numeric_limits<TargetType>::max)());
 }
 
-template <class T, class TargetType>
+BOOST_MATH_EXPORT template <class T, class TargetType>
 BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
            const char* ,
            const char* ,
@@ -595,7 +620,7 @@ BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
    static_assert(boost::math::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
    return  val > 0 ? (boost::math::numeric_limits<TargetType>::max)() : (boost::math::numeric_limits<TargetType>::is_integer ? (boost::math::numeric_limits<TargetType>::min)() : -(boost::math::numeric_limits<TargetType>::max)());
 }
-template <class T, class TargetType>
+BOOST_MATH_EXPORT template <class T, class TargetType>
 BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
            const char* function,
            const char* message,
@@ -606,7 +631,7 @@ BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
    return user_rounding_error(function, message, val, t);
 }
 
-template <class T, class R>
+BOOST_MATH_EXPORT template <class T, class R>
 BOOST_MATH_GPU_ENABLED inline T raise_indeterminate_result_error(
            const char* function,
            const char* message,
@@ -623,7 +648,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_indeterminate_result_error(
 #endif
 }
 
-template <class T, class R>
+BOOST_MATH_EXPORT template <class T, class R>
 BOOST_MATH_GPU_ENABLED inline constexpr T raise_indeterminate_result_error(
            const char* ,
            const char* ,
@@ -636,7 +661,7 @@ BOOST_MATH_GPU_ENABLED inline constexpr T raise_indeterminate_result_error(
    return result;
 }
 
-template <class T, class R>
+BOOST_MATH_EXPORT template <class T, class R>
 BOOST_MATH_GPU_ENABLED inline T raise_indeterminate_result_error(
            const char* ,
            const char* ,
@@ -650,7 +675,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_indeterminate_result_error(
    return result;
 }
 
-template <class T, class R>
+BOOST_MATH_EXPORT template <class T, class R>
 BOOST_MATH_GPU_ENABLED inline T raise_indeterminate_result_error(
            const char* function,
            const char* message,
@@ -663,7 +688,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_indeterminate_result_error(
 
 }  // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_domain_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::domain_error_type policy_type;
@@ -672,7 +697,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_domain_error(const char* function, cons
       val, policy_type());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_pole_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::pole_error_type policy_type;
@@ -681,7 +706,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_pole_error(const char* function, const 
       val, policy_type());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(const char* function, const char* message, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::overflow_error_type policy_type;
@@ -690,7 +715,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(const char* function, co
       policy_type());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::overflow_error_type policy_type;
@@ -699,7 +724,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(const char* function, co
       val, policy_type());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_underflow_error(const char* function, const char* message, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::underflow_error_type policy_type;
@@ -708,7 +733,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_underflow_error(const char* function, c
       policy_type());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_denorm_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::denorm_error_type policy_type;
@@ -718,7 +743,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_denorm_error(const char* function, cons
       policy_type());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_evaluation_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::evaluation_error_type policy_type;
@@ -727,7 +752,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_evaluation_error(const char* function, 
       val, policy_type());
 }
 
-template <class T, class TargetType, class Policy>
+BOOST_MATH_EXPORT template <class T, class TargetType, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr TargetType raise_rounding_error(const char* function, const char* message, const T& val, const TargetType& t, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::rounding_error_type policy_type;
@@ -736,7 +761,7 @@ BOOST_MATH_GPU_ENABLED constexpr TargetType raise_rounding_error(const char* fun
       val, t, policy_type());
 }
 
-template <class T, class R, class Policy>
+BOOST_MATH_EXPORT template <class T, class R, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_indeterminate_result_error(const char* function, const char* message, const T& val, const R& result, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::indeterminate_result_error_type policy_type;
@@ -751,7 +776,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_indeterminate_result_error(const char* 
 namespace detail
 {
 
-template <class R, class T, class Policy>
+BOOST_MATH_EXPORT template <class R, class T, class Policy>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_overflow(T val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    BOOST_MATH_STD_USING
@@ -763,7 +788,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_overflow(T val, R* resu
    }
    return false;
 }
-template <class R, class T, class Policy>
+BOOST_MATH_EXPORT template <class R, class T, class Policy>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_overflow(std::complex<T> val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    typedef typename R::value_type r_type;
@@ -773,7 +798,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_overflow(std::complex<T
    *result = R(re, im);
    return r;
 }
-template <class R, class T, class Policy>
+BOOST_MATH_EXPORT template <class R, class T, class Policy>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_underflow(T val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    if((val != 0) && (static_cast<R>(val) == 0))
@@ -783,7 +808,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_underflow(T val, R* res
    }
    return false;
 }
-template <class R, class T, class Policy>
+BOOST_MATH_EXPORT template <class R, class T, class Policy>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_underflow(std::complex<T> val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    typedef typename R::value_type r_type;
@@ -793,7 +818,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_underflow(std::complex<
    *result = R(re, im);
    return r;
 }
-template <class R, class T, class Policy>
+BOOST_MATH_EXPORT template <class R, class T, class Policy>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_denorm(T val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    BOOST_MATH_STD_USING
@@ -804,7 +829,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_denorm(T val, R* result
    }
    return false;
 }
-template <class R, class T, class Policy>
+BOOST_MATH_EXPORT template <class R, class T, class Policy>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_denorm(std::complex<T> val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    typedef typename R::value_type r_type;
@@ -837,7 +862,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE constexpr bool check_denorm(std::c
 
 } // namespace detail
 
-template <class R, class Policy, class T>
+BOOST_MATH_EXPORT template <class R, class Policy, class T>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE R checked_narrowing_cast(T val, const char* function) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    typedef typename Policy::overflow_error_type overflow_type;
@@ -846,7 +871,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE R checked_narrowing_cast(T val, co
    //
    // Most of what follows will evaluate to a no-op:
    //
-   R result = 0;
+   R result = R(0);
    if(detail::check_overflow<R>(val, &result, function, overflow_type()))
       return result;
    if(detail::check_underflow<R>(val, &result, function, underflow_type()))
@@ -857,7 +882,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE R checked_narrowing_cast(T val, co
    return static_cast<R>(val);
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline void check_series_iterations(const char* function, std::uintmax_t max_iter, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    if(max_iter >= policies::get_max_series_iterations<Policy>())
@@ -866,7 +891,7 @@ BOOST_MATH_GPU_ENABLED inline void check_series_iterations(const char* function,
          "Series evaluation exceeded %1% iterations, giving up now.", static_cast<T>(static_cast<double>(max_iter)), pol);
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline void check_root_iterations(const char* function, std::uintmax_t max_iter, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    if(max_iter >= policies::get_max_root_iterations<Policy>())
@@ -876,20 +901,6 @@ BOOST_MATH_GPU_ENABLED inline void check_root_iterations(const char* function, s
 }
 
 } //namespace policies
-
-namespace detail{
-
-//
-// Simple helper function to assist in returning a pair from a single value,
-// that value usually comes from one of the error handlers above:
-//
-template <class T>
-BOOST_MATH_GPU_ENABLED std::pair<T, T> pair_from_single(const T& val) BOOST_MATH_NOEXCEPT(T)
-{
-   return std::make_pair(val, val);
-}
-
-}
 
 #ifdef _MSC_VER
 #  pragma warning(pop)
@@ -903,7 +914,7 @@ namespace boost {
 namespace math {
 namespace policies {
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_domain_error(
            const char* ,
            const char* ,
@@ -915,7 +926,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_domain_error(
    return boost::math::numeric_limits<T>::quiet_NaN();
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_pole_error(
            const char* function,
            const char* message,
@@ -925,7 +936,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_pole_error(
    return boost::math::numeric_limits<T>::quiet_NaN();
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
            const char* ,
            const char* ,
@@ -936,7 +947,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
    return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : (boost::math::numeric_limits<T>::max)();
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
            const char* ,
            const char* ,
@@ -948,7 +959,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
    return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : (boost::math::numeric_limits<T>::max)();
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_underflow_error(
            const char* ,
            const char* ,
@@ -959,7 +970,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_underflow_error(
    return static_cast<T>(0);
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline constexpr T raise_denorm_error(
            const char* ,
            const char* ,
@@ -971,7 +982,7 @@ BOOST_MATH_GPU_ENABLED inline constexpr T raise_denorm_error(
    return val;
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr T raise_evaluation_error(
            const char* ,
            const char* ,
@@ -983,7 +994,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_evaluation_error(
    return val;
 }
 
-template <class T, class TargetType, class Policy>
+BOOST_MATH_EXPORT template <class T, class TargetType, class Policy>
 BOOST_MATH_GPU_ENABLED constexpr TargetType raise_rounding_error(
            const char* ,
            const char* ,
@@ -997,7 +1008,7 @@ BOOST_MATH_GPU_ENABLED constexpr TargetType raise_rounding_error(
    return  val > 0 ? (boost::math::numeric_limits<TargetType>::max)() : (boost::math::numeric_limits<TargetType>::is_integer ? (boost::math::numeric_limits<TargetType>::min)() : -(boost::math::numeric_limits<TargetType>::max)());
 }
 
-template <class T, class R, class Policy>
+BOOST_MATH_EXPORT template <class T, class R, class Policy>
 BOOST_MATH_GPU_ENABLED inline constexpr T raise_indeterminate_result_error(
            const char* ,
            const char* ,
@@ -1010,14 +1021,14 @@ BOOST_MATH_GPU_ENABLED inline constexpr T raise_indeterminate_result_error(
    return result;
 }
 
-template <class R, class Policy, class T>
+BOOST_MATH_EXPORT template <class R, class Policy, class T>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE R checked_narrowing_cast(T val, const char* function) noexcept(boost::math::is_floating_point_v<R> && boost::math::is_floating_point_v<T>)
 {
    // We only have ignore error policy so no reason to check
    return static_cast<R>(val);
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline void check_series_iterations(const char* function, boost::math::uintmax_t max_iter, const Policy& pol) noexcept(boost::math::is_floating_point_v<T>)
 {
    if(max_iter >= policies::get_max_series_iterations<Policy>())
@@ -1026,7 +1037,7 @@ BOOST_MATH_GPU_ENABLED inline void check_series_iterations(const char* function,
          "Series evaluation exceeded %1% iterations, giving up now.", static_cast<T>(static_cast<double>(max_iter)), pol);
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline void check_root_iterations(const char* function, boost::math::uintmax_t max_iter, const Policy& pol) noexcept(boost::math::is_floating_point_v<T>)
 {
    if(max_iter >= policies::get_max_root_iterations<Policy>())
@@ -1039,7 +1050,21 @@ BOOST_MATH_GPU_ENABLED inline void check_root_iterations(const char* function, b
 } // namespace math
 } // namespace boost
 
-#endif
+#endif // BOOST_MATH_HAS_NVRTC
+
+namespace boost { namespace math { namespace detail {
+
+//
+// Simple helper function to assist in returning a pair from a single value,
+// that value usually comes from one of the error handlers above:
+//
+template <class T>
+BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> pair_from_single(const T& val) BOOST_MATH_NOEXCEPT(T)
+{
+   return boost::math::make_pair(val, val);
+}
+
+}}} // boost::math::detail
 
 #endif // BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 

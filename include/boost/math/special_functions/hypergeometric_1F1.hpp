@@ -13,6 +13,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_asym.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_rational.hpp>
@@ -80,7 +81,8 @@ namespace boost { namespace math { namespace detail {
          if (a < 0)
          {
             if ((b < a) && (z < -b / 4))
-               return hypergeometric_1F1_from_function_ratio_negative_ab(a, b, z, pol, log_scaling);
+               // Defensive programming: it is *almost* certain that we can never get here, proving that is hard though...
+               return hypergeometric_1F1_from_function_ratio_negative_ab(a, b, z, pol, log_scaling);  // LCOV_EXCL_LINE
             else
             {
                //
@@ -123,6 +125,7 @@ namespace boost { namespace math { namespace detail {
             {
                if (boost::math::policies::digits<T, Policy>() <= 64)
                   return hypergeometric_1F1_from_function_ratio_negative_b_forwards(a, b, z, pol, log_scaling);
+               // LCOV_EXCL_START, what follows is multiprecision only
 #ifndef BOOST_MATH_NO_EXCEPTIONS
                try
 #endif
@@ -138,6 +141,7 @@ namespace boost { namespace math { namespace detail {
                   return hypergeometric_1F1_from_function_ratio_negative_b_forwards(a, b, z, pol, log_scaling);
                }
 #endif
+               // LCOV_EXCL_STOP
             }
             //
             // We could fall back to Tricomi's approximation if we're in the transition zone
@@ -160,6 +164,8 @@ namespace boost { namespace math { namespace detail {
       return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
    }
 
+#if 0
+   // Archived, not used, see comments at call site.
    template <class T>
    bool is_convergent_negative_z_series(const T& a, const T& b, const T& z, const T& b_minus_a)
    {
@@ -180,7 +186,7 @@ namespace boost { namespace math { namespace detail {
          // Double check for divergence when we cross the origin on a and b:
          if (a < 0)
          {
-            T n = 300 - floor(a);
+            T n = 3 - floor(a);
             if (fabs((a + n) * z / ((b + n) * n)) < 1)
             {
                if (b < 0)
@@ -225,7 +231,7 @@ namespace boost { namespace math { namespace detail {
       }
       return false;
    }
-
+#endif
    template <class T>
    inline T cyl_bessel_i_shrinkage_rate(const T& z)
    {
@@ -313,11 +319,7 @@ namespace boost { namespace math { namespace detail {
 
       // undefined result:
       if (!detail::check_hypergeometric_1F1_parameters(a, b))
-         return policies::raise_domain_error<T>(
-            function,
-            "Function is indeterminate for negative integer b = %1%.",
-            b,
-            pol);
+         return policies::raise_domain_error<T>(function, "Function is indeterminate for negative integer b = %1%.", b, pol);
 
       // other checks:
       if (a == -1)
@@ -444,6 +446,12 @@ namespace boost { namespace math { namespace detail {
       {
          if (a == 1)
             return detail::hypergeometric_1F1_pade(b, z, pol);
+#if 0
+         //
+         // Commented out: is_convergent_negative_z_series is fine so far as it goes
+         // but there appear to be no cases that use it, and in extremis, we will
+         // fall through to the series evaluation anyway.
+         //
          if (is_convergent_negative_z_series(a, b, z, b_minus_a))
          {
             if ((boost::math::sign(b_minus_a) == boost::math::sign(b)) && ((b > 0) || (b < -200)))
@@ -462,6 +470,7 @@ namespace boost { namespace math { namespace detail {
                return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
             }
          }
+#endif
          if ((b < 0) && (floor(b) == b))
          {
             // Negative integer b, so a must be a negative integer too.
@@ -629,7 +638,7 @@ namespace boost { namespace math { namespace detail {
       static const thread_local long long max_scaling = lltrunc(boost::math::tools::log_max_value<T>()) - 2;
       static const thread_local T max_scale_factor = exp(T(max_scaling));
 
-      while (log_scaling > max_scaling)
+      while (!(boost::math::isinf)(result) && (log_scaling > max_scaling))
       {
          result *= max_scale_factor;
          log_scaling -= max_scaling;
@@ -673,22 +682,32 @@ namespace boost { namespace math { namespace detail {
 
       while (scale > max_scaling)
       {
+         if((fabs(result) > 1) && (fabs(tools::max_value<T>()) / result <= max_scale_factor))
+            return policies::raise_overflow_error<T>("hypergeometric_1F1_regularized", nullptr, pol);
+         // This is *probably* unreachable:
+         // LCOV_EXCL_START
          result *= max_scale_factor;
          scale -= max_scaling;
+         // LCOV_EXCL_STOP
       }
       while (scale < -max_scaling)
       {
          result /= max_scale_factor;
-     scale += max_scaling;
+         scale += max_scaling;
       }
       if (scale != 0)
-         result *= exp(scale);
+      {
+         scale = exp(scale);
+         if ((scale > 1) && (fabs(result) > 1) && (fabs(tools::max_value<T>() / result) <= scale))
+            return policies::raise_overflow_error<T>("hypergeometric_1F1_regularized", nullptr, pol);
+         result *= scale;
+      }
       return result * result_sign;
    }
 
 } // namespace detail
 
-template <class T1, class T2, class T3, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
 inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1(T1 a, T2 b, T3 z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -709,13 +728,13 @@ inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1(T1 a, T
       "boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1(T1 a, T2 b, T3 z)
 {
    return hypergeometric_1F1(a, b, z, policies::policy<>());
 }
 
-template <class T1, class T2, class T3, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
 inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1_regularized(T1 a, T2 b, T3 z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -736,13 +755,13 @@ inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1_regular
       "boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1_regularized(T1 a, T2 b, T3 z)
 {
    return hypergeometric_1F1_regularized(a, b, z, policies::policy<>());
 }
 
-template <class T1, class T2, class T3, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
 inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 a, T2 b, T3 z, const Policy& /* pol */)
 {
   BOOST_FPU_EXCEPTION_GUARD
@@ -764,13 +783,13 @@ inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 
     "boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 a, T2 b, T3 z)
 {
   return log_hypergeometric_1F1(a, b, z, policies::policy<>());
 }
 
-template <class T1, class T2, class T3, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
 inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 a, T2 b, T3 z, int* sign, const Policy& /* pol */)
 {
   BOOST_FPU_EXCEPTION_GUARD
@@ -792,7 +811,7 @@ inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 
     "boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 a, T2 b, T3 z, int* sign)
 {
   return log_hypergeometric_1F1(a, b, z, sign, policies::policy<>());

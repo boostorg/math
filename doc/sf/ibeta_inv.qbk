@@ -7,52 +7,52 @@
    namespace boost{ namespace math{
    
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, const ``__Policy``&);
    
    template <class T1, class T2, class T3, class T4>
-   ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, T4* py);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, T4* py);
    
    template <class T1, class T2, class T3, class T4, class ``__Policy``>
-   ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, T4* py, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, T4* py, const ``__Policy``&);
    
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, const ``__Policy``&);
    
    template <class T1, class T2, class T3, class T4>
-   ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, T4* py);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, T4* py);
    
    template <class T1, class T2, class T3, class T4, class ``__Policy``>
-   ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, T4* py, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, T4* py, const ``__Policy``&);
    
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibeta_inva(T1 b, T2 x, T3 p);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta_inva(T1 b, T2 x, T3 p);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibeta_inva(T1 b, T2 x, T3 p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta_inva(T1 b, T2 x, T3 p, const ``__Policy``&);
    
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibetac_inva(T1 b, T2 x, T3 q);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac_inva(T1 b, T2 x, T3 q);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibetac_inva(T1 b, T2 x, T3 q, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac_inva(T1 b, T2 x, T3 q, const ``__Policy``&);
    
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibeta_invb(T1 a, T2 x, T3 p);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta_invb(T1 a, T2 x, T3 p);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibeta_invb(T1 a, T2 x, T3 p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta_invb(T1 a, T2 x, T3 p, const ``__Policy``&);
    
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibetac_invb(T1 a, T2 x, T3 q);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac_invb(T1 a, T2 x, T3 q);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibetac_invb(T1 a, T2 x, T3 q, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac_invb(T1 a, T2 x, T3 q, const ``__Policy``&);
    
    }} // namespaces
    
@@ -81,16 +81,16 @@ The return type of these functions is computed using the __arg_promotion_rules
 when called with arguments T1...TN of different types.
 
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, const ``__Policy``&);
    
    template <class T1, class T2, class T3, class T4>
-   ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, T4* py);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, T4* py);
    
    template <class T1, class T2, class T3, class T4, class ``__Policy``>
-   ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, T4* py, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, T4* py, const ``__Policy``&);
    
 Returns a value /x/ such that: `p = ibeta(a, b, x);` 
 and sets `*py = 1 - x` when the `py` parameter is provided and is non-null.  
@@ -104,16 +104,16 @@ Requires:  /a,b > 0/ and /0 <= p <= 1/.
 [optional_policy]
 
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q);
+   BOOST_MATH_GPU_ENABLED``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, const ``__Policy``&);
    
    template <class T1, class T2, class T3, class T4>
-   ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, T4* py);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, T4* py);
    
    template <class T1, class T2, class T3, class T4, class ``__Policy``>
-   ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, T4* py, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, T4* py, const ``__Policy``&);
    
 Returns a value /x/ such that: `q = ibetac(a, b, x);`
 and sets `*py = 1 - x` when the `py` parameter is provided and is non-null.  
@@ -127,10 +127,10 @@ Requires:  /a,b > 0/ and /0 <= q <= 1/.
 [optional_policy]
 
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibeta_inva(T1 b, T2 x, T3 p);
+   BOOST_MATH_GPU_ENABLED``__sf_result`` ibeta_inva(T1 b, T2 x, T3 p);
 
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibeta_inva(T1 b, T2 x, T3 p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED``__sf_result`` ibeta_inva(T1 b, T2 x, T3 p, const ``__Policy``&);
 
 Returns a value /a/ such that: `p = ibeta(a, b, x);`
 
@@ -139,10 +139,10 @@ Requires:  /b > 0/, /0 < x < 1/ and /0 <= p <= 1/.
 [optional_policy]
 
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibetac_inva(T1 b, T2 x, T3 p);
+   BOOST_MATH_GPU_ENABLED``__sf_result`` ibetac_inva(T1 b, T2 x, T3 p);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibetac_inva(T1 b, T2 x, T3 p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED``__sf_result`` ibetac_inva(T1 b, T2 x, T3 p, const ``__Policy``&);
    
 Returns a value /a/ such that: `q = ibetac(a, b, x);`
 
@@ -151,10 +151,10 @@ Requires:  /b > 0/, /0 < x < 1/ and /0 <= q <= 1/.
 [optional_policy]
 
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibeta_invb(T1 b, T2 x, T3 p);
+   BOOST_MATH_GPU_ENABLED``__sf_result`` ibeta_invb(T1 b, T2 x, T3 p);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibeta_invb(T1 b, T2 x, T3 p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED``__sf_result`` ibeta_invb(T1 b, T2 x, T3 p, const ``__Policy``&);
 
 Returns a value /b/ such that: `p = ibeta(a, b, x);`
 
@@ -163,10 +163,10 @@ Requires:  /a > 0/, /0 < x < 1/ and /0 <= p <= 1/.
 [optional_policy]
 
    template <class T1, class T2, class T3>
-   ``__sf_result`` ibetac_invb(T1 b, T2 x, T3 p);
+   BOOST_MATH_GPU_ENABLED``__sf_result`` ibetac_invb(T1 b, T2 x, T3 p);
    
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` ibetac_invb(T1 b, T2 x, T3 p, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac_invb(T1 b, T2 x, T3 p, const ``__Policy``&);
    
 Returns a value /b/ such that: `q = ibetac(a, b, x);`
 

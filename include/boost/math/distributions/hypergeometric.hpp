@@ -16,11 +16,13 @@
 #include <boost/math/distributions/detail/hypergeometric_cdf.hpp>
 #include <boost/math/distributions/detail/hypergeometric_quantile.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
+#endif
 
 namespace boost { namespace math {
 
-   template <class RealType = double, class Policy = policies::policy<> >
+   BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
    class hypergeometric_distribution
    {
    public:
@@ -91,9 +93,9 @@ namespace boost { namespace math {
 
    }; // class hypergeometric_distribution
 
-   typedef hypergeometric_distribution<double> hypergeometric;
+   BOOST_MATH_EXPORT typedef hypergeometric_distribution<double> hypergeometric;
 
-   template <class RealType, class Policy>
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline const std::pair<std::uint64_t, std::uint64_t> range(const hypergeometric_distribution<RealType, Policy>& dist)
    { // Range of permissible values for random variable x.
 #ifdef _MSC_VER
@@ -111,13 +113,13 @@ namespace boost { namespace math {
 #endif
    }
 
-   template <class RealType, class Policy>
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline const std::pair<std::uint64_t, std::uint64_t> support(const hypergeometric_distribution<RealType, Policy>& d)
    {
       return range(d);
    }
 
-   template <class RealType, class Policy>
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline RealType pdf(const hypergeometric_distribution<RealType, Policy>& dist, const std::uint64_t& x)
    {
       static const char* function = "boost::math::pdf(const hypergeometric_distribution<%1%>&, const %1%&)";
@@ -131,7 +133,7 @@ namespace boost { namespace math {
          x, dist.defective(), dist.sample_count(), dist.total(), Policy());
    }
 
-   template <class RealType, class Policy, class U>
+   BOOST_MATH_EXPORT template <class RealType, class Policy, class U>
    inline RealType pdf(const hypergeometric_distribution<RealType, Policy>& dist, const U& x)
    {
       BOOST_MATH_STD_USING
@@ -146,7 +148,7 @@ namespace boost { namespace math {
       return pdf(dist, u);
    }
 
-   template <class RealType, class Policy>
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline RealType cdf(const hypergeometric_distribution<RealType, Policy>& dist, const std::uint64_t& x)
    {
       static const char* function = "boost::math::cdf(const hypergeometric_distribution<%1%>&, const %1%&)";
@@ -160,7 +162,7 @@ namespace boost { namespace math {
          x, dist.defective(), dist.sample_count(), dist.total(), false, Policy());
    }
 
-   template <class RealType, class Policy, class U>
+   BOOST_MATH_EXPORT template <class RealType, class Policy, class U>
    inline RealType cdf(const hypergeometric_distribution<RealType, Policy>& dist, const U& x)
    {
       BOOST_MATH_STD_USING
@@ -175,7 +177,7 @@ namespace boost { namespace math {
       return cdf(dist, u);
    }
 
-   template <class RealType, class Policy>
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline RealType cdf(const complemented2_type<hypergeometric_distribution<RealType, Policy>, std::uint64_t>& c)
    {
       static const char* function = "boost::math::cdf(const hypergeometric_distribution<%1%>&, const %1%&)";
@@ -189,7 +191,7 @@ namespace boost { namespace math {
          c.param, c.dist.defective(), c.dist.sample_count(), c.dist.total(), true, Policy());
    }
 
-   template <class RealType, class Policy, class U>
+   BOOST_MATH_EXPORT template <class RealType, class Policy, class U>
    inline RealType cdf(const complemented2_type<hypergeometric_distribution<RealType, Policy>, U>& c)
    {
       BOOST_MATH_STD_USING
@@ -204,7 +206,7 @@ namespace boost { namespace math {
       return cdf(complement(c.dist, u));
    }
 
-   template <class RealType, class Policy>
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline RealType quantile(const hypergeometric_distribution<RealType, Policy>& dist, const RealType& p)
    {
       BOOST_MATH_STD_USING // for ADL of std functions
@@ -221,7 +223,7 @@ namespace boost { namespace math {
       return static_cast<RealType>(detail::hypergeometric_quantile(p, RealType(1 - p), dist.defective(), dist.sample_count(), dist.total(), Policy()));
    } // quantile
 
-   template <class RealType, class Policy>
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline RealType quantile(const complemented2_type<hypergeometric_distribution<RealType, Policy>, RealType>& c)
    {
       BOOST_MATH_STD_USING // for ADL of std functions
@@ -239,13 +241,13 @@ namespace boost { namespace math {
 
    // https://www.wolframalpha.com/input/?i=kurtosis+hypergeometric+distribution
 
-   template <class RealType, class Policy>
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline RealType mean(const hypergeometric_distribution<RealType, Policy>& dist)
    {
       return static_cast<RealType>(dist.defective() * dist.sample_count()) / dist.total();
    } // RealType mean(const hypergeometric_distribution<RealType, Policy>& dist)
 
-   template <class RealType, class Policy>
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline RealType variance(const hypergeometric_distribution<RealType, Policy>& dist)
    {
       RealType r = static_cast<RealType>(dist.defective());
@@ -254,7 +256,7 @@ namespace boost { namespace math {
       return n * r  * (N - r) * (N - n) / (N * N * (N - 1));
    } // RealType variance(const hypergeometric_distribution<RealType, Policy>& dist)
 
-   template <class RealType, class Policy>
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline RealType mode(const hypergeometric_distribution<RealType, Policy>& dist)
    {
       BOOST_MATH_STD_USING
@@ -264,7 +266,7 @@ namespace boost { namespace math {
       return floor((r + 1) * (n + 1) / (N + 2));
    }
 
-   template <class RealType, class Policy>
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline RealType skewness(const hypergeometric_distribution<RealType, Policy>& dist)
    {
       BOOST_MATH_STD_USING
@@ -274,7 +276,7 @@ namespace boost { namespace math {
       return (N - 2 * r) * sqrt(N - 1) * (N - 2 * n) / (sqrt(n * r * (N - r) * (N - n)) * (N - 2));
    } // RealType skewness(const hypergeometric_distribution<RealType, Policy>& dist)
 
-   template <class RealType, class Policy>
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline RealType kurtosis_excess(const hypergeometric_distribution<RealType, Policy>& dist)
    {
       // https://www.wolframalpha.com/input/?i=kurtosis+hypergeometric+distribution shown as plain text:
@@ -296,7 +298,7 @@ namespace boost { namespace math {
       return result;
    } // RealType kurtosis_excess(const hypergeometric_distribution<RealType, Policy>& dist)
 
-   template <class RealType, class Policy>
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline RealType kurtosis(const hypergeometric_distribution<RealType, Policy>& dist)
    {
       return kurtosis_excess(dist) + 3;

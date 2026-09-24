@@ -3,7 +3,22 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_ENABLE_SYCL
 #include <pch_light.hpp>
+#else
+#define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
+#include "sycl/sycl.hpp"
+#include <boost/math/tools/config.hpp>
+#endif
+
+#ifdef __clang__
+#  pragma clang diagnostic push 
+#  pragma clang diagnostic ignored "-Wliteral-range"
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic push 
+#  pragma GCC diagnostic ignored "-Woverflow"
+#endif
+
 #include"test_ibeta_inv.hpp"
 
 #if !defined(TEST_FLOAT) && !defined(TEST_DOUBLE) && !defined(TEST_LDOUBLE) && !defined(TEST_REAL_CONCEPT)

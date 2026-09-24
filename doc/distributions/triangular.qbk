@@ -17,12 +17,12 @@
        typedef RealType value_type;
        typedef Policy   policy_type;
 
-       triangular_distribution(RealType lower = -1, RealType mode = 0, RealType upper = 1); // Constructor.
+       BOOST_MATH_GPU_ENABLED triangular_distribution(RealType lower = -1, RealType mode = 0, RealType upper = 1); // Constructor.
           : m_lower(lower), m_mode(mode), m_upper(upper) // Default is -1, 0, +1 symmetric triangular distribution.
        // Accessor functions.
-       RealType lower()const;
-       RealType mode()const;
-       RealType upper()const;
+       BOOST_MATH_GPU_ENABLED RealType lower()const;
+       BOOST_MATH_GPU_ENABLED RealType mode()const;
+       BOOST_MATH_GPU_ENABLED RealType upper()const;
     }; // class triangular_distribution
 
    }} // namespaces
@@ -77,7 +77,7 @@ and cumulative distribution function
 
 [h4 Member Functions]
 
-   triangular_distribution(RealType lower = 0, RealType mode = 0 RealType upper = 1);
+   BOOST_MATH_GPU_ENABLED triangular_distribution(RealType lower = 0, RealType mode = 0 RealType upper = 1);
 
 Constructs a [@http://en.wikipedia.org/wiki/triangular_distribution triangular distribution]
 with lower  /lower/ (a) and upper /upper/ (b).
@@ -99,15 +99,15 @@ So, for example, to compute a variance using __WolframAlpha, use
 
 The parameters of a distribution can be obtained using these member functions:
 
-   RealType lower()const;
+   BOOST_MATH_GPU_ENABLED RealType lower()const;
 
 Returns the ['lower] parameter of this distribution (default -1).
 
-   RealType mode()const;
+   BOOST_MATH_GPU_ENABLED RealType mode()const;
 
 Returns the ['mode] parameter of this distribution (default 0).
 
-   RealType upper()const;
+   BOOST_MATH_GPU_ENABLED RealType upper()const;
 
 Returns the ['upper] parameter of this distribution (default+1).
 
@@ -115,6 +115,8 @@ Returns the ['upper] parameter of this distribution (default+1).
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variable is \lower\ to \upper\,
 and the supported range is lower <= x <= upper.

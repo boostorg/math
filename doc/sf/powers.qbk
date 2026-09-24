@@ -310,11 +310,17 @@ calculated using NTL::RR at 1000-bit precision.
    template <class T1, class T2, class ``__Policy``>
    ``__sf_result`` hypot(T1 x, T2 y, const ``__Policy``&);
 
+   template <class T1, class T2, class T3>
+   ``__sf_result`` hypot(T1 x, T2 y, T3 z);
+
+   template <class T1, class T2, class T3, class ``__Policy``>
+   ``__sf_result`` hypot(T1 x, T2 y, T3 z, const ``__Policy``&);
+
 __effects computes [equation hypot]
 in such a way as to avoid undue underflow and overflow.
 
 The return type of this function is computed using the __arg_promotion_rules
-when T1 and T2 are of different types.
+when T1 and T2 (and or T3) are of different types.
 
 [optional_policy]
 
@@ -327,6 +333,11 @@ The function is even and symmetric in /x/ and /y/, so first take assume
 ['x,y > 0] and ['x > y] (we can permute the arguments if this is not the case).
 
 Then if ['x * [epsilon] >= y] we can simply return /x/.
+
+In the 3-arg case the approach is to scale by the largest argument, and then calculate
+
+const auto a = max(max(x, y), z);
+return a == 0 ? 0 : a * sqrt(x/a * x/a + y/a * y/a + z/a * z/a);
 
 Otherwise the result is given by:
 

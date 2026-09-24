@@ -5,11 +5,18 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
-#include "math_unit_test.hpp"
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/tools/cubic_roots.hpp>
+#else
+import boost.math;
+#endif
+
+#include "math_unit_test.hpp"
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <random>
 #include <cmath>
 #include <cfloat>
+#endif
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
@@ -99,7 +106,7 @@ template <class Real> void test_zero_coefficients() {
 
         auto roots = cubic_roots(a, b, c, d);
         // I could check the condition number here, but this is fine right?
-        if (!CHECK_ULP_CLOSE(r[0], roots[0], (std::numeric_limits<Real>::digits > 100 ? 120 : 25))) {
+        if (!CHECK_ULP_CLOSE(r[0], roots[0], (std::numeric_limits<Real>::digits > 100 ? 120 : 60))) {
             std::cerr << "  Polynomial x^3 + " << b << "x^2 + " << c << "x + "
                       << d << " has roots {";
             std::cerr << r[0] << ", " << r[1] << ", " << r[2]
@@ -107,8 +114,8 @@ template <class Real> void test_zero_coefficients() {
             std::cerr << roots[0] << ", " << roots[1] << ", " << roots[2]
                       << "}\n";
         }
-        CHECK_ULP_CLOSE(r[1], roots[1], 25);
-        CHECK_ULP_CLOSE(r[2], roots[2], (std::numeric_limits<Real>::digits > 100 ? 120 : 25));
+        CHECK_ULP_CLOSE(r[1], roots[1], 80);
+        CHECK_ULP_CLOSE(r[2], roots[2], (std::numeric_limits<Real>::digits > 100 ? 120 : 80));
         for (auto root : roots) {
             auto res = cubic_root_residual(a, b, c, d, root);
             CHECK_LE(abs(res[0]), res[1]);

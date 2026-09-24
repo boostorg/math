@@ -11,6 +11,9 @@
 // This must appear *before* any #includes, and precludes pch usage:
 //
 #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
+#ifndef BOOST_MATH_OVERFLOW_ERROR_POLICY
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+#endif
 
 #ifdef _MSC_VER
 #pragma warning (disable:4127 4512)
@@ -27,7 +30,16 @@
 #  define TEST_REAL_CONCEPT
 #endif
 
+#ifdef BOOST_MATH_ENABLE_SYCL
+#include "sycl/sycl.hpp"
+#endif
+
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+#endif
+
 #include <boost/math/distributions/non_central_beta.hpp> // for chi_squared_distribution
 #include <boost/math/distributions/poisson.hpp> // for poisson_distribution
 #define BOOST_TEST_MAIN
@@ -41,6 +53,7 @@
 #include "test_ncbeta_hooks.hpp"
 #include "table_type.hpp"
 #include "test_nc_beta.hpp"
+#include "../include_private/boost/math/tools/test.hpp"
 
 #include <iostream>
 using std::cout;

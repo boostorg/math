@@ -174,6 +174,20 @@ void test_erf(T, const char* name)
       do_test_erfc_inv<T>(erfc_inv_big_data, name, "Inverse Erfc Function: extreme values");
    }
 
+   BOOST_CHECK_EQUAL(boost::math::erf(T(0)), T(0));
+   BOOST_CHECK_EQUAL(boost::math::erfc(T(0)), T(1));
+
+   BOOST_CHECK(boost::math::erf(boost::math::tools::root_epsilon<T>() / 8) > T(0));
+   BOOST_CHECK(boost::math::erf(boost::math::tools::epsilon<T>() / 32) >= T(0));
+   BOOST_CHECK(boost::math::erfc(boost::math::tools::epsilon<T>() / 32) <= T(1));
+
+   const bool has_negative_zero { ((boost::math::signbit)(-T(0)) != 0) };
+
+   if(has_negative_zero)
+   {
+      BOOST_CHECK_EQUAL(boost::math::erf(-T(0)), -T(0));
+   }
+
    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
    {
       BOOST_CHECK_THROW(boost::math::erf(std::numeric_limits<T>::quiet_NaN()), std::domain_error);

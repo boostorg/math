@@ -10,9 +10,13 @@
 
 #ifdef __has_include
 # if __has_include(<version>)
+#ifndef BOOST_MATH_BUILD_MODULE
 #  include <version>
+#endif
 #  ifdef __cpp_lib_is_constant_evaluated
+#ifndef BOOST_MATH_BUILD_MODULE
 #   include <type_traits>
+#endif
 #   define BOOST_MATH_HAS_IS_CONSTANT_EVALUATED
 #  endif
 # endif

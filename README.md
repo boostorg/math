@@ -1,13 +1,14 @@
 Boost Math Library
 ============================
 
->ANNOUNCEMENT: This library requires a compliant C++14 compiler.
+>ANNOUNCEMENT: This library requires a compliant C++17 compiler.
+
 
 |                  |  Master  |   Develop   |
 |------------------|----------|-------------|
-| Drone            | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg?ref=refs/heads/master)](https://drone.cpp.al/boostorg/math)   | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg)](https://drone.cpp.al/boostorg/math) |
-| Github Actions   | [![Build Status](https://github.com/boostorg/math/workflows/CI/badge.svg?branch=master)](https://github.com/boostorg/math/actions)      | [![Build Status](https://github.com/boostorg/math/workflows/CI/badge.svg?branch=develop)](https://github.com/boostorg/math/actions) |
-| Codecov          | [![codecov](https://codecov.io/gh/boostorg/math/branch/master/graph/badge.svg)](https://codecov.io/gh/boostorg/math/branch/master)      | [![codecov](https://codecov.io/gh/boostorg/math/branch/develop/graph/badge.svg)](https://codecov.io/gh/boostorg/math/branch/develop) |
+| Drone            | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg?ref=refs/heads/master)](https://drone.cpp.al/boostorg/math)                                | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg)](https://drone.cpp.al/boostorg/math) |
+| Github Actions   | [![Build Status](https://github.com/boostorg/math/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/boostorg/math/actions?query=branch%3Amaster) | [![Build Status](https://github.com/boostorg/math/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/boostorg/math/actions?query=branch%3Adevelop) |
+| Codecov          | [![codecov](https://codecov.io/gh/boostorg/math/branch/master/graph/badge.svg)](https://codecov.io/gh/boostorg/math/branch/master)                                   | [![codecov](https://codecov.io/gh/boostorg/math/branch/develop/graph/badge.svg)](https://codecov.io/gh/boostorg/math/branch/develop) |
 
 
 The Math library provides numerous advanced mathematical functions
@@ -26,11 +27,11 @@ Utility functions for dealing with floating point arithmetic, includes functions
 
 ### Specific Width Floating Point Types
 
-A set of typedefs similar to those provided by `<cstdint>` but for floating point types.
+A set of `typedef`s similar to those provided by C++20's `<stdfloat>` but in `namespace boost`.
 
 ### Mathematical Constants
 
-A wide range of constants ranging from various multiples of π, fractions, Euler's constant, etc.
+A wide range of constants ranging from fractions to various multiples of $\pi$, Euler's constant, etc.
 
 These are of course usable from template code, or as non-templates with a simplified interface if that is more appropriate.
 
@@ -100,21 +101,21 @@ The full documentation is available on [boost.org](http://www.boost.org/doc/libs
 
 ### Standalone Mode
 
-Defining BOOST_MATH_STANDALONE allows Boost.Math to be used without any Boost dependencies.
+Defining `BOOST_MATH_STANDALONE` allows Boost.Math to be used without any Boost dependencies.
 Some functionality is reduced in this mode. A static_assert message will alert you
 if a particular feature has been disabled by standalone mode. Standalone mode is not designed to 
 be used with the rest of boost, and may result in compiler errors.
 
-## Supported Compilers ##
+## Supported Compilers
 
 The following compilers are tested with the CI system, and are known to work.
-Currently a compiler that is fully compliant with C++14 is required to use Boost.Math.
+Currently a compiler that is fully compliant with C++17 is required to use Boost.Math.
 
-* g++ 5 or later
-* clang++ 5 or later
-* Visual Studio 2015 (14.0) or later
+* g++ 9 or later
+* clang++ 7 or later
+* Visual Studio 2019 (16.0) or later
 
-## Support, bugs and feature requests ##
+## Support, bugs and feature requests
 
 Bugs and feature requests can be reported through the [GitHub issue tracker](https://github.com/boostorg/math/issues)
 (see [open issues](https://github.com/boostorg/math/issues) and
@@ -125,7 +126,7 @@ You can submit your changes through a [pull request](https://github.com/boostorg
 There is no mailing-list specific to Boost Math, although you can use the general-purpose Boost [mailing-list](http://lists.boost.org/mailman/listinfo.cgi/boost-users) using the tag [math].
 
 
-## Development ##
+## Development
 
 Clone the whole boost project, which includes the individual Boost projects as submodules ([see boost+git doc](https://github.com/boostorg/boost/wiki/Getting-Started)):
 
@@ -135,25 +136,32 @@ Clone the whole boost project, which includes the individual Boost projects as s
 
 The Boost Math Library is located in `libs/math/`.
 
-### Running tests ###
-First, make sure you are in `libs/math/test`.
-You can either run all the tests listed in `Jamfile.v2` or run a single test:
+### Running tests
+
+The Boost build program `b2` is used to run the tests. To build `b2`, from the
+top-level Boost directory, run either `./bootstrap.sh` (Linux/MacOS) or
+`bootstrap.bat` (Windows).
+
+Then move to `libs/math/test`.  You can either run all the tests listed in
+`Jamfile.v2` or run a single test:
 
     test$ ../../../b2                        <- run all tests
     test$ ../../../b2 static_assert_test     <- single test
     test$ # A more advanced syntax, demoing various options for building the tests:
     test$ ../../../b2 -a -j2 -q --reconfigure toolset=clang cxxflags="--std=c++14 -fsanitize=address -fsanitize=undefined" linkflags="-fsanitize=undefined -fsanitize=address"
 
-### Continuous Integration ###
+### Continuous Integration
+
 The default action for a PR or commit to a PR is for CI to run the full complement of tests. The following can be appended to the end of a commit message to modify behavior:
 
     * [ci skip] to skip all tests
-    * [linux] to test using GCC Versions 5-12 and Clang Versions 5-14 on Ubuntu LTS versions 18.04-22.04.
+    * [linux] to run the Linux compiler and architecture matrix.
     * [apple] to test Apple Clang on the latest version of MacOS.
     * [windows] to test MSVC-14.0, MSVC-14.2, MSVC-14.3, CYGWIN, and mingw on the latest version of Windows.
     * [standalone] to run standalone mode compile tests
      
-### Building documentation ###
+
+### Building documentation
 
 Full instructions can be found [here](https://svn.boost.org/trac10/wiki/BoostDocs/GettingStarted), but to reiterate slightly:
 
@@ -174,3 +182,8 @@ using doxygen ;
 using quickbook ;
 libs/math/doc$ ../../../b2
 ```
+
+## Citation
+
+If you use Boost.Math in academic work, please cite the library using the
+citation metadata in [`CITATION.cff`](CITATION.cff).

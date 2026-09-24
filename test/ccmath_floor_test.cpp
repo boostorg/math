@@ -32,6 +32,7 @@ constexpr void test()
     static_assert(boost::math::ccmath::isinf(boost::math::ccmath::floor(-std::numeric_limits<T>::infinity())), 
                   "If x is +- inf, it is returned, unmodified");
 
+    static_assert(boost::math::ccmath::floor(T(1.0)) == T(1.0));
     static_assert(boost::math::ccmath::floor(T(2)) == T(2));
     static_assert(boost::math::ccmath::floor(T(2.4)) == T(2));
     static_assert(boost::math::ccmath::floor(T(2.9)) == T(2));

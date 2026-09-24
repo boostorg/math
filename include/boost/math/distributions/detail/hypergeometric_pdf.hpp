@@ -15,11 +15,15 @@
 #include <boost/math/special_functions/pow.hpp>
 #include <boost/math/special_functions/prime.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <cstdint>
+#endif
 
 #ifdef BOOST_MATH_INSTRUMENT
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <typeinfo>
+#endif
 #endif
 
 namespace boost{ namespace math{ namespace detail{

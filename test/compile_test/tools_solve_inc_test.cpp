@@ -7,5 +7,5 @@
 // #includes all the files that it needs to.
 //
 #ifndef BOOST_MATH_STANDALONE
-#include <boost/math/tools/solve.hpp>
+#include "../../include_private/boost/math/tools/solve.hpp"
 #endif

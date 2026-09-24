@@ -38,6 +38,10 @@ void test_constant()
     auto pchip_spline = pchip(std::move(x_copy), std::move(y_copy));
     //std::cout << "Constant value pchip spline = " << pchip_spline << "\n";
 
+    auto [lo, hi] = pchip_spline.domain();
+    CHECK_ULP_CLOSE(lo, 0, 1);
+    CHECK_ULP_CLOSE(hi, 81, 1);
+
     for (Real t = x[0]; t <= x.back(); t += Real(0.25)) {
         CHECK_ULP_CLOSE(Real(7), pchip_spline(t), 2);
         CHECK_ULP_CLOSE(Real(0), pchip_spline.prime(t), 2);
@@ -130,6 +134,31 @@ void test_linear()
     CHECK_ULP_CLOSE(Real(y.back() + 1), circular_pchip_spline(Real(x.back()+1)), 2);
     CHECK_ULP_CLOSE(Real(1), circular_pchip_spline.prime(Real(x.back()+1)), 2);
 
+}
+
+template<typename Real>
+void test_partially_filled_circular_buffer()
+{
+    constexpr size_t capacity = 20;
+    constexpr size_t initial_size = 10;
+    boost::circular_buffer<Real> x_buf(capacity);
+    boost::circular_buffer<Real> y_buf(capacity);
+
+    for (size_t i = 0; i < initial_size; ++i) {
+        Real x = Real(i) + Real(0.5);
+        x_buf.push_back(x);
+        y_buf.push_back(x);
+    }
+
+    auto spline = pchip(std::move(x_buf), std::move(y_buf));
+
+    for (size_t i = initial_size; i < 100; ++i) {
+        Real x = Real(i) + Real(0.5);
+        spline.push_back(x, x);
+        Real t = Real(i) - Real(2) + Real(0.3);
+        CHECK_ULP_CLOSE(t, spline(t), 4);
+        CHECK_ULP_CLOSE(Real(1), spline.prime(t), 4);
+    }
 }
 
 template<typename Real>
@@ -262,6 +291,8 @@ int main()
     test_linear<long double>();
     test_interpolation_condition<long double>();
     test_monotonicity<long double>();
+
+    test_partially_filled_circular_buffer<double>();
 
     #ifdef BOOST_HAS_FLOAT128
     test_constant<float128>();

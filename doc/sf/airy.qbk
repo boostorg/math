@@ -18,10 +18,10 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   namespace boost { namespace math {
 
    template <class T>
-   ``__sf_result`` airy_ai(T x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` airy_ai(T x);
 
    template <class T, class Policy>
-   ``__sf_result`` airy_ai(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` airy_ai(T x, const Policy&);
 
   }} // namespaces
   
@@ -78,10 +78,10 @@ This function is implemented in terms of the Bessel functions using the relation
   namespace boost { namespace math {
 
    template <class T>
-   ``__sf_result`` airy_bi(T x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` airy_bi(T x);
 
    template <class T, class Policy>
-   ``__sf_result`` airy_bi(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` airy_bi(T x, const Policy&);
 
   }} // namespaces
   
@@ -132,10 +132,10 @@ This function is implemented in terms of the Bessel functions using the relation
   namespace boost { namespace math {
 
    template <class T>
-   ``__sf_result`` airy_ai_prime(T x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` airy_ai_prime(T x);
 
    template <class T, class Policy>
-   ``__sf_result`` airy_ai_prime(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` airy_ai_prime(T x, const Policy&);
 
   }} // namespaces
   
@@ -186,10 +186,10 @@ This function is implemented in terms of the Bessel functions using the relation
   namespace boost { namespace math {
 
    template <class T>
-   ``__sf_result`` airy_bi_prime(T x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` airy_bi_prime(T x);
 
    template <class T, class Policy>
-   ``__sf_result`` airy_bi_prime(T x, const Policy&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` airy_bi_prime(T x, const Policy&);
 
   }} // namespaces
   
@@ -242,23 +242,23 @@ by providing an output iterator.
 The signature of the single value functions are:
 
   template <class T>
-  T airy_ai_zero(
+  BOOST_MATH_GPU_ENABLED T airy_ai_zero(
            int m);         // 1-based index of zero.
 
   template <class T>
-  T airy_bi_zero(
+  BOOST_MATH_GPU_ENABLED T airy_bi_zero(
            int m);         // 1-based index of zero.
 
 and for multiple zeros:
 
  template <class T, class OutputIterator>
- OutputIterator airy_ai_zero(
+ BOOST_MATH_GPU_ENABLED OutputIterator airy_ai_zero(
                       int start_index,           // 1-based index of first zero.
                       unsigned number_of_zeros,  // How many zeros to generate.
                       OutputIterator out_it);    // Destination for zeros.
 
  template <class T, class OutputIterator>
- OutputIterator airy_bi_zero(
+ BOOST_MATH_GPU_ENABLED OutputIterator airy_bi_zero(
                       int start_index,           // 1-based index of zero.
                       unsigned number_of_zeros,  // How many zeros to generate
                       OutputIterator out_it);    // Destination for zeros.
@@ -266,25 +266,25 @@ and for multiple zeros:
 There are also versions which allow control of the __policy_section for error handling and precision.
 
   template <class T>
-  T airy_ai_zero(
+  BOOST_MATH_GPU_ENABLED T airy_ai_zero(
            int m,          // 1-based index of zero.
            const Policy&); // Policy to use.
 
   template <class T>
-  T airy_bi_zero(
+  BOOST_MATH_GPU_ENABLED T airy_bi_zero(
            int m,          // 1-based index of zero.
            const Policy&); // Policy to use.
 
 
  template <class T, class OutputIterator>
- OutputIterator airy_ai_zero(
+ BOOST_MATH_GPU_ENABLED OutputIterator airy_ai_zero(
                       int start_index,           // 1-based index of first zero.
                       unsigned number_of_zeros,  // How many zeros to generate.
                       OutputIterator out_it,     // Destination for zeros.
                       const Policy& pol);        // Policy to use.
 
  template <class T, class OutputIterator>
- OutputIterator airy_bi_zero(
+ BOOST_MATH_GPU_ENABLED OutputIterator airy_bi_zero(
                       int start_index,           // 1-based index of zero.
                       unsigned number_of_zeros,  // How many zeros to generate.
                       OutputIterator out_it,     // Destination for zeros.

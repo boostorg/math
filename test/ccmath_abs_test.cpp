@@ -76,9 +76,7 @@ int main()
 
     // Types that are convertible to int
     test<short>();
-#if CHAR_MIN != 0
-    test<char>();
-#endif
+    test<signed char>();
 
     // fabs
     fabs_test<float>();

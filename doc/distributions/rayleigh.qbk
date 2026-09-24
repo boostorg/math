@@ -18,9 +18,9 @@
       typedef RealType value_type;
       typedef Policy   policy_type;
       // Construct:
-      rayleigh_distribution(RealType sigma = 1)
+      BOOST_MATH_GPU_ENABLED rayleigh_distribution(RealType sigma = 1)
       // Accessors:
-      RealType sigma()const;
+      BOOST_MATH_GPU_ENABLED RealType sigma()const;
    };
 
    }} // namespaces
@@ -58,7 +58,7 @@ and [@http://en.wikipedia.org/wiki/Weibull_distribution Weibull] distributions a
 
 [h4 Member Functions]
 
-   rayleigh_distribution(RealType sigma = 1);
+   BOOST_MATH_GPU_ENABLED rayleigh_distribution(RealType sigma = 1);
 
 Constructs a [@http://en.wikipedia.org/wiki/Rayleigh_distribution
 Rayleigh distribution] with [sigma] /sigma/.
@@ -66,7 +66,7 @@ Rayleigh distribution] with [sigma] /sigma/.
 Requires that the [sigma] parameter is greater than zero,
 otherwise calls __domain_error.
 
-   RealType sigma()const;
+   BOOST_MATH_GPU_ENABLED RealType sigma()const;
 
 Returns the /sigma/ parameter of this distribution.
 
@@ -74,6 +74,8 @@ Returns the /sigma/ parameter of this distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variable is \[0, max_value\].
 

@@ -356,7 +356,7 @@ void test_spots(RealType)
 
         BOOST_CHECK_CLOSE(      // mean:
            mean(dist)
-           , static_cast<RealType>(-0.579908992539856825862549L), tol10 * 2);
+           , static_cast<RealType>(-0.5799089925398568258625490172876619L), tol10 * 2);
 
         std::cout << std::setprecision(17) << "Variance = " << variance(dist) << std::endl;
          BOOST_CHECK_CLOSE(      // variance: N[variance[skewnormaldistribution[1.1, 2.2, -3.3]], 50]
@@ -365,27 +365,27 @@ void test_spots(RealType)
 
         BOOST_CHECK_CLOSE(      // skewness:
            skewness(dist)
-           , static_cast<RealType>(-0.709854548171537509192897824663L), tol100);
+           , static_cast<RealType>(-0.709854548171537509192897824663027155L), tol100);
         BOOST_CHECK_CLOSE(      // kurtosis:
            kurtosis(dist)
-           , static_cast<RealType>(3.5538752625241790601377L), tol100);
+           , static_cast<RealType>(3.55387526252417906013770535120683805L), tol100);
         BOOST_CHECK_CLOSE(      // kurtosis excess:
            kurtosis_excess(dist)
-           , static_cast<RealType>(0.5538752625241790601377L), tol100);
+           , static_cast<RealType>(0.553875262524179060137705351206838143L), tol100);
 
         BOOST_CHECK_CLOSE(
           pdf(dist, static_cast<RealType>(0.4L)),
-          static_cast<RealType>(0.294140110156599539564571L),
+          static_cast<RealType>(0.294140110156599539564571034730246656L),
           tol10);
 
         BOOST_CHECK_CLOSE(
           cdf(dist, static_cast<RealType>(0.4L)),
-          static_cast<RealType>(0.7339186189278737976326676452L),
+          static_cast<RealType>(0.733918618927873797632667645226588243L),
           tol100);
 
         BOOST_CHECK_CLOSE(
           quantile(dist, static_cast<RealType>(0.3L)),
-          static_cast<RealType>(-1.180104068086875314419247L),
+          static_cast<RealType>(-1.18010406808687531441924729956233392L),
           tol100);
 
 
@@ -395,72 +395,63 @@ void test_spots(RealType)
 
        // cout << "pdf(dist, 0) = " << pdf(dist, 0) <<  ", pdf(dist, 0.45) = " << pdf(dist, 0.45) << endl;
        // BOOST_CHECK_CLOSE(mode(dist), boost::math::constants::root_two<RealType>() / 2, tol5);
-        BOOST_CHECK_CLOSE(mode(dist), static_cast<RealType>(0.41697299497388863932L), tol100);
+        BOOST_CHECK_CLOSE(mode(dist), static_cast<RealType>(0.416972994973888639318345129445233074L), tol100);
       }
 
 
       }
-      if(std::numeric_limits< RealType>::digits && (std::numeric_limits<RealType>::digits < 100))
-      {
-        dist = skew_normal_distribution<RealType>(static_cast<RealType>(1.1l), static_cast<RealType>(0.02l), static_cast<RealType>(0.03l));
+      dist = skew_normal_distribution<RealType>(static_cast<RealType>(1.1l), static_cast<RealType>(0.02l), static_cast<RealType>(0.03l));
 
-        BOOST_CHECK_CLOSE(      // mean:
+      BOOST_CHECK_CLOSE(      // mean:
            mean(dist)
-           , static_cast<RealType>(1.1004785154529557886162L), tol10);
-        BOOST_CHECK_CLOSE(      // variance:
+           , static_cast<RealType>(1.1004785154529557886162056250600829L), tol10);
+      BOOST_CHECK_CLOSE(      // variance:
           variance(dist)
-           , static_cast<RealType>(0.00039977102296128251645L), tol10);
+           , static_cast<RealType>(0.000399771022961282516451686289719995601L), tol10);
 
-        BOOST_CHECK_CLOSE(      // skewness:
+      BOOST_CHECK_CLOSE(      // skewness:
            skewness(dist)
-           , static_cast<RealType>(5.8834811259890359782e-006L), tol100);
-        BOOST_CHECK_CLOSE(      // kurtosis:
+           , static_cast<RealType>(5.88348112598903597820852388986073439e-006L), tol100);
+      BOOST_CHECK_CLOSE(      // kurtosis:
            kurtosis(dist)
-           , static_cast<RealType>(3.L + 9.2903475812137800239002e-008L), tol100);
-        BOOST_CHECK_CLOSE(      // kurtosis excess:
+           , static_cast<RealType>(3.L + 9.290347581213780023900209941e-008L), tol100);
+      BOOST_CHECK_CLOSE(      // kurtosis excess:
            kurtosis_excess(dist)
-           , static_cast<RealType>(9.2903475812137800239002e-008L), tol100);
-      }
-      if (std::numeric_limits< RealType>::digits && (std::numeric_limits<RealType>::digits < 100))
-      {
-        dist = skew_normal_distribution<RealType>(static_cast<RealType>(10.1l), static_cast<RealType>(5.l), static_cast<RealType>(-0.03l));
-        BOOST_CHECK_CLOSE(      // mean:
+           , static_cast<RealType>(9.29034758121378002390020993765449518e-008L), tol100);
+      dist = skew_normal_distribution<RealType>(static_cast<RealType>(10.1l), static_cast<RealType>(5.l), static_cast<RealType>(-0.03l));
+      BOOST_CHECK_CLOSE(      // mean:
            mean(dist)
-           , static_cast<RealType>(9.9803711367610528459485937L), tol10);
-        BOOST_CHECK_CLOSE(      // variance:
+           , static_cast<RealType>(9.98037113676105284594859373497928476L), tol10);
+      BOOST_CHECK_CLOSE(      // variance:
           variance(dist)
-           , static_cast<RealType>(24.98568893508015727823L), tol10);
+           , static_cast<RealType>(24.9856889350801572782303931074997234L), tol10);
 
-        BOOST_CHECK_CLOSE(      // skewness:
+      BOOST_CHECK_CLOSE(      // skewness:
            skewness(dist)
-           , static_cast<RealType>(-5.8834811259890359782085e-006L), tol100);
-        BOOST_CHECK_CLOSE(      // kurtosis:
+           , static_cast<RealType>(-5.88348112598903597820852388986073439e-006L), tol100);
+      BOOST_CHECK_CLOSE(      // kurtosis:
            kurtosis(dist)
-           , static_cast<RealType>(3.L + 9.2903475812137800239002e-008L), tol100);
-        BOOST_CHECK_CLOSE(      // kurtosis excess:
+           , static_cast<RealType>(3.L + 9.290347581213780023900209941e-008L), tol100);
+      BOOST_CHECK_CLOSE(      // kurtosis excess:
            kurtosis_excess(dist)
-           , static_cast<RealType>(9.2903475812137800239002e-008L), tol100);
-      }
-      if (std::numeric_limits< RealType>::digits && (std::numeric_limits<RealType>::digits < 100))
-      {
-        dist = skew_normal_distribution<RealType>(static_cast<RealType>(-10.1l), static_cast<RealType>(5.l), static_cast<RealType>(30.l));
-        BOOST_CHECK_CLOSE(      // mean:
+           , static_cast<RealType>(9.29034758121378002390020993765449518e-008L), tol100);
+      dist = skew_normal_distribution<RealType>(static_cast<RealType>(-10.1l), static_cast<RealType>(5.l), static_cast<RealType>(30.l));
+      BOOST_CHECK_CLOSE(      // mean:
            mean(dist)
-           , static_cast<RealType>(-6.11279169674138408531365L), 2 * tol10);
-        BOOST_CHECK_CLOSE(      // variance:
+           , static_cast<RealType>(-6.11279169674138408531365149047090859L), 2 * tol10);
+      BOOST_CHECK_CLOSE(      // variance:
           variance(dist)
-          , static_cast<RealType>(9.10216994642554914628242L), tol10 * 2);
+          , static_cast<RealType>(9.10216994642554914628242097277880642L), tol10 * 2);
 
-        BOOST_CHECK_CLOSE(      // skewness:
+      BOOST_CHECK_CLOSE(      // skewness:
            skewness(dist)
-           , static_cast<RealType>(0.99072425443686904424L), tol100);
-        BOOST_CHECK_CLOSE(      // kurtosis:
+           , static_cast<RealType>(0.990724254436869044244695246354219556L), tol100);
+      BOOST_CHECK_CLOSE(      // kurtosis:
            kurtosis(dist)
-           , static_cast<RealType>(3.L + 0.8638862008406084244563L), tol100);
-        BOOST_CHECK_CLOSE(      // kurtosis excess:
+           , static_cast<RealType>(3.L + 0.8638862008406084244563090239530549L), tol100);
+      BOOST_CHECK_CLOSE(      // kurtosis excess:
            kurtosis_excess(dist)
-           , static_cast<RealType>(0.8638862008406084244563L), tol100);
-      }
+           , static_cast<RealType>(0.863886200840608424456309023953054896L), tol100);
 
       BOOST_MATH_CHECK_THROW(cdf(skew_normal_distribution<RealType>(0, 0, 0), 0), std::domain_error);
       BOOST_MATH_CHECK_THROW(cdf(skew_normal_distribution<RealType>(0, -1, 0), 0), std::domain_error);
@@ -504,6 +495,61 @@ BOOST_AUTO_TEST_CASE( test_main )
 
   BOOST_CHECK_CLOSE_FRACTION(mean(w01), static_cast<double>(0), tolfeweps); // Default mean == zero
   BOOST_CHECK_CLOSE_FRACTION(scale(w01), static_cast<double>(1), tolfeweps); // Default scale == unity
+
+  // https://github.com/boostorg/math/issues/1190
+  // Avoid cancellation in the extreme left tail (and its reflected upper tail).
+  {
+    const double tail_tolerance = 128 * numeric_limits<double>::epsilon();
+    boost::math::normal_distribution<double> std_normal;
+    const double normal_tail = cdf(std_normal, -8.0);
+    const double alpha_one_tail = normal_tail * normal_tail;
+
+    BOOST_CHECK_CLOSE_FRACTION(
+      cdf(skew_normal_distribution<double>(0, 1, 1), -8.0),
+      alpha_one_tail,
+      tail_tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(
+      cdf(complement(skew_normal_distribution<double>(0, 1, -1), 8.0)),
+      alpha_one_tail,
+      tail_tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(
+      cdf(skew_normal_distribution<double>(0, 1, 2), -6.0),
+      7.1180791906932412294852794865326109874556091859546e-43,
+      tail_tolerance);
+  }
+
+  // Moderate cancellation must also use the accurate tail calculation.
+  // Disable promotion so extended long double cannot mask the loss of bits.
+  {
+    typedef boost::math::policies::policy<
+      boost::math::policies::promote_double<false> > no_promote_policy;
+    typedef skew_normal_distribution<double, no_promote_policy> distribution;
+    const double tolerance = 32 * numeric_limits<double>::epsilon();
+    const distribution lower(0, 1, 4), upper(0, 1, -4);
+    // Normal CDF - 2 * Owen's T, evaluated with cpp_bin_float_100.
+    const double expected = 8.179690339064550124947048052432943616e-7;
+    BOOST_CHECK_CLOSE_FRACTION(cdf(lower, -1.0), expected, tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(cdf(complement(upper, 1.0)), expected, tolerance);
+
+    // Regression from git_issue_184: increasing probabilities must not give
+    // decreasing quantiles after the location/scale transformation.
+    const distribution shifted(573.39724735636185, 77.0, 4.0);
+    const distribution reflected(-573.39724735636185, 77.0, -4.0);
+    const double probabilities[] = {
+      0.00285612015554148, 0.00285612015554149, 0.00285612015554150
+    };
+    double previous = quantile(shifted, probabilities[0]);
+    double previous_complement = quantile(complement(reflected, probabilities[0]));
+    for (unsigned i = 1; i < 3; ++i)
+    {
+      const double current = quantile(shifted, probabilities[i]);
+      const double current_complement = quantile(complement(reflected, probabilities[i]));
+      BOOST_CHECK_LE(previous, current);
+      BOOST_CHECK_GE(previous_complement, current_complement);
+      previous = current;
+      previous_complement = current_complement;
+    }
+  }
 
   // Basic sanity-check spot values for all floating-point types..
   // (Parameter value, arbitrarily zero, only communicates the floating point type).

@@ -6,8 +6,10 @@
  */
 #ifndef BOOST_MATH_FILTERS_DAUBECHIES_HPP
 #define BOOST_MATH_FILTERS_DAUBECHIES_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <limits>
+#endif
 #include <boost/math/tools/big_constant.hpp>
 
 #include <boost/math/tools/is_standalone.hpp>

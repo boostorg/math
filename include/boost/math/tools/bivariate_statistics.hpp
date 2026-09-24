@@ -6,9 +6,11 @@
 #ifndef BOOST_MATH_TOOLS_BIVARIATE_STATISTICS_HPP
 #define BOOST_MATH_TOOLS_BIVARIATE_STATISTICS_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iterator>
 #include <tuple>
 #include <limits>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/header_deprecated.hpp>
 

@@ -4,10 +4,17 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
+#endif
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/quadrature/tanh_sinh.hpp>
 #include <boost/math/constants/constants.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 
 // numerically evaluate the integral for Stefan-Boltzmann Law from Planck's Law

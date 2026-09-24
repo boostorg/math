@@ -26,7 +26,7 @@
 
 namespace boost{ namespace math{ namespace interpolators {
 
-template <class Real>
+BOOST_MATH_EXPORT template <class Real>
 class cardinal_cubic_b_spline
 {
 public:

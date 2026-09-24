@@ -7,10 +7,18 @@
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/distributions/binomial.hpp>
 #include <cfenv>
+#else
+import boost.math;
+#include <fenv.h>
+#endif
+
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <numeric>
-#include <boost/math/distributions/binomial.hpp>
+#endif
 #include "math_unit_test.hpp"
 
 #pragma STDC FENV_ACCESS ON

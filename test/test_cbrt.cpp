@@ -9,8 +9,10 @@
 #  pragma warning (disable : 4224)
 #endif
 
-#ifndef SYCL_LANGUAGE_VERSION
+#ifndef BOOST_MATH_ENABLE_SYCL
 #include <pch_light.hpp> // include /libs/math/src/
+#else
+#include "sycl/sycl.hpp"
 #endif
 
 #include "test_cbrt.hpp"

@@ -6,45 +6,42 @@
  */
 #ifndef TEST_FUNCTIONS_FOR_OPTIMIZATION_HPP
 #define TEST_FUNCTIONS_FOR_OPTIMIZATION_HPP
+
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/constants/constants.hpp>
 #include <array>
 #include <vector>
-#include <boost/math/constants/constants.hpp>
-#if __has_include(<boost/units/systems/si/length.hpp>)
-// This is the only system boost.units still works on.
-// I imagine this will start to fail at some point,
-// and we'll have to remove this test as well.
-#if defined(__APPLE__)
-#define BOOST_MATH_TEST_UNITS_COMPATIBILITY 1
-#include <boost/units/systems/si/length.hpp>
-#include <boost/units/systems/si/area.hpp>
-#include <boost/units/cmath.hpp>
-#include <boost/units/quantity.hpp>
-#include <boost/units/systems/si/io.hpp>
-using namespace boost::units;
-using namespace boost::units::si;
+#endif
 
-// This *should* return an area, but see: https://github.com/boostorg/units/issues/58
-// This sadly prevents std::atomic<quantity<area>>.
-// Nonetheless, we *do* get some information making the argument type dimensioned,
-// even if it would be better to get the full information:
-double dimensioned_sphere(std::vector<quantity<length>> const & v) {
-  quantity<area> r(0.0*meters*meters);
-  for (auto const & x : v) {
-    r += (x * x);
+/* simple n-d quadratic function */
+template<typename RealType>
+RealType
+quadratic(std::vector<RealType>& x)
+{
+  RealType res{ 0.0 };
+  for (auto& item : x) {
+    res += item * item;
   }
-  quantity<area> scale(1.0*meters*meters);
-  return static_cast<double>(r/scale);
+  return res;
 }
-#endif
-#endif
+
+template<typename RealType>
+RealType
+quadratic_high_cond_2D(std::vector<RealType>& x)
+{
+  return 1000 * x[0] * x[0] + x[1] * x[1];
+}
 
 // Taken from: https://en.wikipedia.org/wiki/Test_functions_for_optimization
-template <typename Real> Real ackley(std::array<Real, 2> const &v) {
-  using std::sqrt;
+template<typename Real>
+Real
+ackley(std::array<Real, 2> const& v)
+{
+  using boost::math::constants::e;
+  using boost::math::constants::two_pi;
   using std::cos;
   using std::exp;
-  using boost::math::constants::two_pi;
-  using boost::math::constants::e;
+  using std::sqrt;
   Real x = v[0];
   Real y = v[1];
   Real arg1 = -sqrt((x * x + y * y) / 2) / 5;
@@ -52,16 +49,21 @@ template <typename Real> Real ackley(std::array<Real, 2> const &v) {
   return -20 * exp(arg1) - exp(arg2 / 2) + 20 + e<Real>();
 }
 
-template <typename Real> auto rosenbrock_saddle(std::array<Real, 2> const &v) {
-  auto x = v[0];
-  auto y = v[1];
-  return 100 * (x * x - y) * (x * x - y) + (1 - x) * (1 - x);
+template<typename Real>
+auto
+rosenbrock_saddle(std::array<Real, 2> const& v) -> Real
+{
+  Real x{ v[0] };
+  Real y{ v[1] };
+  return static_cast<Real>(100 * (x * x - y) * (x * x - y) + (1 - x) * (1 - x));
 }
 
-
-template <class Real> Real rastrigin(std::vector<Real> const &v) {
-  using std::cos;
+template<class Real>
+Real
+rastrigin(std::vector<Real> const& v)
+{
   using boost::math::constants::two_pi;
+  using std::cos;
   auto A = static_cast<Real>(10);
   auto y = static_cast<Real>(10 * v.size());
   for (auto x : v) {
@@ -72,7 +74,9 @@ template <class Real> Real rastrigin(std::vector<Real> const &v) {
 
 // Useful for testing return-type != scalar argument type,
 // and robustness to NaNs:
-double sphere(std::vector<float> const &v) {
+double
+sphere(std::vector<float> const& v)
+{
   double r = 0.0;
   for (auto x : v) {
     double x_ = static_cast<double>(x);
@@ -85,23 +89,27 @@ double sphere(std::vector<float> const &v) {
 }
 
 template<typename Real>
-Real three_hump_camel(std::array<Real, 2> const & v) {
+Real
+three_hump_camel(std::array<Real, 2> const& v)
+{
   Real x = v[0];
   Real y = v[1];
-  auto xsq = x*x;
-  return 2*xsq - (1 + Real(1)/Real(20))*xsq*xsq  + xsq*xsq*xsq/6 + x*y + y*y;
+  auto xsq = x * x;
+  return 2 * xsq - (1 + Real(1) / Real(20)) * xsq * xsq + xsq * xsq * xsq / 6 +
+         x * y + y * y;
 }
 
 // Minima occurs at (3, 1/2) with value 0:
 template<typename Real>
-Real beale(std::array<Real, 2> const & v) {
+Real
+beale(std::array<Real, 2> const& v)
+{
   Real x = v[0];
   Real y = v[1];
-  Real t1 = Real(3)/Real(2) -x + x*y;
-  Real t2 = Real(9)/Real(4) -x  + x*y*y;
-  Real t3 = Real(21)/Real(8) -x  + x*y*y*y;
-  return t1*t1 + t2*t2 + t3*t3;
+  Real t1 = Real(3) / Real(2) - x + x * y;
+  Real t2 = Real(9) / Real(4) - x + x * y * y;
+  Real t3 = Real(21) / Real(8) - x + x * y * y * y;
+  return t1 * t1 + t2 * t2 + t3 * t3;
 }
-
 
 #endif

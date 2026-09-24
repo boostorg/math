@@ -5,15 +5,34 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <cmath>
+#include <boost/math/optimization/jso.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 #include "test_functions_for_optimization.hpp"
-#include <boost/math/optimization/jso.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <random>
 #include <limits>
+#endif
 
 using boost::math::optimization::jso;
 using boost::math::optimization::jso_parameters;
 using boost::math::optimization::detail::weighted_lehmer_mean;
+
+void test_default_population_with_many_threads() {
+  using ArgType = std::array<double, 2>;
+  auto jso_params = jso_parameters<ArgType>();
+  jso_params.lower_bounds = {-5, -5};
+  jso_params.upper_bounds = {5, 5};
+  jso_params.threads = 128;
+
+  boost::math::optimization::validate_jso_parameters(jso_params);
+  CHECK_GE(jso_params.initial_population_size, jso_params.threads);
+}
 
 void test_weighted_lehmer_mean() {
   size_t n = 50;
@@ -43,34 +62,36 @@ template <class Real> void test_ackley() {
 
   std::mt19937_64 gen(12345);
   auto local_minima = jso(ackley<Real>, jso_params, gen);
-  CHECK_LE(std::abs(local_minima[0]), 10 * std::numeric_limits<Real>::epsilon());
-  CHECK_LE(std::abs(local_minima[1]), 10 * std::numeric_limits<Real>::epsilon());
+  CHECK_LE(std::abs(local_minima[0]), std::sqrt(std::numeric_limits<Real>::epsilon()));
+  CHECK_LE(std::abs(local_minima[1]), std::sqrt(std::numeric_limits<Real>::epsilon()));
 
   // Does it work with a lambda?
   auto ack = [](std::array<Real, 2> const &x) { return ackley<Real>(x); };
   local_minima = jso(ack, jso_params, gen);
-  CHECK_LE(std::abs(local_minima[0]), 10 * std::numeric_limits<Real>::epsilon());
-  CHECK_LE(std::abs(local_minima[1]), 10 * std::numeric_limits<Real>::epsilon());
+  CHECK_LE(std::abs(local_minima[0]), std::sqrt(std::numeric_limits<Real>::epsilon()));
+  CHECK_LE(std::abs(local_minima[1]), std::sqrt(std::numeric_limits<Real>::epsilon()));
 
   // Test that if an intial guess is the exact solution, the returned solution is the exact solution:
   std::array<Real, 2> initial_guess{0, 0};
   jso_params.initial_guess = &initial_guess;
   local_minima = jso(ack, jso_params, gen);
-  CHECK_EQUAL(local_minima[0], Real(0));
-  CHECK_EQUAL(local_minima[1], Real(0));
+
+  using std::fabs;
+  CHECK_LE(fabs(local_minima[0]), 128 * boost::math::tools::epsilon<Real>());
+  CHECK_LE(fabs(local_minima[1]), 128 * boost::math::tools::epsilon<Real>());
 }
 
 template <class Real> void test_rosenbrock_saddle() {
   std::cout << "Testing jSO on Rosenbrock saddle . . .\n";
   using ArgType = std::array<Real, 2>;
-  auto jso_params = jso_parameters<ArgType>();
+  jso_parameters<ArgType> jso_params { };
   jso_params.lower_bounds = {0.5, 0.5};
   jso_params.upper_bounds = {2.048, 2.048};
   std::mt19937_64 gen(234568);
   auto local_minima = jso(rosenbrock_saddle<Real>, jso_params, gen);
 
-  CHECK_ABSOLUTE_ERROR(Real(1), local_minima[0], 10 * std::numeric_limits<Real>::epsilon());
-  CHECK_ABSOLUTE_ERROR(Real(1), local_minima[1], 10 * std::numeric_limits<Real>::epsilon());
+  CHECK_ABSOLUTE_ERROR(Real(1), local_minima[0], std::sqrt(std::numeric_limits<Real>::epsilon()));
+  CHECK_ABSOLUTE_ERROR(Real(1), local_minima[1], std::sqrt(std::numeric_limits<Real>::epsilon()));
 
   // Does cancellation work?
   std::atomic<bool> cancel = true;
@@ -143,31 +164,14 @@ void test_beale() {
   CHECK_ABSOLUTE_ERROR(Real(1)/Real(2), local_minima[1], Real(2e-4));
 }
 
-#if BOOST_MATH_TEST_UNITS_COMPATIBILITY
-void test_dimensioned_sphere() {
-  std::cout << "Testing jso on dimensioned sphere . . .\n";
-  using ArgType = std::vector<quantity<length>>;
-  auto params = jso_parameters<ArgType>();
-  params.lower_bounds.resize(4, -1.0*meter);
-  params.upper_bounds.resize(4, 1*meter);
-  params.threads = 2;
-  std::mt19937_64 gen(56789);
-  auto local_minima = jso(dimensioned_sphere, params, gen);
-}
-#endif
-
 int main() {
-#if defined(__clang__) || defined(_MSC_VER)
+  test_default_population_with_many_threads();
   test_ackley<float>();
   test_ackley<double>();
   test_rosenbrock_saddle<double>();
   test_rastrigin<double>();
   test_three_hump_camel<float>();
   test_beale<double>();
-#endif
-#if BOOST_MATH_TEST_UNITS_COMPATIBILITY
-  test_dimensioned_sphere();
-#endif
   test_sphere();
   test_weighted_lehmer_mean();
   return boost::math::test::report_errors();

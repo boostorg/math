@@ -5,8 +5,10 @@
 
 #ifndef BOOST_MATH_SPECIAL_CHEBYSHEV_HPP
 #define BOOST_MATH_SPECIAL_CHEBYSHEV_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <type_traits>
+#endif
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -23,7 +25,7 @@
 
 namespace boost { namespace math {
 
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline tools::promote_args_t<T1, T2, T3> chebyshev_next(T1 const & x, T2 const & Tn, T3 const & Tn_1)
 {
     return 2*x*Tn - Tn_1;
@@ -117,7 +119,7 @@ inline Real chebyshev_imp(unsigned n, Real const & x, const Policy&)
 }
 } // namespace detail
 
-template <class Real, class Policy>
+BOOST_MATH_EXPORT template <class Real, class Policy>
 inline tools::promote_args_t<Real> chebyshev_t(unsigned n, Real const & x, const Policy&)
 {
    using result_type = tools::promote_args_t<Real>;
@@ -132,13 +134,13 @@ inline tools::promote_args_t<Real> chebyshev_t(unsigned n, Real const & x, const
    return policies::checked_narrowing_cast<result_type, Policy>(detail::chebyshev_imp<value_type, false>(n, static_cast<value_type>(x), forwarding_policy()), "boost::math::chebyshev_t<%1%>(unsigned, %1%)");
 }
 
-template <class Real>
+BOOST_MATH_EXPORT template <class Real>
 inline tools::promote_args_t<Real> chebyshev_t(unsigned n, Real const & x)
 {
     return chebyshev_t(n, x, policies::policy<>());
 }
 
-template <class Real, class Policy>
+BOOST_MATH_EXPORT template <class Real, class Policy>
 inline tools::promote_args_t<Real> chebyshev_u(unsigned n, Real const & x, const Policy&)
 {
    using result_type = tools::promote_args_t<Real>;
@@ -153,13 +155,13 @@ inline tools::promote_args_t<Real> chebyshev_u(unsigned n, Real const & x, const
    return policies::checked_narrowing_cast<result_type, Policy>(detail::chebyshev_imp<value_type, true>(n, static_cast<value_type>(x), forwarding_policy()), "boost::math::chebyshev_u<%1%>(unsigned, %1%)");
 }
 
-template <class Real>
+BOOST_MATH_EXPORT template <class Real>
 inline tools::promote_args_t<Real> chebyshev_u(unsigned n, Real const & x)
 {
     return chebyshev_u(n, x, policies::policy<>());
 }
 
-template <class Real, class Policy>
+BOOST_MATH_EXPORT template <class Real, class Policy>
 inline tools::promote_args_t<Real> chebyshev_t_prime(unsigned n, Real const & x, const Policy&)
 {
    using result_type = tools::promote_args_t<Real>;
@@ -177,7 +179,7 @@ inline tools::promote_args_t<Real> chebyshev_t_prime(unsigned n, Real const & x,
    return policies::checked_narrowing_cast<result_type, Policy>(n * detail::chebyshev_imp<value_type, true>(n - 1, static_cast<value_type>(x), forwarding_policy()), "boost::math::chebyshev_t_prime<%1%>(unsigned, %1%)");
 }
 
-template <class Real>
+BOOST_MATH_EXPORT template <class Real>
 inline tools::promote_args_t<Real> chebyshev_t_prime(unsigned n, Real const & x)
 {
    return chebyshev_t_prime(n, x, policies::policy<>());
@@ -191,7 +193,7 @@ inline tools::promote_args_t<Real> chebyshev_t_prime(unsigned n, Real const & x)
  * https://www.siam.org/books/ot99/OT99SampleChapter.pdf
  * However, our definition of c0 differs by a factor of 1/2, as stated in the docs. . .
  */
-template <class Real, class T2>
+BOOST_MATH_EXPORT template <class Real, class T2>
 inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, const T2& x)
 {
     using boost::math::constants::half;
@@ -291,7 +293,7 @@ inline Real unchecked_chebyshev_clenshaw_recurrence(const Real* const c, size_t 
 
 } // namespace detail
 
-template <class Real>
+BOOST_MATH_EXPORT template <class Real>
 inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, const Real & a, const Real & b, const Real& x)
 {
     if (x < a || x > b)

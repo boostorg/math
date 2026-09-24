@@ -45,7 +45,7 @@ inline constexpr Real modf_impl(Real x, Real* iptr)
 
 } // Namespace detail
 
-template <typename Real>
+BOOST_MATH_EXPORT template <typename Real>
 inline constexpr Real modf(Real x, Real* iptr)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))

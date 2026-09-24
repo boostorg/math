@@ -16,6 +16,7 @@
 #include <boost/hana/for_each.hpp>
 #include <boost/hana/ext/std/integer_sequence.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
+#include <boost/math/differentiation/finite_difference.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
 #include <boost/math/filters/daubechies.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
@@ -297,8 +298,8 @@ void test_first_derivative()
    // Limited precision test data means we can't test long double here...
 #else
     auto phi1_3 = boost::math::detail::daubechies_scaling_integer_grid<long double, 3, 1>();
-    std::array<long double, 6> lin_3{0.0L, 1.638452340884085725014976L, -2.232758190463137395017742L,
-                                     0.5501593582740176149905562L, 0.04414649130503405501220997L, 0.0L};
+    std::array<long double, 6> lin_3{0.0L, 1.638452340884085725014976113635604107L, -2.23275819046313739501774225255380757L,
+                                     0.550159358274017614990556164200803310L, 0.044146491305034055012209974717400368L, 0.0L};
     for (size_t i = 0; i < lin_3.size(); ++i)
     {
         if(!CHECK_ULP_CLOSE(lin_3[i], phi1_3[i], 0))
@@ -308,8 +309,8 @@ void test_first_derivative()
     }
 
     auto phi1_4 = boost::math::detail::daubechies_scaling_integer_grid<long double, 4, 1>();
-    std::array<long double, 8> lin_4 = {0.0L, 1.776072007522184640093776L, -2.785349397229543142492785L, 1.192452536632278174347632L,
-                                       -0.1313745151846729587935189L, -0.05357102822023923595359996L,0.001770396479992522798495351L, 0.0L};
+    std::array<long double, 8> lin_4 = {0.0L, 1.776072007522184640093776071522502761L, -2.785349397229543142492784905731245880L, 1.192452536632278174347632339082851360L,
+                                       -0.131374515184672958793518896272545740L, -0.053571028220239235953599959390993709L,0.001770396479992522798495350789431024L, 0.0L};
 
     for (size_t i = 0; i < lin_4.size(); ++i)
     {
@@ -319,8 +320,8 @@ void test_first_derivative()
         }
     }
 
-    std::array<long double, 10> lin_5 = {0.0L, 1.558326313047001366564379L, -2.436012783189551921436896L, 1.235905129801454293947039L, -0.3674377136938866359947561L,
-                                        -0.02178035117564654658884556L,0.03234719350814368885815854L,-0.001335619912770701035229331L,-0.00001216838474354431384970525L,0.0L};
+    std::array<long double, 10> lin_5 = {0.0L, 1.558326313047001366564379221011472479L, -2.436012783189551921436895932290077033L, 1.235905129801454293947038906779457610L, -0.367437713693886635994756136622838186L,
+                                        -0.021780351175646546588845564309594589L,0.032347193508143688858158541500450925L,-0.001335619912770701035229330817898250L,-0.000012168384743544313849705250972915L,0.0L};
     auto phi1_5 = boost::math::detail::daubechies_scaling_integer_grid<long double, 5, 1>();
     for (size_t i = 0; i < lin_5.size(); ++i)
     {
@@ -458,12 +459,71 @@ void test_quadratures()
     }
 }
 
+// Exercise both derivative-capable interpolators at points between grid nodes.
+// Differentiating prime() checks double_prime() independently of the grid generator.
+// Use coarse grids so the finite-difference stencil fits inside an interpolation interval.
+template<class Real, int p>
+void test_refinement_derivatives(int refinements)
+{
+    using boost::math::differentiation::finite_difference_derivative;
+    auto f = boost::math::daubechies_scaling<Real, p>(refinements);
+    auto value = [&](Real x) { return f(x); };
+    auto prime = [&](Real x) { return f.prime(x); };
+    const Real tolerance = std::is_same_v<Real, float> ? Real(0.005) : Real(0.000001);
+    for (int i = 0; i < 8; ++i)
+    {
+        Real x = Real(p/3) + Real(i)/8 + Real(1)/32;
+        auto d1 = finite_difference_derivative<decltype(value), Real, 2>(value, x);
+        auto d2 = finite_difference_derivative<decltype(prime), Real, 2>(prime, x);
+        if constexpr (std::is_same_v<Real, float>)
+        {
+            // The automatic float step is too large for the curvature of these
+            // interpolants. This dyadic step stays well inside the grid cell.
+            Real h = Real(1)/1024;
+            d1 = (value(x + h) - value(x - h))/(2*h);
+            d2 = (prime(x + h) - prime(x - h))/(2*h);
+        }
+        CHECK_MOLLIFIED_CLOSE(d1, f.prime(x), tolerance);
+        CHECK_MOLLIFIED_CLOSE(d2, f.double_prime(x), tolerance);
+    }
+}
+
+// At shared dyadic nodes, changing the refinement must preserve function values.
+template<class Real, int p>
+void test_explicit_refinement()
+{
+    auto coarse = boost::math::daubechies_scaling<Real, p>(3);
+    auto fine = boost::math::daubechies_scaling<Real, p>(4);
+    CHECK_EQUAL(true, fine.bytes() > coarse.bytes());
+    auto [a, b] = coarse.support();
+    for (Real x = a; x <= b; x += Real(1)/8)
+    {
+        CHECK_MOLLIFIED_CLOSE(coarse(x), fine(x), 32*std::numeric_limits<Real>::epsilon());
+        if constexpr (p > 2)
+        {
+            CHECK_MOLLIFIED_CLOSE(coarse.prime(x), fine.prime(x), 32*std::numeric_limits<Real>::epsilon());
+        }
+        if constexpr (p >= 6)
+        {
+            CHECK_MOLLIFIED_CLOSE(coarse.double_prime(x), fine.double_prime(x), 32*std::numeric_limits<Real>::epsilon());
+        }
+    }
+}
+
 int main()
 {
     #ifndef __MINGW32__
     boost::hana::for_each(std::make_index_sequence<18>(), [&](auto i){
       test_quadratures<float, i+2>();
       test_quadratures<double, i+2>();
+    });
+    test_refinement_derivatives<float, 6>(4);
+    test_refinement_derivatives<float, 19>(-2);
+    test_refinement_derivatives<double, 6>(4);
+    test_refinement_derivatives<double, 19>(4);
+    boost::hana::for_each(std::make_index_sequence<18>(), [&](auto i) {
+        test_explicit_refinement<float, i + 2>();
+        test_explicit_refinement<double, i + 2>();
     });
 
     test_agreement_with_ten_lectures();

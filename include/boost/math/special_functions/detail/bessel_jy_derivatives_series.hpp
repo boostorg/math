@@ -10,8 +10,10 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <cstdint>
+#endif
 
 namespace boost{ namespace math{ namespace detail{
 

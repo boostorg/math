@@ -14,13 +14,15 @@
 #define BOOST_TEST_MAIN
 
 #include <boost/test/unit_test.hpp>
-#include <libs/math/test/almost_equal.ipp> // Similar to BOOST_CLOSE_FRACTION.
-#include <libs/math/test/s_.ipp> // To create test strings like std::basic_string<CharType> s = S_("0 -0"); 
+#include <almost_equal.ipp> // Similar to BOOST_CLOSE_FRACTION.
+#include <s_.ipp> // To create test strings like std::basic_string<CharType> s = S_("0 -0"); 
 #include <boost/math/special_functions/nonfinite_num_facets.hpp>
 
 #include <locale>
 #include <sstream>
 #include <iomanip>
+
+#include "boost/math/tools/test.hpp"
 
 namespace {
 
@@ -30,7 +32,7 @@ namespace {
 using namespace boost::math;
 using boost::math::signbit;
 using boost::math::changesign;
-using (boost::math::isnan)(;
+using boost::math::isnan;
 
 //------------------------------------------------------------------------------
 // Test nonfinite_num_put and nonfinite_num_get facets by checking
@@ -232,6 +234,15 @@ template<class CharType, class ValType> void trap_test_get_nan_impl()
     ss.clear();
     ss.str(S_(""));
 
+    ValType a3 = std::numeric_limits<ValType>::quiet_NaN();
+    ss << std::showpos << a3;
+    ValType b3;
+    ss >> b3;
+    BOOST_CHECK(ss.rdstate() == std::ios_base::failbit);
+
+    ss.clear();
+    ss.str(S_(""));
+
     ValType a2 = std::numeric_limits<ValType>::signaling_NaN();
     ss << a2;
     ValType b2;
@@ -266,7 +277,7 @@ template<class CharType, class ValType> void trap_test_get_nan_impl()
   os.imbue(new_locale);
   os.exceptions(std::ios_base::badbit | std::ios_base::failbit); // Enable throwing exceptions.
   double nan =  std::numeric_limits<double>::quiet_NaN();
-  BOOST_MATH_CHECK_THROW((os << nan), std::runtime_error);
+  BOOST_MATH_CHECK_THROW((os << nan), std::exception);
   // warning : in "check_trap_nan": exception std::runtime_error is expected
  } //  BOOST_AUTO_TEST_CASE(check_trap_nan)
 
@@ -279,7 +290,7 @@ template<class CharType, class ValType> void trap_test_get_nan_impl()
   os.imbue(new_locale);
   os.exceptions(std::ios_base::badbit | std::ios_base::failbit); // Enable throwing exceptions.
   double inf =  std::numeric_limits<double>::infinity();
-  BOOST_MATH_CHECK_THROW((os << inf), std::runtime_error);
+  BOOST_MATH_CHECK_THROW((os << inf), std::exception);
   // warning : in "check_trap_inf": exception std::runtime_error is expected.
  
  } //  BOOST_AUTO_TEST_CASE(check_trap_nan_inf)

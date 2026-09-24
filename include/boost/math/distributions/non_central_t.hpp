@@ -24,7 +24,7 @@ namespace boost
    namespace math
    {
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       class non_central_t_distribution;
 
       namespace detail{
@@ -100,11 +100,15 @@ namespace boost
                ++count;
             }
             last_term = 0;
+            T betaf_lim = betaf * tools::epsilon<T>() * 4;
             for(auto i = k + 1; ; ++i)
             {
                poisf *= d2 / (i + 0.5f);
                xtermf *= (x * (v / 2 + i - 1)) / (i);
                betaf -= xtermf;
+               if (betaf < betaf_lim)
+                  break; // Nothing but garbage left in betaf now!!
+
                T term = poisf * betaf;
                sum += term;
                if((fabs(last_term) >= fabs(term)) && (fabs(term/sum) < errtol))
@@ -245,8 +249,7 @@ namespace boost
                // t-Distribution". C. van Eeden. International Statistical Review, 29, 4-31.
                // "Continuous Univariate Distributions".  N.L. Johnson, S. Kotz and
                // N. Balkrishnan. 1995. John Wiley and Sons New York.
-               T result = cdf(students_t_distribution<T, Policy>(v), t - delta);
-               return invert ? 1 - result : result;
+               return invert ? cdf(complement(students_t_distribution<T, Policy>(v), t - delta)) : cdf(students_t_distribution<T, Policy>(v), t - delta);
             }
             //
             // x and y are the corresponding random
@@ -270,10 +273,11 @@ namespace boost
                //
                // Calculate p:
                //
+               T c = 0;
                if(x != 0)
                {
-                  result = non_central_beta_p(a, b, d2, x, y, pol);
-                  result = non_central_t2_p(v, delta, x, y, pol, result);
+                  c = non_central_beta_p(a, b, d2, x, y, pol);
+                  result = non_central_t2_p(v, delta, x, y, pol, c);
                   result /= 2;
                }
                else
@@ -281,6 +285,19 @@ namespace boost
                if (invert)
                {
                   result = cdf(complement(boost::math::normal_distribution<T, Policy>(), -delta)) - result;
+                  if ((x != 0) && (fabs(result / (c * tools::epsilon<T>())) < 1000))
+                  {
+                      // We've cancelled out most of the digits in the result, try A&S 26.7.9,
+                      // this is only accurate to a couple of digits at best, but it's better
+                      // than nothing when all else fails, see https://github.com/boostorg/math/issues/1430
+                      t = -t;
+                      delta = -delta;
+
+                      T z = (t * (1 - 1 / (4 * v)) - delta) / sqrt(1 + t * t / (2 * v));
+
+                      return cdf(boost::math::normal_distribution<T, Policy>(), z);
+
+                  }
                   invert = false;
                }
                else
@@ -715,11 +732,6 @@ namespace boost
             return result;
          }
 
-#if 0
-         //
-         // This code is disabled, since there can be multiple answers to the
-         // question, and it's not clear how to find the "right" one.
-         //
          template <class RealType, class Policy>
          struct t_degrees_of_freedom_finder
          {
@@ -745,15 +757,44 @@ namespace boost
          inline RealType find_t_degrees_of_freedom(
             RealType delta, RealType x, RealType p, RealType q, const Policy& pol)
          {
+            using std::fabs;
             const char* function = "non_central_t<%1%>::find_degrees_of_freedom";
             if((p == 0) || (q == 0))
             {
                //
-               // Can't a thing if one of p and q is zero:
+               // Can't find a thing if one of p and q is zero:
                //
-               return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom when the probability is 0 or 1, only possible answer is %1%", // LCOV_EXCL_LINE
+               return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom when the probability is 0 or 1, only possible answer is %1%",
                   RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE
             }
+            if (fabs(x) < tools::epsilon<RealType>())
+            {
+               return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom when the abscissa value is very close to zero as all degrees of freedom generate the same CDF at x=0: try again further out in the tails!!",
+                  RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE
+            }
+
+            // The limiting CDF values are
+            //
+            //   v -> 0:   Phi(-delta)
+            //   v -> inf: Phi(x - delta)
+            //
+            // Outside the interval between these limits, a monotone CDF(v)
+            // has no inverse, and a non-monotone one may have several, so we
+            // cannot select a unique degree of freedom.  This only screens
+            // out-of-range p: it does not detect multiple roots inside the
+            // interval.  See https://github.com/boostorg/math/issues/1410
+            normal_distribution<RealType, Policy> normal;
+            RealType p0 = cdf(normal, -delta);
+            RealType pinf = cdf(normal, x - delta);
+            RealType lower = p0 < pinf ? p0 : pinf;
+            RealType upper = p0 < pinf ? pinf : p0;
+            if((p < lower) || (p > upper))
+            {
+               return policies::raise_evaluation_error<RealType>(function,
+                  "Probability lies outside the interval between the limiting CDF values; the inverse is absent or non-unique: result was %1%",
+                  RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy());
+            }
+
             t_degrees_of_freedom_finder<RealType, Policy> f(delta, x, p < q ? p : q, p < q ? false : true);
             tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
             std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
@@ -762,7 +803,7 @@ namespace boost
             //
             RealType guess = 200;
             std::pair<RealType, RealType> ir = tools::bracket_and_solve_root(
-               f, guess, RealType(2), false, tol, max_iter, pol);
+               f, guess, RealType(2), x < 0 ? false : true, tol, max_iter, pol);
             RealType result = ir.first + (ir.second - ir.first) / 2;
             if(max_iter >= policies::get_max_root_iterations<Policy>())
             {
@@ -815,9 +856,9 @@ namespace boost
             //
             RealType guess;
             if(f(0) < 0)
-               guess = 1;
-            else
                guess = -1;
+            else
+               guess = 1;
             std::pair<RealType, RealType> ir = tools::bracket_and_solve_root(
                f, guess, RealType(2), false, tol, max_iter, pol);
             RealType result = ir.first + (ir.second - ir.first) / 2;
@@ -828,10 +869,9 @@ namespace boost
             }
             return result;
          }
-#endif
       } // namespace detail ======================================================================
 
-      template <class RealType = double, class Policy = policies::policy<> >
+      BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
       class non_central_t_distribution
       {
       public:
@@ -860,26 +900,22 @@ namespace boost
          { // Private data getter function.
             return ncp;
          }
-#if 0
-         //
-         // This code is disabled, since there can be multiple answers to the
-         // question, and it's not clear how to find the "right" one.
-         //
+
          static RealType find_degrees_of_freedom(RealType delta, RealType x, RealType p)
          {
             const char* function = "non_central_t<%1%>::find_degrees_of_freedom";
-            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::evaluation<RealType, Policy>::type eval_type;
             typedef typename policies::normalise<
                Policy,
                policies::promote_float<false>,
                policies::promote_double<false>,
                policies::discrete_quantile<>,
                policies::assert_undefined<> >::type forwarding_policy;
-            value_type result = detail::find_t_degrees_of_freedom(
-               static_cast<value_type>(delta),
-               static_cast<value_type>(x),
-               static_cast<value_type>(p),
-               static_cast<value_type>(1-p),
+            eval_type result = detail::find_t_degrees_of_freedom(
+               static_cast<eval_type>(delta),
+               static_cast<eval_type>(x),
+               static_cast<eval_type>(p),
+               static_cast<eval_type>(1-p),
                forwarding_policy());
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result,
@@ -889,18 +925,18 @@ namespace boost
          static RealType find_degrees_of_freedom(const complemented3_type<A,B,C>& c)
          {
             const char* function = "non_central_t<%1%>::find_degrees_of_freedom";
-            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::evaluation<RealType, Policy>::type eval_type;
             typedef typename policies::normalise<
                Policy,
                policies::promote_float<false>,
                policies::promote_double<false>,
                policies::discrete_quantile<>,
                policies::assert_undefined<> >::type forwarding_policy;
-            value_type result = detail::find_t_degrees_of_freedom(
-               static_cast<value_type>(c.dist),
-               static_cast<value_type>(c.param1),
-               static_cast<value_type>(1-c.param2),
-               static_cast<value_type>(c.param2),
+            eval_type result = detail::find_t_degrees_of_freedom(
+               static_cast<eval_type>(c.dist),
+               static_cast<eval_type>(c.param1),
+               static_cast<eval_type>(1-c.param2),
+               static_cast<eval_type>(c.param2),
                forwarding_policy());
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result,
@@ -909,18 +945,18 @@ namespace boost
          static RealType find_non_centrality(RealType v, RealType x, RealType p)
          {
             const char* function = "non_central_t<%1%>::find_t_non_centrality";
-            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::evaluation<RealType, Policy>::type eval_type;
             typedef typename policies::normalise<
                Policy,
                policies::promote_float<false>,
                policies::promote_double<false>,
                policies::discrete_quantile<>,
                policies::assert_undefined<> >::type forwarding_policy;
-            value_type result = detail::find_t_non_centrality(
-               static_cast<value_type>(v),
-               static_cast<value_type>(x),
-               static_cast<value_type>(p),
-               static_cast<value_type>(1-p),
+            eval_type result = detail::find_t_non_centrality(
+               static_cast<eval_type>(v),
+               static_cast<eval_type>(x),
+               static_cast<eval_type>(p),
+               static_cast<eval_type>(1-p),
                forwarding_policy());
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result,
@@ -930,47 +966,46 @@ namespace boost
          static RealType find_non_centrality(const complemented3_type<A,B,C>& c)
          {
             const char* function = "non_central_t<%1%>::find_t_non_centrality";
-            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::evaluation<RealType, Policy>::type eval_type;
             typedef typename policies::normalise<
                Policy,
                policies::promote_float<false>,
                policies::promote_double<false>,
                policies::discrete_quantile<>,
                policies::assert_undefined<> >::type forwarding_policy;
-            value_type result = detail::find_t_non_centrality(
-               static_cast<value_type>(c.dist),
-               static_cast<value_type>(c.param1),
-               static_cast<value_type>(1-c.param2),
-               static_cast<value_type>(c.param2),
+            eval_type result = detail::find_t_non_centrality(
+               static_cast<eval_type>(c.dist),
+               static_cast<eval_type>(c.param1),
+               static_cast<eval_type>(1-c.param2),
+               static_cast<eval_type>(c.param2),
                forwarding_policy());
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result,
                function);
          }
-#endif
       private:
          // Data member, initialized by constructor.
          RealType v;   // degrees of freedom
          RealType ncp; // non-centrality parameter
       }; // template <class RealType, class Policy> class non_central_t_distribution
 
-      typedef non_central_t_distribution<double> non_central_t; // Reserved name of type double.
+      BOOST_MATH_EXPORT typedef non_central_t_distribution<double> non_central_t; // Reserved name of type double.
 
       #ifdef __cpp_deduction_guides
-      template <class RealType>
+      BOOST_MATH_EXPORT template <class RealType>
       non_central_t_distribution(RealType,RealType)->non_central_t_distribution<typename boost::math::tools::promote_args<RealType>::type>;
       #endif
 
       // Non-member functions to give properties of the distribution.
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       inline const std::pair<RealType, RealType> range(const non_central_t_distribution<RealType, Policy>& /* dist */)
       { // Range of permissible values for random variable k.
          using boost::math::tools::max_value;
          return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       inline const std::pair<RealType, RealType> support(const non_central_t_distribution<RealType, Policy>& /* dist */)
       { // Range of supported values for random variable k.
          // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
@@ -978,7 +1013,7 @@ namespace boost
          return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       inline RealType mode(const non_central_t_distribution<RealType, Policy>& dist)
       { // mode.
          static const char* function = "mode(non_central_t_distribution<%1%> const&)";
@@ -1008,7 +1043,7 @@ namespace boost
             sqrt(var));
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       inline RealType mean(const non_central_t_distribution<RealType, Policy>& dist)
       {
          BOOST_MATH_STD_USING
@@ -1043,7 +1078,7 @@ namespace boost
 
       } // mean
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       inline RealType variance(const non_central_t_distribution<RealType, Policy>& dist)
       { // variance.
          const char* function = "variance(const non_central_t_distribution<%1%>&)";
@@ -1079,7 +1114,7 @@ namespace boost
       // RealType standard_deviation(const non_central_t_distribution<RealType, Policy>& dist)
       // standard_deviation provided by derived accessors.
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       inline RealType skewness(const non_central_t_distribution<RealType, Policy>& dist)
       { // skewness = sqrt(l).
          const char* function = "skewness(const non_central_t_distribution<%1%>&)";
@@ -1111,7 +1146,7 @@ namespace boost
             detail::skewness(static_cast<value_type>(v), static_cast<value_type>(l), forwarding_policy()), function);
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       inline RealType kurtosis_excess(const non_central_t_distribution<RealType, Policy>& dist)
       {
          const char* function = "kurtosis_excess(const non_central_t_distribution<%1%>&)";
@@ -1143,13 +1178,13 @@ namespace boost
             detail::kurtosis_excess(static_cast<value_type>(v), static_cast<value_type>(l), forwarding_policy()), function);
       } // kurtosis_excess
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       inline RealType kurtosis(const non_central_t_distribution<RealType, Policy>& dist)
       {
          return kurtosis_excess(dist) + 3;
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       inline RealType pdf(const non_central_t_distribution<RealType, Policy>& dist, const RealType& t)
       { // Probability Density/Mass Function.
          const char* function = "pdf(non_central_t_distribution<%1%>, %1%)";
@@ -1188,7 +1223,7 @@ namespace boost
             function);
       } // pdf
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       RealType cdf(const non_central_t_distribution<RealType, Policy>& dist, const RealType& x)
       {
          const char* function = "boost::math::cdf(non_central_t_distribution<%1%>&, %1%)";
@@ -1240,7 +1275,7 @@ namespace boost
             function);
       } // cdf
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       RealType cdf(const complemented2_type<non_central_t_distribution<RealType, Policy>, RealType>& c)
       { // Complemented Cumulative Distribution Function
   // was       const char* function = "boost::math::non_central_t_distribution<%1%>::cdf(%1%)";
@@ -1293,7 +1328,7 @@ namespace boost
             function);
       } // ccdf
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       inline RealType quantile(const non_central_t_distribution<RealType, Policy>& dist, const RealType& p)
       { // Quantile (or Percent Point) function.
          static const char* function = "quantile(const non_central_t_distribution<%1%>, %1%)";
@@ -1302,7 +1337,7 @@ namespace boost
          return detail::non_central_t_quantile(function, v, l, p, RealType(1-p), Policy());
       } // quantile
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       inline RealType quantile(const complemented2_type<non_central_t_distribution<RealType, Policy>, RealType>& c)
       { // Quantile (or Percent Point) function.
          static const char* function = "quantile(const complement(non_central_t_distribution<%1%>, %1%))";

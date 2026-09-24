@@ -6,6 +6,9 @@
 #ifndef BOOST_MATH_TOOLS_CENTERED_CONTINUED_FRACTION_HPP
 #define BOOST_MATH_TOOLS_CENTERED_CONTINUED_FRACTION_HPP
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <cstdint>
 #include <vector>
@@ -16,6 +19,7 @@
 #include <sstream>
 #include <array>
 #include <type_traits>
+#endif
 #include <boost/math/tools/is_standalone.hpp>
 
 #ifndef BOOST_MATH_STANDALONE
@@ -31,7 +35,7 @@
 
 namespace boost::math::tools {
 
-template<typename Real, typename Z = int64_t>
+BOOST_MATH_EXPORT template<typename Real, typename Z = int64_t>
 class centered_continued_fraction {
 public:
     centered_continued_fraction(Real x) : x_{x} {
@@ -142,7 +146,7 @@ private:
 };
 
 
-template<typename Real, typename Z2>
+BOOST_MATH_EXPORT template<typename Real, typename Z2>
 std::ostream& operator<<(std::ostream& out, centered_continued_fraction<Real, Z2>& scf) {
     constexpr const int p = std::numeric_limits<Real>::max_digits10;
     if constexpr (p == 2147483647)

@@ -7,7 +7,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/cbrt.hpp>
-#include "libs/math/test/test_cbrt.hpp"
+#include "test_cbrt.hpp"
 
 void expected_results()
 {

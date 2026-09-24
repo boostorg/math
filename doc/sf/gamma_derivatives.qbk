@@ -9,10 +9,10 @@
    namespace boost{ namespace math{ 
    
    template <class T1, class T2>
-   ``__sf_result`` gamma_p_derivative(T1 a, T2 x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p_derivative(T1 a, T2 x);
    
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` gamma_p_derivative(T1 a, T2 x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` gamma_p_derivative(T1 a, T2 x, const ``__Policy``&);
    
    }} // namespaces
    

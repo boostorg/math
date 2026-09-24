@@ -7,7 +7,7 @@
 #include "table_type.hpp"
 
 #include <boost/math/special_functions/gamma.hpp>
-#include "libs/math/test/test_tgamma_ratio.hpp"
+#include "test_tgamma_ratio.hpp"
 
 void expected_results()
 {

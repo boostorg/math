@@ -9,6 +9,8 @@
 #ifndef BOOST_MATH_FWD_HPP
 #define BOOST_MATH_FWD_HPP
 
+#include <boost/math/tools/config.hpp>
+
 namespace boost
 {
 namespace math
@@ -17,7 +19,7 @@ namespace math
 
 //  From <boost/math/quaternion.hpp>  ----------------------------------------//
 
-template < typename T >
+BOOST_MATH_EXPORT template < typename T >
     class quaternion;
 
 // Also has many function templates (including operators)
@@ -25,7 +27,7 @@ template < typename T >
 
 //  From <boost/math/octonion.hpp>  ------------------------------------------//
 
-template < typename T >
+BOOST_MATH_EXPORT template < typename T >
     class octonion;
 
 template < >

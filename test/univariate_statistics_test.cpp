@@ -40,8 +40,8 @@ using std::abs;
  */
 
  // To stress test, set global_seed = 0, global_size = huge.
- static constexpr size_t global_seed = 0;
- static constexpr size_t global_size = 128;
+static constexpr size_t global_seed = 42;
+static constexpr size_t global_size = 64;
 
 template<class T>
 std::vector<T> generate_random_vector(size_t size, size_t seed)
@@ -184,6 +184,9 @@ void test_mean(ExecutionPolicy&& exec)
     BOOST_TEST(abs(mu - 4) < tol);
 
     v = generate_random_vector<Real>(global_size, global_seed);
+    for (auto &x : v) {
+      x += 2;
+    }
     Real scale = 2;
     Real m1 = scale*boost::math::statistics::mean(exec, v);
     for (auto & x : v)
@@ -191,6 +194,11 @@ void test_mean(ExecutionPolicy&& exec)
         x *= scale;
     }
     Real m2 = boost::math::statistics::mean(exec, v);
+    if (abs(m1 - m2) > tol * abs(m1)) {
+      std::cerr << "|mean(2v) - 2mean(v)| > " << tol * abs(m1) << "\n";
+      std::cerr << "mean(2*v) = " << m2 << "\n";
+      std::cerr << "2*mean(v) = " << m1 << "\n";
+    }
     BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 
     // Stress test:

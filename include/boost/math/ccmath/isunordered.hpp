@@ -16,7 +16,7 @@
 
 namespace boost::math::ccmath {
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 inline constexpr bool isunordered(const T x, const T y) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))

@@ -3,15 +3,17 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
+#endif
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/constants/constants.hpp>
 
 namespace boost { namespace math {
 
 // Calculates log(exp(x1) + exp(x2))
-template <typename Real>
+BOOST_MATH_EXPORT template <typename Real>
 Real logaddexp(Real x1, Real x2) noexcept
 {
     using std::log1p;

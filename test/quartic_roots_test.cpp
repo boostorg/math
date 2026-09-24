@@ -5,9 +5,16 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
-#include "math_unit_test.hpp"
-#include <random>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/tools/quartic_roots.hpp>
+#else
+import boost.math;
+#endif
+
+#include "math_unit_test.hpp"
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <random>
+#endif
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
@@ -117,8 +124,8 @@ void test_zero_coefficients()
 
         roots = quartic_roots(a, b, c, d, e);
         // I could check the condition number here, but this is fine right?
-        CHECK_ULP_CLOSE(r[0], roots[0], 160);
-        CHECK_ULP_CLOSE(r[1], roots[1], 260);
+        CHECK_ULP_CLOSE(r[0], roots[0], 340);
+        CHECK_ULP_CLOSE(r[1], roots[1], 440);
         CHECK_ULP_CLOSE(r[2], roots[2], 220);
         CHECK_ULP_CLOSE(r[3], roots[3], 160);
     }

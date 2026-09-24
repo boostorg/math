@@ -12,16 +12,24 @@
 #pragma warning(disable:4702) // Unreachable code (release mode only warning)
 #endif
 
+#if defined __has_include
+#  if ((__cplusplus > 202002L) || (defined(_MSVC_LANG) && (_MSVC_LANG > 202002L)))
+#    if __has_include (<stdfloat>)
+#ifndef BOOST_MATH_BUILD_MODULE
+#    include <stdfloat>
+#endif
+#    endif
+#  endif
+#endif
+
 #include <boost/math/tools/config.hpp>
-
-#ifndef BOOST_MATH_HAS_NVRTC
-
-#include <cmath>
-#include <cstdint>
-#include <limits>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/big_constant.hpp>
+#include <boost/math/tools/numeric_limits.hpp>
+#include <boost/math/tools/cstdint.hpp>
+#include <boost/math/tools/promotion.hpp>
+#include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/assert.hpp>
@@ -82,7 +90,7 @@ namespace detail
 // it performs no better than log(1+x): which is to say not very well at all.
 //
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T log1p_imp(T const & x, const Policy& pol, const std::integral_constant<int, 0>&)
+BOOST_MATH_GPU_ENABLED T log1p_imp(T const & x, const Policy& pol, const boost::math::integral_constant<int, 0>&)
 { // The function returns the natural logarithm of 1 + x.
    typedef typename tools::promote_args<T>::type result_type;
    BOOST_MATH_STD_USING
@@ -90,11 +98,9 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const & x, const Policy& pol, const std::in
    constexpr auto function = "boost::math::log1p<%1%>(%1%)";
 
    if((x < -1) || (boost::math::isnan)(x))
-      return policies::raise_domain_error<T>(
-         function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<T>(function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<T>(
-         function, nullptr, pol);
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
 
    result_type a = abs(result_type(x));
    if(a > result_type(0.5f))
@@ -104,7 +110,7 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const & x, const Policy& pol, const std::in
    if(a < tools::epsilon<result_type>())
       return x;
    detail::log1p_series<result_type> s(x);
-   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 
    result_type result = tools::sum_series(s, policies::get_epsilon<result_type, Policy>(), max_iter);
 
@@ -113,18 +119,16 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const & x, const Policy& pol, const std::in
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const std::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const boost::math::integral_constant<int, 53>&)
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
    constexpr auto function = "boost::math::log1p<%1%>(%1%)";
 
    if(x < -1)
-      return policies::raise_domain_error<T>(
-         function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<T>(function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<T>(
-         function, nullptr, pol);
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
 
    T a = fabs(x);
    if(a > 0.5f)
@@ -166,18 +170,16 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const std::int
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const std::integral_constant<int, 64>&)
+BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const boost::math::integral_constant<int, 64>&)
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
    constexpr auto function = "boost::math::log1p<%1%>(%1%)";
 
    if(x < -1)
-      return policies::raise_domain_error<T>(
-         function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<T>(function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<T>(
-         function, nullptr, pol);
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
 
    T a = fabs(x);
    if(a > 0.5f)
@@ -221,7 +223,7 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const std::int
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const std::integral_constant<int, 24>&)
+BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const boost::math::integral_constant<int, 24>&)
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
@@ -266,37 +268,9 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const std::int
    return result;
 }
 
-template <class T, class Policy, class tag>
-struct log1p_initializer
-{
-   struct init
-   {
-      BOOST_MATH_GPU_ENABLED init()
-      {
-         do_init(tag());
-      }
-      template <int N>
-      BOOST_MATH_GPU_ENABLED static void do_init(const std::integral_constant<int, N>&){}
-      BOOST_MATH_GPU_ENABLED static void do_init(const std::integral_constant<int, 64>&)
-      {
-         boost::math::log1p(static_cast<T>(0.25), Policy());
-      }
-      BOOST_MATH_GPU_ENABLED void force_instantiate()const{}
-   };
-   BOOST_MATH_STATIC const init initializer;
-   BOOST_MATH_GPU_ENABLED static void force_instantiate()
-   {
-      initializer.force_instantiate();
-   }
-};
-
-template <class T, class Policy, class tag>
-const typename log1p_initializer<T, Policy, tag>::init log1p_initializer<T, Policy, tag>::initializer;
-
-
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1p(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -309,125 +283,55 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1p(T x, c
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   typedef std::integral_constant<int,
+   typedef boost::math::integral_constant<int,
       precision_type::value <= 0 ? 0 :
       precision_type::value <= 53 ? 53 :
       precision_type::value <= 64 ? 64 : 0
    > tag_type;
 
-   detail::log1p_initializer<value_type, forwarding_policy, tag_type>::force_instantiate();
-
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(
       detail::log1p_imp(static_cast<value_type>(x), forwarding_policy(), tag_type()), "boost::math::log1p<%1%>(%1%)");
 }
 
-#ifdef log1p
-#  ifndef BOOST_HAS_LOG1P
-#     define BOOST_HAS_LOG1P
-#  endif
-#  undef log1p
-#endif
-
-#if defined(BOOST_HAS_LOG1P) && !(defined(__osf__) && defined(__DECCXX_VER))
-#  ifdef BOOST_MATH_USE_C99
-template <class Policy>
+BOOST_MATH_EXPORT template <class Policy>
 BOOST_MATH_GPU_ENABLED inline float log1p(float x, const Policy& pol)
 {
    if(x < -1)
-      return policies::raise_domain_error<float>(
-         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<float>("log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<float>(
-         "log1p<%1%>(%1%)", nullptr, pol);
+      return -policies::raise_overflow_error<float>("log1p<%1%>(%1%)", nullptr, pol);
+   #ifndef BOOST_MATH_HAS_NVRTC
+   return std::log1p(x);
+   #else
    return ::log1pf(x);
+   #endif
 }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-template <class Policy>
+BOOST_MATH_EXPORT template <class Policy>
 BOOST_MATH_GPU_ENABLED inline long double log1p(long double x, const Policy& pol)
 {
    if(x < -1)
-      return policies::raise_domain_error<long double>(
-         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<long double>("log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<long double>(
-         "log1p<%1%>(%1%)", nullptr, pol);
-   return ::log1pl(x);
+      return -policies::raise_overflow_error<long double>("log1p<%1%>(%1%)", nullptr, pol);
+   return std::log1p(x);
 }
 #endif
-#else
-template <class Policy>
-inline float log1p(float x, const Policy& pol)
-{
-   if(x < -1)
-      return policies::raise_domain_error<float>(
-         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
-   if(x == -1)
-      return -policies::raise_overflow_error<float>(
-         "log1p<%1%>(%1%)", nullptr, pol);
-   return ::log1p(x);
-}
-#endif
-template <class Policy>
+BOOST_MATH_EXPORT template <class Policy>
 BOOST_MATH_GPU_ENABLED inline double log1p(double x, const Policy& pol)
 {
    if(x < -1)
-      return policies::raise_domain_error<double>(
-         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<double>("log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<double>(
-         "log1p<%1%>(%1%)", nullptr, pol);
+      return -policies::raise_overflow_error<double>("log1p<%1%>(%1%)", nullptr, pol);
+   #ifndef BOOST_MATH_HAS_NVRTC
+   return std::log1p(x);
+   #else
    return ::log1p(x);
+   #endif
 }
-#elif defined(_MSC_VER) && (BOOST_MSVC >= 1400)
-//
-// You should only enable this branch if you are absolutely sure
-// that your compilers optimizer won't mess this code up!!
-// Currently tested with VC8 and Intel 9.1.
-//
-template <class Policy>
-inline double log1p(double x, const Policy& pol)
-{
-   if(x < -1)
-      return policies::raise_domain_error<double>(
-         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
-   if(x == -1)
-      return -policies::raise_overflow_error<double>(
-         "log1p<%1%>(%1%)", nullptr, pol);
-   double u = 1+x;
-   if(u == 1.0)
-      return x;
-   else
-      return ::log(u)*(x/(u-1.0));
-}
-template <class Policy>
-inline float log1p(float x, const Policy& pol)
-{
-   return static_cast<float>(boost::math::log1p(static_cast<double>(x), pol));
-}
-#ifndef _WIN32_WCE
-//
-// For some reason this fails to compile under WinCE...
-// Needs more investigation.
-//
-template <class Policy>
-inline long double log1p(long double x, const Policy& pol)
-{
-   if(x < -1)
-      return policies::raise_domain_error<long double>(
-         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
-   if(x == -1)
-      return -policies::raise_overflow_error<long double>(
-         "log1p<%1%>(%1%)", nullptr, pol);
-   long double u = 1+x;
-   if(u == 1.0)
-      return x;
-   else
-      return ::logl(u)*(x/(u-1.0));
-}
-#endif
-#endif
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1p(T x)
 {
    return boost::math::log1p(x, policies::policy<>());
@@ -435,7 +339,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1p(T x)
 //
 // Compute log(1+x)-x:
 //
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    log1pmx(T x, const Policy& pol)
 {
@@ -444,11 +348,9 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    constexpr auto function = "boost::math::log1pmx<%1%>(%1%)";
 
    if(x < -1)
-      return policies::raise_domain_error<T>(
-         function, "log1pmx(x) requires x > -1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<T>(function, "log1pmx(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policies::raise_overflow_error<T>(
-         function, nullptr, pol);
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
 
    result_type a = abs(result_type(x));
    if(a > result_type(0.95f))
@@ -459,7 +361,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
       return -x * x / 2;
    boost::math::detail::log1p_series<T> s(x);
    s();
-   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 
    T result = boost::math::tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter);
 
@@ -467,48 +369,45 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    return result;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1pmx(T x)
 {
    return log1pmx(x, policies::policy<>());
 }
 
+//
+// Specific width floating point types:
+//
+#ifdef __STDCPP_FLOAT32_T__
+BOOST_MATH_EXPORT template <class Policy>
+BOOST_MATH_GPU_ENABLED inline std::float32_t log1p(std::float32_t x, const Policy& pol)
+{
+   return boost::math::log1p(static_cast<float>(x), pol);
+}
+#endif
+#ifdef __STDCPP_FLOAT64_T__
+BOOST_MATH_EXPORT template <class Policy>
+BOOST_MATH_GPU_ENABLED inline std::float64_t log1p(std::float64_t x, const Policy& pol)
+{
+   return boost::math::log1p(static_cast<double>(x), pol);
+}
+#endif
+#ifdef __STDCPP_FLOAT128_T__
+BOOST_MATH_EXPORT template <class Policy>
+BOOST_MATH_GPU_ENABLED inline std::float128_t log1p(std::float128_t x, const Policy& pol)
+{
+   if constexpr (std::numeric_limits<long double>::digits == std::numeric_limits<std::float128_t>::digits)
+   {
+      return boost::math::log1p(static_cast<long double>(x), pol);
+   }
+   else
+   {
+      return boost::math::detail::log1p_imp(x, pol, boost::math::integral_constant<int, 0>());
+   }
+}
+#endif
 } // namespace math
 } // namespace boost
-
-#else // Special handling for NVRTC platform
-
-namespace boost {
-namespace math {
-
-template <typename T>
-BOOST_MATH_GPU_ENABLED auto log1p(T x)
-{
-   return ::log1p(x);
-}
-
-template <>
-BOOST_MATH_GPU_ENABLED auto log1p(float x)
-{
-   return ::log1pf(x);
-}
-
-template <typename T, typename Policy>
-BOOST_MATH_GPU_ENABLED auto log1p(T x, const Policy&)
-{
-   return ::log1p(x);
-}
-
-template <typename Policy>
-BOOST_MATH_GPU_ENABLED auto log1p(float x, const Policy&)
-{
-   return ::log1pf(x);
-}
-
-} // namespace math
-} // namespace boost
-
-#endif // BOOST_MATH_HAS_NVRTC
 
 #ifdef _MSC_VER
 #pragma warning(pop)

@@ -44,7 +44,9 @@
  * 1) Squire, William, and George Trapp. "Using complex variables to estimate derivatives of real functions." Siam Review 40.1 (1998): 110-112.
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <complex>
+#endif
 #include <boost/math/special_functions/next.hpp>
 
 namespace boost{ namespace math{ namespace differentiation {
@@ -67,7 +69,7 @@ namespace detail {
     }
 }
 
-template<class F, class Real>
+BOOST_MATH_EXPORT template<class F, class Real>
 Real complex_step_derivative(const F f, Real x)
 {
     // Is it really this easy? Yes.
@@ -256,7 +258,7 @@ namespace detail {
 
 }
 
-template<class F, class Real, size_t order=6>
+BOOST_MATH_EXPORT template<class F, class Real, size_t order=6>
 inline Real finite_difference_derivative(const F f, Real x, Real* error = nullptr)
 {
    return detail::finite_difference_derivative(f, x, error, detail::fd_tag<order>());

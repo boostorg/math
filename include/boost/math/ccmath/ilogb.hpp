@@ -20,7 +20,7 @@
 namespace boost::math::ccmath {
 
 // If arg is not zero, infinite, or NaN, the value returned is exactly equivalent to static_cast<int>(std::logb(arg))
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr int ilogb(Real arg) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
@@ -37,7 +37,7 @@ inline constexpr int ilogb(Real arg) noexcept
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr int ilogb(Z arg) noexcept
 {
     return boost::math::ccmath::ilogb(static_cast<double>(arg));

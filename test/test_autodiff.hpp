@@ -134,7 +134,7 @@ struct RandomSample {
 
   template <typename U, typename V>
   RandomSample(U start, V finish)
-      : rng_(std::random_device{}()),
+      : rng_(42),
         dist_(static_cast<distribution_param_t>(start),
               get_endpoint_t{}(finish)) {}
 

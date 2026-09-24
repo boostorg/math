@@ -41,30 +41,28 @@ void test_spots(RealType)
    using ::boost::math::normal_distribution;
    BOOST_MATH_STD_USING // ADL of std names.
 
-   if(std::numeric_limits<RealType>::digits && (std::numeric_limits<RealType>::digits < 100))
-   {
+   // Checks of six sub-methods T1 to T6.
+   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.0625L), static_cast<RealType>(0.25L)), static_cast<RealType>(3.89119302347013668966224771378499505568e-2L), tolerance);  // T1
+   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(6.5L), static_cast<RealType>(0.4375L)), static_cast<RealType>(2.00057730485083154100907167684918851101649922551817956120806662022118025e-11L), tolerance); // T2
+   if (boost::math::tools::digits<RealType>() < 100) // too large error for 128 bit long double
+      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(7L), static_cast<RealType>(0.96875L)), static_cast<RealType>(6.3990627193898685308321991442891601376479719094145923322318222572484602e-13L), tolerance); // T3
+   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(4.78125L), static_cast<RealType>(0.0625L)), static_cast<RealType>(1.06329748046874638058307112826015825291136503488102191050906959246644943e-7L), tolerance); // T4
+   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(2.L), static_cast<RealType>(0.5L)), static_cast<RealType>(8.6250779855215071311348831915463718787564119039085429110080944948781288e-3L), tolerance); // T5
+   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(1.L), static_cast<RealType>(0.9999975L)), static_cast<RealType>(6.6741808978228592771558982240461689232406934240709035854119334966793020e-2L), tolerance); // T6
+   //BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(L), static_cast<RealType>(L)), static_cast<RealType>(L), tolerance);
 
-      // Checks of six sub-methods T1 to T6.
-      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.0625L), static_cast<RealType>(0.25L)), static_cast<RealType>(3.89119302347013668966224771378e-2L), tolerance);  // T1
-      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(6.5L), static_cast<RealType>(0.4375L)), static_cast<RealType>(2.00057730485083154100907167685E-11L), tolerance); // T2
-      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(7L), static_cast<RealType>(0.96875L)), static_cast<RealType>(6.39906271938986853083219914429E-13L), tolerance); // T3
-      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(4.78125L), static_cast<RealType>(0.0625L)), static_cast<RealType>(1.06329748046874638058307112826E-7L), tolerance); // T4
-      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(2.L), static_cast<RealType>(0.5L)), static_cast<RealType>(8.62507798552150713113488319155E-3L), tolerance); // T5
-      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(1.L), static_cast<RealType>(0.9999975L)), static_cast<RealType>(6.67418089782285927715589822405E-2L), tolerance); // T6
-      //BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(L), static_cast<RealType>(L)), static_cast<RealType>(L), tolerance);
+   //   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(L), static_cast<RealType>(L)), static_cast<RealType>(L), tolerance);
 
-      //   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(L), static_cast<RealType>(L)), static_cast<RealType>(L), tolerance);
-
-      // Spots values using Mathematica
-      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(6.5L), static_cast<RealType>(0.4375L)), static_cast<RealType>(2.00057730485083154100907167684918851101649922551817956120806662022118024594547E-11L), tolerance);
-      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.4375L), static_cast<RealType>(6.5L)), static_cast<RealType>(0.16540130125449396247498691826626273249659241838438244251206819782787761751256L), tolerance);
+   // Spots values using Mathematica
+   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(6.5L), static_cast<RealType>(0.4375L)), static_cast<RealType>(2.00057730485083154100907167684918851101649922551817956120806662022118024594547E-11L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.4375L), static_cast<RealType>(6.5L)), static_cast<RealType>(0.16540130125449396247498691826626273249659241838438244251206819782787761751256L), tolerance);
+   if (boost::math::tools::digits<RealType>() < 100) // too large error for 128 bit long double
       BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(7.L), static_cast<RealType>(0.96875L)), static_cast<RealType>(6.39906271938986853083219914428916013764797190941459233223182225724846022843930e-13L), tolerance);
-      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.96875L), static_cast<RealType>(7.L)), static_cast<RealType>(0.08316748474602973770533230453272140919966614259525787470390475393923633179072L), tolerance);
-      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(4.78125L), static_cast<RealType>(0.0625L)), static_cast<RealType>(1.06329748046874638058307112826015825291136503488102191050906959246644942646701e-7L), tolerance);
-      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.0625L), static_cast<RealType>(4.78125L)), static_cast<RealType>(0.21571185819897989857261253680409017017649352928888660746045361855686569265171L), tolerance);
-      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(2.L), static_cast<RealType>(0.5L)), static_cast<RealType>(0.00862507798552150713113488319154637187875641190390854291100809449487812876461L), tolerance);
-      BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.5L), static_cast<RealType>(2L)), static_cast<RealType>(0.14158060365397839346662819588111542648867283386549027383784843786494855594607L), tolerance);
-   }
+   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.96875L), static_cast<RealType>(7.L)), static_cast<RealType>(0.08316748474602973770533230453272140919966614259525787470390475393923633179072L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(4.78125L), static_cast<RealType>(0.0625L)), static_cast<RealType>(1.06329748046874638058307112826015825291136503488102191050906959246644942646701e-7L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.0625L), static_cast<RealType>(4.78125L)), static_cast<RealType>(0.21571185819897989857261253680409017017649352928888660746045361855686569265171L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(2.L), static_cast<RealType>(0.5L)), static_cast<RealType>(0.00862507798552150713113488319154637187875641190390854291100809449487812876461L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.5L), static_cast<RealType>(2L)), static_cast<RealType>(0.14158060365397839346662819588111542648867283386549027383784843786494855594607L), tolerance);
    // check basic properties
    BOOST_CHECK_EQUAL(owens_t(static_cast<RealType>(0.5L), static_cast<RealType>(2L)), owens_t(static_cast<RealType>(-0.5L), static_cast<RealType>(2L)));
    BOOST_CHECK_EQUAL(owens_t(static_cast<RealType>(0.5L), static_cast<RealType>(2L)), -owens_t(static_cast<RealType>(0.5L), static_cast<RealType>(-2L)));

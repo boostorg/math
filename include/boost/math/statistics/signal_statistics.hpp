@@ -6,8 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_SIGNAL_STATISTICS_HPP
 #define BOOST_MATH_TOOLS_SIGNAL_STATISTICS_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <iterator>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/complex.hpp>
 #include <boost/math/tools/roots.hpp>
@@ -23,7 +25,7 @@
 
 namespace boost::math::statistics {
 
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
 {
     using std::abs;
@@ -53,20 +55,20 @@ auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
     return ((2*num)/denom - i)/(i-1);
 }
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 inline auto absolute_gini_coefficient(RandomAccessContainer & v)
 {
     return boost::math::statistics::absolute_gini_coefficient(v.begin(), v.end());
 }
 
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 auto sample_absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
 {
     size_t n = std::distance(first, last);
     return n*boost::math::statistics::absolute_gini_coefficient(first, last)/(n-1);
 }
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 inline auto sample_absolute_gini_coefficient(RandomAccessContainer & v)
 {
     return boost::math::statistics::sample_absolute_gini_coefficient(v.begin(), v.end());
@@ -75,7 +77,7 @@ inline auto sample_absolute_gini_coefficient(RandomAccessContainer & v)
 
 // The Hoyer sparsity measure is defined in:
 // https://arxiv.org/pdf/0811.4706.pdf
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
 {
     using T = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -124,14 +126,14 @@ auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
     }
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 inline auto hoyer_sparsity(Container const & v)
 {
     return boost::math::statistics::hoyer_sparsity(v.cbegin(), v.cend());
 }
 
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 auto oracle_snr(Container const & signal, Container const & noisy_signal)
 {
     using Real = typename Container::value_type;
@@ -200,7 +202,7 @@ auto oracle_snr(Container const & signal, Container const & noisy_signal)
     }
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 auto mean_invariant_oracle_snr(Container const & signal, Container const & noisy_signal)
 {
     using Real = typename Container::value_type;
@@ -228,7 +230,7 @@ auto mean_invariant_oracle_snr(Container const & signal, Container const & noisy
 
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 auto mean_invariant_oracle_snr_db(Container const & signal, Container const & noisy_signal)
 {
     using std::log10;
@@ -237,7 +239,7 @@ auto mean_invariant_oracle_snr_db(Container const & signal, Container const & no
 
 
 // Follows the definition of SNR given in Mallat, A Wavelet Tour of Signal Processing, equation 11.16.
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 auto oracle_snr_db(Container const & signal, Container const & noisy_signal)
 {
     using std::log10;
@@ -248,7 +250,7 @@ auto oracle_snr_db(Container const & signal, Container const & noisy_signal)
 // D. R. Pauluzzi and N. C. Beaulieu, "A comparison of SNR estimation techniques for the AWGN channel," IEEE Trans. Communications, Vol. 48, No. 10, pp. 1681-1691, 2000.
 // A nice python implementation:
 // https://github.com/gnuradio/gnuradio/blob/master/gr-digital/examples/snr_estimators.py
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 auto m2m4_snr_estimator(ForwardIterator first, ForwardIterator last, decltype(*first) estimated_signal_kurtosis=1, decltype(*first) estimated_noise_kurtosis=3)
 {
     BOOST_MATH_ASSERT_MSG(estimated_signal_kurtosis > 0, "The estimated signal kurtosis must be positive");
@@ -325,13 +327,13 @@ auto m2m4_snr_estimator(ForwardIterator first, ForwardIterator last, decltype(*f
     }
 }
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 inline auto m2m4_snr_estimator(Container const & noisy_signal,  typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimated_noise_kurtosis=3)
 {
     return m2m4_snr_estimator(noisy_signal.cbegin(), noisy_signal.cend(), estimated_signal_kurtosis, estimated_noise_kurtosis);
 }
 
-template<class ForwardIterator>
+BOOST_MATH_EXPORT template<class ForwardIterator>
 inline auto m2m4_snr_estimator_db(ForwardIterator first, ForwardIterator last, decltype(*first) estimated_signal_kurtosis=1, decltype(*first) estimated_noise_kurtosis=3)
 {
     using std::log10;
@@ -339,7 +341,7 @@ inline auto m2m4_snr_estimator_db(ForwardIterator first, ForwardIterator last, d
 }
 
 
-template<class Container>
+BOOST_MATH_EXPORT template<class Container>
 inline auto m2m4_snr_estimator_db(Container const & noisy_signal,  typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimated_noise_kurtosis=3)
 {
     using std::log10;

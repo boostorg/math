@@ -7,12 +7,14 @@
 
 #ifndef BOOST_MATH_SPECIAL_DAUBECHIES_WAVELET_HPP
 #define BOOST_MATH_SPECIAL_DAUBECHIES_WAVELET_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <array>
 #include <cmath>
 #include <thread>
 #include <future>
 #include <iostream>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
@@ -31,7 +33,7 @@
 
 namespace boost::math {
 
-   template<class Real, int p, int order>
+   BOOST_MATH_EXPORT template<class Real, int p, int order>
    std::vector<Real> daubechies_wavelet_dyadic_grid(int64_t j_max)
    {
       if (j_max == 0)
@@ -75,7 +77,7 @@ namespace boost::math {
    }
 
 
-   template<class Real, int p>
+   BOOST_MATH_EXPORT template<class Real, int p>
    class daubechies_wavelet {
       //
       // Some type manipulation so we know the type of the interpolator, and the vector type it requires:

@@ -4,10 +4,12 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstddef>
 #include <random>
 #include <type_traits>
 #include <vector>
+#endif
 
 namespace boost { namespace math {
 

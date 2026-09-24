@@ -18,13 +18,23 @@
 #  pragma warning (disable :4127) // conditional expression is constant.
 #endif
 
+#ifdef BOOST_MATH_ENABLE_SYCL
+#include "sycl/sycl.hpp"
+#endif
+
+#include <boost/math/tools/config.hpp>
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/next.hpp>  // for has_denorm_now
 
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
-#include <boost/math/tools/test.hpp> // for real_concept
+#endif
+
 #include "test_out_of_range.hpp"
 #include <boost/math/distributions/students_t.hpp>
     using boost::math::students_t_distribution;
@@ -35,6 +45,7 @@
    using std::setprecision;
 #include <limits>
   using std::numeric_limits;
+#include <type_traits>
 
 template <class RealType>
 RealType naive_pdf(RealType v, RealType t)
@@ -247,6 +258,21 @@ void test_spots(RealType)
          static_cast<RealType>(0.1)),  // probability.
          static_cast<RealType>(-1.475884049), // t
          tolerance);
+   errno = 0;
+   BOOST_CHECK_CLOSE( // Tests of df high and p low.
+      ::boost::math::cdf(
+         students_t_distribution<RealType>(1000.),  // degrees_of_freedom
+         static_cast<RealType>(-3.30028272)),  // t
+         static_cast<RealType>(0.0005), // probability.
+         tolerance);
+   BOOST_CHECK_EQUAL(errno, 0);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::quantile(
+         students_t_distribution<RealType>(1000.),  // degrees_of_freedom.
+         static_cast<RealType>(0.0005)),  //  probability.
+         static_cast<RealType>(-3.30028272),  // t.
+         tolerance);
+   BOOST_CHECK_EQUAL(errno, 0);
 
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
@@ -395,6 +421,25 @@ void test_spots(RealType)
          {
             BOOST_CHECK_THROW(boost::math::quantile(students_t_distribution<RealType>((std::numeric_limits<RealType>::min)() / 2), static_cast<RealType>(0.0025f)), std::overflow_error);
          }
+         BOOST_CHECK_CLOSE(boost::math::cdf(students_t_distribution<RealType>(static_cast<RealType>(1)), ldexp(RealType(1), -30)), static_cast<RealType>(0.5000000002964491827262478614651948102240210317156775562512071908L), tolerance);
+         // https://github.com/boostorg/math/issues/1436
+         // We have quite limited precision in this area:
+         if (boost::math::tools::digits<RealType>() > boost::math::tools::digits<float>())
+         {
+             using std::ldexp;
+             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(3)), ldexp(RealType(1), -800)), static_cast<RealType>(-1.94452005735447553162080266906e+80L), 1e-8);
+             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(3)), ldexp(RealType(1), -1000)), static_cast<RealType>(-2.27760708321880957407749124767e+100L), 1e-8);
+             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(5)), ldexp(RealType(1), -1000)), static_cast<RealType>(-2.52030967154944272146770707689e+60L), 1e-8);
+             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(7)), ldexp(RealType(1), -1000)), static_cast<RealType>(-2.02884419021075115948274137329e+43L), 1e-8);
+             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(10)), ldexp(RealType(1), -1000)), static_cast<RealType>(-3.25092256692541451558538754799e+30L), 1e-8);
+             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(30)), ldexp(RealType(1), -1000)), static_cast<RealType>(-54306462721.8246714347211540407L), 1e-8);
+             using nopromote = boost::math::policies::policy<boost::math::policies::promote_double<false>>;
+             BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType, nopromote>(static_cast<RealType>(30)), ldexp(RealType(1), -1000)), static_cast<RealType>(-54306462721.8246714347211540407L), 1e-8);
+             if (boost::math::tools::digits<RealType>() > boost::math::tools::digits<double>())
+             {
+                 BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(30)), ldexp(RealType(1), -16000)), static_cast<RealType>(-1.77766265021682828433490865393e+161L), 1e-8);
+             }
+         }
       }
 
   // Student's t pdf tests.
@@ -522,13 +567,160 @@ void test_spots(RealType)
          static_cast<RealType>(1.0))),
          9);
 
+    // Tests for find_degrees_of_freedom(t, p) overload.
+    // Each case is derived from the CDF spot tests above: the exact df is known,
+    // so we verify that inverting CDF(x; df) = p recovers df to tight tolerance.
+    // float has ~7 significant digits; large-df inversion is ill-conditioned at that precision,
+    // so use a looser tolerance for single precision.
+    RealType tol_inv_df = std::is_same<RealType, float>::value
+       ? static_cast<RealType>(0.1)   // float:  0.1%
+       : static_cast<RealType>(0.01); // double+: 0.01%
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(-6.96455673428326),
+          static_cast<RealType>(0.01)),
+       static_cast<RealType>(2),
+       tol_inv_df);
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(-3.36492999890721),
+          static_cast<RealType>(0.01)),
+       static_cast<RealType>(5),
+       tol_inv_df);
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(-0.559429644),
+          static_cast<RealType>(0.3)),
+       static_cast<RealType>(5),
+       tol_inv_df);
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(1.475884049),
+          static_cast<RealType>(0.9)),
+       static_cast<RealType>(5),
+       tol_inv_df);
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(-1.475884049),
+          static_cast<RealType>(0.1)),
+       static_cast<RealType>(5),
+       tol_inv_df);
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(-5.2410429995425),
+          static_cast<RealType>(0.00001)),
+       static_cast<RealType>(25),
+       tol_inv_df);
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(6.96455673428326),
+          static_cast<RealType>(0.99)),
+       static_cast<RealType>(2),
+       tol_inv_df);
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(2),
+          static_cast<RealType>(0.610822886098362)),
+       static_cast<RealType>(0.1),
+       tol_inv_df);
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(2),
+          static_cast<RealType>(0.777242554908434)),
+       static_cast<RealType>(0.5),
+       tol_inv_df);
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(2),
+          static_cast<RealType>(0.822925875908677)),
+       static_cast<RealType>(0.75),
+       tol_inv_df);
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(2),
+          static_cast<RealType>(0.977114826753374)),
+       static_cast<RealType>(1000),
+       tol_inv_df);
+    BOOST_CHECK_CLOSE(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(1),
+          static_cast<RealType>(0.8413326478347855)),
+       static_cast<RealType>(1e4),
+       tol_inv_df * static_cast<RealType>(5)); // Looser tolerance for ill-conditioned problem with very large df
+    // Small df edge cases where approximation becomes problematic: would need different values for float
+    // For now just test double and long double to have test overage of these code paths
+    if (!std::is_same<RealType, float>::value)
+    {
+       // Small df case 1: Edgeworth expansion breaks down for small degrees of freedom, use fallback
+       BOOST_CHECK_CLOSE(
+          students_t_distribution<RealType>::find_degrees_of_freedom(
+             static_cast<RealType>(1e20),
+             static_cast<RealType>(0.5244796002843015)),
+          static_cast<RealType>(1e-3),
+          tol_inv_df);
+       // Small df case 2: Edgeworth expansion succeeds but is inaccurate, use fallback
+       BOOST_CHECK_CLOSE(
+          students_t_distribution<RealType>::find_degrees_of_freedom(
+             static_cast<RealType>(2.0),
+             static_cast<RealType>(0.500000000644961)),
+          static_cast<RealType>(1e-10),
+          tol_inv_df);
+    }
+    // Analytical test: df=1 (Cauchy) case
+    {
+       boost::math::cauchy_distribution<RealType> cauchy(0, 1);
+       RealType x = static_cast<RealType>(1.0);
+       RealType p = cdf(cauchy, x);
+       RealType df_result = students_t_distribution<RealType>::find_degrees_of_freedom(x, p);
+       BOOST_CHECK_EQUAL(df_result, static_cast<RealType>(1.0));
+    }
+
+    
+   // Domain error: p outside (0,1)
+#ifndef BOOST_NO_EXCEPTIONS
+    BOOST_MATH_CHECK_THROW(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(2),
+          static_cast<RealType>(-0.1)),
+       std::domain_error);
+    BOOST_MATH_CHECK_THROW(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(2),
+          static_cast<RealType>(1.1)),
+       std::domain_error);
+    // x == 0, p != 0.5: no df can satisfy CDF(0; df) == p -> domain error
+    BOOST_MATH_CHECK_THROW(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(0),
+          static_cast<RealType>(0.3)),
+       std::domain_error);
+    // x == 0, p == 0.5: CDF(0; df) == 0.5 for all df -> overflow (infinite solutions)
+    BOOST_MATH_CHECK_THROW(
+       students_t_distribution<RealType>::find_degrees_of_freedom(
+          static_cast<RealType>(0),
+          static_cast<RealType>(0.5)),
+       std::overflow_error);
+    {
+        // Analytical test: df=infinity (Normal) case returns overflow error
+       boost::math::normal_distribution<RealType> norm(0, 1);
+       RealType x = static_cast<RealType>(1.0);
+       RealType p = cdf(norm, x);
+       BOOST_MATH_CHECK_THROW(
+           students_t_distribution<RealType>::find_degrees_of_freedom(x, p),
+           std::overflow_error);
+    }
+#endif
+
     // Test for large degrees of freedom when should be same as normal.
     RealType inf = std::numeric_limits<RealType>::infinity();
     RealType nan = std::numeric_limits<RealType>::quiet_NaN();
 
     std::string type = typeid(RealType).name();
 //    if (type != "class boost::math::concepts::real_concept") fails for gcc
-    if (typeid(RealType) != typeid(boost::math::concepts::real_concept))
+
+    #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+    BOOST_MATH_IF_CONSTEXPR(!std::is_same<RealType, boost::math::concepts::real_concept>::value)
+    #endif
     { // Ordinary floats only.
       RealType limit = 1/ boost::math::tools::epsilon<RealType>();
       // Default policy to get full accuracy.

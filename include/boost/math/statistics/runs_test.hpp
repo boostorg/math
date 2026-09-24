@@ -8,15 +8,17 @@
 #ifndef BOOST_MATH_STATISTICS_RUNS_TEST_HPP
 #define BOOST_MATH_STATISTICS_RUNS_TEST_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <algorithm>
 #include <utility>
+#endif
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/distributions/normal.hpp>
 
 namespace boost::math::statistics {
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 auto runs_above_and_below_threshold(RandomAccessContainer const & v,
                           typename RandomAccessContainer::value_type threshold)
 {
@@ -103,7 +105,7 @@ auto runs_above_and_below_threshold(RandomAccessContainer const & v,
     return std::make_pair(statistic, pvalue);
 }
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 auto runs_above_and_below_median(RandomAccessContainer const & v)
 {
     using Real = typename RandomAccessContainer::value_type;

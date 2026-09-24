@@ -5,16 +5,25 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef SYCL_LANGUAGE_VERSION
+#ifndef BOOST_MATH_ENABLE_SYCL
 #include <pch_light.hpp>
 #else
 #define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
+#include "sycl/sycl.hpp"
 #include <boost/math/tools/config.hpp>
 #endif
 
 #ifdef _MSC_VER
 #  pragma warning(disable : 4756) // overflow in constant arithmetic
 // Constants are too big for float case, but this doesn't matter for test.
+#endif
+
+#ifdef __clang__
+#  pragma clang diagnostic push 
+#  pragma clang diagnostic ignored "-Wliteral-range"
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic push 
+#  pragma GCC diagnostic ignored "-Woverflow"
 #endif
 
 #include "test_bessel_k.hpp"
@@ -125,6 +134,30 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_bessel(0.1F, "float");
 #endif
    test_bessel(0.1, "double");
+
+   {
+      // https://github.com/boostorg/math/issues/1229
+      // Force evaluation at double precision so extended long double
+      // evaluation does not mask underflow in the starting K values.
+      typedef boost::math::policies::policy<
+         boost::math::policies::promote_double<false> > no_promote_policy;
+      const no_promote_policy pol;
+      const double tol = 256 * std::numeric_limits<double>::epsilon();
+
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_k(1000, 747.0, pol),
+         9.4914699277133192873957343540027064981e-66, tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_k(1000.25, 747.0, pol),
+         1.2500811621640357229654772264173947351e-65, tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_k(-1000, 746.0, pol),
+         5.0516775170486159420895532449059993901e-65, tol);
+
+#if !defined(BOOST_MATH_ENABLE_SYCL)
+      if (std::numeric_limits<double>::has_denorm == std::denorm_present)
+         BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(100, 746.0, pol),
+            8 * std::numeric_limits<double>::denorm_min());
+#endif
+   }
+
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_bessel(0.1L, "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS

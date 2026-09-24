@@ -14,11 +14,35 @@
 #include <boost/math/tools/is_detected.hpp>
 
 #ifdef BOOST_MATH_ENABLE_CUDA
+
 #include <cuda/std/utility>
+#include <cuda/std/complex>
+
+namespace boost {
+namespace math {
+
+template <typename T>
+using complex = cuda::std::complex<T>;
+
+} // namespace math
+} // namespace boost
+
+#else
+
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <utility>
+#include <complex>
 #endif
 
-#ifndef BOOST_MATH_HAS_NVRTC
-#include <utility>
+namespace boost {
+namespace math {
+
+template <typename T>
+using complex = std::complex<T>;
+
+} // namespace math
+} // namespace boost
+
 #endif
 
 namespace boost {

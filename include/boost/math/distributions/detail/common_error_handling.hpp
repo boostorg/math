@@ -11,6 +11,7 @@
 #define BOOST_MATH_DISTRIBUTIONS_COMMON_ERROR_HANDLING_HPP
 
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 // using boost::math::isfinite;
@@ -187,11 +188,7 @@ BOOST_MATH_GPU_ENABLED inline bool check_non_centrality(
       RealType* result,
       const Policy& pol)
 {
-   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
-   static const RealType upper_limit = static_cast<RealType>((std::numeric_limits<long long>::max)()) - boost::math::policies::get_max_root_iterations<Policy>();
-   #else
-   constexpr RealType upper_limit = static_cast<RealType>(LONG_LONG_MAX) - boost::math::policies::get_max_root_iterations<Policy>();
-   #endif
+   BOOST_MATH_STATIC const RealType upper_limit = static_cast<RealType>((boost::math::numeric_limits<long long>::max)()) - boost::math::policies::get_max_root_iterations<Policy>();
 
    if((ncp < 0) || !(boost::math::isfinite)(ncp) || ncp > upper_limit)
    {

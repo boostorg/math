@@ -8,9 +8,11 @@
 #ifndef BOOST_MATH_CCMATH_DETAIL_CONFIG
 #define BOOST_MATH_CCMATH_DETAIL_CONFIG
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <type_traits>
 #include <limits>
+#endif
 #include <boost/math/tools/is_constant_evaluated.hpp>
 #include <boost/math/tools/is_standalone.hpp>
 

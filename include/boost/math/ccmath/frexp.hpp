@@ -60,7 +60,7 @@ inline constexpr Real frexp_impl(Real arg, int* exp)
 
 } // namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr Real frexp(Real arg, int* exp)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
@@ -78,7 +78,7 @@ inline constexpr Real frexp(Real arg, int* exp)
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr double frexp(Z arg, int* exp)
 {
     return boost::math::ccmath::frexp(static_cast<double>(arg), exp);

@@ -6,8 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_SIGNAL_STATISTICS_HPP
 #define BOOST_MATH_TOOLS_SIGNAL_STATISTICS_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <iterator>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/complex.hpp>
 #include <boost/math/tools/roots.hpp>

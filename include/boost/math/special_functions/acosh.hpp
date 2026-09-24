@@ -15,7 +15,9 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
+#endif
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
@@ -73,7 +75,7 @@ namespace boost
         }
        }
 
-        template<typename T, typename Policy>
+        BOOST_MATH_EXPORT template<typename T, typename Policy>
         inline typename tools::promote_args<T>::type acosh(T x, const Policy&)
         {
             typedef typename tools::promote_args<T>::type result_type;
@@ -88,7 +90,7 @@ namespace boost
               detail::acosh_imp(static_cast<value_type>(x), forwarding_policy()),
               "boost::math::acosh<%1%>(%1%)");
         }
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline typename tools::promote_args<T>::type acosh(T x)
         {
            return boost::math::acosh(x, policies::policy<>());

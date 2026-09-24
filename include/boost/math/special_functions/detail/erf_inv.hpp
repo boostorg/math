@@ -18,7 +18,9 @@
 
 #ifndef BOOST_MATH_HAS_NVRTC
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
+#endif
 
 namespace boost{ namespace math{
 

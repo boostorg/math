@@ -18,22 +18,22 @@
       typedef Policy    policy_type;
 
       // Constructor:
-      non_central_chi_squared_distribution(RealType v, RealType lambda);
+      BOOST_MATH_GPU_ENABLED non_central_chi_squared_distribution(RealType v, RealType lambda);
 
       // Accessor to degrees of freedom parameter v:
-      RealType degrees_of_freedom()const;
+      BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom()const;
 
       // Accessor to non centrality parameter lambda:
-      RealType non_centrality()const;
+      BOOST_MATH_GPU_ENABLED RealType non_centrality()const;
 
       // Parameter finders:
-      static RealType find_degrees_of_freedom(RealType lambda, RealType x, RealType p);
+      BOOST_MATH_GPU_ENABLED static RealType find_degrees_of_freedom(RealType lambda, RealType x, RealType p);
       template <class A, class B, class C>
-      static RealType find_degrees_of_freedom(const complemented3_type<A,B,C>& c);
+      BOOST_MATH_GPU_ENABLED static RealType find_degrees_of_freedom(const complemented3_type<A,B,C>& c);
 
-      static RealType find_non_centrality(RealType v, RealType x, RealType p);
+      BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(RealType v, RealType x, RealType p);
       template <class A, class B, class C>
-      static RealType find_non_centrality(const complemented3_type<A,B,C>& c);
+      BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(const complemented3_type<A,B,C>& c);
    };
 
    }} // namespaces
@@ -70,43 +70,42 @@ for different values of [lambda]:
 
 [h4 Member Functions]
 
-      non_central_chi_squared_distribution(RealType v, RealType lambda);
+      BOOST_MATH_GPU_ENABLED non_central_chi_squared_distribution(RealType v, RealType lambda);
 
 Constructs a Chi-Squared distribution with [nu] degrees of freedom
 and non-centrality parameter /lambda/.
 
 Requires [nu] > 0 and lambda >= 0, otherwise calls __domain_error.
 
-      RealType degrees_of_freedom()const;
+      BOOST_MATH_GPU_ENABLED RealType degrees_of_freedom()const;
 
 Returns the parameter [nu] from which this object was constructed.
 
-      RealType non_centrality()const;
+      BOOST_MATH_GPU_ENABLED RealType non_centrality()const;
 
 Returns the parameter /lambda/ from which this object was constructed.
 
-
-   static RealType find_degrees_of_freedom(RealType lambda, RealType x, RealType p);
+      BOOST_MATH_GPU_ENABLED static RealType find_degrees_of_freedom(RealType lambda, RealType x, RealType p);
 
 This function returns the number of degrees of freedom [nu] such that:
 `cdf(non_central_chi_squared<RealType, Policy>(v, lambda), x) == p`
 
-   template <class A, class B, class C>
-   static RealType find_degrees_of_freedom(const complemented3_type<A,B,C>& c);
+      template <class A, class B, class C>
+      BOOST_MATH_GPU_ENABLED static RealType find_degrees_of_freedom(const complemented3_type<A,B,C>& c);
 
 When called with argument `boost::math::complement(lambda, x, q)`
 this function returns the number of degrees of freedom [nu] such that:
 
 `cdf(complement(non_central_chi_squared<RealType, Policy>(v, lambda), x)) == q`.
 
-   static RealType find_non_centrality(RealType v, RealType x, RealType p);
+      BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(RealType v, RealType x, RealType p);
 
 This function returns the non centrality parameter /lambda/ such that:
 
 `cdf(non_central_chi_squared<RealType, Policy>(v, lambda), x) == p`
 
-   template <class A, class B, class C>
-   static RealType find_non_centrality(const complemented3_type<A,B,C>& c);
+      template <class A, class B, class C>
+      BOOST_MATH_GPU_ENABLED static RealType find_non_centrality(const complemented3_type<A,B,C>& c);
 
 When called with argument `boost::math::complement(v, x, q)`
 this function returns the non centrality parameter /lambda/ such that:
@@ -117,6 +116,8 @@ this function returns the non centrality parameter /lambda/ such that:
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variable is \[0, +[infin]\].
 

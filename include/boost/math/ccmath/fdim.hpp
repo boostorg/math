@@ -38,7 +38,7 @@ constexpr T fdim_impl(const T x, const T y) noexcept
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr Real fdim(Real x, Real y) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
@@ -61,7 +61,7 @@ constexpr Real fdim(Real x, Real y) noexcept
     }
 }
 
-template <typename T1, typename T2>
+BOOST_MATH_EXPORT template <typename T1, typename T2>
 constexpr auto fdim(T1 x, T2 y) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))

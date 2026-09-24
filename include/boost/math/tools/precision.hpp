@@ -17,12 +17,14 @@
 #include <boost/math/policies/policy.hpp>
 
 #ifndef BOOST_MATH_HAS_NVRTC
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
 #include <limits>
 #include <climits>
 #include <cmath>
 #include <cstdint>
 #include <cfloat> // LDBL_MANT_DIG
+#endif
 #endif
 
 namespace boost{ namespace math
@@ -41,7 +43,7 @@ namespace tools
 // template <> NTL::RR max_value<NTL::RR> ...
 // See  Conceptual Requirements for Real Number Types.
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline constexpr int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) noexcept
 {
    static_assert( ::boost::math::numeric_limits<T>::is_specialized, "Type T must be specialized");
@@ -52,7 +54,7 @@ BOOST_MATH_GPU_ENABLED inline constexpr int digits(BOOST_MATH_EXPLICIT_TEMPLATE_
       : ((boost::math::numeric_limits<T>::digits + 1) * 1000L) / 301L;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline constexpr T max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))  noexcept(boost::math::is_floating_point<T>::value)
 {
    static_assert( ::boost::math::numeric_limits<T>::is_specialized, "Type T must be specialized");
@@ -60,7 +62,7 @@ BOOST_MATH_GPU_ENABLED inline constexpr T max_value(BOOST_MATH_EXPLICIT_TEMPLATE
 } // Also used as a finite 'infinite' value for - and +infinity, for example:
 // -max_value<double> = -1.79769e+308, max_value<double> = 1.79769e+308.
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline constexpr T min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(boost::math::is_floating_point<T>::value)
 {
    static_assert( ::boost::math::numeric_limits<T>::is_specialized, "Type T must be specialized");
@@ -182,9 +184,13 @@ struct log_limit_traits
 {
    typedef typename boost::math::conditional<
       (boost::math::numeric_limits<T>::radix == 2) &&
-      (boost::math::numeric_limits<T>::max_exponent == 128
-         || boost::math::numeric_limits<T>::max_exponent == 1024
-         || boost::math::numeric_limits<T>::max_exponent == 16384),
+      (
+         (     boost::math::numeric_limits<T>::max_exponent == 128
+            || boost::math::numeric_limits<T>::max_exponent == 1024
+            || boost::math::numeric_limits<T>::max_exponent == 16384
+         )
+         && (-boost::math::numeric_limits<T>::min_exponent10 + 1 == boost::math::numeric_limits<T>::max_exponent10)
+      ),
       boost::math::integral_constant<int, (boost::math::numeric_limits<T>::max_exponent > (boost::math::numeric_limits<int>::max)() ? (boost::math::numeric_limits<int>::max)() : static_cast<int>(boost::math::numeric_limits<T>::max_exponent))>,
       boost::math::integral_constant<int, 0>
    >::type tag_type;
@@ -205,8 +211,8 @@ struct log_limit_noexcept_traits : public log_limit_noexcept_traits_imp<T, boost
 #pragma warning(disable:4309)
 #endif
 
-template <class T>
-BOOST_MATH_GPU_ENABLED inline constexpr T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
+BOOST_MATH_EXPORT template <class T>
+BOOST_MATH_GPU_ENABLED inline T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
 {
 #ifndef BOOST_MATH_HAS_NVRTC
    #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -222,8 +228,8 @@ BOOST_MATH_GPU_ENABLED inline constexpr T log_max_value(BOOST_MATH_EXPLICIT_TEMP
 #endif
 }
 
-template <class T>
-BOOST_MATH_GPU_ENABLED inline constexpr T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
+BOOST_MATH_EXPORT template <class T>
+BOOST_MATH_GPU_ENABLED inline T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
 {
 #ifndef BOOST_MATH_HAS_NVRTC
    #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -243,7 +249,7 @@ BOOST_MATH_GPU_ENABLED inline constexpr T log_min_value(BOOST_MATH_EXPLICIT_TEMP
 #pragma warning(pop)
 #endif
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED constexpr T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) noexcept(boost::math::is_floating_point<T>::value)
 {
    // NVRTC does not like this dispatching method so we just skip to where we want to go
@@ -290,7 +296,7 @@ template <class T, class Tag>
 BOOST_MATH_GPU_ENABLED inline T root_epsilon_imp(const T*, const Tag&)
 {
    BOOST_MATH_STD_USING
-   static const T r_eps = sqrt(tools::epsilon<T>());
+   BOOST_MATH_STATIC_LOCAL_VARIABLE const T r_eps = sqrt(tools::epsilon<T>());
    return r_eps;
 }
 
@@ -388,19 +394,19 @@ struct root_epsilon_traits
 
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline constexpr T root_epsilon() noexcept(boost::math::is_floating_point<T>::value && detail::root_epsilon_traits<T>::has_noexcept)
 {
    return detail::root_epsilon_imp(static_cast<T const*>(nullptr), typename detail::root_epsilon_traits<T>::tag_type());
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline constexpr T cbrt_epsilon() noexcept(boost::math::is_floating_point<T>::value && detail::root_epsilon_traits<T>::has_noexcept)
 {
    return detail::cbrt_epsilon_imp(static_cast<T const*>(nullptr), typename detail::root_epsilon_traits<T>::tag_type());
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline constexpr T forth_root_epsilon() noexcept(boost::math::is_floating_point<T>::value && detail::root_epsilon_traits<T>::has_noexcept)
 {
    return detail::forth_root_epsilon_imp(static_cast<T const*>(nullptr), typename detail::root_epsilon_traits<T>::tag_type());

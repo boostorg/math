@@ -58,7 +58,7 @@ OutputIterator bernoulli_number_imp(OutputIterator out, std::size_t start, std::
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline T bernoulli_b2n(const int i, const Policy &pol)
 {
    using tag_type = std::integral_constant<int, detail::bernoulli_imp_variant<T>::value>;
@@ -72,13 +72,13 @@ inline T bernoulli_b2n(const int i, const Policy &pol)
    return result;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline T bernoulli_b2n(const int i)
 {
    return boost::math::bernoulli_b2n<T>(i, policies::policy<>());
 }
 
-template <class T, class OutputIterator, class Policy>
+BOOST_MATH_EXPORT template <class T, class OutputIterator, class Policy>
 inline OutputIterator bernoulli_b2n(const int start_index,
                                     const unsigned number_of_bernoullis_b2n,
                                     OutputIterator out_it,
@@ -94,7 +94,7 @@ inline OutputIterator bernoulli_b2n(const int start_index,
    return boost::math::detail::bernoulli_number_imp<T>(out_it, start_index, number_of_bernoullis_b2n, pol, tag_type());
 }
 
-template <class T, class OutputIterator>
+BOOST_MATH_EXPORT template <class T, class OutputIterator>
 inline OutputIterator bernoulli_b2n(const int start_index,
                                     const unsigned number_of_bernoullis_b2n,
                                     OutputIterator out_it)
@@ -102,7 +102,7 @@ inline OutputIterator bernoulli_b2n(const int start_index,
    return boost::math::bernoulli_b2n<T, OutputIterator>(start_index, number_of_bernoullis_b2n, out_it, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline T tangent_t2n(const int i, const Policy &pol)
 {
    if(i < 0)
@@ -115,13 +115,13 @@ inline T tangent_t2n(const int i, const Policy &pol)
    return result;
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline T tangent_t2n(const int i)
 {
    return boost::math::tangent_t2n<T>(i, policies::policy<>());
 }
 
-template <class T, class OutputIterator, class Policy>
+BOOST_MATH_EXPORT template <class T, class OutputIterator, class Policy>
 inline OutputIterator tangent_t2n(const int start_index,
                                     const unsigned number_of_tangent_t2n,
                                     OutputIterator out_it,
@@ -136,7 +136,7 @@ inline OutputIterator tangent_t2n(const int start_index,
    return boost::math::detail::get_bernoulli_numbers_cache<T, Policy>().copy_tangent_numbers(out_it, start_index, number_of_tangent_t2n, pol);
 }
 
-template <class T, class OutputIterator>
+BOOST_MATH_EXPORT template <class T, class OutputIterator>
 inline OutputIterator tangent_t2n(const int start_index,
                                     const unsigned number_of_tangent_t2n,
                                     OutputIterator out_it)

@@ -85,17 +85,136 @@ BOOST_AUTO_TEST_CASE( test_main )
     BOOST_CHECK_THROW(jacobi_theta4tau(0.0, 0.0), std::domain_error);
     BOOST_CHECK_THROW(jacobi_theta4tau(0.0, -1.0), std::domain_error);
 
+    // Non-finite arguments must raise a domain error. Previously a NaN tau or q
+    // (or a NaN or infinite z when tau < 1) never satisfied the convergence
+    // test and the series loops ran forever.
+    double nan = std::numeric_limits<double>::quiet_NaN();
+    double inf = std::numeric_limits<double>::infinity();
+    BOOST_CHECK_THROW(jacobi_theta1(1.0, nan), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta2(1.0, nan), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta3(1.0, nan), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta4(1.0, nan), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta3m1(1.0, nan), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta4m1(1.0, nan), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta1tau(1.0, nan), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta2tau(1.0, nan), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta3tau(1.0, nan), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta4tau(1.0, nan), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta3m1tau(1.0, nan), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta4m1tau(1.0, nan), std::domain_error);
+    for (double tau : { 0.5, 1.5 }) {
+        BOOST_CHECK_THROW(jacobi_theta1tau(nan, tau), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta2tau(nan, tau), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta3tau(nan, tau), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta4tau(nan, tau), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta3m1tau(nan, tau), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta4m1tau(nan, tau), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta1tau(inf, tau), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta2tau(-inf, tau), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta3tau(inf, tau), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta4tau(-inf, tau), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta3m1tau(inf, tau), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta4m1tau(-inf, tau), std::domain_error);
+    }
+    for (double q : { 0.5, 0.01 }) {
+        BOOST_CHECK_THROW(jacobi_theta1(nan, q), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta2(inf, q), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta3(nan, q), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta4(-inf, q), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta3m1(nan, q), std::domain_error);
+        BOOST_CHECK_THROW(jacobi_theta4m1(inf, q), std::domain_error);
+    }
+
     double eps = std::numeric_limits<double>::epsilon();
+
+    // theta1 with tau < 1 is evaluated via the imaginary transformation, where
+    // it was previously computed as a difference of two nearly equal Gaussians
+    // and lost precision proportional to 1/z (about 1e9 ulps at z = 1e-10).
+    // Reference values: direct Fourier series in 40-digit arithmetic (mpmath).
+    struct theta1_case { double z, tau, expected; };
+    const theta1_case theta1_small_z[] = {
+        { 1e-4, 0.5, 0.0001175932162452335795142692 },
+        { 1e-8, 0.5, 1.175932162099660862653499e-8 },
+        { -1e-8, 0.5, -1.175932162099660862653499e-8 },
+        { 1e-10, 0.9, 9.76024299466749337952347e-11 },
+        { 1e-6, 0.1, 2.455212638799910177735142e-8 },
+        // Exercise the fold from [-pi, pi] into [-pi/2, pi/2] and the sign of the odd reflection
+        { 3.0, 0.5, 0.1665975725928680619270942 },
+        { -2.5, 0.5, -0.7534671707347227485840592 },
+        { 1.5, 0.9, 0.987286730404979118338758 },
+    };
+    for (const theta1_case& c : theta1_small_z) {
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta1tau(c.z, c.tau), c.expected, 20 * eps);
+    }
+
+    // The q-parameterized functions previously went through tau = -log(q)/pi
+    // and back through exp(), which amplified rounding by |log q| (about 100
+    // ulps at q = 1e-200). They now evaluate q^n directly with pow() when q is
+    // small enough for the direct series to be used.
+    struct q_case { double q, theta1, theta2, theta3m1, theta4m1; };
+    const q_case small_q[] = {
+        { 1e-8, 0.01288435374475381934703355, 0.01529684374568976751542499, 1.650671229819356594481906e-8, -1.650671229819356594481904e-8 },
+        { 1e-100, 1.288435374475382107345229e-25, 1.52968437456897685251172e-25, 1.650671229819356594481905e-100, -1.650671229819356594481905e-100 },
+        { 1e-200, 1.288435374475382107345229e-50, 1.52968437456897685251172e-50, 1.650671229819356594481905e-200, -1.650671229819356594481905e-200 },
+    };
+    for (const q_case& c : small_q) {
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta1(0.7, c.q), c.theta1, 10 * eps);
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta2(0.7, c.q), c.theta2, 10 * eps);
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta3m1(0.3, c.q), c.theta3m1, 10 * eps);
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta4m1(0.3, c.q), c.theta4m1, 10 * eps);
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta3(0.3, c.q), 1 + c.theta3m1, 10 * eps);
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta4(0.3, c.q), 1 + c.theta4m1, 10 * eps);
+    }
+
+
+    // The argument reduction for tau < 1 previously chose the multiple of the
+    // period from a 24-bit pi, which picked the wrong multiple for z above a
+    // few times 1e7 and returned zero from z = 1e9 on. The reduction now uses
+    // the full pi and folds its error into the remainder, so these are exact
+    // to a few ulps. Reference values: mpmath with 40 digits.
+    struct large_z_case { double z, tau, theta1, theta2, theta3, theta4; };
+    const large_z_case large_z[] = {
+        { 4e7, 0.05, -3.757318694348920055753796, -0.00001545462079485293420015852, 0.00001549605722685305986708678, 3.757318694348920055753799 },
+        { 4e7, 0.9, -0.9759572565724512898452158, -0.1607607523378354523430388, 0.8881057607381379901037041, 1.11193291050224539104741 },
+        { 1e9, 0.05, 0.00835757877707516055357722, 0.5355121416942209933299827, 0.5355121416942209992545699, 0.008357578778633724488455624 },
+        { 1e9, 0.9, 0.5350024815437516287353571, 0.8259223040518742875028426, 1.047801422217507380865766, 0.9521655733653082082851415 },
+        { 1e12, 0.05, -0.02213061047237238578451432, 0.2849830841470243476666576, 0.2849830841470244257276671, 0.02213061047253907642968685 },
+        { 1e12, 0.9, -0.5997376814987367699456432, 0.7793174854358325013985754, 1.029889184690759448919078, 0.9700680662824351299496771 },
+    };
+    for (const large_z_case& c : large_z) {
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta1tau(c.z, c.tau), c.theta1, 10 * eps);
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta2tau(c.z, c.tau), c.theta2, 10 * eps);
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta3tau(c.z, c.tau), c.theta3, 10 * eps);
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta4tau(c.z, c.tau), c.theta4, 10 * eps);
+        BOOST_CHECK_CLOSE_FRACTION(jacobi_theta1tau(-c.z, c.tau), -c.theta1, 10 * eps);
+        if (c.z <= 1e9) { // exactly representable as a float
+            // Beyond 1/epsilon the reduction's accuracy degrades as z*epsilon^2,
+            // about 50 ulps at z = 1e9 in float
+            float feps = std::numeric_limits<float>::epsilon();
+            BOOST_CHECK_CLOSE_FRACTION(jacobi_theta1tau(static_cast<float>(c.z), static_cast<float>(c.tau)), static_cast<float>(c.theta1), 100 * feps);
+            BOOST_CHECK_CLOSE_FRACTION(jacobi_theta3tau(static_cast<float>(c.z), static_cast<float>(c.tau)), static_cast<float>(c.theta3), 100 * feps);
+        }
+    }
+
     for (double q=0.0078125; q<1.0; q += 0.0078125) { // = 1/128
+        // The periodicity test shifts z by the rounded constant two_pi, which
+        // differs from the true period by about eps. For large q the theta
+        // functions are steep enough (their logarithmic derivative is of
+        // order 1/tau = -pi/ln q) that this shift changes them by more than
+        // the rounding of the evaluation itself, so allow for it.
+        double periodicity_tol = 100 * eps + 4 * constants::pi<double>() * constants::pi<double>() * eps / -log(q);
         for (double z=-8.0; z<=8.0; z += 0.125) {
-            test_periodicity(z, q, 100 * eps);
+            test_periodicity(z, q, periodicity_tol);
             test_argument_translation(z, q, 100 * eps);
             test_sums_of_squares(z, q, 100 * eps);
             // The addition formula is complicated, cut it some extra slack
             test_addition_formulas(z, constants::ln_two<double>(), q, sqrt(sqrt(eps)));
             test_duplication_formula(z, q, 100 * eps);
             test_transformations_of_nome(z, q, 100 * eps);
-            test_watsons_identities(z, 0.5, q, 101 * eps);
+            // Watson's identities subtract products of order 1 to leave a much
+            // smaller remainder, so single-ulp differences in the individual
+            // theta values are amplified by up to a couple of orders of magnitude.
+            test_watsons_identities(z, 0.5, q, 200 * eps);
             test_landen_transformations(z, -log(q)/constants::pi<double>(), sqrt(eps));
             test_elliptic_functions(z, q, 5 * sqrt(eps));
         }
@@ -105,8 +224,20 @@ BOOST_AUTO_TEST_CASE( test_main )
     test_special_values(eps);
 
     for (double s=0.125; s<3.0; s+=0.125) {
-        test_mellin_transforms(2.0 + s, eps, 3 * eps);
+        // The integrals sum thousands of theta values, so allow a few ulps
+        test_mellin_transforms(2.0 + s, eps, 6 * eps);
         test_laplace_transforms(s, eps, 4 * eps);
+    }
+
+    // Laplace transforms at fixed z, for all four functions. The z values
+    // include the small-z regime where theta1 with tau < 1 used to lose
+    // precision, and the ranges cover both series branches in tau.
+    for (double a : { 0.5, 1.0, 2.0, 5.0 }) {
+        for (double z : { 1e-6, 1e-3, 0.1, 0.5, 1.0, 1.5, -0.7, 2.5, 3.0 }) {
+            test_laplace_transforms_in_z(static_cast<float>(a), static_cast<float>(z),
+                std::numeric_limits<float>::epsilon(), 25 * std::numeric_limits<float>::epsilon());
+            test_laplace_transforms_in_z(a, z, eps, 25 * eps);
+        }
     }
 
     test_spots(0.0F, "float");

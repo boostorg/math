@@ -10,7 +10,9 @@
 #ifndef BOOST_MATH_HYPERGEOMETRIC_RATIONAL_HPP
 #define BOOST_MATH_HYPERGEOMETRIC_RATIONAL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
   #include <array>
+#endif
 
   namespace boost{ namespace math{ namespace detail{
 

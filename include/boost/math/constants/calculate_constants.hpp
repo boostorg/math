@@ -7,7 +7,9 @@
 
 #ifndef BOOST_MATH_CALCULATE_CONSTANTS_CONSTANTS_INCLUDED
 #define BOOST_MATH_CALCULATE_CONSTANTS_CONSTANTS_INCLUDED
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
+#endif
 
 namespace boost{ namespace math{ namespace constants{ namespace detail{
 
@@ -93,6 +95,14 @@ template<int N>
 inline T constant_one_div_two_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)))
 {
    return 1 / two_pi<T, policies::policy<policies::digits2<N> > >();
+}
+
+template <class T>
+template<int N>
+inline T constant_log_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)))
+{
+   BOOST_MATH_STD_USING
+   return log(pi<T, policies::policy<policies::digits2<N> > >());
 }
 
 template <class T>

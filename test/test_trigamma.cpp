@@ -4,8 +4,10 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef SYCL_LANGUAGE_VERSION
+#ifndef BOOST_MATH_ENABLE_SYCL
 #include <pch_light.hpp>
+#else
+#include "sycl/sycl.hpp"
 #endif
 
 #include "test_trigamma.hpp"

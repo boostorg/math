@@ -70,7 +70,7 @@ BOOST_MATH_GPU_ENABLED inline T powm1_imp_dispatch(const T x, const T y, const P
 
 } // detail
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
    powm1(const T1 a, const T2 z)
 {
@@ -78,7 +78,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
    return detail::powm1_imp_dispatch(static_cast<result_type>(a), static_cast<result_type>(z), policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
    powm1(const T1 a, const T2 z, const Policy& pol)
 {

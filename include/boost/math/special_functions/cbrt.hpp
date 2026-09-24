@@ -11,15 +11,16 @@
 #pragma once
 #endif
 
-#ifndef __CUDACC_RTC__
-
 #include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_HAS_NVRTC
+
 #include <boost/math/tools/rational.hpp>
+#include <boost/math/tools/type_traits.hpp>
+#include <boost/math/tools/cstdint.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
-#include <type_traits>
-#include <cstdint>
 
 namespace boost{ namespace math{
 
@@ -157,7 +158,7 @@ BOOST_MATH_GPU_ENABLED T cbrt_imp(T z, const Policy& pol)
 
 } // namespace detail
 
-template <typename T, typename Policy>
+BOOST_MATH_EXPORT template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cbrt(T z, const Policy& pol)
 {
    using result_type = typename tools::promote_args<T>::type;
@@ -165,7 +166,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cbrt(T z, co
    return static_cast<result_type>(detail::cbrt_imp(value_type(z), pol));
 }
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cbrt(T z)
 {
    return cbrt(z, policies::policy<>());
@@ -174,19 +175,30 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cbrt(T z)
 } // namespace math
 } // namespace boost
 
-#else
+#else // Special NVRTC handling
 
 namespace boost {
 namespace math {
 
-template <typename T>
-__host__ __device__ T cbrt(T x)
+BOOST_MATH_EXPORT template <typename T>
+BOOST_MATH_GPU_ENABLED double cbrt(T x)
 {
    return ::cbrt(x);
 }
 
-template <>
-__host__ __device__ float cbrt(float x)
+BOOST_MATH_GPU_ENABLED inline float cbrt(float x)
+{
+   return ::cbrtf(x);
+}
+
+BOOST_MATH_EXPORT template <typename T, typename Policy>
+BOOST_MATH_GPU_ENABLED double cbrt(T x, const Policy&)
+{
+   return ::cbrt(x);
+}
+
+BOOST_MATH_EXPORT template <typename Policy>
+BOOST_MATH_GPU_ENABLED float cbrt(float x, const Policy&)
 {
    return ::cbrtf(x);
 }

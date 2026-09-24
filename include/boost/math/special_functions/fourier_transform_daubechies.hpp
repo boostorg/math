@@ -8,11 +8,13 @@
 
 #ifndef BOOST_MATH_SPECIAL_FOURIER_TRANSFORM_DAUBECHIES_HPP
 #define BOOST_MATH_SPECIAL_FOURIER_TRANSFORM_DAUBECHIES_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <cmath>
 #include <complex>
 #include <iostream>
 #include <limits>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/estrin.hpp>
@@ -183,7 +185,7 @@ template <typename Real, unsigned N> constexpr std::array<Real, N> ft_daubechies
  * See more discusion near equation 6.1.1,
  * as well as efficiency gains from equation 7.1.4.
  */
-template <class Real, unsigned p> std::complex<Real> fourier_transform_daubechies_scaling(Real omega) {
+BOOST_MATH_EXPORT template <class Real, unsigned p> std::complex<Real> fourier_transform_daubechies_scaling(Real omega) {
   // This arg promotion is kinda sad, but IMO the accuracy is not good enough in
   // float precision using this method. Requesting a better algorithm!
   if constexpr (std::is_same_v<Real, float>) {
@@ -224,7 +226,7 @@ template <class Real, unsigned p> std::complex<Real> fourier_transform_daubechie
   return phi * static_cast<std::complex<Real>>(pow(prefactor, p));
 }
 
-template <class Real, unsigned p> std::complex<Real> fourier_transform_daubechies_wavelet(Real omega) {
+BOOST_MATH_EXPORT template <class Real, unsigned p> std::complex<Real> fourier_transform_daubechies_wavelet(Real omega) {
   // See Daubechies, 10 Lectures on Wavelets, page 193, unlabelled equation in Theorem 6.3.6:
   // 𝓕[ψ](ω) = -exp(-iω/2)m₀(ω/2 + π)^{*}𝓕[𝜙](ω/2)
   if constexpr (std::is_same_v<Real, float>) {

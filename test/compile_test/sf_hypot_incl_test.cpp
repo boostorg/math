@@ -16,8 +16,11 @@
 void compile_and_link_test()
 {
    check_result<float>(boost::math::hypot<float>(f, f));
+   check_result<float>(boost::math::hypot(f, f, f));
    check_result<double>(boost::math::hypot<double>(d, d));
+   check_result<double>(boost::math::hypot<double>(d, d,d));
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::hypot<long double>(l, l));
+   check_result<long double>(boost::math::hypot<long double>(l, l, l));
 #endif
 }

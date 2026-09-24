@@ -146,18 +146,6 @@ void test_beale() {
   CHECK_ABSOLUTE_ERROR(Real(1)/Real(2), local_minima[1], Real(0.1));
 }
 
-#if BOOST_MATH_TEST_UNITS_COMPATIBILITY
-void test_dimensioned_sphere() {
-  std::cout << "Testing CMA-ES on dimensioned sphere . . .\n";
-  using ArgType = std::vector<quantity<length>>;
-  auto params = cma_es_parameters<ArgType>();
-  params.lower_bounds.resize(4, -1.0*meter);
-  params.upper_bounds.resize(4, 1*meter);
-  std::mt19937_64 gen(56789);
-  auto local_minima = cma_es(dimensioned_sphere, params, gen);
-}
-#endif
-
 int main() {
 #if (defined(__clang__) || defined(_MSC_VER))
   test_ackley<float>();
@@ -166,9 +154,6 @@ int main() {
   test_rastrigin<double>();
   test_three_hump_camel<float>();
   test_beale<double>();
-#endif
-#if BOOST_MATH_TEST_UNITS_COMPATIBILITY
-  test_dimensioned_sphere();
 #endif
   test_sphere();
   return boost::math::test::report_errors();

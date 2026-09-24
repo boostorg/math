@@ -23,8 +23,10 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
 #include <type_traits>
+#endif
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -54,7 +56,7 @@ namespace boost{ namespace math
     // (This is necessary because you can't use a numeric constant
     // since even a long double might not have enough digits).
 
-   enum construction_method
+   BOOST_MATH_EXPORT enum construction_method
    {
       construct_from_float = 1,
       construct_from_double = 2,
@@ -69,15 +71,15 @@ namespace boost{ namespace math
    // Traits class determines how to convert from string based on whether T has a constructor
    // from const char* or not:
    //
-   template <int N>
+   BOOST_MATH_EXPORT template <int N>
    struct dummy_size{};
 
    //
    // Max number of binary digits in the string representations of our constants:
    //
-   static constexpr int max_string_digits = (101 * 1000L) / 301L;
+   BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR int max_string_digits = (101 * 1000L) / 301L;
 
-   template <typename Real, typename Policy>
+   BOOST_MATH_EXPORT template <typename Real, typename Policy>
    struct construction_traits
    {
    private:
@@ -129,7 +131,7 @@ namespace boost{ namespace math
          {
             initializer()
             {
-               F();
+               (F)();
             }
             void force_instantiate()const{}
          };
@@ -151,7 +153,7 @@ namespace boost{ namespace math
          {
             initializer()
             {
-               F();
+               (F)();
             }
             void force_instantiate()const{}
          };
@@ -235,16 +237,16 @@ namespace boost{ namespace math
    \
    \
    /* The actual forwarding function: */ \
-   template <typename T, typename Policy> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T, Policy>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(Policy)) BOOST_MATH_NOEXCEPT(T)\
+   BOOST_MATH_EXPORT template <typename T, typename Policy> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T, Policy>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(Policy)) BOOST_MATH_NOEXCEPT(T)\
    { return detail:: BOOST_MATH_JOIN(constant_, name)<T>::get(typename construction_traits<T, Policy>::type()); }\
-   template <typename T> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_MATH_NOEXCEPT(T)\
+   BOOST_MATH_EXPORT template <typename T> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_MATH_NOEXCEPT(T)\
    { return name<T, boost::math::policies::policy<> >(); }\
    \
    \
    /* Now the namespace specific versions: */ \
-   } namespace float_constants{ static constexpr float name = BOOST_MATH_JOIN(x, F); }\
-   namespace double_constants{ static constexpr double name = x; } \
-   namespace long_double_constants{ static constexpr long double name = BOOST_MATH_JOIN(x, L); }\
+   } namespace float_constants{ BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR float name = BOOST_MATH_JOIN(x, F); }\
+   namespace double_constants{ BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR double name = x; } \
+   namespace long_double_constants{ BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR long double name = BOOST_MATH_JOIN(x, L); }\
    namespace constants{
 
 #else // NVRTC simplified macro definition
@@ -280,6 +282,7 @@ namespace constants {
   BOOST_DEFINE_MATH_CONSTANT(four_thirds_pi, 4.188790204786390984616857844372670512e+00, "4.18879020478639098461685784437267051226289253250014109463325945641042187504827866483737976712282275730953078202e+00")
   BOOST_DEFINE_MATH_CONSTANT(one_div_two_pi, 1.591549430918953357688837633725143620e-01, "1.59154943091895335768883763372514362034459645740456448747667344058896797634226535090113802766253085956072842727e-01")
   BOOST_DEFINE_MATH_CONSTANT(one_div_root_two_pi, 3.989422804014326779399460599343818684e-01, "3.98942280401432677939946059934381868475858631164934657665925829670657925899301838501252333907306936430302558863e-01")
+  BOOST_DEFINE_MATH_CONSTANT(log_pi, 1.144729885849400174143427351353058711e+00, "1.14472988584940017414342735135305871164729481291531157151362307147213776988482607978362327027548970770200981223e+00")
   BOOST_DEFINE_MATH_CONSTANT(root_pi, 1.772453850905516027298167483341145182e+00, "1.77245385090551602729816748334114518279754945612238712821380778985291128459103218137495065673854466541622682362e+00")
   BOOST_DEFINE_MATH_CONSTANT(root_half_pi, 1.253314137315500251207882642405522626e+00, "1.25331413731550025120788264240552262650349337030496915831496178817114682730392098747329791918902863305800498633e+00")
   BOOST_DEFINE_MATH_CONSTANT(root_two_pi, 2.506628274631000502415765284811045253e+00, "2.50662827463100050241576528481104525300698674060993831662992357634229365460784197494659583837805726611600997267e+00")
@@ -339,7 +342,7 @@ namespace constants {
   BOOST_DEFINE_MATH_CONSTANT(reciprocal_fibonacci, 3.35988566624317755317201130291892717968890513, "3.35988566624317755317201130291892717968890513373196848649555381532513031899668338361541621645679008729704")
   BOOST_DEFINE_MATH_CONSTANT(laplace_limit, 0.662743419349181580974742097109252907056233549115022417, "0.66274341934918158097474209710925290705623354911502241752039253499097185308651127724965480259895818168")
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED inline constexpr T tau() {  return two_pi<T>(); }
 
 } // namespace constants
@@ -357,5 +360,3 @@ BOOST_MATH_GPU_ENABLED inline constexpr T tau() {  return two_pi<T>(); }
 #endif
 
 #endif // BOOST_MATH_CONSTANTS_CONSTANTS_INCLUDED
-
-

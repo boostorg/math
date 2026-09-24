@@ -131,9 +131,63 @@ BOOST_MATH_GPU_ENABLED void handle_zero_derivative(F f,
    }
 }
 
+//
+// The Newton and Halley/Schroder iterations assume that when a step leaves
+// [min, max], the root lies between the current guess and the bound it
+// crossed.  If f is not monotone between the guess and the root that need
+// not be true, and the iteration then walks onto the bound without ever
+// seeing f change sign: https://github.com/boostorg/math/issues/808
+//
+// Call this only once the iteration has finished without observing a sign
+// change.  If the result has collapsed onto one of the original endpoints
+// b, we evaluate f(b) once and return true (report failure) when it looks
+// as though there is no root between result and b.  This is a diagnostic
+// heuristic, not a proof:
+//
+// * If f(b) has the opposite sign to f0 (the last residual) or is zero,
+//   then (f being continuous, as these solvers assume throughout) there is
+//   certainly a root in the sliver between result and b, so the result
+//   stands.
+// * Otherwise f(b) must also be "not close to zero" before we complain:
+//   not much closer than f0, and not negligible next to first_f0 (the
+//   residual at the initial guess).  These thresholds absorb rounding
+//   noise at a genuine root at b, where f0 is itself noise once the
+//   iteration has converged.
+//
+// We evaluate f(b) rather than f(result): when bisection approaches a
+// genuine root at b, f(result) is roughly f0 / 2 by construction, so it
+// cannot tell that case apart from a function that never reaches zero.
+// An interior result never evaluates f here at all.
+//
+template <class F, class T>
+BOOST_MATH_GPU_ENABLED bool converged_onto_endpoint_without_root(F& f, const T& result, const T& delta, const T& f0, const T& first_f0, const T& min, const T& max)
+{
+   BOOST_MATH_STD_USING
+   const T dmin = fabs(result - min);
+   const T dmax = fabs(max - result);
+   const T b = dmin <= dmax ? min : max;
+   if ((dmin <= dmax ? dmin : dmax) > 2 * fabs(delta))
+      return false;
+   T fb;
+#if !defined(BOOST_MATH_NO_EXCEPTIONS) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
+   try
+#endif
+   {
+      unpack_0(f(b), fb);
+   }
+#if !defined(BOOST_MATH_NO_EXCEPTIONS) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
+   catch (const std::overflow_error&)
+   {
+      return false; // Can't tell, so keep the previous behaviour.
+   }
+#endif
+   return (fb != 0) && ((fb < 0) == (f0 < 0)) && (fabs(fb) > fabs(f0) / 2)
+      && (fabs(fb) > fabs(first_f0) * tools::root_epsilon<T>());
+}
+
 } // namespace
 
-template <class F, class T, class Tol, class Policy>
+BOOST_MATH_EXPORT template <class F, class T, class Tol, class Policy>
 BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::math::uintmax_t& max_iter, const Policy& pol) noexcept(policies::is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T) 
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 && noexcept(std::declval<F>()(std::declval<T>()))
@@ -157,7 +211,7 @@ BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> bisect(F f, T min, T max, Tol tol
    // Error checking:
    //
    constexpr auto function = "boost::math::tools::bisect<%1%>";
-   if (min >= max)
+   if (!(min < max))
    {
       return boost::math::detail::pair_from_single(policies::raise_evaluation_error(function,
          "Arguments in wrong order in boost::math::tools::bisect (first arg=%1%)", min, pol));
@@ -209,7 +263,7 @@ BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> bisect(F f, T min, T max, Tol tol
    return boost::math::make_pair(min, max);
 }
 
-template <class F, class T, class Tol>
+BOOST_MATH_EXPORT template <class F, class T, class Tol>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::math::uintmax_t& max_iter)  noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value && BOOST_MATH_IS_FLOAT(T)
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 && noexcept(std::declval<F>()(std::declval<T>()))
@@ -219,7 +273,7 @@ BOOST_MATH_GPU_ENABLED inline boost::math::pair<T, T> bisect(F f, T min, T max, 
    return bisect(f, min, max, tol, max_iter, policies::policy<>());
 }
 
-template <class F, class T, class Tol>
+BOOST_MATH_EXPORT template <class F, class T, class Tol>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<T, T> bisect(F f, T min, T max, Tol tol) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value && BOOST_MATH_IS_FLOAT(T) 
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 && noexcept(std::declval<F>()(std::declval<T>()))
@@ -231,7 +285,7 @@ BOOST_MATH_GPU_ENABLED inline boost::math::pair<T, T> bisect(F f, T min, T max, 
 }
 
 
-template <class F, class T>
+BOOST_MATH_EXPORT template <class F, class T>
 BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::math::uintmax_t& max_iter) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value && BOOST_MATH_IS_FLOAT(T)
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 && noexcept(std::declval<F>()(std::declval<T>()))
@@ -241,9 +295,14 @@ BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int 
    BOOST_MATH_STD_USING
 
    constexpr auto function = "boost::math::tools::newton_raphson_iterate<%1%>";
-   if (min > max)
+   if (!(min <= max))
    {
       return policies::raise_evaluation_error(function, "Range arguments in wrong order in boost::math::tools::newton_raphson_iterate(first arg=%1%)", min, boost::math::policies::policy<>());
+   }
+
+   if (max_iter == 0)
+   {
+      return guess;
    }
 
    T f0(0), f1, last_f0(0);
@@ -266,6 +325,10 @@ BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int 
    //
    T max_range_f = 0;
    T min_range_f = 0;
+   const T min0 = min;
+   const T max0 = max;
+   T first_f0 = 0;
+   bool sign_changed = false;
 
    boost::math::uintmax_t count(max_iter);
 
@@ -282,6 +345,10 @@ BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int 
       --count;
       if (0 == f0)
          break;
+      if (first_f0 == 0)
+         first_f0 = f0;
+      else if ((f0 < 0) != (first_f0 < 0))
+         sign_changed = true;
       if (f1 == 0)
       {
          // Oops zero derivative!!!
@@ -344,6 +411,11 @@ BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int 
       }
    }while(count && (fabs(result * factor) < fabs(delta)));
 
+   if ((f0 != 0) && !sign_changed && detail::converged_onto_endpoint_without_root(f, result, delta, f0, first_f0, min0, max0))
+   {
+      return policies::raise_evaluation_error(function, "No root was found in boost::math::tools::newton_raphson_iterate: the iteration converged onto an end of the search range without f changing sign, try a different initial guess or range. Current best guess is %1%", result, boost::math::policies::policy<>());
+   }
+
    max_iter -= count;
 
 #ifdef BOOST_MATH_INSTRUMENT
@@ -353,7 +425,7 @@ BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int 
    return result;
 }
 
-template <class F, class T>
+BOOST_MATH_EXPORT template <class F, class T>
 BOOST_MATH_GPU_ENABLED inline T newton_raphson_iterate(F f, T guess, T min, T max, int digits) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value && BOOST_MATH_IS_FLOAT(T)
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 && noexcept(std::declval<F>()(std::declval<T>()))
@@ -456,8 +528,13 @@ namespace detail {
       if (count)
       {
          max = guess;
+         //
+         // We can't have this extra recursive tidy up step on CUDA:
+         //
+#if !defined(BOOST_MATH_ENABLE_CUDA) && !defined(BOOST_MATH_ENABLE_SYCL)
          if (multiplier > 16)
             return (guess0 - guess) + bracket_root_towards_min(f, guess, f_current, min, max, count);
+#endif
       }
       return guess0 - (max + min) / 2;
    }
@@ -520,8 +597,13 @@ namespace detail {
       if (count)
       {
          min = guess;
+         //
+         // We can't have this extra recursive tidy up step on CUDA:
+         //
+#if !defined(BOOST_MATH_ENABLE_CUDA) && !defined(BOOST_MATH_ENABLE_SYCL)
          if (multiplier > 16)
             return (guess0 - guess) + bracket_root_towards_max(f, guess, f_current, min, max, count);
+#endif
       }
       return guess0 - (max + min) / 2;
    }
@@ -536,7 +618,7 @@ namespace detail {
         << ", digits = " << digits << ", max_iter = " << max_iter << "\n";
 #endif
       static const char* function = "boost::math::tools::halley_iterate<%1%>";
-      if (min >= max)
+      if (!(min < max))
       {
          return policies::raise_evaluation_error(function, "Range arguments in wrong order in boost::math::tools::halley_iterate(first arg=%1%)", min, boost::math::policies::policy<>());
       }
@@ -567,6 +649,10 @@ namespace detail {
       //
       T max_range_f = 0;
       T min_range_f = 0;
+      const T min0 = min;
+      const T max0 = max;
+      T first_f0 = 0;
+      bool sign_changed = false;
 
       std::uintmax_t count(max_iter);
 
@@ -595,6 +681,10 @@ namespace detail {
 
          if (0 == f0)
             break;
+         if (first_f0 == 0)
+            first_f0 = f0;
+         else if ((f0 < 0) != (first_f0 < 0))
+            sign_changed = true;
          if (f1 == 0)
          {
             // Oops zero derivative!!!
@@ -739,6 +829,11 @@ namespace detail {
          }
       } while(count && (fabs(result * factor) < fabs(delta)));
 
+      if ((f0 != 0) && !sign_changed && detail::converged_onto_endpoint_without_root(f, result, delta, f0, first_f0, min0, max0))
+      {
+         return policies::raise_evaluation_error(function, "No root was found in boost::math::tools::halley_iterate: the iteration converged onto an end of the search range without f changing sign, try a different initial guess or range. Current best guess is %1%", result, boost::math::policies::policy<>());
+      }
+
       max_iter -= count;
 
    #ifdef BOOST_MATH_INSTRUMENT
@@ -749,13 +844,13 @@ namespace detail {
    }
 } // T second_order_root_finder
 
-template <class F, class T>
+BOOST_MATH_EXPORT template <class F, class T>
 T halley_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    return detail::second_order_root_finder<detail::halley_step>(f, guess, min, max, digits, max_iter);
 }
 
-template <class F, class T>
+BOOST_MATH_EXPORT template <class F, class T>
 inline T halley_iterate(F f, T guess, T min, T max, int digits) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    std::uintmax_t m = (std::numeric_limits<std::uintmax_t>::max)();
@@ -787,13 +882,13 @@ namespace detail {
 
 }
 
-template <class F, class T>
+BOOST_MATH_EXPORT template <class F, class T>
 T schroder_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    return detail::second_order_root_finder<detail::schroder_stepper>(f, guess, min, max, digits, max_iter);
 }
 
-template <class F, class T>
+BOOST_MATH_EXPORT template <class F, class T>
 inline T schroder_iterate(F f, T guess, T min, T max, int digits) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    std::uintmax_t m = (std::numeric_limits<std::uintmax_t>::max)();
@@ -822,7 +917,7 @@ inline T schroeder_iterate(F f, T guess, T min, T max, int digits) noexcept(poli
    * so this default should recover full precision even in this somewhat pathological case.
    * For isolated roots, the problem is so rapidly convergent that this doesn't matter at all.
    */
-template<class ComplexType, class F>
+BOOST_MATH_EXPORT template<class ComplexType, class F>
 ComplexType complex_newton(F g, ComplexType guess, int max_iterations = std::numeric_limits<typename ComplexType::value_type>::digits)
 {
    typedef typename ComplexType::value_type Real;
@@ -1044,7 +1139,7 @@ std::pair<T, T> quadratic_roots_imp(T const& a, T const& b, T const& c)
 }
 }  // namespace detail
 
-template<class T1, class T2 = T1, class T3 = T1>
+BOOST_MATH_EXPORT template<class T1, class T2 = T1, class T3 = T1>
 inline std::pair<typename tools::promote_args<T1, T2, T3>::type, typename tools::promote_args<T1, T2, T3>::type> quadratic_roots(T1 const& a, T2 const& b, T3 const& c)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type value_type;

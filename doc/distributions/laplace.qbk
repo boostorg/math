@@ -17,10 +17,10 @@
       typedef RealType value_type;
       typedef Policy   policy_type;
       // Construct:
-      laplace_distribution(RealType location = 0, RealType scale = 1);
+      BOOST_MATH_GPU_ENABLED laplace_distribution(RealType location = 0, RealType scale = 1);
       // Accessors:
-      RealType location()const;
-      RealType scale()const;
+      BOOST_MATH_GPU_ENABLED RealType location()const;
+      BOOST_MATH_GPU_ENABLED RealType scale()const;
    };
 
    }} // namespaces
@@ -49,7 +49,7 @@ Note that the domain of the random variable remains
 
 [h4 Member Functions]
 
-   laplace_distribution(RealType location = 0, RealType scale = 1);
+   BOOST_MATH_GPU_ENABLED laplace_distribution(RealType location = 0, RealType scale = 1);
 
 Constructs a laplace distribution with location /location/ and
 scale /scale/.
@@ -61,11 +61,11 @@ The scale parameter is proportional to the standard deviation of the random vari
 Requires that the scale parameter is greater than zero, otherwise calls
 __domain_error.
 
-   RealType location()const;
+   BOOST_MATH_GPU_ENABLED RealType location()const;
 
 Returns the /location/ parameter of this distribution.
 
-   RealType scale()const;
+   BOOST_MATH_GPU_ENABLED RealType scale()const;
 
 Returns the /scale/ parameter of this distribution.
 
@@ -73,6 +73,8 @@ Returns the /scale/ parameter of this distribution.
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
+For this distribution all non-member accessor functions are marked with `BOOST_MATH_GPU_ENABLED` and can
+be run on both host and device.
 
 The domain of the random variable is \[-[infin],+[infin]\].
 

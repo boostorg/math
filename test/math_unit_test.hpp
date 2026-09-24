@@ -6,16 +6,32 @@
 
 #ifndef BOOST_MATH_TEST_TEST_HPP
 #define BOOST_MATH_TEST_TEST_HPP
+// A module build always consumes the standard library through `import std;`.
+// Nothing standard may be included textually in module mode: another Boost
+// header pulling in a std header after the import would trip a concept-merge
+// failure, so every std include below is confined to the non-module branch.
+#ifdef BOOST_MATH_BUILD_MODULE
+import std;
+#include <stddef.h>
+#include <stdint.h>
+#else
+#include <cmath>
 #include <atomic>
 #include <iostream>
 #include <iomanip>
-#include <cmath> // for std::isnan
 #include <string>
 #include <type_traits>
+#endif
 #include <boost/math/tools/assert.hpp>
+// In module mode these declarations come from `import boost.math;`, which the
+// including test performs before this header.
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/trunc.hpp>
-#if defined __has_include
+#endif
+// <cxxabi.h> pulls <typeinfo>/bits/exception.h, which redefine std entities that
+// import std already provides; skip it in module mode (demangle then falls back).
+#if !defined(BOOST_MATH_BUILD_MODULE) && defined __has_include
 #  if __has_include(<cxxabi.h>)
 #define BOOST_MATH_HAS_CXX_ABI 1
 #    include <cxxabi.h>
@@ -58,7 +74,7 @@ bool check_mollified_close(Real expected, Real computed, Real tol, std::string c
     }
     using std::max;
     using std::abs;
-    Real denom = (max)(abs(expected), Real(1));
+    Real denom = (max)(Real(abs(expected)), Real(1));
     Real mollified_relative_error = abs(expected - computed)/denom;
     if (mollified_relative_error > tol)
     {

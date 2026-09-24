@@ -201,7 +201,7 @@ void test_bessel(T, const char* name)
        }
     }
     T tolerance = boost::math::tools::epsilon<T>() * 100;
-#ifndef SYCL_LANGUAGE_VERSION
+#ifndef BOOST_MATH_ENABLE_SYCL
     if ((boost::math::tools::digits<T>() <= std::numeric_limits<double>::digits) && (std::numeric_limits<T>::max_exponent > 1000))
     {
        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(T(0.5), T(710)), SC_(3.3447452278080108123142599104927325061327359278058601201179e306), tolerance);
@@ -214,7 +214,7 @@ void test_bessel(T, const char* name)
        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(T(0.5), T(11357)), SC_(7.173138695269929329584326974917488634629578339622112563648e4929), tolerance * mul);
     }
 #endif
-    BOOST_IF_CONSTEXPR (std::numeric_limits<T>::max_exponent > 1000)
+    BOOST_IF_CONSTEXPR (std::numeric_limits<T>::max_exponent10 > 304)
     {
        BOOST_IF_CONSTEXPR(std::is_floating_point<T>::value == false)
           tolerance *= 4; // multiprecision type.

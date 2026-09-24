@@ -10,6 +10,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/hypot.hpp>
 
 #include <cmath>
 
@@ -41,6 +42,22 @@ const float boundaries[] = {
    std::sqrt((std::numeric_limits<float>::min)()) * 2,
 };
 
+void do_test_boundaries(float x, float y, float z)
+{
+   float expected = static_cast<float>((boost::math::hypot)(
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+      static_cast<long double>(x),
+      static_cast<long double>(y),
+      static_cast<long double>(z)));
+   #else
+      static_cast<double>(x),
+      static_cast<double>(y),
+      static_cast<double>(z));
+   #endif
+   float found = (boost::math::hypot)(x, y, z);
+   BOOST_CHECK_CLOSE(expected, found, tolerance);
+}
+
 void do_test_boundaries(float x, float y)
 {
    float expected = static_cast<float>((boost::math::hypot)(
@@ -55,12 +72,31 @@ void do_test_boundaries(float x, float y)
    BOOST_CHECK_CLOSE(expected, found, tolerance);
 }
 
+void test_boundaries(float x, float y, float z)
+{
+   do_test_boundaries(x, y, z);
+   do_test_boundaries(-x, y, z);
+   do_test_boundaries(x, -y, z);
+   do_test_boundaries(x, y, -z);
+   do_test_boundaries(-x, -y, z);
+   do_test_boundaries(-x, y, -z);
+   do_test_boundaries(x, -y, -z);
+   do_test_boundaries(-x, -y, -z);
+}
+
 void test_boundaries(float x, float y)
 {
    do_test_boundaries(x, y);
    do_test_boundaries(-x, y); 
    do_test_boundaries(-x, -y);
    do_test_boundaries(x, -y);
+
+   for(unsigned i = 0; i < sizeof(boundaries)/sizeof(float); ++i)
+   {
+      test_boundaries(x, y, boundaries[i]);
+      test_boundaries(x, y, boundaries[i] + std::numeric_limits<float>::epsilon()*boundaries[i]);
+      test_boundaries(x, y, boundaries[i] - std::numeric_limits<float>::epsilon()*boundaries[i]);
+   }
 }
 
 void test_boundaries(float x)
@@ -92,12 +128,26 @@ void test_spots()
       BOOST_CHECK_EQUAL(boost::math::hypot(-boundaries[i], zero), std::fabs(-boundaries[i]));
       BOOST_CHECK_EQUAL(boost::math::hypot(boundaries[i], -zero), std::fabs(boundaries[i]));
       BOOST_CHECK_EQUAL(boost::math::hypot(-boundaries[i], -zero), std::fabs(-boundaries[i]));
+
+      BOOST_CHECK_EQUAL(boost::math::hypot(boundaries[i], zero, zero), std::fabs(boundaries[i]));
+      BOOST_CHECK_EQUAL(boost::math::hypot(-boundaries[i], zero, zero), std::fabs(-boundaries[i]));
+      BOOST_CHECK_EQUAL(boost::math::hypot(boundaries[i], -zero, zero), std::fabs(boundaries[i]));
+      BOOST_CHECK_EQUAL(boost::math::hypot(-boundaries[i], -zero, zero), std::fabs(-boundaries[i]));
+      BOOST_CHECK_EQUAL(boost::math::hypot(zero, boundaries[i], zero), std::fabs(boundaries[i]));
+      BOOST_CHECK_EQUAL(boost::math::hypot(zero, -boundaries[i], zero), std::fabs(-boundaries[i]));
+      BOOST_CHECK_EQUAL(boost::math::hypot(zero, boundaries[i], -zero), std::fabs(boundaries[i]));
+      BOOST_CHECK_EQUAL(boost::math::hypot(zero, -boundaries[i], -zero), std::fabs(-boundaries[i]));
       for(unsigned j = 0; j < sizeof(boundaries)/sizeof(float); ++j)
       {
          BOOST_CHECK_EQUAL(boost::math::hypot(boundaries[i], boundaries[j]), boost::math::hypot(boundaries[j], boundaries[i]));
          BOOST_CHECK_EQUAL(boost::math::hypot(boundaries[i], boundaries[j]), boost::math::hypot(boundaries[i], -boundaries[j]));
          BOOST_CHECK_EQUAL(boost::math::hypot(-boundaries[i], -boundaries[j]), boost::math::hypot(-boundaries[j], -boundaries[i]));
          BOOST_CHECK_EQUAL(boost::math::hypot(-boundaries[i], -boundaries[j]), boost::math::hypot(-boundaries[i], boundaries[j]));
+
+         BOOST_CHECK_EQUAL(boost::math::hypot(boundaries[i], boundaries[j], boundaries[j]), boost::math::hypot(boundaries[j], boundaries[i], boundaries[j]));
+         BOOST_CHECK_EQUAL(boost::math::hypot(boundaries[i], boundaries[j], boundaries[j]), boost::math::hypot(boundaries[i], boundaries[j], -boundaries[j]));
+         BOOST_CHECK_EQUAL(boost::math::hypot(-boundaries[i], -boundaries[j], boundaries[j]), boost::math::hypot(-boundaries[j], -boundaries[i], boundaries[j]));
+         BOOST_CHECK_EQUAL(boost::math::hypot(-boundaries[i], -boundaries[j], boundaries[j]), boost::math::hypot(-boundaries[i], boundaries[j], boundaries[j]));
       }
    }
    if((std::numeric_limits<float>::has_infinity) && (std::numeric_limits<float>::has_quiet_NaN))
@@ -108,6 +158,16 @@ void test_spots()
       BOOST_CHECK_EQUAL(boost::math::hypot(-inf, nan), inf);
       BOOST_CHECK_EQUAL(boost::math::hypot(nan, inf), inf);
       BOOST_CHECK_EQUAL(boost::math::hypot(nan, -inf), inf);
+
+      BOOST_CHECK_EQUAL(boost::math::hypot(inf, nan, inf), inf);
+      BOOST_CHECK_EQUAL(boost::math::hypot(-inf, nan, inf), inf);
+      BOOST_CHECK_EQUAL(boost::math::hypot(nan, inf, inf), inf);
+      BOOST_CHECK_EQUAL(boost::math::hypot(nan, -inf, inf), inf);
+      BOOST_CHECK_EQUAL(boost::math::hypot(nan, nan, inf), inf);
+      BOOST_CHECK_EQUAL(boost::math::hypot(-inf, nan, nan), inf);
+      BOOST_CHECK_EQUAL(boost::math::hypot(nan, inf, nan), inf);
+      BOOST_CHECK_EQUAL(boost::math::hypot(nan, -inf, nan), inf);
+
       for(unsigned j = 0; j < sizeof(boundaries)/sizeof(float); ++j)
       {
          BOOST_CHECK_EQUAL(boost::math::hypot(boundaries[j], inf), inf);
@@ -118,6 +178,15 @@ void test_spots()
          BOOST_CHECK_EQUAL(boost::math::hypot(-boundaries[j], -inf), inf);
          BOOST_CHECK_EQUAL(boost::math::hypot(-inf, boundaries[j]), inf);
          BOOST_CHECK_EQUAL(boost::math::hypot(-inf, -boundaries[j]), inf);
+
+         BOOST_CHECK_EQUAL(boost::math::hypot(boundaries[j], inf, inf), inf);
+         BOOST_CHECK_EQUAL(boost::math::hypot(-boundaries[j], inf, inf), inf);
+         BOOST_CHECK_EQUAL(boost::math::hypot(inf, boundaries[j], inf), inf);
+         BOOST_CHECK_EQUAL(boost::math::hypot(inf, -boundaries[j], inf), inf);
+         BOOST_CHECK_EQUAL(boost::math::hypot(boundaries[j], -inf, inf), inf);
+         BOOST_CHECK_EQUAL(boost::math::hypot(-boundaries[j], -inf, inf), inf);
+         BOOST_CHECK_EQUAL(boost::math::hypot(-inf, boundaries[j], inf), inf);
+         BOOST_CHECK_EQUAL(boost::math::hypot(-inf, -boundaries[j], inf), inf);
       }
    }
 }

@@ -1,0 +1,255 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Reverse Mode autodiff policies</title>
+<link rel="stylesheet" href="../../math.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
+<link rel="home" href="../../index.html" title="Math Toolkit 4.2.1">
+<link rel="up" href="../gd_opt.html" title="Gradient Based Optimizers">
+<link rel="prev" href="minimize.html" title="minimize">
+<link rel="next" href="../../poly.html" title="Chapter 12. Polynomials and Rational Functions">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="minimize.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../gd_opt.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../../poly.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="math_toolkit.gd_opt.policies"></a><a class="link" href="policies.html" title="Reverse Mode autodiff policies">Reverse Mode autodiff policies</a>
+</h3></div></div></div>
+<p>
+        This header provides default policy implementations for using the gradient-based
+        optimizers with <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">differentiation</span><span class="special">::</span><span class="identifier">reverse_mode</span><span class="special">::</span><span class="identifier">rvar</span></code> These policies handle:
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            preparing the reverse-mode tape before evaluating an objective,
+          </li>
+<li class="listitem">
+            extracting gradients from rvar arguments after backpropagation,
+          </li>
+<li class="listitem">
+            initializing <code class="computeroutput"><span class="identifier">rvar</span></code> containers
+            and establishing tape checkpoints.
+          </li>
+</ul></div>
+<h5>
+<a name="math_toolkit.gd_opt.policies.h0"></a>
+        <span class="phrase"><a name="math_toolkit.gd_opt.policies.synopsis"></a></span><a class="link" href="policies.html#math_toolkit.gd_opt.policies.synopsis">Synopsis</a>
+      </h5>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">optimization</span><span class="special">/</span><span class="identifier">detail</span><span class="special">/</span><span class="identifier">rdiff_optimization_policies</span><span class="special">&gt;</span>
+
+<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+<span class="keyword">namespace</span> <span class="identifier">math</span> <span class="special">{</span>
+<span class="keyword">namespace</span> <span class="identifier">optimization</span> <span class="special">{</span>
+
+<span class="keyword">namespace</span> <span class="identifier">rdiff</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">differentiation</span><span class="special">::</span><span class="identifier">reverse_mode</span><span class="special">;</span>
+
+<span class="comment">/**
+ * @brief&gt; function evaluation policy for reverse mode autodiff
+ * @arg objective&gt; objective function to evaluate
+ * @arg x&gt; argument list
+ */</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">reverse_mode_function_eval_policy</span>
+<span class="special">{</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Objective</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">ArgumentContainer</span><span class="special">&gt;</span>
+  <span class="identifier">rdiff</span><span class="special">::</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Objective</span><span class="special">&amp;&amp;</span> <span class="identifier">objective</span><span class="special">,</span>
+                                      <span class="identifier">ArgumentContainer</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span>
+<span class="special">};</span>
+
+<span class="comment">/**
+ * @brief&gt; gradient evaluation policy
+ * @arg obj_f&gt; objective
+ * @arg x&gt; argument list
+ * @arg f_eval_olicy&gt; funciton evaluation policy. These need to be
+ *                    done in tandem
+ * @arg obj_v&gt; reference to variable inside gradient class
+ */</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">reverse_mode_gradient_evaluation_policy</span>
+<span class="special">{</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Objective</span><span class="special">,</span>
+           <span class="keyword">class</span> <span class="identifier">ArgumentContainer</span><span class="special">,</span>
+           <span class="keyword">class</span> <span class="identifier">FunctionEvaluationPolicy</span><span class="special">&gt;</span>
+  <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Objective</span><span class="special">&amp;&amp;</span> <span class="identifier">obj_f</span><span class="special">,</span>
+                  <span class="identifier">ArgumentContainer</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">,</span>
+                  <span class="identifier">FunctionEvaluationPolicy</span><span class="special">&amp;&amp;</span> <span class="identifier">f_eval_pol</span><span class="special">,</span>
+                  <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">obj_v</span><span class="special">,</span>
+                  <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;&amp;</span> <span class="identifier">g</span><span class="special">)</span>
+<span class="special">};</span>
+ <span class="comment">/*
+ * init policies
+ */</span>
+
+<span class="comment">/* default rvar policy */</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">tape_initializer_rvar</span>
+<span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ArgumentContainer</span><span class="special">&gt;</span>
+    <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">ArgumentContainer</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span>
+<span class="special">};</span>
+
+<span class="comment">/* random uniform */</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">random_uniform_initializer_rvar</span>
+<span class="special">{</span>
+  <span class="identifier">RealType</span> <span class="identifier">low_</span><span class="special">,</span> <span class="identifier">high_</span><span class="special">;</span>
+  <span class="identifier">size_t</span> <span class="identifier">seed_</span><span class="special">;</span>
+  <span class="identifier">random_uniform_initializer_rvar</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">low</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span>
+                                  <span class="identifier">RealType</span> <span class="identifier">high</span> <span class="special">=</span> <span class="number">1</span><span class="special">,</span>
+                                  <span class="identifier">size_t</span> <span class="identifier">seed</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">random_device</span><span class="special">{}());</span>
+
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ArgumentContainer</span><span class="special">&gt;</span>
+  <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">ArgumentContainer</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+<span class="special">};</span>
+
+<span class="comment">/* constant initializer */</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">costant_initializer_rvar</span>
+<span class="special">{</span>
+  <span class="identifier">RealType</span> <span class="identifier">constant</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <span class="identifier">costant_initializer_rvar</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">v</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>
+
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ArgumentContainer</span><span class="special">&gt;</span>
+  <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">ArgumentContainer</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+<span class="special">};</span>
+<span class="special">}</span> <span class="comment">// namespace optimization</span>
+<span class="special">}</span> <span class="comment">// namespace math</span>
+<span class="special">}</span> <span class="comment">// namespace boost</span>
+</pre>
+<h5>
+<a name="math_toolkit.gd_opt.policies.h1"></a>
+        <span class="phrase"><a name="math_toolkit.gd_opt.policies.function_evaluation_policies"></a></span><a class="link" href="policies.html#math_toolkit.gd_opt.policies.function_evaluation_policies">Function
+        evaluation policies</a>
+      </h5>
+<p>
+        A function evaluation policy defines how an objective is evaluated at the
+        current parameters, and is responsible for any AD bookkeeping required before
+        the call.
+      </p>
+<h5>
+<a name="math_toolkit.gd_opt.policies.h2"></a>
+        <span class="phrase"><a name="math_toolkit.gd_opt.policies.reverse_mode_function_eval_polic"></a></span><a class="link" href="policies.html#math_toolkit.gd_opt.policies.reverse_mode_function_eval_polic">reverse_mode_function_eval_policy</a>
+      </h5>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">&gt;</span> <span class="keyword">struct</span> <span class="identifier">reverse_mode_function_eval_policy</span> <span class="special">{</span> <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Objective</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">ArgumentContainer</span><span class="special">&gt;</span> <span class="identifier">rdiff</span><span class="special">::</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Objective</span><span class="special">&amp;&amp;</span> <span class="identifier">objective</span><span class="special">,</span> <span class="identifier">ArgumentContainer</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span> <span class="special">};</span>
+</pre>
+<p>
+        This policy evaluates the objective objective(x) using reverse-mode AD and
+        ensures the active tape is in a valid state before evaluation:
+      </p>
+<p>
+        ArgumentContainer must contain rdiff::rvar&lt;RealType,1&gt; values.
+      </p>
+<h5>
+<a name="math_toolkit.gd_opt.policies.h3"></a>
+        <span class="phrase"><a name="math_toolkit.gd_opt.policies.gradient_evaluation_policies"></a></span><a class="link" href="policies.html#math_toolkit.gd_opt.policies.gradient_evaluation_policies">Gradient
+        evaluation policies</a>
+      </h5>
+<p>
+        A gradient evaluation policy defines how gradients are computed and extracted
+        into an ordinary numeric container.
+      </p>
+<h5>
+<a name="math_toolkit.gd_opt.policies.h4"></a>
+        <span class="phrase"><a name="math_toolkit.gd_opt.policies.reverse_mode_gradient_evaluation"></a></span><a class="link" href="policies.html#math_toolkit.gd_opt.policies.reverse_mode_gradient_evaluation">reverse_mode_gradient_evaluation_policy</a>
+      </h5>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">&gt;</span> <span class="keyword">struct</span> <span class="identifier">reverse_mode_gradient_evaluation_policy</span> <span class="special">{</span> <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Objective</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">ArgumentContainer</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">FunctionEvaluationPolicy</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Objective</span><span class="special">&amp;&amp;</span> <span class="identifier">obj_f</span><span class="special">,</span> <span class="identifier">ArgumentContainer</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">FunctionEvaluationPolicy</span><span class="special">&amp;&amp;</span> <span class="identifier">f_eval_pol</span><span class="special">,</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">obj_v</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;&amp;</span> <span class="identifier">g</span><span class="special">);</span> <span class="special">};</span>
+</pre>
+<p>
+        This policy computes the objective value and gradient using reverse-mode
+        autodiff
+      </p>
+<h5>
+<a name="math_toolkit.gd_opt.policies.h5"></a>
+        <span class="phrase"><a name="math_toolkit.gd_opt.policies.initialization_policies"></a></span><a class="link" href="policies.html#math_toolkit.gd_opt.policies.initialization_policies">Initialization
+        policies</a>
+      </h5>
+<p>
+        Initialization policies prepare the argument container and the reverse-mode
+        tape for optimization. They establish tape checkpoints that are later used
+        by function/gradient evaluation policies.
+      </p>
+<h5>
+<a name="math_toolkit.gd_opt.policies.h6"></a>
+        <span class="phrase"><a name="math_toolkit.gd_opt.policies.tape_initializer_rvar"></a></span><a class="link" href="policies.html#math_toolkit.gd_opt.policies.tape_initializer_rvar">tape_initializer_rvar</a>
+      </h5>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">&gt;</span> <span class="keyword">struct</span> <span class="identifier">tape_initializer_rvar</span> <span class="special">{</span> <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ArgumentContainer</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">ArgumentContainer</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span> <span class="special">};</span>
+</pre>
+<p>
+        This policy: * statically requires <code class="computeroutput"><span class="identifier">ArgumentContainer</span><span class="special">::</span><span class="identifier">value_type</span></code>
+        to be <code class="computeroutput"><span class="identifier">rdiff</span><span class="special">::</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span><span class="number">1</span><span class="special">&gt;</span></code>, * adds
+        a checkpoint to the active reverse-mode tape via <code class="computeroutput"><span class="identifier">tape</span><span class="special">.</span><span class="identifier">add_checkpoint</span><span class="special">()</span></code>
+      </p>
+<h5>
+<a name="math_toolkit.gd_opt.policies.h7"></a>
+        <span class="phrase"><a name="math_toolkit.gd_opt.policies.random_uniform_initializer_rvar"></a></span><a class="link" href="policies.html#math_toolkit.gd_opt.policies.random_uniform_initializer_rvar">random_uniform_initializer_rvar</a>
+      </h5>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">random_uniform_initializer_rvar</span>
+<span class="special">{</span>
+<span class="identifier">random_uniform_initializer_rvar</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">low</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span>
+<span class="identifier">RealType</span> <span class="identifier">high</span> <span class="special">=</span> <span class="number">1</span><span class="special">,</span>
+<span class="identifier">size_t</span> <span class="identifier">seed</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">random_device</span><span class="special">{}());</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ArgumentContainer</span><span class="special">&gt;</span>
+<span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">ArgumentContainer</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+<span class="special">};</span>
+</pre>
+<p>
+        This policy initializes each element of x independently as:
+      </p>
+<pre class="programlisting"><span class="identifier">x</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">rdiff</span><span class="special">::</span><span class="identifier">rvar</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">U</span><span class="special">(</span><span class="identifier">low</span><span class="special">,</span> <span class="identifier">high</span><span class="special">))</span>
+</pre>
+<p>
+        using
+      </p>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">random</span><span class="special">::</span><span class="identifier">mt19937</span>
+</pre>
+<p>
+        and
+      </p>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">random</span><span class="special">::</span><span class="identifier">uniform_real_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;</span>
+</pre>
+<h5>
+<a name="math_toolkit.gd_opt.policies.h8"></a>
+        <span class="phrase"><a name="math_toolkit.gd_opt.policies.costant_initializer_rvar"></a></span><a class="link" href="policies.html#math_toolkit.gd_opt.policies.costant_initializer_rvar">costant_initializer_rvar</a>
+      </h5>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">costant_initializer_rvar</span>
+<span class="special">{</span>
+<span class="keyword">explicit</span> <span class="identifier">costant_initializer_rvar</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">v</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ArgumentContainer</span><span class="special">&gt;</span>
+<span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">ArgumentContainer</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+<span class="special">};</span>
+</pre>
+<p>
+        This policy initializes each element of x to the constant value v
+      </p>
+</div>
+<div class="copyright-footer">Copyright © 2006-2021 Nikhar Agrawal, Anton Bikineev, Matthew Borland,
+      Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno
+      Lalande, John Maddock, Evan Miller, Jeremy Murphy, Matthew Pulver, Johan Råde,
+      Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle
+      Walker, Xiaogang Zhang, and Maksym Zhelyeznyakov<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="minimize.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../gd_opt.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../../poly.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

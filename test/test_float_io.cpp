@@ -384,10 +384,10 @@ T generate_random()
       val += gen();
    }
    e_type e;
-   val = frexp(val, &e);
+   val = std::frexp(val, &e);
 
    static boost::random::uniform_int_distribution<e_type> ui(0, std::numeric_limits<T>::max_exponent - 10);
-   return ldexp(val, ui(gen));
+   return std::ldexp(val, ui(gen));
 }
 
 template <class T>

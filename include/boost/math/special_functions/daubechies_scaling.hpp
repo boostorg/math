@@ -8,6 +8,7 @@
 #ifndef BOOST_MATH_SPECIAL_DAUBECHIES_SCALING_HPP
 #define BOOST_MATH_SPECIAL_DAUBECHIES_SCALING_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
 #include <cstring>
 #include <cmath>
@@ -17,6 +18,7 @@
 #include <future>
 #include <iostream>
 #include <memory>
+#endif
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/filters/daubechies.hpp>
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
@@ -33,7 +35,7 @@
 
 namespace boost::math {
 
-template<class Real, int p, int order>
+BOOST_MATH_EXPORT template<class Real, int p, int order>
 std::vector<Real> daubechies_scaling_dyadic_grid(int64_t j_max)
 {
     using std::isnan;
@@ -101,50 +103,6 @@ std::vector<Real> daubechies_scaling_dyadic_grid(int64_t j_max)
 namespace detail {
 
 template<class RandomAccessContainer>
-class matched_holder {
-public:
-    using Real = typename RandomAccessContainer::value_type;
-
-    matched_holder(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements, Real x0) : x0_{x0}, y_{std::move(y)}, dy_{std::move(dydx)}
-    {
-        inv_h_ = (1 << grid_refinements);
-        Real h = 1/inv_h_;
-        for (auto & dy : dy_)
-        {
-            dy *= h;
-        }
-    }
-
-    inline Real operator()(Real x) const
-    {
-        using std::floor;
-        using std::sqrt;
-        // This is the exact Holder exponent, but it's pessimistic almost everywhere!
-        // It's only exactly right at dyadic rationals.
-        //Real const alpha = 2 - log(1+sqrt(Real(3)))/log(Real(2));
-        // We're gonna use alpha = 1/2, rather than 0.5500...
-        Real s = (x-x0_)*inv_h_;
-        Real ii = floor(s);
-        auto i = static_cast<decltype(y_.size())>(ii);
-        Real t = s - ii;
-        Real dphi = dy_[i+1];
-        Real diff = y_[i+1] - y_[i];
-        return y_[i] + (2*dphi - diff)*t + 2*sqrt(t)*(diff-dphi);
-    }
-
-    int64_t bytes() const
-    {
-        return 2*y_.size()*sizeof(Real) + sizeof(*this);
-    }
-
-private:
-    Real x0_;
-    Real inv_h_;
-    RandomAccessContainer y_;
-    RandomAccessContainer dy_;
-};
-
-template<class RandomAccessContainer>
 class matched_holder_aos {
 public:
     using Point = typename RandomAccessContainer::value_type;
@@ -186,50 +144,6 @@ private:
     RandomAccessContainer data_;
 };
 
-
-template<class RandomAccessContainer>
-class linear_interpolation {
-public:
-    using Real = typename RandomAccessContainer::value_type;
-
-    linear_interpolation(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements) : y_{std::move(y)}, dydx_{std::move(dydx)}
-    {
-        s_ = (1 << grid_refinements);
-    }
-
-    inline Real operator()(Real x) const
-    {
-        using std::floor;
-        Real y = x*s_;
-        Real k = floor(y);
-
-        int64_t kk = static_cast<int64_t>(k);
-        Real t = y - k;
-        return (1-t)*y_[kk] + t*y_[kk+1];
-    }
-
-    inline Real prime(Real x) const
-    {
-        using std::floor;
-
-        Real y = x*s_;
-        Real k = floor(y);
-
-        int64_t kk = static_cast<int64_t>(k);
-        Real t = y - k;
-        return static_cast<Real>((Real(1)-t)*dydx_[kk] + t*dydx_[kk+1]);
-    }
-
-    int64_t bytes() const
-    {
-        return (1 + y_.size() + dydx_.size())*sizeof(Real) + sizeof(y_) + sizeof(dydx_);
-    }
-
-private:
-    Real s_;
-    RandomAccessContainer y_;
-    RandomAccessContainer dydx_;
-};
 
 template<class RandomAccessContainer>
 class linear_interpolation_aos {
@@ -322,7 +236,7 @@ struct null_interpolator
 
 } // namespace detail
 
-template<class Real, int p>
+BOOST_MATH_EXPORT template<class Real, int p>
 class daubechies_scaling {
     //
     // Some type manipulation so we know the type of the interpolator, and the vector type it requires:

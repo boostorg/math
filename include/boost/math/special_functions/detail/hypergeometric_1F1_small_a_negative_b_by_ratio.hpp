@@ -8,7 +8,9 @@
 #ifndef BOOST_MATH_HYPERGEOMETRIC_1F1_SMALL_A_NEG_B_HPP
 #define BOOST_MATH_HYPERGEOMETRIC_1F1_SMALL_A_NEG_B_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
+#endif
 #include <boost/math/tools/recurrence.hpp>
 
   namespace boost { namespace math { namespace detail {

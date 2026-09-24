@@ -9,11 +9,16 @@
 #  pragma clang diagnostic ignored "-Wliteral-range"
 #elif defined(__GNUC__)
 #  pragma GCC diagnostic push 
-#  pragma GCC diagnostic ignored "-Wliteral-range"
+#  pragma GCC diagnostic ignored "-Woverflow"
 #endif
 
 #define BOOST_TEST_MAIN
 #define BOOST_TEST_MODULE StatsMapAiryTest
+
+#ifdef BOOST_MATH_ENABLE_SYCL
+#include "sycl/sycl.hpp"
+#endif
+
 #include <boost/math/tools/config.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -34,7 +39,7 @@ using boost::multiprecision::cpp_bin_float_quad;
 template<class RealType, int N>
 void do_test_mapairy_pdf(){
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -266,7 +271,7 @@ void do_test_mapairy_pdf(){
 template<class RealType, int N>
 void do_test_mapairy_cdf() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -391,7 +396,7 @@ void do_test_mapairy_cdf() {
 template<class RealType, int N>
 void do_test_mapairy_ccdf() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -585,7 +590,7 @@ void do_test_mapairy_ccdf() {
 template<class RealType, int N>
 void do_test_mapairy_quantile_nearzero() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -634,7 +639,7 @@ void do_test_mapairy_quantile_nearzero() {
 template<class RealType, int N>
 void do_test_mapairy_quantile_lower() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -705,7 +710,7 @@ void do_test_mapairy_quantile_lower() {
 template<class RealType, int N>
 void do_test_mapairy_quantile_upper() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
     BOOST_MATH_STD_USING
@@ -767,7 +772,7 @@ void do_test_mapairy_quantile_upper() {
 template<class RealType, int N>
 void do_test_mapairy_locscale_param() {
     //
-    // Basic sanity checks, tolerance is either 3 epsilon
+    // Basic sanity checks, tolerance is 3 epsilon
     // expressed as a percentage:
     //
 

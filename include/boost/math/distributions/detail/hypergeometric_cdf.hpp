@@ -10,7 +10,9 @@
 
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/distributions/detail/hypergeometric_pdf.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
+#endif
 
 namespace boost{ namespace math{ namespace detail{
 

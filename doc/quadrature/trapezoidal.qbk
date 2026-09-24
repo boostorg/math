@@ -25,6 +25,36 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
     }}} // namespaces
 
+[heading Vector- and matrix-valued integrands]
+
+An additional overload accepts an explicit zero value and scalar norm:
+
+    template<class F, class Real, class Norm>
+    auto trapezoidal(F f, Real a, Real b, const decltype(f(a))& zero, Norm norm,
+        Real tol = boost::math::tools::root_epsilon<Real>(),
+        std::size_t max_refinements = 12,
+        Real* error_estimate = nullptr, Real* L1 = nullptr) -> decltype(f(a));
+
+A policy overload accepts the same arguments without defaults, followed by
+`const Policy& pol`. These overloads participate only if `norm(f(a))` can be
+explicitly converted to `Real`. Existing overloads remain unchanged.
+
+Return a concrete owning vector or matrix, with dimensions matching `zero`.
+The value type needs addition, addition assignment, unary negation, and scalar
+multiplication. The supplied norm controls the successive-estimate error and
+L1 integral, so tolerance is measured against `tol * L1`, not independently for
+each entry. For an Eigen matrix, a typical norm is
+`[](const Matrix& m) { return m.norm(); }`.
+
+    Matrix result = boost::math::quadrature::trapezoidal(
+        f, a, b, zero, norm, 1e-10);
+
+Equal bounds return `zero` and set requested error and L1 outputs to zero without
+calling `f`. Reversed bounds negate the integral and preserve nonnegative error
+and L1 estimates. Invalid bounds invoke the scalar domain-error policy; if it
+returns, the result is `zero` multiplied by its scalar error value, and requested
+error and L1 outputs receive that value.
+
 [heading Description]
 
 The functional `trapezoidal` calculates the integral of a function /f/ using the surprisingly simple trapezoidal rule.

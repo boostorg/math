@@ -7,16 +7,21 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_QUINTIC_HERMITE_HPP
 #define BOOST_MATH_INTERPOLATORS_QUINTIC_HERMITE_HPP
+
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <stdexcept>
 #include <memory>
+#include <cstdint>
+#endif
 #include <boost/math/interpolators/detail/quintic_hermite_detail.hpp>
 
 namespace boost {
 namespace math {
 namespace interpolators {
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class quintic_hermite {
 public:
     using Real = typename RandomAccessContainer::value_type;
@@ -50,7 +55,7 @@ public:
         impl_->push_back(x, y, dydx, d2ydx2);
     }
 
-    int64_t bytes() const
+    std::int64_t bytes() const
     {
         return impl_->bytes() + sizeof(impl_);
     }
@@ -64,7 +69,7 @@ private:
     std::shared_ptr<detail::quintic_hermite_detail<RandomAccessContainer>> impl_;
 };
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class cardinal_quintic_hermite {
 public:
     using Real = typename RandomAccessContainer::value_type;
@@ -85,7 +90,7 @@ public:
         return impl_->double_prime(x);
     }
 
-    int64_t bytes() const
+    std::int64_t bytes() const
     {
         return impl_->bytes() + sizeof(impl_);
     }
@@ -99,7 +104,7 @@ private:
     std::shared_ptr<detail::cardinal_quintic_hermite_detail<RandomAccessContainer>> impl_;
 };
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class cardinal_quintic_hermite_aos {
 public:
     using Point = typename RandomAccessContainer::value_type;
@@ -123,7 +128,7 @@ public:
         return impl_->double_prime(x);
     }
 
-    int64_t bytes() const
+    std::int64_t bytes() const
     {
         return impl_->bytes() + sizeof(impl_);
     }

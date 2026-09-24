@@ -8,11 +8,17 @@
 // Constants are too big for float case, but this doesn't matter for test.
 #endif
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp>
+#endif
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/heuman_lambda.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
@@ -71,5 +77,17 @@ void test_spots(T, const char* type_name)
 #include "heuman_lambda_data.ipp"
 
     do_test_heuman_lambda<T>(heuman_lambda_data, type_name, "Elliptic Integral Heuman Lambda: Random Data");
+
+    //
+    // Special cases for coverage:
+    //
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+    BOOST_CHECK_THROW(boost::math::heuman_lambda(T(1.1), T(0.5)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::heuman_lambda(static_cast<T>(1e-100), T(2.5)), std::domain_error);
+#else
+    BOOST_CHECK((boost::math::isnan)(boost::math::heuman_lambda(T(1.1), T(0.5))));
+    BOOST_CHECK((boost::math::isnan)(boost::math::heuman_lambda(static_cast<T>(1e-100), T(2.5))));
+#endif
+
 }
 

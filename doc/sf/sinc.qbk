@@ -43,16 +43,16 @@ and [@http://mathworld.wolfram.com/Octonion.html octonions].
 ``
 
    template<class T> 
-   ``__sf_result`` sinc_pi(const T x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` sinc_pi(const T x);
 
    template<class T, class ``__Policy``> 
-   ``__sf_result`` sinc_pi(const T x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` sinc_pi(const T x, const ``__Policy``&);
 
    template<class T, template<typename> class U> 
-   U<T> sinc_pi(const U<T> x);
+   BOOST_MATH_GPU_ENABLED U<T> sinc_pi(const U<T> x);
 
    template<class T, template<typename> class U, class ``__Policy``> 
-   U<T> sinc_pi(const U<T> x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED U<T> sinc_pi(const U<T> x, const ``__Policy``&);
 
 Computes 
 [link math_toolkit.sinc.sinc_overview 
@@ -78,10 +78,10 @@ to ensure accuracy.
 ``
 
    template<class T> 
-   ``__sf_result`` sinhc_pi(const T x);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` sinhc_pi(const T x);
 
    template<class T, class ``__Policy``> 
-   ``__sf_result`` sinhc_pi(const T x, const ``__Policy``&);
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` sinhc_pi(const T x, const ``__Policy``&);
 
    template<typename T, template<typename> class U> 
    U<T> sinhc_pi(const U<T> x);

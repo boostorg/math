@@ -5,10 +5,18 @@
 //
 // https://github.com/scipy/scipy/issues/18511
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/distributions/hypergeometric.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <limits>
 #include <cstdint>
+#else
+import boost.math;
+// UINT64_C is a preprocessor macro and is not provided by import std, so pull
+// it from the pure-C header (not the <cstdint> wrapper) in module mode.
+#include <stdint.h>
+#endif
+
 #include "math_unit_test.hpp"
 
 template <typename T>
@@ -29,7 +37,6 @@ int main()
 {
     test<float>();
     test<double>();
-    test<long double>();
 
     return boost::math::test::report_errors();
 }

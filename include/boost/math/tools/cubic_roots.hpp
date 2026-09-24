@@ -4,12 +4,36 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #ifndef BOOST_MATH_TOOLS_CUBIC_ROOTS_HPP
 #define BOOST_MATH_TOOLS_CUBIC_ROOTS_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <array>
+#endif
+#include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/roots.hpp>
 
 namespace boost::math::tools {
+
+namespace detail {
+
+// Orders finite roots ascending and moves NaN entries to the back.
+// Sorting NaNs is UB when using vanilla operator< (comparisons to NaN are always false),
+// so we need to provide our own sort function that pushes NaN to the end
+template <typename Real>
+bool roots_less(const Real& lhs, const Real& rhs)
+{
+    if ((boost::math::isnan)(lhs))
+    {
+        return false;
+    }
+    if ((boost::math::isnan)(rhs))
+    {
+        return true;
+    }
+    return lhs < rhs;
+}
+
+} // namespace detail
 
 // Solves ax^3 + bx^2 + cx + d = 0.
 // Only returns the real roots, as types get weird for real coefficients and
@@ -17,7 +41,7 @@ namespace boost::math::tools {
 // algorithm apparently exists: Algorithm 954: An Accurate and Efficient Cubic
 // and Quartic Equation Solver for Physical Applications However, I don't have
 // access to that paper!
-template <typename Real>
+BOOST_MATH_EXPORT template <typename Real>
 std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
     using std::abs;
     using std::acos;
@@ -55,7 +79,7 @@ std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
         roots[0] = x0;
         roots[1] = x1;
         roots[2] = 0;
-        std::sort(roots.begin(), roots.end());
+        std::sort(roots.begin(), roots.end(), detail::roots_less<Real>);
         return roots;
     }
     Real p = b / a;
@@ -115,7 +139,7 @@ std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
             }
         }
     }
-    std::sort(roots.begin(), roots.end());
+    std::sort(roots.begin(), roots.end(), detail::roots_less<Real>);
     return roots;
 }
 
@@ -123,7 +147,7 @@ std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
 // eps*|rp'(r)| (second element) for a root. Recall that for a numerically
 // computed root r satisfying r = r_0(1+eps) of a function p, |p(r)| <=
 // eps|rp'(r)|.
-template <typename Real>
+BOOST_MATH_EXPORT template <typename Real>
 std::array<Real, 2> cubic_root_residual(Real a, Real b, Real c, Real d,
                                         Real root) {
     using std::abs;
@@ -150,7 +174,7 @@ std::array<Real, 2> cubic_root_residual(Real a, Real b, Real c, Real d,
 
 // Computes the condition number of rootfinding. This is defined in Corless, A
 // Graduate Introduction to Numerical Methods, Section 3.2.1.
-template <typename Real>
+BOOST_MATH_EXPORT template <typename Real>
 Real cubic_root_condition_number(Real a, Real b, Real c, Real d, Real root) {
     using std::abs;
     using std::fma;

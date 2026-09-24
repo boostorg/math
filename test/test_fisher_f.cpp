@@ -8,9 +8,17 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/tools/test.hpp>
+#ifdef BOOST_MATH_ENABLE_SYCL
+#include "sycl/sycl.hpp"
+#endif
+
+#include <boost/math/tools/config.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 using ::boost::math::concepts::real_concept;
+#endif
 
 #include <boost/math/distributions/fisher_f.hpp> // for fisher_f_distribution
 using boost::math::fisher_f_distribution;
@@ -405,7 +413,35 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE(
        kurtosis(dist2)
        , static_cast<RealType>(6272) * 12 / 3456 + 3, tol2);
-    // special cases:
+    
+    if (!std::is_same<RealType, boost::math::concepts::real_concept>::value)
+    {
+      RealType df1 = 10;
+      RealType df2 = 2;
+      RealType x = 6;
+      RealType P = cdf(fisher_f_distribution<RealType>(df1, df2), x);
+      BOOST_CHECK_CLOSE(fisher_f_distribution<RealType>::find_v2(x, df1, P), df2, tol2*10);
+      BOOST_CHECK_CLOSE(fisher_f_distribution<RealType>::find_v1(x, df2, P), df1, tol2*200);
+      BOOST_CHECK_CLOSE(fisher_f_distribution<RealType>::find_v1(boost::math::complement(x, df2, 1-P)), df1, tol2*200);
+      BOOST_CHECK_CLOSE(fisher_f_distribution<RealType>::find_v2(boost::math::complement(x, df1, 1-P)), df2, tol2*10);
+    }
+    // Test case where two df solve inversion problem
+    RealType df1 = 5;
+    RealType df2 = 3.5;
+    x = 3.51; 
+    RealType P = cdf(fisher_f_distribution<RealType>(df1, df2), x);
+    BOOST_MATH_CHECK_THROW(fisher_f_distribution<RealType>::find_v1(x, df2, P), boost::math::evaluation_error);
+    BOOST_MATH_CHECK_THROW(fisher_f_distribution<RealType>::find_v1(boost::math::complement(x, df2, 1-P)), boost::math::evaluation_error);
+   
+    df1 = 6;
+    df2 = 4;
+    x = 0.5;
+    P = cdf(fisher_f_distribution<RealType>(df1, df2), x);
+    BOOST_MATH_CHECK_THROW(fisher_f_distribution<RealType>::find_v2(x, df1, P), boost::math::evaluation_error);
+    BOOST_MATH_CHECK_THROW(fisher_f_distribution<RealType>::find_v2(boost::math::complement(x, df1, P)), boost::math::evaluation_error);
+
+
+      // special cases:
     BOOST_MATH_CHECK_THROW(
        pdf(
           fisher_f_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1)),

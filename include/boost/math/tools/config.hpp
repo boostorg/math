@@ -11,7 +11,37 @@
 #pragma once
 #endif
 
-#ifndef __CUDACC_RTC__
+// C++20 named module support.
+// BOOST_MATH_BUILD_MODULE is defined when building or consuming the boost.math
+// module (module/math.cppm and the module test harness). BOOST_MATH_EXPORT marks
+// every public entity and expands to nothing in ordinary header builds.
+// BOOST_MATH_TEST_EXPORT additionally exports detail entities exercised by the
+// module test suite, and only when the module is built with
+// BOOST_MATH_EXPORT_TESTING. BOOST_MATH_INTERFACE_UNIT is defined only by
+// module/math.cppm itself and guards entities that a module consumer must
+// receive from the import rather than redeclare.
+#ifdef BOOST_MATH_BUILD_MODULE
+
+#if !defined(__cpp_inline_variables) || (__cpp_inline_variables < 201606L)
+#  error "Building the boost.math module requires inline variable support (C++17 or later)"
+#endif
+
+#define BOOST_MATH_EXPORT export
+
+#ifdef BOOST_MATH_EXPORT_TESTING
+#  define BOOST_MATH_TEST_EXPORT export
+#else
+#  define BOOST_MATH_TEST_EXPORT
+#endif
+
+#else
+
+#define BOOST_MATH_EXPORT
+#define BOOST_MATH_TEST_EXPORT
+
+#endif
+
+#if !(defined(__CUDACC_RTC__) && defined(BOOST_MATH_ENABLE_NVRTC))
 
 #include <boost/math/tools/is_standalone.hpp>
 
@@ -84,6 +114,10 @@
 
 #else // Things from boost/config that are required, and easy to replicate
 
+#if !defined(BOOST_MATH_BUILD_MODULE) && __has_include(<version>)
+#include <version>
+#endif
+
 #define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION
 #define BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #define BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS
@@ -92,19 +126,19 @@
 // Since Boost.Multiprecision is in active development some tests do not fully cooperate yet.
 #define BOOST_MATH_NO_MP_TESTS
 
-#if (__cplusplus > 201400L || _MSVC_LANG > 201400L)
+#if ((__cplusplus > 201400L) || (defined(_MSVC_LANG) && (_MSVC_LANG > 201400L)))
 #define BOOST_MATH_CXX14_CONSTEXPR constexpr
 #else
 #define BOOST_MATH_CXX14_CONSTEXPR
 #define BOOST_MATH_NO_CXX14_CONSTEXPR
 #endif // BOOST_MATH_CXX14_CONSTEXPR
 
-#if (__cplusplus > 201700L || _MSVC_LANG > 201700L)
+#if ((__cplusplus > 201700L) || (defined(_MSVC_LANG) && (_MSVC_LANG > 201700L)))
 #define BOOST_MATH_IF_CONSTEXPR if constexpr
 
-// Clang on mac provides the execution header with none of the functionality. TODO: Check back on this
+// libc++ currently provides the execution header with none of the functionality.
 // https://en.cppreference.com/w/cpp/compiler_support "Standardization of Parallelism TS"
-#  if !__has_include(<execution>) || (defined(__APPLE__) && defined(__clang__))
+#  if !__has_include(<execution>) || !defined(__cpp_lib_execution) || (__cpp_lib_execution < 201603L)
 #  define BOOST_MATH_NO_CXX17_HDR_EXECUTION
 #  endif
 #else
@@ -113,7 +147,7 @@
 #  define BOOST_MATH_NO_CXX17_HDR_EXECUTION
 #endif
 
-#if __cpp_lib_gcd_lcm >= 201606L
+#if (defined(__cpp_lib_gcd_lcm) && (__cpp_lib_gcd_lcm >= 201606L))
 #define BOOST_MATH_HAS_CXX17_NUMERIC
 #endif
 
@@ -147,8 +181,13 @@
    //
    // Make sure we have some std lib headers included so we can detect __GXX_RTTI:
    //
-#  include <algorithm>  // for min and max
-#  include <limits>
+   // A module build receives these through import std; the module unit stages what
+   // its global module fragment needs. Textual inclusion after an import trips a
+   // clang concept-merge bug, so skip it here.
+#  ifndef BOOST_MATH_BUILD_MODULE
+#     include <algorithm>  // for min and max
+#     include <limits>
+#  endif
 #  ifndef __GXX_RTTI
 #     ifndef BOOST_MATH_NO_TYPEID
 #        define BOOST_MATH_NO_TYPEID
@@ -164,7 +203,7 @@
 #    define BOOST_MATH_NOINLINE __declspec(noinline)
 #  elif defined(__GNUC__) && __GNUC__ > 3
      // Clang also defines __GNUC__ (as 4)
-#    if defined(__CUDACC__)
+#    if defined(__CUDACC__) && defined(BOOST_MATH_ENABLE_CUDA)
        // nvcc doesn't always parse __noinline__,
        // see: https://svn.boost.org/trac/boost/ticket/9392
 #      define BOOST_MATH_NOINLINE __attribute__ ((noinline))
@@ -200,7 +239,7 @@
 
 // C++23
 #if __cplusplus > 202002L || (defined(_MSVC_LANG) &&_MSVC_LANG > 202002L)
-#  if __GNUC__ >= 13
+#  if !defined(BOOST_MATH_BUILD_MODULE) && defined(__GNUC__) && __GNUC__ >= 13
      // libstdc++3 only defines to/from_chars for std::float128_t when one of these defines are set
      // otherwise we're right out of luck...
 #    if defined(_GLIBCXX_LDOUBLE_IS_IEEE_BINARY128) || defined(_GLIBCXX_HAVE_FLOAT128_MATH)
@@ -212,18 +251,24 @@
 #  endif
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>  // for min and max
 #include <limits>
 #include <cmath>
 #include <climits>
 #include <cfloat>
+#endif
 
 #include <boost/math/tools/user.hpp>
 
-#if (defined(__NetBSD__) || defined(__EMSCRIPTEN__)\
+#if (defined(__NetBSD__)\
    || (defined(__hppa) && !defined(__OpenBSD__)) || (defined(__NO_LONG_DOUBLE_MATH) && (DBL_MANT_DIG != LDBL_MANT_DIG))) \
    && !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
 //#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#endif
+
+#if defined(__EMSCRIPTEN__) && !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
+#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
 
 #ifdef __IBMCPP__
@@ -430,7 +475,9 @@ struct non_type {};
 //
 // noexcept support:
 //
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
+#endif
 #define BOOST_MATH_NOEXCEPT(T) noexcept(std::is_floating_point<T>::value)
 #define BOOST_MATH_IS_FLOAT(T) (std::is_floating_point<T>::value)
 
@@ -465,7 +512,7 @@ struct non_type {};
 #if defined(BOOST_MATH_STANDALONE) && defined(_GLIBCXX_USE_FLOAT128) && defined(__GNUC__) && defined(__GNUC_MINOR__) && defined(__GNUC_PATCHLEVEL__) && !defined(__STRICT_ANSI__) \
    && !defined(BOOST_MATH_DISABLE_FLOAT128) && !defined(BOOST_MATH_USE_FLOAT128)
 #  define BOOST_MATH_USE_FLOAT128
-#elif defined(BOOST_HAS_FLOAT128) && !defined(BOOST_MATH_USE_FLOAT128)
+#elif defined(BOOST_HAS_FLOAT128) && !defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_MATH_DISABLE_FLOAT128)
 #  define BOOST_MATH_USE_FLOAT128
 #endif
 #ifdef BOOST_MATH_USE_FLOAT128
@@ -530,6 +577,7 @@ struct non_type {};
 
 #define BOOST_MATH_STD_USING BOOST_MATH_STD_USING_CORE
 
+#if !defined(BOOST_MATH_BUILD_MODULE) || defined(BOOST_MATH_INTERFACE_UNIT)
 namespace boost{ namespace math{
 namespace tools
 {
@@ -564,6 +612,7 @@ struct is_integer_for_rounding
 }
 
 }} // namespace boost namespace math
+#endif
 
 #ifdef __GLIBC_PREREQ
 #  if __GLIBC_PREREQ(2,14)
@@ -579,7 +628,9 @@ struct is_integer_for_rounding
 // Much more information in this message thread: https://groups.google.com/forum/#!topic/boost-list/ZT99wtIFlb4
 //
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cfenv>
+#endif
 
 #  ifdef FE_ALL_EXCEPT
 
@@ -619,7 +670,7 @@ namespace boost{ namespace math{
 #  define BOOST_MATH_INSTRUMENT_FPU
 #endif
 
-#ifdef BOOST_MATH_INSTRUMENT
+#if defined(BOOST_MATH_INSTRUMENT) && !defined(BOOST_MATH_BUILD_MODULE)
 
 #  include <iostream>
 #  include <iomanip>
@@ -649,7 +700,9 @@ namespace boost{ namespace math{
 // Some mingw flavours have issues with thread_local and types with non-trivial destructors
 // See https://sourceforge.net/p/mingw-w64/bugs/527/
 //
-#if (defined(__MINGW32__) && (__GNUC__ < 9) && !defined(__clang__))
+// When running windows-2022 or 2025 we see this issue again with GCC 12 and 14
+//
+#if (defined(__MINGW32__) && ((__GNUC__ < 9) || (__GNUC__ >= 12)) && !defined(__clang__))
 #  define BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
 #endif
 
@@ -668,7 +721,7 @@ namespace boost{ namespace math{
 // CUDA support:
 //
 
-#ifdef __CUDACC__
+#if defined(__CUDACC__) && defined(BOOST_MATH_ENABLE_CUDA)
 
 // We have to get our include order correct otherwise you get compilation failures
 #include <cuda.h>
@@ -677,6 +730,8 @@ namespace boost{ namespace math{
 #include <cuda/std/utility>
 #include <cuda/std/cstdint>
 #include <cuda/std/array>
+#include <cuda/std/tuple>
+#include <cuda/std/complex>
 
 #  define BOOST_MATH_CUDA_ENABLED __host__ __device__
 #  define BOOST_MATH_HAS_GPU_SUPPORT
@@ -694,14 +749,10 @@ namespace boost{ namespace math{
 #  undef BOOST_MATH_FORCEINLINE
 #  define BOOST_MATH_FORCEINLINE __forceinline__
 
-#elif defined(SYCL_LANGUAGE_VERSION)
+#elif defined(BOOST_MATH_ENABLE_SYCL)
 
 #  define BOOST_MATH_SYCL_ENABLED SYCL_EXTERNAL
 #  define BOOST_MATH_HAS_GPU_SUPPORT
-
-#  ifndef BOOST_MATH_ENABLE_SYCL
-#    define BOOST_MATH_ENABLE_SYCL
-#  endif
 
 #  ifndef BOOST_MATH_NO_EXCEPTIONS
 #    define BOOST_MATH_NO_EXCEPTIONS
@@ -748,6 +799,13 @@ BOOST_MATH_GPU_ENABLED constexpr T gpu_safe_max(const T& a, const T& b) { return
 
 #endif
 
+// Native 128-bit integer support (GCC, Clang, Intel, nvcc with a GCC host).
+// Boost.Config's BOOST_HAS_INT128 is unavailable in standalone mode, so test the
+// compiler macro directly. Define BOOST_MATH_NO_INT128 to force the portable paths.
+#if defined(__SIZEOF_INT128__) && !defined(BOOST_MATH_NO_INT128)
+#  define BOOST_MATH_HAS_INT128
+#endif
+
 // Static variables are not allowed with CUDA or C++20 modules
 // See if we can inline them instead
 
@@ -766,7 +824,7 @@ BOOST_MATH_GPU_ENABLED constexpr T gpu_safe_max(const T& a, const T& b) { return
 #    define BOOST_MATH_STATIC_LOCAL_VARIABLE
 #  else
 #    define BOOST_MATH_INLINE_CONSTEXPR constexpr
-#    define BOOST_MATH_STATIC constexpr
+#    define BOOST_MATH_STATIC static
 #    define BOOST_MATH_STATIC_LOCAL_VARIABLE static
 #  endif
 #endif
@@ -788,6 +846,7 @@ BOOST_MATH_GPU_ENABLED constexpr T gpu_safe_max(const T& a, const T& b) { return
 #define BOOST_MATH_HAS_GPU_SUPPORT
 
 #define BOOST_MATH_GPU_ENABLED __host__ __device__
+#define BOOST_MATH_CUDA_ENABLED __host__ __device__
 
 #define BOOST_MATH_STATIC static
 #define BOOST_MATH_STATIC_LOCAL_VARIABLE
@@ -799,9 +858,11 @@ BOOST_MATH_GPU_ENABLED constexpr T gpu_safe_max(const T& a, const T& b) { return
 #define BOOST_MATH_BIG_CONSTANT(T, N, V) static_cast<T>(V)
 #define BOOST_MATH_FORCEINLINE __forceinline__
 #define BOOST_MATH_STD_USING  
-#define BOOST_MATH_IF_CONSTEXPR if constexpr
+#define BOOST_MATH_IF_CONSTEXPR if
 #define BOOST_MATH_IS_FLOAT(T) (boost::math::is_floating_point<T>::value)
 #define BOOST_MATH_CONSTEXPR_TABLE_FUNCTION constexpr
+#define BOOST_MATH_NO_EXCEPTIONS
+#define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION 
 
 // This should be defined to nothing but since it is not specifically a math macro
 // we need to undef before proceeding

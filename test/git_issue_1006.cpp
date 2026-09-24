@@ -3,10 +3,23 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/distributions/beta.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
+
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cfenv>
 #include <iostream>
-#include <boost/math/distributions/beta.hpp>
+#endif
+
+// FE_* macros require a textual <cfenv>/<fenv.h>; on libstdc++ that wrapper pulls
+// bits/c++config.h, which redefines std entities import std already provides. The
+// fp-exception check is diagnostic, so it is a no-op in a module build.
+#ifndef BOOST_MATH_BUILD_MODULE
 
 #pragma STDC FENV_ACCESS ON
 
@@ -40,6 +53,9 @@ void show_fpexcept_flags()
 
    std::feclearexcept(FE_ALL_EXCEPT);
 }
+#else
+void show_fpexcept_flags() {}
+#endif
 
 int main()
 {

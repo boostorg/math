@@ -10,9 +10,11 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
 #include <vector>
 #include <type_traits>
+#endif
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/tools/roots.hpp>
@@ -23,7 +25,7 @@ namespace boost{
 namespace math{
 
 // Recurrence relation for legendre P and Q polynomials:
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type
    legendre_next(unsigned l, T1 x, T2 Pl, T3 Plm1)
 {
@@ -40,10 +42,7 @@ T legendre_imp(unsigned l, T x, const Policy& pol, bool second = false)
    static const char* function = "boost::math::legrendre_p<%1%>(unsigned, %1%)";
    // Error handling:
    if((x < -1) || (x > 1))
-      return policies::raise_domain_error<T>(
-         function,
-         "The Legendre Polynomial is defined for"
-         " -1 <= x <= 1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<T>(function, "The Legendre Polynomial is defined for -1 <= x <= 1, but got x = %1%.", x, pol);
 
    T p0, p1;
    if(second)
@@ -73,28 +72,16 @@ T legendre_imp(unsigned l, T x, const Policy& pol, bool second = false)
 }
 
 template <class T, class Policy>
-T legendre_p_prime_imp(unsigned l, T x, const Policy& pol, T* Pn 
-#ifdef BOOST_NO_CXX11_NULLPTR
-   = 0
-#else
-   = nullptr
-#endif
-)
+T legendre_p_prime_imp(unsigned l, T x, const Policy& pol, T* Pn = nullptr)
 {
    static const char* function = "boost::math::legrendre_p_prime<%1%>(unsigned, %1%)";
    // Error handling:
    if ((x < -1) || (x > 1))
-      return policies::raise_domain_error<T>(
-         function,
-         "The Legendre Polynomial is defined for"
-         " -1 <= x <= 1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<T>(function, "The Legendre Polynomial is defined for -1 <= x <= 1, but got x = %1%.", x, pol);
    
    if (l == 0)
     {
-        if (Pn)
-        {
-           *Pn = 1;
-        }
+        BOOST_MATH_ASSERT(Pn == nullptr); // There are no zeros of P_0 so we shoud never call this with l = 0 and Pn non-null.
         return 0;
     }
     T p0 = 1;
@@ -218,11 +205,11 @@ std::vector<T> legendre_p_zeros_imp(int n, const Policy& pol)
         ++k;
     }
     return zeros;
-}
+}  // LCOV_EXCL_LINE
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline typename std::enable_if<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
    legendre_p(int l, T x, const Policy& pol)
 {
@@ -235,7 +222,7 @@ inline typename std::enable_if<policies::is_policy<Policy>::value, typename tool
 }
 
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline typename std::enable_if<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
    legendre_p_prime(int l, T x, const Policy& pol)
 {
@@ -247,21 +234,21 @@ inline typename std::enable_if<policies::is_policy<Policy>::value, typename tool
    return policies::checked_narrowing_cast<result_type, Policy>(detail::legendre_p_prime_imp(l, static_cast<value_type>(x), pol), function);
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline typename tools::promote_args<T>::type
    legendre_p(int l, T x)
 {
    return boost::math::legendre_p(l, x, policies::policy<>());
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline typename tools::promote_args<T>::type
    legendre_p_prime(int l, T x)
 {
    return boost::math::legendre_p_prime(l, x, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline std::vector<T> legendre_p_zeros(int l, const Policy& pol)
 {
     if(l < 0)
@@ -271,13 +258,13 @@ inline std::vector<T> legendre_p_zeros(int l, const Policy& pol)
 }
 
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline std::vector<T> legendre_p_zeros(int l)
 {
    return boost::math::legendre_p_zeros<T>(l, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline typename std::enable_if<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
    legendre_q(unsigned l, T x, const Policy& pol)
 {
@@ -286,7 +273,7 @@ inline typename std::enable_if<policies::is_policy<Policy>::value, typename tool
    return policies::checked_narrowing_cast<result_type, Policy>(detail::legendre_imp(l, static_cast<value_type>(x), pol, true), "boost::math::legendre_q<%1%>(unsigned, %1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline typename tools::promote_args<T>::type
    legendre_q(unsigned l, T x)
 {
@@ -294,7 +281,7 @@ inline typename tools::promote_args<T>::type
 }
 
 // Recurrence for associated polynomials:
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type
    legendre_next(unsigned l, unsigned m, T1 x, T2 Pl, T3 Plm1)
 {
@@ -310,10 +297,7 @@ T legendre_p_imp(int l, int m, T x, T sin_theta_power, const Policy& pol)
    BOOST_MATH_STD_USING
    // Error handling:
    if((x < -1) || (x > 1))
-      return policies::raise_domain_error<T>(
-      "boost::math::legendre_p<%1%>(int, int, %1%)",
-         "The associated Legendre Polynomial is defined for"
-         " -1 <= x <= 1, but got x = %1%.", x, pol);
+      return policies::raise_domain_error<T>("boost::math::legendre_p<%1%>(int, int, %1%)", "The associated Legendre Polynomial is defined for -1 <= x <= 1, but got x = %1%.", x, pol);
    // Handle negative arguments first:
    if(l < 0)
       return legendre_p_imp(-l-1, m, x, sin_theta_power, pol);
@@ -370,7 +354,7 @@ inline T legendre_p_imp(int l, int m, T x, const Policy& pol)
 
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type
    legendre_p(int l, int m, T x, const Policy& pol)
 {
@@ -379,7 +363,7 @@ inline typename tools::promote_args<T>::type
    return policies::checked_narrowing_cast<result_type, Policy>(detail::legendre_p_imp(l, m, static_cast<value_type>(x), pol), "boost::math::legendre_p<%1%>(int, int, %1%)");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline typename tools::promote_args<T>::type
    legendre_p(int l, int m, T x)
 {

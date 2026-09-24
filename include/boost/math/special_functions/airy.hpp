@@ -1,4 +1,5 @@
 // Copyright John Maddock 2012.
+// Copyright Matt Borland 2024.
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -7,19 +8,24 @@
 #ifndef BOOST_MATH_AIRY_HPP
 #define BOOST_MATH_AIRY_HPP
 
-#include <limits>
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/numeric_limits.hpp>
+#include <boost/math/tools/precision.hpp>
+#include <boost/math/tools/cstdint.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/cbrt.hpp>
 #include <boost/math/special_functions/detail/airy_ai_bi_zero.hpp>
 #include <boost/math/tools/roots.hpp>
+#include <boost/math/policies/error_handling.hpp>
+#include <boost/math/constants/constants.hpp>
 
 namespace boost{ namespace math{
 
 namespace detail{
 
 template <class T, class Policy>
-T airy_ai_imp(T x, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T airy_ai_imp(T x, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
@@ -57,7 +63,7 @@ T airy_ai_imp(T x, const Policy& pol)
 }
 
 template <class T, class Policy>
-T airy_bi_imp(T x, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T airy_bi_imp(T x, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
@@ -90,7 +96,7 @@ T airy_bi_imp(T x, const Policy& pol)
 }
 
 template <class T, class Policy>
-T airy_ai_prime_imp(T x, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T airy_ai_prime_imp(T x, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
@@ -125,7 +131,7 @@ T airy_ai_prime_imp(T x, const Policy& pol)
 }
 
 template <class T, class Policy>
-T airy_bi_prime_imp(T x, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T airy_bi_prime_imp(T x, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
@@ -156,7 +162,7 @@ T airy_bi_prime_imp(T x, const Policy& pol)
 }
 
 template <class T, class Policy>
-T airy_ai_zero_imp(int m, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T airy_ai_zero_imp(int m, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names, needed for log, sqrt.
 
@@ -181,7 +187,7 @@ T airy_ai_zero_imp(int m, const Policy& pol)
    // of decimal digits in the numeric type T, being at least 12.
    const int my_digits10 = static_cast<int>(static_cast<float>(policies::digits<T, Policy>() * 0.301F));
 
-   const std::uintmax_t iterations_allowed = static_cast<std::uintmax_t>((std::max)(12, my_digits10 * 2));
+   const std::uintmax_t iterations_allowed = static_cast<std::uintmax_t>(BOOST_MATH_GPU_SAFE_MAX(12, my_digits10 * 2));
 
    std::uintmax_t iterations_used = iterations_allowed;
 
@@ -209,7 +215,7 @@ T airy_ai_zero_imp(int m, const Policy& pol)
 }
 
 template <class T, class Policy>
-T airy_bi_zero_imp(int m, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T airy_bi_zero_imp(int m, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names, needed for log, sqrt.
 
@@ -233,7 +239,7 @@ T airy_bi_zero_imp(int m, const Policy& pol)
    // of decimal digits in the numeric type T, being at least 12.
    const int my_digits10 = static_cast<int>(static_cast<float>(policies::digits<T, Policy>() * 0.301F));
 
-   const std::uintmax_t iterations_allowed = static_cast<std::uintmax_t>((std::max)(12, my_digits10 * 2));
+   const std::uintmax_t iterations_allowed = static_cast<std::uintmax_t>(BOOST_MATH_GPU_SAFE_MAX(12, my_digits10 * 2));
 
    std::uintmax_t iterations_used = iterations_allowed;
 
@@ -262,8 +268,8 @@ T airy_bi_zero_imp(int m, const Policy& pol)
 
 } // namespace detail
 
-template <class T, class Policy>
-inline typename tools::promote_args<T>::type airy_ai(T x, const Policy&)
+BOOST_MATH_EXPORT template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type airy_ai(T x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T>::type result_type;
@@ -278,14 +284,14 @@ inline typename tools::promote_args<T>::type airy_ai(T x, const Policy&)
    return policies::checked_narrowing_cast<result_type, Policy>(detail::airy_ai_imp<value_type>(static_cast<value_type>(x), forwarding_policy()), "boost::math::airy<%1%>(%1%)");
 }
 
-template <class T>
-inline typename tools::promote_args<T>::type airy_ai(T x)
+BOOST_MATH_EXPORT template <class T>
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type airy_ai(T x)
 {
    return airy_ai(x, policies::policy<>());
 }
 
-template <class T, class Policy>
-inline typename tools::promote_args<T>::type airy_bi(T x, const Policy&)
+BOOST_MATH_EXPORT template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type airy_bi(T x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T>::type result_type;
@@ -300,14 +306,14 @@ inline typename tools::promote_args<T>::type airy_bi(T x, const Policy&)
    return policies::checked_narrowing_cast<result_type, Policy>(detail::airy_bi_imp<value_type>(static_cast<value_type>(x), forwarding_policy()), "boost::math::airy<%1%>(%1%)");
 }
 
-template <class T>
-inline typename tools::promote_args<T>::type airy_bi(T x)
+BOOST_MATH_EXPORT template <class T>
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type airy_bi(T x)
 {
    return airy_bi(x, policies::policy<>());
 }
 
-template <class T, class Policy>
-inline typename tools::promote_args<T>::type airy_ai_prime(T x, const Policy&)
+BOOST_MATH_EXPORT template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type airy_ai_prime(T x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T>::type result_type;
@@ -322,14 +328,14 @@ inline typename tools::promote_args<T>::type airy_ai_prime(T x, const Policy&)
    return policies::checked_narrowing_cast<result_type, Policy>(detail::airy_ai_prime_imp<value_type>(static_cast<value_type>(x), forwarding_policy()), "boost::math::airy<%1%>(%1%)");
 }
 
-template <class T>
-inline typename tools::promote_args<T>::type airy_ai_prime(T x)
+BOOST_MATH_EXPORT template <class T>
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type airy_ai_prime(T x)
 {
    return airy_ai_prime(x, policies::policy<>());
 }
 
-template <class T, class Policy>
-inline typename tools::promote_args<T>::type airy_bi_prime(T x, const Policy&)
+BOOST_MATH_EXPORT template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type airy_bi_prime(T x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T>::type result_type;
@@ -344,14 +350,14 @@ inline typename tools::promote_args<T>::type airy_bi_prime(T x, const Policy&)
    return policies::checked_narrowing_cast<result_type, Policy>(detail::airy_bi_prime_imp<value_type>(static_cast<value_type>(x), forwarding_policy()), "boost::math::airy<%1%>(%1%)");
 }
 
-template <class T>
-inline typename tools::promote_args<T>::type airy_bi_prime(T x)
+BOOST_MATH_EXPORT template <class T>
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type airy_bi_prime(T x)
 {
    return airy_bi_prime(x, policies::policy<>());
 }
 
-template <class T, class Policy>
-inline T airy_ai_zero(int m, const Policy& /*pol*/)
+BOOST_MATH_EXPORT template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline T airy_ai_zero(int m, const Policy& /*pol*/)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename policies::evaluation<T, Policy>::type value_type;
@@ -370,14 +376,14 @@ inline T airy_ai_zero(int m, const Policy& /*pol*/)
    return policies::checked_narrowing_cast<T, Policy>(detail::airy_ai_zero_imp<value_type>(m, forwarding_policy()), "boost::math::airy_ai_zero<%1%>(unsigned)");
 }
 
-template <class T>
-inline T airy_ai_zero(int m)
+BOOST_MATH_EXPORT template <class T>
+BOOST_MATH_GPU_ENABLED inline T airy_ai_zero(int m)
 {
    return airy_ai_zero<T>(m, policies::policy<>());
 }
 
-template <class T, class OutputIterator, class Policy>
-inline OutputIterator airy_ai_zero(
+BOOST_MATH_EXPORT template <class T, class OutputIterator, class Policy>
+BOOST_MATH_GPU_ENABLED inline OutputIterator airy_ai_zero(
                          int start_index,
                          unsigned number_of_zeros,
                          OutputIterator out_it,
@@ -398,8 +404,8 @@ inline OutputIterator airy_ai_zero(
    return out_it;
 }
 
-template <class T, class OutputIterator>
-inline OutputIterator airy_ai_zero(
+BOOST_MATH_EXPORT template <class T, class OutputIterator>
+BOOST_MATH_GPU_ENABLED inline OutputIterator airy_ai_zero(
                          int start_index,
                          unsigned number_of_zeros,
                          OutputIterator out_it)
@@ -407,8 +413,8 @@ inline OutputIterator airy_ai_zero(
    return airy_ai_zero<T>(start_index, number_of_zeros, out_it, policies::policy<>());
 }
 
-template <class T, class Policy>
-inline T airy_bi_zero(int m, const Policy& /*pol*/)
+BOOST_MATH_EXPORT template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline T airy_bi_zero(int m, const Policy& /*pol*/)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename policies::evaluation<T, Policy>::type value_type;
@@ -427,14 +433,14 @@ inline T airy_bi_zero(int m, const Policy& /*pol*/)
    return policies::checked_narrowing_cast<T, Policy>(detail::airy_bi_zero_imp<value_type>(m, forwarding_policy()), "boost::math::airy_bi_zero<%1%>(unsigned)");
 }
 
-template <typename T>
-inline T airy_bi_zero(int m)
+BOOST_MATH_EXPORT template <typename T>
+BOOST_MATH_GPU_ENABLED inline T airy_bi_zero(int m)
 {
    return airy_bi_zero<T>(m, policies::policy<>());
 }
 
-template <class T, class OutputIterator, class Policy>
-inline OutputIterator airy_bi_zero(
+BOOST_MATH_EXPORT template <class T, class OutputIterator, class Policy>
+BOOST_MATH_GPU_ENABLED inline OutputIterator airy_bi_zero(
                          int start_index,
                          unsigned number_of_zeros,
                          OutputIterator out_it,
@@ -455,8 +461,8 @@ inline OutputIterator airy_bi_zero(
    return out_it;
 }
 
-template <class T, class OutputIterator>
-inline OutputIterator airy_bi_zero(
+BOOST_MATH_EXPORT template <class T, class OutputIterator>
+BOOST_MATH_GPU_ENABLED inline OutputIterator airy_bi_zero(
                          int start_index,
                          unsigned number_of_zeros,
                          OutputIterator out_it)

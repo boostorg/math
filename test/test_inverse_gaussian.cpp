@@ -16,8 +16,13 @@
 
 //#include <pch.hpp> // include directory libs/math/src/tr1/ is needed.
 
-#include <boost/math/tools/test.hpp>
+#include <boost/math/tools/config.hpp>
+#include "../include_private/boost/math/tools/test.hpp"
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+#endif
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -26,7 +31,6 @@
 using boost::math::inverse_gaussian_distribution;
 using boost::math::inverse_gaussian;
 
-#include <boost/math/tools/test.hpp>
 #include "test_out_of_range.hpp"
 
 #include <iostream>
@@ -247,6 +251,13 @@ BOOST_AUTO_TEST_CASE( test_main )
   // quantile 0.001026926242348481 compared to expected 0.001, so much less accurate,
   // but better than R that gives up completely!
   // R Error in SuppDists::qinverse_gaussian(4.87914430108515e-219, 1, 1) : Infinite value in NewtonRoot()
+
+  inverse_gaussian w_big(66.99652081);
+  BOOST_CHECK_CLOSE_FRACTION(
+     quantile(w_big, 0.97969), 591.567880739988823, 15 * tolfeweps);
+  BOOST_CHECK_CLOSE_FRACTION(
+     quantile(complement(w_big, 1 - 0.97969)), 591.567880739988823, 10 * tolfeweps);
+
 
   BOOST_CHECK_CLOSE_FRACTION(
     pdf(w11, 0.5), static_cast<double>(0.87878257893544476), tolfeweps); // pdf

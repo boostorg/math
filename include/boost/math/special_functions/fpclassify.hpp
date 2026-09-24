@@ -19,9 +19,11 @@
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/detail/fp_traits.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <type_traits>
 #include <cmath>
+#endif
 
 /*!
   \file fpclassify.hpp
@@ -86,27 +88,27 @@ is used.
 
 namespace boost { namespace math {
 
-template<> inline BOOST_MATH_GPU_ENABLED bool (isnan)(float x) { return x != x; }
-template<> inline BOOST_MATH_GPU_ENABLED bool (isnan)(double x) { return x != x; }
+template<> BOOST_MATH_GPU_ENABLED inline bool (isnan)(float x) { return x != x; }
+template<> BOOST_MATH_GPU_ENABLED inline bool (isnan)(double x) { return x != x; }
 
-template<> inline BOOST_MATH_GPU_ENABLED bool (isinf)(float x) { return x > FLT_MAX || x < -FLT_MAX; }
-template<> inline BOOST_MATH_GPU_ENABLED bool (isinf)(double x) { return x > DBL_MAX || x < -DBL_MAX; }
+template<> BOOST_MATH_GPU_ENABLED inline bool (isinf)(float x) { return x > FLT_MAX || x < -FLT_MAX; }
+template<> BOOST_MATH_GPU_ENABLED inline bool (isinf)(double x) { return x > DBL_MAX || x < -DBL_MAX; }
 
-template<> inline BOOST_MATH_GPU_ENABLED bool (isfinite)(float x) {  return !isnan(x) && !isinf(x);  }
-template<> inline BOOST_MATH_GPU_ENABLED bool (isfinite)(double x) {  return !isnan(x) && !isinf(x); }
+template<> BOOST_MATH_GPU_ENABLED inline bool (isfinite)(float x) {  return !isnan(x) && !isinf(x);  }
+template<> BOOST_MATH_GPU_ENABLED inline bool (isfinite)(double x) {  return !isnan(x) && !isinf(x); }
 
-template<> inline BOOST_MATH_GPU_ENABLED bool (isnormal)(float x)
+template<> BOOST_MATH_GPU_ENABLED inline bool (isnormal)(float x)
 {
    if(x < 0) x = -x;
    return (x >= FLT_MIN) && (x <= FLT_MAX);
 }
-template<> inline BOOST_MATH_GPU_ENABLED bool (isnormal)(double x)
+template<> BOOST_MATH_GPU_ENABLED inline bool (isnormal)(double x)
 {
    if(x < 0) x = -x;
    return (x >= DBL_MIN) && (x <= DBL_MAX);
 }
 
-template<> inline BOOST_MATH_GPU_ENABLED int (fpclassify)(float t)
+template<> BOOST_MATH_GPU_ENABLED inline int (fpclassify)(float t)
 {
    if((boost::math::isnan)(t))
       return FP_NAN;
@@ -127,10 +129,10 @@ template<> inline BOOST_MATH_GPU_ENABLED int (fpclassify)(float t)
    }
    else if(at > FLT_MAX)
       return FP_INFINITE;
-   return FP_NAN;
+   return FP_NAN;    // LCOV_EXCL_LINE  should not normally be reachable.
 }
 
-template<> inline BOOST_MATH_GPU_ENABLED int (fpclassify)(double t)
+template<> BOOST_MATH_GPU_ENABLED inline int (fpclassify)(double t)
 {
    if((boost::math::isnan)(t))
       return FP_NAN;
@@ -157,7 +159,9 @@ template<> inline BOOST_MATH_GPU_ENABLED int (fpclassify)(double t)
 #else
 
 #if defined(_MSC_VER) || defined(BOOST_BORLANDC)
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cfloat>
+#endif
 #endif
 #ifdef BOOST_MATH_USE_FLOAT128
 #ifdef __has_include
@@ -243,7 +247,7 @@ inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const generic_tag<true>&)
    // whenever possible check for Nan's first:
 #if defined(BOOST_HAS_FPCLASSIFY)  && !defined(BOOST_MATH_DISABLE_STD_FPCLASSIFY)
    if(::boost::math_detail::is_nan_helper(t, typename std::is_floating_point<T>::type()))
-      return FP_NAN;
+      return FP_NAN;  // LCOV_EXCL_LINE only called in UDT contexts (excluded from coverage checks).
 #elif defined(isnan)
    if(boost::math_detail::is_nan_helper(t, typename std::is_floating_point<T>::type()))
       return FP_NAN;
@@ -352,7 +356,7 @@ inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(long double t, const native_tag&
 
 }  // namespace detail
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline int fpclassify BOOST_NO_MACRO_EXPAND(T t)
 {
    typedef typename detail::fp_traits<T>::type traits;
@@ -724,44 +728,44 @@ inline bool (isnan)(__float128 x)
 namespace boost {
 namespace math {
 
-template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>, bool> = true>
-inline BOOST_MATH_GPU_ENABLED bool isnan(T x)
+BOOST_MATH_EXPORT template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>, bool> = true>
+BOOST_MATH_GPU_ENABLED inline bool isnan(T x)
 {
    return false;
 }
 
-template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>, bool> = true>
-inline BOOST_MATH_GPU_ENABLED bool isnan(T x)
+BOOST_MATH_EXPORT template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>, bool> = true>
+BOOST_MATH_GPU_ENABLED inline bool isnan(T x)
 {
    return ::isnan(x);
 }
 
-template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>, bool> = true>
-inline BOOST_MATH_GPU_ENABLED bool isinf(T x)
+BOOST_MATH_EXPORT template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>, bool> = true>
+BOOST_MATH_GPU_ENABLED inline bool isinf(T x)
 {
    return false;
 }
 
-template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>, bool> = true>
-inline BOOST_MATH_GPU_ENABLED bool isinf(T x)
+BOOST_MATH_EXPORT template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>, bool> = true>
+BOOST_MATH_GPU_ENABLED inline bool isinf(T x)
 {
    return ::isinf(x);
 }
 
-template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>, bool> = true>
-inline BOOST_MATH_GPU_ENABLED bool isfinite(T x)
+BOOST_MATH_EXPORT template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>, bool> = true>
+BOOST_MATH_GPU_ENABLED inline bool isfinite(T x)
 {
    return true;
 }
 
-template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>, bool> = true>
-inline BOOST_MATH_GPU_ENABLED bool isfinite(T x)
+BOOST_MATH_EXPORT template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>, bool> = true>
+BOOST_MATH_GPU_ENABLED inline bool isfinite(T x)
 {
    return ::isfinite(x);
 }
 
-template <typename T>
-inline BOOST_MATH_GPU_ENABLED bool isnormal(T x)
+BOOST_MATH_EXPORT template <typename T>
+BOOST_MATH_GPU_ENABLED inline bool isnormal(T x)
 {
    return x != static_cast<T>(0) && x != static_cast<T>(-0) && 
             !boost::math::isnan(x) && 
@@ -769,8 +773,8 @@ inline BOOST_MATH_GPU_ENABLED bool isnormal(T x)
 }
 
 // We skip the check for FP_SUBNORMAL since they are not supported on these platforms
-template <typename T>
-inline BOOST_MATH_GPU_ENABLED int fpclassify(T x)
+BOOST_MATH_EXPORT template <typename T>
+BOOST_MATH_GPU_ENABLED inline int fpclassify(T x)
 {
    if (boost::math::isnan(x))
    {

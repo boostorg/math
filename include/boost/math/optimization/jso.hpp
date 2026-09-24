@@ -6,8 +6,13 @@
  */
 #ifndef BOOST_MATH_OPTIMIZATION_JSO_HPP
 #define BOOST_MATH_OPTIMIZATION_JSO_HPP
+
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <atomic>
+#endif
 #include <boost/math/optimization/detail/common.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <iostream>
 #include <limits>
@@ -18,6 +23,7 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
+#endif
 
 namespace boost::math::optimization {
 
@@ -31,7 +37,7 @@ namespace boost::math::optimization {
 // to understand without also reading: Zhang, J., & Sanderson, A. C. (2009).
 // JADE: adaptive differential evolution with optional external archive.
 // IEEE Transactions on evolutionary computation, 13(5), 945-958."
-template <typename ArgumentContainer> struct jso_parameters {
+BOOST_MATH_EXPORT template <typename ArgumentContainer> struct jso_parameters {
   using Real = typename ArgumentContainer::value_type;
   using DimensionlessReal = decltype(Real()/Real());
   ArgumentContainer lower_bounds;
@@ -49,7 +55,7 @@ template <typename ArgumentContainer> struct jso_parameters {
   ArgumentContainer const *initial_guess = nullptr;
 };
 
-template <typename ArgumentContainer>
+BOOST_MATH_EXPORT template <typename ArgumentContainer>
 void validate_jso_parameters(jso_parameters<ArgumentContainer> &jso_params) {
   using std::isfinite;
   using std::isnan;
@@ -67,6 +73,9 @@ void validate_jso_parameters(jso_parameters<ArgumentContainer> &jso_params) {
     // but if we followed the reference, the population size would then be zero.
     jso_params.initial_population_size = static_cast<size_t>(
         std::ceil(25 * std::log(dimension + 1.0) * sqrt(dimension)));
+    if (jso_params.initial_population_size < jso_params.threads) {
+      jso_params.initial_population_size = jso_params.threads;
+    }
   }
   if (jso_params.max_function_evaluations == 0) {
     // Recommended value from the reference:
@@ -91,7 +100,7 @@ void validate_jso_parameters(jso_parameters<ArgumentContainer> &jso_params) {
   }
 }
 
-template <typename ArgumentContainer, class Func, class URBG>
+BOOST_MATH_EXPORT template <typename ArgumentContainer, class Func, class URBG>
 ArgumentContainer
 jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
     URBG &gen,
@@ -349,13 +358,14 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
           delta_f.push_back(abs(cost[i] - trial_cost));
         }
         // Build the historical archive:
+        // The historical archive stores inferior solutions for the purpose of maintaining diversity.
         if (archive.size() < cost.size()) {
-          archive.push_back(trial_vector);
+          archive.push_back(population[i]);
         } else {
-          // If it's already built, then put the successful trial in a random index:
+          // If it's already built, then put the eliminated individual in a random index:
           archive.resize(cost.size());
           auto idx = gen() % archive.size();
-          archive[idx] = trial_vector;
+          archive[idx] = population[i];
         }
         cost[i] = trial_cost;
         population[i] = trial_vector;
@@ -388,7 +398,7 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
         throw std::logic_error(oss.str());
       }
       for (size_t i = 0; i < weights.size(); ++i) {
-        weights[i] = delta_f[i] / delta_sum;
+        weights[i] = static_cast<DimensionlessReal>(delta_f[i] / delta_sum);
       }
 
       M_CR[k] = detail::weighted_lehmer_mean(S_CR, weights);

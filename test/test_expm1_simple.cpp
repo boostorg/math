@@ -3,9 +3,20 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifdef BOOST_MATH_ENABLE_SYCL
+#include "sycl/sycl.hpp"
+#endif
+
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/special_functions/expm1.hpp>
+#else
+import boost.math;
+#endif
+
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <random>
 #include <cmath>
-#include <boost/math/special_functions/expm1.hpp>
+#endif
 #include "math_unit_test.hpp"
 
 constexpr int N = 50000;

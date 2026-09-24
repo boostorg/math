@@ -3,8 +3,15 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef SYCL_LANGUAGE_VERSION
+#ifndef BOOST_MATH_ENABLE_SYCL
 #include <pch.hpp>
+#else
+#include "sycl/sycl.hpp"
+#endif
+
+#ifdef __clang__
+#  pragma clang diagnostic push 
+#  pragma clang diagnostic ignored "-Wimplicit-const-int-float-conversion"
 #endif
 
 #include <boost/math/concepts/real_concept.hpp>

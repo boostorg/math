@@ -26,7 +26,9 @@ using cuda::std::array;
 
 #else
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
+#endif
 
 namespace boost {
 namespace math {
