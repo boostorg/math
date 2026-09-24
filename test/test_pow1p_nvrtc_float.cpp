@@ -20,10 +20,10 @@
 #include <boost/math/special_functions/pow1p.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
 
-typedef double float_type;
+typedef float float_type;
 
 const char* cuda_kernel = R"(
-typedef double float_type;
+typedef float float_type;
 #include <cuda/std/type_traits>
 #include <boost/math/special_functions/pow1p.hpp>
 extern "C" __global__ 
