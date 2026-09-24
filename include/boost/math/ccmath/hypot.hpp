@@ -57,6 +57,10 @@ constexpr T hypot_impl(T x, T y, T z) noexcept
     z = boost::math::ccmath::abs(z);
 
     T a = boost::math::ccmath::fmax(boost::math::ccmath::fmax(x, y), z);
+    if (a == 0)
+    {
+        return a;
+    }
 
     return a * boost::math::ccmath::sqrt((x / a) * (x / a) 
                                        + (y / a) * (y / a) 
@@ -128,8 +132,8 @@ constexpr long double hypotl(long double x, long double y) noexcept
 }
 #endif
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
-constexpr auto hypot(Real x, Real y, Real z) noexcept
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+constexpr Real hypot(Real x, Real y, Real z) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
@@ -159,7 +163,7 @@ constexpr auto hypot(Real x, Real y, Real z) noexcept
     }
 }
 
-template <typename T1, typename T2, typename T3>
+BOOST_MATH_EXPORT template <typename T1, typename T2, typename T3>
 constexpr auto hypot(T1 x, T2 y, T3 z) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
