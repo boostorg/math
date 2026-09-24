@@ -10,7 +10,6 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/tools/promotion.hpp>
-#include <boost/math/tools/is_detected.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/sign.hpp>
@@ -20,7 +19,7 @@
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 #  include <boost/math/special_functions/next.hpp>
 #  include <boost/math/special_functions/math_fwd.hpp>
-#  include <utility>
+#  include <cmath>
 #endif // BOOST_MATH_ENABLE_CUDA
 
 namespace boost {
@@ -31,22 +30,10 @@ namespace detail {
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 
 template <typename T>
-using fma_t = decltype(fma(std::declval<T>(), std::declval<T>(), std::declval<T>()));
-
-template <typename T>
-constexpr bool is_fma_detected_v = boost::math::tools::is_detected<fma_t, T>::value;
-
-template <typename T, boost::math::enable_if_t<is_fma_detected_v<T>, bool> = true>
-BOOST_MATH_FORCEINLINE BOOST_MATH_GPU_ENABLED T local_fma(const T x, const T y, const T z)
+BOOST_MATH_FORCEINLINE T local_fma(const T x, const T y, const T z)
 {
     using std::fma;
     return fma(x, y, z);
-}
-
-template <typename T, boost::math::enable_if_t<!is_fma_detected_v<T>, bool> = true>
-BOOST_MATH_FORCEINLINE BOOST_MATH_GPU_ENABLED T local_fma(const T x, const T y, const T z)
-{
-    return x * y + z;
 }
 
 #else
