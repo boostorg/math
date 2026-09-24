@@ -15,6 +15,22 @@
 
 #include "math_unit_test.hpp"
 
+#ifndef BOOST_MATH_STANDALONE
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
+
+// Expression-template types must instantiate.  Arguments are kept moderate because
+// pow1p calls pow(1+x, y), and multiprecision pow loses accuracy for huge y.
+template <typename T>
+void test_multiprecision()
+{
+    using big = boost::multiprecision::cpp_bin_float_100;
+    CHECK_ULP_CLOSE(static_cast<T>(pow(big(1.5), big(2.25))), boost::math::pow1p(T(0.5), T(2.25)), 10);
+    CHECK_ULP_CLOSE(static_cast<T>(pow(big(0.75), big(-7.5))), boost::math::pow1p(T(-0.25), T(-7.5)), 10);
+    CHECK_ULP_CLOSE(static_cast<T>(pow(1 + big(T(0.001)), big(1000.5))), boost::math::pow1p(T(0.001), T(1000.5)), 10);
+}
+#endif
+
 template <typename T>
 void test()
 {
@@ -41,7 +57,26 @@ void test()
     {
         CHECK_EQUAL(boost::math::pow1p(T(5), -boost::math::numeric_limits<T>::infinity()), T(0));
         CHECK_EQUAL(boost::math::pow1p(T(5), boost::math::numeric_limits<T>::infinity()), boost::math::numeric_limits<T>::infinity());
-    
+        // |1+x| < 1 reverses the limits:
+        CHECK_EQUAL(boost::math::pow1p(T(-0.5), boost::math::numeric_limits<T>::infinity()), T(0));
+        CHECK_EQUAL(boost::math::pow1p(T(-0.5), -boost::math::numeric_limits<T>::infinity()), boost::math::numeric_limits<T>::infinity());
+        CHECK_EQUAL(boost::math::pow1p(T(-1.5), boost::math::numeric_limits<T>::infinity()), T(0));
+        CHECK_EQUAL(boost::math::pow1p(T(-3), boost::math::numeric_limits<T>::infinity()), boost::math::numeric_limits<T>::infinity());
+        CHECK_EQUAL(boost::math::pow1p(T(-3), -boost::math::numeric_limits<T>::infinity()), T(0));
+        BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<T>::has_quiet_NaN)
+        {
+            CHECK_EQUAL(boost::math::isnan(boost::math::pow1p(boost::math::numeric_limits<T>::quiet_NaN(), boost::math::numeric_limits<T>::infinity())), true);
+        }
+
+        // Tiny x, huge finite y: the exponent y*log1p(x) is far out of range, and the
+        // result must overflow or underflow cleanly rather than become inf*0 = NaN.
+        using std::ldexp;
+        const T tiny = ldexp(T(1), -boost::math::tools::digits<T>() - 7);
+        const T huge = boost::math::tools::max_value<T>() / 4;
+        CHECK_EQUAL(boost::math::pow1p(tiny, huge), boost::math::numeric_limits<T>::infinity());
+        CHECK_EQUAL(boost::math::pow1p(tiny, -huge), T(0));
+        CHECK_EQUAL(boost::math::pow1p(-tiny, huge), T(0));
+        CHECK_EQUAL(boost::math::pow1p(-tiny, -huge), boost::math::numeric_limits<T>::infinity());
 
     // pow(+/-inf, y)
         CHECK_EQUAL(boost::math::pow1p(boost::math::numeric_limits<T>::infinity(), T(2)), boost::math::numeric_limits<T>::infinity());
@@ -146,6 +181,11 @@ int main()
 
     #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test<boost::math::concepts::real_concept>();
+    #endif
+
+    #ifndef BOOST_MATH_STANDALONE
+    test_multiprecision<boost::multiprecision::cpp_bin_float_50>();
+    test_multiprecision<boost::multiprecision::cpp_dec_float_50>();
     #endif
 
     return boost::math::test::report_errors();
