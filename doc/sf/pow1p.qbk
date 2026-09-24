@@ -43,4 +43,9 @@ red points are errors that exceed 100 ULP.
 [$../graphs/pow1p_ulps_y1000.svg]
 [$../graphs/pow1p_ulps_y2e20.svg]
 
+[warning pow1p relies on error-free transforms and IEEE overflow behavior.
+Compiling with value-unsafe floating-point optimizations (`-ffast-math`, `/fp:fast`, or icpx's default `-fp-model=fast`)
+can make results for small /x/ and large /y/ completely wrong.
+With icpx, use `-fp-model=precise`.]
+
 [endsect]
