@@ -15,7 +15,7 @@
 
 #include "math_unit_test.hpp"
 
-#ifndef BOOST_MATH_STANDALONE
+#if !defined(BOOST_MATH_STANDALONE) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 
@@ -183,7 +183,7 @@ int main()
     test<boost::math::concepts::real_concept>();
     #endif
 
-    #ifndef BOOST_MATH_STANDALONE
+    #if !defined(BOOST_MATH_STANDALONE) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
     test_multiprecision<boost::multiprecision::cpp_bin_float_50>();
     test_multiprecision<boost::multiprecision::cpp_dec_float_50>();
     #endif
