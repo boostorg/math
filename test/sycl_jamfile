@@ -98,3 +98,5 @@ run test_igamma_inva.cpp ;
 run test_hermite.cpp ;
 
 run git_issue_695_mp.cpp ;
+
+run test_pow1p.cpp ;

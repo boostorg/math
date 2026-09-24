@@ -146,6 +146,7 @@ test-suite special_fun :
 
    [ run hypot_test.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework ]
    [ run pow_test.cpp /boost/test//boost_unit_test_framework ]
+   [ run test_pow1p.cpp ]
    [ run logaddexp_test.cpp /boost/test//boost_unit_test_framework ]
    [ run logsumexp_test.cpp /boost/test//boost_unit_test_framework : : : [ requires cxx11_hdr_initializer_list cxx11_variadic_templates ] ]
    [ run ccmath_sqrt_test.cpp /boost/test//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] $(float128_type) ]

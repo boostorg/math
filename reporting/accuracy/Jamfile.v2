@@ -182,3 +182,6 @@ run erfc_error_plot.cpp /boost/multiprecision//boost_multiprecision mpfr gmp : :
 explicit erfc_error_plot_cpp_bin_float_50 ;
 run erfc_error_plot.cpp /boost/multiprecision//boost_multiprecision mpfr gmp quadmath : : : release <cxxstd>17 <cxxstd-dialect>gnu <define>TEST_TYPE=float128 [ check-target-builds ../../config//has_mpfr : : <build>no ] : erfc_error_plot_float128 ;
 explicit erfc_error_plot_cpp_bin_float_50 ;
+
+run pow1p_ulps_plot.cpp : : : release <cxxstd>17 : pow1p_ulps_plot ;
+explicit pow1p_ulps_plot ;
