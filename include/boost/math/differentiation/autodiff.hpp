@@ -152,8 +152,8 @@ class fvar {
   // RealType(ca) | RealType | RealType is copy constructible from the arithmetic types.
   explicit fvar(root_type const&);  // Initialize a constant. (No epsilon terms.)
 
-  template <typename RealType2>
-  fvar(RealType2 const& ca);  // Supports any RealType2 for which static_cast<root_type>(ca) compiles.
+  template <typename RealType2, typename std::enable_if<std::is_constructible<RealType, RealType2 const&>::value, int>::type = 0>
+  fvar(RealType2 const& ca);  // Supports any RealType2 for which static_cast<RealType>(ca) compiles.
 
   // r = cr | RealType& | Assignment operator.
   fvar& operator=(fvar const&) = default;
@@ -683,9 +683,9 @@ fvar<RealType, Order>::fvar(fvar<RealType2, Order2> const& cr) {
 template <typename RealType, size_t Order>
 fvar<RealType, Order>::fvar(root_type const& ca) : v{{static_cast<RealType>(ca)}} {}
 
-// Can cause compiler error if RealType2 cannot be cast to root_type.
+// Constrained so that e.g. Eigen expression templates are not implicitly convertible to fvar.
 template <typename RealType, size_t Order>
-template <typename RealType2>
+template <typename RealType2, typename std::enable_if<std::is_constructible<RealType, RealType2 const&>::value, int>::type>
 fvar<RealType, Order>::fvar(RealType2 const& ca) : v{{static_cast<RealType>(ca)}} {}
 
 /*
