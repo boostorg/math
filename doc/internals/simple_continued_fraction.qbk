@@ -22,7 +22,7 @@
         const std::vector<Z>& partial_denominators() const;
 
         template<typename T, typename Z_>
-        friend std::ostream& operator<<(std::ostream& out, simple_continued_fraction<T, Z>& scf);
+        friend std::ostream& operator<<(std::ostream& out, const simple_continued_fraction<T, Z_>& scf);
     };
     }
 
