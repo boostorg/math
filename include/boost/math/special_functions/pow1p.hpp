@@ -27,35 +27,13 @@ namespace math {
 
 namespace detail {
 
-#ifndef BOOST_MATH_HAS_GPU_SUPPORT
-
-template <typename T>
-BOOST_MATH_FORCEINLINE T local_fma(const T x, const T y, const T z)
-{
-    using std::fma;
-    return fma(x, y, z);
-}
-
-#else
-
-template <typename T>
-BOOST_MATH_FORCEINLINE BOOST_MATH_GPU_ENABLED T local_fma(const T x, const T y, const T z)
-{
-    return ::fma(x, y, z);
-}
-
-template <>
-BOOST_MATH_FORCEINLINE BOOST_MATH_GPU_ENABLED float local_fma(const float x, const float y, const float z)
-{
-    return ::fmaf(x, y, z);
-}
-
-#endif // BOOST_MATH_HAS_GPU_SUPPORT
-
 template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
 {
     BOOST_MATH_STD_USING
+    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
+    using std::fma;
+    #endif
     constexpr auto function = "boost::math::pow1p<%1%>(%1%, %1%)";
 
     // The special values follow the spec of the pow() function defined in
@@ -92,16 +70,14 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
 
     if ((boost::math::isinf)(y))
     {
-        if ((boost::math::signbit)(y) == 1)
+        if ((boost::math::isnan)(x))
         {
-            // pow(x, -inf)
-            return T(0);
+            return x;
         }
-        else
-        {
-            // pow(x, +inf)
-            return y;
-        }
+        // pow(x, +/-inf): |1+x| > 1 exactly when x > 0 or x < -2, since
+        // x = -2, -1 and 0 have been handled above.
+        const bool base_exceeds_one = (x > 0) || (x < -2);
+        return (base_exceeds_one == (y > 0)) ? T(abs(y)) : T(0);
     }
 
     if ((boost::math::isinf)(x)) 
@@ -217,18 +193,25 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
     // expand log(1+t/s) to second order.
 
     // (u + uu) ~= t/s.
-    T r1 = local_fma(-u, s, t);
+    T r1 = fma(T(-u), s, t);
     T uu = r1 / s;
 
     // (u + vv) ~= log(1+(u+uu)) ~= log(1+t/s).
-    T vv = local_fma(T(-0.5)*u, u, uu);
+    T vv = fma(T(T(-0.5) * u), u, uu);
 
     // (w + ww) ~= y*(u+vv) ~= y*log(1+t/s).
-    T r2 = local_fma(y, u, -w);
-    T ww = local_fma(y, vv, r2);
+    T r2 = fma(y, u, T(-w));
+    T ww = fma(y, vv, r2);
 
+    // |ww| is tiny compared with |w|, so if exp(w) over/underflows so does the
+    // result (term1 lies on the same side of 1); don't form inf * 0.
+    T ew = exp(w);
+    if (ew == 0 || (boost::math::isinf)(ew))
+    {
+        return ew;
+    }
     // TODO: maybe ww is small enough such that exp(ww) ~= 1+ww.
-    T term2 = exp(w) * exp(ww);
+    T term2 = ew * exp(ww);
     return term1 * term2;
 }
 
