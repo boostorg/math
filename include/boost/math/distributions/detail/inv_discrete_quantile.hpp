@@ -333,17 +333,25 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_floor(const Dis
       k = lo;
    if (k > hi)
       k = hi;
+   // Beyond 1/epsilon every value is an integer and k - 1 == k, so there is
+   // nothing to settle (and stepping by one would never finish):
+   if (k - 1 == k)
+      return k;
+   // Don't walk further than the root finder was allowed to iterate:
+   boost::math::uintmax_t steps = policies::get_max_root_iterations<typename Dist::policy_type>();
    value_type gk = discrete_quantile_residual(d, k, p, c);
    // Step down until cdf(k) <= p:
-   while ((gk > 0) && (k > lo))
+   while ((gk > 0) && (k > lo) && steps)
    {
+      --steps;
       k -= 1;
       gk = discrete_quantile_residual(d, k, p, c);
    }
    // Step up while the next integer still has cdf <= p.  If it hits a run
    // with cdf == p we want the first of that run, so stop there:
-   while (k < hi)
+   while ((k < hi) && steps)
    {
+      --steps;
       value_type gn = discrete_quantile_residual(d, value_type(k + 1), p, c);
       if (gn > 0)
          break;
@@ -359,8 +367,9 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_floor(const Dis
    // If we started inside a run with cdf == p, move to its first member:
    if (gk == 0)
    {
-      while (k > lo)
+      while ((k > lo) && steps)
       {
+         --steps;
          if (discrete_quantile_residual(d, value_type(k - 1), p, c) < 0)
             break;
          k -= 1;
@@ -383,17 +392,23 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_ceil(const Dist
       k = lo;
    if (k > hi)
       k = hi;
+   // See round_to_floor:
+   if (k + 1 == k)
+      return k;
+   boost::math::uintmax_t steps = policies::get_max_root_iterations<typename Dist::policy_type>();
    value_type gk = discrete_quantile_residual(d, k, p, c);
    // Step up until cdf(k) >= p:
-   while ((gk < 0) && (k < hi))
+   while ((gk < 0) && (k < hi) && steps)
    {
+      --steps;
       k += 1;
       gk = discrete_quantile_residual(d, k, p, c);
    }
    // Step down while the previous integer still has cdf >= p.  If it hits
    // a run with cdf == p we want the last of that run, so stop there:
-   while (k > lo)
+   while ((k > lo) && steps)
    {
+      --steps;
       value_type gp = discrete_quantile_residual(d, value_type(k - 1), p, c);
       if (gp < 0)
          break;
@@ -409,8 +424,9 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_ceil(const Dist
    // If we started inside a run with cdf == p, move to its last member:
    if (gk == 0)
    {
-      while (k < hi)
+      while ((k < hi) && steps)
       {
+         --steps;
          if (discrete_quantile_residual(d, value_type(k + 1), p, c) > 0)
             break;
          k += 1;
