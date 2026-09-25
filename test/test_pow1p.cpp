@@ -68,6 +68,8 @@ void test()
             CHECK_EQUAL(boost::math::isnan(boost::math::pow1p(boost::math::numeric_limits<T>::quiet_NaN(), boost::math::numeric_limits<T>::infinity())), true);
         }
 
+        // icpx defaults to -fp-model=fast, which breaks the overflow handling and error-free transforms.
+        #ifndef BOOST_MATH_ENABLE_SYCL
         // Tiny x, huge finite y: the exponent y*log1p(x) is far out of range, and the
         // result must overflow or underflow cleanly rather than become inf*0 = NaN.
         using std::ldexp;
@@ -77,6 +79,7 @@ void test()
         CHECK_EQUAL(boost::math::pow1p(tiny, -huge), T(0));
         CHECK_EQUAL(boost::math::pow1p(-tiny, huge), T(0));
         CHECK_EQUAL(boost::math::pow1p(-tiny, -huge), boost::math::numeric_limits<T>::infinity());
+        #endif
 
     // pow(+/-inf, y)
         CHECK_EQUAL(boost::math::pow1p(boost::math::numeric_limits<T>::infinity(), T(2)), boost::math::numeric_limits<T>::infinity());
@@ -97,6 +100,7 @@ void test()
     // (1+x) < 0
     CHECK_ULP_CLOSE(boost::math::pow1p(T(-3), T(2)), pow(T(-2), T(2)), 10);
 
+    #ifndef BOOST_MATH_ENABLE_SYCL
     // Tiny x, huge y: 1+x is inexact and the double-T branch is taken.
     // Reference values are exp(y*log1p(x)) computed at 100 digits.
     {
@@ -126,6 +130,7 @@ void test()
         CHECK_ULP_CLOSE(T(1.9141657450800789253871830037475352857803e-261L), boost::math::pow1p(T(-2.1413450492090156e-22), T(2.8034969310889015e+24)), 10);
         CHECK_ULP_CLOSE(T(1.5108017556765851783235726673009126604833e+287L), boost::math::pow1p(T(6.3377799876470245e-17), T(1.0433536087590337e+19)), 10);
     }
+    #endif
 
     // x < 0
     std::mt19937_64 rng;
