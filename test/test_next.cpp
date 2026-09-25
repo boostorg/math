@@ -13,6 +13,9 @@
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/ulp.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#ifdef BOOST_MATH_TEST_FLOAT128
+#include <boost/multiprecision/float128.hpp>
+#endif
 #include <iostream>
 #include <iomanip>
 
@@ -256,10 +259,46 @@ void test_values(const T& val, const char* name)
    }
 }
 
+//
+// IEEE types use the bit patterns, check distances that cross zero and span the whole range:
+//
+template <class T>
+void test_distance_across_zero()
+{
+   BOOST_MATH_STD_USING
+   if (!boost::math::detail::has_denorm_now<T>())
+      return;
+   // Number of positive values up to and including 1 and max, computed exactly or with one rounding:
+   const T per_binade = ldexp(T(1), std::numeric_limits<T>::digits - 1);
+   const T n_one = (2 - std::numeric_limits<T>::min_exponent) * per_binade;
+   const T n_max_plus_one = (std::numeric_limits<T>::max_exponent - std::numeric_limits<T>::min_exponent + 2) * per_binade;
+   const T denorm_min = std::numeric_limits<T>::denorm_min();
+   const T max_val = (std::numeric_limits<T>::max)();
+
+   BOOST_CHECK_EQUAL(boost::math::float_distance(T(0), T(-T(0))), T(0));
+   BOOST_CHECK_EQUAL(boost::math::float_distance(T(-denorm_min), denorm_min), T(2));
+   BOOST_CHECK_EQUAL(boost::math::float_distance(T(-T(0)), denorm_min), T(1));
+   BOOST_CHECK_EQUAL(boost::math::float_distance(T(0), T(1)), n_one);
+   BOOST_CHECK_EQUAL(boost::math::float_distance(T(1), T(-1)), T(-2 * n_one));
+   BOOST_CHECK_EQUAL(boost::math::float_distance(T(-denorm_min), max_val), n_max_plus_one);
+   BOOST_CHECK_EQUAL(boost::math::float_distance(T(-max_val), max_val), T(2 * n_max_plus_one - 2));
+   BOOST_CHECK_EQUAL(boost::math::float_distance(max_val, T(-max_val)), T(2 - 2 * n_max_plus_one));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
    test_values(1.0f, "float");
    test_values(1.0, "double");
+   test_distance_across_zero<float>();
+   test_distance_across_zero<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   // binary128 on aarch64 and s390x Linux:
+   if (!std::is_void<boost::math::detail::float_distance_bits_type<long double>::type>::value)
+      test_distance_across_zero<long double>();
+#endif
+#ifdef BOOST_MATH_TEST_FLOAT128
+   test_distance_across_zero<boost::multiprecision::float128>();
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_values(1.0L, "long double");
 
