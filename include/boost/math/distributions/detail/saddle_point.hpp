@@ -37,9 +37,11 @@ inline RealType stirlerr_series(const RealType& n, const Policy& pol)
    return bernoulli_stirling_series<RealType>(n, pol);
 }
 
-// The same for any n > 0: below the series' range, directly. The subtraction cancels, so the result is
-// not relatively accurate there, but its absolute error stays a few eps, which is what matters where it
-// enters an exponent. ln(n!) = log1p(tgamma1pm1(n)) for n < 1/2 avoids rounding 1 + n.
+// The same for any n > 0. Below the series' range, step down from above it with
+//   stirlerr(z) = stirlerr(z + 1) + (z + 1/2) log1pmx(1/z) + 1/(2z),
+// whose terms are about 1/(12 z^2) and are each formed with an absolute error of about eps/z.
+// (Computing ln(n!) - [(n + 1/2) ln n - n + ln(2 pi)/2] directly would cancel, with an absolute
+// error of about ln(n!) eps, which grows with the series' threshold and so with the precision.)
 template <class RealType, class Policy>
 inline RealType stirlerr(const RealType& n, const Policy& pol)
 {
@@ -48,9 +50,19 @@ inline RealType stirlerr(const RealType& n, const Policy& pol)
    {
       return stirlerr_series(n, pol);
    }
-   const RealType log_n_factorial = n < RealType(0.5) ? RealType(boost::math::log1p(boost::math::tgamma1pm1(n, pol), pol))
-                                                      : RealType(boost::math::lgamma(n + 1, pol));
-   return log_n_factorial - ((n + RealType(0.5)) * log(n) - n + log(constants::two_pi<RealType>()) / 2);
+   const RealType target = 2 * minimum_argument_for_bernoulli_recursion<RealType>();
+   int steps = 1;
+   while (!(n + steps > target))
+   {
+      ++steps;
+   }
+   RealType sum = stirlerr_series(RealType(n + steps), pol);
+   for (int j = steps - 1; j >= 0; --j)
+   {
+      const RealType z = n + j;
+      sum += (z + RealType(0.5)) * boost::math::log1pmx(RealType(1 / z), pol) + 1 / (2 * z);
+   }
+   return sum;
 }
 
 // The deviance term k ln(k/mean) + mean - k, for k > 0.

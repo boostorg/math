@@ -19,6 +19,7 @@
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <cstdint>
+#include <limits>
 #endif
 
 #ifdef BOOST_MATH_INSTRUMENT
@@ -503,6 +504,14 @@ inline typename tools::promote_args<T>::type
       result = detail::hypergeometric_pdf_factorial_imp<value_type>(x, r, n, N, forwarding_policy());
    }
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   else if((N <= boost::math::prime(boost::math::max_prime - 1)) && !(std::numeric_limits<value_type>::is_specialized && (std::numeric_limits<value_type>::digits <= 64)))
+   {
+      //
+      // Beyond 64-bit precision, Loader's method needs many more steps for its Stirling remainders
+      // at small arguments, so while the table of primes reaches we keep prime factorisation.
+      //
+      result = detail::hypergeometric_pdf_prime_imp<value_type>(x, r, n, N, forwarding_policy());
+   }
    else
    {
       //
