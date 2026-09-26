@@ -143,10 +143,10 @@ RealType von_mises_scaled_i0(RealType k, const Policy& pol)
     return sum / sqrt(constants::two_pi<RealType>() * k);
 }
 
-// s0 = e^-k I0(k) and d = e^-k (I0(k) - I1(k)), without the cancellation of forming I0 - I1,
-// so that the circular variance d/s0 = 1 - I1/I0 has full relative accuracy.
+// The circular variance 1 - I1(k)/I0(k) and ln(2 pi e^-k I0(k)), both without underflow and
+// without the cancellation of forming I0 - I1: every sum below has positive terms.
 template <typename RealType, typename Policy>
-void von_mises_scaled_i0_i1(RealType k, RealType* s0, RealType* d, const Policy&)
+void von_mises_moments(RealType k, RealType* circular_variance, RealType* log_two_pi_scaled_i0, const Policy&)
 {
     BOOST_MATH_STD_USING
     const RealType eps = tools::epsilon<RealType>();
@@ -170,13 +170,12 @@ void von_mises_scaled_i0_i1(RealType k, RealType* s0, RealType* d, const Policy&
                 break;
             }
         }
-        const RealType scale = 1 / sqrt(constants::two_pi<RealType>() * k);
-        *s0 = sum0 * scale;
-        *d = sumd * scale;
+        *circular_variance = sumd / sum0;
+        *log_two_pi_scaled_i0 = log(sum0 * sqrt(constants::two_pi<RealType>() / k));
         return;
     }
     // (1/pi) int_0^pi e^(-k(1 - cos t)) {1, 1 - cos t} dt by the trapezoidal rule, which for these
-    // periodic integrands at least squares the error with each halving of the step; every term is positive.
+    // periodic integrands at least squares the error with each halving of the step.
     const RealType tol = sqrt(eps);
     RealType f_end = exp(-2 * k);
     RealType sum0 = (1 + f_end) / 2;
@@ -204,16 +203,41 @@ void von_mises_scaled_i0_i1(RealType k, RealType* s0, RealType* d, const Policy&
             break;
         }
     }
-    *s0 = sum0 / n;
-    *d = sumd / n;
+    *circular_variance = sumd / sum0;
+    *log_two_pi_scaled_i0 = log(constants::two_pi<RealType>() * sum0 / n);
+}
+
+// int_0^width f(s) ds for the positive, smooth integrands below, which fall by at most the cutoff's
+// number of e-folds over the interval. That interval is not a full period, so the trapezoidal rule
+// would converge only as h^2: use Gauss-Legendre up to double precision, and tanh-sinh beyond.
+template <typename RealType, typename Policy, typename F>
+RealType von_mises_integrate(F f, RealType width, const Policy&)
+{
+    BOOST_MATH_IF_CONSTEXPR (std::numeric_limits<RealType>::is_specialized && (std::numeric_limits<RealType>::digits <= 53))
+    {
+        return quadrature::gauss<RealType, 30>::integrate(f, RealType(0), width);
+    }
+    else
+    {
+        static const quadrature::tanh_sinh<RealType, Policy> integrator;
+        return integrator.integrate(f, RealType(0), width, policies::get_epsilon<RealType, Policy>());
+    }
+}
+
+// Beyond this many e-folds the integrands are negligible: the part cut off is at most about
+// e^-L sqrt(2L) of what is kept.
+template <typename RealType, typename Policy>
+RealType von_mises_cutoff()
+{
+    BOOST_MATH_STD_USING
+    const RealType l0 = 1 - log(policies::get_epsilon<RealType, Policy>());
+    return l0 + log(l0);
 }
 
 // The cdf of the standard distribution at -a, 0 <= a <= pi, which is at most 1/2:
 //   F(-a) = (1/(2 pi e^-k I0(k))) int_a^pi e^(-k(1 - cos t)) dt.
 // The integrand is positive, so the left tail keeps its relative accuracy.
 // It falls off like e^(-k(cos a - cos t)), so the range is cut where it drops below eps.
-// The interval is not a full period, so the trapezoidal rule would converge only as h^2:
-// use Gauss-Legendre up to double precision, and tanh-sinh beyond.
 template <typename RealType, typename Policy>
 RealType von_mises_cdf_left(RealType k, RealType a, RealType s0, const Policy& pol)
 {
@@ -227,10 +251,8 @@ RealType von_mises_cdf_left(RealType k, RealType a, RealType s0, const Policy& p
     {
         return (pi - a) / constants::two_pi<RealType>();
     }
-    const RealType eps = policies::get_epsilon<RealType, Policy>();
     const RealType sin_half_a = sin(a / 2);
-    const RealType cutoff = -log(eps) + log1p(k * pi, pol) + 1;
-    const RealType s2 = sin_half_a * sin_half_a + cutoff / (2 * k);
+    const RealType s2 = sin_half_a * sin_half_a + von_mises_cutoff<RealType, Policy>() / (2 * k);
     const RealType width = (s2 >= 1 ? pi : RealType(2 * asin(sqrt(s2)))) - a;
     // In terms of the offset s = t - a, so that rounding t does not perturb the steep exponent:
     // cos a - cos t = 2 sin(a + s/2) sin(s/2).
@@ -238,17 +260,30 @@ RealType von_mises_cdf_left(RealType k, RealType a, RealType s0, const Policy& p
     {
         return exp(-2 * k * sin(a + s / 2) * sin(s / 2));
     };
-    RealType integral;
-    BOOST_MATH_IF_CONSTEXPR (std::numeric_limits<RealType>::is_specialized && (std::numeric_limits<RealType>::digits <= 53))
+    return exp(-2 * k * sin_half_a * sin_half_a) * von_mises_integrate(integrand, width, pol) / (constants::two_pi<RealType>() * s0);
+}
+
+// The probability between the mean and a, 0 <= a <= pi, with relative accuracy even as a -> 0:
+//   F(a) - 1/2 = (1/(2 pi e^-k I0(k))) int_0^a e^(-k(1 - cos t)) dt.
+template <typename RealType, typename Policy>
+RealType von_mises_cdf_centre(RealType k, RealType a, RealType s0, const Policy& pol)
+{
+    BOOST_MATH_STD_USING
+    RealType width = a;
+    if (k > 0)
     {
-        integral = quadrature::gauss<RealType, 30>::integrate(integrand, RealType(0), width);
+        const RealType s2 = von_mises_cutoff<RealType, Policy>() / (2 * k);
+        if (s2 < 1)
+        {
+            width = (std::min)(a, RealType(2 * asin(sqrt(s2))));
+        }
     }
-    else
+    auto integrand = [&](RealType t) -> RealType
     {
-        static const quadrature::tanh_sinh<RealType, Policy> integrator;
-        integral = integrator.integrate(integrand, RealType(0), width, eps);
-    }
-    return exp(-2 * k * sin_half_a * sin_half_a) * integral / (constants::two_pi<RealType>() * s0);
+        RealType s = sin(t / 2);
+        return exp(-2 * k * s * s);
+    };
+    return von_mises_integrate(integrand, width, pol) / (constants::two_pi<RealType>() * s0);
 }
 
 template <typename RealType, typename Policy>
@@ -264,39 +299,63 @@ template <typename RealType, typename Policy>
 RealType von_mises_quantile_left(RealType k, RealType p, const Policy& pol)
 {
     BOOST_MATH_STD_USING
+    static const char* function = "boost::math::quantile(const von_mises_distribution<%1%>&, %1%)";
     const RealType pi = constants::pi<RealType>();
     if (p <= 0)
     {
         return -pi;
     }
-    if (p == 0.5f)
-    {
-        // The median; Newton's relative stopping test never settles on a root at zero.
-        return 0;
-    }
     const RealType s0 = von_mises_scaled_i0(k, pol);
-    RealType guess;
-    if (k < 1)
+    std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+    const int digits = policies::digits<RealType, Policy>();
+    RealType result;
+    if (p >= 0.25f)
     {
-        guess = (2 * p - 1) * pi;
+        // Near the median solve for the distance a below it, so that the root is not
+        // lost against the 1/2 it sits beside: q = 1/2 - p is exact here.
+        const RealType q = 0.5f - p;
+        if (q == 0)
+        {
+            return 0;
+        }
+        RealType guess;
+        if (k < 1)
+        {
+            guess = constants::two_pi<RealType>() * q;
+        }
+        else
+        {
+            // Wrapped normal with variance 1/k: 2 sqrt(k) sin(u/2) is close to standard normal.
+            RealType z = constants::root_two<RealType>() * erf_inv(2 * q, pol) / (2 * sqrt(k));
+            guess = z >= 1 ? RealType(pi / 2) : RealType(2 * asin(z));
+        }
+        auto f = [&](RealType a) -> std::pair<RealType, RealType>
+        {
+            return std::make_pair(von_mises_cdf_centre(k, a, s0, pol) - q, von_mises_pdf_imp<RealType, Policy>(k, a, s0));
+        };
+        result = -tools::newton_raphson_iterate(f, guess, RealType(0), pi, digits, max_iter);
     }
     else
     {
-        // Wrapped normal with variance 1/k: 2 sqrt(k) sin(u/2) is close to standard normal.
-        RealType z = -constants::root_two<RealType>() * erfc_inv(2 * p, pol) / (2 * sqrt(k));
-        guess = z <= -1 ? RealType(-pi / 2) : RealType(2 * asin(z));
+        RealType guess;
+        if (k < 1)
+        {
+            guess = (2 * p - 1) * pi;
+        }
+        else
+        {
+            RealType z = -constants::root_two<RealType>() * erfc_inv(2 * p, pol) / (2 * sqrt(k));
+            guess = z <= -1 ? RealType(-pi / 2) : RealType(2 * asin(z));
+        }
+        auto f = [&](RealType u) -> std::pair<RealType, RealType>
+        {
+            return std::make_pair(von_mises_cdf_left(k, -u, s0, pol) - p, von_mises_pdf_imp<RealType, Policy>(k, u, s0));
+        };
+        result = tools::newton_raphson_iterate(f, guess, -pi, RealType(0), digits, max_iter);
     }
-    auto f = [&](RealType u) -> std::pair<RealType, RealType>
-    {
-        RealType cdf = u <= 0 ? von_mises_cdf_left(k, -u, s0, pol) : 1 - von_mises_cdf_left(k, u, s0, pol);
-        return std::make_pair(cdf - p, von_mises_pdf_imp<RealType, Policy>(k, u, s0));
-    };
-    // The root is in [-pi, 0], but rounding can put it just above 0 when p is close to 1/2.
-    std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
-    RealType result = tools::newton_raphson_iterate(f, guess, -pi, pi, policies::digits<RealType, Policy>(), max_iter);
     if (max_iter >= policies::get_max_root_iterations<Policy>())
     {
-        return policies::raise_evaluation_error<RealType>("boost::math::quantile(const von_mises_distribution<%1%>&, %1%)",
+        return policies::raise_evaluation_error<RealType>(function,
             "Unable to locate solution in a reasonable time: either there is no answer to quantile or the answer is infinite.  Current best guess is %1%", result, pol);
     }
     return result;
@@ -418,9 +477,9 @@ inline RealType median(const von_mises_distribution<RealType, Policy>& dist)
 BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType variance(const von_mises_distribution<RealType, Policy>& dist)
 {
-    RealType s0, d;
-    detail::von_mises_scaled_i0_i1(dist.concentration(), &s0, &d, Policy());
-    return d / s0;
+    RealType v, log_two_pi_s0;
+    detail::von_mises_moments(dist.concentration(), &v, &log_two_pi_s0, Policy());
+    return v;
 }
 
 // Circular standard deviation, sqrt(-2 ln(I1(k)/I0(k))).
@@ -428,9 +487,14 @@ BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType standard_deviation(const von_mises_distribution<RealType, Policy>& dist)
 {
     BOOST_MATH_STD_USING
-    RealType s0, d;
-    detail::von_mises_scaled_i0_i1(dist.concentration(), &s0, &d, Policy());
-    return sqrt(-2 * log1p(-d / s0, Policy()));
+    if (dist.concentration() == 0)
+    {
+        return policies::raise_overflow_error<RealType>("boost::math::standard_deviation(const von_mises_distribution<%1%>&)",
+            "The circular standard deviation is infinite when the concentration is zero.", Policy());
+    }
+    RealType v, log_two_pi_s0;
+    detail::von_mises_moments(dist.concentration(), &v, &log_two_pi_s0, Policy());
+    return sqrt(-2 * log1p(-v, Policy()));
 }
 
 BOOST_MATH_EXPORT template <typename RealType, typename Policy>
@@ -445,9 +509,9 @@ inline RealType entropy(const von_mises_distribution<RealType, Policy>& dist)
     BOOST_MATH_STD_USING
     // ln(2 pi I0(k)) - k I1(k)/I0(k), with the e^k factors cancelled.
     const RealType k = dist.concentration();
-    RealType s0, d;
-    detail::von_mises_scaled_i0_i1(k, &s0, &d, Policy());
-    return log(constants::two_pi<RealType>() * s0) + k * d / s0;
+    RealType v, log_two_pi_s0;
+    detail::von_mises_moments(k, &v, &log_two_pi_s0, Policy());
+    return log_two_pi_s0 + k * v;
 }
 
 } // namespace math

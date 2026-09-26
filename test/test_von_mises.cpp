@@ -255,6 +255,45 @@ void test_symmetry()
     }
 }
 
+// Where the distribution is normal to within rounding, and the moments' scaled Bessel values would underflow.
+template <class T>
+void test_huge_concentration()
+{
+    using std::log;
+    using std::sqrt;
+    const T e = boost::math::constants::e<T>();
+    const T two_pi = boost::math::constants::two_pi<T>();
+    const T k = std::numeric_limits<T>::max_exponent10 > 100 ? T(1e250) : T(1e30);
+    von_mises_distribution<T> dist(0, k);
+    CHECK_ULP_CLOSE(1 / (2 * k), variance(dist), 8);
+    CHECK_ULP_CLOSE(1 / sqrt(k), standard_deviation(dist), 8);
+    CHECK_ULP_CLOSE(log(two_pi * e / k) / 2, entropy(dist), 8);
+    // Phi(-1) and Phi(-10).
+    CHECK_ULP_CLOSE(T(0.158655253931457051414767454367962077522L), cdf(dist, -1 / sqrt(k)), 16);
+    CHECK_ULP_CLOSE(T(7.61985302416052606597337100660413e-24L), cdf(dist, -10 / sqrt(k)), 128);
+    CHECK_ULP_CLOSE(T(7.61985302416052606597337100660413e-24L), cdf(complement(dist, 10 / sqrt(k))), 128);
+}
+
+// Probabilities a few ulps from the median put the root within rounding of zero.
+template <class T>
+void test_quantile_near_median()
+{
+    using std::nextafter;
+    for (T k : {T(0), T(1), T(50), T(1e6)})
+    {
+        von_mises_distribution<T> dist(0, k);
+        T p = T(0.5);
+        for (int i = 0; i < 4; ++i)
+        {
+            p = nextafter(p, T(0));
+            const T below = quantile(dist, p);
+            CHECK_ULP_CLOSE(-below, quantile(complement(dist, p)), 4);
+            // Here F(u) = 1/2 + pdf(0) u to within rounding.
+            CHECK_ULP_CLOSE(-(T(0.5) - p) / pdf(dist, T(0)), below, 8);
+        }
+    }
+}
+
 template <class T>
 void test_support()
 {
@@ -287,6 +326,8 @@ void test_errors()
     CHECK_THROW(quantile(dist, T(-1)), std::domain_error);
     CHECK_THROW(quantile(dist, T(2)), std::domain_error);
     CHECK_THROW(quantile(complement(dist, nan)), std::domain_error);
+    // The circular standard deviation of the uniform circle is infinite.
+    CHECK_THROW(standard_deviation(von_mises_distribution<T>(0, 0)), std::overflow_error);
 }
 
 template <class T>
@@ -303,6 +344,11 @@ void test_all()
     test_symmetry<T>();
     test_support<T>();
     test_errors<T>();
+    if (is_fast<T>())
+    {
+        test_huge_concentration<T>();
+        test_quantile_near_median<T>();
+    }
 }
 
 int main()

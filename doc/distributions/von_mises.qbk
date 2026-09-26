@@ -76,6 +76,7 @@ The moments are those of circular statistics:
 and `standard_deviation` returns the circular standard deviation
 [sqrt](-2 ln(I[sub 1]([kappa])/I[sub 0]([kappa]))),
 so the standard deviation is not the square root of the variance.
+With zero concentration the circular standard deviation is infinite, and `standard_deviation` calls __overflow_error.
 
 [h4 Accuracy]
 
