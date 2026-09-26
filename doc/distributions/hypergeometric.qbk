@@ -89,8 +89,8 @@ that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random variable are the 64-bit unsigned integers in the range
 \[max(0, n + r - N), min(n, r)\].  A __domain_error is raised if the
-random variable is outside this range.  The CDF, its complement, and the quantile
-also raise a __domain_error for a non-integral value; the PDF instead returns the
+random variable is outside this range.  The CDF and its complement also raise a
+__domain_error for a non-integral random variable; the PDF instead returns the
 analytic continuation of its formula in terms of binomial coefficients (see Implementation below).
 
 [caution
