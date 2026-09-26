@@ -17,8 +17,9 @@
 namespace boost::math::interpolators::detail {
 
 
-template <class RandomAccessContainer, class Size>
-inline RandomAccessContainer& get_bezier_storage(Size size)
+// Each thread has its own scratch space, allocated on first use.
+template <class RandomAccessContainer>
+inline RandomAccessContainer& get_bezier_storage(typename RandomAccessContainer::size_type size)
 {
     static thread_local RandomAccessContainer the_storage;
     if (the_storage.size() < size) {
@@ -53,7 +54,6 @@ public:
             }
         }
         control_points_ = std::move(control_points);
-        get_bezier_storage<RandomAccessContainer>(control_points_.size() - 1);
     }
 
     inline Point operator()(Real t) const
