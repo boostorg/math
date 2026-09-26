@@ -89,7 +89,9 @@ that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random variable are the 64-bit unsigned integers in the range
 \[max(0, n + r - N), min(n, r)\].  A __domain_error is raised if the
-random variable is outside this range, or is not an integral value.
+random variable is outside this range.  The CDF, its complement, and the quantile
+also raise a __domain_error for a non-integral value; the PDF instead returns the
+analytic continuation of its formula in terms of binomial coefficients (see Implementation below).
 
 [caution
 The quantile function will by default return an integer result that has been
@@ -209,6 +211,16 @@ calculating via logarithms.  We use the latter method, as it is usually
 lgamma.  However, in this area where N > 104729, the user should expect
 to lose around log[sub 10]N decimal digits during the calculation in
 the worst case.
+
+For non-integral /k/ the PDF is the analytic continuation of the formula above, with
+the binomial coefficients written in terms of gamma functions.  It is computed from the
+PDF at the integer /j/ = floor(/k/) and the shift /d/ = /k/ - /j/:
+
+[expression f(k) = f(j) \u00d7 [Gamma](j+1)/[Gamma](j+1+d) \u00d7 [Gamma](N-r-n+j+1)/[Gamma](N-r-n+j+1+d) \u00d7 [Gamma](r-k+1+d)/[Gamma](r-k+1) \u00d7 [Gamma](n-k+1+d)/[Gamma](n-k+1)]
+
+where each ratio is evaluated with __tgamma_delta_ratio, which is accurate for small /d/ and large arguments.
+The result is accurate to a few epsilon beyond the conditioning of the function in /k/,
+agrees with the integer values as /d/ \u2192 0, and is log-concave, so it is monotone on either side of the mode.
 
 The CDF and its complement is calculated by directly summing the PDFs.
 We start by deciding whether the CDF, or its complement, is likely to be
