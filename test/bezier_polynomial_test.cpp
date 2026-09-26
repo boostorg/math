@@ -11,6 +11,8 @@
 #include <numeric>
 #include <random>
 #include <array>
+#include <thread>
+#include <vector>
 #include <boost/core/demangle.hpp>
 #include <boost/math/interpolators/bezier_polynomial.hpp>
 #ifdef BOOST_HAS_FLOAT128
@@ -186,6 +188,45 @@ void test_linear_precision()
     }
 }
 
+// The scratch space is thread_local, so a curve built on one thread must also be usable on others.
+template<typename Real>
+void test_other_threads()
+{
+    std::vector<std::array<Real, 3>> control_points(7);
+    for (size_t i = 0; i < control_points.size(); ++i) {
+        control_points[i] = {Real(i), Real(i*i), Real(1)/Real(i + 1)};
+    }
+    auto bp = bezier_polynomial(std::move(control_points));
+    std::vector<Real> ts{Real(0), Real(0.125), Real(0.5), Real(0.75), Real(1)};
+    std::vector<std::array<Real, 3>> expected_p, expected_dp;
+    for (Real t : ts) {
+        expected_p.push_back(bp(t));
+        expected_dp.push_back(bp.prime(t));
+    }
+    // Evaluate on other threads, then check on this one: the checks themselves are not thread-safe.
+    std::vector<std::vector<std::array<Real, 3>>> computed_p(4), computed_dp(4);
+    std::vector<std::thread> threads;
+    for (size_t k = 0; k < computed_p.size(); ++k) {
+        threads.emplace_back([&, k]() {
+            for (Real t : ts) {
+                computed_p[k].push_back(bp(t));
+                computed_dp[k].push_back(bp.prime(t));
+            }
+        });
+    }
+    for (auto& thread : threads) {
+        thread.join();
+    }
+    for (size_t k = 0; k < computed_p.size(); ++k) {
+        for (size_t i = 0; i < ts.size(); ++i) {
+            for (size_t j = 0; j < 3; ++j) {
+                CHECK_EQUAL(expected_p[i][j], computed_p[k][i][j]);
+                CHECK_EQUAL(expected_dp[i][j], computed_dp[k][i][j]);
+            }
+        }
+    }
+}
+
 int main()
 {
     #ifdef __STDCPP_FLOAT32_T__
@@ -215,6 +256,7 @@ int main()
     test_linear_precision<double>();
     test_reversal_symmetry<double>();
     #endif
+    test_other_threads<double>();
 
     #ifdef BOOST_HAS_FLOAT128
     test_linear<float128>();
