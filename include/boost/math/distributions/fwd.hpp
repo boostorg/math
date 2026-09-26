@@ -129,7 +129,7 @@ class uniform_distribution;
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 class weibull_distribution;
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 class von_mises_distribution;
 
 }} // namespaces

@@ -9,8 +9,9 @@
 
 #include <boost/math/distributions/von_mises.hpp>
 #include <boost/math/tools/ulps_plot.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
 
-using precise_real = long double;
+using precise_real = boost::multiprecision::cpp_bin_float_50;
 
 template <typename CoarseReal>
 void generate_ulps_plot_pdf(CoarseReal concentration)
@@ -30,8 +31,9 @@ void generate_ulps_plot_pdf(CoarseReal concentration)
 
     using hp_func = decltype (high_precision);
 
+    auto pi = boost::math::constants::pi<CoarseReal>();
     boost::math::tools::ulps_plot<hp_func, precise_real, CoarseReal> plot(
-                high_precision, 0, boost::math::constants::pi<CoarseReal>());
+                high_precision, -pi, +pi);
     plot.add_fn(low_precision);
     std::string filename = "von_mises_ulps_pdf_"
                            + std::to_string(static_cast<int>(concentration))

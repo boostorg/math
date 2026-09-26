@@ -1,4 +1,3 @@
-
 // Copyright Philipp C. J. Muenster 2020.
 // Copyright Paul A. Bristow 2010.
 // Copyright John Maddock 2007.
@@ -9,385 +8,315 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// test_von_mises.cpp
-
-// https://en.wikipedia.org/wiki/Von_Mises_distribution
-// From MathWorld--A Wolfram Web Resource.
-// http://mathworld.wolfram.com/VonMisesDistribution.html
-
-#ifdef _MSC_VER
-#  pragma warning (disable: 4127) // conditional expression is constant
-// caused by using   if(std::numeric_limits<RealType>::has_infinity)
-// and   if (std::numeric_limits<RealType>::has_quiet_NaN)
-#endif
-
-#include <boost/cstdfloat.hpp>
-#include <boost/math/concepts/real_concept.hpp> // for real_concept
-
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp> // Boost.Test
-#include <boost/test/tools/floating_point_comparison.hpp>
-
 #include <boost/math/distributions/von_mises.hpp>
-   using boost::math::von_mises_distribution;
-#include <boost/math/tools/test.hpp>
-
+#include <boost/math/quadrature/gauss.hpp>
+#ifndef BOOST_MATH_STANDALONE
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#endif
 #include "math_unit_test.hpp"
-#include "pch.hpp"
-#include "test_out_of_range.hpp"
 
-#include <iostream>
-#include <iomanip>
-   using std::cout;
-   using std::endl;
-   using std::setprecision;
+#include <cmath>
+#include <cstdlib>
 #include <limits>
-   using std::numeric_limits;
+#include <stdexcept>
+#include <type_traits>
 
-template <class RealType>
-void check_von_mises(RealType mean, RealType conc, RealType x, RealType p, RealType q, RealType tol)
+using boost::math::von_mises_distribution;
+
+// strtold rather than lexical_cast, which rejects values that underflow T.
+template <class T>
+typename std::enable_if<std::is_floating_point<T>::value, T>::type from_string(const char* s)
 {
-  BOOST_CHECK_CLOSE(
-      ::boost::math::cdf(
-          von_mises_distribution<RealType>(mean, conc),      // distribution.
-          x),                                                // random variable.
-      p,                                                     // probability.
-      tol);                                                  // %tolerance.
-  BOOST_CHECK_CLOSE(
-      ::boost::math::cdf(
-          complement(
-              von_mises_distribution<RealType>(mean, conc),  // distribution.
-              x)),                                           // random variable.
-      q,                                                     // probability complement.
-      tol);                                                  // %tolerance.
-  BOOST_CHECK_CLOSE(
-      ::boost::math::quantile(
-          von_mises_distribution<RealType>(mean, conc),      // distribution.
-          p),                                                // probability.
-      x,                                                     // random variable.
-      tol);                                                  // %tolerance.
-   BOOST_CHECK_CLOSE(
-      ::boost::math::quantile(
-          complement(
-              von_mises_distribution<RealType>(mean, conc),  // distribution.
-              q)),                                           // probability complement.
-      x,                                                     // random variable.
-      tol);                                                  // %tolerance.
+    return static_cast<T>(std::strtold(s, nullptr));
 }
 
-template <class RealType>
-void test_spots(RealType)
+template <class T>
+typename std::enable_if<!std::is_floating_point<T>::value, T>::type from_string(const char* s)
 {
-  // Basic sanity checks
-  // Check some bad parameters to the distribution,
-#ifndef BOOST_NO_EXCEPTIONS
-  BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType> nbad1(0, -1), std::domain_error); // negative conc
-#else
-  BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType>(0, -1), std::domain_error); // negative conc
-#endif
+    return T(s);
+}
 
-  // Tests on extreme values of random variate x, if has std::numeric_limits infinity etc.
-  von_mises_distribution<RealType> N01;
-  if(std::numeric_limits<RealType>::has_infinity)
-  {
-    BOOST_MATH_CHECK_THROW(pdf(N01, +std::numeric_limits<RealType>::infinity()), std::domain_error);             // x = + infinity, pdf = 0
-    BOOST_MATH_CHECK_THROW(pdf(N01, -std::numeric_limits<RealType>::infinity()), std::domain_error);             // x = - infinity, pdf = 0
-    BOOST_MATH_CHECK_THROW(cdf(N01, +std::numeric_limits<RealType>::infinity()), std::domain_error);             // x = + infinity, cdf = 1
-    BOOST_MATH_CHECK_THROW(cdf(N01, -std::numeric_limits<RealType>::infinity()), std::domain_error);             // x = - infinity, cdf = 0
-    BOOST_MATH_CHECK_THROW(cdf(complement(N01, +std::numeric_limits<RealType>::infinity())), std::domain_error); // x = + infinity, c cdf = 0
-    BOOST_MATH_CHECK_THROW(cdf(complement(N01, -std::numeric_limits<RealType>::infinity())), std::domain_error); // x = - infinity, c cdf = 1
-
-#ifndef BOOST_NO_EXCEPTIONS
-    BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType> nbad1(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), std::domain_error); // +infinite mean
-    BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType> nbad1(-std::numeric_limits<RealType>::infinity(),  static_cast<RealType>(1)), std::domain_error); // -infinite mean
-    BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType> nbad1(static_cast<RealType>(0), std::numeric_limits<RealType>::infinity()), std::domain_error); // infinite conc
-#else
-    BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType>(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), std::domain_error); // +infinite mean
-    BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType>(-std::numeric_limits<RealType>::infinity(),  static_cast<RealType>(1)), std::domain_error); // -infinite mean
-    BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType>(static_cast<RealType>(0), std::numeric_limits<RealType>::infinity()), std::domain_error); // infinite conc
-#endif
-  }
-
-  if (std::numeric_limits<RealType>::has_quiet_NaN)
-  {
-    // No longer allow x to be NaN, then these tests should throw.
-    BOOST_MATH_CHECK_THROW(pdf(N01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // x = NaN
-    BOOST_MATH_CHECK_THROW(cdf(N01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // x = NaN
-    BOOST_MATH_CHECK_THROW(cdf(complement(N01, +std::numeric_limits<RealType>::quiet_NaN())), std::domain_error); // x = + infinity
-    BOOST_MATH_CHECK_THROW(quantile(N01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // p = + infinity
-    BOOST_MATH_CHECK_THROW(quantile(complement(N01, +std::numeric_limits<RealType>::quiet_NaN())), std::domain_error); // p = + infinity
-  }
-
-  //
-  // Tests for PDF: we know that the peak value is at e/(2*pi*I0(1)
-  //
-  RealType tolerance = boost::math::tools::epsilon<RealType>() * 5 * 100; // 5 eps as a percentage
-  BOOST_CHECK_CLOSE(
-      pdf(von_mises_distribution<RealType>(), static_cast<RealType>(0)),
-      static_cast<RealType>(0.34171048862346315949457814754706159394027L),  // e/(2*pi*I0(1))
-      tolerance);
-  BOOST_CHECK_CLOSE(
-      pdf(von_mises_distribution<RealType>(3, 0), static_cast<RealType>(3)),
-      static_cast<RealType>(0.15915494309189533576888376337251L),           // 1/(2*pi)
-      tolerance);
-  BOOST_CHECK_CLOSE(
-      pdf(von_mises_distribution<RealType>(3), static_cast<RealType>(3)),
-      static_cast<RealType>(0.34171048862346315949457814754706159394027L),  // e/(2*pi*I0(1))
-      tolerance);
-  BOOST_CHECK_CLOSE(
-      pdf(von_mises_distribution<RealType>(3, 5), static_cast<RealType>(3)),
-      static_cast<RealType>(0.86713652854235200257351846969777045343907L),  // e^5/(2*pi*I0(5))
-      tolerance);
-  BOOST_CHECK_CLOSE(
-      pdf(von_mises_distribution<RealType>(3, 25), static_cast<RealType>(3)),
-      static_cast<RealType>(1.98455543847726689510475504795539869409664L),  // e^25/(2*pi*I0(25))
-      tolerance);
-    // edge case for single point precision
-    BOOST_CHECK_CLOSE(
-      pdf(von_mises_distribution<RealType>(3, 86), static_cast<RealType>(3)),
-      static_cast<RealType>(3.69423343123704539549725123346713237943413L),
-      tolerance);
-  BOOST_CHECK_CLOSE(
-      pdf(von_mises_distribution<RealType>(3, 87), static_cast<RealType>(3)),
-      static_cast<RealType>(3.71571226458759536792289974309199255119626L),
-      tolerance);
-    // edge case for double point precision
-  BOOST_CHECK_CLOSE(
-      pdf(von_mises_distribution<RealType>(3, 708), static_cast<RealType>(3)),
-      static_cast<RealType>(10.6132883625399035032551439553585260831760L),
-      tolerance);
-    BOOST_CHECK_CLOSE(
-      pdf(von_mises_distribution<RealType>(3, 709), static_cast<RealType>(3)),
-      static_cast<RealType>(10.6207836264247647802343430545802569228891L),
-      tolerance);
-
-  tolerance = 2e-3f; // 2e-5 (as %)
-
-  cout << "Tolerance for type " << typeid(RealType).name()
-       << " is " << tolerance << " %" << endl;
-
-  // test CDF for mean and interval edges
-  check_von_mises(
-      static_cast<RealType>(0),
-      static_cast<RealType>(1),
-      static_cast<RealType>(0),
-      static_cast<RealType>(0.5L),
-      static_cast<RealType>(0.5L),
-      tolerance);
-
-  check_von_mises(
-      static_cast<RealType>(0),
-      static_cast<RealType>(1),
-      static_cast<RealType>(-boost::math::constants::pi<RealType>()),
-      static_cast<RealType>(0.0L),
-      static_cast<RealType>(1.0L),
-      tolerance);
-
-  check_von_mises(
-      static_cast<RealType>(0),
-      static_cast<RealType>(1),
-      static_cast<RealType>(boost::math::constants::pi<RealType>()),
-      static_cast<RealType>(1.0L),
-      static_cast<RealType>(0.0L),
-      tolerance);
-
-  // test CDF for low concentrations
-  check_von_mises(
-      static_cast<RealType>(0),
-      static_cast<RealType>(1),
-      static_cast<RealType>(1),
-      static_cast<RealType>(0.794355307434683479987678129735260058645499262629455722769L),
-      static_cast<RealType>(0.205644692565316520012321870264739941354500737370544277230L),
-      tolerance);
-
-  check_von_mises(
-      static_cast<RealType>(0),
-      static_cast<RealType>(1),
-      static_cast<RealType>(-1),
-      static_cast<RealType>(0.205644692565316520012321870264739941354500737370544277230L),
-      static_cast<RealType>(0.794355307434683479987678129735260058645499262629455722769L),
-      tolerance);
-
-  check_von_mises(
-      static_cast<RealType>(0),
-      static_cast<RealType>(5),
-      static_cast<RealType>(1),
-      static_cast<RealType>(0.98096204546814689054581384796251763480020360394758184271L),
-      static_cast<RealType>(0.01903795453185310945418615203748236519979639605241815729L),
-      tolerance);
-
-  check_von_mises(
-      static_cast<RealType>(0),
-      static_cast<RealType>(5),
-      static_cast<RealType>(-1),
-      static_cast<RealType>(0.01903795453185310945418615203748236519979639605241815729L),
-      static_cast<RealType>(0.98096204546814689054581384796251763480020360394758184271L),
-      tolerance);
-
-  // test CDF for high concentrations
-  //~ check_von_mises(
-      //~ static_cast<RealType>(0),
-      //~ static_cast<RealType>(25),
-      //~ static_cast<RealType>(1),
-      //~ static_cast<RealType>(0.999999062404464440452233504489299782776166264467210572765L),
-      //~ static_cast<RealType>(9.37595535559547766495510700217223833735532789427234e-7L),
-      //~ tolerance);
-
-  //~ check_von_mises(
-      //~ static_cast<RealType>(0),
-      //~ static_cast<RealType>(25),
-      //~ static_cast<RealType>(-1),
-      //~ static_cast<RealType>(9.37595535559547766495510700217223833735532789427234e-7L),
-      //~ static_cast<RealType>(0.999999062404464440452233504489299782776166264467210572765L),
-      //~ tolerance);
-
-  //~ check_von_mises(
-      //~ static_cast<RealType>(0),
-      //~ static_cast<RealType>(125),
-      //~ static_cast<RealType>(1),
-      //~ static_cast<RealType>(0.99999999999999999996645363431349332910951002333081490389L),
-      //~ static_cast<RealType>(3.3546365686506670890489976669185096109e-20L),
-      //~ tolerance);
-
-  //~ check_von_mises(
-      //~ static_cast<RealType>(0),
-      //~ static_cast<RealType>(125),
-      //~ static_cast<RealType>(-1),
-      //~ static_cast<RealType>(3.3546365686506670890489976669185096109e-20L),
-      //~ static_cast<RealType>(0.99999999999999999996645363431349332910951002333081490389L),
-      //~ tolerance);
-
-
-  RealType tol2 = boost::math::tools::epsilon<RealType>() * 500;
-  von_mises_distribution<RealType> dist(2, 3);
-  RealType x = static_cast<RealType>(0.125);
-
-  BOOST_MATH_STD_USING // ADL of std math lib names
-
-  // mean:
-  BOOST_CHECK_CLOSE(
-       mean(dist)
-       , static_cast<RealType>(2), tol2);
-  // variance:
-  BOOST_CHECK_CLOSE(
-       variance(von_mises_distribution<RealType>(2, 0))
-       , static_cast<RealType>(1), tol2);
-  BOOST_CHECK_CLOSE(
-       variance(von_mises_distribution<RealType>(2, 1))
-       , static_cast<RealType>(0.553610034103465492952318204807357330223746852599612177138L), tol2);
-  BOOST_CHECK_CLOSE(
-       variance(von_mises_distribution<RealType>(2, 5))
-       , static_cast<RealType>(0.106616862955914778412994992775050827245562823701700738786L), tol2);
-  //~ BOOST_CHECK_CLOSE(
-       //~ variance(von_mises_distribution<RealType>(2, 25))
-       //~ , static_cast<RealType>(0.020208546509484068780303296944566388571293465011951716357L), tol2);
-  //~ BOOST_CHECK_CLOSE(
-       //~ variance(von_mises_distribution<RealType>(2, 125))
-       //~ , static_cast<RealType>(0.004008064813593637057963834031301840442156903531539609019L), tol2);
-
-  // std deviation:
-  BOOST_CHECK_CLOSE(
-       standard_deviation(dist)
-       , static_cast<RealType>(0.649213658343262740252572725779410261163523458085389547123L), tol2);
-  // hazard:
-  BOOST_CHECK_CLOSE(
-       hazard(dist, x)
-       , pdf(dist, x) / cdf(complement(dist, x)), tol2);
-  // cumulative hazard:
-  BOOST_CHECK_CLOSE(
-       chf(dist, x)
-       , -log(cdf(complement(dist, x))), tol2);
-  // coefficient_of_variation:
-  BOOST_CHECK_CLOSE(
-       coefficient_of_variation(dist)
-       , standard_deviation(dist) / mean(dist), tol2);
-  // mode:
-  BOOST_CHECK_CLOSE(
-       mode(dist)
-       , static_cast<RealType>(2), tol2);
-
-  BOOST_CHECK_CLOSE(
-       median(dist)
-       , static_cast<RealType>(2), tol2);
-
-  // skewness:
-  BOOST_CHECK_CLOSE(
-       skewness(dist)
-       , static_cast<RealType>(0), tol2);
-
-  BOOST_CHECK_CLOSE(
-       entropy(dist)
-       , 0.993228806353252817873771736349142645476889275244864748502L, tol2);
-
-  von_mises_distribution<RealType> norm01(0, 1); // Test default (0, 1)
-  BOOST_CHECK_CLOSE(
-       mean(norm01),
-       static_cast<RealType>(0), 0); // Mean == zero
-
-  von_mises_distribution<RealType> defsd_norm01(0); // Test default (0, sd = 1)
-  BOOST_CHECK_CLOSE(
-       mean(defsd_norm01),
-       static_cast<RealType>(0), 0); // Mean == zero
-
-  von_mises_distribution<RealType> def_norm01; // Test default (0, sd = 1)
-  BOOST_CHECK_CLOSE(
-       mean(def_norm01),
-       static_cast<RealType>(0), 0); // Mean == zero
-
-  // Error tests:
-  check_out_of_range<boost::math::von_mises_distribution<RealType> >(0, 1); // (All) valid constructor parameter values.
-
-  BOOST_MATH_CHECK_THROW(quantile(von_mises_distribution<RealType>(0, 1), -1), std::domain_error);
-  BOOST_MATH_CHECK_THROW(quantile(von_mises_distribution<RealType>(0, 1), 2), std::domain_error);
-} // template <class RealType>void test_spots(RealType)
-
-template <typename RealType>
-void test_symmetry(RealType)
+// The relative error of exp(-y) is |y| times that of y, so allow for it.
+template <class T>
+int exp_tolerance(T k, T u)
 {
-    RealType const pi = boost::math::constants::pi<RealType>();
-    RealType delta = 1.0 / (1 << 4);
-  for (RealType mean = 0; mean < pi; mean += delta) {
-    for (RealType conc = 0; conc < 100; conc = (conc + 1) * 1.5 - 1) {
-      von_mises_distribution<RealType> dist(mean, conc);
-      for (RealType x = 0; x < pi; x += delta) {
-        CHECK_ULP_CLOSE(pdf(dist, mean + x),
-                        pdf(dist, mean - x), 2);
-        CHECK_ULP_CLOSE(cdf(dist, mean + x) - static_cast<RealType>(0.5),
-                        static_cast<RealType>(0.5) - cdf(dist, mean - x), 32);
-      }
+    using std::sin;
+    T s = sin(u / 2);
+    return 32 + static_cast<int>(8 * k * s * s);
+}
+
+// Beyond double the cdf uses tanh-sinh quadrature, which takes milliseconds, so those types get sparser loops.
+template <class T>
+bool is_fast()
+{
+    return std::is_floating_point<T>::value;
+}
+
+template <class T>
+T grid_step()
+{
+    return is_fast<T>() ? T(0.125) : T(1);
+}
+
+template <class T>
+void test_spots()
+{
+    // {kappa, u, pdf, cdf, complement of cdf}, from mpmath at 60 digits.
+    static const char* const data[][5] = {
+      {"0.5", "-3.0", "0.0912252976461840379820933577361329255606", "0.01287384404011132628315119923691059344663", "0.9871261559598886737168488007630894065534"},
+      {"0.5", "-1.0", "0.196071550526524086413763451689326250825", "0.2715226591251793199448800702551483284961", "0.7284773408748206800551199297448516715039"},
+      {"0.5", "-0.25", "0.2429327617033683559013882330159184120864", "0.4386341927772687107551605685702497556036", "0.5613658072227312892448394314297502443964"},
+      {"0.5", "0.0", "0.2467383573941201474772991642849040692603", "0.5", "0.5"},
+      {"0.5", "0.5", "0.232088734383606427838415056057829590115", "0.6208770268159540434436100108945377629265", "0.3791229731840459565563899891054622370735"},
+      {"0.5", "2.0", "0.1215414157555752772890403705423004325392", "0.8848231100868918132924501451608733377203", "0.1151768899131081867075498548391266622797"},
+      {"5.0", "-3.0", "0.00004138792752915659777616252209971139913074", "0.000005668659921619703012317037101563918361689", "0.9999943313400783802969876829628984360816"},
+      {"5.0", "-1.0", "0.08706961456376827266327441069660051952476", "0.0190379545318531094541861520374823651998", "0.9809620454681468905458138479625176348002"},
+      {"5.0", "-0.25", "0.7423037643464445689948461977563146163048", "0.2939650204800054031218938580632133253127", "0.7060349795199945968781061419367866746873"},
+      {"5.0", "0.0", "0.8671365285423520025735184696977704534391", "0.5", "0.5"},
+      {"5.0", "0.5", "0.4701770125291431414758802335102456690076", "0.8586624818092983238327382084308137380641", "0.1413375181907016761672617915691862619359"},
+      {"5.0", "2.0", "0.0007293965387295747468161420565478164792032", "0.999810518550356705764482062195139854066", "0.0001894814496432942355179378048601459340429"},
+      {"50.0", "-3.0", "1.726474728701131897274231580755440210442e-43", "1.771559480845494822618388772926421989873e-44", "1.0"},
+      {"50.0", "-1.0", "0.0000000002931498292824351897359431582750173746876", "0.000000000006869235154586915768865963174674043998617", "0.9999999999931307648454130842311340368253"},
+      {"50.0", "-0.25", "0.5946207433807447509051628129560149739889", "0.03931556815087087478901111487392325730048", "0.9606844318491291252109888851260767426995"},
+      {"50.0", "0.0", "2.81383249608255054589931212712591310859", "0.5", "0.5"},
+      {"50.0", "0.5", "0.006180695497707893157202489669503380565833", "0.9997582277598794729826240424180070740493", "0.0002417722401205270173759575819929259507402"},
+      {"50.0", "2.0", "4.989538832605930159529018130048728362805e-31", "0.9999999999999999999999999999999889056431", "1.109435685709275223350169131875357208308e-32"},
+      {"1000.0", "-3.0", "7.212659818487654971016715045664679601909e-864", "5.419758304748379754068015875706168003294e-866", "1.0"},
+      {"1000.0", "-1.0", "2.862093693516050071781425702949356969262e-199", "3.39871343372991781227724531225219529813e-202", "1.0"},
+      {"1000.0", "-0.25", "3.978249758044480108064723961370962347826e-13", "1.583689032406510412742370845548162517928e-15", "0.9999999999999984163109675934895872576292"},
+      {"1000.0", "0.0", "12.61408496162744720188900353346495083738", "0.5", "0.5"},
+      {"1000.0", "0.5", "8.622593097199372341764522813836560181269e-53", "1.0", "1.791743860692674111721063817439501913897e-55"},
+      {"1000.0", "2.0", "1.191513794511670949059178707139141346055e-614", "1.0", "1.311029608541689282749467334862523737376e-617"},
+      {"1000000.0", "-0.25", "2.736548875920210235984480318011804339029e-13499", "1.10608802206099512319217301932265410593e-13504", "1.0"},
+      {"1000000.0", "0.0", "398.9422305336258105819158952373769957743", "0.5", "0.5"},
+    };
+    for (auto const& row : data)
+    {
+        const T k = from_string<T>(row[0]);
+        const T u = from_string<T>(row[1]);
+        const T expected_pdf = from_string<T>(row[2]);
+        const T expected_cdf = from_string<T>(row[3]);
+        const T expected_ccdf = from_string<T>(row[4]);
+        const int tol = exp_tolerance(k, u);
+        // The distribution is a translate, so a dyadic mean changes nothing.
+        for (T mean : {T(0), T(0.75), T(-2)})
+        {
+            if (!is_fast<T>() && (mean != 0))
+            {
+                continue;
+            }
+            von_mises_distribution<T> dist(mean, k);
+            const T x = mean + u;
+            if (expected_pdf >= (std::numeric_limits<T>::min)())
+            {
+                CHECK_ULP_CLOSE(expected_pdf, pdf(dist, x), tol);
+            }
+            if (expected_cdf >= (std::numeric_limits<T>::min)())
+            {
+                CHECK_ULP_CLOSE(expected_cdf, cdf(dist, x), tol);
+            }
+            if (expected_ccdf >= (std::numeric_limits<T>::min)())
+            {
+                CHECK_ULP_CLOSE(expected_ccdf, cdf(complement(dist, x)), tol);
+            }
+        }
     }
-  }
 }
 
-BOOST_AUTO_TEST_CASE( test_main )
+template <class T>
+void test_moments()
 {
-  // Check that we can generate von_mises distribution using the two convenience methods:
-  boost::math::von_mises myf1(1., 2);       // Using typedef
-  von_mises_distribution<> myf2(1., 2);     // Using default RealType double.
-  boost::math::von_mises myn01;             // Use default values.
-  // Note NOT myn01() as the compiler will interpret as a function!
+    // {kappa, circular variance, circular standard deviation, entropy}, from mpmath at 60 digits.
+    static const char* const data[][4] = {
+      {"0.5", "0.7575003874191980546492976464963645925877", "1.683303398802970259379764397122457347388", "1.77817697930442581482659287057323642698"},
+      {"5.0", "0.1066168629559147784129949927750508272456", "0.4748468074586960312096852738531094009897", "0.6756431570114528094714655330324416977434"},
+      {"50.0", "0.0100510326215022474073440705353173833048", "0.1421399682332739278516634966880758092353", "-0.531995800643737561909134538702056029257"},
+      {"1000.0", "0.0005001251251957198010818256520440214055299", "0.03163068856284189459460209894809633476081", "-2.034688918525470043889750394297228431701"},
+      {"1000000.0", "0.0000005000001250001250001953129062510478547813", "0.001000000250000197916929687995129242568135", "-5.488816495777276810013227453167050890645"},
+    };
+    for (auto const& row : data)
+    {
+        von_mises_distribution<T> dist(1, from_string<T>(row[0]));
+        CHECK_ULP_CLOSE(from_string<T>(row[1]), variance(dist), 8);
+        CHECK_ULP_CLOSE(from_string<T>(row[2]), standard_deviation(dist), 8);
+        CHECK_ULP_CLOSE(from_string<T>(row[3]), entropy(dist), 8);
+        CHECK_EQUAL(mean(dist), T(1));
+        CHECK_EQUAL(mode(dist), T(1));
+        CHECK_EQUAL(median(dist), T(1));
+        CHECK_EQUAL(skewness(dist), T(0));
+    }
+}
 
-  // Check the synonyms, provided to allow generic use of find_location and find_scale.
-  BOOST_CHECK_EQUAL(myn01.mean(), myn01.location());
-  BOOST_CHECK_EQUAL(myn01.concentration(), myn01.scale());
+// With zero concentration the distribution is uniform on the circle.
+template <class T>
+void test_uniform()
+{
+    const T pi = boost::math::constants::pi<T>();
+    von_mises_distribution<T> dist(0, 0);
+    for (T u = -3; u <= 3; u += T(0.25))
+    {
+        CHECK_ULP_CLOSE(1 / (2 * pi), pdf(dist, u), 2);
+        CHECK_ULP_CLOSE((u + pi) / (2 * pi), cdf(dist, u), 4);
+        CHECK_ULP_CLOSE((pi - u) / (2 * pi), cdf(complement(dist, u)), 4);
+    }
+    CHECK_ULP_CLOSE(T(1), variance(dist), 1);
+    CHECK_ULP_CLOSE(log(2 * pi), entropy(dist), 2);
+}
 
-  // Basic sanity-check spot values.
-  // (Parameter value, arbitrarily zero, only communicates the floating point type).
-  test_spots(0.0F);   // Test float. OK at decdigits = 0 tolerance = 0.0001 %
-  test_spots(0.0);    // Test double. OK at decdigits 7, tolerance = 1e07 %
-  test_spots(0.0L); // Test long double.
+template <class T>
+void test_quantile()
+{
+    const T eps = std::numeric_limits<T>::epsilon();
+    for (T k : {T(0), T(0.5), T(5), T(50), T(1000)})
+    {
+        if (!is_fast<T>() && (k != T(0.5)) && (k != T(50)))
+        {
+            continue;
+        }
+        von_mises_distribution<T> dist(T(0.5), k);
+        for (T u = -3; u <= 3; u += grid_step<T>())
+        {
+            const T x = T(0.5) + u;
+            // Invert whichever of the cdf and its complement is the small one, as that carries u exactly.
+            if (u <= 0)
+            {
+                const T p = cdf(dist, x);
+                if (p >= (std::numeric_limits<T>::min)())
+                {
+                    CHECK_ABSOLUTE_ERROR(x, quantile(dist, p), 16 * eps * (1 + fabs(x)));
+                }
+            }
+            else
+            {
+                const T q = cdf(complement(dist, x));
+                if (q >= (std::numeric_limits<T>::min)())
+                {
+                    CHECK_ABSOLUTE_ERROR(x, quantile(complement(dist, q)), 16 * eps * (1 + fabs(x)));
+                }
+            }
+        }
+        CHECK_EQUAL(quantile(dist, T(0.5)), T(0.5));
+        CHECK_EQUAL(quantile(complement(dist, T(0.5))), T(0.5));
+        CHECK_ULP_CLOSE(support(dist).first, quantile(dist, T(0)), 1);
+        CHECK_ULP_CLOSE(support(dist).second, quantile(dist, T(1)), 1);
+        CHECK_ULP_CLOSE(support(dist).second, quantile(complement(dist, T(0))), 1);
+        CHECK_ULP_CLOSE(support(dist).first, quantile(complement(dist, T(1))), 1);
+    }
+}
 
-  // Check symmetry of PDF and CDF
-  test_symmetry(0.0F);
-  test_symmetry(0.0);
-  test_symmetry(0.0L);
-} // BOOST_AUTO_TEST_CASE( test_main )
+// The cdf is the integral of the pdf, and the pdf integrates to one.
+template <class T>
+void test_pdf_integral()
+{
+    const T pi = boost::math::constants::pi<T>();
+    for (T k : {T(0.25), T(3), T(30)})
+    {
+        von_mises_distribution<T> dist(0, k);
+        auto f = [&](T x) { return pdf(dist, x); };
+        // Composite 30-point Gauss-Legendre: the pdf is entire, so this is accurate to rounding.
+        auto integrate = [&](T a, T b)
+        {
+            T sum = 0;
+            for (int i = 0; i < 8; ++i)
+            {
+                sum += boost::math::quadrature::gauss<T, 30>::integrate(f, a + (b - a) * i / 8, a + (b - a) * (i + 1) / 8);
+            }
+            return sum;
+        };
+        CHECK_ULP_CLOSE(T(1), integrate(-pi, pi), 16);
+        for (T u : {T(-2.5), T(-1), T(-0.125), T(0.5), T(2)})
+        {
+            CHECK_ULP_CLOSE(integrate(-pi, u), cdf(dist, u), 64);
+        }
+    }
+}
 
-/*
-./test_von_mises.exe
-Output:
-Running 1 test case...
-Tolerance for type f is 0.002 %
-Tolerance for type d is 0.002 %
-Tolerance for type e is 0.002 %
-*** No errors detected */
+template <class T>
+void test_symmetry()
+{
+    for (T mean : {T(0), T(1.5), T(-3)})
+    {
+        for (T k : {T(0.5), T(4), T(40)})
+        {
+            if (!is_fast<T>() && ((mean != T(1.5)) || (k != 4)))
+            {
+                continue;
+            }
+            von_mises_distribution<T> dist(mean, k);
+            for (T x = T(1) / 16; x < 3; x += grid_step<T>() / 2)
+            {
+                CHECK_EQUAL(pdf(dist, mean + x), pdf(dist, mean - x));
+                CHECK_EQUAL(cdf(dist, mean - x), cdf(complement(dist, mean + x)));
+                CHECK_EQUAL(cdf(dist, mean + x), cdf(complement(dist, mean - x)));
+            }
+        }
+    }
+}
+
+template <class T>
+void test_support()
+{
+    const T pi = boost::math::constants::pi<T>();
+    von_mises_distribution<T> dist(1, 2);
+    CHECK_ULP_CLOSE(1 - pi, support(dist).first, 1);
+    CHECK_ULP_CLOSE(1 + pi, support(dist).second, 1);
+    CHECK_EQUAL(pdf(dist, T(-3)), T(0));
+    CHECK_EQUAL(pdf(dist, T(5)), T(0));
+    CHECK_EQUAL(cdf(dist, T(-3)), T(0));
+    CHECK_EQUAL(cdf(dist, T(5)), T(1));
+    CHECK_EQUAL(cdf(complement(dist, T(-3))), T(1));
+    CHECK_EQUAL(cdf(complement(dist, T(5))), T(0));
+}
+
+template <class T>
+void test_errors()
+{
+    const T inf = std::numeric_limits<T>::infinity();
+    const T nan = std::numeric_limits<T>::quiet_NaN();
+    CHECK_THROW(von_mises_distribution<T>(0, -1), std::domain_error);
+    CHECK_THROW(von_mises_distribution<T>(0, inf), std::domain_error);
+    CHECK_THROW(von_mises_distribution<T>(0, nan), std::domain_error);
+    CHECK_THROW(von_mises_distribution<T>(inf, 1), std::domain_error);
+    CHECK_THROW(von_mises_distribution<T>(nan, 1), std::domain_error);
+    von_mises_distribution<T> dist(0, 1);
+    CHECK_THROW(pdf(dist, nan), std::domain_error);
+    CHECK_THROW(cdf(dist, nan), std::domain_error);
+    CHECK_THROW(cdf(complement(dist, nan)), std::domain_error);
+    CHECK_THROW(quantile(dist, T(-1)), std::domain_error);
+    CHECK_THROW(quantile(dist, T(2)), std::domain_error);
+    CHECK_THROW(quantile(complement(dist, nan)), std::domain_error);
+}
+
+template <class T>
+void test_all()
+{
+    test_spots<T>();
+    test_moments<T>();
+    test_uniform<T>();
+    test_quantile<T>();
+    if (is_fast<T>())
+    {
+        test_pdf_integral<T>();
+    }
+    test_symmetry<T>();
+    test_support<T>();
+    test_errors<T>();
+}
+
+int main()
+{
+    boost::math::von_mises dist;
+    CHECK_EQUAL(dist.mean(), dist.location());
+    CHECK_EQUAL(dist.concentration(), dist.scale());
+    CHECK_EQUAL(dist.concentration(), 1.0);
+
+    test_all<float>();
+    test_all<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+    test_all<long double>();
+#endif
+#ifndef BOOST_MATH_STANDALONE
+    test_all<boost::multiprecision::cpp_bin_float_quad>();
+#endif
+    return boost::math::test::report_errors();
+}

@@ -2,7 +2,7 @@
 //    Copyright Paul A. Bristow 2006, 2007.
 //    Copyright Philipp C. J. Muenster, 2020.
 //    Copyright Matt Borland, 2022.
-
+//
 //    Use, modification and distribution are subject to the
 //    Boost Software License, Version 1.0. (See accompanying file
 //    LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -14,64 +14,86 @@
 // From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/VonMisesDistribution.html
 
+#include <boost/math/distributions/fwd.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
-#include <boost/math/special_functions/bessel.hpp>  // for besseli0 and besseli1
-#include <boost/math/special_functions/erf.hpp>     // for erf
+#include <boost/math/special_functions/bessel.hpp>
+#include <boost/math/special_functions/erf.hpp>
+#include <boost/math/special_functions/log1p.hpp>
+#include <boost/math/quadrature/gauss.hpp>
+#include <boost/math/quadrature/tanh_sinh.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/tools/config.hpp>
+#include <boost/math/constants/constants.hpp>
 
+#include <cstdint>
 #include <utility>
 #include <limits>
-#include <array>
-#include <type_traits>
 
 namespace boost { namespace math {
 
-template <typename RealType = double, typename Policy = policies::policy<> >
+namespace detail {
+
+template <class RealType, class Policy>
+inline bool check_von_mises_concentration(const char* function, RealType concentration, RealType* result, const Policy& pol)
+{
+   if (!(boost::math::isfinite)(concentration) || (concentration < 0))
+   {
+      *result = policies::raise_domain_error<RealType>(
+         function, "Concentration parameter is %1%, but must be finite and >= 0!", concentration, pol);
+      return false;
+   }
+   return true;
+}
+
+template <class RealType, class Policy>
+inline bool check_von_mises(const char* function, RealType mean, RealType concentration, RealType* result, const Policy& pol)
+{
+   return check_location(function, mean, result, pol)
+      && check_von_mises_concentration(function, concentration, result, pol);
+}
+
+} // namespace detail
+
+BOOST_MATH_EXPORT template <typename RealType = double, typename Policy = policies::policy<> >
 class von_mises_distribution
 {
 public:
     using value_type = RealType;
     using policy_type = Policy;
 
-    von_mises_distribution(RealType l_mean = 0, RealType concentration = 1)
+    explicit von_mises_distribution(RealType l_mean = 0, RealType concentration = 1)
         : m_mean {l_mean}, m_concentration {concentration}
     { // Default is a 'standard' von Mises distribution vM01.
-        static const char* function = "boost::math::von_mises_distribution<%1%>::von_mises_distribution";
-
         RealType result;
-        detail::check_positive_x(function, concentration, &result, Policy());
-        detail::check_angle(function, l_mean, &result, Policy());
+        detail::check_von_mises("boost::math::von_mises_distribution<%1%>::von_mises_distribution",
+                                l_mean, concentration, &result, Policy());
     }
 
-    inline RealType mean() const
+    RealType mean() const
     { // alias for location.
         return m_mean;
     }
 
-    inline RealType concentration() const
+    RealType concentration() const
     { // alias for scale.
         return m_concentration;
     }
 
     // Synonyms, provided to allow generic use of find_location and find_scale.
-    inline RealType location() const
-    { // location.
+    RealType location() const
+    {
         return m_mean;
     }
-    inline RealType scale() const
-    { // scale.
+    RealType scale() const
+    {
         return m_concentration;
     }
 
 private:
-    //
-    // Data members:
-    //
-    RealType m_mean;                 // distribution mean or location.
-    RealType m_concentration;        // distribution standard deviation or scale.
+    RealType m_mean;
+    RealType m_concentration;
 }; // class von_mises_distribution
 
 using von_mises = von_mises_distribution<double>;
@@ -83,475 +105,299 @@ template <typename RealType>
 von_mises_distribution(RealType,RealType)->von_mises_distribution<boost::math::tools::promote_args_t<RealType>>;
 #endif
 
-#ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable:4127)
-#endif
-
 template <typename RealType, typename Policy>
 inline std::pair<RealType, RealType> range(const von_mises_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
-    BOOST_IF_CONSTEXPR (std::numeric_limits<RealType>::has_infinity)
-    {
-        return std::pair<RealType, RealType>(-std::numeric_limits<RealType>::infinity(),
-                                             +std::numeric_limits<RealType>::infinity()); // - to + infinity.
-    }
-    else
-    { // Can only use max_value.
-        using boost::math::tools::max_value;
-        return std::pair<RealType, RealType>(-max_value<RealType>(), +max_value<RealType>()); // - to + max value.
-    }
+    using boost::math::tools::max_value;
+    return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
 }
 
 template <typename RealType, typename Policy>
 inline std::pair<RealType, RealType> support(const von_mises_distribution<RealType, Policy>& dist)
-{ // This is range values for random variable x where cdf rises from 0 to 1, and outside it, the pdf is zero.
+{ // Range of x where the pdf is non-zero: one full turn centred on the mean.
     const RealType pi = boost::math::constants::pi<RealType>();
-    return std::pair<RealType, RealType>(dist.mean() - pi, dist.mean() + pi); //  u-pi, u+pi
+    return std::pair<RealType, RealType>(dist.mean() - pi, dist.mean() + pi);
 }
-
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-
-namespace detail {
-// float version of pdf_impl
-template <typename RealType, typename Policy>
-inline RealType pdf_impl(const von_mises_distribution<RealType, Policy>& dist, RealType x,
-                         const std::integral_constant<int, 24>&)
-{
-    const RealType mean = dist.mean();
-    const RealType conc = dist.concentration();
-
-    BOOST_MATH_STD_USING
-
-    if(conc < 87)
-    {
-        RealType bessel_i0 = cyl_bessel_i(0, conc, Policy());
-        return exp(conc * cos(x - mean)) / bessel_i0 / boost::math::constants::two_pi<RealType>();
-    }
-    else    // exp(88) > MAX_FLOAT
-    {
-        // we make use of I0(conc) = exp(conc) * P(conc), with polynomial P
-        // polynomial coefficients from boost/math/special_functions/detail/bessel_i0.hpp
-        static constexpr std::array<float, 5> P
-        {
-            3.98942280401432677e-01f,
-            4.98677850501790847e-02f,
-            2.80506290907257351e-02f,
-            2.92194053028393074e-02f,
-            4.47422143699726895e-02f
-        };
-
-        RealType result = exp(conc * (cos(x - mean) - 1.f));
-        result /= boost::math::tools::evaluate_polynomial(P, RealType(1.f / conc)) / sqrt(conc)
-                            * boost::math::constants::two_pi<RealType>();
-        return result;
-    }
-}
-
-// double version of pdf_impl
-template <typename RealType, typename Policy>
-inline RealType pdf_impl(const von_mises_distribution<RealType, Policy>& dist, RealType x,
-                         const std::integral_constant<int, 53>&)
-{
-    RealType mean = dist.mean();
-    RealType conc = dist.concentration();
-
-    BOOST_MATH_STD_USING
-    if(conc < 709)
-    {
-        RealType bessel_i0 = cyl_bessel_i(0, conc, Policy());
-        return exp(conc * cos(x - mean)) / bessel_i0 / boost::math::constants::two_pi<RealType>();
-    }
-    else // exp(709) > MAX_DOUBLE
-    {
-        // we make use of I0(conc) = exp(conc) * P(conc), with polynomial P
-        // polynomial coefficients from boost/math/special_functions/detail/bessel_i0.hpp
-        static constexpr std::array<double, 5> P
-        {
-                3.98942280401432905e-01,
-                4.98677850491434560e-02,
-                2.80506308916506102e-02,
-                2.92179096853915176e-02,
-                4.53371208762579442e-02
-        };
-
-        RealType result = exp(conc * (cos(x - mean) - 1.0));
-        result /= boost::math::tools::evaluate_polynomial(P, RealType(1.0 / conc)) / sqrt(conc)
-                            * boost::math::constants::two_pi<RealType>();
-        return result;
-    }
-}
-
-// long double version of pdf_impl
-template <typename RealType, typename Policy>
-inline RealType pdf_impl(const von_mises_distribution<RealType, Policy>& dist, RealType x,
-                         const std::integral_constant<int, 64>&)
-{
-    const RealType mean = dist.mean();
-    const RealType conc = dist.concentration();
-
-    BOOST_MATH_STD_USING
-    if (conc < 1000)
-    {
-        RealType bessel_i0 = cyl_bessel_i(0, conc, Policy());
-        return exp(conc * cos(x - mean)) / bessel_i0 / boost::math::constants::two_pi<RealType>();
-    }
-    else
-    {
-        // Bessel I0 over[50, INF]
-        // Max error in interpolated form : 5.587e-20
-        // Max Error found at float80 precision = Poly : 8.776852e-20
-        static constexpr std::array<RealType, 18>  P
-        {
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, +3.98942280401432677955074061e-01),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, +4.98677850501789875615574058e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, +2.80506290908675604202206833e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, +2.92194052159035901631494784e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, +4.47422430732256364094681137e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, +9.05971614435738691235525172e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, +2.29180522595459823234266708e-01),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, +6.15122547776140254569073131e-01),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, +7.48491812136365376477357324e+00),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, -2.45569740166506688169730713e+02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, +9.66857566379480730407063170e+03),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, -2.71924083955641197750323901e+05),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, +5.74276685704579268845870586e+06),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, -8.89753803265734681907148778e+07),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, +9.82590905134996782086242180e+08),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, -7.30623197145529889358596301e+09),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, +3.27310000726207055200805893e+10),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, -6.64365417189215599168817064e+10)
-        };
-
-        RealType result = exp(conc * (cos(x - mean) - 1.0));
-        result /= boost::math::tools::evaluate_polynomial(P, RealType(1.0 / conc)) / sqrt(conc)
-                            * boost::math::constants::two_pi<RealType>();
-        return result;
-    }
-}
-template <typename RealType, typename Policy>
-inline RealType pdf_impl(const von_mises_distribution<RealType, Policy>& dist, RealType x,
-                         const std::integral_constant<int, 113>&)
-{
-    BOOST_MATH_STD_USING    // for ADL of std functions
-
-    const RealType mean = dist.mean();
-    const RealType conc = dist.concentration();
-    const RealType bessel_i0 = cyl_bessel_i(0, conc, Policy());
-
-    return exp(conc * cos(x - mean)) / bessel_i0 / boost::math::constants::two_pi<RealType>();
-}
-} // namespace detail
-
-template <typename RealType, typename Policy>
-inline RealType pdf(const von_mises_distribution<RealType, Policy>& dist, const RealType& x)
-{
-    BOOST_MATH_STD_USING    // for ADL of std functions
-
-    const RealType conc = dist.concentration();
-    const RealType mean = dist.mean();
-
-    static const char* function = "boost::math::pdf(const von_mises_distribution<%1%>&, %1%)";
-
-    RealType result = 0;
-    if (!detail::check_positive_x(function, conc, &result, Policy()))
-    {
-        return result;
-    }
-    else if (!detail::check_angle(function, mean, &result, Policy()))
-    {
-        return result;
-    }
-    else if (!detail::check_angle(function, x - mean, &result, Policy()))
-    {
-        return result;
-    }
-
-    // Below produces MSVC 4127 warnings, so the above used instead.
-    //if(std::numeric_limits<RealType>::has_infinity && abs(x) == std::numeric_limits<RealType>::infinity())
-    //{ // pdf + and - infinity is zero.
-    //    return 0;
-    //}
-    using tag_type = std::integral_constant<int,
-         ((std::numeric_limits<RealType>::digits == 0) || (std::numeric_limits<RealType>::radix != 2)) ? 0 :
-         std::numeric_limits<RealType>::digits <= 24 ? 24 :
-         std::numeric_limits<RealType>::digits <= 53 ? 53 :
-         std::numeric_limits<RealType>::digits <= 64 ? 64 :
-         std::numeric_limits<RealType>::digits <= 113 ? 113 : -1
-         >;
-
-    return detail::pdf_impl(dist, x, tag_type());
-} // pdf
 
 namespace detail {
 
-// We use the Fortran algorithm designed by Geoffrey W. Hill in
-// "Algorithm 518: Incomplete Bessel Function I0. The Von Mises Distribution", 1977, ACM
-// DOI: 10.1145/355744.355753
+// e^-k I0(k), which stays finite for all k.
 template <typename RealType, typename Policy>
-inline RealType cdf_impl(const von_mises_distribution<RealType, Policy>& dist, const RealType& x)
+RealType von_mises_scaled_i0(RealType k, const Policy& pol)
 {
-    BOOST_MATH_STD_USING    // for ADL of std functions
+    BOOST_MATH_STD_USING
+    if (k < tools::log_max_value<RealType>())
+    {
+        return cyl_bessel_i(0, k, pol) * exp(-k);
+    }
+    // Here k is far beyond the precision, so the asymptotic series converges before its terms grow.
+    RealType term = 1;
+    RealType sum = 1;
+    for (unsigned j = 1; term > tools::epsilon<RealType>() * sum; ++j)
+    {
+        term *= RealType((2 * j - 1) * (2 * j - 1)) / (8 * j * k);
+        sum += term;
+    }
+    return sum / sqrt(constants::two_pi<RealType>() * k);
+}
 
-    constexpr RealType pi = boost::math::constants::pi<RealType>();
+// s0 = e^-k I0(k) and d = e^-k (I0(k) - I1(k)), without the cancellation of forming I0 - I1,
+// so that the circular variance d/s0 = 1 - I1/I0 has full relative accuracy.
+template <typename RealType, typename Policy>
+void von_mises_scaled_i0_i1(RealType k, RealType* s0, RealType* d, const Policy&)
+{
+    BOOST_MATH_STD_USING
+    const RealType eps = tools::epsilon<RealType>();
+    // Beyond this the smallest term of the asymptotic series, about e^(-2k), is below eps.
+    const RealType asymptotic_limit = tools::digits<RealType>() * constants::ln_two<RealType>();
+    if (k >= asymptotic_limit)
+    {
+        // e^-k I_nu(k) ~ (2 pi k)^(-1/2) sum_j (-1)^j a_j(nu) k^-j; every term of the I0 - I1 series is positive.
+        RealType t0 = 1;
+        RealType t1 = 1;
+        RealType sum0 = 1;
+        RealType sumd = 0;
+        for (unsigned j = 1; ; ++j)
+        {
+            t0 *= RealType((2 * j - 1) * (2 * j - 1)) / (8 * j * k);
+            t1 *= (RealType(2 * j) - 3) * (2 * j + 1) / (8 * j * k);
+            sum0 += t0;
+            sumd += t0 - t1;
+            if (t0 - t1 <= eps * sumd)
+            {
+                break;
+            }
+        }
+        const RealType scale = 1 / sqrt(constants::two_pi<RealType>() * k);
+        *s0 = sum0 * scale;
+        *d = sumd * scale;
+        return;
+    }
+    // (1/pi) int_0^pi e^(-k(1 - cos t)) {1, 1 - cos t} dt by the trapezoidal rule, which for these
+    // periodic integrands at least squares the error with each halving of the step; every term is positive.
+    const RealType tol = sqrt(eps);
+    RealType f_end = exp(-2 * k);
+    RealType sum0 = (1 + f_end) / 2;
+    RealType sumd = f_end;
+    unsigned n = 1;
+    for (unsigned level = 0; level < 30; ++level)
+    {
+        RealType mid0 = 0;
+        RealType midd = 0;
+        for (unsigned j = 1; j < 2 * n; j += 2)
+        {
+            RealType s = sin(constants::pi<RealType>() * j / (4 * n));
+            RealType g = 2 * s * s;
+            RealType f = exp(-k * g);
+            mid0 += f;
+            midd += f * g;
+        }
+        // Compare the midpoint rule with the trapezoidal rule of the previous level.
+        const bool converged = (level > 1) && (fabs(mid0 - sum0) <= tol * sum0) && (fabs(midd - sumd) <= tol * sumd);
+        sum0 += mid0;
+        sumd += midd;
+        n *= 2;
+        if (converged)
+        {
+            break;
+        }
+    }
+    *s0 = sum0 / n;
+    *d = sumd / n;
+}
 
-    RealType conc = dist.concentration();
-    RealType mean = dist.mean();
-
-    RealType u = x - mean;
-
-    if (u <= -pi)
+// The cdf of the standard distribution at -a, 0 <= a <= pi, which is at most 1/2:
+//   F(-a) = (1/(2 pi e^-k I0(k))) int_a^pi e^(-k(1 - cos t)) dt.
+// The integrand is positive, so the left tail keeps its relative accuracy.
+// It falls off like e^(-k(cos a - cos t)), so the range is cut where it drops below eps.
+// The interval is not a full period, so the trapezoidal rule would converge only as h^2:
+// use Gauss-Legendre up to double precision, and tanh-sinh beyond.
+template <typename RealType, typename Policy>
+RealType von_mises_cdf_left(RealType k, RealType a, RealType s0, const Policy& pol)
+{
+    BOOST_MATH_STD_USING
+    const RealType pi = constants::pi<RealType>();
+    if (a >= pi)
     {
         return 0;
     }
-    if (u >= pi)
+    if (k == 0)
     {
-        return 1;
+        return (pi - a) / constants::two_pi<RealType>();
     }
-
-    RealType result = 0;
-
-    // Extrapolation of critical kappa value
-    constexpr int digits = std::numeric_limits<RealType>::max_digits10 - 1;
-    constexpr RealType ck = ((0.1611 * digits - 2.8778) * digits + 18.45) * digits - 35.4;
-
-    if (conc > ck) 
+    const RealType eps = policies::get_epsilon<RealType, Policy>();
+    const RealType sin_half_a = sin(a / 2);
+    const RealType cutoff = -log(eps) + log1p(k * pi, pol) + 1;
+    const RealType s2 = sin_half_a * sin_half_a + cutoff / (2 * k);
+    const RealType width = (s2 >= 1 ? pi : RealType(2 * asin(sqrt(s2)))) - a;
+    // In terms of the offset s = t - a, so that rounding t does not perturb the steep exponent:
+    // cos a - cos t = 2 sin(a + s/2) sin(s/2).
+    auto integrand = [&](RealType s) -> RealType
     {
-        RealType c = 24 * conc;
-        RealType v = c - 56;
-        RealType r = sqrt((54 / (347 / v + 26 - c) - 6 + c) / 12);
-        RealType z = sin(u / 2) * r;
-        RealType s = z * z * 2;
-        v = v - s + 3;
-        RealType y = (c - s - s - 16) / 3;
-        y = ((s + static_cast<RealType>(7)/4) * s + static_cast<RealType>(167)/2) / v - y;
-        result = (1 + boost::math::erf(z - s / (y * y) * z)) / 2;
+        return exp(-2 * k * sin(a + s / 2) * sin(s / 2));
+    };
+    RealType integral;
+    BOOST_MATH_IF_CONSTEXPR (std::numeric_limits<RealType>::is_specialized && (std::numeric_limits<RealType>::digits <= 53))
+    {
+        integral = quadrature::gauss<RealType, 30>::integrate(integrand, RealType(0), width);
     }
     else
     {
-        RealType v = 0;
-        if(conc > 0) 
-        {
-            // Extrapolation of the tables given in the paper used to estimate the number of iterations needed
-            constexpr RealType a1 = 0.357143 * digits * digits - 3.13286 * digits + 13.9286;
-            constexpr RealType a2 = 1.53571 - 0.0857143 * digits;
-            constexpr RealType a3 = 1.01389 * digits * digits * digits - 23.1488 * digits * digits + 177.349 * digits - 448.19;
-            constexpr RealType a4 = 0.178571 * digits * digits - 2.55 * digits + 9.87143;
-
-            auto iterations = static_cast<int>(ceil(a1 + conc * a2 - a3 / (conc + a4)));
-
-            RealType r = 0;
-            RealType z = 2 / conc;
-            for (auto j = iterations - 1; j > 0; --j) 
-            {
-                RealType sj = sin(j * u);
-                r = 1 / (j * z + r);
-                v = (sj / j + v) * r;
-            }
-        }
-        result = (x - mean + pi) / 2;
-        result = (result + v) / pi;
+        static const quadrature::tanh_sinh<RealType, Policy> integrator;
+        integral = integrator.integrate(integrand, RealType(0), width, eps);
     }
+    return exp(-2 * k * sin_half_a * sin_half_a) * integral / (constants::two_pi<RealType>() * s0);
+}
 
-    if (result < 0)
+template <typename RealType, typename Policy>
+RealType von_mises_pdf_imp(RealType k, RealType u, RealType s0)
+{
+    BOOST_MATH_STD_USING
+    RealType s = sin(u / 2);
+    return exp(-2 * k * s * s) / (constants::two_pi<RealType>() * s0);
+}
+
+// Solves F(u) = p for u in [-pi, 0], where p <= 1/2.
+template <typename RealType, typename Policy>
+RealType von_mises_quantile_left(RealType k, RealType p, const Policy& pol)
+{
+    BOOST_MATH_STD_USING
+    const RealType pi = constants::pi<RealType>();
+    if (p <= 0)
     {
-        result = 0;
+        return -pi;
     }
-    else if (result > 1)
+    if (p == 0.5f)
     {
-        result = 1;
+        // The median; Newton's relative stopping test never settles on a root at zero.
+        return 0;
     }
-
+    const RealType s0 = von_mises_scaled_i0(k, pol);
+    RealType guess;
+    if (k < 1)
+    {
+        guess = (2 * p - 1) * pi;
+    }
+    else
+    {
+        // Wrapped normal with variance 1/k: 2 sqrt(k) sin(u/2) is close to standard normal.
+        RealType z = -constants::root_two<RealType>() * erfc_inv(2 * p, pol) / (2 * sqrt(k));
+        guess = z <= -1 ? RealType(-pi / 2) : RealType(2 * asin(z));
+    }
+    auto f = [&](RealType u) -> std::pair<RealType, RealType>
+    {
+        RealType cdf = u <= 0 ? von_mises_cdf_left(k, -u, s0, pol) : 1 - von_mises_cdf_left(k, u, s0, pol);
+        return std::make_pair(cdf - p, von_mises_pdf_imp<RealType, Policy>(k, u, s0));
+    };
+    // The root is in [-pi, 0], but rounding can put it just above 0 when p is close to 1/2.
+    std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+    RealType result = tools::newton_raphson_iterate(f, guess, -pi, pi, policies::digits<RealType, Policy>(), max_iter);
+    if (max_iter >= policies::get_max_root_iterations<Policy>())
+    {
+        return policies::raise_evaluation_error<RealType>("boost::math::quantile(const von_mises_distribution<%1%>&, %1%)",
+            "Unable to locate solution in a reasonable time: either there is no answer to quantile or the answer is infinite.  Current best guess is %1%", result, pol);
+    }
     return result;
 }
 
 } // namespace detail
 
 template <typename RealType, typename Policy>
-inline RealType cdf(const von_mises_distribution<RealType, Policy>& dist, const RealType& x)
+inline RealType pdf(const von_mises_distribution<RealType, Policy>& dist, const RealType& x)
 {
-    RealType conc = dist.concentration();
-    RealType mean = dist.mean();
-
-    static const char* function = "boost::math::cdf(const von_mises_distribution<%1%>&, %1%)";
-    
+    BOOST_MATH_STD_USING
+    static const char* function = "boost::math::pdf(const von_mises_distribution<%1%>&, %1%)";
+    const RealType k = dist.concentration();
+    const RealType mean = dist.mean();
     RealType result = 0;
-    if (!detail::check_positive_x(function, conc, &result, Policy()))
+    if (!detail::check_von_mises(function, mean, k, &result, Policy())
+        || !detail::check_x(function, x, &result, Policy()))
     {
         return result;
     }
-    else if (!detail::check_angle(function, mean, &result, Policy()))
+    const RealType u = x - mean;
+    if (fabs(u) > constants::pi<RealType>())
     {
-        return result;
+        return 0;
     }
-    if (!detail::check_angle(function, x - mean, &result, Policy()))
-    {
-        return result;
-    }
-
-    return detail::cdf_impl(dist, x);
-} // cdf
+    return detail::von_mises_pdf_imp<RealType, Policy>(k, u, detail::von_mises_scaled_i0(k, Policy()));
+}
 
 template <typename RealType, typename Policy>
-inline RealType quantile(const von_mises_distribution<RealType, Policy>& dist, const RealType& p)
+inline RealType cdf(const von_mises_distribution<RealType, Policy>& dist, const RealType& x)
 {
-    BOOST_MATH_STD_USING    // for ADL of std functions
-
-    RealType conc = dist.concentration();
-    RealType mean = dist.mean();
-
-    static const char* function
-            = "boost::math::quantile(const von_mises_distribution<%1%>&, %1%)";
-
+    static const char* function = "boost::math::cdf(const von_mises_distribution<%1%>&, %1%)";
+    const RealType k = dist.concentration();
+    const RealType mean = dist.mean();
     RealType result = 0;
-    if (!detail::check_positive_x(function, conc, &result, Policy()))
+    if (!detail::check_von_mises(function, mean, k, &result, Policy())
+        || !detail::check_x(function, x, &result, Policy()))
     {
         return result;
     }
-    else if (!detail::check_angle(function, mean, &result, Policy()))
-    {
-        return result;
-    }
-    else if (!detail::check_probability(function, p, &result, Policy()))
-    {
-        return result;
-    }
-
-    if (p <= 0)
-        return -boost::math::constants::pi<RealType>();
-    if (p >= 1)
-        return +boost::math::constants::pi<RealType>();
-
-    using tag_type = std::integral_constant<int,
-            ((std::numeric_limits<RealType>::digits == 0) || (std::numeric_limits<RealType>::radix != 2)) ? 0 :
-            std::numeric_limits<RealType>::digits <= 24 ? 24 :
-            std::numeric_limits<RealType>::digits <= 53 ? 53 :
-            std::numeric_limits<RealType>::digits <= 64 ? 64 :
-            std::numeric_limits<RealType>::digits <= 113 ? 113 : -1
-            >;
-
-    struct step_func 
-    {
-        const von_mises_distribution<RealType, Policy>& dist;
-        const RealType p;
-        std::pair<RealType, RealType> operator()(RealType x) {
-            return std::make_pair(detail::cdf_impl(dist, x) - p,              // f(x)
-                                  detail::pdf_impl(dist, x, tag_type()));     // f'(x)
-        }
-    };
-
-    RealType lower = mean - boost::math::constants::pi<RealType>();
-    RealType upper = mean + boost::math::constants::pi<RealType>();
-    RealType zero = boost::math::tools::newton_raphson_iterate(
-            step_func{dist, p}, mean, lower, upper, 15 /* digits */);
-
-    return zero;
-} // quantile
+    const RealType u = x - mean;
+    const RealType s0 = detail::von_mises_scaled_i0(k, Policy());
+    return u <= 0 ? detail::von_mises_cdf_left(k, -u, s0, Policy())
+                  : 1 - detail::von_mises_cdf_left(k, u, s0, Policy());
+}
 
 template <typename RealType, typename Policy>
 inline RealType cdf(const complemented2_type<von_mises_distribution<RealType, Policy>, RealType>& c)
 {
-    RealType conc = c.dist.concentration();
-    RealType mean = c.dist.mean();
-    RealType x = c.param;
-
-    static const char* function
-            = "boost::math::cdf(const complement(von_mises_distribution<%1%>&), %1%)";
-
+    static const char* function = "boost::math::cdf(const complement(von_mises_distribution<%1%>&), %1%)";
+    const RealType k = c.dist.concentration();
+    const RealType mean = c.dist.mean();
+    const RealType x = c.param;
     RealType result = 0;
-    if (!detail::check_positive_x(function, conc, &result, Policy()))
+    if (!detail::check_von_mises(function, mean, k, &result, Policy())
+        || !detail::check_x(function, x, &result, Policy()))
     {
         return result;
     }
-    if (!detail::check_angle(function, mean, &result, Policy()))
-    {
-        return result;
-    }
-    if (!detail::check_angle(function, x - mean, &result, Policy()))
-    {
-        return result;
-    }
+    const RealType u = x - mean;
+    const RealType s0 = detail::von_mises_scaled_i0(k, Policy());
+    return u >= 0 ? detail::von_mises_cdf_left(k, u, s0, Policy())
+                  : 1 - detail::von_mises_cdf_left(k, -u, s0, Policy());
+}
 
-    return detail::cdf_impl(c.dist, 2 * mean - x);
-} // cdf complement
+template <typename RealType, typename Policy>
+inline RealType quantile(const von_mises_distribution<RealType, Policy>& dist, const RealType& p)
+{
+    static const char* function = "boost::math::quantile(const von_mises_distribution<%1%>&, %1%)";
+    const RealType k = dist.concentration();
+    const RealType mean = dist.mean();
+    RealType result = 0;
+    if (!detail::check_von_mises(function, mean, k, &result, Policy())
+        || !detail::check_probability(function, p, &result, Policy()))
+    {
+        return result;
+    }
+    // By symmetry F(-u) = 1 - F(u).
+    return p <= 0.5f ? mean + detail::von_mises_quantile_left(k, p, Policy())
+                     : mean - detail::von_mises_quantile_left(k, RealType(1 - p), Policy());
+}
 
 template <typename RealType, typename Policy>
 inline RealType quantile(const complemented2_type<von_mises_distribution<RealType, Policy>, RealType>& c)
 {
-    BOOST_MATH_STD_USING    // for ADL of std functions
-
-    RealType conc = c.dist.concentration();
-    RealType mean = c.dist.mean();
-
-    static const char* function
-            = "boost::math::quantile(const complement(von_mises_distribution<%1%>&), %1%)";
-
+    static const char* function = "boost::math::quantile(const complement(von_mises_distribution<%1%>&), %1%)";
+    const RealType k = c.dist.concentration();
+    const RealType mean = c.dist.mean();
+    const RealType q = c.param;
     RealType result = 0;
-    if (!detail::check_positive_x(function, conc, &result, Policy()))
+    if (!detail::check_von_mises(function, mean, k, &result, Policy())
+        || !detail::check_probability(function, q, &result, Policy()))
     {
-         return result;
+        return result;
     }
-    else if (!detail::check_angle(function, mean, &result, Policy()))
-    {
-         return result;
-    }
-
-    RealType q = c.param;
-    if (!detail::check_probability(function, q, &result, Policy()))
-    {
-         return result;
-    }
-
-    if (q <= 0)
-    {
-        return +boost::math::constants::pi<RealType>();
-    }
-    else if (q >= 1)
-    {
-        return -boost::math::constants::pi<RealType>();
-    }
-
-    using tag_type = std::integral_constant<int,
-            ((std::numeric_limits<RealType>::digits == 0) || (std::numeric_limits<RealType>::radix != 2)) ? 0 :
-            std::numeric_limits<RealType>::digits <= 24 ? 24 :
-            std::numeric_limits<RealType>::digits <= 53 ? 53 :
-            std::numeric_limits<RealType>::digits <= 64 ? 64 :
-            std::numeric_limits<RealType>::digits <= 113 ? 113 : -1
-            >;
-
-    struct step_func 
-    {
-        const complemented2_type<von_mises_distribution<RealType, Policy>, RealType>& c;
-        std::pair<RealType, RealType> operator()(RealType x) {
-            RealType xc = 2 * c.dist.mean() - x;
-            return std::make_pair(detail::cdf_impl(c.dist, xc) - c.param,        // f(x)
-                                                     -detail::pdf_impl(c.dist, xc, tag_type())); // f'(x)
-        }
-    };
-
-    RealType lower = mean - boost::math::constants::pi<RealType>();
-    RealType upper = mean + boost::math::constants::pi<RealType>();
-    RealType zero = boost::math::tools::newton_raphson_iterate(
-            step_func{c}, mean, lower, upper, 15 /* digits */);
-
-    return zero;
-} // quantile
+    return q <= 0.5f ? mean - detail::von_mises_quantile_left(k, q, Policy())
+                     : mean + detail::von_mises_quantile_left(k, RealType(1 - q), Policy());
+}
 
 template <typename RealType, typename Policy>
 inline RealType mean(const von_mises_distribution<RealType, Policy>& dist)
 {
     return dist.mean();
-}
-
-template <typename RealType, typename Policy>
-inline RealType standard_deviation(const von_mises_distribution<RealType, Policy>& dist)
-{
-    BOOST_MATH_STD_USING
-    RealType bessel_quot = cyl_bessel_i(1, dist.concentration(), Policy())
-                                             / cyl_bessel_i(0, dist.concentration(), Policy());
-    return sqrt(-2 * log(bessel_quot));
 }
 
 template <typename RealType, typename Policy>
@@ -566,324 +412,23 @@ inline RealType median(const von_mises_distribution<RealType, Policy>& dist)
     return dist.mean();
 }
 
-namespace detail {
-// float version of variance_impl
-template <typename RealType, typename Policy>
-inline RealType variance_impl(const von_mises_distribution<RealType, Policy>& dist,
-                              const std::integral_constant<int, 24>&)
-{
-    RealType conc = dist.concentration();
-    BOOST_MATH_STD_USING
-
-    if (conc < 7.75)
-    {
-        RealType bessel_i0 = cyl_bessel_i(0, conc, Policy());
-        RealType bessel_i1 = cyl_bessel_i(1, conc, Policy());
-        return 1 - bessel_i1 / bessel_i0;
-    }
-    else if (conc < 50)
-    {
-        // Polynomial coefficients from
-        // boost/math/special_functions/detail/bessel_i0.hpp and
-        // boost/math/special_functions/detail/bessel_i1.hpp
-        // compute numerator as I0(conc) - I1(conc) from single polynomial
-        static constexpr std::array<float, 5> P_numer 
-        {
-            +5.356107887570000000e-07f,
-            +1.994139882543095464e-01f,
-            +7.683426463016022940e-02f,
-            +4.007722563185265850e-02f,
-            +2.785578524715388070e-01f
-        };
-        static constexpr std::array<float, 5> P_denom
-        {
-            +3.98942651588301770e-01f,
-            +4.98327234176892844e-02f,
-            +2.91866904423115499e-02f,
-            +1.35614940793742178e-02f,
-            +1.31409251787866793e-01f
-        };
-
-        RealType x = 1 / conc;
-        RealType numer = boost::math::tools::evaluate_polynomial(P_numer, x);
-        RealType denom = boost::math::tools::evaluate_polynomial(P_denom, x);
-
-        return numer / denom;
-    }
-    else
-    {
-        static constexpr std::array<float, 5> P_numer 
-        {
-            1.644239196640000000e-07f,
-            1.994490498867993467e-01f,
-            7.569820327857441460e-02f,
-            5.573513685531774810e-02f,
-            1.918908150536447035e-01f
-        };
-        static constexpr std::array<float, 5> P_denom
-        {
-            3.98942280401432677e-01f,
-            4.98677850501790847e-02f,
-            2.80506290907257351e-02f,
-            2.92194053028393074e-02f,
-            4.47422143699726895e-02f
-        };
-
-        RealType x = 1 / conc;
-        RealType numer = boost::math::tools::evaluate_polynomial(P_numer, x);
-        RealType denom = boost::math::tools::evaluate_polynomial(P_denom, x);
-
-        return numer / denom;
-    }
-}
-
-// double version of variance_impl
-template <typename RealType, typename Policy>
-inline RealType variance_impl(const von_mises_distribution<RealType, Policy>& dist,
-                              const std::integral_constant<int, 53>&)
-{
-    RealType conc = dist.concentration();
-    BOOST_MATH_STD_USING
-    if (conc < 7.75)
-    {
-        RealType bessel_i0 = cyl_bessel_i(0, conc, Policy());
-        RealType bessel_i1 = cyl_bessel_i(1, conc, Policy());
-        return 1 - bessel_i1 / bessel_i0;
-    }
-    else if (conc < 500)
-    {
-        // Polynomial coefficients from
-        // boost/math/special_functions/detail/bessel_i0.hpp and
-        // boost/math/special_functions/detail/bessel_i1.hpp
-        // compute numerator as I0(conc) - I1(conc) from single polynomial
-        static constexpr std::array<double, 22> P_numer
-        {
-            -1.55174e-14,
-            +1.994711402218073518e-01,
-            +7.480166592881663552e-02,
-            +7.013008203242116521e-02,
-            +1.016110940936680100e-02,
-            +2.837895300433059925e-01,
-            -6.808807273294442296e+00
-            +4.756438487430168291e+02
-            -2.312449372965164219e+04,
-            +8.645232325622160644e+05,
-            -2.509248065298433807e+07,
-            +5.705709779789331679e+08,
-            -1.021122689535998576e+10,
-            +1.439407686911892518e+11,
-            -1.593043530624297061e+12,
-            +1.373585989454675265e+13,
-            -9.104389306577963414e+13,
-            +4.540402039126762439e+14,
-            -1.645981875199121119e+15,
-            +4.091196019695783875e+15,
-            -6.233158807315033853e+15,
-            +4.389193640817412685e+15
-        };
-        static constexpr std::array<double, 22> P_denom
-        {
-            3.98942280401425088e-01,
-            4.98677850604961985e-02,
-            2.80506233928312623e-02,
-            2.92211225166047873e-02,
-            4.44207299493659561e-02,
-            1.30970574605856719e-01,
-            -3.35052280231727022e+00,
-            2.33025711583514727e+02,
-            -1.13366350697172355e+04,
-            4.24057674317867331e+05,
-            -1.23157028595698731e+07,
-            2.80231938155267516e+08,
-            -5.01883999713777929e+09,
-            7.08029243015109113e+10,
-            -7.84261082124811106e+11,
-            6.76825737854096565e+12,
-            -4.49034849696138065e+13,
-            2.24155239966958995e+14,
-            -8.13426467865659318e+14,
-            2.02391097391687777e+15,
-            -3.08675715295370878e+15,
-            2.17587543863819074e+15
-        };
-
-        RealType x = 1 / conc;
-        RealType numer = boost::math::tools::evaluate_polynomial(P_numer, x);
-        RealType denom = boost::math::tools::evaluate_polynomial(P_denom, x);
-
-        return numer / denom;
-    }
-    else
-    {
-        static constexpr std::array<double, 5> P_numer
-        {
-            +1.423e-15,
-            +1.994711401959018717e-01,
-            +7.480168411736836931e-02,
-            +7.012212565916144652e-02,
-            +1.037734243240472200e-01
-        };
-        static constexpr std::array<double, 5> P_denom 
-        {
-            3.98942280401432905e-01,
-            4.98677850491434560e-02,
-            2.80506308916506102e-02,
-            2.92179096853915176e-02,
-            4.53371208762579442e-02
-        };
-        RealType x = 1 / conc;
-        RealType numer = boost::math::tools::evaluate_polynomial(P_numer, x);
-        RealType denom = boost::math::tools::evaluate_polynomial(P_denom, x);
-
-        return numer / denom;
-    }
-}
-
-// long double version of variance_impl
-template <typename RealType, typename Policy>
-inline RealType variance_impl(const von_mises_distribution<RealType, Policy>& dist,
-                              const std::integral_constant<int, 64>&)
-{
-    BOOST_MATH_STD_USING
-    RealType conc = dist.concentration();
-    if (conc < 50)
-    {
-        RealType bessel_i0 = cyl_bessel_i(0, conc, Policy());
-        RealType bessel_i1 = cyl_bessel_i(1, conc, Policy());
-        return 1 - bessel_i1 / bessel_i0;
-    }
-    else
-    {
-        // Polynomial for Bessel I0 / exp(conc) / sqrt(conc)
-        static constexpr std::array<RealType, 16> P_denom 
-        {
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 3.9894228040143267793994605993438166526772e-01),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 4.9867785050179084742493257495245185241487e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 2.8050629090725735167652437695397756897920e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 2.9219405302839307466358297347675795965363e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 4.4742214369972689474366968442268908028204e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 9.0602984099194778006610058410222616383078e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 2.2839502241666629677015839125593079416327e-01),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 6.8926354981801627920292655818232972385750e-01),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 2.4231921590621824187100989532173995000655e+00),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 9.7264260959693775207585700654645245723497e+00),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 4.3890136225398811195878046856373030127018e+01),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 2.1999720924619285464910452647408431234369e+02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 1.2076909538525038580501368530598517194748e+03),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 7.5684635141332367730007149159063086133399e+03),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 3.5178192543258299267923025833141286569141e+04),
-            BOOST_MATH_BIG_CONSTANT(RealType, 64, 6.2966297919851965784482163987240461837728e+05)
-        };
-
-        // Polynomial for (Bessel I0 - Bessel I1) / exp(conc) / sqrt(x)
-        static constexpr std::array<RealType, 16> P_numer
-        {
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, -3.368165e-34),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +0.1994711402007163389699730299733589146073),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +0.07480167757526862711373984952175456888896),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +0.07012657272681433791923412617430580227103),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +0.10226791855993757596915805134093796837369),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +0.2013399646648772644282448264813045181469),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +0.4983164125454637874163933874417571110056),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +1.4845676457582822590839158984567308297366),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +5.169476606935535670414552625141409318434),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +20.59713743665130419014001937211862931161),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +92.40031163861578044111910646492625263225),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +460.9440321063085921197536056693132597443),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +2.520575547528944544570101030955801999019e+03),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +1.5734053646329490893326466550032992462076e+04),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +7.319778356894459435808347175389511056370e+04),
-             BOOST_MATH_BIG_CONSTANT(RealType, 64, +1.2997438696903014448182029282439919466883e+06)
-        };
-
-        RealType x = 1 / conc;
-        RealType numer = boost::math::tools::evaluate_polynomial(P_numer, x);
-        RealType denom = boost::math::tools::evaluate_polynomial(P_denom, x);
-
-        return numer / denom;
-        
-        return 0;
-    }
-}
-
-// quad version of variance_impl
-template <typename RealType, typename Policy>
-inline RealType variance_impl(const von_mises_distribution<RealType, Policy>& dist,
-                              const std::integral_constant<int, 113>&)
-{
-    BOOST_MATH_STD_USING
-    RealType conc = dist.concentration();
-    if (conc < 100)
-    {
-        RealType bessel_i0 = cyl_bessel_i(0, conc, Policy());
-        RealType bessel_i1 = cyl_bessel_i(1, conc, Policy());
-        return 1 - bessel_i1 / bessel_i0;
-    }
-    else
-    {
-        // Polynomial for Bessel I0 / exp(conc) / sqrt(conc)
-        static const std::array<RealType, 16> P_denom 
-        {
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.9894228040143267793994605993438166526772e-01),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.9867785050179084742493257495245185241487e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.8050629090725735167652437695397756897920e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.9219405302839307466358297347675795965363e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.4742214369972689474366968442268908028204e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.0602984099194778006610058410222616383078e-02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.2839502241666629677015839125593079416327e-01),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.8926354981801627920292655818232972385750e-01),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.4231921590621824187100989532173995000655e+00),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.7264260959693775207585700654645245723497e+00),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.3890136225398811195878046856373030127018e+01),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.1999720924619285464910452647408431234369e+02),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.2076909538525038580501368530598517194748e+03),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.5684635141332367730007149159063086133399e+03),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.5178192543258299267923025833141286569141e+04),
-            BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.2966297919851965784482163987240461837728e+05)
-        };
-
-        // Polynomial for (Bessel I0 - Bessel I1) / exp(conc) / sqrt(x)
-        static const std::array<RealType, 16> P_numer
-        {
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.368165e-34),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +0.1994711402007163389699730299733589146073),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +0.07480167757526862711373984952175456888896),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +0.07012657272681433791923412617430580227103),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +0.10226791855993757596915805134093796837369),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +0.2013399646648772644282448264813045181469),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +0.4983164125454637874163933874417571110056),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +1.4845676457582822590839158984567308297366),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +5.169476606935535670414552625141409318434),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +20.59713743665130419014001937211862931161),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +92.40031163861578044111910646492625263225),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +460.9440321063085921197536056693132597443),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +2.520575547528944544570101030955801999019e+03),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +1.5734053646329490893326466550032992462076e+04),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +7.319778356894459435808347175389511056370e+04),
-             BOOST_MATH_BIG_CONSTANT(RealType, 113, +1.2997438696903014448182029282439919466883e+06)
-        };
-        RealType x = 1 / conc;
-        RealType numer = boost::math::tools::evaluate_polynomial(P_numer, x);
-        RealType denom = boost::math::tools::evaluate_polynomial(P_denom, x);
-
-        return numer / denom;
-    }
-}
-} // namespace detail
-
+// Circular variance, 1 - I1(k)/I0(k).
 template <typename RealType, typename Policy>
 inline RealType variance(const von_mises_distribution<RealType, Policy>& dist)
 {
+    RealType s0, d;
+    detail::von_mises_scaled_i0_i1(dist.concentration(), &s0, &d, Policy());
+    return d / s0;
+}
 
-    using tag_type = std::integral_constant<int,
-            ((std::numeric_limits<RealType>::digits == 0) || (std::numeric_limits<RealType>::radix != 2)) ? 0 :
-            std::numeric_limits<RealType>::digits <= 24 ? 24 :
-            std::numeric_limits<RealType>::digits <= 53 ? 53 :
-            std::numeric_limits<RealType>::digits <= 64 ? 64 :
-            std::numeric_limits<RealType>::digits <= 113 ? 113 : -1
-            >;
-
-    return detail::variance_impl(dist, tag_type());
+// Circular standard deviation, sqrt(-2 ln(I1(k)/I0(k))).
+template <typename RealType, typename Policy>
+inline RealType standard_deviation(const von_mises_distribution<RealType, Policy>& dist)
+{
+    BOOST_MATH_STD_USING
+    RealType s0, d;
+    detail::von_mises_scaled_i0_i1(dist.concentration(), &s0, &d, Policy());
+    return sqrt(-2 * log1p(-d / s0, Policy()));
 }
 
 template <typename RealType, typename Policy>
@@ -893,13 +438,14 @@ inline RealType skewness(const von_mises_distribution<RealType, Policy>& /*dist*
 }
 
 template <typename RealType, typename Policy>
-inline RealType entropy(const von_mises_distribution<RealType, Policy> & dist)
+inline RealType entropy(const von_mises_distribution<RealType, Policy>& dist)
 {
     BOOST_MATH_STD_USING
-    RealType arg = constants::two_pi<RealType>() * cyl_bessel_i(0, dist.concentration(), Policy());
-    RealType bessel_quot = cyl_bessel_i(1, dist.concentration(), Policy())
-                                            / cyl_bessel_i(0, dist.concentration(), Policy());
-    return log(arg) - dist.concentration() * bessel_quot;
+    // ln(2 pi I0(k)) - k I1(k)/I0(k), with the e^k factors cancelled.
+    const RealType k = dist.concentration();
+    RealType s0, d;
+    detail::von_mises_scaled_i0_i1(k, &s0, &d, Policy());
+    return log(constants::two_pi<RealType>() * s0) + k * d / s0;
 }
 
 } // namespace math
