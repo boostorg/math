@@ -255,7 +255,8 @@ namespace boost
                return invert ? 0.0f : 1.0f;
             value_type result;
             value_type c = a + b + l / 2;
-            value_type cross = 1 - (b / c) * (1 + l / (2 * c * c));
+            // 1 - (b / c) (1 + l / (2 c^2)), written without forming 1 - b/c, which rounds to 0 for huge b:
+            value_type cross = (a + l / 2) / c - (b / c) * (l / (2 * c * c));
             if(l == 0)
             {
                if(x < y)

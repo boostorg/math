@@ -15,6 +15,7 @@
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/distributions/non_central_beta.hpp>
 #include <boost/math/distributions/non_central_chi_squared.hpp>
+#include <boost/math/distributions/chi_squared.hpp>
 #include <boost/math/distributions/detail/generic_mode.hpp>
 #include <boost/math/special_functions/pow.hpp>
 #include <boost/math/policies/policy.hpp>
@@ -119,6 +120,15 @@ namespace boost
          }
 
          template <class RealType, class Policy>
+         RealType large_v1_approximation(RealType x, RealType v2, RealType p, RealType q)
+         { // For v1 -> inf, F -> v2 / X with X ~ chi-squared(v2), so cdf(x) -> Q_chi2(v2)(v2 / x).
+               bool comp = p < q ? false : true;
+               RealType pval =  p < q ? p : q;
+               chi_squared_distribution<RealType, Policy> d(v2);
+               return comp ? pval - cdf(d, v2 / x) : cdf(complement(d, v2 / x)) - pval;
+         }
+
+         template <class RealType, class Policy>
          inline RealType find_degrees_of_freedom_f(
             const RealType x, const RealType v, const RealType nc, const bool find_v1, const RealType p, const RealType q, const Policy& pol)
          {
@@ -148,15 +158,12 @@ namespace boost
             RealType vLarge = sqrt(boost::math::tools::max_value<RealType>());
             RealType vSmall = 1 / vLarge;
 
-            // As v2 -> infinity, noncentral f converges to chi-squared distribution.
-            // Rather than evaluating f(vLarge), we can use the more stable chi-squared approximation
-            RealType large_difference;
-            if (find_v1)
-            {
-               large_difference = large_v2_approximation<RealType, Policy>(x, v, p, q, nc);
-            }
-            else
-               large_difference = f(vLarge);
+            // Rather than evaluating f at an enormous degrees of freedom, use its limit. As v2 -> infinity,
+            // v1 F tends to the non-central chi-squared with v1 degrees of freedom; as v1 -> infinity,
+            // F tends to v2 / chi-squared(v2), central, whatever the non-centrality.
+            RealType large_difference = find_v1
+               ? large_v1_approximation<RealType, Policy>(x, v, p, q)
+               : large_v2_approximation<RealType, Policy>(x, v, p, q, nc);
 
             if ((large_difference < 0) == (f(vSmall) < 0)){
                return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom because two degrees of freedom can be found using the given parameters",
