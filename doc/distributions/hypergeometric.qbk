@@ -128,17 +128,11 @@ lookup of the results gives an accuracy to a few epsilon.
 `boost::math::max_factorial<RealType>::value` is 170 at double or long double
 precision.
 
-For larger N such that `N < boost::math::prime(boost::math::max_prime)`
-then only basic arithmetic is required for the calculation
-and the accuracy is typically < 20 epsilon.  This takes care of N
-up to 104729.
-
-For `N > boost::math::prime(boost::math::max_prime)` then accuracy quickly
-degrades, with 5 or 6 decimal digits being lost for N = 110000.
-
-In general for very large N, the user should expect to lose log[sub 10]N
-decimal digits of precision during the calculation, with the results
-becoming meaningless for N >= 10[super 15].
+For larger N the error is typically a few tens of epsilon wherever the PDF exceeds e[super -15]
+(about 3 \u00d7 10[super -7]), however large N is, as long as products of the parameters
+are exactly representable (below 2[super 53] at double precision).
+Further into the tails the error is also a few tens of epsilon for N up to 104729;
+beyond that it grows in proportion to |ln f(k)|, reaching around a thousand epsilon where f(k) ~ e[super -700].
 
 [h4 Testing]
 
@@ -204,13 +198,22 @@ calculate the result (indeed there is no shorter method involving only basic
 arithmetic once the exponents have been found), the method is therefore
 much more accurate than the alternatives.
 
-For much larger N, we can calculate the PDF from the factorials using
-either lgamma, or by directly combining lanczos approximations to avoid
-calculating via logarithms.  We use the latter method, as it is usually
-1 or 2 decimal digits more accurate than computing via logarithms with
-lgamma.  However, in this area where N > 104729, the user should expect
-to lose around log[sub 10]N decimal digits during the calculation in
-the worst case.
+Prime factorisation is, however, slow, and above the table of primes it is not available at all.
+So for N above the table of factorials we use Loader's saddle-point method, as does R's `dhyper`:
+the PDF is the ratio of binomial densities
+
+[expression f(k) = Binom(k; r, p) Binom(n - k; N - r, p) / Binom(n; N, p)]
+
+in which the powers of /p/ cancel for any /p/; with /p/ = /n/ / /N/ the denominator is at its mode.
+Each binomial density is exp of a sum of Stirling-series remainders and deviance terms, all small near
+the mode, so near the mode the accuracy does not depend on N. The means of the deviance terms are
+ratios of products of the parameters, which we form without rounding, and we use the symmetry
+f(k; r, n, N) = f(r - k; r, N - n, N) to keep /p/ <= 1/2, since for /p/ near 1 large powers of 1 - /p/
+would otherwise have to cancel. Because the result is an exponential, its relative error grows like
+|ln f(k)| \u00d7 epsilon in the tails, so where the PDF is below e[super -15] and N is within the table
+of primes we recompute it by prime factorisation.
+
+Loader, C. (2000), "Fast and Accurate Computation of Binomial Probabilities".
 
 For non-integral /k/ the PDF is the analytic continuation of the formula above, with
 the binomial coefficients written in terms of gamma functions.  It is computed from the

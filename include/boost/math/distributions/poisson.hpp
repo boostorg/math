@@ -50,6 +50,7 @@
 #include <boost/math/special_functions/factorials.hpp> // factorials.
 #include <boost/math/tools/roots.hpp> // for root finding.
 #include <boost/math/distributions/detail/inv_discrete_quantile.hpp>
+#include <boost/math/distributions/detail/saddle_point.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 
@@ -143,40 +144,6 @@ namespace boost
         return true;
       } // bool check_dist_and_prob
 
-#ifndef BOOST_MATH_HAS_GPU_SUPPORT
-      // ln(n!) minus Stirling's approximation (n + 1/2) ln n - n + ln(2 pi)/2, from Loader (2000).
-      // The Bernoulli series converges to full precision only above minimum_argument_for_bernoulli_recursion.
-      template <class RealType, class Policy>
-      inline RealType stirlerr(const RealType& n, const Policy& pol) {
-        return boost::math::detail::bernoulli_stirling_series<RealType>(n, pol);
-      }
-
-      // The deviance term k ln(k/mean) + mean - k of Loader (2000), for k > 0.
-      // For |v| < 1/2, with v = (k - mean)/(k + mean), sum its series in v^2, which has no cancellation;
-      // beyond that, the direct formula loses at most a factor of about 2.5.
-      template <class RealType, class Policy>
-      inline RealType bd0(const RealType& mean, const RealType& k, const Policy& pol) {
-        BOOST_MATH_STD_USING // for ADL of std functions.
-        if (abs(k - mean) < (k + mean) / 2) {
-          const RealType v = (k - mean) / (k + mean);
-          const RealType v2 = v * v;
-          RealType sum = (k - mean) * v;
-          RealType term = 2 * k * v;
-          const boost::math::uintmax_t max_iterations = policies::get_max_series_iterations<Policy>();
-          for (boost::math::uintmax_t i = 1; i <= max_iterations; ++i) {
-            term *= v2;
-            const RealType next = term / (2 * i + 1);
-            sum += next;
-            if (abs(next) <= abs(sum) * tools::epsilon<RealType>()) {
-              return sum;
-            }
-          }
-          return policies::raise_evaluation_error<RealType>("boost::math::poisson_detail::bd0<%1%>(%1%, %1%)",
-              "Series did not converge, best approximation was %1%", sum, pol);
-        }
-        return k * log(k / mean) + mean - k;
-      }
-#endif
 
     } // namespace poisson_detail
 
@@ -354,7 +321,7 @@ namespace boost
           return -log_k_factorial + k*log(mean) - mean;
         }
         // Loader's (2000) saddle-point form, which avoids the cancellation of the direct formula when k is near mean.
-        return -poisson_detail::stirlerr(k, Policy()) - poisson_detail::bd0(mean, k, Policy()) - log(boost::math::constants::two_pi<RealType>() * k) / 2;
+        return -boost::math::detail::stirlerr_series(k, Policy()) - boost::math::detail::bd0(mean, k, Policy()) - log(boost::math::constants::two_pi<RealType>() * k) / 2;
 #endif
       }
 

@@ -494,6 +494,32 @@ void test_spots(RealType /*T*/, const char* type_name)
    BOOST_MATH_CHECK_THROW(d = boost::math::hypergeometric_distribution<RealType>(40, 501, 500), std::domain_error);
 
    //
+   // Integer x beyond the factorial table, where Loader's saddle-point method is used, with prime
+   // factorisation in the tails up to N = 104729. Values from mpmath at 60 digits.
+   //
+   struct large_case { unsigned x, r, n, N; long double pdf; RealType tol; };
+   const large_case large_cases[] = {
+      { 600, 1500, 2000, 5000, 0.025126012323870050456659927618198748L, tolerance },
+      { 700, 1500, 2000, 5000, 0.0000000000708147414413862429733772355814014052L, tolerance },
+      { 24000, 60000, 80000, 200000, 0.0039735405018628404013758812090728637L, tolerance },
+      { 24123, 60000, 80000, 200000, 0.00187568978055549884111723163694289891L, tolerance },
+      { 23500, 60000, 80000, 200000, 0.000000016112756785169958209568753951147937L, 4 * tolerance },
+      { 1200000, 3000000, 4000000, 10000000, 0.000561946220334811372962916024931211627L, tolerance },
+      { 1203456, 3000000, 4000000, 10000000, 0.00000000402250531175235295684236178111301572L, 4 * tolerance },
+   };
+   for (auto const& c : large_cases)
+   {
+      boost::math::hypergeometric_distribution<RealType> dist(c.r, c.n, c.N);
+      BOOST_CHECK_CLOSE(pdf(dist, c.x), static_cast<RealType>(c.pdf), c.tol);
+   }
+   // At an end of the support the result must not underflow before it is complete (true value 1.466e-322).
+   if (std::numeric_limits<RealType>::min_exponent10 < -320)
+   {
+      boost::math::hypergeometric_distribution<RealType> dist(100000, 1065, 200000);
+      BOOST_CHECK(pdf(dist, 0u) > 0);
+   }
+
+   //
    // Non-integer x: the analytic continuation C(r, x) C(N - r, n - x) / C(N, n).
    // Values from mpmath at 50 digits; the tolerance scales with the condition number
    // |x d/dx ln pdf|, which is how much a rounding of x itself is amplified.
