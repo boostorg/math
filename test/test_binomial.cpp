@@ -819,6 +819,15 @@ void test_spots(RealType T)
 
    check_out_of_range<boost::math::binomial_distribution<RealType> >(1, 1); // (All) valid constructor parameter values.
 
+   {
+      // The quantile is beyond 1/epsilon, where k + 1 == k: this must return,
+      // even on platforms where the value itself is inaccurate (see below).
+      using namespace boost::math::policies;
+      binomial_distribution<RealType, policy<discrete_quantile<integer_round_up> > > up(9079765771874083840, 0.561815);
+      binomial_distribution<RealType, policy<discrete_quantile<integer_round_down> > > down(9079765771874083840, 0.561815);
+      BOOST_CHECK(quantile(up, RealType(0.0365346)) >= 0);
+      BOOST_CHECK(quantile(down, RealType(0.0365346)) >= 0);
+   }
 #if !(defined(__clang__) && defined( __APPLE__))
    // See bug reported here: https://github.com/boostorg/math/pull/1007
    //

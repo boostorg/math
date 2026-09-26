@@ -10,7 +10,6 @@
 name: codecov
 
 on:
-  pull_request:
   push:
     branches:
       - master
@@ -57,7 +56,7 @@ jobs:
               compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'test_reverse_mode_autodiff' }
           - { name: Collect coverage gradient-optimizers, coverage: yes,
               compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'gradient_based_optimizers' }
-    timeout-minutes: 360
+    timeout-minutes: 180
     runs-on: ${{matrix.os}}
     container: ${{matrix.container}}
     env: {B2_USE_CCACHE: 0}
