@@ -160,12 +160,14 @@ void test_uniform()
         CHECK_ULP_CLOSE((pi - u) / (2 * pi), cdf(complement(dist, u)), 4);
     }
     CHECK_ULP_CLOSE(T(1), variance(dist), 1);
+    using std::log;
     CHECK_ULP_CLOSE(log(2 * pi), entropy(dist), 2);
 }
 
 template <class T>
 void test_quantile()
 {
+    using std::abs;
     const T eps = std::numeric_limits<T>::epsilon();
     for (T k : {T(0), T(0.5), T(5), T(50), T(1000)})
     {
@@ -183,7 +185,7 @@ void test_quantile()
                 const T p = cdf(dist, x);
                 if (p >= (std::numeric_limits<T>::min)())
                 {
-                    CHECK_ABSOLUTE_ERROR(x, quantile(dist, p), 16 * eps * (1 + fabs(x)));
+                    CHECK_ABSOLUTE_ERROR(x, quantile(dist, p), T(16 * eps * (1 + abs(x))));
                 }
             }
             else
@@ -191,7 +193,7 @@ void test_quantile()
                 const T q = cdf(complement(dist, x));
                 if (q >= (std::numeric_limits<T>::min)())
                 {
-                    CHECK_ABSOLUTE_ERROR(x, quantile(complement(dist, q)), 16 * eps * (1 + fabs(x)));
+                    CHECK_ABSOLUTE_ERROR(x, quantile(complement(dist, q)), T(16 * eps * (1 + abs(x))));
                 }
             }
         }

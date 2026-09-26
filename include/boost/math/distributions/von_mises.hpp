@@ -27,9 +27,11 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/constants/constants.hpp>
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
 #include <utility>
 #include <limits>
+#endif
 
 namespace boost { namespace math {
 
@@ -96,23 +98,23 @@ private:
     RealType m_concentration;
 }; // class von_mises_distribution
 
-using von_mises = von_mises_distribution<double>;
+BOOST_MATH_EXPORT using von_mises = von_mises_distribution<double>;
 
 #ifdef __cpp_deduction_guides
-template <typename RealType>
+BOOST_MATH_EXPORT template <typename RealType>
 von_mises_distribution(RealType)->von_mises_distribution<boost::math::tools::promote_args_t<RealType>>;
-template <typename RealType>
+BOOST_MATH_EXPORT template <typename RealType>
 von_mises_distribution(RealType,RealType)->von_mises_distribution<boost::math::tools::promote_args_t<RealType>>;
 #endif
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline std::pair<RealType, RealType> range(const von_mises_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
     using boost::math::tools::max_value;
     return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
 }
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline std::pair<RealType, RealType> support(const von_mises_distribution<RealType, Policy>& dist)
 { // Range of x where the pdf is non-zero: one full turn centred on the mean.
     const RealType pi = boost::math::constants::pi<RealType>();
@@ -302,7 +304,7 @@ RealType von_mises_quantile_left(RealType k, RealType p, const Policy& pol)
 
 } // namespace detail
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType pdf(const von_mises_distribution<RealType, Policy>& dist, const RealType& x)
 {
     BOOST_MATH_STD_USING
@@ -323,7 +325,7 @@ inline RealType pdf(const von_mises_distribution<RealType, Policy>& dist, const 
     return detail::von_mises_pdf_imp<RealType, Policy>(k, u, detail::von_mises_scaled_i0(k, Policy()));
 }
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType cdf(const von_mises_distribution<RealType, Policy>& dist, const RealType& x)
 {
     static const char* function = "boost::math::cdf(const von_mises_distribution<%1%>&, %1%)";
@@ -341,7 +343,7 @@ inline RealType cdf(const von_mises_distribution<RealType, Policy>& dist, const 
                   : 1 - detail::von_mises_cdf_left(k, u, s0, Policy());
 }
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType cdf(const complemented2_type<von_mises_distribution<RealType, Policy>, RealType>& c)
 {
     static const char* function = "boost::math::cdf(const complement(von_mises_distribution<%1%>&), %1%)";
@@ -360,7 +362,7 @@ inline RealType cdf(const complemented2_type<von_mises_distribution<RealType, Po
                   : 1 - detail::von_mises_cdf_left(k, -u, s0, Policy());
 }
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType quantile(const von_mises_distribution<RealType, Policy>& dist, const RealType& p)
 {
     static const char* function = "boost::math::quantile(const von_mises_distribution<%1%>&, %1%)";
@@ -377,7 +379,7 @@ inline RealType quantile(const von_mises_distribution<RealType, Policy>& dist, c
                      : mean - detail::von_mises_quantile_left(k, RealType(1 - p), Policy());
 }
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType quantile(const complemented2_type<von_mises_distribution<RealType, Policy>, RealType>& c)
 {
     static const char* function = "boost::math::quantile(const complement(von_mises_distribution<%1%>&), %1%)";
@@ -394,26 +396,26 @@ inline RealType quantile(const complemented2_type<von_mises_distribution<RealTyp
                      : mean + detail::von_mises_quantile_left(k, RealType(1 - q), Policy());
 }
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType mean(const von_mises_distribution<RealType, Policy>& dist)
 {
     return dist.mean();
 }
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType mode(const von_mises_distribution<RealType, Policy>& dist)
 {
     return dist.mean();
 }
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType median(const von_mises_distribution<RealType, Policy>& dist)
 {
     return dist.mean();
 }
 
 // Circular variance, 1 - I1(k)/I0(k).
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType variance(const von_mises_distribution<RealType, Policy>& dist)
 {
     RealType s0, d;
@@ -422,7 +424,7 @@ inline RealType variance(const von_mises_distribution<RealType, Policy>& dist)
 }
 
 // Circular standard deviation, sqrt(-2 ln(I1(k)/I0(k))).
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType standard_deviation(const von_mises_distribution<RealType, Policy>& dist)
 {
     BOOST_MATH_STD_USING
@@ -431,13 +433,13 @@ inline RealType standard_deviation(const von_mises_distribution<RealType, Policy
     return sqrt(-2 * log1p(-d / s0, Policy()));
 }
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType skewness(const von_mises_distribution<RealType, Policy>& /*dist*/)
 {
     return 0;
 }
 
-template <typename RealType, typename Policy>
+BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline RealType entropy(const von_mises_distribution<RealType, Policy>& dist)
 {
     BOOST_MATH_STD_USING
