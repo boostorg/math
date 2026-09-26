@@ -488,6 +488,42 @@ inline typename tools::promote_args<T>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::hypergeometric_pdf<%1%>(%1%,%1%,%1%,%1%)");
 }
 
+//
+// The analytic continuation C(r, x) C(N - r, n - x) / C(N, n) to non-integer x, lower < x < upper.
+// Anchor at k = floor(x) (passed as floor_x), whose PDF the integer code computes accurately, and shift by d = x - k:
+//   pdf(x) = pdf(k) D(k + 1) D(N - r - n + k + 1) / (D(r - x + 1) D(n - x + 1)),
+// where D(z) = Gamma(z) / Gamma(z + d) is tgamma_delta_ratio. Each ratio is accurate for small d
+// and large z, where a quotient of gamma functions or of powers would lose digits in proportion to N,
+// and each tends to 1 as d -> 0, so the continuation meets the integer values.
+//
+template <class T, class Policy>
+inline typename tools::promote_args<T>::type
+   hypergeometric_pdf_noninteger(T x, std::uint64_t floor_x, std::uint64_t r, std::uint64_t n, std::uint64_t N, const Policy&)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   BOOST_MATH_STD_USING
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   const value_type vx = x;
+   const value_type k = static_cast<value_type>(floor_x);
+   const value_type d = vx - k;
+   const value_type base = hypergeometric_pdf<value_type>(floor_x, r, n, N, forwarding_policy());
+   const value_type m = static_cast<value_type>(N) - static_cast<value_type>(r) - static_cast<value_type>(n);
+   value_type result = base
+      * boost::math::tgamma_delta_ratio(k + 1, d, forwarding_policy())
+      * boost::math::tgamma_delta_ratio(m + k + 1, d, forwarding_policy())
+      / (boost::math::tgamma_delta_ratio(static_cast<value_type>(r) - vx + 1, d, forwarding_policy())
+         * boost::math::tgamma_delta_ratio(static_cast<value_type>(n) - vx + 1, d, forwarding_policy()));
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::hypergeometric_pdf<%1%>(%1%,%1%,%1%,%1%)");
+}
+
 }}} // namespaces
 
 #endif
