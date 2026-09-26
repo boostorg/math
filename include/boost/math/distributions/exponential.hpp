@@ -111,10 +111,15 @@ BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const exponential_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-   using boost::math::tools::max_value;
-   using boost::math::tools::min_value;
-   return boost::math::pair<RealType, RealType>(min_value<RealType>(),  max_value<RealType>());
-   // min_value<RealType>() to avoid a discontinuity at x = 0.
+   BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
+   { 
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
+   }
+   else
+   { // Can only use max_value.
+      using boost::math::tools::max_value;
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // - to + max.
+   }
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -130,9 +135,6 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const exponential_distribution<RealTy
       return result;
    if(0 == detail::verify_exp_x(function, x, &result, Policy()))
       return result;
-   // Workaround for VC11/12 bug:
-   if ((boost::math::isinf)(x))
-      return 0;
    result = lambda * exp(-lambda * x);
    return result;
 } // pdf
@@ -227,9 +229,6 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<exponential_
       return result;
    if(0 == detail::verify_exp_x(function, c.param, &result, Policy()))
       return result;
-   // Workaround for VC11/12 bug:
-   if (c.param >= tools::max_value<RealType>())
-      return 0;
    result = exp(-c.param * lambda);
 
    return result;
@@ -248,9 +247,6 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<exponenti
       return result;
    if(0 == detail::verify_exp_x(function, c.param, &result, Policy()))
       return result;
-   // Workaround for VC11/12 bug:
-   if (c.param >= tools::max_value<RealType>())
-      return 0;
    result = -c.param * lambda;
 
    return result;

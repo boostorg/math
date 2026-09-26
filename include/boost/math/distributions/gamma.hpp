@@ -58,6 +58,22 @@ BOOST_MATH_GPU_ENABLED inline bool check_gamma_x(
 }
 
 template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline bool check_gamma_x_positive(
+      const char* function,
+      RealType const& x,
+      RealType* result, const Policy& pol)
+{
+   if((x < 0) || (boost::math::isnan)(x))
+   {
+      *result = policies::raise_domain_error<RealType>(
+         function,
+         "Random variate is %1% but must be >= 0 !", x, pol);
+      return false;
+   }
+   return true;
+}
+
+template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline bool check_gamma(
       const char* function,
       RealType scale,
@@ -112,17 +128,30 @@ gamma_distribution(RealType,RealType)->gamma_distribution<typename boost::math::
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const gamma_distribution<RealType, Policy>& /* dist */)
 { // Range of permissible values for random variable x.
-   using boost::math::tools::max_value;
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
+  BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
+  { 
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), boost::math::numeric_limits<RealType>::infinity()); // 0 to + infinity.
+  }
+  else
+  {
+      using boost::math::tools::max_value;
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // 0 to + max
+  }
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const gamma_distribution<RealType, Policy>& /* dist */)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-   using boost::math::tools::max_value;
-   using boost::math::tools::min_value;
-   return boost::math::pair<RealType, RealType>(min_value<RealType>(),  max_value<RealType>());
+  BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
+  { 
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), boost::math::numeric_limits<RealType>::infinity()); // 0 to + infinity.
+  }
+  else
+  {
+      using boost::math::tools::max_value;
+      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // 0 to + max
+   }
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -138,13 +167,18 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const gamma_distribution<RealType, Po
    RealType result = 0;
    if(false == detail::check_gamma(function, scale, shape, &result, Policy()))
       return result;
-   if(false == detail::check_gamma_x(function, x, &result, Policy()))
+   if(false == detail::check_gamma_x_positive(function, x, &result, Policy()))
       return result;
 
    if(x == 0)
    {
       return 0;
    }
+   if ((boost::math::isinf)(x))
+   {
+      return 0;
+   }
+
    result = gamma_p_derivative(shape, x / scale, Policy()) / scale;
    return result;
 } // pdf
@@ -168,9 +202,8 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const gamma_distribution<RealType,
 
    if(x == 0)
    {
-      return boost::math::numeric_limits<RealType>::quiet_NaN();
+      return policies::raise_domain_error<RealType>(function, "Random variate is %1% but must be > 0 !", x, Policy());;
    }
-
    result = -k*log(theta) + (k-1)*log(x) - lgamma(k) - (x/theta);
    
    return result;
@@ -189,8 +222,17 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const gamma_distribution<RealType, Po
    RealType result = 0;
    if(false == detail::check_gamma(function, scale, shape, &result, Policy()))
       return result;
-   if(false == detail::check_gamma_x(function, x, &result, Policy()))
+   if(false == detail::check_gamma_x_positive(function, x, &result, Policy()))
       return result;
+   
+   if(x == 0)
+   {
+      return 0;
+   }
+   if ((boost::math::isinf)(x))
+   {
+      return 1;
+   }
 
    result = boost::math::gamma_p(shape, x / scale, Policy());
    return result;
@@ -233,8 +275,17 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<gamma_distri
    RealType result = 0;
    if(false == detail::check_gamma(function, scale, shape, &result, Policy()))
       return result;
-   if(false == detail::check_gamma_x(function, c.param, &result, Policy()))
+   if(false == detail::check_gamma_x_positive(function, c.param, &result, Policy()))
       return result;
+
+   if(c.param == 0)
+   {
+      return 1;
+   }
+   if ((boost::math::isinf)(c.param))
+   {
+      return 0;
+   }
 
    result = gamma_q(shape, c.param / scale, Policy());
 

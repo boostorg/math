@@ -217,6 +217,70 @@ BOOST_MATH_GPU_ENABLED inline bool check_finite(
    return true;
 }
 
+template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline bool check_inverse_gamma_shape(
+      const char* function, // inverse_gamma
+      RealType shape, // shape aka alpha
+      RealType* result, // to update, perhaps with NaN
+      const Policy& pol)
+{  // Sources say shape argument must be > 0
+   // but seems logical to allow shape zero as special case,
+   // returning pdf and cdf zero (but not < 0).
+   // (Functions like mean, variance with other limits on shape are checked
+   // in version including an operator & limit below).
+   if((shape < 0) || !(boost::math::isfinite)(shape))
+   {
+      *result = policies::raise_domain_error<RealType>(
+         function,
+         "Shape parameter is %1%, but must be >= 0 !", shape, pol);
+      return false;
+   }
+   return true;
+} //bool check_inverse_gamma_shape
+
+template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline bool check_inverse_gamma_x(
+      const char* function,
+      RealType const& x,
+      RealType* result, const Policy& pol)
+{
+   if((x < 0) || !(boost::math::isfinite)(x))
+   {
+      *result = policies::raise_domain_error<RealType>(
+         function,
+         "Random variate is %1% but must be >= 0 !", x, pol);
+      return false;
+   }
+   return true;
+}
+
+template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline bool check_inverse_gamma_x_positive(
+      const char* function,
+      RealType const& x,
+      RealType* result, const Policy& pol)
+{
+   if((x < 0) || (boost::math::isnan)(x))
+   {
+      *result = policies::raise_domain_error<RealType>(
+         function,
+         "Random variate is %1% but must be >= 0 !", x, pol);
+      return false;
+   }
+   return true;
+}
+
+template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline bool check_inverse_gamma(
+      const char* function, // TODO swap these over, so shape is first.
+      RealType scale,  // scale aka beta
+      RealType shape, // shape aka alpha
+      RealType* result, const Policy& pol)
+{
+   return check_scale(function, scale, result, pol)
+     && check_inverse_gamma_shape(function, shape, result, pol);
+} // bool check_inverse_gamma
+
 } // namespace detail
 } // namespace math
 } // namespace boost
