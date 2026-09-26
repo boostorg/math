@@ -148,15 +148,10 @@ namespace boost
             RealType vLarge = sqrt(boost::math::tools::max_value<RealType>());
             RealType vSmall = 1 / vLarge;
 
-            // As v2 -> infinity, noncentral f converges to chi-squared distribution.
-            // Rather than evaluating f(vLarge), we can use the more stable chi-squared approximation
-            RealType large_difference;
-            if (find_v1)
-            {
-               large_difference = large_v2_approximation<RealType, Policy>(x, v, p, q, nc);
-            }
-            else
-               large_difference = f(vLarge);
+            // As v2 -> infinity, v1 F converges to the non-central chi-squared distribution with v1
+            // degrees of freedom. Rather than evaluating f at an enormous degrees of freedom, use that
+            // limit (when finding v2, the fixed v is v1).
+            RealType large_difference = large_v2_approximation<RealType, Policy>(x, v, p, q, nc);
 
             if ((large_difference < 0) == (f(vSmall) < 0)){
                return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom because two degrees of freedom can be found using the given parameters",
