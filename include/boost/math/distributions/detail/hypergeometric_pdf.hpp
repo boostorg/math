@@ -593,10 +593,10 @@ inline typename tools::promote_args<T>::type
    const value_type n_left = static_cast<value_type>(n - floor_x);                 // >= 1, as x < n
    // Each numerator is paired with a denominator, so that no intermediate product underflows early.
    value_type result = base
-      * (boost::math::tgamma_delta_ratio(k + 1, d, forwarding_policy())
-         / boost::math::tgamma_delta_ratio(r_left + 1 - d, d, forwarding_policy()))
-      * (boost::math::tgamma_delta_ratio(failures_left + 1, d, forwarding_policy())
-         / boost::math::tgamma_delta_ratio(n_left + 1 - d, d, forwarding_policy()));
+      * (boost::math::tgamma_delta_ratio(value_type(k + 1), d, forwarding_policy())
+         / boost::math::tgamma_delta_ratio(value_type(r_left + 1 - d), d, forwarding_policy()))
+      * (boost::math::tgamma_delta_ratio(value_type(failures_left + 1), d, forwarding_policy())
+         / boost::math::tgamma_delta_ratio(value_type(n_left + 1 - d), d, forwarding_policy()));
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::hypergeometric_pdf<%1%>(%1%,%1%,%1%,%1%)");
 }
 

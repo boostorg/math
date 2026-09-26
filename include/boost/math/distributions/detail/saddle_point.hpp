@@ -146,11 +146,11 @@ inline RealType log_binomial_pdf_saddle_point(const RealType& x, const RealType&
    }
    if (x == 0)
    {
-      return p < RealType(0.1) ? RealType(-bd0(n * q, n, pol) - n * p) : RealType(n * log(q));
+      return p < RealType(0.1) ? RealType(-bd0(RealType(n * q), n, pol) - n * p) : RealType(n * log(q));
    }
    if (x == n)
    {
-      return q < RealType(0.1) ? RealType(-bd0(n * p, n, pol) - n * q) : RealType(n * log(p));
+      return q < RealType(0.1) ? RealType(-bd0(RealType(n * p), n, pol) - n * q) : RealType(n * log(p));
    }
    const RealType lc = stirlerr(n, pol) - stirlerr(x, pol) - stirlerr(RealType(n - x), pol)
                      - bd0(RealType(n * p), x, pol) - bd0(RealType(n * q), RealType(n - x), pol);
