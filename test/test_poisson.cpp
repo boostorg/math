@@ -279,6 +279,8 @@ void test_spots(RealType)
       logpdf(poisson_distribution<RealType>(static_cast<RealType>(3)), static_cast<RealType>(6.0625)),
       static_cast<RealType>(-3.03626217292210137508893426424318787L),
          tolerance);
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   // GPU builds keep the direct formula, so these accuracy checks apply only to the host path.
    // |k - mean| / (k + mean) just above 0.1, where the direct deviance formula cancels.
    BOOST_CHECK_CLOSE(
       logpdf(poisson_distribution<RealType>(static_cast<RealType>(1000)), static_cast<RealType>(800)),
@@ -335,6 +337,7 @@ void test_spots(RealType)
         static_cast<RealType>(-18.993045686877064),
            tolerance);
   }
+#endif
 
   // CDF
   BOOST_CHECK_CLOSE(
