@@ -17,10 +17,13 @@
 namespace boost::math::interpolators::detail {
 
 
-template <class RandomAccessContainer>
-inline RandomAccessContainer& get_bezier_storage()
+template <class RandomAccessContainer, class Size>
+inline RandomAccessContainer& get_bezier_storage(Size size)
 {
     static thread_local RandomAccessContainer the_storage;
+    if (the_storage.size() < size) {
+        the_storage.resize(size);
+    }
     return the_storage;
 }
 
@@ -50,10 +53,7 @@ public:
             }
         }
         control_points_ = std::move(control_points);
-        auto & storage = get_bezier_storage<RandomAccessContainer>();
-        if (storage.size() < control_points_.size() -1) {
-            storage.resize(control_points_.size() -1);
-        }
+        get_bezier_storage<RandomAccessContainer>(control_points_.size() - 1);
     }
 
     inline Point operator()(Real t) const
@@ -68,7 +68,7 @@ public:
             return p;
         }
 
-        auto & scratch_space = get_bezier_storage<RandomAccessContainer>();
+        auto & scratch_space = get_bezier_storage<RandomAccessContainer>(control_points_.size() - 1);
         for (Z i = 0; i < control_points_.size() - 1; ++i) {
             for (Z j = 0; j < control_points_[0].size(); ++j) {
                 scratch_space[i][j] = (1-t)*control_points_[i][j] + t*control_points_[i+1][j];
@@ -80,7 +80,7 @@ public:
     }
 
     Point prime(Real t) {
-        auto & scratch_space = get_bezier_storage<RandomAccessContainer>();
+        auto & scratch_space = get_bezier_storage<RandomAccessContainer>(control_points_.size() - 1);
         for (Z i = 0; i < control_points_.size() - 1; ++i) {
             for (Z j = 0; j < control_points_[0].size(); ++j) {
                 scratch_space[i][j] = control_points_[i+1][j] - control_points_[i][j];
