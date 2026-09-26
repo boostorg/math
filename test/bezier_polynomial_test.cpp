@@ -13,6 +13,7 @@
 #include <array>
 #include <boost/core/demangle.hpp>
 #include <boost/math/interpolators/bezier_polynomial.hpp>
+#include <future>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
@@ -186,6 +187,25 @@ void test_linear_precision()
     }
 }
 
+template<typename Real>
+void test_async_evaluation()
+{
+    std::vector<std::array<Real, 2>> control_points{{Real(0), Real(0)},
+                        {Real(1), Real(2)},
+                        {Real(3), Real(3)},
+                        {Real(4), Real(0)}};
+
+    auto bp = bezier_polynomial(std::move(control_points));
+
+    std::array<Real, 2> p_main = bp(Real(0.5));
+
+    std::array<Real, 2> p_worker =
+        std::async(std::launch::async, [&] { return bp(Real(0.5)); }).get();
+
+    CHECK_ULP_CLOSE(p_main[0], p_worker[0], 3);
+    CHECK_ULP_CLOSE(p_main[1], p_worker[1], 3);
+}
+
 int main()
 {
     #ifdef __STDCPP_FLOAT32_T__
@@ -194,12 +214,14 @@ int main()
     test_convex_hull<std::float32_t>();
     test_linear_precision<std::float32_t>();
     test_reversal_symmetry<std::float32_t>();
+    test_async_evaluation<std::float32_t>();
     #else
     test_linear<float>();
     test_quadratic<float>();
     test_convex_hull<float>();
     test_linear_precision<float>();
     test_reversal_symmetry<float>();
+    test_async_evaluation<float>();
     #endif
 
     #ifdef __STDCPP_FLOAT64_T__
@@ -208,12 +230,14 @@ int main()
     test_convex_hull<std::float64_t>();
     test_linear_precision<std::float64_t>();
     test_reversal_symmetry<std::float64_t>();
+    test_async_evaluation<std::float64_t>();
     #else
     test_linear<double>();
     test_quadratic<double>();
     test_convex_hull<double>();
     test_linear_precision<double>();
     test_reversal_symmetry<double>();
+    test_async_evaluation<double>();
     #endif
 
     #ifdef BOOST_HAS_FLOAT128
