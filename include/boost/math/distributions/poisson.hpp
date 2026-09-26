@@ -51,6 +51,7 @@
 #include <boost/math/tools/roots.hpp> // for root finding.
 #include <boost/math/distributions/detail/inv_discrete_quantile.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/special_functions/log1p.hpp>
 
 namespace boost
 {
@@ -142,61 +143,40 @@ namespace boost
         return true;
       } // bool check_dist_and_prob
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+      // ln(n!) minus Stirling's approximation (n + 1/2) ln n - n + ln(2 pi)/2, from Loader (2000).
+      // The Bernoulli series converges to full precision only above minimum_argument_for_bernoulli_recursion.
       template <class RealType, class Policy>
-      BOOST_MATH_GPU_ENABLED inline RealType stirlerr(const RealType& n, const Policy& pol) {
-        BOOST_MATH_STD_USING // for ADL of std functions.
-        using boost::math::lgamma;
-
-        // Use the direct formula for small n
-        if (n < boost::math::detail::minimum_argument_for_bernoulli_recursion<RealType>()) {
-          return lgamma(n + 1) - (n * log(n) - n + RealType(0.5) * log(RealType(2) * boost::math::constants::pi<RealType>() * n));
-        }
-
-        // Use the Stirling series approximation for large n
+      inline RealType stirlerr(const RealType& n, const Policy& pol) {
         return boost::math::detail::bernoulli_stirling_series<RealType>(n, pol);
-
       }
 
+      // The deviance term k ln(k/mean) + mean - k of Loader (2000), for k > 0.
+      // For |v| < 1/2, with v = (k - mean)/(k + mean), sum its series in v^2, which has no cancellation;
+      // beyond that, the direct formula loses at most a factor of about 2.5.
       template <class RealType, class Policy>
-      BOOST_MATH_GPU_ENABLED inline RealType bd0(const RealType& mean, const RealType& k, const Policy& pol) {
+      inline RealType bd0(const RealType& mean, const RealType& k, const Policy& pol) {
         BOOST_MATH_STD_USING // for ADL of std functions.
-
-        // Calculate v = (k - mean) / (k + mean) from Loader (2000) approximation
-        bool is_close = abs(k - mean) < RealType(0.1) * (k + mean);
-
-        if (is_close) { // Use the series approximation if |v| < 0.1
-          RealType v = (k - mean) / (k + mean);
-          RealType v2 = v * v;
-          RealType series_term = ((k - mean) * (k - mean)) / (k + mean);
-
+        if (abs(k - mean) < (k + mean) / 2) {
+          const RealType v = (k - mean) / (k + mean);
+          const RealType v2 = v * v;
+          RealType sum = (k - mean) * v;
           RealType term = 2 * k * v;
-          
-          // Series is trivially zero when k = mean, so skip the loop
-          if (term != RealType(0)) {
-            RealType target_epsilon = abs(term) * boost::math::tools::epsilon<RealType>();
-            const boost::math::size_t max_iterations = policies::get_max_series_iterations<Policy>();
-
-            for (boost::math::size_t i = 1U;; ++i) {
-              term *= v2;
-              RealType next = term / (2 * i + 1);
-              series_term += next;
-              // Break if the next term is less than the target epsilon
-              if (abs(next) < target_epsilon) {
-                break;
-              }
-              if (i > max_iterations) {
-                return policies::raise_evaluation_error<RealType>("bd0<%1%>()", "Series did not converge in the allotted iterations, best approximation was %1%", series_term, pol);
-              }
+          const boost::math::uintmax_t max_iterations = policies::get_max_series_iterations<Policy>();
+          for (boost::math::uintmax_t i = 1; i <= max_iterations; ++i) {
+            term *= v2;
+            const RealType next = term / (2 * i + 1);
+            sum += next;
+            if (abs(next) <= abs(sum) * tools::epsilon<RealType>()) {
+              return sum;
             }
           }
-          return series_term;
-        } else {
-          // Use the direct formula if |v| >= 0.1
-          RealType direct = (k == 0) ? RealType(0) : k * log(k / mean) + mean - k;
-          return direct;
+          return policies::raise_evaluation_error<RealType>("boost::math::poisson_detail::bd0<%1%>(%1%, %1%)",
+              "Series did not converge, best approximation was %1%", sum, pol);
         }
-
+        return k * log(k / mean) + mean - k;
       }
+#endif
 
     } // namespace poisson_detail
 
@@ -361,8 +341,21 @@ namespace boost
       // Special case where k and lambda are both positive
       if(k > 0 && mean > 0)
       {
-        // Use the Loader (2000) saddle-point approximation for logpdf calculation
-        return -poisson_detail::stirlerr(k, Policy()) - poisson_detail::bd0(mean, k, Policy()) - RealType(0.5) * log(RealType(2) * boost::math::constants::pi<RealType>() * k);
+#ifdef BOOST_MATH_HAS_GPU_SUPPORT
+        return -lgamma(k+1) + k*log(mean) - mean;
+#else
+        // For small k the direct formula has little cancellation, while Stirling's form would cancel
+        // its ln(2 pi k)/2 terms as k -> 0. Just above minimum_argument_for_bernoulli_recursion the
+        // Bernoulli series can still fail to converge (at k = 6.05 for double), so leave a margin.
+        if (k <= 2 * boost::math::detail::minimum_argument_for_bernoulli_recursion<RealType>())
+        {
+          // Below 1/2, ln(k!) = log1p(tgamma1pm1(k)) avoids rounding 1 + k.
+          const RealType log_k_factorial = k < 0.5f ? RealType(log1p(tgamma1pm1(k, Policy()), Policy())) : RealType(lgamma(k+1, Policy()));
+          return -log_k_factorial + k*log(mean) - mean;
+        }
+        // Loader's (2000) saddle-point form, which avoids the cancellation of the direct formula when k is near mean.
+        return -poisson_detail::stirlerr(k, Policy()) - poisson_detail::bd0(mean, k, Policy()) - log(boost::math::constants::two_pi<RealType>() * k) / 2;
+#endif
       }
 
       result = log(pdf(dist, k));

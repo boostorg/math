@@ -500,7 +500,6 @@ T bernoulli_stirling_series(const T& z, const Policy& pol) {
    const T one_over_x2 = one_over_x_pow_two_n_minus_one * one_over_x_pow_two_n_minus_one;
    T sum = (boost::math::bernoulli_b2n<T>(1) / 2) * one_over_x_pow_two_n_minus_one;
    const T target_epsilon_to_break_loop = sum * boost::math::tools::epsilon<T>();
-   const T half_ln_two_pi_over_z = sqrt(boost::math::constants::two_pi<T>() / z);
    T last_term = 2 * sum;
 
    for (boost::math::size_t n = 2U;; ++n)

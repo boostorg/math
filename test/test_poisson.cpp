@@ -259,7 +259,37 @@ void test_spots(RealType)
          static_cast<RealType>(-2.472264284061216), // probability (already in log space).
          tolerance);
 
-   // Cases below require around 15+ significant decimal digits to represent
+    // Tiny non-integer k, where Stirling's form would cancel ln(2 pi k)/2 against itself.
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(0.01)), static_cast<RealType>(1e-20)),
+      static_cast<RealType>(-0.01L),
+         tolerance);
+
+   // k at the threshold of the Bernoulli series for Stirling's remainder, where it does not yet converge.
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(3)), static_cast<RealType>(6)),
+      static_cast<RealType>(-2.98757748000144284668870687136879109L),
+         tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(3)), static_cast<RealType>(7)),
+      static_cast<RealType>(-3.83487534038864646039881437788944512L),
+         tolerance);
+   // Non-integer k just above the Bernoulli threshold for double, where the series can still diverge.
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(3)), static_cast<RealType>(6.0625)),
+      static_cast<RealType>(-3.03626217292210137508893426424318787L),
+         tolerance);
+   // |k - mean| / (k + mean) just above 0.1, where the direct deviance formula cancels.
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(1000)), static_cast<RealType>(800)),
+      static_cast<RealType>(-25.746507512332073098754568741464577L),
+         tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(100000)), static_cast<RealType>(80000)),
+      static_cast<RealType>(-2155.07972539491888743157625548588799L),
+         tolerance);
+
+  // Cases below require around 15+ significant decimal digits to represent
   // k / mean meaningfully, so skip for float.
   if (std::numeric_limits<RealType>::digits10 > 15)
   {
