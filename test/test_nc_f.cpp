@@ -416,6 +416,20 @@ void test_spots(RealType, const char* name = nullptr)
       }
    }
 
+   // As v1 -> infinity, F tends to v2 / chi-squared(v2): find_v1's check for a second root must use
+   // that limit, not the v2 -> infinity one, or it reports two roots where there is one.
+   {
+      for (RealType xv : {RealType(1.2), RealType(0.8)})
+      {
+         RealType v1 = 50;
+         RealType v2 = xv > 1 ? RealType(3) : RealType(10);
+         nc = xv > 1 ? RealType(5) : RealType(3);
+         boost::math::non_central_f_distribution<RealType> ref(v1, v2, nc);
+         RealType P = cdf(ref, xv);
+         BOOST_CHECK_CLOSE(ref.find_v1(xv, v2, nc, P), v1, tolerance);
+      }
+   }
+
    // Check case where two degrees of freedom solve the inversion problem
    BOOST_MATH_CHECK_THROW(dist.find_v1(RealType(1.5), RealType(2.0), RealType(1.0), RealType(0.49845842011686358665786775091245664L)), boost::math::evaluation_error);
    BOOST_MATH_CHECK_THROW(dist.find_v1(RealType(3.51), RealType(5), RealType(0), RealType(0.85802971653663762108266155337333L)), boost::math::evaluation_error);
