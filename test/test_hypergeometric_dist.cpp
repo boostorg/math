@@ -524,6 +524,14 @@ void test_spots(RealType /*T*/, const char* type_name)
    BOOST_CHECK(pdf(d2, static_cast<RealType>(40.5)) < pdf(d2, static_cast<RealType>(41)));
    BOOST_CHECK(pdf(d2, static_cast<RealType>(80.5)) < pdf(d2, static_cast<RealType>(80)));
    BOOST_CHECK(pdf(d2, static_cast<RealType>(80.5)) > pdf(d2, static_cast<RealType>(81)));
+   // Counts too large for the type to hold exactly (here N > 2^24 for an unpromoted float): their
+   // differences must be formed exactly, or at the bottom of the support (7) a gamma argument hits a pole.
+   {
+      using no_promote = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false>>;
+      boost::math::hypergeometric_distribution<RealType, no_promote> big(30000001 - 3, 10, 30000001);
+      const RealType p = pdf(big, static_cast<RealType>(7.5));
+      BOOST_CHECK((boost::math::isfinite)(p) && (p >= 0));
+   }
    // Outside the support is still an error.
    BOOST_MATH_CHECK_THROW(pdf(d2, static_cast<RealType>(150.5)), std::domain_error);
    BOOST_MATH_CHECK_THROW(pdf(d2, static_cast<RealType>(-0.5)), std::domain_error);
