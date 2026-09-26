@@ -270,8 +270,8 @@ void test_huge_concentration()
     CHECK_ULP_CLOSE(log(two_pi * e / k) / 2, entropy(dist), 8);
     // Phi(-1) and Phi(-10).
     CHECK_ULP_CLOSE(T(0.158655253931457051414767454367962077522L), cdf(dist, -1 / sqrt(k)), 16);
-    CHECK_ULP_CLOSE(T(7.61985302416052606597337100660413e-24L), cdf(dist, -10 / sqrt(k)), 128);
-    CHECK_ULP_CLOSE(T(7.61985302416052606597337100660413e-24L), cdf(complement(dist, 10 / sqrt(k))), 128);
+    CHECK_ULP_CLOSE(T(7.619853024160526065973343251599308363504e-24L), cdf(dist, -10 / sqrt(k)), 128);
+    CHECK_ULP_CLOSE(T(7.619853024160526065973343251599308363504e-24L), cdf(complement(dist, 10 / sqrt(k))), 128);
 }
 
 // Probabilities a few ulps from the median put the root within rounding of zero.
