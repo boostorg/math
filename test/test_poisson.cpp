@@ -290,8 +290,8 @@ void test_spots(RealType)
          tolerance);
 
   // Cases below require around 15+ significant decimal digits to represent
-  // k / mean meaningfully, so skip for float.
-  if (std::numeric_limits<RealType>::digits10 > 15)
+  // k / mean meaningfully, so skip for float (double has digits10 == 15).
+  if (std::numeric_limits<RealType>::digits10 >= 15)
   {
     BOOST_CHECK_CLOSE(
        logpdf(poisson_distribution<RealType>(static_cast<RealType>(1000000)), // mean 1000000.

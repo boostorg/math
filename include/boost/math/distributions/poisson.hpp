@@ -350,7 +350,7 @@ namespace boost
         if (k <= 2 * boost::math::detail::minimum_argument_for_bernoulli_recursion<RealType>())
         {
           // Below 1/2, ln(k!) = log1p(tgamma1pm1(k)) avoids rounding 1 + k.
-          const RealType log_k_factorial = k < 0.5f ? RealType(log1p(tgamma1pm1(k, Policy()), Policy())) : RealType(lgamma(k+1, Policy()));
+          const RealType log_k_factorial = k < RealType(0.5) ? RealType(log1p(tgamma1pm1(k, Policy()), Policy())) : RealType(lgamma(k+1, Policy()));
           return -log_k_factorial + k*log(mean) - mean;
         }
         // Loader's (2000) saddle-point form, which avoids the cancellation of the direct formula when k is near mean.
