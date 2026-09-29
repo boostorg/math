@@ -524,6 +524,36 @@ public:
          *pL1 = L1;
       return result;
    }
+   // Explicit zero and norm for vector- and matrix-valued integrands.
+   // The original overloads above retain their existing behavior.
+   template <class F, class Norm>
+   static auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* pL1 = nullptr)
+      ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
+   {
+      typedef decltype(f(Real(0))) K;
+      static_assert(!std::is_integral<K>::value,
+                   "The return type cannot be integral.");
+      unsigned non_zero_start = 1;
+      K result = zero;
+      if (N & 1) {
+         result = f(Real(0)) * static_cast<Real>(base::weights()[0]);
+      }
+      else {
+         result = zero;
+         non_zero_start = 0;
+      }
+      Real L1 = static_cast<Real>(norm(result));
+      for (unsigned i = non_zero_start; i < base::abscissa().size(); ++i)
+      {
+         K fp = f(static_cast<Real>(base::abscissa()[i]));
+         K fm = f(static_cast<Real>(-base::abscissa()[i]));
+         result += (fp + fm) * static_cast<Real>(base::weights()[i]);
+         L1 += (static_cast<Real>(norm(fp)) + static_cast<Real>(norm(fm))) * static_cast<Real>(base::weights()[i]);
+      }
+      if (pL1)
+         *pL1 = L1;
+      return result;
+   }
 };
 
 } // namespace quadrature
