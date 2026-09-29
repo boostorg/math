@@ -513,7 +513,6 @@ public:
          non_zero_start = 0;
       }
       Real L1 = abs(result);
-      Real weight_total;
       for (unsigned i = non_zero_start; i < base::abscissa().size(); ++i)
       {
          K fp = f(static_cast<Real>(base::abscissa()[i]));
