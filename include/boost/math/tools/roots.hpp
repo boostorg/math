@@ -131,6 +131,60 @@ BOOST_MATH_GPU_ENABLED void handle_zero_derivative(F f,
    }
 }
 
+//
+// The Newton and Halley/Schroder iterations assume that when a step leaves
+// [min, max], the root lies between the current guess and the bound it
+// crossed.  If f is not monotone between the guess and the root that need
+// not be true, and the iteration then walks onto the bound without ever
+// seeing f change sign: https://github.com/boostorg/math/issues/808
+//
+// Call this only once the iteration has finished without observing a sign
+// change.  If the result has collapsed onto one of the original endpoints
+// b, we evaluate f(b) once and return true (report failure) when it looks
+// as though there is no root between result and b.  This is a diagnostic
+// heuristic, not a proof:
+//
+// * If f(b) has the opposite sign to f0 (the last residual) or is zero,
+//   then (f being continuous, as these solvers assume throughout) there is
+//   certainly a root in the sliver between result and b, so the result
+//   stands.
+// * Otherwise f(b) must also be "not close to zero" before we complain:
+//   not much closer than f0, and not negligible next to first_f0 (the
+//   residual at the initial guess).  These thresholds absorb rounding
+//   noise at a genuine root at b, where f0 is itself noise once the
+//   iteration has converged.
+//
+// We evaluate f(b) rather than f(result): when bisection approaches a
+// genuine root at b, f(result) is roughly f0 / 2 by construction, so it
+// cannot tell that case apart from a function that never reaches zero.
+// An interior result never evaluates f here at all.
+//
+template <class F, class T>
+BOOST_MATH_GPU_ENABLED bool converged_onto_endpoint_without_root(F& f, const T& result, const T& delta, const T& f0, const T& first_f0, const T& min, const T& max)
+{
+   BOOST_MATH_STD_USING
+   const T dmin = fabs(result - min);
+   const T dmax = fabs(max - result);
+   const T b = dmin <= dmax ? min : max;
+   if ((dmin <= dmax ? dmin : dmax) > 2 * fabs(delta))
+      return false;
+   T fb;
+#if !defined(BOOST_MATH_NO_EXCEPTIONS) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
+   try
+#endif
+   {
+      unpack_0(f(b), fb);
+   }
+#if !defined(BOOST_MATH_NO_EXCEPTIONS) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
+   catch (const std::overflow_error&)
+   {
+      return false; // Can't tell, so keep the previous behaviour.
+   }
+#endif
+   return (fb != 0) && ((fb < 0) == (f0 < 0)) && (fabs(fb) > fabs(f0) / 2)
+      && (fabs(fb) > fabs(first_f0) * tools::root_epsilon<T>());
+}
+
 } // namespace
 
 BOOST_MATH_EXPORT template <class F, class T, class Tol, class Policy>
@@ -271,6 +325,10 @@ BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int 
    //
    T max_range_f = 0;
    T min_range_f = 0;
+   const T min0 = min;
+   const T max0 = max;
+   T first_f0 = 0;
+   bool sign_changed = false;
 
    boost::math::uintmax_t count(max_iter);
 
@@ -287,6 +345,10 @@ BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int 
       --count;
       if (0 == f0)
          break;
+      if (first_f0 == 0)
+         first_f0 = f0;
+      else if ((f0 < 0) != (first_f0 < 0))
+         sign_changed = true;
       if (f1 == 0)
       {
          // Oops zero derivative!!!
@@ -348,6 +410,11 @@ BOOST_MATH_GPU_ENABLED T newton_raphson_iterate(F f, T guess, T min, T max, int 
          return policies::raise_evaluation_error(function, "There appears to be no root to be found in boost::math::tools::newton_raphson_iterate, perhaps we have a local minima near current best guess of %1%", guess, boost::math::policies::policy<>());
       }
    }while(count && (fabs(result * factor) < fabs(delta)));
+
+   if ((f0 != 0) && !sign_changed && detail::converged_onto_endpoint_without_root(f, result, delta, f0, first_f0, min0, max0))
+   {
+      return policies::raise_evaluation_error(function, "No root was found in boost::math::tools::newton_raphson_iterate: the iteration converged onto an end of the search range without f changing sign, try a different initial guess or range. Current best guess is %1%", result, boost::math::policies::policy<>());
+   }
 
    max_iter -= count;
 
@@ -582,6 +649,10 @@ namespace detail {
       //
       T max_range_f = 0;
       T min_range_f = 0;
+      const T min0 = min;
+      const T max0 = max;
+      T first_f0 = 0;
+      bool sign_changed = false;
 
       std::uintmax_t count(max_iter);
 
@@ -610,6 +681,10 @@ namespace detail {
 
          if (0 == f0)
             break;
+         if (first_f0 == 0)
+            first_f0 = f0;
+         else if ((f0 < 0) != (first_f0 < 0))
+            sign_changed = true;
          if (f1 == 0)
          {
             // Oops zero derivative!!!
@@ -753,6 +828,11 @@ namespace detail {
             return policies::raise_evaluation_error(function, "There appears to be no root to be found in boost::math::tools::newton_raphson_iterate, perhaps we have a local minima near current best guess of %1%", guess, boost::math::policies::policy<>());
          }
       } while(count && (fabs(result * factor) < fabs(delta)));
+
+      if ((f0 != 0) && !sign_changed && detail::converged_onto_endpoint_without_root(f, result, delta, f0, first_f0, min0, max0))
+      {
+         return policies::raise_evaluation_error(function, "No root was found in boost::math::tools::halley_iterate: the iteration converged onto an end of the search range without f changing sign, try a different initial guess or range. Current best guess is %1%", result, boost::math::policies::policy<>());
+      }
 
       max_iter -= count;
 

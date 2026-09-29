@@ -452,6 +452,26 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_non_integral_arithmetic_relations, T, non_int
     BOOST_CHECK_EQUAL(a * T(0.5), a / T(2));
 }
 
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_integral_scalar_remainder, T, integral_test_types)
+{
+    polynomial<T> const a{T(3), T(-7), T(5), T(0), T(4)};
+    polynomial<T> const r{T(1), T(-1), T(1)};
+
+    BOOST_CHECK_EQUAL(a % T(2), r);
+    BOOST_CHECK_EQUAL((a / T(2)) * T(2) + a % T(2), a);
+    BOOST_CHECK_EQUAL(a % T(1), polynomial<T>());
+
+    polynomial<T> b = a;
+    b %= T(2);
+    BOOST_CHECK_EQUAL(b, r);
+
+    // Divisor aliasing a coefficient, and a divisor wider than T:
+    polynomial<T> c{T(2), T(3)};
+    c %= c[0];
+    BOOST_CHECK_EQUAL(c, (polynomial<T>{T(0), T(1)}));
+    BOOST_CHECK_EQUAL(polynomial<T>{T(3)} % (static_cast<long long>(1) << 40), polynomial<T>{T(3)});
+}
+
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_cont_and_pp, T, integral_test_types)
 {
     std::array<polynomial<T>, 4> const q={{

@@ -20,6 +20,9 @@ import boost.math;
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/core/demangle.hpp>
 #endif
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#endif
 
 #if !defined(BOOST_MATH_BUILD_MODULE) && __has_include(<stdfloat>)
 #  include <stdfloat>
@@ -84,8 +87,14 @@ void test_bump()
     auto bump_prime = [&bump](Real x) { Real z = 1-x*x; return -2*x*bump(x)/(z*z); };
 
     Real t0 = -1;
-    size_t n = 2049;
+    // The bump is not band-limited: sampling error does not decrease with
+    // floating-point roundoff. 2049 knots suffice through 64-bit precision;
+    // use 4097 for the 113-bit types tested below (see GitHub issue #915).
+    size_t n = std::numeric_limits<Real>::digits > 64 ? 4097 : 2049;
     Real h = Real(2)/Real(n-1);
+    Real value_tol = 20*std::numeric_limits<Real>::epsilon();
+    // Differentiating the cardinal basis introduces a factor of 1/h.
+    Real derivative_tol = value_tol/h;
 
     std::vector<Real> v(n);
     for(size_t i = 0; i < n; ++i) {
@@ -102,28 +111,25 @@ void test_bump()
         Real t = t0 + i*h;
         Real expected = v_copy[i];
         Real computed = ws(t);
-        if(!CHECK_MOLLIFIED_CLOSE(expected, computed, 10*std::numeric_limits<Real>::epsilon())) {
+        if(!CHECK_MOLLIFIED_CLOSE(expected, computed, value_tol)) {
             std::cerr << "  Problem occurred at abscissa " << t << "\n";
         }
 
         Real expected_prime = bump_prime(t);
         Real computed_prime = ws.prime(t);
-        if(!CHECK_MOLLIFIED_CLOSE(expected_prime, computed_prime, 1000*std::numeric_limits<Real>::epsilon())) {
+        if(!CHECK_MOLLIFIED_CLOSE(expected_prime, computed_prime, derivative_tol)) {
             std::cerr << "  Problem occurred at abscissa " << t << "\n";
         }
 
     }
 
-    std::mt19937 gen(323723);
-    std::uniform_real_distribution<long double> dis(-0.85, 0.85);
-
-    size_t i = 0;
-    while (i++ < 1000)
+    // Use a deterministic evaluation grid independent of the standard library RNG.
+    for (size_t i = 0; i < 1000; ++i)
     {
-        Real t = static_cast<Real>(dis(gen));
+        Real t = -Real(85)/100 + Real(170)*i/(100*Real(999));
         Real expected = bump(t);
         Real computed = ws(t);
-        if(!CHECK_MOLLIFIED_CLOSE(expected, computed, 10*std::numeric_limits<Real>::epsilon())) {
+        if(!CHECK_MOLLIFIED_CLOSE(expected, computed, value_tol)) {
             std::cerr << "  Problem occurred at abscissa " << t << "\n";
         }
 
@@ -159,10 +165,12 @@ int main()
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_knots<long double>();
-#if LDBL_MANT_DIG <= 64
-    // Anything more precise than this fails for unknown reasons
     test_bump<long double>();
 #endif
+
+#ifndef BOOST_MATH_BUILD_MODULE
+    // Exercise binary128 precision even where long double is only binary64.
+    test_bump<boost::multiprecision::cpp_bin_float_quad>();
 #endif
 
     return boost::math::test::report_errors();

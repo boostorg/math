@@ -71,6 +71,50 @@ BOOST_MATH_GPU_ENABLED T ellint_rc1p_imp(T y, const Policy& pol)
    return result;
 }
 
+//
+// RC(1, 1+e) = 1 - e/3 + e^2/5 - ..., summed until the terms are negligible, for small |e|.
+//
+template <typename T>
+BOOST_MATH_GPU_ENABLED T ellint_rc1p_series(T e)
+{
+   BOOST_MATH_STD_USING
+   T sum = 1;
+   T term = 1;
+   for(unsigned k = 1; k < 10000; ++k)
+   {
+      term *= -e;
+      T t = term / (2 * k + 1);
+      sum += t;
+      if(fabs(t) < tools::epsilon<T>())
+         break;
+   }
+   return sum;
+}
+//
+// The series in the final step of the RJ algorithm, through order B:
+// sum_N (3/2)_N / (5/2)_N T_N with N T_N = -sum_{r=2}^{5} (-1)^r (N - r/2) E_r T_{N-r},
+// Carlson, J. Res. Natl. Inst. Stand. Technol. 107 (2002) 413-418, Eq. (3.9).
+//
+template <typename T>
+BOOST_MATH_GPU_ENABLED T ellint_rj_series(T E2, T E3, T E4, T E5, unsigned B)
+{
+   T tm1 = 1, tm2 = 0, tm3 = 0, tm4 = 0, tm5 = 0; // T_{N-1}, ..., T_{N-5}
+   T sum = 1;
+   T c = 1;
+   for(unsigned N = 1; N <= B; ++N)
+   {
+      T tn = -((T(N) - 1) * E2 * tm2 - (T(N) - T(1.5)) * E3 * tm3 + (T(N) - 2) * E4 * tm4 - (T(N) - T(2.5)) * E5 * tm5) / N;
+      c *= T(2 * N + 1) / (2 * N + 3);
+      sum += c * tn;
+      tm5 = tm4;
+      tm4 = tm3;
+      tm3 = tm2;
+      tm2 = tm1;
+      tm1 = tn;
+   }
+   return sum;
+}
+
 template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T ellint_rj_imp_final(T x, T y, T z, T p, const Policy& pol)
 {
@@ -135,7 +179,15 @@ BOOST_MATH_GPU_ENABLED T ellint_rj_imp_final(T x, T y, T z, T p, const Policy& p
    T An = (x + y + z + 2 * p) / 5;
    T A0 = An;
    T delta = (p - x) * (p - y) * (p - z);
-   T Q = pow(tools::epsilon<T>() / 5, -T(1) / 8) * BOOST_MATH_GPU_SAFE_MAX(BOOST_MATH_GPU_SAFE_MAX(fabs(An - x), fabs(An - y)), BOOST_MATH_GPU_SAFE_MAX(fabs(An - z), fabs(An - p)));
+   //
+   // Beyond long double precision, fewer duplications with a longer final series pay off, with order
+   // ~2 p^0.4 for p bits (Johansson, arXiv:1806.06725), and so does summing the series for RC(1, 1+E_n)
+   // whenever |E_n| <= 1/8, rather than calling atan or log.
+   //
+   const bool high_precision = tools::digits<T>() > 64;
+   const unsigned order = high_precision ? static_cast<unsigned>(2 * pow(static_cast<double>(tools::digits<T>()), 0.4) + 0.5) : 7u;
+   const T rc_series_limit = high_precision ? T(0.125) : T(0);
+   T Q = (high_precision ? T(pow(tools::epsilon<T>() / 5, -T(1) / (order + 1))) : T(sqrt(sqrt(sqrt(5 / tools::epsilon<T>()))))) * BOOST_MATH_GPU_SAFE_MAX(BOOST_MATH_GPU_SAFE_MAX(fabs(An - x), fabs(An - y)), BOOST_MATH_GPU_SAFE_MAX(fabs(An - z), fabs(An - p)));
 
    unsigned n;
    T lambda;
@@ -144,6 +196,10 @@ BOOST_MATH_GPU_ENABLED T ellint_rj_imp_final(T x, T y, T z, T p, const Policy& p
    T rx, ry, rz, rp;
    T fmn = 1; // 4^-n
    T RC_sum = 0;
+   // After the first iteration or two E_n is tiny, and RC(1, 1+E_n) is cheaper from its
+   // series 1 - E/3 + E^2/5 - ... (as Johansson also suggests, arXiv:1806.06725):
+   // below this limit the first omitted term is under epsilon / 13.
+   const T series_limit = sqrt(tools::cbrt_epsilon<T>());
 
    for(n = 0; n < policies::get_max_series_iterations<Policy>(); ++n)
    {
@@ -154,7 +210,15 @@ BOOST_MATH_GPU_ENABLED T ellint_rj_imp_final(T x, T y, T z, T p, const Policy& p
       Dn = (rp + rx) * (rp + ry) * (rp + rz);
       En = delta / Dn;
       En /= Dn;
-      if((En < T(-0.5)) && (En > T(-1.5)))
+      if(fabs(En) < series_limit)
+      {
+         RC_sum += fmn / Dn * (1 + En * (T(-1) / 3 + En * (T(1) / 5 + En * (T(-1) / 7 + En * (T(1) / 9 + En * (T(-1) / 11))))));
+      }
+      else if(fabs(En) <= rc_series_limit)
+      {
+         RC_sum += fmn / Dn * ellint_rc1p_series(En);
+      }
+      else if((En < T(-0.5)) && (En > T(-1.5)))
       {
          //
          // Occasionally En ~ -1, we then have no means of calculating
@@ -200,7 +264,9 @@ BOOST_MATH_GPU_ENABLED T ellint_rj_imp_final(T x, T y, T z, T p, const Policy& p
    T E3 = X * Y * Z + 2 * E2 * P + 4 * P * P * P;
    T E4 = (2 * X * Y * Z + E2 * P + 3 * P * P * P) * P;
    T E5 = X * Y * Z * P * P;
-   T result = fmn * pow(An, T(-3) / 2) *
+   if(high_precision)
+      return fmn / (An * sqrt(An)) * ellint_rj_series(E2, E3, E4, E5, order) + 6 * RC_sum;
+   T result = fmn / (An * sqrt(An)) *
       (1 - 3 * E2 / 14 + E3 / 6 + 9 * E2 * E2 / 88 - 3 * E4 / 22 - 9 * E2 * E3 / 52 + 3 * E5 / 26 - E2 * E2 * E2 / 16
       + 3 * E3 * E3 / 40 + 3 * E2 * E4 / 20 + 45 * E2 * E2 * E3 / 272 - 9 * (E3 * E4 + E2 * E5) / 68);
 

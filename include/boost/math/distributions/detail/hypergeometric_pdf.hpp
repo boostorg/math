@@ -15,9 +15,11 @@
 #include <boost/math/special_functions/pow.hpp>
 #include <boost/math/special_functions/prime.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#include <boost/math/distributions/detail/saddle_point.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <cstdint>
+#include <limits>
 #endif
 
 #ifdef BOOST_MATH_INSTRUMENT
@@ -431,6 +433,52 @@ T hypergeometric_pdf_factorial_imp(std::uint64_t x, std::uint64_t r, std::uint64
 }
 
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+//
+// Loader's method, as in R's dhyper: the ratio of binomial densities
+//   Binom(x; r, p) Binom(n - x; N - r, p) / Binom(n; N, p),
+// in which the powers of p cancel. With p = n / N the denominator is at its mode. Near the mode
+// the accuracy does not degrade as N grows, as long as the products of counts formed below are
+// exact (below 2^53 for double); in the tails the relative error grows like |ln pdf| eps.
+//
+template <class T, class Policy>
+T hypergeometric_pdf_saddle_point_imp(std::uint64_t x, std::uint64_t r, std::uint64_t n, std::uint64_t N, const Policy& pol)
+{
+   BOOST_MATH_STD_USING
+   if (n > N - n)
+   {
+      // Swap the sample with the rest of the population, pdf(x; r, n, N) = pdf(r - x; r, N - n, N),
+      // so that p = n / N <= 1/2: with p near 1, powers of q = 1 - p with huge exponents would
+      // have to cancel between the binomials.
+      return hypergeometric_pdf_saddle_point_imp<T>(r - x, r, N - n, N, pol);
+   }
+   const std::uint64_t r_x = r - x, n_x = n - x, rest = N - r - n + x;
+   const T p = static_cast<T>(n) / static_cast<T>(N);
+   const T q = static_cast<T>(N - n) / static_cast<T>(N);
+   if ((x == 0) || (r_x == 0) || (n_x == 0) || (rest == 0) || (n == 0) || (n == N))
+   {
+      // At the ends of the support one binomial is degenerate; its own branches handle that.
+      // Combined as logarithms, so that no intermediate product underflows before the division.
+      return exp(log_binomial_pdf_saddle_point(static_cast<T>(x), static_cast<T>(r), p, q, pol)
+         + log_binomial_pdf_saddle_point(static_cast<T>(n_x), static_cast<T>(N - r), p, q, pol)
+         - log_binomial_pdf_saddle_point(static_cast<T>(n), static_cast<T>(N), p, q, pol));
+   }
+   // All three binomials in one exponent. The means are r n / N, r (N - n) / N, (N - r) n / N and
+   // (N - r)(N - n) / N, passed as ratios; the denominator's deviance terms vanish, as n = N p exactly.
+   const T vN = static_cast<T>(N), vn = static_cast<T>(n), vm = static_cast<T>(N - n);
+   const T vr = static_cast<T>(r), vs = static_cast<T>(N - r);
+   const T vx = static_cast<T>(x), vr_x = static_cast<T>(r_x), vn_x = static_cast<T>(n_x), vrest = static_cast<T>(rest);
+   const T lc = stirlerr(vr, pol) - stirlerr(vx, pol) - stirlerr(vr_x, pol)
+      + stirlerr(vs, pol) - stirlerr(vn_x, pol) - stirlerr(vrest, pol)
+      - stirlerr(vN, pol) + stirlerr(vn, pol) + stirlerr(vm, pol)
+      - bd0_ratio(vx, T(vr * vn), vN, pol) - bd0_ratio(vr_x, T(vr * vm), vN, pol)
+      - bd0_ratio(vn_x, T(vs * vn), vN, pol) - bd0_ratio(vrest, T(vs * vm), vN, pol);
+   // The Gaussian prefactors: sqrt(r / (2 pi x (r - x))) sqrt((N - r) / (2 pi (n - x) rest)) / sqrt(N / (2 pi n (N - n))).
+   const T prefactor = sqrt((vr / (vx * vr_x)) * (vs / (vn_x * vrest)) * ((vn * vm) / vN) / constants::two_pi<T>());
+   return exp(lc) * prefactor;
+}
+#endif
+
 template <class T, class Policy>
 inline typename tools::promote_args<T>::type 
    hypergeometric_pdf(std::uint64_t x, std::uint64_t r, std::uint64_t n, std::uint64_t N, const Policy&)
@@ -438,7 +486,6 @@ inline typename tools::promote_args<T>::type
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
    typedef typename policies::normalise<
       Policy, 
       policies::promote_float<false>, 
@@ -456,6 +503,30 @@ inline typename tools::promote_args<T>::type
       //
       result = detail::hypergeometric_pdf_factorial_imp<value_type>(x, r, n, N, forwarding_policy());
    }
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   else if((N <= boost::math::prime(boost::math::max_prime - 1)) && !(std::numeric_limits<value_type>::is_specialized && (std::numeric_limits<value_type>::digits <= 64)))
+   {
+      //
+      // Beyond 64-bit precision, Loader's method needs many more steps for its Stirling remainders
+      // at small arguments, so while the table of primes reaches we keep prime factorisation.
+      //
+      result = detail::hypergeometric_pdf_prime_imp<value_type>(x, r, n, N, forwarding_policy());
+   }
+   else
+   {
+      //
+      // Otherwise Loader's saddle-point method, as in R's dhyper: it keeps its accuracy however
+      // large N is, and is hundreds of times faster than prime factorisation at N ~ 1e5.
+      // Its relative error grows like |ln pdf| eps, though, since it exponentiates, so in the
+      // tails, where the prime table reaches, prime factorisation is more accurate:
+      //
+      result = detail::hypergeometric_pdf_saddle_point_imp<value_type>(x, r, n, N, forwarding_policy());
+      if((result < value_type(3.0590232050182578837e-7L)) && (N <= boost::math::prime(boost::math::max_prime - 1)))  // e^-15
+      {
+         result = detail::hypergeometric_pdf_prime_imp<value_type>(x, r, n, N, forwarding_policy());
+      }
+   }
+#else
    else if(N <= boost::math::prime(boost::math::max_prime - 1))
    {
       //
@@ -468,13 +539,13 @@ inline typename tools::promote_args<T>::type
    else
    {
       //
-      // Catch all case - use the lanczos approximation - where available - 
-      // to evaluate the ratio of factorials.  This is reasonably fast
-      // (almost as quick as using logarithmic evaluation in terms of lgamma)
-      // but only a few digits better in accuracy than using lgamma:
+      // Catch all case - use the lanczos approximation - where available -
+      // to evaluate the ratio of factorials.  This loses around log10(N) decimal digits.
       //
+      typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
       result = detail::hypergeometric_pdf_lanczos_imp(value_type(), x, r, n, N, evaluation_type(), forwarding_policy());
    }
+#endif
 
    if(result > 1)
    {
@@ -485,6 +556,47 @@ inline typename tools::promote_args<T>::type
       result = 0;
    }
 
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::hypergeometric_pdf<%1%>(%1%,%1%,%1%,%1%)");
+}
+
+//
+// The analytic continuation C(r, x) C(N - r, n - x) / C(N, n) to non-integer x, lower < x < upper.
+// Anchor at k = floor(x) (passed as floor_x), whose PDF the integer code computes accurately, and shift by d = x - k:
+//   pdf(x) = pdf(k) D(k + 1) D(N - r - n + k + 1) / (D(r - x + 1) D(n - x + 1)),
+// where D(z) = Gamma(z) / Gamma(z + d) is tgamma_delta_ratio. Each ratio is accurate for small d
+// and large z, where a quotient of gamma functions or of powers would lose digits in proportion to N,
+// and each tends to 1 as d -> 0, so the continuation meets the integer values.
+//
+template <class T, class Policy>
+inline typename tools::promote_args<T>::type
+   hypergeometric_pdf_noninteger(T x, std::uint64_t floor_x, std::uint64_t r, std::uint64_t n, std::uint64_t N, const Policy&)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   BOOST_MATH_STD_USING
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   const value_type vx = x;
+   const value_type k = static_cast<value_type>(floor_x);
+   const value_type d = vx - k;
+   const value_type base = hypergeometric_pdf<value_type>(floor_x, r, n, N, forwarding_policy());
+   // Differences of the counts are formed in integers, where they are exact and, inside the support,
+   // non-negative; converting the counts first would round them when they exceed the precision.
+   const value_type failures_left = static_cast<value_type>(N + floor_x - r - n);  // N - r - n + floor(x) >= 0
+   const value_type r_left = static_cast<value_type>(r - floor_x);                 // >= 1, as x < r
+   const value_type n_left = static_cast<value_type>(n - floor_x);                 // >= 1, as x < n
+   // Each numerator is paired with a denominator, so that no intermediate product underflows early.
+   value_type result = base
+      * (boost::math::tgamma_delta_ratio(value_type(k + 1), d, forwarding_policy())
+         / boost::math::tgamma_delta_ratio(value_type(r_left + 1 - d), d, forwarding_policy()))
+      * (boost::math::tgamma_delta_ratio(value_type(failures_left + 1), d, forwarding_policy())
+         / boost::math::tgamma_delta_ratio(value_type(n_left + 1 - d), d, forwarding_policy()));
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::hypergeometric_pdf<%1%>(%1%,%1%,%1%,%1%)");
 }
 

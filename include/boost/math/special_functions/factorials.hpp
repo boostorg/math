@@ -146,13 +146,13 @@ T rising_factorial_imp(T x, int n, const Policy& pol)
       return result;
    }
    if(n == 0)
-      return 1;
+      return T(1);
    if(x == 0)
    {
       if(n < 0)
          return static_cast<T>(-boost::math::tgamma_delta_ratio(x + 1, static_cast<T>(-n), pol));
       else
-         return 0;
+         return T(0);
    }
    if((x < 1) && (x + n < 0))
    {
@@ -173,7 +173,7 @@ inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
    static_assert(!boost::math::is_integral<T>::value, "Type T must not be an integral type");
    BOOST_MATH_STD_USING // ADL of std names
    if(x == 0)
-      return 0;
+      return T(0);
    if(x < 0)
    {
       //
@@ -183,7 +183,7 @@ inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
       return (n&1 ? -1 : 1) * rising_factorial(-x, n, pol);
    }
    if(n == 0)
-      return 1;
+      return T(1);
    if(x < 0.5f)
    {
       //
@@ -210,7 +210,7 @@ inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
       T xp1 = x + 1;
       unsigned n2 = itrunc((T)floor(xp1), pol);
       if(n2 == xp1)
-         return 0;
+         return T(0);
       auto result = static_cast<T>(boost::math::tgamma_delta_ratio(xp1, -static_cast<T>(n2), pol));
       x -= n2;
       result *= x;

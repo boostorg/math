@@ -235,6 +235,8 @@ inline real_concept modf(real_concept a, real_concept* ipart)
    return result;
 #endif
 }
+inline real_concept fma(real_concept a, real_concept b, real_concept c)
+{ return std::fma(a.value(), b.value(), c.value()); }
 inline real_concept frexp(real_concept a, int* expon)
 { return std::frexp(a.value(), expon); }
 inline real_concept ldexp(real_concept a, int expon)

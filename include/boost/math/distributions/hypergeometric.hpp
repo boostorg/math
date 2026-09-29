@@ -140,12 +140,24 @@ namespace boost { namespace math {
       static const char* function = "boost::math::pdf(const hypergeometric_distribution<%1%>&, const %1%&)";
       RealType r = static_cast<RealType>(x);
       auto u = static_cast<std::uint64_t>(lltrunc(r, typename policies::normalise<Policy, policies::rounding_error<policies::ignore_error> >::type()));
-      if(u != r)
+      if(u == r)
+      {
+         return pdf(dist, u);
+      }
+      // Non-integer x: the analytic continuation of C(r, x) C(N - r, n - x) / C(N, n).
+      RealType result = 0;
+      if(!dist.check_params(function, &result))
+         return result;
+      const RealType lower = static_cast<RealType>((std::max)(INT64_C(0), static_cast<std::int64_t>(dist.sample_count() + dist.defective()) - static_cast<std::int64_t>(dist.total())));
+      const RealType upper = static_cast<RealType>((std::min)(dist.defective(), dist.sample_count()));
+      if(!(boost::math::isfinite)(r) || !(r > lower) || !(r < upper))
       {
          return boost::math::policies::raise_domain_error<RealType>(
-            function, "Random variable out of range: must be an integer but got %1%", r, Policy());
+            function, "Random variable out of range: must be between max(0, n + r - N) and min(n, r) but got %1%", r, Policy());
       }
-      return pdf(dist, u);
+      // Here x > 0, so its truncation u is floor(x).
+      return boost::math::detail::hypergeometric_pdf_noninteger(
+         r, u, dist.defective(), dist.sample_count(), dist.total(), Policy());
    }
 
    BOOST_MATH_EXPORT template <class RealType, class Policy>

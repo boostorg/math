@@ -244,7 +244,101 @@ void test_spots(RealType)
       static_cast<RealType>(20)),   //  K>> mean 
       log(static_cast<RealType>(8.277463646553730E-009)), // probability.
          tolerance);
-  
+
+   // New test cases for Loader (2000) saddle-point approximation. Probs already
+   // in log space. Values calculated using mpmath (1000-digit precision).
+   BOOST_CHECK_CLOSE(
+     logpdf(poisson_distribution<RealType>(static_cast<RealType>(14)), // mean 14.
+      static_cast<RealType>(14)),
+      static_cast<RealType>(-2.244418568125061), // probability (already in log space).
+         tolerance);
+
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(20)), // mean 20.
+         static_cast<RealType>(18)),
+         static_cast<RealType>(-2.472264284061216), // probability (already in log space).
+         tolerance);
+
+    // Tiny non-integer k, where Stirling's form would cancel ln(2 pi k)/2 against itself.
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(0.01)), static_cast<RealType>(1e-20)),
+      static_cast<RealType>(-0.01L),
+         tolerance);
+
+   // k at the threshold of the Bernoulli series for Stirling's remainder, where it does not yet converge.
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(3)), static_cast<RealType>(6)),
+      static_cast<RealType>(-2.98757748000144284668870687136879109L),
+         tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(3)), static_cast<RealType>(7)),
+      static_cast<RealType>(-3.83487534038864646039881437788944512L),
+         tolerance);
+   // Non-integer k just above the Bernoulli threshold for double, where the series can still diverge.
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(3)), static_cast<RealType>(6.0625)),
+      static_cast<RealType>(-3.03626217292210137508893426424318787L),
+         tolerance);
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   // GPU builds keep the direct formula, so these accuracy checks apply only to the host path.
+   // |k - mean| / (k + mean) just above 0.1, where the direct deviance formula cancels.
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(1000)), static_cast<RealType>(800)),
+      static_cast<RealType>(-25.746507512332073098754568741464577L),
+         tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(100000)), static_cast<RealType>(80000)),
+      static_cast<RealType>(-2155.07972539491888743157625548588799L),
+         tolerance);
+
+  // Cases below require around 15+ significant decimal digits to represent
+  // k / mean meaningfully, so skip for float (double has digits10 == 15).
+  if (std::numeric_limits<RealType>::digits10 >= 15)
+  {
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(1000000)), // mean 1000000.
+        static_cast<RealType>(1300000)),
+        static_cast<RealType>(-41081.501683746894),
+           tolerance);
+
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(1e8)), // mean 1e8.
+        static_cast<RealType>(8e7)),
+        static_cast<RealType>(-2148525.91257035),
+           tolerance);
+
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(1e10)), // mean 1e10.
+        static_cast<RealType>(105e9)),
+        static_cast<RealType>(-151894402015.7727),
+           tolerance);
+
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(1e15)), // mean 1e15.
+        static_cast<RealType>(8e14)), // |v| > 0.1 boundary
+        static_cast<RealType>(-21485158948650.273),
+           tolerance);
+
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(1e15)), // mean 1e15.
+        static_cast<RealType>(12e14)), // |v| < 0.1 boundary
+        static_cast<RealType>(-18785868152763.832),
+           tolerance);
+
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(1e16)), // mean 1e16.
+        static_cast<RealType>(1e16)), // old formula returns 0.0 here
+        static_cast<RealType>(-19.339619277157038),
+           tolerance);
+
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(5e15)), // mean 5e15.
+        static_cast<RealType>(5e15)),
+        static_cast<RealType>(-18.993045686877064),
+           tolerance);
+  }
+#endif
+
   // CDF
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.

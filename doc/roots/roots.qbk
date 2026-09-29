@@ -110,6 +110,13 @@ substantially with each iteration, ['digits] should be set by experiment so that
 iteration just takes the next value into the zone where ['f(x)] becomes inaccurate.
 A good starting point for ['digits] would be 0.6*D for Newton and 0.4*D for Halley or Shr'''&#xf6;'''der
 iteration, where D is `std::numeric_limits<T>::digits`.
+* Out-of-bounds steps are assumed to have the root between the current guess and the bound
+they crossed.  If ['f(x)] is not monotone between the guess and the root (for example there is a
+local extremum in the way) that assumption fails, and the iteration can end up at the bound without
+['f(x)] ever changing sign.  The implementation attempts to detect this case: if the result has collapsed
+onto one end of [min, max], ['f(x)] never changed sign, and ['f(x)] at that end does not look like a root,
+an __evaluation_error is raised rather than returning the bound.  The detection is heuristic, so the
+best defence is a good initial guess, or a range [min, max] on which ['f(x)] is monotone.
 * If you need some diagnostic output to see what is going on, you can
 `#define BOOST_MATH_INSTRUMENT` before the `#include <boost/math/tools/roots.hpp>`,
 and also ensure that display of all the significant digits with

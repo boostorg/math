@@ -98,10 +98,14 @@ namespace boost {
 
       char my_buffer[64U];
 
-      const int my_prec   = static_cast<int>(os.precision());
-      const int my_digits = ((my_prec == 0) ? 36 : my_prec);
+      const int my_prec = static_cast<int>(os.precision());
 
-      const std::ios_base::fmtflags my_flags  = os.flags();
+      const std::ios_base::fmtflags my_flags = os.flags();
+      const bool is_hexfloat = ((my_flags & std::ios_base::floatfield) == std::ios_base::floatfield);
+
+      // std::hexfloat ignores stream precision.  A negative printf precision
+      // supplied through '*' is treated as if the precision were omitted.
+      const int my_digits = (is_hexfloat ? -1 : ((my_prec == 0) ? 36 : my_prec));
 
       char my_format_string[8U];
 
@@ -121,7 +125,8 @@ namespace boost {
 
       char the_notation_char;
 
-      if     (my_flags & std::ios_base::scientific) { the_notation_char = 'e'; }
+      if     (is_hexfloat)                            { the_notation_char = ((my_flags & std::ios_base::uppercase) ? 'A' : 'a'); }
+      else if(my_flags & std::ios_base::scientific) { the_notation_char = 'e'; }
       else if(my_flags & std::ios_base::fixed)      { the_notation_char = 'f'; }
       else                                          { the_notation_char = 'g'; }
 
@@ -183,7 +188,7 @@ namespace boost {
     template<typename char_type, class traits_type>
     inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>& is, boost::math::cstdfloat::detail::float_internal128_t& x)
     {
-      std::string str = boost::math::detail::read_string_while(is, "+-eE.0123456789infINFnanNANinfinityINFINITY");
+      std::string str = boost::math::detail::read_string_while(is, "+-eEpPxXbBcCdD.0123456789infINFnanNANinfinityINFINITY");
 
       char* p_end;
 

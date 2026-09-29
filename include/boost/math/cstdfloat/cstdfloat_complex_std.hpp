@@ -90,21 +90,6 @@
       complex(const complex<double>&);
       complex(const complex<long double>&);
 
-      #if defined(BOOST_NO_CXX11_CONSTEXPR)
-      complex(const value_type& r = value_type(),
-              const value_type& i = value_type()) : re(r),
-                                                    im(i) { }
-
-      template<typename X>
-      explicit complex(const complex<X>& x) : re(x.real()),
-                                              im(x.imag()) { }
-
-      const value_type& real() const { return re; }
-      const value_type& imag() const { return im; }
-
-      value_type& real() { return re; }
-      value_type& imag() { return im; }
-      #else
       constexpr complex(const value_type& r = value_type(),
                         const value_type& i = value_type()) : re(r),
                                                               im(i) { }
@@ -115,7 +100,6 @@
 
       value_type real() const { return re; }
       value_type imag() const { return im; }
-      #endif
 
       void real(value_type r) { re = r; }
       void imag(value_type i) { im = i; }

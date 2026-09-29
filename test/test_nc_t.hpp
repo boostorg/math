@@ -350,6 +350,21 @@ void test_spots(RealType)
        BOOST_CHECK_CLOSE_FRACTION(cdf(d, -1), static_cast<RealType>(1.61471461239552e-127), 1e-3);
    }
 
+   // https://github.com/boostorg/math/issues/1410
+   // p=0.99 is below both limiting CDF values:
+   // Phi(2.5) and Phi(3.75).  Previously this could return a tiny,
+   // meaningless degree of freedom instead of reporting that the inverse
+   // cannot be selected uniquely.
+   BOOST_MATH_CHECK_THROW(distro1::find_degrees_of_freedom(static_cast<RealType>(-2.5), static_cast<RealType>(1.25), static_cast<RealType>(0.99)), boost::math::evaluation_error);
+   BOOST_MATH_CHECK_THROW(distro1::find_degrees_of_freedom(boost::math::complement(static_cast<RealType>(-2.5), static_cast<RealType>(1.25), static_cast<RealType>(0.01))), boost::math::evaluation_error);
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   {
+      // A non-throwing policy must get NaN, not a plausible-looking value.
+      typedef boost::math::policies::policy<boost::math::policies::evaluation_error<boost::math::policies::ignore_error> > ignore_policy;
+      typedef boost::math::non_central_t_distribution<RealType, ignore_policy> ignore_distro;
+      BOOST_CHECK((boost::math::isnan)(ignore_distro::find_degrees_of_freedom(static_cast<RealType>(-2.5), static_cast<RealType>(1.25), static_cast<RealType>(0.99))));
+   }
+
 } // template <class RealType>void test_spots(RealType)
 
 template <class T>

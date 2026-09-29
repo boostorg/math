@@ -1318,7 +1318,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
 
       if(p_derivative)
       {
-         *p_derivative = a * pow(x, a - 1);
+         // As for p below: x may be 1 - y with y too small to survive the rounding.
+         *p_derivative = y < 0.5 ? T(a * exp((a - 1) * boost::math::log1p(-y, pol))) : T(a * pow(x, a - 1));
       }
       T p;  // LCOV_EXCL_LINE
       if(y < 0.5)

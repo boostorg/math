@@ -72,6 +72,14 @@ struct is_fvar_impl<fvar<RealType, Order>> : std::true_type {};
 template <typename T>
 using is_fvar = is_fvar_impl<typename std::decay<T>::type>;
 
+// Unlike std::is_constructible, this accepts explicit-only conversions such as double -> std::float32_t.
+template <typename To, typename From, typename = void>
+struct is_static_castable : std::false_type {};
+
+template <typename To, typename From>
+struct is_static_castable<To, From, decltype(static_cast<void>(static_cast<To>(std::declval<From const&>())))>
+    : std::true_type {};
+
 template <typename RealType, size_t Order, size_t... Orders>
 struct nest_fvar {
   using type = fvar<typename nest_fvar<RealType, Orders...>::type, Order>;
@@ -152,8 +160,8 @@ class fvar {
   // RealType(ca) | RealType | RealType is copy constructible from the arithmetic types.
   explicit fvar(root_type const&);  // Initialize a constant. (No epsilon terms.)
 
-  template <typename RealType2>
-  fvar(RealType2 const& ca);  // Supports any RealType2 for which static_cast<root_type>(ca) compiles.
+  template <typename RealType2, typename std::enable_if<is_static_castable<RealType, RealType2>::value, int>::type = 0>
+  fvar(RealType2 const& ca);  // Supports any RealType2 for which static_cast<RealType>(ca) compiles.
 
   // r = cr | RealType& | Assignment operator.
   fvar& operator=(fvar const&) = default;
@@ -683,9 +691,9 @@ fvar<RealType, Order>::fvar(fvar<RealType2, Order2> const& cr) {
 template <typename RealType, size_t Order>
 fvar<RealType, Order>::fvar(root_type const& ca) : v{{static_cast<RealType>(ca)}} {}
 
-// Can cause compiler error if RealType2 cannot be cast to root_type.
+// Constrained so that e.g. Eigen expression templates are not implicitly convertible to fvar.
 template <typename RealType, size_t Order>
-template <typename RealType2>
+template <typename RealType2, typename std::enable_if<is_static_castable<RealType, RealType2>::value, int>::type>
 fvar<RealType, Order>::fvar(RealType2 const& ca) : v{{static_cast<RealType>(ca)}} {}
 
 /*
@@ -2011,11 +2019,7 @@ template <typename RealType0, size_t Order0, typename RealType1, size_t Order1>
 struct promote_args<detail::autodiff_fvar_type<RealType0, Order0>,
                       detail::autodiff_fvar_type<RealType1, Order1>> {
   using type = detail::autodiff_fvar_type<typename promote_args<RealType0, RealType1>::type,
-#ifndef BOOST_MATH_NO_CXX14_CONSTEXPR
                                           (std::max)(Order0, Order1)>;
-#else
-        Order0<Order1 ? Order1 : Order0>;
-#endif
 };
 
 template <typename RealType, size_t Order>

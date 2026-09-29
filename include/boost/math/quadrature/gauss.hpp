@@ -893,6 +893,130 @@ public:
       }
       return static_cast<K>(policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy()));
    }
+
+   // Explicit zero and norm for vector- and matrix-valued integrands.
+   // The original overloads above retain their existing behavior.
+   template <class F, class Norm>
+   static auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* pL1 = nullptr)
+      ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
+   {
+      typedef decltype(f(Real(0))) K;
+      static_assert(!std::is_integral<K>::value,
+                   "The return type cannot be integral.");
+      unsigned non_zero_start = 1;
+      K result = zero;
+      if (N & 1) {
+         result = f(Real(0)) * static_cast<Real>(base::weights()[0]);
+      }
+      else {
+         result = zero;
+         non_zero_start = 0;
+      }
+      Real L1 = static_cast<Real>(norm(result));
+      for (unsigned i = non_zero_start; i < base::abscissa().size(); ++i)
+      {
+         K fp = f(static_cast<Real>(base::abscissa()[i]));
+         K fm = f(static_cast<Real>(-base::abscissa()[i]));
+         result += (fp + fm) * static_cast<Real>(base::weights()[i]);
+         L1 += (static_cast<Real>(norm(fp)) + static_cast<Real>(norm(fm))) * static_cast<Real>(base::weights()[i]);
+      }
+      if (pL1)
+         *pL1 = L1;
+      return result;
+   }
+   template <class F, class Norm>
+   static auto integrate(F f, Real a, Real b, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* pL1 = nullptr)
+      ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
+   {
+      typedef decltype(f(a)) K;
+      static const char* function = "boost::math::quadrature::gauss<%1%>::integrate(f, %1%, %1%)";
+      if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
+      {
+         // Infinite limits:
+         Real min_inf = -tools::max_value<Real>();
+         if ((a <= min_inf) && (b >= tools::max_value<Real>()))
+         {
+            auto u = [&](const Real& t)->K
+            {
+               Real t_sq = t*t;
+               Real inv = 1 / (1 - t_sq);
+               K res = f(t*inv)*(1 + t_sq)*inv*inv;
+               return res;
+            };
+            return integrate(u, zero, norm, pL1);
+         }
+
+         // Right limit is infinite:
+         if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
+         {
+            auto u = [&](const Real& t)->K
+            {
+               Real z = 1 / (t + 1);
+               Real arg = 2 * z + a - 1;
+               K res = f(arg)*z*z;
+               return res;
+            };
+            K Q = Real(2) * integrate(u, zero, norm, pL1);
+            if (pL1)
+            {
+               *pL1 *= 2;
+            }
+            return Q;
+         }
+
+         if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
+         {
+            auto v = [&](const Real& t)->K
+            {
+               Real z = 1 / (t + 1);
+               Real arg = 2 * z - 1;
+               K res = f(b - arg) * z * z;
+               return res;
+            };
+            K Q = Real(2) * integrate(v, zero, norm, pL1);
+            if (pL1)
+            {
+               *pL1 *= 2;
+            }
+            return Q;
+         }
+
+         if ((boost::math::isfinite)(a) && (boost::math::isfinite)(b))
+         {
+            if (a == b)
+            {
+               if (pL1)
+                  *pL1 = Real(0);
+               return zero;
+            }
+            if (b < a)
+            {
+               return -integrate(f, b, a, zero, norm, pL1);
+            }
+            Real avg = (a + b)*constants::half<Real>();
+            Real scale = (b - a)*constants::half<Real>();
+
+            auto u = [&](Real z)->K
+            {
+               return f(avg + scale*z);
+            };
+            K Q = scale*integrate(u, zero, norm, pL1);
+
+            if (pL1)
+            {
+               *pL1 *= scale;
+            }
+            return Q;
+         }
+      }
+      // Preserve the scalar error policy, including non-throwing policies,
+      // and use scalar multiplication to produce a result with the right shape.
+      Real error = policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy());
+      if (pL1)
+         *pL1 = error;
+      K result = zero * error;
+      return result;
+   }
 };
 
 } // namespace quadrature

@@ -241,7 +241,7 @@
           Bound on Parameter p</a>
         </h6>
 <pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
-  <span class="identifier">RealType</span> <span class="identifier">failures</span><span class="special">,</span>
+  <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span>
   <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">,</span>
   <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">)</span> <span class="comment">// (0 &lt;= alpha &lt;= 1), 0.05 equivalent to 95% confidence.</span>
 </pre>
@@ -251,10 +251,9 @@
 <div class="variablelist">
 <p class="title"><b></b></p>
 <dl class="variablelist">
-<dt><span class="term">failures</span></dt>
+<dt><span class="term">trials</span></dt>
 <dd><p>
-                The total number of failures before the <span class="emphasis"><em>r</em></span>th
-                success.
+                The total number of trials conducted.
               </p></dd>
 <dt><span class="term">successes</span></dt>
 <dd><p>

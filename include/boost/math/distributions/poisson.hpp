@@ -50,6 +50,9 @@
 #include <boost/math/special_functions/factorials.hpp> // factorials.
 #include <boost/math/tools/roots.hpp> // for root finding.
 #include <boost/math/distributions/detail/inv_discrete_quantile.hpp>
+#include <boost/math/distributions/detail/saddle_point.hpp>
+#include <boost/math/constants/constants.hpp>
+#include <boost/math/special_functions/log1p.hpp>
 
 namespace boost
 {
@@ -140,6 +143,7 @@ namespace boost
         }
         return true;
       } // bool check_dist_and_prob
+
 
     } // namespace poisson_detail
 
@@ -304,7 +308,21 @@ namespace boost
       // Special case where k and lambda are both positive
       if(k > 0 && mean > 0)
       {
+#ifdef BOOST_MATH_HAS_GPU_SUPPORT
         return -lgamma(k+1) + k*log(mean) - mean;
+#else
+        // For small k the direct formula has little cancellation, while Stirling's form would cancel
+        // its ln(2 pi k)/2 terms as k -> 0. Just above minimum_argument_for_bernoulli_recursion the
+        // Bernoulli series can still fail to converge (at k = 6.05 for double), so leave a margin.
+        if (k <= 2 * boost::math::detail::minimum_argument_for_bernoulli_recursion<RealType>())
+        {
+          // Below 1/2, ln(k!) = log1p(tgamma1pm1(k)) avoids rounding 1 + k.
+          const RealType log_k_factorial = k < RealType(0.5) ? RealType(log1p(tgamma1pm1(k, Policy()), Policy())) : RealType(lgamma(k+1, Policy()));
+          return -log_k_factorial + k*log(mean) - mean;
+        }
+        // Loader's (2000) saddle-point form, which avoids the cancellation of the direct formula when k is near mean.
+        return -boost::math::detail::stirlerr_series(k, Policy()) - boost::math::detail::bd0(mean, k, Policy()) - log(boost::math::constants::two_pi<RealType>() * k) / 2;
+#endif
       }
 
       result = log(pdf(dist, k));

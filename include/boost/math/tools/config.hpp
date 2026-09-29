@@ -799,6 +799,13 @@ BOOST_MATH_GPU_ENABLED constexpr T gpu_safe_max(const T& a, const T& b) { return
 
 #endif
 
+// Native 128-bit integer support (GCC, Clang, Intel, nvcc with a GCC host).
+// Boost.Config's BOOST_HAS_INT128 is unavailable in standalone mode, so test the
+// compiler macro directly. Define BOOST_MATH_NO_INT128 to force the portable paths.
+#if defined(__SIZEOF_INT128__) && !defined(BOOST_MATH_NO_INT128)
+#  define BOOST_MATH_HAS_INT128
+#endif
+
 // Static variables are not allowed with CUDA or C++20 modules
 // See if we can inline them instead
 

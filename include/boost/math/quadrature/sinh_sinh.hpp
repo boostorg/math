@@ -45,6 +45,15 @@ public:
         return m_imp->integrate(f, tol, error, L1, levels);
     }
 
+    template<class F, class Norm>
+    auto integrate(const F f, const decltype(f(Real(0)))& zero, Norm norm,
+        Real tol = tools::root_epsilon<Real>(), Real* error = nullptr,
+        Real* L1 = nullptr, std::size_t* levels = nullptr) const
+        ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
+    {
+        return m_imp->integrate(f, zero, norm, tol, error, L1, levels);
+    }
+
 private:
     std::shared_ptr<detail::sinh_sinh_detail<Real, Policy>> m_imp;
 };

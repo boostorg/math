@@ -4,6 +4,8 @@
 //           https://www.boost.org/LICENSE_1_0.txt)
 
 #include "test_autodiff.hpp"
+#include <type_traits>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(test_autodiff_1)
 
@@ -67,6 +69,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(implicit_constructors, T, all_float_types) {
   BOOST_CHECK_EQUAL(static_cast<T>(x), static_cast<T>(3.0));
   BOOST_CHECK_EQUAL(static_cast<T>(one), static_cast<T>(1.0));
   BOOST_CHECK_EQUAL(static_cast<T>(two_and_a_half), static_cast<T>(2.5));
+  // Only types that T can be constructed from convert implicitly (#424: Eigen expressions must not).
+  BOOST_CHECK((std::is_convertible<int, autodiff_fvar<T, m>>::value));
+  BOOST_CHECK((std::is_convertible<double, autodiff_fvar<autodiff_fvar<T, 2>, m>>::value));
+  BOOST_CHECK((!std::is_convertible<std::vector<T>, autodiff_fvar<T, m>>::value));
+  BOOST_CHECK((!std::is_constructible<autodiff_fvar<T, m>, std::vector<T>>::value));
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(assignment, T, all_float_types) {

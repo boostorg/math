@@ -33,10 +33,38 @@
 namespace boost::math::tools {
 
 namespace detail {
+// Abscissas of the vertical gridlines: evenly spaced, or at whole powers of ten on a logarithmic axis.
+template<class CoarseReal>
+std::vector<CoarseReal> vertical_gridlines(CoarseReal min_x, CoarseReal max_x, int vertical_lines, bool log_x)
+{
+    using std::ceil;
+    using std::floor;
+    using std::log10;
+    using std::pow;
+    std::vector<CoarseReal> xs;
+    if (!log_x)
+    {
+        for (int i = 1; i <= vertical_lines; ++i)
+        {
+            xs.push_back(min_x + ((max_x - min_x)*i)/vertical_lines);
+        }
+        return xs;
+    }
+    const int lo = static_cast<int>(ceil(log10(min_x)));
+    const int hi = static_cast<int>(floor(log10(max_x)));
+    const int step = (std::max)(1, static_cast<int>(ceil(double(hi - lo)/(std::max)(1, vertical_lines))));
+    for (int e = hi; e >= lo; e -= step)
+    {
+        xs.push_back(static_cast<CoarseReal>(pow(10.0L, e)));
+    }
+    std::reverse(xs.begin(), xs.end());
+    return xs;
+}
+
 template<class F1, class F2, class CoarseReal, class PreciseReal>
 void write_gridlines(std::ostream& fs, int horizontal_lines, int vertical_lines,
                      F1 x_scale, F2 y_scale, CoarseReal min_x, CoarseReal max_x, PreciseReal min_y, PreciseReal max_y,
-                     int graph_width, int graph_height, int margin_left, std::string const & font_color)
+                     int graph_width, int graph_height, int margin_left, std::string const & font_color, bool log_x = false)
 {
   // Make a grid:
   for (int i = 1; i <= horizontal_lines; ++i) {
@@ -52,8 +80,7 @@ void write_gridlines(std::ostream& fs, int horizontal_lines, int vertical_lines,
          << std::setprecision(4) << y_cord_dataspace << "</text>\n";
    }
 
-    for (int i = 1; i <= vertical_lines; ++i) {
-        CoarseReal x_cord_dataspace = min_x +  ((max_x - min_x)*i)/vertical_lines;
+    for (CoarseReal x_cord_dataspace : vertical_gridlines(min_x, max_x, vertical_lines, log_x)) {
         CoarseReal x = x_scale(x_cord_dataspace);
         fs << "<line x1='" << x << "' y1='0' x2='" << x
            << "' y2='" << graph_height
@@ -69,8 +96,9 @@ void write_gridlines(std::ostream& fs, int horizontal_lines, int vertical_lines,
 template<class F, typename PreciseReal, typename CoarseReal>
 class ulps_plot {
 public:
+    // With log_abscissas, the abscissas are sampled uniformly in log(x), and the x-axis is logarithmic; requires 0 < a.
     ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
-             size_t samples = 1000, bool perturb_abscissas = false, int random_seed = -1);
+             size_t samples = 1000, bool perturb_abscissas = false, int random_seed = -1, bool log_abscissas = false);
 
     ulps_plot& clip(PreciseReal clip);
 
@@ -172,6 +200,11 @@ public:
         // Maps [a,b] to [0, graph_width]
         auto x_scale = [&](CoarseReal x)->CoarseReal
         {
+            using std::log;
+            if (plot.log_abscissas_)
+            {
+                return (log(x/plot.a_)/log(plot.b_/plot.a_))*static_cast<CoarseReal>(graph_width);
+            }
             return ((x-plot.a_)/(plot.b_ - plot.a_))*static_cast<CoarseReal>(graph_width);
         };
 
@@ -209,7 +242,7 @@ public:
         if (worst_ulp_distance > 3)
         {
             detail::write_gridlines(fs, plot.horizontal_lines_, plot.vertical_lines_, x_scale, y_scale, plot.a_, plot.b_,
-                                    min_y, max_y, graph_width, graph_height, margin_left, plot.font_color_);
+                                    min_y, max_y, graph_width, graph_height, margin_left, plot.font_color_, plot.log_abscissas_);
         }
         else
         {
@@ -230,9 +263,8 @@ public:
                        <<  std::setprecision(4) << y_cord_dataspace << "</text>\n";
                 }
             }
-            for (int i = 1; i <= plot.vertical_lines_; ++i)
+            for (CoarseReal x_cord_dataspace : detail::vertical_gridlines(plot.a_, plot.b_, plot.vertical_lines_, plot.log_abscissas_))
             {
-                CoarseReal x_cord_dataspace = plot.a_ +  ((plot.b_ - plot.a_)*i)/plot.vertical_lines_;
                 CoarseReal x = x_scale(x_cord_dataspace);
                 fs << "<line x1='" << x << "' y1='0' x2='" << x
                    << "' y2='" << graph_height
@@ -364,6 +396,7 @@ private:
     std::vector<std::string> colors_;
     CoarseReal a_;
     CoarseReal b_;
+    bool log_abscissas_;
     PreciseReal clip_;
     int width_;
     std::string envelope_color_;
@@ -481,7 +514,7 @@ void ulps_plot<F, PreciseReal, CoarseReal>::write(std::string const & filename) 
 
 template<class F, typename PreciseReal, typename CoarseReal>
 ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
-             size_t samples, bool perturb_abscissas, int random_seed) : crop_color_("red")
+             size_t samples, bool perturb_abscissas, int random_seed, bool log_abscissas) : crop_color_("red")
 {
     // Use digits10 for this comparison in case the two types have differeing radixes:
     static_assert(std::numeric_limits<PreciseReal>::digits10 >= std::numeric_limits<CoarseReal>::digits10, "PreciseReal must have higher precision that CoarseReal");
@@ -493,8 +526,13 @@ ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, Co
     {
         throw std::domain_error("On interval [a,b], b > a is required.");
     }
+    if (log_abscissas && !(a > 0))
+    {
+        throw std::domain_error("Logarithmic abscissas require a > 0.");
+    }
     a_ = a;
     b_ = b;
+    log_abscissas_ = log_abscissas;
 
     std::mt19937_64 gen;
     if (random_seed == -1)
@@ -515,7 +553,24 @@ ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, Co
     precise_abscissas_.resize(samples);
     coarse_abscissas_.resize(samples);
 
-    if (perturb_abscissas)
+    if (log_abscissas)
+    {
+        // Uniform in log(x); each abscissa is exactly representable in CoarseReal, so both types see the same x.
+        using std::log;
+        using std::exp;
+        std::uniform_real_distribution<long double> log_dis(log(static_cast<long double>(a)), log(static_cast<long double>(b)));
+        for (size_t i = 0; i < samples; ++i)
+        {
+            CoarseReal x = static_cast<CoarseReal>(exp(log_dis(gen)));
+            coarse_abscissas_[i] = (std::min)((std::max)(x, a), b);
+        }
+        std::sort(coarse_abscissas_.begin(), coarse_abscissas_.end());
+        for (size_t i = 0; i < samples; ++i)
+        {
+            precise_abscissas_[i] = static_cast<PreciseReal>(coarse_abscissas_[i]);
+        }
+    }
+    else if (perturb_abscissas)
     {
         for(size_t i = 0; i < samples; ++i)
         {

@@ -336,6 +336,9 @@ void test_spots(RealType, const char* name = nullptr)
    for (RealType x : x_vals)
    {
       RealType P = cdf(dist_no_centrality, x);
+      RealType Q = cdf(complement(dist_no_centrality, x));
+      // Regression test for #1463: CDF and CCDF must remain complementary for nc=0.
+      BOOST_CHECK_CLOSE(P + Q, RealType(1), tolerance);
       BOOST_CHECK_LE(dist.find_non_centrality(x, a, b, P), tolerance);
    }
    // Case when P=1 or P=0 
@@ -370,10 +373,8 @@ void test_spots(RealType, const char* name = nullptr)
       }
    }
    
-   // Quick spot check for finding degrees of freedom. When checking for two degrees 
-   // of freedom for real_concept types, the cdf at large/small v2 can be greater than 1 
-   // or less than 0. 
-   if (!std::is_same<RealType, boost::math::concepts::real_concept>::value){
+   // Quick spot check for finding degrees of freedom.
+   {
       RealType v1 = 10;
       RealType v2 = 5; 
       nc = 1;
@@ -384,6 +385,49 @@ void test_spots(RealType, const char* name = nullptr)
       BOOST_CHECK_CLOSE(ref.find_v2(boost::math::complement(x, v1, nc, 1-P)), v2, tolerance);
       BOOST_CHECK_CLOSE(ref.find_v1(x, v2, nc, P), v1, tolerance);
       BOOST_CHECK_CLOSE(ref.find_v1(boost::math::complement(x, v2, nc, 1-P)), v1, tolerance);
+   }
+
+   // https://github.com/boostorg/math/issues/1491: the cdf is monotonic in v2 here, but at huge v2
+   // it used to come out negative, so find_v2 reported two roots.
+   {
+      RealType v1 = 2;
+      RealType v2 = 2;
+      nc = RealType(1.5);
+      x = RealType(1.25);
+      boost::math::non_central_f_distribution<RealType> ref(v1, v2, nc);
+      RealType P = cdf(ref, x);
+      BOOST_CHECK_CLOSE(ref.find_v2(x, v1, nc, P), v2, tolerance);
+      BOOST_CHECK_CLOSE(ref.find_v2(boost::math::complement(x, v1, nc, 1 - P)), v2, tolerance);
+      // As v2 -> infinity the distribution of v1 F tends to the non-central chi-squared.
+      // (Not for real_concept, whose generic incomplete beta is not accurate at such enormous b.)
+      boost::math::non_central_chi_squared_distribution<RealType> limit(v1, nc);
+      for (RealType big : {RealType(1e20), RealType(1e100)})
+      {
+         if (std::is_same<RealType, boost::math::concepts::real_concept>::value)
+            break;
+         if (big >= boost::math::tools::max_value<RealType>())
+            continue;
+         boost::math::non_central_f_distribution<RealType> far(v1, big, nc);
+         for (RealType xx : {RealType(0.5), RealType(2), RealType(20)})
+         {
+            BOOST_CHECK_CLOSE(cdf(far, xx), cdf(limit, xx * v1), tolerance);
+            BOOST_CHECK_CLOSE(cdf(complement(far, xx)), cdf(complement(limit, xx * v1)), tolerance);
+         }
+      }
+   }
+
+   // As v1 -> infinity, F tends to v2 / chi-squared(v2): find_v1's check for a second root must use
+   // that limit, not the v2 -> infinity one, or it reports two roots where there is one.
+   {
+      for (RealType xv : {RealType(1.2), RealType(0.8)})
+      {
+         RealType v1 = 50;
+         RealType v2 = xv > 1 ? RealType(3) : RealType(10);
+         nc = xv > 1 ? RealType(5) : RealType(3);
+         boost::math::non_central_f_distribution<RealType> ref(v1, v2, nc);
+         RealType P = cdf(ref, xv);
+         BOOST_CHECK_CLOSE(ref.find_v1(xv, v2, nc, P), v1, tolerance);
+      }
    }
 
    // Check case where two degrees of freedom solve the inversion problem

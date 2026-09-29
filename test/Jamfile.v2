@@ -146,6 +146,7 @@ test-suite special_fun :
 
    [ run hypot_test.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework ]
    [ run pow_test.cpp /boost/test//boost_unit_test_framework ]
+   [ run test_pow1p.cpp ]
    [ run logaddexp_test.cpp /boost/test//boost_unit_test_framework ]
    [ run logsumexp_test.cpp /boost/test//boost_unit_test_framework : : : [ requires cxx11_hdr_initializer_list cxx11_variadic_templates ] ]
    [ run ccmath_sqrt_test.cpp /boost/test//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] $(float128_type) ]
@@ -575,7 +576,7 @@ test-suite special_fun :
 
    [ run test_ldouble_simple.cpp /boost/test//boost_unit_test_framework  ]
    # Needs to run in release mode, as it's rather slow:
-   [ run test_next.cpp pch /boost/test//boost_unit_test_framework ]
+   [ run test_next.cpp pch /boost/test//boost_unit_test_framework : : : $(float128_type_gcc) ]
    [ run test_next_decimal.cpp pch /boost/test//boost_unit_test_framework : : : release  ]
    [ run test_owens_t.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_polygamma.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
@@ -902,6 +903,7 @@ test-suite distribution_tests :
    [ run test_triangular.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_uniform.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_weibull.cpp /boost/test//boost_unit_test_framework ]
+   [ run test_von_mises.cpp : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
 
    [ run test_legacy_nonfinite.cpp /boost/test//boost_unit_test_framework ]
    [ run test_basic_nonfinite.cpp /boost/test//boost_unit_test_framework  ]
@@ -919,6 +921,7 @@ test-suite distribution_tests :
    [ run scipy_issue_15101.cpp /boost/test//boost_unit_test_framework ]
    [ run scipy_issue_17146.cpp /boost/test//boost_unit_test_framework  ]
    [ run scipy_issue_17388.cpp /boost/test//boost_unit_test_framework  ]
+   [ run git_issue_935.cpp ]
    [ run scipy_issue_17916.cpp /boost/test//boost_unit_test_framework  ]
    [ run scipy_issue_17916_nct.cpp /boost/test//boost_unit_test_framework  ]
    [ run scipy_issue_18302.cpp /boost/test//boost_unit_test_framework  ]
@@ -1039,9 +1042,19 @@ test-suite misc :
    [ run test_recurrence.cpp : : : <define>TEST=3 release $(float128_type) [ requires cxx11_unified_initialization_syntax cxx11_hdr_tuple cxx11_auto_declarations cxx11_decltype ]  : test_recurrence_3 ]
 
    [ run test_print_info_on_type.cpp  ]
-   [ run univariate_statistics_test.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run univariate_statistics_test.cpp /boost/test//boost_unit_test_framework
+  : : :
+    <toolset>gcc,<target-os>windows:<cxxflags>-Wa,-mbig-obj
+    <debug-symbols>off
+    <toolset>msvc:<cxxflags>/bigobj
+    [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ]
+    [ requires cxx17_if_constexpr cxx17_std_apply ]
+  ]
    [ run univariate_statistics_backwards_compatible_test.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ] ]
    [ run ooura_fourier_integral_test.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] $(float128_type) [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run test_prime_sieve.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run test_prime_sieve_mp.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run test_prime_sieve_mp.cpp ../tools//gmp : : : <define>BOOST_MATH_TEST_GMP [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_gmp : : <build>no ] : test_prime_sieve_gmp ]
    [ run empirical_cumulative_distribution_test.cpp  : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run norms_test.cpp /boost/test//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run signal_statistics_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
@@ -1051,7 +1064,14 @@ test-suite misc :
    [ run quartic_roots_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_t_test.cpp : : : $(float128_type) [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ]  ]
    [ run test_z_test.cpp : : : $(float128_type) [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ]  ]
-   [ run bivariate_statistics_test.cpp : : : [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ] [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] ]
+   [ run bivariate_statistics_test.cpp
+  : : :
+    <toolset>gcc,<target-os>windows:<cxxflags>-Wa,-mbig-obj
+    <debug-symbols>off
+    <toolset>msvc:<cxxflags>/bigobj
+    [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ]
+    [ requires cxx17_if_constexpr cxx17_std_apply ]
+  ]
    [ run linear_regression_test.cpp : : : [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ]  ]
    [ run test_runs_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_chatterjee_correlation.cpp /boost/test//boost_unit_test_framework ]
@@ -1100,7 +1120,7 @@ test-suite interpolators :
    [ run cohen_acceleration_test.cpp  : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx17_if_constexpr cxx17_std_apply ]  $(float128_type) ]
    [ compile compile_test/filters_daubechies_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ]  ]
    [ compile compile_test/sf_daubechies_scaling_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ]  ]
-   [ run whittaker_shannon_test.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] ]
+   [ run whittaker_shannon_test.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] $(float128_type) ]
    [ run cardinal_quadratic_b_spline_test.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] ]
    [ run cardinal_quintic_b_spline_test.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] $(float128_type) ]
    [ run makima_test.cpp /boost/circular_buffer//boost_circular_buffer : : :  [ requires cxx17_if_constexpr cxx17_std_apply ]  $(float128_type) ]
@@ -1217,6 +1237,15 @@ test-suite quadrature :
      : : : release <define>TEST10 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_10 ]
 
+   [ run double_exponential_eigen_test.cpp : : :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax ]
+     [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
+   [ run gauss_kronrod_eigen_test.cpp : : :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax ]
+     [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
+   [ run gauss_quadrature_eigen_test.cpp : : :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax ]
+     [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
    [ run gauss_quadrature_test.cpp : : : <define>TEST1 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_quadrature_test_1 ]
    [ run gauss_quadrature_test.cpp : : : <define>TEST2 $(float128_type)
@@ -1355,6 +1384,7 @@ test-suite quadrature :
    [ run test_trapezoidal.cpp /boost/test//boost_unit_test_framework : : :
       release [ requires cxx11_lambdas cxx11_auto_declarations cxx11_decltype cxx11_unified_initialization_syntax cxx11_variadic_templates ]
       $(float128_type) ]
+   [ run test_symplectic.cpp ]
 ;
 
 test-suite autodiff :
@@ -1897,8 +1927,8 @@ test-suite autodiff-long-running-tests
         [ run test_reverse_mode_autodiff_special_functions_compile/hypergeometric/test_reverse_mode_autodiff_hypergeometric_1F0_compile_test_ET_ON_bin_float_types.cpp ]
         [ run test_reverse_mode_autodiff_special_functions_compile/hypergeometric/test_reverse_mode_autodiff_hypergeometric_1F0_compile_test_ET_OFF_bin_float_types.cpp ]
         [ run-fail test_reverse_mode_autodiff_special_functions_compile/hypergeometric/test_reverse_mode_autodiff_hypergeometric_1F0_compile_test_ET_OFF_bin_float_types.cpp ]
-        [ compile-fail test_reverse_mode_autodiff_special_functions_compile/hypergeometric/test_reverse_mode_autodiff_hypergeometric_1F0_compile_test_ET_ON_multiprecision_float_types.cpp ]
-        [ compile-fail test_reverse_mode_autodiff_special_functions_compile/hypergeometric/test_reverse_mode_autodiff_hypergeometric_1F0_compile_test_ET_OFF_multiprecision_float_types.cpp ]
+        [ run test_reverse_mode_autodiff_special_functions_compile/hypergeometric/test_reverse_mode_autodiff_hypergeometric_1F0_compile_test_ET_ON_multiprecision_float_types.cpp ]
+        [ run test_reverse_mode_autodiff_special_functions_compile/hypergeometric/test_reverse_mode_autodiff_hypergeometric_1F0_compile_test_ET_OFF_multiprecision_float_types.cpp ]
         [ compile-fail test_reverse_mode_autodiff_special_functions_compile/hypergeometric/test_reverse_mode_autodiff_hypergeometric_0F1_compile_test_ET_ON_bin_float_types.cpp ]
         [ run test_reverse_mode_autodiff_special_functions_compile/hypergeometric/test_reverse_mode_autodiff_hypergeometric_0F1_compile_test_ET_OFF_bin_float_types.cpp ]
         [ run-fail test_reverse_mode_autodiff_special_functions_compile/hypergeometric/test_reverse_mode_autodiff_hypergeometric_0F1_compile_test_ET_OFF_bin_float_types.cpp ]
@@ -2149,6 +2179,7 @@ test-suite concepts :
    [ run  compile_test/sf_next_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/sf_powm1_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/sf_prime_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ run  compile_test/sf_prime_sieve_incl_test.cpp compile_test_main  : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/sf_relative_distance_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/sf_round_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/sf_sign_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
@@ -2305,6 +2336,7 @@ alias no_eh_tests :
    sf_next_incl_test
    sf_powm1_incl_test
    sf_prime_incl_test
+   sf_prime_sieve_incl_test
    sf_relative_distance_incl_test
    sf_round_incl_test
    sf_sign_incl_test

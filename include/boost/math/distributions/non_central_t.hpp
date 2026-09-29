@@ -772,6 +772,29 @@ namespace boost
                return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom when the abscissa value is very close to zero as all degrees of freedom generate the same CDF at x=0: try again further out in the tails!!",
                   RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE
             }
+
+            // The limiting CDF values are
+            //
+            //   v -> 0:   Phi(-delta)
+            //   v -> inf: Phi(x - delta)
+            //
+            // Outside the interval between these limits, a monotone CDF(v)
+            // has no inverse, and a non-monotone one may have several, so we
+            // cannot select a unique degree of freedom.  This only screens
+            // out-of-range p: it does not detect multiple roots inside the
+            // interval.  See https://github.com/boostorg/math/issues/1410
+            normal_distribution<RealType, Policy> normal;
+            RealType p0 = cdf(normal, -delta);
+            RealType pinf = cdf(normal, x - delta);
+            RealType lower = p0 < pinf ? p0 : pinf;
+            RealType upper = p0 < pinf ? pinf : p0;
+            if((p < lower) || (p > upper))
+            {
+               return policies::raise_evaluation_error<RealType>(function,
+                  "Probability lies outside the interval between the limiting CDF values; the inverse is absent or non-unique: result was %1%",
+                  RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy());
+            }
+
             t_degrees_of_freedom_finder<RealType, Policy> f(delta, x, p < q ? p : q, p < q ? false : true);
             tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
             std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();

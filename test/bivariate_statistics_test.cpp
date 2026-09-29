@@ -302,6 +302,25 @@ void test_integer_correlation_coefficient(ExecutionPolicy&& exec)
     CHECK_LE(abs(rho_uv - sqrt(double(3))/double(2)), tol);
 }
 
+void test_parallel_correlation_merge()
+{
+    using boost::math::statistics::correlation_coefficient;
+    // Exceed the parallel dispatch threshold, even on a two-thread machine.
+    std::vector<double> u(65536);
+    std::vector<double> v(u.size());
+    for (std::size_t i = 0; i < u.size(); ++i)
+    {
+        u[i] = static_cast<double>(i % 4);
+        v[i] = u[i] + static_cast<double>((i / 4) % 4);
+    }
+    // Each pair of independent uniform values in {0, 1, 2, 3} occurs equally often.
+    // Var(u) = 5/4, Var(v) = 5/2, and Cov(u, v) = 5/4.
+    const double expected = 1 / std::sqrt(2.0);
+    const double tol = 1000 * std::numeric_limits<double>::epsilon();
+    CHECK_MOLLIFIED_CLOSE(expected, correlation_coefficient(std::execution::par, u, v), tol);
+    CHECK_MOLLIFIED_CLOSE(expected, correlation_coefficient(std::execution::par, v, u), tol);
+}
+
 int main()
 {
     test_covariance<float>(std::execution::seq);
@@ -330,6 +349,7 @@ int main()
     test_correlation_coefficient<long double>(std::execution::par);
     test_correlation_coefficient<cpp_bin_float_50>(std::execution::seq);
     test_correlation_coefficient<cpp_bin_float_50>(std::execution::par);
+    test_parallel_correlation_merge();
     
     test_integer_correlation_coefficient<int>(std::execution::seq);
     test_integer_correlation_coefficient<int>(std::execution::par);

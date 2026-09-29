@@ -24,6 +24,9 @@
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
 #include <cfloat>
+#include <climits>
+#include <cstdint>
+#include <cstring>
 #endif
 
 
@@ -462,6 +465,75 @@ inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U&
 
 namespace detail{
 
+#ifdef BOOST_MATH_HAS_INT128
+__extension__ typedef unsigned __int128 float_distance_uint128;
+#endif
+
+//
+// Unsigned integer type with the same size as T, if T is an IEEE binary32, binary64
+// or binary128 type, otherwise void:
+//
+template <class T>
+struct float_distance_bits_type
+{
+   template <int Digits, class U, class Otherwise>
+   using select = typename std::conditional<std::numeric_limits<T>::is_iec559 && (std::numeric_limits<T>::digits == Digits) && (sizeof(T) == sizeof(U)), U, Otherwise>::type;
+#ifdef BOOST_MATH_HAS_INT128
+   using type = select<24, std::uint32_t, select<53, std::uint64_t, select<113, float_distance_uint128, void>>>;
+#else
+   using type = select<24, std::uint32_t, select<53, std::uint64_t, void>>;
+#endif
+};
+
+template <class T>
+inline T float_distance_bits_to_float(std::uint32_t d) { return static_cast<T>(d); }
+template <class T>
+inline T float_distance_bits_to_float(std::uint64_t d) { return static_cast<T>(d); }
+#ifdef BOOST_MATH_HAS_INT128
+template <class T>
+inline T float_distance_bits_to_float(float_distance_uint128 d)
+{
+   // Both halves are exact in T, so there is only one rounding:
+   return static_cast<T>(static_cast<std::uint64_t>(d >> 64)) * T(18446744073709551616.0) + static_cast<T>(static_cast<std::uint64_t>(d));
+}
+#endif
+
+//
+// For IEEE types, the distance is the difference of the bit patterns once they
+// are mapped to unsigned integers in the same order as the values, see
+// https://randomascii.wordpress.com/2012/01/23/stupid-float-tricks-2/
+// Returns false if the generic code must be used instead.
+//
+template <class T>
+inline bool float_distance_by_bits(const T& a, const T& b, T& result, const std::true_type&)
+{
+   BOOST_MATH_STD_USING
+   using U = typename float_distance_bits_type<T>::type;
+   //
+   // If denorms are flushed to zero, then the generic code steps straight from zero
+   // to min_value, which the bit patterns can't do:
+   //
+   if (!((fabs(a) >= tools::min_value<T>()) && (fabs(b) >= tools::min_value<T>()) && ((a < 0) == (b < 0))) && !detail::has_denorm_now<T>())
+      return false;
+   U ai, bi;
+   std::memcpy(&ai, &a, sizeof(T));
+   std::memcpy(&bi, &b, sizeof(T));
+   //
+   // Map -x to sign - |x| and x to sign + |x|, so -0 and +0 are the same point:
+   //
+   constexpr U sign = U(1) << (sizeof(U) * CHAR_BIT - 1);
+   ai = (ai & sign) ? U(sign - (ai & ~sign)) : U(sign + ai);
+   bi = (bi & sign) ? U(sign - (bi & ~sign)) : U(sign + bi);
+   result = bi >= ai ? float_distance_bits_to_float<T>(U(bi - ai)) : T(-float_distance_bits_to_float<T>(U(ai - bi)));
+   return true;
+}
+
+template <class T>
+inline bool float_distance_by_bits(const T&, const T&, T&, const std::false_type&)
+{
+   return false;
+}
+
 template <class T, class Policy>
 T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy& pol)
 {
@@ -474,6 +546,9 @@ T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy
       return policies::raise_domain_error<T>(function, "Argument a must be finite, but got %1%", a, pol);
    if(!(boost::math::isfinite)(b))
       return policies::raise_domain_error<T>(function, "Argument b must be finite, but got %1%", b, pol);
+   T bits_result;
+   if(float_distance_by_bits(a, b, bits_result, std::integral_constant<bool, !std::is_void<typename float_distance_bits_type<T>::type>::value>()))
+      return bits_result;
    //
    // Special cases:
    //

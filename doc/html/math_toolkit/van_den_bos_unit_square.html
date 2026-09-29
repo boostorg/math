@@ -1,0 +1,178 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Van den Bos Unit-Square Quadrature</title>
+<link rel="stylesheet" href="../math.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
+<link rel="home" href="../index.html" title="Math Toolkit 4.2.1">
+<link rel="up" href="../quadrature.html" title="Chapter 14. Quadrature and Differentiation">
+<link rel="prev" href="../quadrature.html" title="Chapter 14. Quadrature and Differentiation">
+<link rel="next" href="trapezoidal.html" title="Trapezoidal Quadrature">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../quadrature.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../quadrature.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="trapezoidal.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="math_toolkit.van_den_bos_unit_square"></a><a class="link" href="van_den_bos_unit_square.html" title="Van den Bos Unit-Square Quadrature">Van den Bos Unit-Square
+    Quadrature</a>
+</h2></div></div></div>
+<h4>
+<a name="math_toolkit.van_den_bos_unit_square.h0"></a>
+      <span class="phrase"><a name="math_toolkit.van_den_bos_unit_square.synopsis"></a></span><a class="link" href="van_den_bos_unit_square.html#math_toolkit.van_den_bos_unit_square.synopsis">Synopsis</a>
+    </h4>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">quadrature</span><span class="special">/</span><span class="identifier">van_den_bos_unit_square</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">quadrature</span> <span class="special">{</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
+<span class="keyword">auto</span> <span class="identifier">van_den_bos_unit_square</span><span class="special">(</span>
+    <span class="identifier">F</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">f</span><span class="special">,</span>
+    <span class="keyword">double</span> <span class="identifier">tolerance</span><span class="special">,</span>
+    <span class="keyword">double</span><span class="special">*</span> <span class="identifier">error_estimate</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
+    <span class="keyword">double</span><span class="special">*</span> <span class="identifier">L1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">evaluations</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">);</span>
+
+<span class="special">}}}</span> <span class="comment">// namespaces</span>
+</pre>
+<h4>
+<a name="math_toolkit.van_den_bos_unit_square.h1"></a>
+      <span class="phrase"><a name="math_toolkit.van_den_bos_unit_square.description"></a></span><a class="link" href="van_den_bos_unit_square.html#math_toolkit.van_den_bos_unit_square.description">Description</a>
+    </h4>
+<p>
+      <code class="computeroutput"><span class="identifier">van_den_bos_unit_square</span></code> computes
+      an adaptive positive cubature of a real- or complex-valued function over the
+      reference square [0,1]^2. The integrand receives the two coordinates as separate
+      <code class="computeroutput"><span class="keyword">double</span></code> arguments.
+    </p>
+<p>
+      For a nondegenerate parallelogram with one vertex <code class="literal">p0</code> and
+      edge vectors <code class="literal">a</code> and <code class="literal">b</code>, use the affine
+      map <code class="computeroutput"><span class="identifier">p</span><span class="special">(</span><span class="identifier">u</span><span class="special">,</span><span class="identifier">v</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">p0</span>
+      <span class="special">+</span> <span class="identifier">u</span> <span class="identifier">a</span> <span class="special">+</span> <span class="identifier">v</span>
+      <span class="identifier">b</span></code>, where <code class="computeroutput"><span class="special">(</span><span class="identifier">u</span><span class="special">,</span><span class="identifier">v</span><span class="special">)</span></code> lies in <code class="computeroutput"><span class="special">[</span><span class="number">0</span><span class="special">,</span><span class="number">1</span><span class="special">]^</span><span class="number">2</span></code>. The integral
+      over the parallelogram is the integral of <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">p0</span> <span class="special">+</span>
+      <span class="identifier">u</span> <span class="identifier">a</span>
+      <span class="special">+</span> <span class="identifier">v</span> <span class="identifier">b</span><span class="special">)</span></code> over the
+      unit square, multiplied by <code class="computeroutput"><span class="identifier">abs</span><span class="special">(</span><span class="identifier">det</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span><span class="identifier">b</span><span class="special">))</span></code>. The caller must perform this mapping and
+      include the constant Jacobian <code class="computeroutput"><span class="identifier">abs</span><span class="special">(</span><span class="identifier">det</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span><span class="identifier">b</span><span class="special">))</span></code> in the integrand.
+    </p>
+<p>
+      The precomputed rules contain no points on the boundary of the square, so the
+      routine does not evaluate the integrand at an endpoint singularity. Interior
+      nodes approach the boundary as the levels increase, however, so excluding the
+      endpoints does not by itself make an improper integral well conditioned. Singular
+      integrals may still require a suitable change of variables.
+    </p>
+<p>
+      The precomputed rules form a nested hierarchy. After the first level, only
+      points newly introduced by the next level are evaluated. The routine requires
+      two consecutive adjacent-level differences to satisfy <code class="computeroutput"><span class="identifier">tolerance</span></code>
+      before stopping, which avoids accepting an isolated cancellation. If the maximum
+      level is reached first, the last rule is returned and its difference is used
+      as the final <code class="computeroutput"><span class="identifier">error_estimate</span></code>
+      (subject to the roundoff floor).
+    </p>
+<p>
+      The optional <code class="computeroutput"><span class="identifier">L1</span></code> output is the
+      weighted sum of the absolute integrand values. <code class="computeroutput"><span class="identifier">evaluations</span></code>
+      reports the number of function calls, including calls reused by all subsequent
+      levels. The supported result types are <code class="computeroutput"><span class="keyword">float</span></code>
+      and <code class="computeroutput"><span class="keyword">double</span></code>, including complex
+      values with <code class="computeroutput"><span class="keyword">float</span></code> or <code class="computeroutput"><span class="keyword">double</span></code> components. Higher-precision return types
+      are not supported.
+    </p>
+<p>
+      Nodes and weights are computed offline. If the requested tolerance is not reached
+      by the final precomputed level, the routine returns that level's result and
+      error estimate; it does not compute additional levels.
+    </p>
+<p>
+      Requires C++17.
+    </p>
+<p>
+      Positive cubature rules satisfying the same moment conditions are not unique.
+      The nodes and weights of this routine are chosen on a Fejer type-II grid. The
+      nodes are strictly contained in <code class="computeroutput"><span class="special">(</span><span class="number">0</span><span class="special">,</span><span class="number">1</span><span class="special">)^</span><span class="number">2</span></code>, and the
+      weighted rule is invariant under D<sub>4</sub>.
+    </p>
+<h4>
+<a name="math_toolkit.van_den_bos_unit_square.h2"></a>
+      <span class="phrase"><a name="math_toolkit.van_den_bos_unit_square.dilogarithm_example"></a></span><a class="link" href="van_den_bos_unit_square.html#math_toolkit.van_den_bos_unit_square.dilogarithm_example">Dilogarithm
+      example</a>
+    </h4>
+<p>
+      For a smooth special-function example, the integral of <code class="computeroutput"><span class="number">1</span><span class="special">/(</span><span class="number">1</span><span class="special">-</span><span class="identifier">xy</span><span class="special">/</span><span class="number">2</span><span class="special">)</span></code> over the unit square is <code class="computeroutput"><span class="identifier">pi</span><span class="special">^</span><span class="number">2</span><span class="special">/</span><span class="number">6</span> <span class="special">-</span> <span class="identifier">log</span><span class="special">^</span><span class="number">2</span><span class="special">(</span><span class="number">2</span><span class="special">)</span></code>.
+    </p>
+<pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quadrature</span><span class="special">::</span><span class="identifier">van_den_bos_unit_square</span><span class="special">;</span>
+
+<span class="keyword">double</span> <span class="identifier">error_estimate</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+<span class="keyword">double</span> <span class="identifier">value</span> <span class="special">=</span> <span class="identifier">van_den_bos_unit_square</span><span class="special">(</span>
+    <span class="special">[](</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">y</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">return</span> <span class="number">1</span> <span class="special">/</span> <span class="special">(</span><span class="number">1</span> <span class="special">-</span> <span class="identifier">x</span> <span class="special">*</span> <span class="identifier">y</span> <span class="special">/</span> <span class="number">2</span><span class="special">);</span>
+    <span class="special">},</span>
+    <span class="number">1e-10</span><span class="special">,</span>
+    <span class="special">&amp;</span><span class="identifier">error_estimate</span><span class="special">);</span>
+</pre>
+<h4>
+<a name="math_toolkit.van_den_bos_unit_square.h3"></a>
+      <span class="phrase"><a name="math_toolkit.van_den_bos_unit_square.square_lattice_green_function"></a></span><a class="link" href="van_den_bos_unit_square.html#math_toolkit.van_den_bos_unit_square.square_lattice_green_function">Square-lattice
+      Green function</a>
+    </h4>
+<p>
+      The resolvent of the nearest-neighbor square lattice gives the genuinely two-dimensional
+      periodic integral of <code class="computeroutput"><span class="number">1</span><span class="special">/(</span><span class="identifier">z</span> <span class="special">-</span> <span class="identifier">cos</span><span class="special">(</span><span class="number">2</span><span class="special">*</span><span class="identifier">pi</span><span class="special">*</span><span class="identifier">x</span><span class="special">)</span> <span class="special">-</span> <span class="identifier">cos</span><span class="special">(</span><span class="number">2</span><span class="special">*</span><span class="identifier">pi</span><span class="special">*</span><span class="identifier">y</span><span class="special">))</span></code> over the unit square. For <code class="literal">z &gt;
+      2</code>, its closed form is <code class="computeroutput"><span class="identifier">G</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span>
+      <span class="special">=</span> <span class="number">2</span><span class="special">*</span><span class="identifier">K</span><span class="special">(</span><span class="number">2</span><span class="special">/</span><span class="identifier">z</span><span class="special">)/(</span><span class="identifier">pi</span><span class="special">*</span><span class="identifier">z</span><span class="special">)</span></code>, where <code class="literal">K</code> is the complete
+      elliptic integral of the first kind. For example, <code class="literal">z = 3</code>
+      can be computed with
+    </p>
+<pre class="programlisting"><span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">z</span> <span class="special">=</span> <span class="number">3</span><span class="special">;</span>
+<span class="keyword">double</span> <span class="keyword">const</span> <span class="identifier">two_pi</span> <span class="special">=</span> <span class="number">2</span> <span class="special">*</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;();</span>
+<span class="keyword">double</span> <span class="identifier">value</span> <span class="special">=</span> <span class="identifier">van_den_bos_unit_square</span><span class="special">(</span>
+    <span class="special">[=](</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">y</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">return</span> <span class="number">1</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">z</span> <span class="special">-</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cos</span><span class="special">(</span><span class="identifier">two_pi</span> <span class="special">*</span> <span class="identifier">x</span><span class="special">)</span>
+                      <span class="special">-</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cos</span><span class="special">(</span><span class="identifier">two_pi</span> <span class="special">*</span> <span class="identifier">y</span><span class="special">));</span>
+    <span class="special">},</span>
+    <span class="number">1e-6</span><span class="special">);</span>
+</pre>
+<p>
+      The lattice value <code class="literal">z = 2</code>, and the parameter value <code class="literal">z
+      = 1</code> in the dilogarithm family <code class="computeroutput"><span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">zxy</span><span class="special">)^-</span><span class="number">1</span></code>, give improper
+      integrals. Although the rules do not evaluate the singular boundary points
+      themselves, singular integrands may require a suitable change of variables
+      and should not be expected to have reliable adjacent-level error estimates
+      without such treatment.
+    </p>
+<p>
+      The construction follows the positive, nested reduction approach of <a href="https://arxiv.org/abs/1809.09842" target="_top">van den Bos et al.</a>, adapted
+      here to the uniform measure on the unit square.
+    </p>
+</div>
+<div class="copyright-footer">Copyright © 2006-2021 Nikhar Agrawal, Anton Bikineev, Matthew Borland,
+      Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno
+      Lalande, John Maddock, Evan Miller, Jeremy Murphy, Matthew Pulver, Johan Råde,
+      Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle
+      Walker, Xiaogang Zhang, and Maksym Zhelyeznyakov<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../quadrature.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../quadrature.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="trapezoidal.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

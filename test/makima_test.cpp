@@ -36,6 +36,10 @@ void test_constant()
     auto y_copy = y;
     auto akima = makima(std::move(x_copy), std::move(y_copy));
 
+    auto [lo, hi] = akima.domain();
+    CHECK_ULP_CLOSE(lo, 0, 1);
+    CHECK_ULP_CLOSE(hi, 81, 1);
+
     for (Real t = x[0]; t <= x.back(); t += Real(0.25)) {
         CHECK_ULP_CLOSE(Real(7), akima(t), 2);
         CHECK_ULP_CLOSE(Real(0), akima.prime(t), 2);

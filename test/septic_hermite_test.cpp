@@ -497,8 +497,40 @@ void test_interpolation_condition()
 }
 
 
+// Non-unit spacing exposes missing chain-rule factors in derivative evaluation.
+void test_cardinal_derivative_scaling()
+{
+    for (double dx : {0.125, 2.0})
+    {
+        std::vector<std::array<double, 4>> data(4);
+        std::vector<double> y(4), dy(4), d2y(4), d3y(4);
+        for (size_t i = 0; i < data.size(); ++i)
+        {
+            double x = -1 + i*dx;
+            data[i] = {x*x*x, 3*x*x, 6*x, 6};
+            y[i] = x*x*x;
+            dy[i] = 3*x*x;
+            d2y[i] = 6*x;
+            d3y[i] = 6;
+        }
+        auto f = boost::math::interpolators::detail::cardinal_septic_hermite_detail_aos(std::move(data), -1.0, dx);
+        auto g = boost::math::interpolators::detail::cardinal_septic_hermite_detail(std::move(y), std::move(dy), std::move(d2y), std::move(d3y), -1.0, dx);
+        for (int i = 0; i <= 24; ++i)
+        {
+            double x = -1 + i*dx/8;
+            CHECK_MOLLIFIED_CLOSE(x*x*x, f(x), 1e-12);
+            CHECK_MOLLIFIED_CLOSE(3*x*x, f.prime(x), 1e-12);
+            CHECK_MOLLIFIED_CLOSE(6*x, f.double_prime(x), 1e-12);
+            CHECK_MOLLIFIED_CLOSE(x*x*x, g(x), 1e-12);
+            CHECK_MOLLIFIED_CLOSE(3*x*x, g.prime(x), 1e-12);
+            CHECK_MOLLIFIED_CLOSE(6*x, g.double_prime(x), 1e-12);
+        }
+    }
+}
+
 int main()
 {
+    test_cardinal_derivative_scaling();
     #ifdef __STDCPP_FLOAT32_T__
     test_constant<std::float32_t>();
     test_linear<std::float32_t>();
