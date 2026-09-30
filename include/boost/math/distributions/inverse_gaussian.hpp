@@ -239,7 +239,12 @@ namespace detail
       RealType y = a / constants::root_two<RealType>();
       RealType epsilon = policies::get_epsilon<RealType, Policy>();
       RealType y_squared = y * y;
-      if ((a > 0) && (y_squared >= -2 * log(epsilon)))
+      // A reduced precision policy may stop the series earlier, but must not
+      // move its asymptotic expansion into the small-argument region.
+      RealType asymptotic_epsilon = tools::epsilon<RealType>();
+      if (epsilon < asymptotic_epsilon)
+         asymptotic_epsilon = epsilon;
+      if ((a > 0) && (y_squared >= -2 * log(asymptotic_epsilon)))
       {
          // With p=1/y and rho=y/z, factor the difference of the two scaled
          // tails before summing instead of subtracting nearly equal values.
@@ -323,6 +328,12 @@ namespace detail
       RealType log_max = tools::log_max_value<RealType>();
       RealType log_min = -tools::log_min_value<RealType>();
       RealType h = (log_max < log_min ? log_max : log_min) / 2;
+      // Near the mean, the ordinary factors amplify rounding by z*z rather
+      // than y*y. Use the scaled tail when this exceeds the precision budget.
+      // Compare before multiplying to keep the limit within the exponent range.
+      RealType precision_h = -log(epsilon);
+      if ((precision_h > 0) && (y_squared < h / precision_h - 1))
+         h = precision_h * (1 + y_squared);
       normal_distribution<RealType> normal;
       if (inverse_z > 1 / sqrt(h))
       {
