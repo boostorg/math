@@ -14,6 +14,7 @@
 #include <boost/test/included/unit_test.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/hermite.hpp>
+#include <boost/multiprecision/eigen.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 
 using boost::math::quadrature::hermite;

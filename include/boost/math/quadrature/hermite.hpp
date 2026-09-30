@@ -26,11 +26,6 @@
    #define EIGEN_SUPPORT
 #endif
 
-#if __has_include(<boost/multiprecision/eigen.hpp>) && __has_include(<Eigen/Dense>)
-   #include <boost/multiprecision/eigen.hpp>
-   #include <boost/multiprecision/cpp_bin_float.hpp>
-#endif
-
 namespace boost { namespace math{ namespace quadrature{ namespace detail {
 
 

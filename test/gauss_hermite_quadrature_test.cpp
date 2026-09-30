@@ -43,14 +43,17 @@ void test_complex_lambert_w(RealType tol)
 BOOST_AUTO_TEST_CASE(gauss_hermite_qudrature_test)
 {
    test_complex_lambert_w<std::complex<double>, 15>(2e-16);
-   test_complex_lambert_w<boost::multiprecision::complex128, 15>(2e-25);
    test_complex_lambert_w<boost::multiprecision::cpp_complex_quad, 15>(2e-25);
 
    test_complex_lambert_w<std::complex<double>, 10>(2e-15);
-   test_complex_lambert_w<boost::multiprecision::complex128, 10>(2e-15);
    test_complex_lambert_w<boost::multiprecision::cpp_complex_quad, 10>(2e-15);
 
    test_complex_lambert_w<std::complex<double>, 7>(1e-9);
-   test_complex_lambert_w<boost::multiprecision::complex128, 7>(1e-9);
    test_complex_lambert_w<boost::multiprecision::cpp_complex_quad, 7>(1e-9);
+
+   #ifdef BOOST_HAS_FLOAT128
+   test_complex_lambert_w<boost::multiprecision::complex128, 10>(2e-15);
+   test_complex_lambert_w<boost::multiprecision::complex128, 7>(1e-9);
+   test_complex_lambert_w<boost::multiprecision::complex128, 15>(2e-25);
+   #endif
 }
