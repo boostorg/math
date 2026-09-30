@@ -19,13 +19,16 @@
 #if __has_include(<Eigen/Dense>)
    #include <Eigen/Dense>
    #include <Eigen/Eigenvalues>
-   #include <boost/multiprecision/eigen.hpp>
-   #include <boost/multiprecision/cpp_bin_float.hpp>
    #include <boost/math/constants/constants.hpp>
    #include <boost/math/special_functions/hermite.hpp>
    #include <boost/math/tools/roots.hpp>
 
    #define EIGEN_SUPPORT
+#endif
+
+#if __has_include(<boost/multiprecision/eigen.hpp>) && __has_include(<Eigen/Dense>)
+   #include <boost/multiprecision/eigen.hpp>
+   #include <boost/multiprecision/cpp_bin_float.hpp>
 #endif
 
 namespace boost { namespace math{ namespace quadrature{ namespace detail {
@@ -94,7 +97,8 @@ class hermite_detail
 public:
    static std::pair<std::vector<Real>, std::vector<Real> > calculate_values()
    {
-      namespace mp = boost::multiprecision;
+      using std::sqrt;
+      using std::pow;
 
       Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic> P = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>::Zero(N, N);
       for (unsigned n = 0; n < N; ++n)
@@ -114,14 +118,19 @@ public:
       // Filter out negative roots
       std::vector<Real> pos_roots;
       pos_roots.reserve(N);
-      for (unsigned i=0; i < roots.size(); i++)
+      const Real zero_tol = std::numeric_limits<Real>::epsilon() * 1000;
+
+      for (unsigned i = 0; i < roots.size(); ++i)
       {
-        // Need to account for root near 0
-        if (roots(i) >= -std::numeric_limits<Real>::epsilon() * 1000)
-        {
-            Real root = hermite_minimizer(N, roots(i));
-            pos_roots.push_back(root);
-        }
+         Real root = roots(i);
+         if (abs(root) <= zero_tol)
+         {
+            pos_roots.push_back(Real(0));
+         }
+         else if (root > 0)
+         {
+            pos_roots.push_back(hermite_minimizer(N, root));
+         }
       }
 
       std::vector<Real> abscissa_vals(pos_roots.size());
@@ -131,7 +140,7 @@ public:
       {
          abscissa_vals[i] = pos_roots[i];
          Real hermite_val = boost::math::hermite<Real>(N-1, pos_roots[i]);
-         Real weight = mp::pow(Real(2), N-1) * factorial<Real>(N) * boost::math::constants::root_pi<Real>() / mp::pow(Real(N), 2) / mp::pow(hermite_val, 2.0);
+         Real weight = pow(Real(2), N-1) * factorial<Real>(N) * boost::math::constants::root_pi<Real>() / pow(Real(N), 2) / pow(hermite_val, 2.0);
          weight_vals[i] = weight;
       }
 
@@ -217,7 +226,7 @@ class hermite_detail<T, 7, 0>
             static_cast<storage_type>(8.16287882858964663038710959027145817e-01L),
             static_cast<storage_type>(1.67355162876747144503180139830359482e+00L),
             static_cast<storage_type>(2.65196135683523349244708200651661611e+00L),
-};
+         };
          return data;
       }
       static std::array<storage_type, 4> const & weights()
@@ -245,7 +254,7 @@ class hermite_detail<T, 7, 0>
             static_cast<storage_type>(8.16287882858964663038710959027145817e-01Q),
             static_cast<storage_type>(1.67355162876747144503180139830359482e+00Q),
             static_cast<storage_type>(2.65196135683523349244708200651661611e+00Q),
-};
+         };
          return data;
       }
       static std::array<storage_type, 4> const & weights()
@@ -273,7 +282,7 @@ class hermite_detail<T, 7, 4>
             BOOST_MATH_HUGE_CONSTANT(T, 0, 8.1628788285896466303871095902714581674288940037863615684472203343594907048766511668519794976704116666704491757953733e-01),
             BOOST_MATH_HUGE_CONSTANT(T, 0, 1.6735516287674714450318013983035948191078100577354089269242175099937138333690347986612540761793805055242734953861690e+00),
             BOOST_MATH_HUGE_CONSTANT(T, 0, 2.6519613568352334924470820065166161144381584786255294172031003071471600949016031668052906818697878641942881494964276e+00),
-};
+         };
          return data;
       }
       static std::array<T, 4> const & weights()
@@ -302,7 +311,7 @@ class hermite_detail<T, 10, 0>
             static_cast<storage_type>(1.75668364929988177345140122010615676e+00L),
             static_cast<storage_type>(2.53273167423278979640896079775479348e+00L),
             static_cast<storage_type>(3.43615911883773760332672549431912138e+00L),
-};
+         };
          return data;
       }
       static std::array<storage_type, 5> const & weights()
@@ -332,7 +341,7 @@ class hermite_detail<T, 10, 0>
             static_cast<storage_type>(1.75668364929988177345140122010615676e+00Q),
             static_cast<storage_type>(2.53273167423278979640896079775479348e+00Q),
             static_cast<storage_type>(3.43615911883773760332672549431912138e+00Q),
-};
+         };
          return data;
       }
       static std::array<storage_type, 5> const & weights()
@@ -362,7 +371,7 @@ class hermite_detail<T, 10, 4>
             BOOST_MATH_HUGE_CONSTANT(T, 0, 1.7566836492998817734514012201061567632954744937388471000872849560961705796098190771278266711469838314640623161517203e+00),
             BOOST_MATH_HUGE_CONSTANT(T, 0, 2.5327316742327897964089607977547934803078465081567249459332874134930859380473865340227292325941771646240824732515703e+00),
             BOOST_MATH_HUGE_CONSTANT(T, 0, 3.4361591188377376033267254943191213848406783093901772906871762944002361145649511153468627231618843292611320162500620e+00),
-};
+         };
          return data;
       }
       static std::array<T, 5> const & weights()
@@ -395,7 +404,7 @@ class hermite_detail<T, 15, 0>
             static_cast<storage_type>(2.96716692790560324848896036354980632e+00L),
             static_cast<storage_type>(3.66995037340445253472922383311568148e+00L),
             static_cast<storage_type>(4.49999070730939155366438053053482422e+00L),
-};
+         };
          return data;
       }
       static std::array<storage_type, 8> const & weights()
@@ -431,7 +440,7 @@ class hermite_detail<T, 15, 0>
             static_cast<storage_type>(2.96716692790560324848896036354980632e+00Q),
             static_cast<storage_type>(3.66995037340445253472922383311568148e+00Q),
             static_cast<storage_type>(4.49999070730939155366438053053482422e+00Q),
-};
+         };
          return data;
       }
       static std::array<storage_type, 8> const & weights()
@@ -467,7 +476,7 @@ class hermite_detail<T, 15, 4>
             BOOST_MATH_HUGE_CONSTANT(T, 0, 2.9671669279056032484889603635498063155705164076381381507212727522118956916046294049934561649283587290854852693064039e+00),
             BOOST_MATH_HUGE_CONSTANT(T, 0, 3.6699503734044525347292238331156814846958556260108268200827250197712929612325341525137596165272567610075980577793224e+00),
             BOOST_MATH_HUGE_CONSTANT(T, 0, 4.4999907073093915536643805305348242199319830534949905938271742846019366228525630586264389556919589962713446071341276e+00),
-};
+         };
          return data;
       }
       static std::array<T, 8> const & weights()

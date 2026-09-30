@@ -1271,7 +1271,7 @@ test-suite quadrature :
 
    [ run gauss_hermite_quadrature_test.cpp : : : $(float128_type) <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_hermite_quadrature_test ]
 
-   [ run gauss_hermite_quadrature_eigen_test.cpp : : :
+   [ run gauss_hermite_quadrature_eigen_test.cpp : : : $(float128_type)
      [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
 
    [ run naive_monte_carlo_test.cpp : : :

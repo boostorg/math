@@ -7,15 +7,19 @@
 #define BOOST_TEST_MODULE gauss_hermite_qudrature_test
 
 #include <complex>
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/tools/test_value.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/multiprecision/cpp_complex.hpp>
 #include <boost/math/quadrature/hermite.hpp>
-#include <boost/multiprecision/complex128.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
+
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/complex128.hpp>
+#endif
 
 template<class Complex, unsigned Points, class RealType>
 void test_complex_lambert_w(RealType tol)
