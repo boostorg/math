@@ -1268,6 +1268,9 @@ test-suite quadrature :
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : adaptive_gauss_quadrature_test_2 ]
    [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST3 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : adaptive_gauss_quadrature_test_3 ]
+   [ run gauss_hermite_quadrature_test.cpp : : : $(float128_type) [ requires cxx17_if_constexpr ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+   [ run gauss_hermite_quadrature_eigen_test.cpp : : : [ requires cxx17_if_constexpr ]
+     [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
 
    [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=1  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
@@ -2273,6 +2276,7 @@ test-suite concepts :
    [ run  compile_test/quad_tanh_sinh_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/quad_gauss_incl_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/quad_gauss_kronrod_incl_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ compile  compile_test/quad_gauss_hermite_incl_test.cpp : [ requires cxx17_if_constexpr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/quad_ooura_fourier_integrals_incl_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/quad_wavelet_transforms_incl_test.cpp : [ requires cxx17_std_apply cxx17_if_constexpr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/quad_exp_sinh_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]

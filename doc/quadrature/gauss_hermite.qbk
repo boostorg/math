@@ -1,0 +1,105 @@
+[/
+Copyright (c) 2026 Jacob Hass
+Copyright (c) 2026 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:gauss_hermite Gauss-Hermite quadrature]
+
+[heading Synopsis]
+
+`#include <boost/math/quadrature/gauss_hermite.hpp>`
+
+   namespace boost{ namespace math{ namespace quadrature{
+
+   template <class Real, unsigned Points, class ``__Policy`` = boost::math::policies::policy<> >
+   struct gauss_hermite
+   {
+      static const RandomAccessContainer& abscissa();
+      static const RandomAccessContainer& weights();
+
+      template <class F>
+      static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
+
+      template <class F, class Norm>
+      static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm,
+                            Real* pL1 = nullptr) -> decltype(f(Real(0)));
+   };
+
+   }}} // namespaces
+
+[heading Description]
+
+The `gauss_hermite` class template computes
+
+[expression ['[int][sub -[infin]][super [infin]] f(x) e[super -x[super 2]] dx [approx] [sum][sub i] w[sub i] f(x[sub i])]]
+
+using /Points/ evaluations of /f/, where the abscissas /x[sub i]/ are the zeros of the Hermite polynomial /H[sub Points]/.
+The rule is exact when /f/ is a polynomial of degree at most 2/Points/ - 1.
+Note that the weight function exp(-/x/[super 2]) is not part of /f/: pass only the factor that multiplies it.
+
+Like [link math_toolkit.gauss `gauss`], this is a "one shot" non-adaptive routine.
+It obtains no estimate of the error, and is intended for smooth /f/ that grow no faster than a polynomial,
+such as expectations of smooth functions of a normally distributed variable.
+
+   static const RandomAccessContainer& abscissa();
+   static const RandomAccessContainer& weights();
+
+These provide direct access to the abscissas and weights. Only the nonnegative abscissas are stored, in increasing order;
+the rule is symmetric about zero.
+
+   template <class F>
+   static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
+
+Integrates /f/(/x/) exp(-/x/[super 2]) over the real line, and optionally sets `*pL1` to the corresponding integral of |/f/|.
+If that is substantially larger than the absolute value of the result, then the sum was ill-conditioned.
+/f/ may return a real or complex value.
+
+   template <class F, class Norm>
+   static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm,
+                         Real* pL1 = nullptr) -> decltype(f(Real(0)));
+
+As for [link math_toolkit.gauss `gauss`], this overload handles vector- and matrix-valued integrands:
+`zero` is the additive identity of the returned type, and `norm` returns a nonnegative scalar convertible to `Real`.
+
+[heading Example]
+
+If /X/ is normally distributed with mean [mu] and standard deviation [sigma], then substituting /X/ = [mu] + [radic]2 [sigma] /x/ gives
+
+[expression ['E\[g(X)\] = [pi][super -1/2] [int][sub -[infin]][super [infin]] g([mu] + [radic]2 [sigma] x) e[super -x[super 2]] dx]]
+
+so, for example, E\[cos /X/\] = exp(-[sigma][super 2]/2) cos [mu] is computed by
+
+   using boost::math::quadrature::gauss_hermite;
+   using boost::math::constants::root_pi;
+   using boost::math::constants::root_two;
+   double mu = 0.5;
+   double sigma = 2;
+   auto g = [&](double x) { return std::cos(mu + root_two<double>() * sigma * x); };
+   double expectation = gauss_hermite<double, 30>::integrate(g) / root_pi<double>();
+
+[heading Choosing the number of points]
+
+`gauss_hermite` has pre-computed tables of abscissas and weights for 7, 10 and 15 points, at up to 110 decimal digits of precision.
+For other numbers of points, or higher precision types, the abscissas and weights are computed the first time they are needed and then cached.
+Each zero is isolated by bisection with a Sturm sequence, then refined with Halley's method, all evaluated
+with the three-term recurrence for orthonormal Hermite polynomials.
+In double precision the computed abscissas are within a few ulps of the correctly rounded values and the weights within about one hundred,
+for up to at least 200 points.
+
+In double precision the recurrence overflows for more than 706 points (the outer weights underflow long before that).
+`integrate` then raises an __evaluation_error through the /Policy/; if the policy does not throw, the result is a NaN.
+
+As with `gauss`, defining `BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND` turns any combination of type and number of points without
+pre-computed values into a compile-time error.
+The program [@../../tools/gauss_hermite_constants.cpp gauss_hermite_constants.cpp] generates the pre-computed tables,
+and is easily modified for other numbers of points.
+
+[heading References]
+
+* G. H. Golub and J. H. Welsch, ['Calculation of Gauss quadrature rules], Mathematics of Computation 23 (1969), 221-230.
+* W. Gautschi, ['Orthogonal Polynomials: Computation and Approximation], Oxford University Press, 2004.
+
+[endsect] [/section:gauss_hermite Gauss-Hermite quadrature]
