@@ -440,6 +440,20 @@ void test_spots(RealType)
     BOOST_MATH_CHECK_THROW(fisher_f_distribution<RealType>::find_v2(x, df1, P), boost::math::evaluation_error);
     BOOST_MATH_CHECK_THROW(fisher_f_distribution<RealType>::find_v2(boost::math::complement(x, df1, P)), boost::math::evaluation_error);
 
+    // https://github.com/boostorg/math/issues/1495: here the cdf tends to 0 both as v2 -> 0 and
+    // v2 -> infinity, so every P has two roots. Probing v2 = 1/sqrt(max_value) instead of using
+    // the limit missed the small root once P fell below the cdf there (v2 = 150 for double).
+    {
+       df1 = 10000;
+       x = static_cast<RealType>(0.1);
+       for (RealType df2v : {RealType(1), RealType(10), RealType(50), RealType(150)})
+       {
+          RealType Pv = cdf(fisher_f_distribution<RealType>(df1, df2v), x);
+          if (Pv < boost::math::tools::min_value<RealType>())
+             continue;
+          BOOST_MATH_CHECK_THROW(fisher_f_distribution<RealType>::find_v2(x, df1, Pv), boost::math::evaluation_error);
+       }
+    }
 
       // special cases:
     BOOST_MATH_CHECK_THROW(
