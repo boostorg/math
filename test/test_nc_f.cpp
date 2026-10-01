@@ -430,6 +430,22 @@ void test_spots(RealType, const char* name = nullptr)
       }
    }
 
+   // https://github.com/boostorg/math/issues/1495: here the cdf tends to 0 both as v2 -> 0 and
+   // v2 -> infinity, so every P has two roots. Probing v2 = 1/sqrt(max_value) instead of using
+   // the limit missed the small root once P fell below the cdf there (v2 = 150 for double).
+   {
+      RealType v1 = 10000;
+      nc = 1;
+      x = RealType(0.1);
+      for (RealType v2 : {RealType(1), RealType(10), RealType(50), RealType(150)})
+      {
+         RealType P = cdf(boost::math::non_central_f_distribution<RealType>(v1, v2, nc), x);
+         if (P < boost::math::tools::min_value<RealType>())
+            continue;
+         BOOST_MATH_CHECK_THROW(dist.find_v2(x, v1, nc, P), boost::math::evaluation_error);
+      }
+   }
+
    // Check case where two degrees of freedom solve the inversion problem
    BOOST_MATH_CHECK_THROW(dist.find_v1(RealType(1.5), RealType(2.0), RealType(1.0), RealType(0.49845842011686358665786775091245664L)), boost::math::evaluation_error);
    BOOST_MATH_CHECK_THROW(dist.find_v1(RealType(3.51), RealType(5), RealType(0), RealType(0.85802971653663762108266155337333L)), boost::math::evaluation_error);
