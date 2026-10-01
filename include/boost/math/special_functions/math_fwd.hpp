@@ -128,6 +128,14 @@ BOOST_MATH_NAMESPACE_BEGIN // Math functions (in roughly alphabetic order).
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          beta(RT1 a, RT2 b, RT3 x, const Policy& pol); // Beta function (3 arguments).
 
+   BOOST_MATH_EXPORT template <class RT1, class RT2>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2>
+         lbeta(RT1 a, RT2 b); // Log of the beta function.
+
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class Policy>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2>
+         lbeta(RT1 a, RT2 b, const Policy& pol); // Log of the beta function.
+
    BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          betac(RT1 a, RT2 b, RT3 x);
@@ -1315,6 +1323,10 @@ BOOST_MATH_NAMESPACE_BEGIN // Math functions (in roughly alphabetic order).
    template <class RT1, class RT2, class A>\
    BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::tools::promote_args_t<RT1, RT2, A> \
    beta(RT1 a, RT2 b, A x){ return ::BOOST_MATH_NAMESPACE::beta(a, b, x, Policy()); }\
+\
+   template <class RT1, class RT2>\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT1, RT2> \
+   lbeta(RT1 a, RT2 b) { return ::boost::math::lbeta(a, b, Policy()); }\
 \
    template <class RT1, class RT2, class RT3>\
    BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::tools::promote_args_t<RT1, RT2, RT3> \
