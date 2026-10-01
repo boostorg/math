@@ -11,6 +11,12 @@
 #pragma once
 #endif
 
+#include <boost/math/tools/config.hpp>
+
+#ifdef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
+#error "The header <boost/math/quadrature/gauss_hermite.hpp> requires C++17 or later."
+#endif
+
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <cmath>
