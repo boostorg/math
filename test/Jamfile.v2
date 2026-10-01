@@ -1269,6 +1269,8 @@ test-suite quadrature :
    [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST3 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : adaptive_gauss_quadrature_test_3 ]
    [ run gauss_hermite_quadrature_test.cpp : : : $(float128_type) [ requires cxx17_if_constexpr ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+   [ run gauss_hermite_quadrature_eigen_test.cpp : : : [ requires cxx17_if_constexpr ]
+     [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
 
    [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=1  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
