@@ -18,6 +18,7 @@
 #endif
 
 #ifndef BOOST_MATH_BUILD_MODULE
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <limits>
@@ -26,7 +27,9 @@
 #include <vector>
 #endif
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/policies/policy.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/precision.hpp>
 
@@ -83,13 +86,14 @@ class gauss_hermite_detail
    // Everything is evaluated with the orthonormal recurrence
    //    p_0 = pi^(-1/4),  p_{k+1} = x sqrt(2/(k+1)) p_k - sqrt(k/(k+1)) p_{k-1},
    // whose values stay representable long after H_N itself overflows. Then p_N' = sqrt(2N) p_{N-1},
-   // and the weight is 2/p_N'(x)^2. Evaluating H_N from its monomial coefficients instead
-   // would be hopelessly ill-conditioned: the largest zero of H_100 has condition number ~1e13.
+   // p_N'' = 2x p_N' - 2N p_N, and the weight is 2/p_N'(x)^2. Evaluating H_N from its monomial
+   // coefficients instead would be hopelessly ill-conditioned: the largest zero of H_100 has
+   // condition number ~1e13.
    //
    // By Sturm's theorem for orthogonal polynomials, the number of sign changes in p_0(x), ..., p_N(x)
-   // is the number of zeros of p_N above x. Bisecting on that count isolates each zero, and Newton's
+   // is the number of zeros of p_N above x. Bisecting on that count isolates each zero, and Halley's
    // method then converges to it inside its bracket. Asymptotic initial guesses alone are not enough:
-   // for N = 200, those of Numerical Recipes' gauher send Newton to the wrong zero.
+   // for N = 215, even Halley's method from those of Numerical Recipes' gauher finds the wrong zero.
    struct recurrence
    {
       Real p;
@@ -97,32 +101,53 @@ class gauss_hermite_detail
       unsigned zeros_above;
    };
 
-   static recurrence evaluate(Real x)
+   class orthonormal_hermite
    {
-      using std::sqrt;
-      Real p = 1 / sqrt(sqrt(boost::math::constants::pi<Real>()));
-      Real p_previous = 0;
-      bool last_negative = false;
-      unsigned sign_changes = 0;
-      for (unsigned k = 0; k < N; ++k)
+   public:
+      orthonormal_hermite() : a(N), b(N)
       {
-         Real p_next = x * sqrt(Real(2) / Real(k + 1)) * p - sqrt(Real(k) / Real(k + 1)) * p_previous;
-         p_previous = p;
-         p = p_next;
-         // A zero p_k(x) lies between values of opposite sign, so skipping it keeps the count right.
-         if ((p != 0) && ((p < 0) != last_negative))
+         using std::sqrt;
+         for (unsigned k = 0; k < N; ++k)
          {
-            ++sign_changes;
-            last_negative = !last_negative;
+            a[k] = sqrt(Real(2) / Real(k + 1));
+            b[k] = sqrt(Real(k) / Real(k + 1));
          }
+         p0 = 1 / sqrt(sqrt(boost::math::constants::pi<Real>()));
+         derivative_scale = sqrt(Real(2 * N));
       }
-      return recurrence{ p, sqrt(Real(2 * N)) * p_previous, sign_changes };
-   }
+
+      recurrence operator()(const Real& x) const
+      {
+         Real p = p0;
+         Real p_previous = 0;
+         bool last_negative = false;
+         unsigned sign_changes = 0;
+         for (unsigned k = 0; k < N; ++k)
+         {
+            Real p_next = x * a[k] * p - b[k] * p_previous;
+            p_previous = p;
+            p = p_next;
+            // A zero p_k(x) lies between values of opposite sign, so skipping it keeps the count right.
+            if ((p != 0) && ((p < 0) != last_negative))
+            {
+               ++sign_changes;
+               last_negative = !last_negative;
+            }
+         }
+         return recurrence{ p, derivative_scale * p_previous, sign_changes };
+      }
+
+   private:
+      std::vector<Real> a;
+      std::vector<Real> b;
+      Real p0;
+      Real derivative_scale;
+   };
 
    // The weight is 2/p_N'(x)^2 at the exact zero, but d(log w)/dx is about -4x, so evaluating it at
-   // the rounded zero z costs far more accuracy than the rounding itself. Since p'' = 2x p' - 2N p,
-   // move p' to the exact zero, which lies a Newton step delta = -p/p' away.
-   static Real weight(Real z, const recurrence& r)
+   // the rounded zero z costs far more accuracy than the rounding itself. Use p'' to move p' to the
+   // exact zero, which lies a Newton step delta = -p/p' away.
+   static Real weight(const Real& z, const recurrence& r)
    {
       Real delta = -r.p / r.p_prime;
       Real p_prime = r.p_prime + (2 * z * r.p_prime - 2 * Real(N) * r.p) * delta;
@@ -136,14 +161,24 @@ class gauss_hermite_detail
       const unsigned positive_zeros = N / 2;
       const unsigned offset = N & 1;
       std::vector<Real> x(positive_zeros + offset), w(positive_zeros + offset);
+      const orthonormal_hermite evaluate;
+      // All zeros lie below sqrt(2N + 1), so none lie above `upper`. Every p_k grows with x beyond
+      // its zeros, so if the recurrence overflows anywhere we need it, it overflows here: report
+      // that with NaNs, which gauss_hermite turns into an evaluation error.
+      Real upper = sqrt(Real(2 * N + 2));
+      recurrence top = evaluate(upper);
+      if (!(boost::math::isfinite)(top.p) || !(boost::math::isfinite)(top.p_prime))
+      {
+         std::fill(x.begin(), x.end(), std::numeric_limits<Real>::quiet_NaN());
+         std::fill(w.begin(), w.end(), std::numeric_limits<Real>::quiet_NaN());
+         return std::make_pair(x, w);
+      }
       if (offset)
       {
-         recurrence r = evaluate(Real(0));
-         w[0] = weight(Real(0), r);
+         w[0] = weight(Real(0), evaluate(Real(0)));
       }
-      // All zeros lie below sqrt(2N + 1), so none lie above `upper`. Find them from the largest down:
-      // after each one, `upper` is a point with exactly t - 1 zeros above it.
-      Real upper = sqrt(Real(2 * N + 2));
+      // Find the zeros from the largest down: after each one, `upper` is a point with exactly t - 1
+      // zeros above it.
       for (unsigned t = 1; t <= positive_zeros; ++t)
       {
          Real lower = 0;
@@ -159,7 +194,9 @@ class gauss_hermite_detail
             if (above == t)
                break;
          }
-         // Newton's method, falling back to bisection whenever a step would leave the bracket.
+         // Halley's method, falling back to bisection whenever a step would leave the bracket.
+         // With u = p/p' and v = p''/p' = 2z - 2N u, the step is u/(1 - uv/2); the ratios cannot
+         // overflow even where p'^2 would.
          const bool lower_negative = evaluate(lower).p < 0;
          Real z = (lower + high) / 2;
          recurrence r = evaluate(z);
@@ -169,7 +206,9 @@ class gauss_hermite_detail
                lower = z;
             else
                high = z;
-            Real next = z - r.p / r.p_prime;
+            Real u = r.p / r.p_prime;
+            Real v = 2 * z - 2 * Real(N) * u;
+            Real next = z - u / (1 - u * v / 2);
             if (!((next > lower) && (next < high)))
                next = (lower + high) / 2;
             const bool converged = abs(next - z) <= 2 * tools::epsilon<Real>() * abs(next);
@@ -497,6 +536,21 @@ template <class Real, unsigned N, class Policy = boost::math::policies::policy<>
 class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::gauss_hermite_constant_category<Real>::value>
 {
    using base = detail::gauss_hermite_detail<Real, N, detail::gauss_hermite_constant_category<Real>::value>;
+
+   // Abscissas computed on demand are NaN when the recurrence overflows Real.
+   static bool overflowed()
+   {
+      return !(boost::math::isfinite)(static_cast<Real>(base::abscissa().back()));
+   }
+
+   static Real overflow_error()
+   {
+      return policies::raise_evaluation_error(
+         "boost::math::quadrature::gauss_hermite<%1%>::integrate",
+         "The Hermite recurrence overflows with this many points; use fewer points or a type with a wider exponent range.",
+         std::numeric_limits<Real>::quiet_NaN(), Policy());
+   }
+
 public:
    // Integrates f(x) exp(-x^2) over the real line.
    template <class F>
@@ -508,6 +562,13 @@ public:
       static_assert(!std::is_integral<K>::value,
                     "The return type cannot be integral, it must be either a real or complex floating point type.");
       using std::abs;
+      if (overflowed())
+      {
+         Real error = overflow_error();
+         if (pL1)
+            *pL1 = error;
+         return static_cast<K>(error);
+      }
       unsigned non_zero_start = 1;
       K result = Real(0);
       if (N & 1)
@@ -538,6 +599,16 @@ public:
    {
       using K = decltype(f(Real(0)));
       static_assert(!std::is_integral<K>::value, "The return type cannot be integral.");
+      if (overflowed())
+      {
+         // Preserve the scalar error policy, including non-throwing policies,
+         // and use scalar multiplication to produce a result with the right shape.
+         Real error = overflow_error();
+         if (pL1)
+            *pL1 = error;
+         K result = zero * error;
+         return result;
+      }
       unsigned non_zero_start = 1;
       K result = zero;
       if (N & 1)

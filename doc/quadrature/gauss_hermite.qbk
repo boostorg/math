@@ -84,11 +84,13 @@ so, for example, E\[cos /X/\] = exp(-[sigma][super 2]/2) cos [mu] is computed by
 
 `gauss_hermite` has pre-computed tables of abscissas and weights for 7, 10 and 15 points, at up to 110 decimal digits of precision.
 For other numbers of points, or higher precision types, the abscissas and weights are computed the first time they are needed and then cached.
-Each zero is isolated by bisection with a Sturm sequence, then refined with Newton's method, all evaluated
+Each zero is isolated by bisection with a Sturm sequence, then refined with Halley's method, all evaluated
 with the three-term recurrence for orthonormal Hermite polynomials.
 In double precision the computed abscissas are within a few ulps of the correctly rounded values and the weights within about one hundred,
 for up to at least 200 points.
-Beyond roughly 700 points in double precision the recurrence overflows, and in any case the outer weights underflow long before that.
+
+In double precision the recurrence overflows for more than 706 points (the outer weights underflow long before that).
+`integrate` then raises an __evaluation_error through the /Policy/; if the policy does not throw, the result is a NaN.
 
 As with `gauss`, defining `BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND` turns any combination of type and number of points without
 pre-computed values into a compile-time error.

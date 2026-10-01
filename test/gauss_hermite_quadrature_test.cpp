@@ -105,6 +105,24 @@ void test_large_N()
    CHECK_ULP_CLOSE(root_pi * std::exp(-0.25), rule::integrate([](double x) { return std::cos(x); }), 16);
 }
 
+// Past N = 706 in double the recurrence overflows, which must be reported through the policy.
+void test_overflow()
+{
+   using ignore_policy = boost::math::policies::policy<boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
+   double L1 = 0;
+   CHECK_NAN((gauss_hermite<double, 1000, ignore_policy>::integrate([](double x) { return std::cos(x); }, &L1)));
+   CHECK_NAN(L1);
+   using vector = std::valarray<double>;
+   vector Q = gauss_hermite<double, 1000, ignore_policy>::integrate([](double x) { return vector{1.0, x}; }, vector(0.0, 2),
+                                                                    [](const vector& v) { return std::sqrt((v * v).sum()); });
+   CHECK_EQUAL(Q.size(), std::size_t(2));
+   CHECK_NAN(Q[0]);
+   CHECK_NAN(Q[1]);
+#ifndef BOOST_NO_EXCEPTIONS
+   CHECK_THROW((gauss_hermite<double, 1000>::integrate([](double x) { return std::cos(x); })), boost::math::evaluation_error);
+#endif
+}
+
 template <class Real>
 void test_moments_all_N()
 {
@@ -150,6 +168,8 @@ int main()
 
    test_large_N<200>();
    test_large_N<500>();
+   test_large_N<706>();
+   test_overflow();
 
    return boost::math::test::report_errors();
 }
