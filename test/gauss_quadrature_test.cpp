@@ -293,7 +293,7 @@ void test_ca()
     Real tol = expected_error<Points>(test_ca_error_id);
     Real L1;
 
-    auto f1 = [](const Real& x) {
+    auto f1 = [](const Real& x) { 
       if (x == 0) {
          return static_cast<Real>(1);
       }
@@ -452,7 +452,7 @@ void test_complex_lambert_w()
 
 BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 {
-
+  
 #ifdef TEST1
 
 #ifdef __STDCPP_FLOAT64_T__

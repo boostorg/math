@@ -1,175 +1,33 @@
 //  Copyright Jacob Hass 2026.
+//  Copyright Nick Thompson 2026.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_MATH_QUADRATURE_HERMITE_HPP
-#define BOOST_MATH_QUADRATURE_HERMITE_HPP
+#ifndef BOOST_MATH_QUADRATURE_GAUSS_HERMITE_HPP
+#define BOOST_MATH_QUADRATURE_GAUSS_HERMITE_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <cmath>
 #include <limits>
 #include <type_traits>
 #include <utility>
 #include <vector>
+#endif
+#include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/big_constant.hpp>
-#include <iostream>
+#include <boost/math/tools/precision.hpp>
 
-#if __has_include(<Eigen/Dense>)
-   #include <Eigen/Dense>
-   #include <Eigen/Eigenvalues>
-   #include <boost/math/constants/constants.hpp>
-   #include <boost/math/special_functions/hermite.hpp>
-   #include <boost/math/tools/roots.hpp>
-
-   #define EIGEN_SUPPORT
-#endif
-
-namespace boost { namespace math{ namespace quadrature{ namespace detail {
-
-
-#if defined(EIGEN_SUPPORT) && !defined(BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND)
-
-template <typename Real>
-struct hermite_functor
-{
-   hermite_functor(unsigned const& N_) : N(N_) {};
-
-   std::pair<Real, Real> operator()(Real const& x)
-   {
-      Real fx = boost::math::hermite<Real>(N, x);
-      Real fdx = Real(2) * Real(N) * boost::math::hermite<Real>(N-1, x);
-      return std::make_pair(fx, fdx);
-   }
-
-private:
-   unsigned N;
-};
-
-template <class Real>
-Real hermite_minimizer(unsigned N, Real guess)
-{
-   Real min;
-   Real max;
-   if (guess > 0)
-   {
-      min = guess / 1.1;                    // Minimum possible value is half our guess.
-      max = guess * 1.1;                      // Maximum possible value is twice our guess.
-   }
-   else
-   {
-      min = guess * 1.1;                    // Minimum possible value is half our guess.
-      max = guess / 1.1;                      // Maximum possible value is twice our guess.
-   }
-
-   const int digits = std::numeric_limits<Real>::digits;
-   int get_digits = static_cast<int>(digits);    // Accuracy doubles with each step, so stop when we have
-                                                         // just over half the digits correct.
-   const std::uintmax_t maxit = 10000;
-   std::uintmax_t it = maxit;
-   Real result = boost::math::tools::newton_raphson_iterate(hermite_functor<Real>(N), guess, min, max, get_digits, it);
-   return result;
-}
-
-template <typename Real>
-Real factorial(unsigned n)
-{
-   Real i = Real(1);
-   Real factorial = Real(1);
-
-   while (i <= n)
-   {
-      factorial *= i;
-      i++;
-   }
-   return factorial;
-}
-
-template <class Real, unsigned N, unsigned Category>
-class hermite_detail
-{
-public:
-   static std::pair<std::vector<Real>, std::vector<Real> > calculate_values()
-   {
-      using std::sqrt;
-      using std::pow;
-
-      Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic> P = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>::Zero(N, N);
-      for (unsigned n = 0; n < N; ++n)
-      {
-         P(n, n) = Real(0);
-
-         if (n > 0)
-         {
-               P(n, n-1) = sqrt(Real(n) / Real(2));
-               P(n-1, n) = sqrt(Real(n) / Real(2));
-         }
-      }
-
-      Eigen::SelfAdjointEigenSolver<Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic> > solver(P);
-      Eigen::Vector<Real, Eigen::Dynamic> roots = solver.eigenvalues();
-
-      // Filter out negative roots
-      std::vector<Real> pos_roots;
-      pos_roots.reserve(N);
-      const Real zero_tol = std::numeric_limits<Real>::epsilon() * 1000;
-
-      for (unsigned i = 0; i < roots.size(); ++i)
-      {
-         Real root = roots(i);
-         if (abs(root) <= zero_tol)
-         {
-            pos_roots.push_back(Real(0));
-         }
-         else if (root > 0)
-         {
-            pos_roots.push_back(hermite_minimizer(N, root));
-         }
-      }
-
-      std::vector<Real> abscissa_vals(pos_roots.size());
-      std::vector<Real> weight_vals(pos_roots.size());
-
-      for (unsigned i=0; i < pos_roots.size(); i++)
-      {
-         abscissa_vals[i] = pos_roots[i];
-         Real hermite_val = boost::math::hermite<Real>(N-1, pos_roots[i]);
-         Real weight = pow(Real(2), N-1) * factorial<Real>(N) * boost::math::constants::root_pi<Real>() / pow(Real(N), 2) / pow(hermite_val, 2.0);
-         weight_vals[i] = weight;
-      }
-
-      // If N is odd, first abscissa is 0
-      if (N % 2 != 0)
-      {
-         abscissa_vals[0] = Real(0);
-      }
-
-      return std::make_pair(abscissa_vals, weight_vals);
-   }
-
-   static const std::vector<Real>& weights()
-   {
-      static std::pair<std::vector<Real>, std::vector<Real> > data = calculate_values();
-      return data.second;
-   }
-
-   static const std::vector<Real>& abscissa()
-   {
-      static std::pair<std::vector<Real>, std::vector<Real> > data = calculate_values();
-      return data.first;
-   }
-};
-
-#else
-
-template <class Real, unsigned N, unsigned Category>
-class hermite_detail;
-
-#endif
+namespace boost { namespace math { namespace quadrature { namespace detail {
 
 template <class T>
-struct hermite_constant_category
+struct gauss_hermite_constant_category
 {
    static const unsigned value =
       (std::numeric_limits<T>::is_specialized == 0) ? 999 :
@@ -208,11 +66,148 @@ struct hermite_constant_category
       >;
 };
 
+#ifndef BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND
+
+template <class Real, unsigned N, unsigned Category>
+class gauss_hermite_detail
+{
+   static_assert(N > 0, "Gauss-Hermite quadrature needs at least one point.");
+
+   // The nonnegative zeros of the Hermite polynomial H_N, in increasing order, and their weights.
+   // Everything is evaluated with the orthonormal recurrence
+   //    p_0 = pi^(-1/4),  p_{k+1} = x sqrt(2/(k+1)) p_k - sqrt(k/(k+1)) p_{k-1},
+   // whose values stay representable long after H_N itself overflows. Then p_N' = sqrt(2N) p_{N-1},
+   // and the weight is 2/p_N'(x)^2. Evaluating H_N from its monomial coefficients instead
+   // would be hopelessly ill-conditioned: the largest zero of H_100 has condition number ~1e13.
+   //
+   // By Sturm's theorem for orthogonal polynomials, the number of sign changes in p_0(x), ..., p_N(x)
+   // is the number of zeros of p_N above x. Bisecting on that count isolates each zero, and Newton's
+   // method then converges to it inside its bracket. Asymptotic initial guesses alone are not enough:
+   // for N = 200, those of Numerical Recipes' gauher send Newton to the wrong zero.
+   struct recurrence
+   {
+      Real p;
+      Real p_prime;
+      unsigned zeros_above;
+   };
+
+   static recurrence evaluate(Real x)
+   {
+      using std::sqrt;
+      Real p = 1 / sqrt(sqrt(boost::math::constants::pi<Real>()));
+      Real p_previous = 0;
+      bool last_negative = false;
+      unsigned sign_changes = 0;
+      for (unsigned k = 0; k < N; ++k)
+      {
+         Real p_next = x * sqrt(Real(2) / Real(k + 1)) * p - sqrt(Real(k) / Real(k + 1)) * p_previous;
+         p_previous = p;
+         p = p_next;
+         // A zero p_k(x) lies between values of opposite sign, so skipping it keeps the count right.
+         if ((p != 0) && ((p < 0) != last_negative))
+         {
+            ++sign_changes;
+            last_negative = !last_negative;
+         }
+      }
+      return recurrence{ p, sqrt(Real(2 * N)) * p_previous, sign_changes };
+   }
+
+   // The weight is 2/p_N'(x)^2 at the exact zero, but d(log w)/dx is about -4x, so evaluating it at
+   // the rounded zero z costs far more accuracy than the rounding itself. Since p'' = 2x p' - 2N p,
+   // move p' to the exact zero, which lies a Newton step delta = -p/p' away.
+   static Real weight(Real z, const recurrence& r)
+   {
+      Real delta = -r.p / r.p_prime;
+      Real p_prime = r.p_prime + (2 * z * r.p_prime - 2 * Real(N) * r.p) * delta;
+      return 2 / (p_prime * p_prime);
+   }
+
+   static std::pair<std::vector<Real>, std::vector<Real> > calculate_values()
+   {
+      using std::abs;
+      using std::sqrt;
+      const unsigned positive_zeros = N / 2;
+      const unsigned offset = N & 1;
+      std::vector<Real> x(positive_zeros + offset), w(positive_zeros + offset);
+      if (offset)
+      {
+         recurrence r = evaluate(Real(0));
+         w[0] = weight(Real(0), r);
+      }
+      // All zeros lie below sqrt(2N + 1), so none lie above `upper`. Find them from the largest down:
+      // after each one, `upper` is a point with exactly t - 1 zeros above it.
+      Real upper = sqrt(Real(2 * N + 2));
+      for (unsigned t = 1; t <= positive_zeros; ++t)
+      {
+         Real lower = 0;
+         Real high = upper;
+         for (int i = 0; i < tools::digits<Real>(); ++i)
+         {
+            Real mid = (lower + high) / 2;
+            unsigned above = evaluate(mid).zeros_above;
+            if (above >= t)
+               lower = mid;
+            else
+               high = mid;
+            if (above == t)
+               break;
+         }
+         // Newton's method, falling back to bisection whenever a step would leave the bracket.
+         const bool lower_negative = evaluate(lower).p < 0;
+         Real z = (lower + high) / 2;
+         recurrence r = evaluate(z);
+         for (int i = 0; (r.p != 0) && (i < 4 * tools::digits<Real>()); ++i)
+         {
+            if ((r.p < 0) == lower_negative)
+               lower = z;
+            else
+               high = z;
+            Real next = z - r.p / r.p_prime;
+            if (!((next > lower) && (next < high)))
+               next = (lower + high) / 2;
+            const bool converged = abs(next - z) <= 2 * tools::epsilon<Real>() * abs(next);
+            z = next;
+            r = evaluate(z);
+            if (converged)
+               break;
+         }
+         x[positive_zeros + offset - t] = z;
+         w[positive_zeros + offset - t] = weight(z, r);
+         upper = lower;
+      }
+      return std::make_pair(x, w);
+   }
+
+   static const std::pair<std::vector<Real>, std::vector<Real> >& values()
+   {
+      static const std::pair<std::vector<Real>, std::vector<Real> > data = calculate_values();
+      return data;
+   }
+
+public:
+   static const std::vector<Real>& abscissa()
+   {
+      return values().first;
+   }
+   static const std::vector<Real>& weights()
+   {
+      return values().second;
+   }
+};
+
+#else
+
+template <class Real, unsigned N, unsigned Category>
+class gauss_hermite_detail;
+
+#endif
+
 #ifndef BOOST_HAS_FLOAT128
 template <class T>
-class hermite_detail<T, 7, 0>
+class gauss_hermite_detail<T, 7, 0>
 {
-   using storage_type = typename hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 4> const & abscissa()
       {
@@ -238,9 +233,9 @@ class hermite_detail<T, 7, 0>
 
 #else
 template <class T>
-class hermite_detail<T, 7, 0>
+class gauss_hermite_detail<T, 7, 0>
 {
-   using storage_type = typename hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 4> const & abscissa()
       {
@@ -266,9 +261,9 @@ class hermite_detail<T, 7, 0>
 
 #endif
 template <class T>
-class hermite_detail<T, 7, 4>
+class gauss_hermite_detail<T, 7, 4>
 {
-   using storage_type = typename hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
    public:
       static std::array<T, 4> const & abscissa()
       {
@@ -294,9 +289,9 @@ class hermite_detail<T, 7, 4>
 
 #ifndef BOOST_HAS_FLOAT128
 template <class T>
-class hermite_detail<T, 10, 0>
+class gauss_hermite_detail<T, 10, 0>
 {
-   using storage_type = typename hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 5> const & abscissa()
       {
@@ -324,9 +319,9 @@ class hermite_detail<T, 10, 0>
 
 #else
 template <class T>
-class hermite_detail<T, 10, 0>
+class gauss_hermite_detail<T, 10, 0>
 {
-   using storage_type = typename hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 5> const & abscissa()
       {
@@ -354,9 +349,9 @@ class hermite_detail<T, 10, 0>
 
 #endif
 template <class T>
-class hermite_detail<T, 10, 4>
+class gauss_hermite_detail<T, 10, 4>
 {
-   using storage_type = typename hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
    public:
       static std::array<T, 5> const & abscissa()
       {
@@ -384,9 +379,9 @@ class hermite_detail<T, 10, 4>
 
 #ifndef BOOST_HAS_FLOAT128
 template <class T>
-class hermite_detail<T, 15, 0>
+class gauss_hermite_detail<T, 15, 0>
 {
-   using storage_type = typename hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 8> const & abscissa()
       {
@@ -420,9 +415,9 @@ class hermite_detail<T, 15, 0>
 
 #else
 template <class T>
-class hermite_detail<T, 15, 0>
+class gauss_hermite_detail<T, 15, 0>
 {
-   using storage_type = typename hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 8> const & abscissa()
       {
@@ -456,9 +451,9 @@ class hermite_detail<T, 15, 0>
 
 #endif
 template <class T>
-class hermite_detail<T, 15, 4>
+class gauss_hermite_detail<T, 15, 4>
 {
-   using storage_type = typename hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
    public:
       static std::array<T, 8> const & abscissa()
       {
@@ -493,27 +488,28 @@ class hermite_detail<T, 15, 4>
 } // namespace detail
 
 template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
-class hermite : public detail::hermite_detail<Real, N, detail::hermite_constant_category<Real>::value>
+class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::gauss_hermite_constant_category<Real>::value>
 {
-   typedef detail::hermite_detail<Real, N, detail::hermite_constant_category<Real>::value> base;
+   using base = detail::gauss_hermite_detail<Real, N, detail::gauss_hermite_constant_category<Real>::value>;
 public:
-
+   // Integrates f(x) exp(-x^2) over the real line.
    template <class F>
    static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
-     // In many math texts, K represents the field of real or complex numbers.
-     // Too bad we can't put blackboard bold into C++ source!
-      typedef decltype(f(Real(0))) K;
+      // In many math texts, K represents the field of real or complex numbers.
+      // Too bad we can't put blackboard bold into C++ source!
+      using K = decltype(f(Real(0)));
       static_assert(!std::is_integral<K>::value,
-                   "The return type cannot be integral, it must be either a real or complex floating point type.");
+                    "The return type cannot be integral, it must be either a real or complex floating point type.");
       using std::abs;
       unsigned non_zero_start = 1;
       K result = Real(0);
-      if (N & 1) {
+      if (N & 1)
+      {
          result = f(Real(0)) * static_cast<Real>(base::weights()[0]);
       }
-      else {
-         result = 0;
+      else
+      {
          non_zero_start = 0;
       }
       Real L1 = abs(result);
@@ -528,29 +524,29 @@ public:
          *pL1 = L1;
       return result;
    }
+
    // Explicit zero and norm for vector- and matrix-valued integrands.
-   // The original overloads above retain their existing behavior.
    template <class F, class Norm>
    static auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* pL1 = nullptr)
       ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
    {
-      typedef decltype(f(Real(0))) K;
-      static_assert(!std::is_integral<K>::value,
-                   "The return type cannot be integral.");
+      using K = decltype(f(Real(0)));
+      static_assert(!std::is_integral<K>::value, "The return type cannot be integral.");
       unsigned non_zero_start = 1;
       K result = zero;
-      if (N & 1) {
+      if (N & 1)
+      {
          result = f(Real(0)) * static_cast<Real>(base::weights()[0]);
       }
-      else {
-         result = zero;
+      else
+      {
          non_zero_start = 0;
       }
       Real L1 = static_cast<Real>(norm(result));
       for (unsigned i = non_zero_start; i < base::abscissa().size(); ++i)
       {
          K fp = f(static_cast<Real>(base::abscissa()[i]));
-         K fm = f(static_cast<Real>(-base::abscissa()[i]));
+         K fm = f(-static_cast<Real>(base::abscissa()[i]));
          result += (fp + fm) * static_cast<Real>(base::weights()[i]);
          L1 += (static_cast<Real>(norm(fp)) + static_cast<Real>(norm(fm))) * static_cast<Real>(base::weights()[i]);
       }
@@ -564,4 +560,4 @@ public:
 } // namespace math
 } // namespace boost
 
-#endif // BOOST_MATH_QUADRATURE_HERMITE_HPP
+#endif // BOOST_MATH_QUADRATURE_GAUSS_HERMITE_HPP
