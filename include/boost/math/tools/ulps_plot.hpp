@@ -291,14 +291,18 @@ public:
                     fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << plot.nan_color_ << "'/>\n";
                     y = y_scale(static_cast<PreciseReal>(-plot.clip_));
                     fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << plot.nan_color_ << "'/>\n";
+                    continue;
                 }
                 if (plot.clip_ > 0 && static_cast<PreciseReal>(abs(ulp[j])) > plot.clip_)
                 {
-                   if (plot.crop_color_ == "")
+                   // Mark cropped points with a cross, in the color of their function unless one was set,
+                   // so that they stay distinguishable when several functions are plotted:
+                   std::string const & crop_color = plot.crop_color_set_ ? plot.crop_color_ : color;
+                   if (crop_color == "")
                       continue;
                    CoarseReal x = x_scale(plot.coarse_abscissas_[j]);
                    PreciseReal y = y_scale(static_cast<PreciseReal>(ulp[j] < 0 ? -plot.clip_ : plot.clip_));
-                   fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << plot.crop_color_ << "'/>\n";
+                   fs << "<path d='M" << x - 2.5 << " " << y - 2.5 << " l5 5 m0 -5 l-5 5' stroke='" << crop_color << "' stroke-width='1'/>\n";
                 }
                 else
                 {
@@ -407,6 +411,7 @@ private:
     std::string background_color_;
     std::string font_color_;
     std::string crop_color_;
+    bool crop_color_set_ = false;
     std::string nan_color_;
 };
 
@@ -470,6 +475,7 @@ template<class F, typename PreciseReal, typename CoarseReal>
 ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::crop_color(std::string const & color)
 {
     crop_color_ = color;
+    crop_color_set_ = true;
     return *this;
 }
 
