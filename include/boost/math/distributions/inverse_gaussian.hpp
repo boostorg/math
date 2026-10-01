@@ -208,159 +208,27 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const inverse_gaussian_distributio
    return result;
 } // pdf
 
-namespace detail
+namespace detail {
+
+template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType inverse_gaussian_cdf_second_term(RealType a, RealType b, RealType shape)
 {
-   template <class RealType, class Policy>
-   BOOST_MATH_GPU_ENABLED inline RealType inverse_gaussian_cdf(
-      RealType mean, RealType scale, RealType x, bool invert, const Policy& pol)
-   {
-      BOOST_MATH_STD_USING
-      // a = sqrt(scale/x)*(x/mean-1), z = sqrt(scale/x)*(x/mean+1)/sqrt(2).
-      // Construct 1/z and a without first forming the unbounded ratios.
-      RealType d, w, inverse_z;
-      if (x <= mean)
-      {
-         d = (x - mean) / mean;
-         w = sqrt(x) / sqrt(scale);
-         inverse_z = constants::root_two<RealType>() * w / (1 + x / mean);
-      }
-      else
-      {
-         d = (x - mean) / x;
-         w = (sqrt(mean) / sqrt(scale)) * (sqrt(mean) / sqrt(x));
-         inverse_z = constants::root_two<RealType>() * w / (1 + mean / x);
-      }
-      if (w == 0)
-      {
-         RealType result = x < mean ? RealType(0) : x == mean ? RealType(0.5f) : RealType(1);
-         return invert ? 1 - result : result;
-      }
-      RealType a = d == 0 ? RealType(0) : d / w;
-      RealType y = a / constants::root_two<RealType>();
-      RealType epsilon = policies::get_epsilon<RealType, Policy>();
-      RealType y_squared = y * y;
-      // A reduced precision policy may stop the series earlier, but must not
-      // move its asymptotic expansion into the small-argument region.
-      RealType asymptotic_epsilon = tools::epsilon<RealType>();
-      if (epsilon < asymptotic_epsilon)
-         asymptotic_epsilon = epsilon;
-      if ((a > 0) && (y_squared >= -2 * log(asymptotic_epsilon)))
-      {
-         // With p=1/y and rho=y/z, factor the difference of the two scaled
-         // tails before summing instead of subtracting nearly equal values.
-         RealType t = mean / x;
-         RealType p = constants::root_two<RealType>() * w / d;
-         RealType rho = d / (1 + t);
-         RealType difference = p * (2 * t / (1 + t));
-         RealType base = 1;
-         RealType rho_power = 1;
-         RealType geometric_sum = 1;
-         RealType sum = 1;
-         const boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-         boost::math::uintmax_t iter = 0;
-         bool converged = false;
-         while (iter < max_iter)
-         {
-            ++iter;
-            base *= -RealType(2 * iter - 1) * p * p / 2;
-            rho_power *= rho;
-            geometric_sum += rho_power;
-            rho_power *= rho;
-            geometric_sum += rho_power;
-            RealType term = base * geometric_sum;
-            // The alternating integrated remainder is bounded by this term.
-            if (abs(term) <= epsilon * abs(sum))
-            {
-               converged = true;
-               break;
-            }
-            sum += term;
-         }
-         if (!converged)
-            policies::check_series_iterations<RealType>(
-               "boost::math::cdf(inverse_gaussian_distribution<%1%>, %1%)", iter, pol);
-         RealType q = exp(-y_squared) * difference * sum / (2 * constants::root_pi<RealType>());
-         return invert ? q : 1 - q;
-      }
+   BOOST_MATH_STD_USING
+   if (shape < tools::log_max_value<RealType>() / 4)
+      return exp(2 * shape) * cdf(complement(normal_distribution<RealType>(), b));
 
-      if ((x > mean) && (w <= 1 / constants::root_two<RealType>()))
-      {
-         RealType s = sqrt(scale) / sqrt(x);
-         if (s <= 1)
-         {
-            // With u=scale*x/(2*mean*mean)>=1 and v=scale/(2*x)<=1/2,
-            // integrate the survival density as a well-conditioned series:
-            // Q=s*exp(v-y*y)/sqrt(2*pi)*sum((-v)^n/n!*U(-1/2-n,u)).
-            RealType root_u = 1 / (constants::root_two<RealType>() * w);
-            RealType u = root_u * root_u;
-            RealType v = s * s / 2;
-            RealType coefficient = 1;
-            RealType fraction = upper_gamma_fraction(RealType(-0.5f), u, epsilon);
-            RealType term = fraction;
-            RealType sum = term;
-            boost::math::uintmax_t iter = 0;
-            const boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-            // U(a-1,u)<=U(a,u), so this bounds the next term and the remainder.
-            while (abs(term) * v / RealType(iter + 1) > epsilon * abs(sum))
-            {
-               if (iter == max_iter)
-               {
-                  policies::check_series_iterations<RealType>(
-                     "boost::math::cdf(inverse_gaussian_distribution<%1%>, %1%)", iter, pol);
-                  break;
-               }
-               ++iter;
-               coefficient *= -v / RealType(iter);
-               if (u <= RealType(iter) + 1)
-                  // Here 1-u*U(-1/2-(n-1),u) >= 1/3, so recurrence is stable.
-                  fraction = (1 - u * fraction) / (RealType(iter) + RealType(0.5f));
-               else
-                  fraction = upper_gamma_fraction(RealType(-0.5f) - RealType(iter), u, epsilon);
-               term = coefficient * fraction;
-               sum += term;
-            }
-            // Keep s separately: v may underflow while the final tail is representable.
-            RealType q = (exp(v - y_squared) * sum / constants::root_two_pi<RealType>()) * s;
-            return invert ? q : 1 - q;
-         }
-      }
-
-      RealType log_max = tools::log_max_value<RealType>();
-      RealType log_min = -tools::log_min_value<RealType>();
-      RealType h = (log_max < log_min ? log_max : log_min) / 2;
-      // Near the mean, the ordinary factors amplify rounding by z*z rather
-      // than y*y. Use the scaled tail when this exceeds the precision budget.
-      // Compare before multiplying to keep the limit within the exponent range.
-      RealType precision_h = -log(epsilon);
-      if ((precision_h > 0) && (y_squared < h / precision_h - 1))
-         h = precision_h * (1 + y_squared);
-      normal_distribution<RealType> normal;
-      if (inverse_z > 1 / sqrt(h))
-      {
-         // Both ordinary factors have exponent range to spare in this region.
-         RealType n0 = sqrt(scale / x) * ((x / mean) - 1);
-         RealType b = sqrt(scale / x) * ((x / mean) + 1);
-         RealType tail = exp(2 * (scale / mean)) * cdf(complement(normal, b));
-         return invert ? cdf(complement(normal, n0)) - tail : cdf(normal, n0) + tail;
-      }
-
-      // exp(2*scale/mean)*Phi(-b) = exp(-a*a/2)*erfcx(b/sqrt(2))/2.
-      RealType erfcx;
-      if (inverse_z * inverse_z <= epsilon)
-      {
-         // The first omitted term has relative magnitude at most epsilon/2.
-         erfcx = inverse_z / constants::root_pi<RealType>();
-      }
-      else
-      {
-         RealType z = 1 / inverse_z;
-         erfcx = z * upper_gamma_fraction(RealType(0.5f), RealType(z * z), epsilon)
-            / constants::root_pi<RealType>();
-      }
-      RealType tail = exp(-y_squared) * erfcx / 2;
-      return invert ? cdf(complement(normal, a)) - tail : cdf(normal, a) + tail;
-   }
+   // exp(2 * shape) * Phi(-b) = exp(-a*a/2) * erfcx(b/sqrt(2)) / 2.
+   RealType e = exp(-a * a / 2);
+   if (e == 0)
+      return 0;
+   // z*z >= 2*shape, so the continued fraction is only used for large z.
+   RealType z = b / constants::root_two<RealType>();
+   RealType z_squared = z * z;
+   return e * z * upper_gamma_fraction(RealType(0.5f), z_squared, policies::get_epsilon<RealType, Policy>())
+      / (2 * constants::root_pi<RealType>());
 }
+
+} // namespace detail
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const inverse_gaussian_distribution<RealType, Policy>& dist, const RealType& x)
@@ -391,7 +259,19 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const inverse_gaussian_distribution<R
    {
      return 0; // Convenient, even if not defined mathematically.
    }
-   return detail::inverse_gaussian_cdf(mean, scale, x, false, Policy());
+   // Problem with this formula for large scale > 1000 or small x
+   // so use normal distribution version:
+   // Wikipedia CDF equation http://en.wikipedia.org/wiki/Inverse_Gaussian_distribution.
+
+   normal_distribution<RealType> n01;
+
+   RealType n0 = sqrt(scale / x);
+   n0 *= ((x / mean) -1);
+   RealType n1 = cdf(n01, n0);
+   RealType n3 = sqrt(scale / x);
+   n3 *= (x / mean) + 1;
+   result = n1 + detail::inverse_gaussian_cdf_second_term<RealType, Policy>(n0, n3, scale / mean);
+   return result;
 } // cdf
 
 template <class RealType, class Policy>
@@ -561,7 +441,15 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<inverse_gaus
    if(false == detail::check_positive_x(function, x, &result, Policy()))
       return result;
 
-   return detail::inverse_gaussian_cdf(mean, scale, x, true, Policy());
+   normal_distribution<RealType> n01;
+   RealType n0 = sqrt(scale / x);
+   n0 *= ((x / mean) -1);
+   RealType cdf_1 = cdf(complement(n01, n0));
+
+   RealType n3 = sqrt(scale / x);
+   n3 *= (x / mean) + 1;
+   result = cdf_1 - detail::inverse_gaussian_cdf_second_term<RealType, Policy>(n0, n3, scale / mean);
+   return result;
 } // cdf complement
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
