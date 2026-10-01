@@ -142,8 +142,10 @@ int main()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_moments_all_N<long double>();
 #endif
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_moments<boost::math::concepts::real_concept, 7>();
    test_moments<boost::math::concepts::real_concept, 10>();
+#endif
    test_moments_all_N<boost::multiprecision::cpp_bin_float_50>();
    test_moments<boost::multiprecision::cpp_bin_float_quad, 15>();
    test_moments<boost::multiprecision::cpp_bin_float_quad, 20>();
