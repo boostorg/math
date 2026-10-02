@@ -107,8 +107,22 @@ void test_spots(std::size_t ulps, Real absolute_tolerance)
 #endif
 }
 
+// With a = 1, the continued fraction for an underflowing target starts with 0/0, so libeta must use
+// P = 1 - (1 - x)^b instead. In double these targets are subnormal; to full precision,
+// log(P) = log(b) + log(x) when b x is far below epsilon.
+void test_a_equal_to_one_underflow()
+{
+   using std::log;
+   const double ln_two = boost::math::constants::ln_two<double>();
+   // P = 1 - (1 - 2^-1070)^(2^17), so log(P) = (17 - 1070) log(2):
+   CHECK_ULP_CLOSE(-1053 * ln_two, libeta(1.0, std::ldexp(1.0, 17), std::ldexp(1.0, -1070)), 1);
+   // Q = 1 - (1/2)^(2^-1040) after swapping a and b, so log(Q) = -1040 log(2) + log(log(2)):
+   CHECK_ULP_CLOSE(-1040 * ln_two + log(ln_two), libetac(std::ldexp(1.0, -1040), 1.0, 0.5), 1);
+}
+
 int main()
 {
+   test_a_equal_to_one_underflow();
    // Near the mean, libeta is log(ibeta), so it inherits ibeta's error: 18.5 epsilon at (37.5, 40.25, 0.5) in double.
    test_spots<float>(2, 2 * std::numeric_limits<float>::epsilon());
    test_spots<double>(8, 32 * std::numeric_limits<double>::epsilon());

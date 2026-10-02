@@ -1931,13 +1931,19 @@ BOOST_MATH_GPU_ENABLED T libeta_imp(T a, T b, T x, const Policy& pol, bool inver
    if(target >= tools::min_value<T>())
       return log(target);
 
-   // The target underflows, which happens only in its tail with a and b > 1, where the continued fraction
-   // converges: target = power_terms / fraction. The complement is the target with roles swapped.
+   // The target underflows, so we are far out in its tail, where the continued fraction converges:
+   // target = power_terms / fraction. The complement is the target with roles swapped.
    T y = 1 - x;
    if(invert)
    {
       BOOST_MATH_GPU_SAFE_SWAP(a, b);
       BOOST_MATH_GPU_SAFE_SWAP(x, y);
+   }
+   if(a == 1)
+   {
+      // The fraction's first term is 0/0 here, but P = -expm1(b log1p(-x)) exactly, and since P underflows,
+      // the argument of expm1 is far below epsilon, so log(P) = log(b) + log(-log1p(-x)) to full precision:
+      return log(b) + log(-boost::math::log1p(-x, pol));
    }
    ibeta_fraction2_t<T> f(a, b, x, y);
    boost::math::uintmax_t max_terms = policies::get_max_series_iterations<Policy>();

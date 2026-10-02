@@ -221,9 +221,10 @@ to those described in the
 [@http://portal.acm.org/citation.cfm?doid=131766.131776 Didonato and Morris TOMS 708 paper].
 
 `libeta` and `libetac` take the logarithm of whichever of `ibeta` and `ibetac` is the smaller (using `log1p` for the other),
-since these have small relative errors. Only when the smaller underflows, which can happen only in its tail with /a, b > 1/,
+since these have small relative errors. Only when the smaller underflows, far out in its tail,
 do they work in logarithms: the result is then the logarithm of the power terms that prefix the continued fraction above,
 following the same combination of Lanczos sums and power terms but without exponentiating, minus the logarithm of the continued fraction.
+When /a = 1/ the closed form /1 - (1 - x)[super b]/ is used instead.
 By contrast, R's `pbeta(q, a, b, log.p = TRUE)` carries logarithms through each of the TOMS 708 methods.
 
 [endsect][/section:ibeta_function The Incomplete Beta Function]
