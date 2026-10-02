@@ -97,6 +97,17 @@ void test_spots(std::size_t ulps, Real absolute_tolerance)
    CHECK_THROW(lbeta(Real(0), Real(1)), std::domain_error);
    CHECK_THROW(lbeta(Real(1), Real(-2)), std::domain_error);
 #endif
+   // NaN arguments give NaN, without raising an error:
+   if (std::numeric_limits<Real>::has_quiet_NaN)
+   {
+      const Real nan = std::numeric_limits<Real>::quiet_NaN();
+      CHECK_TRUE((boost::math::isnan)(Real(lbeta(nan, Real(2)))));
+      CHECK_TRUE((boost::math::isnan)(Real(lbeta(Real(2), nan))));
+      CHECK_TRUE((boost::math::isnan)(Real(lbeta(nan, Real(0.5)))));
+      CHECK_TRUE((boost::math::isnan)(Real(lbeta(Real(0.5), nan))));
+      CHECK_TRUE((boost::math::isnan)(Real(lbeta(nan, Real(50)))));
+      CHECK_TRUE((boost::math::isnan)(Real(lbeta(nan, nan))));
+   }
    // log(beta) tends to -infinity with either argument, reported as an overflow:
    if (std::numeric_limits<Real>::has_infinity)
    {
