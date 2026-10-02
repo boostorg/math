@@ -227,11 +227,13 @@ BOOST_MATH_GPU_ENABLED T lbeta_imp(T a, T b, const Lanczos&, const Policy& pol)
 
    T c = a + b;
 
-   // Special cases, as in beta_imp:
+   // Special cases, as in beta_imp. For tiny b, log(beta) = -log(b) - b digamma(a) + O(b); unlike in
+   // beta_imp, the b term is not negligible next to -log(b) when a is huge, and log(a) is close enough to
+   // digamma(a) wherever c == a:
    if((c == a) && (b < tools::epsilon<T>()))
-      return -log(b);
+      return -log(b) - b * log(a);
    else if((c == b) && (a < tools::epsilon<T>()))
-      return -log(a);
+      return -log(a) - a * log(b);
    if(b == 1)
       return -log(a);
    else if(a == 1)
@@ -274,11 +276,11 @@ BOOST_MATH_GPU_ENABLED T lbeta_imp(T a, T b, const lanczos::undefined_lanczos& l
    }
    const T c = a + b;
 
-   // Special cases:
+   // Special cases, as in the Lanczos version:
    if ((c == a) && (b < tools::epsilon<T>()))
-      return -log(b);
+      return -log(b) - b * log(a);
    else if ((c == b) && (a < tools::epsilon<T>()))
-      return -log(a);
+      return -log(a) - a * log(b);
    if (b == 1)
       return -log(a);
    else if (a == 1)
