@@ -6,7 +6,9 @@
 #ifndef BOOST_MATH_CCMATH_DETAIL_SWAP_HPP
 #define BOOST_MATH_CCMATH_DETAIL_SWAP_HPP
 
-namespace boost::math::ccmath::detail {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath::detail {
 
 template <typename T>
 inline constexpr void swap(T& x, T& y) noexcept
@@ -16,6 +18,6 @@ inline constexpr void swap(T& x, T& y) noexcept
     y = temp;
 }
 
-}
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_DETAIL_SWAP_HPP

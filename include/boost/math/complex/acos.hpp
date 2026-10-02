@@ -17,7 +17,7 @@
 namespace std{ using ::sqrt; using ::fabs; using ::acos; using ::asin; using ::atan; using ::atan2; }
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template<class T> 
 [[deprecated("Replaced by C++11")]] std::complex<T> acos(const std::complex<T>& z)
@@ -39,9 +39,9 @@ BOOST_MATH_EXPORT template<class T>
    static const T half = static_cast<T>(0.5L);
    static const T a_crossover = static_cast<T>(10);
    static const T b_crossover = static_cast<T>(0.6417L);
-   static const T s_pi = boost::math::constants::pi<T>();
+   static const T s_pi = BOOST_MATH_NAMESPACE::constants::pi<T>();
    static const T half_pi = s_pi / 2;
-   static const T log_two = boost::math::constants::ln_two<T>();
+   static const T log_two = BOOST_MATH_NAMESPACE::constants::ln_two<T>();
    static const T quarter_pi = s_pi / 4;
    
 #ifdef _MSC_VER
@@ -63,14 +63,14 @@ BOOST_MATH_EXPORT template<class T>
    // but doing it this way prevents overflow/underflow arithmetic
    // in the main body of the logic, which may trip up some machines:
    //
-   if((boost::math::isinf)(x))
+   if((BOOST_MATH_NAMESPACE::isinf)(x))
    {
-      if((boost::math::isinf)(y))
+      if((BOOST_MATH_NAMESPACE::isinf)(y))
       {
          real = quarter_pi;
          imag = std::numeric_limits<T>::infinity();
       }
-      else if((boost::math::isnan)(y))
+      else if((BOOST_MATH_NAMESPACE::isnan)(y))
       {
          return std::complex<T>(y, -std::numeric_limits<T>::infinity());
       }
@@ -81,18 +81,18 @@ BOOST_MATH_EXPORT template<class T>
          imag = std::numeric_limits<T>::infinity();
       }
    }
-   else if((boost::math::isnan)(x))
+   else if((BOOST_MATH_NAMESPACE::isnan)(x))
    {
-      if((boost::math::isinf)(y))
-         return std::complex<T>(x, ((boost::math::signbit)(z.imag())) ? std::numeric_limits<T>::infinity() :  -std::numeric_limits<T>::infinity());
+      if((BOOST_MATH_NAMESPACE::isinf)(y))
+         return std::complex<T>(x, ((BOOST_MATH_NAMESPACE::signbit)(z.imag())) ? std::numeric_limits<T>::infinity() :  -std::numeric_limits<T>::infinity());
       return std::complex<T>(x, x);
    }
-   else if((boost::math::isinf)(y))
+   else if((BOOST_MATH_NAMESPACE::isinf)(y))
    {
       real = half_pi;
       imag = std::numeric_limits<T>::infinity();
    }
-   else if((boost::math::isnan)(y))
+   else if((BOOST_MATH_NAMESPACE::isnan)(y))
    {
       return std::complex<T>((x == 0) ? half_pi : y, y);
    }
@@ -103,7 +103,7 @@ BOOST_MATH_EXPORT template<class T>
       // begin with the special case for real numbers:
       //
       if((y == 0) && (x <= one))
-         return std::complex<T>((x == 0) ? half_pi : std::acos(z.real()), (boost::math::changesign)(z.imag()));
+         return std::complex<T>((x == 0) ? half_pi : std::acos(z.real()), (BOOST_MATH_NAMESPACE::changesign)(z.imag()));
       //
       // Figure out if our input is within the "safe area" identified by Hull et al.
       // This would be more efficient with portable floating point exception handling;
@@ -152,7 +152,7 @@ BOOST_MATH_EXPORT template<class T>
             {
                am1 = half * (yy/(r + xp1) + (s + xm1));
             }
-            imag = boost::math::log1p(am1 + std::sqrt(am1 * (a + one)));
+            imag = BOOST_MATH_NAMESPACE::log1p(am1 + std::sqrt(am1 * (a + one)));
          }
          else
          {
@@ -178,7 +178,7 @@ BOOST_MATH_EXPORT template<class T>
                {
                   // xp1 * xm1 won't overflow:
                   real = y / std::sqrt(xm1*xp1);
-                  imag = boost::math::log1p(xm1 + std::sqrt(xp1*xm1));
+                  imag = BOOST_MATH_NAMESPACE::log1p(xm1 + std::sqrt(xp1*xm1));
                }
                else
                {
@@ -215,13 +215,13 @@ BOOST_MATH_EXPORT template<class T>
          {
             real = std::atan(y/x);
             T xoy = x/y;
-            imag = log_two + std::log(y) + half * boost::math::log1p(xoy*xoy);
+            imag = log_two + std::log(y) + half * BOOST_MATH_NAMESPACE::log1p(xoy*xoy);
          }
          else
          {
             real = half_pi;
             T a = std::sqrt(one + y*y);
-            imag = half * boost::math::log1p(static_cast<T>(2)*y*(y+a));
+            imag = half * BOOST_MATH_NAMESPACE::log1p(static_cast<T>(2)*y*(y+a));
          }
       }
    }
@@ -229,10 +229,10 @@ BOOST_MATH_EXPORT template<class T>
    //
    // Finish off by working out the sign of the result:
    //
-   if((boost::math::signbit)(z.real()))
+   if((BOOST_MATH_NAMESPACE::signbit)(z.real()))
       real = s_pi - real;
-   if(!(boost::math::signbit)(z.imag()))
-      imag = (boost::math::changesign)(imag);
+   if(!(BOOST_MATH_NAMESPACE::signbit)(z.imag()))
+      imag = (BOOST_MATH_NAMESPACE::changesign)(imag);
 
    return std::complex<T>(real, imag);
 #ifdef _MSC_VER
@@ -240,6 +240,6 @@ BOOST_MATH_EXPORT template<class T>
 #endif
 }
 
-} } // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_COMPLEX_ACOS_INCLUDED

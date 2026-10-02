@@ -13,9 +13,9 @@
 
 extern "C" double BOOST_MATH_TR1_DECL boost_fmax BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(double x, double y) BOOST_MATH_C99_THROW_SPEC
 {
-   if((boost::math::isnan)(x))
+   if((BOOST_MATH_NAMESPACE::isnan)(x))
       return y;
-   if((boost::math::isnan)(y))
+   if((BOOST_MATH_NAMESPACE::isnan)(y))
       return x;
    return  (std::max)(x, y);
 }

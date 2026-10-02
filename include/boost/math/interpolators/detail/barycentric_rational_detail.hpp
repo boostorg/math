@@ -18,7 +18,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/assert.hpp>
 
-namespace boost{ namespace math{ namespace interpolators { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators { namespace detail{
 
 template<class Real>
 class barycentric_rational_imp
@@ -72,13 +72,13 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x,
     for(unsigned i = 0; start_x != end_x; ++start_x, ++start_y, ++i)
     {
         // But if we're going to do a memcpy, we can do some error checking which is inexpensive relative to the copy:
-        if(boost::math::isnan(*start_x))
+        if(BOOST_MATH_NAMESPACE::isnan(*start_x))
         {
             std::string msg = std::string("x[") + std::to_string(i) + "] is a NAN";
             throw std::domain_error(msg);
         }
 
-        if(boost::math::isnan(*start_y))
+        if(BOOST_MATH_NAMESPACE::isnan(*start_y))
         {
            std::string msg = std::string("y[") + std::to_string(i) + "] is a NAN";
            throw std::domain_error(msg);
@@ -213,5 +213,5 @@ Real barycentric_rational_imp<Real>::prime(Real x) const
 
     return numerator/denominator;
 }
-}}}}
+}} BOOST_MATH_NAMESPACE_END
 #endif

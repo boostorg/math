@@ -20,7 +20,7 @@
 #endif
 #endif
 
-namespace boost::math::filters {
+BOOST_MATH_NAMESPACE_BEGIN namespace filters {
 
 template <typename Real, unsigned p>
 constexpr std::array<Real, 2*p> daubechies_scaling_filter()
@@ -97,5 +97,5 @@ std::array<Real, 2*p> daubechies_wavelet_filter() {
     return g;
 }
 
-} // namespaces
+} BOOST_MATH_NAMESPACE_END
 #endif

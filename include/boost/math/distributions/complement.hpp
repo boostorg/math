@@ -17,7 +17,7 @@
 // not clear if that's possible.  In any case this
 // code is *very* lightweight.
 //
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <class Dist, class RealType>
 struct complemented2_type
@@ -191,8 +191,7 @@ BOOST_MATH_GPU_ENABLED inline complemented7_type<Dist, RealType1, RealType2, Rea
    return complemented7_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5, RealType6>(d, r1, r2, r3, r4, r5, r6);
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_STATS_COMPLEMENT_HPP
 

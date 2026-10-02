@@ -12,11 +12,10 @@
 #include <vector>
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {
 
-namespace rdiff = boost::math::differentiation::reverse_mode;
+namespace rdiff = BOOST_MATH_NAMESPACE::differentiation::reverse_mode;
 
 /** @brief> helper to get the underlying realtype from
  *  update policy
@@ -154,6 +153,5 @@ random_vector(size_t n)
 }
 
 } // namespace optimization
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

@@ -4,6 +4,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/math/tools/config.hpp>
+
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <cstddef>
 #include <random>
@@ -11,7 +13,7 @@
 #include <vector>
 #endif
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 // To stress test, set global_seed = 0, global_size = huge.
 static constexpr std::size_t global_seed = 0;
@@ -100,4 +102,4 @@ std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
     return v;
 }
 
-}} // Namespaces
+BOOST_MATH_NAMESPACE_END

@@ -26,7 +26,7 @@
 // Weisstein, Eric W. "Inverse Chi-Squared Distribution." From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/InverseChi-SquaredDistribution.html
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail
 {
@@ -99,23 +99,23 @@ BOOST_MATH_EXPORT typedef inverse_chi_squared_distribution<double> inverse_chi_s
 
 #ifdef __cpp_deduction_guides
 BOOST_MATH_EXPORT template <class RealType>
-inverse_chi_squared_distribution(RealType)->inverse_chi_squared_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+inverse_chi_squared_distribution(RealType)->inverse_chi_squared_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 BOOST_MATH_EXPORT template <class RealType>
-inverse_chi_squared_distribution(RealType,RealType)->inverse_chi_squared_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+inverse_chi_squared_distribution(RealType,RealType)->inverse_chi_squared_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 #endif
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const inverse_chi_squared_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const inverse_chi_squared_distribution<RealType, Policy>& /*dist*/)
 {  // Range of permissible values for random variable x.
-   using boost::math::tools::max_value;
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // 0 to + infinity.
+   using BOOST_MATH_NAMESPACE::tools::max_value;
+   return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // 0 to + infinity.
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const inverse_chi_squared_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const inverse_chi_squared_distribution<RealType, Policy>& /*dist*/)
 {  // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), tools::max_value<RealType>()); // 0 to + infinity.
+   return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), tools::max_value<RealType>()); // 0 to + infinity.
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -134,7 +134,7 @@ BOOST_MATH_GPU_ENABLED RealType pdf(const inverse_chi_squared_distribution<RealT
    { // Bad distribution.
       return error_result;
    }
-   if((x < 0) || !(boost::math::isfinite)(x))
+   if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
    { // Bad x.
       return policies::raise_domain_error<RealType>(
          function, "inverse Chi Square parameter was %1%, but must be >= 0 !", x, Policy());
@@ -172,7 +172,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const inverse_chi_squared_distributio
    { // Bad distribution.
       return error_result;
    }
-   if((x < 0) || !(boost::math::isfinite)(x))
+   if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
    { // Bad x.
       return policies::raise_domain_error<RealType>(
          function, "inverse Chi Square parameter was %1%, but must be >= 0 !", x, Policy());
@@ -184,13 +184,13 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const inverse_chi_squared_distributio
    // RealType shape = df /2; // inv_gamma shape,
    // RealType scale = df * scale/2; // inv_gamma scale,
    // result = boost::math::gamma_q(shape, scale / x, Policy()); // inverse_gamma code.
-   return boost::math::gamma_q(df / 2, (df * (scale / 2)) / x, Policy());
+   return BOOST_MATH_NAMESPACE::gamma_q(df / 2, (df * (scale / 2)) / x, Policy());
 } // cdf
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const inverse_chi_squared_distribution<RealType, Policy>& dist, const RealType& p)
 {
-   using boost::math::gamma_q_inv;
+   using BOOST_MATH_NAMESPACE::gamma_q_inv;
    RealType df = dist.degrees_of_freedom();
    RealType scale = dist.scale();
 
@@ -222,7 +222,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const inverse_chi_squared_distri
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<inverse_chi_squared_distribution<RealType, Policy>, RealType>& c)
 {
-   using boost::math::gamma_q_inv;
+   using BOOST_MATH_NAMESPACE::gamma_q_inv;
    RealType const& df = c.dist.degrees_of_freedom();
    RealType const& scale = c.dist.scale();
    RealType const& x = c.param;
@@ -238,7 +238,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<inverse_chi_
    { // Treat zero as a special case.
      return 1;
    }
-   if((x < 0) || !(boost::math::isfinite)(x))
+   if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
    {
       return policies::raise_domain_error<RealType>(
          function, "inverse Chi Square parameter was %1%, but must be > 0 !", x, Policy());
@@ -253,7 +253,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<inverse_chi_
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<inverse_chi_squared_distribution<RealType, Policy>, RealType>& c)
 {
-   using boost::math::gamma_q_inv;
+   using BOOST_MATH_NAMESPACE::gamma_q_inv;
 
    RealType const& df = c.dist.degrees_of_freedom();
    RealType const& scale = c.dist.scale();
@@ -387,8 +387,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const inverse_chi_squared
 // Parameter estimation comes last:
 //
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

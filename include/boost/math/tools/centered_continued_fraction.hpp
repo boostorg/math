@@ -33,7 +33,7 @@
 #include <boost/core/demangle.hpp>
 #endif
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 BOOST_MATH_EXPORT template<typename Real, typename Z = int64_t>
 class centered_continued_fraction {
@@ -173,5 +173,5 @@ std::ostream& operator<<(std::ostream& out, centered_continued_fraction<Real, Z2
 }
 
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

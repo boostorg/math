@@ -15,7 +15,7 @@
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 BOOST_MATH_EXPORT template <typename T>
 inline constexpr bool isfinite(T x)
@@ -26,11 +26,11 @@ inline constexpr bool isfinite(T x)
         // equivalent to casting the integral argument arg to double (e.g. static_cast<double>(arg))
         if constexpr (std::is_integral_v<T>)
         {
-            return !boost::math::ccmath::isinf(static_cast<double>(x)) && !boost::math::ccmath::isnan(static_cast<double>(x));
+            return !BOOST_MATH_NAMESPACE::ccmath::isinf(static_cast<double>(x)) && !BOOST_MATH_NAMESPACE::ccmath::isnan(static_cast<double>(x));
         }
         else
         {
-            return !boost::math::ccmath::isinf(x) && !boost::math::ccmath::isnan(x);
+            return !BOOST_MATH_NAMESPACE::ccmath::isinf(x) && !BOOST_MATH_NAMESPACE::ccmath::isnan(x);
         }
     }
     else
@@ -48,6 +48,6 @@ inline constexpr bool isfinite(T x)
     }
 }
 
-}
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_ISFINITE

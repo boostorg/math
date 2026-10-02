@@ -26,7 +26,7 @@
 #endif
 #endif
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 BOOST_MATH_EXPORT template<typename Real, typename Z = int64_t>
 class luroth_expansion {
@@ -147,5 +147,5 @@ std::ostream& operator<<(std::ostream& out, luroth_expansion<Real, Z2>& luroth)
 }
 
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

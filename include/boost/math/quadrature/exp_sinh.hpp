@@ -27,7 +27,7 @@
 #include <string>
 #endif
 
-namespace boost{ namespace math{ namespace quadrature {
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature {
 
 BOOST_MATH_EXPORT template<class Real, class Policy = policies::policy<> >
 class exp_sinh
@@ -37,9 +37,9 @@ public:
       : m_imp(std::make_shared<detail::exp_sinh_detail<Real, Policy>>(max_refinements)) {}
 
     template<class F>
-    auto integrate(const F& f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const ->decltype(std::declval<F>()(std::declval<Real>()));
+    auto integrate(const F& f, Real a, Real b, Real tol = BOOST_MATH_NAMESPACE::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const ->decltype(std::declval<F>()(std::declval<Real>()));
     template<class F>
-    auto integrate(const F& f, Real tol = boost::math::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const ->decltype(std::declval<F>()(std::declval<Real>()));
+    auto integrate(const F& f, Real tol = BOOST_MATH_NAMESPACE::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const ->decltype(std::declval<F>()(std::declval<Real>()));
 
     template<class F, class Norm>
     auto integrate(const F& f, Real a, Real b, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const ->decltype(static_cast<Real>(norm(std::declval<F>()(std::declval<Real>()))), std::declval<F>()(std::declval<Real>()));
@@ -58,18 +58,18 @@ auto exp_sinh<Real, Policy>::integrate(const F& f, Real a, Real b, Real toleranc
     static_assert(!std::is_integral<K>::value,
                   "The return type cannot be integral, it must be either a real or complex floating point type.");
     using std::abs;
-    using boost::math::constants::half;
-    using boost::math::quadrature::detail::exp_sinh_detail;
+    using BOOST_MATH_NAMESPACE::constants::half;
+    using BOOST_MATH_NAMESPACE::quadrature::detail::exp_sinh_detail;
 
     static const char* function = "boost::math::quadrature::exp_sinh<%1%>::integrate";
 
     // Neither limit may be a NaN:
-    if((boost::math::isnan)(a) || (boost::math::isnan)(b))
+    if((BOOST_MATH_NAMESPACE::isnan)(a) || (BOOST_MATH_NAMESPACE::isnan)(b))
     {
        return static_cast<K>(policies::raise_domain_error(function, "NaN supplied as one limit of integration - sorry I don't know what to do", a, Policy()));
      }
     // Right limit is infinite:
-    if ((boost::math::isfinite)(a) && (b >= boost::math::tools::max_value<Real>()))
+    if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (b >= BOOST_MATH_NAMESPACE::tools::max_value<Real>()))
     {
         // If a = 0, don't use an additional level of indirection:
         if (a == static_cast<Real>(0))
@@ -80,14 +80,14 @@ auto exp_sinh<Real, Policy>::integrate(const F& f, Real a, Real b, Real toleranc
         return m_imp->integrate(u, error, L1, function, tolerance, levels);
     }
 
-    if ((boost::math::isfinite)(b) && a <= -boost::math::tools::max_value<Real>())
+    if ((BOOST_MATH_NAMESPACE::isfinite)(b) && a <= -BOOST_MATH_NAMESPACE::tools::max_value<Real>())
     {
         const auto u = [&](Real t)->K { return f(b-t);};
         return m_imp->integrate(u, error, L1, function, tolerance, levels);
     }
 
     // Infinite limits:
-    if ((a <= -boost::math::tools::max_value<Real>()) && (b >= boost::math::tools::max_value<Real>()))
+    if ((a <= -BOOST_MATH_NAMESPACE::tools::max_value<Real>()) && (b >= BOOST_MATH_NAMESPACE::tools::max_value<Real>()))
     {
         return static_cast<K>(policies::raise_domain_error(function, "Use sinh_sinh quadrature for integration over the whole real line; exp_sinh is for half infinite integrals.", a, Policy()));
     }
@@ -116,18 +116,18 @@ auto exp_sinh<Real, Policy>::integrate(const F& f, Real a, Real b, const decltyp
     static_assert(!std::is_integral<K>::value,
                   "The return type cannot be integral, it must be either a real or complex floating point type.");
     using std::abs;
-    using boost::math::constants::half;
-    using boost::math::quadrature::detail::exp_sinh_detail;
+    using BOOST_MATH_NAMESPACE::constants::half;
+    using BOOST_MATH_NAMESPACE::quadrature::detail::exp_sinh_detail;
 
     static const char* function = "boost::math::quadrature::exp_sinh<%1%>::integrate";
 
     // Neither limit may be a NaN:
-    if((boost::math::isnan)(a) || (boost::math::isnan)(b))
+    if((BOOST_MATH_NAMESPACE::isnan)(a) || (BOOST_MATH_NAMESPACE::isnan)(b))
     {
        return detail::norm_quadrature_error(zero, policies::raise_domain_error(function, "NaN supplied as one limit of integration - sorry I don't know what to do", a, Policy()), error, L1, levels);
      }
     // Right limit is infinite:
-    if ((boost::math::isfinite)(a) && (b >= boost::math::tools::max_value<Real>()))
+    if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (b >= BOOST_MATH_NAMESPACE::tools::max_value<Real>()))
     {
         // If a = 0, don't use an additional level of indirection:
         if (a == static_cast<Real>(0))
@@ -138,14 +138,14 @@ auto exp_sinh<Real, Policy>::integrate(const F& f, Real a, Real b, const decltyp
         return m_imp->integrate(u, zero, norm, error, L1, function, tolerance, levels);
     }
 
-    if ((boost::math::isfinite)(b) && a <= -boost::math::tools::max_value<Real>())
+    if ((BOOST_MATH_NAMESPACE::isfinite)(b) && a <= -BOOST_MATH_NAMESPACE::tools::max_value<Real>())
     {
         const auto u = [&](Real t)->K { return f(b-t);};
         return m_imp->integrate(u, zero, norm, error, L1, function, tolerance, levels);
     }
 
     // Infinite limits:
-    if ((a <= -boost::math::tools::max_value<Real>()) && (b >= boost::math::tools::max_value<Real>()))
+    if ((a <= -BOOST_MATH_NAMESPACE::tools::max_value<Real>()) && (b >= BOOST_MATH_NAMESPACE::tools::max_value<Real>()))
     {
         return detail::norm_quadrature_error(zero, policies::raise_domain_error(function, "Use sinh_sinh quadrature for integration over the whole real line; exp_sinh is for half infinite integrals.", a, Policy()), error, L1, levels);
     }
@@ -165,7 +165,7 @@ auto exp_sinh<Real, Policy>::integrate(const F& f, const decltype(std::declval<F
     return m_imp->integrate(f, zero, norm, error, L1, function, tolerance, levels);
 }
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HAS_NVRTC
 
@@ -177,28 +177,27 @@ auto exp_sinh<Real, Policy>::integrate(const F& f, const decltype(std::declval<F
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 
-namespace boost { 
-namespace math { 
+BOOST_MATH_NAMESPACE_BEGIN
 namespace quadrature {
 
 template <class F, class Real, class Policy = policies::policy<> >
-__device__ auto exp_sinh_integrate(const F& f, Real a, Real b, Real tolerance, Real* error, Real* L1, boost::math::size_t* levels)
+__device__ auto exp_sinh_integrate(const F& f, Real a, Real b, Real tolerance, Real* error, Real* L1, BOOST_MATH_NAMESPACE::size_t* levels)
 {
     BOOST_MATH_STD_USING
 
     using K = decltype(f(a));
-    static_assert(!boost::math::is_integral<K>::value,
+    static_assert(!BOOST_MATH_NAMESPACE::is_integral<K>::value,
                   "The return type cannot be integral, it must be either a real or complex floating point type.");
 
     constexpr auto function = "boost::math::quadrature::exp_sinh<%1%>::integrate";
 
     // Neither limit may be a NaN:
-    if((boost::math::isnan)(a) || (boost::math::isnan)(b))
+    if((BOOST_MATH_NAMESPACE::isnan)(a) || (BOOST_MATH_NAMESPACE::isnan)(b))
     {
        return static_cast<K>(policies::raise_domain_error(function, "NaN supplied as one limit of integration - sorry I don't know what to do", a, Policy()));
     }
     // Right limit is infinite:
-    if ((boost::math::isfinite)(a) && (b >= boost::math::tools::max_value<Real>()))
+    if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (b >= BOOST_MATH_NAMESPACE::tools::max_value<Real>()))
     {
         // If a = 0, don't use an additional level of indirection:
         if (a == static_cast<Real>(0))
@@ -209,14 +208,14 @@ __device__ auto exp_sinh_integrate(const F& f, Real a, Real b, Real tolerance, R
         return detail::exp_sinh_integrate_impl(u, tolerance, error, L1, levels);
     }
 
-    if ((boost::math::isfinite)(b) && a <= -boost::math::tools::max_value<Real>())
+    if ((BOOST_MATH_NAMESPACE::isfinite)(b) && a <= -BOOST_MATH_NAMESPACE::tools::max_value<Real>())
     {
         const auto u = [&](Real t)->K { return f(b-t);};
         return detail::exp_sinh_integrate_impl(u, tolerance, error, L1, levels);
     }
 
     // Infinite limits:
-    if ((a <= -boost::math::tools::max_value<Real>()) && (b >= boost::math::tools::max_value<Real>()))
+    if ((a <= -BOOST_MATH_NAMESPACE::tools::max_value<Real>()) && (b >= BOOST_MATH_NAMESPACE::tools::max_value<Real>()))
     {
         return static_cast<K>(policies::raise_domain_error(function, "Use sinh_sinh quadrature for integration over the whole real line; exp_sinh is for half infinite integrals.", a, Policy()));
     }
@@ -225,7 +224,7 @@ __device__ auto exp_sinh_integrate(const F& f, Real a, Real b, Real tolerance, R
 }
 
 template <class F, class Real, class Policy = policies::policy<> >
-__device__ auto exp_sinh_integrate(const F& f, Real tolerance, Real* error, Real* L1, boost::math::size_t* levels)
+__device__ auto exp_sinh_integrate(const F& f, Real tolerance, Real* error, Real* L1, BOOST_MATH_NAMESPACE::size_t* levels)
 {
     BOOST_MATH_STD_USING
     constexpr auto function = "boost::math::quadrature::exp_sinh<%1%>::integrate";
@@ -236,8 +235,7 @@ __device__ auto exp_sinh_integrate(const F& f, Real tolerance, Real* error, Real
 }
 
 } // namespace quadrature
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ENABLE_CUDA
 

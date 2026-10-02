@@ -16,7 +16,7 @@
 #include <boost/math/tools/promotion.hpp>
 
 
-namespace boost { namespace math { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
 template <class T, class Policy>
 inline T hypergeometric_1F0_imp(const T& a, const T& z, const Policy& pol)
@@ -64,6 +64,6 @@ inline typename tools::promote_args<T1, T2>::type hypergeometric_1F0(T1 a, T2 z)
 }
 
 
-  } } // namespace boost::math
+  BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_1F0_HPP

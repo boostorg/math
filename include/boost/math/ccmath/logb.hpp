@@ -17,7 +17,7 @@
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/abs.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail {
 
@@ -29,7 +29,7 @@ template <typename T>
 constexpr T logb_impl(T arg) noexcept
 {
     int exp = 0;
-    boost::math::ccmath::frexp(arg, &exp);
+    BOOST_MATH_NAMESPACE::ccmath::frexp(arg, &exp);
 
     return static_cast<T>(exp - 1);
 }
@@ -41,20 +41,20 @@ constexpr Real logb(Real arg) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
     {
-        if (boost::math::ccmath::abs(arg) == Real(0))
+        if (BOOST_MATH_NAMESPACE::ccmath::abs(arg) == Real(0))
         {
             return -std::numeric_limits<Real>::infinity();
         }
-        else if (boost::math::ccmath::isinf(arg))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isinf(arg))
         {
             return std::numeric_limits<Real>::infinity();
         }
-        else if (boost::math::ccmath::isnan(arg))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isnan(arg))
         {
             return arg;
         }
         
-        return boost::math::ccmath::detail::logb_impl(arg);
+        return BOOST_MATH_NAMESPACE::ccmath::detail::logb_impl(arg);
     }
     else
     {
@@ -66,21 +66,21 @@ constexpr Real logb(Real arg) noexcept
 BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 constexpr double logb(Z arg) noexcept
 {
-    return boost::math::ccmath::logb(static_cast<double>(arg));
+    return BOOST_MATH_NAMESPACE::ccmath::logb(static_cast<double>(arg));
 }
 
 constexpr float logbf(float arg) noexcept
 {
-    return boost::math::ccmath::logb(arg);
+    return BOOST_MATH_NAMESPACE::ccmath::logb(arg);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 constexpr long double logbl(long double arg) noexcept
 {
-    return boost::math::ccmath::logb(arg);
+    return BOOST_MATH_NAMESPACE::ccmath::logb(arg);
 }
 #endif
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_LOGB_HPP

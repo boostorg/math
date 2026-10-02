@@ -9,8 +9,9 @@
 #include <utility>
 #endif
 
-namespace boost {
-namespace math {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {
 namespace detail {
@@ -48,6 +49,5 @@ decltype(auto) if_functional_dispatch(F1&& f1, F2&& f2, Args&&... args)
 } // namespace detail
 } // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif // REVERSE_MODE_AUTODIFF_UTILITIES_HPP

@@ -22,7 +22,7 @@
 #include <boost/math/special_functions/logit.hpp>
 #include <boost/math/special_functions/logistic_sigmoid.hpp>
 
-namespace boost { namespace math { 
+BOOST_MATH_NAMESPACE_BEGIN
 
     BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
     class logistic_distribution
@@ -61,26 +61,26 @@ namespace boost { namespace math {
 
     #ifdef __cpp_deduction_guides
     BOOST_MATH_EXPORT template <class RealType>
-    logistic_distribution(RealType)->logistic_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+    logistic_distribution(RealType)->logistic_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
     BOOST_MATH_EXPORT template <class RealType>
-    logistic_distribution(RealType,RealType)->logistic_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+    logistic_distribution(RealType,RealType)->logistic_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
     #endif
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const logistic_distribution<RealType, Policy>& /* dist */)
+    BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const logistic_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable x.
-      using boost::math::tools::max_value;
-      return boost::math::pair<RealType, RealType>(
-         boost::math::numeric_limits<RealType>::has_infinity ? -boost::math::numeric_limits<RealType>::infinity() : -max_value<RealType>(), 
-         boost::math::numeric_limits<RealType>::has_infinity ? boost::math::numeric_limits<RealType>::infinity() : max_value<RealType>());
+      using BOOST_MATH_NAMESPACE::tools::max_value;
+      return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(
+         BOOST_MATH_NAMESPACE::numeric_limits<RealType>::has_infinity ? -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity() : -max_value<RealType>(), 
+         BOOST_MATH_NAMESPACE::numeric_limits<RealType>::has_infinity ? BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity() : max_value<RealType>());
     }
     
     BOOST_MATH_EXPORT template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const logistic_distribution<RealType, Policy>& /* dist */)
+    BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const logistic_distribution<RealType, Policy>& /* dist */)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-      using boost::math::tools::max_value;
-      return boost::math::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + infinity
+      using BOOST_MATH_NAMESPACE::tools::max_value;
+      return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + infinity
     }
      
     BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -100,7 +100,7 @@ namespace boost { namespace math {
           return result;
        }
 
-       if((boost::math::isinf)(x))
+       if((BOOST_MATH_NAMESPACE::isinf)(x))
        {
           return 0; // pdf + and - infinity is zero.
        }
@@ -136,7 +136,7 @@ namespace boost { namespace math {
           return result;
        }
 
-       if((boost::math::isinf)(x))
+       if((BOOST_MATH_NAMESPACE::isinf)(x))
        {
           if(x < 0) return 0; // -infinity
           return 1; // + infinity
@@ -168,7 +168,7 @@ namespace boost { namespace math {
           return result;
        }
 
-       if((boost::math::isinf)(x))
+       if((BOOST_MATH_NAMESPACE::isinf)(x))
        {
           if(x < 0) 
           {
@@ -240,7 +240,7 @@ namespace boost { namespace math {
        {
           return result;
        }
-       if((boost::math::isinf)(x))
+       if((BOOST_MATH_NAMESPACE::isinf)(x))
        {
           if(x < 0) return 1; // cdf complement -infinity is unity.
           return 0; // cdf complement +infinity is zero.
@@ -273,7 +273,7 @@ namespace boost { namespace math {
        {
           return result;
        }
-       if((boost::math::isinf)(x))
+       if((BOOST_MATH_NAMESPACE::isinf)(x))
        {
           if(x < 0) return 1; // cdf complement -infinity is unity.
           return 0; // cdf complement +infinity is zero.
@@ -305,7 +305,7 @@ namespace boost { namespace math {
        RealType q = c.param;
        if(false == detail::check_probability(function, q, &result, Policy()))
           return result;
-       using boost::math::tools::max_value;
+       using BOOST_MATH_NAMESPACE::tools::max_value;
 
        if(q == 1)
        {
@@ -330,7 +330,7 @@ namespace boost { namespace math {
     {
       BOOST_MATH_STD_USING
       RealType scale = dist.scale();
-      return boost::math::constants::pi<RealType>()*boost::math::constants::pi<RealType>()*scale*scale/3;
+      return BOOST_MATH_NAMESPACE::constants::pi<RealType>()*BOOST_MATH_NAMESPACE::constants::pi<RealType>()*scale*scale/3;
     } // RealType variance(const logistic_distribution<RealType, Policy>& dist)
     
     BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -368,7 +368,7 @@ namespace boost { namespace math {
        using std::log;
        return 2 + log(dist.scale());
     }
-  }}
+  BOOST_MATH_NAMESPACE_END
 
 
 // Must come at the end:

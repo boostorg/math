@@ -23,7 +23,7 @@
 #  include <unistd.h>
 #endif
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 struct cache_info
 {
@@ -110,6 +110,6 @@ inline const cache_info& cached_cache_info() noexcept
     return info;
 }
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_CPU_CACHE_HPP

@@ -16,7 +16,9 @@
 #include <utility>
 #endif
 
-namespace boost::math::interpolators::detail {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators::detail {
 
 template <class RandomAccessContainer>
 class bilinear_uniform_imp
@@ -135,5 +137,5 @@ private:
 };
 
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

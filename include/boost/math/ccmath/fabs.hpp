@@ -16,26 +16,26 @@
 
 #include <boost/math/ccmath/abs.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 BOOST_MATH_EXPORT template <typename T>
 inline constexpr auto fabs(T x) noexcept
 {
-    return boost::math::ccmath::abs(x);
+    return BOOST_MATH_NAMESPACE::ccmath::abs(x);
 }
 
 inline constexpr float fabsf(float x) noexcept
 {
-    return boost::math::ccmath::abs(x);
+    return BOOST_MATH_NAMESPACE::ccmath::abs(x);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline constexpr long double fabsl(long double x) noexcept
 {
-    return boost::math::ccmath::abs(x);
+    return BOOST_MATH_NAMESPACE::ccmath::abs(x);
 }
 #endif
 
-}
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_FABS

@@ -11,13 +11,13 @@
 #include <boost/math/special_functions/trunc.hpp>
 #include "c_policy.hpp"
 
-namespace boost{ namespace math{ namespace tr1{
+BOOST_MATH_NAMESPACE_BEGIN namespace tr1{
 
 extern "C" float BOOST_MATH_TR1_DECL boost_truncf BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(float x) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::trunc BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x);
 }
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 
 

@@ -20,7 +20,7 @@
 #include <boost/math/tools/precision.hpp>
 
 
-namespace boost{ namespace math{ namespace concepts{
+BOOST_MATH_NAMESPACE_BEGIN namespace concepts{
 
 template <class RealType>
 struct RealTypeConcept
@@ -103,17 +103,17 @@ struct RealTypeConcept
       int i {};
       r2 = ldexp(r, i);
       r2 = frexp(r, &i);
-      i = boost::math::tools::digits<RealType>();
-      r2 = boost::math::tools::max_value<RealType>();
-      r2 = boost::math::tools::min_value<RealType>();
-      r2 = boost::math::tools::log_max_value<RealType>();
-      r2 = boost::math::tools::log_min_value<RealType>();
-      r2 = boost::math::tools::epsilon<RealType>();
+      i = BOOST_MATH_NAMESPACE::tools::digits<RealType>();
+      r2 = BOOST_MATH_NAMESPACE::tools::max_value<RealType>();
+      r2 = BOOST_MATH_NAMESPACE::tools::min_value<RealType>();
+      r2 = BOOST_MATH_NAMESPACE::tools::log_max_value<RealType>();
+      r2 = BOOST_MATH_NAMESPACE::tools::log_min_value<RealType>();
+      r2 = BOOST_MATH_NAMESPACE::tools::epsilon<RealType>();
    }
 }; // struct DistributionConcept
 
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif
 

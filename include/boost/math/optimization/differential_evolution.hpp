@@ -24,7 +24,7 @@
 #include <vector>
 #endif
 
-namespace boost::math::optimization {
+BOOST_MATH_NAMESPACE_BEGIN namespace optimization {
 
 // Storn, R., Price, K. (1997). Differential evolution-a simple and efficient heuristic for global optimization over
 // continuous spaces.
@@ -238,5 +238,5 @@ ArgumentContainer differential_evolution(
   return population[std::distance(cost.begin(), it)];
 }
 
-} // namespace boost::math::optimization
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::optimization
 #endif

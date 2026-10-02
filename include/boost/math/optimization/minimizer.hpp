@@ -7,11 +7,12 @@
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
 #include <boost/math/optimization/gradient_optimizers.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
+#include <algorithm>
+#include <cmath>
 #include <vector>
 #include <chrono>
 #endif
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {
 BOOST_MATH_EXPORT template<typename RealType>
 struct optimization_result
@@ -108,7 +109,8 @@ struct relative_objective_tol_policy
       first_call_ = false;
       return false;
     }
-    RealType denom = max<RealType>(1, abs(last_value_));
+    using std::abs;
+    RealType denom = (std::max)(static_cast<RealType>(1), static_cast<RealType>(abs(last_value_)));
     RealType rel_diff = abs(objective_v - last_value_) / denom;
     last_value_ = objective_v;
     return rel_diff < rel_tol_;
@@ -333,6 +335,5 @@ minimize(Optimizer& opt,
   return minimize_impl(opt, project, converged, terminate, history);
 }
 } // namespace optimization
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

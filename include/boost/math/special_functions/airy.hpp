@@ -20,7 +20,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail{
 
@@ -33,15 +33,15 @@ BOOST_MATH_GPU_ENABLED T airy_ai_imp(T x, const Policy& pol)
    {
       T p = (-x * sqrt(-x) * 2) / 3;
       T v = T(1) / 3;
-      T j1 = boost::math::cyl_bessel_j(v, p, pol);
-      T j2 = boost::math::cyl_bessel_j(-v, p, pol);
+      T j1 = BOOST_MATH_NAMESPACE::cyl_bessel_j(v, p, pol);
+      T j2 = BOOST_MATH_NAMESPACE::cyl_bessel_j(-v, p, pol);
       T ai = sqrt(-x) * (j1 + j2) / 3;
       //T bi = sqrt(-x / 3) * (j2 - j1);
       return ai;
    }
    else if(fabs(x * x * x) / 6 < tools::epsilon<T>())
    {
-      T tg = boost::math::tgamma(constants::twothirds<T>(), pol);
+      T tg = BOOST_MATH_NAMESPACE::tgamma(constants::twothirds<T>(), pol);
       T ai = 1 / (pow(T(3), constants::twothirds<T>()) * tg);
       //T bi = 1 / (sqrt(boost::math::cbrt(T(3))) * tg);
       return ai;
@@ -56,7 +56,7 @@ BOOST_MATH_GPU_ENABLED T airy_ai_imp(T x, const Policy& pol)
       // Note that although we can calculate ai from j1 and j2, the accuracy is horrible
       // as we're subtracting two very large values, so use the Bessel K relation instead:
       //
-      T ai = cyl_bessel_k(v, p, pol) * sqrt(x / 3) / boost::math::constants::pi<T>();  //sqrt(x) * (j1 - j2) / 3;
+      T ai = cyl_bessel_k(v, p, pol) * sqrt(x / 3) / BOOST_MATH_NAMESPACE::constants::pi<T>();  //sqrt(x) * (j1 - j2) / 3;
       //T bi = sqrt(x / 3) * (j1 + j2);
       return ai;
    }
@@ -71,25 +71,25 @@ BOOST_MATH_GPU_ENABLED T airy_bi_imp(T x, const Policy& pol)
    {
       T p = (-x * sqrt(-x) * 2) / 3;
       T v = T(1) / 3;
-      T j1 = boost::math::cyl_bessel_j(v, p, pol);
-      T j2 = boost::math::cyl_bessel_j(-v, p, pol);
+      T j1 = BOOST_MATH_NAMESPACE::cyl_bessel_j(v, p, pol);
+      T j2 = BOOST_MATH_NAMESPACE::cyl_bessel_j(-v, p, pol);
       //T ai = sqrt(-x) * (j1 + j2) / 3;
       T bi = sqrt(-x / 3) * (j2 - j1);
       return bi;
    }
    else if(fabs(x * x * x) / 6 < tools::epsilon<T>())
    {
-      T tg = boost::math::tgamma(constants::twothirds<T>(), pol);
+      T tg = BOOST_MATH_NAMESPACE::tgamma(constants::twothirds<T>(), pol);
       //T ai = 1 / (pow(T(3), constants::twothirds<T>()) * tg);
-      T bi = 1 / (sqrt(boost::math::cbrt(T(3), pol)) * tg);
+      T bi = 1 / (sqrt(BOOST_MATH_NAMESPACE::cbrt(T(3), pol)) * tg);
       return bi;
    }
    else
    {
       T p = 2 * x * sqrt(x) / 3;
       T v = T(1) / 3;
-      T j1 = boost::math::cyl_bessel_i(-v, p, pol);
-      T j2 = boost::math::cyl_bessel_i(v, p, pol);
+      T j1 = BOOST_MATH_NAMESPACE::cyl_bessel_i(-v, p, pol);
+      T j2 = BOOST_MATH_NAMESPACE::cyl_bessel_i(v, p, pol);
       T bi = sqrt(x / 3) * (j1 + j2);
       return bi;
    }
@@ -104,15 +104,15 @@ BOOST_MATH_GPU_ENABLED T airy_ai_prime_imp(T x, const Policy& pol)
    {
       T p = (-x * sqrt(-x) * 2) / 3;
       T v = T(2) / 3;
-      T j1 = boost::math::cyl_bessel_j(v, p, pol);
-      T j2 = boost::math::cyl_bessel_j(-v, p, pol);
+      T j1 = BOOST_MATH_NAMESPACE::cyl_bessel_j(v, p, pol);
+      T j2 = BOOST_MATH_NAMESPACE::cyl_bessel_j(-v, p, pol);
       T aip = -x * (j1 - j2) / 3;
       return aip;
    }
    else if(fabs(x * x) / 2 < tools::epsilon<T>())
    {
-      T tg = boost::math::tgamma(constants::third<T>(), pol);
-      T aip = 1 / (boost::math::cbrt(T(3), pol) * tg);
+      T tg = BOOST_MATH_NAMESPACE::tgamma(constants::third<T>(), pol);
+      T aip = 1 / (BOOST_MATH_NAMESPACE::cbrt(T(3), pol) * tg);
       return -aip;
    }
    else
@@ -125,7 +125,7 @@ BOOST_MATH_GPU_ENABLED T airy_ai_prime_imp(T x, const Policy& pol)
       // Note that although we can calculate ai from j1 and j2, the accuracy is horrible
       // as we're subtracting two very large values, so use the Bessel K relation instead:
       //
-      T aip = -cyl_bessel_k(v, p, pol) * x / (boost::math::constants::root_three<T>() * boost::math::constants::pi<T>());
+      T aip = -cyl_bessel_k(v, p, pol) * x / (BOOST_MATH_NAMESPACE::constants::root_three<T>() * BOOST_MATH_NAMESPACE::constants::pi<T>());
       return aip;
    }
 }
@@ -139,24 +139,24 @@ BOOST_MATH_GPU_ENABLED T airy_bi_prime_imp(T x, const Policy& pol)
    {
       T p = (-x * sqrt(-x) * 2) / 3;
       T v = T(2) / 3;
-      T j1 = boost::math::cyl_bessel_j(v, p, pol);
-      T j2 = boost::math::cyl_bessel_j(-v, p, pol);
+      T j1 = BOOST_MATH_NAMESPACE::cyl_bessel_j(v, p, pol);
+      T j2 = BOOST_MATH_NAMESPACE::cyl_bessel_j(-v, p, pol);
       T aip = -x * (j1 + j2) / constants::root_three<T>();
       return aip;
    }
    else if(fabs(x * x) / 2 < tools::epsilon<T>())
    {
-      T tg = boost::math::tgamma(constants::third<T>(), pol);
-      T bip = sqrt(boost::math::cbrt(T(3), pol)) / tg;
+      T tg = BOOST_MATH_NAMESPACE::tgamma(constants::third<T>(), pol);
+      T bip = sqrt(BOOST_MATH_NAMESPACE::cbrt(T(3), pol)) / tg;
       return bip;
    }
    else
    {
       T p = 2 * x * sqrt(x) / 3;
       T v = T(2) / 3;
-      T j1 = boost::math::cyl_bessel_i(-v, p, pol);
-      T j2 = boost::math::cyl_bessel_i(v, p, pol);
-      T aip = x * (j1 + j2) / boost::math::constants::root_three<T>();
+      T j1 = BOOST_MATH_NAMESPACE::cyl_bessel_i(-v, p, pol);
+      T j2 = BOOST_MATH_NAMESPACE::cyl_bessel_i(v, p, pol);
+      T aip = x * (j1 + j2) / BOOST_MATH_NAMESPACE::constants::root_three<T>();
       return aip;
    }
 }
@@ -181,7 +181,7 @@ BOOST_MATH_GPU_ENABLED T airy_ai_zero_imp(int m, const Policy& pol)
    }
 
    // Set up the initial guess for the upcoming root-finding.
-   const T guess_root = boost::math::detail::airy_zero::airy_ai_zero_detail::initial_guess<T>(m, pol);
+   const T guess_root = BOOST_MATH_NAMESPACE::detail::airy_zero::airy_ai_zero_detail::initial_guess<T>(m, pol);
 
    // Select the maximum allowed iterations based on the number
    // of decimal digits in the numeric type T, being at least 12.
@@ -201,8 +201,8 @@ BOOST_MATH_GPU_ENABLED T airy_ai_zero_imp(int m, const Policy& pol)
 
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T am =
-      boost::math::tools::newton_raphson_iterate(
-         boost::math::detail::airy_zero::airy_ai_zero_detail::function_object_ai_and_ai_prime<T, Policy>(pol),
+      BOOST_MATH_NAMESPACE::tools::newton_raphson_iterate(
+         BOOST_MATH_NAMESPACE::detail::airy_zero::airy_ai_zero_detail::function_object_ai_and_ai_prime<T, Policy>(pol),
          guess_root,
          T(guess_root - tolerance),
          T(guess_root + tolerance),
@@ -233,7 +233,7 @@ BOOST_MATH_GPU_ENABLED T airy_bi_zero_imp(int m, const Policy& pol)
         "The requested rank of the zero is %1%, but must be 1 or more !", static_cast<T>(m), pol);
    }
    // Set up the initial guess for the upcoming root-finding.
-   const T guess_root = boost::math::detail::airy_zero::airy_bi_zero_detail::initial_guess<T>(m, pol);
+   const T guess_root = BOOST_MATH_NAMESPACE::detail::airy_zero::airy_bi_zero_detail::initial_guess<T>(m, pol);
 
    // Select the maximum allowed iterations based on the number
    // of decimal digits in the numeric type T, being at least 12.
@@ -253,8 +253,8 @@ BOOST_MATH_GPU_ENABLED T airy_bi_zero_imp(int m, const Policy& pol)
 
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T bm =
-      boost::math::tools::newton_raphson_iterate(
-         boost::math::detail::airy_zero::airy_bi_zero_detail::function_object_bi_and_bi_prime<T, Policy>(pol),
+      BOOST_MATH_NAMESPACE::tools::newton_raphson_iterate(
+         BOOST_MATH_NAMESPACE::detail::airy_zero::airy_bi_zero_detail::function_object_bi_and_bi_prime<T, Policy>(pol),
          guess_root,
          T(guess_root - tolerance),
          T(guess_root + tolerance),
@@ -398,7 +398,7 @@ BOOST_MATH_GPU_ENABLED inline OutputIterator airy_ai_zero(
 
    for(unsigned i = 0; i < number_of_zeros; ++i)
    {
-      *out_it = boost::math::airy_ai_zero<result_type>(start_index + i, pol);
+      *out_it = BOOST_MATH_NAMESPACE::airy_ai_zero<result_type>(start_index + i, pol);
       ++out_it;
    }
    return out_it;
@@ -455,7 +455,7 @@ BOOST_MATH_GPU_ENABLED inline OutputIterator airy_bi_zero(
 
    for(unsigned i = 0; i < number_of_zeros; ++i)
    {
-      *out_it = boost::math::airy_bi_zero<result_type>(start_index + i, pol);
+      *out_it = BOOST_MATH_NAMESPACE::airy_bi_zero<result_type>(start_index + i, pol);
       ++out_it;
    }
    return out_it;
@@ -470,6 +470,6 @@ BOOST_MATH_GPU_ENABLED inline OutputIterator airy_bi_zero(
    return airy_bi_zero<T>(start_index, number_of_zeros, out_it, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_AIRY_HPP

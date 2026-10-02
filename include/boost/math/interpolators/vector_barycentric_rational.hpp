@@ -17,7 +17,7 @@
 #endif
 #include <boost/math/interpolators/detail/vector_barycentric_rational_detail.hpp>
 
-namespace boost{ namespace math{ namespace interpolators{
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators{
 
 BOOST_MATH_EXPORT template<class TimeContainer, class SpaceContainer>
 class vector_barycentric_rational
@@ -80,5 +80,5 @@ void vector_barycentric_rational<TimeContainer, SpaceContainer>::operator()(type
     return;
 }
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif

@@ -26,7 +26,7 @@
 #include <boost/math/special_functions/cbrt.hpp>
 #include <boost/math/interpolators/cubic_hermite.hpp>
 
-namespace boost{ namespace math { namespace quadrature {
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature {
 
 BOOST_MATH_EXPORT enum class available_methods
 {
@@ -168,7 +168,7 @@ size_check(const T& vec1, const U& vec2, const char* function, const Policy& pol
     if (vec1.size() != vec2.size())
     {
         std::string msg = "Starting vectors (p0, q0) are not the same size but got (" + std::to_string(vec1.size()) + "!=" + std::to_string(vec2.size()) + ")";
-        boost::math::policies::raise_evaluation_error(function, msg.c_str(), 0, pol);
+        BOOST_MATH_NAMESPACE::policies::raise_evaluation_error(function, msg.c_str(), 0, pol);
     }
 }
 
@@ -350,9 +350,9 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
     // Not sure how to make this function string nicer
     static const char* function = "boost::math::quadrature::integrate_hamiltonian(p0, q0, %1%, steps, dHdp, dHdq)";
 
-    if ((dt <= 0) || !(boost::math::isfinite)(dt))
+    if ((dt <= 0) || !(BOOST_MATH_NAMESPACE::isfinite)(dt))
     {
-        boost::math::policies::raise_domain_error(function, "Time step must be positive and finite but got: dt = %1%.\n", dt, pol);
+        BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, "Time step must be positive and finite but got: dt = %1%.\n", dt, pol);
     }
 
     // Check that p0 and q0 have the same size
@@ -370,7 +370,7 @@ std::pair<std::vector<RandomAccessContainer>, std::vector<RandomAccessContainer>
         case available_methods::Y2:       stepper = second_order_yoshida; break;
         case available_methods::SRKNB6:   stepper = SRKN_b_6; break;
         case available_methods::SRKNB11:  stepper = SRKN_b_11; break;
-        default: boost::math::policies::raise_domain_error(function, "Incorrect method recieved. Must be in `available_methods` enum class.", 0, pol);
+        default: BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, "Incorrect method recieved. Must be in `available_methods` enum class.", 0, pol);
     }
 
     std::vector<RandomAccessContainer> p = initialize_array(p0, steps);
@@ -494,14 +494,14 @@ std::tuple<std::vector<RealType>, std::vector<RealType>, std::vector<RealType>, 
     // Not sure how to make this function string nicer
     static const char* function = "boost::math::quadrature::integrate_hamiltonian(p0, q0, %1%, steps, dHdp, dHdq)";
 
-    if (!(boost::math::isfinite)(timeInterval.second))
+    if (!(BOOST_MATH_NAMESPACE::isfinite)(timeInterval.second))
     {
-        boost::math::policies::raise_domain_error(function, "Maximum time  must be positive and finite but got: tMax = %1%.\n", timeInterval.second, pol);
+        BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, "Maximum time  must be positive and finite but got: tMax = %1%.\n", timeInterval.second, pol);
     }
 
     if ((timeInterval.first < 0))
     {
-        boost::math::policies::raise_domain_error(function, "Minimum time  must be positive and finite but got: tMin = %1%.\n", timeInterval.first, pol);
+        BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, "Minimum time  must be positive and finite but got: tMin = %1%.\n", timeInterval.first, pol);
     }
 
     // Check that p0 and q0 have the same size
@@ -520,7 +520,7 @@ std::tuple<std::vector<RealType>, std::vector<RealType>, std::vector<RealType>, 
         case available_methods::Y4:       stepper = fourth_order_yoshida; order = 4; break;
         case available_methods::SRKNB6:   stepper = SRKN_b_6; order = 4; break;
         case available_methods::SRKNB11:  stepper = SRKN_b_11; order = 6; break;
-        default: boost::math::policies::raise_domain_error(function, "Incorrect method recieved. Must be in `available_methods` enum class.", 0, pol);
+        default: BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, "Incorrect method recieved. Must be in `available_methods` enum class.", 0, pol);
     }
 
     std::vector<RandomAccessContainer> p = { p0 };
@@ -593,7 +593,7 @@ BOOST_MATH_EXPORT std::tuple<std::vector<RealType>, std::vector<RealType>, std::
                                                                                                                                                          const RealType rtol,
                                                                                                                                                          const available_methods& method)
 {
-    return detail::integrate_hamiltonian_adaptive_imp(p0, q0, timeInterval, dHdp, dHdq, atol, rtol, method, boost::math::policies::policy<>());
+    return detail::integrate_hamiltonian_adaptive_imp(p0, q0, timeInterval, dHdp, dHdq, atol, rtol, method, BOOST_MATH_NAMESPACE::policies::policy<>());
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
@@ -605,7 +605,7 @@ BOOST_MATH_EXPORT std::tuple<std::vector<RealType>, std::vector<RealType>, std::
                                                                                                                                                          const RealType atol,
                                                                                                                                                          const RealType rtol)
 {
-    return detail::integrate_hamiltonian_adaptive_imp(p0, q0, timeInterval, dHdp, dHdq, atol, rtol, available_methods::Y6, boost::math::policies::policy<>());
+    return detail::integrate_hamiltonian_adaptive_imp(p0, q0, timeInterval, dHdp, dHdq, atol, rtol, available_methods::Y6, BOOST_MATH_NAMESPACE::policies::policy<>());
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func, class Policy>
@@ -630,7 +630,7 @@ BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<Rand
                                                                                                                            Func dHdq,
                                                                                                                            available_methods method)
 {
-    return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, method, boost::math::policies::policy<>());
+    return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, method, BOOST_MATH_NAMESPACE::policies::policy<>());
 }
 
 template <typename RandomAccessContainer, typename RealType, class Func>
@@ -641,11 +641,11 @@ BOOST_MATH_EXPORT std::pair<std::vector<RandomAccessContainer>, std::vector<Rand
                                                                                                                            Func dHdp,
                                                                                                                            Func dHdq)
 {
-    return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, available_methods::Y6, boost::math::policies::policy<>());
+    return integrate_hamiltonian(p0, q0, dt, steps, dHdp, dHdq, available_methods::Y6, BOOST_MATH_NAMESPACE::policies::policy<>());
 }
 
 template <typename RealType, class Func, class Policy>
-BOOST_MATH_EXPORT boost::math::interpolators::cubic_hermite<std::vector<RealType> > integrate_hamiltonian_cubic(RealType p0,
+BOOST_MATH_EXPORT BOOST_MATH_NAMESPACE::interpolators::cubic_hermite<std::vector<RealType> > integrate_hamiltonian_cubic(RealType p0,
                                                                                                                 RealType q0,
                                                                                                                 const RealType dt,
                                                                                                                 const unsigned steps,
@@ -665,11 +665,11 @@ BOOST_MATH_EXPORT boost::math::interpolators::cubic_hermite<std::vector<RealType
         dpdt[i] = -dHdq(p[i]);
         time[i] = i * dt;
     }
-    return boost::math::interpolators::cubic_hermite<std::vector<RealType> >(std::move(time), std::move(p), std::move(dpdt));
+    return BOOST_MATH_NAMESPACE::interpolators::cubic_hermite<std::vector<RealType> >(std::move(time), std::move(p), std::move(dpdt));
 }
 
 template <typename RealType, class Func>
-BOOST_MATH_EXPORT boost::math::interpolators::cubic_hermite<std::vector<RealType> > integrate_hamiltonian_cubic(RealType p0,
+BOOST_MATH_EXPORT BOOST_MATH_NAMESPACE::interpolators::cubic_hermite<std::vector<RealType> > integrate_hamiltonian_cubic(RealType p0,
                                                                                                                 RealType q0,
                                                                                                                 const RealType dt,
                                                                                                                 const unsigned steps,
@@ -677,20 +677,20 @@ BOOST_MATH_EXPORT boost::math::interpolators::cubic_hermite<std::vector<RealType
                                                                                                                 Func dHdq,
                                                                                                                 available_methods method)
 {
-    return integrate_hamiltonian_cubic(p0, q0, dt, steps, dHdp, dHdq, method, boost::math::policies::policy<>());
+    return integrate_hamiltonian_cubic(p0, q0, dt, steps, dHdp, dHdq, method, BOOST_MATH_NAMESPACE::policies::policy<>());
 }
 
 template <typename RealType, class Func>
-BOOST_MATH_EXPORT boost::math::interpolators::cubic_hermite<std::vector<RealType> > integrate_hamiltonian_cubic(RealType p0,
+BOOST_MATH_EXPORT BOOST_MATH_NAMESPACE::interpolators::cubic_hermite<std::vector<RealType> > integrate_hamiltonian_cubic(RealType p0,
                                                                                                                 RealType q0,
                                                                                                                 const RealType dt,
                                                                                                                 const unsigned steps,
                                                                                                                 Func dHdp,
                                                                                                                 Func dHdq)
 {
-    return integrate_hamiltonian_cubic(p0, q0, dt, steps, dHdp, dHdq, available_methods::Y6, boost::math::policies::policy<>());
+    return integrate_hamiltonian_cubic(p0, q0, dt, steps, dHdp, dHdq, available_methods::Y6, BOOST_MATH_NAMESPACE::policies::policy<>());
 }
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 
 #endif

@@ -13,7 +13,7 @@
 #error "The header <boost/math/isinf.hpp> can only be used in C++17 and later."
 #endif
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 BOOST_MATH_EXPORT template <typename T>
 constexpr bool isinf BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x) noexcept
@@ -43,7 +43,7 @@ constexpr bool isinf BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x) noexcept
     }
     else
     {
-        using boost::math::isinf;
+        using BOOST_MATH_NAMESPACE::isinf;
 
         if constexpr (!std::is_integral_v<T>)
         {
@@ -56,6 +56,6 @@ constexpr bool isinf BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x) noexcept
     }
 }
 
-}
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_ISINF

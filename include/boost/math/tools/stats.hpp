@@ -16,7 +16,7 @@
 #endif
 #include <boost/math/tools/precision.hpp>
 
-namespace boost{ namespace math{ namespace tools{
+BOOST_MATH_NAMESPACE_BEGIN namespace tools{
 
 template <class T>
 class stats
@@ -82,8 +82,7 @@ private:
 };
 
 } // namespace tools
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif
 

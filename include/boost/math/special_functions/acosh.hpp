@@ -27,10 +27,7 @@
 
 // This is the inverse of the hyperbolic cosine function.
 
-namespace boost
-{
-    namespace math
-    {
+BOOST_MATH_NAMESPACE_BEGIN
        namespace detail
        {
         template<typename T, typename Policy>
@@ -38,7 +35,7 @@ namespace boost
         {
             BOOST_MATH_STD_USING
             
-            if((x < 1) || (boost::math::isnan)(x))
+            if((x < 1) || (BOOST_MATH_NAMESPACE::isnan)(x))
             {
                return policies::raise_domain_error<T>("boost::math::acosh<%1%>(%1%)", "acosh requires x >= 1, but got x = %1%.", x, pol);
             }
@@ -55,7 +52,7 @@ namespace boost
                    // This is just a rearrangement of the standard form below
                    // devised to minimise loss of precision when x ~ 1:
                    T y = x - 1;
-                   return boost::math::log1p(y + sqrt(y * y + 2 * y), pol);
+                   return BOOST_MATH_NAMESPACE::log1p(y + sqrt(y * y + 2 * y), pol);
                 }
                 else
                 {
@@ -93,11 +90,10 @@ namespace boost
         BOOST_MATH_EXPORT template<typename T>
         inline typename tools::promote_args<T>::type acosh(T x)
         {
-           return boost::math::acosh(x, policies::policy<>());
+           return BOOST_MATH_NAMESPACE::acosh(x, policies::policy<>());
         }
 
-    }
-}
+    BOOST_MATH_NAMESPACE_END
 
 #endif /* BOOST_ACOSH_HPP */
 

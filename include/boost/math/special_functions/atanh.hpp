@@ -24,10 +24,7 @@
 
 // This is the inverse of the hyperbolic tangent function.
 
-namespace boost
-{
-    namespace math
-    {
+BOOST_MATH_NAMESPACE_BEGIN
        namespace detail
        {
         // This is the main fare
@@ -46,7 +43,7 @@ namespace boost
             {
                return policies::raise_domain_error<T>(function, "atanh requires x <= 1, but got x = %1%.", x, pol);
             }
-            else if((boost::math::isnan)(x))
+            else if((BOOST_MATH_NAMESPACE::isnan)(x))
             {
                return policies::raise_domain_error<T>(function, "atanh requires -1 <= x <= 1, but got x = %1%.", x, pol);
             }
@@ -64,7 +61,7 @@ namespace boost
             {
                 // http://functions.wolfram.com/ElementaryFunctions/ArcTanh/02/
                 if(abs(x) < 0.5f)
-                   return (boost::math::log1p(x, pol) - boost::math::log1p(-x, pol)) / 2;
+                   return (BOOST_MATH_NAMESPACE::log1p(x, pol) - BOOST_MATH_NAMESPACE::log1p(-x, pol)) / 2;
                 return(log( (1 + x) / (1 - x) ) / 2);
             }
             else
@@ -104,11 +101,10 @@ namespace boost
         BOOST_MATH_EXPORT template<typename T>
         BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type atanh(T x)
         {
-           return boost::math::atanh(x, policies::policy<>());
+           return BOOST_MATH_NAMESPACE::atanh(x, policies::policy<>());
         }
 
-    }
-}
+    BOOST_MATH_NAMESPACE_END
 
 #endif /* BOOST_ATANH_HPP */
 

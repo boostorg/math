@@ -15,7 +15,7 @@
 #include <boost/math/special_functions/detail/polygamma.hpp>
 #include <boost/math/special_functions/trigamma.hpp>
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
   
   BOOST_MATH_EXPORT template<class T, class Policy>
@@ -25,9 +25,9 @@ namespace boost { namespace math {
      // Filter off special cases right at the start:
      //
      if(n == 0)
-        return boost::math::digamma(x, pol);
+        return BOOST_MATH_NAMESPACE::digamma(x, pol);
      if(n == 1)
-        return boost::math::trigamma(x, pol);
+        return BOOST_MATH_NAMESPACE::trigamma(x, pol);
      //
      // We've found some standard library functions to misbehave if any FPU exception flags
      // are set prior to their call, this code will clear those flags, then reset them
@@ -74,10 +74,10 @@ namespace boost { namespace math {
   BOOST_MATH_EXPORT template<class T>
   inline typename tools::promote_args<T>::type polygamma(const int n, T x)
   {
-      return boost::math::polygamma(n, x, policies::policy<>());
+      return BOOST_MATH_NAMESPACE::polygamma(n, x, policies::policy<>());
   }
 
-} } // namespace boost::math
+BOOST_MATH_NAMESPACE_END
 
 #endif // _BOOST_BERNOULLI_2013_05_30_HPP_
 

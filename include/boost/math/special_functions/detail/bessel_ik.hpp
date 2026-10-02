@@ -25,7 +25,7 @@
 
 // Modified Bessel functions of the first and second kind of fractional order
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail {
 
@@ -62,20 +62,20 @@ BOOST_MATH_GPU_ENABLED inline T bessel_i_small_z_series(T v, T x, const Policy& 
    T prefix;
    if(v < max_factorial<T>::value)
    {
-      prefix = pow(x / 2, v) / boost::math::tgamma(v + 1, pol);
+      prefix = pow(x / 2, v) / BOOST_MATH_NAMESPACE::tgamma(v + 1, pol);
    }
    else
    {
-      prefix = v * log(x / 2) - boost::math::lgamma(v + 1, pol);
+      prefix = v * log(x / 2) - BOOST_MATH_NAMESPACE::lgamma(v + 1, pol);
       prefix = exp(prefix);
    }
    if(prefix == 0)
       return prefix;
 
    cyl_bessel_i_small_z<T, Policy> s(v, x);
-   boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 
-   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+   T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
 
    policies::check_series_iterations<T>("boost::math::bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
    return prefix * result;
@@ -91,8 +91,8 @@ BOOST_MATH_GPU_ENABLED int temme_ik(T v, T x, T* result_K, T* K1, const Policy& 
     unsigned long k;
 
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
-    using namespace boost::math::constants;
+    using namespace BOOST_MATH_NAMESPACE::tools;
+    using namespace BOOST_MATH_NAMESPACE::constants;
 
 
     // |x| <= 2, Temme series converge rapidly
@@ -100,14 +100,14 @@ BOOST_MATH_GPU_ENABLED int temme_ik(T v, T x, T* result_K, T* K1, const Policy& 
     BOOST_MATH_ASSERT(abs(x) <= 2);
     BOOST_MATH_ASSERT(abs(v) <= 0.5f);
 
-    T gp = boost::math::tgamma1pm1(v, pol);
-    T gm = boost::math::tgamma1pm1(-v, pol);
+    T gp = BOOST_MATH_NAMESPACE::tgamma1pm1(v, pol);
+    T gm = BOOST_MATH_NAMESPACE::tgamma1pm1(-v, pol);
 
     a = log(x / 2);
     b = exp(v * a);
     sigma = -a * v;
     c = abs(v) < tools::epsilon<T>() ?
-       T(1) : T(boost::math::sin_pi(v, pol) / (v * pi<T>()));
+       T(1) : T(BOOST_MATH_NAMESPACE::sin_pi(v, pol) / (v * pi<T>()));
     d = abs(sigma) < tools::epsilon<T>() ?
         T(1) : T(sinh(sigma) / sigma);
     gamma1 = abs(v) < tools::epsilon<T>() ?
@@ -211,7 +211,7 @@ template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED int CF2_ik(T v, T x, T* Kv, T* Kv1, T* Kv_scaled, T* Kv1_scaled, const Policy& pol)
 {
     BOOST_MATH_STD_USING
-    using namespace boost::math::constants;
+    using namespace BOOST_MATH_NAMESPACE::constants;
 
     T S, C, Q, D, f, a, b, q, delta, tolerance, current, prev;
     unsigned long k;
@@ -322,8 +322,8 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
     BOOST_MATH_INSTRUMENT_VARIABLE(kind);
 
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
-    using namespace boost::math::constants;
+    using namespace BOOST_MATH_NAMESPACE::tools;
+    using namespace BOOST_MATH_NAMESPACE::constants;
 
     constexpr auto function = "boost::math::bessel_ik<%1%>(%1%,%1%)";
 
@@ -346,7 +346,7 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
     if (((kind & need_i) == 0) && (fabs(4 * v * v - 25) / (8 * x) < tools::forth_root_epsilon<T>()))
     {
        // A&S 9.7.2
-       Iv = boost::math::numeric_limits<T>::quiet_NaN(); // any value will do
+       Iv = BOOST_MATH_NAMESPACE::numeric_limits<T>::quiet_NaN(); // any value will do
        T mu = 4 * v * v;
        T eight_z = 8 * x;
        Kv = 1 + (mu - 1) / eight_z + (mu - 1) * (mu - 9) / (2 * eight_z * eight_z) + (mu - 1) * (mu - 9) * (mu - 25) / (6 * eight_z * eight_z * eight_z);
@@ -397,7 +397,7 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
              {
                 prev /= current;
                 scale /= current;
-                scale_sign *= ((boost::math::signbit)(current) ? -1 : 1);
+                scale_sign *= ((BOOST_MATH_NAMESPACE::signbit)(current) ? -1 : 1);
                 current = 1;
              }
           }
@@ -435,13 +435,13 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
           }
        }
        else
-          Iv = boost::math::numeric_limits<T>::quiet_NaN(); // any value will do
+          Iv = BOOST_MATH_NAMESPACE::numeric_limits<T>::quiet_NaN(); // any value will do
     }
     if (reflect && (kind & need_i))
     {
         BOOST_MATH_ASSERT(fabs(v - n - u) < tools::forth_root_epsilon<T>());
         T z = (u + n % 2);
-        T fact = (2 / pi<T>()) * (boost::math::sin_pi(z, pol) * Kv);
+        T fact = (2 / pi<T>()) * (BOOST_MATH_NAMESPACE::sin_pi(z, pol) * Kv);
         if(fact == 0)
            *result_I = Iv;
         else if(tools::max_value<T>() * scale < fact)
@@ -495,7 +495,7 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
     return 0;
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_BESSEL_IK_HPP
 

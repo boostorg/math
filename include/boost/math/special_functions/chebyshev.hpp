@@ -23,7 +23,7 @@
 #  include <boost/math/special_functions/acosh.hpp>
 #endif
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline tools::promote_args_t<T1, T2, T3> chebyshev_next(T1 const & x, T2 const & Tn, T3 const & Tn_1)
@@ -65,7 +65,7 @@ inline Real chebyshev_imp(unsigned n, Real const & x, const Policy&)
     using std::acosh;
 #define BOOST_MATH_ACOSH_POLICY
 #else
-   using boost::math::acosh;
+   using BOOST_MATH_NAMESPACE::acosh;
 #define BOOST_MATH_ACOSH_POLICY , Policy()
 #endif
     using std::cosh;
@@ -112,7 +112,7 @@ inline Real chebyshev_imp(unsigned n, Real const & x, const Policy&)
     while(l < n)
     {
        std::swap(T0, T1);
-       T1 = static_cast<Real>(boost::math::chebyshev_next(x, T0, T1));
+       T1 = static_cast<Real>(BOOST_MATH_NAMESPACE::chebyshev_next(x, T0, T1));
        ++l;
     }
     return T1;
@@ -196,7 +196,7 @@ inline tools::promote_args_t<Real> chebyshev_t_prime(unsigned n, Real const & x)
 BOOST_MATH_EXPORT template <class Real, class T2>
 inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, const T2& x)
 {
-    using boost::math::constants::half;
+    using BOOST_MATH_NAMESPACE::constants::half;
     if (length < 2)
     {
         if (length == 0)
@@ -311,6 +311,6 @@ inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, co
     return detail::unchecked_chebyshev_clenshaw_recurrence(c, length, a, b, x);
 }
 
-}} // Namespace boost::math
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SPECIAL_CHEBYSHEV_HPP

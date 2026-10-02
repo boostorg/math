@@ -16,8 +16,7 @@
 #include <deque>
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {
 
 /** @brief> Helper struct for L-BFGS
@@ -105,14 +104,14 @@ struct lbfgs_update_policy
 {
   template<typename ArgumentType,
            typename = typename std::enable_if<
-             boost::math::differentiation::reverse_mode::detail::is_expression<
+             BOOST_MATH_NAMESPACE::differentiation::reverse_mode::detail::is_expression<
                ArgumentType>::value>::type>
   void operator()(ArgumentType& x, RealType pk, RealType alpha)
   {
       x.get_value() += alpha * pk;
   }
   template<typename ArgumentType,
-           typename std::enable_if<!boost::math::differentiation::reverse_mode::
+           typename std::enable_if<!BOOST_MATH_NAMESPACE::differentiation::reverse_mode::
                                      detail::is_expression<ArgumentType>::value,
                                    int>::type = 0>
   void operator()(ArgumentType& x, RealType pk, RealType alpha)
@@ -381,6 +380,5 @@ make_lbfgs(Objective&& obj,
 }
 
 } // namespace optimization
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

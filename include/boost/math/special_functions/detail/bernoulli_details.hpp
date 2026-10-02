@@ -26,7 +26,7 @@
 #  define BOOST_MATH_BERNOULLI_NOTHREADS
 #endif
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 //
 // Asymptotic expansion for B2n due to
 // Luschny LogB3 formula (http://www.luschny.de/math/primes/bernincl.html)
@@ -39,9 +39,9 @@ T b2n_asymptotic(int n)
    const T nx2(nx * nx);
 
    const T approximate_log_of_bernoulli_bn =
-        ((boost::math::constants::half<T>() + nx) * log(nx))
-        + ((boost::math::constants::half<T>() - nx) * log(boost::math::constants::pi<T>()))
-        + (((T(3) / 2) - nx) * boost::math::constants::ln_two<T>())
+        ((BOOST_MATH_NAMESPACE::constants::half<T>() + nx) * log(nx))
+        + ((BOOST_MATH_NAMESPACE::constants::half<T>() - nx) * log(BOOST_MATH_NAMESPACE::constants::pi<T>()))
+        + (((T(3) / 2) - nx) * BOOST_MATH_NAMESPACE::constants::ln_two<T>())
         + ((nx * (T(2) - (nx2 * 7) * (1 + ((nx2 * 30) * ((nx2 * 12) - 1))))) / (((nx2 * nx2) * nx2) * 2520));
    return ((n / 2) & 1 ? 1 : -1) * (approximate_log_of_bernoulli_bn > tools::log_max_value<T>()
       ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", nullptr, nx, Policy())
@@ -95,9 +95,9 @@ struct max_bernoulli_root_functor
       const double nx2(n * n);
 
       const double approximate_log_of_bernoulli_bn
-         =   ((boost::math::constants::half<double>() + n) * log(n))
-           + ((boost::math::constants::half<double>() - n) * log(boost::math::constants::pi<double>()))
-           + (((static_cast<double>(3) / 2) - n) * boost::math::constants::ln_two<double>())
+         =   ((BOOST_MATH_NAMESPACE::constants::half<double>() + n) * log(n))
+           + ((BOOST_MATH_NAMESPACE::constants::half<double>() - n) * log(BOOST_MATH_NAMESPACE::constants::pi<double>()))
+           + (((static_cast<double>(3) / 2) - n) * BOOST_MATH_NAMESPACE::constants::ln_two<double>())
            + ((n * (2 - (nx2 * 7) * (1 + ((nx2 * 30) * ((nx2 * 12) - 1))))) / (((nx2 * nx2) * nx2) * 2520));
 
       return approximate_log_of_bernoulli_bn - target;
@@ -112,11 +112,11 @@ inline std::size_t find_bernoulli_overflow_limit(const std::false_type&)
    // Set a limit on how large the result can ever be:
    static const auto max_result = static_cast<double>((std::numeric_limits<std::size_t>::max)() - 1000u);
 
-   unsigned long long t = static_cast<unsigned long long>(lltrunc(boost::math::tools::log_max_value<T>()));
+   unsigned long long t = static_cast<unsigned long long>(lltrunc(BOOST_MATH_NAMESPACE::tools::log_max_value<T>()));
    max_bernoulli_root_functor fun(t);
-   boost::math::tools::equal_floor tol;
-   std::uintmax_t max_iter = boost::math::policies::get_max_root_iterations<Policy>();
-   double result = boost::math::tools::toms748_solve(fun, sqrt(static_cast<double>(t)), static_cast<double>(t), tol, max_iter).first / 2;
+   BOOST_MATH_NAMESPACE::tools::equal_floor tol;
+   std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_root_iterations<Policy>();
+   double result = BOOST_MATH_NAMESPACE::tools::toms748_solve(fun, sqrt(static_cast<double>(t)), static_cast<double>(t), tol, max_iter).first / 2;
    if (result > max_result)
    {
       result = max_result;
@@ -230,7 +230,7 @@ class bernoulli_numbers_cache
 public:
    bernoulli_numbers_cache() : m_overflow_limit((std::numeric_limits<std::size_t>::max)())
       , m_counter(0)
-      , m_current_precision(boost::math::tools::digits<T>())
+      , m_current_precision(BOOST_MATH_NAMESPACE::tools::digits<T>())
    {}
 
    using container_type = fixed_vector<T>;
@@ -261,9 +261,9 @@ public:
       for(std::size_t i = std::max<size_t>(2, prev_size); i < m; i++)
       {
          bool overflow_check = false;
-         if(i >= min_overflow_index && (boost::math::tools::max_value<T>() / (i-1) < m_intermediates[1]) )
+         if(i >= min_overflow_index && (BOOST_MATH_NAMESPACE::tools::max_value<T>() / (i-1) < m_intermediates[1]) )
          {
-            std::fill(tn.begin() + i, tn.end(), boost::math::tools::max_value<T>());
+            std::fill(tn.begin() + i, tn.end(), BOOST_MATH_NAMESPACE::tools::max_value<T>());
             break;
          }
          m_intermediates[1] = m_intermediates[1] * (i-1);
@@ -271,15 +271,15 @@ public:
          {
             overflow_check =
                   (i >= min_overflow_index) && (
-                  (boost::math::tools::max_value<T>() / (i - j) < m_intermediates[j])
-                  || (boost::math::tools::max_value<T>() / (i - j + 2) < m_intermediates[j-1])
-                  || (boost::math::tools::max_value<T>() - m_intermediates[j] * (i - j) < m_intermediates[j-1] * (i - j + 2))
-                  || ((boost::math::isinf)(m_intermediates[j]))
+                  (BOOST_MATH_NAMESPACE::tools::max_value<T>() / (i - j) < m_intermediates[j])
+                  || (BOOST_MATH_NAMESPACE::tools::max_value<T>() / (i - j + 2) < m_intermediates[j-1])
+                  || (BOOST_MATH_NAMESPACE::tools::max_value<T>() - m_intermediates[j] * (i - j) < m_intermediates[j-1] * (i - j + 2))
+                  || ((BOOST_MATH_NAMESPACE::isinf)(m_intermediates[j]))
                 );
 
             if(overflow_check)
             {
-               std::fill(tn.begin() + i, tn.end(), boost::math::tools::max_value<T>());
+               std::fill(tn.begin() + i, tn.end(), BOOST_MATH_NAMESPACE::tools::max_value<T>());
                break;
             }
             m_intermediates[j] = m_intermediates[j] * (i - j) + m_intermediates[j-1] * (i - j + 2);
@@ -395,12 +395,12 @@ public:
       //
       // Single threaded code, very simple:
       //
-      if(m_current_precision < boost::math::tools::digits<T>())
+      if(m_current_precision < BOOST_MATH_NAMESPACE::tools::digits<T>())
       {
          bn.clear();
          tn.clear();
          m_intermediates.clear();
-         m_current_precision = boost::math::tools::digits<T>();
+         m_current_precision = BOOST_MATH_NAMESPACE::tools::digits<T>();
       }
       if(start + n >= bn.size())
       {
@@ -424,20 +424,20 @@ public:
       // Get the counter and see if we need to calculate more constants:
       //
       if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
-         || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
+         || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < BOOST_MATH_NAMESPACE::tools::digits<T>()))
       {
          std::lock_guard<std::mutex> l(m_mutex);
 
          if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
-            || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
+            || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < BOOST_MATH_NAMESPACE::tools::digits<T>()))
          {
-            if(static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>())
+            if(static_cast<int>(m_current_precision.load(std::memory_order_consume)) < BOOST_MATH_NAMESPACE::tools::digits<T>())
             {
                bn.clear();
                tn.clear();
                m_intermediates.clear();
                m_counter.store(0, std::memory_order_release);
-               m_current_precision = boost::math::tools::digits<T>();
+               m_current_precision = BOOST_MATH_NAMESPACE::tools::digits<T>();
             }
             if(start + n >= bn.size())
             {
@@ -503,12 +503,12 @@ public:
       //
       // Single threaded code, very simple:
       //
-      if(m_current_precision < boost::math::tools::digits<T>())
+      if(m_current_precision < BOOST_MATH_NAMESPACE::tools::digits<T>())
       {
          bn.clear();
          tn.clear();
          m_intermediates.clear();
-         m_current_precision = boost::math::tools::digits<T>();
+         m_current_precision = BOOST_MATH_NAMESPACE::tools::digits<T>();
       }
       if(start + n >= bn.size())
       {
@@ -540,20 +540,20 @@ public:
       // Get the counter and see if we need to calculate more constants:
       //
       if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
-         || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
+         || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < BOOST_MATH_NAMESPACE::tools::digits<T>()))
       {
          std::lock_guard<std::mutex> l(m_mutex);
 
          if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
-            || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
+            || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < BOOST_MATH_NAMESPACE::tools::digits<T>()))
          {
-            if(static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>())
+            if(static_cast<int>(m_current_precision.load(std::memory_order_consume)) < BOOST_MATH_NAMESPACE::tools::digits<T>())
             {
                bn.clear();
                tn.clear();
                m_intermediates.clear();
                m_counter.store(0, std::memory_order_release);
-               m_current_precision = boost::math::tools::digits<T>();
+               m_current_precision = BOOST_MATH_NAMESPACE::tools::digits<T>();
             }
             if(start + n >= bn.size())
             {
@@ -628,6 +628,6 @@ inline typename std::enable_if<std::numeric_limits<T>::digits && (std::numeric_l
    return data;
 }
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_BERNOULLI_DETAIL_HPP

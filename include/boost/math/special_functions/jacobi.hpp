@@ -13,7 +13,7 @@
 
 #include <boost/math/tools/config.hpp>
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template<typename Real>
 Real jacobi(unsigned n, Real alpha, Real beta, Real x)
@@ -69,5 +69,5 @@ Real jacobi_double_prime(unsigned n, Real alpha, Real beta, Real x)
     return jacobi_derivative<Real>(n, alpha, beta, x, 2);
 }
 
-}}
+BOOST_MATH_NAMESPACE_END
 #endif

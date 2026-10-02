@@ -30,7 +30,7 @@
 #include <iomanip>
 #endif
 
-namespace boost { namespace math { namespace quadrature {
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature {
 
 namespace detail {
 
@@ -264,6 +264,6 @@ auto van_den_bos_unit_square(
     return current;
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif

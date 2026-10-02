@@ -33,14 +33,14 @@
 #endif
 #endif
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 class saspoint5_distribution;
 
 namespace detail {
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -345,7 +345,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_plus_imp_prec(const RealTyp
 
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_plus_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -857,14 +857,14 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_plus_imp_prec(const RealTyp
 
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_imp_prec(const RealType& x, const boost::math::integral_constant<int, 53> &tag) {
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 53> &tag) {
     BOOST_MATH_STD_USING // for ADL of std functions
 
     return saspoint5_pdf_plus_imp_prec<RealType>(abs(x), tag);
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_imp_prec(const RealType& x, const boost::math::integral_constant<int, 113>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>& tag) {
     BOOST_MATH_STD_USING // for ADL of std functions
 
     return saspoint5_pdf_plus_imp_prec<RealType>(abs(x), tag);
@@ -897,7 +897,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_imp(const saspoint5_distrib
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef boost::math::integral_constant<int,
+    typedef BOOST_MATH_NAMESPACE::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
@@ -913,7 +913,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_pdf_imp(const saspoint5_distrib
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1171,7 +1171,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_plus_imp_prec(const RealTyp
 
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_plus_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1650,7 +1650,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_plus_imp_prec(const RealTyp
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp_prec(const RealType& x, bool complement, const boost::math::integral_constant<int, 53>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp_prec(const RealType& x, bool complement, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>& tag) {
     if (x >= 0) {
         return complement ? saspoint5_cdf_plus_imp_prec(x, tag) : 1 - saspoint5_cdf_plus_imp_prec(x, tag);
     }
@@ -1658,12 +1658,12 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp_prec(const RealType& x,
         return complement ? 1 - saspoint5_cdf_plus_imp_prec(-x, tag) : saspoint5_cdf_plus_imp_prec(-x, tag);
     }
     else {
-        return boost::math::numeric_limits<RealType>::quiet_NaN();
+        return BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp_prec(const RealType& x, bool complement, const boost::math::integral_constant<int, 113>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp_prec(const RealType& x, bool complement, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>& tag) {
     if (x >= 0) {
         return complement ? saspoint5_cdf_plus_imp_prec(x, tag) : 1 - saspoint5_cdf_plus_imp_prec(x, tag);
     }
@@ -1671,7 +1671,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp_prec(const RealType& x,
         return complement ? 1 - saspoint5_cdf_plus_imp_prec(-x, tag) : saspoint5_cdf_plus_imp_prec(-x, tag);
     }
     else {
-        return boost::math::numeric_limits<RealType>::quiet_NaN();
+        return BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
@@ -1702,7 +1702,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp(const saspoint5_distrib
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef boost::math::integral_constant<int,
+    typedef BOOST_MATH_NAMESPACE::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
@@ -1718,7 +1718,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_cdf_imp(const saspoint5_distrib
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -2002,7 +2002,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_upper_imp_prec(const R
 
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_upper_imp_prec(const RealType& p, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -2501,7 +2501,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_upper_imp_prec(const R
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp_prec(const RealType& p, bool complement, const boost::math::integral_constant<int, 53>& tag)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp_prec(const RealType& p, bool complement, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>& tag)
 {
     if (p > 0.5) {
         return !complement ? saspoint5_quantile_upper_imp_prec(1 - p, tag) : -saspoint5_quantile_upper_imp_prec(1 - p, tag);
@@ -2511,7 +2511,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp_prec(const RealTyp
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp_prec(const RealType& p, bool complement, const boost::math::integral_constant<int, 113>& tag)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp_prec(const RealType& p, bool complement, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>& tag)
 {
     if (p > 0.5) {
         return !complement ? saspoint5_quantile_upper_imp_prec(1 - p, tag) : -saspoint5_quantile_upper_imp_prec(1 - p, tag);
@@ -2548,7 +2548,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp(const saspoint5_di
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef boost::math::integral_constant<int,
+    typedef BOOST_MATH_NAMESPACE::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
@@ -2562,13 +2562,13 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_quantile_imp(const saspoint5_di
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_entropy_imp_prec(const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_entropy_imp_prec(const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
     return static_cast<RealType>(3.63992444568030649573);
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType saspoint5_entropy_imp_prec(const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType saspoint5_entropy_imp_prec(const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
     return BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.6399244456803064957308496039071853510);
 }
@@ -2591,7 +2591,7 @@ BOOST_MATH_GPU_ENABLED inline RealType saspoint5_entropy_imp(const saspoint5_dis
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef boost::math::integral_constant<int,
+    typedef BOOST_MATH_NAMESPACE::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
@@ -2640,37 +2640,37 @@ BOOST_MATH_EXPORT typedef saspoint5_distribution<double> saspoint5;
 
 #ifdef __cpp_deduction_guides
 BOOST_MATH_EXPORT template <class RealType>
-saspoint5_distribution(RealType) -> saspoint5_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+saspoint5_distribution(RealType) -> saspoint5_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 BOOST_MATH_EXPORT template <class RealType>
-saspoint5_distribution(RealType, RealType) -> saspoint5_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+saspoint5_distribution(RealType, RealType) -> saspoint5_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 #endif
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const saspoint5_distribution<RealType, Policy>&)
+BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const saspoint5_distribution<RealType, Policy>&)
 { // Range of permissible values for random variable x.
-    BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
+    BOOST_MATH_IF_CONSTEXPR (BOOST_MATH_NAMESPACE::numeric_limits<RealType>::has_infinity)
     {
-        return boost::math::pair<RealType, RealType>(-boost::math::numeric_limits<RealType>::infinity(), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
+        return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity(), BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity()); // - to + infinity.
     }
     else
     { // Can only use max_value.
-        using boost::math::tools::max_value;
-        return boost::math::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max.
+        using BOOST_MATH_NAMESPACE::tools::max_value;
+        return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max.
     }
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const saspoint5_distribution<RealType, Policy>&)
+BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const saspoint5_distribution<RealType, Policy>&)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-    BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
+    BOOST_MATH_IF_CONSTEXPR (BOOST_MATH_NAMESPACE::numeric_limits<RealType>::has_infinity)
     {
-        return boost::math::pair<RealType, RealType>(-boost::math::numeric_limits<RealType>::infinity(), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
+        return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity(), BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity()); // - to + infinity.
     }
     else
     { // Can only use max_value.
-        using boost::math::tools::max_value;
-        return boost::math::pair<RealType, RealType>(-tools::max_value<RealType>(), max_value<RealType>()); // - to + max.
+        using BOOST_MATH_NAMESPACE::tools::max_value;
+        return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-tools::max_value<RealType>(), max_value<RealType>()); // - to + max.
     }
 }
 
@@ -2715,7 +2715,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mean(const saspoint5_distribution<RealTyp
         "boost::math::mean(saspoint5<%1%>&)",
         "The SaS point5 distribution does not have a mean: "
         "the only possible return value is %1%.",
-        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
+        BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -2729,7 +2729,7 @@ BOOST_MATH_GPU_ENABLED inline RealType variance(const saspoint5_distribution<Rea
         "boost::math::variance(saspoint5<%1%>&)",
         "The SaS point5 distribution does not have a variance: "
         "the only possible return value is %1%.",
-        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
+        BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -2755,7 +2755,7 @@ BOOST_MATH_GPU_ENABLED inline RealType skewness(const saspoint5_distribution<Rea
         "boost::math::skewness(saspoint5<%1%>&)",
         "The SaS point5 distribution does not have a skewness: "
         "the only possible return value is %1%.",
-        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
+        BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -2769,7 +2769,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const saspoint5_distribution<Rea
         "boost::math::kurtosis(saspoint5<%1%>&)",
         "The SaS point5 distribution does not have a kurtosis: "
         "the only possible return value is %1%.",
-        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
+        BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -2783,7 +2783,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const saspoint5_distribut
         "boost::math::kurtosis_excess(saspoint5<%1%>&)",
         "The SaS point5 distribution does not have a kurtosis: "
         "the only possible return value is %1%.",
-        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
+        BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -2792,7 +2792,7 @@ BOOST_MATH_GPU_ENABLED inline RealType entropy(const saspoint5_distribution<Real
     return detail::saspoint5_entropy_imp(dist);
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 
 #endif // BOOST_STATS_SASPOINT5_HPP

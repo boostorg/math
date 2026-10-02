@@ -10,7 +10,7 @@
 #endif
 #include <boost/math/interpolators/detail/cardinal_trigonometric_detail.hpp>
 
-namespace boost { namespace math { namespace interpolators {
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators {
 
 template<class RandomAccessContainer>
 class cardinal_trigonometric
@@ -56,5 +56,5 @@ private:
     std::shared_ptr<interpolators::detail::cardinal_trigonometric_detail<Real>> m_impl;
 };
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif

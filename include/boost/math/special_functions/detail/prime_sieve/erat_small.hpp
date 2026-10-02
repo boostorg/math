@@ -22,7 +22,7 @@
 #include <algorithm>
 #endif
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 namespace small_detail {
 
@@ -223,6 +223,6 @@ private:
     std::size_t chunk_bytes_ {32768};
 };
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_ERAT_SMALL_HPP

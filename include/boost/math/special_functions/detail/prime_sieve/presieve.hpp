@@ -21,7 +21,7 @@
 #include <algorithm>
 #endif
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 inline constexpr unsigned presieve_max_prime {163};
 inline constexpr std::size_t presieve_table_count {16};
@@ -263,6 +263,6 @@ inline void presieve_segment(std::uint8_t* sieve, std::size_t bytes, std::uint64
     }
 }
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_PRESIEVE_HPP

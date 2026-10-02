@@ -12,7 +12,7 @@
 #include <boost/math/differentiation/finite_difference.hpp>
 #include <boost/math/tools/config.hpp>
 
-namespace boost { namespace math { namespace tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 BOOST_MATH_EXPORT template<class Real, bool kahan=true>
 class summation_condition_number {
@@ -88,7 +88,7 @@ Real evaluation_condition_number(F const & f, Real const & x)
     using std::abs;
     using std::isnan;
     using std::sqrt;
-    using boost::math::differentiation::finite_difference_derivative;
+    using BOOST_MATH_NAMESPACE::differentiation::finite_difference_derivative;
 
     Real fx = f(x);
     if (isnan(fx))
@@ -118,7 +118,7 @@ Real evaluation_condition_number(F const & f, Real const & x)
             // Check if a left derivative exists:
             const Real eps = (std::numeric_limits<Real>::epsilon)();
             Real h = - 2 * sqrt(eps);
-            h = boost::math::differentiation::detail::make_xph_representable(x, h);
+            h = BOOST_MATH_NAMESPACE::differentiation::detail::make_xph_representable(x, h);
             Real yh = f(x + h);
             Real y0 = f(x);
             Real diff = yh - y0;
@@ -142,5 +142,5 @@ Real evaluation_condition_number(F const & f, Real const & x)
     return abs(x*fp/fx);
 }
 
-}}} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 #endif

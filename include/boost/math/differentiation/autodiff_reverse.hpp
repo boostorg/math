@@ -46,8 +46,7 @@
 #endif
 #define BOOST_MATH_BUFFER_SIZE 65536
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {
 
@@ -309,7 +308,7 @@ public:
         if (!n_) // leaf node
             return;
 
-        using boost::math::differentiation::reverse_mode::fabs;
+        using BOOST_MATH_NAMESPACE::differentiation::reverse_mode::fabs;
         using std::fabs;
         if (!adjoint_ || fabs(*adjoint_) < 2 * std::numeric_limits<RealType>::epsilon())
             return;
@@ -799,14 +798,13 @@ auto grad_nd(ftype &f, First first, Other... other)
 }
 } // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 namespace std {
 
 // copied from forward mode
 template<typename RealType, size_t DerivativeOrder>
-class numeric_limits<boost::math::differentiation::reverse_mode::rvar<RealType, DerivativeOrder>>
-    : public numeric_limits<typename boost::math::differentiation::reverse_mode::
+class numeric_limits<BOOST_MATH_NAMESPACE::differentiation::reverse_mode::rvar<RealType, DerivativeOrder>>
+    : public numeric_limits<typename BOOST_MATH_NAMESPACE::differentiation::reverse_mode::
                                 rvar<RealType, DerivativeOrder>::value_type>
 {};
 } // namespace std

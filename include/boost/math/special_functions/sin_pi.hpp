@@ -26,7 +26,7 @@
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/constants/constants.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline T sin_pi_imp(T x, const Policy&)
@@ -45,7 +45,7 @@ BOOST_MATH_GPU_ENABLED inline T sin_pi_imp(T x, const Policy&)
       invert = false;
 
    T rem = floor(x);
-   if(abs(floor(rem/2)*2 - rem) > boost::math::numeric_limits<T>::epsilon())
+   if(abs(floor(rem/2)*2 - rem) > BOOST_MATH_NAMESPACE::numeric_limits<T>::epsilon())
    {
       invert = !invert;
    }
@@ -88,21 +88,19 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type sin_pi(T x, 
       // We want to ignore overflows since the result is in [-1,1] and the 
       // check slows the code down considerably.
       policies::overflow_error<policies::ignore_error> >::type forwarding_policy;
-   return policies::checked_narrowing_cast<result_type, forwarding_policy>(boost::math::detail::sin_pi_dispatch<value_type>(x, forwarding_policy()), "sin_pi");
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(BOOST_MATH_NAMESPACE::detail::sin_pi_dispatch<value_type>(x, forwarding_policy()), "sin_pi");
 }
 
 BOOST_MATH_EXPORT template <class T>
 inline typename tools::promote_args<T>::type sin_pi(T x)
 {
-   return boost::math::sin_pi(x, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::sin_pi(x, policies::policy<>());
 }
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #else // Special handling for NVRTC
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED auto sin_pi(T x)
@@ -128,8 +126,7 @@ BOOST_MATH_GPU_ENABLED auto sin_pi(float x, const Policy&)
    return ::sinpif(x);
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HAS_NVRTC
 

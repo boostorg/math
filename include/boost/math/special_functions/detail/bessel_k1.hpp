@@ -45,17 +45,17 @@
 // references above.  We can also improve performance WRT to
 // Holoborodko without loss of precision.
 
-namespace boost { namespace math { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
    template <typename T, int N>
-   BOOST_MATH_GPU_ENABLED inline T bessel_k1_imp(const T&, const boost::math::integral_constant<int, N>&)
+   BOOST_MATH_GPU_ENABLED inline T bessel_k1_imp(const T&, const BOOST_MATH_NAMESPACE::integral_constant<int, N>&)
    {
       BOOST_MATH_ASSERT(0);
       return 0;
    }
 
    template <typename T>
-   BOOST_MATH_GPU_ENABLED T bessel_k1_imp(const T& x, const boost::math::integral_constant<int, 24>&)
+   BOOST_MATH_GPU_ENABLED T bessel_k1_imp(const T& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 24>&)
    {
       BOOST_MATH_STD_USING
       if(x <= 1)
@@ -126,7 +126,7 @@ namespace boost { namespace math { namespace detail{
    }
 
    template <typename T>
-   BOOST_MATH_GPU_ENABLED T bessel_k1_imp(const T& x, const boost::math::integral_constant<int, 53>&)
+   BOOST_MATH_GPU_ENABLED T bessel_k1_imp(const T& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
    {
       BOOST_MATH_STD_USING
       if(x <= 1)
@@ -219,7 +219,7 @@ namespace boost { namespace math { namespace detail{
    }
 
    template <typename T>
-   BOOST_MATH_GPU_ENABLED T bessel_k1_imp(const T& x, const boost::math::integral_constant<int, 64>&)
+   BOOST_MATH_GPU_ENABLED T bessel_k1_imp(const T& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 64>&)
    {
       BOOST_MATH_STD_USING
       if(x <= 1)
@@ -319,7 +319,7 @@ namespace boost { namespace math { namespace detail{
    }
 
    template <typename T>
-   BOOST_MATH_GPU_ENABLED T bessel_k1_imp(const T& x, const boost::math::integral_constant<int, 113>&)
+   BOOST_MATH_GPU_ENABLED T bessel_k1_imp(const T& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
    {
       BOOST_MATH_STD_USING
       if(x <= 1)
@@ -483,16 +483,16 @@ namespace boost { namespace math { namespace detail{
     }
 
     template <typename T>
-    BOOST_MATH_GPU_ENABLED T bessel_k1_imp(const T& x, const boost::math::integral_constant<int, 0>&)
+    BOOST_MATH_GPU_ENABLED T bessel_k1_imp(const T& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 0>&)
     {
-       if(boost::math::tools::digits<T>() <= 24)
-          return bessel_k1_imp(x, boost::math::integral_constant<int, 24>());
-       else if(boost::math::tools::digits<T>() <= 53)
-          return bessel_k1_imp(x, boost::math::integral_constant<int, 53>());
-       else if(boost::math::tools::digits<T>() <= 64)
-          return bessel_k1_imp(x, boost::math::integral_constant<int, 64>());
-       else if(boost::math::tools::digits<T>() <= 113)
-          return bessel_k1_imp(x, boost::math::integral_constant<int, 113>());
+       if(BOOST_MATH_NAMESPACE::tools::digits<T>() <= 24)
+          return bessel_k1_imp(x, BOOST_MATH_NAMESPACE::integral_constant<int, 24>());
+       else if(BOOST_MATH_NAMESPACE::tools::digits<T>() <= 53)
+          return bessel_k1_imp(x, BOOST_MATH_NAMESPACE::integral_constant<int, 53>());
+       else if(BOOST_MATH_NAMESPACE::tools::digits<T>() <= 64)
+          return bessel_k1_imp(x, BOOST_MATH_NAMESPACE::integral_constant<int, 64>());
+       else if(BOOST_MATH_NAMESPACE::tools::digits<T>() <= 113)
+          return bessel_k1_imp(x, BOOST_MATH_NAMESPACE::integral_constant<int, 113>());
        BOOST_MATH_ASSERT(0);
        return 0;
     }
@@ -500,23 +500,23 @@ namespace boost { namespace math { namespace detail{
    template <typename T>
    BOOST_MATH_GPU_ENABLED inline T bessel_k1(const T& x)
    {
-      typedef boost::math::integral_constant<int,
-         ((boost::math::numeric_limits<T>::digits == 0) || (boost::math::numeric_limits<T>::radix != 2)) ?
+      typedef BOOST_MATH_NAMESPACE::integral_constant<int,
+         ((BOOST_MATH_NAMESPACE::numeric_limits<T>::digits == 0) || (BOOST_MATH_NAMESPACE::numeric_limits<T>::radix != 2)) ?
          0 :
-         boost::math::numeric_limits<T>::digits <= 24 ?
+         BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 24 ?
          24 :
-         boost::math::numeric_limits<T>::digits <= 53 ?
+         BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 53 ?
          53 :
-         boost::math::numeric_limits<T>::digits <= 64 ?
+         BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 64 ?
          64 :
-         boost::math::numeric_limits<T>::digits <= 113 ?
+         BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 113 ?
          113 : -1
       > tag_type;
 
       return bessel_k1_imp(x, tag_type());
    }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #ifdef _MSC_VER
 #pragma warning(pop)

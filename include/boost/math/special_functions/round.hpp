@@ -30,7 +30,7 @@
 #    define BOOST_MATH_HAS_CONSTEXPR_LDEXP
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail{
 
@@ -40,7 +40,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T> round(const T& v, const P
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
 
-   if(!(boost::math::isfinite)(v))
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(v))
    {
       return policies::raise_rounding_error("boost::math::round<%1%>(%1%)", nullptr, static_cast<result_type>(v), static_cast<result_type>(v), pol);
    }
@@ -106,7 +106,7 @@ inline int iround(const T& v, const Policy& pol)
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
 
-   result_type r = boost::math::round(v, pol);
+   result_type r = BOOST_MATH_NAMESPACE::round(v, pol);
 
    #if defined(BOOST_MATH_HAS_CONSTEXPR_LDEXP) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
    if constexpr (std::is_arithmetic_v<result_type>
@@ -115,11 +115,11 @@ inline int iround(const T& v, const Policy& pol)
                  #endif
                 )
    {
-      constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
+      constexpr result_type max_val = BOOST_MATH_NAMESPACE::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
       
       if (r >= max_val || r < -max_val)
       {
-         return static_cast<int>(boost::math::policies::raise_rounding_error("boost::math::iround<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
+         return static_cast<int>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::iround<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
       }
    }
    else
@@ -128,7 +128,7 @@ inline int iround(const T& v, const Policy& pol)
    
       if (r >= max_val || r < -max_val)
       {
-         return static_cast<int>(boost::math::policies::raise_rounding_error("boost::math::iround<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
+         return static_cast<int>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::iround<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
       }
    }
    #else
@@ -136,7 +136,7 @@ inline int iround(const T& v, const Policy& pol)
 
    if (r >= max_val || r < -max_val)
    {
-      return static_cast<int>(boost::math::policies::raise_rounding_error("boost::math::iround<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
+      return static_cast<int>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::iround<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
    }
    #endif
 
@@ -154,7 +154,7 @@ BOOST_MATH_GPU_ENABLED inline long lround(const T& v, const Policy& pol)
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
 
-   result_type r = boost::math::round(v, pol);
+   result_type r = BOOST_MATH_NAMESPACE::round(v, pol);
    
    #if defined(BOOST_MATH_HAS_CONSTEXPR_LDEXP) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
    if constexpr (std::is_arithmetic_v<result_type>
@@ -163,11 +163,11 @@ BOOST_MATH_GPU_ENABLED inline long lround(const T& v, const Policy& pol)
                  #endif
                 )
    {
-      constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
+      constexpr result_type max_val = BOOST_MATH_NAMESPACE::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
       
       if (r >= max_val || r < -max_val)
       {
-         return static_cast<long>(boost::math::policies::raise_rounding_error("boost::math::lround<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
+         return static_cast<long>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::lround<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
       }
    }
    else
@@ -176,7 +176,7 @@ BOOST_MATH_GPU_ENABLED inline long lround(const T& v, const Policy& pol)
    
       if (r >= max_val || r < -max_val)
       {
-         return static_cast<long>(boost::math::policies::raise_rounding_error("boost::math::lround<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
+         return static_cast<long>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::lround<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
       }
    }
    #else
@@ -184,7 +184,7 @@ BOOST_MATH_GPU_ENABLED inline long lround(const T& v, const Policy& pol)
 
    if (r >= max_val || r < -max_val)
    {
-      return static_cast<long>(boost::math::policies::raise_rounding_error("boost::math::lround<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
+      return static_cast<long>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::lround<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
    }
    #endif
 
@@ -200,9 +200,9 @@ BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline long long llround(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
-   using result_type = boost::math::tools::promote_args_t<T>;
+   using result_type = BOOST_MATH_NAMESPACE::tools::promote_args_t<T>;
 
-   result_type r = boost::math::round(v, pol);
+   result_type r = BOOST_MATH_NAMESPACE::round(v, pol);
 
    #if defined(BOOST_MATH_HAS_CONSTEXPR_LDEXP) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
    if constexpr (std::is_arithmetic_v<result_type>
@@ -211,11 +211,11 @@ BOOST_MATH_GPU_ENABLED inline long long llround(const T& v, const Policy& pol)
                  #endif
                 )
    {
-      constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
+      constexpr result_type max_val = BOOST_MATH_NAMESPACE::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
       
       if (r >= max_val || r < -max_val)
       {
-         return static_cast<long long>(boost::math::policies::raise_rounding_error("boost::math::llround<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
+         return static_cast<long long>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::llround<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
       }
    }
    else
@@ -224,7 +224,7 @@ BOOST_MATH_GPU_ENABLED inline long long llround(const T& v, const Policy& pol)
    
       if (r >= max_val || r < -max_val)
       {
-         return static_cast<long long>(boost::math::policies::raise_rounding_error("boost::math::llround<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
+         return static_cast<long long>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::llround<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
       }
    }
    #else
@@ -232,7 +232,7 @@ BOOST_MATH_GPU_ENABLED inline long long llround(const T& v, const Policy& pol)
 
    if (r >= max_val || r < -max_val)
    {
-      return static_cast<long long>(boost::math::policies::raise_rounding_error("boost::math::llround<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
+      return static_cast<long long>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::llround<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
    }
    #endif
 
@@ -244,12 +244,11 @@ BOOST_MATH_GPU_ENABLED inline long long llround(const T& v)
    return llround(v, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #else // Specialized NVRTC overloads
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED T round(T x)
@@ -347,8 +346,7 @@ BOOST_MATH_GPU_ENABLED long long llround(float x, const Policy&)
    return ::llroundf(x);
 }
 
-} // Namespace math
-} // Namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HAS_NVRTC
 

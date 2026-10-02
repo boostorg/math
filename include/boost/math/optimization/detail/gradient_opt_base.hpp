@@ -6,11 +6,10 @@
 #define BOOST_MATH_OPTIMIZATION_DETAIL_GRADIENT_OPT_BASE_HPP
 #include <boost/math/differentiation/autodiff_reverse.hpp>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {
 
-namespace rdiff = boost::math::differentiation::reverse_mode;
+namespace rdiff = BOOST_MATH_NAMESPACE::differentiation::reverse_mode;
 
 /**
  * @brief The abstract_optimizer class implementing common variables
@@ -87,6 +86,5 @@ public:
   const std::vector<RealType>& gradients() const { return derived().g_; }
 };
 } // namespace optimization
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

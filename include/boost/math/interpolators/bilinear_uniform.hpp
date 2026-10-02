@@ -25,7 +25,7 @@
 #endif
 #include <boost/math/interpolators/detail/bilinear_uniform_detail.hpp>
 
-namespace boost::math::interpolators {
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators {
 
 BOOST_MATH_EXPORT template <class RandomAccessContainer>
 class bilinear_uniform
@@ -54,5 +54,5 @@ private:
     std::shared_ptr<detail::bilinear_uniform_imp<RandomAccessContainer>> m_imp;
 };
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

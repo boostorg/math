@@ -38,7 +38,7 @@
 #  endif
 #endif
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 inline constexpr std::uint8_t wheel_offsets[8] = {7, 11, 13, 17, 19, 23, 29, 31};
 inline constexpr std::uint8_t unset_bit[8] = {0xfe, 0xfd, 0xfb, 0xf7, 0xef, 0xdf, 0xbf, 0x7f};
@@ -270,7 +270,7 @@ inline bool first_multiple(const Tables& t, std::uint64_t prime, std::uint64_t s
 // Writes whole groups of eight, so out needs 7 slots of slack beyond the count.
 inline std::size_t extract_word(std::uint64_t word, std::uint64_t low, std::uint64_t* out) noexcept
 {
-    const std::size_t count {static_cast<std::size_t>(boost::math::tools::popcount(word))};
+    const std::size_t count {static_cast<std::size_t>(BOOST_MATH_NAMESPACE::tools::popcount(word))};
     if (count == 0)
     {
         return 0;
@@ -293,7 +293,7 @@ inline std::size_t extract_word(std::uint64_t word, std::uint64_t low, std::uint
 // Same for 32-bit outputs: sixteen values per group, so 15 slots of slack are needed.
 inline std::size_t extract_word_u32(std::uint64_t word, std::uint64_t low, std::uint32_t* out) noexcept
 {
-    const std::size_t count {static_cast<std::size_t>(boost::math::tools::popcount(word))};
+    const std::size_t count {static_cast<std::size_t>(BOOST_MATH_NAMESPACE::tools::popcount(word))};
     if (count == 0)
     {
         return 0;
@@ -319,17 +319,17 @@ inline std::size_t extract_word_u32(std::uint64_t word, std::uint64_t low, std::
 // the count (64 bits at most, so 67 slots always suffice).
 inline std::size_t extract_word(std::uint64_t word, std::uint64_t low, std::uint64_t* out) noexcept
 {
-    const std::size_t count {static_cast<std::size_t>(boost::math::tools::popcount(word))};
+    const std::size_t count {static_cast<std::size_t>(BOOST_MATH_NAMESPACE::tools::popcount(word))};
     std::size_t j {0};
     while (j < count)
     {
-        out[j] = low + bit_values[boost::math::tools::countr_zero(word)];
+        out[j] = low + bit_values[BOOST_MATH_NAMESPACE::tools::countr_zero(word)];
         word &= word - 1;
-        out[j + 1] = low + bit_values[boost::math::tools::countr_zero(word)];
+        out[j + 1] = low + bit_values[BOOST_MATH_NAMESPACE::tools::countr_zero(word)];
         word &= word - 1;
-        out[j + 2] = low + bit_values[boost::math::tools::countr_zero(word)];
+        out[j + 2] = low + bit_values[BOOST_MATH_NAMESPACE::tools::countr_zero(word)];
         word &= word - 1;
-        out[j + 3] = low + bit_values[boost::math::tools::countr_zero(word)];
+        out[j + 3] = low + bit_values[BOOST_MATH_NAMESPACE::tools::countr_zero(word)];
         word &= word - 1;
         j += 4;
     }
@@ -339,18 +339,18 @@ inline std::size_t extract_word(std::uint64_t word, std::uint64_t low, std::uint
 // Same as extract_word for values known to fit 32 bits (sieving primes).
 inline std::size_t extract_word_u32(std::uint64_t word, std::uint64_t low, std::uint32_t* out) noexcept
 {
-    const std::size_t count {static_cast<std::size_t>(boost::math::tools::popcount(word))};
+    const std::size_t count {static_cast<std::size_t>(BOOST_MATH_NAMESPACE::tools::popcount(word))};
     const std::uint32_t base {static_cast<std::uint32_t>(low)};
     std::size_t j {0};
     while (j < count)
     {
-        out[j] = base + bit_values[boost::math::tools::countr_zero(word)];
+        out[j] = base + bit_values[BOOST_MATH_NAMESPACE::tools::countr_zero(word)];
         word &= word - 1;
-        out[j + 1] = base + bit_values[boost::math::tools::countr_zero(word)];
+        out[j + 1] = base + bit_values[BOOST_MATH_NAMESPACE::tools::countr_zero(word)];
         word &= word - 1;
-        out[j + 2] = base + bit_values[boost::math::tools::countr_zero(word)];
+        out[j + 2] = base + bit_values[BOOST_MATH_NAMESPACE::tools::countr_zero(word)];
         word &= word - 1;
-        out[j + 3] = base + bit_values[boost::math::tools::countr_zero(word)];
+        out[j + 3] = base + bit_values[BOOST_MATH_NAMESPACE::tools::countr_zero(word)];
         word &= word - 1;
         j += 4;
     }
@@ -359,6 +359,6 @@ inline std::size_t extract_word_u32(std::uint64_t word, std::uint64_t low, std::
 
 #endif // BOOST_MATH_PRIME_SIEVE_AVX512_EXTRACT
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_LAYOUT_HPP

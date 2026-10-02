@@ -19,7 +19,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline T modf(const T& v, T* ipart, const Policy& pol)
@@ -69,6 +69,6 @@ BOOST_MATH_GPU_ENABLED inline T modf(const T& v, long long* ipart)
    return modf(v, ipart, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_MODF_HPP

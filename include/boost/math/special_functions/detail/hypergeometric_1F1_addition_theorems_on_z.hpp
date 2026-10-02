@@ -24,7 +24,7 @@
 // See https://dlmf.nist.gov/13.13
 //
 
-  namespace boost { namespace math { namespace detail {
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
      //
      // This works moderately well for a < 0, but has some very strange behaviour with
@@ -42,8 +42,8 @@
         {
            BOOST_MATH_STD_USING
            long long scale1(0), scale2(0);
-           M = boost::math::detail::hypergeometric_1F1_imp(a, b, z, pol, scale1);
-           M_next = boost::math::detail::hypergeometric_1F1_imp(T(a - 1), b, z, pol, scale2);
+           M = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(a, b, z, pol, scale1);
+           M_next = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(T(a - 1), b, z, pol, scale2);
            if (scale1 != scale2)
               M_next *= exp(T(scale2 - scale1));
            if (M > 1e10f)
@@ -80,10 +80,10 @@
         BOOST_MATH_STD_USING
            BOOST_MATH_ASSERT((z + k) / z > 0.5f);
         hypergeometric_1f1_recurrence_on_z_minus_zero_series<T, Policy> s(a, b, z, k, pol);
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
         log_scaling += s.scale();
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result * exp(T(k)) * pow(z / (z + k), b - a);
      }
 
@@ -101,8 +101,8 @@
         hypergeometric_1f1_recurrence_on_z_plus_plus_series(const T& a, const T& b, const T& z, int k_, const Policy& pol)
            : term(1), a_plus_n(a), b_plus_n(b), z_(z), n(0), k(k_)
         {
-           M = boost::math::detail::hypergeometric_1F1_imp(a, b, z, pol);
-           M_next = boost::math::detail::hypergeometric_1F1_imp(a + 1, b + 1, z, pol);
+           M = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(a, b, z, pol);
+           M_next = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(a + 1, b + 1, z, pol);
         }
         T operator()()
         {
@@ -125,9 +125,9 @@
      T hypergeometric_1f1_recurrence_on_z_plus_plus(const T& a, const T& b, const T& z, int k, const Policy& pol)
      {
         hypergeometric_1f1_recurrence_on_z_plus_plus_series<T, Policy> s(a, b, z, k, pol);
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result;
      }
 
@@ -139,8 +139,8 @@
         hypergeometric_1f1_recurrence_on_z_zero_minus_series(const T& a, const T& b, const T& z, int k_, const Policy& pol)
            : term(1), b_pochhammer(1 - b), x_k_power(-k_ / z), b_minus_n(b), a_(a), z_(z), b_(b), n(0), k(k_)
         {
-           M = boost::math::detail::hypergeometric_1F1_imp(a, b, z, pol);
-           M_next = boost::math::detail::hypergeometric_1F1_imp(a, b - 1, z, pol);
+           M = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(a, b, z, pol);
+           M_next = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(a, b - 1, z, pol);
         }
         T operator()()
         {
@@ -164,9 +164,9 @@
         BOOST_MATH_STD_USING
            BOOST_MATH_ASSERT(abs(k) < fabs(z));
         hypergeometric_1f1_recurrence_on_z_zero_minus_series<T, Policy> s(a, b, z, k, pol);
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result * pow((z + k) / z, 1 - b);
      }
 
@@ -178,8 +178,8 @@
         hypergeometric_1f1_recurrence_on_z_plus_zero_series(const T& a, const T& b, const T& z, int k_, const Policy& pol)
            : term(1), a_pochhammer(a), z_plus_k(z + k_), b_(b), a_(a), z_(z), n(0), k(k_)
         {
-           M = boost::math::detail::hypergeometric_1F1_imp(a, b, z, pol);
-           M_next = boost::math::detail::hypergeometric_1F1_imp(a + 1, b, z, pol);
+           M = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(a, b, z, pol);
+           M_next = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(a + 1, b, z, pol);
         }
         T operator()()
         {
@@ -203,9 +203,9 @@
            BOOST_MATH_ASSERT(k / z > -0.5f);
         //BOOST_MATH_ASSERT(floor(a) != a || a > 0);
         hypergeometric_1f1_recurrence_on_z_plus_zero_series<T, Policy> s(a, b, z, k, pol);
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result * pow(z / (z + k), a);
      }
 
@@ -217,8 +217,8 @@
         hypergeometric_1f1_recurrence_on_z_zero_plus_series(const T& a, const T& b, const T& z, int k_, const Policy& pol)
            : term(1), b_minus_a_plus_n(b - a), b_plus_n(b), a_(a), z_(z), n(0), k(k_)
         {
-           M = boost::math::detail::hypergeometric_1F1_imp(a, b, z, pol);
-           M_next = boost::math::detail::hypergeometric_1F1_imp(a, b + 1, z, pol);
+           M = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(a, b, z, pol);
+           M_next = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(a, b + 1, z, pol);
         }
         T operator()()
         {
@@ -241,9 +241,9 @@
      {
         BOOST_MATH_STD_USING
            hypergeometric_1f1_recurrence_on_z_zero_plus_series<T, Policy> s(a, b, z, k, pol);
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result * exp(T(k));
      }
      //
@@ -258,8 +258,8 @@
         hypergeometric_1f1_recurrence_on_z_minus_minus_series(const T& a, const T& b, const T& z, int k_, const Policy& pol)
            : term(1), one_minus_b_plus_n(1 - b), a_(a), b_(b), z_(z), n(0), k(k_)
         {
-           M = boost::math::detail::hypergeometric_1F1_imp(a, b, z, pol);
-           M_next = boost::math::detail::hypergeometric_1F1_imp(a - 1, b - 1, z, pol);
+           M = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(a, b, z, pol);
+           M_next = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(a - 1, b - 1, z, pol);
         }
         T operator()()
         {
@@ -281,13 +281,13 @@
      {
         BOOST_MATH_STD_USING
            hypergeometric_1f1_recurrence_on_z_minus_minus_series<T, Policy> s(a, b, z, k, pol);
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result * exp(T(k)) * pow((z + k) / z, 1 - b);
      }
 #endif
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_1F1_ADDITION_THEOREMS_ON_Z_HPP

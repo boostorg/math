@@ -16,7 +16,7 @@
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/tools/precision.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class T, class Policy>
 T ulp_imp(const T& val, const std::true_type&, const Policy& pol)
@@ -25,7 +25,7 @@ T ulp_imp(const T& val, const std::true_type&, const Policy& pol)
    int expon;
    static const char* function = "ulp<%1%>(%1%)";
 
-   int fpclass = (boost::math::fpclassify)(val);
+   int fpclass = (BOOST_MATH_NAMESPACE::fpclassify)(val);
 
    if(fpclass == FP_NAN)
    {
@@ -57,7 +57,7 @@ T ulp_imp(const T& val, const std::false_type&, const Policy& pol)
    int expon;
    static const char* function = "ulp<%1%>(%1%)";
 
-   int fpclass = (boost::math::fpclassify)(val);
+   int fpclass = (BOOST_MATH_NAMESPACE::fpclassify)(val);
 
    if(fpclass == FP_NAN)
    {
@@ -96,7 +96,7 @@ inline typename tools::promote_args<T>::type ulp(const T& val)
 }
 
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SPECIAL_ULP_HPP
 

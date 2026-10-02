@@ -16,8 +16,7 @@
 
 // Sizes of arrays of z values for Lambert W[0], W[1] ... W[64]" and W[-1], W[-2] ... W[-64].
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace lambert_w_detail {
 namespace lambert_w_lookup
 {
@@ -158,5 +157,4 @@ BOOST_MATH_INLINE_CONSTEXPR lookup_t wm1zs[noof_wm1zs] =
 }; // wm1zs
 } // namespace lambert_w_lookup
 } // namespace detail
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END

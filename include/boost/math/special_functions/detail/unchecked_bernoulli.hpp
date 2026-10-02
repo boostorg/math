@@ -22,7 +22,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
-namespace boost { namespace math { 
+BOOST_MATH_NAMESPACE_BEGIN
    
 namespace detail {
 
@@ -1302,6 +1302,6 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_b2n(const std::
    return detail::unchecked_bernoulli_imp<T>(n, tag_type());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_UNCHECKED_BERNOULLI_HPP

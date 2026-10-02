@@ -14,7 +14,9 @@
 #include <limits>
 #endif
 
-namespace boost::math::interpolators::detail {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators::detail {
 
 
 // Each thread has its own scratch space, allocated on first use.
@@ -165,5 +167,5 @@ private:
 };
 
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

@@ -22,8 +22,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -137,8 +136,7 @@ BOOST_MATH_GPU_ENABLED constexpr inline typename tools::promote_args<T>::type po
 #pragma warning(pop)
 #endif
 
-}  // namespace math
-}  // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 
 #endif

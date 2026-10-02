@@ -23,7 +23,7 @@
 #include <utility>
 #endif
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 namespace medium_detail {
 
@@ -175,6 +175,6 @@ private:
     std::uint64_t stop_ {0};
 };
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_ERAT_MEDIUM_HPP

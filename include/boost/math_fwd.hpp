@@ -11,10 +11,7 @@
 
 #include <boost/math/tools/config.hpp>
 
-namespace boost
-{
-namespace math
-{
+BOOST_MATH_NAMESPACE_BEGIN
 
 
 //  From <boost/math/quaternion.hpp>  ----------------------------------------//
@@ -37,8 +34,7 @@ template < >
 template < >
     class octonion< long double >;
 
-}  // namespace math
-}  // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 
 #endif  // BOOST_MATH_FWD_HPP
