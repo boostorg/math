@@ -15,7 +15,7 @@
 // Define BOOST_MATH_NAMESPACE_COMPONENTS as a comma separated list of 1 to 5 identifiers
 // outermost first, e.g. "my_lib, math" places the library in ::my_lib::math.
 // Without C++17 nested namespaces we needed some heroics to make this work
-#if defined(BOOST_MATH_NAMESPACE) || defined(BOOST_MATH_NAMESPACE_LEVELS) || defined(BOOST_MATH_NAMESPACE_BEGIN) || defined(BOOST_MATH_NAMESPACE_END) || defined(BOOST_MATH_DETAIL_NAMESPACE)
+#if defined(BOOST_MATH_NAMESPACE) || defined(BOOST_MATH_NAMESPACE_LEVELS) || defined(BOOST_MATH_NAMESPACE_BEGIN) || defined(BOOST_MATH_NAMESPACE_END) || defined(BOOST_MATH_DETAIL_NAMESPACE) || defined(BOOST_MATH_DETAIL_NAMESPACE_BEGIN) || defined(BOOST_MATH_DETAIL_NAMESPACE_END)
 #  error "Configure the namespace with BOOST_MATH_NAMESPACE_COMPONENTS (e.g. my_lib, math); the other BOOST_MATH_NAMESPACE macros are derived from it"
 #endif
 

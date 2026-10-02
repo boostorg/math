@@ -4,11 +4,15 @@ Almost all configuration details are set up automatically by
 `<boost\math\tools\config.hpp>`.
 
 In normal use, only policy configuration macros are likely to be used. See __policy_ref.
+Libraries that embed their own copy of Boost.Math may also want `BOOST_MATH_NAMESPACE_COMPONENTS`,
+see [link math_toolkit.namespace Configurable Namespace].
 
 For reference, information on Boost.Math macros used internally are described briefly below.
 
 [table Boost.Math Macros
 [[MACRO][Notes]]
+[[`BOOST_MATH_NAMESPACE_COMPONENTS`] [Relocates the whole library from `boost::math` into a namespace of your choosing,
+for example `my_lib, math` for `my_lib::math`. See [link math_toolkit.namespace Configurable Namespace].]]
 [[`BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS`] [Do not produce or use long double functions: this macro gets set when the platform's
 long double or standard library long double support is absent or buggy.]]
 [[`BOOST_MATH_USE_FLOAT128`][When set the numeric constants support the `__float128` data type with constants having the `Q` suffix.]]
