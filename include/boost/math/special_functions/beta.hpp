@@ -224,6 +224,9 @@ BOOST_MATH_GPU_ENABLED T lbeta_imp(T a, T b, const Lanczos&, const Policy& pol)
       return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got a=%1%).", a, pol);
    if(b <= 0)
       return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got b=%1%).", b, pol);
+   // log(beta(a, b)) tends to -infinity when either argument does:
+   if((boost::math::isinf)(a) || (boost::math::isinf)(b))
+      return -policies::raise_overflow_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", nullptr, pol);
 
    T c = a + b;
 
@@ -268,6 +271,9 @@ BOOST_MATH_GPU_ENABLED T lbeta_imp(T a, T b, const lanczos::undefined_lanczos& l
       return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got a=%1%).", a, pol);
    if(b <= 0)
       return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got b=%1%).", b, pol);
+   // log(beta(a, b)) tends to -infinity when either argument does:
+   if((boost::math::isinf)(a) || (boost::math::isinf)(b))
+      return -policies::raise_overflow_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", nullptr, pol);
 
    // Fix the argument order so that lbeta(a, b) == lbeta(b, a) exactly:
    if (a < b)
