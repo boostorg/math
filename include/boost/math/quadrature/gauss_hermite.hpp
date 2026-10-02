@@ -32,7 +32,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/precision.hpp>
-#include <boost/math/quadrature/detail/gauss_quadrature.hpp>
+#include <boost/math/quadrature/detail/quadrature_constant.hpp>
 
 namespace boost { namespace math { namespace quadrature { namespace detail {
 
@@ -213,7 +213,7 @@ class gauss_hermite_detail;
 template <class T>
 class gauss_hermite_detail<T, 7, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 4> const & abscissa()
       {
@@ -241,7 +241,7 @@ class gauss_hermite_detail<T, 7, 0>
 template <class T>
 class gauss_hermite_detail<T, 7, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 4> const & abscissa()
       {
@@ -269,7 +269,7 @@ class gauss_hermite_detail<T, 7, 0>
 template <class T>
 class gauss_hermite_detail<T, 7, 4>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
    public:
       static std::array<T, 4> const & abscissa()
       {
@@ -297,7 +297,7 @@ class gauss_hermite_detail<T, 7, 4>
 template <class T>
 class gauss_hermite_detail<T, 10, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 5> const & abscissa()
       {
@@ -327,7 +327,7 @@ class gauss_hermite_detail<T, 10, 0>
 template <class T>
 class gauss_hermite_detail<T, 10, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 5> const & abscissa()
       {
@@ -357,7 +357,7 @@ class gauss_hermite_detail<T, 10, 0>
 template <class T>
 class gauss_hermite_detail<T, 10, 4>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
    public:
       static std::array<T, 5> const & abscissa()
       {
@@ -387,7 +387,7 @@ class gauss_hermite_detail<T, 10, 4>
 template <class T>
 class gauss_hermite_detail<T, 15, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 8> const & abscissa()
       {
@@ -423,7 +423,7 @@ class gauss_hermite_detail<T, 15, 0>
 template <class T>
 class gauss_hermite_detail<T, 15, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 8> const & abscissa()
       {
@@ -459,7 +459,7 @@ class gauss_hermite_detail<T, 15, 0>
 template <class T>
 class gauss_hermite_detail<T, 15, 4>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
    public:
       static std::array<T, 8> const & abscissa()
       {
@@ -494,9 +494,9 @@ class gauss_hermite_detail<T, 15, 4>
 } // namespace detail
 
 template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
-class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::gauss_constant_category<Real>::value>
+class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::quadrature_constant_category<Real>::value>
 {
-   using base = detail::gauss_hermite_detail<Real, N, detail::gauss_constant_category<Real>::value>;
+   using base = detail::gauss_hermite_detail<Real, N, detail::quadrature_constant_category<Real>::value>;
 
    // Abscissas computed on demand are NaN when the recurrence overflows Real.
    static bool overflowed()

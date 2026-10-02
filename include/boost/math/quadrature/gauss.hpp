@@ -16,7 +16,7 @@
 #endif
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/quadrature/detail/gauss_quadrature.hpp>
+#include <boost/math/quadrature/detail/quadrature_constant.hpp>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -64,7 +64,7 @@ class gauss_detail;
 template <class T>
 class gauss_detail<T, 7, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 4> const & abscissa()
    {
@@ -91,7 +91,7 @@ public:
 template <class T>
 class gauss_detail<T, 7, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 4> const & abscissa()
    {
@@ -144,7 +144,7 @@ public:
 template <class T>
 class gauss_detail<T, 10, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 5> const & abscissa()
    {
@@ -173,7 +173,7 @@ public:
 template <class T>
 class gauss_detail<T, 10, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 5> const & abscissa()
    {
@@ -231,7 +231,7 @@ public:
 template <class T>
 class gauss_detail<T, 15, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 8> const & abscissa()
    {
@@ -266,7 +266,7 @@ public:
 template <class T>
 class gauss_detail<T, 15, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 8> const & abscissa()
    {
@@ -336,7 +336,7 @@ public:
 template <class T>
 class gauss_detail<T, 20, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 10> const & abscissa()
    {
@@ -375,7 +375,7 @@ public:
 template <class T>
 class gauss_detail<T, 20, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 10> const & abscissa()
    {
@@ -453,7 +453,7 @@ public:
 template <class T>
 class gauss_detail<T, 25, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 13> const & abscissa()
    {
@@ -498,7 +498,7 @@ public:
 template <class T>
 class gauss_detail<T, 25, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 13> const & abscissa()
    {
@@ -589,7 +589,7 @@ public:
 template <class T>
 class gauss_detail<T, 30, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 15> const & abscissa()
    {
@@ -638,7 +638,7 @@ public:
 template <class T>
 class gauss_detail<T, 30, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 15> const & abscissa()
    {
@@ -735,9 +735,9 @@ public:
 }
 
 BOOST_MATH_EXPORT template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
-class gauss : public detail::gauss_detail<Real, N, detail::gauss_constant_category<Real>::value>
+class gauss : public detail::gauss_detail<Real, N, detail::quadrature_constant_category<Real>::value>
 {
-   typedef detail::gauss_detail<Real, N, detail::gauss_constant_category<Real>::value> base;
+   typedef detail::gauss_detail<Real, N, detail::quadrature_constant_category<Real>::value> base;
 public:
 
    template <class F>
