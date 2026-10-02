@@ -1,4 +1,4 @@
-[section:namespace Configurable Namespace]
+[section:configurable_namespace Configurable Namespace]
 
 [h4 Overview]
 
@@ -105,7 +105,7 @@ The library's continuous integration builds every public header, plus a runtime 
 `BOOST_MATH_NAMESPACE_COMPONENTS=my_lib,math`. It checks that nothing is left in `boost::math` and that no symbol in the
 resulting binary is in namespace `boost`. See `libs/math/test/cmake_namespace_test`.
 
-[endsect] [/section:namespace Configurable Namespace]
+[endsect] [/section:configurable_namespace Configurable Namespace]
 
 [/
   Copyright 2026 Matt Borland.
