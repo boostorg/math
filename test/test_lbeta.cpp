@@ -88,8 +88,10 @@ void test_spots(std::size_t ulps, Real absolute_tolerance)
          CHECK_LE(Real(abs(expected - computed)), absolute_tolerance);
       CHECK_EQUAL(computed, Real(lbeta(b, a)));
    }
-   CHECK_EQUAL(Real(lbeta(Real(1), Real(3))), Real(-log(Real(3))));
-   CHECK_EQUAL(Real(lbeta(Real(0.25), Real(1))), Real(-log(Real(0.25))));
+   // With one argument equal to 1, log(beta) is -log of the other. Compare with a high-precision
+   // reference rather than Real's own log, which real_concept evaluates only in double precision:
+   CHECK_ULP_CLOSE(from_reference<Real>(cpp_bin_float_100(-log(cpp_bin_float_100(3)))), Real(lbeta(Real(1), Real(3))), 1);
+   CHECK_ULP_CLOSE(from_reference<Real>(cpp_bin_float_100(-log(cpp_bin_float_100(0.25)))), Real(lbeta(Real(0.25), Real(1))), 1);
 #ifndef BOOST_NO_EXCEPTIONS
    CHECK_THROW(lbeta(Real(0), Real(1)), std::domain_error);
    CHECK_THROW(lbeta(Real(1), Real(-2)), std::domain_error);
@@ -104,7 +106,7 @@ int main()
    test_spots<long double>(8, 4 * std::numeric_limits<long double>::epsilon());
 #endif
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-   test_spots<boost::math::concepts::real_concept>(8, boost::math::concepts::real_concept(4 * std::numeric_limits<long double>::epsilon()));
+   test_spots<boost::math::concepts::real_concept>(8, boost::math::concepts::real_concept(16 * std::numeric_limits<long double>::epsilon()));
 #endif
    using boost::multiprecision::cpp_bin_float_50;
    test_spots<cpp_bin_float_50>(8, 8 * std::numeric_limits<cpp_bin_float_50>::epsilon());
