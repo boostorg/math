@@ -32,48 +32,9 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/quadrature/detail/gauss_quadrature.hpp>
 
 namespace boost { namespace math { namespace quadrature { namespace detail {
-
-template <class T>
-struct gauss_hermite_constant_category
-{
-   static const unsigned value =
-      (std::numeric_limits<T>::is_specialized == 0) ? 999 :
-      (std::numeric_limits<T>::radix == 2) ?
-      (
-#ifdef BOOST_HAS_FLOAT128
-         (std::numeric_limits<T>::digits <= 113) && std::is_constructible<T, __float128>::value ? 0 :
-#else
-         (std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits) && std::is_constructible<T, long double>::value ? 0 :
-#endif
-         (std::numeric_limits<T>::digits10 <= 110) && std::is_constructible<T, const char*>::value ? 4 : 999
-      ) : (std::numeric_limits<T>::digits10 <= 110) && std::is_constructible<T, const char*>::value ? 4 : 999;
-
-   using storage_type =
-      std::conditional_t<(std::numeric_limits<T>::is_specialized == 0), T,
-         std::conditional_t<(std::numeric_limits<T>::radix == 2),
-            std::conditional_t< ((std::numeric_limits<T>::digits <= std::numeric_limits<float>::digits) && std::is_constructible<T, float>::value),
-               float,
-               std::conditional_t<((std::numeric_limits<T>::digits <= std::numeric_limits<double>::digits) && std::is_constructible<T, double>::value),
-                  double,
-                  std::conditional_t<((std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits) && std::is_constructible<T, long double>::value),
-                     long double,
-#ifdef BOOST_HAS_FLOAT128
-                     std::conditional_t<((std::numeric_limits<T>::digits <= 113) && std::is_constructible<T, __float128>::value),
-                        __float128,
-                        T
-                     >
-                  >
-#else
-                     T
-                  >
-#endif
-               >
-            >, T
-         >
-      >;
-};
 
 #ifndef BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND
 
@@ -252,7 +213,7 @@ class gauss_hermite_detail;
 template <class T>
 class gauss_hermite_detail<T, 7, 0>
 {
-   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 4> const & abscissa()
       {
@@ -280,7 +241,7 @@ class gauss_hermite_detail<T, 7, 0>
 template <class T>
 class gauss_hermite_detail<T, 7, 0>
 {
-   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 4> const & abscissa()
       {
@@ -308,7 +269,7 @@ class gauss_hermite_detail<T, 7, 0>
 template <class T>
 class gauss_hermite_detail<T, 7, 4>
 {
-   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_constant_category<T>::storage_type;
    public:
       static std::array<T, 4> const & abscissa()
       {
@@ -336,7 +297,7 @@ class gauss_hermite_detail<T, 7, 4>
 template <class T>
 class gauss_hermite_detail<T, 10, 0>
 {
-   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 5> const & abscissa()
       {
@@ -366,7 +327,7 @@ class gauss_hermite_detail<T, 10, 0>
 template <class T>
 class gauss_hermite_detail<T, 10, 0>
 {
-   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 5> const & abscissa()
       {
@@ -396,7 +357,7 @@ class gauss_hermite_detail<T, 10, 0>
 template <class T>
 class gauss_hermite_detail<T, 10, 4>
 {
-   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_constant_category<T>::storage_type;
    public:
       static std::array<T, 5> const & abscissa()
       {
@@ -426,7 +387,7 @@ class gauss_hermite_detail<T, 10, 4>
 template <class T>
 class gauss_hermite_detail<T, 15, 0>
 {
-   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 8> const & abscissa()
       {
@@ -462,7 +423,7 @@ class gauss_hermite_detail<T, 15, 0>
 template <class T>
 class gauss_hermite_detail<T, 15, 0>
 {
-   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_constant_category<T>::storage_type;
    public:
       static std::array<storage_type, 8> const & abscissa()
       {
@@ -498,7 +459,7 @@ class gauss_hermite_detail<T, 15, 0>
 template <class T>
 class gauss_hermite_detail<T, 15, 4>
 {
-   using storage_type = typename gauss_hermite_constant_category<T>::storage_type;
+   using storage_type = typename gauss_constant_category<T>::storage_type;
    public:
       static std::array<T, 8> const & abscissa()
       {
@@ -533,9 +494,9 @@ class gauss_hermite_detail<T, 15, 4>
 } // namespace detail
 
 template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
-class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::gauss_hermite_constant_category<Real>::value>
+class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::gauss_constant_category<Real>::value>
 {
-   using base = detail::gauss_hermite_detail<Real, N, detail::gauss_hermite_constant_category<Real>::value>;
+   using base = detail::gauss_hermite_detail<Real, N, detail::gauss_constant_category<Real>::value>;
 
    // Abscissas computed on demand are NaN when the recurrence overflows Real.
    static bool overflowed()

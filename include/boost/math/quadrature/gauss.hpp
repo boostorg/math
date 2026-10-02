@@ -16,53 +16,14 @@
 #endif
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/quadrature/detail/gauss_quadrature.hpp>
 
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
 
-namespace boost { namespace math{ namespace quadrature{ namespace detail{
-
-template <class T>
-struct gauss_constant_category
-{
-   static const unsigned value =
-      (std::numeric_limits<T>::is_specialized == 0) ? 999 :
-      (std::numeric_limits<T>::radix == 2) ?
-      (
-#ifdef BOOST_HAS_FLOAT128
-         (std::numeric_limits<T>::digits <= 113) && std::is_constructible<T, __float128>::value ? 0 :
-#else
-         (std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits) && std::is_constructible<T, long double>::value ? 0 :
-#endif
-         (std::numeric_limits<T>::digits10 <= 110) && std::is_constructible<T, const char*>::value ? 4 : 999
-      ) : (std::numeric_limits<T>::digits10 <= 110) && std::is_constructible<T, const char*>::value ? 4 : 999;
-   
-   using storage_type =
-      std::conditional_t<(std::numeric_limits<T>::is_specialized == 0), T,
-         std::conditional_t<(std::numeric_limits<T>::radix == 2),
-            std::conditional_t< ((std::numeric_limits<T>::digits <= std::numeric_limits<float>::digits) && std::is_constructible<T, float>::value),
-               float,
-               std::conditional_t<((std::numeric_limits<T>::digits <= std::numeric_limits<double>::digits) && std::is_constructible<T, double>::value),
-                  double,
-                  std::conditional_t<((std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits) && std::is_constructible<T, long double>::value),
-                     long double,
-#ifdef BOOST_HAS_FLOAT128
-                     std::conditional_t<((std::numeric_limits<T>::digits <= 113) && std::is_constructible<T, __float128>::value),
-                        __float128,
-                        T
-                     >
-                  >
-#else
-                     T
-                  >
-#endif
-               >
-            >, T
-         >
-      >;
-};
+namespace boost { namespace math{ namespace quadrature{ namespace detail {
 
 #ifndef BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND
 
