@@ -491,6 +491,50 @@ jobs:
           cmake --build .
           ctest --output-on-failure --no-tests=error
 
+  cmake-namespace-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            compiler: g++-14
+            cxxstd: 14
+          - os: ubuntu-24.04
+            compiler: g++-14
+            cxxstd: 20
+          - os: ubuntu-24.04
+            compiler: clang++-18
+            cxxstd: 17
+          - os: macos-15
+            compiler: clang++
+            cxxstd: 17
+          - os: windows-2022
+            cxxstd: 17
+
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Relocate the library into my_lib::math
+        if: runner.os != 'Windows'
+        run: |
+          cd test/cmake_namespace_test
+          mkdir __build__ && cd __build__
+          cmake -DCMAKE_CXX_COMPILER=${{matrix.compiler}} -DCMAKE_CXX_STANDARD=${{matrix.cxxstd}} ..
+          cmake --build . -j 4
+          ctest --output-on-failure --no-tests=error
+
+      - name: Relocate the library into my_lib::math (MSVC)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          cd test/cmake_namespace_test
+          mkdir __build__ && cd __build__
+          cmake -DCMAKE_CXX_STANDARD=${{matrix.cxxstd}} -DBOOST_MATH_NAMESPACE_TEST_HEADERS=OFF ..
+          cmake --build . --config Debug
+          ctest --output-on-failure --no-tests=error -C Debug
+
   posix-cmake-subdir-legacy:
     strategy:
       fail-fast: false
