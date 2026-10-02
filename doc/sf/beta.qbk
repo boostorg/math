@@ -90,11 +90,11 @@ when both are. In double precision the result is within 2 ulps where |log B| >= 
 absolute error elsewhere, for arguments across the whole exponent range.
 Without a __lanczos approximation, `lbeta` takes logarithms in the generic method below, except that when one
 argument is small it uses lgamma and __tgamma_delta_ratio directly, and when both lie between 1 and the
-threshold for Sterling's approximation it takes the logarithm of `beta` itself, which cannot overflow or underflow there.
+threshold for Stirling's approximation it takes the logarithm of `beta` itself, which cannot overflow or underflow there.
 
 The generic implementation - where no __lanczos approximation is available - is
 implemented in a very similar way to the generic version of the gamma function
-by means of Sterling's approximation.
+by means of Stirling's approximation.
 Again in order to avoid numerical overflow the power terms that prefix the series
 are collected together
 

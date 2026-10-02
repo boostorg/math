@@ -97,6 +97,18 @@ void test_spots(std::size_t ulps, Real absolute_tolerance)
    CHECK_THROW(lbeta(Real(0), Real(1)), std::domain_error);
    CHECK_THROW(lbeta(Real(1), Real(-2)), std::domain_error);
 #endif
+   // log(beta) tends to -infinity with either argument, reported as an overflow:
+   if (std::numeric_limits<Real>::has_infinity)
+   {
+      using ignore_overflow = boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::ignore_error>>;
+      const Real infinity = std::numeric_limits<Real>::infinity();
+      CHECK_EQUAL(Real(lbeta(infinity, Real(2.5), ignore_overflow())), Real(-infinity));
+      CHECK_EQUAL(Real(lbeta(Real(1e-30), infinity, ignore_overflow())), Real(-infinity));
+      CHECK_EQUAL(Real(lbeta(infinity, infinity, ignore_overflow())), Real(-infinity));
+#ifndef BOOST_NO_EXCEPTIONS
+      CHECK_THROW(lbeta(infinity, Real(2.5)), std::overflow_error);
+#endif
+   }
 }
 
 int main()
