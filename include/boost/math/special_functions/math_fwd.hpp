@@ -160,6 +160,22 @@ BOOST_MATH_NAMESPACE_BEGIN // Math functions (in roughly alphabetic order).
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
          ibetac(RT1 a, RT2 b, RT3 x, const Policy& pol); // Incomplete beta complement function.
 
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
+         libeta(RT1 a, RT2 b, RT3 x); // Log of the incomplete beta function.
+
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
+         libeta(RT1 a, RT2 b, RT3 x, const Policy& pol); // Log of the incomplete beta function.
+
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
+         libetac(RT1 a, RT2 b, RT3 x); // Log of the incomplete beta complement function.
+
+   BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
+   BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2, RT3>
+         libetac(RT1 a, RT2 b, RT3 x, const Policy& pol); // Log of the incomplete beta complement function.
+
    BOOST_MATH_EXPORT template <class T1, class T2, class T3, class T4>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T1, T2, T3, T4>
          ibeta_inv(T1 a, T2 b, T3 p, T4* py);
@@ -1339,6 +1355,14 @@ BOOST_MATH_NAMESPACE_BEGIN // Math functions (in roughly alphabetic order).
    template <class RT1, class RT2, class RT3>\
    BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::tools::promote_args_t<RT1, RT2, RT3> \
    ibetac(RT1 a, RT2 b, RT3 x){ return ::BOOST_MATH_NAMESPACE::ibetac(a, b, x, Policy()); }\
+\
+   template <class RT1, class RT2, class RT3>\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT1, RT2, RT3> \
+   libeta(RT1 a, RT2 b, RT3 x){ return ::boost::math::libeta(a, b, x, Policy()); }\
+\
+   template <class RT1, class RT2, class RT3>\
+   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT1, RT2, RT3> \
+   libetac(RT1 a, RT2 b, RT3 x){ return ::boost::math::libetac(a, b, x, Policy()); }\
 \
    template <class T1, class T2, class T3, class T4>\
    BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::tools::promote_args_t<T1, T2, T3, T4>  \
