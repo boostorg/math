@@ -1863,6 +1863,69 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol
 }
 
 //
+// Logarithm of the non-normalised upper (upper == true) or lower incomplete gamma function.
+//
+// Where the non-normalised value is representable it is the logarithm of that. Otherwise this
+// uses the regularised value, the target T = Q (upper) or P (lower), and its complement C:
+//
+//    T >= 1/2:                 lgamma(a) + log1p(-C)
+//    T representable:          lgamma(a) + log(T)
+//    T underflows:             a log(x) - x + log(continued fraction), upper, x > a
+//                              a log(x) - x + log(series / a),         lower, x < a
+//
+// The last two are the methods that gamma_incomplete_imp uses in logs for large a, here applied
+// only far out in the tail, where they converge quickly. As in Abergel and Moisan's G-function
+// (ACM TOMS 46(1), Algorithm 1006), the prefix x^a e^-x is never formed.
+//
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper)
+{
+   BOOST_MATH_STD_USING
+   const char* function = upper ? "boost::math::ligamma<%1%>(%1%, %1%)" : "boost::math::ligamma_lower<%1%>(%1%, %1%)";
+
+   // NaN in, NaN out, before any check or comparison:
+   if((boost::math::isnan)(a) || (boost::math::isnan)(x))
+      return a + x;
+   if(!(boost::math::isfinite)(a))
+      return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be finite (got a=%1%).", a, pol);
+   if(a <= 0)
+      return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
+   if(x < 0)
+      return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
+
+   // At the ends of the range, the target is either the complete gamma function or zero:
+   bool target_is_zero = upper ? (boost::math::isinf)(x) : (x == 0);
+   if(target_is_zero)
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
+   if(upper ? (x == 0) : (boost::math::isinf)(x))
+      return boost::math::lgamma(a, pol);
+
+   // Under- and overflow are ours to handle, so stop the evaluations below from reporting them:
+   typedef typename policies::normalise<Policy, policies::underflow_error<policies::ignore_error>, policies::overflow_error<policies::ignore_error> >::type quiet_policy;
+
+   if(a < max_factorial<T>::value)
+   {
+      // The non-normalised value cannot overflow, as it is at most tgamma(a):
+      T value = gamma_incomplete_imp(a, x, false, upper, quiet_policy(), static_cast<T*>(nullptr));
+      if(value >= tools::min_value<T>())
+         return log(value);
+   }
+   T target = gamma_incomplete_imp(a, x, true, upper, quiet_policy(), static_cast<T*>(nullptr));
+   if(target > 0.5f)
+      return boost::math::lgamma(a, pol) + boost::math::log1p(-gamma_incomplete_imp(a, x, true, !upper, quiet_policy(), static_cast<T*>(nullptr)), pol);
+   if(target >= tools::min_value<T>())
+      return boost::math::lgamma(a, pol) + log(target);
+
+   // The target underflows, so x is far out in its tail:
+   T result = a * log(x) - x;
+   if(upper)
+      result += log(upper_gamma_fraction(a, x, policies::get_epsilon<T, Policy>()));
+   else
+      result += log(detail::lower_gamma_series(a, x, pol, T(0)) / a);
+   return result;
+}
+
+//
 // Ratios of two gamma functions:
 //
 template <class T, class Policy, class Lanczos>
@@ -2525,6 +2588,52 @@ BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_p(T1 a, T2 z)
 {
    return lgamma_p(a, z, policies::policy<>());
+}
+
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma(T1 a, T2 z, const Policy&)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef tools::promote_args_t<T1, T2> result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), true), "boost::math::ligamma<%1%>(%1%, %1%)");
+}
+
+BOOST_MATH_EXPORT template <class T1, class T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma(T1 a, T2 z)
+{
+   return ligamma(a, z, policies::policy<>());
+}
+
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma_lower(T1 a, T2 z, const Policy&)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef tools::promote_args_t<T1, T2> result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), false), "boost::math::ligamma_lower<%1%>(%1%, %1%)");
+}
+
+BOOST_MATH_EXPORT template <class T1, class T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma_lower(T1 a, T2 z)
+{
+   return ligamma_lower(a, z, policies::policy<>());
 }
 //
 // Regularised lower incomplete gamma:
