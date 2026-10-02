@@ -98,6 +98,17 @@ void test_spots(std::size_t ulps, Real absolute_tolerance)
       CHECK_EQUAL(Real(libeta(Real(2), Real(0), Real(0.5), ignore_overflow())), minus_infinity);
       CHECK_EQUAL(Real(libetac(Real(0), Real(2), Real(0.5), ignore_overflow())), minus_infinity);
    }
+   // NaN arguments give NaN, without raising an error:
+   if (std::numeric_limits<Real>::has_quiet_NaN)
+   {
+      const Real nan = std::numeric_limits<Real>::quiet_NaN();
+      CHECK_TRUE((boost::math::isnan)(Real(libeta(nan, Real(2), Real(0.5)))));
+      CHECK_TRUE((boost::math::isnan)(Real(libeta(Real(2), nan, Real(0.5)))));
+      CHECK_TRUE((boost::math::isnan)(Real(libeta(Real(2), Real(3), nan))));
+      CHECK_TRUE((boost::math::isnan)(Real(libetac(nan, Real(2), Real(0.5)))));
+      CHECK_TRUE((boost::math::isnan)(Real(libetac(Real(2), nan, Real(0.5)))));
+      CHECK_TRUE((boost::math::isnan)(Real(libetac(Real(2), Real(3), nan))));
+   }
 #ifndef BOOST_NO_EXCEPTIONS
    CHECK_THROW(libeta(Real(2), Real(3), Real(0)), std::overflow_error);
    CHECK_THROW(libeta(Real(2), Real(3), Real(-0.5)), std::domain_error);
