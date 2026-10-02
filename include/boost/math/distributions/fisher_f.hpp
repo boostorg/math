@@ -65,6 +65,22 @@ namespace boost{ namespace math{
       }
 
       template <class RealType, class Policy>
+      RealType fisher_small_v1_approximation(RealType p, RealType q)
+      { // For v1 -> 0, chi-squared(v1) collapses to a point mass at 0, so cdf(x) -> 1 for any x > 0.
+            bool comp = p < q ? false : true;
+            RealType pval =  p < q ? p : q;
+            return comp ? pval : 1 - pval;
+      }
+
+      template <class RealType, class Policy>
+      RealType fisher_small_v2_approximation(RealType p, RealType q)
+      { // For v2 -> 0, F diverges to infinity a.s., so cdf(x) -> 0 for any finite x.
+            bool comp = p < q ? false : true;
+            RealType pval =  p < q ? p : q;
+            return comp ? pval - 1 : -pval;
+      }
+
+      template <class RealType, class Policy>
       inline RealType find_degrees_of_freedom_fisher_f(
          const RealType x, const RealType v, const bool find_v1, const RealType p, const RealType q, const Policy& pol)
       {
@@ -91,9 +107,11 @@ namespace boost{ namespace math{
          // small values of v have the same sign. If the sign is the same, then there 
          // are an even number of roots. If the signs differ, there is only one root
          // and we can safely find the root.
-         RealType vLarge = sqrt(boost::math::tools::max_value<RealType>());
-         RealType vSmall = 1 / vLarge;
 
+         // Rather than evaluating f at an enormous or minuscule degrees of freedom, use its
+         // limits. As v1 -> infinity, F tends to v2 / chi-squared(v2); as v2 -> infinity, F
+         // tends to chi-squared(v1) / v1. As v1 -> 0, F collapses to a point mass at 0, so
+         // cdf(x) -> 1; as v2 -> 0, F diverges to infinity almost surely, so cdf(x) -> 0.
          RealType large_difference;
          if (find_v1)
          {
@@ -102,7 +120,11 @@ namespace boost{ namespace math{
          else
             large_difference = fisher_large_v2_approximation<RealType, Policy>(x, v, p, q);
 
-         if ((large_difference < 0) == (f(vSmall) < 0)){
+         RealType small_difference = find_v1
+            ? fisher_small_v1_approximation<RealType, Policy>(p, q)
+            : fisher_small_v2_approximation<RealType, Policy>(p, q);
+
+         if ((large_difference < 0) == (small_difference < 0)){
             return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom because two degrees of freedom can be found using the given parameters",
                RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE 
          }

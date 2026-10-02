@@ -18,6 +18,7 @@
 #include <boost/math/distributions/chi_squared.hpp>
 #include <boost/math/distributions/detail/generic_mode.hpp>
 #include <boost/math/special_functions/pow.hpp>
+#include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/distributions/complement.hpp> // complements
 
@@ -129,6 +130,24 @@ namespace boost
          }
 
          template <class RealType, class Policy>
+         RealType small_v1_approximation(RealType p, RealType q, RealType nc)
+         { // For v1 -> 0, F collapses to a point mass at 0 with probability exp(-nc/2), so cdf(x) -> exp(-nc/2) for any x > 0.
+               BOOST_MATH_STD_USING
+               bool comp = p < q ? false : true;
+               RealType pval =  p < q ? p : q;
+               // comp branch needs 1 - exp(-nc/2), computed via expm1 to avoid cancellation for small nc.
+               return comp ? pval + boost::math::expm1(RealType(-nc / 2)) : exp(RealType(-nc / 2)) - pval;
+         }
+
+         template <class RealType, class Policy>
+         RealType small_v2_approximation(RealType p, RealType q)
+         { // For v2 -> 0, F diverges to infinity a.s., so cdf(x) -> 0 for any finite x.
+               bool comp = p < q ? false : true;
+               RealType pval =  p < q ? p : q;
+               return comp ? pval - 1 : -pval;
+         }
+
+         template <class RealType, class Policy>
          inline RealType find_degrees_of_freedom_f(
             const RealType x, const RealType v, const RealType nc, const bool find_v1, const RealType p, const RealType q, const Policy& pol)
          {
@@ -155,17 +174,21 @@ namespace boost
             // small values of v have the same sign. If the sign is the same, then there 
             // are an even number of roots. If the signs differ, there is only one root
             // and we can safely find the root.
-            RealType vLarge = sqrt(boost::math::tools::max_value<RealType>());
-            RealType vSmall = 1 / vLarge;
 
-            // Rather than evaluating f at an enormous degrees of freedom, use its limit. As v2 -> infinity,
-            // v1 F tends to the non-central chi-squared with v1 degrees of freedom; as v1 -> infinity,
-            // F tends to v2 / chi-squared(v2), central, whatever the non-centrality.
+            // Rather than evaluating f at an enormous or minuscule degrees of freedom, use its
+            // limits. As v2 -> infinity, v1 F tends to the non-central chi-squared with v1 degrees
+            // of freedom; as v1 -> infinity, F tends to v2 / chi-squared(v2), central, whatever the
+            // non-centrality. As v1 -> 0, F collapses to a point mass at 0 with probability
+            // exp(-nc/2); as v2 -> 0, F diverges to infinity almost surely.
             RealType large_difference = find_v1
                ? large_v1_approximation<RealType, Policy>(x, v, p, q)
                : large_v2_approximation<RealType, Policy>(x, v, p, q, nc);
 
-            if ((large_difference < 0) == (f(vSmall) < 0)){
+            RealType small_difference = find_v1
+               ? small_v1_approximation<RealType, Policy>(p, q, nc)
+               : small_v2_approximation<RealType, Policy>(p, q);
+
+            if ((large_difference < 0) == (small_difference < 0)){
                return policies::raise_evaluation_error<RealType>(function, "Can't find degrees of freedom because two degrees of freedom can be found using the given parameters",
                   RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy()); // LCOV_EXCL_LINE 
             }

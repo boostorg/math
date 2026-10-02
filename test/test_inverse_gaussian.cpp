@@ -387,6 +387,16 @@ BOOST_AUTO_TEST_CASE( test_main )
 #endif
   /*      */
   
+  // Large shape: independent high-precision values from the defining CDF.
+  check_inverse_gaussian(1., 1000., 1.,
+    0.506306255528466690646614735956978724498991, 0.493693744471533309353385264043021275501009, tolfeweps);
+  check_inverse_gaussian(1., 1000., 0.96875,
+    0.161492549505796665675678816590357590761845, 0.838507450494203334324321183409642409238155, tolfeweps);
+  check_inverse_gaussian(1., 1000., 1.03125,
+    0.838681329955945237527053545092684829137562, 0.161318670044054762472946454907315170862438, tolfeweps);
+  // The CDF rounds to one here, but its complement is still representable.
+  BOOST_CHECK_CLOSE_FRACTION(cdf(complement(inverse_gaussian_distribution<double>(1, 1000), 1.5)),
+    1.580094156944363444323823384185312e-38, 100 * tolfeweps);
 } // BOOST_AUTO_TEST_CASE( test_main )
 
 /*
@@ -395,5 +405,3 @@ Output:
 
 
 */
-
-

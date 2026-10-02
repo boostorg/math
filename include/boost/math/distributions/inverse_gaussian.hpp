@@ -208,6 +208,28 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const inverse_gaussian_distributio
    return result;
 } // pdf
 
+namespace detail {
+
+template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType inverse_gaussian_cdf_second_term(RealType a, RealType b, RealType shape)
+{
+   BOOST_MATH_STD_USING
+   if (shape < tools::log_max_value<RealType>() / 4)
+      return exp(2 * shape) * cdf(complement(normal_distribution<RealType>(), b));
+
+   // exp(2 * shape) * Phi(-b) = exp(-a*a/2) * erfcx(b/sqrt(2)) / 2.
+   RealType e = exp(-a * a / 2);
+   if (e == 0)
+      return 0;
+   // z*z >= 2*shape, so the continued fraction is only used for large z.
+   RealType z = b / constants::root_two<RealType>();
+   RealType z_squared = z * z;
+   return e * z * upper_gamma_fraction(RealType(0.5f), z_squared, policies::get_epsilon<RealType, Policy>())
+      / (2 * constants::root_pi<RealType>());
+}
+
+} // namespace detail
+
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const inverse_gaussian_distribution<RealType, Policy>& dist, const RealType& x)
 { // Cumulative Density Function.
@@ -246,11 +268,9 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const inverse_gaussian_distribution<R
    RealType n0 = sqrt(scale / x);
    n0 *= ((x / mean) -1);
    RealType n1 = cdf(n01, n0);
-   RealType expfactor = exp(2 * scale / mean);
-   RealType n3 = - sqrt(scale / x);
+   RealType n3 = sqrt(scale / x);
    n3 *= (x / mean) + 1;
-   RealType n4 = cdf(n01, n3);
-   result = n1 + expfactor * n4;
+   result = n1 + detail::inverse_gaussian_cdf_second_term<RealType, Policy>(n0, n3, scale / mean);
    return result;
 } // cdf
 
@@ -426,14 +446,9 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<inverse_gaus
    n0 *= ((x / mean) -1);
    RealType cdf_1 = cdf(complement(n01, n0));
 
-   RealType expfactor = exp(2 * scale / mean);
-   RealType n3 = - sqrt(scale / x);
+   RealType n3 = sqrt(scale / x);
    n3 *= (x / mean) + 1;
-
-   //RealType n5 = +sqrt(scale/x) * ((x /mean) + 1); // note now positive sign.
-   RealType n6 = cdf(complement(n01, +sqrt(scale/x) * ((x /mean) + 1)));
-   // RealType n4 = cdf(n01, n3); // = 
-   result = cdf_1 - expfactor * n6; 
+   result = cdf_1 - detail::inverse_gaussian_cdf_second_term<RealType, Policy>(n0, n3, scale / mean);
    return result;
 } // cdf complement
 
@@ -562,5 +577,3 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const inverse_gaussian_di
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_STATS_INVERSE_GAUSSIAN_HPP
-
-
