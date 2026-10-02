@@ -8,6 +8,9 @@
 // lgamma(a) + lgamma(b) - lgamma(a + b), with a and b log-uniform in [1e-3, 1e6]:
 // the range where neither alternative fails outright for most pairs.
 //
+// Promotion is disabled so that each type is timed in its own arithmetic: by default,
+// float is evaluated in double, and double in long double where that is wider.
+//
 
 #include <cmath>
 #include <random>
@@ -16,6 +19,8 @@
 #include <benchmark/benchmark.h>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/special_functions/gamma.hpp>
+
+using no_promotion = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false>>;
 
 template <typename Real>
 std::vector<std::pair<Real, Real>> arguments()
@@ -38,7 +43,7 @@ void lbeta_performance(benchmark::State& state)
     for (auto _ : state)
     {
         auto const & p = v[i++ & 1023];
-        benchmark::DoNotOptimize(boost::math::lbeta(p.first, p.second));
+        benchmark::DoNotOptimize(boost::math::lbeta(p.first, p.second, no_promotion()));
     }
 }
 
@@ -51,7 +56,7 @@ void log_beta_performance(benchmark::State& state)
     for (auto _ : state)
     {
         auto const & p = v[i++ & 1023];
-        benchmark::DoNotOptimize(log(boost::math::beta(p.first, p.second)));
+        benchmark::DoNotOptimize(log(boost::math::beta(p.first, p.second, no_promotion())));
     }
 }
 
@@ -64,7 +69,7 @@ void lgamma_sum_performance(benchmark::State& state)
     for (auto _ : state)
     {
         auto const & p = v[i++ & 1023];
-        benchmark::DoNotOptimize(lgamma(p.first) + lgamma(p.second) - lgamma(p.first + p.second));
+        benchmark::DoNotOptimize(lgamma(p.first, no_promotion()) + lgamma(p.second, no_promotion()) - lgamma(p.first + p.second, no_promotion()));
     }
 }
 
