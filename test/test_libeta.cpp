@@ -120,6 +120,34 @@ void test_a_equal_to_one_underflow()
    CHECK_ULP_CLOSE(-1040 * ln_two + log(ln_two), libetac(std::ldexp(1.0, -1040), 1.0, 0.5), 1);
 }
 
+// There is no Lanczos approximation at 100 digits, so libeta takes its generic code path. With the exponent range
+// narrowed to about double's, the table's targets below exp(-800) underflow, so only the generic log-space power
+// terms produce them. (Elsewhere ibeta itself currently loses digits at this precision, which libeta would inherit.)
+void test_generic_underflow()
+{
+   using narrow_100 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float<100, boost::multiprecision::digit_base_10, void, std::int32_t, -1100, 1100>>;
+   static_assert(std::is_same<boost::math::lanczos::lanczos<narrow_100, boost::math::policies::policy<>>::type, boost::math::lanczos::undefined_lanczos>::value,
+                 "This test needs a type without a Lanczos approximation.");
+   int checked = 0;
+   for (const libeta_case& c : cases)
+   {
+      narrow_100 a(c.a), b(c.b), x(c.x);
+      narrow_100 log_p = from_reference<narrow_100>(cpp_bin_float_100(c.log_p));
+      narrow_100 log_q = from_reference<narrow_100>(cpp_bin_float_100(c.log_q));
+      if (log_p < -800)
+      {
+         CHECK_ULP_CLOSE(log_p, narrow_100(libeta(a, b, x)), 8);
+         ++checked;
+      }
+      if (log_q < -800)
+      {
+         CHECK_ULP_CLOSE(log_q, narrow_100(libetac(a, b, x)), 8);
+         ++checked;
+      }
+   }
+   CHECK_LE(4, checked);
+}
+
 int main()
 {
    test_a_equal_to_one_underflow();
@@ -134,5 +162,6 @@ int main()
 #endif
    using boost::multiprecision::cpp_bin_float_50;
    test_spots<cpp_bin_float_50>(16, 16 * std::numeric_limits<cpp_bin_float_50>::epsilon());
+   test_generic_underflow();
    return boost::math::test::report_errors();
 }
