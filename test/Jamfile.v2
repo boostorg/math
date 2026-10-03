@@ -489,6 +489,7 @@ test-suite special_fun :
           <toolset>intel:<pch>off
         : test_ibeta_inv_ab_real_concept3  ]
    [ run test_igamma.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
+   [ run test_ligamma.cpp ]
    [ run test_igamma_inv.cpp test_instances//test_instances pch_light  /boost/test//boost_unit_test_framework
         : # command line
         : # input files

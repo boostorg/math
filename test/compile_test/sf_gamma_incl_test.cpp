@@ -51,6 +51,18 @@ check_result<double>(boost::math::lgamma_p<double>(d, d));
    check_result<long double>(boost::math::lgamma_p<long double>(l, l));
 #endif
 
+   check_result<float>(boost::math::ligamma<float>(f, f));
+   check_result<double>(boost::math::ligamma<double>(d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   check_result<long double>(boost::math::ligamma<long double>(l, l));
+#endif
+
+   check_result<float>(boost::math::ligamma_lower<float>(f, f));
+   check_result<double>(boost::math::ligamma_lower<double>(d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   check_result<long double>(boost::math::ligamma_lower<long double>(l, l));
+#endif
+
    check_result<float>(boost::math::gamma_p_inv<float>(f, f));
    check_result<double>(boost::math::gamma_p_inv<double>(d, d));
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
