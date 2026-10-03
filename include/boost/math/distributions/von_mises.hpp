@@ -33,14 +33,14 @@
 #include <limits>
 #endif
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail {
 
 template <class RealType, class Policy>
 inline bool check_von_mises_concentration(const char* function, RealType concentration, RealType* result, const Policy& pol)
 {
-   if (!(boost::math::isfinite)(concentration) || (concentration < 0))
+   if (!(BOOST_MATH_NAMESPACE::isfinite)(concentration) || (concentration < 0))
    {
       *result = policies::raise_domain_error<RealType>(
          function, "Concentration parameter is %1%, but must be finite and >= 0!", concentration, pol);
@@ -102,22 +102,22 @@ BOOST_MATH_EXPORT using von_mises = von_mises_distribution<double>;
 
 #ifdef __cpp_deduction_guides
 BOOST_MATH_EXPORT template <typename RealType>
-von_mises_distribution(RealType)->von_mises_distribution<boost::math::tools::promote_args_t<RealType>>;
+von_mises_distribution(RealType)->von_mises_distribution<BOOST_MATH_NAMESPACE::tools::promote_args_t<RealType>>;
 BOOST_MATH_EXPORT template <typename RealType>
-von_mises_distribution(RealType,RealType)->von_mises_distribution<boost::math::tools::promote_args_t<RealType>>;
+von_mises_distribution(RealType,RealType)->von_mises_distribution<BOOST_MATH_NAMESPACE::tools::promote_args_t<RealType>>;
 #endif
 
 BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline std::pair<RealType, RealType> range(const von_mises_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
-    using boost::math::tools::max_value;
+    using BOOST_MATH_NAMESPACE::tools::max_value;
     return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
 }
 
 BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 inline std::pair<RealType, RealType> support(const von_mises_distribution<RealType, Policy>& dist)
 { // Range of x where the pdf is non-zero: one full turn centred on the mean.
-    const RealType pi = boost::math::constants::pi<RealType>();
+    const RealType pi = BOOST_MATH_NAMESPACE::constants::pi<RealType>();
     return std::pair<RealType, RealType>(dist.mean() - pi, dist.mean() + pi);
 }
 
@@ -514,8 +514,7 @@ inline RealType entropy(const von_mises_distribution<RealType, Policy>& dist)
     return log_two_pi_s0 + k * v;
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

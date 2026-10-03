@@ -15,25 +15,25 @@
 #include <cmath>
 #endif
 
-namespace boost { namespace math { namespace statistics { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics { namespace detail {
 
 template<typename ReturnType, typename T>
 ReturnType one_sample_z_test_impl(T sample_mean, T sample_variance, T sample_size, T assumed_mean)
 {
     using Real = typename std::tuple_element<0, ReturnType>::type;
     using std::sqrt;
-    using no_promote_policy = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false>>;
+    using no_promote_policy = BOOST_MATH_NAMESPACE::policies::policy<BOOST_MATH_NAMESPACE::policies::promote_float<false>, BOOST_MATH_NAMESPACE::policies::promote_double<false>>;
 
     Real test_statistic = (sample_mean - assumed_mean) / (sample_variance / sqrt(sample_size));
-    auto z = boost::math::normal_distribution<Real, no_promote_policy>(sample_size - 1);
+    auto z = BOOST_MATH_NAMESPACE::normal_distribution<Real, no_promote_policy>(sample_size - 1);
     Real pvalue;
     if(test_statistic > 0)
     {
-        pvalue = 2*boost::math::cdf<Real>(z, -test_statistic);
+        pvalue = 2*BOOST_MATH_NAMESPACE::cdf<Real>(z, -test_statistic);
     }
     else
     {
-        pvalue = 2*boost::math::cdf<Real>(z, test_statistic);
+        pvalue = 2*BOOST_MATH_NAMESPACE::cdf<Real>(z, test_statistic);
     }
 
     return std::make_pair(test_statistic, pvalue);
@@ -54,18 +54,18 @@ ReturnType two_sample_z_test_impl(T mean_1, T variance_1, T size_1, T mean_2, T 
 {
     using Real = typename std::tuple_element<0, ReturnType>::type;
     using std::sqrt;
-    using no_promote_policy = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false>>;
+    using no_promote_policy = BOOST_MATH_NAMESPACE::policies::policy<BOOST_MATH_NAMESPACE::policies::promote_float<false>, BOOST_MATH_NAMESPACE::policies::promote_double<false>>;
 
     Real test_statistic = (mean_1 - mean_2) / sqrt(variance_1/size_1 + variance_2/size_2);
-    auto z = boost::math::normal_distribution<Real, no_promote_policy>(size_1 + size_2 - 1);
+    auto z = BOOST_MATH_NAMESPACE::normal_distribution<Real, no_promote_policy>(size_1 + size_2 - 1);
     Real pvalue;
     if(test_statistic > 0)
     {
-        pvalue = 2*boost::math::cdf<Real>(z, -test_statistic);
+        pvalue = 2*BOOST_MATH_NAMESPACE::cdf<Real>(z, -test_statistic);
     }
     else
     {
-        pvalue = 2*boost::math::cdf<Real>(z, test_statistic);
+        pvalue = 2*BOOST_MATH_NAMESPACE::cdf<Real>(z, test_statistic);
     }
 
     return std::make_pair(test_statistic, pvalue);
@@ -158,6 +158,6 @@ inline auto two_sample_z_test(Container const & u, Container const & v) -> std::
     return detail::two_sample_z_test_impl<std::pair<Real, Real>>(std::begin(u), std::end(u), std::begin(v), std::end(v));
 }
 
-}}} // boost::math::statistics
+} BOOST_MATH_NAMESPACE_END // boost::math::statistics
 
 #endif // BOOST_MATH_STATISTICS_Z_TEST_HPP

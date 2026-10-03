@@ -30,7 +30,7 @@
 
 #endif
 
-namespace boost{ namespace math{ namespace tools{
+BOOST_MATH_NAMESPACE_BEGIN namespace tools{
 
    template <class T>
    struct convert_from_string_result
@@ -80,8 +80,7 @@ namespace boost{ namespace math{ namespace tools{
    }
 
 } // namespace tools
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_TOOLS_CONVERT_FROM_STRING_INCLUDED
 

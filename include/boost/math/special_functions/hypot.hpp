@@ -19,7 +19,7 @@
 #include <boost/math/tools/utility.hpp>
 #include <boost/math/tools/numeric_limits.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T hypot_imp(T x, T y, const Policy& pol)
@@ -37,9 +37,9 @@ BOOST_MATH_GPU_ENABLED T hypot_imp(T x, T y, const Policy& pol)
 #pragma warning(disable: 4127)
 #endif
    // special case, see C99 Annex F:
-   if(boost::math::numeric_limits<T>::has_infinity
-      && ((x == boost::math::numeric_limits<T>::infinity())
-      || (y == boost::math::numeric_limits<T>::infinity())))
+   if(BOOST_MATH_NAMESPACE::numeric_limits<T>::has_infinity
+      && ((x == BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity())
+      || (y == BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity())))
       return policies::raise_overflow_error<T>("boost::math::hypot<%1%>(%1%,%1%)", nullptr, pol);
 #ifdef _MSC_VER
 #pragma warning(pop)
@@ -69,11 +69,11 @@ BOOST_MATH_GPU_ENABLED T hypot_imp(T x, T y, T z, const Policy& pol)
    #pragma warning(disable: 4127)
    #endif
    // special case, see C99 Annex F:
-   BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<T>::has_infinity)
+   BOOST_MATH_IF_CONSTEXPR (BOOST_MATH_NAMESPACE::numeric_limits<T>::has_infinity)
    {
-      if(((x == boost::math::numeric_limits<T>::infinity())
-         || (y == boost::math::numeric_limits<T>::infinity())
-         || (z == boost::math::numeric_limits<T>::infinity())))
+      if(((x == BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity())
+         || (y == BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity())
+         || (z == BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity())))
          return policies::raise_overflow_error<T>("boost::math::hypot<%1%>(%1%,%1%,%1%)", nullptr, pol);
    }
    #ifdef _MSC_VER
@@ -108,7 +108,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
       static_cast<result_type>(x), static_cast<result_type>(y), policies::policy<>());
 }
 
-BOOST_MATH_EXPORT template <class T1, class T2, class Policy, boost::math::enable_if_t<policies::is_policy_v<Policy>, bool>>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy, BOOST_MATH_NAMESPACE::enable_if_t<policies::is_policy_v<Policy>, bool>>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
    hypot(T1 x, T2 y, const Policy& pol)
 {
@@ -117,7 +117,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
       static_cast<result_type>(x), static_cast<result_type>(y), pol);
 }
 
-BOOST_MATH_EXPORT template <class T1, class T2, class T3, boost::math::enable_if_t<!policies::is_policy_v<T3>, bool>>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, BOOST_MATH_NAMESPACE::enable_if_t<!policies::is_policy_v<T3>, bool>>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2, T3>
    hypot(T1 x, T2 y, T3 z)
 {
@@ -139,8 +139,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2, T3>
                             pol);
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPOT_INCLUDED
 

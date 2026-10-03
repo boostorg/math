@@ -14,14 +14,14 @@
 
 #include <boost/math/ccmath/isnan.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 BOOST_MATH_EXPORT template <typename T>
 inline constexpr bool isunordered(const T x, const T y) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        return boost::math::ccmath::isnan(x) || boost::math::ccmath::isnan(y);
+        return BOOST_MATH_NAMESPACE::ccmath::isnan(x) || BOOST_MATH_NAMESPACE::ccmath::isnan(y);
     }
     else
     {
@@ -30,6 +30,6 @@ inline constexpr bool isunordered(const T x, const T y) noexcept
     }
 }
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_ISUNORDERED_HPP

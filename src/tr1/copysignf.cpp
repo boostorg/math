@@ -13,7 +13,7 @@
 
 extern "C" float BOOST_MATH_TR1_DECL boost_copysignf BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(float x, float y) BOOST_MATH_C99_THROW_SPEC
 {
-   return boost::math::copysign BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, y);
+   return BOOST_MATH_NAMESPACE::copysign BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, y);
 }
 
 

@@ -25,7 +25,7 @@
 #include <algorithm>
 #endif
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 class segment_sieve
 {
@@ -152,6 +152,6 @@ private:
     std::size_t next_prime_ {0};
 };
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_ENGINE_HPP

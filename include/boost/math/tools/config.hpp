@@ -11,6 +11,72 @@
 #pragma once
 #endif
 
+// Configurable top level namespace (https://github.com/boostorg/math/issues/769).
+// Define BOOST_MATH_NAMESPACE_COMPONENTS as a comma separated list of 1 to 5 identifiers
+// outermost first, e.g. "my_lib, math" places the library in ::my_lib::math.
+// Without C++17 nested namespaces we needed some heroics to make this work
+#if defined(BOOST_MATH_NAMESPACE) || defined(BOOST_MATH_NAMESPACE_LEVELS) || defined(BOOST_MATH_NAMESPACE_BEGIN) || defined(BOOST_MATH_NAMESPACE_END) || defined(BOOST_MATH_DETAIL_NAMESPACE) || defined(BOOST_MATH_DETAIL_NAMESPACE_BEGIN) || defined(BOOST_MATH_DETAIL_NAMESPACE_END)
+#  error "Configure the namespace with BOOST_MATH_NAMESPACE_COMPONENTS (e.g. my_lib, math); the other BOOST_MATH_NAMESPACE macros are derived from it"
+#endif
+
+#ifndef BOOST_MATH_NAMESPACE_COMPONENTS
+#  define BOOST_MATH_NAMESPACE_COMPONENTS boost, math
+#endif
+
+// The extra expansion makes MSVC's traditional preprocessor split the components into separate arguments
+#define BOOST_MATH_DETAIL_NS_EXPAND(x) x
+#define BOOST_MATH_DETAIL_NS_COUNT_I(a1, a2, a3, a4, a5, a6, n, ...) n
+#define BOOST_MATH_DETAIL_NS_COUNT(...) BOOST_MATH_DETAIL_NS_EXPAND(BOOST_MATH_DETAIL_NS_COUNT_I(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0))
+#define BOOST_MATH_DETAIL_NS_APPLY(macro, args) BOOST_MATH_DETAIL_NS_EXPAND(macro args)
+
+#if BOOST_MATH_DETAIL_NS_COUNT(BOOST_MATH_NAMESPACE_COMPONENTS) == 1
+#  define BOOST_MATH_NAMESPACE_LEVELS 1
+#  define BOOST_MATH_DETAIL_NS_OPEN(a1) namespace a1 {
+#  define BOOST_MATH_DETAIL_NS_QUALIFY(a1) a1
+#  define BOOST_MATH_DETAIL_NS_OPEN_SIBLING(a1) namespace a1##_detail {
+#  define BOOST_MATH_DETAIL_NS_QUALIFY_SIBLING(a1) a1##_detail
+#  define BOOST_MATH_NAMESPACE_END }
+#elif BOOST_MATH_DETAIL_NS_COUNT(BOOST_MATH_NAMESPACE_COMPONENTS) == 2
+#  define BOOST_MATH_NAMESPACE_LEVELS 2
+#  define BOOST_MATH_DETAIL_NS_OPEN(a1, a2) namespace a1 { namespace a2 {
+#  define BOOST_MATH_DETAIL_NS_QUALIFY(a1, a2) a1::a2
+#  define BOOST_MATH_DETAIL_NS_OPEN_SIBLING(a1, a2) namespace a1 { namespace a2##_detail {
+#  define BOOST_MATH_DETAIL_NS_QUALIFY_SIBLING(a1, a2) a1::a2##_detail
+#  define BOOST_MATH_NAMESPACE_END }}
+#elif BOOST_MATH_DETAIL_NS_COUNT(BOOST_MATH_NAMESPACE_COMPONENTS) == 3
+#  define BOOST_MATH_NAMESPACE_LEVELS 3
+#  define BOOST_MATH_DETAIL_NS_OPEN(a1, a2, a3) namespace a1 { namespace a2 { namespace a3 {
+#  define BOOST_MATH_DETAIL_NS_QUALIFY(a1, a2, a3) a1::a2::a3
+#  define BOOST_MATH_DETAIL_NS_OPEN_SIBLING(a1, a2, a3) namespace a1 { namespace a2 { namespace a3##_detail {
+#  define BOOST_MATH_DETAIL_NS_QUALIFY_SIBLING(a1, a2, a3) a1::a2::a3##_detail
+#  define BOOST_MATH_NAMESPACE_END }}}
+#elif BOOST_MATH_DETAIL_NS_COUNT(BOOST_MATH_NAMESPACE_COMPONENTS) == 4
+#  define BOOST_MATH_NAMESPACE_LEVELS 4
+#  define BOOST_MATH_DETAIL_NS_OPEN(a1, a2, a3, a4) namespace a1 { namespace a2 { namespace a3 { namespace a4 {
+#  define BOOST_MATH_DETAIL_NS_QUALIFY(a1, a2, a3, a4) a1::a2::a3::a4
+#  define BOOST_MATH_DETAIL_NS_OPEN_SIBLING(a1, a2, a3, a4) namespace a1 { namespace a2 { namespace a3 { namespace a4##_detail {
+#  define BOOST_MATH_DETAIL_NS_QUALIFY_SIBLING(a1, a2, a3, a4) a1::a2::a3::a4##_detail
+#  define BOOST_MATH_NAMESPACE_END }}}}
+#elif BOOST_MATH_DETAIL_NS_COUNT(BOOST_MATH_NAMESPACE_COMPONENTS) == 5
+#  define BOOST_MATH_NAMESPACE_LEVELS 5
+#  define BOOST_MATH_DETAIL_NS_OPEN(a1, a2, a3, a4, a5) namespace a1 { namespace a2 { namespace a3 { namespace a4 { namespace a5 {
+#  define BOOST_MATH_DETAIL_NS_QUALIFY(a1, a2, a3, a4, a5) a1::a2::a3::a4::a5
+#  define BOOST_MATH_DETAIL_NS_OPEN_SIBLING(a1, a2, a3, a4, a5) namespace a1 { namespace a2 { namespace a3 { namespace a4 { namespace a5##_detail {
+#  define BOOST_MATH_DETAIL_NS_QUALIFY_SIBLING(a1, a2, a3, a4, a5) a1::a2::a3::a4::a5##_detail
+#  define BOOST_MATH_NAMESPACE_END }}}}}
+#else
+#  error "BOOST_MATH_NAMESPACE_COMPONENTS must contain between 1 and 5 identifiers, please file a bug report at https://github.com/boostorg/math/ if you need more"
+#endif
+
+#define BOOST_MATH_NAMESPACE_BEGIN BOOST_MATH_DETAIL_NS_APPLY(BOOST_MATH_DETAIL_NS_OPEN, (BOOST_MATH_NAMESPACE_COMPONENTS))
+#define BOOST_MATH_NAMESPACE BOOST_MATH_DETAIL_NS_APPLY(BOOST_MATH_DETAIL_NS_QUALIFY, (BOOST_MATH_NAMESPACE_COMPONENTS))
+
+// Sibling of the library namespace with "_detail" appended to the innermost component
+// (::boost::math_detail by default) for helpers that must not be enclosed by the library namespace.
+#define BOOST_MATH_DETAIL_NAMESPACE_BEGIN BOOST_MATH_DETAIL_NS_APPLY(BOOST_MATH_DETAIL_NS_OPEN_SIBLING, (BOOST_MATH_NAMESPACE_COMPONENTS))
+#define BOOST_MATH_DETAIL_NAMESPACE_END BOOST_MATH_NAMESPACE_END
+#define BOOST_MATH_DETAIL_NAMESPACE BOOST_MATH_DETAIL_NS_APPLY(BOOST_MATH_DETAIL_NS_QUALIFY_SIBLING, (BOOST_MATH_NAMESPACE_COMPONENTS))
+
 // C++20 named module support.
 // BOOST_MATH_BUILD_MODULE is defined when building or consuming the boost.math
 // module (module/math.cppm and the module test harness). BOOST_MATH_EXPORT marks
@@ -364,18 +430,18 @@
 
 #if defined(__SUNPRO_CC) && (__SUNPRO_CC <= 0x590)
 
-namespace boost { namespace math { namespace tools { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools { namespace detail {
 template <typename T>
 struct type {};
 
 template <typename T, T n>
 struct non_type {};
-}}}} // Namespace boost, math tools, detail
+}} BOOST_MATH_NAMESPACE_END // Namespace boost, math tools, detail
 
-#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(t)              boost::math::tools::detail::type<t>* = 0
-#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(t)         boost::math::tools::detail::type<t>*
-#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE(t, v)       boost::math::tools::detail::non_type<t, v>* = 0
-#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)  boost::math::tools::detail::non_type<t, v>*
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(t)              BOOST_MATH_NAMESPACE::tools::detail::type<t>* = 0
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(t)         BOOST_MATH_NAMESPACE::tools::detail::type<t>*
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE(t, v)       BOOST_MATH_NAMESPACE::tools::detail::non_type<t, v>* = 0
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)  BOOST_MATH_NAMESPACE::tools::detail::non_type<t, v>*
 
 #  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(t)         \
              , BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(t)
@@ -578,7 +644,7 @@ struct non_type {};
 #define BOOST_MATH_STD_USING BOOST_MATH_STD_USING_CORE
 
 #if !defined(BOOST_MATH_BUILD_MODULE) || defined(BOOST_MATH_INTERFACE_UNIT)
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 namespace tools
 {
 
@@ -611,7 +677,7 @@ struct is_integer_for_rounding
 
 }
 
-}} // namespace boost namespace math
+BOOST_MATH_NAMESPACE_END
 #endif
 
 #ifdef __GLIBC_PREREQ
@@ -634,7 +700,7 @@ struct is_integer_for_rounding
 
 #  ifdef FE_ALL_EXCEPT
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
    namespace detail
    {
    struct fpu_guard
@@ -653,9 +719,9 @@ namespace boost{ namespace math{
    };
 
    } // namespace detail
-   }} // namespaces
+   BOOST_MATH_NAMESPACE_END
 
-#    define BOOST_FPU_EXCEPTION_GUARD boost::math::detail::fpu_guard local_guard_object;
+#    define BOOST_FPU_EXCEPTION_GUARD BOOST_MATH_NAMESPACE::detail::fpu_guard local_guard_object;
 #    define BOOST_MATH_INSTRUMENT_FPU do{ fexcept_t cpu_flags; fegetexceptflag(&cpu_flags, FE_ALL_EXCEPT); BOOST_MATH_INSTRUMENT_VARIABLE(cpu_flags); } while(0); 
 
 #  else
@@ -851,7 +917,7 @@ BOOST_MATH_GPU_ENABLED constexpr T gpu_safe_max(const T& a, const T& b) { return
 #define BOOST_MATH_STATIC static
 #define BOOST_MATH_STATIC_LOCAL_VARIABLE
 
-#define BOOST_MATH_NOEXCEPT(T) noexcept(boost::math::is_floating_point_v<T>)
+#define BOOST_MATH_NOEXCEPT(T) noexcept(BOOST_MATH_NAMESPACE::is_floating_point_v<T>)
 #define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T) 
 #define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) 
 #define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T) 
@@ -859,7 +925,7 @@ BOOST_MATH_GPU_ENABLED constexpr T gpu_safe_max(const T& a, const T& b) { return
 #define BOOST_MATH_FORCEINLINE __forceinline__
 #define BOOST_MATH_STD_USING  
 #define BOOST_MATH_IF_CONSTEXPR if
-#define BOOST_MATH_IS_FLOAT(T) (boost::math::is_floating_point<T>::value)
+#define BOOST_MATH_IS_FLOAT(T) (BOOST_MATH_NAMESPACE::is_floating_point<T>::value)
 #define BOOST_MATH_CONSTEXPR_TABLE_FUNCTION constexpr
 #define BOOST_MATH_NO_EXCEPTIONS
 #define BOOST_MATH_PREVENT_MACRO_SUBSTITUTION 

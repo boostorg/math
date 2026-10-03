@@ -19,8 +19,7 @@
 #include <type_traits>
 #include <vector>
 #endif
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {
 namespace detail {
@@ -460,7 +459,6 @@ public:
 } // namespace detail
 } // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif

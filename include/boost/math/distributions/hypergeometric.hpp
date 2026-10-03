@@ -20,7 +20,7 @@
 #include <cstdint>
 #endif
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
    BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
    class hypergeometric_distribution
@@ -56,13 +56,13 @@ namespace boost { namespace math {
       {
          if(m_r > m_N)
          {
-            *result = boost::math::policies::raise_domain_error<RealType>(
+            *result = BOOST_MATH_NAMESPACE::policies::raise_domain_error<RealType>(
                function, "Parameter r out of range: must be <= N but got %1%", static_cast<RealType>(m_r), Policy());
             return false;
          }
          if(m_n > m_N)
          {
-            *result = boost::math::policies::raise_domain_error<RealType>(
+            *result = BOOST_MATH_NAMESPACE::policies::raise_domain_error<RealType>(
                function, "Parameter n out of range: must be <= N but got %1%", static_cast<RealType>(m_n), Policy());
             return false;
          }
@@ -72,13 +72,13 @@ namespace boost { namespace math {
       {
          if(x < static_cast<std::uint64_t>((std::max)(INT64_C(0), static_cast<std::int64_t>(m_n + m_r) - static_cast<std::int64_t>(m_N))))
          {
-            *result = boost::math::policies::raise_domain_error<RealType>(
+            *result = BOOST_MATH_NAMESPACE::policies::raise_domain_error<RealType>(
                function, "Random variable out of range: must be > 0 and > m + r - N but got %1%", static_cast<RealType>(x), Policy());
             return false;
          }
          if(x > (std::min)(m_r, m_n))
          {
-            *result = boost::math::policies::raise_domain_error<RealType>(
+            *result = BOOST_MATH_NAMESPACE::policies::raise_domain_error<RealType>(
                function, "Random variable out of range: must be less than both n and r but got %1%", static_cast<RealType>(x), Policy());
             return false;
          }
@@ -129,7 +129,7 @@ namespace boost { namespace math {
       if(!dist.check_x(x, function, &result))
          return result;
 
-      return boost::math::detail::hypergeometric_pdf<RealType>(
+      return BOOST_MATH_NAMESPACE::detail::hypergeometric_pdf<RealType>(
          x, dist.defective(), dist.sample_count(), dist.total(), Policy());
    }
 
@@ -150,13 +150,13 @@ namespace boost { namespace math {
          return result;
       const RealType lower = static_cast<RealType>((std::max)(INT64_C(0), static_cast<std::int64_t>(dist.sample_count() + dist.defective()) - static_cast<std::int64_t>(dist.total())));
       const RealType upper = static_cast<RealType>((std::min)(dist.defective(), dist.sample_count()));
-      if(!(boost::math::isfinite)(r) || !(r > lower) || !(r < upper))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(r) || !(r > lower) || !(r < upper))
       {
-         return boost::math::policies::raise_domain_error<RealType>(
+         return BOOST_MATH_NAMESPACE::policies::raise_domain_error<RealType>(
             function, "Random variable out of range: must be between max(0, n + r - N) and min(n, r) but got %1%", r, Policy());
       }
       // Here x > 0, so its truncation u is floor(x).
-      return boost::math::detail::hypergeometric_pdf_noninteger(
+      return BOOST_MATH_NAMESPACE::detail::hypergeometric_pdf_noninteger(
          r, u, dist.defective(), dist.sample_count(), dist.total(), Policy());
    }
 
@@ -170,7 +170,7 @@ namespace boost { namespace math {
       if(!dist.check_x(x, function, &result))
          return result;
 
-      return boost::math::detail::hypergeometric_cdf<RealType>(
+      return BOOST_MATH_NAMESPACE::detail::hypergeometric_cdf<RealType>(
          x, dist.defective(), dist.sample_count(), dist.total(), false, Policy());
    }
 
@@ -183,7 +183,7 @@ namespace boost { namespace math {
       auto u = static_cast<std::uint64_t>(lltrunc(r, typename policies::normalise<Policy, policies::rounding_error<policies::ignore_error> >::type()));
       if(u != r)
       {
-         return boost::math::policies::raise_domain_error<RealType>(
+         return BOOST_MATH_NAMESPACE::policies::raise_domain_error<RealType>(
             function, "Random variable out of range: must be an integer but got %1%", r, Policy());
       }
       return cdf(dist, u);
@@ -199,7 +199,7 @@ namespace boost { namespace math {
       if(!c.dist.check_x(c.param, function, &result))
          return result;
 
-      return boost::math::detail::hypergeometric_cdf<RealType>(
+      return BOOST_MATH_NAMESPACE::detail::hypergeometric_cdf<RealType>(
          c.param, c.dist.defective(), c.dist.sample_count(), c.dist.total(), true, Policy());
    }
 
@@ -212,7 +212,7 @@ namespace boost { namespace math {
       auto u = static_cast<std::uint64_t>(lltrunc(r, typename policies::normalise<Policy, policies::rounding_error<policies::ignore_error> >::type()));
       if(u != r)
       {
-         return boost::math::policies::raise_domain_error<RealType>(
+         return BOOST_MATH_NAMESPACE::policies::raise_domain_error<RealType>(
             function, "Random variable out of range: must be an integer but got %1%", r, Policy());
       }
       return cdf(complement(c.dist, u));
@@ -315,7 +315,7 @@ namespace boost { namespace math {
    {
       return kurtosis_excess(dist) + 3;
    } // RealType kurtosis_excess(const hypergeometric_distribution<RealType, Policy>& dist)
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

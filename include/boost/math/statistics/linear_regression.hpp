@@ -20,7 +20,7 @@
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/statistics/bivariate_statistics.hpp>
 
-namespace boost { namespace math { namespace statistics { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics { namespace detail {
 
 
 template<class ReturnType, class RandomAccessContainer>
@@ -37,12 +37,12 @@ ReturnType simple_ordinary_least_squares_impl(RandomAccessContainer const & x,
     {
         throw std::domain_error("The same number of samples must be in the independent and dependent variable.");
     }
-    std::tuple<Real, Real, Real> temp = boost::math::statistics::means_and_covariance(x, y);
+    std::tuple<Real, Real, Real> temp = BOOST_MATH_NAMESPACE::statistics::means_and_covariance(x, y);
     Real mu_x = std::get<0>(temp);
     Real mu_y = std::get<1>(temp);
     Real cov_xy = std::get<2>(temp);
 
-    Real var_x = boost::math::statistics::variance(x);
+    Real var_x = BOOST_MATH_NAMESPACE::statistics::variance(x);
 
     if (var_x <= 0) {
         throw std::domain_error("Independent variable has no variance; this breaks linear regression.");
@@ -69,12 +69,12 @@ ReturnType simple_ordinary_least_squares_with_R_squared_impl(RandomAccessContain
     {
         throw std::domain_error("The same number of samples must be in the independent and dependent variable.");
     }
-    std::tuple<Real, Real, Real> temp = boost::math::statistics::means_and_covariance(x, y);
+    std::tuple<Real, Real, Real> temp = BOOST_MATH_NAMESPACE::statistics::means_and_covariance(x, y);
     Real mu_x = std::get<0>(temp);
     Real mu_y = std::get<1>(temp);
     Real cov_xy = std::get<2>(temp);
 
-    Real var_x = boost::math::statistics::variance(x);
+    Real var_x = BOOST_MATH_NAMESPACE::statistics::variance(x);
 
     if (var_x <= 0) {
         throw std::domain_error("Independent variable has no variance; this breaks linear regression.");
@@ -131,5 +131,5 @@ inline auto simple_ordinary_least_squares_with_R_squared(RandomAccessContainer c
 {
     return detail::simple_ordinary_least_squares_with_R_squared_impl<std::tuple<Real, Real, Real>>(x, y);
 }
-}}} // namespace boost::math::statistics
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::statistics
 #endif

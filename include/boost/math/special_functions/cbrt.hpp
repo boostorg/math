@@ -22,7 +22,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail
 {
@@ -71,9 +71,9 @@ BOOST_MATH_GPU_ENABLED T cbrt_imp(T z, const Policy& pol)
       static_cast<T>(1.2599210498948731647672106072782),   // 2^1/3
       static_cast<T>(1.5874010519681994747517056392723),   // 2^2/3
    };
-   if((boost::math::isinf)(z) || (z == 0))
+   if((BOOST_MATH_NAMESPACE::isinf)(z) || (z == 0))
       return z;
-   if(!(boost::math::isfinite)(z))
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(z))
    {
       return policies::raise_domain_error("boost::math::cbrt<%1%>(%1%)", "Argument to function must be finite but got %1%.", z, pol);
    }
@@ -172,13 +172,11 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cbrt(T z)
    return cbrt(z, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #else // Special NVRTC handling
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED double cbrt(T x)
@@ -203,8 +201,7 @@ BOOST_MATH_GPU_ENABLED float cbrt(float x, const Policy&)
    return ::cbrtf(x);
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // NVRTC
 

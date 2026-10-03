@@ -33,7 +33,7 @@
 // Elliptic integrals (complete and incomplete) of the second kind
 // Carlson, Numerische Mathematik, vol 33, 1 (1979)
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_d(T1 k, T2 phi, const Policy& pol);
@@ -48,8 +48,8 @@ template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T ellint_d_imp(T phi, T k, const Policy& pol)
 {
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
-    using namespace boost::math::constants;
+    using namespace BOOST_MATH_NAMESPACE::tools;
+    using namespace BOOST_MATH_NAMESPACE::constants;
 
     bool invert = false;
     if(phi < 0)
@@ -76,10 +76,10 @@ BOOST_MATH_GPU_ENABLED T ellint_d_imp(T phi, T k, const Policy& pol)
        // Carlson's algorithm works only for |phi| <= pi/2,
        // use the integrand's periodicity to normalize phi
        //
-       T rphi = boost::math::tools::fmod_workaround(phi, T(constants::half_pi<T>()));
-       T m = boost::math::round((phi - rphi) / constants::half_pi<T>());
+       T rphi = BOOST_MATH_NAMESPACE::tools::fmod_workaround(phi, T(constants::half_pi<T>()));
+       T m = BOOST_MATH_NAMESPACE::round((phi - rphi) / constants::half_pi<T>());
        int s = 1;
-       if(boost::math::tools::fmod_workaround(m, T(2)) > T(0.5))
+       if(BOOST_MATH_NAMESPACE::tools::fmod_workaround(m, T(2)) > T(0.5))
        {
           m += 1;
           s = -1;
@@ -119,7 +119,7 @@ template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T ellint_d_imp(T k, const Policy& pol)
 {
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
+    using namespace BOOST_MATH_NAMESPACE::tools;
 
     if (abs(k) >= 1)
     {
@@ -138,7 +138,7 @@ BOOST_MATH_GPU_ENABLED T ellint_d_imp(T k, const Policy& pol)
 }
 
 template <typename T, typename Policy>
-BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type ellint_d(T k, const Policy& pol, const boost::math::true_type&)
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type ellint_d(T k, const Policy& pol, const BOOST_MATH_NAMESPACE::true_type&)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -147,9 +147,9 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type ellint_d(T k
 
 // Elliptic integral (Legendre form) of the second kind
 template <class T1, class T2>
-BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type ellint_d(T1 k, T2 phi, const boost::math::false_type&)
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type ellint_d(T1 k, T2 phi, const BOOST_MATH_NAMESPACE::false_type&)
 {
-   return boost::math::ellint_d(k, phi, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::ellint_d(k, phi, policies::policy<>());
 }
 
 } // detail
@@ -177,7 +177,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type ellint_
    return policies::checked_narrowing_cast<result_type, Policy>(detail::ellint_d_imp(static_cast<value_type>(phi), static_cast<value_type>(k), pol), "boost::math::ellint_2<%1%>(%1%,%1%)");
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ELLINT_D_HPP
 

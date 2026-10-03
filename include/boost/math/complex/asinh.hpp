@@ -13,7 +13,7 @@
 #  include <boost/math/complex/asin.hpp>
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template<class T> 
 [[deprecated("Replaced by C++11")]] inline std::complex<T> asinh(const std::complex<T>& x)
@@ -24,9 +24,9 @@ BOOST_MATH_EXPORT template<class T>
    // to say asin is specified in terms of asinh), this is consistent
    // with C99 though:
    //
-   return ::boost::math::detail::mult_i(::boost::math::asin(::boost::math::detail::mult_minus_i(x)));
+   return ::BOOST_MATH_NAMESPACE::detail::mult_i(::BOOST_MATH_NAMESPACE::asin(::BOOST_MATH_NAMESPACE::detail::mult_minus_i(x)));
 }
 
-} } // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_COMPLEX_ASINH_INCLUDED

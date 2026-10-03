@@ -40,7 +40,7 @@
 #include <limits>
 #endif
 
-namespace boost::math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail::prime_sieve {
 
@@ -354,7 +354,7 @@ inline void prime_reserve(Integer upper_bound, std::vector<T, Alloc>& primes)
     }
 }
 
-} // namespace boost::math
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HAS_NVRTC
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_PRIME_SIEVE_HPP

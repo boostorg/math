@@ -17,7 +17,7 @@
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isfinite.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail
 {
@@ -67,9 +67,9 @@ inline constexpr Real frexp(Real arg, int* exp)
     {
         return arg == Real(0)  ? detail::frexp_zero_impl(arg, exp) : 
                arg == Real(-0) ? detail::frexp_zero_impl(arg, exp) :
-               boost::math::ccmath::isinf(arg) ? detail::frexp_zero_impl(arg, exp) : 
-               boost::math::ccmath::isnan(arg) ? detail::frexp_zero_impl(arg, exp) :
-               boost::math::ccmath::detail::frexp_impl(arg, exp);
+               BOOST_MATH_NAMESPACE::ccmath::isinf(arg) ? detail::frexp_zero_impl(arg, exp) : 
+               BOOST_MATH_NAMESPACE::ccmath::isnan(arg) ? detail::frexp_zero_impl(arg, exp) :
+               BOOST_MATH_NAMESPACE::ccmath::detail::frexp_impl(arg, exp);
     }
     else
     {
@@ -81,21 +81,21 @@ inline constexpr Real frexp(Real arg, int* exp)
 BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr double frexp(Z arg, int* exp)
 {
-    return boost::math::ccmath::frexp(static_cast<double>(arg), exp);
+    return BOOST_MATH_NAMESPACE::ccmath::frexp(static_cast<double>(arg), exp);
 }
 
 inline constexpr float frexpf(float arg, int* exp)
 {
-    return boost::math::ccmath::frexp(arg, exp);
+    return BOOST_MATH_NAMESPACE::ccmath::frexp(arg, exp);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline constexpr long double frexpl(long double arg, int* exp)
 {
-    return boost::math::ccmath::frexp(arg, exp);
+    return BOOST_MATH_NAMESPACE::ccmath::frexp(arg, exp);
 }
 #endif
 
-}
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_FREXP_HPP

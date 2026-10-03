@@ -6,7 +6,9 @@
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <cstddef>
 #endif
-namespace boost { namespace math { namespace quadrature { namespace detail {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature { namespace detail {
 template<class K, class Real>
 K norm_quadrature_error(const K& zero, Real invalid, Real* error, Real* l1, std::size_t* levels = nullptr)
 {
@@ -16,5 +18,5 @@ K norm_quadrature_error(const K& zero, Real invalid, Real* error, Real* l1, std:
     K result = zero * invalid;
     return result;
 }
-}}}}
+}} BOOST_MATH_NAMESPACE_END
 #endif

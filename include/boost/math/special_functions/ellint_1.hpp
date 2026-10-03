@@ -31,7 +31,7 @@
 // Elliptic integrals (complete and incomplete) of the first kind
 // Carlson, Numerische Mathematik, vol 33, 1 (1979)
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol);
@@ -39,11 +39,11 @@ BOOST_MATH_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k,
 namespace detail{
 
 template <typename T, typename Policy>
-BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, boost::math::integral_constant<int, 0> const&);
+BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, BOOST_MATH_NAMESPACE::integral_constant<int, 0> const&);
 template <typename T, typename Policy>
-BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, boost::math::integral_constant<int, 1> const&);
+BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, BOOST_MATH_NAMESPACE::integral_constant<int, 1> const&);
 template <typename T, typename Policy>
-BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, boost::math::integral_constant<int, 2> const&);
+BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, BOOST_MATH_NAMESPACE::integral_constant<int, 2> const&);
 template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, T one_minus_k2);
 
@@ -52,8 +52,8 @@ template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T ellint_f_imp(T phi, T k, const Policy& pol, T one_minus_k2)
 {
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
-    using namespace boost::math::constants;
+    using namespace BOOST_MATH_NAMESPACE::tools;
+    using namespace BOOST_MATH_NAMESPACE::constants;
 
     constexpr auto function = "boost::math::ellint_f<%1%>(%1%,%1%)";
     BOOST_MATH_INSTRUMENT_VARIABLE(phi);
@@ -93,12 +93,12 @@ BOOST_MATH_GPU_ENABLED T ellint_f_imp(T phi, T k, const Policy& pol, T one_minus
        // so rewritten to use fmod instead:
        //
        BOOST_MATH_INSTRUMENT_CODE("pi/2 = " << constants::pi<T>() / 2);
-       T rphi = boost::math::tools::fmod_workaround(phi, T(constants::half_pi<T>()));
+       T rphi = BOOST_MATH_NAMESPACE::tools::fmod_workaround(phi, T(constants::half_pi<T>()));
        BOOST_MATH_INSTRUMENT_VARIABLE(rphi);
-       T m = boost::math::round((phi - rphi) / constants::half_pi<T>());
+       T m = BOOST_MATH_NAMESPACE::round((phi - rphi) / constants::half_pi<T>());
        BOOST_MATH_INSTRUMENT_VARIABLE(m);
        int s = 1;
-       if(boost::math::tools::fmod_workaround(m, T(2)) > T(0.5))
+       if(BOOST_MATH_NAMESPACE::tools::fmod_workaround(m, T(2)) > T(0.5))
        {
           m += 1;
           s = -1;
@@ -162,7 +162,7 @@ template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T ellint_k_imp(T k, const Policy& pol, T one_minus_k2)
 {
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
+    using namespace BOOST_MATH_NAMESPACE::tools;
 
     constexpr auto function = "boost::math::ellint_k<%1%>(%1%)";
 
@@ -182,7 +182,7 @@ BOOST_MATH_GPU_ENABLED T ellint_k_imp(T k, const Policy& pol, T one_minus_k2)
     return value;
 }
 template <typename T, typename Policy>
-BOOST_MATH_GPU_ENABLED inline T ellint_k_imp(T k, const Policy& pol, boost::math::integral_constant<int, 2> const&)
+BOOST_MATH_GPU_ENABLED inline T ellint_k_imp(T k, const Policy& pol, BOOST_MATH_NAMESPACE::integral_constant<int, 2> const&)
 {
    return ellint_k_imp(k, pol, T(1 - k * k));
 }
@@ -204,10 +204,10 @@ BOOST_MATH_GPU_ENABLED inline T ellint_k_imp(T k, const Policy& pol, boost::math
 // archived in the code below), but was found to have slightly higher error rates.
 //
 template <typename T, typename Policy>
-BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, boost::math::integral_constant<int, 0> const&)
+BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, BOOST_MATH_NAMESPACE::integral_constant<int, 0> const&)
 {
    BOOST_MATH_STD_USING
-   using namespace boost::math::tools;
+   using namespace BOOST_MATH_NAMESPACE::tools;
 
    T m = k * k;
 
@@ -232,7 +232,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          static_cast<T>(0.081541118718303215),
          static_cast<T>(0.078199656811256481910)
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - static_cast<T>(0.05));
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - static_cast<T>(0.05));
    }
    case 2:
    case 3:
@@ -253,7 +253,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          static_cast<T>(0.248557682972264071),
          static_cast<T>(0.266363809892617521)
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - static_cast<T>(0.15));
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - static_cast<T>(0.15));
    }
    case 4:
    case 5:
@@ -274,7 +274,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          static_cast<T>(0.871013847709812357),
          static_cast<T>(1.057652872753547036)
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - static_cast<T>(0.25));
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - static_cast<T>(0.25));
    }
    case 6:
    case 7:
@@ -296,7 +296,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          static_cast<T>(5.115867135558865806),
          static_cast<T>(7.224080007363877411)
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - static_cast<T>(0.35));
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - static_cast<T>(0.35));
    }
    case 8:
    case 9:
@@ -319,7 +319,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          static_cast<T>(53.73749198700554656),
          static_cast<T>(90.27388602940998849)
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - static_cast<T>(0.45));
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - static_cast<T>(0.45));
    }
    case 10:
    case 11:
@@ -343,7 +343,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          static_cast<T>(1228.420013075863451),
          static_cast<T>(2536.529755382764488)
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - static_cast<T>(0.55));
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - static_cast<T>(0.55));
    }
    case 12:
    case 13:
@@ -369,7 +369,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          static_cast<T>(228672.1890493117096),
          static_cast<T>(612757.2711915852774)
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - static_cast<T>(0.65));
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - static_cast<T>(0.65));
    }
    case 14:
    case 15:
@@ -398,7 +398,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          static_cast<T>(1901975729.538660119),
          static_cast<T>(7208915015.330103756)
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - static_cast<T>(0.75));
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - static_cast<T>(0.75));
    }
    case 16:
       //else if (m < static_cast<T>(0.85))
@@ -422,7 +422,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          static_cast<T>(1408862325.028702687),
          static_cast<T>(7515687935.373774627)
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - static_cast<T>(0.825));
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - static_cast<T>(0.825));
    }
    case 17:
       //else if (m < static_cast<T>(0.90))
@@ -450,20 +450,20 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          static_cast<T>(499488053713388.7989),
          static_cast<T>(37859743397240299.20)
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - static_cast<T>(0.875));
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - static_cast<T>(0.875));
    }
    default:
       //
       // This handles all cases where m > 0.9, 
       // including all error handling:
       //
-      return ellint_k_imp(k, pol, boost::math::integral_constant<int, 2>());
+      return ellint_k_imp(k, pol, BOOST_MATH_NAMESPACE::integral_constant<int, 2>());
 #if 0
    else
    {
       T lambda_prime = (1 - sqrt(k)) / (2 * (1 + sqrt(k)));
       T k_prime = ellint_k(sqrt((1 - k) * (1 + k))); // K(m')
-      T lambda_prime_4th = boost::math::pow<4>(lambda_prime);
+      T lambda_prime_4th = BOOST_MATH_NAMESPACE::pow<4>(lambda_prime);
       T q_prime = ((((((20910 * lambda_prime_4th) + 1707) * lambda_prime_4th + 150) * lambda_prime_4th + 15) * lambda_prime_4th + 2) * lambda_prime_4th + 1) * lambda_prime;
       /*T q_prime_2 = lambda_prime
          + 2 * boost::math::pow<5>(lambda_prime)
@@ -471,16 +471,16 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          + 150 * boost::math::pow<13>(lambda_prime)
          + 1707 * boost::math::pow<17>(lambda_prime)
          + 20910 * boost::math::pow<21>(lambda_prime);*/
-      return -log(q_prime) * k_prime / boost::math::constants::pi<T>();
+      return -log(q_prime) * k_prime / BOOST_MATH_NAMESPACE::constants::pi<T>();
    }
 #endif
    }
 }
 template <typename T, typename Policy>
-BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, boost::math::integral_constant<int, 1> const&)
+BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, BOOST_MATH_NAMESPACE::integral_constant<int, 1> const&)
 {
    BOOST_MATH_STD_USING
-   using namespace boost::math::tools;
+   using namespace BOOST_MATH_NAMESPACE::tools;
 
    T m = k * k;
    switch (static_cast<int>(m * 20))
@@ -505,7 +505,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          0.075592617535422415648L,
          0.073562939365441925050L
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - 0.05L);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - 0.05L);
    }
    case 2:
    case 3:
@@ -528,7 +528,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          0.31290024539780334906L,
          0.34223105446381299902L
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - 0.15L);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - 0.15L);
    }
    case 4:
    case 5:
@@ -552,7 +552,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          1.9772844873556364793L,
          2.4628890581910021287L
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - 0.25L);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - 0.25L);
    }
    case 6:
    case 7:
@@ -577,7 +577,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          21.104114212004582734L,
          30.460132808575799413L,
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - 0.35L);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - 0.35L);
    }
    case 8:
    case 9:
@@ -603,7 +603,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          441.78537518096201946L,
          756.39903981567380952L
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - 0.45L);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - 0.45L);
    }
    case 10:
    case 11:
@@ -630,7 +630,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          22958.388550988306870L,
          48203.103373625406989L
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - 0.55L);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - 0.55L);
    }
    case 12:
    case 13:
@@ -659,7 +659,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          1.2046317340783185238e7L,
          3.2705187507963254185e7L
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - 0.65L);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - 0.65L);
    }
    case 14:
    case 15:
@@ -692,7 +692,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          1.5254661585564745591e12L,
          5.8483259088850315936e12
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - 0.75L);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - 0.75L);
    }
    case 16:
    {
@@ -719,7 +719,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          1.1692489201929996116e12L,
          6.3306543358985679881e12
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - 0.825L);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - 0.825L);
    }
    case 17:
    {
@@ -751,37 +751,37 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
          1.2814410112866546052e19L,
          9.8249807041031260167e19
       };
-      return boost::math::tools::evaluate_polynomial(coef, m - 0.875L);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(coef, m - 0.875L);
    }
    default:
       //
       // All cases where m > 0.9
       // including all error handling:
       //
-      return ellint_k_imp(k, pol, boost::math::integral_constant<int, 2>());
+      return ellint_k_imp(k, pol, BOOST_MATH_NAMESPACE::integral_constant<int, 2>());
    }
 }
 
 template <typename T, typename Policy>
-BOOST_MATH_GPU_ENABLED typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, const boost::math::true_type&)
+BOOST_MATH_GPU_ENABLED typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, const BOOST_MATH_NAMESPACE::true_type&)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   typedef boost::math::integral_constant<int, 
+   typedef BOOST_MATH_NAMESPACE::integral_constant<int, 
 #if defined(__clang_major__) && (__clang_major__ == 7)
       2
 #else
-      boost::math::is_floating_point<T>::value && boost::math::numeric_limits<T>::digits && (boost::math::numeric_limits<T>::digits <= 54) ? 0 :
-      boost::math::is_floating_point<T>::value && boost::math::numeric_limits<T>::digits && (boost::math::numeric_limits<T>::digits <= 64) ? 1 : 2
+      BOOST_MATH_NAMESPACE::is_floating_point<T>::value && BOOST_MATH_NAMESPACE::numeric_limits<T>::digits && (BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 54) ? 0 :
+      BOOST_MATH_NAMESPACE::is_floating_point<T>::value && BOOST_MATH_NAMESPACE::numeric_limits<T>::digits && (BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 64) ? 1 : 2
 #endif
    > precision_tag_type;
    return policies::checked_narrowing_cast<result_type, Policy>(detail::ellint_k_imp(static_cast<value_type>(k), pol, precision_tag_type()), "boost::math::ellint_1<%1%>(%1%)");
 }
 
 template <class T1, class T2>
-BOOST_MATH_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const boost::math::false_type&)
+BOOST_MATH_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const BOOST_MATH_NAMESPACE::false_type&)
 {
-   return boost::math::ellint_1(k, phi, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::ellint_1(k, phi, policies::policy<>());
 }
 
 } // namespace detail
@@ -809,7 +809,7 @@ BOOST_MATH_GPU_ENABLED typename tools::promote_args<T>::type ellint_1(T k)
    return ellint_1(k, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ELLINT_1_HPP
 

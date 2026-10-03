@@ -16,7 +16,9 @@
 #include <type_traits>  // for std::false_type
 #endif
 
-namespace boost::math::optimization::detail {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN namespace optimization::detail {
 
 template <typename T, typename = void> struct has_resize : std::false_type {};
 
@@ -198,5 +200,5 @@ auto weighted_lehmer_mean(RandomAccessContainer const & values, RandomAccessCont
   return numerator/denominator;
 }
 
-} // namespace boost::math::optimization::detail
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::optimization::detail
 #endif

@@ -217,6 +217,8 @@ test-suite special_fun :
    [ run test_bessel_k_prime.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
    [ run bessel_iterator_test.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
    [ run test_beta.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
+   [ run test_lbeta.cpp ]
+   [ run test_libeta.cpp ]
    [ run test_bessel_airy_zeros.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_bernoulli_constants.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_binomial_coeff.cpp pch /boost/test//boost_unit_test_framework  ]
@@ -487,6 +489,7 @@ test-suite special_fun :
           <toolset>intel:<pch>off
         : test_ibeta_inv_ab_real_concept3  ]
    [ run test_igamma.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
+   [ run test_ligamma.cpp ]
    [ run test_igamma_inv.cpp test_instances//test_instances pch_light  /boost/test//boost_unit_test_framework
         : # command line
         : # input files

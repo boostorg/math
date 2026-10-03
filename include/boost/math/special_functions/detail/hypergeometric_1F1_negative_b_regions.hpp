@@ -8,8 +8,7 @@
 #ifndef BOOST_MATH_DETIAL_1F1_MAP_NEG_B_HPP
 #define BOOST_MATH_DETIAL_1F1_MAP_NEG_B_HPP
 
-namespace boost {
-   namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
       namespace detail {
          //
          // hypergeometric_1F1_negative_b_recurrence_region maps out the domains over which
@@ -515,7 +514,7 @@ namespace boost {
             return 0;
          }
 
-} } }
+} BOOST_MATH_NAMESPACE_END
 
 
 #endif   // BOOST_MATH_DETIAL_1F1_MAP_NEG_B_HPP

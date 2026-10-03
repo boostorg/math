@@ -19,8 +19,7 @@
 #include <cmath>
 #include <complex>
 #endif
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {
 template<typename RealType, size_t DerivativeOrder, typename ARG>
@@ -849,6 +848,5 @@ struct fmod_right_float_expr
 
 } // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

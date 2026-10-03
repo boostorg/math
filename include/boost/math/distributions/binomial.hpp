@@ -93,10 +93,7 @@
 #include <utility>
 #endif
 
-namespace boost
-{
-  namespace math
-  {
+BOOST_MATH_NAMESPACE_BEGIN
 
      BOOST_MATH_EXPORT template <class RealType, class Policy>
      class binomial_distribution;
@@ -106,7 +103,7 @@ namespace boost
         template <class RealType, class Policy>
         BOOST_MATH_CUDA_ENABLED inline bool check_N(const char* function, const RealType& N, RealType* result, const Policy& pol)
         {
-           if((N < 0) || !(boost::math::isfinite)(N))
+           if((N < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(N))
            {
                *result = policies::raise_domain_error<RealType>(
                   function,
@@ -118,7 +115,7 @@ namespace boost
         template <class RealType, class Policy>
         BOOST_MATH_CUDA_ENABLED inline bool check_success_fraction(const char* function, const RealType& p, RealType* result, const Policy& pol)
         {
-           if((p < 0) || (p > 1) || !(boost::math::isfinite)(p))
+           if((p < 0) || (p > 1) || !(BOOST_MATH_NAMESPACE::isfinite)(p))
            {
                *result = policies::raise_domain_error<RealType>(
                   function,
@@ -140,7 +137,7 @@ namespace boost
         {
            if(check_dist(function, N, p, result, pol) == false)
               return false;
-           if((k < 0) || !(boost::math::isfinite)(k))
+           if((k < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(k))
            {
                *result = policies::raise_domain_error<RealType>(
                   function,
@@ -177,7 +174,7 @@ namespace boost
             // kurtosis:
             // T k = (1 - 6 * sf * (1 - sf) ) / (n * sf * (1 - sf));
             // Get the inverse of a std normal distribution:
-            T x = boost::math::erfc_inv(p > q ? 2 * q : 2 * p, pol) * constants::root_two<T>();
+            T x = BOOST_MATH_NAMESPACE::erfc_inv(p > q ? 2 * q : 2 * p, pol) * constants::root_two<T>();
             // Set the sign:
             if(p < 0.5)
                x = -x;
@@ -417,23 +414,23 @@ namespace boost
 
       #ifdef __cpp_deduction_guides
       BOOST_MATH_EXPORT template <class RealType>
-      binomial_distribution(RealType)->binomial_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+      binomial_distribution(RealType)->binomial_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
       BOOST_MATH_EXPORT template <class RealType>
-      binomial_distribution(RealType,RealType)->binomial_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+      binomial_distribution(RealType,RealType)->binomial_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
       #endif
 
       BOOST_MATH_EXPORT template <class RealType, class Policy>
-      BOOST_MATH_CUDA_ENABLED const boost::math::pair<RealType, RealType> range(const binomial_distribution<RealType, Policy>& dist)
+      BOOST_MATH_CUDA_ENABLED const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const binomial_distribution<RealType, Policy>& dist)
       { // Range of permissible values for random variable k.
-        using boost::math::tools::max_value;
-        return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), dist.trials());
+        using BOOST_MATH_NAMESPACE::tools::max_value;
+        return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), dist.trials());
       }
 
       BOOST_MATH_EXPORT template <class RealType, class Policy>
-      BOOST_MATH_CUDA_ENABLED const boost::math::pair<RealType, RealType> support(const binomial_distribution<RealType, Policy>& dist)
+      BOOST_MATH_CUDA_ENABLED const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const binomial_distribution<RealType, Policy>& dist)
       { // Range of supported values for random variable k.
         // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-        return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  dist.trials());
+        return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0),  dist.trials());
       }
 
       BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -499,7 +496,7 @@ namespace boost
         //           = p^k (1-p)^(n-k) / (beta(k+1, n-k+1) * (n+1))
         //           = ibeta_derivative(k+1, n-k+1, p) / (n+1)
         //
-        using boost::math::ibeta_derivative; // a, b, x
+        using BOOST_MATH_NAMESPACE::ibeta_derivative; // a, b, x
         return ibeta_derivative(k+1, n-k+1, dist.success_fraction(), Policy()) / (n+1);
 
       } // pdf
@@ -718,8 +715,7 @@ namespace boost
          return (1 - 6 * p * q) / (n * p * q);
       }
 
-    } // namespace math
-  } // namespace boost
+    BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

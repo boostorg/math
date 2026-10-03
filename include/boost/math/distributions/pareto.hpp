@@ -26,10 +26,7 @@
 #include <boost/math/special_functions/powm1.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 
-namespace boost
-{
-  namespace math
-  {
+BOOST_MATH_NAMESPACE_BEGIN
     namespace detail
     { // Parameter checking.
       template <class RealType, class Policy>
@@ -38,7 +35,7 @@ namespace boost
         RealType scale,
         RealType* result, const Policy& pol)
       {
-        if((boost::math::isfinite)(scale))
+        if((BOOST_MATH_NAMESPACE::isfinite)(scale))
         { // any > 0 finite value is OK.
           if (scale > 0)
           {
@@ -67,7 +64,7 @@ namespace boost
         RealType shape,
         RealType* result, const Policy& pol)
       {
-        if((boost::math::isfinite)(shape))
+        if((BOOST_MATH_NAMESPACE::isfinite)(shape))
         { // Any finite value > 0 is OK.
           if (shape > 0)
           {
@@ -96,7 +93,7 @@ namespace boost
         RealType const& x,
         RealType* result, const Policy& pol)
       {
-        if((boost::math::isfinite)(x))
+        if((BOOST_MATH_NAMESPACE::isfinite)(x))
         { //
           if (x > 0)
           {
@@ -165,25 +162,25 @@ namespace boost
 
     #ifdef __cpp_deduction_guides
     BOOST_MATH_EXPORT template <class RealType>
-    pareto_distribution(RealType)->pareto_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+    pareto_distribution(RealType)->pareto_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
     BOOST_MATH_EXPORT template <class RealType>
-    pareto_distribution(RealType,RealType)->pareto_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+    pareto_distribution(RealType,RealType)->pareto_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
     #endif
 
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const pareto_distribution<RealType, Policy>& /*dist*/)
+    BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const pareto_distribution<RealType, Policy>& /*dist*/)
     { // Range of permissible values for random variable x.
-      using boost::math::tools::max_value;
-      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // scale zero to + infinity.
+      using BOOST_MATH_NAMESPACE::tools::max_value;
+      return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // scale zero to + infinity.
     } // range
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const pareto_distribution<RealType, Policy>& dist)
+    BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const pareto_distribution<RealType, Policy>& dist)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-      using boost::math::tools::max_value;
-      return boost::math::pair<RealType, RealType>(dist.scale(), max_value<RealType>() ); // scale to + infinity.
+      using BOOST_MATH_NAMESPACE::tools::max_value;
+      return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(dist.scale(), max_value<RealType>() ); // scale to + infinity.
     } // support
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -224,7 +221,7 @@ namespace boost
       }
 
       // result = RealType(1) - pow((scale / x), shape);
-      result = -boost::math::powm1(scale/x, shape, Policy()); // should be more accurate.
+      result = -BOOST_MATH_NAMESPACE::powm1(scale/x, shape, Policy()); // should be more accurate.
       return result;
     } // cdf
 
@@ -243,7 +240,7 @@ namespace boost
 
       if (x <= scale)
       { // regardless of shape, cdf is zero.
-        return -boost::math::numeric_limits<RealType>::infinity();
+        return -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
       }
 
       result = log1p(-pow(scale/x, shape), Policy());
@@ -363,7 +360,7 @@ namespace boost
       }
       else
       {
-        using boost::math::tools::max_value;
+        using BOOST_MATH_NAMESPACE::tools::max_value;
         return max_value<RealType>(); // +infinity.
       }
     } // mean
@@ -495,8 +492,7 @@ namespace boost
       return log(xm/alpha) + 1 + 1/alpha;
     }
 
-    } // namespace math
-  } // namespace boost
+    BOOST_MATH_NAMESPACE_END
 
   // This include must be at the end, *after* the accessors
   // for this distribution have been defined, in order to

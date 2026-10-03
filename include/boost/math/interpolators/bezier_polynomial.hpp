@@ -16,7 +16,7 @@
 #warning "Thread local storage support is necessary for the Bezier polynomial class to work."
 #endif
 
-namespace boost::math::interpolators {
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators {
 
 BOOST_MATH_EXPORT template <class RandomAccessContainer>
 class bezier_polynomial
@@ -60,5 +60,5 @@ private:
     std::shared_ptr<detail::bezier_polynomial_imp<RandomAccessContainer>> m_imp;
 };
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

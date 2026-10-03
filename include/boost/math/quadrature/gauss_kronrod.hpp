@@ -23,7 +23,7 @@
 #include <boost/math/quadrature/gauss.hpp>
 #include <boost/math/quadrature/detail/quadrature_constant.hpp>
 
-namespace boost { namespace math{ namespace quadrature{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature{ namespace detail{
 
 #ifndef BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND
 
@@ -37,7 +37,7 @@ class gauss_kronrod_detail
    }
    static std::vector<Real> calculate_abscissa()
    {
-      static std::vector<Real> result = boost::math::legendre_p_zeros<Real>((N - 1) / 2);
+      static std::vector<Real> result = BOOST_MATH_NAMESPACE::legendre_p_zeros<Real>((N - 1) / 2);
       const legendre_stieltjes<Real> E = get_legendre_stieltjes();
       std::vector<Real> ls_zeros = E.zeros();
       result.insert(result.end(), ls_zeros.begin(), ls_zeros.end());
@@ -54,7 +54,7 @@ class gauss_kronrod_detail
       for (unsigned i = gauss_start; i < abscissa().size(); i += 2)
       {
          Real x = abscissa()[i];
-         Real p = boost::math::legendre_p_prime(gauss_order, x);
+         Real p = BOOST_MATH_NAMESPACE::legendre_p_prime(gauss_order, x);
          Real gauss_weight = 2 / ((1 - x * x) * p * p);
          result[i] = gauss_weight + static_cast<Real>(2) / (static_cast<Real>(gauss_order + 1) * legendre_p_prime(gauss_order, x) * E(x));
       }
@@ -1236,7 +1236,7 @@ public:
       static_assert(!std::is_integral<K>::value,
                   "The return type cannot be integral, it must be either a real or complex floating point type.");
       static const char* function = "boost::math::quadrature::gauss_kronrod<%1%>::integrate(f, %1%, %1%)";
-      if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
+      if (!(BOOST_MATH_NAMESPACE::isnan)(a) && !(BOOST_MATH_NAMESPACE::isnan)(b))
       {
          // Infinite limits:
          if ((a <= -tools::max_value<Real>()) && (b >= tools::max_value<Real>()))
@@ -1256,7 +1256,7 @@ public:
          }
 
          // Right limit is infinite:
-         if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (b >= tools::max_value<Real>()))
          {
             auto u = [&](const Real& t)->K
             {
@@ -1274,7 +1274,7 @@ public:
             return Q;
          }
 
-         if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(b) && (a <= -tools::max_value<Real>()))
          {
             auto v = [&](const Real& t)->K
             {
@@ -1291,7 +1291,7 @@ public:
             return Q;
          }
 
-         if ((boost::math::isfinite)(a) && (boost::math::isfinite)(b))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (BOOST_MATH_NAMESPACE::isfinite)(b))
          {
             if (a==b)
             {
@@ -1412,7 +1412,7 @@ public:
       static_assert(!std::is_integral<K>::value,
                   "The return type cannot be integral.");
       static const char* function = "boost::math::quadrature::gauss_kronrod<%1%>::integrate(f, %1%, %1%)";
-      if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
+      if (!(BOOST_MATH_NAMESPACE::isnan)(a) && !(BOOST_MATH_NAMESPACE::isnan)(b))
       {
          // Infinite limits:
          if ((a <= -tools::max_value<Real>()) && (b >= tools::max_value<Real>()))
@@ -1432,7 +1432,7 @@ public:
          }
 
          // Right limit is infinite:
-         if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (b >= tools::max_value<Real>()))
          {
             auto u = [&](const Real& t)->K
             {
@@ -1452,7 +1452,7 @@ public:
             return Q;
          }
 
-         if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(b) && (a <= -tools::max_value<Real>()))
          {
             auto v = [&](const Real& t)->K
             {
@@ -1471,7 +1471,7 @@ public:
             return Q;
          }
 
-         if ((boost::math::isfinite)(a) && (boost::math::isfinite)(b))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (BOOST_MATH_NAMESPACE::isfinite)(b))
          {
             if (a==b)
             {
@@ -1500,8 +1500,7 @@ public:
 };
 
 } // namespace quadrature
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #ifdef _MSC_VER
 #pragma warning(pop)

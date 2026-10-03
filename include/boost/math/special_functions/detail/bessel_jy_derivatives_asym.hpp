@@ -15,7 +15,7 @@
 #pragma once
 #endif
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class T>
 inline T asymptotic_bessel_derivative_amplitude(T v, T x)
@@ -31,7 +31,7 @@ inline T asymptotic_bessel_derivative_amplitude(T v, T x)
    s -= (mu - 3) / (2 * txq);
    s -= ((mu - 1) * (mu - 45)) / (txq * txq * 8);
 
-   return sqrt(s * 2 / (boost::math::constants::pi<T>() * x));
+   return sqrt(s * 2 / (BOOST_MATH_NAMESPACE::constants::pi<T>() * x));
 }
 
 template <class T>
@@ -133,9 +133,9 @@ inline bool asymptotic_bessel_derivative_large_x_limit(const T& v, const T& x)
    // error rates either side of the divide for v < 10000.
    // At double precision eps^1/8 ~= 0.01.
    //
-   return (std::max)(T(fabs(v)), T(1)) < x * sqrt(boost::math::tools::forth_root_epsilon<T>());
+   return (std::max)(T(fabs(v)), T(1)) < x * sqrt(BOOST_MATH_NAMESPACE::tools::forth_root_epsilon<T>());
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SF_DETAIL_BESSEL_JY_DERIVATIVES_ASYM_HPP

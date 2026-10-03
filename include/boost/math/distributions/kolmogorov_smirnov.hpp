@@ -127,7 +127,7 @@
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/roots.hpp> // Newton-Raphson
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail {
 
@@ -361,7 +361,7 @@ BOOST_MATH_EXPORT typedef kolmogorov_smirnov_distribution<double> kolmogorov_k; 
 
 #ifdef __cpp_deduction_guides
 BOOST_MATH_EXPORT template <class RealType>
-kolmogorov_smirnov_distribution(RealType)->kolmogorov_smirnov_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+kolmogorov_smirnov_distribution(RealType)->kolmogorov_smirnov_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 #endif
 
 namespace detail {
@@ -391,7 +391,7 @@ inline RealType kolmogorov_smirnov_lower_guess(RealType p) {
     RealType W = (L > 1) ? L + log(L) / 2 : RealType(1);
     for (int i = 0; i < 3; i++) {
         RealType e = exp(-8 * W);
-        RealType h = W - log(W) / 2 - boost::math::log1p(e) - L;
+        RealType h = W - log(W) / 2 - BOOST_MATH_NAMESPACE::log1p(e) - L;
         RealType dh = 1 - 1 / (2 * W) + 8 * e / (1 + e);
         W -= h / dh;
     }
@@ -418,7 +418,7 @@ inline RealType kolmogorov_smirnov_upper_guess(RealType q) {
         RealType dphi = 1 - 4 * a * r3 + 9 * b * r8 - 16 * c * r15;
         r -= phi / dphi;
     }
-    return -(log(q) - constants::ln_two<RealType>() + boost::math::log1p(r - 1)) / 2;
+    return -(log(q) - constants::ln_two<RealType>() + BOOST_MATH_NAMESPACE::log1p(r - 1)) / 2;
 }
 
 template <class RealType, class Policy>
@@ -431,14 +431,14 @@ struct kolmogorov_smirnov_lower_quantile_functor
         log_prob = log(p);
     }
 
-    boost::math::tuple<RealType, RealType> operator()(RealType const& W)
+    BOOST_MATH_NAMESPACE::tuple<RealType, RealType> operator()(RealType const& W)
     {
         BOOST_MATH_STD_USING
         RealType x = sqrt(scale / W);
         RealType F = cdf(distribution, x);
         RealType f = pdf(distribution, x);
         // g(W) = ln F(x(W)) - ln p ; dg/dW = (f/F) * dx/dW, dx/dW = -x/(2W)
-        return boost::math::make_tuple(log(F) - log_prob, -f * x / (2 * W * F));
+        return BOOST_MATH_NAMESPACE::make_tuple(log(F) - log_prob, -f * x / (2 * W * F));
     }
 private:
     const kolmogorov_smirnov_distribution<RealType, Policy>& distribution;
@@ -456,14 +456,14 @@ struct kolmogorov_smirnov_upper_quantile_functor
         log_prob = log(q);
     }
 
-    boost::math::tuple<RealType, RealType> operator()(RealType const& V)
+    BOOST_MATH_NAMESPACE::tuple<RealType, RealType> operator()(RealType const& V)
     {
         BOOST_MATH_STD_USING
         RealType x = sqrt(V / n);
         RealType Q = cdf(complement(distribution, x));
         RealType f = pdf(distribution, x);
         // g(V) = ln Q(x(V)) - ln q ; dg/dV = -(f/Q) * dx/dV, dx/dV = x/(2V)
-        return boost::math::make_tuple(log(Q) - log_prob, -f * x / (2 * V * Q));
+        return BOOST_MATH_NAMESPACE::make_tuple(log(Q) - log_prob, -f * x / (2 * V * Q));
     }
 private:
     const kolmogorov_smirnov_distribution<RealType, Policy>& distribution;
@@ -529,7 +529,7 @@ RealType kolmogorov_smirnov_quantile_imp(const kolmogorov_smirnov_distribution<R
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> range(const kolmogorov_smirnov_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
-   using boost::math::tools::max_value;
+   using BOOST_MATH_NAMESPACE::tools::max_value;
    return std::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
 }
 
@@ -538,7 +538,7 @@ inline const std::pair<RealType, RealType> support(const kolmogorov_smirnov_dist
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
    // In the exact distribution, the upper limit would be 1.
-   using boost::math::tools::max_value;
+   using BOOST_MATH_NAMESPACE::tools::max_value;
    return std::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
 }
 
@@ -557,7 +557,7 @@ inline RealType pdf(const kolmogorov_smirnov_distribution<RealType, Policy>& dis
    if(false == detail::check_df(function, n, &error_result, Policy()))
       return error_result;
 
-   if (x < 0 || !(boost::math::isfinite)(x))
+   if (x < 0 || !(BOOST_MATH_NAMESPACE::isfinite)(x))
    {
       return policies::raise_domain_error<RealType>(
          function, "Kolmogorov-Smirnov parameter was %1%, but must be > 0 !", x, Policy());
@@ -581,7 +581,7 @@ inline RealType cdf(const kolmogorov_smirnov_distribution<RealType, Policy>& dis
       return error_result;
    if(false == detail::check_df(function, n, &error_result, Policy()))
       return error_result;
-   if((x < 0) || !(boost::math::isfinite)(x)) {
+   if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x)) {
       return policies::raise_domain_error<RealType>(
          function, "Random variable parameter was %1%, but must be between > 0 !", x, Policy());
    }
@@ -613,7 +613,7 @@ inline RealType cdf(const complemented2_type<kolmogorov_smirnov_distribution<Rea
    if(false == detail::check_df(function, n, &error_result, Policy()))
       return error_result;
 
-   if((x < 0) || !(boost::math::isfinite)(x))
+   if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
       return policies::raise_domain_error<RealType>(
          function, "Random variable parameter was %1%, but must be between > 0 !", x, Policy());
 
@@ -757,8 +757,8 @@ inline RealType skewness(const kolmogorov_smirnov_distribution<RealType, Policy>
     if (detail::kolmogorov_smirnov_use_constants<RealType>(Policy()))
         return detail::kolmogorov_smirnov_skewness_constant<RealType>();
     RealType ex3 = RealType(0.5625) * constants::root_half_pi<RealType>() * constants::zeta_three<RealType>() / n / sqrt(n);
-    RealType mean = boost::math::mean(dist);
-    RealType var = boost::math::variance(dist);
+    RealType mean = BOOST_MATH_NAMESPACE::mean(dist);
+    RealType var = BOOST_MATH_NAMESPACE::variance(dist);
     return (ex3 - 3 * mean * var - mean * mean * mean) / var / sqrt(var);
 }
 
@@ -774,9 +774,9 @@ inline RealType kurtosis_excess(const kolmogorov_smirnov_distribution<RealType, 
     if (detail::kolmogorov_smirnov_use_constants<RealType>(Policy()))
         return detail::kolmogorov_smirnov_kurtosis_excess_constant<RealType>();
     RealType ex4 = 7 * constants::pi_sqr_div_six<RealType>() * constants::pi_sqr_div_six<RealType>() / 20 / n / n;
-    RealType mean = boost::math::mean(dist);
-    RealType var = boost::math::variance(dist);
-    RealType skew = boost::math::skewness(dist);
+    RealType mean = BOOST_MATH_NAMESPACE::mean(dist);
+    RealType var = BOOST_MATH_NAMESPACE::variance(dist);
+    RealType skew = BOOST_MATH_NAMESPACE::skewness(dist);
     return (ex4 - 4 * mean * skew * var * sqrt(var) - 6 * mean * mean * var - mean * mean * mean * mean) / var / var - 3;
 }
 
@@ -785,5 +785,5 @@ inline RealType kurtosis(const kolmogorov_smirnov_distribution<RealType, Policy>
 {
     return kurtosis_excess(dist) + 3;
 }
-}}
+BOOST_MATH_NAMESPACE_END
 #endif

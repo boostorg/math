@@ -15,7 +15,7 @@
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail {
 
@@ -48,28 +48,28 @@ constexpr Real fma(Real x, Real y, Real z) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        if (x == 0 && boost::math::ccmath::isinf(y))
+        if (x == 0 && BOOST_MATH_NAMESPACE::ccmath::isinf(y))
         {
             return std::numeric_limits<Real>::quiet_NaN();
         }
-        else if (y == 0 && boost::math::ccmath::isinf(x))
+        else if (y == 0 && BOOST_MATH_NAMESPACE::ccmath::isinf(x))
         {
             return std::numeric_limits<Real>::quiet_NaN();
         }
-        else if (boost::math::ccmath::isnan(x))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isnan(x))
         {
             return std::numeric_limits<Real>::quiet_NaN();
         }
-        else if (boost::math::ccmath::isnan(y))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isnan(y))
         {
             return std::numeric_limits<Real>::quiet_NaN();
         }
-        else if (boost::math::ccmath::isnan(z))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isnan(z))
         {
             return std::numeric_limits<Real>::quiet_NaN();
         }
 
-        return boost::math::ccmath::detail::fma_imp(x, y, z);
+        return BOOST_MATH_NAMESPACE::ccmath::detail::fma_imp(x, y, z);
     }
     else
     {
@@ -104,7 +104,7 @@ constexpr auto fma(T1 x, T2 y, T3 z) noexcept
                               >>>;
                               #endif
 
-        return boost::math::ccmath::fma(promoted_type(x), promoted_type(y), promoted_type(z));
+        return BOOST_MATH_NAMESPACE::ccmath::fma(promoted_type(x), promoted_type(y), promoted_type(z));
     }
     else
     {
@@ -115,16 +115,16 @@ constexpr auto fma(T1 x, T2 y, T3 z) noexcept
 
 constexpr float fmaf(float x, float y, float z) noexcept
 {
-    return boost::math::ccmath::fma(x, y, z);
+    return BOOST_MATH_NAMESPACE::ccmath::fma(x, y, z);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 constexpr long double fmal(long double x, long double y, long double z) noexcept
 {
-    return boost::math::ccmath::fma(x, y, z);
+    return BOOST_MATH_NAMESPACE::ccmath::fma(x, y, z);
 }
 #endif
 
-} // Namespace boost::math::ccmath
+} BOOST_MATH_NAMESPACE_END // Namespace boost::math::ccmath
 
 #endif // BOOST_MATH_CCMATH_FMA_HPP

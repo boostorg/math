@@ -23,8 +23,7 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/complement.hpp>
 
-namespace boost{ namespace math
-{
+BOOST_MATH_NAMESPACE_BEGIN
   namespace detail
   {
     template <class RealType, class Policy>
@@ -33,7 +32,7 @@ namespace boost{ namespace math
       RealType lower,
       RealType* result, const Policy& pol)
     {
-      if((boost::math::isfinite)(lower))
+      if((BOOST_MATH_NAMESPACE::isfinite)(lower))
       { // any finite value is OK.
         return true;
       }
@@ -52,7 +51,7 @@ namespace boost{ namespace math
       RealType upper,
       RealType* result, const Policy& pol)
     {
-      if((boost::math::isfinite)(upper))
+      if((BOOST_MATH_NAMESPACE::isfinite)(upper))
       { // Any finite value is OK.
         return true;
       }
@@ -71,7 +70,7 @@ namespace boost{ namespace math
       RealType const& x,
       RealType* result, const Policy& pol)
     {
-      if((boost::math::isfinite)(x))
+      if((BOOST_MATH_NAMESPACE::isfinite)(x))
       { // Any finite value is OK
         return true;
       }
@@ -144,25 +143,25 @@ namespace boost{ namespace math
 
   #ifdef __cpp_deduction_guides
   BOOST_MATH_EXPORT template <class RealType>
-  uniform_distribution(RealType)->uniform_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+  uniform_distribution(RealType)->uniform_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
   BOOST_MATH_EXPORT template <class RealType>
-  uniform_distribution(RealType,RealType)->uniform_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+  uniform_distribution(RealType,RealType)->uniform_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
   #endif
 
   BOOST_MATH_EXPORT template <class RealType, class Policy>
-  BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const uniform_distribution<RealType, Policy>& /* dist */)
+  BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const uniform_distribution<RealType, Policy>& /* dist */)
   { // Range of permissible values for random variable x.
-     using boost::math::tools::max_value;
-     return boost::math::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + 'infinity'.
+     using BOOST_MATH_NAMESPACE::tools::max_value;
+     return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + 'infinity'.
      // Note RealType infinity is NOT permitted, only max_value.
   }
 
   BOOST_MATH_EXPORT template <class RealType, class Policy>
-  BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const uniform_distribution<RealType, Policy>& dist)
+  BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const uniform_distribution<RealType, Policy>& dist)
   { // Range of supported values for random variable x.
      // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-     using boost::math::tools::max_value;
-     return boost::math::pair<RealType, RealType>(dist.lower(),  dist.upper());
+     using BOOST_MATH_NAMESPACE::tools::max_value;
+     return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(dist.lower(),  dist.upper());
   }
 
   BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -384,8 +383,7 @@ namespace boost{ namespace math
     return log(dist.upper() - dist.lower());
   }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

@@ -17,8 +17,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
-namespace boost{
-namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 // Recurrence relation for Hermite polynomials:
 BOOST_MATH_EXPORT template <class T1, class T2, class T3>
@@ -67,11 +66,10 @@ BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type 
    hermite(unsigned n, T x)
 {
-   return boost::math::hermite(n, x, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::hermite(n, x, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SPECIAL_HERMITE_HPP
 

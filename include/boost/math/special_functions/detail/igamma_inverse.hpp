@@ -19,7 +19,7 @@
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail{
 
@@ -91,7 +91,7 @@ BOOST_MATH_GPU_ENABLED inline T didonato_FN(T p, T a, T x, unsigned N, T toleran
    // See equation 34.
    //
    BOOST_MATH_STD_USING
-   T u = log(p) + boost::math::lgamma(a + 1, pol);
+   T u = log(p) + BOOST_MATH_NAMESPACE::lgamma(a + 1, pol);
    return exp((u + x - log(didonato_SN(a, x, N, tolerance))) / a);
 }
 
@@ -119,7 +119,7 @@ BOOST_MATH_GPU_ENABLED T find_inverse_gamma(T a, T p, T q, const Policy& pol, bo
    }
    else if(a < 1)
    {
-      T g = boost::math::tgamma(a, pol);
+      T g = BOOST_MATH_NAMESPACE::tgamma(a, pol);
       T b = q * g;
       BOOST_MATH_INSTRUMENT_VARIABLE(g);
       BOOST_MATH_INSTRUMENT_VARIABLE(b);
@@ -237,7 +237,7 @@ BOOST_MATH_GPU_ENABLED T find_inverse_gamma(T a, T p, T q, const Policy& pol, bo
          else
          {
             T D = BOOST_MATH_GPU_SAFE_MAX(T(2), T(a * (a - 1)));
-            T lg = boost::math::lgamma(a, pol);
+            T lg = BOOST_MATH_NAMESPACE::lgamma(a, pol);
             T lb = log(q) + lg;
             if(lb < -D * T(2.3))
             {
@@ -282,13 +282,13 @@ BOOST_MATH_GPU_ENABLED T find_inverse_gamma(T a, T p, T q, const Policy& pol, bo
          if(w < 0.15f * ap1)
          {
             // DiDonato and Morris Eq 35:
-            T v = log(p) + boost::math::lgamma(ap1, pol);
+            T v = log(p) + BOOST_MATH_NAMESPACE::lgamma(ap1, pol);
             z = exp((v + w) / a);
-            s = boost::math::log1p(z / ap1 * (1 + z / ap2), pol);
+            s = BOOST_MATH_NAMESPACE::log1p(z / ap1 * (1 + z / ap2), pol);
             z = exp((v + z - s) / a);
-            s = boost::math::log1p(z / ap1 * (1 + z / ap2), pol);
+            s = BOOST_MATH_NAMESPACE::log1p(z / ap1 * (1 + z / ap2), pol);
             z = exp((v + z - s) / a);
-            s = boost::math::log1p(z / ap1 * (1 + z / ap2 * (1 + z / (a + 3))), pol);
+            s = BOOST_MATH_NAMESPACE::log1p(z / ap1 * (1 + z / ap2 * (1 + z / (a + 3))), pol);
             z = exp((v + z - s) / a);
             BOOST_MATH_INSTRUMENT_VARIABLE(z);
          }
@@ -304,7 +304,7 @@ BOOST_MATH_GPU_ENABLED T find_inverse_gamma(T a, T p, T q, const Policy& pol, bo
          {
             // DiDonato and Morris Eq 36:
             T ls = log(didonato_SN(a, z, 100, T(1e-4)));
-            T v = log(p) + boost::math::lgamma(ap1, pol);
+            T v = log(p) + BOOST_MATH_NAMESPACE::lgamma(ap1, pol);
             z = exp((v + z - ls) / a);
             result = z * (1 - (a * log(z) - z - v + ls) / (a - z));
 
@@ -336,7 +336,7 @@ struct gamma_p_inverse_func
       }
    }
 
-   BOOST_MATH_GPU_ENABLED boost::math::tuple<T, T, T> operator()(const T& x)const
+   BOOST_MATH_GPU_ENABLED BOOST_MATH_NAMESPACE::tuple<T, T, T> operator()(const T& x)const
    {
       BOOST_FPU_EXCEPTION_GUARD
       //
@@ -356,7 +356,7 @@ struct gamma_p_inverse_func
 
       T f, f1;
       value_type ft;
-      f = static_cast<T>(boost::math::detail::gamma_incomplete_imp(
+      f = static_cast<T>(BOOST_MATH_NAMESPACE::detail::gamma_incomplete_imp(
                static_cast<value_type>(a),
                static_cast<value_type>(x),
                true, invert,
@@ -390,7 +390,7 @@ struct gamma_p_inverse_func
          f2 = -f2;
       }
 
-      return boost::math::make_tuple(static_cast<T>(f - p), f1, f2);
+      return BOOST_MATH_NAMESPACE::make_tuple(static_cast<T>(f - p), f1, f2);
    }
 private:
    T a, p;
@@ -428,7 +428,7 @@ BOOST_MATH_GPU_ENABLED T gamma_p_inv_imp(T a, T p, const Policy& pol)
    // for underflow up front.  Only a tiny guess can be this far out, so
    // the extra evaluation is rarely paid for:
    //
-   if((guess < sqrt(lower)) && (boost::math::gamma_p(a, lower, pol) >= p))
+   if((guess < sqrt(lower)) && (BOOST_MATH_NAMESPACE::gamma_p(a, lower, pol) >= p))
       return policies::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
    BOOST_MATH_INSTRUMENT_VARIABLE(guess);
    //
@@ -453,7 +453,7 @@ BOOST_MATH_GPU_ENABLED T gamma_p_inv_imp(T a, T p, const Policy& pol)
    //
    // Go ahead and iterate:
    //
-   boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
    
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    guess = tools::halley_iterate(
@@ -507,7 +507,7 @@ BOOST_MATH_GPU_ENABLED T gamma_q_inv_imp(T a, T q, const Policy& pol)
    // root finder has no root to converge on inside [lower, max], so check
    // for underflow up front (see gamma_p_inv_imp):
    //
-   if((guess < sqrt(lower)) && (boost::math::gamma_q(a, lower, pol) <= q))
+   if((guess < sqrt(lower)) && (BOOST_MATH_NAMESPACE::gamma_q(a, lower, pol) <= q))
       return policies::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
    //
    // Work out how many digits to converge to, normally this is
@@ -531,7 +531,7 @@ BOOST_MATH_GPU_ENABLED T gamma_q_inv_imp(T a, T q, const Policy& pol)
    //
    // Go ahead and iterate:
    //
-   boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    guess = tools::halley_iterate(
@@ -593,8 +593,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
    return gamma_q_inv(a, p, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_IGAMMA_INVERSE_HPP
 

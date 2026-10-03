@@ -18,7 +18,7 @@
 #pragma warning(disable:4127)
 #endif
 
-  namespace boost { namespace math {
+  BOOST_MATH_NAMESPACE_BEGIN
 
   namespace detail {
 
@@ -52,7 +52,7 @@
         }
         if ((fabs(a) < 10) && (fabs(b) < 10))
         {
-           prefix *= pow(z, a) * pow(z, -b) * boost::math::tgamma(b, pol) / boost::math::tgamma(a, pol);
+           prefix *= pow(z, a) * pow(z, -b) * BOOST_MATH_NAMESPACE::tgamma(b, pol) / BOOST_MATH_NAMESPACE::tgamma(a, pol);
         }
         else
         {
@@ -61,12 +61,12 @@
            log_scaling += e;
            prefix *= exp(t - e);
 
-           t = boost::math::lgamma(b, &s, pol);
+           t = BOOST_MATH_NAMESPACE::lgamma(b, &s, pol);
            e = lltrunc(t, pol);
            log_scaling += e;
            prefix *= s * exp(t - e);
 
-           t = boost::math::lgamma(a, &s, pol);
+           t = BOOST_MATH_NAMESPACE::lgamma(a, &s, pol);
            e = lltrunc(t, pol);
            log_scaling -= e;
            prefix /= s * exp(t - e);
@@ -91,16 +91,16 @@
            term /= ++k;
            a1_poch += 1;
            a2_poch += 1;
-           if (fabs(sum) * boost::math::policies::get_epsilon<T, Policy>() > fabs(term))
+           if (fabs(sum) * BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>() > fabs(term))
               break;
-           if(fabs(sum) / abs_sum < boost::math::policies::get_epsilon<T, Policy>())
-              return boost::math::policies::raise_evaluation_error<T>(function, "Large-z asymptotic approximation to 1F1 has destroyed all the digits in the result due to cancellation.  Current best guess is %1%", 
+           if(fabs(sum) / abs_sum < BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>())
+              return BOOST_MATH_NAMESPACE::policies::raise_evaluation_error<T>(function, "Large-z asymptotic approximation to 1F1 has destroyed all the digits in the result due to cancellation.  Current best guess is %1%", 
                  prefix * sum, Policy());
-           if(k > boost::math::policies::get_max_series_iterations<Policy>())
-              return boost::math::policies::raise_evaluation_error<T>(function, "1F1: Unable to locate solution in a reasonable time:"
+           if(k > BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>())
+              return BOOST_MATH_NAMESPACE::policies::raise_evaluation_error<T>(function, "1F1: Unable to locate solution in a reasonable time:"
                  " large-z asymptotic approximation.  Current best guess is %1%", prefix * sum, Policy());
            if((k > 10) && (fabs(term) > fabs(last_term)))
-              return boost::math::policies::raise_evaluation_error<T>(function, "Large-z asymptotic approximation to 1F1 is divergent.  Current best guess is %1%", prefix * sum, Policy());
+              return BOOST_MATH_NAMESPACE::policies::raise_evaluation_error<T>(function, "Large-z asymptotic approximation to 1F1 is divergent.  Current best guess is %1%", prefix * sum, Policy());
         } while (true);
 
         return prefix * sum;
@@ -172,7 +172,7 @@
     return in_region;
   }
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #ifdef _MSC_VER
 #pragma warning(pop)

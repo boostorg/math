@@ -30,10 +30,7 @@
 #include <type_traits>
 #endif
 
-namespace boost
-{
-   namespace math
-   {
+BOOST_MATH_NAMESPACE_BEGIN
 
       namespace detail {
 
@@ -1072,7 +1069,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
             using    ::std::exp;
             using    ::std::cos;
             
-            using    ::boost::math::sinc_pi;
+            using    ::BOOST_MATH_NAMESPACE::sinc_pi;
             
             T    u = exp(real(q));
             
@@ -1093,7 +1090,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
             using    ::std::cos;
             using    ::std::cosh;
             
-            using    ::boost::math::sinhc_pi;
+            using    ::BOOST_MATH_NAMESPACE::sinhc_pi;
             
             T    z = abs(unreal(q));
             
@@ -1112,7 +1109,7 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
             using    ::std::cos;
             using    ::std::cosh;
             
-            using    ::boost::math::sinhc_pi;
+            using    ::BOOST_MATH_NAMESPACE::sinhc_pi;
             
             T    z = abs(unreal(q));
             
@@ -1184,7 +1181,6 @@ inline BOOST_MATH_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>&
                 return(pow(quaternion<T>(static_cast<T>(1))/q,-n));
             }
         }
-    }
-}
+    BOOST_MATH_NAMESPACE_END
 
 #endif /* BOOST_QUATERNION_HPP */

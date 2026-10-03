@@ -53,7 +53,7 @@
 #  endif
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace concepts
 {
@@ -225,7 +225,7 @@ inline real_concept modf(real_concept a, real_concept* ipart)
 {
 #ifdef __MINGW32__
    real_concept_base_type ip;
-   real_concept_base_type result = boost::math::modf(a.value(), &ip);
+   real_concept_base_type result = BOOST_MATH_NAMESPACE::modf(a.value(), &ip);
    *ipart = ip;
    return result;
 #else
@@ -270,17 +270,17 @@ inline real_concept tanh(real_concept a)
 // Note that these must not actually call the std:: versions as that precludes using this
 // header to test in C++03 mode, call the Boost versions instead:
 //
-inline boost::math::concepts::real_concept asinh(boost::math::concepts::real_concept a)
+inline BOOST_MATH_NAMESPACE::concepts::real_concept asinh(BOOST_MATH_NAMESPACE::concepts::real_concept a)
 {
-   return boost::math::asinh(a.value(), boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::ignore_error>()));
+   return BOOST_MATH_NAMESPACE::asinh(a.value(), BOOST_MATH_NAMESPACE::policies::make_policy(BOOST_MATH_NAMESPACE::policies::overflow_error<BOOST_MATH_NAMESPACE::policies::ignore_error>()));
 }
-inline boost::math::concepts::real_concept acosh(boost::math::concepts::real_concept a)
+inline BOOST_MATH_NAMESPACE::concepts::real_concept acosh(BOOST_MATH_NAMESPACE::concepts::real_concept a)
 {
-   return boost::math::acosh(a.value(), boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::ignore_error>()));
+   return BOOST_MATH_NAMESPACE::acosh(a.value(), BOOST_MATH_NAMESPACE::policies::make_policy(BOOST_MATH_NAMESPACE::policies::overflow_error<BOOST_MATH_NAMESPACE::policies::ignore_error>()));
 }
-inline boost::math::concepts::real_concept atanh(boost::math::concepts::real_concept a)
+inline BOOST_MATH_NAMESPACE::concepts::real_concept atanh(BOOST_MATH_NAMESPACE::concepts::real_concept a)
 {
-   return boost::math::atanh(a.value(), boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::ignore_error>()));
+   return BOOST_MATH_NAMESPACE::atanh(a.value(), BOOST_MATH_NAMESPACE::policies::make_policy(BOOST_MATH_NAMESPACE::policies::overflow_error<BOOST_MATH_NAMESPACE::policies::ignore_error>()));
 }
 
 //
@@ -288,37 +288,37 @@ inline boost::math::concepts::real_concept atanh(boost::math::concepts::real_con
 //
 template <class Policy>
 inline int iround(const concepts::real_concept& v, const Policy& pol)
-{ return boost::math::iround(v.value(), pol); }
+{ return BOOST_MATH_NAMESPACE::iround(v.value(), pol); }
 inline int iround(const concepts::real_concept& v)
-{ return boost::math::iround(v.value(), policies::policy<>()); }
+{ return BOOST_MATH_NAMESPACE::iround(v.value(), policies::policy<>()); }
 template <class Policy>
 inline long lround(const concepts::real_concept& v, const Policy& pol)
-{ return boost::math::lround(v.value(), pol); }
+{ return BOOST_MATH_NAMESPACE::lround(v.value(), pol); }
 inline long lround(const concepts::real_concept& v)
-{ return boost::math::lround(v.value(), policies::policy<>()); }
+{ return BOOST_MATH_NAMESPACE::lround(v.value(), policies::policy<>()); }
 
 template <class Policy>
 inline long long llround(const concepts::real_concept& v, const Policy& pol)
-{ return boost::math::llround(v.value(), pol); }
+{ return BOOST_MATH_NAMESPACE::llround(v.value(), pol); }
 inline long long llround(const concepts::real_concept& v)
-{ return boost::math::llround(v.value(), policies::policy<>()); }
+{ return BOOST_MATH_NAMESPACE::llround(v.value(), policies::policy<>()); }
 
 template <class Policy>
 inline int itrunc(const concepts::real_concept& v, const Policy& pol)
-{ return boost::math::itrunc(v.value(), pol); }
+{ return BOOST_MATH_NAMESPACE::itrunc(v.value(), pol); }
 inline int itrunc(const concepts::real_concept& v)
-{ return boost::math::itrunc(v.value(), policies::policy<>()); }
+{ return BOOST_MATH_NAMESPACE::itrunc(v.value(), policies::policy<>()); }
 template <class Policy>
 inline long ltrunc(const concepts::real_concept& v, const Policy& pol)
-{ return boost::math::ltrunc(v.value(), pol); }
+{ return BOOST_MATH_NAMESPACE::ltrunc(v.value(), pol); }
 inline long ltrunc(const concepts::real_concept& v)
-{ return boost::math::ltrunc(v.value(), policies::policy<>()); }
+{ return BOOST_MATH_NAMESPACE::ltrunc(v.value(), policies::policy<>()); }
 
 template <class Policy>
 inline long long lltrunc(const concepts::real_concept& v, const Policy& pol)
-{ return boost::math::lltrunc(v.value(), pol); }
+{ return BOOST_MATH_NAMESPACE::lltrunc(v.value(), pol); }
 inline long long lltrunc(const concepts::real_concept& v)
-{ return boost::math::lltrunc(v.value(), policies::policy<>()); }
+{ return BOOST_MATH_NAMESPACE::lltrunc(v.value(), policies::policy<>()); }
 
 // Streaming:
 template <class charT, class traits>
@@ -341,7 +341,7 @@ namespace tools
 {
 
 template <>
-inline concepts::real_concept make_big_value<concepts::real_concept>(boost::math::tools::largest_float val, const char* , std::false_type const&, std::false_type const&)
+inline concepts::real_concept make_big_value<concepts::real_concept>(BOOST_MATH_NAMESPACE::tools::largest_float val, const char* , std::false_type const&, std::false_type const&)
 {
    return val;  // Can't use lexical_cast here, sometimes it fails....
 }
@@ -394,8 +394,7 @@ inline constexpr int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE
 }
 
 } // namespace tools
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_REAL_CONCEPT_HPP
 

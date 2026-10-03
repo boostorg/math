@@ -22,7 +22,7 @@
 #include <type_traits>
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail{
 //
@@ -303,12 +303,12 @@ BOOST_MATH_GPU_ENABLED T erf_inv_imp(const T& p, const T& q, const Policy&, cons
 template <class T, class Policy>
 struct erf_roots
 {
-   boost::math::tuple<T,T,T> operator()(const T& guess)
+   BOOST_MATH_NAMESPACE::tuple<T,T,T> operator()(const T& guess)
    {
       BOOST_MATH_STD_USING
       T derivative = sign * (2 / sqrt(constants::pi<T>())) * exp(-(guess * guess));
       T derivative2 = -2 * guess * derivative;
-      return boost::math::make_tuple(((sign > 0) ? static_cast<T>(boost::math::erf(guess, Policy()) - target) : static_cast<T>(boost::math::erfc(guess, Policy())) - target), derivative, derivative2);
+      return BOOST_MATH_NAMESPACE::make_tuple(((sign > 0) ? static_cast<T>(BOOST_MATH_NAMESPACE::erf(guess, Policy()) - target) : static_cast<T>(BOOST_MATH_NAMESPACE::erfc(guess, Policy())) - target), derivative, derivative2);
    }
    erf_roots(T z, int s) : target(z), sign(s) {}
 private:
@@ -492,13 +492,11 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type erf_inv(T z)
    return erf_inv(z, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #else // Special handling for NVRTC
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 template <typename T>
 BOOST_MATH_GPU_ENABLED auto erf_inv(T x)
@@ -548,8 +546,7 @@ BOOST_MATH_GPU_ENABLED auto erfc_inv(float x, const Policy&)
    return ::erfcinvf(x);
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HAS_NVRTV
 

@@ -11,8 +11,7 @@
 #include <cmath>
 #include <vector>
 #endif
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {
 
 /**
@@ -203,6 +202,5 @@ private:
 };
 
 } // namespace optimization
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif // LINE_SEARCH_POLICIES_HPP

@@ -17,7 +17,7 @@
 #include <boost/math/special_functions/hermite.hpp>
 #include <boost/math/tools/fraction.hpp>
 
-namespace boost { namespace math { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
    template <class T>
    struct hypergeometric_2F0_cf
@@ -46,7 +46,7 @@ namespace boost { namespace math { namespace detail {
    template <class T, class Policy>
    T hypergeometric_2F0_cf_imp(T a1, T a2, T z, const Policy& pol, const char* function)
    {
-      using namespace boost::math;
+      using namespace BOOST_MATH_NAMESPACE;
       hypergeometric_2F0_cf<T> evaluator(a1, a2, z);
       std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
       T cf = tools::continued_fraction_b(evaluator, policies::get_epsilon<T, Policy>(), max_iter);
@@ -73,7 +73,7 @@ namespace boost { namespace math { namespace detail {
       bool is_a2_integer = (a2 == floor(a2));
 
       if (!asymptotic && !is_a1_integer && !is_a2_integer)
-         return boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
+         return BOOST_MATH_NAMESPACE::policies::raise_overflow_error<T>(function, nullptr, pol);
       if (!is_a1_integer || (a1 > 0))
       {
          swap(a1, a2);
@@ -83,7 +83,7 @@ namespace boost { namespace math { namespace detail {
       // At this point a1 must be a negative integer:
       //
       if(!asymptotic && (!is_a1_integer || (a1 > 0)))
-         return boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
+         return BOOST_MATH_NAMESPACE::policies::raise_overflow_error<T>(function, nullptr, pol);
       //
       // Special cases first:
       //
@@ -92,29 +92,29 @@ namespace boost { namespace math { namespace detail {
       if ((a1 == a2 - 0.5f) && (z < 0))
       {
          // http://functions.wolfram.com/07.31.03.0083.01
-         int n = static_cast<int>(static_cast<std::uintmax_t>(boost::math::lltrunc(-2 * a1)));
+         int n = static_cast<int>(static_cast<std::uintmax_t>(BOOST_MATH_NAMESPACE::lltrunc(-2 * a1)));
          T smz = sqrt(-z);
-         return static_cast<T>(pow(2 / smz, T(-n)) * boost::math::hermite(n, 1 / smz, pol));  // Warning suppression: integer power returns at least a double
+         return static_cast<T>(pow(2 / smz, T(-n)) * BOOST_MATH_NAMESPACE::hermite(n, 1 / smz, pol));  // Warning suppression: integer power returns at least a double
       }
 
       if (is_a1_integer && is_a2_integer)
       {
          if ((a1 < 1) && (a2 <= a1))
          {
-            const unsigned int n = static_cast<unsigned int>(static_cast<std::uintmax_t>(boost::math::lltrunc(-a1)));
-            const unsigned int m = static_cast<unsigned int>(static_cast<std::uintmax_t>(boost::math::lltrunc(-a2 - n)));
+            const unsigned int n = static_cast<unsigned int>(static_cast<std::uintmax_t>(BOOST_MATH_NAMESPACE::lltrunc(-a1)));
+            const unsigned int m = static_cast<unsigned int>(static_cast<std::uintmax_t>(BOOST_MATH_NAMESPACE::lltrunc(-a2 - n)));
 
-            return (pow(z, T(n)) * boost::math::factorial<T>(n, pol)) *
-               boost::math::laguerre(n, m, -(1 / z), pol);
+            return (pow(z, T(n)) * BOOST_MATH_NAMESPACE::factorial<T>(n, pol)) *
+               BOOST_MATH_NAMESPACE::laguerre(n, m, -(1 / z), pol);
          }
          else if ((a2 < 1) && (a1 <= a2))
          {
             // function is symmetric for a1 and a2
-            const unsigned int n = static_cast<unsigned int>(static_cast<std::uintmax_t>(boost::math::lltrunc(-a2)));
-            const unsigned int m = static_cast<unsigned int>(static_cast<std::uintmax_t>(boost::math::lltrunc(-a1 - n)));
+            const unsigned int n = static_cast<unsigned int>(static_cast<std::uintmax_t>(BOOST_MATH_NAMESPACE::lltrunc(-a2)));
+            const unsigned int m = static_cast<unsigned int>(static_cast<std::uintmax_t>(BOOST_MATH_NAMESPACE::lltrunc(-a1 - n)));
 
-            return (pow(z, T(n)) * boost::math::factorial<T>(n, pol)) *
-               boost::math::laguerre(n, m, -(1 / z), pol);
+            return (pow(z, T(n)) * BOOST_MATH_NAMESPACE::factorial<T>(n, pol)) *
+               BOOST_MATH_NAMESPACE::laguerre(n, m, -(1 / z), pol);
          }
       }
 
@@ -158,6 +158,6 @@ inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_2F0(T1 a1, 
 }
 
 
-  } } // namespace boost::math
+  BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_HPP

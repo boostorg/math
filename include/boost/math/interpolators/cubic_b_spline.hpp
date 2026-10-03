@@ -27,7 +27,7 @@
 
 BOOST_MATH_HEADER_DEPRECATED("<boost/math/interpolators/cardinal_cubic_b_spline.hpp>");
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 template <class Real>
 class cubic_b_spline
@@ -86,5 +86,5 @@ Real cubic_b_spline<Real>::double_prime(Real x) const
 }
 
 
-}}
+BOOST_MATH_NAMESPACE_END
 #endif

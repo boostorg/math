@@ -19,10 +19,7 @@
 // using boost::math::complement; // will be needed by users who want complement,
 // but NOT placed here to avoid putting it in global scope.
 
-namespace boost
-{
-  namespace math
-  {
+BOOST_MATH_NAMESPACE_BEGIN
   // Function to find location of random variable z
   // to give probability p (given scale)
   // Applies to normal, lognormal, extreme value, Cauchy, (and symmetrical triangular),
@@ -38,22 +35,22 @@ namespace boost
       const Policy& pol 
       )
     {
-      static_assert(::boost::math::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
-      static_assert(::boost::math::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution."); 
+      static_assert(::BOOST_MATH_NAMESPACE::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
+      static_assert(::BOOST_MATH_NAMESPACE::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution."); 
       static const char* function = "boost::math::find_location<Dist, Policy>&, %1%)";
 
-      if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(p) || (p < 0) || (p > 1))
       {
        return policies::raise_domain_error<typename Dist::value_type>(
            function, "Probability parameter was %1%, but must be >= 0 and <= 1!", p, pol);
       }
-      if(!(boost::math::isfinite)(z))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(z))
       {
        return policies::raise_domain_error<typename Dist::value_type>(
            function, "z parameter was %1%, but must be finite!", z, pol);
       }
       typename Dist::value_type result;
-      if(!(boost::math::detail::check_scale)(function, scale, &result, pol))
+      if(!(BOOST_MATH_NAMESPACE::detail::check_scale)(function, scale, &result, pol))
       {
        return result;
       }
@@ -84,20 +81,20 @@ namespace boost
       static const char* function = "boost::math::find_location<Dist, Policy>&, %1%)";
 
       typename Dist::value_type p = c.param1;
-      if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(p) || (p < 0) || (p > 1))
       {
        return policies::raise_domain_error<typename Dist::value_type>(
            function, "Probability parameter was %1%, but must be >= 0 and <= 1!", p, policies::policy<>());
       }
       typename Dist::value_type z = c.dist;
-      if(!(boost::math::isfinite)(z))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(z))
       {
        return policies::raise_domain_error<typename Dist::value_type>(
            function, "z parameter was %1%, but must be finite!", z, policies::policy<>());
       }
       typename Dist::value_type result;
       typename Dist::value_type scale = c.param2;
-      if(!(boost::math::detail::check_scale)(function, scale, &result, policies::policy<>()))
+      if(!(BOOST_MATH_NAMESPACE::detail::check_scale)(function, scale, &result, policies::policy<>()))
       {
        return result;
       }
@@ -113,20 +110,20 @@ namespace boost
       static const char* function = "boost::math::find_location<Dist, Policy>&, %1%)";
 
       typename Dist::value_type p = c.param1;
-      if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(p) || (p < 0) || (p > 1))
       {
        return policies::raise_domain_error<typename Dist::value_type>(
            function, "Probability parameter was %1%, but must be >= 0 and <= 1!", p, c.param3);
       }
       typename Dist::value_type z = c.dist;
-      if(!(boost::math::isfinite)(z))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(z))
       {
        return policies::raise_domain_error<typename Dist::value_type>(
            function, "z parameter was %1%, but must be finite!", z, c.param3);
       }
       typename Dist::value_type result;
       typename Dist::value_type scale = c.param2;
-      if(!(boost::math::detail::check_scale)(function, scale, &result, c.param3))
+      if(!(BOOST_MATH_NAMESPACE::detail::check_scale)(function, scale, &result, c.param3))
       {
        return result;
       }
@@ -134,8 +131,7 @@ namespace boost
        return z - quantile(Dist(), p) * scale;
     } // find_location complement
 
-  } // namespace boost
-} // namespace math
+  BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_STATS_FIND_LOCATION_HPP
 

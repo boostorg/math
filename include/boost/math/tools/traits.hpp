@@ -31,7 +31,7 @@ as defined above, and has member functions "scale" and "location".
 #include <type_traits>
 #endif
 
-namespace boost{ namespace math{ namespace tools{
+BOOST_MATH_NAMESPACE_BEGIN namespace tools{
 
 namespace detail{
 
@@ -129,15 +129,15 @@ struct is_scaled_distribution_helper<D, true>
 template <typename D>
 struct is_scaled_distribution_imp
 {
-   static constexpr bool value = (::boost::math::tools::detail::is_scaled_distribution_helper<D, ::boost::math::tools::detail::is_distribution_imp<D>::value>::value);
+   static constexpr bool value = (::BOOST_MATH_NAMESPACE::tools::detail::is_scaled_distribution_helper<D, ::BOOST_MATH_NAMESPACE::tools::detail::is_distribution_imp<D>::value>::value);
 };
 
 } // namespace detail
 
-template <typename T> struct is_distribution : public std::integral_constant<bool, ::boost::math::tools::detail::is_distribution_imp<T>::value> {};
-template <typename T> struct is_scaled_distribution : public std::integral_constant<bool, ::boost::math::tools::detail::is_scaled_distribution_imp<T>::value> {};
+template <typename T> struct is_distribution : public std::integral_constant<bool, ::BOOST_MATH_NAMESPACE::tools::detail::is_distribution_imp<T>::value> {};
+template <typename T> struct is_scaled_distribution : public std::integral_constant<bool, ::BOOST_MATH_NAMESPACE::tools::detail::is_scaled_distribution_imp<T>::value> {};
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 
 #endif
 

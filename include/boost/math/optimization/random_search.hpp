@@ -22,7 +22,7 @@
 #endif
 #include <boost/math/optimization/detail/common.hpp>
 
-namespace boost::math::optimization {
+BOOST_MATH_NAMESPACE_BEGIN namespace optimization {
 
 BOOST_MATH_EXPORT template <typename ArgumentContainer> struct random_search_parameters {
   using Real = typename ArgumentContainer::value_type;
@@ -145,5 +145,5 @@ ArgumentContainer random_search(
   return best_vector;
 }
 
-} // namespace boost::math::optimization
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::optimization
 #endif

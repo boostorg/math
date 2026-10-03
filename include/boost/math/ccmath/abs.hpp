@@ -18,14 +18,14 @@
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail {
 
 template <typename T> 
 constexpr T abs_impl(T x) noexcept
 {
-    if ((boost::math::ccmath::isnan)(x))
+    if ((BOOST_MATH_NAMESPACE::ccmath::isnan)(x))
     {
         return std::numeric_limits<T>::quiet_NaN();
     }
@@ -76,14 +76,14 @@ constexpr T abs(T x) noexcept
 
 constexpr long int labs(long int j) noexcept
 {
-    return boost::math::ccmath::abs(j);
+    return BOOST_MATH_NAMESPACE::ccmath::abs(j);
 }
 
 constexpr long long int llabs(long long int j) noexcept
 {
-    return boost::math::ccmath::abs(j);
+    return BOOST_MATH_NAMESPACE::ccmath::abs(j);
 }
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_ABS

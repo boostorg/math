@@ -19,16 +19,16 @@
 #include <boost/math/tools/complex.hpp>
 #include <boost/math/tools/cstdint.hpp>
 
-namespace boost{ namespace math{ namespace tools{
+BOOST_MATH_NAMESPACE_BEGIN namespace tools{
 
 namespace detail
 {
 
    template <typename T>
-   struct is_pair : public boost::math::false_type{};
+   struct is_pair : public BOOST_MATH_NAMESPACE::false_type{};
 
    template <typename T, typename U>
-   struct is_pair<boost::math::pair<T,U>> : public boost::math::true_type{};
+   struct is_pair<BOOST_MATH_NAMESPACE::pair<T,U>> : public BOOST_MATH_NAMESPACE::true_type{};
 
    template <typename Gen>
    struct fraction_traits_simple
@@ -64,7 +64,7 @@ namespace detail
 
    template <typename Gen>
    struct fraction_traits
-       : public boost::math::conditional<
+       : public BOOST_MATH_NAMESPACE::conditional<
          is_pair<typename Gen::result_type>::value,
          fraction_traits_pair<Gen>,
          fraction_traits_simple<Gen>>::type
@@ -110,7 +110,7 @@ namespace detail {
 //
 
 template <typename Gen, typename U>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b_impl(Gen& g, const U& factor, boost::math::uintmax_t& max_terms)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b_impl(Gen& g, const U& factor, BOOST_MATH_NAMESPACE::uintmax_t& max_terms)
       noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
       #ifndef BOOST_MATH_HAS_GPU_SUPPORT
       // SYCL can not handle this condition so we only check float on that platform
@@ -140,7 +140,7 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
    C = f;
    D = 0;
 
-   boost::math::uintmax_t counter(max_terms);
+   BOOST_MATH_NAMESPACE::uintmax_t counter(max_terms);
    do{
       v = g();
       D = traits::b(v) + traits::a(v) * D;
@@ -162,7 +162,7 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
 } // namespace detail
 
 BOOST_MATH_EXPORT template <typename Gen, typename U>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, const U& factor, boost::math::uintmax_t& max_terms)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, const U& factor, BOOST_MATH_NAMESPACE::uintmax_t& max_terms)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
          #ifndef BOOST_MATH_HAS_GPU_SUPPORT
          && noexcept(std::declval<Gen>()())
@@ -180,7 +180,7 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
    #endif
    )
 {
-   boost::math::uintmax_t max_terms = (boost::math::numeric_limits<boost::math::uintmax_t>::max)();
+   BOOST_MATH_NAMESPACE::uintmax_t max_terms = (BOOST_MATH_NAMESPACE::numeric_limits<BOOST_MATH_NAMESPACE::uintmax_t>::max)();
    return detail::continued_fraction_b_impl(g, factor, max_terms);
 }
 
@@ -198,12 +198,12 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
    using result_type = typename traits::result_type;
 
    result_type factor = ldexp(1.0f, 1 - bits); // 1 / pow(result_type(2), bits);
-   boost::math::uintmax_t max_terms = (boost::math::numeric_limits<boost::math::uintmax_t>::max)();
+   BOOST_MATH_NAMESPACE::uintmax_t max_terms = (BOOST_MATH_NAMESPACE::numeric_limits<BOOST_MATH_NAMESPACE::uintmax_t>::max)();
    return detail::continued_fraction_b_impl(g, factor, max_terms);
 }
 
 BOOST_MATH_EXPORT template <typename Gen>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, int bits, boost::math::uintmax_t& max_terms)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, int bits, BOOST_MATH_NAMESPACE::uintmax_t& max_terms)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<Gen>()())
@@ -236,7 +236,7 @@ namespace detail {
 // Note that the first a1 and b1 returned by generator Gen are both used.
 //
 template <typename Gen, typename U>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a_impl(Gen& g, const U& factor, boost::math::uintmax_t& max_terms)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a_impl(Gen& g, const U& factor, BOOST_MATH_NAMESPACE::uintmax_t& max_terms)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<Gen>()())
@@ -266,7 +266,7 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
    C = f;
    D = 0;
 
-   boost::math::uintmax_t counter(max_terms);
+   BOOST_MATH_NAMESPACE::uintmax_t counter(max_terms);
 
    do{
       v = g();
@@ -289,7 +289,7 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
 } // namespace detail
 
 BOOST_MATH_EXPORT template <typename Gen, typename U>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, const U& factor, boost::math::uintmax_t& max_terms)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, const U& factor, BOOST_MATH_NAMESPACE::uintmax_t& max_terms)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<Gen>()())
@@ -307,7 +307,7 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
    #endif
    )
 {
-   boost::math::uintmax_t max_iter = (boost::math::numeric_limits<boost::math::uintmax_t>::max)();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = (BOOST_MATH_NAMESPACE::numeric_limits<BOOST_MATH_NAMESPACE::uintmax_t>::max)();
    return detail::continued_fraction_a_impl(g, factor, max_iter);
 }
 
@@ -325,13 +325,13 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
    typedef typename traits::result_type result_type;
 
    result_type factor = ldexp(1.0f, 1-bits); // 1 / pow(result_type(2), bits);
-   boost::math::uintmax_t max_iter = (boost::math::numeric_limits<boost::math::uintmax_t>::max)();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = (BOOST_MATH_NAMESPACE::numeric_limits<BOOST_MATH_NAMESPACE::uintmax_t>::max)();
 
    return detail::continued_fraction_a_impl(g, factor, max_iter);
 }
 
 BOOST_MATH_EXPORT template <typename Gen>
-BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, int bits, boost::math::uintmax_t& max_terms)
+BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, int bits, BOOST_MATH_NAMESPACE::uintmax_t& max_terms)
    noexcept(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<Gen>()())
@@ -348,7 +348,6 @@ BOOST_MATH_GPU_ENABLED inline typename detail::fraction_traits<Gen>::result_type
 }
 
 } // namespace tools
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_TOOLS_FRACTION_INCLUDED

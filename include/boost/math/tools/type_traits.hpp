@@ -16,8 +16,7 @@
 
 #include <cuda/std/type_traits>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 // Helper classes
 BOOST_MATH_EXPORT using cuda::std::integral_constant;
@@ -164,8 +163,7 @@ BOOST_MATH_EXPORT using cuda::std::underlying_type_t;
 #include <type_traits>
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 // Helper classes
 BOOST_MATH_EXPORT using std::integral_constant;
@@ -309,183 +307,182 @@ BOOST_MATH_EXPORT using std::underlying_type_t;
 #endif 
 
 BOOST_MATH_EXPORT template <bool B>
-using bool_constant = boost::math::integral_constant<bool, B>;
+using bool_constant = BOOST_MATH_NAMESPACE::integral_constant<bool, B>;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_void_v = boost::math::is_void<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_void_v = BOOST_MATH_NAMESPACE::is_void<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_null_pointer_v = boost::math::is_null_pointer<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_null_pointer_v = BOOST_MATH_NAMESPACE::is_null_pointer<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_integral_v = boost::math::is_integral<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_integral_v = BOOST_MATH_NAMESPACE::is_integral<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_floating_point_v = boost::math::is_floating_point<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_floating_point_v = BOOST_MATH_NAMESPACE::is_floating_point<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_array_v = boost::math::is_array<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_array_v = BOOST_MATH_NAMESPACE::is_array<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_enum_v = boost::math::is_enum<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_enum_v = BOOST_MATH_NAMESPACE::is_enum<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_union_v = boost::math::is_union<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_union_v = BOOST_MATH_NAMESPACE::is_union<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_class_v = boost::math::is_class<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_class_v = BOOST_MATH_NAMESPACE::is_class<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_function_v = boost::math::is_function<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_function_v = BOOST_MATH_NAMESPACE::is_function<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_pointer_v = boost::math::is_pointer<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_pointer_v = BOOST_MATH_NAMESPACE::is_pointer<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_lvalue_reference_v = boost::math::is_lvalue_reference<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_lvalue_reference_v = BOOST_MATH_NAMESPACE::is_lvalue_reference<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_rvalue_reference_v = boost::math::is_rvalue_reference<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_rvalue_reference_v = BOOST_MATH_NAMESPACE::is_rvalue_reference<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_member_object_pointer_v = boost::math::is_member_object_pointer<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_member_object_pointer_v = BOOST_MATH_NAMESPACE::is_member_object_pointer<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_member_function_pointer_v = boost::math::is_member_function_pointer<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_member_function_pointer_v = BOOST_MATH_NAMESPACE::is_member_function_pointer<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_fundamental_v = boost::math::is_fundamental<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_fundamental_v = BOOST_MATH_NAMESPACE::is_fundamental<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_arithmetic_v = boost::math::is_arithmetic<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_arithmetic_v = BOOST_MATH_NAMESPACE::is_arithmetic<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_scalar_v = boost::math::is_scalar<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_scalar_v = BOOST_MATH_NAMESPACE::is_scalar<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_object_v = boost::math::is_object<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_object_v = BOOST_MATH_NAMESPACE::is_object<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_compound_v = boost::math::is_compound<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_compound_v = BOOST_MATH_NAMESPACE::is_compound<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_reference_v = boost::math::is_reference<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_reference_v = BOOST_MATH_NAMESPACE::is_reference<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_member_pointer_v = boost::math::is_member_pointer<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_member_pointer_v = BOOST_MATH_NAMESPACE::is_member_pointer<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_const_v = boost::math::is_const<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_const_v = BOOST_MATH_NAMESPACE::is_const<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_volatile_v = boost::math::is_volatile<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_volatile_v = BOOST_MATH_NAMESPACE::is_volatile<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_copyable_v = boost::math::is_trivially_copyable<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_copyable_v = BOOST_MATH_NAMESPACE::is_trivially_copyable<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_standard_layout_v = boost::math::is_standard_layout<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_standard_layout_v = BOOST_MATH_NAMESPACE::is_standard_layout<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_empty_v = boost::math::is_empty<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_empty_v = BOOST_MATH_NAMESPACE::is_empty<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_polymorphic_v = boost::math::is_polymorphic<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_polymorphic_v = BOOST_MATH_NAMESPACE::is_polymorphic<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_abstract_v = boost::math::is_abstract<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_abstract_v = BOOST_MATH_NAMESPACE::is_abstract<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_final_v = boost::math::is_final<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_final_v = BOOST_MATH_NAMESPACE::is_final<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_signed_v = boost::math::is_signed<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_signed_v = BOOST_MATH_NAMESPACE::is_signed<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_unsigned_v = boost::math::is_unsigned<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_unsigned_v = BOOST_MATH_NAMESPACE::is_unsigned<T>::value;
 
 BOOST_MATH_EXPORT template <typename T, typename... Args>
-BOOST_MATH_INLINE_CONSTEXPR bool is_constructible_v = boost::math::is_constructible<T, Args...>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_constructible_v = BOOST_MATH_NAMESPACE::is_constructible<T, Args...>::value;
 
 BOOST_MATH_EXPORT template <typename T, typename... Args>
-BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_constructible_v = boost::math::is_trivially_constructible<T, Args...>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_constructible_v = BOOST_MATH_NAMESPACE::is_trivially_constructible<T, Args...>::value;
 
 BOOST_MATH_EXPORT template <typename T, typename... Args>
-BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_constructible_v = boost::math::is_nothrow_constructible<T, Args...>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_constructible_v = BOOST_MATH_NAMESPACE::is_nothrow_constructible<T, Args...>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_default_constructible_v = boost::math::is_default_constructible<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_default_constructible_v = BOOST_MATH_NAMESPACE::is_default_constructible<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_default_constructible_v = boost::math::is_trivially_default_constructible<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_default_constructible_v = BOOST_MATH_NAMESPACE::is_trivially_default_constructible<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_default_constructible_v = boost::math::is_nothrow_default_constructible<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_default_constructible_v = BOOST_MATH_NAMESPACE::is_nothrow_default_constructible<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_copy_constructible_v = boost::math::is_copy_constructible<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_copy_constructible_v = BOOST_MATH_NAMESPACE::is_copy_constructible<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_copy_constructible_v = boost::math::is_trivially_copy_constructible<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_copy_constructible_v = BOOST_MATH_NAMESPACE::is_trivially_copy_constructible<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_copy_constructible_v = boost::math::is_nothrow_copy_constructible<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_copy_constructible_v = BOOST_MATH_NAMESPACE::is_nothrow_copy_constructible<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_move_constructible_v = boost::math::is_move_constructible<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_move_constructible_v = BOOST_MATH_NAMESPACE::is_move_constructible<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_move_constructible_v = boost::math::is_trivially_move_constructible<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_move_constructible_v = BOOST_MATH_NAMESPACE::is_trivially_move_constructible<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_move_constructible_v = boost::math::is_nothrow_move_constructible<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_move_constructible_v = BOOST_MATH_NAMESPACE::is_nothrow_move_constructible<T>::value;
 
 BOOST_MATH_EXPORT template <typename T, typename U>
-BOOST_MATH_INLINE_CONSTEXPR bool is_assignable_v = boost::math::is_assignable<T, U>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_assignable_v = BOOST_MATH_NAMESPACE::is_assignable<T, U>::value;
 
 BOOST_MATH_EXPORT template <typename T, typename U>
-BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_assignable_v = boost::math::is_trivially_assignable<T, U>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_assignable_v = BOOST_MATH_NAMESPACE::is_trivially_assignable<T, U>::value;
 
 BOOST_MATH_EXPORT template <typename T, typename U>
-BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_assignable_v = boost::math::is_nothrow_assignable<T, U>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_assignable_v = BOOST_MATH_NAMESPACE::is_nothrow_assignable<T, U>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_copy_assignable_v = boost::math::is_copy_assignable<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_copy_assignable_v = BOOST_MATH_NAMESPACE::is_copy_assignable<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_copy_assignable_v = boost::math::is_trivially_copy_assignable<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_copy_assignable_v = BOOST_MATH_NAMESPACE::is_trivially_copy_assignable<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_copy_assignable_v = boost::math::is_nothrow_copy_assignable<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_copy_assignable_v = BOOST_MATH_NAMESPACE::is_nothrow_copy_assignable<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_move_assignable_v = boost::math::is_move_assignable<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_move_assignable_v = BOOST_MATH_NAMESPACE::is_move_assignable<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_move_assignable_v = boost::math::is_trivially_move_assignable<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_move_assignable_v = BOOST_MATH_NAMESPACE::is_trivially_move_assignable<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_move_assignable_v = boost::math::is_nothrow_move_assignable<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_move_assignable_v = BOOST_MATH_NAMESPACE::is_nothrow_move_assignable<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_destructible_v = boost::math::is_destructible<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_destructible_v = BOOST_MATH_NAMESPACE::is_destructible<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_destructible_v = boost::math::is_trivially_destructible<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_trivially_destructible_v = BOOST_MATH_NAMESPACE::is_trivially_destructible<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_destructible_v = boost::math::is_nothrow_destructible<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_nothrow_destructible_v = BOOST_MATH_NAMESPACE::is_nothrow_destructible<T>::value;
 
 BOOST_MATH_EXPORT template <typename T>
-BOOST_MATH_INLINE_CONSTEXPR bool has_virtual_destructor_v = boost::math::has_virtual_destructor<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool has_virtual_destructor_v = BOOST_MATH_NAMESPACE::has_virtual_destructor<T>::value;
 
 BOOST_MATH_EXPORT template <typename T, typename U>
-BOOST_MATH_INLINE_CONSTEXPR bool is_same_v = boost::math::is_same<T, U>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_same_v = BOOST_MATH_NAMESPACE::is_same<T, U>::value;
 
 BOOST_MATH_EXPORT template <typename T, typename U>
-BOOST_MATH_INLINE_CONSTEXPR bool is_base_of_v = boost::math::is_base_of<T, U>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool is_base_of_v = BOOST_MATH_NAMESPACE::is_base_of<T, U>::value;
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_TOOLS_TYPE_TRAITS

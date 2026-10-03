@@ -1,0 +1,389 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Configurable Namespace</title>
+<link rel="stylesheet" href="../math.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
+<link rel="home" href="../index.html" title="Math Toolkit 4.2.1">
+<link rel="up" href="../overview.html" title="Chapter 1. Overview">
+<link rel="prev" href="standalone.html" title="Standalone Usage">
+<link rel="next" href="result_type.html" title="Calculation of the Type of the Result">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="standalone.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../overview.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="result_type.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="math_toolkit.configurable_namespace"></a><a class="link" href="configurable_namespace.html" title="Configurable Namespace">Configurable Namespace</a>
+</h2></div></div></div>
+<h5>
+<a name="math_toolkit.configurable_namespace.h0"></a>
+      <span class="phrase"><a name="math_toolkit.configurable_namespace.overview"></a></span><a class="link" href="configurable_namespace.html#math_toolkit.configurable_namespace.overview">Overview</a>
+    </h5>
+<p>
+      By default every entity in Boost.Math lives in namespace <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span></code>. Defining
+      the macro <code class="computeroutput"><span class="identifier">BOOST_MATH_NAMESPACE_COMPONENTS</span></code>
+      relocates the whole library into a namespace of your choosing. This is intended
+      for libraries that embed their own copy of Boost.Math (typically in <a class="link" href="standalone.html" title="Standalone Usage">standalone
+      mode</a>): moving the copy out of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span></code> means
+      it can never collide with a different version of Boost.Math that the end user
+      also compiles or links against, whether as duplicate symbols in a static library
+      or as an ODR violation.
+    </p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_NAMESPACE_COMPONENTS</span> <span class="identifier">my_lib</span><span class="special">,</span> <span class="identifier">math</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="special">{</span>
+    <span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">my_lib</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="number">5.0</span><span class="special">);</span>            <span class="comment">// 24</span>
+    <span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">BOOST_MATH_NAMESPACE</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="number">5.0</span><span class="special">);</span>    <span class="comment">// the same function</span>
+    <span class="keyword">return</span> <span class="identifier">x</span> <span class="special">==</span> <span class="identifier">y</span> <span class="special">?</span> <span class="number">0</span> <span class="special">:</span> <span class="number">1</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+      Nothing changes unless the macro is defined: the default configuration produces
+      exactly the same code as before.
+    </p>
+<h5>
+<a name="math_toolkit.configurable_namespace.h1"></a>
+      <span class="phrase"><a name="math_toolkit.configurable_namespace.configuring_the_namespace"></a></span><a class="link" href="configurable_namespace.html#math_toolkit.configurable_namespace.configuring_the_namespace">Configuring
+      the namespace</a>
+    </h5>
+<p>
+      <code class="computeroutput"><span class="identifier">BOOST_MATH_NAMESPACE_COMPONENTS</span></code>
+      is a comma separated list of between one and five identifiers, outermost first.
+      The default is <code class="computeroutput"><span class="identifier">boost</span><span class="special">,</span>
+      <span class="identifier">math</span></code>. Some examples:
+    </p>
+<div class="table">
+<a name="math_toolkit.configurable_namespace.example_configurations"></a><p class="title"><b>Table 1.1. Example configurations</b></p>
+<div class="table-contents"><table class="table" summary="Example configurations">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_MATH_NAMESPACE_COMPONENTS</span></code>
+              </p>
+            </th>
+<th>
+              <p>
+                Library namespace
+              </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">,</span>
+                <span class="identifier">math</span></code> (default)
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">my_lib</span><span class="special">,</span>
+                <span class="identifier">math</span></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="special">::</span><span class="identifier">my_lib</span><span class="special">::</span><span class="identifier">math</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">_Math</span></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="special">::</span><span class="identifier">_Math</span></code>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">my_company</span><span class="special">,</span>
+                <span class="identifier">third_party</span><span class="special">,</span>
+                <span class="identifier">math</span></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="special">::</span><span class="identifier">my_company</span><span class="special">::</span><span class="identifier">third_party</span><span class="special">::</span><span class="identifier">math</span></code>
+              </p>
+            </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<br class="table-break"><p>
+      The namespace is given as a list of components rather than as a qualified name
+      such as <code class="computeroutput"><span class="identifier">my_lib</span><span class="special">::</span><span class="identifier">math</span></code>, because the preprocessor cannot split
+      a qualified name into its parts, and C++14 (the oldest standard the library
+      supports) has no nested namespace definitions.
+    </p>
+<p>
+      The macro must be defined before the first Boost.Math header is included. In
+      a project with more than one translation unit, set it in the build system so
+      that every translation unit sees the same value:
+    </p>
+<pre class="programlisting"><span class="identifier">g</span><span class="special">++</span> <span class="special">-</span><span class="identifier">DBOOST_MATH_NAMESPACE_COMPONENTS</span><span class="special">=</span><span class="identifier">my_lib</span><span class="special">,</span><span class="identifier">math</span> <span class="special">...</span>
+<span class="identifier">cl</span> <span class="special">/</span><span class="identifier">DBOOST_MATH_NAMESPACE_COMPONENTS</span><span class="special">=</span><span class="identifier">my_lib</span><span class="special">,</span><span class="identifier">math</span> <span class="special">...</span>
+
+<span class="preprocessor"># CMake</span>
+<span class="identifier">target_compile_definitions</span><span class="special">(</span><span class="identifier">my_target</span> <span class="identifier">PRIVATE</span> <span class="identifier">BOOST_MATH_NAMESPACE_COMPONENTS</span><span class="special">=</span><span class="identifier">my_lib</span><span class="special">,</span><span class="identifier">math</span><span class="special">)</span>
+</pre>
+<h5>
+<a name="math_toolkit.configurable_namespace.h2"></a>
+      <span class="phrase"><a name="math_toolkit.configurable_namespace.macros"></a></span><a class="link" href="configurable_namespace.html#math_toolkit.configurable_namespace.macros">Macros</a>
+    </h5>
+<p>
+      <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+      derives the following macros from <code class="computeroutput"><span class="identifier">BOOST_MATH_NAMESPACE_COMPONENTS</span></code>.
+      They are always defined, so code that uses them works with any configuration,
+      including the default one. Defining any of them yourself is a compile time
+      error.
+    </p>
+<div class="table">
+<a name="math_toolkit.configurable_namespace.derived_macros"></a><p class="title"><b>Table 1.2. Derived macros</b></p>
+<div class="table-contents"><table class="table" summary="Derived macros">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                Macro
+              </p>
+            </th>
+<th>
+              <p>
+                Default expansion
+              </p>
+            </th>
+<th>
+              <p>
+                Description
+              </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_MATH_NAMESPACE</span></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span></code>
+              </p>
+            </td>
+<td>
+              <p>
+                The qualified name of the library namespace, for example <code class="computeroutput"><span class="special">::</span><span class="identifier">BOOST_MATH_NAMESPACE</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code> or <code class="computeroutput"><span class="keyword">namespace</span>
+                <span class="identifier">bm</span> <span class="special">=</span>
+                <span class="identifier">BOOST_MATH_NAMESPACE</span><span class="special">;</span></code>.
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_MATH_NAMESPACE_BEGIN</span></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="keyword">namespace</span> <span class="identifier">boost</span>
+                <span class="special">{</span> <span class="keyword">namespace</span>
+                <span class="identifier">math</span> <span class="special">{</span></code>
+              </p>
+            </td>
+<td>
+              <p>
+                Opens the library namespace. Use it only at global namespace scope.
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_MATH_NAMESPACE_END</span></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="special">}}</span></code>
+              </p>
+            </td>
+<td>
+              <p>
+                Closes the namespace opened by <code class="computeroutput"><span class="identifier">BOOST_MATH_NAMESPACE_BEGIN</span></code>.
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_MATH_NAMESPACE_LEVELS</span></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="number">2</span></code>
+              </p>
+            </td>
+<td>
+              <p>
+                The number of components, as an integer literal that can be tested
+                with <code class="computeroutput"><span class="preprocessor">#if</span></code>.
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_MATH_DETAIL_NAMESPACE</span></code>
+              </p>
+            </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math_detail</span></code>
+              </p>
+            </td>
+<td>
+              <p>
+                A sibling of the library namespace, formed by appending <code class="computeroutput"><span class="identifier">_detail</span></code> to the innermost component,
+                which holds the few internal helpers that must not be enclosed by
+                the library namespace. <code class="computeroutput"><span class="identifier">BOOST_MATH_DETAIL_NAMESPACE_BEGIN</span></code>
+                and <code class="computeroutput"><span class="identifier">BOOST_MATH_DETAIL_NAMESPACE_END</span></code>
+                open and close it. User code should never need these.
+              </p>
+            </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<br class="table-break"><h5>
+<a name="math_toolkit.configurable_namespace.h3"></a>
+      <span class="phrase"><a name="math_toolkit.configurable_namespace.code_that_extends_the_library"></a></span><a class="link" href="configurable_namespace.html#math_toolkit.configurable_namespace.code_that_extends_the_library">Code
+      that extends the library</a>
+    </h5>
+<p>
+      Anything you declare inside the library namespace must follow it when it moves.
+      The usual case is the <a class="link" href="pol_ref/error_handling_policies.html" title="Error Handling Policies">user_error
+      policy</a>, whose handlers you define inside the policies namespace. Writing
+      them with the macros keeps them correct for every configuration:
+    </p>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_NAMESPACE_BEGIN</span>
+<span class="keyword">namespace</span> <span class="identifier">policies</span> <span class="special">{</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">T</span> <span class="identifier">user_domain_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="comment">// ...</span>
+<span class="special">}</span>
+
+<span class="special">}</span> <span class="comment">// namespace policies</span>
+<span class="identifier">BOOST_MATH_NAMESPACE_END</span>
+</pre>
+<p>
+      The same applies to anything else you previously wrote in <code class="computeroutput"><span class="keyword">namespace</span>
+      <span class="identifier">boost</span> <span class="special">{</span>
+      <span class="keyword">namespace</span> <span class="identifier">math</span>
+      <span class="special">{</span></code>, such as specializations of library
+      templates. The convenience macros <code class="computeroutput"><span class="identifier">BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS</span></code>
+      and <code class="computeroutput"><span class="identifier">BOOST_MATH_DECLARE_DISTRIBUTIONS</span></code>
+      work unchanged in any configuration.
+    </p>
+<h5>
+<a name="math_toolkit.configurable_namespace.h4"></a>
+      <span class="phrase"><a name="math_toolkit.configurable_namespace.limitations"></a></span><a class="link" href="configurable_namespace.html#math_toolkit.configurable_namespace.limitations">Limitations</a>
+    </h5>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+          Only C++ names move. Header paths, include guards and macro names stay
+          the same, so a single translation unit can contain only one configuration
+          of the library. Different translation units, or different libraries linked
+          into the same program, may each use a different namespace: that is the
+          purpose of the feature.
+        </li>
+<li class="listitem">
+          Every translation unit that shares one copy of the library must use the
+          same <code class="computeroutput"><span class="identifier">BOOST_MATH_NAMESPACE_COMPONENTS</span></code>.
+        </li>
+<li class="listitem">
+          Libraries that call Boost.Math by its default name are not affected by
+          the macro and will not find a relocated copy. This includes other Boost
+          libraries that use Boost.Math internally, such as Boost.Multiprecision,
+          so relocation is intended for a self contained copy of Boost.Math.
+        </li>
+<li class="listitem">
+          The messages carried by exceptions and error handlers still name the function
+          as <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::...</span></code>.
+        </li>
+<li class="listitem">
+          The fixed width floating point typedefs of <a class="link" href="specified_typedefs.html" title="Overview"><code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code></a> (<code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">float64_t</span></code>
+          and friends) are not part of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span></code>
+          and stay in namespace <code class="computeroutput"><span class="identifier">boost</span></code>.
+        </li>
+<li class="listitem">
+          The <a class="link" href="cxx20_modules.html" title="Support for C++20 Modules">C++20 module</a> is built
+          and tested with the default namespace only.
+        </li>
+</ul></div>
+<h5>
+<a name="math_toolkit.configurable_namespace.h5"></a>
+      <span class="phrase"><a name="math_toolkit.configurable_namespace.testing"></a></span><a class="link" href="configurable_namespace.html#math_toolkit.configurable_namespace.testing">Testing</a>
+    </h5>
+<p>
+      The library's continuous integration builds every public header, plus a runtime
+      test, with <code class="computeroutput"><span class="identifier">BOOST_MATH_NAMESPACE_COMPONENTS</span><span class="special">=</span><span class="identifier">my_lib</span><span class="special">,</span><span class="identifier">math</span></code>. It checks that nothing is left in
+      <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span></code> and that no symbol in the resulting
+      binary is in namespace <code class="computeroutput"><span class="identifier">boost</span></code>.
+      See <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">cmake_namespace_test</span></code>.
+    </p>
+</div>
+<div class="copyright-footer">Copyright © 2006-2021 Nikhar Agrawal, Anton Bikineev, Matthew Borland,
+      Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno
+      Lalande, John Maddock, Evan Miller, Jeremy Murphy, Matthew Pulver, Johan Råde,
+      Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle
+      Walker, Xiaogang Zhang, and Maksym Zhelyeznyakov<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="standalone.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../overview.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="result_type.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

@@ -34,7 +34,7 @@
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/quadrature/detail/quadrature_constant.hpp>
 
-namespace boost { namespace math { namespace quadrature { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature { namespace detail {
 
 #ifndef BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND
 
@@ -73,7 +73,7 @@ class gauss_hermite_detail
             a[k] = sqrt(Real(2) / Real(k + 1));
             b[k] = sqrt(Real(k) / Real(k + 1));
          }
-         p0 = 1 / sqrt(sqrt(boost::math::constants::pi<Real>()));
+         p0 = 1 / sqrt(sqrt(BOOST_MATH_NAMESPACE::constants::pi<Real>()));
          derivative_scale = sqrt(Real(2 * N));
       }
 
@@ -128,7 +128,7 @@ class gauss_hermite_detail
       // that with NaNs, which gauss_hermite turns into an evaluation error.
       Real upper = sqrt(Real(2 * N + 2));
       recurrence top = evaluate(upper);
-      if (!(boost::math::isfinite)(top.p) || !(boost::math::isfinite)(top.p_prime))
+      if (!(BOOST_MATH_NAMESPACE::isfinite)(top.p) || !(BOOST_MATH_NAMESPACE::isfinite)(top.p_prime))
       {
          std::fill(x.begin(), x.end(), std::numeric_limits<Real>::quiet_NaN());
          std::fill(w.begin(), w.end(), std::numeric_limits<Real>::quiet_NaN());
@@ -501,7 +501,7 @@ class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::quadr
    // Abscissas computed on demand are NaN when the recurrence overflows Real.
    static bool overflowed()
    {
-      return !(boost::math::isfinite)(static_cast<Real>(base::abscissa().back()));
+      return !(BOOST_MATH_NAMESPACE::isfinite)(static_cast<Real>(base::abscissa().back()));
    }
 
    static Real overflow_error()
@@ -595,7 +595,6 @@ public:
 };
 
 } // namespace quadrature
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_QUADRATURE_GAUSS_HERMITE_HPP

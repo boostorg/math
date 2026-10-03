@@ -18,14 +18,14 @@
 #include <boost/math/ccmath/floor.hpp>
 #include <boost/math/ccmath/ceil.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail {
 
 template <typename T>
 inline constexpr T trunc_impl(T arg) noexcept
 {
-    return (arg > 0) ? boost::math::ccmath::floor(arg) : boost::math::ccmath::ceil(arg);
+    return (arg > 0) ? BOOST_MATH_NAMESPACE::ccmath::floor(arg) : BOOST_MATH_NAMESPACE::ccmath::ceil(arg);
 }
 
 } // Namespace detail
@@ -35,10 +35,10 @@ inline constexpr Real trunc(Real arg) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
     {
-        return boost::math::ccmath::abs(arg) == Real(0) ? arg :
-               boost::math::ccmath::isinf(arg) ? arg :
-               boost::math::ccmath::isnan(arg) ? arg :
-               boost::math::ccmath::detail::trunc_impl(arg);
+        return BOOST_MATH_NAMESPACE::ccmath::abs(arg) == Real(0) ? arg :
+               BOOST_MATH_NAMESPACE::ccmath::isinf(arg) ? arg :
+               BOOST_MATH_NAMESPACE::ccmath::isnan(arg) ? arg :
+               BOOST_MATH_NAMESPACE::ccmath::detail::trunc_impl(arg);
     }
     else
     {
@@ -50,21 +50,21 @@ inline constexpr Real trunc(Real arg) noexcept
 BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr double trunc(Z arg) noexcept
 {
-    return boost::math::ccmath::trunc(static_cast<double>(arg));
+    return BOOST_MATH_NAMESPACE::ccmath::trunc(static_cast<double>(arg));
 }
 
 inline constexpr float truncf(float arg) noexcept
 {
-    return boost::math::ccmath::trunc(arg);
+    return BOOST_MATH_NAMESPACE::ccmath::trunc(arg);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline constexpr long double truncl(long double arg) noexcept
 {
-    return boost::math::ccmath::trunc(arg);
+    return BOOST_MATH_NAMESPACE::ccmath::trunc(arg);
 }
 #endif
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_TRUNC_HPP

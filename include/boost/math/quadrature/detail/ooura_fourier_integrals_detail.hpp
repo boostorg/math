@@ -23,7 +23,7 @@
 #endif
 #endif
 
-namespace boost { namespace math { namespace quadrature { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature { namespace detail {
 
 // Ooura and Mori, A robust double exponential formula for Fourier-type integrals,
 // eta is the argument to the exponential in equation 3.3:
@@ -50,7 +50,7 @@ std::pair<Real, Real> ooura_eta(Real x, Real alpha) {
 template<class Real>
 Real calculate_ooura_alpha(Real h)
 {
-    using boost::math::constants::pi;
+    using BOOST_MATH_NAMESPACE::constants::pi;
     using std::log1p;
     using std::sqrt;
     Real x = sqrt(16 + 4*log1p(pi<Real>()/h)/h);
@@ -63,7 +63,7 @@ std::pair<Real, Real> ooura_sin_node_and_weight(long n, Real h, Real alpha)
     using std::expm1;
     using std::exp;
     using std::abs;
-    using boost::math::constants::pi;
+    using BOOST_MATH_NAMESPACE::constants::pi;
     using std::isnan;
 
     if (n == 0) {
@@ -77,7 +77,7 @@ std::pair<Real, Real> ooura_sin_node_and_weight(long n, Real h, Real alpha)
 
         Real eta_prime_0 = Real(2) + alpha + Real(1)/Real(4);
         Real node = pi<Real>()/(eta_prime_0*h);
-        Real weight = pi<Real>()*boost::math::sin_pi(1/(eta_prime_0*h));
+        Real weight = pi<Real>()*BOOST_MATH_NAMESPACE::sin_pi(1/(eta_prime_0*h));
         Real eta_dbl_prime = -alpha + Real(1)/Real(4);
         Real phi_prime_0 = (1 - eta_dbl_prime/(eta_prime_0*eta_prime_0))/2;
         weight *= phi_prime_0;
@@ -102,18 +102,18 @@ std::pair<Real, Real> ooura_sin_node_and_weight(long n, Real h, Real alpha)
     Real arg;
     if(eta > 1) {
         arg = n/( 1/exp_meta - 1 );
-        s *= boost::math::sin_pi(arg);
+        s *= BOOST_MATH_NAMESPACE::sin_pi(arg);
         if (n&1) {
             s *= -1;
         }
     }
     else if (eta < -1) {
         arg = n/(1-exp_meta);
-        s *= boost::math::sin_pi(arg);
+        s *= BOOST_MATH_NAMESPACE::sin_pi(arg);
     }
     else {
         arg = -n*exp_meta/expm1_meta;
-        s *= boost::math::sin_pi(arg);
+        s *= BOOST_MATH_NAMESPACE::sin_pi(arg);
         if (n&1) {
             s *= -1;
         }
@@ -143,7 +143,7 @@ std::pair<Real, Real> ooura_cos_node_and_weight(long n, Real h, Real alpha)
     using std::expm1;
     using std::exp;
     using std::abs;
-    using boost::math::constants::pi;
+    using BOOST_MATH_NAMESPACE::constants::pi;
 
     Real x = h*(n-Real(1)/Real(2));
     auto p = ooura_eta(x, alpha);
@@ -163,11 +163,11 @@ std::pair<Real, Real> ooura_cos_node_and_weight(long n, Real h, Real alpha)
     Real arg;
     if (eta < -1) {
         arg = -(n-Real(1)/Real(2))/expm1_meta;
-        s *= boost::math::cos_pi(arg);
+        s *= BOOST_MATH_NAMESPACE::cos_pi(arg);
     }
     else {
         arg = -(n-Real(1)/Real(2))*exp_meta/expm1_meta;
-        s *= boost::math::sin_pi(arg);
+        s *= BOOST_MATH_NAMESPACE::sin_pi(arg);
         if (n&1) {
             s *= -1;
         }
@@ -235,7 +235,7 @@ public:
     std::pair<Real,Real> integrate(F const & f, Real omega) {
         using std::abs;
         using std::max;
-        using boost::math::constants::pi;
+        using BOOST_MATH_NAMESPACE::constants::pi;
 
         if (omega == 0) {
             return {Real(0), Real(0)};
@@ -497,7 +497,7 @@ public:
     std::pair<Real,Real> integrate(F const & f, Real omega) {
         using std::abs;
         using std::max;
-        using boost::math::constants::pi;
+        using BOOST_MATH_NAMESPACE::constants::pi;
 
         if (omega == 0) {
             throw std::domain_error("At omega = 0, the integral is not oscillatory. The user must choose an appropriate method for this case.\n");
@@ -692,5 +692,5 @@ private:
 };
 
 
-}}}}
+}} BOOST_MATH_NAMESPACE_END
 #endif

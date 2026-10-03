@@ -11,7 +11,7 @@
 #ifndef BOOST_MATH_DETAIL_HYPERGEOMETRIC_CF_HPP
 #define BOOST_MATH_DETAIL_HYPERGEOMETRIC_CF_HPP
 
-  namespace boost { namespace math { namespace detail {
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
   // primary template for term of continued fraction
   template <class T, unsigned p, unsigned q>
@@ -169,9 +169,9 @@
     std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
     const T result = tools::continued_fraction_b(
       term,
-      boost::math::policies::get_epsilon<T, Policy>(),
+      BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(),
       max_iter);
-    boost::math::policies::check_series_iterations<T>(
+    BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>(
       "boost::math::hypergeometric_pFq_cf<%1%>(%1%,%1%,%1%)",
       max_iter,
       pol);
@@ -223,6 +223,6 @@
     return result;
   }
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_DETAIL_HYPERGEOMETRIC_CF_HPP

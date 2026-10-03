@@ -24,8 +24,7 @@
 #endif
 #include <boost/math/tools/mp.hpp>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace mp = tools::meta_programming;
 
@@ -98,7 +97,7 @@ get_type_at<fvar<RealType, Order>, sizeof...(Orders)> fvar<RealType, Order>::der
   static_assert(sizeof...(Orders) <= depth,
                 "Number of parameters to derivative(...) cannot exceed fvar::depth.");
   return at(static_cast<size_t>(orders)...) *
-         product(boost::math::factorial<root_type>(static_cast<unsigned>(orders))...);
+         product(BOOST_MATH_NAMESPACE::factorial<root_type>(static_cast<unsigned>(orders))...);
 }
 
 template <typename RootType, typename Func>
@@ -385,5 +384,4 @@ auto make_ftuple(RealTypes const&... ca)
 
 }  // namespace autodiff_v1
 }  // namespace differentiation
-}  // namespace math
-}  // namespace boost
+BOOST_MATH_NAMESPACE_END

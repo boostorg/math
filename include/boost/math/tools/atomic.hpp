@@ -15,8 +15,7 @@
 #include <atomic>
 #endif
 
-namespace boost {
-   namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
       namespace detail {
 #if (ATOMIC_INT_LOCK_FREE == 2) && !defined(BOOST_MATH_NO_ATOMIC_INT)
          typedef std::atomic<int> atomic_counter_type;
@@ -42,8 +41,7 @@ namespace boost {
 #  define BOOST_MATH_NO_ATOMIC_INT
 #endif
       } // Namespace detail
-   } // Namespace math
-} // Namespace boost
+   BOOST_MATH_NAMESPACE_END
 
 #else
 #  define BOOST_MATH_NO_ATOMIC_INT

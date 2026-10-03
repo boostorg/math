@@ -21,7 +21,7 @@
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isfinite.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail {
 
@@ -50,32 +50,32 @@ constexpr Real fmod(Real x, Real y)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        if (boost::math::ccmath::abs(x) == static_cast<Real>(0) && y != static_cast<Real>(0))
+        if (BOOST_MATH_NAMESPACE::ccmath::abs(x) == static_cast<Real>(0) && y != static_cast<Real>(0))
         {
             return x;
         }
-        else if (boost::math::ccmath::isinf(x) && !boost::math::ccmath::isnan(y))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isinf(x) && !BOOST_MATH_NAMESPACE::ccmath::isnan(y))
         {
             return std::numeric_limits<Real>::quiet_NaN();
         }
-        else if (boost::math::ccmath::abs(y) == static_cast<Real>(0) && !boost::math::ccmath::isnan(x))
+        else if (BOOST_MATH_NAMESPACE::ccmath::abs(y) == static_cast<Real>(0) && !BOOST_MATH_NAMESPACE::ccmath::isnan(x))
         {
             return std::numeric_limits<Real>::quiet_NaN();
         }
-        else if (boost::math::ccmath::isinf(y) && boost::math::ccmath::isfinite(x))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isinf(y) && BOOST_MATH_NAMESPACE::ccmath::isfinite(x))
         {
             return x;
         }
-        else if (boost::math::ccmath::isnan(x))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isnan(x))
         {
             return x;
         }
-        else if (boost::math::ccmath::isnan(y))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isnan(y))
         {
             return y;
         }
 
-        return boost::math::ccmath::detail::fmod_impl<Real>(x, y);
+        return BOOST_MATH_NAMESPACE::ccmath::detail::fmod_impl<Real>(x, y);
     }
     else
     {
@@ -89,8 +89,8 @@ constexpr auto fmod(T1 x, T2 y)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        using promoted_type = boost::math::tools::promote_args_t<T1, T2>;
-        return boost::math::ccmath::fmod(promoted_type(x), promoted_type(y));
+        using promoted_type = BOOST_MATH_NAMESPACE::tools::promote_args_t<T1, T2>;
+        return BOOST_MATH_NAMESPACE::ccmath::fmod(promoted_type(x), promoted_type(y));
     }
     else
     {
@@ -101,16 +101,16 @@ constexpr auto fmod(T1 x, T2 y)
 
 constexpr float fmodf(float x, float y)
 {
-    return boost::math::ccmath::fmod(x, y);
+    return BOOST_MATH_NAMESPACE::ccmath::fmod(x, y);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 constexpr long double fmodl(long double x, long double y)
 {
-    return boost::math::ccmath::fmod(x, y);
+    return BOOST_MATH_NAMESPACE::ccmath::fmod(x, y);
 }
 #endif
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_FMOD_HPP

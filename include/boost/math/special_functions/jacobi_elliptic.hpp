@@ -12,7 +12,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail{
 
@@ -314,6 +314,6 @@ inline typename tools::promote_args<T, U>::type jacobi_cs(T k, U theta)
    return jacobi_cs(k, theta, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_JACOBI_ELLIPTIC_HPP

@@ -32,8 +32,7 @@
   #include <boost/math/tools/nothrow.hpp>
   #include <boost/math/tools/throw_exception.hpp>
 
-namespace boost {
-   namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
       namespace detail {
          //
          // What follows is the input streaming code: this is not "proper" iostream code at all
@@ -77,19 +76,18 @@ namespace boost {
          }
 
       }
-   }
-}
+   BOOST_MATH_NAMESPACE_END
 
 #if defined(__GNUC__) && !defined(BOOST_MATH_TEST_IO_AS_INTEL_QUAD)
 
   // Forward declarations of quadruple-precision string functions.
   extern "C" int quadmath_snprintf(char *str, size_t size, const char *format, ...) BOOST_MATH_NOTHROW;
-  extern "C" boost::math::cstdfloat::detail::float_internal128_t strtoflt128(const char*, char **) BOOST_MATH_NOTHROW;
+  extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t strtoflt128(const char*, char **) BOOST_MATH_NOTHROW;
 
   namespace std
   {
     template<typename char_type, class traits_type>
-    inline std::basic_ostream<char_type, traits_type>& operator<<(std::basic_ostream<char_type, traits_type>& os, const boost::math::cstdfloat::detail::float_internal128_t& x)
+    inline std::basic_ostream<char_type, traits_type>& operator<<(std::basic_ostream<char_type, traits_type>& os, const BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t& x)
     {
       std::basic_ostringstream<char_type, traits_type> ostr;
       ostr.flags(os.flags());
@@ -186,9 +184,9 @@ namespace boost {
     }
 
     template<typename char_type, class traits_type>
-    inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>& is, boost::math::cstdfloat::detail::float_internal128_t& x)
+    inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>& is, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t& x)
     {
-      std::string str = boost::math::detail::read_string_while(is, "+-eEpPxXbBcCdD.0123456789infINFnanNANinfinityINFINITY");
+      std::string str = BOOST_MATH_NAMESPACE::detail::read_string_while(is, "+-eEpPxXbBcCdD.0123456789infINFnanNANinfinityINFINITY");
 
       char* p_end;
 
@@ -225,7 +223,7 @@ namespace boost {
   #include <cstring>
   #include <cctype>
   
-  namespace boost { namespace math { namespace cstdfloat { namespace detail {
+  BOOST_MATH_NAMESPACE_BEGIN namespace cstdfloat { namespace detail {
 
   template<class string_type>
   void format_float_string(string_type& str,
@@ -502,7 +500,7 @@ namespace boost {
       {
         int e = -expon / 2;
 
-        const float_type t2 = boost::math::cstdfloat::detail::pown(ten, e);
+        const float_type t2 = BOOST_MATH_NAMESPACE::cstdfloat::detail::pown(ten, e);
 
         eval_multiply(t, t2, x);
         eval_multiply(t, t2);
@@ -514,7 +512,7 @@ namespace boost {
       }
       else
       {
-        t = boost::math::cstdfloat::detail::pown(ten, -expon);
+        t = BOOST_MATH_NAMESPACE::cstdfloat::detail::pown(ten, -expon);
         eval_multiply(t, x);
       }
 
@@ -754,15 +752,15 @@ namespace boost {
 
       if(expon > (std::numeric_limits<float_type>::min_exponent10 + 2))
       {
-        t = boost::math::cstdfloat::detail::pown(t, expon);
+        t = BOOST_MATH_NAMESPACE::cstdfloat::detail::pown(t, expon);
         eval_multiply(value, t);
       }
       else
       {
-        t = boost::math::cstdfloat::detail::pown(t, (expon + digits_seen + 1));
+        t = BOOST_MATH_NAMESPACE::cstdfloat::detail::pown(t, (expon + digits_seen + 1));
         eval_multiply(value, t);
         t = ten;
-        t = boost::math::cstdfloat::detail::pown(t, (-digits_seen - 1));
+        t = BOOST_MATH_NAMESPACE::cstdfloat::detail::pown(t, (-digits_seen - 1));
         eval_multiply(value, t);
       }
     }
@@ -774,16 +772,16 @@ namespace boost {
 
     return (*p == '\0');
   }
-  } } } } // boost::math::cstdfloat::detail
+  } } BOOST_MATH_NAMESPACE_END // boost::math::cstdfloat::detail
 
   namespace std
   {
     template<typename char_type, class traits_type>
-    inline std::basic_ostream<char_type, traits_type>& operator<<(std::basic_ostream<char_type, traits_type>& os, const boost::math::cstdfloat::detail::float_internal128_t& x)
+    inline std::basic_ostream<char_type, traits_type>& operator<<(std::basic_ostream<char_type, traits_type>& os, const BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t& x)
     {
-      boost::math::cstdfloat::detail::float_internal128_t non_const_x = x;
+      BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t non_const_x = x;
 
-      const std::string str = boost::math::cstdfloat::detail::convert_to_string(non_const_x,
+      const std::string str = BOOST_MATH_NAMESPACE::cstdfloat::detail::convert_to_string(non_const_x,
                                                                                 os.precision(),
                                                                                 os.flags());
 
@@ -798,11 +796,11 @@ namespace boost {
     }
 
     template<typename char_type, class traits_type>
-    inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>& is, boost::math::cstdfloat::detail::float_internal128_t& x)
+    inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>& is, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t& x)
     {
-      std::string str = boost::math::detail::read_string_while(is, "+-eE.0123456789infINFnanNANinfinityINFINITY");
+      std::string str = BOOST_MATH_NAMESPACE::detail::read_string_while(is, "+-eE.0123456789infINFnanNANinfinityINFINITY");
 
-      const bool conversion_is_ok = boost::math::cstdfloat::detail::convert_from_string(x, str.c_str());
+      const bool conversion_is_ok = BOOST_MATH_NAMESPACE::cstdfloat::detail::convert_from_string(x, str.c_str());
 
       if(false == conversion_is_ok)
       {

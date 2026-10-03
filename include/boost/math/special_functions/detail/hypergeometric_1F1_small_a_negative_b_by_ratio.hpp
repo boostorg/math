@@ -13,7 +13,7 @@
 #endif
 #include <boost/math/tools/recurrence.hpp>
 
-  namespace boost { namespace math { namespace detail {
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
      // forward declaration for initial values
      template <class T, class Policy>
@@ -36,7 +36,7 @@
          //
          // We need approximately an extra 10 recurrences per 50 binary digits precision above that of double:
          //
-         b += (std::max)(0, boost::math::tools::digits<T>() - 53) / 5;
+         b += (std::max)(0, BOOST_MATH_NAMESPACE::tools::digits<T>() - 53) / 5;
          return b;
       }
 
@@ -49,14 +49,14 @@
          // then recurse until b > 0, compute a reference value and normalize (Millers method).
          //
          int iterations = itrunc(-b, pol);
-         std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-         T ratio = boost::math::tools::function_ratio_from_forwards_recurrence(boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T>(a, b, z), boost::math::tools::epsilon<T>(), max_iter);
-         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_small_a_negative_b_by_ratio<%1%>(%1%,%1%,%1%)", max_iter, pol);
+         std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+         T ratio = BOOST_MATH_NAMESPACE::tools::function_ratio_from_forwards_recurrence(BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_recurrence_b_coefficients<T>(a, b, z), BOOST_MATH_NAMESPACE::tools::epsilon<T>(), max_iter);
+         BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_small_a_negative_b_by_ratio<%1%>(%1%,%1%,%1%)", max_iter, pol);
          T first = 1;
          T second = 1 / ratio;
          long long scaling1 = 0;
          BOOST_MATH_ASSERT(b + iterations != a);
-         second = boost::math::tools::apply_recurrence_relation_forward(boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T>(a, b + 1, z), iterations, first, second, &scaling1);
+         second = BOOST_MATH_NAMESPACE::tools::apply_recurrence_relation_forward(BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_recurrence_b_coefficients<T>(a, b + 1, z), iterations, first, second, &scaling1);
          long long scaling2 = 0;
          first = hypergeometric_1F1_imp(a, T(b + iterations + 1), z, pol, scaling2);
          //
@@ -67,6 +67,6 @@
       }
 
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_1F1_SMALL_A_NEG_B_HPP

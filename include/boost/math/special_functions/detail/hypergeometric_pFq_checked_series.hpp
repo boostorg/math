@@ -19,13 +19,13 @@
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 
-  namespace boost { namespace math { namespace detail {
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
      template <class Seq, class Real>
      unsigned set_crossover_locations(const Seq& aj, const Seq& bj, const Real& z, unsigned int* crossover_locations)
      {
         BOOST_MATH_STD_USING
-        using nothrow_policy = typename boost::math::policies::normalise<boost::math::policies::policy<>, boost::math::policies::rounding_error<boost::math::policies::ignore_error>>::type;
+        using nothrow_policy = typename BOOST_MATH_NAMESPACE::policies::normalise<BOOST_MATH_NAMESPACE::policies::policy<>, BOOST_MATH_NAMESPACE::policies::rounding_error<BOOST_MATH_NAMESPACE::policies::ignore_error>>::type;
         unsigned N_terms = 0;
 
         if(aj.size() == 1 && bj.size() == 1)
@@ -125,14 +125,14 @@
      std::pair<Real, Real> hypergeometric_pFq_checked_series_impl(const Seq& aj, const Seq& bj, const Real& z, const Policy& pol, const Terminal& termination, long long& log_scale)
      {
         BOOST_MATH_STD_USING
-        using nothrow_policy = typename boost::math::policies::normalise<Policy, boost::math::policies::rounding_error<boost::math::policies::ignore_error>>::type;
+        using nothrow_policy = typename BOOST_MATH_NAMESPACE::policies::normalise<Policy, BOOST_MATH_NAMESPACE::policies::rounding_error<BOOST_MATH_NAMESPACE::policies::ignore_error>>::type;
         Real result = 1;
         Real abs_result = 1;
         Real term = 1;
         Real term0 = 0;
-        Real tol = boost::math::policies::get_epsilon<Real, Policy>();
+        Real tol = BOOST_MATH_NAMESPACE::policies::get_epsilon<Real, Policy>();
         std::uintmax_t k = 0;
-        Real upper_limit(sqrt(boost::math::tools::max_value<Real>())), diff;
+        Real upper_limit(sqrt(BOOST_MATH_NAMESPACE::tools::max_value<Real>())), diff;
         if ((tools::max_value<Real>() / fabs(z) < upper_limit))
         {
            upper_limit = tools::max_value<Real>() / fabs(z);
@@ -145,7 +145,7 @@
             }
         }
         Real lower_limit(1 / upper_limit);
-        long long log_scaling_factor = lltrunc(boost::math::tools::log_max_value<Real>(), nothrow_policy()) - 2;
+        long long log_scaling_factor = lltrunc(BOOST_MATH_NAMESPACE::tools::log_max_value<Real>(), nothrow_policy()) - 2;
         Real scaling_factor = exp(Real(log_scaling_factor));
         Real term_m1;
         long long local_scaling = 0;
@@ -225,7 +225,7 @@
               if (*bi + k == 0)
               {
                  // The series is undefined:
-                 result = boost::math::policies::raise_domain_error("boost::math::hypergeometric_pFq<%1%>", "One of the b values was the negative integer %1%", *bi, pol);
+                 result = BOOST_MATH_NAMESPACE::policies::raise_domain_error("boost::math::hypergeometric_pFq<%1%>", "One of the b values was the negative integer %1%", *bi, pol);
                  return std::make_pair(result, result);
               }
               term /= *bi + k;
@@ -271,7 +271,7 @@
               if (have_no_correct_bits)
               {
                  // We have no correct bits in the result... just give up!
-                 result = boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that no bits in the result are correct, last result was %1%", Real(result * exp(Real(log_scale))), pol);
+                 result = BOOST_MATH_NAMESPACE::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that no bits in the result are correct, last result was %1%", Real(result * exp(Real(log_scale))), pol);
                  return std::make_pair(result, result);
               }
               else
@@ -442,7 +442,7 @@
                      if (*bi + k == 0)
                      {
                         // The series is undefined:
-                        result = boost::math::policies::raise_domain_error("boost::math::hypergeometric_pFq<%1%>", "One of the b values was the negative integer %1%", *bi, pol);
+                        result = BOOST_MATH_NAMESPACE::policies::raise_domain_error("boost::math::hypergeometric_pFq<%1%>", "One of the b values was the negative integer %1%", *bi, pol);
                         return std::make_pair(result, result);
                      }
                      term /= *bi + k;
@@ -477,10 +477,10 @@
                         else
                            d = fabs(term * exp(Real(rescale)) / result);
                      }
-                     if (d < boost::math::policies::get_epsilon<Real, Policy>())
+                     if (d < BOOST_MATH_NAMESPACE::policies::get_epsilon<Real, Policy>())
                         break;
                   }
-               } while (!termination(k - s) && ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || terms_are_growing));
+               } while (!termination(k - s) && ((diff > BOOST_MATH_NAMESPACE::policies::get_epsilon<Real, Policy>()) || terms_are_growing));
 
                //std::cout << "Norm loop result = " << std::setprecision(35) << boost::multiprecision::mpfr_float_50(loop_result)* exp(boost::multiprecision::mpfr_float_50(loop_scale)) << std::endl;
                //
@@ -545,7 +545,7 @@
                      if (*bi + k == 0)
                      {
                         // The series is undefined:
-                        result = boost::math::policies::raise_domain_error("boost::math::hypergeometric_pFq<%1%>", "One of the b values was the negative integer %1%", *bi, pol);
+                        result = BOOST_MATH_NAMESPACE::policies::raise_domain_error("boost::math::hypergeometric_pFq<%1%>", "One of the b values was the negative integer %1%", *bi, pol);
                         return std::make_pair(result, result);
                      }
                      term *= *bi + k;
@@ -579,7 +579,7 @@
                         else
                            d = fabs(term * exp(Real(rescale)) / result);
                      }
-                     if (d < boost::math::policies::get_epsilon<Real, Policy>())
+                     if (d < BOOST_MATH_NAMESPACE::policies::get_epsilon<Real, Policy>())
                         break;
                   }
 
@@ -599,7 +599,7 @@
                      loop_scale -= log_scaling_factor;
                   }
                   diff = fabs(term / loop_result);
-               } while (!termination(s - k) && ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || (fabs(term) > fabs(term_m1))));
+               } while (!termination(s - k) && ((diff > BOOST_MATH_NAMESPACE::policies::get_epsilon<Real, Policy>()) || (fabs(term) > fabs(term_m1))));
 
                //std::cout << "Norm loop result = " << std::setprecision(35) << boost::multiprecision::mpfr_float_50(loop_result)* exp(boost::multiprecision::mpfr_float_50(loop_scale)) << std::endl;
                //
@@ -663,15 +663,15 @@
      Real hypergeometric_pFq_checked_series_impl(const Seq& aj, const Seq& bj, const Real& z, const Policy& pol, long long& log_scale)
      {
         BOOST_MATH_STD_USING
-        iteration_terminator term(boost::math::policies::get_max_series_iterations<Policy>());
+        iteration_terminator term(BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>());
         std::pair<Real, Real> result = hypergeometric_pFq_checked_series_impl(aj, bj, z, pol, term, log_scale);
         //
         // Check to see how many digits we've lost, if it's more than half, raise an evaluation error -
         // this is an entirely arbitrary cut off, but not unreasonable.
         //
-        if (result.second * sqrt(boost::math::policies::get_epsilon<Real, Policy>()) > abs(result.first))
+        if (result.second * sqrt(BOOST_MATH_NAMESPACE::policies::get_epsilon<Real, Policy>()) > abs(result.first))
         {
-           return boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that fewer than half the bits in the result are correct, last result was %1%", Real(result.first * exp(Real(log_scale))), pol);
+           return BOOST_MATH_NAMESPACE::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that fewer than half the bits in the result are correct, last result was %1%", Real(result.first * exp(Real(log_scale))), pol);
         }
         return result.first;
      }
@@ -684,6 +684,6 @@
         return hypergeometric_pFq_checked_series_impl(aj, bj, z, pol, log_scale);
      }
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_HYPERGEOMETRIC_PFQ_SERIES_HPP_

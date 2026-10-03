@@ -14,7 +14,7 @@
 #include <cstdint>
 #endif
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
    template <class T, class Policy>
    T hypergeometric_cdf_imp(std::uint64_t x, std::uint64_t r, std::uint64_t n, std::uint64_t N, bool invert, const Policy& pol)
@@ -97,7 +97,7 @@ namespace boost{ namespace math{ namespace detail{
       return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::hypergeometric_cdf<%1%>(%1%,%1%,%1%,%1%)");
    }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif
 

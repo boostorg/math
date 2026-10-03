@@ -64,17 +64,14 @@
 // in domain_error_imp in error_handling.
 #endif
 
-namespace boost
-{
-  namespace math
-  {
+BOOST_MATH_NAMESPACE_BEGIN
     namespace negative_binomial_detail
     {
       // Common error checking routines for negative binomial distribution functions:
       template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline bool check_successes(const char* function, const RealType& r, RealType* result, const Policy& pol)
       {
-        if( !(boost::math::isfinite)(r) || (r <= 0) )
+        if( !(BOOST_MATH_NAMESPACE::isfinite)(r) || (r <= 0) )
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -86,7 +83,7 @@ namespace boost
       template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline bool check_success_fraction(const char* function, const RealType& p, RealType* result, const Policy& pol)
       {
-        if( !(boost::math::isfinite)(p) || (p < 0) || (p > 1) )
+        if( !(BOOST_MATH_NAMESPACE::isfinite)(p) || (p < 0) || (p > 1) )
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -108,7 +105,7 @@ namespace boost
         {
           return false;
         }
-        if( !(boost::math::isfinite)(k) || (k < 0) )
+        if( !(BOOST_MATH_NAMESPACE::isfinite)(k) || (k < 0) )
         { // Check k failures.
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -255,22 +252,22 @@ namespace boost
 
     #ifdef __cpp_deduction_guides
     BOOST_MATH_EXPORT template <class RealType>
-    negative_binomial_distribution(RealType,RealType)->negative_binomial_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+    negative_binomial_distribution(RealType,RealType)->negative_binomial_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
     #endif
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const negative_binomial_distribution<RealType, Policy>& /* dist */)
+    BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const negative_binomial_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable k.
-       using boost::math::tools::max_value;
-       return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // max_integer?
+       using BOOST_MATH_NAMESPACE::tools::max_value;
+       return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // max_integer?
     }
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const negative_binomial_distribution<RealType, Policy>& /* dist */)
+    BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const negative_binomial_distribution<RealType, Policy>& /* dist */)
     { // Range of supported values for random variable k.
        // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-       using boost::math::tools::max_value;
-       return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>()); // max_integer?
+       using BOOST_MATH_NAMESPACE::tools::max_value;
+       return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>()); // max_integer?
     }
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -366,7 +363,7 @@ namespace boost
     BOOST_MATH_GPU_ENABLED inline RealType cdf(const negative_binomial_distribution<RealType, Policy>& dist, const RealType& k)
     { // Cumulative Distribution Function of Negative Binomial.
       constexpr auto function = "boost::math::cdf(const negative_binomial_distribution<%1%>&, %1%)";
-      using boost::math::ibeta; // Regularized incomplete beta function.
+      using BOOST_MATH_NAMESPACE::ibeta; // Regularized incomplete beta function.
       // k argument may be integral, signed, or unsigned, or floating point.
       // If necessary, it has already been promoted from an integral type.
       RealType p = dist.success_fraction();
@@ -393,7 +390,7 @@ namespace boost
       { // Complemented Cumulative Distribution Function Negative Binomial.
 
       constexpr auto function = "boost::math::cdf(const negative_binomial_distribution<%1%>&, %1%)";
-      using boost::math::ibetac; // Regularized incomplete beta function complement.
+      using BOOST_MATH_NAMESPACE::ibetac; // Regularized incomplete beta function complement.
       // k argument may be integral, signed, or unsigned, or floating point.
       // If necessary, it has already been promoted from an integral type.
       RealType const& k = c.param;
@@ -494,7 +491,7 @@ namespace boost
       //
       // Max iterations permitted:
       //
-      boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+      BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
       typedef typename Policy::discrete_quantile_type discrete_type;
       return detail::inverse_discrete_quantile(
          dist,
@@ -581,7 +578,7 @@ namespace boost
        //
        // Max iterations permitted:
        //
-       boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+       BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
        typedef typename Policy::discrete_quantile_type discrete_type;
        return detail::inverse_discrete_quantile(
           dist,
@@ -594,8 +591,7 @@ namespace boost
           max_iter);
     } // quantile complement
 
- } // namespace math
-} // namespace boost
+ BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

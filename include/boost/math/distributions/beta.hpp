@@ -41,17 +41,14 @@
 // in domain_error_imp in error_handling
 #endif
 
-namespace boost
-{
-  namespace math
-  {
+BOOST_MATH_NAMESPACE_BEGIN
     namespace beta_detail
     {
       // Common error checking routines for beta distribution functions:
       template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline bool check_alpha(const char* function, const RealType& alpha, RealType* result, const Policy& pol)
       {
-        if(!(boost::math::isfinite)(alpha) || (alpha <= 0))
+        if(!(BOOST_MATH_NAMESPACE::isfinite)(alpha) || (alpha <= 0))
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -64,7 +61,7 @@ namespace boost
       template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline bool check_beta(const char* function, const RealType& beta, RealType* result, const Policy& pol)
       {
-        if(!(boost::math::isfinite)(beta) || (beta <= 0))
+        if(!(BOOST_MATH_NAMESPACE::isfinite)(beta) || (beta <= 0))
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -77,7 +74,7 @@ namespace boost
       template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline bool check_prob(const char* function, const RealType& p, RealType* result, const Policy& pol)
       {
-        if((p < 0) || (p > 1) || !(boost::math::isfinite)(p))
+        if((p < 0) || (p > 1) || !(BOOST_MATH_NAMESPACE::isfinite)(p))
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -90,7 +87,7 @@ namespace boost
       template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline bool check_x(const char* function, const RealType& x, RealType* result, const Policy& pol)
       {
-        if(!(boost::math::isfinite)(x) || (x < 0) || (x > 1))
+        if(!(BOOST_MATH_NAMESPACE::isfinite)(x) || (x < 0) || (x > 1))
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -124,7 +121,7 @@ namespace boost
       template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline bool check_mean(const char* function, const RealType& mean, RealType* result, const Policy& pol)
       {
-        if(!(boost::math::isfinite)(mean) || (mean <= 0))
+        if(!(BOOST_MATH_NAMESPACE::isfinite)(mean) || (mean <= 0))
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -136,7 +133,7 @@ namespace boost
       template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline bool check_variance(const char* function, const RealType& variance, RealType* result, const Policy& pol)
       {
-        if(!(boost::math::isfinite)(variance) || (variance <= 0))
+        if(!(BOOST_MATH_NAMESPACE::isfinite)(variance) || (variance <= 0))
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -276,23 +273,23 @@ namespace boost
 
     #ifdef __cpp_deduction_guides
     BOOST_MATH_EXPORT template <class RealType>
-    beta_distribution(RealType)->beta_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+    beta_distribution(RealType)->beta_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
     BOOST_MATH_EXPORT template <class RealType>
-    beta_distribution(RealType, RealType)->beta_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+    beta_distribution(RealType, RealType)->beta_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
     #endif
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const beta_distribution<RealType, Policy>& /* dist */)
+    BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const beta_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable x.
-      using boost::math::tools::max_value;
-      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
+      using BOOST_MATH_NAMESPACE::tools::max_value;
+      return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
     }
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const beta_distribution<RealType, Policy>&  /* dist */)
+    BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const beta_distribution<RealType, Policy>&  /* dist */)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
+      return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
     }
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -390,7 +387,7 @@ namespace boost
       {
         return result;
       }
-      using boost::math::beta;
+      using BOOST_MATH_NAMESPACE::beta;
 
       // Corner cases: check_x ensures x element of [0, 1], but PDF is 0 for x = 0 and x = 1. PDF EQN:
       // https://wikimedia.org/api/rest_v1/media/math/render/svg/125fdaa41844a8703d1a8610ac00fbf3edacc8e7
@@ -567,8 +564,7 @@ namespace boost
       return static_cast<RealType>(ibetac_inv(a, b, q, static_cast<RealType*>(nullptr), Policy()));
     } // Quantile Complement
 
-  } // namespace math
-} // namespace boost
+  BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

@@ -17,8 +17,7 @@
 #endif
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace interpolators {
 
 BOOST_MATH_EXPORT template<class RandomAccessContainer, class Policy = policies::policy<>>
@@ -36,7 +35,7 @@ public:
         if (x.size() < 4)
         {
             error_msg_ = "Must be at least four data points.";
-            boost::math::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
+            BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
             valid_ = false;
             return;
         }
@@ -138,7 +137,7 @@ public:
         using std::abs;
         using std::isnan;
         if (x <= impl_->x_.back()) {
-            boost::math::policies::raise_domain_error<bool>(function, "Calling push_back must preserve the monotonicity of the x's", false, Policy());
+            BOOST_MATH_NAMESPACE::policies::raise_domain_error<bool>(function, "Calling push_back must preserve the monotonicity of the x's", false, Policy());
             return;
         }
         impl_->x_.push_back(x);
@@ -193,6 +192,5 @@ private:
 };
 
 }
-}
-}
+BOOST_MATH_NAMESPACE_END
 #endif

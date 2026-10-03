@@ -16,7 +16,7 @@
 #error "The header <boost/math/div.hpp> can only be used in C++17 and later."
 #endif
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail {
 
@@ -64,7 +64,7 @@ inline constexpr auto div(Z x, Z y) noexcept
     }
     else
     {
-        return detail::div_impl<boost::math::ccmath::div_t<Z>>(x, y);
+        return detail::div_impl<BOOST_MATH_NAMESPACE::ccmath::div_t<Z>>(x, y);
     }
 }
 
@@ -83,6 +83,6 @@ inline constexpr std::imaxdiv_t imaxdiv(std::intmax_t x, std::intmax_t y) noexce
     return detail::div_impl<std::imaxdiv_t>(x, y);
 }
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_DIV_HPP

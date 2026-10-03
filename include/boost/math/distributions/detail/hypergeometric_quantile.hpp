@@ -11,7 +11,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/distributions/detail/hypergeometric_pdf.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class T>
 inline std::uint64_t round_x_from_p(std::uint64_t x, T p, T cum, T fudge_factor, std::uint64_t lbound, std::uint64_t /*ubound*/, const policies::discrete_quantile<policies::integer_round_down>&)
@@ -112,7 +112,7 @@ std::uint64_t hypergeometric_quantile_imp(T p, T q, std::uint64_t r, std::uint64
    BOOST_MATH_STD_USING
    BOOST_FPU_EXCEPTION_GUARD
    T result;
-   T fudge_factor = 1 + tools::epsilon<T>() * ((N <= boost::math::prime(boost::math::max_prime - 1)) ? 50 : 2 * N);
+   T fudge_factor = 1 + tools::epsilon<T>() * ((N <= BOOST_MATH_NAMESPACE::prime(BOOST_MATH_NAMESPACE::max_prime - 1)) ? 50 : 2 * N);
    std::uint64_t base = static_cast<std::uint64_t>((std::max)(0, static_cast<int>(n + r) - static_cast<int>(N)));
    std::uint64_t lim = (std::min)(r, n);
 
@@ -135,15 +135,15 @@ std::uint64_t hypergeometric_quantile_imp(T p, T q, std::uint64_t r, std::uint64
          ++x;
          // We want to skip through x values as fast as we can until we start getting non-zero values,
          // otherwise we're just making lots of expensive PDF calls:
-         T log_pdf = boost::math::lgamma(static_cast<T>(n + 1), pol)
-            + boost::math::lgamma(static_cast<T>(r + 1), pol)
-            + boost::math::lgamma(static_cast<T>(N - n + 1), pol)
-            + boost::math::lgamma(static_cast<T>(N - r + 1), pol)
-            - boost::math::lgamma(static_cast<T>(N + 1), pol)
-            - boost::math::lgamma(static_cast<T>(x + 1), pol)
-            - boost::math::lgamma(static_cast<T>(n - x + 1), pol)
-            - boost::math::lgamma(static_cast<T>(r - x + 1), pol)
-            - boost::math::lgamma(static_cast<T>(N - n - r + x + 1), pol);
+         T log_pdf = BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(n + 1), pol)
+            + BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(r + 1), pol)
+            + BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N - n + 1), pol)
+            + BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N - r + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(x + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(n - x + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(r - x + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N - n - r + x + 1), pol);
          while (log_pdf < tools::log_min_value<T>())
          {
             log_pdf += -log(static_cast<T>(x + 1)) + log(static_cast<T>(n - x)) + log(static_cast<T>(r - x)) - log(static_cast<T>(N - n - r + x + 1));
@@ -183,15 +183,15 @@ std::uint64_t hypergeometric_quantile_imp(T p, T q, std::uint64_t r, std::uint64
          // We want to skip through x values as fast as we can until we start getting non-zero values,
          // otherwise we're just making lots of expensive PDF calls:
          --x;
-         T log_pdf = boost::math::lgamma(static_cast<T>(n + 1), pol)
-            + boost::math::lgamma(static_cast<T>(r + 1), pol)
-            + boost::math::lgamma(static_cast<T>(N - n + 1), pol)
-            + boost::math::lgamma(static_cast<T>(N - r + 1), pol)
-            - boost::math::lgamma(static_cast<T>(N + 1), pol)
-            - boost::math::lgamma(static_cast<T>(x + 1), pol)
-            - boost::math::lgamma(static_cast<T>(n - x + 1), pol)
-            - boost::math::lgamma(static_cast<T>(r - x + 1), pol)
-            - boost::math::lgamma(static_cast<T>(N - n - r + x + 1), pol);
+         T log_pdf = BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(n + 1), pol)
+            + BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(r + 1), pol)
+            + BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N - n + 1), pol)
+            + BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N - r + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(x + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(n - x + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(r - x + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N - n - r + x + 1), pol);
          while (log_pdf < tools::log_min_value<T>())
          {
             log_pdf += log(static_cast<T>(x)) - log(static_cast<T>(n - x + 1)) - log(static_cast<T>(r - x + 1)) + log(static_cast<T>(N - n - r + x));
@@ -239,7 +239,7 @@ inline std::uint64_t hypergeometric_quantile(T p, T q, std::uint64_t r, std::uin
    return detail::hypergeometric_quantile_imp<value_type>(p, q, r, n, N, forwarding_policy());
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif
 

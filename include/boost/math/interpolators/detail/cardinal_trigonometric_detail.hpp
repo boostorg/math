@@ -24,7 +24,7 @@
 #endif
 #endif
 
-namespace boost { namespace math { namespace interpolators { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators { namespace detail {
 
 template<typename Real>
 class cardinal_trigonometric_detail {
@@ -98,7 +98,7 @@ public:
   {
     using std::sin;
     using std::cos;
-    using boost::math::constants::two_pi;
+    using BOOST_MATH_NAMESPACE::constants::two_pi;
     using std::exp;
     float s = m_gamma[0][0];
     float x = two_pi<float>()*(t - m_t0)/m_T;
@@ -124,7 +124,7 @@ public:
   {
       using std::sin;
       using std::cos;
-      using boost::math::constants::two_pi;
+      using BOOST_MATH_NAMESPACE::constants::two_pi;
       using std::exp;
       float x = two_pi<float>()*(t - m_t0)/m_T;
       fftwf_complex z;
@@ -148,7 +148,7 @@ public:
   {
       using std::sin;
       using std::cos;
-      using boost::math::constants::two_pi;
+      using BOOST_MATH_NAMESPACE::constants::two_pi;
       using std::exp;
       float x = two_pi<float>()*(t - m_t0)/m_T;
       fftwf_complex z;
@@ -259,7 +259,7 @@ public:
   {
     using std::sin;
     using std::cos;
-    using boost::math::constants::two_pi;
+    using BOOST_MATH_NAMESPACE::constants::two_pi;
     using std::exp;
     double s = m_gamma[0][0];
     double x = two_pi<double>()*(t - m_t0)/m_T;
@@ -285,7 +285,7 @@ public:
   {
       using std::sin;
       using std::cos;
-      using boost::math::constants::two_pi;
+      using BOOST_MATH_NAMESPACE::constants::two_pi;
       using std::exp;
       double x = two_pi<double>()*(t - m_t0)/m_T;
       fftw_complex z;
@@ -309,7 +309,7 @@ public:
   {
       using std::sin;
       using std::cos;
-      using boost::math::constants::two_pi;
+      using BOOST_MATH_NAMESPACE::constants::two_pi;
       using std::exp;
       double x = two_pi<double>()*(t - m_t0)/m_T;
       fftw_complex z;
@@ -416,7 +416,7 @@ public:
   {
     using std::sin;
     using std::cos;
-    using boost::math::constants::two_pi;
+    using BOOST_MATH_NAMESPACE::constants::two_pi;
     using std::exp;
     long double s = m_gamma[0][0];
     long double x = two_pi<long double>()*(t - m_t0)/m_T;
@@ -441,7 +441,7 @@ public:
   {
       using std::sin;
       using std::cos;
-      using boost::math::constants::two_pi;
+      using BOOST_MATH_NAMESPACE::constants::two_pi;
       using std::exp;
       long double x = two_pi<long double>()*(t - m_t0)/m_T;
       fftwl_complex z;
@@ -465,7 +465,7 @@ public:
   {
       using std::sin;
       using std::cos;
-      using boost::math::constants::two_pi;
+      using BOOST_MATH_NAMESPACE::constants::two_pi;
       using std::exp;
       long double x = two_pi<long double>()*(t - m_t0)/m_T;
       fftwl_complex z;
@@ -572,7 +572,7 @@ public:
   {
     using std::sin;
     using std::cos;
-    using boost::math::constants::two_pi;
+    using BOOST_MATH_NAMESPACE::constants::two_pi;
     using std::exp;
     __float128 s = m_gamma[0][0];
     __float128 x = two_pi<__float128>()*(t - m_t0)/m_T;
@@ -597,7 +597,7 @@ public:
   {
       using std::sin;
       using std::cos;
-      using boost::math::constants::two_pi;
+      using BOOST_MATH_NAMESPACE::constants::two_pi;
       using std::exp;
       __float128 x = two_pi<__float128>()*(t - m_t0)/m_T;
       fftwq_complex z;
@@ -621,7 +621,7 @@ public:
   {
       using std::sin;
       using std::cos;
-      using boost::math::constants::two_pi;
+      using BOOST_MATH_NAMESPACE::constants::two_pi;
       using std::exp;
       __float128 x = two_pi<__float128>()*(t - m_t0)/m_T;
       fftwq_complex z;
@@ -682,5 +682,5 @@ private:
 };
 #endif
 
-}}}}
+}} BOOST_MATH_NAMESPACE_END
 #endif

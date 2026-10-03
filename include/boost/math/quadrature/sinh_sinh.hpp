@@ -30,9 +30,9 @@
 #include <memory>
 #endif
 
-namespace boost{ namespace math{ namespace quadrature {
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature {
 
-BOOST_MATH_EXPORT template<class Real, class Policy = boost::math::policies::policy<> >
+BOOST_MATH_EXPORT template<class Real, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
 class sinh_sinh
 {
 public:
@@ -40,7 +40,7 @@ public:
         : m_imp(std::make_shared<detail::sinh_sinh_detail<Real, Policy> >(max_refinements)) {}
 
     template<class F>
-    auto integrate(const F f, Real tol = boost::math::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const ->decltype(std::declval<F>()(std::declval<Real>()))
+    auto integrate(const F f, Real tol = BOOST_MATH_NAMESPACE::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const ->decltype(std::declval<F>()(std::declval<Real>()))
     {
         return m_imp->integrate(f, tol, error, L1, levels);
     }
@@ -58,25 +58,23 @@ private:
     std::shared_ptr<detail::sinh_sinh_detail<Real, Policy>> m_imp;
 };
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HAS_NVRTC
 
 #ifdef BOOST_MATH_ENABLE_CUDA
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace quadrature {
 
-template <class F, class Real, class Policy = boost::math::policies::policy<> >
-__device__ auto sinh_sinh_integrate(const F& f, Real tol = boost::math::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, boost::math::size_t* levels = nullptr)
+template <class F, class Real, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
+__device__ auto sinh_sinh_integrate(const F& f, Real tol = BOOST_MATH_NAMESPACE::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, BOOST_MATH_NAMESPACE::size_t* levels = nullptr)
 {
     return detail::sinh_sinh_integrate_impl(f, tol, error, L1, levels);
 }
 
 } // namespace quadrature
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ENABLE_CUDA
 

@@ -24,7 +24,7 @@
 #endif
 #endif
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail{
 
@@ -131,8 +131,8 @@ public:
         {
             throw std::domain_error("a < b is required.\n");
         }
-        using boost::math::constants::half;
-        using boost::math::constants::pi;
+        using BOOST_MATH_NAMESPACE::constants::half;
+        using BOOST_MATH_NAMESPACE::constants::pi;
         using std::cos;
         using std::abs;
         Real bma = (b-a)*half<Real>();
@@ -235,5 +235,5 @@ private:
     Real m_b;
 };
 
-}}
+BOOST_MATH_NAMESPACE_END
 #endif

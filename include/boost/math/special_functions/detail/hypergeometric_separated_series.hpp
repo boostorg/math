@@ -10,7 +10,7 @@
 #ifndef BOOST_MATH_HYPERGEOMETRIC_SEPARATED_SERIES_HPP
 #define BOOST_MATH_HYPERGEOMETRIC_SEPARATED_SERIES_HPP
 
-  namespace boost { namespace math { namespace detail {
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
   template <class T, class Policy>
   inline T hypergeometric_1F1_separated_series(const T& a, const T& b, const T& z, const Policy& pol)
@@ -45,6 +45,6 @@
     return result;
   }
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_SEPARATED_SERIES_HPP

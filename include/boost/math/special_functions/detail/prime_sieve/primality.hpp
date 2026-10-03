@@ -30,7 +30,7 @@
 #endif
 #endif
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 // The 71 primes not exceeding 353: bases for the pseudosquares test and trial division.
 inline constexpr std::uint16_t small_primes_to_353[71] =
@@ -118,7 +118,7 @@ inline bool is_prime_u64_miller_rabin(std::uint64_t n) noexcept
     }
 
     constexpr std::uint64_t bases[7] = {2u, 325u, 9375u, 28178u, 450775u, 9780504u, 1795265022u};
-    const int r {boost::math::tools::countr_zero(n - 1)};
+    const int r {BOOST_MATH_NAMESPACE::tools::countr_zero(n - 1)};
     const std::uint64_t d {(n - 1) >> r};
 
     for (const std::uint64_t base : bases)
@@ -158,7 +158,7 @@ inline int jacobi_u64(std::uint64_t a, std::uint64_t n) noexcept
     int result {1};
     while (a != 0)
     {
-        const int twos {boost::math::tools::countr_zero(a)};
+        const int twos {BOOST_MATH_NAMESPACE::tools::countr_zero(a)};
         a >>= twos;
         if ((twos & 1) != 0)
         {
@@ -315,7 +315,7 @@ inline bool is_prime_u64(std::uint64_t n) noexcept
     const std::uint64_t minus_one {n - one};
 
     // strong Fermat test to base 2
-    const int r {boost::math::tools::countr_zero(n - 1)};
+    const int r {BOOST_MATH_NAMESPACE::tools::countr_zero(n - 1)};
     const std::uint64_t d {(n - 1) >> r};
     std::uint64_t x {mont.pow(mont.to_form(2), d)};
     if (x != one && x != minus_one)
@@ -337,7 +337,7 @@ inline bool is_prime_u64(std::uint64_t n) noexcept
     }
 
     // perfect squares would make the search for D below loop forever
-    const std::uint64_t root {boost::math::tools::isqrt(n)};
+    const std::uint64_t root {BOOST_MATH_NAMESPACE::tools::isqrt(n)};
     if (root * root == n)
     {
         return false;
@@ -369,12 +369,12 @@ inline bool is_prime_u64(std::uint64_t n) noexcept
     const std::uint64_t big_d {mont.to_form(d_res)};
     const std::uint64_t big_q {mont.to_form(q_res)};
 
-    const int s {boost::math::tools::countr_zero(n + 1)};
+    const int s {BOOST_MATH_NAMESPACE::tools::countr_zero(n + 1)};
     const std::uint64_t k {(n + 1) >> s};
     std::uint64_t u {one};
     std::uint64_t v {one};
     std::uint64_t qk {big_q};
-    for (int i {63 - boost::math::tools::countl_zero(k)}; i-- > 0;)
+    for (int i {63 - BOOST_MATH_NAMESPACE::tools::countl_zero(k)}; i-- > 0;)
     {
         u = mont.mul(u, v);
         v = mont.sub(mont.mul(v, v), mont.add(qk, qk));
@@ -810,7 +810,7 @@ bool pseudosquares_prime_test(const Integer& n, std::size_t index, std::uint64_t
     }
 
     // Any prime power q^k with q > s has k <= log(n) / log(s)
-    const unsigned log2_s {s < 2 ? 1u : static_cast<unsigned>(63 - boost::math::tools::countl_zero(s))};
+    const unsigned log2_s {s < 2 ? 1u : static_cast<unsigned>(63 - BOOST_MATH_NAMESPACE::tools::countl_zero(s))};
     const unsigned max_k {bit_length(n) / log2_s};
     if (max_k >= 2 && is_perfect_power(n, max_k))
     {
@@ -819,7 +819,7 @@ bool pseudosquares_prime_test(const Integer& n, std::size_t index, std::uint64_t
     return true;
 }
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // BOOST_MATH_HAS_NVRTC
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_PRIMALITY_HPP

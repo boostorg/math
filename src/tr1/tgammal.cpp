@@ -11,13 +11,13 @@
 #include <boost/math/special_functions/gamma.hpp>
 #include "c_policy.hpp"
 
-namespace boost{ namespace math{ namespace tr1{
+BOOST_MATH_NAMESPACE_BEGIN namespace tr1{
 
 extern "C" long double BOOST_MATH_TR1_DECL boost_tgammal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::tgamma BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x);
 }
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 
 

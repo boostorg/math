@@ -29,7 +29,7 @@
 
   #if defined(BOOST_CSTDFLOAT_HAS_INTERNAL_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
 
-  #define BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE boost::math::cstdfloat::detail::float_internal128_t
+  #define BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t
   #include <boost/math/cstdfloat/cstdfloat_complex_std.hpp>
   #undef BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE
 
