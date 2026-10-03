@@ -220,9 +220,9 @@ BOOST_MATH_GPU_ENABLED T lbeta_imp(T a, T b, const Lanczos&, const Policy& pol)
 {
    BOOST_MATH_STD_USING  // for ADL of std names
 
-   // NaN in, NaN out, before any comparison sends it down a branch meant for ordered arguments:
+   // Reject NaN before any comparison sends it down a branch meant for ordered arguments:
    if((boost::math::isnan)(a) || (boost::math::isnan)(b))
-      return a + b;
+      return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must not be NaN (got %1%).", (boost::math::isnan)(a) ? a : b, pol);
    if(a <= 0)
       return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got a=%1%).", a, pol);
    if(b <= 0)
@@ -270,9 +270,9 @@ BOOST_MATH_GPU_ENABLED T lbeta_imp(T a, T b, const lanczos::undefined_lanczos& l
 {
    BOOST_MATH_STD_USING
 
-   // NaN in, NaN out, before any comparison sends it down a branch meant for ordered arguments:
+   // Reject NaN before any comparison sends it down a branch meant for ordered arguments:
    if((boost::math::isnan)(a) || (boost::math::isnan)(b))
-      return a + b;
+      return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must not be NaN (got %1%).", (boost::math::isnan)(a) ? a : b, pol);
    if(a <= 0)
       return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got a=%1%).", a, pol);
    if(b <= 0)
