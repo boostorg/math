@@ -33,6 +33,18 @@ void compile_and_link_test()
    check_result<long double>(boost::math::ibeta<long double>(l, l, l));
 #endif
 
+   check_result<float>(boost::math::libeta<float>(f, f, f));
+   check_result<double>(boost::math::libeta<double>(d, d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   check_result<long double>(boost::math::libeta<long double>(l, l, l));
+#endif
+
+   check_result<float>(boost::math::libetac<float>(f, f, f));
+   check_result<double>(boost::math::libetac<double>(d, d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   check_result<long double>(boost::math::libetac<long double>(l, l, l));
+#endif
+
    check_result<float>(boost::math::ibeta_inv<float>(f, f, f));
    check_result<double>(boost::math::ibeta_inv<double>(d, d, d));
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

@@ -279,6 +279,8 @@ void instantiate(RealType)
    boost::math::betac(v1, v2, v3);
    boost::math::ibeta(v1, v2, v3);
    boost::math::ibetac(v1, v2, v3);
+   boost::math::libeta(v1, v2, v3);
+   boost::math::libetac(v1, v2, v3);
    boost::math::ibeta_inv(v1, v2, v3);
    boost::math::ibetac_inv(v1, v2, v3);
    boost::math::ibeta_inva(v1, v2, v3);
@@ -561,6 +563,8 @@ void instantiate(RealType)
    boost::math::betac(v1 * 1, v2 + 0, v3 / 1);
    boost::math::ibeta(v1 * 1, v2 + 0, v3 / 1);
    boost::math::ibetac(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::libeta(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::libetac(v1 * 1, v2 + 0, v3 / 1);
    boost::math::ibeta_inv(v1 * 1, v2 + 0, v3 / 1);
    boost::math::ibetac_inv(v1 * 1, v2 + 0, v3 / 1);
    boost::math::ibeta_inva(v1 * 1, v2 + 0, v3 / 1);
@@ -815,6 +819,8 @@ void instantiate(RealType)
    boost::math::betac(v1, v2, v3, pol);
    boost::math::ibeta(v1, v2, v3, pol);
    boost::math::ibetac(v1, v2, v3, pol);
+   boost::math::libeta(v1, v2, v3, pol);
+   boost::math::libetac(v1, v2, v3, pol);
    boost::math::ibeta_inv(v1, v2, v3, pol);
    boost::math::ibetac_inv(v1, v2, v3, pol);
    boost::math::ibeta_inva(v1, v2, v3, pol);
@@ -1095,6 +1101,8 @@ void instantiate(RealType)
    test::betac(v1, v2, v3);
    test::ibeta(v1, v2, v3);
    test::ibetac(v1, v2, v3);
+   test::libeta(v1, v2, v3);
+   test::libetac(v1, v2, v3);
    test::ibeta_inv(v1, v2, v3);
    test::ibetac_inv(v1, v2, v3);
    test::ibeta_inva(v1, v2, v3);
@@ -1389,6 +1397,8 @@ void instantiate_mixed(RealType)
    boost::math::ibeta(fr, dr, lr);
    boost::math::ibetac(l, i, s);
    boost::math::ibetac(fr, dr, lr);
+   boost::math::libeta(fr, dr, lr);
+   boost::math::libetac(fr, dr, lr);
    boost::math::ibeta_inv(l, s, i);
    boost::math::ibeta_inv(fr, dr, lr);
    boost::math::ibetac_inv(l, i, s);
@@ -1607,6 +1617,8 @@ void instantiate_mixed(RealType)
    boost::math::ibeta(fr, dr, lr, pol);
    boost::math::ibetac(l, i, s, pol);
    boost::math::ibetac(fr, dr, lr, pol);
+   boost::math::libeta(fr, dr, lr, pol);
+   boost::math::libetac(fr, dr, lr, pol);
    boost::math::ibeta_inv(l, s, i, pol);
    boost::math::ibeta_inv(fr, dr, lr, pol);
    boost::math::ibetac_inv(l, i, s, pol);
@@ -1824,6 +1836,8 @@ void instantiate_mixed(RealType)
    test::ibeta(fr, dr, lr);
    test::ibetac(l, i, s);
    test::ibetac(fr, dr, lr);
+   test::libeta(fr, dr, lr);
+   test::libetac(fr, dr, lr);
    test::ibeta_inv(l, s, i);
    test::ibeta_inv(fr, dr, lr);
    test::ibetac_inv(l, i, s);

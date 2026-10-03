@@ -1813,6 +1813,146 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
    return invert ? (normalised ? 1 : BOOST_MATH_NAMESPACE::beta(a, b, pol)) - fract : fract;
 } // template <class T, class Lanczos>T ibeta_imp(T a, T b, T x, const Lanczos& l, bool inv, bool normalised)
 
+//
+// Logarithm of the normalised power terms (x^a)(y^b)/Beta(a,b), for when they underflow.
+// This follows ibeta_power_terms branch for branch, but never exponentiates, so it has no
+// need of that function's overflow and underflow sidesteps.  It is only used where the
+// result is large and negative, so the remaining cancellation between the terms is mild.
+//
+template <class T, class Lanczos, class Policy>
+BOOST_MATH_GPU_ENABLED T log_ibeta_power_terms(T a, T b, T x, T y, const Lanczos&, const Policy& pol)
+{
+   BOOST_MATH_STD_USING
+
+   T c = a + b;
+   T gh = Lanczos::g() - 0.5f;
+   T agh = static_cast<T>(a + gh);
+   T bgh = static_cast<T>(b + gh);
+   T cgh = static_cast<T>(c + gh);
+   T result = log(Lanczos::lanczos_sum_expG_scaled(c) / (Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b)));
+   result += (log(bgh) - 1 + log(agh / cgh)) / 2;
+
+   // l1 and l2 are the bases of the powers minus one:
+   T l1 = ((x * b - y * a) - y * gh) / agh;
+   T l2 = ((y * a - x * b) - x * gh) / bgh;
+   if((BOOST_MATH_GPU_SAFE_MIN(fabs(l1), fabs(l2)) < 0.2))
+   {
+      if((l1 * l2 > 0) || (BOOST_MATH_GPU_SAFE_MIN(a, b) < 1))
+      {
+         result += fabs(l1) < 0.1 ? T(a * BOOST_MATH_NAMESPACE::log1p(l1, pol)) : T(a * log((x * cgh) / agh));
+         result += fabs(l2) < 0.1 ? T(b * BOOST_MATH_NAMESPACE::log1p(l2, pol)) : T(b * log((y * cgh) / bgh));
+      }
+      else if(BOOST_MATH_GPU_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
+      {
+         // The powers tend in opposite directions, so move one inside the other, as in ibeta_power_terms:
+         bool small_a = a < b;
+         T ratio = b / a;
+         if((small_a && (ratio * l2 < 0.1)) || (!small_a && (l1 / ratio > 0.1)))
+         {
+            T l3 = BOOST_MATH_NAMESPACE::expm1(ratio * BOOST_MATH_NAMESPACE::log1p(l2, pol), pol);
+            l3 = l1 + l3 + l3 * l1;
+            result += a * BOOST_MATH_NAMESPACE::log1p(l3, pol);
+         }
+         else
+         {
+            T l3 = BOOST_MATH_NAMESPACE::expm1(BOOST_MATH_NAMESPACE::log1p(l1, pol) / ratio, pol);
+            l3 = l2 + l3 + l3 * l2;
+            result += b * BOOST_MATH_NAMESPACE::log1p(l3, pol);
+         }
+      }
+      else if(fabs(l1) < fabs(l2))
+         result += a * BOOST_MATH_NAMESPACE::log1p(l1, pol) + b * log((y * cgh) / bgh);
+      else
+         result += b * BOOST_MATH_NAMESPACE::log1p(l2, pol) + a * log((x * cgh) / agh);
+   }
+   else
+      result += a * log((x * cgh) / agh) + b * log((y * cgh) / bgh);
+   return result;
+}
+
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED T log_ibeta_power_terms(T a, T b, T x, T y, const BOOST_MATH_NAMESPACE::lanczos::undefined_lanczos& l, const Policy& pol)
+{
+   BOOST_MATH_STD_USING
+   // Only reached when the power terms underflow, which types without a Lanczos approximation, having
+   // wide exponent ranges, rarely do; then the terms are large and negative and barely cancel:
+   return a * log(x) + b * log(y) - lbeta_imp(a, b, l, pol);
+}
+#endif
+
+//
+// Logarithm of the regularised incomplete beta, or of its complement when invert is true.
+//
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED T libeta_imp(T a, T b, T x, const Policy& pol, bool invert)
+{
+   BOOST_MATH_STD_USING
+   typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
+   const char* function = invert ? "boost::math::libetac<%1%>(%1%, %1%, %1%)" : "boost::math::libeta<%1%>(%1%, %1%, %1%)";
+
+   // These checks also reject NaN arguments:
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(a))
+      return policies::raise_domain_error<T>(function, "The argument a to the incomplete beta function must be finite (got a=%1%).", a, pol);
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(b))
+      return policies::raise_domain_error<T>(function, "The argument b to the incomplete beta function must be finite (got b=%1%).", b, pol);
+   if(!(0 <= x && x <= 1))
+      return policies::raise_domain_error<T>(function, "The argument x to the incomplete beta function must be in [0,1] (got x=%1%).", x, pol);
+   if(a < 0)
+      return policies::raise_domain_error<T>(function, "The argument a to the incomplete beta function must be >= zero (got a=%1%).", a, pol);
+   if(b < 0)
+      return policies::raise_domain_error<T>(function, "The argument b to the incomplete beta function must be >= zero (got b=%1%).", b, pol);
+   if((a == 0) && (b == 0))
+      return policies::raise_domain_error<T>(function, "The arguments a and b to the incomplete beta function cannot both be zero, with x=%1%.", x, pol);
+
+   // Where the target is exactly zero, its log is -infinity. As in ibeta, a == 0 makes P = 1
+   // and b == 0 makes P = 0 whatever x is:
+   bool p_is_zero = (b == 0) || ((a != 0) && (x == 0));
+   bool q_is_zero = (a == 0) || ((b != 0) && (x == 1));
+   bool target_is_zero = invert ? q_is_zero : p_is_zero;
+   if(target_is_zero)
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
+
+   // The underflow is ours to handle, so stop ibeta_imp from reporting it:
+   typedef typename policies::normalise<Policy, policies::underflow_error<policies::ignore_error> >::type quiet_policy;
+
+   // The target, P = ibeta or Q = ibetac, is accurate in relative terms, so log(target) is fine unless the
+   // target is near one, when log1p(-other) is better, or underflows. Start with whichever is likely smaller:
+   // the mean a / (a + b) separates them roughly evenly.
+   bool target_likely_small = (x * (a + b) <= a) != invert;
+   if(!target_likely_small)
+   {
+      T other = ibeta_imp(a, b, x, quiet_policy(), !invert, true, static_cast<T*>(nullptr));
+      if(other <= 0.5f)
+         return BOOST_MATH_NAMESPACE::log1p(-other, pol);
+   }
+   T target = ibeta_imp(a, b, x, quiet_policy(), invert, true, static_cast<T*>(nullptr));
+   if(target > 0.5f)
+      return BOOST_MATH_NAMESPACE::log1p(-ibeta_imp(a, b, x, quiet_policy(), !invert, true, static_cast<T*>(nullptr)), pol);
+   if(target >= tools::min_value<T>())
+      return log(target);
+
+   // The target underflows, so we are far out in its tail, where the continued fraction converges:
+   // target = power_terms / fraction. The complement is the target with roles swapped.
+   T y = 1 - x;
+   if(invert)
+   {
+      BOOST_MATH_GPU_SAFE_SWAP(a, b);
+      BOOST_MATH_GPU_SAFE_SWAP(x, y);
+   }
+   if(a == 1)
+   {
+      // The fraction's first term is 0/0 here, but P = -expm1(b log1p(-x)) exactly, and since P underflows,
+      // the argument of expm1 is far below epsilon, so log(P) = log(b) + log(-log1p(-x)) to full precision:
+      return log(b) + log(-BOOST_MATH_NAMESPACE::log1p(-x, pol));
+   }
+   ibeta_fraction2_t<T> f(a, b, x, y);
+   BOOST_MATH_NAMESPACE::uintmax_t max_terms = policies::get_max_series_iterations<Policy>();
+   T fract = tools::continued_fraction_b(f, policies::get_epsilon<T, Policy>(), max_terms);
+   policies::check_series_iterations<T>(function, max_terms, pol);
+   return log_ibeta_power_terms(a, b, x, y, lanczos_type(), pol) - log(fract);
+}
+
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised)
 {
@@ -2019,6 +2159,54 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
       policies::assert_undefined<> >::type forwarding_policy;
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), true, true), "boost::math::ibetac<%1%>(%1%,%1%,%1%)");
+}
+
+BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<RT1, RT2, RT3>
+   libeta(RT1 a, RT2 b, RT3 x, const Policy&)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::libeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), false), "boost::math::libeta<%1%>(%1%,%1%,%1%)");
+}
+
+BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<RT1, RT2, RT3>
+   libeta(RT1 a, RT2 b, RT3 x)
+{
+   return BOOST_MATH_NAMESPACE::libeta(a, b, x, policies::policy<>());
+}
+
+BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<RT1, RT2, RT3>
+   libetac(RT1 a, RT2 b, RT3 x, const Policy&)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::libeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), true), "boost::math::libetac<%1%>(%1%,%1%,%1%)");
+}
+
+BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<RT1, RT2, RT3>
+   libetac(RT1 a, RT2 b, RT3 x)
+{
+   return BOOST_MATH_NAMESPACE::libetac(a, b, x, policies::policy<>());
 }
 BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
