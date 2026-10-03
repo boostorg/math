@@ -21,6 +21,7 @@
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/special_functions/legendre_stieltjes.hpp>
 #include <boost/math/quadrature/gauss.hpp>
+#include <boost/math/quadrature/detail/quadrature_constant.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN namespace quadrature{ namespace detail{
 
@@ -88,7 +89,7 @@ class gauss_kronrod_detail;
 template <class T>
 class gauss_kronrod_detail<T, 15, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 8> const & abscissa()
    {
@@ -124,7 +125,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 15, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 8> const & abscissa()
    {
@@ -196,7 +197,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 21, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 11> const & abscissa()
    {
@@ -238,7 +239,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 21, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 11> const & abscissa()
    {
@@ -322,7 +323,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 31, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 16> const & abscissa()
    {
@@ -375,7 +376,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 31, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 16> const & abscissa()
    {
@@ -479,7 +480,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 41, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 21> const & abscissa()
    {
@@ -542,7 +543,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 41, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 21> const & abscissa()
    {
@@ -666,7 +667,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 51, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 26> const & abscissa()
    {
@@ -739,7 +740,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 51, 3>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 26> const & abscissa()
    {
@@ -883,7 +884,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 61, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 31> const & abscissa()
    {
@@ -966,7 +967,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 61, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 31> const & abscissa()
    {
@@ -1127,10 +1128,10 @@ public:
 
 }
 
-BOOST_MATH_EXPORT template <class Real, unsigned N, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
-class gauss_kronrod : public detail::gauss_kronrod_detail<Real, N, detail::gauss_constant_category<Real>::value>
+BOOST_MATH_EXPORT template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
+class gauss_kronrod : public detail::gauss_kronrod_detail<Real, N, detail::quadrature_constant_category<Real>::value>
 {
-   typedef detail::gauss_kronrod_detail<Real, N, detail::gauss_constant_category<Real>::value> base;
+   typedef detail::gauss_kronrod_detail<Real, N, detail::quadrature_constant_category<Real>::value> base;
 public:
   typedef Real value_type;
 private:
