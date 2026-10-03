@@ -237,7 +237,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T gamma_imp(T z, const Policy& pol
             return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
          /*
          * Result can never be subnormal as we have a value > 1 in the numerator:
-         if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
+         if((BOOST_MATH_NAMESPACE::fpclassify)(result) == (int)FP_SUBNORMAL)
             return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
             */
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
@@ -1884,7 +1884,7 @@ BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper)
    const char* function = upper ? "boost::math::ligamma<%1%>(%1%, %1%)" : "boost::math::ligamma_lower<%1%>(%1%, %1%)";
 
    // These checks also reject NaN arguments:
-   if(!(boost::math::isfinite)(a))
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(a))
       return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be finite (got a=%1%).", a, pol);
    if(a <= 0)
       return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
@@ -1892,11 +1892,11 @@ BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper)
       return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
 
    // At the ends of the range, the target is either the complete gamma function or zero:
-   bool target_is_zero = upper ? (boost::math::isinf)(x) : (x == 0);
+   bool target_is_zero = upper ? (BOOST_MATH_NAMESPACE::isinf)(x) : (x == 0);
    if(target_is_zero)
       return -policies::raise_overflow_error<T>(function, nullptr, pol);
-   if(upper ? (x == 0) : (boost::math::isinf)(x))
-      return boost::math::lgamma(a, pol);
+   if(upper ? (x == 0) : (BOOST_MATH_NAMESPACE::isinf)(x))
+      return BOOST_MATH_NAMESPACE::lgamma(a, pol);
 
    // Under- and overflow are ours to handle, so stop the evaluations below from reporting them:
    typedef typename policies::normalise<Policy, policies::underflow_error<policies::ignore_error>, policies::overflow_error<policies::ignore_error> >::type quiet_policy;
@@ -1910,9 +1910,9 @@ BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper)
    }
    T target = gamma_incomplete_imp(a, x, true, upper, quiet_policy(), static_cast<T*>(nullptr));
    if(target > 0.5f)
-      return boost::math::lgamma(a, pol) + boost::math::log1p(-gamma_incomplete_imp(a, x, true, !upper, quiet_policy(), static_cast<T*>(nullptr)), pol);
+      return BOOST_MATH_NAMESPACE::lgamma(a, pol) + BOOST_MATH_NAMESPACE::log1p(-gamma_incomplete_imp(a, x, true, !upper, quiet_policy(), static_cast<T*>(nullptr)), pol);
    if(target >= tools::min_value<T>())
-      return boost::math::lgamma(a, pol) + log(target);
+      return BOOST_MATH_NAMESPACE::lgamma(a, pol) + log(target);
 
    // The target underflows, so x is far out in its tail:
    T result = a * log(x) - x;
