@@ -261,10 +261,16 @@ run test_airy_bi_prime_float.cu ;
 
 run test_beta_double.cu ;
 run test_beta_float.cu ;
+run test_lbeta_double.cu ;
+run test_lbeta_float.cu ;
 run test_betac_double.cu ;
 run test_betac_float.cu ;
 run test_ibeta_double.cu ;
 run test_ibeta_float.cu ;
+run test_libeta_double.cu ;
+run test_libeta_float.cu ;
+run test_libetac_double.cu ;
+run test_libetac_float.cu ;
 run test_ibeta_derivative_double.cu ;
 run test_ibeta_derivative_float.cu ;
 run test_ibeta_inv_double.cu ;
@@ -379,6 +385,10 @@ run test_lgamma_q_double.cu ;
 run test_lgamma_q_float.cu ;
 run test_lgamma_p_double.cu ;
 run test_lgamma_p_float.cu ;
+run test_ligamma_double.cu ;
+run test_ligamma_float.cu ;
+run test_ligamma_lower_double.cu ;
+run test_ligamma_lower_float.cu ;
 
 run test_log1p_double.cu ;
 run test_log1p_float.cu ;

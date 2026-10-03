@@ -9,12 +9,12 @@
 #include <cstddef>
 #include <type_traits>
 #endif
-namespace boost {
-namespace math {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {} // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif

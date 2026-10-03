@@ -63,10 +63,8 @@
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RateRangeT</span><span class="special">&gt;</span>
    <span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">RateRangeT</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rate_range</span><span class="special">);</span>
 
- <span class="preprocessor">#if</span> <span class="special">!</span><span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_NO_CXX11_HDR_INITIALIZER_LIST</span><span class="special">)</span>     <span class="comment">// C++11 initializer lists supported.</span>
    <span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">initializer_list</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;</span> <span class="identifier">l1</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">initializer_list</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;</span> <span class="identifier">l2</span><span class="special">);</span>
    <span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">initializer_list</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;</span> <span class="identifier">l1</span><span class="special">);</span>
- <span class="preprocessor">#endif</span>
 
    <span class="comment">// Accessors:</span>
    <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">num_phases</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>

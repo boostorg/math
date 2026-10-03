@@ -16,13 +16,13 @@
 #include <boost/math/tools/cstdint.hpp>
 #include <boost/math/tools/type_traits.hpp>
 
-namespace boost{ namespace math{ namespace tools{
+BOOST_MATH_NAMESPACE_BEGIN namespace tools{
 
 //
 // Simple series summation come first:
 //
 BOOST_MATH_EXPORT template <class Functor, class U, class V>
-BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& func, const U& factor, boost::math::uintmax_t& max_terms, const V& init_value) noexcept(BOOST_MATH_IS_FLOAT(typename Functor::result_type)
+BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& func, const U& factor, BOOST_MATH_NAMESPACE::uintmax_t& max_terms, const V& init_value) noexcept(BOOST_MATH_IS_FLOAT(typename Functor::result_type)
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 && noexcept(std::declval<Functor>()())
 #endif
@@ -32,7 +32,7 @@ BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& 
 
    typedef typename Functor::result_type result_type;
 
-   boost::math::uintmax_t counter = max_terms;
+   BOOST_MATH_NAMESPACE::uintmax_t counter = max_terms;
 
    result_type result = static_cast<result_type>(init_value);
    result_type next_term;
@@ -49,7 +49,7 @@ BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& 
 }
 
 BOOST_MATH_EXPORT template <class Functor, class U>
-BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& func, const U& factor, boost::math::uintmax_t& max_terms) noexcept(BOOST_MATH_IS_FLOAT(typename Functor::result_type)
+BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& func, const U& factor, BOOST_MATH_NAMESPACE::uintmax_t& max_terms) noexcept(BOOST_MATH_IS_FLOAT(typename Functor::result_type)
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 && noexcept(std::declval<Functor>()())
 #endif
@@ -60,7 +60,7 @@ BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& 
 }
 
 BOOST_MATH_EXPORT template <class Functor, class U>
-BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& func, int bits, boost::math::uintmax_t& max_terms, const U& init_value) noexcept(BOOST_MATH_IS_FLOAT(typename Functor::result_type)
+BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& func, int bits, BOOST_MATH_NAMESPACE::uintmax_t& max_terms, const U& init_value) noexcept(BOOST_MATH_IS_FLOAT(typename Functor::result_type)
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 && noexcept(std::declval<Functor>()())
 #endif
@@ -81,13 +81,13 @@ BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& 
 {
    BOOST_MATH_STD_USING
    typedef typename Functor::result_type result_type;
-   boost::math::uintmax_t iters = (boost::math::numeric_limits<boost::math::uintmax_t>::max)();
+   BOOST_MATH_NAMESPACE::uintmax_t iters = (BOOST_MATH_NAMESPACE::numeric_limits<BOOST_MATH_NAMESPACE::uintmax_t>::max)();
    result_type init_val = 0;
    return sum_series(func, bits, iters, init_val);
 }
 
 BOOST_MATH_EXPORT template <class Functor>
-BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& func, int bits, boost::math::uintmax_t& max_terms) noexcept(BOOST_MATH_IS_FLOAT(typename Functor::result_type)
+BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& func, int bits, BOOST_MATH_NAMESPACE::uintmax_t& max_terms) noexcept(BOOST_MATH_IS_FLOAT(typename Functor::result_type)
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 && noexcept(std::declval<Functor>()())
 #endif
@@ -107,14 +107,14 @@ BOOST_MATH_GPU_ENABLED inline typename Functor::result_type sum_series(Functor& 
 )
 {
    BOOST_MATH_STD_USING
-   boost::math::uintmax_t iters = (boost::math::numeric_limits<boost::math::uintmax_t>::max)();
+   BOOST_MATH_NAMESPACE::uintmax_t iters = (BOOST_MATH_NAMESPACE::numeric_limits<BOOST_MATH_NAMESPACE::uintmax_t>::max)();
    return sum_series(func, bits, iters, init_value);
 }
 //
 // Checked summation:
 //
 BOOST_MATH_EXPORT template <class Functor, class U, class V>
-BOOST_MATH_GPU_ENABLED inline typename Functor::result_type checked_sum_series(Functor& func, const U& factor, boost::math::uintmax_t& max_terms, const V& init_value, V& norm) noexcept(BOOST_MATH_IS_FLOAT(typename Functor::result_type)
+BOOST_MATH_GPU_ENABLED inline typename Functor::result_type checked_sum_series(Functor& func, const U& factor, BOOST_MATH_NAMESPACE::uintmax_t& max_terms, const V& init_value, V& norm) noexcept(BOOST_MATH_IS_FLOAT(typename Functor::result_type)
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 && noexcept(std::declval<Functor>()())
 #endif
@@ -124,7 +124,7 @@ BOOST_MATH_GPU_ENABLED inline typename Functor::result_type checked_sum_series(F
 
    typedef typename Functor::result_type result_type;
 
-   boost::math::uintmax_t counter = max_terms;
+   BOOST_MATH_NAMESPACE::uintmax_t counter = max_terms;
 
    result_type result = init_value;
    result_type next_term;
@@ -181,7 +181,7 @@ BOOST_MATH_GPU_ENABLED inline typename Functor::result_type kahan_sum_series(Fun
 }
 
 BOOST_MATH_EXPORT template <class Functor>
-BOOST_MATH_GPU_ENABLED inline typename Functor::result_type kahan_sum_series(Functor& func, int bits, boost::math::uintmax_t& max_terms) noexcept(BOOST_MATH_IS_FLOAT(typename Functor::result_type)
+BOOST_MATH_GPU_ENABLED inline typename Functor::result_type kahan_sum_series(Functor& func, int bits, BOOST_MATH_NAMESPACE::uintmax_t& max_terms) noexcept(BOOST_MATH_IS_FLOAT(typename Functor::result_type)
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 && noexcept(std::declval<Functor>()())
 #endif
@@ -191,7 +191,7 @@ BOOST_MATH_GPU_ENABLED inline typename Functor::result_type kahan_sum_series(Fun
 
    typedef typename Functor::result_type result_type;
 
-   boost::math::uintmax_t counter = max_terms;
+   BOOST_MATH_NAMESPACE::uintmax_t counter = max_terms;
 
    result_type factor = ldexp(result_type(1), bits);
    result_type result = func();
@@ -214,8 +214,7 @@ BOOST_MATH_GPU_ENABLED inline typename Functor::result_type kahan_sum_series(Fun
 }
 
 } // namespace tools
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_TOOLS_SERIES_INCLUDED
 

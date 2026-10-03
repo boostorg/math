@@ -54,10 +54,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 
-namespace boost
-{
-  namespace math
-  {
+BOOST_MATH_NAMESPACE_BEGIN
     namespace poisson_detail
     {
       // Common error checking routines for Poisson distribution functions.
@@ -67,7 +64,7 @@ namespace boost
       template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline bool check_mean(const char* function, const RealType& mean, RealType* result, const Policy& pol)
       {
-        if(!(boost::math::isfinite)(mean) || (mean < 0))
+        if(!(BOOST_MATH_NAMESPACE::isfinite)(mean) || (mean < 0))
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -80,7 +77,7 @@ namespace boost
       template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline bool check_mean_NZ(const char* function, const RealType& mean, RealType* result, const Policy& pol)
       { // mean == 0 is considered an error.
-        if( !(boost::math::isfinite)(mean) || (mean <= 0))
+        if( !(BOOST_MATH_NAMESPACE::isfinite)(mean) || (mean <= 0))
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -99,7 +96,7 @@ namespace boost
       template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline bool check_k(const char* function, const RealType& k, RealType* result, const Policy& pol)
       {
-        if((k < 0) || !(boost::math::isfinite)(k))
+        if((k < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(k))
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -123,7 +120,7 @@ namespace boost
       template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline bool check_prob(const char* function, const RealType& p, RealType* result, const Policy& pol)
       { // Check 0 <= p <= 1
-        if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
+        if(!(BOOST_MATH_NAMESPACE::isfinite)(p) || (p < 0) || (p > 1))
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -176,24 +173,24 @@ namespace boost
 
     #ifdef __cpp_deduction_guides
     BOOST_MATH_EXPORT template <class RealType>
-    poisson_distribution(RealType)->poisson_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+    poisson_distribution(RealType)->poisson_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
     #endif
 
     // Non-member functions to give properties of the distribution.
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const poisson_distribution<RealType, Policy>& /* dist */)
+    BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const poisson_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable k.
-       using boost::math::tools::max_value;
-       return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // Max integer?
+       using BOOST_MATH_NAMESPACE::tools::max_value;
+       return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // Max integer?
     }
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const poisson_distribution<RealType, Policy>& /* dist */)
+    BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const poisson_distribution<RealType, Policy>& /* dist */)
     { // Range of supported values for random variable k.
        // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-       using boost::math::tools::max_value;
-       return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
+       using BOOST_MATH_NAMESPACE::tools::max_value;
+       return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
     }
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -276,7 +273,7 @@ namespace boost
       { // mean ^ k = 1, and k! = 1, so can simplify.
         return exp(-mean);
       }
-      return boost::math::gamma_p_derivative(k+1, mean, Policy());
+      return BOOST_MATH_NAMESPACE::gamma_p_derivative(k+1, mean, Policy());
     } // pdf
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -285,11 +282,11 @@ namespace boost
       BOOST_FPU_EXCEPTION_GUARD
 
       BOOST_MATH_STD_USING // for ADL of std functions.
-      using boost::math::lgamma;
+      using BOOST_MATH_NAMESPACE::lgamma;
 
       RealType mean = dist.mean();
       // Error check:
-      RealType result = -boost::math::numeric_limits<RealType>::infinity();
+      RealType result = -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
       if(false == poisson_detail::check_dist_and_k(
         "boost::math::pdf(const poisson_distribution<%1%>&, %1%)",
         mean,
@@ -302,7 +299,7 @@ namespace boost
       // Special case of mean zero, regardless of the number of events k.
       if (mean == 0)
       { // Probability for any k is zero.
-        return boost::math::numeric_limits<RealType>::quiet_NaN();
+        return BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN();
       }
       
       // Special case where k and lambda are both positive
@@ -314,14 +311,14 @@ namespace boost
         // For small k the direct formula has little cancellation, while Stirling's form would cancel
         // its ln(2 pi k)/2 terms as k -> 0. Just above minimum_argument_for_bernoulli_recursion the
         // Bernoulli series can still fail to converge (at k = 6.05 for double), so leave a margin.
-        if (k <= 2 * boost::math::detail::minimum_argument_for_bernoulli_recursion<RealType>())
+        if (k <= 2 * BOOST_MATH_NAMESPACE::detail::minimum_argument_for_bernoulli_recursion<RealType>())
         {
           // Below 1/2, ln(k!) = log1p(tgamma1pm1(k)) avoids rounding 1 + k.
           const RealType log_k_factorial = k < RealType(0.5) ? RealType(log1p(tgamma1pm1(k, Policy()), Policy())) : RealType(lgamma(k+1, Policy()));
           return -log_k_factorial + k*log(mean) - mean;
         }
         // Loader's (2000) saddle-point form, which avoids the cancellation of the direct formula when k is near mean.
-        return -boost::math::detail::stirlerr_series(k, Policy()) - boost::math::detail::bd0(mean, k, Policy()) - log(boost::math::constants::two_pi<RealType>() * k) / 2;
+        return -BOOST_MATH_NAMESPACE::detail::stirlerr_series(k, Policy()) - BOOST_MATH_NAMESPACE::detail::bd0(mean, k, Policy()) - log(BOOST_MATH_NAMESPACE::constants::two_pi<RealType>() * k) / 2;
 #endif
       }
 
@@ -421,7 +418,7 @@ namespace boost
       }
       if (k == 0)
       { // Avoid repeated checks on k and mean in gamma_p.
-         return -boost::math::expm1(-mean, Policy());
+         return -BOOST_MATH_NAMESPACE::expm1(-mean, Policy());
       }
       // Unlike un-complemented cdf (sum from 0 to k),
       // can't use finite sum from k+1 to infinity for small integral k,
@@ -463,14 +460,14 @@ namespace boost
          return policies::raise_overflow_error<RealType>(function, 0, Policy());
       }
       using discrete_type = typename Policy::discrete_quantile_type;
-      boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+      BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
       RealType guess;
       RealType factor = 8;
       RealType z = dist.mean();
       if(z < 1)
          guess = z;
       else
-         guess = boost::math::detail::inverse_poisson_cornish_fisher(z, p, RealType(1-p), Policy());
+         guess = BOOST_MATH_NAMESPACE::detail::inverse_poisson_cornish_fisher(z, p, RealType(1-p), Policy());
       if(z > 5)
       {
          if(z > 1000)
@@ -534,14 +531,14 @@ namespace boost
          return 0;  // Exact result regardless of discrete-quantile Policy
       }
       using discrete_type = typename Policy::discrete_quantile_type;
-      boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+      BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
       RealType guess;
       RealType factor = 8;
       RealType z = dist.mean();
       if(z < 1)
          guess = z;
       else
-         guess = boost::math::detail::inverse_poisson_cornish_fisher(z, RealType(1-q), q, Policy());
+         guess = BOOST_MATH_NAMESPACE::detail::inverse_poisson_cornish_fisher(z, RealType(1-q), q, Policy());
       if(z > 5)
       {
          if(z > 1000)
@@ -567,8 +564,7 @@ namespace boost
          max_iter);
    } // quantile complement.
 
-  } // namespace math
-} // namespace boost
+  BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

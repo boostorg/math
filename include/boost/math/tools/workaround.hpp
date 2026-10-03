@@ -16,7 +16,7 @@
 
 #include <boost/math/tools/config.hpp>
 
-namespace boost{ namespace math{ namespace tools{
+BOOST_MATH_NAMESPACE_BEGIN namespace tools{
 //
 // We call this short forwarding function so that we can work around a bug
 // on Darwin that causes std::fmod to return a NaN.  The test case is:
@@ -36,7 +36,7 @@ inline long double fmod_workaround(long double a, long double b) noexcept
 }
 #endif
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_TOOLS_WORHAROUND_HPP
 

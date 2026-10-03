@@ -38,8 +38,7 @@
 #pragma GCC system_header
 #endif
 
-namespace boost{
-namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 namespace detail{
 
 // TODO(mborland): Temporary for NVRTC
@@ -48,14 +47,14 @@ template<class T, class Policy>
 T polygamma_imp(const int n, T x, const Policy &pol);
 
 template <class T, class Policy>
-T trigamma_prec(T x, const Policy& pol, const boost::math::integral_constant<int, 0>&)
+T trigamma_prec(T x, const Policy& pol, const BOOST_MATH_NAMESPACE::integral_constant<int, 0>&)
 {
    return polygamma_imp(1, x, pol);
 }
 #endif
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
    // Max error in interpolated form: 3.736e-017
    BOOST_MATH_STATIC const T offset = BOOST_MATH_BIG_CONSTANT(T, 53, 2.1093254089355469);
@@ -116,7 +115,7 @@ BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const boost::math::in
 
    if(x <= 2)
    {
-      return (offset + boost::math::tools::evaluate_polynomial(P_1_2, x) / tools::evaluate_polynomial(Q_1_2, x)) / (x * x);
+      return (offset + BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P_1_2, x) / tools::evaluate_polynomial(Q_1_2, x)) / (x * x);
    }
    else if(x <= 4)
    {
@@ -128,7 +127,7 @@ BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const boost::math::in
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const boost::math::integral_constant<int, 64>&)
+BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const BOOST_MATH_NAMESPACE::integral_constant<int, 64>&)
 {
    // Max error in interpolated form: 1.178e-020
    BOOST_MATH_STATIC const T offset_1_2 = BOOST_MATH_BIG_CONSTANT(T, 64, 2.109325408935546875);
@@ -194,7 +193,7 @@ BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const boost::math::in
 
    if(x <= 2)
    {
-      return (offset_1_2 + boost::math::tools::evaluate_polynomial(P_1_2, x) / tools::evaluate_polynomial(Q_1_2, x)) / (x * x);
+      return (offset_1_2 + BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P_1_2, x) / tools::evaluate_polynomial(Q_1_2, x)) / (x * x);
    }
    else if(x <= 8)
    {
@@ -206,7 +205,7 @@ BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const boost::math::in
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
    // Max error in interpolated form: 1.916e-035
 
@@ -354,11 +353,11 @@ BOOST_MATH_GPU_ENABLED T trigamma_prec(T x, const Policy&, const boost::math::in
 
    if(x <= 2)
    {
-      return (2 + boost::math::tools::evaluate_polynomial(P_1_2, x) / tools::evaluate_polynomial(Q_1_2, x)) / (x * x);
+      return (2 + BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P_1_2, x) / tools::evaluate_polynomial(Q_1_2, x)) / (x * x);
    }
    else if(x <= 4)
    {
-      return (y_offset_2_4 + boost::math::tools::evaluate_polynomial(P_2_4, x) / tools::evaluate_polynomial(Q_2_4, x)) / (x * x);
+      return (y_offset_2_4 + BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P_2_4, x) / tools::evaluate_polynomial(Q_2_4, x)) / (x * x);
    }
    else if(x <= 8)
    {
@@ -399,8 +398,8 @@ BOOST_MATH_GPU_ENABLED T trigamma_dispatch(T x, const Policy& pol, const Tag& ta
       {
          return policies::raise_pole_error<T>("boost::math::trigamma<%1%>(%1%)", nullptr, (1-x), pol);
       }
-      T s = fabs(x) < fabs(z) ? boost::math::sin_pi(x, pol) : boost::math::sin_pi(z, pol);
-      return result - trigamma_prec(T(z), pol, tag) + boost::math::pow<2>(constants::pi<T>()) / (s * s);
+      T s = fabs(x) < fabs(z) ? BOOST_MATH_NAMESPACE::sin_pi(x, pol) : BOOST_MATH_NAMESPACE::sin_pi(z, pol);
+      return result - trigamma_prec(T(z), pol, tag) + BOOST_MATH_NAMESPACE::pow<2>(constants::pi<T>()) / (s * s);
    }
    if(x < 1)
    {
@@ -419,7 +418,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename policies::precision<T, Policy>::type precision_type;
-   typedef boost::math::integral_constant<int,
+   typedef BOOST_MATH_NAMESPACE::integral_constant<int,
       precision_type::value <= 0 ? 0 :
       precision_type::value <= 53 ? 53 :
       precision_type::value <= 64 ? 64 :
@@ -442,7 +441,6 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    return trigamma(x, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif
 

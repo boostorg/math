@@ -30,7 +30,7 @@
 
 // The envelope is the maximum of 1/2 and half the condition number of function evaluation.
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 namespace detail {
 // Abscissas of the vertical gridlines: evenly spaced, or at whole powers of ten on a logarithmic axis.
@@ -291,14 +291,18 @@ public:
                     fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << plot.nan_color_ << "'/>\n";
                     y = y_scale(static_cast<PreciseReal>(-plot.clip_));
                     fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << plot.nan_color_ << "'/>\n";
+                    continue;
                 }
                 if (plot.clip_ > 0 && static_cast<PreciseReal>(abs(ulp[j])) > plot.clip_)
                 {
-                   if (plot.crop_color_ == "")
+                   // Mark cropped points with a cross, in the color of their function unless one was set,
+                   // so that they stay distinguishable when several functions are plotted:
+                   std::string const & crop_color = plot.crop_color_set_ ? plot.crop_color_ : color;
+                   if (crop_color == "")
                       continue;
                    CoarseReal x = x_scale(plot.coarse_abscissas_[j]);
                    PreciseReal y = y_scale(static_cast<PreciseReal>(ulp[j] < 0 ? -plot.clip_ : plot.clip_));
-                   fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << plot.crop_color_ << "'/>\n";
+                   fs << "<path d='M" << x - 2.5 << " " << y - 2.5 << " l5 5 m0 -5 l-5 5' stroke='" << crop_color << "' stroke-width='1'/>\n";
                 }
                 else
                 {
@@ -407,6 +411,7 @@ private:
     std::string background_color_;
     std::string font_color_;
     std::string crop_color_;
+    bool crop_color_set_ = false;
     std::string nan_color_;
 };
 
@@ -470,6 +475,7 @@ template<class F, typename PreciseReal, typename CoarseReal>
 ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::crop_color(std::string const & color)
 {
     crop_color_ = color;
+    crop_color_set_ = true;
     return *this;
 }
 
@@ -502,7 +508,7 @@ bool ends_with(std::string const& filename, std::string const& suffix)
 template<class F, typename PreciseReal, typename CoarseReal>
 void ulps_plot<F, PreciseReal, CoarseReal>::write(std::string const & filename) const
 {
-    if(!boost::math::tools::detail::ends_with(filename, ".svg"))
+    if(!BOOST_MATH_NAMESPACE::tools::detail::ends_with(filename, ".svg"))
     {
         throw std::logic_error("Only svg files are supported at this time.");
     }
@@ -608,7 +614,7 @@ ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, Co
         if (y != 0)
         {
             // Maybe cond_ is badly names; should it be half_cond_?
-            cond_[i] = boost::math::tools::evaluation_condition_number(hi_acc_impl, precise_abscissas_[i])/2;
+            cond_[i] = BOOST_MATH_NAMESPACE::tools::evaluation_condition_number(hi_acc_impl, precise_abscissas_[i])/2;
             // Half-ULP accuracy is the correctly rounded result, so make sure the envelop doesn't go below this:
             if (cond_[i] < 0.5)
             {
@@ -651,5 +657,5 @@ ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::ad
 
 
 
-} // namespace boost::math::tools
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::tools
 #endif

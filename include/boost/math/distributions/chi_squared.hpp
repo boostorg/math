@@ -20,7 +20,7 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp>
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
 class chi_squared_distribution
@@ -60,7 +60,7 @@ BOOST_MATH_EXPORT using chi_squared = chi_squared_distribution<double>;
 
 #ifdef __cpp_deduction_guides
 BOOST_MATH_EXPORT template <class RealType>
-chi_squared_distribution(RealType)->chi_squared_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+chi_squared_distribution(RealType)->chi_squared_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 #endif
 
 #ifdef _MSC_VER
@@ -69,16 +69,16 @@ chi_squared_distribution(RealType)->chi_squared_distribution<typename boost::mat
 #endif
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const chi_squared_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const chi_squared_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
-  BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
+  BOOST_MATH_IF_CONSTEXPR (BOOST_MATH_NAMESPACE::numeric_limits<RealType>::has_infinity)
   { 
-    return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), boost::math::numeric_limits<RealType>::infinity()); // 0 to + infinity.
+    return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity()); // 0 to + infinity.
   }
   else
   {
-    using boost::math::tools::max_value;
-    return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // 0 to + max.
+    using BOOST_MATH_NAMESPACE::tools::max_value;
+    return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>()); // 0 to + max.
   }
 }
 
@@ -87,10 +87,10 @@ BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const 
 #endif
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const chi_squared_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const chi_squared_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), tools::max_value<RealType>()); // 0 to + infinity.
+   return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), tools::max_value<RealType>()); // 0 to + infinity.
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -107,7 +107,7 @@ BOOST_MATH_GPU_ENABLED RealType pdf(const chi_squared_distribution<RealType, Pol
          function, degrees_of_freedom, &error_result, Policy()))
       return error_result;
 
-   if((chi_square < 0) || !(boost::math::isfinite)(chi_square))
+   if((chi_square < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(chi_square))
    {
       return policies::raise_domain_error<RealType>(
          function, "Chi Square parameter was %1%, but must be > 0 !", chi_square, Policy());
@@ -146,13 +146,13 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const chi_squared_distribution<RealTy
          function, degrees_of_freedom, &error_result, Policy()))
       return error_result;
 
-   if((chi_square < 0) || !(boost::math::isfinite)(chi_square))
+   if((chi_square < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(chi_square))
    {
       return policies::raise_domain_error<RealType>(
          function, "Chi Square parameter was %1%, but must be > 0 !", chi_square, Policy());
    }
 
-   return boost::math::gamma_p(degrees_of_freedom / 2, chi_square / 2, Policy());
+   return BOOST_MATH_NAMESPACE::gamma_p(degrees_of_freedom / 2, chi_square / 2, Policy());
 } // cdf
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -169,7 +169,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const chi_squared_distribution<R
      )
      return error_result;
 
-   return 2 * boost::math::gamma_p_inv(degrees_of_freedom / 2, p, Policy());
+   return 2 * BOOST_MATH_NAMESPACE::gamma_p_inv(degrees_of_freedom / 2, p, Policy());
 } // quantile
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -184,13 +184,13 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<chi_squared_
          function, degrees_of_freedom, &error_result, Policy()))
       return error_result;
 
-   if((chi_square < 0) || !(boost::math::isfinite)(chi_square))
+   if((chi_square < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(chi_square))
    {
       return policies::raise_domain_error<RealType>(
          function, "Chi Square parameter was %1%, but must be > 0 !", chi_square, Policy());
    }
 
-   return boost::math::gamma_q(degrees_of_freedom / 2, chi_square / 2, Policy());
+   return BOOST_MATH_NAMESPACE::gamma_q(degrees_of_freedom / 2, chi_square / 2, Policy());
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -206,7 +206,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<chi_squ
      )
     return error_result;
 
-   return 2 * boost::math::gamma_q_inv(degrees_of_freedom / 2, q, Policy());
+   return 2 * BOOST_MATH_NAMESPACE::gamma_q_inv(degrees_of_freedom / 2, q, Policy());
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -322,8 +322,8 @@ BOOST_MATH_GPU_ENABLED RealType chi_squared_distribution<RealType, Policy>::find
 
    detail::df_estimator<RealType, Policy> f(alpha, beta, variance, difference_from_variance);
    tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
-   boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
-   boost::math::pair<RealType, RealType> r =
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::pair<RealType, RealType> r =
      tools::bracket_and_solve_root(f, hint, RealType(2), false, tol, max_iter, Policy());
    RealType result = r.first + (r.second - r.first) / 2;
    if(max_iter >= policies::get_max_root_iterations<Policy>())
@@ -334,8 +334,7 @@ BOOST_MATH_GPU_ENABLED RealType chi_squared_distribution<RealType, Policy>::find
    return result;
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

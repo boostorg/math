@@ -25,7 +25,7 @@
 #include <vector>
 #endif
 
-namespace boost::math::optimization {
+BOOST_MATH_NAMESPACE_BEGIN namespace optimization {
 
 #ifndef BOOST_MATH_DEBUG_JSO
 #define BOOST_MATH_DEBUG_JSO 0
@@ -470,5 +470,5 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
   return population[indices[0]];
 }
 
-} // namespace boost::math::optimization
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::optimization
 #endif

@@ -156,6 +156,8 @@ that conform to the requirements specified by `real_concept`.]]
 [section:namespaces Namespaces]
    
 All math functions and distributions are in `namespace boost::math`.
+Libraries that embed their own copy of Boost.Math can move it into a different namespace,
+see [link math_toolkit.configurable_namespace Configurable Namespace].
    
 So, for example, the Students-t distribution template in `namespace boost::math` is
    

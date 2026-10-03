@@ -22,8 +22,7 @@
 #  include <cmath>
 #endif // BOOST_MATH_ENABLE_CUDA
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail {
 
@@ -47,16 +46,16 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
     if (x == T(-1))
     { 
         // pow(+/-0, y)
-        if ((boost::math::isfinite)(y) && y < 0) 
+        if ((BOOST_MATH_NAMESPACE::isfinite)(y) && y < 0) 
         {
-            return boost::math::policies::raise_domain_error<T>(function, "Division by 0", x, pol);
+            return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Division by 0", x, pol);
         }
 
         // Gets correct special handling
         return pow(T(0), y);
     }
 
-    if (x == T(-2) && (boost::math::isinf)(y)) 
+    if (x == T(-2) && (BOOST_MATH_NAMESPACE::isinf)(y)) 
     { 
         // pow(-1, +/-inf)
         return T(1);
@@ -68,9 +67,9 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
         return T(1);
     }
 
-    if ((boost::math::isinf)(y))
+    if ((BOOST_MATH_NAMESPACE::isinf)(y))
     {
-        if ((boost::math::isnan)(x))
+        if ((BOOST_MATH_NAMESPACE::isnan)(x))
         {
             return x;
         }
@@ -80,7 +79,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
         return (base_exceeds_one == (y > 0)) ? T(abs(y)) : T(0);
     }
 
-    if ((boost::math::isinf)(x)) 
+    if ((BOOST_MATH_NAMESPACE::isinf)(x)) 
     { 
         // pow(+/-inf, y)
         return pow(x, y);
@@ -89,11 +88,11 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
     // Up to this point, (1+x) = {+/-0, +/-1, +/-inf} have been handled, and
     // and y = {+/-0, +/-inf} have been handled.  Next, we handle `nan` and
     // y = {+/-1}.
-    if ((boost::math::isnan)(x)) 
+    if ((BOOST_MATH_NAMESPACE::isnan)(x)) 
     {
         return x;
     }
-    else if ((boost::math::isnan)(y))
+    else if ((BOOST_MATH_NAMESPACE::isnan)(y))
     {
         return y;
     }
@@ -127,7 +126,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
             #ifdef BOOST_MATH_HAS_GPU_SUPPORT
             s = ::nextafter(s, T(1));
             #else
-            s = boost::math::nextafter(s, T(1));
+            s = BOOST_MATH_NAMESPACE::nextafter(s, T(1));
             #endif
 
             t = x - (s - T(1));
@@ -142,7 +141,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
             #ifdef BOOST_MATH_HAS_GPU_SUPPORT
             s = ::nextafter(s, T(0));
             #else
-            s = boost::math::nextafter(s, T(0));
+            s = BOOST_MATH_NAMESPACE::nextafter(s, T(0));
             #endif
 
             t = x - (s - T(1));
@@ -157,7 +156,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
             #ifdef BOOST_MATH_HAS_GPU_SUPPORT
             s = ::nextafter(s, T(0));
             #else
-            s = boost::math::nextafter(s, T(0));
+            s = BOOST_MATH_NAMESPACE::nextafter(s, T(0));
             #endif
 
             t = T(1) - (s - x);
@@ -170,7 +169,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
     // if the first term over/underflows, then the result over/underflows.
     // And of course, term2 == 1 if t == 0.
     T term1 = pow(s, y);
-    if (t == T(0) || term1 == T(0) || (boost::math::isinf)(term1))
+    if (t == T(0) || term1 == T(0) || (BOOST_MATH_NAMESPACE::isinf)(term1))
     {
         return term1;
     }
@@ -206,7 +205,7 @@ BOOST_MATH_GPU_ENABLED T pow1p_imp(const T x, const T y, const Policy& pol)
     // |ww| is tiny compared with |w|, so if exp(w) over/underflows so does the
     // result (term1 lies on the same side of 1); don't form inf * 0.
     T ew = exp(w);
-    if (ew == 0 || (boost::math::isinf)(ew))
+    if (ew == 0 || (BOOST_MATH_NAMESPACE::isinf)(ew))
     {
         return ew;
     }
@@ -233,7 +232,6 @@ pow1p(const T1 x, const T2 y)
     return detail::pow1p_imp(static_cast<result_type>(x), static_cast<result_type>(y), policies::policy<>());
 }
 
-} // Namespace math
-} // Namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SF_POW1P_HPP

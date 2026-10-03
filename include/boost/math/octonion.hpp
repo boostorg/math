@@ -17,10 +17,7 @@
 #endif
 
 
-namespace boost
-{
-    namespace math
-    {
+BOOST_MATH_NAMESPACE_BEGIN
 
 #define    BOOST_OCTONION_ACCESSOR_GENERATOR(type)                      \
             type                        real() const                    \
@@ -93,14 +90,14 @@ namespace boost
                 return(::std::complex<type>(g,h));                      \
             }                                                           \
                                                                         \
-            ::boost::math::quaternion<type>    H_component_1() const    \
+            ::BOOST_MATH_NAMESPACE::quaternion<type>    H_component_1() const    \
             {                                                           \
-                return(::boost::math::quaternion<type>(a,b,c,d));       \
+                return(::BOOST_MATH_NAMESPACE::quaternion<type>(a,b,c,d));       \
             }                                                           \
                                                                         \
-            ::boost::math::quaternion<type>    H_component_2() const    \
+            ::BOOST_MATH_NAMESPACE::quaternion<type>    H_component_2() const    \
             {                                                           \
-                return(::boost::math::quaternion<type>(e,f,g,h));       \
+                return(::BOOST_MATH_NAMESPACE::quaternion<type>(e,f,g,h));       \
             }
 
 
@@ -153,7 +150,7 @@ namespace boost
                 return(*this);                                                                      \
             }                                                                                       \
                                                                                                     \
-            octonion<type> &        operator = (::boost::math::quaternion<type> const & a_affecter) \
+            octonion<type> &        operator = (::BOOST_MATH_NAMESPACE::quaternion<type> const & a_affecter) \
             {                                                                                       \
                 a = a_affecter.R_component_1();                                                     \
                 b = a_affecter.R_component_2();                                                     \
@@ -233,8 +230,8 @@ namespace boost
 
             // constructor for O seen as H^2
 
-            explicit                octonion(   ::boost::math::quaternion<T> const & q0,
-                                                ::boost::math::quaternion<T> const & q1 = ::boost::math::quaternion<T>())
+            explicit                octonion(   ::BOOST_MATH_NAMESPACE::quaternion<T> const & q0,
+                                                ::BOOST_MATH_NAMESPACE::quaternion<T> const & q1 = ::BOOST_MATH_NAMESPACE::quaternion<T>())
             :   a(q0.R_component_1()),
                 b(q0.R_component_2()),
                 c(q0.R_component_3()),
@@ -317,7 +314,7 @@ namespace boost
             }
 
 
-            octonion<T> &            operator += (::boost::math::quaternion<T> const & rhs)
+            octonion<T> &            operator += (::BOOST_MATH_NAMESPACE::quaternion<T> const & rhs)
             {
                 T    at = a + rhs.R_component_1();    // exception guard
                 T    bt = b + rhs.R_component_2();    // exception guard
@@ -381,7 +378,7 @@ namespace boost
             }
 
 
-            octonion<T> &            operator -= (::boost::math::quaternion<T> const & rhs)
+            octonion<T> &            operator -= (::BOOST_MATH_NAMESPACE::quaternion<T> const & rhs)
             {
                 T    at = a - rhs.R_component_1();    // exception guard
                 T    bt = b - rhs.R_component_2();    // exception guard
@@ -473,7 +470,7 @@ namespace boost
             }
 
 
-            octonion<T> &            operator *= (::boost::math::quaternion<T> const & rhs)
+            octonion<T> &            operator *= (::BOOST_MATH_NAMESPACE::quaternion<T> const & rhs)
             {
                 T    ar = rhs.R_component_1();
                 T    br = rhs.R_component_2();
@@ -589,7 +586,7 @@ namespace boost
             }
 
 
-            octonion<T> &            operator /= (::boost::math::quaternion<T> const & rhs)
+            octonion<T> &            operator /= (::BOOST_MATH_NAMESPACE::quaternion<T> const & rhs)
             {
                 T    ar = rhs.R_component_1();
                 T    br = rhs.R_component_2();
@@ -723,8 +720,8 @@ namespace boost
             {                                                                                                                       \
             }                                                                                                                       \
                                                                                                                                     \
-            explicit                    octonion(   ::boost::math::quaternion<type> const & q0,                                     \
-                                                    ::boost::math::quaternion<type> const & q1 = ::boost::math::quaternion<type>()) \
+            explicit                    octonion(   ::BOOST_MATH_NAMESPACE::quaternion<type> const & q0,                                     \
+                                                    ::BOOST_MATH_NAMESPACE::quaternion<type> const & q1 = ::BOOST_MATH_NAMESPACE::quaternion<type>()) \
             :   a(q0.R_component_1()),                                                                                              \
                 b(q0.R_component_2()),                                                                                              \
                 c(q0.R_component_3()),                                                                                              \
@@ -755,7 +752,7 @@ namespace boost
             }
 
 #define    BOOST_OCTONION_MEMBER_ADD_GENERATOR_3(type)                                              \
-            octonion<type> &            operator += (::boost::math::quaternion<type> const & rhs)   \
+            octonion<type> &            operator += (::BOOST_MATH_NAMESPACE::quaternion<type> const & rhs)   \
             {                                                                                       \
                 a += rhs.R_component_1();                                                           \
                 b += rhs.R_component_2();                                                           \
@@ -799,7 +796,7 @@ namespace boost
             }
 
 #define    BOOST_OCTONION_MEMBER_SUB_GENERATOR_3(type)                                              \
-            octonion<type> &            operator -= (::boost::math::quaternion<type> const & rhs)   \
+            octonion<type> &            operator -= (::BOOST_MATH_NAMESPACE::quaternion<type> const & rhs)   \
             {                                                                                       \
                 a -= rhs.R_component_1();                                                           \
                 b -= rhs.R_component_2();                                                           \
@@ -868,7 +865,7 @@ namespace boost
             }
 
 #define    BOOST_OCTONION_MEMBER_MUL_GENERATOR_3(type)                                                    \
-            octonion<type> &            operator *= (::boost::math::quaternion<type> const & rhs)   \
+            octonion<type> &            operator *= (::BOOST_MATH_NAMESPACE::quaternion<type> const & rhs)   \
             {                                                                                       \
                 type    ar = rhs.R_component_1();                                                   \
                 type    br = rhs.R_component_2();                                                   \
@@ -995,7 +992,7 @@ namespace boost
             }
 
     #define    BOOST_OCTONION_MEMBER_DIV_GENERATOR_3(type)                                           \
-            octonion<type> &            operator /= (::boost::math::quaternion<type> const & rhs)    \
+            octonion<type> &            operator /= (::BOOST_MATH_NAMESPACE::quaternion<type> const & rhs)    \
             {                                                                                        \
                 using    ::std::valarray;                                                            \
                 using    ::std::abs;                                                                 \
@@ -1366,12 +1363,12 @@ namespace boost
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_3_L(op)                                                                              \
         BOOST_MATH_EXPORT template<typename T>                                                                                                      \
-        inline octonion<T>                        operator op (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs) \
+        inline octonion<T>                        operator op (::BOOST_MATH_NAMESPACE::quaternion<T> const & lhs, octonion<T> const & rhs) \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_3_R(op)                                                                              \
         BOOST_MATH_EXPORT template<typename T>                                                                                                      \
-        inline octonion<T>                        operator op (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs) \
+        inline octonion<T>                        operator op (octonion<T> const & lhs, ::BOOST_MATH_NAMESPACE::quaternion<T> const & rhs) \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
 
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_4(op)                                                                                \
@@ -1487,7 +1484,7 @@ namespace boost
 
 
         BOOST_MATH_EXPORT template<typename T>
-        inline bool                                operator == (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs)
+        inline bool                                operator == (::BOOST_MATH_NAMESPACE::quaternion<T> const & lhs, octonion<T> const & rhs)
         {
             return(
                         (rhs.R_component_1() == lhs.R_component_1())&&
@@ -1503,7 +1500,7 @@ namespace boost
 
 
         BOOST_MATH_EXPORT template<typename T>
-        inline bool                                operator == (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs)
+        inline bool                                operator == (octonion<T> const & lhs, ::BOOST_MATH_NAMESPACE::quaternion<T> const & rhs)
         {
             return(
                         (lhs.R_component_1() == rhs.R_component_1())&&
@@ -1556,11 +1553,11 @@ namespace boost
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
         BOOST_MATH_EXPORT template<typename T>
-        inline bool                                operator != (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs)
+        inline bool                                operator != (::BOOST_MATH_NAMESPACE::quaternion<T> const & lhs, octonion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
         BOOST_MATH_EXPORT template<typename T>
-        inline bool                                operator != (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs)
+        inline bool                                operator != (octonion<T> const & lhs, ::BOOST_MATH_NAMESPACE::quaternion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
 
         BOOST_MATH_EXPORT template<typename T>
@@ -1597,8 +1594,8 @@ namespace boost
             ::std::complex<T>    x = ::std::complex<T>();
             ::std::complex<T>    y = ::std::complex<T>();
 
-            ::boost::math::quaternion<T>    p = ::boost::math::quaternion<T>();
-            ::boost::math::quaternion<T>    q = ::boost::math::quaternion<T>();
+            ::BOOST_MATH_NAMESPACE::quaternion<T>    p = ::BOOST_MATH_NAMESPACE::quaternion<T>();
+            ::BOOST_MATH_NAMESPACE::quaternion<T>    q = ::BOOST_MATH_NAMESPACE::quaternion<T>();
 
             charT    ch = charT();
             char    cc;
@@ -1673,7 +1670,7 @@ namespace boost
                             }
                             else if    (cc == ',')                        // read "((u),"
                             {
-                                p = ::boost::math::quaternion<T>(u);
+                                p = ::BOOST_MATH_NAMESPACE::quaternion<T>(u);
 
                                 is >> q;                                // read "((u),q"
 
@@ -1721,7 +1718,7 @@ namespace boost
 
                             if        (cc == ')')                        // read "((u,v)"
                             {
-                                p = ::boost::math::quaternion<T>(u,v);
+                                p = ::BOOST_MATH_NAMESPACE::quaternion<T>(u,v);
 
                                 is >> ch;                                // get the next lexeme
 
@@ -1857,7 +1854,7 @@ namespace boost
 
                                         if        (cc == ')')                            // read "((a),q)"
                                         {
-                                            p = ::boost::math::quaternion<T>(a);
+                                            p = ::BOOST_MATH_NAMESPACE::quaternion<T>(a);
 
                                             o = octonion<T>(p,q);
                                         }
@@ -1973,7 +1970,7 @@ namespace boost
 
                                             if        (cc == '(')                        // read "((a),(e,(" (ambiguity resolution)
                                             {
-                                                p = ::boost::math::quaternion<T>(a);
+                                                p = ::BOOST_MATH_NAMESPACE::quaternion<T>(a);
 
                                                 x = ::std::complex<T>(c);                // "c" was actually "e"
 
@@ -1993,7 +1990,7 @@ namespace boost
 
                                                 if        (cc == ')')                        // read "((a),(e,y)"
                                                 {
-                                                    q = ::boost::math::quaternion<T>(x,y);
+                                                    q = ::BOOST_MATH_NAMESPACE::quaternion<T>(x,y);
 
                                                     is >> ch;                                // get the next lexeme
 
@@ -2112,7 +2109,7 @@ namespace boost
                                                 }
                                                 else if    (cc == ',')                        // read "((a),(e,f," (ambiguity resolution)
                                                 {
-                                                    p = ::boost::math::quaternion<T>(a);
+                                                    p = ::BOOST_MATH_NAMESPACE::quaternion<T>(a);
 
                                                     is >> g;                                // read "((a),(e,f,g" (too late to backtrack)
 
@@ -2130,7 +2127,7 @@ namespace boost
 
                                                     if        (cc == ')')                        // read "((a),(e,f,g)"
                                                     {
-                                                        q = ::boost::math::quaternion<T>(c,d,g);        // "c" was actually "e", and "d" was actually "f"
+                                                        q = ::BOOST_MATH_NAMESPACE::quaternion<T>(c,d,g);        // "c" was actually "e", and "d" was actually "f"
 
                                                         is >> ch;                                // get the next lexeme
 
@@ -2169,7 +2166,7 @@ namespace boost
 
                                                         if        (cc == ')')                        // read "((a),(e,f,g,h)"
                                                         {
-                                                            q = ::boost::math::quaternion<T>(c,d,g,h);    // "c" was actually "e", and "d" was actually "f"
+                                                            q = ::BOOST_MATH_NAMESPACE::quaternion<T>(c,d,g,h);    // "c" was actually "e", and "d" was actually "f"
 
                                                             is >> ch;                                // get the next lexeme
 
@@ -2343,7 +2340,7 @@ namespace boost
                                     }
                                     else if    (cc == ',')                            // read "((a,v),"
                                     {
-                                        p = ::boost::math::quaternion<T>(u,v);
+                                        p = ::BOOST_MATH_NAMESPACE::quaternion<T>(u,v);
 
                                         is >> q;                                    // read "((a,v),q"
 
@@ -2438,7 +2435,7 @@ namespace boost
 
                                             if        (cc == '(')                            // read "((a,b),(("
                                             {
-                                                p = ::boost::math::quaternion<T>(a,b);
+                                                p = ::BOOST_MATH_NAMESPACE::quaternion<T>(a,b);
 
                                                 is.putback(ch);
 
@@ -2715,7 +2712,7 @@ namespace boost
                                                         }
                                                         else if    (cc == ',')                            // read "((a,b),(e,f," (ambiguity resolution)
                                                         {
-                                                            p = ::boost::math::quaternion<T>(a,b);                // too late to backtrack
+                                                            p = ::BOOST_MATH_NAMESPACE::quaternion<T>(a,b);                // too late to backtrack
 
                                                             is >> g;                                    // read "((a,b),(e,f,g"
 
@@ -2745,7 +2742,7 @@ namespace boost
 
                                                                 if        (cc == ')')                            // read "((a,b),(e,f,g))"
                                                                 {
-                                                                    q = ::boost::math::quaternion<T>(c,d,g);            // "c" is actually "e" and "d" is actually "f"
+                                                                    q = ::BOOST_MATH_NAMESPACE::quaternion<T>(c,d,g);            // "c" is actually "e" and "d" is actually "f"
 
                                                                     o = octonion<T>(p,q);
                                                                 }
@@ -2784,7 +2781,7 @@ namespace boost
 
                                                                     if        (cc == ')')                            // read ((a,b),(e,f,g,h))"
                                                                     {
-                                                                        q = ::boost::math::quaternion<T>(c,d,g,h);            // "c" is actually "e" and "d" is actually "f"
+                                                                        q = ::BOOST_MATH_NAMESPACE::quaternion<T>(c,d,g,h);            // "c" is actually "e" and "d" is actually "f"
 
                                                                         o = octonion<T>(p,q);
                                                                     }
@@ -2859,7 +2856,7 @@ namespace boost
                                         }
                                         else if    (cc == ',')                            // read "((a,b,c),"
                                         {
-                                            p = ::boost::math::quaternion<T>(a,b,c);
+                                            p = ::BOOST_MATH_NAMESPACE::quaternion<T>(a,b,c);
 
                                             is >> q;                                    // read "((a,b,c),q"
 
@@ -2923,7 +2920,7 @@ namespace boost
                                             }
                                             else if    (cc == ',')                            // read "((a,b,c,d),"
                                             {
-                                                p = ::boost::math::quaternion<T>(a,b,c,d);
+                                                p = ::BOOST_MATH_NAMESPACE::quaternion<T>(a,b,c,d);
 
                                                 is >> q;                                    // read "((a,b,c,d),q"
 
@@ -3023,7 +3020,7 @@ namespace boost
 
                             if        (cc == '(')                            // read "(a,(("
                             {
-                                p = ::boost::math::quaternion<T>(a);
+                                p = ::BOOST_MATH_NAMESPACE::quaternion<T>(a);
 
                                 is.putback(ch);
 
@@ -3300,7 +3297,7 @@ namespace boost
                                         }
                                         else if    (cc == ',')                            // read "(a,(e,f," (ambiguity resolution)
                                         {
-                                            p = ::boost::math::quaternion<T>(a);
+                                            p = ::BOOST_MATH_NAMESPACE::quaternion<T>(a);
 
                                             is >> g;                                    // read "(a,(e,f,g"
 
@@ -3330,7 +3327,7 @@ namespace boost
 
                                                 if        (cc == ')')                            // read "(a,(e,f,g))"
                                                 {
-                                                    q = ::boost::math::quaternion<T>(c,d,g);            // "c" is actually "e" and "d" is actually "f"
+                                                    q = ::BOOST_MATH_NAMESPACE::quaternion<T>(c,d,g);            // "c" is actually "e" and "d" is actually "f"
 
                                                     o = octonion<T>(p,q);
                                                 }
@@ -3369,7 +3366,7 @@ namespace boost
 
                                                     if        (cc == ')')                            // read "(a,(e,f,g,h))"
                                                     {
-                                                        q = ::boost::math::quaternion<T>(c,d,g,h);            // "c" is actually "e" and "d" is actually "f"
+                                                        q = ::BOOST_MATH_NAMESPACE::quaternion<T>(c,d,g,h);            // "c" is actually "e" and "d" is actually "f"
 
                                                         o = octonion<T>(p,q);
                                                     }
@@ -3966,7 +3963,7 @@ namespace boost
             using    ::std::exp;
             using    ::std::cos;
 
-            using    ::boost::math::sinc_pi;
+            using    ::BOOST_MATH_NAMESPACE::sinc_pi;
 
             T    u = exp(real(o));
 
@@ -3989,7 +3986,7 @@ namespace boost
             using    ::std::cos;
             using    ::std::cosh;
 
-            using    ::boost::math::sinhc_pi;
+            using    ::BOOST_MATH_NAMESPACE::sinhc_pi;
 
             T    z = abs(unreal(o));
 
@@ -4010,7 +4007,7 @@ namespace boost
             using    ::std::cos;
             using    ::std::cosh;
 
-            using    ::boost::math::sinhc_pi;
+            using    ::BOOST_MATH_NAMESPACE::sinhc_pi;
 
             T    z = abs(unreal(o));
 
@@ -4106,7 +4103,6 @@ namespace boost
                                     static_cast<T>(rhs.R_component_8())));
             }
         }
-    }
-}
+    BOOST_MATH_NAMESPACE_END
 
 #endif /* BOOST_OCTONION_HPP */

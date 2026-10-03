@@ -11,7 +11,7 @@
 #include <boost/math/tools/recurrence.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
-  namespace boost { namespace math { namespace detail {
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
      template <class T, class Policy>
      T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol, long long& log_scaling);
@@ -90,7 +90,7 @@
         // This is going to be a mighty big number:
         //
         long long local_scaling = 0;
-        T M2 = boost::math::detail::hypergeometric_1F1_imp(T(1 + a - b), T(2 - b), z, pol, local_scaling);
+        T M2 = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(T(1 + a - b), T(2 - b), z, pol, local_scaling);
         log_scaling -= local_scaling; // all the M2 terms are in the denominator
         //
         // Since a, b and z are all likely to be large we need the Wronksian
@@ -107,10 +107,10 @@
         // Let M3 = M(1+a-b + 1, 2-b + 1, z)
         // we can get to this from the ratio which is cheaper to calculate:
         //
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T> coef2(1 + a - b + 1, 2 - b + 1, z);
-        T M3 = boost::math::tools::function_ratio_from_backwards_recurrence(coef2, boost::math::policies::get_epsilon<T, Policy>(), max_iter) * M2;
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_from_function_ratio_negative_b_positive_a<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T> coef2(1 + a - b + 1, 2 - b + 1, z);
+        T M3 = BOOST_MATH_NAMESPACE::tools::function_ratio_from_backwards_recurrence(coef2, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter) * M2;
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_from_function_ratio_negative_b_positive_a<%1%>(%1%,%1%,%1%)", max_iter, pol);
         //
         // Get the RHS of the Wronksian:
         //
@@ -134,10 +134,10 @@
         //
         // Get the function ratio, M(a+1, b+1, z)/M(a,b,z):
         //
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T> coef(a + 1, b + 1, z);
-        T ratio = boost::math::tools::function_ratio_from_backwards_recurrence(coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_from_function_ratio_negative_b_positive_a<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T> coef(a + 1, b + 1, z);
+        T ratio = BOOST_MATH_NAMESPACE::tools::function_ratio_from_backwards_recurrence(coef, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_from_function_ratio_negative_b_positive_a<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return hypergeometric_1F1_from_function_ratio_negative_b(a, b, z, pol, log_scaling, ratio);
      }
      //
@@ -576,10 +576,10 @@
         //
         // Get the function ratio, M(a+1, b+1, z)/M(a,b,z):
         //
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T> coef(a, b, z);
-        T ratio = 1 / boost::math::tools::function_ratio_from_forwards_recurrence(coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_from_function_ratio_negative_b_positive_a<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T> coef(a, b, z);
+        T ratio = 1 / BOOST_MATH_NAMESPACE::tools::function_ratio_from_forwards_recurrence(coef, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_from_function_ratio_negative_b_positive_a<%1%>(%1%,%1%,%1%)", max_iter, pol);
         //
         // We can't normalise via the Wronksian as the subtraction in the Wronksian will suffer an exquisite amount of cancellation - 
         // potentially many hundreds of digits in this region.  However, if forwards iteration is stable at this point
@@ -589,7 +589,7 @@
         long long scale = 0;
         int steps = itrunc(ceil(-b));
         T reference_value = hypergeometric_1F1_imp(T(a + steps), T(b + steps), z, pol, log_scaling);
-        T found = boost::math::tools::apply_recurrence_relation_forward(boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T>(a + 1, b + 1, z), steps - 1, T(1), ratio, &scale);
+        T found = BOOST_MATH_NAMESPACE::tools::apply_recurrence_relation_forward(BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T>(a + 1, b + 1, z), steps - 1, T(1), ratio, &scale);
         log_scaling -= scale;
         if ((fabs(reference_value) < 1) && (fabs(reference_value) < tools::min_value<T>() * fabs(found)))
         {
@@ -625,10 +625,10 @@
         //
         // Get the function ratio, M(a+1, b+1, z)/M(a,b,z):
         //
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T> coef(a, b + 1, z);
-        T ratio = boost::math::tools::function_ratio_from_backwards_recurrence(coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_from_function_ratio_negative_b_positive_a<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_recurrence_b_coefficients<T> coef(a, b + 1, z);
+        T ratio = BOOST_MATH_NAMESPACE::tools::function_ratio_from_backwards_recurrence(coef, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_from_function_ratio_negative_b_positive_a<%1%>(%1%,%1%,%1%)", max_iter, pol);
         //
         // We need to use A&S 13.4.3 to convert a ratio for M(a, b + 1, z) / M(a, b, z)
         // to M(a+1, b+1, z) / M(a, b, z)
@@ -642,14 +642,14 @@
         // This is going to be a mighty big number:
         //
         long long local_scaling = 0;
-        T M2 = boost::math::detail::hypergeometric_1F1_imp(T(1 + a - b), T(2 - b), z, pol, local_scaling);
+        T M2 = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(T(1 + a - b), T(2 - b), z, pol, local_scaling);
         log_scaling -= local_scaling; // all the M2 terms are in the denominator
         //
         // Let M3 = M(1+a-b + 1, 2-b + 1, z)
         // We don't use the ratio to get this as it's not clear that it's reliable:
         //
         long long local_scaling2 = 0;
-        T M3 = boost::math::detail::hypergeometric_1F1_imp(T(2 + a - b), T(3 - b), z, pol, local_scaling2);
+        T M3 = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(T(2 + a - b), T(3 - b), z, pol, local_scaling2);
         //
         // M2 and M3 must be identically scaled:
         //
@@ -673,6 +673,6 @@
         return rhs / lhs;
      }
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_HYPERGEOMETRIC_1F1_BY_RATIOS_HPP_

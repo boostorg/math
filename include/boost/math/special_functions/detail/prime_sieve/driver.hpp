@@ -21,7 +21,7 @@
 #include <algorithm>
 #endif
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 // Upper bound on the number of primes <= x (Dusart 2010 for x >= 60184).
 inline std::uint64_t prime_count_upper_bound(std::uint64_t x) noexcept
@@ -97,7 +97,7 @@ inline std::vector<std::uint32_t> sieving_primes_upto(std::uint64_t n)
     {
         return simple_primes_from_167(static_cast<std::uint32_t>(n));
     }
-    const std::uint32_t root {static_cast<std::uint32_t>(boost::math::tools::isqrt(n))};
+    const std::uint32_t root {static_cast<std::uint32_t>(BOOST_MATH_NAMESPACE::tools::isqrt(n))};
     const std::vector<std::uint32_t> seed {simple_primes_from_167(root)};
 
     prime_sieve_options options {};
@@ -131,6 +131,6 @@ inline std::uint64_t count_u64(std::uint64_t start, std::uint64_t stop, const pr
     return sink.count;
 }
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_DRIVER_HPP

@@ -18,7 +18,7 @@
 #include <boost/math/special_functions/ellint_rf.hpp>
 #include <boost/math/special_functions/pow.hpp>
 
-namespace boost { namespace math { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
    template <typename T, typename Policy>
    BOOST_MATH_GPU_ENABLED T ellint_rg_imp(T x, T y, T z, const Policy& pol)
@@ -28,7 +28,7 @@ namespace boost { namespace math { namespace detail{
 
       if(x < 0 || y < 0 || z < 0)
       {
-         return policies::raise_domain_error<T>(function, "domain error, all arguments must be non-negative, only sensible result is %1%.", boost::math::numeric_limits<T>::quiet_NaN(), pol);
+         return policies::raise_domain_error<T>(function, "domain error, all arguments must be non-negative, only sensible result is %1%.", BOOST_MATH_NAMESPACE::numeric_limits<T>::quiet_NaN(), pol);
       }
       //
       // Function is symmetric in x, y and z, but we require
@@ -92,10 +92,10 @@ namespace boost { namespace math { namespace detail{
             xn = (xn + yn) / 2;
             yn = t;
             sum_pow *= 2;
-            sum += sum_pow * boost::math::pow<2>(xn - yn);
+            sum += sum_pow * BOOST_MATH_NAMESPACE::pow<2>(xn - yn);
          }
          T RF = constants::pi<T>() / (xn + yn);
-         return ((boost::math::pow<2>((x0 + y0) / 2) - sum) * RF) / 2;
+         return ((BOOST_MATH_NAMESPACE::pow<2>((x0 + y0) / 2) - sum) * RF) / 2;
       }
       return (z * ellint_rf_imp(x, y, z, pol)
          - (x - z) * (y - z) * ellint_rd_imp(x, y, z, pol) / 3
@@ -124,7 +124,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2, T3>::type
    return ellint_rg(x, y, z, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ELLINT_RG_HPP
 

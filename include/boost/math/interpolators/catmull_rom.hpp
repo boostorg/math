@@ -38,7 +38,7 @@ namespace std_workaround {
 #endif
 }
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
     namespace detail
     {
@@ -310,5 +310,5 @@ Point catmull_rom<Point, RandomAccessContainer>::prime(const typename Point::val
 }
 
 
-}}
+BOOST_MATH_NAMESPACE_END
 #endif

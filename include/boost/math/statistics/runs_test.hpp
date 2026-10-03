@@ -16,7 +16,7 @@
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/distributions/normal.hpp>
 
-namespace boost::math::statistics {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics {
 
 BOOST_MATH_EXPORT template<class RandomAccessContainer>
 auto runs_above_and_below_threshold(RandomAccessContainer const & v,
@@ -29,9 +29,9 @@ auto runs_above_and_below_threshold(RandomAccessContainer const & v,
     {
         throw std::domain_error("At least 2 samples are required to get number of runs.");
     }
-    typedef boost::math::policies::policy<
-          boost::math::policies::promote_float<false>,
-          boost::math::policies::promote_double<false> >
+    typedef BOOST_MATH_NAMESPACE::policies::policy<
+          BOOST_MATH_NAMESPACE::policies::promote_float<false>,
+          BOOST_MATH_NAMESPACE::policies::promote_double<false> >
           no_promote_policy;
 
     decltype(v.size()) nabove = 0;
@@ -100,8 +100,8 @@ auto runs_above_and_below_threshold(RandomAccessContainer const & v,
     Real sd = sqrt(variance);
     Real statistic = (runs - expected_runs)/sd;
 
-    auto normal = boost::math::normal_distribution<Real, no_promote_policy>(0,1);
-    Real pvalue = 2*boost::math::cdf(normal, -abs(statistic));
+    auto normal = BOOST_MATH_NAMESPACE::normal_distribution<Real, no_promote_policy>(0,1);
+    Real pvalue = 2*BOOST_MATH_NAMESPACE::cdf(normal, -abs(statistic));
     return std::make_pair(statistic, pvalue);
 }
 
@@ -115,9 +115,9 @@ auto runs_above_and_below_median(RandomAccessContainer const & v)
     // We have to memcpy v because the median does a partial sort,
     // and that would be catastrophic for the runs test.
     auto w = v;
-    Real median = boost::math::statistics::median(w);
+    Real median = BOOST_MATH_NAMESPACE::statistics::median(w);
     return runs_above_and_below_threshold(v, median);
 }
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

@@ -11,7 +11,7 @@
 #include <type_traits>
 #endif
 
-namespace boost{ namespace math{ namespace constants{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace constants{ namespace detail{
 
 template <class T>
 template<int N>
@@ -693,8 +693,8 @@ inline T constant_catalan<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((st
          break;
       }
    }
-   return boost::math::constants::pi<T, boost::math::policies::policy<> >()
-      * log(2 + boost::math::constants::root_three<T, boost::math::policies::policy<> >())
+   return BOOST_MATH_NAMESPACE::constants::pi<T, BOOST_MATH_NAMESPACE::policies::policy<> >()
+      * log(2 + BOOST_MATH_NAMESPACE::constants::root_three<T, BOOST_MATH_NAMESPACE::policies::policy<> >())
        / 8
       + 3 * sum / 8;
 }
@@ -758,7 +758,7 @@ T khinchin(int digits)
       if(term < lim)
          break;
    }
-   return exp(sum / boost::math::constants::ln_two<T, boost::math::policies::policy<> >());
+   return exp(sum / BOOST_MATH_NAMESPACE::constants::ln_two<T, BOOST_MATH_NAMESPACE::policies::policy<> >());
 }
 
 }
@@ -864,7 +864,7 @@ template <class T>
 inline T zeta_series_derivative_lead_2()
 {
    // derivative of lead part at 2:
-   return -2 * boost::math::constants::ln_two<T>();
+   return -2 * BOOST_MATH_NAMESPACE::constants::ln_two<T>();
 }
 
 template <class T>
@@ -887,9 +887,9 @@ inline T constant_glaisher<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((s
    int n = N ? (std::min)(N, tools::digits<T>()) : tools::digits<T>();
    T v = detail::zeta_derivative_2<T>(n);
    v *= 6;
-   v /= boost::math::constants::pi<T, forwarding_policy>() * boost::math::constants::pi<T, forwarding_policy>();
-   v -= boost::math::constants::euler<T, forwarding_policy>();
-   v -= log(2 * boost::math::constants::pi<T, forwarding_policy>());
+   v /= BOOST_MATH_NAMESPACE::constants::pi<T, forwarding_policy>() * BOOST_MATH_NAMESPACE::constants::pi<T, forwarding_policy>();
+   v -= BOOST_MATH_NAMESPACE::constants::euler<T, forwarding_policy>();
+   v -= log(2 * BOOST_MATH_NAMESPACE::constants::pi<T, forwarding_policy>());
    v /= -12;
    return exp(v);
 
@@ -978,28 +978,28 @@ template <class T>
 template<int N>
 inline T constant_log2_e<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)))
 {
-   return 1 / boost::math::constants::ln_two<T>();
+   return 1 / BOOST_MATH_NAMESPACE::constants::ln_two<T>();
 }
 
 template <class T>
 template<int N>
 inline T constant_quarter_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)))
 {
-   return boost::math::constants::pi<T>() / 4;
+   return BOOST_MATH_NAMESPACE::constants::pi<T>() / 4;
 }
 
 template <class T>
 template<int N>
 inline T constant_one_div_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)))
 {
-   return 1 / boost::math::constants::pi<T>();
+   return 1 / BOOST_MATH_NAMESPACE::constants::pi<T>();
 }
 
 template <class T>
 template<int N>
 inline T constant_two_div_root_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)))
 {
-   return 2 * boost::math::constants::one_div_root_pi<T>();
+   return 2 * BOOST_MATH_NAMESPACE::constants::one_div_root_pi<T>();
 }
 
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
@@ -1113,7 +1113,6 @@ inline T constant_laplace_limit<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SP
 
 }
 }
-}
-} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CALCULATE_CONSTANTS_CONSTANTS_INCLUDED

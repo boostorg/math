@@ -34,7 +34,7 @@
 #include <utility>
 #endif
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 inline constexpr std::uint64_t min_chunk_width {10000000};
 
@@ -69,7 +69,7 @@ inline chunk_plan plan_chunks(std::uint64_t start, std::uint64_t stop, const pri
     plan.stop = stop;
     const std::uint64_t dist {stop - start + 1};
     const unsigned hw {worker_count(options)};
-    const std::uint64_t root {boost::math::tools::isqrt(stop)};
+    const std::uint64_t root {BOOST_MATH_NAMESPACE::tools::isqrt(stop)};
     const std::uint64_t threshold {(std::max)(root / 5, min_chunk_width)};
     std::uint64_t threads {dist / threshold};
     threads = (std::max)(threads, std::uint64_t(1));
@@ -402,7 +402,7 @@ inline std::vector<std::uint32_t> sieving_primes_upto_parallel(std::uint64_t n, 
     return out;
 }
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // BOOST_MATH_PRIME_SIEVE_HAS_THREADS
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_PARALLEL_HPP

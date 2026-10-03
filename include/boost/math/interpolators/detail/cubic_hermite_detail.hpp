@@ -18,8 +18,7 @@
 
 #include <boost/math/policies/error_handling.hpp>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace interpolators {
 namespace detail {
 
@@ -38,21 +37,21 @@ public:
         if (x_.size() != y_.size())
         {
             error_msg_ = "There must be the same number of ordinates as abscissas.";
-            boost::math::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
+            BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
             valid_ = false;
             return;
         }
         if (x_.size() != dydx_.size())
         {
             error_msg_ = "There must be the same number of ordinates as derivative values.";
-            boost::math::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
+            BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
             valid_ = false;
             return;
         }
         if (x_.size() < 2)
         {
             error_msg_ = "Must be at least two data points.";
-            boost::math::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
+            BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
             valid_ = false;
             return;
         }
@@ -67,7 +66,7 @@ public:
                 oss << "Abscissas must be listed in strictly increasing order x0 < x1 < ... < x_{n-1}, ";
                 oss << "but at x[" << i - 1 << "] = " << x0 << ", and x[" << i << "] = " << x1 << ".\n";
                 error_msg_ = oss.str();
-                boost::math::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
+                BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
                 valid_ = false;
                 return;
             }
@@ -85,7 +84,7 @@ public:
         using std::isnan;
         if (x <= x_.back())
         {
-            boost::math::policies::raise_domain_error<bool>(function, "Calling push_back must preserve the monotonicity of the x's", false, Policy());
+            BOOST_MATH_NAMESPACE::policies::raise_domain_error<bool>(function, "Calling push_back must preserve the monotonicity of the x's", false, Policy());
             return;
         }
         x_.push_back(x);
@@ -104,7 +103,7 @@ public:
             oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
                 << x_[0] << ", " << x_.back() << "]";
-            return boost::math::policies::raise_domain_error<Real>(function, oss.str().c_str(), x, Policy());
+            return BOOST_MATH_NAMESPACE::policies::raise_domain_error<Real>(function, oss.str().c_str(), x, Policy());
         }
         // We need t := (x-x_k)/(x_{k+1}-x_k) \in [0,1) for this to work.
         // Sadly this neccessitates this loathesome check, otherwise we get t = 1 at x = xf.
@@ -142,7 +141,7 @@ public:
             oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
                 << x_[0] << ", " << x_.back() << "]";
-            return boost::math::policies::raise_domain_error<Real>(function, oss.str().c_str(), x, Policy());
+            return BOOST_MATH_NAMESPACE::policies::raise_domain_error<Real>(function, oss.str().c_str(), x, Policy());
         }
         if (x == x_.back())
         {
@@ -228,21 +227,21 @@ public:
         if (y_.size() != dy_.size())
         {
             error_msg_ = "There must be the same number of derivatives as ordinates.";
-            boost::math::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
+            BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
             valid_ = false;
             return;
         }
         if (y_.size() < 2)
         {
             error_msg_ = "Must be at least two data points.";
-            boost::math::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
+            BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
             valid_ = false;
             return;
         }
         if (dx <= 0)
         {
             error_msg_ = "dx > 0 is required.";
-            boost::math::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
+            BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
             valid_ = false;
             return;
         }
@@ -270,7 +269,7 @@ public:
             oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
                 << x0_ << ", " << xf << "]";
-            return boost::math::policies::raise_domain_error<Real>(function, oss.str().c_str(), x, Policy());
+            return BOOST_MATH_NAMESPACE::policies::raise_domain_error<Real>(function, oss.str().c_str(), x, Policy());
         }
         if (x == xf)
         {
@@ -308,7 +307,7 @@ public:
             oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
                 << x0_ << ", " << xf << "]";
-            return boost::math::policies::raise_domain_error<Real>(function, oss.str().c_str(), x, Policy());
+            return BOOST_MATH_NAMESPACE::policies::raise_domain_error<Real>(function, oss.str().c_str(), x, Policy());
         }
         if (x == xf)
         {
@@ -386,21 +385,21 @@ public:
         if (dat_.size() < 2)
         {
             error_msg_ = "Must be at least two data points.";
-            boost::math::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
+            BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
             valid_ = false;
             return;
         }
         if (dat_[0].size() != 2)
         {
             error_msg_ = "Each datum must contain (y, y'), and nothing else.";
-            boost::math::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
+            BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
             valid_ = false;
             return;
         }
         if (dx <= 0)
         {
             error_msg_ = "dx > 0 is required.";
-            boost::math::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
+            BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
             valid_ = false;
             return;
         }
@@ -424,7 +423,7 @@ public:
             oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
                 << x0_ << ", " << xf << "]";
-            return boost::math::policies::raise_domain_error<Real>(function, oss.str().c_str(), x, Policy());
+            return BOOST_MATH_NAMESPACE::policies::raise_domain_error<Real>(function, oss.str().c_str(), x, Policy());
         }
         if (x == xf)
         {
@@ -471,7 +470,7 @@ public:
             oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
                 << x0_ << ", " << xf << "]";
-            return boost::math::policies::raise_domain_error<Real>(function, oss.str().c_str(), x, Policy());
+            return BOOST_MATH_NAMESPACE::policies::raise_domain_error<Real>(function, oss.str().c_str(), x, Policy());
         }
         if (x == xf)
         {
@@ -540,7 +539,6 @@ private:
 
 }
 }
-}
-}
+BOOST_MATH_NAMESPACE_END
 #endif
 

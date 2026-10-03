@@ -35,7 +35,7 @@
 // Elliptic integrals (complete and incomplete) of the third kind
 // Carlson, Numerische Mathematik, vol 33, 1 (1979)
 
-namespace boost { namespace math { 
+BOOST_MATH_NAMESPACE_BEGIN
    
 namespace detail{
 
@@ -117,14 +117,14 @@ BOOST_MATH_CUDA_ENABLED T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol
       }
       else
       {
-         T rphi = boost::math::tools::fmod_workaround(T(fabs(phi)), T(constants::half_pi<T>()));
-         T m = boost::math::round((fabs(phi) - rphi) / constants::half_pi<T>());
+         T rphi = BOOST_MATH_NAMESPACE::tools::fmod_workaround(T(fabs(phi)), T(constants::half_pi<T>()));
+         T m = BOOST_MATH_NAMESPACE::round((fabs(phi) - rphi) / constants::half_pi<T>());
          int sign = 1;
          if((m != 0) && (k >= 1))
          {
             return policies::raise_domain_error<T>(function, "Got k=1 and phi=%1% but the result is complex in that domain", phi, pol);
          }
-         if(boost::math::tools::fmod_workaround(m, T(2)) > T(0.5))
+         if(BOOST_MATH_NAMESPACE::tools::fmod_workaround(m, T(2)) > T(0.5))
          {
             m += 1;
             sign = -1;
@@ -149,7 +149,7 @@ BOOST_MATH_CUDA_ENABLED T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol
          // v > 1:
          T vcr = sqrt(-vc);
          T arg = vcr * tan(phi);
-         return (boost::math::log1p(arg, pol) - boost::math::log1p(-arg, pol)) / (2 * vcr);
+         return (BOOST_MATH_NAMESPACE::log1p(arg, pol) - BOOST_MATH_NAMESPACE::log1p(-arg, pol)) / (2 * vcr);
       }
    }
    if((v < 0) && fabs(k) <= 1)
@@ -276,7 +276,7 @@ BOOST_MATH_CUDA_ENABLED T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
 {
     // Note arg vc = 1-v, possibly without cancellation errors
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
+    using namespace BOOST_MATH_NAMESPACE::tools;
 
     constexpr auto function = "boost::math::ellint_pi<%1%>(%1%,%1%)";
 
@@ -292,7 +292,7 @@ BOOST_MATH_CUDA_ENABLED T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
 
     if(v == 0)
     {
-       return (k == 0) ? boost::math::constants::pi<T>() / 2 : boost::math::ellint_1(k, pol);
+       return (k == 0) ? BOOST_MATH_NAMESPACE::constants::pi<T>() / 2 : BOOST_MATH_NAMESPACE::ellint_1(k, pol);
     }
 
     if(v < 0)
@@ -302,11 +302,11 @@ BOOST_MATH_CUDA_ENABLED T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
        T N = (k2 - v) / (1 - v);
        T Nm1 = (1 - k2) / (1 - v);
        T result = 0;
-       result = boost::math::detail::ellint_pi_imp(N, k, Nm1, pol);
+       result = BOOST_MATH_NAMESPACE::detail::ellint_pi_imp(N, k, Nm1, pol);
        // This next part is split in two to avoid spurious over/underflow:
        result *= -v / (1 - v);
        result *= (1 - k2) / (k2 - v);
-       result += boost::math::ellint_1(k, pol) * k2 / (k2 - v);
+       result += BOOST_MATH_NAMESPACE::ellint_1(k, pol) * k2 / (k2 - v);
        return result;
     }
 
@@ -320,13 +320,13 @@ BOOST_MATH_CUDA_ENABLED T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
 }
 
 template <class T1, class T2, class T3>
-BOOST_MATH_CUDA_ENABLED inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const boost::math::false_type&)
+BOOST_MATH_CUDA_ENABLED inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const BOOST_MATH_NAMESPACE::false_type&)
 {
-   return boost::math::ellint_3(k, v, phi, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::ellint_3(k, v, phi, policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
-BOOST_MATH_CUDA_ENABLED inline typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v, const Policy& pol, const boost::math::true_type&)
+BOOST_MATH_CUDA_ENABLED inline typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v, const Policy& pol, const BOOST_MATH_NAMESPACE::true_type&)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -368,7 +368,7 @@ BOOST_MATH_CUDA_ENABLED inline typename tools::promote_args<T1, T2>::type ellint
    return ellint_3(k, v, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ELLINT_3_HPP
 

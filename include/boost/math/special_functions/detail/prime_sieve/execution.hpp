@@ -45,7 +45,7 @@
 #endif
 #endif
 
-namespace boost::math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace execution {
 
@@ -113,6 +113,6 @@ constexpr exec_mode mode_of() noexcept
 }
 
 } // namespace detail::prime_sieve
-} // namespace boost::math
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_EXECUTION_HPP

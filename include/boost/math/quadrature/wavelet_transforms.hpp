@@ -9,7 +9,7 @@
 #include <boost/math/special_functions/daubechies_wavelet.hpp>
 #include <boost/math/quadrature/trapezoidal.hpp>
 
-namespace boost::math::quadrature {
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature {
 
 BOOST_MATH_EXPORT template<class F, typename Real, int p>
 class daubechies_wavelet_transform
@@ -19,7 +19,7 @@ public:
     int max_refinements = 12) : f_{f}, psi_(grid_refinements), tol_{tol}, max_refinements_{max_refinements}
     {}
 
-    daubechies_wavelet_transform(F f, boost::math::daubechies_wavelet<Real, p> wavelet, Real tol = 100*std::numeric_limits<Real>::epsilon(),
+    daubechies_wavelet_transform(F f, BOOST_MATH_NAMESPACE::daubechies_wavelet<Real, p> wavelet, Real tol = 100*std::numeric_limits<Real>::epsilon(),
     int max_refinements = 12) : f_{f}, psi_{wavelet}, tol_{tol}, max_refinements_{max_refinements}
     {}
 
@@ -27,7 +27,7 @@ public:
     {
         using std::sqrt;
         using std::abs;
-        using boost::math::quadrature::trapezoidal;
+        using BOOST_MATH_NAMESPACE::quadrature::trapezoidal;
         auto g = [&] (Real u) {
             return f_(s*u+t)*psi_(u);
         };
@@ -37,11 +37,11 @@ public:
 
 private:
     F f_;
-    boost::math::daubechies_wavelet<Real, p> psi_;
+    BOOST_MATH_NAMESPACE::daubechies_wavelet<Real, p> psi_;
     Real tol_;
     int max_refinements_;
 };
 
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

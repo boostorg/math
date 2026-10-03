@@ -13,7 +13,7 @@
 #include <cstdint>
 #endif
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 // Algorithm 1 of https://people.mpim-bonn.mpg.de/zagier/files/exp-math-9/fulltext.pdf
 // Convergence Acceleration of Alternating Series: Henri Cohen, Fernando Rodriguez Villegas, and Don Zagier
@@ -51,5 +51,5 @@ auto cohen_acceleration(G& generator, std::int64_t n = -1)
     return s/d;
 }
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

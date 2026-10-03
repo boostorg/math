@@ -27,10 +27,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/type_traits.hpp>
 
-namespace boost
-{
-  namespace math
-  {
+BOOST_MATH_NAMESPACE_BEGIN
     namespace tools
     {
       ///// This promotion system works as follows:
@@ -72,22 +69,22 @@ namespace boost
       // Promotes a single argument to double if it is an integer type
       template <class T>
       struct promote_arg {
-         using type = typename boost::math::conditional<boost::math::is_integral<T>::value, double, T>::type;
+         using type = typename BOOST_MATH_NAMESPACE::conditional<BOOST_MATH_NAMESPACE::is_integral<T>::value, double, T>::type;
       };
 
 
       // Promotes two arguments, neither of which is an integer type using an asymmetric
       // convertibility rule.
-      template <class T1, class T2, bool = (boost::math::is_floating_point<T1>::value && boost::math::is_floating_point<T2>::value)>
+      template <class T1, class T2, bool = (BOOST_MATH_NAMESPACE::is_floating_point<T1>::value && BOOST_MATH_NAMESPACE::is_floating_point<T2>::value)>
       struct pa2_integral_already_removed {
-         using type = typename boost::math::conditional<
-            !boost::math::is_floating_point<T2>::value && boost::math::is_convertible<T1, T2>::value, 
+         using type = typename BOOST_MATH_NAMESPACE::conditional<
+            !BOOST_MATH_NAMESPACE::is_floating_point<T2>::value && BOOST_MATH_NAMESPACE::is_convertible<T1, T2>::value, 
             T2, T1>::type;
       };
       // For two floating point types, promotes using `std::common_type` functionality 
       template <class T1, class T2>
       struct pa2_integral_already_removed<T1, T2, true> {
-         using type = boost::math::common_type_t<T1, T2, float>;
+         using type = BOOST_MATH_NAMESPACE::common_type_t<T1, T2, float>;
       };
 
 
@@ -97,7 +94,7 @@ namespace boost
       // Specialization for one argument
       template <typename T>
       struct promote_args_permissive<T> {
-         using type = typename promote_arg<typename boost::math::remove_cv<T>::type>::type;
+         using type = typename promote_arg<typename BOOST_MATH_NAMESPACE::remove_cv<T>::type>::type;
       };
       // Specialization for two or more arguments
       template <typename T1, typename... T2_to_TN>
@@ -121,7 +118,7 @@ namespace boost
          //
          // Guard against use of long double if it's not supported:
          //
-         static_assert((0 == boost::math::is_same<type, long double>::value), "Sorry, but this platform does not have sufficient long double support for the special functions to be reliably implemented.");
+         static_assert((0 == BOOST_MATH_NAMESPACE::is_same<type, long double>::value), "Sorry, but this platform does not have sufficient long double support for the special functions to be reliably implemented.");
 #endif
       };
 
@@ -129,7 +126,6 @@ namespace boost
       using promote_args_t = typename promote_args<Args...>::type;
 
     } // namespace tools
-  } // namespace math
-} // namespace boost
+  BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_PROMOTION_HPP

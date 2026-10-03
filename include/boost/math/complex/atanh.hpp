@@ -18,7 +18,7 @@
 namespace std{ using ::sqrt; using ::fabs; using ::acos; using ::asin; using ::atan; using ::atan2; }
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template<class T> 
 [[deprecated("Replaced by C++11")]] std::complex<T> atanh(const std::complex<T>& z)
@@ -39,13 +39,13 @@ BOOST_MATH_EXPORT template<class T>
    // See also: https://svn.boost.org/trac/boost/ticket/7291
    //
    
-   static const T pi = boost::math::constants::pi<T>();
+   static const T pi = BOOST_MATH_NAMESPACE::constants::pi<T>();
    static const T half_pi = pi / 2;
    static const T one = static_cast<T>(1.0L);
    static const T two = static_cast<T>(2.0L);
    static const T four = static_cast<T>(4.0L);
    static const T zero = static_cast<T>(0);
-   static const T log_two = boost::math::constants::ln_two<T>();
+   static const T log_two = BOOST_MATH_NAMESPACE::constants::ln_two<T>();
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -63,20 +63,20 @@ BOOST_MATH_EXPORT template<class T>
    //
    // Begin by handling the special cases specified in C99:
    //
-   if((boost::math::isnan)(x))
+   if((BOOST_MATH_NAMESPACE::isnan)(x))
    {
-      if((boost::math::isnan)(y))
+      if((BOOST_MATH_NAMESPACE::isnan)(y))
          return std::complex<T>(x, x);
-      else if((boost::math::isinf)(y))
-         return std::complex<T>(0, ((boost::math::signbit)(z.imag()) ? -half_pi : half_pi));
+      else if((BOOST_MATH_NAMESPACE::isinf)(y))
+         return std::complex<T>(0, ((BOOST_MATH_NAMESPACE::signbit)(z.imag()) ? -half_pi : half_pi));
       else
          return std::complex<T>(x, x);
    }
-   else if((boost::math::isnan)(y))
+   else if((BOOST_MATH_NAMESPACE::isnan)(y))
    {
       if(x == 0)
          return std::complex<T>(x, y);
-      if((boost::math::isinf)(x))
+      if((BOOST_MATH_NAMESPACE::isinf)(x))
          return std::complex<T>(0, y);
       else
          return std::complex<T>(y, y);
@@ -91,15 +91,15 @@ BOOST_MATH_EXPORT template<class T>
       // 
       // real(atanh(z)) == log1p(4*x / ((x-1)*(x-1) + y^2))
       // 
-      real = boost::math::log1p(four * x / (mxm1*mxm1 + yy));
+      real = BOOST_MATH_NAMESPACE::log1p(four * x / (mxm1*mxm1 + yy));
       real /= four;
-      if((boost::math::signbit)(z.real()))
-         real = (boost::math::changesign)(real);
+      if((BOOST_MATH_NAMESPACE::signbit)(z.real()))
+         real = (BOOST_MATH_NAMESPACE::changesign)(real);
 
       imag = std::atan2((y * two), (mxm1*(one+x) - yy));
       imag /= two;
       if(z.imag() < 0)
-         imag = (boost::math::changesign)(imag);
+         imag = (BOOST_MATH_NAMESPACE::changesign)(imag);
    }
    else
    {
@@ -115,24 +115,24 @@ BOOST_MATH_EXPORT template<class T>
       if(x >= safe_upper)
       {
          // x-1 = x to machine precision:
-         if((boost::math::isinf)(x) || (boost::math::isinf)(y))
+         if((BOOST_MATH_NAMESPACE::isinf)(x) || (BOOST_MATH_NAMESPACE::isinf)(y))
          {
             real = 0;
          }
          else if(y >= safe_upper)
          {
             // Big x and y: divide through by x*y:
-            real = boost::math::log1p((four/y) / (x/y + y/x));
+            real = BOOST_MATH_NAMESPACE::log1p((four/y) / (x/y + y/x));
          }
          else if(y > one)
          {
             // Big x: divide through by x:
-            real = boost::math::log1p(four / (x + y*y/x));
+            real = BOOST_MATH_NAMESPACE::log1p(four / (x + y*y/x));
          }
          else
          {
             // Big x small y, as above but neglect y^2/x:
-            real = boost::math::log1p(four/x);
+            real = BOOST_MATH_NAMESPACE::log1p(four/x);
          }
       }
       else if(y >= safe_upper)
@@ -140,7 +140,7 @@ BOOST_MATH_EXPORT template<class T>
          if(x > one)
          {
             // Big y, medium x, divide through by y:
-            real = boost::math::log1p((four*x/y) / (y + mxm1*mxm1/y));
+            real = BOOST_MATH_NAMESPACE::log1p((four*x/y) / (y + mxm1*mxm1/y));
          }
          else
          {
@@ -154,14 +154,14 @@ BOOST_MATH_EXPORT template<class T>
          T div = mxm1*mxm1;
          if(y > safe_lower)
             div += y*y;
-         real = boost::math::log1p(four*x/div);
+         real = BOOST_MATH_NAMESPACE::log1p(four*x/div);
       }
       else
-         real = boost::math::changesign(two * (std::log(y) - log_two));
+         real = BOOST_MATH_NAMESPACE::changesign(two * (std::log(y) - log_two));
 
       real /= four;
-      if((boost::math::signbit)(z.real()))
-         real = (boost::math::changesign)(real);
+      if((BOOST_MATH_NAMESPACE::signbit)(z.real()))
+         real = (BOOST_MATH_NAMESPACE::changesign)(real);
 
       //
       // Now handle imaginary part, this is much easier,
@@ -200,8 +200,8 @@ BOOST_MATH_EXPORT template<class T>
             imag = std::atan2(two*y, mxm1*(one+x));
       }
       imag /= two;
-      if((boost::math::signbit)(z.imag()))
-         imag = (boost::math::changesign)(imag);
+      if((BOOST_MATH_NAMESPACE::signbit)(z.imag()))
+         imag = (BOOST_MATH_NAMESPACE::changesign)(imag);
    }
    return std::complex<T>(real, imag);
 #ifdef _MSC_VER
@@ -209,6 +209,6 @@ BOOST_MATH_EXPORT template<class T>
 #endif
 }
 
-} } // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_COMPLEX_ATANH_INCLUDED

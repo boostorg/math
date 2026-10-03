@@ -25,19 +25,19 @@
 #include <boost/math/ccmath/fmax.hpp>
 #include <boost/math/ccmath/detail/swap.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail {
 
 template <typename T>
 constexpr T hypot_impl(T x, T y) noexcept
 {
-    x = boost::math::ccmath::abs(x);
-    y = boost::math::ccmath::abs(y);
+    x = BOOST_MATH_NAMESPACE::ccmath::abs(x);
+    y = BOOST_MATH_NAMESPACE::ccmath::abs(y);
 
     if (y > x)
     {
-        boost::math::ccmath::detail::swap(x, y);
+        BOOST_MATH_NAMESPACE::ccmath::detail::swap(x, y);
     }
 
     if(x * std::numeric_limits<T>::epsilon() >= y)
@@ -46,23 +46,23 @@ constexpr T hypot_impl(T x, T y) noexcept
     }
 
     T rat = y / x;
-    return x * boost::math::ccmath::sqrt(1 + rat * rat);
+    return x * BOOST_MATH_NAMESPACE::ccmath::sqrt(1 + rat * rat);
 }
 
 template <typename T>
 constexpr T hypot_impl(T x, T y, T z) noexcept
 {
-    x = boost::math::ccmath::abs(x);
-    y = boost::math::ccmath::abs(y);
-    z = boost::math::ccmath::abs(z);
+    x = BOOST_MATH_NAMESPACE::ccmath::abs(x);
+    y = BOOST_MATH_NAMESPACE::ccmath::abs(y);
+    z = BOOST_MATH_NAMESPACE::ccmath::abs(z);
 
-    T a = boost::math::ccmath::fmax(boost::math::ccmath::fmax(x, y), z);
+    T a = BOOST_MATH_NAMESPACE::ccmath::fmax(BOOST_MATH_NAMESPACE::ccmath::fmax(x, y), z);
     if (a == 0)
     {
         return a;
     }
 
-    return a * boost::math::ccmath::sqrt((x / a) * (x / a) 
+    return a * BOOST_MATH_NAMESPACE::ccmath::sqrt((x / a) * (x / a) 
                                        + (y / a) * (y / a) 
                                        + (z / a) * (z / a));
 }
@@ -74,29 +74,29 @@ constexpr Real hypot(Real x, Real y) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        if (boost::math::ccmath::abs(x) == static_cast<Real>(0))
+        if (BOOST_MATH_NAMESPACE::ccmath::abs(x) == static_cast<Real>(0))
         {
-            return boost::math::ccmath::abs(y);
+            return BOOST_MATH_NAMESPACE::ccmath::abs(y);
         }
-        else if (boost::math::ccmath::abs(y) == static_cast<Real>(0))
+        else if (BOOST_MATH_NAMESPACE::ccmath::abs(y) == static_cast<Real>(0))
         {
-            return boost::math::ccmath::abs(x);
+            return BOOST_MATH_NAMESPACE::ccmath::abs(x);
         }
         // Return +inf even if the other argument is NaN
-        else if (boost::math::ccmath::isinf(x) || boost::math::ccmath::isinf(y))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isinf(x) || BOOST_MATH_NAMESPACE::ccmath::isinf(y))
         {
             return std::numeric_limits<Real>::infinity();
         }
-        else if (boost::math::ccmath::isnan(x))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isnan(x))
         {
             return x;
         }
-        else if (boost::math::ccmath::isnan(y))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isnan(y))
         {
             return y;
         }
         
-        return boost::math::ccmath::detail::hypot_impl(x, y);
+        return BOOST_MATH_NAMESPACE::ccmath::detail::hypot_impl(x, y);
     }
     else
     {
@@ -110,8 +110,8 @@ constexpr auto hypot(T1 x, T2 y) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        using promoted_type = boost::math::tools::promote_args_t<T1, T2>;
-        return boost::math::ccmath::hypot(static_cast<promoted_type>(x), static_cast<promoted_type>(y));
+        using promoted_type = BOOST_MATH_NAMESPACE::tools::promote_args_t<T1, T2>;
+        return BOOST_MATH_NAMESPACE::ccmath::hypot(static_cast<promoted_type>(x), static_cast<promoted_type>(y));
     }
     else
     {
@@ -122,13 +122,13 @@ constexpr auto hypot(T1 x, T2 y) noexcept
 
 constexpr float hypotf(float x, float y) noexcept
 {
-    return boost::math::ccmath::hypot(x, y);
+    return BOOST_MATH_NAMESPACE::ccmath::hypot(x, y);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 constexpr long double hypotl(long double x, long double y) noexcept
 {
-    return boost::math::ccmath::hypot(x, y);
+    return BOOST_MATH_NAMESPACE::ccmath::hypot(x, y);
 }
 #endif
 
@@ -137,19 +137,19 @@ constexpr Real hypot(Real x, Real y, Real z) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        if (boost::math::ccmath::isinf(x) || boost::math::ccmath::isinf(y) || boost::math::ccmath::isinf(z))
+        if (BOOST_MATH_NAMESPACE::ccmath::isinf(x) || BOOST_MATH_NAMESPACE::ccmath::isinf(y) || BOOST_MATH_NAMESPACE::ccmath::isinf(z))
         {
             return std::numeric_limits<Real>::infinity();
         }
-        else if (boost::math::ccmath::isnan(x))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isnan(x))
         {
             return x;
         }
-        else if (boost::math::ccmath::isnan(y))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isnan(y))
         {
             return y;
         }
-        else if (boost::math::ccmath::isnan(z))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isnan(z))
         {
             return z;
         }
@@ -169,7 +169,7 @@ constexpr auto hypot(T1 x, T2 y, T3 z) noexcept
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
         using promoted_type = tools::promote_args_t<T1, T2, T3>;
-        return boost::math::ccmath::hypot(static_cast<promoted_type>(x), 
+        return BOOST_MATH_NAMESPACE::ccmath::hypot(static_cast<promoted_type>(x), 
                                           static_cast<promoted_type>(y), 
                                           static_cast<promoted_type>(z));
     }
@@ -180,6 +180,6 @@ constexpr auto hypot(T1 x, T2 y, T3 z) noexcept
     }
 }
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_HYPOT_HPP

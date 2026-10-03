@@ -38,8 +38,8 @@
 #pragma GCC system_header
 #endif
 
-namespace boost{ namespace math
-{
+BOOST_MATH_NAMESPACE_BEGIN
+
   namespace constants
   {
     // To permit other calculations at about 100 decimal digits with some UDT,
@@ -110,7 +110,7 @@ namespace boost{ namespace math
 
    namespace detail{
 
-      template <class Real, class Policy = boost::math::policies::policy<> >
+      template <class Real, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
       struct constant_return
       {
          using construct_type = typename construction_traits<Real, Policy>::type;
@@ -186,7 +186,7 @@ namespace boost{ namespace math
    /* The default implementations come next: */ \
    static inline const T& get_from_string()\
    {\
-      static const T result(boost::math::tools::convert_from_string<T>(y));\
+      static const T result(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>(y));\
       return result;\
    }\
    /* This one is for very high precision that is none the less known at compile time: */ \
@@ -200,10 +200,10 @@ namespace boost{ namespace math
    {\
       static BOOST_MATH_THREAD_LOCAL int digits = 0;\
       static BOOST_MATH_THREAD_LOCAL T value;\
-      int current_digits = boost::math::tools::digits<T>();\
+      int current_digits = BOOST_MATH_NAMESPACE::tools::digits<T>();\
       if(digits != current_digits)\
       {\
-         value = current_digits > max_string_digits ? compute<0>() : T(boost::math::tools::convert_from_string<T>(y));\
+         value = current_digits > max_string_digits ? compute<0>() : T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>(y));\
          digits = current_digits; \
       }\
       return value;\
@@ -240,7 +240,7 @@ namespace boost{ namespace math
    BOOST_MATH_EXPORT template <typename T, typename Policy> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T, Policy>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(Policy)) BOOST_MATH_NOEXCEPT(T)\
    { return detail:: BOOST_MATH_JOIN(constant_, name)<T>::get(typename construction_traits<T, Policy>::type()); }\
    BOOST_MATH_EXPORT template <typename T> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_MATH_NOEXCEPT(T)\
-   { return name<T, boost::math::policies::policy<> >(); }\
+   { return name<T, BOOST_MATH_NAMESPACE::policies::policy<> >(); }\
    \
    \
    /* Now the namespace specific versions: */ \
@@ -253,8 +253,7 @@ namespace boost{ namespace math
 
 #define BOOST_DEFINE_MATH_CONSTANT(name, value, str_value) template <typename T> BOOST_MATH_GPU_ENABLED constexpr T name() noexcept { return static_cast<T>(value); }
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace constants {
 
 #endif
@@ -346,8 +345,7 @@ BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED inline constexpr T tau() {  return two_pi<T>(); }
 
 } // namespace constants
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 //
 // We deliberately include this *after* all the declarations above,

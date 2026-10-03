@@ -17,19 +17,19 @@
 //
 
 
-  namespace boost { namespace math { namespace detail {
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
      template <class T, class Policy>
      T hypergeometric_1F1_large_neg_a_asymtotic_dlmf_13_8_9(T a, T b, T z, const Policy& pol)
      {
-        T result = boost::math::cyl_bessel_j(b - 1, sqrt(2 * z * (b - 2 * a)), pol);
-        result *= boost::math::tgamma(b, pol) * exp(z / 2);
+        T result = BOOST_MATH_NAMESPACE::cyl_bessel_j(b - 1, sqrt(2 * z * (b - 2 * a)), pol);
+        result *= BOOST_MATH_NAMESPACE::tgamma(b, pol) * exp(z / 2);
         T p = pow((b / 2 - a) * z, (1 - b) / 4);
         result *= p;
         result *= p;
         return result;
      }
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_1F1_BESSEL_HPP

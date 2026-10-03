@@ -14,7 +14,7 @@
 #include <boost/math/interpolators/detail/cardinal_quadratic_b_spline_detail.hpp>
 
 
-namespace boost{ namespace math{ namespace interpolators {
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators {
 
 BOOST_MATH_EXPORT template <class Real>
 class cardinal_quadratic_b_spline
@@ -57,5 +57,5 @@ private:
     std::shared_ptr<detail::cardinal_quadratic_b_spline_detail<Real>> impl_;
 };
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif

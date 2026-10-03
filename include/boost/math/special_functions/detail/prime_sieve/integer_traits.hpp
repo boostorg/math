@@ -18,10 +18,10 @@
 #include <type_traits>
 #endif
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 template <class T>
-inline constexpr bool is_multiprecision_v = boost::math::tools::detail::has_backend_type<T>::value;
+inline constexpr bool is_multiprecision_v = BOOST_MATH_NAMESPACE::tools::detail::has_backend_type<T>::value;
 
 template <class T>
 inline constexpr bool is_integer_like_v = std::is_integral<T>::value || (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::is_integer);
@@ -78,6 +78,6 @@ inline Integer to_common(const Bound& x)
     return Integer(clamp_non_negative(x));
 }
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_INTEGER_TRAITS_HPP

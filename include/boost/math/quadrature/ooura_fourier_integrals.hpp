@@ -16,7 +16,7 @@
 #endif
 #include <boost/math/quadrature/detail/ooura_fourier_integrals_detail.hpp>
 
-namespace boost { namespace math { namespace quadrature {
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature {
 
 BOOST_MATH_EXPORT template<class Real>
 class ooura_fourier_sin {
@@ -66,5 +66,5 @@ private:
 };
 
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif

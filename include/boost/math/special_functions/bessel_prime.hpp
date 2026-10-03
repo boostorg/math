@@ -16,7 +16,7 @@
 #include <boost/math/special_functions/detail/bessel_jy_derivatives_series.hpp>
 #include <boost/math/special_functions/detail/bessel_derivatives_linear.hpp>
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail{
 
@@ -29,7 +29,7 @@ inline T cyl_bessel_j_prime_imp(T v, T x, const Policy& pol)
    // Prevent complex result:
    //
    if ((x < 0) && (floor(v) != v))
-      return boost::math::policies::raise_domain_error<T>(function, "Got x = %1%, but function requires x >= 0", x, pol);
+      return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Got x = %1%, but function requires x >= 0", x, pol);
    //
    // Special cases for x == 0:
    //
@@ -42,13 +42,13 @@ inline T cyl_bessel_j_prime_imp(T v, T x, const Policy& pol)
       else if (floor(v) == v || v > 1)
          return 0;
       else
-         return boost::math::policies::raise_domain_error<T>(function, "Got x = %1%, but function is indeterminate for this order", x, pol);
+         return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Got x = %1%, but function is indeterminate for this order", x, pol);
    }
    //
    // Special case for large x: use asymptotic expansion:
    //
-   if (boost::math::detail::asymptotic_bessel_derivative_large_x_limit(v, x))
-      return boost::math::detail::asymptotic_bessel_j_derivative_large_x_2(v, x, pol);
+   if (BOOST_MATH_NAMESPACE::detail::asymptotic_bessel_derivative_large_x_limit(v, x))
+      return BOOST_MATH_NAMESPACE::detail::asymptotic_bessel_j_derivative_large_x_2(v, x, pol);
    //
    // Special case for small x: use Taylor series:
    //
@@ -61,18 +61,18 @@ inline T cyl_bessel_j_prime_imp(T v, T x, const Policy& pol)
          if (itrunc(v, pol) & 1)
             inversed = true;
       }
-      T r = boost::math::detail::bessel_j_derivative_small_z_series(v, x, pol);
+      T r = BOOST_MATH_NAMESPACE::detail::bessel_j_derivative_small_z_series(v, x, pol);
       return inversed ? T(-r) : r;
    }
    //
    // Special case for v == 0:
    //
    if (v == 0)
-      return -boost::math::detail::cyl_bessel_j_imp<T>(1, x, Tag(), pol);
+      return -BOOST_MATH_NAMESPACE::detail::cyl_bessel_j_imp<T>(1, x, Tag(), pol);
    //
    // Default case:
    //
-   return boost::math::detail::bessel_j_derivative_linear(v, x, Tag(), pol);
+   return BOOST_MATH_NAMESPACE::detail::bessel_j_derivative_linear(v, x, Tag(), pol);
 }
 
 template <class T, class Policy>
@@ -83,22 +83,22 @@ inline T sph_bessel_j_prime_imp(unsigned v, T x, const Policy& pol)
    // Prevent complex result:
    //
    if (x < 0)
-      return boost::math::policies::raise_domain_error<T>(function, "Got x = %1%, but function requires x >= 0.", x, pol);
+      return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Got x = %1%, but function requires x >= 0.", x, pol);
    //
    // Special case for v == 0:
    //
    if (v == 0)
-      return (x == 0) ? boost::math::policies::raise_overflow_error<T>(function, nullptr, pol)
-         : static_cast<T>(-boost::math::detail::sph_bessel_j_imp<T>(1, x, pol));
+      return (x == 0) ? BOOST_MATH_NAMESPACE::policies::raise_overflow_error<T>(function, nullptr, pol)
+         : static_cast<T>(-BOOST_MATH_NAMESPACE::detail::sph_bessel_j_imp<T>(1, x, pol));
    //
    // Special case for x == 0 and v > 0:
    //
    if (x == 0)
-      return boost::math::policies::raise_domain_error<T>(function, "Got x = %1%, but function is indeterminate for this order", x, pol);
+      return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Got x = %1%, but function is indeterminate for this order", x, pol);
    //
    // Default case:
    //
-   return boost::math::detail::sph_bessel_j_derivative_linear(v, x, pol);
+   return BOOST_MATH_NAMESPACE::detail::sph_bessel_j_derivative_linear(v, x, pol);
 }
 
 template <class T, class Policy>
@@ -110,7 +110,7 @@ inline T cyl_bessel_i_prime_imp(T v, T x, const Policy& pol)
    // Prevent complex result:
    //
    if (x < 0 && floor(v) != v)
-      return boost::math::policies::raise_domain_error<T>(function, "Got x = %1%, but function requires x >= 0", x, pol);
+      return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Got x = %1%, but function requires x >= 0", x, pol);
    //
    // Special cases for x == 0:
    //
@@ -121,17 +121,17 @@ inline T cyl_bessel_i_prime_imp(T v, T x, const Policy& pol)
       else if (floor(v) == v || v > 1)
          return 0;
       else 
-         return boost::math::policies::raise_domain_error<T>(function, "Got x = %1%, but function is indeterminate for this order", x, pol);
+         return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Got x = %1%, but function is indeterminate for this order", x, pol);
    }
    //
    // Special case for v == 0:
    //
    if (v == 0)
-      return boost::math::detail::cyl_bessel_i_imp<T>(1, x, pol);
+      return BOOST_MATH_NAMESPACE::detail::cyl_bessel_i_imp<T>(1, x, pol);
    //
    // Default case:
    //
-   return boost::math::detail::bessel_i_derivative_linear(v, x, pol);
+   return BOOST_MATH_NAMESPACE::detail::bessel_i_derivative_linear(v, x, pol);
 }
 
 template <class Tag, class T, class Policy>
@@ -141,16 +141,16 @@ inline T cyl_bessel_k_prime_imp(T v, T x, const Policy& pol)
    // Prevent complex and indeterminate results:
    //
    if (x <= 0)
-      return boost::math::policies::raise_domain_error<T>("boost::math::cyl_bessel_k_prime<%1%>(%1%,%1%)", "Got x = %1%, but function requires x > 0", x, pol);
+      return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>("boost::math::cyl_bessel_k_prime<%1%>(%1%,%1%)", "Got x = %1%, but function requires x > 0", x, pol);
    //
    // Special case for v == 0:
    //
    if (v == 0)
-      return -boost::math::detail::cyl_bessel_k_imp<T>(1, x, Tag(), pol);
+      return -BOOST_MATH_NAMESPACE::detail::cyl_bessel_k_imp<T>(1, x, Tag(), pol);
    //
    // Default case:
    //
-   return boost::math::detail::bessel_k_derivative_linear(v, x, Tag(), pol);
+   return BOOST_MATH_NAMESPACE::detail::bessel_k_derivative_linear(v, x, Tag(), pol);
 }
 
 template <class Tag, class T, class Policy>
@@ -161,30 +161,30 @@ inline T cyl_neumann_prime_imp(T v, T x, const Policy& pol)
    // Prevent complex and indeterminate results:
    //
    if (x <= 0)
-      return boost::math::policies::raise_domain_error<T>("boost::math::cyl_neumann_prime<%1%>(%1%,%1%)", "Got x = %1%, but function requires x > 0", x, pol);
+      return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>("boost::math::cyl_neumann_prime<%1%>(%1%,%1%)", "Got x = %1%, but function requires x > 0", x, pol);
    //
    // Special case for large x: use asymptotic expansion:
    //
-   if (boost::math::detail::asymptotic_bessel_derivative_large_x_limit(v, x))
-      return boost::math::detail::asymptotic_bessel_y_derivative_large_x_2(v, x, pol);
+   if (BOOST_MATH_NAMESPACE::detail::asymptotic_bessel_derivative_large_x_limit(v, x))
+      return BOOST_MATH_NAMESPACE::detail::asymptotic_bessel_y_derivative_large_x_2(v, x, pol);
    //
    // Special case for small x: use Taylor series:
    //
    if (v > 0 && floor(v) != v)
    {
-      const T eps = boost::math::policies::get_epsilon<T, Policy>();
+      const T eps = BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>();
       if (log(eps / 2) > v * log((x * x) / (v * 4)))
-         return boost::math::detail::bessel_y_derivative_small_z_series(v, x, pol);
+         return BOOST_MATH_NAMESPACE::detail::bessel_y_derivative_small_z_series(v, x, pol);
    }
    //
    // Special case for v == 0:
    //
    if (v == 0)
-      return -boost::math::detail::cyl_neumann_imp<T>(1, x, Tag(), pol);
+      return -BOOST_MATH_NAMESPACE::detail::cyl_neumann_imp<T>(1, x, Tag(), pol);
    //
    // Default case:
    //
-   return boost::math::detail::bessel_y_derivative_linear(v, x, Tag(), pol);
+   return BOOST_MATH_NAMESPACE::detail::bessel_y_derivative_linear(v, x, Tag(), pol);
 }
 
 template <class T, class Policy>
@@ -194,16 +194,16 @@ inline T sph_neumann_prime_imp(unsigned v, T x, const Policy& pol)
    // Prevent complex and indeterminate result:
    //
    if (x <= 0)
-      return boost::math::policies::raise_domain_error<T>("boost::math::sph_neumann_prime<%1%>(%1%,%1%)", "Got x = %1%, but function requires x > 0.", x, pol);
+      return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>("boost::math::sph_neumann_prime<%1%>(%1%,%1%)", "Got x = %1%, but function requires x > 0.", x, pol);
    //
    // Special case for v == 0:
    //
    if (v == 0)
-      return -boost::math::detail::sph_neumann_imp<T>(1, x, pol);
+      return -BOOST_MATH_NAMESPACE::detail::sph_neumann_imp<T>(1, x, pol);
    //
    // Default case:
    //
-   return boost::math::detail::sph_neumann_derivative_linear(v, x, pol);
+   return BOOST_MATH_NAMESPACE::detail::sph_neumann_derivative_linear(v, x, pol);
 }
 
 } // namespace detail
@@ -337,7 +337,6 @@ inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sp
    return sph_neumann_prime(v, x, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_BESSEL_DERIVATIVES_HPP

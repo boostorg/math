@@ -20,7 +20,7 @@
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail {
 
@@ -48,10 +48,10 @@ inline constexpr Real ldexp(Real arg, int exp) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
     {
-        return boost::math::ccmath::abs(arg) == Real(0) ? arg :
-               (boost::math::ccmath::isinf)(arg) ? arg :
-               (boost::math::ccmath::isnan)(arg) ? arg :
-               boost::math::ccmath::detail::ldexp_impl(arg, exp);
+        return BOOST_MATH_NAMESPACE::ccmath::abs(arg) == Real(0) ? arg :
+               (BOOST_MATH_NAMESPACE::ccmath::isinf)(arg) ? arg :
+               (BOOST_MATH_NAMESPACE::ccmath::isnan)(arg) ? arg :
+               BOOST_MATH_NAMESPACE::ccmath::detail::ldexp_impl(arg, exp);
     }
     else
     {
@@ -63,21 +63,21 @@ inline constexpr Real ldexp(Real arg, int exp) noexcept
 BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr double ldexp(Z arg, int exp) noexcept
 {
-    return boost::math::ccmath::ldexp(static_cast<double>(arg), exp);
+    return BOOST_MATH_NAMESPACE::ccmath::ldexp(static_cast<double>(arg), exp);
 }
 
 inline constexpr float ldexpf(float arg, int exp) noexcept
 {
-    return boost::math::ccmath::ldexp(arg, exp);
+    return BOOST_MATH_NAMESPACE::ccmath::ldexp(arg, exp);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline constexpr long double ldexpl(long double arg, int exp) noexcept
 {
-    return boost::math::ccmath::ldexp(arg, exp);
+    return BOOST_MATH_NAMESPACE::ccmath::ldexp(arg, exp);
 }
 #endif
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_LDEXP_HPP

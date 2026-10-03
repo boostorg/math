@@ -18,7 +18,9 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace boost { namespace math { namespace quadrature { namespace detail {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature { namespace detail {
 
 inline constexpr std::array<double, 4> van_den_bos_unit_square_level_0_weights{{
     0x1.1e1e7d23aeec2p-6,
@@ -995,6 +997,6 @@ inline constexpr std::array<std::size_t, 7> van_den_bos_unit_square_sizes{{
     van_den_bos_unit_square_level_6_weights.size()
 }};
 
-}}}} // namespaces
+}} BOOST_MATH_NAMESPACE_END
 
 #endif

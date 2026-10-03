@@ -24,7 +24,7 @@
 #endif
 #endif
 
-namespace boost{ namespace math{ namespace quadrature { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature { namespace detail{
 
 
 // Returns the tanh-sinh quadrature of a function f over the open interval (-1, 1)
@@ -133,7 +133,7 @@ private:
 #endif
       Real h = ldexp(static_cast<Real>(1), -static_cast<int>(row));
       std::size_t first_complement = 0;
-      std::size_t n = boost::math::itrunc(ceil((m_t_max - h) / (2 * h)));
+      std::size_t n = BOOST_MATH_NAMESPACE::itrunc(ceil((m_t_max - h) / (2 * h)));
       m_abscissas[row].reserve(n);
       m_weights[row].reserve(n);
       for (Real pos = h; pos < m_t_max; pos += 2 * h)
@@ -151,14 +151,14 @@ private:
    {
       using std::tanh;
       using std::sinh;
-      using boost::math::constants::half_pi;
+      using BOOST_MATH_NAMESPACE::constants::half_pi;
       return tanh(half_pi<Real>()*sinh(t));
    }
    static inline Real weight_at_t(const Real& t)
    {
       using std::cosh;
       using std::sinh;
-      using boost::math::constants::half_pi;
+      using BOOST_MATH_NAMESPACE::constants::half_pi;
       Real cs = cosh(half_pi<Real>() * sinh(t));
       return half_pi<Real>() * cosh(t) / (cs * cs);
    }
@@ -167,7 +167,7 @@ private:
       using std::cosh;
       using std::exp;
       using std::sinh;
-      using boost::math::constants::half_pi;
+      using BOOST_MATH_NAMESPACE::constants::half_pi;
       Real u2 = half_pi<Real>() * sinh(t);
       return 1 / (exp(u2) *cosh(u2));
    }
@@ -175,7 +175,7 @@ private:
    {
       using std::log;
       using std::sqrt;
-      using boost::math::constants::pi;
+      using BOOST_MATH_NAMESPACE::constants::pi;
       Real l = log(2-x) - log(x);
       return log((sqrt(l * l + pi<Real>() * pi<Real>()) + l) / pi<Real>());
    };
@@ -186,7 +186,7 @@ private:
    mutable std::vector<std::size_t>       m_first_complements;
    std::size_t                       m_max_refinements, m_inital_row_length{};
 #if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_MATH_HAS_THREADS)
-   mutable boost::math::detail::atomic_unsigned_type      m_committed_refinements{};
+   mutable BOOST_MATH_NAMESPACE::detail::atomic_unsigned_type      m_committed_refinements{};
    mutable std::mutex m_mutex;
 #else
    mutable unsigned                  m_committed_refinements;
@@ -204,8 +204,8 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     using std::tanh;
     using std::sinh;
     using std::sqrt;
-    using boost::math::constants::half;
-    using boost::math::constants::half_pi;
+    using BOOST_MATH_NAMESPACE::constants::half;
+    using BOOST_MATH_NAMESPACE::constants::half_pi;
 
     //
     // The type of the result:
@@ -245,10 +245,10 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     // 
     result_type yp{ f(-1 - m_abscissas[0][max_left_position], m_abscissas[0][max_left_position]) };
     result_type ym{ f(1 + m_abscissas[0][max_right_position], -m_abscissas[0][max_right_position]) };
-    result_type tail_tolerance{ (std::max)(boost::math::tools::epsilon<Real>(), Real(tolerance * tolerance)) };
+    result_type tail_tolerance{ (std::max)(BOOST_MATH_NAMESPACE::tools::epsilon<Real>(), Real(tolerance * tolerance)) };
     while (max_left_position)
     {
-       if ((boost::math::isfinite)(yp))
+       if ((BOOST_MATH_NAMESPACE::isfinite)(yp))
           break;
        --max_left_position;
        yp = f(-1 - m_abscissas[0][max_left_position], m_abscissas[0][max_left_position]);
@@ -268,7 +268,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     //
     while (max_right_position)
     {
-       if ((boost::math::isfinite)(ym))
+       if ((BOOST_MATH_NAMESPACE::isfinite)(ym))
           break;
        --max_right_position;
        ym = f(1 + m_abscissas[0][max_right_position], -m_abscissas[0][max_right_position]);
@@ -303,7 +303,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         Real x = m_abscissas[0][i];
         Real xc = x;
         Real w = m_weights[0][i];
-        if ((boost::math::signbit)(x))
+        if ((BOOST_MATH_NAMESPACE::signbit)(x))
         {
            // We have stored x - 1:
            x = 1 + xc;
@@ -380,7 +380,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         do
         {
            yp = f(-1 - abscissa_row[max_left_index], abscissa_row[max_left_index]);
-           if ((boost::math::isfinite)(yp))
+           if ((BOOST_MATH_NAMESPACE::isfinite)(yp))
               break;
            if(max_left_position <= 2)
            {
@@ -395,7 +395,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         do
         {
            ym = f(1 + abscissa_row[max_right_index], -abscissa_row[max_right_index]);
-           if ((boost::math::isfinite)(ym))
+           if ((BOOST_MATH_NAMESPACE::isfinite)(ym))
               break;
            if (max_right_position <= 2)
            {
@@ -461,7 +461,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         Real last_err = err;
         err = abs(I0 - I1);
 
-        if (!(boost::math::isfinite)(I1))
+        if (!(BOOST_MATH_NAMESPACE::isfinite)(I1))
         {
             return policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point and got %1%. Please narrow the bounds of integration or check your function for singularities.", I1, Policy());
         }
@@ -477,7 +477,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
            else if(thrash_count > 2)
               // OK, terrible error, but giving up anyway!
               terminate = true;
-           else if (last_err < boost::math::tools::root_epsilon<Real>())
+           else if (last_err < BOOST_MATH_NAMESPACE::tools::root_epsilon<Real>())
               // Trying to squeeze precision that probably isn't there, abort:
               terminate = true;
            else
@@ -575,8 +575,8 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     using std::tanh;
     using std::sinh;
     using std::sqrt;
-    using boost::math::constants::half;
-    using boost::math::constants::half_pi;
+    using BOOST_MATH_NAMESPACE::constants::half;
+    using BOOST_MATH_NAMESPACE::constants::half_pi;
 
     //
     // The type of the result:
@@ -616,10 +616,10 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     //
     result_type yp{ f(-1 - m_abscissas[0][max_left_position], m_abscissas[0][max_left_position]) };
     result_type ym{ f(1 + m_abscissas[0][max_right_position], -m_abscissas[0][max_right_position]) };
-    Real tail_tolerance{ (std::max)(boost::math::tools::epsilon<Real>(), Real(tolerance * tolerance)) };
+    Real tail_tolerance{ (std::max)(BOOST_MATH_NAMESPACE::tools::epsilon<Real>(), Real(tolerance * tolerance)) };
     while (max_left_position)
     {
-       if ((boost::math::isfinite)(magnitude(yp)))
+       if ((BOOST_MATH_NAMESPACE::isfinite)(magnitude(yp)))
           break;
        --max_left_position;
        yp = f(-1 - m_abscissas[0][max_left_position], m_abscissas[0][max_left_position]);
@@ -639,7 +639,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     //
     while (max_right_position)
     {
-       if ((boost::math::isfinite)(magnitude(ym)))
+       if ((BOOST_MATH_NAMESPACE::isfinite)(magnitude(ym)))
           break;
        --max_right_position;
        ym = f(1 + m_abscissas[0][max_right_position], -m_abscissas[0][max_right_position]);
@@ -675,7 +675,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         Real x = m_abscissas[0][i];
         Real xc = x;
         Real w = m_weights[0][i];
-        if ((boost::math::signbit)(x))
+        if ((BOOST_MATH_NAMESPACE::signbit)(x))
         {
            // We have stored x - 1:
            x = 1 + xc;
@@ -752,7 +752,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         do
         {
            yp = f(-1 - abscissa_row[max_left_index], abscissa_row[max_left_index]);
-           if ((boost::math::isfinite)(magnitude(yp)))
+           if ((BOOST_MATH_NAMESPACE::isfinite)(magnitude(yp)))
               break;
            if(max_left_position <= 2)
            {
@@ -768,7 +768,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         do
         {
            ym = f(1 + abscissa_row[max_right_index], -abscissa_row[max_right_index]);
-           if ((boost::math::isfinite)(magnitude(ym)))
+           if ((BOOST_MATH_NAMESPACE::isfinite)(magnitude(ym)))
               break;
            if (max_right_position <= 2)
            {
@@ -835,7 +835,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         Real last_err = err;
         err = magnitude(I0 - I1);
 
-        if (!(boost::math::isfinite)(magnitude(I1)))
+        if (!(BOOST_MATH_NAMESPACE::isfinite)(magnitude(I1)))
         {
             policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point and got %1%. Please narrow the bounds of integration or check your function for singularities.", magnitude(I1), Policy());
             return I1;
@@ -852,7 +852,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
            else if(thrash_count > 2)
               // OK, terrible error, but giving up anyway!
               terminate = true;
-           else if (last_err < boost::math::tools::root_epsilon<Real>())
+           else if (last_err < BOOST_MATH_NAMESPACE::tools::root_epsilon<Real>())
               // Trying to squeeze precision that probably isn't there, abort:
               terminate = true;
            else
@@ -949,10 +949,10 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std:
    using std::asinh;
    using std::atanh;
    using std::ceil;
-   using boost::math::constants::half_pi;
-   using boost::math::constants::pi;
-   using boost::math::constants::two_div_pi;
-   using boost::math::lltrunc;
+   using BOOST_MATH_NAMESPACE::constants::half_pi;
+   using BOOST_MATH_NAMESPACE::constants::pi;
+   using BOOST_MATH_NAMESPACE::constants::two_div_pi;
+   using BOOST_MATH_NAMESPACE::lltrunc;
 
    m_committed_refinements = 4;
    //
@@ -1053,7 +1053,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std:
       1, 0, 1, 1, 3, 5, 11, 22,
    };
 #if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_MATH_HAS_THREADS)
-   m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
+   m_committed_refinements = static_cast<BOOST_MATH_NAMESPACE::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
 #else
    m_committed_refinements = m_abscissas.size() - 1;
 #endif
@@ -1106,7 +1106,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std:
       1, 0, 1, 1, 3, 5, 11, 22,
    };
 #if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_MATH_HAS_THREADS)
-   m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
+   m_committed_refinements = static_cast<BOOST_MATH_NAMESPACE::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
 #else
    m_committed_refinements = m_abscissas.size() - 1;
 #endif
@@ -1158,7 +1158,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std:
       1, 0, 1, 1, 3, 5, 11, 22,
    };
 #if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_MATH_HAS_THREADS)
-   m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
+   m_committed_refinements = static_cast<BOOST_MATH_NAMESPACE::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
 #else
    m_committed_refinements = m_abscissas.size() - 1;
 #endif
@@ -1212,7 +1212,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std:
       1, 0, 1, 1, 3, 5, 11, 22,
    };
 #if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_MATH_HAS_THREADS)
-   m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
+   m_committed_refinements = static_cast<BOOST_MATH_NAMESPACE::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
 #else
    m_committed_refinements = m_abscissas.size() - 1;
 #endif
@@ -1258,6 +1258,6 @@ void tanh_sinh_detail<Real, Policy>::prune_to_min_complement(const Real& m)
    }
 }
 
-}}}}  // namespaces
+}} BOOST_MATH_NAMESPACE_END
 
 #endif

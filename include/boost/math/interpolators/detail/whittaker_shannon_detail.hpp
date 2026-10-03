@@ -13,7 +13,7 @@
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/special_functions/cos_pi.hpp>
 
-namespace boost { namespace math { namespace interpolators { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators { namespace detail {
 
 template<class RandomAccessContainer>
 class whittaker_shannon_detail {
@@ -29,7 +29,7 @@ public:
     }
 
     inline Real operator()(Real t) const {
-        using boost::math::constants::pi;
+        using BOOST_MATH_NAMESPACE::constants::pi;
         using std::isfinite;
         using std::floor;
         using std::ceil;
@@ -57,11 +57,11 @@ public:
             }
             return m_y[i];
         }
-        return y*boost::math::sin_pi(x)/pi<Real>();
+        return y*BOOST_MATH_NAMESPACE::sin_pi(x)/pi<Real>();
     }
 
     Real prime(Real t) const {
-        using boost::math::constants::pi;
+        using BOOST_MATH_NAMESPACE::constants::pi;
         using std::isfinite;
         using std::floor;
         using std::ceil;
@@ -88,8 +88,8 @@ public:
         }
         Real z = x;
         auto it = m_y.begin();
-        Real cospix = boost::math::cos_pi(x);
-        Real sinpix_div_pi = boost::math::sin_pi(x)/pi<Real>();
+        Real cospix = BOOST_MATH_NAMESPACE::cos_pi(x);
+        Real sinpix_div_pi = BOOST_MATH_NAMESPACE::sin_pi(x)/pi<Real>();
 
         Real s = 0;
         auto end = m_y.end();
@@ -126,5 +126,5 @@ private:
     Real m_t0;
     Real m_h;
 };
-}}}}
+}} BOOST_MATH_NAMESPACE_END
 #endif

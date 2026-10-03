@@ -12,7 +12,7 @@
 #include <cmath>
 #endif
 
-namespace boost { namespace math { namespace tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 BOOST_MATH_EXPORT template<typename Real>
 Real agm(Real a, Real g)
@@ -47,5 +47,5 @@ Real agm(Real a, Real g)
 }
 
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif

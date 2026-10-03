@@ -11,11 +11,10 @@
 #include <type_traits>
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {
 
-namespace rdiff = boost::math::differentiation::reverse_mode;
+namespace rdiff = BOOST_MATH_NAMESPACE::differentiation::reverse_mode;
 
 /******************************************************************/
 /**
@@ -130,7 +129,6 @@ struct costant_initializer_rvar
   }
 };
 } // namespace optimization
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif

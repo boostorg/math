@@ -29,23 +29,23 @@
 // R_F(x, y, z) = 0.5 * \int_{0}^{\infty} [(t+x)(t+y)(t+z)]^{-1/2} dt
 // Carlson, Numerische Mathematik, vol 33, 1 (1979)
 
-namespace boost { namespace math { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
    template <typename T, typename Policy>
    BOOST_MATH_GPU_ENABLED T ellint_rf_imp(T x, T y, T z, const Policy& pol)
    {
       BOOST_MATH_STD_USING
-      using namespace boost::math;
+      using namespace BOOST_MATH_NAMESPACE;
 
       constexpr auto function = "boost::math::ellint_rf<%1%>(%1%,%1%,%1%)";
 
       if(x < 0 || y < 0 || z < 0)
       {
-         return policies::raise_domain_error<T>(function, "domain error, all arguments must be non-negative, only sensible result is %1%.", boost::math::numeric_limits<T>::quiet_NaN(), pol);
+         return policies::raise_domain_error<T>(function, "domain error, all arguments must be non-negative, only sensible result is %1%.", BOOST_MATH_NAMESPACE::numeric_limits<T>::quiet_NaN(), pol);
       }
       if(x + y == 0 || y + z == 0 || z + x == 0)
       {
-         return policies::raise_domain_error<T>(function, "domain error, at most one argument can be zero, only sensible result is %1%.", boost::math::numeric_limits<T>::quiet_NaN(), pol);
+         return policies::raise_domain_error<T>(function, "domain error, at most one argument can be zero, only sensible result is %1%.", BOOST_MATH_NAMESPACE::numeric_limits<T>::quiet_NaN(), pol);
       }
       //
       // Special cases from http://dlmf.nist.gov/19.20#i
@@ -106,13 +106,13 @@ namespace boost { namespace math { namespace detail{
       T zn = z;
       T An = (x + y + z) / 3;
       T A0 = An;
-      T Q = pow(3 * boost::math::tools::epsilon<T>(), T(-1) / 8) * BOOST_MATH_GPU_SAFE_MAX(BOOST_MATH_GPU_SAFE_MAX(fabs(An - xn), fabs(An - yn)), fabs(An - zn));
+      T Q = pow(3 * BOOST_MATH_NAMESPACE::tools::epsilon<T>(), T(-1) / 8) * BOOST_MATH_GPU_SAFE_MAX(BOOST_MATH_GPU_SAFE_MAX(fabs(An - xn), fabs(An - yn)), fabs(An - zn));
       T fn = 1;
 
 
       // duplication
       unsigned k = 1;
-      for(; k < boost::math::policies::get_max_series_iterations<Policy>(); ++k)
+      for(; k < BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>(); ++k)
       {
          T root_x = sqrt(xn);
          T root_y = sqrt(yn);
@@ -163,7 +163,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2, T3>::type
    return ellint_rf(x, y, z, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ELLINT_RF_HPP
 

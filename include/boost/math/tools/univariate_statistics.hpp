@@ -24,7 +24,7 @@
 
 BOOST_MATH_HEADER_DEPRECATED("<boost/math/statistics/univariate_statistics.hpp>");
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 template<class ForwardIterator>
 auto mean(ForwardIterator first, ForwardIterator last)
@@ -409,7 +409,7 @@ auto median_absolute_deviation(RandomAccessIterator first, RandomAccessIterator 
     using std::isnan;
     if (isnan(center))
     {
-        center = boost::math::tools::median(first, last);
+        center = BOOST_MATH_NAMESPACE::tools::median(first, last);
     }
     size_t num_elems = std::distance(first, last);
     BOOST_MATH_ASSERT_MSG(num_elems > 0, "The median of a zero-length vector is undefined.");
@@ -435,5 +435,5 @@ inline auto median_absolute_deviation(RandomAccessContainer & v, typename Random
     return median_absolute_deviation(v.begin(), v.end(), center);
 }
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

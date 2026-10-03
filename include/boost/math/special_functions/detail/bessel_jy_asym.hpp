@@ -21,7 +21,7 @@
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class T>
 BOOST_MATH_GPU_ENABLED inline T asymptotic_bessel_amplitude(T v, T x)
@@ -85,8 +85,8 @@ BOOST_MATH_GPU_ENABLED inline T asymptotic_bessel_y_large_x_2(T v, T x, const Po
    //
    T cx = cos(x);
    T sx = sin(x);
-   T ci = boost::math::cos_pi(v / 2 + 0.25f, pol);
-   T si = boost::math::sin_pi(v / 2 + 0.25f, pol);
+   T ci = BOOST_MATH_NAMESPACE::cos_pi(v / 2 + 0.25f, pol);
+   T si = BOOST_MATH_NAMESPACE::sin_pi(v / 2 + 0.25f, pol);
    T sin_phase = sin(phase) * (cx * ci + sx * si) + cos(phase) * (sx * ci - cx * si);
    BOOST_MATH_INSTRUMENT_CODE(sin(phase));
    BOOST_MATH_INSTRUMENT_CODE(cos(x));
@@ -119,8 +119,8 @@ BOOST_MATH_GPU_ENABLED inline T asymptotic_bessel_j_large_x_2(T v, T x, const Po
    BOOST_MATH_INSTRUMENT_CODE(sin(x));
    T cx = cos(x);
    T sx = sin(x);
-   T ci = boost::math::cos_pi(v / 2 + 0.25f, pol);
-   T si = boost::math::sin_pi(v / 2 + 0.25f, pol);
+   T ci = BOOST_MATH_NAMESPACE::cos_pi(v / 2 + 0.25f, pol);
+   T si = BOOST_MATH_NAMESPACE::sin_pi(v / 2 + 0.25f, pol);
    T sin_phase = cos(phase) * (cx * ci + sx * si) - sin(phase) * (sx * ci - cx * si);
    BOOST_MATH_INSTRUMENT_VARIABLE(sin_phase);
    return sin_phase * ampl;
@@ -165,10 +165,10 @@ template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED void temme_asymptotic_y_small_x(T v, T x, T* Y, T* Y1, const Policy& pol)
 {
    T c = 1;
-   T p = (v / boost::math::sin_pi(v, pol)) * pow(x / 2, -v) / boost::math::tgamma(1 - v, pol);
-   T q = (v / boost::math::sin_pi(v, pol)) * pow(x / 2, v) / boost::math::tgamma(1 + v, pol);
+   T p = (v / BOOST_MATH_NAMESPACE::sin_pi(v, pol)) * pow(x / 2, -v) / BOOST_MATH_NAMESPACE::tgamma(1 - v, pol);
+   T q = (v / BOOST_MATH_NAMESPACE::sin_pi(v, pol)) * pow(x / 2, v) / BOOST_MATH_NAMESPACE::tgamma(1 + v, pol);
    T f = (p - q) / v;
-   T g_prefix = boost::math::sin_pi(v / 2, pol);
+   T g_prefix = BOOST_MATH_NAMESPACE::sin_pi(v / 2, pol);
    g_prefix *= g_prefix * 2 / v;
    T g = f + g_prefix * q;
    T h = p;
@@ -220,11 +220,11 @@ BOOST_MATH_GPU_ENABLED T asymptotic_bessel_i_large_x(T v, T x, const Policy& pol
 
    s = e * (e * s / sqrt(2 * x * constants::pi<T>()));
 
-   return (boost::math::isfinite)(s) ?
+   return (BOOST_MATH_NAMESPACE::isfinite)(s) ?
       s : policies::raise_overflow_error<T>("boost::math::asymptotic_bessel_i_large_x<%1%>(%1%,%1%)", nullptr, pol);
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif
 

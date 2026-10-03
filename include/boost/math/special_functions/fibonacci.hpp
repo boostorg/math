@@ -19,8 +19,7 @@
 #pragma once
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail {
    constexpr double fib_bits_phi = 0.69424191363061730173879026;
@@ -88,7 +87,6 @@ class fibonacci_generator {
     T a = 0, b = 1;
 };
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif

@@ -12,7 +12,7 @@
 #include <cstdint>
 #endif
 
-  namespace boost{ namespace math{ namespace detail{
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
      template <class T, class Policy>
      T hypergeometric_1F1_scaled_series(const T& a, const T& b, T z, const Policy& pol, const char* function)
@@ -24,9 +24,9 @@
         // and keep track of the integer scaling factor n.  At the end we can perform
         // an exact subtraction of n from z and scale the result:
         //
-        T sum(0), term(1), upper_limit(sqrt(boost::math::tools::max_value<T>())), diff;
+        T sum(0), term(1), upper_limit(sqrt(BOOST_MATH_NAMESPACE::tools::max_value<T>())), diff;
         unsigned n = 0;
-        long long log_scaling_factor = 1 - lltrunc(boost::math::tools::log_max_value<T>());
+        long long log_scaling_factor = 1 - lltrunc(BOOST_MATH_NAMESPACE::tools::log_max_value<T>());
         T scaling_factor = exp(T(log_scaling_factor));
         std::intmax_t current_scaling = 0;
 
@@ -40,11 +40,11 @@
               current_scaling += log_scaling_factor;
            }
            term *= (((a + n) / ((b + n) * (n + 1))) * z);
-           if (n > boost::math::policies::get_max_series_iterations<Policy>())
-              return boost::math::policies::raise_evaluation_error(function, "Series did not converge, best value is %1%", sum, pol);
+           if (n > BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>())
+              return BOOST_MATH_NAMESPACE::policies::raise_evaluation_error(function, "Series did not converge, best value is %1%", sum, pol);
            ++n;
            diff = fabs(term / sum);
-        } while (diff > boost::math::policies::get_epsilon<T, Policy>());
+        } while (diff > BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>());
 
         z = -z - current_scaling;
         while (z < log_scaling_factor)
@@ -57,6 +57,6 @@
 
 
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_1F1_SCALED_SERIES_HPP

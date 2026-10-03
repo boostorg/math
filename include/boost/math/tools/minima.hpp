@@ -19,10 +19,10 @@
 #include <boost/math/tools/utility.hpp>
 #include <boost/math/policies/policy.hpp>
 
-namespace boost{ namespace math{ namespace tools{
+BOOST_MATH_NAMESPACE_BEGIN namespace tools{
 
 BOOST_MATH_EXPORT template <class F, class T>
-BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> brent_find_minima(F f, T min, T max, int bits, boost::math::uintmax_t& max_iter)
+BOOST_MATH_GPU_ENABLED BOOST_MATH_NAMESPACE::pair<T, T> brent_find_minima(F f, T min, T max, int bits, BOOST_MATH_NAMESPACE::uintmax_t& max_iter)
    noexcept(BOOST_MATH_IS_FLOAT(T) 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<F>()(std::declval<T>()))
@@ -30,7 +30,7 @@ BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> brent_find_minima(F f, T min, T m
    )
 {
    BOOST_MATH_STD_USING
-   bits = (boost::math::min)(policies::digits<T, policies::policy<> >() / 2, bits);
+   bits = (BOOST_MATH_NAMESPACE::min)(policies::digits<T, policies::policy<> >() / 2, bits);
    T tolerance = static_cast<T>(ldexp(1.0, 1-bits));
    T x;  // minima so far
    T w;  // second best point
@@ -48,7 +48,7 @@ BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> brent_find_minima(F f, T min, T m
    fw = fv = fx = f(x);
    delta2 = delta = 0;
 
-   boost::math::uintmax_t count = max_iter;
+   BOOST_MATH_NAMESPACE::uintmax_t count = max_iter;
 
    do{
       // get midpoint
@@ -140,22 +140,22 @@ BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> brent_find_minima(F f, T min, T m
 
    max_iter -= count;
 
-   return boost::math::make_pair(x, fx);
+   return BOOST_MATH_NAMESPACE::make_pair(x, fx);
 }
 
 BOOST_MATH_EXPORT template <class F, class T>
-BOOST_MATH_GPU_ENABLED inline boost::math::pair<T, T> brent_find_minima(F f, T min, T max, int digits)
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::pair<T, T> brent_find_minima(F f, T min, T max, int digits)
    noexcept(BOOST_MATH_IS_FLOAT(T)
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    && noexcept(std::declval<F>()(std::declval<T>()))
    #endif
    )
 {
-   boost::math::uintmax_t m = (boost::math::numeric_limits<boost::math::uintmax_t>::max)();
+   BOOST_MATH_NAMESPACE::uintmax_t m = (BOOST_MATH_NAMESPACE::numeric_limits<BOOST_MATH_NAMESPACE::uintmax_t>::max)();
    return brent_find_minima(f, min, max, digits, m);
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif
 

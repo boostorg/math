@@ -49,7 +49,7 @@
 #endif
 #include <boost/math/special_functions/next.hpp>
 
-namespace boost{ namespace math{ namespace differentiation {
+BOOST_MATH_NAMESPACE_BEGIN namespace differentiation {
 
 namespace detail {
     template<class Real>
@@ -63,7 +63,7 @@ namespace detail {
         // Handle the case x + h == x:
         if (h == 0)
         {
-            h = boost::math::nextafter(x, (numeric_limits<Real>::max)()) - x;
+            h = BOOST_MATH_NAMESPACE::nextafter(x, (numeric_limits<Real>::max)()) - x;
         }
         return h;
     }
@@ -264,5 +264,5 @@ inline Real finite_difference_derivative(const F f, Real x, Real* error = nullpt
    return detail::finite_difference_derivative(f, x, error, detail::fd_tag<order>());
 }
 
-}}}  // namespaces
+} BOOST_MATH_NAMESPACE_END
 #endif

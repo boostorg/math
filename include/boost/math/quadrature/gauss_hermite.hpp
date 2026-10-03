@@ -36,7 +36,7 @@
 #include <boost/math/special_functions/detail/orthogonal_polynomial.hpp>
 #include <boost/math/special_functions/hermite.hpp>
 
-namespace boost { namespace math { namespace quadrature { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature { namespace detail {
 
 #ifndef BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND
 
@@ -360,7 +360,7 @@ class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::quadr
    // Abscissas computed on demand are NaN when the recurrence overflows Real.
    static bool overflowed()
    {
-      return !(boost::math::isfinite)(static_cast<Real>(base::abscissa().back()));
+      return !(BOOST_MATH_NAMESPACE::isfinite)(static_cast<Real>(base::abscissa().back()));
    }
 
    static Real overflow_error()
@@ -454,7 +454,6 @@ public:
 };
 
 } // namespace quadrature
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_QUADRATURE_GAUSS_HERMITE_HPP

@@ -31,7 +31,7 @@
 #include <boost/core/demangle.hpp>
 #endif
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 BOOST_MATH_EXPORT template<typename Real, typename Z = int64_t>
 class simple_continued_fraction {
@@ -172,5 +172,5 @@ std::ostream& operator<<(std::ostream& out, const simple_continued_fraction<Real
 }
 
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

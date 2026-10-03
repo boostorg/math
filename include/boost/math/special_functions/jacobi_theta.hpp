@@ -110,7 +110,7 @@
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 // Simple functions - parameterized by q
 BOOST_MATH_EXPORT template <class T, class U>
@@ -189,7 +189,7 @@ jacobi_theta_converged(RealType last_delta, RealType delta, RealType eps) {
 template <class RealType, class Policy>
 inline bool
 jacobi_theta_check_z(RealType z, const Policy& pol, const char* function, RealType* result) {
-    if (!(boost::math::isfinite)(z)) {
+    if (!(BOOST_MATH_NAMESPACE::isfinite)(z)) {
         *result = policies::raise_domain_error<RealType>(function, "z must be finite but got %1%.", z, pol);
         return false;
     }
@@ -496,7 +496,7 @@ struct jacobi_theta_exponents {
         dN += pi_hi * dP;
         RealType dQ;
         RealType Q = divide_by_a(N, dN, dQ);
-        RealType result = boost::math::expm1(RealType(-2 * Q));
+        RealType result = BOOST_MATH_NAMESPACE::expm1(RealType(-2 * Q));
         if (result == -1)
             return result;
         return result - 2 * dQ * (1 + result);
@@ -1282,6 +1282,6 @@ inline typename tools::promote_args<T, U>::type jacobi_theta4(T z, U q) {
     return jacobi_theta4(z, q, policies::policy<>());
 }
 
-}}
+BOOST_MATH_NAMESPACE_END
 
 #endif

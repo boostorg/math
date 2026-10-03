@@ -54,18 +54,18 @@
 // TODO - revisit this?
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail{
 
 template <class T>
-BOOST_MATH_GPU_ENABLED inline bool is_odd(T v, const boost::math::true_type&)
+BOOST_MATH_GPU_ENABLED inline bool is_odd(T v, const BOOST_MATH_NAMESPACE::true_type&)
 {
    int i = static_cast<int>(v);
    return i&1;
 }
 template <class T>
-BOOST_MATH_GPU_ENABLED inline bool is_odd(T v, const boost::math::false_type&)
+BOOST_MATH_GPU_ENABLED inline bool is_odd(T v, const BOOST_MATH_NAMESPACE::false_type&)
 {
    // Oh dear can't cast T to int!
    BOOST_MATH_STD_USING
@@ -75,7 +75,7 @@ BOOST_MATH_GPU_ENABLED inline bool is_odd(T v, const boost::math::false_type&)
 template <class T>
 BOOST_MATH_GPU_ENABLED inline bool is_odd(T v)
 {
-   return is_odd(v, ::boost::math::is_convertible<T, int>());
+   return is_odd(v, ::BOOST_MATH_NAMESPACE::is_convertible<T, int>());
 }
 
 template <class T>
@@ -104,7 +104,7 @@ BOOST_MATH_GPU_ENABLED T sinpx(T z)
    BOOST_MATH_ASSERT(fl >= 0);
    if(dist > T(0.5))
       dist = 1 - dist;
-   T result = sin(dist*boost::math::constants::pi<T>());
+   T result = sin(dist*BOOST_MATH_NAMESPACE::constants::pi<T>());
    return sign*z*result;
 } // template <class T> T sinpx(T z)
 //
@@ -153,7 +153,7 @@ BOOST_MATH_GPU_ENABLED T gamma_imp_final(T z, const Policy& pol, const Lanczos& 
    else
    {
       result *= Lanczos::lanczos_sum(z);
-      T zgh = (z + static_cast<T>(Lanczos::g()) - boost::math::constants::half<T>());
+      T zgh = (z + static_cast<T>(Lanczos::g()) - BOOST_MATH_NAMESPACE::constants::half<T>());
       T lzgh = log(zgh);
       BOOST_MATH_INSTRUMENT_VARIABLE(result);
       BOOST_MATH_INSTRUMENT_VARIABLE(tools::log_max_value<T>());
@@ -162,22 +162,22 @@ BOOST_MATH_GPU_ENABLED T gamma_imp_final(T z, const Policy& pol, const Lanczos& 
          // we're going to overflow unless this is done with care:
          BOOST_MATH_INSTRUMENT_VARIABLE(zgh);
          if(lzgh * z / 2 > tools::log_max_value<T>())
-            return boost::math::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+            return BOOST_MATH_NAMESPACE::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
          T hp = pow(zgh, T((z / 2) - T(0.25)));
          BOOST_MATH_INSTRUMENT_VARIABLE(hp);
          result *= hp / exp(zgh);
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
          if(tools::max_value<T>() / hp < result)
-            return boost::math::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+            return BOOST_MATH_NAMESPACE::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
          result *= hp;
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
       else
       {
          BOOST_MATH_INSTRUMENT_VARIABLE(zgh);
-         BOOST_MATH_INSTRUMENT_VARIABLE(pow(zgh, T(z - boost::math::constants::half<T>())));
+         BOOST_MATH_INSTRUMENT_VARIABLE(pow(zgh, T(z - BOOST_MATH_NAMESPACE::constants::half<T>())));
          BOOST_MATH_INSTRUMENT_VARIABLE(exp(zgh));
-         result *= pow(zgh, T(z - boost::math::constants::half<T>())) / exp(zgh);
+         result *= pow(zgh, T(z - BOOST_MATH_NAMESPACE::constants::half<T>())) / exp(zgh);
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
    }
@@ -216,9 +216,9 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T gamma_imp(T z, const Policy& pol
          }
 #endif
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         BOOST_MATH_IF_CONSTEXPR(!boost::math::numeric_limits<T>::is_specialized || (boost::math::numeric_limits<T>::digits > 64))
+         BOOST_MATH_IF_CONSTEXPR(!BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized || (BOOST_MATH_NAMESPACE::numeric_limits<T>::digits > 64))
          {
-            if ((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
+            if ((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < BOOST_MATH_NAMESPACE::constants::pi<T>()))
             {
                return policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE MP only.
 
@@ -230,14 +230,14 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T gamma_imp(T z, const Policy& pol
             // Specifically, sinpx can never be larger than 1 / epsilon which is too small to
             // ever generate a value less than one for `result`, unless T has a truely
             // exceptional number of digits precision.
-            BOOST_MATH_ASSERT((fabs(result) > 1) || (tools::max_value<T>() * fabs(result) > boost::math::constants::pi<T>()));
+            BOOST_MATH_ASSERT((fabs(result) > 1) || (tools::max_value<T>() * fabs(result) > BOOST_MATH_NAMESPACE::constants::pi<T>()));
          }
-         result = -boost::math::constants::pi<T>() / result;
+         result = -BOOST_MATH_NAMESPACE::constants::pi<T>() / result;
          if (result == 0)
             return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
          /*
          * Result can never be subnormal as we have a value > 1 in the numerator:
-         if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
+         if((BOOST_MATH_NAMESPACE::fpclassify)(result) == (int)FP_SUBNORMAL)
             return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
             */
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
@@ -288,7 +288,7 @@ BOOST_MATH_GPU_ENABLED T lgamma_imp_final(T z, const Policy& pol, const Lanczos&
    else if(z < 15)
    {
       typedef typename policies::precision<T, Policy>::type precision_type;
-      typedef boost::math::integral_constant<int,
+      typedef BOOST_MATH_NAMESPACE::integral_constant<int,
          precision_type::value <= 0 ? 0 :
          precision_type::value <= 64 ? 64 :
          precision_type::value <= 113 ? 113 : 0
@@ -296,7 +296,7 @@ BOOST_MATH_GPU_ENABLED T lgamma_imp_final(T z, const Policy& pol, const Lanczos&
 
       result = lgamma_small_imp<T>(z, T(z - 1), T(z - 2), tag_type(), pol, l);
    }
-   else if((z >= 3) && (z < 100) && (boost::math::numeric_limits<T>::max_exponent >= 1024))
+   else if((z >= 3) && (z < 100) && (BOOST_MATH_NAMESPACE::numeric_limits<T>::max_exponent >= 1024))
    {
       // taking the log of tgamma reduces the error, no danger of overflow here:
       result = log(gamma_imp(z, pol, l));
@@ -304,7 +304,7 @@ BOOST_MATH_GPU_ENABLED T lgamma_imp_final(T z, const Policy& pol, const Lanczos&
    else
    {
       // regular evaluation:
-      T zgh = static_cast<T>(z + T(Lanczos::g()) - boost::math::constants::half<T>());
+      T zgh = static_cast<T>(z + T(Lanczos::g()) - BOOST_MATH_NAMESPACE::constants::half<T>());
       result = log(zgh) - 1;
       result *= z - 0.5f;
       //
@@ -349,7 +349,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T lgamma_imp(T z, const Policy& po
       {
          sresult = -sresult;
       }
-      result = log(boost::math::constants::pi<T>()) - lgamma_imp_final(T(z), pol, l) - log(t);
+      result = log(BOOST_MATH_NAMESPACE::constants::pi<T>()) - lgamma_imp_final(T(z), pol, l) - log(t);
 
       if(sign)
       {
@@ -378,7 +378,7 @@ private:
    T z, a;
    int k;
 public:
-   typedef boost::math::pair<T,T> result_type;
+   typedef BOOST_MATH_NAMESPACE::pair<T,T> result_type;
 
    BOOST_MATH_GPU_ENABLED upper_incomplete_gamma_fract(T a1, T z1)
       : z(z1-a1+1), a(a1), k(0)
@@ -400,7 +400,7 @@ BOOST_MATH_GPU_ENABLED inline T upper_gamma_fraction(T a, T z, T eps)
    // upper incomplete integral.  Divide by tgamma(z)
    // to normalise.
    upper_incomplete_gamma_fract<T> f(a, z);
-   return 1 / (z - a + 1 + boost::math::tools::continued_fraction_a(f, eps));
+   return 1 / (z - a + 1 + BOOST_MATH_NAMESPACE::tools::continued_fraction_a(f, eps));
 }
 
 template <class T>
@@ -428,9 +428,9 @@ BOOST_MATH_GPU_ENABLED inline T lower_gamma_series(T a, T z, const Policy& pol, 
    // lower incomplete integral. Then divide by tgamma(a)
    // to get the normalised value.
    lower_incomplete_gamma_series<T> s(a, z);
-   boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    T factor = policies::get_epsilon<T, Policy>();
-   T result = boost::math::tools::sum_series(s, factor, max_iter, init_value);
+   T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, factor, max_iter, init_value);
    policies::check_series_iterations<T>("boost::math::detail::lower_gamma_series<%1%>(%1%)", max_iter, pol);
    return result;
 }
@@ -442,14 +442,14 @@ BOOST_MATH_GPU_ENABLED inline T lower_gamma_series(T a, T z, const Policy& pol, 
 // with Bernoulli numbers.
 //
 template<class T>
-boost::math::size_t highest_bernoulli_index()
+BOOST_MATH_NAMESPACE::size_t highest_bernoulli_index()
 {
-   const float digits10_of_type = (boost::math::numeric_limits<T>::is_specialized
-                                      ? static_cast<float>(boost::math::numeric_limits<T>::digits10)
-                                      : static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
+   const float digits10_of_type = (BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                                      ? static_cast<float>(BOOST_MATH_NAMESPACE::numeric_limits<T>::digits10)
+                                      : static_cast<float>(BOOST_MATH_NAMESPACE::tools::digits<T>() * 0.301F));
 
    // Find the high index n for Bn to produce the desired precision in Stirling's calculation.
-   return static_cast<boost::math::size_t>(18.0F + (0.6F * digits10_of_type));
+   return static_cast<BOOST_MATH_NAMESPACE::size_t>(18.0F + (0.6F * digits10_of_type));
 }
 
 template<class T>
@@ -457,9 +457,9 @@ int minimum_argument_for_bernoulli_recursion()
 {
    BOOST_MATH_STD_USING
 
-   const float digits10_of_type = (boost::math::numeric_limits<T>::is_specialized
-                                    ? (float) boost::math::numeric_limits<T>::digits10
-                                    : (float) (boost::math::tools::digits<T>() * 0.301F));
+   const float digits10_of_type = (BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                                    ? (float) BOOST_MATH_NAMESPACE::numeric_limits<T>::digits10
+                                    : (float) (BOOST_MATH_NAMESPACE::tools::digits<T>() * 0.301F));
 
    int min_arg = (int) (digits10_of_type * 1.7F);
 
@@ -494,21 +494,21 @@ T bernoulli_stirling_series(const T& z, const Policy& pol) {
 
    // Perform the Bernoulli series expansion of Stirling's approximation.
 
-   const boost::math::size_t number_of_bernoullis_b2n = policies::get_max_series_iterations<Policy>();
+   const BOOST_MATH_NAMESPACE::size_t number_of_bernoullis_b2n = policies::get_max_series_iterations<Policy>();
 
    T one_over_x_pow_two_n_minus_one = 1 / z;
    const T one_over_x2 = one_over_x_pow_two_n_minus_one * one_over_x_pow_two_n_minus_one;
-   T sum = (boost::math::bernoulli_b2n<T>(1) / 2) * one_over_x_pow_two_n_minus_one;
-   const T target_epsilon_to_break_loop = sum * boost::math::tools::epsilon<T>();
+   T sum = (BOOST_MATH_NAMESPACE::bernoulli_b2n<T>(1) / 2) * one_over_x_pow_two_n_minus_one;
+   const T target_epsilon_to_break_loop = sum * BOOST_MATH_NAMESPACE::tools::epsilon<T>();
    T last_term = 2 * sum;
 
-   for (boost::math::size_t n = 2U;; ++n)
+   for (BOOST_MATH_NAMESPACE::size_t n = 2U;; ++n)
    {
       one_over_x_pow_two_n_minus_one *= one_over_x2;
 
-      const boost::math::size_t n2 = static_cast<boost::math::size_t>(n * 2U);
+      const BOOST_MATH_NAMESPACE::size_t n2 = static_cast<BOOST_MATH_NAMESPACE::size_t>(n * 2U);
 
-      const T term = (boost::math::bernoulli_b2n<T>(static_cast<int>(n)) * one_over_x_pow_two_n_minus_one) / (n2 * (n2 - 1U));
+      const T term = (BOOST_MATH_NAMESPACE::bernoulli_b2n<T>(static_cast<int>(n)) * one_over_x_pow_two_n_minus_one) / (n2 * (n2 - 1U));
 
       if ((n >= 3U) && (abs(term) < target_epsilon_to_break_loop))
       {
@@ -547,7 +547,7 @@ T scaled_tgamma_no_lanczos(const T& z, const Policy& pol, bool islog = false)
    BOOST_MATH_ASSERT(minimum_argument_for_bernoulli_recursion<T>() <= z);
 
    T sum = bernoulli_stirling_series(z, pol);
-   const T half_ln_two_pi_over_z = sqrt(boost::math::constants::two_pi<T>() / z);
+   const T half_ln_two_pi_over_z = sqrt(BOOST_MATH_NAMESPACE::constants::two_pi<T>() / z);
 
    // Complete Stirling's approximation.
    T scaled_gamma_value = islog ? T(sum + log(half_ln_two_pi_over_z)) : T(exp(sum) * half_ln_two_pi_over_z);
@@ -568,7 +568,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    // Check if the argument of tgamma is identically zero.
    const bool is_at_zero = (z == 0);
 
-   if((boost::math::isnan)(z) || (is_at_zero) || ((boost::math::isinf)(z) && (z < 0)))
+   if((BOOST_MATH_NAMESPACE::isnan)(z) || (is_at_zero) || ((BOOST_MATH_NAMESPACE::isinf)(z) && (z < 0)))
       return policies::raise_domain_error<T>(function, "Evaluation of tgamma at %1%.", z, pol);
 
    const bool b_neg = (z < 0);
@@ -576,9 +576,9 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    const bool floor_of_z_is_equal_to_z = (floor(z) == z);
 
    // Special case handling of small factorials:
-   if((!b_neg) && floor_of_z_is_equal_to_z && (z < boost::math::max_factorial<T>::value))
+   if((!b_neg) && floor_of_z_is_equal_to_z && (z < BOOST_MATH_NAMESPACE::max_factorial<T>::value))
    {
-      return boost::math::unchecked_factorial<T>(static_cast<unsigned>(itrunc(z) - 1));
+      return BOOST_MATH_NAMESPACE::unchecked_factorial<T>(static_cast<unsigned>(itrunc(z) - 1));
    }
 
    // Make a local, unsigned copy of the input argument.
@@ -588,9 +588,9 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    if(zz < tools::cbrt_epsilon<T>())
    {
       const T a0(1);
-      const T a1(boost::math::constants::euler<T>());
-      const T six_euler_squared((boost::math::constants::euler<T>() * boost::math::constants::euler<T>()) * 6);
-      const T a2((six_euler_squared -  boost::math::constants::pi_sqr<T>()) / 12);
+      const T a1(BOOST_MATH_NAMESPACE::constants::euler<T>());
+      const T six_euler_squared((BOOST_MATH_NAMESPACE::constants::euler<T>() * BOOST_MATH_NAMESPACE::constants::euler<T>()) * 6);
+      const T a2((six_euler_squared -  BOOST_MATH_NAMESPACE::constants::pi_sqr<T>()) / 12);
 
       const T inverse_tgamma_series = z * ((a2 * z + a1) * z + a0);
 
@@ -605,7 +605,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
 
    if(zz < min_arg_for_recursion)
    {
-      n_recur = boost::math::itrunc(min_arg_for_recursion - zz) + 1;
+      n_recur = BOOST_MATH_NAMESPACE::itrunc(min_arg_for_recursion - zz) + 1;
 
       zz += n_recur;
    }
@@ -665,9 +665,9 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
       //
       // Result can never overflow, since sinpx(z) can never be smaller than machine epsilon and gamma_value > 1.
       //
-      BOOST_MATH_ASSERT(   (abs(gamma_value) > 1) || ((tools::max_value<T>() * abs(gamma_value)) > boost::math::constants::pi<T>()));  // LCOV_EXCL_LINE  MP only
+      BOOST_MATH_ASSERT(   (abs(gamma_value) > 1) || ((tools::max_value<T>() * abs(gamma_value)) > BOOST_MATH_NAMESPACE::constants::pi<T>()));  // LCOV_EXCL_LINE  MP only
 
-      gamma_value = -boost::math::constants::pi<T>() / gamma_value;
+      gamma_value = -BOOST_MATH_NAMESPACE::constants::pi<T>() / gamma_value;
 
       BOOST_MATH_INSTRUMENT_VARIABLE(gamma_value);  // LCOV_EXCL_LINE  MP only
       //
@@ -702,7 +702,7 @@ inline T log_gamma_near_1(const T& z, Policy const& pol)
 
    do
    {
-      term = power_term * boost::math::polygamma(n - 1, T(1), pol);
+      term = power_term * BOOST_MATH_NAMESPACE::polygamma(n - 1, T(1), pol);
       result += term;  // LCOV_EXCL_LINE
       ++n;
       power_term *= z / n;
@@ -723,9 +723,9 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
 
    if(is_at_zero)
       return policies::raise_domain_error<T>(function, "Evaluation of lgamma at zero %1%.", z, pol);
-   if((boost::math::isnan)(z))
+   if((BOOST_MATH_NAMESPACE::isnan)(z))
       return policies::raise_domain_error<T>(function, "Evaluation of lgamma at %1%.", z, pol);
-   if((boost::math::isinf)(z))
+   if((BOOST_MATH_NAMESPACE::isinf)(z))
       return policies::raise_overflow_error<T>(function, nullptr, pol);
 
    const bool b_neg = (z < 0);
@@ -733,11 +733,11 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
    const bool floor_of_z_is_equal_to_z = (floor(z) == z);
 
    // Special case handling of small factorials:
-   if((!b_neg) && floor_of_z_is_equal_to_z && (z < boost::math::max_factorial<T>::value))
+   if((!b_neg) && floor_of_z_is_equal_to_z && (z < BOOST_MATH_NAMESPACE::max_factorial<T>::value))
    {
       if (sign)
          *sign = 1;  // LCOV_EXCL_LINE
-      return log(boost::math::unchecked_factorial<T>(itrunc(z) - 1));
+      return log(BOOST_MATH_NAMESPACE::unchecked_factorial<T>(itrunc(z) - 1));
    }
 
    // Make a local, unsigned copy of the input argument.
@@ -811,7 +811,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
          sign_of_result = -sign_of_result;  // LCOV_EXCL_LINE  MP only
       }
 
-      log_gamma_value = - log_gamma_value + log(boost::math::constants::pi<T>()) - log(t);
+      log_gamma_value = - log_gamma_value + log(BOOST_MATH_NAMESPACE::constants::pi<T>()) - log(t);
    }
 
    if(sign != static_cast<int*>(nullptr)) { *sign = sign_of_result; }
@@ -845,7 +845,7 @@ BOOST_MATH_GPU_ENABLED T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& 
 
    typedef typename policies::precision<T,Policy>::type precision_type;
 
-   typedef boost::math::integral_constant<int,
+   typedef BOOST_MATH_NAMESPACE::integral_constant<int,
       precision_type::value <= 0 ? 0 :
       precision_type::value <= 64 ? 64 :
       precision_type::value <= 113 ? 113 : 0
@@ -860,14 +860,14 @@ BOOST_MATH_GPU_ENABLED T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& 
          #ifdef BOOST_MATH_HAS_NVRTC
          result = ::tgamma(1+dz);
          #else
-         result = boost::math::tgamma(1+dz, pol) - 1;
+         result = BOOST_MATH_NAMESPACE::tgamma(1+dz, pol) - 1;
          #endif
          BOOST_MATH_INSTRUMENT_CODE(result);
       }
       else
       {
          // Use expm1 on lgamma:
-         result = boost::math::expm1(-boost::math::log1p(dz, pol)
+         result = BOOST_MATH_NAMESPACE::expm1(-BOOST_MATH_NAMESPACE::log1p(dz, pol)
             + lgamma_small_imp<T>(dz+2, dz + 1, dz, tag_type(), pol, l), pol);
          BOOST_MATH_INSTRUMENT_CODE(result);
       }
@@ -877,7 +877,7 @@ BOOST_MATH_GPU_ENABLED T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& 
       if(dz < 2)
       {
          // Use expm1 on lgamma:
-         result = boost::math::expm1(lgamma_small_imp<T>(dz+1, dz, dz-1, tag_type(), pol, l), pol);
+         result = BOOST_MATH_NAMESPACE::expm1(lgamma_small_imp<T>(dz+1, dz, dz-1, tag_type(), pol, l), pol);
          BOOST_MATH_INSTRUMENT_CODE(result);
       }
       else
@@ -886,7 +886,7 @@ BOOST_MATH_GPU_ENABLED T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& 
          #ifdef BOOST_MATH_HAS_NVRTC
          result = ::tgamma(1+dz);
          #else
-         result = boost::math::tgamma(1+dz, pol) - 1;
+         result = BOOST_MATH_NAMESPACE::tgamma(1+dz, pol) - 1;
          #endif
          BOOST_MATH_INSTRUMENT_CODE(result);
       }
@@ -899,15 +899,15 @@ BOOST_MATH_GPU_ENABLED T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& 
 
 template <class T, class Policy>
 inline T tgammap1m1_imp(T z, Policy const& pol,
-                 const ::boost::math::lanczos::undefined_lanczos&)
+                 const ::BOOST_MATH_NAMESPACE::lanczos::undefined_lanczos&)
 {
    BOOST_MATH_STD_USING // ADL of std names
 
    if(fabs(z) < T(0.55))
    {
-      return boost::math::expm1(log_gamma_near_1(z, pol));
+      return BOOST_MATH_NAMESPACE::expm1(log_gamma_near_1(z, pol));
    }
-   return boost::math::expm1(boost::math::lgamma(1 + z, pol));
+   return BOOST_MATH_NAMESPACE::expm1(BOOST_MATH_NAMESPACE::lgamma(1 + z, pol));
 }
 
 #endif // BOOST_MATH_HAS_GPU_SUPPORT
@@ -989,7 +989,7 @@ BOOST_MATH_GPU_ENABLED T full_igamma_prefix(T a, T z, const Policy& pol)
    // rather than before it...
    // Typically though this method is used when the result is small, we should probably not overflow here...
    //
-   if((boost::math::fpclassify)(prefix) == (int)BOOST_MATH_FP_INFINITE)
+   if((BOOST_MATH_NAMESPACE::fpclassify)(prefix) == (int)BOOST_MATH_FP_INFINITE)
       return policies::raise_overflow_error<T>("boost::math::detail::full_igamma_prefix<%1%>(%1%, %1%)", "Result of incomplete gamma function is too large to represent.", pol);  // LCOV_EXCL_LINE
 
    return prefix;
@@ -1034,7 +1034,7 @@ BOOST_MATH_GPU_ENABLED T regularised_gamma_prefix(T a, T z, const Policy& pol, c
    else if((fabs(d*d*a) <= 100) && (a > 150))
    {
       // special case for large a and a ~ z.
-      prefix = a * boost::math::log1pmx(d, pol) + z * static_cast<T>(0.5 - Lanczos::g()) / agh;
+      prefix = a * BOOST_MATH_NAMESPACE::log1pmx(d, pol) + z * static_cast<T>(0.5 - Lanczos::g()) / agh;
       prefix = exp(prefix);
    }
    else
@@ -1076,7 +1076,7 @@ BOOST_MATH_GPU_ENABLED T regularised_gamma_prefix(T a, T z, const Policy& pol, c
          prefix = pow(T(z / agh), a) * exp(amz);
       }
    }
-   prefix *= sqrt(agh / boost::math::constants::e<T>()) / Lanczos::lanczos_sum_expG_scaled(a);
+   prefix *= sqrt(agh / BOOST_MATH_NAMESPACE::constants::e<T>()) / Lanczos::lanczos_sum_expG_scaled(a);
    return prefix;
 }
 
@@ -1093,7 +1093,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
    if((a < 1) && (z < 1))
    {
       // No overflow possible since the power terms tend to unity as a,z -> 0
-      return pow(z, a) * exp(-z) / boost::math::tgamma(a, pol);
+      return pow(z, a) * exp(-z) / BOOST_MATH_NAMESPACE::tgamma(a, pol);
    }
    else if(a > minimum_argument_for_bernoulli_recursion<T>())
    {
@@ -1140,7 +1140,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
          {
             // We have no test case that gets here, most likely the type T
             // has a high precision but low exponent range:
-            return exp(a * log(z) - z - boost::math::lgamma(a, pol));
+            return exp(a * log(z) - z - BOOST_MATH_NAMESPACE::lgamma(a, pol));
          }
          result = power_term_1 * power_term_2 * power_term_3 / scaled_gamma;
          for (long i = 0; i < shift; ++i)
@@ -1171,21 +1171,21 @@ BOOST_MATH_GPU_ENABLED inline T tgamma_small_upper_part(T a, T x, const Policy& 
    typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
    T result {detail::tgammap1m1_imp(static_cast<value_type>(a), pol, evaluation_type())};
    #else
-   T result { boost::math::tgamma1pm1(a, pol) };
+   T result { BOOST_MATH_NAMESPACE::tgamma1pm1(a, pol) };
    #endif
 
    if(pgam)
       *pgam = (result + 1) / a;
-   T p = boost::math::powm1(x, a, pol);
+   T p = BOOST_MATH_NAMESPACE::powm1(x, a, pol);
    result -= p;
    result /= a;
    detail::small_gamma2_series<T> s(a, x);
-   boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>() - 10;
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>() - 10;
    p += 1;
    if(pderivative)
       *pderivative = p / (*pgam * exp(x));
    T init_value = invert ? *pgam : 0;
-   result = -p * tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, (init_value - result) / p);
+   result = -p * tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter, (init_value - result) / p);
    policies::check_series_iterations<T>("boost::math::tgamma_small_upper_part<%1%>(%1%, %1%)", max_iter, pol);
    if(invert)
       result = -result;
@@ -1215,7 +1215,7 @@ BOOST_MATH_GPU_ENABLED inline T finite_gamma_q(T a, T x, Policy const& pol, T* p
    }
    if(pderivative)
    {
-      *pderivative = e * pow(x, a) / boost::math::unchecked_factorial<T>(itrunc(T(a - 1), pol));
+      *pderivative = e * pow(x, a) / BOOST_MATH_NAMESPACE::unchecked_factorial<T>(itrunc(T(a - 1), pol));
    }
    return sum;
 }
@@ -1232,7 +1232,7 @@ BOOST_MATH_GPU_ENABLED T finite_half_gamma_q(T a, T x, T* p_derivative, const Po
 
    #ifdef BOOST_MATH_HAS_NVRTC
    T e;
-   if (boost::math::is_same_v<T, float>)
+   if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
    {
       e = ::erfcf(::sqrtf(x));
    }
@@ -1241,7 +1241,7 @@ BOOST_MATH_GPU_ENABLED T finite_half_gamma_q(T a, T x, T* p_derivative, const Po
       e = ::erfc(::sqrt(x));
    }
    #else
-   T e = boost::math::erfc(sqrt(x), pol);
+   T e = BOOST_MATH_NAMESPACE::erfc(sqrt(x), pol);
    #endif
 
    if((e != 0) && (a > 1))
@@ -1294,9 +1294,9 @@ BOOST_MATH_GPU_ENABLED T incomplete_tgamma_large_x(const T& a, const T& x, const
 {
    BOOST_MATH_STD_USING
    incomplete_tgamma_large_x_series<T> s(a, x);
-   boost::math::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-   boost::math::policies::check_series_iterations<T>("boost::math::tgamma<%1%>(%1%,%1%)", max_iter, pol);
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+   T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+   BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::tgamma<%1%>(%1%,%1%)", max_iter, pol);
    return result;
 }
 
@@ -1392,7 +1392,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
       // series and continued fractions are slow to converge:
       //
       bool use_temme = false;
-      if(normalised && boost::math::numeric_limits<T>::is_specialized && (a > 20))
+      if(normalised && BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized && (a > 20))
       {
          T sigma = fabs((x-a)/a);
          if((a > 200) && (policies::digits<T, Policy>() <= 113))
@@ -1451,7 +1451,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
          if(!normalised)
          {
             #ifdef BOOST_MATH_HAS_NVRTC
-            if (boost::math::is_same_v<T, float>)
+            if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
             {
                result *= ::tgammaf(a);
             }
@@ -1460,7 +1460,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
                result *= ::tgamma(a);
             }
             #else
-            result *= boost::math::tgamma(a, pol);
+            result *= BOOST_MATH_NAMESPACE::tgamma(a, pol);
             #endif
          }
          break;
@@ -1471,7 +1471,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
          if(!normalised)
          {
             #ifdef BOOST_MATH_HAS_NVRTC
-            if (boost::math::is_same_v<T, float>)
+            if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
             {
                result *= ::tgammaf(a);
             }
@@ -1480,7 +1480,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
                result *= ::tgamma(a);
             }
             #else
-            result *= boost::math::tgamma(a, pol);
+            result *= BOOST_MATH_NAMESPACE::tgamma(a, pol);
             #endif
          }
          if(p_derivative && (*p_derivative == 0))
@@ -1512,7 +1512,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
             if(invert)
             {
                #ifdef BOOST_MATH_HAS_NVRTC
-               if (boost::math::is_same_v<T, float>)
+               if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
                {
                   init_value = (normalised ? T(1) : ::tgammaf(a));
                }
@@ -1521,7 +1521,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
                   init_value = (normalised ? T(1) : ::tgamma(a));
                }
                #else
-               init_value = (normalised ? T(1) : boost::math::tgamma(a, pol));
+               init_value = (normalised ? T(1) : BOOST_MATH_NAMESPACE::tgamma(a, pol));
                #endif
 
                if(normalised || (result >= 1) || (tools::max_value<T>() * result > init_value))
@@ -1580,7 +1580,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
          //
          typedef typename policies::precision<T, Policy>::type precision_type;
 
-         typedef boost::math::integral_constant<int,
+         typedef BOOST_MATH_NAMESPACE::integral_constant<int,
             precision_type::value <= 0 ? 0 :
             precision_type::value <= 53 ? 53 :
             precision_type::value <= 64 ? 64 :
@@ -1607,7 +1607,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
             {
 #endif
                #ifdef BOOST_MATH_HAS_NVRTC
-               if (boost::math::is_same_v<T, float>)
+               if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
                {
                   result = ::powf(x, a) / ::tgammaf(a + 1);
                }
@@ -1616,7 +1616,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
                   result = ::pow(x, a) / ::tgamma(a + 1);
                }
                #else
-               result = pow(x, a) / boost::math::tgamma(a + 1, pol);
+               result = pow(x, a) / BOOST_MATH_NAMESPACE::tgamma(a + 1, pol);
                #endif
 #ifndef BOOST_MATH_NO_EXCEPTIONS
             }
@@ -1651,7 +1651,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
    {
       #ifdef BOOST_MATH_HAS_NVRTC
       T gam;
-      if (boost::math::is_same_v<T, float>)
+      if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
       {
          gam = normalised ? T(1) : ::tgammaf(a);
       }
@@ -1660,7 +1660,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
          gam = normalised ? T(1) : ::tgamma(a);
       }
       #else
-      T gam = normalised ? T(1) : boost::math::tgamma(a, pol);
+      T gam = normalised ? T(1) : BOOST_MATH_NAMESPACE::tgamma(a, pol);
       #endif
       result = gam - result;
    }
@@ -1736,7 +1736,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
             {
                // Try http://functions.wolfram.com/06.06.06.0039.01
                result = 1 + 1 / (12 * a) + 1 / (288 * a * a);
-               result = log(result) - a + (a - 0.5f) * log(a) + log(boost::math::constants::root_two_pi<T>());
+               result = log(result) - a + (a - 0.5f) * log(a) + log(BOOST_MATH_NAMESPACE::constants::root_two_pi<T>());
                BOOST_MATH_ASSERT(p_derivative == nullptr);
                // Not currently used for non-normalized igamma:
                //if(p_derivative)
@@ -1759,7 +1759,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
          else
          {
             #ifdef BOOST_MATH_HAS_NVRTC
-            if (boost::math::is_same_v<T, float>)
+            if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
             {
                result = ::logf(result) + ::lgammaf(a);
             }
@@ -1768,7 +1768,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
                result = ::log(result) + ::lgamma(a);
             }
             #else
-            result = log(result) + boost::math::lgamma(a, pol);
+            result = log(result) + BOOST_MATH_NAMESPACE::lgamma(a, pol);
             #endif
          }
       }
@@ -1785,7 +1785,7 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool in
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T lgamma_incomplete_imp(T a, T x, const Policy& pol)
 {
-   using namespace boost::math;  // temporary until we're in the right namespace
+   using namespace BOOST_MATH_NAMESPACE;  // temporary until we're in the right namespace
 
    BOOST_MATH_STD_USING_CORE
 
@@ -1826,7 +1826,7 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_imp(T a, T x, const Policy& pol)
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol)
 {
-   using namespace boost::math;  // temporary until we're in the right namespace
+   using namespace BOOST_MATH_NAMESPACE;  // temporary until we're in the right namespace
 
    BOOST_MATH_STD_USING_CORE
 
@@ -1863,6 +1863,67 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol
 }
 
 //
+// Logarithm of the non-normalised upper (upper == true) or lower incomplete gamma function.
+//
+// Where the non-normalised value is representable it is the logarithm of that. Otherwise this
+// uses the regularised value, the target T = Q (upper) or P (lower), and its complement C:
+//
+//    T >= 1/2:                 lgamma(a) + log1p(-C)
+//    T representable:          lgamma(a) + log(T)
+//    T underflows:             a log(x) - x + log(continued fraction), upper, x > a
+//                              a log(x) - x + log(series / a),         lower, x < a
+//
+// The last two are the methods that gamma_incomplete_imp uses in logs for large a, here applied
+// only far out in the tail, where they converge quickly. As in Abergel and Moisan's G-function
+// (ACM TOMS 46(1), Algorithm 1006), the prefix x^a e^-x is never formed.
+//
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper)
+{
+   BOOST_MATH_STD_USING
+   const char* function = upper ? "boost::math::ligamma<%1%>(%1%, %1%)" : "boost::math::ligamma_lower<%1%>(%1%, %1%)";
+
+   // These checks also reject NaN arguments:
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(a))
+      return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be finite (got a=%1%).", a, pol);
+   if(a <= 0)
+      return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
+   if(!(x >= 0))
+      return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
+
+   // At the ends of the range, the target is either the complete gamma function or zero:
+   bool target_is_zero = upper ? (BOOST_MATH_NAMESPACE::isinf)(x) : (x == 0);
+   if(target_is_zero)
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
+   if(upper ? (x == 0) : (BOOST_MATH_NAMESPACE::isinf)(x))
+      return BOOST_MATH_NAMESPACE::lgamma(a, pol);
+
+   // Under- and overflow are ours to handle, so stop the evaluations below from reporting them:
+   typedef typename policies::normalise<Policy, policies::underflow_error<policies::ignore_error>, policies::overflow_error<policies::ignore_error> >::type quiet_policy;
+
+   if(a < max_factorial<T>::value)
+   {
+      // The non-normalised value cannot overflow, as it is at most tgamma(a):
+      T value = gamma_incomplete_imp(a, x, false, upper, quiet_policy(), static_cast<T*>(nullptr));
+      if(value >= tools::min_value<T>())
+         return log(value);
+   }
+   T target = gamma_incomplete_imp(a, x, true, upper, quiet_policy(), static_cast<T*>(nullptr));
+   if(target > 0.5f)
+      return BOOST_MATH_NAMESPACE::lgamma(a, pol) + BOOST_MATH_NAMESPACE::log1p(-gamma_incomplete_imp(a, x, true, !upper, quiet_policy(), static_cast<T*>(nullptr)), pol);
+   if(target >= tools::min_value<T>())
+      return BOOST_MATH_NAMESPACE::lgamma(a, pol) + log(target);
+
+   // The target underflows, so x is far out in its tail:
+   T result = a * log(x) - x;
+   if(upper)
+      result += log(upper_gamma_fraction(a, x, policies::get_epsilon<T, Policy>()));
+   else
+      result += log(detail::lower_gamma_series(a, x, pol, T(0)) / a);
+   return result;
+}
+
+//
 // Ratios of two gamma functions:
 //
 template <class T, class Policy, class Lanczos>
@@ -1877,7 +1938,7 @@ BOOST_MATH_GPU_ENABLED T tgamma_delta_ratio_imp_lanczos_final(T z, T delta, cons
       // Given delta < z * eps
       // and zgh > z
       // Then this must follow:
-      BOOST_MATH_ASSERT(fabs(delta / zgh) < boost::math::tools::epsilon<T>());
+      BOOST_MATH_ASSERT(fabs(delta / zgh) < BOOST_MATH_NAMESPACE::tools::epsilon<T>());
       // We have:
       // result = exp((constants::half<T>() - z) * boost::math::log1p(delta / zgh, pol));
       // 0.5 - z == -z
@@ -1889,7 +1950,7 @@ BOOST_MATH_GPU_ENABLED T tgamma_delta_ratio_imp_lanczos_final(T z, T delta, cons
    {
       if(fabs(delta) < 10)
       {
-         result = exp((constants::half<T>() - z) * boost::math::log1p(delta / zgh, pol));
+         result = exp((constants::half<T>() - z) * BOOST_MATH_NAMESPACE::log1p(delta / zgh, pol));
       }
       else
       {
@@ -1918,17 +1979,17 @@ BOOST_MATH_GPU_ENABLED T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Poli
       // G(z) / G(L) = 1 / (z * G(L)) ; z < eps, L = z + delta = delta
       //    z * G(L) = z * G(lim) * (G(L)/G(lim)) ; lim = largest factorial
       //
-      if(boost::math::max_factorial<T>::value < delta)
+      if(BOOST_MATH_NAMESPACE::max_factorial<T>::value < delta)
       {
-         T ratio = tgamma_delta_ratio_imp_lanczos_final(T(delta), T(boost::math::max_factorial<T>::value - delta), pol, l);
+         T ratio = tgamma_delta_ratio_imp_lanczos_final(T(delta), T(BOOST_MATH_NAMESPACE::max_factorial<T>::value - delta), pol, l);
          ratio *= z;
-         ratio *= boost::math::unchecked_factorial<T>(boost::math::max_factorial<T>::value - 1);
+         ratio *= BOOST_MATH_NAMESPACE::unchecked_factorial<T>(BOOST_MATH_NAMESPACE::max_factorial<T>::value - 1);
          return 1 / ratio;
       }
       else
       {
          #ifdef BOOST_MATH_HAS_NVRTC
-         if (boost::math::is_same_v<T, float>)
+         if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
          {
             return 1 / (z * ::tgammaf(z + delta));
          }
@@ -1937,7 +1998,7 @@ BOOST_MATH_GPU_ENABLED T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Poli
             return 1 / (z * ::tgamma(z + delta));
          }
          #else
-         return 1 / (z * boost::math::tgamma(z + delta, pol));
+         return 1 / (z * BOOST_MATH_NAMESPACE::tgamma(z + delta, pol));
          #endif
       }
    }
@@ -1979,7 +2040,7 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const lanczos:
       T scaled_tgamma_num = scaled_tgamma_no_lanczos(z, pol);
       T scaled_tgamma_denom = scaled_tgamma_no_lanczos(T(z + delta), pol);
       T result = scaled_tgamma_num / scaled_tgamma_denom;
-      result *= exp(z * boost::math::log1p(-delta / (z + delta), pol)) * pow(T((delta + z) / constants::e<T>()), -delta);
+      result *= exp(z * BOOST_MATH_NAMESPACE::log1p(-delta / (z + delta), pol)) * pow(T((delta + z) / constants::e<T>()), -delta);
       return result;
    }
    //
@@ -2017,7 +2078,7 @@ BOOST_MATH_GPU_ENABLED T tgamma_delta_ratio_imp(T z, T delta, const Policy& pol)
    {
       // This isn't very sophisticated, or accurate, but it does work:
       #ifdef BOOST_MATH_HAS_NVRTC
-      if (boost::math::is_same_v<T, float>)
+      if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
       {
          return ::tgammaf(z) / ::tgammaf(z + delta);
       }
@@ -2026,7 +2087,7 @@ BOOST_MATH_GPU_ENABLED T tgamma_delta_ratio_imp(T z, T delta, const Policy& pol)
          return ::tgamma(z) / ::tgamma(z + delta);
       }
       #else
-      return boost::math::tgamma(z, pol) / boost::math::tgamma(z + delta, pol);
+      return BOOST_MATH_NAMESPACE::tgamma(z, pol) / BOOST_MATH_NAMESPACE::tgamma(z + delta, pol);
       #endif
    }
 
@@ -2082,9 +2143,9 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
-   if((x <= 0) || (boost::math::isinf)(x))
+   if((x <= 0) || (BOOST_MATH_NAMESPACE::isinf)(x))
       return policies::raise_domain_error<T>("boost::math::tgamma_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got a=%1%).", x, pol);
-   if((y <= 0) || (boost::math::isinf)(y))
+   if((y <= 0) || (BOOST_MATH_NAMESPACE::isinf)(y))
       return policies::raise_domain_error<T>("boost::math::tgamma_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got b=%1%).", y, pol);
 
    // We don't need to worry about the denorm case on device
@@ -2102,7 +2163,7 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
    {
       // Rather than subtracting values, lets just call the gamma functions directly:
       #ifdef BOOST_MATH_HAS_NVRTC
-      if (boost::math::is_same_v<T, float>)
+      if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
       {
          return ::tgammaf(x) / ::tgammaf(y);
       }
@@ -2111,7 +2172,7 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
          return ::tgamma(x) / ::tgamma(y);
       }
       #else
-      return boost::math::tgamma(x, pol) / boost::math::tgamma(y, pol);
+      return BOOST_MATH_NAMESPACE::tgamma(x, pol) / BOOST_MATH_NAMESPACE::tgamma(y, pol);
       #endif
    }
    T prefix = 1;
@@ -2130,7 +2191,7 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
          }
 
          #ifdef BOOST_MATH_HAS_NVRTC
-         if (boost::math::is_same_v<T, float>)
+         if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
          {
             return prefix * ::tgammaf(x) / ::tgammaf(y);
          }
@@ -2139,14 +2200,14 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
             return prefix * ::tgamma(x) / ::tgamma(y);
          }
          #else
-         return prefix * boost::math::tgamma(x, pol) / boost::math::tgamma(y, pol);
+         return prefix * BOOST_MATH_NAMESPACE::tgamma(x, pol) / BOOST_MATH_NAMESPACE::tgamma(y, pol);
          #endif
       }
       //
       // result is almost certainly going to underflow to zero, try logs just in case:
       //
       #ifdef BOOST_MATH_HAS_NVRTC
-      if (boost::math::is_same_v<T, float>)
+      if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
       {
          return ::expf(::lgammaf(x) - ::lgammaf(y));
       }
@@ -2155,7 +2216,7 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
          return ::exp(::lgamma(x) - ::lgamma(y));
       }
       #else
-      return exp(boost::math::lgamma(x, pol) - boost::math::lgamma(y, pol));
+      return exp(BOOST_MATH_NAMESPACE::lgamma(x, pol) - BOOST_MATH_NAMESPACE::lgamma(y, pol));
       #endif
    }
    if(y < 1)
@@ -2173,7 +2234,7 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
          }
 
          #ifdef BOOST_MATH_HAS_NVRTC
-         if (boost::math::is_same_v<T, float>)
+         if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
          {
             return prefix * ::tgammaf(x) / ::tgammaf(y);
          }
@@ -2182,13 +2243,13 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
             return prefix * ::tgamma(x) / ::tgamma(y);
          }
          #else
-         return prefix * boost::math::tgamma(x, pol) / boost::math::tgamma(y, pol);
+         return prefix * BOOST_MATH_NAMESPACE::tgamma(x, pol) / BOOST_MATH_NAMESPACE::tgamma(y, pol);
          #endif
       }
       //
       // Result will almost certainly overflow, try logs just in case:
       //
-      BOOST_MATH_IF_CONSTEXPR(boost::math::is_same<T, float>::value || boost::math::is_same<T, double>::value)
+      BOOST_MATH_IF_CONSTEXPR(BOOST_MATH_NAMESPACE::is_same<T, float>::value || BOOST_MATH_NAMESPACE::is_same<T, double>::value)
       {
          // straight to the scene of the accident, since the result is larger than max_factorial:
          return policies::raise_overflow_error<T>("tgamma_ratio", nullptr, pol);
@@ -2196,7 +2257,7 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
       else
       {
          #ifdef BOOST_MATH_HAS_NVRTC
-         if (boost::math::is_same_v<T, float>)
+         if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
          {
             prefix = ::lgammaf(x) - ::lgammaf(y);
          }
@@ -2205,9 +2266,9 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
             prefix = ::lgamma(x) - ::lgamma(y);
          }
          #else
-         prefix = boost::math::lgamma(x, pol) - boost::math::lgamma(y, pol);
+         prefix = BOOST_MATH_NAMESPACE::lgamma(x, pol) - BOOST_MATH_NAMESPACE::lgamma(y, pol);
          #endif
-         if (prefix > boost::math::tools::log_max_value<T>())
+         if (prefix > BOOST_MATH_NAMESPACE::tools::log_max_value<T>())
             return policies::raise_overflow_error<T>("tgamma_ratio", nullptr, pol);
          //
          // This is unreachable, unless max_factorial is small compared to the exponent
@@ -2222,7 +2283,7 @@ BOOST_MATH_GPU_ENABLED T tgamma_ratio_imp(T x, T y, const Policy& pol)
    #ifdef BOOST_MATH_HAS_NVRTC
    return detail::tgamma_delta_ratio_imp(x, y - x, pol);
    #else
-   return boost::math::tgamma_delta_ratio(x, y - x, pol);
+   return BOOST_MATH_NAMESPACE::tgamma_delta_ratio(x, y - x, pol);
    #endif
 }
 
@@ -2263,7 +2324,7 @@ BOOST_MATH_GPU_ENABLED T gamma_p_derivative_imp(T a, T x, const Policy& pol)
    {
       // Underflow in calculation, use logs instead:
       #ifdef BOOST_MATH_HAS_NVRTC
-      if (boost::math::is_same_v<T, float>)
+      if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
       {
          f1 = a * ::logf(x) - x - ::lgammaf(a) - ::logf(x);
       }
@@ -2284,7 +2345,7 @@ BOOST_MATH_GPU_ENABLED T gamma_p_derivative_imp(T a, T x, const Policy& pol)
 
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
-   tgamma(T z, const Policy& /* pol */, const boost::math::true_type)
+   tgamma(T z, const Policy& /* pol */, const BOOST_MATH_NAMESPACE::true_type)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T>::type result_type;
@@ -2301,7 +2362,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
 
 template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
-   tgamma(T1 a, T2 z, const Policy&, const boost::math::false_type)
+   tgamma(T1 a, T2 z, const Policy&, const BOOST_MATH_NAMESPACE::false_type)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef tools::promote_args_t<T1, T2> result_type;
@@ -2322,7 +2383,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
 
 template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
-   tgamma(T1 a, T2 z, const boost::math::false_type& tag)
+   tgamma(T1 a, T2 z, const BOOST_MATH_NAMESPACE::false_type& tag)
 {
    return tgamma(a, z, policies::policy<>(), tag);
 }
@@ -2359,14 +2420,14 @@ BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    lgamma(T x, const Policy& pol)
 {
-   return ::boost::math::lgamma(x, nullptr, pol);
+   return ::BOOST_MATH_NAMESPACE::lgamma(x, nullptr, pol);
 }
 
 BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    lgamma(T x)
 {
-   return ::boost::math::lgamma(x, nullptr, policies::policy<>());
+   return ::BOOST_MATH_NAMESPACE::lgamma(x, nullptr, policies::policy<>());
 }
 
 BOOST_MATH_EXPORT template <class T, class Policy>
@@ -2384,7 +2445,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   return policies::checked_narrowing_cast<typename boost::math::remove_cv<result_type>::type, forwarding_policy>(detail::tgammap1m1_imp(static_cast<value_type>(z), forwarding_policy(), evaluation_type()), "boost::math::tgamma1pm1<%!%>(%1%)");
+   return policies::checked_narrowing_cast<typename BOOST_MATH_NAMESPACE::remove_cv<result_type>::type, forwarding_policy>(detail::tgammap1m1_imp(static_cast<value_type>(z), forwarding_policy(), evaluation_type()), "boost::math::tgamma1pm1<%!%>(%1%)");
 }
 
 BOOST_MATH_EXPORT template <class T>
@@ -2414,7 +2475,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    tgamma(T1 a, T2 z, const Policy& pol)
 {
    using result_type = tools::promote_args_t<T1, T2>;
-   return static_cast<result_type>(detail::tgamma(a, z, pol, boost::math::false_type()));
+   return static_cast<result_type>(detail::tgamma(a, z, pol, BOOST_MATH_NAMESPACE::false_type()));
 }
 BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
@@ -2526,6 +2587,52 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> lgamma_p(T1 a, T2 z)
 {
    return lgamma_p(a, z, policies::policy<>());
 }
+
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma(T1 a, T2 z, const Policy&)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef tools::promote_args_t<T1, T2> result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), true), "boost::math::ligamma<%1%>(%1%, %1%)");
+}
+
+BOOST_MATH_EXPORT template <class T1, class T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma(T1 a, T2 z)
+{
+   return ligamma(a, z, policies::policy<>());
+}
+
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma_lower(T1 a, T2 z, const Policy&)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef tools::promote_args_t<T1, T2> result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), false), "boost::math::ligamma_lower<%1%>(%1%, %1%)");
+}
+
+BOOST_MATH_EXPORT template <class T1, class T2>
+BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma_lower(T1 a, T2 z)
+{
+   return ligamma_lower(a, z, policies::policy<>());
+}
 //
 // Regularised lower incomplete gamma:
 //
@@ -2624,8 +2731,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2>
    return gamma_p_derivative(a, x, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #ifdef _MSC_VER
 # pragma warning(pop)

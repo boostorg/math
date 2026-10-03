@@ -27,10 +27,7 @@
 
 // These are the the "Sinus Cardinal" functions.
 
-namespace boost
-{
-    namespace math
-    {
+BOOST_MATH_NAMESPACE_BEGIN
        namespace detail
        {
         // This is the "Sinus Cardinal" of index Pi.
@@ -40,7 +37,7 @@ namespace boost
         {
             BOOST_MATH_STD_USING
 
-            if ((boost::math::isinf)(x))
+            if ((BOOST_MATH_NAMESPACE::isinf)(x))
             {
                return 0;
             }
@@ -116,8 +113,7 @@ namespace boost
         {
            return sinc_pi(x);
         }
-    }
-}
+    BOOST_MATH_NAMESPACE_END
 
 #endif /* BOOST_SINC_HPP */
 

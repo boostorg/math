@@ -17,7 +17,7 @@
 #include <boost/math/tools/recurrence.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
 
-  namespace boost { namespace math { namespace detail {
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
   // forward declaration for initial values
   template <class T, class Policy>
@@ -29,7 +29,7 @@
   template <class T>
   struct hypergeometric_1F1_recurrence_a_coefficients
   {
-    using result_type = boost::math::tuple<T, T, T>;
+    using result_type = BOOST_MATH_NAMESPACE::tuple<T, T, T>;
 
     hypergeometric_1F1_recurrence_a_coefficients(const T& a, const T& b, const T& z):
     a(a), b(b), z(z)
@@ -48,7 +48,7 @@
       const T bn = (2 * ai - b + z);
       const T cn = -ai;
 
-      return boost::math::make_tuple(an, bn, cn);
+      return BOOST_MATH_NAMESPACE::make_tuple(an, bn, cn);
     }
 
   private:
@@ -60,7 +60,7 @@
   template <class T>
   struct hypergeometric_1F1_recurrence_b_coefficients
   {
-    using result_type = boost::math::tuple<T, T, T>;
+    using result_type = BOOST_MATH_NAMESPACE::tuple<T, T, T>;
 
     hypergeometric_1F1_recurrence_b_coefficients(const T& a, const T& b, const T& z):
     a(a), b(b), z(z)
@@ -79,7 +79,7 @@
       const T bn = bi * (1 - bi - z);
       const T cn = z * (bi - a);
 
-      return boost::math::make_tuple(an, bn, cn);
+      return BOOST_MATH_NAMESPACE::make_tuple(an, bn, cn);
     }
 
   private:
@@ -93,7 +93,7 @@
   template <class T>
   struct hypergeometric_1F1_recurrence_small_b_coefficients
   {
-     using result_type = boost::math::tuple<T, T, T>;
+     using result_type = BOOST_MATH_NAMESPACE::tuple<T, T, T>;
 
      hypergeometric_1F1_recurrence_small_b_coefficients(const T& a, const T& b, const T& z, int N) :
         a(a), b(b), z(z), N(N)
@@ -113,7 +113,7 @@
         const T bn = bi * (-bi_minus_1 - z);
         const T cn = z * (bi - a);
 
-        return boost::math::make_tuple(an, bn, cn);
+        return BOOST_MATH_NAMESPACE::make_tuple(an, bn, cn);
      }
 
   private:
@@ -126,7 +126,7 @@
   template <class T>
   struct hypergeometric_1F1_recurrence_a_and_b_coefficients
   {
-    using result_type = boost::math::tuple<T, T, T>;
+    using result_type = BOOST_MATH_NAMESPACE::tuple<T, T, T>;
 
     hypergeometric_1F1_recurrence_a_and_b_coefficients(const T& a, const T& b, const T& z, int offset = 0):
     a(a), b(b), z(z), offset(offset)
@@ -146,7 +146,7 @@
       const T bn = bi * (z - (b + (offset + i - 1)));
       const T cn = -ai * z;
 
-      return boost::math::make_tuple(an, bn, cn);
+      return BOOST_MATH_NAMESPACE::make_tuple(an, bn, cn);
     }
 
   private:
@@ -166,7 +166,7 @@
   template <class T>
   struct hypergeometric_1F1_recurrence_2a_and_2b_coefficients
   {
-     typedef boost::math::tuple<T, T, T> result_type;
+     typedef BOOST_MATH_NAMESPACE::tuple<T, T, T> result_type;
 
      hypergeometric_1F1_recurrence_2a_and_2b_coefficients(const T& a, const T& b, const T& z, int offset = 0) :
         a(a), b(b), z(z), offset(offset)
@@ -185,7 +185,7 @@
            + ai * bi * z * (b + (offset + i + 1)) / ((b + (offset + i + 1)) * (z - bi));
         const T cn = -ai * (a + (offset + i + 1)) * z * z / ((b + (offset + i + 1)) * (z - bi));
 
-        return boost::math::make_tuple(an, bn, cn);
+        return BOOST_MATH_NAMESPACE::make_tuple(an, bn, cn);
      }
 
   private:
@@ -201,7 +201,7 @@
   template <class T>
   struct hypergeometric_1F1_recurrence_2a_coefficients
   {
-     typedef boost::math::tuple<T, T, T> result_type;
+     typedef BOOST_MATH_NAMESPACE::tuple<T, T, T> result_type;
 
      hypergeometric_1F1_recurrence_2a_coefficients(const T& a, const T& b, const T& z, int offset = 0) :
         a(a), b(b), z(z), offset(offset)
@@ -217,7 +217,7 @@
         const T bn = (b - ai) * (a + (offset + i - 1)) / (2 * (a + (offset + i - 1)) - b + z) + (2 * ai - b + z) + ai * (b - (a + (offset + i + 1))) / (2 * (a + (offset + i + 1)) - b + z);
         const T cn = -ai * (a + (offset + i + 1)) / (2 * (a + (offset + i + 1)) - b + z);
 
-        return boost::math::make_tuple(an, bn, cn);
+        return BOOST_MATH_NAMESPACE::make_tuple(an, bn, cn);
      }
 
   private:
@@ -233,7 +233,7 @@
   template <class T>
   struct hypergeometric_1F1_recurrence_2b_coefficients
   {
-     typedef boost::math::tuple<T, T, T> result_type;
+     typedef BOOST_MATH_NAMESPACE::tuple<T, T, T> result_type;
 
      hypergeometric_1F1_recurrence_2b_coefficients(const T& a, const T& b, const T& z, int offset = 0) :
         a(a), b(b), z(z), offset(offset)
@@ -252,7 +252,7 @@
         const T bn = z * bi * bi_m1 * (bi_m1 - a) / (-bi_m1 * (-bi_m2 - z)) + bi * (-bi_m1 - z) + z * (bi - a) * bi_p1 * bi / (bi_p1 * (bi + z));
         const T cn = z * z * (bi - a) * (bi_p1 - a) / (bi_p1 * (bi + z));
 
-        return boost::math::make_tuple(an, bn, cn);
+        return BOOST_MATH_NAMESPACE::make_tuple(an, bn, cn);
      }
 
   private:
@@ -270,7 +270,7 @@
   template <class T>
   struct hypergeometric_1F1_recurrence_a_plus_b_minus_coefficients
   {
-     typedef boost::math::tuple<T, T, T> result_type;
+     typedef BOOST_MATH_NAMESPACE::tuple<T, T, T> result_type;
 
      hypergeometric_1F1_recurrence_a_plus_b_minus_coefficients(const T& a, const T& b, const T& z, int offset = 0) :
         a(a), b(b), z(z), offset(offset)
@@ -286,7 +286,7 @@
         const T bn = z * ((-1 / (ai + z) - 1 / (ai + z - 1)) * (bi + z - 1) + 3) + bi - 1;
         const T cn = ai * (1 - bi) / (ai + z);
 
-        return boost::math::make_tuple(an, bn, cn);
+        return BOOST_MATH_NAMESPACE::make_tuple(an, bn, cn);
      }
 
   private:
@@ -396,10 +396,10 @@
      // If the shifts are so large that we would throw an evaluation_error, try the series instead,
      // even though this will almost certainly throw as well:
      //
-     if (b_shift > static_cast<std::intmax_t>(boost::math::policies::get_max_series_iterations<Policy>()))
+     if (b_shift > static_cast<std::intmax_t>(BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>()))
         return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
 
-     if (a_shift > static_cast<std::intmax_t>(boost::math::policies::get_max_series_iterations<Policy>()))
+     if (a_shift > static_cast<std::intmax_t>(BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>()))
         return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
 
      int a_b_shift = b < 0 ? itrunc(b + b_shift) : b_shift;   // The max we can shift on a and b together
@@ -444,12 +444,12 @@
      T second {};
      long long scale1 {};
      long long scale2 {};
-     first = boost::math::detail::hypergeometric_1F1_imp(T(a + a_shift), T(b + b_shift), z, pol, scale1);
+     first = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(T(a + a_shift), T(b + b_shift), z, pol, scale1);
      //
      // It would be good to compute "second" from first and the ratio - unfortunately we are right on the cusp
      // recursion on a switching from stable backwards to stable forwards behaviour and so this is not possible here.
      //
-     second = boost::math::detail::hypergeometric_1F1_imp(T(a + a_shift - 1), T(b + b_shift), z, pol, scale2);
+     second = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_imp(T(a + a_shift - 1), T(b + b_shift), z, pol, scale2);
      if (scale1 != scale2)
         second *= exp(T(scale2 - scale1));
      log_scaling += scale1;
@@ -459,7 +459,7 @@
      // and want to recurse until [a + a_shift - leading_a_shift, b + b_shift, z] and [a + a_shift - leadng_a_shift - 1, b + b_shift, z]
      // which is leading_a_shift -1 steps.
      //
-     second = boost::math::tools::apply_recurrence_relation_backward(
+     second = BOOST_MATH_NAMESPACE::tools::apply_recurrence_relation_backward(
         hypergeometric_1F1_recurrence_a_coefficients<T>(a + a_shift - 1, b + b_shift, z), 
         leading_a_shift, first, second, &log_scaling, &first);
 
@@ -480,7 +480,7 @@
         // Now apply a_b_shift - 1 recursions to get down to
         // [a + 1, b + trailing_b_shift + 1, z] and [a, b + trailing_b_shift, z]
         //
-        second = boost::math::tools::apply_recurrence_relation_backward(
+        second = BOOST_MATH_NAMESPACE::tools::apply_recurrence_relation_backward(
            hypergeometric_1F1_recurrence_a_and_b_coefficients<T>(a, b + b_shift - a_b_shift, z, a_b_shift - 1),
            a_b_shift - 1, first, second, &log_scaling, &first);
         //
@@ -508,7 +508,7 @@
      //
      if (trailing_b_shift)
      {
-        second = boost::math::tools::apply_recurrence_relation_backward(
+        second = BOOST_MATH_NAMESPACE::tools::apply_recurrence_relation_backward(
            hypergeometric_1F1_recurrence_small_b_coefficients<T>(a, b, z, trailing_b_shift), 
            trailing_b_shift, first, second, &log_scaling);
      }
@@ -517,6 +517,6 @@
 
 
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_HYPERGEOMETRIC_1F1_RECURRENCE_HPP_

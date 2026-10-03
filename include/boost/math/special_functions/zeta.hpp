@@ -29,7 +29,7 @@
 #pragma GCC system_header
 #endif
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 #if 0
 //
@@ -48,7 +48,7 @@ struct zeta_series_cache_size
    // time.  This is important when constructing rational approximations
    // to zeta for example.
    //
-   typedef typename boost::math::policies::precision<T,Policy>::type precision_type;
+   typedef typename BOOST_MATH_NAMESPACE::policies::precision<T,Policy>::type precision_type;
    typedef typename mpl::if_<
       mpl::less_equal<precision_type, std::integral_constant<int, 0> >,
       std::integral_constant<int, 5000>,
@@ -105,7 +105,7 @@ T zeta_series_imp(T s, T sc, const Policy&)
       ++n;
    }while(fabs(change / sum) > tools::epsilon<T>());
 
-   return sum * 1 / -boost::math::powm1(T(2), sc);
+   return sum * 1 / -BOOST_MATH_NAMESPACE::powm1(T(2), sc);
 }
 
 //
@@ -151,7 +151,7 @@ T zeta_polynomial_series(T s, T sc, Policy const &)
    // See: http://www.cecm.sfu.ca/personal/pborwein/PAPERS/P155.pdf
    //
    BOOST_MATH_STD_USING
-   int n = itrunc(T(log(boost::math::tools::epsilon<T>()) / -2));
+   int n = itrunc(T(log(BOOST_MATH_NAMESPACE::tools::epsilon<T>()) / -2));
    T sum = 0;  // LCOV_EXCL_LINE spurious miss as surrounding lines hit.
    T two_n = ldexp(T(1), n);
    int ej_sign = 1;  // LCOV_EXCL_LINE spurious miss as surrounding lines hit.
@@ -974,23 +974,23 @@ T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
                if(((-v) & 1) == 0)
                   return 0;
                int n = (-v + 1) / 2;
-               if(n <= (int)boost::math::max_bernoulli_b2n<T>::value)
-                  return T((-v & 1) ? -1 : 1) * boost::math::unchecked_bernoulli_b2n<T>(n) / (1 - v);
+               if(n <= (int)BOOST_MATH_NAMESPACE::max_bernoulli_b2n<T>::value)
+                  return T((-v & 1) ? -1 : 1) * BOOST_MATH_NAMESPACE::unchecked_bernoulli_b2n<T>(n) / (1 - v);
             }
             else if((v & 1) == 0)
             {
-               if(((v / 2) <= (int)boost::math::max_bernoulli_b2n<T>::value) && (v <= (int)boost::math::max_factorial<T>::value))
+               if(((v / 2) <= (int)BOOST_MATH_NAMESPACE::max_bernoulli_b2n<T>::value) && (v <= (int)BOOST_MATH_NAMESPACE::max_factorial<T>::value))
                   return T(((v / 2 - 1) & 1) ? -1 : 1) * ldexp(T(1), v - 1) * static_cast<T>(pow(constants::pi<T, Policy>(), T(v))) *
-                     boost::math::unchecked_bernoulli_b2n<T>(v / 2) / boost::math::unchecked_factorial<T>(v);
+                     BOOST_MATH_NAMESPACE::unchecked_bernoulli_b2n<T>(v / 2) / BOOST_MATH_NAMESPACE::unchecked_factorial<T>(v);
                return T(((v / 2 - 1) & 1) ? -1 : 1) * ldexp(T(1), v - 1) * static_cast<T>(pow(constants::pi<T, Policy>(), T(v))) *
-                  boost::math::bernoulli_b2n<T>(v / 2) / boost::math::factorial<T>(v, pol);
+                  BOOST_MATH_NAMESPACE::bernoulli_b2n<T>(v / 2) / BOOST_MATH_NAMESPACE::factorial<T>(v, pol);
             }
             else
                return zeta_imp_odd_integer(v, sc, pol, std::integral_constant<bool, (Tag::value <= 113) && Tag::value>());
          }
 #ifndef BOOST_MATH_NO_EXCEPTIONS
       }
-      catch(const boost::math::rounding_error&){} // Just fall through, s is too large to round
+      catch(const BOOST_MATH_NAMESPACE::rounding_error&){} // Just fall through, s is too large to round
       catch(const std::overflow_error&){} // LCOV_EXCL_LINE We can only get here for "strange" MP types with small exponents and very large digit counts.
 #endif
    }
@@ -1008,8 +1008,8 @@ T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
       {
          if(s > max_factorial<T>::value)
          {
-            T mult = boost::math::sin_pi(0.5f * sc, pol) * 2 * zeta_imp(s, sc, pol, tag);
-            result = boost::math::lgamma(s, pol);
+            T mult = BOOST_MATH_NAMESPACE::sin_pi(0.5f * sc, pol) * 2 * zeta_imp(s, sc, pol, tag);
+            result = BOOST_MATH_NAMESPACE::lgamma(s, pol);
             result -= s * log(2 * constants::pi<T>());
             if(result > tools::log_max_value<T>())
                return sign(mult) * policies::raise_overflow_error<T>(function, nullptr, pol);
@@ -1020,14 +1020,14 @@ T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
             // half integer.
             //
             if(tools::max_value<T>() / fabs(mult) < result)
-               return boost::math::sign(mult) * policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE
+               return BOOST_MATH_NAMESPACE::sign(mult) * policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE
             result *= mult;
          }
          else
          {
-            result = boost::math::sin_pi(0.5f * sc, pol)
+            result = BOOST_MATH_NAMESPACE::sin_pi(0.5f * sc, pol)
                * 2 * pow(2 * constants::pi<T>(), -s)
-               * boost::math::tgamma(s, pol)
+               * BOOST_MATH_NAMESPACE::tgamma(s, pol)
                * zeta_imp(s, sc, pol, tag);
          }
       }
@@ -1073,7 +1073,7 @@ inline typename tools::promote_args<T>::type zeta(T s)
    return zeta(s, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ZETA_HPP
 

@@ -31,14 +31,16 @@
 #    define BOOST_MATH_HAS_CONSTEXPR_LDEXP
 #endif
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN
+
+namespace detail{
 
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T> trunc(const T& v, const Policy& pol, const std::false_type&)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
-   if(!(boost::math::isfinite)(v))
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(v))
    {
       return policies::raise_rounding_error("boost::math::trunc<%1%>(%1%)", nullptr, static_cast<result_type>(v), static_cast<result_type>(v), pol);
    }
@@ -67,8 +69,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T> trunc(const T& v)
 
 #else // Special handling for nvrtc
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail {
 
@@ -124,7 +125,7 @@ BOOST_MATH_GPU_ENABLED inline int itrunc(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
-   result_type r = boost::math::trunc(v, pol);
+   result_type r = BOOST_MATH_NAMESPACE::trunc(v, pol);
 
    #if defined(BOOST_MATH_HAS_CONSTEXPR_LDEXP) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
    if constexpr (std::is_arithmetic_v<result_type>
@@ -133,11 +134,11 @@ BOOST_MATH_GPU_ENABLED inline int itrunc(const T& v, const Policy& pol)
                  #endif
                 )
    {
-      constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
+      constexpr result_type max_val = BOOST_MATH_NAMESPACE::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
       
       if (r >= max_val || r < -max_val)
       {
-         return static_cast<int>(boost::math::policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
+         return static_cast<int>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
       }
    }
    else
@@ -146,7 +147,7 @@ BOOST_MATH_GPU_ENABLED inline int itrunc(const T& v, const Policy& pol)
    
       if (r >= max_val || r < -max_val)
       {
-         return static_cast<int>(boost::math::policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
+         return static_cast<int>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
       }
    }
    #else
@@ -154,7 +155,7 @@ BOOST_MATH_GPU_ENABLED inline int itrunc(const T& v, const Policy& pol)
 
    if (r >= max_val || r < -max_val)
    {
-      return static_cast<int>(boost::math::policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
+      return static_cast<int>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
    }
    #endif
 
@@ -172,7 +173,7 @@ BOOST_MATH_GPU_ENABLED inline long ltrunc(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
-   result_type r = boost::math::trunc(v, pol);
+   result_type r = BOOST_MATH_NAMESPACE::trunc(v, pol);
 
    #if defined(BOOST_MATH_HAS_CONSTEXPR_LDEXP) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
    if constexpr (std::is_arithmetic_v<result_type>
@@ -181,11 +182,11 @@ BOOST_MATH_GPU_ENABLED inline long ltrunc(const T& v, const Policy& pol)
                  #endif
                 )
    {
-      constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
+      constexpr result_type max_val = BOOST_MATH_NAMESPACE::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
       
       if (r >= max_val || r < -max_val)
       {
-         return static_cast<long>(boost::math::policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
+         return static_cast<long>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
       }
    }
    else
@@ -194,7 +195,7 @@ BOOST_MATH_GPU_ENABLED inline long ltrunc(const T& v, const Policy& pol)
    
       if (r >= max_val || r < -max_val)
       {
-         return static_cast<long>(boost::math::policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
+         return static_cast<long>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
       }
    }
    #else
@@ -202,7 +203,7 @@ BOOST_MATH_GPU_ENABLED inline long ltrunc(const T& v, const Policy& pol)
 
    if (r >= max_val || r < -max_val)
    {
-      return static_cast<long>(boost::math::policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
+      return static_cast<long>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
    }
    #endif
 
@@ -220,7 +221,7 @@ BOOST_MATH_GPU_ENABLED inline long long lltrunc(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
-   result_type r = boost::math::trunc(v, pol);
+   result_type r = BOOST_MATH_NAMESPACE::trunc(v, pol);
 
    #if defined(BOOST_MATH_HAS_CONSTEXPR_LDEXP) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
    if constexpr (std::is_arithmetic_v<result_type>
@@ -229,11 +230,11 @@ BOOST_MATH_GPU_ENABLED inline long long lltrunc(const T& v, const Policy& pol)
                  #endif
                 )
    {
-      constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
+      constexpr result_type max_val = BOOST_MATH_NAMESPACE::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
       
       if (r >= max_val || r < -max_val)
       {
-         return static_cast<long long>(boost::math::policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
+         return static_cast<long long>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
       }
    }
    else
@@ -242,7 +243,7 @@ BOOST_MATH_GPU_ENABLED inline long long lltrunc(const T& v, const Policy& pol)
    
       if (r >= max_val || r < -max_val)
       {
-         return static_cast<long long>(boost::math::policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
+         return static_cast<long long>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
       }
    }
    #else
@@ -250,7 +251,7 @@ BOOST_MATH_GPU_ENABLED inline long long lltrunc(const T& v, const Policy& pol)
 
    if (r >= max_val || r < -max_val)
    {
-      return static_cast<long long>(boost::math::policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
+      return static_cast<long long>(BOOST_MATH_NAMESPACE::policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
    }
    #endif
 
@@ -270,9 +271,9 @@ namespace detail {
 template <typename TargetType, typename T>
 BOOST_MATH_GPU_ENABLED TargetType integer_trunc_impl(T v)
 {
-   double r = boost::math::trunc(v);
+   double r = BOOST_MATH_NAMESPACE::trunc(v);
 
-   const double max_val = ldexp(1.0, boost::math::numeric_limits<TargetType>::digits);
+   const double max_val = ldexp(1.0, BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::digits);
 
    if (r >= max_val || r < -max_val)
    {
@@ -323,65 +324,65 @@ BOOST_MATH_GPU_ENABLED long long lltrunc(T v, const Policy&)
 #endif // BOOST_MATH_HAS_NVRTC
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline boost::math::enable_if_t<boost::math::is_constructible_v<int, T>, int>
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::enable_if_t<BOOST_MATH_NAMESPACE::is_constructible_v<int, T>, int>
    iconvert(const T& v, const Policy&)
 {
    return static_cast<int>(v);
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline boost::math::enable_if_t<!boost::math::is_constructible_v<int, T>, int>
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::enable_if_t<!BOOST_MATH_NAMESPACE::is_constructible_v<int, T>, int>
    iconvert(const T& v, const Policy& pol)
 {
-   using boost::math::itrunc;
+   using BOOST_MATH_NAMESPACE::itrunc;
    return itrunc(v, pol);
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline boost::math::enable_if_t<boost::math::is_constructible_v<long, T>, long>
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::enable_if_t<BOOST_MATH_NAMESPACE::is_constructible_v<long, T>, long>
    lconvert(const T& v, const Policy&)
 {
    return static_cast<long>(v);
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline boost::math::enable_if_t<!boost::math::is_constructible_v<long, T>, long>
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::enable_if_t<!BOOST_MATH_NAMESPACE::is_constructible_v<long, T>, long>
    lconvert(const T& v, const Policy& pol)
 {
-   using boost::math::ltrunc;
+   using BOOST_MATH_NAMESPACE::ltrunc;
    return ltrunc(v, pol);
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline boost::math::enable_if_t<boost::math::is_constructible_v<long long, T>, long long>
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::enable_if_t<BOOST_MATH_NAMESPACE::is_constructible_v<long long, T>, long long>
    llconvert(const T& v, const Policy&)
 {
    return static_cast<long long>(v);
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline typename boost::math::enable_if_t<!boost::math::is_constructible_v<long long, T>, long long>
+BOOST_MATH_GPU_ENABLED inline typename BOOST_MATH_NAMESPACE::enable_if_t<!BOOST_MATH_NAMESPACE::is_constructible_v<long long, T>, long long>
    llconvert(const T& v, const Policy& pol)
 {
-   using boost::math::lltrunc;
+   using BOOST_MATH_NAMESPACE::lltrunc;
    return lltrunc(v, pol);
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED [[deprecated("Use llconvert")]] inline boost::math::enable_if_t<boost::math::is_constructible_v<long long, T>, long long>
+BOOST_MATH_GPU_ENABLED [[deprecated("Use llconvert")]] inline BOOST_MATH_NAMESPACE::enable_if_t<BOOST_MATH_NAMESPACE::is_constructible_v<long long, T>, long long>
    llconvertert(const T& v, const Policy&)
 {
    return static_cast<long long>(v);
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED [[deprecated("Use llconvert")]] inline typename boost::math::enable_if_t<!boost::math::is_constructible_v<long long, T>, long long>
+BOOST_MATH_GPU_ENABLED [[deprecated("Use llconvert")]] inline typename BOOST_MATH_NAMESPACE::enable_if_t<!BOOST_MATH_NAMESPACE::is_constructible_v<long long, T>, long long>
    llconvertert(const T& v, const Policy& pol)
 {
-   using boost::math::lltrunc;
+   using BOOST_MATH_NAMESPACE::lltrunc;
    return lltrunc(v, pol);
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_TRUNC_HPP

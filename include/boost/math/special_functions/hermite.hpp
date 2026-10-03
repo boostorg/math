@@ -22,8 +22,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/detail/orthogonal_polynomial.hpp>
 
-namespace boost{
-namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 // Recurrence relation for Hermite polynomials:
 BOOST_MATH_EXPORT template <class T1, class T2, class T3>
@@ -143,7 +142,7 @@ BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    hermite(unsigned n, T x)
 {
-   return boost::math::hermite(n, x, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::hermite(n, x, policies::policy<>());
 }
 
 

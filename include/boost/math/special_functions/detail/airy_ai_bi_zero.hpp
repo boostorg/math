@@ -18,7 +18,7 @@
   #include <boost/math/constants/constants.hpp>
   #include <boost/math/special_functions/cbrt.hpp>
 
-  namespace boost { namespace math {
+  BOOST_MATH_NAMESPACE_BEGIN
   namespace detail
   {
     // Forward declarations of the needed Airy function implementations.
@@ -39,7 +39,7 @@
         const T one_over_z        (T(1) / z);
         const T one_over_z_squared(one_over_z * one_over_z);
 
-        const T z_pow_third     (boost::math::cbrt(z, pol));
+        const T z_pow_third     (BOOST_MATH_NAMESPACE::cbrt(z, pol));
         const T z_pow_two_thirds(z_pow_third * z_pow_third);
 
         // Implement the top line of Eq. 10.4.105.
@@ -96,8 +96,8 @@
               guess = T(-12.8287767528657572004);
               break;
             default:
-              const T t(((boost::math::constants::pi<T>() * 3) * ((T(m) * 4) - 1)) / 8);
-              guess = -boost::math::detail::airy_zero::equation_as_10_4_105(t, pol);
+              const T t(((BOOST_MATH_NAMESPACE::constants::pi<T>() * 3) * ((T(m) * 4) - 1)) / 8);
+              guess = -BOOST_MATH_NAMESPACE::detail::airy_zero::equation_as_10_4_105(t, pol);
               break;
           }
 
@@ -120,12 +120,12 @@
           #  pragma nv_diag_default 20012
           #endif
 
-          BOOST_MATH_GPU_ENABLED boost::math::tuple<T, T> operator()(const T& x) const
+          BOOST_MATH_GPU_ENABLED BOOST_MATH_NAMESPACE::tuple<T, T> operator()(const T& x) const
           {
             // Return a tuple containing both Ai(x) and Ai'(x).
-            return boost::math::make_tuple(
-              boost::math::detail::airy_ai_imp      (x, my_pol),
-              boost::math::detail::airy_ai_prime_imp(x, my_pol));
+            return BOOST_MATH_NAMESPACE::make_tuple(
+              BOOST_MATH_NAMESPACE::detail::airy_ai_imp      (x, my_pol),
+              BOOST_MATH_NAMESPACE::detail::airy_ai_prime_imp(x, my_pol));
           }
 
         private:
@@ -177,8 +177,8 @@
               guess = T(-12.3864171385827387456);
               break;
             default:
-              const T t(((boost::math::constants::pi<T>() * 3) * ((T(m) * 4) - 3)) / 8);
-              guess = -boost::math::detail::airy_zero::equation_as_10_4_105(t, pol);
+              const T t(((BOOST_MATH_NAMESPACE::constants::pi<T>() * 3) * ((T(m) * 4) - 3)) / 8);
+              guess = -BOOST_MATH_NAMESPACE::detail::airy_zero::equation_as_10_4_105(t, pol);
               break;
           }
 
@@ -201,12 +201,12 @@
           #  pragma nv_diag_default 20012
           #endif
 
-          BOOST_MATH_GPU_ENABLED boost::math::tuple<T, T> operator()(const T& x) const
+          BOOST_MATH_GPU_ENABLED BOOST_MATH_NAMESPACE::tuple<T, T> operator()(const T& x) const
           {
             // Return a tuple containing both Bi(x) and Bi'(x).
-            return boost::math::make_tuple(
-              boost::math::detail::airy_bi_imp      (x, my_pol),
-              boost::math::detail::airy_bi_prime_imp(x, my_pol));
+            return BOOST_MATH_NAMESPACE::make_tuple(
+              BOOST_MATH_NAMESPACE::detail::airy_bi_imp      (x, my_pol),
+              BOOST_MATH_NAMESPACE::detail::airy_bi_prime_imp(x, my_pol));
           }
 
         private:
@@ -216,7 +216,6 @@
       } // namespace airy_bi_zero_detail
     } // namespace airy_zero
   } // namespace detail
-  } // namespace math
-  } // namespaces boost
+  BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_AIRY_AI_BI_ZERO_2013_01_20_HPP_

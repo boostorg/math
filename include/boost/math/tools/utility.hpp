@@ -14,8 +14,7 @@
 #include <utility>
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 template <typename T>
 constexpr T min BOOST_MATH_PREVENT_MACRO_SUBSTITUTION (const T& a, const T& b)
@@ -35,13 +34,11 @@ void swap BOOST_MATH_PREVENT_MACRO_SUBSTITUTION (T& a, T& b)
     return (std::swap)(a, b);
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #else
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 template <typename T>
 BOOST_MATH_GPU_ENABLED constexpr T min BOOST_MATH_PREVENT_MACRO_SUBSTITUTION (const T& a, const T& b)
@@ -63,8 +60,7 @@ BOOST_MATH_GPU_ENABLED constexpr void swap BOOST_MATH_PREVENT_MACRO_SUBSTITUTION
     b = t;
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HAS_GPU_SUPPORT
 

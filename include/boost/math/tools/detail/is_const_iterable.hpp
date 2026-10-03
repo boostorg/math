@@ -15,8 +15,7 @@
 #include <utility>
 #endif
 
-namespace boost {
-   namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
       namespace tools {
          namespace detail {
 
@@ -35,6 +34,6 @@ namespace boost {
                && is_detected<const_iterator_t, T>::value
                > {};
 
-} } } }
+} } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_TOOLS_IS_CONST_ITERABLE_HPP

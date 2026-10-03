@@ -13,7 +13,7 @@
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 
-  namespace boost { namespace math { namespace detail {
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
   template <class T, class Policy>
   inline T hypergeometric_0F1_bessel(const T& b, const T& z, const Policy& pol)
@@ -24,23 +24,23 @@
     BOOST_MATH_ASSERT(z < 0);  // condition used at call site
 
     const T sqrt_z = sqrt(-z);
-    const T bessel_mult = boost::math::cyl_bessel_j(b - 1, 2 * sqrt_z, pol);
+    const T bessel_mult = BOOST_MATH_NAMESPACE::cyl_bessel_j(b - 1, 2 * sqrt_z, pol);
 
-    if (b > boost::math::max_factorial<T>::value)
+    if (b > BOOST_MATH_NAMESPACE::max_factorial<T>::value)
     {
        const T lsqrt_z = log(sqrt_z);
        const T lsqrt_z_pow_b = (b - 1) * lsqrt_z;
-       T lg = (boost::math::lgamma(b, pol) - lsqrt_z_pow_b);
+       T lg = (BOOST_MATH_NAMESPACE::lgamma(b, pol) - lsqrt_z_pow_b);
        lg = exp(lg);
        return lg * bessel_mult;
     }
     else
     {
        const T sqrt_z_pow_b = pow(sqrt_z, b - 1);
-       return (boost::math::tgamma(b, pol) / sqrt_z_pow_b) * bessel_mult;
+       return (BOOST_MATH_NAMESPACE::tgamma(b, pol) / sqrt_z_pow_b) * bessel_mult;
     }
   }
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_0F1_BESSEL_HPP

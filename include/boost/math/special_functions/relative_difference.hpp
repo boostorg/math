@@ -10,13 +10,12 @@
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/tools/precision.hpp>
 
-namespace boost{
-   namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
       BOOST_MATH_EXPORT template <class T, class U>
-      typename boost::math::tools::promote_args<T,U>::type relative_difference(const T& arg_a, const U& arg_b)
+      typename BOOST_MATH_NAMESPACE::tools::promote_args<T,U>::type relative_difference(const T& arg_a, const U& arg_b)
       {
-         typedef typename boost::math::tools::promote_args<T, U>::type result_type;
+         typedef typename BOOST_MATH_NAMESPACE::tools::promote_args<T, U>::type result_type;
          result_type a = arg_a;
          result_type b = arg_b;
          BOOST_MATH_STD_USING
@@ -37,7 +36,7 @@ namespace boost{
          result_type max_val = tools::max_value<result_type>();
 #endif
          // Screen out NaN's first, if either value is a NaN then the distance is "infinite":
-         if((boost::math::isnan)(a) || (boost::math::isnan)(b))
+         if((BOOST_MATH_NAMESPACE::isnan)(a) || (BOOST_MATH_NAMESPACE::isnan)(b))
             return max_val;
          // Screen out infinities:
          if(fabs(b) > max_val)
@@ -71,7 +70,7 @@ namespace boost{
 
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && (LDBL_MAX_EXP <= DBL_MAX_EXP)
       template <>
-      inline boost::math::tools::promote_args<double, double>::type relative_difference(const double& arg_a, const double& arg_b)
+      inline BOOST_MATH_NAMESPACE::tools::promote_args<double, double>::type relative_difference(const double& arg_a, const double& arg_b)
       {
          BOOST_MATH_STD_USING
          double a = arg_a;
@@ -86,7 +85,7 @@ namespace boost{
          double max_val = (std::min)((double)tools::max_value<long double>(), tools::max_value<double>());
 
          // Screen out NaN's first, if either value is a NaN then the distance is "infinite":
-         if((boost::math::isnan)(a) || (boost::math::isnan)(b))
+         if((BOOST_MATH_NAMESPACE::isnan)(a) || (BOOST_MATH_NAMESPACE::isnan)(b))
             return max_val;
          // Screen out infinities:
          if(fabs(b) > max_val)
@@ -120,15 +119,14 @@ namespace boost{
 #endif
 
       BOOST_MATH_EXPORT template <class T, class U>
-      inline typename boost::math::tools::promote_args<T, U>::type epsilon_difference(const T& arg_a, const U& arg_b)
+      inline typename BOOST_MATH_NAMESPACE::tools::promote_args<T, U>::type epsilon_difference(const T& arg_a, const U& arg_b)
       {
-         typedef typename boost::math::tools::promote_args<T, U>::type result_type;
+         typedef typename BOOST_MATH_NAMESPACE::tools::promote_args<T, U>::type result_type;
          result_type r = relative_difference(arg_a, arg_b);
-         if(tools::max_value<result_type>() * boost::math::tools::epsilon<result_type>() < r)
+         if(tools::max_value<result_type>() * BOOST_MATH_NAMESPACE::tools::epsilon<result_type>() < r)
             return tools::max_value<result_type>();
-         return r / boost::math::tools::epsilon<result_type>();
+         return r / BOOST_MATH_NAMESPACE::tools::epsilon<result_type>();
       }
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif

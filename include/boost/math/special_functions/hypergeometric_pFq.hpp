@@ -15,8 +15,7 @@
 #include <initializer_list>
 #endif
 
-namespace boost {
-   namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
       namespace detail {
 
@@ -32,9 +31,9 @@ namespace boost {
             bool operator()(std::uintmax_t iter)const
             {
                if (iter > max_iter)
-                  BOOST_MATH_THROW_EXCEPTION(boost::math::detail::pFq_termination_exception("pFq exceeded maximum permitted iterations."));
+                  BOOST_MATH_THROW_EXCEPTION(BOOST_MATH_NAMESPACE::detail::pFq_termination_exception("pFq exceeded maximum permitted iterations."));
                if (std::chrono::duration<double>(std::chrono::system_clock::now() - start_time).count() > max_time)
-                  BOOST_MATH_THROW_EXCEPTION(boost::math::detail::pFq_termination_exception("pFq exceeded maximum permitted evaluation time."));
+                  BOOST_MATH_THROW_EXCEPTION(BOOST_MATH_NAMESPACE::detail::pFq_termination_exception("pFq exceeded maximum permitted evaluation time."));
                return false;
             }
 
@@ -61,7 +60,7 @@ namespace boost {
 
          long long scale = 0;
          static const char* function = "boost::math::hypergeometric_pFq<%1%>(%1%,%1%,%1%)";
-         std::pair<value_type, value_type> r = boost::math::detail::hypergeometric_pFq_checked_series_impl(aj, bj, value_type(z), pol, boost::math::detail::iteration_terminator(boost::math::policies::get_max_series_iterations<forwarding_policy>()), scale);
+         std::pair<value_type, value_type> r = BOOST_MATH_NAMESPACE::detail::hypergeometric_pFq_checked_series_impl(aj, bj, value_type(z), pol, BOOST_MATH_NAMESPACE::detail::iteration_terminator(BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<forwarding_policy>()), scale);
          //
          // Overflow check:
          //
@@ -74,14 +73,14 @@ namespace boost {
          r.first *= mul;
          r.second *= mul;
          if (p_abs_error)
-            *p_abs_error = static_cast<Real>(r.second) * boost::math::tools::epsilon<Real>();
+            *p_abs_error = static_cast<Real>(r.second) * BOOST_MATH_NAMESPACE::tools::epsilon<Real>();
          return policies::checked_narrowing_cast<result_type, Policy>(r.first, function);
       }
 
       BOOST_MATH_EXPORT template <class Seq, class Real>
       inline typename tools::promote_args<Real, typename Seq::value_type>::type hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* p_abs_error = 0)
       {
-         return hypergeometric_pFq(aj, bj, z, p_abs_error, boost::math::policies::policy<>());
+         return hypergeometric_pFq(aj, bj, z, p_abs_error, BOOST_MATH_NAMESPACE::policies::policy<>());
       }
 
       BOOST_MATH_EXPORT template <class R, class Real, class Policy>
@@ -140,7 +139,7 @@ namespace boost {
             try
             {
                long long scale = 0;
-               std::pair<Real, Real> rp = boost::math::detail::hypergeometric_pFq_checked_series_impl(aa, bb, z, pol, boost::math::detail::timed_iteration_terminator(boost::math::policies::get_max_series_iterations<Policy>(), timeout), scale);
+               std::pair<Real, Real> rp = BOOST_MATH_NAMESPACE::detail::hypergeometric_pFq_checked_series_impl(aa, bb, z, pol, BOOST_MATH_NAMESPACE::detail::timed_iteration_terminator(BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>(), timeout), scale);
                rp.first *= exp(Real(scale));
                rp.second *= exp(Real(scale));
 
@@ -151,7 +150,7 @@ namespace boost {
                try {
                   cancellation = itrunc(log10(abs(norm / r)));
                }
-               catch (const boost::math::rounding_error&)
+               catch (const BOOST_MATH_NAMESPACE::rounding_error&)
                {
                   // Happens when r is near enough zero:
                   cancellation = UINT_MAX;
@@ -169,7 +168,7 @@ namespace boost {
                else
                   break;
             }
-            catch (const boost::math::evaluation_error&)
+            catch (const BOOST_MATH_NAMESPACE::evaluation_error&)
             {
                current_precision *= 2;
             }
@@ -178,7 +177,7 @@ namespace boost {
                //
                // Either we have exhausted the number of series iterations, or the timeout.
                // Either way we quit now.
-               throw boost::math::evaluation_error(e.what());
+               throw BOOST_MATH_NAMESPACE::evaluation_error(e.what());
             }
          } while (true);
 
@@ -187,7 +186,7 @@ namespace boost {
       BOOST_MATH_EXPORT template <class Seq, class Real>
       Real hypergeometric_pFq_precision(const Seq& aj, const Seq& bj, const Real& z, unsigned digits10, double timeout = 0.5)
       {
-         return hypergeometric_pFq_precision(aj, bj, z, digits10, timeout, boost::math::policies::policy<>());
+         return hypergeometric_pFq_precision(aj, bj, z, digits10, timeout, BOOST_MATH_NAMESPACE::policies::policy<>());
       }
 
       BOOST_MATH_EXPORT template <class Real, class Policy>
@@ -198,10 +197,9 @@ namespace boost {
       BOOST_MATH_EXPORT template <class Real>
       Real hypergeometric_pFq_precision(const std::initializer_list<Real>& aj, const std::initializer_list<Real>& bj, const Real& z, unsigned digits10, double timeout = 0.5)
       {
-         return hypergeometric_pFq_precision< std::initializer_list<Real>, Real>(aj, bj, z, digits10, timeout, boost::math::policies::policy<>());
+         return hypergeometric_pFq_precision< std::initializer_list<Real>, Real>(aj, bj, z, digits10, timeout, BOOST_MATH_NAMESPACE::policies::policy<>());
       }
 #endif
-   }
-} // namespaces
+   BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_BESSEL_ITERATORS_HPP

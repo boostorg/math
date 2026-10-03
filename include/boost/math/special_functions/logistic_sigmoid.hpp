@@ -13,8 +13,7 @@
 #include <cmath>
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 BOOST_MATH_GPU_ENABLED RealType logistic_sigmoid(RealType x, const Policy&)
@@ -42,7 +41,6 @@ BOOST_MATH_GPU_ENABLED RealType logistic_sigmoid(RealType x)
     return logistic_sigmoid(x, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SF_EXPIT_HPP

@@ -13,7 +13,7 @@
 #error "The header <boost/math/isnan.hpp> can only be used in C++17 and later."
 #endif
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 BOOST_MATH_EXPORT template <typename T>
 inline constexpr bool isnan BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x)
@@ -24,7 +24,7 @@ inline constexpr bool isnan BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x)
     }
     else
     {
-        using boost::math::isnan;
+        using BOOST_MATH_NAMESPACE::isnan;
 
         if constexpr (!std::is_integral_v<T>)
         {
@@ -37,6 +37,6 @@ inline constexpr bool isnan BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x)
     }
 }
 
-}
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_ISNAN

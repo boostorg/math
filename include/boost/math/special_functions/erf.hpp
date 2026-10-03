@@ -31,7 +31,7 @@
 #pragma GCC system_header
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail
 {
@@ -46,7 +46,7 @@ struct erf_asympt_series_t
    BOOST_MATH_GPU_ENABLED erf_asympt_series_t(T z) : xx(2 * -z * z), tk(1)
    {
       BOOST_MATH_STD_USING
-      result = -exp(-z * z) / sqrt(boost::math::constants::pi<T>());
+      result = -exp(-z * z) / sqrt(BOOST_MATH_NAMESPACE::constants::pi<T>());
       result /= z;
    }
 
@@ -150,7 +150,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
 
    BOOST_MATH_INSTRUMENT_CODE("Generic erf_imp called");
 
-   if ((boost::math::isnan)(z))
+   if ((BOOST_MATH_NAMESPACE::isnan)(z))
       return policies::raise_domain_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol);
 
    if (fabs(z) < tools::root_epsilon<T>())
@@ -163,7 +163,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
       return invert ? 1 - term2 : term2;
    }
 
-   const bool signbit_result = ((boost::math::signbit)(z) != 0);
+   const bool signbit_result = ((BOOST_MATH_NAMESPACE::signbit)(z) != 0);
 
    if (signbit_result)
    {
@@ -179,7 +179,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
    {
       detail::erf_asympt_series_t<T> s(z);
       std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-      result = boost::math::tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter, 1);
+      result = BOOST_MATH_NAMESPACE::tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter, 1);
       policies::check_series_iterations<T>("boost::math::erf<%1%>(%1%, %1%)", max_iter, pol);
    }
    else
@@ -204,7 +204,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
          // Compute Q:
          invert = !invert;
          result = z * exp(-z_sq);
-         result /= boost::math::constants::root_pi<T>();
+         result /= BOOST_MATH_NAMESPACE::constants::root_pi<T>();
          result *= upper_gamma_fraction(T(0.5f), z_sq, policies::get_epsilon<T, Policy>());
       }
    }
@@ -220,7 +220,7 @@ BOOST_MATH_GPU_ENABLED T erf_imp(T z, bool invert, const Policy& pol, const std:
 
    BOOST_MATH_INSTRUMENT_CODE("53-bit precision erf_imp called");
 
-   if ((boost::math::isnan)(z))
+   if ((BOOST_MATH_NAMESPACE::isnan)(z))
       return policies::raise_domain_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol);
 
    int prefix_multiplier = 1;
@@ -476,7 +476,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
 
    BOOST_MATH_INSTRUMENT_CODE("64-bit precision erf_imp called");
 
-   if ((boost::math::isnan)(z))
+   if ((BOOST_MATH_NAMESPACE::isnan)(z))
       return policies::raise_domain_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol);
 
    if(z < 0)
@@ -724,7 +724,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
 
    BOOST_MATH_INSTRUMENT_CODE("113-bit precision erf_imp called");
 
-   if ((boost::math::isnan)(z))
+   if ((BOOST_MATH_NAMESPACE::isnan)(z))
       return policies::raise_domain_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol);
 
    if(z < 0)
@@ -1259,22 +1259,20 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type erfc(T z, co
 BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type erf(T z)
 {
-   return boost::math::erf(z, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::erf(z, policies::policy<>());
 }
 
 BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type erfc(T z)
 {
-   return boost::math::erfc(z, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::erfc(z, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #else // Special handling for NVRTC platform
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED auto erf(T x)
@@ -1324,8 +1322,7 @@ BOOST_MATH_GPU_ENABLED auto erfc(float x, const Policy&)
    return ::erfcf(x);
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HAS_NVRTC
 

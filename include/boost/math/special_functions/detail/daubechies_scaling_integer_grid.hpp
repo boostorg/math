@@ -32,7 +32,7 @@ The suffix is as follows:
 #  define C_(x) static_cast<Real>(x)
 #endif
 
-namespace boost::math::detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
 template <typename Real, int p, int order> struct daubechies_scaling_integer_grid_imp;
 
@@ -242,5 +242,5 @@ constexpr inline std::array<Real, 2*p> daubechies_scaling_integer_grid()
     return daubechies_scaling_integer_grid_imp<Real, p, order>::value;
 }
 
-} // namespaces
+} BOOST_MATH_NAMESPACE_END
 #endif

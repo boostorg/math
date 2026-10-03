@@ -43,6 +43,18 @@
    
    template <class T1, class T2, class ``__Policy``>
    BOOST_MATH_GPU_ENABLED ``__sf_result`` tgamma(T1 a, T2 z, const ``__Policy``&);
+
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ligamma(T1 a, T2 z);
+
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ligamma(T1 a, T2 z, const ``__Policy``&);
+
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ligamma_lower(T1 a, T2 z);
+
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ligamma_lower(T1 a, T2 z, const ``__Policy``&);
    
    }} // namespaces
    
@@ -129,6 +141,22 @@ Returns the full (non-normalised) lower incomplete gamma function of a and z:
 Returns the full (non-normalised) upper incomplete gamma function of a and z:
 
 [equation igamma1]
+
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ligamma(T1 a, T2 z);
+
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ligamma(T1 a, T2 z, const ``__Policy``&);
+
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ligamma_lower(T1 a, T2 z);
+
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` ligamma_lower(T1 a, T2 z, const ``__Policy``&);
+
+Return the natural logarithms of `tgamma(a, z)` and `tgamma_lower(a, z)`. They stay finite and accurate where those
+overflow or underflow: for example `ligamma(1000, 1000)` is about 5905 in double precision, where `log(tgamma(1000, 1000))`
+raises an overflow error. Where the result is exactly zero, its logarithm, -infinity, is reported as an __overflow_error.
 
 [h4 Accuracy]
 
@@ -303,8 +331,16 @@ in which case an expansion, for large x, of the (non-normalised) upper
 incomplete gamma function is used. The return is then normalised by subtracting
 the log of the gamma function and adding /a log(x)-x-log(x)/.  
 
+`ligamma` and `ligamma_lower` take the logarithm of `tgamma(a, z)` or `tgamma_lower(a, z)` where that is representable.
+Otherwise they add `lgamma(a)` to the logarithm of the regularized function, or of `log1p` of minus its complement when that
+is the smaller, except where the regularized function underflows: then they use /a log(z) - z/ plus the logarithm of the
+continued fraction (upper) or series (lower) that it multiplies, the same normalization by /z[super a]e[super -z]/ as the
+G-function of Abergel and Moisan.
+
 [h4 References]
 
+* R. Abergel and L. Moisan, Algorithm 1006: Fast and Accurate Evaluation of a Generalized Incomplete Gamma Function,
+ACM TOMS, Vol 46, No 1, 2020.
 * N. M. Temme, A Set of Algorithms for the Incomplete Gamma Functions,
 Probability in the Engineering and Informational Sciences, 8, 1994.
 * N. M. Temme, The Asymptotic Expansion of the Incomplete Gamma Functions,

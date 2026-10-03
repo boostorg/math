@@ -33,14 +33,14 @@
 #  endif
 #endif
 
-namespace boost::math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template<class Real, int p, int order>
 std::vector<Real> daubechies_scaling_dyadic_grid(int64_t j_max)
 {
     using std::isnan;
     using std::sqrt;
-    auto c = boost::math::filters::daubechies_scaling_filter<Real, p>();
+    auto c = BOOST_MATH_NAMESPACE::filters::daubechies_scaling_filter<Real, p>();
     Real scale = sqrt(static_cast<Real>(2))*(1 << order);
     for (auto & x : c)
     {
@@ -401,5 +401,5 @@ private:
    std::shared_ptr<interpolator_type> m_interpolator;
 };
 
-}
+BOOST_MATH_NAMESPACE_END
 #endif

@@ -15,8 +15,9 @@
 #include <cstdint>
 #endif
 
-namespace boost {
-namespace math {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN
 namespace interpolators {
 namespace detail {
 
@@ -650,6 +651,5 @@ private:
 
 }
 }
-}
-}
+BOOST_MATH_NAMESPACE_END
 #endif

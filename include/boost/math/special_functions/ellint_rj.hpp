@@ -31,12 +31,12 @@
 // R_J(x, y, z, p) = 1.5 * \int_{0}^{\infty} (t+p)^{-1} [(t+x)(t+y)(t+z)]^{-1/2} dt
 // Carlson, Numerische Mathematik, vol 33, 1 (1979)
 
-namespace boost { namespace math { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T ellint_rc1p_imp(T y, const Policy& pol)
 {
-   using namespace boost::math;
+   using namespace BOOST_MATH_NAMESPACE;
    // Calculate RC(1, 1 + x)
    BOOST_MATH_STD_USING
 
@@ -61,7 +61,7 @@ BOOST_MATH_GPU_ENABLED T ellint_rc1p_imp(T y, const Policy& pol)
       if(y > T(-0.5))
       {
          T arg = sqrt(-y);
-         result = (boost::math::log1p(arg, pol) - boost::math::log1p(-arg, pol)) / (2 * sqrt(-y));
+         result = (BOOST_MATH_NAMESPACE::log1p(arg, pol) - BOOST_MATH_NAMESPACE::log1p(-arg, pol)) / (2 * sqrt(-y));
       }
       else
       {
@@ -299,7 +299,7 @@ BOOST_MATH_GPU_ENABLED T ellint_rj_imp(T x, T y, T z, T p, const Policy& pol)
    }
    if(x + y == 0 || y + z == 0 || z + x == 0)
    {
-      return policies::raise_domain_error<T>(function, "At most one argument can be zero, only possible result is %1%.", boost::math::numeric_limits<T>::quiet_NaN(), pol);
+      return policies::raise_domain_error<T>(function, "At most one argument can be zero, only possible result is %1%.", BOOST_MATH_NAMESPACE::numeric_limits<T>::quiet_NaN(), pol);
    }
 
    // for p < 0, the integral is singular, return Cauchy principal value
@@ -359,7 +359,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2, T3, T4>::type
    return ellint_rj(x, y, z, p, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ELLINT_RJ_HPP
 

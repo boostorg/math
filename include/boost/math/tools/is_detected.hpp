@@ -10,7 +10,7 @@
 
 #include <boost/math/tools/type_traits.hpp>
 
-namespace boost { namespace math { namespace tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 template <typename...>
 using void_t = void;
@@ -20,14 +20,14 @@ namespace detail {
 template <typename Default, typename AlwaysVoid, template<typename...> class Op, typename... Args>
 struct detector
 {
-    using value_t = boost::math::false_type;
+    using value_t = BOOST_MATH_NAMESPACE::false_type;
     using type = Default;
 };
 
 template <typename Default, template<typename...> class Op, typename... Args>
 struct detector<Default, void_t<Op<Args...>>, Op, Args...>
 {
-    using value_t = boost::math::true_type;
+    using value_t = BOOST_MATH_NAMESPACE::true_type;
     using type = Op<Args...>;
 };
 
@@ -51,6 +51,6 @@ using detected_t = typename detail::detector<nonesuch, void, Op, Args...>::type;
 template <typename Default, template<typename...> class Op, typename... Args>
 using detected_or = detail::detector<Default, void, Op, Args...>;
 
-}}} // Namespaces boost math tools
+} BOOST_MATH_NAMESPACE_END // Namespaces boost math tools
 
 #endif // BOOST_MATH_TOOLS_IS_DETECTED_HPP

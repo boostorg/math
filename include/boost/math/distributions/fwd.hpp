@@ -13,7 +13,7 @@
 
 #include <boost/math/tools/config.hpp>
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 class arcsine_distribution;
@@ -132,46 +132,46 @@ class weibull_distribution;
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 class von_mises_distribution;
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #define BOOST_MATH_DECLARE_DISTRIBUTIONS(Type, Policy)\
-   typedef boost::math::arcsine_distribution<Type, Policy> arcsine;\
-   typedef boost::math::bernoulli_distribution<Type, Policy> bernoulli;\
-   typedef boost::math::beta_distribution<Type, Policy> beta;\
-   typedef boost::math::binomial_distribution<Type, Policy> binomial;\
-   typedef boost::math::cauchy_distribution<Type, Policy> cauchy;\
-   typedef boost::math::chi_squared_distribution<Type, Policy> chi_squared;\
-   typedef boost::math::exponential_distribution<Type, Policy> exponential;\
-   typedef boost::math::extreme_value_distribution<Type, Policy> extreme_value;\
-   typedef boost::math::fisher_f_distribution<Type, Policy> fisher_f;\
-   typedef boost::math::gamma_distribution<Type, Policy> gamma;\
-   typedef boost::math::geometric_distribution<Type, Policy> geometric;\
-   typedef boost::math::hypergeometric_distribution<Type, Policy> hypergeometric;\
-   typedef boost::math::kolmogorov_smirnov_distribution<Type, Policy> kolmogorov_smirnov;\
-   typedef boost::math::inverse_chi_squared_distribution<Type, Policy> inverse_chi_squared;\
-   typedef boost::math::inverse_gaussian_distribution<Type, Policy> inverse_gaussian;\
-   typedef boost::math::inverse_gamma_distribution<Type, Policy> inverse_gamma;\
-   typedef boost::math::landau_distribution<Type, Policy> landau;\
-   typedef boost::math::mapairy_distribution<Type, Policy> mapairy;\
-   typedef boost::math::holtsmark_distribution<Type, Policy> holtsmark;\
-   typedef boost::math::saspoint5_distribution<Type, Policy> saspoint5;\
-   typedef boost::math::laplace_distribution<Type, Policy> laplace;\
-   typedef boost::math::logistic_distribution<Type, Policy> logistic;\
-   typedef boost::math::lognormal_distribution<Type, Policy> lognormal;\
-   typedef boost::math::negative_binomial_distribution<Type, Policy> negative_binomial;\
-   typedef boost::math::non_central_beta_distribution<Type, Policy> non_central_beta;\
-   typedef boost::math::non_central_chi_squared_distribution<Type, Policy> non_central_chi_squared;\
-   typedef boost::math::non_central_f_distribution<Type, Policy> non_central_f;\
-   typedef boost::math::non_central_t_distribution<Type, Policy> non_central_t;\
-   typedef boost::math::normal_distribution<Type, Policy> normal;\
-   typedef boost::math::pareto_distribution<Type, Policy> pareto;\
-   typedef boost::math::poisson_distribution<Type, Policy> poisson;\
-   typedef boost::math::rayleigh_distribution<Type, Policy> rayleigh;\
-   typedef boost::math::skew_normal_distribution<Type, Policy> skew_normal;\
-   typedef boost::math::students_t_distribution<Type, Policy> students_t;\
-   typedef boost::math::triangular_distribution<Type, Policy> triangular;\
-   typedef boost::math::uniform_distribution<Type, Policy> uniform;\
-   typedef boost::math::weibull_distribution<Type, Policy> weibull; \
-   typedef boost::math::von_mises_distribution<Type, Policy> von_mises;
+   typedef BOOST_MATH_NAMESPACE::arcsine_distribution<Type, Policy> arcsine;\
+   typedef BOOST_MATH_NAMESPACE::bernoulli_distribution<Type, Policy> bernoulli;\
+   typedef BOOST_MATH_NAMESPACE::beta_distribution<Type, Policy> beta;\
+   typedef BOOST_MATH_NAMESPACE::binomial_distribution<Type, Policy> binomial;\
+   typedef BOOST_MATH_NAMESPACE::cauchy_distribution<Type, Policy> cauchy;\
+   typedef BOOST_MATH_NAMESPACE::chi_squared_distribution<Type, Policy> chi_squared;\
+   typedef BOOST_MATH_NAMESPACE::exponential_distribution<Type, Policy> exponential;\
+   typedef BOOST_MATH_NAMESPACE::extreme_value_distribution<Type, Policy> extreme_value;\
+   typedef BOOST_MATH_NAMESPACE::fisher_f_distribution<Type, Policy> fisher_f;\
+   typedef BOOST_MATH_NAMESPACE::gamma_distribution<Type, Policy> gamma;\
+   typedef BOOST_MATH_NAMESPACE::geometric_distribution<Type, Policy> geometric;\
+   typedef BOOST_MATH_NAMESPACE::hypergeometric_distribution<Type, Policy> hypergeometric;\
+   typedef BOOST_MATH_NAMESPACE::kolmogorov_smirnov_distribution<Type, Policy> kolmogorov_smirnov;\
+   typedef BOOST_MATH_NAMESPACE::inverse_chi_squared_distribution<Type, Policy> inverse_chi_squared;\
+   typedef BOOST_MATH_NAMESPACE::inverse_gaussian_distribution<Type, Policy> inverse_gaussian;\
+   typedef BOOST_MATH_NAMESPACE::inverse_gamma_distribution<Type, Policy> inverse_gamma;\
+   typedef BOOST_MATH_NAMESPACE::landau_distribution<Type, Policy> landau;\
+   typedef BOOST_MATH_NAMESPACE::mapairy_distribution<Type, Policy> mapairy;\
+   typedef BOOST_MATH_NAMESPACE::holtsmark_distribution<Type, Policy> holtsmark;\
+   typedef BOOST_MATH_NAMESPACE::saspoint5_distribution<Type, Policy> saspoint5;\
+   typedef BOOST_MATH_NAMESPACE::laplace_distribution<Type, Policy> laplace;\
+   typedef BOOST_MATH_NAMESPACE::logistic_distribution<Type, Policy> logistic;\
+   typedef BOOST_MATH_NAMESPACE::lognormal_distribution<Type, Policy> lognormal;\
+   typedef BOOST_MATH_NAMESPACE::negative_binomial_distribution<Type, Policy> negative_binomial;\
+   typedef BOOST_MATH_NAMESPACE::non_central_beta_distribution<Type, Policy> non_central_beta;\
+   typedef BOOST_MATH_NAMESPACE::non_central_chi_squared_distribution<Type, Policy> non_central_chi_squared;\
+   typedef BOOST_MATH_NAMESPACE::non_central_f_distribution<Type, Policy> non_central_f;\
+   typedef BOOST_MATH_NAMESPACE::non_central_t_distribution<Type, Policy> non_central_t;\
+   typedef BOOST_MATH_NAMESPACE::normal_distribution<Type, Policy> normal;\
+   typedef BOOST_MATH_NAMESPACE::pareto_distribution<Type, Policy> pareto;\
+   typedef BOOST_MATH_NAMESPACE::poisson_distribution<Type, Policy> poisson;\
+   typedef BOOST_MATH_NAMESPACE::rayleigh_distribution<Type, Policy> rayleigh;\
+   typedef BOOST_MATH_NAMESPACE::skew_normal_distribution<Type, Policy> skew_normal;\
+   typedef BOOST_MATH_NAMESPACE::students_t_distribution<Type, Policy> students_t;\
+   typedef BOOST_MATH_NAMESPACE::triangular_distribution<Type, Policy> triangular;\
+   typedef BOOST_MATH_NAMESPACE::uniform_distribution<Type, Policy> uniform;\
+   typedef BOOST_MATH_NAMESPACE::weibull_distribution<Type, Policy> weibull; \
+   typedef BOOST_MATH_NAMESPACE::von_mises_distribution<Type, Policy> von_mises;
 
 #endif // BOOST_MATH_DISTRIBUTIONS_FWD_HPP

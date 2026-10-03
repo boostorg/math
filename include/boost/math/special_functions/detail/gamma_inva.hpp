@@ -21,7 +21,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
 
-namespace boost{ namespace math{ 
+BOOST_MATH_NAMESPACE_BEGIN
 
 #ifdef BOOST_MATH_HAS_NVRTC
 template <typename T, typename Policy>
@@ -36,7 +36,7 @@ struct gamma_inva_t
    BOOST_MATH_GPU_ENABLED gamma_inva_t(T z_, T p_, bool invert_) : z(z_), p(p_), invert(invert_) {}
    BOOST_MATH_GPU_ENABLED T operator()(T a)
    {
-      return invert ? p - boost::math::gamma_q(a, z, Policy()) : boost::math::gamma_p(a, z, Policy()) - p;
+      return invert ? p - BOOST_MATH_NAMESPACE::gamma_q(a, z, Policy()) : BOOST_MATH_NAMESPACE::gamma_p(a, z, Policy()) - p;
    }
 private:
    T z, p;
@@ -56,7 +56,7 @@ BOOST_MATH_GPU_ENABLED T inverse_poisson_cornish_fisher(T lambda, T p, T q, cons
    // kurtosis:
    // T k = 1/lambda;
    // Get the inverse of a std normal distribution:
-   T x = boost::math::erfc_inv(p > q ? 2 * q : 2 * p, pol) * constants::root_two<T>();
+   T x = BOOST_MATH_NAMESPACE::erfc_inv(p > q ? 2 * q : 2 * p, pol) * constants::root_two<T>();
    // Set the sign:
    if(p < 0.5)
       x = -x;
@@ -222,18 +222,17 @@ template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
    gamma_p_inva(T1 x, T2 p)
 {
-   return boost::math::gamma_p_inva(x, p, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::gamma_p_inva(x, p, policies::policy<>());
 }
 
 template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
    gamma_q_inva(T1 x, T2 q)
 {
-   return boost::math::gamma_q_inva(x, q, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::gamma_q_inva(x, q, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SP_DETAIL_GAMMA_INVA
 

@@ -25,7 +25,7 @@
 // n < abs(z), forward recurrence stable and usable
 // n >= abs(z), forward recurrence unstable, use Miller's algorithm
 
-namespace boost { namespace math { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T bessel_jn(int n, T x, const Policy& pol)
@@ -92,7 +92,7 @@ BOOST_MATH_GPU_ENABLED T bessel_jn(int n, T x, const Policy& pol)
     {
         T fn; int s;                        // fn = J_(n+1) / J_n
         // |x| <= n, fast convergence for continued fraction CF1
-        boost::math::detail::CF1_jy(static_cast<T>(n), x, &fn, &s, pol);
+        BOOST_MATH_NAMESPACE::detail::CF1_jy(static_cast<T>(n), x, &fn, &s, pol);
         prev = fn;
         current = 1;
         // Check recursion won't go on too far:
@@ -121,7 +121,7 @@ BOOST_MATH_GPU_ENABLED T bessel_jn(int n, T x, const Policy& pol)
     return value / scale;
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_BESSEL_JN_HPP
 

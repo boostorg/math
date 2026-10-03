@@ -20,7 +20,7 @@
 #include <boost/math/special_functions/detail/t_distribution_inv.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 //
 // Helper object used by root finding
@@ -31,17 +31,17 @@ struct temme_root_finder
 {
    BOOST_MATH_GPU_ENABLED temme_root_finder(const T t_, const T a_) : t(t_), a(a_) {
       BOOST_MATH_ASSERT(
-         math::tools::epsilon<T>() <= a && !(boost::math::isinf)(a));
+         BOOST_MATH_NAMESPACE::tools::epsilon<T>() <= a && !(BOOST_MATH_NAMESPACE::isinf)(a));
    }
 
-   BOOST_MATH_GPU_ENABLED boost::math::tuple<T, T> operator()(T x)
+   BOOST_MATH_GPU_ENABLED BOOST_MATH_NAMESPACE::tuple<T, T> operator()(T x)
    {
       BOOST_MATH_STD_USING // ADL of std names
 
       T y = 1 - x;
       T f = log(x) + a * log(y) + t;
       T f1 = (1 / x) - (a / (y));
-      return boost::math::make_tuple(f, f1);
+      return BOOST_MATH_NAMESPACE::make_tuple(f, f1);
    }
 private:
    T t, a;
@@ -63,7 +63,7 @@ BOOST_MATH_GPU_ENABLED T temme_method_1_ibeta_inverse(T a, T b, T z, const Polic
    // get the first approximation for eta from the inverse
    // error function (Eq: 2.9 and 2.10).
    //
-   T eta0 = boost::math::erfc_inv(2 * z, pol);
+   T eta0 = BOOST_MATH_NAMESPACE::erfc_inv(2 * z, pol);
    eta0 /= -sqrt(a / 2);
 
    T terms[4] = { eta0 };
@@ -148,7 +148,7 @@ BOOST_MATH_GPU_ENABLED T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r
    // Get first estimate for eta, see Eq 3.9 and 3.10,
    // but note there is a typo in Eq 3.10:
    //
-   T eta0 = boost::math::erfc_inv(2 * z, pol);
+   T eta0 = BOOST_MATH_NAMESPACE::erfc_inv(2 * z, pol);
    eta0 /= -sqrt(r / 2);
 
    T s = sin(theta);
@@ -311,7 +311,7 @@ BOOST_MATH_GPU_ENABLED T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r
          temme_root_finder<T>(-lu, alpha), x, lower, upper, policies::digits<T, Policy>() / 2);
 #ifndef BOOST_MATH_NO_EXCEPTIONS
    }
-   catch (const boost::math::evaluation_error&)
+   catch (const BOOST_MATH_NAMESPACE::evaluation_error&)
    {
       // Due to numerical instability we may have cases where no root is found when
       // in fact we should just touch the origin.  We simply ignore the error here
@@ -342,9 +342,9 @@ BOOST_MATH_GPU_ENABLED T temme_method_3_ibeta_inverse(T a, T b, T p, T q, const 
    //
    T eta0;
    if(p < q)
-      eta0 = boost::math::gamma_q_inv(b, p, pol);
+      eta0 = BOOST_MATH_NAMESPACE::gamma_q_inv(b, p, pol);
    else
-      eta0 = boost::math::gamma_p_inv(b, q, pol);
+      eta0 = BOOST_MATH_NAMESPACE::gamma_p_inv(b, q, pol);
    eta0 /= a;
    //
    // Define the variables and powers we'll need later on:
@@ -440,7 +440,7 @@ struct ibeta_roots
    BOOST_MATH_GPU_ENABLED ibeta_roots(T _a, T _b, T t, bool inv = false)
       : a(_a), b(_b), target(t), invert(inv) {}
 
-   BOOST_MATH_GPU_ENABLED boost::math::tuple<T, T, T> operator()(T x)
+   BOOST_MATH_GPU_ENABLED BOOST_MATH_NAMESPACE::tuple<T, T, T> operator()(T x)
    {
       BOOST_MATH_STD_USING // ADL of std names
 
@@ -466,7 +466,7 @@ struct ibeta_roots
       if(f1 == 0)
          f1 = (invert ? -1 : 1) * tools::min_value<T>() * 64;
 
-      return boost::math::make_tuple(f, f1, f2);
+      return BOOST_MATH_NAMESPACE::make_tuple(f, f1, f2);
    }
 private:
    T a, b, target;
@@ -562,7 +562,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
          if(a > 1)
          {
             x = pow(p, 1 / a);
-            y = -boost::math::expm1(log(p) / a, pol);
+            y = -BOOST_MATH_NAMESPACE::expm1(log(p) / a, pol);
          }
          else
          {
@@ -572,8 +572,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
       }
       else
       {
-         x = exp(boost::math::log1p(-q, pol) / a);
-         y = -boost::math::expm1(boost::math::log1p(-q, pol) / a, pol);
+         x = exp(BOOST_MATH_NAMESPACE::log1p(-q, pol) / a);
+         y = -BOOST_MATH_NAMESPACE::expm1(BOOST_MATH_NAMESPACE::log1p(-q, pol) / a, pol);
       }
       if(invert)
          BOOST_MATH_GPU_SAFE_SWAP(x, y);
@@ -628,7 +628,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
             T ppa = pow(p, 1/a);
             if((ppa < 0.0025) && (a + b < 200))
             {
-               x = ppa * pow(a * boost::math::beta(a, b, pol), 1/a);
+               x = ppa * pow(a * BOOST_MATH_NAMESPACE::beta(a, b, pol), 1/a);
             }
             else
                x = temme_method_2_ibeta_inverse(a, b, p, r, theta, pol);
@@ -661,11 +661,11 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
                try
 #endif
                {
-                  bet = boost::math::beta(a, b, pol);
+                  bet = BOOST_MATH_NAMESPACE::beta(a, b, pol);
 
                   typedef typename Policy::overflow_error_type overflow_type;
 
-                  BOOST_MATH_IF_CONSTEXPR(overflow_type::value != boost::math::policies::throw_on_error)
+                  BOOST_MATH_IF_CONSTEXPR(overflow_type::value != BOOST_MATH_NAMESPACE::policies::throw_on_error)
                      if(bet > tools::max_value<T>())
                         bet = tools::max_value<T>();
                }
@@ -708,7 +708,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
       // Now we need to ensure that we start our iteration from the
       // right side of the inflection point:
       //
-      T fs = boost::math::ibeta(a, b, xs, pol) - p;
+      T fs = BOOST_MATH_NAMESPACE::ibeta(a, b, xs, pol) - p;
       if(fabs(fs) / p < tools::epsilon<T>() * 3)
       {
          // The result is at the point of inflection, best just return it:
@@ -740,7 +740,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
 #ifndef BOOST_MATH_NO_EXCEPTIONS
       try {
 #endif
-         bet = boost::math::beta(a, b, pol);
+         bet = BOOST_MATH_NAMESPACE::beta(a, b, pol);
 #ifndef BOOST_MATH_NO_EXCEPTIONS
       }
       catch (const std::runtime_error&)
@@ -748,9 +748,9 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
          overflow = true;
       }
 #endif
-      if (overflow || !(boost::math::isfinite)(bet))
+      if (overflow || !(BOOST_MATH_NAMESPACE::isfinite)(bet))
       {
-         xg = exp((boost::math::lgamma(a + 1, pol) + boost::math::lgamma(b, pol) - boost::math::lgamma(a + b, pol) + log(p)) / a);
+         xg = exp((BOOST_MATH_NAMESPACE::lgamma(a + 1, pol) + BOOST_MATH_NAMESPACE::lgamma(b, pol) - BOOST_MATH_NAMESPACE::lgamma(a + b, pol) + log(p)) / a);
          if (xg > 2 / tools::epsilon<T>())
             xg = 2 / tools::epsilon<T>();
       }
@@ -777,7 +777,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
       //
       T xs = (a - 1) / (a + b - 2);
       T xs2 = (b - 1) / (a + b - 2);
-      T ps = boost::math::ibeta(a, b, xs, pol) - p;
+      T ps = BOOST_MATH_NAMESPACE::ibeta(a, b, xs, pol) - p;
 
       if(ps < 0)
       {
@@ -790,9 +790,9 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
       // Estimate x and y, using expm1 to get a good estimate
       // for y when it's very small:
       //
-      T lx = log(p * a * boost::math::beta(a, b, pol)) / a;
+      T lx = log(p * a * BOOST_MATH_NAMESPACE::beta(a, b, pol)) / a;
       x = exp(lx);
-      y = x < 0.9 ? T(1 - x) : (T)(-boost::math::expm1(lx, pol));
+      y = x < 0.9 ? T(1 - x) : (T)(-BOOST_MATH_NAMESPACE::expm1(lx, pol));
 
       if((b < a) && (x < 0.2))
       {
@@ -870,8 +870,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
          try 
          {
 #endif
-            x = pow(p * a * boost::math::beta(a, b, pol), 1 / a);
-            if ((x > 1) || !(boost::math::isfinite)(x))
+            x = pow(p * a * BOOST_MATH_NAMESPACE::beta(a, b, pol), 1 / a);
+            if ((x > 1) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
                x = 1;
 #ifndef BOOST_MATH_NO_EXCEPTIONS
          }
@@ -881,7 +881,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
          }
 #endif
          if(x == 0)
-            x = boost::math::tools::min_value<T>();
+            x = BOOST_MATH_NAMESPACE::tools::min_value<T>();
          y = 1 - x;
       }
       else /*if(pow(q, 1/b) < 0.1)*/
@@ -891,8 +891,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
          try 
          {
 #endif
-            y = pow(1 - pow(p, b * boost::math::beta(a, b, pol)), 1/b);
-            if ((y > 1) || !(boost::math::isfinite)(y))
+            y = pow(1 - pow(p, b * BOOST_MATH_NAMESPACE::beta(a, b, pol)), 1/b);
+            if ((y > 1) || !(BOOST_MATH_NAMESPACE::isfinite)(y))
                y = 1;
 #ifndef BOOST_MATH_NO_EXCEPTIONS
          }
@@ -902,7 +902,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
          }
 #endif
          if(y == 0)
-            y = boost::math::tools::min_value<T>();
+            y = BOOST_MATH_NAMESPACE::tools::min_value<T>();
          x = 1 - y;
       }
    }
@@ -936,21 +936,21 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
          //
          // We're not interested in answers smaller than machine epsilon:
          //
-         lower = boost::math::tools::epsilon<T>();
+         lower = BOOST_MATH_NAMESPACE::tools::epsilon<T>();
          if(x < lower)
             x = lower;
       }
       else
-         lower = boost::math::tools::min_value<T>();
+         lower = BOOST_MATH_NAMESPACE::tools::min_value<T>();
       if(x < lower)
          x = lower;
    }
-   boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
-   boost::math::uintmax_t max_iter_used = 0;
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter_used = 0;
    //
    // Figure out how many digits to iterate towards:
    //
-   int digits = boost::math::policies::digits<T, Policy>() / 2;
+   int digits = BOOST_MATH_NAMESPACE::policies::digits<T, Policy>() / 2;
    if((x < 1e-50) && ((a < 1) || (b < 1)))
    {
       //
@@ -972,11 +972,11 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
    // Since we can't use halley_iterate on device we use newton raphson
    //
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
-   x = boost::math::tools::halley_iterate(
+   x = BOOST_MATH_NAMESPACE::tools::halley_iterate(
    #else
-   x = boost::math::tools::newton_raphson_iterate(
+   x = BOOST_MATH_NAMESPACE::tools::newton_raphson_iterate(
    #endif
-      boost::math::detail::ibeta_roots<T, Policy>(a, b, (p < q ? p : q), (p < q ? false : true)), x, lower, upper, digits, max_iter);
+      BOOST_MATH_NAMESPACE::detail::ibeta_roots<T, Policy>(a, b, (p < q ? p : q), (p < q ? false : true)), x, lower, upper, digits, max_iter);
    policies::check_root_iterations<T>("boost::math::ibeta<%1%>(%1%, %1%, %1%)", max_iter + max_iter_used, pol);
    //
    // We don't really want these asserts here, but they are useful for sanity
@@ -1112,8 +1112,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
    return ibetac_inv(a, b, q, static_cast<result_type*>(nullptr), pol);
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_IGAMMA_INVERSE_HPP
 

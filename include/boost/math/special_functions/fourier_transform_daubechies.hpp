@@ -19,7 +19,7 @@
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/estrin.hpp>
 
-namespace boost::math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail {
 
@@ -191,7 +191,7 @@ BOOST_MATH_EXPORT template <class Real, unsigned p> std::complex<Real> fourier_t
   if constexpr (std::is_same_v<Real, float>) {
     return static_cast<std::complex<float>>(fourier_transform_daubechies_scaling<double, p>(static_cast<double>(omega)));
   }
-  using boost::math::constants::one_div_root_two_pi;
+  using BOOST_MATH_NAMESPACE::constants::one_div_root_two_pi;
   using std::abs;
   using std::exp;
   using std::norm;
@@ -216,7 +216,7 @@ BOOST_MATH_EXPORT template <class Real, unsigned p> std::complex<Real> fourier_t
   do {
     std::complex<Real> arg{0, xi};
     auto z = exp(arg);
-    phi *= boost::math::tools::evaluate_polynomial_estrin(lxi, z);
+    phi *= BOOST_MATH_NAMESPACE::tools::evaluate_polynomial_estrin(lxi, z);
     xi /= 2;
   } while (abs(xi) > std::numeric_limits<Real>::epsilon());
   std::complex<Real> arg{0, omega};
@@ -242,9 +242,9 @@ BOOST_MATH_EXPORT template <class Real, unsigned p> std::complex<Real> fourier_t
   auto z = phase; // strange coincidence.
   //auto z = exp(std::complex<Real>(0, -omega/2 - boost::math::constants::pi<Real>()));
   auto constexpr lxi = detail::ft_daubechies_scaling_polynomial_coefficients<Real, p>();
-  auto m0 = std::complex<Real>(pow((Real(1) + z)/Real(2), p))*boost::math::tools::evaluate_polynomial_estrin(lxi, z);
+  auto m0 = std::complex<Real>(pow((Real(1) + z)/Real(2), p))*BOOST_MATH_NAMESPACE::tools::evaluate_polynomial_estrin(lxi, z);
   return Fphi*std::conj(m0)*phase;
 }
 
-} // namespace boost::math
+BOOST_MATH_NAMESPACE_END
 #endif

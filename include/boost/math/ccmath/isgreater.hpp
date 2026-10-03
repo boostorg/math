@@ -14,14 +14,14 @@
 
 #include <boost/math/ccmath/isnan.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 BOOST_MATH_EXPORT template <typename T1, typename T2 = T1>
 inline constexpr bool isgreater(T1 x, T2 y) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        if (boost::math::ccmath::isnan(x) || boost::math::ccmath::isnan(y))
+        if (BOOST_MATH_NAMESPACE::ccmath::isnan(x) || BOOST_MATH_NAMESPACE::ccmath::isnan(y))
         {
             return false;
         }
@@ -37,6 +37,6 @@ inline constexpr bool isgreater(T1 x, T2 y) noexcept
     }
 }
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_ISGREATER_HPP
