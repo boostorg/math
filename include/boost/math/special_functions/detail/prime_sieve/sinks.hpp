@@ -19,7 +19,7 @@
 #include <vector>
 #endif
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 // Sink contract: segment(words, n_words, low) receives the final bits of one segment whose
 // first byte represents low + {7, ..., 31}; bits outside the requested range are already clear.
@@ -69,7 +69,7 @@ struct count_sink
         std::uint64_t c {0};
         for (std::size_t i {0}; i < n; ++i)
         {
-            c += static_cast<std::uint64_t>(boost::math::tools::popcount(words[i]));
+            c += static_cast<std::uint64_t>(BOOST_MATH_NAMESPACE::tools::popcount(words[i]));
         }
         return c;
 #endif
@@ -117,7 +117,7 @@ public:
             {
                 flush();
             }
-            const std::uint64_t word {boost::math::tools::load_le64(bytes + 8 * w)};
+            const std::uint64_t word {BOOST_MATH_NAMESPACE::tools::load_le64(bytes + 8 * w)};
             size_ += extract_word(word, low + 240u * w, buffer_.data() + size_);
         }
     }
@@ -171,7 +171,7 @@ public:
         std::uint32_t* dst {out_.data()};
         for (std::size_t w {0}; w < n_words; ++w)
         {
-            const std::uint64_t word {boost::math::tools::load_le64(bytes + 8 * w)};
+            const std::uint64_t word {BOOST_MATH_NAMESPACE::tools::load_le64(bytes + 8 * w)};
             size_ += extract_word_u32(word, low + 240u * w, dst + size_);
         }
     }
@@ -214,6 +214,6 @@ struct append_u64
     }
 };
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_SINKS_HPP

@@ -21,7 +21,9 @@
 #endif
 #endif
 
-namespace boost { namespace math{
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN
 
 template<class RandomAccessContainer>
 class empirical_cumulative_distribution_function {
@@ -71,5 +73,5 @@ private:
     RandomAccessContainer m_v;
 };
 
-}}
+BOOST_MATH_NAMESPACE_END
 #endif

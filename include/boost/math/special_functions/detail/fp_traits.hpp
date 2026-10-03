@@ -107,8 +107,7 @@ static_assert((BOOST_MATH_ENDIAN_BIG_BYTE || BOOST_MATH_ENDIAN_LITTLE_BYTE)
 
 //------------------------------------------------------------------------------
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace detail {
 
 //------------------------------------------------------------------------------
@@ -558,7 +557,6 @@ template<class T> struct fp_traits
 //------------------------------------------------------------------------------
 
 }   // namespace detail
-}   // namespace math
-}   // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif

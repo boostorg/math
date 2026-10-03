@@ -10,7 +10,7 @@
 #endif
 #include <boost/math/tools/cubic_roots.hpp>
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 namespace detail {
 
@@ -155,5 +155,5 @@ std::array<Real, 4> quartic_roots(Real a, Real b, Real c, Real d, Real e) {
     return detail::polish_and_sort(a, b, c, d, e, roots);
 }
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

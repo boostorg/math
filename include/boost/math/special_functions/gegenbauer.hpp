@@ -17,17 +17,17 @@
 #endif
 #endif
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template<typename Real>
 BOOST_MATH_GPU_ENABLED Real gegenbauer(unsigned n, Real lambda, Real x)
 {
-    static_assert(!boost::math::is_integral<Real>::value, "Gegenbauer polynomials required floating point arguments.");
+    static_assert(!BOOST_MATH_NAMESPACE::is_integral<Real>::value, "Gegenbauer polynomials required floating point arguments.");
     if (lambda <= -1/Real(2)) {
 #ifndef BOOST_MATH_NO_EXCEPTIONS
        throw std::domain_error("lambda > -1/2 is required.");
 #else
-       return boost::math::numeric_limits<Real>::quiet_NaN();
+       return BOOST_MATH_NAMESPACE::numeric_limits<Real>::quiet_NaN();
 #endif
     }
     // The only reason to do this is because of some instability that could be present for x < 0 that is not present for x > 0.
@@ -48,7 +48,7 @@ BOOST_MATH_GPU_ENABLED Real gegenbauer(unsigned n, Real lambda, Real x)
 
     Real yk = y1;
     Real k = 2;
-    Real k_max = n*(1+boost::math::numeric_limits<Real>::epsilon());
+    Real k_max = n*(1+BOOST_MATH_NAMESPACE::numeric_limits<Real>::epsilon());
     Real gamma = 2*(lambda - 1);
     while(k < k_max)
     {
@@ -82,5 +82,5 @@ BOOST_MATH_GPU_ENABLED Real gegenbauer_prime(unsigned n, Real lambda, Real x) {
 }
 
 
-}}
+BOOST_MATH_NAMESPACE_END
 #endif

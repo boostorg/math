@@ -29,7 +29,7 @@
 // R_C(x, y) = R_F(x, y, y) = 0.5 * \int_{0}^{\infty} (t+x)^{-1/2} (t+y)^{-1} dt
 // Carlson, Numerische Mathematik, vol 33, 1 (1979)
 
-namespace boost { namespace math { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T ellint_rc_imp(T x, T y, const Policy& pol)
@@ -75,7 +75,7 @@ BOOST_MATH_GPU_ENABLED T ellint_rc_imp(T x, T y, const Policy& pol)
        if(y / x > T(0.5))
        {
           T arg = sqrt((x - y) / x);
-          result = (boost::math::log1p(arg, pol) - boost::math::log1p(-arg, pol)) / (2 * sqrt(x - y));
+          result = (BOOST_MATH_NAMESPACE::log1p(arg, pol) - BOOST_MATH_NAMESPACE::log1p(-arg, pol)) / (2 * sqrt(x - y));
        }
        else
        {
@@ -106,7 +106,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type
    return ellint_rc(x, y, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ELLINT_RC_HPP
 

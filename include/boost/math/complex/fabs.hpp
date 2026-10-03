@@ -10,14 +10,14 @@
 #  include <boost/math/special_functions/hypot.hpp>
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template<class T> 
 inline T fabs(const std::complex<T>& z)
 {
-   return ::boost::math::hypot(z.real(), z.imag());
+   return ::BOOST_MATH_NAMESPACE::hypot(z.real(), z.imag());
 }
 
-} } // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_COMPLEX_FABS_INCLUDED

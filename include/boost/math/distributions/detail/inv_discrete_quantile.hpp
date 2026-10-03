@@ -12,7 +12,7 @@
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/tools/tuple.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 //
 // Functor for root finding algorithm:
@@ -82,7 +82,7 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type
       const typename Dist::value_type& multiplier,
       typename Dist::value_type adder,
       const Tolerance& tol,
-      boost::math::uintmax_t& max_iter)
+      BOOST_MATH_NAMESPACE::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
    typedef typename Dist::policy_type policy_type;
@@ -96,7 +96,7 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type
    // Max bounds of the distribution:
    //
    value_type min_bound, max_bound;
-   boost::math::tie(min_bound, max_bound) = support(dist);
+   BOOST_MATH_NAMESPACE::tie(min_bound, max_bound) = support(dist);
 
    if(guess > max_bound)
       guess = max_bound;
@@ -104,7 +104,7 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type
       guess = min_bound;
 
    value_type fa = f(guess);
-   boost::math::uintmax_t count = max_iter - 1;
+   BOOST_MATH_NAMESPACE::uintmax_t count = max_iter - 1;
    value_type fb(fa), a(guess), b =0; // Compiler warning C4701: potentially uninitialized local variable 'b' used
 
    if(fa == 0)
@@ -207,7 +207,7 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type
    // If the root hasn't been bracketed yet, try again
    // using the multiplier this time:
    //
-   if((boost::math::sign)(fb) == (boost::math::sign)(fa))
+   if((BOOST_MATH_NAMESPACE::sign)(fb) == (BOOST_MATH_NAMESPACE::sign)(fa))
    {
       if(fa < 0)
       {
@@ -215,7 +215,7 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type
          // Zero is to the right of x2, so walk upwards
          // until we find it:
          //
-         while(((boost::math::sign)(fb) == (boost::math::sign)(fa)) && (a != b))
+         while(((BOOST_MATH_NAMESPACE::sign)(fb) == (BOOST_MATH_NAMESPACE::sign)(fa)) && (a != b))
          {
             if(count == 0)
                return policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, policy_type()); // LCOV_EXCL_LINE
@@ -235,7 +235,7 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type
          // Zero is to the left of a, so walk downwards
          // until we find it:
          //
-         while(((boost::math::sign)(fb) == (boost::math::sign)(fa)) && (a != b))
+         while(((BOOST_MATH_NAMESPACE::sign)(fb) == (BOOST_MATH_NAMESPACE::sign)(fa)) && (a != b))
          {
             if(fabs(a) < tools::min_value<value_type>())
             {
@@ -277,7 +277,7 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type
    //
    // Go ahead and find the root:
    //
-   boost::math::pair<value_type, value_type> r = toms748_solve(f, a, b, fa, fb, tol, count, policy_type());
+   BOOST_MATH_NAMESPACE::pair<value_type, value_type> r = toms748_solve(f, a, b, fa, fb, tol, count, policy_type());
    max_iter += count;
    if (max_iter >= policies::get_max_root_iterations<policy_type>())
    {
@@ -338,7 +338,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_floor(const Dis
    if (k - 1 == k)
       return k;
    // Don't walk further than the root finder was allowed to iterate:
-   boost::math::uintmax_t steps = policies::get_max_root_iterations<typename Dist::policy_type>();
+   BOOST_MATH_NAMESPACE::uintmax_t steps = policies::get_max_root_iterations<typename Dist::policy_type>();
    value_type gk = discrete_quantile_residual(d, k, p, c);
    // Step down until cdf(k) <= p:
    while ((gk > 0) && (k > lo) && steps)
@@ -395,7 +395,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_ceil(const Dist
    // See round_to_floor:
    if (k + 1 == k)
       return k;
-   boost::math::uintmax_t steps = policies::get_max_root_iterations<typename Dist::policy_type>();
+   BOOST_MATH_NAMESPACE::uintmax_t steps = policies::get_max_root_iterations<typename Dist::policy_type>();
    value_type gk = discrete_quantile_residual(d, k, p, c);
    // Step up until cdf(k) >= p:
    while ((gk < 0) && (k < hi) && steps)
@@ -485,7 +485,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
       const policies::discrete_quantile<policies::real>&,
-      boost::math::uintmax_t& max_iter)
+      BOOST_MATH_NAMESPACE::uintmax_t& max_iter)
 {
    if(p > 0.5)
    {
@@ -515,7 +515,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
       const policies::discrete_quantile<policies::integer_round_outwards>&,
-      boost::math::uintmax_t& max_iter)
+      BOOST_MATH_NAMESPACE::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
    BOOST_MATH_STD_USING
@@ -558,7 +558,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
       const policies::discrete_quantile<policies::integer_round_inwards>&,
-      boost::math::uintmax_t& max_iter)
+      BOOST_MATH_NAMESPACE::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
    BOOST_MATH_STD_USING
@@ -601,7 +601,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
       const policies::discrete_quantile<policies::integer_round_down>&,
-      boost::math::uintmax_t& max_iter)
+      BOOST_MATH_NAMESPACE::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
    BOOST_MATH_STD_USING
@@ -628,7 +628,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
       const policies::discrete_quantile<policies::integer_round_up>&,
-      boost::math::uintmax_t& max_iter)
+      BOOST_MATH_NAMESPACE::uintmax_t& max_iter)
 {
    BOOST_MATH_STD_USING
    if(discrete_quantile_residual(dist, typename Dist::value_type(0), p, c) >= 0)
@@ -654,7 +654,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
       const policies::discrete_quantile<policies::integer_round_nearest>&,
-      boost::math::uintmax_t& max_iter)
+      BOOST_MATH_NAMESPACE::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
    BOOST_MATH_STD_USING
@@ -676,7 +676,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type
       max_iter) + 0.5f, p, c);
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_DISTRIBUTIONS_DETAIL_INV_DISCRETE_QUANTILE
 

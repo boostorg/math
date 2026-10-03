@@ -9,8 +9,9 @@
 #include <cstddef>
 #include <type_traits>
 #endif
-namespace boost {
-namespace math {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {
 
@@ -254,7 +255,6 @@ struct abstract_unary_expression
 };
 } // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // REVERSE_MODE_AUTODIFF_EXPRESSION_TEMPLATE_BASE_HPP

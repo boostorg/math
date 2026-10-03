@@ -28,7 +28,7 @@
 #include <boost/math/special_functions/detail/hypergeometric_1F1_small_a_negative_b_by_ratio.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1F1_negative_b_regions.hpp>
 
-namespace boost { namespace math { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
    // check when 1F1 series can't decay to polynom
    template <class T>
@@ -68,7 +68,7 @@ namespace boost { namespace math { namespace detail {
          T convergence_at_50 = (b - a + 50) * k / (z * 50);
          if ((k > 0) && (k < 50) && (fabs(convergence_at_50) < 1) && (z > z_limit))
          {
-            return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, T(z - k), k, pol, log_scaling);
+            return BOOST_MATH_NAMESPACE::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, T(z - k), k, pol, log_scaling);
          }
 #endif
          if (z < b)
@@ -91,7 +91,7 @@ namespace boost { namespace math { namespace detail {
                // Note that if sqr is negative then we have no solution, so assign an arbitrarily large value to the
                // number of iterations.
                //
-               bool can_use_recursion = (z - b + 100 < boost::math::policies::get_max_series_iterations<Policy>()) && (100 - a < boost::math::policies::get_max_series_iterations<Policy>());
+               bool can_use_recursion = (z - b + 100 < BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>()) && (100 - a < BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>());
                T sqr = 4 * a * z + b * b - 2 * b * z + z * z;
                T iterations_to_convergence = sqr > 0 ? T(0.5f * (-sqrt(sqr) - b + z)) : T(-a - b);
                if(can_use_recursion && ((std::max)(a, b) + iterations_to_convergence > -300))
@@ -119,11 +119,11 @@ namespace boost { namespace math { namespace detail {
             // OK as long as a > 1 whatever the precision though.
             //
             int domain = hypergeometric_1F1_negative_b_recurrence_region(a, b, z);
-            if ((domain < 0) && ((a > 1) || (boost::math::policies::digits<T, Policy>() <= 64)))
+            if ((domain < 0) && ((a > 1) || (BOOST_MATH_NAMESPACE::policies::digits<T, Policy>() <= 64)))
                return hypergeometric_1F1_from_function_ratio_negative_b(a, b, z, pol, log_scaling);
             else if (domain > 0)
             {
-               if (boost::math::policies::digits<T, Policy>() <= 64)
+               if (BOOST_MATH_NAMESPACE::policies::digits<T, Policy>() <= 64)
                   return hypergeometric_1F1_from_function_ratio_negative_b_forwards(a, b, z, pol, log_scaling);
                // LCOV_EXCL_START, what follows is multiprecision only
 #ifndef BOOST_MATH_NO_EXCEPTIONS
@@ -341,7 +341,7 @@ namespace boost { namespace math { namespace detail {
             if ((a < -20) && (z > 0) && (z < 1))
             {
                // https://functions.wolfram.com/HypergeometricFunctions/Hypergeometric1F1/03/01/04/02/0002/
-               return exp(z) * boost::math::gamma_q(1 - a, z, pol);
+               return exp(z) * BOOST_MATH_NAMESPACE::gamma_q(1 - a, z, pol);
             }
             // https://functions.wolfram.com/HypergeometricFunctions/Hypergeometric1F1/03/01/04/02/0003/
             return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
@@ -363,7 +363,7 @@ namespace boost { namespace math { namespace detail {
       }
 
       if ((a == 1) && (b == 2))
-         return boost::math::expm1(z, pol) / z;
+         return BOOST_MATH_NAMESPACE::expm1(z, pol) / z;
 
       if ((b - a == b) && (fabs(z / b) < policies::get_epsilon<T, Policy>()))
          return 1;
@@ -376,7 +376,7 @@ namespace boost { namespace math { namespace detail {
          {
             // a is tiny compared to b, and z < 0
             // 13.3.6 appears to be the most efficient and often the most accurate method.
-            T r = boost::math::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
+            T r = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
             long long scale = lltrunc(z, pol);
             log_scaling += scale;
             return r * exp(z - scale);
@@ -407,7 +407,7 @@ namespace boost { namespace math { namespace detail {
             //
             // We've got nothing left but 13.3.6, even though it may be initially divergent:
             //
-            T r = boost::math::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
+            T r = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
             long long scale = lltrunc(z, pol);
             log_scaling += scale;
             return r * exp(z - scale);
@@ -454,7 +454,7 @@ namespace boost { namespace math { namespace detail {
          //
          if (is_convergent_negative_z_series(a, b, z, b_minus_a))
          {
-            if ((boost::math::sign(b_minus_a) == boost::math::sign(b)) && ((b > 0) || (b < -200)))
+            if ((BOOST_MATH_NAMESPACE::sign(b_minus_a) == BOOST_MATH_NAMESPACE::sign(b)) && ((b > 0) || (b < -200)))
             {
                // Series is close enough to convergent that we should be OK,
                // In this domain b - a ~ b and since 1F1[a, a, z] = e^z 1F1[b-a, b, -z]
@@ -598,7 +598,7 @@ namespace boost { namespace math { namespace detail {
       {
          // b_minus_a is tiny compared to b, and -z < 0
          // 13.3.6 appears to be the most efficient and often the most accurate method.
-         return boost::math::detail::hypergeometric_1F1_AS_13_3_6(a, b, z, b_minus_a, pol, log_scaling);
+         return BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_AS_13_3_6(a, b, z, b_minus_a, pol, log_scaling);
       }
 #if 0
       if ((a > 0) && (b > 0) && (a * z / b > 2))
@@ -635,10 +635,10 @@ namespace boost { namespace math { namespace detail {
       //
       // Actual result will be result * e^log_scaling.
       //
-      static const thread_local long long max_scaling = lltrunc(boost::math::tools::log_max_value<T>()) - 2;
+      static const thread_local long long max_scaling = lltrunc(BOOST_MATH_NAMESPACE::tools::log_max_value<T>()) - 2;
       static const thread_local T max_scale_factor = exp(T(max_scaling));
 
-      while (!(boost::math::isinf)(result) && (log_scaling > max_scaling))
+      while (!(BOOST_MATH_NAMESPACE::isinf)(result) && (log_scaling > max_scaling))
       {
          result *= max_scale_factor;
          log_scaling -= max_scaling;
@@ -675,9 +675,9 @@ namespace boost { namespace math { namespace detail {
       // Actual result will be result * e^log_scaling / tgamma(b).
       //
       int result_sign = 1;
-      T scale = log_scaling - boost::math::lgamma(b, &result_sign, pol);
+      T scale = log_scaling - BOOST_MATH_NAMESPACE::lgamma(b, &result_sign, pol);
 
-      static const thread_local T max_scaling = boost::math::tools::log_max_value<T>() - 2;
+      static const thread_local T max_scaling = BOOST_MATH_NAMESPACE::tools::log_max_value<T>() - 2;
       static const thread_local T max_scale_factor = exp(max_scaling);
 
       while (scale > max_scaling)
@@ -818,6 +818,6 @@ inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 
 }
 
 
-  } } // namespace boost::math
+  BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_HPP

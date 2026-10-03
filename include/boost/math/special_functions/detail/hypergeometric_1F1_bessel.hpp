@@ -17,7 +17,7 @@
 #include <boost/math/special_functions/bessel_iterators.hpp>
 
 
-  namespace boost { namespace math { namespace detail {
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
      template <class T, class Policy>
      T hypergeometric_1F1_divergent_fallback(const T& a, const T& b, const T& z, const Policy& pol, long long& log_scaling);
@@ -35,7 +35,7 @@
         // actually evaluate them:
         T x = sqrt(fabs(2 * z * b - 4 * a * z));
         T v = b - 1;
-        return log(boost::math::constants::e<T>() * x / (2 * v)) * v > tools::log_min_value<T>();
+        return log(BOOST_MATH_NAMESPACE::constants::e<T>() * x / (2 * v)) * v > tools::log_min_value<T>();
      }
 
      //
@@ -69,7 +69,7 @@
            BOOST_MATH_STD_USING
            term /= pow(fabs(bessel_arg), b_minus_1_plus_n / 2);
            mult /= sqrt(fabs(bessel_arg));
-           bessel_cache[cache_size - 1] = bessel_arg > 0 ? boost::math::cyl_bessel_j(b_minus_1_plus_n - 1, 2 * sqrt(bessel_arg), pol) : boost::math::cyl_bessel_i(b_minus_1_plus_n - 1, 2 * sqrt(-bessel_arg), pol);
+           bessel_cache[cache_size - 1] = bessel_arg > 0 ? BOOST_MATH_NAMESPACE::cyl_bessel_j(b_minus_1_plus_n - 1, 2 * sqrt(bessel_arg), pol) : BOOST_MATH_NAMESPACE::cyl_bessel_i(b_minus_1_plus_n - 1, 2 * sqrt(-bessel_arg), pol);
            if (fabs(bessel_cache[cache_size - 1]) < tools::min_value<T>() / tools::epsilon<T>())
            {
               // We get very limited precision due to rapid denormalisation/underflow of the Bessel values, raise an exception and try something else:
@@ -79,7 +79,7 @@
               cache_offset = -cache_size;
               return;
            }
-           if ((fabs(term * bessel_cache[cache_size - 1]) < tools::min_value<T>() / (tools::epsilon<T>() * tools::epsilon<T>())) || !(boost::math::isfinite)(term) || (!std::numeric_limits<T>::has_infinity && (fabs(term) > tools::max_value<T>())))
+           if ((fabs(term * bessel_cache[cache_size - 1]) < tools::min_value<T>() / (tools::epsilon<T>() * tools::epsilon<T>())) || !(BOOST_MATH_NAMESPACE::isfinite)(term) || (!std::numeric_limits<T>::has_infinity && (fabs(term) > tools::max_value<T>())))
            {
               term = -log(fabs(bessel_arg)) * b_minus_1_plus_n / 2;
               log_scale = lltrunc(term);
@@ -91,7 +91,7 @@
 #ifndef BOOST_MATH_NO_CXX17_IF_CONSTEXPR
            if constexpr (std::numeric_limits<T>::has_infinity)
            {
-              if (!(boost::math::isfinite)(bessel_cache[cache_size - 1]))
+              if (!(BOOST_MATH_NAMESPACE::isfinite)(bessel_cache[cache_size - 1]))
               {
                  policies::raise_evaluation_error("hypergeometric_1F1_AS_13_3_7_tricomi_series<%1%>", "Expected finite Bessel function result but got %1%", bessel_cache[cache_size - 1], pol);
                  // Exceptions are off if we get here, just fill the cache with NaN's and we'll let this method fail and fallback later:
@@ -99,15 +99,15 @@
               }
            }
            else
-              if ((boost::math::isnan)(bessel_cache[cache_size - 1]) || (fabs(bessel_cache[cache_size - 1]) >= tools::max_value<T>()))
+              if ((BOOST_MATH_NAMESPACE::isnan)(bessel_cache[cache_size - 1]) || (fabs(bessel_cache[cache_size - 1]) >= tools::max_value<T>()))
               {
                  policies::raise_evaluation_error("hypergeometric_1F1_AS_13_3_7_tricomi_series<%1%>", "Expected finite Bessel function result but got %1%", bessel_cache[cache_size - 1], pol);
                  // Exceptions are off if we get here, just fill the cache with NaN's and we'll let this method fail and fallback later:
                  std::fill(bessel_cache.begin(), bessel_cache.end(), std::numeric_limits<T>::quiet_NaN());
               }
 #else
-           if ((std::numeric_limits<T>::has_infinity && !(boost::math::isfinite)(bessel_cache[cache_size - 1])) 
-              || (!std::numeric_limits<T>::has_infinity && ((boost::math::isnan)(bessel_cache[cache_size - 1]) || (fabs(bessel_cache[cache_size - 1]) >= tools::max_value<T>()))))
+           if ((std::numeric_limits<T>::has_infinity && !(BOOST_MATH_NAMESPACE::isfinite)(bessel_cache[cache_size - 1])) 
+              || (!std::numeric_limits<T>::has_infinity && ((BOOST_MATH_NAMESPACE::isnan)(bessel_cache[cache_size - 1]) || (fabs(bessel_cache[cache_size - 1]) >= tools::max_value<T>()))))
            {
               policies::raise_evaluation_error("hypergeometric_1F1_AS_13_3_7_tricomi_series<%1%>", "Expected finite Bessel function result but got %1%", bessel_cache[cache_size - 1], pol);
               // Exceptions are off if we get here, just fill the cache with NaN's and we'll let this method fail and fallback later:
@@ -206,7 +206,7 @@
                     if ((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_cache[j] / bessel_cache[j + 1]) < fabs(bessel_cache[j])))
                     {
                        T rescale = static_cast<T>(pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), T(j + 1)) * 2);
-                       if (!((boost::math::isfinite)(rescale)))
+                       if (!((BOOST_MATH_NAMESPACE::isfinite)(rescale)))
                           rescale = tools::max_value<T>();
                        for (int k = j; k < cache_size; ++k)
                           bessel_cache[k] /= rescale;
@@ -281,7 +281,7 @@
                     if ((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_cache[j] / bessel_cache[j + 1]) < fabs(bessel_cache[j])))
                     {
                        T rescale = static_cast<T>(pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), T(j + 1)) * 2);
-                       if (!((boost::math::isfinite)(rescale)))
+                       if (!((BOOST_MATH_NAMESPACE::isfinite)(rescale)))
                           rescale = tools::max_value<T>();
                        for (int k = j; k < cache_size; ++k)
                           bessel_cache[k] /= rescale;
@@ -364,7 +364,7 @@
         try
 #endif
         {
-           prefix = boost::math::tgamma(b, pol);
+           prefix = BOOST_MATH_NAMESPACE::tgamma(b, pol);
            prefix *= exp(z / 2);
         }
 #ifndef BOOST_MATH_NO_EXCEPTIONS
@@ -373,16 +373,16 @@
            use_logs = true;
         }
 #endif
-        if (use_logs || (prefix == 0) || !(boost::math::isfinite)(prefix) || (!std::numeric_limits<T>::has_infinity && (fabs(prefix) >= tools::max_value<T>())))
+        if (use_logs || (prefix == 0) || !(BOOST_MATH_NAMESPACE::isfinite)(prefix) || (!std::numeric_limits<T>::has_infinity && (fabs(prefix) >= tools::max_value<T>())))
         {
            use_logs = true;
-           prefix = boost::math::lgamma(b, &prefix_sgn, pol) + z / 2;
+           prefix = BOOST_MATH_NAMESPACE::lgamma(b, &prefix_sgn, pol) + z / 2;
            scale = lltrunc(prefix);
            log_scale += scale;
            prefix -= scale;
         }
         T result(0);
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
         bool retry = false;
         long long series_scale = 0;
 #ifndef BOOST_MATH_NO_EXCEPTIONS
@@ -399,12 +399,12 @@
               T norm = 0;
               result = 0;
               if((a < 0) && (b < 0))
-                 result = boost::math::tools::checked_sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, result, norm);
+                 result = BOOST_MATH_NAMESPACE::tools::checked_sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter, result, norm);
               else
-                 result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, result);
-              if (!(boost::math::isfinite)(result) || (result == 0) || (!std::numeric_limits<T>::has_infinity && (fabs(result) >= tools::max_value<T>())))
+                 result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter, result);
+              if (!(BOOST_MATH_NAMESPACE::isfinite)(result) || (result == 0) || (!std::numeric_limits<T>::has_infinity && (fabs(result) >= tools::max_value<T>())))
                  retry = true;
-              if (norm / fabs(result) > 1 / boost::math::tools::root_epsilon<T>())
+              if (norm / fabs(result) > 1 / BOOST_MATH_NAMESPACE::tools::root_epsilon<T>())
                  retry = true;  // fatal cancellation
            }
 #ifndef BOOST_MATH_NO_EXCEPTIONS
@@ -412,7 +412,7 @@
            {
               retry = true;
            }
-           catch (const boost::math::evaluation_error&)
+           catch (const BOOST_MATH_NAMESPACE::evaluation_error&)
            {
               retry = true;
            }
@@ -424,7 +424,7 @@
            log_scale -= scale;
            return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scale);
         }
-        catch (const boost::math::evaluation_error&)
+        catch (const BOOST_MATH_NAMESPACE::evaluation_error&)
         {
            log_scale -= scale;
            return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scale);
@@ -436,10 +436,10 @@
            log_scale -= series_scale;
            return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scale);
         }
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_7<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_7<%1%>(%1%,%1%,%1%)", max_iter, pol);
         if (use_logs)
         {
-           int sgn = boost::math::sign(result);
+           int sgn = BOOST_MATH_NAMESPACE::sign(result);
            prefix += log(fabs(result));
            result = sgn * prefix_sgn * exp(prefix);
         }
@@ -481,12 +481,12 @@
      {
         BOOST_MATH_STD_USING
            cyl_bessel_i_large_x_sum<T> s(v, x);
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>("boost::math::cyl_bessel_i_large_x<%1%>(%1%,%1%)", max_iter, pol);
-        long long scale = boost::math::lltrunc(x);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::cyl_bessel_i_large_x<%1%>(%1%,%1%)", max_iter, pol);
+        long long scale = BOOST_MATH_NAMESPACE::lltrunc(x);
         log_scaling += scale;
-        return result * exp(x - scale) / sqrt(boost::math::constants::two_pi<T>() * x);
+        return result * exp(x - scale) / sqrt(BOOST_MATH_NAMESPACE::constants::two_pi<T>() * x);
      }
 
 
@@ -513,7 +513,7 @@
            : b_minus_a(b_minus_a), half_z(z / 2), poch_1(2 * b_minus_a - 1), poch_2(b_minus_a - a), b_poch(b), term(1), last_result(1), sign(1), n(0), cache_offset(-cache_size), scale(0), pol(pol_)
         {
            bessel_i_cache[cache_size - 1] = half_z > tools::log_max_value<T>() ?
-              cyl_bessel_i_large_x_scaled(T(b_minus_a - 1.5f), half_z, scale, pol) : boost::math::cyl_bessel_i(b_minus_a - 1.5f, half_z, pol);
+              cyl_bessel_i_large_x_scaled(T(b_minus_a - 1.5f), half_z, scale, pol) : BOOST_MATH_NAMESPACE::cyl_bessel_i(b_minus_a - 1.5f, half_z, pol);
            refill_cache();
         }
         T operator()()
@@ -609,10 +609,10 @@
            return exp(z - scale);
         }
         hypergeometric_1F1_AS_13_3_6_series<T, Policy> s(a, b, z, b_minus_a, pol);
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_6<%1%>(%1%,%1%,%1%)", max_iter, pol);
-        result *= boost::math::tgamma(b_minus_a - 0.5f, pol) * pow(z / 4, -b_minus_a + T(0.5f));
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_6<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        result *= BOOST_MATH_NAMESPACE::tgamma(b_minus_a - 0.5f, pol) * pow(z / 4, -b_minus_a + T(0.5f));
         long long scale = lltrunc(z / 2);
         log_scaling += scale;
         log_scaling += s.scaling();
@@ -649,7 +649,7 @@
         T operator()()
         {
            // we actually return the n-2 term:
-           T result = C_minus_2 * power_term * boost::math::cyl_bessel_j(bessel_order, bessel_arg, pol);
+           T result = C_minus_2 * power_term * BOOST_MATH_NAMESPACE::cyl_bessel_j(bessel_order, bessel_arg, pol);
            bessel_order += 1;
            power_term *= mult;
            ++n;
@@ -673,11 +673,11 @@
      T hypergeometric_1F1_AS_13_3_8(const T& a, const T& b, const T& z, const T& h, const Policy& pol)
      {
         BOOST_MATH_STD_USING
-        T prefix = exp(h * z) * boost::math::tgamma(b);
+        T prefix = exp(h * z) * BOOST_MATH_NAMESPACE::tgamma(b);
         hypergeometric_1F1_AS_13_3_8_series<T, Policy> s(a, b, z, h, pol);
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_8<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_8<%1%>(%1%,%1%,%1%)", max_iter, pol);
         result *= prefix;
         return result;
      }
@@ -699,7 +699,7 @@
         }
         T operator()()
         {
-           T result = term * a_minus_half_plus_s * boost::math::cyl_bessel_i(a_minus_half_plus_s, half_z, pol);
+           T result = term * a_minus_half_plus_s * BOOST_MATH_NAMESPACE::cyl_bessel_i(a_minus_half_plus_s, half_z, pol);
 
            term *= two_a_minus_1_plus_s * two_a_minus_b_plus_s / (b_plus_s * ++s);
            two_a_minus_1_plus_s += 1;
@@ -722,10 +722,10 @@
         T prefix;
         int prefix_sgn = 1;
         if (true/*(a < boost::math::max_factorial<T>::value) && (a > 0)*/)
-           prefix = boost::math::tgamma(a - 0.5f, pol);
+           prefix = BOOST_MATH_NAMESPACE::tgamma(a - 0.5f, pol);
         else
         {
-           prefix = boost::math::lgamma(a - 0.5f, &prefix_sgn, pol);
+           prefix = BOOST_MATH_NAMESPACE::lgamma(a - 0.5f, &prefix_sgn, pol);
            use_logs = true;
         }
         if (use_logs)
@@ -745,9 +745,9 @@
         }
 
         hypergeometric_1f1_13_11_1_series<T, Policy> s(a, b, z, pol);
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_13_11_1<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_13_11_1<%1%>(%1%,%1%,%1%)", max_iter, pol);
         if (use_logs)
         {
            long long scaling = lltrunc(prefix);
@@ -763,6 +763,6 @@
 
 #endif
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_1F1_BESSEL_HPP

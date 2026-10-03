@@ -13,8 +13,7 @@
 
 #include <cuda/std/cstdint>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT using cuda::std::int8_t;
 BOOST_MATH_EXPORT using cuda::std::int16_t;
@@ -60,8 +59,7 @@ using size_t = unsigned long;
 #include <cstdint>
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT using std::int8_t;
 BOOST_MATH_EXPORT using std::int16_t;
@@ -103,7 +101,6 @@ BOOST_MATH_EXPORT using std::size_t;
 
 #endif
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_TOOLS_CSTDINT

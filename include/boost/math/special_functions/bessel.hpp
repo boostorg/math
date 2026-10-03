@@ -45,7 +45,7 @@
 # pragma warning(disable: 6326) // potential comparison of a constant with another constant
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail{
 
@@ -61,11 +61,11 @@ struct sph_bessel_j_small_z_series_term
       mult = x / 2;
       if(v + 3 > max_factorial<T>::value)
       {
-         term = v * log(mult) - boost::math::lgamma(v+1+T(0.5f), Policy());
+         term = v * log(mult) - BOOST_MATH_NAMESPACE::lgamma(v+1+T(0.5f), Policy());
          term = exp(term);
       }
       else
-         term = pow(mult, T(v)) / boost::math::tgamma(v+1+T(0.5f), Policy());
+         term = pow(mult, T(v)) / BOOST_MATH_NAMESPACE::tgamma(v+1+T(0.5f), Policy());
       mult *= -mult;
    }
    BOOST_MATH_GPU_ENABLED T operator()()
@@ -87,9 +87,9 @@ BOOST_MATH_GPU_ENABLED inline T sph_bessel_j_small_z_series(unsigned v, T x, con
 {
    BOOST_MATH_STD_USING // ADL of std names
    sph_bessel_j_small_z_series_term<T, Policy> s(v, x);
-   boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 
-   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+   T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
 
    policies::check_series_iterations<T>("boost::math::sph_bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
    return result * sqrt(constants::pi<T>() / 4);
@@ -170,7 +170,7 @@ BOOST_MATH_GPU_ENABLED inline T sph_bessel_j_imp(unsigned n, T x, const Policy& 
    // Special case, n == 0 resolves down to the sinus cardinal of x:
    //
    if(n == 0)
-      return (boost::math::isinf)(x) ? T(0) : boost::math::sinc_pi(x, pol);
+      return (BOOST_MATH_NAMESPACE::isinf)(x) ? T(0) : BOOST_MATH_NAMESPACE::sinc_pi(x, pol);
    //
    // Special case for x == 0:
    //
@@ -216,7 +216,7 @@ BOOST_MATH_GPU_ENABLED T cyl_bessel_i_imp_final(T v, T x, const Policy& pol)
       }
       return sqrt(2 / (x * constants::pi<T>())) * sinh(x);
    }
-   if((policies::digits<T, Policy>() <= 113) && (boost::math::numeric_limits<T>::digits <= 113) && (boost::math::numeric_limits<T>::radix == 2))
+   if((policies::digits<T, Policy>() <= 113) && (BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 113) && (BOOST_MATH_NAMESPACE::numeric_limits<T>::radix == 2))
    {
       if(v == 0)
       {
@@ -320,7 +320,7 @@ BOOST_MATH_GPU_ENABLED inline T cyl_neumann_imp(T v, T x, const bessel_no_int_ta
    // can occur when x is small and v is large, in which case the result
    // is -INF:
    //
-   if(!(boost::math::isfinite)(y))
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(y))
       return -policies::raise_overflow_error<T>(function, nullptr, pol); // LCOV_EXCL_LINE defensive programming?  Might be dead code now...
    return y;
 }
@@ -381,10 +381,10 @@ BOOST_MATH_GPU_ENABLED inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& 
 
    constexpr auto function = "boost::math::cyl_bessel_j_zero<%1%>(%1%, int)";
 
-   const T half_epsilon(boost::math::tools::epsilon<T>() / 2U);
+   const T half_epsilon(BOOST_MATH_NAMESPACE::tools::epsilon<T>() / 2U);
 
    // Handle non-finite order.
-   if (!(boost::math::isfinite)(v) )
+   if (!(BOOST_MATH_NAMESPACE::isfinite)(v) )
    {
      return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be finite >= 0 !", v, pol);
    }
@@ -427,17 +427,17 @@ BOOST_MATH_GPU_ENABLED inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& 
    // Set up the initial guess for the upcoming root-finding.
    // If the order is a negative integer, then use the corresponding
    // positive integer for the order.
-   const T guess_root = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess<T, Policy>((order_is_integer ? vv : v), m, pol);
+   const T guess_root = BOOST_MATH_NAMESPACE::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess<T, Policy>((order_is_integer ? vv : v), m, pol);
 
    // Select the maximum allowed iterations from the policy.
-   boost::math::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
 
    const T delta_lo = ((guess_root > 0.2F) ? T(0.2) : T(guess_root / 2U));
 
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T jvm =
-      boost::math::tools::newton_raphson_iterate(
-         boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::function_object_jv_and_jv_prime<T, Policy>((order_is_integer ? vv : v), order_is_zero, pol),
+      BOOST_MATH_NAMESPACE::tools::newton_raphson_iterate(
+         BOOST_MATH_NAMESPACE::detail::bessel_zero::cyl_bessel_j_zero_detail::function_object_jv_and_jv_prime<T, Policy>((order_is_integer ? vv : v), order_is_zero, pol),
          guess_root,
          T(guess_root - delta_lo),
          T(guess_root + 0.2F),
@@ -460,7 +460,7 @@ BOOST_MATH_GPU_ENABLED inline T cyl_neumann_zero_imp(T v, int m, const Policy& p
    constexpr auto function = "boost::math::cyl_neumann_zero<%1%>(%1%, int)";
 
    // Handle non-finite order.
-   if (!(boost::math::isfinite)(v) )
+   if (!(BOOST_MATH_NAMESPACE::isfinite)(v) )
    {
      return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be finite >= 0 !", v, pol);
    }
@@ -471,7 +471,7 @@ BOOST_MATH_GPU_ENABLED inline T cyl_neumann_zero_imp(T v, int m, const Policy& p
       return policies::raise_domain_error<T>(function, "Requested the %1%'th zero, but the rank must be positive !", static_cast<T>(m), pol);
    }
 
-   const T half_epsilon(boost::math::tools::epsilon<T>() / 2U);
+   const T half_epsilon(BOOST_MATH_NAMESPACE::tools::epsilon<T>() / 2U);
 
    // Get the absolute value of the order.
    const bool order_is_negative = (v < 0);
@@ -481,7 +481,7 @@ BOOST_MATH_GPU_ENABLED inline T cyl_neumann_zero_imp(T v, int m, const Policy& p
 
    // For negative integers, use reflection to positive integer order.
    if(order_is_negative && order_is_integer)
-      return boost::math::detail::cyl_neumann_zero_imp(vv, m, pol);
+      return BOOST_MATH_NAMESPACE::detail::cyl_neumann_zero_imp(vv, m, pol);
 
    // Check if the order is very close to a negative half-integer.
    const T delta_half_integer(vv - (floor(vv) + 0.5F));
@@ -500,22 +500,22 @@ BOOST_MATH_GPU_ENABLED inline T cyl_neumann_zero_imp(T v, int m, const Policy& p
    // For negative half-integers, use the corresponding
    // spherical Bessel function of positive half-integer order.
    if(order_is_negative_half_integer)
-      return boost::math::detail::cyl_bessel_j_zero_imp(vv, m, pol);
+      return BOOST_MATH_NAMESPACE::detail::cyl_bessel_j_zero_imp(vv, m, pol);
 
    // Set up the initial guess for the upcoming root-finding.
    // If the order is a negative integer, then use the corresponding
    // positive integer for the order.
-   const T guess_root = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess<T, Policy>(v, m, pol);
+   const T guess_root = BOOST_MATH_NAMESPACE::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess<T, Policy>(v, m, pol);
 
    // Select the maximum allowed iterations from the policy.
-   boost::math::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
 
    const T delta_lo = ((guess_root > 0.2F) ? T(0.2) : T(guess_root / 2U));
 
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T yvm =
-      boost::math::tools::newton_raphson_iterate(
-         boost::math::detail::bessel_zero::cyl_neumann_zero_detail::function_object_yv_and_yv_prime<T, Policy>(v, pol),
+      BOOST_MATH_NAMESPACE::tools::newton_raphson_iterate(
+         BOOST_MATH_NAMESPACE::detail::bessel_zero::cyl_neumann_zero_detail::function_object_yv_and_yv_prime<T, Policy>(v, pol),
          guess_root,
          T(guess_root - delta_lo),
          T(guess_root + 0.2F),
@@ -674,9 +674,9 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, Policy>::resu
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   static_assert(    false == boost::math::numeric_limits<T>::is_specialized
-                           || (   true  == boost::math::numeric_limits<T>::is_specialized
-                               && false == boost::math::numeric_limits<T>::is_integer),
+   static_assert(    false == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                           || (   true  == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                               && false == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_integer),
                            "Order must be a floating-point type.");
 
    return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_j_zero_imp<value_type>(v, m, forwarding_policy()), "boost::math::cyl_bessel_j_zero<%1%>(%1%,%1%)");
@@ -685,9 +685,9 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, Policy>::resu
 BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_bessel_j_zero(T v, int m)
 {
-   static_assert(    false == boost::math::numeric_limits<T>::is_specialized
-                           || (   true  == boost::math::numeric_limits<T>::is_specialized
-                               && false == boost::math::numeric_limits<T>::is_integer),
+   static_assert(    false == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                           || (   true  == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                               && false == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_integer),
                            "Order must be a floating-point type.");
 
    return cyl_bessel_j_zero<T, policies::policy<> >(v, m, policies::policy<>());
@@ -700,14 +700,14 @@ BOOST_MATH_GPU_ENABLED inline OutputIterator cyl_bessel_j_zero(T v,
                               OutputIterator out_it,
                               const Policy& pol)
 {
-   static_assert(    false == boost::math::numeric_limits<T>::is_specialized
-                           || (   true  == boost::math::numeric_limits<T>::is_specialized
-                               && false == boost::math::numeric_limits<T>::is_integer),
+   static_assert(    false == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                           || (   true  == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                               && false == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_integer),
                            "Order must be a floating-point type.");
 
    for(int i = 0; i < static_cast<int>(number_of_zeros); ++i)
    {
-      *out_it = boost::math::cyl_bessel_j_zero(v, start_index + i, pol);
+      *out_it = BOOST_MATH_NAMESPACE::cyl_bessel_j_zero(v, start_index + i, pol);
       ++out_it;
    }
    return out_it;
@@ -735,9 +735,9 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, Policy>::resu
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   static_assert(    false == boost::math::numeric_limits<T>::is_specialized
-                           || (   true  == boost::math::numeric_limits<T>::is_specialized
-                               && false == boost::math::numeric_limits<T>::is_integer),
+   static_assert(    false == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                           || (   true  == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                               && false == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_integer),
                            "Order must be a floating-point type.");
 
    return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_neumann_zero_imp<value_type>(v, m, forwarding_policy()), "boost::math::cyl_neumann_zero<%1%>(%1%,%1%)");
@@ -746,9 +746,9 @@ BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, Policy>::resu
 BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_neumann_zero(T v, int m)
 {
-   static_assert(    false == boost::math::numeric_limits<T>::is_specialized
-                           || (   true  == boost::math::numeric_limits<T>::is_specialized
-                               && false == boost::math::numeric_limits<T>::is_integer),
+   static_assert(    false == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                           || (   true  == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                               && false == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_integer),
                            "Order must be a floating-point type.");
 
    return cyl_neumann_zero<T, policies::policy<> >(v, m, policies::policy<>());
@@ -761,14 +761,14 @@ BOOST_MATH_GPU_ENABLED inline OutputIterator cyl_neumann_zero(T v,
                              OutputIterator out_it,
                              const Policy& pol)
 {
-   static_assert(    false == boost::math::numeric_limits<T>::is_specialized
-                           || (   true  == boost::math::numeric_limits<T>::is_specialized
-                               && false == boost::math::numeric_limits<T>::is_integer),
+   static_assert(    false == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                           || (   true  == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized
+                               && false == BOOST_MATH_NAMESPACE::numeric_limits<T>::is_integer),
                            "Order must be a floating-point type.");
 
    for(int i = 0; i < static_cast<int>(number_of_zeros); ++i)
    {
-      *out_it = boost::math::cyl_neumann_zero(v, start_index + i, pol);
+      *out_it = BOOST_MATH_NAMESPACE::cyl_neumann_zero(v, start_index + i, pol);
       ++out_it;
    }
    return out_it;
@@ -783,8 +783,7 @@ BOOST_MATH_GPU_ENABLED inline OutputIterator cyl_neumann_zero(T v,
    return cyl_neumann_zero(v, start_index, number_of_zeros, out_it, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #ifdef _MSC_VER
 # pragma warning(pop)

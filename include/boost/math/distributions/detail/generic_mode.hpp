@@ -15,7 +15,7 @@
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/policies/policy.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class Dist>
 struct pdf_minimizer
@@ -73,7 +73,7 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type generic_find_mode(const Dist& d
       v = pdf(dist, lower_bound);
    }while(maxval < v);
 
-   boost::math::uintmax_t max_iter = policies::get_max_root_iterations<policy_type>();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_root_iterations<policy_type>();
 
    value_type result = tools::brent_find_minima(
       pdf_minimizer<Dist>(dist), 
@@ -124,7 +124,7 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type generic_find_mode_01(const Dist
       v = pdf(dist, lower_bound);
    }while(maxval < v);
 
-   boost::math::uintmax_t max_iter = policies::get_max_root_iterations<policy_type>();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_root_iterations<policy_type>();
 
    value_type result = tools::brent_find_minima(
       pdf_minimizer<Dist>(dist), 
@@ -140,6 +140,6 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type generic_find_mode_01(const Dist
    return result;
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_DISTRIBUTIONS_DETAIL_MODE_HPP

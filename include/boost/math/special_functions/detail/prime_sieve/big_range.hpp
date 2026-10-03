@@ -31,7 +31,7 @@
 #include <type_traits>
 #endif
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 inline constexpr std::uint64_t window_min_depth {100000};
 inline constexpr std::uint64_t window_max_depth {100000000};
@@ -160,7 +160,7 @@ void test_range_u64(std::uint64_t start, std::uint64_t stop, Consumer& consume)
     {
         return;
     }
-    const std::uint64_t root {boost::math::tools::isqrt(stop)};
+    const std::uint64_t root {BOOST_MATH_NAMESPACE::tools::isqrt(stop)};
     const double width {static_cast<double>(stop - start) + 1.0};
     const std::uint64_t depth {choose_window_depth((std::min)(width, 2.0 * static_cast<double>(window_max_bits)), 100.0, root)};
     const std::vector<std::uint32_t> primes {window_sieving_primes(depth)};
@@ -318,7 +318,7 @@ std::uint64_t big_count(const Integer& lower, const Integer& upper, const prime_
     }
 }
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // BOOST_MATH_HAS_NVRTC
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_BIG_RANGE_HPP

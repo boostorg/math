@@ -28,10 +28,7 @@
 
 // These are the the "Hyperbolic Sinus Cardinal" functions.
 
-namespace boost
-{
-    namespace math
-    {
+BOOST_MATH_NAMESPACE_BEGIN
        namespace detail
        {
         // This is the "Hyperbolic Sinus Cardinal" of index Pi.
@@ -47,7 +44,7 @@ namespace boost
             static T const    taylor_2_bound = sqrt(taylor_0_bound);
             static T const    taylor_n_bound = sqrt(taylor_2_bound);
 
-            if((boost::math::isinf)(x))
+            if((BOOST_MATH_NAMESPACE::isinf)(x))
             {
                return policies::raise_overflow_error<T>("sinhc(%1%)", nullptr, Policy());
             }
@@ -137,8 +134,7 @@ namespace boost
                 return(result);
             }
         }
-    }
-}
+    BOOST_MATH_NAMESPACE_END
 
 #endif /* BOOST_SINHC_HPP */
 

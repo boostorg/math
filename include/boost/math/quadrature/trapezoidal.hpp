@@ -27,26 +27,26 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 
-namespace boost{ namespace math{ namespace quadrature {
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature {
 
 BOOST_MATH_EXPORT template<class F, class Real, class Policy>
 auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Real* error_estimate, Real* L1, const Policy& pol)->decltype(std::declval<F>()(std::declval<Real>()))
 {
     static const char* function = "boost::math::quadrature::trapezoidal<%1%>(F, %1%, %1%, %1%)";
     using std::abs;
-    using boost::math::constants::half;
+    using BOOST_MATH_NAMESPACE::constants::half;
     // In many math texts, K represents the field of real or complex numbers.
     // Too bad we can't put blackboard bold into C++ source!
     typedef decltype(f(a)) K;
     static_assert(!std::is_integral<K>::value,
                   "The return type cannot be integral, it must be either a real or complex floating point type.");
-    if (!(boost::math::isfinite)(a))
+    if (!(BOOST_MATH_NAMESPACE::isfinite)(a))
     {
-       return static_cast<K>(boost::math::policies::raise_domain_error(function, "Left endpoint of integration must be finite for adaptive trapezoidal integration but got a = %1%.\n", a, pol));
+       return static_cast<K>(BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, "Left endpoint of integration must be finite for adaptive trapezoidal integration but got a = %1%.\n", a, pol));
     }
-    if (!(boost::math::isfinite)(b))
+    if (!(BOOST_MATH_NAMESPACE::isfinite)(b))
     {
-       return static_cast<K>(boost::math::policies::raise_domain_error(function, "Right endpoint of integration must be finite for adaptive trapezoidal integration but got b = %1%.\n", b, pol));
+       return static_cast<K>(BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, "Right endpoint of integration must be finite for adaptive trapezoidal integration but got b = %1%.\n", b, pol));
     }
 
     if (a == b)
@@ -119,9 +119,9 @@ auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
 }
 
 BOOST_MATH_EXPORT template<class F, class Real>
-auto trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 12, Real* error_estimate = nullptr, Real* L1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
+auto trapezoidal(F f, Real a, Real b, Real tol = BOOST_MATH_NAMESPACE::tools::root_epsilon<Real>(), std::size_t max_refinements = 12, Real* error_estimate = nullptr, Real* L1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
 {
-   return trapezoidal(f, a, b, tol, max_refinements, error_estimate, L1, boost::math::policies::policy<>());
+   return trapezoidal(f, a, b, tol, max_refinements, error_estimate, L1, BOOST_MATH_NAMESPACE::policies::policy<>());
 }
 
 BOOST_MATH_EXPORT template<class F, class Real, class Norm, class Policy>
@@ -129,19 +129,19 @@ auto trapezoidal(F f, Real a, Real b, const decltype(f(a))& zero, Norm norm, Rea
 {
     static const char* function = "boost::math::quadrature::trapezoidal<%1%>(F, %1%, %1%, %1%)";
     const auto magnitude = [&](const decltype(f(a))& value) -> Real { return static_cast<Real>(norm(value)); };
-    using boost::math::constants::half;
+    using BOOST_MATH_NAMESPACE::constants::half;
     // In many math texts, K represents the field of real or complex numbers.
     // Too bad we can't put blackboard bold into C++ source!
     typedef decltype(f(a)) K;
     static_assert(!std::is_integral<K>::value,
                   "The return type cannot be integral, it must be either a real or complex floating point type.");
-    if (!(boost::math::isfinite)(a))
+    if (!(BOOST_MATH_NAMESPACE::isfinite)(a))
     {
-       return detail::norm_quadrature_error(zero, boost::math::policies::raise_domain_error(function, "Left endpoint of integration must be finite for adaptive trapezoidal integration but got a = %1%.\n", a, pol), error_estimate, L1);
+       return detail::norm_quadrature_error(zero, BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, "Left endpoint of integration must be finite for adaptive trapezoidal integration but got a = %1%.\n", a, pol), error_estimate, L1);
     }
-    if (!(boost::math::isfinite)(b))
+    if (!(BOOST_MATH_NAMESPACE::isfinite)(b))
     {
-       return detail::norm_quadrature_error(zero, boost::math::policies::raise_domain_error(function, "Right endpoint of integration must be finite for adaptive trapezoidal integration but got b = %1%.\n", b, pol), error_estimate, L1);
+       return detail::norm_quadrature_error(zero, BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, "Right endpoint of integration must be finite for adaptive trapezoidal integration but got b = %1%.\n", b, pol), error_estimate, L1);
     }
 
     if (a == b)
@@ -216,10 +216,10 @@ auto trapezoidal(F f, Real a, Real b, const decltype(f(a))& zero, Norm norm, Rea
 }
 
 BOOST_MATH_EXPORT template<class F, class Real, class Norm>
-auto trapezoidal(F f, Real a, Real b, const decltype(f(a))& zero, Norm norm, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 12, Real* error_estimate = nullptr, Real* L1 = nullptr)->decltype(static_cast<Real>(norm(f(a))), f(a))
+auto trapezoidal(F f, Real a, Real b, const decltype(f(a))& zero, Norm norm, Real tol = BOOST_MATH_NAMESPACE::tools::root_epsilon<Real>(), std::size_t max_refinements = 12, Real* error_estimate = nullptr, Real* L1 = nullptr)->decltype(static_cast<Real>(norm(f(a))), f(a))
 {
-   return trapezoidal(f, a, b, zero, norm, tol, max_refinements, error_estimate, L1, boost::math::policies::policy<>());
+   return trapezoidal(f, a, b, zero, norm, tol, max_refinements, error_estimate, L1, BOOST_MATH_NAMESPACE::policies::policy<>());
 }
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif

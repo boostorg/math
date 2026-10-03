@@ -38,18 +38,18 @@
     #endif
 
     // Forward declaration of the quadruple-precision square root function.
-    extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SQRT(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+    extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SQRT(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
 
     namespace std
     {
       template<>
-      class numeric_limits<boost::math::cstdfloat::detail::float_internal128_t>
+      class numeric_limits<BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>
       {
       public:
         static constexpr bool                                                 is_specialized           = true;
-        static                 boost::math::cstdfloat::detail::float_internal128_t  (min) () noexcept  { return BOOST_CSTDFLOAT_FLOAT128_MIN; }
-        static                 boost::math::cstdfloat::detail::float_internal128_t  (max) () noexcept  { return BOOST_CSTDFLOAT_FLOAT128_MAX; }
-        static                 boost::math::cstdfloat::detail::float_internal128_t  lowest() noexcept  { return -(max)(); }
+        static                 BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  (min) () noexcept  { return BOOST_CSTDFLOAT_FLOAT128_MIN; }
+        static                 BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  (max) () noexcept  { return BOOST_CSTDFLOAT_FLOAT128_MAX; }
+        static                 BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  lowest() noexcept  { return -(max)(); }
         static constexpr int                                                  digits                   = 113;
         static constexpr int                                                  digits10                 = 33;
         static constexpr int                                                  max_digits10             = 36;
@@ -57,8 +57,8 @@
         static constexpr bool                                                 is_integer               = false;
         static constexpr bool                                                 is_exact                 = false;
         static constexpr int                                                  radix                    = 2;
-        static                 boost::math::cstdfloat::detail::float_internal128_t  epsilon    ()            { return BOOST_CSTDFLOAT_FLOAT128_EPS; }
-        static                 boost::math::cstdfloat::detail::float_internal128_t  round_error()            { return BOOST_FLOAT128_C(0.5); }
+        static                 BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  epsilon    ()            { return BOOST_CSTDFLOAT_FLOAT128_EPS; }
+        static                 BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  round_error()            { return BOOST_FLOAT128_C(0.5); }
         static constexpr int                                                  min_exponent             = -16381;
         static constexpr int                                                  min_exponent10           = static_cast<int>((min_exponent * 301L) / 1000L);
         static constexpr int                                                  max_exponent             = +16384;
@@ -68,10 +68,10 @@
         static constexpr bool                                                 has_signaling_NaN        = false;
         static constexpr float_denorm_style                                   has_denorm               = denorm_present;
         static constexpr bool                                                 has_denorm_loss          = false;
-        static                 boost::math::cstdfloat::detail::float_internal128_t  infinity     ()          { return BOOST_FLOAT128_C(1.0) / BOOST_FLOAT128_C(0.0); }
-        static                 boost::math::cstdfloat::detail::float_internal128_t  quiet_NaN    ()          { return -(::BOOST_CSTDFLOAT_FLOAT128_SQRT(BOOST_FLOAT128_C(-1.0))); }
-        static                 boost::math::cstdfloat::detail::float_internal128_t  signaling_NaN()          { return BOOST_FLOAT128_C(0.0); }
-        static                 boost::math::cstdfloat::detail::float_internal128_t  denorm_min   ()          { return BOOST_CSTDFLOAT_FLOAT128_DENORM_MIN; }
+        static                 BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  infinity     ()          { return BOOST_FLOAT128_C(1.0) / BOOST_FLOAT128_C(0.0); }
+        static                 BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  quiet_NaN    ()          { return -(::BOOST_CSTDFLOAT_FLOAT128_SQRT(BOOST_FLOAT128_C(-1.0))); }
+        static                 BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  signaling_NaN()          { return BOOST_FLOAT128_C(0.0); }
+        static                 BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  denorm_min   ()          { return BOOST_CSTDFLOAT_FLOAT128_DENORM_MIN; }
         static constexpr bool                                                 is_iec559                = true;
         static constexpr bool                                                 is_bounded               = true;
         static constexpr bool                                                 is_modulo                = false;

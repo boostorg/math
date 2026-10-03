@@ -63,13 +63,13 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/type_traits.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 // This version will never be called (at runtime), it's a stub used
 // when T is unsuitable to be passed to these routines:
 //
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline T igamma_temme_large(T, T, const Policy& /* pol */, const boost::math::integral_constant<int, 0>&)
+BOOST_MATH_GPU_ENABLED inline T igamma_temme_large(T, T, const Policy& /* pol */, const BOOST_MATH_NAMESPACE::integral_constant<int, 0>&)
 {
    // stub function, should never actually be called
    BOOST_MATH_ASSERT(0);
@@ -83,11 +83,11 @@ BOOST_MATH_GPU_ENABLED inline T igamma_temme_large(T, T, const Policy& /* pol */
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const boost::math::integral_constant<int, 64>&)
+BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const BOOST_MATH_NAMESPACE::integral_constant<int, 64>&)
 {
    BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
-   T phi = -boost::math::log1pmx(sigma, pol);
+   T phi = -BOOST_MATH_NAMESPACE::log1pmx(sigma, pol);
    T y = a * phi;
    T z = sqrt(2 * phi);
    if(x < a)
@@ -282,7 +282,7 @@ BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const b
    if(x < a)
       result = -result;
 
-   result += boost::math::erfc(sqrt(y), pol) / 2;
+   result += BOOST_MATH_NAMESPACE::erfc(sqrt(y), pol) / 2;
 
    return result;
 }
@@ -294,11 +294,11 @@ BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const b
 // (IEEE double precision or 10^-17).
 //
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
    BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
-   T phi = -boost::math::log1pmx(sigma, pol);
+   T phi = -BOOST_MATH_NAMESPACE::log1pmx(sigma, pol);
    T y = a * phi;
    T z = sqrt(2 * phi);
    if(x < a)
@@ -430,7 +430,7 @@ BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const b
       result = -result;
 
    #ifdef BOOST_MATH_HAS_NVRTC
-   if (boost::math::is_same_v<T, float>)
+   if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
    {
       result += ::erfcf(::sqrtf(y)) / 2;
    }
@@ -439,7 +439,7 @@ BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const b
       result += ::erfc(::sqrt(y)) / 2;
    }
    #else
-   result += boost::math::erfc(sqrt(y), pol) / 2;
+   result += BOOST_MATH_NAMESPACE::erfc(sqrt(y), pol) / 2;
    #endif
 
    return result;
@@ -449,11 +449,11 @@ BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const b
 // (IEEE float precision, or 10^-8)
 //
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const boost::math::integral_constant<int, 24>&)
+BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const BOOST_MATH_NAMESPACE::integral_constant<int, 24>&)
 {
    BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
-   T phi = -boost::math::log1pmx(sigma, pol);
+   T phi = -BOOST_MATH_NAMESPACE::log1pmx(sigma, pol);
    T y = a * phi;
    T z = sqrt(2 * phi);
    if(x < a)
@@ -496,7 +496,7 @@ BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const b
       result = -result;
 
    #ifdef BOOST_MATH_HAS_NVRTC
-   if (boost::math::is_same_v<T, float>)
+   if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
    {
       result += ::erfcf(::sqrtf(y)) / 2;
    }
@@ -505,7 +505,7 @@ BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const b
       result += ::erfc(::sqrt(y)) / 2;
    }
    #else
-   result += boost::math::erfc(sqrt(y), pol) / 2;
+   result += BOOST_MATH_NAMESPACE::erfc(sqrt(y), pol) / 2;
    #endif
 
    return result;
@@ -521,11 +521,11 @@ BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const b
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
    BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
-   T phi = -boost::math::log1pmx(sigma, pol);
+   T phi = -BOOST_MATH_NAMESPACE::log1pmx(sigma, pol);
    T y = a * phi;
    T z = sqrt(2 * phi);
    if(x < a)
@@ -806,7 +806,7 @@ BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const b
    if(x < a)
       result = -result;
 
-   result += boost::math::erfc(sqrt(y), pol) / 2;
+   result += BOOST_MATH_NAMESPACE::erfc(sqrt(y), pol) / 2;
 
    return result;
 }
@@ -815,8 +815,7 @@ BOOST_MATH_GPU_ENABLED T igamma_temme_large(T a, T x, const Policy& pol, const b
 #endif
 
 }  // namespace detail
-}  // namespace math
-}  // namespace math
+BOOST_MATH_NAMESPACE_END
 
 
 #endif // BOOST_MATH_DETAIL_IGAMMA_LARGE

@@ -25,7 +25,7 @@
 #endif
 #endif
 
-namespace boost::math::differentiation {
+BOOST_MATH_NAMESPACE_BEGIN namespace differentiation {
 
 namespace detail {
 template <typename Real>
@@ -589,5 +589,5 @@ private:
     Real m_dt;
 };
 
-} // namespaces
+} BOOST_MATH_NAMESPACE_END
 #endif

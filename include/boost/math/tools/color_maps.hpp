@@ -23,7 +23,7 @@
 #include <vector>
 #endif
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 // In lodepng, the vector is expected to be row major, with the top row
 // specified first. Note that this is a bit confusing sometimes as it's more
@@ -39,10 +39,10 @@ unsigned write_png(const std::string &filename,
   return error;
 }
 
-} // Namespace boost::math::tools
+} BOOST_MATH_NAMESPACE_END // Namespace boost::math::tools
 #endif // __has_include("lodepng.h")
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 namespace detail {
 
@@ -1873,7 +1873,7 @@ color_map_(Real scalar, std::array<std::array<Real, 3>, 256> const &table) {
                 "arithmetic. If you require bytes please submit an issue or "
                 "pull request");
 
-  using boost::math::isnan;
+  using BOOST_MATH_NAMESPACE::isnan;
 
   if ((isnan)(scalar))
   {
@@ -1942,6 +1942,6 @@ std::array<std::uint8_t, 4> to_8bit_rgba(const std::array<Real, 3> &v) {
   return pixel;
 }
 
-} // Namespace boost::math::tools
+} BOOST_MATH_NAMESPACE_END // Namespace boost::math::tools
 
 #endif // BOOST_MATH_COLOR_MAPS_HPP

@@ -17,7 +17,7 @@
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/abs.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 // If arg is not zero, infinite, or NaN, the value returned is exactly equivalent to static_cast<int>(std::logb(arg))
 BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
@@ -25,10 +25,10 @@ inline constexpr int ilogb(Real arg) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
     {
-        return boost::math::ccmath::abs(arg) == Real(0) ? FP_ILOGB0 :
-               boost::math::ccmath::isinf(arg) ? INT_MAX :
-               boost::math::ccmath::isnan(arg) ? FP_ILOGBNAN :
-               static_cast<int>(boost::math::ccmath::logb(arg));
+        return BOOST_MATH_NAMESPACE::ccmath::abs(arg) == Real(0) ? FP_ILOGB0 :
+               BOOST_MATH_NAMESPACE::ccmath::isinf(arg) ? INT_MAX :
+               BOOST_MATH_NAMESPACE::ccmath::isnan(arg) ? FP_ILOGBNAN :
+               static_cast<int>(BOOST_MATH_NAMESPACE::ccmath::logb(arg));
     }
     else
     {
@@ -40,21 +40,21 @@ inline constexpr int ilogb(Real arg) noexcept
 BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr int ilogb(Z arg) noexcept
 {
-    return boost::math::ccmath::ilogb(static_cast<double>(arg));
+    return BOOST_MATH_NAMESPACE::ccmath::ilogb(static_cast<double>(arg));
 }
 
 inline constexpr int ilogbf(float arg) noexcept
 {
-    return boost::math::ccmath::ilogb(arg);
+    return BOOST_MATH_NAMESPACE::ccmath::ilogb(arg);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline constexpr int ilogbl(long double arg) noexcept
 {
-    return boost::math::ccmath::ilogb(arg);
+    return BOOST_MATH_NAMESPACE::ccmath::ilogb(arg);
 }
 #endif
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_ILOGB_HPP

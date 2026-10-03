@@ -25,8 +25,7 @@
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/constants/constants.hpp>
 
-namespace boost{ namespace math
-{
+BOOST_MATH_NAMESPACE_BEGIN
   namespace detail
   {
     template <class RealType, class Policy>
@@ -35,7 +34,7 @@ namespace boost{ namespace math
       RealType lower,
       RealType* result, const Policy& pol)
     {
-      if((boost::math::isfinite)(lower))
+      if((BOOST_MATH_NAMESPACE::isfinite)(lower))
       { // Any finite value is OK.
         return true;
       }
@@ -54,7 +53,7 @@ namespace boost{ namespace math
       RealType mode,
       RealType* result, const Policy& pol)
     {
-      if((boost::math::isfinite)(mode))
+      if((BOOST_MATH_NAMESPACE::isfinite)(mode))
       { // any finite value is OK.
         return true;
       }
@@ -73,7 +72,7 @@ namespace boost{ namespace math
       RealType upper,
       RealType* result, const Policy& pol)
     {
-      if((boost::math::isfinite)(upper))
+      if((BOOST_MATH_NAMESPACE::isfinite)(upper))
       { // any finite value is OK.
         return true;
       }
@@ -92,7 +91,7 @@ namespace boost{ namespace math
       RealType const& x,
       RealType* result, const Policy& pol)
     {
-      if((boost::math::isfinite)(x))
+      if((BOOST_MATH_NAMESPACE::isfinite)(x))
       { // Any finite value is OK
         return true;
       }
@@ -187,25 +186,25 @@ namespace boost{ namespace math
 
   #ifdef __cpp_deduction_guides
   BOOST_MATH_EXPORT template <class RealType>
-  triangular_distribution(RealType)->triangular_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+  triangular_distribution(RealType)->triangular_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
   BOOST_MATH_EXPORT template <class RealType>
-  triangular_distribution(RealType,RealType)->triangular_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+  triangular_distribution(RealType,RealType)->triangular_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
   BOOST_MATH_EXPORT template <class RealType>
-  triangular_distribution(RealType,RealType,RealType)->triangular_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+  triangular_distribution(RealType,RealType,RealType)->triangular_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
   #endif
 
   BOOST_MATH_EXPORT template <class RealType, class Policy>
-  BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const triangular_distribution<RealType, Policy>& /* dist */)
+  BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const triangular_distribution<RealType, Policy>& /* dist */)
   { // Range of permissible values for random variable x.
-    using boost::math::tools::max_value;
-    return boost::math::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
+    using BOOST_MATH_NAMESPACE::tools::max_value;
+    return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
   }
 
   BOOST_MATH_EXPORT template <class RealType, class Policy>
-  BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const triangular_distribution<RealType, Policy>& dist)
+  BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const triangular_distribution<RealType, Policy>& dist)
   { // Range of supported values for random variable x.
     // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-    return boost::math::pair<RealType, RealType>(dist.lower(), dist.upper());
+    return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(dist.lower(), dist.upper());
   }
 
   BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -479,14 +478,14 @@ namespace boost{ namespace math
   BOOST_MATH_GPU_ENABLED inline RealType skewness(const triangular_distribution<RealType, Policy>& dist)
   {
     BOOST_MATH_STD_USING  // for ADL of std functions
-    using namespace boost::math::constants; // for root_two
+    using namespace BOOST_MATH_NAMESPACE::constants; // for root_two
     constexpr auto function = "boost::math::skewness(const triangular_distribution<%1%>&)";
 
     RealType lower = dist.lower();
     RealType mode = dist.mode();
     RealType upper = dist.upper();
     RealType result = 0; // of checks.
-    if(false == boost::math::detail::check_triangular(function,lower, mode, upper, &result, Policy()))
+    if(false == BOOST_MATH_NAMESPACE::detail::check_triangular(function,lower, mode, upper, &result, Policy()))
     {
       return result;
     }
@@ -534,8 +533,7 @@ namespace boost{ namespace math
     return constants::half<RealType>() + log((dist.upper() - dist.lower())/2);
   }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

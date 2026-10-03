@@ -39,7 +39,7 @@
 #include <stdexcept>
 #include <algorithm>
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 namespace cuda_detail {
 
@@ -686,7 +686,7 @@ public:
         chunk_low_ = 30u * ((start - 7) / 30);
 
         // sieving primes: 41..163 from the small table, 167.. from the CPU engine
-        const std::uint64_t root {boost::math::tools::isqrt(stop)};
+        const std::uint64_t root {BOOST_MATH_NAMESPACE::tools::isqrt(stop)};
         std::vector<std::uint32_t> primes;
         for (std::size_t i {0}; i < 71 && small_primes_to_353[i] <= presieve_max_prime; ++i)
         {
@@ -883,7 +883,7 @@ void cuda_range(std::uint64_t start, std::uint64_t stop, const prime_sieve_optio
     sieve.generate(consume);
 }
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // __CUDACC__ && BOOST_MATH_ENABLE_CUDA && !BOOST_MATH_HAS_NVRTC
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_CUDA_HPP

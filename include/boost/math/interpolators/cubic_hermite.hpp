@@ -17,8 +17,7 @@
 #endif
 #include <boost/math/policies/error_handling.hpp>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace interpolators {
 
 BOOST_MATH_EXPORT template<class RandomAccessContainer, class Policy = policies::policy<>>
@@ -171,6 +170,5 @@ private:
 };
 
 }
-}
-}
+BOOST_MATH_NAMESPACE_END
 #endif

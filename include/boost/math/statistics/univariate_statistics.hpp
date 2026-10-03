@@ -22,7 +22,7 @@
 #include <list>
 #endif
 
-namespace boost { namespace math { namespace statistics { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics { namespace detail {
 
 // mode() can only sort a range in place when its iterators are random access and
 // writable. A const random access iterator (e.g. vector<T>::const_iterator) satisfies
@@ -34,14 +34,14 @@ using is_sortable_iterator = std::integral_constant<bool,
     std::is_assignable<typename std::iterator_traits<ForwardIterator>::reference,
                        typename std::iterator_traits<ForwardIterator>::value_type>::value>;
 
-}}}} // namespace boost::math::statistics::detail
+}} BOOST_MATH_NAMESPACE_END // namespace boost::math::statistics::detail
 
 #ifdef BOOST_MATH_EXEC_COMPATIBLE
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <execution>
 #endif
 
-namespace boost::math::statistics {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics {
 
 BOOST_MATH_EXPORT template<class ExecutionPolicy, class ForwardIterator>
 inline auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
@@ -543,7 +543,7 @@ auto median_absolute_deviation(ExecutionPolicy&& exec, RandomAccessIterator firs
     using std::isnan;
     if (isnan(center))
     {
-        center = boost::math::statistics::median(exec, first, last);
+        center = BOOST_MATH_NAMESPACE::statistics::median(exec, first, last);
     }
     const auto num_elems = std::distance(first, last);
     BOOST_MATH_ASSERT_MSG(num_elems > 0, "The median of a zero-length vector is undefined.");
@@ -715,11 +715,11 @@ inline auto mode(Container & v)
     return mode(std::execution::seq, std::begin(v), std::end(v));
 }
 
-} // Namespace boost::math::statistics
+} BOOST_MATH_NAMESPACE_END // Namespace boost::math::statistics
 
 #else // Backwards compatible bindings for C++11 or execution is not implemented
 
-namespace boost { namespace math { namespace statistics {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics {
 
 template<bool B, class T = void>
 using enable_if_t = typename std::enable_if<B, T>::type;
@@ -1085,7 +1085,7 @@ Real median_absolute_deviation(RandomAccessIterator first, RandomAccessIterator 
     using std::isnan;
     if (isnan(center))
     {
-        center = boost::math::statistics::median(first, last);
+        center = BOOST_MATH_NAMESPACE::statistics::median(first, last);
     }
     const auto num_elems = std::distance(first, last);
     BOOST_MATH_ASSERT_MSG(num_elems > 0, "The median of a zero-length vector is undefined.");
@@ -1223,6 +1223,6 @@ inline std::list<Real> mode(Container& c)
 {
     return mode(std::begin(c), std::end(c));
 }
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif
 #endif // BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_HPP

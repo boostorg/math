@@ -28,7 +28,7 @@
 #endif
 #endif
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class T, class Func>
 void bubble_down_one(T* first, T* last, Func f)
@@ -223,19 +223,19 @@ T hypergeometric_pdf_lanczos_imp(T /*dummy*/, std::uint64_t x, std::uint64_t r, 
 }
 
 template <class T, class Policy>
-T hypergeometric_pdf_lanczos_imp(T /*dummy*/, std::uint64_t x, std::uint64_t r, std::uint64_t n, std::uint64_t N, const boost::math::lanczos::undefined_lanczos&, const Policy& pol)
+T hypergeometric_pdf_lanczos_imp(T /*dummy*/, std::uint64_t x, std::uint64_t r, std::uint64_t n, std::uint64_t N, const BOOST_MATH_NAMESPACE::lanczos::undefined_lanczos&, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    return exp(
-      boost::math::lgamma(T(n + 1), pol)
-      + boost::math::lgamma(T(r + 1), pol)
-      + boost::math::lgamma(T(N - n + 1), pol)
-      + boost::math::lgamma(T(N - r + 1), pol)
-      - boost::math::lgamma(T(N + 1), pol)
-      - boost::math::lgamma(T(x + 1), pol)
-      - boost::math::lgamma(T(n - x + 1), pol)
-      - boost::math::lgamma(T(r - x + 1), pol)
-      - boost::math::lgamma(T(N - n - r + x + 1), pol));
+      BOOST_MATH_NAMESPACE::lgamma(T(n + 1), pol)
+      + BOOST_MATH_NAMESPACE::lgamma(T(r + 1), pol)
+      + BOOST_MATH_NAMESPACE::lgamma(T(N - n + 1), pol)
+      + BOOST_MATH_NAMESPACE::lgamma(T(N - r + 1), pol)
+      - BOOST_MATH_NAMESPACE::lgamma(T(N + 1), pol)
+      - BOOST_MATH_NAMESPACE::lgamma(T(x + 1), pol)
+      - BOOST_MATH_NAMESPACE::lgamma(T(n - x + 1), pol)
+      - BOOST_MATH_NAMESPACE::lgamma(T(r - x + 1), pol)
+      - BOOST_MATH_NAMESPACE::lgamma(T(N - n - r + x + 1), pol));
 }
 
 template <class T>
@@ -254,15 +254,15 @@ inline T integer_power(const T& x, int ex)
    case 3:
       return x * x * x;
    case 4:
-      return boost::math::pow<4>(x);
+      return BOOST_MATH_NAMESPACE::pow<4>(x);
    case 5:
-      return boost::math::pow<5>(x);
+      return BOOST_MATH_NAMESPACE::pow<5>(x);
    case 6:
-      return boost::math::pow<6>(x);
+      return BOOST_MATH_NAMESPACE::pow<6>(x);
    case 7:
-      return boost::math::pow<7>(x);
+      return BOOST_MATH_NAMESPACE::pow<7>(x);
    case 8:
-      return boost::math::pow<8>(x);
+      return BOOST_MATH_NAMESPACE::pow<8>(x);
    }
    BOOST_MATH_STD_USING
 #ifdef __SUNPRO_CC
@@ -400,19 +400,19 @@ template <class T, class Policy>
 T hypergeometric_pdf_factorial_imp(std::uint64_t x, std::uint64_t r, std::uint64_t n, std::uint64_t N, const Policy&)
 {
    BOOST_MATH_STD_USING
-   BOOST_MATH_ASSERT(N <= boost::math::max_factorial<T>::value);
-   T result = boost::math::unchecked_factorial<T>(static_cast<unsigned>(n));
+   BOOST_MATH_ASSERT(N <= BOOST_MATH_NAMESPACE::max_factorial<T>::value);
+   T result = BOOST_MATH_NAMESPACE::unchecked_factorial<T>(static_cast<unsigned>(n));
    T num[3] = {
-      boost::math::unchecked_factorial<T>(static_cast<unsigned>(r)),
-      boost::math::unchecked_factorial<T>(static_cast<unsigned>(N - n)),
-      boost::math::unchecked_factorial<T>(static_cast<unsigned>(N - r))
+      BOOST_MATH_NAMESPACE::unchecked_factorial<T>(static_cast<unsigned>(r)),
+      BOOST_MATH_NAMESPACE::unchecked_factorial<T>(static_cast<unsigned>(N - n)),
+      BOOST_MATH_NAMESPACE::unchecked_factorial<T>(static_cast<unsigned>(N - r))
    };
    T denom[5] = {
-      boost::math::unchecked_factorial<T>(static_cast<unsigned>(N)),
-      boost::math::unchecked_factorial<T>(static_cast<unsigned>(x)),
-      boost::math::unchecked_factorial<T>(static_cast<unsigned>(n - x)),
-      boost::math::unchecked_factorial<T>(static_cast<unsigned>(r - x)),
-      boost::math::unchecked_factorial<T>(static_cast<unsigned>(N - n - r + x))
+      BOOST_MATH_NAMESPACE::unchecked_factorial<T>(static_cast<unsigned>(N)),
+      BOOST_MATH_NAMESPACE::unchecked_factorial<T>(static_cast<unsigned>(x)),
+      BOOST_MATH_NAMESPACE::unchecked_factorial<T>(static_cast<unsigned>(n - x)),
+      BOOST_MATH_NAMESPACE::unchecked_factorial<T>(static_cast<unsigned>(r - x)),
+      BOOST_MATH_NAMESPACE::unchecked_factorial<T>(static_cast<unsigned>(N - n - r + x))
    };
    std::size_t i = 0;
    std::size_t j = 0;
@@ -494,7 +494,7 @@ inline typename tools::promote_args<T>::type
       policies::assert_undefined<> >::type forwarding_policy;
 
    value_type result;
-   if(N <= boost::math::max_factorial<value_type>::value)
+   if(N <= BOOST_MATH_NAMESPACE::max_factorial<value_type>::value)
    {
       //
       // If N is small enough then we can evaluate the PDF via the factorials
@@ -504,7 +504,7 @@ inline typename tools::promote_args<T>::type
       result = detail::hypergeometric_pdf_factorial_imp<value_type>(x, r, n, N, forwarding_policy());
    }
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
-   else if((N <= boost::math::prime(boost::math::max_prime - 1)) && !(std::numeric_limits<value_type>::is_specialized && (std::numeric_limits<value_type>::digits <= 64)))
+   else if((N <= BOOST_MATH_NAMESPACE::prime(BOOST_MATH_NAMESPACE::max_prime - 1)) && !(std::numeric_limits<value_type>::is_specialized && (std::numeric_limits<value_type>::digits <= 64)))
    {
       //
       // Beyond 64-bit precision, Loader's method needs many more steps for its Stirling remainders
@@ -521,13 +521,13 @@ inline typename tools::promote_args<T>::type
       // tails, where the prime table reaches, prime factorisation is more accurate:
       //
       result = detail::hypergeometric_pdf_saddle_point_imp<value_type>(x, r, n, N, forwarding_policy());
-      if((result < value_type(3.0590232050182578837e-7L)) && (N <= boost::math::prime(boost::math::max_prime - 1)))  // e^-15
+      if((result < value_type(3.0590232050182578837e-7L)) && (N <= BOOST_MATH_NAMESPACE::prime(BOOST_MATH_NAMESPACE::max_prime - 1)))  // e^-15
       {
          result = detail::hypergeometric_pdf_prime_imp<value_type>(x, r, n, N, forwarding_policy());
       }
    }
 #else
-   else if(N <= boost::math::prime(boost::math::max_prime - 1))
+   else if(N <= BOOST_MATH_NAMESPACE::prime(BOOST_MATH_NAMESPACE::max_prime - 1))
    {
       //
       // If N is no larger than the largest prime number in our lookup table
@@ -593,14 +593,14 @@ inline typename tools::promote_args<T>::type
    const value_type n_left = static_cast<value_type>(n - floor_x);                 // >= 1, as x < n
    // Each numerator is paired with a denominator, so that no intermediate product underflows early.
    value_type result = base
-      * (boost::math::tgamma_delta_ratio(value_type(k + 1), d, forwarding_policy())
-         / boost::math::tgamma_delta_ratio(value_type(r_left + 1 - d), d, forwarding_policy()))
-      * (boost::math::tgamma_delta_ratio(value_type(failures_left + 1), d, forwarding_policy())
-         / boost::math::tgamma_delta_ratio(value_type(n_left + 1 - d), d, forwarding_policy()));
+      * (BOOST_MATH_NAMESPACE::tgamma_delta_ratio(value_type(k + 1), d, forwarding_policy())
+         / BOOST_MATH_NAMESPACE::tgamma_delta_ratio(value_type(r_left + 1 - d), d, forwarding_policy()))
+      * (BOOST_MATH_NAMESPACE::tgamma_delta_ratio(value_type(failures_left + 1), d, forwarding_policy())
+         / BOOST_MATH_NAMESPACE::tgamma_delta_ratio(value_type(n_left + 1 - d), d, forwarding_policy()));
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::hypergeometric_pdf<%1%>(%1%,%1%,%1%,%1%)");
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif
 

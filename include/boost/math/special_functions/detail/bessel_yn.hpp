@@ -20,7 +20,7 @@
 // Bessel function of the second kind of integer order
 // Y_n(z) is the dominant solution, forward recurrence always OK (though unstable)
 
-namespace boost { namespace math { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T bessel_yn(int n, T x, const Policy& pol)
@@ -28,7 +28,7 @@ BOOST_MATH_GPU_ENABLED T bessel_yn(int n, T x, const Policy& pol)
     BOOST_MATH_STD_USING
     T value, factor, current, prev;
 
-    using namespace boost::math::tools;
+    using namespace BOOST_MATH_NAMESPACE::tools;
 
     constexpr auto function = "boost::math::bessel_yn<%1%>(%1%,%1%)";
 
@@ -58,7 +58,7 @@ BOOST_MATH_GPU_ENABLED T bessel_yn(int n, T x, const Policy& pol)
        T scale = 1;
        value = bessel_yn_small_z(n, x, &scale, pol);
        if (tools::max_value<T>() * fabs(scale) < fabs(value))
-          return boost::math::sign(scale) * boost::math::sign(value) * policies::raise_overflow_error<T>(function, nullptr, pol);
+          return BOOST_MATH_NAMESPACE::sign(scale) * BOOST_MATH_NAMESPACE::sign(value) * policies::raise_overflow_error<T>(function, nullptr, pol);
        value = (factor * value) / scale;
     }
     else if(asymptotic_bessel_large_x_limit(n, x))
@@ -107,7 +107,7 @@ BOOST_MATH_GPU_ENABLED T bessel_yn(int n, T x, const Policy& pol)
     return value;
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_BESSEL_YN_HPP
 

@@ -15,7 +15,7 @@
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_0F1_bessel.hpp>
 
-namespace boost { namespace math { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
 
    template <class T>
@@ -111,6 +111,6 @@ inline typename tools::promote_args<T1, T2>::type hypergeometric_0F1(T1 b, T2 z)
 }
 
 
-} } // namespace boost::math
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_HPP

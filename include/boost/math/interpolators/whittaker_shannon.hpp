@@ -10,7 +10,7 @@
 #endif
 #include <boost/math/interpolators/detail/whittaker_shannon_detail.hpp>
 
-namespace boost { namespace math { namespace interpolators {
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators {
 
 BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class whittaker_shannon {
@@ -45,5 +45,5 @@ public:
 private:
     std::shared_ptr<detail::whittaker_shannon_detail<RandomAccessContainer>> m_impl;
 };
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif

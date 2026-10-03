@@ -16,8 +16,7 @@
 #endif
 #include <boost/math/interpolators/detail/septic_hermite_detail.hpp>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace interpolators {
 
 BOOST_MATH_EXPORT template<class RandomAccessContainer>
@@ -146,6 +145,5 @@ private:
 };
 
 }
-}
-}
+BOOST_MATH_NAMESPACE_END
 #endif

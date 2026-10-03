@@ -16,7 +16,7 @@
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 BOOST_MATH_EXPORT template <typename T>
 inline constexpr bool isnormal(T x)
@@ -24,9 +24,9 @@ inline constexpr bool isnormal(T x)
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {   
         return x == T(0) ? false :
-               boost::math::ccmath::isinf(x) ? false :
-               boost::math::ccmath::isnan(x) ? false :
-               boost::math::ccmath::abs(x) < (std::numeric_limits<T>::min)() ? false : true;
+               BOOST_MATH_NAMESPACE::ccmath::isinf(x) ? false :
+               BOOST_MATH_NAMESPACE::ccmath::isnan(x) ? false :
+               BOOST_MATH_NAMESPACE::ccmath::abs(x) < (std::numeric_limits<T>::min)() ? false : true;
     }
     else
     {
@@ -42,6 +42,6 @@ inline constexpr bool isnormal(T x)
         }
     }
 }
-}
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ISNORMAL_HPP

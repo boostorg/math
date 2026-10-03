@@ -110,11 +110,31 @@
 <pre class="programlisting"><span class="identifier">jacobi_theta1tau</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span> <span class="identifier">a</span> <span class="special">/</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;());</span>
 </pre>
 <p>
-        Internally, Boost implements the <span class="emphasis"><em>q</em></span> parameterization
+        Internally, when <span class="emphasis"><em>q</em></span> is larger than exp(-π) (that is, when
+        τ is less than 1), Boost implements the <span class="emphasis"><em>q</em></span> parameterization
         by taking the logarithm of <span class="emphasis"><em>q</em></span> and passing it to the τ parameterization;
         as such, using the τ parameterization directly will generally yield greater
-        precision. As another example, if the complement of <span class="emphasis"><em>q</em></span>
-        is known with great accuracy, then instead of:
+        precision in that regime. When <span class="emphasis"><em>q</em></span> is smaller than exp(-π),
+        the Fourier series is summed directly in terms of <span class="emphasis"><em>q</em></span>,
+        and the two parameterizations are equally accurate.
+      </p>
+<p>
+        Every term of the series is an exponential whose argument is a product or
+        quotient of τ, π and a small integer, or, in the transformed series used when
+        τ &lt; 1, the square of <span class="emphasis"><em>z</em></span> plus a multiple of π/2. Rounding
+        such an argument to working precision would cost as many ulps in the term
+        as the argument is large, so the rounding errors of π, of the products, of
+        the division and of the reduction of <span class="emphasis"><em>z</em></span> are tracked exactly
+        (using error-free transformations that work for any binary floating-point
+        type) and applied as a correction factor to each term. The τ parameterization
+        is therefore accurate to a few ulps throughout, apart from the conditioning
+        of the function itself, for <span class="emphasis"><em>z</em></span> up to about 1/ε (10<sup>16</sup> for
+        <code class="computeroutput"><span class="keyword">double</span></code>); beyond that the reduction
+        of <span class="emphasis"><em>z</em></span> by the period loses accuracy in proportion to
+        <span class="emphasis"><em>z</em></span>ε<sup>2</sup>. In the <span class="emphasis"><em>q</em></span> parameterization the
+        rounding of log(<span class="emphasis"><em>q</em></span>) remains, and its effect grows as
+        <span class="emphasis"><em>q</em></span> approaches 1. As another example, if the complement
+        of <span class="emphasis"><em>q</em></span> is known with great accuracy, then instead of:
       </p>
 <pre class="programlisting"><span class="identifier">jacobi_theta1</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span> <span class="number">1</span><span class="special">-</span><span class="identifier">q_complement</span><span class="special">);</span>
 </pre>
@@ -129,6 +149,12 @@
         are provided. Similar in spirit to <code class="computeroutput"><a class="link" href="../powers/expm1.html" title="expm1">expm1</a></code>,
         these functions return one less than the evaluated function, and yield increased
         accuracy when <span class="emphasis"><em>q</em></span> is small.
+      </p>
+<p>
+        All of the functions return the result of <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+        if <span class="emphasis"><em>z</em></span> is not finite, if <span class="emphasis"><em>q</em></span> lies outside
+        (0, 1), or if τ is not strictly positive. A NaN argument is treated as a domain
+        error.
       </p>
 <h5>
 <a name="math_toolkit.jacobi_theta.jacobi_theta_overview.h1"></a>

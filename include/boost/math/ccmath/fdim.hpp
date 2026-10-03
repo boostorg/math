@@ -15,7 +15,7 @@
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail {
 
@@ -43,16 +43,16 @@ constexpr Real fdim(Real x, Real y) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        if (boost::math::ccmath::isnan(x))
+        if (BOOST_MATH_NAMESPACE::ccmath::isnan(x))
         {
             return x;
         }
-        else if (boost::math::ccmath::isnan(y))
+        else if (BOOST_MATH_NAMESPACE::ccmath::isnan(y))
         {
             return y;
         }
 
-        return boost::math::ccmath::detail::fdim_impl(x, y);
+        return BOOST_MATH_NAMESPACE::ccmath::detail::fdim_impl(x, y);
     }
     else
     {
@@ -66,8 +66,8 @@ constexpr auto fdim(T1 x, T2 y) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        using promoted_type = boost::math::tools::promote_args_t<T1, T2>;
-        return boost::math::ccmath::fdim(promoted_type(x), promoted_type(y));
+        using promoted_type = BOOST_MATH_NAMESPACE::tools::promote_args_t<T1, T2>;
+        return BOOST_MATH_NAMESPACE::ccmath::fdim(promoted_type(x), promoted_type(y));
     }
     else
     {
@@ -78,16 +78,16 @@ constexpr auto fdim(T1 x, T2 y) noexcept
 
 constexpr float fdimf(float x, float y) noexcept
 {
-    return boost::math::ccmath::fdim(x, y);
+    return BOOST_MATH_NAMESPACE::ccmath::fdim(x, y);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 constexpr long double fdiml(long double x, long double y) noexcept
 {
-    return boost::math::ccmath::fdim(x, y);
+    return BOOST_MATH_NAMESPACE::ccmath::fdim(x, y);
 }
 #endif
 
-} // Namespace boost::math::ccmath
+} BOOST_MATH_NAMESPACE_END // Namespace boost::math::ccmath
 
 #endif // BOOST_MATH_CCMATH_FDIM_HPP

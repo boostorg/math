@@ -11,11 +11,10 @@
 #include <vector>
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {
 
-namespace rdiff = boost::math::differentiation::reverse_mode;
+namespace rdiff = BOOST_MATH_NAMESPACE::differentiation::reverse_mode;
 
 /**
  * @brief The nesterov_update_policy class
@@ -30,7 +29,7 @@ struct nesterov_update_policy
 
   template<typename ArgumentType,
            typename = typename std::enable_if<
-             boost::math::differentiation::reverse_mode::detail::is_expression<
+             BOOST_MATH_NAMESPACE::differentiation::reverse_mode::detail::is_expression<
                ArgumentType>::value>::type>
   void operator()(ArgumentType& x, RealType& g, RealType& v)
   {
@@ -39,7 +38,7 @@ struct nesterov_update_policy
     x.get_value() += -mu_ * v_prev + (static_cast<RealType>(1) + mu_) * v;
   }
   template<typename ArgumentType,
-           typename std::enable_if<!boost::math::differentiation::reverse_mode::
+           typename std::enable_if<!BOOST_MATH_NAMESPACE::differentiation::reverse_mode::
                                      detail::is_expression<ArgumentType>::value,
                                    int>::type = 0>
   void operator()(ArgumentType& x, RealType& g, RealType& v) const
@@ -205,6 +204,5 @@ make_nag(Objective&& obj,
     nesterov_update_policy<RealType>{ lr, mu });
 }
 } // namespace optimization
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

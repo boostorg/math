@@ -28,8 +28,7 @@
 
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <typename T>
 struct numeric_limits 
@@ -884,7 +883,6 @@ struct numeric_limits<bool>
 
 #endif // BOOST_MATH_HAS_GPU_SUPPORT
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif

@@ -18,7 +18,7 @@
 #endif
 #include <boost/math/tools/assert.hpp>
 
-namespace boost{ namespace math{ namespace interpolators{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators{ namespace detail{
 
 template <class TimeContainer, class SpaceContainer>
 class vector_barycentric_rational_imp
@@ -194,5 +194,5 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_p
     return;
 }
 
-}}}}
+}} BOOST_MATH_NAMESPACE_END
 #endif

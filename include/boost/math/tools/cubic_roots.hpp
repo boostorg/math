@@ -12,7 +12,7 @@
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/roots.hpp>
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 namespace detail {
 
@@ -22,11 +22,11 @@ namespace detail {
 template <typename Real>
 bool roots_less(const Real& lhs, const Real& rhs)
 {
-    if ((boost::math::isnan)(lhs))
+    if ((BOOST_MATH_NAMESPACE::isnan)(lhs))
     {
         return false;
     }
-    if ((boost::math::isnan)(rhs))
+    if ((BOOST_MATH_NAMESPACE::isnan)(rhs))
     {
         return true;
     }
@@ -196,5 +196,5 @@ Real cubic_root_condition_number(Real a, Real b, Real c, Real d, Real root) {
     return numerator / abs(denominator);
 }
 
-} // namespace boost::math::tools
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::tools
 #endif

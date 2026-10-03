@@ -20,7 +20,7 @@
 #  endif
 #endif
 
-namespace boost::math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template<typename Real>
 inline Real rsqrt(Real const & x)
@@ -51,5 +51,5 @@ inline Real rsqrt(Real const & x)
 }
 
 
-}
+BOOST_MATH_NAMESPACE_END
 #endif

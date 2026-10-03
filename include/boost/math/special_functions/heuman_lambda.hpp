@@ -24,7 +24,7 @@
 
 // Elliptic integral the Jacobi Zeta function.
 
-namespace boost { namespace math { 
+BOOST_MATH_NAMESPACE_BEGIN
    
 namespace detail{
 
@@ -33,8 +33,8 @@ template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T heuman_lambda_imp(T phi, T k, const Policy& pol)
 {
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
-    using namespace boost::math::constants;
+    using namespace BOOST_MATH_NAMESPACE::tools;
+    using namespace BOOST_MATH_NAMESPACE::constants;
 
     constexpr auto function = "boost::math::heuman_lambda<%1%>(%1%, %1%)";
 
@@ -55,9 +55,9 @@ BOOST_MATH_GPU_ENABLED T heuman_lambda_imp(T phi, T k, const Policy& pol)
     }
     else
     {
-       typedef boost::math::integral_constant<int,
-          boost::math::is_floating_point<T>::value && boost::math::numeric_limits<T>::digits && (boost::math::numeric_limits<T>::digits <= 54) ? 0 :
-          boost::math::is_floating_point<T>::value && boost::math::numeric_limits<T>::digits && (boost::math::numeric_limits<T>::digits <= 64) ? 1 : 2
+       typedef BOOST_MATH_NAMESPACE::integral_constant<int,
+          BOOST_MATH_NAMESPACE::is_floating_point<T>::value && BOOST_MATH_NAMESPACE::numeric_limits<T>::digits && (BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 54) ? 0 :
+          BOOST_MATH_NAMESPACE::is_floating_point<T>::value && BOOST_MATH_NAMESPACE::numeric_limits<T>::digits && (BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 64) ? 1 : 2
        > precision_tag_type;
 
        T rkp = sqrt(kp);
@@ -88,10 +88,10 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type heuman_
 BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi)
 {
-   return boost::math::heuman_lambda(k, phi, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::heuman_lambda(k, phi, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ELLINT_D_HPP
 

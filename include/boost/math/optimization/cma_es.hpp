@@ -38,7 +38,7 @@
 #define BOOST_MATH_DEBUG_CMA_ES 0
 #endif
 
-namespace boost::math::optimization {
+BOOST_MATH_NAMESPACE_BEGIN namespace optimization {
 
 BOOST_MATH_EXPORT template <typename ArgumentContainer> struct cma_es_parameters {
   using Real = typename ArgumentContainer::value_type;
@@ -390,5 +390,5 @@ ArgumentContainer cma_es(
   return best_vector;
 }
 
-} // namespace boost::math::optimization
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::optimization
 #endif

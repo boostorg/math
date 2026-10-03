@@ -38,8 +38,7 @@
 #pragma GCC system_header
 #endif
 
-namespace boost { namespace math
-{
+BOOST_MATH_NAMESPACE_BEGIN
 // Forward declarations:
 BOOST_MATH_EXPORT template <class T>
 struct max_factorial;
@@ -64,7 +63,7 @@ template <bool b>
 struct unchecked_factorial_data<float, b>
 {
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   static constexpr boost::math::array<float, 35> factorials = { {
+   static constexpr BOOST_MATH_NAMESPACE::array<float, 35> factorials = { {
       1.0F,
       1.0F,
       2.0F,
@@ -102,15 +101,15 @@ struct unchecked_factorial_data<float, b>
       0.29523279903960414084761860964352e39F,
    }};
 #else
-   static const boost::math::array<float, 35> factorials;
+   static const BOOST_MATH_NAMESPACE::array<float, 35> factorials;
 #endif
 };
 
 template<bool b>
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr boost::math::array<float, 35> unchecked_factorial_data<float, b>::factorials;
+   constexpr BOOST_MATH_NAMESPACE::array<float, 35> unchecked_factorial_data<float, b>::factorials;
 #else
-   const boost::math::array<float, 35> unchecked_factorial_data<float, b>::factorials = {{
+   const BOOST_MATH_NAMESPACE::array<float, 35> unchecked_factorial_data<float, b>::factorials = {{
       1.0F,
       1.0F,
       2.0F,
@@ -216,7 +215,7 @@ template <bool b>
 struct unchecked_factorial_data<double, b>
 {
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   static constexpr boost::math::array<double, 171> factorials = { {
+   static constexpr BOOST_MATH_NAMESPACE::array<double, 171> factorials = { {
       1.0,
       1.0,
       2.0,
@@ -390,15 +389,15 @@ struct unchecked_factorial_data<double, b>
       0.7257415615307998967396728211129263114717e307,
    }};
 #else
-   static const boost::math::array<double, 171> factorials;
+   static const BOOST_MATH_NAMESPACE::array<double, 171> factorials;
 #endif
 };
 
 template <bool b>
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr boost::math::array<double, 171> unchecked_factorial_data<double, b>::factorials;
+   constexpr BOOST_MATH_NAMESPACE::array<double, 171> unchecked_factorial_data<double, b>::factorials;
 #else
-   const boost::math::array<double, 171> unchecked_factorial_data<double, b>::factorials = {{
+   const BOOST_MATH_NAMESPACE::array<double, 171> unchecked_factorial_data<double, b>::factorials = {{
       1.0,
       1.0,
       2.0,
@@ -645,7 +644,7 @@ template <bool b>
 struct unchecked_factorial_data<long double, b>
 {
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   static constexpr boost::math::array<long double, 171> factorials = { {
+   static constexpr BOOST_MATH_NAMESPACE::array<long double, 171> factorials = { {
       1L,
       1L,
       2L,
@@ -819,15 +818,15 @@ struct unchecked_factorial_data<long double, b>
       0.7257415615307998967396728211129263114717e307L,
    }};
 #else
-   static const boost::math::array<long double, 171> factorials;
+   static const BOOST_MATH_NAMESPACE::array<long double, 171> factorials;
 #endif
 };
 
 template <bool b>
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr boost::math::array<long double, 171> unchecked_factorial_data<long double, b>::factorials;
+   constexpr BOOST_MATH_NAMESPACE::array<long double, 171> unchecked_factorial_data<long double, b>::factorials;
 #else
-   const boost::math::array<long double, 171> unchecked_factorial_data<long double, b>::factorials = {{
+   const BOOST_MATH_NAMESPACE::array<long double, 171> unchecked_factorial_data<long double, b>::factorials = {{
       1L,
       1L,
       2L,
@@ -1020,7 +1019,7 @@ template <bool b>
 struct unchecked_factorial_data<BOOST_MATH_FLOAT128_TYPE, b>
 {
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   static constexpr boost::math::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials = { {
+   static constexpr BOOST_MATH_NAMESPACE::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials = { {
       1,
       1,
       2,
@@ -1194,15 +1193,15 @@ struct unchecked_factorial_data<BOOST_MATH_FLOAT128_TYPE, b>
       0.7257415615307998967396728211129263114717e307Q,
    } };
 #else
-   static const boost::math::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials;
+   static const BOOST_MATH_NAMESPACE::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials;
 #endif
 };
 
 template <bool b>
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-constexpr boost::math::array<BOOST_MATH_FLOAT128_TYPE, 171> unchecked_factorial_data<BOOST_MATH_FLOAT128_TYPE, b>::factorials;
+constexpr BOOST_MATH_NAMESPACE::array<BOOST_MATH_FLOAT128_TYPE, 171> unchecked_factorial_data<BOOST_MATH_FLOAT128_TYPE, b>::factorials;
 #else
-const boost::math::array<BOOST_MATH_FLOAT128_TYPE, 171> unchecked_factorial_data<BOOST_MATH_FLOAT128_TYPE, b>::factorials = { {
+const BOOST_MATH_NAMESPACE::array<BOOST_MATH_FLOAT128_TYPE, 171> unchecked_factorial_data<BOOST_MATH_FLOAT128_TYPE, b>::factorials = { {
       1,
       1,
       2,
@@ -1392,7 +1391,7 @@ struct max_factorial<BOOST_MATH_FLOAT128_TYPE>
 #endif
 
 template <class T, int N>
-inline T unchecked_factorial_imp(unsigned i, const boost::math::integral_constant<int, N>&)
+inline T unchecked_factorial_imp(unsigned i, const BOOST_MATH_NAMESPACE::integral_constant<int, N>&)
 {
    //
    // If you're foolish enough to instantiate factorial
@@ -1406,118 +1405,118 @@ inline T unchecked_factorial_imp(unsigned i, const boost::math::integral_constan
    // unsigned int nfac = static_cast<unsigned int>(factorial<double>(n));
    // See factorial documentation for more detail.
    //
-   static_assert(!boost::math::is_integral<T>::value && !boost::math::numeric_limits<T>::is_integer, "Type T must not be an integral type");
+   static_assert(!BOOST_MATH_NAMESPACE::is_integral<T>::value && !BOOST_MATH_NAMESPACE::numeric_limits<T>::is_integer, "Type T must not be an integral type");
 
    // We rely on C++11 thread safe initialization here:
-   static const boost::math::array<T, 101> factorials = {{
-      T(boost::math::tools::convert_from_string<T>("1")),
-      T(boost::math::tools::convert_from_string<T>("1")),
-      T(boost::math::tools::convert_from_string<T>("2")),
-      T(boost::math::tools::convert_from_string<T>("6")),
-      T(boost::math::tools::convert_from_string<T>("24")),
-      T(boost::math::tools::convert_from_string<T>("120")),
-      T(boost::math::tools::convert_from_string<T>("720")),
-      T(boost::math::tools::convert_from_string<T>("5040")),
-      T(boost::math::tools::convert_from_string<T>("40320")),
-      T(boost::math::tools::convert_from_string<T>("362880")),
-      T(boost::math::tools::convert_from_string<T>("3628800")),
-      T(boost::math::tools::convert_from_string<T>("39916800")),
-      T(boost::math::tools::convert_from_string<T>("479001600")),
-      T(boost::math::tools::convert_from_string<T>("6227020800")),
-      T(boost::math::tools::convert_from_string<T>("87178291200")),
-      T(boost::math::tools::convert_from_string<T>("1307674368000")),
-      T(boost::math::tools::convert_from_string<T>("20922789888000")),
-      T(boost::math::tools::convert_from_string<T>("355687428096000")),
-      T(boost::math::tools::convert_from_string<T>("6402373705728000")),
-      T(boost::math::tools::convert_from_string<T>("121645100408832000")),
-      T(boost::math::tools::convert_from_string<T>("2432902008176640000")),
-      T(boost::math::tools::convert_from_string<T>("51090942171709440000")),
-      T(boost::math::tools::convert_from_string<T>("1124000727777607680000")),
-      T(boost::math::tools::convert_from_string<T>("25852016738884976640000")),
-      T(boost::math::tools::convert_from_string<T>("620448401733239439360000")),
-      T(boost::math::tools::convert_from_string<T>("15511210043330985984000000")),
-      T(boost::math::tools::convert_from_string<T>("403291461126605635584000000")),
-      T(boost::math::tools::convert_from_string<T>("10888869450418352160768000000")),
-      T(boost::math::tools::convert_from_string<T>("304888344611713860501504000000")),
-      T(boost::math::tools::convert_from_string<T>("8841761993739701954543616000000")),
-      T(boost::math::tools::convert_from_string<T>("265252859812191058636308480000000")),
-      T(boost::math::tools::convert_from_string<T>("8222838654177922817725562880000000")),
-      T(boost::math::tools::convert_from_string<T>("263130836933693530167218012160000000")),
-      T(boost::math::tools::convert_from_string<T>("8683317618811886495518194401280000000")),
-      T(boost::math::tools::convert_from_string<T>("295232799039604140847618609643520000000")),
-      T(boost::math::tools::convert_from_string<T>("10333147966386144929666651337523200000000")),
-      T(boost::math::tools::convert_from_string<T>("371993326789901217467999448150835200000000")),
-      T(boost::math::tools::convert_from_string<T>("13763753091226345046315979581580902400000000")),
-      T(boost::math::tools::convert_from_string<T>("523022617466601111760007224100074291200000000")),
-      T(boost::math::tools::convert_from_string<T>("20397882081197443358640281739902897356800000000")),
-      T(boost::math::tools::convert_from_string<T>("815915283247897734345611269596115894272000000000")),
-      T(boost::math::tools::convert_from_string<T>("33452526613163807108170062053440751665152000000000")),
-      T(boost::math::tools::convert_from_string<T>("1405006117752879898543142606244511569936384000000000")),
-      T(boost::math::tools::convert_from_string<T>("60415263063373835637355132068513997507264512000000000")),
-      T(boost::math::tools::convert_from_string<T>("2658271574788448768043625811014615890319638528000000000")),
-      T(boost::math::tools::convert_from_string<T>("119622220865480194561963161495657715064383733760000000000")),
-      T(boost::math::tools::convert_from_string<T>("5502622159812088949850305428800254892961651752960000000000")),
-      T(boost::math::tools::convert_from_string<T>("258623241511168180642964355153611979969197632389120000000000")),
-      T(boost::math::tools::convert_from_string<T>("12413915592536072670862289047373375038521486354677760000000000")),
-      T(boost::math::tools::convert_from_string<T>("608281864034267560872252163321295376887552831379210240000000000")),
-      T(boost::math::tools::convert_from_string<T>("30414093201713378043612608166064768844377641568960512000000000000")),
-      T(boost::math::tools::convert_from_string<T>("1551118753287382280224243016469303211063259720016986112000000000000")),
-      T(boost::math::tools::convert_from_string<T>("80658175170943878571660636856403766975289505440883277824000000000000")),
-      T(boost::math::tools::convert_from_string<T>("4274883284060025564298013753389399649690343788366813724672000000000000")),
-      T(boost::math::tools::convert_from_string<T>("230843697339241380472092742683027581083278564571807941132288000000000000")),
-      T(boost::math::tools::convert_from_string<T>("12696403353658275925965100847566516959580321051449436762275840000000000000")),
-      T(boost::math::tools::convert_from_string<T>("710998587804863451854045647463724949736497978881168458687447040000000000000")),
-      T(boost::math::tools::convert_from_string<T>("40526919504877216755680601905432322134980384796226602145184481280000000000000")),
-      T(boost::math::tools::convert_from_string<T>("2350561331282878571829474910515074683828862318181142924420699914240000000000000")),
-      T(boost::math::tools::convert_from_string<T>("138683118545689835737939019720389406345902876772687432540821294940160000000000000")),
-      T(boost::math::tools::convert_from_string<T>("8320987112741390144276341183223364380754172606361245952449277696409600000000000000")),
-      T(boost::math::tools::convert_from_string<T>("507580213877224798800856812176625227226004528988036003099405939480985600000000000000")),
-      T(boost::math::tools::convert_from_string<T>("31469973260387937525653122354950764088012280797258232192163168247821107200000000000000")),
-      T(boost::math::tools::convert_from_string<T>("1982608315404440064116146708361898137544773690227268628106279599612729753600000000000000")),
-      T(boost::math::tools::convert_from_string<T>("126886932185884164103433389335161480802865516174545192198801894375214704230400000000000000")),
-      T(boost::math::tools::convert_from_string<T>("8247650592082470666723170306785496252186258551345437492922123134388955774976000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("544344939077443064003729240247842752644293064388798874532860126869671081148416000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("36471110918188685288249859096605464427167635314049524593701628500267962436943872000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("2480035542436830599600990418569171581047399201355367672371710738018221445712183296000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("171122452428141311372468338881272839092270544893520369393648040923257279754140647424000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("11978571669969891796072783721689098736458938142546425857555362864628009582789845319680000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("850478588567862317521167644239926010288584608120796235886430763388588680378079017697280000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("61234458376886086861524070385274672740778091784697328983823014963978384987221689274204160000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("4470115461512684340891257138125051110076800700282905015819080092370422104067183317016903680000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("330788544151938641225953028221253782145683251820934971170611926835411235700971565459250872320000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("24809140811395398091946477116594033660926243886570122837795894512655842677572867409443815424000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("1885494701666050254987932260861146558230394535379329335672487982961844043495537923117729972224000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("145183092028285869634070784086308284983740379224208358846781574688061991349156420080065207861248000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("11324281178206297831457521158732046228731749579488251990048962825668835325234200766245086213177344000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("894618213078297528685144171539831652069808216779571907213868063227837990693501860533361810841010176000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("71569457046263802294811533723186532165584657342365752577109445058227039255480148842668944867280814080000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("5797126020747367985879734231578109105412357244731625958745865049716390179693892056256184534249745940480000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("475364333701284174842138206989404946643813294067993328617160934076743994734899148613007131808479167119360000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("39455239697206586511897471180120610571436503407643446275224357528369751562996629334879591940103770870906880000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("3314240134565353266999387579130131288000666286242049487118846032383059131291716864129885722968716753156177920000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("281710411438055027694947944226061159480056634330574206405101912752560026159795933451040286452340924018275123200000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("24227095383672732381765523203441259715284870552429381750838764496720162249742450276789464634901319465571660595200000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("2107757298379527717213600518699389595229783738061356212322972511214654115727593174080683423236414793504734471782400000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("185482642257398439114796845645546284380220968949399346684421580986889562184028199319100141244804501828416633516851200000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("16507955160908461081216919262453619309839666236496541854913520707833171034378509739399912570787600662729080382999756800000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("1485715964481761497309522733620825737885569961284688766942216863704985393094065876545992131370884059645617234469978112000000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("135200152767840296255166568759495142147586866476906677791741734597153670771559994765685283954750449427751168336768008192000000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("12438414054641307255475324325873553077577991715875414356840239582938137710983519518443046123837041347353107486982656753664000000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("1156772507081641574759205162306240436214753229576413535186142281213246807121467315215203289516844845303838996289387078090752000000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("108736615665674308027365285256786601004186803580182872307497374434045199869417927630229109214583415458560865651202385340530688000000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("10329978488239059262599702099394727095397746340117372869212250571234293987594703124871765375385424468563282236864226607350415360000000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("991677934870949689209571401541893801158183648651267795444376054838492222809091499987689476037000748982075094738965754305639874560000000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("96192759682482119853328425949563698712343813919172976158104477319333745612481875498805879175589072651261284189679678167647067832320000000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("9426890448883247745626185743057242473809693764078951663494238777294707070023223798882976159207729119823605850588608460429412647567360000000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("933262154439441526816992388562667004907159682643816214685929638952175999932299156089414639761565182862536979208272237582511852109168640000000000000000000000")),
-      T(boost::math::tools::convert_from_string<T>("93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000")),
+   static const BOOST_MATH_NAMESPACE::array<T, 101> factorials = {{
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("1")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("1")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("2")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("6")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("24")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("120")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("720")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("5040")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("40320")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("362880")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("3628800")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("39916800")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("479001600")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("6227020800")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("87178291200")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("1307674368000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("20922789888000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("355687428096000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("6402373705728000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("121645100408832000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("2432902008176640000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("51090942171709440000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("1124000727777607680000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("25852016738884976640000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("620448401733239439360000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("15511210043330985984000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("403291461126605635584000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("10888869450418352160768000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("304888344611713860501504000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("8841761993739701954543616000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("265252859812191058636308480000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("8222838654177922817725562880000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("263130836933693530167218012160000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("8683317618811886495518194401280000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("295232799039604140847618609643520000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("10333147966386144929666651337523200000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("371993326789901217467999448150835200000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("13763753091226345046315979581580902400000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("523022617466601111760007224100074291200000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("20397882081197443358640281739902897356800000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("815915283247897734345611269596115894272000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("33452526613163807108170062053440751665152000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("1405006117752879898543142606244511569936384000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("60415263063373835637355132068513997507264512000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("2658271574788448768043625811014615890319638528000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("119622220865480194561963161495657715064383733760000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("5502622159812088949850305428800254892961651752960000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("258623241511168180642964355153611979969197632389120000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("12413915592536072670862289047373375038521486354677760000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("608281864034267560872252163321295376887552831379210240000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("30414093201713378043612608166064768844377641568960512000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("1551118753287382280224243016469303211063259720016986112000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("80658175170943878571660636856403766975289505440883277824000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("4274883284060025564298013753389399649690343788366813724672000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("230843697339241380472092742683027581083278564571807941132288000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("12696403353658275925965100847566516959580321051449436762275840000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("710998587804863451854045647463724949736497978881168458687447040000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("40526919504877216755680601905432322134980384796226602145184481280000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("2350561331282878571829474910515074683828862318181142924420699914240000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("138683118545689835737939019720389406345902876772687432540821294940160000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("8320987112741390144276341183223364380754172606361245952449277696409600000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("507580213877224798800856812176625227226004528988036003099405939480985600000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("31469973260387937525653122354950764088012280797258232192163168247821107200000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("1982608315404440064116146708361898137544773690227268628106279599612729753600000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("126886932185884164103433389335161480802865516174545192198801894375214704230400000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("8247650592082470666723170306785496252186258551345437492922123134388955774976000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("544344939077443064003729240247842752644293064388798874532860126869671081148416000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("36471110918188685288249859096605464427167635314049524593701628500267962436943872000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("2480035542436830599600990418569171581047399201355367672371710738018221445712183296000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("171122452428141311372468338881272839092270544893520369393648040923257279754140647424000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("11978571669969891796072783721689098736458938142546425857555362864628009582789845319680000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("850478588567862317521167644239926010288584608120796235886430763388588680378079017697280000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("61234458376886086861524070385274672740778091784697328983823014963978384987221689274204160000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("4470115461512684340891257138125051110076800700282905015819080092370422104067183317016903680000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("330788544151938641225953028221253782145683251820934971170611926835411235700971565459250872320000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("24809140811395398091946477116594033660926243886570122837795894512655842677572867409443815424000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("1885494701666050254987932260861146558230394535379329335672487982961844043495537923117729972224000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("145183092028285869634070784086308284983740379224208358846781574688061991349156420080065207861248000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("11324281178206297831457521158732046228731749579488251990048962825668835325234200766245086213177344000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("894618213078297528685144171539831652069808216779571907213868063227837990693501860533361810841010176000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("71569457046263802294811533723186532165584657342365752577109445058227039255480148842668944867280814080000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("5797126020747367985879734231578109105412357244731625958745865049716390179693892056256184534249745940480000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("475364333701284174842138206989404946643813294067993328617160934076743994734899148613007131808479167119360000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("39455239697206586511897471180120610571436503407643446275224357528369751562996629334879591940103770870906880000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("3314240134565353266999387579130131288000666286242049487118846032383059131291716864129885722968716753156177920000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("281710411438055027694947944226061159480056634330574206405101912752560026159795933451040286452340924018275123200000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("24227095383672732381765523203441259715284870552429381750838764496720162249742450276789464634901319465571660595200000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("2107757298379527717213600518699389595229783738061356212322972511214654115727593174080683423236414793504734471782400000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("185482642257398439114796845645546284380220968949399346684421580986889562184028199319100141244804501828416633516851200000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("16507955160908461081216919262453619309839666236496541854913520707833171034378509739399912570787600662729080382999756800000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("1485715964481761497309522733620825737885569961284688766942216863704985393094065876545992131370884059645617234469978112000000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("135200152767840296255166568759495142147586866476906677791741734597153670771559994765685283954750449427751168336768008192000000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("12438414054641307255475324325873553077577991715875414356840239582938137710983519518443046123837041347353107486982656753664000000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("1156772507081641574759205162306240436214753229576413535186142281213246807121467315215203289516844845303838996289387078090752000000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("108736615665674308027365285256786601004186803580182872307497374434045199869417927630229109214583415458560865651202385340530688000000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("10329978488239059262599702099394727095397746340117372869212250571234293987594703124871765375385424468563282236864226607350415360000000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("991677934870949689209571401541893801158183648651267795444376054838492222809091499987689476037000748982075094738965754305639874560000000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("96192759682482119853328425949563698712343813919172976158104477319333745612481875498805879175589072651261284189679678167647067832320000000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("9426890448883247745626185743057242473809693764078951663494238777294707070023223798882976159207729119823605850588608460429412647567360000000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("933262154439441526816992388562667004907159682643816214685929638952175999932299156089414639761565182862536979208272237582511852109168640000000000000000000000")),
+      T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>("93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000")),
    }};
 
    return factorials[i];
 }
 
 template <class T>
-inline T unchecked_factorial_imp(unsigned i, const boost::math::integral_constant<int, 0>&)
+inline T unchecked_factorial_imp(unsigned i, const BOOST_MATH_NAMESPACE::integral_constant<int, 0>&)
 {
    //
    // If you're foolish enough to instantiate factorial
@@ -1531,7 +1530,7 @@ inline T unchecked_factorial_imp(unsigned i, const boost::math::integral_constan
    // unsigned int nfac = static_cast<unsigned int>(factorial<double>(n));
    // See factorial documentation for more detail.
    //
-   static_assert(!boost::math::is_integral<T>::value && !boost::math::numeric_limits<T>::is_integer, "Type T must not be an integral type");
+   static_assert(!BOOST_MATH_NAMESPACE::is_integral<T>::value && !BOOST_MATH_NAMESPACE::numeric_limits<T>::is_integer, "Type T must not be an integral type");
 
    static const char* const factorial_strings[] = {
          "1",
@@ -1642,13 +1641,13 @@ inline T unchecked_factorial_imp(unsigned i, const boost::math::integral_constan
       static BOOST_MATH_THREAD_LOCAL T factorials[sizeof(factorial_strings) / sizeof(factorial_strings[0])];
       static BOOST_MATH_THREAD_LOCAL int digits = 0;
 
-      int current_digits = boost::math::tools::digits<T>();
+      int current_digits = BOOST_MATH_NAMESPACE::tools::digits<T>();
 
       if(digits != current_digits)
       {
          digits = current_digits;
          for(unsigned k = 0; k < sizeof(factorials) / sizeof(factorials[0]); ++k)
-            factorials[k] = static_cast<T>(boost::math::tools::convert_from_string<T>(factorial_strings[k]));
+            factorials[k] = static_cast<T>(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>(factorial_strings[k]));
       }
 
    return factorials[i];
@@ -1657,13 +1656,13 @@ inline T unchecked_factorial_imp(unsigned i, const boost::math::integral_constan
 #endif // BOOST_MATH_HAS_GPU_SUPPORT
 
 template <class T>
-BOOST_MATH_GPU_ENABLED inline T unchecked_factorial_imp(unsigned i, const boost::math::integral_constant<int, boost::math::numeric_limits<float>::digits>&)
+BOOST_MATH_GPU_ENABLED inline T unchecked_factorial_imp(unsigned i, const BOOST_MATH_NAMESPACE::integral_constant<int, BOOST_MATH_NAMESPACE::numeric_limits<float>::digits>&)
 {
    return unchecked_factorial<float>(i);
 }
 
 template <class T>
-BOOST_MATH_GPU_ENABLED inline T unchecked_factorial_imp(unsigned i, const boost::math::integral_constant<int, boost::math::numeric_limits<double>::digits>&)
+BOOST_MATH_GPU_ENABLED inline T unchecked_factorial_imp(unsigned i, const BOOST_MATH_NAMESPACE::integral_constant<int, BOOST_MATH_NAMESPACE::numeric_limits<double>::digits>&)
 {
    return unchecked_factorial<double>(i);
 }
@@ -1672,14 +1671,14 @@ BOOST_MATH_GPU_ENABLED inline T unchecked_factorial_imp(unsigned i, const boost:
 
 #if DBL_MANT_DIG != LDBL_MANT_DIG
 template <class T>
-inline T unchecked_factorial_imp(unsigned i, const boost::math::integral_constant<int, LDBL_MANT_DIG>&)
+inline T unchecked_factorial_imp(unsigned i, const BOOST_MATH_NAMESPACE::integral_constant<int, LDBL_MANT_DIG>&)
 {
    return unchecked_factorial<long double>(i);
 }
 #endif
 #ifdef BOOST_MATH_USE_FLOAT128
 template <class T>
-inline T unchecked_factorial_imp(unsigned i, const boost::math::integral_constant<int, 113>&)
+inline T unchecked_factorial_imp(unsigned i, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
    return unchecked_factorial<BOOST_MATH_FLOAT128_TYPE>(i);
 }
@@ -1690,12 +1689,12 @@ inline T unchecked_factorial_imp(unsigned i, const boost::math::integral_constan
 BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T unchecked_factorial(unsigned i)
 {
-   typedef typename boost::math::policies::precision<T, boost::math::policies::policy<> >::type tag_type;
+   typedef typename BOOST_MATH_NAMESPACE::policies::precision<T, BOOST_MATH_NAMESPACE::policies::policy<> >::type tag_type;
    return unchecked_factorial_imp<T>(i, tag_type());
 }
 
 #ifdef BOOST_MATH_USE_FLOAT128
-#define BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL : boost::math::numeric_limits<T>::digits == 113 ? max_factorial<BOOST_MATH_FLOAT128_TYPE>::value
+#define BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL : BOOST_MATH_NAMESPACE::numeric_limits<T>::digits == 113 ? max_factorial<BOOST_MATH_FLOAT128_TYPE>::value
 #else
 #define BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
 #endif
@@ -1704,10 +1703,10 @@ BOOST_MATH_EXPORT template <class T>
 struct max_factorial
 {
    static constexpr unsigned value = 
-      boost::math::numeric_limits<T>::digits == boost::math::numeric_limits<float>::digits ? max_factorial<float>::value 
-      : boost::math::numeric_limits<T>::digits == boost::math::numeric_limits<double>::digits ? max_factorial<double>::value
+      BOOST_MATH_NAMESPACE::numeric_limits<T>::digits == BOOST_MATH_NAMESPACE::numeric_limits<float>::digits ? max_factorial<float>::value 
+      : BOOST_MATH_NAMESPACE::numeric_limits<T>::digits == BOOST_MATH_NAMESPACE::numeric_limits<double>::digits ? max_factorial<double>::value
       #ifndef BOOST_MATH_GPU_ENABLED 
-      : boost::math::numeric_limits<T>::digits == boost::math::numeric_limits<long double>::digits ? max_factorial<long double>::value 
+      : BOOST_MATH_NAMESPACE::numeric_limits<T>::digits == BOOST_MATH_NAMESPACE::numeric_limits<long double>::digits ? max_factorial<long double>::value 
       BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
       #endif
       : 100;
@@ -1720,8 +1719,7 @@ template <class T>
 constexpr unsigned max_factorial<T>::value;
 #endif
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SP_UC_FACTORIALS_HPP
 

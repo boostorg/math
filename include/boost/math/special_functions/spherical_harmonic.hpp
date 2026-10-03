@@ -18,8 +18,7 @@
 #include <complex>
 #endif
 
-namespace boost{
-namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail{
 
@@ -41,7 +40,7 @@ inline T spherical_harmonic_prefix(unsigned n, unsigned m, T theta, const Policy
 
    T leg = detail::legendre_p_imp(n, m, x, static_cast<T>(pow(fabs(sin_theta), T(m))), pol);
    
-   T prefix = boost::math::tgamma_delta_ratio(static_cast<T>(n - m + 1), static_cast<T>(2 * m), pol);
+   T prefix = BOOST_MATH_NAMESPACE::tgamma_delta_ratio(static_cast<T>(n - m + 1), static_cast<T>(2 * m), pol);
    prefix *= (2 * n + 1) / (4 * constants::pi<T>());
    prefix = sqrt(prefix);
    return prefix * leg;
@@ -64,7 +63,7 @@ T spherical_harmonic_r(unsigned n, int m, T theta, T phi, const Policy& pol)
    if(m&1)
    {
       // Check phase if theta is outside [0, PI]:
-      T mod = boost::math::tools::fmod_workaround(theta, T(2 * constants::pi<T>()));
+      T mod = BOOST_MATH_NAMESPACE::tools::fmod_workaround(theta, T(2 * constants::pi<T>()));
       if(mod < 0)
          mod += 2 * constants::pi<T>();
       if(mod > constants::pi<T>())
@@ -91,7 +90,7 @@ T spherical_harmonic_i(unsigned n, int m, T theta, T phi, const Policy& pol)
    if(m&1)
    {
       // Check phase if theta is outside [0, PI]:
-      T mod = boost::math::tools::fmod_workaround(theta, T(2 * constants::pi<T>()));
+      T mod = BOOST_MATH_NAMESPACE::tools::fmod_workaround(theta, T(2 * constants::pi<T>()));
       if(mod < 0)
          mod += 2 * constants::pi<T>();
       if(mod > constants::pi<T>())
@@ -122,7 +121,7 @@ std::complex<T> spherical_harmonic(unsigned n, int m, U theta, U phi, const Poli
    if(m&1)
    {
       // Check phase if theta is outside [0, PI]:
-      U mod = boost::math::tools::fmod_workaround(theta, U(2 * constants::pi<U>()));
+      U mod = BOOST_MATH_NAMESPACE::tools::fmod_workaround(theta, U(2 * constants::pi<U>()));
       if(mod < 0)
          mod += 2 * constants::pi<U>();
       if(mod > constants::pi<U>())
@@ -163,7 +162,7 @@ BOOST_MATH_EXPORT template <class T1, class T2>
 inline std::complex<typename tools::promote_args<T1, T2>::type> 
    spherical_harmonic(unsigned n, int m, T1 theta, T2 phi)
 {
-   return boost::math::spherical_harmonic(n, m, theta, phi, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::spherical_harmonic(n, m, theta, phi, policies::policy<>());
 }
 
 BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
@@ -179,7 +178,7 @@ BOOST_MATH_EXPORT template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type 
    spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi)
 {
-   return boost::math::spherical_harmonic_r(n, m, theta, phi, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::spherical_harmonic_r(n, m, theta, phi, policies::policy<>());
 }
 
 BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
@@ -195,11 +194,10 @@ BOOST_MATH_EXPORT template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type 
    spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi)
 {
-   return boost::math::spherical_harmonic_i(n, m, theta, phi, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::spherical_harmonic_i(n, m, theta, phi, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SPECIAL_SPHERICAL_HARMONIC_HPP
 

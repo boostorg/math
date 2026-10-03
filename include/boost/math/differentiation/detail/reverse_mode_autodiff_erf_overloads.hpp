@@ -17,8 +17,7 @@
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_utilities.hpp>
 #include <boost/math/special_functions/erf.hpp>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {
 
@@ -83,7 +82,7 @@ struct erf_expr : public abstract_unary_expression<RealType,
     {
         return detail::if_functional_dispatch<(DerivativeOrder > 1)>(
             [this](auto &&x) { return reverse_mode::erf(std::forward<decltype(x)>(x)); },
-            [this](auto &&x) { return boost::math::erf(std::forward<decltype(x)>(x)); },
+            [this](auto &&x) { return BOOST_MATH_NAMESPACE::erf(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv,
@@ -119,7 +118,7 @@ struct erfc_expr : public abstract_unary_expression<RealType,
     {
         return detail::if_functional_dispatch<((DerivativeOrder > 1))>(
             [this](auto &&x) { return reverse_mode::erfc(std::forward<decltype(x)>(x)); },
-            [this](auto &&x) { return boost::math::erfc(std::forward<decltype(x)>(x)); },
+            [this](auto &&x) { return BOOST_MATH_NAMESPACE::erfc(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv,
@@ -156,7 +155,7 @@ struct erf_inv_expr : public abstract_unary_expression<RealType,
     {
         return detail::if_functional_dispatch<((DerivativeOrder > 1))>(
             [this](auto &&x) { return reverse_mode::erf_inv(std::forward<decltype(x)>(x)); },
-            [this](auto &&x) { return boost::math::erf_inv(std::forward<decltype(x)>(x)); },
+            [this](auto &&x) { return BOOST_MATH_NAMESPACE::erf_inv(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv,
@@ -172,7 +171,7 @@ struct erf_inv_expr : public abstract_unary_expression<RealType,
             },
             [](auto &&x) {
                 return static_cast<RealType>(0.5) * sqrt(constants::pi<RealType>())
-                       * exp(pow(boost::math::erf_inv(x), static_cast<RealType>(2.0)));
+                       * exp(pow(BOOST_MATH_NAMESPACE::erf_inv(x), static_cast<RealType>(2.0)));
             },
             argv);
     }
@@ -204,7 +203,7 @@ struct erfc_inv_expr
     {
         return detail::if_functional_dispatch<((DerivativeOrder > 1))>(
             [this](auto &&x) { return reverse_mode::erfc_inv(std::forward<decltype(x)>(x)); },
-            [this](auto &&x) { return boost::math::erfc_inv(std::forward<decltype(x)>(x)); },
+            [this](auto &&x) { return BOOST_MATH_NAMESPACE::erfc_inv(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv,
@@ -220,7 +219,7 @@ struct erfc_inv_expr
             },
             [](auto &&x) {
                 return static_cast<RealType>(-0.5) * sqrt(constants::pi<RealType>())
-                       * exp(pow(boost::math::erfc_inv(x), static_cast<RealType>(2.0)));
+                       * exp(pow(BOOST_MATH_NAMESPACE::erfc_inv(x), static_cast<RealType>(2.0)));
             },
             argv);
     }
@@ -228,7 +227,6 @@ struct erfc_inv_expr
 
 } // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // REVERSE_MODE_AUTODIFF_ERF_OVERLOADS_HPP

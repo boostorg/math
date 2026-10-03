@@ -29,7 +29,7 @@
 #endif
 #endif
 
-namespace boost { namespace math { namespace statistics {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics {
 
 namespace detail {
 
@@ -176,11 +176,11 @@ inline ReturnType chatterjee_correlation_mnn(const Container& u, const Container
     return detail::chatterjee_correlation_mnn_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v), M);
 }
 
-}}} // Namespace boost::math::statistics
+} BOOST_MATH_NAMESPACE_END // Namespace boost::math::statistics
 
 #ifdef BOOST_MATH_EXEC_COMPATIBLE
 
-namespace boost::math::statistics {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics {
 
 namespace detail {
 
@@ -326,7 +326,7 @@ inline ReturnType chatterjee_correlation_mnn(ExecutionPolicy&& exec, const Conta
     }
 }
 
-} // Namespace boost::math::statistics
+} BOOST_MATH_NAMESPACE_END // Namespace boost::math::statistics
 
 #endif
 

@@ -22,7 +22,7 @@
 #endif
 #endif
 
-namespace boost { namespace math { namespace statistics { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics { namespace detail {
 
 struct pair_equal
 {
@@ -33,11 +33,11 @@ struct pair_equal
     }
 };
 
-}}}} // Namespaces
+}} BOOST_MATH_NAMESPACE_END
 
 #ifndef BOOST_MATH_EXEC_COMPATIBLE
 
-namespace boost { namespace math { namespace statistics { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics { namespace detail {
 
 template <typename ForwardIterator, typename T = typename std::iterator_traits<ForwardIterator>::value_type>
 auto rank(ForwardIterator first, ForwardIterator last) -> std::vector<std::size_t>
@@ -79,11 +79,11 @@ inline auto rank(const Container& c) -> std::vector<std::size_t>
     return rank(std::begin(c), std::end(c));
 }
 
-}}}} // Namespaces
+}} BOOST_MATH_NAMESPACE_END
 
 #else
 
-namespace boost::math::statistics::detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics::detail {
 
 template <typename ExecutionPolicy, typename ForwardIterator, typename T = typename std::iterator_traits<ForwardIterator>::value_type>
 auto rank(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
@@ -137,7 +137,7 @@ inline auto rank(const Container& c)
     return rank(std::execution::seq, std::cbegin(c), std::cend(c));
 }
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_EXEC_COMPATIBLE
 

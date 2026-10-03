@@ -29,10 +29,10 @@
 #endif // BOOST_MATH_BUILD_MODULE
 #endif // BOOST_MATH_HAS_NVRTC
 
-namespace boost { namespace math { namespace tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 // Number of trailing zero bits in x. Returns 64 when x is zero.
-BOOST_MATH_GPU_ENABLED inline int countr_zero(boost::math::uint64_t x) noexcept
+BOOST_MATH_GPU_ENABLED inline int countr_zero(BOOST_MATH_NAMESPACE::uint64_t x) noexcept
 {
 #if defined(__CUDA_ARCH__)
     return x == 0 ? 64 : __ffsll(static_cast<long long>(x)) - 1;
@@ -59,7 +59,7 @@ BOOST_MATH_GPU_ENABLED inline int countr_zero(boost::math::uint64_t x) noexcept
 }
 
 // Number of leading zero bits in x. Returns 64 when x is zero.
-BOOST_MATH_GPU_ENABLED inline int countl_zero(boost::math::uint64_t x) noexcept
+BOOST_MATH_GPU_ENABLED inline int countl_zero(BOOST_MATH_NAMESPACE::uint64_t x) noexcept
 {
 #if defined(__CUDA_ARCH__)
     return __clzll(static_cast<long long>(x));
@@ -86,7 +86,7 @@ BOOST_MATH_GPU_ENABLED inline int countl_zero(boost::math::uint64_t x) noexcept
 }
 
 // Number of set bits in x.
-BOOST_MATH_GPU_ENABLED inline int popcount(boost::math::uint64_t x) noexcept
+BOOST_MATH_GPU_ENABLED inline int popcount(BOOST_MATH_NAMESPACE::uint64_t x) noexcept
 {
 #if defined(__CUDA_ARCH__)
     return __popcll(static_cast<unsigned long long>(x));
@@ -104,13 +104,13 @@ BOOST_MATH_GPU_ENABLED inline int popcount(boost::math::uint64_t x) noexcept
 }
 
 // Largest power of two not exceeding x. Returns 0 for x == 0.
-BOOST_MATH_GPU_ENABLED inline boost::math::uint64_t floor_pow2(boost::math::uint64_t x) noexcept
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::uint64_t floor_pow2(BOOST_MATH_NAMESPACE::uint64_t x) noexcept
 {
-    return x == 0 ? 0 : boost::math::uint64_t(1) << (63 - countl_zero(x));
+    return x == 0 ? 0 : BOOST_MATH_NAMESPACE::uint64_t(1) << (63 - countl_zero(x));
 }
 
 // Exact integer square root: the largest r with r * r <= n.
-BOOST_MATH_GPU_ENABLED inline boost::math::uint64_t isqrt(boost::math::uint64_t n) noexcept
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::uint64_t isqrt(BOOST_MATH_NAMESPACE::uint64_t n) noexcept
 {
     if (n < 2)
     {
@@ -118,10 +118,10 @@ BOOST_MATH_GPU_ENABLED inline boost::math::uint64_t isqrt(boost::math::uint64_t 
     }
     // Newton iteration from a power of two above the root converges monotonically down.
     const int bits {64 - countl_zero(n)};
-    boost::math::uint64_t x {boost::math::uint64_t(1) << ((bits + 1) / 2)};
+    BOOST_MATH_NAMESPACE::uint64_t x {BOOST_MATH_NAMESPACE::uint64_t(1) << ((bits + 1) / 2)};
     while (true)
     {
-        const boost::math::uint64_t y {(x + n / x) / 2};
+        const BOOST_MATH_NAMESPACE::uint64_t y {(x + n / x) / 2};
         if (y >= x)
         {
             return x;
@@ -131,18 +131,18 @@ BOOST_MATH_GPU_ENABLED inline boost::math::uint64_t isqrt(boost::math::uint64_t 
 }
 
 // Reads eight bytes as a little-endian 64-bit value regardless of host byte order.
-BOOST_MATH_GPU_ENABLED inline boost::math::uint64_t load_le64(const unsigned char* p) noexcept
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::uint64_t load_le64(const unsigned char* p) noexcept
 {
-    return  static_cast<boost::math::uint64_t>(p[0])
-         | (static_cast<boost::math::uint64_t>(p[1]) << 8)
-         | (static_cast<boost::math::uint64_t>(p[2]) << 16)
-         | (static_cast<boost::math::uint64_t>(p[3]) << 24)
-         | (static_cast<boost::math::uint64_t>(p[4]) << 32)
-         | (static_cast<boost::math::uint64_t>(p[5]) << 40)
-         | (static_cast<boost::math::uint64_t>(p[6]) << 48)
-         | (static_cast<boost::math::uint64_t>(p[7]) << 56);
+    return  static_cast<BOOST_MATH_NAMESPACE::uint64_t>(p[0])
+         | (static_cast<BOOST_MATH_NAMESPACE::uint64_t>(p[1]) << 8)
+         | (static_cast<BOOST_MATH_NAMESPACE::uint64_t>(p[2]) << 16)
+         | (static_cast<BOOST_MATH_NAMESPACE::uint64_t>(p[3]) << 24)
+         | (static_cast<BOOST_MATH_NAMESPACE::uint64_t>(p[4]) << 32)
+         | (static_cast<BOOST_MATH_NAMESPACE::uint64_t>(p[5]) << 40)
+         | (static_cast<BOOST_MATH_NAMESPACE::uint64_t>(p[6]) << 48)
+         | (static_cast<BOOST_MATH_NAMESPACE::uint64_t>(p[7]) << 56);
 }
 
-}}} // namespace boost::math::tools
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::tools
 
 #endif // BOOST_MATH_TOOLS_BIT_HPP

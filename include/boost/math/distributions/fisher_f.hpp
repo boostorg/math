@@ -18,7 +18,7 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp>
 
-namespace boost{ namespace math{ 
+BOOST_MATH_NAMESPACE_BEGIN
    namespace detail{
       template <class RealType, class Policy>
       struct fisher_degrees_of_freedom_finder
@@ -270,22 +270,22 @@ BOOST_MATH_EXPORT typedef fisher_f_distribution<double> fisher_f;
 
 #ifdef __cpp_deduction_guides
 BOOST_MATH_EXPORT template <class RealType>
-fisher_f_distribution(RealType,RealType)->fisher_f_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+fisher_f_distribution(RealType,RealType)->fisher_f_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 #endif
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const fisher_f_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const fisher_f_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
-   using boost::math::tools::max_value;
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
+   using BOOST_MATH_NAMESPACE::tools::max_value;
+   return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const fisher_f_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const fisher_f_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-   using boost::math::tools::max_value;
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
+   using BOOST_MATH_NAMESPACE::tools::max_value;
+   return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -303,7 +303,7 @@ BOOST_MATH_GPU_ENABLED RealType pdf(const fisher_f_distribution<RealType, Policy
          function, df2, &error_result, Policy())))
       return error_result;
 
-   if((x < 0) || !(boost::math::isfinite)(x))
+   if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
    {
       return policies::raise_domain_error<RealType>(
          function, "Random variable parameter was %1%, but must be > 0 !", x, Policy());
@@ -359,7 +359,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const fisher_f_distribution<RealType,
          function, df2, &error_result, Policy()))
       return error_result;
 
-   if((x < 0) || !(boost::math::isfinite)(x))
+   if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
    {
       return policies::raise_domain_error<RealType>(
          function, "Random Variable parameter was %1%, but must be > 0 !", x, Policy());
@@ -376,8 +376,8 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const fisher_f_distribution<RealType,
    // to switch things around so we're passing 1-z instead.
    //
    return v1x > df2
-      ? boost::math::ibetac(df2 / 2, df1 / 2, df2 / (df2 + v1x), Policy())
-      : boost::math::ibeta(df1 / 2, df2 / 2, v1x / (df2 + v1x), Policy());
+      ? BOOST_MATH_NAMESPACE::ibetac(df2 / 2, df1 / 2, df2 / (df2 + v1x), Policy())
+      : BOOST_MATH_NAMESPACE::ibeta(df1 / 2, df2 / 2, v1x / (df2 + v1x), Policy());
 } // cdf
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -400,7 +400,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const fisher_f_distribution<Real
    // uninitialized unless we initialize it to something:
    RealType x, y(0);
 
-   x = boost::math::ibeta_inv(df1 / 2, df2 / 2, p, &y, Policy());
+   x = BOOST_MATH_NAMESPACE::ibeta_inv(df1 / 2, df2 / 2, p, &y, Policy());
 
    return df2 * x / (df1 * y);
 } // quantile
@@ -420,7 +420,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<fisher_f_dis
          function, df2, &error_result, Policy()))
       return error_result;
 
-   if((x < 0) || !(boost::math::isfinite)(x))
+   if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
    {
       return policies::raise_domain_error<RealType>(
          function, "Random Variable parameter was %1%, but must be > 0 !", x, Policy());
@@ -437,8 +437,8 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<fisher_f_dis
    // to switch things around so we're passing 1-z instead.
    //
    return v1x > df2
-      ? boost::math::ibeta(df2 / 2, df1 / 2, df2 / (df2 + v1x), Policy())
-      : boost::math::ibetac(df1 / 2, df2 / 2, v1x / (df2 + v1x), Policy());
+      ? BOOST_MATH_NAMESPACE::ibeta(df2 / 2, df1 / 2, df2 / (df2 + v1x), Policy())
+      : BOOST_MATH_NAMESPACE::ibetac(df1 / 2, df2 / 2, v1x / (df2 + v1x), Policy());
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -460,7 +460,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<fisher_
 
    RealType x, y;
 
-   x = boost::math::ibetac_inv(df1 / 2, df2 / 2, p, &y, Policy());
+   x = BOOST_MATH_NAMESPACE::ibetac_inv(df1 / 2, df2 / 2, p, &y, Policy());
 
    return df2 * x / (df1 * y);
 }
@@ -595,8 +595,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const fisher_f_distributi
    return n / d;
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

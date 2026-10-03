@@ -45,17 +45,14 @@
 #include <boost/math/distributions/fwd.hpp>
 #endif
 
-namespace boost
-{
-  namespace math
-  {
+BOOST_MATH_NAMESPACE_BEGIN
     namespace bernoulli_detail
     {
       // Common error checking routines for bernoulli distribution functions:
       template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline bool check_success_fraction(const char* function, const RealType& p, RealType* result, const Policy& /* pol */)
       {
-        if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
+        if(!(BOOST_MATH_NAMESPACE::isfinite)(p) || (p < 0) || (p > 1))
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -65,12 +62,12 @@ namespace boost
         return true;
       }
       template <class RealType, class Policy>
-      BOOST_MATH_GPU_ENABLED inline bool check_dist(const char* function, const RealType& p, RealType* result, const Policy& /* pol */, const boost::math::true_type&)
+      BOOST_MATH_GPU_ENABLED inline bool check_dist(const char* function, const RealType& p, RealType* result, const Policy& /* pol */, const BOOST_MATH_NAMESPACE::true_type&)
       {
         return check_success_fraction(function, p, result, Policy());
       }
       template <class RealType, class Policy>
-      BOOST_MATH_GPU_ENABLED inline bool check_dist(const char* , const RealType& , RealType* , const Policy& /* pol */, const boost::math::false_type&)
+      BOOST_MATH_GPU_ENABLED inline bool check_dist(const char* , const RealType& , RealType* , const Policy& /* pol */, const BOOST_MATH_NAMESPACE::false_type&)
       {
          return true;
       }
@@ -87,7 +84,7 @@ namespace boost
         {
           return false;
         }
-        if(!(boost::math::isfinite)(k) || !((k == 0) || (k == 1)))
+        if(!(BOOST_MATH_NAMESPACE::isfinite)(k) || !((k == 0) || (k == 1)))
         {
           *result = policies::raise_domain_error<RealType>(
             function,
@@ -138,21 +135,21 @@ namespace boost
 
     #ifdef __cpp_deduction_guides
     BOOST_MATH_EXPORT template <class RealType>
-    bernoulli_distribution(RealType)->bernoulli_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+    bernoulli_distribution(RealType)->bernoulli_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
     #endif
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const bernoulli_distribution<RealType, Policy>& /* dist */)
+    BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const bernoulli_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable k = {0, 1}.
-      using boost::math::tools::max_value;
-      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
+      using BOOST_MATH_NAMESPACE::tools::max_value;
+      return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
     }
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
-    BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const bernoulli_distribution<RealType, Policy>& /* dist */)
+    BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const bernoulli_distribution<RealType, Policy>& /* dist */)
     { // Range of supported values for random variable k = {0, 1}.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-      return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
+      return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), static_cast<RealType>(1));
     }
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -337,8 +334,7 @@ namespace boost
       // return (6 * p * p - 6 * p + 1) / (p * (1 - p)) + 3;
     }
 
-  } // namespace math
-} // namespace boost
+  BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

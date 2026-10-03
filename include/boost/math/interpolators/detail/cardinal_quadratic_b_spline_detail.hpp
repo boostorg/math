@@ -12,7 +12,9 @@
 #include <stdexcept>
 #endif
 
-namespace boost{ namespace math{ namespace interpolators{ namespace detail{
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators{ namespace detail{
 
 template <class Real>
 Real b2_spline(Real x) {
@@ -206,5 +208,5 @@ private:
     Real m_t0;
 };
 
-}}}}
+}} BOOST_MATH_NAMESPACE_END
 #endif

@@ -14,8 +14,7 @@
 #endif
 #include <boost/math/tools/assert.hpp>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace tools {
 
 BOOST_MATH_EXPORT template <typename RandomAccessContainer1, typename RandomAccessContainer2, typename RealOrComplex>
@@ -69,6 +68,5 @@ inline RealOrComplex evaluate_polynomial_estrin(const RandomAccessContainer &coe
 }
 
 } // namespace tools
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

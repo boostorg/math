@@ -15,8 +15,7 @@
 #include <cfenv>
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <typename RealType, typename Policy>
 BOOST_MATH_GPU_ENABLED RealType logit(RealType p, const Policy&)
@@ -52,7 +51,6 @@ BOOST_MATH_GPU_ENABLED RealType logit(RealType p)
     return logit(p, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SF_LOGIT_HPP

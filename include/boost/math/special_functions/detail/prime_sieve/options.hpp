@@ -18,7 +18,7 @@
 #include <algorithm>
 #endif
 
-namespace boost::math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 // Strategy for ranges that fit in 64 bits: sieve to sqrt(upper) or test survivors of a
 // shallow sieve individually (better for short intervals at large magnitudes).
@@ -70,7 +70,7 @@ inline sieve_geometry make_geometry(std::uint64_t start, std::uint64_t stop, con
     sieve_geometry g {};
     g.start = start < 7 ? 7 : start;
     g.stop = stop;
-    g.sqrt_stop = boost::math::tools::isqrt(stop);
+    g.sqrt_stop = BOOST_MATH_NAMESPACE::tools::isqrt(stop);
 
     const cache_info& cache {cached_cache_info()};
     const std::size_t l1 {options.l1d_bytes != 0 ? options.l1d_bytes : cache.l1d_bytes};
@@ -91,7 +91,7 @@ inline sieve_geometry make_geometry(std::uint64_t start, std::uint64_t stop, con
             sieve_bytes = round_down_multiple(sieve_bytes, l1);
         }
         // Keep the segment inside the per-core L2 and within 16 L1 sizes
-        std::size_t cap {static_cast<std::size_t>(boost::math::tools::floor_pow2(l2))};
+        std::size_t cap {static_cast<std::size_t>(BOOST_MATH_NAMESPACE::tools::floor_pow2(l2))};
         cap = (std::min)(cap, 16 * l1);
         cap = (std::max)(cap, l1);
         sieve_bytes = (std::max)(sieve_bytes, l1);
@@ -117,7 +117,7 @@ inline sieve_geometry make_geometry(std::uint64_t start, std::uint64_t stop, con
     // unless the caller fixed the size.
     if (static_cast<double>(g.sqrt_stop) > factor_medium * static_cast<double>(sieve_bytes))
     {
-        sieve_bytes = options.sieve_bytes != 0 ? static_cast<std::size_t>(boost::math::tools::floor_pow2(sieve_bytes)) : max_sieve_bytes;
+        sieve_bytes = options.sieve_bytes != 0 ? static_cast<std::size_t>(BOOST_MATH_NAMESPACE::tools::floor_pow2(sieve_bytes)) : max_sieve_bytes;
         sieve_bytes = (std::max)(sieve_bytes, min_sieve_bytes);
     }
 
@@ -132,6 +132,6 @@ inline sieve_geometry make_geometry(std::uint64_t start, std::uint64_t stop, con
 }
 
 } // namespace detail::prime_sieve
-} // namespace boost::math
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_OPTIONS_HPP

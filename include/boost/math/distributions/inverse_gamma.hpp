@@ -31,8 +31,7 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/complement.hpp>
 
-namespace boost{ namespace math
-{
+BOOST_MATH_NAMESPACE_BEGIN
 namespace detail
 {
 
@@ -47,7 +46,7 @@ BOOST_MATH_GPU_ENABLED inline bool check_inverse_gamma_shape(
    // returning pdf and cdf zero (but not < 0).
    // (Functions like mean, variance with other limits on shape are checked
    // in version including an operator & limit below).
-   if((shape < 0) || !(boost::math::isfinite)(shape))
+   if((shape < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(shape))
    {
       *result = policies::raise_domain_error<RealType>(
          function,
@@ -63,7 +62,7 @@ BOOST_MATH_GPU_ENABLED inline bool check_inverse_gamma_x(
       RealType const& x,
       RealType* result, const Policy& pol)
 {
-   if((x < 0) || !(boost::math::isfinite)(x))
+   if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
    {
       *result = policies::raise_domain_error<RealType>(
          function,
@@ -125,27 +124,27 @@ BOOST_MATH_EXPORT using inverse_gamma = inverse_gamma_distribution<double>;
 
 #ifdef __cpp_deduction_guides
 BOOST_MATH_EXPORT template <class RealType>
-inverse_gamma_distribution(RealType)->inverse_gamma_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+inverse_gamma_distribution(RealType)->inverse_gamma_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 BOOST_MATH_EXPORT template <class RealType>
-inverse_gamma_distribution(RealType,RealType)->inverse_gamma_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+inverse_gamma_distribution(RealType,RealType)->inverse_gamma_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 #endif
 
 // Allow random variable x to be zero, treated as a special case (unlike some definitions).
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
 {  // Range of permissible values for random variable x.
-   using boost::math::tools::max_value;
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
+   using BOOST_MATH_NAMESPACE::tools::max_value;
+   return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
 {  // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-   using boost::math::tools::max_value;
-   using boost::math::tools::min_value;
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
+   using BOOST_MATH_NAMESPACE::tools::max_value;
+   using BOOST_MATH_NAMESPACE::tools::min_value;
+   return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -199,14 +198,14 @@ BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logpdf(const inverse_gamma_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
-   using boost::math::lgamma;
+   using BOOST_MATH_NAMESPACE::lgamma;
 
    constexpr auto function = "boost::math::logpdf(const inverse_gamma_distribution<%1%>&, %1%)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
 
-   RealType result = -boost::math::numeric_limits<RealType>::infinity();
+   RealType result = -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
    if(false == detail::check_inverse_gamma(function, scale, shape, &result, Policy()))
    { // distribution parameters bad.
       return result;
@@ -224,7 +223,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const inverse_gamma_distribution<R
       return result;  // random variable is infinite or so close as to make no difference.
       
    // x * x may under or overflow, likewise our result
-   if (!(boost::math::isfinite)(x*x))
+   if (!(BOOST_MATH_NAMESPACE::isfinite)(x*x))
    {
       return policies::raise_overflow_error<RealType, Policy>(function, "PDF is infinite.", Policy());
    }
@@ -255,7 +254,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const inverse_gamma_distribution<Real
    { // x bad
       return result;
    }
-   result = boost::math::gamma_q(shape, scale / x, Policy());
+   result = BOOST_MATH_NAMESPACE::gamma_q(shape, scale / x, Policy());
    // result = tgamma(shape, scale / x) / tgamma(shape); // naive using tgamma
    return result;
 } // cdf
@@ -264,7 +263,7 @@ BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const inverse_gamma_distribution<RealType, Policy>& dist, const RealType& p)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
-   using boost::math::gamma_q_inv;
+   using BOOST_MATH_NAMESPACE::gamma_q_inv;
 
    constexpr auto function = "boost::math::quantile(const inverse_gamma_distribution<%1%>&, %1%)";
 
@@ -354,7 +353,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mean(const inverse_gamma_distribution<Rea
    {
      return result;
    }
-   if((shape <= 1) || !(boost::math::isfinite)(shape))
+   if((shape <= 1) || !(BOOST_MATH_NAMESPACE::isfinite)(shape))
    {
      result = policies::raise_domain_error<RealType>(
        function,
@@ -380,7 +379,7 @@ BOOST_MATH_GPU_ENABLED inline RealType variance(const inverse_gamma_distribution
    {
      return result;
    }
-   if((shape <= 2) || !(boost::math::isfinite)(shape))
+   if((shape <= 2) || !(BOOST_MATH_NAMESPACE::isfinite)(shape))
    {
      result = policies::raise_domain_error<RealType>(
        function,
@@ -433,7 +432,7 @@ BOOST_MATH_GPU_ENABLED inline RealType skewness(const inverse_gamma_distribution
    {
      return result;
    }
-   if((shape <= 3) || !(boost::math::isfinite)(shape))
+   if((shape <= 3) || !(BOOST_MATH_NAMESPACE::isfinite)(shape))
    {
      result = policies::raise_domain_error<RealType>(
        function,
@@ -459,7 +458,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const inverse_gamma_distr
    {
      return result;
    }
-   if((shape <= 4) || !(boost::math::isfinite)(shape))
+   if((shape <= 4) || !(BOOST_MATH_NAMESPACE::isfinite)(shape))
    {
      result = policies::raise_domain_error<RealType>(
        function,
@@ -483,7 +482,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const inverse_gamma_distribution
    {
      return result;
    }
-   if((shape <= 4) || !(boost::math::isfinite)(shape))
+   if((shape <= 4) || !(BOOST_MATH_NAMESPACE::isfinite)(shape))
    {
      result = policies::raise_domain_error<RealType>(
        function,
@@ -493,8 +492,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const inverse_gamma_distribution
   return kurtosis_excess(dist) + 3;
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

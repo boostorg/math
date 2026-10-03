@@ -15,7 +15,7 @@
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/special_functions/erf.hpp>
 
-namespace boost { namespace math { namespace statistics {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics {
 
 BOOST_MATH_EXPORT template<class RandomAccessContainer>
 auto anderson_darling_normality_statistic(RandomAccessContainer const & v,
@@ -25,18 +25,18 @@ auto anderson_darling_normality_statistic(RandomAccessContainer const & v,
     using Real = typename RandomAccessContainer::value_type;
     using std::log;
     using std::sqrt;
-    using boost::math::erfc;
+    using BOOST_MATH_NAMESPACE::erfc;
 
     if (std::isnan(mu)) {
-        mu = boost::math::statistics::mean(v);
+        mu = BOOST_MATH_NAMESPACE::statistics::mean(v);
     }
     if (std::isnan(sd)) {
-        sd = sqrt(boost::math::statistics::sample_variance(v));
+        sd = sqrt(BOOST_MATH_NAMESPACE::statistics::sample_variance(v));
     }
 
-    typedef boost::math::policies::policy<
-          boost::math::policies::promote_float<false>,
-          boost::math::policies::promote_double<false> >
+    typedef BOOST_MATH_NAMESPACE::policies::policy<
+          BOOST_MATH_NAMESPACE::policies::promote_float<false>,
+          BOOST_MATH_NAMESPACE::policies::promote_double<false> >
           no_promote_policy;
 
     // This is where Knuth's literate programming could really come in handy!
@@ -110,5 +110,5 @@ auto anderson_darling_normality_statistic(RandomAccessContainer const & v,
     return v.size()*(left_tail + right_tail + integrals);
 }
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif

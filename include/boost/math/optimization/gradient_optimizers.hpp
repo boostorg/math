@@ -9,10 +9,8 @@
 #include <boost/math/optimization/lbfgs.hpp>
 #include <boost/math/optimization/nesterov.hpp>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {
 } // namespace optimization
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

@@ -15,7 +15,7 @@
 
 #include <boost/math/tools/config.hpp>
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail {
 
@@ -218,5 +218,5 @@ Real forward_cardinal_b_spline(Real x)
     return cardinal_b_spline<n>(x - (n+1)/Real(2));
 }
 
-}}
+BOOST_MATH_NAMESPACE_END
 #endif

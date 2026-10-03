@@ -45,7 +45,7 @@
 #pragma GCC system_header
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail
 {
@@ -90,14 +90,14 @@ namespace detail
 // it performs no better than log(1+x): which is to say not very well at all.
 //
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T log1p_imp(T const & x, const Policy& pol, const boost::math::integral_constant<int, 0>&)
+BOOST_MATH_GPU_ENABLED T log1p_imp(T const & x, const Policy& pol, const BOOST_MATH_NAMESPACE::integral_constant<int, 0>&)
 { // The function returns the natural logarithm of 1 + x.
    typedef typename tools::promote_args<T>::type result_type;
    BOOST_MATH_STD_USING
 
    constexpr auto function = "boost::math::log1p<%1%>(%1%)";
 
-   if((x < -1) || (boost::math::isnan)(x))
+   if((x < -1) || (BOOST_MATH_NAMESPACE::isnan)(x))
       return policies::raise_domain_error<T>(function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
       return -policies::raise_overflow_error<T>(function, nullptr, pol);
@@ -110,7 +110,7 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const & x, const Policy& pol, const boost::
    if(a < tools::epsilon<result_type>())
       return x;
    detail::log1p_series<result_type> s(x);
-   boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 
    result_type result = tools::sum_series(s, policies::get_epsilon<result_type, Policy>(), max_iter);
 
@@ -119,7 +119,7 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const & x, const Policy& pol, const boost::
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
@@ -170,7 +170,7 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const boost::m
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const boost::math::integral_constant<int, 64>&)
+BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const BOOST_MATH_NAMESPACE::integral_constant<int, 64>&)
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
@@ -223,7 +223,7 @@ BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const boost::m
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const boost::math::integral_constant<int, 24>&)
+BOOST_MATH_GPU_ENABLED T log1p_imp(T const& x, const Policy& pol, const BOOST_MATH_NAMESPACE::integral_constant<int, 24>&)
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
@@ -283,7 +283,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1p(T x, c
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   typedef boost::math::integral_constant<int,
+   typedef BOOST_MATH_NAMESPACE::integral_constant<int,
       precision_type::value <= 0 ? 0 :
       precision_type::value <= 53 ? 53 :
       precision_type::value <= 64 ? 64 : 0
@@ -334,7 +334,7 @@ BOOST_MATH_GPU_ENABLED inline double log1p(double x, const Policy& pol)
 BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1p(T x)
 {
-   return boost::math::log1p(x, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::log1p(x, policies::policy<>());
 }
 //
 // Compute log(1+x)-x:
@@ -359,11 +359,11 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    // epsilon just returns zero, and our "optimisation" will always fail:
    if(a < tools::epsilon<result_type>())
       return -x * x / 2;
-   boost::math::detail::log1p_series<T> s(x);
+   BOOST_MATH_NAMESPACE::detail::log1p_series<T> s(x);
    s();
-   boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 
-   T result = boost::math::tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter);
+   T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter);
 
    policies::check_series_iterations<T>(function, max_iter, pol);
    return result;
@@ -382,14 +382,14 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type log1pmx(T x)
 BOOST_MATH_EXPORT template <class Policy>
 BOOST_MATH_GPU_ENABLED inline std::float32_t log1p(std::float32_t x, const Policy& pol)
 {
-   return boost::math::log1p(static_cast<float>(x), pol);
+   return BOOST_MATH_NAMESPACE::log1p(static_cast<float>(x), pol);
 }
 #endif
 #ifdef __STDCPP_FLOAT64_T__
 BOOST_MATH_EXPORT template <class Policy>
 BOOST_MATH_GPU_ENABLED inline std::float64_t log1p(std::float64_t x, const Policy& pol)
 {
-   return boost::math::log1p(static_cast<double>(x), pol);
+   return BOOST_MATH_NAMESPACE::log1p(static_cast<double>(x), pol);
 }
 #endif
 #ifdef __STDCPP_FLOAT128_T__
@@ -398,16 +398,15 @@ BOOST_MATH_GPU_ENABLED inline std::float128_t log1p(std::float128_t x, const Pol
 {
    if constexpr (std::numeric_limits<long double>::digits == std::numeric_limits<std::float128_t>::digits)
    {
-      return boost::math::log1p(static_cast<long double>(x), pol);
+      return BOOST_MATH_NAMESPACE::log1p(static_cast<long double>(x), pol);
    }
    else
    {
-      return boost::math::detail::log1p_imp(x, pol, boost::math::integral_constant<int, 0>());
+      return BOOST_MATH_NAMESPACE::detail::log1p_imp(x, pol, BOOST_MATH_NAMESPACE::integral_constant<int, 0>());
    }
 }
 #endif
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #ifdef _MSC_VER
 #pragma warning(pop)

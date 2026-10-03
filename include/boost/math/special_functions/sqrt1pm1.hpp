@@ -19,7 +19,7 @@
 // This algorithm computes sqrt(1+x)-1 for small x:
 //
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type sqrt1pm1(const T& val, const Policy& pol)
@@ -29,7 +29,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type sqrt1pm1(con
 
    if(fabs(result_type(val)) > result_type(0.75))
       return sqrt(1 + result_type(val)) - 1;
-   return boost::math::expm1(boost::math::log1p(val, pol) / 2, pol);
+   return BOOST_MATH_NAMESPACE::expm1(BOOST_MATH_NAMESPACE::log1p(val, pol) / 2, pol);
 }
 
 BOOST_MATH_EXPORT template <class T>
@@ -38,8 +38,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type sqrt1pm1(con
    return sqrt1pm1(val, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SQRT1PM1
 

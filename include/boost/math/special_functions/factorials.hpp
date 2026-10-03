@@ -26,13 +26,12 @@
 #pragma warning(pop)
 #endif
 
-namespace boost { namespace math
-{
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline T factorial(unsigned i, const Policy& pol)
 {
-   static_assert(!boost::math::is_integral<T>::value, "Type T must not be an integral type");
+   static_assert(!BOOST_MATH_NAMESPACE::is_integral<T>::value, "Type T must not be an integral type");
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
@@ -44,7 +43,7 @@ BOOST_MATH_GPU_ENABLED inline T factorial(unsigned i, const Policy& pol)
 
    if(i <= max_factorial<T>::value)
       return unchecked_factorial<T>(i);
-   T result = boost::math::tgamma(static_cast<T>(i+1), pol);
+   T result = BOOST_MATH_NAMESPACE::tgamma(static_cast<T>(i+1), pol);
    if(result > tools::max_value<T>())
       return result; // Overflowed value! (But tgamma will have signalled the error already).
    return floor(result + 0.5f);
@@ -76,7 +75,7 @@ inline double factorial<double>(unsigned i)
 BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T double_factorial(unsigned i, const Policy& pol)
 {
-   static_assert(!boost::math::is_integral<T>::value, "Type T must not be an integral type");
+   static_assert(!BOOST_MATH_NAMESPACE::is_integral<T>::value, "Type T must not be an integral type");
    BOOST_MATH_STD_USING  // ADL lookup of std names
    if(i & 1)
    {
@@ -90,7 +89,7 @@ BOOST_MATH_GPU_ENABLED T double_factorial(unsigned i, const Policy& pol)
       // Fallthrough: i is too large to use table lookup, try the
       // gamma function instead.
       //
-      T result = boost::math::tgamma(static_cast<T>(i) / 2 + 1, pol) / sqrt(constants::pi<T>());
+      T result = BOOST_MATH_NAMESPACE::tgamma(static_cast<T>(i) / 2 + 1, pol) / sqrt(constants::pi<T>());
       if(ldexp(tools::max_value<T>(), -static_cast<int>(i+1) / 2) > result)
          return ceil(result * ldexp(T(1), static_cast<int>(i+1) / 2) - 0.5f);
    }
@@ -122,7 +121,7 @@ namespace detail{
 template <class T, class Policy>
 T rising_factorial_imp(T x, int n, const Policy& pol)
 {
-   static_assert(!boost::math::is_integral<T>::value, "Type T must not be an integral type");
+   static_assert(!BOOST_MATH_NAMESPACE::is_integral<T>::value, "Type T must not be an integral type");
    if(x < 0)
    {
       //
@@ -150,13 +149,13 @@ T rising_factorial_imp(T x, int n, const Policy& pol)
    if(x == 0)
    {
       if(n < 0)
-         return static_cast<T>(-boost::math::tgamma_delta_ratio(x + 1, static_cast<T>(-n), pol));
+         return static_cast<T>(-BOOST_MATH_NAMESPACE::tgamma_delta_ratio(x + 1, static_cast<T>(-n), pol));
       else
          return T(0);
    }
    if((x < 1) && (x + n < 0))
    {
-      const auto val = static_cast<T>(boost::math::tgamma_delta_ratio(1 - x, static_cast<T>(-n), pol));
+      const auto val = static_cast<T>(BOOST_MATH_NAMESPACE::tgamma_delta_ratio(1 - x, static_cast<T>(-n), pol));
       return (n & 1) ? T(-val) : val;
    }
    //
@@ -164,13 +163,13 @@ T rising_factorial_imp(T x, int n, const Policy& pol)
    // tgamma_delta_ratio is already optimised for that
    // use case:
    //
-   return 1 / static_cast<T>(boost::math::tgamma_delta_ratio(x, static_cast<T>(n), pol));
+   return 1 / static_cast<T>(BOOST_MATH_NAMESPACE::tgamma_delta_ratio(x, static_cast<T>(n), pol));
 }
 
 template <class T, class Policy>
 inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
 {
-   static_assert(!boost::math::is_integral<T>::value, "Type T must not be an integral type");
+   static_assert(!BOOST_MATH_NAMESPACE::is_integral<T>::value, "Type T must not be an integral type");
    BOOST_MATH_STD_USING // ADL of std names
    if(x == 0)
       return T(0);
@@ -193,13 +192,13 @@ inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
       {
          // If the two end of the range are far apart we have a ratio of two very large
          // numbers, split the calculation up into two blocks:
-         T t1 = x * boost::math::falling_factorial(x - 1, max_factorial<T>::value - 2, pol);
-         T t2 = boost::math::falling_factorial(x - max_factorial<T>::value + 1, n - max_factorial<T>::value + 1, pol);
+         T t1 = x * BOOST_MATH_NAMESPACE::falling_factorial(x - 1, max_factorial<T>::value - 2, pol);
+         T t2 = BOOST_MATH_NAMESPACE::falling_factorial(x - max_factorial<T>::value + 1, n - max_factorial<T>::value + 1, pol);
          if(tools::max_value<T>() / fabs(t1) < fabs(t2))
-            return boost::math::sign(t1) * boost::math::sign(t2) * policies::raise_overflow_error<T>("boost::math::falling_factorial<%1%>", 0, pol);
+            return BOOST_MATH_NAMESPACE::sign(t1) * BOOST_MATH_NAMESPACE::sign(t2) * policies::raise_overflow_error<T>("boost::math::falling_factorial<%1%>", 0, pol);
          return t1 * t2;
       }
-      return x * boost::math::falling_factorial(x - 1, n - 1, pol);
+      return x * BOOST_MATH_NAMESPACE::falling_factorial(x - 1, n - 1, pol);
    }
    if(x <= n - 1)
    {
@@ -211,7 +210,7 @@ inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
       unsigned n2 = itrunc((T)floor(xp1), pol);
       if(n2 == xp1)
          return T(0);
-      auto result = static_cast<T>(boost::math::tgamma_delta_ratio(xp1, -static_cast<T>(n2), pol));
+      auto result = static_cast<T>(BOOST_MATH_NAMESPACE::tgamma_delta_ratio(xp1, -static_cast<T>(n2), pol));
       x -= n2;
       result *= x;
       ++n2;
@@ -226,7 +225,7 @@ inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
    // because tgamma_delta_ratio is already optimised
    // for that use case:
    //
-   return static_cast<T>(boost::math::tgamma_delta_ratio(x + 1, -static_cast<T>(n), pol));
+   return static_cast<T>(BOOST_MATH_NAMESPACE::tgamma_delta_ratio(x + 1, -static_cast<T>(n), pol));
 }
 
 } // namespace detail
@@ -269,8 +268,7 @@ inline typename tools::promote_args<RT>::type
 
 #endif // BOOST_MATH_HAS_GPU_SUPPORT
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SP_FACTORIALS_HPP
 

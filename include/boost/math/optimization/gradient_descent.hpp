@@ -8,8 +8,7 @@
 #include <boost/math/optimization/detail/gradient_opt_base.hpp>
 #include <boost/math/optimization/detail/rdiff_optimization_policies.hpp>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {
 
 BOOST_MATH_EXPORT template<typename RealType>
@@ -21,14 +20,14 @@ struct gradient_descent_update_policy
 
   template<typename ArgumentType,
            typename = typename std::enable_if<
-             boost::math::differentiation::reverse_mode::detail::is_expression<
+             BOOST_MATH_NAMESPACE::differentiation::reverse_mode::detail::is_expression<
                ArgumentType>::value>::type>
   void operator()(ArgumentType& x, RealType& g)
   {
     x.get_value() -= lr_ * g;
   }
   template<typename ArgumentType,
-           typename std::enable_if<!boost::math::differentiation::reverse_mode::
+           typename std::enable_if<!BOOST_MATH_NAMESPACE::differentiation::reverse_mode::
                                      detail::is_expression<ArgumentType>::value,
                                    int>::type = 0>
   void operator()(ArgumentType& x, RealType& g) const
@@ -197,6 +196,5 @@ make_gradient_descent(Objective&& obj,
 }
 
 } // namespace optimization
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

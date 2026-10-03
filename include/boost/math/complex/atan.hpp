@@ -13,7 +13,7 @@
 #  include <boost/math/complex/atanh.hpp>
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template<class T> 
 [[deprecated("Replaced by C++11")]] std::complex<T> atan(const std::complex<T>& x)
@@ -28,9 +28,9 @@ BOOST_MATH_EXPORT template<class T>
       if(x.imag() == -1)
          return std::complex<T>(0, std::numeric_limits<T>::has_infinity ? -std::numeric_limits<T>::infinity() : -static_cast<T>(HUGE_VAL));
    }
-   return ::boost::math::detail::mult_minus_i(::boost::math::atanh(::boost::math::detail::mult_i(x)));
+   return ::BOOST_MATH_NAMESPACE::detail::mult_minus_i(::BOOST_MATH_NAMESPACE::atanh(::BOOST_MATH_NAMESPACE::detail::mult_i(x)));
 }
 
-} } // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_COMPLEX_ATAN_INCLUDED

@@ -44,26 +44,23 @@
 #pragma GCC system_header
 #endif
 
-namespace boost
-{
-   namespace math
-   {
+BOOST_MATH_NAMESPACE_BEGIN
       namespace detail
       {
          // owens_t_znorm1(x) = P(-oo<Z<=x)-0.5 with Z being normally distributed.
          template<typename RealType, class Policy>
          inline RealType owens_t_znorm1(const RealType x, const Policy& pol)
          {
-            using namespace boost::math::constants;
-            return boost::math::erf(x*one_div_root_two<RealType>(), pol)*half<RealType>();
+            using namespace BOOST_MATH_NAMESPACE::constants;
+            return BOOST_MATH_NAMESPACE::erf(x*one_div_root_two<RealType>(), pol)*half<RealType>();
          } // RealType owens_t_znorm1(const RealType x)
 
          // owens_t_znorm2(x) = P(x<=Z<oo) with Z being normally distributed.
          template<typename RealType, class Policy>
          inline RealType owens_t_znorm2(const RealType x, const Policy& pol)
          {
-            using namespace boost::math::constants;
-            return boost::math::erfc(x*one_div_root_two<RealType>(), pol)*half<RealType>();
+            using namespace BOOST_MATH_NAMESPACE::constants;
+            return BOOST_MATH_NAMESPACE::erfc(x*one_div_root_two<RealType>(), pol)*half<RealType>();
          } // RealType owens_t_znorm2(const RealType x)
 
          // Auxiliary function, it computes an array key that is used to determine
@@ -169,7 +166,7 @@ namespace boost
          inline RealType owens_t_T1(const RealType h, const RealType a, const unsigned short m, const Policy& pol)
          {
             BOOST_MATH_STD_USING
-            using namespace boost::math::constants;
+            using namespace BOOST_MATH_NAMESPACE::constants;
 
             const RealType hs = -h*h*half<RealType>();
             const RealType dhs = exp( hs );
@@ -178,7 +175,7 @@ namespace boost
             unsigned short j=1;
             RealType jj = 1;
             RealType aj = a * one_div_two_pi<RealType>();
-            RealType dj = boost::math::expm1( hs, pol);
+            RealType dj = BOOST_MATH_NAMESPACE::expm1( hs, pol);
             RealType gj = hs*dhs;
 
             RealType val = atan( a ) * one_div_two_pi<RealType>();
@@ -205,7 +202,7 @@ namespace boost
          inline RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah, const Policy& pol, const std::false_type&)
          {
             BOOST_MATH_STD_USING
-            using namespace boost::math::constants;
+            using namespace BOOST_MATH_NAMESPACE::constants;
 
             const unsigned short maxii = m+m+1;
             const RealType hs = h*h;
@@ -238,7 +235,7 @@ namespace boost
          inline RealType owens_t_T3_imp(const RealType h, const RealType a, const RealType ah, const std::integral_constant<int, 53>&, const Policy& pol)
          {
             BOOST_MATH_STD_USING
-            using namespace boost::math::constants;
+            using namespace BOOST_MATH_NAMESPACE::constants;
 
       const unsigned short m = 20;
 
@@ -292,7 +289,7 @@ namespace boost
         inline RealType owens_t_T3_imp(const RealType h, const RealType a, const RealType ah, const std::integral_constant<int, 64>&, const Policy& pol)
         {
           BOOST_MATH_STD_USING
-          using namespace boost::math::constants;
+          using namespace BOOST_MATH_NAMESPACE::constants;
           
           const unsigned short m = 30;
 
@@ -378,7 +375,7 @@ namespace boost
          inline RealType owens_t_T4(const RealType h, const RealType a, const unsigned short m)
          {
             BOOST_MATH_STD_USING
-            using namespace boost::math::constants;
+            using namespace BOOST_MATH_NAMESPACE::constants;
 
             const unsigned short maxii = m+m+1;
             const RealType hs = h*h;
@@ -436,7 +433,7 @@ namespace boost
                static_cast<RealType>(0.38862217010742057883E-02),  static_cast<RealType>(0.16793031084546090448E-02) };
 
             const RealType as = a*a;
-            const RealType hs = -h*h*boost::math::constants::half<RealType>();
+            const RealType hs = -h*h*BOOST_MATH_NAMESPACE::constants::half<RealType>();
             // LCOV_EXCL_STOP
 
             RealType val = 0;
@@ -511,7 +508,7 @@ namespace boost
           // LCOV_EXCL_STOP
 
           const RealType as = a*a;
-          const RealType hs = -h*h*boost::math::constants::half<RealType>();
+          const RealType hs = -h*h*BOOST_MATH_NAMESPACE::constants::half<RealType>();
 
           RealType val = 0;
           for(unsigned short i = 0; i < m; ++i)
@@ -542,7 +539,7 @@ namespace boost
          inline RealType owens_t_T6(const RealType h, const RealType a, const Policy& pol)
          {
             BOOST_MATH_STD_USING
-            using namespace boost::math::constants;
+            using namespace BOOST_MATH_NAMESPACE::constants;
 
             const RealType normh = owens_t_znorm2(h, pol);
             const RealType y = static_cast<RealType>(1) - a;
@@ -634,14 +631,14 @@ namespace boost
             abs_err += fabs(c * term);
             if(sum < 0)  // sum must always be positive, if it's negative something really bad has happened:
                policies::raise_evaluation_error(function, 0, T(0), pol);
-            return std::pair<T, T>((sum / d) / boost::math::constants::two_pi<T>(), abs_err / sum);
+            return std::pair<T, T>((sum / d) / BOOST_MATH_NAMESPACE::constants::two_pi<T>(), abs_err / sum);
          }
 
          template<typename RealType, class Policy>
          inline RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah, const Policy& pol, const std::true_type&)
          {
             BOOST_MATH_STD_USING
-            using namespace boost::math::constants;
+            using namespace BOOST_MATH_NAMESPACE::constants;
 
             const unsigned short maxii = m+m+1;
             const RealType hs = h*h;
@@ -686,7 +683,7 @@ namespace boost
             // and/or fail to alternate at a drop of a hat! :-(
             //
             BOOST_MATH_STD_USING
-            using namespace boost::math::constants;
+            using namespace BOOST_MATH_NAMESPACE::constants;
 
             const RealType hs = h*h;
             const RealType as = -a*a;
@@ -695,7 +692,7 @@ namespace boost
             unsigned short ii = 1;
             RealType val = 0;
             RealType vi = a * exp( -ah*ah*half<RealType>() ) / root_two_pi<RealType>();
-            RealType z = boost::math::detail::owens_t_znorm1(ah, pol)/h;
+            RealType z = BOOST_MATH_NAMESPACE::detail::owens_t_znorm1(ah, pol)/h;
             RealType last_z = fabs(z);
 
             //
@@ -768,7 +765,7 @@ namespace boost
             RealType yi = 1.0;
             RealType val = 0.0;
 
-            RealType lim = boost::math::policies::get_epsilon<RealType, Policy>();
+            RealType lim = BOOST_MATH_NAMESPACE::policies::get_epsilon<RealType, Policy>();
 
             while( true )
             {
@@ -874,7 +871,7 @@ namespace boost
                return owens_t_znorm2(RealType(fabs(h)), pol);
             }
             // Attempt arbitrary precision code, this will throw if it goes wrong:
-            typedef typename boost::math::policies::normalise<Policy, boost::math::policies::evaluation_error<> >::type forwarding_policy;
+            typedef typename BOOST_MATH_NAMESPACE::policies::normalise<Policy, BOOST_MATH_NAMESPACE::policies::evaluation_error<> >::type forwarding_policy;
             std::pair<RealType, RealType> p1(0, tools::max_value<RealType>()), p2(0, tools::max_value<RealType>());
             RealType target_precision = policies::get_epsilon<RealType, Policy>() * 1000;
             bool have_t1(false), have_t2(false);
@@ -890,7 +887,7 @@ namespace boost
                      return p1.first;
 #ifndef BOOST_MATH_NO_EXCEPTIONS
                }
-               catch(const boost::math::evaluation_error&){}  // T1 may fail and throw, that's OK
+               catch(const BOOST_MATH_NAMESPACE::evaluation_error&){}  // T1 may fail and throw, that's OK
 #endif
             }
             if(ah > 1)
@@ -905,7 +902,7 @@ namespace boost
                      return p2.first;
 #ifndef BOOST_MATH_NO_EXCEPTIONS
                }
-               catch(const boost::math::evaluation_error&){}  // T2 may fail and throw, that's OK
+               catch(const BOOST_MATH_NAMESPACE::evaluation_error&){}  // T2 may fail and throw, that's OK
 #endif
             }
             //
@@ -924,7 +921,7 @@ namespace boost
                      return p1.first;
 #ifndef BOOST_MATH_NO_EXCEPTIONS
                }
-               catch(const boost::math::evaluation_error&){}  // T1 may fail and throw, that's OK
+               catch(const BOOST_MATH_NAMESPACE::evaluation_error&){}  // T1 may fail and throw, that's OK
 #endif
             }
             //
@@ -943,7 +940,7 @@ namespace boost
                      return p2.first;
 #ifndef BOOST_MATH_NO_EXCEPTIONS
                }
-               catch(const boost::math::evaluation_error&){}  // T2 may fail and throw, that's OK
+               catch(const BOOST_MATH_NAMESPACE::evaluation_error&){}  // T2 may fail and throw, that's OK
 #endif
             }
             //
@@ -957,7 +954,7 @@ namespace boost
                return T4_mp(h, a, pol);
 #ifndef BOOST_MATH_NO_EXCEPTIONS
             }
-            catch(const boost::math::evaluation_error&){}  // T4 may fail and throw, that's OK
+            catch(const BOOST_MATH_NAMESPACE::evaluation_error&){}  // T4 may fail and throw, that's OK
 #endif
             //
             // Now look back at the results from T1 and T2 and see if either gave better
@@ -1058,8 +1055,7 @@ namespace boost
       }
 
 
-   } // namespace math
-} // namespace boost
+   BOOST_MATH_NAMESPACE_END
 
 #ifdef _MSC_VER
 #pragma warning(pop)

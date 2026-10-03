@@ -30,7 +30,7 @@
 
 // The envelope is the maximum of 1/2 and half the condition number of function evaluation.
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 namespace detail {
 // Abscissas of the vertical gridlines: evenly spaced, or at whole powers of ten on a logarithmic axis.
@@ -502,7 +502,7 @@ bool ends_with(std::string const& filename, std::string const& suffix)
 template<class F, typename PreciseReal, typename CoarseReal>
 void ulps_plot<F, PreciseReal, CoarseReal>::write(std::string const & filename) const
 {
-    if(!boost::math::tools::detail::ends_with(filename, ".svg"))
+    if(!BOOST_MATH_NAMESPACE::tools::detail::ends_with(filename, ".svg"))
     {
         throw std::logic_error("Only svg files are supported at this time.");
     }
@@ -608,7 +608,7 @@ ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, Co
         if (y != 0)
         {
             // Maybe cond_ is badly names; should it be half_cond_?
-            cond_[i] = boost::math::tools::evaluation_condition_number(hi_acc_impl, precise_abscissas_[i])/2;
+            cond_[i] = BOOST_MATH_NAMESPACE::tools::evaluation_condition_number(hi_acc_impl, precise_abscissas_[i])/2;
             // Half-ULP accuracy is the correctly rounded result, so make sure the envelop doesn't go below this:
             if (cond_[i] < 0.5)
             {
@@ -651,5 +651,5 @@ ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::ad
 
 
 
-} // namespace boost::math::tools
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::tools
 #endif

@@ -21,8 +21,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 
-namespace boost{ namespace math
-{
+BOOST_MATH_NAMESPACE_BEGIN
 namespace detail
 {
 
@@ -32,7 +31,7 @@ namespace detail
         RealType const& x,
         RealType* result, const Policy& pol)
   {
-     if((x < 0) || !(boost::math::isfinite)(x))
+     if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
      {
         *result = policies::raise_domain_error<RealType>(
            function,
@@ -81,24 +80,24 @@ BOOST_MATH_EXPORT typedef lognormal_distribution<double> lognormal;
 
 #ifdef __cpp_deduction_guides
 BOOST_MATH_EXPORT template <class RealType>
-lognormal_distribution(RealType)->lognormal_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+lognormal_distribution(RealType)->lognormal_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 BOOST_MATH_EXPORT template <class RealType>
-lognormal_distribution(RealType,RealType)->lognormal_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+lognormal_distribution(RealType,RealType)->lognormal_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 #endif
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const lognormal_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const lognormal_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x is >0 to +infinity.
-   using boost::math::tools::max_value;
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
+   using BOOST_MATH_NAMESPACE::tools::max_value;
+   return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const lognormal_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const lognormal_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-   using boost::math::tools::max_value;
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
+   using BOOST_MATH_NAMESPACE::tools::max_value;
+   return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -255,7 +254,7 @@ BOOST_MATH_GPU_ENABLED inline RealType variance(const lognormal_distribution<Rea
    if(0 == detail::check_location("boost::math::variance(const lognormal_distribution<%1%>&)", mu, &result, Policy()))
       return result;
 
-   return boost::math::expm1(sigma * sigma, Policy()) * exp(2 * mu + sigma * sigma);
+   return BOOST_MATH_NAMESPACE::expm1(sigma * sigma, Policy()) * exp(2 * mu + sigma * sigma);
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -300,7 +299,7 @@ BOOST_MATH_GPU_ENABLED inline RealType skewness(const lognormal_distribution<Rea
    if(0 == detail::check_location("boost::math::skewness(const lognormal_distribution<%1%>&)", dist.location(), &result, Policy()))
       return result;
 
-   return (ess + 2) * sqrt(boost::math::expm1(ss, Policy()));
+   return (ess + 2) * sqrt(BOOST_MATH_NAMESPACE::expm1(ss, Policy()));
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -348,8 +347,7 @@ BOOST_MATH_GPU_ENABLED inline RealType entropy(const lognormal_distribution<Real
    return mu + log(constants::two_pi<RealType>()*constants::e<RealType>()*sigma*sigma)/2;
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

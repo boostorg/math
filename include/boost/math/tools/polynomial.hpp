@@ -31,7 +31,7 @@
 #include <iterator>
 #endif
 
-namespace boost{ namespace math{ namespace tools{
+BOOST_MATH_NAMESPACE_BEGIN namespace tools{
 
 BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED T chebyshev_coefficient(unsigned n, unsigned m)
@@ -52,7 +52,7 @@ BOOST_MATH_GPU_ENABLED T chebyshev_coefficient(unsigned n, unsigned m)
    if(r & 1)
       result = -result;
    result /= n - r;
-   result *= boost::math::binomial_coefficient<T>(n - r, r);
+   result *= BOOST_MATH_NAMESPACE::binomial_coefficient<T>(n - r, r);
    result *= ldexp(1.0f, m);
    return result;
 }
@@ -335,11 +335,11 @@ public:
       m_data.resize(p.size());
       for(unsigned i = 0; i < p.size(); ++i)
       {
-         m_data[i] = boost::math::tools::real_cast<T>(p[i]);
+         m_data[i] = BOOST_MATH_NAMESPACE::tools::real_cast<T>(p[i]);
       }
    }
 #ifdef BOOST_MATH_HAS_IS_CONST_ITERABLE
-    template <class Range, typename std::enable_if<boost::math::tools::detail::is_const_iterable<Range>::value, bool>::type = true>
+    template <class Range, typename std::enable_if<BOOST_MATH_NAMESPACE::tools::detail::is_const_iterable<Range>::value, bool>::type = true>
     BOOST_MATH_GPU_ENABLED explicit polynomial(const Range& r)
        : polynomial(r.begin(), r.end()) 
     {
@@ -382,7 +382,7 @@ public:
 
    BOOST_MATH_GPU_ENABLED T operator()(T z) const
    {
-      return m_data.size() > 0 ? boost::math::tools::evaluate_polynomial((m_data).data(), z, m_data.size()) : T(0);
+      return m_data.size() > 0 ? BOOST_MATH_NAMESPACE::tools::evaluate_polynomial((m_data).data(), z, m_data.size()) : T(0);
    }
    BOOST_MATH_GPU_ENABLED std::vector<T> chebyshev() const
    {
@@ -869,8 +869,7 @@ BOOST_MATH_GPU_ENABLED inline std::basic_ostream<charT, traits>& operator << (st
 }
 
 } // namespace tools
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 //
 // Polynomial specific overload of gcd algorithm:

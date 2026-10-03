@@ -15,8 +15,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
-namespace boost{
-namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 // Recurrence relation for Laguerre polynomials:
 BOOST_MATH_EXPORT template <class T1, class T2, class T3>
@@ -63,7 +62,7 @@ template <class T>
 inline typename tools::promote_args<T>::type 
    laguerre(unsigned n, unsigned m, T x, const std::false_type&)
 {
-   return boost::math::laguerre(n, m, x, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::laguerre(n, m, x, policies::policy<>());
 }
 
 } // namespace detail
@@ -91,7 +90,7 @@ T laguerre_imp(unsigned n, unsigned m, T x, const Policy& pol)
 {
    // Special cases:
    if(m == 0)
-      return boost::math::laguerre(n, x, pol);
+      return BOOST_MATH_NAMESPACE::laguerre(n, x, pol);
 
    T p0 = 1;
    
@@ -130,8 +129,7 @@ inline typename laguerre_result<T1, T2>::type
    return detail::laguerre(n, m, x, tag_type());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SPECIAL_LAGUERRE_HPP
 

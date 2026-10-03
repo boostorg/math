@@ -18,21 +18,21 @@
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isfinite.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 BOOST_MATH_EXPORT template <typename T, std::enable_if_t<!std::is_integral_v<T>, bool> = true>
 inline constexpr int fpclassify BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        return (boost::math::ccmath::isnan)(x) ? FP_NAN :
-               (boost::math::ccmath::isinf)(x) ? FP_INFINITE :
-               boost::math::ccmath::abs(x) == T(0) ? FP_ZERO :
-               boost::math::ccmath::abs(x) > 0 && boost::math::ccmath::abs(x) < (std::numeric_limits<T>::min)() ? FP_SUBNORMAL : FP_NORMAL;
+        return (BOOST_MATH_NAMESPACE::ccmath::isnan)(x) ? FP_NAN :
+               (BOOST_MATH_NAMESPACE::ccmath::isinf)(x) ? FP_INFINITE :
+               BOOST_MATH_NAMESPACE::ccmath::abs(x) == T(0) ? FP_ZERO :
+               BOOST_MATH_NAMESPACE::ccmath::abs(x) > 0 && BOOST_MATH_NAMESPACE::ccmath::abs(x) < (std::numeric_limits<T>::min)() ? FP_SUBNORMAL : FP_NORMAL;
     }
     else
     {
-        using boost::math::fpclassify;
+        using BOOST_MATH_NAMESPACE::fpclassify;
         return (fpclassify)(x);
     }
 }
@@ -40,9 +40,9 @@ inline constexpr int fpclassify BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x)
 BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr int fpclassify(Z x)
 {
-    return boost::math::ccmath::fpclassify(static_cast<double>(x));
+    return BOOST_MATH_NAMESPACE::ccmath::fpclassify(static_cast<double>(x));
 }
 
-}
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_FPCLASSIFY

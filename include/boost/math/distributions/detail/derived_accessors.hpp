@@ -43,7 +43,7 @@
 // Suppressing spurious warning in coefficient_of_variation
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <class Distribution>
 BOOST_MATH_GPU_ENABLED typename Distribution::value_type variance(const Distribution& dist);
@@ -181,8 +181,7 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type median(const Dist& d)
   return quantile(d, static_cast<value_type>(0.5f));
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 
 #ifdef _MSC_VER

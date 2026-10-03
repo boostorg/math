@@ -17,12 +17,12 @@
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T binomial_coefficient(unsigned n, unsigned k, const Policy& pol)
 {
-   static_assert(!boost::math::is_integral<T>::value, "Type T must not be an integral type");
+   static_assert(!BOOST_MATH_NAMESPACE::is_integral<T>::value, "Type T must not be an integral type");
    BOOST_MATH_STD_USING
    constexpr auto function = "boost::math::binomial_coefficient<%1%>(unsigned, unsigned)";
    if(k > n)
@@ -44,9 +44,9 @@ BOOST_MATH_GPU_ENABLED T binomial_coefficient(unsigned n, unsigned k, const Poli
    {
       // Use the beta function:
       if(k < n - k)
-         result = static_cast<T>(k * boost::math::beta(static_cast<T>(k), static_cast<T>(n-k+1), pol));
+         result = static_cast<T>(k * BOOST_MATH_NAMESPACE::beta(static_cast<T>(k), static_cast<T>(n-k+1), pol));
       else
-         result = static_cast<T>((n - k) * boost::math::beta(static_cast<T>(k+1), static_cast<T>(n-k), pol));
+         result = static_cast<T>((n - k) * BOOST_MATH_NAMESPACE::beta(static_cast<T>(k+1), static_cast<T>(n-k), pol));
       if(result == 0)
          return policies::raise_overflow_error<T>(function, nullptr, pol);
       result = 1 / result;
@@ -77,8 +77,7 @@ BOOST_MATH_GPU_ENABLED inline T binomial_coefficient(unsigned n, unsigned k)
    return binomial_coefficient<T>(n, k, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 
 #endif // BOOST_MATH_SF_BINOMIAL_HPP

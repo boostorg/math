@@ -22,7 +22,7 @@
 #pragma warning(disable:4127)
 #endif
 
-namespace boost { namespace math{ namespace quadrature{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature{ namespace detail{
 
 template <class T>
 struct gauss_constant_category
@@ -75,7 +75,7 @@ class gauss_detail
       for (unsigned i = 0; i < abscissa().size(); ++i)
       {
          Real x = abscissa()[i];
-         Real p = boost::math::legendre_p_prime(N, x);
+         Real p = BOOST_MATH_NAMESPACE::legendre_p_prime(N, x);
          result[i] = 2 / ((1 - x * x) * p * p);
       }
       return result;
@@ -83,7 +83,7 @@ class gauss_detail
 public:
    static const std::vector<Real>& abscissa()
    {
-      static std::vector<Real> data = boost::math::legendre_p_zeros<Real>(N);
+      static std::vector<Real> data = BOOST_MATH_NAMESPACE::legendre_p_zeros<Real>(N);
       return data;
    }
    static const std::vector<Real>& weights()
@@ -773,7 +773,7 @@ public:
 
 }
 
-BOOST_MATH_EXPORT template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
+BOOST_MATH_EXPORT template <class Real, unsigned N, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
 class gauss : public detail::gauss_detail<Real, N, detail::gauss_constant_category<Real>::value>
 {
    typedef detail::gauss_detail<Real, N, detail::gauss_constant_category<Real>::value> base;
@@ -814,7 +814,7 @@ public:
    {
       typedef decltype(f(a)) K;
       static const char* function = "boost::math::quadrature::gauss<%1%>::integrate(f, %1%, %1%)";
-      if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
+      if (!(BOOST_MATH_NAMESPACE::isnan)(a) && !(BOOST_MATH_NAMESPACE::isnan)(b))
       {
          // Infinite limits:
          Real min_inf = -tools::max_value<Real>();
@@ -831,7 +831,7 @@ public:
          }
 
          // Right limit is infinite:
-         if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (b >= tools::max_value<Real>()))
          {
             auto u = [&](const Real& t)->K
             {
@@ -848,7 +848,7 @@ public:
             return Q;
          }
 
-         if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(b) && (a <= -tools::max_value<Real>()))
          {
             auto v = [&](const Real& t)->K
             {
@@ -865,7 +865,7 @@ public:
             return Q;
          }
 
-         if ((boost::math::isfinite)(a) && (boost::math::isfinite)(b))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (BOOST_MATH_NAMESPACE::isfinite)(b))
          {
             if (a == b)
             {
@@ -930,7 +930,7 @@ public:
    {
       typedef decltype(f(a)) K;
       static const char* function = "boost::math::quadrature::gauss<%1%>::integrate(f, %1%, %1%)";
-      if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
+      if (!(BOOST_MATH_NAMESPACE::isnan)(a) && !(BOOST_MATH_NAMESPACE::isnan)(b))
       {
          // Infinite limits:
          Real min_inf = -tools::max_value<Real>();
@@ -947,7 +947,7 @@ public:
          }
 
          // Right limit is infinite:
-         if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (b >= tools::max_value<Real>()))
          {
             auto u = [&](const Real& t)->K
             {
@@ -964,7 +964,7 @@ public:
             return Q;
          }
 
-         if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(b) && (a <= -tools::max_value<Real>()))
          {
             auto v = [&](const Real& t)->K
             {
@@ -981,7 +981,7 @@ public:
             return Q;
          }
 
-         if ((boost::math::isfinite)(a) && (boost::math::isfinite)(b))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (BOOST_MATH_NAMESPACE::isfinite)(b))
          {
             if (a == b)
             {
@@ -1020,8 +1020,7 @@ public:
 };
 
 } // namespace quadrature
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #ifdef _MSC_VER
 #pragma warning(pop)

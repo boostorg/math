@@ -15,8 +15,7 @@
 #include <cuda/std/utility>
 #include <cuda/std/tuple>
 
-namespace boost { 
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT using cuda::std::pair;
 BOOST_MATH_EXPORT using cuda::std::tuple;
@@ -32,15 +31,15 @@ BOOST_MATH_EXPORT using cuda::std::tuple_element;
 namespace detail {
 
 template <typename T>
-BOOST_MATH_GPU_ENABLED T&& forward(boost::math::remove_reference_t<T>& arg) noexcept
+BOOST_MATH_GPU_ENABLED T&& forward(BOOST_MATH_NAMESPACE::remove_reference_t<T>& arg) noexcept
 {
     return static_cast<T&&>(arg);
 }
 
 template <typename T>
-BOOST_MATH_GPU_ENABLED T&& forward(boost::math::remove_reference_t<T>&& arg) noexcept
+BOOST_MATH_GPU_ENABLED T&& forward(BOOST_MATH_NAMESPACE::remove_reference_t<T>&& arg) noexcept
 {
-    static_assert(!boost::math::is_lvalue_reference<T>::value, "Cannot forward an rvalue as an lvalue.");
+    static_assert(!BOOST_MATH_NAMESPACE::is_lvalue_reference<T>::value, "Cannot forward an rvalue as an lvalue.");
     return static_cast<T&&>(arg);
 }
 
@@ -49,13 +48,12 @@ BOOST_MATH_GPU_ENABLED T&& forward(boost::math::remove_reference_t<T>&& arg) noe
 template <typename T, typename... Ts>
 BOOST_MATH_GPU_ENABLED auto make_tuple(T&& t, Ts&&... ts) 
 {
-    return cuda::std::tuple<boost::math::decay_t<T>, boost::math::decay_t<Ts>...>(
-        boost::math::detail::forward<T>(t), boost::math::detail::forward<Ts>(ts)...
+    return cuda::std::tuple<BOOST_MATH_NAMESPACE::decay_t<T>, BOOST_MATH_NAMESPACE::decay_t<Ts>...>(
+        BOOST_MATH_NAMESPACE::detail::forward<T>(t), BOOST_MATH_NAMESPACE::detail::forward<Ts>(ts)...
     );
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #else
 
@@ -63,8 +61,7 @@ BOOST_MATH_GPU_ENABLED auto make_tuple(T&& t, Ts&&... ts)
 #include <tuple>
 #endif
 
-namespace boost { 
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT using ::std::tuple;
 BOOST_MATH_EXPORT using ::std::pair;
@@ -82,8 +79,7 @@ BOOST_MATH_EXPORT using ::std::tuple_element;
 // Pair helpers
 BOOST_MATH_EXPORT using ::std::make_pair;
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ENABLE_CUDA
 

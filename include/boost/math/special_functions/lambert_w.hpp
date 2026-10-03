@@ -96,8 +96,7 @@ using lookup_t = double; // Type for lookup table (double or float, or even long
 #pragma GCC system_header
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace lambert_w_detail {
 
 //! \brief Applies a single Halley step to make a better estimate of Lambert W.
@@ -131,7 +130,7 @@ template <typename T>
 inline T lambert_w_halley_iterate(T w_est, const T z)
 {
   BOOST_MATH_STD_USING
-  static const T max_diff = boost::math::tools::root_epsilon<T>() * fabs(w_est);
+  static const T max_diff = BOOST_MATH_NAMESPACE::tools::root_epsilon<T>() * fabs(w_est);
 
   T w_new = lambert_w_halley_step(w_est, z);
   T diff = fabs(w_est - w_new);
@@ -236,7 +235,7 @@ inline T schroeder_update(const T w, const T y)
   BOOST_MATH_STD_USING // Aid argument dependent lookup of abs.
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER
     std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
-  using boost::math::float_distance;
+  using BOOST_MATH_NAMESPACE::float_distance;
   T fd = float_distance<T>(w, y);
   std::cout << "Schroder ";
   if (abs(fd) < 214748000.)
@@ -874,9 +873,9 @@ inline T lambert_w0_small_z(T z, const Policy& pol, std::integral_constant<int, 
           341422.05066583836331735491399356945575432970390954  z^19  Wolfram value differs at 36 decimal digit, as expected.
      */
 
-  using boost::math::policies::get_epsilon; // for type T.
-  using boost::math::tools::sum_series;
-  using boost::math::tools::evaluate_polynomial;
+  using BOOST_MATH_NAMESPACE::policies::get_epsilon; // for type T.
+  using BOOST_MATH_NAMESPACE::tools::sum_series;
+  using BOOST_MATH_NAMESPACE::tools::evaluate_polynomial;
   // http://www.boost.org/doc/libs/release/libs/math/doc/html/math_toolkit/roots/rational.html
 
   // std::streamsize prec = std::cout.precision(std::numeric_limits <T>::max_digits10);
@@ -967,7 +966,7 @@ template <typename T>
 inline T do_get_near_singularity_param(T z)
 {
    BOOST_MATH_STD_USING
-   const T p2 = 2 * (boost::math::constants::e<T>() * z + 1);
+   const T p2 = 2 * (BOOST_MATH_NAMESPACE::constants::e<T>() * z + 1);
    const T p = sqrt(p2);
    return p;
 }
@@ -1013,7 +1012,7 @@ T lambert_w_positive_rational_float(T z)
             1.690949264e+00f,
          };
          // LCOV_EXCL_STOP
-         return z * (Y + boost::math::tools::evaluate_polynomial(P, z) / boost::math::tools::evaluate_polynomial(Q, z));
+         return z * (Y + BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, z) / BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, z));
       }
       else
       { // 0.5 < z < 2
@@ -1033,7 +1032,7 @@ T lambert_w_positive_rational_float(T z)
             2.407221031e-01f,
          };
          // LCOV_EXCL_STOP
-         return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
+         return z * (Y + BOOST_MATH_NAMESPACE::tools::evaluate_rational(P, Q, z));
       }
    }
    else if (z < 6)
@@ -1055,7 +1054,7 @@ T lambert_w_positive_rational_float(T z)
          5.477869455e-03f,
       };
       // LCOV_EXCL_STOP
-      return Y + boost::math::tools::evaluate_rational(P, Q, z);
+      return Y + BOOST_MATH_NAMESPACE::tools::evaluate_rational(P, Q, z);
    }
    else if (z < 18)
    {
@@ -1076,7 +1075,7 @@ T lambert_w_positive_rational_float(T z)
          4.076716763e-04f,
       };
       // LCOV_EXCL_STOP
-      return Y + boost::math::tools::evaluate_rational(P, Q, z);
+      return Y + BOOST_MATH_NAMESPACE::tools::evaluate_rational(P, Q, z);
    }
    else if (z < T(9897.12905874))  // 2.8 < log(z) < 9.2
    {
@@ -1098,7 +1097,7 @@ T lambert_w_positive_rational_float(T z)
       };
       // LCOV_EXCL_STOP
       T log_w = log(z);
-      return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
+      return log_w + Y + BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, log_w) / BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, log_w);
    }
    else if (z < T(7.896296e+13))  // 9.2 < log(z) <= 32
    {
@@ -1120,7 +1119,7 @@ T lambert_w_positive_rational_float(T z)
       };
       // LCOV_EXCL_STOP
       T log_w = log(z);
-      return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
+      return log_w + Y + BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, log_w) / BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, log_w);
    }
 
     // Max error in interpolated form: 1.491e-08
@@ -1141,7 +1140,7 @@ T lambert_w_positive_rational_float(T z)
     };
     // LCOV_EXCL_STOP
     T log_w = log(z);
-    return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
+    return log_w + Y + BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, log_w) / BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, log_w);
 
 }
 
@@ -1170,7 +1169,7 @@ T lambert_w_negative_rational_float(T z, const Policy& pol)
             3.501498501e+00f,
          };
          // LCOV_EXCL_STOP
-         return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
+         return z * (Y + BOOST_MATH_NAMESPACE::tools::evaluate_rational(P, Q, z));
       }
       else
       {
@@ -1198,7 +1197,7 @@ T lambert_w_negative_rational_float(T z, const Policy& pol)
       };
       // LCOV_EXCL_STOP
       T d = z + 0.367879441171442321595523770161460867445811f;
-      return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
+      return -d / (Y + BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, d) / BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, d));
    }
 
     return lambert_w_singularity_series(get_near_singularity_param(z, pol));
@@ -1211,13 +1210,13 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
   static const char* function = "boost::math::lambert_w0<%1%>"; // For error messages.
   BOOST_MATH_STD_USING // Aid ADL of std functions.
 
-  if ((boost::math::isnan)(z))
+  if ((BOOST_MATH_NAMESPACE::isnan)(z))
   {
-    return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
+    return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
   }
-  if ((boost::math::isinf)(z))
+  if ((BOOST_MATH_NAMESPACE::isinf)(z))
   {
-    return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
+    return BOOST_MATH_NAMESPACE::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
   }
 
    if (z >= T(0.05)) // Fukushima switch point.
@@ -1228,7 +1227,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
    else if (z <= -0.3678794411714423215955237701614608674458111310f)
    {
       if (z < -0.3678794411714423215955237701614608674458111310f)
-         return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
+         return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
       return -1;
    }
 
@@ -1265,7 +1264,7 @@ T lambert_w_positive_rational_double(T z)
             2.91327346750475362e-01
          };
          // LCOV_EXCL_STOP
-         return z * (offset + boost::math::tools::evaluate_polynomial(P, z) / boost::math::tools::evaluate_polynomial(Q, z));
+         return z * (offset + BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, z) / BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, z));
       }
       else
       {
@@ -1292,7 +1291,7 @@ T lambert_w_positive_rational_double(T z)
             2.21610620995418981e-01,
             5.70597669908194213e-03
          };// LCOV_EXCL_STOP
-         return z * (offset + boost::math::tools::evaluate_rational(P, Q, z));
+         return z * (offset + BOOST_MATH_NAMESPACE::tools::evaluate_rational(P, Q, z));
       }
    }
    else if (z < 6)
@@ -1322,7 +1321,7 @@ T lambert_w_positive_rational_double(T z)
          4.43611344705509378e-06,
       };
       // LCOV_EXCL_STOP
-      return Y + boost::math::tools::evaluate_rational(P, Q, z);
+      return Y + BOOST_MATH_NAMESPACE::tools::evaluate_rational(P, Q, z);
    }
    else if (z < 18)
    {
@@ -1354,7 +1353,7 @@ T lambert_w_positive_rational_double(T z)
          8.17517283816615732e-10
       };
       // LCOV_EXCL_STOP
-      return offset + boost::math::tools::evaluate_rational(P, Q, z);
+      return offset + BOOST_MATH_NAMESPACE::tools::evaluate_rational(P, Q, z);
    }
    else if (z < 9897.12905874)  // 2.8 < log(z) < 9.2
    {
@@ -1385,7 +1384,7 @@ T lambert_w_positive_rational_double(T z)
       };
       // LCOV_EXCL_STOP
       T log_w = log(z);
-      return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
+      return log_w + Y + BOOST_MATH_NAMESPACE::tools::evaluate_rational(P, Q, log_w);
    }
    else if (z < 7.896296e+13)  // 9.2 < log(z) <= 32
    {
@@ -1416,7 +1415,7 @@ T lambert_w_positive_rational_double(T z)
       };
       // LCOV_EXCL_STOP
       T log_w = log(z);
-      return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
+      return log_w + Y + BOOST_MATH_NAMESPACE::tools::evaluate_rational(P, Q, log_w);
    }
    else if (z < 2.6881171e+43) // 32 < log(z) < 100
    {
@@ -1447,7 +1446,7 @@ T lambert_w_positive_rational_double(T z)
       };
       // LCOV_EXCL_STOP
       T log_w = log(z);
-      return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
+      return log_w + Y + BOOST_MATH_NAMESPACE::tools::evaluate_rational(P, Q, log_w);
    }
    else // 100 < log(z) < 710
    {
@@ -1482,7 +1481,7 @@ T lambert_w_positive_rational_double(T z)
       };
       // LCOV_EXCL_STOP
       T log_w = log(z);
-      return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
+      return log_w + Y + BOOST_MATH_NAMESPACE::tools::evaluate_rational(P, Q, log_w);
    }
 }
 
@@ -1517,7 +1516,7 @@ T lambert_w_negative_rational_double(T z, const Policy& pol)
             2.11640324843601588e+00,
          };
          // LCOV_EXCL_STOP
-         return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
+         return z * (Y + BOOST_MATH_NAMESPACE::tools::evaluate_rational(P, Q, z));
       }
       else
       {
@@ -1552,7 +1551,7 @@ T lambert_w_negative_rational_double(T z, const Policy& pol)
          4.10677610657724330e+00,
       };
       // LCOV_EXCL_STOP
-      return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
+      return z * (Y + BOOST_MATH_NAMESPACE::tools::evaluate_rational(P, Q, z));
    }
    else if (z > -0.3178794411714423215955237)
    {
@@ -1582,7 +1581,7 @@ T lambert_w_negative_rational_double(T z, const Policy& pol)
       };
       // LCOV_EXCL_STOP
       T d = z + 0.367879441171442321595523770161460867445811;
-      return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
+      return -d / (Y + BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, d) / BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, d));
    }
    else if (z > -0.3578794411714423215955237701)
    {
@@ -1613,12 +1612,12 @@ T lambert_w_negative_rational_double(T z, const Policy& pol)
       };
       // LCOV_EXCL_STOP
       T d = z + 0.36787944117144232159552377016146086744581113103176804;
-      return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
+      return -d / (Y + BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, d) / BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, d));
    }
    else
    {  // z is very close (within 0.01) of the singularity at -e^-1,
       // so use a series expansion from R. M. Corless et al.
-      const T p2 = 2 * (boost::math::constants::e<T>() * z + 1);
+      const T p2 = 2 * (BOOST_MATH_NAMESPACE::constants::e<T>() * z + 1);
       const T p = sqrt(p2);
       return lambert_w_detail::lambert_w_singularity_series(p);
    }
@@ -1638,13 +1637,13 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
    "- or possibly edit the coefficients to have "
    "an appropriate size-suffix for 64-bit floats on your platform - L?");
 
-    if ((boost::math::isnan)(z))
+    if ((BOOST_MATH_NAMESPACE::isnan)(z))
     {
-      return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
+      return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
     }
-    if ((boost::math::isinf)(z))
+    if ((BOOST_MATH_NAMESPACE::isinf)(z))
     {
-      return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
+      return BOOST_MATH_NAMESPACE::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
     }
 
    if (z >= 0.05)
@@ -1655,7 +1654,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
    {
       if (z < -0.36787944117144232159552377016146086744581113103176804)
       {
-         return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
+         return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
       }
       return -1;
    }
@@ -1676,9 +1675,9 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
    BOOST_MATH_STD_USING // Aid ADL of std functions.
 
    // Filter out special cases first:
-   if ((boost::math::isnan)(z))
+   if ((BOOST_MATH_NAMESPACE::isnan)(z))
    {
-      return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
+      return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
    }
    if (fabs(z) <= 0.05f)
    {
@@ -1687,7 +1686,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
    }
    if (z > (std::numeric_limits<double>::max)())
    {
-      if ((boost::math::isinf)(z))
+      if ((BOOST_MATH_NAMESPACE::isinf)(z))
       {
          return policies::raise_overflow_error<T>(function, nullptr, pol);
          // Or might return infinity if available else max_value,
@@ -1704,17 +1703,17 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
    }
    if (z < -0.3578794411714423215955237701)
    { // Very close to branch point so rational polynomials are not usable.
-      if (z <= -boost::math::constants::exp_minus_one<T>())
+      if (z <= -BOOST_MATH_NAMESPACE::constants::exp_minus_one<T>())
       {
-         if (z == -boost::math::constants::exp_minus_one<T>())
+         if (z == -BOOST_MATH_NAMESPACE::constants::exp_minus_one<T>())
          { // Exactly at the branch point singularity.
             return -1;
          }
-         return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
+         return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
       }
       // z is very close (within 0.01) of the branch singularity at -e^-1
       // so use a series approximation proposed by Corless et al.
-      const T p2 = 2 * (boost::math::constants::e<T>() * z + 1);
+      const T p2 = 2 * (BOOST_MATH_NAMESPACE::constants::e<T>() * z + 1);
       const T p = sqrt(p2);
       T w = lambert_w_detail::lambert_w_singularity_series(p);
       return lambert_w_halley_iterate(w, z);
@@ -1764,12 +1763,12 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   const char* function = "boost::math::lambert_wm1<RealType>(<RealType>)"; // Used for error messages.
 
   // Check for edge and corner cases first:
-  if ((boost::math::isnan)(z))
+  if ((BOOST_MATH_NAMESPACE::isnan)(z))
   {
     return policies::raise_domain_error(function, "Argument z is NaN!", z, pol);
   } // isnan
 
-  if ((boost::math::isinf)(z))
+  if ((BOOST_MATH_NAMESPACE::isinf)(z))
   {
     return policies::raise_domain_error(function, "Argument z is infinite!", z, pol);
   } // isinf
@@ -1778,9 +1777,9 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   { // z is exactly zero so return -std::numeric_limits<T>::infinity();
       return -policies::raise_overflow_error(function, nullptr, z, pol);
   }
-  if (boost::math::detail::has_denorm_now<T>())
+  if (BOOST_MATH_NAMESPACE::detail::has_denorm_now<T>())
   { // All real types except arbitrary precision.
-    if (!(boost::math::isnormal)(z))
+    if (!(BOOST_MATH_NAMESPACE::isnormal)(z))
     { // Almost zero - might also just return infinity like z == 0 or max_value?
       return -policies::raise_overflow_error(function, "Argument z =  %1% is denormalized! (must be z > (std::numeric_limits<RealType>::min)() or z == 0)", z, pol);
     }
@@ -1790,18 +1789,18 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   { //
     return policies::raise_domain_error(function, "Argument z = %1% is out of range (z <= 0) for Lambert W-1 branch! (Try Lambert W0 branch?)", z, pol);
   }
-  if (z == -boost::math::constants::exp_minus_one<T>()) // == singularity/branch point z = -exp(-1) = -0.36787944.
+  if (z == -BOOST_MATH_NAMESPACE::constants::exp_minus_one<T>()) // == singularity/branch point z = -exp(-1) = -0.36787944.
   { // At singularity, so return exactly -1.
     return -static_cast<T>(1);
   }
   // z is too negative for the W-1 (or W0) branch.
-  if (z < -boost::math::constants::exp_minus_one<T>()) // > singularity/branch point z = -exp(-1) = -0.36787944.
+  if (z < -BOOST_MATH_NAMESPACE::constants::exp_minus_one<T>()) // > singularity/branch point z = -exp(-1) = -0.36787944.
   {
     return policies::raise_domain_error(function, "Argument z = %1% is out of range (require -exp(-1) = -0.36787944... < z <= 0) for Lambert W-1 (or W0) branch!", z, pol);
   }
   if (z < static_cast<T>(-0.35))
   { // Close to singularity/branch point z = -0.3678794411714423215955237701614608727 but on W-1 branch.
-    const T p2 = 2 * (boost::math::constants::e<T>() * z + 1);
+    const T p2 = 2 * (BOOST_MATH_NAMESPACE::constants::e<T>() * z + 1);
     // Commented out, requires z = -1 / 2e which is greater than -0.35 so this whole branch is not taken.
     //if (p2 == 0)
     //{ // At the singularity at branch point.
@@ -1809,7 +1808,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     // }
     BOOST_MATH_ASSERT(p2 > 0);
     T w_series = lambert_w_singularity_series(T(-sqrt(p2)));
-    if (boost::math::tools::digits<T>() > 53)
+    if (BOOST_MATH_NAMESPACE::tools::digits<T>() > 53)
     { // Multiprecision, so try a Halley refinement.
        w_series = lambert_w_detail::lambert_w_halley_iterate(w_series, z);
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_WM1_NOT_BUILTIN
@@ -1882,15 +1881,15 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   } // Z too small so use approximation and Halley.
     // Else Use a lookup table to find the nearest integer part of Lambert W-1 as starting point for Bisection.
 
-  if (boost::math::tools::digits<T>() > 53)
+  if (BOOST_MATH_NAMESPACE::tools::digits<T>() > 53)
   { // T is more precise than 64-bit double (or long double, or ?),
     // so compute an approximate value using only one Schroeder refinement,
     // (avoiding any double-precision Halley refinement from policy double_digits2<50> 53 - 3 = 50
     // because are next going to use Halley refinement at full/high precision using this as an approximation).
-    using boost::math::policies::precision;
-    using boost::math::policies::digits10;
-    using boost::math::policies::digits2;
-    using boost::math::policies::policy;
+    using BOOST_MATH_NAMESPACE::policies::precision;
+    using BOOST_MATH_NAMESPACE::policies::digits10;
+    using BOOST_MATH_NAMESPACE::policies::digits2;
+    using BOOST_MATH_NAMESPACE::policies::policy;
     // Compute a 50-bit precision approximate W0 in a double (no Halley refinement).
     T double_approx(static_cast<T>(lambert_wm1_imp(must_reduce_to_double(z, std::is_constructible<double, T>()), policy<digits2<50>>())));
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_WM1_NOT_BUILTIN
@@ -1910,7 +1909,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   } // digits > 53  - higher precision than double.
   else // T is double or less precision.
   { // Use a lookup table to find the nearest integer part of Lambert W as starting point for Bisection.
-    using namespace boost::math::lambert_w_detail::lambert_w_lookup;
+    using namespace BOOST_MATH_NAMESPACE::lambert_w_detail::lambert_w_lookup;
     // Bracketing sequence  n = (2, 4, 8, 16, 32, 64) for W-1 branch. (0 is -infinity)
     // Since z is probably quite small, start with lowest n (=2).
     int n = 2;
@@ -2018,7 +2017,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
 //! Lambert W0 using User-defined policy.
   BOOST_MATH_EXPORT template <typename T, typename Policy>
   inline
-    typename boost::math::tools::promote_args<T>::type
+    typename BOOST_MATH_NAMESPACE::tools::promote_args<T>::type
     lambert_w0(T z, const Policy& pol)
   {
      // Promote integer or expression template arguments to double,
@@ -2100,9 +2099,9 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
         }
         // This is the sensible choice if we regard the Lambert-W function as complex analytic.
         // Of course on the real line, it's just undefined.
-        if (z == -boost::math::constants::exp_minus_one<result_type>())
+        if (z == -BOOST_MATH_NAMESPACE::constants::exp_minus_one<result_type>())
         {
-           return boost::math::policies::raise_overflow_error("lambert_w0_prime", nullptr, z, pol);
+           return BOOST_MATH_NAMESPACE::policies::raise_overflow_error("lambert_w0_prime", nullptr, z, pol);
         }
         // if z < -1/e, we'll let lambert_w0 do the error handling:
         result_type w = lambert_w0(result_type(z), pol);
@@ -2143,9 +2142,9 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     //      return static_cast<result_type>(1);
     //}
     //if (z == - boost::math::constants::exp_minus_one<result_type>())
-    if (z == 0 || z == - boost::math::constants::exp_minus_one<result_type>())
+    if (z == 0 || z == - BOOST_MATH_NAMESPACE::constants::exp_minus_one<result_type>())
     {
-       return -boost::math::policies::raise_overflow_error("lambert_wm1_prime", nullptr, z, pol);
+       return -BOOST_MATH_NAMESPACE::policies::raise_overflow_error("lambert_wm1_prime", nullptr, z, pol);
     }
 
     result_type w = lambert_wm1(z, pol);
@@ -2159,7 +2158,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
      return lambert_wm1_prime(z, policies::policy<>());
   }
 
-}} //boost::math namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // #ifdef BOOST_MATH_SF_LAMBERT_W_HPP
 

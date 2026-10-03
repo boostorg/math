@@ -39,7 +39,7 @@
 #pragma warning(disable:4702) // Unreachable code (release mode only warning)
 #endif
 
-namespace boost { namespace math { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
   template<class T, class Policy>
   T polygamma_atinfinityplus(const int n, const T& x, const Policy& pol, const char* function) // for large values of x such as for x> 400
@@ -57,9 +57,9 @@ namespace boost { namespace math { namespace detail{
         if(n == 1) return 1 / x;
         T nlx = n * log(x);
         if((nlx < tools::log_max_value<T>()) && (n < (int)max_factorial<T>::value))
-           return ((n & 1) ? 1 : -1) * boost::math::factorial<T>(n - 1, pol) * static_cast<T>(pow(x, T(-n)));
+           return ((n & 1) ? 1 : -1) * BOOST_MATH_NAMESPACE::factorial<T>(n - 1, pol) * static_cast<T>(pow(x, T(-n)));
         else
-         return ((n & 1) ? 1 : -1) * exp(boost::math::lgamma(T(n), pol) - n * log(x));
+         return ((n & 1) ? 1 : -1) * exp(BOOST_MATH_NAMESPACE::lgamma(T(n), pol) - n * log(x));
      }
      T term, sum, part_term;
      T x_squared = x * x;
@@ -83,15 +83,15 @@ namespace boost { namespace math { namespace detail{
      // or the power term underflows, this just gets set to 0 and then we
      // know that we have to use logs for the initial terms:
      //
-     part_term = ((n > (int)boost::math::max_factorial<T>::value) && (T(n) * n > tools::log_max_value<T>()))
-        ? T(0) : static_cast<T>(boost::math::factorial<T>(n - 1, pol) * pow(x, T(-n - 1)));
+     part_term = ((n > (int)BOOST_MATH_NAMESPACE::max_factorial<T>::value) && (T(n) * n > tools::log_max_value<T>()))
+        ? T(0) : static_cast<T>(BOOST_MATH_NAMESPACE::factorial<T>(n - 1, pol) * pow(x, T(-n - 1)));
      if(part_term == 0)
      {
         // Either n is very large, or the power term underflows,
         // set the initial values of part_term, term and sum via logs:
-        part_term = static_cast<T>(T(boost::math::lgamma(n, pol)) - (n + 1) * log(x));
-        sum = exp(part_term + log(n + 2 * x) - boost::math::constants::ln_two<T>());
-        part_term += log(T(n) * (n + 1)) - boost::math::constants::ln_two<T>() - log(x);
+        part_term = static_cast<T>(T(BOOST_MATH_NAMESPACE::lgamma(n, pol)) - (n + 1) * log(x));
+        sum = exp(part_term + log(n + 2 * x) - BOOST_MATH_NAMESPACE::constants::ln_two<T>());
+        part_term += log(T(n) * (n + 1)) - BOOST_MATH_NAMESPACE::constants::ln_two<T>() - log(x);
         part_term = exp(part_term);
      }
      else
@@ -108,7 +108,7 @@ namespace boost { namespace math { namespace detail{
 
      for(unsigned k = 1;;)
      {
-        term = part_term * boost::math::bernoulli_b2n<T>(k, pol);
+        term = part_term * BOOST_MATH_NAMESPACE::bernoulli_b2n<T>(k, pol);
         sum += term;
         //
         // Normal termination condition:
@@ -167,13 +167,13 @@ namespace boost { namespace math { namespace detail{
           sum0 += z_plus_k_pow_minus_m_minus_one;
           z += 1;
        }
-       sum0 *= boost::math::factorial<T>(n, pol);
+       sum0 *= BOOST_MATH_NAMESPACE::factorial<T>(n, pol);
     }
     else
     {
        for(int k = 1; k <= iter; ++k)
        {
-          T log_term = log(z) * minus_m_minus_one + boost::math::lgamma(T(n + 1), pol);
+          T log_term = log(z) * minus_m_minus_one + BOOST_MATH_NAMESPACE::lgamma(T(n + 1), pol);
           sum0 += exp(log_term);
           z += 1;
        }
@@ -196,7 +196,7 @@ namespace boost { namespace math { namespace detail{
      //
      // In order to avoid spurious overflow, save the n! term for later, and rescale at the end:
      //
-     T scale = boost::math::factorial<T>(n, pol);
+     T scale = BOOST_MATH_NAMESPACE::factorial<T>(n, pol);
      //
      // "factorial_part" contains everything except the zeta function
      // evaluations in each term:
@@ -209,7 +209,7 @@ namespace boost { namespace math { namespace detail{
      //
      T prefix = static_cast<T>(pow(x, T(n + 1)));  // Warning supression: Integer power returns at least a double
      if(prefix == 0)
-        return boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
+        return BOOST_MATH_NAMESPACE::policies::raise_overflow_error<T>(function, nullptr, pol);
      prefix = 1 / prefix;
      //
      // First term in the series is necessarily < zeta(2) < 2, so
@@ -229,10 +229,10 @@ namespace boost { namespace math { namespace detail{
      for(unsigned k = 0;;)
      {
         // Get the k'th term:
-        T term = factorial_part * boost::math::zeta(T(k + n + 1), pol);
+        T term = factorial_part * BOOST_MATH_NAMESPACE::zeta(T(k + n + 1), pol);
         sum += term;
         // Termination condition:
-        if(fabs(term) < fabs(sum * boost::math::policies::get_epsilon<T, Policy>()))
+        if(fabs(term) < fabs(sum * BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>()))
            break;
         //
         // Move on k and factorial_part:
@@ -248,8 +248,8 @@ namespace boost { namespace math { namespace detail{
      //
      // We need to multiply by the scale, at each stage checking for overflow:
      //
-     if(boost::math::tools::max_value<T>() / scale < sum)
-        return boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
+     if(BOOST_MATH_NAMESPACE::tools::max_value<T>() / scale < sum)
+        return BOOST_MATH_NAMESPACE::policies::raise_overflow_error<T>(function, nullptr, pol);
      sum *= scale;
      return n & 1 ? sum : T(-sum);
   }
@@ -297,106 +297,106 @@ namespace boost { namespace math { namespace detail{
      // subscripting the tables in the calculation, but halves the storage space
      // (and complexity for that matter).
      //
-     T s = fabs(x) < fabs(xc) ? boost::math::sin_pi(x, pol) : boost::math::sin_pi(xc, pol);
-     T c = boost::math::cos_pi(x, pol);
+     T s = fabs(x) < fabs(xc) ? BOOST_MATH_NAMESPACE::sin_pi(x, pol) : BOOST_MATH_NAMESPACE::sin_pi(xc, pol);
+     T c = BOOST_MATH_NAMESPACE::cos_pi(x, pol);
      switch(n)
      {
      case 1:
         return -constants::pi<T, Policy>() / (s * s);
      case 2:
      {
-        return 2 * constants::pi<T, Policy>() * constants::pi<T, Policy>() * c / boost::math::pow<3>(s, pol);
+        return 2 * constants::pi<T, Policy>() * constants::pi<T, Policy>() * c / BOOST_MATH_NAMESPACE::pow<3>(s, pol);
      }
      case 3:
      {
         constexpr int P[] = { -2, -4 };
-        return boost::math::pow<3>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<4>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<3>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<4>(s, pol);
      }
      case 4:
      {
         constexpr int P[] = { 16, 8 };
-        return boost::math::pow<4>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<5>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<4>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<5>(s, pol);
      }
      case 5:
      {
         constexpr int P[] = { -16, -88, -16 };
-        return boost::math::pow<5>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<6>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<5>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<6>(s, pol);
      }
      case 6:
      {
         constexpr int P[] = { 272, 416, 32 };
-        return boost::math::pow<6>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<7>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<6>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<7>(s, pol);
      }
      case 7:
      {
         constexpr int P[] = { -272, -2880, -1824, -64 };
-        return boost::math::pow<7>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<8>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<7>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<8>(s, pol);
      }
      case 8:
      {
         constexpr int P[] = { 7936, 24576, 7680, 128 };
-        return boost::math::pow<8>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<9>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<8>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<9>(s, pol);
      }
      case 9:
      {
         constexpr int P[] = { -7936, -137216, -185856, -31616, -256 };
-        return boost::math::pow<9>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<10>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<9>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<10>(s, pol);
      }
      case 10:
      {
         constexpr int P[] = { 353792, 1841152, 1304832, 128512, 512 };
-        return boost::math::pow<10>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<11>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<10>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<11>(s, pol);
      }
      case 11:
      {
         constexpr int P[] = { -353792, -9061376, -21253376, -8728576, -518656, -1024};
-        return boost::math::pow<11>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<12>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<11>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<12>(s, pol);
      }
      case 12:
      {
         constexpr int P[] = { 22368256, 175627264, 222398464, 56520704, 2084864, 2048 };
-        return boost::math::pow<12>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<13>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<12>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<13>(s, pol);
      }
 #ifndef BOOST_NO_LONG_LONG
      case 13:
      {
         constexpr long long P[] = { -22368256LL, -795300864LL, -2868264960LL, -2174832640LL, -357888000LL, -8361984LL, -4096 };
-        return boost::math::pow<13>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<14>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<13>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<14>(s, pol);
      }
      case 14:
      {
         constexpr long long P[] = { 1903757312LL, 21016670208LL, 41731645440LL, 20261765120LL, 2230947840LL, 33497088LL, 8192 };
-        return boost::math::pow<14>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<15>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<14>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<15>(s, pol);
      }
      case 15:
      {
         constexpr long long P[] = { -1903757312LL, -89702612992LL, -460858269696LL, -559148810240LL, -182172651520LL, -13754155008LL, -134094848LL, -16384 };
-        return boost::math::pow<15>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<16>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<15>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<16>(s, pol);
      }
      case 16:
      {
         constexpr long long P[] = { 209865342976LL, 3099269660672LL, 8885192097792LL, 7048869314560LL, 1594922762240LL, 84134068224LL, 536608768LL, 32768 };
-        return boost::math::pow<16>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<17>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<16>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<17>(s, pol);
      }
      case 17:
      {
         constexpr long long P[] = { -209865342976LL, -12655654469632LL, -87815735738368LL, -155964390375424LL, -84842998005760LL, -13684856848384LL, -511780323328LL, -2146926592LL, -65536 };
-        return boost::math::pow<17>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<18>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<17>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<18>(s, pol);
      }
      case 18:
      {
         constexpr long long P[] = { 29088885112832LL, 553753414467584LL, 2165206642589696LL, 2550316668551168LL, 985278548541440LL, 115620218667008LL, 3100738912256LL, 8588754944LL, 131072 };
-        return boost::math::pow<18>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<19>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<18>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<19>(s, pol);
      }
      case 19:
      {
         constexpr long long P[] = { -29088885112832LL, -2184860175433728LL, -19686087844429824LL, -48165109676113920LL, -39471306959486976LL, -11124607890751488LL, -965271355195392LL, -18733264797696LL, -34357248000LL, -262144 };
-        return boost::math::pow<19>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<20>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<19>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<20>(s, pol);
      }
      case 20:
      {
         constexpr long long P[] = { 4951498053124096LL, 118071834535526400LL, 603968063567560704LL, 990081991141490688LL, 584901762421358592LL, 122829335169859584LL, 7984436548730880LL, 112949304754176LL, 137433710592LL, 524288 };
-        return boost::math::pow<20>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<21>(s, pol);
+        return BOOST_MATH_NAMESPACE::pow<20>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / BOOST_MATH_NAMESPACE::pow<21>(s, pol);
      }
 #endif
      }
@@ -452,7 +452,7 @@ namespace boost { namespace math { namespace detail{
         }
 
      }
-     T sum = boost::math::tools::evaluate_even_polynomial(&table[index][0], c, table[index].size());
+     T sum = BOOST_MATH_NAMESPACE::tools::evaluate_even_polynomial(&table[index][0], c, table[index].size());
      if(index & 1)
         sum *= c;  // First coefficient is order 1, and really an odd polynomial.
      if(sum == 0)
@@ -461,17 +461,17 @@ namespace boost { namespace math { namespace detail{
      // The remaining terms are computed using logs since the powers and factorials
      // get real large real quick:
      //
-     T power_terms = n * log(boost::math::constants::pi<T>());
+     T power_terms = n * log(BOOST_MATH_NAMESPACE::constants::pi<T>());
      if(s == 0)
-        return sum * boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
+        return sum * BOOST_MATH_NAMESPACE::policies::raise_overflow_error<T>(function, nullptr, pol);
      power_terms -= log(fabs(s)) * (n + 1);
-     power_terms += boost::math::lgamma(T(n), pol);
+     power_terms += BOOST_MATH_NAMESPACE::lgamma(T(n), pol);
      power_terms += log(fabs(sum));
 
-     if(power_terms > boost::math::tools::log_max_value<T>())
-        return sum * boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
+     if(power_terms > BOOST_MATH_NAMESPACE::tools::log_max_value<T>())
+        return sum * BOOST_MATH_NAMESPACE::policies::raise_overflow_error<T>(function, nullptr, pol);
 
-     return exp(power_terms) * ((s < 0) && ((n + 1) & 1) ? -1 : 1) * boost::math::sign(sum);
+     return exp(power_terms) * ((s < 0) && ((n + 1) & 1) ? -1 : 1) * BOOST_MATH_NAMESPACE::sign(sum);
   }
 
   template<class T, class Policy>
@@ -516,13 +516,13 @@ namespace boost { namespace math { namespace detail{
     }
     else if(x == 1)
     {
-       return (n & 1 ? 1 : -1) * boost::math::factorial<T>(n, pol) * boost::math::zeta(T(n + 1), pol);
+       return (n & 1 ? 1 : -1) * BOOST_MATH_NAMESPACE::factorial<T>(n, pol) * BOOST_MATH_NAMESPACE::zeta(T(n + 1), pol);
     }
     else if(x == 0.5f)
     {
-       T result = (n & 1 ? 1 : -1) * boost::math::factorial<T>(n, pol) * boost::math::zeta(T(n + 1), pol);
+       T result = (n & 1 ? 1 : -1) * BOOST_MATH_NAMESPACE::factorial<T>(n, pol) * BOOST_MATH_NAMESPACE::zeta(T(n + 1), pol);
        if(fabs(result) >= ldexp(tools::max_value<T>(), -n - 1))
-          return boost::math::sign(result) * policies::raise_overflow_error<T>(function, nullptr, pol);
+          return BOOST_MATH_NAMESPACE::sign(result) * policies::raise_overflow_error<T>(function, nullptr, pol);
        result *= ldexp(T(1), n + 1) - 1;
        return result;
     }
@@ -532,7 +532,7 @@ namespace boost { namespace math { namespace detail{
     }
   }
 
-} } } // namespace boost::math::detail
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail
 
 #ifdef _MSC_VER
 #pragma warning(pop)

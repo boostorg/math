@@ -13,7 +13,7 @@
 #endif
 #include <boost/math/special_functions/logaddexp.hpp>
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 // https://nhigham.com/2021/01/05/what-is-the-log-sum-exp-function/
 // See equation (#)
@@ -59,4 +59,4 @@ inline Real logsumexp(Args&& ...args)
     return logsumexp(list.begin(), list.end());
 }
 
-}} // Namespace boost::math
+BOOST_MATH_NAMESPACE_END

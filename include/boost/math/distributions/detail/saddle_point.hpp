@@ -20,7 +20,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
-namespace boost { namespace math { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
 // ln(n!) minus Stirling's approximation (n + 1/2) ln n - n + ln(2 pi)/2, for n above the point
 // where its Bernoulli series converges; that is minimum_argument_for_bernoulli_recursion, with a margin
@@ -60,7 +60,7 @@ inline RealType stirlerr(const RealType& n, const Policy& pol)
    for (int j = steps - 1; j >= 0; --j)
    {
       const RealType z = n + j;
-      sum += (z + RealType(0.5)) * boost::math::log1pmx(RealType(1 / z), pol) + 1 / (2 * z);
+      sum += (z + RealType(0.5)) * BOOST_MATH_NAMESPACE::log1pmx(RealType(1 / z), pol) + 1 / (2 * z);
    }
    return sum;
 }
@@ -78,8 +78,8 @@ inline RealType bd0(const RealType& mean, const RealType& k, const Policy& pol)
       const RealType v2 = v * v;
       RealType sum = (k - mean) * v;
       RealType term = 2 * k * v;
-      const boost::math::uintmax_t max_iterations = policies::get_max_series_iterations<Policy>();
-      for (boost::math::uintmax_t i = 1; i <= max_iterations; ++i)
+      const BOOST_MATH_NAMESPACE::uintmax_t max_iterations = policies::get_max_series_iterations<Policy>();
+      for (BOOST_MATH_NAMESPACE::uintmax_t i = 1; i <= max_iterations; ++i)
       {
          term *= v2;
          const RealType next = term / (2 * i + 1);
@@ -111,8 +111,8 @@ inline RealType bd0_ratio(const RealType& k, const RealType& a, const RealType& 
       const RealType v2 = v * v;
       RealType sum = diff / b * v;
       RealType term = 2 * k * v;
-      const boost::math::uintmax_t max_iterations = policies::get_max_series_iterations<Policy>();
-      for (boost::math::uintmax_t i = 1; i <= max_iterations; ++i)
+      const BOOST_MATH_NAMESPACE::uintmax_t max_iterations = policies::get_max_series_iterations<Policy>();
+      for (BOOST_MATH_NAMESPACE::uintmax_t i = 1; i <= max_iterations; ++i)
       {
          term *= v2;
          const RealType next = term / (2 * i + 1);
@@ -154,11 +154,11 @@ inline RealType log_binomial_pdf_saddle_point(const RealType& x, const RealType&
    }
    const RealType lc = stirlerr(n, pol) - stirlerr(x, pol) - stirlerr(RealType(n - x), pol)
                      - bd0(RealType(n * p), x, pol) - bd0(RealType(n * q), RealType(n - x), pol);
-   const RealType lf = log(constants::two_pi<RealType>()) + log(x) + boost::math::log1p(-x / n, pol);
+   const RealType lf = log(constants::two_pi<RealType>()) + log(x) + BOOST_MATH_NAMESPACE::log1p(-x / n, pol);
    return lc - lf / 2;
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HAS_GPU_SUPPORT
 

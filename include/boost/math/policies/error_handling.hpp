@@ -55,7 +55,7 @@
 // for example when policy macros are used to ignore errors rather than throw.
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 #ifndef BOOST_MATH_NO_EXCEPTIONS
 
@@ -108,7 +108,7 @@ namespace detail
 template <class T>
 inline std::string prec_format(const T& val)
 {
-   using prec_type = typename boost::math::policies::precision<T, boost::math::policies::policy<> >::type;
+   using prec_type = typename BOOST_MATH_NAMESPACE::policies::precision<T, BOOST_MATH_NAMESPACE::policies::policy<> >::type;
 
    std::stringstream strm { };
 
@@ -187,7 +187,7 @@ void raise_error(const char* pfunction, const char* message)
   std::string function(pfunction);
   std::string msg("Error in function ");
 #ifndef BOOST_MATH_NO_RTTI
-  replace_all_in_string(function, "%1%", boost::math::policies::detail::name_of<T>());
+  replace_all_in_string(function, "%1%", BOOST_MATH_NAMESPACE::policies::detail::name_of<T>());
 #else
   replace_all_in_string(function, "%1%", "Unknown");
 #endif
@@ -214,7 +214,7 @@ void raise_error(const char* pfunction, const char* pmessage, const T& val)
   std::string message(pmessage);
   std::string msg("Error in function ");
 #ifndef BOOST_MATH_NO_RTTI
-  replace_all_in_string(function, "%1%", boost::math::policies::detail::name_of<T>());
+  replace_all_in_string(function, "%1%", BOOST_MATH_NAMESPACE::policies::detail::name_of<T>());
 #else
   replace_all_in_string(function, "%1%", "Unknown");
 #endif
@@ -234,14 +234,14 @@ BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
            const char* function,
            const char* message,
            const T& val,
-           const ::boost::math::policies::domain_error< ::boost::math::policies::throw_on_error>&)
+           const ::BOOST_MATH_NAMESPACE::policies::domain_error< ::BOOST_MATH_NAMESPACE::policies::throw_on_error>&)
 {
 #ifdef BOOST_MATH_NO_EXCEPTIONS
    static_assert(sizeof(T) == 0, "Error handler called with throw_on_error and BOOST_MATH_NO_EXCEPTIONS set.");
 #else
    raise_error<std::domain_error, T>(function, message, val);
    // we never get here:
-   return boost::math::numeric_limits<T>::quiet_NaN();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::quiet_NaN();
 #endif
 }
 
@@ -250,11 +250,11 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_domain_error(
            const char* ,
            const char* ,
            const T& ,
-           const ::boost::math::policies::domain_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+           const ::BOOST_MATH_NAMESPACE::policies::domain_error< ::BOOST_MATH_NAMESPACE::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   return boost::math::numeric_limits<T>::quiet_NaN();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::quiet_NaN();
 }
 
 BOOST_MATH_EXPORT template <class T>
@@ -262,12 +262,12 @@ BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
            const char* ,
            const char* ,
            const T& ,
-           const ::boost::math::policies::domain_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
+           const ::BOOST_MATH_NAMESPACE::policies::domain_error< ::BOOST_MATH_NAMESPACE::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    errno = EDOM;
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
-   return boost::math::numeric_limits<T>::quiet_NaN();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::quiet_NaN();
 }
 
 BOOST_MATH_EXPORT template <class T>
@@ -275,7 +275,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
            const char* function,
            const char* message,
            const T& val,
-           const  ::boost::math::policies::domain_error< ::boost::math::policies::user_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::domain_error< ::BOOST_MATH_NAMESPACE::policies::user_error>&)
 {
    return user_domain_error(function, message, val);
 }
@@ -285,12 +285,12 @@ BOOST_MATH_GPU_ENABLED inline T raise_pole_error(
            const char* function,
            const char* message,
            const T& val,
-           const  ::boost::math::policies::pole_error< ::boost::math::policies::throw_on_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::pole_error< ::BOOST_MATH_NAMESPACE::policies::throw_on_error>&)
 {
 #ifdef BOOST_MATH_NO_EXCEPTIONS
    static_assert(sizeof(T) == 0, "Error handler called with throw_on_error and BOOST_MATH_NO_EXCEPTIONS set.");
 #else
-   return boost::math::policies::detail::raise_domain_error(function, message, val,  ::boost::math::policies::domain_error< ::boost::math::policies::throw_on_error>());
+   return BOOST_MATH_NAMESPACE::policies::detail::raise_domain_error(function, message, val,  ::BOOST_MATH_NAMESPACE::policies::domain_error< ::BOOST_MATH_NAMESPACE::policies::throw_on_error>());
 #endif
 }
 
@@ -299,9 +299,9 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_pole_error(
            const char* function,
            const char* message,
            const T& val,
-           const  ::boost::math::policies::pole_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::pole_error< ::BOOST_MATH_NAMESPACE::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
 {
-   return  ::boost::math::policies::detail::raise_domain_error(function, message, val,  ::boost::math::policies::domain_error< ::boost::math::policies::ignore_error>());
+   return  ::BOOST_MATH_NAMESPACE::policies::detail::raise_domain_error(function, message, val,  ::BOOST_MATH_NAMESPACE::policies::domain_error< ::BOOST_MATH_NAMESPACE::policies::ignore_error>());
 }
 
 BOOST_MATH_EXPORT template <class T>
@@ -309,9 +309,9 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_pole_error(
            const char* function,
            const char* message,
            const T& val,
-           const  ::boost::math::policies::pole_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::pole_error< ::BOOST_MATH_NAMESPACE::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
-   return  ::boost::math::policies::detail::raise_domain_error(function, message, val,  ::boost::math::policies::domain_error< ::boost::math::policies::errno_on_error>());
+   return  ::BOOST_MATH_NAMESPACE::policies::detail::raise_domain_error(function, message, val,  ::BOOST_MATH_NAMESPACE::policies::domain_error< ::BOOST_MATH_NAMESPACE::policies::errno_on_error>());
 }
 
 BOOST_MATH_EXPORT template <class T>
@@ -319,7 +319,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_pole_error(
            const char* function,
            const char* message,
            const T& val,
-           const  ::boost::math::policies::pole_error< ::boost::math::policies::user_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::pole_error< ::BOOST_MATH_NAMESPACE::policies::user_error>&)
 {
    return user_pole_error(function, message, val);
 }
@@ -328,14 +328,14 @@ BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* function,
            const char* message,
-           const  ::boost::math::policies::overflow_error< ::boost::math::policies::throw_on_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::overflow_error< ::BOOST_MATH_NAMESPACE::policies::throw_on_error>&)
 {
 #ifdef BOOST_MATH_NO_EXCEPTIONS
    static_assert(sizeof(T) == 0, "Error handler called with throw_on_error and BOOST_MATH_NO_EXCEPTIONS set.");
 #else
    raise_error<std::overflow_error, T>(function, message ? message : "numeric overflow");
    // We should never get here:
-   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::has_infinity ? BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity() : BOOST_MATH_NAMESPACE::tools::max_value<T>();
 #endif
 }
 
@@ -344,14 +344,14 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* function,
            const char* message,
            const T& val,
-           const ::boost::math::policies::overflow_error< ::boost::math::policies::throw_on_error>&)
+           const ::BOOST_MATH_NAMESPACE::policies::overflow_error< ::BOOST_MATH_NAMESPACE::policies::throw_on_error>&)
 {
 #ifdef BOOST_MATH_NO_EXCEPTIONS
    static_assert(sizeof(T) == 0, "Error handler called with throw_on_error and BOOST_MATH_NO_EXCEPTIONS set.");
 #else
    raise_error<std::overflow_error, T>(function, message ? message : "numeric overflow", val);
    // We should never get here:
-   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::has_infinity ? BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity() : BOOST_MATH_NAMESPACE::tools::max_value<T>();
 #endif
 }
 
@@ -359,11 +359,11 @@ BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
            const char* ,
            const char* ,
-           const  ::boost::math::policies::overflow_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::overflow_error< ::BOOST_MATH_NAMESPACE::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::has_infinity ? BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity() : BOOST_MATH_NAMESPACE::tools::max_value<T>();
 }
 
 BOOST_MATH_EXPORT template <class T>
@@ -371,23 +371,23 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
            const char* ,
            const char* ,
            const T&,
-           const  ::boost::math::policies::overflow_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::overflow_error< ::BOOST_MATH_NAMESPACE::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::has_infinity ? BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity() : BOOST_MATH_NAMESPACE::tools::max_value<T>();
 }
 
 BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* ,
            const char* ,
-           const  ::boost::math::policies::overflow_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::overflow_error< ::BOOST_MATH_NAMESPACE::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
-   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::has_infinity ? BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity() : BOOST_MATH_NAMESPACE::tools::max_value<T>();
 }
 
 BOOST_MATH_EXPORT template <class T>
@@ -395,21 +395,21 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* ,
            const char* ,
            const T&,
-           const  ::boost::math::policies::overflow_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::overflow_error< ::BOOST_MATH_NAMESPACE::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
-   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::has_infinity ? BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity() : BOOST_MATH_NAMESPACE::tools::max_value<T>();
 }
 
 BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* function,
            const char* message,
-           const  ::boost::math::policies::overflow_error< ::boost::math::policies::user_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::overflow_error< ::BOOST_MATH_NAMESPACE::policies::user_error>&)
 {
-   return user_overflow_error(function, message, boost::math::numeric_limits<T>::infinity());
+   return user_overflow_error(function, message, BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity());
 }
 
 BOOST_MATH_EXPORT template <class T>
@@ -417,20 +417,20 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
            const char* function,
            const char* message,
            const T& val,
-           const  ::boost::math::policies::overflow_error< ::boost::math::policies::user_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::overflow_error< ::BOOST_MATH_NAMESPACE::policies::user_error>&)
 {
    std::string m(message ? message : "");
    std::string sval = prec_format(val);
    replace_all_in_string(m, "%1%", sval.c_str());
 
-   return user_overflow_error(function, m.c_str(), boost::math::numeric_limits<T>::infinity());
+   return user_overflow_error(function, m.c_str(), BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity());
 }
 
 BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_underflow_error(
            const char* function,
            const char* message,
-           const  ::boost::math::policies::underflow_error< ::boost::math::policies::throw_on_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::underflow_error< ::BOOST_MATH_NAMESPACE::policies::throw_on_error>&)
 {
 #ifdef BOOST_MATH_NO_EXCEPTIONS
    static_assert(sizeof(T) == 0, "Error handler called with throw_on_error and BOOST_MATH_NO_EXCEPTIONS set.");
@@ -445,7 +445,7 @@ BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED constexpr T raise_underflow_error(
            const char* ,
            const char* ,
-           const  ::boost::math::policies::underflow_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::underflow_error< ::BOOST_MATH_NAMESPACE::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
@@ -456,7 +456,7 @@ BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_underflow_error(
            const char* /* function */,
            const char* /* message */,
-           const  ::boost::math::policies::underflow_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::underflow_error< ::BOOST_MATH_NAMESPACE::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
@@ -468,7 +468,7 @@ BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T raise_underflow_error(
            const char* function,
            const char* message,
-           const  ::boost::math::policies::underflow_error< ::boost::math::policies::user_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::underflow_error< ::BOOST_MATH_NAMESPACE::policies::user_error>&)
 {
    return user_underflow_error(function, message, T(0));
 }
@@ -478,7 +478,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_denorm_error(
            const char* function,
            const char* message,
            const T& /* val */,
-           const  ::boost::math::policies::denorm_error< ::boost::math::policies::throw_on_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::denorm_error< ::BOOST_MATH_NAMESPACE::policies::throw_on_error>&)
 {
 #ifdef BOOST_MATH_NO_EXCEPTIONS
    static_assert(sizeof(T) == 0, "Error handler called with throw_on_error and BOOST_MATH_NO_EXCEPTIONS set.");
@@ -494,7 +494,7 @@ BOOST_MATH_GPU_ENABLED inline constexpr T raise_denorm_error(
            const char* ,
            const char* ,
            const T&  val,
-           const  ::boost::math::policies::denorm_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::denorm_error< ::BOOST_MATH_NAMESPACE::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
@@ -506,7 +506,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_denorm_error(
            const char* ,
            const char* ,
            const T& val,
-           const  ::boost::math::policies::denorm_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::denorm_error< ::BOOST_MATH_NAMESPACE::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
@@ -519,7 +519,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_denorm_error(
            const char* function,
            const char* message,
            const T& val,
-           const  ::boost::math::policies::denorm_error< ::boost::math::policies::user_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::denorm_error< ::BOOST_MATH_NAMESPACE::policies::user_error>&)
 {
    return user_denorm_error(function, message, val);
 }
@@ -529,12 +529,12 @@ BOOST_MATH_GPU_ENABLED inline T raise_evaluation_error(
            const char* function,
            const char* message,
            const T& val,
-           const  ::boost::math::policies::evaluation_error< ::boost::math::policies::throw_on_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::evaluation_error< ::BOOST_MATH_NAMESPACE::policies::throw_on_error>&)
 {
 #ifdef BOOST_MATH_NO_EXCEPTIONS
    static_assert(sizeof(T) == 0, "Error handler called with throw_on_error and BOOST_MATH_NO_EXCEPTIONS set.");
 #else
-   raise_error<boost::math::evaluation_error, T>(function, message, val);
+   raise_error<BOOST_MATH_NAMESPACE::evaluation_error, T>(function, message, val);
    // we never get here:
    return T(0);
 #endif
@@ -545,7 +545,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_evaluation_error(
            const char* ,
            const char* ,
            const T& val,
-           const  ::boost::math::policies::evaluation_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::evaluation_error< ::BOOST_MATH_NAMESPACE::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
@@ -557,7 +557,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_evaluation_error(
            const char* ,
            const char* ,
            const T& val,
-           const  ::boost::math::policies::evaluation_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::evaluation_error< ::BOOST_MATH_NAMESPACE::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    errno = EDOM;
    // This may or may not do the right thing, but the user asked for the error
@@ -570,7 +570,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_evaluation_error(
            const char* function,
            const char* message,
            const T& val,
-           const  ::boost::math::policies::evaluation_error< ::boost::math::policies::user_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::evaluation_error< ::BOOST_MATH_NAMESPACE::policies::user_error>&)
 {
    return user_evaluation_error(function, message, val);
 }
@@ -581,12 +581,12 @@ BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
            const char* message,
            const T& val,
            const TargetType&,
-           const  ::boost::math::policies::rounding_error< ::boost::math::policies::throw_on_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::rounding_error< ::BOOST_MATH_NAMESPACE::policies::throw_on_error>&)
 {
 #ifdef BOOST_MATH_NO_EXCEPTIONS
    static_assert(sizeof(T) == 0, "Error handler called with throw_on_error and BOOST_MATH_NO_EXCEPTIONS set.");
 #else
-   raise_error<boost::math::rounding_error, T>(function, message, val);
+   raise_error<BOOST_MATH_NAMESPACE::rounding_error, T>(function, message, val);
    // we never get here:
    return TargetType(0);
 #endif
@@ -598,12 +598,12 @@ BOOST_MATH_GPU_ENABLED constexpr TargetType raise_rounding_error(
            const char* ,
            const T& val,
            const TargetType&,
-           const  ::boost::math::policies::rounding_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::rounding_error< ::BOOST_MATH_NAMESPACE::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   static_assert(boost::math::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
-   return  val > 0 ? (boost::math::numeric_limits<TargetType>::max)() : (boost::math::numeric_limits<TargetType>::is_integer ? (boost::math::numeric_limits<TargetType>::min)() : -(boost::math::numeric_limits<TargetType>::max)());
+   static_assert(BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
+   return  val > 0 ? (BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::max)() : (BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::is_integer ? (BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::min)() : -(BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::max)());
 }
 
 BOOST_MATH_EXPORT template <class T, class TargetType>
@@ -612,13 +612,13 @@ BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
            const char* ,
            const T& val,
            const TargetType&,
-           const  ::boost::math::policies::rounding_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
+           const  ::BOOST_MATH_NAMESPACE::policies::rounding_error< ::BOOST_MATH_NAMESPACE::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
-   static_assert(boost::math::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
-   return  val > 0 ? (boost::math::numeric_limits<TargetType>::max)() : (boost::math::numeric_limits<TargetType>::is_integer ? (boost::math::numeric_limits<TargetType>::min)() : -(boost::math::numeric_limits<TargetType>::max)());
+   static_assert(BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
+   return  val > 0 ? (BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::max)() : (BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::is_integer ? (BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::min)() : -(BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::max)());
 }
 BOOST_MATH_EXPORT template <class T, class TargetType>
 BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
@@ -626,7 +626,7 @@ BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
            const char* message,
            const T& val,
            const TargetType& t,
-           const  ::boost::math::policies::rounding_error< ::boost::math::policies::user_error>&)
+           const  ::BOOST_MATH_NAMESPACE::policies::rounding_error< ::BOOST_MATH_NAMESPACE::policies::user_error>&)
 {
    return user_rounding_error(function, message, val, t);
 }
@@ -637,14 +637,14 @@ BOOST_MATH_GPU_ENABLED inline T raise_indeterminate_result_error(
            const char* message,
            const T& val,
            const R& ,
-           const ::boost::math::policies::indeterminate_result_error< ::boost::math::policies::throw_on_error>&)
+           const ::BOOST_MATH_NAMESPACE::policies::indeterminate_result_error< ::BOOST_MATH_NAMESPACE::policies::throw_on_error>&)
 {
 #ifdef BOOST_MATH_NO_EXCEPTIONS
    static_assert(sizeof(T) == 0, "Error handler called with throw_on_error and BOOST_MATH_NO_EXCEPTIONS set.");
 #else
    raise_error<std::domain_error, T>(function, message, val);
    // we never get here:
-   return boost::math::numeric_limits<T>::quiet_NaN();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::quiet_NaN();
 #endif
 }
 
@@ -654,7 +654,7 @@ BOOST_MATH_GPU_ENABLED inline constexpr T raise_indeterminate_result_error(
            const char* ,
            const T& ,
            const R& result,
-           const ::boost::math::policies::indeterminate_result_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+           const ::BOOST_MATH_NAMESPACE::policies::indeterminate_result_error< ::BOOST_MATH_NAMESPACE::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
@@ -667,7 +667,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_indeterminate_result_error(
            const char* ,
            const T& ,
            const R& result,
-           const ::boost::math::policies::indeterminate_result_error< ::boost::math::policies::errno_on_error>&)
+           const ::BOOST_MATH_NAMESPACE::policies::indeterminate_result_error< ::BOOST_MATH_NAMESPACE::policies::errno_on_error>&)
 {
    errno = EDOM;
    // This may or may not do the right thing, but the user asked for the error
@@ -681,7 +681,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_indeterminate_result_error(
            const char* message,
            const T& val,
            const R& ,
-           const ::boost::math::policies::indeterminate_result_error< ::boost::math::policies::user_error>&)
+           const ::BOOST_MATH_NAMESPACE::policies::indeterminate_result_error< ::BOOST_MATH_NAMESPACE::policies::user_error>&)
 {
    return user_indeterminate_result_error(function, message, val);
 }
@@ -782,7 +782,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_overflow(T val, R* resu
    BOOST_MATH_STD_USING
    if(fabs(val) > tools::max_value<R>())
    {
-      boost::math::policies::detail::raise_overflow_error<R>(function, nullptr, pol);
+      BOOST_MATH_NAMESPACE::policies::detail::raise_overflow_error<R>(function, nullptr, pol);
       *result = static_cast<R>(val);
       return true;
    }
@@ -803,7 +803,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_underflow(T val, R* res
 {
    if((val != 0) && (static_cast<R>(val) == 0))
    {
-      *result = static_cast<R>(boost::math::policies::detail::raise_underflow_error<R>(function, nullptr, pol));
+      *result = static_cast<R>(BOOST_MATH_NAMESPACE::policies::detail::raise_underflow_error<R>(function, nullptr, pol));
       return true;
    }
    return false;
@@ -824,7 +824,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_denorm(T val, R* result
    BOOST_MATH_STD_USING
    if((fabs(val) < static_cast<T>(tools::min_value<R>())) && (static_cast<R>(val) != 0))
    {
-      *result = static_cast<R>(boost::math::policies::detail::raise_denorm_error<R>(function, 0, static_cast<R>(val), pol));
+      *result = static_cast<R>(BOOST_MATH_NAMESPACE::policies::detail::raise_denorm_error<R>(function, 0, static_cast<R>(val), pol));
       return true;
    }
    return false;
@@ -906,12 +906,11 @@ BOOST_MATH_GPU_ENABLED inline void check_root_iterations(const char* function, s
 #  pragma warning(pop)
 #endif
 
-}} // namespaces boost/math
+BOOST_MATH_NAMESPACE_END // namespaces boost/math
 
 #else // Special values for NVRTC
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace policies {
 
 BOOST_MATH_EXPORT template <class T, class Policy>
@@ -923,7 +922,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_domain_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   return boost::math::numeric_limits<T>::quiet_NaN();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::quiet_NaN();
 }
 
 BOOST_MATH_EXPORT template <class T, class Policy>
@@ -933,7 +932,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_pole_error(
            const T& val,
            const  Policy&) BOOST_MATH_NOEXCEPT(T)
 {
-   return boost::math::numeric_limits<T>::quiet_NaN();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::quiet_NaN();
 }
 
 BOOST_MATH_EXPORT template <class T, class Policy>
@@ -944,7 +943,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : (boost::math::numeric_limits<T>::max)();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::has_infinity ? BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity() : (BOOST_MATH_NAMESPACE::numeric_limits<T>::max)();
 }
 
 BOOST_MATH_EXPORT template <class T, class Policy>
@@ -956,7 +955,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : (boost::math::numeric_limits<T>::max)();
+   return BOOST_MATH_NAMESPACE::numeric_limits<T>::has_infinity ? BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity() : (BOOST_MATH_NAMESPACE::numeric_limits<T>::max)();
 }
 
 BOOST_MATH_EXPORT template <class T, class Policy>
@@ -1004,8 +1003,8 @@ BOOST_MATH_GPU_ENABLED constexpr TargetType raise_rounding_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   static_assert(boost::math::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
-   return  val > 0 ? (boost::math::numeric_limits<TargetType>::max)() : (boost::math::numeric_limits<TargetType>::is_integer ? (boost::math::numeric_limits<TargetType>::min)() : -(boost::math::numeric_limits<TargetType>::max)());
+   static_assert(BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
+   return  val > 0 ? (BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::max)() : (BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::is_integer ? (BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::min)() : -(BOOST_MATH_NAMESPACE::numeric_limits<TargetType>::max)());
 }
 
 BOOST_MATH_EXPORT template <class T, class R, class Policy>
@@ -1022,14 +1021,14 @@ BOOST_MATH_GPU_ENABLED inline constexpr T raise_indeterminate_result_error(
 }
 
 BOOST_MATH_EXPORT template <class R, class Policy, class T>
-BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE R checked_narrowing_cast(T val, const char* function) noexcept(boost::math::is_floating_point_v<R> && boost::math::is_floating_point_v<T>)
+BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE R checked_narrowing_cast(T val, const char* function) noexcept(BOOST_MATH_NAMESPACE::is_floating_point_v<R> && BOOST_MATH_NAMESPACE::is_floating_point_v<T>)
 {
    // We only have ignore error policy so no reason to check
    return static_cast<R>(val);
 }
 
 BOOST_MATH_EXPORT template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline void check_series_iterations(const char* function, boost::math::uintmax_t max_iter, const Policy& pol) noexcept(boost::math::is_floating_point_v<T>)
+BOOST_MATH_GPU_ENABLED inline void check_series_iterations(const char* function, BOOST_MATH_NAMESPACE::uintmax_t max_iter, const Policy& pol) noexcept(BOOST_MATH_NAMESPACE::is_floating_point_v<T>)
 {
    if(max_iter >= policies::get_max_series_iterations<Policy>())
       raise_evaluation_error<T>(
@@ -1038,7 +1037,7 @@ BOOST_MATH_GPU_ENABLED inline void check_series_iterations(const char* function,
 }
 
 BOOST_MATH_EXPORT template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline void check_root_iterations(const char* function, boost::math::uintmax_t max_iter, const Policy& pol) noexcept(boost::math::is_floating_point_v<T>)
+BOOST_MATH_GPU_ENABLED inline void check_root_iterations(const char* function, BOOST_MATH_NAMESPACE::uintmax_t max_iter, const Policy& pol) noexcept(BOOST_MATH_NAMESPACE::is_floating_point_v<T>)
 {
    if(max_iter >= policies::get_max_root_iterations<Policy>())
       raise_evaluation_error<T>(
@@ -1047,24 +1046,23 @@ BOOST_MATH_GPU_ENABLED inline void check_root_iterations(const char* function, b
 }
 
 } // namespace policies
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HAS_NVRTC
 
-namespace boost { namespace math { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
 //
 // Simple helper function to assist in returning a pair from a single value,
 // that value usually comes from one of the error handlers above:
 //
 template <class T>
-BOOST_MATH_GPU_ENABLED boost::math::pair<T, T> pair_from_single(const T& val) BOOST_MATH_NOEXCEPT(T)
+BOOST_MATH_GPU_ENABLED BOOST_MATH_NAMESPACE::pair<T, T> pair_from_single(const T& val) BOOST_MATH_NOEXCEPT(T)
 {
-   return boost::math::make_pair(val, val);
+   return BOOST_MATH_NAMESPACE::make_pair(val, val);
 }
 
-}}} // boost::math::detail
+} BOOST_MATH_NAMESPACE_END // boost::math::detail
 
 #endif // BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 

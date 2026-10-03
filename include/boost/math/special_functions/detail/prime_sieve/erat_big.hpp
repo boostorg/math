@@ -25,7 +25,7 @@
 #include <utility>
 #endif
 
-namespace boost::math::detail::prime_sieve {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail::prime_sieve {
 
 inline constexpr std::size_t bucket_bytes {8192};
 
@@ -156,7 +156,7 @@ public:
             return;
         }
         sieve_bytes_ = sieve_bytes;
-        log2_sieve_bytes_ = static_cast<unsigned>(63 - boost::math::tools::countl_zero(sieve_bytes));
+        log2_sieve_bytes_ = static_cast<unsigned>(63 - BOOST_MATH_NAMESPACE::tools::countl_zero(sieve_bytes));
         mask_ = sieve_bytes - 1;
         // Enough lists for the largest possible jump: 10 wheel steps of the largest prime
         const std::size_t lists {static_cast<std::size_t>(((max_prime / 30 + 1) * 10 + sieve_bytes) / sieve_bytes) + 2};
@@ -268,6 +268,6 @@ private:
     bool enabled_ {false};
 };
 
-} // namespace boost::math::detail::prime_sieve
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::detail::prime_sieve
 
 #endif // BOOST_MATH_SF_DETAIL_PRIME_SIEVE_ERAT_BIG_HPP

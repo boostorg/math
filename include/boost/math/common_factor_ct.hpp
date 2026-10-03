@@ -11,22 +11,19 @@
 #define BOOST_MATH_COMMON_FACTOR_CT_HPP
 
 #ifndef BOOST_MATH_STANDALONE
+#include <boost/math/tools/config.hpp>
 #include <boost/integer/common_factor_ct.hpp>
 #include <boost/math/tools/header_deprecated.hpp>
 
 BOOST_MATH_HEADER_DEPRECATED("<boost/integer/common_factor_ct.hpp>");
 
-namespace boost
-{
-namespace math
-{
+BOOST_MATH_NAMESPACE_BEGIN
 
    using boost::integer::static_gcd;
    using boost::integer::static_lcm;
    using boost::integer::static_gcd_type;
 
-}  // namespace math
-}  // namespace boost
+BOOST_MATH_NAMESPACE_END
 #else
 #error Common factor is not available in standalone mode because it requires boost.integer.
 #endif // BOOST_MATH_STANDALONE
