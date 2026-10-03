@@ -221,14 +221,14 @@ BOOST_MATH_GPU_ENABLED T lbeta_imp(T a, T b, const Lanczos&, const Policy& pol)
    BOOST_MATH_STD_USING  // for ADL of std names
 
    // Reject NaN before any comparison sends it down a branch meant for ordered arguments:
-   if((boost::math::isnan)(a) || (boost::math::isnan)(b))
-      return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must not be NaN (got %1%).", (boost::math::isnan)(a) ? a : b, pol);
+   if((BOOST_MATH_NAMESPACE::isnan)(a) || (BOOST_MATH_NAMESPACE::isnan)(b))
+      return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must not be NaN (got %1%).", (BOOST_MATH_NAMESPACE::isnan)(a) ? a : b, pol);
    if(a <= 0)
       return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got a=%1%).", a, pol);
    if(b <= 0)
       return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got b=%1%).", b, pol);
    // log(beta(a, b)) tends to -infinity when either argument does:
-   if((boost::math::isinf)(a) || (boost::math::isinf)(b))
+   if((BOOST_MATH_NAMESPACE::isinf)(a) || (BOOST_MATH_NAMESPACE::isinf)(b))
       return -policies::raise_overflow_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", nullptr, pol);
 
    T c = a + b;
@@ -255,7 +255,7 @@ BOOST_MATH_GPU_ENABLED T lbeta_imp(T a, T b, const Lanczos&, const Policy& pol)
    T bgh = static_cast<T>(b + Lanczos::g() - 0.5f);
    T cgh = static_cast<T>(c + Lanczos::g() - 0.5f);
    T result = log(Lanczos::lanczos_sum_expG_scaled(a) * (Lanczos::lanczos_sum_expG_scaled(b) / Lanczos::lanczos_sum_expG_scaled(c)));
-   result += (a - T(0.5)) * boost::math::log1p(-b / cgh, pol);
+   result += (a - T(0.5)) * BOOST_MATH_NAMESPACE::log1p(-b / cgh, pol);
    result += b * log(bgh / cgh);
    result += (1 - log(bgh)) / 2;
    return result;
@@ -271,14 +271,14 @@ BOOST_MATH_GPU_ENABLED T lbeta_imp(T a, T b, const lanczos::undefined_lanczos& l
    BOOST_MATH_STD_USING
 
    // Reject NaN before any comparison sends it down a branch meant for ordered arguments:
-   if((boost::math::isnan)(a) || (boost::math::isnan)(b))
-      return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must not be NaN (got %1%).", (boost::math::isnan)(a) ? a : b, pol);
+   if((BOOST_MATH_NAMESPACE::isnan)(a) || (BOOST_MATH_NAMESPACE::isnan)(b))
+      return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must not be NaN (got %1%).", (BOOST_MATH_NAMESPACE::isnan)(a) ? a : b, pol);
    if(a <= 0)
       return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got a=%1%).", a, pol);
    if(b <= 0)
       return policies::raise_domain_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got b=%1%).", b, pol);
    // log(beta(a, b)) tends to -infinity when either argument does:
-   if((boost::math::isinf)(a) || (boost::math::isinf)(b))
+   if((BOOST_MATH_NAMESPACE::isinf)(a) || (BOOST_MATH_NAMESPACE::isinf)(b))
       return -policies::raise_overflow_error<T>("boost::math::lbeta<%1%>(%1%,%1%)", nullptr, pol);
 
    // Fix the argument order so that lbeta(a, b) == lbeta(b, a) exactly:
@@ -315,12 +315,12 @@ BOOST_MATH_GPU_ENABLED T lbeta_imp(T a, T b, const lanczos::undefined_lanczos& l
    if ((shift_a == 0) && (shift_b == 0))
    {
       // log of pow(a / c, a) * pow(b / c, b), with log1p for the larger argument, whose ratio is near one:
-      T power_terms = a < b ? a * log(a / c) + b * boost::math::log1p(-a / c, pol) : a * boost::math::log1p(-b / c, pol) + b * log(b / c);
+      T power_terms = a < b ? a * log(a / c) + b * BOOST_MATH_NAMESPACE::log1p(-a / c, pol) : a * BOOST_MATH_NAMESPACE::log1p(-b / c, pol) + b * log(b / c);
       return power_terms + log(scaled_tgamma_no_lanczos(a, pol) * (scaled_tgamma_no_lanczos(b, pol) / scaled_tgamma_no_lanczos(c, pol)));
    }
    else if ((a < 1) && (b < 1))
    {
-      return boost::math::lgamma(a, pol) + (boost::math::lgamma(b, pol) - boost::math::lgamma(c, pol));
+      return BOOST_MATH_NAMESPACE::lgamma(a, pol) + (BOOST_MATH_NAMESPACE::lgamma(b, pol) - BOOST_MATH_NAMESPACE::lgamma(c, pol));
    }
    else if((a < 1) || (b < 1) || (shift_a == 0) || (shift_b == 0))
    {
@@ -329,9 +329,9 @@ BOOST_MATH_GPU_ENABLED T lbeta_imp(T a, T b, const lanczos::undefined_lanczos& l
       // is about b^-a, which only a narrow exponent range can underflow; then fall back to recursion.
       T small_arg = a < b ? a : b;
       T large_arg = a < b ? b : a;
-      T ratio = boost::math::tgamma_delta_ratio(large_arg, small_arg, pol);
+      T ratio = BOOST_MATH_NAMESPACE::tgamma_delta_ratio(large_arg, small_arg, pol);
       if ((ratio >= tools::min_value<T>()) || (small_arg < 1))
-         return boost::math::lgamma(small_arg, pol) + log(ratio);
+         return BOOST_MATH_NAMESPACE::lgamma(small_arg, pol) + log(ratio);
    }
    else
    {
@@ -1938,7 +1938,7 @@ BOOST_MATH_EXPORT template <class RT1, class RT2>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2>::type
    lbeta(RT1 a, RT2 b)
 {
-   return boost::math::lbeta(a, b, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::lbeta(a, b, policies::policy<>());
 }
 
 BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
