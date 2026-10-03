@@ -33,6 +33,8 @@
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/quadrature/detail/quadrature_constant.hpp>
+#include <boost/math/special_functions/detail/orthogonal_polynomial.hpp>
+#include <boost/math/special_functions/hermite.hpp>
 
 namespace boost { namespace math { namespace quadrature { namespace detail {
 
@@ -41,164 +43,21 @@ namespace boost { namespace math { namespace quadrature { namespace detail {
 template <class Real, unsigned N, unsigned Category>
 class gauss_hermite_detail
 {
-   static_assert(N > 0, "Gauss-Hermite quadrature needs at least one point.");
-
-   // The nonnegative zeros of the Hermite polynomial H_N, in increasing order, and their weights.
-   // Everything is evaluated with the orthonormal recurrence
-   //    p_0 = pi^(-1/4),  p_{k+1} = x sqrt(2/(k+1)) p_k - sqrt(k/(k+1)) p_{k-1},
-   // whose values stay representable long after H_N itself overflows. Then p_N' = sqrt(2N) p_{N-1},
-   // p_N'' = 2x p_N' - 2N p_N, and the weight is 2/p_N'(x)^2. Evaluating H_N from its monomial
-   // coefficients instead would be hopelessly ill-conditioned: the largest zero of H_100 has
-   // condition number ~1e13.
-   //
-   // By Sturm's theorem for orthogonal polynomials, the number of sign changes in p_0(x), ..., p_N(x)
-   // is the number of zeros of p_N above x. Bisecting on that count isolates each zero, and Halley's
-   // method then converges to it inside its bracket. Asymptotic initial guesses alone are not enough:
-   // for N = 215, even Halley's method from those of Numerical Recipes' gauher finds the wrong zero.
-   struct recurrence
+   static const boost::math::detail::orthogonal_polynomial<Real, boost::math::detail::hermite_family<Real>>& polynomial()
    {
-      Real p;
-      Real p_prime;
-      unsigned zeros_above;
-   };
-
-   class orthonormal_hermite
-   {
-   public:
-      orthonormal_hermite() : a(N), b(N)
-      {
-         using std::sqrt;
-         for (unsigned k = 0; k < N; ++k)
-         {
-            a[k] = sqrt(Real(2) / Real(k + 1));
-            b[k] = sqrt(Real(k) / Real(k + 1));
-         }
-         p0 = 1 / sqrt(sqrt(boost::math::constants::pi<Real>()));
-         derivative_scale = sqrt(Real(2 * N));
-      }
-
-      recurrence operator()(const Real& x) const
-      {
-         Real p = p0;
-         Real p_previous = 0;
-         bool last_negative = false;
-         unsigned sign_changes = 0;
-         for (unsigned k = 0; k < N; ++k)
-         {
-            Real p_next = x * a[k] * p - b[k] * p_previous;
-            p_previous = p;
-            p = p_next;
-            // A zero p_k(x) lies between values of opposite sign, so skipping it keeps the count right.
-            if ((p != 0) && ((p < 0) != last_negative))
-            {
-               ++sign_changes;
-               last_negative = !last_negative;
-            }
-         }
-         return recurrence{ p, derivative_scale * p_previous, sign_changes };
-      }
-
-   private:
-      std::vector<Real> a;
-      std::vector<Real> b;
-      Real p0;
-      Real derivative_scale;
-   };
-
-   // The weight is 2/p_N'(x)^2 at the exact zero, but d(log w)/dx is about -4x, so evaluating it at
-   // the rounded zero z costs far more accuracy than the rounding itself. Use p'' to move p' to the
-   // exact zero, which lies a Newton step delta = -p/p' away.
-   static Real weight(const Real& z, const recurrence& r)
-   {
-      Real delta = -r.p / r.p_prime;
-      Real p_prime = r.p_prime + (2 * z * r.p_prime - 2 * Real(N) * r.p) * delta;
-      return 2 / (p_prime * p_prime);
-   }
-
-   static std::pair<std::vector<Real>, std::vector<Real> > calculate_values()
-   {
-      using std::abs;
-      using std::sqrt;
-      const unsigned positive_zeros = N / 2;
-      const unsigned offset = N & 1;
-      std::vector<Real> x(positive_zeros + offset), w(positive_zeros + offset);
-      const orthonormal_hermite evaluate;
-      // All zeros lie below sqrt(2N + 1), so none lie above `upper`. Every p_k grows with x beyond
-      // its zeros, so if the recurrence overflows anywhere we need it, it overflows here: report
-      // that with NaNs, which gauss_hermite turns into an evaluation error.
-      Real upper = sqrt(Real(2 * N + 2));
-      recurrence top = evaluate(upper);
-      if (!(boost::math::isfinite)(top.p) || !(boost::math::isfinite)(top.p_prime))
-      {
-         std::fill(x.begin(), x.end(), std::numeric_limits<Real>::quiet_NaN());
-         std::fill(w.begin(), w.end(), std::numeric_limits<Real>::quiet_NaN());
-         return std::make_pair(x, w);
-      }
-      if (offset)
-      {
-         w[0] = weight(Real(0), evaluate(Real(0)));
-      }
-      // Find the zeros from the largest down: after each one, `upper` is a point with exactly t - 1
-      // zeros above it.
-      for (unsigned t = 1; t <= positive_zeros; ++t)
-      {
-         Real lower = 0;
-         Real high = upper;
-         for (int i = 0; i < tools::digits<Real>(); ++i)
-         {
-            Real mid = (lower + high) / 2;
-            unsigned above = evaluate(mid).zeros_above;
-            if (above >= t)
-               lower = mid;
-            else
-               high = mid;
-            if (above == t)
-               break;
-         }
-         // Halley's method, falling back to bisection whenever a step would leave the bracket.
-         // With u = p/p' and v = p''/p' = 2z - 2N u, the step is u/(1 - uv/2); the ratios cannot
-         // overflow even where p'^2 would.
-         const bool lower_negative = evaluate(lower).p < 0;
-         Real z = (lower + high) / 2;
-         recurrence r = evaluate(z);
-         for (int i = 0; (r.p != 0) && (i < 4 * tools::digits<Real>()); ++i)
-         {
-            if ((r.p < 0) == lower_negative)
-               lower = z;
-            else
-               high = z;
-            Real u = r.p / r.p_prime;
-            Real v = 2 * z - 2 * Real(N) * u;
-            Real next = z - u / (1 - u * v / 2);
-            if (!((next > lower) && (next < high)))
-               next = (lower + high) / 2;
-            const bool converged = abs(next - z) <= 2 * tools::epsilon<Real>() * abs(next);
-            z = next;
-            r = evaluate(z);
-            if (converged)
-               break;
-         }
-         x[positive_zeros + offset - t] = z;
-         w[positive_zeros + offset - t] = weight(z, r);
-         upper = lower;
-      }
-      return std::make_pair(x, w);
-   }
-
-   static const std::pair<std::vector<Real>, std::vector<Real> >& values()
-   {
-      static const std::pair<std::vector<Real>, std::vector<Real> > data = calculate_values();
-      return data;
+      static const boost::math::detail::orthogonal_polynomial<Real, boost::math::detail::hermite_family<Real>> value(N);
+      return value;
    }
 
 public:
    static const std::vector<Real>& abscissa()
    {
-      return values().first;
+      return polynomial().abscissa();
    }
+
    static const std::vector<Real>& weights()
    {
-      return values().second;
+      return polynomial().weights();
    }
 };
 
