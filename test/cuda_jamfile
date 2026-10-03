@@ -261,6 +261,8 @@ run test_airy_bi_prime_float.cu ;
 
 run test_beta_double.cu ;
 run test_beta_float.cu ;
+run test_lbeta_double.cu ;
+run test_lbeta_float.cu ;
 run test_betac_double.cu ;
 run test_betac_float.cu ;
 run test_ibeta_double.cu ;

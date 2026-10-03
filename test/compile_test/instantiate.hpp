@@ -275,6 +275,7 @@ void instantiate(RealType)
    boost::math::erfc_inv(v1);
    boost::math::beta(v1, v2);
    boost::math::beta(v1, v2, v3);
+   boost::math::lbeta(v1, v2);
    boost::math::betac(v1, v2, v3);
    boost::math::ibeta(v1, v2, v3);
    boost::math::ibetac(v1, v2, v3);
@@ -556,6 +557,7 @@ void instantiate(RealType)
    boost::math::erfc_inv(v1 * 1);
    boost::math::beta(v1 * 1, v2 + 0);
    boost::math::beta(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::lbeta(v1 * 1, v2 + 0);
    boost::math::betac(v1 * 1, v2 + 0, v3 / 1);
    boost::math::ibeta(v1 * 1, v2 + 0, v3 / 1);
    boost::math::ibetac(v1 * 1, v2 + 0, v3 / 1);
@@ -809,6 +811,7 @@ void instantiate(RealType)
    boost::math::erfc_inv(v1, pol);
    boost::math::beta(v1, v2, pol);
    boost::math::beta(v1, v2, v3, pol);
+   boost::math::lbeta(v1, v2, pol);
    boost::math::betac(v1, v2, v3, pol);
    boost::math::ibeta(v1, v2, v3, pol);
    boost::math::ibetac(v1, v2, v3, pol);
@@ -1088,6 +1091,7 @@ void instantiate(RealType)
    test::erfc_inv(v1);
    test::beta(v1, v2);
    test::beta(v1, v2, v3);
+   test::lbeta(v1, v2);
    test::betac(v1, v2, v3);
    test::ibeta(v1, v2, v3);
    test::ibetac(v1, v2, v3);
@@ -1375,6 +1379,7 @@ void instantiate_mixed(RealType)
    }
    boost::math::erfc_inv(i);
    boost::math::beta(i, s);
+   boost::math::lbeta(i, s);
    boost::math::beta(fr, lr);
    boost::math::beta(i, s, l);
    boost::math::beta(fr, dr, lr);
@@ -1592,6 +1597,7 @@ void instantiate_mixed(RealType)
    }
    boost::math::erfc_inv(i, pol);
    boost::math::beta(i, s, pol);
+   boost::math::lbeta(i, s, pol);
    boost::math::beta(fr, lr, pol);
    boost::math::beta(i, s, l, pol);
    boost::math::beta(fr, dr, lr, pol);
@@ -1808,6 +1814,8 @@ void instantiate_mixed(RealType)
    test::erfc_inv(i);
    test::beta(i, s);
    test::beta(fr, lr);
+   test::lbeta(i, s);
+   test::lbeta(fr, lr);
    test::beta(i, s, l);
    test::beta(fr, dr, lr);
    test::betac(l, i, s);
