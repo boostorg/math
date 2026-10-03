@@ -97,10 +97,12 @@ int main(void)
     // check the results
     for(int i = 0; i < numElements; ++i)
     {
-        // The logarithm passes through zero, where relative error is meaningless, so compare absolutely there:
-        float_type error = std::fabs(results[i]) < 1
-            ? std::fabs(output_vector[i] - results[i]) / std::numeric_limits<float_type>::epsilon()
-            : boost::math::epsilon_difference(output_vector[i], results[i]);
+        // The logarithm is a difference of terms as large as a log(x) and x, so it carries an absolute error of
+        // a few eps times their size, on the host and the device alike: measure the difference against that size.
+        float_type a = input_vector1[i];
+        float_type x = input_vector2[i];
+        float_type scale = std::fmax(std::fmax(float_type(1), std::fabs(results[i])), std::fmax(x, std::fabs(a * std::log(x))));
+        float_type error = std::fabs(output_vector[i] - results[i]) / (std::numeric_limits<float_type>::epsilon() * scale);
         if (error > 300)
         {
             std::cerr << "Result verification failed at element " << i << "!" << std::endl;
