@@ -1357,12 +1357,12 @@ BOOST_MATH_NAMESPACE_BEGIN // Math functions (in roughly alphabetic order).
    ibetac(RT1 a, RT2 b, RT3 x){ return ::BOOST_MATH_NAMESPACE::ibetac(a, b, x, Policy()); }\
 \
    template <class RT1, class RT2, class RT3>\
-   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT1, RT2, RT3> \
-   libeta(RT1 a, RT2 b, RT3 x){ return ::boost::math::libeta(a, b, x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::tools::promote_args_t<RT1, RT2, RT3> \
+   libeta(RT1 a, RT2 b, RT3 x){ return ::BOOST_MATH_NAMESPACE::libeta(a, b, x, Policy()); }\
 \
    template <class RT1, class RT2, class RT3>\
-   BOOST_MATH_GPU_ENABLED inline boost::math::tools::promote_args_t<RT1, RT2, RT3> \
-   libetac(RT1 a, RT2 b, RT3 x){ return ::boost::math::libetac(a, b, x, Policy()); }\
+   BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::tools::promote_args_t<RT1, RT2, RT3> \
+   libetac(RT1 a, RT2 b, RT3 x){ return ::BOOST_MATH_NAMESPACE::libetac(a, b, x, Policy()); }\
 \
    template <class T1, class T2, class T3, class T4>\
    BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::tools::promote_args_t<T1, T2, T3, T4>  \

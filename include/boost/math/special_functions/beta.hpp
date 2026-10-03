@@ -1839,8 +1839,8 @@ BOOST_MATH_GPU_ENABLED T log_ibeta_power_terms(T a, T b, T x, T y, const Lanczos
    {
       if((l1 * l2 > 0) || (BOOST_MATH_GPU_SAFE_MIN(a, b) < 1))
       {
-         result += fabs(l1) < 0.1 ? T(a * boost::math::log1p(l1, pol)) : T(a * log((x * cgh) / agh));
-         result += fabs(l2) < 0.1 ? T(b * boost::math::log1p(l2, pol)) : T(b * log((y * cgh) / bgh));
+         result += fabs(l1) < 0.1 ? T(a * BOOST_MATH_NAMESPACE::log1p(l1, pol)) : T(a * log((x * cgh) / agh));
+         result += fabs(l2) < 0.1 ? T(b * BOOST_MATH_NAMESPACE::log1p(l2, pol)) : T(b * log((y * cgh) / bgh));
       }
       else if(BOOST_MATH_GPU_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
       {
@@ -1849,21 +1849,21 @@ BOOST_MATH_GPU_ENABLED T log_ibeta_power_terms(T a, T b, T x, T y, const Lanczos
          T ratio = b / a;
          if((small_a && (ratio * l2 < 0.1)) || (!small_a && (l1 / ratio > 0.1)))
          {
-            T l3 = boost::math::expm1(ratio * boost::math::log1p(l2, pol), pol);
+            T l3 = BOOST_MATH_NAMESPACE::expm1(ratio * BOOST_MATH_NAMESPACE::log1p(l2, pol), pol);
             l3 = l1 + l3 + l3 * l1;
-            result += a * boost::math::log1p(l3, pol);
+            result += a * BOOST_MATH_NAMESPACE::log1p(l3, pol);
          }
          else
          {
-            T l3 = boost::math::expm1(boost::math::log1p(l1, pol) / ratio, pol);
+            T l3 = BOOST_MATH_NAMESPACE::expm1(BOOST_MATH_NAMESPACE::log1p(l1, pol) / ratio, pol);
             l3 = l2 + l3 + l3 * l2;
-            result += b * boost::math::log1p(l3, pol);
+            result += b * BOOST_MATH_NAMESPACE::log1p(l3, pol);
          }
       }
       else if(fabs(l1) < fabs(l2))
-         result += a * boost::math::log1p(l1, pol) + b * log((y * cgh) / bgh);
+         result += a * BOOST_MATH_NAMESPACE::log1p(l1, pol) + b * log((y * cgh) / bgh);
       else
-         result += b * boost::math::log1p(l2, pol) + a * log((x * cgh) / agh);
+         result += b * BOOST_MATH_NAMESPACE::log1p(l2, pol) + a * log((x * cgh) / agh);
    }
    else
       result += a * log((x * cgh) / agh) + b * log((y * cgh) / bgh);
@@ -1872,7 +1872,7 @@ BOOST_MATH_GPU_ENABLED T log_ibeta_power_terms(T a, T b, T x, T y, const Lanczos
 
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T log_ibeta_power_terms(T a, T b, T x, T y, const boost::math::lanczos::undefined_lanczos& l, const Policy& pol)
+BOOST_MATH_GPU_ENABLED T log_ibeta_power_terms(T a, T b, T x, T y, const BOOST_MATH_NAMESPACE::lanczos::undefined_lanczos& l, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    // Only reached when the power terms underflow, which types without a Lanczos approximation, having
@@ -1892,9 +1892,9 @@ BOOST_MATH_GPU_ENABLED T libeta_imp(T a, T b, T x, const Policy& pol, bool inver
    const char* function = invert ? "boost::math::libetac<%1%>(%1%, %1%, %1%)" : "boost::math::libeta<%1%>(%1%, %1%, %1%)";
 
    // These checks also reject NaN arguments:
-   if(!(boost::math::isfinite)(a))
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(a))
       return policies::raise_domain_error<T>(function, "The argument a to the incomplete beta function must be finite (got a=%1%).", a, pol);
-   if(!(boost::math::isfinite)(b))
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(b))
       return policies::raise_domain_error<T>(function, "The argument b to the incomplete beta function must be finite (got b=%1%).", b, pol);
    if(!(0 <= x && x <= 1))
       return policies::raise_domain_error<T>(function, "The argument x to the incomplete beta function must be in [0,1] (got x=%1%).", x, pol);
@@ -1924,11 +1924,11 @@ BOOST_MATH_GPU_ENABLED T libeta_imp(T a, T b, T x, const Policy& pol, bool inver
    {
       T other = ibeta_imp(a, b, x, quiet_policy(), !invert, true, static_cast<T*>(nullptr));
       if(other <= 0.5f)
-         return boost::math::log1p(-other, pol);
+         return BOOST_MATH_NAMESPACE::log1p(-other, pol);
    }
    T target = ibeta_imp(a, b, x, quiet_policy(), invert, true, static_cast<T*>(nullptr));
    if(target > 0.5f)
-      return boost::math::log1p(-ibeta_imp(a, b, x, quiet_policy(), !invert, true, static_cast<T*>(nullptr)), pol);
+      return BOOST_MATH_NAMESPACE::log1p(-ibeta_imp(a, b, x, quiet_policy(), !invert, true, static_cast<T*>(nullptr)), pol);
    if(target >= tools::min_value<T>())
       return log(target);
 
@@ -1944,10 +1944,10 @@ BOOST_MATH_GPU_ENABLED T libeta_imp(T a, T b, T x, const Policy& pol, bool inver
    {
       // The fraction's first term is 0/0 here, but P = -expm1(b log1p(-x)) exactly, and since P underflows,
       // the argument of expm1 is far below epsilon, so log(P) = log(b) + log(-log1p(-x)) to full precision:
-      return log(b) + log(-boost::math::log1p(-x, pol));
+      return log(b) + log(-BOOST_MATH_NAMESPACE::log1p(-x, pol));
    }
    ibeta_fraction2_t<T> f(a, b, x, y);
-   boost::math::uintmax_t max_terms = policies::get_max_series_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t max_terms = policies::get_max_series_iterations<Policy>();
    T fract = tools::continued_fraction_b(f, policies::get_epsilon<T, Policy>(), max_terms);
    policies::check_series_iterations<T>(function, max_terms, pol);
    return log_ibeta_power_terms(a, b, x, y, lanczos_type(), pol) - log(fract);
@@ -2182,7 +2182,7 @@ BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<RT1, RT2, RT3>
    libeta(RT1 a, RT2 b, RT3 x)
 {
-   return boost::math::libeta(a, b, x, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::libeta(a, b, x, policies::policy<>());
 }
 
 BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3, class Policy>
@@ -2206,7 +2206,7 @@ BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
 BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<RT1, RT2, RT3>
    libetac(RT1 a, RT2 b, RT3 x)
 {
-   return boost::math::libetac(a, b, x, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::libetac(a, b, x, policies::policy<>());
 }
 BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type
