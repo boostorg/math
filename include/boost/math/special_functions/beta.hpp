@@ -1891,9 +1891,7 @@ BOOST_MATH_GPU_ENABLED T libeta_imp(T a, T b, T x, const Policy& pol, bool inver
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
    const char* function = invert ? "boost::math::libetac<%1%>(%1%, %1%, %1%)" : "boost::math::libeta<%1%>(%1%, %1%, %1%)";
 
-   // NaN in, NaN out, before any check or comparison:
-   if((boost::math::isnan)(a) || (boost::math::isnan)(b) || (boost::math::isnan)(x))
-      return a + b + x;
+   // These checks also reject NaN arguments:
    if(!(boost::math::isfinite)(a))
       return policies::raise_domain_error<T>(function, "The argument a to the incomplete beta function must be finite (got a=%1%).", a, pol);
    if(!(boost::math::isfinite)(b))
