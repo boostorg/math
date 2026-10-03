@@ -156,8 +156,7 @@ Returns the full (non-normalised) upper incomplete gamma function of a and z:
 
 Return the natural logarithms of `tgamma(a, z)` and `tgamma_lower(a, z)`. They stay finite and accurate where those
 overflow or underflow: for example `ligamma(1000, 1000)` is about 5905 in double precision, where `log(tgamma(1000, 1000))`
-raises an overflow error. Where the result is exactly zero, its logarithm, -infinity, is reported as an __overflow_error,
-and NaN arguments give NaN.
+raises an overflow error. Where the result is exactly zero, its logarithm, -infinity, is reported as an __overflow_error.
 
 [h4 Accuracy]
 

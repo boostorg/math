@@ -1883,14 +1883,12 @@ BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper)
    BOOST_MATH_STD_USING
    const char* function = upper ? "boost::math::ligamma<%1%>(%1%, %1%)" : "boost::math::ligamma_lower<%1%>(%1%, %1%)";
 
-   // NaN in, NaN out, before any check or comparison:
-   if((boost::math::isnan)(a) || (boost::math::isnan)(x))
-      return a + x;
+   // These checks also reject NaN arguments:
    if(!(boost::math::isfinite)(a))
       return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be finite (got a=%1%).", a, pol);
    if(a <= 0)
       return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
-   if(x < 0)
+   if(!(x >= 0))
       return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
 
    // At the ends of the range, the target is either the complete gamma function or zero:

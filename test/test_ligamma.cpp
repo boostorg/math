@@ -102,14 +102,19 @@ void test_spots(std::size_t ulps, Real absolute_tolerance)
       CHECK_EQUAL(Real(ligamma(Real(2.5), infinity, ignore_overflow())), Real(-infinity));
       CHECK_EQUAL(Real(ligamma_lower(Real(2.5), Real(0), ignore_overflow())), Real(-infinity));
    }
-   // NaN arguments give NaN, without raising an error:
+   // NaN arguments are domain errors; ignoring the error gives NaN:
    if (std::numeric_limits<Real>::has_quiet_NaN)
    {
+      using ignore_domain = boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error>>;
       const Real nan = std::numeric_limits<Real>::quiet_NaN();
-      CHECK_TRUE((boost::math::isnan)(Real(ligamma(nan, Real(2)))));
-      CHECK_TRUE((boost::math::isnan)(Real(ligamma(Real(2), nan))));
-      CHECK_TRUE((boost::math::isnan)(Real(ligamma_lower(nan, Real(2)))));
-      CHECK_TRUE((boost::math::isnan)(Real(ligamma_lower(Real(2), nan))));
+      CHECK_TRUE((boost::math::isnan)(Real(ligamma(nan, Real(2), ignore_domain()))));
+      CHECK_TRUE((boost::math::isnan)(Real(ligamma(Real(2), nan, ignore_domain()))));
+      CHECK_TRUE((boost::math::isnan)(Real(ligamma_lower(nan, Real(2), ignore_domain()))));
+      CHECK_TRUE((boost::math::isnan)(Real(ligamma_lower(Real(2), nan, ignore_domain()))));
+#ifndef BOOST_NO_EXCEPTIONS
+      CHECK_THROW(ligamma(nan, Real(2)), std::domain_error);
+      CHECK_THROW(ligamma_lower(Real(2), nan), std::domain_error);
+#endif
    }
 #ifndef BOOST_NO_EXCEPTIONS
    CHECK_THROW(ligamma_lower(Real(2), Real(0)), std::overflow_error);
