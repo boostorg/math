@@ -493,7 +493,7 @@ class gauss_hermite_detail<T, 15, 4>
 
 } // namespace detail
 
-template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
+template <class Real, unsigned N, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
 class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::quadrature_constant_category<Real>::value>
 {
    using base = detail::gauss_hermite_detail<Real, N, detail::quadrature_constant_category<Real>::value>;

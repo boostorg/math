@@ -1128,7 +1128,7 @@ public:
 
 }
 
-BOOST_MATH_EXPORT template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
+BOOST_MATH_EXPORT template <class Real, unsigned N, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
 class gauss_kronrod : public detail::gauss_kronrod_detail<Real, N, detail::quadrature_constant_category<Real>::value>
 {
    typedef detail::gauss_kronrod_detail<Real, N, detail::quadrature_constant_category<Real>::value> base;
