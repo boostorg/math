@@ -23,7 +23,7 @@
 #pragma warning(disable:4127)
 #endif
 
-namespace boost { namespace math{ namespace quadrature{ namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature{ namespace detail {
 
 #ifndef BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND
 

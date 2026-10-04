@@ -12,7 +12,7 @@
 #include <type_traits>
 #endif
 
-namespace boost { namespace math{ namespace quadrature{ namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature{ namespace detail {
 
 template <class T>
 struct quadrature_constant_category
@@ -54,9 +54,8 @@ struct quadrature_constant_category
       >;
 };
 
-}
-}
-}
-}
+} // namespace detail
+} // namespace quadrature
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_QUADRATURE_DETAIL_QUADRATURE_CONSTANT_HPP
