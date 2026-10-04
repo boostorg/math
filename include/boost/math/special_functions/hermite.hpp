@@ -87,6 +87,16 @@ public:
       return p0_value;
    }
 
+   unsigned num_roots() const
+   {  // Need to account for odd N having root at 0
+      return (N+1) / 2;
+   }
+
+   Real lower_bound() const
+   {
+      return 0;
+   }
+
    Real upper_bound() const
    {
       return sqrt(Real(2 * N + 2));
@@ -97,7 +107,7 @@ public:
       return a(k) * x * p + b(k) * p_previous;
    }
 
-   Real derivative(const Real& p_previous) const
+   Real derivative(const Real& x, const Real& p, const Real& p_previous) const
    {
       return derivative_scale * p_previous;
    }
@@ -145,7 +155,6 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    return BOOST_MATH_NAMESPACE::hermite(n, x, policies::policy<>());
 }
 
-
 BOOST_MATH_EXPORT template <class T, class Policy>
 inline std::vector<T> hermite_zeros(unsigned n, const Policy&)
 {
@@ -153,8 +162,8 @@ inline std::vector<T> hermite_zeros(unsigned n, const Policy&)
    std::vector<T> roots = evaluate.abscissa();
    return roots;
 }
-} // namespace math
-} // namespace boost
+
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SPECIAL_HERMITE_HPP
 

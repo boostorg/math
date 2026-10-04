@@ -14,12 +14,13 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#include <boost/math/special_functions/detail/orthogonal_polynomial.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
 
 // Recurrence relation for Laguerre polynomials:
 BOOST_MATH_EXPORT template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type  
+inline typename tools::promote_args<T1, T2, T3>::type
    laguerre_next(unsigned n, T1 x, T2 Ln, T3 Lnm1)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
@@ -50,7 +51,7 @@ T laguerre_imp(unsigned n, T x)
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type 
+inline typename tools::promote_args<T>::type
 laguerre(unsigned n, T x, const Policy&, const std::true_type&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -59,7 +60,7 @@ laguerre(unsigned n, T x, const Policy&, const std::true_type&)
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type 
+inline typename tools::promote_args<T>::type
    laguerre(unsigned n, unsigned m, T x, const std::false_type&)
 {
    return BOOST_MATH_NAMESPACE::laguerre(n, m, x, policies::policy<>());
@@ -68,7 +69,7 @@ inline typename tools::promote_args<T>::type
 } // namespace detail
 
 BOOST_MATH_EXPORT template <class T>
-inline typename tools::promote_args<T>::type 
+inline typename tools::promote_args<T>::type
    laguerre(unsigned n, T x)
 {
    return laguerre(n, x, policies::policy<>());
@@ -76,7 +77,7 @@ inline typename tools::promote_args<T>::type
 
 // Recurrence for associated polynomials:
 BOOST_MATH_EXPORT template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type  
+inline typename tools::promote_args<T1, T2, T3>::type
    laguerre_next(unsigned n, unsigned l, T1 x, T2 Pl, T3 Plm1)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
@@ -93,7 +94,7 @@ T laguerre_imp(unsigned n, unsigned m, T x, const Policy& pol)
       return BOOST_MATH_NAMESPACE::laguerre(n, x, pol);
 
    T p0 = 1;
-   
+
    if(n == 0)
       return p0;
 
@@ -113,7 +114,7 @@ T laguerre_imp(unsigned n, unsigned m, T x, const Policy& pol)
 }
 
 BOOST_MATH_EXPORT template <class T, class Policy>
-inline typename tools::promote_args<T>::type 
+inline typename tools::promote_args<T>::type
    laguerre(unsigned n, unsigned m, T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -122,11 +123,79 @@ inline typename tools::promote_args<T>::type
 }
 
 BOOST_MATH_EXPORT template <class T1, class T2>
-inline typename laguerre_result<T1, T2>::type 
+inline typename laguerre_result<T1, T2>::type
    laguerre(unsigned n, T1 m, T2 x)
 {
    typedef typename policies::is_policy<T2>::type tag_type;
    return detail::laguerre(n, m, x, tag_type());
+}
+
+namespace detail{
+
+template <class Real>
+class laguerre_family
+{
+public:
+   laguerre_family(unsigned n) : N(n) {}
+
+   Real p0() const
+   {
+      return 1;
+   }
+
+   Real lower_bound() const
+   {
+      return 0;
+   }
+
+   Real upper_bound() const
+   { // See https://mathoverflow.net/questions/251607/zeroes-of-laguerre-polynomials
+      return N + (N-1) * sqrt(N);
+   }
+
+   unsigned num_roots() const
+   {
+      return N;
+   }
+
+   Real next(const Real& x, const Real& p, const Real& p_previous, unsigned k) const
+   {
+      return ((2*k + 1 - x) * p - k * p_previous) / (k + 1);
+   }
+
+   Real derivative(const Real& x, const Real& p, const Real& p_previous) const
+   {
+      return N / x * (p - p_previous);
+   }
+
+   Real second_derivative(const Real& x, const Real& p, const Real& p_prime) const
+   {
+      return ((x-1) * p_prime - N * p) / x;;
+   }
+
+   Real second_derivative_ratio(const Real& x, const Real& p, const Real& p_prime) const
+   {
+      return (x-1) / x - N / x * p / p_prime;
+   }
+
+   Real weight(const Real& x, const Real& p, const Real& p_prime) const
+   {
+      Real delta = -p / p_prime;
+      Real p_prime_at_root = p_prime + second_derivative(x, p, p_prime) * delta;
+      return x / (p_prime_at_root * p_prime_at_root);
+   }
+
+private:
+   unsigned N;
+};
+}
+
+BOOST_MATH_EXPORT template <class T, class Policy>
+inline std::vector<T> laguerre_zeros(unsigned n, const Policy&)
+{
+   detail::orthogonal_polynomial<T, detail::laguerre_family<T> > evaluate(n);
+   std::vector<T> roots = evaluate.abscissa();
+   return roots;
 }
 
 BOOST_MATH_NAMESPACE_END
