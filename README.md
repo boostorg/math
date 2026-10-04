@@ -54,7 +54,7 @@ along with the incomplete gamma and beta functions (four variants of each)
 and all the possible inverses of these, plus the digamma, various factorial
 functions, Bessel functions, elliptic integrals, hypergeometrics, sinus cardinals
 (along with their hyperbolic variants), inverse hyperbolic functions,
-Legrendre/Laguerre/Hermite/Chebyshev polynomials
+Legendre/Laguerre/Hermite/Chebyshev polynomials
 and various special power and logarithmic functions.
 
 All the implementations are fully generic and support the use of arbitrary "real-number" types,
