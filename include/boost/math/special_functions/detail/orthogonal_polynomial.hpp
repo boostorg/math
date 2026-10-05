@@ -52,10 +52,10 @@ struct recurrence
    unsigned sign_changes;
 };
 
-class orthonormal_hermite
+class strum_counter
 {
 public:
-   orthonormal_hermite(unsigned n) : N(n), family(N) {}
+   strum_counter(unsigned n) : N(n), family(N) {}
 
    recurrence operator()(const Real& x) const
    {
@@ -121,16 +121,17 @@ std::pair<std::vector<Real>, std::vector<Real> > calculate_values()
 {
    using std::abs;
    using std::sqrt;
-   const orthonormal_hermite evaluate(N);
+   const strum_counter evaluate(N);
 
    const unsigned num_roots = evaluate.num_roots();
    unsigned interior_roots = num_roots;
    std::vector<Real> x(num_roots), w(num_roots);
-   // All zeros lie below upper_bound(), so none lie above `upper`. Every p_k grows with x beyond
-   // its zeros, so if the recurrence overflows anywhere we need it, it overflows here: report
-   // that with NaNs, which gauss_hermite turns into an evaluation error.
+
    Real upper = evaluate.upper_bound();
    Real lower = evaluate.lower_bound();
+   // All zeros lie below upper_bound(), so none lie above `upper`. Every p_k grows with x beyond
+   // its zeros, so if the recurrence overflows anywhere we need it, it overflows here: report
+   // that with NaNs, which turns into an evaluation error.
    recurrence top = evaluate(upper);
    if (!(boost::math::isfinite)(top.p) || !(boost::math::isfinite)(top.p_prime))
    {
@@ -146,6 +147,7 @@ std::pair<std::vector<Real>, std::vector<Real> > calculate_values()
       w[0] = evaluate.weight(lower, bottom.p, bottom.p_prime);
       interior_roots--;
    }
+   // Need to know whether the number of sign changes increases or decreases with x, to know which direction to bisect.
    const bool count_increases = top.sign_changes > bottom.sign_changes;
    // Find the zeros from the largest down, following the variation-count direction of this family.
    for (unsigned t = 1; t <= interior_roots; ++t)
@@ -203,7 +205,6 @@ std::pair<std::vector<Real>, std::vector<Real> > calculate_values()
    }
    return std::make_pair(x, w);
 }
-
 };
 
 } // namespace detail
