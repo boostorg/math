@@ -9,7 +9,9 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/laguerre.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/tools/test_value.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
 
@@ -44,8 +46,8 @@ void do_test_laguerre2(const T& data, const char* type_name, const char* test_na
    // test laguerre against data:
    //
    result = boost::math::tools::test_hetero<Real>(
-      data, 
-      bind_func_int1<Real>(funcp, 0, 1), 
+      data,
+      bind_func_int1<Real>(funcp, 0, 1),
       extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "laguerre(n, x)", test_name);
 
@@ -77,8 +79,8 @@ void do_test_laguerre3(const T& data, const char* type_name, const char* test_na
    // test laguerre against data:
    //
    result = boost::math::tools::test_hetero<Real>(
-      data, 
-      bind_func_int2<Real>(funcp, 0, 1, 2), 
+      data,
+      bind_func_int2<Real>(funcp, 0, 1, 2),
       extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "laguerre(n, m, x)", test_name);
    std::cout << std::endl;
@@ -93,7 +95,7 @@ void test_laguerre(T, const char* name)
    //
    // The contents are as follows, each row of data contains
    // three items, input value a, input value b and erf(a, b):
-   // 
+   //
 #  include "laguerre2.ipp"
 
    do_test_laguerre2<T>(laguerre2, name, "Laguerre Polynomials");
@@ -138,5 +140,20 @@ void test_spots(T, const char* t)
 
    BOOST_CHECK_EQUAL(::boost::math::laguerre(0, T(40)), T(1));
    BOOST_CHECK_EQUAL(::boost::math::laguerre(0, T(400)), T(1));
+}
+
+template <class T>
+void test_zeros(T tol, const char* t)
+{
+   std::cout << "Testing zeros of Laguerre polynomials for type " << t << std::endl;
+
+   unsigned N = 5;
+   std::vector<T> roots = boost::math::laguerre_zeros<T>(N);
+   // Values calculated via Mathematica to 115 digits of precision.
+   BOOST_CHECK_CLOSE_FRACTION(roots[0], BOOST_MATH_TEST_VALUE(T, 0.263560319718140910203061943360833334689007569905516927862615028383113143804688485388801428636768142471684891181097), tol);
+   BOOST_CHECK_CLOSE_FRACTION(roots[1], BOOST_MATH_TEST_VALUE(T, 1.413403059106516792218407980187557749539096004380880280554408297900742377592354294632071875549162504722547195499148), tol);
+   BOOST_CHECK_CLOSE_FRACTION(roots[2], BOOST_MATH_TEST_VALUE(T, 3.596425771040722081223186588782971665671150940710574538253074419444595035340244283770723676354534463586988774883226), tol);
+   BOOST_CHECK_CLOSE_FRACTION(roots[3], BOOST_MATH_TEST_VALUE(T, 7.085810005858837556922124181108086000385935670784940882578921655737736629317011861316381315331093202242780296517779), tol);
+   BOOST_CHECK_CLOSE_FRACTION(roots[4], BOOST_MATH_TEST_VALUE(T, 12.64080084427578265943321930656055124971480981421808737075098059853381281394570107489202170412844168697599884191874), tol);
 }
 

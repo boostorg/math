@@ -190,8 +190,8 @@ private:
 };
 }
 
-BOOST_MATH_EXPORT template <class T, class Policy>
-inline std::vector<T> laguerre_zeros(unsigned n, const Policy&)
+BOOST_MATH_EXPORT template <class T>
+inline std::vector<T> laguerre_zeros(unsigned n)
 {
    detail::orthogonal_polynomial<T, detail::laguerre_family<T> > evaluate(n);
    std::vector<T> roots = evaluate.abscissa();
