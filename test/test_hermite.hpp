@@ -119,8 +119,22 @@ void test_zeros(T tol, const char* t)
    unsigned n = 5;
    std::vector<T> roots = boost::math::hermite_zeros<T>(n);
 
+   // Values calculated via Mathematica to 115 digits of precision. There are analytic
+   // forms for n=5, but we use the Mathematica values to avoid any possible errors in the analytic forms.
    BOOST_CHECK(roots[0] == static_cast<T>(0.0));
    BOOST_CHECK_CLOSE_FRACTION(roots[1], BOOST_MATH_TEST_VALUE(T, 0.958572464613818507112770593892988318186088855258188531586143507302496033429132943021604997827459024608627911920236), tol);
    BOOST_CHECK_CLOSE_FRACTION(roots[2], BOOST_MATH_TEST_VALUE(T, 2.020182870456085632928724088144645147052232147465047392683263162405991380184033204210731765879926476113524974944731), tol);
+}
+
+template <class T>
+void test_zeros_large(T tol, const char* t)
+{
+   std::cout << "Testing large zeroes for type" << t << std::endl;
+
+   unsigned n = 51;
+   std::vector<T> roots = boost::math::hermite_zeros<T>(n);
+   BOOST_CHECK(roots[0] == static_cast<T>(0.0));
+   BOOST_CHECK_CLOSE_FRACTION(roots[1], BOOST_MATH_TEST_VALUE(T, 0.309591040937240381743948191151561479623957390823503743440212146918027604219155638736760608256983544297164436410560), tol);
+   BOOST_CHECK_CLOSE_FRACTION(roots[2], BOOST_MATH_TEST_VALUE(T, 0.619470849747152643678094222038018479995571650371683666801895611074480999643845365550174850892603373156948236224257), tol);
 }
 
