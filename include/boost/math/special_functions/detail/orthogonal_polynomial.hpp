@@ -18,7 +18,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
-namespace boost { namespace math { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
 template <class Real, class Family>
 class orthogonal_polynomial
@@ -208,7 +208,6 @@ std::pair<std::vector<Real>, std::vector<Real> > calculate_values()
 };
 
 } // namespace detail
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_DETAIL_ORTHOGONAL_POLYNOMIAL_HPP
