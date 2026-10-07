@@ -141,4 +141,7 @@ test_zeros_large<cpp_bin_float_100>(std::numeric_limits<cpp_bin_float_100>::epsi
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_zeros_large(boost::math::concepts::real_concept(2e-19), "real_concept");
 #endif
+
+test_zeros_accuracy(std::numeric_limits<double>::epsilon(), "double");
+test_zero_special_case<double>();
 }

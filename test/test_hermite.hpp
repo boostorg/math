@@ -138,3 +138,56 @@ void test_zeros_large(T tol, const char* t)
    BOOST_CHECK_CLOSE_FRACTION(roots[2], BOOST_MATH_TEST_VALUE(T, 0.619470849747152643678094222038018479995571650371683666801895611074480999643845365550174850892603373156948236224257), tol);
 }
 
+template <class T>
+void test_zeros_accuracy(T tol, const char* t)
+{
+   std::cout << "Testing zeros accuracy for type " << t << std::endl;
+
+   // The error in the zeros is very large for roots that are far from the origin. Thus,
+   // we only teset the first root for n = 6 to 9. The machine epsilon for double precision
+   // is about 1e-16, and the polynomial is very sensitive to this error for large roots
+   // and large n.
+   for (unsigned n = 6; n < 10; ++n)
+   {
+      std::vector<T> zeros = boost::math::hermite_zeros<T>(n);
+      if (n & 1)
+      {
+         BOOST_CHECK(zeros.size() == (n-1)/2 +1);
+         BOOST_CHECK_SMALL(zeros[0], tol);
+      }
+      else
+      {
+         // Zero is not a zero of the odd hermite polynomials
+         BOOST_CHECK(zeros.size() == n/2);
+         BOOST_CHECK(zeros[0] > 0);
+         BOOST_CHECK_SMALL(boost::math::hermite(n, zeros[0]), 400 * tol);
+      }
+   }
+   return;
+}
+
+template <class T>
+void test_zero_special_case()
+{
+   std::cout << "Testing special cases for zeros" << std::endl;
+
+   BOOST_CHECK_THROW(boost::math::hermite_zeros<T>(0), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::hermite_zeros<T>(std::numeric_limits<unsigned>::quiet_NaN()), std::domain_error);
+
+   using ignore_policy = boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+                                                       boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
+   CHECK_NAN((boost::math::hermite_zeros<T, ignore_policy>(0)[0]));
+   CHECK_NAN((boost::math::hermite_zeros<T, ignore_policy>(std::numeric_limits<unsigned>::quiet_NaN())[0]));
+
+   std::vector<T> zeros = boost::math::hermite_zeros<T>(1);
+   BOOST_CHECK(zeros.size() == 1);
+   BOOST_CHECK(zeros[0] == static_cast<T>(0.0));
+
+   // Past N = 706 in double the recurrence overflows, which must be reported through the policy.
+   BOOST_CHECK_THROW(boost::math::hermite_zeros<T>(1000), boost::math::evaluation_error);
+
+   std::vector<T> roots = boost::math::hermite_zeros<T, ignore_policy>(1000);
+   BOOST_CHECK(roots.size() == 500);
+   CHECK_NAN(roots[0]);
+
+}
