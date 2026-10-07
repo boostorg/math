@@ -190,13 +190,31 @@ private:
 };
 }
 
-BOOST_MATH_EXPORT template <class T>
-inline std::vector<T> laguerre_zeros(unsigned n)
+BOOST_MATH_EXPORT template <class T, class Policy>
+inline std::vector<T> laguerre_zeros(unsigned n, const Policy& pol)
 {
+   static const char* function = "boost::math::laguerre_zeros(unsigned %1%)";
+   if (n == 0)
+   {
+      policies::raise_domain_error(function, "Laguerre polynomial has no roots for n = 0.", n, pol);
+      return { std::numeric_limits<T>::quiet_NaN() };
+   }
+   if (n == 1)
+   {
+      return { static_cast<T>(1) };
+   }
+
    detail::orthogonal_polynomial<T, detail::laguerre_family<T> > evaluate(n);
    std::vector<T> roots = evaluate.abscissa();
    return roots;
 }
+
+BOOST_MATH_EXPORT template <class T>
+inline std::vector<T> laguerre_zeros(unsigned n)
+{
+   return BOOST_MATH_NAMESPACE::laguerre_zeros<T>(n, policies::policy<>());
+}
+
 
 BOOST_MATH_NAMESPACE_END
 
