@@ -190,13 +190,18 @@ private:
 };
 }
 
-BOOST_MATH_EXPORT template <class T, class Policy>
-inline std::vector<T> laguerre_zeros(unsigned n, const Policy& pol)
+BOOST_MATH_EXPORT template <class T, class Policy = policies::policy<>>
+inline std::vector<T> laguerre_zeros(unsigned n)
 {
    static const char* function = "boost::math::laguerre_zeros(unsigned %1%)";
+   if ((!(BOOST_MATH_NAMESPACE::isfinite)(n)))
+   {
+      policies::raise_domain_error(function, "The argument n to the laguerre_zeros function must be finite (got n=%1%).", n, Policy());
+      return { std::numeric_limits<T>::quiet_NaN() };
+   }
    if (n == 0)
    {
-      policies::raise_domain_error(function, "Laguerre polynomial has no roots for n = 0.", n, pol);
+      policies::raise_domain_error(function, "Laguerre polynomial has no roots for n = 0.", n, Policy());
       return { std::numeric_limits<T>::quiet_NaN() };
    }
    if (n == 1)
@@ -206,15 +211,17 @@ inline std::vector<T> laguerre_zeros(unsigned n, const Policy& pol)
 
    detail::orthogonal_polynomial<T, detail::laguerre_family<T> > evaluate(n);
    std::vector<T> roots = evaluate.abscissa();
+
+   if (!(BOOST_MATH_NAMESPACE::isfinite)(roots[0]))
+   {
+      // In this case, the recurrence has overflowed and returned NaNs. Throw evaluation error
+      // or return vector of nans.
+      policies::raise_evaluation_error(function, "End points of the interval is not finite. Probably due to n being too large.", n, Policy());
+      return roots;
+   }
+
    return roots;
 }
-
-BOOST_MATH_EXPORT template <class T>
-inline std::vector<T> laguerre_zeros(unsigned n)
-{
-   return BOOST_MATH_NAMESPACE::laguerre_zeros<T>(n, policies::policy<>());
-}
-
 
 BOOST_MATH_NAMESPACE_END
 
