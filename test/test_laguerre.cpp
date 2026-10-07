@@ -201,9 +201,9 @@ using cpp_bin_float_100 = boost::multiprecision::cpp_bin_float_100;
 // Difference is 1e-101.
 test_zeros_large<cpp_bin_float_100>( 100 * std::numeric_limits<cpp_bin_float_100>::epsilon(), "cpp_bin_float_100");
 
-// #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-//    test_zeros_large(boost::math::concepts::real_concept(2e-19), "real_concept");
-// #endif
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+   test_zeros_large(boost::math::concepts::real_concept(4e-18), "real_concept");
+#endif
 
 test_zero_special_case<double>();
 test_zeros_accuracy(std::numeric_limits<double>::epsilon(), "double");
