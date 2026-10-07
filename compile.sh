@@ -1,1 +1,0 @@
-g++ laguerreRoots.cpp -o laguerreRoots -I/home/jacob/Documents/boost/libs/math/include;
