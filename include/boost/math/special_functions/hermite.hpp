@@ -155,13 +155,28 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    return BOOST_MATH_NAMESPACE::hermite(n, x, policies::policy<>());
 }
 
-// Todo: add policy for nan handling
-BOOST_MATH_EXPORT template <class T>
-inline std::vector<T> hermite_zeros(unsigned n)
+BOOST_MATH_EXPORT template <class T, class Policy>
+inline std::vector<T> hermite_zeros(unsigned n, const Policy& pol)
 {
+   static const char* function = "boost::math::hermite_zeros(unsigned %1%)";
+   if (n == 0)
+   {
+      policies::raise_domain_error(function, "Hermite polynomial has no roots for n = 0.", n, pol);
+      return { std::numeric_limits<T>::quiet_NaN() };
+   }
+   if (n == 1)
+   {
+      return { static_cast<T>(0) };
+   }
    detail::orthogonal_polynomial<T, detail::hermite_family<T> > evaluate(n);
    std::vector<T> roots = evaluate.abscissa();
    return roots;
+}
+
+BOOST_MATH_EXPORT template <class T>
+inline std::vector<T> hermite_zeros(unsigned n)
+{
+   return BOOST_MATH_NAMESPACE::hermite_zeros<T>(n, policies::policy<>());
 }
 
 BOOST_MATH_NAMESPACE_END
