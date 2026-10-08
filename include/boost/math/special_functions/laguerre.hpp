@@ -182,7 +182,7 @@ public:
    {
       Real delta = -p / p_prime;
       Real p_prime_at_root = p_prime + second_derivative(x, p, p_prime) * delta;
-      return x / (p_prime_at_root * p_prime_at_root);
+      return 1 / (p_prime_at_root * p_prime_at_root) / x;
    }
 
 private:
