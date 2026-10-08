@@ -329,5 +329,51 @@ void test_spots(T)
          static_cast<T>(1.0e13L),
          static_cast<T>(0.995L)),
       static_cast<T>(0.0099010703473402885173268397418009652L), 5e-10);
+   //
+   // min(a, b) == 1000 exactly used to fall between two strict comparisons
+   // when selecting the initial guess, so that no guess was set at all:
+   // https://github.com/boostorg/math/issues/1511
+   //
+   // The generic (non-Lanczos) code used by real_concept is far less
+   // accurate for arguments this large, whatever the value of min(a, b),
+   // so only the built-in floating point types get the usual tolerance:
+   //
+   T tolerance_1511 = tolerance * (boost::is_floating_point<T>::value ? 1 : 100000000);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(
+         static_cast<T>(1000),
+         static_cast<T>(1.0e9L),
+         static_cast<T>(0.025L)),
+      static_cast<T>(9.389721085563963404180136990833102726849528911e-7L), tolerance_1511);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(
+         static_cast<T>(1.0e9L),
+         static_cast<T>(1000),
+         static_cast<T>(0.975L)),
+      static_cast<T>(0.999999061027891443603659581986300916689727315L), tolerance_1511);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibetac_inv(
+         static_cast<T>(1000),
+         static_cast<T>(1.0e9L),
+         static_cast<T>(0.975L)),
+      static_cast<T>(9.389721085563963404180136990833102726849528911e-7L), tolerance_1511);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(
+         static_cast<T>(1000),
+         static_cast<T>(1.0e9L),
+         static_cast<T>(0.5L)),
+      static_cast<T>(9.996656874277116690802174656563429711990058656e-7L), tolerance_1511);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(
+         static_cast<T>(1000),
+         static_cast<T>(2.0e7L),
+         static_cast<T>(0.025L)),
+      static_cast<T>(4.694637640096960118983038721439854358366856456e-5L), tolerance_1511);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(
+         static_cast<T>(1000),
+         static_cast<T>(1.0e12L),
+         static_cast<T>(0.025L)),
+      static_cast<T>(9.389730174978430291685459639013695242587542550e-10L), tolerance_1511);
 }
 

@@ -688,7 +688,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
                x = temme_method_3_ibeta_inverse(a, b, p, q, pol);
                y = 1 - x;
             }
-            else if ((y > 1e-5) && BOOST_MATH_GPU_SAFE_MIN(a, b) > 1000)
+            else if ((y > 1e-5) && BOOST_MATH_GPU_SAFE_MIN(a, b) >= 1000)
             {
                // All options have failed, use the saddle point as a starting location:
                x = BOOST_MATH_GPU_SAFE_MAX(a, b) / (a + b);
