@@ -642,13 +642,16 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
       }
       T minv = BOOST_MATH_GPU_SAFE_MIN(a, b);
       T maxv = BOOST_MATH_GPU_SAFE_MAX(a, b);
-      if(ibeta_inv_small_x_estimate(a, b, p, &x, pol))
+      if((p < T(1e-20)) && ibeta_inv_small_x_estimate(a, b, p, &x, pol))
       {
          //
-         // x is small enough that the first two terms of the power series
-         // for the incomplete beta give a better starting point than any of
-         // the asymptotic expansions below, which lose accuracy far out in
-         // the tail and can leave the iteration too far from the root.
+         // Far out in the tail the asymptotic expansions below lose accuracy
+         // and can leave the iteration too far from the root to converge.
+         // Here x is small enough that the first two terms of the power
+         // series for the incomplete beta give a better starting point.
+         // The test on p is only there to keep the cost of the estimate
+         // (a call to beta) away from ordinary arguments: the expansions
+         // are still good many orders of magnitude below that threshold.
          //
          y = 1 - x;
       }

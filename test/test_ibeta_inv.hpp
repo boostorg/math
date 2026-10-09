@@ -376,6 +376,23 @@ void test_spots(T)
          static_cast<T>(0.025L)),
       static_cast<T>(9.389730174978430291685459639013695242587542550e-10L), tolerance_1511);
    //
+   // The same case with promotion to a wider type switched off, so that it is
+   // exercised in the working precision on every platform: with promotion to
+   // an 80-bit long double the iteration could recover from the missing guess.
+   //
+   {
+      boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> > no_promotion;
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(1000), static_cast<T>(1.0e9L), static_cast<T>(0.025L), no_promotion),
+         static_cast<T>(9.389721085563963404180136990833102726849528911e-7L), tolerance_1511);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(1.0e9L), static_cast<T>(1000), static_cast<T>(0.975L), no_promotion),
+         static_cast<T>(0.999999061027891443603659581986300916689727315L), tolerance_1511);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(1000), static_cast<T>(2.0e7L), static_cast<T>(0.025L), no_promotion),
+         static_cast<T>(4.694637640096960118983038721439854358366856456e-5L), tolerance_1511);
+   }
+   //
    // The second derivative handed to the root finder had the wrong sign
    // whenever the target was p rather than q.  Check it against cases with
    // simple closed forms: I_x(2, 1) = x^2 and I_x(2, 3) = 6x^2 - 8x^3 + 3x^4.
