@@ -28,7 +28,12 @@ runs:
             case "${{ inputs.compiler }}" in
               msvc) flags="/arch:AVX2 /fp:contract" ;;
               clang-cl) flags="/arch:AVX2 /clang:-ffp-contract=fast" ;;
-              *) flags="-mfma -mavx2 -ffp-contract=fast" ;;
+              *)
+                flags="-mfma -mavx2 -ffp-contract=fast"
+                # MinGW: Win64 only aligns the stack to 16 bytes, but gcc emits aligned 32-byte AVX moves
+                # for stack objects, which crash (gcc bug 54412). Have the assembler make them unaligned.
+                if [ "$RUNNER_OS" = Windows ]; then flags="$flags -Wa,-muse-unaligned-vector-move"; fi
+                ;;
             esac
             ;;
           arm64|aarch64)
