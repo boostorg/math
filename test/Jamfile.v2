@@ -2264,6 +2264,7 @@ test-suite concepts :
    [ compile  compile_test/tools_throw_exception_incl_test.cpp   : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/tools_traits_incl_test.cpp   : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/tools_ulps_plot_incl_test.cpp   : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ compile  compile_test/tools_ulps_heatmap_incl_test.cpp   : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/tools_workaround_incl_test.cpp   : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/interpolators_cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/interpolators_barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
@@ -2405,6 +2406,7 @@ alias no_eh_tests :
    tools_throw_exception_incl_test
    tools_traits_incl_test
    #tools_ulps_plot_incl_test
+   #tools_ulps_heatmap_incl_test
    tools_workaround_incl_test
 ;
 

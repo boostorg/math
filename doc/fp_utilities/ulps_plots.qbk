@@ -133,6 +133,59 @@ Note that if the function evaluated in `PreciseReal` is not accurate, the plot i
 But just how accurate it needs to be is more difficult to determine.
 We recommend starting with at least `long double` to test `float` precision, and `boost::multiprecision::float128` to test `double` precision values.
 
+[h4 Functions of two variables]
+
+    #include <boost/math/tools/ulps_heatmap.hpp>
+
+    namespace boost::math::tools {
+
+    template<class F, typename PreciseReal, typename CoarseReal>
+    class ulps_heatmap {
+    public:
+        // Samples f(x, y) at the pixel centres of a width x height grid; a logarithmic axis needs a positive minimum.
+        // The reference is evaluated on threads (0 means all cores), so hi_acc_impl must be thread safe:
+        ulps_heatmap(F hi_acc_impl, CoarseReal x_min, CoarseReal x_max, CoarseReal y_min, CoarseReal y_max,
+                     size_t width = 800, size_t height = 500, bool log_x = false, bool log_y = false, unsigned threads = 0);
+        // Add an implementation to test; each is drawn as a panel, side by side on the same scale:
+        template<class G>
+        ulps_heatmap& add_fn(G g, std::string const & label = "");
+        // Saturate the color scale at clip. By default it is chosen from all panels' values:
+        // the maximum on a log scale, the 99th percentile on a linear one.
+        ulps_heatmap& clip(double clip);
+        ulps_heatmap& log_scale(bool log_scale);
+        // Maps [0, 1] to sRGB in [0, 1]^3; inferno by default:
+        ulps_heatmap& color_map(std::function<std::array<double, 3>(double)> color_map);
+        // Encodes 8-bit RGB pixels (row-major, top row first) as a PNG; lodepng by default if lodepng.h is found:
+        ulps_heatmap& png_encoder(std::function<std::vector<unsigned char>(std::vector<unsigned char> const & rgb, size_t width, size_t height)> encoder);
+        ulps_heatmap& title(std::string const & title);
+        ulps_heatmap& x_label(std::string const & label);
+        ulps_heatmap& y_label(std::string const & label);
+        ulps_heatmap& background_color(std::string const & color);
+        ulps_heatmap& font_color(std::string const & color);
+        // Write max(1/2, |ulps|), or |ulps| over the envelope, as an SVG:
+        void write_ulps(std::string const & filename) const;
+        void write_ulps_envelope(std::string const & filename) const;
+        // For each panel, counts of points outside 1/2 ulp and outside the envelope, and the worst points:
+        std::string summary() const;
+    };
+
+    } // namespaces
+
+For a function of two variables, the condition number of evaluation is the sum of the condition numbers in each argument,
+/|x f[sub x]/f| + |y f[sub y]/f|/, since both arguments are rounded.
+`ulps_heatmap` evaluates the error over a grid and writes two heatmaps.
+`write_ulps` shows max(½, |ulps|), which is ½ wherever the result is correctly rounded.
+`write_ulps_envelope` divides |ulps| by the envelope max(½, cond/2) and shows max(1, ratio), so that anything brighter than the floor is error that rounding the arguments does not explain.
+Points without a value are green: where the implementation returns NaN or infinity or throws, or the reference is not finite.
+
+Calling `add_fn` more than once compares implementations: each gets a panel, and the panels share the axes and the color scale,
+so that, for example, the code before and after a change can be compared directly.
+
+The heatmap is a PNG embedded in the SVG.
+If `lodepng.h` is on the include path, [@https://github.com/lvandeve/lodepng lodepng] encodes it (link `lodepng.cpp`);
+otherwise, pass your own encoder to `png_encoder`, or the `write` functions throw `std::logic_error`.
+An example is given [@../../reporting/accuracy/ligamma_ulps_heatmap.cpp here].
+
 [heading References]
 
 * Cleve Moler. ['Ulps Plots Reveal Math Function Accuracy], https://blogs.mathworks.com/cleve/2017/01/23/ulps-plots-reveal-math-function-accurary/
