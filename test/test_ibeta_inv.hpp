@@ -375,5 +375,44 @@ void test_spots(T)
          static_cast<T>(1.0e12L),
          static_cast<T>(0.025L)),
       static_cast<T>(9.389730174978430291685459639013695242587542550e-10L), tolerance_1511);
+   //
+   // The second derivative handed to the root finder had the wrong sign
+   // whenever the target was p rather than q.  Check it against cases with
+   // simple closed forms: I_x(2, 1) = x^2 and I_x(2, 3) = 6x^2 - 8x^3 + 3x^4.
+   //
+   {
+      typedef boost::math::policies::policy<> pol_type;
+      boost::math::detail::ibeta_roots<T, pol_type> r1(static_cast<T>(2), static_cast<T>(1), static_cast<T>(0.5), false);
+      boost::math::detail::ibeta_roots<T, pol_type> r1c(static_cast<T>(2), static_cast<T>(1), static_cast<T>(0.5), true);
+      BOOST_CHECK_CLOSE(boost::math::get<1>(r1(static_cast<T>(0.25))), static_cast<T>(0.5), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::get<2>(r1(static_cast<T>(0.25))), static_cast<T>(2), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::get<1>(r1c(static_cast<T>(0.25))), static_cast<T>(-0.5), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::get<2>(r1c(static_cast<T>(0.25))), static_cast<T>(-2), tolerance);
+      boost::math::detail::ibeta_roots<T, pol_type> r2(static_cast<T>(2), static_cast<T>(3), static_cast<T>(0.5), false);
+      boost::math::detail::ibeta_roots<T, pol_type> r2c(static_cast<T>(2), static_cast<T>(3), static_cast<T>(0.5), true);
+      BOOST_CHECK_CLOSE(boost::math::get<1>(r2(static_cast<T>(0.25))), static_cast<T>(1.6875), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::get<2>(r2(static_cast<T>(0.25))), static_cast<T>(2.25), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::get<1>(r2c(static_cast<T>(0.25))), static_cast<T>(-1.6875), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::get<2>(r2c(static_cast<T>(0.25))), static_cast<T>(-2.25), tolerance);
+   }
+   //
+   // With that sign wrong, Halley iteration was only second order, which left
+   // errors of tens to hundreds of ulps for large a and b whenever the evaluation
+   // was not promoted to a wider type.  These points were among the worst:
+   //
+   if (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::digits == std::numeric_limits<double>::digits))
+   {
+      boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promotion;
+      T tol = boost::math::tools::epsilon<T>() * 2000;   // 20 eps as a percentage
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(2000), static_cast<T>(1.0e9), static_cast<T>(0.006940925861941986), no_promotion),
+         static_cast<T>(1.891653812057568512817838421240351406e-06L), tol);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(1000), static_cast<T>(1.0e9), static_cast<T>(0.006940925861941986), no_promotion),
+         static_cast<T>(9.238836420371353708007156030941301367e-07L), tol);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(40), static_cast<T>(80), static_cast<T>(0.05189222238401044), no_promotion),
+         static_cast<T>(2.651352194946371952577010439645915240e-01L), tol);
+   }
 }
 

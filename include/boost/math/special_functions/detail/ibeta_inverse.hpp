@@ -456,11 +456,14 @@ struct ibeta_roots
       if(x == 0)
          x = tools::min_value<T>() * 64;
 
-      T f2 = f1 * (-y * a + (b - 2) * x + 1);
+      //
+      // Second derivative: f1 * ((a - 1) / x - (b - 1) / y).
+      // f1 already carries the sign for the inverted case, so
+      // no further sign change is needed here:
+      //
+      T f2 = f1 * (y * a - (b - 2) * x - 1);
       if(fabs(f2) < y * x * tools::max_value<T>())
          f2 /= (y * x);
-      if(invert)
-         f2 = -f2;
 
       // make sure we don't have a zero derivative:
       if(f1 == 0)
