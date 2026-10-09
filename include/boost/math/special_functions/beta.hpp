@@ -1232,7 +1232,11 @@ BOOST_MATH_GPU_ENABLED T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names
 
-   T result = pow(x, n);
+   //
+   // When x is close to 1 it is y = 1 - x that is known accurately, and
+   // pow(x, n) would amplify the rounding error in x by a factor of n:
+   //
+   T result = (y < T(0.5)) ? T(exp(n * BOOST_MATH_NAMESPACE::log1p(-y, pol))) : T(pow(x, n));
 
    if(result > tools::min_value<T>())
    {

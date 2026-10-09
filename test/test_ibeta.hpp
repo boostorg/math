@@ -518,5 +518,25 @@ void test_spots(T, const char* name)
             }
          }
       }
+      //
+      // Integer a and b, one of them large, x beyond a/(a+b).  The finite binomial
+      // sum used here started from pow(x, n) with x = 1 - y close to 1, which
+      // multiplied the rounding error in x by n.  The low bit in x makes 1 - x
+      // inexact for double and long double (for float it is simply lost, which
+      // changes the result by far less than the tolerance).
+      // Reference values are from the finite sum in exact decimal arithmetic.
+      //
+      T x_int = ldexp(static_cast<T>(1), -28) + ldexp(static_cast<T>(1), -68);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(2), static_cast<T>(1.0e9L), x_int),
+         static_cast<T>(0.886091673490414896866866835148507163568245289L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibetac(static_cast<T>(2), static_cast<T>(1.0e9L), x_int),
+         static_cast<T>(0.113908326509585103133133164851492836431754711L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(3), static_cast<T>(1.0e9L), x_int),
+         static_cast<T>(0.718821994107927404618541727411257158457373858L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibetac(static_cast<T>(3), static_cast<T>(1.0e9L), x_int),
+         static_cast<T>(0.281178005892072595381458272588742841542626142L), tolerance);
 }
-
