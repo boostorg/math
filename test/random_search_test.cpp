@@ -61,7 +61,9 @@ template <class Real> void test_ackley() {
   for (auto const & q : queries) {
     auto expected = ackley<Real>(q.first);
     // Not bitwise equal: the optimizer's call may be inlined and fused differently from this one.
-    CHECK_MOLLIFIED_CLOSE(expected, q.second, 8*std::numeric_limits<Real>::epsilon());
+    // The Ackley function is a difference of terms near 20 + e, so near its minimum of zero the
+    // two can differ by a few epsilon of those terms rather than of the result.
+    CHECK_MOLLIFIED_CLOSE(expected, q.second, 200*std::numeric_limits<Real>::epsilon());
   }
 }
 
