@@ -2,8 +2,8 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at http://boost.org/LICENSE_1_0.txt)
 #
-# Fails unless the runner's CPU has fused multiply-add, then exports compiler flags that let the
-# compiler fuse a*b + c freely: CXXFLAGS and CUDAFLAGS for CMake, and FMA_B2 for b2 command lines.
+# Fails unless the runner's CPU has fused multiply-add, then exports the compiler flags that let the
+# compiler fuse a*b + c: CXXFLAGS and CUDAFLAGS for CMake, and FMA_B2 for b2 command lines.
 
 name: FMA
 description: Require FMA on the runner and export flags that use it
@@ -25,22 +25,28 @@ runs:
             else
               if grep -qw fma /proc/cpuinfo; then has_fma=True; else has_fma=False; fi
             fi
+            # -mfma is all gcc and clang need. No -ffp-contract: both already contract by default, and
+            # for clang -ffp-contract=fast moves the fusion out of the front end, so it is lost at -O0.
+            # clang then fuses within an expression at every optimization level, -O0 included. gcc has
+            # no way to fuse at -O0 or -O1; it starts at -O2.
             case "${{ inputs.compiler }}" in
+              # MSVC has no switch for FMA alone: /arch:AVX2 is the lowest level that enables it.
               msvc) flags="/arch:AVX2 /fp:contract" ;;
-              clang-cl) flags="/arch:AVX2 /clang:-ffp-contract=fast" ;;
+              clang-cl) flags="-mfma" ;;
               *)
-                flags="-mfma -mavx2 -ffp-contract=fast"
-                # MinGW: Win64 only aligns the stack to 16 bytes, but gcc emits aligned 32-byte AVX moves
-                # for stack objects, which crash (gcc bug 54412). Have the assembler make them unaligned.
+                flags="-mfma"
+                # MinGW: -mfma brings in AVX. Win64 only aligns the stack to 16 bytes, but gcc emits
+                # aligned 32-byte AVX moves for stack objects, which crash (gcc bug 54412). Have the
+                # assembler make them unaligned.
                 # Only for b2: CXXFLAGS is also seen by bootstrap, which builds b2 with another compiler.
                 if [ "$RUNNER_OS" = Windows ]; then b2_extra="cxxflags=-Wa,-muse-unaligned-vector-move"; fi
                 ;;
             esac
             ;;
           arm64|aarch64)
-            # Fused multiply-add is part of the base A64 instruction set:
+            # Fused multiply-add is part of the base A64 instruction set, so no flag is needed:
             has_fma=True
-            flags="-ffp-contract=fast"
+            flags=""
             ;;
           *)
             echo "::error::Unknown architecture $(uname -m)"
@@ -55,5 +61,5 @@ runs:
         b2_flags="${b2_extra:-}"
         for f in $flags; do b2_flags="$b2_flags cxxflags=$f"; done
         echo "CXXFLAGS=$flags" >> "$GITHUB_ENV"
-        echo "CUDAFLAGS=-Xcompiler=$(echo $flags | tr ' ' ',')" >> "$GITHUB_ENV"
+        if [ -n "$flags" ]; then echo "CUDAFLAGS=-Xcompiler=$(echo $flags | tr ' ' ',')" >> "$GITHUB_ENV"; fi
         echo "FMA_B2=$b2_flags" >> "$GITHUB_ENV"

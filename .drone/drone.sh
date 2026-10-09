@@ -50,15 +50,16 @@ echo '==================================> BEFORE_SCRIPT'
 
 echo '==================================> SCRIPT'
 
-# Require fused multiply-add, and let the compiler fuse a*b + c freely:
+# Require fused multiply-add, and let the compiler use it. -mfma is all gcc and clang need:
+# both already contract a*b + c by default.
 case $(uname -m) in
     x86_64)
         grep -qw fma /proc/cpuinfo || { echo "This runner's CPU has no FMA"; exit 1; }
-        FMA_FLAGS="<cxxflags>-mfma <cxxflags>-mavx2 <cxxflags>-ffp-contract=fast"
+        FMA_FLAGS="<cxxflags>-mfma"
         ;;
     *)
-        # Fused multiply-add is part of the base aarch64 and s390x instruction sets:
-        FMA_FLAGS="<cxxflags>-ffp-contract=fast"
+        # Fused multiply-add is part of the base aarch64 and s390x instruction sets, so no flag is needed:
+        FMA_FLAGS=""
         ;;
 esac
 echo "FMA: $(uname -m); $FMA_FLAGS"
