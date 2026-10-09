@@ -177,7 +177,8 @@ int main()
    test_spots<boost::math::concepts::real_concept>(16, boost::math::concepts::real_concept(64 * std::numeric_limits<long double>::epsilon()));
 #endif
    using boost::multiprecision::cpp_bin_float_50;
-   test_spots<cpp_bin_float_50>(16, 16 * std::numeric_limits<cpp_bin_float_50>::epsilon());
+   // At 50 digits the Lanczos g is about 30, and ibeta near the mean scatters by up to about 60 epsilon:
+   test_spots<cpp_bin_float_50>(16, 64 * std::numeric_limits<cpp_bin_float_50>::epsilon());
    test_generic_underflow();
    return boost::math::test::report_errors();
 }

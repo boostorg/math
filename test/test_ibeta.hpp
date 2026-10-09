@@ -518,5 +518,39 @@ void test_spots(T, const char* name)
             }
          }
       }
+      //
+      // Integer a and b, one of them large, x beyond a/(a+b).  The finite binomial
+      // sum used here started from pow(x, n) with x = 1 - y close to 1, which
+      // multiplied the rounding error in x by n.  The low bit in x makes 1 - x
+      // inexact for double and long double (for float it is simply lost, which
+      // changes the result by far less than the tolerance).
+      // Reference values are from the finite sum in exact decimal arithmetic.
+      //
+      T x_int = ldexp(static_cast<T>(1), -28) + ldexp(static_cast<T>(1), -68);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(2), static_cast<T>(1.0e9L), x_int),
+         static_cast<T>(0.886091673490414896866866835148507163568245289L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibetac(static_cast<T>(2), static_cast<T>(1.0e9L), x_int),
+         static_cast<T>(0.113908326509585103133133164851492836431754711L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(3), static_cast<T>(1.0e9L), x_int),
+         static_cast<T>(0.718821994107927404618541727411257158457373858L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibetac(static_cast<T>(3), static_cast<T>(1.0e9L), x_int),
+         static_cast<T>(0.281178005892072595381458272588742841542626142L), tolerance);
+      //
+      // Large a and b near the mode. The bases of the exponents in the power terms
+      // (x^a)(y^b)/B(a, b) were formed from x b - y a, with y = 1 - x rounded, which
+      // lost about eps max(a, b) min(x, y): these were off by 300 and 140 epsilon,
+      // and by up to 1e-11 where the compiler contracts x b - y a into an fma.
+      // The generic (non-Lanczos) code used by real_concept is far less accurate here.
+      //
+      T tolerance_large = tolerance * (boost::is_floating_point<T>::value ? 1 : 100000000);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(1.0e5L), static_cast<T>(2.5e7L), static_cast<T>(4158) / 1048576),
+         static_cast<T>(0.06845490339638190702573107740432918859230714009L), tolerance_large);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(3.0e4L), static_cast<T>(1.0e7L), static_cast<T>(3119) / 1048576),
+         static_cast<T>(0.1690982393949004438961071516113973441276481773L), tolerance_large);
 }
-

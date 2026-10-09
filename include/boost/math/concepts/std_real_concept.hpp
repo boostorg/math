@@ -197,6 +197,8 @@ inline BOOST_MATH_NAMESPACE::concepts::std_real_concept modf(BOOST_MATH_NAMESPAC
    *ipart = ip;
    return result;
 }
+inline BOOST_MATH_NAMESPACE::concepts::std_real_concept fma(BOOST_MATH_NAMESPACE::concepts::std_real_concept a, BOOST_MATH_NAMESPACE::concepts::std_real_concept b, BOOST_MATH_NAMESPACE::concepts::std_real_concept c)
+{ return std::fma(a.value(), b.value(), c.value()); }
 inline BOOST_MATH_NAMESPACE::concepts::std_real_concept frexp(BOOST_MATH_NAMESPACE::concepts::std_real_concept a, int* expon)
 { return std::frexp(a.value(), expon); }
 inline BOOST_MATH_NAMESPACE::concepts::std_real_concept ldexp(BOOST_MATH_NAMESPACE::concepts::std_real_concept a, int expon)

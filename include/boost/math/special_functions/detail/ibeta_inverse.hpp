@@ -456,11 +456,14 @@ struct ibeta_roots
       if(x == 0)
          x = tools::min_value<T>() * 64;
 
-      T f2 = f1 * (-y * a + (b - 2) * x + 1);
+      //
+      // Second derivative: f1 * ((a - 1) / x - (b - 1) / y).
+      // f1 already carries the sign for the inverted case, so
+      // no further sign change is needed here:
+      //
+      T f2 = f1 * (y * a - (b - 2) * x - 1);
       if(fabs(f2) < y * x * tools::max_value<T>())
          f2 /= (y * x);
-      if(invert)
-         f2 = -f2;
 
       // make sure we don't have a zero derivative:
       if(f1 == 0)
@@ -472,6 +475,48 @@ private:
    T a, b, target;
    bool invert;
 };
+
+//
+// Estimate x from the leading terms of the power series
+//
+//    I_x(a, b) = x^a / (a B(a, b)) * (1 - a (b - 1) x / (a + 1) + ...)
+//
+// Returns true and sets *px only when x is small enough for the estimate
+// to be good, which is the case far out in the lower tail.
+//
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED bool ibeta_inv_small_x_estimate(T a, T b, T p, T* px, const Policy& pol)
+{
+   BOOST_MATH_STD_USING
+
+   T bet = 0;
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+   try
+#endif
+   {
+      bet = BOOST_MATH_NAMESPACE::beta(a, b, pol);
+   }
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+   catch (const std::overflow_error&)
+   {
+      return false;
+   }
+#endif
+   if(!(bet > tools::min_value<T>()) || !(BOOST_MATH_NAMESPACE::isfinite)(bet))
+      return false;
+   //
+   // Work in logs: p * a * B(a, b) can underflow even though x does not.
+   //
+   T x = exp((log(p) + log(a) + log(bet)) / a);
+   //
+   // Successive terms of the series fall off like x when b is small and
+   // like (b - 1) x when b is large, so this bounds what has been dropped:
+   //
+   if(!(x * (1 + fabs(b - 1)) < T(0.1)) || !(x > tools::min_value<T>()))
+      return false;
+   *px = x * (1 + (b - 1) * x / (a + 1));
+   return true;
+}
 
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
@@ -597,7 +642,20 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
       }
       T minv = BOOST_MATH_GPU_SAFE_MIN(a, b);
       T maxv = BOOST_MATH_GPU_SAFE_MAX(a, b);
-      if((sqrt(minv) > (maxv - minv)) && (minv > 5))
+      if((p < T(1e-20)) && ibeta_inv_small_x_estimate(a, b, p, &x, pol))
+      {
+         //
+         // Far out in the tail the asymptotic expansions below lose accuracy
+         // and can leave the iteration too far from the root to converge.
+         // Here x is small enough that the first two terms of the power
+         // series for the incomplete beta give a better starting point.
+         // The test on p is only there to keep the cost of the estimate
+         // (a call to beta) away from ordinary arguments: the expansions
+         // are still good many orders of magnitude below that threshold.
+         //
+         y = 1 - x;
+      }
+      else if((sqrt(minv) > (maxv - minv)) && (minv > 5))
       {
          //
          // When a and b differ by a small amount
@@ -688,7 +746,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
                x = temme_method_3_ibeta_inverse(a, b, p, q, pol);
                y = 1 - x;
             }
-            else if ((y > 1e-5) && BOOST_MATH_GPU_SAFE_MIN(a, b) > 1000)
+            else if ((y > 1e-5) && BOOST_MATH_GPU_SAFE_MIN(a, b) >= 1000)
             {
                // All options have failed, use the saddle point as a starting location:
                x = BOOST_MATH_GPU_SAFE_MAX(a, b) / (a + b);
