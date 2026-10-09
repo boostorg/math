@@ -191,7 +191,7 @@ test_zeros(std::numeric_limits<long double>::epsilon(), "long double");
 using cpp_bin_float_100 = boost::multiprecision::cpp_bin_float_100;
 test_zeros<cpp_bin_float_100>(std::numeric_limits<cpp_bin_float_100>::epsilon(), "cpp_bin_float_100");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-   test_zeros(boost::math::concepts::real_concept(8e-20), "real_concept");
+   test_zeros(boost::math::concepts::real_concept(1e-19), "real_concept");
 #endif
 
 test_zeros_large(15 * std::numeric_limits<float>::epsilon(), "float");

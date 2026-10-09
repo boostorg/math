@@ -150,7 +150,7 @@ public:
 
    Real upper_bound() const
    { // See https://mathoverflow.net/questions/251607/zeroes-of-laguerre-polynomials
-      return N + (N-1) * sqrt(N);
+      return N + (N-1) * sqrt(N) + 1;
    }
 
    unsigned num_roots() const

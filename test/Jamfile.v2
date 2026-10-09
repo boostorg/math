@@ -1274,6 +1274,8 @@ test-suite quadrature :
    [ run gauss_hermite_quadrature_test.cpp : : : $(float128_type) [ requires cxx17_if_constexpr ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
    [ run gauss_hermite_quadrature_eigen_test.cpp : : : [ requires cxx17_if_constexpr ]
      [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
+   [ run gauss_laguerre_quadrature_test.cpp : : : $(float128_type) [ requires cxx17_if_constexpr ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+
 
    [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=1  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
@@ -1409,7 +1411,7 @@ test-suite autodiff :
 
 test-suite test_reverse_mode_autodiff
     :
-        [ run test_reverse_mode_autodiff_flat_linear_allocator.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
+        [ run test_reverse_mode_autodiff_flat_linear_allocator.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
         [ run test_reverse_mode_autodiff_constructors.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
         [ run test_reverse_mode_autodiff_comparison_operators.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
         [ run test_reverse_mode_autodiff_stl_support.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
@@ -1419,9 +1421,9 @@ test-suite test_reverse_mode_autodiff
 
 test-suite gradient_based_optimizers
     :
-        [ run test_gradient_descent_optimizer.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
-        [ run test_nesterov_optimizer.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
-        [ run test_lbfgs.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
+        [ run test_gradient_descent_optimizer.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+        [ run test_nesterov_optimizer.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+        [ run test_lbfgs.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
     ;
 # BEGIN AUTODIFF LONG RUNNING TESTS
 test-suite autodiff-long-running-tests

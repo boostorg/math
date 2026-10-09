@@ -24,7 +24,6 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-#include <iostream>
 #endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -43,6 +42,7 @@ BOOST_MATH_NAMESPACE_BEGIN namespace quadrature { namespace detail {
 template <class Real, unsigned N, unsigned Category>
 class gauss_laguerre_detail
 {
+   static_assert(N > 1, "gauss_laguerre requires N > 1");
    static const boost::math::detail::orthogonal_polynomial<Real, boost::math::detail::laguerre_family<Real>>& polynomial()
    {
       static const boost::math::detail::orthogonal_polynomial<Real, boost::math::detail::laguerre_family<Real>> value(N);
@@ -483,7 +483,6 @@ public:
       Real L1 = abs(result);
       for (unsigned i = 0; i < base::abscissa().size(); ++i)
       {
-         std::cout << "abscissa: " << base::abscissa()[i] << ", weight: " << base::weights()[i] <<  ", value:" << f(static_cast<Real>(base::abscissa()[i])) << std::endl;
          K fp = f(static_cast<Real>(base::abscissa()[i]));
          result += fp * static_cast<Real>(base::weights()[i]);
          L1 += abs(fp) * static_cast<Real>(base::weights()[i]);
