@@ -494,7 +494,7 @@ ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::ul
 }
 
 namespace detail{
-bool ends_with(std::string const& filename, std::string const& suffix)
+inline bool ends_with(std::string const& filename, std::string const& suffix)
 {
     if(filename.size() < suffix.size())
     {
