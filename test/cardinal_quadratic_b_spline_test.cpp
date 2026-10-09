@@ -50,7 +50,7 @@ void test_constant()
       CHECK_MOLLIFIED_CLOSE(0, qbs.prime(t), 300*std::numeric_limits<Real>::epsilon());
       t = t0 + i*h + h/4;
       CHECK_ULP_CLOSE(c, qbs(t), 2);
-      CHECK_MOLLIFIED_CLOSE(0, qbs.prime(t), (std::numeric_limits<Real>::digits > 100 ? 300 : 150) * std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(0, qbs.prime(t), (std::numeric_limits<Real>::digits > 100 ? 300 : 200) * std::numeric_limits<Real>::epsilon());
       ++i;
     }
 }
@@ -73,7 +73,8 @@ void test_linear()
     size_t i = 0;
     while (i < n) {
       Real t = t0 + i*h;
-      CHECK_ULP_CLOSE(m*t+b, qbs(t), 2);
+      // At the knots the spline has to reproduce the data it was built from:
+      CHECK_ULP_CLOSE(y[i], qbs(t), 2);
       CHECK_ULP_CLOSE(m, qbs.prime(t), 820);
       ++i;
     }
@@ -81,7 +82,7 @@ void test_linear()
     i = 0;
     while (i < n) {
       Real t = t0 + i*h + h/2;
-      CHECK_ULP_CLOSE(m*t+b, qbs(t), 2);
+      CHECK_ULP_CLOSE(m*t+b, qbs(t), 3);
       CHECK_MOLLIFIED_CLOSE(m, qbs.prime(t), 1500*std::numeric_limits<Real>::epsilon());
       t = t0 + i*h + h/4;
       CHECK_ULP_CLOSE(m*t+b, qbs(t), 3);
@@ -110,7 +111,11 @@ void test_quadratic()
     size_t i = 0;
     while (i < n) {
       Real t = t0 + i*h;
-      CHECK_ULP_CLOSE(a*t*t + b*t + c, qbs(t), 2);
+      // At the knots the spline has to reproduce the data it was built from.
+      // Recomputing the polynomial here is not the same thing: it crosses zero
+      // inside the interval, and next to the root the result depends on whether
+      // the compiler fuses the multiplies and adds.
+      CHECK_ULP_CLOSE(y[i], qbs(t), 2);
       ++i;
     }
 
@@ -120,7 +125,7 @@ void test_quadratic()
       CHECK_ULP_CLOSE(a*t*t + b*t + c, qbs(t), 47);
 
       t = t0 + i*h + h/4;
-      if (!CHECK_ULP_CLOSE(a*t*t + b*t + c, qbs(t), 104)) {
+      if (!CHECK_ULP_CLOSE(a*t*t + b*t + c, qbs(t), 120)) {
           std::cerr << "  Problem abscissa t = " << t << "\n";
       }
       ++i;

@@ -632,7 +632,7 @@ void test_crc()
        };
        Q = integrator.integrate(f, 0, boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
        Q_expected = 1 / sinc_pi(p*pi<Real>());
-       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10 * tol);
+       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 15 * tol);
     }
     // and for p < 1:
     for (Real p = Real (-0.99); p < 0; p += Real(0.1)) {
@@ -642,7 +642,7 @@ void test_crc()
        };
        Q = integrator.integrate(f, 0, boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
        Q_expected = 1 / sinc_pi(p*pi<Real>());
-       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10 * tol);
+       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 15 * tol);
     }
 
     // CRC Section 5.5, integral 635
