@@ -1,0 +1,53 @@
+# Copyright 2026 Nick Thompson
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at http://boost.org/LICENSE_1_0.txt)
+#
+# Fails unless the runner's CPU has fused multiply-add, then exports compiler flags that let the
+# compiler fuse a*b + c freely: CXXFLAGS and CUDAFLAGS for CMake, and FMA_B2 for b2 command lines.
+
+name: FMA
+description: Require FMA on the runner and export flags that use it
+inputs:
+  compiler:
+    description: gnu (gcc, clang, MinGW), msvc, or clang-cl
+    default: gnu
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        case "$(uname -m)" in
+          x86_64|AMD64)
+            if [ "$RUNNER_OS" = Windows ]; then
+              has_fma=$(pwsh -NoProfile -Command '[System.Runtime.Intrinsics.X86.Fma]::IsSupported')
+            elif [ "$RUNNER_OS" = macOS ]; then
+              if sysctl -n machdep.cpu.leaf7_features machdep.cpu.features | grep -qw FMA; then has_fma=True; else has_fma=False; fi
+            else
+              if grep -qw fma /proc/cpuinfo; then has_fma=True; else has_fma=False; fi
+            fi
+            case "${{ inputs.compiler }}" in
+              msvc) flags="/arch:AVX2 /fp:contract" ;;
+              clang-cl) flags="/arch:AVX2 /clang:-ffp-contract=fast" ;;
+              *) flags="-mfma -mavx2 -ffp-contract=fast" ;;
+            esac
+            ;;
+          arm64|aarch64)
+            # Fused multiply-add is part of the base A64 instruction set:
+            has_fma=True
+            flags="-ffp-contract=fast"
+            ;;
+          *)
+            echo "::error::Unknown architecture $(uname -m)"
+            exit 1
+            ;;
+        esac
+        echo "FMA: $has_fma ($(uname -m)); flags: $flags"
+        if [ "$has_fma" != True ]; then
+          echo "::error::This runner's CPU has no FMA"
+          exit 1
+        fi
+        b2_flags=""
+        for f in $flags; do b2_flags="$b2_flags cxxflags=$f"; done
+        echo "CXXFLAGS=$flags" >> "$GITHUB_ENV"
+        echo "CUDAFLAGS=-Xcompiler=$(echo $flags | tr ' ' ',')" >> "$GITHUB_ENV"
+        echo "FMA_B2=$b2_flags" >> "$GITHUB_ENV"

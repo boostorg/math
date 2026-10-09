@@ -50,7 +50,19 @@ echo '==================================> BEFORE_SCRIPT'
 
 echo '==================================> SCRIPT'
 
-echo "using $TOOLSET : : $COMPILER : <cxxflags>-std=$CXXSTD $OPTIONS ;" > ~/user-config.jam
+# Require fused multiply-add, and let the compiler fuse a*b + c freely:
+case $(uname -m) in
+    x86_64)
+        grep -qw fma /proc/cpuinfo || { echo "This runner's CPU has no FMA"; exit 1; }
+        FMA_FLAGS="<cxxflags>-mfma <cxxflags>-mavx2 <cxxflags>-ffp-contract=fast"
+        ;;
+    *)
+        # Fused multiply-add is part of the base aarch64 and s390x instruction sets:
+        FMA_FLAGS="<cxxflags>-ffp-contract=fast"
+        ;;
+esac
+echo "FMA: $(uname -m); $FMA_FLAGS"
+echo "using $TOOLSET : : $COMPILER : <cxxflags>-std=$CXXSTD $OPTIONS $FMA_FLAGS ;" > ~/user-config.jam
 (cd libs/config/test && ../../../b2 print_config_info print_math_info toolset=$TOOLSET)
 (cd libs/math/test && ../../../b2 -d0 -j3 toolset=$TOOLSET $TEST_SUITE)
 
