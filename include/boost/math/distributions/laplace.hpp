@@ -180,8 +180,8 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const laplace_distribution<RealTyp
        return result;
    }
 
-   const RealType mu = dist.scale();
-   const RealType b = dist.location();
+   const RealType mu = dist.location();
+   const RealType b = dist.scale();
 
    // if b is 0 avoid divide by 0 error
    if(abs(b) < BOOST_MATH_NAMESPACE::numeric_limits<RealType>::epsilon())

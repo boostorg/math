@@ -492,6 +492,31 @@ void test_location_scale_symmetry()
 }
 
 template <class RealType>
+void test_logpdf_location_scale_symmetry()
+{
+   RealType tolerance(boost::math::tools::epsilon<RealType>() * 500); // 5 eps as a percentage
+
+   const float xtest[7] = {  -2.0, -1.0, -0.5, 0.0, 0.5, 1.0, 2.0 };
+   const float ltest[7] = {  -2.0, -1.0, -0.5, 0.0, 0.5, 1.0, 2.0 };
+   const float stest[3] = {  0.5, 1.0, 2.0 };
+
+   for (int xi=0; xi<7; ++xi)
+      for (int li=0; li<7; ++li)
+         for (int si=0; si<3; ++si)
+         {
+            RealType x( static_cast<RealType>(xtest[xi]) );
+            RealType l( static_cast<RealType>(ltest[li]) );
+            RealType s( static_cast<RealType>(stest[si]) );
+            RealType x0( (x-l)/s );
+
+            BOOST_CHECK_CLOSE(
+               logpdf(laplace_distribution<RealType>(l,s), x) + log(s),
+               logpdf(laplace_distribution<RealType>(), x0),
+               tolerance);
+         }
+}
+
+template <class RealType>
 void test_mmm_moments()
 {
    RealType tolerance(boost::math::tools::epsilon<RealType>() * 500); // 5 eps as a percentage
@@ -684,6 +709,12 @@ BOOST_AUTO_TEST_CASE( location_scale_symmetry )
 {
    test_location_scale_symmetry<float>();
    test_location_scale_symmetry<double>();
+}
+
+BOOST_AUTO_TEST_CASE( logpdf_location_scale_symmetry )
+{
+   test_logpdf_location_scale_symmetry<float>();
+   test_logpdf_location_scale_symmetry<double>();
 }
 
 BOOST_AUTO_TEST_CASE( mmm_moments )
