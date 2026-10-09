@@ -476,6 +476,48 @@ private:
    bool invert;
 };
 
+//
+// Estimate x from the leading terms of the power series
+//
+//    I_x(a, b) = x^a / (a B(a, b)) * (1 - a (b - 1) x / (a + 1) + ...)
+//
+// Returns true and sets *px only when x is small enough for the estimate
+// to be good, which is the case far out in the lower tail.
+//
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED bool ibeta_inv_small_x_estimate(T a, T b, T p, T* px, const Policy& pol)
+{
+   BOOST_MATH_STD_USING
+
+   T bet = 0;
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+   try
+#endif
+   {
+      bet = BOOST_MATH_NAMESPACE::beta(a, b, pol);
+   }
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+   catch (const std::overflow_error&)
+   {
+      return false;
+   }
+#endif
+   if(!(bet > tools::min_value<T>()) || !(BOOST_MATH_NAMESPACE::isfinite)(bet))
+      return false;
+   //
+   // Work in logs: p * a * B(a, b) can underflow even though x does not.
+   //
+   T x = exp((log(p) + log(a) + log(bet)) / a);
+   //
+   // Successive terms of the series fall off like x when b is small and
+   // like (b - 1) x when b is large, so this bounds what has been dropped:
+   //
+   if(!(x * (1 + fabs(b - 1)) < T(0.1)) || !(x > tools::min_value<T>()))
+      return false;
+   *px = x * (1 + (b - 1) * x / (a + 1));
+   return true;
+}
+
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
 {
@@ -600,7 +642,17 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
       }
       T minv = BOOST_MATH_GPU_SAFE_MIN(a, b);
       T maxv = BOOST_MATH_GPU_SAFE_MAX(a, b);
-      if((sqrt(minv) > (maxv - minv)) && (minv > 5))
+      if(ibeta_inv_small_x_estimate(a, b, p, &x, pol))
+      {
+         //
+         // x is small enough that the first two terms of the power series
+         // for the incomplete beta give a better starting point than any of
+         // the asymptotic expansions below, which lose accuracy far out in
+         // the tail and can leave the iteration too far from the root.
+         //
+         y = 1 - x;
+      }
+      else if((sqrt(minv) > (maxv - minv)) && (minv > 5))
       {
          //
          // When a and b differ by a small amount

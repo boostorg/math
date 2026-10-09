@@ -414,5 +414,29 @@ void test_spots(T)
          ::boost::math::ibeta_inv(static_cast<T>(40), static_cast<T>(80), static_cast<T>(0.05189222238401044), no_promotion),
          static_cast<T>(2.651352194946371952577010439645915240e-01L), tol);
    }
+   //
+   // Far out in the lower tail the asymptotic starting guesses are poor, and
+   // the iteration could run out of steps before reaching the root.  The start
+   // now comes from the power series there.  Reference values are from the
+   // finite sum for integer a in exact decimal arithmetic.
+   //
+   if (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::min_exponent10 < -260))
+   {
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(2), static_cast<T>(4), static_cast<T>(1e-100L)),
+         static_cast<T>(3.1622776601683793319988935444327185337196e-51L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(3), static_cast<T>(3), static_cast<T>(1e-200L)),
+         static_cast<T>(1.0e-67L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(10), static_cast<T>(10000), static_cast<T>(1e-250L)),
+         static_cast<T>(4.5266918634202858901451019656158915843844e-29L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(5), static_cast<T>(1.0e6L), static_cast<T>(1e-150L)),
+         static_cast<T>(2.6051658743682083165731837839652844149311e-36L), tolerance);
+      BOOST_CHECK_EQUAL(
+         ::boost::math::ibetac_inv(static_cast<T>(4), static_cast<T>(2), static_cast<T>(1e-100L)),
+         static_cast<T>(1));
+   }
 }
 
