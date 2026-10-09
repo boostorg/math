@@ -92,9 +92,6 @@ jobs:
       - name: Test
         run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS $FMA_B2
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
   ubuntu-focal-no-eh:
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -155,9 +152,6 @@ jobs:
       - name: Test
         run: ../../../b2 toolset=$TOOLSET no_eh_tests exception-handling=off rtti=off define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER $FMA_B2
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
   macos:
     runs-on: macos-latest
     timeout-minutes: 120
@@ -198,9 +192,6 @@ jobs:
       - name: Test
         run: ../../../b2 toolset=${{ matrix.toolset }} cxxstd=${{ matrix.standard }} ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER $FMA_B2
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
   windows_gcc:
     runs-on: windows-2025
     timeout-minutes: 120
@@ -246,9 +237,6 @@ jobs:
       - name: Test
         run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} %FMA_B2%
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
   MSVC2022:
     runs-on: windows-2022
     timeout-minutes: 120
@@ -299,9 +287,6 @@ jobs:
       - name: Test
         run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} pch=off %FMA_B2%
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
   standalone-compile-tests-gcc:
     runs-on: ubuntu-24.04
     strategy:
@@ -445,9 +430,6 @@ jobs:
       - name: Test
         run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_STANDALONE define=BOOST_MP_STANDALONE $FMA_B2
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
 
   posix-cmake-test:
     strategy:
@@ -837,12 +819,6 @@ jobs:
         run: |
           cd ../boost-root/__build__
           ctest --output-on-failure --no-tests=error
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
-        with:
-          kind: ctest
-          dir: ../boost-root/__build__
   cuda-cmake-test:
     strategy:
       fail-fast: false
@@ -905,12 +881,6 @@ jobs:
           # way on a real GPU (RTX 3080 Ti), and prime_sieve_cuda takes over 25 minutes
           # on a simulated one (39 s on the card).
           ctest --output-on-failure --no-tests=error -j $(nproc) -E 'inverse_gaussian_quan|lgamma_p_double|prime_sieve_cuda'
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
-        with:
-          kind: ctest
-          dir: ../boost-root/__build__
 
   cmake-module-test:
     strategy:
@@ -989,12 +959,6 @@ jobs:
           cd ../boost-root/__build__
           cmake --build . --target tests
           ctest --output-on-failure --no-tests=error
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
-        with:
-          kind: ctest
-          dir: ../boost-root/__build__
 
   cmake-module-test-gcc:
     strategy:
@@ -1071,12 +1035,6 @@ jobs:
           cd ../boost-root/__build__
           cmake --build . --target tests
           ctest --output-on-failure --no-tests=error
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
-        with:
-          kind: ctest
-          dir: ../boost-root/__build__
 
   cmake-module-test-msvc:
     strategy:
@@ -1153,9 +1111,3 @@ jobs:
           cd ../boost-root/__build__
           cmake --build . --target tests
           ctest --output-on-failure --no-tests=error
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
-        with:
-          kind: ctest
-          dir: ../boost-root/__build__
