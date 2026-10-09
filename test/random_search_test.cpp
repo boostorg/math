@@ -60,7 +60,8 @@ template <class Real> void test_ackley() {
   CHECK_LE(size_t(1), queries.size());
   for (auto const & q : queries) {
     auto expected = ackley<Real>(q.first);
-    CHECK_EQUAL(expected, q.second);
+    // Not bitwise equal: the optimizer's call may be inlined and fused differently from this one.
+    CHECK_MOLLIFIED_CLOSE(expected, q.second, 8*std::numeric_limits<Real>::epsilon());
   }
 }
 

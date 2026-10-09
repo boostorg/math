@@ -32,7 +32,8 @@ runs:
                 flags="-mfma -mavx2 -ffp-contract=fast"
                 # MinGW: Win64 only aligns the stack to 16 bytes, but gcc emits aligned 32-byte AVX moves
                 # for stack objects, which crash (gcc bug 54412). Have the assembler make them unaligned.
-                if [ "$RUNNER_OS" = Windows ]; then flags="$flags -Wa,-muse-unaligned-vector-move"; fi
+                # Only for b2: CXXFLAGS is also seen by bootstrap, which builds b2 with another compiler.
+                if [ "$RUNNER_OS" = Windows ]; then b2_extra="cxxflags=-Wa,-muse-unaligned-vector-move"; fi
                 ;;
             esac
             ;;
@@ -51,7 +52,7 @@ runs:
           echo "::error::This runner's CPU has no FMA"
           exit 1
         fi
-        b2_flags=""
+        b2_flags="${b2_extra:-}"
         for f in $flags; do b2_flags="$b2_flags cxxflags=$f"; done
         echo "CXXFLAGS=$flags" >> "$GITHUB_ENV"
         echo "CUDAFLAGS=-Xcompiler=$(echo $flags | tr ' ' ',')" >> "$GITHUB_ENV"
