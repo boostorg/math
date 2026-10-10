@@ -251,6 +251,29 @@ void test_spots_2F1(T, const char*)
 }
 
 template <class T>
+void test_cancellation_2F1(T, const char*)
+{
+   //
+   // https://github.com/boostorg/math/issues/1522
+   // The series here cancel so badly that most of the digits in the result are wrong.  The error estimate
+   // says so if it is requested, and if it's not then an exception must be raised rather than returning a
+   // value that is wrong in most of its digits.  Reference values calculated with Arb:
+   //
+   static const std::array<std::array<T, 5>, 2> data = { {
+      { SC_(9.0625), SC_(13.625), SC_(4.5), SC_(-0.6875), SC_(2.107503713242693781171923454116933960691675630871e-5) },
+      { SC_(45.5), SC_(0.125), SC_(4.5), SC_(-0.6875), SC_(0.762999969577181178354134721632979164888521564591) },
+   } };
+   for (auto row = data.begin(); row != data.end(); ++row)
+   {
+      T norm;
+      T result = boost::math::hypergeometric_pFq({ (*row)[0], (*row)[1] }, { (*row)[2] }, (*row)[3], &norm);
+      BOOST_CHECK_LE(fabs(result - (*row)[4]), norm);
+      BOOST_CHECK_GT(norm, boost::math::tools::root_epsilon<T>() * fabs(result));
+      BOOST_CHECK_THROW(boost::math::hypergeometric_pFq({ (*row)[0], (*row)[1] }, { (*row)[2] }, (*row)[3]), boost::math::evaluation_error);
+   }
+}
+
+template <class T>
 void test_spots_0F2(T, const char*)
 {
 #include "hypergeometric_0F2.ipp"
@@ -334,5 +357,6 @@ void test_spots(T z, const char* type_name)
    test_spots_1F2(z, type_name);
    test_spots_2F2(z, type_name);
    test_spots_2F1(z, type_name);
+   test_cancellation_2F1(z, type_name);
    test_special_cases(z, type_name);
 }
