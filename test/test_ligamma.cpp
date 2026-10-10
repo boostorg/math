@@ -114,9 +114,12 @@ void test_spots(std::size_t ulps, Real absolute_tolerance)
    // epsilon at these points, so only the built-in types are held to this:
    if (std::is_floating_point<Real>::value)
    {
+      // Where long double is no wider than double (MSVC), double is not evaluated in a wider type, and the
+      // 1/a in tgamma_small_upper_part magnifies the rounding of its terms: 6 ulps at a = 0.1875 there.
+      const std::size_t near_one_ulps = std::numeric_limits<Real>::digits < std::numeric_limits<long double>::digits ? ulps : 2 * ulps;
       for (const near_one_case& c : near_one_cases)
       {
-         CHECK_ULP_CLOSE(from_reference<Real>(cpp_bin_float_100(c.log_upper)), Real(ligamma(Real(c.a), Real(c.x))), ulps);
+         CHECK_ULP_CLOSE(from_reference<Real>(cpp_bin_float_100(c.log_upper)), Real(ligamma(Real(c.a), Real(c.x))), near_one_ulps);
       }
    }
 
