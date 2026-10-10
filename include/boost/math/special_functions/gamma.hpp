@@ -1901,11 +1901,35 @@ BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper)
    // Under- and overflow are ours to handle, so stop the evaluations below from reporting them:
    typedef typename policies::normalise<Policy, policies::underflow_error<policies::ignore_error>, policies::overflow_error<policies::ignore_error> >::type quiet_policy;
 
+   if(upper && (a < 2) && (x < 1.1f))
+   {
+      //
+      // tgamma_small_upper_part forms tgamma(a, x) as R - x^a S, with R = (tgamma1pm1(a) - powm1(x, a)) / a,
+      // without the cancellation in tgamma(a) - tgamma_lower(a, x) that the general method has here.
+      // Subtracting 1 from R instead gives tgamma(a, x) - 1 directly, so that log1p is accurate where
+      // tgamma(a, x) is near 1; away from 1, the log of the value itself is better. For a >= 1 and
+      // small x, tgamma1pm1(a) - a and powm1(x, a) ~ -1 cancel, and the methods below do better:
+      //
+      T pm1 = BOOST_MATH_NAMESPACE::powm1(x, a, pol);
+      if((a < 1) || (pm1 > -0.5f))
+      {
+         T result = ((BOOST_MATH_NAMESPACE::tgamma1pm1(a, pol) - a) - pm1) / a;
+         detail::small_gamma2_series<T> s(a, x);
+         BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+         result -= (pm1 + 1) * tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter, T(0));
+         policies::check_series_iterations<T>(function, max_iter, pol);
+         if(fabs(result) <= 0.5f)
+            return BOOST_MATH_NAMESPACE::log1p(result, pol);
+         return log(tgamma_small_upper_part(a, x, pol));
+      }
+   }
    if(a < max_factorial<T>::value)
    {
       // The non-normalised value cannot overflow, as it is at most tgamma(a):
       T value = gamma_incomplete_imp(a, x, false, upper, quiet_policy(), static_cast<T*>(nullptr));
-      if(value >= tools::min_value<T>())
+      // Near 1 the log would turn the value's relative error into a far larger one in the result,
+      // so there the regularised forms below, which never form the value, are used instead:
+      if((value >= tools::min_value<T>()) && ((value < 0.5f) || (value > 2)))
          return log(value);
    }
    T target = gamma_incomplete_imp(a, x, true, upper, quiet_policy(), static_cast<T*>(nullptr));
