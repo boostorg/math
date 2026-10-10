@@ -407,6 +407,28 @@ void test_spots(T, const char* name)
       static_cast<T>(0.996883849270604867987018345952777458206564642094991979259788L), tolerance);
 
    //
+   // https://github.com/boostorg/math/issues/1523
+   // Integer a and b < 40 use a finite sum of binomial terms, the first of which underflowed (or was
+   // denormal and had lost most of its digits) when the result is still a normal number.
+   // Reference values calculated with Arb.
+   //
+   if((std::numeric_limits<T>::digits == 53) && (std::numeric_limits<T>::max_exponent == 1024))
+   {
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(355), static_cast<T>(30), static_cast<T>(0.125)),
+         static_cast<T>(1.796632735766621150661223125033790309249801096395e-279L), tolerance * 2);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(360), static_cast<T>(30), static_cast<T>(0.125)),
+         static_cast<T>(8.092463621017578599073247171071767737149917413962e-284L), tolerance * 2);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(365), static_cast<T>(30), static_cast<T>(0.125)),
+         static_cast<T>(3.626281949877933614152039221277820028263770136555e-288L), tolerance * 2);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(350), static_cast<T>(20), static_cast<T>(0.125)),
+         static_cast<T>(2.012450499868551870681489937548499305656442752329e-286L), tolerance * 2);
+   }
+
+   //
    // Bug cases from Rocco Romeo:
    //
    BOOST_CHECK_CLOSE(
