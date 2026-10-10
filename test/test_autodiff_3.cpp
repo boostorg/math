@@ -168,6 +168,21 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(fmod_test, T, bin_float_types) {
   BOOST_CHECK_EQUAL(y.derivative(3u), T(0));
 }
 
+BOOST_AUTO_TEST_CASE_TEMPLATE(fma_test, T, bin_float_types) {
+  BOOST_MATH_STD_USING
+  constexpr unsigned m = 3;
+  const T cx = T(3.25);
+  auto x = make_fvar<T, m>(cx);
+  auto y = fma(x, x, autodiff_fvar<T, m>(T(0.5)));
+  BOOST_CHECK_EQUAL(y.derivative(0u), T(11.0625));
+  BOOST_CHECK_EQUAL(y.derivative(1u), T(6.5));
+  BOOST_CHECK_EQUAL(y.derivative(2u), T(2));
+  BOOST_CHECK_EQUAL(y.derivative(3u), T(0));
+  // The value is rounded once: (1 + 2^-12)^2 - (1 + 2^-11) is exactly 2^-24.
+  auto z = make_fvar<T, m>(1 + ldexp(T(1), -12));
+  BOOST_CHECK_EQUAL(fma(z, z, autodiff_fvar<T, m>(-(1 + ldexp(T(1), -11)))).derivative(0u), ldexp(T(1), -24));
+}
+
 BOOST_AUTO_TEST_CASE_TEMPLATE(round_and_trunc, T, all_float_types) {
   BOOST_MATH_STD_USING
   constexpr unsigned m = 3;
