@@ -687,6 +687,11 @@ inline T log_gamma_near_1(const T& z, Policy const& pol)
    // no lanczos support, use a taylor series at z = 1,
    // see https://www.wolframalpha.com/input/?i=taylor+series+lgamma(x)+at+x+%3D+1
    //
+   // The series is  lgamma(1 + z) = -gamma z + sum_{n >= 2} (-1)^n zeta(n) z^n / n,  where
+   // polygamma(n - 1, 1) = (-1)^n (n - 1)! zeta(n).  Since zeta(n) -> 1 this only converges
+   // like z^n, so remove the terms (-z)^n / n of zeta(n) = 1 + ..., which sum to
+   // -log1p(z) + z, leaving terms which converge like (z / 2)^n.
+   //
    BOOST_MATH_STD_USING // ADL of std names
 
    // For some reason, several lines aren't triggered for coverage even though
@@ -694,18 +699,20 @@ inline T log_gamma_near_1(const T& z, Policy const& pol)
 
    BOOST_MATH_ASSERT(fabs(z) < 1); // LCOV_EXCL_LINE
 
-   T result = -constants::euler<T>() * z;
+   T result = (1 - constants::euler<T>()) * z - BOOST_MATH_NAMESPACE::log1p(z, pol);
 
    T power_term = z * z / 2;
+   T negated_power = z * z;
    int n = 2;     // LCOV_EXCL_LINE
    T term = 0;    // LCOV_EXCL_LINE
 
    do
    {
-      term = power_term * BOOST_MATH_NAMESPACE::polygamma(n - 1, T(1), pol);
+      term = power_term * BOOST_MATH_NAMESPACE::polygamma(n - 1, T(1), pol) - negated_power / n;
       result += term;  // LCOV_EXCL_LINE
       ++n;
       power_term *= z / n;
+      negated_power *= -z;
    } while (fabs(result) * tools::epsilon<T>() < fabs(term));
 
    return result;
@@ -834,6 +841,30 @@ template <class RT1, class RT2, class Policy>
 BOOST_MATH_GPU_ENABLED tools::promote_args_t<RT1, RT2> tgamma(RT1 a, RT2 z, const Policy& pol);
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+//
+// Calculates tgamma(z+1)-1 for -0.5 <= z < 2.5 for types without rational approximations
+// to lgamma.  Their lanczos approximations are accurate to the precision of the type, but
+// this is not enough to avoid losing a few digits to cancellation here.
+// Reduce to a Taylor series at 1 using tgamma(1 + w + n) = tgamma(1 + w) (1 + w) ... (n + w)
+// with -1/2 <= w < 0.6 (w is exact), and take the expm1 of lgamma:
+//
+template <class T, class Policy>
+T tgammap1m1_series(T z, Policy const& pol)
+{
+   BOOST_MATH_STD_USING
+
+   int n = z < T(0.6f) ? 0 : z < T(1.6f) ? 1 : 2;
+   T w = z - n;
+   T result = log_gamma_near_1(w, pol);
+   if(n >= 1)
+      result += BOOST_MATH_NAMESPACE::log1p(w, pol);
+   if(n == 2)
+      result += log(w + 2);
+   return BOOST_MATH_NAMESPACE::expm1(result, pol);
+}
+#endif // BOOST_MATH_HAS_GPU_SUPPORT
+
 //
 // This helper calculates tgamma(dz+1)-1 without cancellation errors,
 // used by the upper incomplete gamma with z < 1:
@@ -852,6 +883,15 @@ BOOST_MATH_GPU_ENABLED T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& 
    > tag_type;
 
    T result{};
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   BOOST_MATH_IF_CONSTEXPR(precision_type::value > 113)
+   {
+      // Too many digits for the rational approximations to lgamma, the generic code
+      // below is not accurate enough:
+      if((dz >= T(-0.5)) && (dz < T(2.5)))
+         return tgammap1m1_series(dz, pol);
+   }
+#endif
    if(dz < 0)
    {
       if(dz < T(-0.5))
@@ -903,9 +943,9 @@ inline T tgammap1m1_imp(T z, Policy const& pol,
 {
    BOOST_MATH_STD_USING // ADL of std names
 
-   if(fabs(z) < T(0.55))
+   if((z >= T(-0.5)) && (z < T(2.5)))
    {
-      return BOOST_MATH_NAMESPACE::expm1(log_gamma_near_1(z, pol));
+      return tgammap1m1_series(z, pol);
    }
    return BOOST_MATH_NAMESPACE::expm1(BOOST_MATH_NAMESPACE::lgamma(1 + z, pol));
 }
