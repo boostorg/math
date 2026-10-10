@@ -105,4 +105,21 @@ void test_spots(T z, const char* type_name)
    BOOST_CHECK_EQUAL(boost::math::hypergeometric_2F0(T(0), T(20), T(2)), T(1));
    BOOST_CHECK_EQUAL(boost::math::hypergeometric_2F0(T(20), T(0), T(2)), T(1));
    BOOST_CHECK_EQUAL(boost::math::hypergeometric_2F0(T(20), T(10), T(0)), T(1));
+   //
+   // Negative integer a1 with a2 > 0 and z > 0, where the series cancels: exact values, from the series
+   // in rational arithmetic.  The last case may raise an evaluation_error rather than lose digits:
+   //
+   T tolerance = boost::math::tools::epsilon<T>() * 4;
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_2F0(T(-20), T(7.5), T(0.0703125)), T(0.0009058711400604743835444245801821637120072L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_2F0(T(7.5), T(-20), T(0.0703125)), T(0.0009058711400604743835444245801821637120072L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_2F0(T(-50), T(1.25), T(0.03125)), T(0.3052122739096701050752227260666316776838L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_2F0(T(-30), T(0.5), T(0.0625)), T(0.5866164156536446434351584193455355526903L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_2F0(T(-40), T(3), T(0.015625)), T(0.2278524180520048379881596526813574062803L), tolerance);
+#ifndef BOOST_NO_EXCEPTIONS
+   try
+   {
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_2F0(T(-100), T(1.75), T(0.03125)), T(0.08262089934873659278920475540110746903509L), tolerance);
+   }
+   catch (const boost::math::evaluation_error&) {}
+#endif
 }
