@@ -18,9 +18,11 @@
 
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 #endif
 #include <boost/math/tools/roots.hpp>
+#include <boost/math/tools/throw_exception.hpp>
 #include <boost/math/special_functions/legendre.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
@@ -33,7 +35,7 @@ public:
     {
         if (m == 0)
         {
-           throw std::domain_error("The Legendre-Stieltjes polynomial is defined for order m > 0.\n");
+           BOOST_MATH_THROW_EXCEPTION(std::domain_error("The Legendre-Stieltjes polynomial is defined for order m > 0.\n"));
         }
         m_m = static_cast<int>(m);
         std::ptrdiff_t n = m - 1;
