@@ -95,7 +95,6 @@ jobs:
         with:
           # For coverage builds fetch the whole history, else only 1 commit using a 'fake ternary'
           fetch-depth: ${{ matrix.coverage && '0' || '1' }}
-      - uses: ./.github/actions/fma
 
       - name: Cache ccache
         uses: actions/cache@v4
@@ -194,7 +193,7 @@ jobs:
 
       - name: Run tests
         if: '!matrix.coverity'
-        run: ci/build.sh $FMA_B2
+        run: ci/build.sh
 
       - name: Upload coverage
         if: matrix.coverage

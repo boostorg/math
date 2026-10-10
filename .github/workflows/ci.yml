@@ -18,6 +18,13 @@ concurrency:
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+# The gcc and clang jobs that run the test suite build with fused multiply-add. -O2 rather than
+# b2's default of -O0 because it is what users build with and gcc does not fuse below it, and
+# inlining=on because b2's debug variant otherwise adds -fno-inline. The CMake jobs get the same
+# flags through CXXFLAGS. arm64 has FMA in its base instruction set, so macOS drops -mfma.
+env:
+  FMA_B2: cxxflags=-mfma cxxflags=-O2 inlining=on
+
 # b2 -l is no use as a hang detector: on POSIX it is a CPU-time rlimit that kills multithreaded
 # tests, and on Windows it misfires at launch.  So the test jobs have a job-level timeout instead.
 jobs:
@@ -44,7 +51,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
-      - uses: ./.github/actions/fma
       - name: Set TOOLSET
         run: echo ${{ matrix.compiler }} | awk '/^g/ { print "TOOLSET=gcc" } /^clang/ { print "TOOLSET=clang" }' >> $GITHUB_ENV
       - name: Add repository
@@ -84,7 +90,7 @@ jobs:
         run: 'echo "using $TOOLSET : : ${{ matrix.compiler }} : <cxxflags>-std=${{ matrix.standard }} ;" > ~/user-config.jam'
         working-directory: ../boost-root
       - name: Config info install
-        run: ../../../b2 config_info_travis_install toolset=$TOOLSET $FMA_B2
+        run: ../../../b2 config_info_travis_install toolset=$TOOLSET
         working-directory: ../boost-root/libs/config/test
       - name: Config info
         run: ./config_info_travis
@@ -92,9 +98,6 @@ jobs:
       - name: Test
         run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS $FMA_B2
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
   ubuntu-focal-no-eh:
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -107,7 +110,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
-      - uses: ./.github/actions/fma
       - name: Set TOOLSET
         run: echo ${{ matrix.compiler }} | awk '/^g/ { print "TOOLSET=gcc" } /^clang/ { print "TOOLSET=clang" }' >> $GITHUB_ENV
       - name: Add repository
@@ -147,7 +149,7 @@ jobs:
         run: 'echo "using $TOOLSET : : ${{ matrix.compiler }} : <cxxflags>-std=${{ matrix.standard }} ;" > ~/user-config.jam'
         working-directory: ../boost-root
       - name: Config info install
-        run: ../../../b2 config_info_travis_install toolset=$TOOLSET $FMA_B2
+        run: ../../../b2 config_info_travis_install toolset=$TOOLSET
         working-directory: ../boost-root/libs/config/test
       - name: Config info
         run: ./config_info_travis
@@ -155,12 +157,11 @@ jobs:
       - name: Test
         run: ../../../b2 toolset=$TOOLSET no_eh_tests exception-handling=off rtti=off define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER $FMA_B2
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
   macos:
     runs-on: macos-latest
     timeout-minutes: 120
+    env:
+      FMA_B2: cxxflags=-O2 inlining=on
     strategy:
       fail-fast: false
       matrix:
@@ -171,7 +172,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
-      - uses: ./.github/actions/fma
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -190,7 +190,7 @@ jobs:
         run: ./b2 headers
         working-directory: ../boost-root
       - name: Config info install
-        run: ../../../b2 config_info_travis_install toolset=${{ matrix.toolset }} cxxstd=${{ matrix.standard }} $FMA_B2
+        run: ../../../b2 config_info_travis_install toolset=${{ matrix.toolset }} cxxstd=${{ matrix.standard }}
         working-directory: ../boost-root/libs/config/test
       - name: Config info
         run: ./config_info_travis
@@ -198,9 +198,6 @@ jobs:
       - name: Test
         run: ../../../b2 toolset=${{ matrix.toolset }} cxxstd=${{ matrix.standard }} ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER $FMA_B2
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
   windows_gcc:
     runs-on: windows-2025
     timeout-minutes: 120
@@ -209,6 +206,9 @@ jobs:
         shell: cmd
     env:
       ARGS: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard }}
+      # -mfma brings in AVX. Win64 only aligns the stack to 16 bytes, but gcc emits aligned 32-byte
+      # AVX moves for stack objects, which crash (gcc bug 54412). Have the assembler unalign them.
+      FMA_B2: cxxflags=-mfma cxxflags=-O2 inlining=on cxxflags=-Wa,-muse-unaligned-vector-move
     strategy:
       fail-fast: false
       matrix:
@@ -219,7 +219,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
-      - uses: ./.github/actions/fma
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -238,7 +237,7 @@ jobs:
         run: b2 headers
         working-directory: ../boost-root
       - name: Config info install
-        run: ..\..\..\b2 config_info_travis_install %ARGS% %FMA_B2%
+        run: ..\..\..\b2 config_info_travis_install %ARGS%
         working-directory: ../boost-root/libs/config/test
       - name: Config info
         run: config_info_travis
@@ -246,9 +245,6 @@ jobs:
       - name: Test
         run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} %FMA_B2%
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
   MSVC2022:
     runs-on: windows-2022
     timeout-minutes: 120
@@ -270,9 +266,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
-      - uses: ./.github/actions/fma
-        with:
-          compiler: ${{ matrix.toolset == 'clang-win' && 'clang-cl' || 'msvc' }}
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -291,17 +284,14 @@ jobs:
         run: b2 headers
         working-directory: ../boost-root
       - name: Config info install
-        run: ..\..\..\b2 config_info_travis_install %ARGS% %FMA_B2%
+        run: ..\..\..\b2 config_info_travis_install %ARGS%
         working-directory: ../boost-root/libs/config/test
       - name: Config info
         run: config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} pch=off %FMA_B2%
+        run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} pch=off
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
   standalone-compile-tests-gcc:
     runs-on: ubuntu-24.04
     strategy:
@@ -312,7 +302,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
-      - uses: ./.github/actions/fma
       - name: Add repository
         continue-on-error: true
         id: addrepo
@@ -353,7 +342,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
-      - uses: ./.github/actions/fma
       - name: Add repository
         continue-on-error: true
         id: addrepo
@@ -397,7 +385,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
-      - uses: ./.github/actions/fma
       - name: Set TOOLSET
         run: echo ${{ matrix.compiler }} | awk '/^g/ { print "TOOLSET=gcc" } /^clang/ { print "TOOLSET=clang" }' >> $GITHUB_ENV
       - name: Add repository
@@ -437,7 +424,7 @@ jobs:
         run: 'echo "using $TOOLSET : : ${{ matrix.compiler }} : <cxxflags>-std=${{ matrix.standard }} ;" > ~/user-config.jam'
         working-directory: ../boost-root
       - name: Config info install
-        run: ../../../b2 config_info_travis_install toolset=$TOOLSET $FMA_B2
+        run: ../../../b2 config_info_travis_install toolset=$TOOLSET
         working-directory: ../boost-root/libs/config/test
       - name: Config info
         run: ./config_info_travis
@@ -445,9 +432,6 @@ jobs:
       - name: Test
         run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_STANDALONE define=BOOST_MP_STANDALONE $FMA_B2
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
 
   posix-cmake-test:
     strategy:
@@ -460,7 +444,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/fma
 
       - name: Install packages
         if: matrix.install
@@ -511,7 +494,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/fma
 
       - name: Use library with add_subdirectory (header-only)
         run: |
@@ -545,9 +527,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/fma
-        with:
-          compiler: ${{ runner.os == 'Windows' && 'msvc' || 'gnu' }}
 
       - name: Relocate the library into my_lib::math
         if: runner.os != 'Windows'
@@ -581,7 +560,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/fma
 
       - name: Setup Boost
         run: |
@@ -623,7 +601,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/fma
 
       - name: Setup Boost
         run: |
@@ -676,7 +653,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/fma
 
       - name: Setup Boost
         run: |
@@ -729,7 +705,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/fma
 
       - name: Setup Boost
         run: |
@@ -777,6 +752,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      CXXFLAGS: -mfma -O2
+
     steps:
       - name: Intel Apt repository
         timeout-minutes: 1
@@ -798,7 +776,6 @@ jobs:
 
       - name: checkout project code
         uses: actions/checkout@v6
-      - uses: ./.github/actions/fma
 
       - name: Install Packages
         run: |
@@ -837,17 +814,15 @@ jobs:
         run: |
           cd ../boost-root/__build__
           ctest --output-on-failure --no-tests=error
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
-        with:
-          kind: ctest
-          dir: ../boost-root/__build__
   cuda-cmake-test:
     strategy:
       fail-fast: false
 
     runs-on: ubuntu-24.04
+
+    env:
+      CXXFLAGS: -mfma -O2
+      CUDAFLAGS: -Xcompiler=-mfma,-O2
 
     steps:
       # CUDA 12.8 and a simulated GPU (PantheonSim): the runner has none, so
@@ -864,7 +839,6 @@ jobs:
           nvcc -V
           nvidia-smi -L
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/fma
 
       - name: Install Packages
         run: |
@@ -905,12 +879,6 @@ jobs:
           # way on a real GPU (RTX 3080 Ti), and prime_sieve_cuda takes over 25 minutes
           # on a simulated one (39 s on the card).
           ctest --output-on-failure --no-tests=error -j $(nproc) -E 'inverse_gaussian_quan|lgamma_p_double|prime_sieve_cuda'
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
-        with:
-          kind: ctest
-          dir: ../boost-root/__build__
 
   cmake-module-test:
     strategy:
@@ -929,7 +897,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/fma
 
       - name: Install toolchain
         run: |
@@ -973,7 +940,7 @@ jobs:
             -DBUILD_TESTING=ON \
             -DBOOST_MATH_BUILD_MODULE=ON \
             -DCMAKE_CXX_COMPILER=clang++-$LLVM_VERSION \
-            -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-reserved-module-identifier $CXXFLAGS" \
+            -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-reserved-module-identifier -mfma -O2" \
             -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD=$IMPORT_STD_UUID \
             -DCMAKE_CXX_STDLIB_MODULES_JSON=/usr/lib/llvm-$LLVM_VERSION/lib/libc++.modules.json \
             ..
@@ -989,12 +956,6 @@ jobs:
           cd ../boost-root/__build__
           cmake --build . --target tests
           ctest --output-on-failure --no-tests=error
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
-        with:
-          kind: ctest
-          dir: ../boost-root/__build__
 
   cmake-module-test-gcc:
     strategy:
@@ -1008,6 +969,7 @@ jobs:
     container: ubuntu:26.04
 
     env:
+      CXXFLAGS: -mfma -O2
       GCC_VERSION: "15"
       # Pinned so the experimental `import std` feature UUID below stays valid.
       CMAKE_VERSION: 4.4.0
@@ -1024,7 +986,6 @@ jobs:
           echo "/opt/cmake-$CMAKE_VERSION-linux-x86_64/bin" >> "$GITHUB_PATH"
 
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/fma
 
       - name: Setup Boost
         run: |
@@ -1071,12 +1032,6 @@ jobs:
           cd ../boost-root/__build__
           cmake --build . --target tests
           ctest --output-on-failure --no-tests=error
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
-        with:
-          kind: ctest
-          dir: ../boost-root/__build__
 
   cmake-module-test-msvc:
     strategy:
@@ -1092,9 +1047,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/fma
-        with:
-          compiler: msvc
 
       # Puts cl.exe and the MSVC INCLUDE/LIB environment on PATH for the later steps.
       - name: Set up the MSVC environment
@@ -1153,9 +1105,3 @@ jobs:
           cd ../boost-root/__build__
           cmake --build . --target tests
           ctest --output-on-failure --no-tests=error
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
-        with:
-          kind: ctest
-          dir: ../boost-root/__build__
