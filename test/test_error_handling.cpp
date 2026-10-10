@@ -340,6 +340,25 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_complex_error(std::complex<double>(0));
    test_complex_error(std::complex<long double>(0));
 
+   // An in-range complex value has to come through checked_narrowing_cast unchanged.
+   // The per-component checks used to leave the result partly uninitialized, which clang
+   // at -O1 and above with -fno-inline turned into a spurious overflow error.
+   {
+      using namespace boost::math::policies;
+      std::complex<long double> z(0.53L, -0.99L);
+      std::complex<double> r = checked_narrowing_cast<std::complex<double>, policy<> >(z, "test<%1%>");
+      BOOST_CHECK_EQUAL(r.real(), static_cast<double>(0.53L));
+      BOOST_CHECK_EQUAL(r.imag(), static_cast<double>(-0.99L));
+      // When only one component is out of range the other one keeps its value:
+      if (std::numeric_limits<long double>::max_exponent > std::numeric_limits<double>::max_exponent)
+      {
+         std::complex<long double> big((std::numeric_limits<long double>::max)(), 0.25L);
+         r = checked_narrowing_cast<std::complex<double>, policy<overflow_error<ignore_error> > >(big, "test<%1%>");
+         BOOST_CHECK((boost::math::isinf)(r.real()));
+         BOOST_CHECK_EQUAL(r.imag(), 0.25);
+      }
+   }
+
    test_polynomial_error(boost::math::tools::polynomial<float>());
 
 } // BOOST_AUTO_TEST_CASE( test_main )
