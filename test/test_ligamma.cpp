@@ -8,6 +8,7 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
+#include <type_traits>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -47,6 +48,24 @@ const ligamma_case cases[] = {
       { 1.048576e6, 1.0496e6, "1.3487766106501424078633459785724088776137287211137638456602466106862593851691460461761679317593366554025664762e+07", "1.3487767774769577991040370044266971477801670978480955073684733273999936390880788611365025536637318183046721133e+07" },
       { 3.0, 9.332636185032189e-302, "6.9314718055994530941723212145817656807550013436025525412068000949339362196969471560586332699641868754200148102e-01", "-2.0805401539685040379430916096114522299311478936385885118137747228138183602023027557844635967440697947147924131e+03" },
       { 4.0, 712.0, "-6.9229154983203152364214453894071131752969051036854104094512292173514623019574780148370046658687497631154999836e+02", "1.7917594692280550008124773583807022727229906921830047058553743431308879151883036824794790818101507763299715101e+00" }
+};
+
+// Where tgamma(a, x) is near 1, log(tgamma(a, x)) magnified tgamma's relative error, by up to 13 ulps at these
+// points in double (https://github.com/boostorg/math/issues/1514). The logarithms are between 0.1 and 0.9 in
+// magnitude, well away from zero, so their relative error is checked. Computed in cpp_bin_float_100, which agrees
+// with cpp_bin_float<80> to 1e-78:
+struct near_one_case
+{
+   double a;
+   double x;
+   const char* log_upper;
+};
+
+const near_one_case near_one_cases[] = {
+      { 1.390625, 0.001953125, "-1.1913041184082416179216001200942763032633867183697e-01" },
+      { 1.25, 0.0078125, "-1.0031506095522183340374220415887316547470731629977e-01" },
+      { 0.1875, 0.09375, "4.3359308784299207346300520698158223193093290652088e-01" },
+      { 0.75, 0.5, "-5.4736210896550123271278938139978866325343747684934e-01" }
 };
 
 template <class Real>
@@ -90,6 +109,18 @@ void test_spots(std::size_t ulps, Real absolute_tolerance)
       Real a(c.a), x(c.x);
       check(from_reference<Real>(cpp_bin_float_100(c.log_upper)), Real(ligamma(a, x)), ulps, absolute_tolerance);
       check(from_reference<Real>(cpp_bin_float_100(c.log_lower)), Real(ligamma_lower(a, x)), ulps, absolute_tolerance);
+   }
+   // In real_concept and cpp_bin_float_50, tgamma1pm1 and lgamma are themselves off by tens to hundreds of
+   // epsilon at these points, so only the built-in types are held to this:
+   if (std::is_floating_point<Real>::value)
+   {
+      // Where long double is no wider than double (MSVC), double is not evaluated in a wider type, and the
+      // 1/a in tgamma_small_upper_part magnifies the rounding of its terms: 6 ulps at a = 0.1875 there.
+      const std::size_t near_one_ulps = std::numeric_limits<Real>::digits < std::numeric_limits<long double>::digits ? ulps : 2 * ulps;
+      for (const near_one_case& c : near_one_cases)
+      {
+         CHECK_ULP_CLOSE(from_reference<Real>(cpp_bin_float_100(c.log_upper)), Real(ligamma(Real(c.a), Real(c.x))), near_one_ulps);
+      }
    }
 
    // At the ends of the range the functions are lgamma(a) or the logarithm of zero:

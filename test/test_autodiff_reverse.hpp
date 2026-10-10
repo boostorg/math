@@ -156,7 +156,7 @@ static_assert(std::is_same<RandomSample<bmp::cpp_bin_float_50>::dist_t,
               "");
 
 template<typename T>
-constexpr T boost_close_tol(T scale_factor = 1e5)
+constexpr T boost_close_tol(T scale_factor = T(1e5))
 {
-    return 0.01;
+    return T(0.01);
 }
