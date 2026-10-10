@@ -32,7 +32,7 @@ runs:
             t=$(basename "${f%.output}"); names="$names $t"; n=$((n+1))
             if [ $n -le 8 ]; then
               out=$(grep -a -m 10 -iE "$pat" "$f" | esc || true)
-              if [ -z "$out" ]; then out=$(tail -n 14 "$f" | esc || true); fi
+              out="$out--- last lines:%0A$(tail -n 8 "$f" | esc || true)"
               echo "::error title=FAILED $t::$out"
             fi
           done < <(find bin.v2/libs/math -name '*.output' 2>/dev/null | sort)
