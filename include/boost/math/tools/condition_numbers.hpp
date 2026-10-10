@@ -96,7 +96,8 @@ Real evaluation_condition_number(F const & f, Real const & x)
         return std::numeric_limits<Real>::quiet_NaN();
     }
     bool caught_exception = false;
-    Real fp;
+    // Initialized because it is read below even when the derivative threw:
+    Real fp = std::numeric_limits<Real>::quiet_NaN();
 #ifndef BOOST_MATH_NO_EXCEPTIONS
     try
     {
