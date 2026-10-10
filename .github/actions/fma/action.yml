@@ -34,6 +34,9 @@ runs:
             # assembler make them unaligned.
             # Only for b2: CXXFLAGS is also seen by bootstrap, which builds b2 with another compiler.
             if [ "$RUNNER_OS" = Windows ]; then b2_extra="cxxflags=-Wa,-muse-unaligned-vector-move"; fi
+            # b2's debug variant adds -fno-inline. Optimizing without inlining is not what users do,
+            # and clang needs over 6 GB for one multiprecision test that way (0.7 GB at -O0).
+            b2_extra="${b2_extra:-} inlining=on"
             ;;
         esac
         echo "FMA flags ($(uname -m)): $flags"

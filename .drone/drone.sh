@@ -58,7 +58,9 @@ if [ "$(uname -m)" = x86_64 ]; then FMA_FLAGS="<cxxflags>-mfma $FMA_FLAGS"; fi
 echo "FMA: $(uname -m); $FMA_FLAGS"
 echo "using $TOOLSET : : $COMPILER : <cxxflags>-std=$CXXSTD $OPTIONS $FMA_FLAGS ;" > ~/user-config.jam
 (cd libs/config/test && ../../../b2 print_config_info print_math_info toolset=$TOOLSET)
-(cd libs/math/test && ../../../b2 -d0 -j3 toolset=$TOOLSET $TEST_SUITE)
+# inlining=on: b2's debug variant adds -fno-inline, which is not how users optimize, and clang
+# needs over 6 GB for one multiprecision test that way.
+(cd libs/math/test && ../../../b2 -d0 -j3 toolset=$TOOLSET inlining=on $TEST_SUITE)
 
 echo '==================================> AFTER_SUCCESS'
 
