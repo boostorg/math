@@ -128,6 +128,20 @@ inline std::string tick_label(double v, bool log_axis)
     return os.str();
 }
 
+// Approximate width in pixels of a tick label at font-size 13, ignoring its SVG markup:
+inline int label_width(std::string const & label)
+{
+    int chars = 0;
+    bool in_tag = false;
+    for (char c : label)
+    {
+        if (c == '<') { in_tag = true; }
+        else if (c == '>') { in_tag = false; }
+        else if (!in_tag) { ++chars; }
+    }
+    return 7*chars;
+}
+
 // Labels v > 0 on a logarithmic colorbar as a power of ten, 10^2 or 10^2.45, so that every label on it reads alike.
 inline std::string power_label(double v)
 {
@@ -633,6 +647,9 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
     int const panels = static_cast<int>(panels_.size());
     int const plots_width = panels*W + (panels - 1)*panel_gap;
     int const total_width = margin_left + plots_width + margin_right;
+    // As many axis ticks as fit without their labels overlapping:
+    int const x_ticks = (std::max)(2, (std::min)(8, W/60));
+    int const y_ticks = (std::max)(2, (std::min)(6, H/40));
     // The function heatmaps go below the error heatmaps, separated by room for the latter's x tick labels:
     int const function_gap = 66;
     int const function_top = margin_top + H + function_gap;
@@ -787,13 +804,13 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
            << "' style='image-rendering: pixelated' href='data:image/png;base64," << detail::base64(png) << "'/>\n";
         fs << "<rect x='" << left << "' y='" << margin_top << "' width='" << W << "' height='" << H
            << "' fill='none' stroke='gray'/>\n";
-        for (CoarseReal x : ticks(x_min_, x_max_, 8, log_x_))
+        for (CoarseReal x : ticks(x_min_, x_max_, x_ticks, log_x_))
         {
             double px = left + x_pos(x);
             fs << "<line x1='" << px << "' y1='" << margin_top + H << "' x2='" << px << "' y2='" << margin_top + H + 5
                << "' stroke='gray'/>\n"
                << "<text x='" << px << "' y='" << margin_top + H + 20 << "' text-anchor='middle' font-size='13'>"
-               << detail::tick_label(x, log_x_) << "</text>\n";
+               << (log_x_ ? detail::tick_label(x, true) : detail::axis_label(static_cast<double>(x), static_cast<double>(x_min_), static_cast<double>(x_max_), x_ticks, false)) << "</text>\n";
         }
         if (!show_function_)
         {
@@ -806,13 +823,13 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
                << "' style='image-rendering: pixelated' href='data:image/png;base64," << detail::base64(*fn_png_ptr) << "'/>\n";
             fs << "<rect x='" << left << "' y='" << function_top << "' width='" << W << "' height='" << H
                << "' fill='none' stroke='gray'/>\n";
-            for (CoarseReal x : ticks(x_min_, x_max_, 8, log_x_))
+            for (CoarseReal x : ticks(x_min_, x_max_, x_ticks, log_x_))
             {
                 double px = left + x_pos(x);
                 fs << "<line x1='" << px << "' y1='" << function_top + H << "' x2='" << px << "' y2='" << function_top + H + 5
                    << "' stroke='gray'/>\n"
                    << "<text x='" << px << "' y='" << function_top + H + 20 << "' text-anchor='middle' font-size='13'>"
-                   << detail::tick_label(x, log_x_) << "</text>\n";
+                   << (log_x_ ? detail::tick_label(x, true) : detail::axis_label(static_cast<double>(x), static_cast<double>(x_min_), static_cast<double>(x_max_), x_ticks, false)) << "</text>\n";
             }
             fs << "<text x='" << left + W/2 << "' y='" << function_top + H + 45 << "' text-anchor='middle' font-size='15'>"
                << x_label_ << "</text>\n";
@@ -820,25 +837,25 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
         }
     }
     // The panels share the y axis, which is labelled on the first:
-    for (CoarseReal y : ticks(y_min_, y_max_, 6, log_y_))
+    for (CoarseReal y : ticks(y_min_, y_max_, y_ticks, log_y_))
     {
         double py = y_pos(y);
         fs << "<line x1='" << margin_left - 5 << "' y1='" << py << "' x2='" << margin_left << "' y2='" << py
            << "' stroke='gray'/>\n"
            << "<text x='" << margin_left - 8 << "' y='" << py + 4 << "' text-anchor='end' font-size='13'>"
-           << detail::tick_label(y, log_y_) << "</text>\n";
+           << (log_y_ ? detail::tick_label(y, true) : detail::axis_label(static_cast<double>(y), static_cast<double>(y_min_), static_cast<double>(y_max_), y_ticks, false)) << "</text>\n";
     }
     fs << "<text x='" << 18 << "' y='" << margin_top + H/2 << "' text-anchor='middle' font-size='15' transform='rotate(-90 18 "
        << margin_top + H/2 << ")'>" << y_label_ << "</text>\n";
     if (show_function_)
     {
-        for (CoarseReal y : ticks(y_min_, y_max_, 6, log_y_))
+        for (CoarseReal y : ticks(y_min_, y_max_, y_ticks, log_y_))
         {
             double py = function_top + (y_pos(y) - margin_top);
             fs << "<line x1='" << margin_left - 5 << "' y1='" << py << "' x2='" << margin_left << "' y2='" << py
                << "' stroke='gray'/>\n"
                << "<text x='" << margin_left - 8 << "' y='" << py + 4 << "' text-anchor='end' font-size='13'>"
-               << detail::tick_label(y, log_y_) << "</text>\n";
+               << (log_y_ ? detail::tick_label(y, true) : detail::axis_label(static_cast<double>(y), static_cast<double>(y_min_), static_cast<double>(y_max_), y_ticks, false)) << "</text>\n";
         }
         fs << "<text x='" << 18 << "' y='" << function_top + H/2 << "' text-anchor='middle' font-size='15' transform='rotate(-90 18 "
            << function_top + H/2 << ")'>" << y_label_ << "</text>\n";
@@ -855,7 +872,9 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
     }
     fs << "<rect x='" << bar_x << "' y='" << margin_top << "' width='" << bar_width << "' height='" << H
        << "' fill='none' stroke='gray'/>\n";
+    int bar_label_width = 0;
     auto bar_tick = [&](double t, std::string const & label) {
+        bar_label_width = (std::max)(bar_label_width, detail::label_width(label));
         double py = margin_top + (1 - t)*H;
         fs << "<line x1='" << bar_x + bar_width << "' y1='" << py << "' x2='" << bar_x + bar_width + 5 << "' y2='" << py
            << "' stroke='gray'/>\n"
@@ -869,11 +888,13 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
     if (log_scale_)
     {
         double decades = std::log10(clip/floor);
-        for (double e = std::floor(std::log10(floor)); e < std::log10(clip); ++e)
+        // Label every power of ten, or every step-th one when the scale spans many decades, so that the labels don't overlap:
+        int step = (std::max)(1, static_cast<int>(std::ceil(decades/(std::max)(1, (std::min)(8, H/24)))));
+        for (double e = step*std::ceil(std::log10(floor)/step); e < std::log10(clip); e += step)
         {
             double t = (e - std::log10(floor))/decades;
             // Keep clear of the end labels:
-            if (t > 0.05 && t < 0.95)
+            if (t*H > 16 && (1 - t)*H > 16)
             {
                 bar_tick(t, detail::power_label(std::pow(10.0, e)));
             }
@@ -915,7 +936,7 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
     if (any_spurious) { swatch(spurious_overflow_rgb, "spurious overflow"); }
     if (any_no_reference) { swatch(no_reference_rgb, "out of range, handled correctly"); }
     // The colorbar's label runs down its right side, clear of the title:
-    int const label_x = bar_x + bar_width + 90;
+    int const label_x = (std::min)(bar_x + bar_width + 8 + bar_label_width + 16, total_width - 10);
     fs << "<text x='" << label_x << "' y='" << margin_top + H/2 << "' text-anchor='middle' font-size='13' transform='rotate(90 "
        << label_x << " " << margin_top + H/2 << ")'>" << quantity << "</text>\n";
     if (show_function_)
@@ -929,7 +950,9 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
         }
         fs << "<rect x='" << bar_x << "' y='" << function_top << "' width='" << bar_width << "' height='" << H
            << "' fill='none' stroke='gray'/>\n";
+        int fn_label_width = 0;
         auto fn_tick = [&](double t, std::string const & label) {
+            fn_label_width = (std::max)(fn_label_width, detail::label_width(label));
             double py = function_top + (1 - t)*H;
             fs << "<line x1='" << bar_x + bar_width << "' y1='" << py << "' x2='" << bar_x + bar_width + 5 << "' y2='" << py
                << "' stroke='gray'/>\n"
@@ -938,17 +961,20 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
         std::string fn_quantity = "f(x, y)";
         if (!function_label_.empty()) { fn_quantity = function_label_; }
         else if (!title_.empty()) { fn_quantity = title_; }
+        // Enough digits that the ticks, a quarter of the colorbar apart, don't all read alike:
+        int const fn_precision = detail::tick_precision(mode == fn_mode::linear_div ? -fsym : fmin, mode == fn_mode::linear_div ? fsym : fmax, 4);
+        auto fn_number = [&](double v) { std::ostringstream os; os << std::setprecision(fn_precision) << v; return os.str(); };
         switch (mode)
         {
         case fn_mode::log_seq:
         {
             double lo = std::log10(fmin);
             double hi = std::log10(fmax);
-            int step = (std::max)(1, static_cast<int>(std::ceil((hi - lo)/6)));
+            int step = (std::max)(1, static_cast<int>(std::ceil((hi - lo)/(std::max)(1, (std::min)(6, H/24)))));
             for (int e = static_cast<int>(std::ceil(lo)); e <= hi; e += step)
             {
                 double t = fn_t(std::pow(10.0, e));
-                if (t > 0.06 && t < 0.94)
+                if (t*H > 16 && (1 - t)*H > 16)
                 {
                     fn_tick(t, detail::power_label(std::pow(10.0, e)));
                 }
@@ -958,20 +984,19 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
         case fn_mode::linear_seq:
             for (int i = 1; i < 4; ++i)
             {
-                fn_tick(i/4.0, number(fmin + (fmax - fmin)*i/4));
+                fn_tick(i/4.0, fn_number(fmin + (fmax - fmin)*i/4));
             }
             break;
         case fn_mode::linear_div:
-            fn_tick(0.25, number(-fsym/2));
+            fn_tick(0.25, fn_number(-fsym/2));
             fn_tick(0.5, "0");
-            fn_tick(0.75, number(fsym/2));
+            fn_tick(0.75, fn_number(fsym/2));
             break;
         }
         // The ends of the colorbar are the extreme values, not clipped:
-        auto end_label = [](double v) { std::ostringstream os; os << std::setprecision(4) << v; return os.str(); };
-        fn_tick(0, mode == fn_mode::log_seq ? detail::power_label(fmin) : end_label(mode == fn_mode::linear_div ? -fsym : fmin));
-        fn_tick(1, mode == fn_mode::log_seq ? detail::power_label(fmax) : end_label(mode == fn_mode::linear_div ? fsym : fmax));
-        int const fn_label_x = bar_x + bar_width + 90;
+        fn_tick(0, mode == fn_mode::log_seq ? detail::power_label(fmin) : fn_number(mode == fn_mode::linear_div ? -fsym : fmin));
+        fn_tick(1, mode == fn_mode::log_seq ? detail::power_label(fmax) : fn_number(mode == fn_mode::linear_div ? fsym : fmax));
+        int const fn_label_x = (std::min)(bar_x + bar_width + 8 + fn_label_width + 16, total_width - 10);
         fs << "<text x='" << fn_label_x << "' y='" << function_top + H/2 << "' text-anchor='middle' font-size='13' transform='rotate(90 "
            << fn_label_x << " " << function_top + H/2 << ")'>" << fn_quantity << "</text>\n";
     }

@@ -36,6 +36,47 @@
 BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 namespace detail {
+// Significant digits that tell apart tick labels spaced (hi - lo)/intervals apart, and at least 4:
+// a function that varies only in its sixth digit over the plot must not get identical labels.
+inline int tick_precision(double lo, double hi, int intervals)
+{
+    double spacing = std::abs(hi - lo)/(std::max)(1, intervals);
+    double magnitude = (std::max)(std::abs(lo), std::abs(hi));
+    if (!(spacing > 0) || !(magnitude > 0))
+    {
+        return 4;
+    }
+    int digits = static_cast<int>(std::ceil(std::log10(magnitude/spacing))) + 1;
+    return (std::min)(17, (std::max)(4, digits));
+}
+
+// Labels a tick on an axis spanning [lo, hi] with the given number of intervals between ticks. On a linear axis
+// whose values are tiny or huge, use compact scientific notation (2e-4, 1.5e6) rather than a string of zeros.
+inline std::string axis_label(double v, double lo, double hi, int intervals, bool log_axis)
+{
+    std::ostringstream os;
+    double magnitude = (std::max)(std::abs(lo), std::abs(hi));
+    int precision = tick_precision(lo, hi, intervals);
+    if (log_axis || v == 0 || !(magnitude < 1e-2 || magnitude >= 1e5))
+    {
+        os << std::setprecision(log_axis ? 4 : precision) << v;
+        return os.str();
+    }
+    os << std::scientific << std::setprecision(precision - 1) << v;
+    std::string s = os.str();
+    std::string::size_type e = s.find('e');
+    std::string mantissa = s.substr(0, e);
+    if (mantissa.find('.') != std::string::npos)
+    {
+        mantissa.erase(mantissa.find_last_not_of('0') + 1);
+        if (mantissa.back() == '.')
+        {
+            mantissa.pop_back();
+        }
+    }
+    return mantissa + "e" + std::to_string(std::stoi(s.substr(e + 1)));
+}
+
 
 // How an implementation's result relates to the true value, which is used to decide whether the ulps are meaningful.
 enum class ulps_class : std::uint8_t
@@ -178,7 +219,7 @@ void write_gridlines(std::ostream& fs, int horizontal_lines, int vertical_lines,
 
         fs << "<text x='" <<  x - 10  << "' y='" << graph_height + 10
            << "' font-family='times' font-size='10' fill='" << font_color << "'>"
-           << std::setprecision(4) << x_cord_dataspace << "</text>\n";
+           << axis_label(static_cast<double>(x_cord_dataspace), static_cast<double>(min_x), static_cast<double>(max_x), vertical_lines, log_x) << "</text>\n";
     }
 }
 }
@@ -383,7 +424,7 @@ public:
 
                 fs << "<text x='" <<  x - 10  << "' y='" << graph_height + 10
                    << "' font-family='times' font-size='10' fill='" << plot.font_color_ << "'>"
-                   << std::setprecision(4) << x_cord_dataspace << "</text>\n";
+                   << detail::axis_label(static_cast<double>(x_cord_dataspace), static_cast<double>(plot.a_), static_cast<double>(plot.b_), plot.vertical_lines_, plot.log_abscissas_) << "</text>\n";
             }
         }
 
@@ -632,6 +673,7 @@ public:
             else
             {
                 int lines = (std::max)(2, plot.horizontal_lines_/2);
+                int precision = detail::tick_precision(static_cast<double>(lo), static_cast<double>(hi), lines);
                 for (int i = 0; i <= lines; ++i)
                 {
                     PreciseReal v = lo + ((hi - lo)*i)/lines;
@@ -640,7 +682,7 @@ public:
                        << "' y2='" << y << "' stroke='gray' stroke-width='1' opacity='0.5' stroke-dasharray='4' />\n";
                     fs << "<text x='" << -margin_left/4 + 5 << "' y='" << y - 3
                        << "' font-family='times' font-size='10' fill='" << plot.font_color_ << "' transform='rotate(-90 "
-                       << -margin_left/4 + 8 << " " << y + 5 << ")'>" << std::setprecision(4) << v << "</text>\n";
+                       << -margin_left/4 + 8 << " " << y + 5 << ")'>" << std::setprecision(precision) << v << "</text>\n";
                 }
             }
             for (CoarseReal x_cord_dataspace : detail::vertical_gridlines(plot.a_, plot.b_, plot.vertical_lines_, plot.log_abscissas_))
@@ -650,7 +692,7 @@ public:
                    << "' stroke='gray' stroke-width='1' opacity='0.5' stroke-dasharray='4' />\n";
                 fs << "<text x='" << x - 10 << "' y='" << function_height + 10
                    << "' font-family='times' font-size='10' fill='" << plot.font_color_ << "'>"
-                   << std::setprecision(4) << x_cord_dataspace << "</text>\n";
+                   << detail::axis_label(static_cast<double>(x_cord_dataspace), static_cast<double>(plot.a_), static_cast<double>(plot.b_), plot.vertical_lines_, plot.log_abscissas_) << "</text>\n";
             }
             fs << "<text x='" << graph_width - 5 << "' y='12' font-family='times' font-size='12' text-anchor='end' fill='"
                << plot.font_color_ << "'>" << "f(x)" << "</text>\n";
