@@ -819,6 +819,12 @@ jobs:
         run: |
           cd ../boost-root/__build__
           ctest --output-on-failure --no-tests=error
+      - name: Report failed tests
+        if: failure()
+        uses: ./.github/actions/report-failures
+        with:
+          kind: ctest
+          dir: ../boost-root/__build__
   cuda-cmake-test:
     strategy:
       fail-fast: false
