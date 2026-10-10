@@ -208,6 +208,18 @@ void test_spots(T, const char* type_name)
    T tolerance = boost::math::tools::epsilon<T>() * 15000;
    if(tolerance < 1e-25f)
       tolerance = 1e-25f;  // limit of test data?
+   //
+   // Temme's expansion used by gamma_p was only good to ~100 eps for x < a, a ~ 20 and (a - x) / a ~ 0.4,
+   // which the inverse inherits.  Reference values from Arb: the x with P(x) = p, and P at that x rounded
+   // to double, for doubles only:
+   //
+   BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+   {
+      typedef boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> > no_promote;
+      T fine_tolerance = boost::math::tools::epsilon<T>() * 3;
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::gamma_p_inv(T(20.339175013722919), T(0.021704055520888658), no_promote()), static_cast<T>(12.288770943973497911L), fine_tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::gamma_p(T(20.339175013722919), T(12.288770943973498), no_promote()), static_cast<T>(0.021704055520888660013558011624319002363L), fine_tolerance * 3);
+   }
    BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(1)/100, static_cast<T>(1.0/128)), static_cast<T>(0.35767144525455121503672919307647515332256996883787L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(1)/100, static_cast<T>(0.5)), static_cast<T>(4.4655350189103486773248562646452806745879516124613e-31L), tolerance*10);
    //
