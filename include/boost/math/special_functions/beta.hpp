@@ -1271,17 +1271,26 @@ BOOST_MATH_GPU_ENABLED T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
       int start = itrunc(n * x);
       if(start <= k + 1)
          start = itrunc(k + 2);
-      result = static_cast<T>(pow(x, T(start)) * pow(y, n - T(start)) * BOOST_MATH_NAMESPACE::binomial_coefficient<T>(itrunc(n), itrunc(start), pol));
+      //
+      // The term x^i y^(n-i) C(n, i).  The binomial coefficient is large and the power of y is not very
+      // small (n - i < b), but x^i can underflow, or be denormal and have lost most of its digits, while
+      // the term is still a normal number.  So split x^i in two, and multiply the coefficient in between:
+      //
+      auto binomial_term = [&](unsigned i)
+      {
+         return static_cast<T>(pow(x, T(i / 2)) * (pow(y, n - T(i)) * BOOST_MATH_NAMESPACE::binomial_coefficient<T>(itrunc(n), i, pol)) * pow(x, T(i - i / 2)));
+      };
+      result = binomial_term(start);
       if(result == 0)
       {
          // OK, starting slightly above the mode didn't work,
-         // we'll have to sum the terms the old fashioned way.
+         // we'll have to sum all the terms the old fashioned way.
          // Very hard to get here, possibly only when exponent
          // range is very limited (as with type float):
          // LCOV_EXCL_START
-         for(unsigned i = start - 1; i > k; --i)
+         for(unsigned i = itrunc(n); i > k; --i)
          {
-            result += static_cast<T>(pow(x, static_cast<T>(i)) * pow(y, n - i) * BOOST_MATH_NAMESPACE::binomial_coefficient<T>(itrunc(n), itrunc(i), pol));
+            result += binomial_term(i);
          }
          // LCOV_EXCL_STOP
       }

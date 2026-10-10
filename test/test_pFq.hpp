@@ -268,8 +268,19 @@ void test_cancellation_2F1(T, const char*)
       T norm;
       T result = boost::math::hypergeometric_pFq({ (*row)[0], (*row)[1] }, { (*row)[2] }, (*row)[3], &norm);
       BOOST_CHECK_LE(fabs(result - (*row)[4]), norm);
-      BOOST_CHECK_GT(norm, boost::math::tools::root_epsilon<T>() * fabs(result));
-      BOOST_CHECK_THROW(boost::math::hypergeometric_pFq({ (*row)[0], (*row)[1] }, { (*row)[2] }, (*row)[3]), boost::math::evaluation_error);
+      // Types of up to 64 bits lose more than half their digits; a quad precision long double keeps more than half:
+      if (boost::math::tools::digits<T>() <= 64)
+      {
+         BOOST_CHECK_GT(norm, boost::math::tools::root_epsilon<T>() * fabs(result));
+      }
+      if (norm > boost::math::tools::root_epsilon<T>() * fabs(result))
+      {
+         BOOST_CHECK_THROW(boost::math::hypergeometric_pFq({ (*row)[0], (*row)[1] }, { (*row)[2] }, (*row)[3]), boost::math::evaluation_error);
+      }
+      else
+      {
+         BOOST_CHECK_EQUAL(boost::math::hypergeometric_pFq({ (*row)[0], (*row)[1] }, { (*row)[2] }, (*row)[3]), result);
+      }
    }
 }
 
