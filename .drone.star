@@ -22,6 +22,7 @@ def main(ctx):
   cxx17_stds = [ "c++17" ]
   gnu_cxx17_stds = [ "gnu++17" ]
   non_native_stds = [ "c++17" ]
+  s390x_things_to_test = [ "special_fun", "distribution_tests" ]
   gcc13_stds = [ "c++23" ]
 
   result = []
@@ -46,7 +47,10 @@ def main(ctx):
 
     # Keep architecture coverage, but do it once in the minimum language mode.
     for cxx in non_native_stds:
-      result.append(linux_cxx("Ubuntu g++ s390s " + cxx + " " + suite, "g++", packages="g++", buildtype="boost", image="cppalliance/droneubuntu2404:multiarch", arch="s390x", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
+      # The s390x runners are few and shared with all of Boost, so their queue sets the length of the
+      # whole build: test only the suites that big-endian and IEEE quad long double matter most for.
+      if suite in s390x_things_to_test:
+        result.append(linux_cxx("Ubuntu g++ s390s " + cxx + " " + suite, "g++", packages="g++", buildtype="boost", image="cppalliance/droneubuntu2404:multiarch", arch="s390x", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
       result.append(linux_cxx("Ubuntu g++ ARM64" + cxx + " " + suite, "g++", packages="g++", buildtype="boost", image="cppalliance/droneubuntu2404:multiarch", arch="arm64", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
   for suite in gcc13_things_to_test:
     for cxx in gcc13_stds:
