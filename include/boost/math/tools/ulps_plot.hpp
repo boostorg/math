@@ -17,6 +17,9 @@
 #include <random>
 #include <limits>
 #include <stdexcept>
+#include <cstdint>
+#include <cmath>
+#include <sstream>
 #endif
 #include <boost/math/tools/is_standalone.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
@@ -33,6 +36,93 @@
 BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 namespace detail {
+
+// How an implementation's result relates to the true value, which is used to decide whether the ulps are meaningful.
+enum class ulps_class : std::uint8_t
+{
+    // Both are in range: the ulps are meaningful.
+    ok,
+    // The true value is NaN or infinite (or its evaluation threw): f is undefined there. Not a defect.
+    undefined,
+    // |true value| > max: the implementation threw std::overflow_error or returned an infinity of the right sign. Correct.
+    overflow_handled,
+    // The true value is nonzero but below the smallest normal: the implementation returned zero or a subnormal of the right sign. Correct.
+    underflow_handled,
+    // The true value is a finite double, but the implementation returned NaN or threw something other than an overflow_error. A bug.
+    failed,
+    // The true value is a finite double, but the implementation threw std::overflow_error or returned an infinity. A bug.
+    spurious_overflow,
+    // The true value is out of range, but the implementation returned an ordinary number, NaN, the wrong sign, or threw something else.
+    // Counted as the maximal error.
+    mishandled
+};
+
+// Evaluates call() (which returns the implementation's value) and classifies the outcome against the true value z.
+// When the result is ulps_class::ok, w holds the implementation's value.
+template<class CoarseReal, class PreciseReal, class Call>
+ulps_class classify_result(PreciseReal const & z, Call call, CoarseReal & w, std::string * message = nullptr)
+{
+    using std::abs;
+    using std::isfinite;
+    using std::isinf;
+    using std::isnan;
+    if (!isfinite(z))
+    {
+        return ulps_class::undefined;
+    }
+    bool const over = abs(z) > static_cast<PreciseReal>((std::numeric_limits<CoarseReal>::max)());
+    bool const under = z != 0 && abs(z) < static_cast<PreciseReal>((std::numeric_limits<CoarseReal>::min)());
+    try
+    {
+        w = static_cast<CoarseReal>(call());
+    }
+    catch (std::overflow_error const & e)
+    {
+        if (message) { *message = std::string("std::overflow_error: ") + e.what(); }
+        return over ? ulps_class::overflow_handled : ulps_class::spurious_overflow;
+    }
+    catch (std::underflow_error const & e)
+    {
+        if (message) { *message = std::string("std::underflow_error: ") + e.what(); }
+        return under ? ulps_class::underflow_handled : ulps_class::failed;
+    }
+    catch (std::exception const & e)
+    {
+        if (message) { *message = e.what(); }
+        return (over || under) ? ulps_class::mishandled : ulps_class::failed;
+    }
+    catch (...)
+    {
+        if (message) { *message = "unknown exception"; }
+        return (over || under) ? ulps_class::mishandled : ulps_class::failed;
+    }
+    if (isnan(w))
+    {
+        if (message) { *message = "returned NaN"; }
+        return (over || under) ? ulps_class::mishandled : ulps_class::failed;
+    }
+    if (isinf(w))
+    {
+        if (message) { *message = "returned an infinity"; }
+        if (over)
+        {
+            return ((w > 0) == (z > 0)) ? ulps_class::overflow_handled : ulps_class::mishandled;
+        }
+        return ulps_class::spurious_overflow;
+    }
+    if (over)
+    {
+        return ulps_class::mishandled;
+    }
+    if (under)
+    {
+        bool const right_sign = (w == 0) || ((w > 0) == (z > 0));
+        bool const tiny = abs(w) < (std::numeric_limits<CoarseReal>::min)();
+        return (right_sign && tiny) ? ulps_class::underflow_handled : ulps_class::mishandled;
+    }
+    return ulps_class::ok;
+}
+
 // Abscissas of the vertical gridlines: evenly spaced, or at whole powers of ten on a logarithmic axis.
 template<class CoarseReal>
 std::vector<CoarseReal> vertical_gridlines(CoarseReal min_x, CoarseReal max_x, int vertical_lines, bool log_x)
@@ -125,13 +215,28 @@ public:
 
     ulps_plot& vertical_lines(int vertical_lines);
 
+    // Draws the function itself (the high-accuracy ordinates) in a second plot below the ulps plot,
+    // with the same width and x axis. Off by default.
+    ulps_plot& show_function(bool show_function);
+
+    // With show_function, asks for a logarithmic y axis, which is useful when f spans many decades. It is used
+    // only if every finite value of f is positive; otherwise (f changes sign or is zero somewhere) the axis is linear.
+    ulps_plot& log_function(bool log_function);
+
+    ulps_plot& function_color(std::string const & color);
+
     void write(std::string const & filename) const;
+
+    // For each function added: counts of samples by outcome (see detail::ulps_class), the worst ulps and the worst
+    // ulps/envelope with the abscissas where they occur, and the first message of a failure.
+    std::string summary() const;
 
     friend std::ostream& operator<<(std::ostream& fs, ulps_plot const & plot)
     {
         using std::abs;
         using std::floor;
         using std::isnan;
+        using std::isfinite;
         if (plot.ulp_list_.size() == 0)
         {
             throw std::domain_error("No functions added for comparison.");
@@ -141,6 +246,8 @@ public:
             throw std::domain_error("Width = " + std::to_string(plot.width_) + ", which is too small.");
         }
 
+        // The y range comes from the ulps alone (and clip). The condition number envelope never sets it: where the envelope
+        // leaves the plot (e.g. near poles) it is clipped to the plot area.
         PreciseReal worst_ulp_distance = 0;
         PreciseReal min_y = (std::numeric_limits<PreciseReal>::max)();
         PreciseReal max_y = std::numeric_limits<PreciseReal>::lowest();
@@ -213,10 +320,14 @@ public:
             return ((max_y - y)/(max_y - min_y) )*static_cast<PreciseReal>(graph_height);
         };
 
+        // The function plot goes below the ulps plot, separated by room for the ulps plot's x tick labels:
+        int const function_gap = 40;
+        int const function_height = plot.show_function_ ? graph_height/2 : 0;
+        int const total_height = plot.show_function_ ? height + function_gap + function_height + margin_bottom : height;
         fs << "<?xml version=\"1.0\" encoding='UTF-8' ?>\n"
            << "<svg xmlns='http://www.w3.org/2000/svg' width='"
            << plot.width_ << "' height='"
-           << height << "'>\n"
+           << total_height << "'>\n"
            << "<style>\nsvg { background-color:" << plot.background_color_ << "; }\n"
            << "</style>\n";
         if (plot.title_.size() > 0)
@@ -276,6 +387,10 @@ public:
             }
         }
 
+        // Everything data-dependent (points, markers, the envelope) is clipped to the plot area, with room for the markers on its edges,
+        // so that nothing runs into the neighboring panel:
+        fs << "<defs><clipPath id='ulps-area'><rect x='-4' y='-4' width='" << graph_width + 8 << "' height='" << graph_height + 8 << "'/></clipPath></defs>\n";
+        fs << "<g clip-path='url(#ulps-area)'>\n";
         int color_idx = 0;
         for (auto const & ulp : plot.ulp_list_)
         {
@@ -284,13 +399,7 @@ public:
             {
                 if (isnan(ulp[j]))
                 {
-                    if(plot.nan_color_ == "")
-                        continue;
-                    CoarseReal x = x_scale(plot.coarse_abscissas_[j]);
-                    PreciseReal y = y_scale(static_cast<PreciseReal>(plot.clip_));
-                    fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << plot.nan_color_ << "'/>\n";
-                    y = y_scale(static_cast<PreciseReal>(-plot.clip_));
-                    fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << plot.nan_color_ << "'/>\n";
+                    // Not a comparison: see the markers below.
                     continue;
                 }
                 if (plot.clip_ > 0 && static_cast<PreciseReal>(abs(ulp[j])) > plot.clip_)
@@ -310,6 +419,67 @@ public:
                    PreciseReal y = y_scale(static_cast<PreciseReal>(ulp[j]));
                    fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << color << "'/>\n";
                 }
+            }
+        }
+
+        // Results that are not comparisons are marked on the edges, and counted in a legend:
+        //   green triangle (top):   NaN or a domain error, though the true value is a finite double (a bug);
+        //   cyan diamond (top):     spurious overflow: std::overflow_error or an infinity, though the true value is a finite double (a bug);
+        //   yellow circle (top):    out of range, but mishandled (counted as the maximal error);
+        //   gray tick (bottom):     correctly handled: the true value is undefined, overflows (and std::overflow_error or an infinity
+        //                           was returned), or underflows (and zero or a subnormal was returned).
+        {
+            size_t counts[7] = {0, 0, 0, 0, 0, 0, 0};
+            auto cit = plot.class_list_.begin();
+            for (size_t f = 0; f < plot.class_list_.size(); ++f, ++cit)
+            {
+                for (size_t j = 0; j < cit->size(); ++j)
+                {
+                    detail::ulps_class c = (*cit)[j];
+                    ++counts[static_cast<size_t>(c)];
+                    if (c == detail::ulps_class::ok)
+                    {
+                        continue;
+                    }
+                    CoarseReal x = x_scale(plot.coarse_abscissas_[j]);
+                    switch (c)
+                    {
+                    case detail::ulps_class::failed:
+                        fs << "<path d='M" << x - 3 << " 1 L" << x + 3 << " 1 L" << x << " 8 Z' fill='" << (plot.nan_color_.empty() ? "#7fff00" : plot.nan_color_) << "'/>\n";
+                        break;
+                    case detail::ulps_class::spurious_overflow:
+                        fs << "<path d='M" << x << " 1 L" << x + 4 << " 5 L" << x << " 9 L" << x - 4 << " 5 Z' fill='#00e5ff'/>\n";
+                        break;
+                    case detail::ulps_class::mishandled:
+                        fs << "<circle cx='" << x << "' cy='5' r='3.5' fill='#ffe600' stroke='black' stroke-width='0.5'/>\n";
+                        break;
+                    default:
+                        fs << "<line x1='" << x << "' y1='" << graph_height - 7 << "' x2='" << x << "' y2='" << graph_height - 1
+                           << "' stroke='#888888' stroke-width='1'/>\n";
+                        break;
+                    }
+                }
+            }
+            size_t gray = counts[1] + counts[2] + counts[3];
+            struct entry { std::string text; size_t n; int kind; };
+            std::vector<entry> legend = {
+                {"NaN or domain error", counts[4], 4},
+                {"spurious overflow", counts[5], 5},
+                {"out of range, mishandled", counts[6], 6},
+                {"out of range or undefined, handled correctly", gray, 1}};
+            int row = 0;
+            for (auto const & e : legend)
+            {
+                if (e.n == 0)
+                {
+                    continue;
+                }
+                int ly = 16 + 15*row++;
+                int lx = graph_width - 12;
+                std::string fill = e.kind == 4 ? (plot.nan_color_.empty() ? "#7fff00" : plot.nan_color_) : e.kind == 5 ? "#00e5ff" : e.kind == 6 ? "#ffe600" : "#888888";
+                fs << "<rect x='" << lx << "' y='" << ly - 9 << "' width='9' height='9' fill='" << fill << "'/>\n";
+                fs << "<text x='" << lx - 5 << "' y='" << ly - 1 << "' font-family='times' font-size='12' text-anchor='end' fill='"
+                   << plot.font_color_ << "'>" << e.text << " (" << e.n << ")</text>\n";
             }
         }
 
@@ -386,8 +556,130 @@ public:
             fs << close_path;
         }
     done:
-        fs << "</g>\n"
-           << "</svg>\n";
+        fs << "</g>\n";   // the clipped group
+        fs << "</g>\n";
+        if (plot.show_function_)
+        {
+            // The function, from the high-accuracy ordinates, on the same x axis as the ulps plot.
+            // f itself is plotted, never |f|. A logarithmic axis needs every finite f to be positive.
+            using std::log10;
+            using std::pow;
+            bool all_positive = true;
+            for (auto const & y : plot.precise_ordinates_)
+            {
+                if (isfinite(y) && !(y > 0))
+                {
+                    all_positive = false;
+                }
+            }
+            bool const log_f = plot.log_function_ && all_positive;
+            auto transform = [&](PreciseReal y)->PreciseReal {
+                return log_f ? log10(y) : y;
+            };
+            auto usable = [&](PreciseReal y)->bool {
+                return isfinite(y);
+            };
+            PreciseReal lo = (std::numeric_limits<PreciseReal>::max)();
+            PreciseReal hi = std::numeric_limits<PreciseReal>::lowest();
+            for (auto const & y : plot.precise_ordinates_)
+            {
+                if (usable(y))
+                {
+                    PreciseReal t = transform(y);
+                    lo = (std::min)(lo, t);
+                    hi = (std::max)(hi, t);
+                }
+            }
+            if (!(lo <= hi))
+            {
+                lo = 0;
+                hi = 1;
+            }
+            if (log_f)
+            {
+                // Whole decades at the ends of the axis:
+                lo = floor(lo);
+                hi = -floor(-hi);
+            }
+            if (!(hi > lo))
+            {
+                // A constant function:
+                lo -= 1;
+                hi += 1;
+            }
+            auto f_scale = [&](PreciseReal t)->PreciseReal {
+                return ((hi - t)/(hi - lo))*static_cast<PreciseReal>(function_height);
+            };
+            fs << "<g transform='translate(" << margin_left << ", " << margin_top + graph_height + function_gap << ")'>\n";
+            fs << "<line x1='0' y1='0' x2='0' y2='" << function_height << "' stroke='gray' stroke-width='1'/>\n";
+            fs << "<line x1='0' y1='" << function_height << "' x2='" << graph_width << "' y2='" << function_height
+               << "' stroke='gray' stroke-width='1'/>\n";
+            // y gridlines and labels:
+            if (log_f)
+            {
+                int decades = static_cast<int>(hi - lo);
+                int step = (std::max)(1, static_cast<int>(std::ceil(double(decades)/plot.horizontal_lines_)));
+                for (int e = static_cast<int>(hi); e >= static_cast<int>(lo); e -= step)
+                {
+                    PreciseReal y = f_scale(static_cast<PreciseReal>(e));
+                    fs << "<line x1='0' y1='" << y << "' x2='" << graph_width
+                       << "' y2='" << y << "' stroke='gray' stroke-width='1' opacity='0.5' stroke-dasharray='4' />\n";
+                    fs << "<text x='" << -margin_left/2 << "' y='" << y - 3
+                       << "' font-family='times' font-size='10' fill='" << plot.font_color_ << "' transform='rotate(-90 "
+                       << -margin_left/2 + 7 << " " << y << ")'>1e" << e << "</text>\n";
+                }
+            }
+            else
+            {
+                int lines = (std::max)(2, plot.horizontal_lines_/2);
+                for (int i = 0; i <= lines; ++i)
+                {
+                    PreciseReal v = lo + ((hi - lo)*i)/lines;
+                    PreciseReal y = f_scale(v);
+                    fs << "<line x1='0' y1='" << y << "' x2='" << graph_width
+                       << "' y2='" << y << "' stroke='gray' stroke-width='1' opacity='0.5' stroke-dasharray='4' />\n";
+                    fs << "<text x='" << -margin_left/4 + 5 << "' y='" << y - 3
+                       << "' font-family='times' font-size='10' fill='" << plot.font_color_ << "' transform='rotate(-90 "
+                       << -margin_left/4 + 8 << " " << y + 5 << ")'>" << std::setprecision(4) << v << "</text>\n";
+                }
+            }
+            for (CoarseReal x_cord_dataspace : detail::vertical_gridlines(plot.a_, plot.b_, plot.vertical_lines_, plot.log_abscissas_))
+            {
+                CoarseReal x = x_scale(x_cord_dataspace);
+                fs << "<line x1='" << x << "' y1='0' x2='" << x << "' y2='" << function_height
+                   << "' stroke='gray' stroke-width='1' opacity='0.5' stroke-dasharray='4' />\n";
+                fs << "<text x='" << x - 10 << "' y='" << function_height + 10
+                   << "' font-family='times' font-size='10' fill='" << plot.font_color_ << "'>"
+                   << std::setprecision(4) << x_cord_dataspace << "</text>\n";
+            }
+            fs << "<text x='" << graph_width - 5 << "' y='12' font-family='times' font-size='12' text-anchor='end' fill='"
+               << plot.font_color_ << "'>" << "f(x)" << "</text>\n";
+            // The curve, broken wherever the function is not finite (or, on a log axis, zero):
+            bool pen_down = false;
+            for (size_t j = 0; j < plot.precise_ordinates_.size(); ++j)
+            {
+                PreciseReal y = plot.precise_ordinates_[j];
+                if (!usable(y))
+                {
+                    if (pen_down)
+                    {
+                        fs << "' stroke='" << plot.function_color_ << "' stroke-width='1' fill='none'></path>\n";
+                        pen_down = false;
+                    }
+                    continue;
+                }
+                CoarseReal x = x_scale(plot.coarse_abscissas_[j]);
+                PreciseReal fy = f_scale(transform(y));
+                fs << (pen_down ? " L" : "<path d='M") << x << " " << fy;
+                pen_down = true;
+            }
+            if (pen_down)
+            {
+                fs << "' stroke='" << plot.function_color_ << "' stroke-width='1' fill='none'></path>\n";
+            }
+            fs << "</g>\n";
+        }
+        fs << "</svg>\n";
         return fs;
     }
 
@@ -397,6 +689,8 @@ private:
     std::vector<PreciseReal> precise_ordinates_;
     std::vector<PreciseReal> cond_;
     std::list<std::vector<CoarseReal>> ulp_list_;
+    std::list<std::vector<detail::ulps_class>> class_list_;
+    std::list<std::string> first_message_;
     std::vector<std::string> colors_;
     CoarseReal a_;
     CoarseReal b_;
@@ -413,6 +707,9 @@ private:
     std::string crop_color_;
     bool crop_color_set_ = false;
     std::string nan_color_;
+    bool show_function_ = false;
+    bool log_function_ = false;
+    std::string function_color_ = "orange";
 };
 
 template<class F, typename PreciseReal, typename CoarseReal>
@@ -447,6 +744,27 @@ template<class F, typename PreciseReal, typename CoarseReal>
 ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::vertical_lines(int vertical_lines)
 {
     vertical_lines_ = vertical_lines;
+    return *this;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::show_function(bool show_function)
+{
+    show_function_ = show_function;
+    return *this;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::log_function(bool log_function)
+{
+    log_function_ = log_function;
+    return *this;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::function_color(std::string const & color)
+{
+    function_color_ = color;
     return *this;
 }
 
@@ -503,6 +821,58 @@ inline bool ends_with(std::string const& filename, std::string const& suffix)
 
     return std::equal(std::begin(suffix), std::end(suffix), std::end(filename) - suffix.size());
 }
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+std::string ulps_plot<F, PreciseReal, CoarseReal>::summary() const
+{
+    using std::abs;
+    using std::isnan;
+    std::ostringstream os;
+    os << std::setprecision(std::numeric_limits<CoarseReal>::max_digits10);
+    auto uit = ulp_list_.begin();
+    auto cit = class_list_.begin();
+    auto mit = first_message_.begin();
+    for (size_t f = 0; f < ulp_list_.size(); ++f, ++uit, ++cit, ++mit)
+    {
+        size_t counts[7] = {0, 0, 0, 0, 0, 0, 0};
+        size_t first[7];
+        for (size_t& v : first) { v = static_cast<size_t>(-1); }
+        size_t worst_ulps = static_cast<size_t>(-1);
+        size_t worst_ratio = static_cast<size_t>(-1);
+        for (size_t j = 0; j < cit->size(); ++j)
+        {
+            size_t c = static_cast<size_t>((*cit)[j]);
+            if (counts[c]++ == 0) { first[c] = j; }
+            if ((*cit)[j] != detail::ulps_class::ok) { continue; }
+            if (worst_ulps == static_cast<size_t>(-1) || abs((*uit)[j]) > abs((*uit)[worst_ulps])) { worst_ulps = j; }
+            if (!isnan(cond_[j]))
+            {
+                PreciseReal r = abs(static_cast<PreciseReal>((*uit)[j]))/cond_[j];
+                if (worst_ratio == static_cast<size_t>(-1) || r > abs(static_cast<PreciseReal>((*uit)[worst_ratio]))/cond_[worst_ratio]) { worst_ratio = j; }
+            }
+        }
+        os << "samples=" << cit->size() << " ok=" << counts[0] << " undefined=" << counts[1] << " overflow_handled=" << counts[2]
+           << " underflow_handled=" << counts[3] << " green_nan_or_domain_error=" << counts[4] << " cyan_spurious_overflow=" << counts[5]
+           << " mishandled=" << counts[6] << "\n";
+        if (worst_ulps != static_cast<size_t>(-1))
+        {
+            os << "  worst_ulps=" << (*uit)[worst_ulps] << " at x=" << coarse_abscissas_[worst_ulps] << "\n";
+        }
+        if (worst_ratio != static_cast<size_t>(-1))
+        {
+            os << "  worst_ulps_over_envelope=" << (static_cast<PreciseReal>((*uit)[worst_ratio])/cond_[worst_ratio]) << " at x=" << coarse_abscissas_[worst_ratio] << "\n";
+        }
+        char const * names[7] = {"", "", "", "", "green", "cyan", "mishandled"};
+        for (size_t c = 4; c < 7; ++c)
+        {
+            if (counts[c] > 0)
+            {
+                os << "  " << names[c] << ": first at x=" << coarse_abscissas_[first[c]] << (mit->empty() ? "" : ("; message: " + *mit)) << "\n";
+            }
+        }
+    }
+    return os.str();
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
@@ -639,16 +1009,35 @@ template<class G>
 ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::add_fn(G g, std::string const & color)
 {
     using std::abs;
+    using std::isfinite;
     size_t samples = precise_abscissas_.size();
-    std::vector<CoarseReal> ulps(samples);
+    std::vector<CoarseReal> ulps(samples, std::numeric_limits<CoarseReal>::quiet_NaN());
+    std::vector<detail::ulps_class> classes(samples, detail::ulps_class::ok);
+    std::string first_message;
     for (size_t i = 0; i < samples; ++i)
     {
         PreciseReal y_hi_acc = precise_ordinates_[i];
-        PreciseReal y_lo_acc = static_cast<PreciseReal>(g(coarse_abscissas_[i]));
+        CoarseReal w = 0;
+        std::string message;
+        // The implementation is evaluated everywhere, even where the true value is out of range, to check that
+        // overflow and underflow are handled correctly:
+        detail::ulps_class c = detail::classify_result<CoarseReal>(y_hi_acc, [&]() { return g(coarse_abscissas_[i]); }, w, &message);
+        classes[i] = c;
+        if (c != detail::ulps_class::ok)
+        {
+            if (first_message.empty() && !message.empty() && (c == detail::ulps_class::failed || c == detail::ulps_class::spurious_overflow || c == detail::ulps_class::mishandled))
+            {
+                first_message = message;
+            }
+            continue;
+        }
+        PreciseReal y_lo_acc = static_cast<PreciseReal>(w);
         PreciseReal absy = abs(y_hi_acc);
         PreciseReal dist = static_cast<PreciseReal>(nextafter(static_cast<CoarseReal>(absy), (std::numeric_limits<CoarseReal>::max)()) - static_cast<CoarseReal>(absy));
         ulps[i] = static_cast<CoarseReal>((y_lo_acc - y_hi_acc)/dist);
     }
+    class_list_.emplace_back(classes);
+    first_message_.emplace_back(first_message);
     ulp_list_.emplace_back(ulps);
     colors_.emplace_back(color);
     return *this;

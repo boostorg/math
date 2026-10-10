@@ -49,6 +49,17 @@
         //
         ulps_plot& crop_color(std::string const & font_color);
         //
+        // Draw the function itself (the high-accuracy ordinates) in a second plot below the ulps plot,
+        // on the same x axis (off by default). With log_function, the y axis is logarithmic if f is positive everywhere sampled:
+        //
+        ulps_plot& show_function(bool show_function);
+        ulps_plot& log_function(bool log_function);
+        ulps_plot& function_color(std::string const & color);
+        //
+        // Counts of samples by outcome (ok, undefined, overflow/underflow handled, NaN or domain error, spurious overflow, mishandled), and the worst errors:
+        //
+        std::string summary() const;
+        //
         // Set's the color of points where one of the functions returned a NaN,
         // or set to an empty string to hide completely (the default):
         //
@@ -162,6 +173,13 @@ We recommend starting with at least `long double` to test `float` precision, and
         ulps_heatmap& y_label(std::string const & label);
         ulps_heatmap& background_color(std::string const & color);
         ulps_heatmap& font_color(std::string const & color);
+        // Draw the reference function as a heatmap below each error panel, with its own colorbar (off by default).
+        // f is colored linearly from min(f) to max(f) (viridis); if f has both signs, symmetrically about zero with a dark-centered diverging map.
+        // If f > 0 everywhere and spans three or more decades, log10(f) is used; log_function forces or disables this:
+        ulps_heatmap& show_function(bool show_function);
+        // The caption of the function panels (default: the title):
+        ulps_heatmap& function_label(std::string const & label);
+        ulps_heatmap& log_function(bool log_function);
         // Write max(1/2, |ulps|), or |ulps| over the envelope, as an SVG:
         void write_ulps(std::string const & filename) const;
         void write_ulps_envelope(std::string const & filename) const;
@@ -176,7 +194,13 @@ For a function of two variables, the condition number of evaluation is the sum o
 `ulps_heatmap` evaluates the error over a grid and writes two heatmaps.
 `write_ulps` shows max(½, |ulps|), which is ½ wherever the result is correctly rounded.
 `write_ulps_envelope` divides |ulps| by the envelope max(½, cond/2) and shows max(1, ratio), so that anything brighter than the floor is error that rounding the arguments does not explain.
-Points without a value are green: where the implementation returns NaN or infinity or throws, or the reference is not finite.
+The implementation is evaluated everywhere, including where the true value is out of range, and each pixel is classified:
+green means NaN or a domain error where the true value is a finite double; cyan means a spurious overflow
+(`std::overflow_error` or an infinity where the true value is a finite double); both are bugs.
+Dark gray means the result was handled correctly: the true value is undefined, or it overflows and the implementation raised `std::overflow_error` or returned an infinity,
+or it underflows and the implementation returned zero or a subnormal.
+An out-of-range true value for which the implementation returned an ordinary number (or NaN, or the wrong sign) is counted as the maximal error and shown at the top of the color scale.
+`ulps_plot` draws the same classes as markers on the edges of the plot, with a legend, and `summary()` reports the counts.
 
 Calling `add_fn` more than once compares implementations: each gets a panel, and the panels share the axes and the color scale,
 so that, for example, the code before and after a change can be compared directly.
