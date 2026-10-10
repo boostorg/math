@@ -677,12 +677,16 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
 
     // The function's color mapping: f itself, linearly from min(f) to max(f) with a sequential map (viridis); if f has both signs,
     // symmetric about zero with a dark-centered diverging map. If f > 0 everywhere and spans three or more decades, color by log10(f)
-    // (see log_function). Pixels with no finite reference in CoarseReal's range are drawn gray.
-    enum class fn_mode { log_seq, linear_seq, linear_div };
+    // (see log_function). If f has both signs and its largest values dwarf the bulk of the plot (0F1(b, z) reaches 1e9 in a corner
+    // and is of order 1 elsewhere), a linear map would show only black, so color by sgn(f) ln(1 + |f|/s), with s chosen so that the
+    // 90th percentile of |f| falls halfway between s and max |f| on a log scale. Pixels with no finite reference in CoarseReal's range are
+    // drawn gray.
+    enum class fn_mode { log_seq, linear_seq, linear_div, symlog_div };
     fn_mode mode = fn_mode::linear_seq;
     double fmin = std::numeric_limits<double>::infinity();
     double fmax = -std::numeric_limits<double>::infinity();
     double fsym = 0;
+    double fscale = 1;
     std::vector<unsigned char> fn_png;
     std::vector<unsigned char> const * fn_png_ptr = nullptr;
     auto fn_ok = [&](std::size_t k) {
@@ -697,6 +701,7 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
         case fn_mode::log_seq:     t = (std::log10(v) - std::log10(fmin))/(std::log10(fmax) - std::log10(fmin)); break;
         case fn_mode::linear_seq:  t = (v - fmin)/(fmax - fmin); break;
         case fn_mode::linear_div:  t = 0.5 + 0.5*v/fsym; break;
+        case fn_mode::symlog_div:  t = 0.5 + 0.5*std::copysign(std::log1p(std::abs(v)/fscale), v)/std::log1p(fsym/fscale); break;
         }
         return std::clamp(t, 0.0, 1.0);
     };
@@ -724,6 +729,18 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
         {
             mode = fn_mode::linear_div;
             fsym = (std::max)(-fmin, fmax);
+            std::vector<double> fabs_values;
+            for (std::size_t k = 0; k < width*height; ++k)
+            {
+                if (fn_ok(k)) { fabs_values.push_back(std::abs(static_cast<double>(precise_[k]))); }
+            }
+            auto p90 = fabs_values.begin() + static_cast<std::ptrdiff_t>(0.9*(fabs_values.size() - 1));
+            std::nth_element(fabs_values.begin(), p90, fabs_values.end());
+            if (*p90 > 0 && fsym > 1000 * *p90)
+            {
+                mode = fn_mode::symlog_div;
+                fscale = (std::max)(*p90 * (*p90 / fsym), (std::numeric_limits<double>::min)());
+            }
         }
         else
         {
@@ -742,7 +759,7 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
             if (fn_ok(k))
             {
                 double t = fn_t(static_cast<double>(precise_[k]));
-                c = detail::to_8bit_rgb(mode == fn_mode::linear_div ? detail::dark_diverging(t) : viridis<double>(t));
+                c = detail::to_8bit_rgb(mode == fn_mode::linear_div || mode == fn_mode::symlog_div ? detail::dark_diverging(t) : viridis<double>(t));
             }
             std::copy(c.begin(), c.end(), rgb.begin() + 3*k);
         }
@@ -944,7 +961,7 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
         for (int st = 0; st < steps; ++st)
         {
             double t = 1 - (st + 0.5)/steps;
-            auto c = detail::to_8bit_rgb(mode == fn_mode::linear_div ? detail::dark_diverging(t) : viridis<double>(t));
+            auto c = detail::to_8bit_rgb(mode == fn_mode::linear_div || mode == fn_mode::symlog_div ? detail::dark_diverging(t) : viridis<double>(t));
             fs << "<rect x='" << bar_x << "' y='" << function_top + double(H)*st/steps << "' width='" << bar_width
                << "' height='" << double(H)/steps + 0.5 << "' fill='" << rgb_string(c) << "'/>\n";
         }
@@ -992,10 +1009,35 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
             fn_tick(0.5, "0");
             fn_tick(0.75, fn_number(fsym/2));
             break;
+        case fn_mode::symlog_div:
+        {
+            fn_tick(0.5, "0");
+            double lo = std::log10(fscale);
+            double hi = std::log10(fsym);
+            int step = (std::max)(1, static_cast<int>(std::ceil((hi - lo)/(std::max)(1, (std::min)(3, H/48)))));
+            for (int e = static_cast<int>(std::ceil(lo)); e <= hi; e += step)
+            {
+                double t = fn_t(std::pow(10.0, e));
+                if ((t - 0.5)*H > 16 && (1 - t)*H > 16)
+                {
+                    fn_tick(t, detail::power_label(std::pow(10.0, e)));
+                    fn_tick(1 - t, "-" + detail::power_label(std::pow(10.0, e)));
+                }
+            }
+            break;
+        }
         }
         // The ends of the colorbar are the extreme values, not clipped:
-        fn_tick(0, mode == fn_mode::log_seq ? detail::power_label(fmin) : fn_number(mode == fn_mode::linear_div ? -fsym : fmin));
-        fn_tick(1, mode == fn_mode::log_seq ? detail::power_label(fmax) : fn_number(mode == fn_mode::linear_div ? fsym : fmax));
+        if (mode == fn_mode::symlog_div)
+        {
+            fn_tick(0, "-" + detail::power_label(fsym));
+            fn_tick(1, detail::power_label(fsym));
+        }
+        else
+        {
+            fn_tick(0, mode == fn_mode::log_seq ? detail::power_label(fmin) : fn_number(mode == fn_mode::linear_div ? -fsym : fmin));
+            fn_tick(1, mode == fn_mode::log_seq ? detail::power_label(fmax) : fn_number(mode == fn_mode::linear_div ? fsym : fmax));
+        }
         int const fn_label_x = (std::min)(bar_x + bar_width + 8 + fn_label_width + 16, total_width - 10);
         fs << "<text x='" << fn_label_x << "' y='" << function_top + H/2 << "' text-anchor='middle' font-size='13' transform='rotate(90 "
            << fn_label_x << " " << function_top + H/2 << ")'>" << fn_quantity << "</text>\n";
