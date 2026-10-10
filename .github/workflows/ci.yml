@@ -817,6 +817,10 @@ jobs:
   cuda-cmake-test:
     strategy:
       fail-fast: false
+      matrix:
+        # Building all the CUDA tests takes over 45 minutes on one runner, more than any other job,
+        # so each shard builds and runs every third test:
+        shard: [ 0, 1, 2 ]
 
     runs-on: ubuntu-24.04
 
@@ -871,14 +875,17 @@ jobs:
       - name: Build tests
         run: |
           cd ../boost-root/__build__
-          cmake --build . --target tests -j $(nproc)
+          # This shard's tests; a run test named run-X runs the executable target X, which is built here:
+          ctest -N | sed -n 's/^ *Test *#[0-9]*: //p' | awk 'NR % 3 == ${{ matrix.shard }}' > shard_tests.txt
+          echo "$(wc -l < shard_tests.txt) tests in this shard"
+          cmake --build . -j $(nproc) --target $(sed -n 's/^run-//p' shard_tests.txt)
       - name: Run tests
         run: |
           cd ../boost-root/__build__
           # Left out: inverse_gaussian_quan_float/double and lgamma_p_double fail the same
           # way on a real GPU (RTX 3080 Ti), and prime_sieve_cuda takes over 25 minutes
           # on a simulated one (39 s on the card).
-          ctest --output-on-failure --no-tests=error -j $(nproc) -E 'inverse_gaussian_quan|lgamma_p_double|prime_sieve_cuda'
+          ctest --output-on-failure --no-tests=error -j $(nproc) -R "^($(paste -sd '|' shard_tests.txt))\$" -E 'inverse_gaussian_quan|lgamma_p_double|prime_sieve_cuda'
 
   cmake-module-test:
     strategy:
