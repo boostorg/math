@@ -173,6 +173,15 @@ void test_spots(RealType)
     static_cast<RealType>(10-3), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(dist),
     static_cast<RealType>(10), tolerance);
+  //
+  // Far left tail, where Phi(-b) in the second term underflowed to a subnormal and lost most of its digits.
+  // The cdf is conditioned to ~lambda / 2x = 600 eps here.  Value from Arb, doubles only:
+  //
+  BOOST_IF_CONSTEXPR (std::is_same<RealType, double>::value)
+  {
+     typedef boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promote;
+     BOOST_CHECK_CLOSE_FRACTION(cdf(inverse_gaussian_distribution<RealType, no_promote>(1, 128.331518555765), RealType(0.10592537251772893)), RealType(1.166199182184273491e-212), 1000 * std::numeric_limits<RealType>::epsilon());
+  }
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )
