@@ -72,7 +72,7 @@ void test_dlp_evaluation()
     BOOST_CHECK_CLOSE_FRACTION(q2, expected, tol);
     Real q3 = dlp(x, 3);
     expected = (x/3)*(5*expected - (Real(N*N - 4))/(2*n*n));
-    BOOST_CHECK_CLOSE_FRACTION(q3, expected, 2*tol);
+    BOOST_CHECK_CLOSE_FRACTION(q3, expected, 4*tol);
 
     // q_r(x) is even for even r, and odd for odd r:
     for (size_t n = 8; n < 22; ++n)

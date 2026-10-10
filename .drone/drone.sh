@@ -50,9 +50,16 @@ echo '==================================> BEFORE_SCRIPT'
 
 echo '==================================> SCRIPT'
 
-echo "using $TOOLSET : : $COMPILER : <cxxflags>-std=$CXXSTD $OPTIONS ;" > ~/user-config.jam
+# Let the compiler use fused multiply-add for a*b + c. -O2 rather than b2's default of -O0: it is
+# what users build with, and gcc does not fuse below it. gcc and clang both contract by default.
+# FMA is in the base aarch64 and s390x instruction sets; x86 needs it switched on.
+FMA_FLAGS="<cxxflags>-O2"
+if [ "$(uname -m)" = x86_64 ]; then FMA_FLAGS="<cxxflags>-mfma $FMA_FLAGS"; fi
+echo "using $TOOLSET : : $COMPILER : <cxxflags>-std=$CXXSTD $OPTIONS $FMA_FLAGS ;" > ~/user-config.jam
 (cd libs/config/test && ../../../b2 print_config_info print_math_info toolset=$TOOLSET)
-(cd libs/math/test && ../../../b2 -d0 -j3 toolset=$TOOLSET $TEST_SUITE)
+# inlining=on: b2's debug variant adds -fno-inline, which is not how users optimize, and clang
+# needs over 6 GB for one multiprecision test that way.
+(cd libs/math/test && ../../../b2 -d0 -j3 toolset=$TOOLSET inlining=on $TEST_SUITE)
 
 echo '==================================> AFTER_SUCCESS'
 

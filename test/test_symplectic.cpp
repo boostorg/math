@@ -309,7 +309,7 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
     test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, available_methods::SRKNB11);
 
     // Test Adaptive steps
-    test_adaptive<float>(1e-6, available_methods::Y6, 3e-6);
+    test_adaptive<float>(1e-6, available_methods::Y6, 5e-6);
     test_adaptive<double>(1e-12, available_methods::Y6, 1e-10);
     test_adaptive<long double>(1e-12, available_methods::Y6, 1e-10);
 

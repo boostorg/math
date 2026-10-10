@@ -18,6 +18,13 @@ concurrency:
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+# The gcc and clang jobs that run the test suite build with fused multiply-add. -O2 rather than
+# b2's default of -O0 because it is what users build with and gcc does not fuse below it, and
+# inlining=on because b2's debug variant otherwise adds -fno-inline. The CMake jobs get the same
+# flags through CXXFLAGS. arm64 has FMA in its base instruction set, so macOS drops -mfma.
+env:
+  FMA_B2: cxxflags=-mfma cxxflags=-O2 inlining=on
+
 # b2 -l is no use as a hang detector: on POSIX it is a CPU-time rlimit that kills multithreaded
 # tests, and on Windows it misfires at launch.  So the test jobs have a job-level timeout instead.
 jobs:
@@ -89,7 +96,7 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS
+        run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS $FMA_B2
         working-directory: ../boost-root/libs/math/test
   ubuntu-focal-no-eh:
     runs-on: ubuntu-24.04
@@ -148,11 +155,13 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ../../../b2 toolset=$TOOLSET no_eh_tests exception-handling=off rtti=off define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER
+        run: ../../../b2 toolset=$TOOLSET no_eh_tests exception-handling=off rtti=off define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER $FMA_B2
         working-directory: ../boost-root/libs/math/test
   macos:
     runs-on: macos-latest
     timeout-minutes: 120
+    env:
+      FMA_B2: cxxflags=-O2 inlining=on
     strategy:
       fail-fast: false
       matrix:
@@ -187,7 +196,7 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ../../../b2 toolset=${{ matrix.toolset }} cxxstd=${{ matrix.standard }} ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER
+        run: ../../../b2 toolset=${{ matrix.toolset }} cxxstd=${{ matrix.standard }} ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER $FMA_B2
         working-directory: ../boost-root/libs/math/test
   windows_gcc:
     runs-on: windows-2025
@@ -197,6 +206,9 @@ jobs:
         shell: cmd
     env:
       ARGS: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard }}
+      # -mfma brings in AVX. Win64 only aligns the stack to 16 bytes, but gcc emits aligned 32-byte
+      # AVX moves for stack objects, which crash (gcc bug 54412). Have the assembler unalign them.
+      FMA_B2: cxxflags=-mfma cxxflags=-O2 inlining=on cxxflags=-Wa,-muse-unaligned-vector-move
     strategy:
       fail-fast: false
       matrix:
@@ -231,7 +243,7 @@ jobs:
         run: config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }}
+        run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} %FMA_B2%
         working-directory: ../boost-root/libs/math/test
   MSVC2022:
     runs-on: windows-2022
@@ -418,7 +430,7 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_STANDALONE define=BOOST_MP_STANDALONE
+        run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_STANDALONE define=BOOST_MP_STANDALONE $FMA_B2
         working-directory: ../boost-root/libs/math/test
 
   posix-cmake-test:
@@ -740,6 +752,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      CXXFLAGS: -mfma -O2
+
     steps:
       - name: Intel Apt repository
         timeout-minutes: 1
@@ -804,6 +819,10 @@ jobs:
       fail-fast: false
 
     runs-on: ubuntu-24.04
+
+    env:
+      CXXFLAGS: -mfma -O2
+      CUDAFLAGS: -Xcompiler=-mfma,-O2
 
     steps:
       # CUDA 12.8 and a simulated GPU (PantheonSim): the runner has none, so
@@ -921,7 +940,7 @@ jobs:
             -DBUILD_TESTING=ON \
             -DBOOST_MATH_BUILD_MODULE=ON \
             -DCMAKE_CXX_COMPILER=clang++-$LLVM_VERSION \
-            -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-reserved-module-identifier" \
+            -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-reserved-module-identifier -mfma -O2" \
             -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD=$IMPORT_STD_UUID \
             -DCMAKE_CXX_STDLIB_MODULES_JSON=/usr/lib/llvm-$LLVM_VERSION/lib/libc++.modules.json \
             ..
@@ -950,6 +969,7 @@ jobs:
     container: ubuntu:26.04
 
     env:
+      CXXFLAGS: -mfma -O2
       GCC_VERSION: "15"
       # Pinned so the experimental `import std` feature UUID below stays valid.
       CMAKE_VERSION: 4.4.0

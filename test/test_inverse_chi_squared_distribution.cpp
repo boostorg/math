@@ -366,7 +366,8 @@ BOOST_AUTO_TEST_CASE( test_main )
   BOOST_CHECK_EQUAL(ichisq5.scale(), 1./5.); // check default is 1/df
   BOOST_CHECK_CLOSE_FRACTION(pdf(ichisq5, 0.2), 3.0510380337346841, tol4eps);
   BOOST_CHECK_CLOSE_FRACTION(cdf(ichisq5, 0.5), 0.84914503608460956, tol4eps);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(complement(ichisq5, 0.5)), 1 - 0.84914503608460956, tol4eps);
+  // The expected value is formed by subtraction, which magnifies the rounding of the constant about six times:
+  BOOST_CHECK_CLOSE_FRACTION(cdf(complement(ichisq5, 0.5)), 1 - 0.84914503608460956, tol4eps * 2);
 
   BOOST_CHECK_CLOSE_FRACTION(quantile(ichisq5, 0.84914503608460956), 0.5, tol4eps*100);
   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(ichisq5, 1. - 0.84914503608460956)), 0.5, tol4eps*100);
