@@ -44,14 +44,16 @@ BOOST_MATH_GPU_ENABLED T heuman_lambda_imp(T phi, T k, const Policy& pol)
     T result;
     T sinp = sin(phi);
     T cosp = cos(phi);
-    T s2 = sinp * sinp;
     T k2 = k * k;
     T kp = 1 - k2;
-    T delta = sqrt(1 - (kp * s2));
+    T c2 = cosp * cosp;
+    // 1 - kp * s2 written without cancellation, as phi -> pi/2 and/or k -> 0:
+    T delta2 = k2 + kp * c2;
+    T delta = sqrt(delta2);
     if(fabs(phi) <= constants::half_pi<T>())
     {
        result = kp * sinp * cosp / (delta * constants::half_pi<T>());
-       result *= ellint_rf_imp(T(0), kp, T(1), pol) + k2 * ellint_rj(T(0), kp, T(1), T(1 - k2 / (delta * delta)), pol) / (3 * delta * delta);
+       result *= ellint_rf_imp(T(0), kp, T(1), pol) + k2 * ellint_rj(T(0), kp, T(1), T(kp * c2 / delta2), pol) / (3 * delta2);
     }
     else
     {

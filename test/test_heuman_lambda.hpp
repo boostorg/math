@@ -79,6 +79,16 @@ void test_spots(T, const char* type_name)
     do_test_heuman_lambda<T>(heuman_lambda_data, type_name, "Elliptic Integral Heuman Lambda: Random Data");
 
     //
+    // Data is phi, k, result.  phi close to pi/2, where 1 - k^2 / delta^2 cancels; values calculated with Arb:
+    //
+    static const std::array<std::array<T, 3>, 2> data2 = {{
+        { { SC_(1.570556640625), SC_(0.99609375), SC_(0.99984939042322658740529229320291417190363051236320589578) } },
+        { { SC_(1.570556640625), SC_(0.5), SC_(0.99993800327192228903056807352064091322769813604390459942) } },
+    }};
+
+    do_test_heuman_lambda<T>(data2, type_name, "Elliptic Integral Heuman Lambda: phi near pi/2");
+
+    //
     // Special cases for coverage:
     //
 #ifndef BOOST_MATH_NO_EXCEPTIONS
