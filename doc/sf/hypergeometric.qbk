@@ -471,6 +471,10 @@ You should divide this value by the result to get an estimate of ['relative erro
 It should be noted that the error estimates are rather crude - the error can be significantly underestimated 
 in some circumstances, and over-estimated in others.
 
+If ['p_abs_error] is not provided, and the error estimate shows that more than half of the digits of the result are
+likely to be wrong (the relative error estimate is larger than the square root of machine epsilon), then an __evaluation_error is raised
+rather than returning a result which is wrong in most of its digits.
+
 The `hypergeometric_pFq_precision` functions will calculate `pFq` to a specified number of decimal places, and if `timeout`
 is reached then they raise an __evaluation_error.  Note that while these functions are defined as templates, they
 require type `Real` to be a *variable-precision* floating-point type: in practice the only type currently supported
