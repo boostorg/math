@@ -9,13 +9,28 @@ name: FMA
 description: Require FMA on the runner and export flags that use it
 inputs:
   compiler:
-    description: gnu (gcc, clang, MinGW), msvc, or clang-cl
-    default: gnu
+    description: gcc (also MinGW), clang, msvc or clang-cl. The default is clang on macOS and gcc elsewhere.
+    default: auto
 runs:
   using: composite
   steps:
     - shell: bash
       run: |
+        compiler="${{ inputs.compiler }}"
+        if [ "$compiler" = auto ]; then
+          if [ "$RUNNER_OS" = macOS ]; then compiler=clang; else compiler=gcc; fi
+        fi
+        # No -ffp-contract: gcc and clang both contract a*b + c by default, and for clang
+        # -ffp-contract=fast moves the fusion out of the front end, so less is fused at low optimization.
+        #
+        # -O1 because gcc never fuses at -O0. Even at -O1 it only does so with
+        # -fexpensive-optimizations, which is what enables the pass that forms FMAs (otherwise -O2).
+        # clang fuses within an expression at any level and rejects that flag.
+        case "$compiler" in
+          gcc) opt="-O1 -fexpensive-optimizations" ;;
+          clang) opt="-O1" ;;
+          *) opt="" ;;
+        esac
         case "$(uname -m)" in
           x86_64|AMD64)
             if [ "$RUNNER_OS" = Windows ]; then
@@ -25,16 +40,12 @@ runs:
             else
               if grep -qw fma /proc/cpuinfo; then has_fma=True; else has_fma=False; fi
             fi
-            # -mfma is all gcc and clang need. No -ffp-contract: both already contract by default, and
-            # for clang -ffp-contract=fast moves the fusion out of the front end, so it is lost at -O0.
-            # clang then fuses within an expression at every optimization level, -O0 included. gcc has
-            # no way to fuse at -O0 or -O1; it starts at -O2.
-            case "${{ inputs.compiler }}" in
+            case "$compiler" in
               # MSVC has no switch for FMA alone: /arch:AVX2 is the lowest level that enables it.
               msvc) flags="/arch:AVX2 /fp:contract" ;;
               clang-cl) flags="-mfma" ;;
               *)
-                flags="-mfma"
+                flags="-mfma $opt"
                 # MinGW: -mfma brings in AVX. Win64 only aligns the stack to 16 bytes, but gcc emits
                 # aligned 32-byte AVX moves for stack objects, which crash (gcc bug 54412). Have the
                 # assembler make them unaligned.
@@ -44,16 +55,16 @@ runs:
             esac
             ;;
           arm64|aarch64)
-            # Fused multiply-add is part of the base A64 instruction set, so no flag is needed:
+            # Fused multiply-add is part of the base A64 instruction set, so no -m flag is needed:
             has_fma=True
-            flags=""
+            flags="$opt"
             ;;
           *)
             echo "::error::Unknown architecture $(uname -m)"
             exit 1
             ;;
         esac
-        echo "FMA: $has_fma ($(uname -m)); flags: $flags"
+        echo "FMA: $has_fma ($(uname -m)); compiler: $compiler; flags: $flags"
         if [ "$has_fma" != True ]; then
           echo "::error::This runner's CPU has no FMA"
           exit 1
