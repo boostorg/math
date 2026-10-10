@@ -118,6 +118,33 @@ void test_gamma(T, const char* name)
    do_test_gamma<T>(near_m55, name, "near -55");
 }
 
+template <class T>
+void test_tgamma1pm1(T, const char* name)
+{
+   std::cout << "Testing tgamma1pm1 with type " << name << std::endl;
+   //
+   // https://github.com/boostorg/math/issues/1519
+   // The lgamma approximations used internally for these types are not accurate enough
+   // to avoid losing digits to cancellation, errors were as high as 1500 epsilon.
+   // The arguments are dyadic, reference values calculated with Arb:
+   //
+   static const std::array<std::array<T, 2>, 8> data = {{
+      {{ T(-0.375), SC_(0.4345188480905567756360197394564231366322077722066673307706798580950941973020969146309569665256322935994654337852) }},
+      {{ T(0.375), SC_(-0.111086430843774659257572435933755308792224698740403129584327399497564425740749328075507124360869447559309799521) }},
+      {{ T(0.75), SC_(-0.080937473151116766153176272477832104861570563918947041577410796282632833679901232072120717838813700063369964821) }},
+      {{ T(1.25), SC_(0.1330030963193463474783391112086475009359899009000204585729306248655997636058528505057375427260575938629599223101) }},
+      {{ T(1.625), SC_(0.4569332050919717252553325478854297481420860186473965078139717308778300441349421789220656691275952981869570811881) }},
+      {{ T(1.75), SC_(0.6083594219855456592319415231637938164922515131418426772395311065053925410601728438737887437820760248891025615618) }},
+      {{ T(1.875), SC_(0.7877108988969403106484306138406837807894743299311615258427956959629808411549585601993268102781147763595978133741) }},
+      {{ T(1.984375), SC_(0.9714651224878432889438635713198502884452632095994134781726907836796579737404575370382611229556842737635526601037) }},
+   }};
+   T tolerance = 40 * boost::math::tools::epsilon<T>();
+   for(unsigned i = 0; i < data.size(); ++i)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma1pm1(data[i][0]), data[i][1], tolerance);
+   }
+}
+
 void expected_results()
 {
    //
@@ -173,17 +200,25 @@ BOOST_AUTO_TEST_CASE(test_main)
    using namespace boost::multiprecision;
 #if !defined(TEST) || (TEST == 1)
    test_gamma(number<cpp_bin_float<38> >(0), "number<cpp_bin_float<38> >");
+   test_tgamma1pm1(number<cpp_bin_float<38> >(0), "number<cpp_bin_float<38> >");
    test_gamma(number<cpp_bin_float<45> >(0), "number<cpp_bin_float<45> >");
+   test_tgamma1pm1(number<cpp_bin_float<45> >(0), "number<cpp_bin_float<45> >");
 #endif
 #if !defined(TEST) || (TEST == 2)
    test_gamma(cpp_bin_float_50(0), "cpp_bin_float_50");
+   test_tgamma1pm1(cpp_bin_float_50(0), "cpp_bin_float_50");
    test_gamma(number<cpp_bin_float<55> >(0), "number<cpp_bin_float<55> >");
+   test_tgamma1pm1(number<cpp_bin_float<55> >(0), "number<cpp_bin_float<55> >");
    test_gamma(number<cpp_bin_float<65> >(0), "number<cpp_bin_float<65> >");
+   test_tgamma1pm1(number<cpp_bin_float<65> >(0), "number<cpp_bin_float<65> >");
 #endif
 #if !defined(TEST) || (TEST == 3)
    test_gamma(number<cpp_bin_float<75> >(0), "number<cpp_bin_float<75> >");
+   test_tgamma1pm1(number<cpp_bin_float<75> >(0), "number<cpp_bin_float<75> >");
    test_gamma(number<cpp_bin_float<85> >(0), "number<cpp_bin_float<85> >");
+   test_tgamma1pm1(number<cpp_bin_float<85> >(0), "number<cpp_bin_float<85> >");
    test_gamma(cpp_bin_float_100(0), "cpp_bin_float_100");
+   test_tgamma1pm1(cpp_bin_float_100(0), "cpp_bin_float_100");
 #endif
 }
 #else // No mp tests
