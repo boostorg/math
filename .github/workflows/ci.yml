@@ -96,20 +96,8 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: |
-          set -o pipefail
-          ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS $FMA_B2 2>&1 | tee $RUNNER_TEMP/b2.log
+        run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS $FMA_B2
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
-      - name: Report build errors (TEMPORARY)
-        if: failure()
-        run: |
-          esc() { cut -c1-300 | sed -e 's/%/%25/g' | awk '{printf "%s%%0A", $0}'; }
-          echo "::error title=b2 failed lines::$(grep -a -E '^\.\.\.failed|^\.\.\.skipped' $RUNNER_TEMP/b2.log | head -20 | esc)"
-          echo "::error title=b2 errors::$(grep -a -n -E 'error:|Error|Killed|fatal|undefined reference|Terminated|signal' $RUNNER_TEMP/b2.log | head -25 | esc)"
-          echo "::error title=b2 tail::$(tail -n 25 $RUNNER_TEMP/b2.log | esc)"
   ubuntu-focal-no-eh:
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -257,9 +245,6 @@ jobs:
       - name: Test
         run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} %FMA_B2%
         working-directory: ../boost-root/libs/math/test
-      - name: Report failed tests
-        if: failure()
-        uses: ./.github/actions/report-failures
   MSVC2022:
     runs-on: windows-2022
     timeout-minutes: 120
