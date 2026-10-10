@@ -512,8 +512,17 @@
         hypergeometric_1F1_AS_13_3_6_series(const T& a, const T& b, const T& z, const T& b_minus_a, const Policy& pol_)
            : b_minus_a(b_minus_a), half_z(z / 2), poch_1(2 * b_minus_a - 1), poch_2(b_minus_a - a), b_poch(b), term(1), last_result(1), sign(1), n(0), cache_offset(-cache_size), scale(0), pol(pol_)
         {
+           //
+           // The cache is normalised using a directly calculated Bessel I, either that of the first term or the one below it.
+           // For negative order v, I_v is the sum of a positive and a negative term when -2k < v < 1 - 2k, so it may be near
+           // a zero and have few correct digits.  Use the first term's order unless that's the case:
+           //
+           T v = b_minus_a - 0.5f;
+           normalise_on_first = !((v < 0) && (floor(-v) != 2 * floor(-v / 2)));  // not odd(floor(-v))
+           if (!normalise_on_first)
+              v -= 1;
            bessel_i_cache[cache_size - 1] = half_z > tools::log_max_value<T>() ?
-              cyl_bessel_i_large_x_scaled(T(b_minus_a - 1.5f), half_z, scale, pol) : BOOST_MATH_NAMESPACE::cyl_bessel_i(b_minus_a - 1.5f, half_z, pol);
+              cyl_bessel_i_large_x_scaled(v, half_z, scale, pol) : BOOST_MATH_NAMESPACE::cyl_bessel_i(v, half_z, pol);
            refill_cache();
         }
         T operator()()
@@ -550,6 +559,7 @@
         T b_minus_a, half_z, poch_1, poch_2, b_poch, term, last_result;
         int sign;
         int n, cache_offset;
+        bool normalise_on_first;
         long long scale;
         const Policy& pol;
         std::array<T, cache_size> bessel_i_cache;
@@ -565,11 +575,22 @@
            //
            cache_offset += cache_size;
            T last_value = bessel_i_cache.back();
-           bessel_i_backwards_iterator<T, Policy> i(b_minus_a + cache_offset + (int)cache_size - 1.5f, half_z, tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 1) / tools::epsilon<T>());
+           //
+           // We run the recurrence ourselves rather than use bessel_i_backwards_iterator, as the latter
+           // steps down from a single rounded starting order, so is off by up to ~eps * cache_size in all of the
+           // orders, and this is amplified where I_v is small.  We only use it to get the ratio at the start.
+           //
+           T order = b_minus_a - 0.5f + cache_offset;
+           if (order + (cache_size - 1) < -1)
+              BOOST_MATH_NAMESPACE::policies::raise_domain_error("hypergeometric_1F1_AS_13_3_6<%1%>", "Order must be > 0 stable backwards recurrence but got %1%", T(order + (cache_size - 1)), pol);
+           T seed = tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 1) / tools::epsilon<T>();
+           tools::backward_recurrence_iterator<bessel_ik_recurrence<T> > start(bessel_ik_recurrence<T>(order + (cache_size - 1), half_z), seed);
+           T above = start.f_n_plus_1;
+           T current = start.f_n;
 
-           for (int j = cache_size - 1; j >= 0; --j, ++i)
+           for (int j = cache_size - 1; j >= 0; --j)
            {
-              bessel_i_cache[j] = *i;
+              bessel_i_cache[j] = current;
               //
               // Depending on the value of half_z, the values stored in the cache can grow so
               // large as to overflow, if that looks likely then we need to rescale all the
@@ -584,10 +605,17 @@
                     rescale = tools::max_value<T>();
                  for (int k = j; k < cache_size; ++k)
                     bessel_i_cache[k] /= rescale;
-                 i = bessel_i_backwards_iterator<T, Policy>(b_minus_a -0.5f + cache_offset + j, half_z, bessel_i_cache[j + 1], bessel_i_cache[j]);
+                 if (order + j < -1)
+                    BOOST_MATH_NAMESPACE::policies::raise_domain_error("hypergeometric_1F1_AS_13_3_6<%1%>", "Order must be > 0 stable backwards recurrence but got %1%", T(order + j), pol);
+                 above = bessel_i_cache[j + 1];
+                 current = bessel_i_cache[j];
               }
+              // I_{v-1} = I_{v+1} + (2v / x) I_v
+              T below = above + (2 * (order + j) / half_z) * current;
+              above = current;
+              current = below;
            }
-           T ratio = last_value / *i;
+           T ratio = (normalise_on_first && (cache_offset == 0)) ? last_value / bessel_i_cache[0] : last_value / current;
            for (auto j = bessel_i_cache.begin(); j != bessel_i_cache.end(); ++j)
               *j *= ratio;
         }

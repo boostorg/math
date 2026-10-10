@@ -440,6 +440,19 @@ void test_spots(RealType)
                  BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(30)), ldexp(RealType(1), -16000)), static_cast<RealType>(-1.77766265021682828433490865393e+161L), 1e-8);
              }
          }
+         //
+         //
+         // Non-integer df between 2 and 3: the initial estimate is only good to about 1e-5.
+         // Exactly representable arguments; values from Arb (Nemo), solving cdf(t) = p with the cdf evaluated via 2F1:
+         //
+         {
+            RealType q_tol = boost::math::tools::epsilon<RealType>() * 20;
+            BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(2.984375)), static_cast<RealType>(0.19775390625)), static_cast<RealType>(-0.9899896881294573676655327252469783357936L), q_tol);
+            BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(2.984375)), static_cast<RealType>(0.80224609375)), static_cast<RealType>(0.9899896881294573676655327252469783357936L), q_tol * 4);
+            BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(2.5)), static_cast<RealType>(0.125)), static_cast<RealType>(-1.490852989983931479613959756356777034859L), q_tol);
+            BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(2.75)), static_cast<RealType>(0.1875)), static_cast<RealType>(-1.055456724185615319612720490421164490370L), q_tol);
+            BOOST_CHECK_CLOSE_FRACTION(boost::math::quantile(students_t_distribution<RealType>(static_cast<RealType>(2.625)), static_cast<RealType>(0.046875)), static_cast<RealType>(-2.578198064149963051339669162521479681954L), q_tol);
+         }
       }
 
   // Student's t pdf tests.

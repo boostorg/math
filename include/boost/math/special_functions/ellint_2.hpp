@@ -138,7 +138,13 @@ BOOST_MATH_GPU_ENABLED T ellint_e_imp(T phi, T k, const Policy& pol)
           T cosp = cos(rphi);
           T c = 1 / (sinp * sinp);
           T cm1 = cosp * cosp / (sinp * sinp);  // c - 1
-          result = s * ((1 - k2) * ellint_rf_imp(cm1, T(c - k2), c, pol) + k2 * (1 - k2) * ellint_rd(cm1, c, T(c - k2), pol) / 3 + k2 * sqrt(cm1 / (c * (c - k2))));
+          //
+          // 1 - k^2 and c - k^2 = (c - 1) + (1 - k^2) are calculated without cancellation
+          // as both are small when k is near 1 and phi near pi/2:
+          //
+          T k2m1 = (1 - fabs(k)) * (1 + fabs(k));
+          T cmk2 = cm1 + k2m1;
+          result = s * (k2m1 * ellint_rf_imp(cm1, cmk2, c, pol) + k2 * k2m1 * ellint_rd(cm1, c, cmk2, pol) / 3 + k2 * sqrt(cm1 / (c * cmk2)));
        }
        if (m != 0)
        {

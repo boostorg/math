@@ -470,5 +470,23 @@ void test_spots(T)
          ::boost::math::ibetac_inv(static_cast<T>(4), static_cast<T>(2), static_cast<T>(1e-100L)),
          static_cast<T>(1));
    }
+   //
+   // a == b and p == 1/2: the root is exactly the inflection point, which was also the upper
+   // bound of the search, and the root finder only crept up on it, to ~sqrt(eps):
+   //
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(1.0002383038393605L), T(1.0002383038393605L), T(0.5)), T(0.5), 8 * boost::math::tools::epsilon<T>());
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(0.36209832717702123L), T(0.36209832717702123L), T(0.5)), T(0.5), 8 * boost::math::tools::epsilon<T>());
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(2.495355969835936L), T(2.495355969835936L), T(0.5)), T(0.5), 8 * boost::math::tools::epsilon<T>());
+   //
+   // Near the mean ibeta used to sidestep to a series that lost up to 250 eps, which the inverses inherited.
+   // Reference values from a 100-digit evaluation, doubles only:
+   //
+   BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+   {
+      typedef boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promote;
+      T fine_tolerance = boost::math::tools::epsilon<T>() * 4;
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(26.915348039269173), T(31.260793671239576), T(0.5), no_promote()), static_cast<T>(0.462221785758236606742689160666476137835L), fine_tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac_inv(T(30.902954325135934), T(305.49211132155142), T(0.025), no_promote()), static_cast<T>(0.1248965682964306624656343882252054888054L), fine_tolerance);
+   }
 }
 

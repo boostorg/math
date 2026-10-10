@@ -214,7 +214,8 @@ template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType inverse_gaussian_cdf_second_term(RealType a, RealType b, RealType shape)
 {
    BOOST_MATH_STD_USING
-   if (shape < tools::log_max_value<RealType>() / 4)
+   // Phi(-b) underflows, and loses its digits as a subnormal first, long before the result does:
+   if ((shape < tools::log_max_value<RealType>() / 4) && (b * b < -tools::log_min_value<RealType>()))
       return exp(2 * shape) * cdf(complement(normal_distribution<RealType>(), b));
 
    // exp(2 * shape) * Phi(-b) = exp(-a*a/2) * erfcx(b/sqrt(2)) / 2.

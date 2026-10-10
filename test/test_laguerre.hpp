@@ -129,6 +129,31 @@ void test_spots(T, const char* t)
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(20, static_cast<T>(4.5L)), static_cast<T>(1.437239150257817378525582974722170737587L), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(50, static_cast<T>(4.5L)), static_cast<T>(-0.7795068145562651416494321484050019245248L), tolerance);
 
+   //
+   // Large n, where the plain recurrence loses up to n^1.5 epsilon or so.
+   // Values from Arb, summing the power series with ball arithmetic:
+   //
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(100, static_cast<T>(0.0068359375L)), static_cast<T>(0.423801679702102671995527499546438407167L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(100, static_cast<T>(-0.0126953125L)), static_cast<T>(2.728030280575653737375641683876867341864L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(300, static_cast<T>(0.0185546875L)), static_cast<T>(-0.26543197876082762751661668583129080036L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(50, static_cast<T>(0.08984375L)), static_cast<T>(-0.38457758508627425771987804342644330632L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(200, static_cast<T>(0.04296875L)), static_cast<T>(0.115650412589651806567199804324877580583L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(1000, static_cast<T>(0.009765625L)), static_cast<T>(0.214478845717718726380897093043899969172L), tolerance);
+   //
+   // The corrected recurrence should be good to an epsilon or two everywhere, without promotion to a wider
+   // type too.  Exact values, from the recurrence in rational arithmetic:
+   //
+   {
+      typedef boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> > no_promote;
+      T fine_tolerance = boost::math::tools::epsilon<T>() * 4;
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(300, static_cast<T>(0.25L), no_promote()), static_cast<T>(-0.1459220863189830924214270638214961311852L), fine_tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(100, static_cast<T>(2.5L), no_promote()), static_cast<T>(0.4257949400323675465623240248736101499633L), fine_tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(1000, static_cast<T>(0.5L), no_promote()), static_cast<T>(0.1530641781102510973600254467704571049436L), fine_tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(50, static_cast<T>(12.5L), no_promote()), static_cast<T>(14.31526804586314374951422376822543024939L), fine_tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(200, static_cast<T>(1.375L), no_promote()), static_cast<T>(0.1504238825858422683351257809206239809714L), fine_tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(100, static_cast<T>(0.0068359375L), no_promote()), static_cast<T>(0.423801679702102671995527499546438407167L), fine_tolerance);
+   }
+
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(4, 5, static_cast<T>(0.5L)), static_cast<T>(88.31510416666666666666666666666666666667L), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(10, 0, static_cast<T>(2.5L)), static_cast<T>(-0.8802526766660982969576719576719576719577L), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::laguerre(10, 1, static_cast<T>(4.5L)), static_cast<T>(1.564311458042689732142857142857142857143L), tolerance);

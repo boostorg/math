@@ -1453,7 +1453,11 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
             // Note in this zone we can't use Temme's expansion for
             // types longer than an 80-bit real:
             // it would require too many terms in the polynomials.
-            if(sigma < 0.4)
+            //
+            // For x < a and small a the expansion is only good to ~100 eps as sigma approaches 0.4,
+            // whereas the series is good to ~10 eps there:
+            //
+            if(sigma < ((x < a) && (a < 50) ? 0.3f : 0.4f))
                use_temme = true;
          }
       }
