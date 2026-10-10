@@ -98,6 +98,9 @@ jobs:
       - name: Test
         run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS $FMA_B2
         working-directory: ../boost-root/libs/math/test
+      - name: Report failed tests
+        if: failure()
+        uses: ./.github/actions/report-failures
   ubuntu-focal-no-eh:
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -245,6 +248,9 @@ jobs:
       - name: Test
         run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} %FMA_B2%
         working-directory: ../boost-root/libs/math/test
+      - name: Report failed tests
+        if: failure()
+        uses: ./.github/actions/report-failures
   MSVC2022:
     runs-on: windows-2022
     timeout-minutes: 120
