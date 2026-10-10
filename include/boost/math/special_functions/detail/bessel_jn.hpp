@@ -110,7 +110,11 @@ BOOST_MATH_GPU_ENABLED T bessel_jn(int n, T x, const Policy& pol)
             prev = current;
             current = next;
         }
-        value = bessel_j0(x) / current;       // normalization
+        //
+        // Normalize with whichever of J0 and J1 is larger: J0 may be near a zero,
+        // in which case the recurrence has cancelled all the digits of current.
+        //
+        value = (fabs(current) > fabs(prev)) ? bessel_j0(x) / current : bessel_j1(x) / prev;
         scale = 1 / scale;
     }
     value *= factor;

@@ -288,6 +288,18 @@ void test_bessel(T, const char* name)
     BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_j(364, T(38.5)), SC_(1.793940496519190500748409872348034004417458734118663909894e-309), tolerance);
     #endif
     //
+    // Integer order close to a zero of J0, where J0 can't be used to normalize the backward recurrence.
+    // The abscissas are doubles, so only test types that can represent them:
+    //
+    if (boost::math::tools::digits<T>() >= 53)
+    {
+       T zero_tolerance = boost::math::tools::epsilon<T>() * 20;
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_j(10, T(8.6537237301984558)), SC_(0.0996158647456921646927721919213908589596019870131360940723049378983), zero_tolerance);
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_j(7, T(5.5200781102863106)), SC_(0.0881464684159767016952121525637257877790920066703460259556066159961), zero_tolerance);
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_j(12, T(11.791534439014281)), SC_(0.1795280373512378986489789702185521318452327344959779893506059462388), zero_tolerance);
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_j(9, T(8.6537279129110122)), SC_(0.1833532562916418433167901418287371987480602621047903858777232081307), zero_tolerance);
+    }
+    //
     // Special cases at infinity:
     //
     BOOST_IF_CONSTEXPR (std::numeric_limits<T>::has_infinity)
