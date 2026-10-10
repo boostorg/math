@@ -471,6 +471,13 @@ void test_spots(T)
          static_cast<T>(1));
    }
    //
+   // a == b and p == 1/2: the root is exactly the inflection point, which was also the upper
+   // bound of the search, and the root finder only crept up on it, to ~sqrt(eps):
+   //
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(1.0002383038393605L), T(1.0002383038393605L), T(0.5)), T(0.5), 8 * boost::math::tools::epsilon<T>());
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(0.36209832717702123L), T(0.36209832717702123L), T(0.5)), T(0.5), 8 * boost::math::tools::epsilon<T>());
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(2.495355969835936L), T(2.495355969835936L), T(0.5)), T(0.5), 8 * boost::math::tools::epsilon<T>());
+   //
    // Near the mean ibeta used to sidestep to a series that lost up to 250 eps, which the inverses inherited.
    // Reference values from a 100-digit evaluation, doubles only:
    //
