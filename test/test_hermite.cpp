@@ -13,23 +13,25 @@
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #endif
 
+#include <limits>
 #include "test_hermite.hpp"
+#include <boost/multiprecision/cpp_bin_float.hpp>
 
 //
 // DESCRIPTION:
 // ~~~~~~~~~~~~
 //
-// This file tests the Hermite polynomials.  
+// This file tests the Hermite polynomials.
 // There are two sets of tests, spot
 // tests which compare our results with selected values computed
-// using the online special function calculator at 
+// using the online special function calculator at
 // functions.wolfram.com, while the bulk of the accuracy tests
 // use values generated with NTL::RR at 1000-bit precision
 // and our generic versions of these functions.
 //
 // Note that when this file is first run on a new platform many of
 // these tests will fail: the default accuracy is 1 epsilon which
-// is too tight for most platforms.  In this situation you will 
+// is too tight for most platforms.  In this situation you will
 // need to cast a human eye over the error rates reported and make
 // a judgement as to whether they are acceptable.  Either way please
 // report the results to the Boost mailing list.  Acceptable rates of
@@ -80,7 +82,7 @@ void expected_results()
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
    //
-   std::cout << "Tests run with " << BOOST_COMPILER << ", " 
+   std::cout << "Tests run with " << BOOST_COMPILER << ", "
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
@@ -118,8 +120,28 @@ BOOST_AUTO_TEST_CASE( test_main )
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::endl;
 #endif
-   
+
+test_zeros(std::numeric_limits<float>::epsilon(), "float");
+test_zeros(std::numeric_limits<double>::epsilon(), "double");
+test_zeros(std::numeric_limits<long double>::epsilon(), "long double");
+using cpp_bin_float_100 = boost::multiprecision::cpp_bin_float_100;
+// Checked by hand that they line up exactly to 100 digits!
+test_zeros<cpp_bin_float_100>(std::numeric_limits<cpp_bin_float_100>::epsilon(), "cpp_bin_float_100");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+   test_zeros(boost::math::concepts::real_concept(2e-19), "real_concept");
+#endif
+
+test_zeros_large(std::numeric_limits<float>::epsilon(), "float");
+test_zeros_large(std::numeric_limits<double>::epsilon(), "double");
+test_zeros_large(std::numeric_limits<long double>::epsilon(), "long double");
+using cpp_bin_float_100 = boost::multiprecision::cpp_bin_float_100;
+// Difference is 1e-101.
+test_zeros_large<cpp_bin_float_100>(std::numeric_limits<cpp_bin_float_100>::epsilon(), "cpp_bin_float_100");
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+   test_zeros_large(boost::math::concepts::real_concept(2e-19), "real_concept");
+#endif
+
+test_zeros_accuracy(std::numeric_limits<double>::epsilon(), "double");
+test_zero_special_case<double>();
 }
-
-
-
