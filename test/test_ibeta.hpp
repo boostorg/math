@@ -575,4 +575,13 @@ void test_spots(T, const char* name)
       BOOST_CHECK_CLOSE(
          ::boost::math::ibeta(static_cast<T>(3.0e4L), static_cast<T>(1.0e7L), static_cast<T>(3119) / 1048576),
          static_cast<T>(0.1690982393949004438961071516113973441276481773L), tolerance_large);
+   //
+   // Near the mean with b < 40, where sidestepping to the series lost up to 250 eps.
+   // Reference value from a 100-digit evaluation, doubles only:
+   //
+   BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+   {
+      typedef boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promote;
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(124.93519797258834), T(35.625649490623374), T(0.74635077170289033), no_promote()), static_cast<T>(0.1654537324451929478298745553715453707115L), boost::math::tools::epsilon<T>() * 8);
+   }
 }

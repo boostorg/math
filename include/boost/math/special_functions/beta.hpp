@@ -1724,23 +1724,9 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
          }
          else if(a > 15)
          {
-            // sidestep so we can use the series representation:
-            int n = itrunc(T(floor(b)), pol);
-            if(n == b)
-               --n;
-            T bbar = b - n;
-            T prefix; // LCOV_EXCL_LINE
-            if(!normalised)
-            {
-               prefix = rising_factorial_ratio(T(a+bbar), bbar, n);
-            }
-            else
-            {
-               prefix = 1;
-            }
-            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(nullptr));
-            fract = beta_small_b_large_a_series(a,  bbar, x, y, fract, T(1), pol, normalised);
-            fract /= prefix;
+            // The continued fraction is accurate to within the error of its prefix here, whereas sidestepping to
+            // the series with ibeta_a_step and beta_small_b_large_a_series lost up to 250 eps near the mean:
+            fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
             BOOST_MATH_INSTRUMENT_VARIABLE(fract);
          }
          else if(normalised)
