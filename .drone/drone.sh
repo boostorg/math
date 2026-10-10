@@ -50,23 +50,11 @@ echo '==================================> BEFORE_SCRIPT'
 
 echo '==================================> SCRIPT'
 
-# Require fused multiply-add, and let the compiler use it. gcc and clang both contract a*b + c by
-# default, so -mfma is the only target flag needed. -O1 because gcc never fuses at -O0, and even at
-# -O1 only with -fexpensive-optimizations, which enables the pass that forms FMAs. clang fuses
-# within an expression at any level and rejects that flag.
-case $TOOLSET in
-    gcc*) FMA_FLAGS="<cxxflags>-O1 <cxxflags>-fexpensive-optimizations" ;;
-    *) FMA_FLAGS="<cxxflags>-O1" ;;
-esac
-case $(uname -m) in
-    x86_64)
-        grep -qw fma /proc/cpuinfo || { echo "This runner's CPU has no FMA"; exit 1; }
-        FMA_FLAGS="<cxxflags>-mfma $FMA_FLAGS"
-        ;;
-    *)
-        # Fused multiply-add is part of the base aarch64 and s390x instruction sets: no -m flag needed.
-        ;;
-esac
+# Let the compiler use fused multiply-add for a*b + c. -O2 rather than b2's default of -O0: it is
+# what users build with, and gcc does not fuse below it. gcc and clang both contract by default.
+# FMA is in the base aarch64 and s390x instruction sets; x86 needs it switched on.
+FMA_FLAGS="<cxxflags>-O2"
+if [ "$(uname -m)" = x86_64 ]; then FMA_FLAGS="<cxxflags>-mfma $FMA_FLAGS"; fi
 echo "FMA: $(uname -m); $FMA_FLAGS"
 echo "using $TOOLSET : : $COMPILER : <cxxflags>-std=$CXXSTD $OPTIONS $FMA_FLAGS ;" > ~/user-config.jam
 (cd libs/config/test && ../../../b2 print_config_info print_math_info toolset=$TOOLSET)
