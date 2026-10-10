@@ -18,6 +18,10 @@
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/quadrature/exp_sinh.hpp>
+#include <boost/math/quadrature/gauss_kronrod.hpp>
+#include <boost/math/quadrature/tanh_sinh.hpp>
+#include <boost/math/special_functions/log1p.hpp>
+#include <boost/math/special_functions/erf.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
 
@@ -218,6 +222,74 @@ BOOST_MATH_NAMESPACE_BEGIN
          }
 
          template <class T, class Policy>
+         T non_central_t_left_tail_integral(T v, T delta, T t, const Policy& pol)
+         {
+            BOOST_MATH_STD_USING
+            //
+            // Computes P(T <= -t) for t > 0 and delta > 0, which is the upper tail Q(t) of the
+            // distribution with non-centrality -delta.  The series used for the cdf sum terms of both
+            // signs here, which cancel when this tail is small (they sum to the much larger tail on the
+            // other side), so integrate the tail directly instead:
+            //
+            //   P(T <= -t) = E[Phi(-(t s + delta))],   s = sqrt(chi^2_v / v),
+            //
+            // where the integrand is positive.  The chi density is 2 (v/2)^(v/2) e^(-v/2) / Gamma(v/2)
+            // times s^(v-1) exp(-v (s^2 - 1) / 2).
+            //
+            T half_v = v / 2;
+            T t2 = t * t;
+            T eps = policies::get_epsilon<T, Policy>();
+            auto integrand = [&](T s) -> T
+               {
+                  // (v - 1) log(s) - v (s^2 - 1) / 2, avoiding cancellation for s close to 1:
+                  T e;
+                  if (fabs(s - 1) < 0.5f)
+                  {
+                     T d = s - 1;
+                     e = v * (BOOST_MATH_NAMESPACE::log1pmx(d, pol) - d * d / 2) - BOOST_MATH_NAMESPACE::log1p(d, pol);
+                  }
+                  else
+                     e = (v - 1) * log(s) - half_v * (s * s - 1);
+                  return exp(e) * BOOST_MATH_NAMESPACE::erfc((t * s + delta) / constants::root_two<T>(), pol) / 2;
+               };
+            //
+            // The integrand is only significant in a narrow window, for large v much narrower than the
+            // interval (0, inf), so first locate it.  The upper limit is where the tail of
+            // exp(-t delta s - (v + t^2) s^2 / 2), the factors that decay for large s, has fallen to epsilon:
+            //
+            T hi = (sqrt(t2 * delta * delta - 2 * (v + t2) * log(eps)) - t * delta) / (v + t2);
+            T result;
+            if (v < 2)
+            {
+               //
+               // The integrand is singular at zero (for v < 1) or has a singular derivative there,
+               // and is otherwise wide, so tanh-sinh quadrature is the right tool:
+               //
+               result = quadrature::tanh_sinh<T, Policy>().integrate(integrand, T(0), hi);
+               return result * 2 * half_v * gamma_p_derivative(half_v, half_v, pol);
+            }
+            //
+            // Otherwise estimate the mode m and the width of the window around it from the Gaussian
+            // approximation to Phi(-a), and integrate each side of the mode separately:
+            //
+            T disc = t2 * delta * delta + 4 * (v + t2) * (v - 1);
+            T m = (sqrt(disc) - t * delta) / (2 * (v + t2));
+            T w = 2 * sqrt(-2 * log(eps) / (v + t2 + (v - 1) / (m * m)));
+            using integrator = quadrature::gauss_kronrod<T, 15, Policy>;
+            if (m + w > hi)
+               hi = m + w;
+            // The default tolerance of sqrt(epsilon) leaves errors of 1e-12 or so, which is more than the series:
+            T tol = pow(eps, T(2) / 3);
+            result = integrator::integrate(integrand, m, hi, 15, tol);
+            if (m > w)
+               result += integrator::integrate(integrand, m - w, m, 15, tol);
+            else
+               result += integrator::integrate(integrand, T(0), m, 15, tol);
+            // The normalisation constant is 2 (v/2)^(v/2) e^(-v/2) / Gamma(v/2):
+            return result * 2 * half_v * gamma_p_derivative(half_v, half_v, pol);
+         }
+
+         template <class T, class Policy>
          T non_central_t_cdf(T v, T delta, T t, bool invert, const Policy& pol)
          {
             BOOST_MATH_STD_USING
@@ -281,7 +353,13 @@ BOOST_MATH_NAMESPACE_BEGIN
                   result = 0;
                if (invert)
                {
-                  result = cdf(complement(BOOST_MATH_NAMESPACE::normal_distribution<T, Policy>(), -delta)) - result;
+                  T upper = cdf(complement(BOOST_MATH_NAMESPACE::normal_distribution<T, Policy>(), -delta));
+                  result = upper - result;
+                  if ((delta < 0) && (x != 0) && (result < (std::max)(c, upper) / 8))
+                  {
+                     // Most of the digits have cancelled, compute the tail directly:
+                     return non_central_t_left_tail_integral(v, T(-delta), t, pol);
+                  }
                   if ((x != 0) && (fabs(result / (c * tools::epsilon<T>())) < 1000))
                   {
                       // We've cancelled out most of the digits in the result, try A&S 26.7.9,
@@ -309,7 +387,14 @@ BOOST_MATH_NAMESPACE_BEGIN
                if(x != 0)
                {
                   result = non_central_beta_q(a, b, d2, x, y, pol);
+                  T positive = result;
                   result = non_central_t2_q(v, delta, x, y, pol, result);
+                  if (!invert && (delta < 0) && (result < positive / 8))
+                  {
+                     // The terms with delta < 0 have cancelled most of the digits of the
+                     // (small) upper tail, compute it directly:
+                     return non_central_t_left_tail_integral(v, T(-delta), t, pol);
+                  }
                   result /= 2;
                }
                else // x == 0
