@@ -38,7 +38,6 @@ void test_spot(RealType)
 
     RealType k = static_cast<RealType>(2.L);
     RealType alpha = static_cast<RealType>(0.05L);
-    RealType p = static_cast<RealType>(0.5L);
     RealType result;
     result = negative_binomial_distribution<RealType>::find_lower_bound_on_p(static_cast<RealType>(k), static_cast<RealType>(1), static_cast<RealType>(alpha));
     result = negative_binomial_distribution<RealType>::find_lower_bound_on_p(k, 1, alpha);

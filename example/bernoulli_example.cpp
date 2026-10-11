@@ -7,8 +7,10 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifdef _MSC_VER
 #pragma warning (disable : 4100) // unreferenced formal parameter.
 #pragma warning (disable : 4127) // conditional expression is constant.
+#endif
 
 //#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 

@@ -14,7 +14,7 @@
 #include <iomanip>
 
 template <class T>
-void test_value(const T& val, const char* name)
+void test_value(const T& val, const char* /*name*/)
 {
    using namespace boost::math;
    using std::fabs;
@@ -62,7 +62,7 @@ void test_value(const T& val, const char* name)
 }
 
 template <class T>
-void test_values(const T& val, const char* name)
+void test_values(const T& /*val*/, const char* name)
 {
    static const T a = static_cast<T>(1.3456724e22);
    static const T b = static_cast<T>(1.3456724e-22);

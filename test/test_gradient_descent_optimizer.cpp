@@ -276,7 +276,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(function_constraint_test, T, all_float_types)
 template<typename RealType>
 struct no_init_policy
 {
-  void operator()(std::vector<RealType>& x) const noexcept {}
+  void operator()(std::vector<RealType>& /*x*/) const noexcept {}
 };
 
 template<typename RealType>

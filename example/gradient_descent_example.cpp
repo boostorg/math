@@ -90,7 +90,7 @@ std::vector<rdiff::rvar<T, 1>> init_theta_phi_uniform(size_t N, unsigned seed = 
     return u;
 }
 
-int main(int argc, char* argv[])
+int main()
 {
     /*
     if (argc != 2) {

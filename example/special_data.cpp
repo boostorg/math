@@ -25,7 +25,7 @@ T my_special(T a, T b)
    return a + b;
 }
 
-int cpp_main(int argc, char*argv [])
+int cpp_main(int argc, char* /*argv*/ [])
 {
    //
    // We'll use so many digits of precision that any

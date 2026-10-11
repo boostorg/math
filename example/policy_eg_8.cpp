@@ -58,14 +58,14 @@ namespace boost{ namespace math
   namespace policies
   {
     template <class T>
-    T user_domain_error(const char* function, const char* message, const T& val)
+    T user_domain_error(const char* /*function*/, const char* /*message*/, const T& /*val*/)
     { // Ignoring function, message and val for this example, perhaps unhelpfully.
        cerr << "Domain Error!" << endl;
        return std::numeric_limits<T>::quiet_NaN();
     }
 
     template <class T>
-    T user_pole_error(const char* function, const char* message, const T& val)
+    T user_pole_error(const char* /*function*/, const char* /*message*/, const T& /*val*/)
     { // Ignoring function, message and val for this example, perhaps unhelpfully.
        cerr << "Pole Error!" << endl;
        return std::numeric_limits<T>::quiet_NaN();
