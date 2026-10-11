@@ -177,9 +177,11 @@ void expected_results()
 
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::policies::promote_double<>() && (std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
+   if((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
       && (std::numeric_limits<long double>::digits < 90))
    {
+      if (boost::math::policies::promote_double<>())
+      {
       // some errors spill over into type double as well:
       add_expected_result(
          ".*",                          // compiler
@@ -209,6 +211,7 @@ void expected_results()
          "double",                      // test type(s)
          ".*",                          // test data group
          ".*", 30, 30);                 // test function
+      }
       //
       // and we have a few cases with higher limits as well:
       //
