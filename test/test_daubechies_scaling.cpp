@@ -406,7 +406,7 @@ void test_quadratures()
         }
 
         auto phi_sq = [phi](Real x) { Real t = phi(x); return t*t; };
-        Q = trapezoidal(phi, a, b, tol, 15, &error_estimate, &L1);
+        Q = trapezoidal(phi_sq, a, b, tol, 15, &error_estimate, &L1);
         if (!CHECK_MOLLIFIED_CLOSE(Real(1), Q, 20*std::sqrt(std::numeric_limits<Real>::epsilon())/(p*p)))
         {
             std::cerr << "  L2 norm of " << p << " vanishing moment scaling function is not equal 1.\n";
