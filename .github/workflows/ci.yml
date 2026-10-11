@@ -252,7 +252,7 @@ jobs:
       run:
         shell: cmd
     env:
-      ARGS: address-model=64 cxxstd=${{ matrix.standard }}
+      ARGS: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard }}
       # Optimize like the other jobs (/O2): b2's debug default of /Od makes the tests slow to run.
       OPT_B2: optimization=speed inlining=on
     strategy:
