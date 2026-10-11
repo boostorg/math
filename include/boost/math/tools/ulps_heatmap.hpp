@@ -16,6 +16,10 @@
 // Both use a sequential colormap (inferno by default), so the floor is dark and errors
 // glow. Each can use a linear or a logarithmic color scale.
 //
+// f is sampled at the pixel centres and at random probes between them; each pixel shows the
+// worst of its samples. The condition numbers come from finite differences of the reference
+// values on the grid (see detail::grid_condition_numbers_2d).
+//
 // The heatmap is a PNG embedded in an SVG, which carries the axes, colorbar and labels.
 // The PNG encoder can be set with png_encoder. If lodepng.h is on the include path, the
 // default encoder is lodepng (https://github.com/lvandeve/lodepng; link lodepng.cpp).
@@ -34,6 +38,7 @@
 #include <fstream>
 #include <functional>
 #include <iomanip>
+#include <random>
 #include <limits>
 #include <sstream>
 #include <stdexcept>
@@ -43,11 +48,6 @@
 #endif
 #include <boost/math/tools/color_maps.hpp>
 #include <boost/math/tools/ulps_plot.hpp>
-
-#if __has_include("lodepng.h")
-#include "lodepng.h"
-#define BOOST_MATH_ULPS_HEATMAP_HAS_LODEPNG
-#endif
 
 BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
@@ -63,41 +63,6 @@ inline std::array<std::uint8_t, 3> to_8bit_rgb(std::array<double, 3> const & c)
         rgb[k] = static_cast<std::uint8_t>(std::lround(255*std::clamp(c[k], 0.0, 1.0)));
     }
     return rgb;
-}
-
-inline std::string base64(std::vector<unsigned char> const & bytes)
-{
-    static constexpr char table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    std::string out;
-    out.reserve(4*((bytes.size() + 2)/3));
-    for (std::size_t i = 0; i < bytes.size(); i += 3)
-    {
-        std::uint32_t n = std::uint32_t(bytes[i]) << 16;
-        if (i + 1 < bytes.size()) { n |= std::uint32_t(bytes[i + 1]) << 8; }
-        if (i + 2 < bytes.size()) { n |= bytes[i + 2]; }
-        out += table[(n >> 18) & 63];
-        out += table[(n >> 12) & 63];
-        out += i + 1 < bytes.size() ? table[(n >> 6) & 63] : '=';
-        out += i + 2 < bytes.size() ? table[n & 63] : '=';
-    }
-    return out;
-}
-
-inline std::function<std::vector<unsigned char>(std::vector<unsigned char> const &, std::size_t, std::size_t)> default_png_encoder()
-{
-#ifdef BOOST_MATH_ULPS_HEATMAP_HAS_LODEPNG
-    return [](std::vector<unsigned char> const & rgb, std::size_t width, std::size_t height) {
-        std::vector<unsigned char> png;
-        unsigned error = lodepng::encode(png, rgb, static_cast<unsigned>(width), static_cast<unsigned>(height), LCT_RGB);
-        if (error)
-        {
-            throw std::runtime_error(std::string("lodepng: ") + lodepng_error_text(error));
-        }
-        return png;
-    };
-#else
-    return nullptr;
-#endif
 }
 
 // A diverging map for signed data on a dark background: light blue -> dark blue -> near black (zero) -> dark red -> light orange.
@@ -173,42 +138,14 @@ std::vector<CoarseReal> heatmap_abscissas(CoarseReal a, CoarseReal b, std::size_
     return xs;
 }
 
-// |x f'(x)/f(x)|, given fx = f(x), by a one-sided difference with relative step sqrt(eps). The envelope
-// needs only a few digits, which this gives with one more evaluation of f; evaluation_condition_number
-// takes six. Steps backward if the forward step leaves the domain.
-template<class F, class Real>
-Real heatmap_condition_number(F f, Real const & x, Real const & fx)
-{
-    using std::abs;
-    using std::isfinite;
-    using std::sqrt;
-    if (x == 0)
-    {
-        return 0;
-    }
-    Real h = sqrt(std::numeric_limits<Real>::epsilon());
-    for (Real step : {h, -h})
-    {
-        try
-        {
-            Real xh = x + x*step;
-            Real slope = (f(xh) - fx)/(xh - x);
-            if (isfinite(slope))
-            {
-                return abs(x*slope/fx);
-            }
-        }
-        catch (...)
-        {
-        }
-    }
-    return std::numeric_limits<Real>::quiet_NaN();
-}
-
 // Runs body(j) for j in [0, n) on several threads.
 template<class Body>
 void parallel_for(std::size_t n, unsigned threads, Body body)
 {
+    if (n == 0)
+    {
+        return;
+    }
     if (threads == 0)
     {
         threads = (std::max)(1u, std::thread::hardware_concurrency());
@@ -230,17 +167,129 @@ void parallel_for(std::size_t n, unsigned threads, Body body)
     }
 }
 
+
+// f_x and f_y at (qx, qy), between the nodes of the grid x (columns) by y (rows), from the bicubic through the 4 x 4 nearest
+// grid derivatives dx, dy (row-major, like the values z), which must all be trusted (tx, ty). As in interpolate_derivative,
+// the bicubic through z must predict f(qx, qy) = qz well enough that the condition number is good to about fd_tolerance.
+template<class Real>
+bool interpolate_gradient(std::vector<Real> const & x, std::vector<Real> const & y, std::vector<Real> const & z,
+                          std::vector<Real> const & dx, std::vector<Real> const & dy,
+                          std::vector<unsigned char> const & tx, std::vector<unsigned char> const & ty,
+                          Real const & qx, Real const & qy, Real const & qz, Real & gx, Real & gy)
+{
+    using std::abs;
+    using std::isfinite;
+    std::size_t const W = x.size();
+    std::size_t const H = y.size();
+    if (W < 5 || H < 5)
+    {
+        return false;
+    }
+    std::size_t const si = interpolation_window(x.data(), W, qx);
+    std::size_t const sj = interpolation_window(y.data(), H, qy);
+    Real wx[4];
+    Real wy[4];
+    lagrange_weights(x.data() + si, 4, qx, wx);
+    lagrange_weights(y.data() + sj, 4, qy, wy);
+    Real fi = 0;
+    gx = 0;
+    gy = 0;
+    for (std::size_t b = 0; b < 4; ++b)
+    {
+        for (std::size_t a = 0; a < 4; ++a)
+        {
+            std::size_t k = (sj + b)*W + si + a;
+            if (!tx[k] || !ty[k])
+            {
+                return false;
+            }
+            Real w = wx[a]*wy[b];
+            fi += w*z[k];
+            gx += w*dx[k];
+            gy += w*dy[k];
+        }
+    }
+    Real const hx = abs(x[si + 2] - x[si + 1]);
+    Real const hy = abs(y[sj + 2] - y[sj + 1]);
+    Real const ax = abs(qx);
+    Real const ay = abs(qy);
+    return isfinite(gx) && isfinite(gy)
+        && abs(fi - qz)*(ax/hx + ay/hy) <= Real(fd_tolerance)*(std::max)(Real(abs(qz)), Real(ax*abs(gx) + ay*abs(gy)));
+}
+
+// The condition numbers |x f_x/f| + |y f_y/f| on the grid x (columns) by y (rows) with reference values z (row-major, row j at y[j]),
+// returned in cond, and at the probes (qx, qy) with values qz, returned in qcond. The 2D analogue of grid_condition_numbers:
+// finite differences along the rows and the columns, bicubic interpolation of the gradient at the probes, and local
+// differences where these can't be trusted. Inf where f = 0, NaN where f is not finite. f must be thread safe.
+template<class F, class Real>
+void grid_condition_numbers_2d(F const & f, std::vector<Real> const & x, std::vector<Real> const & y, std::vector<Real> const & z,
+                               std::vector<Real> const & qx, std::vector<Real> const & qy, std::vector<Real> const & qz,
+                               std::vector<Real> & cond, std::vector<Real> & qcond, unsigned threads)
+{
+    using std::abs;
+    using std::isfinite;
+    std::size_t const W = x.size();
+    std::size_t const H = y.size();
+    std::vector<Real> dx(W*H);
+    std::vector<Real> dy(W*H);
+    std::vector<unsigned char> tx(W*H);
+    std::vector<unsigned char> ty(W*H);
+    parallel_for(H, threads, [&](std::size_t j) {
+        grid_derivatives(x.data(), z.data() + j*W, 1, W, dx.data() + j*W, tx.data() + j*W);
+    });
+    parallel_for(W, threads, [&](std::size_t i) {
+        grid_derivatives(y.data(), z.data() + i, W, H, dy.data() + i, ty.data() + i);
+    });
+    cond.assign(W*H, std::numeric_limits<Real>::quiet_NaN());
+    parallel_for(H, threads, [&](std::size_t j) {
+        for (std::size_t i = 0; i < W; ++i)
+        {
+            std::size_t k = j*W + i;
+            if (!isfinite(z[k]))
+            {
+                continue;
+            }
+            Real cx = tx[k] ? Real(abs(x[i]*dx[k]/z[k])) : local_condition_number([&](Real const & t) { return f(t, y[j]); }, x[i], z[k]);
+            Real cy = ty[k] ? Real(abs(y[j]*dy[k]/z[k])) : local_condition_number([&](Real const & t) { return f(x[i], t); }, y[j], z[k]);
+            cond[k] = cx + cy;
+        }
+    });
+    qcond.assign(qx.size(), std::numeric_limits<Real>::quiet_NaN());
+    std::size_t const chunk = 64;
+    parallel_for((qx.size() + chunk - 1)/chunk, threads, [&](std::size_t c) {
+        for (std::size_t p = c*chunk; p < (std::min)(qx.size(), (c + 1)*chunk); ++p)
+        {
+            if (!isfinite(qz[p]))
+            {
+                continue;
+            }
+            Real gx;
+            Real gy;
+            if (interpolate_gradient(x, y, z, dx, dy, tx, ty, qx[p], qy[p], qz[p], gx, gy))
+            {
+                qcond[p] = abs(qx[p]*gx/qz[p]) + abs(qy[p]*gy/qz[p]);
+            }
+            else
+            {
+                qcond[p] = local_condition_number([&](Real const & t) { return f(t, qy[p]); }, qx[p], qz[p])
+                         + local_condition_number([&](Real const & t) { return f(qx[p], t); }, qy[p], qz[p]);
+            }
+        }
+    });
+}
+
 } // namespace detail
 
 template<class F, typename PreciseReal, typename CoarseReal>
 class ulps_heatmap {
 public:
-    // Samples f at the pixel centres of a width x height grid on [x_min, x_max] x [y_min, y_max].
-    // A logarithmic axis is sampled evenly in log and requires a positive minimum.
+    // Samples f at the pixel centres of a width x height grid on [x_min, x_max] x [y_min, y_max], and at
+    // probe_density*width*height random probes (uniform in the plotted coordinates, with a fixed seed). Each pixel
+    // shows the worst of its samples. A logarithmic axis is sampled evenly in log and requires a positive minimum.
     // hi_acc_impl(x, y) takes PreciseReal arguments and must be safe to call from several threads.
     ulps_heatmap(F hi_acc_impl, CoarseReal x_min, CoarseReal x_max, CoarseReal y_min, CoarseReal y_max,
                  std::size_t width = 800, std::size_t height = 500,
-                 bool log_x = false, bool log_y = false, unsigned threads = 0);
+                 bool log_x = false, bool log_y = false, unsigned threads = 0, double probe_density = 0.25);
 
     // Computes the error of the implementation g(x, y), which takes CoarseReal arguments. Each
     // function added is drawn as its own panel, side by side with the others and on the same scale.
@@ -259,7 +308,7 @@ public:
     ulps_heatmap& color_map(std::function<std::array<double, 3>(double)> color_map);
 
     // Encodes 8-bit RGB pixels, row-major from the top row, as a PNG; lodepng by default, if lodepng.h is found.
-    using png_encoder_type = std::function<std::vector<unsigned char>(std::vector<unsigned char> const & rgb, std::size_t width, std::size_t height)>;
+    using png_encoder_type = detail::png_encoder_type;
     ulps_heatmap& png_encoder(png_encoder_type encoder);
 
     ulps_heatmap& title(std::string const & title);
@@ -300,7 +349,20 @@ private:
         std::vector<double> ulps;
         std::vector<double> ulps_envelope;
         std::vector<detail::ulps_class> state;
+        // Where the worst ulps and ulps/envelope of each pixel were found: 0 for its centre, p + 1 for probe p.
+        std::vector<std::size_t> ulps_source;
+        std::vector<std::size_t> ulps_envelope_source;
     };
+
+    // The coordinates of the sample source (see panel) in pixel k:
+    std::pair<CoarseReal, CoarseReal> sample_location(std::size_t k, std::size_t source) const
+    {
+        if (source == 0)
+        {
+            return {xs_[k % xs_.size()], ys_[k / xs_.size()]};
+        }
+        return {probe_x_[source - 1], probe_y_[source - 1]};
+    }
 
     void write_svg(std::string const & filename, std::vector<double> panel::* values, double floor,
                    std::string const & quantity) const;
@@ -310,6 +372,12 @@ private:
     // Row-major, with row 0 at y_max (the top of the image):
     std::vector<PreciseReal> precise_;
     std::vector<double> envelope_;
+    // The random probes, the pixels they fall in, and their reference values and envelopes:
+    std::vector<CoarseReal> probe_x_;
+    std::vector<CoarseReal> probe_y_;
+    std::vector<std::size_t> probe_pixel_;
+    std::vector<PreciseReal> probe_precise_;
+    std::vector<double> probe_envelope_;
     std::vector<panel> panels_;
     CoarseReal x_min_;
     CoarseReal x_max_;
@@ -335,7 +403,7 @@ private:
 template<class F, typename PreciseReal, typename CoarseReal>
 ulps_heatmap<F, PreciseReal, CoarseReal>::ulps_heatmap(F hi_acc_impl, CoarseReal x_min, CoarseReal x_max,
              CoarseReal y_min, CoarseReal y_max, std::size_t width, std::size_t height,
-             bool log_x, bool log_y, unsigned threads)
+             bool log_x, bool log_y, unsigned threads, double probe_density)
     : x_min_(x_min), x_max_(x_max), y_min_(y_min), y_max_(y_max), log_x_(log_x), log_y_(log_y), threads_(threads)
 {
     static_assert(std::numeric_limits<PreciseReal>::digits10 >= std::numeric_limits<CoarseReal>::digits10, "PreciseReal must have higher precision that CoarseReal");
@@ -355,31 +423,79 @@ ulps_heatmap<F, PreciseReal, CoarseReal>::ulps_heatmap(F hi_acc_impl, CoarseReal
     ys_ = detail::heatmap_abscissas(y_min, y_max, height, log_y);
     std::reverse(ys_.begin(), ys_.end());
 
+    if (!(probe_density >= 0))
+    {
+        throw std::domain_error("The probe density must be nonnegative.");
+    }
+
+    // Random probes, uniform in the plotted coordinates, find the errors between the pixel centres: at integers and
+    // half-integers, which a grid can hit or miss and which often take their own code paths, and in narrow features.
+    std::size_t const probes = static_cast<std::size_t>(probe_density*static_cast<double>(width*height));
+    std::mt19937_64 gen(20261011);
+    std::uniform_real_distribution<double> unit(0.0, 1.0);
+    auto random_coordinate = [&](CoarseReal lo, CoarseReal hi, bool log_axis, std::size_t n, std::size_t & cell) {
+        double u = unit(gen);
+        long double t_lo = log_axis ? std::log(static_cast<long double>(lo)) : static_cast<long double>(lo);
+        long double t_hi = log_axis ? std::log(static_cast<long double>(hi)) : static_cast<long double>(hi);
+        long double t = t_lo + (t_hi - t_lo)*u;
+        cell = (std::min)(n - 1, static_cast<std::size_t>(u*static_cast<double>(n)));
+        return (std::min)(hi, (std::max)(lo, static_cast<CoarseReal>(log_axis ? std::exp(t) : t)));
+    };
+    probe_x_.resize(probes);
+    probe_y_.resize(probes);
+    probe_pixel_.resize(probes);
+    for (std::size_t p = 0; p < probes; ++p)
+    {
+        std::size_t i;
+        std::size_t j;
+        probe_x_[p] = random_coordinate(x_min, x_max, log_x, width, i);
+        probe_y_[p] = random_coordinate(y_min, y_max, log_y, height, j);
+        // Row 0 is at the top:
+        probe_pixel_[p] = (height - 1 - j)*width + i;
+    }
+
+    auto reference = [&](PreciseReal const & x, PreciseReal const & y) {
+        try
+        {
+            return static_cast<PreciseReal>(hi_acc_impl(x, y));
+        }
+        catch (...)
+        {
+            return std::numeric_limits<PreciseReal>::quiet_NaN();
+        }
+    };
+    std::vector<PreciseReal> px(xs_.begin(), xs_.end());
+    std::vector<PreciseReal> py(ys_.begin(), ys_.end());
+    std::vector<PreciseReal> qx(probe_x_.begin(), probe_x_.end());
+    std::vector<PreciseReal> qy(probe_y_.begin(), probe_y_.end());
     precise_.resize(width*height);
-    envelope_.resize(width*height, std::numeric_limits<double>::quiet_NaN());
     detail::parallel_for(height, threads_, [&](std::size_t j) {
-        using std::abs;
-        PreciseReal y = ys_[j];
         for (std::size_t i = 0; i < width; ++i)
         {
-            PreciseReal x = xs_[i];
-            PreciseReal & z = precise_[j*width + i];
-            try
-            {
-                z = hi_acc_impl(x, y);
-                // Relative perturbations of x and y each contribute their own condition number:
-                auto f_x = [&](PreciseReal const & t) { return hi_acc_impl(t, y); };
-                auto f_y = [&](PreciseReal const & t) { return hi_acc_impl(x, t); };
-                PreciseReal cond = detail::heatmap_condition_number(f_x, x, z) + detail::heatmap_condition_number(f_y, y, z);
-                // As in ulps_plot, the envelope never drops below the 1/2 ulp of correct rounding:
-                envelope_[j*width + i] = (std::max)(0.5, static_cast<double>(cond/2));
-            }
-            catch (...)
-            {
-                z = std::numeric_limits<PreciseReal>::quiet_NaN();
-            }
+            precise_[j*width + i] = reference(px[i], py[j]);
         }
     });
+    probe_precise_.resize(probes);
+    std::size_t const chunk = 64;
+    detail::parallel_for((probes + chunk - 1)/chunk, threads_, [&](std::size_t c) {
+        for (std::size_t p = c*chunk; p < (std::min)(probes, (c + 1)*chunk); ++p)
+        {
+            probe_precise_[p] = reference(qx[p], qy[p]);
+        }
+    });
+    // The condition numbers, from finite differences on the grid:
+    std::vector<PreciseReal> cond;
+    std::vector<PreciseReal> qcond;
+    detail::grid_condition_numbers_2d(reference, px, py, precise_, qx, qy, probe_precise_, cond, qcond, threads_);
+    // As in ulps_plot, the envelope never drops below the 1/2 ulp of correct rounding:
+    auto envelope = [](PreciseReal const & c) {
+        using std::isnan;
+        return isnan(c) ? std::numeric_limits<double>::quiet_NaN() : (std::max)(0.5, static_cast<double>(c/2));
+    };
+    envelope_.resize(width*height);
+    std::transform(cond.begin(), cond.end(), envelope_.begin(), envelope);
+    probe_envelope_.resize(probes);
+    std::transform(qcond.begin(), qcond.end(), probe_envelope_.begin(), envelope);
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
@@ -393,30 +509,73 @@ ulps_heatmap<F, PreciseReal, CoarseReal>& ulps_heatmap<F, PreciseReal, CoarseRea
     p.ulps.assign(n, std::numeric_limits<double>::quiet_NaN());
     p.ulps_envelope.assign(n, std::numeric_limits<double>::quiet_NaN());
     p.state.assign(n, detail::ulps_class::ok);
-    detail::parallel_for(ys_.size(), threads_, [&](std::size_t j) {
+    p.ulps_source.assign(n, 0);
+    p.ulps_envelope_source.assign(n, 0);
+    // The ulps of g at (x, y), against the reference value z, with the same ulp distance as ulps_plot:
+    auto evaluate = [&](CoarseReal x, CoarseReal y, PreciseReal const & z, double & ulps) {
         using std::abs;
-        using std::isfinite;
         using std::nextafter;
+        // The implementation is evaluated everywhere, even where the true value is out of range, to check
+        // that overflow and underflow are handled correctly:
+        CoarseReal w = 0;
+        detail::ulps_class c = detail::classify_result<CoarseReal>(z, [&]() { return g(x, y); }, w);
+        if (c == detail::ulps_class::ok)
+        {
+            CoarseReal absz = static_cast<CoarseReal>(abs(z));
+            PreciseReal dist = static_cast<PreciseReal>(nextafter(absz, (std::numeric_limits<CoarseReal>::max)()) - absz);
+            ulps = static_cast<double>((static_cast<PreciseReal>(w) - z)/dist);
+        }
+        return c;
+    };
+    detail::parallel_for(ys_.size(), threads_, [&](std::size_t j) {
         for (std::size_t i = 0; i < width; ++i)
         {
             std::size_t k = j*width + i;
-            PreciseReal const & z = precise_[k];
-            // The implementation is evaluated everywhere, even where the true value is out of range, to check
-            // that overflow and underflow are handled correctly:
-            CoarseReal w = 0;
-            detail::ulps_class c = detail::classify_result<CoarseReal>(z, [&]() { return g(xs_[i], ys_[j]); }, w);
-            p.state[k] = c;
-            if (c != detail::ulps_class::ok)
-            {
-                continue;
-            }
-            // The same ulp distance as ulps_plot:
-            CoarseReal absz = static_cast<CoarseReal>(abs(z));
-            PreciseReal dist = static_cast<PreciseReal>(nextafter(absz, (std::numeric_limits<CoarseReal>::max)()) - absz);
-            p.ulps[k] = static_cast<double>((static_cast<PreciseReal>(w) - z)/dist);
+            p.state[k] = evaluate(xs_[i], ys_[j], precise_[k], p.ulps[k]);
             p.ulps_envelope[k] = p.ulps[k]/envelope_[k];
         }
     });
+    std::size_t const probes = probe_x_.size();
+    std::vector<detail::ulps_class> probe_state(probes);
+    std::vector<double> probe_ulps(probes, std::numeric_limits<double>::quiet_NaN());
+    std::size_t const chunk = 64;
+    detail::parallel_for((probes + chunk - 1)/chunk, threads_, [&](std::size_t c) {
+        for (std::size_t q = c*chunk; q < (std::min)(probes, (c + 1)*chunk); ++q)
+        {
+            probe_state[q] = evaluate(probe_x_[q], probe_y_[q], probe_precise_[q], probe_ulps[q]);
+        }
+    });
+    // Each pixel shows the worst of its samples: a bug (NaN, a spurious overflow, a mishandled out-of-range value) over an
+    // ulps value, over a correctly handled out-of-range value; and of the ulps values, the largest.
+    auto rank = [](detail::ulps_class c) {
+        return c == detail::ulps_class::ok ? 1 : (c == detail::ulps_class::failed || c == detail::ulps_class::spurious_overflow || c == detail::ulps_class::mishandled) ? 2 : 0;
+    };
+    for (std::size_t q = 0; q < probes; ++q)
+    {
+        std::size_t k = probe_pixel_[q];
+        double ratio = probe_ulps[q]/probe_envelope_[q];
+        if (rank(probe_state[q]) > rank(p.state[k]))
+        {
+            p.state[k] = probe_state[q];
+            p.ulps[k] = probe_ulps[q];
+            p.ulps_envelope[k] = ratio;
+            p.ulps_source[k] = q + 1;
+            p.ulps_envelope_source[k] = q + 1;
+        }
+        else if (probe_state[q] == detail::ulps_class::ok && p.state[k] == detail::ulps_class::ok)
+        {
+            if (std::abs(probe_ulps[q]) > std::abs(p.ulps[k]))
+            {
+                p.ulps[k] = probe_ulps[q];
+                p.ulps_source[k] = q + 1;
+            }
+            if (std::abs(ratio) > std::abs(p.ulps_envelope[k]) || std::isnan(p.ulps_envelope[k]))
+            {
+                p.ulps_envelope[k] = ratio;
+                p.ulps_envelope_source[k] = q + 1;
+            }
+        }
+    }
     panels_.push_back(std::move(p));
     return *this;
 }
@@ -549,7 +708,7 @@ std::string ulps_heatmap<F, PreciseReal, CoarseReal>::summary() const
         {
             os << p.label << ": ";
         }
-        os << p.state.size() << " pixels: ok=" << counts[0] << " undefined=" << counts[1] << " overflow_handled=" << counts[2]
+        os << p.state.size() << " pixels (" << probe_x_.size() << " probes): ok=" << counts[0] << " undefined=" << counts[1] << " overflow_handled=" << counts[2]
            << " underflow_handled=" << counts[3] << " green_nan_or_domain_error=" << counts[4] << " cyan_spurious_overflow=" << counts[5]
            << " mishandled=" << counts[6] << " over_half_ulp=" << over_half << " over_envelope=" << over_envelope << "\n";
         char const * names[7] = {"", "", "", "", "Green (NaN or domain error)", "Cyan (spurious overflow)", "Mishandled out-of-range result (maximal error)"};
@@ -562,12 +721,14 @@ std::string ulps_heatmap<F, PreciseReal, CoarseReal>::summary() const
                    << "], y in [" << ys_[by1[c]] << ", " << ys_[by0[c]] << "]\n";
             }
         }
+        auto at_ulps = sample_location(worst_ulps, p.ulps_source[worst_ulps]);
+        auto at_ratio = sample_location(worst_ratio, p.ulps_envelope_source[worst_ratio]);
         os << "  Worst ulps:          " << std::setprecision(4) << p.ulps[worst_ulps]
            << std::setprecision(std::numeric_limits<CoarseReal>::max_digits10)
-           << " at (" << xs_[worst_ulps % width] << ", " << ys_[worst_ulps / width] << ")\n";
+           << " at (" << at_ulps.first << ", " << at_ulps.second << ")\n";
         os << "  Worst ulps/envelope: " << std::setprecision(4) << p.ulps_envelope[worst_ratio]
            << std::setprecision(std::numeric_limits<CoarseReal>::max_digits10)
-           << " at (" << xs_[worst_ratio % width] << ", " << ys_[worst_ratio / width] << ")\n";
+           << " at (" << at_ratio.first << ", " << at_ratio.second << ")\n";
     }
     return os.str();
 }
