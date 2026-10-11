@@ -174,12 +174,12 @@ size_check(const T& vec1, const U& vec2, const char* function, const Policy& pol
 
 template <typename T, typename U, class Policy>
 typename std::enable_if_t<!(has_size_v<T> && has_size_v<U>), void>
-size_check(const T& vec1, const U& vec2, const char* function, const Policy& pol){    return;    }
+size_check(const T& /*vec1*/, const U& /*vec2*/, const char* /*function*/, const Policy& /*pol*/){    return;    }
 
 // Function to initialize array of integer types of size N
 template<typename T>
 typename std::enable_if_t<!has_size_v<T>, std::vector<T> >
-initialize_array(const T& p0, const size_t N)
+initialize_array(const T& /*p0*/, const size_t N)
 {
     std::vector<T> initializedArr(N);
     return initializedArr;
@@ -404,7 +404,7 @@ struct error_info
     bool success(RandomAccessContainer& current_p,
                  RandomAccessContainer& current_q,
                  RandomAccessContainer& next_p,
-                 RandomAccessContainer& next_q,
+                 RandomAccessContainer& /*next_q*/,
                  RealType& dt,
                  RealType& currentError)
     {
