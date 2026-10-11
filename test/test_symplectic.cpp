@@ -318,5 +318,7 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
     test_adaptive<double>(1e-12, available_methods::SRKNB6, 1e-11);
     test_adaptive<double>(1e-12, available_methods::SRKNB11, 1e-11);
 
-    test_adaptive<boost::multiprecision::cpp_bin_float_quad>(1e-12, available_methods::Y2, 1e-7);
+    // The second order method needs ~10^5 steps for this tolerance (and the double precision case above covers it),
+    // so use the sixth order method to cover the multiprecision type:
+    test_adaptive<boost::multiprecision::cpp_bin_float_quad>(1e-12, available_methods::Y6, 1e-10);
 }

@@ -95,6 +95,12 @@ void test_bump()
     Real value_tol = 20*std::numeric_limits<Real>::epsilon();
     // Differentiating the cardinal basis introduces a factor of 1/h.
     Real derivative_tol = value_tol/h;
+    // Each evaluation sums over all n knots in software 113-bit arithmetic, which dominates the run time
+    // of this test. For those types check every 8th knot and a quarter of the off-knot abscissas;
+    // the hardware types are checked at every knot and at all 1000 abscissas.
+    const bool soft = std::numeric_limits<Real>::digits > 64;
+    const size_t knot_stride = soft ? 8 : 1;
+    const size_t samples = soft ? 250 : 1000;
 
     std::vector<Real> v(n);
     for(size_t i = 0; i < n; ++i) {
@@ -107,7 +113,7 @@ void test_bump()
     auto ws = whittaker_shannon<decltype(v)>(std::move(v), t0, h);
 
     // Test the knots:
-    for(size_t i = v_copy.size()/4; i < 3*v_copy.size()/4; ++i) {
+    for(size_t i = v_copy.size()/4; i < 3*v_copy.size()/4; i += knot_stride) {
         Real t = t0 + i*h;
         Real expected = v_copy[i];
         Real computed = ws(t);
@@ -124,9 +130,9 @@ void test_bump()
     }
 
     // Use a deterministic evaluation grid independent of the standard library RNG.
-    for (size_t i = 0; i < 1000; ++i)
+    for (size_t i = 0; i < samples; ++i)
     {
-        Real t = -Real(85)/100 + Real(170)*i/(100*Real(999));
+        Real t = -Real(85)/100 + Real(170)*i/(100*Real(samples - 1));
         Real expected = bump(t);
         Real computed = ws(t);
         if(!CHECK_MOLLIFIED_CLOSE(expected, computed, value_tol)) {

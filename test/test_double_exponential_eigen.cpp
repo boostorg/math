@@ -1,16 +1,15 @@
 // Copyright Nick Thompson, 2026
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
-#define BOOST_TEST_MODULE double_exponential_eigen_test
 #include <complex>
 #include <cmath>
 #include <limits>
 #include <Eigen/Dense>
-#include <boost/test/included/unit_test.hpp>
 #include <boost/math/quadrature/exp_sinh.hpp>
 #include <boost/math/quadrature/sinh_sinh.hpp>
 #include <boost/math/quadrature/tanh_sinh.hpp>
 #include <boost/math/quadrature/trapezoidal.hpp>
+#include "math_unit_test.hpp"
 
 namespace q = boost::math::quadrature;
 using matrix = Eigen::MatrixXcd;
@@ -23,12 +22,12 @@ const double pi = boost::math::constants::pi<double>();
 
 void check(const matrix& actual, const matrix& expected, double tolerance = 1e-9)
 {
-    BOOST_CHECK_EQUAL(actual.rows(), expected.rows());
-    BOOST_CHECK_EQUAL(actual.cols(), expected.cols());
-    BOOST_CHECK_SMALL((actual-expected).norm(), tolerance);
+    CHECK_EQUAL(actual.rows(), expected.rows());
+    CHECK_EQUAL(actual.cols(), expected.cols());
+    CHECK_ABSOLUTE_ERROR(0, (actual-expected).norm(), tolerance);
 }
 
-BOOST_AUTO_TEST_CASE(exp_sinh_matrices)
+void exp_sinh_matrices()
 {
     q::exp_sinh<double> integrator;
     unsigned calls = 0;
@@ -40,17 +39,17 @@ BOOST_AUTO_TEST_CASE(exp_sinh_matrices)
     calls = 0;
     matrix result = integrator.integrate(f, zero, norm, 1e-11, &error, &l1, &levels);
     check(result, value*2);
-    BOOST_CHECK_GT(calls, coarse_calls);
-    BOOST_CHECK_GE(levels, 2);
-    BOOST_CHECK_LT(error, 1e-9);
-    BOOST_CHECK_CLOSE_FRACTION(l1, norm(value)*2, 1e-10);
+    CHECK_TRUE(calls > coarse_calls);
+    CHECK_GE(levels, static_cast<std::size_t>(2));
+    CHECK_TRUE(error < 1e-9);
+    CHECK_ULP_CLOSE(norm(value)*2, l1, 8);
     const unsigned refined_calls = calls;
     calls = 0;
     double scaled_error = 0, scaled_l1 = 0;
     check(integrator.integrate(f, zero, scaled_norm, 1e-11, &scaled_error, &scaled_l1), result);
-    BOOST_CHECK_EQUAL(calls, refined_calls);
-    BOOST_CHECK_CLOSE_FRACTION(scaled_error, 8*error, 1e-10);
-    BOOST_CHECK_CLOSE_FRACTION(scaled_l1, 8*l1, 1e-10);
+    CHECK_EQUAL(calls, refined_calls);
+    CHECK_ULP_CLOSE(8*error, scaled_error, 4);
+    CHECK_ULP_CLOSE(8*l1, scaled_l1, 4);
     check(integrator.integrate(f, 0., inf, zero, norm), value*2);
     const auto shifted = [&](double x) -> matrix { return value*std::exp(-(x-2)); };
     check(integrator.integrate(shifted, 2., inf, zero, norm), value);
@@ -69,10 +68,10 @@ BOOST_AUTO_TEST_CASE(exp_sinh_matrices)
         for (Eigen::Index j = 0; j < expected.cols(); ++j)
             expected(i, j) = value(i, j)/double(1+i+2*j);
     check(integrator.integrate(mixed, zero, norm), expected);
-    BOOST_CHECK_THROW(integrator.integrate(f, 0., 1., zero, norm), std::domain_error);
+    CHECK_THROW(integrator.integrate(f, 0., 1., zero, norm), std::domain_error);
 }
 
-BOOST_AUTO_TEST_CASE(sinh_sinh_matrices)
+void sinh_sinh_matrices()
 {
     q::sinh_sinh<double> integrator;
     unsigned calls = 0;
@@ -84,22 +83,22 @@ BOOST_AUTO_TEST_CASE(sinh_sinh_matrices)
     calls = 0;
     matrix result = integrator.integrate(f, zero, norm, 1e-11, &error, &l1, &levels);
     check(result, value*std::sqrt(pi));
-    BOOST_CHECK_GT(calls, coarse_calls);
-    BOOST_CHECK_GE(levels, 2);
-    BOOST_CHECK_LT(error, 1e-9);
-    BOOST_CHECK_CLOSE_FRACTION(l1, norm(value)*std::sqrt(pi), 1e-10);
+    CHECK_TRUE(calls > coarse_calls);
+    CHECK_GE(levels, static_cast<std::size_t>(2));
+    CHECK_TRUE(error < 1e-9);
+    CHECK_ULP_CLOSE(norm(value)*std::sqrt(pi), l1, 4);
     const unsigned refined_calls = calls;
     calls = 0;
     double scaled_error = 0, scaled_l1 = 0;
     check(integrator.integrate(f, zero, scaled_norm, 1e-11, &scaled_error, &scaled_l1), result);
-    BOOST_CHECK_EQUAL(calls, refined_calls);
-    BOOST_CHECK_CLOSE_FRACTION(scaled_error, 8*error, 1e-10);
-    BOOST_CHECK_CLOSE_FRACTION(scaled_l1, 8*l1, 1e-10);
+    CHECK_EQUAL(calls, refined_calls);
+    CHECK_ULP_CLOSE(8*error, scaled_error, 4);
+    CHECK_ULP_CLOSE(8*l1, scaled_l1, 4);
     const auto constant = [&](double) -> matrix { return value; };
-    BOOST_CHECK_THROW(integrator.integrate(constant, zero, norm), std::domain_error);
+    CHECK_THROW(integrator.integrate(constant, zero, norm), std::domain_error);
 }
 
-BOOST_AUTO_TEST_CASE(tanh_sinh_matrices)
+void tanh_sinh_matrices()
 {
     q::tanh_sinh<double> integrator;
     unsigned calls = 0;
@@ -113,17 +112,17 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_matrices)
     std::size_t levels = 0;
     matrix result = integrator.integrate(f, 0., 1., zero, norm, 1e-11, &error, &l1, &levels);
     check(result, value*exact);
-    BOOST_CHECK_GT(calls, coarse_calls);
-    BOOST_CHECK_GT(levels, 4);
-    BOOST_CHECK_LT(error, 1e-9);
-    BOOST_CHECK_CLOSE_FRACTION(l1, norm(value)*exact, 1e-10);
+    CHECK_TRUE(calls > coarse_calls);
+    CHECK_TRUE(levels > 4);
+    CHECK_TRUE(error < 1e-9);
+    CHECK_ULP_CLOSE(norm(value)*exact, l1, 12);
     const unsigned refined_calls = calls;
     calls = 0;
     double scaled_error = 0, scaled_l1 = 0;
     check(integrator.integrate(f, 0., 1., zero, scaled_norm, 1e-11, &scaled_error, &scaled_l1), result);
-    BOOST_CHECK_EQUAL(calls, refined_calls);
-    BOOST_CHECK_CLOSE_FRACTION(scaled_error, 8*error, 1e-10);
-    BOOST_CHECK_CLOSE_FRACTION(scaled_l1, 8*l1, 1e-10);
+    CHECK_EQUAL(calls, refined_calls);
+    CHECK_ULP_CLOSE(8*error, scaled_error, 4);
+    CHECK_ULP_CLOSE(8*l1, scaled_l1, 4);
     check(integrator.integrate(f, 1., 0., zero, norm, 1e-11), -result);
     const auto smooth = [&](double x) -> matrix { return value*std::exp(x); };
     check(integrator.integrate(smooth, zero, norm), value*(std::exp(1.)-std::exp(-1.)));
@@ -142,26 +141,26 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_matrices)
     check(integrator.integrate(endpoint, -1., 1., zero, norm), value*pi);
     check(integrator.integrate(endpoint, 1., -1., zero, norm), -value*pi);
     const auto shifted_endpoint = [&](double x, double complement) -> matrix {
-        BOOST_CHECK_GE(x, 2.);
-        BOOST_CHECK_LE(x, 6.); // x can round to the endpoint; complement retains distance.
+        CHECK_GE(x, 2.);
+        CHECK_LE(x, 6.); // x can round to the endpoint; complement retains distance.
         const double c = std::abs(complement);
         return value/std::sqrt(c*(4-c));
     };
     check(integrator.integrate(shifted_endpoint, 2., 6., zero, norm, 1e-11, &error, &l1), value*pi);
-    BOOST_CHECK_CLOSE_FRACTION(l1, norm(value)*pi, 1e-10);
+    CHECK_ULP_CLOSE(norm(value)*pi, l1, 4);
     // An endpoint singularity in the ordinary one-argument interface.
     const auto logarithm = [&](double x) -> matrix { return value*std::log(x); };
     check(integrator.integrate(logarithm, 0., 1., zero, norm), -value);
     calls = 0;
     check(integrator.integrate(f, 2., 2., zero, norm, 1e-11, &error, &l1, &levels), zero);
-    BOOST_CHECK_EQUAL(calls, 0);
-    BOOST_CHECK_EQUAL(error, 0);
-    BOOST_CHECK_EQUAL(l1, 0);
-    BOOST_CHECK_EQUAL(levels, 0);
+    CHECK_EQUAL(calls, static_cast<unsigned>(0));
+    CHECK_EQUAL(error, 0.0);
+    CHECK_EQUAL(l1, 0.0);
+    CHECK_EQUAL(levels, static_cast<std::size_t>(0));
     check(integrator.integrate(endpoint, 2., 2., zero, norm), zero);
 }
 
-BOOST_AUTO_TEST_CASE(trapezoidal_matrices)
+void trapezoidal_matrices()
 {
     unsigned calls = 0;
     // Poisson kernel: its integral over one period is 2*pi.
@@ -173,33 +172,33 @@ BOOST_AUTO_TEST_CASE(trapezoidal_matrices)
     double error = 0, l1 = 0;
     matrix result = q::trapezoidal(f, 0., 2*pi, zero, norm, 1e-11, 12, &error, &l1);
     check(result, value*(2*pi));
-    BOOST_CHECK_GT(calls, coarse_calls);
-    BOOST_CHECK_LT(error, 1e-8);
-    BOOST_CHECK_CLOSE_FRACTION(l1, norm(value)*(2*pi), 1e-10);
+    CHECK_TRUE(calls > coarse_calls);
+    CHECK_TRUE(error < 1e-8);
+    CHECK_ULP_CLOSE(norm(value)*(2*pi), l1, 28);
     const unsigned refined_calls = calls;
     calls = 0;
     double scaled_error = 0, scaled_l1 = 0;
     check(q::trapezoidal(f, 0., 2*pi, zero, scaled_norm, 1e-11, 12, &scaled_error, &scaled_l1), result);
-    BOOST_CHECK_EQUAL(calls, refined_calls);
-    BOOST_CHECK_CLOSE_FRACTION(scaled_error, 8*error, 1e-10);
-    BOOST_CHECK_CLOSE_FRACTION(scaled_l1, 8*l1, 1e-10);
+    CHECK_EQUAL(calls, refined_calls);
+    CHECK_ULP_CLOSE(8*error, scaled_error, 4);
+    CHECK_ULP_CLOSE(8*l1, scaled_l1, 4);
     check(q::trapezoidal(f, 2*pi, 0., zero, norm, 1e-11), -result);
     calls = 0;
     check(q::trapezoidal(f, 1., 1., zero, norm, 1e-11, 12, &error, &l1), zero);
-    BOOST_CHECK_EQUAL(calls, 0);
-    BOOST_CHECK_EQUAL(error, 0);
-    BOOST_CHECK_EQUAL(l1, 0);
+    CHECK_EQUAL(calls, static_cast<unsigned>(0));
+    CHECK_EQUAL(error, 0.0);
+    CHECK_EQUAL(l1, 0.0);
 }
 
-BOOST_AUTO_TEST_CASE(nonthrowing_errors)
+void nonthrowing_errors()
 {
     using ignore = boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error>>;
     const auto f = [&](double) -> matrix { return value; };
     const auto invalid = [](const matrix& m) {
-        BOOST_CHECK_EQUAL(m.rows(), 2);
-        BOOST_CHECK_EQUAL(m.cols(), 3);
+        CHECK_EQUAL(m.rows(), static_cast<Eigen::Index>(2));
+        CHECK_EQUAL(m.cols(), static_cast<Eigen::Index>(3));
         for (Eigen::Index i = 0; i < m.size(); ++i)
-            BOOST_CHECK(std::isnan(m.data()[i].real()));
+            CHECK_NAN(m.data()[i].real());
     };
     const double nan = std::numeric_limits<double>::quiet_NaN();
     invalid(q::exp_sinh<double, ignore>().integrate(f, 0., 1., zero, norm));
@@ -209,7 +208,7 @@ BOOST_AUTO_TEST_CASE(nonthrowing_errors)
     invalid(q::trapezoidal(f, 0., inf, zero, norm, 1e-10, 12, static_cast<double*>(nullptr), static_cast<double*>(nullptr), ignore()));
 }
 
-BOOST_AUTO_TEST_CASE(evaluation_errors_and_scalar_compatibility)
+void evaluation_errors_and_scalar_compatibility()
 {
     const auto bad = [](double x) -> matrix {
         if (std::abs(x) > 1e100) return zero;
@@ -217,20 +216,20 @@ BOOST_AUTO_TEST_CASE(evaluation_errors_and_scalar_compatibility)
         m(0, 0) = std::numeric_limits<double>::quiet_NaN();
         return m;
     };
-    BOOST_CHECK_THROW(q::exp_sinh<double>().integrate(bad, zero, norm), boost::math::evaluation_error);
-    BOOST_CHECK_THROW(q::sinh_sinh<double>().integrate(bad, zero, norm), boost::math::evaluation_error);
-    BOOST_CHECK_THROW(q::tanh_sinh<double>().integrate(bad, zero, norm), boost::math::evaluation_error);
+    CHECK_THROW(q::exp_sinh<double>().integrate(bad, zero, norm), boost::math::evaluation_error);
+    CHECK_THROW(q::sinh_sinh<double>().integrate(bad, zero, norm), boost::math::evaluation_error);
+    CHECK_THROW(q::tanh_sinh<double>().integrate(bad, zero, norm), boost::math::evaluation_error);
     using ignore = boost::math::policies::policy<boost::math::policies::evaluation_error<boost::math::policies::ignore_error>>;
     // Non-throwing evaluation policies retain the concrete estimate, as in the
     // existing interface, rather than trying to construct a matrix from a scalar.
     matrix result = q::exp_sinh<double, ignore>().integrate(bad, zero, norm);
-    BOOST_CHECK_EQUAL(result.rows(), 2);
-    BOOST_CHECK_EQUAL(result.cols(), 3);
-    BOOST_CHECK(std::isnan(result(0, 0).real()));
+    CHECK_EQUAL(result.rows(), static_cast<Eigen::Index>(2));
+    CHECK_EQUAL(result.cols(), static_cast<Eigen::Index>(3));
+    CHECK_NAN(result(0, 0).real());
     result = q::sinh_sinh<double, ignore>().integrate(bad, zero, norm);
-    BOOST_CHECK(std::isnan(result(0, 0).real()));
+    CHECK_NAN(result(0, 0).real());
     result = q::tanh_sinh<double, ignore>().integrate(bad, zero, norm);
-    BOOST_CHECK(std::isnan(result(0, 0).real()));
+    CHECK_NAN(result(0, 0).real());
 
     const auto f = [](double x) { return std::exp(-x*x); };
     const auto scalar_norm = [](double x) { return std::abs(x); };
@@ -244,9 +243,20 @@ BOOST_AUTO_TEST_CASE(evaluation_errors_and_scalar_compatibility)
     exp_integrator e;
     sinh_integrator s;
     tanh_integrator t;
-    BOOST_CHECK_EQUAL((e.*exp_original)(f, 1e-10, nullptr, nullptr, nullptr), e.integrate(f, 0., scalar_norm, 1e-10));
-    BOOST_CHECK_EQUAL((s.*sinh_original)(f, 1e-10, nullptr, nullptr, nullptr), s.integrate(f, 0., scalar_norm, 1e-10));
-    BOOST_CHECK_EQUAL((t.*tanh_original)(f, 1e-10, nullptr, nullptr, nullptr), t.integrate(f, 0., scalar_norm, 1e-10));
+    CHECK_EQUAL((e.*exp_original)(f, 1e-10, nullptr, nullptr, nullptr), e.integrate(f, 0., scalar_norm, 1e-10));
+    CHECK_EQUAL((s.*sinh_original)(f, 1e-10, nullptr, nullptr, nullptr), s.integrate(f, 0., scalar_norm, 1e-10));
+    CHECK_EQUAL((t.*tanh_original)(f, 1e-10, nullptr, nullptr, nullptr), t.integrate(f, 0., scalar_norm, 1e-10));
     double (*trap_original)(function, double, double, double, std::size_t, double*, double*) = &q::trapezoidal<function, double>;
-    BOOST_CHECK_EQUAL(trap_original(f, -1., 1., 1e-10, 12, nullptr, nullptr), q::trapezoidal(f, -1., 1., 0., scalar_norm, 1e-10));
+    CHECK_EQUAL(trap_original(f, -1., 1., 1e-10, 12, nullptr, nullptr), q::trapezoidal(f, -1., 1., 0., scalar_norm, 1e-10));
+}
+
+int main()
+{
+    exp_sinh_matrices();
+    sinh_sinh_matrices();
+    tanh_sinh_matrices();
+    trapezoidal_matrices();
+    nonthrowing_errors();
+    evaluation_errors_and_scalar_compatibility();
+    return boost::math::test::report_errors();
 }

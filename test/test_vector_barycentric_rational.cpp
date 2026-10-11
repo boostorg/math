@@ -4,8 +4,6 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_TEST_MODULE vector_barycentric_rational
-
 #include <cmath>
 #include <random>
 #include <array>
@@ -13,10 +11,9 @@
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/type_index.hpp>
-#include <boost/test/included/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/interpolators/barycentric_rational.hpp>
 #include <boost/math/interpolators/vector_barycentric_rational.hpp>
+#include "math_unit_test.hpp"
 
 #if __has_include(<stdfloat>)
 #  include <stdfloat>
@@ -70,8 +67,8 @@ void test_agreement_with_1d()
     {
         Real t = dis2(gen);
         interpolator(z, t);
-        BOOST_CHECK_CLOSE(z[0], scalar_interpolator0(t), 10000*numeric_limits<Real>::epsilon());
-        BOOST_CHECK_CLOSE(z[1], scalar_interpolator1(t), 10000*numeric_limits<Real>::epsilon());
+        CHECK_ULP_CLOSE(scalar_interpolator0(t), z[0], 200);
+        CHECK_ULP_CLOSE(scalar_interpolator1(t), z[1], 200);
     }
 }
 
@@ -103,8 +100,8 @@ void test_interpolation_condition_eigen()
     for (size_t i = 0; i < t_copy.size(); ++i)
     {
         interpolator(z, t_copy[i]);
-        BOOST_CHECK_CLOSE(z[0], y_copy[i][0], 100*numeric_limits<Real>::epsilon());
-        BOOST_CHECK_CLOSE(z[1], y_copy[i][1], 100*numeric_limits<Real>::epsilon());
+        CHECK_ULP_CLOSE(y_copy[i][0], z[0], 2);
+        CHECK_ULP_CLOSE(y_copy[i][1], z[1], 2);
     }
 }
 
@@ -135,8 +132,8 @@ void test_interpolation_condition_std_array()
     for (size_t i = 0; i < t_copy.size(); ++i)
     {
         interpolator(z, t_copy[i]);
-        BOOST_CHECK_CLOSE(z[0], y_copy[i][0], 100*numeric_limits<Real>::epsilon());
-        BOOST_CHECK_CLOSE(z[1], y_copy[i][1], 100*numeric_limits<Real>::epsilon());
+        CHECK_ULP_CLOSE(y_copy[i][0], z[0], 2);
+        CHECK_ULP_CLOSE(y_copy[i][1], z[1], 2);
     }
 }
 
@@ -171,8 +168,8 @@ void test_interpolation_condition_ublas()
     for (size_t i = 0; i < t_copy.size(); ++i)
     {
         interpolator(z, t_copy[i]);
-        BOOST_CHECK_CLOSE(z[0], y_copy[i][0], 100*numeric_limits<Real>::epsilon());
-        BOOST_CHECK_CLOSE(z[1], y_copy[i][1], 100*numeric_limits<Real>::epsilon());
+        CHECK_ULP_CLOSE(y_copy[i][0], z[0], 2);
+        CHECK_ULP_CLOSE(y_copy[i][1], z[1], 2);
     }
 }
 
@@ -202,8 +199,8 @@ void test_interpolation_condition_high_order()
     for (size_t i = 0; i < t_copy.size(); ++i)
     {
         interpolator(z, t_copy[i]);
-        BOOST_CHECK_CLOSE(z[0], y_copy[i][0], 100*numeric_limits<Real>::epsilon());
-        BOOST_CHECK_CLOSE(z[1], y_copy[i][1], 100*numeric_limits<Real>::epsilon());
+        CHECK_ULP_CLOSE(y_copy[i][0], z[0], 2);
+        CHECK_ULP_CLOSE(y_copy[i][1], z[1], 2);
     }
 }
 
@@ -240,13 +237,13 @@ void test_constant_eigen()
         // Don't evaluate the constant at x[i]; that's already tested in the interpolation condition test.
         Real t = t_copy[i] + dis(gen);
         z = interpolator(t);
-        BOOST_CHECK_CLOSE(z[0], constant0, 100*sqrt(numeric_limits<Real>::epsilon()));
-        BOOST_CHECK_CLOSE(z[1], constant1, 100*sqrt(numeric_limits<Real>::epsilon()));
+        CHECK_ABSOLUTE_ERROR(constant0, Real(z[0]), Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant0)));
+        CHECK_ABSOLUTE_ERROR(constant1, Real(z[1]), Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant1)));
         Eigen::Vector2d zprime = interpolator.prime(t);
         Real zero_0 = zprime[0];
         Real zero_1 = zprime[1];
-        BOOST_CHECK_SMALL(zero_0, sqrt(numeric_limits<Real>::epsilon()));
-        BOOST_CHECK_SMALL(zero_1, sqrt(numeric_limits<Real>::epsilon()));
+        CHECK_ABSOLUTE_ERROR(0, zero_0, sqrt(numeric_limits<Real>::epsilon()));
+        CHECK_ABSOLUTE_ERROR(0, zero_1, sqrt(numeric_limits<Real>::epsilon()));
     }
 }
 
@@ -283,13 +280,13 @@ void test_constant_std_array()
         // Don't evaluate the constant at x[i]; that's already tested in the interpolation condition test.
         Real t = t_copy[i] + dis(gen);
         z = interpolator(t);
-        BOOST_CHECK_CLOSE(z[0], constant0, 100*sqrt(numeric_limits<Real>::epsilon()));
-        BOOST_CHECK_CLOSE(z[1], constant1, 100*sqrt(numeric_limits<Real>::epsilon()));
+        CHECK_ABSOLUTE_ERROR(constant0, z[0], Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant0)));
+        CHECK_ABSOLUTE_ERROR(constant1, z[1], Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant1)));
         std::array<Real, 2> zprime = interpolator.prime(t);
         Real zero_0 = zprime[0];
         Real zero_1 = zprime[1];
-        BOOST_CHECK_SMALL(zero_0, sqrt(numeric_limits<Real>::epsilon()));
-        BOOST_CHECK_SMALL(zero_1, sqrt(numeric_limits<Real>::epsilon()));
+        CHECK_ABSOLUTE_ERROR(0, zero_0, sqrt(numeric_limits<Real>::epsilon()));
+        CHECK_ABSOLUTE_ERROR(0, zero_1, sqrt(numeric_limits<Real>::epsilon()));
     }
 }
 
@@ -325,13 +322,13 @@ void test_constant_high_order()
         // Don't evaluate the constant at x[i]; that's already tested in the interpolation condition test.
         Real t = t_copy[i] + dis(gen);
         z = interpolator(t);
-        BOOST_CHECK_CLOSE(z[0], constant0, 100*sqrt(numeric_limits<Real>::epsilon()));
-        BOOST_CHECK_CLOSE(z[1], constant1, 100*sqrt(numeric_limits<Real>::epsilon()));
+        CHECK_ABSOLUTE_ERROR(constant0, Real(z[0]), Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant0)));
+        CHECK_ABSOLUTE_ERROR(constant1, Real(z[1]), Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant1)));
         Eigen::Vector2d zprime = interpolator.prime(t);
         Real zero_0 = zprime[0];
         Real zero_1 = zprime[1];
-        BOOST_CHECK_SMALL(zero_0, sqrt(numeric_limits<Real>::epsilon()));
-        BOOST_CHECK_SMALL(zero_1, sqrt(numeric_limits<Real>::epsilon()));
+        CHECK_ABSOLUTE_ERROR(0, zero_0, sqrt(numeric_limits<Real>::epsilon()));
+        CHECK_ABSOLUTE_ERROR(0, zero_1, sqrt(numeric_limits<Real>::epsilon()));
     }
 }
 
@@ -365,17 +362,17 @@ void test_weights()
         Real w_expect = 1/(t_copy[i] - t_copy[i - 1]) + 1/(t_copy[i+1] - t_copy[i]);
         if (i % 2 == 0)
         {
-            BOOST_CHECK_CLOSE(w, -w_expect, 0.00001);
+            CHECK_ABSOLUTE_ERROR(-w_expect, w, Real(1e-07*abs(-w_expect)));
         }
         else
         {
-            BOOST_CHECK_CLOSE(w, w_expect, 0.00001);
+            CHECK_ABSOLUTE_ERROR(w_expect, w, Real(1e-07*abs(w_expect)));
         }
     }
 }
 
 
-BOOST_AUTO_TEST_CASE(vector_barycentric_rational)
+void vector_barycentric_rational()
 {
     #ifdef __STDCPP_FLOAT64_T__
 
@@ -402,4 +399,10 @@ BOOST_AUTO_TEST_CASE(vector_barycentric_rational)
     test_agreement_with_1d<double>();
 
     #endif
+}
+
+int main()
+{
+    vector_barycentric_rational();
+    return boost::math::test::report_errors();
 }

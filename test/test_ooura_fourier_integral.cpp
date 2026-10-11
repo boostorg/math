@@ -3,15 +3,12 @@
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-#define BOOST_TEST_MODULE test_ooura_fourier_transform
-
 #include <cmath>
 #include <iostream>
 #include <boost/type_index.hpp>
-#include <boost/test/included/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/quadrature/ooura_fourier_integrals.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include "math_unit_test.hpp"
 
 using boost::math::quadrature::ooura_fourier_sin;
 using boost::math::quadrature::ooura_fourier_cos;
@@ -67,8 +64,8 @@ void test_ooura_eta()
         Real x = 0;
         Real alpha = 7;
         auto [eta, eta_prime] = ooura_eta(x, alpha);
-        BOOST_CHECK_SMALL(eta, (std::numeric_limits<Real>::min)());
-        BOOST_CHECK_CLOSE_FRACTION(eta_prime, 2 + alpha + Real(1)/Real(4), 10*std::numeric_limits<Real>::epsilon());
+        CHECK_ABSOLUTE_ERROR(0, eta, (std::numeric_limits<Real>::min)());
+        CHECK_ULP_CLOSE(2 + alpha + Real(1)/Real(4), eta_prime, 4);
     }
 
     {
@@ -76,8 +73,8 @@ void test_ooura_eta()
         for (Real z = 0.125; z < 500; z += 0.125) {
             Real x = std::log(z);
             auto [eta, eta_prime] = ooura_eta(x, alpha);
-            BOOST_CHECK_CLOSE_FRACTION(eta, 2*x + alpha*(1-1/z) + (z-1)/4, 10*std::numeric_limits<Real>::epsilon());
-            BOOST_CHECK_CLOSE_FRACTION(eta_prime, 2 + alpha/z + z/4, 10*std::numeric_limits<Real>::epsilon());
+            CHECK_ULP_CLOSE(2*x + alpha*(1-1/z) + (z-1)/4, eta, 16);
+            CHECK_ULP_CLOSE(2 + alpha/z + z/4, eta_prime, 16);
         }
     }
 }
@@ -95,7 +92,7 @@ void test_ooura_sin_nodes_and_weights()
         Real h = 1;
         auto [node, weight] = ooura_sin_node_and_weight(n, h, alpha);
         Real expected_node = pi<Real>()/(1-exp(-ooura_eta(n*h, alpha).first));
-        BOOST_CHECK_CLOSE_FRACTION(node,  expected_node,10*std::numeric_limits<Real>::epsilon());
+        CHECK_ULP_CLOSE(expected_node, node, 4);
     }
 }
 
@@ -107,7 +104,7 @@ void test_ooura_alpha() {
     using boost::math::quadrature::detail::calculate_ooura_alpha;
     Real alpha = calculate_ooura_alpha(Real(1));
     Real expected = 1/sqrt(16 + 4*log1p(pi<Real>()));
-    BOOST_CHECK_CLOSE_FRACTION(alpha, expected, 10*std::numeric_limits<Real>::epsilon());
+    CHECK_ULP_CLOSE(expected, alpha, 4);
 }
 
 void test_node_weight_precision_agreement()
@@ -149,17 +146,16 @@ void test_sinc()
 {
     std::cout << "Testing sinc integral on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     using std::numeric_limits;
-    Real tol = 50*numeric_limits<Real>::epsilon();
     auto integrator = get_sin_integrator<Real>();
     auto f = [](Real x)->Real { return 1/x; };
     Real omega = 1;
     while (omega < 10)
     {
         auto [Is, err] = integrator.integrate(f, omega);
-        BOOST_CHECK_CLOSE_FRACTION(Is, pi<Real>()/2, tol);
+        CHECK_ULP_CLOSE(pi<Real>()/2, Is, 36);
 
         auto [Isn, errn] = integrator.integrate(f, -omega);
-        BOOST_CHECK_CLOSE_FRACTION(Isn, -pi<Real>()/2, tol);
+        CHECK_ULP_CLOSE(-pi<Real>()/2, Isn, 36);
         omega += 1;
     }
 }
@@ -171,7 +167,6 @@ void test_exp()
     std::cout << "Testing exponential integral on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     using std::exp;
     using std::numeric_limits;
-    Real tol = 50*numeric_limits<Real>::epsilon();
     auto integrator = get_sin_integrator<Real>();
     auto f = [](Real x)->Real {return exp(-x);};
     Real omega = 1;
@@ -179,7 +174,7 @@ void test_exp()
     {
         auto [Is, err] = integrator.integrate(f, omega);
         Real exact = omega/(1+omega*omega);
-        BOOST_CHECK_CLOSE_FRACTION(Is, exact, tol);
+        CHECK_ULP_CLOSE(exact, Is, 20);
         omega += 1;
     }
 }
@@ -191,14 +186,13 @@ void test_root()
     std::cout << "Testing integral of sin(kx)/sqrt(x) on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     using std::sqrt;
     using std::numeric_limits;
-    Real tol = 10*numeric_limits<Real>::epsilon();
     auto integrator = get_sin_integrator<Real>();
     auto f = [](Real x)->Real { return 1/sqrt(x);};
     Real omega = 1;
     while (omega < 5) {
         auto [Is, err] = integrator.integrate(f, omega);
         Real exact = sqrt(pi<Real>()/(2*omega));
-        BOOST_CHECK_CLOSE_FRACTION(Is, exact, 10*tol);
+        CHECK_ULP_CLOSE(exact, Is, 188);
         omega += 1;
     }
 }
@@ -226,7 +220,7 @@ void test_double_osc()
     Real omega = 1;
     auto [Is, err] = integrator.integrate(f, omega);
     Real exact = asymptotic(lambda);
-    BOOST_CHECK_CLOSE_FRACTION(2*Is, exact, 0.05);
+    CHECK_ABSOLUTE_ERROR(exact, 2*Is, Real(0.05)*std::abs(exact));
 }
 
 template<class Real>
@@ -241,7 +235,7 @@ void test_zero_integrand()
     Real omega = 1;
     auto [Is, err] = integrator.integrate(f, omega);
     Real exact = 0;
-    BOOST_CHECK_EQUAL(Is, exact);
+    CHECK_EQUAL(Is, exact);
 }
 
 
@@ -258,7 +252,7 @@ void test_zero_integrand()
 //     auto f = [](Real x)->Real { return exp(-100*numeric_limits<Real>::epsilon()*x)*log(x);};
 //     Real omega = 1;
 //     Real Is = ooura_fourier_sin<decltype(f), Real>(f, omega, sqrt(numeric_limits<Real>::epsilon())/100);
-//     BOOST_CHECK_CLOSE_FRACTION(Is, -euler<Real>(), tol);
+//     CHECK_ULP_CLOSE(-euler<Real>(), Is, 2000);
 // }
 
 
@@ -270,14 +264,13 @@ void test_cos_integral1()
     using boost::math::constants::half_pi;
     using boost::math::constants::e;
     using std::numeric_limits;
-    Real tol = 10*numeric_limits<Real>::epsilon();
 
     auto integrator = get_cos_integrator<Real>();
     auto f = [](Real x)->Real { return 1/(x*x+1);};
     Real omega = 1;
     auto [Is, err] = integrator.integrate(f, omega);
     Real exact = half_pi<Real>()/e<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Is, exact, tol);
+    CHECK_ULP_CLOSE(exact, Is, 4);
 }
 
 template<class Real>
@@ -288,7 +281,6 @@ void test_cos_integral2()
     using boost::math::constants::half_pi;
     using boost::math::constants::e;
     using std::numeric_limits;
-    Real tol = 10*numeric_limits<Real>::epsilon();
 
     auto integrator = get_cos_integrator<Real>();
     for (Real a = 1; a < 5; ++a) {
@@ -296,7 +288,7 @@ void test_cos_integral2()
         for(Real omega = 1; omega < 3; ++omega) {
             auto [Is, err] = integrator.integrate(f, omega);
             Real exact = a/(a*a+omega*omega);
-            BOOST_CHECK_CLOSE_FRACTION(Is, exact, 50*tol);
+            CHECK_ULP_CLOSE(exact, Is, 1000);
         }
     }
 }
@@ -312,7 +304,7 @@ void test_nodes()
         Real t0 = node_row[0];
         for (size_t i = 1; i < node_row.size(); ++i) {
             Real t1 = node_row[i];
-            BOOST_CHECK(t1 > t0);
+            CHECK_TRUE(t1 > t0);
             t0 = t1;
         }
     }
@@ -322,14 +314,14 @@ void test_nodes()
         Real t0 = node_row[0];
         for (size_t i = 1; i < node_row.size(); ++i) {
             Real t1 = node_row[i];
-            BOOST_CHECK(t1 < t0);
+            CHECK_TRUE(t1 < t0);
             t0 = t1;
         }
     }
 }
 
 
-BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
+int main()
 {
     test_cos_integral1<float>();
     test_cos_integral1<double>();
@@ -375,4 +367,6 @@ BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
     test_nodes<float>();
     test_nodes<double>();
     test_nodes<long double>();
+
+    return boost::math::test::report_errors();
 }

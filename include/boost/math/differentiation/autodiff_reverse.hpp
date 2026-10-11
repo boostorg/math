@@ -613,6 +613,15 @@ rvar<RealType, DerivativeOrder> make_rvar(const expression<RealType, DerivativeO
     return rvar<RealType, DerivativeOrder>(expr);
 }
 
+// The value is a*b + c rounded twice, not once; the derivatives are exact either way.
+template<typename RealType, size_t DerivativeOrder, typename A, typename B, typename C>
+rvar<RealType, DerivativeOrder> fma(const expression<RealType, DerivativeOrder, A> &a,
+                                    const expression<RealType, DerivativeOrder, B> &b,
+                                    const expression<RealType, DerivativeOrder, C> &c)
+{
+    return a * b + c;
+}
+
 namespace detail {
 
 /** @brief helper overload for grad implementation.

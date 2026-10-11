@@ -4,17 +4,15 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_TEST_MODULE sinh_sinh_quadrature_test
 #include <complex>
 #include <boost/multiprecision/cpp_complex.hpp>
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/test/included/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/quadrature/sinh_sinh.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/math/tools/test_value.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/type_index.hpp>
+#include "math_unit_test.hpp"
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1900)
 // MSVC-12 has problems if we include 2 different multiprecision types in the same program,
@@ -141,7 +139,6 @@ void test_nr_examples()
 {
     std::cout << "Testing type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real integration_limit = sqrt(boost::math::tools::epsilon<Real>());
-    Real tol = 10 * boost::math::tools::epsilon<Real>();
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
@@ -152,15 +149,15 @@ void test_nr_examples()
     auto f0 = [](Real)->Real { return (Real) 0; };
     Q = integrator.integrate(f0, integration_limit, &error, &L1);
     Q_expected = 0;
-    BOOST_CHECK_SMALL(Q, tol);
-    BOOST_CHECK_SMALL(L1, tol);
+    CHECK_EQUAL(Q, Real(0));
+    CHECK_EQUAL(L1, Real(0));
 
     // In spite of the poles at \pm i, we still get a doubling of the correct digits at each level of refinement.
     auto f1 = [](const Real& t)->Real { return 1/(1+t*t); };
     Q = integrator.integrate(f1, integration_limit, &error, &L1);
     Q_expected = pi<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 16);
+    CHECK_ULP_CLOSE(Q_expected, L1, 16);
 #if defined(BOOST_MSVC) && (BOOST_MSVC < 1900)
     auto f2 = [](const Real& x)->Real { return fabs(x) > boost::math::tools::log_max_value<Real>() ? 0 : exp(-x*x); };
 #else
@@ -168,27 +165,26 @@ void test_nr_examples()
 #endif
     Q = integrator.integrate(f2, integration_limit, &error, &L1);
     Q_expected = root_pi<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 12);
+    CHECK_ULP_CLOSE(Q_expected, L1, 12);
 
     auto f5 = [](const Real& t)->Real { return 1/cosh(t);};
     Q = integrator.integrate(f5, integration_limit, &error, &L1);
     Q_expected = pi<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 8);
+    CHECK_ULP_CLOSE(Q_expected, L1, 8);
 
     // This oscillatory integral has rapid convergence because the oscillations get swamped by the exponential growth of the denominator,
     // none the less the error is slightly higher than for the other cases:
-    tol *= 10;
     auto f8 = [](const Real& t)->Real { return cos(t)/cosh(t);};
     Q = integrator.integrate(f8, integration_limit, &error, &L1);
     Q_expected = pi<Real>()/cosh(half_pi<Real>());
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 200);
     // Try again with progressively fewer arguments:
     Q = integrator.integrate(f8, integration_limit);
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 200);
     Q = integrator.integrate(f8);
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 200);
 }
 
 // Test formulas for in the CRC Handbook of Mathematical functions, 32nd edition.
@@ -197,7 +193,6 @@ void test_crc()
 {
     std::cout << "Testing CRC formulas on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real integration_limit = sqrt(boost::math::tools::epsilon<Real>());
-    Real tol = 10 * boost::math::tools::epsilon<Real>();
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
@@ -215,8 +210,8 @@ void test_crc()
     };
     Q = integrator.integrate(f0, integration_limit, &error, &L1);
     Q_expected = pi_sqr<Real>()/2;
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 8);
+    CHECK_ULP_CLOSE(Q_expected, L1, 8);
 
 
     // CRC Definite integral 695:
@@ -229,7 +224,7 @@ void test_crc()
     };
     Q = integrator.integrate(f1, integration_limit, &error, &L1);
     Q_expected = pi<Real>()*tanh(half_pi<Real>());
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 100);  // radix-10 types (cpp_dec_float) have ulps up to 10x smaller relative to eps
 }
 
 template<class Complex>
@@ -237,7 +232,6 @@ void test_dirichlet_eta()
 {
   typedef typename Complex::value_type Real;
   std::cout << "Testing Dirichlet eta function on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-  Real tol = 10 * boost::math::tools::epsilon<Real>();
   Complex Q;
   const sinh_sinh<Real> integrator(10);
 
@@ -258,13 +252,13 @@ void test_dirichlet_eta()
   {
     Complex Q_expected = { BOOST_MATH_TEST_VALUE(Real, 0.7265597750624632632014957285472413863111295027357257871), BOOST_MATH_TEST_VALUE(Real, 0.158095863901207324355426285544321998253687969756843115) };
 
-    BOOST_CHECK_CLOSE_FRACTION(Q.real(), Q_expected.real(), tol);
-    BOOST_CHECK_CLOSE_FRACTION(Q.imag(), Q_expected.imag(), tol);
+    CHECK_ULP_CLOSE(Q_expected.real(), Q.real(), 4);
+    CHECK_ULP_CLOSE(Q_expected.imag(), Q.imag(), 12);
   }
 }
 
 
-BOOST_AUTO_TEST_CASE(sinh_sinh_quadrature_test)
+void sinh_sinh_quadrature_test()
 {
     //
     // Uncomment the following to print out the coefficients:
@@ -309,4 +303,10 @@ BOOST_AUTO_TEST_CASE(sinh_sinh_quadrature_test)
 #endif
 
 
+}
+
+int main()
+{
+    sinh_sinh_quadrature_test();
+    return boost::math::test::report_errors();
 }

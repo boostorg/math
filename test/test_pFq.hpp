@@ -268,12 +268,16 @@ void test_cancellation_2F1(T, const char*)
       T norm;
       T result = boost::math::hypergeometric_pFq({ (*row)[0], (*row)[1] }, { (*row)[2] }, (*row)[3], &norm);
       BOOST_CHECK_LE(fabs(result - (*row)[4]), norm);
+      // norm is scaled by the epsilon of T, but the series is summed (and the decision to throw made) in the
+      // evaluation type, which is more precise when T is promoted, e.g. double to a quad precision long double:
+      typedef typename boost::math::policies::evaluation<T, boost::math::policies::policy<> >::type value_type;
+      T eval_norm = norm * T(boost::math::tools::epsilon<value_type>() / boost::math::tools::epsilon<T>());
       // Types of up to 64 bits lose more than half their digits; a quad precision long double keeps more than half:
-      if (boost::math::tools::digits<T>() <= 64)
+      if (boost::math::tools::digits<value_type>() <= 64)
       {
-         BOOST_CHECK_GT(norm, boost::math::tools::root_epsilon<T>() * fabs(result));
+         BOOST_CHECK_GT(eval_norm, boost::math::tools::root_epsilon<T>() * fabs(result));
       }
-      if (norm > boost::math::tools::root_epsilon<T>() * fabs(result))
+      if (eval_norm > boost::math::tools::root_epsilon<T>() * fabs(result))
       {
          BOOST_CHECK_THROW(boost::math::hypergeometric_pFq({ (*row)[0], (*row)[1] }, { (*row)[2] }, (*row)[3]), boost::math::evaluation_error);
       }

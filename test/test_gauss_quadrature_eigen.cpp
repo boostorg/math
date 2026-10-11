@@ -4,14 +4,12 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_TEST_MODULE gauss_quadrature_eigen_test
-
 #include <complex>
 #include <limits>
 #include <Eigen/Dense>
 #include <unsupported/Eigen/MatrixFunctions>
-#include <boost/test/included/unit_test.hpp>
 #include <boost/math/quadrature/gauss.hpp>
+#include "math_unit_test.hpp"
 
 using boost::math::quadrature::gauss;
 using matrix = Eigen::Matrix<std::complex<double>, 2, 2>;
@@ -43,8 +41,7 @@ void test_matrix()
     const auto check = [](const matrix& actual, const matrix& expected) {
         for (unsigned i = 0; i < 2; ++i)
             for (unsigned j = 0; j < 2; ++j)
-                BOOST_CHECK_SMALL(std::abs(actual(i, j) - expected(i, j)),
-                                  100 * std::numeric_limits<double>::epsilon());
+                CHECK_ABSOLUTE_ERROR(0, std::abs(actual(i, j) - expected(i, j)), 100 * std::numeric_limits<double>::epsilon());
     };
 
     check(gauss<double, N>::integrate(f, zero, norm), primitive(1) + -primitive(-1));
@@ -57,17 +54,16 @@ void test_matrix()
     double l1 = 0;
     check(gauss<double, N>::integrate([&](double) { return value; }, 0., 3., zero, norm, &l1),
           value * 3);
-    BOOST_CHECK_CLOSE_FRACTION(l1, 3 * value.norm(),
-                               100 * std::numeric_limits<double>::epsilon());
+    CHECK_ULP_CLOSE(3 * value.norm(), l1, 4);
 }
 
-BOOST_AUTO_TEST_CASE(matrix_valued_quadrature)
+void matrix_valued_quadrature()
 {
     test_matrix<7>();
     test_matrix<10>();
 }
 
-BOOST_AUTO_TEST_CASE(dynamic_matrices_and_infinite_bounds)
+void dynamic_matrices_and_infinite_bounds()
 {
     using dynamic_matrix = Eigen::MatrixXcd;
     const dynamic_matrix zero = dynamic_matrix::Zero(2, 3);
@@ -75,9 +71,9 @@ BOOST_AUTO_TEST_CASE(dynamic_matrices_and_infinite_bounds)
     value << 1., 2., 3., 4., 5., 6.;
     const auto norm = [](const dynamic_matrix& m) { return m.norm(); };
     const auto check = [&](const dynamic_matrix& actual) {
-        BOOST_CHECK_EQUAL(actual.rows(), 2);
-        BOOST_CHECK_EQUAL(actual.cols(), 3);
-        BOOST_CHECK_SMALL((actual - value).norm(), 1e-10);
+        CHECK_EQUAL(actual.rows(), static_cast<Eigen::Index>(2));
+        CHECK_EQUAL(actual.cols(), static_cast<Eigen::Index>(3));
+        CHECK_ABSOLUTE_ERROR(0, (actual - value).norm(), 1e-10);
     };
     const double inf = std::numeric_limits<double>::infinity();
     using integrator = gauss<double, 30>;
@@ -86,7 +82,7 @@ BOOST_AUTO_TEST_CASE(dynamic_matrices_and_infinite_bounds)
     const auto left = [&](double x) -> dynamic_matrix { return value / ((1-x)*(1-x)); };
     double l1 = 0;
     check(integrator::integrate(right, 0., inf, zero, norm, &l1));
-    BOOST_CHECK_CLOSE_FRACTION(l1, value.norm(), 1e-12);
+    CHECK_ULP_CLOSE(value.norm(), l1, 4);
     check(integrator::integrate(left, -inf, 0., zero, norm));
     const auto whole = [&](double x) -> dynamic_matrix {
         return value / (boost::math::constants::pi<double>() * (1+x*x));
@@ -97,43 +93,41 @@ BOOST_AUTO_TEST_CASE(dynamic_matrices_and_infinite_bounds)
     const auto counted = [&](double) -> dynamic_matrix { ++calls; return value; };
     l1 = -1;
     dynamic_matrix empty = integrator::integrate(counted, 2., 2., zero, norm, &l1);
-    BOOST_CHECK_EQUAL(empty.rows(), 2);
-    BOOST_CHECK_EQUAL(empty.cols(), 3);
-    BOOST_CHECK_EQUAL(empty.norm(), 0);
-    BOOST_CHECK_EQUAL(l1, 0);
-    BOOST_CHECK_EQUAL(calls, 0);
+    CHECK_EQUAL(empty.rows(), static_cast<Eigen::Index>(2));
+    CHECK_EQUAL(empty.cols(), static_cast<Eigen::Index>(3));
+    CHECK_EQUAL(empty.norm(), 0.0);
+    CHECK_EQUAL(l1, 0.0);
+    CHECK_EQUAL(calls, static_cast<unsigned>(0));
 
     const double nan = std::numeric_limits<double>::quiet_NaN();
-    BOOST_CHECK_THROW(integrator::integrate(counted, nan, 1., zero, norm), std::domain_error);
+    CHECK_THROW(integrator::integrate(counted, nan, 1., zero, norm), std::domain_error);
     using ignore = boost::math::policies::policy<
         boost::math::policies::domain_error<boost::math::policies::ignore_error>>;
     dynamic_matrix invalid = gauss<double, 30, ignore>::integrate(counted, nan, 1., zero, norm, &l1);
-    BOOST_CHECK_EQUAL(invalid.rows(), 2);
-    BOOST_CHECK_EQUAL(invalid.cols(), 3);
-    BOOST_CHECK(std::isnan(l1));
+    CHECK_EQUAL(invalid.rows(), static_cast<Eigen::Index>(2));
+    CHECK_EQUAL(invalid.cols(), static_cast<Eigen::Index>(3));
+    CHECK_NAN(l1);
     for (Eigen::Index i = 0; i < invalid.size(); ++i)
-        BOOST_CHECK(std::isnan(invalid.data()[i].real()));
-    BOOST_CHECK_EQUAL(calls, 0);
+        CHECK_NAN(invalid.data()[i].real());
+    CHECK_EQUAL(calls, static_cast<unsigned>(0));
 }
 
-BOOST_AUTO_TEST_CASE(scalar_overload_compatibility)
+void scalar_overload_compatibility()
 {
     const auto f = [](double x) { return x*x; };
     const auto norm = [](double x) { return std::abs(x); };
     using integrator = gauss<double, 7>;
     double old_l1 = 0, new_l1 = 0;
-    BOOST_CHECK_EQUAL(integrator::integrate(f, &old_l1),
-                      integrator::integrate(f, 0., norm, &new_l1));
-    BOOST_CHECK_EQUAL(old_l1, new_l1);
-    BOOST_CHECK_EQUAL(integrator::integrate(f, 0., 1., &old_l1),
-                      integrator::integrate(f, 0., 1., 0., norm, &new_l1));
-    BOOST_CHECK_EQUAL(old_l1, new_l1);
+    CHECK_EQUAL(integrator::integrate(f, &old_l1), integrator::integrate(f, 0., norm, &new_l1));
+    CHECK_EQUAL(old_l1, new_l1);
+    CHECK_EQUAL(integrator::integrate(f, 0., 1., &old_l1), integrator::integrate(f, 0., 1., 0., norm, &new_l1));
+    CHECK_EQUAL(old_l1, new_l1);
     using function = decltype(f);
     double (*original)(function, double*) = &integrator::integrate<function>;
-    BOOST_CHECK_EQUAL(original(f, nullptr), integrator::integrate(f));
+    CHECK_EQUAL(original(f, nullptr), integrator::integrate(f));
 }
 
-BOOST_AUTO_TEST_CASE(controllability_gramian)
+void controllability_gramian()
 {
     // The dimensions and matrix-exponential expression from issue #337.
     // A*A = 0, so exp(A*t) = I + A*t and the integral is polynomial.
@@ -152,7 +146,7 @@ BOOST_AUTO_TEST_CASE(controllability_gramian)
     expected(0, 1) = expected(1, 0) = 0.5;
     expected(1, 1) = 1;
     gramian_matrix result = gauss<double, 10>::integrate(f, 0., 1., zero, norm);
-    BOOST_CHECK_SMALL((result - expected).norm(), 1e-14);
+    CHECK_ABSOLUTE_ERROR(0, (result - expected).norm(), 1e-14);
 
     // Verify that L1 follows the supplied norm, including on the canonical
     // interval and when the integration bounds are reversed.
@@ -160,9 +154,18 @@ BOOST_AUTO_TEST_CASE(controllability_gramian)
     const auto constant = [&](double) -> gramian_matrix { return expected; };
     double l1 = 0;
     result = gauss<double, 7>::integrate(constant, zero, scaled_norm, &l1);
-    BOOST_CHECK_SMALL((result - 2*expected).norm(), 1e-14);
-    BOOST_CHECK_CLOSE_FRACTION(l1, 4*expected.norm(), 1e-14);
+    CHECK_ABSOLUTE_ERROR(0, (result - 2*expected).norm(), 1e-14);
+    CHECK_ULP_CLOSE(4*expected.norm(), l1, 4);
     result = gauss<double, 10>::integrate(constant, 3., 0., zero, scaled_norm, &l1);
-    BOOST_CHECK_SMALL((result + 3*expected).norm(), 1e-14);
-    BOOST_CHECK_CLOSE_FRACTION(l1, 6*expected.norm(), 1e-14);
+    CHECK_ABSOLUTE_ERROR(0, (result + 3*expected).norm(), 1e-14);
+    CHECK_ULP_CLOSE(6*expected.norm(), l1, 4);
+}
+
+int main()
+{
+    matrix_valued_quadrature();
+    dynamic_matrices_and_infinite_bounds();
+    scalar_overload_compatibility();
+    controllability_gramian();
+    return boost::math::test::report_errors();
 }

@@ -34,12 +34,15 @@ using boost::math::constants::root_two;
 using boost::math::quadrature::daubechies_wavelet_transform;
 using boost::math::quadrature::trapezoidal;
 
+// Every inequality and identity below is a statement about the quadrature against the interpolated wavelet,
+// not about the interpolation error, so a coarser grid than the default is enough.
+// p = 2 keeps the default constructor; the default grid for larger p is exercised by test_daubechies_wavelet.
 template<typename Real, int p>
-void test_wavelet_transform()
+void test_wavelet_transform(int grid_refinements = -1)
 {
     using std::abs;
     std::cout << "Testing wavelet transform of " << p << " vanishing moment Daubechies wavelet on type " << boost::core::demangle(typeid(Real).name()) << "\n";
-    auto psi = boost::math::daubechies_wavelet<Real, p>();
+    auto psi = boost::math::daubechies_wavelet<Real, p>(grid_refinements);
 
     auto abs_psi = [&psi](Real x) {
         return abs(psi(x));
@@ -141,12 +144,12 @@ int main()
     try{
        #ifdef __STDCPP_FLOAT64_T__
        test_wavelet_transform<std::float64_t, 2>();
-       test_wavelet_transform<std::float64_t, 8>();
-       test_wavelet_transform<std::float64_t, 16>();
+       test_wavelet_transform<std::float64_t, 8>(10);
+       test_wavelet_transform<std::float64_t, 16>(10);
        #else
        test_wavelet_transform<double, 2>();
-       test_wavelet_transform<double, 8>();
-       test_wavelet_transform<double, 16>();
+       test_wavelet_transform<double, 8>(10);
+       test_wavelet_transform<double, 16>(10);
        #endif
        // All these tests pass, but the compilation takes too long on CI:
        //boost::hana::for_each(std::make_index_sequence<17>(), [&](auto i) {

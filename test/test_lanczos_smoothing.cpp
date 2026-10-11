@@ -4,19 +4,16 @@
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
-#define BOOST_TEST_MODULE lanczos_smoothing_test
-
 #include <random>
 #include <array>
 #include <boost/range.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/test/included/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/differentiation/lanczos_smoothing.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/special_functions/next.hpp> // for float_distance
 #include <boost/math/tools/condition_numbers.hpp>
+#include "math_unit_test.hpp"
 
 using std::abs;
 using std::pow;
@@ -35,21 +32,20 @@ template<class Real>
 void test_dlp_norms()
 {
     std::cout << "Testing Discrete Legendre Polynomial norms on type " << typeid(Real).name() << "\n";
-    Real tol = std::numeric_limits<Real>::epsilon();
     auto dlp = discrete_legendre<Real>(1, Real(0));
-    BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(0), 3, tol);
-    BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(1), 2, tol);
+    CHECK_ULP_CLOSE(3, dlp.norm_sq(0), 2);
+    CHECK_ULP_CLOSE(2, dlp.norm_sq(1), 2);
     dlp = discrete_legendre<Real>(2, Real(0));
-    BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(0), Real(5)/Real(2), tol);
-    BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(1), Real(5)/Real(4), tol);
-    BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(2), Real(3*3*7)/Real(pow(2,6)), 2*tol);
+    CHECK_ULP_CLOSE(Real(5)/Real(2), dlp.norm_sq(0), 2);
+    CHECK_ULP_CLOSE(Real(5)/Real(4), dlp.norm_sq(1), 2);
+    CHECK_ULP_CLOSE(Real(3*3*7)/Real(pow(2,6)), dlp.norm_sq(2), 4);
     dlp = discrete_legendre<Real>(200, Real(0));
     for(size_t r = 0; r < 10; ++r)
     {
         Real calc = dlp.norm_sq(r);
         Real expected = Real(2)/Real(2*r+1);
         // As long as r << n, ||q_r||^2 -> 2/(2r+1) as n->infty
-        BOOST_CHECK_CLOSE_FRACTION(calc, expected, 0.05);
+        CHECK_ABSOLUTE_ERROR(expected, calc, Real(0.05*abs(expected)));
     }
 
 }
@@ -58,21 +54,20 @@ template<class Real>
 void test_dlp_evaluation()
 {
     std::cout << "Testing evaluation of Discrete Legendre polynomials on type " << typeid(Real).name() << "\n";
-    Real tol = std::numeric_limits<Real>::epsilon();
     size_t n = 25;
     Real x = 0.72;
     auto dlp = discrete_legendre<Real>(n, x);
     Real q0 = dlp(x, 0);
-    BOOST_TEST(q0 == 1);
+    CHECK_EQUAL(q0, Real(1));
     Real q1 = dlp(x, 1);
-    BOOST_TEST(q1 == x);
+    CHECK_EQUAL(q1, x);
     Real q2 = dlp(x, 2);
     int N = 2*n+1;
     Real expected = 0.5*(3*x*x - Real(N*N - 1)/Real(4*n*n));
-    BOOST_CHECK_CLOSE_FRACTION(q2, expected, tol);
+    CHECK_ULP_CLOSE(expected, q2, 2);
     Real q3 = dlp(x, 3);
     expected = (x/3)*(5*expected - (Real(N*N - 4))/(2*n*n));
-    BOOST_CHECK_CLOSE_FRACTION(q3, expected, 4*tol);
+    CHECK_ULP_CLOSE(expected, q3, 8);
 
     // q_r(x) is even for even r, and odd for odd r:
     for (size_t n = 8; n < 22; ++n)
@@ -84,13 +79,13 @@ void test_dlp_evaluation()
             {
                 Real q1 = dlp(x, r);
                 Real q2 = -dlp(-x, r);
-                BOOST_CHECK_CLOSE_FRACTION(q1, q2, tol);
+                CHECK_ULP_CLOSE(q2, q1, 2);
             }
             else
             {
                 Real q1 = dlp(x, r);
                 Real q2 = dlp(-x, r);
-                BOOST_CHECK_CLOSE_FRACTION(q1, q2, tol);
+                CHECK_ULP_CLOSE(q2, q1, 2);
             }
 
             Real l2_sq = 0;
@@ -102,7 +97,7 @@ void test_dlp_evaluation()
             }
             l2_sq /= n;
             Real l2_sq_expected = dlp.norm_sq(r);
-            BOOST_CHECK_CLOSE_FRACTION(l2_sq, l2_sq_expected, 20*tol);
+            CHECK_ULP_CLOSE(l2_sq_expected, l2_sq, 40);
         }
     }
 }
@@ -111,7 +106,6 @@ template<class Real>
 void test_dlp_next()
 {
     std::cout << "Testing Discrete Legendre polynomial 'next' function on type " << typeid(Real).name() << "\n";
-    Real tol = std::numeric_limits<Real>::epsilon();
 
     for(size_t n = 2; n < 20; ++n)
     {
@@ -120,13 +114,13 @@ void test_dlp_next()
             auto dlp = discrete_legendre<Real>(n, x);
             for (size_t k = 2; k < n; ++k)
             {
-                BOOST_CHECK_CLOSE(dlp.next(), dlp(x, k), tol);
+                CHECK_ULP_CLOSE(dlp(x, k), dlp.next(), 0);
             }
 
             dlp = discrete_legendre<Real>(n, x);
             for (size_t k = 2; k < n; ++k)
             {
-                BOOST_CHECK_CLOSE(dlp.next_prime(), dlp.prime(x, k), tol);
+                CHECK_ULP_CLOSE(dlp.prime(x, k), dlp.next_prime(), 0);
             }
         }
     }
@@ -137,17 +131,16 @@ template<class Real>
 void test_dlp_derivatives()
 {
     std::cout << "Testing Discrete Legendre polynomial derivatives on type " << typeid(Real).name() << "\n";
-    Real tol = 10*std::numeric_limits<Real>::epsilon();
     int n = 25;
     Real x = 0.72;
     auto dlp = discrete_legendre<Real>(n, x);
     Real q0p = dlp.prime(x, 0);
-    BOOST_TEST(q0p == 0);
+    CHECK_EQUAL(q0p, Real(0));
     Real q1p = dlp.prime(x, 1);
-    BOOST_TEST(q1p == 1);
+    CHECK_EQUAL(q1p, Real(1));
     Real q2p = dlp.prime(x, 2);
     Real expected = 3*x;
-    BOOST_CHECK_CLOSE_FRACTION(q2p, expected, tol);
+    CHECK_ULP_CLOSE(expected, q2p, 4);
 }
 
 template<class Real>
@@ -158,7 +151,7 @@ void test_dlp_second_derivative()
     Real x = Real(1)/Real(3);
     auto dlp = discrete_legendre<Real>(n, x);
     Real q2pp = dlp.next_dbl_prime();
-    BOOST_TEST(q2pp == 3);
+    CHECK_EQUAL(q2pp, Real(3));
 }
 
 
@@ -180,7 +173,7 @@ void test_interior_velocity_filter()
             {
                 cond += j*f[j];
             }
-            BOOST_CHECK_CLOSE_FRACTION(cond.sum(), half<Real>(), 2*cond()*tol);
+            CHECK_ABSOLUTE_ERROR(half<Real>(), cond.sum(), Real(2*(cond()*tol)*abs(half<Real>())));
 
             for (int l = 3; l <= p; l += 2)
             {
@@ -190,7 +183,7 @@ void test_interior_velocity_filter()
                     cond += pow(Real(j), l)*f[j];
                 }
                 Real expected = -pow(Real(f.size() - 1), l)*f[f.size()-1];
-                BOOST_CHECK_CLOSE_FRACTION(expected, cond.sum(), 15*cond()*tol);
+                CHECK_ABSOLUTE_ERROR(expected, cond.sum(), Real(15*(cond()*tol)*abs(expected)));
             }
             //std::cout << "(n,p) = (" << n  << "," << p << ") = {";
             //for (auto & x : f)
@@ -218,12 +211,12 @@ void test_interior_lanczos()
             for (size_t m = n; m < v.size() - n; ++m)
             {
                 Real dvdt = dld(v, m);
-                BOOST_CHECK_SMALL(dvdt, tol);
+                CHECK_ABSOLUTE_ERROR(0, dvdt, tol);
             }
             auto dvdt = dld(v);
             for (size_t m = n; m < v.size() - n; ++m)
             {
-                BOOST_CHECK_SMALL(dvdt[m], tol);
+                CHECK_ABSOLUTE_ERROR(0, dvdt[m], tol);
             }
         }
     }
@@ -242,12 +235,12 @@ void test_interior_lanczos()
             for (size_t m = n; m < v.size() - n; ++m)
             {
                 Real dvdt = dld(v, m);
-                BOOST_CHECK_CLOSE_FRACTION(dvdt, 7, 2000*tol);
+                CHECK_ULP_CLOSE(7, dvdt, 4000);
             }
             auto dvdt = dld(v);
             for (size_t m = n; m < v.size() - n; ++m)
             {
-                BOOST_CHECK_CLOSE_FRACTION(dvdt[m], 7, 2000*tol);
+                CHECK_ULP_CLOSE(7, dvdt[m], 4000);
             }
         }
     }
@@ -269,7 +262,7 @@ void test_interior_lanczos()
             auto dld = discrete_lanczos_derivative(Real(1), n, p);
             for (size_t m = n; m < v.size() - n; ++m)
             {
-                BOOST_CHECK_CLOSE_FRACTION(dld(v, m), Real(7), Real(0.0042));
+                CHECK_ABSOLUTE_ERROR(Real(7), dld(v, m), Real(0.0042*abs(Real(7))));
             }
         }
     }
@@ -287,7 +280,7 @@ void test_interior_lanczos()
             auto dld = discrete_lanczos_derivative(Real(1), n, p);
             for (size_t m = n; m < v.size() - n; ++m)
             {
-                BOOST_CHECK_CLOSE_FRACTION(dld(v,m), Real(30*m + 7), Real(0.00008));
+                CHECK_ABSOLUTE_ERROR(Real(30*m + 7), dld(v,m), Real(8e-05*abs(Real(30*m + 7))));
             }
         }
     }
@@ -307,7 +300,7 @@ void test_interior_lanczos()
 
             for (size_t m = n; m < v.size() - n && m < n + 10; ++m)
             {
-                BOOST_CHECK_CLOSE_FRACTION(dld(v,m), omega*cos(omega*m), Real(0.03));
+                CHECK_ABSOLUTE_ERROR(omega*cos(omega*m), dld(v,m), Real(0.03*abs(omega*cos(omega*m))));
             }
         }
     }
@@ -332,7 +325,7 @@ void test_boundary_velocity_filters()
                     cond += f[i];
                 }
 
-                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), -f[f.size()-1], 6*cond()*tol);
+                CHECK_ABSOLUTE_ERROR(-f[f.size()-1], cond.sum(), Real(6*(cond()*tol)*abs(-f[f.size()-1])));
 
                 cond = summation_condition_number<Real>(0);
                 for (size_t k = 0; k < f.size(); ++k)
@@ -341,7 +334,7 @@ void test_boundary_velocity_filters()
                     // note the shifted index here:
                     cond += (j-s)*f[k];
                 }
-                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), 1, 6*cond()*tol);
+                CHECK_ABSOLUTE_ERROR(1, cond.sum(), Real(6*(cond()*tol)*Real(1)));
 
 
                 for (int l = 2; l <= p; ++l)
@@ -358,11 +351,11 @@ void test_boundary_velocity_filters()
                     Real expected = -pow(Real(f.size()-1) - Real(n) - Real(s), l)*f[f.size()-1];
                     if (expected == 0)
                     {
-                        BOOST_CHECK_SMALL(cond.sum(), cond()*tol);
+                        CHECK_ABSOLUTE_ERROR(0, cond.sum(), cond()*tol);
                     }
                     else
                     {
-                        BOOST_CHECK_CLOSE_FRACTION(expected, cond.sum(), 200*cond()*tol);
+                        CHECK_ABSOLUTE_ERROR(expected, cond.sum(), Real(200*(cond()*tol)*abs(expected)));
                     }
                 }
 
@@ -392,12 +385,12 @@ void test_boundary_lanczos()
             for (size_t m = 0; m < n; ++m)
             {
                 Real dvdt = lsd(v,m);
-                BOOST_CHECK_SMALL(dvdt, 4*sqrt(tol));
+                CHECK_ABSOLUTE_ERROR(0, dvdt, 4*sqrt(tol));
             }
             for (size_t m = v.size() - n; m < v.size(); ++m)
             {
                 Real dvdt = lsd(v,m);
-                BOOST_CHECK_SMALL(dvdt, 4*sqrt(tol));
+                CHECK_ABSOLUTE_ERROR(0, dvdt, 4*sqrt(tol));
             }
         }
     }
@@ -415,13 +408,13 @@ void test_boundary_lanczos()
             for (size_t m = 0; m < n; ++m)
             {
                 Real dvdt = lsd(v,m);
-                BOOST_CHECK_CLOSE_FRACTION(dvdt, 7, sqrt(tol));
+                CHECK_ABSOLUTE_ERROR(7, dvdt, Real((sqrt(tol))*Real(7)));
             }
 
             for (size_t m = v.size() - n; m < v.size(); ++m)
             {
                 Real dvdt = lsd(v,m);
-                BOOST_CHECK_CLOSE_FRACTION(dvdt, 7, 4*sqrt(tol));
+                CHECK_ABSOLUTE_ERROR(7, dvdt, Real(4*(sqrt(tol))*Real(7)));
             }
         }
     }
@@ -438,7 +431,7 @@ void test_boundary_lanczos()
             auto lsd = discrete_lanczos_derivative(Real(1), n, p);
             for (size_t m = 0; m < v.size(); ++m)
             {
-                BOOST_CHECK_CLOSE_FRACTION(lsd(v,m), 30*m+7, 30*sqrt(tol));
+                CHECK_ABSOLUTE_ERROR(Real(30*m+7), lsd(v,m), Real(30*sqrt(tol)*Real(30*m+7)));
             }
         }
     }
@@ -461,12 +454,12 @@ void test_boundary_lanczos()
             auto lsd = discrete_lanczos_derivative(Real(1), n, p);
             for (size_t m = 0; m < v.size(); ++m)
             {
-                BOOST_CHECK_CLOSE_FRACTION(lsd(v,m), 30*m+7, 0.005);
+                CHECK_ABSOLUTE_ERROR(Real(30*m+7), lsd(v,m), Real(0.005*Real(30*m+7)));
             }
             auto dvdt = lsd(v);
             for (size_t m = 0; m < v.size(); ++m)
             {
-                BOOST_CHECK_CLOSE_FRACTION(dvdt[m], 30*m+7, 0.005);
+                CHECK_ABSOLUTE_ERROR(Real(30*m+7), dvdt[m], Real(0.005*Real(30*m+7)));
             }
         }
     }
@@ -496,7 +489,7 @@ void test_acceleration_filters()
                 {
                     cond += f[i];
                 }
-                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), -f[f.size()-1], 10*cond()*eps);
+                CHECK_ABSOLUTE_ERROR(-f[f.size()-1], cond.sum(), Real(10*(cond()*eps)*abs(-f[f.size()-1])));
 
 
                 cond = summation_condition_number<Real>(0);
@@ -506,7 +499,7 @@ void test_acceleration_filters()
                     cond += (j-s)*f[k];
                 }
                 Real expected = -(Real(f.size()-1)- Real(n) - s)*f[f.size()-1];
-                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), expected, 10*cond()*eps);
+                CHECK_ABSOLUTE_ERROR(expected, cond.sum(), Real(10*(cond()*eps)*abs(expected)));
 
                 cond = summation_condition_number<Real>(0);
                 for (size_t k = 0; k < f.size(); ++k)
@@ -514,7 +507,7 @@ void test_acceleration_filters()
                     Real j = Real(k) - Real(n);
                     cond += (j-s)*(j-s)*f[k];
                 }
-                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), 2, 100*cond()*eps);
+                CHECK_ABSOLUTE_ERROR(2, cond.sum(), Real(100*(cond()*eps)*Real(2)));
                 // See unlabelled equation in McDevitt, 2012, just after equation 26:
                 // It appears that there is an off-by-one error in that equation, since p + 1 moments don't vanish, only p.
                 // This test is itself suspect; the condition number of the moment sum is infinite.
@@ -529,7 +522,7 @@ void test_acceleration_filters()
                         cond += pow((j-s), l)*f[k];
                     }
                     Real expected = -pow(Real(f.size()- 1 - n -s), l)*f[f.size()-1];
-                    BOOST_CHECK_CLOSE_FRACTION(cond.sum(), expected, 1000*cond()*eps);
+                    CHECK_ABSOLUTE_ERROR(expected, cond.sum(), Real(1000*(cond()*eps)*abs(expected)));
                 }
             }
         }
@@ -544,7 +537,7 @@ void test_lanczos_acceleration()
     auto lanczos = discrete_lanczos_derivative<Real, 2>(Real(1), 4, 3);
     for (size_t i = 0; i < v.size(); ++i)
     {
-        BOOST_CHECK_SMALL(lanczos(v, i), eps);
+        CHECK_ABSOLUTE_ERROR(0, lanczos(v, i), eps);
     }
 
     for(size_t i = 0; i < v.size(); ++i)
@@ -553,7 +546,7 @@ void test_lanczos_acceleration()
     }
     for (size_t i = 0; i < v.size(); ++i)
     {
-        BOOST_CHECK_SMALL(lanczos(v,i), 200*eps);
+        CHECK_ABSOLUTE_ERROR(0, lanczos(v,i), 200*eps);
     }
 
     for(size_t i = 0; i < v.size(); ++i)
@@ -562,7 +555,7 @@ void test_lanczos_acceleration()
     }
     for (size_t i = 0; i < v.size(); ++i)
     {
-        BOOST_CHECK_CLOSE_FRACTION(lanczos(v, i), 14, 1500*eps);
+        CHECK_ULP_CLOSE(14, lanczos(v, i), 3000);
     }
 
     // Now add noise, and kick up the smoothing of the Lanzcos derivative (increase n):
@@ -581,7 +574,7 @@ void test_lanczos_acceleration()
     auto w = lanczos(v);
     for (size_t i = 0; i < v.size(); ++i)
     {
-        BOOST_CHECK_CLOSE_FRACTION(w[i], 14, std_dev/200);
+        CHECK_ABSOLUTE_ERROR(14, w[i], Real((std_dev/200)*Real(14)));
     }
 }
 
@@ -589,7 +582,6 @@ template<class Real>
 void test_rescaling()
 {
     std::cout << "Test rescaling on type " << typeid(Real).name() << "\n";
-    Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> v(500);
     for(size_t i = 0; i < v.size(); ++i)
     {
@@ -605,7 +597,7 @@ void test_rescaling()
 
     for(size_t i = 0; i < v.size(); ++i)
     {
-        BOOST_CHECK_CLOSE_FRACTION(dvdt1[i], 2*dvdt2[i], tol);
+        CHECK_ULP_CLOSE(2*dvdt2[i], dvdt1[i], 2);
     }
 
     auto lanczos3 = discrete_lanczos_derivative<Real, 2>(Real(1));
@@ -617,7 +609,7 @@ void test_rescaling()
 
     for(size_t i = 0; i < v.size(); ++i)
     {
-        BOOST_CHECK_CLOSE_FRACTION(dv2dt21[i], 4*dv2dt22[i], tol);
+        CHECK_ULP_CLOSE(4*dv2dt22[i], dv2dt21[i], 2);
     }
 }
 
@@ -638,7 +630,7 @@ void test_data_representations()
 
     for(size_t i = 0; i < v.size(); ++i)
     {
-        BOOST_CHECK_CLOSE_FRACTION(dvdt[i], 9, tol);
+        CHECK_ULP_CLOSE(9, dvdt[i], 300);
     }
 
     boost::numeric::ublas::vector<Real> w(500);
@@ -652,7 +644,7 @@ void test_data_representations()
 
     for(size_t i = 0; i < v.size(); ++i)
     {
-        BOOST_CHECK_CLOSE_FRACTION(dwdt[i], 9, tol);
+        CHECK_ULP_CLOSE(9, dwdt[i], 300);
     }
 
     auto v1 = boost::make_iterator_range(v.begin(), v.end());
@@ -661,7 +653,7 @@ void test_data_representations()
 
     for(size_t i = 0; i < v2.size(); ++i)
     {
-        BOOST_CHECK_CLOSE_FRACTION(v2[i], 9, tol);
+        CHECK_ULP_CLOSE(9, v2[i], 300);
     }
 
     auto lanczos2 = discrete_lanczos_derivative<Real, 2>(Real(1));
@@ -670,12 +662,12 @@ void test_data_representations()
 
     for(size_t i = 0; i < v2.size(); ++i)
     {
-        BOOST_CHECK_SMALL(v2[i], 10*tol);
+        CHECK_ABSOLUTE_ERROR(0, v2[i], 10*tol);
     }
 
 }
 
-BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)
+void lanczos_smoothing_test()
 {
     test_dlp_second_derivative<double>();
     test_dlp_norms<double>();
@@ -705,4 +697,10 @@ BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)
 
     test_rescaling<double>();
     test_data_representations<double>();
+}
+
+int main()
+{
+    lanczos_smoothing_test();
+    return boost::math::test::report_errors();
 }

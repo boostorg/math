@@ -4,16 +4,12 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_TEST_MODULE exp_sinh_quadrature_test
-
 #include <complex>
 #include <type_traits>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/test_value.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/test/included/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/quadrature/exp_sinh.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/math/special_functions/bessel.hpp>
@@ -24,6 +20,7 @@
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/type_traits/is_class.hpp>
 #include <boost/type_index.hpp>
+#include "math_unit_test.hpp"
 
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/complex128.hpp>
@@ -184,7 +181,6 @@ template<class Real>
 void test_right_limit_infinite()
 {
     std::cout << "Testing right limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = 10 * boost::math::tools::epsilon<Real>();
     Real Q;
     Real Q_expected;
     Real error;
@@ -195,15 +191,15 @@ void test_right_limit_infinite()
     const auto f2 = [](const Real& t)->Real { return exp(-t)/sqrt(t); };
     Q = integrator.integrate(f2, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = root_pi<Real>();
-    Real tol_mult = 1;
+    std::size_t tol_mult = 1;
     // Multiprecision type have higher error rates, probably evaluation of f() is less accurate:
     if (!std::numeric_limits<Real>::digits10 || (std::numeric_limits<Real>::digits10 > 25))
        tol_mult = 1200;
     else if (std::numeric_limits<Real>::digits10 > std::numeric_limits<double>::digits10)
        tol_mult = 5;
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * tol_mult);
+    CHECK_ULP_CLOSE(Q_expected, Q, 20 * tol_mult);
     // The integrand is strictly positive, so it coincides with the value of the integral:
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol * tol_mult);
+    CHECK_ULP_CLOSE(Q_expected, L1, 20 * tol_mult);
 
     #ifdef BOOST_MATH_STANDALONE
     BOOST_IF_CONSTEXPR (std::is_fundamental<Real>::value)
@@ -212,28 +208,28 @@ void test_right_limit_infinite()
         auto f3 = [](Real t)->Real { Real z = exp(-t); if (z == 0) { return z; } return z*cos(t); };
         Q = integrator.integrate(f3, get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = half<Real>();
-        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+        CHECK_ULP_CLOSE(Q_expected, Q, 20);
         Q = integrator.integrate(f3, 10, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = BOOST_MATH_TEST_VALUE(Real, -6.6976341310426674140007086979326069121526743314567805278252392932e-6);
-        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10 * tol);
+        CHECK_ULP_CLOSE(Q_expected, Q, 68);
         // Integrating through zero risks precision loss:
         Q = integrator.integrate(f3, -10, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = BOOST_MATH_TEST_VALUE(Real, -15232.3213626280525704332288302799653087046646639974940243044623285817777006);
-        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, std::numeric_limits<Real>::digits10 > 30 ? 1000 * tol : tol);
+        CHECK_ULP_CLOSE(Q_expected, Q, std::numeric_limits<Real>::digits10 > 30 ? 20000 : 20);
 
         auto f4 = [](Real t)->Real { return 1/(1+t*t); };
         Q = integrator.integrate(f4, 1, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = pi<Real>()/4;
-        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-        BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+        CHECK_ULP_CLOSE(Q_expected, Q, 8);
+        CHECK_ULP_CLOSE(Q_expected, L1, 8);
         Q = integrator.integrate(f4, 20, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = BOOST_MATH_TEST_VALUE(Real, 0.0499583957219427614100062870348448814912770804235071744108534548299835954767);
-        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-        BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+        CHECK_ULP_CLOSE(Q_expected, Q, 4);
+        CHECK_ULP_CLOSE(Q_expected, L1, 4);
         Q = integrator.integrate(f4, 500, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = BOOST_MATH_TEST_VALUE(Real, 0.0019999973333397333150476759363217553199063513829126652556286269630);
-        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-        BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+        CHECK_ULP_CLOSE(Q_expected, Q, 4);
+        CHECK_ULP_CLOSE(Q_expected, L1, 4);
     }
 }
 
@@ -241,7 +237,6 @@ template<class Real>
 void test_left_limit_infinite()
 {
     std::cout << "Testing left limit infinite for 1/(1+t^2) on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = 10 * boost::math::tools::epsilon<Real>();
     Real Q;
     Real Q_expected;
     Real error;
@@ -256,16 +251,16 @@ void test_left_limit_infinite()
         auto f1 = [](const Real& t)->Real { return 1/(1+t*t);};
         Q = integrator.integrate(f1, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), 0, get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = half_pi<Real>();
-        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-        BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+        CHECK_ULP_CLOSE(Q_expected, Q, 8);
+        CHECK_ULP_CLOSE(Q_expected, L1, 8);
         Q = integrator.integrate(f1, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), -20, get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = BOOST_MATH_TEST_VALUE(Real, 0.0499583957219427614100062870348448814912770804235071744108534548299835954767);
-        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-        BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+        CHECK_ULP_CLOSE(Q_expected, Q, 4);
+        CHECK_ULP_CLOSE(Q_expected, L1, 4);
         Q = integrator.integrate(f1, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), -500, get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = BOOST_MATH_TEST_VALUE(Real, 0.0019999973333397333150476759363217553199063513829126652556286269630);
-        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-        BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+        CHECK_ULP_CLOSE(Q_expected, Q, 4);
+        CHECK_ULP_CLOSE(Q_expected, L1, 4);
     }
 }
 
@@ -280,7 +275,6 @@ void test_nr_examples()
     using std::exp;
     using std::sqrt;
     std::cout << "Testing type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = 10 * boost::math::tools::epsilon<Real>();
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
@@ -291,14 +285,14 @@ void test_nr_examples()
     auto f0 = [] (Real)->Real { return (Real) 0; };
     Q = integrator.integrate(f0, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = 0;
-    BOOST_CHECK_CLOSE_FRACTION(Q, 0.0f, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, 0.0f, tol);
+    CHECK_EQUAL(Q, Real(0));
+    CHECK_EQUAL(L1, Real(0));
 
     auto f = [](const Real& x)->Real { return 1/(1+x*x); };
     Q = integrator.integrate(f, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = half_pi<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 8);
+    CHECK_ULP_CLOSE(Q_expected, L1, 8);
 
     auto f1 = [](Real x)->Real {
         Real z1 = exp(-x);
@@ -318,10 +312,10 @@ void test_nr_examples()
     Q_expected = sqrt(pi<Real>()*(sqrt((Real) 5) - 2));
 
     // The integrand is oscillatory; the accuracy is low.
-    Real tol_mul = 1;
+    std::size_t tol_mul = 1;
     if (std::numeric_limits<Real>::digits10 > 40)
        tol_mul = 500000;
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mul * tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 20 * tol_mul);
 
     auto f2 = [](Real x)->Real { return x > boost::math::tools::log_max_value<Real>() ? Real(0) : Real(pow(x, -(Real) 2/(Real) 7)*exp(-x*x)); };
     Q = integrator.integrate(f2, get_convergence_tolerance<Real>(), &error, &L1);
@@ -331,15 +325,15 @@ void test_nr_examples()
        tol_mul = 500;
     else
        tol_mul = 3;
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mul * tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol_mul * tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 20 * tol_mul);
+    CHECK_ULP_CLOSE(Q_expected, L1, 20 * tol_mul);
 
     auto f3 = [](Real x)->Real { return (Real) 1/ (sqrt(x)*(1+x)); };
     Q = integrator.integrate(f3, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = pi<Real>();
 
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10*boost::math::tools::epsilon<Real>());
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, 10*boost::math::tools::epsilon<Real>());
+    CHECK_ULP_CLOSE(Q_expected, Q, 8);
+    CHECK_ULP_CLOSE(Q_expected, L1, 8);
 
     auto f4 = [](const Real& t)->Real { return  t > boost::math::tools::log_max_value<Real>() ? Real(0) : Real(exp(-t*t*half<Real>())); };
     Q = integrator.integrate(f4, get_convergence_tolerance<Real>(), &error, &L1);
@@ -347,14 +341,14 @@ void test_nr_examples()
     tol_mul = 1;
     if (std::numeric_limits<Real>::digits10 > 40)
        tol_mul = 5000;
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mul * tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol_mul * tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 20 * tol_mul);
+    CHECK_ULP_CLOSE(Q_expected, L1, 20 * tol_mul);
 
     auto f5 = [](const Real& t)->Real { return 1/cosh(t);};
     Q = integrator.integrate(f5, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = half_pi<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * 12);   // Fails at float precision without higher error rate
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol * 12);
+    CHECK_ULP_CLOSE(Q_expected, Q, 240);   // Fails at float precision without higher error rate
+    CHECK_ULP_CLOSE(Q_expected, L1, 240);
 }
 
 // Definite integrals found in the CRC Handbook of Mathematical Formulas
@@ -368,7 +362,6 @@ void test_crc()
     using std::log;
     using std::cos;
     std::cout << "Testing integral from CRC handbook on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = 10 * boost::math::tools::epsilon<Real>();
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
@@ -379,7 +372,7 @@ void test_crc()
     auto f0 = [](const Real& x)->Real { return x > boost::math::tools::log_max_value<Real>() ? Real(0) : Real(log(x)*exp(-x)); };
     Q = integrator.integrate(f0, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = -boost::math::constants::euler<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 8);
 
     // Test the integral representation of the gamma function:
     auto f1 = [](Real t)->Real { Real x = exp(-t);
@@ -392,7 +385,7 @@ void test_crc()
 
     Q = integrator.integrate(f1, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = boost::math::tgamma(12.0f);
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 16);
 
     // Integral representation of the modified bessel function:
     // K_5(12)
@@ -406,7 +399,7 @@ void test_crc()
     };
     Q = integrator.integrate(f2, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = boost::math::cyl_bessel_k<int, Real>(5, 12);
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 20);
     // Laplace transform of cos(at)
     Real a = 20;
     Real s = 1;
@@ -420,7 +413,7 @@ void test_crc()
     };
 
     // Since the integrand is oscillatory, we increase the tolerance:
-    Real tol_mult = 10;
+    std::size_t tol_mult = 10;
     // Multiprecision type have higher error rates, probably evaluation of f() is less accurate:
     if (!std::is_class<Real>::value)
     {
@@ -429,7 +422,7 @@ void test_crc()
        Q_expected = s/(a*a+s*s);
        if (std::numeric_limits<Real>::digits10 > std::numeric_limits<double>::digits10)
           tol_mult = 500000; // we should really investigate this more??
-       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mult*tol);
+       CHECK_ULP_CLOSE(Q_expected, Q, 20 * tol_mult);
     }
 
     //
@@ -453,12 +446,12 @@ void test_crc()
        // Multiprecision type have higher error rates, probably evaluation of f() is less accurate:
        if ((std::numeric_limits<Real>::digits10 > std::numeric_limits<long double>::digits10) || (std::numeric_limits<Real>::digits > 100) || !std::numeric_limits<Real>::digits)
           tol_mult = 50000;
-       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mult * tol);
+       CHECK_ULP_CLOSE(Q_expected, Q, 20 * tol_mult);
     }
     auto f6 = [](const Real& t)->Real { return t > boost::math::tools::log_max_value<Real>() ? Real(0) : Real(exp(-t*t)*log(t));};
     Q = integrator.integrate(f6, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = -boost::math::constants::root_pi<Real>()*(boost::math::constants::euler<Real>() + 2*ln_two<Real>())/4;
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 20);
 
     // CRC Section 5.5, integral 591
     // The parameter p allows us to control the strength of the singularity.
@@ -468,7 +461,7 @@ void test_crc()
     // "There's a lot of room at the bottom".
     // This version is transformed via argument substitution (exp(-x) for x) so that the integral is spread
     // over (0, INF).
-    tol *= boost::math::tools::digits<Real>() > 100 ? 100000 : 75;
+    const std::size_t ulps = 20 * (boost::math::tools::digits<Real>() > 100 ? 100000 : 75);
     for (Real pn = 99; pn > 0; pn -= 10) {
        Real p = pn / 100;
        auto f = [&](Real x)->Real
@@ -483,7 +476,7 @@ void test_crc()
        std::cout << std::setprecision(std::numeric_limits<Real>::max_digits10) << Q_expected << std::endl;
        std::cout << fabs((Q - Q_expected) / Q_expected) << std::endl;
        */
-       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+       CHECK_ULP_CLOSE(Q_expected, Q, ulps);
     }
     // and for p < 1:
     for (Real p = -0.99; p < 0; p += 0.1) {
@@ -493,7 +486,7 @@ void test_crc()
        };
        Q = integrator.integrate(f, get_convergence_tolerance<Real>(), &error, &L1);
        Q_expected = 1 / boost::math::sinc_pi(p*pi<Real>());
-       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+       CHECK_ULP_CLOSE(Q_expected, Q, ulps);
     }
 }
 
@@ -502,7 +495,6 @@ void test_complex_modified_bessel()
 {
     std::cout << "Testing complex modified Bessel function on type " << boost::typeindex::type_id<Complex>().pretty_name() << "\n";
     typedef typename Complex::value_type Real;
-    Real tol = 100 * boost::math::tools::epsilon<Real>();
     Real error;
     Real L1;
     const auto& integrator = get_integrator<Real>();
@@ -533,8 +525,8 @@ void test_complex_modified_bessel()
     {
         Real K0_x_expected = BOOST_MATH_TEST_VALUE(Real, -0.08296852656762551490517953520589186885781541203818846830385526187936132191822538822296497597191327722262903004145527496422090506197776994);
         Real K0_y_expected = BOOST_MATH_TEST_VALUE(Real, 0.027949603635183423629723306332336002340909030265538548521150904238352846705644065168365102147901993976999717171115546662967229050834575193041);
-        BOOST_CHECK_CLOSE_FRACTION(K0.real(), K0_x_expected, tol);
-        BOOST_CHECK_CLOSE_FRACTION(K0.imag(), K0_y_expected, tol);
+        CHECK_ULP_CLOSE(K0_x_expected, K0.real(), 132);
+        CHECK_ULP_CLOSE(K0_y_expected, K0.imag(), 200);
     }
 }
 
@@ -542,7 +534,6 @@ template<typename Complex>
 void test_complex_exponential_integral_E1(){
     std::cout << "Testing complex exponential integral on type " << boost::typeindex::type_id<Complex>().pretty_name() << "\n";
     typedef typename Complex::value_type Real;
-    Real tol = 100 * boost::math::tools::epsilon<Real>();
     Real error;
     Real L1;
     const auto& integrator = get_integrator<Real>();
@@ -568,8 +559,8 @@ void test_complex_exponential_integral_E1(){
     {
         Real E1_real_expected = BOOST_MATH_TEST_VALUE(Real, 0.071702995463938694845949672113596046091766639758473558841839765788732549949008866887694451956003503764943496943262401868244277788066634858393);
         Real E1_imag_expected = BOOST_MATH_TEST_VALUE(Real, -0.065138628279238400564373880665751377423524428792583839078600260273866805818117625959446311737353882269129094759883720722150048944193926087208);
-        BOOST_CHECK_CLOSE_FRACTION(E1.real(), E1_real_expected, tol);
-        BOOST_CHECK_CLOSE_FRACTION(E1.imag(), E1_imag_expected, tol);
+        CHECK_ULP_CLOSE(E1_real_expected, E1.real(), 4);
+        CHECK_ULP_CLOSE(E1_imag_expected, E1.imag(), 4);
     }
 }
 
@@ -600,12 +591,11 @@ void test_non_central_t()
       },
       boost::math::tools::root_epsilon<T>(), &err, &L1, &levels);
 
-   T tol = 100 * boost::math::tools::epsilon<T>();
-   BOOST_CHECK_CLOSE_FRACTION(integral, expected, tol);
+   CHECK_ULP_CLOSE(expected, integral, 200);
 }
 
 
-BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
+void exp_sinh_quadrature_test()
 {
    //
    // Uncomment to generate the coefficients:
@@ -725,4 +715,10 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     test_complex_exponential_integral_E1<boost::multiprecision::complex128>();
 #endif
 #endif
+}
+
+int main()
+{
+    exp_sinh_quadrature_test();
+    return boost::math::test::report_errors();
 }

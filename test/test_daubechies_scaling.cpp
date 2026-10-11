@@ -29,6 +29,7 @@ using boost::multiprecision::float128;
 #endif
 
 using std::sqrt;
+using std::abs;
 // Mallat, Theorem 7.4, characterization number 3:
 // A conjugate mirror filter has p vanishing moments iff h^{(n)}(pi) = 0 for 0 <= n < p.
 template<class Real, unsigned p>
@@ -333,6 +334,16 @@ void test_first_derivative()
 #endif
 }
 
+// Building the default grid dominates the run time of this test, and none of the checks in
+// test_quadratures need its full precision. Small p (cheap, and slow to converge) and the
+// representative p = 10, 19 use the default constructor so that path stays covered;
+// the rest use a grid of 2^10 points per integer interval.
+template<int p>
+constexpr int quadrature_grid_refinements()
+{
+    return (p <= 5 || p == 10 || p == 19) ? -1 : 10;
+}
+
 template<typename Real, int p>
 void test_quadratures()
 {
@@ -371,8 +382,8 @@ void test_quadratures()
         xlo = a;
         xhi = b;
         for (int i = 0; i < samples; ++i) {
-            BOOST_ASSERT(abs(phi(xlo)) <= 5);
-            BOOST_ASSERT(abs(phi(xhi)) <= 5);
+            CHECK_LE(std::abs(phi(xlo)), Real(5));
+            CHECK_LE(std::abs(phi(xhi)), Real(5));
             xlo = std::nextafter(xlo, (std::numeric_limits<Real>::max)());
             xhi = std::nextafter(xhi, std::numeric_limits<Real>::lowest());
         }
@@ -381,7 +392,7 @@ void test_quadratures()
     }
     else if constexpr (p > 2)
     {
-        auto phi = boost::math::daubechies_scaling<Real, p>();
+        auto phi = boost::math::daubechies_scaling<Real, p>(quadrature_grid_refinements<p>());
         std::cout << "Scaling functor size is " << phi.bytes() << " bytes" << std::endl;
 
         Real tol = std::numeric_limits<Real>::epsilon();
@@ -396,7 +407,7 @@ void test_quadratures()
         }
 
         auto phi_sq = [phi](Real x) { Real t = phi(x); return t*t; };
-        Q = trapezoidal(phi, a, b, tol, 15, &error_estimate, &L1);
+        Q = trapezoidal(phi_sq, a, b, tol, 15, &error_estimate, &L1);
         if (!CHECK_MOLLIFIED_CLOSE(Real(1), Q, 20*std::sqrt(std::numeric_limits<Real>::epsilon())/(p*p)))
         {
             std::cerr << "  L2 norm of " << p << " vanishing moment scaling function is not equal 1.\n";
@@ -437,11 +448,11 @@ void test_quadratures()
             CHECK_ULP_CLOSE(Real(0), phi(xlo), 0);
             CHECK_ULP_CLOSE(Real(0), phi(xhi), 0);
             if constexpr (p > 2) {
-                BOOST_ASSERT(abs(phi.prime(xlo)) <= 5);
-                BOOST_ASSERT(abs(phi.prime(xhi)) <= 5);
+                CHECK_LE(std::abs(phi.prime(xlo)), Real(5));
+                CHECK_LE(std::abs(phi.prime(xhi)), Real(5));
                 if constexpr (p > 5) {
-                     BOOST_ASSERT(abs(phi.double_prime(xlo)) <= 5);
-                     BOOST_ASSERT(abs(phi.double_prime(xhi)) <= 5);
+                     CHECK_LE(std::abs(phi.double_prime(xlo)), Real(5));
+                     CHECK_LE(std::abs(phi.double_prime(xhi)), Real(5));
                 }
             }
             xlo = std::nextafter(xlo, std::numeric_limits<Real>::lowest());
@@ -451,8 +462,8 @@ void test_quadratures()
         xlo = a;
         xhi = b;
         for (int i = 0; i < samples; ++i) {
-            BOOST_ASSERT(abs(phi(xlo)) <= 5);
-            BOOST_ASSERT(abs(phi(xhi)) <= 5);
+            CHECK_LE(std::abs(phi(xlo)), Real(5));
+            CHECK_LE(std::abs(phi(xhi)), Real(5));
             xlo = std::nextafter(xlo, (std::numeric_limits<Real>::max)());
             xhi = std::nextafter(xhi, std::numeric_limits<Real>::lowest());
         }

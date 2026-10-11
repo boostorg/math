@@ -30,7 +30,8 @@ template <class Real> void test_ackley() {
   // This makes the CI a bit more robust;
   // the computation is only deterministic with a deterministic number of threads:
   rs_params.threads = 2;
-  rs_params.max_function_calls *= 10;
+  // A fixed budget (the default scales with the core count). Plenty to land within the tolerance below.
+  rs_params.max_function_calls = 100000;
   std::mt19937_64 gen(12345);
   auto local_minima = random_search(ackley<Real>, rs_params, gen);
   CHECK_LE(std::abs(local_minima[0]), Real(0.2));
@@ -135,7 +136,8 @@ void test_three_hump_camel() {
   rs_params.upper_bounds[0] = 5.0;
   rs_params.upper_bounds[1] = 5.0;
   rs_params.threads = 2;
-  rs_params.max_function_calls *= 10;
+  // A fixed budget (the default scales with the core count). Plenty to land within the tolerance below.
+  rs_params.max_function_calls = 100000;
   std::mt19937_64 gen(56789);
   auto local_minima = random_search(three_hump_camel<Real>, rs_params, gen);
   for (auto x : local_minima) {
@@ -154,7 +156,8 @@ void test_beale() {
   rs_params.upper_bounds[0]= 5.0;
   rs_params.upper_bounds[1]= 5.0;
   rs_params.threads = 2;
-  rs_params.max_function_calls *= 10;
+  // A fixed budget (the default scales with the core count). Plenty to land within the tolerance below.
+  rs_params.max_function_calls = 100000;
   std::mt19937_64 gen(56789);
   auto local_minima = random_search(beale<Real>, rs_params, gen);
   CHECK_ABSOLUTE_ERROR(Real(3), local_minima[0], Real(0.1));

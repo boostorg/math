@@ -4,10 +4,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_TEST_MODULE adaptive_gauss_kronrod_quadrature_test
-
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
+#include "math_unit_test.hpp"
 
 #if __has_include(<stdfloat>)
 # include <stdfloat>
@@ -16,8 +15,6 @@
 #if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_TRAILING_RESULT_TYPES) && !defined(BOOST_NO_SFINAE_EXPR)
 
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/test/included/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -79,7 +76,6 @@ template<class Real, unsigned Points>
 void test_linear()
 {
     std::cout << "Testing linear functions are integrated properly by gauss_kronrod on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = boost::math::tools::epsilon<Real>() * 10;
     Real error;
     auto f = [](const Real& x)
     {
@@ -87,26 +83,25 @@ void test_linear()
     };
     Real L1;
     Real Q = gauss_kronrod<Real, Points>::integrate(f, (Real) 0, (Real) 1, 15, get_termination_condition<Real>(), &error, &L1);
-    BOOST_CHECK_CLOSE_FRACTION(Q, 9.5, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, 9.5, tol);
-    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
-    BOOST_CHECK_GE(fabs(error), fabs(Q - 9.5));
+    CHECK_ULP_CLOSE(Real(9.5), Q, 8);
+    CHECK_ULP_CLOSE(Real(9.5), L1, 8);
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
+    CHECK_GE(abs(error), abs(Q - Real(9.5)));
 }
 
 template<class Real, unsigned Points>
 void test_quadratic()
 {
     std::cout << "Testing quadratic functions are integrated properly by gauss-kronrod on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = boost::math::tools::epsilon<Real>() * 10;
     Real error;
 
     auto f = [](const Real& x) { return 5*x*x + 7*x + 12; };
     Real L1;
     Real Q = gauss_kronrod<Real, Points>::integrate(f, 0, 1, 15, get_termination_condition<Real>(), &error, &L1);
-    BOOST_CHECK_CLOSE_FRACTION(Q, (Real) 17 + half<Real>()*third<Real>(), tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, (Real) 17 + half<Real>()*third<Real>(), tol);
-    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
-    BOOST_CHECK_GE(fabs(error), fabs(Q - ((Real)17 + half<Real>()*third<Real>())));
+    CHECK_ULP_CLOSE((Real) 17 + half<Real>()*third<Real>(), Q, 8);
+    CHECK_ULP_CLOSE((Real) 17 + half<Real>()*third<Real>(), L1, 8);
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
+    CHECK_GE(abs(error), abs(Q - ((Real)17 + half<Real>()*third<Real>())));
 }
 
 // Examples taken from
@@ -115,37 +110,35 @@ template<class Real, unsigned Points>
 void test_ca()
 {
     std::cout << "Testing integration of C(a) on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = boost::math::tools::epsilon<Real>() * 10;
     Real L1;
     Real error;
 
     auto f1 = [](const Real& x) { return atan(x)/(x*(x*x + 1)) ; };
     Real Q = gauss_kronrod<Real, Points>::integrate(f1, 0, 1, 15, get_termination_condition<Real>(), &error, &L1);
     Real Q_expected = pi<Real>()*ln_two<Real>()/8 + catalan<Real>()*half<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
-    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
-    BOOST_CHECK_GE(fabs(error), fabs(Q - Q_expected));
+    CHECK_ULP_CLOSE(Q_expected, Q, 8);
+    CHECK_ULP_CLOSE(Q_expected, L1, 8);
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
+    CHECK_GE(abs(error), abs(Q - Q_expected));
 
     auto f2 = [](Real x)->Real { Real t0 = x*x + 1; Real t1 = sqrt(t0); return atan(t1)/(t0*t1); };
     Q = gauss_kronrod<Real, Points>::integrate(f2, 0 , 1, 15, get_termination_condition<Real>(), &error, &L1);
     Q_expected = pi<Real>()/4 - pi<Real>()/root_two<Real>() + 3*atan(root_two<Real>())/root_two<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
-    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
-    BOOST_CHECK_GE(fabs(error), fabs(Q - Q_expected));
+    CHECK_ULP_CLOSE(Q_expected, Q, 8);
+    CHECK_ULP_CLOSE(Q_expected, L1, 8);
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
+    CHECK_GE(abs(error), abs(Q - Q_expected));
 
     auto f5 = [](Real t)->Real { return t*t*log(t)/((t*t - 1)*(t*t*t*t + 1)); };
     Q = gauss_kronrod<Real, Points>::integrate(f5, 0, 1, 25);
     Q_expected = pi<Real>()*pi<Real>()*(2 - root_two<Real>())/32;
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 100 * tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 1192);
 }
 
 template<class Real, unsigned Points>
 void test_three_quadrature_schemes_examples()
 {
     std::cout << "Testing integral in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = boost::math::tools::epsilon<Real>() * 10;
     Real Q;
     Real Q_expected;
 
@@ -153,26 +146,26 @@ void test_three_quadrature_schemes_examples()
     auto f1 = [](const Real& t) { return t*boost::math::log1p(t); };
     Q = gauss_kronrod<Real, Points>::integrate(f1, 0 , 1);
     Q_expected = half<Real>()*half<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 4);
 
 
     // Example 2:
     auto f2 = [](const Real& t) { return t*t*atan(t); };
     Q = gauss_kronrod<Real, Points>::integrate(f2, 0, 1);
     Q_expected = (pi<Real>() -2 + 2*ln_two<Real>())/12;
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 2 * tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 40);
 
     // Example 3:
     auto f3 = [](const Real& t) { return exp(t)*cos(t); };
     Q = gauss_kronrod<Real, Points>::integrate(f3, 0, half_pi<Real>());
     Q_expected = boost::math::expm1(half_pi<Real>())*half<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 12);
 
     // Example 4:
     auto f4 = [](Real x)->Real { Real t0 = sqrt(x*x + 2); return atan(t0)/(t0*(x*x+1)); };
     Q = gauss_kronrod<Real, Points>::integrate(f4, 0, 1);
     Q_expected = 5*pi<Real>()*pi<Real>()/96;
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 8);
 }
 
 
@@ -180,7 +173,6 @@ template<class Real, unsigned Points>
 void test_integration_over_real_line()
 {
     std::cout << "Testing integrals over entire real line in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = boost::math::tools::epsilon<Real>() * 10;
     Real Q;
     Real Q_expected;
     Real L1;
@@ -189,16 +181,16 @@ void test_integration_over_real_line()
     auto f1 = [](const Real& t) { return 1/(1+t*t);};
     Q = gauss_kronrod<Real, Points>::integrate(f1, -boost::math::tools::max_value<Real>(), boost::math::tools::max_value<Real>(), 15, get_termination_condition<Real>(), &error, &L1);
     Q_expected = pi<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
-    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
+    CHECK_ULP_CLOSE(Q_expected, Q, 8);
+    CHECK_ULP_CLOSE(Q_expected, L1, 8);
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
 
     auto f4 = [](const Real& t) { return 1/cosh(t);};
     Q = gauss_kronrod<Real, Points>::integrate(f4, -boost::math::tools::max_value<Real>(), boost::math::tools::max_value<Real>(), 15, get_termination_condition<Real>(), &error, &L1);
     Q_expected = pi<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
-    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
+    CHECK_ULP_CLOSE(Q_expected, Q, 4);
+    CHECK_ULP_CLOSE(Q_expected, L1, 4);
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
 
 }
 
@@ -206,7 +198,6 @@ template<class Real, unsigned Points>
 void test_right_limit_infinite()
 {
     std::cout << "Testing right limit infinite for Gauss-Kronrod in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = boost::math::tools::epsilon<Real>() * 10;
     Real Q;
     Real Q_expected;
     Real L1;
@@ -216,21 +207,20 @@ void test_right_limit_infinite()
     auto f1 = [](const Real& t) { return 1/(1+t*t);};
     Q = gauss_kronrod<Real, Points>::integrate(f1, 0, boost::math::tools::max_value<Real>(), 15, get_termination_condition<Real>(), &error, &L1);
     Q_expected = half_pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
+    CHECK_ULP_CLOSE(Q_expected, Q, 8);
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
 
     auto f4 = [](const Real& t) { return 1/(1+t*t); };
     Q = gauss_kronrod<Real, Points>::integrate(f4, 1, boost::math::tools::max_value<Real>(), 15, get_termination_condition<Real>(), &error, &L1);
     Q_expected = pi<Real>()/4;
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
+    CHECK_ULP_CLOSE(Q_expected, Q, 4);
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
 }
 
 template<class Real, unsigned Points>
 void test_left_limit_infinite()
 {
     std::cout << "Testing left limit infinite for Gauss-Kronrod in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = boost::math::tools::epsilon<Real>() * 10;
     Real Q;
     Real Q_expected;
 
@@ -238,10 +228,10 @@ void test_left_limit_infinite()
     auto f1 = [](const Real& t) { return 1/(1+t*t);};
     Q = gauss_kronrod<Real, Points>::integrate(f1, -boost::math::tools::max_value<Real>(), 0);
     Q_expected = half_pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 300*tol);
+    CHECK_ULP_CLOSE(Q_expected, Q, 60);
 }
 
-BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
+void gauss_quadrature_test()
 {
 #ifdef TEST1
     std::cout << "Testing with 15 point Gauss-Kronrod rule:\n";
@@ -328,6 +318,12 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_left_limit_infinite<cpp_bin_float_quad, 61>();
 #endif
 #endif
+}
+
+int main()
+{
+    gauss_quadrature_test();
+    return boost::math::test::report_errors();
 }
 
 #else

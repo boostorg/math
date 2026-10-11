@@ -243,7 +243,8 @@ jobs:
         run: config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ..\..\..\b2 -d0 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} %FMA_B2%
+        # On Windows -d0 hides the output of failing tests, so rerun the failures verbosely.
+        run: ..\..\..\b2 -d0 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} %FMA_B2% || ..\..\..\b2 -d1 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} %FMA_B2%
         working-directory: ../boost-root/libs/math/test
   MSVC2022:
     runs-on: windows-2022
@@ -292,7 +293,8 @@ jobs:
         run: config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ..\..\..\b2 -d0 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} pch=off %OPT_B2%
+        # On Windows -d0 hides the output of failing tests, so rerun the failures verbosely.
+        run: ..\..\..\b2 -d0 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} pch=off %OPT_B2% || ..\..\..\b2 -d1 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} pch=off %OPT_B2%
         working-directory: ../boost-root/libs/math/test
   standalone-compile-tests-gcc:
     runs-on: ubuntu-24.04

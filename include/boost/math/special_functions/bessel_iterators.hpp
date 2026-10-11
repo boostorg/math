@@ -66,6 +66,25 @@ BOOST_MATH_NAMESPACE_BEGIN
             if (v < -1)
                BOOST_MATH_NAMESPACE::policies::raise_domain_error("bessel_j_backwards_iterator<%1%>", "Order must be > 0 stable backwards recurrence but got %1%", v, Policy());
          }
+         //
+         // As above, but starting from order v + k: the orders v + k, v + k - 1, ... are then each computed
+         // with a single rounding, rather than by stepping down from a rounded v + k.
+         //
+         bessel_j_backwards_iterator(const T& v, const T& x, BOOST_MATH_NAMESPACE::tools::recurrence_offset k)
+            : bessel_j_backwards_iterator(v, x, BOOST_MATH_NAMESPACE::cyl_bessel_j(T(v + k.value), x, Policy()), k) {}
+
+         bessel_j_backwards_iterator(const T& v, const T& x, const T& J_v_plus_k, BOOST_MATH_NAMESPACE::tools::recurrence_offset k)
+            : it(detail::bessel_jy_recurrence<T>(v, x), J_v_plus_k, k)
+         {
+            if(v + k.value < 0)
+               BOOST_MATH_NAMESPACE::policies::raise_domain_error("bessel_j_backwards_iterator<%1%>", "Order must be > 0 stable backwards recurrence but got %1%", T(v + k.value), Policy());
+         }
+         bessel_j_backwards_iterator(const T& v, const T& x, const T& J_v_plus_k_plus_1, const T& J_v_plus_k, BOOST_MATH_NAMESPACE::tools::recurrence_offset k)
+            : it(detail::bessel_jy_recurrence<T>(v, x), J_v_plus_k_plus_1, J_v_plus_k, k)
+         {
+            if (v + k.value < -1)
+               BOOST_MATH_NAMESPACE::policies::raise_domain_error("bessel_j_backwards_iterator<%1%>", "Order must be > 0 stable backwards recurrence but got %1%", T(v + k.value), Policy());
+         }
 
          bessel_j_backwards_iterator& operator++()
          {
@@ -113,6 +132,25 @@ BOOST_MATH_NAMESPACE_BEGIN
             if(v < -1)
                BOOST_MATH_NAMESPACE::policies::raise_domain_error("bessel_i_backwards_iterator<%1%>", "Order must be > 0 stable backwards recurrence but got %1%", v, Policy());
          }
+         //
+         // As above, but starting from order v + k: the orders v + k, v + k - 1, ... are then each computed
+         // with a single rounding, rather than by stepping down from a rounded v + k.
+         //
+         bessel_i_backwards_iterator(const T& v, const T& x, BOOST_MATH_NAMESPACE::tools::recurrence_offset k)
+            : bessel_i_backwards_iterator(v, x, BOOST_MATH_NAMESPACE::cyl_bessel_i(T(v + k.value), x, Policy()), k) {}
+
+         bessel_i_backwards_iterator(const T& v, const T& x, const T& I_v_plus_k, BOOST_MATH_NAMESPACE::tools::recurrence_offset k)
+            : it(detail::bessel_ik_recurrence<T>(v, x), I_v_plus_k, k)
+         {
+            if(v + k.value < -1)
+               BOOST_MATH_NAMESPACE::policies::raise_domain_error("bessel_i_backwards_iterator<%1%>", "Order must be > 0 stable backwards recurrence but got %1%", T(v + k.value), Policy());
+         }
+         bessel_i_backwards_iterator(const T& v, const T& x, const T& I_v_plus_k_plus_1, const T& I_v_plus_k, BOOST_MATH_NAMESPACE::tools::recurrence_offset k)
+            : it(detail::bessel_ik_recurrence<T>(v, x), I_v_plus_k_plus_1, I_v_plus_k, k)
+         {
+            if(v + k.value < -1)
+               BOOST_MATH_NAMESPACE::policies::raise_domain_error("bessel_i_backwards_iterator<%1%>", "Order must be > 0 stable backwards recurrence but got %1%", T(v + k.value), Policy());
+         }
 
          bessel_i_backwards_iterator& operator++()
          {
@@ -159,6 +197,25 @@ BOOST_MATH_NAMESPACE_BEGIN
          {
             if (v > 1)
                BOOST_MATH_NAMESPACE::policies::raise_domain_error("bessel_i_forwards_iterator<%1%>", "Order must be < 0 stable forwards recurrence but got %1%", v, Policy());
+         }
+         //
+         // As above, but starting from order v + k: the orders v + k, v + k + 1, ... are then each computed
+         // with a single rounding, rather than by stepping up from a rounded v + k.
+         //
+         bessel_i_forwards_iterator(const T& v, const T& x, BOOST_MATH_NAMESPACE::tools::recurrence_offset k)
+            : bessel_i_forwards_iterator(v, x, BOOST_MATH_NAMESPACE::cyl_bessel_i(T(v + k.value), x, Policy()), k) {}
+
+         bessel_i_forwards_iterator(const T& v, const T& x, const T& I_v_plus_k, BOOST_MATH_NAMESPACE::tools::recurrence_offset k)
+            : it(detail::bessel_ik_recurrence<T>(v, x), I_v_plus_k, k)
+         {
+            if (v + k.value > 1)
+               BOOST_MATH_NAMESPACE::policies::raise_domain_error("bessel_i_forwards_iterator<%1%>", "Order must be < 0 stable forwards recurrence but got %1%", T(v + k.value), Policy());
+         }
+         bessel_i_forwards_iterator(const T& v, const T& x, const T& I_v_plus_k_minus_1, const T& I_v_plus_k, BOOST_MATH_NAMESPACE::tools::recurrence_offset k)
+            : it(detail::bessel_ik_recurrence<T>(v, x), I_v_plus_k_minus_1, I_v_plus_k, k)
+         {
+            if (v + k.value > 1)
+               BOOST_MATH_NAMESPACE::policies::raise_domain_error("bessel_i_forwards_iterator<%1%>", "Order must be < 0 stable forwards recurrence but got %1%", T(v + k.value), Policy());
          }
 
          bessel_i_forwards_iterator& operator++()

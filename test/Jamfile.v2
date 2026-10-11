@@ -1004,7 +1004,7 @@ test-suite misc :
    [ run test_engel_expansion.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] $(float128_type) ]
    [ run test_classify.cpp pch /boost/test//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>/bigobj ]
    [ run test_error_handling.cpp /boost/test//boost_unit_test_framework  ]
-   [ run test_legendre_stieltjes.cpp /boost/test//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] $(float128_type)  ]
+   [ run test_legendre_stieltjes.cpp : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] $(float128_type)  ]
    [ run test_minima.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_rationals.cpp /boost/test//boost_unit_test_framework
       test_rational_instances/test_rational_double1.cpp
@@ -1054,7 +1054,7 @@ test-suite misc :
     [ requires cxx17_if_constexpr cxx17_std_apply ]
   ]
    [ run test_univariate_statistics_backwards_compatible.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ] ]
-   [ run test_ooura_fourier_integral.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] $(float128_type) [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run test_ooura_fourier_integral.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] $(float128_type) [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_prime_sieve.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_prime_sieve_mp.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_prime_sieve_mp.cpp ../tools//gmp : : : <define>BOOST_MATH_TEST_GMP [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_gmp : : <build>no ] : test_prime_sieve_gmp ]
@@ -1079,11 +1079,13 @@ test-suite misc :
    [ run test_runs_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_chatterjee_correlation.cpp /boost/test//boost_unit_test_framework ]
    [ run test_rank.cpp /boost/test//boost_unit_test_framework ]
-   [ run test_lanczos_smoothing.cpp /boost/test//boost_unit_test_framework : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run test_lanczos_smoothing.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_condition_number.cpp /boost/test//boost_unit_test_framework : : : <define>TEST=1 <toolset>msvc:<cxxflags>/bigobj $(float128_type) : condition_number_test_1 ]
    [ run test_condition_number.cpp /boost/test//boost_unit_test_framework : : : <define>TEST=2 <toolset>msvc:<cxxflags>/bigobj $(float128_type) : condition_number_test_2 ]
    [ run test_condition_number.cpp /boost/test//boost_unit_test_framework : : : <define>TEST=3 <toolset>msvc:<cxxflags>/bigobj $(float128_type) : condition_number_test_3 ]
    [ run test_real_concept.cpp /boost/test//boost_unit_test_framework  ]
+   [ run test_real_concept_neg_bin.cpp ]
+   [ run test_math_fwd.cpp ]
    [ run test_remez.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_roots.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_root_iterations.cpp pch /boost/test//boost_unit_test_framework : : : [ requires cxx11_hdr_tuple ]  ]
@@ -1108,9 +1110,9 @@ test-suite misc :
 #   [ run __temporary_test.cpp test_instances//test_instances : : : <test-info>always_show_run_output <pch>off ]
 ;
 test-suite interpolators :
-   [ run test_barycentric_rational.cpp /boost/test//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ] $(float128_type)  ]
-   [ run test_vector_barycentric_rational.cpp /boost/test//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ]  [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
-   [ run test_cardinal_cubic_b_spline.cpp /boost/test//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+   [ run test_barycentric_rational.cpp : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ] $(float128_type)  ]
+   [ run test_vector_barycentric_rational.cpp : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ]  [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
+   [ run test_cardinal_cubic_b_spline.cpp : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
    [ run test_cardinal_b_spline.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] $(float128_type) ]
    [ run test_jacobi_polynomial.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] $(float128_type) ]
    [ run test_gegenbauer.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] $(float128_type) ]
@@ -1133,9 +1135,9 @@ test-suite interpolators :
    [ run test_cubic_hermite.cpp /boost/circular_buffer//boost_circular_buffer : : :  [ requires cxx17_if_constexpr cxx17_std_apply ]  $(float128_type) ]
    [ run test_bilinear_uniform.cpp  : : : [ requires cxx17_if_constexpr cxx17_std_apply ]  ]
    [ run test_bezier_polynomial.cpp  : : : [ requires cxx17_if_constexpr cxx17_std_apply ]  $(float128_type) ]
-   [ run test_catmull_rom.cpp /boost/test//boost_unit_test_framework : : : <define>TEST=1 [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] : catmull_rom_test_1 ]
-   [ run test_catmull_rom.cpp /boost/test//boost_unit_test_framework : : : <define>TEST=2 [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] : catmull_rom_test_2 ]
-   [ run test_catmull_rom.cpp /boost/test//boost_unit_test_framework : : : <define>TEST=3 [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] : catmull_rom_test_3 ]
+   [ run test_catmull_rom.cpp : : : <define>TEST=1 [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] : catmull_rom_test_1 ]
+   [ run test_catmull_rom.cpp : : : <define>TEST=2 [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] : catmull_rom_test_2 ]
+   [ run test_catmull_rom.cpp : : : <define>TEST=3 [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] : catmull_rom_test_3 ]
    [ run compile_test/test_interpolators_catmull_rom_incl.cpp compile_test_main  : : : [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] ]
    [ run compile_test/test_interpolators_catmull_rom_concept.cpp compile_test_main   : : : [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] ]
    [ run test_standalone_asserts.cpp ]
@@ -1149,94 +1151,94 @@ test-suite interpolators :
 ;
 
 test-suite quadrature :
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST1 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
    tanh_sinh_quadrature_test_1 ]
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST1A $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
    tanh_sinh_quadrature_test_1a ]
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST1B $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
    tanh_sinh_quadrature_test_1b ]
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST2 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
    tanh_sinh_quadrature_test_2 ]
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST2A $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
    tanh_sinh_quadrature_test_2a ]
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST3 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_3 ]
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST3A $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_3a ]
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST4 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_4 ]
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST5 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_5 ]
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST6 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_6 ]
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST6A $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_6a ]
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST7 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_7 ]
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST8 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_8 ]
-   [ run  test_tanh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run  test_tanh_sinh_quadrature.cpp
      : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST9
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_9 ]
 
    [ run tanh_sinh_mpfr.cpp ../tools//mpfr ../tools//gmp : : : [ check-target-builds ../config//has_mpfr : : <build>no ] [ check-target-builds ../config//has_gmp : : <build>no ] [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal-range [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
-   [ run test_sinh_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run test_sinh_sinh_quadrature.cpp
      : : : release $(float128_type) [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
-   [ run test_exp_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run test_exp_sinh_quadrature.cpp
      : : : <define>TEST1 $(float128_type) [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_1 ]
 
-   [ run test_exp_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run test_exp_sinh_quadrature.cpp
      : : : release <define>TEST2 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_2 ]
-   [ run test_exp_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run test_exp_sinh_quadrature.cpp
      : : : <define>TEST3 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_3 ]
-   [ run test_exp_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run test_exp_sinh_quadrature.cpp
      : : : release <define>TEST4 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_4 ]
-   [ run test_exp_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run test_exp_sinh_quadrature.cpp
      : : : release <define>TEST5 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_5 ]
-   [ run test_exp_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run test_exp_sinh_quadrature.cpp
      : : : release <define>TEST6 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_6 ]
-   [ run test_exp_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run test_exp_sinh_quadrature.cpp
      : : : release <define>TEST7 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_7 ]
-   [ run test_exp_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run test_exp_sinh_quadrature.cpp
      : : : release <define>TEST8 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_8 ]
-   [ run test_exp_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run test_exp_sinh_quadrature.cpp
      : : : release <define>TEST9 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_9 ]
-   [ run test_exp_sinh_quadrature.cpp /boost/test//boost_unit_test_framework
+   [ run test_exp_sinh_quadrature.cpp
      : : : release <define>TEST10 $(float128_type)
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_10 ]
 
@@ -1384,14 +1386,14 @@ test-suite quadrature :
    [ run git_issue_898.cpp ]
    [ run git_issue_1075.cpp : : : $(float128_type) ]
 
-   [ run test_trapezoidal.cpp /boost/test//boost_unit_test_framework : : :
+   [ run test_trapezoidal.cpp : : :
       release [ requires cxx11_lambdas cxx11_auto_declarations cxx11_decltype cxx11_unified_initialization_syntax cxx11_variadic_templates ]
       $(float128_type) ]
    [ run test_symplectic.cpp ]
 ;
 
 test-suite autodiff :
-   [ run test_numerical_differentiation.cpp /boost/test//boost_unit_test_framework  : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_auto_declarations cxx11_constexpr ] ]
+   [ run test_numerical_differentiation.cpp  : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_auto_declarations cxx11_constexpr ] ]
    [ run  compile_test/test_diff_numerical_differentiation_incl.cpp compile_test_main  : : : [ requires cxx11_auto_declarations cxx11_constexpr ] ]
    [ compile  compile_test/test_diff_numerical_differentiation_concept.cpp  : [ requires cxx11_auto_declarations cxx11_constexpr ] ]
    [ run test_autodiff_1.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release $(float128_type) [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx11_inline_namespaces ] ]

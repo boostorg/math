@@ -52,9 +52,9 @@ echo '==================================> SCRIPT'
 
 # Let the compiler use fused multiply-add for a*b + c. -O2 rather than b2's default of -O0: it is
 # what users build with, and gcc does not fuse below it. gcc and clang both contract by default.
-# FMA is in the base aarch64 and s390x instruction sets; x86 needs it switched on.
+# FMA is in the base aarch64 and s390x instruction sets; x86 needs it switched on, where the CPU has it.
 FMA_FLAGS="<cxxflags>-O2"
-if [ "$(uname -m)" = x86_64 ]; then FMA_FLAGS="<cxxflags>-mfma $FMA_FLAGS"; fi
+if [ "$(uname -m)" = x86_64 ] && grep -qw fma /proc/cpuinfo; then FMA_FLAGS="<cxxflags>-mfma $FMA_FLAGS"; fi
 echo "using $TOOLSET : : $COMPILER : <cxxflags>-std=$CXXSTD $OPTIONS $FMA_FLAGS ;" > ~/user-config.jam
 (cd libs/config/test && ../../../b2 print_config_info print_math_info toolset=$TOOLSET)
 # inlining=on: b2's debug variant adds -fno-inline, which is not how users optimize, and clang
