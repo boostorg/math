@@ -58,12 +58,9 @@ void expected_results()
       "Mac OS",                      // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-#ifdef __aarch64__
-      // Error rates for M1 macs are higher than x86_64 macs
+      // Unpromoted double has the same error rates on M1 and x86_64 macs
+      // (3763 for the negative order Mathworld data on x86_64):
       ".*", 4000, 1500);               // test function
-#else
-      ".*", 3500, 1500);               // test function
-#endif
    //
    // Cygwin:
    //
