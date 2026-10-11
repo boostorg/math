@@ -278,6 +278,34 @@ void test_raster_canvas()
         masks m = finish(canvas);
         CHECK_TRUE(m.colors == std::vector<std::string>({"red", "blue", "red"}));
     }
+    // Masks blend per pixel, so shapes covering different subsamples of one pixel still overlap: red, blue over the left
+    // half of pixel 0, then red over its right half, must paint red, blue, red:
+    {
+        detail::raster_canvas canvas(0, 0, 3, 1);
+        canvas.polygon("red", {{2, 0}, {3, 0}, {3, 1}, {2, 1}});
+        canvas.polygon("blue", {{0, 0}, {0.5, 0}, {0.5, 1}, {0, 1}});
+        canvas.polygon("red", {{0.5, 0}, {1, 0}, {1, 1}, {0.5, 1}});
+        CHECK_TRUE(finish(canvas).colors == std::vector<std::string>({"red", "blue", "red"}));
+    }
+    // Every color gets its own mask, however many there are:
+    {
+        detail::raster_canvas canvas(0, 0, 50, 2);
+        for (int i = 0; i < 40; ++i)
+        {
+            canvas.disk("rgb(" + std::to_string(i) + ",0,0)", i + 0.5, 1, 0.4);
+        }
+        CHECK_EQUAL(canvas.masks(), std::size_t(40));
+    }
+    // ...but at most max_masks of one color: interleaving red and blue over one pixel needs a new mask each time, until red
+    // and blue each have max_masks:
+    {
+        detail::raster_canvas canvas(0, 0, 1, 1);
+        for (int i = 0; i < 100; ++i)
+        {
+            canvas.disk(i % 2 ? "blue" : "red", 0.5, 0.5, 0.5);
+        }
+        CHECK_EQUAL(canvas.masks(), 2*detail::raster_canvas::max_masks);
+    }
     // ...but one that doesn't touch the blue one shares the first red mask:
     {
         detail::raster_canvas canvas(0, 0, 16, 8);

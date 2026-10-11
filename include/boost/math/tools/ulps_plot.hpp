@@ -513,12 +513,15 @@ inline std::string svg_id(std::string const & prefix, std::string const & conten
 // Each pixel of a mask holds a bit for each of its 16 subsamples, and shapes are ORed in, so overlapping shapes of one
 // color (adjacent points, the joints of a polyline) cover their union, neither more nor less.
 // The masks are painted in order. A shape goes into the topmost mask of its color unless a mask of another color above
-// that one has a subsample in common with it, in which case it starts a new mask on top; so the result is the same as
-// painting the shapes one by one, with one mask per color in the usual case. Past max_masks, a shape goes into the
-// topmost mask of its color, if there is one, to bound the size of the file.
+// that one covers any part of a pixel the shape covers (masks blend per pixel, so disjoint subsamples of one pixel still
+// interact), in which case it starts a new mask on top; so the result is the same as painting the shapes one by one,
+// with one mask per color in the usual case. max_masks limits the number of masks of each color, which bounds the size
+// of the file when shapes of a few colors are interleaved: past it, a shape goes into the topmost mask of its color.
+// Each color has a mask of its own, however many colors there are.
 class raster_canvas
 {
 public:
+    // The most masks of one color:
     static constexpr std::size_t max_masks = 32;
 
     raster_canvas(double x0, double y0, int width, int height)
@@ -679,7 +682,7 @@ private:
             {
                 for (int i = i0; i <= i1; ++i)
                 {
-                    if (m.bits[pixel(i, j)] & shape_[box(i, j)])
+                    if (m.bits[pixel(i, j)] != 0 && shape_[box(i, j)] != 0)
                     {
                         return true;
                     }
@@ -701,15 +704,21 @@ private:
                 break;
             }
         }
-        if (target == masks_.size() && masks_.size() >= max_masks)
+        if (target == masks_.size())
         {
-            for (std::size_t l = masks_.size(); l-- > 0;)
+            std::size_t same_color = 0;
+            std::size_t topmost = masks_.size();
+            for (std::size_t l = 0; l < masks_.size(); ++l)
             {
                 if (masks_[l].color == color)
                 {
-                    target = l;
-                    break;
+                    ++same_color;
+                    topmost = l;
                 }
+            }
+            if (same_color >= max_masks)
+            {
+                target = topmost;
             }
         }
         if (target == masks_.size())
