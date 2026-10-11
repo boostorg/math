@@ -469,6 +469,62 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_to_nearest_floor(c
    return result;
 }
 //
+// Rounding for distributions that find their quantile some other way (in
+// closed form, or by summing the pdf) and only need the result settled on
+// the integer the policy asks for.  "result" is the real-valued quantile,
+// or an integer within a step or so of the answer.
+//
+template <class Dist>
+BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_discrete_quantile(const Dist&, typename Dist::value_type result, typename Dist::value_type, bool, const policies::discrete_quantile<policies::real>&)
+{
+   return result;
+}
+
+template <class Dist>
+BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_discrete_quantile(const Dist& d, typename Dist::value_type result, typename Dist::value_type p, bool c, const policies::discrete_quantile<policies::integer_round_up>&)
+{
+   return round_to_ceil(d, result, p, c);
+}
+
+template <class Dist>
+BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_discrete_quantile(const Dist& d, typename Dist::value_type result, typename Dist::value_type p, bool c, const policies::discrete_quantile<policies::integer_round_down>&)
+{
+   return round_to_floor(d, result, p, c);
+}
+
+//
+// integer_round_outwards rounds lower quantiles (probability below 0.5) down
+// and upper ones up; integer_round_inwards the reverse.  Both are a choice of
+// one of the other two policies:
+//
+template <class T>
+BOOST_MATH_GPU_ENABLED inline bool is_lower_quantile(const T& p, bool c)
+{
+   return (c ? T(1 - p) : p) < 0.5f;
+}
+
+template <class Dist>
+BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_discrete_quantile(const Dist& d, typename Dist::value_type result, typename Dist::value_type p, bool c, const policies::discrete_quantile<policies::integer_round_outwards>&)
+{
+   return is_lower_quantile(p, c)
+      ? round_discrete_quantile(d, result, p, c, policies::discrete_quantile<policies::integer_round_down>())
+      : round_discrete_quantile(d, result, p, c, policies::discrete_quantile<policies::integer_round_up>());
+}
+
+template <class Dist>
+BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_discrete_quantile(const Dist& d, typename Dist::value_type result, typename Dist::value_type p, bool c, const policies::discrete_quantile<policies::integer_round_inwards>&)
+{
+   return is_lower_quantile(p, c)
+      ? round_discrete_quantile(d, result, p, c, policies::discrete_quantile<policies::integer_round_up>())
+      : round_discrete_quantile(d, result, p, c, policies::discrete_quantile<policies::integer_round_down>());
+}
+
+template <class Dist>
+BOOST_MATH_GPU_ENABLED inline typename Dist::value_type round_discrete_quantile(const Dist& d, typename Dist::value_type result, typename Dist::value_type p, bool c, const policies::discrete_quantile<policies::integer_round_nearest>&)
+{
+   return round_to_nearest_floor(d, typename Dist::value_type(result + 0.5f), p, c);
+}
+//
 // Now finally are the public API functions.
 // There is one overload for each policy,
 // each one is responsible for selecting the correct
@@ -503,92 +559,6 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type
       adder, 
       tools::eps_tolerance<typename Dist::value_type>(policies::digits<typename Dist::value_type, typename Dist::policy_type>()),
       max_iter);
-}
-
-template <class Dist>
-BOOST_MATH_GPU_ENABLED inline typename Dist::value_type 
-   inverse_discrete_quantile(
-      const Dist& dist,
-      const typename Dist::value_type& p,
-      bool c,
-      const typename Dist::value_type& guess,
-      const typename Dist::value_type& multiplier,
-      const typename Dist::value_type& adder,
-      const policies::discrete_quantile<policies::integer_round_outwards>&,
-      BOOST_MATH_NAMESPACE::uintmax_t& max_iter)
-{
-   typedef typename Dist::value_type value_type;
-   BOOST_MATH_STD_USING
-   typename Dist::value_type pp = c ? 1 - p : p;
-   if(discrete_quantile_residual(dist, typename Dist::value_type(0), p, c) >= 0)
-      return 0;  // cdf(0) >= p already: see round_to_ceil / round_to_floor.
-   //
-   // What happens next depends on whether we're looking for an 
-   // upper or lower quantile:
-   //
-   if(pp < 0.5f)
-      return round_to_floor(dist, do_inverse_discrete_quantile(
-         dist, 
-         p, 
-         c,
-         (guess < 1 ? value_type(1) : (value_type)floor(guess)), 
-         multiplier, 
-         adder, 
-         tools::equal_floor(),
-         max_iter), p, c);
-   // else:
-   return round_to_ceil(dist, do_inverse_discrete_quantile(
-      dist, 
-      p, 
-      c,
-      (value_type)ceil(guess), 
-      multiplier, 
-      adder, 
-      tools::equal_ceil(),
-      max_iter), p, c);
-}
-
-template <class Dist>
-BOOST_MATH_GPU_ENABLED inline typename Dist::value_type 
-   inverse_discrete_quantile(
-      const Dist& dist,
-      const typename Dist::value_type& p,
-      bool c,
-      const typename Dist::value_type& guess,
-      const typename Dist::value_type& multiplier,
-      const typename Dist::value_type& adder,
-      const policies::discrete_quantile<policies::integer_round_inwards>&,
-      BOOST_MATH_NAMESPACE::uintmax_t& max_iter)
-{
-   typedef typename Dist::value_type value_type;
-   BOOST_MATH_STD_USING
-   typename Dist::value_type pp = c ? 1 - p : p;
-   if(discrete_quantile_residual(dist, typename Dist::value_type(0), p, c) >= 0)
-      return 0;  // cdf(0) >= p already: see round_to_ceil / round_to_floor.
-   //
-   // What happens next depends on whether we're looking for an 
-   // upper or lower quantile:
-   //
-   if(pp < 0.5f)
-      return round_to_ceil(dist, do_inverse_discrete_quantile(
-         dist, 
-         p, 
-         c,
-         ceil(guess), 
-         multiplier, 
-         adder, 
-         tools::equal_ceil(),
-         max_iter), p, c);
-   // else:
-   return round_to_floor(dist, do_inverse_discrete_quantile(
-      dist, 
-      p, 
-      c,
-      (guess < 1 ? value_type(1) : floor(guess)), 
-      multiplier, 
-      adder, 
-      tools::equal_floor(),
-      max_iter), p, c);
 }
 
 template <class Dist>
@@ -674,6 +644,42 @@ BOOST_MATH_GPU_ENABLED inline typename Dist::value_type
       adder, 
       tools::equal_nearest_integer(),
       max_iter) + 0.5f, p, c);
+}
+
+template <class Dist>
+BOOST_MATH_GPU_ENABLED inline typename Dist::value_type 
+   inverse_discrete_quantile(
+      const Dist& dist,
+      const typename Dist::value_type& p,
+      bool c,
+      const typename Dist::value_type& guess,
+      const typename Dist::value_type& multiplier,
+      const typename Dist::value_type& adder,
+      const policies::discrete_quantile<policies::integer_round_outwards>&,
+      BOOST_MATH_NAMESPACE::uintmax_t& max_iter)
+{
+   // The up and down overloads also return 0 when cdf(0) >= p already.
+   return is_lower_quantile(p, c)
+      ? inverse_discrete_quantile(dist, p, c, guess, multiplier, adder, policies::discrete_quantile<policies::integer_round_down>(), max_iter)
+      : inverse_discrete_quantile(dist, p, c, guess, multiplier, adder, policies::discrete_quantile<policies::integer_round_up>(), max_iter);
+}
+
+template <class Dist>
+BOOST_MATH_GPU_ENABLED inline typename Dist::value_type 
+   inverse_discrete_quantile(
+      const Dist& dist,
+      const typename Dist::value_type& p,
+      bool c,
+      const typename Dist::value_type& guess,
+      const typename Dist::value_type& multiplier,
+      const typename Dist::value_type& adder,
+      const policies::discrete_quantile<policies::integer_round_inwards>&,
+      BOOST_MATH_NAMESPACE::uintmax_t& max_iter)
+{
+   // The up and down overloads also return 0 when cdf(0) >= p already.
+   return is_lower_quantile(p, c)
+      ? inverse_discrete_quantile(dist, p, c, guess, multiplier, adder, policies::discrete_quantile<policies::integer_round_up>(), max_iter)
+      : inverse_discrete_quantile(dist, p, c, guess, multiplier, adder, policies::discrete_quantile<policies::integer_round_down>(), max_iter);
 }
 
 } BOOST_MATH_NAMESPACE_END

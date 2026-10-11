@@ -17,6 +17,7 @@
 #include <boost/math/distributions/negative_binomial.hpp>
 #include <boost/math/distributions/binomial.hpp>
 #include <boost/math/distributions/poisson.hpp>
+#include <boost/math/distributions/geometric.hpp>
 #else
 import boost.math;
 #endif
@@ -119,6 +120,9 @@ void test_policy(rounding r)
          check_round_trips(boost::math::binomial_distribution<double, Policy>(trials, p), r);
    for (double mean : { 0.1, 4.5, 30.0 })
       check_round_trips(boost::math::poisson_distribution<double, Policy>(mean), r);
+   // The geometric finds its quantile in closed form, but rounds the same way:
+   for (double p : { 0.05, 0.5, 0.9 })
+      check_round_trips(boost::math::geometric_distribution<double, Policy>(p), r);
 }
 
 int main()
