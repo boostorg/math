@@ -1393,7 +1393,7 @@ test-suite quadrature :
 ;
 
 test-suite autodiff :
-   [ run test_numerical_differentiation.cpp /boost/test//boost_unit_test_framework  : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_auto_declarations cxx11_constexpr ] ]
+   [ run test_numerical_differentiation.cpp  : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_auto_declarations cxx11_constexpr ] ]
    [ run  compile_test/test_diff_numerical_differentiation_incl.cpp compile_test_main  : : : [ requires cxx11_auto_declarations cxx11_constexpr ] ]
    [ compile  compile_test/test_diff_numerical_differentiation_concept.cpp  : [ requires cxx11_auto_declarations cxx11_constexpr ] ]
    [ run test_autodiff_1.cpp /boost/test//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release $(float128_type) [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx11_inline_namespaces ] ]
