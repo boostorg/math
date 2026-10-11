@@ -131,7 +131,7 @@ struct RandomSample
 
     template<typename U, typename V>
     RandomSample(U start, V finish)
-        : rng_(std::random_device{}())
+        : rng_(42)  // fixed, as in test_autodiff.hpp, so that a failure reproduces
         , dist_(static_cast<distribution_param_t>(start), get_endpoint_t{}(finish))
     {}
 

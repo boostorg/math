@@ -1138,6 +1138,14 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
    else if(a > minimum_argument_for_bernoulli_recursion<T>())
    {
       T scaled_gamma = scaled_tgamma_no_lanczos(a, pol);
+      // (z / a)^a e^(a - z) = exp(a log1pmx(d)) with d = (z - a) / a, where z - a is exact.  pow(z / a, a)
+      // instead turns the rounding of z / a into a relative error of eps a:
+      T d = (z - a) / a;
+      if (fabs(d) < 0.5)
+      {
+         T l = a * BOOST_MATH_NAMESPACE::log1pmx(d, pol);
+         return l > tools::log_min_value<T>() ? T(exp(l) / scaled_gamma) : T(exp(l - log(scaled_gamma)));
+      }
       T power_term = pow(z / a, a / 2);
       T a_minus_z = a - z;
       if ((0 == power_term) || (fabs(a_minus_z) > tools::log_max_value<T>()))

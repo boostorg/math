@@ -51,15 +51,35 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail{
      // term      == value of current term to be added to sum.
      // part_term == value of current term excluding the Bernoulli number part
      //
+     //
+     // (n-1)! / x^(n+1) can be a normal number while x^(n+1) overflows or x^-(n+1) underflows, so
+     // compute it as mantissa * 2^exponent from the mantissas and exponents of (n-1)! and x.
+     // Taking logs instead loses log(result) eps of relative accuracy.
+     //
+     const bool use_factorial = (n <= (int)BOOST_MATH_NAMESPACE::max_factorial<T>::value)
+        || (BOOST_MATH_NAMESPACE::lgamma(T(n), pol) < tools::log_max_value<T>());
+     int x_exponent = 0;
+     T x_mantissa = frexp(x, &x_exponent);
+     int factorial_exponent = 0;
+     T factorial_mantissa = 0;
+     long long exponent = 0;
+     T mantissa = 0;
+     // Exponents are summed as long long, then clamped so that ldexp gets an int:
+     auto clamped = [](long long e) { return static_cast<int>((std::max)((std::min)(e, static_cast<long long>((std::numeric_limits<int>::max)() / 2)), static_cast<long long>((std::numeric_limits<int>::min)() / 2))); };
+     if(use_factorial)
+     {
+        factorial_mantissa = frexp(BOOST_MATH_NAMESPACE::factorial<T>(n - 1, pol), &factorial_exponent);
+        mantissa = factorial_mantissa * static_cast<T>(pow(x_mantissa, T(-n - 1)));
+        exponent = factorial_exponent - static_cast<long long>(n + 1) * x_exponent;
+     }
      if(n + x == x)
      {
-        // x is crazy large, just concentrate on the first part of the expression and use logs:
+        // x is crazy large, just concentrate on the first part of the expression:
         if(n == 1) return 1 / x;
-        T nlx = n * log(x);
-        if((nlx < tools::log_max_value<T>()) && (n < (int)max_factorial<T>::value))
-           return ((n & 1) ? 1 : -1) * BOOST_MATH_NAMESPACE::factorial<T>(n - 1, pol) * static_cast<T>(pow(x, T(-n)));
+        if(use_factorial)
+           return ((n & 1) ? 1 : -1) * ldexp(factorial_mantissa * static_cast<T>(pow(x_mantissa, T(-n))), clamped(factorial_exponent - static_cast<long long>(n) * x_exponent));
         else
-         return ((n & 1) ? 1 : -1) * exp(BOOST_MATH_NAMESPACE::lgamma(T(n), pol) - n * log(x));
+           return ((n & 1) ? 1 : -1) * exp(BOOST_MATH_NAMESPACE::lgamma(T(n), pol) - n * log(x));
      }
      T term, sum, part_term;
      T x_squared = x * x;
@@ -79,16 +99,11 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail{
      //
      // part_term n * (n + 1) / (2x)
      //
-     // If either the factorial would overflow,
-     // or the power term underflows, this just gets set to 0 and then we
-     // know that we have to use logs for the initial terms:
+     // If the factorial would overflow, we have to use logs for the initial terms;
+     // otherwise use the scaled (n-1)! / x^(n+1) from above:
      //
-     part_term = ((n > (int)BOOST_MATH_NAMESPACE::max_factorial<T>::value) && (T(n) * n > tools::log_max_value<T>()))
-        ? T(0) : static_cast<T>(BOOST_MATH_NAMESPACE::factorial<T>(n - 1, pol) * pow(x, T(-n - 1)));
-     if(part_term == 0)
+     if(!use_factorial)
      {
-        // Either n is very large, or the power term underflows,
-        // set the initial values of part_term, term and sum via logs:
         part_term = static_cast<T>(T(BOOST_MATH_NAMESPACE::lgamma(n, pol)) - (n + 1) * log(x));
         sum = exp(part_term + log(n + 2 * x) - BOOST_MATH_NAMESPACE::constants::ln_two<T>());
         part_term += log(T(n) * (n + 1)) - BOOST_MATH_NAMESPACE::constants::ln_two<T>() - log(x);
@@ -96,9 +111,10 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail{
      }
      else
      {
-        sum = part_term * (n + 2 * x) / 2;
-        part_term *= (T(n) * (n + 1)) / 2;
-        part_term /= x;
+        // (n + 2x) / 2 * (n-1)! / x^(n+1), with n + 2x scaled by 2^-x_exponent:
+        sum = ldexp(mantissa * ldexp(n + 2 * x, -x_exponent) / 2, clamped(exponent + x_exponent));
+        // n (n + 1) / 2x * (n-1)! / x^(n+1):
+        part_term = ldexp(mantissa * (T(n) * (n + 1) / 2) / x_mantissa, clamped(exponent - x_exponent));
      }
      //
      // If the leading term is 0, so is the result:

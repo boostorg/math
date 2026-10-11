@@ -140,11 +140,17 @@ public:
         Real a0 = d2ydx2_[i];
         Real a1 = d2ydx2_[i+1];
         Real t= (x-x0)/dx;
-        Real t2 = t*t;
 
-        Real dydx = 30*t2*(1 - 2*t + t*t)*(y1-y0)/dx;
-        dydx += (1-18*t*t + 32*t*t*t - 15*t*t*t*t)*v0 - t*t*(12 - 28*t + 15*t*t)*v1;
-        dydx += (t*dx/2)*((2 - 9*t + 12*t*t - 5*t*t*t)*a0 + t*(3 - 8*t + 5*t*t)*a1);
+        // The basis polynomials factored at their zeros, with u = 1 - t (exact for t >= 1/2), as in septic_hermite:
+        Real u = 1 - t;
+        Real z0 = 30*t*t*u*u;
+        Real z1 = u*u*(1 + t*(2 - 15*t));
+        Real z2 = t*t*(1 + u*(2 - 15*u));
+        // z0 m + z1 v0 + z2 v1 (m the secant slope) cancels; with z0 + z1 + z2 = 1 it is anchored at the
+        // nearer endpoint's derivative instead, as in septic_hermite:
+        Real m = (y1-y0)/dx;
+        Real dydx = t < Real(0.5) ? Real(v0 + (z0*(m - v0) + z2*(v1 - v0))) : Real(v1 + (z0*(m - v1) + z1*(v0 - v1)));
+        dydx += (t*dx/2)*(u*u*(2 - 5*t)*a0 + t*u*(3 - 5*t)*a1);
         return dydx;
     }
 
@@ -334,9 +340,16 @@ public:
         Real d2y0 = d2y_[i];
         Real d2y1 = d2y_[i+1];
 
-        Real dydx = 30*t*t*(1 - 2*t + t*t)*(y1-y0);
-        dydx += (1-18*t*t + 32*t*t*t - 15*t*t*t*t)*dy0 - t*t*(12 - 28*t + 15*t*t)*dy1;
-        dydx += t*((2 - 9*t + 12*t*t - 5*t*t*t)*d2y0 + t*(3 - 8*t + 5*t*t)*d2y1);
+        // The basis polynomials factored at their zeros, with u = 1 - t (exact for t >= 1/2), as in septic_hermite:
+        Real u = 1 - t;
+        Real z0 = 30*t*t*u*u;
+        Real z1 = u*u*(1 + t*(2 - 15*t));
+        Real z2 = t*t*(1 + u*(2 - 15*u));
+        // z0 m + z1 v0 + z2 v1 (m the secant slope) cancels; with z0 + z1 + z2 = 1 it is anchored at the
+        // nearer endpoint's derivative instead, as in septic_hermite:
+        Real m = y1 - y0;
+        Real dydx = t < Real(0.5) ? Real(dy0 + (z0*(m - dy0) + z2*(dy1 - dy0))) : Real(dy1 + (z0*(m - dy1) + z1*(dy0 - dy1)));
+        dydx += t*(u*u*(2 - 5*t)*d2y0 + t*u*(3 - 5*t)*d2y1);
         dydx *= inv_dx_;
         return dydx;
     }
@@ -517,9 +530,16 @@ public:
         Real a0 = data_[i][2];
         Real a1 = data_[i+1][2];
 
-        Real dy = 30*t*t*(1 - 2*t + t*t)*(y1-y0);
-        dy += (1-18*t*t + 32*t*t*t - 15*t*t*t*t)*v0 - t*t*(12 - 28*t + 15*t*t)*v1;
-        dy += t*((2 - 9*t + 12*t*t - 5*t*t*t)*a0 + t*(3 - 8*t + 5*t*t)*a1);
+        // The basis polynomials factored at their zeros, with u = 1 - t (exact for t >= 1/2), as in septic_hermite:
+        Real u = 1 - t;
+        Real z0 = 30*t*t*u*u;
+        Real z1 = u*u*(1 + t*(2 - 15*t));
+        Real z2 = t*t*(1 + u*(2 - 15*u));
+        // z0 m + z1 v0 + z2 v1 (m the secant slope) cancels; with z0 + z1 + z2 = 1 it is anchored at the
+        // nearer endpoint's derivative instead, as in septic_hermite:
+        Real m = y1 - y0;
+        Real dy = t < Real(0.5) ? Real(v0 + (z0*(m - v0) + z2*(v1 - v0))) : Real(v1 + (z0*(m - v1) + z1*(v0 - v1)));
+        dy += t*(u*u*(2 - 5*t)*a0 + t*u*(3 - 5*t)*a1);
         return dy*inv_dx_;
     }
 

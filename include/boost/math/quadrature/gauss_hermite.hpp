@@ -182,6 +182,27 @@ class gauss_hermite_detail
          w[positive_zeros + offset - t] = weight(z, r);
          upper = lower;
       }
+      // Every node runs through the same rounded coefficients a and b, so the weights share a relative error
+      // of a few eps that grows with N (against 50 digits: -5 eps at N = 200, -10 at 500); exact coefficients
+      // remove it only with the recurrence in twice the precision. The exact weights sum to sqrt(pi), the
+      // integral of exp(-x^2), so scale them to that: weights with relative errors e_i then have e_i - e, e
+      // their weighted mean, plus two roundings. That removes the shared part, which is what integrals of
+      // smooth functions see, and moves no weight by more than |e| <= max |e_i|; measured, both the largest and
+      // the mean |e_i| fall for N = 200, 500 and 706. Sum from the smallest weight, with Neumaier's compensation:
+      Real sum = 0;
+      Real compensation = 0;
+      for (std::size_t i = w.size(); i-- > 0;)
+      {
+         Real term = (offset && (i == 0)) ? w[i] : Real(2 * w[i]);
+         Real t = sum + term;
+         compensation += abs(sum) >= abs(term) ? Real((sum - t) + term) : Real((term - t) + sum);
+         sum = t;
+      }
+      const Real scale = BOOST_MATH_NAMESPACE::constants::root_pi<Real>() / (sum + compensation);
+      for (Real& weight_i : w)
+      {
+         weight_i *= scale;
+      }
       return std::make_pair(x, w);
    }
 
