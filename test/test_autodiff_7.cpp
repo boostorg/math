@@ -5,9 +5,9 @@
 
 #include "test_autodiff.hpp"
 
-BOOST_AUTO_TEST_SUITE(test_autodiff_7)
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(expm1_hpp, T, all_float_types) {
+template <class T>
+void expm1_hpp() {
   using boost::math::differentiation::detail::log;
   using boost::multiprecision::log;
   using std::log;
@@ -17,10 +17,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(expm1_hpp, T, all_float_types) {
   for (auto i : boost::irange(test_constants::n_samples)) {
     std::ignore = i;
     auto x = x_sampler.next();
-    BOOST_CHECK_CLOSE(boost::math::expm1(make_fvar<T, m>(x)).derivative(0u),
-                      boost::math::expm1(x),
-                      50 * test_constants::pct_epsilon());
+    CHECK_RELATIVE_ERROR(boost::math::expm1(make_fvar<T, m>(x)).derivative(0u),
+                      boost::math::expm1(x), (50 * test_constants::pct_epsilon()) / 100);
   }
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+int main()
+{
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { expm1_hpp<typename decltype(t)::type>(); });
+   return boost::math::test::report_errors();
+}

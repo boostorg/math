@@ -6,9 +6,9 @@
 #include "test_autodiff.hpp"
 #include <boost/math/special_functions.hpp>
 
-BOOST_AUTO_TEST_SUITE(test_autodiff_5)
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(binomial_hpp, T, all_float_types) {
+template <class T>
+void binomial_hpp() {
   using boost::multiprecision::min;
   using std::fabs;
   using std::min;
@@ -30,24 +30,26 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(binomial_hpp, T, all_float_types) {
             ? make_fvar<T, m>(boost::math::binomial_coefficient<T>(n, r))
             : boost::math::binomial_coefficient<T>(n, r);
     auto anchor_v = boost::math::binomial_coefficient<T>(n, r);
-    BOOST_CHECK_EQUAL(autodiff_v.derivative(0u), anchor_v);
+    CHECK_EQUAL(autodiff_v.derivative(0u), anchor_v);
   }
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(cbrt_hpp, T, all_float_types) {
+template <class T>
+void cbrt_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{-2000, 2000};
   for (auto i : boost::irange(test_constants::n_samples)) {
     std::ignore = i;
     auto x = x_sampler.next();
-    BOOST_CHECK_CLOSE(boost::math::cbrt(make_fvar<T, m>(x)).derivative(0u),
-                      boost::math::cbrt(x), 50 * test_constants::pct_epsilon());
+    CHECK_RELATIVE_ERROR(boost::math::cbrt(make_fvar<T, m>(x)).derivative(0u),
+                      boost::math::cbrt(x), (50 * test_constants::pct_epsilon()) / 100);
   }
 }
 
 #if !defined(__APPLE__)
-BOOST_AUTO_TEST_CASE_TEMPLATE(chebyshev_hpp, T, all_float_types) {
+template <class T>
+void chebyshev_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   {
@@ -57,32 +59,31 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(chebyshev_hpp, T, all_float_types) {
       std::ignore = i;
       auto n = n_sampler.next();
       auto x = x_sampler.next();
-      BOOST_CHECK_CLOSE(
+      CHECK_RELATIVE_ERROR(
           boost::math::chebyshev_t(n, make_fvar<T, m>(x)).derivative(0u),
-          boost::math::chebyshev_t(n, x), 40 * test_constants::pct_epsilon());
+          boost::math::chebyshev_t(n, x), (40 * test_constants::pct_epsilon()) / 100);
       // Lower accuracy with clang/apple:
-      BOOST_CHECK_CLOSE(
+      CHECK_RELATIVE_ERROR(
           boost::math::chebyshev_u(n, make_fvar<T, m>(x)).derivative(0u),
-          boost::math::chebyshev_u(n, x), 80 * test_constants::pct_epsilon());
+          boost::math::chebyshev_u(n, x), (80 * test_constants::pct_epsilon()) / 100);
 
-      BOOST_CHECK_CLOSE(
+      CHECK_RELATIVE_ERROR(
           boost::math::chebyshev_t_prime(n, make_fvar<T, m>(x)).derivative(0u),
-          boost::math::chebyshev_t_prime(n, x),
-          40 * test_constants::pct_epsilon());
+          boost::math::chebyshev_t_prime(n, x), (40 * test_constants::pct_epsilon()) / 100);
 
       /*/usr/include/boost/math/special_functions/chebyshev.hpp:164:40: error:
        cannot convert
        boost::math::differentiation::autodiff_v1::detail::fvar<double, 3> to
        double in return
-       BOOST_CHECK_EQUAL(boost::math::chebyshev_clenshaw_recurrence(c.data(),c.size(),make_fvar<T,m>(0.20))
+       CHECK_EQUAL(boost::math::chebyshev_clenshaw_recurrence(c.data(),c.size(),make_fvar<T,m>(0.20))
        ,
        boost::math::chebyshev_clenshaw_recurrence(c.data(),c.size(),static_cast<T>(0.20)));*/
       /*try {
         std::array<T, 4> c0{{14.2, -13.7, 82.3, 96}};
-        BOOST_CHECK_CLOSE(boost::math::chebyshev_clenshaw_recurrence(c0.data(),
+        CHECK_RELATIVE_ERROR(boost::math::chebyshev_clenshaw_recurrence(c0.data(),
       c0.size(), make_fvar<T,m>(x)),
                                      boost::math::chebyshev_clenshaw_recurrence(c0.data(),
-      c0.size(), x), 10*test_constants::pct_epsilon()); } catch (...) {
+      c0.size(), x), (10*test_constants::pct_epsilon()) / 100); } catch (...) {
         std::rethrow_exception(std::exception_ptr(std::current_exception()));
       }*/
     }
@@ -90,19 +91,21 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(chebyshev_hpp, T, all_float_types) {
 }
 #endif
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(cospi_hpp, T, all_float_types) {
+template <class T>
+void cospi_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{-2000, 2000};
   for (auto i : boost::irange(test_constants::n_samples)) {
     std::ignore = i;
     auto x = x_sampler.next();
-    BOOST_CHECK_CLOSE(boost::math::cos_pi(make_fvar<T, m>(x)).derivative(0u),
-                      boost::math::cos_pi(x), test_constants::pct_epsilon());
+    CHECK_RELATIVE_ERROR(boost::math::cos_pi(make_fvar<T, m>(x)).derivative(0u),
+                      boost::math::cos_pi(x), (test_constants::pct_epsilon()) / 100);
   }
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(digamma_hpp, T, all_float_types) {
+template <class T>
+void digamma_hpp() {
 
   using boost::math::nextafter;
   using std::nextafter;
@@ -115,9 +118,18 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(digamma_hpp, T, all_float_types) {
     auto x = nextafter(x_sampler.next(), ((std::numeric_limits<T>::max))());
     auto autodiff_v = boost::math::digamma(make_fvar<T, m>(x));
     auto anchor_v = boost::math::digamma(x);
-    BOOST_CHECK_CLOSE(autodiff_v.derivative(0u), anchor_v,
-                      1e4 * test_constants::pct_epsilon());
+    CHECK_RELATIVE_ERROR(autodiff_v.derivative(0u), anchor_v, (1e4 * test_constants::pct_epsilon()) / 100);
   }
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+int main()
+{
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { binomial_hpp<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { cbrt_hpp<typename decltype(t)::type>(); });
+#if !defined(__APPLE__)
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { chebyshev_hpp<typename decltype(t)::type>(); });
+#endif
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { cospi_hpp<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { digamma_hpp<typename decltype(t)::type>(); });
+   return boost::math::test::report_errors();
+}
