@@ -223,7 +223,9 @@ void test_values(const T& val, const char* name)
    //
    // We need to test float_distance over multiple orders of magnitude,
    // the only way to get an accurate true result is to count the representations
-   // between the two end points, but we can only really do this for type float:
+   // between the two end points, but we can only really do this for type float.
+   // Counting costs 2^23 steps per binade, so the ratios below are the smallest that still cross a
+   // power of two (and, in the last case, zero and the denormal/normal boundary).
    //
    if (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::digits < 30) && (std::numeric_limits<T>::radix == 2))
    {
@@ -231,7 +233,7 @@ void test_values(const T& val, const char* name)
       std::uintmax_t result;
 
       left = static_cast<T>(0.1);
-      right = left * static_cast<T>(4.2);
+      right = left * static_cast<T>(1.4);
       dist = boost::math::float_distance(left, right);
       // We have to use a wider integer type for the accurate count, since there
       // aren't enough bits in T to get a true result if the values differ
@@ -242,7 +244,7 @@ void test_values(const T& val, const char* name)
       BOOST_CHECK_EQUAL(fresult, dist);
 
       left = static_cast<T>(-0.1);
-      right = left * static_cast<T>(4.2);
+      right = left * static_cast<T>(1.4);
       dist = boost::math::float_distance(right, left);
       result = 0;
       for (; left != right; ++result, left = boost::math::float_prior(left));
@@ -250,7 +252,7 @@ void test_values(const T& val, const char* name)
       BOOST_CHECK_EQUAL(fresult, dist);
 
       left = static_cast<T>(-1.1) * (std::numeric_limits<T>::min)();
-      right = static_cast<T>(-4.1) * left;
+      right = static_cast<T>(-1.5) * left;
       dist = boost::math::float_distance(left, right);
       result = 0;
       for (; left != right; ++result, left = boost::math::float_next(left));

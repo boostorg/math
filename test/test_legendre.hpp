@@ -284,7 +284,9 @@ void test_legendre_p_prime()
             BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p_prime<T>(n, (T) -1), -expected, tolerance);
             BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p_prime<T>(-n - 1,  (T) -1), -expected, tolerance);
         }
-        ++n;
+        // Each evaluation is O(n), so test every n at first and then a sparse set up to 5000
+        // (odd stride, so both parities are still covered):
+        n += (n < 200) ? 1 : 101;
     }
     //
     // Coverage:
