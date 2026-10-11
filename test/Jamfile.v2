@@ -1084,6 +1084,8 @@ test-suite misc :
    [ run test_condition_number.cpp /boost/test//boost_unit_test_framework : : : <define>TEST=2 <toolset>msvc:<cxxflags>/bigobj $(float128_type) : condition_number_test_2 ]
    [ run test_condition_number.cpp /boost/test//boost_unit_test_framework : : : <define>TEST=3 <toolset>msvc:<cxxflags>/bigobj $(float128_type) : condition_number_test_3 ]
    [ run test_real_concept.cpp /boost/test//boost_unit_test_framework  ]
+   [ run test_real_concept_neg_bin.cpp ]
+   [ run test_math_fwd.cpp ]
    [ run test_remez.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_roots.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_root_iterations.cpp pch /boost/test//boost_unit_test_framework : : : [ requires cxx11_hdr_tuple ]  ]
