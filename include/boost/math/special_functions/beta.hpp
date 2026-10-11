@@ -462,11 +462,11 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
       // rounding error found with fma, is lh + ll, and the rounding of lh + the rest is added back below.
       //
       T ab = a - b;
-      T ab_err = ibeta_sum_error(a, -b, ab);
+      T ab_err = ibeta_sum_error(a, T(-b), ab);
       T ph = fma(l1, ab, T(0));  // fma(x, y, 0) so that the product is not contracted into a later sum
       T pl = fma(l1, ab, -ph) + l1 * ab_err;
       T nh = ph - b;
-      T nl = pl + ibeta_sum_error(ph, -b, nh);
+      T nl = pl + ibeta_sum_error(ph, T(-b), nh);
       T wh = nh / bgh;
       T wl = (fma(-wh, bgh, nh) + (nl - wh * bgh_err)) / bgh;
       T lh = fma(gh, wh, T(0));
@@ -1284,8 +1284,9 @@ BOOST_MATH_GPU_ENABLED T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T
    //
    // The sum is often started from s0 = -1, when the first term is of order one and each later term
    // is rounded onto a coarse grid, so keep their rounding errors in comp (Neumaier summation):
-   T sum = s0 + prefix * j;  // Value at N = 0
-   T comp = (fabs(s0) >= fabs(prefix * j)) ? (s0 - sum) + prefix * j : (prefix * j - sum) + s0;
+   T pj = prefix * j;
+   T sum = s0 + pj;  // Value at N = 0
+   T comp = (fabs(s0) >= fabs(pj)) ? T((s0 - sum) + pj) : T((pj - sum) + s0);
    // some variables we'll need:
    unsigned tnp1 = 1; // 2*N+1
    T lx2 = lx / 2;
@@ -1333,7 +1334,7 @@ BOOST_MATH_GPU_ENABLED T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T
       //
       T r = prefix * p[n] * j;
       T next = sum + r;
-      comp += (fabs(sum) >= fabs(r)) ? (sum - next) + r : (r - next) + sum;
+      comp += (fabs(sum) >= fabs(r)) ? T((sum - next) + r) : T((r - next) + sum);
       sum = next;
       // r is always small:
       BOOST_MATH_ASSERT(tools::max_value<T>() * tools::epsilon<T>() > fabs(r));

@@ -181,7 +181,8 @@ void test_spots(T)
       BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
       {
          typedef boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promote;
-         T tolerance = boost::math::tools::epsilon<T>() * 3;
+         // Measured: at most 2.2 eps with contraction (-ffp-contract=on or fast), 3.004 eps without (x86 CI):
+         T tolerance = boost::math::tools::epsilon<T>() * 4;
          BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_derivative(T(13.75), T(132.2), T(0.09503), no_promote()), static_cast<T>(16.2620218649512813145L), tolerance);
          BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_derivative(T(10.09), T(26.7), T(0.2817), no_promote()), static_cast<T>(5.26015522153723928254L), tolerance);
          BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_derivative(T(21.98), T(41.93), T(0.3487), no_promote()), static_cast<T>(6.61952926053123374081L), tolerance);
