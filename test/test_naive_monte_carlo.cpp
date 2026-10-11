@@ -4,17 +4,15 @@
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
-#define BOOST_TEST_MODULE naive_monte_carlo_test
 #define BOOST_NAIVE_MONTE_CARLO_DEBUG_FAILURES
 #include <cmath>
 #include <ostream>
 #include <boost/math/tools/test_value.hpp>
 #include <boost/type_index.hpp>
-#include <boost/test/included/unit_test.hpp>
 
-#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/naive_monte_carlo.hpp>
+#include "math_unit_test.hpp"
 
 #if __has_include(<stdfloat>)
 #  include <stdfloat>
@@ -49,7 +47,7 @@ void test_pi_multithreaded()
         std::cout << "Error in estimation of pi too high, function calls: " << mc.calls() << "\n";
         std::cout << "Final error estimate : " << mc.current_error_estimate() << "\n";
         std::cout << "Error goal           : " << error_goal << "\n";
-        BOOST_CHECK_CLOSE_FRACTION(pi_estimated, pi<Real>(), 0.005);
+        CHECK_ABSOLUTE_ERROR(pi<Real>(), pi_estimated, Real(0.005*abs(pi<Real>())));
     }
 }
 
@@ -78,7 +76,7 @@ void test_pi()
         std::cout << "Error in estimation of pi too high, function calls: " << mc.calls() << "\n";
         std::cout << "Final error estimate : " << mc.current_error_estimate() << "\n";
         std::cout << "Error goal           : " << error_goal << "\n";
-        BOOST_CHECK_CLOSE_FRACTION(pi_estimated, pi<Real>(), 0.005);
+        CHECK_ABSOLUTE_ERROR(pi<Real>(), pi_estimated, Real(0.005*abs(pi<Real>())));
     }
 
 }
@@ -98,9 +96,9 @@ void test_constant()
 
     auto task = mc.integrate();
     Real one = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(one, 1, 0.001);
-    BOOST_CHECK_SMALL(mc.current_error_estimate(), std::numeric_limits<Real>::epsilon());
-    BOOST_CHECK(mc.calls() > 1000);
+    CHECK_ABSOLUTE_ERROR(1, one, Real(0.001));
+    CHECK_ABSOLUTE_ERROR(0, mc.current_error_estimate(), std::numeric_limits<Real>::epsilon());
+    CHECK_TRUE(mc.calls() > 1000);
 }
 
 
@@ -121,12 +119,12 @@ void test_cancel_and_restart()
     mc.cancel();
     Real y = task.get();
     // Super low tolerance; because it got canceled so fast:
-    BOOST_CHECK_CLOSE_FRACTION(y, exact, static_cast<Real>(1.0));
+    CHECK_ABSOLUTE_ERROR(exact, y, abs(exact));
 
     mc.update_target_error((Real) 0.01);
     task = mc.integrate();
     y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, exact, 0.1);
+    CHECK_ABSOLUTE_ERROR(exact, y, Real(0.1*abs(exact)));
 }
 
 template<class Real>
@@ -149,7 +147,7 @@ void test_finite_singular_boundary()
     auto task = mc.integrate();
 
     Real y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, Real(1), Real(0.1));
+    CHECK_ABSOLUTE_ERROR(Real(1), y, Real(0.1));
 }
 
 template<class Real>
@@ -166,8 +164,8 @@ void test_multithreaded_variance()
 
     auto task = mc.integrate();
     Real y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, 0.5, 0.01);
-    BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.05);
+    CHECK_ABSOLUTE_ERROR(Real(0.5), y, Real(0.005));
+    CHECK_ABSOLUTE_ERROR(exact_variance, mc.variance(), Real(0.05*abs(exact_variance)));
 }
 
 template<class Real>
@@ -184,8 +182,8 @@ void test_variance()
 
     auto task = mc.integrate();
     Real y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, static_cast<Real>(0.5), static_cast<Real>(0.01));
-    BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.05);
+    CHECK_ABSOLUTE_ERROR(static_cast<Real>(0.5), y, Real(0.005));
+    CHECK_ABSOLUTE_ERROR(exact_variance, mc.variance(), Real(0.05*abs(exact_variance)));
 }
 
 template<class Real, uint64_t dimension>
@@ -211,10 +209,10 @@ void test_product()
 
     auto task = mc.integrate();
     Real y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+    CHECK_ABSOLUTE_ERROR(1, y, Real(0.01));
     using std::pow;
     Real exact_variance = pow(4.0/3.0, dimension) - 1;
-    BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.1);
+    CHECK_ABSOLUTE_ERROR(exact_variance, mc.variance(), Real(0.1*abs(exact_variance)));
 }
 
 template<class Real, uint64_t dimension>
@@ -242,22 +240,22 @@ void test_alternative_rng_1()
 
     auto task = mc1.integrate();
     Real y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+    CHECK_ABSOLUTE_ERROR(1, y, Real(0.01));
     using std::pow;
     Real exact_variance = pow(4.0/3.0, dimension) - 1;
-    BOOST_CHECK_CLOSE_FRACTION(mc1.variance(), exact_variance, 0.05);
+    CHECK_ABSOLUTE_ERROR(exact_variance, mc1.variance(), Real(0.05*abs(exact_variance)));
 
     std::cout << "Testing std::knuth_b" << std::endl;
     naive_monte_carlo<Real, decltype(g), std::knuth_b> mc2(g, bounds, (Real) 0.001, false, 1, 1883);
     task = mc2.integrate();
     y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+    CHECK_ABSOLUTE_ERROR(1, y, Real(0.01));
 
     std::cout << "Testing std::ranlux48" << std::endl;
     naive_monte_carlo<Real, decltype(g), std::ranlux48> mc3(g, bounds, (Real) 0.001, false, 1, 1884);
     task = mc3.integrate();
     y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+    CHECK_ABSOLUTE_ERROR(1, y, Real(0.01));
 }
 
 template<class Real, uint64_t dimension>
@@ -284,19 +282,19 @@ void test_alternative_rng_2()
     naive_monte_carlo<Real, decltype(g), std::default_random_engine> mc4(g, bounds, (Real) 0.001, false, 1, 1884);
     auto task = mc4.integrate();
     Real y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+    CHECK_ABSOLUTE_ERROR(1, y, Real(0.01));
 
     std::cout << "Testing std::minstd_rand" << std::endl;
     naive_monte_carlo<Real, decltype(g), std::minstd_rand> mc5(g, bounds, (Real) 0.001, false, 1, 1887);
     task = mc5.integrate();
     y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+    CHECK_ABSOLUTE_ERROR(1, y, Real(0.01));
 
     std::cout << "Testing std::minstd_rand0" << std::endl;
     naive_monte_carlo<Real, decltype(g), std::minstd_rand0> mc6(g, bounds, (Real) 0.001, false, 1, 1889);
     task = mc6.integrate();
     y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+    CHECK_ABSOLUTE_ERROR(1, y, Real(0.01));
 
 }
 
@@ -317,7 +315,7 @@ void test_upper_bound_infinite()
     naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001, true, 1, 8765);
     auto task = mc.integrate();
     Real y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, boost::math::constants::half_pi<Real>(), 0.01);
+    CHECK_ABSOLUTE_ERROR(boost::math::constants::half_pi<Real>(), y, Real(0.01*abs(boost::math::constants::half_pi<Real>())));
 }
 
 template<class Real>
@@ -338,7 +336,7 @@ void test_lower_bound_infinite()
 
     auto task = mc.integrate();
     Real y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, boost::math::constants::half_pi<Real>(), 0.01);
+    CHECK_ABSOLUTE_ERROR(boost::math::constants::half_pi<Real>(), y, Real(0.01*abs(boost::math::constants::half_pi<Real>())));
 }
 
 template<class Real>
@@ -359,7 +357,7 @@ void test_lower_bound_infinite2()
     naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001, true, 1, 1208);
     auto task = mc.integrate();
     Real y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, boost::math::constants::half_pi<Real>()/boost::math::constants::root_two<Real>(), 0.01);
+    CHECK_ABSOLUTE_ERROR(boost::math::constants::half_pi<Real>()/boost::math::constants::root_two<Real>(), y, Real(0.01*abs(boost::math::constants::half_pi<Real>()/boost::math::constants::root_two<Real>())));
 }
 
 template<class Real>
@@ -380,7 +378,7 @@ void test_double_infinite()
 
     auto task = mc.integrate();
     Real y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, boost::math::constants::pi<Real>(), 0.01);
+    CHECK_ABSOLUTE_ERROR(boost::math::constants::pi<Real>(), y, Real(0.01*abs(boost::math::constants::pi<Real>())));
 }
 
 template<class Real, uint64_t dimension>
@@ -416,12 +414,12 @@ void test_radovic()
         std::cout << "Final error estimate: " << mc.current_error_estimate() << std::endl;
         std::cout << "Error goal          : " << error_goal << std::endl;
         std::cout << "Variance estimate   : " << mc.variance() << std::endl;
-        BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+        CHECK_ABSOLUTE_ERROR(1, y, Real(0.01));
     }
 }
 
 
-BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
+void naive_monte_carlo_test()
 {
    std::cout << "Default hardware concurrency = " << std::thread::hardware_concurrency() << std::endl;
 #if !defined(TEST) || TEST == 1
@@ -668,4 +666,10 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 
 #endif
 
+}
+
+int main()
+{
+    naive_monte_carlo_test();
+    return boost::math::test::report_errors();
 }
