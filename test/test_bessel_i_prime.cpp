@@ -99,7 +99,8 @@ void expected_results()
       "Win32.*",                     // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-      ".*", 3500, 1000);                 // test function
+      // Unpromoted double: I'(-4.999, 2.125) = 1.1e-4 is off by 3763 eps, but its cond in v is 1.5e6:
+      ".*", 4000, 1500);                 // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

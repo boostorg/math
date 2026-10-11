@@ -122,13 +122,16 @@ void expected_results()
    // Extended exponent range of long double
    // causes more extreme test cases to be executed:
    //
-   add_expected_result(
-      "GNU.*",                          // compiler
-      ".*",                          // stdlib
-      "Win32.*",                          // platform
-      "double",                // test type(s)
-      ".*",                          // test data group
-      ".*", 10, 10);         // test function
+   // Unpromoted double gets the largest type row: ibeta_inv(2.96e-4, 0.318, 0.815) = 1.9e-300 is off by
+   // 8600 eps, with cond 3400 in p and 700 in a.
+   if (boost::math::policies::promote_double<>())
+      add_expected_result(
+         "GNU.*",                          // compiler
+         ".*",                          // stdlib
+         "Win32.*",                          // platform
+         "double",                // test type(s)
+         ".*",                          // test data group
+         ".*", 10, 10);         // test function
    add_expected_result(
       "GNU.*",                          // compiler
       ".*",                          // stdlib
