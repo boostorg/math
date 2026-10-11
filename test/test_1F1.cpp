@@ -121,13 +121,18 @@ void expected_results()
    }
 
 #if (defined(__aarch64__) && !defined(__APPLE__)) || defined(__s390__)
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      "double",                      // test type(s)
-      "Bug.*",                       // test data group
-      ".*", 10, 2);                  // test function
+   //
+   // Unpromoted double gets the largest type rows below: the worst bug case,
+   // 1F1(17955.56, -9.7e-9, -82.41) at 1.2e5 eps, has cond 4.5e4 in both a and z.
+   //
+   if(boost::math::policies::promote_double<>())
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                      // test type(s)
+         "Bug.*",                       // test data group
+         ".*", 10, 2);                  // test function
 #endif
 
    add_expected_result(

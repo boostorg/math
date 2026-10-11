@@ -112,13 +112,17 @@ void expected_results()
       // of the function means that 0.5ulp error in the input has a 
       // non-zero output error.  
       // Typical case is cyl_neumann_prime(8.5, boost::math::constants::pi<T>() * 4);
-      add_expected_result(
-         ".*",                          // compiler
-         ".*",                          // stdlib
-         "linux",                       // platform
-         "double",                      // test type(s)
-         ".*",                          // test data group
-         ".*", 30, 20);                  // test function
+      //
+      // Unpromoted double gets the largest type rows below: the worst cases are ill-conditioned,
+      // e.g. Y'(-18, 31.618) at 620 eps has cond 2e4, Y'(-503.01, 8071.5) at 3e4 eps has cond 3e7.
+      if(boost::math::policies::promote_double<>())
+         add_expected_result(
+            ".*",                          // compiler
+            ".*",                          // stdlib
+            "linux",                       // platform
+            "double",                      // test type(s)
+            ".*",                          // test data group
+            ".*", 30, 20);                  // test function
       add_expected_result(
             ".*",                          // compiler
             ".*",                          // stdlib
