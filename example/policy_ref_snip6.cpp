@@ -10,13 +10,19 @@
 //[policy_ref_snip6
 
 #include <boost/math/distributions/negative_binomial.hpp>
-using boost::math::negative_binomial;
+using boost::math::negative_binomial_distribution;
 
-// Use the default rounding policy integer_round_outwards.
+using namespace boost::math::policies;
+
+typedef negative_binomial_distribution<
+      double,
+      policy<discrete_quantile<integer_round_outwards> >
+   > dist_type;
+
 // Lower quantile rounded down:
-double x = quantile(negative_binomial(20, 0.3), 0.05); // rounded up 27 from 27.3898
+double x = quantile(dist_type(20, 0.3), 0.05); // 27 rounded down from 27.3898
 // Upper quantile rounded up:
-double y = quantile(complement(negative_binomial(20, 0.3), 0.05)); // rounded down to 69 from 68.1584
+double y = quantile(complement(dist_type(20, 0.3), 0.05)); // 69 rounded up from 68.1584
 
 //] //[/policy_ref_snip6]
 
@@ -25,13 +31,15 @@ using std::cout; using std::endl;
 
 int main()
 {
-   cout << "quantile(negative_binomial(20, 0.3), 0.05) = "<< x <<endl
+   cout << "using policy<discrete_quantile<integer_round_outwards> > " << endl
+     << "quantile(negative_binomial(20, 0.3), 0.05) = "<< x <<endl
      << "quantile(complement(negative_binomial(20, 0.3), 0.05)) = " << y << endl;
 }
 
 /*
 Output:
 
+  using policy<discrete_quantile<integer_round_outwards> >
   quantile(negative_binomial(20, 0.3), 0.05) = 27
   quantile(complement(negative_binomial(20, 0.3), 0.05)) = 69
 */

@@ -242,7 +242,7 @@ control whether internal promotion to a higher precision floating-point type tak
    precision internally: defaults to `boost::math::policies::promote_float<true>`]]
 [[`boost::math::policies::promote_double<B>`]
    [Indicates whether `double` arguments should be promoted to `long double`
-   precision internally: defaults to `boost::math::policies::promote_double<true>`]]
+   precision internally: defaults to `boost::math::policies::promote_double<false>`]]
 ]
 
 [h4 Examples]
@@ -325,10 +325,10 @@ discrete quantiles work, and how integer results are rounded:
    enum discrete_quantile_policy_type
    {
       real,
-      integer_round_outwards, // default
+      integer_round_outwards,
       integer_round_inwards,
       integer_round_down,
-      integer_round_up,
+      integer_round_up,       // default
       integer_round_nearest
    };
    
@@ -349,7 +349,7 @@ Results in `x = 27.3898` and `y = 68.1584`.
 
 [h5 integer_round_outwards]
 
-This is the default policy: an integer value is returned so that:
+An integer value is returned so that:
 
 * Lower quantiles (where the probability is less than 0.5) are rounded
 down.
@@ -399,12 +399,28 @@ and also ['at least 5% coverage in each tail].
 [h5 integer_round_down]
 
 Always rounds down to an integer value, no matter whether it's an upper 
-or a lower quantile.
+or a lower quantile: `quantile(dist, p)` is the largest integer /k/ with
+`cdf(dist, k) <= p`, and `quantile(complement(dist, q))` the largest /k/ with
+`cdf(complement(dist, k)) >= q`.
 
 [h5 integer_round_up]
 
-Always rounds up to an integer value, no matter whether it's an upper 
-or a lower quantile.
+This is the default policy.  It always rounds up to an integer value, no matter whether it's an upper
+or a lower quantile: `quantile(dist, p)` is the smallest integer /k/ with
+`cdf(dist, k) >= p`, and `quantile(complement(dist, q))` the smallest /k/ with
+`cdf(complement(dist, k)) <= q`.  This is the usual definition of the quantile
+of a discrete distribution, and the one R, SciPy, Julia and Mathematica use.
+For example the 5% and 95% quantiles of `binomial(50, 0.5)` are
+19 and 31: `cdf(binomial(50, 0.5), 18) < 0.05 <= cdf(binomial(50, 0.5), 19)`
+and `cdf(binomial(50, 0.5), 30) < 0.95 <= cdf(binomial(50, 0.5), 31)`.
+
+All of the discrete distributions (binomial, negative binomial, Poisson,
+geometric, hypergeometric and Bernoulli) settle the answer on the cdf at
+integers, so `quantile(dist, cdf(dist, k)) == k`
+and `quantile(complement(dist, cdf(complement(dist, k)))) == k`, except where
+the cdf rounds to the same value at consecutive integers (then the smallest of
+them is returned), and except that `p == 1` (or `q == 0`) gives the end of the
+support for distributions that have one, since only there is the cdf exactly 1.
 
 [h5 integer_round_nearest]
 
@@ -587,8 +603,10 @@ to `true`, but can be set to `false` to turn promotion of
 
 Determines whether `double` types get promoted to `long double`
 internally to ensure maximum precision in the result, defaults
-to `true`, but can be set to `false` to turn promotion of
-`double`'s off.
+to `false` (it defaulted to `true` in releases before the change
+described in the revision history), but can be set to `true` to turn promotion of
+`double`'s on.  Promotion is slow on most platforms: `long double` is x87 on x86
+and is software emulated on AArch64 Linux.
 
 [h5 BOOST_MATH_DISCRETE_QUANTILE_POLICY]
 
@@ -596,7 +614,7 @@ Determines how discrete quantiles return their results: either
 as an integer, or as a real value, can be set to one of the
 enumerated values: `real`, `integer_round_outwards`, `integer_round_inwards`,
 `integer_round_down`, `integer_round_up`, `integer_round_nearest`.  Defaults to
-`integer_round_outwards`.
+`integer_round_up`.
 
 [h5 BOOST_MATH_ASSERT_UNDEFINED_POLICY]
 
@@ -826,7 +844,7 @@ which in turn inherits from `std::integral_constant<bool, B>`.
    policy<...>::promote_double_type
    
 Specifies whether or not to promote `double` arguments to `long double` precision
-internally.  Will be an instance of `boost::math::policies::promote_float<B>`
+internally (the default is not to).  Will be an instance of `boost::math::policies::promote_float<B>`
 which in turn inherits from `std::integral_constant<bool, B>`.
 
    policy<...>::discrete_quantile_type

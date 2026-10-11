@@ -261,8 +261,8 @@ BOOST_MATH_NAMESPACE_BEGIN
       {
         return result;
       }
-      if (p <= (1 - dist.success_fraction()))
-      { // p <= pdf(dist, 0) == cdf(dist, 0)
+      if (p <= cdf(dist, RealType(0)))
+      { // The smallest k with cdf(k) >= p.
         return 0;
       }
       else
@@ -290,13 +290,14 @@ BOOST_MATH_NAMESPACE_BEGIN
         return result;
       }
 
-      if (q <= 1 - dist.success_fraction())
-      { // // q <= cdf(complement(dist, 0)) == pdf(dist, 0)
-        return 1;
+      // The smallest k with cdf(complement(dist, k)) <= q:
+      if (q >= cdf(complement(dist, RealType(0))))
+      {
+        return 0;
       }
       else
       {
-        return 0;
+        return 1;
       }
     } // quantile complemented.
 

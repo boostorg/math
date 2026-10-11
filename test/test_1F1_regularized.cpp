@@ -17,7 +17,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
+   if(!boost::math::policies::promote_double<>() || boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
       largest_type = "(long\\s+)?double|real_concept|cpp_bin_float_quad|dec_40|cpp_bin_float_double_extended";
    }
@@ -74,6 +74,8 @@ void expected_results()
       ".*", 1000, 300);              // test function
 
 #if (LDBL_MANT_DIG < DBL_MANT_DIG * 2) && (LDBL_MANT_DIG != DBL_MANT_DIG)
+   if(boost::math::policies::promote_double<>())
+   {
    //
    // long double has only a little extra precision and errors may creep
    // into the double results:
@@ -108,7 +110,7 @@ void expected_results()
       "double",                      // test type(s)
       "Bug.*",                     // test data group
       ".*", 300, 50);                 // test function
-
+   }
 #endif
 
    add_expected_result(
