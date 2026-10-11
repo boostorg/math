@@ -14,11 +14,12 @@
     #include <boost/math/tools/workaround.hpp>
     #include <cmath>
     
-    BOOST_AUTO_TEST_SUITE(test_ibeta_derivative_compiles)
+    namespace test_ibeta_derivative_compiles {
     
     using namespace rdiff;
     
-    BOOST_AUTO_TEST_CASE_TEMPLATE(test_ibeta_derivative, T, bin_float_types)
+    template <typename T>
+    void test_ibeta_derivative()
     {
         RandomSample<T> rng{ 0.01, 1
  };
@@ -27,7 +28,13 @@
         rvar<T, 1> x_ad = x;
         auto y = boost::math::ibeta_derivative(x_ad,x_ad,x_ad);
         auto y_expect = boost::math::ibeta_derivative(x,x,x);
-        BOOST_CHECK_CLOSE(y.item(), y_expect, 1000*boost_close_tol<T>());
+        CHECK_RELATIVE_ERROR(y.item(), y_expect, 1000*boost_close_tol<T>() / 100);
     }
-    BOOST_AUTO_TEST_SUITE_END()
+    } // namespace test_ibeta_derivative_compiles
+    
+    int main()
+    {
+        mp11::mp_for_each<mp11::mp_transform<mp11::mp_identity, bin_float_types>>([](auto t) { test_ibeta_derivative_compiles::test_ibeta_derivative<typename decltype(t)::type>(); });
+        return boost::math::test::report_errors();
+    }
     

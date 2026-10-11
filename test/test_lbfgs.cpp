@@ -12,9 +12,8 @@
 namespace rdiff = boost::math::differentiation::reverse_mode;
 namespace bopt = boost::math::optimization;
 
-BOOST_AUTO_TEST_SUITE(basic_lbfgs)
 
-BOOST_AUTO_TEST_CASE(default_lbfgs_test) //, T, all_float_types)
+void default_lbfgs_test() //, T, all_float_types)
 {
     using T                = double;
     constexpr size_t NITER = 10;
@@ -32,7 +31,7 @@ BOOST_AUTO_TEST_CASE(default_lbfgs_test) //, T, all_float_types)
 
     auto result = bopt::minimize(opt, constraint, convergence_policy);
     for (auto& xi : x) {
-        BOOST_REQUIRE_CLOSE(xi, T{1.0}, eps);
+        CHECK_RELATIVE_ERROR(xi, T{1.0}, (eps) / 100);
     }
 }
 
@@ -74,7 +73,8 @@ struct analytic_gradient_eval_pol
     }
 };
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(custom_init_lbfgs_test, T, all_float_types)
+template <class T>
+void custom_init_lbfgs_test()
 {
     constexpr size_t M   = 8;
     const T          eps = T{1e-6};
@@ -93,11 +93,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(custom_init_lbfgs_test, T, all_float_types)
     auto result = minimize(opt, constraint, convergence_policy);
 
     for (auto& xi : x) {
-        BOOST_REQUIRE_CLOSE(xi, T{1.0}, eps);
+        CHECK_RELATIVE_ERROR(xi, T{1.0}, (eps) / 100);
     }
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(analytic_lbfgs_test, T, all_float_types)
+template <class T>
+void analytic_lbfgs_test()
 {
     constexpr size_t M   = 10;
     const T          eps = T{1e-3};
@@ -118,7 +119,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(analytic_lbfgs_test, T, all_float_types)
     auto result = minimize(opt);
 
     for (auto& xi : x) {
-        BOOST_REQUIRE_SMALL(xi, eps);
+        CHECK_ABSOLUTE_ERROR(0,xi, eps);
     }
 }
-BOOST_AUTO_TEST_SUITE_END()
+
+int main()
+{
+   default_lbfgs_test();
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { custom_init_lbfgs_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { analytic_lbfgs_test<typename decltype(t)::type>(); });
+   return boost::math::test::report_errors();
+}

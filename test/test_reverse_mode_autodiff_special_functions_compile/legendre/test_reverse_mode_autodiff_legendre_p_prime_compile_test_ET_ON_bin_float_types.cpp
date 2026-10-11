@@ -14,11 +14,12 @@
     #include <boost/math/tools/workaround.hpp>
     #include <cmath>
     
-    BOOST_AUTO_TEST_SUITE(test_legendre_p_prime_compiles)
+    namespace test_legendre_p_prime_compiles {
     
     using namespace rdiff;
     
-    BOOST_AUTO_TEST_CASE_TEMPLATE(test_legendre_p_prime, T, bin_float_types)
+    template <typename T>
+    void test_legendre_p_prime()
     {
         RandomSample<T> rng{ -1, 1
  };
@@ -27,7 +28,13 @@
         rvar<T, 1> x_ad = x;
         auto y = boost::math::legendre_p_prime(2,x_ad);
         auto y_expect = boost::math::legendre_p_prime(2,x);
-        BOOST_CHECK_CLOSE(y.item(), y_expect, 1000*boost_close_tol<T>());
+        CHECK_RELATIVE_ERROR(y.item(), y_expect, 1000*boost_close_tol<T>() / 100);
     }
-    BOOST_AUTO_TEST_SUITE_END()
+    } // namespace test_legendre_p_prime_compiles
+    
+    int main()
+    {
+        mp11::mp_for_each<mp11::mp_transform<mp11::mp_identity, bin_float_types>>([](auto t) { test_legendre_p_prime_compiles::test_legendre_p_prime<typename decltype(t)::type>(); });
+        return boost::math::test::report_errors();
+    }
     

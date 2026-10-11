@@ -9,9 +9,9 @@
 #include <boost/math/optimization/minimizer.hpp>
 namespace rdiff = boost::math::differentiation::reverse_mode;
 namespace bopt = boost::math::optimization;
-BOOST_AUTO_TEST_SUITE(basic_gradient_descent)
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(default_gd_test, T, all_float_types)
+template <class T>
+void default_gd_test()
 {
   size_t NITER = 2000;
   size_t N = 15;
@@ -28,10 +28,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(default_gd_test, T, all_float_types)
     gdopt.step();
   }
   for (auto& x : x_ad) {
-    BOOST_REQUIRE_SMALL(x.item(), eps);
+    CHECK_ABSOLUTE_ERROR(0,x.item(), eps);
   }
 }
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_minimize, T, all_float_types)
+template <class T>
+void test_minimize()
 {
   size_t NITER = 2000;
   size_t N = 15;
@@ -46,10 +47,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_minimize, T, all_float_types)
     bopt::make_gradient_descent(&quadratic<rdiff::rvar<T, 1>>, x_ad, lr);
   auto z = minimize(gdopt);
   for (auto& x : x_ad) {
-    BOOST_REQUIRE_SMALL(x.item(), eps);
+    CHECK_ABSOLUTE_ERROR(0,x.item(), eps);
   }
 }
-BOOST_AUTO_TEST_CASE_TEMPLATE(random_initializer_test, T, all_float_types)
+template <class T>
+void random_initializer_test()
 {
   size_t N = 10;
   T lr = T{ 1e-2 };
@@ -63,12 +65,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(random_initializer_test, T, all_float_types)
                                   T(-2.0), T(2.0), 1234));
   for (auto& xi : x) {
     T v = xi.item();
-    BOOST_TEST(v >= -2);
-    BOOST_TEST(v <= 2);
+    CHECK_TRUE(v >= -2);
+    CHECK_TRUE(v <= 2);
   }
   gdopt.step();
 }
-BOOST_AUTO_TEST_CASE_TEMPLATE(const_initializer_test, T, all_float_types)
+template <class T>
+void const_initializer_test()
 {
   size_t N = 10;
   T lr = T{ 1e-2 };
@@ -82,12 +85,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(const_initializer_test, T, all_float_types)
 
   for (auto& xi : x) {
     T v = xi.item();
-    BOOST_REQUIRE_CLOSE(v, T{ 5.0 }, T{ 1e-3 });
+    CHECK_RELATIVE_ERROR(v, T{ 5.0 }, (T{ 1e-3 }) / 100);
   }
   gdopt.step();
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(box_constraint_test, T, all_float_types)
+template <class T>
+void box_constraint_test()
 {
   size_t N = 5;
   T lr = T{ 1e-2 };
@@ -100,11 +104,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(box_constraint_test, T, all_float_types)
     gdopt, bopt::box_constraints<std::vector<rdiff::rvar<T, 1>>, T>(-1.0, 1.0));
 
   for (auto& xi : x) {
-    BOOST_TEST(xi.item() >= -1.0);
-    BOOST_TEST(xi.item() <= 1.0);
+    CHECK_TRUE(xi.item() >= -1.0);
+    CHECK_TRUE(xi.item() <= 1.0);
   }
 }
-BOOST_AUTO_TEST_CASE_TEMPLATE(max_iter_test, T, all_float_types)
+template <class T>
+void max_iter_test()
 {
   size_t N = 2;
   T lr = T{ 1e-6 }; // very slow learning
@@ -120,10 +125,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(max_iter_test, T, all_float_types)
                    bopt::gradient_norm_convergence_policy<T>(T{ 1e-20 }),
                    bopt::max_iter_termination_policy(max_iter));
 
-  BOOST_TEST(!res.converged); // should not converge with tiny lr
-  BOOST_REQUIRE_EQUAL(res.num_iter, max_iter);
+  CHECK_TRUE(!res.converged); // should not converge with tiny lr
+  CHECK_EQUAL(res.num_iter, max_iter);
 }
-BOOST_AUTO_TEST_CASE_TEMPLATE(history_tracking_test, T, all_float_types)
+template <class T>
+void history_tracking_test()
 {
   size_t N = 3;
   T lr = T{ 1e-2 };
@@ -139,10 +145,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(history_tracking_test, T, all_float_types)
                    bopt::max_iter_termination_policy(1000),
                    true); // enable history
 
-  BOOST_TEST(!res.objective_history.empty());
-  BOOST_TEST(res.objective_history.front() > res.objective_history.back());
+  CHECK_TRUE(!res.objective_history.empty());
+  CHECK_TRUE(res.objective_history.front() > res.objective_history.back());
 }
-BOOST_AUTO_TEST_CASE_TEMPLATE(rosenbrock_test, T, all_float_types)
+template <class T>
+void rosenbrock_test()
 {
   std::array<rdiff::rvar<T, 1>, 2> x = { T{ -1.2 }, T{ 1.0 } }; // bad start
   T lr = T{ 1e-3 };
@@ -155,35 +162,36 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(rosenbrock_test, T, all_float_types)
     bopt::unconstrained_policy<std::array<rdiff::rvar<T, 1>, 2>>{},
     bopt::gradient_norm_convergence_policy<T>(T{ 1e-4 }),
     bopt::max_iter_termination_policy(50000));
-  BOOST_TEST(res.converged);
-  BOOST_REQUIRE_CLOSE(x[0].item(), T{ 1.0 }, T{ 1e-1 });
-  BOOST_REQUIRE_CLOSE(x[1].item(), T{ 1.0 }, T{ 1e-1 });
+  CHECK_TRUE(res.converged);
+  CHECK_RELATIVE_ERROR(x[0].item(), T{ 1.0 }, (T{ 1e-1 }) / 100);
+  CHECK_RELATIVE_ERROR(x[1].item(), T{ 1.0 }, (T{ 1e-1 }) / 100);
 }
-BOOST_AUTO_TEST_CASE_TEMPLATE(objective_tol_convergence_test,
-                              T,
-                              all_float_types)
+template <class T>
+void objective_tol_convergence_test()
 {
   using policy_t = bopt::objective_tol_convergence_policy<T>;
   policy_t pol(1e-3);
   std::vector<T> dummy_grad;
 
-  BOOST_TEST(!pol(dummy_grad, T{100.0}));
-  BOOST_TEST(!pol(dummy_grad, T{99.0}));
-  BOOST_TEST(pol(dummy_grad, T{99.0005}));
+  CHECK_TRUE(!pol(dummy_grad, T{100.0}));
+  CHECK_TRUE(!pol(dummy_grad, T{99.0}));
+  CHECK_TRUE(pol(dummy_grad, T{99.0005}));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(relative_objective_tol_test, T, all_float_types)
+template <class T>
+void relative_objective_tol_test()
 {
   using policy_t = bopt::relative_objective_tol_policy<T>;
   policy_t pol(1e-3);
 
   std::vector<T> dummy_grad;
-  BOOST_TEST(!pol(dummy_grad, T{1000.0}));
-  BOOST_TEST(!pol(dummy_grad, T{1010.0}));
-  BOOST_TEST(pol(dummy_grad, T{1010.5}));
+  CHECK_TRUE(!pol(dummy_grad, T{1000.0}));
+  CHECK_TRUE(!pol(dummy_grad, T{1010.0}));
+  CHECK_TRUE(pol(dummy_grad, T{1010.5}));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(combined_policy_test, T, all_float_types)
+template <class T>
+void combined_policy_test()
 {
   using pol_abs = bopt::objective_tol_convergence_policy<T>;
   using pol_rel = bopt::relative_objective_tol_policy<T>;
@@ -195,12 +203,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(combined_policy_test, T, all_float_types)
 
   std::vector<T> dummy_grad;
 
-  BOOST_TEST(!comb(dummy_grad, T{100.0}));
-  BOOST_TEST(!comb(dummy_grad, T{110.0}));
-  BOOST_TEST(comb(dummy_grad, T{110.1}));
-  BOOST_TEST(comb(dummy_grad, T{110.1000001}));
+  CHECK_TRUE(!comb(dummy_grad, T{100.0}));
+  CHECK_TRUE(!comb(dummy_grad, T{110.0}));
+  CHECK_TRUE(comb(dummy_grad, T{110.1}));
+  CHECK_TRUE(comb(dummy_grad, T{110.1000001}));
 }
-BOOST_AUTO_TEST_CASE_TEMPLATE(nonnegativity_constraint_test, T, all_float_types)
+template <class T>
+void nonnegativity_constraint_test()
 {
     std::vector<T> x = {T{1.0}, T{-2.0}, T{3.0}, T{-4.0}};
 
@@ -208,33 +217,39 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(nonnegativity_constraint_test, T, all_float_types)
     proj(x);
 
     for (auto& xi : x)
-        BOOST_TEST(xi >= 0.0);
-    BOOST_TEST(x == std::vector<T>({T{1.0}, T{0.0}, T{3.0}, T{0.0}}));
+        CHECK_TRUE(xi >= 0.0);
+    CHECK_TRUE(x == std::vector<T>({T{1.0}, T{0.0}, T{3.0}, T{0.0}}));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(l2_ball_constraint_test, T, all_float_types)
+template <class T>
+void l2_ball_constraint_test()
 {
+    using std::abs;
     std::vector<T>                              x = {T{3.0}, T{4.0}}; // norm = 5
     bopt::l2_ball_constraint<std::vector<T>, T> proj(1.0);
     proj(x);
 
     T norm = sqrt(x[0] * x[0] + x[1] * x[1]);
-    BOOST_TEST(abs(norm - T{1.0}) < T{1e-12}); // projected to unit circle
+    CHECK_TRUE(abs(norm - T{1.0}) < T{1e-12}); // projected to unit circle
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(l1_ball_constraint_test, T, all_float_types)
+template <class T>
+void l1_ball_constraint_test()
 {
+    using std::abs;
     std::vector<T> x = {T{3.0}, T{4.0}}; // L1 norm = 7
 
     bopt::l1_ball_constraint<std::vector<T>, T> proj(2.0);
     proj(x);
 
     T norm1 = abs(x[0]) + abs(x[1]);
-    BOOST_TEST(abs(norm1 - T{2.0}) < T{1e-12});
+    CHECK_TRUE(abs(norm1 - T{2.0}) < T{1e-12});
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(simplex_constraint_test, T, all_float_types)
+template <class T>
+void simplex_constraint_test()
 {
+    using std::abs;
     std::vector<T> x = {T{-1.0}, T{2.0}, T{3.0}}; // has negative and sum != 1
 
     bopt::simplex_constraint<std::vector<T>, T> proj;
@@ -242,23 +257,26 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(simplex_constraint_test, T, all_float_types)
 
     T sum = 0.0;
     for (auto& xi : x) {
-        BOOST_TEST(xi >= 0.0); // all nonnegative
+        CHECK_TRUE(xi >= 0.0); // all nonnegative
         sum += xi;
     }
-    BOOST_TEST(abs(sum - T{1.0}) < T{1e-12}); // normalized to sum=1
+    CHECK_TRUE(abs(sum - T{1.0}) < T{1e-12}); // normalized to sum=1
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(unit_sphere_constraint_test, T, all_float_types)
+template <class T>
+void unit_sphere_constraint_test()
 {
+    using std::abs;
     std::vector<T>                                  x = {T{0.3}, T{0.4}}; // norm = 0.5
     bopt::unit_sphere_constraint<std::vector<T>, T> proj;
     proj(x);
 
     T norm = sqrt(x[0] * x[0] + x[1] * x[1]);
-    BOOST_TEST(abs(norm - T{1.0}) < T{1e-12}); // always projected to sphere
+    CHECK_TRUE(abs(norm - T{1.0}) < T{1e-12}); // always projected to sphere
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(function_constraint_test, T, all_float_types)
+template <class T>
+void function_constraint_test()
 {
   auto clip_to_half = [](std::vector<T>& v) {
     for (auto& xi : v)
@@ -270,7 +288,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(function_constraint_test, T, all_float_types)
   std::vector<T>                            x = {T{0.2}, T{0.7}, T{1.5}};
   proj(x);
 
-  BOOST_TEST(x == std::vector<T>({T{0.2}, T{0.5}, T{0.5}}));
+  CHECK_TRUE(x == std::vector<T>({T{0.2}, T{0.5}, T{0.5}}));
 }
 
 template<typename RealType>
@@ -310,7 +328,8 @@ struct analytic_gradient_eval_pol
   }
 };
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(analytic_derivative_policies, T, all_float_types)
+template <class T>
+void analytic_derivative_policies()
 {
   std::vector<T> x;
   size_t NITER = 2000;
@@ -333,7 +352,29 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(analytic_derivative_policies, T, all_float_types)
     gdopt.step();
   }
   for (auto& xi : x) {
-    BOOST_REQUIRE_SMALL(xi, eps);
+    CHECK_ABSOLUTE_ERROR(0,xi, eps);
   }
 }
-BOOST_AUTO_TEST_SUITE_END()
+
+int main()
+{
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { default_gd_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { test_minimize<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { random_initializer_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { const_initializer_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { box_constraint_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { max_iter_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { history_tracking_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { rosenbrock_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { objective_tol_convergence_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { relative_objective_tol_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { combined_policy_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { nonnegativity_constraint_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { l2_ball_constraint_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { l1_ball_constraint_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { simplex_constraint_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { unit_sphere_constraint_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { function_constraint_test<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { analytic_derivative_policies<typename decltype(t)::type>(); });
+   return boost::math::test::report_errors();
+}

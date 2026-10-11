@@ -71,11 +71,12 @@ def generate_boost_test(func_sig,
     #include <boost/math/tools/workaround.hpp>
     #include <cmath>
     
-    BOOST_AUTO_TEST_SUITE(test_{func_name}_compiles)
+    namespace test_{func_name}_compiles {{
     
     using namespace rdiff;
     
-    BOOST_AUTO_TEST_CASE_TEMPLATE(test_{func_name}, T, {type_str})
+    template <typename T>
+    void test_{func_name}()
     {{
         RandomSample<T> rng{{ {min_val}, {max_val} }};
         T               x = rng.next();
@@ -83,9 +84,15 @@ def generate_boost_test(func_sig,
         rvar<T, 1> x_ad = x;
         auto y = boost::math::{func_sig.replace("arg", "x_ad")};
         auto y_expect = boost::math::{func_sig.replace("arg", "x")};
-        BOOST_CHECK_CLOSE(y.item(), y_expect, 1000*boost_close_tol<T>());
+        CHECK_RELATIVE_ERROR(y.item(), y_expect, 1000*boost_close_tol<T>() / 100);
     }}
-    BOOST_AUTO_TEST_SUITE_END()
+    }} // namespace test_{func_name}_compiles
+    
+    int main()
+    {{
+        mp11::mp_for_each<mp11::mp_transform<mp11::mp_identity, {type_str}>>([](auto t) {{ test_{func_name}_compiles::test_{func_name}<typename decltype(t)::type>(); }});
+        return boost::math::test::report_errors();
+    }}
     """
     cpp_file_sig = f"test_reverse_mode_autodiff_{func_name}_compile_test_ET_{et_str}_{type_str}.cpp"
     cpp_file_loc = f"{cpp_file_dir}/{cpp_file_sig}"
@@ -98,7 +105,7 @@ def compile_cpp_file(filename):
     file_name_no_ext = base_file_name.split(".")[0]
     program_name = f"/tmp/{file_name_no_ext}"
     clean_up_command = f"rm {program_name}"
-    compile_command = f"{CC} -o {program_name} {CPPFLAGS} {INCLUDE_FLAGS} -lboost_unit_test_framework {filename}"
+    compile_command = f"{CC} -o {program_name} {CPPFLAGS} {INCLUDE_FLAGS} {filename}"
     
     logger.info("cleaning up old executable")
     result_clean_up = subprocess.run(clean_up_command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
