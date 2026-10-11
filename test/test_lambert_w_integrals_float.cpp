@@ -13,11 +13,7 @@
 #include <boost/version.hpp>   // for BOOST_MSVC versions.
 
 // Boost macros
-#define BOOST_TEST_MAIN
-#define BOOST_LIB_DIAGNOSTIC "on" // Report library file details.
-#include <boost/test/included/unit_test.hpp> // Boost.Test
-// #include <boost/test/unit_test.hpp> // Boost.Test
-#include <boost/test/tools/floating_point_comparison.hpp>
+#include "math_unit_test.hpp"
 
 #include <boost/array.hpp>
 #include <boost/type_traits/is_constructible.hpp>
@@ -134,7 +130,7 @@ void test_integrals()
       return lambert_w0<Real>(z);
     };
     Real z = ts.integrate(f, a, b); // OK without any decltype(f)
-    BOOST_CHECK_CLOSE_FRACTION(z, boost::math::constants::e<Real>() - 1, tol * 3);
+    CHECK_RELATIVE_ERROR(z, boost::math::constants::e<Real>() - 1, tol * 3);
   }
   {
     // Integrate for function lambert_W0(z/(z sqrt(z)).
@@ -144,7 +140,7 @@ void test_integrals()
       return lambert_w0<Real>(z)/(z * sqrt(z));
     };
     Real z = es.integrate(f); // OK
-    BOOST_CHECK_CLOSE_FRACTION(z, 2 * boost::math::constants::root_two_pi<Real>(), tol);
+    CHECK_RELATIVE_ERROR(z, 2 * boost::math::constants::root_two_pi<Real>(), tol);
   }
   {
     // Integrate for function lambert_W0(1/z^2).
@@ -163,15 +159,14 @@ void test_integrals()
       }
     };
     Real z = es.integrate(f);
-    BOOST_CHECK_CLOSE_FRACTION(z, boost::math::constants::root_two_pi<Real>(), tol);
+    CHECK_RELATIVE_ERROR(z, boost::math::constants::root_two_pi<Real>(), tol);
   }
 } // template<class Real> void test_integrals()
 
 
-BOOST_AUTO_TEST_CASE( integrals )
+void integrals()
 {
   std::cout << "Macro BOOST_MATH_LAMBERT_W0_INTEGRALS is defined." << std::endl;
-  BOOST_TEST_MESSAGE("\nTest Lambert W0 integrals.");
   try
   {
   // using statements needed to change precision policy.
@@ -251,7 +246,7 @@ Real x;
     // Unexpected exception thrown in integration code at abscissa (x): 3.478765835953569e-23.
     x = es.integrate(f);
     std::cout << "es.integrate(f) = " << x << std::endl;
-    BOOST_CHECK_CLOSE_FRACTION(x, boost::math::constants::root_two_pi<Real>(), tol);
+    CHECK_RELATIVE_ERROR(x, boost::math::constants::root_two_pi<Real>(), tol);
     // root_two_pi<double = 2.506628274631000502
   }
     */
@@ -264,3 +259,8 @@ Real x;
   }
 }
 
+int main()
+{
+   integrals();
+   return boost::math::test::report_errors();
+}
