@@ -333,6 +333,16 @@ void test_first_derivative()
 #endif
 }
 
+// Building the default grid dominates the run time of this test, and none of the checks in
+// test_quadratures need its full precision. Small p (cheap, and slow to converge) and the
+// representative p = 10, 19 use the default constructor so that path stays covered;
+// the rest use a grid of 2^10 points per integer interval.
+template<int p>
+constexpr int quadrature_grid_refinements()
+{
+    return (p <= 5 || p == 10 || p == 19) ? -1 : 10;
+}
+
 template<typename Real, int p>
 void test_quadratures()
 {
@@ -371,8 +381,8 @@ void test_quadratures()
         xlo = a;
         xhi = b;
         for (int i = 0; i < samples; ++i) {
-            BOOST_ASSERT(abs(phi(xlo)) <= 5);
-            BOOST_ASSERT(abs(phi(xhi)) <= 5);
+            CHECK_LE(abs(phi(xlo)), Real(5));
+            CHECK_LE(abs(phi(xhi)), Real(5));
             xlo = std::nextafter(xlo, (std::numeric_limits<Real>::max)());
             xhi = std::nextafter(xhi, std::numeric_limits<Real>::lowest());
         }
@@ -381,7 +391,7 @@ void test_quadratures()
     }
     else if constexpr (p > 2)
     {
-        auto phi = boost::math::daubechies_scaling<Real, p>();
+        auto phi = boost::math::daubechies_scaling<Real, p>(quadrature_grid_refinements<p>());
         std::cout << "Scaling functor size is " << phi.bytes() << " bytes" << std::endl;
 
         Real tol = std::numeric_limits<Real>::epsilon();
@@ -437,11 +447,11 @@ void test_quadratures()
             CHECK_ULP_CLOSE(Real(0), phi(xlo), 0);
             CHECK_ULP_CLOSE(Real(0), phi(xhi), 0);
             if constexpr (p > 2) {
-                BOOST_ASSERT(abs(phi.prime(xlo)) <= 5);
-                BOOST_ASSERT(abs(phi.prime(xhi)) <= 5);
+                CHECK_LE(abs(phi.prime(xlo)), Real(5));
+                CHECK_LE(abs(phi.prime(xhi)), Real(5));
                 if constexpr (p > 5) {
-                     BOOST_ASSERT(abs(phi.double_prime(xlo)) <= 5);
-                     BOOST_ASSERT(abs(phi.double_prime(xhi)) <= 5);
+                     CHECK_LE(abs(phi.double_prime(xlo)), Real(5));
+                     CHECK_LE(abs(phi.double_prime(xhi)), Real(5));
                 }
             }
             xlo = std::nextafter(xlo, std::numeric_limits<Real>::lowest());
@@ -451,8 +461,8 @@ void test_quadratures()
         xlo = a;
         xhi = b;
         for (int i = 0; i < samples; ++i) {
-            BOOST_ASSERT(abs(phi(xlo)) <= 5);
-            BOOST_ASSERT(abs(phi(xhi)) <= 5);
+            CHECK_LE(abs(phi(xlo)), Real(5));
+            CHECK_LE(abs(phi(xhi)), Real(5));
             xlo = std::nextafter(xlo, (std::numeric_limits<Real>::max)());
             xhi = std::nextafter(xhi, std::numeric_limits<Real>::lowest());
         }

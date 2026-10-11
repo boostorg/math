@@ -86,7 +86,9 @@ void test_roots() {
 template<int p>
 void test_scaling_quadrature() {
    std::cout << "Testing numerical quadrature of the scaling function with " << p << " vanishing moments matches numerical evaluation.\n";
-   auto phi = boost::math::daubechies_scaling<double, p>();
+   // The quadrature is only a sanity check at 1e-4, and its error is the same on a grid of 2^12 points per
+   // integer interval as on the default grid (2^18 or more), so don't pay for the default grid.
+   auto phi = boost::math::daubechies_scaling<double, p>(12);
    auto [tmin, tmax] = phi.support();
    double domega = 1/8.0;
    for (double omega = domega; omega < 10; omega += domega) {
@@ -104,7 +106,10 @@ void test_scaling_quadrature() {
 template<int p>
 void test_wavelet_quadrature() {
    std::cout << "Testing numerical quadrature of the wavelet with " << p << " vanishing moments matches numerical evaluation.\n";
-   auto psi = boost::math::daubechies_wavelet<double, p>();
+   // The quadrature error here (about 1e-10 in modulus, and just under 1e-2 in phase near the root at
+   // omega = 0) is the same on a grid of 2^12 points per integer interval as on the default grid
+   // (it is the quadrature, not the grid, that limits it), so don't pay for the default grid.
+   auto psi = boost::math::daubechies_wavelet<double, p>(12);
    auto [tmin, tmax] = psi.support();
    double domega = 1/8.0;
    // There is a root at at ω=0, so skip this one because we can't recover the phase of a root. 

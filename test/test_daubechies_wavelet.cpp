@@ -42,12 +42,22 @@ void test_exact_value()
     CHECK_MOLLIFIED_CLOSE(expected, computed, 0.0001);
 }
 
+// Building the default grid dominates the run time of this test, and none of the checks in
+// test_quadratures need its full precision. Small p (cheap, and slow to converge) and the
+// representative p = 10, 19 use the default constructor so that path stays covered;
+// the rest use a grid of 2^10 points per integer interval.
+template<int p>
+constexpr int quadrature_grid_refinements()
+{
+    return (p <= 5 || p == 10 || p == 19) ? -1 : 10;
+}
+
 template<typename Real, int p>
 void test_quadratures()
 {
     std::cout << "Testing quadratures of " << p << " vanishing moment Daubechies wavelet on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     using boost::math::quadrature::trapezoidal;
-    auto psi = boost::math::daubechies_wavelet<Real, p>();
+    auto psi = boost::math::daubechies_wavelet<Real, p>(quadrature_grid_refinements<p>());
     std::cout << "Wavelet functor size is " << psi.bytes() << " bytes" << std::endl;
         
     Real tol = std::numeric_limits<Real>::epsilon();
@@ -102,16 +112,16 @@ void test_quadratures()
     xhi = b;
     for (int i = 0; i < samples; ++i) {
         std::cout << std::setprecision(std::numeric_limits<Real>::max_digits10);
-        BOOST_ASSERT(abs(psi(xlo)) <= 5);
-        BOOST_ASSERT(abs(psi(xhi)) <= 5);
+        CHECK_LE(abs(psi(xlo)), Real(5));
+        CHECK_LE(abs(psi(xhi)), Real(5));
         if constexpr (p > 2)
         {
-            BOOST_ASSERT(abs(psi.prime(xlo)) <= 5);
-            BOOST_ASSERT(abs(psi.prime(xhi)) <= 5);
+            CHECK_LE(abs(psi.prime(xlo)), Real(5));
+            CHECK_LE(abs(psi.prime(xhi)), Real(5));
             if constexpr (p >= 6)
             {
-                BOOST_ASSERT(abs(psi.double_prime(xlo)) <= 5);
-                BOOST_ASSERT(abs(psi.double_prime(xhi)) <= 5);
+                CHECK_LE(abs(psi.double_prime(xlo)), Real(5));
+                CHECK_LE(abs(psi.double_prime(xhi)), Real(5));
             }
         }
         xlo = std::nextafter(xlo, (std::numeric_limits<Real>::max)());
