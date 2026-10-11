@@ -30,6 +30,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <exception>
+#include <system_error>
 #include <algorithm>
 #include <utility>
 #endif
