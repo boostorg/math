@@ -50,7 +50,8 @@ inline std::uint64_t addmod_u64(std::uint64_t a, std::uint64_t b, std::uint64_t 
 // (a * b) mod m for any 64-bit operands.
 inline std::uint64_t mulmod_u64(std::uint64_t a, std::uint64_t b, std::uint64_t m) noexcept
 {
-#if defined(BOOST_MATH_HAS_INT128)
+// clang-cl has __int128 but the MSVC runtime lacks __umodti3, which the remainder below needs:
+#if defined(BOOST_MATH_HAS_INT128) && !(defined(_MSC_VER) && defined(__clang__))
     return static_cast<std::uint64_t>((static_cast<unsigned __int128>(a) * b) % m);
 #elif defined(_MSC_VER) && !defined(__clang__) && defined(_M_X64)
     std::uint64_t high {};
