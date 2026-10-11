@@ -18,12 +18,15 @@ concurrency:
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
-# The gcc and clang jobs that run the test suite build with fused multiply-add. -O2 rather than
-# b2's default of -O0 because it is what users build with and gcc does not fuse below it, and
-# inlining=on because b2's debug variant otherwise adds -fno-inline. The CMake jobs get the same
-# flags through CXXFLAGS. arm64 has FMA in its base instruction set, so macOS drops -mfma.
+# Every job builds with the same floating-point contraction: fused multiply-add, contracted across
+# expressions. gcc and clang get -ffp-contract=fast, since gcc's ISO -std=c++NN modes otherwise
+# mean off and clang's default only fuses within one expression; x86 also needs -mfma (arm64 has
+# FMA in its base instruction set, so macOS drops it). MSVC and clang-cl get /fp:contract (or
+# -ffp-contract=fast) with /arch:AVX2. -O2 rather than b2's default of -O0 because it is what
+# users build with and gcc does not fuse below it, and inlining=on because b2's debug variant
+# otherwise adds -fno-inline. The CMake jobs get the same flags through CXXFLAGS.
 env:
-  FMA_B2: cxxflags=-mfma cxxflags=-O2 inlining=on
+  FMA_B2: cxxflags=-mfma cxxflags=-ffp-contract=fast cxxflags=-O2 inlining=on
 
 # b2 -l is no use as a hang detector: on POSIX it is a CPU-time rlimit that kills multithreaded
 # tests, and on Windows it misfires at launch.  So the test jobs have a job-level timeout instead.
@@ -161,7 +164,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 120
     env:
-      FMA_B2: cxxflags=-O2 inlining=on
+      FMA_B2: cxxflags=-ffp-contract=fast cxxflags=-O2 inlining=on
     strategy:
       fail-fast: false
       matrix:
@@ -208,7 +211,7 @@ jobs:
       ARGS: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard }}
       # -mfma brings in AVX. Win64 only aligns the stack to 16 bytes, but gcc emits aligned 32-byte
       # AVX moves for stack objects, which crash (gcc bug 54412). Have the assembler unalign them.
-      FMA_B2: cxxflags=-mfma cxxflags=-O2 inlining=on cxxflags=-Wa,-muse-unaligned-vector-move
+      FMA_B2: cxxflags=-mfma cxxflags=-ffp-contract=fast cxxflags=-O2 inlining=on cxxflags=-Wa,-muse-unaligned-vector-move
     strategy:
       fail-fast: false
       matrix:
@@ -255,7 +258,7 @@ jobs:
     env:
       ARGS: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard }}
       # Optimize like the other jobs (/O2): b2's debug default of /Od makes the tests slow to run.
-      OPT_B2: optimization=speed inlining=on
+      OPT_B2: optimization=speed inlining=on ${{ matrix.contract }}
     strategy:
       fail-fast: false
       matrix:
@@ -265,6 +268,14 @@ jobs:
         exclude:
           - toolset: clang-win
             standard: 17
+        include:
+          # cl only fuses with /fp:contract, and only into the FMA instructions of /arch:AVX2.
+          # clang-cl's /fp:contract would mean -ffp-contract=on, so it is given fast directly;
+          # its /arch:AVX2 targets Haswell, which has FMA.
+          - toolset: msvc-14.3
+            contract: cxxflags=/fp:contract cxxflags=/arch:AVX2
+          - toolset: clang-win
+            contract: cxxflags=/clang:-ffp-contract=fast cxxflags=/arch:AVX2
     steps:
       - uses: actions/checkout@v6
         with:
@@ -302,6 +313,8 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [ g++-13 ]
+    env:
+      CXXFLAGS: -mfma -ffp-contract=fast -O2
     steps:
       - uses: actions/checkout@v6
         with:
@@ -342,6 +355,8 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [ clang++-19 ]
+    env:
+      CXXFLAGS: -mfma -ffp-contract=fast -O2
     steps:
       - uses: actions/checkout@v6
         with:
@@ -446,6 +461,9 @@ jobs:
 
     runs-on: ${{matrix.os}}
 
+    env:
+      CXXFLAGS: -mfma -ffp-contract=fast -O2
+
     steps:
       - uses: actions/checkout@v6
 
@@ -491,10 +509,16 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
+            cxxflags: -mfma -ffp-contract=fast -O2
           - os: ubuntu-24.04
+            cxxflags: -mfma -ffp-contract=fast -O2
           - os: macos-15
+            cxxflags: -ffp-contract=fast -O2
 
     runs-on: ${{matrix.os}}
+
+    env:
+      CXXFLAGS: ${{matrix.cxxflags}}
 
     steps:
       - uses: actions/checkout@v6
@@ -515,19 +539,29 @@ jobs:
           - os: ubuntu-24.04
             compiler: g++-14
             cxxstd: 14
+            cxxflags: -mfma -ffp-contract=fast
           - os: ubuntu-24.04
             compiler: g++-14
             cxxstd: 20
+            cxxflags: -mfma -ffp-contract=fast
           - os: ubuntu-24.04
             compiler: clang++-18
             cxxstd: 17
+            cxxflags: -mfma -ffp-contract=fast
           - os: macos-15
             compiler: clang++
             cxxstd: 17
+            cxxflags: -ffp-contract=fast
           - os: windows-2022
             cxxstd: 17
+            cxxflags: /fp:contract /arch:AVX2
 
     runs-on: ${{matrix.os}}
+
+    # Not optimized: the test looks for the library's symbols in the object files, which inlining
+    # would remove.
+    env:
+      CXXFLAGS: ${{matrix.cxxflags}}
 
     steps:
       - uses: actions/checkout@v6
@@ -557,10 +591,16 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
+            cxxflags: -mfma -ffp-contract=fast -O2
           - os: ubuntu-24.04
+            cxxflags: -mfma -ffp-contract=fast -O2
           - os: macos-15
+            cxxflags: -ffp-contract=fast -O2
 
     runs-on: ${{matrix.os}}
+
+    env:
+      CXXFLAGS: ${{matrix.cxxflags}}
 
     steps:
       - uses: actions/checkout@v6
@@ -602,6 +642,9 @@ jobs:
           - os: macos-15
 
     runs-on: ${{matrix.os}}
+
+    env:
+      CXXFLAGS: -ffp-contract=fast -O2
 
     steps:
       - uses: actions/checkout@v6
@@ -655,6 +698,9 @@ jobs:
 
     runs-on: ${{matrix.os}}
 
+    env:
+      CXXFLAGS: -ffp-contract=fast -O2
+
     steps:
       - uses: actions/checkout@v6
 
@@ -707,6 +753,9 @@ jobs:
 
     runs-on: ${{matrix.os}}
 
+    env:
+      CXXFLAGS: -ffp-contract=fast -O2
+
     steps:
       - uses: actions/checkout@v6
 
@@ -757,7 +806,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      CXXFLAGS: -mfma -O2
+      CXXFLAGS: -mfma -ffp-contract=fast -O2
 
     steps:
       - name: Intel Apt repository
@@ -829,8 +878,8 @@ jobs:
     runs-on: ubuntu-24.04
 
     env:
-      CXXFLAGS: -mfma -O2
-      CUDAFLAGS: -Xcompiler=-mfma,-O2
+      CXXFLAGS: -mfma -ffp-contract=fast -O2
+      CUDAFLAGS: -Xcompiler=-mfma,-ffp-contract=fast,-O2
 
     steps:
       # CUDA 12.8 and a simulated GPU (PantheonSim): the runner has none, so
@@ -951,7 +1000,7 @@ jobs:
             -DBUILD_TESTING=ON \
             -DBOOST_MATH_BUILD_MODULE=ON \
             -DCMAKE_CXX_COMPILER=clang++-$LLVM_VERSION \
-            -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-reserved-module-identifier -mfma -O2" \
+            -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-reserved-module-identifier -mfma -ffp-contract=fast -O2" \
             -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD=$IMPORT_STD_UUID \
             -DCMAKE_CXX_STDLIB_MODULES_JSON=/usr/lib/llvm-$LLVM_VERSION/lib/libc++.modules.json \
             ..
@@ -980,7 +1029,7 @@ jobs:
     container: ubuntu:26.04
 
     env:
-      CXXFLAGS: -mfma -O2
+      CXXFLAGS: -mfma -ffp-contract=fast -O2
       GCC_VERSION: "15"
       # Pinned so the experimental `import std` feature UUID below stays valid.
       CMAKE_VERSION: 4.4.0
@@ -1055,6 +1104,7 @@ jobs:
       CMAKE_VERSION: 4.4.0
       # CMake gates import std behind this UUID; it is specific to the CMake version.
       IMPORT_STD_UUID: f35a9ac6-8463-4d38-8eec-5d6008153e7d
+      CXXFLAGS: /fp:contract /arch:AVX2 /O2
 
     steps:
       - uses: actions/checkout@v6
