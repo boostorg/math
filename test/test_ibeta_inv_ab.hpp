@@ -244,7 +244,9 @@ void test_beta(T, const char* name)
    BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
    {
       typedef boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promote;
-      T tolerance = boost::math::tools::epsilon<T>() * 6;
+      // The forward functions are still a few eps out here, more with gcc's default -ffp-contract=fast, and the inverses
+      // divide that by their sensitivity to the parameter:
+      T tolerance = boost::math::tools::epsilon<T>() * 10;
       BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_invb(T(0.10797751623277096), T(0.65150235550348956), T(0.5), no_promote()), static_cast<T>(0.096646123284035831240382L), tolerance);
       BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_invb(T(0.09555), T(0.05486), T(0.6881), no_promote()), static_cast<T>(0.555050462429118307720304L), tolerance);
       BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inva(T(0.04377), T(0.6669), T(0.3244), no_promote()), static_cast<T>(0.0991673416391090870153045L), tolerance);
