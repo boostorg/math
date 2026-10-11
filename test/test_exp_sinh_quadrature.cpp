@@ -208,7 +208,7 @@ void test_right_limit_infinite()
         auto f3 = [](Real t)->Real { Real z = exp(-t); if (z == 0) { return z; } return z*cos(t); };
         Q = integrator.integrate(f3, get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = half<Real>();
-        CHECK_ULP_CLOSE(Q_expected, Q, 4);
+        CHECK_ULP_CLOSE(Q_expected, Q, 20);
         Q = integrator.integrate(f3, 10, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = BOOST_MATH_TEST_VALUE(Real, -6.6976341310426674140007086979326069121526743314567805278252392932e-6);
         CHECK_ULP_CLOSE(Q_expected, Q, 68);

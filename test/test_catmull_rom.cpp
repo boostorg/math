@@ -102,7 +102,7 @@ void test_linear()
     for (double s = 1; s < 2; s += 0.01)
     {
         auto p = cr(s);
-        CHECK_ULP_CLOSE(s, p[0], 4);
+        CHECK_ULP_CLOSE(Real(s), p[0], 4);
         CHECK_ABSOLUTE_ERROR(0, p[1], tol);
         CHECK_ABSOLUTE_ERROR(0, p[2], tol);
 

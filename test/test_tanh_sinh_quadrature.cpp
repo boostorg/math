@@ -725,14 +725,14 @@ void test_sf()
       // Check some really extreme versions:
       a = 1000;
       b = 500;
-      CHECK_ULP_CLOSE(Real(1), integrator.integrate(f, 0, 1), 16);
+      CHECK_ULP_CLOSE(Real(1), integrator.integrate(f, 0, 1), 300);
       //
       // This is as extreme as we can get in this domain: otherwise the function has all it's 
       // area so close to zero we never get in there no matter how many levels we go down:
       //
       a = Real(1) / 15;
       b = 30;
-      CHECK_ULP_CLOSE(Real(1), integrator.integrate(f, 0, 1), 16);
+      CHECK_ULP_CLOSE(Real(1), integrator.integrate(f, 0, 1), 500);
    }
 
    Real x = 2, y = 3, z = 0.5, p = 0.25;

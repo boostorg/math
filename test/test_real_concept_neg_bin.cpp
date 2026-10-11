@@ -46,6 +46,8 @@ void test_spot(RealType)
 
 int main()
 {
+#ifndef BOOST_MATH_STANDALONE // real_concept constants need Boost.LexicalCast
   test_spot(boost::math::concepts::real_concept(0.)); // Test real concept.
+#endif
   return 0;
 } 
