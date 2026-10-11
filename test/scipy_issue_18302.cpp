@@ -15,7 +15,7 @@ import boost.math;
 #include <boost/math/policies/policy.hpp>
 #include <limits>
 #endif
-#include "math_unit_test.hpp"
+#include "test_math_unit.hpp"
 
 int main(void)
 {

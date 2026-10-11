@@ -7,7 +7,7 @@
 #include <boost/math/special_functions/logistic_sigmoid.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
-#include "math_unit_test.hpp"
+#include "test_math_unit.hpp"
 #include <array>
 #include <cfloat>
 #include <cfenv>

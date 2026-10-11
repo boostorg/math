@@ -28,7 +28,7 @@ import boost.math;
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <random>
 #endif
-#include "math_unit_test.hpp"
+#include "test_math_unit.hpp"
 
 std::uintmax_t global_iter_count;
 std::uintmax_t total_iter_count = 0;

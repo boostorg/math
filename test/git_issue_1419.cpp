@@ -8,7 +8,7 @@
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <algorithm>
 #include <vector>
-#include "math_unit_test.hpp"
+#include "test_math_unit.hpp"
 
 int main()
 {

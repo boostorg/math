@@ -15,7 +15,7 @@
 import boost.math;
 #endif
 
-#include "math_unit_test.hpp"
+#include "test_math_unit.hpp"
 
 // numerically evaluate the integral for Stefan-Boltzmann Law from Planck's Law
 // https://en.wikipedia.org/wiki/Stefan%E2%80%93Boltzmann_law#Derivation_from_Planck's_law

@@ -16,8 +16,8 @@ import boost.math;
 #endif
 
 #ifdef BOOST_MATH_STANDALONE
-// Standalone/module builds cannot use Boost.Core; map lightweight_test onto math_unit_test.hpp.
-#include "math_unit_test.hpp"
+// Standalone/module builds cannot use Boost.Core; map lightweight_test onto test_math_unit.hpp.
+#include "test_math_unit.hpp"
 #define BOOST_TEST(expr) CHECK_TRUE((expr))
 namespace boost { inline int report_errors() { return ::boost::math::test::report_errors(); } }
 #endif

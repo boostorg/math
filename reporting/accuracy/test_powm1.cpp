@@ -6,7 +6,7 @@
 
 #define BOOST_TEST_MAIN
 #include "bindings.hpp"
-#include "../../test/powm1_sqrtp1m1_test.hpp"
+#include "../../test/test_powm1_sqrtp1m1.hpp"
 #include <boost/math/special_functions/powm1.hpp>
 #include <boost/math/special_functions/sqrt1pm1.hpp>
 #include <boost/test/unit_test.hpp>

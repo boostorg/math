@@ -14,7 +14,7 @@
 
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/special_functions/beta.hpp>
-#include "math_unit_test.hpp"
+#include "test_math_unit.hpp"
 
 template <class T>
 void test_spots(T)

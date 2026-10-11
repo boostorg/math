@@ -17,7 +17,7 @@ import boost.math;
 #include <random>
 #include <cmath>
 #endif
-#include "math_unit_test.hpp"
+#include "test_math_unit.hpp"
 
 constexpr int N = 50000;
 

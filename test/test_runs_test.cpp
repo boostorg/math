@@ -11,7 +11,7 @@
 import boost.math;
 #endif
 
-#include "math_unit_test.hpp"
+#include "test_math_unit.hpp"
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <random>

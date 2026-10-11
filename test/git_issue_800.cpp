@@ -9,7 +9,7 @@
 import boost.math;
 #endif
 
-#include "math_unit_test.hpp"
+#include "test_math_unit.hpp"
 
 template <typename T>
 void test()

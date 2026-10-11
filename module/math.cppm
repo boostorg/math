@@ -47,7 +47,7 @@ module;
 
 // The macro hub and its helper entities are deliberately kept in the global
 // module so that consumer translation units may also include them textually
-// (for example through test/math_unit_test.hpp).
+// (for example through test/test_math_unit.hpp).
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/assert.hpp>
 

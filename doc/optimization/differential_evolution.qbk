@@ -104,7 +104,7 @@ So if the maximum generations is hit, the iteration stops, even if (say) a `valu
 [h4:examples Examples]
 
 An example use can be found [@../../example/differential_evolution.cpp here].
-More examples and API use cases can be studied in [@../../test/differential_evolution_test.cpp differential_evolution_test.cpp].
+More examples and API use cases can be studied in [@../../test/test_differential_evolution.cpp test_differential_evolution.cpp].
 
 [h5:caveats Caveats]
 
