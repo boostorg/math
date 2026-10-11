@@ -185,6 +185,12 @@ BOOST_MATH_GPU_ENABLED T beta_imp(T a, T b, const lanczos::undefined_lanczos& l,
       return BOOST_MATH_NAMESPACE::tgamma(a, pol) * BOOST_MATH_NAMESPACE::tgamma_delta_ratio(b, a, pol);
    else if(b < 1)
       return BOOST_MATH_NAMESPACE::tgamma(b, pol) * BOOST_MATH_NAMESPACE::tgamma_delta_ratio(a, b, pol);
+   else if(c < ::BOOST_MATH_NAMESPACE::max_factorial<T>::value)
+   {
+      // The recursion below rounds ~2 (shift_a + shift_b) times and raises a / c and b / c to powers
+      // above min_sterling, which costs ~30 eps at 113 bits; tgamma is good to about 1 eps and can't overflow here:
+      return BOOST_MATH_NAMESPACE::tgamma(a, pol) * (BOOST_MATH_NAMESPACE::tgamma(b, pol) / BOOST_MATH_NAMESPACE::tgamma(c, pol));
+   }
    else
    {
       T result = beta_imp(T(a + shift_a), T(b + shift_b), l, pol);
@@ -1821,6 +1827,32 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
                fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
                BOOST_MATH_INSTRUMENT_VARIABLE(fract);
             }
+         }
+         else if((a <= 15) && normalised && (lanczos_type::value > 53) && (lanczos_type::value < lanczos::undefined_lanczos::value))
+         {
+            // With a Lanczos approximation above double precision, the continued fraction's prefix
+            // (ibeta_power_terms) carries the rounding of three Lanczos sums, ~10 eps at 113 bits, and with
+            // a <= 15 that is no better than sidestepping to the series, and 2x worse well below the mean,
+            // so keep the sidestep there.  The formula for the non-normalised case requires two pochhammer
+            // calculations rather than one, so the sidestep is only used in the normalised case:
+            int n = itrunc(T(floor(b)), pol);
+            T bbar = b - n;
+            if(bbar <= 0)
+            {
+               --n;
+               bbar += 1;
+            }
+            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(nullptr));
+            fract += ibeta_a_step(a, bbar, x, y, 20, pol, normalised, static_cast<T*>(nullptr));
+            if(invert)
+               fract -= 1;  // Note this line would need changing if we ever enable this branch in non-normalized case
+            fract = beta_small_b_large_a_series(T(a+20),  bbar, x, y, fract, T(1), pol, normalised);
+            if(invert)
+            {
+               fract = -fract;
+               invert = false;
+            }
+            BOOST_MATH_INSTRUMENT_VARIABLE(fract);
          }
          else
          {

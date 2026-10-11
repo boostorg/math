@@ -754,8 +754,7 @@ if(std::numeric_limits<RealType>::is_specialized)
      typedef policy<discrete_quantile<integer_round_nearest> > P6;
      RealType tol = boost::math::tools::epsilon<RealType>() * 700;
      if(!boost::is_floating_point<RealType>::value)
-        tol *= 20;  // no lanczos approximation implies less accuracy: the cdf scatters by ~30 eps, and near k = 0
-                    // the quantile multiplies that by up to 550 (7500 eps for real_concept on 128-bit long double)
+        tol *= 10;  // no lanczos approximation implies less accuracy
      //
      // Check full real value first:
      //
