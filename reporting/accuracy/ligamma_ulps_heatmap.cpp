@@ -7,6 +7,7 @@
 // The reference is log(tgamma(a, x)) in 50 digits, which can't underflow.
 // Requires lodepng: link lodepng.cpp and put lodepng.h on the include path.
 
+#define BOOST_MATH_USE_LODEPNG
 #include <iostream>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/tools/ulps_heatmap.hpp>

@@ -82,9 +82,10 @@ std::size_t check_1d(F f, Exact exact, double a, double b, std::vector<double> c
 
 void test_condition_numbers_1d()
 {
-    // exp: |x f'/f| = |x|. Smooth, so the grid is trusted everywhere and needs no extra evaluations:
+    // exp: |x f'/f| = |x|. Smooth, so the grid is trusted except within 8 grid steps of 0, where the stencils are
+    // wide compared to |x| (detail::fd_max_span):
     auto exp_fallbacks = check_1d([](double x) { return std::exp(x); }, [](double x) { return std::abs(x); }, -5.0, 5.0, {}, 1e-6);
-    CHECK_EQUAL(exp_fallbacks, std::size_t(0));
+    CHECK_LE(exp_fallbacks, std::size_t(30));
 
     // log near 1: |1/log(x)|, a narrow spike at the zero x = 1. The probes next to it must see the spike, not a smeared version:
     std::vector<double> near_one = {1 + 1e-9, 1 - 1e-9, 1 + 1e-6, 1 - 1e-6, 1 + 1e-3, std::nextafter(1.0, 2.0)};
@@ -105,6 +106,29 @@ void test_condition_numbers_1d()
     CHECK_LE(std::size_t(1), tan_fallbacks);
     // Only the few points near the pole need them:
     CHECK_LE(tan_fallbacks, std::size_t(30));
+
+    // log(x) - 1 on [0.5, 32768] with the 8 grid points of a 10-sample logarithmic ulps_plot, a factor of 4 apart.
+    // The five-point stencils are as wide as x itself, and agree with the three-point ones although both are badly wrong,
+    // so they must not be trusted:
+    {
+        auto f = [](double x) { return std::log(x) - 1; };
+        std::vector<double> x, fx, px = {3.0, 100.0, 5000.0}, fpx, pcond;
+        for (int i = 0; i < 8; ++i)
+        {
+            x.push_back(std::exp(std::log(0.5) + (std::log(32768.0) - std::log(0.5))*(i + 0.5)/8));
+            fx.push_back(f(x.back()));
+        }
+        for (double p : px) { fpx.push_back(f(p)); }
+        std::vector<double> cond = detail::grid_condition_numbers(f, x, fx, px, fpx, pcond);
+        for (std::size_t i = 0; i < x.size(); ++i)
+        {
+            CHECK_LE(std::abs(cond[i] - std::abs(1/fx[i])), 1e-6*(std::max)(1.0, std::abs(1/fx[i])));
+        }
+        for (std::size_t i = 0; i < px.size(); ++i)
+        {
+            CHECK_LE(std::abs(pcond[i] - std::abs(1/fpx[i])), 1e-6*(std::max)(1.0, std::abs(1/fpx[i])));
+        }
+    }
 }
 
 void test_condition_numbers_2d()
@@ -204,8 +228,81 @@ struct recording_encoder
     }
 };
 
+// The masks of a raster canvas, and the order of their colors:
+struct masks
+{
+    std::vector<std::vector<unsigned char>> images;
+    std::vector<std::string> colors;
+};
+
+masks finish(detail::raster_canvas const & canvas)
+{
+    masks m;
+    std::ostringstream os;
+    canvas.finish(os, [&](std::vector<unsigned char> const & rgb, std::size_t, std::size_t) { m.images.push_back(rgb); return rgb; }, "t-");
+    std::string s = os.str();
+    for (std::size_t k = s.find("<rect "); k != std::string::npos; k = s.find("<rect ", k + 1))
+    {
+        std::size_t a = s.find("fill='", k) + 6;
+        m.colors.push_back(s.substr(a, s.find('\'', a) - a));
+    }
+    return m;
+}
+
+void test_raster_canvas()
+{
+    // Overlapping shapes of one color cover their union: two unit disks centred on the corners of pixel (0, 0) each cover
+    // 13 of its 16 subsamples, and together all of them:
+    {
+        detail::raster_canvas canvas(0, 0, 2, 2);
+        canvas.disk("red", 0, 0, 1);
+        canvas.disk("red", 1, 0, 1);
+        masks m = finish(canvas);
+        CHECK_EQUAL(m.images.size(), std::size_t(1));
+        CHECK_EQUAL(int(m.images[0][0]), 255);
+    }
+    // A polyline's joints aren't painted twice: two collinear segments make the same mask as one:
+    {
+        detail::raster_canvas one(0, 0, 20, 10);
+        detail::raster_canvas two(0, 0, 20, 10);
+        one.segment("red", 1.3, 2.2, 18.7, 7.9, 1);
+        two.polyline("red", {{1.3, 2.2}, {10.0, 5.05}, {18.7, 7.9}}, 1);
+        CHECK_TRUE(finish(one).images == finish(two).images);
+    }
+    // Shapes are painted in the order they are drawn: a red disk drawn over a blue one is on top of it...
+    {
+        detail::raster_canvas canvas(0, 0, 8, 8);
+        canvas.disk("red", 2, 2, 1.5);
+        canvas.disk("blue", 4, 4, 2);
+        canvas.disk("red", 4, 4, 1);
+        masks m = finish(canvas);
+        CHECK_TRUE(m.colors == std::vector<std::string>({"red", "blue", "red"}));
+    }
+    // ...but one that doesn't touch the blue one shares the first red mask:
+    {
+        detail::raster_canvas canvas(0, 0, 16, 8);
+        canvas.disk("red", 2, 2, 1.5);
+        canvas.disk("blue", 8, 4, 2);
+        canvas.disk("red", 14, 4, 1);
+        masks m = finish(canvas);
+        CHECK_TRUE(m.colors == std::vector<std::string>({"red", "blue"}));
+    }
+}
+
+std::string first_mask_id(std::string const & svg)
+{
+    std::size_t a = svg.find("<mask id='") + 10;
+    return svg.substr(a, svg.find('\'', a) - a);
+}
+
 void test_files()
 {
+    // lodepng is the default encoder only on request, so that this program, which isn't linked with lodepng, links even if
+    // lodepng.h is on the include path:
+#if !defined(BOOST_MATH_USE_LODEPNG) && !defined(LODEPNG_H)
+    CHECK_TRUE(!detail::default_png_encoder());
+#endif
+
     CHECK_EQUAL(detail::base64({'M', 'a', 'n'}), std::string("TWFu"));
     CHECK_EQUAL(detail::base64({'M', 'a'}), std::string("TWE="));
     CHECK_EQUAL(detail::base64({'M'}), std::string("TQ=="));
@@ -248,6 +345,21 @@ void test_files()
     CHECK_LE(std::size_t(400), widths[0]);
     std::remove(raster_name.c_str());
 
+    // Plots that differ only in their settings get different mask ids, so they can be inlined in one page:
+    {
+        std::ostringstream a, b;
+        plot.clip(0.5);
+        a << plot;
+        plot.clip(5);
+        b << plot;
+        CHECK_TRUE(a.str() != b.str());
+        CHECK_TRUE(first_mask_id(a.str()) != first_mask_id(b.str()));
+        std::ostringstream c;
+        plot.envelope_color("red");
+        c << plot;
+        CHECK_TRUE(first_mask_id(b.str()) != first_mask_id(c.str()));
+    }
+
     // The summary counts the grid and the probes:
     CHECK_LE(std::size_t(1), count(plot.summary(), "samples=500 "));
 
@@ -279,6 +391,7 @@ int main()
 {
     test_condition_numbers_1d();
     test_condition_numbers_2d();
+    test_raster_canvas();
     test_files();
     return boost::math::test::report_errors();
 }

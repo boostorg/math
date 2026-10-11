@@ -81,8 +81,8 @@
         template<class G>
         ulps_plot& add_fn(G g, std::string const & color = "steelblue");
         //
-        // Encodes 8-bit RGB pixels (row-major, top row first) as a PNG; lodepng by default if lodepng.h is found.
-        // With nullptr, the plot is pure SVG:
+        // Encodes 8-bit RGB pixels (row-major, top row first) as a PNG; lodepng by default if requested (see below).
+        // With nullptr, or no encoder, the plot is pure SVG:
         //
         ulps_plot& png_encoder(std::function<std::vector<unsigned char>(std::vector<unsigned char> const & rgb, size_t width, size_t height)> encoder);
         //
@@ -148,10 +148,12 @@ Note that the graph is written as an SVG. We use `firefox foo.svg` or `open -a F
 Thousands of points and curve segments make a heavy SVG that some viewers draw slowly or mangle,
 so the data (the points, the markers, the envelope and the curve of `show_function`) is drawn into PNG images embedded in the SVG,
 antialiased by 4x4 supersampling at the plot's pixel size, while the axes and text stay vector.
-Each color is a grayscale mask that the SVG fills with that color, so colors are given as CSS strings, as before.
-If `lodepng.h` is on the include path, [@https://github.com/lvandeve/lodepng lodepng] encodes the images (link `lodepng.cpp`);
-otherwise, pass an encoder to `png_encoder`.
-Without one, or with `png_encoder(nullptr)`, the whole plot is drawn as SVG elements.
+Each color is a grayscale mask that the SVG fills with that color, so colors are given as CSS strings, as before,
+and the masks are painted in the order the shapes were drawn.
+To encode the images with [@https://github.com/lvandeve/lodepng lodepng], define `BOOST_MATH_USE_LODEPNG` (or include `lodepng.h` first)
+before including the header, and link `lodepng.cpp`; or pass an encoder to `png_encoder`.
+lodepng is not used just because `lodepng.h` happens to be on the include path, so that programs which don't link it still link.
+Without an encoder, or with `png_encoder(nullptr)`, the whole plot is drawn as SVG elements.
 
 [h4 Sampling and the envelope]
 
@@ -165,6 +167,8 @@ so it costs no evaluations of /f/ beyond the ones that are plotted.
 /f'/ at each grid point is the derivative of the quartic through five neighbouring grid values: centred, or one-sided at the edges and next to undefined values.
 Where it disagrees with the three-point estimate by more than a few percent of the scale that matters for the condition number,
 /f/ is not smooth on the scale of the grid (a pole, a kink, a narrow feature), and /f'/ is computed instead from a central difference with a small step.
+The same happens where the stencil is wider than |/x/|/2, since many functions vary on the scale of /x/ itself:
+on a logarithmic axis with fewer than about 20 points per decade, and on a linear one within a few grid steps of 0.
 At a probe, /f'/ is the cubic interpolant of the four nearest grid derivatives, divided by the exact /f/ at the probe.
 At a simple zero of /f/, /f'/ is smooth and /f/ is not, so the condition number is computed exactly there:
 interpolating the condition number itself would smear its narrow spike.
@@ -241,7 +245,7 @@ Calling `add_fn` more than once compares implementations: each gets a panel, and
 so that, for example, the code before and after a change can be compared directly.
 
 The heatmap is a PNG embedded in the SVG.
-If `lodepng.h` is on the include path, [@https://github.com/lvandeve/lodepng lodepng] encodes it (link `lodepng.cpp`);
+If `BOOST_MATH_USE_LODEPNG` is defined (or `lodepng.h` is included first), [@https://github.com/lvandeve/lodepng lodepng] encodes it (link `lodepng.cpp`);
 otherwise, pass your own encoder to `png_encoder`, or the `write` functions throw `std::logic_error`.
 An example is given [@../../reporting/accuracy/ligamma_ulps_heatmap.cpp here].
 

@@ -30,13 +30,15 @@
 #endif
 
 // The data layer (points, markers, envelope, curves) is drawn into PNGs embedded in the SVG, while the axes and text
-// stay vector. If lodepng.h is on the include path, lodepng encodes them (link lodepng.cpp); see png_encoder.
-#if defined(__has_include)
-#if __has_include("lodepng.h")
+// stay vector; see png_encoder. lodepng (https://github.com/lvandeve/lodepng) is the default encoder only on request,
+// so that a program which merely has lodepng.h on its include path still links: define BOOST_MATH_USE_LODEPNG,
+// or include lodepng.h before this header, and link lodepng.cpp. Otherwise there is no default encoder.
+#if defined(BOOST_MATH_USE_LODEPNG) && !defined(LODEPNG_H)
 #include "lodepng.h"
+#endif
+#ifdef LODEPNG_H
 #define BOOST_MATH_ULPS_HAS_LODEPNG
 #define BOOST_MATH_ULPS_HEATMAP_HAS_LODEPNG
-#endif
 #endif
 
 // Design of this function comes from:
@@ -95,6 +97,12 @@ inline std::string base64(std::vector<unsigned char> const & bytes)
 // How well a finite-difference derivative must agree with a lower-order one to be trusted, as a fraction of
 // max(|f|/|x|, |f'|): that is, of the scale on which an error in f' changes the condition number |x f'/f|.
 constexpr double fd_tolerance = 0.05;
+
+// The largest span of a stencil, relative to |x|, that is trusted. The condition number is relative, and many
+// functions vary on the scale of |x| itself (log(x), x^a, near 0 or on a coarse logarithmic grid), where a stencil
+// as wide as |x| can pass the agreement test and still be badly wrong. On a logarithmic axis this asks for about
+// 20 grid points per decade; on a linear one, it sends the few points within 8 grid steps of 0 to a local difference.
+constexpr double fd_max_span = 0.5;
 
 // f'(t[j]) from the polynomial interpolating (t[k], f[k]), k < n: sum over k != j of L_k'(t[j]) (f[k] - f[j]).
 template<class Real>
@@ -214,9 +222,11 @@ void grid_derivatives(Real const * x, Real const * f, std::size_t stride, std::s
         int const s3 = (std::min)(2, (std::max)(0, jj - 1));
         Real const d3 = derivative_at_node(ts + s3, fs + s3, 3, jj - s3);
         d[j*stride] = d5;
-        // |x| |d5 - d3| <= tol max(|f|, |x d5|), which holds trivially at x = 0, where the condition number is 0:
+        // |x| |d5 - d3| <= tol max(|f|, |x d5|), with a stencil narrow compared to |x|. Both hold trivially at x = 0,
+        // where the condition number is 0:
         Real const ax = abs(x[j]);
-        trusted[j*stride] = isfinite(d5) && ax*abs(d5 - d3) <= Real(fd_tolerance)*(std::max)(Real(abs(fs[jj])), Real(ax*abs(d5)));
+        trusted[j*stride] = isfinite(d5) && (ax == 0 || abs(ts[4] - ts[0]) <= Real(fd_max_span)*ax)
+                         && ax*abs(d5 - d3) <= Real(fd_tolerance)*(std::max)(Real(abs(fs[jj])), Real(ax*abs(d5)));
     }
 }
 
@@ -306,10 +316,12 @@ bool interpolate_derivative(Real const * x, Real const * f, Real const * d, unsi
         fi += w[k]*f[start + k];
         ds += w[k]*d[start + k];
     }
-    // An error e in the interpolated f means an error of about e/h in f', so |s| e/(h |f|) in the condition number:
+    // An error e in the interpolated f means an error of about e/h in f', so |s| e/(h |f|) in the condition number.
+    // As in grid_derivatives, the window must also be narrow compared to |s|:
     Real const h = abs(x[start + 2] - x[start + 1]);
     Real const as = abs(s);
-    return isfinite(ds) && as*abs(fi - fs) <= Real(fd_tolerance)*h*(std::max)(Real(abs(fs)), Real(as*abs(ds)));
+    return isfinite(ds) && (as == 0 || abs(x[start + 3] - x[start]) <= Real(fd_max_span)*as)
+        && as*abs(fi - fs) <= Real(fd_tolerance)*h*(std::max)(Real(abs(fs)), Real(as*abs(ds)));
 }
 
 // The condition numbers |x f'(x)/f(x)| at the nodes of the grid x (sorted) with reference values fx = f(x), and at the probes
@@ -481,19 +493,41 @@ private:
     double x0_, y0_, x1_, y1_;
 };
 
-// Rasterizes the primitives of the data layer, with 4x4 supersampling for antialiasing, into one coverage mask per color.
+// A short name for SVG ids, from content, so that different plots inlined in one page don't collide.
+inline std::string svg_id(std::string const & prefix, std::string const & content)
+{
+    std::uint64_t h = 1469598103934665603ULL;
+    for (char c : content)
+    {
+        h = (h ^ static_cast<unsigned char>(c))*1099511628211ULL;
+    }
+    std::ostringstream os;
+    os << prefix << std::hex << (h & 0xffffffffffffULL);
+    return os.str();
+}
+
+// Rasterizes the primitives of the data layer, with 4x4 supersampling for antialiasing, into coverage masks.
 // finish() writes each mask as a PNG in the SVG and paints its color through it, so colors stay CSS strings and the
 // background, gridlines and text show through. A pixel of the mask covers one unit of the SVG's user space.
+//
+// Each pixel of a mask holds a bit for each of its 16 subsamples, and shapes are ORed in, so overlapping shapes of one
+// color (adjacent points, the joints of a polyline) cover their union, neither more nor less.
+// The masks are painted in order. A shape goes into the topmost mask of its color unless a mask of another color above
+// that one has a subsample in common with it, in which case it starts a new mask on top; so the result is the same as
+// painting the shapes one by one, with one mask per color in the usual case. Past max_masks, a shape goes into the
+// topmost mask of its color, if there is one, to bound the size of the file.
 class raster_canvas
 {
 public:
+    static constexpr std::size_t max_masks = 32;
+
     raster_canvas(double x0, double y0, int width, int height)
         : x0_(x0), y0_(y0), width_(width), height_(height)
     {
     }
     void disk(std::string const & color, double cx, double cy, double r)
     {
-        fill(layer(color), cx - r, cy - r, cx + r, cy + r, [&](double x, double y) {
+        fill(color, cx - r, cy - r, cx + r, cy + r, [&](double x, double y) {
             return (x - cx)*(x - cx) + (y - cy)*(y - cy) <= r*r;
         });
     }
@@ -507,7 +541,7 @@ public:
         double const dx = bx - ax;
         double const dy = by - ay;
         double const len2 = dx*dx + dy*dy;
-        fill(layer(color), (std::min)(ax, bx) - h, (std::min)(ay, by) - h, (std::max)(ax, bx) + h, (std::max)(ay, by) + h,
+        fill(color, (std::min)(ax, bx) - h, (std::min)(ay, by) - h, (std::max)(ax, bx) + h, (std::max)(ay, by) + h,
              [&](double x, double y) {
             double t = len2 > 0 ? ((x - ax)*dx + (y - ay)*dy)/len2 : 0;
             t = (std::min)(1.0, (std::max)(0.0, t));
@@ -529,7 +563,7 @@ public:
             ymin = (std::min)(ymin, a.y); ymax = (std::max)(ymax, a.y);
             area += a.x*b.y - b.x*a.y;
         }
-        fill(layer(color), xmin, ymin, xmax, ymax, [&](double x, double y) {
+        fill(color, xmin, ymin, xmax, ymax, [&](double x, double y) {
             for (std::size_t i = 0; i < p.size(); ++i)
             {
                 plot_point const & a = p[i];
@@ -542,6 +576,7 @@ public:
             return true;
         });
     }
+    // The union of the segments, so the joints are not painted twice:
     void polyline(std::string const & color, std::vector<plot_point> const & p, double width)
     {
         for (std::size_t i = 0; i + 1 < p.size(); ++i)
@@ -549,50 +584,56 @@ public:
             segment(color, p[i].x, p[i].y, p[i + 1].x, p[i + 1].y, width);
         }
     }
-    // Writes each color's mask, in the order the colors were first used. id must be unique in the document.
-    void finish(std::ostream & os, png_encoder_type const & encoder, std::string const & id) const
+    // Writes the masks, bottom first. Their ids start with prefix and go on with a hash of their geometry, colors and content.
+    void finish(std::ostream & os, png_encoder_type const & encoder, std::string const & prefix) const
     {
-        for (std::size_t l = 0; l < layers_.size(); ++l)
+        std::vector<std::string> pngs;
+        std::ostringstream key;
+        key << x0_ << ' ' << y0_ << ' ' << width_ << ' ' << height_ << '\n';
+        for (mask const & m : masks_)
         {
-            std::vector<unsigned char> rgb(3*layers_[l].coverage.size());
-            for (std::size_t k = 0; k < layers_[l].coverage.size(); ++k)
+            std::vector<unsigned char> rgb(3*m.bits.size());
+            for (std::size_t k = 0; k < m.bits.size(); ++k)
             {
-                // Coverage counts subsamples, 0 to 16:
-                unsigned char v = static_cast<unsigned char>((255*layers_[l].coverage[k] + 8)/16);
+                unsigned n = 0;
+                for (unsigned b = m.bits[k]; b != 0; b &= b - 1)
+                {
+                    ++n;
+                }
+                unsigned char v = static_cast<unsigned char>((255*n + 8)/16);
                 rgb[3*k] = rgb[3*k + 1] = rgb[3*k + 2] = v;
             }
+            pngs.push_back(base64(encoder(rgb, static_cast<std::size_t>(width_), static_cast<std::size_t>(height_))));
+            key << m.color << '\n' << pngs.back() << '\n';
+        }
+        std::string const id = svg_id(prefix, key.str());
+        for (std::size_t l = 0; l < masks_.size(); ++l)
+        {
             std::string mask_id = id + "-" + std::to_string(l);
             os << "<mask id='" << mask_id << "' maskUnits='userSpaceOnUse' x='" << x0_ << "' y='" << y0_ << "' width='" << width_
                << "' height='" << height_ << "'><image x='" << x0_ << "' y='" << y0_ << "' width='" << width_ << "' height='" << height_
-               << "' href='data:image/png;base64," << base64(encoder(rgb, static_cast<std::size_t>(width_), static_cast<std::size_t>(height_)))
-               << "'/></mask>\n"
+               << "' href='data:image/png;base64," << pngs[l] << "'/></mask>\n"
                << "<rect x='" << x0_ << "' y='" << y0_ << "' width='" << width_ << "' height='" << height_ << "' fill='"
-               << layers_[l].color << "' mask='url(#" << mask_id << ")'/>\n";
+               << masks_[l].color << "' mask='url(#" << mask_id << ")'/>\n";
         }
+    }
+    std::size_t masks() const
+    {
+        return masks_.size();
     }
 private:
-    struct color_layer
+    struct mask
     {
         std::string color;
-        std::vector<std::uint8_t> coverage;
+        std::vector<std::uint16_t> bits;
     };
-    color_layer & layer(std::string const & color)
+    std::size_t pixel(int i, int j) const
     {
-        for (color_layer & l : layers_)
-        {
-            if (l.color == color)
-            {
-                return l;
-            }
-        }
-        layers_.push_back(color_layer{color, std::vector<std::uint8_t>(static_cast<std::size_t>(width_)*static_cast<std::size_t>(height_), 0)});
-        return layers_.back();
+        return static_cast<std::size_t>(j)*static_cast<std::size_t>(width_) + static_cast<std::size_t>(i);
     }
-    // Sets the coverage of each pixel meeting the box [xmin, xmax] x [ymin, ymax] (in user space) to the larger of its
-    // coverage and the number of its 4x4 subsamples inside the shape. The larger, not the sum, so that overlapping
-    // shapes of one color (the segments of a polyline at their joints) don't darken.
+    // Rasterizes the shape inside(x, y) within the box [xmin, xmax] x [ymin, ymax] (in user space), and ORs it into a mask.
     template<class Inside>
-    void fill(color_layer & l, double xmin, double ymin, double xmax, double ymax, Inside inside)
+    void fill(std::string const & color, double xmin, double ymin, double xmax, double ymax, Inside inside)
     {
         if (!(xmin <= xmax && ymin <= ymax))
         {
@@ -602,20 +643,85 @@ private:
         int const i1 = (std::min)(width_ - 1, static_cast<int>(std::floor((std::min)(xmax - x0_, double(width_)))));
         int const j0 = (std::max)(0, static_cast<int>(std::floor((std::max)(ymin - y0_, -1.0))));
         int const j1 = (std::min)(height_ - 1, static_cast<int>(std::floor((std::min)(ymax - y0_, double(height_)))));
+        if (i0 > i1 || j0 > j1)
+        {
+            return;
+        }
+        std::size_t const bw = static_cast<std::size_t>(i1 - i0 + 1);
+        auto box = [&](int i, int j) { return static_cast<std::size_t>(j - j0)*bw + static_cast<std::size_t>(i - i0); };
+        shape_.assign(bw*static_cast<std::size_t>(j1 - j0 + 1), 0);
+        bool any = false;
         for (int j = j0; j <= j1; ++j)
         {
             for (int i = i0; i <= i1; ++i)
             {
-                std::uint8_t count = 0;
+                unsigned b = 0;
                 for (int sj = 0; sj < 4; ++sj)
                 {
                     for (int si = 0; si < 4; ++si)
                     {
-                        count += inside(x0_ + i + (si + 0.5)/4, y0_ + j + (sj + 0.5)/4) ? 1 : 0;
+                        if (inside(x0_ + i + (si + 0.5)/4, y0_ + j + (sj + 0.5)/4))
+                        {
+                            b |= 1u << (4*sj + si);
+                        }
                     }
                 }
-                std::uint8_t & c = l.coverage[static_cast<std::size_t>(j)*static_cast<std::size_t>(width_) + static_cast<std::size_t>(i)];
-                c = (std::max)(c, count);
+                shape_[box(i, j)] = static_cast<std::uint16_t>(b);
+                any = any || b != 0;
+            }
+        }
+        if (!any)
+        {
+            return;
+        }
+        auto overlaps = [&](mask const & m) {
+            for (int j = j0; j <= j1; ++j)
+            {
+                for (int i = i0; i <= i1; ++i)
+                {
+                    if (m.bits[pixel(i, j)] & shape_[box(i, j)])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+        // The topmost mask of this color that no mask of another color above it overlaps:
+        std::size_t target = masks_.size();
+        for (std::size_t l = masks_.size(); l-- > 0;)
+        {
+            if (masks_[l].color == color)
+            {
+                target = l;
+                break;
+            }
+            if (overlaps(masks_[l]))
+            {
+                break;
+            }
+        }
+        if (target == masks_.size() && masks_.size() >= max_masks)
+        {
+            for (std::size_t l = masks_.size(); l-- > 0;)
+            {
+                if (masks_[l].color == color)
+                {
+                    target = l;
+                    break;
+                }
+            }
+        }
+        if (target == masks_.size())
+        {
+            masks_.push_back(mask{color, std::vector<std::uint16_t>(static_cast<std::size_t>(width_)*static_cast<std::size_t>(height_), 0)});
+        }
+        mask & m = masks_[target];
+        for (int j = j0; j <= j1; ++j)
+        {
+            for (int i = i0; i <= i1; ++i)
+            {
+                m.bits[pixel(i, j)] = static_cast<std::uint16_t>(m.bits[pixel(i, j)] | shape_[box(i, j)]);
             }
         }
     }
@@ -623,21 +729,10 @@ private:
     double y0_;
     int width_;
     int height_;
-    std::vector<color_layer> layers_;
+    std::vector<mask> masks_;
+    std::vector<std::uint16_t> shape_;
 };
 
-// A short name for a document's SVG ids, from its content, so that several plots inlined in one page don't collide.
-inline std::string svg_id(std::string const & prefix, std::string const & content)
-{
-    std::uint64_t h = 1469598103934665603ULL;
-    for (char c : content)
-    {
-        h = (h ^ static_cast<unsigned char>(c))*1099511628211ULL;
-    }
-    std::ostringstream os;
-    os << prefix << std::hex << (h & 0xffffffffffULL);
-    return os.str();
-}
 // Significant digits that tell apart tick labels spaced (hi - lo)/intervals apart, and at least 4:
 // a function that varies only in its sixth digit over the plot must not get identical labels.
 inline int tick_precision(double lo, double hi, int intervals)
@@ -1125,16 +1220,17 @@ public:
                 }
             }
         };
-        std::string const id = detail::svg_id("ulps-", plot.svg_key());
         if (plot.png_encoder_)
         {
             detail::raster_canvas canvas(-4, -4, graph_width + 8, graph_height + 8);
             draw_data(canvas);
-            canvas.finish(fs, plot.png_encoder_, id);
+            canvas.finish(fs, plot.png_encoder_, "ulps-");
         }
         else
         {
-            detail::vector_canvas canvas(fs, -4, -4, graph_width + 8, graph_height + 8, id);
+            // The clip path's id depends only on what it defines, so a collision between plots is harmless:
+            detail::vector_canvas canvas(fs, -4, -4, graph_width + 8, graph_height + 8,
+                                         detail::svg_id("ulps-clip-", std::to_string(graph_width) + " " + std::to_string(graph_height)));
             draw_data(canvas);
             canvas.finish();
         }
@@ -1286,11 +1382,12 @@ public:
             {
                 detail::raster_canvas canvas(-4, -4, graph_width + 8, function_height + 8);
                 draw_curve(canvas);
-                canvas.finish(fs, plot.png_encoder_, id + "-f");
+                canvas.finish(fs, plot.png_encoder_, "ulps-f-");
             }
             else
             {
-                detail::vector_canvas canvas(fs, -4, -4, graph_width + 8, function_height + 8, id + "-f");
+                detail::vector_canvas canvas(fs, -4, -4, graph_width + 8, function_height + 8,
+                                             detail::svg_id("ulps-clip-", std::to_string(graph_width) + " " + std::to_string(function_height)));
                 draw_curve(canvas);
                 canvas.finish();
             }
@@ -1329,20 +1426,6 @@ private:
     std::string function_color_ = "orange";
     png_encoder_type png_encoder_ = detail::default_png_encoder();
 
-    // Distinguishes the plot's data, for svg_id:
-    std::string svg_key() const
-    {
-        std::ostringstream os;
-        os << std::setprecision(17) << title_ << ' ' << width_ << ' ' << a_ << ' ' << b_ << ' ' << coarse_abscissas_.size();
-        for (auto const & ulps : ulp_list_)
-        {
-            for (size_t j = 0; j < ulps.size(); j += 1 + ulps.size()/64)
-            {
-                os << ' ' << ulps[j];
-            }
-        }
-        return os.str();
-    }
 };
 
 template<class F, typename PreciseReal, typename CoarseReal>

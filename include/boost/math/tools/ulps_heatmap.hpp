@@ -21,8 +21,8 @@
 // values on the grid (see detail::grid_condition_numbers_2d).
 //
 // The heatmap is a PNG embedded in an SVG, which carries the axes, colorbar and labels.
-// The PNG encoder can be set with png_encoder. If lodepng.h is on the include path, the
-// default encoder is lodepng (https://github.com/lvandeve/lodepng; link lodepng.cpp).
+// The PNG encoder can be set with png_encoder. The default is lodepng (https://github.com/lvandeve/lodepng;
+// link lodepng.cpp) if BOOST_MATH_USE_LODEPNG is defined or lodepng.h is included first; see ulps_plot.hpp.
 
 #ifndef BOOST_MATH_TOOLS_ULPS_HEATMAP_HPP
 #define BOOST_MATH_TOOLS_ULPS_HEATMAP_HPP
@@ -213,7 +213,9 @@ bool interpolate_gradient(std::vector<Real> const & x, std::vector<Real> const &
     Real const hy = abs(y[sj + 2] - y[sj + 1]);
     Real const ax = abs(qx);
     Real const ay = abs(qy);
-    return isfinite(gx) && isfinite(gy)
+    // Each window must be narrow compared to its coordinate, as in interpolate_derivative:
+    bool const narrow = (ax == 0 || abs(x[si + 3] - x[si]) <= Real(fd_max_span)*ax) && (ay == 0 || abs(y[sj + 3] - y[sj]) <= Real(fd_max_span)*ay);
+    return narrow && isfinite(gx) && isfinite(gy)
         && abs(fi - qz)*(ax/hx + ay/hy) <= Real(fd_tolerance)*(std::max)(Real(abs(qz)), Real(ax*abs(gx) + ay*abs(gy)));
 }
 
@@ -307,7 +309,7 @@ public:
     // Maps [0, 1] to sRGB in [0, 1]^3; inferno by default. Any of the color_maps.hpp maps fit.
     ulps_heatmap& color_map(std::function<std::array<double, 3>(double)> color_map);
 
-    // Encodes 8-bit RGB pixels, row-major from the top row, as a PNG; lodepng by default, if lodepng.h is found.
+    // Encodes 8-bit RGB pixels, row-major from the top row, as a PNG; lodepng by default, if requested (see ulps_plot.hpp).
     using png_encoder_type = detail::png_encoder_type;
     ulps_heatmap& png_encoder(png_encoder_type encoder);
 
@@ -747,7 +749,7 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
     }
     if (!png_encoder_)
     {
-        throw std::logic_error("No PNG encoder: set one with png_encoder, or put lodepng.h on the include path.");
+        throw std::logic_error("No PNG encoder: set one with png_encoder, or define BOOST_MATH_USE_LODEPNG and link lodepng.");
     }
     // Gray: correctly handled: the true value is undefined, or out of range and the implementation overflowed (or underflowed to zero
     //       or a subnormal) as it should. Green: NaN or a domain error where the true value is a finite double.
