@@ -9,7 +9,7 @@
 // Module build check for boost::math::quadrature::naive_monte_carlo. When
 // BOOST_MATH_BUILD_MODULE is defined the component is consumed through
 // `import boost.math;` and the standard library through `import std;` (performed
-// by test_math_unit.hpp). Nothing standard or Boost is included textually in
+// by math_unit_test.hpp). Nothing standard or Boost is included textually in
 // that mode. Expected values are the exact analytic integrals of the constant
 // and linear integrands taken from test_naive_monte_carlo.cpp.
 
@@ -23,7 +23,7 @@ import boost.math;
 #include <vector>
 #include <utility>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 using boost::math::quadrature::naive_monte_carlo;
 

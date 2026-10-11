@@ -13,7 +13,7 @@
 #  include <stdfloat>
 #endif
 
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 #if !defined(BOOST_MATH_STANDALONE) && !defined(BOOST_MATH_HAS_GPU_SUPPORT)
 #include <boost/multiprecision/cpp_dec_float.hpp>

@@ -9,7 +9,7 @@
 #include "sycl/sycl.hpp"
 #endif
 
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 #include <numeric>
 #include <utility>
 #include <random>

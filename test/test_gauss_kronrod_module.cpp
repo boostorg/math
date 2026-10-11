@@ -18,10 +18,10 @@
 import boost.math;
 #endif
 
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 // The integrands below use only Real arithmetic, so no standard-library header
-// is needed here: std::cout and report_errors() come from test_math_unit.hpp.
+// is needed here: std::cout and report_errors() come from math_unit_test.hpp.
 
 template <class Real, unsigned Points>
 void test_polynomials(const char* type_name)

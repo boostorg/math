@@ -5,7 +5,7 @@
 #include <boost/math/quadrature/van_den_bos_unit_square.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/ellint_1.hpp>
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 #include <array>
 #include <cmath>

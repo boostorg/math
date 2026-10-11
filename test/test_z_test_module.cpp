@@ -20,7 +20,7 @@ import boost.math;
 #include <vector>
 #include <cmath>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 // Summary-statistic overload: statistic = (sample_mean - assumed_mean) / (sample_variance / sqrt(n)).
 template <typename Real>

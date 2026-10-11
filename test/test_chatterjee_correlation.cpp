@@ -10,7 +10,7 @@
 import boost.math;
 #endif
 
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/tools/random_vector.hpp>

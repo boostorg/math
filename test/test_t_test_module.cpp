@@ -21,7 +21,7 @@ import boost.math;
 #include <vector>
 #include <utility>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 // One-sample test, double precision. Statistic and p-value are the known-good
 // values reproduced with Mathematica in test_agreement_with_mathematica.

@@ -16,7 +16,7 @@
 #ifdef _MSC_VER
 #  pragma warning(disable : 4127) // conditional expression is constant.
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/constants/constants.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>

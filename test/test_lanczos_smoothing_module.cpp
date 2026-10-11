@@ -22,7 +22,7 @@ import boost.math;
 #include <vector>
 #include <cstddef>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 // First derivative (order 1) on unit-spacing samples, double precision.
 void test_velocity()

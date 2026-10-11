@@ -27,7 +27,7 @@ import boost.math;
 #include <limits>
 #include <cmath>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 using boost::math::interpolators::cardinal_quintic_b_spline;
 

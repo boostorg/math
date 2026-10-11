@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/ccmath/next.hpp>
 #include <boost/math/ccmath/fpclassify.hpp>
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 #if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
 template <typename T>

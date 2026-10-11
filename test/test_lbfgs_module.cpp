@@ -22,7 +22,7 @@ import boost.math;
 #include <vector>
 #include <cstddef>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 namespace bopt = boost::math::optimization;
 

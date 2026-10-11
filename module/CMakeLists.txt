@@ -32,7 +32,7 @@ target_compile_options(boost_math_module PRIVATE $<$<CXX_COMPILER_ID:Clang>:-w>)
 # but the tests link this target and need both macros too: BOOST_MATH_BUILD_MODULE
 # so they import the module instead of including the headers directly, and
 # BOOST_MATH_STANDALONE so any textually included support header (for example
-# test/test_math_unit.hpp -> tools/config.hpp) follows the same configuration
+# test/math_unit_test.hpp -> tools/config.hpp) follows the same configuration
 # branch the module was built with.
 target_compile_definitions(boost_math_module PUBLIC BOOST_MATH_BUILD_MODULE BOOST_MATH_STANDALONE=1)
 

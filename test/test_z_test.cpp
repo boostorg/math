@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 #include <boost/math/statistics/z_test.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>

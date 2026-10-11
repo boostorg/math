@@ -6,7 +6,7 @@
 
 #include <boost/math/special_functions/logit.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 #include <array>
 #include <limits>
 #include <cfenv>

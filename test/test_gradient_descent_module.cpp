@@ -7,7 +7,7 @@
 // Module build check for boost::math::optimization::gradient_descent. When
 // BOOST_MATH_BUILD_MODULE is defined the component is consumed through
 // `import boost.math;` and the standard library through `import std;` (performed
-// by test_math_unit.hpp). Nothing standard or Boost is included textually in
+// by math_unit_test.hpp). Nothing standard or Boost is included textually in
 // that mode.
 //
 // The optimizer minimizes f(x) = sum_i x_i^2, whose gradient is 2 x_i. With a
@@ -27,7 +27,7 @@ import boost.math;
 #include <vector>
 #include <cstddef>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 namespace bopt = boost::math::optimization;
 

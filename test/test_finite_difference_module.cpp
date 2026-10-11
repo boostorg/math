@@ -21,7 +21,7 @@ import boost.math;
 #include <complex>
 #include <iostream>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 using boost::math::differentiation::finite_difference_derivative;
 using boost::math::differentiation::complex_step_derivative;

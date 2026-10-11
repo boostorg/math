@@ -25,7 +25,7 @@ import boost.math;
 #include <cmath>
 #include <vector>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 using namespace boost::math::policies;
 

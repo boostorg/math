@@ -5,7 +5,7 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 #include <boost/math/tools/centered_continued_fraction.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>

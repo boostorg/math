@@ -21,7 +21,7 @@ import boost.math;
 #include <vector>
 #include <algorithm>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 using boost::math::statistics::anderson_darling_normality_statistic;
 

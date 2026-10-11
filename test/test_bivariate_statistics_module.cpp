@@ -23,7 +23,7 @@ import boost.math;
 #include <limits>
 #include <cmath>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 // means_and_covariance returns (mean_u, mean_v, covariance); covariance() pulls
 // out the third element. All expected values below are exact for these inputs.

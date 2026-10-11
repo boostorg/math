@@ -4,7 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #include <cmath>
 #include <limits>
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 #include <boost/math/special_functions/lambert_w.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
 #if !defined(TEST) || (TEST > 1)

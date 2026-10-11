@@ -18,7 +18,7 @@ import boost.math;
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 template <class T>
 void test_spots(T, const char* t)

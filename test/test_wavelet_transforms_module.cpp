@@ -21,7 +21,7 @@ import boost.math;
 #include <cmath>
 #include <limits>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 template <typename Real, int p>
 void test_wavelet_transform()

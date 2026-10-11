@@ -20,7 +20,7 @@ import boost.math;
 // must not be included in module mode).
 #include <fenv.h>
 
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 #pragma STDC FENV_ACCESS ON
 

@@ -19,7 +19,7 @@ import boost.math;
 #include <array>
 #include <numeric>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 #pragma STDC FENV_ACCESS ON
 

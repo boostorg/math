@@ -7,7 +7,7 @@
 #include <vector>
 #include <boost/math/statistics/detail/rank.hpp>
 #include <boost/math/tools/config.hpp>
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 template <typename T>
 void test()

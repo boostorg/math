@@ -13,7 +13,7 @@
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 #include <cmath>
 #include <cstdlib>

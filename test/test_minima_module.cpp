@@ -19,7 +19,7 @@
 import boost.math;
 #endif
 
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 // f(v) = 3 (v - 3)^2 + 4 has a unique minimum at v = 3 with value 4.
 // Brent's parabolic interpolation is exact for a quadratic, so both overloads

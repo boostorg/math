@@ -21,7 +21,7 @@ import boost.math;
 #include <complex>
 #include <iostream>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 // The boost::math complex overloads are deprecated in favour of the C++11
 // std:: versions but remain exported; silence the deprecation notice.

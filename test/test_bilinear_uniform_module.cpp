@@ -24,7 +24,7 @@ import boost.math;
 #include <utility>
 #include <iostream>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 using boost::math::interpolators::bilinear_uniform;
 

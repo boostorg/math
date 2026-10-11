@@ -27,7 +27,7 @@ import boost.math;
 #include <array>
 #include <utility>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 using boost::math::interpolators::quintic_hermite;
 using boost::math::interpolators::cardinal_quintic_hermite;

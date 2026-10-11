@@ -3,7 +3,7 @@
 //  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 #include <limits>
 #include <boost/math/special_functions/logaddexp.hpp>
 #include <boost/math/constants/constants.hpp>

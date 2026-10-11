@@ -15,7 +15,7 @@
 #include <random>
 #include <tuple>
 #include <cmath>
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/statistics/bivariate_statistics.hpp>

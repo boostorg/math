@@ -7,7 +7,7 @@
 
 #include <boost/math/tools/config.hpp>
 #ifndef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 #include <numeric>
 #include <random>
 #include <array>

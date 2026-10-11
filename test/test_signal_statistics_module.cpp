@@ -26,7 +26,7 @@ import boost.math;
 #include <limits>
 #include <cstddef>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 // The absolute Gini coefficient of {-1, 0, 0} is the population value 2/3, and
 // the sample value n/(n-1) times that, which is 1 for n = 3. A vector whose

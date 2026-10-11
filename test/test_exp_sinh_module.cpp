@@ -21,7 +21,7 @@ import boost.math;
 #include <cmath>
 #include <limits>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 template <class Real>
 void test_spots(Real, const char* type_name)

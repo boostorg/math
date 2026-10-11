@@ -21,7 +21,7 @@ import boost.math;
 #include <cfenv>
 #endif
 
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 #pragma STDC FENV_ACCESS ON
 

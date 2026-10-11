@@ -21,7 +21,7 @@ import boost.math;
 #include <cmath>
 #include <limits>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 // Constant and linear integrands: the trapezoidal rule reproduces these exactly.
 template <class Real>

@@ -25,7 +25,7 @@ import boost.math;
 #include <array>
 #include <utility>
 #endif
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 using boost::math::interpolators::septic_hermite;
 using boost::math::interpolators::cardinal_septic_hermite;

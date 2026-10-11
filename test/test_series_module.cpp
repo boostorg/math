@@ -19,7 +19,7 @@
 import boost.math;
 #endif
 
-#include "test_math_unit.hpp"
+#include "math_unit_test.hpp"
 
 // Yields the geometric sequence r^n for n = 0, 1, 2, ...; the partial sums
 // converge to 1 / (1 - r) when |r| < 1.
