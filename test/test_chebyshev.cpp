@@ -64,7 +64,7 @@ void test_derivatives()
         CHECK_MOLLIFIED_CLOSE(chebyshev_t_prime(3, x), 3*(4*x*x - 1), tol);
         CHECK_MOLLIFIED_CLOSE(chebyshev_t_prime(4, x), 16*x*(2*x*x - 1), tol);
         // This one makes the tolerance have to grow too large; the Chebyshev recurrence is more stable than naive polynomial evaluation anyway.
-        //BOOST_CHECK_CLOSE_FRACTION(chebyshev_t_prime(5, x), 5*(4*x*x*(4*x*x - 3) + 1), tol);
+        //CHECK_MOLLIFIED_CLOSE(chebyshev_t_prime(5, x), 5*(4*x*x*(4*x*x - 3) + 1), tol);
         x += 1/static_cast<Real>(1<<7);
     }
 }

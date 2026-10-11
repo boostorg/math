@@ -4,16 +4,13 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_TEST_MODULE barycentric_rational
-
 #include <cmath>
 #include <random>
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/type_index.hpp>
-#include <boost/test/included/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/interpolators/barycentric_rational.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include "math_unit_test.hpp"
 
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
@@ -49,7 +46,7 @@ void test_interpolation_condition()
     for (size_t i = 0; i < x.size(); ++i)
     {
         Real z = interpolator(x[i]);
-        BOOST_CHECK_CLOSE(z, y[i], 100*numeric_limits<Real>::epsilon());
+        CHECK_ULP_CLOSE(y[i], z, 2);
     }
 
     // Make sure that the move constructor does the same thing:
@@ -60,7 +57,7 @@ void test_interpolation_condition()
     for (size_t i = 0; i < x_copy.size(); ++i)
     {
         Real z = move_interpolator(x_copy[i]);
-        BOOST_CHECK_CLOSE(z, y_copy[i], 100*numeric_limits<Real>::epsilon());
+        CHECK_ULP_CLOSE(y_copy[i], z, 2);
     }
 }
 
@@ -86,7 +83,7 @@ void test_interpolation_condition_high_order()
     for (size_t i = 0; i < x.size(); ++i)
     {
         Real z = interpolator(x[i]);
-        BOOST_CHECK_CLOSE(z, y[i], 100*numeric_limits<Real>::epsilon());
+        CHECK_ULP_CLOSE(y[i], z, 2);
     }
 }
 
@@ -116,8 +113,8 @@ void test_constant()
         // Don't evaluate the constant at x[i]; that's already tested in the interpolation condition test.
         Real t = x[i] + dis(gen);
         Real z = interpolator(t);
-        BOOST_CHECK_CLOSE(z, constant, 100*sqrt(numeric_limits<Real>::epsilon()));
-        BOOST_CHECK_SMALL(interpolator.prime(t), sqrt(numeric_limits<Real>::epsilon()));
+        CHECK_ABSOLUTE_ERROR(constant, z, Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant)));
+        CHECK_ABSOLUTE_ERROR(0, interpolator.prime(t), sqrt(numeric_limits<Real>::epsilon()));
     }
 }
 
@@ -146,8 +143,8 @@ void test_constant_high_order()
     {
         Real t = x[i] + dis(gen);
         Real z = interpolator(t);
-        BOOST_CHECK_CLOSE(z, constant, 1000*sqrt(numeric_limits<Real>::epsilon()));
-        BOOST_CHECK_SMALL(interpolator.prime(t), 100*sqrt(numeric_limits<Real>::epsilon()));
+        CHECK_ABSOLUTE_ERROR(constant, z, Real(10*(sqrt(numeric_limits<Real>::epsilon()))*abs(constant)));
+        CHECK_ABSOLUTE_ERROR(0, interpolator.prime(t), 100*sqrt(numeric_limits<Real>::epsilon()));
     }
 }
 
@@ -175,13 +172,13 @@ void test_runge()
     {
         Real t = x[i];
         Real z = interpolator(t);
-        BOOST_CHECK_CLOSE(z, y[i], 0.03);
+        CHECK_ABSOLUTE_ERROR(y[i], z, Real(0.0003*abs(y[i])));
         Real z_prime = interpolator.prime(t);
         Real num = -50*t;
         Real denom = (1+25*t*t)*(1+25*t*t);
         if (abs(num/denom) > 0.00001)
         {
-            BOOST_CHECK_CLOSE_FRACTION(z_prime, num/denom, 0.03);
+            CHECK_ABSOLUTE_ERROR(num/denom, z_prime, Real(0.03*abs(num/denom)));
         }
     }
 
@@ -191,7 +188,7 @@ void test_runge()
     {
         Real t = x[i] + dis(gen);
         Real z = interpolator(t);
-        BOOST_CHECK_CLOSE(z, 1/(1+25*t*t), tol);
+        CHECK_ABSOLUTE_ERROR(1/(1+25*t*t), z, Real(tol/100*abs(1/(1+25*t*t))));
         Real z_prime = interpolator.prime(t);
         Real num = -50*t;
         Real denom = (1+25*t*t)*(1+25*t*t);
@@ -200,7 +197,7 @@ void test_runge()
         if (abs(runge_prime) > 0 && abs(z_prime - runge_prime)/abs(runge_prime) > tol)
         {
             std::cout << "Error too high for t = " << t << " which is a distance " << t - x[i] << " from node " << i << "/" << x.size() << " associated with data (" << x[i] << ", " << y[i] << ")\n";
-            BOOST_CHECK_CLOSE_FRACTION(z_prime, runge_prime, tol);
+            CHECK_ABSOLUTE_ERROR(runge_prime, z_prime, Real(tol*abs(runge_prime)));
         }
     }
 }
@@ -229,11 +226,11 @@ void test_weights()
         Real w = interpolator.weight(i);
         if (i % 2 == 0)
         {
-            BOOST_CHECK_CLOSE(w, 1, 0.00001);
+            CHECK_ABSOLUTE_ERROR(1, w, Real(1e-07));
         }
         else
         {
-            BOOST_CHECK_CLOSE(w, -1, 0.00001);
+            CHECK_ABSOLUTE_ERROR(-1, w, Real(1e-07));
         }
     }
 
@@ -246,18 +243,18 @@ void test_weights()
         Real w_expect = 1/(x[i] - x[i - 1]) + 1/(x[i+1] - x[i]);
         if (i % 2 == 0)
         {
-            BOOST_CHECK_CLOSE(w, -w_expect, 0.00001);
+            CHECK_ABSOLUTE_ERROR(-w_expect, w, Real(1e-07*abs(-w_expect)));
         }
         else
         {
-            BOOST_CHECK_CLOSE(w, w_expect, 0.00001);
+            CHECK_ABSOLUTE_ERROR(w_expect, w, Real(1e-07*abs(w_expect)));
         }
     }
 
 }
 
 
-BOOST_AUTO_TEST_CASE(barycentric_rational)
+void barycentric_rational()
 {
     // The tests took too long at the higher precisions.
     // They still pass, but the CI system is starting to time out,
@@ -319,4 +316,10 @@ BOOST_AUTO_TEST_CASE(barycentric_rational)
     //test_runge<boost::multiprecision::float128>();
 #endif
 
+}
+
+int main()
+{
+    barycentric_rational();
+    return boost::math::test::report_errors();
 }
