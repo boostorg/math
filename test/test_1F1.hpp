@@ -439,7 +439,7 @@ void test_spots7(T, const char* type_name)
 }
 
 template <class T>
-void test_spots8(T, const char* type_name)
+void test_spots8(T, const char* /*type_name*/)
 {
    BOOST_CHECK_THROW(boost::math::hypergeometric_1F1(static_cast<T>(2), static_cast<T>(-100), static_cast<T>(0.5)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::hypergeometric_1F1(static_cast<T>(-100.1), static_cast<T>(-100), static_cast<T>(0.5)), std::domain_error);

@@ -2705,7 +2705,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<saspoin
 } // quantile complement
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline RealType mean(const saspoint5_distribution<RealType, Policy> &dist)
+BOOST_MATH_GPU_ENABLED inline RealType mean(const saspoint5_distribution<RealType, Policy> &/*dist*/)
 {
     // There is no mean:
     typedef typename Policy::assert_undefined_type assert_type;

@@ -67,7 +67,7 @@ int test()
    return 0;
 }
 
-int main(int argc, char* argv[])
+int main()
 {
    using namespace boost::math::policies;
    if (test<policy<>>())

@@ -19,7 +19,7 @@ using boost::math::quadrature::tanh_sinh;
 BOOST_AUTO_TEST_CASE(issue893) {
    typedef boost::multiprecision::cpp_bin_float_100 real;
 
-   auto fun = [](real x) -> real {
+   auto fun = [](real /*x*/) -> real {
       return 1.0;
    };
 

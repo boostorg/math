@@ -54,7 +54,7 @@ public:
            class ArgumentContainer>
   RealType operator()(Objective& objective,
                       ObjectiveEvalPolicy& obj_eval,
-                      GradientEvalPolicy& grad_eval,
+                      GradientEvalPolicy& /*grad_eval*/,
                       ArgumentContainer& x,
                       const std::vector<RealType>& g,
                       const std::vector<RealType>& p,

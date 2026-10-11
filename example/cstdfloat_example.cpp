@@ -45,7 +45,7 @@ Also provides the correct result for Visual Studio 2010
 namespace boost
 {
 template <typename FPT>
-const int max_digits10()
+int max_digits10()
 {
 // Since max_digits10 is not defined (or wrong) on older systems, define a local max_digits10.
   // Usage:   int m = max_digits10<boost::float64_t>();
