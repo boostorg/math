@@ -933,14 +933,14 @@ public:
 
         if (plot.clip_ > 0)
         {
-            if (max_y > plot.clip_)
+            // With a clip, the range is symmetric, so that the ±envelope and the ticks are too: ±min(clip, worst |ulps|).
+            PreciseReal extent = (std::max)(max_y, PreciseReal(-min_y));
+            if (extent > plot.clip_)
             {
-                max_y = plot.clip_;
+                extent = plot.clip_;
             }
-            if (min_y < -plot.clip_)
-            {
-                min_y = -plot.clip_;
-            }
+            max_y = extent;
+            min_y = -extent;
         }
 
         int height = static_cast<int>(floor(static_cast<double>(plot.width_)/1.61803));
