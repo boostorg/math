@@ -531,10 +531,7 @@ The quantile function will by default return an integer result:
 `quantile(dist, p)` is the smallest integer /k/ with `cdf(dist, k) >= p`, and
 `quantile(complement(dist, q))` is the smallest integer /k/ with
 `cdf(complement(dist, k)) <= q`.  This is the `integer_round_up` policy, and
-the definition R, SciPy, Julia and Mathematica use.  Earlier releases rounded
-lower quantiles down and upper quantiles up (`integer_round_outwards`): define
-`BOOST_MATH_DISCRETE_QUANTILE_POLICY` as `integer_round_outwards` to get that
-behaviour back.
+the definition R, SciPy, Julia and Mathematica use.
 
 This behaviour can be changed so that the quantile functions are rounded
 differently, or even return a real-valued result using

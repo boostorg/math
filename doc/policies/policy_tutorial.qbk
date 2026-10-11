@@ -68,10 +68,7 @@ if these work OK for you then you can stop reading now!]
 `quantile(dist, p)` is the smallest integer /k/ with `cdf(dist, k) >= p`, and
 `quantile(complement(dist, q))` is the smallest integer /k/ with
 `cdf(complement(dist, k)) <= q`.  This is the `integer_round_up` policy, and
-the definition R, SciPy, Julia and Mathematica use.  Earlier releases rounded
-lower quantiles down and upper quantiles up (`integer_round_outwards`): define
-`BOOST_MATH_DISCRETE_QUANTILE_POLICY` as `integer_round_outwards` to get that
-behaviour back.
+the definition R, SciPy, Julia and Mathematica use.
 
 This behaviour can be changed so that the quantile functions are rounded
    differently, or even return a real-valued result using
@@ -441,11 +438,10 @@ when dealing with a discrete distribution], and if in doubt,
 
 [heading Rounding Outwards]
 
-Before this default was adopted the default was `integer_round_outwards`,
-and you can get it back by defining `BOOST_MATH_DISCRETE_QUANTILE_POLICY` as
-`integer_round_outwards` (see [link math_toolkit.pol_ref.policy_defaults
-Using Macros to Change the Policy Defaults]) or by using the policy
-directly.  It rounds lower quantiles (probability less than 0.5) down and upper
+The `integer_round_outwards` policy, which you can select by defining
+`BOOST_MATH_DISCRETE_QUANTILE_POLICY` as `integer_round_outwards` (see
+[link math_toolkit.pol_ref.policy_defaults Using Macros to Change the Policy Defaults])
+or by using the policy directly, rounds lower quantiles (probability less than 0.5) down and upper
 quantiles (probability greater than 0.5) up.  The reasoning is that if someone
 asks for a quantile at 0.05, then we can normally assume that they are asking
 for ['[*at least] 95% of the probability to the right of the value chosen,
@@ -509,7 +505,7 @@ to know that other rounding options are available:
 [variablelist
 
 [[integer_round_outwards]
-   [This was the default policy in earlier releases, as described above: lower quantiles
+   [As described above: lower quantiles
    are rounded down (probability < 0.5), and upper quantiles
    (probability > 0.5) are rounded up.
 
