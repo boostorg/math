@@ -24,6 +24,11 @@ using boost::math::optimization::detail::best_indices;
 using boost::math::optimization::detail::random_initial_population;
 using boost::math::optimization::detail::validate_initial_guess;
 
+// The default is one thread per hardware thread, and the library spawns and joins that many threads every
+// generation. That is expensive on many-core machines and makes the random streams depend on the machine.
+// A fixed small number still exercises the multithreaded path.
+constexpr unsigned test_threads = 2;
+
 void test_random_initial_population() {
   std::array<double, 2> lower_bounds = {-5, -5};
   std::array<double, 2> upper_bounds = {5, 5};
@@ -81,6 +86,7 @@ template <class Real> void test_ackley() {
   std::cout << "Testing differential evolution on the Ackley function . . .\n";
   using ArgType = std::array<Real, 2>;
   auto de_params = differential_evolution_parameters<ArgType>();
+  de_params.threads = test_threads;
   de_params.lower_bounds = {-5, -5};
   de_params.upper_bounds = {5, 5};
 
@@ -107,6 +113,7 @@ template <class Real> void test_rosenbrock_saddle() {
   std::cout << "Testing differential evolution on the Rosenbrock saddle . . .\n";
   using ArgType = std::array<Real, 2>;
   auto de_params = differential_evolution_parameters<ArgType>();
+  de_params.threads = test_threads;
   de_params.lower_bounds = {0.5, 0.5};
   de_params.upper_bounds = {2.048, 2.048};
   std::mt19937_64 gen(234568);
@@ -127,6 +134,7 @@ template <class Real> void test_rastrigin() {
   std::cout << "Testing differential evolution on the Rastrigin function . . .\n";
   using ArgType = std::vector<Real>;
   auto de_params = differential_evolution_parameters<ArgType>();
+  de_params.threads = test_threads;
   de_params.lower_bounds.resize(8, static_cast<Real>(-5.12));
   de_params.upper_bounds.resize(8, static_cast<Real>(5.12));
   std::mt19937_64 gen(34567);
@@ -146,6 +154,7 @@ void test_sphere() {
   std::cout << "Testing differential evolution on the sphere function . . .\n";
   using ArgType = std::vector<float>;
   auto de_params = differential_evolution_parameters<ArgType>();
+  de_params.threads = test_threads;
   de_params.lower_bounds.resize(3, -1);
   de_params.upper_bounds.resize(3, 1);
   de_params.NP *= 10;
@@ -169,6 +178,7 @@ void test_three_hump_camel() {
   std::cout << "Testing differential evolution on the three hump camel . . .\n";
   using ArgType = std::array<Real, 2>;
   auto de_params = differential_evolution_parameters<ArgType>();
+  de_params.threads = test_threads;
   de_params.lower_bounds[0] = -5.0;
   de_params.lower_bounds[1] = -5.0;
   de_params.upper_bounds[0] = 5.0;
@@ -185,6 +195,7 @@ void test_beale() {
   std::cout << "Testing differential evolution on the Beale function . . .\n";
   using ArgType = std::array<Real, 2>;
   auto de_params = differential_evolution_parameters<ArgType>();
+  de_params.threads = test_threads;
   de_params.lower_bounds[0] = -5.0;
   de_params.lower_bounds[1] = -5.0;
   de_params.upper_bounds[0]= 5.0;
