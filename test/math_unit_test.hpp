@@ -59,7 +59,7 @@ namespace detail {
 }
 
 template<class Real>
-bool check_mollified_close(Real expected, Real computed, Real tol, std::string const & filename, std::string const & function, int line)
+bool check_mollified_close(Real expected, Real computed, Real tol, char const * filename, char const * function, int line)
 {
     using std::isnan;
     BOOST_MATH_ASSERT_MSG(!isnan(tol), "Tolerance cannot be a nan.");
@@ -101,7 +101,7 @@ bool check_mollified_close(Real expected, Real computed, Real tol, std::string c
 }
 
 template<class PreciseReal, class Real>
-bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::string const & filename, std::string const & function, int line)
+bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, char const * filename, char const * function, int line)
 {
     using std::max;
     using std::abs;
@@ -168,7 +168,7 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
 }
 
 template<typename Real>
-bool check_le(Real lesser, Real greater, std::string const & filename, std::string const & function, int line)
+bool check_le(Real lesser, Real greater, char const * filename, char const * function, int line)
 {
     using std::max;
     using std::abs;
@@ -217,7 +217,7 @@ bool check_le(Real lesser, Real greater, std::string const & filename, std::stri
 
 
 template<class PreciseReal, class Real>
-bool check_conditioned_error(Real abscissa, PreciseReal expected1, PreciseReal expected_derivative, Real computed, Real acceptable_badness, std::string const & filename, std::string const & function, int line)
+bool check_conditioned_error(Real abscissa, PreciseReal expected1, PreciseReal expected_derivative, Real computed, Real acceptable_badness, char const * filename, char const * function, int line)
 {
     using std::max;
     using std::abs;
@@ -298,7 +298,7 @@ bool check_conditioned_error(Real abscissa, PreciseReal expected1, PreciseReal e
 
 
 template<class PreciseReal, class Real>
-bool check_absolute_error(PreciseReal expected1, Real computed, Real acceptable_error, std::string const & filename, std::string const & function, int line)
+bool check_absolute_error(PreciseReal expected1, Real computed, Real acceptable_error, char const * filename, char const * function, int line)
 {
     using std::max;
     using std::abs;
@@ -387,7 +387,7 @@ bool check_relative_error(X const & x, Y const & y, Tol const & tol, char const 
 }
 
 template<class Real>
-bool check_nan(Real x, std::string const & filename, std::string const & function, int line)
+bool check_nan(Real x, char const * filename, char const * function, int line)
 {
     using std::isnan;
     if (!isnan(x)) {
@@ -402,7 +402,7 @@ bool check_nan(Real x, std::string const & filename, std::string const & functio
 }
 
 template<class Real>
-bool check_equal(Real x, Real y, std::string const & filename, std::string const & function, int line)
+bool check_equal(Real x, Real y, char const * filename, char const * function, int line)
 {
   using std::isnan;
   if (x != y) {
@@ -425,7 +425,7 @@ bool check_equal(Real x, Real y, std::string const & filename, std::string const
 }
 
 
-inline bool check_true(bool condition, std::string const & filename, std::string const & function, int line)
+inline bool check_true(bool condition, char const * filename, char const * function, int line)
 {
   if (!condition) {
     std::ios_base::fmtflags f( std::cerr.flags() );
@@ -438,7 +438,7 @@ inline bool check_true(bool condition, std::string const & filename, std::string
   return true;
 }
 
-inline void report_non_throw(const std::string& file, int line)
+inline void report_non_throw(char const * file, int line)
 {
    std::cerr << "Expected exception not thrown in test at: " << file << ":" << line << std::endl;
    ++detail::global_error_count();
@@ -450,7 +450,7 @@ inline void report_unexpected_throw(char const * file, int line)
    ++detail::global_error_count();
 }
 
-inline void report_incorrect_throw(const std::string& file, int line)
+inline void report_incorrect_throw(char const * file, int line)
 {
    std::cerr << "Exception of the wrong type thrown in test at: " << file << ":" << line << std::endl;
    ++detail::global_error_count();
