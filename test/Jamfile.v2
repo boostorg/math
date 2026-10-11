@@ -1006,7 +1006,7 @@ test-suite misc :
    [ run test_error_handling.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_legendre_stieltjes.cpp : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] $(float128_type)  ]
    [ run test_minima.cpp pch /boost/test//boost_unit_test_framework  ]
-   [ run test_rationals.cpp /boost/test//boost_unit_test_framework
+   [ run test_rationals.cpp
       test_rational_instances/test_rational_double1.cpp
       test_rational_instances/test_rational_double2.cpp
       test_rational_instances/test_rational_double3.cpp

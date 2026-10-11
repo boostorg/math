@@ -63,100 +63,100 @@ int main()
       mp_t r6 = boost::math::tools::evaluate_polynomial(&coef[0], mp_t(10247.25), i);
 
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_polynomial(n" << i << "c, static_cast<T>(0.125), " << i << "),\n"
          "      static_cast<T>(" << r1 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_polynomial(n" << i << "c, static_cast<T>(0.25), " << i << "),\n"
          "      static_cast<T>(" << r2 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_polynomial(n" << i << "c, static_cast<T>(0.75), " << i << "),\n"
          "      static_cast<T>(" << r3 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_polynomial(n" << i << "c, static_cast<T>(1.0f - 1.0f/64.0f), " << i << "),\n"
          "      static_cast<T>(" << r4 << "L),\n"
          "      tolerance);\n";
       if(fabs(r5) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_polynomial(n" << i << "c, static_cast<T>(6.5), " << i << "),\n"
             "      static_cast<T>(" << r5 << "L),\n"
             "      tolerance);\n";
       if(fabs(r6) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_polynomial(n" << i << "c, static_cast<T>(10247.25), " << i << "),\n"
             "      static_cast<T>(" << r6 << "L),\n"
             "      tolerance);\n\n";
 
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_polynomial(n" << i << "c, static_cast<T>(0.125)),\n"
          "      static_cast<T>(" << r1 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_polynomial(n" << i << "c, static_cast<T>(0.25)),\n"
          "      static_cast<T>(" << r2 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_polynomial(n" << i << "c, static_cast<T>(0.75)),\n"
          "      static_cast<T>(" << r3 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_polynomial(n" << i << "c, static_cast<T>(1.0f - 1.0f/64.0f)),\n"
          "      static_cast<T>(" << r4 << "L),\n"
          "      tolerance);\n";
       if(fabs(r5) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_polynomial(n" << i << "c, static_cast<T>(6.5)),\n"
             "      static_cast<T>(" << r5 << "L),\n"
             "      tolerance);\n";
       if(fabs(r6) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_polynomial(n" << i << "c, static_cast<T>(10247.25)),\n"
             "      static_cast<T>(" << r6 << "L),\n"
             "      tolerance);\n\n";
 
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_polynomial(n" << i << "a, static_cast<T>(0.125)),\n"
          "      static_cast<T>(" << r1 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_polynomial(n" << i << "a, static_cast<T>(0.25)),\n"
          "      static_cast<T>(" << r2 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_polynomial(n" << i << "a, static_cast<T>(0.75)),\n"
          "      static_cast<T>(" << r3 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_polynomial(n" << i << "a, static_cast<T>(1.0f - 1.0f/64.0f)),\n"
          "      static_cast<T>(" << r4 << "L),\n"
          "      tolerance);\n";
       if(fabs(r5) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_polynomial(n" << i << "a, static_cast<T>(6.5)),\n"
             "      static_cast<T>(" << r5 << "L),\n"
             "      tolerance);\n";
       if(fabs(r6) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_polynomial(n" << i << "a, static_cast<T>(10247.25)),\n"
             "      static_cast<T>(" << r6 << "L),\n"
             "      tolerance);\n\n";
@@ -169,100 +169,100 @@ int main()
       r6 = boost::math::tools::evaluate_even_polynomial(&coef[0], mp_t(10247.25), i);
 
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_even_polynomial(n" << i << "c, static_cast<T>(0.125), " << i << "),\n"
          "      static_cast<T>(" << r1 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_even_polynomial(n" << i << "c, static_cast<T>(0.25), " << i << "),\n"
          "      static_cast<T>(" << r2 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_even_polynomial(n" << i << "c, static_cast<T>(0.75), " << i << "),\n"
          "      static_cast<T>(" << r3 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_even_polynomial(n" << i << "c, static_cast<T>(1.0f - 1.0f/64.0f), " << i << "),\n"
          "      static_cast<T>(" << r4 << "L),\n"
          "      tolerance);\n";
       if(fabs(r5) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_even_polynomial(n" << i << "c, static_cast<T>(6.5f), " << i << "),\n"
             "      static_cast<T>(" << r5 << "L),\n"
             "      tolerance);\n";
       if(fabs(r6) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_even_polynomial(n" << i << "c, static_cast<T>(10247.25f), " << i << "),\n"
             "      static_cast<T>(" << r6 << "L),\n"
             "      tolerance);\n\n";
 
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_even_polynomial(n" << i << "c, static_cast<T>(0.125)),\n"
          "      static_cast<T>(" << r1 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_even_polynomial(n" << i << "c, static_cast<T>(0.25)),\n"
          "      static_cast<T>(" << r2 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_even_polynomial(n" << i << "c, static_cast<T>(0.75)),\n"
          "      static_cast<T>(" << r3 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_even_polynomial(n" << i << "c, static_cast<T>(1.0f - 1.0f/64.0f)),\n"
          "      static_cast<T>(" << r4 << "L),\n"
          "      tolerance);\n";
       if(fabs(r5) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_even_polynomial(n" << i << "c, static_cast<T>(6.5f)),\n"
             "      static_cast<T>(" << r5 << "L),\n"
             "      tolerance);\n";
       if(fabs(r6) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_even_polynomial(n" << i << "c, static_cast<T>(10247.25f)),\n"
             "      static_cast<T>(" << r6 << "L),\n"
             "      tolerance);\n\n";
 
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_even_polynomial(n" << i << "a, static_cast<T>(0.125)),\n"
          "      static_cast<T>(" << r1 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_even_polynomial(n" << i << "a, static_cast<T>(0.25)),\n"
          "      static_cast<T>(" << r2 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_even_polynomial(n" << i << "a, static_cast<T>(0.75)),\n"
          "      static_cast<T>(" << r3 << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_even_polynomial(n" << i << "a, static_cast<T>(1.0f - 1.0f/64.0f)),\n"
          "      static_cast<T>(" << r4 << "L),\n"
          "      tolerance);\n";
       if(fabs(r5) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_even_polynomial(n" << i << "a, static_cast<T>(6.5f)),\n"
             "      static_cast<T>(" << r5 << "L),\n"
             "      tolerance);\n";
       if(fabs(r6) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_even_polynomial(n" << i << "a, static_cast<T>(10247.25f)),\n"
             "      static_cast<T>(" << r6 << "L),\n"
             "      tolerance);\n\n";
@@ -277,100 +277,100 @@ int main()
          r6 = boost::math::tools::evaluate_odd_polynomial(&coef[0], mp_t(10247.25), i);
 
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_odd_polynomial(n" << i << "c, static_cast<T>(0.125), " << i << "),\n"
             "      static_cast<T>(" << r1 << "L),\n"
             "      tolerance);\n";
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_odd_polynomial(n" << i << "c, static_cast<T>(0.25), " << i << "),\n"
             "      static_cast<T>(" << r2 << "L),\n"
             "      tolerance);\n";
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_odd_polynomial(n" << i << "c, static_cast<T>(0.75), " << i << "),\n"
             "      static_cast<T>(" << r3 << "L),\n"
             "      tolerance);\n";
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_odd_polynomial(n" << i << "c, static_cast<T>(1.0f - 1.0f/64.0f), " << i << "),\n"
             "      static_cast<T>(" << r4 << "L),\n"
             "      tolerance);\n";
          if(fabs(r5) < tools::max_value<float>())
             std::cout <<
-               "   BOOST_CHECK_CLOSE(\n"
+               "   CHECK_RELATIVE_ERROR(\n"
                "      boost::math::tools::evaluate_odd_polynomial(n" << i << "c, static_cast<T>(6.5f), " << i << "),\n"
                "      static_cast<T>(" << r5 << "L),\n"
                "      tolerance);\n";
          if(fabs(r6) < tools::max_value<float>())
             std::cout <<
-               "   BOOST_CHECK_CLOSE(\n"
+               "   CHECK_RELATIVE_ERROR(\n"
                "      boost::math::tools::evaluate_odd_polynomial(n" << i << "c, static_cast<T>(10247.25f), " << i << "),\n"
                "      static_cast<T>(" << r6 << "L),\n"
                "      tolerance);\n\n";
 
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_odd_polynomial(n" << i << "c, static_cast<T>(0.125)),\n"
             "      static_cast<T>(" << r1 << "L),\n"
             "      tolerance);\n";
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_odd_polynomial(n" << i << "c, static_cast<T>(0.25)),\n"
             "      static_cast<T>(" << r2 << "L),\n"
             "      tolerance);\n";
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_odd_polynomial(n" << i << "c, static_cast<T>(0.75)),\n"
             "      static_cast<T>(" << r3 << "L),\n"
             "      tolerance);\n";
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_odd_polynomial(n" << i << "c, static_cast<T>(1.0f - 1.0f/64.0f)),\n"
             "      static_cast<T>(" << r4 << "L),\n"
             "      tolerance);\n";
          if(fabs(r5) < tools::max_value<float>())
             std::cout <<
-               "   BOOST_CHECK_CLOSE(\n"
+               "   CHECK_RELATIVE_ERROR(\n"
                "      boost::math::tools::evaluate_odd_polynomial(n" << i << "c, static_cast<T>(6.5f)),\n"
                "      static_cast<T>(" << r5 << "L),\n"
                "      tolerance);\n";
          if(fabs(r6) < tools::max_value<float>())
             std::cout <<
-               "   BOOST_CHECK_CLOSE(\n"
+               "   CHECK_RELATIVE_ERROR(\n"
                "      boost::math::tools::evaluate_odd_polynomial(n" << i << "c, static_cast<T>(10247.25f)),\n"
                "      static_cast<T>(" << r6 << "L),\n"
                "      tolerance);\n\n";
 
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_odd_polynomial(n" << i << "a, static_cast<T>(0.125)),\n"
             "      static_cast<T>(" << r1 << "L),\n"
             "      tolerance);\n";
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_odd_polynomial(n" << i << "a, static_cast<T>(0.25)),\n"
             "      static_cast<T>(" << r2 << "L),\n"
             "      tolerance);\n";
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_odd_polynomial(n" << i << "a, static_cast<T>(0.75)),\n"
             "      static_cast<T>(" << r3 << "L),\n"
             "      tolerance);\n";
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_odd_polynomial(n" << i << "a, static_cast<T>(1.0f - 1.0f/64.0f)),\n"
             "      static_cast<T>(" << r4 << "L),\n"
             "      tolerance);\n";
          if(fabs(r5) < tools::max_value<float>())
             std::cout <<
-               "   BOOST_CHECK_CLOSE(\n"
+               "   CHECK_RELATIVE_ERROR(\n"
                "      boost::math::tools::evaluate_odd_polynomial(n" << i << "a, static_cast<T>(6.5f)),\n"
                "      static_cast<T>(" << r5 << "L),\n"
                "      tolerance);\n";
          if(fabs(r6) < tools::max_value<float>())
             std::cout <<
-               "   BOOST_CHECK_CLOSE(\n"
+               "   CHECK_RELATIVE_ERROR(\n"
                "      boost::math::tools::evaluate_odd_polynomial(n" << i << "a, static_cast<T>(10247.25f)),\n"
                "      static_cast<T>(" << r6 << "L),\n"
                "      tolerance);\n\n";
@@ -418,100 +418,100 @@ int main()
       mp_t r6d = boost::math::tools::evaluate_polynomial(&coef[0], mp_t(10247.25), i);
 
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_rational(n" << i << "c, d" << i << "c, static_cast<T>(0.125), " << i << "),\n"
          "      static_cast<T>(" << r1/r1d << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_rational(n" << i << "c, d" << i << "c, static_cast<T>(0.25), " << i << "),\n"
          "      static_cast<T>(" << r2/r2d << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_rational(n" << i << "c, d" << i << "c, static_cast<T>(0.75), " << i << "),\n"
          "      static_cast<T>(" << r3/r3d << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_rational(n" << i << "c, d" << i << "c, static_cast<T>(1.0f - 1.0f/64.0f), " << i << "),\n"
          "      static_cast<T>(" << r4/r4d << "L),\n"
          "      tolerance);\n";
       if(fabs(r5/r5d) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_rational(n" << i << "c, d" << i << "c, static_cast<T>(6.5f), " << i << "),\n"
             "      static_cast<T>(" << r5/r5d << "L),\n"
             "      tolerance);\n";
       if(fabs(r6/r6d) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_rational(n" << i << "c, d" << i << "c, static_cast<T>(10247.25f), " << i << "),\n"
             "      static_cast<T>(" << r6/r6d << "L),\n"
             "      tolerance);\n\n";
 
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_rational(n" << i << "c, d" << i << "c, static_cast<T>(0.125)),\n"
          "      static_cast<T>(" << r1/r1d << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_rational(n" << i << "c, d" << i << "c, static_cast<T>(0.25)),\n"
          "      static_cast<T>(" << r2/r2d << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_rational(n" << i << "c, d" << i << "c, static_cast<T>(0.75)),\n"
          "      static_cast<T>(" << r3/r3d << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_rational(n" << i << "c, d" << i << "c, static_cast<T>(1.0f - 1.0f/64.0f)),\n"
          "      static_cast<T>(" << r4/r4d << "L),\n"
          "      tolerance);\n";
       if(fabs(r5/r5d) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_rational(n" << i << "c, d" << i << "c, static_cast<T>(6.5f)),\n"
             "      static_cast<T>(" << r5/r5d << "L),\n"
             "      tolerance);\n";
       if(fabs(r6/r6d) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_rational(n" << i << "c, d" << i << "c, static_cast<T>(10247.25f)),\n"
             "      static_cast<T>(" << r6/r6d << "L),\n"
             "      tolerance);\n\n";
 
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_rational(n" << i << "a, d" << i << "a, static_cast<T>(0.125)),\n"
          "      static_cast<T>(" << r1/r1d << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_rational(n" << i << "a, d" << i << "a, static_cast<T>(0.25)),\n"
          "      static_cast<T>(" << r2/r2d << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_rational(n" << i << "a, d" << i << "a, static_cast<T>(0.75)),\n"
          "      static_cast<T>(" << r3/r3d << "L),\n"
          "      tolerance);\n";
       std::cout <<
-         "   BOOST_CHECK_CLOSE(\n"
+         "   CHECK_RELATIVE_ERROR(\n"
          "      boost::math::tools::evaluate_rational(n" << i << "a, d" << i << "a, static_cast<T>(1.0f - 1.0f/64.0f)),\n"
          "      static_cast<T>(" << r4/r4d << "L),\n"
          "      tolerance);\n";
       if(fabs(r5/r5d) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_rational(n" << i << "a, d" << i << "a, static_cast<T>(6.5f)),\n"
             "      static_cast<T>(" << r5/r5d << "L),\n"
             "      tolerance);\n";
       if(fabs(r6/r6d) < tools::max_value<float>())
          std::cout <<
-            "   BOOST_CHECK_CLOSE(\n"
+            "   CHECK_RELATIVE_ERROR(\n"
             "      boost::math::tools::evaluate_rational(n" << i << "a, d" << i << "a, static_cast<T>(10247.25f)),\n"
             "      static_cast<T>(" << r6/r6d << "L),\n"
             "      tolerance);\n\n";
