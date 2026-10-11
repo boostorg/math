@@ -3,6 +3,10 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+// The test data contains overflows, which the test expects to come back as infinities, as in the
+// test_instances library (which is compiled with this policy).  The headers are included here as well,
+// so the policy has to agree with the library's to avoid two different definitions of the same functions:
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #include <pch_light.hpp>
 #include "test_laguerre.hpp"
 
