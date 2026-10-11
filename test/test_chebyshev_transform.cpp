@@ -5,17 +5,28 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 #include "math_unit_test.hpp"
+#include <algorithm>
+#include <cmath>
+#include <random>
+#include <vector>
 #include <boost/type_index.hpp>
 #include <boost/math/special_functions/chebyshev.hpp>
 #include <boost/math/special_functions/chebyshev_transform.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/math/tools/test_value.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/multiprecision/cpp_complex.hpp>
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/float128.hpp>
+#include <boost/multiprecision/complex128.hpp>
+#endif
 
-#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4)
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5)
 #  define TEST1
 #  define TEST2
 #  define TEST3
 #  define TEST4
+#  define TEST5
 #endif
 
 using boost::math::chebyshev_t;
@@ -38,14 +49,16 @@ void test_sin_chebyshev_transform()
     Real a = 0;
     Real b = 1;
     chebyshev_transform<Real> cheb(f, a, b, tol);
+    // Higher precision needs a longer series, and the rounding error of the derivative grows like its length squared.
+    Real slack = std::numeric_limits<Real>::digits > 64 ? 10 : 1;
 
     Real x = a;
     while (x < b)
     {
         Real s = sin(x);
         Real c = cos(x);
-        CHECK_ABSOLUTE_ERROR(s, cheb(x), tol);
-        CHECK_ABSOLUTE_ERROR(c, cheb.prime(x), 150*tol);
+        CHECK_ABSOLUTE_ERROR(s, cheb(x), slack*tol);
+        CHECK_ABSOLUTE_ERROR(c, cheb.prime(x), 200*slack*tol);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
 
@@ -70,6 +83,8 @@ void test_sinc_chebyshev_transform()
     Real a = 0;
     Real b = 1;
     chebyshev_transform<Real> cheb(f, a, b, tol/50);
+    // See test_sin_chebyshev_transform.
+    Real slack = std::numeric_limits<Real>::digits > 64 ? 10 : 1;
 
     Real x = a;
     while (x < b)
@@ -79,7 +94,7 @@ void test_sinc_chebyshev_transform()
         if (x == 0) { ds = 0; }
 
         CHECK_ABSOLUTE_ERROR(s, cheb(x), tol);
-        CHECK_ABSOLUTE_ERROR(ds, cheb.prime(x), 10*tol);
+        CHECK_ABSOLUTE_ERROR(ds, cheb.prime(x), 10*slack*tol);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
 
@@ -124,7 +139,9 @@ void test_atap_examples()
         // Basically, the max refinements are always hit; so the error is not related to the precision of the type.
         Real acceptable_error = sqrt(tol);
         Real acceptable_error_2 = 9e-4;
-        if (std::is_same<Real, long double>::value)
+        // The error is that of truncating the series of a discontinuous function (about 1/n at the
+        // maximum length n = 2^24), so it does not shrink with the precision beyond that of long double.
+        if (std::is_same<Real, long double>::value || std::numeric_limits<Real>::digits > 64)
         {
             acceptable_error = 1.6e-5;
         }
@@ -185,15 +202,59 @@ void test_chebyshev_chebyshev_transform()
     }
 }
 
+// The DCT-II behind chebyshev_transform, for odd and even n, against a naive sum in 50 digits;
+// the in-place transform agrees with the out-of-place one to 0 ulps.
+template <class Real>
+void test_dct_ii()
+{
+   using boost::multiprecision::cpp_bin_float_50;
+   std::mt19937_64 gen(5);
+   std::uniform_real_distribution<double> dis(-1, 1);
+   for (std::size_t n : {1, 2, 3, 4, 5, 7, 8, 12, 17, 64, 100, 127, 1000})
+   {
+      std::vector<Real> x(n);
+      for (auto& t : x)
+      {
+         t = Real(dis(gen));
+      }
+      boost::math::detail::dct_ii<Real> dct(n);
+      std::vector<Real> y(n);
+      dct.execute(x.data(), y.data());
+      std::vector<Real> z = x;
+      dct.execute(z.data());
+      CHECK_EQUAL(z == y, true);
+      // y[k] = 2 sum_j x[j] cos(pi k (2j+1)/(2n)); the error bound is normwise, like the FFT's.
+      Real scale = 0;
+      std::vector<cpp_bin_float_50> ref(n);
+      for (std::size_t k = 0; k < n; ++k)
+      {
+         cpp_bin_float_50 sum = 0;
+         for (std::size_t j = 0; j < n; ++j)
+         {
+            sum += cpp_bin_float_50(x[j]) * boost::math::cos_pi(cpp_bin_float_50((2 * j + 1) * k) / (2 * n));
+         }
+         ref[k] = 2 * sum;
+         scale = (std::max)(scale, static_cast<Real>(abs(ref[k])));
+      }
+      Real L = static_cast<Real>(std::log2(static_cast<double>(n)) + 1);
+      for (std::size_t k = 0; k < n; ++k)
+      {
+         CHECK_ABSOLUTE_ERROR(static_cast<Real>(ref[k]), y[k], 4 * std::numeric_limits<Real>::epsilon() * L * scale);
+      }
+   }
+}
+
 int main()
 {
 #ifdef TEST1
+    test_dct_ii<float>();
     test_chebyshev_chebyshev_transform<float>();
     test_sin_chebyshev_transform<float>();
     test_atap_examples<float>();
     test_sinc_chebyshev_transform<float>();
 #endif
 #ifdef TEST2
+    test_dct_ii<double>();
     test_chebyshev_chebyshev_transform<double>();
     test_sin_chebyshev_transform<double>();
     test_atap_examples<double>();
@@ -207,11 +268,19 @@ int main()
 #endif
 #ifdef TEST4
 #ifdef BOOST_HAS_FLOAT128
-    test_chebyshev_chebyshev_transform<__float128>();
-    test_sin_chebyshev_transform<__float128>();
-    test_atap_examples<__float128>();
-    test_sinc_chebyshev_transform<__float128>();
+    using boost::multiprecision::float128;
+    test_chebyshev_chebyshev_transform<float128>();
+    test_sin_chebyshev_transform<float128>();
+    test_atap_examples<float128>();
+    test_sinc_chebyshev_transform<float128>();
 #endif
+#endif
+#ifdef TEST5
+    // The atap examples are not smooth, so they run to the maximum length (2^23 points); too slow in software arithmetic.
+    using boost::multiprecision::cpp_bin_float_50;
+    test_chebyshev_chebyshev_transform<cpp_bin_float_50>();
+    test_sin_chebyshev_transform<cpp_bin_float_50>();
+    test_sinc_chebyshev_transform<cpp_bin_float_50>();
 #endif
 
     return boost::math::test::report_errors();

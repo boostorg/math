@@ -42,6 +42,7 @@ set(BOOST_MATH_NB_SOURCES
   src/distributions_heavy.cpp
   src/distributions_discrete.cpp
   src/distributions_noncentral.cpp
+  src/fft.cpp
 )
 
 nanobind_add_module(_ext NOMINSIZE ${BOOST_MATH_NB_SOURCES})

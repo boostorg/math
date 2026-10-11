@@ -72,7 +72,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y g++-14 clang-18 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-14 clang-18 libgmp-dev libmpfr-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -131,7 +131,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y g++-13 clang-19 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-13 clang-19 libgmp-dev libmpfr-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -335,7 +335,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y g++-13 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-13 libgmp-dev libmpfr-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -377,7 +377,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y clang-19 libgmp-dev libmpfr-dev libfftw3-dev libtbb-dev
+        run: sudo apt-get install -y clang-19 libgmp-dev libmpfr-dev libtbb-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -422,7 +422,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y g++-13 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-13 libgmp-dev libmpfr-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -470,7 +470,7 @@ jobs:
 
       - name: Install packages
         if: matrix.install
-        run: sudo apt install ${{matrix.install}} libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt install ${{matrix.install}} libgmp-dev libmpfr-dev
 
       - name: Setup Boost
         run: |

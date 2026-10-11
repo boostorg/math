@@ -7,118 +7,92 @@
 #define BOOST_MATH_SPECIAL_CHEBYSHEV_TRANSFORM_HPP
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
+#include <cstddef>
+#include <limits>
+#include <stdexcept>
 #include <type_traits>
+#include <vector>
 #endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/chebyshev.hpp>
-
-#ifdef BOOST_HAS_FLOAT128
-#include <quadmath.h>
-#endif
-
-#ifdef __has_include
-#  if __has_include(<fftw3.h>)
-#    include <fftw3.h>
-#  else
-#    error "This feature is unavailable without fftw3 installed"
-#endif
-#endif
+#include <boost/math/special_functions/cos_pi.hpp>
+#include <boost/math/special_functions/sin_pi.hpp>
+#include <boost/math/tools/fft.hpp>
+#include <boost/math/tools/detail/complex_from_real.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail{
 
-template <class T>
-struct fftw_cos_transform;
-
-template<>
-struct fftw_cos_transform<double>
+// The type II discrete cosine transform with FFTW's REDFT10 normalisation,
+//
+//    y[k] = 2 sum_{j=0}^{n-1} x[j] cos(pi*k*(2j+1)/(2n)),
+//
+// computed with one real FFT of length n (Makhoul, IEEE Trans. ASSP 28(1), 1980):
+// with v[j] = x[2j] and v[n-1-j] = x[2j+1], and V the DFT of v,
+// y[k] = 2 Re(exp(-i*pi*k/(2n)) V[k]) and y[n-k] = -2 Im(exp(-i*pi*k/(2n)) V[k]).
+template <class Real>
+class dct_ii
 {
-   fftw_cos_transform(int n, double* data1, double* data2)
+public:
+   using complex_type = typename BOOST_MATH_NAMESPACE::tools::detail::complex_from_real<Real>::type;
+
+   explicit dct_ii(std::size_t n) : m_n(n), m_fft(n), m_v(n), m_V(n / 2 + 1), m_cos(n / 2 + 1), m_sin(n / 2 + 1)
    {
-      plan = fftw_plan_r2r_1d(n, data1, data2, FFTW_REDFT10, FFTW_ESTIMATE);
+      // exp(-i*pi*k/(2n)) = cos - i sin for k in [0, n/2]; the argument k/(2n) has at most one rounding.
+      for (std::size_t k = 0; k <= n / 2; ++k)
+      {
+         Real x = static_cast<Real>(k) / static_cast<Real>(2 * n);
+         m_cos[k] = BOOST_MATH_NAMESPACE::cos_pi(x);
+         m_sin[k] = BOOST_MATH_NAMESPACE::sin_pi(x);
+      }
    }
-   ~fftw_cos_transform()
+
+   // In place: replaces the n values at x with their transform.
+   void execute(Real* x)
    {
-      fftw_destroy_plan(plan);
+      execute(x, x);
    }
-   void execute(double* data1, double* data2)
+
+   // Reads n values from x and writes n values to y. x and y are either the same array (all of x is read
+   // into the workspace before y is written) or don't overlap. Any n > 0 works, odd or even; the constructor
+   // allocates all the workspace, so execute never allocates.
+   void execute(const Real* x, Real* y)
    {
-      fftw_execute_r2r(plan, data1, data2);
+      for (std::size_t j = 0; 2 * j < m_n; ++j)
+      {
+         m_v[j] = x[2 * j];
+      }
+      for (std::size_t j = 0; 2 * j + 1 < m_n; ++j)
+      {
+         m_v[m_n - 1 - j] = x[2 * j + 1];
+      }
+      m_fft.transform(m_v, m_V);
+      for (std::size_t k = 0; k <= m_n / 2; ++k)
+      {
+         Real vr = m_V[k].real();
+         Real vi = m_V[k].imag();
+         // (cos - i sin)(vr + i vi)
+         y[k] = 2 * (m_cos[k] * vr + m_sin[k] * vi);
+         if (k != 0 && m_n - k != k)
+         {
+            y[m_n - k] = -2 * (m_cos[k] * vi - m_sin[k] * vr);
+         }
+      }
    }
-   static double cos(double x) { return std::cos(x); }
-   static double fabs(double x) { return std::fabs(x); }
+
 private:
-   fftw_plan plan;
+   std::size_t m_n;
+   BOOST_MATH_NAMESPACE::tools::real_fft<complex_type> m_fft;
+   std::vector<Real> m_v;
+   std::vector<complex_type> m_V;
+   std::vector<Real> m_cos;
+   std::vector<Real> m_sin;
 };
 
-template<>
-struct fftw_cos_transform<float>
-{
-   fftw_cos_transform(int n, float* data1, float* data2)
-   {
-      plan = fftwf_plan_r2r_1d(n, data1, data2, FFTW_REDFT10, FFTW_ESTIMATE);
-   }
-   ~fftw_cos_transform()
-   {
-      fftwf_destroy_plan(plan);
-   }
-   void execute(float* data1, float* data2)
-   {
-      fftwf_execute_r2r(plan, data1, data2);
-   }
-   static float cos(float x) { return std::cos(x); }
-   static float fabs(float x) { return std::fabs(x); }
-private:
-   fftwf_plan plan;
-};
-
-template<>
-struct fftw_cos_transform<long double>
-{
-   fftw_cos_transform(int n, long double* data1, long double* data2)
-   {
-      plan = fftwl_plan_r2r_1d(n, data1, data2, FFTW_REDFT10, FFTW_ESTIMATE);
-   }
-   ~fftw_cos_transform()
-   {
-      fftwl_destroy_plan(plan);
-   }
-   void execute(long double* data1, long double* data2)
-   {
-      fftwl_execute_r2r(plan, data1, data2);
-   }
-   static long double cos(long double x) { return std::cos(x); }
-   static long double fabs(long double x) { return std::fabs(x); }
-private:
-   fftwl_plan plan;
-};
-#ifdef BOOST_HAS_FLOAT128
-template<>
-struct fftw_cos_transform<__float128>
-{
-   fftw_cos_transform(int n, __float128* data1, __float128* data2)
-   {
-      plan = fftwq_plan_r2r_1d(n, data1, data2, FFTW_REDFT10, FFTW_ESTIMATE);
-   }
-   ~fftw_cos_transform()
-   {
-      fftwq_destroy_plan(plan);
-   }
-   void execute(__float128* data1, __float128* data2)
-   {
-      fftwq_execute_r2r(plan, data1, data2);
-   }
-   static __float128 cos(__float128 x) { return cosq(x); }
-   static __float128 fabs(__float128 x) { return fabsq(x); }
-private:
-   fftwq_plan plan;
-};
-
-#endif
 }
 
-template<class Real>
+BOOST_MATH_EXPORT template<class Real>
 class chebyshev_transform
 {
 public:
@@ -132,8 +106,6 @@ public:
             throw std::domain_error("a < b is required.\n");
         }
         using BOOST_MATH_NAMESPACE::constants::half;
-        using BOOST_MATH_NAMESPACE::constants::pi;
-        using std::cos;
         using std::abs;
         Real bma = (b-a)*half<Real>();
         Real bpa = (b+a)*half<Real>();
@@ -146,23 +118,23 @@ public:
             vf.resize(n);
             m_coeffs.resize(n);
 
-            detail::fftw_cos_transform<Real> plan(static_cast<int>(n), vf.data(), m_coeffs.data());
+            detail::dct_ii<Real> dct(n);
             Real inv_n = 1/static_cast<Real>(n);
             for(size_t j = 0; j < n/2; ++j)
             {
                 // Use symmetry cos((j+1/2)pi/n) = - cos((n-1-j+1/2)pi/n)
-                Real y = detail::fftw_cos_transform<Real>::cos(pi<Real>()*(j+half<Real>())*inv_n);
+                Real y = BOOST_MATH_NAMESPACE::cos_pi(static_cast<Real>(2*j+1)/static_cast<Real>(2*n));
                 vf[j] = f(y*bma + bpa)*inv_n;
                 vf[n-1-j]= f(bpa-y*bma)*inv_n;
             }
 
-            plan.execute(vf.data(), m_coeffs.data());
+            dct.execute(vf.data(), m_coeffs.data());
             Real max_coeff = 0;
             for (auto const & coeff : m_coeffs)
             {
-                if (detail::fftw_cos_transform<Real>::fabs(coeff) > max_coeff)
+                if (abs(coeff) > max_coeff)
                 {
-                    max_coeff = detail::fftw_cos_transform<Real>::fabs(coeff);
+                    max_coeff = abs(coeff);
                 }
             }
             size_t j = m_coeffs.size() - 1;

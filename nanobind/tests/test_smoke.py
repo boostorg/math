@@ -274,10 +274,38 @@ def test_array_matches_scalar(case):
     assert np.all(got == want)
 
 
+# Not elementwise, so tested on their own below.
+SIEVE = {"prime_sieve", "prime_range", "prime_count"}
+
+
 def test_every_function_has_a_case():
     names = {n for n in bm.__all__ if not inspect.isclass(getattr(bm, n))}
-    covered = {c[0] for c in CASES}
+    covered = {c[0] for c in CASES} | SIEVE
     assert names - covered == set()
+
+
+def test_sieve():
+    want = [p for p in range(2, 100) if all(p % d for d in range(2, p))]
+    got = bm.prime_sieve(100)
+    assert got.dtype == np.uint64 and list(got) == want
+    assert list(bm.prime_range(50, 100)) == [p for p in want if p >= 50]
+    assert bm.prime_count(100) == len(want) and bm.prime_count(50, 100) == len([p for p in want if p >= 50])
+    assert bm.prime_count(10**7) == 664579
+    assert list(bm.prime_range(2**63 - 100, 2**63)) == [9223372036854775783]
+
+
+def test_integer_results():
+    assert type(bm.prime(3)) is int and bm.prime(3) == 7
+    assert bm.prime(np.arange(4)).dtype == np.uint64
+    assert bm.fibonacci(93) == 12200160415121876738 and bm.fibonacci(np.arange(3)).dtype == np.uint64
+    with pytest.raises(ValueError):
+        bm.prime(np.array([1, 20000]))
+
+
+def test_python_scalars_give_python_floats():
+    assert type(bm.libeta(1, 2, 0.1)) is float
+    assert type(bm.tgamma(np.float32(3))) is np.float32
+    assert bm.libeta(1, 2, 0) == -np.inf
 
 
 # --- conventions ------------------------------------------------------------
@@ -390,9 +418,14 @@ DISCRETE = [
 ]
 
 
+# Classes that are not distributions.
+TRANSFORMS = {"fft", "real_fft", "dct_ii"}
+
+
 def test_every_distribution_has_a_case():
     names = {n for n in bm.__all__ if inspect.isclass(getattr(bm, n))}
-    assert names == {c[0] for c in CONTINUOUS + DISCRETE}
+    assert names - TRANSFORMS == {c[0] for c in CONTINUOUS + DISCRETE}
+    assert TRANSFORMS <= names
 
 
 @pytest.mark.parametrize("case", CONTINUOUS, ids=lambda c: c[0])

@@ -25,6 +25,9 @@
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <boost/math/special_functions/fibonacci.hpp>
 #include <boost/math/special_functions/prime.hpp>
+#include <boost/math/special_functions/prime_sieve.hpp>
+#include <cstdint>
+#include <vector>
 
 #include "bindings.hpp"
 #include "macros.hpp"
@@ -64,5 +67,37 @@ void bmpy::bind_elementary(nb::module_& m) {
        m, "fibonacci", []<class T>(unsigned long long n) { return bm::fibonacci<std::uint64_t>(n); }, {"n"},
        "boost::math::fibonacci<std::uint64_t>");
    bmpy::def_vec<bmpy::Int<unsigned>>(
-       m, "prime", []<class T>(unsigned n) { return bm::prime(n); }, {"n"}, "boost::math::prime");
+       m, "prime", []<class T>(unsigned n) { return static_cast<std::uint64_t>(bm::prime(n)); }, {"n"}, "boost::math::prime");
+
+   // The segmented sieve; results are uint64 arrays. prime_count needs an execution policy, and
+   // libc++ may have no <execution>; without nvcc the cuda policy runs on the CPU.
+   auto to_array = [](std::vector<std::uint64_t>&& primes) {
+      auto* data = new std::vector<std::uint64_t>(std::move(primes));
+      nb::capsule owner(data, [](void* p) noexcept { delete static_cast<std::vector<std::uint64_t>*>(p); });
+      return nb::ndarray<nb::numpy, std::uint64_t, nb::ndim<1>>(data->data(), {data->size()}, owner);
+   };
+   m.def("prime_sieve", [to_array](std::uint64_t upper) {
+      std::vector<std::uint64_t> primes;
+      {
+         nb::gil_scoped_release release;
+         bm::prime_sieve(upper, primes);
+      }
+      return to_array(std::move(primes));
+   }, nb::arg("upper"), "boost::math::prime_sieve: the primes in [2, upper)");
+   m.def("prime_range", [to_array](std::uint64_t lower, std::uint64_t upper) {
+      std::vector<std::uint64_t> primes;
+      {
+         nb::gil_scoped_release release;
+         bm::prime_range(lower, upper, primes);
+      }
+      return to_array(std::move(primes));
+   }, nb::arg("lower"), nb::arg("upper"), "boost::math::prime_range: the primes in [lower, upper)");
+   m.def("prime_count", [](std::uint64_t upper) {
+      nb::gil_scoped_release release;
+      return bm::prime_count(bm::execution::cuda, upper);
+   }, nb::arg("upper"), "boost::math::prime_count: the number of primes in [2, upper)");
+   m.def("prime_count", [](std::uint64_t lower, std::uint64_t upper) {
+      nb::gil_scoped_release release;
+      return bm::prime_count(bm::execution::cuda, lower, upper);
+   }, nb::arg("lower"), nb::arg("upper"), "boost::math::prime_count: the number of primes in [lower, upper)");
 }

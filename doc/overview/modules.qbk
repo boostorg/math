@@ -42,7 +42,7 @@ The `cmake-module-test` job in the library's CI runs this configuration on every
 * The `user_error` policy is not supported through the module, because a user supplied `boost::math::policies::user_..._error` definition cannot attach to the module.
 * A program should consume Boost.Math either through the module or through textual includes, not both.
   The only headers that are safe to include textually alongside the import are `boost/math/tools/config.hpp` and `boost/math/tools/assert.hpp`, which the test support headers rely on.
-* Excluded from the module: the TR1/C99 interfaces and `common_factor` headers, `boost/math/bindings`, `boost/math/concepts`, `boost/math/cstdfloat`, all deprecated headers, and the headers that require external non-Boost dependencies (`chebyshev_transform.hpp` and `interpolators/cardinal_trigonometric.hpp` need FFTW, `optimization/cma_es.hpp` needs Eigen).
+* Excluded from the module: the TR1/C99 interfaces and `common_factor` headers, `boost/math/bindings`, `boost/math/concepts`, `boost/math/cstdfloat`, all deprecated headers, and `optimization/cma_es.hpp`, which requires Eigen.
   These remain available as ordinary includes.
 * `__float128` support (`BOOST_MATH_USE_FLOAT128`) is not enabled in the module build.
 * On libc++ the parallel execution policy overloads in statistics compile out (no `<execution>` support), matching the ordinary header behavior on that standard library.
