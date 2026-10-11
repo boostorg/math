@@ -91,7 +91,6 @@ jacobi_elliptic	jacobi_sn(0.25,arg)	-10	10
 jacobi_theta	jacobi_theta1(arg,0.5)	-10	10
 jacobi_theta	jacobi_theta1tau(arg,0.5)	-10	10
 jacobi_theta	jacobi_theta2(arg,0.5)	-10	10
-jacobi_theta	jacobi_theta1tau(arg,0.5)	-10	10
 jacobi_theta	jacobi_theta3(arg,0.5)	-10	10
 jacobi_theta	jacobi_theta3tau(arg,0.5)	-10	10
 jacobi_theta	jacobi_theta3m1(arg,0.5)	-10	10
