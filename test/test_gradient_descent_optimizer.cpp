@@ -28,7 +28,7 @@ void default_gd_test()
     gdopt.step();
   }
   for (auto& x : x_ad) {
-    CHECK_ABSOLUTE_ERROR(0,x.item(), eps);
+    if (!CHECK_ABSOLUTE_ERROR(0,x.item(), eps)) { return; }
   }
 }
 template <class T>
@@ -47,7 +47,7 @@ void test_minimize()
     bopt::make_gradient_descent(&quadratic<rdiff::rvar<T, 1>>, x_ad, lr);
   auto z = minimize(gdopt);
   for (auto& x : x_ad) {
-    CHECK_ABSOLUTE_ERROR(0,x.item(), eps);
+    if (!CHECK_ABSOLUTE_ERROR(0,x.item(), eps)) { return; }
   }
 }
 template <class T>
@@ -85,7 +85,7 @@ void const_initializer_test()
 
   for (auto& xi : x) {
     T v = xi.item();
-    CHECK_RELATIVE_ERROR(v, T{ 5.0 }, (T{ 1e-3 }) / 100);
+    if (!CHECK_RELATIVE_ERROR(v, T{ 5.0 }, (T{ 1e-3 }) / 100)) { return; }
   }
   gdopt.step();
 }
@@ -126,7 +126,7 @@ void max_iter_test()
                    bopt::max_iter_termination_policy(max_iter));
 
   CHECK_TRUE(!res.converged); // should not converge with tiny lr
-  CHECK_EQUAL(res.num_iter, max_iter);
+  if (!CHECK_EQUAL(res.num_iter, max_iter)) { return; }
 }
 template <class T>
 void history_tracking_test()
@@ -163,8 +163,8 @@ void rosenbrock_test()
     bopt::gradient_norm_convergence_policy<T>(T{ 1e-4 }),
     bopt::max_iter_termination_policy(50000));
   CHECK_TRUE(res.converged);
-  CHECK_RELATIVE_ERROR(x[0].item(), T{ 1.0 }, (T{ 1e-1 }) / 100);
-  CHECK_RELATIVE_ERROR(x[1].item(), T{ 1.0 }, (T{ 1e-1 }) / 100);
+  if (!CHECK_RELATIVE_ERROR(x[0].item(), T{ 1.0 }, (T{ 1e-1 }) / 100)) { return; }
+  if (!CHECK_RELATIVE_ERROR(x[1].item(), T{ 1.0 }, (T{ 1e-1 }) / 100)) { return; }
 }
 template <class T>
 void objective_tol_convergence_test()
@@ -352,7 +352,7 @@ void analytic_derivative_policies()
     gdopt.step();
   }
   for (auto& xi : x) {
-    CHECK_ABSOLUTE_ERROR(0,xi, eps);
+    if (!CHECK_ABSOLUTE_ERROR(0,xi, eps)) { return; }
   }
 }
 

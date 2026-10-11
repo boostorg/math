@@ -108,18 +108,18 @@ void flat_linear_allocator_test_checkpointing()
 
   for (size_t i = 0; i < checkpoint_indices.size(); ++i) {
     auto it = float_allocator.checkpoint_at(i);
-    CHECK_TRUE(it != float_allocator.begin());
+    if (!CHECK_TRUE(it != float_allocator.begin())) { return; }
     --it;
     CHECK_EQUAL(*it, expected_value_at_checkpoint[i]);
   }
 
   auto first_ckp = float_allocator.first_checkpoint();
-  CHECK_TRUE(first_ckp != float_allocator.begin());
+  if (!CHECK_TRUE(first_ckp != float_allocator.begin())) { return; }
   --first_ckp;
   CHECK_EQUAL(*first_ckp, expected_value_at_checkpoint.front());
 
   auto last_ckp = float_allocator.last_checkpoint();
-  CHECK_TRUE(last_ckp != float_allocator.begin());
+  if (!CHECK_TRUE(last_ckp != float_allocator.begin())) { return; }
   --last_ckp;
   CHECK_EQUAL(*last_ckp, expected_value_at_checkpoint.back());
 

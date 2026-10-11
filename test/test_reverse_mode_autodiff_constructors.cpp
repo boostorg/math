@@ -162,14 +162,14 @@ void inplace_addition()
 
     x1 += x2;
 
-    CHECK_EQUAL(x1.item(), expected);
+    if (!CHECK_EQUAL(x1.item(), expected)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     x1.backward();
 
-    CHECK_RELATIVE_ERROR(orig_x1.adjoint(), 1.0, (300 * std::numeric_limits<T>::epsilon()) / 100);
-    CHECK_RELATIVE_ERROR(orig_x2.adjoint(), 1.0, (300 * std::numeric_limits<T>::epsilon()) / 100);
+    if (!CHECK_RELATIVE_ERROR(orig_x1.adjoint(), 1.0, (300 * std::numeric_limits<T>::epsilon()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(orig_x2.adjoint(), 1.0, (300 * std::numeric_limits<T>::epsilon()) / 100)) { return; }
     tape.clear();
 }
 
@@ -190,14 +190,14 @@ void inplace_subtraction()
 
     x1 -= x2;
 
-    CHECK_EQUAL(x1.item(), expected);
+    if (!CHECK_EQUAL(x1.item(), expected)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     x1.backward();
 
-    CHECK_RELATIVE_ERROR(orig_x1.adjoint(), 1.0, (300 * std::numeric_limits<T>::epsilon()) / 100);
-    CHECK_RELATIVE_ERROR(orig_x2.adjoint(), -1.0, (300 * std::numeric_limits<T>::epsilon()) / 100);
+    if (!CHECK_RELATIVE_ERROR(orig_x1.adjoint(), 1.0, (300 * std::numeric_limits<T>::epsilon()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(orig_x2.adjoint(), -1.0, (300 * std::numeric_limits<T>::epsilon()) / 100)) { return; }
     tape.clear();
 }
 
@@ -218,14 +218,14 @@ void inplace_multiplication()
 
     x1 *= x2;
 
-    CHECK_EQUAL(x1.item(), expected);
+    if (!CHECK_EQUAL(x1.item(), expected)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     x1.backward();
 
-    CHECK_RELATIVE_ERROR(orig_x1.adjoint(), x2_v, (300 * std::numeric_limits<T>::epsilon()) / 100);
-    CHECK_RELATIVE_ERROR(orig_x2.adjoint(), x1_v, (300 * std::numeric_limits<T>::epsilon()) / 100);
+    if (!CHECK_RELATIVE_ERROR(orig_x1.adjoint(), x2_v, (300 * std::numeric_limits<T>::epsilon()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(orig_x2.adjoint(), x1_v, (300 * std::numeric_limits<T>::epsilon()) / 100)) { return; }
     tape.clear();
 }
 
@@ -247,15 +247,15 @@ void inplace_division()
 
     x1 /= x2;
 
-    CHECK_EQUAL(x1.item(), expected);
+    if (!CHECK_EQUAL(x1.item(), expected)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     x1.backward();
 
-    CHECK_RELATIVE_ERROR(orig_x1.adjoint(), 1.0 / x2_v, (300 * std::numeric_limits<T>::epsilon()) / 100);
-    CHECK_RELATIVE_ERROR(orig_x2.adjoint(),
-                        -x1_v / (x2_v * x2_v), (300 * std::numeric_limits<T>::epsilon()) / 100);
+    if (!CHECK_RELATIVE_ERROR(orig_x1.adjoint(), 1.0 / x2_v, (300 * std::numeric_limits<T>::epsilon()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(orig_x2.adjoint(),
+                        -x1_v / (x2_v * x2_v), (300 * std::numeric_limits<T>::epsilon()) / 100)) { return; }
     tape.clear();
 }
 template <class T>

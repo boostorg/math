@@ -31,7 +31,7 @@ void default_lbfgs_test() //, T, all_float_types)
 
     auto result = bopt::minimize(opt, constraint, convergence_policy);
     for (auto& xi : x) {
-        CHECK_RELATIVE_ERROR(xi, T{1.0}, (eps) / 100);
+        if (!CHECK_RELATIVE_ERROR(xi, T{1.0}, (eps) / 100)) { return; }
     }
 }
 
@@ -93,7 +93,7 @@ void custom_init_lbfgs_test()
     auto result = minimize(opt, constraint, convergence_policy);
 
     for (auto& xi : x) {
-        CHECK_RELATIVE_ERROR(xi, T{1.0}, (eps) / 100);
+        if (!CHECK_RELATIVE_ERROR(xi, T{1.0}, (eps) / 100)) { return; }
     }
 }
 
@@ -119,7 +119,7 @@ void analytic_lbfgs_test()
     auto result = minimize(opt);
 
     for (auto& xi : x) {
-        CHECK_ABSOLUTE_ERROR(0,xi, eps);
+        if (!CHECK_ABSOLUTE_ERROR(0,xi, eps)) { return; }
     }
 }
 

@@ -26,25 +26,25 @@ void test_fabs()
     rvar<T, 1>      fabs_neg        = fabs(x_neg);
     rvar<T, 1>      fabs_pos        = fabs(x_pos);
 
-    CHECK_RELATIVE_ERROR(fabs_neg.item(), test_fabs_neg_v, (boost_close_tol<T>()) / 100);
-    CHECK_RELATIVE_ERROR(fabs_pos.item(), test_fabs_pos_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(fabs_neg.item(), test_fabs_neg_v, (boost_close_tol<T>()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(fabs_pos.item(), test_fabs_pos_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
     tape.zero_grad();
     fabs_neg.backward();
-    CHECK_RELATIVE_ERROR(x_neg.adjoint(), -1, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_neg.adjoint(), -1, (boost_close_tol<T>()) / 100)) { return; }
     ;
 
     tape.zero_grad();
     fabs_pos.backward();
-    CHECK_RELATIVE_ERROR(x_pos.adjoint(), 1, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_pos.adjoint(), 1, (boost_close_tol<T>()) / 100)) { return; }
 
     rvar<T, 1> z = fabs(x_neg * x_neg * x_neg);
     tape.zero_grad();
     z.backward();
     T expected_grad = 3 * x_neg_v * x_neg_v * (-1);
-    CHECK_RELATIVE_ERROR(x_neg.adjoint(), expected_grad, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_neg.adjoint(), expected_grad, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -67,25 +67,25 @@ void test_abs()
     rvar<T, 1>      abs_neg        = abs(x_neg);
     rvar<T, 1>      abs_pos        = abs(x_pos);
 
-    CHECK_RELATIVE_ERROR(abs_neg.item(), test_abs_neg_v, (boost_close_tol<T>()) / 100);
-    CHECK_RELATIVE_ERROR(abs_pos.item(), test_abs_pos_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(abs_neg.item(), test_abs_neg_v, (boost_close_tol<T>()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(abs_pos.item(), test_abs_pos_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
     tape.zero_grad();
     abs_neg.backward();
-    CHECK_RELATIVE_ERROR(x_neg.adjoint(), -1, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_neg.adjoint(), -1, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.zero_grad();
     abs_pos.backward();
-    CHECK_RELATIVE_ERROR(x_pos.adjoint(), 1, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_pos.adjoint(), 1, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.zero_grad();
     rvar<T, 1> z = abs(x_neg * x_neg * x_neg);
     z.backward();
 
     T expected_grad = 3 * x_neg_v * x_neg_v * -1;
-    CHECK_RELATIVE_ERROR(x_neg.adjoint(), expected_grad, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_neg.adjoint(), expected_grad, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -101,13 +101,13 @@ void test_ceil()
 
     rvar<T, 1>      x_ceil      = ceil(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_ceil.item(), test_ceil_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_ceil.item(), test_ceil_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
     tape.zero_grad();
     x_ceil.backward();
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), 0.0, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), 0.0, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -122,13 +122,13 @@ void test_floor()
 
     rvar<T, 1>      x_floor     = floor(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_floor.item(), test_ceil_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_floor.item(), test_ceil_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
     tape.zero_grad();
     x_floor.backward();
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), 0.0, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), 0.0, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -145,7 +145,7 @@ void test_exp()
 
     rvar<T, 1> x_func      = exp(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -154,7 +154,7 @@ void test_exp()
     T          expected_deriv = -2.0 * x_v * exp(-x_v * x_v);
     test_func_2.backward();
 
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -175,7 +175,7 @@ void test_pow()
     T          expected_v = pow(x_v, y_v);
     rvar<T, 1> v_func     = pow(x_rvar, y_rvar);
 
-    CHECK_RELATIVE_ERROR(expected_v, v_func.item(), (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(expected_v, v_func.item(), (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
@@ -183,24 +183,24 @@ void test_pow()
 
     T df_dx_expected = y_v * pow(x_v, y_v - 1);
     T df_dy_expected = pow(x_v, y_v) * log(x_v);
-    CHECK_RELATIVE_ERROR(df_dx_expected, x_rvar.adjoint(), (boost_close_tol<T>()) / 100);
-    CHECK_RELATIVE_ERROR(df_dy_expected, y_rvar.adjoint(), (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(df_dx_expected, x_rvar.adjoint(), (boost_close_tol<T>()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(df_dy_expected, y_rvar.adjoint(), (boost_close_tol<T>()) / 100)) { return; }
 
     rvar<T, 1> v_rvar_by_float = pow(x_rvar, y_v);
     rvar<T, 1> v_float_by_rvar = pow(x_v, y_rvar);
 
-    CHECK_RELATIVE_ERROR(expected_v, v_rvar_by_float.item(), (boost_close_tol<T>()) / 100);
-    CHECK_RELATIVE_ERROR(expected_v, v_float_by_rvar.item(), (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(expected_v, v_rvar_by_float.item(), (boost_close_tol<T>()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(expected_v, v_float_by_rvar.item(), (boost_close_tol<T>()) / 100)) { return; }
 
     tape.zero_grad();
     v_rvar_by_float.backward();
-    CHECK_RELATIVE_ERROR(df_dx_expected, x_rvar.adjoint(), (boost_close_tol<T>()) / 100);
-    CHECK_RELATIVE_ERROR(0.0, y_rvar.adjoint(), (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(df_dx_expected, x_rvar.adjoint(), (boost_close_tol<T>()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(0.0, y_rvar.adjoint(), (boost_close_tol<T>()) / 100)) { return; }
 
     tape.zero_grad();
     v_float_by_rvar.backward();
-    CHECK_RELATIVE_ERROR(0.0, x_rvar.adjoint(), (boost_close_tol<T>()) / 100);
-    CHECK_RELATIVE_ERROR(df_dy_expected, y_rvar.adjoint(), (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(0.0, x_rvar.adjoint(), (boost_close_tol<T>()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(df_dy_expected, y_rvar.adjoint(), (boost_close_tol<T>()) / 100)) { return; }
 }
 
 template <class T>
@@ -214,7 +214,7 @@ void test_log()
 
     rvar<T, 1>      x_func      = log(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -223,7 +223,7 @@ void test_log()
     T          expected_deriv = 2.0 / x_v;
     test_func_2.backward();
 
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -237,7 +237,7 @@ void test_sqrt()
     rvar<T, 1>      x_rvar      = x_v;
     rvar<T, 1>      x_func      = sqrt(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -246,7 +246,7 @@ void test_sqrt()
     T          expected_deriv = 3.0 * sqrt(x_v) / 2.0;
     test_func_2.backward();
 
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -271,7 +271,7 @@ void test_frexp()
     rvar<T, 1>      x_rvar      = x_v;
     rvar<T, 1>      x_func      = frexp(x_rvar, &i2);
 
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -285,7 +285,7 @@ void test_frexp()
     // T   f1             = frexp(x_v + h, &i3);
     // T   f2             = frexp(x_v, &i4);
     T   expected_deriv = 1.0 / pow(2.0, i4);
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -301,7 +301,7 @@ void test_cos()
 
     rvar<T, 1>      x_func      = cos(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -310,7 +310,7 @@ void test_cos()
     T          expected_deriv = -2 * x_v * sin(x_v * x_v);
     test_func_2.backward();
 
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -326,7 +326,7 @@ void test_sin()
 
     rvar<T, 1>      x_func      = sin(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -335,7 +335,7 @@ void test_sin()
     T          expected_deriv = 2 * x_v * cos(x_v * x_v);
     test_func_2.backward();
 
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -351,7 +351,7 @@ void test_tan()
 
     rvar<T, 1>      x_func      = tan(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -360,7 +360,7 @@ void test_tan()
     T          expected_deriv = 2 * x_v * 1 / (cos(x_v * x_v) * cos(x_v * x_v));
     test_func_2.backward();
 
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -376,7 +376,7 @@ void test_acos()
 
     rvar<T, 1>      x_func      = acos(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -385,7 +385,7 @@ void test_acos()
     T          expected_deriv = -2 * x_v / sqrt(1 - x_v * x_v * x_v * x_v);
     test_func_2.backward();
 
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -401,7 +401,7 @@ void test_asin()
 
     rvar<T, 1>      x_func      = asin(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -410,7 +410,7 @@ void test_asin()
     T          expected_deriv = 2 * x_v / sqrt(1 - x_v * x_v * x_v * x_v);
     test_func_2.backward();
 
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -426,7 +426,7 @@ void test_atan()
 
     rvar<T, 1>      x_func      = atan(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -435,7 +435,7 @@ void test_atan()
     T          expected_deriv = 2 * x_v / (1 + x_v * x_v * x_v * x_v);
     test_func_2.backward();
 
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -454,7 +454,7 @@ void test_atan2()
 
     {
         rvar<T, 1> z = atan2(y_rvar, x_rvar);
-        CHECK_RELATIVE_ERROR(z.item(), expected, (boost_close_tol<T>()) / 100);
+        if (!CHECK_RELATIVE_ERROR(z.item(), expected, (boost_close_tol<T>()) / 100)) { return; }
 
         gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
         tape.zero_grad();
@@ -464,14 +464,14 @@ void test_atan2()
         T dy_expected = x_v / denom;
         T dx_expected = -y_v / denom;
 
-        CHECK_RELATIVE_ERROR(y_rvar.adjoint(), dy_expected, (boost_close_tol<T>()) / 100);
-        CHECK_RELATIVE_ERROR(x_rvar.adjoint(), dx_expected, (boost_close_tol<T>()) / 100);
+        if (!CHECK_RELATIVE_ERROR(y_rvar.adjoint(), dy_expected, (boost_close_tol<T>()) / 100)) { return; }
+        if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), dx_expected, (boost_close_tol<T>()) / 100)) { return; }
     }
 
     {
         rvar<T, 1> y2 = y_v;
         rvar<T, 1> z  = atan2(y2, x_v);
-        CHECK_RELATIVE_ERROR(z.item(), expected, (boost_close_tol<T>()) / 100);
+        if (!CHECK_RELATIVE_ERROR(z.item(), expected, (boost_close_tol<T>()) / 100)) { return; }
 
         gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
         tape.zero_grad();
@@ -479,13 +479,13 @@ void test_atan2()
 
         T dy_expected = x_v / (x_v * x_v + y_v * y_v);
 
-        CHECK_RELATIVE_ERROR(y2.adjoint(), dy_expected, (boost_close_tol<T>()) / 100);
+        if (!CHECK_RELATIVE_ERROR(y2.adjoint(), dy_expected, (boost_close_tol<T>()) / 100)) { return; }
     }
 
     {
         rvar<T, 1> x2 = x_v;
         rvar<T, 1> z  = atan2(y_v, x2);
-        CHECK_RELATIVE_ERROR(z.item(), expected, (boost_close_tol<T>()) / 100);
+        if (!CHECK_RELATIVE_ERROR(z.item(), expected, (boost_close_tol<T>()) / 100)) { return; }
 
         gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
         tape.zero_grad();
@@ -493,7 +493,7 @@ void test_atan2()
 
         T dx_expected = -y_v / (x_v * x_v + y_v * y_v);
 
-        CHECK_RELATIVE_ERROR(x2.adjoint(), dx_expected, (boost_close_tol<T>()) / 100);
+        if (!CHECK_RELATIVE_ERROR(x2.adjoint(), dx_expected, (boost_close_tol<T>()) / 100)) { return; }
     }
 }
 
@@ -508,13 +508,13 @@ void test_trunc()
 
     rvar<T, 1>      x_trunc      = trunc(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_trunc.item(), test_trunc_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_trunc.item(), test_trunc_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
     tape.zero_grad();
     x_trunc.backward();
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), 0.0, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), 0.0, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -538,7 +538,7 @@ void test_fmod()
     rvar<T, 1> y_rvar        = y_v;
 
     rvar<T, 1> fmod_rvar     = fmod(x_rvar, y_rvar);
-    CHECK_RELATIVE_ERROR(fmod_rvar.item(), expected_fmod, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(fmod_rvar.item(), expected_fmod, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
@@ -547,22 +547,22 @@ void test_fmod()
     T dx_expected = 1.0;
     T dy_expected = -1.0 * trunc(x_v / y_v);
 
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), dx_expected, (boost_close_tol<T>()) / 100);
-    CHECK_RELATIVE_ERROR(y_rvar.adjoint(), dy_expected, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), dx_expected, (boost_close_tol<T>()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(y_rvar.adjoint(), dy_expected, (boost_close_tol<T>()) / 100)) { return; }
 
     rvar<T, 1> fmod_rvar_float = fmod(x_rvar, y_v);
-    CHECK_RELATIVE_ERROR(fmod_rvar_float.item(), expected_fmod, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(fmod_rvar_float.item(), expected_fmod, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.zero_grad();
     fmod_rvar_float.backward();
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), dx_expected, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), dx_expected, (boost_close_tol<T>()) / 100)) { return; }
 
     rvar<T, 1> fmod_float_rvar = fmod(x_v, y_rvar);
-    CHECK_RELATIVE_ERROR(fmod_float_rvar.item(), expected_fmod, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(fmod_float_rvar.item(), expected_fmod, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.zero_grad();
     fmod_float_rvar.backward();
-    CHECK_RELATIVE_ERROR(y_rvar.adjoint(), dy_expected, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(y_rvar.adjoint(), dy_expected, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -578,13 +578,13 @@ void test_round()
 
     rvar<T, 1>      x_round      = round(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_round.item(), test_round_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_round.item(), test_round_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
     tape.zero_grad();
     x_round.backward();
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), 0.0, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), 0.0, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -597,7 +597,7 @@ void test_iround()
     int             test_round_v = iround(x_v);
     rvar<T, 1>      x_rvar       = x_v;
     int             x_round      = iround(x_rvar);
-    CHECK_EQUAL(x_round, test_round_v);
+    if (!CHECK_EQUAL(x_round, test_round_v)) { return; }
 }
 
 template <class T>
@@ -609,7 +609,7 @@ void test_lround()
     long            test_round_v = lround(x_v);
     rvar<T, 1>      x_rvar       = x_v;
     long            x_round      = lround(x_rvar);
-    CHECK_EQUAL(x_round, test_round_v);
+    if (!CHECK_EQUAL(x_round, test_round_v)) { return; }
 }
 
 template <class T>
@@ -621,7 +621,7 @@ void test_llround()
     long long       test_round_v = llround(x_v);
     rvar<T, 1>      x_rvar       = x_v;
     long long       x_round      = llround(x_rvar);
-    CHECK_EQUAL(x_round, test_round_v);
+    if (!CHECK_EQUAL(x_round, test_round_v)) { return; }
 }
 
 template <class T>
@@ -633,7 +633,7 @@ void test_itrunc()
     int             test_trunc_v = itrunc(x_v);
     rvar<T, 1>      x_rvar       = x_v;
     int             x_trunc      = itrunc(x_rvar);
-    CHECK_EQUAL(x_trunc, test_trunc_v);
+    if (!CHECK_EQUAL(x_trunc, test_trunc_v)) { return; }
 }
 template <class T>
 void test_ltrunc()
@@ -644,7 +644,7 @@ void test_ltrunc()
     long            test_trunc_v = ltrunc(x_v);
     rvar<T, 1>      x_rvar       = x_v;
     long            x_trunc      = ltrunc(x_rvar);
-    CHECK_EQUAL(x_trunc, test_trunc_v);
+    if (!CHECK_EQUAL(x_trunc, test_trunc_v)) { return; }
 }
 template <class T>
 void test_lltrunc()
@@ -655,7 +655,7 @@ void test_lltrunc()
     int             test_trunc_v = lltrunc(x_v);
     rvar<T, 1>      x_rvar       = x_v;
     int             x_trunc      = lltrunc(x_rvar);
-    CHECK_EQUAL(x_trunc, test_trunc_v);
+    if (!CHECK_EQUAL(x_trunc, test_trunc_v)) { return; }
 }
 
 template <class T>
@@ -669,7 +669,7 @@ void test_sinh()
 
     rvar<T, 1>      x_func      = sinh(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -678,7 +678,7 @@ void test_sinh()
     T          expected_deriv = 2 * x_v * cosh(x_v * x_v);
     test_func_2.backward();
 
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -694,7 +694,7 @@ void test_cosh()
 
     rvar<T, 1>      x_func      = cosh(x_rvar);
 
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -703,7 +703,7 @@ void test_cosh()
     T          expected_deriv = 2 * x_v * sinh(x_v * x_v);
     test_func_2.backward();
 
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -716,13 +716,13 @@ void test_tanh()
     T               test_func_v = tanh(x_v);
     rvar<T, 1>      x_rvar      = x_v;
     rvar<T, 1>      x_func      = tanh(x_rvar);
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     rvar<T, 1> test_func_2    = tanh(x_rvar * x_rvar);
     T          expected_deriv = 2 * x_v / (cosh(x_v * x_v) * cosh(x_v * x_v));
     test_func_2.backward();
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
     tape.clear();
 }
 template <class T>
@@ -737,7 +737,7 @@ void test_ldexp()
 
     rvar<T, 1> x_func = ldexp(x_rvar, exp_i);
 
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
 
@@ -751,7 +751,7 @@ void test_ldexp()
 
     test_func_2.backward();
 
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
 
     tape.clear();
 }
@@ -761,13 +761,13 @@ void test_ldexp_huge_val()
     const T   huge_val    = std::numeric_limits<T>::infinity();
     const int exp         = 1;
     T         result_huge = ldexp(huge_val, exp);
-    CHECK_EQUAL(result_huge, huge_val);
+    if (!CHECK_EQUAL(result_huge, huge_val)) { return; }
     rvar<T, 1> x_huge    = huge_val;
     rvar<T, 1> func_huge = ldexp(x_huge, exp);
-    CHECK_EQUAL(func_huge.item(), huge_val);
+    if (!CHECK_EQUAL(func_huge.item(), huge_val)) { return; }
     func_huge.backward();
     T expected_adjoint = static_cast<T>(2);
-    CHECK_EQUAL(x_huge.adjoint(), expected_adjoint);
+    if (!CHECK_EQUAL(x_huge.adjoint(), expected_adjoint)) { return; }
     get_active_tape<T, 1>().clear();
 }
 
@@ -779,13 +779,13 @@ void test_log10()
     T               test_func_v = log10(x_v);
     rvar<T, 1>      x_rvar      = x_v;
     rvar<T, 1>      x_func      = log10(x_rvar);
-    CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_func.item(), test_func_v, (boost_close_tol<T>()) / 100)) { return; }
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     rvar<T, 1> test_func_2    = log10(x_rvar * x_rvar);
     T          expected_deriv = T{2.0} / (x_v * log(T{10.0}));
     test_func_2.backward();
-    CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_rvar.adjoint(), expected_deriv, (boost_close_tol<T>()) / 100)) { return; }
     tape.clear();
 }
 
@@ -943,8 +943,8 @@ void test_func_1_first_derivative()
     auto            grad_f_analytical = grad_test_func_1_analytical(x, y);
     /* intended use case */
     f_ad.backward();
-    CHECK_RELATIVE_ERROR(x_ad.adjoint(), grad_f_analytical[0], (boost_close_tol<T>()) / 100);
-    CHECK_RELATIVE_ERROR(y_ad.adjoint(), grad_f_analytical[1], (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_ad.adjoint(), grad_f_analytical[0], (boost_close_tol<T>()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(y_ad.adjoint(), grad_f_analytical[1], (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
@@ -955,8 +955,8 @@ void test_func_1_first_derivative()
     auto grad_nd_func_test_grad = grad_nd<1>(f_ad, &x_ad, &y_ad);
 
     for (int i = 0; i < 2; i++) {
-        CHECK_RELATIVE_ERROR(grad_func_test_grad[i], grad_f_analytical[i], (boost_close_tol<T>()) / 100);
-        CHECK_RELATIVE_ERROR(grad_nd_func_test_grad[i], grad_f_analytical[i], (boost_close_tol<T>()) / 100);
+        if (!CHECK_RELATIVE_ERROR(grad_func_test_grad[i], grad_f_analytical[i], (boost_close_tol<T>()) / 100)) { return; }
+        if (!CHECK_RELATIVE_ERROR(grad_nd_func_test_grad[i], grad_f_analytical[i], (boost_close_tol<T>()) / 100)) { return; }
     }
 }
 template <class T>
@@ -980,8 +980,8 @@ void test_func_1_second_derivative_and_hessian()
 
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
-            CHECK_RELATIVE_ERROR(hess_func_test[i][j], hess_analytical[i][j], (boost_close_tol<T>()) / 100);
-            CHECK_RELATIVE_ERROR(hess_func_test[i][j], grad_nd_func_test[i][j], (boost_close_tol<T>()) / 100);
+            if (!CHECK_RELATIVE_ERROR(hess_func_test[i][j], hess_analytical[i][j], (boost_close_tol<T>()) / 100)) { return; }
+            if (!CHECK_RELATIVE_ERROR(hess_func_test[i][j], grad_nd_func_test[i][j], (boost_close_tol<T>()) / 100)) { return; }
         }
     }
 }
@@ -1013,8 +1013,8 @@ void test_func_1_order_3_der()
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
             for (int k = 0; k < 2; k++) {
-                CHECK_RELATIVE_ERROR(grad_tensor[i][j][k], df3[i][j][k], (boost_close_tol<T>()) / 100);
-                CHECK_RELATIVE_ERROR(grad_nd_func_test[i][j][k], df3[i][j][k], (boost_close_tol<T>()) / 100);
+                if (!CHECK_RELATIVE_ERROR(grad_tensor[i][j][k], df3[i][j][k], (boost_close_tol<T>()) / 100)) { return; }
+                if (!CHECK_RELATIVE_ERROR(grad_nd_func_test[i][j][k], df3[i][j][k], (boost_close_tol<T>()) / 100)) { return; }
             }
         }
     }
@@ -1052,10 +1052,10 @@ void test_func_1_fourth_derivative()
         for (int j = 0; j < 2; j++) {
             for (int k = 0; k < 2; k++) {
                 for (int l = 0; l < 2; l++) {
-                    CHECK_RELATIVE_ERROR(ggggf[i][j][k][l],
-                                        df4[i][j][k][l], (1 * boost_close_tol<T>()) / 100);
-                    CHECK_RELATIVE_ERROR(grad_nd_func_test[i][j][k][l],
-                                        df4[i][j][k][l], (1 * boost_close_tol<T>()) / 100);
+                    if (!CHECK_RELATIVE_ERROR(ggggf[i][j][k][l],
+                                        df4[i][j][k][l], (1 * boost_close_tol<T>()) / 100)) { return; }
+                    if (!CHECK_RELATIVE_ERROR(grad_nd_func_test[i][j][k][l],
+                                        df4[i][j][k][l], (1 * boost_close_tol<T>()) / 100)) { return; }
                 }
             }
         }

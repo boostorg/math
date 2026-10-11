@@ -27,7 +27,7 @@ void default_nesterov_test()
 
   auto z = minimize(nag, constraint, convergence_policy);
   for (auto& xi : x) {
-    CHECK_ABSOLUTE_ERROR(0,xi.item(), eps);
+    if (!CHECK_ABSOLUTE_ERROR(0,xi.item(), eps)) { return; }
   }
 }
 

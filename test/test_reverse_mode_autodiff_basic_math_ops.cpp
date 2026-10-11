@@ -26,20 +26,20 @@ void addition()
     rvar<T, 1>      test_rvar_p_rvar   = x1 + x2;
     rvar<T, 1>      test_rvar_p_float  = x1 + x2_v;
     rvar<T, 1>      test_float_p_rvar  = x1_v + x2;
-    CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item());
-    CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item());
-    CHECK_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v);
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item())) { return; }
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item())) { return; }
+    if (!CHECK_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     test_rvar_p_rvar.backward();
-    CHECK_EQUAL(x1.adjoint(), T(1.0));
-    CHECK_EQUAL(x2.adjoint(), T(1.0));
+    if (!CHECK_EQUAL(x1.adjoint(), T(1.0))) { return; }
+    if (!CHECK_EQUAL(x2.adjoint(), T(1.0))) { return; }
 
     tape.zero_grad();
     rvar<T, 1> z = x1 + x1 + x1 + x1 + x1;
     z.backward();
-    CHECK_EQUAL(x1.adjoint(), T(5.0));
+    if (!CHECK_EQUAL(x1.adjoint(), T(5.0))) { return; }
 }
 
 template <class T>
@@ -57,21 +57,21 @@ void multiplication()
     rvar<T, 1>      test_rvar_p_float  = x1 * x2_v;
     rvar<T, 1>      test_float_p_rvar  = x1_v * x2;
 
-    CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item());
-    CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item());
-    CHECK_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v);
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item())) { return; }
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item())) { return; }
+    if (!CHECK_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     test_rvar_p_rvar.backward();
-    CHECK_EQUAL(x1.adjoint(), x2_v);
-    CHECK_EQUAL(x2.adjoint(), x1_v);
+    if (!CHECK_EQUAL(x1.adjoint(), x2_v)) { return; }
+    if (!CHECK_EQUAL(x2.adjoint(), x1_v)) { return; }
 
     tape.zero_grad();
     auto       z = x1 * x1 * x1 * x1 * x1;
     rvar<T, 1> zz(z);
     zz.backward();
-    CHECK_RELATIVE_ERROR(x1.adjoint(), T(5) * x1_v * x1_v * x1_v * x1_v, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x1.adjoint(), T(5) * x1_v * x1_v * x1_v * x1_v, (boost_close_tol<T>()) / 100)) { return; }
     tape.clear();
 }
 
@@ -90,21 +90,21 @@ void minus()
     rvar<T, 1>      test_rvar_p_float  = x1 - x2_v;
     rvar<T, 1>      test_float_p_rvar  = x1_v - x2;
 
-    CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item());
-    CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item());
-    CHECK_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v);
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item())) { return; }
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item())) { return; }
+    if (!CHECK_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     test_rvar_p_rvar.backward();
-    CHECK_EQUAL(x1.adjoint(), T(1.0));
-    CHECK_EQUAL(x2.adjoint(), T(-1.0));
+    if (!CHECK_EQUAL(x1.adjoint(), T(1.0))) { return; }
+    if (!CHECK_EQUAL(x2.adjoint(), T(-1.0))) { return; }
 
     tape.zero_grad();
     auto       z = -x1 - x1 - x1 - x1 - x1;
     rvar<T, 1> zz(z);
     zz.backward();
-    CHECK_RELATIVE_ERROR(x1.adjoint(), -5, (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x1.adjoint(), -5, (boost_close_tol<T>()) / 100)) { return; }
     tape.clear();
 }
 
@@ -123,22 +123,22 @@ void division()
     rvar<T, 1>      test_rvar_p_float  = x1 / x2_v;
     rvar<T, 1>      test_float_p_rvar  = x1_v / x2;
 
-    CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item());
-    CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item());
-    CHECK_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v);
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item())) { return; }
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item())) { return; }
+    if (!CHECK_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     test_rvar_p_rvar.backward();
-    CHECK_RELATIVE_ERROR(x1.adjoint(), 1.0 / x2_v, (boost_close_tol<T>()) / 100);
-    CHECK_RELATIVE_ERROR(x2.adjoint(), -x1_v / (x2_v * x2_v), (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x1.adjoint(), 1.0 / x2_v, (boost_close_tol<T>()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(x2.adjoint(), -x1_v / (x2_v * x2_v), (boost_close_tol<T>()) / 100)) { return; }
 
     tape.zero_grad();
     auto       z = 2.0 / x1 / x1 / x1 / x1 / x1;
     rvar<T, 1> zz(z);
     zz.backward();
-    CHECK_RELATIVE_ERROR(x1.adjoint(),
-                        -10 / (x1_v * x1_v * x1_v * x1_v * x1_v * x1_v), (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x1.adjoint(),
+                        -10 / (x1_v * x1_v * x1_v * x1_v * x1_v * x1_v), (boost_close_tol<T>()) / 100)) { return; }
     tape.clear();
 }
 
@@ -292,8 +292,8 @@ void first_derivative()
     auto            grad_f_analytical = grad_f_a(x, y);
     /* intended use case */
     f_ad.backward();
-    CHECK_RELATIVE_ERROR(x_ad.adjoint(), grad_f_analytical[0], (boost_close_tol<T>()) / 100);
-    CHECK_RELATIVE_ERROR(y_ad.adjoint(), grad_f_analytical[1], (boost_close_tol<T>()) / 100);
+    if (!CHECK_RELATIVE_ERROR(x_ad.adjoint(), grad_f_analytical[0], (boost_close_tol<T>()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(y_ad.adjoint(), grad_f_analytical[1], (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1, BOOST_MATH_BUFFER_SIZE>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
@@ -304,8 +304,8 @@ void first_derivative()
     auto grad_nd_func_test_grad = grad_nd<1>(f_ad, &x_ad, &y_ad);
 
     for (int i = 0; i < 2; i++) {
-        CHECK_RELATIVE_ERROR(grad_func_test_grad[i], grad_f_analytical[i], (boost_close_tol<T>()) / 100);
-        CHECK_RELATIVE_ERROR(grad_nd_func_test_grad[i], grad_f_analytical[i], (boost_close_tol<T>()) / 100);
+        if (!CHECK_RELATIVE_ERROR(grad_func_test_grad[i], grad_f_analytical[i], (boost_close_tol<T>()) / 100)) { return; }
+        if (!CHECK_RELATIVE_ERROR(grad_nd_func_test_grad[i], grad_f_analytical[i], (boost_close_tol<T>()) / 100)) { return; }
     }
 }
 template <class T>
@@ -329,8 +329,8 @@ void second_derivative_and_hessian()
 
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
-            CHECK_RELATIVE_ERROR(hess_func_test[i][j], hess_analytical[i][j], (boost_close_tol<T>()) / 100);
-            CHECK_RELATIVE_ERROR(hess_func_test[i][j], grad_nd_func_test[i][j], (boost_close_tol<T>()) / 100);
+            if (!CHECK_RELATIVE_ERROR(hess_func_test[i][j], hess_analytical[i][j], (boost_close_tol<T>()) / 100)) { return; }
+            if (!CHECK_RELATIVE_ERROR(hess_func_test[i][j], grad_nd_func_test[i][j], (boost_close_tol<T>()) / 100)) { return; }
         }
     }
 }
@@ -362,8 +362,8 @@ void order_3_der()
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
             for (int k = 0; k < 2; k++) {
-                CHECK_RELATIVE_ERROR(grad_tensor[i][j][k], df3[i][j][k], (boost_close_tol<T>()) / 100);
-                CHECK_RELATIVE_ERROR(grad_nd_func_test[i][j][k], df3[i][j][k], (boost_close_tol<T>()) / 100);
+                if (!CHECK_RELATIVE_ERROR(grad_tensor[i][j][k], df3[i][j][k], (boost_close_tol<T>()) / 100)) { return; }
+                if (!CHECK_RELATIVE_ERROR(grad_nd_func_test[i][j][k], df3[i][j][k], (boost_close_tol<T>()) / 100)) { return; }
             }
         }
     }
@@ -403,9 +403,9 @@ void fourth_derivative()
         for (int j = 0; j < 2; j++) {
             for (int k = 0; k < 2; k++) {
                 for (int l = 0; l < 2; l++) {
-                    CHECK_RELATIVE_ERROR(ggggf[i][j][k][l], df4[i][j][k][l], (boost_close_tol<T>()) / 100);
-                    CHECK_RELATIVE_ERROR(grad_nd_func_test[i][j][k][l],
-                                        df4[i][j][k][l], (boost_close_tol<T>()) / 100);
+                    if (!CHECK_RELATIVE_ERROR(ggggf[i][j][k][l], df4[i][j][k][l], (boost_close_tol<T>()) / 100)) { return; }
+                    if (!CHECK_RELATIVE_ERROR(grad_nd_func_test[i][j][k][l],
+                                        df4[i][j][k][l], (boost_close_tol<T>()) / 100)) { return; }
                 }
             }
         }
