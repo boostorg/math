@@ -70,7 +70,7 @@
 //
 // #define BOOST_MATH_PROMOTE_FLOAT_POLICY true
 //
-// Promote doubles to long double internally:
+// Promote doubles to long double internally (the default is false):
 //
 // #define BOOST_MATH_PROMOTE_DOUBLE_POLICY true
 //

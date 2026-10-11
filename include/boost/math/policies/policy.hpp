@@ -111,11 +111,10 @@ namespace policies{
 #define BOOST_MATH_PROMOTE_FLOAT_POLICY true
 #endif
 #ifndef BOOST_MATH_PROMOTE_DOUBLE_POLICY
-#ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+// long double is slow almost everywhere (x87 on x86, software emulated 128 bit
+// on AArch64), so double is not promoted to it by default.  Define
+// BOOST_MATH_PROMOTE_DOUBLE_POLICY as true to get the old behaviour.
 #define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
-#else
-#define BOOST_MATH_PROMOTE_DOUBLE_POLICY true
-#endif
 #endif
 #ifndef BOOST_MATH_DISCRETE_QUANTILE_POLICY
 #define BOOST_MATH_DISCRETE_QUANTILE_POLICY integer_round_outwards
