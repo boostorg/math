@@ -174,5 +174,22 @@ void test_spots(T)
       BOOST_CHECK_THROW(boost::math::ibeta_derivative(T(-1), T(2), T(0.5)), std::domain_error);
       BOOST_CHECK_THROW(boost::math::ibeta_derivative(T(1), T(0), T(0.5)), std::domain_error);
       BOOST_CHECK_THROW(boost::math::ibeta_derivative(T(1), T(-1), T(0.5)), std::domain_error);
+      //
+      // The leading terms x^a y^b / beta(a, b) lost up to 9 eps near the mean to the rounding of the first term of
+      // the exponent, which is about -g.  Reference values from Arb, doubles only:
+      //
+      BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+      {
+         typedef boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promote;
+         T tolerance = boost::math::tools::epsilon<T>() * 3;
+         BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_derivative(T(13.75), T(132.2), T(0.09503), no_promote()), static_cast<T>(16.2620218649512813145L), tolerance);
+         BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_derivative(T(10.09), T(26.7), T(0.2817), no_promote()), static_cast<T>(5.26015522153723928254L), tolerance);
+         BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_derivative(T(21.98), T(41.93), T(0.3487), no_promote()), static_cast<T>(6.61952926053123374081L), tolerance);
+         BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_derivative(T(15.21), T(30.7), T(0.3279), no_promote()), static_cast<T>(5.72958483402182718067L), tolerance);
+         BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_derivative(T(56.2), T(52.75), T(0.5072), no_promote()), static_cast<T>(8.17282632294558333472L), tolerance);
+         BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_derivative(T(782), T(13.67), T(0.9832), no_promote()), static_cast<T>(87.6857498074179632276L), tolerance);
+         BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_derivative(T(23.37), T(12.38), T(0.6454), no_promote()), static_cast<T>(4.89312563681850804428L), tolerance);
+         BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_derivative(T(27.93), T(12.74), T(0.6779), no_promote()), static_cast<T>(5.32487717695550616177L), tolerance);
+      }
 }
 

@@ -237,5 +237,17 @@ void test_beta(T, const char* name)
       BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(2.125), static_cast<T>(1.125), static_cast<T>(-n)), std::domain_error);
    }
 
+   //
+   // ibeta and ibetac for a, b < 1 were up to 10 eps out, which the inverses inherited, divided by the sensitivity of
+   // the function to the parameter: 24 eps for the first of these.  Reference values from Arb, doubles only:
+   //
+   BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+   {
+      typedef boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promote;
+      T tolerance = boost::math::tools::epsilon<T>() * 6;
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_invb(T(0.10797751623277096), T(0.65150235550348956), T(0.5), no_promote()), static_cast<T>(0.096646123284035831240382L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_invb(T(0.09555), T(0.05486), T(0.6881), no_promote()), static_cast<T>(0.555050462429118307720304L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inva(T(0.04377), T(0.6669), T(0.3244), no_promote()), static_cast<T>(0.0991673416391090870153045L), tolerance);
+   }
 }
 

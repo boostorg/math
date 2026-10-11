@@ -457,18 +457,38 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
       //
       //    a log1p(l1) + b log1p(l2) = gh (l1 (a - b) - b) / bgh + a log1pmx(l1) + b log1pmx(l2)
       //
-      T l = gh * (l1 * (a - b) - b) / bgh
+      // The first term is about -gh, so rounding it costs as much as eps gh / 2 of relative error in
+      // the result. Carry it as a sum of two doubles: gh (l1 (a - b) - b) / bgh, with every operation's
+      // rounding error found with fma, is lh + ll, and the rounding of lh + the rest is added back below.
+      //
+      T ab = a - b;
+      T ab_err = ibeta_sum_error(a, -b, ab);
+      T ph = fma(l1, ab, T(0));  // fma(x, y, 0) so that the product is not contracted into a later sum
+      T pl = fma(l1, ab, -ph) + l1 * ab_err;
+      T nh = ph - b;
+      T nl = pl + ibeta_sum_error(ph, -b, nh);
+      T wh = nh / bgh;
+      T wl = (fma(-wh, bgh, nh) + (nl - wh * bgh_err)) / bgh;
+      T lh = fma(gh, wh, T(0));
+      T ll = fma(gh, wh, -lh) + gh * wl;
+      T rest = ll
          + a * BOOST_MATH_NAMESPACE::log1pmx(l1, pol)
          + b * BOOST_MATH_NAMESPACE::log1pmx(l2, pol);
+      T l = lh + rest;
+      T l_err = ibeta_sum_error(lh, rest, l);
       if((l <= tools::log_min_value<T>()) || (l >= tools::log_max_value<T>()))
       {
+         l += l_err;
          l += log(result);
          if(l >= tools::log_max_value<T>())
             return policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE we can probably never get here, probably!
          result = exp(l);
       }
       else
+      {
          result *= exp(l);
+         result = fma(result, l_err, result);
+      }
       BOOST_MATH_INSTRUMENT_VARIABLE(result);
    }
    else if((BOOST_MATH_GPU_SAFE_MIN(fabs(l1), fabs(l2)) < 0.2))
@@ -834,6 +854,36 @@ private:
    int n;
 };
 
+//
+// Sum the series s0 + s() + s() + ...  with Neumaier compensated summation.
+// The series is often started from s0 = -1 (to evaluate the complement), where the running sum
+// sits on a coarse grid (|sum| >= 1/2) and plain accumulation loses several eps to rounding.
+// The compensation term keeps the error of the whole sum to about one rounding.
+//
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED T ibeta_series_sum(ibeta_series_t<T>& s, T s0, BOOST_MATH_NAMESPACE::uintmax_t& max_iter, const Policy&)
+{
+   BOOST_MATH_STD_USING
+   const T factor = BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t counter = max_iter;
+   T sum = s0;
+   T comp = 0;
+   T term;
+   do
+   {
+      term = s();
+      T next = sum + term;
+      if (abs(sum) >= abs(term))
+         comp += (sum - next) + term;
+      else
+         comp += (term - next) + sum;
+      sum = next;
+   }
+   while ((abs(factor * sum) < abs(term)) && --counter);
+   max_iter = max_iter - counter;
+   return sum + comp;
+}
+
 template <class T, class Lanczos, class Policy>
 BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_derivative, T y, const Policy& pol)
 {
@@ -913,7 +963,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool 
       return s0; // Safeguard: series can't cope with denorms.
    ibeta_series_t<T> s(a, b, x, result);
    BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-   result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter, s0);
+   result = ibeta_series_sum(s, s0, max_iter, pol);
    policies::check_series_iterations<T>("boost::math::ibeta<%1%>(%1%, %1%, %1%) in ibeta_series (with lanczos)", max_iter, pol);
    return result;
 }
@@ -975,7 +1025,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const BOOST_MATH_NAME
       return s0; // Safeguard: series can't cope with denorms.
    ibeta_series_t<T> s(a, b, x, result);
    BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-   result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter, s0);
+   result = ibeta_series_sum(s, s0, max_iter, pol);
    policies::check_series_iterations<T>("boost::math::ibeta<%1%>(%1%, %1%, %1%) in ibeta_series (without lanczos)", max_iter, pol);
    return result;
 }
@@ -992,14 +1042,18 @@ struct ibeta_fraction2_t
 
    BOOST_MATH_GPU_ENABLED result_type operator()()
    {
-      T denom = (a + 2 * m - 1);
-      T aN = (m * (a + m - 1) / denom) * ((a + b + m - 1) / denom) * (b - m) * x * x;
+      return term(m++);
+   }
 
-      T bN = static_cast<T>(m);
-      bN += (m * (b - m) * x) / (a + 2*m - 1);
-      bN += ((a + m) * (a * y - b * x + 1 + m *(2 - x))) / (a + 2*m + 1);
+   // The n'th numerator and denominator of the fraction:
+   BOOST_MATH_GPU_ENABLED result_type term(int n) const
+   {
+      T denom = (a + 2 * n - 1);
+      T aN = (n * (a + n - 1) / denom) * ((a + b + n - 1) / denom) * (b - n) * x * x;
 
-      ++m;
+      T bN = static_cast<T>(n);
+      bN += (n * (b - n) * x) / (a + 2*n - 1);
+      bN += ((a + n) * (a * y - b * x + 1 + n *(2 - x))) / (a + 2*n + 1);
 
       return BOOST_MATH_NAMESPACE::make_pair(aN, bN);
    }
@@ -1008,6 +1062,34 @@ private:
    T a, b, x, y;
    int m;
 };
+//
+// Value of the continued fraction, and the number of terms used in max_terms.  The forward (Lentz)
+// evaluation multiplies together one factor per term and their rounding errors add up to several eps, and
+// it stops as soon as one factor is within eps of one, which can leave a tail of several eps when the
+// fraction converges slowly.  So once we know how many terms are needed, evaluate again from the tail,
+// from twice as many terms, which damps the rounding errors.
+//
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline T ibeta_fraction2_value(T a, T b, T x, T y, BOOST_MATH_NAMESPACE::uintmax_t& max_terms, const Policy&)
+{
+   ibeta_fraction2_t<T> f(a, b, x, y);
+   BOOST_MATH_NAMESPACE::uintmax_t limit = max_terms;
+   T fract = BOOST_MATH_NAMESPACE::tools::continued_fraction_b(f, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_terms);
+   if(max_terms < limit / 2)
+   {
+      BOOST_MATH_NAMESPACE::uintmax_t terms = 2 * max_terms;
+      T tail = 0;
+      for(BOOST_MATH_NAMESPACE::uintmax_t m = terms; m > 0; --m)
+      {
+         BOOST_MATH_NAMESPACE::pair<T, T> t = f.term(static_cast<int>(m));
+         tail = t.first / (t.second + tail);
+      }
+      T refined = f.term(0).second + tail;
+      if((BOOST_MATH_NAMESPACE::isfinite)(refined))
+         fract = refined;
+   }
+   return fract;
+}
 //
 // Evaluate the incomplete beta via the continued fraction representation:
 //
@@ -1025,13 +1107,29 @@ BOOST_MATH_GPU_ENABLED inline T ibeta_fraction2(T a, T b, T x, T y, const Policy
    if(result == 0)
       return result;
 
-   ibeta_fraction2_t<T> f(a, b, x, y);
    BOOST_MATH_NAMESPACE::uintmax_t max_terms = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
-   T fract = BOOST_MATH_NAMESPACE::tools::continued_fraction_b(f, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_terms);
+   T fract = ibeta_fraction2_value(a, b, x, y, max_terms, pol);
    BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::ibeta", max_terms, pol);
    BOOST_MATH_INSTRUMENT_VARIABLE(fract);
    BOOST_MATH_INSTRUMENT_VARIABLE(result);
    return result / fract;
+}
+//
+// The complement of ibeta_series: (normalised ? 1 : beta(a, b)) - ibeta_series(a, b, x).  The series has
+// the rounding error of its prefix, a few eps, which the subtraction multiplies by S / (1 - S).  So when
+// S > 1/2 and x is not small, compute the complement itself, from the continued fraction for the same
+// function with a and b (and x and y) exchanged.  Its rounding errors grow like 1 / sqrt(x) as that
+// fraction becomes degenerate at y = 1 - x near 1, which is why it is only used for x >= 0.02, where
+// it takes about 60 terms.
+//
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED T ibeta_series_complement(T a, T b, T x, bool normalised, T* p_derivative, T y, const Policy& pol)
+{
+   typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
+   T s = ibeta_series(a, b, x, T(0), lanczos_type(), normalised, p_derivative, y, pol);
+   if(normalised && (s > 0.5f) && (x >= 0.02f))
+      return ibeta_fraction2(b, a, y, x, pol, true, static_cast<T*>(nullptr));
+   return (normalised ? T(1) : BOOST_MATH_NAMESPACE::beta(a, b, pol)) - s;
 }
 //
 // Computes the difference between ibeta(a,b,x) and ibeta(a+k,b,x):
@@ -1184,7 +1282,10 @@ BOOST_MATH_GPU_ENABLED T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T
    //
    // Now we can start to pull things together and evaluate the sum in Eq 9:
    //
+   // The sum is often started from s0 = -1, when the first term is of order one and each later term
+   // is rounded onto a coarse grid, so keep their rounding errors in comp (Neumaier summation):
    T sum = s0 + prefix * j;  // Value at N = 0
+   T comp = (fabs(s0) >= fabs(prefix * j)) ? (s0 - sum) + prefix * j : (prefix * j - sum) + s0;
    // some variables we'll need:
    unsigned tnp1 = 1; // 2*N+1
    T lx2 = lx / 2;
@@ -1231,13 +1332,15 @@ BOOST_MATH_GPU_ENABLED T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T
       // pull it together with Eq 9:
       //
       T r = prefix * p[n] * j;
-      sum += r;
+      T next = sum + r;
+      comp += (fabs(sum) >= fabs(r)) ? (sum - next) + r : (r - next) + sum;
+      sum = next;
       // r is always small:
       BOOST_MATH_ASSERT(tools::max_value<T>() * tools::epsilon<T>() > fabs(r));
       if(fabs(r / tools::epsilon<T>()) < fabs(sum))
          break;
    }
-   return sum;
+   return sum + comp;
 } // template <class T, class Lanczos>T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Lanczos& l, bool normalised)
 
 //
@@ -1537,9 +1640,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
             }
             else
             {
-               fract = -(normalised ? 1 : BOOST_MATH_NAMESPACE::beta(a, b, pol));
                invert = false;
-               fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
+               fract = ibeta_series_complement(a, b, x, normalised, p_derivative, y, pol);
                BOOST_MATH_INSTRUMENT_VARIABLE(fract);
             }
          }
@@ -1557,9 +1659,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
                }
                else
                {
-                  fract = -(normalised ? 1 : BOOST_MATH_NAMESPACE::beta(a, b, pol));
                   invert = false;
-                  fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
+                  fract = ibeta_series_complement(a, b, x, normalised, p_derivative, y, pol);
                   BOOST_MATH_INSTRUMENT_VARIABLE(fract);
                }
             }
@@ -1603,9 +1704,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
             }
             else
             {
-               fract = -(normalised ? 1 : BOOST_MATH_NAMESPACE::beta(a, b, pol));
                invert = false;
-               fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
+               fract = ibeta_series_complement(a, b, x, normalised, p_derivative, y, pol);
                BOOST_MATH_INSTRUMENT_VARIABLE(fract);
             }
          }
@@ -1624,9 +1724,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
                }
                else
                {
-                  fract = -(normalised ? 1 : BOOST_MATH_NAMESPACE::beta(a, b, pol));
                   invert = false;
-                  fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
+                  fract = ibeta_series_complement(a, b, x, normalised, p_derivative, y, pol);
                   BOOST_MATH_INSTRUMENT_VARIABLE(fract);
                }
             }
@@ -1722,41 +1821,15 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
                BOOST_MATH_INSTRUMENT_VARIABLE(fract);
             }
          }
-         else if(a > 15)
-         {
-            // The continued fraction is accurate to within the error of its prefix here, whereas sidestepping to
-            // the series with ibeta_a_step and beta_small_b_large_a_series lost up to 250 eps near the mean.
-            // Since x <= a / (a + b) it converges quickly: at most ~80 terms in double for any a (the worst
-            // case is b ~ 1.1 at the mean), so it is no more than twice as slow as the sidestep, and usually faster:
-            fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
-            BOOST_MATH_INSTRUMENT_VARIABLE(fract);
-         }
-         else if(normalised)
-         {
-            // The formula here for the non-normalised case is tricky to figure
-            // out (for me!!), and requires two pochhammer calculations rather
-            // than one, so leave it for now and only use this in the normalized case....
-            int n = itrunc(T(floor(b)), pol);
-            T bbar = b - n;
-            if(bbar <= 0)
-            {
-               --n;
-               bbar += 1;
-            }
-            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(nullptr));
-            fract += ibeta_a_step(a, bbar, x, y, 20, pol, normalised, static_cast<T*>(nullptr));
-            if(invert)
-               fract -= 1;  // Note this line would need changing if we ever enable this branch in non-normalized case
-            fract = beta_small_b_large_a_series(T(a+20),  bbar, x, y, fract, T(1), pol, normalised);
-            if(invert)
-            {
-               fract = -fract;
-               invert = false;
-            }
-            BOOST_MATH_INSTRUMENT_VARIABLE(fract);
-         }
          else
          {
+            // The continued fraction is accurate to within the error of its prefix and, evaluated from the
+            // tail, its own rounding errors.  Sidestepping to the series with ibeta_a_step and
+            // beta_small_b_large_a_series lost up to 250 eps near the mean for a > 15, and 10-90 eps for
+            // 3 <= b < 40.  Since x <= a / (a + b) the fraction converges quickly (at most ~80 terms in
+            // double), and compared with that sidestep, measured against 50 digits near the mean, it has
+            // the same or smaller maximum error for every b >= 1 (b ~ 1: 4.6 vs 7.1 eps for a >= 15,
+            // 12.6 vs 14.5 for a < 15) and takes 0.6-0.8 times as long:
             fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
             BOOST_MATH_INSTRUMENT_VARIABLE(fract);
          }
@@ -1789,9 +1862,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
             }
             if (local_result != 0)
             {
-               ibeta_fraction2_t<T> f(a, b, x, y);
                BOOST_MATH_NAMESPACE::uintmax_t max_terms = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
-               T local_fract = BOOST_MATH_NAMESPACE::tools::continued_fraction_b(f, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_terms);
+               T local_fract = ibeta_fraction2_value(a, b, x, y, max_terms, pol);
                if (max_terms >= BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>())
                {
                   // Continued fraction failed, fall back to asymptotic expansion:
@@ -1964,9 +2036,8 @@ BOOST_MATH_GPU_ENABLED T libeta_imp(T a, T b, T x, const Policy& pol, bool inver
       // the argument of expm1 is far below epsilon, so log(P) = log(b) + log(-log1p(-x)) to full precision:
       return log(b) + log(-BOOST_MATH_NAMESPACE::log1p(-x, pol));
    }
-   ibeta_fraction2_t<T> f(a, b, x, y);
    BOOST_MATH_NAMESPACE::uintmax_t max_terms = policies::get_max_series_iterations<Policy>();
-   T fract = tools::continued_fraction_b(f, policies::get_epsilon<T, Policy>(), max_terms);
+   T fract = ibeta_fraction2_value(a, b, x, y, max_terms, pol);
    policies::check_series_iterations<T>(function, max_terms, pol);
    return log_ibeta_power_terms(a, b, x, y, lanczos_type(), pol) - log(fract);
 }
