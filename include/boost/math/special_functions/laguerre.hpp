@@ -14,10 +14,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
-
-#ifndef BOOST_MATH_BUILD_MODULE
-#include <cmath>
-#endif
+#include <boost/math/special_functions/detail/two_product.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
 
@@ -36,13 +33,11 @@ namespace detail{
 // Implement Laguerre polynomials via recurrence.  On its own the recurrence loses up to n^1.5 epsilon or so
 // where L_n oscillates, as both of its solutions are of similar size there and the rounding errors of each step
 // accumulate.  So we find the rounding error of each step almost exactly, and carry it forward with the same
-// recurrence: the result is then within the conditioning of L_n.  The rounded products come from fma(a, b, 0),
-// which the compiler can't contract into a later addition, as that would break the error free transformations:
+// recurrence: the result is then within the conditioning of L_n.
 //
 template <class T>
 T laguerre_imp(unsigned n, T x)
 {
-   using std::fma;
    T p0 = 1;
    T p1 = 1 - x;
 
@@ -53,6 +48,7 @@ T laguerre_imp(unsigned n, T x)
    T e0 = 0;
    T t = p1 - 1;
    T e1 = (1 - (p1 - t)) + (-x - t);
+   detail::two_product<T> product;
 
    for(unsigned c = 1; c < n; ++c)
    {
@@ -61,17 +57,18 @@ T laguerre_imp(unsigned n, T x)
       t = a - (2 * c + 1);
       T ea = ((2 * c + 1) - (a - t)) + (-x - t);
       // s1 + r1 = a p1 and s2 + r2 = c p0 exactly:
-      T s1 = fma(a, p1, T(0));
-      T r1 = fma(a, p1, -s1);
-      T s2 = fma(T(c), p0, T(0));
-      T r2 = fma(T(c), p0, -s2);
+      T s1, r1, s2, r2;
+      product(a, p1, s1, r1);
+      product(T(c), p0, s2, r2);
       // d + ed = s1 - s2 exactly:
       T d = s1 - s2;
       t = d - s1;
       T ed = (s1 - (d - t)) + (-s2 - t);
       T p2 = d / (c + 1);
-      // d - (c + 1) p2 exactly:
-      T rd = fma(-T(c + 1), p2, d);
+      // d - (c + 1) p2, where d - q is exact as q is so close to d:
+      T q, rq;
+      product(T(c + 1), p2, q, rq);
+      T rd = (d - q) - rq;
       T e2 = (a * e1 - c * e0 + rd + ed + r1 - r2 + ea * p1) / (c + 1);
       p0 = p1;
       p1 = p2;

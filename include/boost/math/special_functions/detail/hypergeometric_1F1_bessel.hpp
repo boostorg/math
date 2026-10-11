@@ -512,6 +512,7 @@
         hypergeometric_1F1_AS_13_3_6_series(const T& a, const T& b, const T& z, const T& b_minus_a, const Policy& pol_)
            : b_minus_a(b_minus_a), half_z(z / 2), poch_1(2 * b_minus_a - 1), poch_2(b_minus_a - a), b_poch(b), term(1), last_result(1), sign(1), n(0), cache_offset(-cache_size), scale(0), pol(pol_)
         {
+           BOOST_MATH_STD_USING
            //
            // The cache is normalised using a directly calculated Bessel I, either that of the first term or the one below it.
            // For negative order v, I_v is the sum of a positive and a negative term when -2k < v < 1 - 2k, so it may be near

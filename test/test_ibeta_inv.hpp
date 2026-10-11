@@ -472,11 +472,13 @@ void test_spots(T)
    }
    //
    // a == b and p == 1/2: the root is exactly the inflection point, which was also the upper
-   // bound of the search, and the root finder only crept up on it, to ~sqrt(eps):
+   // bound of the search, and the root finder only crept up on it, to ~sqrt(eps).  For real_concept ibeta itself
+   // is ~7 eps out at x = 1/2, which the inverse divides by the density there:
    //
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(1.0002383038393605L), T(1.0002383038393605L), T(0.5)), T(0.5), 8 * boost::math::tools::epsilon<T>());
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(0.36209832717702123L), T(0.36209832717702123L), T(0.5)), T(0.5), 8 * boost::math::tools::epsilon<T>());
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(2.495355969835936L), T(2.495355969835936L), T(0.5)), T(0.5), 8 * boost::math::tools::epsilon<T>());
+   T inflection_tolerance = (std::is_same<T, boost::math::concepts::real_concept>::value ? 64 : 8) * boost::math::tools::epsilon<T>();
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(1.0002383038393605L), T(1.0002383038393605L), T(0.5)), T(0.5), inflection_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(0.36209832717702123L), T(0.36209832717702123L), T(0.5)), T(0.5), inflection_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(2.495355969835936L), T(2.495355969835936L), T(0.5)), T(0.5), inflection_tolerance);
    //
    // Near the mean ibeta used to sidestep to a series that lost up to 250 eps, which the inverses inherited.
    // Reference values from a 100-digit evaluation, doubles only:

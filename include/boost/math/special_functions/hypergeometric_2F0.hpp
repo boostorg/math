@@ -16,11 +16,8 @@
 #include <boost/math/special_functions/laguerre.hpp>
 #include <boost/math/special_functions/hermite.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/special_functions/detail/two_product.hpp>
 #include <boost/math/tools/fraction.hpp>
-
-#ifndef BOOST_MATH_BUILD_MODULE
-#include <cmath>
-#endif
 
 BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
@@ -67,17 +64,16 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
    // of each step almost exactly, and carry it forward with the same recurrence.  The result is then correctly
    // rounded unless the uncorrected recurrence was out by more than a few percent, which only happens for n > 50
    // and n z between about 1 and 20, and there we raise an evaluation_error rather than return a wrong value.
-   // The rounded products come from fma(a, b, 0), which the compiler can't contract into a later addition:
    //
    template <class T, class Policy>
    T hypergeometric_2F0_neg_int_recurrence(unsigned n, const T& b, const T& z, const Policy& pol, const char* function)
    {
       BOOST_MATH_STD_USING
-      using std::fma;
+      two_product<T> product;
       T t;
       // g1 + e1 = 1 - b z exactly:
-      T bz = fma(b, z, T(0));
-      T rbz = fma(b, z, -bz);
+      T bz, rbz;
+      product(b, z, bz, rbz);
       T g1 = 1 - bz;
       t = g1 - 1;
       T e1 = ((1 - (g1 - t)) + (-bz - t)) - rbz;
@@ -89,18 +85,18 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
          T u = k + b;
          t = u - k;
          T eu = (k - (u - t)) + (b - t);
-         T v = fma(u, z, T(0));
-         T rv = fma(u, z, -v) + eu * z;
+         T v, rv;
+         product(u, z, v, rv);
+         rv += eu * z;
          T a = 1 - v;
          t = a - 1;
          T ea = ((1 - (a - t)) + (-v - t)) - rv;
-         T c = fma(T(k), z, T(0));
-         T ec = fma(T(k), z, -c);
+         T c, ec;
+         product(T(k), z, c, ec);
          // s1 + r1 = a g1, s2 + r2 = c g0 and d + ed = s1 + s2 exactly:
-         T s1 = fma(a, g1, T(0));
-         T r1 = fma(a, g1, -s1);
-         T s2 = fma(c, g0, T(0));
-         T r2 = fma(c, g0, -s2);
+         T s1, r1, s2, r2;
+         product(a, g1, s1, r1);
+         product(c, g0, s2, r2);
          T d = s1 + s2;
          t = d - s1;
          T ed = (s1 - (d - t)) + (s2 - t);
