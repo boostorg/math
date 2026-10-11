@@ -1725,7 +1725,9 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
          else if(a > 15)
          {
             // The continued fraction is accurate to within the error of its prefix here, whereas sidestepping to
-            // the series with ibeta_a_step and beta_small_b_large_a_series lost up to 250 eps near the mean:
+            // the series with ibeta_a_step and beta_small_b_large_a_series lost up to 250 eps near the mean.
+            // Since x <= a / (a + b) it converges quickly: at most ~80 terms in double for any a (the worst
+            // case is b ~ 1.1 at the mean), so it is no more than twice as slow as the sidestep, and usually faster:
             fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
             BOOST_MATH_INSTRUMENT_VARIABLE(fract);
          }
