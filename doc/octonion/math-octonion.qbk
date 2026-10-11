@@ -925,7 +925,7 @@ Computes the n-th power of the octonion q.
 
 [section:oct_tests Test Program]
 
-The [@../../test/octonion_test.cpp octonion_test.cpp]
+The [@../../test/test_octonion.cpp test_octonion.cpp]
 test program tests octonions specialisations for float, double and long double
 ([@../octonion/output.txt sample output]).
 

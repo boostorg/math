@@ -69,72 +69,72 @@ set(BOOST_MATH_MODULE_TESTS
         git_issue_800
         git_issue_1120
         scipy_issue_17146
-        ccmath_isinf_test
-        ccmath_isnan_test
+        test_ccmath_isinf
+        test_ccmath_isnan
         git_issue_1139
-        cubic_roots_test
-        quartic_roots_test
+        test_cubic_roots
+        test_quartic_roots
         git_issue_898
-        cardinal_quadratic_b_spline_test
-        whittaker_shannon_test
+        test_cardinal_quadratic_b_spline
+        test_whittaker_shannon
         test_runs_test
-        linear_regression_test
-        ljung_box_test
-        differential_evolution_test
-        random_search_test
-        quaternion_constexpr_test
+        test_linear_regression
+        test_ljung_box
+        test_differential_evolution
+        test_random_search
+        test_quaternion_constexpr
         octonion_test_simple
-        lambert_w_module_test
-        students_t_df_module_test
-        ccmath_next_module_test
-        lambert_w_std_free_module_test
-        exp_sinh_module_test
-        lanczos_smoothing_module_test
-        finite_difference_module_test
-        signal_statistics_module_test
+        test_lambert_w_module
+        test_students_t_df_module
+        test_ccmath_next_module
+        test_lambert_w_std_free_module
+        test_exp_sinh_module
+        test_lanczos_smoothing_module
+        test_finite_difference_module
+        test_signal_statistics_module
         # Differentiation
-        autodiff_module_test
+        test_autodiff_module
         # Quadrature
-        gauss_module_test
-        gauss_kronrod_module_test
-        trapezoidal_module_test
-        sinh_sinh_module_test
-        naive_monte_carlo_module_test
-        ooura_fourier_integrals_module_test
-        wavelet_transforms_module_test
+        test_gauss_module
+        test_gauss_kronrod_module
+        test_trapezoidal_module
+        test_sinh_sinh_module
+        test_naive_monte_carlo_module
+        test_ooura_fourier_integrals_module
+        test_wavelet_transforms_module
         # Interpolators
-        cardinal_cubic_b_spline_module_test
-        cardinal_quintic_b_spline_module_test
-        barycentric_rational_module_test
-        vector_barycentric_rational_module_test
-        catmull_rom_module_test
-        pchip_module_test
-        makima_module_test
-        cubic_hermite_module_test
-        quintic_hermite_module_test
-        septic_hermite_module_test
-        bezier_polynomial_module_test
-        #bilinear_uniform_module_test # ICE on GCC-15
+        test_cardinal_cubic_b_spline_module
+        test_cardinal_quintic_b_spline_module
+        test_barycentric_rational_module
+        test_vector_barycentric_rational_module
+        test_catmull_rom_module
+        test_pchip_module
+        test_makima_module
+        test_cubic_hermite_module
+        test_quintic_hermite_module
+        test_septic_hermite_module
+        test_bezier_polynomial_module
+        #test_bilinear_uniform_module # ICE on GCC-15
         # Statistics
-        univariate_statistics_module_test
-        bivariate_statistics_module_test
-        anderson_darling_module_test
-        t_test_module_test
-        z_test_module_test
+        test_univariate_statistics_module
+        test_bivariate_statistics_module
+        test_anderson_darling_module
+        test_t_test_module
+        test_z_test_module
         # Optimization
-        gradient_descent_module_test
-        lbfgs_module_test
-        nesterov_module_test
+        test_gradient_descent_module
+        test_lbfgs_module
+        test_nesterov_module
         # Tools
-        polynomial_module_test
-        roots_module_test
-        norms_module_test
-        agm_module_test
-        estrin_module_test
-        series_module_test
-        minima_module_test
+        test_polynomial_module
+        test_roots_module
+        test_norms_module
+        test_agm_module
+        test_estrin_module
+        test_series_module
+        test_minima_module
         # Algebra
-        complex_module_test
+        test_complex_module
         # Distributions (adapted regression tests)
         git_issue_1006
         git_issue_1175
@@ -151,7 +151,7 @@ set(BOOST_MATH_MODULE_TESTS
         git_issue_810
         test_tgamma_eh
         # Optimization / statistics (adapted)
-        jso_test
+        test_jso
         test_chatterjee_correlation
 )
 
@@ -163,7 +163,7 @@ set(BOOST_MATH_MODULE_TESTS
 # libstdc++ and by MSVC, so keeping the consumers std-include-free is what lets the
 # whole set build on all three toolchains rather than clang alone.
 #
-# lambert_w_std_free_module_test additionally names no standard library entity at all;
+# test_lambert_w_std_free_module additionally names no standard library entity at all;
 # it is the canary for GCC's C++20 module exposure rule (a namespace-scope entity with
 # internal linkage cannot be reached from an exported template), which guards the
 # BOOST_MATH_INLINE_CONSTEXPR fixes on the compiler that actually diagnoses them.

@@ -13,7 +13,7 @@
 
 #define SC_(x) static_cast<T>(BOOST_STRINGIZE(x))
 
-#include "log1p_expm1_test.hpp"
+#include "test_log1p_expm1.hpp"
 
 //
 // DESCRIPTION:
