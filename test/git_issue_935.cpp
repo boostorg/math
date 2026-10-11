@@ -11,13 +11,14 @@
 // cdf(k) the continuous root is only known to within noise, and the rounded
 // result used to be off by one.  Check that quantile(cdf(k)) round-trips,
 // with p nudged a few ulps either side of cdf(k), for every integer rounding
-// policy, both tails, and each distribution that shares that code.
+// policy, both tails, and each discrete distribution.
 
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/distributions/negative_binomial.hpp>
 #include <boost/math/distributions/binomial.hpp>
 #include <boost/math/distributions/poisson.hpp>
 #include <boost/math/distributions/geometric.hpp>
+#include <boost/math/distributions/hypergeometric.hpp>
 #else
 import boost.math;
 #endif
@@ -30,7 +31,7 @@ import boost.math;
 
 using namespace boost::math::policies;
 
-enum class rounding { up, down, outwards, inwards };
+enum class rounding { up, down, outwards, inwards, nearest };
 
 // The answer each policy should give, from G[k] = cdf(k) - p (or
 // p - cdf(complement(d, k)) for the complement), which increases with k.
@@ -97,10 +98,24 @@ void check_round_trips(const Dist& d, rounding r)
                continue;
             for (std::size_t i = 0; i < lower.size(); ++i)
                G[i] = comp ? p - upper[i] : lower[i] - p;
+            const double q = comp ? quantile(complement(d, p)) : quantile(d, p);
+            if (r == rounding::nearest)
+            {
+               // Whatever "nearest" means for this distribution, it is round
+               // up's answer or the one below it, and round up's when p is
+               // exactly on a step:
+               const long up = expected_quantile(G, rounding::up, 0.5);
+               if (up < 0)
+                  continue;
+               if ((G[up] == 0) || (up == 0))
+                  CHECK_EQUAL(q, static_cast<double>(up));
+               else if ((q != up) && (q != up - 1))
+                  CHECK_EQUAL(q, static_cast<double>(up));
+               continue;
+            }
             const long expected = expected_quantile(G, r, comp ? 1 - p : p);
             if (expected < 0)
                continue;
-            const double q = comp ? quantile(complement(d, p)) : quantile(d, p);
             CHECK_EQUAL(q, static_cast<double>(expected));
          }
       }
@@ -120,9 +135,12 @@ void test_policy(rounding r)
          check_round_trips(boost::math::binomial_distribution<double, Policy>(trials, p), r);
    for (double mean : { 0.1, 4.5, 30.0 })
       check_round_trips(boost::math::poisson_distribution<double, Policy>(mean), r);
-   // The geometric finds its quantile in closed form, but rounds the same way:
+   // These two find the quantile without inverse_discrete_quantile (in
+   // closed form, and by summing the pdf), but round the same way:
    for (double p : { 0.05, 0.5, 0.9 })
       check_round_trips(boost::math::geometric_distribution<double, Policy>(p), r);
+   check_round_trips(boost::math::hypergeometric_distribution<double, Policy>(25, 20, 60), r);
+   check_round_trips(boost::math::hypergeometric_distribution<double, Policy>(300, 150, 1000), r);
 }
 
 int main()
@@ -151,6 +169,22 @@ int main()
    test_policy<policy<discrete_quantile<integer_round_down>>>(rounding::down);
    test_policy<policy<discrete_quantile<integer_round_outwards>>>(rounding::outwards);
    test_policy<policy<discrete_quantile<integer_round_inwards>>>(rounding::inwards);
+   test_policy<policy<discrete_quantile<integer_round_nearest>>>(rounding::nearest);
+
+   // float is evaluated in double, but cdf() is rounded to float, and the
+   // hypergeometric quantile must allow for that:
+   {
+      using namespace boost::math;
+      hypergeometric_distribution<float> up(25, 20, 60);
+      hypergeometric_distribution<float, policy<discrete_quantile<integer_round_down>>> down(25, 20, 60);
+      for (float k = 1; k < 15; ++k)
+      {
+         CHECK_EQUAL(quantile(up, cdf(up, k)), k);
+         CHECK_EQUAL(quantile(complement(up, cdf(complement(up, k)))), k);
+         CHECK_EQUAL(quantile(down, cdf(down, k)), k);
+         CHECK_EQUAL(quantile(complement(down, cdf(complement(down, k)))), k);
+      }
+   }
 
    return boost::math::test::report_errors();
 }
