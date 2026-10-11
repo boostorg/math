@@ -51,19 +51,22 @@ improvement in performance, as does switching to a different compiler
 There are a number of [link policy Policies] that can be used to trade accuracy for performance:
 
 * Internal promotion: by default functions with `float` arguments are evaluated at `double` precision
-internally to ensure full precision in the result.  Similarly `double` precision functions are
-evaluated at `long double` precision internally by default.  Changing these defaults can have a significant
+internally to ensure full precision in the result.  `double` precision functions are evaluated at `double`
+precision by default (older releases promoted them to `long double`, which is slow on x86 and very slow
+where `long double` is software emulated).  Changing the `float` default can have a significant
 speed advantage at the expense of accuracy, note also that evaluating using `float` internally may result in
 numerical instability for some of the more complex algorithms, we suggest you use this option with care.
+Defining `BOOST_MATH_PROMOTE_DOUBLE_POLICY` as `true` turns promotion of `double` on again for the extra accuracy.
 * Target accuracy: just because you choose to evaluate at `double` precision doesn't mean you necessarily want
 to target full 16-digit accuracy, if you wish you can change the default (full machine precision) to whatever
 is "good enough" for your particular use case.
 
-For example, suppose you want to evaluate `double` precision functions at `double` precision internally, you
-can change the global default by passing `-DBOOST_MATH_PROMOTE_DOUBLE_POLICY=false` on the command line, or
-at the point of call via something like this:
+For example, suppose you want `float` precision functions to be evaluated at `float` precision internally, you
+can change the global default by passing `-DBOOST_MATH_PROMOTE_FLOAT_POLICY=false` on the command line.
+Likewise, to get the extra accuracy of `long double` for `double` functions, pass `-DBOOST_MATH_PROMOTE_DOUBLE_POLICY=true`.
+Either can also be selected at the point of call via something like this:
 
-   double val = boost::math::erf(my_argument, boost::math::policies::make_policy(boost::math::policies::promote_double<false>()));
+   double val = boost::math::erf(my_argument, boost::math::policies::make_policy(boost::math::policies::promote_double<true>()));
 
 However, an easier option might be:
 

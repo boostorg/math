@@ -8,6 +8,14 @@ All old bug reports including closed ones can be viewed on Trac
 
 Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
+[h4 Unreleased]
+
+* [*Breaking change:] `double` arguments are no longer promoted to `long double` internally by default
+(`BOOST_MATH_PROMOTE_DOUBLE_POLICY` now defaults to `false` on all platforms), see
+[@https://github.com/boostorg/math/issues/1211 1211].  `long double` is x87 on x86 and software emulated on
+AArch64 Linux, so promotion was slow, but results for `double` may now differ in the last few bits.
+To restore the old behavior define `BOOST_MATH_PROMOTE_DOUBLE_POLICY` as `true`, or pass `promote_double<true>` in a policy.
+
 [h4 Math-4.2.1 (Boost-1.86)]
 
 * Correct Bessel function results at infinity, see [@https://github.com/boostorg/math/issues/1143 1143].

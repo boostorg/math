@@ -242,7 +242,7 @@ control whether internal promotion to a higher precision floating-point type tak
    precision internally: defaults to `boost::math::policies::promote_float<true>`]]
 [[`boost::math::policies::promote_double<B>`]
    [Indicates whether `double` arguments should be promoted to `long double`
-   precision internally: defaults to `boost::math::policies::promote_double<true>`]]
+   precision internally: defaults to `boost::math::policies::promote_double<false>`]]
 ]
 
 [h4 Examples]
@@ -587,8 +587,10 @@ to `true`, but can be set to `false` to turn promotion of
 
 Determines whether `double` types get promoted to `long double`
 internally to ensure maximum precision in the result, defaults
-to `true`, but can be set to `false` to turn promotion of
-`double`'s off.
+to `false` (it defaulted to `true` in releases before the change
+described in the revision history), but can be set to `true` to turn promotion of
+`double`'s on.  Promotion is slow on most platforms: `long double` is x87 on x86
+and is software emulated on AArch64 Linux.
 
 [h5 BOOST_MATH_DISCRETE_QUANTILE_POLICY]
 
@@ -826,7 +828,7 @@ which in turn inherits from `std::integral_constant<bool, B>`.
    policy<...>::promote_double_type
    
 Specifies whether or not to promote `double` arguments to `long double` precision
-internally.  Will be an instance of `boost::math::policies::promote_float<B>`
+internally (the default is not to).  Will be an instance of `boost::math::policies::promote_float<B>`
 which in turn inherits from `std::integral_constant<bool, B>`.
 
    policy<...>::discrete_quantile_type
