@@ -14,9 +14,12 @@
 #endif
 #include <boost/math/special_functions/fpclassify.hpp>
 
-#if __has_include("lodepng.h")
-
+// write_png uses lodepng (https://github.com/lvandeve/lodepng) only on request, so that a program which merely has lodepng.h
+// on its include path still links: define BOOST_MATH_USE_LODEPNG, or include lodepng.h before this header, and link lodepng.cpp.
+#if defined(BOOST_MATH_USE_LODEPNG) && !defined(LODEPNG_H)
 #include "lodepng.h"
+#endif
+#ifdef LODEPNG_H
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <iostream>
 #include <string>
@@ -28,7 +31,7 @@ BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 // In lodepng, the vector is expected to be row major, with the top row
 // specified first. Note that this is a bit confusing sometimes as it's more
 // natural to let y increase moving *up*.
-unsigned write_png(const std::string &filename,
+inline unsigned write_png(const std::string &filename,
                    const std::vector<std::uint8_t> &img, std::size_t width,
                    std::size_t height) {
   unsigned error = lodepng::encode(filename, img, width, height,
@@ -40,7 +43,7 @@ unsigned write_png(const std::string &filename,
 }
 
 } BOOST_MATH_NAMESPACE_END // Namespace boost::math::tools
-#endif // __has_include("lodepng.h")
+#endif // LODEPNG_H
 
 BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
