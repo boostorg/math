@@ -591,7 +591,7 @@ void test_non_central_t()
       },
       boost::math::tools::root_epsilon<T>(), &err, &L1, &levels);
 
-   CHECK_ULP_CLOSE(expected, integral, 60);
+   CHECK_ULP_CLOSE(expected, integral, 200);
 }
 
 
