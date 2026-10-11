@@ -11,11 +11,233 @@
 #endif
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/big_constant.hpp>
+#include <boost/math/quadrature/detail/quadrature_constant.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN namespace quadrature { namespace detail {
 
 template <class T, unsigned N, unsigned Category>
 class hermite_detail;
+
+#ifndef BOOST_HAS_FLOAT128
+template <class T>
+class hermite_detail<T, 9, 0>
+{
+	using storage_type = typename quadrature_constant_category<T>::storage_type;
+public:
+	static std::array<storage_type, 4> const& abscissa()
+	{
+		static std::array<storage_type, 4> data = {
+			static_cast<storage_type>(7.41095349994540841861796561106955925e-1L),
+			static_cast<storage_type>(1.73205080756887729352744634150587237e+0L),
+			static_cast<storage_type>(2.86127957605705811733147448659436790e+0L),
+			static_cast<storage_type>(4.18495601767273186068890789532200196e+0L),
+		};
+		return data;
+	}
+	static std::array<storage_type, 4> const& weights()
+	{
+		static std::array<storage_type, 4> data = {
+			static_cast<storage_type>(2.70074329577937870762767019924468134e-1L),
+			static_cast<storage_type>(9.48509485094850948509485094850948509e-2L),
+			static_cast<storage_type>(7.99632547089353276985526566648531622e-3L),
+			static_cast<storage_type>(9.42694575565174894450779398247150402e-5L),
+		};
+		return data;
+	}
+};
+
+template <class T>
+class hermite_detail<T, 11, 0>
+{
+	using storage_type = typename quadrature_constant_category<T>::storage_type;
+public:
+	static std::array<storage_type, 5> const& abscissa()
+	{
+		static std::array<storage_type, 5> data = {
+			static_cast<storage_type>(8.46288098351021696107430604280023007e-1L),
+			static_cast<storage_type>(1.73205080756887729352744634150587237e+0L),
+			static_cast<storage_type>(2.68403956015856917664122201161807775e+0L),
+			static_cast<storage_type>(3.73557154604095725980716377228260495e+0L),
+			static_cast<storage_type>(4.97914651171955824227894519469040276e+0L),
+		};
+		return data;
+	}
+	static std::array<storage_type, 5> const& weights()
+	{
+		static std::array<storage_type, 5> data = {
+			static_cast<storage_type>(2.40004456875491628985507767946740900e-1L),
+			static_cast<storage_type>(8.14426992437463641652123327515997673e-2L),
+			static_cast<storage_type>(1.08127291815507746167330431938212732e-2L),
+			static_cast<storage_type>(4.17511463528033667570317708971897379e-4L),
+			static_cast<storage_type>(2.34179777470183295039460801648869778e-6L),
+		};
+		return data;
+	}
+};
+
+template <class T>
+class hermite_detail<T, 35, 0>
+{
+	using storage_type = typename quadrature_constant_category<T>::storage_type;
+public:
+	static std::array<storage_type, 17> const& abscissa()
+	{
+		static std::array<storage_type, 17> data = {
+			static_cast<storage_type>(2.48992297579960611806557803951626045e-1L),
+			static_cast<storage_type>(7.41095349994540841861796561106955925e-1L),
+			static_cast<storage_type>(1.23042363402730600775114365003367672e+0L),
+			static_cast<storage_type>(1.73205080756887729352744634150587237e+0L),
+			static_cast<storage_type>(2.23362606167694165200959431338129917e+0L),
+			static_cast<storage_type>(2.59608311504920215935784602955313567e+0L),
+			static_cast<storage_type>(2.86127957605705811733147448659436790e+0L),
+			static_cast<storage_type>(3.20533379449919451871837817630563698e+0L),
+			static_cast<storage_type>(3.63531851903727824521897202861977472e+0L),
+			static_cast<storage_type>(4.18495601767273186068890789532200196e+0L),
+			static_cast<storage_type>(4.73643308595229708409872019687152404e+0L),
+			static_cast<storage_type>(5.18701603991365606599177652181572609e+0L),
+			static_cast<storage_type>(5.69817776848810958932964960213302465e+0L),
+			static_cast<storage_type>(6.36339449433636998763257860506340781e+0L),
+			static_cast<storage_type>(7.12210670080461665821897691565815296e+0L),
+			static_cast<storage_type>(7.98077179859056088018000647678504333e+0L),
+			static_cast<storage_type>(9.01693978989030251745980372131053694e+0L),
+		};
+		return data;
+	}
+	static std::array<storage_type, 17> const& weights()
+	{
+		static std::array<storage_type, 17> data = {
+			static_cast<storage_type>(1.91760115888044429590916239185753805e-1L),
+			static_cast<storage_type>(1.48070831155216006153705613303108235e-1L),
+			static_cast<storage_type>(9.23647267169863059276383613338036040e-2L),
+			static_cast<storage_type>(4.52736854651505158647378658023314265e-2L),
+			static_cast<storage_type>(1.56734737518511515415579576572693307e-2L),
+			static_cast<storage_type>(3.15544626918756380509627832516482637e-3L),
+			static_cast<storage_type>(2.31134524035221012072341995793982431e-3L),
+			static_cast<storage_type>(8.18953927502264909061677157830279238e-4L),
+			static_cast<storage_type>(2.75242141167851574995163819724891339e-4L),
+			static_cast<storage_type>(3.57293481989751002281842012477533791e-5L),
+			static_cast<storage_type>(2.73422068011878298167069087657533829e-6L),
+			static_cast<storage_type>(2.46764213457980786711604323832793621e-7L),
+			static_cast<storage_type>(2.13941944795611063066738760595756450e-8L),
+			static_cast<storage_type>(4.60117603486561870108264094313249606e-10L),
+			static_cast<storage_type>(3.09722235760631617127944641701574759e-12L),
+			static_cast<storage_type>(5.45004126506368991707589692041379015e-15L),
+			static_cast<storage_type>(1.05413265823333411894004579401405126e-18L),
+		};
+		return data;
+	}
+};
+
+#else
+template <class T>
+class hermite_detail<T, 9, 0>
+{
+	using storage_type = typename quadrature_constant_category<T>::storage_type;
+public:
+	static std::array<storage_type, 4> const& abscissa()
+	{
+		static std::array<storage_type, 4> data = {
+			static_cast<storage_type>(7.41095349994540841861796561106955925e-1Q),
+			static_cast<storage_type>(1.73205080756887729352744634150587237e+0Q),
+			static_cast<storage_type>(2.86127957605705811733147448659436790e+0Q),
+			static_cast<storage_type>(4.18495601767273186068890789532200196e+0Q),
+		};
+		return data;
+	}
+	static std::array<storage_type, 4> const& weights()
+	{
+		static std::array<storage_type, 4> data = {
+			static_cast<storage_type>(2.70074329577937870762767019924468134e-1Q),
+			static_cast<storage_type>(9.48509485094850948509485094850948509e-2Q),
+			static_cast<storage_type>(7.99632547089353276985526566648531622e-3Q),
+			static_cast<storage_type>(9.42694575565174894450779398247150402e-5Q),
+		};
+		return data;
+	}
+};
+
+template <class T>
+class hermite_detail<T, 11, 0>
+{
+	using storage_type = typename quadrature_constant_category<T>::storage_type;
+public:
+	static std::array<storage_type, 5> const& abscissa()
+	{
+		static std::array<storage_type, 5> data = {
+			static_cast<storage_type>(8.46288098351021696107430604280023007e-1Q),
+			static_cast<storage_type>(1.73205080756887729352744634150587237e+0Q),
+			static_cast<storage_type>(2.68403956015856917664122201161807775e+0Q),
+			static_cast<storage_type>(3.73557154604095725980716377228260495e+0Q),
+			static_cast<storage_type>(4.97914651171955824227894519469040276e+0Q),
+		};
+		return data;
+	}
+	static std::array<storage_type, 5> const& weights()
+	{
+		static std::array<storage_type, 5> data = {
+			static_cast<storage_type>(2.40004456875491628985507767946740900e-1Q),
+			static_cast<storage_type>(8.14426992437463641652123327515997673e-2Q),
+			static_cast<storage_type>(1.08127291815507746167330431938212732e-2Q),
+			static_cast<storage_type>(4.17511463528033667570317708971897379e-4Q),
+			static_cast<storage_type>(2.34179777470183295039460801648869778e-6Q),
+		};
+		return data;
+	}
+};
+
+template <class T>
+class hermite_detail<T, 35, 0>
+{
+	using storage_type = typename quadrature_constant_category<T>::storage_type;
+public:
+	static std::array<storage_type, 17> const& abscissa()
+	{
+		static std::array<storage_type, 17> data = {
+			static_cast<storage_type>(2.48992297579960611806557803951626045e-1Q),
+			static_cast<storage_type>(7.41095349994540841861796561106955925e-1Q),
+			static_cast<storage_type>(1.23042363402730600775114365003367672e+0Q),
+			static_cast<storage_type>(1.73205080756887729352744634150587237e+0Q),
+			static_cast<storage_type>(2.23362606167694165200959431338129917e+0Q),
+			static_cast<storage_type>(2.59608311504920215935784602955313567e+0Q),
+			static_cast<storage_type>(2.86127957605705811733147448659436790e+0Q),
+			static_cast<storage_type>(3.20533379449919451871837817630563698e+0Q),
+			static_cast<storage_type>(3.63531851903727824521897202861977472e+0Q),
+			static_cast<storage_type>(4.18495601767273186068890789532200196e+0Q),
+			static_cast<storage_type>(4.73643308595229708409872019687152404e+0Q),
+			static_cast<storage_type>(5.18701603991365606599177652181572609e+0Q),
+			static_cast<storage_type>(5.69817776848810958932964960213302465e+0Q),
+			static_cast<storage_type>(6.36339449433636998763257860506340781e+0Q),
+			static_cast<storage_type>(7.12210670080461665821897691565815296e+0Q),
+			static_cast<storage_type>(7.98077179859056088018000647678504333e+0Q),
+			static_cast<storage_type>(9.01693978989030251745980372131053694e+0Q),
+		};
+		return data;
+	}
+	static std::array<storage_type, 17> const& weights()
+	{
+		static std::array<storage_type, 17> data = {
+			static_cast<storage_type>(1.91760115888044429590916239185753805e-1Q),
+			static_cast<storage_type>(1.48070831155216006153705613303108235e-1Q),
+			static_cast<storage_type>(9.23647267169863059276383613338036040e-2Q),
+			static_cast<storage_type>(4.52736854651505158647378658023314265e-2Q),
+			static_cast<storage_type>(1.56734737518511515415579576572693307e-2Q),
+			static_cast<storage_type>(3.15544626918756380509627832516482637e-3Q),
+			static_cast<storage_type>(2.31134524035221012072341995793982431e-3Q),
+			static_cast<storage_type>(8.18953927502264909061677157830279238e-4Q),
+			static_cast<storage_type>(2.75242141167851574995163819724891339e-4Q),
+			static_cast<storage_type>(3.57293481989751002281842012477533791e-5Q),
+			static_cast<storage_type>(2.73422068011878298167069087657533829e-6Q),
+			static_cast<storage_type>(2.46764213457980786711604323832793621e-7Q),
+			static_cast<storage_type>(2.13941944795611063066738760595756450e-8Q),
+			static_cast<storage_type>(4.60117603486561870108264094313249606e-10Q),
+			static_cast<storage_type>(3.09722235760631617127944641701574759e-12Q),
+			static_cast<storage_type>(5.45004126506368991707589692041379015e-15Q),
+			static_cast<storage_type>(1.05413265823333411894004579401405126e-18Q),
+		};
+		return data;
+	}
+};
+#endif
 
 template <class T>
 class hermite_detail<T, 9, 4>
