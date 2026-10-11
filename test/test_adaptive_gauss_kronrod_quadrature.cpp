@@ -85,8 +85,8 @@ void test_linear()
     Real Q = gauss_kronrod<Real, Points>::integrate(f, (Real) 0, (Real) 1, 15, get_termination_condition<Real>(), &error, &L1);
     CHECK_ULP_CLOSE(Real(9.5), Q, 8);
     CHECK_ULP_CLOSE(Real(9.5), L1, 8);
-    CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
-    CHECK_GE(fabs(error), fabs(Q - 9.5));
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
+    CHECK_GE(abs(error), abs(Q - Real(9.5)));
 }
 
 template<class Real, unsigned Points>
@@ -100,8 +100,8 @@ void test_quadratic()
     Real Q = gauss_kronrod<Real, Points>::integrate(f, 0, 1, 15, get_termination_condition<Real>(), &error, &L1);
     CHECK_ULP_CLOSE((Real) 17 + half<Real>()*third<Real>(), Q, 8);
     CHECK_ULP_CLOSE((Real) 17 + half<Real>()*third<Real>(), L1, 8);
-    CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
-    CHECK_GE(fabs(error), fabs(Q - ((Real)17 + half<Real>()*third<Real>())));
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
+    CHECK_GE(abs(error), abs(Q - ((Real)17 + half<Real>()*third<Real>())));
 }
 
 // Examples taken from
@@ -118,16 +118,16 @@ void test_ca()
     Real Q_expected = pi<Real>()*ln_two<Real>()/8 + catalan<Real>()*half<Real>();
     CHECK_ULP_CLOSE(Q_expected, Q, 8);
     CHECK_ULP_CLOSE(Q_expected, L1, 8);
-    CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
-    CHECK_GE(fabs(error), fabs(Q - Q_expected));
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
+    CHECK_GE(abs(error), abs(Q - Q_expected));
 
     auto f2 = [](Real x)->Real { Real t0 = x*x + 1; Real t1 = sqrt(t0); return atan(t1)/(t0*t1); };
     Q = gauss_kronrod<Real, Points>::integrate(f2, 0 , 1, 15, get_termination_condition<Real>(), &error, &L1);
     Q_expected = pi<Real>()/4 - pi<Real>()/root_two<Real>() + 3*atan(root_two<Real>())/root_two<Real>();
     CHECK_ULP_CLOSE(Q_expected, Q, 8);
     CHECK_ULP_CLOSE(Q_expected, L1, 8);
-    CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
-    CHECK_GE(fabs(error), fabs(Q - Q_expected));
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
+    CHECK_GE(abs(error), abs(Q - Q_expected));
 
     auto f5 = [](Real t)->Real { return t*t*log(t)/((t*t - 1)*(t*t*t*t + 1)); };
     Q = gauss_kronrod<Real, Points>::integrate(f5, 0, 1, 25);
@@ -183,14 +183,14 @@ void test_integration_over_real_line()
     Q_expected = pi<Real>();
     CHECK_ULP_CLOSE(Q_expected, Q, 8);
     CHECK_ULP_CLOSE(Q_expected, L1, 8);
-    CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
 
     auto f4 = [](const Real& t) { return 1/cosh(t);};
     Q = gauss_kronrod<Real, Points>::integrate(f4, -boost::math::tools::max_value<Real>(), boost::math::tools::max_value<Real>(), 15, get_termination_condition<Real>(), &error, &L1);
     Q_expected = pi<Real>();
     CHECK_ULP_CLOSE(Q_expected, Q, 4);
     CHECK_ULP_CLOSE(Q_expected, L1, 4);
-    CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
 
 }
 
@@ -208,13 +208,13 @@ void test_right_limit_infinite()
     Q = gauss_kronrod<Real, Points>::integrate(f1, 0, boost::math::tools::max_value<Real>(), 15, get_termination_condition<Real>(), &error, &L1);
     Q_expected = half_pi<Real>();
     CHECK_ULP_CLOSE(Q_expected, Q, 8);
-    CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
 
     auto f4 = [](const Real& t) { return 1/(1+t*t); };
     Q = gauss_kronrod<Real, Points>::integrate(f4, 1, boost::math::tools::max_value<Real>(), 15, get_termination_condition<Real>(), &error, &L1);
     Q_expected = pi<Real>()/4;
     CHECK_ULP_CLOSE(Q_expected, Q, 4);
-    CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
+    CHECK_LE(abs(error / Q), get_termination_condition<Real>());
 }
 
 template<class Real, unsigned Points>

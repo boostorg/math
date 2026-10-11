@@ -112,16 +112,16 @@ void test_quadratures()
     xhi = b;
     for (int i = 0; i < samples; ++i) {
         std::cout << std::setprecision(std::numeric_limits<Real>::max_digits10);
-        CHECK_LE(abs(psi(xlo)), Real(5));
-        CHECK_LE(abs(psi(xhi)), Real(5));
+        CHECK_LE(std::abs(psi(xlo)), Real(5));
+        CHECK_LE(std::abs(psi(xhi)), Real(5));
         if constexpr (p > 2)
         {
-            CHECK_LE(abs(psi.prime(xlo)), Real(5));
-            CHECK_LE(abs(psi.prime(xhi)), Real(5));
+            CHECK_LE(std::abs(psi.prime(xlo)), Real(5));
+            CHECK_LE(std::abs(psi.prime(xhi)), Real(5));
             if constexpr (p >= 6)
             {
-                CHECK_LE(abs(psi.double_prime(xlo)), Real(5));
-                CHECK_LE(abs(psi.double_prime(xhi)), Real(5));
+                CHECK_LE(std::abs(psi.double_prime(xlo)), Real(5));
+                CHECK_LE(std::abs(psi.double_prime(xhi)), Real(5));
             }
         }
         xlo = std::nextafter(xlo, (std::numeric_limits<Real>::max)());

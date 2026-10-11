@@ -237,8 +237,8 @@ void test_constant_eigen()
         // Don't evaluate the constant at x[i]; that's already tested in the interpolation condition test.
         Real t = t_copy[i] + dis(gen);
         z = interpolator(t);
-        CHECK_ABSOLUTE_ERROR(constant0, z[0], Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant0)));
-        CHECK_ABSOLUTE_ERROR(constant1, z[1], Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant1)));
+        CHECK_ABSOLUTE_ERROR(constant0, Real(z[0]), Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant0)));
+        CHECK_ABSOLUTE_ERROR(constant1, Real(z[1]), Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant1)));
         Eigen::Vector2d zprime = interpolator.prime(t);
         Real zero_0 = zprime[0];
         Real zero_1 = zprime[1];
@@ -322,8 +322,8 @@ void test_constant_high_order()
         // Don't evaluate the constant at x[i]; that's already tested in the interpolation condition test.
         Real t = t_copy[i] + dis(gen);
         z = interpolator(t);
-        CHECK_ABSOLUTE_ERROR(constant0, z[0], Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant0)));
-        CHECK_ABSOLUTE_ERROR(constant1, z[1], Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant1)));
+        CHECK_ABSOLUTE_ERROR(constant0, Real(z[0]), Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant0)));
+        CHECK_ABSOLUTE_ERROR(constant1, Real(z[1]), Real((sqrt(numeric_limits<Real>::epsilon()))*abs(constant1)));
         Eigen::Vector2d zprime = interpolator.prime(t);
         Real zero_0 = zprime[0];
         Real zero_1 = zprime[1];

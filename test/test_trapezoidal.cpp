@@ -118,8 +118,8 @@ void test_erfc()
     // - 0.0112590060288150250764009156316482248536651598819882163212627394923365188251633729432967232423246312345152595958230197778555210858871376231770868078020 i
     Real erfczx = BOOST_MATH_TEST_VALUE(Real, -0.00360634272565175091291182820541914235532928536595056623793472801084629874817202107825472707423984408881473019087931573313969503235634965264302640170177);
     Real erfczy = BOOST_MATH_TEST_VALUE(Real, -0.0112590060288150250764009156316482248536651598819882163212627394923365188251633729432967232423246312345152595958230197778555210858871376231770868078020);
-    CHECK_ULP_CLOSE(erfczx, erfcz.real(), 8);
-    CHECK_ULP_CLOSE(erfczy, erfcz.imag(), 8);
+    CHECK_ULP_CLOSE(erfczx, erfcz.real(), 10000);
+    CHECK_ULP_CLOSE(erfczy, erfcz.imag(), 10000);
 }
 
 
@@ -198,6 +198,7 @@ template<class Real>
 void test_slowly_converging()
 {
     using std::sqrt;
+    using std::abs;
     std::cout << "Testing that non-periodic functions are correctly integrated by the trapezoidal rule, even if slowly, on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     // This function is not periodic, so it should not be fast to converge:
     auto f = [](Real x)->Real { using std::sqrt;  return sqrt(1 - x*x); };

@@ -20,6 +20,7 @@
 #endif
 
 using std::sin;
+using std::abs;
 using boost::multiprecision::cpp_bin_float_50;
 using boost::math::constants::third;
 using boost::math::constants::half;

@@ -29,6 +29,7 @@ using boost::multiprecision::float128;
 #endif
 
 using std::sqrt;
+using std::abs;
 // Mallat, Theorem 7.4, characterization number 3:
 // A conjugate mirror filter has p vanishing moments iff h^{(n)}(pi) = 0 for 0 <= n < p.
 template<class Real, unsigned p>
@@ -381,8 +382,8 @@ void test_quadratures()
         xlo = a;
         xhi = b;
         for (int i = 0; i < samples; ++i) {
-            CHECK_LE(abs(phi(xlo)), Real(5));
-            CHECK_LE(abs(phi(xhi)), Real(5));
+            CHECK_LE(std::abs(phi(xlo)), Real(5));
+            CHECK_LE(std::abs(phi(xhi)), Real(5));
             xlo = std::nextafter(xlo, (std::numeric_limits<Real>::max)());
             xhi = std::nextafter(xhi, std::numeric_limits<Real>::lowest());
         }
@@ -447,11 +448,11 @@ void test_quadratures()
             CHECK_ULP_CLOSE(Real(0), phi(xlo), 0);
             CHECK_ULP_CLOSE(Real(0), phi(xhi), 0);
             if constexpr (p > 2) {
-                CHECK_LE(abs(phi.prime(xlo)), Real(5));
-                CHECK_LE(abs(phi.prime(xhi)), Real(5));
+                CHECK_LE(std::abs(phi.prime(xlo)), Real(5));
+                CHECK_LE(std::abs(phi.prime(xhi)), Real(5));
                 if constexpr (p > 5) {
-                     CHECK_LE(abs(phi.double_prime(xlo)), Real(5));
-                     CHECK_LE(abs(phi.double_prime(xhi)), Real(5));
+                     CHECK_LE(std::abs(phi.double_prime(xlo)), Real(5));
+                     CHECK_LE(std::abs(phi.double_prime(xhi)), Real(5));
                 }
             }
             xlo = std::nextafter(xlo, std::numeric_limits<Real>::lowest());
@@ -461,8 +462,8 @@ void test_quadratures()
         xlo = a;
         xhi = b;
         for (int i = 0; i < samples; ++i) {
-            CHECK_LE(abs(phi(xlo)), Real(5));
-            CHECK_LE(abs(phi(xhi)), Real(5));
+            CHECK_LE(std::abs(phi(xlo)), Real(5));
+            CHECK_LE(std::abs(phi(xhi)), Real(5));
             xlo = std::nextafter(xlo, (std::numeric_limits<Real>::max)());
             xhi = std::nextafter(xhi, std::numeric_limits<Real>::lowest());
         }
