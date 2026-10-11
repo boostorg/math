@@ -4,11 +4,10 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_TEST_MODULE issue893
 
 #include <iostream>
 #include <sstream>
-#include <boost/test/included/unit_test.hpp>
+#include "math_unit_test.hpp"
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/quadrature/tanh_sinh.hpp>
 
@@ -16,7 +15,7 @@ using boost::math::quadrature::tanh_sinh;
 
 #include <iostream>
 
-BOOST_AUTO_TEST_CASE(issue893) {
+void issue893() {
    typedef boost::multiprecision::cpp_bin_float_100 real;
 
    auto fun = [](real /*x*/) -> real {
@@ -28,5 +27,11 @@ BOOST_AUTO_TEST_CASE(issue893) {
    const real b = -0.9999995515592481132478776023609116290187750667053638330158486516399489191171270344610533516275817076;
    real y = integrator.integrate(fun, -b, a);
    
-   BOOST_CHECK(y < 1);
+   CHECK_TRUE(y < 1);
+}
+
+int main()
+{
+   issue893();
+   return boost::math::test::report_errors();
 }

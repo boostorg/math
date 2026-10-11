@@ -4,12 +4,9 @@
 //           https://www.boost.org/LICENSE_1_0.txt)
 #ifndef TEST_AUTODIFF_REVERSE_HPP
 #define TEST_AUTODIFF_REVERSE_HPP
-#ifndef BOOST_TEST_MODULE
-#define BOOST_TEST_MODULE test_autodiff
-#endif
 #define BOOST_MP_NO_QUAD
 #define BOOST_MATH_DISABLE_FLOAT128
-#include <boost/test/included/unit_test.hpp>
+#include "math_unit_test.hpp"
 #include <version> // always safe
 
 #if __has_include(<stdfloat>)
@@ -19,13 +16,13 @@
 #include <algorithm>
 #include <boost/math/differentiation/autodiff_reverse.hpp>
 #include <boost/math/tools/config.hpp>
+#include <boost/mp11/algorithm.hpp>
 #include <boost/mp11/function.hpp>
 #include <boost/mp11/integral.hpp>
 #include <boost/mp11/list.hpp>
 #include <boost/mp11/utility.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
-#include <boost/test/included/unit_test.hpp>
 #include <cfenv>
 #include <cstdlib>
 #include <random>
