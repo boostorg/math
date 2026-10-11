@@ -577,21 +577,16 @@
            cache_offset += cache_size;
            T last_value = bessel_i_cache.back();
            //
-           // We run the recurrence ourselves rather than use bessel_i_backwards_iterator, as the latter
-           // steps down from a single rounded starting order, so is off by up to ~eps * cache_size in all of the
-           // orders, and this is amplified where I_v is small.  We only use it to get the ratio at the start.
+           // The iterator steps down in order from v + k with k an integer, so each order v + j is rounded only once.
+           // Stepping down from a rounded order instead put every order out by ~eps * cache_offset, which is amplified
+           // where I_v is small:
            //
-           T order = b_minus_a - 0.5f + cache_offset;
-           if (order + (cache_size - 1) < -1)
-              BOOST_MATH_NAMESPACE::policies::raise_domain_error("hypergeometric_1F1_AS_13_3_6<%1%>", "Order must be > 0 stable backwards recurrence but got %1%", T(order + (cache_size - 1)), pol);
-           T seed = tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 1) / tools::epsilon<T>();
-           tools::backward_recurrence_iterator<bessel_ik_recurrence<T> > start(bessel_ik_recurrence<T>(order + (cache_size - 1), half_z), seed);
-           T above = start.f_n_plus_1;
-           T current = start.f_n;
+           T v = b_minus_a - 0.5f;
+           bessel_i_backwards_iterator<T, Policy> i(v, half_z, tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 1) / tools::epsilon<T>(), tools::recurrence_offset(cache_offset + cache_size - 1));
 
-           for (int j = cache_size - 1; j >= 0; --j)
+           for (int j = cache_size - 1; j >= 0; --j, ++i)
            {
-              bessel_i_cache[j] = current;
+              bessel_i_cache[j] = *i;
               //
               // Depending on the value of half_z, the values stored in the cache can grow so
               // large as to overflow, if that looks likely then we need to rescale all the
@@ -606,17 +601,10 @@
                     rescale = tools::max_value<T>();
                  for (int k = j; k < cache_size; ++k)
                     bessel_i_cache[k] /= rescale;
-                 if (order + j < -1)
-                    BOOST_MATH_NAMESPACE::policies::raise_domain_error("hypergeometric_1F1_AS_13_3_6<%1%>", "Order must be > 0 stable backwards recurrence but got %1%", T(order + j), pol);
-                 above = bessel_i_cache[j + 1];
-                 current = bessel_i_cache[j];
+                 i = bessel_i_backwards_iterator<T, Policy>(v, half_z, bessel_i_cache[j + 1], bessel_i_cache[j], tools::recurrence_offset(cache_offset + j));
               }
-              // I_{v-1} = I_{v+1} + (2v / x) I_v
-              T below = above + (2 * (order + j) / half_z) * current;
-              above = current;
-              current = below;
            }
-           T ratio = (normalise_on_first && (cache_offset == 0)) ? last_value / bessel_i_cache[0] : last_value / current;
+           T ratio = (normalise_on_first && (cache_offset == 0)) ? last_value / bessel_i_cache[0] : last_value / *i;
            for (auto j = bessel_i_cache.begin(); j != bessel_i_cache.end(); ++j)
               *j *= ratio;
         }
