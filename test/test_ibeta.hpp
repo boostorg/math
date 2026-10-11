@@ -584,4 +584,34 @@ void test_spots(T, const char* name)
       typedef boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promote;
       BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(124.93519797258834), T(35.625649490623374), T(0.74635077170289033), no_promote()), static_cast<T>(0.1654537324451929478298745553715453707115L), boost::math::tools::epsilon<T>() * 8);
    }
+   //
+   // The series for the complement started from -1 and rounded each term onto the coarse grid of that running
+   // sum, which lost 5-10 eps for a, b < 1; and for a <= 15 near the mean the sidestep to a series (b < 40), and the
+   // forward evaluation of the continued fraction (b >= 40), lost as much.  The prefix error of that series is
+   // multiplied by S / (1 - S) in 1 - S, 5-15 eps for S > 1/2.  Reference values from Arb, doubles only:
+   //
+   BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+   {
+      typedef boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promote;
+      // Measured: at most 2.8 eps with contraction (-ffp-contract=on or fast), 3.03 eps without (x86 CI):
+      T tolerance = boost::math::tools::epsilon<T>() * 4;
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(0.06487), T(0.1276), T(0.3528), no_promote()), static_cast<T>(0.641466056762343904103825L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(0.3301), T(0.16), T(0.3677), no_promote()), static_cast<T>(0.27439745512337435015174L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(2.207), T(13.56), T(0.1469), no_promote()), static_cast<T>(0.400192942359675404658327L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(1.974), T(32.96), T(0.05104), no_promote()), static_cast<T>(0.530751012427838743979204L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.974), T(32.96), T(0.05104), no_promote()), static_cast<T>(0.469248987572161256020796L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.728), T(10.6), T(0.1423), no_promote()), static_cast<T>(0.412692486775009981483788L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.221), T(296.3), T(0.004113), no_promote()), static_cast<T>(0.379883178660505860442496L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(1.221), T(296.3), T(0.004113), no_promote()), static_cast<T>(0.620116821339494139557504L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.081), T(225.2), T(0.004949), no_promote()), static_cast<T>(0.360005149325214614768655L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.241), T(116.3), T(0.0108), no_promote()), static_cast<T>(0.373352830867477269482944L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.435), T(377.2), T(0.003875), no_promote()), static_cast<T>(0.379795123779314547118388L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.249), T(248.3), T(0.005199), no_promote()), static_cast<T>(0.366349117098876110163662L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(0.02942), T(0.2289), T(0.0253), no_promote()), static_cast<T>(0.196810945256536317102582L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(0.08087), T(0.06533), T(0.6775), no_promote()), static_cast<T>(0.529113561442567211501508L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(0.7857), T(0.0817), T(0.7627), no_promote()), static_cast<T>(0.13545630774913902473231L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(0.9848), T(0.1066), T(0.6446), no_promote()), static_cast<T>(0.106135652852894343731671L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(0.06833), T(0.7126), T(0.2048), no_promote()), static_cast<T>(0.133607615095624763603441L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(0.05328), T(0.5656), T(0.08573), no_promote()), static_cast<T>(0.168174045733948386362056L), tolerance);
+   }
 }
