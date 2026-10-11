@@ -182,6 +182,25 @@ void test_spots(T, const char* t)
    BOOST_CHECK_CLOSE(::boost::math::expint(22, static_cast<T>(1.5F)), static_cast<T>(0.0098864453561701486668317763826728620676449196215016L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::expint(22, static_cast<T>(4.5F)), static_cast<T>(0.00043257793497205419001613830279995985617548506505159L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::expint(22, static_cast<T>(50.0F)), static_cast<T>(2.6900194251201629500599598206345018300567305625080e-24L), tolerance);
+
+   //
+   // Small n and z, where the continued fraction used to lose up to 100 eps.
+   // Values from Arb, with exactly representable arguments, and without promotion to long double:
+   //
+   typedef boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> > no_promote;
+   T fine_tolerance = boost::math::tools::epsilon<T>() * 4;
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::expint(2, static_cast<T>(0.5234375L), no_promote()), static_cast<T>(0.313849729892195947855048595503987330295L), fine_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::expint(5, static_cast<T>(0.765625L), no_promote()), static_cast<T>(0.093986486497079385849351196976185361696L), fine_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::expint(3, static_cast<T>(0.546875L), no_promote()), static_cast<T>(0.206887798968448296964906195937878966847L), fine_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::expint(4, static_cast<T>(0.6875L), no_promote()), static_cast<T>(0.128875072258780982223489377343610090143L), fine_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::expint(7, static_cast<T>(0.84375L), no_promote()), static_cast<T>(0.061611202574823970288571878649546543895L), fine_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::expint(2, static_cast<T>(0.8125L), no_promote()), static_cast<T>(0.197012716206338050333499382725494520580L), fine_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::expint(2, static_cast<T>(1.25L), no_promote()), static_cast<T>(0.103488081202802379458312298784846073324L), fine_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::expint(10, static_cast<T>(1.0625L), no_promote()), static_cast<T>(0.033959400110090244027421921101310089047L), fine_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::expint(3, static_cast<T>(0.505859375L), no_promote()), static_cast<T>(0.219700004051754511547025991804223456768L), fine_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::expint(3, static_cast<T>(0.5078125L), no_promote()), static_cast<T>(0.219069446190807745449512957752318730531L), fine_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::expint(2, static_cast<T>(2.0390625L), no_promote()), static_cast<T>(0.035674719779421774803516160152884417867L), fine_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::expint(5, static_cast<T>(1.75L), no_promote()), static_cast<T>(0.028626070441920717401063405140884849129L), fine_tolerance);
    //
    // Ei:
    //

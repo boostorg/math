@@ -818,11 +818,13 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
       y = 1 / (1 + xg);
       //
       // And finally we know that our result is below the inflection
-      // point, so set an upper limit on our search:
+      // point, so set an upper limit on our search.  The root can be
+      // exactly at the inflection point (a == b and p == 1/2), and the
+      // root finder only creeps up on a bound, so leave it a little room:
       //
       if(x > xs)
          x = xs;
-      upper = xs;
+      upper = BOOST_MATH_GPU_SAFE_MIN(T(xs * 1.0001f), T(1));
    }
    else if((a > 1) && (b > 1))
    {
@@ -874,11 +876,13 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
       }
       //
       // And finally we know that our result is below the inflection
-      // point, so set an upper limit on our search:
+      // point, so set an upper limit on our search.  The root can be
+      // exactly at the inflection point (a == b and p == 1/2), and the
+      // root finder only creeps up on a bound, so leave it a little room:
       //
       if(x > xs)
          x = xs;
-      upper = xs;
+      upper = BOOST_MATH_GPU_SAFE_MIN(T(xs * 1.0001f), T(1));
    }
    else /*if((a <= 1) != (b <= 1))*/
    {

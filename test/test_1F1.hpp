@@ -448,6 +448,25 @@ void test_spots8(T, const char* type_name)
 }
 
 template <class T>
+void test_spots9(T, const char* type_name)
+{
+   //
+   // Values from Arb: the Bessel function series (A&S 13.3.6) used when b - a is small relative to b
+   // was normalised using a Bessel I that is ill-conditioned, and used rounded orders.
+   // The inputs are exactly representable doubles, so we only test double, without promotion to long double:
+   //
+   BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+   {
+      typedef boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> > no_promote;
+      T tol = boost::math::tools::epsilon<T>() * 20;
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_1F1(T(2.5), T(2.6467452353166792), T(2.1236045729111082), no_promote()), static_cast<T>(7.6229969267684479172456450199096452234456372656741L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_1F1(T(2.5), T(3.1), T(7.0), no_promote()), static_cast<T>(496.01424503510156054820225283083574607375L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_1F1(T(0.3), T(5.0), T(-1.7), no_promote()), static_cast<T>(0.91381409350285664938172257296860111244081L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_1F1(T(0.3), T(10.0), T(-3.0), no_promote()), static_cast<T>(0.92338769146325315656055820506546991002123L), tol);
+   }
+}
+
+template <class T>
 void test_spots(T z, const char* type_name)
 {
    test_spots1(z, type_name);
@@ -470,6 +489,7 @@ void test_spots(T z, const char* type_name)
       test_spots6(z, type_name);
    test_spots7(z, type_name);
    test_spots8(z, type_name);
+   test_spots9(z, type_name);
 }
 
 

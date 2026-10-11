@@ -15,6 +15,8 @@
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/special_functions/laguerre.hpp>
 #include <boost/math/special_functions/hermite.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/special_functions/detail/two_product.hpp>
 #include <boost/math/tools/fraction.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN namespace detail {
@@ -54,6 +56,62 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
       return cf;
    }
 
+
+   //
+   // 2F0(-n, b; z) for b > 0 and z > 0, where the series alternates and cancels badly.  Instead use the recurrence
+   // g[k+1] = (1 - (k + b) z) g[k] + k z g[k-1], with g[0] = 1 and g[1] = 1 - b z.  Where g is close to the
+   // minimal solution of the recurrence its rounding errors grow, so as in laguerre.hpp we find the rounding error
+   // of each step almost exactly, and carry it forward with the same recurrence.  The result is then correctly
+   // rounded unless the uncorrected recurrence was out by more than a few percent, which only happens for n > 50
+   // and n z between about 1 and 20, and there we raise an evaluation_error rather than return a wrong value.
+   //
+   template <class T, class Policy>
+   T hypergeometric_2F0_neg_int_recurrence(unsigned n, const T& b, const T& z, const Policy& pol, const char* function)
+   {
+      BOOST_MATH_STD_USING
+      two_product<T> product;
+      T t;
+      // g1 + e1 = 1 - b z exactly:
+      T bz, rbz;
+      product(b, z, bz, rbz);
+      T g1 = 1 - bz;
+      t = g1 - 1;
+      T e1 = ((1 - (g1 - t)) + (-bz - t)) - rbz;
+      T g0 = 1;
+      T e0 = 0;
+      for (unsigned k = 1; k < n; ++k)
+      {
+         // a + ea = 1 - (k + b) z and c + ec = k z exactly:
+         T u = k + b;
+         t = u - k;
+         T eu = (k - (u - t)) + (b - t);
+         T v, rv;
+         product(u, z, v, rv);
+         rv += eu * z;
+         T a = 1 - v;
+         t = a - 1;
+         T ea = ((1 - (a - t)) + (-v - t)) - rv;
+         T c, ec;
+         product(T(k), z, c, ec);
+         // s1 + r1 = a g1, s2 + r2 = c g0 and d + ed = s1 + s2 exactly:
+         T s1, r1, s2, r2;
+         product(a, g1, s1, r1);
+         product(c, g0, s2, r2);
+         T d = s1 + s2;
+         t = d - s1;
+         T ed = (s1 - (d - t)) + (s2 - t);
+         T e2 = a * e1 + c * e0 + ed + r1 + r2 + ea * g1 + ec * g0;
+         g0 = g1;
+         g1 = d;
+         e0 = e1;
+         e1 = e2;
+      }
+      if (!(BOOST_MATH_NAMESPACE::isfinite)(g1))
+         return BOOST_MATH_NAMESPACE::policies::raise_overflow_error<T>(function, nullptr, pol);
+      if (!(fabs(e1) < fabs(g1) / 32))
+         return BOOST_MATH_NAMESPACE::policies::raise_evaluation_error<T>(function, "The recurrence loses too many digits to give an accurate result, last value was %1%", T(g1 + e1), pol);
+      return g1 + e1;
+   }
 
    template <class T, class Policy>
    inline T hypergeometric_2F0_imp(T a1, T a2, const T& z, const Policy& pol, bool asymptotic = false)
@@ -117,6 +175,9 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
                BOOST_MATH_NAMESPACE::laguerre(n, m, -(1 / z), pol);
          }
       }
+
+      if ((a2 > 0) && (z > 0))
+         return hypergeometric_2F0_neg_int_recurrence(static_cast<unsigned>(BOOST_MATH_NAMESPACE::lltrunc(-a1)), a2, z, pol, function);
 
       if ((a1 * a2 * z < 0) && (a2 < -5) && (fabs(a1 * a2 * z) > 0.5))
       {

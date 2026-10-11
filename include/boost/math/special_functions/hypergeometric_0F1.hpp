@@ -71,8 +71,10 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
          // Series is alternating and divergent, need to do something else here,
          // Bessel function relation is much more accurate, unless |b| is similarly
          // large to |z|, otherwise the CF formula suffers from cancellation when
-         // the result would be very small.
-         if (fabs(z / b) > 4)
+         // the result would be very small.  For positive b the CF's error grows rapidly
+         // once |z/b| > 2, but for b > max_factorial the Bessel relation needs lgamma and
+         // is only accurate to a few hundred eps.
+         if (fabs(z / b) > (((b > 0) && (b <= BOOST_MATH_NAMESPACE::max_factorial<T>::value)) ? 2 : 4))
             return hypergeometric_0F1_bessel(b, z, pol);
          return hypergeometric_0F1_cf_imp(b, z, pol, function);
       }

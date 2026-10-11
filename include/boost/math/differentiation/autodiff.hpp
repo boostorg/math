@@ -552,6 +552,10 @@ template <typename RealType1, size_t Order1, typename RealType2, size_t Order2>
 promote<fvar<RealType1, Order1>, fvar<RealType2, Order2>> fmod(fvar<RealType1, Order1> const&,
                                                                fvar<RealType2, Order2> const&);
 
+// fma(cr1, cr2, cr3) | RealType
+template <typename RealType, size_t Order>
+fvar<RealType, Order> fma(fvar<RealType, Order> const&, fvar<RealType, Order> const&, fvar<RealType, Order> const&);
+
 // round(cr1) | RealType
 template <typename RealType, size_t Order>
 fvar<RealType, Order> round(fvar<RealType, Order> const&);
@@ -1696,6 +1700,17 @@ promote<fvar<RealType1, Order1>, fvar<RealType2, Order2>> fmod(fvar<RealType1, O
   auto const numer = static_cast<typename fvar<RealType1, Order1>::root_type>(cr1);
   auto const denom = static_cast<typename fvar<RealType2, Order2>::root_type>(cr2);
   return cr1 - cr2 * trunc(numer / denom);
+}
+
+template <typename RealType, size_t Order>
+fvar<RealType, Order> fma(fvar<RealType, Order> const& cr1, fvar<RealType, Order> const& cr2, fvar<RealType, Order> const& cr3) {
+  using std::fma;
+  using root_type = typename fvar<RealType, Order>::root_type;
+  // The derivatives are those of cr1 * cr2 + cr3, and the value is rounded once, as fma's is:
+  fvar<RealType, Order> result = cr1 * cr2 + cr3;
+  root_type const value =
+      fma(static_cast<root_type>(cr1), static_cast<root_type>(cr2), static_cast<root_type>(cr3));
+  return result += value - static_cast<root_type>(result);
 }
 
 template <typename RealType, size_t Order>
