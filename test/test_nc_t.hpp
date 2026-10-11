@@ -542,6 +542,10 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
             {
                non_centrality_precision_multiplier = 500;
                df_precision_multiplier = 500;
+               // Unpromoted double: at df = 528154, delta = 5.3e-11 the cdf hardly depends on delta,
+               // cond(delta wrt p) is 6e10, so one ulp of p moves delta by 8e-6 relative:
+               if (std::is_same<value_type, double>::value && !boost::math::policies::promote_double<>())
+                  non_centrality_precision_multiplier = 1500;
             }
             if (data[i][0] > 1000000000)
             {
