@@ -44,33 +44,17 @@ long expected_quantile(const std::vector<double>& G, rounding r, double lower_p)
       return 0;
    if (up)
    {
-      // Smallest k with cdf(k) >= p, or the last of a run with cdf(k) == p:
+      // Smallest k with cdf(k) >= p:
       long k = 0;
       while ((k < n) && (G[k] < 0))
          ++k;
-      if (k == n)
-         return -1;
-      if (G[k] == 0)
-      {
-         while ((k + 1 < n) && (G[k + 1] <= 0))
-            ++k;
-         if (k == n - 1)
-            return -1;
-      }
-      return k;
+      return k == n ? -1 : k;
    }
-   // Largest k with cdf(k) <= p, or the first of a run with cdf(k) == p:
+   // Largest k with cdf(k) <= p:
    long k = n - 1;
    while ((k >= 0) && (G[k] > 0))
       --k;
-   if (k == n - 1)
-      return -1;
-   if (G[k] == 0)
-   {
-      while ((k > 0) && (G[k - 1] >= 0))
-         --k;
-   }
-   return k;
+   return k == n - 1 ? -1 : k;
 }
 
 template <class Dist>

@@ -117,7 +117,10 @@ namespace policies{
 #define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
 #endif
 #ifndef BOOST_MATH_DISCRETE_QUANTILE_POLICY
-#define BOOST_MATH_DISCRETE_QUANTILE_POLICY integer_round_outwards
+// The smallest k with cdf(k) >= p, as R, SciPy, Julia and Mathematica define
+// it.  Define BOOST_MATH_DISCRETE_QUANTILE_POLICY as integer_round_outwards to
+// get the old behaviour.
+#define BOOST_MATH_DISCRETE_QUANTILE_POLICY integer_round_up
 #endif
 #ifndef BOOST_MATH_ASSERT_UNDEFINED_POLICY
 #define BOOST_MATH_ASSERT_UNDEFINED_POLICY true

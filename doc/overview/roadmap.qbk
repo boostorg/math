@@ -15,6 +15,15 @@ Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93
 [@https://github.com/boostorg/math/issues/1211 1211].  `long double` is x87 on x86 and software emulated on
 AArch64 Linux, so promotion was slow, but results for `double` may now differ in the last few bits.
 To restore the old behavior define `BOOST_MATH_PROMOTE_DOUBLE_POLICY` as `true`, or pass `promote_double<true>` in a policy.
+* [*Breaking change:] the quantiles of discrete distributions now default to `integer_round_up`
+(`BOOST_MATH_DISCRETE_QUANTILE_POLICY` used to default to `integer_round_outwards`), see
+[@https://github.com/boostorg/math/issues/1203 1203].  `quantile(dist, p)` is now the smallest /k/ with `cdf(dist, k) >= p`,
+and `quantile(complement(dist, q))` the smallest /k/ with `cdf(complement(dist, k)) <= q`, as in R, SciPy, Julia and Mathematica.
+Lower quantiles (p < 0.5) are therefore often one larger than before.  The geometric distribution now rounds its quantile
+as the policy asks (it used to return a real value whatever the policy), and the hypergeometric quantile now returns
+/k/ when p is exactly `cdf(dist, k)`.  To restore the old behavior define `BOOST_MATH_DISCRETE_QUANTILE_POLICY` as
+`integer_round_outwards`, or pass `discrete_quantile<integer_round_outwards>` in a policy (with `discrete_quantile<real>`
+for the old geometric results).
 
 [h4 Math-4.2.1 (Boost-1.86)]
 

@@ -74,7 +74,7 @@
 //
 // #define BOOST_MATH_PROMOTE_DOUBLE_POLICY true
 //
-// What do discrete quantiles return?
+// What do discrete quantiles return (the default is integer_round_up)?
 //
 // #define BOOST_MATH_DISCRETE_QUANTILE_POLICY integer_round_outwards
 //
