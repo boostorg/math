@@ -27,6 +27,9 @@ env:
   B2_LINK: shared
   LCOV_BRANCH_COVERAGE: 0
   CODECOV_NAME: Github Actions
+  # The contraction flags of the other CI jobs. Coverage builds are debug (-O0), where gcc does not
+  # fuse anyway, but this keeps the configuration the same.
+  B2_CXXFLAGS: -mfma -ffp-contract=fast
 
 jobs:
   posix:
