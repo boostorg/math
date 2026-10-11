@@ -373,10 +373,11 @@ void test_files()
     CHECK_LE(std::size_t(400), widths[0]);
     std::remove(raster_name.c_str());
 
-    // Plots that differ only in their settings get different mask ids, so they can be inlined in one page:
+    // Plots that differ only in their settings get different mask ids, so they can be inlined in one page.
+    // Correctly rounded sines are within 0.5 ulps, so a clip of 0.5 may change nothing; 0.25 always does:
     {
         std::ostringstream a, b;
-        plot.clip(0.5);
+        plot.clip(0.25);
         a << plot;
         plot.clip(5);
         b << plot;

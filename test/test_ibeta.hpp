@@ -538,6 +538,9 @@ void test_spots(T, const char* name)
                BOOST_CHECK_MESSAGE(boost::math::ibeta(a, b, x - delta[j]) > boost::math::ibeta(a, b, x - delta[j+1]), 
                   "ibeta not monotonically increasing below a/(a+b) for ibeta(" << a << ", " << b << ", " << x << ") and delta=" << delta[j] << ": [" << boost::math::ibeta(a, b, x - delta[j]) << " >= " << boost::math::ibeta(a, b, x - delta[j+1]) << "]");  
             }
+            // Without a Lanczos approximation, the power terms here once came out 12x too small. The density is ~1e8,
+            // so the rounding of x and the continued fraction leave ~1e-8 of error. Arb, with x = a / (a + b) + 1e-11 in double:
+            BOOST_CHECK_CLOSE_FRACTION(boost::math::ibeta(a, b, T(x + delta[5])), static_cast<T>(0.50112741311964152717889063178639807L), T(1e-7));
          }
       }
       //

@@ -14,8 +14,9 @@ on:
   release:
     types: [published, created, edited]
 
+# A new push to a branch (develop, or a PR's) cancels that branch's older runs of this workflow:
 concurrency:
-  group: ${{ github.head_ref || github.run_id }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 # Every job builds with the same floating-point contraction: fused multiply-add, contracted across

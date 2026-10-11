@@ -31,6 +31,9 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/math/special_functions/factorials.hpp>
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+#include <boost/math/special_functions/detail/two_product.hpp>  // only the host-only no-Lanczos power terms use it
+#endif
 #include <boost/math/tools/roots.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
@@ -377,6 +380,79 @@ BOOST_MATH_GPU_ENABLED inline T ibeta_sum_error(T u, T v, T s)
 }
 
 //
+// The bases of the power terms minus one, l1 = x cgh / agh - 1 and l2 = y cgh / bgh - 1, where
+// agh = a + gh, bgh = b + gh and cgh = a + b + gh (gh = 0 for no shift).
+// The larger of x and y = 1 - x has been rounded, and near the mode x b and y a nearly
+// cancel, so ((x b - y a) - y gh) / agh has an absolute error of about
+// eps max(a, b) min(x, y) / agh, which the exponent a multiplies. Instead use only the
+// smaller of x and y, carry the rounding errors of a + gh and a + b + gh, and form the
+// products with fma:
+//
+template <class T>
+BOOST_MATH_GPU_ENABLED inline void ibeta_power_bases(T a, T b, T x, T y, T gh, T agh, T bgh, T cgh, T& l1, T& l2)
+{
+   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   using std::fma;
+   #endif
+   T c = a + b;
+   T agh_err = ibeta_sum_error(a, gh, agh);
+   T bgh_err = ibeta_sum_error(b, gh, bgh);
+   T cgh_err = ibeta_sum_error(c, gh, cgh) + ibeta_sum_error(a, b, c);
+   if(x <= y)
+   {
+      l1 = (fma(x, cgh, -agh) + (x * cgh_err - agh_err)) / agh;
+      // y cgh - bgh = a - x cgh:
+      l2 = -(fma(x, cgh, -a) + x * cgh_err) / bgh;
+   }
+   else
+   {
+      // x cgh - agh = b - y cgh:
+      l1 = -(fma(y, cgh, -b) + y * cgh_err) / agh;
+      l2 = (fma(y, cgh, -bgh) + (y * cgh_err - bgh_err)) / bgh;
+   }
+}
+
+//
+// a log1p(l1) + b log1p(l2) for bases from ibeta_power_bases with max(|l1|, |l2|) < 0.5,
+// returned as l + l_err:
+//
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline T ibeta_power_log_near_mean(T a, T b, T l1, T l2, T gh, T bgh, const Policy& pol, T& l_err)
+{
+   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   using std::fma;
+   #endif
+   T bgh_err = ibeta_sum_error(b, gh, bgh);
+   //
+   // Both bases are near 1, and when a and b are large the two terms of the exponent
+   // a log1p(l1) + b log1p(l2) nearly cancel. Since agh (1 + l1) + bgh (1 + l2) = cgh,
+   // a l1 + b l2 = gh (l1 (a - b) - b) / bgh, which leaves terms that don't cancel:
+   //
+   //    a log1p(l1) + b log1p(l2) = gh (l1 (a - b) - b) / bgh + a log1pmx(l1) + b log1pmx(l2)
+   //
+   // The first term is about -gh, so rounding it costs as much as eps gh / 2 of relative error in
+   // the result. Carry it as a sum of two doubles: gh (l1 (a - b) - b) / bgh, with every operation's
+   // rounding error found with fma, is lh + ll, and the rounding of lh + the rest is added back below.
+   //
+   T ab = a - b;
+   T ab_err = ibeta_sum_error(a, T(-b), ab);
+   T ph = fma(l1, ab, T(0));  // fma(x, y, 0) so that the product is not contracted into a later sum
+   T pl = fma(l1, ab, -ph) + l1 * ab_err;
+   T nh = ph - b;
+   T nl = pl + ibeta_sum_error(ph, T(-b), nh);
+   T wh = nh / bgh;
+   T wl = (fma(-wh, bgh, nh) + (nl - wh * bgh_err)) / bgh;
+   T lh = fma(gh, wh, T(0));
+   T ll = fma(gh, wh, -lh) + gh * wl;
+   T rest = ll
+      + a * BOOST_MATH_NAMESPACE::log1pmx(l1, pol)
+      + b * BOOST_MATH_NAMESPACE::log1pmx(l2, pol);
+   T l = lh + rest;
+   l_err = ibeta_sum_error(lh, rest, l);
+   return l;
+}
+
+//
 // Compute the leading power terms in the incomplete Beta:
 //
 // (x^a)(y^b)/Beta(a,b) when normalised, and
@@ -427,61 +503,18 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
    result *= sqrt(agh / cgh);
    BOOST_MATH_INSTRUMENT_VARIABLE(result);
 
-   // l1 and l2 are the bases of the exponents minus one, x cgh / agh - 1 and y cgh / bgh - 1.
-   // The larger of x and y = 1 - x has been rounded, and near the mode x b and y a nearly
-   // cancel, so ((x b - y a) - y gh) / agh has an absolute error of about
-   // eps max(a, b) min(x, y) / agh, which the exponent a multiplies. Instead use only the
-   // smaller of x and y, carry the rounding errors of a + gh and a + b + gh, and form the
-   // products with fma:
+   // l1 and l2 are the bases of the exponents minus one:
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    using std::fma;
    #endif
-   T agh_err = ibeta_sum_error(a, gh, agh);
-   T bgh_err = ibeta_sum_error(b, gh, bgh);
-   T cgh_err = ibeta_sum_error(c, gh, cgh) + ibeta_sum_error(a, b, c);
    T l1, l2;
-   if(x <= y)
-   {
-      l1 = (fma(x, cgh, -agh) + (x * cgh_err - agh_err)) / agh;
-      // y cgh - bgh = a - x cgh:
-      l2 = -(fma(x, cgh, -a) + x * cgh_err) / bgh;
-   }
-   else
-   {
-      // x cgh - agh = b - y cgh:
-      l1 = -(fma(y, cgh, -b) + y * cgh_err) / agh;
-      l2 = (fma(y, cgh, -bgh) + (y * cgh_err - bgh_err)) / bgh;
-   }
+   ibeta_power_bases(a, b, x, y, gh, agh, bgh, cgh, l1, l2);
    BOOST_MATH_INSTRUMENT_VARIABLE(l1);
    BOOST_MATH_INSTRUMENT_VARIABLE(l2);
    if(BOOST_MATH_GPU_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
    {
-      //
-      // Both bases are near 1, and when a and b are large the two terms of the exponent
-      // a log1p(l1) + b log1p(l2) nearly cancel. Since agh (1 + l1) + bgh (1 + l2) = cgh,
-      // a l1 + b l2 = gh (l1 (a - b) - b) / bgh, which leaves terms that don't cancel:
-      //
-      //    a log1p(l1) + b log1p(l2) = gh (l1 (a - b) - b) / bgh + a log1pmx(l1) + b log1pmx(l2)
-      //
-      // The first term is about -gh, so rounding it costs as much as eps gh / 2 of relative error in
-      // the result. Carry it as a sum of two doubles: gh (l1 (a - b) - b) / bgh, with every operation's
-      // rounding error found with fma, is lh + ll, and the rounding of lh + the rest is added back below.
-      //
-      T ab = a - b;
-      T ab_err = ibeta_sum_error(a, T(-b), ab);
-      T ph = fma(l1, ab, T(0));  // fma(x, y, 0) so that the product is not contracted into a later sum
-      T pl = fma(l1, ab, -ph) + l1 * ab_err;
-      T nh = ph - b;
-      T nl = pl + ibeta_sum_error(ph, T(-b), nh);
-      T wh = nh / bgh;
-      T wl = (fma(-wh, bgh, nh) + (nl - wh * bgh_err)) / bgh;
-      T lh = fma(gh, wh, T(0));
-      T ll = fma(gh, wh, -lh) + gh * wl;
-      T rest = ll
-         + a * BOOST_MATH_NAMESPACE::log1pmx(l1, pol)
-         + b * BOOST_MATH_NAMESPACE::log1pmx(l2, pol);
-      T l = lh + rest;
-      T l_err = ibeta_sum_error(lh, rest, l);
+      T l_err;
+      T l = ibeta_power_log_near_mean(a, b, l1, l2, gh, bgh, pol, l_err);
       if((l <= tools::log_min_value<T>()) || (l >= tools::log_max_value<T>()))
       {
          l += l_err;
@@ -691,6 +724,25 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
 
    if ((shift_a == 0) && (shift_b == 0))
    {
+      T scale = prefix * scaled_tgamma_no_lanczos(c, pol) / (scaled_tgamma_no_lanczos(a, pol) * scaled_tgamma_no_lanczos(b, pol));
+      //
+      // Near the mean the bases x c / a and y c / b are close to 1, and pow of them rounds to a relative
+      // error of about eps max(a, b), O(1) once a, b ~ 1 / eps.  With d = x c - a = b - y c, found exactly
+      // from the smaller of x and y and the rounding error of c, the bases are 1 + d / a and 1 - d / b,
+      // and the d terms of the exponent cancel exactly, leaving a log1pmx(d / a) + b log1pmx(-d / b):
+      //
+      T c_err = ibeta_sum_error(a, b, c);
+      T ph, pl;
+      two_product<T> product;
+      product(x <= y ? x : y, c, ph, pl);  // ph is fma(x, c, 0), which contraction can't fuse into ph - a
+      T d = x <= y ? T((ph - a) + (pl + x * c_err)) : T(-((ph - b) + (pl + y * c_err)));
+      T l1 = d / a;
+      T l2 = -d / b;
+      if (BOOST_MATH_GPU_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
+      {
+         T l = a * BOOST_MATH_NAMESPACE::log1pmx(l1, pol) + b * BOOST_MATH_NAMESPACE::log1pmx(l2, pol);
+         return l > tools::log_min_value<T>() ? T(exp(l) * scale) : T(exp(l + log(scale)));
+      }
       T power1, power2;
       bool need_logs = false;
       if (a < b)
@@ -746,56 +798,11 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
       }
       if (need_logs)
       {
-         //
-         // We want:
-         //
-         // (xc / a)^a (yc / b)^b
-         //
-         // But we know that one or other term will over / underflow and combining the logs will be next to useless as that will cause significant cancellation.
-         // If we assume b > a and express z ^ b as(z ^ b / a) ^ a with z = (yc / b) then we can move one power term inside the other :
-         //
-         // ((xc / a) * (yc / b)^(b / a))^a
-         //
-         // However, we're not quite there yet, as the term being exponentiated is quite likely to be close to unity, so let:
-         //
-         // xc / a = 1 + (xb - ya) / a
-         //
-         // analogously let :
-         //
-         // 1 + p = (yc / b) ^ (b / a) = 1 + expm1((b / a) * log1p((ya - xb) / b))
-         //
-         // so putting the two together we have :
-         //
-         // exp(a * log1p((xb - ya) / a + p + p(xb - ya) / a))
-         //
-         // Analogously, when a > b we can just swap all the terms around.
-         //
-         // Finally, there are a few cases (x or y is unity) when the above logic can't be used
-         // or where there is no logarithmic cancellation and accuracy is better just using
-         // the regular formula:
-         //
-         T xc_a = x * c / a;
-         T yc_b = y * c / b;
-         if ((x == 1) || (y == 1) || (fabs(xc_a - 1) > 0.25) || (fabs(yc_b - 1) > 0.25))
-         {
-            // The above logic fails, the result is almost certainly zero:
-            power1 = exp(log(xc_a) * a + log(yc_b) * b);
-            power2 = 1;
-         }
-         else if (b > a)
-         {
-            T p = BOOST_MATH_NAMESPACE::expm1((b / a) * BOOST_MATH_NAMESPACE::log1p((y * a - x * b) / b));
-            power1 = exp(a * BOOST_MATH_NAMESPACE::log1p((x * b - y * a) / a + p * (x * c / a)));
-            power2 = 1;
-         }
-         else
-         {
-            T p = BOOST_MATH_NAMESPACE::expm1((a / b) * BOOST_MATH_NAMESPACE::log1p((x * b - y * a) / a));
-            power1 = exp(b * BOOST_MATH_NAMESPACE::log1p((y * a - x * b) / b + p * (y * c / b)));
-            power2 = 1;
-         }
+         // Away from the mean (handled above) there is no logarithmic cancellation to avoid:
+         power1 = exp(log(x * c / a) * a + log(y * c / b) * b);
+         power2 = 1;
       }
-      return prefix * power1 * power2 * scaled_tgamma_no_lanczos(c, pol) / (scaled_tgamma_no_lanczos(a, pol) * scaled_tgamma_no_lanczos(b, pol));
+      return power1 * power2 * scale;
    }
 
    T power1 = pow(x, a);
@@ -1955,33 +1962,22 @@ BOOST_MATH_GPU_ENABLED T log_ibeta_power_terms(T a, T b, T x, T y, const Lanczos
    T result = log(Lanczos::lanczos_sum_expG_scaled(c) / (Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b)));
    result += (log(bgh) - 1 + log(agh / cgh)) / 2;
 
-   // l1 and l2 are the bases of the powers minus one:
-   T l1 = ((x * b - y * a) - y * gh) / agh;
-   T l2 = ((y * a - x * b) - x * gh) / bgh;
-   if((BOOST_MATH_GPU_SAFE_MIN(fabs(l1), fabs(l2)) < 0.2))
+   // l1 and l2 are the bases of the powers minus one, as in ibeta_power_terms, which near the mean also
+   // needs its exponent's cancellation removed:
+   T l1, l2;
+   ibeta_power_bases(a, b, x, y, gh, agh, bgh, cgh, l1, l2);
+   if(BOOST_MATH_GPU_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
+   {
+      T l_err;
+      T l = ibeta_power_log_near_mean(a, b, l1, l2, gh, bgh, pol, l_err);
+      result += l + l_err;
+   }
+   else if((BOOST_MATH_GPU_SAFE_MIN(fabs(l1), fabs(l2)) < 0.2))
    {
       if((l1 * l2 > 0) || (BOOST_MATH_GPU_SAFE_MIN(a, b) < 1))
       {
          result += fabs(l1) < 0.1 ? T(a * BOOST_MATH_NAMESPACE::log1p(l1, pol)) : T(a * log((x * cgh) / agh));
          result += fabs(l2) < 0.1 ? T(b * BOOST_MATH_NAMESPACE::log1p(l2, pol)) : T(b * log((y * cgh) / bgh));
-      }
-      else if(BOOST_MATH_GPU_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
-      {
-         // The powers tend in opposite directions, so move one inside the other, as in ibeta_power_terms:
-         bool small_a = a < b;
-         T ratio = b / a;
-         if((small_a && (ratio * l2 < 0.1)) || (!small_a && (l1 / ratio > 0.1)))
-         {
-            T l3 = BOOST_MATH_NAMESPACE::expm1(ratio * BOOST_MATH_NAMESPACE::log1p(l2, pol), pol);
-            l3 = l1 + l3 + l3 * l1;
-            result += a * BOOST_MATH_NAMESPACE::log1p(l3, pol);
-         }
-         else
-         {
-            T l3 = BOOST_MATH_NAMESPACE::expm1(BOOST_MATH_NAMESPACE::log1p(l1, pol) / ratio, pol);
-            l3 = l2 + l3 + l3 * l2;
-            result += b * BOOST_MATH_NAMESPACE::log1p(l3, pol);
-         }
       }
       else if(fabs(l1) < fabs(l2))
          result += a * BOOST_MATH_NAMESPACE::log1p(l1, pol) + b * log((y * cgh) / bgh);

@@ -547,6 +547,24 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
             {
                df_precision_multiplier *= 50; // very little precision left at this point
             }
+            //
+            // Where the non-centrality is tiny the probability barely depends on it: an error of eps p in a
+            // probability p moves the non-centrality delta by eps p / |dp/d delta|, and dp/d delta ~ -pdf(t),
+            // the central t density to first order in delta. Allow 16 of those (measured: up to ~8, with
+            // -ffp-contract=fast):
+            //
+            auto non_centrality_tolerance = [&](value_type p)
+            {
+               value_type tol = precision * non_centrality_precision_multiplier;
+               if ((data[i][1] > 0) && (data[i][1] < 1e-6))
+               {
+                  value_type d = boost::math::pdf(boost::math::students_t_distribution<value_type>(data[i][0]), data[i][2]);
+                  value_type conditioned = 16 * boost::math::tools::epsilon<value_type>() * p / (data[i][1] * d) * 100;
+                  if (conditioned > tol)
+                     tol = conditioned;
+               }
+               return tol;
+            };
             if((data[i][3] < 0.99) && (data[i][3] != 0))
             {
                if (data[i][0] < 1.0e12)  // no precision above this
@@ -557,7 +575,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
                }
                BOOST_CHECK_CLOSE_EX(
                   boost::math::non_central_t_distribution<value_type>::find_non_centrality(data[i][0], data[i][2], data[i][3]),
-                  data[i][1], precision * non_centrality_precision_multiplier, i);
+                  data[i][1], non_centrality_tolerance(data[i][3]), i);
             }
             if((data[i][4] < 0.99) && (data[i][4] != 0))
             {
@@ -569,7 +587,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
                }
                BOOST_CHECK_CLOSE_EX(
                   boost::math::non_central_t_distribution<value_type>::find_non_centrality(boost::math::complement(data[i][0], data[i][2], data[i][4])),
-                  data[i][1], precision * non_centrality_precision_multiplier, i);
+                  data[i][1], non_centrality_tolerance(data[i][4]), i);
             }
          }
          catch(const std::exception& e)

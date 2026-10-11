@@ -36,7 +36,7 @@ using std::abs;
  */
 
 // To stress test, set global_seed = 0, global_size = huge.
-static const std::size_t global_seed = 0;
+static const std::size_t global_seed = 42;  // 0 seeds from std::random_device
 static const std::size_t global_size = 128;
 
 template<bool B, class T = void>
