@@ -16,17 +16,18 @@
 BOOST_MATH_NAMESPACE_BEGIN namespace quadrature { namespace detail {
 
 template <class T, unsigned N, unsigned Category>
-class hermite_detail;
+class nested_hermite_detail;
 
 #ifndef BOOST_HAS_FLOAT128
 template <class T>
-class hermite_detail<T, 9, 0>
+class nested_hermite_detail<T, 9, 0>
 {
 	using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
-	static std::array<storage_type, 4> const& abscissa()
+	static std::array<storage_type, 5> const& abscissa()
 	{
-		static std::array<storage_type, 4> data = {
+		static std::array<storage_type, 5> data = {
+			static_cast<storage_type>(0.00000000000000000000000000000000000e+0L),
 			static_cast<storage_type>(7.41095349994540841861796561106955925e-1L),
 			static_cast<storage_type>(1.73205080756887729352744634150587237e+0L),
 			static_cast<storage_type>(2.86127957605705811733147448659436790e+0L),
@@ -34,9 +35,10 @@ public:
 		};
 		return data;
 	}
-	static std::array<storage_type, 4> const& weights()
+	static std::array<storage_type, 5> const& weights()
 	{
-		static std::array<storage_type, 4> data = {
+		static std::array<storage_type, 5> data = {
+			static_cast<storage_type>(2.53968253968253968253968253968253968e-1L),
 			static_cast<storage_type>(2.70074329577937870762767019924468134e-1L),
 			static_cast<storage_type>(9.48509485094850948509485094850948509e-2L),
 			static_cast<storage_type>(7.99632547089353276985526566648531622e-3L),
@@ -47,13 +49,14 @@ public:
 };
 
 template <class T>
-class hermite_detail<T, 11, 0>
+class nested_hermite_detail<T, 11, 0>
 {
 	using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
-	static std::array<storage_type, 5> const& abscissa()
+	static std::array<storage_type, 6> const& abscissa()
 	{
-		static std::array<storage_type, 5> data = {
+		static std::array<storage_type, 6> data = {
+			static_cast<storage_type>(0.00000000000000000000000000000000000e+0L),
 			static_cast<storage_type>(8.46288098351021696107430604280023007e-1L),
 			static_cast<storage_type>(1.73205080756887729352744634150587237e+0L),
 			static_cast<storage_type>(2.68403956015856917664122201161807775e+0L),
@@ -62,9 +65,10 @@ public:
 		};
 		return data;
 	}
-	static std::array<storage_type, 5> const& weights()
+	static std::array<storage_type, 6> const& weights()
 	{
-		static std::array<storage_type, 5> data = {
+		static std::array<storage_type, 6> data = {
+			static_cast<storage_type>(3.34640522875816993464052287581699346e-1L),
 			static_cast<storage_type>(2.40004456875491628985507767946740900e-1L),
 			static_cast<storage_type>(8.14426992437463641652123327515997673e-2L),
 			static_cast<storage_type>(1.08127291815507746167330431938212732e-2L),
@@ -76,13 +80,14 @@ public:
 };
 
 template <class T>
-class hermite_detail<T, 35, 0>
+class nested_hermite_detail<T, 35, 0>
 {
 	using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
-	static std::array<storage_type, 17> const& abscissa()
+	static std::array<storage_type, 18> const& abscissa()
 	{
-		static std::array<storage_type, 17> data = {
+		static std::array<storage_type, 18> data = {
+			static_cast<storage_type>(0.00000000000000000000000000000000000e+0L),
 			static_cast<storage_type>(2.48992297579960611806557803951626045e-1L),
 			static_cast<storage_type>(7.41095349994540841861796561106955925e-1L),
 			static_cast<storage_type>(1.23042363402730600775114365003367672e+0L),
@@ -103,9 +108,10 @@ public:
 		};
 		return data;
 	}
-	static std::array<storage_type, 17> const& weights()
+	static std::array<storage_type, 18> const& weights()
 	{
-		static std::array<storage_type, 17> data = {
+		static std::array<storage_type, 18> data = {
+			static_cast<storage_type>(5.14894508068784293797284167909642189e-4L),
 			static_cast<storage_type>(1.91760115888044429590916239185753805e-1L),
 			static_cast<storage_type>(1.48070831155216006153705613303108235e-1L),
 			static_cast<storage_type>(9.23647267169863059276383613338036040e-2L),
@@ -130,13 +136,14 @@ public:
 
 #else
 template <class T>
-class hermite_detail<T, 9, 0>
+class nested_hermite_detail<T, 9, 0>
 {
 	using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
-	static std::array<storage_type, 4> const& abscissa()
+	static std::array<storage_type, 5> const& abscissa()
 	{
-		static std::array<storage_type, 4> data = {
+		static std::array<storage_type, 5> data = {
+			static_cast<storage_type>(0.00000000000000000000000000000000000e+0Q),
 			static_cast<storage_type>(7.41095349994540841861796561106955925e-1Q),
 			static_cast<storage_type>(1.73205080756887729352744634150587237e+0Q),
 			static_cast<storage_type>(2.86127957605705811733147448659436790e+0Q),
@@ -144,9 +151,10 @@ public:
 		};
 		return data;
 	}
-	static std::array<storage_type, 4> const& weights()
+	static std::array<storage_type, 5> const& weights()
 	{
-		static std::array<storage_type, 4> data = {
+		static std::array<storage_type, 5> data = {
+			static_cast<storage_type>(2.53968253968253968253968253968253968e-1Q),
 			static_cast<storage_type>(2.70074329577937870762767019924468134e-1Q),
 			static_cast<storage_type>(9.48509485094850948509485094850948509e-2Q),
 			static_cast<storage_type>(7.99632547089353276985526566648531622e-3Q),
@@ -157,13 +165,14 @@ public:
 };
 
 template <class T>
-class hermite_detail<T, 11, 0>
+class nested_hermite_detail<T, 11, 0>
 {
 	using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
-	static std::array<storage_type, 5> const& abscissa()
+	static std::array<storage_type, 6> const& abscissa()
 	{
-		static std::array<storage_type, 5> data = {
+		static std::array<storage_type, 6> data = {
+			static_cast<storage_type>(0.00000000000000000000000000000000000e+0Q),
 			static_cast<storage_type>(8.46288098351021696107430604280023007e-1Q),
 			static_cast<storage_type>(1.73205080756887729352744634150587237e+0Q),
 			static_cast<storage_type>(2.68403956015856917664122201161807775e+0Q),
@@ -172,9 +181,10 @@ public:
 		};
 		return data;
 	}
-	static std::array<storage_type, 5> const& weights()
+	static std::array<storage_type, 6> const& weights()
 	{
-		static std::array<storage_type, 5> data = {
+		static std::array<storage_type, 6> data = {
+			static_cast<storage_type>(3.34640522875816993464052287581699346e-1Q),
 			static_cast<storage_type>(2.40004456875491628985507767946740900e-1Q),
 			static_cast<storage_type>(8.14426992437463641652123327515997673e-2Q),
 			static_cast<storage_type>(1.08127291815507746167330431938212732e-2Q),
@@ -186,13 +196,14 @@ public:
 };
 
 template <class T>
-class hermite_detail<T, 35, 0>
+class nested_hermite_detail<T, 35, 0>
 {
 	using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
-	static std::array<storage_type, 17> const& abscissa()
+	static std::array<storage_type, 18> const& abscissa()
 	{
-		static std::array<storage_type, 17> data = {
+		static std::array<storage_type, 18> data = {
+			static_cast<storage_type>(0.00000000000000000000000000000000000e+0Q),
 			static_cast<storage_type>(2.48992297579960611806557803951626045e-1Q),
 			static_cast<storage_type>(7.41095349994540841861796561106955925e-1Q),
 			static_cast<storage_type>(1.23042363402730600775114365003367672e+0Q),
@@ -213,9 +224,10 @@ public:
 		};
 		return data;
 	}
-	static std::array<storage_type, 17> const& weights()
+	static std::array<storage_type, 18> const& weights()
 	{
-		static std::array<storage_type, 17> data = {
+		static std::array<storage_type, 18> data = {
+			static_cast<storage_type>(5.14894508068784293797284167909642189e-4Q),
 			static_cast<storage_type>(1.91760115888044429590916239185753805e-1Q),
 			static_cast<storage_type>(1.48070831155216006153705613303108235e-1Q),
 			static_cast<storage_type>(9.23647267169863059276383613338036040e-2Q),
@@ -240,12 +252,13 @@ public:
 #endif
 
 template <class T>
-class hermite_detail<T, 9, 4>
+class nested_hermite_detail<T, 9, 4>
 {
 public:
-	static std::array<T, 4> const& abscissa()
+	static std::array<T, 5> const& abscissa()
 	{
-		static std::array<T, 4> data = {
+		static std::array<T, 5> data = {
+			BOOST_MATH_HUGE_CONSTANT(T, 0, 0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e+0),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 7.4109534999454084186179656110695592518092982290412922637988938766610630349740124898547045880418881069281361922670648E-1),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 1.7320508075688772935274463415058723669428052538103806280558069794519330169088000370811461867572485756756261414154067E+0),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 2.8612795760570581173314744865943678971118491559702800271732077975623256204273285107408410524670010261554038591810389E+0),
@@ -254,9 +267,10 @@ public:
 		return data;
 	}
 
-	static std::array<T, 4> const& weights()
+	static std::array<T, 5> const& weights()
 	{
-		static std::array<T, 4> data = {
+		static std::array<T, 5> data = {
+			BOOST_MATH_HUGE_CONSTANT(T, 0, 2.5396825396825396825396825396825396825396825396825396825396825396825396825396825396825396825396825396825396825396825E-1),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 2.7007432957793787076276701992446813366379406402317870669393787886261321376184219291553148391791760196963402659199630E-1),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 9.4850948509485094850948509485094850948509485094850948509485094850948509485094850948509485094850948509485094850948509E-2),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 7.9963254708935327698552656664853162205368039436505795827422176479263777744169292534625542947629555549842307193627505E-3),
@@ -267,12 +281,13 @@ public:
 };
 
 template <class T>
-class hermite_detail<T, 11, 4>
+class nested_hermite_detail<T, 11, 4>
 {
 public:
-	static std::array<T, 5> const& abscissa()
+	static std::array<T, 6> const& abscissa()
 	{
-		static std::array<T, 5> data = {
+		static std::array<T, 6> data = {
+			BOOST_MATH_HUGE_CONSTANT(T, 0, 0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e+0),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 8.4628809835102169610743060428002300707119038071037006240576351928539862994107790052623295959164775260707497658946188E-1),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 1.7320508075688772935274463415058723669428052538103806280558069794519330169088000370811461867572485756756261414154067E+0),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 2.6840395601585691766412220116180777517440425778942119697814643431838590328884256649836583826769500472754216852265171E+0),
@@ -282,9 +297,10 @@ public:
 		return data;
 	}
 
-	static std::array<T, 5> const& weights()
+	static std::array<T, 6> const& weights()
 	{
-		static std::array<T, 5> data = {
+		static std::array<T, 6> data = {
+			BOOST_MATH_HUGE_CONSTANT(T, 0, 3.3464052287581699346405228758169934640522875816993464052287581699346405228758169934640522875816993464052287581699346E-1),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 2.4000445687549162898550776794674090022309802621872369346669866522101833342825695269067681799295038531408359356140762E-1),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 8.1442699243746364165212332751599767306573589296102385107620709714950552646887725421756835369400814426992437463641652E-2),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 1.0812729181550774616733043193821273190890372742889988781036381505065274855237007179727445274770603619385220656615449E-2),
@@ -296,12 +312,13 @@ public:
 };
 
 template <class T>
-class hermite_detail<T, 35, 4>
+class nested_hermite_detail<T, 35, 4>
 {
 public:
-	static std::array<T, 17> const& abscissa()
+	static std::array<T, 18> const& abscissa()
 	{
-		static std::array<T, 17> data = {
+		static std::array<T, 18> data = {
+			BOOST_MATH_HUGE_CONSTANT(T, 0, 0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e+0),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 2.4899229757996061180655780395162604541147145633656770663803187812547501374041129643335546203854828476031892816699553E-1),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 7.4109534999454084186179656110695592518092982290412922637988938766610630349740124898547045880418881069281361922670648E-1),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 1.2304236340273060077511436500336767171202603878862085874504565983940248088608259340626144503027529652403781696061235E+0),
@@ -323,9 +340,10 @@ public:
 		return data;
 	}
 
-	static std::array<T, 17> const& weights()
+	static std::array<T, 18> const& weights()
 	{
-		static std::array<T, 17> data = {
+		static std::array<T, 18> data = {
+			BOOST_MATH_HUGE_CONSTANT(T, 0, 5.1489450806878429379728416790964218947941181609086689464826747308884468930874185239765261305887340923818631332584379E-4),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 1.9176011588804442959091623918575380459210820703526642157521914539322588360319554332470034621632620127148476735231304E-1),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 1.4807083115521600615370561330310823520152346680799494244203150614196474940098324436958925258929971805045421148938584E-1),
 			BOOST_MATH_HUGE_CONSTANT(T, 0, 9.2364726716986305927638361333803603965321551821346736096468220946801967816549183450007892278445878660354035956900558E-2),
@@ -348,7 +366,110 @@ public:
 	}
 };
 
-}} // namespace quadrature::detail
+} // namespace detail
+
+template <class Real, unsigned N, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
+class nested_hermite : public detail::nested_hermite_detail<Real, N, detail::quadrature_constant_category<Real>::value>
+{
+   using base = detail::nested_hermite_detail<Real, N, detail::quadrature_constant_category<Real>::value>;
+
+   // Abscissas computed on demand are NaN when the recurrence overflows Real.
+   static bool overflowed()
+   {
+      return !(BOOST_MATH_NAMESPACE::isfinite)(static_cast<Real>(base::abscissa().back()));
+   }
+
+   static Real overflow_error()
+   {
+      return policies::raise_evaluation_error(
+         "boost::math::quadrature::nested_hermite<%1%>::integrate",
+         "The Hermite recurrence overflows with this many points; use fewer points or a type with a wider exponent range.",
+         std::numeric_limits<Real>::quiet_NaN(), Policy());
+   }
+
+public:
+   // Integrates f(x) exp(-x^2) over the real line.
+   template <class F>
+   static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
+   {
+      // In many math texts, K represents the field of real or complex numbers.
+      // Too bad we can't put blackboard bold into C++ source!
+      using K = decltype(f(Real(0)));
+      static_assert(!std::is_integral<K>::value,
+                    "The return type cannot be integral, it must be either a real or complex floating point type.");
+      using std::abs;
+      if (overflowed())
+      {
+         Real error = overflow_error();
+         if (pL1)
+            *pL1 = error;
+         return static_cast<K>(error);
+      }
+      unsigned non_zero_start = 1;
+      K result = Real(0);
+      if (N & 1)
+      {
+         result = f(Real(0)) * static_cast<Real>(base::weights()[0]);
+      }
+      else
+      {
+         non_zero_start = 0;
+      }
+      Real L1 = abs(result);
+      for (unsigned i = non_zero_start; i < base::abscissa().size(); ++i)
+      {
+         K fp = f(static_cast<Real>(base::abscissa()[i]));
+         K fm = f(-static_cast<Real>(base::abscissa()[i]));
+         result += (fp + fm) * static_cast<Real>(base::weights()[i]);
+         L1 += (abs(fp) + abs(fm)) * static_cast<Real>(base::weights()[i]);
+      }
+      if (pL1)
+         *pL1 = L1;
+      return result;
+   }
+
+   // Explicit zero and norm for vector- and matrix-valued integrands.
+   template <class F, class Norm>
+   static auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* pL1 = nullptr)
+      ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
+   {
+      using K = decltype(f(Real(0)));
+      static_assert(!std::is_integral<K>::value, "The return type cannot be integral.");
+      if (overflowed())
+      {
+         // Preserve the scalar error policy, including non-throwing policies,
+         // and use scalar multiplication to produce a result with the right shape.
+         Real error = overflow_error();
+         if (pL1)
+            *pL1 = error;
+         K result = zero * error;
+         return result;
+      }
+      unsigned non_zero_start = 1;
+      K result = zero;
+      if (N & 1)
+      {
+         result = f(Real(0)) * static_cast<Real>(base::weights()[0]);
+      }
+      else
+      {
+         non_zero_start = 0;
+      }
+      Real L1 = static_cast<Real>(norm(result));
+      for (unsigned i = non_zero_start; i < base::abscissa().size(); ++i)
+      {
+         K fp = f(static_cast<Real>(base::abscissa()[i]));
+         K fm = f(-static_cast<Real>(base::abscissa()[i]));
+         result += (fp + fm) * static_cast<Real>(base::weights()[i]);
+         L1 += (static_cast<Real>(norm(fp)) + static_cast<Real>(norm(fm))) * static_cast<Real>(base::weights()[i]);
+      }
+      if (pL1)
+         *pL1 = L1;
+      return result;
+   }
+};
+
+} // namespace quadrature
 BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_QUADRATURE_HERMITE_ADAPTIVE_HPP
