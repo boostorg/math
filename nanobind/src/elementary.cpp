@@ -1,0 +1,68 @@
+// Copyright 2026 Nick Thompson
+// Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
+
+#include <boost/math/special_functions/log1p.hpp>
+#include <boost/math/special_functions/expm1.hpp>
+#include <boost/math/special_functions/cbrt.hpp>
+#include <boost/math/special_functions/sqrt1pm1.hpp>
+#include <boost/math/special_functions/powm1.hpp>
+#include <boost/math/special_functions/pow1p.hpp>
+#include <boost/math/special_functions/sin_pi.hpp>
+#include <boost/math/special_functions/cos_pi.hpp>
+#include <boost/math/special_functions/sinc.hpp>
+#include <boost/math/special_functions/sinhc.hpp>
+#include <boost/math/special_functions/asinh.hpp>
+#include <boost/math/special_functions/acosh.hpp>
+#include <boost/math/special_functions/atanh.hpp>
+#include <boost/math/special_functions/hypot.hpp>
+#include <boost/math/special_functions/rsqrt.hpp>
+#include <boost/math/special_functions/logit.hpp>
+#include <boost/math/special_functions/logistic_sigmoid.hpp>
+#include <boost/math/special_functions/logaddexp.hpp>
+#include <boost/math/special_functions/next.hpp>
+#include <boost/math/special_functions/ulp.hpp>
+#include <boost/math/special_functions/relative_difference.hpp>
+#include <boost/math/special_functions/fibonacci.hpp>
+#include <boost/math/special_functions/prime.hpp>
+
+#include "bindings.hpp"
+#include "macros.hpp"
+
+void bmpy::bind_elementary(nb::module_& m) {
+   BMPY_R1(log1p, "x");
+   BMPY_R1(log1pmx, "x");
+   BMPY_R1(expm1, "x");
+   BMPY_R1(cbrt, "x");
+   BMPY_R1(sqrt1pm1, "x");
+   BMPY_R2(powm1, "x", "y");
+   BMPY_R2(pow1p, "x", "y");
+   BMPY_R1(sin_pi, "x");
+   BMPY_R1(cos_pi, "x");
+   BMPY_R1(sinc_pi, "x");
+   BMPY_R1(sinhc_pi, "x");
+   BMPY_R1(asinh, "x");
+   BMPY_R1(acosh, "x");
+   BMPY_R1(atanh, "x");
+   BMPY_R2(hypot, "x", "y");
+   BMPY_R1(rsqrt, "x");
+   BMPY_R1(logit, "p");
+   BMPY_R1(logistic_sigmoid, "x");
+   BMPY_R2(logaddexp, "x", "y");
+
+   // Floating-point navigation; float32 inputs work in float.
+   BMPY_R1(float_next, "x");
+   BMPY_R1(float_prior, "x");
+   BMPY_R2(float_distance, "a", "b");
+   BMPY_R1I1(float_advance, int, "x", "n");
+   BMPY_R2(nextafter, "x", "y");
+   BMPY_R1(ulp, "x");
+   BMPY_R2(relative_difference, "a", "b");
+   BMPY_R2(epsilon_difference, "a", "b");
+
+   bmpy::def_vec<bmpy::Int<unsigned long long>>(
+       m, "fibonacci", []<class T>(unsigned long long n) { return bm::fibonacci<std::uint64_t>(n); }, {"n"},
+       "boost::math::fibonacci<std::uint64_t>");
+   bmpy::def_vec<bmpy::Int<unsigned>>(
+       m, "prime", []<class T>(unsigned n) { return bm::prime(n); }, {"n"}, "boost::math::prime");
+}

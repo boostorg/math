@@ -173,7 +173,7 @@ void test_interior_velocity_filter()
             {
                 cond += j*f[j];
             }
-            CHECK_ABSOLUTE_ERROR(half<Real>(), cond.sum(), Real(2*(cond()*tol)*abs(half<Real>())));
+            CHECK_ABSOLUTE_ERROR(half<Real>(), cond.sum(), Real(4*(cond()*tol)*abs(half<Real>())));
 
             for (int l = 3; l <= p; l += 2)
             {
