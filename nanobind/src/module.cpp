@@ -19,4 +19,5 @@ NB_MODULE(_ext, m) {
    bmpy::bind_distributions_heavy(m);
    bmpy::bind_distributions_discrete(m);
    bmpy::bind_distributions_noncentral(m);
+   bmpy::bind_fft(m);
 }

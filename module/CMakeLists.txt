@@ -128,6 +128,7 @@ set(BOOST_MATH_MODULE_TESTS
         # Tools
         test_polynomial_module
         test_roots_module
+        test_fft_module
         test_norms_module
         test_agm_module
         test_estrin_module

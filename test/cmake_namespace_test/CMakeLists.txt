@@ -51,9 +51,7 @@ if(BOOST_MATH_NAMESPACE_TEST_HEADERS)
     boost/math/constants/calculate_constants.hpp
     boost/math/cstdfloat/cstdfloat_complex_std.hpp
     boost/math/differentiation/autodiff_cpp11.hpp
-    boost/math/interpolators/cardinal_trigonometric.hpp
     boost/math/optimization/cma_es.hpp
-    boost/math/special_functions/chebyshev_transform.hpp
     boost/math/tools/signal_statistics.hpp
   )
 

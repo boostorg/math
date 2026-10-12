@@ -22,6 +22,7 @@ void bind_distributions_continuous(nb::module_& m);
 void bind_distributions_heavy(nb::module_& m);
 void bind_distributions_discrete(nb::module_& m);
 void bind_distributions_noncentral(nb::module_& m);
+void bind_fft(nb::module_& m);
 
 }  // namespace bmpy
 
