@@ -512,8 +512,18 @@
         hypergeometric_1F1_AS_13_3_6_series(const T& a, const T& b, const T& z, const T& b_minus_a, const Policy& pol_)
            : b_minus_a(b_minus_a), half_z(z / 2), poch_1(2 * b_minus_a - 1), poch_2(b_minus_a - a), b_poch(b), term(1), last_result(1), sign(1), n(0), cache_offset(-cache_size), scale(0), pol(pol_)
         {
+           BOOST_MATH_STD_USING
+           //
+           // The cache is normalised using a directly calculated Bessel I, either that of the first term or the one below it.
+           // For negative order v, I_v is the sum of a positive and a negative term when -2k < v < 1 - 2k, so it may be near
+           // a zero and have few correct digits.  Use the first term's order unless that's the case:
+           //
+           T v = b_minus_a - 0.5f;
+           normalise_on_first = !((v < 0) && (floor(-v) != 2 * floor(-v / 2)));  // not odd(floor(-v))
+           if (!normalise_on_first)
+              v -= 1;
            bessel_i_cache[cache_size - 1] = half_z > tools::log_max_value<T>() ?
-              cyl_bessel_i_large_x_scaled(T(b_minus_a - 1.5f), half_z, scale, pol) : BOOST_MATH_NAMESPACE::cyl_bessel_i(b_minus_a - 1.5f, half_z, pol);
+              cyl_bessel_i_large_x_scaled(v, half_z, scale, pol) : BOOST_MATH_NAMESPACE::cyl_bessel_i(v, half_z, pol);
            refill_cache();
         }
         T operator()()
@@ -550,6 +560,7 @@
         T b_minus_a, half_z, poch_1, poch_2, b_poch, term, last_result;
         int sign;
         int n, cache_offset;
+        bool normalise_on_first;
         long long scale;
         const Policy& pol;
         std::array<T, cache_size> bessel_i_cache;
@@ -565,7 +576,13 @@
            //
            cache_offset += cache_size;
            T last_value = bessel_i_cache.back();
-           bessel_i_backwards_iterator<T, Policy> i(b_minus_a + cache_offset + (int)cache_size - 1.5f, half_z, tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 1) / tools::epsilon<T>());
+           //
+           // The iterator steps down in order from v + k with k an integer, so each order v + j is rounded only once.
+           // Stepping down from a rounded order instead put every order out by ~eps * cache_offset, which is amplified
+           // where I_v is small:
+           //
+           T v = b_minus_a - 0.5f;
+           bessel_i_backwards_iterator<T, Policy> i(v, half_z, tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 1) / tools::epsilon<T>(), tools::recurrence_offset(cache_offset + cache_size - 1));
 
            for (int j = cache_size - 1; j >= 0; --j, ++i)
            {
@@ -584,10 +601,10 @@
                     rescale = tools::max_value<T>();
                  for (int k = j; k < cache_size; ++k)
                     bessel_i_cache[k] /= rescale;
-                 i = bessel_i_backwards_iterator<T, Policy>(b_minus_a -0.5f + cache_offset + j, half_z, bessel_i_cache[j + 1], bessel_i_cache[j]);
+                 i = bessel_i_backwards_iterator<T, Policy>(v, half_z, bessel_i_cache[j + 1], bessel_i_cache[j], tools::recurrence_offset(cache_offset + j));
               }
            }
-           T ratio = last_value / *i;
+           T ratio = (normalise_on_first && (cache_offset == 0)) ? last_value / bessel_i_cache[0] : last_value / *i;
            for (auto j = bessel_i_cache.begin(); j != bessel_i_cache.end(); ++j)
               *j *= ratio;
         }

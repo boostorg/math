@@ -349,6 +349,10 @@ void    test_SO4_spherical()
     ::std::cout << "Testing spherical:" << ::std::endl;
     ::std::cout << ::std::endl;
     
+    // Six nested loops: the SO3 grid size would mean 5^6 round trips. A coarser grid still
+    // visits every combination of the six angles' ranges.
+    const int    number_of_intervals = 3;
+    
     const float    rho1 = 1.0f;
     const float    rho2 = 1.0f;
     

@@ -18,7 +18,7 @@ import boost.math;
 using namespace std;
 using boost::math::beta_distribution;
 
-int main(int argc, char* argv[])
+int main()
 {
    double a = 5.0;
    double b = 5.0;

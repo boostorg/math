@@ -31,6 +31,9 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/math/special_functions/factorials.hpp>
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+#include <boost/math/special_functions/detail/two_product.hpp>  // only the host-only no-Lanczos power terms use it
+#endif
 #include <boost/math/tools/roots.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
@@ -185,6 +188,12 @@ BOOST_MATH_GPU_ENABLED T beta_imp(T a, T b, const lanczos::undefined_lanczos& l,
       return BOOST_MATH_NAMESPACE::tgamma(a, pol) * BOOST_MATH_NAMESPACE::tgamma_delta_ratio(b, a, pol);
    else if(b < 1)
       return BOOST_MATH_NAMESPACE::tgamma(b, pol) * BOOST_MATH_NAMESPACE::tgamma_delta_ratio(a, b, pol);
+   else if(c < ::BOOST_MATH_NAMESPACE::max_factorial<T>::value)
+   {
+      // The recursion below rounds ~2 (shift_a + shift_b) times and raises a / c and b / c to powers
+      // above min_sterling, which costs ~30 eps at 113 bits; tgamma is good to about 1 eps and can't overflow here:
+      return BOOST_MATH_NAMESPACE::tgamma(a, pol) * (BOOST_MATH_NAMESPACE::tgamma(b, pol) / BOOST_MATH_NAMESPACE::tgamma(c, pol));
+   }
    else
    {
       T result = beta_imp(T(a + shift_a), T(b + shift_b), l, pol);
@@ -361,6 +370,89 @@ BOOST_MATH_GPU_ENABLED T lbeta_imp(T a, T b, const lanczos::undefined_lanczos& l
 #endif
 
 //
+// The exact sum u + v is s + (return value), where s = fl(u + v):
+//
+template <class T>
+BOOST_MATH_GPU_ENABLED inline T ibeta_sum_error(T u, T v, T s)
+{
+   T vv = s - u;
+   return (u - (s - vv)) + (v - vv);
+}
+
+//
+// The bases of the power terms minus one, l1 = x cgh / agh - 1 and l2 = y cgh / bgh - 1, where
+// agh = a + gh, bgh = b + gh and cgh = a + b + gh (gh = 0 for no shift).
+// The larger of x and y = 1 - x has been rounded, and near the mode x b and y a nearly
+// cancel, so ((x b - y a) - y gh) / agh has an absolute error of about
+// eps max(a, b) min(x, y) / agh, which the exponent a multiplies. Instead use only the
+// smaller of x and y, carry the rounding errors of a + gh and a + b + gh, and form the
+// products with fma:
+//
+template <class T>
+BOOST_MATH_GPU_ENABLED inline void ibeta_power_bases(T a, T b, T x, T y, T gh, T agh, T bgh, T cgh, T& l1, T& l2)
+{
+   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   using std::fma;
+   #endif
+   T c = a + b;
+   T agh_err = ibeta_sum_error(a, gh, agh);
+   T bgh_err = ibeta_sum_error(b, gh, bgh);
+   T cgh_err = ibeta_sum_error(c, gh, cgh) + ibeta_sum_error(a, b, c);
+   if(x <= y)
+   {
+      l1 = (fma(x, cgh, -agh) + (x * cgh_err - agh_err)) / agh;
+      // y cgh - bgh = a - x cgh:
+      l2 = -(fma(x, cgh, -a) + x * cgh_err) / bgh;
+   }
+   else
+   {
+      // x cgh - agh = b - y cgh:
+      l1 = -(fma(y, cgh, -b) + y * cgh_err) / agh;
+      l2 = (fma(y, cgh, -bgh) + (y * cgh_err - bgh_err)) / bgh;
+   }
+}
+
+//
+// a log1p(l1) + b log1p(l2) for bases from ibeta_power_bases with max(|l1|, |l2|) < 0.5,
+// returned as l + l_err:
+//
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline T ibeta_power_log_near_mean(T a, T b, T l1, T l2, T gh, T bgh, const Policy& pol, T& l_err)
+{
+   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   using std::fma;
+   #endif
+   T bgh_err = ibeta_sum_error(b, gh, bgh);
+   //
+   // Both bases are near 1, and when a and b are large the two terms of the exponent
+   // a log1p(l1) + b log1p(l2) nearly cancel. Since agh (1 + l1) + bgh (1 + l2) = cgh,
+   // a l1 + b l2 = gh (l1 (a - b) - b) / bgh, which leaves terms that don't cancel:
+   //
+   //    a log1p(l1) + b log1p(l2) = gh (l1 (a - b) - b) / bgh + a log1pmx(l1) + b log1pmx(l2)
+   //
+   // The first term is about -gh, so rounding it costs as much as eps gh / 2 of relative error in
+   // the result. Carry it as a sum of two doubles: gh (l1 (a - b) - b) / bgh, with every operation's
+   // rounding error found with fma, is lh + ll, and the rounding of lh + the rest is added back below.
+   //
+   T ab = a - b;
+   T ab_err = ibeta_sum_error(a, T(-b), ab);
+   T ph = fma(l1, ab, T(0));  // fma(x, y, 0) so that the product is not contracted into a later sum
+   T pl = fma(l1, ab, -ph) + l1 * ab_err;
+   T nh = ph - b;
+   T nl = pl + ibeta_sum_error(ph, T(-b), nh);
+   T wh = nh / bgh;
+   T wl = (fma(-wh, bgh, nh) + (nl - wh * bgh_err)) / bgh;
+   T lh = fma(gh, wh, T(0));
+   T ll = fma(gh, wh, -lh) + gh * wl;
+   T rest = ll
+      + a * BOOST_MATH_NAMESPACE::log1pmx(l1, pol)
+      + b * BOOST_MATH_NAMESPACE::log1pmx(l2, pol);
+   T l = lh + rest;
+   l_err = ibeta_sum_error(lh, rest, l);
+   return l;
+}
+
+//
 // Compute the leading power terms in the incomplete Beta:
 //
 // (x^a)(y^b)/Beta(a,b) when normalised, and
@@ -411,10 +503,34 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
    result *= sqrt(agh / cgh);
    BOOST_MATH_INSTRUMENT_VARIABLE(result);
 
-   // l1 and l2 are the base of the exponents minus one:
-   T l1 = ((x * b - y * a) - y * gh) / agh;
-   T l2 = ((y * a - x * b) - x * gh) / bgh;
-   if((BOOST_MATH_GPU_SAFE_MIN(fabs(l1), fabs(l2)) < 0.2))
+   // l1 and l2 are the bases of the exponents minus one:
+   #ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   using std::fma;
+   #endif
+   T l1, l2;
+   ibeta_power_bases(a, b, x, y, gh, agh, bgh, cgh, l1, l2);
+   BOOST_MATH_INSTRUMENT_VARIABLE(l1);
+   BOOST_MATH_INSTRUMENT_VARIABLE(l2);
+   if(BOOST_MATH_GPU_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
+   {
+      T l_err;
+      T l = ibeta_power_log_near_mean(a, b, l1, l2, gh, bgh, pol, l_err);
+      if((l <= tools::log_min_value<T>()) || (l >= tools::log_max_value<T>()))
+      {
+         l += l_err;
+         l += log(result);
+         if(l >= tools::log_max_value<T>())
+            return policies::raise_overflow_error<T>(function, nullptr, pol);  // LCOV_EXCL_LINE we can probably never get here, probably!
+         result = exp(l);
+      }
+      else
+      {
+         result *= exp(l);
+         result = fma(result, l_err, result);
+      }
+      BOOST_MATH_INSTRUMENT_VARIABLE(result);
+   }
+   else if((BOOST_MATH_GPU_SAFE_MIN(fabs(l1), fabs(l2)) < 0.2))
    {
       // when the base of the exponent is very near 1 we get really
       // gross errors unless extra care is taken:
@@ -451,46 +567,6 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
          else
          {
             result *= pow((y * cgh) / bgh, b);
-            BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         }
-      }
-      else if(BOOST_MATH_GPU_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
-      {
-         //
-         // Both exponents are near one and both the exponents are
-         // greater than one and further these two
-         // power terms tend in opposite directions (one towards zero,
-         // the other towards infinity), so we have to combine the terms
-         // to avoid any risk of overflow or underflow.
-         //
-         // We do this by moving one power term inside the other, we have:
-         //
-         //    (1 + l1)^a * (1 + l2)^b
-         //  = ((1 + l1)*(1 + l2)^(b/a))^a
-         //  = (1 + l1 + l3 + l1*l3)^a   ;  l3 = (1 + l2)^(b/a) - 1
-         //                                    = exp((b/a) * log(1 + l2)) - 1
-         //
-         // The tricky bit is deciding which term to move inside :-)
-         // By preference we move the larger term inside, so that the
-         // size of the largest exponent is reduced.  However, that can
-         // only be done as long as l3 (see above) is also small.
-         //
-         bool small_a = a < b;
-         T ratio = b / a;
-         if((small_a && (ratio * l2 < 0.1)) || (!small_a && (l1 / ratio > 0.1)))
-         {
-            T l3 = BOOST_MATH_NAMESPACE::expm1(ratio * BOOST_MATH_NAMESPACE::log1p(l2, pol), pol);
-            l3 = l1 + l3 + l3 * l1;
-            l3 = a * BOOST_MATH_NAMESPACE::log1p(l3, pol);
-            result *= exp(l3);
-            BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         }
-         else
-         {
-            T l3 = BOOST_MATH_NAMESPACE::expm1(BOOST_MATH_NAMESPACE::log1p(l1, pol) / ratio, pol);
-            l3 = l2 + l3 + l3 * l2;
-            l3 = b * BOOST_MATH_NAMESPACE::log1p(l3, pol);
-            result *= exp(l3);
             BOOST_MATH_INSTRUMENT_VARIABLE(result);
          }
       }
@@ -648,6 +724,25 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
 
    if ((shift_a == 0) && (shift_b == 0))
    {
+      T scale = prefix * scaled_tgamma_no_lanczos(c, pol) / (scaled_tgamma_no_lanczos(a, pol) * scaled_tgamma_no_lanczos(b, pol));
+      //
+      // Near the mean the bases x c / a and y c / b are close to 1, and pow of them rounds to a relative
+      // error of about eps max(a, b), O(1) once a, b ~ 1 / eps.  With d = x c - a = b - y c, found exactly
+      // from the smaller of x and y and the rounding error of c, the bases are 1 + d / a and 1 - d / b,
+      // and the d terms of the exponent cancel exactly, leaving a log1pmx(d / a) + b log1pmx(-d / b):
+      //
+      T c_err = ibeta_sum_error(a, b, c);
+      T ph, pl;
+      two_product<T> product;
+      product(x <= y ? x : y, c, ph, pl);  // ph is fma(x, c, 0), which contraction can't fuse into ph - a
+      T d = x <= y ? T((ph - a) + (pl + x * c_err)) : T(-((ph - b) + (pl + y * c_err)));
+      T l1 = d / a;
+      T l2 = -d / b;
+      if (BOOST_MATH_GPU_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
+      {
+         T l = a * BOOST_MATH_NAMESPACE::log1pmx(l1, pol) + b * BOOST_MATH_NAMESPACE::log1pmx(l2, pol);
+         return l > tools::log_min_value<T>() ? T(exp(l) * scale) : T(exp(l + log(scale)));
+      }
       T power1, power2;
       bool need_logs = false;
       if (a < b)
@@ -703,56 +798,11 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
       }
       if (need_logs)
       {
-         //
-         // We want:
-         //
-         // (xc / a)^a (yc / b)^b
-         //
-         // But we know that one or other term will over / underflow and combining the logs will be next to useless as that will cause significant cancellation.
-         // If we assume b > a and express z ^ b as(z ^ b / a) ^ a with z = (yc / b) then we can move one power term inside the other :
-         //
-         // ((xc / a) * (yc / b)^(b / a))^a
-         //
-         // However, we're not quite there yet, as the term being exponentiated is quite likely to be close to unity, so let:
-         //
-         // xc / a = 1 + (xb - ya) / a
-         //
-         // analogously let :
-         //
-         // 1 + p = (yc / b) ^ (b / a) = 1 + expm1((b / a) * log1p((ya - xb) / b))
-         //
-         // so putting the two together we have :
-         //
-         // exp(a * log1p((xb - ya) / a + p + p(xb - ya) / a))
-         //
-         // Analogously, when a > b we can just swap all the terms around.
-         //
-         // Finally, there are a few cases (x or y is unity) when the above logic can't be used
-         // or where there is no logarithmic cancellation and accuracy is better just using
-         // the regular formula:
-         //
-         T xc_a = x * c / a;
-         T yc_b = y * c / b;
-         if ((x == 1) || (y == 1) || (fabs(xc_a - 1) > 0.25) || (fabs(yc_b - 1) > 0.25))
-         {
-            // The above logic fails, the result is almost certainly zero:
-            power1 = exp(log(xc_a) * a + log(yc_b) * b);
-            power2 = 1;
-         }
-         else if (b > a)
-         {
-            T p = BOOST_MATH_NAMESPACE::expm1((b / a) * BOOST_MATH_NAMESPACE::log1p((y * a - x * b) / b));
-            power1 = exp(a * BOOST_MATH_NAMESPACE::log1p((x * b - y * a) / a + p * (x * c / a)));
-            power2 = 1;
-         }
-         else
-         {
-            T p = BOOST_MATH_NAMESPACE::expm1((a / b) * BOOST_MATH_NAMESPACE::log1p((x * b - y * a) / a));
-            power1 = exp(b * BOOST_MATH_NAMESPACE::log1p((y * a - x * b) / b + p * (y * c / b)));
-            power2 = 1;
-         }
+         // Away from the mean (handled above) there is no logarithmic cancellation to avoid:
+         power1 = exp(log(x * c / a) * a + log(y * c / b) * b);
+         power2 = 1;
       }
-      return prefix * power1 * power2 * scaled_tgamma_no_lanczos(c, pol) / (scaled_tgamma_no_lanczos(a, pol) * scaled_tgamma_no_lanczos(b, pol));
+      return power1 * power2 * scale;
    }
 
    T power1 = pow(x, a);
@@ -816,6 +866,36 @@ private:
    T result, x, apn, poch;
    int n;
 };
+
+//
+// Sum the series s0 + s() + s() + ...  with Neumaier compensated summation.
+// The series is often started from s0 = -1 (to evaluate the complement), where the running sum
+// sits on a coarse grid (|sum| >= 1/2) and plain accumulation loses several eps to rounding.
+// The compensation term keeps the error of the whole sum to about one rounding.
+//
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED T ibeta_series_sum(ibeta_series_t<T>& s, T s0, BOOST_MATH_NAMESPACE::uintmax_t& max_iter, const Policy&)
+{
+   BOOST_MATH_STD_USING
+   const T factor = BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t counter = max_iter;
+   T sum = s0;
+   T comp = 0;
+   T term;
+   do
+   {
+      term = s();
+      T next = sum + term;
+      if (abs(sum) >= abs(term))
+         comp += (sum - next) + term;
+      else
+         comp += (term - next) + sum;
+      sum = next;
+   }
+   while ((abs(factor * sum) < abs(term)) && --counter);
+   max_iter = max_iter - counter;
+   return sum + comp;
+}
 
 template <class T, class Lanczos, class Policy>
 BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_derivative, T y, const Policy& pol)
@@ -896,7 +976,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool 
       return s0; // Safeguard: series can't cope with denorms.
    ibeta_series_t<T> s(a, b, x, result);
    BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-   result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter, s0);
+   result = ibeta_series_sum(s, s0, max_iter, pol);
    policies::check_series_iterations<T>("boost::math::ibeta<%1%>(%1%, %1%, %1%) in ibeta_series (with lanczos)", max_iter, pol);
    return result;
 }
@@ -958,7 +1038,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const BOOST_MATH_NAME
       return s0; // Safeguard: series can't cope with denorms.
    ibeta_series_t<T> s(a, b, x, result);
    BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-   result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter, s0);
+   result = ibeta_series_sum(s, s0, max_iter, pol);
    policies::check_series_iterations<T>("boost::math::ibeta<%1%>(%1%, %1%, %1%) in ibeta_series (without lanczos)", max_iter, pol);
    return result;
 }
@@ -975,14 +1055,18 @@ struct ibeta_fraction2_t
 
    BOOST_MATH_GPU_ENABLED result_type operator()()
    {
-      T denom = (a + 2 * m - 1);
-      T aN = (m * (a + m - 1) / denom) * ((a + b + m - 1) / denom) * (b - m) * x * x;
+      return term(m++);
+   }
 
-      T bN = static_cast<T>(m);
-      bN += (m * (b - m) * x) / (a + 2*m - 1);
-      bN += ((a + m) * (a * y - b * x + 1 + m *(2 - x))) / (a + 2*m + 1);
+   // The n'th numerator and denominator of the fraction:
+   BOOST_MATH_GPU_ENABLED result_type term(int n) const
+   {
+      T denom = (a + 2 * n - 1);
+      T aN = (n * (a + n - 1) / denom) * ((a + b + n - 1) / denom) * (b - n) * x * x;
 
-      ++m;
+      T bN = static_cast<T>(n);
+      bN += (n * (b - n) * x) / (a + 2*n - 1);
+      bN += ((a + n) * (a * y - b * x + 1 + n *(2 - x))) / (a + 2*n + 1);
 
       return BOOST_MATH_NAMESPACE::make_pair(aN, bN);
    }
@@ -991,6 +1075,34 @@ private:
    T a, b, x, y;
    int m;
 };
+//
+// Value of the continued fraction, and the number of terms used in max_terms.  The forward (Lentz)
+// evaluation multiplies together one factor per term and their rounding errors add up to several eps, and
+// it stops as soon as one factor is within eps of one, which can leave a tail of several eps when the
+// fraction converges slowly.  So once we know how many terms are needed, evaluate again from the tail,
+// from twice as many terms, which damps the rounding errors.
+//
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline T ibeta_fraction2_value(T a, T b, T x, T y, BOOST_MATH_NAMESPACE::uintmax_t& max_terms, const Policy&)
+{
+   ibeta_fraction2_t<T> f(a, b, x, y);
+   BOOST_MATH_NAMESPACE::uintmax_t limit = max_terms;
+   T fract = BOOST_MATH_NAMESPACE::tools::continued_fraction_b(f, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_terms);
+   if(max_terms < limit / 2)
+   {
+      BOOST_MATH_NAMESPACE::uintmax_t terms = 2 * max_terms;
+      T tail = 0;
+      for(BOOST_MATH_NAMESPACE::uintmax_t m = terms; m > 0; --m)
+      {
+         BOOST_MATH_NAMESPACE::pair<T, T> t = f.term(static_cast<int>(m));
+         tail = t.first / (t.second + tail);
+      }
+      T refined = f.term(0).second + tail;
+      if((BOOST_MATH_NAMESPACE::isfinite)(refined))
+         fract = refined;
+   }
+   return fract;
+}
 //
 // Evaluate the incomplete beta via the continued fraction representation:
 //
@@ -1008,13 +1120,29 @@ BOOST_MATH_GPU_ENABLED inline T ibeta_fraction2(T a, T b, T x, T y, const Policy
    if(result == 0)
       return result;
 
-   ibeta_fraction2_t<T> f(a, b, x, y);
    BOOST_MATH_NAMESPACE::uintmax_t max_terms = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
-   T fract = BOOST_MATH_NAMESPACE::tools::continued_fraction_b(f, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_terms);
+   T fract = ibeta_fraction2_value(a, b, x, y, max_terms, pol);
    BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>("boost::math::ibeta", max_terms, pol);
    BOOST_MATH_INSTRUMENT_VARIABLE(fract);
    BOOST_MATH_INSTRUMENT_VARIABLE(result);
    return result / fract;
+}
+//
+// The complement of ibeta_series: (normalised ? 1 : beta(a, b)) - ibeta_series(a, b, x).  The series has
+// the rounding error of its prefix, a few eps, which the subtraction multiplies by S / (1 - S).  So when
+// S > 1/2 and x is not small, compute the complement itself, from the continued fraction for the same
+// function with a and b (and x and y) exchanged.  Its rounding errors grow like 1 / sqrt(x) as that
+// fraction becomes degenerate at y = 1 - x near 1, which is why it is only used for x >= 0.02, where
+// it takes about 60 terms.
+//
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED T ibeta_series_complement(T a, T b, T x, bool normalised, T* p_derivative, T y, const Policy& pol)
+{
+   typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
+   T s = ibeta_series(a, b, x, T(0), lanczos_type(), normalised, p_derivative, y, pol);
+   if(normalised && (s > 0.5f) && (x >= 0.02f))
+      return ibeta_fraction2(b, a, y, x, pol, true, static_cast<T*>(nullptr));
+   return (normalised ? T(1) : BOOST_MATH_NAMESPACE::beta(a, b, pol)) - s;
 }
 //
 // Computes the difference between ibeta(a,b,x) and ibeta(a+k,b,x):
@@ -1167,7 +1295,11 @@ BOOST_MATH_GPU_ENABLED T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T
    //
    // Now we can start to pull things together and evaluate the sum in Eq 9:
    //
-   T sum = s0 + prefix * j;  // Value at N = 0
+   // The sum is often started from s0 = -1, when the first term is of order one and each later term
+   // is rounded onto a coarse grid, so keep their rounding errors in comp (Neumaier summation):
+   T pj = prefix * j;
+   T sum = s0 + pj;  // Value at N = 0
+   T comp = (fabs(s0) >= fabs(pj)) ? T((s0 - sum) + pj) : T((pj - sum) + s0);
    // some variables we'll need:
    unsigned tnp1 = 1; // 2*N+1
    T lx2 = lx / 2;
@@ -1214,13 +1346,15 @@ BOOST_MATH_GPU_ENABLED T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T
       // pull it together with Eq 9:
       //
       T r = prefix * p[n] * j;
-      sum += r;
+      T next = sum + r;
+      comp += (fabs(sum) >= fabs(r)) ? T((sum - next) + r) : T((r - next) + sum);
+      sum = next;
       // r is always small:
       BOOST_MATH_ASSERT(tools::max_value<T>() * tools::epsilon<T>() > fabs(r));
       if(fabs(r / tools::epsilon<T>()) < fabs(sum))
          break;
    }
-   return sum;
+   return sum + comp;
 } // template <class T, class Lanczos>T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Lanczos& l, bool normalised)
 
 //
@@ -1232,7 +1366,11 @@ BOOST_MATH_GPU_ENABLED T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names
 
-   T result = pow(x, n);
+   //
+   // When x is close to 1 it is y = 1 - x that is known accurately, and
+   // pow(x, n) would amplify the rounding error in x by a factor of n:
+   //
+   T result = (y < T(0.5)) ? T(exp(n * BOOST_MATH_NAMESPACE::log1p(-y, pol))) : T(pow(x, n));
 
    if(result > tools::min_value<T>())
    {
@@ -1250,17 +1388,26 @@ BOOST_MATH_GPU_ENABLED T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
       int start = itrunc(n * x);
       if(start <= k + 1)
          start = itrunc(k + 2);
-      result = static_cast<T>(pow(x, T(start)) * pow(y, n - T(start)) * BOOST_MATH_NAMESPACE::binomial_coefficient<T>(itrunc(n), itrunc(start), pol));
+      //
+      // The term x^i y^(n-i) C(n, i).  The binomial coefficient is large and the power of y is not very
+      // small (n - i < b), but x^i can underflow, or be denormal and have lost most of its digits, while
+      // the term is still a normal number.  So split x^i in two, and multiply the coefficient in between:
+      //
+      auto binomial_term = [&](unsigned i)
+      {
+         return static_cast<T>(pow(x, T(i / 2)) * (pow(y, n - T(i)) * BOOST_MATH_NAMESPACE::binomial_coefficient<T>(itrunc(n), i, pol)) * pow(x, T(i - i / 2)));
+      };
+      result = binomial_term(start);
       if(result == 0)
       {
          // OK, starting slightly above the mode didn't work,
-         // we'll have to sum the terms the old fashioned way.
+         // we'll have to sum all the terms the old fashioned way.
          // Very hard to get here, possibly only when exponent
          // range is very limited (as with type float):
          // LCOV_EXCL_START
-         for(unsigned i = start - 1; i > k; --i)
+         for(unsigned i = itrunc(n); i > k; --i)
          {
-            result += static_cast<T>(pow(x, static_cast<T>(i)) * pow(y, n - i) * BOOST_MATH_NAMESPACE::binomial_coefficient<T>(itrunc(n), itrunc(i), pol));
+            result += binomial_term(i);
          }
          // LCOV_EXCL_STOP
       }
@@ -1507,9 +1654,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
             }
             else
             {
-               fract = -(normalised ? 1 : BOOST_MATH_NAMESPACE::beta(a, b, pol));
                invert = false;
-               fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
+               fract = ibeta_series_complement(a, b, x, normalised, p_derivative, y, pol);
                BOOST_MATH_INSTRUMENT_VARIABLE(fract);
             }
          }
@@ -1527,9 +1673,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
                }
                else
                {
-                  fract = -(normalised ? 1 : BOOST_MATH_NAMESPACE::beta(a, b, pol));
                   invert = false;
-                  fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
+                  fract = ibeta_series_complement(a, b, x, normalised, p_derivative, y, pol);
                   BOOST_MATH_INSTRUMENT_VARIABLE(fract);
                }
             }
@@ -1573,9 +1718,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
             }
             else
             {
-               fract = -(normalised ? 1 : BOOST_MATH_NAMESPACE::beta(a, b, pol));
                invert = false;
-               fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
+               fract = ibeta_series_complement(a, b, x, normalised, p_derivative, y, pol);
                BOOST_MATH_INSTRUMENT_VARIABLE(fract);
             }
          }
@@ -1594,9 +1738,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
                }
                else
                {
-                  fract = -(normalised ? 1 : BOOST_MATH_NAMESPACE::beta(a, b, pol));
                   invert = false;
-                  fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
+                  fract = ibeta_series_complement(a, b, x, normalised, p_derivative, y, pol);
                   BOOST_MATH_INSTRUMENT_VARIABLE(fract);
                }
             }
@@ -1692,32 +1835,13 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
                BOOST_MATH_INSTRUMENT_VARIABLE(fract);
             }
          }
-         else if(a > 15)
+         else if((a <= 15) && normalised && (lanczos_type::value > 53) && (lanczos_type::value < lanczos::undefined_lanczos::value))
          {
-            // sidestep so we can use the series representation:
-            int n = itrunc(T(floor(b)), pol);
-            if(n == b)
-               --n;
-            T bbar = b - n;
-            T prefix; // LCOV_EXCL_LINE
-            if(!normalised)
-            {
-               prefix = rising_factorial_ratio(T(a+bbar), bbar, n);
-            }
-            else
-            {
-               prefix = 1;
-            }
-            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(nullptr));
-            fract = beta_small_b_large_a_series(a,  bbar, x, y, fract, T(1), pol, normalised);
-            fract /= prefix;
-            BOOST_MATH_INSTRUMENT_VARIABLE(fract);
-         }
-         else if(normalised)
-         {
-            // The formula here for the non-normalised case is tricky to figure
-            // out (for me!!), and requires two pochhammer calculations rather
-            // than one, so leave it for now and only use this in the normalized case....
+            // With a Lanczos approximation above double precision, the continued fraction's prefix
+            // (ibeta_power_terms) carries the rounding of three Lanczos sums, ~10 eps at 113 bits, and with
+            // a <= 15 that is no better than sidestepping to the series, and 2x worse well below the mean,
+            // so keep the sidestep there.  The formula for the non-normalised case requires two pochhammer
+            // calculations rather than one, so the sidestep is only used in the normalised case:
             int n = itrunc(T(floor(b)), pol);
             T bbar = b - n;
             if(bbar <= 0)
@@ -1739,6 +1863,13 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
          }
          else
          {
+            // The continued fraction is accurate to within the error of its prefix and, evaluated from the
+            // tail, its own rounding errors.  Sidestepping to the series with ibeta_a_step and
+            // beta_small_b_large_a_series lost up to 250 eps near the mean for a > 15, and 10-90 eps for
+            // 3 <= b < 40.  Since x <= a / (a + b) the fraction converges quickly (at most ~80 terms in
+            // double), and compared with that sidestep, measured against 50 digits near the mean, it has
+            // the same or smaller maximum error for every b >= 1 (b ~ 1: 4.6 vs 7.1 eps for a >= 15,
+            // 12.6 vs 14.5 for a < 15) and takes 0.6-0.8 times as long:
             fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
             BOOST_MATH_INSTRUMENT_VARIABLE(fract);
          }
@@ -1771,9 +1902,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
             }
             if (local_result != 0)
             {
-               ibeta_fraction2_t<T> f(a, b, x, y);
                BOOST_MATH_NAMESPACE::uintmax_t max_terms = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
-               T local_fract = BOOST_MATH_NAMESPACE::tools::continued_fraction_b(f, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_terms);
+               T local_fract = ibeta_fraction2_value(a, b, x, y, max_terms, pol);
                if (max_terms >= BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>())
                {
                   // Continued fraction failed, fall back to asymptotic expansion:
@@ -1832,33 +1962,22 @@ BOOST_MATH_GPU_ENABLED T log_ibeta_power_terms(T a, T b, T x, T y, const Lanczos
    T result = log(Lanczos::lanczos_sum_expG_scaled(c) / (Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b)));
    result += (log(bgh) - 1 + log(agh / cgh)) / 2;
 
-   // l1 and l2 are the bases of the powers minus one:
-   T l1 = ((x * b - y * a) - y * gh) / agh;
-   T l2 = ((y * a - x * b) - x * gh) / bgh;
-   if((BOOST_MATH_GPU_SAFE_MIN(fabs(l1), fabs(l2)) < 0.2))
+   // l1 and l2 are the bases of the powers minus one, as in ibeta_power_terms, which near the mean also
+   // needs its exponent's cancellation removed:
+   T l1, l2;
+   ibeta_power_bases(a, b, x, y, gh, agh, bgh, cgh, l1, l2);
+   if(BOOST_MATH_GPU_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
+   {
+      T l_err;
+      T l = ibeta_power_log_near_mean(a, b, l1, l2, gh, bgh, pol, l_err);
+      result += l + l_err;
+   }
+   else if((BOOST_MATH_GPU_SAFE_MIN(fabs(l1), fabs(l2)) < 0.2))
    {
       if((l1 * l2 > 0) || (BOOST_MATH_GPU_SAFE_MIN(a, b) < 1))
       {
          result += fabs(l1) < 0.1 ? T(a * BOOST_MATH_NAMESPACE::log1p(l1, pol)) : T(a * log((x * cgh) / agh));
          result += fabs(l2) < 0.1 ? T(b * BOOST_MATH_NAMESPACE::log1p(l2, pol)) : T(b * log((y * cgh) / bgh));
-      }
-      else if(BOOST_MATH_GPU_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
-      {
-         // The powers tend in opposite directions, so move one inside the other, as in ibeta_power_terms:
-         bool small_a = a < b;
-         T ratio = b / a;
-         if((small_a && (ratio * l2 < 0.1)) || (!small_a && (l1 / ratio > 0.1)))
-         {
-            T l3 = BOOST_MATH_NAMESPACE::expm1(ratio * BOOST_MATH_NAMESPACE::log1p(l2, pol), pol);
-            l3 = l1 + l3 + l3 * l1;
-            result += a * BOOST_MATH_NAMESPACE::log1p(l3, pol);
-         }
-         else
-         {
-            T l3 = BOOST_MATH_NAMESPACE::expm1(BOOST_MATH_NAMESPACE::log1p(l1, pol) / ratio, pol);
-            l3 = l2 + l3 + l3 * l2;
-            result += b * BOOST_MATH_NAMESPACE::log1p(l3, pol);
-         }
       }
       else if(fabs(l1) < fabs(l2))
          result += a * BOOST_MATH_NAMESPACE::log1p(l1, pol) + b * log((y * cgh) / bgh);
@@ -1946,9 +2065,8 @@ BOOST_MATH_GPU_ENABLED T libeta_imp(T a, T b, T x, const Policy& pol, bool inver
       // the argument of expm1 is far below epsilon, so log(P) = log(b) + log(-log1p(-x)) to full precision:
       return log(b) + log(-BOOST_MATH_NAMESPACE::log1p(-x, pol));
    }
-   ibeta_fraction2_t<T> f(a, b, x, y);
    BOOST_MATH_NAMESPACE::uintmax_t max_terms = policies::get_max_series_iterations<Policy>();
-   T fract = tools::continued_fraction_b(f, policies::get_epsilon<T, Policy>(), max_terms);
+   T fract = ibeta_fraction2_value(a, b, x, y, max_terms, pol);
    policies::check_series_iterations<T>(function, max_terms, pol);
    return log_ibeta_power_terms(a, b, x, y, lanczos_type(), pol) - log(fract);
 }

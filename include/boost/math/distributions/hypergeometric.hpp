@@ -15,6 +15,7 @@
 #include <boost/math/distributions/detail/hypergeometric_pdf.hpp>
 #include <boost/math/distributions/detail/hypergeometric_cdf.hpp>
 #include <boost/math/distributions/detail/hypergeometric_quantile.hpp>
+#include <boost/math/distributions/detail/inv_discrete_quantile.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
@@ -218,6 +219,52 @@ BOOST_MATH_NAMESPACE_BEGIN
       return cdf(complement(c.dist, u));
    }
 
+   namespace detail {
+   //
+   // hypergeometric_quantile sums the pdf to find the answer.  Away from a
+   // step of the cdf that sum decides it; within rounding error of one the
+   // comparison with p is made using cdf() itself, as for the other discrete
+   // distributions, so that quantile(cdf(k)) == k.
+   //
+   template <class Dist>
+   inline typename Dist::value_type hypergeometric_round_quantile(const Dist& d, const hypergeometric_quantile_result& s, typename Dist::value_type p, bool c, const policies::discrete_quantile<policies::integer_round_up>& tag)
+   {
+      typedef typename Dist::value_type value_type;
+      return s.ambiguous ? round_discrete_quantile(d, value_type(s.up), p, c, tag) : value_type(s.up);
+   }
+   template <class Dist>
+   inline typename Dist::value_type hypergeometric_round_quantile(const Dist& d, const hypergeometric_quantile_result& s, typename Dist::value_type p, bool c, const policies::discrete_quantile<policies::integer_round_down>& tag)
+   {
+      typedef typename Dist::value_type value_type;
+      if (s.ambiguous)
+         return round_discrete_quantile(d, value_type(value_type(s.up) - 1), p, c, tag);
+      // cdf(up) > p clearly, so the answer is the integer below it, if any:
+      return s.up > support(d).first ? value_type(s.up - 1) : value_type(s.up);
+   }
+   template <class Dist>
+   inline typename Dist::value_type hypergeometric_round_quantile(const Dist& d, const hypergeometric_quantile_result& s, typename Dist::value_type p, bool c, const policies::discrete_quantile<policies::integer_round_outwards>&)
+   {
+      return is_lower_quantile(p, c)
+         ? hypergeometric_round_quantile(d, s, p, c, policies::discrete_quantile<policies::integer_round_down>())
+         : hypergeometric_round_quantile(d, s, p, c, policies::discrete_quantile<policies::integer_round_up>());
+   }
+   template <class Dist>
+   inline typename Dist::value_type hypergeometric_round_quantile(const Dist& d, const hypergeometric_quantile_result& s, typename Dist::value_type p, bool c, const policies::discrete_quantile<policies::integer_round_inwards>&)
+   {
+      return is_lower_quantile(p, c)
+         ? hypergeometric_round_quantile(d, s, p, c, policies::discrete_quantile<policies::integer_round_up>())
+         : hypergeometric_round_quantile(d, s, p, c, policies::discrete_quantile<policies::integer_round_down>());
+   }
+   template <class Dist>
+   inline typename Dist::value_type hypergeometric_round_quantile(const Dist& d, const hypergeometric_quantile_result& s, typename Dist::value_type p, bool c, const policies::discrete_quantile<policies::integer_round_nearest>& tag)
+   {
+      // The nearer of up - 1 and up, as for the other distributions (which
+      // also never return more than up):
+      typedef typename Dist::value_type value_type;
+      return s.ambiguous ? round_discrete_quantile(d, value_type(s.nearest), p, c, tag) : value_type(s.nearest);
+   }
+   } // namespace detail
+
    BOOST_MATH_EXPORT template <class RealType, class Policy>
    inline RealType quantile(const hypergeometric_distribution<RealType, Policy>& dist, const RealType& p)
    {
@@ -232,7 +279,13 @@ BOOST_MATH_NAMESPACE_BEGIN
       if(false == detail::check_probability(function, p, &result, Policy())) 
          return result;
 
-      return static_cast<RealType>(detail::hypergeometric_quantile(p, RealType(1 - p), dist.defective(), dist.sample_count(), dist.total(), Policy()));
+      // Only the ends of the support have cdf == 0 or 1 exactly, but the
+      // computed cdf can round to 0 or 1 further in, so handle them here:
+      if (p == 0)
+         return static_cast<RealType>(support(dist).first);
+      if (p == 1)
+         return static_cast<RealType>(support(dist).second);
+      return detail::hypergeometric_round_quantile(dist, detail::hypergeometric_quantile(p, RealType(1 - p), false, dist.defective(), dist.sample_count(), dist.total(), Policy()), p, false, typename Policy::discrete_quantile_type());
    } // quantile
 
    BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -248,7 +301,12 @@ BOOST_MATH_NAMESPACE_BEGIN
       if (false == detail::check_probability(function, c.param, &result, Policy()))
          return result;
 
-      return static_cast<RealType>(detail::hypergeometric_quantile(RealType(1 - c.param), c.param, c.dist.defective(), c.dist.sample_count(), c.dist.total(), Policy()));
+      // As above:
+      if (c.param == 1)
+         return static_cast<RealType>(support(c.dist).first);
+      if (c.param == 0)
+         return static_cast<RealType>(support(c.dist).second);
+      return detail::hypergeometric_round_quantile(c.dist, detail::hypergeometric_quantile(RealType(1 - c.param), c.param, true, c.dist.defective(), c.dist.sample_count(), c.dist.total(), Policy()), c.param, true, typename Policy::discrete_quantile_type());
    } // quantile
 
    // https://www.wolframalpha.com/input/?i=kurtosis+hypergeometric+distribution

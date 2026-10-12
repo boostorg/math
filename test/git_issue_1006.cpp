@@ -3,6 +3,10 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+// This has to precede the library headers: the optimizer may otherwise speculate
+// a division that overflows, and raise a flag for a branch that is never taken.
+#pragma STDC FENV_ACCESS ON
+
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/distributions/beta.hpp>
 #else
@@ -20,8 +24,6 @@ import boost.math;
 // bits/c++config.h, which redefines std entities import std already provides. The
 // fp-exception check is diagnostic, so it is a no-op in a module build.
 #ifndef BOOST_MATH_BUILD_MODULE
-
-#pragma STDC FENV_ACCESS ON
 
 // Show and then clear the fenv flags
 void show_fpexcept_flags()

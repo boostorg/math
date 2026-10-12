@@ -266,6 +266,20 @@ void test_bessel_prime(T, const char* name)
     BOOST_CHECK_EQUAL(boost::math::cyl_bessel_j_prime(T(2), T(0)), T(0));
 
     //
+    // The three term asymptotic expansion was used for x > 95 and v < 1, where it is only good to 1e4 eps,
+    // values from Arb as (J(v-1, x) - J(v+1, x)) / 2, the abscissas are doubles so we only test double:
+    //
+    BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+    {
+        T large_x_tol = boost::math::tools::epsilon<T>() * 20;
+        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_j_prime(T(1.0007482056796131), T(113.87316017807642)), static_cast<T>(0.0747696314057408945840436353080930202707L), large_x_tol);
+        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_j_prime(T(0.3), T(150.5)), static_cast<T>(0.0650254984322614707173842423734883453958L), large_x_tol);
+        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_j_prime(T(0), T(120.75)), static_cast<T>(-0.040227984996192229945874445912887161952L), large_x_tol);
+        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_j_prime(T(2), T(250.25)), static_cast<T>(-0.048437217713892677788514150828785684487L), large_x_tol);
+        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_j_prime(T(3.7), T(330.5)), static_cast<T>(0.0146548919503718203861877942627449196684L), large_x_tol);
+    }
+
+    //
     // Special cases that are errors:
     //
     BOOST_MATH_CHECK_THROW(boost::math::sph_bessel_prime(1, T(0)), std::domain_error);

@@ -329,14 +329,16 @@ The quantiles (percentiles or percentage points) for a few probability levels:
   cout << "If guessing then percentiles 1 to 99% will get " << quantile(quiz, 0.01)
     << " to " << quantile(complement(quiz, 0.01)) << " right." << endl;
 /*`
-Notice that these output integral values because the default policy is `integer_round_outwards`.
+Notice that these output integral values because the default policy is `integer_round_up`:
+the lower value is the smallest k with `cdf(quiz, k) >= p`, and the upper
+the smallest k with `cdf(complement(quiz, k)) <= p`.
 [pre
-Quartiles 2 to 5
-1 standard deviation 2 to 5
-Deciles 1 to 6
-5 to 95% 0 to 7
-2.5 to 97.5% 0 to 8
-2 to 98% 0 to 8
+Quartiles 3 to 5
+1 standard deviation 3 to 5
+Deciles 2 to 6
+5 to 95% 1 to 7
+2.5 to 97.5% 1 to 8
+2 to 98% 1 to 8
 ]
 */
 
@@ -345,8 +347,7 @@ Deciles 1 to 6
 //[discrete_quantile_real
 /*`
 Quantiles values are controlled by the __understand_dis_quant  quantile policy chosen.
-The default is `integer_round_outwards`,
-so the lower quantile is rounded down, and the upper quantile is rounded up.
+The default is `integer_round_up`, so both quantiles are rounded up.
 
 But we might believe that the real values tell us a little more - see __math_discrete.
 
@@ -363,7 +364,6 @@ Or we can now create a (typedef for) policy that has discrete quantiles real
   using boost::math::policies::policy;
   using boost::math::policies::discrete_quantile;
   using boost::math::policies::real;
-  using boost::math::policies::integer_round_outwards; // Default.
   typedef boost::math::policies::policy<discrete_quantile<real> > real_quantile_policy;
 /*`
 Add a custom binomial distribution called ``real_quantile_binomial`` that uses ``real_quantile_policy``
@@ -377,8 +377,8 @@ Construct an object of this custom distribution:
 /*`
 And use this to show some quantiles - that now have real rather than integer values.
 */
-  cout << "Quartiles " << quantile(quiz, 0.25) << " to "
-    << quantile(complement(quiz_real, 0.25)) << endl; // Quartiles 2 to 4.6212
+  cout << "Quartiles " << quantile(quiz_real, 0.25) << " to "
+    << quantile(complement(quiz_real, 0.25)) << endl; // Quartiles 2.2821 to 4.6212
   cout << "1 standard deviation " << quantile(quiz_real, 0.33) << " to "
     << quantile(quiz_real, 0.67) << endl; // 1 sd 2.6654 4.194
   cout << "Deciles " << quantile(quiz_real, 0.1)  << " to "
@@ -395,7 +395,7 @@ And use this to show some quantiles - that now have real rather than integer val
 /*`
 [pre
 Real Quantiles
-Quartiles 2 to 4.621
+Quartiles 2.282 to 4.621
 1 standard deviation 2.665 to 4.194
 Deciles 1.349 to 5.758
 5 to 95% 0.8374 to 6.456
@@ -506,14 +506,14 @@ Standard deviation is 1.732
 So about 2/3 will lie within 1 standard deviation and get between 3 and 5 correct.
 Mode (the most frequent) is 4
 Skewness is 0.2887
-Quartiles 2 to 5
-1 standard deviation 2 to 5
-Deciles 1 to 6
-5 to 95% 0 to 7
-2.5 to 97.5% 0 to 8
-2 to 98% 0 to 8
+Quartiles 3 to 5
+1 standard deviation 3 to 5
+Deciles 2 to 6
+5 to 95% 1 to 7
+2.5 to 97.5% 1 to 8
+2 to 98% 1 to 8
 If guessing then percentiles 1 to 99% will get 0 to 8 right.
-Quartiles 2 to 4.621
+Quartiles 2.282 to 4.621
 1 standard deviation 2.665 to 4.194
 Deciles 1.349 to 5.758
 5 to 95% 0.8374 to 6.456

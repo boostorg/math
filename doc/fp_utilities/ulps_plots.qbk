@@ -16,8 +16,10 @@
     template<class F, typename PreciseReal, typename CoarseReal>
     class ulps_plot {
     public:
+        // samples: 4/5 of them on a uniform grid in the plotted coordinate, the rest random probes (see below).
+        // With log_abscissas, the x axis is logarithmic and the grid uniform in log(x); requires 0 < a.
         ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
-                  size_t samples = 10000, bool perturb_abscissas = false, int random_seed = -1);
+                  size_t samples = 1000, bool perturb_abscissas = false, int random_seed = -1, bool log_abscissas = false);
         //
         // Set a clip value to restrict the range of ULP's shown, values outside [-clip,clip]
         // will be shown at the clip boundary as crosses, in the color of their function by default:
@@ -49,6 +51,17 @@
         //
         ulps_plot& crop_color(std::string const & font_color);
         //
+        // Draw the function itself (the high-accuracy ordinates) in a second plot below the ulps plot,
+        // on the same x axis (off by default). With log_function, the y axis is logarithmic if f is positive everywhere sampled:
+        //
+        ulps_plot& show_function(bool show_function);
+        ulps_plot& log_function(bool log_function);
+        ulps_plot& function_color(std::string const & color);
+        //
+        // Counts of samples by outcome (ok, undefined, overflow/underflow handled, NaN or domain error, spurious overflow, mishandled), and the worst errors:
+        //
+        std::string summary() const;
+        //
         // Set's the color of points where one of the functions returned a NaN,
         // or set to an empty string to hide completely (the default):
         //
@@ -67,6 +80,11 @@
         //
         template<class G>
         ulps_plot& add_fn(G g, std::string const & color = "steelblue");
+        //
+        // Encodes 8-bit RGB pixels (row-major, top row first) as a PNG; lodepng by default if requested (see below).
+        // With nullptr, or no encoder, the plot is pure SVG:
+        //
+        ulps_plot& png_encoder(std::function<std::vector<unsigned char>(std::vector<unsigned char> const & rgb, size_t width, size_t height)> encoder);
         //
         // Write to stream or file:
         //
@@ -127,11 +145,109 @@ For example:
 
 
 Note that the graph is written as an SVG. We use `firefox foo.svg` or `open -a Firefox foo.svg` to display these files.
+Thousands of points and curve segments make a heavy SVG that some viewers draw slowly or mangle,
+so the data (the points, the markers, the envelope and the curve of `show_function`) is drawn into PNG images embedded in the SVG,
+antialiased by 4x4 supersampling at the plot's pixel size, while the axes and text stay vector.
+Each color is a grayscale mask that the SVG fills with that color, so colors are given as CSS strings, as before,
+and the masks are painted in the order the shapes were drawn.
+To encode the images with [@https://github.com/lvandeve/lodepng lodepng], define `BOOST_MATH_USE_LODEPNG` (or include `lodepng.h` first)
+before including the header, and link `lodepng.cpp`; or pass an encoder to `png_encoder`.
+lodepng is not used just because `lodepng.h` happens to be on the include path, so that programs which don't link it still link.
+Without an encoder, or with `png_encoder(nullptr)`, the whole plot is drawn as SVG elements.
+
+[h4 Sampling and the envelope]
+
+The abscissas are a uniform grid in the plotted coordinate (/x/, or log /x/ on a logarithmic axis), at the centres of equal cells spanning \[/a/, /b/\],
+plus random probes, a quarter as many as the grid points, uniform in the same coordinate.
+The grid gives most of the points and the envelope; the probes find errors between the grid points,
+for example at the integers and half-integers that a grid can hit or miss and that often take their own code paths.
+
+The condition number |/x f'(x)/f(x)/| comes from finite differences of the reference values on the grid,
+so it costs no evaluations of /f/ beyond the ones that are plotted.
+/f'/ at each grid point is the derivative of the quartic through five neighbouring grid values: centred, or one-sided at the edges and next to undefined values.
+Where it disagrees with the three-point estimate by more than a few percent of the scale that matters for the condition number,
+/f/ is not smooth on the scale of the grid (a pole, a kink, a narrow feature), and /f'/ is computed instead from a central difference with a small step.
+The same happens where the stencil is wider than |/x/|/2, since many functions vary on the scale of /x/ itself:
+on a logarithmic axis with fewer than about 20 points per decade, and on a linear one within a few grid steps of 0.
+At a probe, /f'/ is the cubic interpolant of the four nearest grid derivatives, divided by the exact /f/ at the probe.
+At a simple zero of /f/, /f'/ is smooth and /f/ is not, so the condition number is computed exactly there:
+interpolating the condition number itself would smear its narrow spike.
+If the cubic through the grid values of /f/ doesn't predict /f/ at the probe, there is something between the grid points, and the probe gets a local difference too.
 
 There is a subtle issue about the "correct" value.
 Note that if the function evaluated in `PreciseReal` is not accurate, the plot is worthless.
 But just how accurate it needs to be is more difficult to determine.
 We recommend starting with at least `long double` to test `float` precision, and `boost::multiprecision::float128` to test `double` precision values.
+
+[h4 Functions of two variables]
+
+    #include <boost/math/tools/ulps_heatmap.hpp>
+
+    namespace boost::math::tools {
+
+    template<class F, typename PreciseReal, typename CoarseReal>
+    class ulps_heatmap {
+    public:
+        // Samples f(x, y) at the pixel centres of a width x height grid; a logarithmic axis needs a positive minimum.
+        // The reference is evaluated on threads (0 means all cores), so hi_acc_impl must be thread safe:
+        // There are also probe_density*width*height random probes, and each pixel shows the worst of its samples:
+        ulps_heatmap(F hi_acc_impl, CoarseReal x_min, CoarseReal x_max, CoarseReal y_min, CoarseReal y_max,
+                     size_t width = 800, size_t height = 500, bool log_x = false, bool log_y = false, unsigned threads = 0,
+                     double probe_density = 0.25);
+        // Add an implementation to test; each is drawn as a panel, side by side on the same scale:
+        template<class G>
+        ulps_heatmap& add_fn(G g, std::string const & label = "");
+        // Saturate the color scale at clip. By default it is chosen from all panels' values:
+        // the maximum on a log scale, the 99th percentile on a linear one.
+        ulps_heatmap& clip(double clip);
+        ulps_heatmap& log_scale(bool log_scale);
+        // Maps [0, 1] to sRGB in [0, 1]^3; inferno by default:
+        ulps_heatmap& color_map(std::function<std::array<double, 3>(double)> color_map);
+        // Encodes 8-bit RGB pixels (row-major, top row first) as a PNG; lodepng by default if lodepng.h is found:
+        ulps_heatmap& png_encoder(std::function<std::vector<unsigned char>(std::vector<unsigned char> const & rgb, size_t width, size_t height)> encoder);
+        ulps_heatmap& title(std::string const & title);
+        ulps_heatmap& x_label(std::string const & label);
+        ulps_heatmap& y_label(std::string const & label);
+        ulps_heatmap& background_color(std::string const & color);
+        ulps_heatmap& font_color(std::string const & color);
+        // Draw the reference function as a heatmap below each error panel, with its own colorbar (off by default).
+        // f is colored linearly from min(f) to max(f) (viridis); if f has both signs, symmetrically about zero with a dark-centered diverging map.
+        // If f > 0 everywhere and spans three or more decades, log10(f) is used; log_function forces or disables this:
+        ulps_heatmap& show_function(bool show_function);
+        // The caption of the function panels (default: the title):
+        ulps_heatmap& function_label(std::string const & label);
+        ulps_heatmap& log_function(bool log_function);
+        // Write max(1/2, |ulps|), or |ulps| over the envelope, as an SVG:
+        void write_ulps(std::string const & filename) const;
+        void write_ulps_envelope(std::string const & filename) const;
+        // For each panel, counts of points outside 1/2 ulp and outside the envelope, and the worst points:
+        std::string summary() const;
+    };
+
+    } // namespaces
+
+For a function of two variables, the condition number of evaluation is the sum of the condition numbers in each argument,
+/|x f[sub x]/f| + |y f[sub y]/f|/, since both arguments are rounded.
+`ulps_heatmap` evaluates the error at the pixel centres, and at random probes (a quarter as many by default, with a fixed seed), and writes two heatmaps.
+Each pixel shows the worst of the samples in it. As in one dimension, the condition numbers come from finite differences on the grid,
+along the rows and the columns, and at the probes from the bicubic interpolant of the gradient.
+`write_ulps` shows max(½, |ulps|), which is ½ wherever the result is correctly rounded.
+`write_ulps_envelope` divides |ulps| by the envelope max(½, cond/2) and shows max(1, ratio), so that anything brighter than the floor is error that rounding the arguments does not explain.
+The implementation is evaluated everywhere, including where the true value is out of range, and each pixel is classified:
+green means NaN or a domain error where the true value is a finite double; cyan means a spurious overflow
+(`std::overflow_error` or an infinity where the true value is a finite double); both are bugs.
+Dark gray means the result was handled correctly: the true value is undefined, or it overflows and the implementation raised `std::overflow_error` or returned an infinity,
+or it underflows and the implementation returned zero or a subnormal.
+An out-of-range true value for which the implementation returned an ordinary number (or NaN, or the wrong sign) is counted as the maximal error and shown at the top of the color scale.
+`ulps_plot` draws the same classes as markers on the edges of the plot, with a legend, and `summary()` reports the counts.
+
+Calling `add_fn` more than once compares implementations: each gets a panel, and the panels share the axes and the color scale,
+so that, for example, the code before and after a change can be compared directly.
+
+The heatmap is a PNG embedded in the SVG.
+If `BOOST_MATH_USE_LODEPNG` is defined (or `lodepng.h` is included first), [@https://github.com/lvandeve/lodepng lodepng] encodes it (link `lodepng.cpp`);
+otherwise, pass your own encoder to `png_encoder`, or the `write` functions throw `std::logic_error`.
+An example is given [@../../reporting/accuracy/ligamma_ulps_heatmap.cpp here].
 
 [heading References]
 

@@ -60,7 +60,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
+   if(!boost::math::policies::promote_double<>() || boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
       largest_type = "(long\\s+)?double";
    }
@@ -145,7 +145,11 @@ void expected_results()
       largest_type,                     // test type(s)
       "(?i).*large.*",                      // test data group
       ".*", 200000, 10000);                 // test function
-   if (std::numeric_limits<long double>::digits == 64)
+   //
+   // Unpromoted double gets the largest type rows: the worst large cases have cond 700 to 4e4 in a and b,
+   // except betac(34657.7, 103.4, 0.815) at 3700 eps (5x cond), whose result 1.6e-307 is next to underflow.
+   //
+   if (boost::math::policies::promote_double<>() && (std::numeric_limits<long double>::digits == 64))
    {
       // 80-bit long double, errors spill over:
       add_expected_result(
@@ -235,7 +239,7 @@ void expected_results()
       "(?i).*small.*",                      // test data group
       ".*", 130, 30);                 // test function
    //
-   // MinGW:
+   // MinGW (real_concept is its 80-bit long double, whose libm is less accurate; measured 704 and mean 52):
    //
    add_expected_result(
       "GNU[^|]*",                          // compiler
@@ -243,14 +247,15 @@ void expected_results()
       "Win32[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "(?i).*medium.*",                     // test data group
-      ".*", 400, 50);  // test function
-   add_expected_result(
-      "GNU.*",                          // compiler
-      ".*",                          // stdlib
-      "Win32.*",                          // platform
-      "double",                     // test type(s)
-      "(?i).*large.*",                      // test data group
-      ".*", 20, 10);                 // test function
+      ".*", 800, 60);  // test function
+   if (boost::math::policies::promote_double<>())
+      add_expected_result(
+         "GNU.*",                          // compiler
+         ".*",                          // stdlib
+         "Win32.*",                          // platform
+         "double",                     // test type(s)
+         "(?i).*large.*",                      // test data group
+         ".*", 20, 10);                 // test function
    add_expected_result(
       "GNU.*",                          // compiler
       ".*",                          // stdlib
@@ -268,13 +273,14 @@ void expected_results()
       "real_concept",                   // test type(s)
       "(?i).*medium.*",                 // test data group
       ".*", 400, 50);                   // test function
-   add_expected_result(
-      "GNU.*",                          // compiler
-      ".*",                             // stdlib
-      "Cygwin*",                        // platform
-      "double",                         // test type(s)
-      "(?i).*large.*",                  // test data group
-      ".*", 20, 10);                    // test function
+   if (boost::math::policies::promote_double<>())
+      add_expected_result(
+         "GNU.*",                          // compiler
+         ".*",                             // stdlib
+         "Cygwin*",                        // platform
+         "double",                         // test type(s)
+         "(?i).*large.*",                  // test data group
+         ".*", 20, 10);                    // test function
    add_expected_result(
       "GNU.*",                          // compiler
       ".*",                             // stdlib

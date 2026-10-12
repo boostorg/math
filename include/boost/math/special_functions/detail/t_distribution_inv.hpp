@@ -489,60 +489,70 @@ BOOST_MATH_GPU_ENABLED T fast_students_t_quantile_imp(T df, T p, const Policy& p
    //
    // Change variables to inverse incomplete beta:
    //
-   T t2 = t * t;
-   T xb = df / (df + t2);
-   T y = t2 / (df + t2);
-   T a = df / 2;
-   //
-   // t can be so large that x underflows,
-   // just return our estimate in that case:
-   //
-   if(xb == 0)
-      return t;
-   //
-   // Get incomplete beta and it's derivative:
-   //
-   T f1;
-   T f0 = xb < y ? ibeta_imp(a, constants::half<T>(), xb, pol, false, true, &f1)
-      : ibeta_imp(constants::half<T>(), a, y, pol, true, true, &f1);
+   for (int i = 0; i < 3; ++i)
+   {
+      T t2 = t * t;
+      T xb = df / (df + t2);
+      T y = t2 / (df + t2);
+      T a = df / 2;
+      //
+      // t can be so large that x underflows,
+      // just return our estimate in that case:
+      //
+      if(xb == 0)
+         return invert ? -t : t;
+      //
+      // Get incomplete beta and it's derivative:
+      //
+      T f1;
+      T f0 = xb < y ? ibeta_imp(a, constants::half<T>(), xb, pol, false, true, &f1)
+         : ibeta_imp(constants::half<T>(), a, y, pol, true, true, &f1);
 
-   // Get cdf from incomplete beta result:
-   T p0 = f0 / 2  - p;
-   // Get pdf from derivative:
-   T rxb = sqrt(xb);
-   T p1 = f1 * sqrt(y / df);
-   p1 *= rxb;
-   p1 *= rxb;
-   p1 *= rxb;
-   // If p1 has underflowed, all subsequent calculations will fail:
-   if (p1 < tools::min_value<T>())
-       return t;
-   //
-   // Second derivative divided by p1:
-   //
-   // yacas gives:
-   //
-   // In> PrettyForm(Simplify(D(t) (1 + t^2/v) ^ (-(v+1)/2)))
-   //
-   //  |                        | v + 1     |     |
-   //  |                       -| ----- + 1 |     |
-   //  |                        |   2       |     |
-   // -|             |  2     |                   |
-   //  |             | t      |                   |
-   //  |             | -- + 1 |                   |
-   //  | ( v + 1 ) * | v      |               * t |
-   // ---------------------------------------------
-   //                       v
-   //
-   // Which after some manipulation is:
-   //
-   // -p1 * t * (df + 1) / (t^2 + df)
-   //
-   T p2 = t * (df + 1) / (t * t + df);
-   // Halley step:
-   t = fabs(t);
-   t += p0 / (p1 + p0 * p2 / 2);
-   return !invert ? -t : t;
+      // Get cdf from incomplete beta result:
+      T p0 = f0 / 2  - p;
+      // Get pdf from derivative:
+      T rxb = sqrt(xb);
+      T p1 = f1 * sqrt(y / df);
+      p1 *= rxb;
+      p1 *= rxb;
+      p1 *= rxb;
+      // If p1 has underflowed, all subsequent calculations will fail:
+      if (p1 < tools::min_value<T>())
+          return invert ? -t : t;
+      //
+      // Second derivative divided by p1:
+      //
+      // yacas gives:
+      //
+      // In> PrettyForm(Simplify(D(t) (1 + t^2/v) ^ (-(v+1)/2)))
+      //
+      //  |                        | v + 1     |     |
+      //  |                       -| ----- + 1 |     |
+      //  |                        |   2       |     |
+      // -|             |  2     |                   |
+      //  |             | t      |                   |
+      //  |             | -- + 1 |                   |
+      //  | ( v + 1 ) * | v      |               * t |
+      // ---------------------------------------------
+      //                       v
+      //
+      // Which after some manipulation is:
+      //
+      // -p1 * t * (df + 1) / (t^2 + df)
+      //
+      T p2 = t * (df + 1) / (t * t + df);
+      // Halley step:
+      T step = p0 / (p1 + p0 * p2 / 2);
+      t -= step;
+      //
+      // The series estimates used for non-integer df between 2 and 3 are
+      // only good to about 1e-5, which a single Halley step can't fix,
+      // so repeat if the step was large:
+      //
+      if (fabs(step) < 1e-7f * fabs(t))
+         break;
+   }
+   return invert ? -t : t;
 }
 
 template <class T, class Policy>

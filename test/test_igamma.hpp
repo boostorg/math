@@ -316,6 +316,12 @@ void test_spots(T, const char* name = nullptr)
    // Check large a, x values. Precision just isn't great here. 
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(1450.25), static_cast<T>(1500.75)), static_cast<T>(-0.09812447528127799786140178403478691390753413399549580160096975713L), tolerance * (std::is_same<T, boost::math::concepts::real_concept>::value ? 16 : 1));
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(2000), static_cast<T>(1900)), static_cast<T>(-4.448523733381445722945397105917814000790587922314824687065050805L), tolerance * gcc_win_mul * (std::is_same<T, boost::math::concepts::real_concept>::value ? 8 : 1));
+   // Without a Lanczos approximation, the prefix x^a e^-x / tgamma(a) near x = a was once ~1e4 eps out. Arb:
+   if (std::is_same<typename boost::math::lanczos::lanczos<T, boost::math::policies::policy<> >::type, boost::math::lanczos::undefined_lanczos>::value)
+   {
+      BOOST_CHECK_CLOSE(::boost::math::gamma_p(static_cast<T>(100000), static_cast<T>(100300)), static_cast<T>(0.828636311251207647668620176040716549542805025L), tolerance);
+      BOOST_CHECK_CLOSE(::boost::math::gamma_q(static_cast<T>(100000), static_cast<T>(100300)), static_cast<T>(0.171363688748792352331379823959283450457194975L), tolerance);
+   }
 
    //
    // Coverage:

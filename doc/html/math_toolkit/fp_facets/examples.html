@@ -154,51 +154,6 @@
 <span class="identifier">s</span> <span class="special">&lt;&lt;</span> <span class="identifier">setprecison</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">max_digits10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">scientific</span> <span class="special">&lt;&lt;</span> <span class="identifier">output_value</span><span class="special">;</span>
 <span class="identifier">s</span> <span class="special">&gt;&gt;</span> <span class="identifier">input_value</span><span class="special">;</span>
 </pre>
-<h5>
-<a name="math_toolkit.fp_facets.examples.h2"></a>
-        <span class="phrase"><a name="math_toolkit.fp_facets.examples.use_with_serialization_archives"></a></span><a class="link" href="examples.html#math_toolkit.fp_facets.examples.use_with_serialization_archives">Use
-        with serialization archives</a>
-      </h5>
-<p>
-        It is vital that the same locale is used when an archive is saved and when
-        it is loaded. Otherwise, loading the archive may fail. By default, archives
-        are saved and loaded with a classic C locale with a <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">archive</span><span class="special">::</span><span class="identifier">codecvt_null</span></code>
-        facet added. Normally you do not have to worry about that.
-      </p>
-<p>
-        The constructors for the archive classes, as a side-effect, imbue the stream
-        with such a locale. However, if you want to use the facets <code class="computeroutput"><span class="identifier">nonfinite_num_put</span></code> and <code class="computeroutput"><span class="identifier">nonfinite_num_get</span></code>
-        with archives, then you have to manage the locale manually. That is done
-        by calling the archive constructor with the flag <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">archive</span><span class="special">::</span><span class="identifier">no_codecvt</span></code>,
-        thereby ensuring that the archive constructor will <span class="bold"><strong>not
-        imbue the stream with a new locale</strong></span>.
-      </p>
-<p>
-        The following code shows how to use <code class="computeroutput"><span class="identifier">nonfinite_num_put</span></code>
-        with a <code class="computeroutput"><span class="identifier">text_oarchive</span></code>.
-      </p>
-<pre class="programlisting"><span class="identifier">locale</span> <span class="identifier">default_locale</span><span class="special">(</span><span class="identifier">locale</span><span class="special">::</span><span class="identifier">classic</span><span class="special">(),</span> <span class="keyword">new</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">archive</span><span class="special">::</span><span class="identifier">codecvt_null</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;);</span>
-<span class="identifier">locale</span> <span class="identifier">my_locale</span><span class="special">(</span><span class="identifier">default_locale</span><span class="special">,</span> <span class="keyword">new</span> <span class="identifier">nonfinite_num_put</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;);</span>
-
-<span class="identifier">ofstream</span> <span class="identifier">ofs</span><span class="special">(</span><span class="string">"test.txt"</span><span class="special">);</span>
-<span class="identifier">ofs</span><span class="special">.</span><span class="identifier">imbue</span><span class="special">(</span><span class="identifier">my_locale</span><span class="special">);</span>
-
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">archive</span><span class="special">::</span><span class="identifier">text_oarchive</span> <span class="identifier">oa</span><span class="special">(</span><span class="identifier">ofs</span><span class="special">,</span> <span class="identifier">no_codecvt</span><span class="special">);</span>
-
-<span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">();</span>
-<span class="identifier">oa</span> <span class="special">&amp;</span> <span class="identifier">x</span><span class="special">;</span>
-</pre>
-<p>
-        The same method works with <code class="computeroutput"><span class="identifier">nonfinite_num_get</span></code>
-        and <code class="computeroutput"><span class="identifier">text_iarchive</span></code>.
-      </p>
-<p>
-        If you use the <code class="computeroutput"><span class="identifier">nonfinite_num_put</span></code>
-        with <code class="computeroutput"><span class="identifier">trap_infinity</span></code> and/or
-        <code class="computeroutput"><span class="identifier">trap_nan</span></code> flag with a serialization
-        archive, then you must set the exception mask of the stream. Serialization
-        archives do not check the stream state.
-      </p>
 <h6>
 <a name="math_toolkit.fp_facets.examples.h3"></a>
         <span class="phrase"><a name="math_toolkit.fp_facets.examples.other_examples"></a></span><a class="link" href="examples.html#math_toolkit.fp_facets.examples.other_examples">Other
@@ -232,12 +187,6 @@
       </p>
 <p>
         A simple example of trapping nonfinite output is at <a href="../../../../example/nonfinite_num_facet_trap.cpp" target="_top">nonfinite_num_facet_trap.cpp</a>.
-      </p>
-<p>
-        A very basic example of using Boost.Archive is at <a href="../../../../example/nonfinite_serialization_archives.cpp" target="_top">../../example/nonfinite_serialization_archives.cpp</a>.
-      </p>
-<p>
-        A full demonstration of serialization by Francois Mauger is at <a href="../../../../example/nonfinite_num_facet_serialization.cpp" target="_top">../../example/nonfinite_num_facet_serialization.cpp</a>
       </p>
 </div>
 <div class="copyright-footer">Copyright © 2006-2021 Nikhar Agrawal, Anton Bikineev, Matthew Borland,

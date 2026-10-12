@@ -166,6 +166,20 @@ void test_spots(T, const char* type_name)
     } };
     do_test_ellint_e2<T>(small_angles, type_name, "Elliptic Integral E: Small Angles");
     //
+    // k near 1 and phi near pi/2, where 1 - k^2 and c - k^2 lost digits.  Values from Arb, the inputs
+    // are doubles so we only test double:
+    //
+    BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+    {
+       T near_one_tol = boost::math::tools::epsilon<T>() * 20;
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::ellint_2(T(0.99982354168451881), T(1.5324486420721517)), static_cast<T>(0.999781247261809877237707915464176878750833L), near_one_tol);
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::ellint_2(T(-0.99982354168451881), T(1.5324486420721517)), static_cast<T>(0.999781247261809877237707915464176878750833L), near_one_tol);
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::ellint_2(T(0.9999), T(1.5707)), static_cast<T>(1.000513137840708950445877625147809092023445L), near_one_tol);
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::ellint_2(T(0.99999999), T(1.57079)), static_cast<T>(1.000000096605569833326740569455842531840166L), near_one_tol);
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::ellint_2(T(0.999), T(1.5)), static_cast<T>(0.999793406537408520821881945938968097695362L), near_one_tol);
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::ellint_2(T(0.99995), T(1.5706)), static_cast<T>(1.000272612821377046854477086139187907740933L), near_one_tol);
+    }
+    //
     // Test error handling:
     //
     #ifndef BOOST_MATH_NO_EXCEPTIONS

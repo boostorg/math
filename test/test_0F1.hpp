@@ -70,6 +70,19 @@ void test_spots(T, const char* type_name)
    BOOST_CHECK_THROW(boost::math::hypergeometric_0F1(T(-1), T(-1)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::hypergeometric_0F1(T(-10), T(-5)), std::domain_error);
 
+   //
+   // Values from Arb: the continued fraction used for |z/b| < 4 loses digits as |z/b| increases:
+   //
+   BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+   {
+      typedef boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> > no_promote;
+      T tol = boost::math::tools::epsilon<T>() * 20;
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(4.1626372172798245), T(-15.278605051851581), no_promote()), static_cast<T>(-0.02654682130764034819050775426638173461952L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(6.7), T(-20.0), no_promote()), static_cast<T>(0.012009242471182931317176314275578674493445L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(12.5), T(-30.0), no_promote()), static_cast<T>(0.068441050155700602021463722345924613949886L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(3.3), T(-10.0), no_promote()), static_cast<T>(-0.04255851577720615712187619528229191551525L), tol);
+   }
+
    static const std::array<std::array<T, 3>, 50> hypergeometric_0F1_integer_data = { {
       { SC_(4.0), SC_(-20.0),  SC_(-0.012889714201783047561923257996127233830940165138385) },
       { SC_(8.0), SC_(-20.0),  SC_(0.046498609282365144223175012935939437508273248399881) },

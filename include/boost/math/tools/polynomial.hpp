@@ -540,7 +540,7 @@ public:
    template <typename U>
    BOOST_MATH_GPU_ENABLED polynomial& operator >>=(U const &n)
    {
-       BOOST_MATH_ASSERT(n <= m_data.size());
+       BOOST_MATH_ASSERT(static_cast<size_type>(n) <= m_data.size());
        m_data.erase(m_data.begin(), m_data.begin() + n);
        return *this;
    }

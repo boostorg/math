@@ -77,7 +77,7 @@ template<typename RealType>
 struct tape_initializer_rvar
 {
     template<class ArgumentContainer>
-    void operator()(ArgumentContainer& x) const noexcept
+    void operator()(ArgumentContainer& /*x*/) const noexcept
     {
         static_assert(std::is_same<typename ArgumentContainer::value_type,
                                    rdiff::rvar<RealType, 1>>::value,

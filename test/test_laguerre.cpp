@@ -4,6 +4,10 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <limits>
+// The test data contains overflows, which the test expects to come back as infinities, as in the
+// test_instances library (which is compiled with this policy).  The headers are included here as well,
+// so the policy has to agree with the library's to avoid two different definitions of the same functions:
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #include <pch_light.hpp>
 #include "test_laguerre.hpp"
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -40,7 +44,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
+   if(!boost::math::policies::promote_double<>() || boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
       largest_type = "(long\\s+)?double";
    }
@@ -56,7 +60,7 @@ void expected_results()
    // even though the implementation contains nothing but basic
    // arithmetic?
    //
-   if((std::numeric_limits<long double>::digits <= 64)
+   if(boost::math::policies::promote_double<>() && (std::numeric_limits<long double>::digits <= 64)
       && (std::numeric_limits<long double>::digits != std::numeric_limits<double>::digits))
    {
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

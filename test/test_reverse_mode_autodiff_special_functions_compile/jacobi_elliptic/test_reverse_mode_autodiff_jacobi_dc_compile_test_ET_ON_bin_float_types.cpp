@@ -14,11 +14,12 @@
     #include <boost/math/tools/workaround.hpp>
     #include <cmath>
     
-    BOOST_AUTO_TEST_SUITE(test_jacobi_dc_compiles)
+    namespace test_jacobi_dc_compiles {
     
     using namespace rdiff;
     
-    BOOST_AUTO_TEST_CASE_TEMPLATE(test_jacobi_dc, T, bin_float_types)
+    template <typename T>
+    void test_jacobi_dc()
     {
         RandomSample<T> rng{ -10, 10
  };
@@ -27,7 +28,13 @@
         rvar<T, 1> x_ad = x;
         auto y = boost::math::jacobi_dc(0.25,x_ad);
         auto y_expect = boost::math::jacobi_dc(0.25,x);
-        BOOST_CHECK_CLOSE(y.item(), y_expect, 1000*boost_close_tol<T>());
+        CHECK_RELATIVE_ERROR(y.item(), y_expect, 1000*boost_close_tol<T>() / 100);
     }
-    BOOST_AUTO_TEST_SUITE_END()
+    } // namespace test_jacobi_dc_compiles
+    
+    int main()
+    {
+        mp11::mp_for_each<mp11::mp_transform<mp11::mp_identity, bin_float_types>>([](auto t) { test_jacobi_dc_compiles::test_jacobi_dc<typename decltype(t)::type>(); });
+        return boost::math::test::report_errors();
+    }
     

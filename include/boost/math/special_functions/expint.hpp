@@ -398,6 +398,16 @@ BOOST_MATH_GPU_ENABLED inline T expint_as_fraction(unsigned n, T z, const Policy
    policies::check_series_iterations<T>("boost::math::expint_continued_fraction<%1%>(unsigned,%1%)", max_iter, pol);
    BOOST_MATH_INSTRUMENT_VARIABLE(result)
    BOOST_MATH_INSTRUMENT_VARIABLE(max_iter)
+   //
+   // The forward evaluation above multiplies together one factor per term, and their rounding errors
+   // add up to tens of eps.  Worse, where it converges slowly it stops while the tail still changes the
+   // result by tens of eps.  So evaluate the fraction again from the tail, which damps the rounding errors,
+   // and starting from twice as many terms: b[k-1] - k (n + k - 1) / (b[k] - ...), with b[k] = n + z + 2k.
+   //
+   BOOST_MATH_NAMESPACE::uintmax_t terms = 2 * max_iter;
+   result = n + z + 2 * T(terms);
+   for(BOOST_MATH_NAMESPACE::uintmax_t k = terms; k > 0; --k)
+      result = (n + z + 2 * T(k - 1)) - T(k) * T(n + k - 1) / result;
    result = exp(-z) / result;
    BOOST_MATH_INSTRUMENT_VARIABLE(result)
    return result;

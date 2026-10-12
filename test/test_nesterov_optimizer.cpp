@@ -9,9 +9,9 @@
 #include <boost/math/optimization/nesterov.hpp>
 namespace rdiff = boost::math::differentiation::reverse_mode;
 namespace bopt = boost::math::optimization;
-BOOST_AUTO_TEST_SUITE(nesterov_descent)
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(default_nesterov_test, T, all_float_types)
+template <class T>
+void default_nesterov_test()
 {
   T lr = T{ 1e-5 };
   T mu = T{ 0.95 };
@@ -27,7 +27,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(default_nesterov_test, T, all_float_types)
 
   auto z = minimize(nag, constraint, convergence_policy);
   for (auto& xi : x) {
-    BOOST_REQUIRE_SMALL(xi.item(), eps);
+    if (!CHECK_ABSOLUTE_ERROR(0,xi.item(), eps)) { return; }
   }
 }
-BOOST_AUTO_TEST_SUITE_END()
+
+int main()
+{
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { default_nesterov_test<typename decltype(t)::type>(); });
+   return boost::math::test::report_errors();
+}

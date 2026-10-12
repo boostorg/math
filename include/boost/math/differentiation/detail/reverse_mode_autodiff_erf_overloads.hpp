@@ -81,8 +81,8 @@ struct erf_expr : public abstract_unary_expression<RealType,
     inner_t evaluate() const
     {
         return detail::if_functional_dispatch<(DerivativeOrder > 1)>(
-            [this](auto &&x) { return reverse_mode::erf(std::forward<decltype(x)>(x)); },
-            [this](auto &&x) { return BOOST_MATH_NAMESPACE::erf(std::forward<decltype(x)>(x)); },
+            [](auto &&x) { return reverse_mode::erf(std::forward<decltype(x)>(x)); },
+            [](auto &&x) { return BOOST_MATH_NAMESPACE::erf(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv,
@@ -117,8 +117,8 @@ struct erfc_expr : public abstract_unary_expression<RealType,
     inner_t evaluate() const
     {
         return detail::if_functional_dispatch<((DerivativeOrder > 1))>(
-            [this](auto &&x) { return reverse_mode::erfc(std::forward<decltype(x)>(x)); },
-            [this](auto &&x) { return BOOST_MATH_NAMESPACE::erfc(std::forward<decltype(x)>(x)); },
+            [](auto &&x) { return reverse_mode::erfc(std::forward<decltype(x)>(x)); },
+            [](auto &&x) { return BOOST_MATH_NAMESPACE::erfc(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv,
@@ -154,8 +154,8 @@ struct erf_inv_expr : public abstract_unary_expression<RealType,
     inner_t evaluate() const
     {
         return detail::if_functional_dispatch<((DerivativeOrder > 1))>(
-            [this](auto &&x) { return reverse_mode::erf_inv(std::forward<decltype(x)>(x)); },
-            [this](auto &&x) { return BOOST_MATH_NAMESPACE::erf_inv(std::forward<decltype(x)>(x)); },
+            [](auto &&x) { return reverse_mode::erf_inv(std::forward<decltype(x)>(x)); },
+            [](auto &&x) { return BOOST_MATH_NAMESPACE::erf_inv(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv,
@@ -202,8 +202,8 @@ struct erfc_inv_expr
     inner_t evaluate() const
     {
         return detail::if_functional_dispatch<((DerivativeOrder > 1))>(
-            [this](auto &&x) { return reverse_mode::erfc_inv(std::forward<decltype(x)>(x)); },
-            [this](auto &&x) { return BOOST_MATH_NAMESPACE::erfc_inv(std::forward<decltype(x)>(x)); },
+            [](auto &&x) { return reverse_mode::erfc_inv(std::forward<decltype(x)>(x)); },
+            [](auto &&x) { return BOOST_MATH_NAMESPACE::erfc_inv(std::forward<decltype(x)>(x)); },
             this->arg.evaluate());
     }
     static const inner_t derivative(const inner_t &argv,

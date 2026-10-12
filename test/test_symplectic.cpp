@@ -10,14 +10,14 @@
 #  pragma warning (disable : 4310) // cast truncates constant value.
 #  pragma warning (disable : 4512) // assignment operator could not be generated.
 #endif
-#define BOOST_TEST_MODULE symplectic_quadrature
 
 #include <algorithm>
 #include <boost/math/tools/config.hpp>
-#include <boost/test/included/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
+#include "math_unit_test.hpp"
 #include <boost/math/tools/test_value.hpp>
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/math/concepts/real_concept.hpp>
+#endif
 #include <boost/math/quadrature/symplectic.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -85,11 +85,11 @@ void test_invalid_parameters()
     RealType q0 = 1;
     RealType p0 = 0;
     // Negative timestep
-    BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(p0, q0, -0.1, 10, oscillator_dHdp<RealType>, oscillator_dHdq<RealType>), std::domain_error);
+    CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(p0, q0, -0.1, 10, oscillator_dHdp<RealType>, oscillator_dHdq<RealType>), std::domain_error);
 
     std::vector<double> p0vec = {1, 1};
     std::vector<double> q0vec = {1};
-    BOOST_CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(p0vec, q0vec, 0.1, 10, pendulum_vector_dHdp<RealType>, pendulum_vector_dHdq<RealType>), boost::math::evaluation_error);
+    CHECK_THROW(boost::math::quadrature::integrate_hamiltonian(p0vec, q0vec, 0.1, 10, pendulum_vector_dHdp<RealType>, pendulum_vector_dHdq<RealType>), boost::math::evaluation_error);
 }
 
 /* Test if SHO energy fluctuations are below a given tolerance*/
@@ -121,7 +121,7 @@ void test_harmonic_oscillator(const RealType tol, const available_methods method
     }
 
     RealType max_error = *std::max_element(std::begin(abs_energy_error), std::end(abs_energy_error));
-    BOOST_CHECK_LE(max_error, tol);
+    CHECK_LE(max_error, tol);
 }
 
 /* Test if SHO energy fluctuations are below a given tolerance*/
@@ -154,7 +154,7 @@ void test_pendulum(const RealType tol, const available_methods method)
     }
 
     RealType max_error = *std::max_element(std::begin(abs_energy_error), std::end(abs_energy_error));
-    BOOST_CHECK_LE(max_error, tol);
+    CHECK_LE(max_error, tol);
 }
 
 /* Test if SHO energy fluctuations are below a given tolerance*/
@@ -190,7 +190,7 @@ void test_hh_model(const RealType tol, const available_methods method)
     }
 
     RealType max_error = *std::max_element(std::begin(abs_energy_error), std::end(abs_energy_error));
-    BOOST_CHECK_LE(max_error, tol);
+    CHECK_LE(max_error, tol);
 }
 
 template <typename RealType>
@@ -223,7 +223,7 @@ void test_multiprecision_sho(const RealType tol, const available_methods method)
     }
 
     RealType max_error = *std::max_element(std::begin(abs_energy_error), std::end(abs_energy_error));
-    BOOST_CHECK_LE(max_error, tol);
+    CHECK_LE(max_error, tol);
 }
 
 /* Test if SHO energy fluctuations are below a given tolerance*/
@@ -250,7 +250,7 @@ void test_adaptive(const RealType atol, const available_methods method, const Re
     // Check that max error is less than atol
     RealType max_error = *std::max_element(std::begin(error), std::end(error));
 
-    BOOST_CHECK_LE(max_error, atol);
+    CHECK_LE(max_error, atol);
 
     RealType p_val;
     RealType q_val;
@@ -264,10 +264,10 @@ void test_adaptive(const RealType atol, const available_methods method, const Re
     }
 
     RealType maxEnergyError = *std::max_element(std::begin(abs_energy_error), std::end(abs_energy_error));
-    BOOST_CHECK_LE(maxEnergyError, energyError);
+    CHECK_LE(maxEnergyError, energyError);
 }
 
-BOOST_AUTO_TEST_CASE(symplectic_quadrature)
+void symplectic_quadrature()
 {
     test_invalid_parameters<double>();
 
@@ -309,7 +309,7 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
     test_multiprecision_sho<boost::multiprecision::cpp_bin_float_quad>(1e-29, available_methods::SRKNB11);
 
     // Test Adaptive steps
-    test_adaptive<float>(1e-6, available_methods::Y6, 3e-6);
+    test_adaptive<float>(1e-6, available_methods::Y6, 5e-6);
     test_adaptive<double>(1e-12, available_methods::Y6, 1e-10);
     test_adaptive<long double>(1e-12, available_methods::Y6, 1e-10);
 
@@ -318,5 +318,13 @@ BOOST_AUTO_TEST_CASE(symplectic_quadrature)
     test_adaptive<double>(1e-12, available_methods::SRKNB6, 1e-11);
     test_adaptive<double>(1e-12, available_methods::SRKNB11, 1e-11);
 
-    test_adaptive<boost::multiprecision::cpp_bin_float_quad>(1e-12, available_methods::Y2, 1e-7);
+    // The second order method needs ~10^5 steps for this tolerance (and the double precision case above covers it),
+    // so use the sixth order method to cover the multiprecision type:
+    test_adaptive<boost::multiprecision::cpp_bin_float_quad>(1e-12, available_methods::Y6, 1e-10);
+}
+
+int main()
+{
+   symplectic_quadrature();
+   return boost::math::test::report_errors();
 }

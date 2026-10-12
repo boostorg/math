@@ -50,11 +50,16 @@ class discrete_legendre {
         return prod;
     }
 
+    // Every product that meets a sum is an explicit fma. Contraction is optional, so a compiler may fuse a
+    // plain a*b - c in one inlined copy of a step and not in another (CSE of a shared product is enough),
+    // and the recurrence then disagrees with itself. The other products feed multiplies, divides or an
+    // fma's addend, which contraction never touches, and N*N - (r-1)^2 is exact either way.
     Real next()
     {
+        using std::fma;
         Real N = 2 * m_n + 1;
         Real num = (m_r - 1) * (N * N - (m_r - 1) * (m_r - 1)) * m_qrm2;
-        Real tmp = (2 * m_r - 1) * m_x * m_qrm1 - num / Real(4 * m_n * m_n);
+        Real tmp = fma((2 * m_r - 1) * m_x, m_qrm1, -(num / Real(4 * m_n * m_n)));
         m_qrm2 = m_qrm1;
         m_qrm1 = tmp / m_r;
         ++m_r;
@@ -63,10 +68,11 @@ class discrete_legendre {
 
     Real next_prime()
     {
+        using std::fma;
         Real N = 2 * m_n + 1;
         Real s = (m_r - 1) * (N * N - (m_r - 1) * (m_r - 1)) / Real(4 * m_n * m_n);
-        Real tmp1 = ((2 * m_r - 1) * m_x * m_qrm1 - s * m_qrm2) / m_r;
-        Real tmp2 = ((2 * m_r - 1) * (m_qrm1 + m_x * m_qrm1p) - s * m_qrm2p) / m_r;
+        Real tmp1 = fma((2 * m_r - 1) * m_x, m_qrm1, -s * m_qrm2) / m_r;
+        Real tmp2 = fma(Real(2 * m_r - 1), fma(m_x, m_qrm1p, m_qrm1), -s * m_qrm2p) / m_r;
         m_qrm2 = m_qrm1;
         m_qrm1 = tmp1;
         m_qrm2p = m_qrm1p;
@@ -77,12 +83,13 @@ class discrete_legendre {
 
     Real next_dbl_prime()
     {
+        using std::fma;
         Real N = 2*m_n + 1;
         Real trm1 = 2*m_r - 1;
         Real s = (m_r - 1) * (N * N - (m_r - 1) * (m_r - 1)) / Real(4 * m_n * m_n);
-        Real rqrpp = 2*trm1*m_qrm1p + trm1*m_x*m_qrm1pp - s*m_qrm2pp;
-        Real tmp1 = ((2 * m_r - 1) * m_x * m_qrm1 - s * m_qrm2) / m_r;
-        Real tmp2 = ((2 * m_r - 1) * (m_qrm1 + m_x * m_qrm1p) - s * m_qrm2p) / m_r;
+        Real rqrpp = fma(trm1 * m_x, m_qrm1pp, fma(2 * trm1, m_qrm1p, -s * m_qrm2pp));
+        Real tmp1 = fma(trm1 * m_x, m_qrm1, -s * m_qrm2) / m_r;
+        Real tmp2 = fma(trm1, fma(m_x, m_qrm1p, m_qrm1), -s * m_qrm2p) / m_r;
         m_qrm2 = m_qrm1;
         m_qrm1 = tmp1;
         m_qrm2p = m_qrm1p;
@@ -93,53 +100,32 @@ class discrete_legendre {
         return m_qrm1pp;
     }
 
-    Real operator()(Real x, std::size_t k)
+    Real operator()(Real x, std::size_t k) const
     {
         BOOST_MATH_ASSERT_MSG(k <= 2 * m_n, "r <= 2n is required.");
         if (k == 0)
         {
             return 1;
         }
-        if (k == 1)
-        {
-            return x;
-        }
-        Real qrm2 = 1;
-        Real qrm1 = x;
-        Real N = 2 * m_n + 1;
+        discrete_legendre dlp(m_n, x);
+        Real q = x;
         for (std::size_t r = 2; r <= k; ++r) {
-            Real num = (r - 1) * (N * N - (r - 1) * (r - 1)) * qrm2;
-            Real tmp = (2 * r - 1) * x * qrm1 - num / Real(4 * m_n * m_n);
-            qrm2 = qrm1;
-            qrm1 = tmp / r;
+            q = dlp.next();
         }
-        return qrm1;
+        return q;
     }
 
-    Real prime(Real x, std::size_t k) {
+    Real prime(Real x, std::size_t k) const {
         BOOST_MATH_ASSERT_MSG(k <= 2 * m_n, "r <= 2n is required.");
         if (k == 0) {
             return 0;
         }
-        if (k == 1) {
-            return 1;
-        }
-        Real qrm2 = 1;
-        Real qrm1 = x;
-        Real qrm2p = 0;
-        Real qrm1p = 1;
-        Real N = 2 * m_n + 1;
+        discrete_legendre dlp(m_n, x);
+        Real qp = 1;
         for (std::size_t r = 2; r <= k; ++r) {
-            Real s =
-                (r - 1) * (N * N - (r - 1) * (r - 1)) / Real(4 * m_n * m_n);
-            Real tmp1 = ((2 * r - 1) * x * qrm1 - s * qrm2) / r;
-            Real tmp2 = ((2 * r - 1) * (qrm1 + x * qrm1p) - s * qrm2p) / r;
-            qrm2 = qrm1;
-            qrm1 = tmp1;
-            qrm2p = qrm1p;
-            qrm1p = tmp2;
+            qp = dlp.next_prime();
         }
-        return qrm1p;
+        return qp;
     }
 
   private:

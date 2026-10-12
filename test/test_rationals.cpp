@@ -3,11 +3,10 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/math/concepts/real_concept.hpp>
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
-#include <boost/array.hpp>
+#endif
+#include "math_unit_test.hpp"
 #include <boost/math/tools/rational.hpp>
 #include <iostream>
 
@@ -27,13 +26,13 @@ void test_spots(T t, const char* n)
    do_test_spots(t, T(0));
 }
 
-BOOST_AUTO_TEST_CASE( test_main )
+int main()
 {
    test_spots(0.0F, "float");
    test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double");
-#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+#if !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS) && !defined(BOOST_MATH_STANDALONE)
    test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 #else
@@ -42,7 +41,7 @@ BOOST_AUTO_TEST_CASE( test_main )
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::endl;
 #endif
-   
+   return boost::math::test::report_errors();
 }
 
 

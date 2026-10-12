@@ -3,7 +3,6 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_TEST_MODULE test_recurrences
 
 #include <boost/math/tools/config.hpp>
 
@@ -11,9 +10,10 @@
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/tools/recurrence.hpp>
 #include <boost/math/special_functions/bessel.hpp>
-#include <boost/test/included/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
+#include "math_unit_test.hpp"
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/math/concepts/real_concept.hpp>
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(disable:4127)
@@ -64,15 +64,15 @@ void test_spots(T, const char* name)
       T sixth = boost::math::tools::apply_recurrence_relation_forward(coef, 6, first, second, (long long*)0, &prev);
       T expected1 = boost::math::cyl_neumann(v + 6, x);
       T expected2 = boost::math::cyl_neumann(v + 5, x);
-      BOOST_CHECK_CLOSE_FRACTION(sixth, expected1, tol);
-      BOOST_CHECK_CLOSE_FRACTION(prev, expected2, tol);
+      CHECK_RELATIVE_ERROR(sixth, expected1, tol);
+      CHECK_RELATIVE_ERROR(prev, expected2, tol);
 
       boost::math::tools::forward_recurrence_iterator< bessel_jy_recurrence<T> > it(coef, first, second);
       for (unsigned i = 0; i < 15; ++i)
       {
          expected1 = boost::math::cyl_neumann(v + i, x);
          T found = *it;
-         BOOST_CHECK_CLOSE_FRACTION(found, expected1, tol);
+         CHECK_RELATIVE_ERROR(found, expected1, tol);
          ++it;
       }
 
@@ -89,14 +89,14 @@ void test_spots(T, const char* name)
          T ratio = boost::math::tools::function_ratio_from_forwards_recurrence(bessel_jy_recurrence<T>(v, x), boost::math::tools::epsilon<T>(), max_iter);
          first = boost::math::cyl_neumann(v, x);
          second = boost::math::cyl_neumann(v + 1, x);
-         BOOST_CHECK_CLOSE_FRACTION(ratio, first / second, tol);
+         CHECK_RELATIVE_ERROR(ratio, first / second, tol);
 
          boost::math::tools::forward_recurrence_iterator< bessel_jy_recurrence<T> > it2(bessel_jy_recurrence<T>(v, x), boost::math::cyl_neumann(v, x));
          for (unsigned i = 0; i < 15; ++i)
          {
             expected1 = boost::math::cyl_neumann(v + i, x);
             T found = *it2;
-            BOOST_CHECK_CLOSE_FRACTION(found, expected1, tol);
+            CHECK_RELATIVE_ERROR(found, expected1, tol);
             ++it2;
          }
       }
@@ -118,15 +118,15 @@ void test_spots(T, const char* name)
       T sixth = boost::math::tools::apply_recurrence_relation_backward(coef, 6, first, second, (long long*)0, &prev);
       T expected1 = boost::math::cyl_bessel_j(v - 6, x);
       T expected2 = boost::math::cyl_bessel_j(v - 5, x);
-      BOOST_CHECK_CLOSE_FRACTION(sixth, expected1, tol);
-      BOOST_CHECK_CLOSE_FRACTION(prev, expected2, tol);
+      CHECK_RELATIVE_ERROR(sixth, expected1, tol);
+      CHECK_RELATIVE_ERROR(prev, expected2, tol);
 
       boost::math::tools::backward_recurrence_iterator< bessel_jy_recurrence<T> > it(coef, first, second);
       for (unsigned i = 0; i < 15; ++i)
       {
          expected1 = boost::math::cyl_bessel_j(v - i, x);
          T found = *it;
-         BOOST_CHECK_CLOSE_FRACTION(found, expected1, tol);
+         CHECK_RELATIVE_ERROR(found, expected1, tol);
          ++it;
       }
 
@@ -134,7 +134,7 @@ void test_spots(T, const char* name)
       T ratio = boost::math::tools::function_ratio_from_backwards_recurrence(bessel_jy_recurrence<T>(v, x), boost::math::tools::epsilon<T>(), max_iter);
       first = boost::math::cyl_bessel_j(v, x);
       second = boost::math::cyl_bessel_j(v - 1, x);
-      BOOST_CHECK_CLOSE_FRACTION(ratio, first / second, tol);
+      CHECK_RELATIVE_ERROR(ratio, first / second, tol);
 
       boost::math::tools::backward_recurrence_iterator< bessel_jy_recurrence<T> > it2(bessel_jy_recurrence<T>(v, x), boost::math::cyl_bessel_j(v, x));
       //boost::math::tools::backward_recurrence_iterator< bessel_jy_recurrence<T> > it3(bessel_jy_recurrence<T>(v, x), boost::math::cyl_neumann(v+1, x), boost::math::cyl_neumann(v, x));
@@ -142,7 +142,7 @@ void test_spots(T, const char* name)
       {
          expected1 = boost::math::cyl_bessel_j(v - i, x);
          T found = *it2;
-         BOOST_CHECK_CLOSE_FRACTION(found, expected1, tol);
+         CHECK_RELATIVE_ERROR(found, expected1, tol);
          ++it2;
       }
 
@@ -150,7 +150,7 @@ void test_spots(T, const char* name)
 }
 
 
-BOOST_AUTO_TEST_CASE( test_main )
+void test_main()
 {
    BOOST_MATH_CONTROL_FP;
 #if !defined(TEST) || TEST == 1
@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double");
-#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+#if !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS) && !defined(BOOST_MATH_STANDALONE)
    test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 #endif
@@ -168,6 +168,12 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_spots(boost::multiprecision::cpp_bin_float_quad(), "cpp_bin_float_quad");
    #endif
 #endif
+}
+
+int main()
+{
+   test_main();
+   return boost::math::test::report_errors();
 }
 
 #else

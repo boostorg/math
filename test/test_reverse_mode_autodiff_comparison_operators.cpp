@@ -3,10 +3,10 @@
 //      (See accompanying file LICENSE_1_0.txt or copy at
 //           https://www.boost.org/LICENSE_1_0.txt)
 #include "test_autodiff_reverse.hpp"
-BOOST_AUTO_TEST_SUITE(test_comparison_operators)
 using namespace rdiff;
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(equals_rvar_and_rvar, T, all_float_types)
+template <class T>
+void equals_rvar_and_rvar()
 {
     T          a    = T(3.14);
     T          b    = T(3.14);
@@ -17,13 +17,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(equals_rvar_and_rvar, T, all_float_types)
     rvar<T, 3> var3 = rvar<T, 3>(a);
     rvar<T, 4> var4 = rvar<T, 4>(c);
 
-    BOOST_CHECK(var1 == var2);
-    BOOST_CHECK(!(var1 == var4));
-    BOOST_CHECK(var2 == var3);
-    BOOST_CHECK(!(var3 == var4));
+    CHECK_TRUE(var1 == var2);
+    CHECK_TRUE(!(var1 == var4));
+    CHECK_TRUE(var2 == var3);
+    CHECK_TRUE(!(var3 == var4));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(equals_rvar_and_scalar, T, all_float_types)
+template <class T>
+void equals_rvar_and_scalar()
 {
     T          a    = T(3.14);
     T          b    = T(3.14);
@@ -34,28 +35,29 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(equals_rvar_and_scalar, T, all_float_types)
     rvar<T, 3> var3 = rvar<T, 3>(a);
     rvar<T, 4> var4 = rvar<T, 4>(a);
 
-    BOOST_CHECK(var1 == b);
-    BOOST_CHECK(!(var1 == c));
-    BOOST_CHECK(b == var1);
-    BOOST_CHECK(!(c == var1));
+    CHECK_TRUE(var1 == b);
+    CHECK_TRUE(!(var1 == c));
+    CHECK_TRUE(b == var1);
+    CHECK_TRUE(!(c == var1));
 
-    BOOST_CHECK(var2 == b);
-    BOOST_CHECK(!(var2 == c));
-    BOOST_CHECK(b == var2);
-    BOOST_CHECK(!(c == var2));
+    CHECK_TRUE(var2 == b);
+    CHECK_TRUE(!(var2 == c));
+    CHECK_TRUE(b == var2);
+    CHECK_TRUE(!(c == var2));
 
-    BOOST_CHECK(var3 == b);
-    BOOST_CHECK(!(var3 == c));
-    BOOST_CHECK(b == var3);
-    BOOST_CHECK(!(c == var3));
+    CHECK_TRUE(var3 == b);
+    CHECK_TRUE(!(var3 == c));
+    CHECK_TRUE(b == var3);
+    CHECK_TRUE(!(c == var3));
 
-    BOOST_CHECK(var4 == b);
-    BOOST_CHECK(!(var4 == c));
-    BOOST_CHECK(b == var4);
-    BOOST_CHECK(!(c == var4));
+    CHECK_TRUE(var4 == b);
+    CHECK_TRUE(!(var4 == c));
+    CHECK_TRUE(b == var4);
+    CHECK_TRUE(!(c == var4));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(inequality_rvar_and_rvar, T, all_float_types)
+template <class T>
+void inequality_rvar_and_rvar()
 {
     T          a    = T(3.14);
     T          b    = T(3.14);
@@ -66,13 +68,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(inequality_rvar_and_rvar, T, all_float_types)
     rvar<T, 3> var3 = rvar<T, 3>(a);
     rvar<T, 4> var4 = rvar<T, 4>(c);
 
-    BOOST_CHECK(var1 != var4);
-    BOOST_CHECK(!(var1 != var2));
-    BOOST_CHECK(var2 != var4);
-    BOOST_CHECK(!(var3 != var2));
+    CHECK_TRUE(var1 != var4);
+    CHECK_TRUE(!(var1 != var2));
+    CHECK_TRUE(var2 != var4);
+    CHECK_TRUE(!(var3 != var2));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(inequality_rvar_and_scalar, T, all_float_types)
+template <class T>
+void inequality_rvar_and_scalar()
 {
     T          a    = T(3.14);
     T          b    = T(3.14);
@@ -83,28 +86,29 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(inequality_rvar_and_scalar, T, all_float_types)
     rvar<T, 3> var3 = rvar<T, 3>(a);
     rvar<T, 4> var4 = rvar<T, 4>(a);
 
-    BOOST_CHECK(var1 != c);
-    BOOST_CHECK(!(var1 != b));
-    BOOST_CHECK(c != var1);
-    BOOST_CHECK(!(b != var1));
+    CHECK_TRUE(var1 != c);
+    CHECK_TRUE(!(var1 != b));
+    CHECK_TRUE(c != var1);
+    CHECK_TRUE(!(b != var1));
 
-    BOOST_CHECK(var2 != c);
-    BOOST_CHECK(!(var2 != b));
-    BOOST_CHECK(c != var2);
-    BOOST_CHECK(!(b != var2));
+    CHECK_TRUE(var2 != c);
+    CHECK_TRUE(!(var2 != b));
+    CHECK_TRUE(c != var2);
+    CHECK_TRUE(!(b != var2));
 
-    BOOST_CHECK(var3 != c);
-    BOOST_CHECK(!(var3 != b));
-    BOOST_CHECK(c != var3);
-    BOOST_CHECK(!(b != var3));
+    CHECK_TRUE(var3 != c);
+    CHECK_TRUE(!(var3 != b));
+    CHECK_TRUE(c != var3);
+    CHECK_TRUE(!(b != var3));
 
-    BOOST_CHECK(var4 != c);
-    BOOST_CHECK(!(var4 != b));
-    BOOST_CHECK(c != var4);
-    BOOST_CHECK(!(b != var4));
+    CHECK_TRUE(var4 != c);
+    CHECK_TRUE(!(var4 != b));
+    CHECK_TRUE(c != var4);
+    CHECK_TRUE(!(b != var4));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(less_than_rvar_and_rvar, T, all_float_types)
+template <class T>
+void less_than_rvar_and_rvar()
 {
     T          a    = T(3.14);
     T          b    = T(3.14);
@@ -115,13 +119,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(less_than_rvar_and_rvar, T, all_float_types)
     rvar<T, 3> var3 = rvar<T, 3>(c);
     rvar<T, 4> var4 = rvar<T, 4>(c);
 
-    BOOST_CHECK(var3 < var1);
-    BOOST_CHECK(!(var1 < var2));
-    BOOST_CHECK(!(var1 < var3));
-    BOOST_CHECK(!(var3 < var4));
+    CHECK_TRUE(var3 < var1);
+    CHECK_TRUE(!(var1 < var2));
+    CHECK_TRUE(!(var1 < var3));
+    CHECK_TRUE(!(var3 < var4));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(greater_than_rvar_and_rvar, T, all_float_types)
+template <class T>
+void greater_than_rvar_and_rvar()
 {
     T          a    = T(3.14);
     T          b    = T(3.14);
@@ -132,12 +137,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(greater_than_rvar_and_rvar, T, all_float_types)
     rvar<T, 3> var3 = rvar<T, 3>(c);
     rvar<T, 4> var4 = rvar<T, 4>(c);
 
-    BOOST_CHECK(var1 > var3);
-    BOOST_CHECK(!(var1 > var2));
-    BOOST_CHECK(!(var3 > var1));
-    BOOST_CHECK(!(var3 > var4));
+    CHECK_TRUE(var1 > var3);
+    CHECK_TRUE(!(var1 > var2));
+    CHECK_TRUE(!(var3 > var1));
+    CHECK_TRUE(!(var3 > var4));
 }
-BOOST_AUTO_TEST_CASE_TEMPLATE(less_than_rvar_and_scalar, T, all_float_types)
+template <class T>
+void less_than_rvar_and_scalar()
 {
     T          a    = T(3.14);
     T          b    = T(3.14);
@@ -149,28 +155,29 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(less_than_rvar_and_scalar, T, all_float_types)
     rvar<T, 3> var3 = rvar<T, 3>(c);
     rvar<T, 4> var4 = rvar<T, 4>(c);
 
-    BOOST_CHECK(var3 < a);
-    BOOST_CHECK(!(var1 < b));
-    BOOST_CHECK(c < var1);
-    BOOST_CHECK(!(d < var2));
+    CHECK_TRUE(var3 < a);
+    CHECK_TRUE(!(var1 < b));
+    CHECK_TRUE(c < var1);
+    CHECK_TRUE(!(d < var2));
 
-    BOOST_CHECK(var4 < a);
-    BOOST_CHECK(!(var2 < b));
-    BOOST_CHECK(c < var2);
-    BOOST_CHECK(!(d < var1));
+    CHECK_TRUE(var4 < a);
+    CHECK_TRUE(!(var2 < b));
+    CHECK_TRUE(c < var2);
+    CHECK_TRUE(!(d < var1));
 
-    BOOST_CHECK(var3 < b);
-    BOOST_CHECK(var4 < b);
-    BOOST_CHECK(c < var1);
-    BOOST_CHECK(!(d < var3));
+    CHECK_TRUE(var3 < b);
+    CHECK_TRUE(var4 < b);
+    CHECK_TRUE(c < var1);
+    CHECK_TRUE(!(d < var3));
 
-    BOOST_CHECK(var3 < a);
-    BOOST_CHECK(!(var2 < a));
-    BOOST_CHECK(!(c < var4));
-    BOOST_CHECK(!(d < var1));
+    CHECK_TRUE(var3 < a);
+    CHECK_TRUE(!(var2 < a));
+    CHECK_TRUE(!(c < var4));
+    CHECK_TRUE(!(d < var1));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(greater_than_rvar_and_scalar, T, all_float_types)
+template <class T>
+void greater_than_rvar_and_scalar()
 {
     T          a    = T(3.14);
     T          b    = T(3.14);
@@ -181,28 +188,29 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(greater_than_rvar_and_scalar, T, all_float_types)
     rvar<T, 3> var3 = rvar<T, 3>(c);
     rvar<T, 4> var4 = rvar<T, 4>(c);
 
-    BOOST_CHECK(var1 > c);
-    BOOST_CHECK(!(var1 > b));
-    BOOST_CHECK(b > var3);
-    BOOST_CHECK(!(c > var4));
+    CHECK_TRUE(var1 > c);
+    CHECK_TRUE(!(var1 > b));
+    CHECK_TRUE(b > var3);
+    CHECK_TRUE(!(c > var4));
 
-    BOOST_CHECK(var2 > c);
-    BOOST_CHECK(!(var2 > b));
-    BOOST_CHECK(b > var4);
-    BOOST_CHECK(!(c > var3));
+    CHECK_TRUE(var2 > c);
+    CHECK_TRUE(!(var2 > b));
+    CHECK_TRUE(b > var4);
+    CHECK_TRUE(!(c > var3));
 
-    BOOST_CHECK(var1 > c);
-    BOOST_CHECK(!(var1 > b));
-    BOOST_CHECK(a > var4);
-    BOOST_CHECK(!(c > var3));
+    CHECK_TRUE(var1 > c);
+    CHECK_TRUE(!(var1 > b));
+    CHECK_TRUE(a > var4);
+    CHECK_TRUE(!(c > var3));
 
-    BOOST_CHECK(var2 > c);
-    BOOST_CHECK(!(var2 > b));
-    BOOST_CHECK(a > var4);
-    BOOST_CHECK(!(c > var3));
+    CHECK_TRUE(var2 > c);
+    CHECK_TRUE(!(var2 > b));
+    CHECK_TRUE(a > var4);
+    CHECK_TRUE(!(c > var3));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(less_than_or_equal_rvar_and_rvar, T, all_float_types)
+template <class T>
+void less_than_or_equal_rvar_and_rvar()
 {
     T          a    = T(3.14);
     T          b    = T(3.14);
@@ -213,13 +221,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(less_than_or_equal_rvar_and_rvar, T, all_float_typ
     rvar<T, 3> var3 = rvar<T, 3>(c);
     rvar<T, 4> var4 = rvar<T, 4>(c);
 
-    BOOST_CHECK(var3 <= var1);
-    BOOST_CHECK(var1 <= var2);
-    BOOST_CHECK(!(var1 <= var3));
-    BOOST_CHECK(var3 <= var4);
+    CHECK_TRUE(var3 <= var1);
+    CHECK_TRUE(var1 <= var2);
+    CHECK_TRUE(!(var1 <= var3));
+    CHECK_TRUE(var3 <= var4);
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(less_than_or_equal_rvar_and_scalar, T, all_float_types)
+template <class T>
+void less_than_or_equal_rvar_and_scalar()
 {
     T          a    = T(3.14);
     T          b    = T(3.14);
@@ -231,28 +240,29 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(less_than_or_equal_rvar_and_scalar, T, all_float_t
     rvar<T, 3> var3 = rvar<T, 3>(c);
     rvar<T, 4> var4 = rvar<T, 4>(c);
 
-    BOOST_CHECK(var3 <= a);
-    BOOST_CHECK(var1 <= b);
-    BOOST_CHECK(c <= var1);
-    BOOST_CHECK(!(d <= var2));
+    CHECK_TRUE(var3 <= a);
+    CHECK_TRUE(var1 <= b);
+    CHECK_TRUE(c <= var1);
+    CHECK_TRUE(!(d <= var2));
 
-    BOOST_CHECK(var4 <= a);
-    BOOST_CHECK(var2 <= b);
-    BOOST_CHECK(c <= var2);
-    BOOST_CHECK(!(d <= var1));
+    CHECK_TRUE(var4 <= a);
+    CHECK_TRUE(var2 <= b);
+    CHECK_TRUE(c <= var2);
+    CHECK_TRUE(!(d <= var1));
 
-    BOOST_CHECK(var3 <= b);
-    BOOST_CHECK(var4 <= b);
-    BOOST_CHECK(c <= var1);
-    BOOST_CHECK(!(d <= var3));
+    CHECK_TRUE(var3 <= b);
+    CHECK_TRUE(var4 <= b);
+    CHECK_TRUE(c <= var1);
+    CHECK_TRUE(!(d <= var3));
 
-    BOOST_CHECK(var3 <= a);
-    BOOST_CHECK(var2 <= a);
-    BOOST_CHECK(c <= var4);
-    BOOST_CHECK(!(d <= var1));
+    CHECK_TRUE(var3 <= a);
+    CHECK_TRUE(var2 <= a);
+    CHECK_TRUE(c <= var4);
+    CHECK_TRUE(!(d <= var1));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(greater_than_or_equal_rvar_and_rvar, T, all_float_types)
+template <class T>
+void greater_than_or_equal_rvar_and_rvar()
 {
     T          a    = T(3.14);
     T          b    = T(3.14);
@@ -263,13 +273,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(greater_than_or_equal_rvar_and_rvar, T, all_float_
     rvar<T, 3> var3 = rvar<T, 3>(c);
     rvar<T, 4> var4 = rvar<T, 4>(c);
 
-    BOOST_CHECK(var1 >= var3);
-    BOOST_CHECK(var1 >= var2);
-    BOOST_CHECK(!(var3 >= var1));
-    BOOST_CHECK(var3 >= var4);
+    CHECK_TRUE(var1 >= var3);
+    CHECK_TRUE(var1 >= var2);
+    CHECK_TRUE(!(var3 >= var1));
+    CHECK_TRUE(var3 >= var4);
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(greater_than_or_equal_rvar_and_scalar, T, all_float_types)
+template <class T>
+void greater_than_or_equal_rvar_and_scalar()
 {
     T          a    = T(3.14);
     T          b    = T(3.14);
@@ -280,24 +291,40 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(greater_than_or_equal_rvar_and_scalar, T, all_floa
     rvar<T, 3> var3 = rvar<T, 3>(c);
     rvar<T, 4> var4 = rvar<T, 4>(c);
 
-    BOOST_CHECK(var1 >= c);
-    BOOST_CHECK(var1 >= b);
-    BOOST_CHECK(b >= var3);
-    BOOST_CHECK(c >= var4);
+    CHECK_TRUE(var1 >= c);
+    CHECK_TRUE(var1 >= b);
+    CHECK_TRUE(b >= var3);
+    CHECK_TRUE(c >= var4);
 
-    BOOST_CHECK(var2 >= c);
-    BOOST_CHECK(var2 >= b);
-    BOOST_CHECK(b >= var4);
-    BOOST_CHECK(c >= var3);
+    CHECK_TRUE(var2 >= c);
+    CHECK_TRUE(var2 >= b);
+    CHECK_TRUE(b >= var4);
+    CHECK_TRUE(c >= var3);
 
-    BOOST_CHECK(var1 >= c);
-    BOOST_CHECK(var1 >= b);
-    BOOST_CHECK(a >= var4);
-    BOOST_CHECK(c >= var3);
+    CHECK_TRUE(var1 >= c);
+    CHECK_TRUE(var1 >= b);
+    CHECK_TRUE(a >= var4);
+    CHECK_TRUE(c >= var3);
 
-    BOOST_CHECK(var2 >= c);
-    BOOST_CHECK(var2 >= b);
-    BOOST_CHECK(a >= var4);
-    BOOST_CHECK(c >= var3);
+    CHECK_TRUE(var2 >= c);
+    CHECK_TRUE(var2 >= b);
+    CHECK_TRUE(a >= var4);
+    CHECK_TRUE(c >= var3);
 }
-BOOST_AUTO_TEST_SUITE_END()
+
+int main()
+{
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { equals_rvar_and_rvar<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { equals_rvar_and_scalar<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { inequality_rvar_and_rvar<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { inequality_rvar_and_scalar<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { less_than_rvar_and_rvar<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { greater_than_rvar_and_rvar<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { less_than_rvar_and_scalar<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { greater_than_rvar_and_scalar<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { less_than_or_equal_rvar_and_rvar<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { less_than_or_equal_rvar_and_scalar<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { greater_than_or_equal_rvar_and_rvar<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { greater_than_or_equal_rvar_and_scalar<typename decltype(t)::type>(); });
+   return boost::math::test::report_errors();
+}

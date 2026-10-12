@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <array>
 #include <complex>
+#include <functional>
 #include <tuple>
 #include <iostream>
 #include <vector>

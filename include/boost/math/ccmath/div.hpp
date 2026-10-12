@@ -8,6 +8,7 @@
 
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <cinttypes>
+#include <cstdlib>
 #include <cstdint>
 #endif
 #include <boost/math/ccmath/detail/config.hpp>

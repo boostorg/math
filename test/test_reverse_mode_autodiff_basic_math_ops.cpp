@@ -5,7 +5,6 @@
 
 #include "test_autodiff_reverse.hpp"
 #include <vector>
-BOOST_AUTO_TEST_SUITE(test_basic_math_ops)
 
 using namespace rdiff;
 template<typename T>
@@ -13,7 +12,8 @@ T test_add(T x[5])
 {
     return x[0] + x[1] + x[2] + x[3] + x[4];
 }
-BOOST_AUTO_TEST_CASE_TEMPLATE(addition, T, all_float_types)
+template <class T>
+void addition()
 {
     RandomSample<T> rng{-100, 100};
     T               x1_v               = rng.next();
@@ -26,23 +26,24 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(addition, T, all_float_types)
     rvar<T, 1>      test_rvar_p_rvar   = x1 + x2;
     rvar<T, 1>      test_rvar_p_float  = x1 + x2_v;
     rvar<T, 1>      test_float_p_rvar  = x1_v + x2;
-    BOOST_REQUIRE_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item());
-    BOOST_REQUIRE_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item());
-    BOOST_REQUIRE_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v);
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item())) { return; }
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item())) { return; }
+    if (!CHECK_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     test_rvar_p_rvar.backward();
-    BOOST_REQUIRE_EQUAL(x1.adjoint(), T(1.0));
-    BOOST_REQUIRE_EQUAL(x2.adjoint(), T(1.0));
+    if (!CHECK_EQUAL(x1.adjoint(), T(1.0))) { return; }
+    if (!CHECK_EQUAL(x2.adjoint(), T(1.0))) { return; }
 
     tape.zero_grad();
     rvar<T, 1> z = x1 + x1 + x1 + x1 + x1;
     z.backward();
-    BOOST_REQUIRE_EQUAL(x1.adjoint(), 5.0);
+    if (!CHECK_EQUAL(x1.adjoint(), T(5.0))) { return; }
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(multiplication, T, all_float_types)
+template <class T>
+void multiplication()
 {
     RandomSample<T> rng{T(-100), T(100)};
     T               x1_v               = rng.next();
@@ -56,25 +57,26 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(multiplication, T, all_float_types)
     rvar<T, 1>      test_rvar_p_float  = x1 * x2_v;
     rvar<T, 1>      test_float_p_rvar  = x1_v * x2;
 
-    BOOST_REQUIRE_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item());
-    BOOST_REQUIRE_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item());
-    BOOST_REQUIRE_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v);
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item())) { return; }
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item())) { return; }
+    if (!CHECK_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     test_rvar_p_rvar.backward();
-    BOOST_REQUIRE_EQUAL(x1.adjoint(), x2_v);
-    BOOST_REQUIRE_EQUAL(x2.adjoint(), x1_v);
+    if (!CHECK_EQUAL(x1.adjoint(), x2_v)) { return; }
+    if (!CHECK_EQUAL(x2.adjoint(), x1_v)) { return; }
 
     tape.zero_grad();
     auto       z = x1 * x1 * x1 * x1 * x1;
     rvar<T, 1> zz(z);
     zz.backward();
-    BOOST_REQUIRE_CLOSE(x1.adjoint(), T(5) * x1_v * x1_v * x1_v * x1_v, boost_close_tol<T>());
+    if (!CHECK_RELATIVE_ERROR(x1.adjoint(), T(5) * x1_v * x1_v * x1_v * x1_v, (boost_close_tol<T>()) / 100)) { return; }
     tape.clear();
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(minus, T, all_float_types)
+template <class T>
+void minus()
 {
     RandomSample<T> rng{-100, 100};
     T               x1_v               = rng.next();
@@ -88,25 +90,26 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(minus, T, all_float_types)
     rvar<T, 1>      test_rvar_p_float  = x1 - x2_v;
     rvar<T, 1>      test_float_p_rvar  = x1_v - x2;
 
-    BOOST_REQUIRE_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item());
-    BOOST_REQUIRE_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item());
-    BOOST_REQUIRE_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v);
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item())) { return; }
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item())) { return; }
+    if (!CHECK_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     test_rvar_p_rvar.backward();
-    BOOST_REQUIRE_EQUAL(x1.adjoint(), 1.0);
-    BOOST_REQUIRE_EQUAL(x2.adjoint(), -1.0);
+    if (!CHECK_EQUAL(x1.adjoint(), T(1.0))) { return; }
+    if (!CHECK_EQUAL(x2.adjoint(), T(-1.0))) { return; }
 
     tape.zero_grad();
     auto       z = -x1 - x1 - x1 - x1 - x1;
     rvar<T, 1> zz(z);
     zz.backward();
-    BOOST_REQUIRE_CLOSE(x1.adjoint(), -5, boost_close_tol<T>());
+    if (!CHECK_RELATIVE_ERROR(x1.adjoint(), -5, (boost_close_tol<T>()) / 100)) { return; }
     tape.clear();
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(division, T, all_float_types)
+template <class T>
+void division()
 {
     RandomSample<T> rng{-1, 1};
     T               x1_v               = rng.next();
@@ -120,23 +123,22 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(division, T, all_float_types)
     rvar<T, 1>      test_rvar_p_float  = x1 / x2_v;
     rvar<T, 1>      test_float_p_rvar  = x1_v / x2;
 
-    BOOST_REQUIRE_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item());
-    BOOST_REQUIRE_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item());
-    BOOST_REQUIRE_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v);
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_rvar.item())) { return; }
+    if (!CHECK_EQUAL(test_rvar_p_rvar_v, test_rvar_p_float.item())) { return; }
+    if (!CHECK_EQUAL(test_float_p_rvar.item(), test_rvar_p_rvar_v)) { return; }
 
     gradient_tape<T, 1>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
     test_rvar_p_rvar.backward();
-    BOOST_REQUIRE_CLOSE(x1.adjoint(), 1.0 / x2_v, boost_close_tol<T>());
-    BOOST_REQUIRE_CLOSE(x2.adjoint(), -x1_v / (x2_v * x2_v), boost_close_tol<T>());
+    if (!CHECK_RELATIVE_ERROR(x1.adjoint(), 1.0 / x2_v, (boost_close_tol<T>()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(x2.adjoint(), -x1_v / (x2_v * x2_v), (boost_close_tol<T>()) / 100)) { return; }
 
     tape.zero_grad();
     auto       z = 2.0 / x1 / x1 / x1 / x1 / x1;
     rvar<T, 1> zz(z);
     zz.backward();
-    BOOST_REQUIRE_CLOSE(x1.adjoint(),
-                        -10 / (x1_v * x1_v * x1_v * x1_v * x1_v * x1_v),
-                        boost_close_tol<T>());
+    if (!CHECK_RELATIVE_ERROR(x1.adjoint(),
+                        -10 / (x1_v * x1_v * x1_v * x1_v * x1_v * x1_v), (boost_close_tol<T>()) / 100)) { return; }
     tape.clear();
 }
 
@@ -275,7 +277,8 @@ std::vector<std::vector<std::vector<std::vector<T>>>> df_4_a(T x, T y)
             {{{f_yxxx, f_yxxy}, {f_yxyx, f_yxyy}}, {{f_yyxx, f_yyxy}, {f_yyyx, f_yyyy}}}};
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(first_derivative, T, all_float_types)
+template <class T>
+void first_derivative()
 {
     //RandomSample<T> rng{-1, 1};
     T x(1.1224);   //rng.next();
@@ -289,8 +292,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(first_derivative, T, all_float_types)
     auto            grad_f_analytical = grad_f_a(x, y);
     /* intended use case */
     f_ad.backward();
-    BOOST_REQUIRE_CLOSE(x_ad.adjoint(), grad_f_analytical[0], boost_close_tol<T>());
-    BOOST_REQUIRE_CLOSE(y_ad.adjoint(), grad_f_analytical[1], boost_close_tol<T>());
+    if (!CHECK_RELATIVE_ERROR(x_ad.adjoint(), grad_f_analytical[0], (boost_close_tol<T>()) / 100)) { return; }
+    if (!CHECK_RELATIVE_ERROR(y_ad.adjoint(), grad_f_analytical[1], (boost_close_tol<T>()) / 100)) { return; }
 
     gradient_tape<T, 1, BOOST_MATH_BUFFER_SIZE>& tape = get_active_tape<T, 1>();
     tape.zero_grad();
@@ -301,11 +304,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(first_derivative, T, all_float_types)
     auto grad_nd_func_test_grad = grad_nd<1>(f_ad, &x_ad, &y_ad);
 
     for (int i = 0; i < 2; i++) {
-        BOOST_REQUIRE_CLOSE(grad_func_test_grad[i], grad_f_analytical[i], boost_close_tol<T>());
-        BOOST_REQUIRE_CLOSE(grad_nd_func_test_grad[i], grad_f_analytical[i], boost_close_tol<T>());
+        if (!CHECK_RELATIVE_ERROR(grad_func_test_grad[i], grad_f_analytical[i], (boost_close_tol<T>()) / 100)) { return; }
+        if (!CHECK_RELATIVE_ERROR(grad_nd_func_test_grad[i], grad_f_analytical[i], (boost_close_tol<T>()) / 100)) { return; }
     }
 }
-BOOST_AUTO_TEST_CASE_TEMPLATE(second_derivative_and_hessian, T, all_float_types)
+template <class T>
+void second_derivative_and_hessian()
 {
     //RandomSample<T>                   rng{1, 1};
     T x = 1.0; //; rng.next();
@@ -325,13 +329,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(second_derivative_and_hessian, T, all_float_types)
 
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
-            BOOST_REQUIRE_CLOSE(hess_func_test[i][j], hess_analytical[i][j], boost_close_tol<T>());
-            BOOST_REQUIRE_CLOSE(hess_func_test[i][j], grad_nd_func_test[i][j], boost_close_tol<T>());
+            if (!CHECK_RELATIVE_ERROR(hess_func_test[i][j], hess_analytical[i][j], (boost_close_tol<T>()) / 100)) { return; }
+            if (!CHECK_RELATIVE_ERROR(hess_func_test[i][j], grad_nd_func_test[i][j], (boost_close_tol<T>()) / 100)) { return; }
         }
     }
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(order_3_der, T, all_float_types)
+template <class T>
+void order_3_der()
 {
     //RandomSample<T>                   rng{1, 2};
     T x = 1; //rng.next();
@@ -357,14 +362,15 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(order_3_der, T, all_float_types)
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
             for (int k = 0; k < 2; k++) {
-                BOOST_REQUIRE_CLOSE(grad_tensor[i][j][k], df3[i][j][k], boost_close_tol<T>());
-                BOOST_REQUIRE_CLOSE(grad_nd_func_test[i][j][k], df3[i][j][k], boost_close_tol<T>());
+                if (!CHECK_RELATIVE_ERROR(grad_tensor[i][j][k], df3[i][j][k], (boost_close_tol<T>()) / 100)) { return; }
+                if (!CHECK_RELATIVE_ERROR(grad_nd_func_test[i][j][k], df3[i][j][k], (boost_close_tol<T>()) / 100)) { return; }
             }
         }
     }
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(fourth_derivative, T, all_float_types)
+template <class T>
+void fourth_derivative()
 {
     //RandomSample<T> rng{1, 2};
     // this derivative is a bit unstable and so the tests
@@ -397,13 +403,24 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(fourth_derivative, T, all_float_types)
         for (int j = 0; j < 2; j++) {
             for (int k = 0; k < 2; k++) {
                 for (int l = 0; l < 2; l++) {
-                    BOOST_REQUIRE_CLOSE(ggggf[i][j][k][l], df4[i][j][k][l], boost_close_tol<T>());
-                    BOOST_REQUIRE_CLOSE(grad_nd_func_test[i][j][k][l],
-                                        df4[i][j][k][l],
-                                        boost_close_tol<T>());
+                    if (!CHECK_RELATIVE_ERROR(ggggf[i][j][k][l], df4[i][j][k][l], (boost_close_tol<T>()) / 100)) { return; }
+                    if (!CHECK_RELATIVE_ERROR(grad_nd_func_test[i][j][k][l],
+                                        df4[i][j][k][l], (boost_close_tol<T>()) / 100)) { return; }
                 }
             }
         }
     }
 }
-BOOST_AUTO_TEST_SUITE_END()
+
+int main()
+{
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { addition<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { multiplication<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { minus<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { division<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { first_derivative<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { second_derivative_and_hessian<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { order_3_der<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { fourth_derivative<typename decltype(t)::type>(); });
+   return boost::math::test::report_errors();
+}

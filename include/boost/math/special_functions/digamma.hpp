@@ -23,6 +23,7 @@
 
 #ifndef BOOST_MATH_HAS_NVRTC
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/bernoulli.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>

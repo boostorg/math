@@ -74,6 +74,15 @@ BOOST_MATH_NAMESPACE_BEGIN
          r.second *= mul;
          if (p_abs_error)
             *p_abs_error = static_cast<Real>(r.second) * BOOST_MATH_NAMESPACE::tools::epsilon<Real>();
+         else if ((r.first != 0) && !(r.second * BOOST_MATH_NAMESPACE::tools::epsilon<value_type>() <= BOOST_MATH_NAMESPACE::tools::root_epsilon<result_type>() * fabs(r.first)))
+         {
+            //
+            // The series calculation has lost more than half the digits of the result to cancellation,
+            // and the caller didn't ask for the error estimate so can't know about it: raise an error
+            // rather than return a value that is wrong in most of its digits.
+            //
+            return policies::raise_evaluation_error<result_type>(function, "Cancellation is so severe that fewer than half the digits in the result are correct, last result was %1%", static_cast<result_type>(r.first), pol);
+         }
          return policies::checked_narrowing_cast<result_type, Policy>(r.first, function);
       }
 

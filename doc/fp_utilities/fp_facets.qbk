@@ -453,45 +453,6 @@ and crucially, [*require `scientific` format], not `fixed` or automatic (default
   s >> input_value;
 
 
-[h4 Use with serialization archives]
-
-It is vital that the same locale is used
-when an archive is saved and when it is loaded.
-Otherwise, loading the archive may fail.
-By default, archives are saved and loaded with a classic C locale
-with a `boost::archive::codecvt_null` facet added.
-Normally you do not have to worry about that.
-
-The constructors for the archive classes, as a side-effect,
-imbue the stream with such a locale.
-However, if you want to use the
-facets `nonfinite_num_put` and `nonfinite_num_get` with archives,
-then you have to manage the locale manually.
-That is done by calling the archive constructor with the flag
-`boost::archive::no_codecvt`, thereby ensuring that the archive constructor
-will [*not imbue the stream with a new locale].
-
-The following code shows how to use `nonfinite_num_put` with a `text_oarchive`.
-
-  locale default_locale(locale::classic(), new boost::archive::codecvt_null<char>);
-  locale my_locale(default_locale, new nonfinite_num_put<char>);
-
-  ofstream ofs("test.txt");
-  ofs.imbue(my_locale);
-
-  boost::archive::text_oarchive oa(ofs, no_codecvt);
-
-  double x = numeric_limits<double>::infinity();
-  oa & x;
-
-The same method works with `nonfinite_num_get` and `text_iarchive`.
-
-If you use the `nonfinite_num_put` with `trap_infinity`
-and/or `trap_nan` flag with a serialization archive,
-then you must set the exception mask of the stream.
-Serialization archives do not check the stream state.
-
-
 [h5 Other examples]
 
 [@../../example/nonfinite_facet_simple.cpp nonfinite_facet_simple.cpp]
@@ -516,12 +477,6 @@ of various finite and nonfinite values.
 
 A simple example of trapping nonfinite output is at
 [@../../example/nonfinite_num_facet_trap.cpp nonfinite_num_facet_trap.cpp].
-
-A very basic example of using Boost.Archive is at
-[@../../example/nonfinite_serialization_archives.cpp].
-
-A full demonstration of serialization by Francois Mauger is at
-[@../../example/nonfinite_num_facet_serialization.cpp]
 
 [endsect] [/section:examples Examples]
 

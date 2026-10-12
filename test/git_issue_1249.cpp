@@ -32,7 +32,7 @@ struct test_lower
       return tgamma_lower(a, x, c_policy());
    }
 
-   T expected(T a) const
+   T expected(T /*a*/) const
    {
       return T(0.0);
    }

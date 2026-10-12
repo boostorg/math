@@ -132,8 +132,12 @@ inline bool asymptotic_bessel_derivative_large_x_limit(const T& v, const T& x)
    // using the former seems to work OK in practice with broadly similar
    // error rates either side of the divide for v < 10000.
    // At double precision eps^1/8 ~= 0.01.
+   // However, the expansions for the derivatives (A&S 9.2.30 and 9.2.31) are
+   // truncated after only three terms: for small v this leaves errors of up to
+   // 1e4 eps at x ~ 100 whereas the recurrence relations are good to a few eps,
+   // so we need x about twice as large, and to treat all v < 2 as v = 2.
    //
-   return (std::max)(T(fabs(v)), T(1)) < x * sqrt(BOOST_MATH_NAMESPACE::tools::forth_root_epsilon<T>());
+   return 2 * (std::max)(T(fabs(v)), T(2)) < x * sqrt(BOOST_MATH_NAMESPACE::tools::forth_root_epsilon<T>());
 }
 
 } BOOST_MATH_NAMESPACE_END

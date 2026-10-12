@@ -28,11 +28,7 @@
 #include <boost/version.hpp>   // for BOOST_MSVC versions.
 
 // Boost macros
-#define BOOST_TEST_MAIN
-#define BOOST_LIB_DIAGNOSTIC "on" // Report library file details.
-#include <boost/test/included/unit_test.hpp> // Boost.Test
-// #include <boost/test/unit_test.hpp> // Boost.Test
-#include <boost/test/tools/floating_point_comparison.hpp>
+#include "math_unit_test.hpp"
 
 #include <boost/array.hpp>
 #include <boost/type_traits/is_constructible.hpp>
@@ -81,10 +77,9 @@ using boost::math::lambert_w0;
 
 std::string show_versions(void);
 
-BOOST_AUTO_TEST_CASE( Derivatives_of_lambert_w )
+void Derivatives_of_lambert_w()
 {
   std::cout << "Macro BOOST_MATH_LAMBERT_W_DERIVATIVES to test 1st derivatives is defined." << std::endl;
-  BOOST_TEST_MESSAGE("\nTest Lambert W function 1st differentials.");
 
   using boost::math::constants::exp_minus_one;
   using boost::math::lambert_w0_prime;
@@ -108,22 +103,22 @@ BOOST_AUTO_TEST_CASE( Derivatives_of_lambert_w )
   // (derivative of N[productlog(-1, x), 55] ) at x = N[-0.1, 55]
 
   // W0 branch
-  BOOST_CHECK_CLOSE_FRACTION(lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, -0.2)),
+  CHECK_RELATIVE_ERROR(lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, -0.2)),
    // BOOST_MATH_TEST_VALUE(RealType, 1.7491967609218355),
     BOOST_MATH_TEST_VALUE(RealType, 1.7491967609218358355273514903396335693828167746571404),
     tolerance); //                  1.7491967609218358355273514903396335693828167746571404
 
-    BOOST_CHECK_CLOSE_FRACTION(lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, 10.)),
+    CHECK_RELATIVE_ERROR(lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, 10.)),
     BOOST_MATH_TEST_VALUE(RealType, 0.063577133469345105142021311010780887641928338458371618),
     tolerance);
 
 // W-1 branch
-  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1_prime(BOOST_MATH_TEST_VALUE(RealType, -0.1)),
+  CHECK_RELATIVE_ERROR(lambert_wm1_prime(BOOST_MATH_TEST_VALUE(RealType, -0.1)),
     BOOST_MATH_TEST_VALUE(RealType, -13.880252213229780748699361486619519025203815492277715),
     tolerance);
   // Lambert W_prime -13.880252213229780748699361486619519025203815492277715, double -13.880252213229781
 
-  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1_prime(BOOST_MATH_TEST_VALUE(RealType, -0.2)),
+  CHECK_RELATIVE_ERROR(lambert_wm1_prime(BOOST_MATH_TEST_VALUE(RealType, -0.2)),
     BOOST_MATH_TEST_VALUE(RealType, -8.2411940564179044961885598641955579728547896392013239),
     tolerance);
   // Lambert W_prime -8.2411940564179044961885598641955579728547896392013239, double -8.2411940564179051
@@ -131,4 +126,8 @@ BOOST_AUTO_TEST_CASE( Derivatives_of_lambert_w )
   // Lambert W_prime 0.063577133469345105142021311010780887641928338458371618, double 0.063577133469345098
 }; // BOOST_AUTO_TEST_CASE("Derivatives of lambert_w")
 
-
+int main()
+{
+   Derivatives_of_lambert_w();
+   return boost::math::test::report_errors();
+}

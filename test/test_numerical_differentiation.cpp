@@ -3,18 +3,15 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_TEST_MODULE numerical_differentiation_test
-
 #include <cmath>
 #include <limits>
 #include <iostream>
 #include <boost/type_index.hpp>
-#include <boost/test/included/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/bessel_prime.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/differentiation/finite_difference.hpp>
+#include "math_unit_test.hpp"
 
 #if __has_include(<stdfloat>)
 #  include <stdfloat>
@@ -78,13 +75,13 @@ void test_order(size_t points_to_test)
     //std::cout << "eps^(order/order+1) = " << pow(std::numeric_limits<Real>::epsilon(), convergence_rate) << "\n\n\n";
 
     bool max_error_good = max_error < 2*sqrt(std::numeric_limits<Real>::epsilon());
-    BOOST_TEST(max_error_good);
+    CHECK_TRUE(max_error_good);
 
     bool error_estimate_good = max_relative_error_in_error < (Real) 2;
-    BOOST_TEST(error_estimate_good);
+    CHECK_TRUE(error_estimate_good);
 
     double failure_rate = (double) failures / (double) points_to_test;
-    BOOST_CHECK_SMALL(failure_rate, 0.05);
+    CHECK_ABSOLUTE_ERROR(0, failure_rate, 0.05);
 }
 
 template<class Real>
@@ -106,7 +103,7 @@ void test_bessel()
     //std::cout << "Error             : " << abs(computed - expected) << std::endl;
     //std::cout << "a prior error est : " << error_estimate << std::endl;
 
-    BOOST_CHECK_CLOSE_FRACTION(expected, computed, 10*error_estimate);
+    CHECK_ABSOLUTE_ERROR(expected, computed, 10*error_estimate*abs(expected));
 
     computed = finite_difference_derivative<decltype(f), Real, 2>(f, x);
     expected = cyl_bessel_j_prime(12, x);
@@ -117,7 +114,7 @@ void test_bessel()
     //std::cout << "Error             : " << abs(computed - expected) << std::endl;
     //std::cout << "a prior error est : " << error_estimate << std::endl;
 
-    BOOST_CHECK_CLOSE_FRACTION(expected, computed, 50*error_estimate);
+    CHECK_ABSOLUTE_ERROR(expected, computed, 50*error_estimate*abs(expected));
 
     computed = finite_difference_derivative<decltype(f), Real, 4>(f, x);
     expected = cyl_bessel_j_prime(12, x);
@@ -128,7 +125,7 @@ void test_bessel()
     //std::cout << "Error             : " << abs(computed - expected) << std::endl;
     //std::cout << "a prior error est : " << error_estimate << std::endl;
 
-    BOOST_CHECK_CLOSE_FRACTION(expected, computed, 25*error_estimate);
+    CHECK_ABSOLUTE_ERROR(expected, computed, 25*error_estimate*abs(expected));
 
 
     computed = finite_difference_derivative<decltype(f), Real, 6>(f, x);
@@ -140,7 +137,7 @@ void test_bessel()
     //std::cout << "Error             : " << abs(computed - expected) << std::endl;
     //std::cout << "a prior error est : " << error_estimate << std::endl;
 
-    BOOST_CHECK_CLOSE_FRACTION(expected, computed, 100*error_estimate);
+    CHECK_ABSOLUTE_ERROR(expected, computed, 100*error_estimate*abs(expected));
 
     computed = finite_difference_derivative<decltype(f), Real, 8>(f, x);
     expected = cyl_bessel_j_prime(12, x);
@@ -151,7 +148,7 @@ void test_bessel()
     //std::cout << "Error             : " << abs(computed - expected) << std::endl;
     //std::cout << "a prior error est : " << error_estimate << std::endl;
 
-    BOOST_CHECK_CLOSE_FRACTION(expected, computed, 25*error_estimate);
+    CHECK_ABSOLUTE_ERROR(expected, computed, 25*error_estimate*abs(expected));
 }
 
 // Example of a function which is subject to catastrophic cancellation using finite-differences, but is almost perfectly stable using complex step:
@@ -209,18 +206,18 @@ void test_complex_step()
         if (abs(expected) <= std::numeric_limits<Real>::epsilon())
         {
             bool issmall = computed < std::numeric_limits<Real>::epsilon();
-            BOOST_TEST(issmall);
+            CHECK_TRUE(issmall);
         }
         else
         {
-            BOOST_CHECK_CLOSE_FRACTION(expected, computed, 200*std::numeric_limits<Real>::epsilon());
+            CHECK_ULP_CLOSE(expected, computed, 368);
         }
         x += 1;
     }
 }
 
 
-BOOST_AUTO_TEST_CASE(numerical_differentiation_test)
+int main()
 {
     constexpr size_t points_to_test = 1000;
     
@@ -259,4 +256,6 @@ BOOST_AUTO_TEST_CASE(numerical_differentiation_test)
     test_order<double, 6>(points_to_test);
     test_order<double, 8>(points_to_test);
     #endif
+
+    return boost::math::test::report_errors();
 }

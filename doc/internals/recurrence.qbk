@@ -25,6 +25,8 @@
 
    template <class Recurrence>
    struct backward_recurrence_iterator;
+
+   struct recurrence_offset;
          
    }}} // namespaces
 
@@ -136,6 +138,8 @@ Returns F[sub n - number_of_steps].
 
       forward_recurrence_iterator(const Recurrence& r, value_type f_n_minus_1, value_type f_n);
       forward_recurrence_iterator(const Recurrence& r, value_type f_n);
+      forward_recurrence_iterator(const Recurrence& r, value_type f_n_minus_1, value_type f_n, recurrence_offset k0);
+      forward_recurrence_iterator(const Recurrence& r, value_type f_n, recurrence_offset k0);
       /* Operators omitted for clarity */
    };
 
@@ -150,6 +154,8 @@ only one value is provided, then the second is computed by using the recurrence 
 
       backward_recurrence_iterator(const Recurrence& r, value_type f_n_plus_1, value_type f_n);
       backward_recurrence_iterator(const Recurrence& r, value_type f_n);
+      backward_recurrence_iterator(const Recurrence& r, value_type f_n_plus_1, value_type f_n, recurrence_offset k0);
+      backward_recurrence_iterator(const Recurrence& r, value_type f_n, recurrence_offset k0);
       /* Operators omitted for clarity */
    };
 
@@ -158,6 +164,18 @@ backward direction.  The constructors take the recurrence relation, plus either 
 only one value is provided, then the second is computed by using the recurrence relation to calculate the function ratio.
 
 Note that /incrementing/ this iterator moves the value returned successively to F[sub n-1], F[sub n-2] etc.
+
+   struct recurrence_offset
+   {
+      explicit recurrence_offset(int k);
+      int value;
+   };
+
+By default both iterators call the recurrence functor with 0, then 1, 2, ... (forwards) or -1, -2, ... (backwards).
+The constructors that take a `recurrence_offset(k0)` start from index /k0/ instead.  This matters when the coefficients
+depend on /v + n/ for non-integer /v/: passing the base /v/ to the functor and the integer offset to the iterator
+rounds each /v + n/ once, whereas a functor constructed from the rounded /v + k0/ puts every later order out by the
+error in that rounding.
 
 [endsect] [/section:recurrence Tools For 3-Term Recurrence Relations]
 

@@ -792,7 +792,9 @@ BOOST_MATH_EXPORT template <class R, class T, class Policy>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_overflow(std::complex<T> val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    typedef typename R::value_type r_type;
-   r_type re, im;
+   // Start from the converted value: the checks below only write to a component that fails,
+   // and reading the other one uninitialized is undefined behaviour.
+   r_type re = static_cast<r_type>(val.real()), im = static_cast<r_type>(val.imag());
    bool r = check_overflow<r_type>(val.real(), &re, function, pol);
    r = check_overflow<r_type>(val.imag(), &im, function, pol) || r;
    *result = R(re, im);
@@ -812,7 +814,9 @@ BOOST_MATH_EXPORT template <class R, class T, class Policy>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_underflow(std::complex<T> val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    typedef typename R::value_type r_type;
-   r_type re, im;
+   // Start from the converted value: the checks below only write to a component that fails,
+   // and reading the other one uninitialized is undefined behaviour.
+   r_type re = static_cast<r_type>(val.real()), im = static_cast<r_type>(val.imag());
    bool r = check_underflow<r_type>(val.real(), &re, function, pol);
    r = check_underflow<r_type>(val.imag(), &im, function, pol) || r;
    *result = R(re, im);
@@ -833,7 +837,9 @@ BOOST_MATH_EXPORT template <class R, class T, class Policy>
 BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE bool check_denorm(std::complex<T> val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    typedef typename R::value_type r_type;
-   r_type re, im;
+   // Start from the converted value: the checks below only write to a component that fails,
+   // and reading the other one uninitialized is undefined behaviour.
+   r_type re = static_cast<r_type>(val.real()), im = static_cast<r_type>(val.imag());
    bool r = check_denorm<r_type>(val.real(), &re, function, pol);
    r = check_denorm<r_type>(val.imag(), &im, function, pol) || r;
    *result = R(re, im);
