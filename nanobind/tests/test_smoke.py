@@ -276,12 +276,35 @@ def test_array_matches_scalar(case):
 
 # Not elementwise, so tested on their own below.
 SIEVE = {"prime_sieve", "prime_range", "prime_count"}
+QUADRATURE = {"tanh_sinh", "exp_sinh", "sinh_sinh", "trapezoidal", "gauss", "gauss_kronrod", "gauss_hermite",
+              "ooura_fourier_sin", "ooura_fourier_cos", "van_den_bos_unit_square"}
 
 
 def test_every_function_has_a_case():
     names = {n for n in bm.__all__ if not inspect.isclass(getattr(bm, n))}
-    covered = {c[0] for c in CASES} | SIEVE
+    covered = {c[0] for c in CASES} | SIEVE | QUADRATURE
     assert names - covered == set()
+
+
+def test_quadrature():
+    cases = [
+        (bm.tanh_sinh(lambda x: 1 / math.sqrt(x), 0, 1), 2.0),
+        (bm.exp_sinh(lambda x: math.exp(-x)), 1.0),
+        (bm.sinh_sinh(lambda x: math.exp(-x * x)), math.sqrt(math.pi)),
+        (bm.trapezoidal(lambda x: 1 / (5 - 4 * math.cos(x)), 0, 2 * math.pi), 2 * math.pi / 3),
+        (bm.gauss(lambda x: x * x, 0, 1, points=7), 1 / 3),
+        (bm.gauss_kronrod(math.sin, 0, math.pi, points=61), 2.0),
+        (bm.gauss_hermite(lambda x: x * x), math.sqrt(math.pi) / 2),
+        (bm.ooura_fourier_sin(lambda t: 1 / t, 1.0), math.pi / 2),
+        (bm.ooura_fourier_cos(lambda t: 1 / (1 + t * t), 1.0), math.pi / (2 * math.e)),
+        (bm.van_den_bos_unit_square(lambda x, y: x * y), 0.25),
+    ]
+    for result, exact in cases:
+        assert math.isclose(result[0], exact, rel_tol=1e-12)
+    with pytest.raises(ValueError):
+        bm.gauss(math.sin, 0, 1, points=8)
+    with pytest.raises(ZeroDivisionError):
+        bm.tanh_sinh(lambda x: 1 / 0, 0, 1)
 
 
 def test_sieve():
