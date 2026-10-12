@@ -54,6 +54,8 @@ endif()
 
 set(pkg_dir "${CMAKE_CURRENT_BINARY_DIR}/boost/math")
 set_target_properties(_ext PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${pkg_dir}")
-add_custom_command(TARGET _ext POST_BUILD
+# The pure-Python files, copied on every build so that edits to them need no relink:
+add_custom_target(boost_math_py ALL
+  COMMAND "${CMAKE_COMMAND}" -E make_directory "${pkg_dir}"
   COMMAND "${CMAKE_COMMAND}" -E copy_if_different
-          "${CMAKE_CURRENT_SOURCE_DIR}/boost/math/__init__.py" "${pkg_dir}/__init__.py")
+          "${CMAKE_CURRENT_SOURCE_DIR}/boost/math/__init__.py" "${CMAKE_CURRENT_SOURCE_DIR}/boost/math/ulps.py" "${pkg_dir}")

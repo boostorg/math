@@ -1874,6 +1874,31 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_imp(T a, T x, const Policy& pol)
    return log(gamma_q(a, x, pol));
 }
 
+//
+// log(x^a e^-x / tgamma(a)), the log of regularised_gamma_prefix, for a >= 1. With agh = a + g - 1/2
+// and d = (x - agh) / agh, a log(x) - x - lgamma(a) is exactly
+//    a log1pmx(d) + x (1/2 - g) / agh + log(agh / e) / 2 - log(lanczos_sum_expG_scaled(a)),
+// which has none of the cancellation of the direct form when a and x are large.
+//
+template <class T, class Policy, class Lanczos>
+BOOST_MATH_GPU_ENABLED T log_regularised_gamma_prefix(T a, T x, const Policy& pol, const Lanczos&)
+{
+   BOOST_MATH_STD_USING
+   if(a < 1)
+      return a * log(x) - x - BOOST_MATH_NAMESPACE::lgamma(a, pol);
+   T agh = a + static_cast<T>(Lanczos::g()) - T(0.5);
+   T d = ((x - a) - static_cast<T>(Lanczos::g()) + T(0.5)) / agh;
+   return a * BOOST_MATH_NAMESPACE::log1pmx(d, pol) + x * static_cast<T>(0.5 - Lanczos::g()) / agh
+      + (log(agh) - 1) / 2 - log(Lanczos::lanczos_sum_expG_scaled(a));
+}
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED T log_regularised_gamma_prefix(T a, T x, const Policy& pol, const lanczos::undefined_lanczos&)
+{
+   BOOST_MATH_STD_USING
+   return a * log(x) - x - BOOST_MATH_NAMESPACE::lgamma(a, pol);
+}
+
 // Calculate log of incomplete gamma function
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol)
@@ -1910,7 +1935,21 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol
       need_p = true;
 
    if (need_p)
-      return log(gamma_p(a, x, pol));
+   {
+      // Method 2 in logs, P = prefix * series / a. It works where P underflows (#1564), and for
+      // large a it is more accurate than log(P), since log P is far better conditioned than P
+      // there. For smaller a, or without a Lanczos approximation for the prefix, log(P) is the
+      // more accurate of the two.
+      typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
+      constexpr bool accurate_log_prefix = !BOOST_MATH_NAMESPACE::is_same<lanczos_type, lanczos::undefined_lanczos>::value;
+      if(accurate_log_prefix && (x < a) && (a > 1000))
+         return log_regularised_gamma_prefix(a, x, pol, lanczos_type()) + log(detail::lower_gamma_series(a, x, pol) / a);
+      typedef typename policies::normalise<Policy, policies::underflow_error<policies::ignore_error> >::type quiet_policy;
+      T p = gamma_p(a, x, quiet_policy());
+      if(p >= tools::min_value<T>())
+         return log(p);
+      return log_regularised_gamma_prefix(a, x, pol, lanczos_type()) + log(detail::lower_gamma_series(a, x, pol) / a);
+   }
    return log1p(-gamma_q(a, x, pol), pol);
 }
 

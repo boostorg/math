@@ -316,6 +316,18 @@ void test_spots(T, const char* name = nullptr)
    // Check large a, x values. Precision just isn't great here. 
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(1450.25), static_cast<T>(1500.75)), static_cast<T>(-0.09812447528127799786140178403478691390753413399549580160096975713L), tolerance * (std::is_same<T, boost::math::concepts::real_concept>::value ? 16 : 1));
    BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(2000), static_cast<T>(1900)), static_cast<T>(-4.448523733381445722945397105917814000790587922314824687065050805L), tolerance * gcc_win_mul * (std::is_same<T, boost::math::concepts::real_concept>::value ? 8 : 1));
+   // log P is finite where P underflows (#1564), and for large a it is computed in logs. Without a
+   // Lanczos approximation the prefix is a log(x) - x - lgamma(a), which cancels ~100-fold here:
+   {
+      T log_tolerance = tolerance * (std::is_same<typename boost::math::lanczos::lanczos<T, boost::math::policies::policy<> >::type, boost::math::lanczos::undefined_lanczos>::value ? 200 : 4);
+      BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(1000000), static_cast<T>(500000)), static_cast<T>(-193154.3141086602556152285324604561949543258601759776033022052943L), log_tolerance);
+      BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(10000), static_cast<T>(5000)), static_cast<T>(-1936.302975331597581776736325409680160786732605632025420667837257L), log_tolerance);
+      if (!std::is_same<typename boost::math::lanczos::lanczos<T, boost::math::policies::policy<> >::type, boost::math::lanczos::undefined_lanczos>::value)
+      {
+         BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(100000), static_cast<T>(90000)), static_cast<T>(-540.4252806833238788932453223532282504424226780607045633973466037L), log_tolerance);
+         BOOST_CHECK_CLOSE(::boost::math::lgamma_p(static_cast<T>(1000000), static_cast<T>(990000)), static_cast<T>(-53.56704246543242809844092012858294405874181248142883790959132019L), log_tolerance);
+      }
+   }
    // Without a Lanczos approximation, the prefix x^a e^-x / tgamma(a) near x = a was once ~1e4 eps out. Arb:
    if (std::is_same<typename boost::math::lanczos::lanczos<T, boost::math::policies::policy<> >::type, boost::math::lanczos::undefined_lanczos>::value)
    {
