@@ -255,6 +255,46 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<inverse_chi_
 } // cdf(complemented
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType logcdf(const inverse_chi_squared_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   BOOST_MATH_STD_USING
+   constexpr auto function = "boost::math::logcdf(const inverse_chi_squared_distribution<%1%>&, %1%)";
+   RealType df = dist.degrees_of_freedom();
+   RealType scale = dist.scale();
+   RealType error_result;
+   if(false == detail::check_inverse_chi_squared(function, df, scale, &error_result, Policy()))
+      return error_result;
+   if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
+   {
+      return policies::raise_domain_error<RealType>(
+         function, "inverse Chi Square parameter was %1%, but must be >= 0 !", x, Policy());
+   }
+   if (x == 0)
+      return log(RealType(0));
+   return BOOST_MATH_NAMESPACE::lgamma_q(df / 2, (df * (scale / 2)) / x, Policy());
+}
+
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<inverse_chi_squared_distribution<RealType, Policy>, RealType>& c)
+{
+   RealType const& df = c.dist.degrees_of_freedom();
+   RealType const& scale = c.dist.scale();
+   RealType const& x = c.param;
+   constexpr auto function = "boost::math::logcdf(const inverse_chi_squared_distribution<%1%>&, %1%)";
+   RealType error_result;
+   if(false == detail::check_df(function, df, &error_result, Policy()))
+      return error_result;
+   if (x == 0)
+      return 0;
+   if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
+   {
+      return policies::raise_domain_error<RealType>(
+         function, "inverse Chi Square parameter was %1%, but must be > 0 !", x, Policy());
+   }
+   return BOOST_MATH_NAMESPACE::lgamma_p(df / 2, (df * scale / 2) / x, Policy());
+}
+
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<inverse_chi_squared_distribution<RealType, Policy>, RealType>& c)
 {
    using BOOST_MATH_NAMESPACE::gamma_q_inv;

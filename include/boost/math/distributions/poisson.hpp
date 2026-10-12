@@ -432,6 +432,51 @@ BOOST_MATH_NAMESPACE_BEGIN
     } // poisson ccdf
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
+    BOOST_MATH_GPU_ENABLED inline RealType logcdf(const poisson_distribution<RealType, Policy>& dist, const RealType& k)
+    {
+      BOOST_MATH_STD_USING
+      RealType mean = dist.mean();
+      RealType result = 0;
+      if(false == poisson_detail::check_dist_and_k(
+        "boost::math::logcdf(const poisson_distribution<%1%>&, %1%)", mean, k, &result, Policy()))
+      {
+        return result;
+      }
+      if (mean == 0)
+      {
+        return log(RealType(0));
+      }
+      if (k == 0)
+      {
+        return -mean;
+      }
+      return BOOST_MATH_NAMESPACE::lgamma_q(k + 1, mean, Policy());
+    }
+
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
+    BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<poisson_distribution<RealType, Policy>, RealType>& c)
+    {
+      BOOST_MATH_STD_USING
+      RealType const& k = c.param;
+      RealType mean = c.dist.mean();
+      RealType result = 0;
+      if(false == poisson_detail::check_dist_and_k(
+        "boost::math::logcdf(const poisson_distribution<%1%>&, %1%)", mean, k, &result, Policy()))
+      {
+        return result;
+      }
+      if (mean == 0)
+      {
+        return 0;
+      }
+      if (k == 0)
+      {
+        return log(-BOOST_MATH_NAMESPACE::expm1(-mean, Policy()));
+      }
+      return BOOST_MATH_NAMESPACE::lgamma_p(k + 1, mean, Policy());
+    }
+
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const poisson_distribution<RealType, Policy>& dist, const RealType& p)
     { // Quantile (or Percent Point) Poisson function.
       // Return the number of expected events k for a given probability p.

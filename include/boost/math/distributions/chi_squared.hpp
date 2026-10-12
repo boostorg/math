@@ -198,6 +198,39 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<chi_squared_
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType logcdf(const chi_squared_distribution<RealType, Policy>& dist, const RealType& chi_square)
+{
+   RealType degrees_of_freedom = dist.degrees_of_freedom();
+   RealType error_result;
+   constexpr auto function = "boost::math::logcdf(const chi_squared_distribution<%1%>&, %1%)";
+   if(!detail::check_df(function, degrees_of_freedom, &error_result, Policy()))
+      return error_result;
+   if((chi_square < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(chi_square))
+   {
+      return policies::raise_domain_error<RealType>(
+         function, "Chi Square parameter was %1%, but must be > 0 !", chi_square, Policy());
+   }
+   return BOOST_MATH_NAMESPACE::lgamma_p(degrees_of_freedom / 2, chi_square / 2, Policy());
+}
+
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<chi_squared_distribution<RealType, Policy>, RealType>& c)
+{
+   RealType const& degrees_of_freedom = c.dist.degrees_of_freedom();
+   RealType const& chi_square = c.param;
+   constexpr auto function = "boost::math::logcdf(const chi_squared_distribution<%1%>&, %1%)";
+   RealType error_result;
+   if(!detail::check_df(function, degrees_of_freedom, &error_result, Policy()))
+      return error_result;
+   if((chi_square < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(chi_square))
+   {
+      return policies::raise_domain_error<RealType>(
+         function, "Chi Square parameter was %1%, but must be > 0 !", chi_square, Policy());
+   }
+   return BOOST_MATH_NAMESPACE::lgamma_q(degrees_of_freedom / 2, chi_square / 2, Policy());
+}
+
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<chi_squared_distribution<RealType, Policy>, RealType>& c)
 {
    RealType const& degrees_of_freedom = c.dist.degrees_of_freedom();
