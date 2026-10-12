@@ -297,6 +297,10 @@ void test_spots(RealType)
     BOOST_CHECK_EQUAL(mean(arcsine_01), 0.5); // 1 / (1 + 1) = 1/2 exactly.
     BOOST_CHECK_EQUAL(median(arcsine_01), 0.5); // 1 / (1 + 1) = 1/2 exactly.
     BOOST_CHECK_EQUAL(variance(arcsine_01), 0.125); // 1/8 = 0.125
+    // entropy = log(pi (x_max - x_min) / 4), as for beta(1/2, 1/2) scaled to [x_min, x_max]:
+    BOOST_CHECK_CLOSE_FRACTION(entropy(arcsine_01), static_cast<RealType>(-0.24156447527049044469103689156329442450L), tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(entropy(arcsine_distribution<RealType>(-1, 1)), static_cast<RealType>(0.45158270528945486472619522989488214357L), tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(entropy(arcsine_distribution<RealType>(2, 1002)), static_cast<RealType>(6.6661908037116466073629374724897981983L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(standard_deviation(arcsine_01), one_div_root_two<double>() / 2, tolerance); // 1/ sqrt(s) = 0.35355339059327379
     BOOST_CHECK_EQUAL(skewness(arcsine_01), 0); //
     BOOST_CHECK_EQUAL(kurtosis_excess(arcsine_01), -1.5); // -3/2

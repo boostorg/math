@@ -430,6 +430,27 @@ BOOST_MATH_NAMESPACE_BEGIN
     } // kurtosis_excess
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
+    BOOST_MATH_GPU_ENABLED inline RealType entropy(const arcsine_distribution<RealType, Policy>& dist)
+    {
+      BOOST_MATH_STD_USING
+      RealType result;
+      RealType x_min = dist.x_min();
+      RealType x_max = dist.x_max();
+
+      if (!arcsine_detail::check_dist(
+        "boost::math::entropy(arcsine_distribution<%1%> const&, %1% )",
+        x_min,
+        x_max,
+        &result, Policy())
+        )
+      {
+        return result;
+      }
+      // A beta(1/2, 1/2) distribution scaled to [x_min, x_max]: log(pi (x_max - x_min) / 4).
+      return log(x_max - x_min) + log(constants::pi<RealType>() / 4);
+    } // entropy
+
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const arcsine_distribution<RealType, Policy>& dist)
     {
       RealType result;
