@@ -24,6 +24,7 @@ void bind_distributions_discrete(nb::module_& m);
 void bind_distributions_noncentral(nb::module_& m);
 void bind_fft(nb::module_& m);
 void bind_quadrature(nb::module_& m);
+void bind_optimization(nb::module_& m);
 void bind_polynomial_roots(nb::module_& m);
 
 }  // namespace bmpy

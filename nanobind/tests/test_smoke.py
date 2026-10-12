@@ -278,12 +278,31 @@ def test_array_matches_scalar(case):
 SIEVE = {"prime_sieve", "prime_range", "prime_count", "polynomial_roots", "polynomial_roots_aberth", "polynomial_roots_companion_matrix"}
 QUADRATURE = {"tanh_sinh", "exp_sinh", "sinh_sinh", "trapezoidal", "gauss", "gauss_kronrod", "gauss_hermite",
               "ooura_fourier_sin", "ooura_fourier_cos", "van_den_bos_unit_square"}
+OPTIMIZATION = {"differential_evolution", "jso", "random_search", "cma_es"}
 
 
 def test_every_function_has_a_case():
     names = {n for n in bm.__all__ if not inspect.isclass(getattr(bm, n))}
-    covered = {c[0] for c in CASES} | SIEVE | QUADRATURE
+    covered = {c[0] for c in CASES} | SIEVE | QUADRATURE | OPTIMIZATION
     assert names - covered == set()
+
+
+def test_optimization():
+    def f(x):
+        return (x[0] - 1) ** 2 + (x[1] + 2) ** 2
+    lo, hi = [-5.0, -5.0], [5.0, 5.0]
+    runs = [bm.differential_evolution(f, lo, hi, population=50, max_generations=200, threads=4), bm.jso(f, lo, hi),
+            bm.random_search(f, lo, hi, max_function_calls=20000)]
+    if hasattr(bm, "cma_es"):  # Only where Eigen was found.
+        runs.append(bm.cma_es(f, lo, hi, max_generations=200))
+    for x in runs:
+        assert f(x) < 1e-2
+    def bad(x):
+        raise RuntimeError("boom")
+    with pytest.raises(RuntimeError):
+        bm.differential_evolution(bad, lo, hi, threads=4)
+    with pytest.raises(ValueError):
+        bm.jso(f, [0.0], [1.0, 2.0])
 
 
 def test_quadrature():

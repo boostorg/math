@@ -44,12 +44,18 @@ set(BOOST_MATH_NB_SOURCES
   src/distributions_noncentral.cpp
   src/fft.cpp
   src/quadrature.cpp
+  src/optimization.cpp
   src/polynomial_roots.cpp
 )
 
 nanobind_add_module(_ext NOMINSIZE ${BOOST_MATH_NB_SOURCES})
 target_include_directories(_ext PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../include" "${CMAKE_CURRENT_SOURCE_DIR}/src")
 target_compile_definitions(_ext PRIVATE BOOST_MATH_STANDALONE)
+# Optional: cma_es needs Eigen.
+find_package(Eigen3 CONFIG QUIET)
+if(Eigen3_FOUND)
+  target_link_libraries(_ext PRIVATE Eigen3::Eigen)
+endif()
 if(NOT MSVC)
   # Match CI and test/Makefile: contraction allowed everywhere.
   target_compile_options(_ext PRIVATE -ffp-contract=fast)
