@@ -1069,6 +1069,7 @@ test-suite misc :
    [ run test_cubic_roots.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_quartic_roots.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_fft.cpp : : : $(float128_type) ]
+   [ run test_polynomial_roots.cpp : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_range_based_for ] ]
    [ run test_t_test.cpp : : : $(float128_type) [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ]  ]
    [ run test_z_test.cpp : : : $(float128_type) [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ]  ]
    [ run test_bivariate_statistics.cpp

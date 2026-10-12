@@ -15,7 +15,7 @@
 
 void compile_and_link_test()
 {
-    auto f = [](double x) { return x; };
-    boost::math::chebyshev_transform<double> test(f, 0.0, 1.0);
+    auto func = [](double x) { return x; };
+    boost::math::chebyshev_transform<double> test(func, 0.0, 1.0);
     check_result<double>(test(1.0));
 }

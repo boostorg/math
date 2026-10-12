@@ -7,6 +7,7 @@
 #define BOOST_MATH_TOOLS_FFT_HPP
 
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/detail/complex_from_real.hpp>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/special_functions/cos_pi.hpp>
@@ -29,7 +30,7 @@ namespace fft_detail {
 // The real type of a complex type: std::complex<T> gives T, and a Boost.Multiprecision complex
 // number gives its component type. Both have a real() member returning it.
 template <class Complex>
-using real_type_t = typename std::decay<decltype(std::declval<Complex const&>().real())>::type;
+using real_type_t = BOOST_MATH_NAMESPACE::tools::detail::real_from_complex_t<Complex>;
 
 template <class Complex>
 inline Complex conj(Complex const& z)
