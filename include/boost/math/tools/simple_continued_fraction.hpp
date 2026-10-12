@@ -91,10 +91,10 @@ public:
        }
        b_.shrink_to_fit();
        
-       for (size_t i = 1; i < b_.size(); ++i) {
-         if (b_[i] <= 0) {
+       for (size_t k = 1; k < b_.size(); ++k) {
+         if (b_[k] <= 0) {
             std::ostringstream oss;
-            oss << "Found a negative partial denominator: b[" << i << "] = " << b_[i] << "."
+            oss << "Found a negative partial denominator: b[" << k << "] = " << b_[k] << "."
                 #ifndef BOOST_MATH_STANDALONE
                 << " This means the integer type '" << boost::core::demangle(typeid(Z).name())
                 #else

@@ -15,8 +15,8 @@
 
 void compile_and_link_test()
 {
-    auto f = [](std::vector<double> const & v) { return v[0]*v[0]; };
+    auto func = [](std::vector<double> const & v) { return v[0]*v[0]; };
     boost::math::optimization::differential_evolution_parameters<std::vector<double>> params;
     std::mt19937_64 gen(12345);
-    auto v = boost::math::optimization::differential_evolution(f, params, gen);
+    auto v = boost::math::optimization::differential_evolution(func, params, gen);
 }

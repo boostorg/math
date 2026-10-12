@@ -554,6 +554,25 @@ void test_spots(RealType)
    check_out_of_range<fisher_f_distribution<RealType> >(2, 3);
 } // template <class RealType>void test_spots(RealType)
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 50 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](RealType a, RealType b, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(entropy(fisher_f_distribution<RealType>(a, b)), h, tol);
+   };
+   check(static_cast<RealType>(1.0L), static_cast<RealType>(1.0L), static_cast<RealType>(2.53102424696929079297789159426941184779829508L));
+   check(static_cast<RealType>(3.0L), static_cast<RealType>(7.0L), static_cast<RealType>(1.29757386701720675737265722214109674705565741L));
+   check(static_cast<RealType>(0.5L), static_cast<RealType>(20.0L), static_cast<RealType>(-0.182688737809773478849227322294024324235751138L));
+   check(static_cast<RealType>(40.0L), static_cast<RealType>(3.0L), static_cast<RealType>(1.70499110991526789424530604877101535949383958L));
+   check(static_cast<RealType>(300.0L), static_cast<RealType>(700.0L), static_cast<RealType>(-0.908695462402952220696390581813149677008313271L));
+   check(static_cast<RealType>(100000000.0L), static_cast<RealType>(100000000.0L), static_cast<RealType>(-7.09825465321156468487440412754032928913414501L));
+   check(static_cast<RealType>(100000000.0L), static_cast<RealType>(2.0L), static_cast<RealType>(2.15443132980306565454635751349814086208431867L));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
 
@@ -566,11 +585,15 @@ BOOST_AUTO_TEST_CASE( test_main )
 
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float.
+  test_entropy(0.0F);
   test_spots(0.0); // Test double.
+  test_entropy(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
+  test_entropy(0.0L);
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  test_entropy(boost::math::concepts::real_concept(0.));
 #endif
 #endif
   

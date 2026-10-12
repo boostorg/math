@@ -18,6 +18,10 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp>
 
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/distributions/detail/entropy.hpp>
+#endif
+
 BOOST_MATH_NAMESPACE_BEGIN
    namespace detail{
       template <class RealType, class Policy>
@@ -594,6 +598,55 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const fisher_f_distributi
    RealType d = df1 * (df2 - 6) * (df2 - 8) * (df1 + df2 - 2);
    return n / d;
 }
+
+#ifndef BOOST_MATH_HAS_NVRTC
+// Not GPU enabled: the Stirling series use Bernoulli numbers.
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+inline RealType entropy(const fisher_f_distribution<RealType, Policy>& dist)
+{
+   BOOST_MATH_STD_USING
+   // With a = df1/2, b = df2/2 and s = a + b,
+   //   H = log(b/a) + lgamma(a) + lgamma(b) - lgamma(s) - (a - 1) digamma(a) - (b + 1) digamma(b) + s digamma(s).
+   // Its terms are ~s log(s) while H ~ -log(s)/2, so every parameter at or above the threshold has
+   // lgamma and digamma replaced by their Stirling forms, with the logs combined exactly
+   // (r and nu as in detail::entropy_stirling_series).
+   RealType a = dist.degrees_of_freedom1() / 2;
+   RealType b = dist.degrees_of_freedom2() / 2;
+   RealType s = a + b;
+   const RealType threshold = detail::entropy_series_threshold<RealType, Policy>();
+   RealType r_s, nu_s;
+   if (s >= threshold)
+      detail::entropy_stirling_series(s, r_s, nu_s, Policy());
+   if ((a >= threshold) && (b >= threshold))
+   {
+      RealType r_a, nu_a, r_b, nu_b;
+      detail::entropy_stirling_series(a, r_a, nu_a, Policy());
+      detail::entropy_stirling_series(b, r_b, nu_b, Policy());
+      return constants::log_root_two_pi<RealType>() + constants::half<RealType>() + log(1 / a + 1 / b) / 2
+         - 1 / (2 * a) + 1 / (2 * b) + r_a + r_b - r_s + 2 * nu_b - nu_s;
+   }
+   if (b >= threshold)
+   {
+      RealType r_b, nu_b;
+      detail::entropy_stirling_series(b, r_b, nu_b, Policy());
+      return BOOST_MATH_NAMESPACE::log1p(a / b, Policy()) / 2 + a + 1 / (2 * b) + r_b + 2 * nu_b - r_s - nu_s
+         - log(a) + BOOST_MATH_NAMESPACE::lgamma(a, Policy()) - (a - 1) * BOOST_MATH_NAMESPACE::digamma(a, Policy());
+   }
+   if (a >= threshold)
+   {
+      RealType r_a, nu_a;
+      detail::entropy_stirling_series(a, r_a, nu_a, Policy());
+      return BOOST_MATH_NAMESPACE::log1p(b / a, Policy()) / 2 + b - 1 / (2 * a) + r_a - r_s - nu_s
+         + log(b) + BOOST_MATH_NAMESPACE::lgamma(b, Policy()) - (b + 1) * BOOST_MATH_NAMESPACE::digamma(b, Policy());
+   }
+   // Both small: -lgamma(s) + s digamma(s) = log(s)/2 + s - log(2 pi e)/2 - r(s) - nu(s) for large s.
+   RealType s_part = (s >= threshold)
+      ? RealType(log(s) / 2 + s - constants::log_root_two_pi<RealType>() - constants::half<RealType>() - r_s - nu_s)
+      : RealType(s * BOOST_MATH_NAMESPACE::digamma(s, Policy()) - BOOST_MATH_NAMESPACE::lgamma(s, Policy()));
+   return log(b / a) + BOOST_MATH_NAMESPACE::lgamma(a, Policy()) - (a - 1) * BOOST_MATH_NAMESPACE::digamma(a, Policy())
+      + BOOST_MATH_NAMESPACE::lgamma(b, Policy()) - (b + 1) * BOOST_MATH_NAMESPACE::digamma(b, Policy()) + s_part;
+}
+#endif
 
 BOOST_MATH_NAMESPACE_END
 

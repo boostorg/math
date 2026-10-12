@@ -204,23 +204,42 @@ void test_high_precision()
     BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(dist), RealType("0.8816189679105236704015538304328295408355055629289034536289160037385510119639244078254098968815665536"), tol);
 }
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](RealType a, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::entropy(boost::math::kolmogorov_smirnov_distribution<RealType>(a)), h, tol);
+   };
+   check(static_cast<RealType>(1.0L), static_cast<RealType>(0.000890322654402673706663823838286072983848397531L));
+   check(static_cast<RealType>(10.0L), static_cast<RealType>(-1.15040222384262016830233190350389603081670235L));
+   check(static_cast<RealType>(1000.0L), static_cast<RealType>(-3.45298731683666585232032335818826023841780384L));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
   BOOST_MATH_CONTROL_FP;
 
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float.
+  test_entropy(0.0F);
   test_spots(0.0); // Test double.
+  test_entropy(0.0);
   test_quantile_extremes(0.0F);
   test_quantile_extremes(0.0);
   test_reference_values(0.0F);
   test_reference_values(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
+  test_entropy(0.0L);
   test_quantile_extremes(0.0L);
   test_reference_values(0.0L);
 #if !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  test_entropy(boost::math::concepts::real_concept(0.));
   test_quantile_extremes(boost::math::concepts::real_concept(0.));
   test_reference_values(boost::math::concepts::real_concept(0.));
 #endif

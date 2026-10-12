@@ -15,7 +15,7 @@
 
 void compile_and_link_test()
 {
-    auto f = [](double x) { return x; };
-    boost::math::tools::ulps_plot<decltype(f), double, float> test(f, 1.0f, 2.0f);
+    auto func = [](double x) { return x; };
+    boost::math::tools::ulps_plot<decltype(func), double, float> test(func, 1.0f, 2.0f);
     auto dummy = test.width(1);
 }

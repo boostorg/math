@@ -16,10 +16,10 @@
 
 void compile_and_link_test()
 {
-    auto f = [](double x) { return x; };
+    auto func = [](double x) { return x; };
     boost::math::quadrature::ooura_fourier_sin<double> sin_integrator;
     boost::math::quadrature::ooura_fourier_cos<double> cos_integrator;
-    check_result<std::pair<double, double>>(sin_integrator.integrate(f, 1.0));
-    check_result<std::pair<double, double>>(cos_integrator.integrate(f, 1.0));
+    check_result<std::pair<double, double>>(sin_integrator.integrate(func, 1.0));
+    check_result<std::pair<double, double>>(cos_integrator.integrate(func, 1.0));
 }
 #endif

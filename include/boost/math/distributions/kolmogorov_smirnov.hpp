@@ -785,5 +785,16 @@ inline RealType kurtosis(const kolmogorov_smirnov_distribution<RealType, Policy>
 {
     return kurtosis_excess(dist) + 3;
 }
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+inline RealType entropy(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
+{
+   BOOST_MATH_STD_USING
+   // The Kolmogorov limit distribution of sqrt(n) D_n, scaled by 1/sqrt(n). Its entropy,
+   // -int K' log(K'), has no closed form; this is its value from mpmath quadrature at 120 digits.
+   const RealType h_kolmogorov = BOOST_MATH_BIG_CONSTANT(RealType, 290,
+      0.000890322654402673706663823838286072983848397531327230497524635227050594202535194227074830683369);
+   return h_kolmogorov - log(dist.number_of_observations()) / 2;
+}
+
 BOOST_MATH_NAMESPACE_END
 #endif

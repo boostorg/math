@@ -845,6 +845,26 @@ void test_spots(RealType T)
 #endif
 } // template <class RealType>void test_spots(RealType)
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](RealType a, RealType b, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(entropy(binomial_distribution<RealType>(a, b)), h, tol);
+   };
+   check(static_cast<RealType>(20.0L), static_cast<RealType>(0.25L), static_cast<RealType>(2.07287436578888442287876627787179281960353742L));
+   check(static_cast<RealType>(1.0L), static_cast<RealType>(0.5L), static_cast<RealType>(0.693147180559945309417232121458176568075500134L));
+   check(static_cast<RealType>(1000.0L), static_cast<RealType>(0.5L), static_cast<RealType>(4.17966890863526857777743155825925363260293286L));
+   check(static_cast<RealType>(1000000.0L), static_cast<RealType>(0.125L), static_cast<RealType>(7.22020691646115941001106073174051289066355791L));
+   check(static_cast<RealType>(1000000000.0L), static_cast<RealType>(0.00000095367431640625L), static_cast<RealType>(4.84901174228382418930529560338738967408482415L));
+   check(static_cast<RealType>(1000000000000.0L), static_cast<RealType>(0.5L), static_cast<RealType>(14.5413019106090015364710462597202929838925063L));
+   BOOST_CHECK_EQUAL(entropy(binomial_distribution<RealType>(10, 1)), RealType(0));
+   BOOST_CHECK_EQUAL(entropy(binomial_distribution<RealType>(0, 0.5)), RealType(0));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
    BOOST_MATH_CONTROL_FP;
@@ -859,17 +879,21 @@ BOOST_AUTO_TEST_CASE( test_main )
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
 #ifdef TEST_FLOAT
   test_spots(0.0F); // Test float.
+  test_entropy(0.0F);
 #endif
 #ifdef TEST_DOUBLE
   test_spots(0.0); // Test double.
+  test_entropy(0.0);
 #endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #ifdef TEST_LDOUBLE
   test_spots(0.0L); // Test long double.
+  test_entropy(0.0L);
 #endif
 #if !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
 #ifdef TEST_REAL_CONCEPT
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  test_entropy(boost::math::concepts::real_concept(0.));
 #endif
 #endif
 #else

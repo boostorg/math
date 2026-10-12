@@ -17,7 +17,7 @@ BOOST_MATH_NAMESPACE_BEGIN
          template <class T>
          struct bessel_jy_recurrence
          {
-            bessel_jy_recurrence(T v, T z) : v(v), z(z) {}
+            bessel_jy_recurrence(T v_, T z_) : v(v_), z(z_) {}
             BOOST_MATH_NAMESPACE::tuple<T, T, T> operator()(int k)
             {
                return BOOST_MATH_NAMESPACE::tuple<T, T, T>(1, -2 * (v + k) / z, 1);
@@ -28,7 +28,7 @@ BOOST_MATH_NAMESPACE_BEGIN
          template <class T>
          struct bessel_ik_recurrence
          {
-            bessel_ik_recurrence(T v, T z) : v(v), z(z) {}
+            bessel_ik_recurrence(T v_, T z_) : v(v_), z(z_) {}
             BOOST_MATH_NAMESPACE::tuple<T, T, T> operator()(int k)
             {
                return BOOST_MATH_NAMESPACE::tuple<T, T, T>(1, -2 * (v + k) / z, -1);

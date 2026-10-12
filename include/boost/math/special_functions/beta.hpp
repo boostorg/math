@@ -736,12 +736,12 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
       two_product<T> product;
       product(x <= y ? x : y, c, ph, pl);  // ph is fma(x, c, 0), which contraction can't fuse into ph - a
       T d = x <= y ? T((ph - a) + (pl + x * c_err)) : T(-((ph - b) + (pl + y * c_err)));
-      T l1 = d / a;
-      T l2 = -d / b;
-      if (BOOST_MATH_GPU_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
+      T u1 = d / a;
+      T u2 = -d / b;
+      if (BOOST_MATH_GPU_SAFE_MAX(fabs(u1), fabs(u2)) < 0.5)
       {
-         T l = a * BOOST_MATH_NAMESPACE::log1pmx(l1, pol) + b * BOOST_MATH_NAMESPACE::log1pmx(l2, pol);
-         return l > tools::log_min_value<T>() ? T(exp(l) * scale) : T(exp(l + log(scale)));
+         T log_term = a * BOOST_MATH_NAMESPACE::log1pmx(u1, pol) + b * BOOST_MATH_NAMESPACE::log1pmx(u2, pol);
+         return log_term > tools::log_min_value<T>() ? T(exp(log_term) * scale) : T(exp(log_term + log(scale)));
       }
       T power1, power2;
       bool need_logs = false;
@@ -1893,7 +1893,6 @@ BOOST_MATH_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, b
             // fraction will not converge. If this occurs, we fall back to the `erf`
             // approximation. Simply using `ibeta_fraction2` will cause an evaluation 
             // error to be thrown and we won't be able to use the `erf` approximation.
-            typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
             T local_result = ibeta_power_terms(a, b, x, y, lanczos_type(), normalised, pol);
             if (p_derivative)
             {

@@ -38,7 +38,7 @@ BOOST_MATH_NAMESPACE_BEGIN
             {
                typedef typename std::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
                typedef std::pair<value_type, value_type> result_type;
-               function_ratio_from_backwards_recurrence_fraction(const Recurrence& r) : r(r), k(0) {}
+               function_ratio_from_backwards_recurrence_fraction(const Recurrence& r_) : r(r_), k(0) {}
 
                result_type operator()()
                {
@@ -62,7 +62,7 @@ BOOST_MATH_NAMESPACE_BEGIN
             template <class R, class T>
             struct recurrence_reverser
             {
-               recurrence_reverser(const R& r) : r(r) {}
+               recurrence_reverser(const R& r_) : r(r_) {}
                std::tuple<T, T, T> operator()(int i)
                {
                   using std::swap;
@@ -256,20 +256,20 @@ BOOST_MATH_NAMESPACE_BEGIN
          {
             typedef typename std::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
 
-            forward_recurrence_iterator(const Recurrence& r, value_type f_n_minus_1, value_type f_n)
-               : f_n_minus_1(f_n_minus_1), f_n(f_n), coef(r), k(0) {}
+            forward_recurrence_iterator(const Recurrence& r, value_type f_n_minus_1_, value_type f_n_)
+               : f_n_minus_1(f_n_minus_1_), f_n(f_n_), coef(r), k(0) {}
 
-            forward_recurrence_iterator(const Recurrence& r, value_type f_n)
-               : forward_recurrence_iterator(r, f_n, recurrence_offset(0)) {}
+            forward_recurrence_iterator(const Recurrence& r, value_type f_n_)
+               : forward_recurrence_iterator(r, f_n_, recurrence_offset(0)) {}
 
-            forward_recurrence_iterator(const Recurrence& r, value_type f_n_minus_1, value_type f_n, recurrence_offset k0)
-               : f_n_minus_1(f_n_minus_1), f_n(f_n), coef(r), k(k0.value) {}
+            forward_recurrence_iterator(const Recurrence& r, value_type f_n_minus_1_, value_type f_n_, recurrence_offset k0)
+               : f_n_minus_1(f_n_minus_1_), f_n(f_n_), coef(r), k(k0.value) {}
 
-            forward_recurrence_iterator(const Recurrence& r, value_type f_n, recurrence_offset k0)
-               : f_n(f_n), coef(r), k(k0.value)
+            forward_recurrence_iterator(const Recurrence& r, value_type f_n_, recurrence_offset k0)
+               : f_n(f_n_), coef(r), k(k0.value)
             {
                std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<BOOST_MATH_NAMESPACE::policies::policy<> >();
-               f_n_minus_1 = f_n * BOOST_MATH_NAMESPACE::tools::function_ratio_from_forwards_recurrence(detail::recurrence_offsetter<Recurrence>(r, k - 1), value_type(BOOST_MATH_NAMESPACE::tools::epsilon<value_type>() * 2), max_iter);
+               f_n_minus_1 = f_n_ * BOOST_MATH_NAMESPACE::tools::function_ratio_from_forwards_recurrence(detail::recurrence_offsetter<Recurrence>(r, k - 1), value_type(BOOST_MATH_NAMESPACE::tools::epsilon<value_type>() * 2), max_iter);
                BOOST_MATH_NAMESPACE::policies::check_series_iterations<value_type>("forward_recurrence_iterator<>::forward_recurrence_iterator", max_iter, BOOST_MATH_NAMESPACE::policies::policy<>());
             }
 
@@ -304,20 +304,20 @@ BOOST_MATH_NAMESPACE_BEGIN
          {
             typedef typename std::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
 
-            backward_recurrence_iterator(const Recurrence& r, value_type f_n_plus_1, value_type f_n)
-               : f_n_plus_1(f_n_plus_1), f_n(f_n), coef(r), k(0) {}
+            backward_recurrence_iterator(const Recurrence& r, value_type f_n_plus_1_, value_type f_n_)
+               : f_n_plus_1(f_n_plus_1_), f_n(f_n_), coef(r), k(0) {}
 
-            backward_recurrence_iterator(const Recurrence& r, value_type f_n)
-               : backward_recurrence_iterator(r, f_n, recurrence_offset(0)) {}
+            backward_recurrence_iterator(const Recurrence& r, value_type f_n_)
+               : backward_recurrence_iterator(r, f_n_, recurrence_offset(0)) {}
 
-            backward_recurrence_iterator(const Recurrence& r, value_type f_n_plus_1, value_type f_n, recurrence_offset k0)
-               : f_n_plus_1(f_n_plus_1), f_n(f_n), coef(r), k(k0.value) {}
+            backward_recurrence_iterator(const Recurrence& r, value_type f_n_plus_1_, value_type f_n_, recurrence_offset k0)
+               : f_n_plus_1(f_n_plus_1_), f_n(f_n_), coef(r), k(k0.value) {}
 
-            backward_recurrence_iterator(const Recurrence& r, value_type f_n, recurrence_offset k0)
-               : f_n(f_n), coef(r), k(k0.value)
+            backward_recurrence_iterator(const Recurrence& r, value_type f_n_, recurrence_offset k0)
+               : f_n(f_n_), coef(r), k(k0.value)
             {
                std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<BOOST_MATH_NAMESPACE::policies::policy<> >();
-               f_n_plus_1 = f_n * BOOST_MATH_NAMESPACE::tools::function_ratio_from_backwards_recurrence(detail::recurrence_offsetter<Recurrence>(r, k + 1), value_type(BOOST_MATH_NAMESPACE::tools::epsilon<value_type>() * 2), max_iter);
+               f_n_plus_1 = f_n_ * BOOST_MATH_NAMESPACE::tools::function_ratio_from_backwards_recurrence(detail::recurrence_offsetter<Recurrence>(r, k + 1), value_type(BOOST_MATH_NAMESPACE::tools::epsilon<value_type>() * 2), max_iter);
                BOOST_MATH_NAMESPACE::policies::check_series_iterations<value_type>("backward_recurrence_iterator<>::backward_recurrence_iterator", max_iter, BOOST_MATH_NAMESPACE::policies::policy<>());
             }
 

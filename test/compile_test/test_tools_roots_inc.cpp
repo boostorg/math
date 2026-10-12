@@ -27,12 +27,12 @@ void compile_and_link_test()
    typedef boost::math::tools::eps_tolerance<double> Tol;
    Tol tol(u);
    std::uintmax_t max_iter = 0;
-   F f = 0;
+   F func = 0;
    F2 f2 = 0;
    F3 f3 = 0;
 
-   check_result<std::pair<double, double> >(boost::math::tools::bisect<F, double, Tol>(f, d, d, tol, max_iter));
-   check_result<std::pair<double, double> >(boost::math::tools::bisect<F, double, Tol>(f, d, d, tol));
+   check_result<std::pair<double, double> >(boost::math::tools::bisect<F, double, Tol>(func, d, d, tol, max_iter));
+   check_result<std::pair<double, double> >(boost::math::tools::bisect<F, double, Tol>(func, d, d, tol));
    check_result<double>(boost::math::tools::newton_raphson_iterate<F2, double>(f2, d, d, d, i, max_iter));
    check_result<double>(boost::math::tools::halley_iterate<F3, double>(f3, d, d, d, i, max_iter));
    check_result<double>(boost::math::tools::schroder_iterate<F3, double>(f3, d, d, d, i, max_iter));

@@ -301,7 +301,7 @@ auto lp_norm(ForwardIterator first, ForwardIterator last, unsigned p)
         if (!isfinite(result))
         {
             auto a = BOOST_MATH_NAMESPACE::tools::sup_norm(first, last);
-            Real lp = 0;
+            lp = 0;
             for (auto it = first; it != last; ++it)
             {
                 lp += pow(abs(*it)/a, p);

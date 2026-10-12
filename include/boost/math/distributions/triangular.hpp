@@ -392,8 +392,6 @@ BOOST_MATH_NAMESPACE_BEGIN
     RealType p0 = (mode - lower) / (upper - lower);
     if(p < p0)
     {
-      RealType s = (upper - lower) * (mode - lower);
-      s *= p;
       result = sqrt((upper - lower) * (mode - lower) * p) + lower;
     }
     else if (p == p0)

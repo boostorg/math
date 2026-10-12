@@ -205,6 +205,7 @@ inline double must_reduce_to_double(const T& z, const std::false_type&)
    #endif
 
 #else
+   static_cast<void>(z);
    static_assert(sizeof(T) == 0, "Unsupported in standalone mode: don't know how to cast your number type to a double.");
    return 0.0;
 #endif

@@ -342,11 +342,11 @@ BOOST_MATH_NAMESPACE_BEGIN
                //
                // Calculate p:
                //
-               T c = 0;
+               T beta_p = 0;
                if(x != 0)
                {
-                  c = non_central_beta_p(a, b, d2, x, y, pol);
-                  result = non_central_t2_p(v, delta, x, y, pol, c);
+                  beta_p = non_central_beta_p(a, b, d2, x, y, pol);
+                  result = non_central_t2_p(v, delta, x, y, pol, beta_p);
                   result /= 2;
                }
                else
@@ -355,12 +355,12 @@ BOOST_MATH_NAMESPACE_BEGIN
                {
                   T upper = cdf(complement(BOOST_MATH_NAMESPACE::normal_distribution<T, Policy>(), -delta));
                   result = upper - result;
-                  if ((delta < 0) && (x != 0) && (result < (std::max)(c, upper) / 8))
+                  if ((delta < 0) && (x != 0) && (result < (std::max)(beta_p, upper) / 8))
                   {
                      // Most of the digits have cancelled, compute the tail directly:
                      return non_central_t_left_tail_integral(v, T(-delta), t, pol);
                   }
-                  if ((x != 0) && (fabs(result / (c * tools::epsilon<T>())) < 1000))
+                  if ((x != 0) && (fabs(result / (beta_p * tools::epsilon<T>())) < 1000))
                   {
                       // We've cancelled out most of the digits in the result, try A&S 26.7.9,
                       // this is only accurate to a couple of digits at best, but it's better

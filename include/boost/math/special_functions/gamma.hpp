@@ -1143,8 +1143,8 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
       T d = (z - a) / a;
       if (fabs(d) < 0.5)
       {
-         T l = a * BOOST_MATH_NAMESPACE::log1pmx(d, pol);
-         return l > tools::log_min_value<T>() ? T(exp(l) / scaled_gamma) : T(exp(l - log(scaled_gamma)));
+         T log_term = a * BOOST_MATH_NAMESPACE::log1pmx(d, pol);
+         return log_term > tools::log_min_value<T>() ? T(exp(log_term) / scaled_gamma) : T(exp(log_term - log(scaled_gamma)));
       }
       T power_term = pow(z / a, a / 2);
       T a_minus_z = a - z;

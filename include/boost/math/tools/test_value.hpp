@@ -89,6 +89,7 @@ inline T create_test_value(largest_float, const char* str, const std::false_type
   create_type = 3;
 #endif
 #if defined(BOOST_MATH_STANDALONE)
+  static_cast<void>(str);
   static_assert(sizeof(T) == 0, "Can not create a test value using lexical cast of string in standalone mode");
   return T();
 #else
