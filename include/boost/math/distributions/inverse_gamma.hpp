@@ -31,6 +31,10 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/complement.hpp>
 
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/distributions/detail/entropy.hpp>
+#endif
+
 BOOST_MATH_NAMESPACE_BEGIN
 namespace detail
 {
@@ -491,6 +495,17 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const inverse_gamma_distribution
    }
   return kurtosis_excess(dist) + 3;
 }
+
+#ifndef BOOST_MATH_HAS_NVRTC
+// Not GPU enabled: the Stirling series use Bernoulli numbers.
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+inline RealType entropy(const inverse_gamma_distribution<RealType, Policy>& dist)
+{
+   BOOST_MATH_STD_USING
+   // a + log(scale) + lgamma(a) - (1 + a) digamma(a):
+   return log(dist.scale()) + detail::inverse_gamma_entropy_unit_scale(dist.shape(), Policy());
+}
+#endif
 
 BOOST_MATH_NAMESPACE_END
 

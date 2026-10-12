@@ -31,8 +31,8 @@
   {
     using result_type = BOOST_MATH_NAMESPACE::tuple<T, T, T>;
 
-    hypergeometric_1F1_recurrence_a_coefficients(const T& a, const T& b, const T& z):
-    a(a), b(b), z(z)
+    hypergeometric_1F1_recurrence_a_coefficients(const T& a_, const T& b_, const T& z_):
+    a(a_), b(b_), z(z_)
     {
     }
 
@@ -62,8 +62,8 @@
   {
     using result_type = BOOST_MATH_NAMESPACE::tuple<T, T, T>;
 
-    hypergeometric_1F1_recurrence_b_coefficients(const T& a, const T& b, const T& z):
-    a(a), b(b), z(z)
+    hypergeometric_1F1_recurrence_b_coefficients(const T& a_, const T& b_, const T& z_):
+    a(a_), b(b_), z(z_)
     {
     }
 
@@ -95,8 +95,8 @@
   {
      using result_type = BOOST_MATH_NAMESPACE::tuple<T, T, T>;
 
-     hypergeometric_1F1_recurrence_small_b_coefficients(const T& a, const T& b, const T& z, int N) :
-        a(a), b(b), z(z), N(N)
+     hypergeometric_1F1_recurrence_small_b_coefficients(const T& a_, const T& b_, const T& z_, int N_) :
+        a(a_), b(b_), z(z_), N(N_)
      {
      }
 
@@ -128,8 +128,8 @@
   {
     using result_type = BOOST_MATH_NAMESPACE::tuple<T, T, T>;
 
-    hypergeometric_1F1_recurrence_a_and_b_coefficients(const T& a, const T& b, const T& z, int offset = 0):
-    a(a), b(b), z(z), offset(offset)
+    hypergeometric_1F1_recurrence_a_and_b_coefficients(const T& a_, const T& b_, const T& z_, int offset_ = 0):
+    a(a_), b(b_), z(z_), offset(offset_)
     {
     }
 

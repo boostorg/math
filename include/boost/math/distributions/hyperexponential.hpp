@@ -42,6 +42,8 @@
 # pragma warning(disable:4389) // '==' : signed/unsigned mismatch in test_tools
 #endif // _MSC_VER
 
+#include <boost/math/quadrature/exp_sinh.hpp>
+
 BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail {
@@ -627,6 +629,37 @@ BOOST_MATH_EXPORT template <typename RealT, typename PolicyT>
 RealT mode(hyperexponential_distribution<RealT,PolicyT> const& /*dist*/)
 {
     return 0;
+}
+
+// Not GPU enabled: uses quadrature.
+BOOST_MATH_EXPORT template <class RealT, class PolicyT>
+inline RealT entropy(const hyperexponential_distribution<RealT, PolicyT>& dist)
+{
+   BOOST_MATH_STD_USING
+   // -int_0^inf f log(f) for the mixture f(x) = sum p_i lambda_i exp(-lambda_i x), which has no closed
+   // form. The integral is taken for U = c X, c = 1/E[X], so that the integrand's scale is ~1:
+   // H(X) = H(U) - log(c).
+   const std::vector<RealT> probs = dist.probabilities();
+   const std::vector<RealT> rates = dist.rates();
+   RealT c = 1 / mean(dist);
+   RealT min_rate = rates[0] / c;
+   for (std::size_t i = 1; i < rates.size(); ++i)
+      min_rate = (std::min)(min_rate, RealT(rates[i] / c));
+   auto integrand = [&](RealT u) -> RealT
+   {
+      // f(u) = exp(-min_rate u) g(u), g(u) = sum p_i lambda_i exp(-(lambda_i - min_rate) u):
+      RealT g = 0;
+      for (std::size_t i = 0; i < rates.size(); ++i)
+      {
+         RealT l = rates[i] / c;
+         g += probs[i] * l * exp(-(l - min_rate) * u);
+      }
+      RealT log_f = log(g) - min_rate * u;
+      RealT f = exp(log_f);
+      return f == 0 ? RealT(0) : RealT(-f * log_f);
+   };
+   quadrature::exp_sinh<RealT, PolicyT> integrator;
+   return integrator.integrate(integrand, policies::get_epsilon<RealT, PolicyT>() * 8) - log(c);
 }
 
 BOOST_MATH_NAMESPACE_END

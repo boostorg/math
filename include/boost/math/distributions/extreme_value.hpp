@@ -375,6 +375,13 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const extreme_value_distr
 }
 
 
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType entropy(const extreme_value_distribution<RealType, Policy>& dist)
+{
+   BOOST_MATH_STD_USING
+   return log(dist.scale()) + constants::euler<RealType>() + 1;
+}
+
 BOOST_MATH_NAMESPACE_END
 
 #ifdef _MSC_VER

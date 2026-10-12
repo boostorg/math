@@ -528,8 +528,8 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::find_
    BOOST_MATH_NAMESPACE::normal_distribution<RealType, Policy> norm(0, 1);
    if (detail::analytical_df_if_cdf_matches(norm, t, p))
       return policies::raise_overflow_error<RealType>(function, nullptr, Policy());
-   BOOST_MATH_NAMESPACE::cauchy_distribution<RealType, Policy> cauchy(0, 1);
-   if (detail::analytical_df_if_cdf_matches(cauchy, t, p))
+   BOOST_MATH_NAMESPACE::cauchy_distribution<RealType, Policy> cauchy_dist(0, 1);
+   if (detail::analytical_df_if_cdf_matches(cauchy_dist, t, p))
       return RealType(1);
 
    // Edgeworth warm start: compute a df estimate; fall back to df_hint_fallback if it fails

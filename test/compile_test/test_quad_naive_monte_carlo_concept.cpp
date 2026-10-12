@@ -23,7 +23,7 @@ void compile_and_link_test()
    naive_monte_carlo<std_real_concept, decltype(g)> mc(g, bounds, 1.0);
 
    auto task = mc.integrate();
-   task.get();
+   static_cast<void>(task.get());
 }
 
 #else

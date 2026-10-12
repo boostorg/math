@@ -20,6 +20,10 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp>
 
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/distributions/detail/entropy.hpp>
+#endif
+
 BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
@@ -333,6 +337,16 @@ BOOST_MATH_GPU_ENABLED RealType chi_squared_distribution<RealType, Policy>::find
    }
    return result;
 }
+
+#ifndef BOOST_MATH_HAS_NVRTC
+// Not GPU enabled: the Stirling series use Bernoulli numbers.
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+inline RealType entropy(const chi_squared_distribution<RealType, Policy>& dist)
+{
+   // A gamma(k/2, 2) distribution: log(2) + k/2 + lgamma(k/2) + (1 - k/2) digamma(k/2).
+   return constants::ln_two<RealType>() + detail::gamma_entropy_unit_scale(RealType(dist.degrees_of_freedom() / 2), Policy());
+}
+#endif
 
 BOOST_MATH_NAMESPACE_END
 

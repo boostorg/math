@@ -242,6 +242,21 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(mean, RealT, test_types)
     BOOST_CHECK_CLOSE( boost::math::mean(dist), static_cast<RealT>(1.0333333333333333333333333333333333L), tol );
 }
 
+BOOST_AUTO_TEST_CASE_TEMPLATE(entropy, RealT, test_types)
+{
+    // Reference values: -int f log(f) by mpmath quadrature at 60 digits; no closed form.
+    const RealT tol = 32 * boost::math::tools::epsilon<RealT>();
+    auto check = [&](std::vector<RealT> probs, std::vector<RealT> rates, RealT h)
+    {
+        boost::math::hyperexponential_distribution<RealT> dist(probs, rates);
+        BOOST_CHECK_CLOSE_FRACTION( boost::math::entropy(dist), h, tol );
+    };
+    check({ RealT(0.25), RealT(0.75) }, { RealT(1), RealT(4) }, static_cast<RealT>(0.109445936650126717767786548059487248397216076L));
+    check({ RealT(0.5), RealT(0.5) }, { RealT(1), RealT(1000) }, static_cast<RealT>(-1.77740270917310631903398987519165669943776624L));
+    // A single exponential: 1 - log(rate).
+    check({ RealT(1) }, { RealT(2) }, static_cast<RealT>(0.306852819440054690582767878541823431924499866L));
+}
+
 BOOST_AUTO_TEST_CASE_TEMPLATE(variance, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();

@@ -34,6 +34,10 @@
 extern std::uintmax_t global_iter_count;
 #endif
 
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/distributions/detail/entropy.hpp>
+#endif
+
 BOOST_MATH_NAMESPACE_BEGIN
 
   namespace detail
@@ -711,7 +715,7 @@ BOOST_MATH_NAMESPACE_BEGIN
     if (result == 0)
        result = tools::min_value<RealType>(); // we need to be one side of zero or the other for the root finder to work.
 
-    auto fun = [&, standard_dist, p](const RealType& x)->RealType { return cdf(standard_dist, x) - p; };
+    auto fun = [&, standard_dist, p](const RealType& z)->RealType { return cdf(standard_dist, z) - p; };
 
     RealType f_result = fun(result);
 
@@ -794,6 +798,44 @@ BOOST_MATH_NAMESPACE_BEGIN
     return result;
   } // quantile
 
+
+#ifndef BOOST_MATH_HAS_NVRTC
+// Not GPU enabled: uses quadrature.
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+inline RealType entropy(const skew_normal_distribution<RealType, Policy>& dist)
+{
+   BOOST_MATH_STD_USING
+   // H = log(omega) + log(2 pi e)/2 - E[log(2 Phi(alpha Z))], Z the standard skew normal. Folding the
+   // integral onto x >= 0 turns Phi log(Phi) + (1 - Phi) log(1 - Phi) into the binary entropy h:
+   //   H = log(omega) + log(2 pi e)/2 - log(2) + 2 int_0^inf phi(x) h(Phi(|alpha| x)) dx,
+   // which has no closed form but a smooth, positive, Gaussian-decaying integrand.
+   RealType alpha = fabs(dist.shape());
+   auto h = [](RealType y) -> RealType
+   {
+      // Binary entropy of Phi(y) for y >= 0, with q = Phi(-y):
+      RealType q = BOOST_MATH_NAMESPACE::erfc(y * constants::one_div_root_two<RealType>(), Policy()) / 2;
+      if (q == 0)
+         return RealType(0);
+      return -q * log(q) - (1 - q) * BOOST_MATH_NAMESPACE::log1p(-q, Policy());
+   };
+   RealType integral;
+   quadrature::exp_sinh<RealType, Policy> integrator;
+   const RealType tol = policies::get_epsilon<RealType, Policy>() * 8;
+   if (alpha <= 1)
+   {
+      auto f = [&](RealType x) -> RealType { return 2 * exp(-x * x / 2) * h(alpha * x); };
+      integral = integrator.integrate(f, tol);
+   }
+   else
+   {
+      // y = alpha x keeps the integrand's width ~1 as alpha grows:
+      auto f = [&](RealType y) -> RealType { RealType x = y / alpha; return 2 * exp(-x * x / 2) * h(y); };
+      integral = integrator.integrate(f, tol) / alpha;
+   }
+   return log(dist.scale()) + constants::half<RealType>() - constants::ln_two<RealType>() + integral * constants::one_div_root_two_pi<RealType>()
+      + constants::log_root_two_pi<RealType>();
+}
+#endif
 
 BOOST_MATH_NAMESPACE_END
 

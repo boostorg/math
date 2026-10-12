@@ -808,6 +808,28 @@ if(std::numeric_limits<RealType>::is_specialized)
   return;
 } // template <class RealType> void test_spots(RealType) // Any floating-point type RealType.
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](RealType a, RealType b, RealType h, RealType tolerance)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(entropy(negative_binomial_distribution<RealType>(a, b)), h, tolerance);
+   };
+   check(static_cast<RealType>(5.0L), static_cast<RealType>(0.25L), static_cast<RealType>(3.39359238247812518456836017160705370313434987L), tol);
+   check(static_cast<RealType>(0.5L), static_cast<RealType>(0.5L), static_cast<RealType>(0.943370759269334533806787413559674682998205284L), tol);
+   check(static_cast<RealType>(1000.5L), static_cast<RealType>(0.0625L), static_cast<RealType>(7.61305197413188991442493027236853895416590232L), tol);
+   check(static_cast<RealType>(1000000.0L), static_cast<RealType>(0.5L), static_cast<RealType>(8.67326702746660536495437769998638212050453356L), tol);
+   // About 1e4 terms; the sum is compensated, which a compiler that reassociates floating-point
+   // arithmetic (icpx's default) undoes, leaving ~70 eps:
+   check(static_cast<RealType>(0.125L), static_cast<RealType>(0.00390625L), static_cast<RealType>(3.05357381884703876385483729149700634949203959L), 128 * tol / 16);
+   check(static_cast<RealType>(2.5L), static_cast<RealType>(0.001953125L), static_cast<RealType>(7.96729439209919695998955366089632316751290691L), tol);
+   check(static_cast<RealType>(100000000.0L), static_cast<RealType>(0.9990234375L), static_cast<RealType>(7.16451918702377261816611719177425949753810124L), tol);
+   BOOST_CHECK_EQUAL(entropy(negative_binomial_distribution<RealType>(3, 1)), RealType(0));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
   // Check that can generate negative_binomial distribution using the two convenience methods:
@@ -829,17 +851,21 @@ BOOST_AUTO_TEST_CASE( test_main )
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
 #ifdef TEST_FLOAT
   test_spots(0.0F); // Test float.
+  test_entropy(0.0F);
 #endif
 #ifdef TEST_DOUBLE
   test_spots(0.0); // Test double.
+  test_entropy(0.0);
 #endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #ifdef TEST_LDOUBLE
   test_spots(0.0L); // Test long double.
+  test_entropy(0.0L);
 #endif
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #ifdef TEST_REAL_CONCEPT
     test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+    test_entropy(boost::math::concepts::real_concept(0.));
 #endif
   #endif
 #else

@@ -802,6 +802,23 @@ if(std::numeric_limits<RealType>::is_specialized)
    return;
 } // template <class RealType> void test_spots(RealType) // Any floating-point type RealType.
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](RealType a, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(entropy(geometric_distribution<RealType>(a)), h, tol);
+   };
+   check(static_cast<RealType>(0.5L), static_cast<RealType>(1.38629436111989061883446424291635313615100027L));
+   check(static_cast<RealType>(0.125L), static_cast<RealType>(3.01416129005149429027610171089397952635241012L));
+   check(static_cast<RealType>(0.0009765625L), static_cast<RealType>(7.93098336532607797421766209482556123084489774L));
+   check(static_cast<RealType>(0.99999904632568359375L), static_cast<RealType>(1.41744206512281872090189702738787926182672857e-5L));
+   BOOST_CHECK_EQUAL(entropy(geometric_distribution<RealType>(1)), RealType(0));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
   // Check that can generate geometric distribution using the two convenience methods:
@@ -824,17 +841,21 @@ BOOST_AUTO_TEST_CASE( test_main )
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
 #ifdef TEST_FLOAT
   test_spots(0.0F); // Test float.
+  test_entropy(0.0F);
 #endif
 #ifdef TEST_DOUBLE
   test_spots(0.0); // Test double.
+  test_entropy(0.0);
 #endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #ifdef TEST_LDOUBLE
   test_spots(0.0L); // Test long double.
+  test_entropy(0.0L);
 #endif
   #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
 #if defined(TEST_REAL_CONCEPT) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
     test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+    test_entropy(boost::math::concepts::real_concept(0.));
 #endif
   #endif
 #else

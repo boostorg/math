@@ -26,6 +26,10 @@
 // Weisstein, Eric W. "Inverse Chi-Squared Distribution." From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/InverseChi-SquaredDistribution.html
 
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/distributions/detail/entropy.hpp>
+#endif
+
 BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail
@@ -386,6 +390,18 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const inverse_chi_squared
 //
 // Parameter estimation comes last:
 //
+
+#ifndef BOOST_MATH_HAS_NVRTC
+// Not GPU enabled: the Stirling series use Bernoulli numbers.
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+inline RealType entropy(const inverse_chi_squared_distribution<RealType, Policy>& dist)
+{
+   BOOST_MATH_STD_USING
+   // An inverse_gamma(df/2, df scale/2) distribution:
+   RealType df = dist.degrees_of_freedom();
+   return log(df * dist.scale() / 2) + detail::inverse_gamma_entropy_unit_scale(RealType(df / 2), Policy());
+}
+#endif
 
 BOOST_MATH_NAMESPACE_END
 

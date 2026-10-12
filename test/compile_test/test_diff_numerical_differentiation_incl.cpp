@@ -15,10 +15,10 @@
 
 void compile_and_link_test()
 {
-    auto f = [](double x) { return x; };
+    auto func = [](double x) { return x; };
     double x = 0;
-    check_result<double>(boost::math::differentiation::finite_difference_derivative(f, x));
+    check_result<double>(boost::math::differentiation::finite_difference_derivative(func, x));
 
-    auto g = [](std::complex<double> x){ return x;};
+    auto g = [](std::complex<double> z){ return z;};
     check_result<double>(boost::math::differentiation::complex_step_derivative(g, x));
 }

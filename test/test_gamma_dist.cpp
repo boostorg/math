@@ -248,16 +248,36 @@ void test_spots(RealType)
 
 } // template <class RealType>void test_spots(RealType)
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](RealType a, RealType b, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(entropy(gamma_distribution<RealType>(a, b)), h, tol);
+   };
+   check(static_cast<RealType>(0.25L), static_cast<RealType>(2.0L), static_cast<RealType>(-0.93942044477417628927930504789461881902455563L));
+   check(static_cast<RealType>(3.0L), static_cast<RealType>(1.0L), static_cast<RealType>(1.84757851036301103063025630162298143015981881L));
+   check(static_cast<RealType>(1000000.0L), static_cast<RealType>(0.5L), static_cast<RealType>(7.63354629829344781773929420955609401204555101L));
+   check(static_cast<RealType>(10000000000.0L), static_cast<RealType>(1.0L), static_cast<RealType>(12.931863998141567828536120343160760900089128L));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
    // Basic sanity-check spot values.
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
+  test_entropy(0.0F);
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
+  test_entropy(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
+  test_entropy(0.0L);
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  test_entropy(boost::math::concepts::real_concept(0.));
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "

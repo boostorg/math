@@ -15,8 +15,8 @@
 
 void compile_and_link_test()
 {
-    auto f = [](double x) { return x; };
+    auto func = [](double x) { return x; };
     auto psi = boost::math::daubechies_wavelet<double, 1>();
-    auto Wf = boost::math::quadrature::daubechies_wavelet_transform(f, psi);
+    auto Wf = boost::math::quadrature::daubechies_wavelet_transform(func, psi);
     check_result<double>(Wf(0.0, 0.0));
 }
