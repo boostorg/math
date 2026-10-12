@@ -624,6 +624,29 @@ void test_spots(RealType)
 
 } // template <class RealType>void test_spots(RealType)
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 45 digits: log(beta(a, b)) - (a-1) digamma(a) - (b-1) digamma(b) + (a+b-2) digamma(a+b).
+   // The large-parameter cases cancel catastrophically in that form.
+   RealType tol = 50 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](const char* a, const char* b, const char* h)
+   {
+      beta_distribution<RealType> dist(boost::lexical_cast<RealType>(a), boost::lexical_cast<RealType>(b));
+      BOOST_CHECK_CLOSE_FRACTION(entropy(dist), boost::lexical_cast<RealType>(h), tol);
+   };
+   check("2", "3", "-0.2349066497880003102297094798388788407985");
+   check("0.5", "0.5", "-0.2415644752704904446910368915632944245037");
+   check("0.125", "8", "-7.236093290136823717228800592217375034163");
+   check("9.5", "2", "-0.922951609703585681996556781537869432303");
+   check("30", "70", "-1.671603471334352932984107068683246070161");
+   check("10", "1000000", "-11.27947087941654488172437002583796804517");
+   check("10000", "10000", "-4.225977424873357422152240946297157538477");
+   check("1000000", "0.001", "-1006.482327533958828091847078424074949448");
+   check("1e10", "1e10", "-11.13370770263047364243672571920348908759");
+   BOOST_CHECK_EQUAL(entropy(beta_distribution<RealType>(1, 1)), RealType(0)); // Uniform.
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
    BOOST_MATH_CONTROL_FP;
@@ -718,10 +741,14 @@ BOOST_AUTO_TEST_CASE( test_main )
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
    test_spots(0.0F); // Test float.
    test_spots(0.0); // Test double.
+   test_entropy(0.0F);
+   test_entropy(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L); // Test long double.
+   test_entropy(0.0L);
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
    test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+   test_entropy(boost::math::concepts::real_concept(0.));
 #endif
 #endif
 

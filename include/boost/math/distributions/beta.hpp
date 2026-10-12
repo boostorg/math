@@ -29,6 +29,11 @@
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/special_functions/beta.hpp> // for beta.
+#include <boost/math/special_functions/digamma.hpp> // for entropy.
+#include <boost/math/special_functions/bernoulli.hpp> // for entropy.
+#include <boost/math/special_functions/zeta.hpp> // for entropy.
+#include <boost/math/special_functions/log1p.hpp>
+#include <boost/math/constants/constants.hpp>
 #include <boost/math/distributions/complement.hpp> // complements.
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
@@ -142,6 +147,82 @@ BOOST_MATH_NAMESPACE_BEGIN
         }
         return true;
       } // bool check_variance
+
+      // Below this, entropy uses lgamma and digamma directly; at or above it, the Stirling series
+      // below has converged to full precision before its terms start to grow.
+      template <class RealType, class Policy>
+      inline RealType entropy_series_threshold()
+      {
+        return (std::max)(RealType(10), RealType(policies::digits<RealType, Policy>()) * RealType(0.14));
+      }
+
+      // Asymptotic series for large x of nu(x) = log(x) - 1/(2x) - digamma(x) and of
+      // r(x) = mu(x) + (x - 1) nu(x), where mu(x) = lgamma(x) - (x - 1/2) log(x) + x - log(2 pi)/2.
+      template <class RealType, class Policy>
+      inline void entropy_stirling_series(RealType x, RealType& r, RealType& nu, const Policy& pol)
+      {
+        BOOST_MATH_STD_USING
+        const RealType eps = policies::get_epsilon<RealType, Policy>();
+        r = 0;
+        nu = 0;
+        RealType x_power = x; // x^(2k - 1)
+        for (int k = 1; k < 100; ++k)
+        {
+          RealType b2k = bernoulli_b2n<RealType>(k, pol);
+          RealType nu_term = b2k / (2 * k * x_power * x);
+          RealType r_term = b2k / ((2 * k - 1) * x_power) - nu_term;
+          r += r_term;
+          nu += nu_term;
+          if ((fabs(r_term) <= eps * fabs(r)) && (fabs(nu_term) <= eps * fabs(nu)))
+            break;
+          x_power *= x * x;
+        }
+      }
+
+      // Entropy for a and b near 1, where H vanishes to second order and the usual form cancels to
+      // first order. Here H = g(a) + g(b) + k(a + b), with g(x) = lgamma(x) - (x - 1) digamma(x) and
+      // k(s) = (s - 2) digamma(s) - lgamma(s), which have zero value and slope at x = 1 and s = 2.
+      // Integrating their derivatives, -(x - 1) trigamma(x) and (s - 2) trigamma(s), term by term
+      // with the series for trigamma(1 + t) and trigamma(2 + t) gives, for |t| < 1,
+      //   g(1 + t) = -sum_{n >= 0} (-1)^n (n + 1)/(n + 2) zeta(n + 2) t^(n + 2),
+      //   k(2 + t) =  sum_{n >= 0} (-1)^n (n + 1)/(n + 2) (zeta(n + 2) - 1) t^(n + 2).
+      // zeta(n + 2) - 1 is only accurate to absolute eps, so k uses its series for |t| <= 1/2 only;
+      // further out it has no cancellation to speak of.
+      template <class RealType, class Policy>
+      inline RealType entropy_zeta_series(RealType t, bool minus_one, const Policy& pol)
+      {
+        BOOST_MATH_STD_USING
+        const RealType eps = policies::get_epsilon<RealType, Policy>();
+        RealType t_power = t * t;
+        RealType sum = 0;
+        for (int n = 0; n < 500; ++n)
+        {
+          RealType z = zeta(RealType(n + 2), pol);
+          RealType term = RealType(n + 1) / (n + 2) * (minus_one ? z - 1 : z) * t_power;
+          sum += (n & 1) ? -term : term;
+          if (fabs(term) <= eps * fabs(sum))
+            break;
+          t_power *= t;
+        }
+        return sum;
+      }
+
+      template <class RealType, class Policy>
+      inline RealType entropy_near_uniform(RealType a, RealType b, const Policy& pol)
+      {
+        BOOST_MATH_STD_USING
+        RealType s = a + b;
+        RealType k = (fabs(s - 2) <= RealType(0.5))
+          ? entropy_zeta_series(RealType(s - 2), true, pol)
+          : (s - 2) * digamma(s, pol) - lgamma(s, pol);
+        auto g = [&pol](RealType x)
+        {
+          return (fabs(x - 1) <= RealType(0.5))
+            ? RealType(-entropy_zeta_series(RealType(x - 1), false, pol))
+            : RealType(lgamma(x, pol) - (x - 1) * digamma(x, pol));
+        };
+        return k + g(a) + g(b);
+      }
     } // namespace beta_detail
 
     // typedef beta_distribution<double> beta;
@@ -365,6 +446,45 @@ BOOST_MATH_NAMESPACE_BEGIN
     {
       return 3 + kurtosis_excess(dist);
     } // kurtosis
+
+    // Not GPU enabled: the series use Bernoulli numbers and zeta.
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
+    inline RealType entropy(const beta_distribution<RealType, Policy>& dist)
+    {
+      BOOST_MATH_STD_USING
+      // H = log(B(a, b)) - (a - 1) digamma(a) - (b - 1) digamma(b) + (a + b - 2) digamma(a + b).
+      // For large a or b those terms are ~a log(a) while H ~ log(a), so with s = a + b, the
+      // Stirling forms of lgamma and digamma cancel the large parts exactly:
+      //   H = log(2 pi e ab / s^3) / 2 - 1/(2a) - 1/(2b) + 1/s + r(a) + r(b) - r(s) + nu(s),
+      // where nu and r are the remainders computed by entropy_stirling_series. A small parameter
+      // b keeps its lgamma and digamma: log(2 pi e b)/2 - 1/(2b) + r(b) = lgamma(b) + b - (b - 1) digamma(b).
+      RealType a = dist.alpha();
+      RealType b = dist.beta();
+      const RealType threshold = beta_detail::entropy_series_threshold<RealType, Policy>();
+      if ((a < threshold) && (b < threshold))
+      {
+        return beta_detail::entropy_near_uniform(a, b, Policy());
+      }
+      if (a < b)
+      {
+        BOOST_MATH_GPU_SAFE_SWAP(a, b);
+      }
+      RealType s = a + b;
+      RealType r_a, nu_a, r_s, nu_s;
+      beta_detail::entropy_stirling_series(a, r_a, nu_a, Policy());
+      beta_detail::entropy_stirling_series(s, r_s, nu_s, Policy());
+      // The terms that depend on a and s only; log(a/s) = -log1p(b/a):
+      RealType result = -BOOST_MATH_NAMESPACE::log1p(b / a, Policy()) / 2 - log(s) - 1 / (2 * a) + 1 / s + r_a - r_s + nu_s;
+      if (b < threshold)
+      {
+        return result + lgamma(b, Policy()) + b - (b - 1) * digamma(b, Policy());
+      }
+      RealType r_b, nu_b;
+      beta_detail::entropy_stirling_series(b, r_b, nu_b, Policy());
+      // log(b/s) / 2 + log(s) / 2 + the b terms, given result's -log(s):
+      return result + constants::log_root_two_pi<RealType>() + constants::half<RealType>()
+        - BOOST_MATH_NAMESPACE::log1p(a / b, Policy()) / 2 + log(s) / 2 - 1 / (2 * b) + r_b;
+    } // entropy
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType pdf(const beta_distribution<RealType, Policy>& dist, const RealType& x)

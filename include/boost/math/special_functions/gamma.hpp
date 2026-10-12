@@ -1930,7 +1930,7 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol
 // (ACM TOMS 46(1), Algorithm 1006), the prefix x^a e^-x is never formed.
 //
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper)
+BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper, bool* exact_infinity = nullptr)
 {
    BOOST_MATH_STD_USING
    const char* function = upper ? "boost::math::ligamma<%1%>(%1%, %1%)" : "boost::math::ligamma_lower<%1%>(%1%, %1%)";
@@ -1946,7 +1946,19 @@ BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper)
    // At the ends of the range, the target is either the complete gamma function or zero:
    bool target_is_zero = upper ? (BOOST_MATH_NAMESPACE::isinf)(x) : (x == 0);
    if(target_is_zero)
-      return -policies::raise_overflow_error<T>(function, nullptr, pol);
+   {
+      // -infinity is the exact answer here, not an overflow; the caller returns it unchecked.
+      BOOST_MATH_IF_CONSTEXPR(BOOST_MATH_NAMESPACE::numeric_limits<T>::has_infinity)
+      {
+         if(exact_infinity)
+            *exact_infinity = true;
+         return -BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity();
+      }
+      else
+      {
+         return -policies::raise_overflow_error<T>(function, nullptr, pol);
+      }
+   }
    if(upper ? (x == 0) : (BOOST_MATH_NAMESPACE::isinf)(x))
       return BOOST_MATH_NAMESPACE::lgamma(a, pol);
 
@@ -2677,8 +2689,11 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma(T1 a, T2 z, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
-      detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), true), "boost::math::ligamma<%1%>(%1%, %1%)");
+   bool exact_infinity = false;
+   value_type result = detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), true, &exact_infinity);
+   if(exact_infinity)
+      return static_cast<result_type>(result);
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::ligamma<%1%>(%1%, %1%)");
 }
 
 BOOST_MATH_EXPORT template <class T1, class T2>
@@ -2700,8 +2715,11 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma_lower(T1 a, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
-      detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), false), "boost::math::ligamma_lower<%1%>(%1%, %1%)");
+   bool exact_infinity = false;
+   value_type result = detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), false, &exact_infinity);
+   if(exact_infinity)
+      return static_cast<result_type>(result);
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::ligamma_lower<%1%>(%1%, %1%)");
 }
 
 BOOST_MATH_EXPORT template <class T1, class T2>

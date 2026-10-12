@@ -85,7 +85,6 @@ void test_spots(std::size_t ulps, Real absolute_tolerance)
    }
 
    // The boundaries, which follow ibeta: a == 0 gives P = 1 and b == 0 gives P = 0 whatever x is.
-   using ignore_overflow = boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::ignore_error>>;
    CHECK_EQUAL(Real(libeta(Real(2), Real(3), Real(1))), Real(0));
    CHECK_EQUAL(Real(libetac(Real(2), Real(3), Real(0))), Real(0));
    CHECK_EQUAL(Real(libeta(Real(0), Real(3), Real(0))), Real(0));
@@ -93,10 +92,10 @@ void test_spots(std::size_t ulps, Real absolute_tolerance)
    if (std::numeric_limits<Real>::has_infinity)
    {
       const Real minus_infinity = -std::numeric_limits<Real>::infinity();
-      CHECK_EQUAL(Real(libeta(Real(2), Real(3), Real(0), ignore_overflow())), minus_infinity);
-      CHECK_EQUAL(Real(libetac(Real(2), Real(3), Real(1), ignore_overflow())), minus_infinity);
-      CHECK_EQUAL(Real(libeta(Real(2), Real(0), Real(0.5), ignore_overflow())), minus_infinity);
-      CHECK_EQUAL(Real(libetac(Real(0), Real(2), Real(0.5), ignore_overflow())), minus_infinity);
+      CHECK_EQUAL(Real(libeta(Real(2), Real(3), Real(0))), minus_infinity);
+      CHECK_EQUAL(Real(libetac(Real(2), Real(3), Real(1))), minus_infinity);
+      CHECK_EQUAL(Real(libeta(Real(2), Real(0), Real(0.5))), minus_infinity);
+      CHECK_EQUAL(Real(libetac(Real(0), Real(2), Real(0.5))), minus_infinity);
    }
    // NaN arguments are domain errors; ignoring the error gives NaN:
    if (std::numeric_limits<Real>::has_quiet_NaN)
@@ -115,7 +114,6 @@ void test_spots(std::size_t ulps, Real absolute_tolerance)
 #endif
    }
 #ifndef BOOST_NO_EXCEPTIONS
-   CHECK_THROW(libeta(Real(2), Real(3), Real(0)), std::overflow_error);
    CHECK_THROW(libeta(Real(2), Real(3), Real(-0.5)), std::domain_error);
    CHECK_THROW(libeta(Real(2), Real(3), Real(1.5)), std::domain_error);
    CHECK_THROW(libetac(Real(-2), Real(3), Real(0.5)), std::domain_error);

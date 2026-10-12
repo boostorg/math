@@ -1,0 +1,59 @@
+# Copyright 2026 Nick Thompson
+# Distributed under the Boost Software License, Version 1.0.
+# https://www.boost.org/LICENSE_1_0.txt
+#
+# Dev-only nanobind layer, not built by CI. Usage (venv with nanobind numpy mpmath pytest):
+#   cmake -S nanobind -B build-nb -G Ninja -DPython_EXECUTABLE=venv/bin/python && cmake --build build-nb
+#   PYTHONPATH=build-nb venv/bin/python -m pytest nanobind/tests
+
+cmake_minimum_required(VERSION 3.18)
+project(boost_math_nanobind LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+# Same optimisation level as CI.
+set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+
+find_package(Python 3.9 REQUIRED COMPONENTS Interpreter Development.Module)
+if(NOT nanobind_DIR)
+  # -I: don't let this directory (also called nanobind) shadow the package.
+  execute_process(
+    COMMAND "${Python_EXECUTABLE}" -I -m nanobind --cmake_dir
+    OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE nanobind_DIR
+    COMMAND_ERROR_IS_FATAL ANY)
+endif()
+find_package(nanobind CONFIG REQUIRED)
+
+set(BOOST_MATH_NB_SOURCES
+  src/module.cpp
+  src/gamma.cpp
+  src/beta.cpp
+  src/erf_expint_zeta.cpp
+  src/elementary.cpp
+  src/bessel.cpp
+  src/elliptic.cpp
+  src/jacobi_theta.cpp
+  src/polynomials.cpp
+  src/hypergeometric.cpp
+  src/distributions_continuous.cpp
+  src/distributions_heavy.cpp
+  src/distributions_discrete.cpp
+  src/distributions_noncentral.cpp
+)
+
+nanobind_add_module(_ext NOMINSIZE ${BOOST_MATH_NB_SOURCES})
+target_include_directories(_ext PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../include" "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_compile_definitions(_ext PRIVATE BOOST_MATH_STANDALONE)
+if(NOT MSVC)
+  # Match CI and test/Makefile: contraction allowed everywhere.
+  target_compile_options(_ext PRIVATE -ffp-contract=fast)
+endif()
+
+set(pkg_dir "${CMAKE_CURRENT_BINARY_DIR}/boost/math")
+set_target_properties(_ext PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${pkg_dir}")
+add_custom_command(TARGET _ext POST_BUILD
+  COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+          "${CMAKE_CURRENT_SOURCE_DIR}/boost/math/__init__.py" "${pkg_dir}/__init__.py")

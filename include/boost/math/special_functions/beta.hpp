@@ -2004,7 +2004,7 @@ BOOST_MATH_GPU_ENABLED T log_ibeta_power_terms(T a, T b, T x, T y, const BOOST_M
 // Logarithm of the regularised incomplete beta, or of its complement when invert is true.
 //
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T libeta_imp(T a, T b, T x, const Policy& pol, bool invert)
+BOOST_MATH_GPU_ENABLED T libeta_imp(T a, T b, T x, const Policy& pol, bool invert, bool* exact_infinity = nullptr)
 {
    BOOST_MATH_STD_USING
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
@@ -2030,7 +2030,19 @@ BOOST_MATH_GPU_ENABLED T libeta_imp(T a, T b, T x, const Policy& pol, bool inver
    bool q_is_zero = (a == 0) || ((b != 0) && (x == 1));
    bool target_is_zero = invert ? q_is_zero : p_is_zero;
    if(target_is_zero)
-      return -policies::raise_overflow_error<T>(function, nullptr, pol);
+   {
+      // -infinity is the exact answer here, not an overflow; the caller returns it unchecked.
+      BOOST_MATH_IF_CONSTEXPR(BOOST_MATH_NAMESPACE::numeric_limits<T>::has_infinity)
+      {
+         if(exact_infinity)
+            *exact_infinity = true;
+         return -BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity();
+      }
+      else
+      {
+         return -policies::raise_overflow_error<T>(function, nullptr, pol);
+      }
+   }
 
    // The underflow is ours to handle, so stop ibeta_imp from reporting it:
    typedef typename policies::normalise<Policy, policies::underflow_error<policies::ignore_error> >::type quiet_policy;
@@ -2189,6 +2201,12 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2>::type
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
+   // log(beta(a, b)) is exactly -infinity when either (valid) argument is infinite:
+   BOOST_MATH_IF_CONSTEXPR(BOOST_MATH_NAMESPACE::numeric_limits<value_type>::has_infinity)
+   {
+      if((a > 0) && (b > 0) && ((BOOST_MATH_NAMESPACE::isinf)(a) || (BOOST_MATH_NAMESPACE::isinf)(b)))
+         return -BOOST_MATH_NAMESPACE::numeric_limits<result_type>::infinity();
+   }
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::lbeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), evaluation_type(), forwarding_policy()), "boost::math::lbeta<%1%>(%1%,%1%)");
 }
 
@@ -2293,7 +2311,11 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<RT1, RT2, RT3>
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::libeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), false), "boost::math::libeta<%1%>(%1%,%1%,%1%)");
+   bool exact_infinity = false;
+   value_type result = detail::libeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), false, &exact_infinity);
+   if(exact_infinity)
+      return static_cast<result_type>(result);
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::libeta<%1%>(%1%,%1%,%1%)");
 }
 
 BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
@@ -2317,7 +2339,11 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<RT1, RT2, RT3>
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::libeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), true), "boost::math::libetac<%1%>(%1%,%1%,%1%)");
+   bool exact_infinity = false;
+   value_type result = detail::libeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), true, &exact_infinity);
+   if(exact_infinity)
+      return static_cast<result_type>(result);
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::libetac<%1%>(%1%,%1%,%1%)");
 }
 
 BOOST_MATH_EXPORT template <class RT1, class RT2, class RT3>
