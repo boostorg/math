@@ -21,5 +21,6 @@ NB_MODULE(_ext, m) {
    bmpy::bind_distributions_noncentral(m);
    bmpy::bind_fft(m);
    bmpy::bind_quadrature(m);
+   bmpy::bind_optimization(m);
    bmpy::bind_polynomial_roots(m);
 }
