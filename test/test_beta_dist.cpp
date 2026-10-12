@@ -630,20 +630,20 @@ void test_entropy(RealType)
    // Reference values from mpmath at 45 digits: log(beta(a, b)) - (a-1) digamma(a) - (b-1) digamma(b) + (a+b-2) digamma(a+b).
    // The large-parameter cases cancel catastrophically in that form.
    RealType tol = 50 * boost::math::tools::epsilon<RealType>();
-   auto check = [&](const char* a, const char* b, const char* h)
+   auto check = [&](long double a, long double b, long double h)
    {
-      beta_distribution<RealType> dist(boost::lexical_cast<RealType>(a), boost::lexical_cast<RealType>(b));
-      BOOST_CHECK_CLOSE_FRACTION(entropy(dist), boost::lexical_cast<RealType>(h), tol);
+      beta_distribution<RealType> dist(static_cast<RealType>(a), static_cast<RealType>(b));
+      BOOST_CHECK_CLOSE_FRACTION(entropy(dist), static_cast<RealType>(h), tol);
    };
-   check("2", "3", "-0.2349066497880003102297094798388788407985");
-   check("0.5", "0.5", "-0.2415644752704904446910368915632944245037");
-   check("0.125", "8", "-7.236093290136823717228800592217375034163");
-   check("9.5", "2", "-0.922951609703585681996556781537869432303");
-   check("30", "70", "-1.671603471334352932984107068683246070161");
-   check("10", "1000000", "-11.27947087941654488172437002583796804517");
-   check("10000", "10000", "-4.225977424873357422152240946297157538477");
-   check("1000000", "0.001", "-1006.482327533958828091847078424074949448");
-   check("1e10", "1e10", "-11.13370770263047364243672571920348908759");
+   check(2.0L, 3.0L, -0.2349066497880003102297094798388788407985L);
+   check(0.5L, 0.5L, -0.2415644752704904446910368915632944245037L);
+   check(0.125L, 8.0L, -7.236093290136823717228800592217375034163L);
+   check(9.5L, 2.0L, -0.922951609703585681996556781537869432303L);
+   check(30.0L, 70.0L, -1.671603471334352932984107068683246070161L);
+   check(10.0L, 1000000.0L, -11.27947087941654488172437002583796804517L);
+   check(10000.0L, 10000.0L, -4.225977424873357422152240946297157538477L);
+   check(1000000.0L, 0.001L, -1006.482327533958828091847078424074949448L);
+   check(1e10L, 1e10L, -11.13370770263047364243672571920348908759L);
    BOOST_CHECK_EQUAL(entropy(beta_distribution<RealType>(1, 1)), RealType(0)); // Uniform.
 }
 
