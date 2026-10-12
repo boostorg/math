@@ -655,6 +655,53 @@ BOOST_MATH_NAMESPACE_BEGIN
       } // binomial cdf
 
       BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_CUDA_ENABLED inline RealType logcdf(const binomial_distribution<RealType, Policy>& dist, const RealType& k)
+      {
+        BOOST_MATH_STD_USING
+        RealType n = dist.trials();
+        RealType p = dist.success_fraction();
+        RealType result = 0;
+        if(false == binomial_detail::check_dist_and_k(
+           "boost::math::logcdf(binomial_distribution<%1%> const&, %1%)", n, p, k, &result, Policy()))
+        {
+           return result;
+        }
+        if ((k == n) || (p == 0))
+        {
+          return 0;
+        }
+        if (p == 1)
+        {
+          return log(RealType(0));
+        }
+        return libetac(k + 1, n - k, p, Policy());
+      }
+
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_CUDA_ENABLED inline RealType logcdf(const complemented2_type<binomial_distribution<RealType, Policy>, RealType>& c)
+      {
+        BOOST_MATH_STD_USING
+        RealType const& k = c.param;
+        RealType n = c.dist.trials();
+        RealType p = c.dist.success_fraction();
+        RealType result = 0;
+        if(false == binomial_detail::check_dist_and_k(
+           "boost::math::logcdf(binomial_distribution<%1%> const&, %1%)", n, p, k, &result, Policy()))
+        {
+           return result;
+        }
+        if ((k == n) || (p == 0))
+        {
+          return log(RealType(0));
+        }
+        if (p == 1)
+        {
+          return 0;
+        }
+        return libeta(k + 1, n - k, p, Policy());
+      }
+
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_CUDA_ENABLED inline RealType quantile(const binomial_distribution<RealType, Policy>& dist, const RealType& p)
       {
          return binomial_detail::quantile_imp(dist, p, RealType(1-p), false);

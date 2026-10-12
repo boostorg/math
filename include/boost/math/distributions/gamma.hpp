@@ -244,6 +244,34 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<gamma_distri
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType logcdf(const gamma_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   constexpr auto function = "boost::math::logcdf(const gamma_distribution<%1%>&, %1%)";
+   RealType shape = dist.shape();
+   RealType scale = dist.scale();
+   RealType result = 0;
+   if(false == detail::check_gamma(function, scale, shape, &result, Policy()))
+      return result;
+   if(false == detail::check_gamma_x(function, x, &result, Policy()))
+      return result;
+   return BOOST_MATH_NAMESPACE::lgamma_p(shape, x / scale, Policy());
+}
+
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<gamma_distribution<RealType, Policy>, RealType>& c)
+{
+   constexpr auto function = "boost::math::logcdf(const gamma_distribution<%1%>&, %1%)";
+   RealType shape = c.dist.shape();
+   RealType scale = c.dist.scale();
+   RealType result = 0;
+   if(false == detail::check_gamma(function, scale, shape, &result, Policy()))
+      return result;
+   if(false == detail::check_gamma_x(function, c.param, &result, Policy()))
+      return result;
+   return BOOST_MATH_NAMESPACE::lgamma_q(shape, c.param / scale, Policy());
+}
+
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<gamma_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions

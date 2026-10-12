@@ -446,6 +446,50 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<fisher_f_dis
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType logcdf(const fisher_f_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   constexpr auto function = "boost::math::logcdf(fisher_f_distribution<%1%> const&, %1%)";
+   RealType df1 = dist.degrees_of_freedom1();
+   RealType df2 = dist.degrees_of_freedom2();
+   RealType error_result = 0;
+   if(false == (detail::check_df(function, df1, &error_result, Policy())
+         && detail::check_df(function, df2, &error_result, Policy())))
+      return error_result;
+   if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
+   {
+      return policies::raise_domain_error<RealType>(
+         function, "Random Variable parameter was %1%, but must be > 0 !", x, Policy());
+   }
+   // As in cdf, keep the incomplete beta's argument away from 1:
+   RealType v1x = df1 * x;
+   return v1x > df2
+      ? BOOST_MATH_NAMESPACE::libetac(df2 / 2, df1 / 2, df2 / (df2 + v1x), Policy())
+      : BOOST_MATH_NAMESPACE::libeta(df1 / 2, df2 / 2, v1x / (df2 + v1x), Policy());
+}
+
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<fisher_f_distribution<RealType, Policy>, RealType>& c)
+{
+   constexpr auto function = "boost::math::logcdf(fisher_f_distribution<%1%> const&, %1%)";
+   RealType df1 = c.dist.degrees_of_freedom1();
+   RealType df2 = c.dist.degrees_of_freedom2();
+   RealType x = c.param;
+   RealType error_result = 0;
+   if(false == (detail::check_df(function, df1, &error_result, Policy())
+         && detail::check_df(function, df2, &error_result, Policy())))
+      return error_result;
+   if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
+   {
+      return policies::raise_domain_error<RealType>(
+         function, "Random Variable parameter was %1%, but must be > 0 !", x, Policy());
+   }
+   RealType v1x = df1 * x;
+   return v1x > df2
+      ? BOOST_MATH_NAMESPACE::libeta(df2 / 2, df1 / 2, df2 / (df2 + v1x), Policy())
+      : BOOST_MATH_NAMESPACE::libetac(df1 / 2, df2 / 2, v1x / (df2 + v1x), Policy());
+}
+
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<fisher_f_distribution<RealType, Policy>, RealType>& c)
 {
    constexpr auto function = "boost::math::quantile(fisher_f_distribution<%1%> const&, %1%)";

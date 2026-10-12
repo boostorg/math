@@ -424,6 +424,35 @@ BOOST_MATH_NAMESPACE_BEGIN
     } // cdf Cumulative Distribution Function Negative Binomial.
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
+    BOOST_MATH_GPU_ENABLED inline RealType logcdf(const negative_binomial_distribution<RealType, Policy>& dist, const RealType& k)
+    {
+      constexpr auto function = "boost::math::logcdf(const negative_binomial_distribution<%1%>&, %1%)";
+      RealType p = dist.success_fraction();
+      RealType r = dist.successes();
+      RealType result = 0;
+      if(false == negative_binomial_detail::check_dist_and_k(function, r, p, k, &result, Policy()))
+      {
+        return result;
+      }
+      return BOOST_MATH_NAMESPACE::libeta(r, static_cast<RealType>(k + 1), p, Policy());
+    }
+
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
+    BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<negative_binomial_distribution<RealType, Policy>, RealType>& c)
+    {
+      constexpr auto function = "boost::math::logcdf(const negative_binomial_distribution<%1%>&, %1%)";
+      RealType const& k = c.param;
+      RealType p = c.dist.success_fraction();
+      RealType r = c.dist.successes();
+      RealType result = 0;
+      if(false == negative_binomial_detail::check_dist_and_k(function, r, p, k, &result, Policy()))
+      {
+        return result;
+      }
+      return BOOST_MATH_NAMESPACE::libetac(r, static_cast<RealType>(k + 1), p, Policy());
+    }
+
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const negative_binomial_distribution<RealType, Policy>& dist, const RealType& P)
     { // Quantile, percentile/100 or Percent Point Negative Binomial function.
       // Return the number of expected failures k for a given probability p.

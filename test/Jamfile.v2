@@ -748,6 +748,7 @@ test-suite distribution_tests :
    [ run test_laplace.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_inv_hyp.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_logistic_dist.cpp /boost/test//boost_unit_test_framework  ]
+   [ run test_logcdf.cpp ]
    [ run test_lognormal.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_negative_binomial.cpp /boost/test//boost_unit_test_framework
         : # command line

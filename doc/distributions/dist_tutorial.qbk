@@ -146,14 +146,31 @@ The logcdf and logpdf functions are minimally calculated with log(cdf(my_dist, x
 and log(pdf(my_dist, x)) respectively. The following distributions have specialized
 implementations of the logcdf:
 
+* Beta
+* Binomial
+* Chi Squared
 * Exponential
 * Extreme Value
+* Fisher F
+* Gamma
 * Geometric
+* Inverse Chi Squared
+* Inverse Gamma
 * Laplace
 * Logistic
+* Negative Binomial
 * Pareto
+* Poisson
 * Rayleigh
+* Students t
 * Weibull
+
+The specialisations for the distributions built on the incomplete gamma and beta functions (beta, binomial,
+chi squared, Fisher F, gamma, inverse chi squared, inverse gamma, negative binomial, Poisson and Students t)
+use [link math_toolkit.sf_gamma.igamma lgamma_p and lgamma_q] and
+[link math_toolkit.sf_beta.ibeta_function libeta and libetac], so both `logcdf(dist, x)` and
+`logcdf(complement(dist, x))` stay finite and accurate far into the tails, where `log(cdf(dist, x))`
+underflows to -infinity.
 
 And the following distributions have specialized implementations of logpdf:
 

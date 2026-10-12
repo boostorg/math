@@ -582,6 +582,53 @@ BOOST_MATH_NAMESPACE_BEGIN
     } // beta cdf
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
+    BOOST_MATH_GPU_ENABLED inline RealType logcdf(const beta_distribution<RealType, Policy>& dist, const RealType& x)
+    {
+      BOOST_MATH_STD_USING
+      constexpr auto function = "boost::math::logcdf(beta_distribution<%1%> const&, %1%)";
+      RealType a = dist.alpha();
+      RealType b = dist.beta();
+      RealType result = 0;
+      if(false == beta_detail::check_dist_and_x(function, a, b, x, &result, Policy()))
+      {
+        return result;
+      }
+      if (x == 0)
+      {
+        return log(RealType(0));
+      }
+      else if (x == 1)
+      {
+        return 0;
+      }
+      return static_cast<RealType>(libeta(a, b, x, Policy()));
+    }
+
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
+    BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<beta_distribution<RealType, Policy>, RealType>& c)
+    {
+      BOOST_MATH_STD_USING
+      constexpr auto function = "boost::math::logcdf(beta_distribution<%1%> const&, %1%)";
+      RealType const& x = c.param;
+      RealType a = c.dist.alpha();
+      RealType b = c.dist.beta();
+      RealType result = 0;
+      if(false == beta_detail::check_dist_and_x(function, a, b, x, &result, Policy()))
+      {
+        return result;
+      }
+      if (x == 0)
+      {
+        return 0;
+      }
+      else if (x == 1)
+      {
+        return log(RealType(0));
+      }
+      return static_cast<RealType>(libetac(a, b, x, Policy()));
+    }
+
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const beta_distribution<RealType, Policy>& dist, const RealType& p)
     { // Quantile or Percent Point beta function or
       // Inverse Cumulative probability distribution function CDF.
