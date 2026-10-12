@@ -38,7 +38,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
+   if(!boost::math::policies::promote_double<>() || boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
       largest_type = "(long\\s+)?double";
    }
@@ -52,7 +52,7 @@ void expected_results()
    //
    // Linux:
    //
-   BOOST_MATH_IF_CONSTEXPR((std::numeric_limits<long double>::digits <= 64)
+   BOOST_MATH_IF_CONSTEXPR(boost::math::policies::promote_double<>() && (std::numeric_limits<long double>::digits <= 64)
       && (std::numeric_limits<long double>::digits != std::numeric_limits<double>::digits))
    {
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

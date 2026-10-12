@@ -489,8 +489,9 @@ BOOST_MATH_NAMESPACE_BEGIN
       { // No failures are expected if P = 0.
         return 0; // Total trials will be just dist.successes.
       }
-      // if (P <= pow(dist.success_fraction(), 1))
-      if (x <= success_fraction)
+      // Compare with the cdf itself, not the success fraction it equals
+      // mathematically, so that the rounding below agrees with cdf():
+      if (x <= cdf(dist, RealType(0)))
       { // p <= pdf(dist, 0) == cdf(dist, 0)
         return 0;
       }
@@ -501,9 +502,8 @@ BOOST_MATH_NAMESPACE_BEGIN
 
       // log(1-x) /log(1-success_fraction) -1; but use log1p in case success_fraction is small
       result = BOOST_MATH_NAMESPACE::log1p(-x, Policy()) / BOOST_MATH_NAMESPACE::log1p(-success_fraction, Policy()) - 1;
-      // Subtract a few epsilons here too?
-      // to make sure it doesn't slip over, so ceil would be one too many.
-      return result;
+      // Round as the discrete_quantile policy asks, settling on the cdf at integers:
+      return detail::round_discrete_quantile(dist, result, x, false, typename Policy::discrete_quantile_type());
     } // RealType quantile(const geometric_distribution dist, p)
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -533,9 +533,9 @@ BOOST_MATH_NAMESPACE_BEGIN
           // since the probability of zero failures may be non-zero,
           return 0; // but zero is the best we can do:
        }
-       if (-x <= BOOST_MATH_NAMESPACE::powm1(dist.success_fraction(), dist.successes(), Policy()))
-       {  // q <= cdf(complement(dist, 0)) == pdf(dist, 0)
-          return 0; //
+       if (x >= cdf(complement(dist, RealType(0))))
+       {  // As above, q >= cdf(complement(dist, 0)) == 1 - pdf(dist, 0).
+          return 0;
        }
        if(x == 0)
        {  // Probability 1 - Q  == 1 so infinite failures to achieve certainty.
@@ -549,7 +549,7 @@ BOOST_MATH_NAMESPACE_BEGIN
        }
        // log(x) /log(1-success_fraction) -1; but use log1p in case success_fraction is small
        result = log(x) / BOOST_MATH_NAMESPACE::log1p(-success_fraction, Policy()) - 1;
-      return result;
+       return detail::round_discrete_quantile(dist, result, x, true, typename Policy::discrete_quantile_type());
 
     } // quantile complement
 

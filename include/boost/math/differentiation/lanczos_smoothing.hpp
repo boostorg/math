@@ -50,14 +50,16 @@ class discrete_legendre {
         return prod;
     }
 
-    // Where a step adds two products, contraction may fuse either one, and differently in each inlined copy.
-    // fma(a, b, 0) rounds one of them on its own, which leaves the compiler a single choice; types that don't
-    // contract (x87 long double) round exactly as before.
+    // Every product that meets a sum is an explicit fma. Contraction is optional, so a compiler may fuse a
+    // plain a*b - c in one inlined copy of a step and not in another (CSE of a shared product is enough),
+    // and the recurrence then disagrees with itself. The other products feed multiplies, divides or an
+    // fma's addend, which contraction never touches, and N*N - (r-1)^2 is exact either way.
     Real next()
     {
+        using std::fma;
         Real N = 2 * m_n + 1;
         Real num = (m_r - 1) * (N * N - (m_r - 1) * (m_r - 1)) * m_qrm2;
-        Real tmp = (2 * m_r - 1) * m_x * m_qrm1 - num / Real(4 * m_n * m_n);
+        Real tmp = fma((2 * m_r - 1) * m_x, m_qrm1, -(num / Real(4 * m_n * m_n)));
         m_qrm2 = m_qrm1;
         m_qrm1 = tmp / m_r;
         ++m_r;
@@ -69,8 +71,8 @@ class discrete_legendre {
         using std::fma;
         Real N = 2 * m_n + 1;
         Real s = (m_r - 1) * (N * N - (m_r - 1) * (m_r - 1)) / Real(4 * m_n * m_n);
-        Real tmp1 = ((2 * m_r - 1) * m_x * m_qrm1 - fma(s, m_qrm2, Real(0))) / m_r;
-        Real tmp2 = ((2 * m_r - 1) * (m_qrm1 + m_x * m_qrm1p) - fma(s, m_qrm2p, Real(0))) / m_r;
+        Real tmp1 = fma((2 * m_r - 1) * m_x, m_qrm1, -s * m_qrm2) / m_r;
+        Real tmp2 = fma(Real(2 * m_r - 1), fma(m_x, m_qrm1p, m_qrm1), -s * m_qrm2p) / m_r;
         m_qrm2 = m_qrm1;
         m_qrm1 = tmp1;
         m_qrm2p = m_qrm1p;
@@ -85,9 +87,9 @@ class discrete_legendre {
         Real N = 2*m_n + 1;
         Real trm1 = 2*m_r - 1;
         Real s = (m_r - 1) * (N * N - (m_r - 1) * (m_r - 1)) / Real(4 * m_n * m_n);
-        Real rqrpp = fma(2*trm1, m_qrm1p, Real(0)) + trm1*m_x*m_qrm1pp - fma(s, m_qrm2pp, Real(0));
-        Real tmp1 = ((2 * m_r - 1) * m_x * m_qrm1 - fma(s, m_qrm2, Real(0))) / m_r;
-        Real tmp2 = ((2 * m_r - 1) * (m_qrm1 + m_x * m_qrm1p) - fma(s, m_qrm2p, Real(0))) / m_r;
+        Real rqrpp = fma(trm1 * m_x, m_qrm1pp, fma(2 * trm1, m_qrm1p, -s * m_qrm2pp));
+        Real tmp1 = fma(trm1 * m_x, m_qrm1, -s * m_qrm2) / m_r;
+        Real tmp2 = fma(trm1, fma(m_x, m_qrm1p, m_qrm1), -s * m_qrm2p) / m_r;
         m_qrm2 = m_qrm1;
         m_qrm1 = tmp1;
         m_qrm2p = m_qrm1p;

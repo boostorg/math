@@ -606,6 +606,8 @@ void test_rescaling()
 
     std::vector<Real> dv2dt21(500);
     std::vector<Real> dv2dt22(500);
+    lanczos3(v, dv2dt21);
+    lanczos4(v, dv2dt22);
 
     for(size_t i = 0; i < v.size(); ++i)
     {
@@ -616,7 +618,7 @@ void test_rescaling()
 template<class Real>
 void test_data_representations()
 {
-    std::cout << "Test rescaling on type " << typeid(Real).name() << "\n";
+    std::cout << "Test data representations on type " << typeid(Real).name() << "\n";
     Real tol = 150*std::numeric_limits<Real>::epsilon();
     std::array<Real, 500> v;
     for(size_t i = 0; i < v.size(); ++i)
