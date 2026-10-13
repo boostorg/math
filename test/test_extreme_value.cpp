@@ -251,8 +251,13 @@ void test_spots(RealType)
       BOOST_CHECK_EQUAL(cdf(extreme_value_distribution<RealType>(), inf), 1);
       BOOST_CHECK_EQUAL(cdf(complement(extreme_value_distribution<RealType>(), -inf)), 1);
       BOOST_CHECK_EQUAL(cdf(complement(extreme_value_distribution<RealType>(), inf)), 0);
-      BOOST_CHECK_EQUAL(logcdf(extreme_value_distribution<RealType>(), -inf), 0);
-      BOOST_CHECK_EQUAL(logcdf(extreme_value_distribution<RealType>(), inf), 1);
+      // log(0) is an exact -infinity, which goes to the overflow policy:
+      BOOST_CHECK_THROW(logcdf(extreme_value_distribution<RealType>(), -inf), std::overflow_error);
+      BOOST_CHECK_THROW(logcdf(complement(extreme_value_distribution<RealType>(), inf)), std::overflow_error);
+      BOOST_CHECK_EQUAL(logcdf(extreme_value_distribution<RealType>(), inf), 0);
+      BOOST_CHECK_EQUAL(logcdf(complement(extreme_value_distribution<RealType>(), -inf)), 0);
+      typedef boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::ignore_error> > ignore_overflow;
+      BOOST_CHECK_EQUAL(logcdf(extreme_value_distribution<RealType, ignore_overflow>(), -inf), -inf);
 
       // Test NaN policy
       using boost::math::policies::policy;

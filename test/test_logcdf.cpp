@@ -12,20 +12,24 @@
 #include <boost/math/distributions/beta.hpp>
 #include <boost/math/distributions/binomial.hpp>
 #include <boost/math/distributions/chi_squared.hpp>
+#include <boost/math/distributions/extreme_value.hpp>
 #include <boost/math/distributions/fisher_f.hpp>
 #include <boost/math/distributions/gamma.hpp>
 #include <boost/math/distributions/inverse_chi_squared.hpp>
 #include <boost/math/distributions/inverse_gamma.hpp>
+#include <boost/math/distributions/laplace.hpp>
+#include <boost/math/distributions/logistic.hpp>
 #include <boost/math/distributions/negative_binomial.hpp>
 #include <boost/math/distributions/poisson.hpp>
 #include <boost/math/distributions/students_t.hpp>
+#include <boost/math/distributions/weibull.hpp>
 #include <cmath>
 
 using namespace boost::math;
 
 // Some references (log(1 - tiny)) are below the range of T, where long double is double.
 template <class T>
-void compare(T got, long double expected)
+void compare(T got, long double expected, long double condition = 1)
 {
    if (std::abs(expected) < (std::numeric_limits<T>::min)())
    {
@@ -35,20 +39,22 @@ void compare(T got, long double expected)
    {
       // log(1 - P) = -P for a tiny tail P, so the error is that of gamma_p/ibeta deep in the tail, which in
       // 80 and 128-bit long double reaches ~1000 ulps.
-      CHECK_ULP_CLOSE(static_cast<T>(expected), got, 2048);
+      CHECK_ULP_CLOSE(static_cast<T>(expected), got, static_cast<unsigned>((std::max)(2048.0L, 4 * condition)));
    }
    else
    {
       // ibeta's own error is the limit at large parameters (82 ulps for beta(200, 300) at 0.01).
-      CHECK_ULP_CLOSE(static_cast<T>(expected), got, 128);
+      CHECK_ULP_CLOSE(static_cast<T>(expected), got, static_cast<unsigned>((std::max)(128.0L, 4 * condition)));
    }
 }
 
+// One tail is log1p(-exp(L)) of the other's log L. Where exp(L) is tiny, that multiplies the error in L
+// by |L|, so the tolerance follows that condition number:
 template <class Dist, class T>
 void check(Dist const& dist, T x, long double log_p, long double log_q)
 {
-   compare(logcdf(dist, x), log_p);
-   compare(logcdf(complement(dist, x)), log_q);
+   compare(logcdf(dist, x), log_p, std::fabs(log_p) < 0.5L ? std::fabs(log_q) : 1);
+   compare(logcdf(complement(dist, x)), log_q, std::fabs(log_q) < 0.5L ? std::fabs(log_p) : 1);
 }
 
 template <class T>
@@ -90,12 +96,39 @@ void test_logcdf()
    check(students_t_distribution<T>(5), T(1e70), -9.490167245562357338012859910823596491189e-350L, -803.6545263121025131443400282712354083919L);
    check(students_t_distribution<T>(1e12), T(-40), -804.6084413729540376061252065587134160101L, -3.655895883611449397336474100007682207859e-350L);
    check(students_t_distribution<T>(1e12), T(40), -3.655895883611449397336474100007682207859e-350L, -804.6084413729540376061252065587134160101L);
+   // |x| > sqrt(max) in double, where df / x^2 may underflow:
+   check(students_t_distribution<T>(1), T(-1e200), -461.6617484846585369474748405007362614333L, -3.183098861837906811720139504195578159356e-201L);
+   check(students_t_distribution<T>(2.5), T(-1e160), -921.3634587421731073387873653405855378588L, -7.193397190831722297482216141085036842542e-401L);
+   check(students_t_distribution<T>(7), T(-1e155), -2493.42162960194500325806622545904493395L, -1.320520676354676868206420818690757852191e-1083L);
+   check(students_t_distribution<T>(0.5), T(-1e300), -346.5250100798783758198490653831970251013L, -3.207009754142228919211973798954086743678e-151L);
+   compare(logcdf(students_t_distribution<T>(1e300), T(-1e200)), -1.151292546497022901892142285621235491416e+302L);
    check(students_t_distribution<T>(1e300), T(-40), -804.6084420137537881666068329186099362001L, -3.655893540915029703748985802688283665054e-350L);
+}
+
+// At an infinite x, the log of the tail that vanishes is an exact -infinity, which goes to the overflow
+// policy, and the log of the other tail is zero:
+template <template <class, class> class Distribution, class T>
+void test_infinite_x()
+{
+   using Dist = Distribution<T, boost::math::policies::policy<>>;
+   using Quiet = Distribution<T, boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::ignore_error>>>;
+   const T inf = std::numeric_limits<T>::infinity();
+   CHECK_EQUAL(boost::math::logcdf(Dist(), inf), T(0));
+   CHECK_EQUAL(boost::math::logcdf(boost::math::complement(Dist(), -inf)), T(0));
+   CHECK_EQUAL(boost::math::logcdf(Quiet(), -inf), -inf);
+   CHECK_EQUAL(boost::math::logcdf(boost::math::complement(Quiet(), inf)), -inf);
+   CHECK_THROW(boost::math::logcdf(Dist(), -inf), std::overflow_error);
+   CHECK_THROW(boost::math::logcdf(boost::math::complement(Dist(), inf)), std::overflow_error);
 }
 
 int main()
 {
    test_logcdf<double>();
    test_logcdf<long double>();
+   test_infinite_x<boost::math::extreme_value_distribution, double>();
+   test_infinite_x<boost::math::laplace_distribution, double>();
+   test_infinite_x<boost::math::logistic_distribution, double>();
+   // The Weibull pdf vanishes at 0 for shape > 1:
+   CHECK_THROW(boost::math::logpdf(boost::math::weibull_distribution<double>(2), 0.0), std::overflow_error);
    return boost::math::test::report_errors();
 }

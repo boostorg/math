@@ -190,8 +190,6 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const extreme_value_distribution<R
 
    constexpr auto function = "boost::math::logcdf(const extreme_value_distribution<%1%>&, %1%)";
 
-   if((BOOST_MATH_NAMESPACE::isinf)(x))
-      return x < 0 ? 0.0f : 1.0f;
    RealType a = dist.location();
    RealType b = dist.scale();
    RealType result = 0;
@@ -199,6 +197,9 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const extreme_value_distribution<R
       return result;
    if(0 == detail::check_finite(function, a, &result, Policy()))
       return result;
+   // log(0) at the infinite end is an exact infinity, which goes to the overflow policy:
+   if((BOOST_MATH_NAMESPACE::isinf)(x))
+      return x < 0 ? -policies::raise_overflow_error<RealType>(function, nullptr, Policy()) : RealType(0);
    if(0 == detail::check_x("boost::math::logcdf(const extreme_value_distribution<%1%>&, %1%)", x, &result, Policy()))
       return result;
 
@@ -265,8 +266,6 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<extreme_v
 
    constexpr auto function = "boost::math::logcdf(const extreme_value_distribution<%1%>&, %1%)";
 
-   if((BOOST_MATH_NAMESPACE::isinf)(c.param))
-      return c.param < 0 ? 1.0f : 0.0f;
    RealType a = c.dist.location();
    RealType b = c.dist.scale();
    RealType result = 0;
@@ -274,6 +273,9 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<extreme_v
       return result;
    if(0 == detail::check_finite(function, a, &result, Policy()))
       return result;
+   // log(0) at the infinite end is an exact infinity, which goes to the overflow policy:
+   if((BOOST_MATH_NAMESPACE::isinf)(c.param))
+      return c.param < 0 ? RealType(0) : -policies::raise_overflow_error<RealType>(function, nullptr, Policy());
    if(0 == detail::check_x(function, c.param, &result, Policy()))
       return result;
 

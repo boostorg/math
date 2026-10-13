@@ -325,8 +325,13 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const students_t_distribution<Real
    RealType log_tail;
    if (ax > sqrt(tools::max_value<RealType>()))
    {
-      // x^2 would overflow; df / (df + x^2) is then (df / |x|) / |x|.
-      log_tail = BOOST_MATH_NAMESPACE::libeta(df / 2, static_cast<RealType>(0.5), RealType((df / ax) / ax), Policy());
+      // x^2 would overflow; df / (df + x^2) is then z = (df / |x|) / |x|. Where z is below epsilon (it may
+      // underflow), log I_z(a, 1/2) = a log(z) - log(a) - lbeta(a, 1/2) + O(z), with log(z) taken from the logs:
+      RealType z = (df / ax) / ax;
+      RealType a = df / 2;
+      log_tail = z < tools::epsilon<RealType>()
+         ? RealType(a * (log(df) - 2 * log(ax)) - log(a) - BOOST_MATH_NAMESPACE::lbeta(a, static_cast<RealType>(0.5), Policy()))
+         : RealType(BOOST_MATH_NAMESPACE::libeta(a, static_cast<RealType>(0.5), z, Policy()));
    }
    else
    {

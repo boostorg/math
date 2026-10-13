@@ -1847,6 +1847,9 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_imp(T a, T x, const Policy& pol)
       return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
    if(x < 0)
       return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
+   // The log of an exact zero; the overflow policy decides, as for ligamma:
+   if((BOOST_MATH_NAMESPACE::isinf)(x))
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
 
    if (((x > 1000) || (x > tools::log_max_value<T>() - 10)) && (a + 50 < x))
    {
@@ -1913,6 +1916,9 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol
       return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
    if(x < 0)
       return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
+   // The log of an exact zero; the overflow policy decides, as for ligamma:
+   if(x == 0)
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
 
    // Taken from conditions on Line 1709. There are also
    // conditions on Line 1368, but didn't implement that one here. 
@@ -1969,7 +1975,7 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol
 // (ACM TOMS 46(1), Algorithm 1006), the prefix x^a e^-x is never formed.
 //
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper, bool* exact_infinity = nullptr)
+BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper)
 {
    BOOST_MATH_STD_USING
    const char* function = upper ? "boost::math::ligamma<%1%>(%1%, %1%)" : "boost::math::ligamma_lower<%1%>(%1%, %1%)";
@@ -1986,17 +1992,8 @@ BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper, bo
    bool target_is_zero = upper ? (BOOST_MATH_NAMESPACE::isinf)(x) : (x == 0);
    if(target_is_zero)
    {
-      // -infinity is the exact answer here, not an overflow; the caller returns it unchecked.
-      BOOST_MATH_IF_CONSTEXPR(BOOST_MATH_NAMESPACE::numeric_limits<T>::has_infinity)
-      {
-         if(exact_infinity)
-            *exact_infinity = true;
-         return -BOOST_MATH_NAMESPACE::numeric_limits<T>::infinity();
-      }
-      else
-      {
-         return -policies::raise_overflow_error<T>(function, nullptr, pol);
-      }
+      // -infinity is exact here; as for every other exact infinity, the overflow policy decides:
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
    }
    if(upper ? (x == 0) : (BOOST_MATH_NAMESPACE::isinf)(x))
       return BOOST_MATH_NAMESPACE::lgamma(a, pol);
@@ -2728,10 +2725,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma(T1 a, T2 z, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   bool exact_infinity = false;
-   value_type result = detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), true, &exact_infinity);
-   if(exact_infinity)
-      return static_cast<result_type>(result);
+   value_type result = detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), true);
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::ligamma<%1%>(%1%, %1%)");
 }
 
@@ -2754,10 +2748,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma_lower(T1 a, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   bool exact_infinity = false;
-   value_type result = detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), false, &exact_infinity);
-   if(exact_infinity)
-      return static_cast<result_type>(result);
+   value_type result = detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), false);
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::ligamma_lower<%1%>(%1%, %1%)");
 }
 

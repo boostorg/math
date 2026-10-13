@@ -181,9 +181,10 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const weibull_distribution<RealTyp
       {
          return log(1 / scale);
       }
+      // pdf(0) is zero, so its log is an exact -infinity, which goes to the overflow policy:
       if(shape > 1)
       {
-         return 0;
+         return -policies::raise_overflow_error<RealType>(function, nullptr, Policy());
       }
       return policies::raise_overflow_error<RealType>(function, 0, Policy());
    }

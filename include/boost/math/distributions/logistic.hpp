@@ -168,13 +168,10 @@ BOOST_MATH_NAMESPACE_BEGIN
           return result;
        }
 
+       // The log of the cdf at -infinity is an exact -infinity, which goes to the overflow policy:
        if((BOOST_MATH_NAMESPACE::isinf)(x))
        {
-          if(x < 0) 
-          {
-            return 0; // -infinity
-          }
-          return 1; // + infinity
+          return x < 0 ? -policies::raise_overflow_error<RealType>(function, nullptr, Policy()) : RealType(0);
        }
 
        if(false == detail::check_x(function, x, &result, Policy()))
@@ -273,10 +270,10 @@ BOOST_MATH_NAMESPACE_BEGIN
        {
           return result;
        }
+       // The log of the complement at +infinity is an exact -infinity, which goes to the overflow policy:
        if((BOOST_MATH_NAMESPACE::isinf)(x))
        {
-          if(x < 0) return 1; // cdf complement -infinity is unity.
-          return 0; // cdf complement +infinity is zero.
+          return x < 0 ? RealType(0) : -policies::raise_overflow_error<RealType>(function, nullptr, Policy());
        }
        if(false == detail::check_x(function, x, &result, Policy()))
        {
