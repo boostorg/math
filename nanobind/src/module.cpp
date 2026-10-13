@@ -23,4 +23,7 @@ NB_MODULE(_ext, m) {
    bmpy::bind_quadrature(m);
    bmpy::bind_optimization(m);
    bmpy::bind_polynomial_roots(m);
+#ifdef BMPY_HAVE_ULPS
+   bmpy::bind_ulps(m);
+#endif
 }

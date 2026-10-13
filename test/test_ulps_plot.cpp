@@ -392,6 +392,28 @@ void test_files()
     // The summary counts the grid and the probes:
     CHECK_LE(std::size_t(1), count(plot.summary(), "samples=500 "));
 
+    // Threads change nothing:
+    {
+        ulps_plot<decltype(f), double, float> serial(f, 0.5f, 6.0f, 500, false, 3, false, 1);
+        ulps_plot<decltype(f), double, float> threaded(f, 0.5f, 6.0f, 500, false, 3, false, 4);
+        serial.add_fn(g).add_fn(h);
+        threaded.add_fn(g).add_fn(h);
+        CHECK_TRUE(serial.summary() == threaded.summary());
+    }
+    // An exception on a worker thread reaches the caller:
+    {
+        bool thrown = false;
+        try
+        {
+            detail::parallel_for(100, 4, [](std::size_t j) { if (j == 37) { throw std::runtime_error("37"); } });
+        }
+        catch (std::runtime_error const & e)
+        {
+            thrown = std::string(e.what()) == "37";
+        }
+        CHECK_TRUE(thrown);
+    }
+
     // A logarithmic axis:
     ulps_plot<decltype(f), double, float> log_plot(f, 0.01f, 100.0f, 200, true, 3, true);
     log_plot.add_fn(g).png_encoder(nullptr);
@@ -409,7 +431,8 @@ void test_files()
     std::string const heat_name = "test_ulps_heatmap.svg";
     heat.write_ulps_envelope(heat_name);
     check_svg(read_file(heat_name));
-    CHECK_EQUAL(widths.size(), std::size_t(1));
+    CHECK_TRUE(read_file(heat_name) == heat.ulps_envelope_svg());
+    CHECK_EQUAL(widths.size(), std::size_t(2));
     CHECK_EQUAL(widths[0], std::size_t(40));
     CHECK_EQUAL(heights[0], std::size_t(30));
     std::remove(heat_name.c_str());

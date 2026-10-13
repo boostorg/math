@@ -26,6 +26,8 @@ void bind_fft(nb::module_& m);
 void bind_quadrature(nb::module_& m);
 void bind_optimization(nb::module_& m);
 void bind_polynomial_roots(nb::module_& m);
+// Only with Boost.Multiprecision and zlib; see CMakeLists.txt.
+void bind_ulps(nb::module_& m);
 
 }  // namespace bmpy
 
