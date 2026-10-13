@@ -1275,6 +1275,7 @@ test-suite quadrature :
    [ run gauss_hermite_quadrature_eigen_test.cpp : : : [ requires cxx17_if_constexpr ]
      [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
    [ run gauss_laguerre_quadrature_test.cpp : : : $(float128_type) [ requires cxx17_if_constexpr ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+   [ run gauss_hermite_adaptive.cpp : : : $(float128_type) [ requires cxx17_if_constexpr ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
 
 
    [ run naive_monte_carlo_test.cpp : : :
