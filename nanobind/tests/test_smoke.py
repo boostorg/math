@@ -421,6 +421,7 @@ CONTINUOUS = [
     ("chi_squared_distribution", (3.5,)),
     ("exponential_distribution", (2.0,)),
     ("extreme_value_distribution", ()),
+    ("generalized_extreme_value_distribution", (0.5, 2.0, 0.1)),
     ("fisher_f_distribution", (3.0, 7.0)),
     ("gamma_distribution", (2.5, 1.5)),
     ("inverse_chi_squared_distribution", (4.0,)),
@@ -501,6 +502,23 @@ def test_discrete_distribution(case):
     q = dist.quantile(0.5)
     assert dist.cdf(q) >= 0.5 - 1e-12
     assert math.isfinite(dist.mean()) and math.isfinite(dist.variance())
+
+
+@pytest.mark.parametrize("case", CONTINUOUS + DISCRETE, ids=lambda c: c[0])
+def test_distribution_repr(case):
+    # The repr names the constructor's arguments, each a property, and rebuilds the distribution.
+    name, params = case
+    dist = getattr(bm, name)(*params)
+    r = repr(dist)
+    assert r.startswith(name + "(")
+    again = eval(r, vars(bm))
+    assert repr(again) == r
+    assert np.allclose(again.cdf(dist.quantile(0.3)), 0.3, rtol=1e-12) or name in {c[0] for c in DISCRETE}
+    for i, value in enumerate(params):
+        arg = r[len(name) + 1:-1].split(", ")[i].split("=")[0] if name != "hyperexponential_distribution" else None
+        if arg is not None and not isinstance(value, (list, tuple)):
+            got = getattr(dist, arg)
+            assert (got() if callable(got) else got) == value
 
 
 def test_normal_against_mpmath():

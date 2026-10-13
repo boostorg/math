@@ -38,12 +38,16 @@ if(HAVE_BOOST_TEST)
 
         message(STATUS "Building boost.math with SYCL")
 
+        # icpx defaults to -fp-model=fast, which flushes denormals to zero and reassociates arithmetic,
+        # defeating the error-free transforms and compensated sums the library relies on; test as
+        # the other compilers do (contraction stays on).
+
         set(CMAKE_CXX_COMPILER "icpx")
         set(CMAKE_C_COMPILER "icx")
 
         enable_testing()
 
-        boost_test_jamfile(FILE sycl_jamfile LINK_LIBRARIES Boost::math Boost::assert Boost::concept_check Boost::config Boost::core Boost::integer Boost::lexical_cast Boost::multiprecision Boost::predef Boost::random Boost::throw_exception Boost::unit_test_framework sycl COMPILE_DEFINITIONS BOOST_MATH_ENABLE_SYCL=1 COMPILE_OPTIONS -fsycl )
+        boost_test_jamfile(FILE sycl_jamfile LINK_LIBRARIES Boost::math Boost::assert Boost::concept_check Boost::config Boost::core Boost::integer Boost::lexical_cast Boost::multiprecision Boost::predef Boost::random Boost::throw_exception Boost::unit_test_framework sycl COMPILE_DEFINITIONS BOOST_MATH_ENABLE_SYCL=1 COMPILE_OPTIONS -fsycl -fp-model=precise )
     elseif (BOOST_MATH_BUILD_MODULE)
 
         message(STATUS "Building boost.math as a C++20 module")

@@ -43,6 +43,9 @@ BOOST_MATH_EXPORT template <class RealType, class Policy>
 class fisher_f_distribution;
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
+class generalized_extreme_value_distribution;
+
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 class gamma_distribution;
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -145,6 +148,7 @@ BOOST_MATH_NAMESPACE_END
    typedef BOOST_MATH_NAMESPACE::extreme_value_distribution<Type, Policy> extreme_value;\
    typedef BOOST_MATH_NAMESPACE::fisher_f_distribution<Type, Policy> fisher_f;\
    typedef BOOST_MATH_NAMESPACE::gamma_distribution<Type, Policy> gamma;\
+   typedef BOOST_MATH_NAMESPACE::generalized_extreme_value_distribution<Type, Policy> generalized_extreme_value;\
    typedef BOOST_MATH_NAMESPACE::geometric_distribution<Type, Policy> geometric;\
    typedef BOOST_MATH_NAMESPACE::hypergeometric_distribution<Type, Policy> hypergeometric;\
    typedef BOOST_MATH_NAMESPACE::kolmogorov_smirnov_distribution<Type, Policy> kolmogorov_smirnov;\

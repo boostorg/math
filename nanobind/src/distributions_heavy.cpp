@@ -31,36 +31,42 @@ void bmpy::bind_distributions_heavy(nb::module_& m) {
       nb::class_<D> c(m, "holtsmark_distribution");
       c.def(nb::init<double, double>(), arg("location") = 0.0, arg("scale") = 1.0);
       add_dist_methods(c);
+      bmpy::add_dist_params(c, {BMPY_PARAM("location", location), BMPY_PARAM("scale", scale)});
    }
    {
       using D = bm::landau_distribution<double, pol>;
       nb::class_<D> c(m, "landau_distribution");
       c.def(nb::init<double, double>(), arg("location") = 0.0, arg("scale") = 1.0);
       add_dist_methods(c);
+      bmpy::add_dist_params(c, {BMPY_PARAM("location", location), BMPY_PARAM("scale", scale)});
    }
    {
       using D = bm::mapairy_distribution<double, pol>;
       nb::class_<D> c(m, "mapairy_distribution");
       c.def(nb::init<double, double>(), arg("location") = 0.0, arg("scale") = 1.0);
       add_dist_methods(c);
+      bmpy::add_dist_params(c, {BMPY_PARAM("location", location), BMPY_PARAM("scale", scale)});
    }
    {
       using D = bm::saspoint5_distribution<double, pol>;
       nb::class_<D> c(m, "saspoint5_distribution");
       c.def(nb::init<double, double>(), arg("location") = 0.0, arg("scale") = 1.0);
       add_dist_methods(c);
+      bmpy::add_dist_params(c, {BMPY_PARAM("location", location), BMPY_PARAM("scale", scale)});
    }
    {
       using D = bm::von_mises_distribution<double, pol>;
       nb::class_<D> c(m, "von_mises_distribution");
       c.def(nb::init<double, double>(), arg("mean") = 0.0, arg("concentration") = 1.0);
       add_dist_methods(c);
+      bmpy::add_dist_params(c, {BMPY_PARAM("mean", mean), BMPY_PARAM("concentration", concentration)});
    }
    {
       using D = bm::kolmogorov_smirnov_distribution<double, pol>;
       nb::class_<D> c(m, "kolmogorov_smirnov_distribution");
       c.def(nb::init<double>(), arg("n"));
       add_dist_methods(c);
+      bmpy::add_dist_params(c, {BMPY_PARAM("n", number_of_observations)});
    }
    {
       using D = bm::hyperexponential_distribution<double, pol>;
@@ -71,5 +77,6 @@ void bmpy::bind_distributions_heavy(nb::module_& m) {
           [](D* self, const std::vector<double>& probs, const std::vector<double>& rates) { new (self) D(probs, rates); },
           arg("probabilities"), arg("rates"));
       add_dist_methods(c);
+      bmpy::add_dist_params(c, {BMPY_PARAM("probabilities", probabilities), BMPY_PARAM("rates", rates)});
    }
 }

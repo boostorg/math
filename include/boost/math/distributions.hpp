@@ -23,6 +23,7 @@
 #include <boost/math/distributions/extreme_value.hpp>
 #include <boost/math/distributions/fisher_f.hpp>
 #include <boost/math/distributions/gamma.hpp>
+#include <boost/math/distributions/generalized_extreme_value.hpp>
 #include <boost/math/distributions/geometric.hpp>
 #include <boost/math/distributions/holtsmark.hpp>
 #include <boost/math/distributions/hyperexponential.hpp>
