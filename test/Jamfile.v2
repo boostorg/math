@@ -693,6 +693,7 @@ test-suite distribution_tests :
    [ run test_dist_overloads.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_exponential_dist.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_extreme_value.cpp /boost/test//boost_unit_test_framework  ]
+   [ run test_generalized_extreme_value.cpp ]
    [ run test_find_location.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_find_scale.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_fisher_f.cpp /boost/test//boost_unit_test_framework  ]
@@ -750,28 +751,28 @@ test-suite distribution_tests :
    [ run test_logistic_dist.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_logcdf.cpp ]
    [ run test_lognormal.cpp /boost/test//boost_unit_test_framework  ]
-   [ run test_negative_binomial.cpp /boost/test//boost_unit_test_framework
+   [ run test_negative_binomial.cpp
         : # command line
         : # input files
         : # requirements
           <define>TEST_FLOAT
           <toolset>intel:<pch>off
         : test_negative_binomial_float  ]
-   [ run test_negative_binomial.cpp /boost/test//boost_unit_test_framework
+   [ run test_negative_binomial.cpp
         : # command line
         : # input files
         : # requirements
           <define>TEST_DOUBLE
           <toolset>intel:<pch>off
         : test_negative_binomial_double  ]
-   [ run test_negative_binomial.cpp /boost/test//boost_unit_test_framework
+   [ run test_negative_binomial.cpp
         : # command line
         : # input files
         : # requirements
           <define>TEST_LDOUBLE
           <toolset>intel:<pch>off
         : test_negative_binomial_long_double  ]
-   [ run test_negative_binomial.cpp /boost/test//boost_unit_test_framework
+   [ run test_negative_binomial.cpp
         : # command line
         : # input files
         : # requirements
@@ -1650,6 +1651,7 @@ test-suite concepts :
    [ run  compile_test/test_dist_complement_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/test_dist_exponential_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/test_dist_extreme_val_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
+   [ run  compile_test/test_dist_generalized_extreme_value_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/test_dist_find_location_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/test_dist_find_scale_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/test_dist_fisher_f_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]

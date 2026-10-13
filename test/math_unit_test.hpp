@@ -307,11 +307,11 @@ bool check_absolute_error(PreciseReal expected1, Real computed, Real acceptable_
     if (!std::is_integral<PreciseReal>::value) {
         BOOST_MATH_ASSERT_MSG(sizeof(PreciseReal) >= sizeof(Real),
                          "The expected number must be computed in higher (or equal) precision than the number being tested.");
-        BOOST_MATH_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan (use CHECK_NAN if this is your intention).");
+        BOOST_MATH_ASSERT_MSG(!boost::math::isnan(expected1), "Expected value cannot be a nan (use CHECK_NAN if this is your intention).");
     }
     BOOST_MATH_ASSERT_MSG(acceptable_error > 0, "Error must be > 0.");
 
-    if (isnan(computed))
+    if (boost::math::isnan(computed))
     {
         std::ios_base::fmtflags f(std::cerr.flags());
         std::cerr << std::setprecision(3);
@@ -499,8 +499,15 @@ inline int report_errors()
 
 #define CHECK_TRUE(X) boost::math::test::check_true((X), __FILE__, __func__, __LINE__)
 
+// Without exceptions (GPU and SYCL builds, -fno-exceptions) errors don't throw, so there is nothing to check;
+// as BOOST_MATH_CHECK_THROW does there, the expressions aren't evaluated.
+#ifdef BOOST_MATH_NO_EXCEPTIONS
+#define CHECK_THROW(x, what)
+#define CHECK_NO_THROW(x) x;
+#else
 #define CHECK_THROW(x, what) try{ x; boost::math::test::report_non_throw(__FILE__, __LINE__); }catch(const what&){} catch(...){ boost::math::test::report_incorrect_throw(__FILE__, __LINE__); }
 
 #define CHECK_NO_THROW(x) try{ x; }catch(...){ boost::math::test::report_unexpected_throw(__FILE__, __LINE__); }
+#endif
 
 #endif

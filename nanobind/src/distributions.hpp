@@ -14,7 +14,10 @@
 
 #include <nanobind/stl/pair.h>
 
+#include <initializer_list>
+#include <string>
 #include <utility>
+#include <vector>
 
 #include "vectorize.hpp"
 
@@ -67,6 +70,35 @@ nb::class_<D>& add_dist_methods(nb::class_<D>& cls) {
    BMPY_DIST_ACCESSOR(support)
    BMPY_DIST_ACCESSOR(range)
 #undef BMPY_DIST_ACCESSOR
+   return cls;
+}
+
+// A parameter: the constructor's argument name, and its value read back from the distribution.
+template <class D>
+using dist_param = std::pair<const char*, nb::object (*)(const D&)>;
+
+#define BMPY_PARAM(name, accessor) \
+   bmpy::dist_param<D>{name, +[](const D& d) { return nb::cast(d.accessor()); }}
+
+// Exposes the parameters as read-only properties, under the constructor's argument names, and a repr that
+// constructs the same distribution: normal_distribution(mean=0.0, sd=1.0). A parameter named like a method
+// (the mean of a normal, the mode of a triangular) stays the method, which returns the same value.
+template <class D>
+nb::class_<D>& add_dist_params(nb::class_<D>& cls, std::initializer_list<dist_param<D>> params) {
+   std::vector<dist_param<D>> ps(params);
+   for (auto const& [name, get] : ps) {
+      if (!nb::hasattr(cls, name)) {
+         cls.def_prop_ro(name, get);
+      }
+   }
+   std::string type = nb::cast<std::string>(cls.attr("__name__"));
+   cls.def("__repr__", [type, ps](const D& d) {
+      std::string s = type + "(";
+      for (std::size_t i = 0; i < ps.size(); ++i) {
+         s += (i ? ", " : "") + std::string(ps[i].first) + "=" + nb::cast<std::string>(nb::repr(ps[i].second(d)));
+      }
+      return s + ")";
+   });
    return cls;
 }
 

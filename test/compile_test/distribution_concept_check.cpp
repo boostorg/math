@@ -27,6 +27,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<chi_squared_distribution<RealType, custom_policy> > >();
    function_requires<DistributionConcept<exponential_distribution<RealType, custom_policy> > >();
    function_requires<DistributionConcept<extreme_value_distribution<RealType, custom_policy> > >();
+   function_requires<DistributionConcept<generalized_extreme_value_distribution<RealType, custom_policy> > >();
    function_requires<DistributionConcept<fisher_f_distribution<RealType, custom_policy> > >();
    function_requires<DistributionConcept<gamma_distribution<RealType, custom_policy> > >();
    function_requires<DistributionConcept<geometric_distribution<RealType, custom_policy> > >();
