@@ -125,14 +125,26 @@ void test_spots(std::size_t ulps, Real absolute_tolerance)
       }
    }
 
-   // At the ends of the range the functions are lgamma(a) or exactly -infinity, which is returned, not an overflow:
+   // At the ends of the range the functions are lgamma(a) or exactly -infinity. The latter is an overflow,
+   // as for every exact infinity, and so are lgamma_p and lgamma_q there; ignoring it gives -infinity:
    CHECK_EQUAL(Real(ligamma(Real(2.5), Real(0))), Real(boost::math::lgamma(Real(2.5))));
+#ifndef BOOST_NO_EXCEPTIONS
+   CHECK_THROW(ligamma_lower(Real(2.5), Real(0)), std::overflow_error);
+   CHECK_THROW(boost::math::lgamma_p(Real(2.5), Real(0)), std::overflow_error);
+#endif
    if (std::numeric_limits<Real>::has_infinity)
    {
+      using ignore_overflow = boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::ignore_error>>;
       const Real infinity = std::numeric_limits<Real>::infinity();
       CHECK_EQUAL(Real(ligamma_lower(Real(2.5), infinity)), Real(boost::math::lgamma(Real(2.5))));
-      CHECK_EQUAL(Real(ligamma(Real(2.5), infinity)), Real(-infinity));
-      CHECK_EQUAL(Real(ligamma_lower(Real(2.5), Real(0))), Real(-infinity));
+      CHECK_EQUAL(Real(ligamma(Real(2.5), infinity, ignore_overflow())), Real(-infinity));
+      CHECK_EQUAL(Real(ligamma_lower(Real(2.5), Real(0), ignore_overflow())), Real(-infinity));
+      CHECK_EQUAL(Real(boost::math::lgamma_p(Real(2.5), Real(0), ignore_overflow())), Real(-infinity));
+      CHECK_EQUAL(Real(boost::math::lgamma_q(Real(2.5), infinity, ignore_overflow())), Real(-infinity));
+#ifndef BOOST_NO_EXCEPTIONS
+      CHECK_THROW(ligamma(Real(2.5), infinity), std::overflow_error);
+      CHECK_THROW(boost::math::lgamma_q(Real(2.5), infinity), std::overflow_error);
+#endif
    }
    // NaN arguments are domain errors; ignoring the error gives NaN:
    if (std::numeric_limits<Real>::has_quiet_NaN)

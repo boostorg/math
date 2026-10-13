@@ -347,7 +347,9 @@ def test_integer_results():
 def test_python_scalars_give_python_floats():
     assert type(bm.libeta(1, 2, 0.1)) is float
     assert type(bm.tgamma(np.float32(3))) is np.float32
-    assert bm.libeta(1, 2, 0) == -np.inf
+    # log(0) is an exact infinity, which goes to the overflow policy:
+    with pytest.raises(OverflowError):
+        bm.libeta(1, 2, 0)
 
 
 # --- conventions ------------------------------------------------------------

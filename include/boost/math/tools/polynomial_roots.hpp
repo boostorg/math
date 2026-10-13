@@ -9,6 +9,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/fft.hpp>
+#include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/detail/complex_from_real.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/next.hpp>
@@ -251,7 +252,7 @@ detail::real_from_complex_t<Complex> scaled_residual(std::vector<Coefficient> co
       f = f * x + c;
       scale = scale * ax + abs(c);
    }
-   return abs(f) / ((std::max)(scale, (std::numeric_limits<Real>::min)()));
+   return abs(f) / ((std::max)(scale, tools::min_value<Real>()));
 }
 
 template <class Complex>
@@ -318,7 +319,7 @@ std::vector<Complex> aberth(std::vector<Complex> a,
             Complex(cos(angle), sin(angle));
       }
    }
-   Real eps = std::numeric_limits<Real>::epsilon();
+   Real eps = tools::epsilon<Real>();
    // A root whose last correction was negligible is frozen: it still repels the others but is no longer
    // updated. Each sweep then costs O(n * active) instead of O(n^2).
    const bool global = !(BOOST_MATH_NAMESPACE::isfinite)(interest);
@@ -423,7 +424,7 @@ Real inclusion_radius(std::vector<Real> const& a, Complex z)
    using std::abs;
    using complex_type = Complex;
    std::size_t n = a.size() - 1;
-   Real eps = std::numeric_limits<Real>::epsilon();
+   Real eps = tools::epsilon<Real>();
    bool reversed = abs(z) > 1;
    complex_type x = reversed ? complex_type(Real(1) / z) : z;
    Real ax = abs(x);
@@ -453,7 +454,7 @@ namespace polynomial_roots_detail {
 template <class Real>
 std::vector<detail::complex_from_real_t<Real> > piecewise(std::vector<Real> coefficients)
 {
-   const unsigned precision = std::numeric_limits<Real>::digits;
+   const unsigned precision = static_cast<unsigned>(tools::digits<Real>());
    static_assert(!std::is_integral<Real>::value, "polynomial_roots requires a floating-point coefficient type");
    using std::abs;
    using std::log2;
@@ -485,8 +486,8 @@ std::vector<detail::complex_from_real_t<Real> > piecewise(std::vector<Real> coef
    struct candidate { complex_type z; Real radius; Real residual; };
    std::vector<candidate> candidates;
    std::size_t taylor_degree = (std::min)(degree, std::size_t(4) * precision);
-   Real log_min = log2((std::numeric_limits<Real>::min)());
-   Real log_max = log2((std::numeric_limits<Real>::max)());
+   Real log_min = log2(tools::min_value<Real>());
+   Real log_max = log2(tools::max_value<Real>());
 
    for(auto const& piece : pieces)
    {
@@ -553,7 +554,7 @@ std::vector<detail::complex_from_real_t<Real> > piecewise(std::vector<Real> coef
             coefficient_norm += abs(coefficient);
          Real discarded = 0;
          std::size_t effective_size = local[k].size();
-         Real discard_limit = Real(8) * std::numeric_limits<Real>::epsilon() * coefficient_norm;
+         Real discard_limit = Real(8) * tools::epsilon<Real>() * coefficient_norm;
          while(effective_size > 1 &&
                discarded + abs(local[k][effective_size - 1]) <= discard_limit)
          {
@@ -575,16 +576,16 @@ std::vector<detail::complex_from_real_t<Real> > piecewise(std::vector<Real> coef
                local_value = local_value * t + local[k][q];
                local_scale = local_scale * abs(t) + abs(local[k][q]);
             }
-            local_scale = (std::max)(local_scale, (std::numeric_limits<Real>::min)());
+            local_scale = (std::max)(local_scale, tools::min_value<Real>());
             if(!(BOOST_MATH_NAMESPACE::isfinite)(local_value.real()) || !(BOOST_MATH_NAMESPACE::isfinite)(local_value.imag()) ||
-               abs(local_value) > sqrt(std::numeric_limits<Real>::epsilon()) * local_scale)
+               abs(local_value) > sqrt(tools::epsilon<Real>()) * local_scale)
                continue;
             complex_type z = phase * (gamma + rho * t);
             Real modulus = abs(z);
-            if(modulus >= inner * (Real(1) - Real(32) * std::numeric_limits<Real>::epsilon()) &&
-               modulus <= outer * (Real(1) + Real(32) * std::numeric_limits<Real>::epsilon()))
+            if(modulus >= inner * (Real(1) - Real(32) * tools::epsilon<Real>()) &&
+               modulus <= outer * (Real(1) + Real(32) * tools::epsilon<Real>()))
             {
-               Real error = abs(local_value) + Real(8) * std::numeric_limits<Real>::epsilon() * local_scale;
+               Real error = abs(local_value) + Real(8) * tools::epsilon<Real>() * local_scale;
                // A few Newton steps' worth: copies of one root agree to about the local accuracy, and the
                // guaranteed radius (degree times the step) would also merge neighbouring roots. Copies
                // this misses are merged after polishing, with the guaranteed radius on the full polynomial.
@@ -601,7 +602,7 @@ std::vector<detail::complex_from_real_t<Real> > piecewise(std::vector<Real> coef
    // other's radius (sorted by real part, so there is no branch cut to split a pair), keeping the one with
    // the smaller local backward error, so that each root is polished against the full polynomial only
    // once. Using the smaller radius keeps a poor candidate from absorbing a good one for a different root.
-   Real eps = std::numeric_limits<Real>::epsilon();
+   Real eps = tools::epsilon<Real>();
    auto by_real = [](complex_type a, complex_type b) { return a.real() < b.real() || (a.real() == b.real() && a.imag() < b.imag()); };
    candidates.erase(std::remove_if(candidates.begin(), candidates.end(), [](candidate const& c) {
       return !(BOOST_MATH_NAMESPACE::isfinite)(c.z.real()) || !(BOOST_MATH_NAMESPACE::isfinite)(c.z.imag()) || !(c.radius < std::numeric_limits<Real>::infinity()); }),
@@ -880,7 +881,7 @@ public:
    std::vector<complex_type> eigenvalues()
    {
       std::size_t n = n_;
-      Real eps = std::numeric_limits<Real>::epsilon();
+      Real eps = tools::epsilon<Real>();
       std::size_t hi = n - 1;
       unsigned its = 0, restarts = 0;
       while(hi > 0)
