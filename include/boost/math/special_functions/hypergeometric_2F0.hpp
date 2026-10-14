@@ -16,7 +16,7 @@
 #include <boost/math/special_functions/laguerre.hpp>
 #include <boost/math/special_functions/hermite.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
-#include <boost/math/special_functions/detail/two_product.hpp>
+#include <boost/math/tools/compensated_arithmetic.hpp>
 #include <boost/math/tools/fraction.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN namespace detail {
@@ -70,27 +70,23 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
    {
       BOOST_MATH_STD_USING
       two_product<T> product;
-      T t;
       // g1 + e1 = 1 - b z exactly:
       T bz, rbz;
       product(b, z, bz, rbz);
       T g1 = 1 - bz;
-      t = g1 - 1;
-      T e1 = ((1 - (g1 - t)) + (-bz - t)) - rbz;
+      T e1 = two_sum_error(T(1), T(-bz), g1) - rbz;
       T g0 = 1;
       T e0 = 0;
       for (unsigned k = 1; k < n; ++k)
       {
          // a + ea = 1 - (k + b) z and c + ec = k z exactly:
          T u = k + b;
-         t = u - k;
-         T eu = (k - (u - t)) + (b - t);
+         T eu = two_sum_error(T(k), b, u);
          T v, rv;
          product(u, z, v, rv);
          rv += eu * z;
          T a = 1 - v;
-         t = a - 1;
-         T ea = ((1 - (a - t)) + (-v - t)) - rv;
+         T ea = two_sum_error(T(1), T(-v), a) - rv;
          T c, ec;
          product(T(k), z, c, ec);
          // s1 + r1 = a g1, s2 + r2 = c g0 and d + ed = s1 + s2 exactly:
@@ -98,8 +94,7 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
          product(a, g1, s1, r1);
          product(c, g0, s2, r2);
          T d = s1 + s2;
-         t = d - s1;
-         T ed = (s1 - (d - t)) + (s2 - t);
+         T ed = two_sum_error(s1, s2, d);
          T e2 = a * e1 + c * e0 + ed + r1 + r2 + ea * g1 + ec * g0;
          g0 = g1;
          g1 = d;

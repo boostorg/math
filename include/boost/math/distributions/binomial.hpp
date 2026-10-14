@@ -822,8 +822,8 @@ BOOST_MATH_NAMESPACE_BEGIN
       // denominator is (n + 1) p - (k + 1):
       RealType k_right = mode;
       RealType k_left = mode;
-      detail::entropy_compensated_sum<RealType> s_right;
-      detail::entropy_compensated_sum<RealType> s_left;
+      detail::compensated_sum<RealType> s_right;
+      detail::compensated_sum<RealType> s_left;
       auto log_ratio = [&](RealType k, RealType& ratio, bool left)
       {
         return detail::entropy_log_ratio(RealType((n - k) * p), RealType((k + 1) * q), RealType(fma(n + 1, p, -(k + 1))), ratio, left, Policy());

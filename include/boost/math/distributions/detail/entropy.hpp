@@ -16,7 +16,7 @@
 #include <boost/math/special_functions/digamma.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/log1p.hpp>
-#include <boost/math/special_functions/detail/two_product.hpp>
+#include <boost/math/tools/compensated_arithmetic.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
@@ -126,34 +126,6 @@ inline RealType inverse_gamma_entropy_unit_scale(RealType a, const Policy& pol)
    return constants::log_root_two_pi<RealType>() + constants::half<RealType>() - 3 * log(a) / 2 + 1 / (2 * a) + r + 2 * nu;
 }
 
-// a * b - c * d for a * b close to c * d: with p1 + e1 = a * b and p2 + e2 = c * d exactly (two_product,
-// which also works for types whose fma isn't fused), p1 - p2 is exact by Sterbenz's lemma.
-template <class RealType>
-inline RealType entropy_difference_of_products(RealType a, RealType b, RealType c, RealType d)
-{
-   two_product<RealType> product;
-   RealType p1, e1, p2, e2;
-   product(a, b, p1, e1);
-   product(c, d, p2, e2);
-   return (p1 - p2) + (e1 - e2);
-}
-
-// Neumaier's compensated sum: the direct sums can run to ~1e5 terms (negative binomials with small p).
-template <class RealType>
-struct entropy_compensated_sum
-{
-   RealType sum = 0;
-   RealType c = 0;
-   void add(RealType x)
-   {
-      BOOST_MATH_STD_USING
-      RealType t = sum + x;
-      c += (fabs(sum) >= fabs(x)) ? RealType((sum - t) + x) : RealType((x - t) + sum);
-      sum = t;
-   }
-   RealType value() const { return sum + c; }
-};
-
 // Shannon entropy -sum p log(p) of a discrete distribution, from the log ratios S = log(p / p_0) of its
 // probabilities at points spaced h apart, relative to a point near the mode (S = 0 there):
 //    H = log(h Z) - sum(w S) / Z,  where w = exp(S) and Z = sum(w).
@@ -175,8 +147,9 @@ RealType discrete_entropy_sum(Right& right, Left& left, RealType h, RealType rho
    BOOST_MATH_STD_USING
    const RealType eps = policies::get_epsilon<RealType, Policy>();
    const std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-   entropy_compensated_sum<RealType> z;  // sum of w, without the w = 1 at S = 0.
-   entropy_compensated_sum<RealType> zs; // sum of w S.
+   // Neumaier's compensated sums: the direct sums can run to ~1e5 terms (negative binomials with small p).
+   compensated_sum<RealType> z;  // sum of w, without the w = 1 at S = 0.
+   compensated_sum<RealType> zs; // sum of w S.
    std::uintmax_t iter = 0;
    for (int side = 0; side < 2; ++side)
    {

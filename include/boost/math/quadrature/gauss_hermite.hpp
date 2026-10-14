@@ -30,6 +30,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/tools/compensated_arithmetic.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/quadrature/detail/quadrature_constant.hpp>
@@ -189,16 +190,12 @@ class gauss_hermite_detail
       // their weighted mean, plus two roundings. That removes the shared part, which is what integrals of
       // smooth functions see, and moves no weight by more than |e| <= max |e_i|; measured, both the largest and
       // the mean |e_i| fall for N = 200, 500 and 706. Sum from the smallest weight, with Neumaier's compensation:
-      Real sum = 0;
-      Real compensation = 0;
+      BOOST_MATH_NAMESPACE::detail::compensated_sum<Real> sum;
       for (std::size_t i = w.size(); i-- > 0;)
       {
-         Real term = (offset && (i == 0)) ? w[i] : Real(2 * w[i]);
-         Real t = sum + term;
-         compensation += abs(sum) >= abs(term) ? Real((sum - t) + term) : Real((term - t) + sum);
-         sum = t;
+         sum.add((offset && (i == 0)) ? w[i] : Real(2 * w[i]));
       }
-      const Real scale = BOOST_MATH_NAMESPACE::constants::root_pi<Real>() / (sum + compensation);
+      const Real scale = BOOST_MATH_NAMESPACE::constants::root_pi<Real>() / sum.value();
       for (Real& weight_i : w)
       {
          weight_i *= scale;
