@@ -31,9 +31,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/math/special_functions/factorials.hpp>
-#ifndef BOOST_MATH_HAS_GPU_SUPPORT
-#include <boost/math/special_functions/detail/two_product.hpp>  // only the host-only no-Lanczos power terms use it
-#endif
+#include <boost/math/tools/compensated_arithmetic.hpp>
 #include <boost/math/tools/roots.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
@@ -370,16 +368,6 @@ BOOST_MATH_GPU_ENABLED T lbeta_imp(T a, T b, const lanczos::undefined_lanczos& l
 #endif
 
 //
-// The exact sum u + v is s + (return value), where s = fl(u + v):
-//
-template <class T>
-BOOST_MATH_GPU_ENABLED inline T ibeta_sum_error(T u, T v, T s)
-{
-   T vv = s - u;
-   return (u - (s - vv)) + (v - vv);
-}
-
-//
 // The bases of the power terms minus one, l1 = x cgh / agh - 1 and l2 = y cgh / bgh - 1, where
 // agh = a + gh, bgh = b + gh and cgh = a + b + gh (gh = 0 for no shift).
 // The larger of x and y = 1 - x has been rounded, and near the mode x b and y a nearly
@@ -395,9 +383,9 @@ BOOST_MATH_GPU_ENABLED inline void ibeta_power_bases(T a, T b, T x, T y, T gh, T
    using std::fma;
    #endif
    T c = a + b;
-   T agh_err = ibeta_sum_error(a, gh, agh);
-   T bgh_err = ibeta_sum_error(b, gh, bgh);
-   T cgh_err = ibeta_sum_error(c, gh, cgh) + ibeta_sum_error(a, b, c);
+   T agh_err = two_sum_error(a, gh, agh);
+   T bgh_err = two_sum_error(b, gh, bgh);
+   T cgh_err = two_sum_error(c, gh, cgh) + two_sum_error(a, b, c);
    if(x <= y)
    {
       l1 = (fma(x, cgh, -agh) + (x * cgh_err - agh_err)) / agh;
@@ -422,7 +410,7 @@ BOOST_MATH_GPU_ENABLED inline T ibeta_power_log_near_mean(T a, T b, T l1, T l2, 
    #ifndef BOOST_MATH_HAS_GPU_SUPPORT
    using std::fma;
    #endif
-   T bgh_err = ibeta_sum_error(b, gh, bgh);
+   T bgh_err = two_sum_error(b, gh, bgh);
    //
    // Both bases are near 1, and when a and b are large the two terms of the exponent
    // a log1p(l1) + b log1p(l2) nearly cancel. Since agh (1 + l1) + bgh (1 + l2) = cgh,
@@ -435,11 +423,11 @@ BOOST_MATH_GPU_ENABLED inline T ibeta_power_log_near_mean(T a, T b, T l1, T l2, 
    // rounding error found with fma, is lh + ll, and the rounding of lh + the rest is added back below.
    //
    T ab = a - b;
-   T ab_err = ibeta_sum_error(a, T(-b), ab);
+   T ab_err = two_sum_error(a, T(-b), ab);
    T ph = fma(l1, ab, T(0));  // fma(x, y, 0) so that the product is not contracted into a later sum
    T pl = fma(l1, ab, -ph) + l1 * ab_err;
    T nh = ph - b;
-   T nl = pl + ibeta_sum_error(ph, T(-b), nh);
+   T nl = pl + two_sum_error(ph, T(-b), nh);
    T wh = nh / bgh;
    T wl = (fma(-wh, bgh, nh) + (nl - wh * bgh_err)) / bgh;
    T lh = fma(gh, wh, T(0));
@@ -448,7 +436,7 @@ BOOST_MATH_GPU_ENABLED inline T ibeta_power_log_near_mean(T a, T b, T l1, T l2, 
       + a * BOOST_MATH_NAMESPACE::log1pmx(l1, pol)
       + b * BOOST_MATH_NAMESPACE::log1pmx(l2, pol);
    T l = lh + rest;
-   l_err = ibeta_sum_error(lh, rest, l);
+   l_err = two_sum_error(lh, rest, l);
    return l;
 }
 
@@ -731,7 +719,7 @@ BOOST_MATH_GPU_ENABLED T ibeta_power_terms(T a,
       // from the smaller of x and y and the rounding error of c, the bases are 1 + d / a and 1 - d / b,
       // and the d terms of the exponent cancel exactly, leaving a log1pmx(d / a) + b log1pmx(-d / b):
       //
-      T c_err = ibeta_sum_error(a, b, c);
+      T c_err = two_sum_error(a, b, c);
       T ph, pl;
       two_product<T> product;
       product(x <= y ? x : y, c, ph, pl);  // ph is fma(x, c, 0), which contraction can't fuse into ph - a
@@ -879,22 +867,16 @@ BOOST_MATH_GPU_ENABLED T ibeta_series_sum(ibeta_series_t<T>& s, T s0, BOOST_MATH
    BOOST_MATH_STD_USING
    const T factor = BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>();
    BOOST_MATH_NAMESPACE::uintmax_t counter = max_iter;
-   T sum = s0;
-   T comp = 0;
+   compensated_sum<T> sum(s0);
    T term;
    do
    {
       term = s();
-      T next = sum + term;
-      if (abs(sum) >= abs(term))
-         comp += (sum - next) + term;
-      else
-         comp += (term - next) + sum;
-      sum = next;
+      sum.add(term);
    }
-   while ((abs(factor * sum) < abs(term)) && --counter);
+   while ((abs(factor * sum.sum) < abs(term)) && --counter);
    max_iter = max_iter - counter;
-   return sum + comp;
+   return sum.value();
 }
 
 template <class T, class Lanczos, class Policy>
@@ -1297,9 +1279,8 @@ BOOST_MATH_GPU_ENABLED T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T
    //
    // The sum is often started from s0 = -1, when the first term is of order one and each later term
    // is rounded onto a coarse grid, so keep their rounding errors in comp (Neumaier summation):
-   T pj = prefix * j;
-   T sum = s0 + pj;  // Value at N = 0
-   T comp = (fabs(s0) >= fabs(pj)) ? T((s0 - sum) + pj) : T((pj - sum) + s0);
+   compensated_sum<T> sum(s0);
+   sum.add(prefix * j);  // Value at N = 0
    // some variables we'll need:
    unsigned tnp1 = 1; // 2*N+1
    T lx2 = lx / 2;
@@ -1346,15 +1327,13 @@ BOOST_MATH_GPU_ENABLED T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T
       // pull it together with Eq 9:
       //
       T r = prefix * p[n] * j;
-      T next = sum + r;
-      comp += (fabs(sum) >= fabs(r)) ? T((sum - next) + r) : T((r - next) + sum);
-      sum = next;
+      sum.add(r);
       // r is always small:
       BOOST_MATH_ASSERT(tools::max_value<T>() * tools::epsilon<T>() > fabs(r));
-      if(fabs(r / tools::epsilon<T>()) < fabs(sum))
+      if(fabs(r / tools::epsilon<T>()) < fabs(sum.sum))
          break;
    }
-   return sum + comp;
+   return sum.value();
 } // template <class T, class Lanczos>T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Lanczos& l, bool normalised)
 
 //

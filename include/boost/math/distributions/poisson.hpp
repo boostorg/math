@@ -650,8 +650,8 @@ BOOST_MATH_NAMESPACE_BEGIN
       RealType mode = floor(lambda);
       RealType k_right = mode;
       RealType k_left = mode;
-      detail::entropy_compensated_sum<RealType> s_right;
-      detail::entropy_compensated_sum<RealType> s_left;
+      detail::compensated_sum<RealType> s_right;
+      detail::compensated_sum<RealType> s_left;
       auto right = [&](RealType& s, RealType& ratio)
       {
         s_right.add(detail::entropy_log_ratio(lambda, RealType(k_right + 1), RealType(lambda - (k_right + 1)), ratio, false, Policy()));

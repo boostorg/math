@@ -123,6 +123,7 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/special_functions/jacobi_theta.hpp>
 #include <boost/math/special_functions/log1p.hpp>
+#include <boost/math/tools/compensated_arithmetic.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/roots.hpp> // Newton-Raphson
@@ -160,42 +161,16 @@ inline RealType kolmogorov_smirnov_kurtosis_excess_constant() {
     return BOOST_MATH_BIG_CONSTANT(RealType, 1000, 0.8816189679105236704015538304328295408355055629289034536289160037385510119639244078254098968815665536);
 }
 
-// Splits t = hi + lo so that hi carries only the leading half of the
-// significand: products of two such hi parts are then exact (Veltkamp's
-// splitting, with splitter = 2^ceil(digits/2) + 1).
-template <class RealType>
-inline RealType kolmogorov_smirnov_splitter() {
-    BOOST_MATH_STD_USING
-    return ldexp(RealType(1), (tools::digits<RealType>() + 1) / 2) + 1;
-}
-
-template <class RealType>
-inline void kolmogorov_smirnov_split(RealType t, RealType splitter, RealType& hi, RealType& lo) {
-    RealType g = splitter * t;
-    hi = g - (g - t);
-    lo = t - hi;
-}
-
-// Returns the rounding error of the product ab = a*b, i.e. the exact product
-// is ab + result (Dekker's algorithm, which works for any floating-point
-// type, unlike fma).
-template <class RealType>
-inline RealType kolmogorov_smirnov_product_error(RealType a, RealType b, RealType ab, RealType splitter) {
-    RealType ah, al, bh, bl;
-    kolmogorov_smirnov_split(a, splitter, ah, al);
-    kolmogorov_smirnov_split(b, splitter, bh, bl);
-    return (((ah * bh - ab) + ah * bl) + al * bh) + al * bl;
-}
-
 // Given u = x*x*n as computed in floating point, returns the rounding error
 // in u, so that exp(-c*u) can be evaluated as exp(-c*u) * (1 - c*err)
 // without the rounding error of u being amplified by the size of the
 // exponent c*u.
 template <class RealType>
-inline RealType kolmogorov_smirnov_x2n_error(RealType x, RealType n, RealType u, RealType splitter) {
+inline RealType kolmogorov_smirnov_x2n_error(RealType x, RealType n, RealType u) {
+    two_product<RealType> product;
     RealType x2 = x * x;
-    RealType e1 = kolmogorov_smirnov_product_error(x, x, x2, splitter);
-    RealType e2 = kolmogorov_smirnov_product_error(x2, n, u, splitter);
+    RealType e1 = product.error(x, x, x2);
+    RealType e2 = product.error(x2, n, u);
     return e2 + e1 * n; // x*x*n == u + err
 }
 
@@ -211,7 +186,7 @@ inline RealType kolmogorov_smirnov_nome(RealType x, RealType n) {
     RealType q = exp(-2 * u);
     if (q == 0)
         return q;
-    RealType err = kolmogorov_smirnov_x2n_error(x, n, u, kolmogorov_smirnov_splitter<RealType>());
+    RealType err = kolmogorov_smirnov_x2n_error(x, n, u);
     return q * (1 - 2 * err); // exp(-2 (u + err))
 }
 
@@ -262,10 +237,10 @@ RealType kolmogorov_smirnov_pdf_small_x(RealType x, RealType n, const Policy&) {
     // The rounding errors in the constant, in u and in the division, to
     // second order, so that exp(-W) can be corrected by a factor (1 - delta):
     //   W_exact = W + delta,  delta = ((c_hi + c_lo) - W*u - W*err) / u,  u_exact = u + err
-    RealType splitter = kolmogorov_smirnov_splitter<RealType>();
-    RealType err = kolmogorov_smirnov_x2n_error(x, n, u, splitter);
-    RealType Wu = W * u;
-    RealType delta = ((((c_hi - Wu) - kolmogorov_smirnov_product_error(W, u, Wu, splitter)) + c_lo) - W * err) / u;
+    RealType err = kolmogorov_smirnov_x2n_error(x, n, u);
+    RealType Wu, eWu;
+    two_product<RealType>()(W, u, Wu, eWu);
+    RealType delta = ((((c_hi - Wu) - eWu) + c_lo) - W * err) / u;
     if (half != 0) {
         RealType leading = half * (1 - delta / 2) * sqrt(constants::root_two_pi<RealType>() * sqrt(n) * (pi2 / 4 - u)) / u;
         return leading * leading;
@@ -305,11 +280,11 @@ inline RealType kolmogorov_smirnov_pdf_large_x(RealType x, RealType n, const Pol
         RealType half = exp(-u);
         if (half == 0)
             return static_cast<RealType>(0);
-        RealType err = kolmogorov_smirnov_x2n_error(x, n, u, kolmogorov_smirnov_splitter<RealType>());
+        RealType err = kolmogorov_smirnov_x2n_error(x, n, u);
         RealType leading = half * (1 - err) * sqrt(8 * x * n);
         return leading * leading;
     }
-    RealType err = kolmogorov_smirnov_x2n_error(x, n, u, kolmogorov_smirnov_splitter<RealType>());
+    RealType err = kolmogorov_smirnov_x2n_error(x, n, u);
     r *= (1 - 2 * err); // exp(-2 (u + err))
     RealType r2 = r * r;
 

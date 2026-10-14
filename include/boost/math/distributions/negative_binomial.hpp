@@ -654,8 +654,7 @@ BOOST_MATH_NAMESPACE_BEGIN
         // z1 q - z2 = (r - 1) - z1 p. z1 = z1_hi + z1_lo exactly; z1_lo enters to first order.
         RealType d = r - 1;
         RealType z1_hi = z2 + d;
-        RealType bb = z1_hi - z2;
-        RealType z1_lo = (z2 - (z1_hi - bb)) + (d - bb);
+        RealType z1_lo = detail::two_sum_error(z2, d, z1_hi);
         RealType alpha = BOOST_MATH_NAMESPACE::log1p(RealType((fma(-z1_hi, p, d) - z1_lo * p) / z2), Policy());
         RealType h = sigma / detail::discrete_entropy_step_ratio<RealType, Policy>();
         auto s_of = [&](RealType t)
@@ -680,8 +679,8 @@ BOOST_MATH_NAMESPACE_BEGIN
       // denominator is r q - 1 - k p. For r < 1 the ratio rises towards q in the tail:
       RealType k_right = mode;
       RealType k_left = mode;
-      detail::entropy_compensated_sum<RealType> s_right;
-      detail::entropy_compensated_sum<RealType> s_left;
+      detail::compensated_sum<RealType> s_right;
+      detail::compensated_sum<RealType> s_left;
       auto log_ratio = [&](RealType k, RealType& ratio, bool left)
       {
         return detail::entropy_log_ratio(RealType((k + r) * q), RealType(k + 1), RealType(fma(r, q, -fma(k, p, RealType(1)))), ratio, left, Policy());

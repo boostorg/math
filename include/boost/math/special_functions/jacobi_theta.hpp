@@ -109,6 +109,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/tools/compensated_arithmetic.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
 
@@ -237,86 +238,9 @@ struct jacobi_theta_q_power {
 // tau < 1, the square of z plus a multiple of pi/2). Rounding E to working
 // precision costs |E| ulps in the exponential, so instead the rounding
 // errors of pi, of the products and of the division are tracked exactly with
-// Dekker's product and Knuth's sum (which work for any binary floating-point
+// two_product and two_sum_error (which work for any binary floating-point
 // type) and applied as a correction factor exp(-dE) = 1 - dE. What remains
 // is the rounding of tau itself, which is the caller's.
-// (Cached per type: for a type whose precision can change at run time the
-// cached value may split at the wrong place, in which case the corrections
-// below are merely inexact, i.e. no worse than not applying them.)
-template <class RealType>
-inline RealType jacobi_theta_splitter() {
-    BOOST_MATH_STD_USING
-    static const RealType splitter = ldexp(RealType(1), (tools::digits<RealType>() + 1) / 2) + 1;
-    return splitter;
-}
-
-// Veltkamp's splitting: t = hi + lo where hi holds only the leading half of
-// the significand, so that products of hi parts are exact.
-template <class RealType>
-inline void jacobi_theta_split(RealType t, RealType splitter, RealType& hi, RealType& lo) {
-    RealType g = splitter * t;
-    hi = g - (g - t);
-    lo = t - hi;
-}
-
-// result = fma(a, b, c) if the type has an fma, which is std::fma for the
-// built-in types and is found by argument-dependent lookup for the others
-// (the Boost.Multiprecision types all have one). Returns false, leaving
-// result alone, if there is none.
-namespace jacobi_theta_fma {
-using std::fma;
-
-template <class RealType>
-inline auto evaluate(const RealType& a, const RealType& b, const RealType& c, RealType& result, int) -> decltype(static_cast<void>(fma(a, b, c)), bool()) {
-    result = fma(a, b, c);
-    return true;
-}
-template <class RealType>
-inline bool evaluate(const RealType&, const RealType&, const RealType&, RealType&, long) {
-    return false;
-}
-} // namespace jacobi_theta_fma
-
-// Whether the type's fma is actually fused. Having one is no guarantee: some
-// C libraries (newlib, and hence Cygwin) implement fma(x, y, z) as x * y + z
-// with two roundings, as do the Boost.Multiprecision backends without a
-// native one (cpp_bin_float, but not mpfr_float or float128), and that would
-// silently zero every correction below. Probed once per type: (1 + eps)^2 is
-// 1 + 2 eps + eps^2, and the last term is exactly what a fused
-// fma(x, x, -(1 + 2 eps)) returns, while x * x + z rounds it away. The inputs
-// are built from a volatile so that the compiler cannot fold the call at
-// compile time.
-template <class RealType>
-inline bool jacobi_theta_fma_is_fused() {
-    static const bool fused = [] {
-        volatile int volatile_one = 1;
-        RealType one = static_cast<int>(volatile_one), eps = tools::epsilon<RealType>();
-        RealType x = one + eps, z = -(one + 2 * eps), eps_squared = 0;
-        return jacobi_theta_fma::evaluate(x, x, z, eps_squared, 0) && eps_squared != 0;
-    }();
-    return fused;
-}
-
-// The exact product a*b is ab + (return value), where ab = fl(a*b). A fused
-// fma(a, b, -ab) is exactly this quantity, so it is used where the type has
-// one; the splitting is for the types and libraries that do not.
-template <class RealType>
-inline RealType jacobi_theta_product_error(RealType a, RealType b, RealType ab, RealType splitter) {
-    RealType error;
-    if (jacobi_theta_fma_is_fused<RealType>() && jacobi_theta_fma::evaluate(a, b, RealType(-ab), error, 0))
-        return error;
-    RealType ah, al, bh, bl;
-    jacobi_theta_split(a, splitter, ah, al);
-    jacobi_theta_split(b, splitter, bh, bl);
-    return (((ah * bh - ab) + ah * bl) + al * bh) + al * bl;
-}
-
-// The exact sum a+b is s + (return value), where s = fl(a+b).
-template <class RealType>
-inline RealType jacobi_theta_sum_error(RealType a, RealType b, RealType s) {
-    RealType bb = s - a;
-    return (a - (s - bb)) + (b - bb);
-}
 
 // Pi as hi + lo + lo2: hi holds the leading 24 bits exactly, so that hi * e
 // is exact for small integers e, and lo the following ones to the type's own
@@ -358,7 +282,7 @@ inline RealType jacobi_theta_pi(RealType& lo, RealType& lo2) {
 template <class RealType>
 struct jacobi_theta_exponents {
     RealType tau;           // only used for the scale factor 1/sqrt(tau)
-    RealType splitter;
+    two_product<RealType> product;
     RealType pi_hi, pi_lo, pi_lo2;  // pi = pi_hi + pi_lo + pi_lo2
     RealType a_hi, a_lo;    // pi * tau = -ln(q) = a_hi + a_lo
     RealType inv_a_hi;      // 1 / a_hi, only needed when tau < 1
@@ -383,21 +307,23 @@ struct jacobi_theta_exponents {
 
     // pi * e as hi + lo for a small exact e
     RealType pi_times(RealType e, RealType& lo) const {
-        RealType p = pi_hi * e;
-        RealType q = pi_lo * e;
+        RealType p, ep, q, eq;
+        product(pi_hi, e, p, ep);
+        product(pi_lo, e, q, eq);
         RealType hi = p + q;
         // |q| << |p|, so the sum's error is simply q - (hi - p). The rounding
         // of q itself only matters for the large multiples of the argument
         // reduction, but it is cheap to carry.
-        lo = (q - (hi - p)) + jacobi_theta_product_error(pi_hi, e, p, splitter) + jacobi_theta_product_error(pi_lo, e, q, splitter);
+        lo = (q - (hi - p)) + ep + eq;
         return hi;
     }
 
     // (N + dN) / (a_hi + a_lo) as E + dE, to second order
     RealType divide_by_a(RealType N, RealType dN, RealType& dE) const {
         RealType E = N * inv_a_hi;
-        RealType Ea = E * a_hi;
-        RealType r = (N - Ea) - jacobi_theta_product_error(E, a_hi, Ea, splitter);
+        RealType Ea, eEa;
+        product(E, a_hi, Ea, eEa);
+        RealType r = (N - Ea) - eEa;
         dE = (r + dN - E * a_lo) * inv_a_hi;
         return E;
     }
@@ -409,7 +335,7 @@ struct jacobi_theta_exponents {
         RealType result = exp(-E);
         if (result == 0)
             return result;
-        RealType dE = jacobi_theta_product_error(a_hi, e, E, splitter) + a_lo * e;
+        RealType dE = product.error(a_hi, e, E) + a_lo * e;
         return result * (1 - dE);
     }
 
@@ -451,12 +377,12 @@ struct jacobi_theta_exponents {
             RealType c = pi_times(e, dc);
             dc += pi_lo2 * e;
             RealType r = reduced - c; // exact, c being within a factor of two of reduced
-            RealType err = (jacobi_theta_sum_error(reduced, RealType(-c), r) - dc) + dz;
+            RealType err = (two_sum_error(reduced, RealType(-c), r) - dc) + dz;
             // err can be as large as half an ulp of z, too large for the
             // first-order corrections applied to the terms, so it is folded
             // into the remainder, leaving only the rounding of that.
             reduced = r + err;
-            dz = jacobi_theta_sum_error(r, err, reduced);
+            dz = two_sum_error(r, err, reduced);
             // m may exceed the integers the type holds exactly, but such
             // values are even, so their parity is still right.
             k += fmod(m, RealType(2));
@@ -473,10 +399,11 @@ struct jacobi_theta_exponents {
             RealType dc;
             RealType c = pi_times(RealType(m), dc) / 2;
             z_n = z + c;
-            dz += jacobi_theta_sum_error(z, c, z_n) + dc / 2;
+            dz += two_sum_error(z, c, z_n) + dc / 2;
         }
-        RealType s = z_n * z_n;
-        RealType ds = jacobi_theta_product_error(z_n, z_n, s, splitter) + 2 * z_n * dz;
+        RealType s, ds;
+        product(z_n, z_n, s, ds);
+        ds += 2 * z_n * dz;
         RealType dE;
         RealType E = divide_by_a(s, ds, dE);
         RealType result = exp(-E);
@@ -489,8 +416,9 @@ struct jacobi_theta_exponents {
     // k, where dz is the error in z
     RealType expm1_scaled(RealType z, RealType dz, RealType k) const {
         BOOST_MATH_STD_USING
-        RealType P = z * k;
-        RealType dP = jacobi_theta_product_error(z, k, P, splitter) + dz * k;
+        RealType P, dP;
+        product(z, k, P, dP);
+        dP += dz * k;
         RealType dN;
         RealType N = pi_times(P, dN);
         dN += pi_hi * dP;
@@ -503,7 +431,7 @@ struct jacobi_theta_exponents {
     }
 
 private:
-    jacobi_theta_exponents() : splitter(jacobi_theta_splitter<RealType>()) {
+    jacobi_theta_exponents() {
         pi_hi = jacobi_theta_pi(pi_lo, pi_lo2);
     }
 };

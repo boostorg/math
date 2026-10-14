@@ -412,7 +412,7 @@ BOOST_MATH_NAMESPACE_BEGIN
       if ((sigma >= 2 * sigmas) && ((std::min)((std::min)(z1, z2), (std::min)(z3, z4)) >= margin))
       {
          // Trapezoidal rule on the continuation, with linear coefficient alpha = log(z2 z3 / (z1 z4)):
-         RealType alpha = BOOST_MATH_NAMESPACE::log1p(RealType(detail::entropy_difference_of_products(z2, z3, z1, z4) / (z1 * z4)), Policy());
+         RealType alpha = BOOST_MATH_NAMESPACE::log1p(RealType(detail::difference_of_products(z2, z3, z1, z4) / (z1 * z4)), Policy());
          RealType h = sigma / detail::discrete_entropy_step_ratio<RealType, Policy>();
          auto s_of = [&](RealType t)
          {
@@ -443,14 +443,14 @@ BOOST_MATH_NAMESPACE_BEGIN
       // whose numerator minus denominator is (r + 1)(n + 1) - (k + 1)(N + 2):
       std::uint64_t k_right = mode;
       std::uint64_t k_left = mode;
-      detail::entropy_compensated_sum<RealType> s_right;
-      detail::entropy_compensated_sum<RealType> s_left;
+      detail::compensated_sum<RealType> s_right;
+      detail::compensated_sum<RealType> s_left;
       auto log_ratio = [&](std::uint64_t k, RealType& ratio, bool left)
       {
          RealType kk = static_cast<RealType>(k);
          RealType num = (rr - kk) * (nn - kk);
          RealType den = (kk + 1) * static_cast<RealType>(N + k + 1 - r - n);
-         RealType d = detail::entropy_difference_of_products(RealType(rr + 1), RealType(nn + 1), RealType(kk + 1), RealType(NN + 2));
+         RealType d = detail::difference_of_products(RealType(rr + 1), RealType(nn + 1), RealType(kk + 1), RealType(NN + 2));
          return detail::entropy_log_ratio(num, den, d, ratio, left, Policy());
       };
       auto right = [&](RealType& s, RealType& ratio)
