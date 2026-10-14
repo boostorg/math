@@ -21,6 +21,11 @@
 #include <cmath>
 #include <sstream>
 #include <functional>
+#include <atomic>
+#include <exception>
+#include <mutex>
+#include <thread>
+#include <type_traits>
 #endif
 #include <boost/math/tools/is_standalone.hpp>
 #include <boost/math/tools/config.hpp>
@@ -91,6 +96,103 @@ inline std::string base64(std::vector<unsigned char> const & bytes)
     }
     return out;
 }
+
+// Runs body(j) for j in [0, n) on several threads; all of the hardware's if threads is 0. If body throws, no further
+// work is handed out, and the first exception is rethrown once the threads have finished.
+template<class Body>
+void parallel_for(std::size_t n, unsigned threads, Body body)
+{
+    if (n == 0)
+    {
+        return;
+    }
+    if (threads == 0)
+    {
+        threads = (std::max)(1u, std::thread::hardware_concurrency());
+    }
+    if (threads == 1 || n == 1)
+    {
+        for (std::size_t j = 0; j < n; ++j)
+        {
+            body(j);
+        }
+        return;
+    }
+    threads = static_cast<unsigned>((std::min)(static_cast<std::size_t>(threads), n));
+    std::atomic<std::size_t> next{0};
+    std::atomic<bool> failed{false};
+    std::exception_ptr error;
+    std::mutex error_mutex;
+    auto work = [&]() {
+        try
+        {
+            for (std::size_t j = next++; j < n && !failed; j = next++)
+            {
+                body(j);
+            }
+        }
+        catch (...)
+        {
+            std::lock_guard<std::mutex> lock(error_mutex);
+            if (!error)
+            {
+                error = std::current_exception();
+            }
+            failed = true;
+        }
+    };
+    std::vector<std::thread> pool;
+    try
+    {
+        for (unsigned t = 0; t < threads; ++t)
+        {
+            pool.emplace_back(work);
+        }
+    }
+    catch (...)
+    {
+        // Couldn't start a thread: stop the ones already running and report it.
+        failed = true;
+        for (auto & th : pool)
+        {
+            th.join();
+        }
+        throw;
+    }
+    for (auto & th : pool)
+    {
+        th.join();
+    }
+    if (error)
+    {
+        std::rethrow_exception(error);
+    }
+}
+
+#ifdef BOOST_MATH_STANDALONE
+// Uniform random numbers in [lo, hi) of a type that std::uniform_real_distribution may not support.
+template<class Real, bool = std::is_floating_point<Real>::value>
+class standalone_uniform
+{
+public:
+    standalone_uniform(Real const & lo, Real const & hi) : lo_(lo), hi_(hi) {}
+
+    template<class Gen>
+    Real operator()(Gen & gen) { return lo_ + (hi_ - lo_)*static_cast<Real>(unit_(gen)); }
+
+private:
+    Real lo_;
+    Real hi_;
+    std::uniform_real_distribution<long double> unit_{0.0L, 1.0L};
+};
+
+template<class Real>
+class standalone_uniform<Real, true> : public std::uniform_real_distribution<Real>
+{
+public:
+    using std::uniform_real_distribution<Real>::uniform_real_distribution;
+};
+#endif
 
 // ---- Condition numbers by finite differences on a grid ----
 
@@ -328,53 +430,59 @@ bool interpolate_derivative(Real const * x, Real const * f, Real const * d, unsi
 // px (anywhere in the grid's range) with values fpx, returned in pcond. Inf where f = 0, NaN where f is not finite.
 // The grid's come from finite differences of fx (grid_derivatives), and the probes' from interpolate_derivative; where these
 // can't be trusted, local_condition_number evaluates f at nearby points. If fallbacks isn't null, it receives the number of those.
+// With threads other than 1, f must be thread safe.
 template<class F, class Real>
 std::vector<Real> grid_condition_numbers(F const & f, std::vector<Real> const & x, std::vector<Real> const & fx,
                                          std::vector<Real> const & px, std::vector<Real> const & fpx, std::vector<Real> & pcond,
-                                         std::size_t * fallbacks = nullptr)
+                                         std::size_t * fallbacks = nullptr, unsigned threads = 1)
 {
     using std::abs;
     using std::isfinite;
     std::size_t const n = x.size();
-    std::size_t local = 0;
+    std::atomic<std::size_t> local{0};
     std::vector<Real> d(n);
     std::vector<unsigned char> trusted(n);
     grid_derivatives(x.data(), fx.data(), 1, n, d.data(), trusted.data());
     std::vector<Real> cond(n, std::numeric_limits<Real>::quiet_NaN());
-    for (std::size_t j = 0; j < n; ++j)
-    {
-        if (!isfinite(fx[j]))
+    std::size_t const chunk = 64;
+    parallel_for((n + chunk - 1)/chunk, threads, [&](std::size_t c) {
+        for (std::size_t j = c*chunk; j < (std::min)(n, (c + 1)*chunk); ++j)
         {
-            continue;
+            if (!isfinite(fx[j]))
+            {
+                continue;
+            }
+            if (trusted[j])
+            {
+                cond[j] = abs(x[j]*d[j]/fx[j]);
+            }
+            else
+            {
+                cond[j] = local_condition_number(f, x[j], fx[j]);
+                ++local;
+            }
         }
-        if (trusted[j])
-        {
-            cond[j] = abs(x[j]*d[j]/fx[j]);
-        }
-        else
-        {
-            cond[j] = local_condition_number(f, x[j], fx[j]);
-            ++local;
-        }
-    }
+    });
     pcond.assign(px.size(), std::numeric_limits<Real>::quiet_NaN());
-    for (std::size_t j = 0; j < px.size(); ++j)
-    {
-        if (!isfinite(fpx[j]))
+    parallel_for((px.size() + chunk - 1)/chunk, threads, [&](std::size_t c) {
+        for (std::size_t j = c*chunk; j < (std::min)(px.size(), (c + 1)*chunk); ++j)
         {
-            continue;
+            if (!isfinite(fpx[j]))
+            {
+                continue;
+            }
+            Real dj;
+            if (interpolate_derivative(x.data(), fx.data(), d.data(), trusted.data(), n, px[j], fpx[j], dj))
+            {
+                pcond[j] = abs(px[j]*dj/fpx[j]);
+            }
+            else
+            {
+                pcond[j] = local_condition_number(f, px[j], fpx[j]);
+                ++local;
+            }
         }
-        Real dj;
-        if (interpolate_derivative(x.data(), fx.data(), d.data(), trusted.data(), n, px[j], fpx[j], dj))
-        {
-            pcond[j] = abs(px[j]*dj/fpx[j]);
-        }
-        else
-        {
-            pcond[j] = local_condition_number(f, px[j], fpx[j]);
-            ++local;
-        }
-    }
+    });
     if (fallbacks)
     {
         *fallbacks = local;
@@ -937,8 +1045,11 @@ public:
     // (seeded with random_seed, or randomly if it is -1). With perturb_abscissas, f is evaluated at the sample and the
     // implementation at the nearest CoarseReal; otherwise both at the CoarseReal.
     // With log_abscissas, the abscissas are sampled uniformly in log(x), and the x-axis is logarithmic; requires 0 < a.
+    // f, and the implementations passed to add_fn, are evaluated on this many threads (all of the hardware's if 0); with
+    // more than one, they must be thread safe.
     ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
-             size_t samples = 1000, bool perturb_abscissas = false, int random_seed = -1, bool log_abscissas = false);
+             size_t samples = 1000, bool perturb_abscissas = false, int random_seed = -1, bool log_abscissas = false,
+             unsigned threads = 1);
 
     ulps_plot& clip(PreciseReal clip);
 
@@ -1418,6 +1529,7 @@ private:
     CoarseReal a_;
     CoarseReal b_;
     bool log_abscissas_;
+    unsigned threads_;
     PreciseReal clip_;
     int width_;
     std::string envelope_color_;
@@ -1622,7 +1734,8 @@ void ulps_plot<F, PreciseReal, CoarseReal>::write(std::string const & filename) 
 
 template<class F, typename PreciseReal, typename CoarseReal>
 ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
-             size_t samples, bool perturb_abscissas, int random_seed, bool log_abscissas) : crop_color_("red")
+             size_t samples, bool perturb_abscissas, int random_seed, bool log_abscissas, unsigned threads)
+             : threads_(threads), crop_color_("red")
 {
     // Use digits10 for this comparison in case the two types have differeing radixes:
     static_assert(std::numeric_limits<PreciseReal>::digits10 >= std::numeric_limits<CoarseReal>::digits10, "PreciseReal must have higher precision that CoarseReal");
@@ -1681,9 +1794,9 @@ ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, Co
     #ifndef BOOST_MATH_STANDALONE
     boost::random::uniform_real_distribution<PreciseReal> dis(t_lo, t_hi);
     #else
-    // Use std::random in standalone mode if it is a type that the standard library can support (float, double, or long double)
-    static_assert(std::numeric_limits<PreciseReal>::digits10 <= std::numeric_limits<long double>::digits10, "Standalone mode does not support types with precision that exceeds long double");
-    std::uniform_real_distribution<PreciseReal> dis(t_lo, t_hi);
+    // std's can only generate float, double and long double; other types get a long double in [0, 1), which leaves the
+    // last bits of a multiprecision probe zero (or those of t_lo), but the probes needn't be uniform to the last bit:
+    detail::standalone_uniform<PreciseReal> dis(t_lo, t_hi);
     #endif
     std::vector<PreciseReal> probe_x(probes);
     std::vector<CoarseReal> probe_coarse(probes);
@@ -1707,17 +1820,16 @@ ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, Co
 #endif
     };
     std::vector<PreciseReal> grid_y(grid_size);
-    for (size_t i = 0; i < grid_size; ++i)
-    {
-        grid_y[i] = reference(grid_x[i]);
-    }
     std::vector<PreciseReal> probe_y(probes);
-    for (size_t i = 0; i < probes; ++i)
-    {
-        probe_y[i] = reference(probe_x[i]);
-    }
+    size_t const chunk = 64;
+    detail::parallel_for((samples + chunk - 1)/chunk, threads_, [&](size_t c) {
+        for (size_t i = c*chunk; i < (std::min)(samples, (c + 1)*chunk); ++i)
+        {
+            if (i < grid_size) { grid_y[i] = reference(grid_x[i]); } else { probe_y[i - grid_size] = reference(probe_x[i - grid_size]); }
+        }
+    });
     std::vector<PreciseReal> probe_cond;
-    std::vector<PreciseReal> grid_cond = detail::grid_condition_numbers(reference, grid_x, grid_y, probe_x, probe_y, probe_cond);
+    std::vector<PreciseReal> grid_cond = detail::grid_condition_numbers(reference, grid_x, grid_y, probe_x, probe_y, probe_cond, nullptr, threads_);
 
     // Merge the grid and the probes, in order:
     std::vector<size_t> order(samples);
@@ -1765,28 +1877,36 @@ ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::ad
     size_t samples = precise_abscissas_.size();
     std::vector<CoarseReal> ulps(samples, std::numeric_limits<CoarseReal>::quiet_NaN());
     std::vector<detail::ulps_class> classes(samples, detail::ulps_class::ok);
+    std::vector<std::string> messages(samples);
+    size_t const chunk = 64;
+    detail::parallel_for((samples + chunk - 1)/chunk, threads_, [&](size_t ch) {
+        for (size_t i = ch*chunk; i < (std::min)(samples, (ch + 1)*chunk); ++i)
+        {
+            PreciseReal y_hi_acc = precise_ordinates_[i];
+            CoarseReal w = 0;
+            // The implementation is evaluated everywhere, even where the true value is out of range, to check that
+            // overflow and underflow are handled correctly:
+            detail::ulps_class c = detail::classify_result<CoarseReal>(y_hi_acc, [&]() { return g(coarse_abscissas_[i]); }, w, &messages[i]);
+            classes[i] = c;
+            if (c != detail::ulps_class::ok)
+            {
+                continue;
+            }
+            PreciseReal y_lo_acc = static_cast<PreciseReal>(w);
+            PreciseReal absy = abs(y_hi_acc);
+            PreciseReal dist = static_cast<PreciseReal>(nextafter(static_cast<CoarseReal>(absy), (std::numeric_limits<CoarseReal>::max)()) - static_cast<CoarseReal>(absy));
+            ulps[i] = static_cast<CoarseReal>((y_lo_acc - y_hi_acc)/dist);
+        }
+    });
     std::string first_message;
     for (size_t i = 0; i < samples; ++i)
     {
-        PreciseReal y_hi_acc = precise_ordinates_[i];
-        CoarseReal w = 0;
-        std::string message;
-        // The implementation is evaluated everywhere, even where the true value is out of range, to check that
-        // overflow and underflow are handled correctly:
-        detail::ulps_class c = detail::classify_result<CoarseReal>(y_hi_acc, [&]() { return g(coarse_abscissas_[i]); }, w, &message);
-        classes[i] = c;
-        if (c != detail::ulps_class::ok)
+        detail::ulps_class const c = classes[i];
+        if (!messages[i].empty() && (c == detail::ulps_class::failed || c == detail::ulps_class::spurious_overflow || c == detail::ulps_class::mishandled))
         {
-            if (first_message.empty() && !message.empty() && (c == detail::ulps_class::failed || c == detail::ulps_class::spurious_overflow || c == detail::ulps_class::mishandled))
-            {
-                first_message = message;
-            }
-            continue;
+            first_message = messages[i];
+            break;
         }
-        PreciseReal y_lo_acc = static_cast<PreciseReal>(w);
-        PreciseReal absy = abs(y_hi_acc);
-        PreciseReal dist = static_cast<PreciseReal>(nextafter(static_cast<CoarseReal>(absy), (std::numeric_limits<CoarseReal>::max)()) - static_cast<CoarseReal>(absy));
-        ulps[i] = static_cast<CoarseReal>((y_lo_acc - y_hi_acc)/dist);
     }
     class_list_.emplace_back(classes);
     first_message_.emplace_back(first_message);

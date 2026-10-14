@@ -56,6 +56,28 @@ find_package(Eigen3 CONFIG QUIET)
 if(Eigen3_FOUND)
   target_link_libraries(_ext PRIVATE Eigen3::Eigen)
 endif()
+# Optional: boost.math.ulps needs Boost.Multiprecision (standalone, which needs Boost.Config) and zlib. Only the
+# sibling checkouts (or the cache variables) are searched, never a system Boost of another release.
+find_path(BOOST_MATH_NB_MULTIPRECISION_INCLUDE boost/multiprecision/cpp_bin_float.hpp
+  HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../../multiprecision/include" "$ENV{HOME}/boost/libs/multiprecision/include"
+  DOC "Boost.Multiprecision's include directory, for boost.math.ulps" NO_DEFAULT_PATH)
+find_path(BOOST_MATH_NB_CONFIG_INCLUDE boost/config.hpp
+  HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../../config/include" "$ENV{HOME}/boost/libs/config/include"
+  DOC "Boost.Config's include directory, for boost.math.ulps" NO_DEFAULT_PATH)
+find_package(ZLIB)
+if(BOOST_MATH_NB_MULTIPRECISION_INCLUDE AND BOOST_MATH_NB_CONFIG_INCLUDE AND ZLIB_FOUND)
+  set(ulps_sources src/ulps.cpp src/ulps_gamma.cpp src/ulps_special.cpp src/ulps_elliptic.cpp)
+  target_sources(_ext PRIVATE ${ulps_sources})
+  # Only these see Multiprecision, so that its presence changes nothing else:
+  set_source_files_properties(${ulps_sources} PROPERTIES
+    INCLUDE_DIRECTORIES "${BOOST_MATH_NB_MULTIPRECISION_INCLUDE};${BOOST_MATH_NB_CONFIG_INCLUDE}"
+    COMPILE_DEFINITIONS BOOST_MP_STANDALONE)
+  set_source_files_properties(src/module.cpp PROPERTIES COMPILE_DEFINITIONS BMPY_HAVE_ULPS)
+  target_link_libraries(_ext PRIVATE ZLIB::ZLIB)
+else()
+  message(STATUS "boost.math.ulps disabled: needs Boost.Multiprecision, Boost.Config and zlib "
+                 "(set BOOST_MATH_NB_MULTIPRECISION_INCLUDE and BOOST_MATH_NB_CONFIG_INCLUDE)")
+endif()
 if(NOT MSVC)
   # Match CI and test/Makefile: contraction allowed everywhere.
   target_compile_options(_ext PRIVATE -ffp-contract=fast)

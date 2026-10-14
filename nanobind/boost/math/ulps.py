@@ -1,151 +1,130 @@
 #  Copyright 2026 Nick Thompson
 #  Distributed under the Boost Software License, Version 1.0.
 #  https://www.boost.org/LICENSE_1_0.txt
-"""ulps plots against an mpmath reference.
+"""ulps plots and heatmaps from boost::math::tools::ulps_plot and ulps_heatmap; the reference is the same
+function at cpp_bin_float_50, or reference= any Python callable (an mpmath function, say). For example:
 
-    import boost.math as bm, mpmath as mp
-    from boost.math import ulps
-    ulps.plot(bm.digamma, mp.digamma, np.linspace(-5, 5, 2000))
-    ulps.heatmap(bm.lgamma_p, lambda a, x: mp.log(mp.gammainc(a, 0, x, regularized=True)),
-                 np.logspace(0, 7, 300), np.linspace(0.01, 0.99, 300), y_of=lambda a, r: a * r)
-
-Each point is classified as one of:
-  ulps        |f - ref| / ulp(ref), both finite;
-  overflow    f overflowed (raised or returned +-inf) where ref is finite: shown cyan;
-  nan         f raised a domain error or returned NaN where ref is finite: shown green;
-  handled     ref isn't a finite double and f agrees (inf, or underflow to 0): shown gray.
+    import boost.math as bm; from boost.math import ulps
+    ulps.plot(bm.digamma, -5, 5).save("digamma.svg")
+    ulps.render_to_png(ulps.heatmap(bm.lgamma_p, (1, 1e7), (0.01, 1e7), log_x=True, log_y=True)[0], "lgamma_p.png")
 """
 
 import math
+import os
+import re
+import shutil
+import subprocess
+import tempfile
 
-import mpmath as mp
-import numpy as np
-
-OVERFLOW, NAN, HANDLED = -1.0, -2.0, -3.0
-SPECIAL = {OVERFLOW: ("#2ec4d6", "spurious overflow"), NAN: ("#4caf50", "NaN / domain error"),
-           HANDLED: ("#8a8a85", "out of range, handled")}
-SURFACE, INK, MUTED = "#1a1a19", "#f0efec", "#c3c2b7"
+from . import _ext
 
 
-def error(f, ref, *args, dps=50):
-    """The error of f(*args) against the mpmath reference ref(*args): ulps, or a SPECIAL code."""
-    with mp.workdps(dps):
+class Svg:
+    """An SVG: str() is its text, summary the C++ summary(); shown inline in Jupyter."""
+
+    def __init__(self, text, summary):
+        self.text = text
+        self.summary = summary
+
+    def __str__(self):
+        return self.text
+
+    def _repr_svg_(self):
+        return self.text
+
+    def save(self, path):
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(self.text)
+        return path
+
+
+def _name(f):
+    if not hasattr(_ext, "_ulps_plot"):
+        raise RuntimeError("boost.math.ulps was built without Boost.Multiprecision or zlib; see nanobind/CMakeLists.txt")
+    if isinstance(f, str):
+        return f
+    if getattr(_ext, getattr(f, "__name__", ""), None) is not f:
+        raise TypeError("ulps plots need a boost.math function or its name; arbitrary Python callables are not supported")
+    return f.__name__
+
+
+def _python_reference(reference):
+    """Wraps reference for the C++ side: arguments come as floats, or as 55-digit strings (made mpmath numbers here)
+    where they aren't doubles, and the result goes back as a float or a decimal string; NaN if it raises or isn't real."""
+    try:
+        import mpmath as mp
+    except ImportError:
+        raise ImportError("reference= needs mpmath: pip install mpmath") from None
+
+    def call(*args):
         try:
-            r = ref(*[mp.mpf(a) for a in args])
+            r = reference(*[mp.mpf(a) if isinstance(a, str) else a for a in args])
+            if isinstance(r, mp.mpf):
+                return mp.nstr(r, 55) if mp.isfinite(r) else float(r)
+            return float(r)
         except Exception:
-            return math.nan  # No reference here; left blank in the plots.
-        try:
-            got = f(*args)
-        except OverflowError:
-            got = math.inf
-        except (ValueError, ArithmeticError):
-            got = math.nan
-        if isinstance(r, mp.mpc) or not mp.isfinite(r):
-            return HANDLED if (math.isinf(got) or math.isnan(got)) else float("inf")
-        rf = float(r)
-        if math.isinf(rf) or (rf == 0 and r != 0):
-            # The answer isn't representable: overflow to inf or underflow to 0 is right.
-            return HANDLED if (got == rf or (rf == 0 and abs(got) <= np.finfo(float).tiny)) else float(
-                abs(mp.mpf(got) - r) / np.spacing(np.finfo(float).tiny))
-        if math.isinf(got):
-            return OVERFLOW
-        if math.isnan(got):
-            return NAN
-        return float(abs(mp.mpf(got) - r) / np.spacing(abs(rf)) if rf != 0 else abs(got) / np.spacing(0.0))
+            return math.nan
+
+    return call
 
 
-def _summary(err):
-    e = err[err >= 0]
-    missing = int(np.sum(np.isnan(err)))
-    counts = {name: int(np.sum(err == code)) for code, (_, name) in SPECIAL.items() if np.any(err == code)}
-    parts = [f"max {e.max():.3g} ulps, median {np.median(e):.2g}" if e.size else "no finite errors"]
-    parts += [f"{n} {name}" for name, n in counts.items()]
-    if missing:
-        parts.append(f"{missing} without a reference")
-    return "; ".join(parts)
+def _run(fn, reference, threads):
+    if reference is None:
+        return fn(None, threads)
+    import mpmath as mp
+    call = _python_reference(reference)
+    # The Python calls are serialized anyway; more threads only add GIL churn:
+    with mp.workdps(60):
+        return fn(call, 1)
 
 
-def _style(ax, fig):
-    fig.set_facecolor(SURFACE)
-    ax.set_facecolor(SURFACE)
-    ax.tick_params(colors=MUTED)
-    for s in ax.spines.values():
-        s.set_color(MUTED)
+def plot(f, a, b, *, samples=10000, log_x=False, title=None, reference=None, clip=None, show_function=False,
+         threads=0):
+    """The ulps plot of f on [a, b]; threads=0 uses them all. reference= an mpmath-based callable replaces
+    the cpp_bin_float_50 reference, and runs on one thread."""
+    name = _name(f)
+    svg, summary = _run(lambda ref, th: _ext._ulps_plot(name, a, b, samples, log_x, name if title is None else title, ref,
+                                                        clip or -1, show_function, th), reference, threads)
+    return Svg(svg, summary)
 
 
-def _decades(cb):
-    from matplotlib.ticker import FuncFormatter
-    cb.ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: "$10^{%d}$" % round(np.log10(v))))
-    cb.ax.tick_params(colors=MUTED)
-    cb.outline.set_edgecolor(MUTED)
-    cb.set_label("error in ulps", color=INK)
+def heatmap(f, x_range, y_range, *, width=800, height=500, log_x=False, log_y=False, title=None, x_label="x",
+            y_label="y", log_scale=False, clip=None, reference=None, show_function=False, threads=0):
+    """The ulps heatmap of f(x, y) over x_range by y_range: (ulps, ulps/envelope), two Svgs. reference= as for plot."""
+    name = _name(f)
+    ulps, envelope, summary = _run(
+        lambda ref, th: _ext._ulps_heatmap(name, *x_range, *y_range, width, height, log_x, log_y,
+                                           name if title is None else title, x_label, y_label, log_scale, clip or -1,
+                                           ref, show_function, th), reference, threads)
+    return Svg(ulps, summary), Svg(envelope, summary)
 
 
-def plot(f, ref, x, title=None, xlabel="x", xscale="linear", out=None, dps=50, reference=None):
-    """1D: error in ulps of f(x) against ref(x). Returns (fig, err)."""
-    import matplotlib.pyplot as plt
-    x = np.asarray(x, dtype=float)
-    err = np.array([error(f, ref, xi, dps=dps) for xi in x])
-    fig, ax = plt.subplots(figsize=(8, 4.5))
-    _style(ax, fig)
-    ok = err >= 0
-    ax.scatter(x[ok], np.maximum(err[ok], 0.01), s=3, color="#f5a524", rasterized=True)
-    top = np.max(err[ok]) if ok.any() else 1
-    for code, (color, name) in SPECIAL.items():
-        m = err == code
-        if m.any():
-            ax.scatter(x[m], np.full(m.sum(), max(top, 1) * 2), s=6, color=color, label=name, rasterized=True)
-    ax.set_xscale(xscale)
-    ax.set_yscale("log")
-    ax.set_xlabel(xlabel, color=INK)
-    ax.set_ylabel("error in ulps", color=INK)
-    ax.set_title(title or getattr(f, "__name__", ""), color=INK)
-    if any(np.any(err == c) for c in SPECIAL):
-        ax.legend(frameon=False, labelcolor=INK)
-    fig.text(0.5, 0.01, f"Reference: {reference or f'mpmath at {dps} digits'}; {_summary(err)}.", ha="center",
-             color=MUTED, fontsize=8, wrap=True)
-    fig.tight_layout(rect=(0, 0.03, 1, 1))
-    if out:
-        fig.savefig(out, dpi=300, facecolor=SURFACE)
-    return fig, err
+def _chrome():
+    candidates = [os.environ.get("CHROME"), "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"]
+    candidates += [shutil.which(c) for c in ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser")]
+    return next((c for c in candidates if c and os.path.isfile(c)), None)
 
 
-def heatmap(f, ref, x, y, title=None, xlabel="x", ylabel="y", xscale="log", yscale="log",
-            y_of=None, out=None, dps=50, reference=None):
-    """2D: error in ulps of f(x, y) over the grid x by y. With y_of, the second argument is
-    y_of(x, y) instead of y (e.g. y_of=lambda a, r: a * r to plot against x/a). Returns (fig, err)."""
-    import matplotlib.pyplot as plt
-    from matplotlib.colors import ListedColormap, LogNorm
-    x = np.asarray(x, dtype=float)
-    y = np.asarray(y, dtype=float)
-    err = np.empty((y.size, x.size))
-    for i, yi in enumerate(y):
-        for j, xj in enumerate(x):
-            err[i, j] = error(f, ref, xj, y_of(xj, yi) if y_of else yi, dps=dps)
-    fig, ax = plt.subplots(figsize=(7.2, 6))
-    _style(ax, fig)
-    finite = np.where(err >= 0, np.maximum(err, 0.1), np.nan)
-    vmax = max(np.nanmax(finite) if np.isfinite(finite).any() else 1, 1)
-    im = ax.pcolormesh(x, y, finite, norm=LogNorm(vmin=0.1, vmax=vmax), cmap="inferno", shading="nearest",
-                       rasterized=True)
-    handles = []
-    for code, (color, name) in SPECIAL.items():
-        m = err == code
-        if m.any():
-            ax.pcolormesh(x, y, np.where(m, 1.0, np.nan), cmap=ListedColormap([color]), shading="nearest",
-                          rasterized=True)
-            handles.append(plt.Rectangle((0, 0), 1, 1, color=color, label=name))
-    ax.set_xscale(xscale)
-    ax.set_yscale(yscale)
-    ax.set_xlabel(xlabel, color=INK, fontsize=12)
-    ax.set_ylabel(ylabel, color=INK, fontsize=12)
-    ax.set_title(title or getattr(f, "__name__", ""), color=INK, fontsize=12)
-    if handles:
-        ax.legend(handles=handles, frameon=False, labelcolor=INK, loc="upper left", fontsize=8)
-    _decades(fig.colorbar(im, ax=ax))
-    fig.text(0.5, 0.01, f"Reference: {reference or f'mpmath at {dps} digits'}; {y.size} x {x.size} grid.\n"
-             f"{_summary(err)}; errors below 0.1 ulp shown as 0.1.", ha="center", color=MUTED, fontsize=8)
-    fig.tight_layout(rect=(0, 0.05, 1, 1))
-    if out:
-        fig.savefig(out, dpi=300, facecolor=SURFACE)
-    return fig, err
+def render_to_png(svg, path, *, width=None, height=None):
+    """Renders an Svg (or SVG text) to a PNG with headless Chrome, or cairosvg. Returns path."""
+    text = str(svg)
+    size = lambda attr: int(float(re.search(r"<svg[^>]*?\b" + attr + r"=['\"]([0-9.]+)", text).group(1)))
+    width = width or size("width")
+    height = height or size("height")
+    path = os.path.abspath(path)
+    chrome = _chrome()
+    if chrome:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = os.path.join(tmp, "plot.svg")
+            with open(src, "w", encoding="utf-8") as f:
+                f.write(text)
+            subprocess.run([chrome, "--headless", "--disable-gpu", "--hide-scrollbars", f"--screenshot={path}",
+                            f"--window-size={width},{height}", "file://" + src],
+                           check=True, capture_output=True, timeout=120)
+        return path
+    try:
+        import cairosvg
+    except ImportError:
+        raise RuntimeError("render_to_png needs Google Chrome (or set $CHROME) or `pip install cairosvg`") from None
+    cairosvg.svg2png(bytestring=text.encode(), write_to=path, output_width=width, output_height=height)
+    return path
