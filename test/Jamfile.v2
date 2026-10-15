@@ -1041,6 +1041,7 @@ test-suite misc :
    [ run test_policy_7.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_policy_8.cpp /boost/test//boost_unit_test_framework  ]
    [ compile test_policy_9.cpp  ]
+   [ compile test_policy_9.cpp : <define>BOOST_MATH_PROMOTE_FLOAT_POLICY=false <define>BOOST_MATH_PROMOTE_DOUBLE_POLICY=false : test_policy_9_no_promotion ]
    [ run test_policy_10.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_policy_sf.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_long_double_support.cpp /boost/test//boost_unit_test_framework
