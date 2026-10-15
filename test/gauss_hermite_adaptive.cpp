@@ -10,6 +10,7 @@
 #include <complex>
 #include <limits>
 #include <valarray>
+#include <boost/math/tools/precision.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/hermite_adaptive.hpp>
@@ -34,7 +35,8 @@ void test_complex(typename Complex::value_type imaginary_tol)
    using std::exp;
    using std::sin;
    auto f = [](const Real& x) { return Complex(cos(x), sin(x)); };
-   Complex Q = nested_hermite<Real, N>::integrate(f);
+   Real err;
+   Complex Q = nested_hermite<Real, N>::integrate(f, &err);
    Real expected = boost::math::constants::root_pi<Real>() * exp(-Real(1) / 4);
    CHECK_ABSOLUTE_ERROR(expected, Q.real(), imaginary_tol);
    CHECK_ABSOLUTE_ERROR(Real(0), Q.imag(), imaginary_tol);
@@ -42,7 +44,8 @@ void test_complex(typename Complex::value_type imaginary_tol)
    Complex hermite = gauss_hermite<Real, (N-1)/2>::integrate(f);
    Real error = abs(hermite.real() - expected);
    Real nested_error = abs(Q.real() - expected);
-
+   Real expected_error = (std::max)(static_cast<Real>(abs(Q  - hermite)), static_cast<Real>(abs(Q  * boost::math::tools::epsilon<Real>() * Real(2))));
+   CHECK_ULP_CLOSE(err, expected_error, 4);
    CHECK_LE(nested_error, error);
 }
 
