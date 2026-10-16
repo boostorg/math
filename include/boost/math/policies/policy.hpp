@@ -493,6 +493,8 @@ public:
    using max_root_iterations_type = max_root_iterations<>;
 };
 
+// When neither float nor double is promoted, policy<> already is the forwarding policy:
+#if BOOST_MATH_PROMOTE_FLOAT_POLICY || BOOST_MATH_PROMOTE_DOUBLE_POLICY
 template <>
 struct policy<detail::forwarding_arg1, detail::forwarding_arg2, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy>
 {
@@ -517,6 +519,7 @@ public:
    using max_series_iterations_type = max_series_iterations<>;
    using max_root_iterations_type = max_root_iterations<>;
 };
+#endif
 
 BOOST_MATH_EXPORT template <typename Policy,
           typename A1  = default_policy,
@@ -650,6 +653,7 @@ struct normalise<policy<>,
    using type = policy<detail::forwarding_arg1, detail::forwarding_arg2>;
 };
 
+#if BOOST_MATH_PROMOTE_FLOAT_POLICY || BOOST_MATH_PROMOTE_DOUBLE_POLICY
 template <>
 struct normalise<policy<detail::forwarding_arg1, detail::forwarding_arg2>,
           promote_float<false>,
@@ -666,6 +670,7 @@ struct normalise<policy<detail::forwarding_arg1, detail::forwarding_arg2>,
 {
    using type = policy<detail::forwarding_arg1, detail::forwarding_arg2>;
 };
+#endif
 
 BOOST_MATH_EXPORT BOOST_MATH_GPU_ENABLED constexpr policy<> make_policy() noexcept
 { return {}; }
