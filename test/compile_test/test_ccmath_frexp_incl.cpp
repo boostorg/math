@@ -8,10 +8,10 @@
 
 void compile_and_link_test()
 {
-   int i;
-   check_result<float>(boost::math::ccmath::frexp(1.0f, &i));
-   check_result<double>(boost::math::ccmath::frexp(1.0, &i));
+   int exponent;
+   check_result<float>(boost::math::ccmath::frexp(1.0f, &exponent));
+   check_result<double>(boost::math::ccmath::frexp(1.0, &exponent));
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   check_result<long double>(boost::math::ccmath::frexp(1.0l, &i));
+   check_result<long double>(boost::math::ccmath::frexp(1.0l, &exponent));
 #endif
 }

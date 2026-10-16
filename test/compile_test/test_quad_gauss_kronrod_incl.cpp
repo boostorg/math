@@ -15,7 +15,7 @@
 
 void compile_and_link_test()
 {
-    auto f = [](double x) { return x; };
+    auto func = [](double x) { return x; };
     boost::math::quadrature::gauss<double, 1> integrator;
-    check_result<double>(integrator.integrate(f));
+    check_result<double>(integrator.integrate(func));
 }

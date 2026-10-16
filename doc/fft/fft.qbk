@@ -1,0 +1,267 @@
+[/
+  Copyright Nick Thompson 2026
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:fft Fast Fourier Transform]
+
+[h4 Synopsis]
+
+    #include <boost/math/tools/fft.hpp>
+
+    namespace boost::math::tools {
+
+    template <class Complex>
+    class fft
+    {
+    public:
+        using value_type = Complex;
+        using real_type = /* the real type of Complex */;
+
+        explicit fft(std::size_t n);
+
+        std::size_t size() const noexcept;
+
+        // In place.
+        template <class ContiguousContainer>
+        void transform(ContiguousContainer& v);
+
+        template <class ContiguousContainer>
+        void inverse_transform(ContiguousContainer& v);
+
+        // Out of place: in is left unchanged.
+        template <class InputContainer, class OutputContainer>
+        void transform(InputContainer const& in, OutputContainer& out);
+
+        template <class InputContainer, class OutputContainer>
+        void inverse_transform(InputContainer const& in, OutputContainer& out);
+    };
+
+    template <class Complex>
+    class real_fft
+    {
+    public:
+        using value_type = Complex;
+        using real_type = /* the real type of Complex */;
+
+        explicit real_fft(std::size_t n);
+
+        std::size_t size() const noexcept;
+
+        // Reads n real values, overwrites the n/2 + 1 complex values of output.
+        template <class RealContainer, class ContiguousComplexContainer>
+        void transform(RealContainer const& input, ContiguousComplexContainer& output);
+    };
+
+    } // namespaces
+
+[h4 Description]
+
+`fft<Complex>` computes the discrete Fourier transform of a fixed length /n/, in place:
+
+    using boost::math::tools::fft;
+    std::vector<std::complex<double>> v = ...; // v.size() == n
+    fft<std::complex<double>> f(v.size()); // builds the twiddle factors (and, for some n, Bluestein's chirp)
+    f.transform(v);                         // v now holds the transform
+    f.inverse_transform(v);                 // and now holds the original data again, up to rounding
+
+The constructor does all the setup, so construct the object once and reuse it for every transform of that length.
+It also allocates all the workspace a transform needs, so after construction no transform allocates memory.
+
+The out-of-place overloads leave their input unchanged and write the transform to a second container of /n/ values,
+which must not overlap the input:
+
+    std::vector<std::complex<double>> X(v.size());
+    f.transform(v, X);         // X = F(v), v is unchanged
+    f.inverse_transform(X, v); // v = F^-1(X)
+
+Any length /n/ > 0 is accepted; /n/ = 0 throws a `std::domain_error`, as does a container whose size is not /n/.
+
+The template parameter is the complex type, which may be `std::complex<float>`, `std::complex<double>`, `std::complex<long double>`,
+or a Boost.Multiprecision complex type such as `cpp_complex_50`, `cpp_complex_quad` or `mpc_complex_50`.
+Its real type, `real_type`, is the type returned by its `real()` member: `T` for `std::complex<T>`, and the component type for a multiprecision complex number.
+(`std::complex<cpp_bin_float_50>` is not supported: the standard leaves `std::complex` of anything but `float`, `double` and `long double` unspecified;
+use `cpp_complex_50` instead.)
+For a multiprecision complex type, include its header first: `<boost/multiprecision/cpp_complex.hpp>`, `<boost/multiprecision/complex128.hpp>` or `<boost/multiprecision/mpc.hpp>`.
+Being generic in the floating point type is the main reason to use this rather than FFTW.
+
+The data is passed as a container of `Complex` with contiguous storage, a `data()` member and a size, such as `std::vector<Complex>`, `std::array<Complex, N>` or `std::span<Complex>`.
+
+`real_fft<Complex>` transforms /n/ real samples of type `real_type`. The caller supplies the output, which must hold exactly /n/\/2 + 1 values
+(rounded down; otherwise a `std::domain_error` is thrown) and receives /X/[sub 0], ..., /X/[sub n/2]; the remaining coefficients are /X/[sub n-k] = conj(/X/[sub k]):
+
+    using boost::math::tools::real_fft;
+    using boost::multiprecision::cpp_bin_float_50;
+    using boost::multiprecision::cpp_complex_50;
+    std::vector<cpp_bin_float_50> x = ...;          // x.size() == n
+    std::vector<cpp_complex_50> X(x.size() / 2 + 1);
+    real_fft<cpp_complex_50> r(x.size());
+    r.transform(x, X);
+
+The input may be any container with `operator[]` and a size. Both may be `std::array`s.
+For even /n/ the input is packed into a complex FFT of length /n/\/2, so it is about twice as fast as a complex transform of the real data.
+For odd /n/ it simply uses a complex FFT of length /n/.
+
+[h4 Conventions]
+
+The forward transform uses the negative sign in the exponent and is not normalised:
+
+[expression X[sub k] = [sum][sub j=0][super n-1] x[sub j] exp(-2[pi]/ijk/n)]
+
+The inverse uses the positive sign and divides by /n/:
+
+[expression x[sub j] = (1/n) [sum][sub k=0][super n-1] X[sub k] exp(2[pi]/ijk/n)]
+
+so that `inverse_transform` undoes `transform`.
+This is the same convention as FFTW's `FFTW_FORWARD` (whose backward transform is not normalised), numpy's `fft`/`ifft`, and Matlab's `fft`/`ifft`.
+
+[h4 Thread safety]
+
+An `fft` or `real_fft` object holds its own workspace, which every transform writes to, so `transform` and `inverse_transform` are not `const`
+and an object must not be used by two threads at once. As with an FFTW plan and its buffers, give each thread its own object;
+different objects, even of the same length, are independent.
+
+[h4 Algorithms and complexity]
+
+Lengths whose prime factors are all at most 97 use a mixed-radix Cooley--Tukey FFT in Stockham's autosort form,
+with radix-4 stages where possible and then one stage for each odd prime factor; it ping-pongs between the data and a scratch buffer of length /n/,
+so no digit reversal is needed. Radices 2, 3, 4, 5, 7, 11 and 13 have dedicated butterflies; larger primes /p/ use a generic one,
+which costs ['O(p)] per point. The cutoff of 97 is where Bluestein's algorithm (below) starts to win:
+in double precision, for /n/ = /p/[times]2[super k] and /p/[times]1000, Bluestein is faster from /p/ = 97 to 127 on, depending on /n/,
+and the mixed-radix FFT is also the more accurate up to about the same /p/.
+Every other length uses Bluestein's algorithm, which rewrites the length-/n/ DFT as a convolution and evaluates it with two mixed-radix FFTs of length /m/ >= 2/n/ - 1,
+where /m/ is the smallest 2[super a]3[super b]5[super c] >= 2/n/ - 1 (or the next power of two, if that is within 20%).
+Lengths that are a smooth number times a large prime, such as 2[times]1009, are also done by Bluestein over the whole length:
+applying Bluestein only to the large prime factor inside the mixed-radix decomposition would save at most about a factor of 2, at the cost of a second code path.
+Both algorithms are ['O(n log n)] in time.
+A mixed-radix `fft` stores at most 2/n/ complex twiddle factors and a workspace of /n/ more;
+a Bluestein `fft` stores about 6/m/ complex numbers, including a workspace of 2/m/. A `real_fft` of odd length stores another /n/.
+A Bluestein transform does two FFTs of length /m/ >= 2/n/, so it is roughly 5 to 10 times slower than a mixed-radix transform of similar length.
+If you are free to choose /n/, choose one whose prime factors are 2, 3 and 5, preferably a power of two.
+
+[h4 Accuracy]
+
+Every twiddle factor exp(-2[pi]/ik/n) is computed directly, never by a recurrence: the angle is reduced to the first octant in integer arithmetic,
+and the sine and cosine of what remains are computed by `sin_pi` and `cos_pi`, so each twiddle is accurate to an ulp or two.
+With accurate twiddles, the FFT has normwise relative error ['O([epsilon][radic]log n)] for random data,
+and the largest error in any single coefficient is ['O([epsilon] log n)] relative to the root mean square of the coefficients.
+
+The table below gives errors in units of the type's [epsilon], measured against a reference computed in 50 decimal digits
+(an ['O(n[super 2])] DFT up to /n/ = 1031, our FFT in `cpp_complex_50` beyond that) for uniformly random complex data in the unit square
+(the rows for /n/ = 17 and 101 are means over 20 random vectors, against a 100-digit DFT).
+"rms" is ||/X/ - /X/[sub ref]||[sub 2] / ||/X/[sub ref]||[sub 2] and "max" is the largest |/X/[sub k] - /X/[sub ref,k]| divided by the root mean square of /X/[sub ref].
+FFTW 3 (double, `FFTW_ESTIMATE`) is given for comparison.
+On Apple silicon, `long double` is `double`, and gives the same errors.
+
+[table:fft_accuracy Errors in units of epsilon
+[[n][algorithm][float rms][float max][double rms][double max][FFTW double rms][FFTW double max]]
+[[12]      [mixed radix] [0.46][1.19][0.47][1.77][0.34][1.24]]
+[[16]      [mixed radix] [0.53][1.71][0.33][0.98][0.30][0.98]]
+[[17]      [mixed radix] [0.56][1.22][0.55][1.09][0.55][1.09]]
+[[27]      [mixed radix] [0.72][2.62][0.82][2.25][0.70][2.05]]
+[[49]      [mixed radix] [0.78][2.58][0.74][1.99][0.70][2.19]]
+[[100]     [mixed radix] [0.81][2.73][0.76][2.23][0.76][2.72]]
+[[101]     [Bluestein]   [1.41][3.42][1.39][3.25][1.43][3.32]]
+[[125]     [mixed radix] [0.87][2.70][0.87][2.41][0.89][3.00]]
+[[360]     [mixed radix] [0.92][3.16][0.96][3.14][0.88][3.01]]
+[[1000]    [mixed radix] [1.02][4.38][1.00][3.24][1.06][3.59]]
+[[1024]    [mixed radix] [0.89][3.69][0.84][2.99][0.88][3.62]]
+[[1031]    [Bluestein]   [1.85][5.21][2.14][6.60][2.09][8.55]]
+[[2018]    [Bluestein]   [1.86][6.43][1.86][5.70][2.39][8.17]]
+[[3072]    [mixed radix] [0.98][4.51][1.00][3.51][0.98][3.63]]
+[[3125]    [mixed radix] [1.20][4.89][1.17][4.19][1.19][4.14]]
+[[4096]    [mixed radix] [0.98][3.11][0.93][3.09][1.00][3.82]]
+[[4099]    [Bluestein]   [2.01][6.52][2.25][6.76][2.28][7.89]]
+[[10000]   [mixed radix] [1.21][4.44][1.18][4.35][1.15][4.49]]
+[[12297]   [Bluestein]   [2.52][8.37][2.34][8.27][2.37][8.32]]
+[[65536]   [mixed radix] [1.15][4.08][1.12][4.38][1.22][5.54]]
+[[65537]   [Bluestein]   [2.56][8.98][2.96][11.6][2.27][8.35]]
+[[100000]  [mixed radix] [1.38][6.03][1.34][5.73][1.40][5.99]]
+[[117649]  [mixed radix] [1.39][5.27][1.38][4.73][1.33][5.30]]
+[[1048576] [mixed radix] [1.30][5.76][1.28][5.09][1.38][6.13]]
+[[1000003] [Bluestein]   [2.39][9.30][2.41][8.76][3.10][12.0]]
+]
+
+For `cpp_complex_50` (against a 100 digit reference), the mixed-radix FFT gives rms errors of 0.4[epsilon] at /n/ = 12, 1.3[epsilon] at /n/ = 100,
+1.7[epsilon] at /n/ = 1000 and 4096 and 1.8[epsilon] at /n/ = 3125,
+and Bluestein gives 2.9[epsilon] at /n/ = 101, 3.5[epsilon] at /n/ = 2018 and 3.3[epsilon] at /n/ = 4099.
+
+The mixed-radix FFT is as accurate as FFTW.
+Bluestein's algorithm loses a little: its rms and worst errors are about twice those of a mixed-radix FFT of similar length,
+and they still grow like [radic]log /n/ and log /n/ respectively.
+Prime factors up to 97 are transformed directly by a butterfly, which is as accurate as FFTW (at /n/ = 17 the errors are the same);
+for larger primes, where this FFT uses Bluestein's algorithm, the two are comparable.
+The round trip `inverse_transform(transform(x))` reproduces /x/ to about the same accuracy as the forward transform.
+
+These are errors for data whose coefficients all have similar size.
+The error bounds are normwise, so coefficients much smaller than the rms coefficient have large relative errors; that is inherent in any FFT.
+
+[h4 Performance]
+
+On an Apple M1 Pro core with clang -O2, in double precision (google/benchmark, CPU time medians of 7), against FFTW 3.3.11 with `FFTW_ESTIMATE` plans.
+`FFTW_MEASURE` plans are faster to execute, but making one runs and times many candidate transforms, which costs far more than the transforms it saves,
+unless the same plan is reused very many times; `FFTW_ESTIMATE` is the planner that, like this FFT's constructor, does no measurement.
+The FFTW is Homebrew's arm64 build, which is configured without NEON, so it runs FFTW's scalar codelets;
+an FFTW built with SIMD would be noticeably faster than the figures below.
+Each comparison is like for like: in place against an in-place plan, out of place against an out-of-place plan, and neither allocates during a transform.
+
+[table:fft_performance Time of one complex transform, in microseconds
+[[n][in place][FFTW in place][ratio][out of place][FFTW out of place][ratio]]
+[[16]                            [0.0284] [0.0174] [1.64] [0.0288] [0.0173] [1.66]]
+[[64]                            [0.171] [0.144] [1.19] [0.16] [0.108] [1.48]]
+[[256]                           [0.742] [0.69] [1.07] [0.732] [0.581] [1.26]]
+[[1024]                          [3.63] [3.44] [1.06] [3.44] [3.06] [1.12]]
+[[4096]                          [16.5] [17] [0.97] [16.7] [15.3] [1.09]]
+[[16384]                         [82.9] [168] [0.49] [78.1] [157] [0.50]]
+[[65536]                         [358] [427] [0.84] [361] [758] [0.48]]
+[[262144]                        [1768] [3428] [0.52] [1740] [3340] [0.52]]
+[[1048576]                       [8169] [15790] [0.52] [8256] [19936] [0.41]]
+[[12]                            [0.0247] [0.0125] [1.98] [0.0253] [0.0117] [2.16]]
+[[100]                           [0.306] [0.261] [1.17] [0.287] [0.215] [1.33]]
+[[360]                           [1.37] [1.39] [0.99] [1.3] [1.09] [1.19]]
+[[1000]                          [4.15] [4.77] [0.87] [3.98] [3.92] [1.02]]
+[[10000]                         [51.9] [55.8] [0.93] [51.6] [48.9] [1.06]]
+[[100000]                        [658] [811] [0.81] [662] [687] [0.96]]
+[[786432 = 3[times]2[super 18]]  [5916] [12280] [0.48] [6018] [14294] [0.42]]
+[[531441 = 3[super 12]]          [4793] [5082] [0.94] [4779] [5743] [0.83]]
+[[390625 = 5[super 8]]           [3058] [3695] [0.83] [3075] [3992] [0.77]]
+[[117649 = 7[super 6]]           [1265] [1806] [0.70] [1285] [806] [1.60]]
+[[1001 = 7[times]11[times]13]    [5.68] [5.37] [1.06] [5.53] [4.62] [1.20]]
+[[6208 = 97[times]2[super 6]]    [155] [92.8] [1.67] [155] [88.2] [1.75]]
+[[6464 = 101[times]2[super 6]]   [158] [101] [1.57] [157] [96.9] [1.62]]
+[[2018 = 2[times]1009]           [37.6] [50.6] [0.74] [37.6] [49.4] [0.76]]
+[[4099 (prime)]                  [104] [110] [0.95] [104] [110] [0.94]]
+[[65537 (prime)]                 [2118] [2172] [0.98] [2103] [2174] [0.97]]
+[[1000003 (prime)]               [42672] [52931] [0.81] [42672] [53199] [0.80]]
+]
+
+[table:real_fft_performance Time of one real transform (/n/ real values to /n/\/2 + 1 complex values), in microseconds
+[[n][`real_fft`][FFTW r2c][ratio]]
+[[64]                            [0.134] [0.0479] [2.80]]
+[[1024]                          [2.32] [1.45] [1.60]]
+[[16384]                         [52.5] [39.1] [1.34]]
+[[1048576]                       [4725] [7445] [0.63]]
+[[1000]                          [2.4] [1.68] [1.43]]
+[[1001 = 7[times]11[times]13]    [6.06] [2.69] [2.25]]
+[[100000]                        [381] [395] [0.96]]
+[[2018 = 2[times]1009]           [18.9] [24.7] [0.76]]
+[[4099 (prime)]                  [105] [96.4] [1.09]]
+[[65537 (prime)]                 [2148] [2332] [0.92]]
+]
+
+For lengths below about 10[super 4] this FFT takes about the same time as `FFTW_ESTIMATE` up to about 1.5 times as long (up to 2 times for the shortest complex lengths, and 2.8 times for a real transform of length 64),
+and for longer lengths it is usually faster, by up to a factor of 2.
+Lengths with a large prime factor below the cutoff of 97, such as 97[times]2[super 6], take about 1.7 times as long as FFTW,
+and a real transform of odd length, which is done as a complex transform of the same length, takes 2 to 3 times as long when the length is short.
+The aim of this implementation is a generic `Real`, no external dependency, and accuracy; for the fastest double-precision transforms, use a SIMD build of FFTW.
+
+[h4 References]
+
+* J. W. Cooley and J. W. Tukey, ['An algorithm for the machine calculation of complex Fourier series], Math. Comp. 19 (1965), 297--301.
+* L. I. Bluestein, ['A linear filtering approach to the computation of the discrete Fourier transform], IEEE Trans. Audio Electroacoust. 18 (1970), 451--455.
+* N. J. Higham, ['Accuracy and Stability of Numerical Algorithms], 2nd ed., SIAM 2002, section 24.1.
+* J. C. Schatzman, ['Accuracy of the discrete Fourier transform and the fast Fourier transform], SIAM J. Sci. Comput. 17 (1996), 1150--1166.
+
+[endsect] [/section:fft Fast Fourier Transform]

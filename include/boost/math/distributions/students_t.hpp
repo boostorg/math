@@ -290,6 +290,67 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<students_t_d
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType logcdf(const students_t_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   BOOST_MATH_STD_USING
+   RealType error_result;
+   RealType df = dist.degrees_of_freedom();
+   if (false == detail::check_df_gt0_to_inf(
+     "boost::math::logcdf(const students_t_distribution<%1%>&, %1%)", df, &error_result, Policy()))
+   {
+     return error_result;
+   }
+   if(false == detail::check_x_not_NaN(
+      "boost::math::logcdf(const students_t_distribution<%1%>&, %1%)", x, &error_result, Policy()))
+   {
+      return error_result;
+   }
+   if (x == 0)
+   {
+     return -constants::ln_two<RealType>();
+   }
+   if ((BOOST_MATH_NAMESPACE::isinf)(x))
+   {
+     return (x < 0) ? log(RealType(0)) : RealType(0);
+   }
+   if ((BOOST_MATH_NAMESPACE::isinf)(df))
+   {
+     // The normal limit. (Unlike cdf, finite df stays with the incomplete beta functions below: their logs
+     // reach the normal limit as df grows, where the normal cdf itself underflows.)
+     return logcdf(normal_distribution<RealType, Policy>(0, 1), x);
+   }
+   // log of the lower tail, at -|x|, from the same two incomplete beta forms as cdf. Neither underflows,
+   // even where the tail itself does (huge df, or large |x|):
+   RealType ax = fabs(x);
+   RealType log_tail;
+   if (ax > sqrt(tools::max_value<RealType>()))
+   {
+      // x^2 would overflow; df / (df + x^2) is then z = (df / |x|) / |x|. Where z is below epsilon (it may
+      // underflow), log I_z(a, 1/2) = a log(z) - log(a) - lbeta(a, 1/2) + O(z), with log(z) taken from the logs:
+      RealType z = (df / ax) / ax;
+      RealType a = df / 2;
+      log_tail = z < tools::epsilon<RealType>()
+         ? RealType(a * (log(df) - 2 * log(ax)) - log(a) - BOOST_MATH_NAMESPACE::lbeta(a, static_cast<RealType>(0.5), Policy()))
+         : RealType(BOOST_MATH_NAMESPACE::libeta(a, static_cast<RealType>(0.5), z, Policy()));
+   }
+   else
+   {
+      RealType x2 = x * x;
+      log_tail = df > 2 * x2
+         ? BOOST_MATH_NAMESPACE::libetac(static_cast<RealType>(0.5), df / 2, RealType(x2 / (df + x2)), Policy())
+         : BOOST_MATH_NAMESPACE::libeta(df / 2, static_cast<RealType>(0.5), RealType(df / (df + x2)), Policy());
+   }
+   log_tail -= constants::ln_two<RealType>();
+   return (x < 0) ? log_tail : RealType(BOOST_MATH_NAMESPACE::log1p(-exp(log_tail), Policy()));
+}
+
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<students_t_distribution<RealType, Policy>, RealType>& c)
+{
+   return logcdf(c.dist, -c.param);
+}
+
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<students_t_distribution<RealType, Policy>, RealType>& c)
 {
    return -quantile(c.dist, c.param);
@@ -528,8 +589,8 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::find_
    BOOST_MATH_NAMESPACE::normal_distribution<RealType, Policy> norm(0, 1);
    if (detail::analytical_df_if_cdf_matches(norm, t, p))
       return policies::raise_overflow_error<RealType>(function, nullptr, Policy());
-   BOOST_MATH_NAMESPACE::cauchy_distribution<RealType, Policy> cauchy(0, 1);
-   if (detail::analytical_df_if_cdf_matches(cauchy, t, p))
+   BOOST_MATH_NAMESPACE::cauchy_distribution<RealType, Policy> cauchy_dist(0, 1);
+   if (detail::analytical_df_if_cdf_matches(cauchy_dist, t, p))
       return RealType(1);
 
    // Edgeworth warm start: compute a df estimate; fall back to df_hint_fallback if it fails

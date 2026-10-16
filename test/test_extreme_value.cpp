@@ -251,8 +251,13 @@ void test_spots(RealType)
       BOOST_CHECK_EQUAL(cdf(extreme_value_distribution<RealType>(), inf), 1);
       BOOST_CHECK_EQUAL(cdf(complement(extreme_value_distribution<RealType>(), -inf)), 1);
       BOOST_CHECK_EQUAL(cdf(complement(extreme_value_distribution<RealType>(), inf)), 0);
-      BOOST_CHECK_EQUAL(logcdf(extreme_value_distribution<RealType>(), -inf), 0);
-      BOOST_CHECK_EQUAL(logcdf(extreme_value_distribution<RealType>(), inf), 1);
+      // log(0) is an exact -infinity, which goes to the overflow policy:
+      BOOST_CHECK_THROW(logcdf(extreme_value_distribution<RealType>(), -inf), std::overflow_error);
+      BOOST_CHECK_THROW(logcdf(complement(extreme_value_distribution<RealType>(), inf)), std::overflow_error);
+      BOOST_CHECK_EQUAL(logcdf(extreme_value_distribution<RealType>(), inf), 0);
+      BOOST_CHECK_EQUAL(logcdf(complement(extreme_value_distribution<RealType>(), -inf)), 0);
+      typedef boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::ignore_error> > ignore_overflow;
+      BOOST_CHECK_EQUAL(logcdf(extreme_value_distribution<RealType, ignore_overflow>(), -inf), -inf);
 
       // Test NaN policy
       using boost::math::policies::policy;
@@ -326,6 +331,21 @@ void test_spots(RealType)
 
 } // template <class RealType>void test_spots(RealType)
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](RealType a, RealType b, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(entropy(extreme_value_distribution<RealType>(a, b)), h, tol);
+   };
+   check(static_cast<RealType>(0.0L), static_cast<RealType>(1.0L), static_cast<RealType>(1.57721566490153286060651209008240243104215934L));
+   check(static_cast<RealType>(2.0L), static_cast<RealType>(0.5L), static_cast<RealType>(0.884068484341587551189279968624225862966659202L));
+   check(static_cast<RealType>(-1.0L), static_cast<RealType>(1000.0L), static_cast<RealType>(8.4849709438836699126604864541354950538454638L));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
 
@@ -336,11 +356,15 @@ BOOST_AUTO_TEST_CASE( test_main )
     // Basic sanity-check spot values.
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
+  test_entropy(0.0F);
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
+  test_entropy(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
+  test_entropy(0.0L);
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  test_entropy(boost::math::concepts::real_concept(0.));
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "

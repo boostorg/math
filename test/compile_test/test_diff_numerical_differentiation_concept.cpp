@@ -12,7 +12,7 @@
 void compile_and_link_test()
 {
    boost::math::concepts::std_real_concept x = 0;
-   auto f = [](boost::math::concepts::std_real_concept x) { return x; };
+   auto f = [](boost::math::concepts::std_real_concept y) { return y; };
    boost::math::differentiation::finite_difference_derivative(f, x);
 }
 

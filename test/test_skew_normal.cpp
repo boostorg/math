@@ -463,6 +463,23 @@ void test_spots(RealType)
 
 } // template <class RealType>void test_spots(RealType)
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](RealType a, RealType b, RealType c, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(entropy(skew_normal_distribution<RealType>(a, b, c)), h, tol);
+   };
+   check(static_cast<RealType>(0.0L), static_cast<RealType>(1.0L), static_cast<RealType>(0.0L), static_cast<RealType>(1.41893853320467274178032973640561763986139747L));
+   check(static_cast<RealType>(0.0L), static_cast<RealType>(1.0L), static_cast<RealType>(3.0L), static_cast<RealType>(0.95283496904081354380587026678691115423529239L));
+   check(static_cast<RealType>(1.0L), static_cast<RealType>(2.0L), static_cast<RealType>(-0.5L), static_cast<RealType>(2.04394221870759911267958280049674906664658993L));
+   check(static_cast<RealType>(0.0L), static_cast<RealType>(1.0L), static_cast<RealType>(100.0L), static_cast<RealType>(0.732997437415045664543167570970056569814871539L));
+   check(static_cast<RealType>(0.0L), static_cast<RealType>(0.5L), static_cast<RealType>(0.0625L), static_cast<RealType>(0.724551255972582096669413549575691562292123655L));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
 
@@ -554,11 +571,15 @@ BOOST_AUTO_TEST_CASE( test_main )
   // Basic sanity-check spot values for all floating-point types..
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
+  test_entropy(0.0F);
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
+  test_entropy(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
+  test_entropy(0.0L);
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  test_entropy(boost::math::concepts::real_concept(0.));
 #endif
 #else
   std::cout << "<note>The long double tests have been disabled on this platform "

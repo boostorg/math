@@ -351,6 +351,22 @@ void test_spots(RealType)
    check_out_of_range<inverse_gamma_distribution<RealType> >(1, 1);
 } // template <class RealType>void test_spots(RealType)
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](RealType a, RealType b, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(entropy(inverse_gamma_distribution<RealType>(a, b)), h, tol);
+   };
+   check(static_cast<RealType>(0.5L), static_cast<RealType>(1.0L), static_cast<RealType>(4.01762998195683530623317817517466270661338681L));
+   check(static_cast<RealType>(3.0L), static_cast<RealType>(2.0L), static_cast<RealType>(0.695157020726022061260512603245962860319637612L));
+   check(static_cast<RealType>(25.0L), static_cast<RealType>(1.0L), static_cast<RealType>(-3.38257593603900503164249716259444886211057541L));
+   check(static_cast<RealType>(100000000.0L), static_cast<RealType>(3.0L), static_cast<RealType>(-25.1134702873890991000403224939953383411487738L));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
   BOOST_MATH_CONTROL_FP;
@@ -424,11 +440,15 @@ BOOST_AUTO_TEST_CASE( test_main )
   // Basic sanity-check spot values.
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
+  test_entropy(0.0F);
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
+  test_entropy(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
+  test_entropy(0.0L);
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  test_entropy(boost::math::concepts::real_concept(0.));
 #endif
 #else
   std::cout << "<note>The long double tests have been disabled on this platform "

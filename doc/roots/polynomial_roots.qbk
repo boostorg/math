@@ -1,0 +1,84 @@
+[section:polynomial_roots Complex Roots of a Polynomial]
+
+``
+#include <boost/math/tools/polynomial_roots.hpp>
+``
+
+   template <class RandomAccessContainer>
+   auto polynomial_roots(RandomAccessContainer const& coefficients);
+
+   template <class RandomAccessContainer>
+   auto polynomial_roots_companion_matrix(RandomAccessContainer const& coefficients);
+
+`polynomial_roots` computes all finite complex roots of a polynomial with real,
+floating-point coefficients, held in any random access container: `std::vector`, `std::array`,
+`std::span` and so on. Both functions return a `std::vector<Complex>`. If the container's
+`value_type`, `Real`, is a built-in floating-point type, `Complex` is `std::complex<Real>`; if it is a
+Boost.Multiprecision type, `Complex` is the matching multiprecision complex type (`cpp_complex_50` for
+`cpp_bin_float_50`, and so on), whose header, e.g. `<boost/multiprecision/cpp_complex.hpp>`, must be
+included first. Coefficients are supplied in ascending order, so
+`{a0, a1, ..., an}` represents
+[@https://en.wikipedia.org/wiki/Polynomial a0 + a1 z + ... + an z^n].
+The returned order is unspecified.
+
+The implementation follows the piecewise approximation strategy of Imbach and
+Moroz: a Newton-polygon sweep divides the complex plane into radial rings, the
+rings are divided into angular sectors, and low-degree Taylor polynomials are
+factored locally, with expansions of an order set by the precision of `Real`.
+Candidate roots are polished and checked against the input polynomial. A global Aberth iteration is used as a safety net for unresolved or
+ill-conditioned clusters.
+
+Exact leading zero coefficients are ignored. Exact trailing zero coefficients
+produce the corresponding number of roots at zero. The zero polynomial and
+non-finite coefficients cause `std::domain_error` to be thrown.
+
+[heading The companion QR algorithm]
+
+`polynomial_roots_companion_matrix` computes the same roots as the eigenvalues of the companion matrix,
+by the core-chasing QR algorithm of Aurentz, Mach, Vandebril and Watkins. It
+stores the companion matrix as O(n) 2x2 unitary rotations, so it takes O(n[super 2])
+time and O(n) memory, against O(n[super 3]) and O(n[super 2]) for a dense
+eigensolver. Before the iteration the variable is scaled so that the constant
+and leading coefficients have equal magnitude.
+
+The two functions make different guarantees. `polynomial_roots_companion_matrix` is proven normwise
+backward stable: all of its roots are the exact roots of a single polynomial
+whose coefficient vector is within a modest multiple of n[epsilon] of the input,
+relative to the norm of the coefficients. `polynomial_roots` checks a stronger,
+coefficientwise, bound on each root: each one is an exact root of a polynomial
+whose coefficients each differ from the input in only the last few bits.
+It has no a priori proof of convergence, but it returns only roots that
+pass this check. The coefficientwise bound matters when the roots span many
+orders of magnitude, as in [prod](z - 10[super -k]): the small roots are
+determined by the small coefficients, which a normwise perturbation may change
+completely, so `polynomial_roots_companion_matrix` gets the small roots wrong while `polynomial_roots`
+gets them to nearly full precision. For roots of comparable magnitude the
+two agree.
+
+Exact zero coefficients are handled as for `polynomial_roots`. The zero
+polynomial and non-finite coefficients cause `std::domain_error` to be
+thrown, and `std::runtime_error` is thrown in the unlikely event that the QR
+iteration fails to converge.
+
+[heading Example]
+
+   std::array<double, 3> p{1, 0, 1}; // 1 + z^2
+   auto roots = boost::math::tools::polynomial_roots(p);
+
+The result contains approximations to `i` and `-i`.
+
+[heading References]
+
+J. Imbach and G. Moroz, "Fast evaluation and root finding for polynomials with
+floating-point coefficients", 2023.
+
+J. L. Aurentz, T. Mach, R. Vandebril and D. S. Watkins, "Fast and backward
+stable computation of roots of polynomials", SIAM J. Matrix Anal. Appl. 36
+(2015), 942-973.
+
+J. L. Aurentz, T. Mach, L. Robol, R. Vandebril and D. S. Watkins, "Fast and
+backward stable computation of roots of polynomials, Part II: backward error
+analysis; companion matrix and companion pencil", SIAM J. Matrix Anal. Appl.
+39 (2018), 1245-1269.
+
+[endsect]

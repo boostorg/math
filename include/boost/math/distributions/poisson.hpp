@@ -54,6 +54,10 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/distributions/detail/entropy.hpp>
+#endif
+
 BOOST_MATH_NAMESPACE_BEGIN
     namespace poisson_detail
     {
@@ -428,6 +432,51 @@ BOOST_MATH_NAMESPACE_BEGIN
     } // poisson ccdf
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
+    BOOST_MATH_GPU_ENABLED inline RealType logcdf(const poisson_distribution<RealType, Policy>& dist, const RealType& k)
+    {
+      BOOST_MATH_STD_USING
+      RealType mean = dist.mean();
+      RealType result = 0;
+      if(false == poisson_detail::check_dist_and_k(
+        "boost::math::logcdf(const poisson_distribution<%1%>&, %1%)", mean, k, &result, Policy()))
+      {
+        return result;
+      }
+      if (mean == 0)
+      {
+        return log(RealType(0));
+      }
+      if (k == 0)
+      {
+        return -mean;
+      }
+      return BOOST_MATH_NAMESPACE::lgamma_q(k + 1, mean, Policy());
+    }
+
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
+    BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<poisson_distribution<RealType, Policy>, RealType>& c)
+    {
+      BOOST_MATH_STD_USING
+      RealType const& k = c.param;
+      RealType mean = c.dist.mean();
+      RealType result = 0;
+      if(false == poisson_detail::check_dist_and_k(
+        "boost::math::logcdf(const poisson_distribution<%1%>&, %1%)", mean, k, &result, Policy()))
+      {
+        return result;
+      }
+      if (mean == 0)
+      {
+        return 0;
+      }
+      if (k == 0)
+      {
+        return log(-BOOST_MATH_NAMESPACE::expm1(-mean, Policy()));
+      }
+      return BOOST_MATH_NAMESPACE::lgamma_p(k + 1, mean, Policy());
+    }
+
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const poisson_distribution<RealType, Policy>& dist, const RealType& p)
     { // Quantile (or Percent Point) Poisson function.
       // Return the number of expected events k for a given probability p.
@@ -563,6 +612,65 @@ BOOST_MATH_NAMESPACE_BEGIN
          discrete_type(),
          max_iter);
    } // quantile complement.
+
+#ifndef BOOST_MATH_HAS_NVRTC
+    // Not GPU enabled: the large-mean path uses Bernoulli numbers.
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
+    inline RealType entropy(const poisson_distribution<RealType, Policy>& dist)
+    {
+      BOOST_MATH_STD_USING
+      // No closed form: -sum p log(p) from the log ratios of the probabilities (detail::discrete_entropy_sum).
+      constexpr auto function = "boost::math::entropy(const poisson_distribution<%1%>&)";
+      RealType lambda = dist.mean();
+      RealType result = 0;
+      if (!poisson_detail::check_dist(function, lambda, &result, Policy()))
+        return result;
+      const RealType sigmas = detail::discrete_entropy_tail_sigmas<RealType, Policy>();
+      const RealType threshold = detail::entropy_series_threshold<RealType, Policy>();
+      RealType sigma = sqrt(lambda);
+      if (sigma >= 2 * sigmas)
+      {
+        // Trapezoidal rule on the continuation S(t) = log(lambda^t Gamma(lambda) / Gamma(lambda + t)),
+        // centred on x = lambda - 1:
+        RealType h = sigma / detail::discrete_entropy_step_ratio<RealType, Policy>();
+        int j_right = 0;
+        int j_left = 0;
+        auto right = [&](RealType& s, RealType&) { s = -detail::entropy_lgamma_delta(lambda, RealType(++j_right * h), Policy()); return true; };
+        auto left = [&](RealType& s, RealType&)
+        {
+          RealType t = -(++j_left) * h;
+          if (lambda + t < threshold)
+            return false;
+          s = -detail::entropy_lgamma_delta(lambda, t, Policy());
+          return true;
+        };
+        return detail::discrete_entropy_sum(right, left, h, RealType(0), function, Policy());
+      }
+      // Direct sum from the mode, with p(k + 1) / p(k) = lambda / (k + 1):
+      RealType mode = floor(lambda);
+      RealType k_right = mode;
+      RealType k_left = mode;
+      detail::compensated_sum<RealType> s_right;
+      detail::compensated_sum<RealType> s_left;
+      auto right = [&](RealType& s, RealType& ratio)
+      {
+        s_right.add(detail::entropy_log_ratio(lambda, RealType(k_right + 1), RealType(lambda - (k_right + 1)), ratio, false, Policy()));
+        k_right += 1;
+        s = s_right.value();
+        return true;
+      };
+      auto left = [&](RealType& s, RealType& ratio)
+      {
+        if (k_left == 0)
+          return false;
+        s_left.add(-detail::entropy_log_ratio(lambda, k_left, RealType(lambda - k_left), ratio, true, Policy()));
+        k_left -= 1;
+        s = s_left.value();
+        return true;
+      };
+      return detail::discrete_entropy_sum(right, left, RealType(1), RealType(0), function, Policy());
+    }
+#endif
 
   BOOST_MATH_NAMESPACE_END
 

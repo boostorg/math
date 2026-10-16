@@ -131,6 +131,7 @@ extern "C++" {
 // Special functions (umbrella)
 #include <boost/math/special_functions.hpp>
 #include <boost/math/special_functions/prime_sieve.hpp>
+#include <boost/math/special_functions/chebyshev_transform.hpp>
 
 // Statistical distributions (umbrella)
 #include <boost/math/distributions.hpp>
@@ -147,11 +148,13 @@ extern "C++" {
 #include <boost/math/tools/cubic_roots.hpp>
 #include <boost/math/tools/engel_expansion.hpp>
 #include <boost/math/tools/estrin.hpp>
+#include <boost/math/tools/fft.hpp>
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/luroth_expansion.hpp>
 #include <boost/math/tools/minima.hpp>
 #include <boost/math/tools/norms.hpp>
 #include <boost/math/tools/polynomial.hpp>
+#include <boost/math/tools/polynomial_roots.hpp>
 #include <boost/math/tools/quartic_roots.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/recurrence.hpp>
@@ -171,14 +174,14 @@ extern "C++" {
 #include <boost/math/quadrature/trapezoidal.hpp>
 #include <boost/math/quadrature/wavelet_transforms.hpp>
 
-// Interpolators (the deprecated boost::math namespace shims and the FFTW
-// dependent cardinal_trigonometric interpolator are intentionally excluded)
+// Interpolators (the deprecated boost::math namespace shims are intentionally excluded)
 #include <boost/math/interpolators/barycentric_rational.hpp>
 #include <boost/math/interpolators/bezier_polynomial.hpp>
 #include <boost/math/interpolators/bilinear_uniform.hpp>
 #include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
 #include <boost/math/interpolators/cardinal_quadratic_b_spline.hpp>
 #include <boost/math/interpolators/cardinal_quintic_b_spline.hpp>
+#include <boost/math/interpolators/cardinal_trigonometric.hpp>
 #include <boost/math/interpolators/catmull_rom.hpp>
 #include <boost/math/interpolators/cubic_hermite.hpp>
 #include <boost/math/interpolators/makima.hpp>

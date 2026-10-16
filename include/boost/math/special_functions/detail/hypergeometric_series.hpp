@@ -31,8 +31,8 @@
   {
     typedef T result_type;
 
-    hypergeometric_pFq_generic_series_term(const T& b, const T& z)
-       : n(0), term(1), b(b), z(z)
+    hypergeometric_pFq_generic_series_term(const T& b_, const T& z_)
+       : n(0), term(1), b(b_), z(z_)
     {
     }
 
@@ -57,8 +57,8 @@
   {
     typedef T result_type;
 
-    hypergeometric_pFq_generic_series_term(const T& a, const T& z)
-       : n(0), term(1), a(a), z(z)
+    hypergeometric_pFq_generic_series_term(const T& a_, const T& z_)
+       : n(0), term(1), a(a_), z(z_)
     {
     }
 
@@ -83,8 +83,8 @@
   {
     typedef T result_type;
 
-    hypergeometric_pFq_generic_series_term(const T& a, const T& b, const T& z)
-       : n(0), term(1), a(a), b(b), z(z)
+    hypergeometric_pFq_generic_series_term(const T& a_, const T& b_, const T& z_)
+       : n(0), term(1), a(a_), b(b_), z(z_)
     {
     }
 
@@ -109,8 +109,8 @@
   {
     typedef T result_type;
 
-    hypergeometric_pFq_generic_series_term(const T& a, const T& b1, const T& b2, const T& z)
-       : n(0), term(1), a(a), b1(b1), b2(b2), z(z)
+    hypergeometric_pFq_generic_series_term(const T& a_, const T& b1_, const T& b2_, const T& z_)
+       : n(0), term(1), a(a_), b1(b1_), b2(b2_), z(z_)
     {
     }
 
@@ -135,8 +135,8 @@
   {
     typedef T result_type;
 
-    hypergeometric_pFq_generic_series_term(const T& a1, const T& a2, const T& z)
-       : n(0), term(1), a1(a1), a2(a2), z(z)
+    hypergeometric_pFq_generic_series_term(const T& a1_, const T& a2_, const T& z_)
+       : n(0), term(1), a1(a1_), a2(a2_), z(z_)
     {
     }
 
@@ -161,8 +161,8 @@
   {
     typedef T result_type;
 
-    hypergeometric_pFq_generic_series_term(const T& a1, const T& a2, const T& b, const T& z)
-       : n(0), term(1), a1(a1), a2(a2), b(b), z(z)
+    hypergeometric_pFq_generic_series_term(const T& a1_, const T& a2_, const T& b_, const T& z_)
+       : n(0), term(1), a1(a1_), a2(a2_), b(b_), z(z_)
     {
     }
 

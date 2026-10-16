@@ -120,6 +120,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<chi_squared_distribution<RealType> > >();
    function_requires<DistributionConcept<exponential_distribution<RealType> > >();
    function_requires<DistributionConcept<extreme_value_distribution<RealType> > >();
+   function_requires<DistributionConcept<generalized_extreme_value_distribution<RealType> > >();
    function_requires<DistributionConcept<fisher_f_distribution<RealType> > >();
    function_requires<DistributionConcept<gamma_distribution<RealType> > >();
    function_requires<DistributionConcept<geometric_distribution<RealType> > >();
@@ -162,6 +163,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<chi_squared_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<exponential_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<extreme_value_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<generalized_extreme_value_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<fisher_f_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<gamma_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<geometric_distribution<RealType, test_policy> > >();
@@ -199,6 +201,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<dist_test::chi_squared > >();
    function_requires<DistributionConcept<dist_test::exponential > >();
    function_requires<DistributionConcept<dist_test::extreme_value > >();
+   function_requires<DistributionConcept<dist_test::generalized_extreme_value > >();
    function_requires<DistributionConcept<dist_test::fisher_f > >();
    function_requires<DistributionConcept<dist_test::gamma > >();
    function_requires<DistributionConcept<dist_test::geometric > >();

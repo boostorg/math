@@ -16,6 +16,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/detail/orthogonal_polynomial.hpp>
 #include <boost/math/special_functions/detail/two_product.hpp>
+#include <boost/math/tools/compensated_arithmetic.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
 
@@ -47,24 +48,21 @@ T laguerre_imp(unsigned n, T x)
 
    // Errors in p0 and p1, starting with that of 1 - x:
    T e0 = 0;
-   T t = p1 - 1;
-   T e1 = (1 - (p1 - t)) + (-x - t);
+   T e1 = two_sum_error(T(1), T(-x), p1);
    detail::two_product<T> product;
 
    for(unsigned c = 1; c < n; ++c)
    {
       // a + ea = 2c + 1 - x exactly:
       T a = (2 * c + 1) - x;
-      t = a - (2 * c + 1);
-      T ea = ((2 * c + 1) - (a - t)) + (-x - t);
+      T ea = two_sum_error(T(2 * c + 1), T(-x), a);
       // s1 + r1 = a p1 and s2 + r2 = c p0 exactly:
       T s1, r1, s2, r2;
       product(a, p1, s1, r1);
       product(T(c), p0, s2, r2);
       // d + ed = s1 - s2 exactly:
       T d = s1 - s2;
-      t = d - s1;
-      T ed = (s1 - (d - t)) + (-s2 - t);
+      T ed = two_sum_error(s1, T(-s2), d);
       T p2 = d / (c + 1);
       // d - (c + 1) p2, where d - q is exact as q is so close to d:
       T q, rq;

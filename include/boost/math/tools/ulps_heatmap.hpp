@@ -32,7 +32,6 @@
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <array>
-#include <atomic>
 #include <cmath>
 #include <cstdint>
 #include <fstream>
@@ -43,7 +42,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <thread>
 #include <vector>
 #endif
 #include <boost/math/tools/color_maps.hpp>
@@ -137,36 +135,6 @@ std::vector<CoarseReal> heatmap_abscissas(CoarseReal a, CoarseReal b, std::size_
     }
     return xs;
 }
-
-// Runs body(j) for j in [0, n) on several threads.
-template<class Body>
-void parallel_for(std::size_t n, unsigned threads, Body body)
-{
-    if (n == 0)
-    {
-        return;
-    }
-    if (threads == 0)
-    {
-        threads = (std::max)(1u, std::thread::hardware_concurrency());
-    }
-    std::atomic<std::size_t> next{0};
-    std::vector<std::thread> pool;
-    for (unsigned t = 0; t < threads; ++t)
-    {
-        pool.emplace_back([&]() {
-            for (std::size_t j = next++; j < n; j = next++)
-            {
-                body(j);
-            }
-        });
-    }
-    for (auto & th : pool)
-    {
-        th.join();
-    }
-}
-
 
 // f_x and f_y at (qx, qy), between the nodes of the grid x (columns) by y (rows), from the bicubic through the 4 x 4 nearest
 // grid derivatives dx, dy (row-major, like the values z), which must all be trusted (tx, ty). As in interpolate_derivative,
@@ -339,6 +307,11 @@ public:
 
     void write_ulps_envelope(std::string const & filename) const;
 
+    // The same SVGs as write_ulps and write_ulps_envelope, as strings.
+    std::string ulps_svg() const;
+
+    std::string ulps_envelope_svg() const;
+
     // For each panel, counts of pixels without a value and outside 1/2 ulp and the envelope,
     // and the worst errors and where they occur.
     std::string summary() const;
@@ -366,8 +339,11 @@ private:
         return {probe_x_[source - 1], probe_y_[source - 1]};
     }
 
-    void write_svg(std::string const & filename, std::vector<double> panel::* values, double floor,
+    void write_svg(std::ostream & fs, std::vector<double> panel::* values, double floor,
                    std::string const & quantity) const;
+
+    void write_file(std::string const & filename, std::vector<double> panel::* values, double floor,
+                    std::string const & quantity) const;
 
     std::vector<CoarseReal> xs_;
     std::vector<CoarseReal> ys_;
@@ -669,13 +645,44 @@ ulps_heatmap<F, PreciseReal, CoarseReal>& ulps_heatmap<F, PreciseReal, CoarseRea
 template<class F, typename PreciseReal, typename CoarseReal>
 void ulps_heatmap<F, PreciseReal, CoarseReal>::write_ulps(std::string const & filename) const
 {
-    write_svg(filename, &panel::ulps, 0.5, "|ulps|");
+    write_file(filename, &panel::ulps, 0.5, "|ulps|");
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
 void ulps_heatmap<F, PreciseReal, CoarseReal>::write_ulps_envelope(std::string const & filename) const
 {
-    write_svg(filename, &panel::ulps_envelope, 1, "|ulps| / max(1/2, cond/2)");
+    write_file(filename, &panel::ulps_envelope, 1, "|ulps| / max(1/2, cond/2)");
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+std::string ulps_heatmap<F, PreciseReal, CoarseReal>::ulps_svg() const
+{
+    std::ostringstream os;
+    write_svg(os, &panel::ulps, 0.5, "|ulps|");
+    return os.str();
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+std::string ulps_heatmap<F, PreciseReal, CoarseReal>::ulps_envelope_svg() const
+{
+    std::ostringstream os;
+    write_svg(os, &panel::ulps_envelope, 1, "|ulps| / max(1/2, cond/2)");
+    return os.str();
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+void ulps_heatmap<F, PreciseReal, CoarseReal>::write_file(std::string const & filename, std::vector<double> panel::* values,
+                                                          double floor, std::string const & quantity) const
+{
+    if (!detail::ends_with(filename, ".svg"))
+    {
+        throw std::logic_error("Only svg files are supported at this time.");
+    }
+    // Render first, so that a failure leaves no partial file:
+    std::ostringstream os;
+    write_svg(os, values, floor, quantity);
+    std::ofstream fs(filename);
+    fs << os.str();
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
@@ -736,16 +743,12 @@ std::string ulps_heatmap<F, PreciseReal, CoarseReal>::summary() const
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & filename, std::vector<double> panel::* values,
+void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::ostream & fs, std::vector<double> panel::* values,
                                                          double floor, std::string const & quantity) const
 {
     if (panels_.empty())
     {
         throw std::domain_error("No function added; call add_fn first.");
-    }
-    if (!detail::ends_with(filename, ".svg"))
-    {
-        throw std::logic_error("Only svg files are supported at this time.");
     }
     if (!png_encoder_)
     {
@@ -930,7 +933,6 @@ void ulps_heatmap<F, PreciseReal, CoarseReal>::write_svg(std::string const & fil
         fn_png_ptr = &fn_png;
     }
 
-    std::ofstream fs(filename);
     fs << "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
        << "<svg xmlns='http://www.w3.org/2000/svg' width='" << total_width << "' height='" << total_height << "'>\n"
        << "<style>svg { font-family: times; fill: " << font_color_ << "; }</style>\n"

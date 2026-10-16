@@ -21,6 +21,8 @@
 #include <cstdint>
 #endif
 
+#include <boost/math/distributions/detail/entropy.hpp>
+
 BOOST_MATH_NAMESPACE_BEGIN
 
    BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
@@ -373,6 +375,105 @@ BOOST_MATH_NAMESPACE_BEGIN
    {
       return kurtosis_excess(dist) + 3;
    } // RealType kurtosis_excess(const hypergeometric_distribution<RealType, Policy>& dist)
+   // Not GPU enabled: the large-variance path uses Bernoulli numbers.
+   BOOST_MATH_EXPORT template <class RealType, class Policy>
+   inline RealType entropy(const hypergeometric_distribution<RealType, Policy>& dist)
+   {
+      BOOST_MATH_STD_USING
+      // No closed form: -sum p log(p) from the log ratios of the probabilities (detail::discrete_entropy_sum).
+      constexpr auto function = "boost::math::entropy(const hypergeometric_distribution<%1%>&)";
+      RealType result = 0;
+      if (!dist.check_params(function, &result))
+         return result;
+      const std::uint64_t r = dist.defective();
+      const std::uint64_t n = dist.sample_count();
+      const std::uint64_t N = dist.total();
+      const std::uint64_t k_min = (n + r > N) ? n + r - N : 0;
+      const std::uint64_t k_max = (std::min)(n, r);
+      if (k_min == k_max)
+         return 0;
+      const RealType rr = static_cast<RealType>(r);
+      const RealType nn = static_cast<RealType>(n);
+      const RealType NN = static_cast<RealType>(N);
+      // The mode, floor((r + 1)(n + 1) / (N + 2)); only the starting point of the sums:
+      std::uint64_t mode = (r + 1 <= UINT64_MAX / (n + 1))
+         ? ((r + 1) * (n + 1)) / (N + 2)
+         : static_cast<std::uint64_t>(std::floor(static_cast<double>(r + 1) * static_cast<double>(n + 1) / static_cast<double>(N + 2)));
+      mode = (std::max)(k_min, (std::min)(k_max, mode));
+      const RealType sigmas = detail::discrete_entropy_tail_sigmas<RealType, Policy>();
+      const RealType threshold = detail::entropy_series_threshold<RealType, Policy>();
+      RealType sigma = sqrt(nn * (rr / NN) * (1 - rr / NN) * (NN - nn) / (NN - 1));
+      // log p(k) = -lgamma(k + 1) - lgamma(r - k + 1) - lgamma(n - k + 1) - lgamma(N - r - n + k + 1) + const:
+      const RealType z1 = static_cast<RealType>(mode + 1);
+      const RealType z2 = static_cast<RealType>(r - mode + 1);
+      const RealType z3 = static_cast<RealType>(n - mode + 1);
+      const RealType z4 = static_cast<RealType>(N + mode + 1 - r - n);
+      RealType margin = sigmas * sigma + threshold + 2;
+      if ((sigma >= 2 * sigmas) && ((std::min)((std::min)(z1, z2), (std::min)(z3, z4)) >= margin))
+      {
+         // Trapezoidal rule on the continuation, with linear coefficient alpha = log(z2 z3 / (z1 z4)):
+         RealType alpha = BOOST_MATH_NAMESPACE::log1p(RealType(detail::difference_of_products(z2, z3, z1, z4) / (z1 * z4)), Policy());
+         RealType h = sigma / detail::discrete_entropy_step_ratio<RealType, Policy>();
+         auto s_of = [&](RealType t)
+         {
+            return t * alpha - detail::entropy_lgamma_delta(z1, t, Policy()) - detail::entropy_lgamma_delta(z2, RealType(-t), Policy())
+               - detail::entropy_lgamma_delta(z3, RealType(-t), Policy()) - detail::entropy_lgamma_delta(z4, t, Policy());
+         };
+         int j_right = 0;
+         int j_left = 0;
+         auto right = [&](RealType& s, RealType&)
+         {
+            RealType t = (++j_right) * h;
+            if ((std::min)(z2, z3) - t < threshold)
+               return false;
+            s = s_of(t);
+            return true;
+         };
+         auto left = [&](RealType& s, RealType&)
+         {
+            RealType t = -(++j_left) * h;
+            if ((std::min)(z1, z4) + t < threshold)
+               return false;
+            s = s_of(t);
+            return true;
+         };
+         return detail::discrete_entropy_sum(right, left, h, RealType(0), function, Policy());
+      }
+      // Direct sum from the mode, with p(k + 1) / p(k) = (r - k)(n - k) / ((k + 1)(N - r - n + k + 1)),
+      // whose numerator minus denominator is (r + 1)(n + 1) - (k + 1)(N + 2):
+      std::uint64_t k_right = mode;
+      std::uint64_t k_left = mode;
+      detail::compensated_sum<RealType> s_right;
+      detail::compensated_sum<RealType> s_left;
+      auto log_ratio = [&](std::uint64_t k, RealType& ratio, bool left)
+      {
+         RealType kk = static_cast<RealType>(k);
+         RealType num = (rr - kk) * (nn - kk);
+         RealType den = (kk + 1) * static_cast<RealType>(N + k + 1 - r - n);
+         RealType d = detail::difference_of_products(RealType(rr + 1), RealType(nn + 1), RealType(kk + 1), RealType(NN + 2));
+         return detail::entropy_log_ratio(num, den, d, ratio, left, Policy());
+      };
+      auto right = [&](RealType& s, RealType& ratio)
+      {
+         if (k_right == k_max)
+            return false;
+         s_right.add(log_ratio(k_right, ratio, false));
+         k_right += 1;
+         s = s_right.value();
+         return true;
+      };
+      auto left = [&](RealType& s, RealType& ratio)
+      {
+         if (k_left == k_min)
+            return false;
+         k_left -= 1;
+         s_left.add(-log_ratio(k_left, ratio, true));
+         s = s_left.value();
+         return true;
+      };
+      return detail::discrete_entropy_sum(right, left, RealType(1), RealType(0), function, Policy());
+   }
+
 BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors

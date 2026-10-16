@@ -64,6 +64,10 @@
 // in domain_error_imp in error_handling.
 #endif
 
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/distributions/detail/entropy.hpp>
+#endif
+
 BOOST_MATH_NAMESPACE_BEGIN
     namespace negative_binomial_detail
     {
@@ -420,6 +424,35 @@ BOOST_MATH_NAMESPACE_BEGIN
     } // cdf Cumulative Distribution Function Negative Binomial.
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>
+    BOOST_MATH_GPU_ENABLED inline RealType logcdf(const negative_binomial_distribution<RealType, Policy>& dist, const RealType& k)
+    {
+      constexpr auto function = "boost::math::logcdf(const negative_binomial_distribution<%1%>&, %1%)";
+      RealType p = dist.success_fraction();
+      RealType r = dist.successes();
+      RealType result = 0;
+      if(false == negative_binomial_detail::check_dist_and_k(function, r, p, k, &result, Policy()))
+      {
+        return result;
+      }
+      return BOOST_MATH_NAMESPACE::libeta(r, static_cast<RealType>(k + 1), p, Policy());
+    }
+
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
+    BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<negative_binomial_distribution<RealType, Policy>, RealType>& c)
+    {
+      constexpr auto function = "boost::math::logcdf(const negative_binomial_distribution<%1%>&, %1%)";
+      RealType const& k = c.param;
+      RealType p = c.dist.success_fraction();
+      RealType r = c.dist.successes();
+      RealType result = 0;
+      if(false == negative_binomial_detail::check_dist_and_k(function, r, p, k, &result, Policy()))
+      {
+        return result;
+      }
+      return BOOST_MATH_NAMESPACE::libetac(r, static_cast<RealType>(k + 1), p, Policy());
+    }
+
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
     BOOST_MATH_GPU_ENABLED inline RealType quantile(const negative_binomial_distribution<RealType, Policy>& dist, const RealType& P)
     { // Quantile, percentile/100 or Percent Point Negative Binomial function.
       // Return the number of expected failures k for a given probability p.
@@ -590,6 +623,87 @@ BOOST_MATH_NAMESPACE_BEGIN
           discrete_type(),
           max_iter);
     } // quantile complement
+
+#ifndef BOOST_MATH_HAS_NVRTC
+    // Not GPU enabled: the large-variance path uses Bernoulli numbers.
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
+    inline RealType entropy(const negative_binomial_distribution<RealType, Policy>& dist)
+    {
+      BOOST_MATH_STD_USING
+      // No closed form: -sum p log(p) from the log ratios of the probabilities (detail::discrete_entropy_sum).
+      // For r (1 - p) below ~100 this is a direct sum of ~100 / p terms, and raises an evaluation_error
+      // past the policy's max_series_iterations (p below ~1e-4 by default).
+      constexpr auto function = "boost::math::entropy(const negative_binomial_distribution<%1%>&)";
+      RealType r = dist.successes();
+      RealType p = dist.success_fraction();
+      RealType result = 0;
+      if (!negative_binomial_detail::check_dist(function, r, p, &result, Policy()))
+        return result;
+      if (p == 1)
+        return 0;
+      RealType q = 1 - p;
+      RealType mode = (r > 1) ? RealType(floor((r - 1) * q / p)) : RealType(0);
+      const RealType sigmas = detail::discrete_entropy_tail_sigmas<RealType, Policy>();
+      const RealType threshold = detail::entropy_series_threshold<RealType, Policy>();
+      RealType sigma = sqrt(r * q) / p;
+      RealType z2 = mode + 1;
+      if ((sigma >= 2 * sigmas) && (r >= 1) && (z2 >= sigmas * sigma + threshold + 2))
+      {
+        // Trapezoidal rule on the continuation S(t) = t alpha + [lgamma(z1 + t) - lgamma(z1) - t log(z1)]
+        //   - [lgamma(z2 + t) - lgamma(z2) - t log(z2)], z1 = z2 + r - 1, alpha = log(z1 q / z2), with
+        // z1 q - z2 = (r - 1) - z1 p. z1 = z1_hi + z1_lo exactly; z1_lo enters to first order.
+        RealType d = r - 1;
+        RealType z1_hi = z2 + d;
+        RealType z1_lo = detail::two_sum_error(z2, d, z1_hi);
+        RealType alpha = BOOST_MATH_NAMESPACE::log1p(RealType((fma(-z1_hi, p, d) - z1_lo * p) / z2), Policy());
+        RealType h = sigma / detail::discrete_entropy_step_ratio<RealType, Policy>();
+        auto s_of = [&](RealType t)
+        {
+          return t * alpha + detail::entropy_lgamma_delta(z1_hi, t, Policy()) + z1_lo * BOOST_MATH_NAMESPACE::log1pmx(RealType(t / z1_hi), Policy())
+            - detail::entropy_lgamma_delta(z2, t, Policy());
+        };
+        int j_right = 0;
+        int j_left = 0;
+        auto right = [&](RealType& s, RealType&) { s = s_of(RealType((++j_right) * h)); return true; };
+        auto left = [&](RealType& s, RealType&)
+        {
+          RealType t = -(++j_left) * h;
+          if (z2 + t < threshold)
+            return false;
+          s = s_of(t);
+          return true;
+        };
+        return detail::discrete_entropy_sum(right, left, h, RealType(0), function, Policy());
+      }
+      // Direct sum from the mode, with p(k + 1) / p(k) = (k + r) q / (k + 1), whose numerator minus
+      // denominator is r q - 1 - k p. For r < 1 the ratio rises towards q in the tail:
+      RealType k_right = mode;
+      RealType k_left = mode;
+      detail::compensated_sum<RealType> s_right;
+      detail::compensated_sum<RealType> s_left;
+      auto log_ratio = [&](RealType k, RealType& ratio, bool left)
+      {
+        return detail::entropy_log_ratio(RealType((k + r) * q), RealType(k + 1), RealType(fma(r, q, -fma(k, p, RealType(1)))), ratio, left, Policy());
+      };
+      auto right = [&](RealType& s, RealType& ratio)
+      {
+        s_right.add(log_ratio(k_right, ratio, false));
+        k_right += 1;
+        s = s_right.value();
+        return true;
+      };
+      auto left = [&](RealType& s, RealType& ratio)
+      {
+        if (k_left == 0)
+          return false;
+        k_left -= 1;
+        s_left.add(-log_ratio(k_left, ratio, true));
+        s = s_left.value();
+        return true;
+      };
+      return detail::discrete_entropy_sum(right, left, RealType(1), q, function, Policy());
+    }
+#endif
 
  BOOST_MATH_NAMESPACE_END
 

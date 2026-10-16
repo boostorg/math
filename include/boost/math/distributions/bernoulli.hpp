@@ -35,6 +35,7 @@
 #include <boost/math/distributions/complement.hpp> // complements
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
+#include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
@@ -333,6 +334,17 @@ BOOST_MATH_NAMESPACE_BEGIN
       return 1 / (1 - p) + 1/p -6 + 3;
       // Simpler than:
       // return (6 * p * p - 6 * p + 1) / (p * (1 - p)) + 3;
+    }
+
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
+    BOOST_MATH_GPU_ENABLED inline RealType entropy(const bernoulli_distribution<RealType, Policy>& dist)
+    {
+      BOOST_MATH_STD_USING
+      // -p log(p) - (1 - p) log(1 - p), with 0 log(0) = 0:
+      RealType p = dist.success_fraction();
+      if ((p == 0) || (p == 1))
+        return 0;
+      return -p * log(p) - (1 - p) * BOOST_MATH_NAMESPACE::log1p(-p, Policy());
     }
 
   BOOST_MATH_NAMESPACE_END

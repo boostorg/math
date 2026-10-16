@@ -463,7 +463,7 @@
      {
         typedef T result_type;
 
-        cyl_bessel_i_large_x_sum(const T& v, const T& x) : v(v), z(x), term(1), k(0) {}
+        cyl_bessel_i_large_x_sum(const T& v_, const T& x) : v(v_), z(x), term(1), k(0) {}
 
         T operator()()
         {
@@ -509,8 +509,8 @@
         // that the result should be unity when b-a == b, in fact this is not (quite) 
         // the case for large z.
         //
-        hypergeometric_1F1_AS_13_3_6_series(const T& a, const T& b, const T& z, const T& b_minus_a, const Policy& pol_)
-           : b_minus_a(b_minus_a), half_z(z / 2), poch_1(2 * b_minus_a - 1), poch_2(b_minus_a - a), b_poch(b), term(1), last_result(1), sign(1), n(0), cache_offset(-cache_size), scale(0), pol(pol_)
+        hypergeometric_1F1_AS_13_3_6_series(const T& a, const T& b, const T& z, const T& b_minus_a_, const Policy& pol_)
+           : b_minus_a(b_minus_a_), half_z(z / 2), poch_1(2 * b_minus_a_ - 1), poch_2(b_minus_a_ - a), b_poch(b), term(1), last_result(1), sign(1), n(0), cache_offset(-cache_size), scale(0), pol(pol_)
         {
            BOOST_MATH_STD_USING
            //
@@ -518,7 +518,7 @@
            // For negative order v, I_v is the sum of a positive and a negative term when -2k < v < 1 - 2k, so it may be near
            // a zero and have few correct digits.  Use the first term's order unless that's the case:
            //
-           T v = b_minus_a - 0.5f;
+           T v = b_minus_a_ - 0.5f;
            normalise_on_first = !((v < 0) && (floor(-v) != 2 * floor(-v / 2)));  // not odd(floor(-v))
            if (!normalise_on_first)
               v -= 1;

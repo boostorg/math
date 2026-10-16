@@ -1143,8 +1143,8 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
       T d = (z - a) / a;
       if (fabs(d) < 0.5)
       {
-         T l = a * BOOST_MATH_NAMESPACE::log1pmx(d, pol);
-         return l > tools::log_min_value<T>() ? T(exp(l) / scaled_gamma) : T(exp(l - log(scaled_gamma)));
+         T log_term = a * BOOST_MATH_NAMESPACE::log1pmx(d, pol);
+         return log_term > tools::log_min_value<T>() ? T(exp(log_term) / scaled_gamma) : T(exp(log_term - log(scaled_gamma)));
       }
       T power_term = pow(z / a, a / 2);
       T a_minus_z = a - z;
@@ -1847,6 +1847,9 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_imp(T a, T x, const Policy& pol)
       return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
    if(x < 0)
       return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
+   // The log of an exact zero; the overflow policy decides, as for ligamma:
+   if((BOOST_MATH_NAMESPACE::isinf)(x))
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
 
    if (((x > 1000) || (x > tools::log_max_value<T>() - 10)) && (a + 50 < x))
    {
@@ -1874,6 +1877,31 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_imp(T a, T x, const Policy& pol)
    return log(gamma_q(a, x, pol));
 }
 
+//
+// log(x^a e^-x / tgamma(a)), the log of regularised_gamma_prefix, for a >= 1. With agh = a + g - 1/2
+// and d = (x - agh) / agh, a log(x) - x - lgamma(a) is exactly
+//    a log1pmx(d) + x (1/2 - g) / agh + log(agh / e) / 2 - log(lanczos_sum_expG_scaled(a)),
+// which has none of the cancellation of the direct form when a and x are large.
+//
+template <class T, class Policy, class Lanczos>
+BOOST_MATH_GPU_ENABLED T log_regularised_gamma_prefix(T a, T x, const Policy& pol, const Lanczos&)
+{
+   BOOST_MATH_STD_USING
+   if(a < 1)
+      return a * log(x) - x - BOOST_MATH_NAMESPACE::lgamma(a, pol);
+   T agh = a + static_cast<T>(Lanczos::g()) - T(0.5);
+   T d = ((x - a) - static_cast<T>(Lanczos::g()) + T(0.5)) / agh;
+   return a * BOOST_MATH_NAMESPACE::log1pmx(d, pol) + x * static_cast<T>(0.5 - Lanczos::g()) / agh
+      + (log(agh) - 1) / 2 - log(Lanczos::lanczos_sum_expG_scaled(a));
+}
+
+template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED T log_regularised_gamma_prefix(T a, T x, const Policy& pol, const lanczos::undefined_lanczos&)
+{
+   BOOST_MATH_STD_USING
+   return a * log(x) - x - BOOST_MATH_NAMESPACE::lgamma(a, pol);
+}
+
 // Calculate log of incomplete gamma function
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol)
@@ -1888,6 +1916,9 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol
       return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
    if(x < 0)
       return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
+   // The log of an exact zero; the overflow policy decides, as for ligamma:
+   if(x == 0)
+      return -policies::raise_overflow_error<T>(function, nullptr, pol);
 
    // Taken from conditions on Line 1709. There are also
    // conditions on Line 1368, but didn't implement that one here. 
@@ -1910,7 +1941,21 @@ BOOST_MATH_GPU_ENABLED T lgamma_incomplete_lower_imp(T a, T x, const Policy& pol
       need_p = true;
 
    if (need_p)
-      return log(gamma_p(a, x, pol));
+   {
+      // Method 2 in logs, P = prefix * series / a. It works where P underflows (#1564), and for
+      // large a it is more accurate than log(P), since log P is far better conditioned than P
+      // there. For smaller a, or without a Lanczos approximation for the prefix, log(P) is the
+      // more accurate of the two.
+      typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
+      constexpr bool accurate_log_prefix = !BOOST_MATH_NAMESPACE::is_same<lanczos_type, lanczos::undefined_lanczos>::value;
+      if(accurate_log_prefix && (x < a) && (a > 1000))
+         return log_regularised_gamma_prefix(a, x, pol, lanczos_type()) + log(detail::lower_gamma_series(a, x, pol) / a);
+      typedef typename policies::normalise<Policy, policies::underflow_error<policies::ignore_error> >::type quiet_policy;
+      T p = gamma_p(a, x, quiet_policy());
+      if(p >= tools::min_value<T>())
+         return log(p);
+      return log_regularised_gamma_prefix(a, x, pol, lanczos_type()) + log(detail::lower_gamma_series(a, x, pol) / a);
+   }
    return log1p(-gamma_q(a, x, pol), pol);
 }
 
@@ -1946,7 +1991,10 @@ BOOST_MATH_GPU_ENABLED T ligamma_imp(T a, T x, const Policy& pol, bool upper)
    // At the ends of the range, the target is either the complete gamma function or zero:
    bool target_is_zero = upper ? (BOOST_MATH_NAMESPACE::isinf)(x) : (x == 0);
    if(target_is_zero)
+   {
+      // -infinity is exact here; as for every other exact infinity, the overflow policy decides:
       return -policies::raise_overflow_error<T>(function, nullptr, pol);
+   }
    if(upper ? (x == 0) : (BOOST_MATH_NAMESPACE::isinf)(x))
       return BOOST_MATH_NAMESPACE::lgamma(a, pol);
 
@@ -2677,8 +2725,8 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma(T1 a, T2 z, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
-      detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), true), "boost::math::ligamma<%1%>(%1%, %1%)");
+   value_type result = detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), true);
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::ligamma<%1%>(%1%, %1%)");
 }
 
 BOOST_MATH_EXPORT template <class T1, class T2>
@@ -2700,8 +2748,8 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T1, T2> ligamma_lower(T1 a, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
-      detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), false), "boost::math::ligamma_lower<%1%>(%1%, %1%)");
+   value_type result = detail::ligamma_imp(static_cast<value_type>(a), static_cast<value_type>(z), forwarding_policy(), false);
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::ligamma_lower<%1%>(%1%, %1%)");
 }
 
 BOOST_MATH_EXPORT template <class T1, class T2>

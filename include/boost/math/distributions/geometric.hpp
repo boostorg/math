@@ -553,6 +553,17 @@ BOOST_MATH_NAMESPACE_BEGIN
 
     } // quantile complement
 
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
+    BOOST_MATH_GPU_ENABLED inline RealType entropy(const geometric_distribution<RealType, Policy>& dist)
+    {
+      BOOST_MATH_STD_USING
+      // -[(1 - p) log(1 - p) + p log(p)] / p: both terms are positive.
+      RealType p = dist.success_fraction();
+      if (p == 1)
+        return 0;
+      return -(1 - p) * BOOST_MATH_NAMESPACE::log1p(-p, Policy()) / p - log(p);
+    }
+
  BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors

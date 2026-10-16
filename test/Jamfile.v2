@@ -566,15 +566,17 @@ test-suite special_fun :
 
    [ run test_legendre.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework : : : $(float128_type)  ]
    [ run test_chebyshev.cpp  : : : [ requires cxx11_inline_namespaces cxx11_unified_initialization_syntax cxx11_hdr_tuple cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_range_based_for cxx11_constexpr ] $(float128_type)  ]
-   [ run test_chebyshev_transform.cpp ../config//fftw3f : : : <define>TEST1 [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_1 ]
-   [ run test_chebyshev_transform.cpp ../config//fftw3 : : : <define>TEST2 [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_2 ]
-   [ run test_chebyshev_transform.cpp ../config//fftw3l : : : <define>TEST3 [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_3 ]
-   [ run test_chebyshev_transform.cpp ../config//fftw3q ../config//quadmath : : : <define>TEST4 [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ check-target-builds ../config//has_float128 "__float128" : : <build>no ] : chebyshev_transform_test_4 ]
+   [ run test_chebyshev_transform.cpp : : : <define>TEST1 [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_range_based_for ] : chebyshev_transform_test_1 ]
+   [ run test_chebyshev_transform.cpp : : : <define>TEST2 [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_range_based_for ] : chebyshev_transform_test_2 ]
+   [ run test_chebyshev_transform.cpp : : : <define>TEST3 [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_range_based_for ] : chebyshev_transform_test_3 ]
+   [ run test_chebyshev_transform.cpp ../config//quadmath : : : <define>TEST4 [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_float128 "__float128" : : <build>no ] : chebyshev_transform_test_4 ]
+   [ run test_chebyshev_transform.cpp : : : <define>TEST5 [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_range_based_for ] : chebyshev_transform_test_5 ]
 
-   [ run test_cardinal_trigonometric.cpp ../config//fftw3f : : : <define>TEST1 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : cardinal_trigonometric_test_1 ]
-   [ run test_cardinal_trigonometric.cpp ../config//fftw3 : : : <define>TEST2 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : cardinal_trigonometric_test_2 ]
-   [ run test_cardinal_trigonometric.cpp ../config//fftw3l : : : <define>TEST3 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : cardinal_trigonometric_test_3 ]
-   [ run test_cardinal_trigonometric.cpp ../config//fftw3q ../config//quadmath : : : <define>TEST4 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ check-target-builds ../config//has_float128 "__float128" : : <build>no ] : cardinal_trigonometric_test_4 ]
+   [ run test_cardinal_trigonometric.cpp : : : <define>TEST1 [ requires cxx11_auto_declarations cxx11_range_based_for ] : cardinal_trigonometric_test_1 ]
+   [ run test_cardinal_trigonometric.cpp : : : <define>TEST2 [ requires cxx11_auto_declarations cxx11_range_based_for ] : cardinal_trigonometric_test_2 ]
+   [ run test_cardinal_trigonometric.cpp : : : <define>TEST3 [ requires cxx11_auto_declarations cxx11_range_based_for ] : cardinal_trigonometric_test_3 ]
+   [ run test_cardinal_trigonometric.cpp ../config//quadmath : : : <define>TEST4 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_float128 "__float128" : : <build>no ] : cardinal_trigonometric_test_4 ]
+   [ run test_cardinal_trigonometric.cpp : : : <define>TEST5 [ requires cxx11_auto_declarations cxx11_range_based_for ] : cardinal_trigonometric_test_5 ]
 
 
    [ run test_ldouble_simple.cpp /boost/test//boost_unit_test_framework  ]
@@ -691,6 +693,7 @@ test-suite distribution_tests :
    [ run test_dist_overloads.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_exponential_dist.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_extreme_value.cpp /boost/test//boost_unit_test_framework  ]
+   [ run test_generalized_extreme_value.cpp ]
    [ run test_find_location.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_find_scale.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_fisher_f.cpp /boost/test//boost_unit_test_framework  ]
@@ -746,29 +749,30 @@ test-suite distribution_tests :
    [ run test_laplace.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_inv_hyp.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_logistic_dist.cpp /boost/test//boost_unit_test_framework  ]
+   [ run test_logcdf.cpp ]
    [ run test_lognormal.cpp /boost/test//boost_unit_test_framework  ]
-   [ run test_negative_binomial.cpp /boost/test//boost_unit_test_framework
+   [ run test_negative_binomial.cpp
         : # command line
         : # input files
         : # requirements
           <define>TEST_FLOAT
           <toolset>intel:<pch>off
         : test_negative_binomial_float  ]
-   [ run test_negative_binomial.cpp /boost/test//boost_unit_test_framework
+   [ run test_negative_binomial.cpp
         : # command line
         : # input files
         : # requirements
           <define>TEST_DOUBLE
           <toolset>intel:<pch>off
         : test_negative_binomial_double  ]
-   [ run test_negative_binomial.cpp /boost/test//boost_unit_test_framework
+   [ run test_negative_binomial.cpp
         : # command line
         : # input files
         : # requirements
           <define>TEST_LDOUBLE
           <toolset>intel:<pch>off
         : test_negative_binomial_long_double  ]
-   [ run test_negative_binomial.cpp /boost/test//boost_unit_test_framework
+   [ run test_negative_binomial.cpp
         : # command line
         : # input files
         : # requirements
@@ -1066,6 +1070,8 @@ test-suite misc :
    [ run test_ljung_box.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_cubic_roots.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_quartic_roots.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run test_fft.cpp : : : $(float128_type) ]
+   [ run test_polynomial_roots.cpp : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_range_based_for ] ]
    [ run test_t_test.cpp : : : $(float128_type) [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ]  ]
    [ run test_z_test.cpp : : : $(float128_type) [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ]  ]
    [ run test_bivariate_statistics.cpp
@@ -1647,6 +1653,7 @@ test-suite concepts :
    [ run  compile_test/test_dist_complement_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/test_dist_exponential_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/test_dist_extreme_val_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
+   [ run  compile_test/test_dist_generalized_extreme_value_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/test_dist_find_location_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/test_dist_find_scale_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/test_dist_fisher_f_incl.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
@@ -1693,6 +1700,7 @@ test-suite concepts :
    [ compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] <debug-symbols>off [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] <debug-symbols>off [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
 
+   [ compile  compile_test/test_interpolators_cardinal_trig_incl.cpp :  [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/test_interpolators_cubic_hermite_incl.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/test_interpolators_makima_incl.cpp compile_test_main :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/test_interpolators_pchip_incl.cpp compile_test_main :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
@@ -1767,8 +1775,8 @@ test-suite concepts :
    [ run  compile_test/test_sf_trunc_incl.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/test_sf_ulp_incl.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/test_sf_zeta_incl.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
-   [ compile  compile_test/test_sf_chebyshev_incl.cpp ../config//fftw3 : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
-   [ compile  compile_test/test_sf_chebyshev_transform_incl.cpp ../config//fftw3 : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] ]
+   [ compile  compile_test/test_sf_chebyshev_incl.cpp : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ compile  compile_test/test_sf_chebyshev_transform_incl.cpp : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/test_sf_fibonacci_incl.cpp compile_test_main  : : : [ requires cxx17_std_apply cxx17_if_constexpr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/test_sf_gegenbauer_incl.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/test_sf_lambert_w_incl.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]

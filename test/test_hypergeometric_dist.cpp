@@ -564,17 +564,40 @@ void test_spots(RealType /*T*/, const char* type_name)
 }
 
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](std::uint64_t a, std::uint64_t b, std::uint64_t c, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::entropy(boost::math::hypergeometric_distribution<RealType>(a, b, c)), h, tol);
+   };
+   check(30, 40, 100, static_cast<RealType>(2.23251995010132138603305010352835455335946637L));
+   check(5, 10, 20, static_cast<RealType>(1.41017899258903122865281944730670874143759777L));
+   check(1, 1, 2, static_cast<RealType>(0.693147180559945309417232121458176568075500134L));
+   check(10, 1000, 1000000, static_cast<RealType>(0.0560825642231663484256230658066717444208256013L));
+   check(300000, 400000, 1000000, static_cast<RealType>(6.83281224965225896648567487522138918484639344L));
+   check(250000000, 333333333, 1000000000, static_cast<RealType>(10.1915445366983499530007834277413067488348034L));
+   BOOST_CHECK_EQUAL(boost::math::entropy(boost::math::hypergeometric_distribution<RealType>(5, 5, 5)), RealType(0));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
    expected_results();
    // Basic sanity-check spot values.
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
    test_spots(0.0F, "float"); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
+   test_entropy(0.0F);
    test_spots(0.0, "double"); // Test double. OK at decdigits 7, tolerance = 1e07 %
+   test_entropy(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double"); // Test long double.
+   test_entropy(0.0L);
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_spots(boost::math::concepts::real_concept(0), "real_concept"); // Test real_concept.
+   test_entropy(boost::math::concepts::real_concept(0));
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "

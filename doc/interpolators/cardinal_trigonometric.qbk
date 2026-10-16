@@ -75,8 +75,11 @@ The graphs are visually indistinguishable at 20 samples.
 
 [heading Caveats]
 
-This routine depends on FFTW3, and hence will only compile in float, double, long double, and quad precision, unlike the large bulk of the library which is compatible with arbitrary precision arithmetic.
-The FFTW linker flags must be added to the compile step, i.e., `-lm -lfftw3` for double precision, `-lm -lfftw3f` for float, so on.
+The Fourier coefficients are computed with the library's own [link math_toolkit.fft fast Fourier transform],
+so `Real` may be `float`, `double`, `long double`, or a multiprecision type such as `boost::multiprecision::cpp_bin_float_50`.
+With a multiprecision `Real`, also include the Boost.Multiprecision header for the matching complex type, which the transform uses internally:
+`<boost/multiprecision/cpp_complex.hpp>` for `cpp_bin_float`, `<boost/multiprecision/complex128.hpp>` for `float128`,
+and `<boost/multiprecision/mpc.hpp>` for `mpfr_float`.
 
 Evaluation of derivatives is done by differentiation of Horner's method.
 As always, differentiation amplifies noise; and because some rounding error is produced by computation of the Fourier coefficients, this error is amplified by differentiation.

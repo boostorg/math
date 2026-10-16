@@ -423,6 +423,13 @@ In the Boost library, we /always/ use the natural logarithm to compute different
 This choice of log base for entropy is sometimes referred to as "entropy measured in nats".
 See [@https://doi.org/10.1109/TIT.1978.1055832 On the entropy of continuous probability distributions] for more information.
 
+For discrete distributions, `entropy` returns the Shannon entropy -[sum] /p/[sub k] log(/p/[sub k]), also in nats.
+The Poisson, binomial, negative binomial and hypergeometric distributions have no closed form for it: it is summed
+from the ratios of successive probabilities, and for large variances by a coarse trapezoidal rule on the
+probabilities' continuation through the gamma function, which equals the sum to full precision by the Poisson summation
+formula. The skew normal, hyperexponential and Kolmogorov-Smirnov entropies have no closed form either and
+use quadrature (a precomputed constant for Kolmogorov-Smirnov). The non-central distributions have no `entropy`.
+
 [endsect] [/section:nmp Non-Member Properties]
 
 [/ non_members.qbk

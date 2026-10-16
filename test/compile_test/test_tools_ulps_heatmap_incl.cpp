@@ -15,8 +15,8 @@
 
 void compile_and_link_test()
 {
-    auto f = [](double x, double y) { return x*y; };
+    auto func = [](double x, double y) { return x*y; };
     auto g = [](float x, float y) { return x*y; };
-    boost::math::tools::ulps_heatmap<decltype(f), double, float> test(f, 1.0f, 2.0f, 1.0f, 2.0f, 4, 4);
+    boost::math::tools::ulps_heatmap<decltype(func), double, float> test(func, 1.0f, 2.0f, 1.0f, 2.0f, 4, 4);
     auto dummy = test.add_fn(g, "g").summary();
 }

@@ -29,11 +29,11 @@
         enum{ cache_size = 64 };
 
         typedef T result_type;
-        hypergeometric_1F1_igamma_series(const T& alpha, const T& delta, const T& x, const Policy& pol)
-           : delta_poch(-delta), alpha_poch(alpha), x(x), k(0), cache_offset(0), pol(pol)
+        hypergeometric_1F1_igamma_series(const T& alpha, const T& delta, const T& x_, const Policy& pol_)
+           : delta_poch(-delta), alpha_poch(alpha), x(x_), k(0), cache_offset(0), pol(pol_)
         {
            BOOST_MATH_STD_USING
-           T log_term = log(x) * -alpha;
+           T log_term = log(x_) * -alpha;
            log_scaling = lltrunc(log_term - 3 - BOOST_MATH_NAMESPACE::tools::log_min_value<T>() / 50);
            term = exp(log_term - log_scaling);
            refill_cache();

@@ -19,6 +19,9 @@
 #include <boost/math/special_functions/digamma.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/complement.hpp>
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+#include <boost/math/distributions/detail/entropy.hpp>
+#endif
 
 BOOST_MATH_NAMESPACE_BEGIN
 namespace detail
@@ -241,6 +244,34 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<gamma_distri
 }
 
 BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType logcdf(const gamma_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   constexpr auto function = "boost::math::logcdf(const gamma_distribution<%1%>&, %1%)";
+   RealType shape = dist.shape();
+   RealType scale = dist.scale();
+   RealType result = 0;
+   if(false == detail::check_gamma(function, scale, shape, &result, Policy()))
+      return result;
+   if(false == detail::check_gamma_x(function, x, &result, Policy()))
+      return result;
+   return BOOST_MATH_NAMESPACE::lgamma_p(shape, x / scale, Policy());
+}
+
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<gamma_distribution<RealType, Policy>, RealType>& c)
+{
+   constexpr auto function = "boost::math::logcdf(const gamma_distribution<%1%>&, %1%)";
+   RealType shape = c.dist.shape();
+   RealType scale = c.dist.scale();
+   RealType result = 0;
+   if(false == detail::check_gamma(function, scale, shape, &result, Policy()))
+      return result;
+   if(false == detail::check_gamma_x(function, c.param, &result, Policy()))
+      return result;
+   return BOOST_MATH_NAMESPACE::lgamma_q(shape, c.param / scale, Policy());
+}
+
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<gamma_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
@@ -372,6 +403,15 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const gamma_distribution<RealTyp
    return kurtosis_excess(dist) + 3;
 }
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+inline RealType entropy(const gamma_distribution<RealType, Policy>& dist)
+{
+   BOOST_MATH_STD_USING
+   // k + log(theta) + lgamma(k) + (1 - k) digamma(k), whose terms cancel to ~log(k)/2 for large k:
+   return log(dist.scale()) + detail::gamma_entropy_unit_scale(dist.shape(), Policy());
+}
+#else
 BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType entropy(const gamma_distribution<RealType, Policy>& dist)
 {
@@ -379,8 +419,26 @@ BOOST_MATH_GPU_ENABLED inline RealType entropy(const gamma_distribution<RealType
 
    RealType k = dist.shape();
    RealType theta = dist.scale();
-   return k + log(theta) + BOOST_MATH_NAMESPACE::lgamma(k) + (1-k)*digamma(k);
+   if (k < 10)
+   {
+      return k + log(theta) + BOOST_MATH_NAMESPACE::lgamma(k) + (1-k)*digamma(k);
+   }
+   // The same Stirling form as the host path, with the first ten Bernoulli numbers written out (Bernoulli
+   // numbers are not available on the device): r(k) = sum B_2j (1/((2j-1) k^(2j-1)) - 1/(2j k^2j)), whose
+   // tenth term is below 2e-16 of the sum for k >= 10.
+   constexpr double b2j[10] = {1.0 / 6, -1.0 / 30, 1.0 / 42, -1.0 / 30, 5.0 / 66, -691.0 / 2730, 7.0 / 6,
+                               -3617.0 / 510, 43867.0 / 798, -174611.0 / 330};
+   RealType r = 0;
+   RealType k_power = k; // k^(2j - 1)
+   for (int j = 1; j <= 10; ++j)
+   {
+      RealType b = static_cast<RealType>(b2j[j - 1]);
+      r += b / ((2 * j - 1) * k_power) - b / (2 * j * k_power * k);
+      k_power *= k * k;
+   }
+   return log(theta) + log(k) / 2 + constants::log_root_two_pi<RealType>() + constants::half<RealType>() - 1 / (2 * k) + r;
 }
+#endif
 
 BOOST_MATH_NAMESPACE_END
 

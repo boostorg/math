@@ -62,6 +62,15 @@
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/distributions/detail/entropy.hpp>
+#endif
+
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/special_functions/expint.hpp>
+#include <boost/math/special_functions/expm1.hpp>
+#endif
+
 BOOST_MATH_NAMESPACE_BEGIN
 
 BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
@@ -568,6 +577,73 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const inverse_gaussian_di
   RealType result = 15 * mean / scale;
   return result;
 }
+
+#ifndef BOOST_MATH_HAS_NVRTC
+namespace detail {
+// exp(x) E1(x) for x >= 1.
+template <class RealType, class Policy>
+inline RealType inverse_gaussian_scaled_e1(RealType x, const Policy& pol)
+{
+   BOOST_MATH_STD_USING
+   if (x < 50)
+      return exp(x) * BOOST_MATH_NAMESPACE::expint(1, x, pol);
+   // Continued fraction 1/(x + 1 - 1/(x + 3 - 4/(x + 5 - ...))), by the modified Lentz method:
+   const RealType eps = policies::get_epsilon<RealType, Policy>();
+   const RealType tiny = tools::min_value<RealType>() * 16;
+   RealType f = x + 1;
+   RealType c = f;
+   RealType d = 0;
+   for (int n = 1; n < 1000; ++n)
+   {
+      RealType an = -RealType(n) * n;
+      RealType bn = x + 2 * n + 1;
+      d = bn + an * d;
+      if (d == 0) d = tiny;
+      c = bn + an / c;
+      if (c == 0) c = tiny;
+      d = 1 / d;
+      RealType delta = c * d;
+      f *= delta;
+      if (fabs(delta - 1) <= eps)
+         break;
+   }
+   return 1 / f;
+}
+} // namespace detail
+
+// Not GPU enabled: uses expint.
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+inline RealType entropy(const inverse_gaussian_distribution<RealType, Policy>& dist)
+{
+   BOOST_MATH_STD_USING
+   // With phi = lambda/mu, E[log X] = log(mu) - exp(2 phi) E1(2 phi), so
+   //   H = log(mu) + log(2 pi e / phi)/2 - (3/2) exp(2 phi) E1(2 phi).
+   RealType mu = dist.mean();
+   RealType lambda = dist.scale();
+   RealType phi = lambda / mu;
+   RealType x = 2 * phi;
+   if (x < 1)
+   {
+      // log(mu) = log(lambda) - log(phi), and log(phi) + exp(x) E1(x) cancels for small x; with
+      // E1(x) = -euler - log(x) + Ein(x), Ein(x) = sum_{k >= 1} (-1)^(k+1) x^k / (k k!), it is
+      //   -expm1(x) log(x) + exp(x) (Ein(x) - euler) - log(2).
+      const RealType eps = policies::get_epsilon<RealType, Policy>();
+      RealType ein = 0;
+      RealType term = 1;
+      for (int k = 1; k < 1000; ++k)
+      {
+         term *= -x / k;
+         ein -= term / k;
+         if (fabs(term) <= eps * fabs(ein) * k)
+            break;
+      }
+      RealType bracket = -BOOST_MATH_NAMESPACE::expm1(x, Policy()) * log(x) + exp(x) * (ein - constants::euler<RealType>()) - constants::ln_two<RealType>();
+      return log(lambda) + constants::log_root_two_pi<RealType>() + constants::half<RealType>() - 3 * bracket / 2;
+   }
+   return log(mu) + constants::log_root_two_pi<RealType>() + constants::half<RealType>() - log(phi) / 2
+      - 3 * detail::inverse_gaussian_scaled_e1(x, Policy()) / 2;
+}
+#endif
 
 BOOST_MATH_NAMESPACE_END
 
