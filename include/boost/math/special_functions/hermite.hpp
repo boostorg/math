@@ -70,7 +70,7 @@ public:
          b_values[k] = -sqrt(Real(k) / Real(k + 1));
       }
       p0_value = 1 / sqrt(sqrt(boost::math::constants::pi<Real>()));
-      derivative_scale = sqrt(Real(2 * N));
+      derivative_scale = sqrt(Real(2) * Real(N));
    }
 
    const Real& a(unsigned k) const
@@ -90,7 +90,7 @@ public:
 
    unsigned num_roots() const
    {  // Need to account for odd N having root at 0
-      return (N+1) / 2;
+      return N / 2 + N % 2;
    }
 
    Real lower_bound() const
@@ -100,7 +100,7 @@ public:
 
    Real upper_bound() const
    {
-      return sqrt(Real(2 * N + 2));
+      return sqrt(Real(2) * Real(N) + Real(2));
    }
 
    Real area() const
@@ -125,19 +125,19 @@ public:
 
    Real second_derivative(const Real& x, const Real& p, const Real& p_prime) const
    {
-      return 2 * x * p_prime - 2 * Real(N) * p;
+      return Real(2) * x * p_prime - Real(2) * Real(N) * p;
    }
 
    Real second_derivative_ratio(const Real& x, const Real& p, const Real& p_prime) const
    {
-      return 2 * x - 2 * Real(N) * p / p_prime;
+      return Real(2) * x - Real(2) * Real(N) * p / p_prime;
    }
 
    Real weight(const Real& z, const Real& p, const Real& p_prime) const
    {
       Real delta = -p / p_prime;
       Real p_prime_at_root = p_prime + second_derivative(z, p, p_prime) * delta;
-      return 2 / (p_prime_at_root * p_prime_at_root);
+      return Real(2) / (p_prime_at_root * p_prime_at_root);
    }
 
 private:

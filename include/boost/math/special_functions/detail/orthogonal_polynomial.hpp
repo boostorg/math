@@ -31,7 +31,17 @@ public:
          throw std::domain_error("Gauss quadrature needs at least one point.");
       }
 
-      values = calculate_values();
+      values = calculate_values(Family(N));
+   }
+
+   orthogonal_polynomial(unsigned n, const Family& family) : N(n)
+   {
+      if (N == 0)
+      {
+         throw std::domain_error("Gauss quadrature needs at least one point.");
+      }
+
+      values = calculate_values(family);
    }
    const std::vector<Real>& abscissa() const
    {
@@ -55,7 +65,7 @@ private:
    class strum_counter
    {
       public:
-         strum_counter(unsigned n) : N(n), family(N) {}
+         strum_counter(unsigned n, const Family& family_) : N(n), family(family_) {}
 
          recurrence operator()(const Real& x) const
          {
@@ -127,11 +137,11 @@ private:
    // changes by one at each zero of p_N. Its direction depends on the family. Bisecting on that count
    // isolates each zero, and Halley's method then converges to it inside its bracket. Asymptotic initial guesses alone are not enough:
    // for N = 215, even Halley's method from those of Numerical Recipes' gauher finds the wrong zero.
-   std::pair<std::vector<Real>, std::vector<Real> > calculate_values()
+   std::pair<std::vector<Real>, std::vector<Real> > calculate_values(const Family& family)
    {
       using std::abs;
       using std::sqrt;
-      const strum_counter evaluate(N);
+      const strum_counter evaluate(N, family);
 
       const unsigned num_roots = evaluate.num_roots();
       unsigned interior_roots = num_roots;

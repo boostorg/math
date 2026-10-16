@@ -1,5 +1,6 @@
 
 //  (C) Copyright John Maddock 2006.
+//  (C) Copyright Jacob Hass 2026.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -176,7 +177,9 @@ public:
 
    Real upper_bound() const
    { // See https://mathoverflow.net/questions/251607/zeroes-of-laguerre-polynomials
-      return N + (N-1) * sqrt(N) + 1;
+      using std::sqrt;
+      const Real degree = static_cast<Real>(N);
+      return degree + (degree - 1) * sqrt(degree) + 1;
    }
 
    unsigned num_roots() const
@@ -196,29 +199,30 @@ public:
 
    Real next(const Real& x, const Real& p, const Real& p_previous, unsigned k) const
    {
-      return ((2*k + 1 - x) * p - k * p_previous) / (k + 1);
+      const Real degree = static_cast<Real>(k);
+      return ((Real(2) * degree + 1 - x) * p - degree * p_previous) / (degree + 1);
    }
 
    Real derivative(const Real& x, const Real& p, const Real& p_previous) const
    {
-      return N / x * (p - p_previous);
+      return static_cast<Real>(N) / x * (p - p_previous);
    }
 
    Real second_derivative(const Real& x, const Real& p, const Real& p_prime) const
    {
-      return ((x-1) * p_prime - N * p) / x;;
+      return ((x - 1) * p_prime - static_cast<Real>(N) * p) / x;
    }
 
    Real second_derivative_ratio(const Real& x, const Real& p, const Real& p_prime) const
    {
-      return (x-1) / x - N / x * p / p_prime;
+      return (x - 1) / x - static_cast<Real>(N) / x * p / p_prime;
    }
 
    Real weight(const Real& x, const Real& p, const Real& p_prime) const
    {
       Real delta = -p / p_prime;
       Real p_prime_at_root = p_prime + second_derivative(x, p, p_prime) * delta;
-      return 1 / (p_prime_at_root * p_prime_at_root) / x;
+      return Real(1) / (p_prime_at_root * p_prime_at_root) / x;
    }
 
 private:
