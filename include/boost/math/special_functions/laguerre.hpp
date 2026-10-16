@@ -15,7 +15,6 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/detail/orthogonal_polynomial.hpp>
-#include <boost/math/special_functions/detail/two_product.hpp>
 #include <boost/math/tools/compensated_arithmetic.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
@@ -183,6 +182,16 @@ public:
    unsigned num_roots() const
    {
       return N;
+   }
+
+   Real area() const
+   {
+      return 1;
+   }
+
+   unsigned weight_multiplicity(unsigned) const
+   {
+      return 1;
    }
 
    Real next(const Real& x, const Real& p, const Real& p_previous, unsigned k) const

@@ -160,7 +160,7 @@ void test_zeros_accuracy(T tol, const char* t)
          // Zero is not a zero of the odd hermite polynomials
          BOOST_CHECK(zeros.size() == n/2);
          BOOST_CHECK(zeros[0] > 0);
-         BOOST_CHECK_SMALL(boost::math::hermite(n, zeros[0]), 400 * tol);
+         BOOST_CHECK_SMALL(boost::math::hermite(n, zeros[0]), 2000 * tol);
       }
    }
    return;

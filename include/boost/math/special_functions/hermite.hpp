@@ -20,6 +20,7 @@
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/orthogonal_polynomial.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
@@ -100,6 +101,16 @@ public:
    Real upper_bound() const
    {
       return sqrt(Real(2 * N + 2));
+   }
+
+   Real area() const
+   {
+      return BOOST_MATH_NAMESPACE::constants::root_pi<Real>();
+   }
+
+   unsigned weight_multiplicity(unsigned i) const
+   {
+      return (N % 2 && i == 0) ? 1 : 2;
    }
 
    Real next(const Real& x, const Real& p, const Real& p_previous, unsigned k) const
