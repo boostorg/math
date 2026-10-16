@@ -1,5 +1,6 @@
 
 //  (C) Copyright John Maddock 2006.
+//  (C) Copyright Jacob Hass 2026.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -14,13 +15,14 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#include <boost/math/special_functions/detail/orthogonal_polynomial.hpp>
 #include <boost/math/tools/compensated_arithmetic.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
 
 // Recurrence relation for Laguerre polynomials:
 BOOST_MATH_EXPORT template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type  
+inline typename tools::promote_args<T1, T2, T3>::type
    laguerre_next(unsigned n, T1 x, T2 Ln, T3 Lnm1)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
@@ -76,7 +78,7 @@ T laguerre_imp(unsigned n, T x)
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type 
+inline typename tools::promote_args<T>::type
 laguerre(unsigned n, T x, const Policy&, const std::true_type&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -85,7 +87,7 @@ laguerre(unsigned n, T x, const Policy&, const std::true_type&)
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type 
+inline typename tools::promote_args<T>::type
    laguerre(unsigned n, unsigned m, T x, const std::false_type&)
 {
    return BOOST_MATH_NAMESPACE::laguerre(n, m, x, policies::policy<>());
@@ -94,7 +96,7 @@ inline typename tools::promote_args<T>::type
 } // namespace detail
 
 BOOST_MATH_EXPORT template <class T>
-inline typename tools::promote_args<T>::type 
+inline typename tools::promote_args<T>::type
    laguerre(unsigned n, T x)
 {
    return laguerre(n, x, policies::policy<>());
@@ -102,7 +104,7 @@ inline typename tools::promote_args<T>::type
 
 // Recurrence for associated polynomials:
 BOOST_MATH_EXPORT template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type  
+inline typename tools::promote_args<T1, T2, T3>::type
    laguerre_next(unsigned n, unsigned l, T1 x, T2 Pl, T3 Plm1)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
@@ -119,7 +121,7 @@ T laguerre_imp(unsigned n, unsigned m, T x, const Policy& pol)
       return BOOST_MATH_NAMESPACE::laguerre(n, x, pol);
 
    T p0 = 1;
-   
+
    if(n == 0)
       return p0;
 
@@ -139,7 +141,7 @@ T laguerre_imp(unsigned n, unsigned m, T x, const Policy& pol)
 }
 
 BOOST_MATH_EXPORT template <class T, class Policy>
-inline typename tools::promote_args<T>::type 
+inline typename tools::promote_args<T>::type
    laguerre(unsigned n, unsigned m, T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -148,11 +150,117 @@ inline typename tools::promote_args<T>::type
 }
 
 BOOST_MATH_EXPORT template <class T1, class T2>
-inline typename laguerre_result<T1, T2>::type 
+inline typename laguerre_result<T1, T2>::type
    laguerre(unsigned n, T1 m, T2 x)
 {
    typedef typename policies::is_policy<T2>::type tag_type;
    return detail::laguerre(n, m, x, tag_type());
+}
+
+namespace detail{
+
+template <class Real>
+class laguerre_family
+{
+public:
+   laguerre_family(unsigned n) : N(n) {}
+
+   Real p0() const
+   {
+      return 1;
+   }
+
+   Real lower_bound() const
+   {
+      return 0;
+   }
+
+   Real upper_bound() const
+   { // See https://mathoverflow.net/questions/251607/zeroes-of-laguerre-polynomials
+      using std::sqrt;
+      const Real degree = static_cast<Real>(N);
+      return degree + (degree - 1) * sqrt(degree) + 1;
+   }
+
+   unsigned num_roots() const
+   {
+      return N;
+   }
+
+   Real area() const
+   {
+      return 1;
+   }
+
+   unsigned weight_multiplicity(unsigned) const
+   {
+      return 1;
+   }
+
+   Real next(const Real& x, const Real& p, const Real& p_previous, unsigned k) const
+   {
+      const Real degree = static_cast<Real>(k);
+      return ((Real(2) * degree + 1 - x) * p - degree * p_previous) / (degree + 1);
+   }
+
+   Real derivative(const Real& x, const Real& p, const Real& p_previous) const
+   {
+      return static_cast<Real>(N) / x * (p - p_previous);
+   }
+
+   Real second_derivative(const Real& x, const Real& p, const Real& p_prime) const
+   {
+      return ((x - 1) * p_prime - static_cast<Real>(N) * p) / x;
+   }
+
+   Real second_derivative_ratio(const Real& x, const Real& p, const Real& p_prime) const
+   {
+      return (x - 1) / x - static_cast<Real>(N) / x * p / p_prime;
+   }
+
+   Real weight(const Real& x, const Real& p, const Real& p_prime) const
+   {
+      Real delta = -p / p_prime;
+      Real p_prime_at_root = p_prime + second_derivative(x, p, p_prime) * delta;
+      return Real(1) / (p_prime_at_root * p_prime_at_root) / x;
+   }
+
+private:
+   unsigned N;
+};
+}
+
+BOOST_MATH_EXPORT template <class T, class Policy = policies::policy<>>
+inline std::vector<T> laguerre_zeros(unsigned n)
+{
+   static const char* function = "boost::math::laguerre_zeros(unsigned %1%)";
+   if ((!(BOOST_MATH_NAMESPACE::isfinite)(n)))
+   {
+      policies::raise_domain_error(function, "The argument n to the laguerre_zeros function must be finite (got n=%1%).", n, Policy());
+      return { std::numeric_limits<T>::quiet_NaN() };
+   }
+   if (n == 0)
+   {
+      policies::raise_domain_error(function, "Laguerre polynomial has no roots for n = 0.", n, Policy());
+      return { std::numeric_limits<T>::quiet_NaN() };
+   }
+   if (n == 1)
+   {
+      return { static_cast<T>(1) };
+   }
+
+   detail::orthogonal_polynomial<T, detail::laguerre_family<T> > evaluate(n);
+   std::vector<T> roots = evaluate.abscissa();
+
+   if (!(BOOST_MATH_NAMESPACE::isfinite)(roots[0]))
+   {
+      // In this case, the recurrence has overflowed and returned NaNs. Throw evaluation error
+      // or return vector of nans.
+      policies::raise_evaluation_error(function, "End points of the interval is not finite. Probably due to n being too large.", n, Policy());
+      return roots;
+   }
+
+   return roots;
 }
 
 BOOST_MATH_NAMESPACE_END
