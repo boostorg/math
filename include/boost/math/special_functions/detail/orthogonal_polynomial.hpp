@@ -17,30 +17,22 @@
 #endif
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/compensated_arithmetic.hpp>
+#include <boost/math/policies/error_handling.hpp>
+#include <boost/math/policies/policy.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
-template <class Real, class Family>
+template <class Real, class Family, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
 class orthogonal_polynomial
 {
 public:
    orthogonal_polynomial(unsigned n) : N(n)
    {
-      if (N == 0)
-      {
-         throw std::domain_error("Gauss quadrature needs at least one point.");
-      }
-
       values = calculate_values(Family(N));
    }
 
    orthogonal_polynomial(unsigned n, const Family& family) : N(n)
    {
-      if (N == 0)
-      {
-         throw std::domain_error("Gauss quadrature needs at least one point.");
-      }
-
       values = calculate_values(family);
    }
    const std::vector<Real>& abscissa() const
@@ -139,6 +131,14 @@ private:
    // for N = 215, even Halley's method from those of Numerical Recipes' gauher finds the wrong zero.
    std::pair<std::vector<Real>, std::vector<Real> > calculate_values(const Family& family)
    {
+      if (N == 0)
+      {
+         static const char* function = "boost::math::detail_orthogonal_polynomial(unsigned %1%)";
+         BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, "The argument n used for Gauss quadrature must be > 0 (got n=%1%).", N, Policy());
+         std::vector<Real> x = { std::numeric_limits<Real>::quiet_NaN() };
+         std::vector<Real> w = { std::numeric_limits<Real>::quiet_NaN() };
+         return std::make_pair(x, w);
+      }
       using std::abs;
       using std::sqrt;
       const strum_counter evaluate(N, family);

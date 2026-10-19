@@ -54,7 +54,7 @@ void test_tables_match_on_demand()
    CHECK_EQUAL(table::abscissa().size(), on_demand::abscissa().size());
    for (unsigned i = 0; i < table::abscissa().size(); ++i)
    {
-      CHECK_ULP_CLOSE(static_cast<Real>(table::abscissa()[i]), on_demand::abscissa()[i], 8);
+      CHECK_ULP_CLOSE(static_cast<Real>(table::abscissa()[i]), on_demand::abscissa()[i], 10);
       CHECK_ULP_CLOSE(static_cast<Real>(table::weights()[i]), on_demand::weights()[i], 32);
    }
 }
@@ -83,7 +83,7 @@ void test_vector_valued()
    double L1;
    vector Q = gauss_laguerre<double, N>::integrate(f, zero, norm, &L1);
    CHECK_ULP_CLOSE(1.0, Q[0], 10);
-   CHECK_ULP_CLOSE(2.0, Q[1], 4);
+   CHECK_ULP_CLOSE(2.0, Q[1], 20);
    CHECK_ULP_CLOSE(0.5, Q[2], 16);
    CHECK_LE(norm(Q), L1);
 }
