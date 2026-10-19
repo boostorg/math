@@ -69,7 +69,7 @@ public:
          a_values[k] = sqrt(Real(2) / Real(k + 1));
          b_values[k] = -sqrt(Real(k) / Real(k + 1));
       }
-      p0_value = 1 / sqrt(sqrt(boost::math::constants::pi<Real>()));
+      p0_value = 1 / sqrt(sqrt(BOOST_MATH_NAMESPACE::constants::pi<Real>()));
       derivative_scale = sqrt(Real(2) * Real(N));
    }
 
@@ -166,7 +166,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    return BOOST_MATH_NAMESPACE::hermite(n, x, policies::policy<>());
 }
 
-BOOST_MATH_EXPORT template <class T, class Policy = boost::math::policies::policy<> >
+BOOST_MATH_EXPORT template <class T, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
 inline std::vector<T> hermite_zeros(unsigned n)
 {
    static const char* function = "boost::math::hermite_zeros(unsigned %1%)";

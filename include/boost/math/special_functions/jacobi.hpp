@@ -174,7 +174,7 @@ private:
 };
 }
 
-BOOST_MATH_EXPORT template <class T, class Policy = boost::math::policies::policy<> >
+BOOST_MATH_EXPORT template <class T, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
 inline std::vector<T> jacobi_zeros(unsigned n, T alpha, T beta)
 {
    static const char* function = "boost::math::jacobi_zeros(unsigned %1%)";

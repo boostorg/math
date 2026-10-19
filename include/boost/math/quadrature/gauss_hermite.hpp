@@ -44,9 +44,9 @@ BOOST_MATH_NAMESPACE_BEGIN namespace quadrature { namespace detail {
 template <class Real, unsigned N, unsigned Category>
 class gauss_hermite_detail
 {
-   static const boost::math::detail::orthogonal_polynomial<Real, boost::math::detail::hermite_family<Real>>& polynomial()
+   static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::hermite_family<Real>>& polynomial()
    {
-      static const boost::math::detail::orthogonal_polynomial<Real, boost::math::detail::hermite_family<Real>> value(N);
+      static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::hermite_family<Real>> value(N);
       return value;
    }
 

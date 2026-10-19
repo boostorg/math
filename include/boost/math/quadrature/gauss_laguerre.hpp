@@ -43,9 +43,9 @@ template <class Real, unsigned N, unsigned Category>
 class gauss_laguerre_detail
 {
    static_assert(N > 1, "gauss_laguerre requires N > 1");
-   static const boost::math::detail::orthogonal_polynomial<Real, boost::math::detail::laguerre_family<Real>>& polynomial()
+   static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::laguerre_family<Real>>& polynomial()
    {
-      static const boost::math::detail::orthogonal_polynomial<Real, boost::math::detail::laguerre_family<Real>> value(N);
+      static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::laguerre_family<Real>> value(N);
       return value;
    }
 
