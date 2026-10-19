@@ -104,7 +104,7 @@ void test_derivative()
 template <class T>
 void test_zeros(T tol, const char* t)
 {
-   std::cout << "Testing zeros of Laguerre polynomials for type " << t << std::endl;
+   std::cout << "Testing zeros of Jacobi polynomials for type " << t << std::endl;
 
    unsigned N = 10;
    T alpha = -static_cast<T>(0.5);
@@ -122,6 +122,28 @@ void test_zeros(T tol, const char* t)
    CHECK_ABSOLUTE_ERROR(roots[7], BOOST_MATH_TEST_VALUE(T, 0.714060291625917422384478107667342985650985129021464154416551477200455821467118506327105981403288530428645575696712), tol);
    CHECK_ABSOLUTE_ERROR(roots[8], BOOST_MATH_TEST_VALUE(T, 0.893681191657027897970840390419389902657653328912723300666540830669739848619590156972674550185798367491416410935830), tol);
    CHECK_ABSOLUTE_ERROR(roots[9], BOOST_MATH_TEST_VALUE(T, 0.987995331877131338753329818948431911390477584357501290969978354526517833942968304640446939779768842549215297210134), tol);
+}
+
+template <class T>
+void test_zero_special_case()
+{
+   std::cout << "Testing special cases for zeros" << std::endl;
+
+   CHECK_THROW(boost::math::jacobi_zeros<T>(0, 1, 1), std::domain_error);
+   CHECK_THROW(boost::math::jacobi_zeros<T>(10, -1, 1), std::domain_error);
+   CHECK_THROW(boost::math::jacobi_zeros<T>(10, 1, -1), std::domain_error);
+   CHECK_THROW(boost::math::jacobi_zeros<T>(10, std::numeric_limits<T>::quiet_NaN(), 1), std::domain_error);
+   CHECK_THROW(boost::math::jacobi_zeros<T>(10, 1, std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+   CHECK_THROW(boost::math::jacobi_zeros<T>(std::numeric_limits<unsigned>::quiet_NaN(), 1, 1), std::domain_error);
+
+   using ignore_policy = boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+                                                       boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
+   CHECK_NAN((boost::math::jacobi_zeros<T, ignore_policy>(0, 1, 1)[0]));
+   CHECK_NAN((boost::math::jacobi_zeros<T, ignore_policy>(std::numeric_limits<unsigned>::quiet_NaN(), 1, 1)[0]));
+
+   std::vector<T> zeros = boost::math::jacobi_zeros<T>(1, 0, 0);
+   CHECK_EQUAL(zeros.size(), static_cast<std::size_t>(1));
+   CHECK_EQUAL(zeros[0], static_cast<T>(0));
 }
 
 int main()
@@ -177,6 +199,8 @@ int main()
     #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_zeros(boost::math::concepts::real_concept(1e-19), "real_concept");
     #endif
+
+    test_zero_special_case<double>();
 
     return boost::math::test::report_errors();
 }
