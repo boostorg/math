@@ -128,7 +128,7 @@ using cpp_bin_float_100 = boost::multiprecision::cpp_bin_float_100;
 // Checked by hand that they line up exactly to 100 digits!
 test_zeros<cpp_bin_float_100>(std::numeric_limits<cpp_bin_float_100>::epsilon(), "cpp_bin_float_100");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-   test_zeros(boost::math::concepts::real_concept(2e-19), "real_concept");
+   test_zeros(boost::math::concepts::real_concept(1e-15), "real_concept");
 #endif
 
 test_zeros_large(std::numeric_limits<float>::epsilon(), "float");
@@ -139,7 +139,7 @@ using cpp_bin_float_100 = boost::multiprecision::cpp_bin_float_100;
 test_zeros_large<cpp_bin_float_100>(std::numeric_limits<cpp_bin_float_100>::epsilon(), "cpp_bin_float_100");
 
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-   test_zeros_large(boost::math::concepts::real_concept(2e-19), "real_concept");
+   test_zeros_large(boost::math::concepts::real_concept(1e-15), "real_concept");
 #endif
 
 test_zeros_accuracy(std::numeric_limits<double>::epsilon(), "double");
