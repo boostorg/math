@@ -6,8 +6,10 @@
  */
 #ifndef BOOST_MATH_FILTERS_DAUBECHIES_HPP
 #define BOOST_MATH_FILTERS_DAUBECHIES_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <limits>
+#endif
 #include <boost/math/tools/big_constant.hpp>
 
 #include <boost/math/tools/is_standalone.hpp>
@@ -18,7 +20,7 @@
 #endif
 #endif
 
-namespace boost::math::filters {
+BOOST_MATH_NAMESPACE_BEGIN namespace filters {
 
 template <typename Real, unsigned p>
 constexpr std::array<Real, 2*p> daubechies_scaling_filter()
@@ -95,5 +97,5 @@ std::array<Real, 2*p> daubechies_wavelet_filter() {
     return g;
 }
 
-} // namespaces
+} BOOST_MATH_NAMESPACE_END
 #endif

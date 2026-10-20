@@ -56,6 +56,11 @@
       <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">sd</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">hint</span> <span class="special">=</span> <span class="number">100</span><span class="special">);</span>
+
+   <span class="comment">// degrees of freedom inversion from a quantile and probability:</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span>
+      <span class="identifier">RealType</span> <span class="identifier">t</span><span class="special">,</span>
+      <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
 <span class="special">};</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
@@ -176,6 +181,15 @@
 <p>
           For more information on this function see the <a href="http://www.itl.nist.gov/div898/handbook/prc/section2/prc222.htm" target="_top">NIST
           Engineering Statistics Handbook</a>.
+        </p>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span>
+   <span class="identifier">RealType</span> <span class="identifier">t</span><span class="special">,</span>
+   <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
+</pre>
+<p>
+          Returns the degrees of freedom ν such that CDF(<span class="emphasis"><em>x</em></span>; ν)
+          = <span class="emphasis"><em>p</em></span>. Requires 0 &lt; <span class="emphasis"><em>p</em></span> &lt; 1
+          and <span class="emphasis"><em>x</em></span> ≠ 0, otherwise calls <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.students_t_dist.h1"></a>
@@ -407,6 +421,19 @@
 <td>
                   <p>
                     if (v &gt; 4) 6 / (df - 4) else NaN
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    find_degrees_of_freedom(t, p)
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Uses a 2nd-order Edgeworth expansion as initial guess for a numerical
+                    root finder
                   </p>
                 </td>
 </tr>

@@ -1,0 +1,113 @@
+[/
+Copyright (c) 2026 Nicholas Thompson and Matt Borland
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:van_den_bos_unit_square Van den Bos Unit-Square Quadrature]
+
+[heading Synopsis]
+
+    #include <boost/math/quadrature/van_den_bos_unit_square.hpp>
+    namespace boost { namespace math { namespace quadrature {
+
+    template<class F>
+    auto van_den_bos_unit_square(
+        F const& f,
+        double tolerance,
+        double* error_estimate = nullptr,
+        double* L1 = nullptr,
+        std::size_t* evaluations = nullptr);
+
+    }}} // namespaces
+
+[heading Description]
+
+`van_den_bos_unit_square` computes an adaptive positive cubature of a
+real- or complex-valued function over the reference square [0,1]^2. The
+integrand receives the two coordinates as separate `double` arguments.
+
+For a nondegenerate parallelogram with one vertex [^p0] and edge vectors
+[^a] and [^b], use the affine map
+`p(u,v) = p0 + u a + v b`, where `(u,v)` lies in `[0,1]^2`. The integral
+over the parallelogram is the integral of `f(p0 + u a + v b)` over the unit
+square, multiplied by `abs(det(a,b))`. The caller must perform this mapping
+and include the constant Jacobian `abs(det(a,b))` in the integrand.
+
+The precomputed rules contain no points on the boundary of the square, so the
+routine does not evaluate the integrand at an endpoint singularity. Interior
+nodes approach the boundary as the levels increase, however, so excluding the
+endpoints does not by itself make an improper integral well conditioned.
+Singular integrals may still require a suitable change of variables.
+
+The precomputed rules form a nested hierarchy. After the first level,
+only points newly introduced by the next level are evaluated. The routine
+requires two consecutive adjacent-level differences to satisfy `tolerance`
+before stopping, which avoids accepting an isolated cancellation. If the
+maximum level is reached first, the last rule is returned and its difference
+is used as the final `error_estimate` (subject to the roundoff floor).
+
+The optional `L1` output is the weighted sum of the absolute integrand values.
+`evaluations` reports the number of function calls, including calls reused by
+all subsequent levels. The supported result types are `float` and `double`,
+including complex values with `float` or `double` components. Higher-precision
+return types are not supported.
+
+Nodes and weights are computed offline. If the requested tolerance is not
+reached by the final precomputed level, the routine returns that level's
+result and error estimate; it does not compute additional levels.
+
+Requires C++17.
+
+Positive cubature rules satisfying the same moment conditions are not unique.
+The nodes and weights of this routine are chosen on a Fejer type-II grid. The
+nodes are strictly contained in `(0,1)^2`, and the weighted rule is invariant
+under D[sub 4].
+
+[heading Dilogarithm example]
+
+For a smooth special-function example, the integral of `1/(1-xy/2)` over the
+unit square is `pi^2/6 - log^2(2)`.
+
+    using boost::math::quadrature::van_den_bos_unit_square;
+
+    double error_estimate = 0;
+    double value = van_den_bos_unit_square(
+        [](double x, double y)
+        {
+            return 1 / (1 - x * y / 2);
+        },
+        1e-10,
+        &error_estimate);
+
+[heading Square-lattice Green function]
+
+The resolvent of the nearest-neighbor square lattice gives the genuinely
+two-dimensional periodic integral of
+`1/(z - cos(2*pi*x) - cos(2*pi*y))` over the unit square. For [^z > 2], its
+closed form is `G(z) = 2*K(2/z)/(pi*z)`, where [^K] is the complete elliptic
+integral of the first kind. For example, [^z = 3] can be computed with
+
+    double const z = 3;
+    double const two_pi = 2 * boost::math::constants::pi<double>();
+    double value = van_den_bos_unit_square(
+        [=](double x, double y)
+        {
+            return 1 / (z - std::cos(two_pi * x)
+                          - std::cos(two_pi * y));
+        },
+        1e-6);
+
+The lattice value [^z = 2], and the parameter value [^z = 1] in the
+dilogarithm family `(1-zxy)^-1`, give improper integrals. Although the
+rules do not evaluate the singular boundary points themselves, singular
+integrands may require a suitable change of variables and should not be
+expected to have reliable adjacent-level error estimates without such
+treatment.
+
+The construction follows the positive, nested reduction approach of
+[@https://arxiv.org/abs/1809.09842 van den Bos et al.], adapted here to the
+uniform measure on the unit square.
+
+[endsect] [/section:van_den_bos_unit_square Van den Bos Unit-Square Quadrature]

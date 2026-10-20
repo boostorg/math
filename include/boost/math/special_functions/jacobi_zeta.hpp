@@ -23,7 +23,7 @@
 
 // Elliptic integral the Jacobi Zeta function.
 
-namespace boost { namespace math { 
+BOOST_MATH_NAMESPACE_BEGIN
    
 namespace detail{
 
@@ -32,8 +32,8 @@ template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T jacobi_zeta_imp(T phi, T k, const Policy& pol, T kp)
 {
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
-    using namespace boost::math::constants;
+    using namespace BOOST_MATH_NAMESPACE::tools;
+    using namespace BOOST_MATH_NAMESPACE::constants;
 
     bool invert = false;
     if(phi < 0)
@@ -49,7 +49,7 @@ BOOST_MATH_GPU_ENABLED T jacobi_zeta_imp(T phi, T k, const Policy& pol, T kp)
     T one_minus_ks2 = kp + c2 - kp * c2;
     T k2 = k * k;
     if(k == 1)
-       result = sinp * (boost::math::sign)(cosp);  // We get here by simplifying JacobiZeta[w, 1] in Mathematica, and the fact that 0 <= phi.
+       result = sinp * (BOOST_MATH_NAMESPACE::sign)(cosp);  // We get here by simplifying JacobiZeta[w, 1] in Mathematica, and the fact that 0 <= phi.
     else
     {
        result = k2 * sinp * cosp * sqrt(one_minus_ks2) * ellint_rj_imp(T(0), kp, T(1), one_minus_ks2, pol) / (3 * ellint_k_imp(k, pol, kp));
@@ -63,7 +63,7 @@ BOOST_MATH_GPU_ENABLED inline T jacobi_zeta_imp(T phi, T k, const Policy& pol)
 }
 } // detail
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -71,13 +71,13 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type jacobi_
    return policies::checked_narrowing_cast<result_type, Policy>(detail::jacobi_zeta_imp(static_cast<value_type>(phi), static_cast<value_type>(k), pol), "boost::math::jacobi_zeta<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi)
 {
-   return boost::math::jacobi_zeta(k, phi, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::jacobi_zeta(k, phi, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ELLINT_D_HPP
 

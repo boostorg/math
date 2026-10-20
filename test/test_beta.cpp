@@ -82,6 +82,23 @@ void expected_results()
       "(long\\s+)?double",           // test type(s)
       "Beta Function: Divergent.*",  // test data group
       "beta", 30, 6);   // test function
+   //
+   // MinGW, where real_concept's 80-bit long double libm is less accurate (measured 368 and 55):
+   //
+   add_expected_result(
+      "GNU.*",                       // compiler
+      ".*",                          // stdlib
+      "Win32.*",                     // platform
+      "real_concept",                // test type(s)
+      "Beta Function: Medium.*",     // test data group
+      "beta", 400, 40); // test function
+   add_expected_result(
+      "GNU.*",                       // compiler
+      ".*",                          // stdlib
+      "Win32.*",                     // platform
+      "real_concept",                // test type(s)
+      "Beta Function: Divergent.*",  // test data group
+      "beta", 60, 15);   // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

@@ -27,10 +27,7 @@
 
 // These are the the "Sinus Cardinal" functions.
 
-namespace boost
-{
-    namespace math
-    {
+BOOST_MATH_NAMESPACE_BEGIN
        namespace detail
        {
         // This is the "Sinus Cardinal" of index Pi.
@@ -40,7 +37,7 @@ namespace boost
         {
             BOOST_MATH_STD_USING
 
-            if ((boost::math::isinf)(x))
+            if ((BOOST_MATH_NAMESPACE::isinf)(x))
             {
                return 0;
             }
@@ -57,21 +54,21 @@ namespace boost
 
        } // namespace detail
 
-       template <class T>
+       BOOST_MATH_EXPORT template <class T>
        BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type sinc_pi(T x)
        {
           typedef typename tools::promote_args<T>::type result_type;
           return detail::sinc_pi_imp(static_cast<result_type>(x));
        }
 
-       template <class T, class Policy>
+       BOOST_MATH_EXPORT template <class T, class Policy>
        BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type sinc_pi(T x, const Policy&)
        {
           typedef typename tools::promote_args<T>::type result_type;
           return detail::sinc_pi_imp(static_cast<result_type>(x));
        }
 
-        template<typename T, template<typename> class U>
+        BOOST_MATH_EXPORT template<typename T, template<typename> class U>
         BOOST_MATH_GPU_ENABLED inline U<T>    sinc_pi(const U<T> x)
         {
             BOOST_MATH_STD_USING
@@ -111,13 +108,12 @@ namespace boost
             }
         }
 
-        template<typename T, template<typename> class U, class Policy>
+        BOOST_MATH_EXPORT template<typename T, template<typename> class U, class Policy>
         BOOST_MATH_GPU_ENABLED inline U<T>    sinc_pi(const U<T> x, const Policy&)
         {
            return sinc_pi(x);
         }
-    }
-}
+    BOOST_MATH_NAMESPACE_END
 
 #endif /* BOOST_SINC_HPP */
 

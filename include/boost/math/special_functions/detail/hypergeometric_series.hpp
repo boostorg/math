@@ -10,14 +10,16 @@
 #ifndef BOOST_MATH_DETAIL_HYPERGEOMETRIC_SERIES_HPP
 #define BOOST_MATH_DETAIL_HYPERGEOMETRIC_SERIES_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <cstdint>
+#endif
 #include <boost/math/tools/series.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
-  namespace boost { namespace math { namespace detail {
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
   // primary template for term of Taylor series
   template <class T, unsigned p, unsigned q>
@@ -29,8 +31,8 @@
   {
     typedef T result_type;
 
-    hypergeometric_pFq_generic_series_term(const T& b, const T& z)
-       : n(0), term(1), b(b), z(z)
+    hypergeometric_pFq_generic_series_term(const T& b_, const T& z_)
+       : n(0), term(1), b(b_), z(z_)
     {
     }
 
@@ -55,8 +57,8 @@
   {
     typedef T result_type;
 
-    hypergeometric_pFq_generic_series_term(const T& a, const T& z)
-       : n(0), term(1), a(a), z(z)
+    hypergeometric_pFq_generic_series_term(const T& a_, const T& z_)
+       : n(0), term(1), a(a_), z(z_)
     {
     }
 
@@ -81,8 +83,8 @@
   {
     typedef T result_type;
 
-    hypergeometric_pFq_generic_series_term(const T& a, const T& b, const T& z)
-       : n(0), term(1), a(a), b(b), z(z)
+    hypergeometric_pFq_generic_series_term(const T& a_, const T& b_, const T& z_)
+       : n(0), term(1), a(a_), b(b_), z(z_)
     {
     }
 
@@ -107,8 +109,8 @@
   {
     typedef T result_type;
 
-    hypergeometric_pFq_generic_series_term(const T& a, const T& b1, const T& b2, const T& z)
-       : n(0), term(1), a(a), b1(b1), b2(b2), z(z)
+    hypergeometric_pFq_generic_series_term(const T& a_, const T& b1_, const T& b2_, const T& z_)
+       : n(0), term(1), a(a_), b1(b1_), b2(b2_), z(z_)
     {
     }
 
@@ -133,8 +135,8 @@
   {
     typedef T result_type;
 
-    hypergeometric_pFq_generic_series_term(const T& a1, const T& a2, const T& z)
-       : n(0), term(1), a1(a1), a2(a2), z(z)
+    hypergeometric_pFq_generic_series_term(const T& a1_, const T& a2_, const T& z_)
+       : n(0), term(1), a1(a1_), a2(a2_), z(z_)
     {
     }
 
@@ -159,8 +161,8 @@
   {
     typedef T result_type;
 
-    hypergeometric_pFq_generic_series_term(const T& a1, const T& a2, const T& b, const T& z)
-       : n(0), term(1), a1(a1), a2(a2), b(b), z(z)
+    hypergeometric_pFq_generic_series_term(const T& a1_, const T& a2_, const T& b_, const T& z_)
+       : n(0), term(1), a1(a1_), a2(a2_), b(b_), z(z_)
     {
     }
 
@@ -189,7 +191,7 @@
     BOOST_MATH_STD_USING
     std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 
-    const T result = boost::math::tools::sum_series(term, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+    const T result = BOOST_MATH_NAMESPACE::tools::sum_series(term, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
 
     policies::check_series_iterations<T>("boost::math::hypergeometric_pFq_generic_series<%1%>(%1%,%1%,%1%)", max_iter, pol);
     return result;
@@ -239,7 +241,7 @@
            return r;
         }
         int s1, s2;
-        auto r = static_cast<T>(boost::math::lgamma(T(z + n), &s1, pol) - boost::math::lgamma(z, &s2, pol));
+        auto r = static_cast<T>(BOOST_MATH_NAMESPACE::lgamma(T(z + n), &s1, pol) - BOOST_MATH_NAMESPACE::lgamma(z, &s2, pol));
         if(s)
            *s = s1 * s2;
         return r;
@@ -250,10 +252,10 @@
   inline T hypergeometric_1F1_generic_series(const T& a, const T& b, const T& z, const Policy& pol, long long& log_scaling, const char* function)
   {
      BOOST_MATH_STD_USING
-     T sum(0), term(1), upper_limit(sqrt(boost::math::tools::max_value<T>())), diff;
+     T sum(0), term(1), upper_limit(sqrt(BOOST_MATH_NAMESPACE::tools::max_value<T>())), diff;
      T lower_limit(1 / upper_limit);
      unsigned n = 0;
-     long long log_scaling_factor = lltrunc(boost::math::tools::log_max_value<T>()) - 2;
+     long long log_scaling_factor = lltrunc(BOOST_MATH_NAMESPACE::tools::log_max_value<T>()) - 2;
      T scaling_factor = exp(T(log_scaling_factor));
      T term_m1 = 0;
      long long local_scaling = 0;
@@ -281,7 +283,7 @@
            summit_location = itrunc(t);
      }
 
-     if (summit_location > boost::math::policies::get_max_series_iterations<Policy>() / 4)
+     if (summit_location > BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>() / 4)
      {
         //
         // Skip forward to the location of the largest term in the series and
@@ -322,11 +324,11 @@
         }
         term_m1 = term;
         term *= (((a + n) / ((b + n) * (n + 1))) * z);
-        if (n - summit_location > boost::math::policies::get_max_series_iterations<Policy>())
-           return boost::math::policies::raise_evaluation_error(function, "Series did not converge, best value is %1%", sum, pol);
+        if (n - summit_location > BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>())
+           return BOOST_MATH_NAMESPACE::policies::raise_evaluation_error(function, "Series did not converge, best value is %1%", sum, pol);
         ++n;
         diff = fabs(term / sum);
-     } while ((diff > boost::math::policies::get_epsilon<T, Policy>()) || (fabs(term_m1) < fabs(term)) || (small_a && n < 10));
+     } while ((diff > BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>()) || (fabs(term_m1) < fabs(term)) || (small_a && n < 10));
 
      //
      // See if we need to go backwards as well:
@@ -363,11 +365,11 @@
            }
            term_m1 = term;
            term *= (b + (n - 1)) * n / ((a + (n - 1)) * z);
-           if (summit_location - n > boost::math::policies::get_max_series_iterations<Policy>())
-              return boost::math::policies::raise_evaluation_error(function, "Series did not converge, best value is %1%", sum, pol);
+           if (summit_location - n > BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>())
+              return BOOST_MATH_NAMESPACE::policies::raise_evaluation_error(function, "Series did not converge, best value is %1%", sum, pol);
            --n;
            diff = fabs(term / sum);
-        } while ((diff > boost::math::policies::get_epsilon<T, Policy>()) || (fabs(term_m1) < fabs(term)));
+        } while ((diff > BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>()) || (fabs(term_m1) < fabs(term)));
      }
 
      if (have_minima && n && summit_location)
@@ -397,12 +399,12 @@
            }
            //term_m1 = term;
            term *= (((a + n) / ((b + n) * (n + 1))) * z);
-           if (n > boost::math::policies::get_max_series_iterations<Policy>())
-              return boost::math::policies::raise_evaluation_error(function, "Series did not converge, best value is %1%", sum, pol);
+           if (n > BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>())
+              return BOOST_MATH_NAMESPACE::policies::raise_evaluation_error(function, "Series did not converge, best value is %1%", sum, pol);
            if (++n == backstop)
               break; // we've caught up with ourselves.
            diff = fabs(term / sum);
-        } while ((diff > boost::math::policies::get_epsilon<T, Policy>())/* || (fabs(term_m1) < fabs(term))*/);
+        } while ((diff > BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>())/* || (fabs(term_m1) < fabs(term))*/);
      }
      //std::cout << sum << std::endl;
      return sum;
@@ -429,6 +431,6 @@
     return detail::sum_pFq_series(s, pol);
   }
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_DETAIL_HYPERGEOMETRIC_SERIES_HPP

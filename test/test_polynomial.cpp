@@ -4,7 +4,6 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/config.hpp>
-#define BOOST_TEST_MAIN
 #include <boost/array.hpp>
 #include <boost/math/tools/polynomial.hpp>
 #ifndef BOOST_MATH_STANDALONE
@@ -12,7 +11,9 @@
 #endif
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/joint_view.hpp>
-#include <boost/test/unit_test.hpp>
+#include <boost/mpl/for_each.hpp>
+#include <boost/mpl/identity.hpp>
+#include "math_unit_test.hpp"
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -59,7 +60,7 @@ std::array<int, 9> const d8b = {{0, 2, 8, -3, -3, 0, 1, 0, 1}};
 
 
 
-BOOST_AUTO_TEST_CASE(trivial)
+void trivial()
 {
    /* We have one empty test case here, so that there is always something for Boost.Test to do even if the tests below are #if'ed out */
 }
@@ -77,11 +78,11 @@ std::array<int, 3> const d2 = {{-6, 0, 9}};
 std::array<int, 6> const d5 = {{-9, 0, 3, 0, -15}};
 
 
-BOOST_AUTO_TEST_CASE( test_construction )
+void test_construction()
 {
     polynomial<double> const a(d3a.begin(), d3a.end());
     polynomial<double> const b(d3a.begin(), 3);
-    BOOST_CHECK_EQUAL(a, b);
+    CHECK_EQUAL(a, b);
 }
 
 #ifdef BOOST_MATH_HAS_IS_CONST_ITERABLE
@@ -89,7 +90,7 @@ BOOST_AUTO_TEST_CASE( test_construction )
 #include <list>
 #include <array>
 
-BOOST_AUTO_TEST_CASE(test_range_construction)
+void test_range_construction()
 {
    std::list<double> l{ 1, 2, 3, 4 };
    std::array<double, 4> a{ 3, 4, 5, 6 };
@@ -99,44 +100,44 @@ BOOST_AUTO_TEST_CASE(test_range_construction)
    polynomial<double> p3(l);
    polynomial<double> p4(a);
 
-   BOOST_CHECK_EQUAL(p1, p3);
-   BOOST_CHECK_EQUAL(p2, p4);
+   CHECK_EQUAL(p1, p3);
+   CHECK_EQUAL(p2, p4);
 }
 #endif
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
-BOOST_AUTO_TEST_CASE( test_initializer_list_construction )
+void test_initializer_list_construction()
 {
     polynomial<double> a(begin(d3a), end(d3a));
     polynomial<double> b = {10, -6, -4, 3};
     polynomial<double> c{10, -6, -4, 3};
     polynomial<double> d{10, -6, -4, 3, 0, 0};
-    BOOST_CHECK_EQUAL(a, b);
-    BOOST_CHECK_EQUAL(b, c);
-    BOOST_CHECK_EQUAL(d.degree(), 3u);
+    CHECK_EQUAL(a, b);
+    CHECK_EQUAL(b, c);
+    CHECK_EQUAL(d.degree(), std::size_t(3));
 }
 
-BOOST_AUTO_TEST_CASE( test_initializer_list_assignment )
+void test_initializer_list_assignment()
 {
     polynomial<double> a(begin(d3a), end(d3a));
     polynomial<double> b;
     b = {10, -6, -4, 3, 0, 0};
-    BOOST_CHECK_EQUAL(b.degree(), 3u);
-    BOOST_CHECK_EQUAL(a, b);
+    CHECK_EQUAL(b.degree(), std::size_t(3));
+    CHECK_EQUAL(a, b);
 }
 #endif
 
 
-BOOST_AUTO_TEST_CASE( test_degree )
+void test_degree()
 {
     polynomial<double> const zero;
     polynomial<double> const a(d3a.begin(), d3a.end());
-    BOOST_CHECK_THROW(zero.degree(), std::logic_error);
-    BOOST_CHECK_EQUAL(a.degree(), 3u);
+    CHECK_THROW(zero.degree(), std::logic_error);
+    CHECK_EQUAL(a.degree(), std::size_t(3));
 }
 
 
-BOOST_AUTO_TEST_CASE( test_division_over_field )
+void test_division_over_field()
 {
     polynomial<double> const a(d3a.begin(), d3a.end());
     polynomial<double> const b(d1a.begin(), d1a.end());
@@ -151,30 +152,30 @@ BOOST_AUTO_TEST_CASE( test_division_over_field )
     polynomial<double> const one(1.0);
 
     answer<double> result = quotient_remainder(a, b);
-    BOOST_CHECK_EQUAL(result.quotient, q);
-    BOOST_CHECK_EQUAL(result.remainder, r);
-    BOOST_CHECK_EQUAL(a, q * b + r); // Sanity check.
+    CHECK_EQUAL(result.quotient, q);
+    CHECK_EQUAL(result.remainder, r);
+    CHECK_EQUAL(a, q * b + r); // Sanity check.
 
     result = quotient_remainder(a, c);
-    BOOST_CHECK_EQUAL(result.quotient, f);
-    BOOST_CHECK_EQUAL(result.remainder, e);
-    BOOST_CHECK_EQUAL(a, f * c + e); // Sanity check.
+    CHECK_EQUAL(result.quotient, f);
+    CHECK_EQUAL(result.remainder, e);
+    CHECK_EQUAL(a, f * c + e); // Sanity check.
 
     result = quotient_remainder(a, f);
-    BOOST_CHECK_EQUAL(result.quotient, g);
-    BOOST_CHECK_EQUAL(result.remainder, zero);
-    BOOST_CHECK_EQUAL(a, g * f + zero); // Sanity check.
+    CHECK_EQUAL(result.quotient, g);
+    CHECK_EQUAL(result.remainder, zero);
+    CHECK_EQUAL(a, g * f + zero); // Sanity check.
     // Check that division by a regular number gives the same result.
-    BOOST_CHECK_EQUAL(a / 3.0, g);
-    BOOST_CHECK_EQUAL(a % 3.0, zero);
+    CHECK_EQUAL(a / 3.0, g);
+    CHECK_EQUAL(a % 3.0, zero);
 
     // Sanity checks.
-    BOOST_CHECK_EQUAL(a / a, one);
-    BOOST_CHECK_EQUAL(a % a, zero);
+    CHECK_EQUAL(a / a, one);
+    CHECK_EQUAL(a % a, zero);
     // BOOST_CHECK_EQUAL(zero / zero, zero); // TODO
 }
 
-BOOST_AUTO_TEST_CASE( test_division_over_ufd )
+void test_division_over_ufd()
 {
     polynomial<int> const zero;
     polynomial<int> const one(1);
@@ -184,12 +185,12 @@ BOOST_AUTO_TEST_CASE( test_division_over_ufd )
     polynomial<int> const r(d5.begin(), d5.end());
 
     answer<int> result = quotient_remainder(aa, bb);
-    BOOST_CHECK_EQUAL(result.quotient, q);
-    BOOST_CHECK_EQUAL(result.remainder, r);
+    CHECK_EQUAL(result.quotient, q);
+    CHECK_EQUAL(result.remainder, r);
 
     // Sanity checks.
-    BOOST_CHECK_EQUAL(aa / aa, one);
-    BOOST_CHECK_EQUAL(aa % aa, zero);
+    CHECK_EQUAL(aa / aa, one);
+    CHECK_EQUAL(aa % aa, zero);
 }
 
 #endif
@@ -318,76 +319,140 @@ void normalize(polynomial<T> &p)
  * However, the usual public interface function gcd() will do that.
  */
 
-BOOST_AUTO_TEST_SUITE(test_subresultant_gcd)
 
 // This test is just to show that gcd<polynomial<T>>(u, v) is defined (and works) when T is integral and multiprecision.
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( gcd_interface, T, mp_integral_test_types, FM2GP_Ex_8_3__1<T> )
+template <class T>
+struct gcd_interface_fixture : public FM2GP_Ex_8_3__1<T>
+{
+   void test_method();
+};
+
+template <class T>
+void gcd_interface()
+{
+   gcd_interface_fixture<T>().test_method();
+}
+
+template <class T>
+void gcd_interface_fixture<T>::test_method()
 {
     typedef FM2GP_Ex_8_3__1<T> fixture_type;
     polynomial<T> w;
     w = gcd(fixture_type::x, fixture_type::y);
     normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    CHECK_EQUAL(w, fixture_type::z);
     w = gcd(fixture_type::y, fixture_type::x);
     normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    CHECK_EQUAL(w, fixture_type::z);
 }
 
 // This test is just to show that gcd<polynomial<T>>(u, v) is defined (and works) when T is floating point.
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( gcd_float_interface, T, non_integral_test_types, FM2GP_Ex_8_3__1<T> )
+template <class T>
+struct gcd_float_interface_fixture : public FM2GP_Ex_8_3__1<T>
+{
+   void test_method();
+};
+
+template <class T>
+void gcd_float_interface()
+{
+   gcd_float_interface_fixture<T>().test_method();
+}
+
+template <class T>
+void gcd_float_interface_fixture<T>::test_method()
 {
     typedef FM2GP_Ex_8_3__1<T> fixture_type;
     polynomial<T> w;
     w = gcd(fixture_type::x, fixture_type::y);
     normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    CHECK_EQUAL(w, fixture_type::z);
     w = gcd(fixture_type::y, fixture_type::x);
     normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    CHECK_EQUAL(w, fixture_type::z);
 }
 
 // The following tests call subresultant_gcd explicitly to remove any ambiguity
 // and to permit testing on single-precision integral types.
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, large_integral_test_types, FM2GP_Ex_8_3__1<T> )
+template <class T>
+struct Ex_8_3__1_fixture : public FM2GP_Ex_8_3__1<T>
+{
+   void test_method();
+};
+
+template <class T>
+void Ex_8_3__1()
+{
+   Ex_8_3__1_fixture<T>().test_method();
+}
+
+template <class T>
+void Ex_8_3__1_fixture<T>::test_method()
 {
     typedef FM2GP_Ex_8_3__1<T> fixture_type;
     polynomial<T> w;
     w = subresultant_gcd(fixture_type::x, fixture_type::y);
     normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    CHECK_EQUAL(w, fixture_type::z);
     w = subresultant_gcd(fixture_type::y, fixture_type::x);
     normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    CHECK_EQUAL(w, fixture_type::z);
 }
 
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, large_integral_test_types, FM2GP_Ex_8_3__2<T> )
+template <class T>
+struct Ex_8_3__2_fixture : public FM2GP_Ex_8_3__2<T>
+{
+   void test_method();
+};
+
+template <class T>
+void Ex_8_3__2()
+{
+   Ex_8_3__2_fixture<T>().test_method();
+}
+
+template <class T>
+void Ex_8_3__2_fixture<T>::test_method()
 {
     typedef FM2GP_Ex_8_3__2<T> fixture_type;
     polynomial<T> w;
     w = subresultant_gcd(fixture_type::x, fixture_type::y);
     normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    CHECK_EQUAL(w, fixture_type::z);
     w = subresultant_gcd(fixture_type::y, fixture_type::x);
     normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    CHECK_EQUAL(w, fixture_type::z);
 }
 
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial_int, T, large_integral_test_types, FM2GP_trivial<T> )
+template <class T>
+struct trivial_int_fixture : public FM2GP_trivial<T>
+{
+   void test_method();
+};
+
+template <class T>
+void trivial_int()
+{
+   trivial_int_fixture<T>().test_method();
+}
+
+template <class T>
+void trivial_int_fixture<T>::test_method()
 {
     typedef FM2GP_trivial<T> fixture_type;
     polynomial<T> w;
     w = subresultant_gcd(fixture_type::x, fixture_type::y);
     normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    CHECK_EQUAL(w, fixture_type::z);
     w = subresultant_gcd(fixture_type::y, fixture_type::x);
     normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    CHECK_EQUAL(w, fixture_type::z);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
 
 
-BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, all_test_types )
+template <class T>
+void test_addition()
 {
     polynomial<T> const a(d3a.begin(), d3a.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
@@ -396,24 +461,26 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, all_test_types )
     polynomial<T> result = a + b; // different degree
     std::array<T, 4> tmp = {{8, -5, -4, 3}};
     polynomial<T> expected(tmp.begin(), tmp.end());
-    BOOST_CHECK_EQUAL(result, expected);
-    BOOST_CHECK_EQUAL(a + zero, a);
-    BOOST_CHECK_EQUAL(a + b, b + a);
+    CHECK_EQUAL(result, expected);
+    CHECK_EQUAL(a + zero, a);
+    CHECK_EQUAL(a + b, b + a);
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE( test_subtraction, T, all_test_types )
+template <class T>
+void test_subtraction()
 {
     polynomial<T> const a(d3a.begin(), d3a.end());
     polynomial<T> const zero;
 
-    BOOST_CHECK_EQUAL(a - T(0), a);
-    BOOST_CHECK_EQUAL(T(0) - a, -a);
-    BOOST_CHECK_EQUAL(a - zero, a);
-    BOOST_CHECK_EQUAL(zero - a, -a);
-    BOOST_CHECK_EQUAL(a - a, zero);
+    CHECK_EQUAL(a - T(0), a);
+    CHECK_EQUAL(T(0) - a, -a);
+    CHECK_EQUAL(a - zero, a);
+    CHECK_EQUAL(zero - a, -a);
+    CHECK_EQUAL(a - a, zero);
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE( test_multiplication, T, all_test_types )
+template <class T>
+void test_multiplication()
 {
     polynomial<T> const a(d3a.begin(), d3a.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
@@ -421,38 +488,62 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_multiplication, T, all_test_types )
     std::array<T, 7> const d3a_sq = {{100, -120, -44, 108, -20, -24, 9}};
     polynomial<T> const a_sq(d3a_sq.begin(), d3a_sq.end());
 
-    BOOST_CHECK_EQUAL(a * T(0), zero);
-    BOOST_CHECK_EQUAL(a * zero, zero);
-    BOOST_CHECK_EQUAL(zero * T(0), zero);
-    BOOST_CHECK_EQUAL(zero * zero, zero);
-    BOOST_CHECK_EQUAL(a * b, b * a);
+    CHECK_EQUAL(a * T(0), zero);
+    CHECK_EQUAL(a * zero, zero);
+    CHECK_EQUAL(zero * T(0), zero);
+    CHECK_EQUAL(zero * zero, zero);
+    CHECK_EQUAL(a * b, b * a);
     polynomial<T> aa(a);
     aa *= aa;
-    BOOST_CHECK_EQUAL(aa, a_sq);
-    BOOST_CHECK_EQUAL(aa, a * a);
+    CHECK_EQUAL(aa, a_sq);
+    CHECK_EQUAL(aa, a * a);
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE( test_arithmetic_relations, T, all_test_types )
+template <class T>
+void test_arithmetic_relations()
 {
     polynomial<T> const a(d8b.begin(), d8b.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
 
-    BOOST_CHECK_EQUAL(a * T(2), a + a);
-    BOOST_CHECK_EQUAL(a - b, -b + a);
-    BOOST_CHECK_EQUAL(a, (a * a) / a);
-    BOOST_CHECK_EQUAL(a, (a / a) * a);
+    CHECK_EQUAL(a * T(2), a + a);
+    CHECK_EQUAL(a - b, -b + a);
+    CHECK_EQUAL(a, (a * a) / a);
+    CHECK_EQUAL(a, (a / a) * a);
 }
 
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_non_integral_arithmetic_relations, T, non_integral_test_types )
+template <class T>
+void test_non_integral_arithmetic_relations()
 {
     polynomial<T> const a(d8b.begin(), d8b.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
 
-    BOOST_CHECK_EQUAL(a * T(0.5), a / T(2));
+    CHECK_EQUAL(a * T(0.5), a / T(2));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_cont_and_pp, T, integral_test_types)
+template <class T>
+void test_integral_scalar_remainder()
+{
+    polynomial<T> const a{T(3), T(-7), T(5), T(0), T(4)};
+    polynomial<T> const r{T(1), T(-1), T(1)};
+
+    CHECK_EQUAL(a % T(2), r);
+    CHECK_EQUAL((a / T(2)) * T(2) + a % T(2), a);
+    CHECK_EQUAL(a % T(1), polynomial<T>());
+
+    polynomial<T> b = a;
+    b %= T(2);
+    CHECK_EQUAL(b, r);
+
+    // Divisor aliasing a coefficient, and a divisor wider than T:
+    polynomial<T> c{T(2), T(3)};
+    c %= c[0];
+    CHECK_EQUAL(c, (polynomial<T>{T(0), T(1)}));
+    CHECK_EQUAL(polynomial<T>{T(3)} % (static_cast<long long>(1) << 40), polynomial<T>{T(3)});
+}
+
+template <class T>
+void test_cont_and_pp()
 {
     std::array<polynomial<T>, 4> const q={{
         polynomial<T>(d8.begin(), d8.end()),
@@ -462,16 +553,17 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_cont_and_pp, T, integral_test_types)
     }};
     for (std::size_t i = 0; i < q.size(); i++)
     {
-        BOOST_CHECK_EQUAL(q[i], content(q[i]) * primitive_part(q[i]));
-        BOOST_CHECK_EQUAL(primitive_part(q[i]), primitive_part(q[i], content(q[i])));
+        CHECK_EQUAL(q[i], content(q[i]) * primitive_part(q[i]));
+        CHECK_EQUAL(primitive_part(q[i]), primitive_part(q[i], content(q[i])));
     }
 
     polynomial<T> const zero;
-    BOOST_CHECK_EQUAL(primitive_part(zero), zero);
-    BOOST_CHECK_EQUAL(content(zero), T(0));
+    CHECK_EQUAL(primitive_part(zero), zero);
+    CHECK_EQUAL(content(zero), T(0));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE( test_self_multiply_assign, T, all_test_types )
+template <class T>
+void test_self_multiply_assign()
 {
     polynomial<T> a(d3a.begin(), d3a.end());
     polynomial<T> const b(a);
@@ -480,64 +572,68 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_self_multiply_assign, T, all_test_types )
 
     a *= a;
 
-    BOOST_CHECK_EQUAL(a, b*b);
-    BOOST_CHECK_EQUAL(a, asq);
+    CHECK_EQUAL(a, b*b);
+    CHECK_EQUAL(a, asq);
 
     a *= a;
 
-    BOOST_CHECK_EQUAL(a, b*b*b*b);
+    CHECK_EQUAL(a, b*b*b*b);
 }
 
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_right_shift, T, all_test_types )
+template <class T>
+void test_right_shift()
 {
     polynomial<T> a(d8b.begin(), d8b.end());
     polynomial<T> const aa(a);
     polynomial<T> const b(d8b.begin() + 1, d8b.end());
     polynomial<T> const c(d8b.begin() + 5, d8b.end());
     a >>= 0u;
-    BOOST_CHECK_EQUAL(a, aa);
+    CHECK_EQUAL(a, aa);
     a >>= 1u;
-    BOOST_CHECK_EQUAL(a, b);
+    CHECK_EQUAL(a, b);
     a = a >> 4u;
-    BOOST_CHECK_EQUAL(a, c);
+    CHECK_EQUAL(a, c);
 }
 
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_left_shift, T, all_test_types )
+template <class T>
+void test_left_shift()
 {
     polynomial<T> a(d0a.begin(), d0a.end());
     polynomial<T> const aa(a);
     polynomial<T> const b(d0a1.begin(), d0a1.end());
     polynomial<T> const c(d0a5.begin(), d0a5.end());
     a <<= 0u;
-    BOOST_CHECK_EQUAL(a, aa);
+    CHECK_EQUAL(a, aa);
     a <<= 1u;
-    BOOST_CHECK_EQUAL(a, b);
+    CHECK_EQUAL(a, b);
     a = a << 4u;
-    BOOST_CHECK_EQUAL(a, c);
+    CHECK_EQUAL(a, c);
     polynomial<T> zero;
     // Multiplying zero by x should still be zero.
     zero <<= 1u;
-    BOOST_CHECK_EQUAL(zero, zero_element(multiplies< polynomial<T> >()));
+    CHECK_EQUAL(zero, zero_element(multiplies< polynomial<T> >()));
 }
 
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_odd_even, T, all_test_types)
+template <class T>
+void test_odd_even()
 {
     polynomial<T> const zero;
-    BOOST_CHECK_EQUAL(odd(zero), false);
-    BOOST_CHECK_EQUAL(even(zero), true);
+    CHECK_EQUAL(odd(zero), false);
+    CHECK_EQUAL(even(zero), true);
     polynomial<T> const a(d0a.begin(), d0a.end());
-    BOOST_CHECK_EQUAL(odd(a), true);
-    BOOST_CHECK_EQUAL(even(a), false);
+    CHECK_EQUAL(odd(a), true);
+    CHECK_EQUAL(even(a), false);
     polynomial<T> const b(d0a1.begin(), d0a1.end());
-    BOOST_CHECK_EQUAL(odd(b), false);
-    BOOST_CHECK_EQUAL(even(b), true);
+    CHECK_EQUAL(odd(b), false);
+    CHECK_EQUAL(even(b), true);
 }
 
 // NOTE: Slightly unexpected: this unit test passes even when T = char.
-BOOST_AUTO_TEST_CASE_TEMPLATE( test_pow, T, all_test_types )
+template <class T>
+void test_pow()
 {
    if (std::numeric_limits<T>::digits < 32)
       return;   // Invokes undefined behaviour
@@ -549,71 +645,131 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_pow, T, all_test_types )
     polynomial<T> const asqr(d3a_sqr.begin(), d3a_sqr.end());
     polynomial<T> const acub(d3a_cub.begin(), d3a_cub.end());
 
-    BOOST_CHECK_EQUAL(pow(a, 0), one);
-    BOOST_CHECK_EQUAL(pow(a, 1), a);
-    BOOST_CHECK_EQUAL(pow(a, 2), asqr);
-    BOOST_CHECK_EQUAL(pow(a, 3), acub);
-    BOOST_CHECK_EQUAL(pow(a, 4), pow(asqr, 2));
-    BOOST_CHECK_EQUAL(pow(a, 5), asqr * acub);
-    BOOST_CHECK_EQUAL(pow(a, 6), pow(acub, 2));
-    BOOST_CHECK_EQUAL(pow(a, 7), acub * acub * a);
+    CHECK_EQUAL(pow(a, 0), one);
+    CHECK_EQUAL(pow(a, 1), a);
+    CHECK_EQUAL(pow(a, 2), asqr);
+    CHECK_EQUAL(pow(a, 3), acub);
+    CHECK_EQUAL(pow(a, 4), pow(asqr, 2));
+    CHECK_EQUAL(pow(a, 5), asqr * acub);
+    CHECK_EQUAL(pow(a, 6), pow(acub, 2));
+    CHECK_EQUAL(pow(a, 7), acub * acub * a);
 
-    BOOST_CHECK_THROW(pow(a, -1), std::domain_error);
-    BOOST_CHECK_EQUAL(pow(one, 137), one);
+    CHECK_THROW(pow(a, -1), std::domain_error);
+    CHECK_EQUAL(pow(one, 137), one);
 }
 
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_bool, T, all_test_types)
+template <class T>
+void test_bool()
 {
     polynomial<T> const zero;
     polynomial<T> const a(d0a.begin(), d0a.end());
-    BOOST_CHECK_EQUAL(bool(zero), false);
-    BOOST_CHECK_EQUAL(bool(a), true);
+    CHECK_EQUAL(bool(zero), false);
+    CHECK_EQUAL(bool(a), true);
 }
 
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_set_zero, T, all_test_types)
+template <class T>
+void test_set_zero()
 {
     polynomial<T> const zero;
     polynomial<T> a(d0a.begin(), d0a.end());
     a.set_zero();
-    BOOST_CHECK_EQUAL(a, zero);
+    CHECK_EQUAL(a, zero);
     a.set_zero(); // Ensure that setting zero to zero is a no-op.
-    BOOST_CHECK_EQUAL(a, zero);
+    CHECK_EQUAL(a, zero);
 }
 
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_leading_coefficient, T, all_test_types)
+template <class T>
+void test_leading_coefficient()
 {
     polynomial<T> const zero;
-    BOOST_CHECK_EQUAL(leading_coefficient(zero), T(0));
+    CHECK_EQUAL(leading_coefficient(zero), T(0));
     polynomial<T> a(d0a.begin(), d0a.end());
-    BOOST_CHECK_EQUAL(leading_coefficient(a), T(d0a.back()));
+    CHECK_EQUAL(leading_coefficient(a), T(d0a.back()));
 }
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_prime, T, all_test_types)
+template <class T>
+void test_prime()
 {
     std::vector<T> d{1,1,1,1,1};
     polynomial<T> p(std::move(d));
     polynomial<T> q = p.prime();
-    BOOST_CHECK_EQUAL(q(0), T(1));
+    CHECK_EQUAL(q(0), T(1));
 
     for (size_t i = 0; i < q.size(); ++i)
     {
-        BOOST_CHECK_EQUAL(q[i], i+1);
+        CHECK_EQUAL(q[i], static_cast<T>(i+1));
     }
 
     polynomial<T> P = p.integrate();
-    BOOST_CHECK_EQUAL(P(0), T(0));
+    CHECK_EQUAL(P(0), T(0));
     for (size_t i = 1; i < P.size(); ++i)
     {
-        BOOST_CHECK_EQUAL(P[i], 1/static_cast<T>(i));
+        CHECK_EQUAL(P[i], static_cast<T>(1/static_cast<T>(i)));
     }
 
     polynomial<T> empty;
     q = empty.prime();
-    BOOST_CHECK_EQUAL(q.size(), 0);
+    CHECK_EQUAL(q.size(), std::size_t(0));
 
 }
 #endif
+
+int main()
+{
+   trivial();
+#ifdef TEST1
+   test_construction();
+#endif
+#ifdef TEST1
+#ifdef BOOST_MATH_HAS_IS_CONST_ITERABLE
+   test_range_construction();
+#endif
+#endif
+#ifdef TEST1
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
+   test_initializer_list_construction();
+#endif
+#endif
+#ifdef TEST1
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
+   test_initializer_list_assignment();
+#endif
+#endif
+#ifdef TEST1
+   test_degree();
+#endif
+#ifdef TEST1
+   test_division_over_field();
+#endif
+#ifdef TEST1
+   test_division_over_ufd();
+#endif
+   boost::mpl::for_each<all_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_addition<typename decltype(t)::type>(); });
+   boost::mpl::for_each<all_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_subtraction<typename decltype(t)::type>(); });
+   boost::mpl::for_each<all_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_multiplication<typename decltype(t)::type>(); });
+   boost::mpl::for_each<all_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_arithmetic_relations<typename decltype(t)::type>(); });
+   boost::mpl::for_each<non_integral_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_non_integral_arithmetic_relations<typename decltype(t)::type>(); });
+   boost::mpl::for_each<integral_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_integral_scalar_remainder<typename decltype(t)::type>(); });
+   boost::mpl::for_each<integral_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_cont_and_pp<typename decltype(t)::type>(); });
+   boost::mpl::for_each<all_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_self_multiply_assign<typename decltype(t)::type>(); });
+   boost::mpl::for_each<all_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_right_shift<typename decltype(t)::type>(); });
+   boost::mpl::for_each<all_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_left_shift<typename decltype(t)::type>(); });
+   boost::mpl::for_each<all_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_odd_even<typename decltype(t)::type>(); });
+   boost::mpl::for_each<all_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_pow<typename decltype(t)::type>(); });
+   boost::mpl::for_each<all_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_bool<typename decltype(t)::type>(); });
+   boost::mpl::for_each<all_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_set_zero<typename decltype(t)::type>(); });
+   boost::mpl::for_each<all_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_leading_coefficient<typename decltype(t)::type>(); });
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
+   boost::mpl::for_each<all_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { test_prime<typename decltype(t)::type>(); });
+#endif
+   boost::mpl::for_each<mp_integral_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { gcd_interface<typename decltype(t)::type>(); });
+   boost::mpl::for_each<non_integral_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { gcd_float_interface<typename decltype(t)::type>(); });
+   boost::mpl::for_each<large_integral_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { Ex_8_3__1<typename decltype(t)::type>(); });
+   boost::mpl::for_each<large_integral_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { Ex_8_3__2<typename decltype(t)::type>(); });
+   boost::mpl::for_each<large_integral_test_types, boost::mpl::make_identity<boost::mpl::_1>>([](auto t) { trivial_int<typename decltype(t)::type>(); });
+   return boost::math::test::report_errors();
+}

@@ -6,25 +6,18 @@
 #ifndef BOOST_MATH_TEST_AUTODIFF_HPP
 #define BOOST_MATH_TEST_AUTODIFF_HPP
 
-#ifndef BOOST_TEST_MODULE
-#define BOOST_TEST_MODULE test_autodiff
-#endif
-
-#ifndef BOOST_ALLOW_DEPRECATED_HEADERS
-#define BOOST_ALLOW_DEPRECATED_HEADERS // artifact of sp_typeinfo.hpp inclusion from unit_test.hpp
-#endif
-
 #include <boost/math/tools/config.hpp>
 
 #include <boost/math/differentiation/autodiff.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/mp11/algorithm.hpp>
 #include <boost/mp11/function.hpp>
 #include <boost/mp11/integral.hpp>
 #include <boost/mp11/list.hpp>
 #include <boost/mp11/utility.hpp>
 #include <boost/range/irange.hpp>
-#include <boost/test/included/unit_test.hpp>
+#include "math_unit_test.hpp"
 
 #include <algorithm>
 #include <cfenv>
@@ -134,7 +127,7 @@ struct RandomSample {
 
   template <typename U, typename V>
   RandomSample(U start, V finish)
-      : rng_(std::random_device{}()),
+      : rng_(42),
         dist_(static_cast<distribution_param_t>(start),
               get_endpoint_t{}(finish)) {}
 
@@ -172,7 +165,7 @@ auto isNearZero(const T& t) noexcept -> typename std::enable_if<!diff::is_fvar<T
   using detail::fabs;
   using boost::math::fpclassify;
   using std::sqrt;
-  return fpclassify(fabs(t)) == FP_ZERO || fpclassify(fabs(t)) == FP_SUBNORMAL || boost::math::fpc::is_small(fabs(t), sqrt(std::numeric_limits<T>::epsilon()));
+  return fpclassify(fabs(t)) == FP_ZERO || fpclassify(fabs(t)) == FP_SUBNORMAL || fabs(t) <= sqrt(std::numeric_limits<T>::epsilon());
 }
 
 template<typename T>

@@ -23,7 +23,7 @@
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class T, class Policy>
 struct beta_inv_ab_t
@@ -32,8 +32,8 @@ struct beta_inv_ab_t
    BOOST_MATH_GPU_ENABLED T operator()(T a)
    {
       return invert ? 
-         p - boost::math::ibetac(swap_ab ? b : a, swap_ab ? a : b, z, Policy()) 
-         : boost::math::ibeta(swap_ab ? b : a, swap_ab ? a : b, z, Policy()) - p;
+         p - BOOST_MATH_NAMESPACE::ibetac(swap_ab ? b : a, swap_ab ? a : b, z, Policy()) 
+         : BOOST_MATH_NAMESPACE::ibeta(swap_ab ? b : a, swap_ab ? a : b, z, Policy()) - p;
    }
 private:
    T b, z, p;
@@ -54,7 +54,7 @@ BOOST_MATH_GPU_ENABLED T inverse_negative_binomial_cornish_fisher(T n, T sf, T s
    // kurtosis:
    T k = (6 - sf * (5+sfc)) / (n * (sfc));
    // Get the inverse of a std normal distribution:
-   T x = boost::math::erfc_inv(p > q ? 2 * q : 2 * p, pol) * constants::root_two<T>();
+   T x = BOOST_MATH_NAMESPACE::erfc_inv(p > q ? 2 * q : 2 * p, pol) * constants::root_two<T>();
    // Set the sign:
    if(p < 0.5)
       x = -x;
@@ -153,8 +153,8 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_ab_imp(const T& b, const T& z, const T& p, co
    //
    // Max iterations permitted:
    //
-   boost::math::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
-   boost::math::pair<T, T> r = bracket_and_solve_root(f, guess, factor, swap_ab ? true : false, tol, max_iter, pol);
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::pair<T, T> r = bracket_and_solve_root(f, guess, factor, swap_ab ? true : false, tol, max_iter, pol);
    if(max_iter >= policies::get_max_root_iterations<Policy>())
       return policies::raise_evaluation_error<T>("boost::math::ibeta_invab_imp<%1%>(%1%,%1%,%1%)", "Unable to locate the root within a reasonable number of iterations, closest approximation so far was %1%", r.first, pol);
    return (r.first + r.second) / 2;
@@ -298,32 +298,31 @@ template <class RT1, class RT2, class RT3>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type 
          ibeta_inva(RT1 b, RT2 x, RT3 p)
 {
-   return boost::math::ibeta_inva(b, x, p, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::ibeta_inva(b, x, p, policies::policy<>());
 }
 
 template <class RT1, class RT2, class RT3>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type 
          ibetac_inva(RT1 b, RT2 x, RT3 q)
 {
-   return boost::math::ibetac_inva(b, x, q, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::ibetac_inva(b, x, q, policies::policy<>());
 }
 
 template <class RT1, class RT2, class RT3>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type 
          ibeta_invb(RT1 a, RT2 x, RT3 p)
 {
-   return boost::math::ibeta_invb(a, x, p, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::ibeta_invb(a, x, p, policies::policy<>());
 }
 
 template <class RT1, class RT2, class RT3>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<RT1, RT2, RT3>::type 
          ibetac_invb(RT1 a, RT2 x, RT3 q)
 {
-   return boost::math::ibetac_invb(a, x, q, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::ibetac_invb(a, x, q, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SP_DETAIL_BETA_INV_AB
 

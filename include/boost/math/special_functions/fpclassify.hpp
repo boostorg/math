@@ -19,9 +19,11 @@
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/detail/fp_traits.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <type_traits>
 #include <cmath>
+#endif
 
 /*!
   \file fpclassify.hpp
@@ -84,7 +86,7 @@ is used.
 
 #ifdef BOOST_MATH_HAS_GPU_SUPPORT
 
-namespace boost { namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 template<> BOOST_MATH_GPU_ENABLED inline bool (isnan)(float x) { return x != x; }
 template<> BOOST_MATH_GPU_ENABLED inline bool (isnan)(double x) { return x != x; }
@@ -108,7 +110,7 @@ template<> BOOST_MATH_GPU_ENABLED inline bool (isnormal)(double x)
 
 template<> BOOST_MATH_GPU_ENABLED inline int (fpclassify)(float t)
 {
-   if((boost::math::isnan)(t))
+   if((BOOST_MATH_NAMESPACE::isnan)(t))
       return FP_NAN;
    // std::fabs broken on a few systems especially for long long!!!!
    float at = (t < 0.0f) ? -t : t;
@@ -132,7 +134,7 @@ template<> BOOST_MATH_GPU_ENABLED inline int (fpclassify)(float t)
 
 template<> BOOST_MATH_GPU_ENABLED inline int (fpclassify)(double t)
 {
-   if((boost::math::isnan)(t))
+   if((BOOST_MATH_NAMESPACE::isnan)(t))
       return FP_NAN;
    // std::fabs broken on a few systems especially for long long!!!!
    double at = (t < 0.0) ? -t : t;
@@ -157,7 +159,9 @@ template<> BOOST_MATH_GPU_ENABLED inline int (fpclassify)(double t)
 #else
 
 #if defined(_MSC_VER) || defined(BOOST_BORLANDC)
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cfloat>
+#endif
 #endif
 #ifdef BOOST_MATH_USE_FLOAT128
 #ifdef __has_include
@@ -172,14 +176,12 @@ template<> BOOST_MATH_GPU_ENABLED inline int (fpclassify)(double t)
   namespace std{ using ::abs; using ::fabs; }
 #endif
 
-namespace boost{
-
 //
 // This must not be located in any namespace under boost::math
 // otherwise we can get into an infinite loop if isnan is
 // a #define for "isnan" !
 //
-namespace math_detail{
+BOOST_MATH_DETAIL_NAMESPACE_BEGIN
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -217,13 +219,13 @@ inline bool is_nan_helper(__float128 f, const std::false_type&) { return ::isnan
 inline bool is_nan_helper(__float128 f, const std::true_type&) { return std::isnan(static_cast<double>(f)); }
 inline bool is_nan_helper(__float128 f, const std::false_type&) { return std::isnan(static_cast<double>(f)); }
 #else
-inline bool is_nan_helper(__float128 f, const std::true_type&) { return boost::math::isnan(static_cast<double>(f)); }
-inline bool is_nan_helper(__float128 f, const std::false_type&) { return boost::math::isnan(static_cast<double>(f)); }
+inline bool is_nan_helper(__float128 f, const std::true_type&) { return BOOST_MATH_NAMESPACE::isnan(static_cast<double>(f)); }
+inline bool is_nan_helper(__float128 f, const std::false_type&) { return BOOST_MATH_NAMESPACE::isnan(static_cast<double>(f)); }
 #endif
 #endif
-}
+BOOST_MATH_DETAIL_NAMESPACE_END
 
-namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail{
 
@@ -242,13 +244,13 @@ inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const generic_tag<true>&)
 
    // whenever possible check for Nan's first:
 #if defined(BOOST_HAS_FPCLASSIFY)  && !defined(BOOST_MATH_DISABLE_STD_FPCLASSIFY)
-   if(::boost::math_detail::is_nan_helper(t, typename std::is_floating_point<T>::type()))
+   if(BOOST_MATH_DETAIL_NAMESPACE::is_nan_helper(t, typename std::is_floating_point<T>::type()))
       return FP_NAN;  // LCOV_EXCL_LINE only called in UDT contexts (excluded from coverage checks).
 #elif defined(isnan)
-   if(boost::math_detail::is_nan_helper(t, typename std::is_floating_point<T>::type()))
+   if(BOOST_MATH_DETAIL_NAMESPACE::is_nan_helper(t, typename std::is_floating_point<T>::type()))
       return FP_NAN;
 #elif defined(_MSC_VER) || defined(BOOST_BORLANDC)
-   if(::_isnan(boost::math::tools::real_cast<double>(t)))
+   if(::_isnan(BOOST_MATH_NAMESPACE::tools::real_cast<double>(t)))
       return FP_NAN;
 #endif
    // std::fabs broken on a few systems especially for long long!!!!
@@ -346,13 +348,13 @@ int fpclassify_imp BOOST_NO_MACRO_EXPAND(T x, ieee_copy_leading_bits_tag)
 #if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && (defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY) || defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS))
 inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
 {
-   return boost::math::detail::fpclassify_imp(t, generic_tag<true>());
+   return BOOST_MATH_NAMESPACE::detail::fpclassify_imp(t, generic_tag<true>());
 }
 #endif
 
 }  // namespace detail
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline int fpclassify BOOST_NO_MACRO_EXPAND(T t)
 {
    typedef typename detail::fp_traits<T>::type traits;
@@ -425,7 +427,7 @@ namespace detail {
 #if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
 inline bool isfinite_impl BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
 {
-   return boost::math::detail::isfinite_impl(t, generic_tag<true>());
+   return BOOST_MATH_NAMESPACE::detail::isfinite_impl(t, generic_tag<true>());
 }
 #endif
 
@@ -496,7 +498,7 @@ namespace detail {
 #if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
 inline bool isnormal_impl BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
 {
-   return boost::math::detail::isnormal_impl(t, generic_tag<true>());
+   return BOOST_MATH_NAMESPACE::detail::isnormal_impl(t, generic_tag<true>());
 }
 #endif
 
@@ -585,7 +587,7 @@ namespace detail {
 #if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
 inline bool isinf_impl BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
 {
-   return boost::math::detail::isinf_impl(t, generic_tag<true>());
+   return BOOST_MATH_NAMESPACE::detail::isinf_impl(t, generic_tag<true>());
 }
 #endif
 
@@ -691,9 +693,9 @@ inline bool (isnan)(T x)
 }
 
 #ifdef isnan
-template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
-template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
-template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return BOOST_MATH_DETAIL_NAMESPACE::is_nan_helper(t, std::true_type()); }
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return BOOST_MATH_DETAIL_NAMESPACE::is_nan_helper(t, std::true_type()); }
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return BOOST_MATH_DETAIL_NAMESPACE::is_nan_helper(t, std::true_type()); }
 #elif defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
 template<>
 inline bool (isnan)(long double x)
@@ -714,69 +716,67 @@ inline bool (isnan)(__float128 x)
 
 #endif
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #else // Special handling generally using the CUDA library
 
 #include <boost/math/tools/type_traits.hpp>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
-template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>, bool> = true>
+BOOST_MATH_EXPORT template <typename T, BOOST_MATH_NAMESPACE::enable_if_t<BOOST_MATH_NAMESPACE::is_integral_v<T>, bool> = true>
 BOOST_MATH_GPU_ENABLED inline bool isnan(T x)
 {
    return false;
 }
 
-template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>, bool> = true>
+BOOST_MATH_EXPORT template <typename T, BOOST_MATH_NAMESPACE::enable_if_t<!BOOST_MATH_NAMESPACE::is_integral_v<T>, bool> = true>
 BOOST_MATH_GPU_ENABLED inline bool isnan(T x)
 {
    return ::isnan(x);
 }
 
-template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>, bool> = true>
+BOOST_MATH_EXPORT template <typename T, BOOST_MATH_NAMESPACE::enable_if_t<BOOST_MATH_NAMESPACE::is_integral_v<T>, bool> = true>
 BOOST_MATH_GPU_ENABLED inline bool isinf(T x)
 {
    return false;
 }
 
-template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>, bool> = true>
+BOOST_MATH_EXPORT template <typename T, BOOST_MATH_NAMESPACE::enable_if_t<!BOOST_MATH_NAMESPACE::is_integral_v<T>, bool> = true>
 BOOST_MATH_GPU_ENABLED inline bool isinf(T x)
 {
    return ::isinf(x);
 }
 
-template <typename T, boost::math::enable_if_t<boost::math::is_integral_v<T>, bool> = true>
+BOOST_MATH_EXPORT template <typename T, BOOST_MATH_NAMESPACE::enable_if_t<BOOST_MATH_NAMESPACE::is_integral_v<T>, bool> = true>
 BOOST_MATH_GPU_ENABLED inline bool isfinite(T x)
 {
    return true;
 }
 
-template <typename T, boost::math::enable_if_t<!boost::math::is_integral_v<T>, bool> = true>
+BOOST_MATH_EXPORT template <typename T, BOOST_MATH_NAMESPACE::enable_if_t<!BOOST_MATH_NAMESPACE::is_integral_v<T>, bool> = true>
 BOOST_MATH_GPU_ENABLED inline bool isfinite(T x)
 {
    return ::isfinite(x);
 }
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED inline bool isnormal(T x)
 {
    return x != static_cast<T>(0) && x != static_cast<T>(-0) && 
-            !boost::math::isnan(x) && 
-            !boost::math::isinf(x);
+            !BOOST_MATH_NAMESPACE::isnan(x) && 
+            !BOOST_MATH_NAMESPACE::isinf(x);
 }
 
 // We skip the check for FP_SUBNORMAL since they are not supported on these platforms
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED inline int fpclassify(T x)
 {
-   if (boost::math::isnan(x))
+   if (BOOST_MATH_NAMESPACE::isnan(x))
    {
       return BOOST_MATH_FP_NAN;
    }
-   else if (boost::math::isinf(x))
+   else if (BOOST_MATH_NAMESPACE::isinf(x))
    {
       return BOOST_MATH_FP_INFINITE;
    }
@@ -788,8 +788,7 @@ BOOST_MATH_GPU_ENABLED inline int fpclassify(T x)
    return BOOST_MATH_FP_NORMAL;
 }
 
-} // Namespace math
-} // Namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HAS_NVRTC
 

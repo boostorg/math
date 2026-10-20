@@ -27,7 +27,7 @@
 #pragma GCC system_header
 #endif
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 //
 // These need forward declaring to keep GCC happy:
@@ -41,7 +41,7 @@ BOOST_MATH_GPU_ENABLED T gamma_imp(T z, const Policy& pol, const lanczos::undefi
 // lgamma for small arguments:
 //
 template <class T, class Policy, class Lanczos>
-BOOST_MATH_GPU_ENABLED T lgamma_small_imp(T z, T zm1, T zm2, const boost::math::integral_constant<int, 64>&, const Policy& /* l */, const Lanczos&)
+BOOST_MATH_GPU_ENABLED T lgamma_small_imp(T z, T zm1, T zm2, const BOOST_MATH_NAMESPACE::integral_constant<int, 64>&, const Policy& /* l */, const Lanczos&)
 {
    // This version uses rational approximations for small
    // values of z accurate enough for 64-bit mantissas
@@ -249,7 +249,7 @@ BOOST_MATH_GPU_ENABLED T lgamma_small_imp(T z, T zm1, T zm2, const boost::math::
 // LCOV_EXCL_START
 //
 template <class T, class Policy, class Lanczos>
-T lgamma_small_imp(T z, T zm1, T zm2, const boost::math::integral_constant<int, 113>&, const Policy& /* l */, const Lanczos&)
+T lgamma_small_imp(T z, T zm1, T zm2, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&, const Policy& /* l */, const Lanczos&)
 {
    //
    // This version uses rational approximations for small
@@ -512,7 +512,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const boost::math::integral_constant<int, 
 // LCOV_EXCL_STOP
 
 template <class T, class Policy, class Lanczos>
-BOOST_MATH_GPU_ENABLED T lgamma_small_imp(T z, T zm1, T zm2, const boost::math::integral_constant<int, 0>&, const Policy& pol, const Lanczos& l)
+BOOST_MATH_GPU_ENABLED T lgamma_small_imp(T z, T zm1, T zm2, const BOOST_MATH_NAMESPACE::integral_constant<int, 0>&, const Policy& pol, const Lanczos& l)
 {
    //
    // No rational approximations are available because either
@@ -546,24 +546,24 @@ BOOST_MATH_GPU_ENABLED T lgamma_small_imp(T z, T zm1, T zm2, const boost::math::
    {
       // special case near 2:
       T dz = zm2;
-      result = dz * log((z + lanczos_g_near_1_and_2(l) - T(0.5)) / boost::math::constants::e<T>());
-      result += boost::math::log1p(dz / (lanczos_g_near_1_and_2(l) + T(1.5)), pol) * T(1.5);
-      result += boost::math::log1p(Lanczos::lanczos_sum_near_2(dz), pol);
+      result = dz * log((z + lanczos_g_near_1_and_2(l) - T(0.5)) / BOOST_MATH_NAMESPACE::constants::e<T>());
+      result += BOOST_MATH_NAMESPACE::log1p(dz / (lanczos_g_near_1_and_2(l) + T(1.5)), pol) * T(1.5);
+      result += BOOST_MATH_NAMESPACE::log1p(Lanczos::lanczos_sum_near_2(dz), pol);
    }
    else
    {
       // special case near 1:
       T dz = zm1;
-      result = dz * log((z + lanczos_g_near_1_and_2(l) - T(0.5)) / boost::math::constants::e<T>());
-      result += boost::math::log1p(dz / (lanczos_g_near_1_and_2(l) + T(0.5)), pol) / 2;
-      result += boost::math::log1p(Lanczos::lanczos_sum_near_1(dz), pol);
+      result = dz * log((z + lanczos_g_near_1_and_2(l) - T(0.5)) / BOOST_MATH_NAMESPACE::constants::e<T>());
+      result += BOOST_MATH_NAMESPACE::log1p(dz / (lanczos_g_near_1_and_2(l) + T(0.5)), pol) / 2;
+      result += BOOST_MATH_NAMESPACE::log1p(Lanczos::lanczos_sum_near_1(dz), pol);
    }
    return result;
 }
 
 #endif // BOOST_MATH_HAS_GPU_SUPPORT
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_DETAIL_LGAMMA_SMALL
 

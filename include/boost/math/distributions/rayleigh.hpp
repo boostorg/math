@@ -23,14 +23,14 @@
 # pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail
 { // Error checks:
   template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED inline bool verify_sigma(const char* function, RealType sigma, RealType* presult, const Policy& pol)
   {
-     if((sigma <= 0) || (!(boost::math::isfinite)(sigma)))
+     if((sigma <= 0) || (!(BOOST_MATH_NAMESPACE::isfinite)(sigma)))
      {
         *presult = policies::raise_domain_error<RealType>(
            function,
@@ -43,7 +43,7 @@ namespace detail
   template <class RealType, class Policy>
   BOOST_MATH_GPU_ENABLED inline bool verify_rayleigh_x(const char* function, RealType x, RealType* presult, const Policy& pol)
   {
-     if((x < 0) || (boost::math::isnan)(x))
+     if((x < 0) || (BOOST_MATH_NAMESPACE::isnan)(x))
      {
         *presult = policies::raise_domain_error<RealType>(
            function,
@@ -54,7 +54,7 @@ namespace detail
   } // bool verify_rayleigh_x
 } // namespace detail
 
-template <class RealType = double, class Policy = policies::policy<> >
+BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
 class rayleigh_distribution
 {
 public:
@@ -77,29 +77,29 @@ private:
    RealType m_sigma;
 }; // class rayleigh_distribution
 
-using rayleigh = rayleigh_distribution<double>;
+BOOST_MATH_EXPORT using rayleigh = rayleigh_distribution<double>;
 
 #ifdef __cpp_deduction_guides
-template <class RealType>
-rayleigh_distribution(RealType)->rayleigh_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+BOOST_MATH_EXPORT template <class RealType>
+rayleigh_distribution(RealType)->rayleigh_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 #endif
 
-template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const rayleigh_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const rayleigh_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
-   using boost::math::tools::max_value;
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), boost::math::numeric_limits<RealType>::has_infinity ? boost::math::numeric_limits<RealType>::infinity() : max_value<RealType>());
+   using BOOST_MATH_NAMESPACE::tools::max_value;
+   return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), BOOST_MATH_NAMESPACE::numeric_limits<RealType>::has_infinity ? BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity() : max_value<RealType>());
 }
 
-template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const rayleigh_distribution<RealType, Policy>& /*dist*/)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const rayleigh_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-   using boost::math::tools::max_value;
-   return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
+   using BOOST_MATH_NAMESPACE::tools::max_value;
+   return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0),  max_value<RealType>());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType pdf(const rayleigh_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std function exp.
@@ -115,7 +115,7 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const rayleigh_distribution<RealType,
    {
       return result;
    }
-   if((boost::math::isinf)(x))
+   if((BOOST_MATH_NAMESPACE::isinf)(x))
    {
       return 0;
    }
@@ -124,13 +124,13 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const rayleigh_distribution<RealType,
    return result;
 } // pdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logpdf(const rayleigh_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std function exp.
 
    const RealType sigma = dist.sigma();
-   RealType result = -boost::math::numeric_limits<RealType>::infinity();
+   RealType result = -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
    constexpr auto function = "boost::math::logpdf(const rayleigh_distribution<%1%>&, %1%)";
 
    if(false == detail::verify_sigma(function, sigma, &result, Policy()))
@@ -141,7 +141,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const rayleigh_distribution<RealTy
    {
       return result;
    }
-   if((boost::math::isinf)(x))
+   if((BOOST_MATH_NAMESPACE::isinf)(x))
    {
       return result;
    }
@@ -150,7 +150,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const rayleigh_distribution<RealTy
    return result;
 } // logpdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const rayleigh_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -166,11 +166,11 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const rayleigh_distribution<RealType,
    {
       return result;
    }
-   result = -boost::math::expm1(-x * x / ( 2 * sigma * sigma), Policy());
+   result = -BOOST_MATH_NAMESPACE::expm1(-x * x / ( 2 * sigma * sigma), Policy());
    return result;
 } // cdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logcdf(const rayleigh_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -180,17 +180,17 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const rayleigh_distribution<RealTy
    constexpr auto function = "boost::math::logcdf(const rayleigh_distribution<%1%>&, %1%)";
    if(false == detail::verify_sigma(function, sigma, &result, Policy()))
    {
-      return -boost::math::numeric_limits<RealType>::infinity();
+      return -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
    }
    if(false == detail::verify_rayleigh_x(function, x, &result, Policy()))
    {
-      return -boost::math::numeric_limits<RealType>::infinity();
+      return -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
    }
    result = log1p(-exp(-x * x / ( 2 * sigma * sigma)), Policy());   
    return result;
 } // logcdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const rayleigh_distribution<RealType, Policy>& dist, const RealType& p)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -211,11 +211,11 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const rayleigh_distribution<Real
    {
      return policies::raise_overflow_error<RealType>(function, 0, Policy());
    }
-   result = sqrt(-2 * sigma * sigma * boost::math::log1p(-p, Policy()));
+   result = sqrt(-2 * sigma * sigma * BOOST_MATH_NAMESPACE::log1p(-p, Policy()));
    return result;
 } // quantile
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<rayleigh_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -240,7 +240,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<rayleigh_dis
    return result;
 } // cdf complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<rayleigh_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -250,12 +250,12 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<rayleigh_
    constexpr auto function = "boost::math::logcdf(const rayleigh_distribution<%1%>&, %1%)";
    if(false == detail::verify_sigma(function, sigma, &result, Policy()))
    {
-      return -boost::math::numeric_limits<RealType>::infinity();
+      return -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
    }
    RealType x = c.param;
    if(false == detail::verify_rayleigh_x(function, x, &result, Policy()))
    {
-      return -boost::math::numeric_limits<RealType>::infinity();
+      return -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
    }
    RealType ea = x * x / (2 * sigma * sigma);
    // Fix for VC11/12 x64 bug in exp(float):
@@ -265,7 +265,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<rayleigh_
    return result;
 } // logcdf complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<rayleigh_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING // for ADL of std functions, log & sqrt.
@@ -294,7 +294,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<rayleig
    return result;
 } // quantile complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mean(const rayleigh_distribution<RealType, Policy>& dist)
 {
    RealType result = 0;
@@ -304,11 +304,11 @@ BOOST_MATH_GPU_ENABLED inline RealType mean(const rayleigh_distribution<RealType
    {
       return result;
    }
-   using boost::math::constants::root_half_pi;
+   using BOOST_MATH_NAMESPACE::constants::root_half_pi;
    return sigma * root_half_pi<RealType>();
 } // mean
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType variance(const rayleigh_distribution<RealType, Policy>& dist)
 {
    RealType result = 0;
@@ -318,24 +318,24 @@ BOOST_MATH_GPU_ENABLED inline RealType variance(const rayleigh_distribution<Real
    {
       return result;
    }
-   using boost::math::constants::four_minus_pi;
+   using BOOST_MATH_NAMESPACE::constants::four_minus_pi;
    return four_minus_pi<RealType>() * sigma * sigma / 2;
 } // variance
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mode(const rayleigh_distribution<RealType, Policy>& dist)
 {
    return dist.sigma();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType median(const rayleigh_distribution<RealType, Policy>& dist)
 {
-   using boost::math::constants::root_ln_four;
+   using BOOST_MATH_NAMESPACE::constants::root_ln_four;
    return root_ln_four<RealType>() * dist.sigma();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType skewness(const rayleigh_distribution<RealType, Policy>& /*dist*/)
 {
   return static_cast<RealType>(0.63111065781893713819189935154422777984404221106391L);
@@ -343,7 +343,7 @@ BOOST_MATH_GPU_ENABLED inline RealType skewness(const rayleigh_distribution<Real
   // 2 * sqrt(pi) * (pi-3) / pow(4, 2/3) - pi
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const rayleigh_distribution<RealType, Policy>& /*dist*/)
 {
   return static_cast<RealType>(3.2450893006876380628486604106197544154170667057995L);
@@ -351,7 +351,7 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const rayleigh_distribution<Real
   // 3 - (6*pi*pi - 24*pi + 16) / pow(4-pi, 2)
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const rayleigh_distribution<RealType, Policy>& /*dist*/)
 {
   return static_cast<RealType>(0.2450893006876380628486604106197544154170667057995L);
@@ -359,15 +359,14 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const rayleigh_distributi
   // -(6*pi*pi - 24*pi + 16) / pow(4-pi,2)
 } // kurtosis_excess
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType entropy(const rayleigh_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING
    return 1 + log(dist.sigma()*constants::one_div_root_two<RealType>()) + constants::euler<RealType>()/2;
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #ifdef _MSC_VER
 # pragma warning(pop)

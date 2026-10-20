@@ -6,8 +6,9 @@
 #ifndef REVERSE_MODE_AUTODIFF_COMPARISON_OPERATOR_OVERLOADS_HPP
 #define REVERSE_MODE_AUTODIFF_COMPARISON_OPERATOR_OVERLOADS_HPP
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_expression_template_base.hpp>
-namespace boost {
-namespace math {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {
 template<typename RealType, size_t DerivativeOrder1, size_t DerivativeOrder2, class LhsExpr, class RhsExpr>
@@ -162,6 +163,5 @@ bool operator>=(const RealType2 &lhs, const expression<RealType1, DerivativeOrde
 }
 } // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif // REVERSE_MODE_AUTODIFF_COMPARISON_OPERATOR_OVERLOADS_HPP

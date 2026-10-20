@@ -89,14 +89,17 @@
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
 #include <boost/math/tools/roots.hpp> // for root finding.
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
+#endif
 
-namespace boost
-{
-  namespace math
-  {
+#ifndef BOOST_MATH_HAS_NVRTC
+#include <boost/math/distributions/detail/entropy.hpp>
+#endif
 
-     template <class RealType, class Policy>
+BOOST_MATH_NAMESPACE_BEGIN
+
+     BOOST_MATH_EXPORT template <class RealType, class Policy>
      class binomial_distribution;
 
      namespace binomial_detail{
@@ -104,7 +107,7 @@ namespace boost
         template <class RealType, class Policy>
         BOOST_MATH_CUDA_ENABLED inline bool check_N(const char* function, const RealType& N, RealType* result, const Policy& pol)
         {
-           if((N < 0) || !(boost::math::isfinite)(N))
+           if((N < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(N))
            {
                *result = policies::raise_domain_error<RealType>(
                   function,
@@ -116,7 +119,7 @@ namespace boost
         template <class RealType, class Policy>
         BOOST_MATH_CUDA_ENABLED inline bool check_success_fraction(const char* function, const RealType& p, RealType* result, const Policy& pol)
         {
-           if((p < 0) || (p > 1) || !(boost::math::isfinite)(p))
+           if((p < 0) || (p > 1) || !(BOOST_MATH_NAMESPACE::isfinite)(p))
            {
                *result = policies::raise_domain_error<RealType>(
                   function,
@@ -138,7 +141,7 @@ namespace boost
         {
            if(check_dist(function, N, p, result, pol) == false)
               return false;
-           if((k < 0) || !(boost::math::isfinite)(k))
+           if((k < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(k))
            {
                *result = policies::raise_domain_error<RealType>(
                   function,
@@ -175,7 +178,7 @@ namespace boost
             // kurtosis:
             // T k = (1 - 6 * sf * (1 - sf) ) / (n * sf * (1 - sf));
             // Get the inverse of a std normal distribution:
-            T x = boost::math::erfc_inv(p > q ? 2 * q : 2 * p, pol) * constants::root_two<T>();
+            T x = BOOST_MATH_NAMESPACE::erfc_inv(p > q ? 2 * q : 2 * p, pol) * constants::root_two<T>();
             // Set the sign:
             if(p < 0.5)
                x = -x;
@@ -231,8 +234,8 @@ namespace boost
            // so n is the most sensible answer here:
            return trials;
         }
-        if (p <= pow(1 - success_fraction, trials))
-        { // p <= pdf(dist, 0) == cdf(dist, 0)
+        if (comp ? (q >= cdf(complement(dist, RealType(0)))) : (p <= cdf(dist, RealType(0))))
+        { // Compare with the cdf itself, not pow(1 - p, n), so quantile(cdf(0)) round-trips.
           return 0; // So the only reasonable result is zero.
         } // And root finder would fail otherwise.
 
@@ -274,7 +277,7 @@ namespace boost
 
      }
 
-    template <class RealType = double, class Policy = policies::policy<> >
+    BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
     class binomial_distribution
     {
     public:
@@ -408,45 +411,45 @@ namespace boost
         RealType m_p; // success_fraction
       }; // template <class RealType, class Policy> class binomial_distribution
 
-      typedef binomial_distribution<> binomial;
+      BOOST_MATH_EXPORT typedef binomial_distribution<> binomial;
       // typedef binomial_distribution<double> binomial;
       // IS now included since no longer a name clash with function binomial.
       //typedef binomial_distribution<double> binomial; // Reserved name of type double.
 
       #ifdef __cpp_deduction_guides
-      template <class RealType>
-      binomial_distribution(RealType)->binomial_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-      template <class RealType>
-      binomial_distribution(RealType,RealType)->binomial_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+      BOOST_MATH_EXPORT template <class RealType>
+      binomial_distribution(RealType)->binomial_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
+      BOOST_MATH_EXPORT template <class RealType>
+      binomial_distribution(RealType,RealType)->binomial_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
       #endif
 
-      template <class RealType, class Policy>
-      BOOST_MATH_CUDA_ENABLED const boost::math::pair<RealType, RealType> range(const binomial_distribution<RealType, Policy>& dist)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_CUDA_ENABLED const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const binomial_distribution<RealType, Policy>& dist)
       { // Range of permissible values for random variable k.
-        using boost::math::tools::max_value;
-        return boost::math::pair<RealType, RealType>(static_cast<RealType>(0), dist.trials());
+        using BOOST_MATH_NAMESPACE::tools::max_value;
+        return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0), dist.trials());
       }
 
-      template <class RealType, class Policy>
-      BOOST_MATH_CUDA_ENABLED const boost::math::pair<RealType, RealType> support(const binomial_distribution<RealType, Policy>& dist)
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_CUDA_ENABLED const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const binomial_distribution<RealType, Policy>& dist)
       { // Range of supported values for random variable k.
         // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-        return boost::math::pair<RealType, RealType>(static_cast<RealType>(0),  dist.trials());
+        return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(static_cast<RealType>(0),  dist.trials());
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_CUDA_ENABLED inline RealType mean(const binomial_distribution<RealType, Policy>& dist)
       { // Mean of Binomial distribution = np.
         return  dist.trials() * dist.success_fraction();
       } // mean
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_CUDA_ENABLED inline RealType variance(const binomial_distribution<RealType, Policy>& dist)
       { // Variance of Binomial distribution = np(1-p).
         return  dist.trials() * dist.success_fraction() * (1 - dist.success_fraction());
       } // variance
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_CUDA_ENABLED RealType pdf(const binomial_distribution<RealType, Policy>& dist, const RealType& k)
       { // Probability Density/Mass Function.
         BOOST_FPU_EXCEPTION_GUARD
@@ -497,12 +500,12 @@ namespace boost
         //           = p^k (1-p)^(n-k) / (beta(k+1, n-k+1) * (n+1))
         //           = ibeta_derivative(k+1, n-k+1, p) / (n+1)
         //
-        using boost::math::ibeta_derivative; // a, b, x
+        using BOOST_MATH_NAMESPACE::ibeta_derivative; // a, b, x
         return ibeta_derivative(k+1, n-k+1, dist.success_fraction(), Policy()) / (n+1);
 
       } // pdf
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_CUDA_ENABLED inline RealType cdf(const binomial_distribution<RealType, Policy>& dist, const RealType& k)
       { // Cumulative Distribution Function Binomial.
         // The random variate k is the number of successes in n trials.
@@ -574,7 +577,7 @@ namespace boost
         return ibetac(k + 1, n - k, p, Policy());
       } // binomial cdf
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_CUDA_ENABLED inline RealType cdf(const complemented2_type<binomial_distribution<RealType, Policy>, RealType>& c)
       { // Complemented Cumulative Distribution Function Binomial.
         // The random variate k is the number of successes in n trials.
@@ -651,19 +654,66 @@ namespace boost
         return ibeta(k + 1, n - k, p, Policy());
       } // binomial cdf
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_CUDA_ENABLED inline RealType logcdf(const binomial_distribution<RealType, Policy>& dist, const RealType& k)
+      {
+        BOOST_MATH_STD_USING
+        RealType n = dist.trials();
+        RealType p = dist.success_fraction();
+        RealType result = 0;
+        if(false == binomial_detail::check_dist_and_k(
+           "boost::math::logcdf(binomial_distribution<%1%> const&, %1%)", n, p, k, &result, Policy()))
+        {
+           return result;
+        }
+        if ((k == n) || (p == 0))
+        {
+          return 0;
+        }
+        if (p == 1)
+        {
+          return log(RealType(0));
+        }
+        return libetac(k + 1, n - k, p, Policy());
+      }
+
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
+      BOOST_MATH_CUDA_ENABLED inline RealType logcdf(const complemented2_type<binomial_distribution<RealType, Policy>, RealType>& c)
+      {
+        BOOST_MATH_STD_USING
+        RealType const& k = c.param;
+        RealType n = c.dist.trials();
+        RealType p = c.dist.success_fraction();
+        RealType result = 0;
+        if(false == binomial_detail::check_dist_and_k(
+           "boost::math::logcdf(binomial_distribution<%1%> const&, %1%)", n, p, k, &result, Policy()))
+        {
+           return result;
+        }
+        if ((k == n) || (p == 0))
+        {
+          return log(RealType(0));
+        }
+        if (p == 1)
+        {
+          return 0;
+        }
+        return libeta(k + 1, n - k, p, Policy());
+      }
+
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_CUDA_ENABLED inline RealType quantile(const binomial_distribution<RealType, Policy>& dist, const RealType& p)
       {
          return binomial_detail::quantile_imp(dist, p, RealType(1-p), false);
       } // quantile
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_CUDA_ENABLED RealType quantile(const complemented2_type<binomial_distribution<RealType, Policy>, RealType>& c)
       {
          return binomial_detail::quantile_imp(c.dist, RealType(1-c.param), c.param, true);
       } // quantile
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_CUDA_ENABLED inline RealType mode(const binomial_distribution<RealType, Policy>& dist)
       {
          BOOST_MATH_STD_USING // ADL of std functions.
@@ -672,7 +722,7 @@ namespace boost
          return floor(p * (n + 1));
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_CUDA_ENABLED inline RealType median(const binomial_distribution<RealType, Policy>& dist)
       { // Bounds for the median of the negative binomial distribution
         // VAN DE VEN R. ; WEBER N. C. ;
@@ -690,7 +740,7 @@ namespace boost
          return floor(p * n); // Chose the middle value.
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_CUDA_ENABLED inline RealType skewness(const binomial_distribution<RealType, Policy>& dist)
       {
          BOOST_MATH_STD_USING // ADL of std functions.
@@ -699,7 +749,7 @@ namespace boost
          return (1 - 2 * p) / sqrt(n * p * (1 - p));
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_CUDA_ENABLED inline RealType kurtosis(const binomial_distribution<RealType, Policy>& dist)
       {
          RealType p = dist.success_fraction();
@@ -707,7 +757,7 @@ namespace boost
          return 3 - 6 / n + 1 / (n * p * (1 - p));
       }
 
-      template <class RealType, class Policy>
+      BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_CUDA_ENABLED inline RealType kurtosis_excess(const binomial_distribution<RealType, Policy>& dist)
       {
          RealType p = dist.success_fraction();
@@ -716,8 +766,91 @@ namespace boost
          return (1 - 6 * p * q) / (n * p * q);
       }
 
-    } // namespace math
-  } // namespace boost
+#ifndef BOOST_MATH_HAS_NVRTC
+    // Not GPU enabled: the large-variance path uses Bernoulli numbers.
+    BOOST_MATH_EXPORT template <class RealType, class Policy>
+    inline RealType entropy(const binomial_distribution<RealType, Policy>& dist)
+    {
+      BOOST_MATH_STD_USING
+      // No closed form: -sum p log(p) from the log ratios of the probabilities (detail::discrete_entropy_sum).
+      constexpr auto function = "boost::math::entropy(const binomial_distribution<%1%>&)";
+      RealType n = dist.trials();
+      RealType p = dist.success_fraction();
+      RealType result = 0;
+      if (!binomial_detail::check_dist(function, n, p, &result, Policy()))
+        return result;
+      if (floor(n) != n)
+        return policies::raise_domain_error<RealType>(function, "The number of trials must be an integer for the entropy, but got %1%.", n, Policy());
+      if ((p == 0) || (p == 1) || (n == 0))
+        return 0;
+      RealType q = 1 - p;
+      RealType mode = (std::min)(RealType(floor((n + 1) * p)), n);
+      const RealType sigmas = detail::discrete_entropy_tail_sigmas<RealType, Policy>();
+      const RealType threshold = detail::entropy_series_threshold<RealType, Policy>();
+      RealType sigma = sqrt(n * p * q);
+      RealType z1 = mode + 1;
+      RealType z2 = n + 1 - mode;
+      RealType margin = sigmas * sigma + threshold + 2;
+      if ((sigma >= 2 * sigmas) && (z1 >= margin) && (z2 >= margin))
+      {
+        // Trapezoidal rule on the continuation S(t) = t alpha - [lgamma(z1 + t) - lgamma(z1) - t log(z1)]
+        //   - [lgamma(z2 - t) - lgamma(z2) + t log(z2)], alpha = log(z2 p / (z1 q)), with z2 p - z1 q = (n + 2) p - z1:
+        RealType alpha = BOOST_MATH_NAMESPACE::log1p(RealType(fma(n + 2, p, -z1) / (z1 * q)), Policy());
+        RealType h = sigma / detail::discrete_entropy_step_ratio<RealType, Policy>();
+        auto s_of = [&](RealType t) { return t * alpha - detail::entropy_lgamma_delta(z1, t, Policy()) - detail::entropy_lgamma_delta(z2, RealType(-t), Policy()); };
+        int j_right = 0;
+        int j_left = 0;
+        auto right = [&](RealType& s, RealType&)
+        {
+          RealType t = (++j_right) * h;
+          if (z2 - t < threshold)
+            return false;
+          s = s_of(t);
+          return true;
+        };
+        auto left = [&](RealType& s, RealType&)
+        {
+          RealType t = -(++j_left) * h;
+          if (z1 + t < threshold)
+            return false;
+          s = s_of(t);
+          return true;
+        };
+        return detail::discrete_entropy_sum(right, left, h, RealType(0), function, Policy());
+      }
+      // Direct sum from the mode, with p(k + 1) / p(k) = (n - k) p / ((k + 1) q), whose numerator minus
+      // denominator is (n + 1) p - (k + 1):
+      RealType k_right = mode;
+      RealType k_left = mode;
+      detail::compensated_sum<RealType> s_right;
+      detail::compensated_sum<RealType> s_left;
+      auto log_ratio = [&](RealType k, RealType& ratio, bool left)
+      {
+        return detail::entropy_log_ratio(RealType((n - k) * p), RealType((k + 1) * q), RealType(fma(n + 1, p, -(k + 1))), ratio, left, Policy());
+      };
+      auto right = [&](RealType& s, RealType& ratio)
+      {
+        if (k_right == n)
+          return false;
+        s_right.add(log_ratio(k_right, ratio, false));
+        k_right += 1;
+        s = s_right.value();
+        return true;
+      };
+      auto left = [&](RealType& s, RealType& ratio)
+      {
+        if (k_left == 0)
+          return false;
+        k_left -= 1;
+        s_left.add(-log_ratio(k_left, ratio, true));
+        s = s_left.value();
+        return true;
+      };
+      return detail::discrete_entropy_sum(right, left, RealType(1), RealType(0), function, Policy());
+    }
+#endif
+
+    BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

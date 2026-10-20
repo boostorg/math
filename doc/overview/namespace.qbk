@@ -1,0 +1,115 @@
+[section:configurable_namespace Configurable Namespace]
+
+[h4 Overview]
+
+By default every entity in Boost.Math lives in namespace `boost::math`.
+Defining the macro `BOOST_MATH_NAMESPACE_COMPONENTS` relocates the whole library into a namespace of your choosing.
+This is intended for libraries that embed their own copy of Boost.Math (typically in [link math_toolkit.standalone standalone mode]):
+moving the copy out of `boost::math` means it can never collide with a different version of Boost.Math that the
+end user also compiles or links against, whether as duplicate symbols in a static library or as an ODR violation.
+
+    #define BOOST_MATH_NAMESPACE_COMPONENTS my_lib, math
+    #include <boost/math/special_functions/gamma.hpp>
+
+    int main()
+    {
+        double x = my_lib::math::tgamma(5.0);            // 24
+        double y = BOOST_MATH_NAMESPACE::tgamma(5.0);    // the same function
+        return x == y ? 0 : 1;
+    }
+
+Nothing changes unless the macro is defined: the default configuration produces exactly the same code as before.
+
+[h4 Configuring the namespace]
+
+`BOOST_MATH_NAMESPACE_COMPONENTS` is a comma separated list of between one and five identifiers, outermost first.
+The default is `boost, math`. Some examples:
+
+[table Example configurations
+[[`BOOST_MATH_NAMESPACE_COMPONENTS`][Library namespace]]
+[[`boost, math` (default)][`::boost::math`]]
+[[`my_lib, math`][`::my_lib::math`]]
+[[`_Math`][`::_Math`]]
+[[`my_company, third_party, math`][`::my_company::third_party::math`]]
+]
+
+The namespace is given as a list of components rather than as a qualified name such as `my_lib::math`, because the
+preprocessor cannot split a qualified name into its parts, and C++14 (the oldest standard the library supports) has no
+nested namespace definitions.
+
+The macro must be defined before the first Boost.Math header is included.
+In a project with more than one translation unit, set it in the build system so that every translation unit sees the same value:
+
+    g++ -DBOOST_MATH_NAMESPACE_COMPONENTS=my_lib,math ...
+    cl /DBOOST_MATH_NAMESPACE_COMPONENTS=my_lib,math ...
+
+    # CMake
+    target_compile_definitions(my_target PRIVATE BOOST_MATH_NAMESPACE_COMPONENTS=my_lib,math)
+
+[h4 Macros]
+
+`<boost/math/tools/config.hpp>` derives the following macros from `BOOST_MATH_NAMESPACE_COMPONENTS`.
+They are always defined, so code that uses them works with any configuration, including the default one.
+Defining any of them yourself is a compile time error.
+
+[table Derived macros
+[[Macro][Default expansion][Description]]
+[[`BOOST_MATH_NAMESPACE`][`boost::math`][The qualified name of the library namespace, for example `::BOOST_MATH_NAMESPACE::tgamma(x)`
+or `namespace bm = BOOST_MATH_NAMESPACE;`.]]
+[[`BOOST_MATH_NAMESPACE_BEGIN`][`namespace boost { namespace math {`][Opens the library namespace. Use it only at global namespace scope.]]
+[[`BOOST_MATH_NAMESPACE_END`][`}}`][Closes the namespace opened by `BOOST_MATH_NAMESPACE_BEGIN`.]]
+[[`BOOST_MATH_NAMESPACE_LEVELS`][`2`][The number of components, as an integer literal that can be tested with `#if`.]]
+[[`BOOST_MATH_DETAIL_NAMESPACE`][`boost::math_detail`][A sibling of the library namespace, formed by appending `_detail` to the
+innermost component, which holds the few internal helpers that must not be enclosed by the library namespace.
+`BOOST_MATH_DETAIL_NAMESPACE_BEGIN` and `BOOST_MATH_DETAIL_NAMESPACE_END` open and close it. User code should never need these.]]
+]
+
+[h4 Code that extends the library]
+
+Anything you declare inside the library namespace must follow it when it moves.
+The usual case is the [link math_toolkit.pol_ref.error_handling_policies user_error policy], whose handlers you define
+inside the policies namespace. Writing them with the macros keeps them correct for every configuration:
+
+    BOOST_MATH_NAMESPACE_BEGIN
+    namespace policies {
+
+    template <class T>
+    T user_domain_error(const char* function, const char* message, const T& val)
+    {
+        // ...
+    }
+
+    } // namespace policies
+    BOOST_MATH_NAMESPACE_END
+
+The same applies to anything else you previously wrote in `namespace boost { namespace math {`, such as specializations of library templates.
+The convenience macros `BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS` and `BOOST_MATH_DECLARE_DISTRIBUTIONS` work unchanged in any configuration.
+
+[h4 Limitations]
+
+* Only C++ names move. Header paths, include guards and macro names stay the same, so a single translation unit can
+  contain only one configuration of the library. Different translation units, or different libraries linked into the same
+  program, may each use a different namespace: that is the purpose of the feature.
+* Every translation unit that shares one copy of the library must use the same `BOOST_MATH_NAMESPACE_COMPONENTS`.
+* Libraries that call Boost.Math by its default name are not affected by the macro and will not find a relocated copy.
+  This includes other Boost libraries that use Boost.Math internally, such as Boost.Multiprecision, so relocation is
+  intended for a self contained copy of Boost.Math.
+* The messages carried by exceptions and error handlers still name the function as `boost::math::...`.
+* The fixed width floating point typedefs of [link math_toolkit.specified_typedefs `<boost/cstdfloat.hpp>`]
+  (`boost::float64_t` and friends) are not part of `boost::math` and stay in namespace `boost`.
+* The [link math_toolkit.cxx20_modules C++20 module] is built and tested with the default namespace only.
+
+[h4 Testing]
+
+The library's continuous integration builds every public header, plus a runtime test, with
+`BOOST_MATH_NAMESPACE_COMPONENTS=my_lib,math`. It checks that nothing is left in `boost::math` and that no symbol in the
+resulting binary is in namespace `boost`. See `libs/math/test/cmake_namespace_test`.
+
+[endsect] [/section:configurable_namespace Configurable Namespace]
+
+[/
+  Copyright 2026 Matt Borland.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

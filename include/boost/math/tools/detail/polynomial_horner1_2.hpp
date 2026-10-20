@@ -9,28 +9,28 @@
 #ifndef BOOST_MATH_TOOLS_POLY_EVAL_2_HPP
 #define BOOST_MATH_TOOLS_POLY_EVAL_2_HPP
 
-namespace boost{ namespace math{ namespace tools{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace tools{ namespace detail{
 
 template <class T, class V>
-BOOST_MATH_GPU_ENABLED inline V evaluate_polynomial_c_imp(const T*, const V&, const boost::math::integral_constant<int, 0>*) BOOST_MATH_NOEXCEPT(V)
+BOOST_MATH_GPU_ENABLED inline V evaluate_polynomial_c_imp(const T*, const V&, const BOOST_MATH_NAMESPACE::integral_constant<int, 0>*) BOOST_MATH_NOEXCEPT(V)
 {
    return static_cast<V>(0);
 }
 
 template <class T, class V>
-BOOST_MATH_GPU_ENABLED inline V evaluate_polynomial_c_imp(const T* a, const V&, const boost::math::integral_constant<int, 1>*) BOOST_MATH_NOEXCEPT(V)
+BOOST_MATH_GPU_ENABLED inline V evaluate_polynomial_c_imp(const T* a, const V&, const BOOST_MATH_NAMESPACE::integral_constant<int, 1>*) BOOST_MATH_NOEXCEPT(V)
 {
    return static_cast<V>(a[0]);
 }
 
 template <class T, class V>
-BOOST_MATH_GPU_ENABLED inline V evaluate_polynomial_c_imp(const T* a, const V& x, const boost::math::integral_constant<int, 2>*) BOOST_MATH_NOEXCEPT(V)
+BOOST_MATH_GPU_ENABLED inline V evaluate_polynomial_c_imp(const T* a, const V& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 2>*) BOOST_MATH_NOEXCEPT(V)
 {
    return static_cast<V>(a[1] * x + a[0]);
 }
 
 
-}}}} // namespaces
+}} BOOST_MATH_NAMESPACE_END
 
 #endif // include guard
 

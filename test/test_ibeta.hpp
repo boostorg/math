@@ -407,6 +407,28 @@ void test_spots(T, const char* name)
       static_cast<T>(0.996883849270604867987018345952777458206564642094991979259788L), tolerance);
 
    //
+   // https://github.com/boostorg/math/issues/1523
+   // Integer a and b < 40 use a finite sum of binomial terms, the first of which underflowed (or was
+   // denormal and had lost most of its digits) when the result is still a normal number.
+   // Reference values calculated with Arb.
+   //
+   if((std::numeric_limits<T>::digits == 53) && (std::numeric_limits<T>::max_exponent == 1024))
+   {
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(355), static_cast<T>(30), static_cast<T>(0.125)),
+         static_cast<T>(1.796632735766621150661223125033790309249801096395e-279L), tolerance * 2);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(360), static_cast<T>(30), static_cast<T>(0.125)),
+         static_cast<T>(8.092463621017578599073247171071767737149917413962e-284L), tolerance * 2);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(365), static_cast<T>(30), static_cast<T>(0.125)),
+         static_cast<T>(3.626281949877933614152039221277820028263770136555e-288L), tolerance * 2);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(350), static_cast<T>(20), static_cast<T>(0.125)),
+         static_cast<T>(2.012450499868551870681489937548499305656442752329e-286L), tolerance * 2);
+   }
+
+   //
    // Bug cases from Rocco Romeo:
    //
    BOOST_CHECK_CLOSE(
@@ -516,7 +538,83 @@ void test_spots(T, const char* name)
                BOOST_CHECK_MESSAGE(boost::math::ibeta(a, b, x - delta[j]) > boost::math::ibeta(a, b, x - delta[j+1]), 
                   "ibeta not monotonically increasing below a/(a+b) for ibeta(" << a << ", " << b << ", " << x << ") and delta=" << delta[j] << ": [" << boost::math::ibeta(a, b, x - delta[j]) << " >= " << boost::math::ibeta(a, b, x - delta[j+1]) << "]");  
             }
+            // Without a Lanczos approximation, the power terms here once came out 12x too small. The density is ~1e8,
+            // so the rounding of x and the continued fraction leave ~1e-8 of error. Arb, with x = a / (a + b) + 1e-11 in double:
+            BOOST_CHECK_CLOSE_FRACTION(boost::math::ibeta(a, b, T(x + delta[5])), static_cast<T>(0.50112741311964152717889063178639807L), T(1e-7));
          }
       }
+      //
+      // Integer a and b, one of them large, x beyond a/(a+b).  The finite binomial
+      // sum used here started from pow(x, n) with x = 1 - y close to 1, which
+      // multiplied the rounding error in x by n.  The low bit in x makes 1 - x
+      // inexact for double and long double (for float it is simply lost, which
+      // changes the result by far less than the tolerance).
+      // Reference values are from the finite sum in exact decimal arithmetic.
+      //
+      T x_int = ldexp(static_cast<T>(1), -28) + ldexp(static_cast<T>(1), -68);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(2), static_cast<T>(1.0e9L), x_int),
+         static_cast<T>(0.886091673490414896866866835148507163568245289L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibetac(static_cast<T>(2), static_cast<T>(1.0e9L), x_int),
+         static_cast<T>(0.113908326509585103133133164851492836431754711L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(3), static_cast<T>(1.0e9L), x_int),
+         static_cast<T>(0.718821994107927404618541727411257158457373858L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibetac(static_cast<T>(3), static_cast<T>(1.0e9L), x_int),
+         static_cast<T>(0.281178005892072595381458272588742841542626142L), tolerance);
+      //
+      // Large a and b near the mode. The bases of the exponents in the power terms
+      // (x^a)(y^b)/B(a, b) were formed from x b - y a, with y = 1 - x rounded, which
+      // lost about eps max(a, b) min(x, y): these were off by 300 and 140 epsilon,
+      // and by up to 1e-11 where the compiler contracts x b - y a into an fma.
+      // The generic (non-Lanczos) code used by real_concept is far less accurate here.
+      //
+      T tolerance_large = tolerance * (boost::is_floating_point<T>::value ? 1 : 100000000);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(1.0e5L), static_cast<T>(2.5e7L), static_cast<T>(4158) / 1048576),
+         static_cast<T>(0.06845490339638190702573107740432918859230714009L), tolerance_large);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(static_cast<T>(3.0e4L), static_cast<T>(1.0e7L), static_cast<T>(3119) / 1048576),
+         static_cast<T>(0.1690982393949004438961071516113973441276481773L), tolerance_large);
+   //
+   // Near the mean with b < 40, where sidestepping to the series lost up to 250 eps.
+   // Reference value from a 100-digit evaluation, doubles only:
+   //
+   BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+   {
+      typedef boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promote;
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(124.93519797258834), T(35.625649490623374), T(0.74635077170289033), no_promote()), static_cast<T>(0.1654537324451929478298745553715453707115L), boost::math::tools::epsilon<T>() * 8);
+   }
+   //
+   // The series for the complement started from -1 and rounded each term onto the coarse grid of that running
+   // sum, which lost 5-10 eps for a, b < 1; and for a <= 15 near the mean the sidestep to a series (b < 40), and the
+   // forward evaluation of the continued fraction (b >= 40), lost as much.  The prefix error of that series is
+   // multiplied by S / (1 - S) in 1 - S, 5-15 eps for S > 1/2.  Reference values from Arb, doubles only:
+   //
+   BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+   {
+      typedef boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promote;
+      // Measured: at most 2.8 eps with contraction (-ffp-contract=on or fast), 3.03 eps without (x86 CI):
+      T tolerance = boost::math::tools::epsilon<T>() * 4;
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(0.06487), T(0.1276), T(0.3528), no_promote()), static_cast<T>(0.641466056762343904103825L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(0.3301), T(0.16), T(0.3677), no_promote()), static_cast<T>(0.27439745512337435015174L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(2.207), T(13.56), T(0.1469), no_promote()), static_cast<T>(0.400192942359675404658327L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(1.974), T(32.96), T(0.05104), no_promote()), static_cast<T>(0.530751012427838743979204L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.974), T(32.96), T(0.05104), no_promote()), static_cast<T>(0.469248987572161256020796L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.728), T(10.6), T(0.1423), no_promote()), static_cast<T>(0.412692486775009981483788L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.221), T(296.3), T(0.004113), no_promote()), static_cast<T>(0.379883178660505860442496L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(1.221), T(296.3), T(0.004113), no_promote()), static_cast<T>(0.620116821339494139557504L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.081), T(225.2), T(0.004949), no_promote()), static_cast<T>(0.360005149325214614768655L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.241), T(116.3), T(0.0108), no_promote()), static_cast<T>(0.373352830867477269482944L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.435), T(377.2), T(0.003875), no_promote()), static_cast<T>(0.379795123779314547118388L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(1.249), T(248.3), T(0.005199), no_promote()), static_cast<T>(0.366349117098876110163662L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(0.02942), T(0.2289), T(0.0253), no_promote()), static_cast<T>(0.196810945256536317102582L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(0.08087), T(0.06533), T(0.6775), no_promote()), static_cast<T>(0.529113561442567211501508L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(0.7857), T(0.0817), T(0.7627), no_promote()), static_cast<T>(0.13545630774913902473231L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta(T(0.9848), T(0.1066), T(0.6446), no_promote()), static_cast<T>(0.106135652852894343731671L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(0.06833), T(0.7126), T(0.2048), no_promote()), static_cast<T>(0.133607615095624763603441L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac(T(0.05328), T(0.5656), T(0.08573), no_promote()), static_cast<T>(0.168174045733948386362056L), tolerance);
+   }
 }
-

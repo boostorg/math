@@ -18,7 +18,7 @@
 #include <boost/math/special_functions/round.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 //
 // The main method used is due to Hill:
@@ -35,7 +35,7 @@ BOOST_MATH_GPU_ENABLED T inverse_students_t_hill(T ndf, T u, const Policy& pol)
    T a, b, c, d, q, x, y;
 
    if (ndf > 1e20f)
-      return -boost::math::erfc_inv(2 * u, pol) * constants::root_two<T>();
+      return -BOOST_MATH_NAMESPACE::erfc_inv(2 * u, pol) * constants::root_two<T>();
 
    a = 1 / (ndf - 0.5f);
    b = 48 / (a * a);
@@ -48,14 +48,14 @@ BOOST_MATH_GPU_ENABLED T inverse_students_t_hill(T ndf, T u, const Policy& pol)
       //
       // Asymptotic inverse expansion about normal:
       //
-      x = -boost::math::erfc_inv(2 * u, pol) * constants::root_two<T>();
+      x = -BOOST_MATH_NAMESPACE::erfc_inv(2 * u, pol) * constants::root_two<T>();
       y = x * x;
 
       if (ndf < 5)
          c += 0.3f * (ndf - 4.5f) * (x + 0.6f);
       c += (((0.05f * d * x - 5) * x - 7) * x - 2) * x + b;
       y = (((((0.4f * y + 6.3f) * y + 36) * y + 94.5f) / c - y - 3) / b + 1) * x;
-      y = boost::math::expm1(a * y * y, pol);
+      y = BOOST_MATH_NAMESPACE::expm1(a * y * y, pol);
    }
    else
    {
@@ -82,7 +82,7 @@ BOOST_MATH_GPU_ENABLED T inverse_students_t_tail_series(T df, T v, const Policy&
    BOOST_MATH_STD_USING
    // Tail series expansion, see section 6 of Shaw's paper.
    // w is calculated using Eq 60:
-   T w = boost::math::tgamma_delta_ratio(df / 2, constants::half<T>(), pol)
+   T w = BOOST_MATH_NAMESPACE::tgamma_delta_ratio(df / 2, constants::half<T>(), pol)
       * sqrt(df * constants::pi<T>()) * v;
    // define some variables:
    T np2 = df + 2;
@@ -136,7 +136,7 @@ BOOST_MATH_GPU_ENABLED T inverse_students_t_body_series(T df, T u, const Policy&
    //
    // Start with Eq 56 of Shaw:
    //
-   T v = boost::math::tgamma_delta_ratio(df / 2, constants::half<T>(), pol)
+   T v = BOOST_MATH_NAMESPACE::tgamma_delta_ratio(df / 2, constants::half<T>(), pol)
       * sqrt(df * constants::pi<T>()) * (u - constants::half<T>());
    //
    // Workspace for the polynomial coefficients:
@@ -287,7 +287,7 @@ BOOST_MATH_GPU_ENABLED T inverse_students_t(T df, T u, T v, const Policy& pol, b
             // supplement:
             //
             T a = 4 * (u - u * u);//1 - 4 * (u - 0.5f) * (u - 0.5f);
-            T b = boost::math::cbrt(a, pol);
+            T b = BOOST_MATH_NAMESPACE::cbrt(a, pol);
             static const T c = static_cast<T>(0.85498797333834849467655443627193);
             T p = 6 * (1 + c * (1 / b - 1));
             T p0;
@@ -377,7 +377,7 @@ BOOST_MATH_GPU_ENABLED T inverse_students_t(T df, T u, T v, const Policy& pol, b
 calculate_real:
       if(df > 0x10000000)
       {
-         result = -boost::math::erfc_inv(2 * u, pol) * constants::root_two<T>();
+         result = -BOOST_MATH_NAMESPACE::erfc_inv(2 * u, pol) * constants::root_two<T>();
          if((pexact) && (df >= 1e20))
             *pexact = true;
       }
@@ -390,11 +390,11 @@ calculate_real:
          T crossover = 0.2742f - df * 0.0242143f;
          if(u > crossover)
          {
-            result = boost::math::detail::inverse_students_t_body_series(df, u, pol);
+            result = BOOST_MATH_NAMESPACE::detail::inverse_students_t_body_series(df, u, pol);
          }
          else
          {
-            result = boost::math::detail::inverse_students_t_tail_series(df, u, pol);
+            result = BOOST_MATH_NAMESPACE::detail::inverse_students_t_tail_series(df, u, pol);
          }
       }
       else
@@ -409,11 +409,11 @@ calculate_real:
          // The following is equivalent to: u > 2^df/-0.654
          if(m_exp > 0 && u_exp < df / 0.654f)
          {
-            result = boost::math::detail::inverse_students_t_hill(df, u, pol);
+            result = BOOST_MATH_NAMESPACE::detail::inverse_students_t_hill(df, u, pol);
          }
          else
          {
-            result = boost::math::detail::inverse_students_t_tail_series(df, u, pol);
+            result = BOOST_MATH_NAMESPACE::detail::inverse_students_t_tail_series(df, u, pol);
          }
       }
    }
@@ -426,7 +426,7 @@ BOOST_MATH_GPU_ENABLED inline T find_ibeta_inv_from_t_dist(T a, T p, T /*q*/, T*
    T u = p / 2;
    T v = 1 - u;
    T df = a * 2;
-   T t = boost::math::detail::inverse_students_t(df, u, v, pol);
+   T t = BOOST_MATH_NAMESPACE::detail::inverse_students_t(df, u, v, pol);
    *py = t * t / (df + t * t);
    return df / (df + t * t);
 }
@@ -445,7 +445,7 @@ namespace detail {
 #endif
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline T fast_students_t_quantile_imp(T df, T p, const Policy& pol, const boost::math::false_type*)
+BOOST_MATH_GPU_ENABLED inline T fast_students_t_quantile_imp(T df, T p, const Policy& pol, const BOOST_MATH_NAMESPACE::false_type*)
 {
    BOOST_MATH_STD_USING
    //
@@ -468,12 +468,12 @@ BOOST_MATH_GPU_ENABLED inline T fast_students_t_quantile_imp(T df, T p, const Po
 }
 
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED T fast_students_t_quantile_imp(T df, T p, const Policy& pol, const boost::math::true_type*)
+BOOST_MATH_GPU_ENABLED T fast_students_t_quantile_imp(T df, T p, const Policy& pol, const BOOST_MATH_NAMESPACE::true_type*)
 {
    BOOST_MATH_STD_USING
    bool invert = false;
    if((df < 2) && (floor(df) != df))
-      return boost::math::detail::fast_students_t_quantile_imp(df, p, pol, static_cast<boost::math::false_type*>(nullptr));
+      return BOOST_MATH_NAMESPACE::detail::fast_students_t_quantile_imp(df, p, pol, static_cast<BOOST_MATH_NAMESPACE::false_type*>(nullptr));
    if(p > 0.5)
    {
       p = 1 - p;
@@ -489,53 +489,70 @@ BOOST_MATH_GPU_ENABLED T fast_students_t_quantile_imp(T df, T p, const Policy& p
    //
    // Change variables to inverse incomplete beta:
    //
-   T t2 = t * t;
-   T xb = df / (df + t2);
-   T y = t2 / (df + t2);
-   T a = df / 2;
-   //
-   // t can be so large that x underflows,
-   // just return our estimate in that case:
-   //
-   if(xb == 0)
-      return t;
-   //
-   // Get incomplete beta and it's derivative:
-   //
-   T f1;
-   T f0 = xb < y ? ibeta_imp(a, constants::half<T>(), xb, pol, false, true, &f1)
-      : ibeta_imp(constants::half<T>(), a, y, pol, true, true, &f1);
+   for (int i = 0; i < 3; ++i)
+   {
+      T t2 = t * t;
+      T xb = df / (df + t2);
+      T y = t2 / (df + t2);
+      T a = df / 2;
+      //
+      // t can be so large that x underflows,
+      // just return our estimate in that case:
+      //
+      if(xb == 0)
+         return invert ? -t : t;
+      //
+      // Get incomplete beta and it's derivative:
+      //
+      T f1;
+      T f0 = xb < y ? ibeta_imp(a, constants::half<T>(), xb, pol, false, true, &f1)
+         : ibeta_imp(constants::half<T>(), a, y, pol, true, true, &f1);
 
-   // Get cdf from incomplete beta result:
-   T p0 = f0 / 2  - p;
-   // Get pdf from derivative:
-   T p1 = f1 * sqrt(y * xb * xb * xb / df);
-   //
-   // Second derivative divided by p1:
-   //
-   // yacas gives:
-   //
-   // In> PrettyForm(Simplify(D(t) (1 + t^2/v) ^ (-(v+1)/2)))
-   //
-   //  |                        | v + 1     |     |
-   //  |                       -| ----- + 1 |     |
-   //  |                        |   2       |     |
-   // -|             |  2     |                   |
-   //  |             | t      |                   |
-   //  |             | -- + 1 |                   |
-   //  | ( v + 1 ) * | v      |               * t |
-   // ---------------------------------------------
-   //                       v
-   //
-   // Which after some manipulation is:
-   //
-   // -p1 * t * (df + 1) / (t^2 + df)
-   //
-   T p2 = t * (df + 1) / (t * t + df);
-   // Halley step:
-   t = fabs(t);
-   t += p0 / (p1 + p0 * p2 / 2);
-   return !invert ? -t : t;
+      // Get cdf from incomplete beta result:
+      T p0 = f0 / 2  - p;
+      // Get pdf from derivative:
+      T rxb = sqrt(xb);
+      T p1 = f1 * sqrt(y / df);
+      p1 *= rxb;
+      p1 *= rxb;
+      p1 *= rxb;
+      // If p1 has underflowed, all subsequent calculations will fail:
+      if (p1 < tools::min_value<T>())
+          return invert ? -t : t;
+      //
+      // Second derivative divided by p1:
+      //
+      // yacas gives:
+      //
+      // In> PrettyForm(Simplify(D(t) (1 + t^2/v) ^ (-(v+1)/2)))
+      //
+      //  |                        | v + 1     |     |
+      //  |                       -| ----- + 1 |     |
+      //  |                        |   2       |     |
+      // -|             |  2     |                   |
+      //  |             | t      |                   |
+      //  |             | -- + 1 |                   |
+      //  | ( v + 1 ) * | v      |               * t |
+      // ---------------------------------------------
+      //                       v
+      //
+      // Which after some manipulation is:
+      //
+      // -p1 * t * (df + 1) / (t^2 + df)
+      //
+      T p2 = t * (df + 1) / (t * t + df);
+      // Halley step:
+      T step = p0 / (p1 + p0 * p2 / 2);
+      t -= step;
+      //
+      // The series estimates used for non-integer df between 2 and 3 are
+      // only good to about 1e-5, which a single Halley step can't fix,
+      // so repeat if the step was large:
+      //
+      if (fabs(step) < 1e-7f * fabs(t))
+         break;
+   }
+   return invert ? -t : t;
 }
 
 template <class T, class Policy>
@@ -549,17 +566,17 @@ BOOST_MATH_GPU_ENABLED inline T fast_students_t_quantile(T df, T p, const Policy
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   typedef boost::math::integral_constant<bool,
-      (boost::math::numeric_limits<T>::digits <= 53)
+   typedef BOOST_MATH_NAMESPACE::integral_constant<bool,
+      (BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 53)
        &&
-      (boost::math::numeric_limits<T>::is_specialized)
+      (BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized)
        &&
-      (boost::math::numeric_limits<T>::radix == 2)
+      (BOOST_MATH_NAMESPACE::numeric_limits<T>::radix == 2)
    > tag_type;
    return policies::checked_narrowing_cast<T, forwarding_policy>(fast_students_t_quantile_imp(static_cast<value_type>(df), static_cast<value_type>(p), pol, static_cast<tag_type*>(nullptr)), "boost::math::students_t_quantile<%1%>(%1%,%1%,%1%)");
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SF_DETAIL_INV_T_HPP
 

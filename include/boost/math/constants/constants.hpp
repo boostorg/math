@@ -23,8 +23,10 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <utility>
 #include <type_traits>
+#endif
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -36,8 +38,8 @@
 #pragma GCC system_header
 #endif
 
-namespace boost{ namespace math
-{
+BOOST_MATH_NAMESPACE_BEGIN
+
   namespace constants
   {
     // To permit other calculations at about 100 decimal digits with some UDT,
@@ -54,7 +56,7 @@ namespace boost{ namespace math
     // (This is necessary because you can't use a numeric constant
     // since even a long double might not have enough digits).
 
-   enum construction_method
+   BOOST_MATH_EXPORT enum construction_method
    {
       construct_from_float = 1,
       construct_from_double = 2,
@@ -69,15 +71,15 @@ namespace boost{ namespace math
    // Traits class determines how to convert from string based on whether T has a constructor
    // from const char* or not:
    //
-   template <int N>
+   BOOST_MATH_EXPORT template <int N>
    struct dummy_size{};
 
    //
    // Max number of binary digits in the string representations of our constants:
    //
-   static constexpr int max_string_digits = (101 * 1000L) / 301L;
+   BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR int max_string_digits = (101 * 1000L) / 301L;
 
-   template <typename Real, typename Policy>
+   BOOST_MATH_EXPORT template <typename Real, typename Policy>
    struct construction_traits
    {
    private:
@@ -108,7 +110,7 @@ namespace boost{ namespace math
 
    namespace detail{
 
-      template <class Real, class Policy = boost::math::policies::policy<> >
+      template <class Real, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
       struct constant_return
       {
          using construct_type = typename construction_traits<Real, Policy>::type;
@@ -184,7 +186,7 @@ namespace boost{ namespace math
    /* The default implementations come next: */ \
    static inline const T& get_from_string()\
    {\
-      static const T result(boost::math::tools::convert_from_string<T>(y));\
+      static const T result(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>(y));\
       return result;\
    }\
    /* This one is for very high precision that is none the less known at compile time: */ \
@@ -198,10 +200,10 @@ namespace boost{ namespace math
    {\
       static BOOST_MATH_THREAD_LOCAL int digits = 0;\
       static BOOST_MATH_THREAD_LOCAL T value;\
-      int current_digits = boost::math::tools::digits<T>();\
+      int current_digits = BOOST_MATH_NAMESPACE::tools::digits<T>();\
       if(digits != current_digits)\
       {\
-         value = current_digits > max_string_digits ? compute<0>() : T(boost::math::tools::convert_from_string<T>(y));\
+         value = current_digits > max_string_digits ? compute<0>() : T(BOOST_MATH_NAMESPACE::tools::convert_from_string<T>(y));\
          digits = current_digits; \
       }\
       return value;\
@@ -235,24 +237,23 @@ namespace boost{ namespace math
    \
    \
    /* The actual forwarding function: */ \
-   template <typename T, typename Policy> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T, Policy>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(Policy)) BOOST_MATH_NOEXCEPT(T)\
+   BOOST_MATH_EXPORT template <typename T, typename Policy> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T, Policy>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(Policy)) BOOST_MATH_NOEXCEPT(T)\
    { return detail:: BOOST_MATH_JOIN(constant_, name)<T>::get(typename construction_traits<T, Policy>::type()); }\
-   template <typename T> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_MATH_NOEXCEPT(T)\
-   { return name<T, boost::math::policies::policy<> >(); }\
+   BOOST_MATH_EXPORT template <typename T> BOOST_MATH_GPU_ENABLED inline constexpr typename detail::constant_return<T>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_MATH_NOEXCEPT(T)\
+   { return name<T, BOOST_MATH_NAMESPACE::policies::policy<> >(); }\
    \
    \
    /* Now the namespace specific versions: */ \
-   } namespace float_constants{ static constexpr float name = BOOST_MATH_JOIN(x, F); }\
-   namespace double_constants{ static constexpr double name = x; } \
-   namespace long_double_constants{ static constexpr long double name = BOOST_MATH_JOIN(x, L); }\
+   } namespace float_constants{ BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR float name = BOOST_MATH_JOIN(x, F); }\
+   namespace double_constants{ BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR double name = x; } \
+   namespace long_double_constants{ BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR long double name = BOOST_MATH_JOIN(x, L); }\
    namespace constants{
 
 #else // NVRTC simplified macro definition
 
 #define BOOST_DEFINE_MATH_CONSTANT(name, value, str_value) template <typename T> BOOST_MATH_GPU_ENABLED constexpr T name() noexcept { return static_cast<T>(value); }
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace constants {
 
 #endif
@@ -340,12 +341,11 @@ namespace constants {
   BOOST_DEFINE_MATH_CONSTANT(reciprocal_fibonacci, 3.35988566624317755317201130291892717968890513, "3.35988566624317755317201130291892717968890513373196848649555381532513031899668338361541621645679008729704")
   BOOST_DEFINE_MATH_CONSTANT(laplace_limit, 0.662743419349181580974742097109252907056233549115022417, "0.66274341934918158097474209710925290705623354911502241752039253499097185308651127724965480259895818168")
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED inline constexpr T tau() {  return two_pi<T>(); }
 
 } // namespace constants
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 //
 // We deliberately include this *after* all the declarations above,

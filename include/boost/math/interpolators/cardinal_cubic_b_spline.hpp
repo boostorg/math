@@ -24,9 +24,9 @@
 
 #include <boost/math/interpolators/detail/cardinal_cubic_b_spline_detail.hpp>
 
-namespace boost{ namespace math{ namespace interpolators {
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators {
 
-template <class Real>
+BOOST_MATH_EXPORT template <class Real>
 class cardinal_cubic_b_spline
 {
 public:
@@ -83,5 +83,5 @@ Real cardinal_cubic_b_spline<Real>::double_prime(Real x) const
 }
 
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif

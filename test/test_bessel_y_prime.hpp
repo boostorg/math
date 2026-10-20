@@ -242,6 +242,19 @@ void test_bessel_prime(T, const char* name)
        } };
        do_test_cyl_neumann_y_prime<T>(yv_prime_coverage_data, name, "y': Extra coverage data");
     }
+   //
+   // The three term asymptotic expansion was used for x > 95 and v < 1, where it is only good to 1e4 eps,
+   // values from Arb as (Y(v-1, x) - Y(v+1, x)) / 2, the abscissas are doubles so we only test double:
+   //
+   BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+   {
+      T large_x_tol = boost::math::tools::epsilon<T>() * 20;
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_neumann_prime(T(0.83333333333333337), T(109.0014391556391)), static_cast<T>(0.0760449235630686830463871181005626524645L), large_x_tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_neumann_prime(T(0.3), T(150.5)), static_cast<T>(0.0013333757161545900983834743661673159689L), large_x_tol * 10);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_neumann_prime(T(0), T(120.75)), static_cast<T>(0.0604488068298503912759500045186664470565L), large_x_tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_neumann_prime(T(2), T(250.25)), static_cast<T>(0.0140607640770331360026206679138142471927L), large_x_tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_neumann_prime(T(3.7), T(330.5)), static_cast<T>(-0.041368494497016115551472552645071817405L), large_x_tol);
+   }
    static const std::array<std::array<T, 3>, 1> sph_prime_coverage_data = { {
          // (SphericalBesselY[-1, 5/2] - (SphericalBesselY(0, 5/2)+5/2 * SphericalBesselY[1, 5/2])/(5/2))/2
       {{ SC_(0.0), SC_(2.5), SC_(0.1112058791540732032473814343996886423728680128280382077091151343) }},

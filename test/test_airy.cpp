@@ -20,6 +20,9 @@
 #include <boost/math/concepts/real_concept.hpp>
 #endif
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#endif
 #include <boost/array.hpp>
 #include <iostream>
 #include <iomanip>
@@ -73,8 +76,40 @@ void test_airy(T, const char* name)
       if(boost::math::isfinite(data[i][4]))
          BOOST_CHECK_CLOSE_FRACTION(data[i][4], boost::math::airy_bi_prime(data[i][0]), tol);
    }
+   //
+   // Tiny x, where the constant term alone is not enough: the linear term Ai'(0) x (Bi'(0) x) is
+   // larger than epsilon even though x^3 / 6 < epsilon.  Values calculated with Arb.
+   // x is 2^-8, 2^-17 or 2^-21 so that it falls in the small x branch for float, double and long double.
+   //
+   static const std::array<std::array<T, 3>, 3> tiny_data =
+   {{
+      {{ static_cast<T>(0.00390625L), static_cast<T>(0.3540170441136166768862928636689060871265703L), static_cast<T>(0.6166777599593592690509375843380791217066058L) }},
+      {{ static_cast<T>(7.62939453125e-06L), static_cast<T>(0.3550260792524733873116489237624088683003536L), static_cast<T>(0.6149300476147427989932986279340157797699888L) }},
+      {{ static_cast<T>(4.76837158203125e-07L), static_cast<T>(0.3550279304731082468773725646572280145097495L), static_cast<T>(0.6149268412065471113075676385395360226412311L) }},
+   }};
+   const unsigned row = boost::math::tools::digits<T>() <= 24 ? 0 : boost::math::tools::digits<T>() <= 53 ? 1 : 2;
+   BOOST_CHECK_CLOSE_FRACTION(tiny_data[row][1], boost::math::airy_ai(tiny_data[row][0]), 4 * boost::math::tools::epsilon<T>());
+   BOOST_CHECK_CLOSE_FRACTION(tiny_data[row][2], boost::math::airy_bi(tiny_data[row][0]), 4 * boost::math::tools::epsilon<T>());
 }
 
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+//
+// A type wider than the 113-bit constants: the values at zero, and at x = 2^-40, where the linear
+// term Ai'(0) x is far larger than epsilon.  Values calculated with Arb.
+//
+void test_airy_multiprecision()
+{
+   using T = boost::multiprecision::cpp_bin_float_50;
+   T tol = 4 * boost::math::tools::epsilon<T>();
+   T x = ldexp(T(1), -40);
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::airy_ai(T(0)), T("0.355028053887817239260063186004183176397979174199177240583"), tol);
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::airy_bi(T(0)), T("0.614926627446000735150922369093613553594728188648596505041"), tol);
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::airy_ai_prime(T(0)), T("-0.258819403792806798405183560189203963479091138354934582210"), tol);
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::airy_bi_prime(T(0)), T("0.448288357353826357914823710398828390866226799212262061083"), tol);
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::airy_ai(x), T("0.355028053887581844383597600093405091606994037136788370360"), tol);
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::airy_bi(x), T("0.614926627446408451036802163278338535596058257122885820486"), tol);
+}
+#endif
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
@@ -87,6 +122,9 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_airy(0.1F, "float");
 #endif
    test_airy(0.1, "double");
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   test_airy_multiprecision();
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_airy(0.1L, "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS

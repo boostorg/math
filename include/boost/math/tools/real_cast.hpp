@@ -12,8 +12,7 @@
 #pragma once
 #endif
 
-namespace boost{ namespace math
-{
+BOOST_MATH_NAMESPACE_BEGIN
   namespace tools
   {
     template <class To, class T>
@@ -22,8 +21,7 @@ namespace boost{ namespace math
        return static_cast<To>(t);
     }
   } // namespace tools
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_TOOLS_REAL_CAST_HPP
 

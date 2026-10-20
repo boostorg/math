@@ -6,6 +6,7 @@
  */
 #ifndef BOOST_MATH_QUADRATURE_NAIVE_MONTE_CARLO_HPP
 #define BOOST_MATH_QUADRATURE_NAIVE_MONTE_CARLO_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <sstream>
 #include <algorithm>
 #include <vector>
@@ -21,14 +22,17 @@
 #include <map>
 #include <type_traits>
 #include <cstdint>
+#endif
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
 #ifdef BOOST_NAIVE_MONTE_CARLO_DEBUG_FAILURES
+#ifndef BOOST_MATH_BUILD_MODULE
 #  include <iostream>
 #endif
+#endif
 
-namespace boost { namespace math { namespace quadrature {
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature {
 
 namespace detail {
   enum class limit_classification {FINITE,
@@ -37,7 +41,7 @@ namespace detail {
                                    DOUBLE_INFINITE};
 }
 
-template<class Real, class F, class RandomNumberGenerator = std::mt19937_64, class Policy = boost::math::policies::policy<>,
+BOOST_MATH_EXPORT template<class Real, class F, class RandomNumberGenerator = std::mt19937_64, class Policy = BOOST_MATH_NAMESPACE::policies::policy<>,
          typename std::enable_if<std::is_trivially_copyable<Real>::value, bool>::type = true>
 class naive_monte_carlo
 {
@@ -51,7 +55,7 @@ public:
     {
         using std::numeric_limits;
         using std::sqrt;
-        using boost::math::isinf;
+        using BOOST_MATH_NAMESPACE::isinf;
 
         std::uint64_t n = bounds.size();
         m_lbs.resize(n);
@@ -63,7 +67,7 @@ public:
         {
             if (bounds[i].second <= bounds[i].first)
             {
-                boost::math::policies::raise_domain_error(function, "The upper bound is <= the lower bound.\n", bounds[i].second, Policy());
+                BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, "The upper bound is <= the lower bound.\n", bounds[i].second, Policy());
                 return;
             }
             if (isinf(bounds[i].first))
@@ -391,6 +395,7 @@ private:
             // The idea is that the unstabilized additions have error sigma(f)/sqrt(N) + epsilon*N, which diverges faster than it converges!
             // Kahan summation turns this to sigma(f)/sqrt(N) + epsilon^2*N, and the random walk occurs on a timescale of 10^14 years (on current hardware)
             Real compensator = 0;
+            Real S_compensator = 0;
             std::uint64_t k = m_thread_calls[thread_index].load(std::memory_order_consume);
             while (!m_done) // relaxed load
             {
@@ -419,14 +424,18 @@ private:
                         }
                         os << x[x.size() -1] << "}, and returned " << f << std::endl;
                         static const char* function = "boost::math::quadrature::naive_monte_carlo<%1%>";
-                        boost::math::policies::raise_domain_error(function, os.str().c_str(), /*this is a dummy arg to make it compile*/ 7.2, Policy());
+                        BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, os.str().c_str(), /*this is a dummy arg to make it compile*/ 7.2, Policy());
                     }
                     ++k;
                     Real term = (f - M1)/k;
                     Real y1 = term - compensator;
                     Real M2 = M1 + y1;
                     compensator = (M2 - M1) - y1;
-                    S += (f - M1)*(f - M2);
+                    Real S_term = (f - M1)*(f - M2);
+                    Real y2 = S_term - S_compensator;
+                    Real S2 = S + y2;
+                    S_compensator = (S2 - S) - y2;
+                    S = S2;
                     M1 = M2;
                 }
                 m_thread_averages[thread_index].store(M1, std::memory_order_release);
@@ -465,5 +474,5 @@ private:
     std::mutex m_exception_mutex;
 };
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif

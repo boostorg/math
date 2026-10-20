@@ -78,7 +78,7 @@ void test_spots2(T, const char* type_name)
 }
 
 template <class T>
-void test_sign(T, const char* type_name)
+void test_sign(T, const char* /*type_name*/)
 {
 #include "hypergeometric_1F1_small_random.ipp"
 

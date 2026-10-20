@@ -7,7 +7,7 @@
 <link rel="home" href="../index.html" title="Math Toolkit 4.2.1">
 <link rel="up" href="../overview.html" title="Chapter 1. Overview">
 <link rel="prev" href="error_handling.html" title="Error Handling">
-<link rel="next" href="compilers_overview.html" title="Compilers">
+<link rel="next" href="cxx20_modules.html" title="Support for C++20 Modules">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -21,7 +21,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="error_handling.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../overview.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="compilers_overview.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="error_handling.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../overview.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="cxx20_modules.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -43,6 +43,22 @@
     </p>
 <h5>
 <a name="math_toolkit.gpu.h1"></a>
+      <span class="phrase"><a name="math_toolkit.gpu.library_owned_kernels"></a></span><a class="link" href="gpu.html#math_toolkit.gpu.library_owned_kernels">Library
+      owned kernels</a>
+    </h5>
+<p>
+      One facility launches its own kernels instead of being called from a user's
+      kernel: the prime sieve (<code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">prime_sieve</span></code>, <code class="computeroutput"><span class="identifier">prime_range</span></code>,
+      <code class="computeroutput"><span class="identifier">prime_count</span></code>) accepts <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">execution</span><span class="special">::</span><span class="identifier">cuda</span></code> as
+      its execution policy. When the translation unit is compiled by nvcc with <code class="computeroutput"><span class="identifier">BOOST_MATH_ENABLE_CUDA</span></code> defined, the header
+      <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">prime_sieve</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code> defines
+      <code class="computeroutput"><span class="identifier">BOOST_MATH_HAS_CUDA_PRIME_SIEVE</span></code>
+      and sieves the requested range on the device, managing the device memory and
+      the kernel launches itself. Without nvcc the same call runs on the CPU. See
+      the prime sieve documentation for details and measurements.
+    </p>
+<h5>
+<a name="math_toolkit.gpu.h2"></a>
       <span class="phrase"><a name="math_toolkit.gpu.policies"></a></span><a class="link" href="gpu.html#math_toolkit.gpu.policies">Policies</a>
     </h5>
 <p>
@@ -51,7 +67,7 @@
       is run on device it will be ignored.
     </p>
 <h5>
-<a name="math_toolkit.gpu.h2"></a>
+<a name="math_toolkit.gpu.h3"></a>
       <span class="phrase"><a name="math_toolkit.gpu.how_to_build_with_device_support"></a></span><a class="link" href="gpu.html#math_toolkit.gpu.how_to_build_with_device_support">How
       to build with device support</a>
     </h5>
@@ -100,6 +116,10 @@ void test_beta_dist_kernel(const double* in, double* out, int num_elements)
 <span class="special">}</span>
 </pre>
 <p>
+      When using SYCL you must define BOOST_MATH_ENABLE_SYCL, since device support
+      is opt-in on that platform. For NVCC and NVRTC device support is enabled automatically.
+    </p>
+<p>
       Once your kernel function has been written then use the framework mechanism
       for launching the kernel.
     </p>
@@ -115,7 +135,7 @@ void test_beta_dist_kernel(const double* in, double* out, int num_elements)
 </div>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="error_handling.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../overview.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="compilers_overview.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="error_handling.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../overview.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="cxx20_modules.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

@@ -11,6 +11,9 @@ which would otherwise be detected by Boost.Config.  In addition, if you use a se
 later C++ standards, then support for that later standard version becomes pretty much mandatory.  In other words, if you hit issues, try upping your compiler's
 conformance level to C++17 if you can.
 
+If you embed a standalone copy of this library inside another library, you can also move it out of namespace `boost::math`
+so that it cannot collide with another version of Boost.Math: see [link math_toolkit.configurable_namespace Configurable Namespace].
+
 Latest tarballs of this library can be obtained from:
 
 Latest [@https://github.com/boostorg/math/releases official releases] (including full Boost releases).

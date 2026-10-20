@@ -30,4 +30,10 @@ cmake-build-debug/*
 build.ninja
 .ninja*
 a.out
+*.json
+*.patch
 
+# Test executables built in place (extensionless), but not the sources or the test_* directories:
+/test/test_*
+!/test/test_*.*
+!/test/test_*/

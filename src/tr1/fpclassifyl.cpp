@@ -17,39 +17,39 @@
 #  pragma warning (disable: 4800) // 'int' : forcing value to bool 'true' or 'false' (performance warning)
 #endif
 
-namespace boost{ namespace math{ namespace tr1{
+BOOST_MATH_NAMESPACE_BEGIN namespace tr1{
 
 template<> bool BOOST_MATH_TR1_DECL signbit<long double> BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x)
 {
-   return static_cast<bool>((boost::math::signbit)(x));
+   return static_cast<bool>((BOOST_MATH_NAMESPACE::signbit)(x));
 }
 
 template<> int BOOST_MATH_TR1_DECL fpclassify<long double> BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x)
 {
-   return (boost::math::fpclassify)(x);
+   return (BOOST_MATH_NAMESPACE::fpclassify)(x);
 }
 
 template<> bool BOOST_MATH_TR1_DECL isfinite<long double> BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x)
 {
-   return (boost::math::isfinite)(x);
+   return (BOOST_MATH_NAMESPACE::isfinite)(x);
 }
 
 template<> bool BOOST_MATH_TR1_DECL isinf<long double> BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x)
 {
-   return (boost::math::isinf)(x);
+   return (BOOST_MATH_NAMESPACE::isinf)(x);
 }
 
 template<> bool BOOST_MATH_TR1_DECL isnan<long double> BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x)
 {
-   return (boost::math::isnan)(x);
+   return (BOOST_MATH_NAMESPACE::isnan)(x);
 }
 
 template<> bool BOOST_MATH_TR1_DECL isnormal<long double> BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x)
 {
-   return (boost::math::isnormal)(x);
+   return (BOOST_MATH_NAMESPACE::isnormal)(x);
 }
 
-}}} // namespace boost{ namespace math{ namespace tr1{
+} BOOST_MATH_NAMESPACE_END // namespace boost{ namespace math{ namespace tr1{
 
 #if defined (_MSC_VER)
 #  pragma warning(pop)

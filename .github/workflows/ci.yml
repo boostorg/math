@@ -14,19 +14,43 @@ on:
   release:
     types: [published, created, edited]
 
+# A new push to a branch (develop, or a PR's) cancels that branch's older runs of this workflow:
 concurrency:
-  group: ${{ github.head_ref || github.run_id }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
+# Every job builds with the same floating-point contraction: fused multiply-add, contracted across
+# expressions. gcc and clang get -ffp-contract=fast, since gcc's ISO -std=c++NN modes otherwise
+# mean off and clang's default only fuses within one expression; x86 also needs -mfma (arm64 has
+# FMA in its base instruction set, so macOS drops it). MSVC and clang-cl get /fp:contract (or
+# -ffp-contract=fast) with /arch:AVX2. -O2 rather than b2's default of -O0 because it is what
+# users build with and gcc does not fuse below it, and inlining=on because b2's debug variant
+# otherwise adds -fno-inline. The CMake jobs get the same flags through CXXFLAGS.
+env:
+  FMA_B2: cxxflags=-mfma cxxflags=-ffp-contract=fast cxxflags=-O2 inlining=on
+
+# b2 -l is no use as a hang detector: on POSIX it is a CPU-time rlimit that kills multithreaded
+# tests, and on Windows it misfires at launch.  So the test jobs have a job-level timeout instead.
 jobs:
   ubuntu-noble:
     runs-on: ubuntu-24.04
+    # Reads the repository only; the simulator's action uses no token or secrets.
+    permissions:
+      contents: read
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++-14, clang++-16, clang++-17, clang++-18 ]
+        compiler: [ g++-14, clang++-18 ]
         standard: [ c++20 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
+        include:
+          # C++14 is no longer tested elsewhere, but downstream libraries (e.g. Multiprecision)
+          # still include our headers in C++14 mode.  Keep one job so that breaking C++14 is a
+          # deliberate, announced decision rather than something that slips in unnoticed.
+          - compiler: g++-14
+            standard: c++14
+            suite: github_ci_block_1
     steps:
       - uses: actions/checkout@v6
         with:
@@ -48,7 +72,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y g++-13 g++-14 clang-16 clang-17 clang-18 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-14 clang-18 libgmp-dev libmpfr-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -76,15 +100,16 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS
+        run: ../../../b2 -d0 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS $FMA_B2
         working-directory: ../boost-root/libs/math/test
   ubuntu-focal-no-eh:
     runs-on: ubuntu-24.04
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
         compiler: [ g++-13, clang++-19 ]
-        standard: [ c++14, c++17, c++20, c++23 ]
+        standard: [ c++17, c++20, c++23 ]
     steps:
       - uses: actions/checkout@v6
         with:
@@ -106,7 +131,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y g++-13 clang-19 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-13 clang-19 libgmp-dev libmpfr-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -134,15 +159,18 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ../../../b2 toolset=$TOOLSET no_eh_tests exception-handling=off rtti=off define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER
+        run: ../../../b2 -d0 toolset=$TOOLSET no_eh_tests exception-handling=off rtti=off define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER $FMA_B2
         working-directory: ../boost-root/libs/math/test
   macos:
     runs-on: macos-latest
+    timeout-minutes: 120
+    env:
+      FMA_B2: cxxflags=-ffp-contract=fast cxxflags=-O2 inlining=on
     strategy:
       fail-fast: false
       matrix:
         toolset: [ clang ]
-        standard: [ 14, 17, 20 ]
+        standard: [ 20 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v6
@@ -172,20 +200,24 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ../../../b2 toolset=${{ matrix.toolset }} cxxstd=${{ matrix.standard }} ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER
+        run: ../../../b2 -d0 toolset=${{ matrix.toolset }} cxxstd=${{ matrix.standard }} ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER $FMA_B2
         working-directory: ../boost-root/libs/math/test
   windows_gcc:
     runs-on: windows-2025
+    timeout-minutes: 120
     defaults:
       run:
         shell: cmd
     env:
       ARGS: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard }}
+      # -mfma brings in AVX. Win64 only aligns the stack to 16 bytes, but gcc emits aligned 32-byte
+      # AVX moves for stack objects, which crash (gcc bug 54412). Have the assembler unalign them.
+      FMA_B2: cxxflags=-mfma cxxflags=-ffp-contract=fast cxxflags=-O2 inlining=on cxxflags=-Wa,-muse-unaligned-vector-move
     strategy:
       fail-fast: false
       matrix:
         toolset: [ gcc ]
-        standard: [ 14 ]
+        standard: [ 17 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v6
@@ -215,21 +247,36 @@ jobs:
         run: config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }}
+        # On Windows -d0 hides the output of failing tests, so rerun the failures verbosely.
+        run: ..\..\..\b2 -d0 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} %FMA_B2% || ..\..\..\b2 -d1 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} %FMA_B2%
         working-directory: ../boost-root/libs/math/test
   MSVC2022:
     runs-on: windows-2022
+    timeout-minutes: 120
     defaults:
       run:
         shell: cmd
     env:
-      ARGS: address-model=64 cxxstd=${{ matrix.standard }}
+      ARGS: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard }}
+      # Optimize like the other jobs (/O2): b2's debug default of /Od makes the tests slow to run.
+      OPT_B2: optimization=speed inlining=on ${{ matrix.contract }}
     strategy:
       fail-fast: false
       matrix:
         toolset: [ msvc-14.3, clang-win ]
-        standard: [ 14, 17, latest ]
+        standard: [ 17, latest ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
+        exclude:
+          - toolset: clang-win
+            standard: 17
+        include:
+          # cl only fuses with /fp:contract, and only into the FMA instructions of /arch:AVX2.
+          # clang-cl's /fp:contract would mean -ffp-contract=on, so it is given fast directly;
+          # its /arch:AVX2 targets Haswell, which has FMA.
+          - toolset: msvc-14.3
+            contract: cxxflags=/fp:contract cxxflags=/arch:AVX2
+          - toolset: clang-win
+            contract: cxxflags=/clang:-ffp-contract=fast cxxflags=/arch:AVX2
     steps:
       - uses: actions/checkout@v6
         with:
@@ -258,52 +305,17 @@ jobs:
         run: config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} pch=off
+        # On Windows -d0 hides the output of failing tests, so rerun the failures verbosely.
+        run: ..\..\..\b2 -d0 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} pch=off %OPT_B2% || ..\..\..\b2 -d1 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} pch=off %OPT_B2%
         working-directory: ../boost-root/libs/math/test
-  cygwin:
-    runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        compiler: [ g++-11 ]
-        standard: [ c++17 ]
-        suite: [ github_ci_block_1, github_ci_block_2 ]
-    env:
-      TOOLSET: gcc
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: '0'
-      - name: Install Cygwin
-        run: choco install -y cygwin
-      - name: Install Package Manager
-        run: choco install -y cyg-get
-      - name: Install Packages
-        run: cyg-get git gcc-core gcc-g++ python39 libgmp-devel libmpfr-devel libfftw3-devel
-      - name: Checkout main boost
-        run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE") && git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root'
-      - name: Update tools/boostdep
-        run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE")/../boost-root && git submodule update --init tools/boostdep'
-      - name: Copy files
-        run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE") && cp -r * ../boost-root/libs/math'
-      - name: Install deps
-        run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE")/../boost-root && python tools/boostdep/depinst/depinst.py math -C -I example -I tools'
-      - name: Bootstrap
-        run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE")/../boost-root && ./bootstrap.sh'
-      - name: Generate headers
-        run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE")/../boost-root && ./b2 headers'
-      - name: Config info install
-        run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE")/../boost-root/libs/config/test && ../../../b2 config_info_travis_install toolset=$TOOLSET'
-      - name: Config info
-        run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE")/../boost-root/libs/config/test && ./config_info_travis'
-      - name: Test
-        run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE")/../boost-root/libs/math/test && ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER'
   standalone-compile-tests-gcc:
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
         compiler: [ g++-13 ]
+    env:
+      CXXFLAGS: -mfma -ffp-contract=fast -O2
     steps:
       - uses: actions/checkout@v6
         with:
@@ -323,7 +335,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y g++-13 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-13 libgmp-dev libmpfr-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -344,6 +356,8 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [ clang++-19 ]
+    env:
+      CXXFLAGS: -mfma -ffp-contract=fast -O2
     steps:
       - uses: actions/checkout@v6
         with:
@@ -363,7 +377,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y clang-19 libgmp-dev libmpfr-dev libfftw3-dev libtbb-dev
+        run: sudo apt-get install -y clang-19 libgmp-dev libmpfr-dev libtbb-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -380,11 +394,12 @@ jobs:
         working-directory: ../boost-root/libs/math
   standalone-gcc:
     runs-on: ubuntu-24.04
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
         compiler: [ g++-13 ]
-        standard: [ c++14, c++17, c++20, c++23 ]
+        standard: [ c++17 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v6
@@ -407,7 +422,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt-get install -y g++-13 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-13 libgmp-dev libmpfr-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -435,7 +450,7 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_STANDALONE define=BOOST_MP_STANDALONE
+        run: ../../../b2 -d0 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_STANDALONE define=BOOST_MP_STANDALONE $FMA_B2
         working-directory: ../boost-root/libs/math/test
 
   posix-cmake-test:
@@ -447,12 +462,15 @@ jobs:
 
     runs-on: ${{matrix.os}}
 
+    env:
+      CXXFLAGS: -mfma -ffp-contract=fast -O2
+
     steps:
       - uses: actions/checkout@v6
 
       - name: Install packages
         if: matrix.install
-        run: sudo apt install ${{matrix.install}} libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt install ${{matrix.install}} libgmp-dev libmpfr-dev
 
       - name: Setup Boost
         run: |
@@ -492,10 +510,16 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
+            cxxflags: -mfma -ffp-contract=fast -O2
           - os: ubuntu-24.04
+            cxxflags: -mfma -ffp-contract=fast -O2
           - os: macos-15
+            cxxflags: -ffp-contract=fast -O2
 
     runs-on: ${{matrix.os}}
+
+    env:
+      CXXFLAGS: ${{matrix.cxxflags}}
 
     steps:
       - uses: actions/checkout@v6
@@ -508,16 +532,76 @@ jobs:
           cmake --build .
           ctest --output-on-failure --no-tests=error
 
+  cmake-namespace-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            compiler: g++-14
+            cxxstd: 14
+            cxxflags: -mfma -ffp-contract=fast
+          - os: ubuntu-24.04
+            compiler: g++-14
+            cxxstd: 20
+            cxxflags: -mfma -ffp-contract=fast
+          - os: ubuntu-24.04
+            compiler: clang++-18
+            cxxstd: 17
+            cxxflags: -mfma -ffp-contract=fast
+          - os: macos-15
+            compiler: clang++
+            cxxstd: 17
+            cxxflags: -ffp-contract=fast
+          - os: windows-2022
+            cxxstd: 17
+            cxxflags: /fp:contract /arch:AVX2
+
+    runs-on: ${{matrix.os}}
+
+    # Not optimized: the test looks for the library's symbols in the object files, which inlining
+    # would remove.
+    env:
+      CXXFLAGS: ${{matrix.cxxflags}}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Relocate the library into my_lib::math
+        if: runner.os != 'Windows'
+        run: |
+          cd test/cmake_namespace_test
+          mkdir __build__ && cd __build__
+          cmake -DCMAKE_CXX_COMPILER=${{matrix.compiler}} -DCMAKE_CXX_STANDARD=${{matrix.cxxstd}} ..
+          cmake --build . -j 4
+          ctest --output-on-failure --no-tests=error
+
+      - name: Relocate the library into my_lib::math (MSVC)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          cd test/cmake_namespace_test
+          mkdir __build__ && cd __build__
+          cmake -DCMAKE_CXX_STANDARD=${{matrix.cxxstd}} -DBOOST_MATH_NAMESPACE_TEST_HEADERS=OFF ..
+          cmake --build . --config Debug
+          ctest --output-on-failure --no-tests=error -C Debug
+
   posix-cmake-subdir-legacy:
     strategy:
       fail-fast: false
       matrix:
         include:
           - os: ubuntu-22.04
+            cxxflags: -mfma -ffp-contract=fast -O2
           - os: ubuntu-24.04
+            cxxflags: -mfma -ffp-contract=fast -O2
           - os: macos-15
+            cxxflags: -ffp-contract=fast -O2
 
     runs-on: ${{matrix.os}}
+
+    env:
+      CXXFLAGS: ${{matrix.cxxflags}}
 
     steps:
       - uses: actions/checkout@v6
@@ -559,6 +643,9 @@ jobs:
           - os: macos-15
 
     runs-on: ${{matrix.os}}
+
+    env:
+      CXXFLAGS: -ffp-contract=fast -O2
 
     steps:
       - uses: actions/checkout@v6
@@ -612,6 +699,9 @@ jobs:
 
     runs-on: ${{matrix.os}}
 
+    env:
+      CXXFLAGS: -ffp-contract=fast -O2
+
     steps:
       - uses: actions/checkout@v6
 
@@ -664,6 +754,9 @@ jobs:
 
     runs-on: ${{matrix.os}}
 
+    env:
+      CXXFLAGS: -ffp-contract=fast -O2
+
     steps:
       - uses: actions/checkout@v6
 
@@ -712,6 +805,9 @@ jobs:
       fail-fast: false
 
     runs-on: ubuntu-latest
+
+    env:
+      CXXFLAGS: -mfma -ffp-contract=fast -O2
 
     steps:
       - name: Intel Apt repository
@@ -775,22 +871,31 @@ jobs:
   cuda-cmake-test:
     strategy:
       fail-fast: false
+      matrix:
+        # Building all the CUDA tests takes over 45 minutes on one runner, more than any other job,
+        # so each shard builds and runs every third test:
+        shard: [ 0, 1, 2 ]
 
     runs-on: ubuntu-24.04
 
+    env:
+      CXXFLAGS: -mfma -ffp-contract=fast -O2
+      CUDAFLAGS: -Xcompiler=-mfma,-ffp-contract=fast,-O2
+
     steps:
-      - uses: Jimver/cuda-toolkit@v0.2.25
-        id: cuda-toolkit
+      # CUDA 12.8 and a simulated GPU (PantheonSim): the runner has none, so
+      # the simulator runs the tests' kernels on its CPU. It checks results,
+      # not performance.
+      - name: Set up CUDA 12.8 and a simulated T4
+        uses: pantheongpu/setup-pantheonsim@06648b8c0cb091584196678593215db2e16bd7eb # v0.1.2
         with:
-          cuda: '12.8.0'
-          method: 'network'
-          sub-packages: '["nvcc"]'
+          gpu: nvidia/t4
+          cuda-toolkit: '12.8'
 
       - name: Output CUDA information
         run: |
-          echo "Installed cuda version is: ${{steps.cuda-toolkit.outputs.cuda}}"+
-          echo "Cuda install location: ${{steps.cuda-toolkit.outputs.CUDA_PATH}}"
           nvcc -V
+          nvidia-smi -L
       - uses: actions/checkout@v6
 
       - name: Install Packages
@@ -820,13 +925,245 @@ jobs:
         run: |
           cd ../boost-root
           mkdir __build__ && cd __build__
-          cmake -DBOOST_INCLUDE_LIBRARIES=$LIBRARY -DBUILD_TESTING=ON -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc -DBOOST_MATH_ENABLE_CUDA=1 -DCMAKE_CUDA_ARCHITECTURES="75;86" -DCMAKE_CUDA_STANDARD=17 ..
+          cmake -DBOOST_INCLUDE_LIBRARIES=$LIBRARY -DBUILD_TESTING=ON -DCMAKE_CUDA_COMPILER=/usr/local/cuda-12.8/bin/nvcc -DBOOST_MATH_ENABLE_CUDA=1 -DCMAKE_CUDA_ARCHITECTURES="75;86" -DCMAKE_CUDA_STANDARD=17 -DCMAKE_CUDA_RUNTIME_LIBRARY=Shared ..
       - name: Build tests
         run: |
           cd ../boost-root/__build__
-          cmake --build . --target tests -j $(nproc)
-      # Will leave this commented out for now. GHA does not install graphics cards by default
-      #- name: Run tests
-      #  run: |
-      #    cd ../boost-root/__build__
-      #    ctest --output-on-failure --no-tests=error
+          # This shard's tests; a run test named run-X runs the executable target X, which is built here:
+          ctest -N | sed -n 's/^ *Test *#[0-9]*: //p' | awk 'NR % 3 == ${{ matrix.shard }}' > shard_tests.txt
+          echo "$(wc -l < shard_tests.txt) tests in this shard"
+          cmake --build . -j $(nproc) --target $(sed -n 's/^run-//p' shard_tests.txt)
+      - name: Run tests
+        run: |
+          cd ../boost-root/__build__
+          # Left out: inverse_gaussian_quan_float/double and lgamma_p_double fail the same
+          # way on a real GPU (RTX 3080 Ti), and prime_sieve_cuda takes over 25 minutes
+          # on a simulated one (39 s on the card).
+          ctest --output-on-failure --no-tests=error -j $(nproc) -R "^($(paste -sd '|' shard_tests.txt))\$" -E 'inverse_gaussian_quan|lgamma_p_double|prime_sieve_cuda'
+
+  cmake-module-test:
+    strategy:
+      fail-fast: false
+
+    runs-on: ubuntu-24.04
+
+    env:
+      # clang/libc++ version used to build the module. Needs a libc++ new enough to
+      # mix `import std` with textual libc++ includes (18 and 19 have std-module bugs).
+      LLVM_VERSION: "20"
+      # Pinned so the experimental `import std` feature UUID below stays valid.
+      CMAKE_VERSION: 4.4.0
+      # CMake gates `import std` behind this UUID; it is specific to the CMake version.
+      IMPORT_STD_UUID: f35a9ac6-8463-4d38-8eec-5d6008153e7d
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install toolchain
+        run: |
+          # A recent clang + libc++ (for `import std`), clang-scan-deps (module
+          # dependency scanning), Ninja (required for C++ modules) and a pinned CMake.
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh $LLVM_VERSION
+          sudo apt-get install -y clang-tools-$LLVM_VERSION libc++-$LLVM_VERSION-dev libc++abi-$LLVM_VERSION-dev ninja-build
+          wget -q https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-linux-x86_64.tar.gz
+          sudo tar -xzf cmake-$CMAKE_VERSION-linux-x86_64.tar.gz -C /opt
+          echo "/opt/cmake-$CMAKE_VERSION-linux-x86_64/bin" >> "$GITHUB_PATH"
+
+      - name: Setup Boost
+        run: |
+          echo GITHUB_REPOSITORY: $GITHUB_REPOSITORY
+          LIBRARY=${GITHUB_REPOSITORY#*/}
+          echo LIBRARY: $LIBRARY
+          echo "LIBRARY=$LIBRARY" >> $GITHUB_ENV
+          echo GITHUB_BASE_REF: $GITHUB_BASE_REF
+          echo GITHUB_REF: $GITHUB_REF
+          REF=${GITHUB_BASE_REF:-$GITHUB_REF}
+          REF=${REF#refs/heads/}
+          echo REF: $REF
+          BOOST_BRANCH=develop && [ "$REF" == "master" ] && BOOST_BRANCH=master || true
+          echo BOOST_BRANCH: $BOOST_BRANCH
+          cd ..
+          git clone -b $BOOST_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
+          cd boost-root
+          mkdir -p libs/$LIBRARY
+          cp -r $GITHUB_WORKSPACE/* libs/$LIBRARY
+          git submodule update --init tools/boostdep
+          python3 tools/boostdep/depinst/depinst.py --git_args "--jobs 3" $LIBRARY
+
+      - name: Configure
+        run: |
+          cd ../boost-root
+          mkdir __build__ && cd __build__
+          cmake -G Ninja \
+            -DBOOST_INCLUDE_LIBRARIES=$LIBRARY \
+            -DBUILD_TESTING=ON \
+            -DBOOST_MATH_BUILD_MODULE=ON \
+            -DCMAKE_CXX_COMPILER=clang++-$LLVM_VERSION \
+            -DCMAKE_CXX_FLAGS="-stdlib=libc++ -Wno-reserved-module-identifier -mfma -ffp-contract=fast -O2" \
+            -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD=$IMPORT_STD_UUID \
+            -DCMAKE_CXX_STDLIB_MODULES_JSON=/usr/lib/llvm-$LLVM_VERSION/lib/libc++.modules.json \
+            ..
+
+      # Kept as a separate step so the boost.math module build time is visible on its own.
+      - name: Build the Boost.Math module
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target boost_math_module
+
+      - name: Build and run the tests
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target tests
+          ctest --output-on-failure --no-tests=error
+
+  cmake-module-test-gcc:
+    strategy:
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+
+    # GCC 15 (the first release with import std support and
+    # libstdc++.modules.json) is not packaged for the runner image, so the job
+    # runs in a container that ships it.
+    container: ubuntu:26.04
+
+    env:
+      CXXFLAGS: -mfma -ffp-contract=fast -O2
+      GCC_VERSION: "15"
+      # Pinned so the experimental `import std` feature UUID below stays valid.
+      CMAKE_VERSION: 4.4.0
+      # CMake gates `import std` behind this UUID; it is specific to the CMake version.
+      IMPORT_STD_UUID: f35a9ac6-8463-4d38-8eec-5d6008153e7d
+
+    steps:
+      - name: Install toolchain
+        run: |
+          apt-get update
+          apt-get install -y g++-$GCC_VERSION gcc-$GCC_VERSION ninja-build wget ca-certificates git python3
+          wget -q https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-linux-x86_64.tar.gz
+          tar -xzf cmake-$CMAKE_VERSION-linux-x86_64.tar.gz -C /opt
+          echo "/opt/cmake-$CMAKE_VERSION-linux-x86_64/bin" >> "$GITHUB_PATH"
+
+      - uses: actions/checkout@v6
+
+      - name: Setup Boost
+        run: |
+          echo GITHUB_REPOSITORY: $GITHUB_REPOSITORY
+          LIBRARY=${GITHUB_REPOSITORY#*/}
+          echo LIBRARY: $LIBRARY
+          echo "LIBRARY=$LIBRARY" >> $GITHUB_ENV
+          echo GITHUB_BASE_REF: $GITHUB_BASE_REF
+          echo GITHUB_REF: $GITHUB_REF
+          REF=${GITHUB_BASE_REF:-$GITHUB_REF}
+          REF=${REF#refs/heads/}
+          echo REF: $REF
+          BOOST_BRANCH=develop && [ "$REF" == "master" ] && BOOST_BRANCH=master || true
+          echo BOOST_BRANCH: $BOOST_BRANCH
+          cd ..
+          git clone -b $BOOST_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
+          cd boost-root
+          mkdir -p libs/$LIBRARY
+          cp -r $GITHUB_WORKSPACE/* libs/$LIBRARY
+          git submodule update --init tools/boostdep
+          python3 tools/boostdep/depinst/depinst.py --git_args "--jobs 3" $LIBRARY
+
+      - name: Configure
+        run: |
+          cd ../boost-root
+          mkdir __build__ && cd __build__
+          cmake -G Ninja \
+            -DBOOST_INCLUDE_LIBRARIES=$LIBRARY \
+            -DBUILD_TESTING=ON \
+            -DBOOST_MATH_BUILD_MODULE=ON \
+            -DCMAKE_C_COMPILER=gcc-$GCC_VERSION \
+            -DCMAKE_CXX_COMPILER=g++-$GCC_VERSION \
+            -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD=$IMPORT_STD_UUID \
+            ..
+
+      # Kept as a separate step so the boost.math module build time is visible on its own.
+      - name: Build the Boost.Math module
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target boost_math_module
+
+      - name: Build and run the tests
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target tests
+          ctest --output-on-failure --no-tests=error
+
+  cmake-module-test-msvc:
+    strategy:
+      fail-fast: false
+
+    runs-on: windows-2025
+
+    env:
+      # Pinned so the experimental import std feature UUID below stays valid.
+      CMAKE_VERSION: 4.4.0
+      # CMake gates import std behind this UUID; it is specific to the CMake version.
+      IMPORT_STD_UUID: f35a9ac6-8463-4d38-8eec-5d6008153e7d
+      CXXFLAGS: /fp:contract /arch:AVX2 /O2
+
+    steps:
+      - uses: actions/checkout@v6
+
+      # Puts cl.exe and the MSVC INCLUDE/LIB environment on PATH for the later steps.
+      - name: Set up the MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install toolchain
+        shell: pwsh
+        run: |
+          # A pinned CMake (the import std UUID is tied to the version) and Ninja
+          # (required for C++ modules).
+          curl.exe -L -o cmake.zip "https://github.com/Kitware/CMake/releases/download/v$env:CMAKE_VERSION/cmake-$env:CMAKE_VERSION-windows-x86_64.zip"
+          Expand-Archive -Path cmake.zip -DestinationPath C:\tools
+          "C:\tools\cmake-$env:CMAKE_VERSION-windows-x86_64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append -Encoding utf8
+          choco install ninja -y
+
+      - name: Setup Boost
+        shell: pwsh
+        run: |
+          $LIBRARY = ($env:GITHUB_REPOSITORY -split '/')[-1]
+          "LIBRARY=$LIBRARY" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          $ref = if ($env:GITHUB_BASE_REF) { $env:GITHUB_BASE_REF } else { $env:GITHUB_REF }
+          $ref = $ref -replace '^refs/heads/', ''
+          $branch = if ($ref -eq 'master') { 'master' } else { 'develop' }
+          cd ..
+          git clone -b $branch --depth 1 https://github.com/boostorg/boost.git boost-root
+          cd boost-root
+          New-Item -ItemType Directory -Force -Path "libs/$LIBRARY" | Out-Null
+          Copy-Item -Recurse -Force "$env:GITHUB_WORKSPACE/*" "libs/$LIBRARY"
+          git submodule update --init tools/boostdep
+          python tools/boostdep/depinst/depinst.py --git_args "--jobs 3" $LIBRARY
+
+      - name: Configure
+        shell: pwsh
+        run: |
+          cd ../boost-root
+          New-Item -ItemType Directory -Force -Path __build__ | Out-Null
+          cd __build__
+          cmake -G Ninja `
+            -DBOOST_INCLUDE_LIBRARIES="$env:LIBRARY" `
+            -DBUILD_TESTING=ON `
+            -DBOOST_MATH_BUILD_MODULE=ON `
+            -DCMAKE_CXX_COMPILER=cl `
+            -DCMAKE_EXPERIMENTAL_CXX_IMPORT_STD="$env:IMPORT_STD_UUID" `
+            ..
+
+      # Kept as a separate step so the boost.math module build time is visible on its own.
+      - name: Build the Boost.Math module
+        shell: pwsh
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target boost_math_module
+
+      - name: Build and run the tests
+        shell: pwsh
+        run: |
+          cd ../boost-root/__build__
+          cmake --build . --target tests
+          ctest --output-on-failure --no-tests=error

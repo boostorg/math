@@ -27,7 +27,7 @@
 // R_D(x, y, z) = R_J(x, y, z, z) = 1.5 * \int_{0}^{\infty} [(t+x)(t+y)]^{-1/2} (t+z)^{-3/2} dt
 // Carlson, Numerische Mathematik, vol 33, 1 (1979)
 
-namespace boost { namespace math { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T ellint_rd_imp(T x, T y, T z, const Policy& pol)
@@ -181,7 +181,7 @@ BOOST_MATH_GPU_ENABLED T ellint_rd_imp(T x, T y, T z, const Policy& pol)
 
 } // namespace detail
 
-template <class T1, class T2, class T3, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2, T3>::type 
    ellint_rd(T1 x, T2 y, T3 z, const Policy& pol)
 {
@@ -194,14 +194,14 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2, T3>::type
          static_cast<value_type>(z), pol), "boost::math::ellint_rd<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2, T3>::type 
    ellint_rd(T1 x, T2 y, T3 z)
 {
    return ellint_rd(x, y, z, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ELLINT_RD_HPP
 

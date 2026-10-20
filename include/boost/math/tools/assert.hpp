@@ -36,9 +36,14 @@
 
 #else // Standalone mode - use cassert
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cassert>
 #define BOOST_MATH_ASSERT(expr) assert(expr)
 #define BOOST_MATH_ASSERT_MSG(expr, msg) assert((expr)&&(msg))
+#else
+#define BOOST_MATH_ASSERT(expr)
+#define BOOST_MATH_ASSERT_MSG(expr, msg)
+#endif
 #define BOOST_MATH_STATIC_ASSERT(expr) static_assert(expr, #expr " failed")
 #define BOOST_MATH_STATIC_ASSERT_MSG(expr, msg) static_assert(expr, msg)
 

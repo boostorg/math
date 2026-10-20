@@ -6,9 +6,11 @@
 #ifndef BOOST_MATH_TOOLS_RECURRENCE_HPP_
 #define BOOST_MATH_TOOLS_RECURRENCE_HPP_
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
 #include <tuple>
 #include <utility>
+#endif
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/tuple.hpp>
@@ -18,8 +20,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
-namespace boost {
-   namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
       namespace tools {
          namespace detail{
 
@@ -37,7 +38,7 @@ namespace boost {
             {
                typedef typename std::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
                typedef std::pair<value_type, value_type> result_type;
-               function_ratio_from_backwards_recurrence_fraction(const Recurrence& r) : r(r), k(0) {}
+               function_ratio_from_backwards_recurrence_fraction(const Recurrence& r_) : r(r_), k(0) {}
 
                result_type operator()()
                {
@@ -61,7 +62,7 @@ namespace boost {
             template <class R, class T>
             struct recurrence_reverser
             {
-               recurrence_reverser(const R& r) : r(r) {}
+               recurrence_reverser(const R& r_) : r(r_) {}
                std::tuple<T, T, T> operator()(int i)
                {
                   using std::swap;
@@ -99,11 +100,11 @@ namespace boost {
          // factor:     Convergence criteria, should be no less than machine epsilon.
          // max_iter:   Maximum iterations to use solving the continued fraction.
          //
-         template <class Recurrence, class T>
+         BOOST_MATH_EXPORT template <class Recurrence, class T>
          T function_ratio_from_backwards_recurrence(const Recurrence& r, const T& factor, std::uintmax_t& max_iter)
          {
             detail::function_ratio_from_backwards_recurrence_fraction<Recurrence> f(r);
-            return boost::math::tools::continued_fraction_a(f, factor, max_iter);
+            return BOOST_MATH_NAMESPACE::tools::continued_fraction_a(f, factor, max_iter);
          }
 
          //
@@ -120,11 +121,11 @@ namespace boost {
          // factor:     Convergence criteria, should be no less than machine epsilon.
          // max_iter:   Maximum iterations to use solving the continued fraction.
          //
-         template <class Recurrence, class T>
+         BOOST_MATH_EXPORT template <class Recurrence, class T>
          T function_ratio_from_forwards_recurrence(const Recurrence& r, const T& factor, std::uintmax_t& max_iter)
          {
-            boost::math::tools::detail::function_ratio_from_backwards_recurrence_fraction<boost::math::tools::detail::recurrence_reverser<Recurrence, T> > f(r);
-            return boost::math::tools::continued_fraction_a(f, factor, max_iter);
+            BOOST_MATH_NAMESPACE::tools::detail::function_ratio_from_backwards_recurrence_fraction<BOOST_MATH_NAMESPACE::tools::detail::recurrence_reverser<Recurrence, T> > f(r);
+            return BOOST_MATH_NAMESPACE::tools::continued_fraction_a(f, factor, max_iter);
          }
 
 
@@ -140,7 +141,7 @@ namespace boost {
          // first: w(-1);
          // second: w(0);
          //
-         template <class NextCoefs, class T>
+         BOOST_MATH_EXPORT template <class NextCoefs, class T>
          inline T apply_recurrence_relation_forward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, long long* log_scaling = nullptr, T* previous = nullptr)
          {
             BOOST_MATH_STD_USING
@@ -172,7 +173,7 @@ namespace boost {
                }
                // scale each part separately to avoid spurious overflow:
                third = (a / -c) * first + (b / -c) * second;
-               BOOST_MATH_ASSERT((boost::math::isfinite)(third));
+               BOOST_MATH_ASSERT((BOOST_MATH_NAMESPACE::isfinite)(third));
 
 
                swap(first, second);
@@ -196,7 +197,7 @@ namespace boost {
          // first: w(1);
          // second: w(0);
          //
-         template <class T, class NextCoefs>
+         BOOST_MATH_EXPORT template <class T, class NextCoefs>
          inline T apply_recurrence_relation_backward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, long long* log_scaling = nullptr, T* previous = nullptr)
          {
             BOOST_MATH_STD_USING
@@ -227,7 +228,7 @@ namespace boost {
                }
                // scale each part separately to avoid spurious overflow:
                next = (b / -a) * second + (c / -a) * first;
-               BOOST_MATH_ASSERT((boost::math::isfinite)(next));
+               BOOST_MATH_ASSERT((BOOST_MATH_NAMESPACE::isfinite)(next));
 
                swap(first, second);
                swap(second, next);
@@ -239,20 +240,37 @@ namespace boost {
             return second;
          }
 
-         template <class Recurrence>
+         //
+         // The index at which a recurrence iterator starts: the recurrence is called with k0, k0 + 1, ... (forwards)
+         // or k0, k0 - 1, ... (backwards) rather than starting from 0.  Recurrences whose coefficients depend on
+         // v + k then see each order with a single rounding, rather than stepping from a rounded v + k0.
+         //
+         BOOST_MATH_EXPORT struct recurrence_offset
+         {
+            explicit recurrence_offset(int k) : value(k) {}
+            int value;
+         };
+
+         BOOST_MATH_EXPORT template <class Recurrence>
          struct forward_recurrence_iterator
          {
             typedef typename std::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
 
-            forward_recurrence_iterator(const Recurrence& r, value_type f_n_minus_1, value_type f_n)
-               : f_n_minus_1(f_n_minus_1), f_n(f_n), coef(r), k(0) {}
+            forward_recurrence_iterator(const Recurrence& r, value_type f_n_minus_1_, value_type f_n_)
+               : f_n_minus_1(f_n_minus_1_), f_n(f_n_), coef(r), k(0) {}
 
-            forward_recurrence_iterator(const Recurrence& r, value_type f_n)
-               : f_n(f_n), coef(r), k(0)
+            forward_recurrence_iterator(const Recurrence& r, value_type f_n_)
+               : forward_recurrence_iterator(r, f_n_, recurrence_offset(0)) {}
+
+            forward_recurrence_iterator(const Recurrence& r, value_type f_n_minus_1_, value_type f_n_, recurrence_offset k0)
+               : f_n_minus_1(f_n_minus_1_), f_n(f_n_), coef(r), k(k0.value) {}
+
+            forward_recurrence_iterator(const Recurrence& r, value_type f_n_, recurrence_offset k0)
+               : f_n(f_n_), coef(r), k(k0.value)
             {
-               std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<boost::math::policies::policy<> >();
-               f_n_minus_1 = f_n * boost::math::tools::function_ratio_from_forwards_recurrence(detail::recurrence_offsetter<Recurrence>(r, -1), value_type(boost::math::tools::epsilon<value_type>() * 2), max_iter);
-               boost::math::policies::check_series_iterations<value_type>("forward_recurrence_iterator<>::forward_recurrence_iterator", max_iter, boost::math::policies::policy<>());
+               std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<BOOST_MATH_NAMESPACE::policies::policy<> >();
+               f_n_minus_1 = f_n_ * BOOST_MATH_NAMESPACE::tools::function_ratio_from_forwards_recurrence(detail::recurrence_offsetter<Recurrence>(r, k - 1), value_type(BOOST_MATH_NAMESPACE::tools::epsilon<value_type>() * 2), max_iter);
+               BOOST_MATH_NAMESPACE::policies::check_series_iterations<value_type>("forward_recurrence_iterator<>::forward_recurrence_iterator", max_iter, BOOST_MATH_NAMESPACE::policies::policy<>());
             }
 
             forward_recurrence_iterator& operator++()
@@ -281,20 +299,26 @@ namespace boost {
             int k;
          };
 
-         template <class Recurrence>
+         BOOST_MATH_EXPORT template <class Recurrence>
          struct backward_recurrence_iterator
          {
             typedef typename std::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
 
-            backward_recurrence_iterator(const Recurrence& r, value_type f_n_plus_1, value_type f_n)
-               : f_n_plus_1(f_n_plus_1), f_n(f_n), coef(r), k(0) {}
+            backward_recurrence_iterator(const Recurrence& r, value_type f_n_plus_1_, value_type f_n_)
+               : f_n_plus_1(f_n_plus_1_), f_n(f_n_), coef(r), k(0) {}
 
-            backward_recurrence_iterator(const Recurrence& r, value_type f_n)
-               : f_n(f_n), coef(r), k(0)
+            backward_recurrence_iterator(const Recurrence& r, value_type f_n_)
+               : backward_recurrence_iterator(r, f_n_, recurrence_offset(0)) {}
+
+            backward_recurrence_iterator(const Recurrence& r, value_type f_n_plus_1_, value_type f_n_, recurrence_offset k0)
+               : f_n_plus_1(f_n_plus_1_), f_n(f_n_), coef(r), k(k0.value) {}
+
+            backward_recurrence_iterator(const Recurrence& r, value_type f_n_, recurrence_offset k0)
+               : f_n(f_n_), coef(r), k(k0.value)
             {
-               std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<boost::math::policies::policy<> >();
-               f_n_plus_1 = f_n * boost::math::tools::function_ratio_from_backwards_recurrence(detail::recurrence_offsetter<Recurrence>(r, 1), value_type(boost::math::tools::epsilon<value_type>() * 2), max_iter);
-               boost::math::policies::check_series_iterations<value_type>("backward_recurrence_iterator<>::backward_recurrence_iterator", max_iter, boost::math::policies::policy<>());
+               std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<BOOST_MATH_NAMESPACE::policies::policy<> >();
+               f_n_plus_1 = f_n_ * BOOST_MATH_NAMESPACE::tools::function_ratio_from_backwards_recurrence(detail::recurrence_offsetter<Recurrence>(r, k + 1), value_type(BOOST_MATH_NAMESPACE::tools::epsilon<value_type>() * 2), max_iter);
+               BOOST_MATH_NAMESPACE::policies::check_series_iterations<value_type>("backward_recurrence_iterator<>::backward_recurrence_iterator", max_iter, BOOST_MATH_NAMESPACE::policies::policy<>());
             }
 
             backward_recurrence_iterator& operator++()
@@ -324,7 +348,6 @@ namespace boost {
          };
 
       }
-   }
-} // namespaces
+   BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_TOOLS_RECURRENCE_HPP_

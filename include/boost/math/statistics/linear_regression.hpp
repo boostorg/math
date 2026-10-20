@@ -9,16 +9,18 @@
 #ifndef BOOST_MATH_STATISTICS_LINEAR_REGRESSION_HPP
 #define BOOST_MATH_STATISTICS_LINEAR_REGRESSION_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <algorithm>
 #include <utility>
 #include <tuple>
 #include <stdexcept>
 #include <type_traits>
+#endif
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/statistics/bivariate_statistics.hpp>
 
-namespace boost { namespace math { namespace statistics { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics { namespace detail {
 
 
 template<class ReturnType, class RandomAccessContainer>
@@ -35,12 +37,12 @@ ReturnType simple_ordinary_least_squares_impl(RandomAccessContainer const & x,
     {
         throw std::domain_error("The same number of samples must be in the independent and dependent variable.");
     }
-    std::tuple<Real, Real, Real> temp = boost::math::statistics::means_and_covariance(x, y);
+    std::tuple<Real, Real, Real> temp = BOOST_MATH_NAMESPACE::statistics::means_and_covariance(x, y);
     Real mu_x = std::get<0>(temp);
     Real mu_y = std::get<1>(temp);
     Real cov_xy = std::get<2>(temp);
 
-    Real var_x = boost::math::statistics::variance(x);
+    Real var_x = BOOST_MATH_NAMESPACE::statistics::variance(x);
 
     if (var_x <= 0) {
         throw std::domain_error("Independent variable has no variance; this breaks linear regression.");
@@ -67,12 +69,12 @@ ReturnType simple_ordinary_least_squares_with_R_squared_impl(RandomAccessContain
     {
         throw std::domain_error("The same number of samples must be in the independent and dependent variable.");
     }
-    std::tuple<Real, Real, Real> temp = boost::math::statistics::means_and_covariance(x, y);
+    std::tuple<Real, Real, Real> temp = BOOST_MATH_NAMESPACE::statistics::means_and_covariance(x, y);
     Real mu_x = std::get<0>(temp);
     Real mu_y = std::get<1>(temp);
     Real cov_xy = std::get<2>(temp);
 
-    Real var_x = boost::math::statistics::variance(x);
+    Real var_x = BOOST_MATH_NAMESPACE::statistics::variance(x);
 
     if (var_x <= 0) {
         throw std::domain_error("Independent variable has no variance; this breaks linear regression.");
@@ -102,32 +104,32 @@ ReturnType simple_ordinary_least_squares_with_R_squared_impl(RandomAccessContain
 }
 } // namespace detail
 
-template<typename RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type, 
+BOOST_MATH_EXPORT template<typename RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type, 
          typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline auto simple_ordinary_least_squares(RandomAccessContainer const & x, RandomAccessContainer const & y) -> std::pair<double, double>
 {
     return detail::simple_ordinary_least_squares_impl<std::pair<double, double>>(x, y);
 }
 
-template<typename RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type, 
+BOOST_MATH_EXPORT template<typename RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type, 
          typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline auto simple_ordinary_least_squares(RandomAccessContainer const & x, RandomAccessContainer const & y) -> std::pair<Real, Real>
 {
     return detail::simple_ordinary_least_squares_impl<std::pair<Real, Real>>(x, y);
 }
 
-template<typename RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type, 
+BOOST_MATH_EXPORT template<typename RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type, 
          typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline auto simple_ordinary_least_squares_with_R_squared(RandomAccessContainer const & x, RandomAccessContainer const & y) -> std::tuple<double, double, double>
 {
     return detail::simple_ordinary_least_squares_with_R_squared_impl<std::tuple<double, double, double>>(x, y);
 }
 
-template<typename RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type, 
+BOOST_MATH_EXPORT template<typename RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type, 
          typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline auto simple_ordinary_least_squares_with_R_squared(RandomAccessContainer const & x, RandomAccessContainer const & y) -> std::tuple<Real, Real, Real>
 {
     return detail::simple_ordinary_least_squares_with_R_squared_impl<std::tuple<Real, Real, Real>>(x, y);
 }
-}}} // namespace boost::math::statistics
+} BOOST_MATH_NAMESPACE_END // namespace boost::math::statistics
 #endif

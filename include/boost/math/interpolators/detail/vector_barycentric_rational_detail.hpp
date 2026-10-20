@@ -8,15 +8,17 @@
 #ifndef BOOST_MATH_INTERPOLATORS_VECTOR_BARYCENTRIC_RATIONAL_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_VECTOR_BARYCENTRIC_RATIONAL_DETAIL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
 #include <cmath>
 #include <vector>
 #include <utility> // for std::move
 #include <limits>
 #include <algorithm>
+#endif
 #include <boost/math/tools/assert.hpp>
 
-namespace boost{ namespace math{ namespace interpolators{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators{ namespace detail{
 
 template <class TimeContainer, class SpaceContainer>
 class vector_barycentric_rational_imp
@@ -63,7 +65,6 @@ vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::vector_barycentr
 template<class TimeContainer, class SpaceContainer>
 void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::calculate_weights(size_t approximation_order)
 {
-    using Real = typename TimeContainer::value_type;
     using std::abs;
     std::int64_t n = t_.size();
     w_.resize(n, Real(0));
@@ -105,7 +106,6 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::calculate_w
 template<class TimeContainer, class SpaceContainer>
 void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::operator()(typename SpaceContainer::value_type& p, typename TimeContainer::value_type t) const
 {
-    using Real = typename TimeContainer::value_type;
     for (auto & x : p)
     {
         x = Real(0);
@@ -136,8 +136,6 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::operator()(
 template<class TimeContainer, class SpaceContainer>
 void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_prime(typename SpaceContainer::value_type& x, typename SpaceContainer::value_type& dxdt, typename TimeContainer::value_type t) const
 {
-    using Point = typename SpaceContainer::value_type;
-    using Real = typename TimeContainer::value_type;
     this->operator()(x, t);
     Point numerator;
     for (decltype(x.size()) i = 0; i < x.size(); ++i)
@@ -150,9 +148,9 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_p
         if (t == t_[i])
         {
             Point sum;
-            for (decltype(x.size()) i = 0; i < x.size(); ++i)
+            for (decltype(x.size()) m = 0; m < x.size(); ++m)
             {
-                sum[i] = 0;
+                sum[m] = 0;
             }
 
             for (decltype(t_.size()) j = 0; j < t_.size(); ++j)
@@ -192,5 +190,5 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_p
     return;
 }
 
-}}}}
+}} BOOST_MATH_NAMESPACE_END
 #endif

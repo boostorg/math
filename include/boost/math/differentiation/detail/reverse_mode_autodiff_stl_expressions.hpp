@@ -15,10 +15,11 @@
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_expression_template_base.hpp>
 #include <boost/math/special_functions/round.hpp>
 #include <boost/math/special_functions/trunc.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <complex>
-namespace boost {
-namespace math {
+#endif
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {
 template<typename RealType, size_t DerivativeOrder, typename ARG>
@@ -83,7 +84,7 @@ struct ceil_expr : public abstract_unary_expression<RealType, DerivativeOrder, A
                                     const inner_t & /*v*/,
                                     const RealType & /*constant*/)
     {
-        return inner_t{0.0};
+        return inner_t(0);
     }
 };
 
@@ -116,7 +117,7 @@ struct floor_expr : public abstract_unary_expression<RealType, DerivativeOrder, 
                                     const inner_t & /*v*/,
                                     const RealType & /*constant*/)
     {
-        return inner_t{0.0};
+        return inner_t(0);
     }
 };
 
@@ -149,7 +150,7 @@ struct trunc_expr : public abstract_unary_expression<RealType, DerivativeOrder, 
                                     const inner_t & /*v*/,
                                     const RealType & /*constant*/)
     {
-        return inner_t{0.0};
+        return inner_t(0);
     }
 };
 
@@ -581,7 +582,7 @@ struct round_expr : public abstract_unary_expression<RealType, DerivativeOrder, 
                                     const inner_t & /*v*/,
                                     const RealType & /*constant*/)
     {
-        return inner_t{0.0};
+        return inner_t(0);
     }
 };
 
@@ -782,7 +783,7 @@ struct fmod_expr
                                          const inner_t & /*r*/,
                                          const inner_t & /*v*/)
     {
-        return inner_t{1.0};
+        return inner_t(1);
     };
     static const inner_t right_derivative(const inner_t &l, const inner_t &r, const inner_t & /*v*/)
     {
@@ -840,13 +841,12 @@ struct fmod_right_float_expr
                                     const inner_t & /*v*/,
                                     const RealType & /*constant*/)
     {
-        return inner_t{1.0};
+        return inner_t(1);
     }
 };
 /**************************************************************************************************/
 
 } // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

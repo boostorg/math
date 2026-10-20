@@ -72,3 +72,83 @@ Of course, random numbers are not used internally, but the result is not guarant
 
 [endsect]
 [/section:chatterjee_correlation Chatterjee Correlation]
+
+[section:chatterjee_correlation_mnn Chatterjee Correlation (M nearest neighbours)]
+
+[heading Synopsis]
+
+``
+#include <boost/math/statistics/chatterjee_correlation.hpp>
+
+namespace boost::math::statistics {
+
+    C++17:
+    template <typename ExecutionPolicy, typename Container>
+    auto chatterjee_correlation_mnn(ExecutionPolicy&& exec, const Container& u, const Container& v, std::size_t M);
+
+    C++11:
+    template <typename Container>
+    auto chatterjee_correlation_mnn(const Container& u, const Container& v, std::size_t M);
+}
+``
+
+[heading Description]
+
+`chatterjee_correlation_mnn` computes the revised Chatterjee rank correlation of Lin and Han (2021), which
+generalises Chatterjee's coefficient by incorporating the `M` right nearest neighbours of each point rather
+than only the single right neighbour.
+The statistic still consistently estimates the same measure of dependence (between 0 and 1; zero if and only
+if X and Y are independent, unity if and only if Y is a measurable function of X), but its use of additional
+neighbours boosts the power of the associated independence test.
+
+The original coefficient `chatterjee_correlation` has a statistical detection boundary of n[super -1/4] for
+testing independence, which is substantially weaker than the parametric n[super -1/2] rate.
+By letting `M` grow with the sample size (with M/n -> 0), the revised statistic can approach near-parametric
+efficiency.
+
+Let X and Y be random variables, where Y is not constant, and let (X_i, Y_i) be samples sorted so that
+X_(0) < X_(1) < ... < X_(n-1). Writing R_i for the rank of Y_i and j_m(i) for the index of the m-th right
+nearest neighbour of X_i, the statistic is
+
+``
+    xi_{n,M} = -2 + 6 * sum_i sum_{m=1}^{M} min(R_i, R_{j_m(i)}) / ((n + 1) * (n*M + M*(M + 1) / 4))
+``
+
+The complexity is O(n log n + n M). For `M` of order O(1) or O(poly-log n) this is nearly linear; as `M`
+approaches `n` it tends to O(n[super 2]).
+
+An example is given below:
+
+    std::vector<double> X{1,2,3,4,5};
+    std::vector<double> Y{1,2,3,4,5};
+    using boost::math::statistics::chatterjee_correlation_mnn;
+    std::size_t M = 2;
+    double coeff = chatterjee_correlation_mnn(X, Y, M);
+
+/Nota bene:/ If the input is an integer type the output will be a double precision type.
+
+[heading Choice of M]
+
+The asymptotic null variance of the statistic is minimised when `M` is of order sqrt(n), which is a reasonable
+default for users who want improved power without the quadratic cost of large `M`. Pushing `M` closer to `n`
+increases the power of the independence test against smooth alternatives at the cost of additional computation.
+The choice is left to the caller; `M` must satisfy 1 <= M <= n.
+
+/Nota bene:/ Even at `M` = 1 this statistic is not identical to `chatterjee_correlation`: it uses
+min(R_i, R_j) in place of |R_i - R_j| and a different normalisation, so the two agree only up to a term of
+order 1/n. Use `chatterjee_correlation` when the original coefficient is required.
+
+[heading Invariants]
+
+The function expects at least two samples, a non-constant vector Y, the same number of X's as Y's, and
+1 <= M <= n.
+If Y is constant, the result is a quiet NaN.
+The data set must be sorted by X values.
+If there are ties in the values of X, then the statistic is random due to the random breaking of ties.
+
+[heading References]
+
+* Lin, Zhexiao, and Fang Han. "On boosting the power of Chatterjee's rank correlation." Biometrika 110.2 (2023): 283-299. [@https://arxiv.org/abs/2108.06828 arXiv:2108.06828].
+
+[endsect]
+[/section:chatterjee_correlation_mnn Chatterjee Correlation (M nearest neighbours)]

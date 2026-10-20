@@ -187,6 +187,23 @@ void test_spots(T, const char* type_name)
     BOOST_CHECK_CLOSE_FRACTION(boost::math::jacobi_sn(T(0.5), T(0.5), pol), static_cast<T>(0.475082936028536510082218324703870258745078171807428948028252L), tol);
 
     //
+    // Near u = (2n+1)K, cn is small and dn used to lose digits.  Values are from Arb (via the theta function
+    // expansion), the abscissas are doubles so we can only test double:
+    //
+    BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+    {
+        T dn_tol = boost::math::tools::epsilon<T>() * 10;
+        BOOST_CHECK_CLOSE_FRACTION(boost::math::jacobi_dn(T(0.7332930440917852), T(9.4366833450051786)), static_cast<T>(0.6799127564738345663478755436187154687815L), dn_tol);
+        BOOST_CHECK_CLOSE_FRACTION(boost::math::jacobi_nd(T(0.7332930440917852), T(9.4366833450051786)), static_cast<T>(1.4707769349500115112320436272161322849164L), dn_tol);
+        BOOST_CHECK_CLOSE_FRACTION(boost::math::jacobi_sd(T(0.7332930440917852), T(9.4366833450051786)), static_cast<T>(1.4707768735044084534575192612018116663588L), dn_tol);
+        BOOST_CHECK_CLOSE_FRACTION(boost::math::jacobi_ds(T(0.7332930440917852), T(9.4366833450051786)), static_cast<T>(0.6799127848789924803863790532625343731021L), dn_tol);
+        BOOST_CHECK_CLOSE_FRACTION(boost::math::jacobi_dn(T(0.66553658429940632), T(5.4260257958150389)), static_cast<T>(0.7463652591027747757683386865740851556893L), dn_tol);
+        BOOST_CHECK_CLOSE_FRACTION(boost::math::jacobi_dn(T(0.1), T(11.023218930621491)), static_cast<T>(0.99498743710661995417657175944133777893L), dn_tol);
+        BOOST_CHECK_CLOSE_FRACTION(boost::math::jacobi_dn(T(0.9), T(6.841647415268311)), static_cast<T>(0.43588989435406730937722480659848075219L), dn_tol);
+        BOOST_CHECK_CLOSE_FRACTION(boost::math::jacobi_dn(T(0.99), T(10.069801570083575)), static_cast<T>(0.14106735979665890658400749043180858813L), dn_tol);
+    }
+
+    //
     // Bug cases and coverage:
     //
 #ifndef BOOST_MATH_NO_EXCEPTIONS

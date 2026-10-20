@@ -28,17 +28,19 @@
 
 #ifndef BOOST_MATH_HAS_NVRTC
 #include <boost/math/distributions/fwd.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #endif
+#endif
 
-namespace boost { namespace math {
-template <class RealType, class Policy>
+BOOST_MATH_NAMESPACE_BEGIN
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 class mapairy_distribution;
 
 namespace detail {
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -260,7 +262,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_plus_imp_prec(const RealType&
 
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_plus_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -589,7 +591,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_plus_imp_prec(const RealType&
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -762,7 +764,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_minus_imp_prec(const RealType
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_minus_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1053,7 +1055,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_minus_imp_prec(const RealType
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_imp_prec(const RealType& x, const boost::math::integral_constant<int, 53> &tag) {
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 53> &tag) {
     if (x >= 0) {
         return mapairy_pdf_plus_imp_prec<RealType>(x, tag);
     }
@@ -1061,12 +1063,12 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_imp_prec(const RealType& x, c
         return mapairy_pdf_minus_imp_prec<RealType>(x, tag);
     }
     else {
-        return boost::math::numeric_limits<RealType>::quiet_NaN();
+        return BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_imp_prec(const RealType& x, const boost::math::integral_constant<int, 113>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>& tag) {
     if (x >= 0) {
         return mapairy_pdf_plus_imp_prec<RealType>(x, tag);
     }
@@ -1074,7 +1076,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_imp_prec(const RealType& x, c
         return mapairy_pdf_minus_imp_prec<RealType>(x, tag);
     }
     else {
-        return boost::math::numeric_limits<RealType>::quiet_NaN();
+        return BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
@@ -1105,7 +1107,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_imp(const mapairy_distributio
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef boost::math::integral_constant<int,
+    typedef BOOST_MATH_NAMESPACE::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
@@ -1121,7 +1123,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_pdf_imp(const mapairy_distributio
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1312,7 +1314,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_plus_imp_prec(const RealType&
     }
     else {
         RealType x_cube = x * x * x;
-        RealType t = static_cast<RealType>((boost::math::isnormal)(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3));
+        RealType t = static_cast<RealType>((BOOST_MATH_NAMESPACE::isnormal)(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3));
 
         // Rational Approximation
         // Maximum Relative Error: 6.2709e-17
@@ -1336,7 +1338,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_plus_imp_prec(const RealType&
 
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_plus_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1629,7 +1631,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_plus_imp_prec(const RealType&
     }
     else {
         RealType x_cube = x * x * x;
-        RealType t = (boost::math::isnormal)(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3);
+        RealType t = (BOOST_MATH_NAMESPACE::isnormal)(x_cube) ? 1 / sqrt(x_cube) : 1 / pow(sqrt(x), 3);
 
         // Rational Approximation
         // Maximum Relative Error: 3.5865e-37
@@ -1661,7 +1663,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_plus_imp_prec(const RealType&
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -1838,7 +1840,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_minus_imp_prec(const RealType
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_minus_imp_prec(const RealType& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -2138,7 +2140,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_minus_imp_prec(const RealType
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_imp_prec(const RealType& x, bool complement, const boost::math::integral_constant<int, 53>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_imp_prec(const RealType& x, bool complement, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>& tag) {
     if (x >= 0) {
         return complement ? mapairy_cdf_plus_imp_prec(x, tag) : 1 - mapairy_cdf_plus_imp_prec(x, tag);
     }
@@ -2146,12 +2148,12 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_imp_prec(const RealType& x, b
         return complement ? 1 - mapairy_cdf_minus_imp_prec(x, tag) : mapairy_cdf_minus_imp_prec(x, tag);
     }
     else {
-        return boost::math::numeric_limits<RealType>::quiet_NaN();
+        return BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_imp_prec(const RealType& x, bool complement, const boost::math::integral_constant<int, 113>& tag) {
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_imp_prec(const RealType& x, bool complement, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>& tag) {
     if (x >= 0) {
         return complement ? mapairy_cdf_plus_imp_prec(x, tag) : 1 - mapairy_cdf_plus_imp_prec(x, tag);
     }
@@ -2159,7 +2161,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_imp_prec(const RealType& x, b
         return complement ? 1 - mapairy_cdf_minus_imp_prec(x, tag) : mapairy_cdf_minus_imp_prec(x, tag);
     }
     else {
-        return boost::math::numeric_limits<RealType>::quiet_NaN();
+        return BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN();
     }
 }
 
@@ -2190,7 +2192,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_imp(const mapairy_distributio
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef boost::math::integral_constant<int,
+    typedef BOOST_MATH_NAMESPACE::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
@@ -2206,7 +2208,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_cdf_imp(const mapairy_distributio
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -2531,7 +2533,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_lower_imp_prec(const Rea
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else {
-        result = -boost::math::numeric_limits<RealType>::infinity();
+        result = -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
     }
 
     return result;
@@ -2539,7 +2541,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_lower_imp_prec(const Rea
 
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_lower_imp_prec(const RealType& p, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -3234,14 +3236,14 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_lower_imp_prec(const Rea
         result = tools::evaluate_polynomial(P, t) / tools::evaluate_polynomial(Q, t);
     }
     else {
-        result = -boost::math::numeric_limits<RealType>::infinity();
+        result = -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
     }
 
     return result;
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -3429,14 +3431,14 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_upper_imp_prec(const Rea
     else {
         RealType p_square = p * p;
 
-        if ((boost::math::isnormal)(p_square)) {
+        if ((BOOST_MATH_NAMESPACE::isnormal)(p_square)) {
             result = 1 / cbrt(p_square * constants::two_pi<RealType>());
         }
         else if (p > 0) {
             result = 1 / (cbrt(p) * cbrt(p) * cbrt(constants::two_pi<RealType>()));
         }
         else {
-            result = boost::math::numeric_limits<RealType>::infinity();
+            result = BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
         }
     }
 
@@ -3445,7 +3447,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_upper_imp_prec(const Rea
 
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_upper_imp_prec(const RealType& p, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
     BOOST_MATH_STD_USING
     RealType result;
@@ -3828,14 +3830,14 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_upper_imp_prec(const Rea
     else {
         RealType p_square = p * p;
 
-        if ((boost::math::isnormal)(p_square)) {
+        if ((BOOST_MATH_NAMESPACE::isnormal)(p_square)) {
             result = 1 / cbrt(p_square * constants::two_pi<RealType>());
         }
         else if (p > 0) {
             result = 1 / (cbrt(p) * cbrt(p) * cbrt(constants::two_pi<RealType>()));
         }
         else {
-            result = boost::math::numeric_limits<RealType>::infinity();
+            result = BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
         }
     }
 
@@ -3843,7 +3845,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_upper_imp_prec(const Rea
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_imp_prec(const RealType& p, bool complement, const boost::math::integral_constant<int, 53>& tag)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_imp_prec(const RealType& p, bool complement, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>& tag)
 {
     if (p > 0.5) {
         return !complement ? mapairy_quantile_upper_imp_prec(1 - p, tag) : mapairy_quantile_lower_imp_prec(1 - p, tag);
@@ -3853,7 +3855,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_imp_prec(const RealType&
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_imp_prec(const RealType& p, bool complement, const boost::math::integral_constant<int, 113>& tag)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_imp_prec(const RealType& p, bool complement, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>& tag)
 {
     if (p > 0.5) {
         return !complement ? mapairy_quantile_upper_imp_prec(1 - p, tag) : mapairy_quantile_lower_imp_prec(1 - p, tag);
@@ -3890,7 +3892,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_imp(const mapairy_distri
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef boost::math::integral_constant<int,
+    typedef BOOST_MATH_NAMESPACE::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
@@ -3904,13 +3906,13 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_quantile_imp(const mapairy_distri
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_mode_imp_prec(const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_mode_imp_prec(const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
     return static_cast<RealType>(-1.16158727113597068525);
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_mode_imp_prec(const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_mode_imp_prec(const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
     return BOOST_MATH_BIG_CONSTANT(RealType, 113, -1.1615872711359706852500000803029112987);
 }
@@ -3938,7 +3940,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_mode_imp(const mapairy_distributi
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef boost::math::integral_constant<int,
+    typedef BOOST_MATH_NAMESPACE::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
@@ -3952,13 +3954,13 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_mode_imp(const mapairy_distributi
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_median_imp_prec(const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_median_imp_prec(const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
     return static_cast<RealType>(-0.71671068545502205332);
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_median_imp_prec(const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_median_imp_prec(const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
     return BOOST_MATH_BIG_CONSTANT(RealType, 113, -0.71671068545502205331700196278067230944440);
 }
@@ -3986,7 +3988,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_median_imp(const mapairy_distribu
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef boost::math::integral_constant<int,
+    typedef BOOST_MATH_NAMESPACE::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
@@ -4000,13 +4002,13 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_median_imp(const mapairy_distribu
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_entropy_imp_prec(const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_entropy_imp_prec(const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
     return static_cast<RealType>(2.00727681841065634600);
 }
 
 template <class RealType>
-BOOST_MATH_GPU_ENABLED inline RealType mapairy_entropy_imp_prec(const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED inline RealType mapairy_entropy_imp_prec(const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
     return BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.0072768184106563460003025875575283708);
 }
@@ -4029,7 +4031,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_entropy_imp(const mapairy_distrib
 
     typedef typename tools::promote_args<RealType>::type result_type;
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    typedef boost::math::integral_constant<int,
+    typedef BOOST_MATH_NAMESPACE::integral_constant<int,
         precision_type::value <= 0 ? 0 :
         precision_type::value <= 53 ? 53 :
         precision_type::value <= 113 ? 113 : 0
@@ -4044,7 +4046,7 @@ BOOST_MATH_GPU_ENABLED inline RealType mapairy_entropy_imp(const mapairy_distrib
 
 } // detail
 
-template <class RealType = double, class Policy = policies::policy<> >
+BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
 class mapairy_distribution
 {
     public:
@@ -4074,99 +4076,99 @@ class mapairy_distribution
     RealType c;     // The scale parameter.
 };
 
-typedef mapairy_distribution<double> mapairy;
+BOOST_MATH_EXPORT typedef mapairy_distribution<double> mapairy;
 
 #ifdef __cpp_deduction_guides
-template <class RealType>
-mapairy_distribution(RealType) -> mapairy_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-template <class RealType>
-mapairy_distribution(RealType, RealType) -> mapairy_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+BOOST_MATH_EXPORT template <class RealType>
+mapairy_distribution(RealType) -> mapairy_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
+BOOST_MATH_EXPORT template <class RealType>
+mapairy_distribution(RealType, RealType) -> mapairy_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 #endif
 
-template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> range(const mapairy_distribution<RealType, Policy>&)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const mapairy_distribution<RealType, Policy>&)
 { // Range of permissible values for random variable x.
-    BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
+    BOOST_MATH_IF_CONSTEXPR (BOOST_MATH_NAMESPACE::numeric_limits<RealType>::has_infinity)
     {
-        return boost::math::pair<RealType, RealType>(-boost::math::numeric_limits<RealType>::infinity(), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
+        return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity(), BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity()); // - to + infinity.
     }
     else
     { // Can only use max_value.
-        using boost::math::tools::max_value;
-        return boost::math::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max.
+        using BOOST_MATH_NAMESPACE::tools::max_value;
+        return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max.
     }
 }
 
-template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline const boost::math::pair<RealType, RealType> support(const mapairy_distribution<RealType, Policy>&)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline const BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const mapairy_distribution<RealType, Policy>&)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-    BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
+    BOOST_MATH_IF_CONSTEXPR (BOOST_MATH_NAMESPACE::numeric_limits<RealType>::has_infinity)
     {
-        return boost::math::pair<RealType, RealType>(-boost::math::numeric_limits<RealType>::infinity(), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
+        return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity(), BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity()); // - to + infinity.
     }
     else
     { // Can only use max_value.
-        using boost::math::tools::max_value;
-        return boost::math::pair<RealType, RealType>(-tools::max_value<RealType>(), max_value<RealType>()); // - to + max.
+        using BOOST_MATH_NAMESPACE::tools::max_value;
+        return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-tools::max_value<RealType>(), max_value<RealType>()); // - to + max.
     }
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType pdf(const mapairy_distribution<RealType, Policy>& dist, const RealType& x)
 {
     return detail::mapairy_pdf_imp(dist, x);
 } // pdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const mapairy_distribution<RealType, Policy>& dist, const RealType& x)
 {
     return detail::mapairy_cdf_imp(dist, x, false);
 } // cdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const mapairy_distribution<RealType, Policy>& dist, const RealType& p)
 {
     return detail::mapairy_quantile_imp(dist, p, false);
 } // quantile
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<mapairy_distribution<RealType, Policy>, RealType>& c)
 {
     return detail::mapairy_cdf_imp(c.dist, c.param, true);
 } //  cdf complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<mapairy_distribution<RealType, Policy>, RealType>& c)
 {
     return detail::mapairy_quantile_imp(c.dist, c.param, true);
 } // quantile complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mean(const mapairy_distribution<RealType, Policy> &dist)
 {
     return dist.location();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType variance(const mapairy_distribution<RealType, Policy>& /*dist*/)
 {
-    return boost::math::numeric_limits<RealType>::infinity();
+    return BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mode(const mapairy_distribution<RealType, Policy>& dist)
 {
     return detail::mapairy_mode_imp(dist);
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType median(const mapairy_distribution<RealType, Policy>& dist)
 {
     return detail::mapairy_median_imp(dist);
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType skewness(const mapairy_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no skewness:
@@ -4177,10 +4179,10 @@ BOOST_MATH_GPU_ENABLED inline RealType skewness(const mapairy_distribution<RealT
         "boost::math::skewness(mapairy<%1%>&)",
         "The Map-Airy distribution does not have a skewness: "
         "the only possible return value is %1%.",
-        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
+        BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const mapairy_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no kurtosis:
@@ -4191,10 +4193,10 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const mapairy_distribution<RealT
         "boost::math::kurtosis(mapairy<%1%>&)",
         "The Map-Airy distribution does not have a kurtosis: "
         "the only possible return value is %1%.",
-        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
+        BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const mapairy_distribution<RealType, Policy>& /*dist*/)
 {
     // There is no kurtosis excess:
@@ -4205,16 +4207,16 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const mapairy_distributio
         "boost::math::kurtosis_excess(mapairy<%1%>&)",
         "The Map-Airy distribution does not have a kurtosis: "
         "the only possible return value is %1%.",
-        boost::math::numeric_limits<RealType>::quiet_NaN(), Policy());
+        BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType entropy(const mapairy_distribution<RealType, Policy>& dist)
 {
     return detail::mapairy_entropy_imp(dist);
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 
 #endif // BOOST_STATS_MAPAIRY_HPP

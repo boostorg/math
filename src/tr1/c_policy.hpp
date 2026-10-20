@@ -6,7 +6,7 @@
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
-namespace boost{ namespace math{ namespace policies{
+BOOST_MATH_NAMESPACE_BEGIN namespace policies{
 
 template <>
 struct policy<
@@ -106,17 +106,17 @@ struct normalise<policy<domain_error<errno_on_error>, pole_error<errno_on_error>
    typedef policy<domain_error<errno_on_error>, pole_error<errno_on_error>, overflow_error<errno_on_error>, evaluation_error<errno_on_error>, rounding_error<errno_on_error>, detail::forwarding_arg1, detail::forwarding_arg2> type;
 };
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 namespace c_policies{
 
-using boost::math::policies::policy;
-using boost::math::policies::errno_on_error;
-using boost::math::policies::domain_error;
-using boost::math::policies::pole_error;
-using boost::math::policies::overflow_error;
-using boost::math::policies::rounding_error;
-using boost::math::policies::evaluation_error;
+using BOOST_MATH_NAMESPACE::policies::policy;
+using BOOST_MATH_NAMESPACE::policies::errno_on_error;
+using BOOST_MATH_NAMESPACE::policies::domain_error;
+using BOOST_MATH_NAMESPACE::policies::pole_error;
+using BOOST_MATH_NAMESPACE::policies::overflow_error;
+using BOOST_MATH_NAMESPACE::policies::rounding_error;
+using BOOST_MATH_NAMESPACE::policies::evaluation_error;
 
 typedef policy<
    domain_error<errno_on_error>,

@@ -11,13 +11,13 @@
 #include <boost/math/special_functions/next.hpp>
 #include "c_policy.hpp"
 
-namespace boost{ namespace math{ namespace tr1{
+BOOST_MATH_NAMESPACE_BEGIN namespace tr1{
 
 extern "C" long double BOOST_MATH_TR1_DECL boost_nextafterl BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x, long double y) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::nextafter BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, y);
 }
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 
 

@@ -8,7 +8,7 @@
 
 #include <boost/math/special_functions/lanczos.hpp>
 
-namespace boost{ namespace math{ namespace lanczos{
+BOOST_MATH_NAMESPACE_BEGIN namespace lanczos{
 
 //
 // Lanczos Coefficients for N=13 G=13.144565
@@ -80,7 +80,7 @@ struct lanczos22UDT : public std::integral_constant<int, 120>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 210.0)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 1.0))
       };
-      return boost::math::tools::evaluate_rational(num, denom, z);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_rational(num, denom, z);
    }
 
    template <class T>
@@ -135,7 +135,7 @@ struct lanczos22UDT : public std::integral_constant<int, 120>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 210.0)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 1.0))
       };
-      return boost::math::tools::evaluate_rational(num, denom, z);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_rational(num, denom, z);
    }
 
 
@@ -288,7 +288,7 @@ struct lanczos31UDT
          static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 150, 435)),
          static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 150, 1)),
       };
-      return boost::math::tools::evaluate_rational(num, denom, z, 31);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_rational(num, denom, z, 31);
    }
 
    template <class T>
@@ -361,7 +361,7 @@ struct lanczos31UDT
          static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 150, 435)),
          static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 150, 1)),
       };
-      return boost::math::tools::evaluate_rational(num, denom, z, 31);
+      return BOOST_MATH_NAMESPACE::tools::evaluate_rational(num, denom, z, 31);
    }
 
 
@@ -770,7 +770,7 @@ struct lanczos61UDT
    static double g(){ return 63.19215200000000010049916454590857028961181640625; }
 };
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif
 

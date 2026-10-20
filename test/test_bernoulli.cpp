@@ -146,6 +146,16 @@ void test_spots(RealType)
        static_cast<RealType>(5.11111111111111111111111111111111111111111111L),
        tolerance);
 
+  // entropy = -p log(p) - (1 - p) log(1 - p):
+  BOOST_CHECK_CLOSE_FRACTION(entropy(bernoulli_distribution<RealType>(static_cast<RealType>(0.1L))),
+       static_cast<RealType>(0.3250829733914482395065500282238179392356L), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(entropy(bernoulli_distribution<RealType>(static_cast<RealType>(0.5L))),
+       static_cast<RealType>(0.6931471805599453094172321214581765680755L), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(entropy(bernoulli_distribution<RealType>(static_cast<RealType>(1e-10L))),
+       static_cast<RealType>(2.402585092989045684017824788017689207601e-9L), tolerance);
+  BOOST_CHECK_EQUAL(entropy(bernoulli_distribution<RealType>(0)), 0);
+  BOOST_CHECK_EQUAL(entropy(bernoulli_distribution<RealType>(1)), 0);
+
 #ifndef BOOST_MATH_NO_EXCEPTIONS
   BOOST_MATH_CHECK_THROW(
      quantile(

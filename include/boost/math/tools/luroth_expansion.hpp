@@ -6,6 +6,9 @@
 #ifndef BOOST_MATH_TOOLS_LUROTH_EXPANSION_HPP
 #define BOOST_MATH_TOOLS_LUROTH_EXPANSION_HPP
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <ostream>
 #include <iomanip>
@@ -13,6 +16,7 @@
 #include <limits>
 #include <cstdint>
 #include <stdexcept>
+#endif
 
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE
@@ -22,9 +26,9 @@
 #endif
 #endif
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
-template<typename Real, typename Z = int64_t>
+BOOST_MATH_EXPORT template<typename Real, typename Z = int64_t>
 class luroth_expansion {
 public:
     luroth_expansion(Real x) : x_{x}
@@ -75,10 +79,10 @@ public:
            x = dn*(dn+1)*(x - tmp);
         }
 
-        for (size_t i = 1; i < d_.size(); ++i)
+        for (size_t k = 1; k < d_.size(); ++k)
         {
             // Sanity check:
-            if (d_[i] <= 0)
+            if (d_[k] <= 0)
             {
                 throw std::domain_error("Found a digit <= 0; this is an error.");
             }
@@ -115,7 +119,7 @@ private:
 };
 
 
-template<typename Real, typename Z2>
+BOOST_MATH_EXPORT template<typename Real, typename Z2>
 std::ostream& operator<<(std::ostream& out, luroth_expansion<Real, Z2>& luroth)
 {
    constexpr const int p = std::numeric_limits<Real>::max_digits10;
@@ -143,5 +147,5 @@ std::ostream& operator<<(std::ostream& out, luroth_expansion<Real, Z2>& luroth)
 }
 
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

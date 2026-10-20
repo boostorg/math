@@ -18,7 +18,7 @@
 #define ALIGN16 __declspec(align(16))
 #endif
 
-namespace boost{ namespace math{ namespace lanczos{
+BOOST_MATH_NAMESPACE_BEGIN namespace lanczos{
 
 template <>
 inline double lanczos13m53::lanczos_sum<double>(const double& x)
@@ -225,8 +225,7 @@ inline long double lanczos13m53::lanczos_sum_expG_scaled<long double>(const long
 #endif
 
 } // namespace lanczos
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #undef ALIGN16
 

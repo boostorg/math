@@ -10,7 +10,12 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/next.hpp>
-#include <boost/test/unit_test.hpp>
+// Included after math_unit_test.hpp, the checks use its CHECK_THROW instead of Boost.Test:
+#ifdef BOOST_MATH_TEST_TEST_HPP
+#  define BOOST_CHECK_THROW(x, y) CHECK_THROW(x, y)
+#else
+#  include <boost/test/unit_test.hpp>
+#endif
 
 /*` check_out_of_range functions check that bad parameters
 passed to constructors and functions throw domain_error exceptions.

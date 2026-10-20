@@ -34,7 +34,7 @@
 // x <= 8, minimax rational approximations on root-bracketing intervals
 // x > 8, Hankel asymptotic expansion in Hart, Computer Approximations, 1968
 
-namespace boost { namespace math { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T bessel_y1(T x, const Policy&);
@@ -128,8 +128,8 @@ BOOST_MATH_GPU_ENABLED T bessel_y1(T x, const Policy&)
     T value, factor, r, rc, rs;
 
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
-    using namespace boost::math::constants;
+    using namespace BOOST_MATH_NAMESPACE::tools;
+    using namespace BOOST_MATH_NAMESPACE::constants;
 
     BOOST_MATH_ASSERT(x > 0);
 
@@ -173,7 +173,7 @@ BOOST_MATH_GPU_ENABLED T bessel_y1(T x, const Policy&)
     return value;
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #ifdef _MSC_VER
 #pragma warning(pop)

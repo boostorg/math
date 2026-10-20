@@ -53,6 +53,11 @@
 
    <span class="comment">// Accessor to non-centrality parameter lambda:</span>
    <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="identifier">RealType</span> <span class="identifier">non_centrality</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+
+   <span class="comment">// Parameter finders: </span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_non_centrality</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span> <span class="identifier">v1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span> <span class="identifier">v2</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">A</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">B</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">C</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">D</span><span class="special">&gt;</span>
+   <span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_non_centrality</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">complemented3_type</span><span class="special">&lt;</span><span class="identifier">A</span><span class="special">,</span><span class="identifier">B</span><span class="special">,</span><span class="identifier">C</span><span class="special">,</span><span class="identifier">D</span><span class="special">&gt;&amp;</span> <span class="identifier">c</span><span class="special">);</span>
 <span class="special">};</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
@@ -94,6 +99,30 @@ random variable with <span class="emphasis"><em>v1</em></span> degrees
             <span class="inlinemediaobject"><img src="../../../../graphs/nc_f_pdf.svg" align="middle"></span>
 
           </p></blockquote></div>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_non_centrality</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span> <span class="identifier">v1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span> <span class="identifier">v2</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
+</pre>
+<p>
+          This function returns the non centrality parameter <span class="emphasis"><em>lambda</em></span>
+          such that:
+        </p>
+<p>
+          <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">non_central_chi_squared</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">Policy</span><span class="special">&gt;(</span><span class="identifier">v1</span><span class="special">,</span> <span class="identifier">v2</span><span class="special">,</span> <span class="identifier">lambda</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span>
+          <span class="identifier">p</span></code>
+        </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">A</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">B</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">C</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">D</span><span class="special">&gt;</span>
+<span class="identifier">BOOST_MATH_GPU_ENABLED</span> <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_non_centrality</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">complemented4_type</span><span class="special">&lt;</span><span class="identifier">A</span><span class="special">,</span><span class="identifier">B</span><span class="special">,</span><span class="identifier">C</span><span class="special">,</span><span class="identifier">D</span><span class="special">&gt;&amp;</span> <span class="identifier">c</span><span class="special">);</span>
+</pre>
+<p>
+          When called with argument <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span>
+          <span class="identifier">v1</span><span class="special">,</span>
+          <span class="identifier">v2</span><span class="special">,</span>
+          <span class="identifier">q</span><span class="special">)</span></code>
+          this function returns the non centrality parameter <span class="emphasis"><em>lambda</em></span>
+          such that:
+        </p>
+<p>
+          <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">non_central_chi_squared</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">Policy</span><span class="special">&gt;(</span><span class="identifier">v1</span><span class="special">,</span> <span class="identifier">v2</span><span class="special">,</span> <span class="identifier">lambda</span><span class="special">),</span> <span class="identifier">x</span><span class="special">))</span> <span class="special">==</span> <span class="identifier">q</span></code>.
+        </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.nc_f_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.nc_f_dist.member_functions"></a></span><a class="link" href="nc_f_dist.html#math_toolkit.dist_ref.dists.nc_f_dist.member_functions">Member

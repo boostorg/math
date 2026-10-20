@@ -5,7 +5,12 @@
 //
 // See: https://github.com/scipy/scipy/issues/17916#issuecomment-1437826800
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <boost/math/distributions/non_central_t.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 
 int main(void)

@@ -4,11 +4,13 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #ifndef BOOST_MATH_TOOLS_QUARTIC_ROOTS_HPP
 #define BOOST_MATH_TOOLS_QUARTIC_ROOTS_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <cmath>
+#endif
 #include <boost/math/tools/cubic_roots.hpp>
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 namespace detail {
 
@@ -50,7 +52,7 @@ std::array<Real, 4> polish_and_sort(Real a, Real b, Real c, Real d, Real e, std:
 // Solves ax^4 + bx^3 + cx^2 + dx + e = 0.
 // Only returns the real roots, as these are the only roots of interest in ray intersection problems.
 // Follows Graphics Gems V: https://github.com/erich666/GraphicsGems/blob/master/gems/Roots3And4.c
-template<typename Real>
+BOOST_MATH_EXPORT template<typename Real>
 std::array<Real, 4> quartic_roots(Real a, Real b, Real c, Real d, Real e) {
     using std::abs;
     using std::sqrt;
@@ -153,5 +155,5 @@ std::array<Real, 4> quartic_roots(Real a, Real b, Real c, Real d, Real e) {
     return detail::polish_and_sort(a, b, c, d, e, roots);
 }
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

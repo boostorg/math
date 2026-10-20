@@ -18,7 +18,9 @@
 #if defined __has_include
 #  if ((__cplusplus > 202002L) || (defined(_MSVC_LANG) && (_MSVC_LANG > 202002L)))
 #    if __has_include (<stdfloat>)
+#ifndef BOOST_MATH_BUILD_MODULE
 #    include <stdfloat>
+#endif
 #    endif
 #  endif
 #endif
@@ -45,8 +47,7 @@
 #pragma GCC system_header
 #endif
 
-namespace boost {
-   namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
       namespace detail
       {
@@ -91,12 +92,12 @@ namespace boost {
          // This version uses a Taylor series expansion for 0.5 > |x| > epsilon.
          //
          template <class T, class Policy>
-         T expm1_imp(T x, const boost::math::integral_constant<int, 0>&, const Policy& pol)
+         T expm1_imp(T x, const BOOST_MATH_NAMESPACE::integral_constant<int, 0>&, const Policy& pol)
          {
             BOOST_MATH_STD_USING
 
                T a = fabs(x);
-            if ((boost::math::isnan)(a))
+            if ((BOOST_MATH_NAMESPACE::isnan)(a))
             {
                return policies::raise_domain_error<T>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", a, pol);
             }
@@ -113,7 +114,7 @@ namespace boost {
             if (a < tools::epsilon<T>())
                return x;
             detail::expm1_series<T> s(x);
-            boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+            BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 
             T result = tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter);
 
@@ -123,12 +124,12 @@ namespace boost {
          // LCOV_EXCL_STOP
 
          template <class T, class P>
-         BOOST_MATH_GPU_ENABLED T expm1_imp(T x, const boost::math::integral_constant<int, 53>&, const P& pol)
+         BOOST_MATH_GPU_ENABLED T expm1_imp(T x, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&, const P& pol)
          {
             BOOST_MATH_STD_USING
 
                T a = fabs(x);
-            if ((boost::math::isnan)(a))
+            if ((BOOST_MATH_NAMESPACE::isnan)(a))
             {
                return policies::raise_domain_error<T>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", a, pol);
             }
@@ -154,12 +155,12 @@ namespace boost {
          }
 
          template <class T, class P>
-         BOOST_MATH_GPU_ENABLED T expm1_imp(T x, const boost::math::integral_constant<int, 64>&, const P& pol)
+         BOOST_MATH_GPU_ENABLED T expm1_imp(T x, const BOOST_MATH_NAMESPACE::integral_constant<int, 64>&, const P& pol)
          {
             BOOST_MATH_STD_USING
 
                T a = fabs(x);
-            if ((boost::math::isnan)(a))
+            if ((BOOST_MATH_NAMESPACE::isnan)(a))
             {
                return policies::raise_domain_error<T>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", a, pol);
             }
@@ -203,12 +204,12 @@ namespace boost {
          }
 
          template <class T, class P>
-         BOOST_MATH_GPU_ENABLED T expm1_imp(T x, const boost::math::integral_constant<int, 113>&, const P& pol)
+         BOOST_MATH_GPU_ENABLED T expm1_imp(T x, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&, const P& pol)
          {
             BOOST_MATH_STD_USING
 
                T a = fabs(x);
-            if ((boost::math::isnan)(a))
+            if ((BOOST_MATH_NAMESPACE::isnan)(a))
             {
                return policies::raise_domain_error<T>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", a, pol);
             }
@@ -260,7 +261,7 @@ namespace boost {
 
       } // namespace detail
 
-      template <class T, class Policy>
+      BOOST_MATH_EXPORT template <class T, class Policy>
       BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type expm1(T x, const Policy& /* pol */)
       {
          typedef typename tools::promote_args<T>::type result_type;
@@ -273,7 +274,7 @@ namespace boost {
             policies::discrete_quantile<>,
             policies::assert_undefined<> >::type forwarding_policy;
 
-         typedef boost::math::integral_constant<int,
+         typedef BOOST_MATH_NAMESPACE::integral_constant<int,
             precision_type::value <= 0 ? 0 :
             precision_type::value <= 53 ? 53 :
             precision_type::value <= 64 ? 64 :
@@ -288,15 +289,15 @@ namespace boost {
       //
       // Since we now live in a post C++11 world, we can always defer to std::expm1 when appropriate:
       //
-      template <class Policy>
+      BOOST_MATH_EXPORT template <class Policy>
       BOOST_MATH_GPU_ENABLED inline float expm1(float x, const Policy&)
       {
-         BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != boost::math::policies::ignore_error && Policy::domain_error_type::value != boost::math::policies::errno_on_error)
+         BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != BOOST_MATH_NAMESPACE::policies::ignore_error && Policy::domain_error_type::value != BOOST_MATH_NAMESPACE::policies::errno_on_error)
          {
-            if ((boost::math::isnan)(x))
+            if ((BOOST_MATH_NAMESPACE::isnan)(x))
                return policies::raise_domain_error<float>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", x, Policy());
          }
-         BOOST_MATH_IF_CONSTEXPR(Policy::overflow_error_type::value != boost::math::policies::ignore_error && Policy::overflow_error_type::value != boost::math::policies::errno_on_error)
+         BOOST_MATH_IF_CONSTEXPR(Policy::overflow_error_type::value != BOOST_MATH_NAMESPACE::policies::ignore_error && Policy::overflow_error_type::value != BOOST_MATH_NAMESPACE::policies::errno_on_error)
          {
             if (x >= tools::log_max_value<float>())
                return policies::raise_overflow_error<float>("boost::math::expm1<%1%>(%1%)", nullptr, Policy());
@@ -304,15 +305,15 @@ namespace boost {
          return std::expm1(x);
       }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-      template <class Policy>
+      BOOST_MATH_EXPORT template <class Policy>
       inline long double expm1(long double x, const Policy&)
       {
-         BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != boost::math::policies::ignore_error && Policy::domain_error_type::value != boost::math::policies::errno_on_error)
+         BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != BOOST_MATH_NAMESPACE::policies::ignore_error && Policy::domain_error_type::value != BOOST_MATH_NAMESPACE::policies::errno_on_error)
          {
-            if ((boost::math::isnan)(x))
+            if ((BOOST_MATH_NAMESPACE::isnan)(x))
                return policies::raise_domain_error<long double>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", x, Policy());
          }
-         BOOST_MATH_IF_CONSTEXPR(Policy::overflow_error_type::value != boost::math::policies::ignore_error && Policy::overflow_error_type::value != boost::math::policies::errno_on_error)
+         BOOST_MATH_IF_CONSTEXPR(Policy::overflow_error_type::value != BOOST_MATH_NAMESPACE::policies::ignore_error && Policy::overflow_error_type::value != BOOST_MATH_NAMESPACE::policies::errno_on_error)
          {
             if (x >= tools::log_max_value<long double>())
                return policies::raise_overflow_error<long double>("boost::math::expm1<%1%>(%1%)", nullptr, Policy());
@@ -320,15 +321,15 @@ namespace boost {
          return std::expm1(x);
       }
 #endif
-      template <class Policy>
+      BOOST_MATH_EXPORT template <class Policy>
       BOOST_MATH_GPU_ENABLED inline double expm1(double x, const Policy&)
       {
-         BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != boost::math::policies::ignore_error && Policy::domain_error_type::value != boost::math::policies::errno_on_error)
+         BOOST_MATH_IF_CONSTEXPR(Policy::domain_error_type::value != BOOST_MATH_NAMESPACE::policies::ignore_error && Policy::domain_error_type::value != BOOST_MATH_NAMESPACE::policies::errno_on_error)
          {
-            if ((boost::math::isnan)(x))
+            if ((BOOST_MATH_NAMESPACE::isnan)(x))
                return policies::raise_domain_error<double>("boost::math::expm1<%1%>(%1%)", "expm1 requires a finite argument, but got %1%", x, Policy());
          }
-         BOOST_MATH_IF_CONSTEXPR(Policy::overflow_error_type::value != boost::math::policies::ignore_error && Policy::overflow_error_type::value != boost::math::policies::errno_on_error)
+         BOOST_MATH_IF_CONSTEXPR(Policy::overflow_error_type::value != BOOST_MATH_NAMESPACE::policies::ignore_error && Policy::overflow_error_type::value != BOOST_MATH_NAMESPACE::policies::errno_on_error)
          {
             if (x >= tools::log_max_value<double>())
                return policies::raise_overflow_error<double>("boost::math::expm1<%1%>(%1%)", nullptr, Policy());
@@ -336,7 +337,7 @@ namespace boost {
          return std::expm1(x);
       }
 
-      template <class T>
+      BOOST_MATH_EXPORT template <class T>
       BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type expm1(T x)
       {
          return expm1(x, policies::policy<>());
@@ -345,42 +346,40 @@ namespace boost {
       // Specific width floating point types:
       //
 #ifdef __STDCPP_FLOAT32_T__
-      template <class Policy>
+      BOOST_MATH_EXPORT template <class Policy>
       BOOST_MATH_GPU_ENABLED inline std::float32_t expm1(std::float32_t x, const Policy& pol)
       {
-         return boost::math::expm1(static_cast<float>(x), pol);
+         return BOOST_MATH_NAMESPACE::expm1(static_cast<float>(x), pol);
       }
 #endif
 #ifdef __STDCPP_FLOAT64_T__
-      template <class Policy>
+      BOOST_MATH_EXPORT template <class Policy>
       BOOST_MATH_GPU_ENABLED inline std::float64_t expm1(std::float64_t x, const Policy& pol)
       {
-         return boost::math::expm1(static_cast<double>(x), pol);
+         return BOOST_MATH_NAMESPACE::expm1(static_cast<double>(x), pol);
       }
 #endif
 #ifdef __STDCPP_FLOAT128_T__
-      template <class Policy>
+      BOOST_MATH_EXPORT template <class Policy>
       BOOST_MATH_GPU_ENABLED inline std::float128_t expm1(std::float128_t x, const Policy& pol)
       {
          if constexpr (std::numeric_limits<long double>::digits == std::numeric_limits<std::float128_t>::digits)
          {
-            return boost::math::expm1(static_cast<long double>(x), pol);
+            return BOOST_MATH_NAMESPACE::expm1(static_cast<long double>(x), pol);
          }
          else
          {
-            return boost::math::detail::expm1_imp(x, boost::math::integral_constant<int, 113>(), pol);
+            return BOOST_MATH_NAMESPACE::detail::expm1_imp(x, BOOST_MATH_NAMESPACE::integral_constant<int, 113>(), pol);
          }
       }
 #endif
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #else // Special handling for NVRTC 
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED auto expm1(T x)
 {
    return ::expm1(x);
@@ -392,20 +391,19 @@ BOOST_MATH_GPU_ENABLED auto expm1(float x)
    return ::expm1f(x);
 }
 
-template <typename T, typename Policy>
+BOOST_MATH_EXPORT template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED auto expm1(T x, const Policy&)
 {
    return ::expm1(x);
 }
 
-template <typename Policy>
+BOOST_MATH_EXPORT template <typename Policy>
 BOOST_MATH_GPU_ENABLED auto expm1(float x, const Policy&)
 {
    return ::expm1f(x);
 }
 
-} // Namespace math
-} // Namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HAS_NVRTC
 

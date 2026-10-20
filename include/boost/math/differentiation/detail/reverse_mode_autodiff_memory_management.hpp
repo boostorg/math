@@ -6,17 +6,20 @@
 #ifndef REVERSE_MODE_AUTODIFF_MEMORY_MANAGEMENT_HPP
 #define REVERSE_MODE_AUTODIFF_MEMORY_MANAGEMENT_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <array>
+#endif
 #include <boost/math/tools/assert.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cassert>
 #include <cstddef>
 #include <iterator>
 #include <memory>
 #include <type_traits>
 #include <vector>
-namespace boost {
-namespace math {
+#endif
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {
 namespace detail {
@@ -456,7 +459,6 @@ public:
 } // namespace detail
 } // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif

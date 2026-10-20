@@ -7,8 +7,9 @@
 
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_expression_template_base.hpp>
 
-namespace boost {
-namespace math {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {
 /****************************************************************************************************************/
@@ -270,7 +271,6 @@ struct const_div_by_expr
 
 } // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif

@@ -4,11 +4,9 @@
 //           https://www.boost.org/LICENSE_1_0.txt)
 #include "test_autodiff_reverse.hpp"
 #include <vector>
-BOOST_AUTO_TEST_SUITE(test_flat_linear_allocator)
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_constructors,
-                              T,
-                              all_float_types)
+template <class T>
+void flat_linear_allocator_constructors()
 {
   size_t buffer_size = 16;
   RandomSample<T> rng{ -1, 1 };
@@ -17,21 +15,21 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_constructors,
     float_allocator.emplace_back(rng.next());
   }
 
-  BOOST_CHECK_EQUAL(float_allocator.size(),
+  CHECK_EQUAL(float_allocator.size(),
                     static_cast<size_t>(2 * buffer_size - buffer_size / 2));
-  BOOST_CHECK_EQUAL(float_allocator.capacity(),
+  CHECK_EQUAL(float_allocator.capacity(),
                     static_cast<size_t>(2 * buffer_size));
 
   float_allocator.clear();
-  BOOST_CHECK_EQUAL(float_allocator.size(), static_cast<size_t>(0));
-  BOOST_CHECK_EQUAL(float_allocator.capacity(), buffer_size);
+  CHECK_EQUAL(float_allocator.size(), static_cast<size_t>(0));
+  CHECK_EQUAL(float_allocator.capacity(), buffer_size);
 
   for (size_t i = 0; i < 2 * buffer_size - buffer_size / 2; i++) {
     float_allocator.emplace_back(rng.next());
   }
   float_allocator.reset();
-  BOOST_CHECK_EQUAL(float_allocator.size(), static_cast<size_t>(0));
-  BOOST_CHECK_EQUAL(float_allocator.capacity(), 2 * buffer_size);
+  CHECK_EQUAL(float_allocator.size(), static_cast<size_t>(0));
+  CHECK_EQUAL(float_allocator.capacity(), 2 * buffer_size);
 
   for (size_t i = 0; i < 2 * buffer_size - buffer_size / 2; i++) {
     float_allocator.emplace_back(rng.next());
@@ -39,13 +37,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_constructors,
   T fill_value = T(0.25);
   float_allocator.fill(fill_value);
   for (size_t i = 0; i < float_allocator.size(); i++) {
-    BOOST_CHECK_EQUAL(float_allocator[i], fill_value);
+    CHECK_EQUAL(float_allocator[i], fill_value);
   }
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_test_emplace,
-                              T,
-                              all_float_types)
+template <class T>
+void flat_linear_allocator_test_emplace()
 {
   size_t buffer_size = 16;
   RandomSample<T> rng{ -1, 1 };
@@ -74,22 +71,21 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_test_emplace,
   auto vit = test_vector.begin();
   auto alloc_it = float_allocator.begin();
   for (; vit != test_vector.end(); vit++, alloc_it++) {
-    BOOST_CHECK_EQUAL(*vit,
+    CHECK_EQUAL(*vit,
                       *alloc_it); // should be ok to check floats like this
                                   // since they are expected to be the same.
   }
 
   for (size_t i = 0; i < test_vector.size(); i++) {
-    BOOST_CHECK_EQUAL(test_vector[i],
+    CHECK_EQUAL(test_vector[i],
                       float_allocator[i]); // check random access aswell;
   }
 
-  BOOST_CHECK_EQUAL(test_vector.size(), float_allocator.size());
+  CHECK_EQUAL(test_vector.size(), float_allocator.size());
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_test_checkpointing,
-                              T,
-                              all_float_types)
+template <class T>
+void flat_linear_allocator_test_checkpointing()
 {
   constexpr size_t buffer_size = 16;
   RandomSample<T> rng{ -1, 1 };
@@ -112,23 +108,30 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(flat_linear_allocator_test_checkpointing,
 
   for (size_t i = 0; i < checkpoint_indices.size(); ++i) {
     auto it = float_allocator.checkpoint_at(i);
-    BOOST_REQUIRE(it != float_allocator.begin());
+    if (!CHECK_TRUE(it != float_allocator.begin())) { return; }
     --it;
-    BOOST_CHECK_EQUAL(*it, expected_value_at_checkpoint[i]);
+    CHECK_EQUAL(*it, expected_value_at_checkpoint[i]);
   }
 
   auto first_ckp = float_allocator.first_checkpoint();
-  BOOST_REQUIRE(first_ckp != float_allocator.begin());
+  if (!CHECK_TRUE(first_ckp != float_allocator.begin())) { return; }
   --first_ckp;
-  BOOST_CHECK_EQUAL(*first_ckp, expected_value_at_checkpoint.front());
+  CHECK_EQUAL(*first_ckp, expected_value_at_checkpoint.front());
 
   auto last_ckp = float_allocator.last_checkpoint();
-  BOOST_REQUIRE(last_ckp != float_allocator.begin());
+  if (!CHECK_TRUE(last_ckp != float_allocator.begin())) { return; }
   --last_ckp;
-  BOOST_CHECK_EQUAL(*last_ckp, expected_value_at_checkpoint.back());
+  CHECK_EQUAL(*last_ckp, expected_value_at_checkpoint.back());
 
   float_allocator.rewind_to_last_checkpoint();
-  BOOST_CHECK_EQUAL(float_allocator.size(), checkpoint_indices.back());
-  BOOST_CHECK_EQUAL(float_allocator.capacity(), 2 * buffer_size);
+  CHECK_EQUAL(float_allocator.size(), checkpoint_indices.back());
+  CHECK_EQUAL(float_allocator.capacity(), 2 * buffer_size);
 }
-BOOST_AUTO_TEST_SUITE_END()
+
+int main()
+{
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { flat_linear_allocator_constructors<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { flat_linear_allocator_test_emplace<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { flat_linear_allocator_test_checkpointing<typename decltype(t)::type>(); });
+   return boost::math::test::report_errors();
+}

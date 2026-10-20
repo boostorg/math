@@ -5,8 +5,9 @@
 #ifndef REVERSE_MODE_AUTODIFF_BASIC_OPS_NO_ET_HPP
 #define REVERSE_MODE_AUTODIFF_BASIC_OPS_NO_ET_HPP
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_basic_operator_expressions.hpp>
-namespace boost {
-namespace math {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {
 
@@ -149,6 +150,5 @@ rvar<RealType1, DerivativeOrder> operator/(const expression<RealType1, Derivativ
 }
 } // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

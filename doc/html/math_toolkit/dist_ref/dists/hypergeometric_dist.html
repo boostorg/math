@@ -161,8 +161,11 @@
 <p>
           The domain of the random variable are the 64-bit unsigned integers in the
           range [max(0, n + r - N), min(n, r)]. A <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
-          is raised if the random variable is outside this range, or is not an integral
-          value.
+          is raised if the random variable is outside this range. The CDF and its
+          complement also raise a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+          for a non-integral random variable; the PDF instead returns the analytic
+          continuation of its formula in terms of binomial coefficients (see Implementation
+          below).
         </p>
 <div class="caution"><table border="0" summary="Caution">
 <tr>
@@ -206,20 +209,13 @@
           precision.
         </p>
 <p>
-          For larger N such that <code class="computeroutput"><span class="identifier">N</span> <span class="special">&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">prime</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">max_prime</span><span class="special">)</span></code> then only basic arithmetic is required
-          for the calculation and the accuracy is typically &lt; 20 epsilon. This
-          takes care of N up to 104729.
-        </p>
-<p>
-          For <code class="computeroutput"><span class="identifier">N</span> <span class="special">&gt;</span>
-          <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">prime</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">max_prime</span><span class="special">)</span></code>
-          then accuracy quickly degrades, with 5 or 6 decimal digits being lost for
-          N = 110000.
-        </p>
-<p>
-          In general for very large N, the user should expect to lose log<sub>10</sub>N decimal
-          digits of precision during the calculation, with the results becoming meaningless
-          for N &gt;= 10<sup>15</sup>.
+          For larger N the error is typically a few tens of epsilon wherever the
+          PDF exceeds e<sup>-15</sup>
+(about 3 × 10<sup>-7</sup>), however large N is, as long as products
+          of the parameters are exactly representable (below 2<sup>53</sup> at double precision).
+          Further into the tails the error is also a few tens of epsilon for N up
+          to 104729; beyond that it grows in proportion to |ln f(k)|, reaching around
+          a thousand epsilon where f(k) ~ e<sup>-700</sup>.
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.hypergeometric_dist.h3"></a>
@@ -307,12 +303,50 @@
           accurate than the alternatives.
         </p>
 <p>
-          For much larger N, we can calculate the PDF from the factorials using either
-          lgamma, or by directly combining lanczos approximations to avoid calculating
-          via logarithms. We use the latter method, as it is usually 1 or 2 decimal
-          digits more accurate than computing via logarithms with lgamma. However,
-          in this area where N &gt; 104729, the user should expect to lose around
-          log<sub>10</sub>N decimal digits during the calculation in the worst case.
+          Prime factorisation is, however, slow, and above the table of primes it
+          is not available at all. So for N above the table of factorials we use
+          Loader's saddle-point method, as does R's <code class="computeroutput"><span class="identifier">dhyper</span></code>:
+          the PDF is the ratio of binomial densities
+        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">f(k) = Binom(k; r, p) Binom(n - k; N - r,
+            p) / Binom(n; N, p)</span>
+          </p></blockquote></div>
+<p>
+          in which the powers of <span class="emphasis"><em>p</em></span> cancel for any <span class="emphasis"><em>p</em></span>;
+          with <span class="emphasis"><em>p</em></span> = <span class="emphasis"><em>n</em></span> / <span class="emphasis"><em>N</em></span>
+          the denominator is at its mode. Each binomial density is exp of a sum of
+          Stirling-series remainders and deviance terms, all small near the mode,
+          so near the mode the accuracy does not depend on N. The means of the deviance
+          terms are ratios of products of the parameters, which we form without rounding,
+          and we use the symmetry f(k; r, n, N) = f(r - k; r, N - n, N) to keep
+          <span class="emphasis"><em>p</em></span> &lt;= 1/2, since for <span class="emphasis"><em>p</em></span> near
+          1 large powers of 1 - <span class="emphasis"><em>p</em></span> would otherwise have to cancel.
+          Because the result is an exponential, its relative error grows like |ln
+          f(k)| × epsilon in the tails, so where the PDF is below e<sup>-15</sup> and N
+          is within the table of primes we recompute it by prime factorisation.
+        </p>
+<p>
+          Loader, C. (2000), "Fast and Accurate Computation of Binomial Probabilities".
+        </p>
+<p>
+          For non-integral <span class="emphasis"><em>k</em></span> the PDF is the analytic continuation
+          of the formula above, with the binomial coefficients written in terms of
+          gamma functions. It is computed from the PDF at the integer <span class="emphasis"><em>j</em></span>
+          = floor(<span class="emphasis"><em>k</em></span>) and the shift <span class="emphasis"><em>d</em></span> =
+          <span class="emphasis"><em>k</em></span> - <span class="emphasis"><em>j</em></span>:
+        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">f(k) = f(j) × Γ(j+1)/Γ(j+1+d) × Γ(N-r-n+j+1)/Γ(N-r-n+j+1+d)
+            × Γ(r-k+1+d)/Γ(r-k+1) × Γ(n-k+1+d)/Γ(n-k+1)</span>
+          </p></blockquote></div>
+<p>
+          where each ratio is evaluated with <a class="link" href="../../sf_gamma/gamma_ratios.html" title="Ratios of Gamma Functions">tgamma_delta_ratio</a>,
+          which is accurate for small <span class="emphasis"><em>d</em></span> and large arguments.
+          The result is accurate to a few epsilon beyond the conditioning of the
+          function in <span class="emphasis"><em>k</em></span>, agrees with the integer values as
+          <span class="emphasis"><em>d</em></span> → 0, and is log-concave, so it is monotone
+          on either side of the mode.
         </p>
 <p>
           The CDF and its complement is calculated by directly summing the PDFs.

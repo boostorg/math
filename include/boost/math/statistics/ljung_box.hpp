@@ -6,15 +6,17 @@
 #ifndef BOOST_MATH_STATISTICS_LJUNG_BOX_HPP
 #define BOOST_MATH_STATISTICS_LJUNG_BOX_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <iterator>
 #include <utility>
+#endif
 #include <boost/math/distributions/chi_squared.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
 
-namespace boost::math::statistics {
+BOOST_MATH_NAMESPACE_BEGIN namespace statistics {
 
-template<class RandomAccessIterator>
+BOOST_MATH_EXPORT template<class RandomAccessIterator>
 auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lags = -1, int64_t fit_dof = 0) {
     using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
     int64_t n = std::distance(begin, end);
@@ -31,7 +33,7 @@ auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lag
       throw std::domain_error("Must have at least one lag.");
     }
 
-    auto mu = boost::math::statistics::mean(begin, end);
+    auto mu = BOOST_MATH_NAMESPACE::statistics::mean(begin, end);
 
     std::vector<Real> r(lags + 1, Real(0));
     for (size_t i = 0; i < r.size(); ++i) {
@@ -49,22 +51,22 @@ auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lag
     }
     Q *= n*(n+2);
 
-    typedef boost::math::policies::policy<
-          boost::math::policies::promote_float<false>,
-          boost::math::policies::promote_double<false> >
+    typedef BOOST_MATH_NAMESPACE::policies::policy<
+          BOOST_MATH_NAMESPACE::policies::promote_float<false>,
+          BOOST_MATH_NAMESPACE::policies::promote_double<false> >
           no_promote_policy;
 
-    auto chi = boost::math::chi_squared_distribution<Real, no_promote_policy>(Real(lags - fit_dof));
+    auto chi = BOOST_MATH_NAMESPACE::chi_squared_distribution<Real, no_promote_policy>(Real(lags - fit_dof));
 
-    Real pvalue = 1 - boost::math::cdf(chi, Q);
+    Real pvalue = 1 - BOOST_MATH_NAMESPACE::cdf(chi, Q);
     return std::make_pair(Q, pvalue);
 }
 
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 auto ljung_box(RandomAccessContainer const & v, int64_t lags = -1, int64_t fit_dof = 0) {
     return ljung_box(v.begin(), v.end(), lags, fit_dof);
 }
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

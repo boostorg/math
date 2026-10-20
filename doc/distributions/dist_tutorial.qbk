@@ -146,14 +146,31 @@ The logcdf and logpdf functions are minimally calculated with log(cdf(my_dist, x
 and log(pdf(my_dist, x)) respectively. The following distributions have specialized
 implementations of the logcdf:
 
+* Beta
+* Binomial
+* Chi Squared
 * Exponential
 * Extreme Value
+* Fisher F
+* Gamma
 * Geometric
+* Inverse Chi Squared
+* Inverse Gamma
 * Laplace
 * Logistic
+* Negative Binomial
 * Pareto
+* Poisson
 * Rayleigh
+* Students t
 * Weibull
+
+The specialisations for the distributions built on the incomplete gamma and beta functions (beta, binomial,
+chi squared, Fisher F, gamma, inverse chi squared, inverse gamma, negative binomial, Poisson and Students t)
+use [link math_toolkit.sf_gamma.igamma lgamma_p and lgamma_q] and
+[link math_toolkit.sf_beta.ibeta_function libeta and libetac], so both `logcdf(dist, x)` and
+`logcdf(complement(dist, x))` stay finite and accurate far into the tails, where `log(cdf(dist, x))`
+underflows to -infinity.
 
 And the following distributions have specialized implementations of logpdf:
 
@@ -278,13 +295,11 @@ function.
 
 The quantile functions for these distributions are hard to specify
 in a manner that will satisfy everyone all of the time.  The default
-behaviour is to return an integer result, that has been rounded
-/outwards/: that is to say, lower quantiles - where the probability
-is less than 0.5 are rounded down, while upper quantiles - where
-the probability is greater than 0.5 - are rounded up.  This behaviour
-ensures that if an X% quantile is requested, then /at least/ the requested
-coverage will be present in the central region, and /no more than/
-the requested coverage will be present in the tails.
+behaviour is to return an integer result:
+`quantile(dist, p)` is the smallest integer /k/ with `cdf(dist, k) >= p`, and
+`quantile(complement(dist, q))` is the smallest integer /k/ with
+`cdf(complement(dist, k)) <= q`.  This is the `integer_round_up` policy, and
+the definition R, SciPy, Julia and Mathematica use.
 
 This behaviour can be changed so that the quantile functions are rounded
 differently, or return a real-valued result using

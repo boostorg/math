@@ -345,6 +345,7 @@ Otherwise the result is given by:
 
 [endsect] [/section:hypot hypot]
 
+[include pow1p.qbk]
 [include pow.qbk]
 [include rsqrt.qbk]
 [include logaddexp.qbk]

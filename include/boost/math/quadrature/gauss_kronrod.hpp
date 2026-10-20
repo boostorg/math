@@ -13,14 +13,17 @@
 #pragma warning(disable: 4127)
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <vector>
 #include <algorithm>
+#endif
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/special_functions/legendre_stieltjes.hpp>
 #include <boost/math/quadrature/gauss.hpp>
+#include <boost/math/quadrature/detail/quadrature_constant.hpp>
 
-namespace boost { namespace math{ namespace quadrature{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature{ namespace detail{
 
 #ifndef BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND
 
@@ -34,7 +37,7 @@ class gauss_kronrod_detail
    }
    static std::vector<Real> calculate_abscissa()
    {
-      static std::vector<Real> result = boost::math::legendre_p_zeros<Real>((N - 1) / 2);
+      static std::vector<Real> result = BOOST_MATH_NAMESPACE::legendre_p_zeros<Real>((N - 1) / 2);
       const legendre_stieltjes<Real> E = get_legendre_stieltjes();
       std::vector<Real> ls_zeros = E.zeros();
       result.insert(result.end(), ls_zeros.begin(), ls_zeros.end());
@@ -51,7 +54,7 @@ class gauss_kronrod_detail
       for (unsigned i = gauss_start; i < abscissa().size(); i += 2)
       {
          Real x = abscissa()[i];
-         Real p = boost::math::legendre_p_prime(gauss_order, x);
+         Real p = BOOST_MATH_NAMESPACE::legendre_p_prime(gauss_order, x);
          Real gauss_weight = 2 / ((1 - x * x) * p * p);
          result[i] = gauss_weight + static_cast<Real>(2) / (static_cast<Real>(gauss_order + 1) * legendre_p_prime(gauss_order, x) * E(x));
       }
@@ -86,7 +89,7 @@ class gauss_kronrod_detail;
 template <class T>
 class gauss_kronrod_detail<T, 15, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 8> const & abscissa()
    {
@@ -122,7 +125,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 15, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 8> const & abscissa()
    {
@@ -194,7 +197,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 21, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 11> const & abscissa()
    {
@@ -236,7 +239,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 21, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 11> const & abscissa()
    {
@@ -320,7 +323,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 31, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 16> const & abscissa()
    {
@@ -373,7 +376,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 31, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 16> const & abscissa()
    {
@@ -477,7 +480,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 41, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 21> const & abscissa()
    {
@@ -540,7 +543,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 41, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 21> const & abscissa()
    {
@@ -664,7 +667,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 51, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 26> const & abscissa()
    {
@@ -737,7 +740,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 51, 3>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 26> const & abscissa()
    {
@@ -881,7 +884,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 61, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 31> const & abscissa()
    {
@@ -964,7 +967,7 @@ public:
 template <class T>
 class gauss_kronrod_detail<T, 61, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 31> const & abscissa()
    {
@@ -1125,10 +1128,10 @@ public:
 
 }
 
-template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
-class gauss_kronrod : public detail::gauss_kronrod_detail<Real, N, detail::gauss_constant_category<Real>::value>
+BOOST_MATH_EXPORT template <class Real, unsigned N, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
+class gauss_kronrod : public detail::gauss_kronrod_detail<Real, N, detail::quadrature_constant_category<Real>::value>
 {
-   typedef detail::gauss_kronrod_detail<Real, N, detail::gauss_constant_category<Real>::value> base;
+   typedef detail::gauss_kronrod_detail<Real, N, detail::quadrature_constant_category<Real>::value> base;
 public:
   typedef Real value_type;
 private:
@@ -1233,7 +1236,7 @@ public:
       static_assert(!std::is_integral<K>::value,
                   "The return type cannot be integral, it must be either a real or complex floating point type.");
       static const char* function = "boost::math::quadrature::gauss_kronrod<%1%>::integrate(f, %1%, %1%)";
-      if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
+      if (!(BOOST_MATH_NAMESPACE::isnan)(a) && !(BOOST_MATH_NAMESPACE::isnan)(b))
       {
          // Infinite limits:
          if ((a <= -tools::max_value<Real>()) && (b >= tools::max_value<Real>()))
@@ -1253,7 +1256,7 @@ public:
          }
 
          // Right limit is infinite:
-         if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (b >= tools::max_value<Real>()))
          {
             auto u = [&](const Real& t)->K
             {
@@ -1271,7 +1274,7 @@ public:
             return Q;
          }
 
-         if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(b) && (a <= -tools::max_value<Real>()))
          {
             auto v = [&](const Real& t)->K
             {
@@ -1288,7 +1291,7 @@ public:
             return Q;
          }
 
-         if ((boost::math::isfinite)(a) && (boost::math::isfinite)(b))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (BOOST_MATH_NAMESPACE::isfinite)(b))
          {
             if (a==b)
             {
@@ -1304,11 +1307,200 @@ public:
       }
       return static_cast<K>(policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy()));
    }
+
+private:
+   // Explicit zero/norm path; preserve the original scalar/complex path above.
+   template <class F, class Norm>
+   static auto integrate_non_adaptive_m1_1(F f, const decltype(f(Real(0)))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
+   {
+      typedef decltype(f(Real(0))) K;
+      unsigned gauss_start = 2;
+      unsigned kronrod_start = 1;
+      unsigned gauss_order = (N - 1) / 2;
+      K kronrod_result = zero;
+      K gauss_result = zero;
+      K fp = zero, fm = zero;
+      if (gauss_order & 1)
+      {
+         fp = f(value_type(0));
+         kronrod_result = fp * static_cast<Real>(base::weights()[0]);
+         gauss_result += fp * static_cast<Real>(gauss<Real, (N - 1) / 2>::weights()[0]);
+      }
+      else
+      {
+         fp = f(value_type(0));
+         kronrod_result = fp * static_cast<Real>(base::weights()[0]);
+         gauss_start = 1;
+         kronrod_start = 2;
+      }
+      Real L1 = static_cast<Real>(norm(kronrod_result));
+      for (unsigned i = gauss_start; i < base::abscissa().size(); i += 2)
+      {
+         fp = f(static_cast<Real>(base::abscissa()[i]));
+         fm = f(static_cast<Real>(-base::abscissa()[i]));
+         kronrod_result += (fp + fm) * static_cast<Real>(base::weights()[i]);
+         L1 += (static_cast<Real>(norm(fp)) + static_cast<Real>(norm(fm))) * static_cast<Real>(base::weights()[i]);
+         gauss_result += (fp + fm) * static_cast<Real>(gauss<Real, (N - 1) / 2>::weights()[i / 2]);
+      }
+      for (unsigned i = kronrod_start; i < base::abscissa().size(); i += 2)
+      {
+         fp = f(static_cast<Real>(base::abscissa()[i]));
+         fm = f(static_cast<Real>(-base::abscissa()[i]));
+         kronrod_result += (fp + fm) * static_cast<Real>(base::weights()[i]);
+         L1 += (static_cast<Real>(norm(fp)) + static_cast<Real>(norm(fm))) * static_cast<Real>(base::weights()[i]);
+      }
+      if (pL1)
+         *pL1 = L1;
+      if (error)
+         *error = (std::max)(static_cast<Real>(norm(kronrod_result - gauss_result)), static_cast<Real>(norm(kronrod_result * tools::epsilon<Real>() * Real(2))));
+      return kronrod_result;
+   }
+
+   template <class F, class Norm>
+   struct norm_recursive_info
+   {
+      F f;
+      Real tol;
+      const decltype(std::declval<F>()(std::declval<Real>()))& zero;
+      Norm norm;
+   };
+
+   template <class F, class Norm>
+   static auto recursive_adaptive_integrate(const norm_recursive_info<F, Norm>* info, Real a, Real b, unsigned max_levels, Real abs_tol, Real* error, Real* L1)->decltype(std::declval<F>()(std::declval<Real>()))
+   {
+      typedef decltype(info->f(Real(a))) K;
+      Real error_local;
+      Real mean = (b + a) / 2;
+      Real scale = (b - a) / 2;
+      auto ff = [&](const Real& x)->K
+      {
+         return info->f(scale * x + mean);
+      };
+      K r1 = integrate_non_adaptive_m1_1(ff, info->zero, info->norm, &error_local, L1);
+      K estimate = scale * r1;
+      error_local *= scale;
+
+      K tmp = estimate * info->tol;
+      Real abs_tol1 = static_cast<Real>(info->norm(tmp));
+      if (abs_tol == 0)
+         abs_tol = abs_tol1;
+
+      if (max_levels && (abs_tol1 < error_local) && (abs_tol < error_local))
+      {
+         Real mid = (a + b) / 2;
+         Real L1_local;
+         estimate = recursive_adaptive_integrate(info, a, mid, max_levels - 1, abs_tol / 2, error, L1);
+         estimate += recursive_adaptive_integrate(info, mid, b, max_levels - 1, abs_tol / 2, &error_local, &L1_local);
+         if (error)
+            *error += error_local;
+         if (L1)
+            *L1 += L1_local;
+         return estimate;
+      }
+      if(L1)
+         *L1 *= scale;
+      if (error)
+         *error = error_local;
+      return estimate;
+   }
+
+public:
+   template <class F, class Norm>
+   static auto integrate(F f, Real a, Real b, const decltype(f(a))& zero, Norm norm, unsigned max_depth = 15, Real tol = tools::root_epsilon<Real>(), Real* error = nullptr, Real* pL1 = nullptr)->decltype(static_cast<Real>(norm(f(a))), f(a))
+   {
+      typedef decltype(f(a)) K;
+      static_assert(!std::is_integral<K>::value,
+                  "The return type cannot be integral.");
+      static const char* function = "boost::math::quadrature::gauss_kronrod<%1%>::integrate(f, %1%, %1%)";
+      if (!(BOOST_MATH_NAMESPACE::isnan)(a) && !(BOOST_MATH_NAMESPACE::isnan)(b))
+      {
+         // Infinite limits:
+         if ((a <= -tools::max_value<Real>()) && (b >= tools::max_value<Real>()))
+         {
+            auto u = [&](const Real& t)->K
+            {
+               Real t_sq = t*t;
+               Real inv = 1 / (1 - t_sq);
+               Real w = (1 + t_sq)*inv*inv;
+               Real arg = t*inv;
+               K res = f(arg)*w;
+               return res;
+            };
+            norm_recursive_info<decltype(u), Norm> info = { u, tol, zero, norm };
+            K res = recursive_adaptive_integrate(&info, Real(-1), Real(1), max_depth, Real(0), error, pL1);
+            return res;
+         }
+
+         // Right limit is infinite:
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (b >= tools::max_value<Real>()))
+         {
+            auto u = [&](const Real& t)->K
+            {
+               Real z = 1 / (t + 1);
+               Real arg = 2 * z + a - 1;
+               K res = f(arg)*z*z;
+               return res;
+            };
+            norm_recursive_info<decltype(u), Norm> info = { u, tol, zero, norm };
+            K Q = Real(2) * recursive_adaptive_integrate(&info, Real(-1), Real(1), max_depth, Real(0), error, pL1);
+            if (pL1)
+            {
+               *pL1 *= 2;
+            }
+            if (error)
+               *error *= 2;
+            return Q;
+         }
+
+         if ((BOOST_MATH_NAMESPACE::isfinite)(b) && (a <= -tools::max_value<Real>()))
+         {
+            auto v = [&](const Real& t)->K
+            {
+               Real z = 1 / (t + 1);
+               Real arg = 2 * z - 1;
+               return f(b - arg) * z * z;
+            };
+            norm_recursive_info<decltype(v), Norm> info = { v, tol, zero, norm };
+            K Q = Real(2) * recursive_adaptive_integrate(&info, Real(-1), Real(1), max_depth, Real(0), error, pL1);
+            if (pL1)
+            {
+               *pL1 *= 2;
+            }
+            if (error)
+               *error *= 2;
+            return Q;
+         }
+
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (BOOST_MATH_NAMESPACE::isfinite)(b))
+         {
+            if (a==b)
+            {
+               if (error)
+                  *error = Real(0);
+               if (pL1)
+                  *pL1 = Real(0);
+               return zero;
+            }
+            norm_recursive_info<F, Norm> info = { f, tol, zero, norm };
+            if (b < a)
+            {
+               return -recursive_adaptive_integrate(&info, b, a, max_depth, Real(0), error, pL1);
+            }
+            return recursive_adaptive_integrate(&info, a, b, max_depth, Real(0), error, pL1);
+         }
+      }
+      Real invalid = policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy());
+      if (error)
+         *error = invalid;
+      if (pL1)
+         *pL1 = invalid;
+      K result = zero * invalid;
+      return result;
+   }
 };
 
 } // namespace quadrature
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #ifdef _MSC_VER
 #pragma warning(pop)

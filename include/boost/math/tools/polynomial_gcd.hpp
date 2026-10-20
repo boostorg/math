@@ -11,8 +11,10 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <type_traits>
+#endif
 #include <boost/math/tools/is_standalone.hpp>
 #include <boost/math/tools/polynomial.hpp>
 
@@ -20,9 +22,11 @@
 #include <boost/integer/common_factor_rt.hpp>
 
 #else
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <numeric>
 #include <utility>
 #include <iterator>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/config.hpp>
 
@@ -83,17 +87,18 @@ namespace boost{
          struct gcd_traits;
 
          template <class T>
-         struct gcd_traits<boost::math::tools::polynomial<T> >
+         struct gcd_traits<BOOST_MATH_NAMESPACE::tools::polynomial<T> >
          {
-            inline static const boost::math::tools::polynomial<T>& abs(const boost::math::tools::polynomial<T>& val) { return val; }
+            inline static const BOOST_MATH_NAMESPACE::tools::polynomial<T>& abs(const BOOST_MATH_NAMESPACE::tools::polynomial<T>& val) { return val; }
 
             static const method_type method = method_euclid;
          };
 
       }
 }
+}
 
-namespace math{ namespace tools{
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 /* From Knuth, 4.6.1:
 *
@@ -251,18 +256,18 @@ gcd(polynomial<T> const &u, polynomial<T> const &v)
 //
 // Using declaration so we overload the default implementation in this namespace:
 //
-using boost::math::tools::gcd;
+using BOOST_MATH_NAMESPACE::tools::gcd;
 
-}
+BOOST_MATH_NAMESPACE_END
 
+namespace boost {
 namespace integer
 {
    //
    // Using declaration so we overload the default implementation in this namespace:
    //
-   using boost::math::tools::gcd;
+   using BOOST_MATH_NAMESPACE::tools::gcd;
 }
-
-} // namespace boost::math::tools
+}
 
 #endif

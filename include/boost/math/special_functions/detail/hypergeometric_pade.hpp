@@ -11,7 +11,7 @@
 #ifndef BOOST_MATH_HYPERGEOMETRIC_PADE_HPP
 #define BOOST_MATH_HYPERGEOMETRIC_PADE_HPP
 
-  namespace boost{ namespace math{ namespace detail{
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
   // Luke: C ---------- SUBROUTINE R1F1P(CP, Z, A, B, N) ----------
   // Luke: C ----- PADE APPROXIMATION OF 1F1( 1 ; CP ; -Z ) -------
@@ -34,7 +34,7 @@
     T b1 = one + (z / ct1);
     T a1 = b1 - (z / cp);
 
-    const unsigned max_iterations = boost::math::policies::get_max_series_iterations<Policy>();
+    const unsigned max_iterations = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
 
     T b2 = T(0), a2 = T(0);
     T result = T(0), prev_result;
@@ -56,7 +56,7 @@
       result = a2 / b2;
 
       // condition for interruption
-      if ((fabs(result) * boost::math::tools::epsilon<T>()) > fabs(result - prev_result))
+      if ((fabs(result) * BOOST_MATH_NAMESPACE::tools::epsilon<T>()) > fabs(result - prev_result))
         break;
 
       b0 = b1; b1 = b2;
@@ -90,7 +90,7 @@
     T b1 = one + ((z / (cp + one)) * (bp + one));
     T a1 = b1 - ((bp / cp) * z);
 
-    const unsigned max_iterations = boost::math::policies::get_max_series_iterations<Policy>();
+    const unsigned max_iterations = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
 
     T b2 = T(0), a2 = T(0);
     T result = T(0), prev_result = a1 / b1;
@@ -114,7 +114,7 @@
       result = a2 / b2;
 
       // condition for interruption
-      if ((fabs(result) * boost::math::tools::epsilon<T>()) > fabs(result - prev_result))
+      if ((fabs(result) * BOOST_MATH_NAMESPACE::tools::epsilon<T>()) > fabs(result - prev_result))
         break;
 
       b0 = b1; b1 = b2;
@@ -126,6 +126,6 @@
     return a2 / b2;
   }
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_PADE_HPP

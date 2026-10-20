@@ -16,15 +16,18 @@
  * Patterson, TNL. "The optimum addition of points to quadrature formulae." Mathematics of Computation 22.104 (1968): 847-856.
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iostream>
+#include <stdexcept>
 #include <vector>
+#endif
 #include <boost/math/tools/roots.hpp>
+#include <boost/math/tools/throw_exception.hpp>
 #include <boost/math/special_functions/legendre.hpp>
 
-namespace boost{
-namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
-template<class Real>
+BOOST_MATH_EXPORT template<class Real>
 class legendre_stieltjes
 {
 public:
@@ -32,7 +35,7 @@ public:
     {
         if (m == 0)
         {
-           throw std::domain_error("The Legendre-Stieltjes polynomial is defined for order m > 0.\n");
+           BOOST_MATH_THROW_EXCEPTION(std::domain_error("The Legendre-Stieltjes polynomial is defined for order m > 0.\n"));
         }
         m_m = static_cast<int>(m);
         std::ptrdiff_t n = m - 1;
@@ -114,14 +117,14 @@ public:
         for (size_t i = 2; i <= r; ++i)
         {
             std::swap(p0, p1);
-            p1 = boost::math::legendre_next(n, x, p0, p1);
+            p1 = BOOST_MATH_NAMESPACE::legendre_next(n, x, p0, p1);
             ++n;
             if (!odd)
             {
                Em += m_a[i]*p1;
             }
             std::swap(p0, p1);
-            p1 = boost::math::legendre_next(n, x, p0, p1);
+            p1 = BOOST_MATH_NAMESPACE::legendre_next(n, x, p0, p1);
             ++n;
             if(odd)
             {
@@ -152,7 +155,7 @@ public:
 
     std::vector<Real> zeros() const
     {
-        using boost::math::constants::half;
+        using BOOST_MATH_NAMESPACE::constants::half;
 
         std::vector<Real> stieltjes_zeros;
         std::vector<Real> legendre_zeros = legendre_p_zeros<Real>(m_m - 1);
@@ -200,9 +203,9 @@ public:
 
             // The root bracketing is not very tight; to keep weird stuff from happening
             // in the Newton's method, let's tighten up the tolerance using a few bisections.
-            boost::math::tools::eps_tolerance<Real> tol(6);
+            BOOST_MATH_NAMESPACE::tools::eps_tolerance<Real> tol(6);
             auto g = [&](Real t) { return this->operator()(t); };
-            auto p = boost::math::tools::bisect(g, lower_bound, upper_bound, tol);
+            auto p = BOOST_MATH_NAMESPACE::tools::bisect(g, lower_bound, upper_bound, tol);
 
             Real x_nk_guess = p.first + (p.second - p.first)*half<Real>();
             std::uintmax_t number_of_iterations = 500;
@@ -211,7 +214,7 @@ public:
                                     Real Pn_prime = this->prime(x);
                                     return std::pair<Real, Real>(Pn, Pn_prime); };
 
-            const Real x_nk = boost::math::tools::newton_raphson_iterate(f, x_nk_guess,
+            const Real x_nk = BOOST_MATH_NAMESPACE::tools::newton_raphson_iterate(f, x_nk_guess,
                                                   p.first, p.second,
                                                   tools::digits<Real>(),
                                                   number_of_iterations);
@@ -230,5 +233,5 @@ private:
     int m_m;
 };
 
-}}
+BOOST_MATH_NAMESPACE_END
 #endif

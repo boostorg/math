@@ -344,6 +344,41 @@ void test_spots(RealType)
       distro1 d(8.0f, 8.5f);
       BOOST_CHECK_CLOSE(pdf(d, -1), static_cast<RealType>(6.1747948083757028903541988987716621647020752431287e-20), 2e-5);  // Can we do better on accuracy here?
    }
+   // https://github.com/boostorg/math/issues/1430
+   {
+       distro1 d(1000.f, 23.f);
+       BOOST_CHECK_CLOSE_FRACTION(cdf(d, -1), static_cast<RealType>(1.61471461239552e-127), 1e-3);
+   }
+
+   // https://github.com/boostorg/math/issues/1524
+   // The left tail for delta > 0 (and the right tail for delta < 0) was computed as
+   // the difference of two nearly equal sums, and was wrong for much of the (v, t) plane.
+   // Reference values calculated with Arb:
+   {
+      RealType tol = (std::max)(4 * boost::math::tools::epsilon<RealType>(), static_cast<RealType>(1e-12));
+      distro1 d1(96, 2), d2(static_cast<RealType>(1.5), 2), d3(static_cast<RealType>(0.5), 5), d4(10, 2), d5(24, 3);
+      BOOST_CHECK_CLOSE_FRACTION(cdf(d1, static_cast<RealType>(-19.5)), static_cast<RealType>(1.242656174522169141092300743978390970677e-43L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(cdf(complement(distro1(96, -2), static_cast<RealType>(19.5))), static_cast<RealType>(1.242656174522169141092300743978390970677e-43L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(cdf(d2, -16), static_cast<RealType>(9.099145453251583331626204775224468892248e-5L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(cdf(d3, static_cast<RealType>(-1.5)), static_cast<RealType>(6.997056320865587268922984822595964284464e-8L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(cdf(d4, -5), static_cast<RealType>(2.51884627689584445387260797539450452272e-7L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(cdf(d5, static_cast<RealType>(-7.5)), static_cast<RealType>(7.754192818563403827599625290602197763775e-15L), tol);
+   }
+
+   // https://github.com/boostorg/math/issues/1410
+   // p=0.99 is below both limiting CDF values:
+   // Phi(2.5) and Phi(3.75).  Previously this could return a tiny,
+   // meaningless degree of freedom instead of reporting that the inverse
+   // cannot be selected uniquely.
+   BOOST_MATH_CHECK_THROW(distro1::find_degrees_of_freedom(static_cast<RealType>(-2.5), static_cast<RealType>(1.25), static_cast<RealType>(0.99)), boost::math::evaluation_error);
+   BOOST_MATH_CHECK_THROW(distro1::find_degrees_of_freedom(boost::math::complement(static_cast<RealType>(-2.5), static_cast<RealType>(1.25), static_cast<RealType>(0.01))), boost::math::evaluation_error);
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   {
+      // A non-throwing policy must get NaN, not a plausible-looking value.
+      typedef boost::math::policies::policy<boost::math::policies::evaluation_error<boost::math::policies::ignore_error> > ignore_policy;
+      typedef boost::math::non_central_t_distribution<RealType, ignore_policy> ignore_distro;
+      BOOST_CHECK((boost::math::isnan)(ignore_distro::find_degrees_of_freedom(static_cast<RealType>(-2.5), static_cast<RealType>(1.25), static_cast<RealType>(0.99))));
+   }
 
 } // template <class RealType>void test_spots(RealType)
 
@@ -512,6 +547,24 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
             {
                df_precision_multiplier *= 50; // very little precision left at this point
             }
+            //
+            // Where the non-centrality is tiny the probability barely depends on it: an error of eps p in a
+            // probability p moves the non-centrality delta by eps p / |dp/d delta|, and dp/d delta ~ -pdf(t),
+            // the central t density to first order in delta. Allow 16 of those (measured: up to ~8, with
+            // -ffp-contract=fast):
+            //
+            auto non_centrality_tolerance = [&](value_type p)
+            {
+               value_type tol = precision * non_centrality_precision_multiplier;
+               if ((data[i][1] > 0) && (data[i][1] < 1e-6))
+               {
+                  value_type d = boost::math::pdf(boost::math::students_t_distribution<value_type>(data[i][0]), data[i][2]);
+                  value_type conditioned = 16 * boost::math::tools::epsilon<value_type>() * p / (data[i][1] * d) * 100;
+                  if (conditioned > tol)
+                     tol = conditioned;
+               }
+               return tol;
+            };
             if((data[i][3] < 0.99) && (data[i][3] != 0))
             {
                if (data[i][0] < 1.0e12)  // no precision above this
@@ -522,7 +575,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
                }
                BOOST_CHECK_CLOSE_EX(
                   boost::math::non_central_t_distribution<value_type>::find_non_centrality(data[i][0], data[i][2], data[i][3]),
-                  data[i][1], precision * non_centrality_precision_multiplier, i);
+                  data[i][1], non_centrality_tolerance(data[i][3]), i);
             }
             if((data[i][4] < 0.99) && (data[i][4] != 0))
             {
@@ -534,7 +587,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
                }
                BOOST_CHECK_CLOSE_EX(
                   boost::math::non_central_t_distribution<value_type>::find_non_centrality(boost::math::complement(data[i][0], data[i][2], data[i][4])),
-                  data[i][1], precision * non_centrality_precision_multiplier, i);
+                  data[i][1], non_centrality_tolerance(data[i][4]), i);
             }
          }
          catch(const std::exception& e)
@@ -542,8 +595,10 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
             BOOST_ERROR(e.what());
          }
          // Code coverage:
-         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], boost::math::tools::epsilon<value_type>() / 2, data[i][3]), boost::math::evaluation_error);
-         BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(boost::math::complement(data[i][1], boost::math::tools::epsilon<value_type>() / 2, data[i][3])), boost::math::evaluation_error);
+         using no_promote_policy = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> >;
+         using no_promote_distro = boost::math::non_central_t_distribution<value_type, no_promote_policy>;
+         BOOST_CHECK_THROW(no_promote_distro::find_degrees_of_freedom(data[i][1], boost::math::tools::epsilon<value_type>() / 2, data[i][3]), boost::math::evaluation_error);
+         BOOST_CHECK_THROW(no_promote_distro::find_degrees_of_freedom(boost::math::complement(data[i][1], boost::math::tools::epsilon<value_type>() / 2, data[i][3])), boost::math::evaluation_error);
          BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], data[i][2], value_type(0)), boost::math::evaluation_error);
          BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(boost::math::complement(data[i][1], data[i][2], value_type(0))), boost::math::evaluation_error);
          BOOST_CHECK_THROW(boost::math::non_central_t_distribution<value_type>::find_degrees_of_freedom(data[i][1], data[i][2], value_type(1)), boost::math::evaluation_error);

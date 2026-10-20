@@ -1,0 +1,149 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Chatterjee Correlation (M nearest neighbours)</title>
+<link rel="stylesheet" href="../math.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
+<link rel="home" href="../index.html" title="Math Toolkit 4.2.1">
+<link rel="up" href="../statistics.html" title="Chapter 6. Statistics">
+<link rel="prev" href="chatterjee_correlation.html" title="Chatterjee Correlation">
+<link rel="next" href="../vector_functionals.html" title="Chapter 7. Vector Functionals - Norms">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="chatterjee_correlation.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../statistics.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../vector_functionals.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="math_toolkit.chatterjee_correlation_mnn"></a><a class="link" href="chatterjee_correlation_mnn.html" title="Chatterjee Correlation (M nearest neighbours)">Chatterjee Correlation
+    (M nearest neighbours)</a>
+</h2></div></div></div>
+<h4>
+<a name="math_toolkit.chatterjee_correlation_mnn.h0"></a>
+      <span class="phrase"><a name="math_toolkit.chatterjee_correlation_mnn.synopsis"></a></span><a class="link" href="chatterjee_correlation_mnn.html#math_toolkit.chatterjee_correlation_mnn.synopsis">Synopsis</a>
+    </h4>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">statistics</span><span class="special">/</span><span class="identifier">chatterjee_correlation</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span> <span class="special">{</span>
+
+    <span class="identifier">C</span><span class="special">++</span><span class="number">17</span><span class="special">:</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">ExecutionPolicy</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Container</span><span class="special">&gt;</span>
+    <span class="keyword">auto</span> <span class="identifier">chatterjee_correlation_mnn</span><span class="special">(</span><span class="identifier">ExecutionPolicy</span><span class="special">&amp;&amp;</span> <span class="identifier">exec</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Container</span><span class="special">&amp;</span> <span class="identifier">u</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Container</span><span class="special">&amp;</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">M</span><span class="special">);</span>
+
+    <span class="identifier">C</span><span class="special">++</span><span class="number">11</span><span class="special">:</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Container</span><span class="special">&gt;</span>
+    <span class="keyword">auto</span> <span class="identifier">chatterjee_correlation_mnn</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Container</span><span class="special">&amp;</span> <span class="identifier">u</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Container</span><span class="special">&amp;</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">M</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<h4>
+<a name="math_toolkit.chatterjee_correlation_mnn.h1"></a>
+      <span class="phrase"><a name="math_toolkit.chatterjee_correlation_mnn.description"></a></span><a class="link" href="chatterjee_correlation_mnn.html#math_toolkit.chatterjee_correlation_mnn.description">Description</a>
+    </h4>
+<p>
+      <code class="computeroutput"><span class="identifier">chatterjee_correlation_mnn</span></code>
+      computes the revised Chatterjee rank correlation of Lin and Han (2021), which
+      generalises Chatterjee's coefficient by incorporating the <code class="computeroutput"><span class="identifier">M</span></code>
+      right nearest neighbours of each point rather than only the single right neighbour.
+      The statistic still consistently estimates the same measure of dependence (between
+      0 and 1; zero if and only if X and Y are independent, unity if and only if
+      Y is a measurable function of X), but its use of additional neighbours boosts
+      the power of the associated independence test.
+    </p>
+<p>
+      The original coefficient <code class="computeroutput"><span class="identifier">chatterjee_correlation</span></code>
+      has a statistical detection boundary of n<sup>-1/4</sup> for testing independence, which
+      is substantially weaker than the parametric n<sup>-1/2</sup> rate. By letting <code class="computeroutput"><span class="identifier">M</span></code> grow with the sample size (with M/n -&gt;
+      0), the revised statistic can approach near-parametric efficiency.
+    </p>
+<p>
+      Let X and Y be random variables, where Y is not constant, and let (X_i, Y_i)
+      be samples sorted so that X_(0) &lt; X_(1) &lt; ... &lt; X_(n-1). Writing R_i
+      for the rank of Y_i and j_m(i) for the index of the m-th right nearest neighbour
+      of X_i, the statistic is
+    </p>
+<pre class="programlisting"><span class="identifier">xi_</span><span class="special">{</span><span class="identifier">n</span><span class="special">,</span><span class="identifier">M</span><span class="special">}</span> <span class="special">=</span> <span class="special">-</span><span class="number">2</span> <span class="special">+</span> <span class="number">6</span> <span class="special">*</span> <span class="identifier">sum_i</span> <span class="identifier">sum_</span><span class="special">{</span><span class="identifier">m</span><span class="special">=</span><span class="number">1</span><span class="special">}^{</span><span class="identifier">M</span><span class="special">}</span> <span class="identifier">min</span><span class="special">(</span><span class="identifier">R_i</span><span class="special">,</span> <span class="identifier">R_</span><span class="special">{</span><span class="identifier">j_m</span><span class="special">(</span><span class="identifier">i</span><span class="special">)})</span> <span class="special">/</span> <span class="special">((</span><span class="identifier">n</span> <span class="special">+</span> <span class="number">1</span><span class="special">)</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">n</span><span class="special">*</span><span class="identifier">M</span> <span class="special">+</span> <span class="identifier">M</span><span class="special">*(</span><span class="identifier">M</span> <span class="special">+</span> <span class="number">1</span><span class="special">)</span> <span class="special">/</span> <span class="number">4</span><span class="special">))</span>
+</pre>
+<p>
+      The complexity is O(n log n + n M). For <code class="computeroutput"><span class="identifier">M</span></code>
+      of order O(1) or O(poly-log n) this is nearly linear; as <code class="computeroutput"><span class="identifier">M</span></code>
+      approaches <code class="computeroutput"><span class="identifier">n</span></code> it tends to O(n<sup>2</sup>).
+    </p>
+<p>
+      An example is given below:
+    </p>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">X</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">};</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">Y</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">};</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span><span class="special">::</span><span class="identifier">chatterjee_correlation_mnn</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">M</span> <span class="special">=</span> <span class="number">2</span><span class="special">;</span>
+<span class="keyword">double</span> <span class="identifier">coeff</span> <span class="special">=</span> <span class="identifier">chatterjee_correlation_mnn</span><span class="special">(</span><span class="identifier">X</span><span class="special">,</span> <span class="identifier">Y</span><span class="special">,</span> <span class="identifier">M</span><span class="special">);</span>
+</pre>
+<p>
+      <span class="emphasis"><em>Nota bene:</em></span> If the input is an integer type the output
+      will be a double precision type.
+    </p>
+<h4>
+<a name="math_toolkit.chatterjee_correlation_mnn.h2"></a>
+      <span class="phrase"><a name="math_toolkit.chatterjee_correlation_mnn.choice_of_m"></a></span><a class="link" href="chatterjee_correlation_mnn.html#math_toolkit.chatterjee_correlation_mnn.choice_of_m">Choice
+      of M</a>
+    </h4>
+<p>
+      The asymptotic null variance of the statistic is minimised when <code class="computeroutput"><span class="identifier">M</span></code> is of order sqrt(n), which is a reasonable
+      default for users who want improved power without the quadratic cost of large
+      <code class="computeroutput"><span class="identifier">M</span></code>. Pushing <code class="computeroutput"><span class="identifier">M</span></code>
+      closer to <code class="computeroutput"><span class="identifier">n</span></code> increases the power
+      of the independence test against smooth alternatives at the cost of additional
+      computation. The choice is left to the caller; <code class="computeroutput"><span class="identifier">M</span></code>
+      must satisfy 1 &lt;= M &lt;= n.
+    </p>
+<p>
+      <span class="emphasis"><em>Nota bene:</em></span> Even at <code class="computeroutput"><span class="identifier">M</span></code>
+      = 1 this statistic is not identical to <code class="computeroutput"><span class="identifier">chatterjee_correlation</span></code>:
+      it uses min(R_i, R_j) in place of |R_i - R_j| and a different normalisation,
+      so the two agree only up to a term of order 1/n. Use <code class="computeroutput"><span class="identifier">chatterjee_correlation</span></code>
+      when the original coefficient is required.
+    </p>
+<h4>
+<a name="math_toolkit.chatterjee_correlation_mnn.h3"></a>
+      <span class="phrase"><a name="math_toolkit.chatterjee_correlation_mnn.invariants"></a></span><a class="link" href="chatterjee_correlation_mnn.html#math_toolkit.chatterjee_correlation_mnn.invariants">Invariants</a>
+    </h4>
+<p>
+      The function expects at least two samples, a non-constant vector Y, the same
+      number of X's as Y's, and 1 &lt;= M &lt;= n. If Y is constant, the result is
+      a quiet NaN. The data set must be sorted by X values. If there are ties in
+      the values of X, then the statistic is random due to the random breaking of
+      ties.
+    </p>
+<h4>
+<a name="math_toolkit.chatterjee_correlation_mnn.h4"></a>
+      <span class="phrase"><a name="math_toolkit.chatterjee_correlation_mnn.references"></a></span><a class="link" href="chatterjee_correlation_mnn.html#math_toolkit.chatterjee_correlation_mnn.references">References</a>
+    </h4>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+          Lin, Zhexiao, and Fang Han. "On boosting the power of Chatterjee's
+          rank correlation." Biometrika 110.2 (2023): 283-299. <a href="https://arxiv.org/abs/2108.06828" target="_top">arXiv:2108.06828</a>.
+        </li></ul></div>
+</div>
+<div class="copyright-footer">Copyright © 2006-2021 Nikhar Agrawal, Anton Bikineev, Matthew Borland,
+      Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno
+      Lalande, John Maddock, Evan Miller, Jeremy Murphy, Matthew Pulver, Johan Råde,
+      Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle
+      Walker, Xiaogang Zhang, and Maksym Zhelyeznyakov<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="chatterjee_correlation.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../statistics.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../vector_functionals.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

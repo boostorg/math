@@ -25,9 +25,13 @@ as defined above, and has member functions "scale" and "location".
 #pragma once
 #endif
 
-#include <type_traits>
+#include <boost/math/tools/config.hpp>
 
-namespace boost{ namespace math{ namespace tools{
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <type_traits>
+#endif
+
+BOOST_MATH_NAMESPACE_BEGIN namespace tools{
 
 namespace detail{
 
@@ -56,13 +60,13 @@ BOOST_MATH_HAS_NAMED_TRAIT(has_backend_type, backend_type)
 // C++17-esque helpers
 #if defined(__cpp_variable_templates) && __cpp_variable_templates >= 201304L
 template <typename T>
-constexpr bool has_value_type_v = has_value_type<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool has_value_type_v = has_value_type<T>::value;
 
 template <typename T>
-constexpr bool has_policy_type_v = has_policy_type<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool has_policy_type_v = has_policy_type<T>::value;
 
 template <typename T>
-constexpr bool has_backend_type_v = has_backend_type<T>::value;
+BOOST_MATH_INLINE_CONSTEXPR bool has_backend_type_v = has_backend_type<T>::value;
 #endif
 
 template <typename D>
@@ -125,15 +129,15 @@ struct is_scaled_distribution_helper<D, true>
 template <typename D>
 struct is_scaled_distribution_imp
 {
-   static constexpr bool value = (::boost::math::tools::detail::is_scaled_distribution_helper<D, ::boost::math::tools::detail::is_distribution_imp<D>::value>::value);
+   static constexpr bool value = (::BOOST_MATH_NAMESPACE::tools::detail::is_scaled_distribution_helper<D, ::BOOST_MATH_NAMESPACE::tools::detail::is_distribution_imp<D>::value>::value);
 };
 
 } // namespace detail
 
-template <typename T> struct is_distribution : public std::integral_constant<bool, ::boost::math::tools::detail::is_distribution_imp<T>::value> {};
-template <typename T> struct is_scaled_distribution : public std::integral_constant<bool, ::boost::math::tools::detail::is_scaled_distribution_imp<T>::value> {};
+template <typename T> struct is_distribution : public std::integral_constant<bool, ::BOOST_MATH_NAMESPACE::tools::detail::is_distribution_imp<T>::value> {};
+template <typename T> struct is_scaled_distribution : public std::integral_constant<bool, ::BOOST_MATH_NAMESPACE::tools::detail::is_scaled_distribution_imp<T>::value> {};
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 
 #endif
 

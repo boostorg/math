@@ -11,13 +11,17 @@
 #define BOOST_MATH_CONSTANTS_INFO_INCLUDED
 
 #include <boost/math/constants/constants.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iostream>
 #include <iomanip>
+#endif
 #ifndef BOOST_MATH_NO_RTTI
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <typeinfo>
 #endif
+#endif
 
-namespace boost{ namespace math{ namespace constants{
+BOOST_MATH_NAMESPACE_BEGIN namespace constants{
 
    namespace detail{
 
@@ -84,7 +88,7 @@ void print_info_on_type(std::ostream& os = std::cout BOOST_MATH_APPEND_EXPLICIT_
         os << "Unknown radix = " << std::numeric_limits<T>::radix << "\n";
       }
    }
-   typedef typename boost::math::policies::precision<T, Policy>::type precision_type;
+   typedef typename BOOST_MATH_NAMESPACE::policies::precision<T, Policy>::type precision_type;
    if(precision_type::value)
    {
       if (std::numeric_limits<T>::radix == 2)
@@ -109,7 +113,7 @@ void print_info_on_type(std::ostream& os = std::cout BOOST_MATH_APPEND_EXPLICIT_
          "reports that there is no compile type precision available.\n"
          "boost::math::tools::digits<" << nameof<T>() << ">() \n"
          "reports that the current runtime precision is \n" <<
-         boost::math::tools::digits<T>() << " binary digits.\n";
+         BOOST_MATH_NAMESPACE::tools::digits<T>() << " binary digits.\n";
    }
 
    typedef typename construction_traits<T, Policy>::type construction_type;
@@ -122,7 +126,7 @@ void print_info_on_type(std::ostream& os = std::cout BOOST_MATH_APPEND_EXPLICIT_
          "will be decided at runtime and results will not be cached \n"
          "- this may lead to poor runtime performance.\n"
          "Current runtime precision indicates that\n";
-      if(boost::math::tools::digits<T>() > max_string_digits)
+      if(BOOST_MATH_NAMESPACE::tools::digits<T>() > max_string_digits)
       {
          os << "the constant will be recalculated on each call.\n";
       }
@@ -161,9 +165,9 @@ void print_info_on_type(std::ostream& os = std::cout BOOST_MATH_APPEND_EXPLICIT_
 template <class T>
 void print_info_on_type(std::ostream& os = std::cout BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))
 {
-   print_info_on_type<T, boost::math::policies::policy<> >(os);
+   print_info_on_type<T, BOOST_MATH_NAMESPACE::policies::policy<> >(os);
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CONSTANTS_INFO_INCLUDED

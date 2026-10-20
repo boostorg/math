@@ -115,7 +115,7 @@ And with diagnostics on:
 Working code of this example is at [@../../example/ooura_fourier_integrals_multiprecision_example.cpp ooura_fourier_integrals_multiprecision_example.cpp]
 
 For more examples of other functions and tests, see the full test suite at
-[@../../test/ooura_fourier_integral_test.cpp ooura_fourier_integral_test.cpp]. 
+[@../../test/test_ooura_fourier_integral.cpp test_ooura_fourier_integral.cpp]. 
 
 Ngyen and Nuyens make use of __multiprecision in their extension to multiple dimensions, showing relative errors reducing to [cong] 10[super -2000]!
 

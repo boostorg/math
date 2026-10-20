@@ -325,6 +325,22 @@ void test_spots(RealType)
 } // template <class RealType>void test_spots(RealType)
 
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](RealType a, RealType b, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(entropy(inverse_chi_squared_distribution<RealType>(a, b)), h, tol);
+   };
+   check(static_cast<RealType>(3.0L), static_cast<RealType>(0.5L), static_cast<RealType>(1.00031075496653254881770338072141427422753657L));
+   check(static_cast<RealType>(0.5L), static_cast<RealType>(1.0L), static_cast<RealType>(5.43604508029851859864805887992421863148343284L));
+   check(static_cast<RealType>(40.0L), static_cast<RealType>(2.0L), static_cast<RealType>(0.647759804228300270654711536822405806757989866L));
+   check(static_cast<RealType>(1000000.0L), static_cast<RealType>(0.125L), static_cast<RealType>(-7.22168336384366091723894728684831957747986429L));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
   BOOST_MATH_CONTROL_FP;
@@ -366,7 +382,8 @@ BOOST_AUTO_TEST_CASE( test_main )
   BOOST_CHECK_EQUAL(ichisq5.scale(), 1./5.); // check default is 1/df
   BOOST_CHECK_CLOSE_FRACTION(pdf(ichisq5, 0.2), 3.0510380337346841, tol4eps);
   BOOST_CHECK_CLOSE_FRACTION(cdf(ichisq5, 0.5), 0.84914503608460956, tol4eps);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(complement(ichisq5, 0.5)), 1 - 0.84914503608460956, tol4eps);
+  // The expected value is formed by subtraction, which magnifies the rounding of the constant about six times:
+  BOOST_CHECK_CLOSE_FRACTION(cdf(complement(ichisq5, 0.5)), 1 - 0.84914503608460956, tol4eps * 2);
 
   BOOST_CHECK_CLOSE_FRACTION(quantile(ichisq5, 0.84914503608460956), 0.5, tol4eps*100);
   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(ichisq5, 1. - 0.84914503608460956)), 0.5, tol4eps*100);
@@ -503,11 +520,15 @@ BOOST_AUTO_TEST_CASE( test_main )
   // Basic sanity-check spot values.
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
+  test_entropy(0.0F);
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
+  test_entropy(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
+  test_entropy(0.0L);
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x0582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  test_entropy(boost::math::concepts::real_concept(0.));
 #endif
 #else
   std::cout << "<note>The long double tests have been disabled on this platform "

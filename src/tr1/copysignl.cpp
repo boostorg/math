@@ -13,7 +13,7 @@
 
 extern "C" long double BOOST_MATH_TR1_DECL boost_copysignl BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x, long double y) BOOST_MATH_C99_THROW_SPEC
 {
-   return boost::math::copysign BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, y);
+   return BOOST_MATH_NAMESPACE::copysign BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, y);
 }
 
 

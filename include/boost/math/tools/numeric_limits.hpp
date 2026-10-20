@@ -19,17 +19,18 @@
 
 #ifndef BOOST_MATH_HAS_NVRTC
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
 #include <limits>
 #include <climits>
 #include <cfloat>
+#endif
 
 #endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 struct numeric_limits 
 #ifndef BOOST_MATH_HAS_NVRTC
 : public std::numeric_limits<T> {};
@@ -882,7 +883,6 @@ struct numeric_limits<bool>
 
 #endif // BOOST_MATH_HAS_GPU_SUPPORT
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif

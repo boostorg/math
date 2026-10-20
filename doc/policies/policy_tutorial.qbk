@@ -64,13 +64,11 @@ if these work OK for you then you can stop reading now!]
    will result in the lowest level of error for the type of the result.]]
 [[Behaviour of Discrete Quantiles]
    [
-   The quantile function will by default return an integer result that has been
-   /rounded outwards/.  That is to say lower quantiles (where the probability is
-   less than 0.5) are rounded downward, and upper quantiles (where the probability
-   is greater than 0.5) are rounded upwards.  This behaviour
-   ensures that if an X% quantile is requested, then /at least/ the requested
-   coverage will be present in the central region, and /no more than/
-   the requested coverage will be present in the tails.
+   The quantile function will by default return an integer result:
+`quantile(dist, p)` is the smallest integer /k/ with `cdf(dist, k) >= p`, and
+`quantile(complement(dist, q))` is the smallest integer /k/ with
+`cdf(complement(dist, k)) <= q`.  This is the `integer_round_up` policy, and
+the definition R, SciPy, Julia and Mathematica use.
 
 This behaviour can be changed so that the quantile functions are rounded
    differently, or even return a real-valued result using
@@ -400,33 +398,61 @@ still leaves the question: ['What is actually the right thing to do?]
 
 And in particular: ['What policy should we use by default?]
 
-In coming to an answer we should realise that:
+Calculating an integer result is often much faster than calculating a
+real-valued result (in our tests it was up to 20 times faster), and the
+random variable can only take integer values anyway, so the default is an
+integer.  Which integer?  The usual definition of the quantile of a discrete
+distribution is the smallest value /k/ for which `cdf(dist, k) >= p`.  It is
+what R, SciPy, Julia and Mathematica return, it is the empirical quantile of a
+large sample, and it is the default here: the `integer_round_up` policy.  In
+the example above the result is 19, since:
 
-* Calculating an integer result is often much faster than
-calculating a real-valued result: in fact in our tests it
-was up to 20 times faster.
-* Normally people calculate quantiles so that they can perform
-a test of some kind: ['"If the random variable is less than N
-then we can reject our null-hypothesis with 90% confidence."]
+   cdf(binomial(50, 0.5), 18) < 0.05 <= cdf(binomial(50, 0.5), 19)
 
-So there is a genuine benefit to calculating an integer result
-as well as it being "the right thing to do" from a philosophical
-point of view.  What's more if someone asks for a quantile at 0.05,
-then we can normally assume that they are asking for
-['[*at least] 95% of the probability to the right of the value chosen,
-and [*no more than] 5% of the probability to the left of the value chosen.]
+Upper quantiles are best found from the complement:
+`quantile(complement(dist, q))` is the smallest /k/ for which
+`cdf(complement(dist, k)) <= q`, that is, for which the probability of a
+value greater than /k/ is at most /q/.  This is `quantile(dist, 1 - q)`
+without the rounding error in `1 - q`, which matters when /q/ is small.  For
+example:
 
-In the above binomial example we would therefore round the result down to 18.
+   quantile(complement(binomial(50, 0.5), 0.05));
 
-The converse applies to upper-quantiles: If the probability is greater than
-0.5 we would want to round the quantile up, ['so that [*at least] the requested
-probability is to the left of the value returned, and [*no more than] 1 - the
-requested probability is to the right of the value returned.]
+returns 31, since:
 
-Likewise for two-sided intervals, we would round lower quantiles down,
-and upper quantiles up.  This ensures that we have ['at least the requested
-probability in the central region] and ['no more than 1 minus the requested
-probability in the tail areas.]
+   cdf(complement(binomial(50, 0.5), 30)) > 0.05 >= cdf(complement(binomial(50, 0.5), 31))
+
+Together these give a two-sided interval.  If L and U are the lower and upper
+quantiles, then less than 5% of the probability lies below L and no more than
+5% above U, so /at least/ 90% lies in the central region:
+
+   L <= X && X <= U
+
+and we would reject the null hypothesis if:
+
+   X < L || X > U
+
+The moral here is to ['always be very careful with your comparisons
+when dealing with a discrete distribution], and if in doubt,
+['base your comparisons on CDF's instead].
+
+[heading Rounding Outwards]
+
+The `integer_round_outwards` policy, which you can select by defining
+`BOOST_MATH_DISCRETE_QUANTILE_POLICY` as `integer_round_outwards` (see
+[link math_toolkit.pol_ref.policy_defaults Using Macros to Change the Policy Defaults])
+or by using the policy directly, rounds lower quantiles (probability less than 0.5) down and upper
+quantiles (probability greater than 0.5) up.  The reasoning is that if someone
+asks for a quantile at 0.05, then we can normally assume that they are asking
+for ['[*at least] 95% of the probability to the right of the value chosen,
+and [*no more than] 5% of the probability to the left of the value chosen],
+counting the value chosen as part of the left tail.
+
+In the above binomial example the 0.05 quantile is then rounded down to 18.
+The converse applies to upper-quantiles: they are rounded up,
+['so that [*at least] the requested probability is to the left of the value
+returned, and [*no more than] 1 - the requested probability is to the right
+of the value returned.]
 
 For example, taking our 50 sample binomial distribution with a success fraction
 of 0.5, if we wanted a two sided 90% confidence interval, then we would ask
@@ -435,12 +461,11 @@ for the 0.05 and 0.95 quantiles with the results ['rounded outwards] so that
 
 [$../graphs/binomial_pdf_3.png]
 
-So far so good, but there is in fact a trap waiting for the unwary here:
+With this policy:
 
    quantile(binomial(50, 0.5), 0.05);
 
-returns 18 as the result, which is what we would expect from the graph above,
-and indeed there is no x greater than 18 for which:
+returns 18, and there is no x greater than 18 for which:
 
    cdf(binomial(50, 0.5), x) <= 0.05;
 
@@ -448,7 +473,7 @@ However:
 
    quantile(binomial(50, 0.5), 0.95);
 
-returns 31, and indeed while there is no x less than 31 for which:
+returns 31, and there is no x less than 31 for which:
 
    cdf(binomial(50, 0.5), x) >= 0.95;
 
@@ -457,13 +482,6 @@ would be 32 (since 32 = 50 - 18), but we need to remember that the cdf of
 the binomial is /inclusive/ of the random variable.  So while the left tail
 area /includes/ the quantile returned, the right tail area always excludes
 an upper quantile value: since that "belongs" to the central area.
-
-Look at the graph above to see what's going on here: the lower quantile
-of 18 belongs to the left tail, so any value <= 18 is in the left tail.
-The upper quantile of 31 on the other hand belongs to the central area,
-so the tail area actually starts at 32, so any value > 31 is in the
-right tail.
-
 Therefore if U and L are the upper and lower quantiles respectively, then
 a random variable X is in the tail area - where we would reject the null
 hypothesis if:
@@ -474,9 +492,10 @@ And the a variable X is inside the central region if:
 
    L < X <= U
 
-The moral here is to ['always be very careful with your comparisons
-when dealing with a discrete distribution], and if in doubt,
-['base your comparisons on CDF's instead].
+Unless the lower probability is exactly the cdf at some integer, this is the
+same region as the default gives: only the lower end is reported one lower.  Note also that the result jumps at a probability of 0.5, where the
+rounding changes direction, so (for example) the quantiles of uniformly spaced
+probabilities are not spread evenly around the median.
 
 [heading Other Rounding Policies are Available]
 
@@ -486,7 +505,7 @@ to know that other rounding options are available:
 [variablelist
 
 [[integer_round_outwards]
-   [This is the default policy as described above: lower quantiles
+   [As described above: lower quantiles
    are rounded down (probability < 0.5), and upper quantiles
    (probability > 0.5) are rounded up.
 
@@ -494,7 +513,7 @@ to know that other rounding options are available:
    in the tails, and /at least/ the requested probability
    in the central area.]]
 [[integer_round_inwards]
-   [This is the exact opposite of the default policy:
+   [This is the exact opposite of `integer_round_outwards`:
    lower quantiles
    are rounded up (probability < 0.5),
    and upper quantiles (probability > 0.5) are rounded down.
@@ -503,9 +522,11 @@ to know that other rounding options are available:
    in the tails, and /no more than/ the requested probability
    in the central area.]]
 [[integer_round_down][This policy will always round the result down
-   no matter whether it is an upper or lower quantile]]
-[[integer_round_up][This policy will always round the result up
-   no matter whether it is an upper or lower quantile]]
+   no matter whether it is an upper or lower quantile, giving the largest /k/
+   with `cdf(dist, k) <= p` (or `cdf(complement(dist, k)) >= q`)]]
+[[integer_round_up][This is the default policy: it will always round the result up
+   no matter whether it is an upper or lower quantile, giving the smallest /k/
+   with `cdf(dist, k) >= p` (or `cdf(complement(dist, k)) <= q`)]]
 [[integer_round_nearest][This policy will always round the result
    to the nearest integer
    no matter whether it is an upper or lower quantile]]

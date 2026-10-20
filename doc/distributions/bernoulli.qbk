@@ -97,7 +97,7 @@ the binomial distribution with a single trial should be used, for example:
 [[cdf][Using the relation: cdf = 1 - p for k = 0, else 1]]
 [[cdf complement][q = 1 - p]]
 [[quantile][if x <= (1-p) 0 else 1]]
-[[quantile from the complement][if x <= (1-p) 1 else 0]]
+[[quantile from the complement][if x >= p 0 else 1]]
 [[mean][p]]
 [[variance][p * (1 - p)]]
 [[mode][if (p < 0.5) 0 else 1]]

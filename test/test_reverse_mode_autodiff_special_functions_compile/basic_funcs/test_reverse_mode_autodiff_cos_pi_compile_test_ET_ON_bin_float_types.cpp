@@ -14,11 +14,12 @@
     #include <boost/math/tools/workaround.hpp>
     #include <cmath>
     
-    BOOST_AUTO_TEST_SUITE(test_cos_pi_compiles)
+    namespace test_cos_pi_compiles {
     
     using namespace rdiff;
     
-    BOOST_AUTO_TEST_CASE_TEMPLATE(test_cos_pi, T, bin_float_types)
+    template <typename T>
+    void test_cos_pi()
     {
         RandomSample<T> rng{ -10, 10
  };
@@ -27,7 +28,13 @@
         rvar<T, 1> x_ad = x;
         auto y = boost::math::cos_pi(x_ad);
         auto y_expect = boost::math::cos_pi(x);
-        BOOST_CHECK_CLOSE(y.item(), y_expect, 1000*boost_close_tol<T>());
+        CHECK_RELATIVE_ERROR(y.item(), y_expect, 1000*boost_close_tol<T>() / 100);
     }
-    BOOST_AUTO_TEST_SUITE_END()
+    } // namespace test_cos_pi_compiles
+    
+    int main()
+    {
+        mp11::mp_for_each<mp11::mp_transform<mp11::mp_identity, bin_float_types>>([](auto t) { test_cos_pi_compiles::test_cos_pi<typename decltype(t)::type>(); });
+        return boost::math::test::report_errors();
+    }
     

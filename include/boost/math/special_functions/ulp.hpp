@@ -16,7 +16,7 @@
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/tools/precision.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class T, class Policy>
 T ulp_imp(const T& val, const std::true_type&, const Policy& pol)
@@ -25,7 +25,7 @@ T ulp_imp(const T& val, const std::true_type&, const Policy& pol)
    int expon;
    static const char* function = "ulp<%1%>(%1%)";
 
-   int fpclass = (boost::math::fpclassify)(val);
+   int fpclass = (BOOST_MATH_NAMESPACE::fpclassify)(val);
 
    if(fpclass == FP_NAN)
    {
@@ -57,7 +57,7 @@ T ulp_imp(const T& val, const std::false_type&, const Policy& pol)
    int expon;
    static const char* function = "ulp<%1%>(%1%)";
 
-   int fpclass = (boost::math::fpclassify)(val);
+   int fpclass = (BOOST_MATH_NAMESPACE::fpclassify)(val);
 
    if(fpclass == FP_NAN)
    {
@@ -82,21 +82,21 @@ T ulp_imp(const T& val, const std::false_type&, const Policy& pol)
 
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type ulp(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    return detail::ulp_imp(static_cast<result_type>(val), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline typename tools::promote_args<T>::type ulp(const T& val)
 {
    return ulp(val, policies::policy<>());
 }
 
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SPECIAL_ULP_HPP
 

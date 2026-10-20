@@ -1,0 +1,116 @@
+[section:gev_dist Generalized Extreme Value Distribution]
+
+``#include <boost/math/distributions/generalized_extreme_value.hpp>``
+
+   template <class RealType = double,
+             class ``__Policy``   = ``__policy_class`` >
+   class generalized_extreme_value_distribution;
+
+   typedef generalized_extreme_value_distribution<> generalized_extreme_value;
+
+   template <class RealType, class ``__Policy``>
+   class generalized_extreme_value_distribution
+   {
+   public:
+      typedef RealType value_type;
+
+      generalized_extreme_value_distribution(RealType location = 0, RealType scale = 1, RealType shape = 0);
+
+      RealType location()const;
+      RealType scale()const;
+      RealType shape()const;
+   };
+
+The [@https://en.wikipedia.org/wiki/Generalized_extreme_value_distribution generalized extreme value distribution]
+is the family of limit distributions of the normalized maxima of independent, identically distributed
+random variables. With location [mu], scale [sigma] and shape [xi], its CDF is
+
+[expression F(x) = e[super -t(x)], t(x) = (1 + [xi](x - [mu])/[sigma])[super -1/[xi]]]
+
+on the support where 1 + [xi](x - [mu])/[sigma] > 0, and its PDF is
+
+[expression f(x) = t(x)[super [xi]+1] e[super -t(x)] / [sigma]]
+
+The shape selects the type:
+
+* [xi] > 0, the Fr[eacute]chet type: heavy tailed to the right, and bounded below at [mu] - [sigma]/[xi].
+* [xi] = 0, the Gumbel type, where t(x) = e[super -(x-[mu])/[sigma]]: this is the __extreme_distrib.
+* [xi] < 0, the reversed Weibull type: bounded above at [mu] - [sigma]/[xi].
+
+Note that the sign convention for the shape varies: SciPy's `genextreme`, for example, takes c = -[xi].
+
+[h4 Member Functions]
+
+   generalized_extreme_value_distribution(RealType location = 0, RealType scale = 1, RealType shape = 0);
+
+Constructs a generalized extreme value distribution with the specified location, scale and shape.
+
+Requires that location and shape are finite and that scale is finite and > 0, otherwise calls __domain_error.
+
+   RealType location()const;
+   RealType scale()const;
+   RealType shape()const;
+
+Return the parameters of the distribution.
+
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
+
+The domain of the random variable is \[-[infin], +[infin]\]: outside the support the PDF is zero
+and the CDF is 0 or 1. `support` returns the bounded end for [xi] [ne] 0.
+
+The mean is infinite for [xi] [ge] 1 and the variance for [xi] [ge] 1/2, and both return +[infin] there.
+The skewness is undefined for [xi] [ge] 1/3 and the kurtosis for [xi] [ge] 1/4, where they call __domain_error. The quantile at the unbounded ends calls __overflow_error,
+as does the PDF at the upper end point when [xi] < -1, where the density is infinite.
+
+`logpdf`, `logcdf` and the log of the complement of the CDF are specialized for accuracy deep in the tails.
+
+[h4 Accuracy]
+
+Against references computed with mpmath at the double values of the arguments, the PDF, CDF, their
+complements and logs, and the quantiles are within a few ulps, except where the function is itself
+ill-conditioned: deep in the tails of the CDF, where e[super -t] magnifies the rounding of (x - [mu])/[sigma]
+(up to about 30 ulps), and where the quantile is close to zero and [mu] + [sigma] q cancels.
+The mean, variance, mode, median and entropy are within a few ulps. Skewness and kurtosis are accurate to
+an absolute error of a few tens of epsilon for |[xi]| < 1/4, and of a few hundred for larger |[xi]|,
+where they are third and fourth differences of log[Gamma](1 - k[xi]); both change sign
+(the skewness near [xi] = -0.28, the excess kurtosis near [xi] = -0.15), so their relative error is unbounded there.
+
+[h4 Implementation]
+
+In the following table [mu] is the location, [sigma] the scale, [xi] the shape, z = (x - [mu])/[sigma],
+/p/ the probability and /q = 1 - p/; g[sub k] = [Gamma](1 - k[xi]).
+
+[table
+[[Function][Implementation Notes]]
+[[pdf][exp(-(1 + [xi])L - t) / [sigma], where L = -log t = log1p([xi]z)/[xi], and t = e[super -L].]]
+[[logpdf][-log [sigma] - (1 + [xi])L - t]]
+[[cdf][exp(-t)]]
+[[logcdf][-t]]
+[[cdf complement][-expm1(-t)]]
+[[log of the cdf complement][log(-expm1(-t)) for t < log 2, otherwise log1p(-e[super -t])]]
+[[quantile][[mu] + [sigma] expm1(-[xi] log y)/[xi] with y = -log p, or [mu] + [sigma](y[super -[xi]] - 1)/[xi] when |[xi] log y| > 1.]]
+[[quantile from the complement][As the quantile, with y = -log1p(-q).]]
+[[mean][[mu] + [sigma] tgamma1pm1(-[xi])/[xi]]]
+[[variance][([sigma]g[sub 1]/[xi])[super 2] expm1(A[sub 2]), with A[sub k] = log g[sub k] - k log g[sub 1]]]
+[[skewness][sign([xi]) (g[sub 3] - 3g[sub 1]g[sub 2] + 2g[sub 1][super 3]) / (g[sub 2] - g[sub 1][super 2])[super 3/2], written in terms of the A[sub k]
+   so that the cancellation at small [xi] is exact: the combinations of the A[sub k] are summed from the Taylor series
+   log[Gamma](1 - z) = [gamma]z + [sum] [zeta](j) z[super j]/j, in which their low orders vanish identically, while the series converges quickly.]]
+[[kurtosis excess][(g[sub 4] - 4g[sub 1]g[sub 3] + 6g[sub 1][super 2]g[sub 2] - 3g[sub 1][super 4]) / (g[sub 2] - g[sub 1][super 2])[super 2] - 3, as for the skewness.]]
+[[mode][[mu] + [sigma]((1 + [xi])[super -[xi]] - 1)/[xi], or the upper end point [mu] - [sigma]/[xi] for [xi] [le] -1.]]
+[[median][[mu] + [sigma]((log 2)[super -[xi]] - 1)/[xi]]]
+[[entropy][log [sigma] + [gamma](1 + [xi]) + 1]]
+]
+
+At [xi] = 0, and for |[xi]| below machine epsilon in the moments, the Gumbel formulas are used.
+
+[endsect] [/section:gev_dist Generalized Extreme Value]
+
+[/ generalized_extreme_value.qbk
+  Copyright 2026 Nick Thompson.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

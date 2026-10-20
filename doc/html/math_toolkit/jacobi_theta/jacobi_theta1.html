@@ -110,15 +110,19 @@
 
         </p></blockquote></div>
 <p>
-        Accuracy tends to degenerate near <span class="emphasis"><em>q</em></span>=1 (small τ).
+        Accuracy degrades gently as <span class="emphasis"><em>q</em></span> approaches 1 (small τ),
+        where the rounding of log(<span class="emphasis"><em>q</em></span>) is amplified by the size
+        of the exponents in the transformed series; the τ parameterization does not
+        have this problem.
       </p>
 <h5>
 <a name="math_toolkit.jacobi_theta.jacobi_theta1.h3"></a>
         <span class="phrase"><a name="math_toolkit.jacobi_theta.jacobi_theta1.implementation"></a></span><a class="link" href="jacobi_theta1.html#math_toolkit.jacobi_theta.jacobi_theta1.implementation">Implementation</a>
       </h5>
 <p>
-        The <span class="emphasis"><em>q</em></span> parameterization is implemented using the τ parameterization,
-        where τ=-log(<span class="emphasis"><em>q</em></span>)/π.
+        When <span class="emphasis"><em>q</em></span> &lt; exp(-π) the series above is summed directly
+        in <span class="emphasis"><em>q</em></span>. Otherwise the <span class="emphasis"><em>q</em></span> parameterization
+        is implemented using the τ parameterization, where τ=-log(<span class="emphasis"><em>q</em></span>)/π.
       </p>
 <p>
         If τ is greater than or equal to 1, the summation above is used as-is. However
@@ -131,7 +135,11 @@
         </p></blockquote></div>
 <p>
         This transformation of variables ensures that the function will always converge
-        in a small number of iterations.
+        in a small number of iterations. The transformed series is a sum of differences
+        of Gaussians centered at ±π(<span class="emphasis"><em>n</em></span>+1/2), which nearly cancel
+        as <span class="emphasis"><em>x</em></span> approaches zero; each difference is therefore evaluated
+        using <code class="computeroutput"><a class="link" href="../powers/expm1.html" title="expm1">expm1</a></code>
+        so that full relative precision is retained for small <span class="emphasis"><em>x</em></span>.
       </p>
 </div>
 <div class="copyright-footer">Copyright © 2006-2021 Nikhar Agrawal, Anton Bikineev, Matthew Borland,

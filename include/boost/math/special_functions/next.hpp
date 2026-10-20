@@ -21,8 +21,13 @@
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/traits.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <type_traits>
 #include <cfloat>
+#include <climits>
+#include <cstdint>
+#include <cstring>
+#endif
 
 
 #if !defined(_CRAYC) && !defined(BOOST_MATH_ENABLE_CUDA) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
@@ -32,7 +37,7 @@
 #endif
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
    namespace concepts {
 
@@ -56,9 +61,9 @@ template <>
 struct has_hidden_guard_digits<__float128> : public std::false_type {};
 #endif
 template <>
-struct has_hidden_guard_digits<boost::math::concepts::real_concept> : public std::false_type {};
+struct has_hidden_guard_digits<BOOST_MATH_NAMESPACE::concepts::real_concept> : public std::false_type {};
 template <>
-struct has_hidden_guard_digits<boost::math::concepts::std_real_concept> : public std::false_type {};
+struct has_hidden_guard_digits<BOOST_MATH_NAMESPACE::concepts::std_real_concept> : public std::false_type {};
 
 template <class T, bool b>
 struct has_hidden_guard_digits_10 : public std::false_type {};
@@ -149,7 +154,7 @@ inline T get_min_shift_value()
    return val;
 }
 
-template <class T, bool b = boost::math::tools::detail::has_backend_type<T>::value>
+template <class T, bool b = BOOST_MATH_NAMESPACE::tools::detail::has_backend_type<T>::value>
 struct exponent_type
 {
    typedef int type;
@@ -170,7 +175,7 @@ T float_next_imp(const T& val, const std::true_type&, const Policy& pol)
    exponent_type expon;
    static const char* function = "float_next<%1%>(%1%)";
 
-   int fpclass = (boost::math::fpclassify)(val);
+   int fpclass = (BOOST_MATH_NAMESPACE::fpclassify)(val);
 
    if (fpclass == (int)FP_INFINITE)
    {
@@ -223,7 +228,7 @@ T float_next_imp(const T& val, const std::false_type&, const Policy& pol)
    exponent_type expon;
    static const char* function = "float_next<%1%>(%1%)";
 
-   int fpclass = (boost::math::fpclassify)(val);
+   int fpclass = (BOOST_MATH_NAMESPACE::fpclassify)(val);
 
    if (fpclass == (int)FP_INFINITE)
    {
@@ -265,7 +270,7 @@ T float_next_imp(const T& val, const std::false_type&, const Policy& pol)
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type float_next(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -278,12 +283,12 @@ inline typename tools::promote_args<T>::type float_next(const T& val, const Poli
 // the SSE2 registers if the FTZ or DAZ flags are set, so use our own
 // - albeit slower - code instead as at least that gives the correct answer.
 //
-template <class Policy>
+BOOST_MATH_EXPORT template <class Policy>
 inline double float_next(const double& val, const Policy& pol)
 {
    static const char* function = "float_next<%1%>(%1%)";
 
-   if(!(boost::math::isfinite)(val) && (val > 0))
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(val) && (val > 0))
       return policies::raise_domain_error<double>(
          function,
          "Argument must be finite, but got %1%", val, pol);
@@ -295,7 +300,7 @@ inline double float_next(const double& val, const Policy& pol)
 }
 #endif
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline typename tools::promote_args<T>::type float_next(const T& val)
 {
    return float_next(val, policies::policy<>());
@@ -312,7 +317,7 @@ T float_prior_imp(const T& val, const std::true_type&, const Policy& pol)
    exponent_type expon;
    static const char* function = "float_prior<%1%>(%1%)";
 
-   int fpclass = (boost::math::fpclassify)(val);
+   int fpclass = (BOOST_MATH_NAMESPACE::fpclassify)(val);
 
    if (fpclass == (int)FP_INFINITE)
    {
@@ -366,7 +371,7 @@ T float_prior_imp(const T& val, const std::false_type&, const Policy& pol)
    exponent_type expon;
    static const char* function = "float_prior<%1%>(%1%)";
 
-   int fpclass = (boost::math::fpclassify)(val);
+   int fpclass = (BOOST_MATH_NAMESPACE::fpclassify)(val);
 
    if (fpclass == (int)FP_INFINITE)
    {
@@ -409,7 +414,7 @@ T float_prior_imp(const T& val, const std::false_type&, const Policy& pol)
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type float_prior(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -422,12 +427,12 @@ inline typename tools::promote_args<T>::type float_prior(const T& val, const Pol
 // the SSE2 registers if the FTZ or DAZ flags are set, so use our own
 // - albeit slower - code instead as at least that gives the correct answer.
 //
-template <class Policy>
+BOOST_MATH_EXPORT template <class Policy>
 inline double float_prior(const double& val, const Policy& pol)
 {
    static const char* function = "float_prior<%1%>(%1%)";
 
-   if(!(boost::math::isfinite)(val) && (val < 0))
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(val) && (val < 0))
       return policies::raise_domain_error<double>(
          function,
          "Argument must be finite, but got %1%", val, pol);
@@ -439,26 +444,95 @@ inline double float_prior(const double& val, const Policy& pol)
 }
 #endif
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline typename tools::promote_args<T>::type float_prior(const T& val)
 {
    return float_prior(val, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
-   return val < direction ? boost::math::float_next<result_type>(val, pol) : val == direction ? val : boost::math::float_prior<result_type>(val, pol);
+   return val < direction ? BOOST_MATH_NAMESPACE::float_next<result_type>(val, pol) : val == direction ? val : BOOST_MATH_NAMESPACE::float_prior<result_type>(val, pol);
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction)
 {
    return nextafter(val, direction, policies::policy<>());
 }
 
 namespace detail{
+
+#ifdef BOOST_MATH_HAS_INT128
+__extension__ typedef unsigned __int128 float_distance_uint128;
+#endif
+
+//
+// Unsigned integer type with the same size as T, if T is an IEEE binary32, binary64
+// or binary128 type, otherwise void:
+//
+template <class T>
+struct float_distance_bits_type
+{
+   template <int Digits, class U, class Otherwise>
+   using select = typename std::conditional<std::numeric_limits<T>::is_iec559 && (std::numeric_limits<T>::digits == Digits) && (sizeof(T) == sizeof(U)), U, Otherwise>::type;
+#ifdef BOOST_MATH_HAS_INT128
+   using type = select<24, std::uint32_t, select<53, std::uint64_t, select<113, float_distance_uint128, void>>>;
+#else
+   using type = select<24, std::uint32_t, select<53, std::uint64_t, void>>;
+#endif
+};
+
+template <class T>
+inline T float_distance_bits_to_float(std::uint32_t d) { return static_cast<T>(d); }
+template <class T>
+inline T float_distance_bits_to_float(std::uint64_t d) { return static_cast<T>(d); }
+#ifdef BOOST_MATH_HAS_INT128
+template <class T>
+inline T float_distance_bits_to_float(float_distance_uint128 d)
+{
+   // Both halves are exact in T, so there is only one rounding:
+   return static_cast<T>(static_cast<std::uint64_t>(d >> 64)) * T(18446744073709551616.0) + static_cast<T>(static_cast<std::uint64_t>(d));
+}
+#endif
+
+//
+// For IEEE types, the distance is the difference of the bit patterns once they
+// are mapped to unsigned integers in the same order as the values, see
+// https://randomascii.wordpress.com/2012/01/23/stupid-float-tricks-2/
+// Returns false if the generic code must be used instead.
+//
+template <class T>
+inline bool float_distance_by_bits(const T& a, const T& b, T& result, const std::true_type&)
+{
+   BOOST_MATH_STD_USING
+   using U = typename float_distance_bits_type<T>::type;
+   //
+   // If denorms are flushed to zero, then the generic code steps straight from zero
+   // to min_value, which the bit patterns can't do:
+   //
+   if (!((fabs(a) >= tools::min_value<T>()) && (fabs(b) >= tools::min_value<T>()) && ((a < 0) == (b < 0))) && !detail::has_denorm_now<T>())
+      return false;
+   U ai, bi;
+   std::memcpy(&ai, &a, sizeof(T));
+   std::memcpy(&bi, &b, sizeof(T));
+   //
+   // Map -x to sign - |x| and x to sign + |x|, so -0 and +0 are the same point:
+   //
+   constexpr U sign = U(1) << (sizeof(U) * CHAR_BIT - 1);
+   ai = (ai & sign) ? U(sign - (ai & ~sign)) : U(sign + ai);
+   bi = (bi & sign) ? U(sign - (bi & ~sign)) : U(sign + bi);
+   result = bi >= ai ? float_distance_bits_to_float<T>(U(bi - ai)) : T(-float_distance_bits_to_float<T>(U(ai - bi)));
+   return true;
+}
+
+template <class T>
+inline bool float_distance_by_bits(const T&, const T&, T&, const std::false_type&)
+{
+   return false;
+}
 
 template <class T, class Policy>
 T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy& pol)
@@ -468,10 +542,13 @@ T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy
    // Error handling:
    //
    static const char* function = "float_distance<%1%>(%1%, %1%)";
-   if(!(boost::math::isfinite)(a))
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(a))
       return policies::raise_domain_error<T>(function, "Argument a must be finite, but got %1%", a, pol);
-   if(!(boost::math::isfinite)(b))
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(b))
       return policies::raise_domain_error<T>(function, "Argument b must be finite, but got %1%", b, pol);
+   T bits_result;
+   if(float_distance_by_bits(a, b, bits_result, std::integral_constant<bool, !std::is_void<typename float_distance_bits_type<T>::type>::value>()))
+      return bits_result;
    //
    // Special cases:
    //
@@ -483,7 +560,7 @@ T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy
       return 1 + fabs(float_distance(static_cast<T>((b < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), b, pol));
    if(b == 0)
       return 1 + fabs(float_distance(static_cast<T>((a < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), a, pol));
-   if(boost::math::sign(a) != boost::math::sign(b))
+   if(BOOST_MATH_NAMESPACE::sign(a) != BOOST_MATH_NAMESPACE::sign(b))
       return 2 + fabs(float_distance(static_cast<T>((b < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), b, pol))
          + fabs(float_distance(static_cast<T>((a < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), a, pol));
    //
@@ -502,7 +579,7 @@ T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy
    // because we actually have fewer than tools::digits<T>()
    // significant bits in the representation:
    //
-   (void)frexp(((boost::math::fpclassify)(a) == (int)FP_SUBNORMAL) ? tools::min_value<T>() : a, &expon);
+   (void)frexp(((BOOST_MATH_NAMESPACE::fpclassify)(a) == (int)FP_SUBNORMAL) ? tools::min_value<T>() : a, &expon);
    T upper = ldexp(T(1), expon);
    T result = T(0);
    //
@@ -523,7 +600,7 @@ T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy
    //
    expon = tools::digits<T>() - expon;
    T mb, x, y, z;
-   if(((boost::math::fpclassify)(a) == (int)FP_SUBNORMAL) || (b - a < tools::min_value<T>()))
+   if(((BOOST_MATH_NAMESPACE::fpclassify)(a) == (int)FP_SUBNORMAL) || (b - a < tools::min_value<T>()))
    {
       //
       // Special case - either one end of the range is a denormal, or else the difference is.
@@ -572,9 +649,9 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
    // Error handling:
    //
    static const char* function = "float_distance<%1%>(%1%, %1%)";
-   if(!(boost::math::isfinite)(a))
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(a))
       return policies::raise_domain_error<T>(function, "Argument a must be finite, but got %1%", a, pol);
-   if(!(boost::math::isfinite)(b))
+   if(!(BOOST_MATH_NAMESPACE::isfinite)(b))
       return policies::raise_domain_error<T>(function, "Argument b must be finite, but got %1%", b, pol);
    //
    // Special cases:
@@ -587,7 +664,7 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
       return 1 + fabs(float_distance(static_cast<T>((b < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), b, pol));
    if(b == 0)
       return 1 + fabs(float_distance(static_cast<T>((a < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), a, pol));
-   if(boost::math::sign(a) != boost::math::sign(b))
+   if(BOOST_MATH_NAMESPACE::sign(a) != BOOST_MATH_NAMESPACE::sign(b))
       return 2 + fabs(float_distance(static_cast<T>((b < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), b, pol))
          + fabs(float_distance(static_cast<T>((a < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), a, pol));
    //
@@ -606,7 +683,7 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
    // because we actually have fewer than tools::digits<T>()
    // significant bits in the representation:
    //
-   expon = 1 + ilogb(((boost::math::fpclassify)(a) == (int)FP_SUBNORMAL) ? tools::min_value<T>() : a);
+   expon = 1 + ilogb(((BOOST_MATH_NAMESPACE::fpclassify)(a) == (int)FP_SUBNORMAL) ? tools::min_value<T>() : a);
    T upper = scalbn(T(1), expon);
    T result = T(0);
    //
@@ -626,7 +703,7 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
    //
    expon = std::numeric_limits<T>::digits - expon;
    T mb, x, y, z;
-   if(((boost::math::fpclassify)(a) == (int)FP_SUBNORMAL) || (b - a < tools::min_value<T>()))
+   if(((BOOST_MATH_NAMESPACE::fpclassify)(a) == (int)FP_SUBNORMAL) || (b - a < tools::min_value<T>()))
    {
       //
       // Special case - either one end of the range is a denormal, or else the difference is.
@@ -664,7 +741,7 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
 
 } // namespace detail
 
-template <class T, class U, class Policy>
+BOOST_MATH_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b, const Policy& pol)
 {
    //
@@ -698,10 +775,10 @@ inline typename tools::promote_args<T, U>::type float_distance(const T& a, const
    }
 }
 
-template <class T, class U>
+BOOST_MATH_EXPORT template <class T, class U>
 typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b)
 {
-   return boost::math::float_distance(a, b, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::float_distance(a, b, policies::policy<>());
 }
 
 namespace detail{
@@ -715,7 +792,7 @@ T float_advance_imp(T val, int distance, const std::true_type&, const Policy& po
    //
    static const char* function = "float_advance<%1%>(%1%, int)";
 
-   int fpclass = (boost::math::fpclassify)(val);
+   int fpclass = (BOOST_MATH_NAMESPACE::fpclassify)(val);
 
    if((fpclass == (int)FP_NAN) || (fpclass == (int)FP_INFINITE))
       return policies::raise_domain_error<T>(function, "Argument val must be finite, but got %1%", val, pol);
@@ -797,7 +874,7 @@ T float_advance_imp(T val, int distance, const std::false_type&, const Policy& p
    //
    static const char* function = "float_advance<%1%>(%1%, int)";
 
-   int fpclass = (boost::math::fpclassify)(val);
+   int fpclass = (BOOST_MATH_NAMESPACE::fpclassify)(val);
 
    if((fpclass == (int)FP_NAN) || (fpclass == (int)FP_INFINITE))
       return policies::raise_domain_error<T>(function, "Argument val must be finite, but got %1%", val, pol);
@@ -866,20 +943,20 @@ T float_advance_imp(T val, int distance, const std::false_type&, const Policy& p
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    return detail::float_advance_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), distance, std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 inline typename tools::promote_args<T>::type float_advance(const T& val, int distance)
 {
-   return boost::math::float_advance(val, distance, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::float_advance(val, distance, policies::policy<>());
 }
 
-}} // boost math namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif
 

@@ -6,9 +6,16 @@
 // See: https://github.com/boostorg/math/issues/889
 // See: https://github.com/scipy/scipy/issues/17388
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/distributions/binomial.hpp>
+#else
+import boost.math;
+#endif
+
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <numeric>
-#include <boost/math/distributions/binomial.hpp>
+#endif
 #include "math_unit_test.hpp"
 
 int main(void)

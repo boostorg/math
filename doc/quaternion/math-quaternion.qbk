@@ -839,7 +839,7 @@ Computes the n-th power of the quaternion q.
 
 [section:quat_tests Test Program]
 
-The [@../../test/quaternion_test.cpp quaternion_test.cpp]
+The [@../../test/test_quaternion.cpp test_quaternion.cpp]
 test program tests quaternions specializations for float, double and long double
 ([@../quaternion/output.txt sample output], with message output
 enabled).

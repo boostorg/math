@@ -18,7 +18,7 @@ int main( int ac, char const* av[] )
     if( ac >= 2 )
     {
         char version[ 64 ];
-        std::sprintf( version, "%d.%d.%d", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100 );
+        std::snprintf( version, sizeof( version ), "%d.%d.%d", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100 );
 
         BOOST_TEST_CSTR_EQ( av[1], version );
     }

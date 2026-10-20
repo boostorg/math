@@ -46,8 +46,7 @@
 
 // Here is a helper function used for raising the value of a given
 // floating-point type to the power of n, where n has integral type.
-namespace boost {
-   namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
       namespace cstdfloat {
          namespace detail {
 
@@ -125,8 +124,7 @@ namespace boost {
 
          }
       }
-   }
-} // boost::math::cstdfloat::detail
+   BOOST_MATH_NAMESPACE_END // boost::math::cstdfloat::detail
 
 // We will now define preprocessor symbols representing quadruple-precision <cmath> functions.
 #if defined(__INTEL_COMPILER)
@@ -299,61 +297,61 @@ namespace boost {
 
 extern "C" int quadmath_snprintf(char*, std::size_t, const char*, ...) BOOST_MATH_NOTHROW;
 
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LDEXP(boost::math::cstdfloat::detail::float_internal128_t, int) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FREXP(boost::math::cstdfloat::detail::float_internal128_t, int*) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FABS(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FLOOR(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_CEIL(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SQRT(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TRUNC(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_POW(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LOG(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LOG10(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SIN(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_COS(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TAN(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ASIN(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ACOS(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATAN(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FMOD(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATAN2(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LGAMMA(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LDEXP(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, int) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FREXP(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, int*) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FABS(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FLOOR(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_CEIL(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SQRT(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TRUNC(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_POW(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LOG(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LOG10(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SIN(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_COS(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TAN(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ASIN(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ACOS(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATAN(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FMOD(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATAN2(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LGAMMA(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
 
 //   begin more functions
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_REMAINDER(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_REMQUO(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t, int*) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_FMA(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_FMAX(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_FMIN(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_FDIM(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_NAN(const char*) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_REMAINDER(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_REMQUO(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, int*) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_FMA(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_FMAX(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_FMIN(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_FDIM(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_NAN(const char*) BOOST_MATH_NOTHROW;
 //extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_EXP2         (boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_LOG2(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_LOG1P(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_CBRT(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_HYPOT(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_ERF(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_ERFC(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" long long int                                        BOOST_CSTDFLOAT_FLOAT128_LLROUND(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" long int                                             BOOST_CSTDFLOAT_FLOAT128_LROUND(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_ROUND(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_NEARBYINT(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" long long int                                        BOOST_CSTDFLOAT_FLOAT128_LLRINT(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" long int                                             BOOST_CSTDFLOAT_FLOAT128_LRINT(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_RINT(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_MODF(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t*) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_SCALBLN(boost::math::cstdfloat::detail::float_internal128_t, long int) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_SCALBN(boost::math::cstdfloat::detail::float_internal128_t, int) BOOST_MATH_NOTHROW;
-extern "C" int                                                  BOOST_CSTDFLOAT_FLOAT128_ILOGB(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_LOGB(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_NEXTAFTER(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_LOG2(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_LOG1P(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_CBRT(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_HYPOT(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_ERF(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_ERFC(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" long long int                                        BOOST_CSTDFLOAT_FLOAT128_LLROUND(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" long int                                             BOOST_CSTDFLOAT_FLOAT128_LROUND(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_ROUND(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_NEARBYINT(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" long long int                                        BOOST_CSTDFLOAT_FLOAT128_LLRINT(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" long int                                             BOOST_CSTDFLOAT_FLOAT128_LRINT(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_RINT(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_MODF(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t*) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_SCALBLN(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, long int) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_SCALBN(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, int) BOOST_MATH_NOTHROW;
+extern "C" int                                                  BOOST_CSTDFLOAT_FLOAT128_ILOGB(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_LOGB(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_NEXTAFTER(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
 //extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_NEXTTOWARD   (boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_COPYSIGN(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" int                                                  BOOST_CSTDFLOAT_FLOAT128_SIGNBIT(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_COPYSIGN(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" int                                                  BOOST_CSTDFLOAT_FLOAT128_SIGNBIT(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
 //extern "C" int                                                BOOST_CSTDFLOAT_FLOAT128_FPCLASSIFY   (boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
 //extern "C" int                                                BOOST_CSTDFLOAT_FLOAT128_ISFINITE      (boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" int                                                  BOOST_CSTDFLOAT_FLOAT128_ISINF(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
-extern "C" int                                                  BOOST_CSTDFLOAT_FLOAT128_ISNAN(boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" int                                                  BOOST_CSTDFLOAT_FLOAT128_ISINF(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
+extern "C" int                                                  BOOST_CSTDFLOAT_FLOAT128_ISNAN(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
 //extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_ISNORMAL   (boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
 //extern "C" int                                                BOOST_CSTDFLOAT_FLOAT128_ISGREATER   (boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
 //extern "C" int                                                BOOST_CSTDFLOAT_FLOAT128_ISGREATEREQUAL(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) BOOST_MATH_NOTHROW;
@@ -365,29 +363,29 @@ extern "C" int                                                  BOOST_CSTDFLOAT_
 
 #if !defined(BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS)
 
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXP(boost::math::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXPM1(boost::math::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SINH(boost::math::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_COSH(boost::math::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TANH(boost::math::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ASINH(boost::math::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ACOSH(boost::math::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATANH(boost::math::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
-extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TGAMMA(boost::math::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXP(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXPM1(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SINH(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_COSH(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TANH(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ASINH(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ACOSH(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATANH(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
+extern "C" BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TGAMMA(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW;
  
 #else // BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS
 
 // Forward declaration of the patched exponent function, exp(x).
-inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXP(boost::math::cstdfloat::detail::float_internal128_t x);
+inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXP(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x);
 
-inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXPM1(boost::math::cstdfloat::detail::float_internal128_t x)
+inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXPM1(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x)
 {
    // Compute exp(x) - 1 for x small.
 
    // Use an order-12 Pade approximation of the exponential function.
    // PadeApproximant[Exp[x] - 1, {x, 0, 12, 12}].
 
-   typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+   typedef BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t float_type;
 
    float_type sum;
 
@@ -427,12 +425,12 @@ inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT
 
    return sum;
 }
-inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXP(boost::math::cstdfloat::detail::float_internal128_t x)
+inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXP(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x)
 {
    // Patch the expq() function for a subset of broken GCC compilers
    // like GCC 4.7, 4.8 on MinGW.
 
-   typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+   typedef BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t float_type;
 
    // Scale the argument x to the range (-ln2 < x < ln2).
    constexpr float_type one_over_ln2 = float_type(BOOST_FLOAT128_C(1.44269504088896340735992468100189213742664595415299));
@@ -467,7 +465,7 @@ inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT
    if (::BOOST_CSTDFLOAT_FLOAT128_FABS(x - floor_of_x) < float_type(BOOST_CSTDFLOAT_FLOAT128_EPS))
    {
       // Return e^n for arguments very near an integer.
-      return boost::math::cstdfloat::detail::pown(BOOST_FLOAT128_C(2.71828182845904523536028747135266249775724709369996), static_cast<std::int_fast32_t>(floor_of_x));
+      return BOOST_MATH_NAMESPACE::cstdfloat::detail::pown(BOOST_FLOAT128_C(2.71828182845904523536028747135266249775724709369996), static_cast<std::int_fast32_t>(floor_of_x));
    }
 
    // Compute the scaled argument alpha.
@@ -478,13 +476,13 @@ inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT
    const float_type scaled_result = ::BOOST_CSTDFLOAT_FLOAT128_EXPM1(alpha) + float_type(1);
 
    // Rescale the result and return it.
-   return scaled_result * boost::math::cstdfloat::detail::pown(float_type(2), n);
+   return scaled_result * BOOST_MATH_NAMESPACE::cstdfloat::detail::pown(float_type(2), n);
 }
-inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SINH(boost::math::cstdfloat::detail::float_internal128_t x)
+inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SINH(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x)
 {
    // Patch the sinhq() function for a subset of broken GCC compilers
    // like GCC 4.7, 4.8 on MinGW.
-   typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+   typedef BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t float_type;
 
    // Here, we use the following:
    // Set: ex  = exp(x)
@@ -506,50 +504,50 @@ inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT
       return (ex - (float_type(1) / ex)) / 2;
    }
 }
-inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_COSH(boost::math::cstdfloat::detail::float_internal128_t x)
+inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_COSH(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x)
 {
    // Patch the coshq() function for a subset of broken GCC compilers
    // like GCC 4.7, 4.8 on MinGW.
-   typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+   typedef BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t float_type;
    const float_type ex = ::BOOST_CSTDFLOAT_FLOAT128_EXP(x);
    return (ex + (float_type(1) / ex)) / 2;
 }
-inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TANH(boost::math::cstdfloat::detail::float_internal128_t x)
+inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TANH(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x)
 {
    // Patch the tanhq() function for a subset of broken GCC compilers
    // like GCC 4.7, 4.8 on MinGW.
-   typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+   typedef BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t float_type;
    const float_type ex_plus = ::BOOST_CSTDFLOAT_FLOAT128_EXP(x);
    const float_type ex_minus = (float_type(1) / ex_plus);
    return (ex_plus - ex_minus) / (ex_plus + ex_minus);
 }
-inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ASINH(boost::math::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW
+inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ASINH(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW
 {
    // Patch the asinh() function since quadmath does not have it.
-   typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+   typedef BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t float_type;
    return ::BOOST_CSTDFLOAT_FLOAT128_LOG(x + ::BOOST_CSTDFLOAT_FLOAT128_SQRT((x * x) + float_type(1)));
 }
-inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ACOSH(boost::math::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW
+inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ACOSH(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW
 {
    // Patch the acosh() function since quadmath does not have it.
-   typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+   typedef BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t float_type;
    const float_type zp(x + float_type(1));
    const float_type zm(x - float_type(1));
 
    return ::BOOST_CSTDFLOAT_FLOAT128_LOG(x + (zp * ::BOOST_CSTDFLOAT_FLOAT128_SQRT(zm / zp)));
 }
-inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATANH(boost::math::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW
+inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATANH(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW
 {
    // Patch the atanh() function since quadmath does not have it.
-   typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+   typedef BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t float_type;
    return (::BOOST_CSTDFLOAT_FLOAT128_LOG(float_type(1) + x)
       - ::BOOST_CSTDFLOAT_FLOAT128_LOG(float_type(1) - x)) / 2;
 }
-inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TGAMMA(boost::math::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW
+inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TGAMMA(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) BOOST_MATH_NOTHROW
 {
    // Patch the tgammaq() function for a subset of broken GCC compilers
    // like GCC 4.7, 4.8 on MinGW.
-   typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+   typedef BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t float_type;
 
    if (x > float_type(0))
    {
@@ -612,110 +610,109 @@ inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT
 
 // Define the quadruple-precision <cmath> functions in the namespace boost::math::cstdfloat::detail.
 
-namespace boost {
-   namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
       namespace cstdfloat {
          namespace detail {
-            inline   boost::math::cstdfloat::detail::float_internal128_t ldexp(boost::math::cstdfloat::detail::float_internal128_t x, int n) { return ::BOOST_CSTDFLOAT_FLOAT128_LDEXP(x, n); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t frexp(boost::math::cstdfloat::detail::float_internal128_t x, int* pn) { return ::BOOST_CSTDFLOAT_FLOAT128_FREXP(x, pn); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t fabs(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_FABS(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t abs(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_FABS(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t floor(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_FLOOR(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t ceil(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_CEIL(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t sqrt(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_SQRT(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t trunc(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_TRUNC(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t exp(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_EXP(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t expm1(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_EXPM1(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t pow(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t a) { return ::BOOST_CSTDFLOAT_FLOAT128_POW(x, a); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t pow(boost::math::cstdfloat::detail::float_internal128_t x, int a) { return ::BOOST_CSTDFLOAT_FLOAT128_POW(x, boost::math::cstdfloat::detail::float_internal128_t(a)); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t log(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LOG(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t log10(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LOG10(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t sin(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_SIN(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t cos(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_COS(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t tan(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_TAN(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t asin(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ASIN(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t acos(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ACOS(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t atan(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ATAN(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t sinh(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_SINH(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t cosh(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_COSH(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t tanh(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_TANH(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t asinh(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ASINH(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t acosh(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ACOSH(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t atanh(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ATANH(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t fmod(boost::math::cstdfloat::detail::float_internal128_t a, boost::math::cstdfloat::detail::float_internal128_t b) { return ::BOOST_CSTDFLOAT_FLOAT128_FMOD(a, b); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t atan2(boost::math::cstdfloat::detail::float_internal128_t y, boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ATAN2(y, x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t lgamma(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LGAMMA(x); }
-            inline   boost::math::cstdfloat::detail::float_internal128_t tgamma(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_TGAMMA(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t ldexp(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, int n) { return ::BOOST_CSTDFLOAT_FLOAT128_LDEXP(x, n); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t frexp(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, int* pn) { return ::BOOST_CSTDFLOAT_FLOAT128_FREXP(x, pn); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t fabs(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_FABS(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t abs(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_FABS(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t floor(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_FLOOR(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t ceil(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_CEIL(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t sqrt(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_SQRT(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t trunc(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_TRUNC(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t exp(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_EXP(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t expm1(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_EXPM1(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t pow(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t a) { return ::BOOST_CSTDFLOAT_FLOAT128_POW(x, a); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t pow(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, int a) { return ::BOOST_CSTDFLOAT_FLOAT128_POW(x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t(a)); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t log(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LOG(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t log10(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LOG10(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t sin(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_SIN(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t cos(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_COS(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t tan(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_TAN(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t asin(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ASIN(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t acos(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ACOS(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t atan(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ATAN(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t sinh(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_SINH(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t cosh(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_COSH(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t tanh(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_TANH(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t asinh(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ASINH(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t acosh(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ACOSH(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t atanh(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ATANH(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t fmod(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t a, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t b) { return ::BOOST_CSTDFLOAT_FLOAT128_FMOD(a, b); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t atan2(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ATAN2(y, x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t lgamma(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LGAMMA(x); }
+            inline   BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t tgamma(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_TGAMMA(x); }
             //   begin more functions
-            inline boost::math::cstdfloat::detail::float_internal128_t  remainder(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_REMAINDER(x, y); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  remquo(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y, int* z) { return ::BOOST_CSTDFLOAT_FLOAT128_REMQUO(x, y, z); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  fma(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y, boost::math::cstdfloat::detail::float_internal128_t z) { return BOOST_CSTDFLOAT_FLOAT128_FMA(x, y, z); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  remainder(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_REMAINDER(x, y); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  remquo(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y, int* z) { return ::BOOST_CSTDFLOAT_FLOAT128_REMQUO(x, y, z); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  fma(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t z) { return BOOST_CSTDFLOAT_FLOAT128_FMA(x, y, z); }
 
-            inline boost::math::cstdfloat::detail::float_internal128_t  fmax(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMAX(x, y); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  fmax(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMAX(x, y); }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               fmax(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMAX(x, y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               fmax(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, T y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMAX(x, y); }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               fmax(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMAX(x, y); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  fmin(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMIN(x, y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               fmax(T x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMAX(x, y); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  fmin(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMIN(x, y); }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               fmin(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMIN(x, y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               fmin(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, T y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMIN(x, y); }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               fmin(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMIN(x, y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               fmin(T x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMIN(x, y); }
 
-            inline boost::math::cstdfloat::detail::float_internal128_t  fdim(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FDIM(x, y); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  nanq(const char* x) { return ::BOOST_CSTDFLOAT_FLOAT128_NAN(x); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  exp2(boost::math::cstdfloat::detail::float_internal128_t x)
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  fdim(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FDIM(x, y); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  nanq(const char* x) { return ::BOOST_CSTDFLOAT_FLOAT128_NAN(x); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  exp2(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x)
             {
-               return ::BOOST_CSTDFLOAT_FLOAT128_POW(boost::math::cstdfloat::detail::float_internal128_t(2), x);
+               return ::BOOST_CSTDFLOAT_FLOAT128_POW(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t(2), x);
             }
-            inline boost::math::cstdfloat::detail::float_internal128_t  log2(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LOG2(x); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  log1p(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LOG1P(x); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  cbrt(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_CBRT(x); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  hypot(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y, boost::math::cstdfloat::detail::float_internal128_t z) { return ::BOOST_CSTDFLOAT_FLOAT128_SQRT(x*x + y * y + z * z); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  hypot(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_HYPOT(x, y); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  log2(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LOG2(x); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  log1p(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LOG1P(x); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  cbrt(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_CBRT(x); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  hypot(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t z) { return ::BOOST_CSTDFLOAT_FLOAT128_SQRT(x*x + y * y + z * z); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  hypot(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_HYPOT(x, y); }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               hypot(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return ::BOOST_CSTDFLOAT_FLOAT128_HYPOT(x, y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               hypot(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, T y) { return ::BOOST_CSTDFLOAT_FLOAT128_HYPOT(x, y); }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               hypot(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_HYPOT(x, y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               hypot(T x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_HYPOT(x, y); }
 
 
-            inline boost::math::cstdfloat::detail::float_internal128_t  erf(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ERF(x); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  erfc(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ERFC(x); }
-            inline long long int                                        llround(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LLROUND(x); }
-            inline long int                                             lround(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LROUND(x); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  round(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ROUND(x); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  nearbyint(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_NEARBYINT(x); }
-            inline long long int                                        llrint(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LLRINT(x); }
-            inline long int                                             lrint(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LRINT(x); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  rint(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_RINT(x); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  modf(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t* y) { return ::BOOST_CSTDFLOAT_FLOAT128_MODF(x, y); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  scalbln(boost::math::cstdfloat::detail::float_internal128_t x, long int y) { return ::BOOST_CSTDFLOAT_FLOAT128_SCALBLN(x, y); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  scalbn(boost::math::cstdfloat::detail::float_internal128_t x, int y) { return ::BOOST_CSTDFLOAT_FLOAT128_SCALBN(x, y); }
-            inline int                                                  ilogb(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ILOGB(x); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  logb(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LOGB(x); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  nextafter(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_NEXTAFTER(x, y); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  nexttoward(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y) { return -(::BOOST_CSTDFLOAT_FLOAT128_NEXTAFTER(-x, -y)); }
-            inline boost::math::cstdfloat::detail::float_internal128_t  copysign   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_COPYSIGN(x, y); }
-            inline bool                                                 signbit   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_SIGNBIT(x); }
-            inline int                                                  fpclassify BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x)
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  erf(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ERF(x); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  erfc(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ERFC(x); }
+            inline long long int                                        llround(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LLROUND(x); }
+            inline long int                                             lround(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LROUND(x); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  round(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ROUND(x); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  nearbyint(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_NEARBYINT(x); }
+            inline long long int                                        llrint(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LLRINT(x); }
+            inline long int                                             lrint(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LRINT(x); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  rint(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_RINT(x); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  modf(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t* y) { return ::BOOST_CSTDFLOAT_FLOAT128_MODF(x, y); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  scalbln(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, long int y) { return ::BOOST_CSTDFLOAT_FLOAT128_SCALBLN(x, y); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  scalbn(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, int y) { return ::BOOST_CSTDFLOAT_FLOAT128_SCALBN(x, y); }
+            inline int                                                  ilogb(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ILOGB(x); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  logb(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_LOGB(x); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  nextafter(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_NEXTAFTER(x, y); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  nexttoward(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return -(::BOOST_CSTDFLOAT_FLOAT128_NEXTAFTER(-x, -y)); }
+            inline BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t  copysign   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_COPYSIGN(x, y); }
+            inline bool                                                 signbit   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_SIGNBIT(x); }
+            inline int                                                  fpclassify BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x)
             {
                if (::BOOST_CSTDFLOAT_FLOAT128_ISNAN(x))
                   return FP_NAN;
@@ -729,14 +726,14 @@ namespace boost {
                else
                   return FP_NORMAL;
             }
-            inline bool                                      isfinite   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x)
+            inline bool                                      isfinite   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x)
             {
                return !::BOOST_CSTDFLOAT_FLOAT128_ISNAN(x) && !::BOOST_CSTDFLOAT_FLOAT128_ISINF(x);
             }
-            inline bool                                      isinf      BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ISINF(x); }
-            inline bool                                      isnan      BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ISNAN(x); }
-            inline bool                                      isnormal   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x) { return boost::math::cstdfloat::detail::fpclassify BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x) == FP_NORMAL; }
-            inline bool                                      isgreater      BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)
+            inline bool                                      isinf      BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ISINF(x); }
+            inline bool                                      isnan      BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ISNAN(x); }
+            inline bool                                      isnormal   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x) { return BOOST_MATH_NAMESPACE::cstdfloat::detail::fpclassify BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x) == FP_NORMAL; }
+            inline bool                                      isgreater      BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y)
             {
                if (isnan BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x) || isnan BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(y))
                   return false;
@@ -744,16 +741,16 @@ namespace boost {
             }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               isgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return isgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, (boost::math::cstdfloat::detail::float_internal128_t)y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               isgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, T y) { return isgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, (BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t)y); }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               isgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return isgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((boost::math::cstdfloat::detail::float_internal128_t)x, y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               isgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return isgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t)x, y); }
 
-            inline bool                                      isgreaterequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)
+            inline bool                                      isgreaterequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y)
             {
                if (isnan BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x) || isnan BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(y))
                   return false;
@@ -761,16 +758,16 @@ namespace boost {
             }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               isgreaterequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return isgreaterequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, (boost::math::cstdfloat::detail::float_internal128_t)y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               isgreaterequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, T y) { return isgreaterequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, (BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t)y); }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               isgreaterequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return isgreaterequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((boost::math::cstdfloat::detail::float_internal128_t)x, y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               isgreaterequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return isgreaterequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t)x, y); }
 
-            inline bool                                      isless      BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)
+            inline bool                                      isless      BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y)
             {
                if (isnan BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x) || isnan BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(y))
                   return false;
@@ -778,17 +775,17 @@ namespace boost {
             }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               isless BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return isless BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, (boost::math::cstdfloat::detail::float_internal128_t)y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               isless BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, T y) { return isless BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, (BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t)y); }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               isless BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return isless BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((boost::math::cstdfloat::detail::float_internal128_t)x, y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               isless BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return isless BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t)x, y); }
 
 
-            inline bool                                      islessequal   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)
+            inline bool                                      islessequal   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y)
             {
                if (isnan BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x) || isnan BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(y))
                   return false;
@@ -796,17 +793,17 @@ namespace boost {
             }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               islessequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return islessequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, (boost::math::cstdfloat::detail::float_internal128_t)y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               islessequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, T y) { return islessequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, (BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t)y); }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               islessequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return islessequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((boost::math::cstdfloat::detail::float_internal128_t)x, y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               islessequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return islessequal BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t)x, y); }
 
 
-            inline bool                                      islessgreater   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)
+            inline bool                                      islessgreater   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y)
             {
                if (isnan BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x) || isnan BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(y))
                   return false;
@@ -814,118 +811,117 @@ namespace boost {
             }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               islessgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return islessgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, (boost::math::cstdfloat::detail::float_internal128_t)y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               islessgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, T y) { return islessgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, (BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t)y); }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               islessgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return islessgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((boost::math::cstdfloat::detail::float_internal128_t)x, y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               islessgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return islessgreater BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t)x, y); }
 
 
-            inline bool                                      isunordered   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_ISNAN(x) || ::BOOST_CSTDFLOAT_FLOAT128_ISNAN(y); }
+            inline bool                                      isunordered   BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_ISNAN(x) || ::BOOST_CSTDFLOAT_FLOAT128_ISNAN(y); }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               isunordered BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return isunordered BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, (boost::math::cstdfloat::detail::float_internal128_t)y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               isunordered BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t x, T y) { return isunordered BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x, (BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t)y); }
             template <class T>
             inline typename std::enable_if<
-               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
-               && !std::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
-               isunordered BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return isunordered BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((boost::math::cstdfloat::detail::float_internal128_t)x, y); }
+               std::is_convertible<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value
+               && !std::is_same<T, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::value, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t>::type
+               isunordered BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(T x, BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t y) { return isunordered BOOST_MATH_PREVENT_MACRO_SUBSTITUTION((BOOST_MATH_NAMESPACE::cstdfloat::detail::float_internal128_t)x, y); }
 
 
             //   end more functions
          }
       }
-   }
-} // boost::math::cstdfloat::detail
+   BOOST_MATH_NAMESPACE_END // boost::math::cstdfloat::detail
 
 // We will now inject the quadruple-precision <cmath> functions
 // into the std namespace. This is done via *using* directive.
 namespace std
 {
-   using boost::math::cstdfloat::detail::ldexp;
-   using boost::math::cstdfloat::detail::frexp;
-   using boost::math::cstdfloat::detail::fabs;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::ldexp;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::frexp;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::fabs;
 
 #if !(defined(_GLIBCXX_USE_FLOAT128) && defined(__GNUC__) && (__GNUC__ >= 7))
 #if (defined(__clang__) && !(!defined(__STRICT_ANSI__) && defined(_GLIBCXX_USE_FLOAT128))) || (__GNUC__ <= 6 && !defined(__clang__)) 
    // workaround for clang using libstdc++ and old GCC
-   using boost::math::cstdfloat::detail::abs;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::abs;
 #endif
 #endif
 
-   using boost::math::cstdfloat::detail::floor;
-   using boost::math::cstdfloat::detail::ceil;
-   using boost::math::cstdfloat::detail::sqrt;
-   using boost::math::cstdfloat::detail::trunc;
-   using boost::math::cstdfloat::detail::exp;
-   using boost::math::cstdfloat::detail::expm1;
-   using boost::math::cstdfloat::detail::pow;
-   using boost::math::cstdfloat::detail::log;
-   using boost::math::cstdfloat::detail::log10;
-   using boost::math::cstdfloat::detail::sin;
-   using boost::math::cstdfloat::detail::cos;
-   using boost::math::cstdfloat::detail::tan;
-   using boost::math::cstdfloat::detail::asin;
-   using boost::math::cstdfloat::detail::acos;
-   using boost::math::cstdfloat::detail::atan;
-   using boost::math::cstdfloat::detail::sinh;
-   using boost::math::cstdfloat::detail::cosh;
-   using boost::math::cstdfloat::detail::tanh;
-   using boost::math::cstdfloat::detail::asinh;
-   using boost::math::cstdfloat::detail::acosh;
-   using boost::math::cstdfloat::detail::atanh;
-   using boost::math::cstdfloat::detail::fmod;
-   using boost::math::cstdfloat::detail::atan2;
-   using boost::math::cstdfloat::detail::lgamma;
-   using boost::math::cstdfloat::detail::tgamma;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::floor;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::ceil;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::sqrt;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::trunc;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::exp;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::expm1;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::pow;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::log;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::log10;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::sin;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::cos;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::tan;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::asin;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::acos;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::atan;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::sinh;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::cosh;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::tanh;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::asinh;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::acosh;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::atanh;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::fmod;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::atan2;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::lgamma;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::tgamma;
 
    //   begin more functions
-   using boost::math::cstdfloat::detail::remainder;
-   using boost::math::cstdfloat::detail::remquo;
-   using boost::math::cstdfloat::detail::fma;
-   using boost::math::cstdfloat::detail::fmax;
-   using boost::math::cstdfloat::detail::fmin;
-   using boost::math::cstdfloat::detail::fdim;
-   using boost::math::cstdfloat::detail::nanq;
-   using boost::math::cstdfloat::detail::exp2;
-   using boost::math::cstdfloat::detail::log2;
-   using boost::math::cstdfloat::detail::log1p;
-   using boost::math::cstdfloat::detail::cbrt;
-   using boost::math::cstdfloat::detail::hypot;
-   using boost::math::cstdfloat::detail::erf;
-   using boost::math::cstdfloat::detail::erfc;
-   using boost::math::cstdfloat::detail::llround;
-   using boost::math::cstdfloat::detail::lround;
-   using boost::math::cstdfloat::detail::round;
-   using boost::math::cstdfloat::detail::nearbyint;
-   using boost::math::cstdfloat::detail::llrint;
-   using boost::math::cstdfloat::detail::lrint;
-   using boost::math::cstdfloat::detail::rint;
-   using boost::math::cstdfloat::detail::modf;
-   using boost::math::cstdfloat::detail::scalbln;
-   using boost::math::cstdfloat::detail::scalbn;
-   using boost::math::cstdfloat::detail::ilogb;
-   using boost::math::cstdfloat::detail::logb;
-   using boost::math::cstdfloat::detail::nextafter;
-   using boost::math::cstdfloat::detail::nexttoward;
-   using boost::math::cstdfloat::detail::copysign;
-   using boost::math::cstdfloat::detail::signbit;
-   using boost::math::cstdfloat::detail::fpclassify;
-   using boost::math::cstdfloat::detail::isfinite;
-   using boost::math::cstdfloat::detail::isinf;
-   using boost::math::cstdfloat::detail::isnan;
-   using boost::math::cstdfloat::detail::isnormal;
-   using boost::math::cstdfloat::detail::isgreater;
-   using boost::math::cstdfloat::detail::isgreaterequal;
-   using boost::math::cstdfloat::detail::isless;
-   using boost::math::cstdfloat::detail::islessequal;
-   using boost::math::cstdfloat::detail::islessgreater;
-   using boost::math::cstdfloat::detail::isunordered;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::remainder;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::remquo;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::fma;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::fmax;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::fmin;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::fdim;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::nanq;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::exp2;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::log2;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::log1p;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::cbrt;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::hypot;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::erf;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::erfc;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::llround;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::lround;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::round;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::nearbyint;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::llrint;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::lrint;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::rint;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::modf;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::scalbln;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::scalbn;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::ilogb;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::logb;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::nextafter;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::nexttoward;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::copysign;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::signbit;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::fpclassify;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::isfinite;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::isinf;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::isnan;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::isnormal;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::isgreater;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::isgreaterequal;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::isless;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::islessequal;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::islessgreater;
+   using BOOST_MATH_NAMESPACE::cstdfloat::detail::isunordered;
    //   end more functions
 
 } // namespace std

@@ -131,6 +131,66 @@
 </pre>
 <h4>
 <a name="math_toolkit.gauss.h2"></a>
+      <span class="phrase"><a name="math_toolkit.gauss.vector_and_matrix_valued_integra"></a></span><a class="link" href="gauss.html#math_toolkit.gauss.vector_and_matrix_valued_integra">Vector-
+      and matrix-valued integrands</a>
+    </h4>
+<p>
+      Additional overloads accept an explicit additive identity and a scalar-valued
+      norm:
+    </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Norm</span><span class="special">&gt;</span>
+<span class="keyword">static</span> <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">decltype</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">Real</span><span class="special">(</span><span class="number">0</span><span class="special">)))&amp;</span> <span class="identifier">zero</span><span class="special">,</span> <span class="identifier">Norm</span> <span class="identifier">norm</span><span class="special">,</span>
+                      <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)</span> <span class="special">-&gt;</span> <span class="keyword">decltype</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">Real</span><span class="special">(</span><span class="number">0</span><span class="special">)));</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Norm</span><span class="special">&gt;</span>
+<span class="keyword">static</span> <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span>
+                      <span class="keyword">const</span> <span class="keyword">decltype</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">Real</span><span class="special">(</span><span class="number">0</span><span class="special">)))&amp;</span> <span class="identifier">zero</span><span class="special">,</span> <span class="identifier">Norm</span> <span class="identifier">norm</span><span class="special">,</span>
+                      <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)</span> <span class="special">-&gt;</span> <span class="keyword">decltype</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">Real</span><span class="special">(</span><span class="number">0</span><span class="special">)));</span>
+</pre>
+<p>
+      These overloads participate in overload resolution only when <code class="computeroutput"><span class="identifier">norm</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">Real</span><span class="special">(</span><span class="number">0</span><span class="special">)))</span></code> is convertible
+      to <code class="computeroutput"><span class="identifier">Real</span></code> by an explicit cast.
+      Existing overloads are unchanged.
+    </p>
+<p>
+      The integrand must return a concrete value type supporting addition, addition
+      assignment, unary negation, and multiplication by <code class="computeroutput"><span class="identifier">Real</span></code>
+      on either side. All returned values and <code class="computeroutput"><span class="identifier">zero</span></code>
+      must have compatible dimensions. In particular, return an owning matrix rather
+      than an unevaluated expression referencing temporaries. <code class="computeroutput"><span class="identifier">norm</span></code>
+      must return a nonnegative scalar norm convertible to <code class="computeroutput"><span class="identifier">Real</span></code>.
+      If requested, <code class="computeroutput"><span class="identifier">pL1</span></code> receives
+      the quadrature approximation to the integral of <code class="computeroutput"><span class="identifier">norm</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">x</span><span class="special">))</span></code> over
+      the interval in increasing order. This is not an error estimate.
+    </p>
+<p>
+      For example, with Eigen available:
+    </p>
+<pre class="programlisting"><span class="keyword">using</span> <span class="identifier">Matrix</span> <span class="special">=</span> <span class="identifier">Eigen</span><span class="special">::</span><span class="identifier">Matrix</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;,</span> <span class="number">2</span><span class="special">,</span> <span class="number">2</span><span class="special">&gt;;</span>
+<span class="identifier">Matrix</span> <span class="identifier">zero</span> <span class="special">=</span> <span class="identifier">Matrix</span><span class="special">::</span><span class="identifier">Zero</span><span class="special">();</span>
+<span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[](</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">-&gt;</span> <span class="identifier">Matrix</span> <span class="special">{</span>
+    <span class="identifier">Matrix</span> <span class="identifier">result</span><span class="special">;</span>
+    <span class="identifier">result</span> <span class="special">&lt;&lt;</span> <span class="identifier">x</span><span class="special">,</span> <span class="number">0.</span><span class="special">,</span> <span class="number">0.</span><span class="special">,</span> <span class="identifier">x</span><span class="special">*</span><span class="identifier">x</span><span class="special">;</span>
+    <span class="keyword">return</span> <span class="identifier">result</span><span class="special">;</span>
+<span class="special">};</span>
+<span class="keyword">auto</span> <span class="identifier">norm</span> <span class="special">=</span> <span class="special">[](</span><span class="keyword">const</span> <span class="identifier">Matrix</span><span class="special">&amp;</span> <span class="identifier">m</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">norm</span><span class="special">();</span> <span class="special">};</span>
+<span class="identifier">Matrix</span> <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quadrature</span><span class="special">::</span><span class="identifier">gauss</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">10</span><span class="special">&gt;::</span><span class="identifier">integrate</span><span class="special">(</span>
+    <span class="identifier">f</span><span class="special">,</span> <span class="number">0.</span><span class="special">,</span> <span class="number">1.</span><span class="special">,</span> <span class="identifier">zero</span><span class="special">,</span> <span class="identifier">norm</span><span class="special">);</span>
+</pre>
+<p>
+      The explicit zero also allows dynamically sized matrices: initialize it with
+      the required dimensions. For equal bounds the supplied zero is returned, <code class="computeroutput"><span class="special">*</span><span class="identifier">pL1</span></code> is set
+      to zero if requested, and the integrand is not evaluated.
+    </p>
+<p>
+      Invalid bounds invoke the existing scalar domain-error policy. If that policy
+      returns a scalar error value instead of throwing, the result is <code class="computeroutput"><span class="identifier">zero</span></code> multiplied by that value, and <code class="computeroutput"><span class="special">*</span><span class="identifier">pL1</span></code> receives
+      that value if requested. For floating-point Eigen matrices and the ignore-error
+      policy, this produces a matrix of NaNs with the supplied dimensions. Custom
+      value types must support this multiplication too.
+    </p>
+<h4>
+<a name="math_toolkit.gauss.h3"></a>
       <span class="phrase"><a name="math_toolkit.gauss.choosing_the_number_of_points"></a></span><a class="link" href="gauss.html#math_toolkit.gauss.choosing_the_number_of_points">Choosing
       the number of points</a>
     </h4>
@@ -163,7 +223,7 @@
         </li>
 </ul></div>
 <h4>
-<a name="math_toolkit.gauss.h3"></a>
+<a name="math_toolkit.gauss.h4"></a>
       <span class="phrase"><a name="math_toolkit.gauss.examples"></a></span><a class="link" href="gauss.html#math_toolkit.gauss.examples">Examples</a>
     </h4>
 <p>

@@ -40,7 +40,7 @@
    using std::setprecision;
 
 template <class RealType>
-void test_spot(RealType location, RealType scale, RealType x, RealType p, RealType q, RealType logp, RealType logq, RealType tolerance, RealType logtolerance, RealType logtoleranceq)
+void test_spot(RealType location, RealType scale, RealType x, RealType p, RealType q, RealType logp, RealType /*logq*/, RealType tolerance, RealType logtolerance, RealType logtoleranceq)
 {
    if (std::is_same<RealType, long double>::value || std::is_same<RealType, boost::math::concepts::real_concept>::value)
    {

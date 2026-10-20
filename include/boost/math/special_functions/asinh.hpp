@@ -16,7 +16,9 @@
 #endif
 
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
+#endif
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/sqrt1pm1.hpp>
@@ -26,17 +28,14 @@
 
 // This is the inverse of the hyperbolic sine function.
 
-namespace boost
-{
-    namespace math
-    {
+BOOST_MATH_NAMESPACE_BEGIN
        namespace detail{
         template<typename T, class Policy>
         inline T    asinh_imp(const T x, const Policy& pol)
         {
             BOOST_MATH_STD_USING
             
-            if((boost::math::isnan)(x))
+            if((BOOST_MATH_NAMESPACE::isnan)(x))
             {
                return policies::raise_domain_error<T>("boost::math::asinh<%1%>(%1%)", "asinh requires a finite argument, but got x = %1%.", x, pol);
             }
@@ -51,7 +50,7 @@ namespace boost
                 else if(x < 0.5f)
                 {
                    // As below, but rearranged to preserve digits:
-                   return boost::math::log1p(x + boost::math::sqrt1pm1(x * x, pol), pol);
+                   return BOOST_MATH_NAMESPACE::log1p(x + BOOST_MATH_NAMESPACE::sqrt1pm1(x * x, pol), pol);
                 }
                 else
                 {
@@ -82,12 +81,12 @@ namespace boost
         }
        }
 
-        template<typename T>
+        BOOST_MATH_EXPORT template<typename T>
         inline typename tools::promote_args<T>::type asinh(T x)
         {
-           return boost::math::asinh(x, policies::policy<>());
+           return BOOST_MATH_NAMESPACE::asinh(x, policies::policy<>());
         }
-        template<typename T, typename Policy>
+        BOOST_MATH_EXPORT template<typename T, typename Policy>
         inline typename tools::promote_args<T>::type asinh(T x, const Policy&)
         {
             typedef typename tools::promote_args<T>::type result_type;
@@ -103,8 +102,7 @@ namespace boost
               "boost::math::asinh<%1%>(%1%)");
         }
 
-    }
-}
+    BOOST_MATH_NAMESPACE_END
 
 #endif /* BOOST_ASINH_HPP */
 

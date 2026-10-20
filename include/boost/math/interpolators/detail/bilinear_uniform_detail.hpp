@@ -7,14 +7,18 @@
 #ifndef BOOST_MATH_INTERPOLATORS_BILINEAR_UNIFORM_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_BILINEAR_UNIFORM_DETAIL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <stdexcept>
 #include <iostream>
 #include <string>
 #include <limits>
 #include <cmath>
 #include <utility>
+#endif
 
-namespace boost::math::interpolators::detail {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators::detail {
 
 template <class RandomAccessContainer>
 class bilinear_uniform_imp
@@ -133,5 +137,5 @@ private:
 };
 
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

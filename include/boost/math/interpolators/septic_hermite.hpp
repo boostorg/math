@@ -6,17 +6,20 @@
  */
 #ifndef BOOST_MATH_INTERPOLATORS_SEPTIC_HERMITE_HPP
 #define BOOST_MATH_INTERPOLATORS_SEPTIC_HERMITE_HPP
+
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <stdexcept>
 #include <memory>
 #include <cstdint>
+#endif
 #include <boost/math/interpolators/detail/septic_hermite_detail.hpp>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace interpolators {
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class septic_hermite
 {
 public:
@@ -62,7 +65,7 @@ private:
     std::shared_ptr<detail::septic_hermite_detail<RandomAccessContainer>> impl_;
 };
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class cardinal_septic_hermite
 {
 public:
@@ -103,7 +106,7 @@ private:
 };
 
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class cardinal_septic_hermite_aos {
 public:
     using Point = typename RandomAccessContainer::value_type;
@@ -142,6 +145,5 @@ private:
 };
 
 }
-}
-}
+BOOST_MATH_NAMESPACE_END
 #endif

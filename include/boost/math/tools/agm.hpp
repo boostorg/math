@@ -5,12 +5,16 @@
 
 #ifndef BOOST_MATH_TOOLS_AGM_HPP
 #define BOOST_MATH_TOOLS_AGM_HPP
+
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <cmath>
+#endif
 
-namespace boost { namespace math { namespace tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
-template<typename Real>
+BOOST_MATH_EXPORT template<typename Real>
 Real agm(Real a, Real g)
 {
     using std::sqrt;
@@ -43,5 +47,5 @@ Real agm(Real a, Real g)
 }
 
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif

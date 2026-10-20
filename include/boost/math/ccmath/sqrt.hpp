@@ -19,7 +19,7 @@
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/tools/is_constant_evaluated.hpp>
 
-namespace boost::math::ccmath { 
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail {
 
@@ -43,19 +43,19 @@ constexpr Real sqrt_impl(Real x)
 
 } // namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr Real sqrt(Real x)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        if (boost::math::ccmath::isnan(x) || 
-           (boost::math::ccmath::isinf(x) && x > 0) ||
-            boost::math::ccmath::abs(x) == Real(0))
+        if (BOOST_MATH_NAMESPACE::ccmath::isnan(x) || 
+           (BOOST_MATH_NAMESPACE::ccmath::isinf(x) && x > 0) ||
+            BOOST_MATH_NAMESPACE::ccmath::abs(x) == Real(0))
         {
             return x;
         }
         // Domain error is implementation defined so return NAN
-        else if (boost::math::ccmath::isinf(x) && x < 0)
+        else if (BOOST_MATH_NAMESPACE::ccmath::isinf(x) && x < 0)
         {
             return std::numeric_limits<Real>::quiet_NaN();
         }
@@ -69,12 +69,12 @@ constexpr Real sqrt(Real x)
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 constexpr double sqrt(Z x)
 {
     return detail::sqrt_impl<double>(static_cast<double>(x));
 }
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_SQRT

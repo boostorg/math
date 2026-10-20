@@ -19,56 +19,56 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline T modf(const T& v, T* ipart, const Policy& pol)
 {
    *ipart = trunc(v, pol);
    return v - *ipart;
 }
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T modf(const T& v, T* ipart)
 {
    return modf(v, ipart, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline T modf(const T& v, int* ipart, const Policy& pol)
 {
    *ipart = itrunc(v, pol);
    return v - *ipart;
 }
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T modf(const T& v, int* ipart)
 {
    return modf(v, ipart, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline T modf(const T& v, long* ipart, const Policy& pol)
 {
    *ipart = ltrunc(v, pol);
    return v - *ipart;
 }
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T modf(const T& v, long* ipart)
 {
    return modf(v, ipart, policies::policy<>());
 }
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline T modf(const T& v, long long* ipart, const Policy& pol)
 {
    *ipart = lltrunc(v, pol);
    return v - *ipart;
 }
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline T modf(const T& v, long long* ipart)
 {
    return modf(v, ipart, policies::policy<>());
 }
 
-}} // namespaces
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_MODF_HPP

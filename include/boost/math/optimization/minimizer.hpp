@@ -6,12 +6,15 @@
 #define BOOST_MATH_OPTIMIZATION_MINIMIZER_HPP
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
 #include <boost/math/optimization/gradient_optimizers.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <algorithm>
+#include <cmath>
 #include <vector>
 #include <chrono>
-namespace boost {
-namespace math {
+#endif
+BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {
-template<typename RealType>
+BOOST_MATH_EXPORT template<typename RealType>
 struct optimization_result
 {
   size_t num_iter = 0;
@@ -20,7 +23,7 @@ struct optimization_result
   bool converged;
 };
 
-template<typename RealType>
+BOOST_MATH_EXPORT template<typename RealType>
 std::ostream&
 operator<<(std::ostream& os, const optimization_result<RealType>& r)
 {
@@ -40,7 +43,7 @@ operator<<(std::ostream& os, const optimization_result<RealType>& r)
   return os;
 }
 /*****************************************************************************************/
-template<typename RealType>
+BOOST_MATH_EXPORT template<typename RealType>
 struct gradient_norm_convergence_policy
 {
   RealType tol_;
@@ -56,7 +59,7 @@ struct gradient_norm_convergence_policy
   }
 };
 
-template<typename RealType>
+BOOST_MATH_EXPORT template<typename RealType>
 struct objective_tol_convergence_policy
 {
   RealType tol_;
@@ -84,7 +87,7 @@ struct objective_tol_convergence_policy
   }
 };
 
-template<typename RealType>
+BOOST_MATH_EXPORT template<typename RealType>
 struct relative_objective_tol_policy
 {
   RealType rel_tol_;
@@ -106,14 +109,15 @@ struct relative_objective_tol_policy
       first_call_ = false;
       return false;
     }
-    RealType denom = max<RealType>(1, abs(last_value_));
+    using std::abs;
+    RealType denom = (std::max)(static_cast<RealType>(1), static_cast<RealType>(abs(last_value_)));
     RealType rel_diff = abs(objective_v - last_value_) / denom;
     last_value_ = objective_v;
     return rel_diff < rel_tol_;
   }
 };
 
-template<class Policy1, class Policy2>
+BOOST_MATH_EXPORT template<class Policy1, class Policy2>
 struct combined_convergence_policy
 {
   Policy1 p1_;
@@ -165,13 +169,13 @@ struct wallclock_termination_policy
 };
 
 /*****************************************************************************************/
-template<typename ArgumentContainer>
+BOOST_MATH_EXPORT template<typename ArgumentContainer>
 struct unconstrained_policy
 {
   void operator()(ArgumentContainer&) {}
 };
 
-template<typename ArgumentContainer, typename RealType>
+BOOST_MATH_EXPORT template<typename ArgumentContainer, typename RealType>
 struct box_constraints
 {
   RealType min_, max_;
@@ -186,7 +190,7 @@ struct box_constraints
   }
 };
 
-template<typename ArgumentContainer, typename RealType>
+BOOST_MATH_EXPORT template<typename ArgumentContainer, typename RealType>
 struct nonnegativity_constraint
 {
   void operator()(ArgumentContainer& x) const
@@ -197,7 +201,7 @@ struct nonnegativity_constraint
     }
   }
 };
-template<typename ArgumentContainer, typename RealType>
+BOOST_MATH_EXPORT template<typename ArgumentContainer, typename RealType>
 struct l2_ball_constraint
 {
   RealType radius_;
@@ -218,7 +222,7 @@ struct l2_ball_constraint
   }
 };
 
-template<typename ArgumentContainer, typename RealType>
+BOOST_MATH_EXPORT template<typename ArgumentContainer, typename RealType>
 struct l1_ball_constraint
 {
   RealType radius_;
@@ -239,7 +243,7 @@ struct l1_ball_constraint
     }
   }
 };
-template<typename ArgumentContainer, typename RealType>
+BOOST_MATH_EXPORT template<typename ArgumentContainer, typename RealType>
 struct simplex_constraint
 {
   void operator()(ArgumentContainer& x) const
@@ -257,7 +261,7 @@ struct simplex_constraint
   }
 };
 
-template<typename ArgumentContainer>
+BOOST_MATH_EXPORT template<typename ArgumentContainer>
 struct function_constraint
 {
   using func_t = void (*)(ArgumentContainer&);
@@ -271,7 +275,7 @@ struct function_constraint
 
   void operator()(ArgumentContainer& x) const { f_(x); }
 };
-template<typename ArgumentContainer, typename RealType>
+BOOST_MATH_EXPORT template<typename ArgumentContainer, typename RealType>
 struct unit_sphere_constraint
 {
   void operator()(ArgumentContainer& x) const
@@ -313,7 +317,7 @@ minimize_impl(Optimizer& opt,
   result.converged = converged(opt.gradients(), opt.objective_value());
   return result;
 }
-template<class Optimizer,
+BOOST_MATH_EXPORT template<class Optimizer,
          class ConstraintPolicy =
            unconstrained_policy<typename Optimizer::argument_container_t>,
          class ConvergencePolicy =
@@ -331,6 +335,5 @@ minimize(Optimizer& opt,
   return minimize_impl(opt, project, converged, terminate, history);
 }
 } // namespace optimization
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

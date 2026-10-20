@@ -6,10 +6,10 @@
 #include <boost/math/tools/test_value.hpp>
 #include <boost/utility/identity_type.hpp>
 #include <cmath>
-BOOST_AUTO_TEST_SUITE(erf_support)
 
 using namespace rdiff;
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_erf, T, all_float_types)
+template <class T>
+void test_erf()
 {
     std::array<T, 5> answers{
         {BOOST_MATH_TEST_VALUE(
@@ -29,14 +29,15 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_erf, T, all_float_types)
     auto         g3 = grad_nd<3>(y, &x);
     auto         g4 = grad_nd<4>(y, &x);
 
-    BOOST_CHECK_CLOSE(y.item(), answers[0], eps);
-    BOOST_CHECK_CLOSE(g1[0], answers[1], eps);
-    BOOST_CHECK_CLOSE(g2[0][0], answers[2], eps);
-    BOOST_CHECK_CLOSE(g3[0][0][0], answers[3], eps);
-    BOOST_CHECK_CLOSE(g4[0][0][0][0], answers[4], eps);
+    CHECK_RELATIVE_ERROR(y.item(), answers[0], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g1[0], answers[1], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g2[0][0], answers[2], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g3[0][0][0], answers[3], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g4[0][0][0][0], answers[4], (eps) / 100);
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_erfc, T, all_float_types)
+template <class T>
+void test_erfc()
 {
     std::array<T, 5> answers{
         {BOOST_MATH_TEST_VALUE(T, 0.00002209049699858544137277612958232037984770708739924966),
@@ -55,15 +56,16 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_erfc, T, all_float_types)
     auto         g3 = grad_nd<3>(y, &x);
     auto         g4 = grad_nd<4>(y, &x);
 
-    BOOST_CHECK_CLOSE(y.item(), answers[0], eps);
-    BOOST_CHECK_CLOSE(g1[0], answers[1], eps);
-    BOOST_CHECK_CLOSE(g2[0][0], answers[2], eps);
-    BOOST_CHECK_CLOSE(g3[0][0][0], answers[3], eps);
-    BOOST_CHECK_CLOSE(g4[0][0][0][0], answers[4], eps);
+    CHECK_RELATIVE_ERROR(y.item(), answers[0], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g1[0], answers[1], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g2[0][0], answers[2], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g3[0][0][0], answers[3], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g4[0][0][0][0], answers[4], (eps) / 100);
 }
 
 using namespace rdiff;
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_erf_inv, T, all_float_types)
+template <class T>
+void test_erf_inv()
 {
     std::array<T, 5> answers{{BOOST_MATH_TEST_VALUE(T, 0.4769362762044699),
                               BOOST_MATH_TEST_VALUE(T, 1.11258481897195),
@@ -81,13 +83,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_erf_inv, T, all_float_types)
     auto         g3 = grad_nd<3>(y, &x);
     auto         g4 = grad_nd<4>(y, &x);
 
-    BOOST_CHECK_CLOSE(y.item(), answers[0], eps);
-    BOOST_CHECK_CLOSE(g1[0], answers[1], eps);
-    BOOST_CHECK_CLOSE(g2[0][0], answers[2], eps);
-    BOOST_CHECK_CLOSE(g3[0][0][0], answers[3], eps);
-    BOOST_CHECK_CLOSE(g4[0][0][0][0], answers[4], eps);
+    CHECK_RELATIVE_ERROR(y.item(), answers[0], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g1[0], answers[1], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g2[0][0], answers[2], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g3[0][0][0], answers[3], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g4[0][0][0][0], answers[4], (eps) / 100);
 }
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_erfc_inv, T, all_float_types)
+template <class T>
+void test_erfc_inv()
 {
     std::array<T, 5> answers{{BOOST_MATH_TEST_VALUE(T, 0.4769362762044699),
                               BOOST_MATH_TEST_VALUE(T, -1.11258481897195),
@@ -105,10 +108,18 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_erfc_inv, T, all_float_types)
     auto         g3 = grad_nd<3>(y, &x);
     auto         g4 = grad_nd<4>(y, &x);
 
-    BOOST_CHECK_CLOSE(y.item(), answers[0], eps);
-    BOOST_CHECK_CLOSE(g1[0], answers[1], eps);
-    BOOST_CHECK_CLOSE(g2[0][0], answers[2], eps);
-    BOOST_CHECK_CLOSE(g3[0][0][0], answers[3], eps);
-    BOOST_CHECK_CLOSE(g4[0][0][0][0], answers[4], eps);
+    CHECK_RELATIVE_ERROR(y.item(), answers[0], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g1[0], answers[1], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g2[0][0], answers[2], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g3[0][0][0], answers[3], (eps) / 100);
+    CHECK_RELATIVE_ERROR(g4[0][0][0][0], answers[4], (eps) / 100);
 }
-BOOST_AUTO_TEST_SUITE_END()
+
+int main()
+{
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { test_erf<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { test_erfc<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { test_erf_inv<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { test_erfc_inv<typename decltype(t)::type>(); });
+   return boost::math::test::report_errors();
+}

@@ -21,11 +21,13 @@ With these techniques, the code could be simplified.
 #   define BOOST_FPCLASSIFY_VAX_FORMAT
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstring>
 #include <cstdint>
 #include <limits>
 #include <climits>
 #include <type_traits>
+#endif
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/is_standalone.hpp>
 #include <boost/math/tools/assert.hpp>
@@ -105,8 +107,7 @@ static_assert((BOOST_MATH_ENDIAN_BIG_BYTE || BOOST_MATH_ENDIAN_LITTLE_BYTE)
 
 //------------------------------------------------------------------------------
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace detail {
 
 //------------------------------------------------------------------------------
@@ -556,7 +557,6 @@ template<class T> struct fp_traits
 //------------------------------------------------------------------------------
 
 }   // namespace detail
-}   // namespace math
-}   // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif

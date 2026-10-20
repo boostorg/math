@@ -6,7 +6,7 @@
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #include "bindings.hpp"
-#include "../../test/log1p_expm1_test.hpp"
+#include "../../test/test_log1p_expm1.hpp"
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #define BOOST_TEST_MAIN

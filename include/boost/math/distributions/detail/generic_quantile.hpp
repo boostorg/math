@@ -10,7 +10,7 @@
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/cstdint.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class Dist>
 struct generic_quantile_finder
@@ -82,8 +82,8 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type generic_quantile(const Dist& di
 
    generic_quantile_finder<Dist> f(dist, p, comp);
    tools::eps_tolerance<value_type> tol(policies::digits<value_type, forwarding_policy>() - 3);
-   boost::math::uintmax_t max_iter = policies::get_max_root_iterations<forwarding_policy>();
-   boost::math::pair<value_type, value_type> ir = tools::bracket_and_solve_root(
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_root_iterations<forwarding_policy>();
+   BOOST_MATH_NAMESPACE::pair<value_type, value_type> ir = tools::bracket_and_solve_root(
       f, guess, value_type(2), true, tol, max_iter, forwarding_policy());
    value_type result = ir.first + (ir.second - ir.first) / 2;
    if(max_iter >= policies::get_max_root_iterations<forwarding_policy>())
@@ -94,7 +94,7 @@ BOOST_MATH_GPU_ENABLED typename Dist::value_type generic_quantile(const Dist& di
    return result;
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_DISTIBUTIONS_DETAIL_GENERIC_QUANTILE_HPP
 

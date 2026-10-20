@@ -15,13 +15,14 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/detail/bessel_k0.hpp>
 #include <boost/math/special_functions/detail/bessel_k1.hpp>
+#include <boost/math/special_functions/detail/bessel_ik.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
 // Modified Bessel function of the second kind of integer order
 // K_n(z) is the dominant solution, forward recurrence always OK (though unstable)
 
-namespace boost { namespace math { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED T bessel_kn(int n, T x, const Policy& pol)
@@ -29,7 +30,7 @@ BOOST_MATH_GPU_ENABLED T bessel_kn(int n, T x, const Policy& pol)
     BOOST_MATH_STD_USING
     T value, current, prev;
 
-    using namespace boost::math::tools;
+    using namespace BOOST_MATH_NAMESPACE::tools;
 
     constexpr auto function = "boost::math::bessel_kn<%1%>(%1%,%1%)";
 
@@ -60,6 +61,12 @@ BOOST_MATH_GPU_ENABLED T bessel_kn(int n, T x, const Policy& pol)
     {
        prev = bessel_k0(x);
        current = bessel_k1(x);
+       if ((prev < tools::min_value<T>()) || (current < tools::min_value<T>()))
+       {
+          T Iv, Kv;
+          bessel_ik(static_cast<T>(n), x, &Iv, &Kv, need_k, pol);
+          return Kv;
+       }
        int k = 1;
        BOOST_MATH_ASSERT(k < n);
        T scale = 1;
@@ -79,13 +86,13 @@ BOOST_MATH_GPU_ENABLED T bessel_kn(int n, T x, const Policy& pol)
        }
        while(k < n);
        if (tools::max_value<T>() * scale < fabs(value))
-          return ((boost::math::signbit)(scale) ? -1 : 1) * sign(value) * policies::raise_overflow_error<T>(function, nullptr, pol);
+          return ((BOOST_MATH_NAMESPACE::signbit)(scale) ? -1 : 1) * sign(value) * policies::raise_overflow_error<T>(function, nullptr, pol);
        value /= scale;
     }
     return value;
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_BESSEL_KN_HPP
 

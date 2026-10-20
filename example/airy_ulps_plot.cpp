@@ -48,6 +48,8 @@ int main() {
     //plot.title(title);
     plot.vertical_lines(6);
     plot.add_fn(ai_coarse);
+    // The points and the envelope are drawn into PNGs embedded in the SVG if you define BOOST_MATH_USE_LODEPNG
+    // before including ulps_plot.hpp (link lodepng.cpp), or pass an encoder to png_encoder; otherwise the plot is pure SVG.
     // You can write the plot to a stream:
     //std::cout << plot;
     // Or to a file:

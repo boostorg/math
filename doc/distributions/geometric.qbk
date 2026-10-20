@@ -290,16 +290,14 @@ the context of this distribution:
    
 ``cdf(complement(geometric(p), k))``]]
 [[__quantile]
-   [The [*greatest] number of failures /k/ expected to be observed from /k/ trials
-   with success fraction /p/, at probability /P/.  Note that the value returned
-   is a real-number, and not an integer.  Depending on the use case you may
-   want to take either the floor or ceiling of the real result.  For example:
+   [The [*smallest] number of failures /k/ with `cdf(geometric(p), k) >= P`.
+   The result is rounded to an integer as the discrete quantile policy
+   (__understand_dis_quant) asks: use `discrete_quantile<real>` to get the
+   real-valued result instead.  For example:
 ``quantile(geometric(p), P)``]]
 [[__quantile_c]
-   [The [*smallest] number of failures /k/ expected to be observed from /k/ trials
-   with success fraction /p/, at probability /P/.  Note that the value returned
-   is a real-number, and not an integer.  Depending on the use case you may
-   want to take either the floor or ceiling of the real result. For example:
+   [The [*smallest] number of failures /k/ with `cdf(complement(geometric(p), k)) <= P`,
+   rounded in the same way.  For example:
    ``quantile(complement(geometric(p), P))``]]
 ]
 
@@ -327,8 +325,9 @@ the expected number of failures using the quantile.
 [[cdf][cdf = 1 - q[super k=1]]]
 [[logcdf][log(cdf) = log1p(-exp(log1p(-p) * (k+1)))]]
 [[cdf complement][exp(log1p(-p) * (k+1))]]
-[[quantile][k = log1p(-x) / log1p(-p) -1]]
-[[quantile from the complement][k = log(x) / log1p(-p) -1]]
+[[quantile][k = log1p(-x) / log1p(-p) -1, then rounded as the policy asks
+   using the cdf at the nearby integers]]
+[[quantile from the complement][k = log(x) / log1p(-p) -1, rounded in the same way]]
 [[mean][(1-p)/p]]
 [[variance][(1-p)/p[sup2]]]
 [[mode][0]]

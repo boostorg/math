@@ -6,6 +6,9 @@
 #ifndef BOOST_MATH_TOOLS_CENTERED_CONTINUED_FRACTION_HPP
 #define BOOST_MATH_TOOLS_CENTERED_CONTINUED_FRACTION_HPP
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <cstdint>
 #include <vector>
@@ -16,6 +19,7 @@
 #include <sstream>
 #include <array>
 #include <type_traits>
+#endif
 #include <boost/math/tools/is_standalone.hpp>
 
 #ifndef BOOST_MATH_STANDALONE
@@ -29,9 +33,9 @@
 #include <boost/core/demangle.hpp>
 #endif
 
-namespace boost::math::tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
-template<typename Real, typename Z = int64_t>
+BOOST_MATH_EXPORT template<typename Real, typename Z = int64_t>
 class centered_continued_fraction {
 public:
     centered_continued_fraction(Real x) : x_{x} {
@@ -87,11 +91,11 @@ public:
         }
         b_.shrink_to_fit();
 
-        for (size_t i = 1; i < b_.size(); ++i)
+        for (size_t k = 1; k < b_.size(); ++k)
         {
-            if (b_[i] == 0) {
+            if (b_[k] == 0) {
                 std::ostringstream oss;
-                oss << "Found a zero partial denominator: b[" << i << "] = " << b_[i] << "."
+                oss << "Found a zero partial denominator: b[" << k << "] = " << b_[k] << "."
                     #ifndef BOOST_MATH_STANDALONE
                     << " This means the integer type '" << boost::core::demangle(typeid(Z).name())
                     #else
@@ -142,7 +146,7 @@ private:
 };
 
 
-template<typename Real, typename Z2>
+BOOST_MATH_EXPORT template<typename Real, typename Z2>
 std::ostream& operator<<(std::ostream& out, centered_continued_fraction<Real, Z2>& scf) {
     constexpr const int p = std::numeric_limits<Real>::max_digits10;
     if constexpr (p == 2147483647)
@@ -169,5 +173,5 @@ std::ostream& operator<<(std::ostream& out, centered_continued_fraction<Real, Z2
 }
 
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

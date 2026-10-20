@@ -6,15 +6,17 @@
 #ifndef BOOST_MATH_TOOLS_BIVARIATE_STATISTICS_HPP
 #define BOOST_MATH_TOOLS_BIVARIATE_STATISTICS_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <iterator>
 #include <tuple>
 #include <limits>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/header_deprecated.hpp>
 
 BOOST_MATH_HEADER_DEPRECATED("<boost/math/statistics/bivariate_statistics.hpp>");
 
-namespace boost{ namespace math{ namespace tools {
+BOOST_MATH_NAMESPACE_BEGIN namespace tools {
 
 template<class Container>
 auto means_and_covariance(Container const & u, Container const & v)
@@ -44,7 +46,7 @@ auto means_and_covariance(Container const & u, Container const & v)
 template<class Container>
 auto covariance(Container const & u, Container const & v)
 {
-    auto [mu_u, mu_v, cov] = boost::math::tools::means_and_covariance(u, v);
+    auto [mu_u, mu_v, cov] = BOOST_MATH_NAMESPACE::tools::means_and_covariance(u, v);
     return cov;
 }
 
@@ -92,5 +94,5 @@ auto correlation_coefficient(Container const & u, Container const & v)
     return rho;
 }
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif

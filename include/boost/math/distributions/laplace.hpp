@@ -28,14 +28,14 @@
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 #ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable:4127) // conditional expression is constant
 #endif
 
-template <class RealType = double, class Policy = policies::policy<> >
+BOOST_MATH_EXPORT template <class RealType = double, class Policy = policies::policy<> >
 class laplace_distribution
 {
 public:
@@ -84,47 +84,47 @@ private:
 
 //
 // Convenient type synonym for double.
-using laplace = laplace_distribution<double>;
+BOOST_MATH_EXPORT using laplace = laplace_distribution<double>;
 
 #ifdef __cpp_deduction_guides
-template <class RealType>
-laplace_distribution(RealType)->laplace_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-template <class RealType>
-laplace_distribution(RealType,RealType)->laplace_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+BOOST_MATH_EXPORT template <class RealType>
+laplace_distribution(RealType)->laplace_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
+BOOST_MATH_EXPORT template <class RealType>
+laplace_distribution(RealType,RealType)->laplace_distribution<typename BOOST_MATH_NAMESPACE::tools::promote_args<RealType>::type>;
 #endif
 
 //
 // Non-member functions.
-template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> range(const laplace_distribution<RealType, Policy>&)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::pair<RealType, RealType> range(const laplace_distribution<RealType, Policy>&)
 {
-  BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
+  BOOST_MATH_IF_CONSTEXPR (BOOST_MATH_NAMESPACE::numeric_limits<RealType>::has_infinity)
   {  // Can use infinity.
-     return boost::math::pair<RealType, RealType>(-boost::math::numeric_limits<RealType>::infinity(), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
+     return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity(), BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity()); // - to + infinity.
   }
   else
   { // Can only use max_value.
-    using boost::math::tools::max_value;
-    return boost::math::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max value.
+    using BOOST_MATH_NAMESPACE::tools::max_value;
+    return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max value.
   }
 
 }
 
-template <class RealType, class Policy>
-BOOST_MATH_GPU_ENABLED inline boost::math::pair<RealType, RealType> support(const laplace_distribution<RealType, Policy>&)
+BOOST_MATH_EXPORT template <class RealType, class Policy>
+BOOST_MATH_GPU_ENABLED inline BOOST_MATH_NAMESPACE::pair<RealType, RealType> support(const laplace_distribution<RealType, Policy>&)
 {
-  BOOST_MATH_IF_CONSTEXPR (boost::math::numeric_limits<RealType>::has_infinity)
+  BOOST_MATH_IF_CONSTEXPR (BOOST_MATH_NAMESPACE::numeric_limits<RealType>::has_infinity)
   { // Can Use infinity.
-     return boost::math::pair<RealType, RealType>(-boost::math::numeric_limits<RealType>::infinity(), boost::math::numeric_limits<RealType>::infinity()); // - to + infinity.
+     return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity(), BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity()); // - to + infinity.
   }
   else
   { // Can only use max_value.
-    using boost::math::tools::max_value;
-    return boost::math::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max value.
+    using BOOST_MATH_NAMESPACE::tools::max_value;
+    return BOOST_MATH_NAMESPACE::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + max value.
   }
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType pdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -136,7 +136,7 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const laplace_distribution<RealType, 
    // Check scale and location.
    if (false == dist.check_parameters(function, &result)) return result;
    // Special pdf values.
-   if((boost::math::isinf)(x))
+   if((BOOST_MATH_NAMESPACE::isinf)(x))
    {
       return 0; // pdf + and - infinity is zero.
    }
@@ -156,13 +156,13 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const laplace_distribution<RealType, 
    return result;
 } // pdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logpdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
 
    // Checking function argument
-   RealType result = -boost::math::numeric_limits<RealType>::infinity();
+   RealType result = -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
    constexpr auto function = "boost::math::logpdf(const laplace_distribution<%1%>&, %1%))";
 
    // Check scale and location.
@@ -171,7 +171,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const laplace_distribution<RealTyp
        return result;
    }
    // Special pdf values.
-   if((boost::math::isinf)(x))
+   if((BOOST_MATH_NAMESPACE::isinf)(x))
    {
       return result; // pdf + and - infinity is zero so logpdf is -INF
    }
@@ -180,25 +180,25 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const laplace_distribution<RealTyp
        return result;
    }
 
-   const RealType mu = dist.scale();
-   const RealType b = dist.location();
+   const RealType mu = dist.location();
+   const RealType b = dist.scale();
 
    // if b is 0 avoid divide by 0 error
-   if(abs(b) < boost::math::numeric_limits<RealType>::epsilon())
+   if(abs(b) < BOOST_MATH_NAMESPACE::numeric_limits<RealType>::epsilon())
    {
       result = log(pdf(dist, x));
    }
    else
    {
       // General case
-      const RealType log2 = boost::math::constants::ln_two<RealType>();
+      const RealType log2 = BOOST_MATH_NAMESPACE::constants::ln_two<RealType>();
       result = -abs(x-mu)/b - log(b) - log2;
    }
 
    return result;
 } // logpdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // For ADL of std functions.
@@ -210,7 +210,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const laplace_distribution<RealType, 
    if (false == dist.check_parameters(function, &result)) return result;
 
    // Special cdf values:
-   if((boost::math::isinf)(x))
+   if((BOOST_MATH_NAMESPACE::isinf)(x))
    {
      if(x < 0) return 0; // -infinity.
      return 1; // + infinity.
@@ -232,7 +232,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const laplace_distribution<RealType, 
    return result;
 } // cdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logcdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // For ADL of std functions.
@@ -246,14 +246,10 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const laplace_distribution<RealTyp
       return result;
    }
 
-   // Special cdf values:
-   if((boost::math::isinf)(x))
+   // The log of the cdf at -infinity is an exact -infinity, which goes to the overflow policy:
+   if((BOOST_MATH_NAMESPACE::isinf)(x))
    {
-      if(x < 0) 
-      {
-         return 0; // -infinity.
-      }
-      return 1; // + infinity.
+      return x < 0 ? -policies::raise_overflow_error<RealType>(function, nullptr, Policy()) : RealType(0);
    }
 
    if (false == detail::check_x(function, x, &result, Policy())) 
@@ -267,7 +263,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const laplace_distribution<RealTyp
 
    if (x < location)
    {
-      result = ((x - location) / scale) - boost::math::constants::ln_two<RealType>();
+      result = ((x - location) / scale) - BOOST_MATH_NAMESPACE::constants::ln_two<RealType>();
    }
    else
    {
@@ -277,7 +273,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const laplace_distribution<RealTyp
    return result;
 } // logcdf
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const laplace_distribution<RealType, Policy>& dist, const RealType& p)
 {
    BOOST_MATH_STD_USING // for ADL of std functions.
@@ -315,7 +311,7 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const laplace_distribution<RealT
 } // quantile
 
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<laplace_distribution<RealType, Policy>, RealType>& c)
 {
    // Calculate complement of cdf.
@@ -333,7 +329,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<laplace_dist
     if (false == c.dist.check_parameters(function, &result)) return result;
 
    // Special cdf values.
-   if((boost::math::isinf)(x))
+   if((BOOST_MATH_NAMESPACE::isinf)(x))
    {
      if(x < 0) return 1; // cdf complement -infinity is unity.
      return 0; // cdf complement +infinity is zero.
@@ -352,7 +348,7 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<laplace_dist
    return result;
 } // cdf complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<laplace_distribution<RealType, Policy>, RealType>& c)
 {
    // Calculate complement of logcdf.
@@ -369,22 +365,17 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<laplace_d
    // Check scale and location.
     if (false == c.dist.check_parameters(function, &result)) return result;
 
-   // Special cdf values.
-   if((boost::math::isinf)(x))
+   // The log of the complement at +infinity is an exact -infinity, which goes to the overflow policy:
+   if((BOOST_MATH_NAMESPACE::isinf)(x))
    {
-     if(x < 0) 
-     { 
-       return 1; // cdf complement -infinity is unity.
-     }
-
-     return 0; // cdf complement +infinity is zero.
+     return x < 0 ? RealType(0) : -policies::raise_overflow_error<RealType>(function, nullptr, Policy());
    }
    if(false == detail::check_x(function, x, &result, Policy()))return result;
 
    // Cdf interval value.
    if (-x < -location)
    {
-      result = (-x+location)/scale - boost::math::constants::ln_two<RealType>();
+      result = (-x+location)/scale - BOOST_MATH_NAMESPACE::constants::ln_two<RealType>();
    }
    else
    {
@@ -393,7 +384,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<laplace_d
    return result;
 } // cdf complement
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<laplace_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING // for ADL of std functions.
@@ -411,11 +402,11 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<laplace
    // Extreme values.
    if(q == 0)
    {
-       return boost::math::numeric_limits<RealType>::infinity();
+       return BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
    }
    if(q == 1)
    {
-       return -boost::math::numeric_limits<RealType>::infinity();
+       return -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
    }
    if(false == detail::check_probability(function, q, &result, Policy())) return result;
 
@@ -428,49 +419,49 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const complemented2_type<laplace
    return result;
 } // quantile
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mean(const laplace_distribution<RealType, Policy>& dist)
 {
    return dist.location();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType standard_deviation(const laplace_distribution<RealType, Policy>& dist)
 {
    return constants::root_two<RealType>() * dist.scale();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType mode(const laplace_distribution<RealType, Policy>& dist)
 {
    return dist.location();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType median(const laplace_distribution<RealType, Policy>& dist)
 {
    return dist.location();
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType skewness(const laplace_distribution<RealType, Policy>& /*dist*/)
 {
    return 0;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis(const laplace_distribution<RealType, Policy>& /*dist*/)
 {
    return 6;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const laplace_distribution<RealType, Policy>& /*dist*/)
 {
    return 3;
 }
 
-template <class RealType, class Policy>
+BOOST_MATH_EXPORT template <class RealType, class Policy>
 BOOST_MATH_GPU_ENABLED inline RealType entropy(const laplace_distribution<RealType, Policy> & dist)
 {
    using std::log;
@@ -481,8 +472,7 @@ BOOST_MATH_GPU_ENABLED inline RealType entropy(const laplace_distribution<RealTy
 #  pragma warning(pop)
 #endif
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to

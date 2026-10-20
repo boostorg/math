@@ -7,8 +7,9 @@
 #define REVERSE_MODE_AUTODIFF_BASIC_OPS_ET_HPP
 
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_basic_operator_expressions.hpp>
-namespace boost {
-namespace math {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {
 template<typename RealType, size_t DerivativeOrder, typename LHS, typename RHS>
@@ -154,7 +155,6 @@ div_by_const_expr<RealType1, DerivativeOrder, ARG> operator/(
 }
 } // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // REVERSE_MODE_AUTODIFF_BASIC_OPS_ET_HPP

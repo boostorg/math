@@ -11,19 +11,21 @@
 // that we need to implement all these functions.
 //
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <complex>
 #include <limits>
+#endif
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/constants/constants.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class T>
 inline T mult_minus_one(const T& t)
 {
-   return (boost::math::isnan)(t) ? t : (boost::math::changesign)(t);
+   return (BOOST_MATH_NAMESPACE::isnan)(t) ? t : (BOOST_MATH_NAMESPACE::changesign)(t);
 }
 
 template <class T>
@@ -62,7 +64,7 @@ inline long double safe_min(long double t)
    return std::sqrt((std::numeric_limits<double>::min)()) * t;
 }
 
-} } } // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_COMPLEX_DETAILS_INCLUDED
 

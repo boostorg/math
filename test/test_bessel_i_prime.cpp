@@ -37,7 +37,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
+   if(!boost::math::policies::promote_double<>() || boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
       largest_type = "(long\\s+)?double";
    }
@@ -58,12 +58,9 @@ void expected_results()
       "Mac OS",                      // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-#ifdef __aarch64__
-      // Error rates for M1 macs are higher than x86_64 macs
+      // Unpromoted double has the same error rates on M1 and x86_64 macs
+      // (3763 for the negative order Mathworld data on x86_64):
       ".*", 4000, 1500);               // test function
-#else
-      ".*", 3500, 1500);               // test function
-#endif
    //
    // Cygwin:
    //
@@ -102,7 +99,8 @@ void expected_results()
       "Win32.*",                     // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-      ".*", 3500, 1000);                 // test function
+      // Unpromoted double: I'(-4.999, 2.125) = 1.1e-4 is off by 3763 eps, but its cond in v is 1.5e6:
+      ".*", 4000, 1500);                 // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

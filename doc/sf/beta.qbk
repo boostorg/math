@@ -13,6 +13,12 @@
    
    template <class T1, class T2, class ``__Policy``>
    BOOST_MATH_GPU_ENABLED ``__sf_result`` beta(T1 a, T2 b, const ``__Policy``&);
+
+   template <class T1, class T2>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` lbeta(T1 a, T2 b);
+
+   template <class T1, class T2, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` lbeta(T1 a, T2 b, const ``__Policy``&);
    
    }} // namespaces
 
@@ -28,6 +34,11 @@ The beta function is defined by:
 
 The return type of these functions is computed using the __arg_promotion_rules
 when T1 and T2 are different types.
+
+`lbeta` returns the natural logarithm of the beta function, log B(a, b).
+It stays finite and accurate where `beta` underflows, for example when both /a/ and /b/ are large,
+and where lgamma(a) + lgamma(b) - lgamma(a + b) would lose every digit to cancellation,
+when one argument is much larger than the other.
 
 [h4 Accuracy]
 
@@ -69,9 +80,21 @@ immediately cuts the maximum error in half:
 This may not be the final solution, but it is very competitive compared to
 other implementation methods.
 
+`lbeta` takes the logarithm of this form term by term. With /a/ >= /b/, /c = a + b/ and /xgh = x + g - 1\/2/,
+and since /agh = cgh - b/, the two power terms merge:
+
+log B(a, b) = log(L(a) L(b) / L(c)) + (a - 1\/2) log1p(-b \/ cgh) + b log(bgh \/ cgh) + (1 - log bgh) \/ 2
+
+where /L/ is the scaled Lanczos sum. None of these terms cancel when one argument is large, and none underflow
+when both are. In double precision the result is within 2 ulps where |log B| >= 1, and within 1 epsilon
+absolute error elsewhere, for arguments across the whole exponent range.
+Without a __lanczos approximation, `lbeta` takes logarithms in the generic method below, except that when one
+argument is small it uses lgamma and __tgamma_delta_ratio directly, and when both lie between 1 and the
+threshold for Stirling's approximation it takes the logarithm of `beta` itself, which cannot overflow or underflow there.
+
 The generic implementation - where no __lanczos approximation is available - is
 implemented in a very similar way to the generic version of the gamma function
-by means of Sterling's approximation.
+by means of Stirling's approximation.
 Again in order to avoid numerical overflow the power terms that prefix the series
 are collected together
 

@@ -39,10 +39,8 @@
       template <typename RateRangeT>
       hyperexponential_distribution(RateRangeT const& rate_range);
 
-    #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)     // C++11 initializer lists supported.
       hyperexponential_distribution(std::initializer_list<RealType> l1, std::initializer_list<RealType> l2);
       hyperexponential_distribution(std::initializer_list<RealType> l1);
-    #endif
 
       // Accessors:
       std::size_t num_phases() const;

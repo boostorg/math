@@ -19,6 +19,18 @@
    
    template <class T1, class T2, class T3, class ``__Policy``>
    BOOST_MATH_GPU_ENABLED ``__sf_result`` ibetac(T1 a, T2 b, T3 x, const ``__Policy``&);
+
+   template <class T1, class T2, class T3>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` libeta(T1 a, T2 b, T3 x);
+
+   template <class T1, class T2, class T3, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` libeta(T1 a, T2 b, T3 x, const ``__Policy``&);
+
+   template <class T1, class T2, class T3>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` libetac(T1 a, T2 b, T3 x);
+
+   template <class T1, class T2, class T3, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` libetac(T1 a, T2 b, T3 x, const ``__Policy``&);
    
    template <class T1, class T2, class T3>
    BOOST_MATH_GPU_ENABLED ``__sf_result`` beta(T1 a, T2 b, T3 x);
@@ -77,6 +89,22 @@ Returns the normalised incomplete beta function of a, b and x:
 Returns the normalised complement of the incomplete beta function of a, b and x:
 
 [equation ibeta4]
+
+   template <class T1, class T2, class T3>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` libeta(T1 a, T2 b, T3 x);
+
+   template <class T1, class T2, class T3, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` libeta(T1 a, T2 b, T3 x, const ``__Policy``&);
+
+   template <class T1, class T2, class T3>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` libetac(T1 a, T2 b, T3 x);
+
+   template <class T1, class T2, class T3, class ``__Policy``>
+   BOOST_MATH_GPU_ENABLED ``__sf_result`` libetac(T1 a, T2 b, T3 x, const ``__Policy``&);
+
+Return the natural logarithms of `ibeta(a, b, x)` and `ibetac(a, b, x)`. They stay finite and accurate far out in the tails,
+where `ibeta` or `ibetac` underflows: for example `libeta(10000, 10000, 0.25)` is about -2882 in double precision, where `log(ibeta(10000, 10000, 0.25))` is -infinity.
+Where the result is exactly zero, its logarithm, -infinity, is reported as an __overflow_error.
 
    template <class T1, class T2, class T3>
    BOOST_MATH_GPU_ENABLED ``__sf_result`` beta(T1 a, T2 b, T3 x);
@@ -191,6 +219,13 @@ efficient means of computation, by using the duplication formulae:
 The domains of a, b and x for which the various methods are used are identical
 to those described in the
 [@http://portal.acm.org/citation.cfm?doid=131766.131776 Didonato and Morris TOMS 708 paper].
+
+`libeta` and `libetac` take the logarithm of whichever of `ibeta` and `ibetac` is the smaller (using `log1p` for the other),
+since these have small relative errors. Only when the smaller underflows, far out in its tail,
+do they work in logarithms: the result is then the logarithm of the power terms that prefix the continued fraction above,
+following the same combination of Lanczos sums and power terms but without exponentiating, minus the logarithm of the continued fraction.
+When /a = 1/ the closed form /1 - (1 - x)[super b]/ is used instead.
+By contrast, R's `pbeta(q, a, b, log.p = TRUE)` carries logarithms through each of the TOMS 708 methods.
 
 [endsect][/section:ibeta_function The Incomplete Beta Function]
 

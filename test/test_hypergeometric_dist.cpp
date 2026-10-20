@@ -18,6 +18,7 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <iostream>
+#include <cstdlib>
    using std::cout;
    using std::endl;
    using std::setprecision;
@@ -57,7 +58,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
+   if(!boost::math::policies::promote_double<>() || boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
       largest_type = "(long\\s+)?double|real_concept";
    }
@@ -69,7 +70,7 @@ void expected_results()
    largest_type = "(long\\s+)?double";
 #endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if((boost::math::tools::digits<long double>() > boost::math::tools::digits<double>())
+   if(boost::math::policies::promote_double<>() && (boost::math::tools::digits<long double>() > boost::math::tools::digits<double>())
       && (boost::math::tools::digits<long double>() < 100))
    {
       //
@@ -491,8 +492,96 @@ void test_spots(RealType /*T*/, const char* type_name)
 
    BOOST_MATH_CHECK_THROW(d = boost::math::hypergeometric_distribution<RealType>(501, 40, 500), std::domain_error);
    BOOST_MATH_CHECK_THROW(d = boost::math::hypergeometric_distribution<RealType>(40, 501, 500), std::domain_error);
+
+   //
+   // Integer x beyond the factorial table, where Loader's saddle-point method is used, with prime
+   // factorisation in the tails up to N = 104729. Values from mpmath at 60 digits.
+   //
+   struct large_case { unsigned x, r, n, N; long double pdf; RealType tol; };
+   const large_case large_cases[] = {
+      { 600, 1500, 2000, 5000, 0.025126012323870050456659927618198748L, tolerance },
+      { 700, 1500, 2000, 5000, 0.0000000000708147414413862429733772355814014052L, tolerance },
+      { 24000, 60000, 80000, 200000, 0.0039735405018628404013758812090728637L, tolerance },
+      { 24123, 60000, 80000, 200000, 0.00187568978055549884111723163694289891L, tolerance },
+      { 23500, 60000, 80000, 200000, 0.000000016112756785169958209568753951147937L, 4 * tolerance },
+      { 1200000, 3000000, 4000000, 10000000, 0.000561946220334811372962916024931211627L, tolerance },
+      { 1203456, 3000000, 4000000, 10000000, 0.00000000402250531175235295684236178111301572L, 4 * tolerance },
+   };
+   for (auto const& c : large_cases)
+   {
+      boost::math::hypergeometric_distribution<RealType> dist(c.r, c.n, c.N);
+      BOOST_CHECK_CLOSE(pdf(dist, c.x), static_cast<RealType>(c.pdf), c.tol);
+   }
+   // At an end of the support the result must not underflow before it is complete (true value 1.466e-322).
+   if (std::numeric_limits<RealType>::min_exponent10 < -320)
+   {
+      boost::math::hypergeometric_distribution<RealType> dist(100000, 1065, 200000);
+      BOOST_CHECK(pdf(dist, 0u) > 0);
+   }
+
+   //
+   // Non-integer x: the analytic continuation C(r, x) C(N - r, n - x) / C(N, n).
+   // Values from mpmath at 50 digits; the tolerance scales with the condition number
+   // |x d/dx ln pdf|, which is how much a rounding of x itself is amplified.
+   //
+   struct noninteger_case { const char* x; unsigned r, n, N; long double pdf, cond; };
+   static const noninteger_case noninteger_cases[] = {
+      { "2.5", 7, 9, 20, 0.306765408837835280425772348087512074L, 1.27L },
+      { "0.25", 7, 9, 20, 0.00923344250444341451195317576706156765L, 0.72L },
+      { "6.75", 7, 9, 20, 0.00121681025252355074963724021736470271L, 24.4L },
+      { "60.5", 200, 150, 500, 0.0788614625136665537116488597232431263L, 1.29L },
+      { "45.125", 200, 150, 500, 0.000938770338227857359230205729668782774L, 27.4L },
+      { "12000.5", 30000, 40000, 100000, 0.00561924531383347907377494860263026125L, 1.29L },
+   };
+   for (auto const& c : noninteger_cases)
+   {
+      boost::math::hypergeometric_distribution<RealType> dist(c.r, c.n, c.N);
+      const RealType x = static_cast<RealType>(std::strtold(c.x, nullptr));
+      BOOST_CHECK_CLOSE(pdf(dist, x), static_cast<RealType>(c.pdf), tolerance * static_cast<RealType>(1 + c.cond));
+   }
+   // Integer-valued x of any type takes the exact integer path.
+   boost::math::hypergeometric_distribution<RealType> d2(200, 150, 500);
+   for (unsigned k = 0; k <= 150; k += 10)
+   {
+      BOOST_CHECK_EQUAL(pdf(d2, static_cast<RealType>(k)), pdf(d2, static_cast<std::uint64_t>(k)));
+   }
+   // The continuation is log-concave in x, so between integers away from the mode it is monotone.
+   BOOST_CHECK(pdf(d2, static_cast<RealType>(40.5)) > pdf(d2, static_cast<RealType>(40)));
+   BOOST_CHECK(pdf(d2, static_cast<RealType>(40.5)) < pdf(d2, static_cast<RealType>(41)));
+   BOOST_CHECK(pdf(d2, static_cast<RealType>(80.5)) < pdf(d2, static_cast<RealType>(80)));
+   BOOST_CHECK(pdf(d2, static_cast<RealType>(80.5)) > pdf(d2, static_cast<RealType>(81)));
+   // Counts too large for the type to hold exactly (here N > 2^24 for an unpromoted float): their
+   // differences must be formed exactly, or at the bottom of the support (7) a gamma argument hits a pole.
+   {
+      using no_promote = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false>>;
+      boost::math::hypergeometric_distribution<RealType, no_promote> big(30000001 - 3, 10, 30000001);
+      const RealType p = pdf(big, static_cast<RealType>(7.5));
+      BOOST_CHECK((boost::math::isfinite)(p) && (p >= 0));
+   }
+   // Outside the support is still an error.
+   BOOST_MATH_CHECK_THROW(pdf(d2, static_cast<RealType>(150.5)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(pdf(d2, static_cast<RealType>(-0.5)), std::domain_error);
 }
 
+
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](std::uint64_t a, std::uint64_t b, std::uint64_t c, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::entropy(boost::math::hypergeometric_distribution<RealType>(a, b, c)), h, tol);
+   };
+   check(30, 40, 100, static_cast<RealType>(2.23251995010132138603305010352835455335946637L));
+   check(5, 10, 20, static_cast<RealType>(1.41017899258903122865281944730670874143759777L));
+   check(1, 1, 2, static_cast<RealType>(0.693147180559945309417232121458176568075500134L));
+   check(10, 1000, 1000000, static_cast<RealType>(0.0560825642231663484256230658066717444208256013L));
+   check(300000, 400000, 1000000, static_cast<RealType>(6.83281224965225896648567487522138918484639344L));
+   check(250000000, 333333333, 1000000000, static_cast<RealType>(10.1915445366983499530007834277413067488348034L));
+   BOOST_CHECK_EQUAL(boost::math::entropy(boost::math::hypergeometric_distribution<RealType>(5, 5, 5)), RealType(0));
+}
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
@@ -500,11 +589,15 @@ BOOST_AUTO_TEST_CASE( test_main )
    // Basic sanity-check spot values.
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
    test_spots(0.0F, "float"); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
+   test_entropy(0.0F);
    test_spots(0.0, "double"); // Test double. OK at decdigits 7, tolerance = 1e07 %
+   test_entropy(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double"); // Test long double.
+   test_entropy(0.0L);
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_spots(boost::math::concepts::real_concept(0), "real_concept"); // Test real_concept.
+   test_entropy(boost::math::concepts::real_concept(0));
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "

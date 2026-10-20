@@ -5,12 +5,14 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 #ifndef BOOST_MATH_INTERPOLATORS_WHITAKKER_SHANNON_HPP
 #define BOOST_MATH_INTERPOLATORS_WHITAKKER_SHANNON_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <memory>
+#endif
 #include <boost/math/interpolators/detail/whittaker_shannon_detail.hpp>
 
-namespace boost { namespace math { namespace interpolators {
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators {
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer>
 class whittaker_shannon {
 public:
 
@@ -43,5 +45,5 @@ public:
 private:
     std::shared_ptr<detail::whittaker_shannon_detail<RandomAccessContainer>> m_impl;
 };
-}}}
+} BOOST_MATH_NAMESPACE_END
 #endif

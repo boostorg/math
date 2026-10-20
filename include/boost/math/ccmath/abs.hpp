@@ -18,14 +18,14 @@
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail {
 
 template <typename T> 
 constexpr T abs_impl(T x) noexcept
 {
-    if ((boost::math::ccmath::isnan)(x))
+    if ((BOOST_MATH_NAMESPACE::ccmath::isnan)(x))
     {
         return std::numeric_limits<T>::quiet_NaN();
     }
@@ -44,7 +44,7 @@ constexpr T abs_impl(T x) noexcept
 
 } // Namespace detail
 
-template <typename T, std::enable_if_t<!std::is_unsigned_v<T>, bool> = true>
+BOOST_MATH_EXPORT template <typename T, std::enable_if_t<!std::is_unsigned_v<T>, bool> = true>
 constexpr T abs(T x) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
@@ -60,7 +60,7 @@ constexpr T abs(T x) noexcept
 
 // If abs() is called with an argument of type X for which is_unsigned_v<X> is true and if X
 // cannot be converted to int by integral promotion (7.3.7), the program is ill-formed.
-template <typename T, std::enable_if_t<std::is_unsigned_v<T>, bool> = true>
+BOOST_MATH_EXPORT template <typename T, std::enable_if_t<std::is_unsigned_v<T>, bool> = true>
 constexpr T abs(T x) noexcept
 {
     if constexpr (std::is_convertible_v<T, int>)
@@ -76,14 +76,14 @@ constexpr T abs(T x) noexcept
 
 constexpr long int labs(long int j) noexcept
 {
-    return boost::math::ccmath::abs(j);
+    return BOOST_MATH_NAMESPACE::ccmath::abs(j);
 }
 
 constexpr long long int llabs(long long int j) noexcept
 {
-    return boost::math::ccmath::abs(j);
+    return BOOST_MATH_NAMESPACE::ccmath::abs(j);
 }
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_ABS

@@ -7,18 +7,26 @@
 #ifndef BOOST_MATH_INTERPOLATORS_BEZIER_POLYNOMIAL_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_BEZIER_POLYNOMIAL_DETAIL_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <stdexcept>
 #include <iostream>
 #include <string>
 #include <limits>
+#endif
 
-namespace boost::math::interpolators::detail {
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators::detail {
 
 
+// Each thread has its own scratch space, allocated on first use.
 template <class RandomAccessContainer>
-static inline RandomAccessContainer& get_bezier_storage()
+inline RandomAccessContainer& get_bezier_storage(typename RandomAccessContainer::size_type size)
 {
     static thread_local RandomAccessContainer the_storage;
+    if (the_storage.size() < size) {
+        the_storage.resize(size);
+    }
     return the_storage;
 }
 
@@ -48,10 +56,6 @@ public:
             }
         }
         control_points_ = std::move(control_points);
-        auto & storage = get_bezier_storage<RandomAccessContainer>();
-        if (storage.size() < control_points_.size() -1) {
-            storage.resize(control_points_.size() -1);
-        }
     }
 
     inline Point operator()(Real t) const
@@ -66,7 +70,7 @@ public:
             return p;
         }
 
-        auto & scratch_space = get_bezier_storage<RandomAccessContainer>();
+        auto & scratch_space = get_bezier_storage<RandomAccessContainer>(control_points_.size() - 1);
         for (Z i = 0; i < control_points_.size() - 1; ++i) {
             for (Z j = 0; j < control_points_[0].size(); ++j) {
                 scratch_space[i][j] = (1-t)*control_points_[i][j] + t*control_points_[i+1][j];
@@ -78,7 +82,7 @@ public:
     }
 
     Point prime(Real t) {
-        auto & scratch_space = get_bezier_storage<RandomAccessContainer>();
+        auto & scratch_space = get_bezier_storage<RandomAccessContainer>(control_points_.size() - 1);
         for (Z i = 0; i < control_points_.size() - 1; ++i) {
             for (Z j = 0; j < control_points_[0].size(); ++j) {
                 scratch_space[i][j] = control_points_[i+1][j] - control_points_[i][j];
@@ -163,5 +167,5 @@ private:
 };
 
 
-}
+} BOOST_MATH_NAMESPACE_END
 #endif

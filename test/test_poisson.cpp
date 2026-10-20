@@ -244,7 +244,101 @@ void test_spots(RealType)
       static_cast<RealType>(20)),   //  K>> mean 
       log(static_cast<RealType>(8.277463646553730E-009)), // probability.
          tolerance);
-  
+
+   // New test cases for Loader (2000) saddle-point approximation. Probs already
+   // in log space. Values calculated using mpmath (1000-digit precision).
+   BOOST_CHECK_CLOSE(
+     logpdf(poisson_distribution<RealType>(static_cast<RealType>(14)), // mean 14.
+      static_cast<RealType>(14)),
+      static_cast<RealType>(-2.244418568125061), // probability (already in log space).
+         tolerance);
+
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(20)), // mean 20.
+         static_cast<RealType>(18)),
+         static_cast<RealType>(-2.472264284061216), // probability (already in log space).
+         tolerance);
+
+    // Tiny non-integer k, where Stirling's form would cancel ln(2 pi k)/2 against itself.
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(0.01)), static_cast<RealType>(1e-20)),
+      static_cast<RealType>(-0.01L),
+         tolerance);
+
+   // k at the threshold of the Bernoulli series for Stirling's remainder, where it does not yet converge.
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(3)), static_cast<RealType>(6)),
+      static_cast<RealType>(-2.98757748000144284668870687136879109L),
+         tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(3)), static_cast<RealType>(7)),
+      static_cast<RealType>(-3.83487534038864646039881437788944512L),
+         tolerance);
+   // Non-integer k just above the Bernoulli threshold for double, where the series can still diverge.
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(3)), static_cast<RealType>(6.0625)),
+      static_cast<RealType>(-3.03626217292210137508893426424318787L),
+         tolerance);
+#ifndef BOOST_MATH_HAS_GPU_SUPPORT
+   // GPU builds keep the direct formula, so these accuracy checks apply only to the host path.
+   // |k - mean| / (k + mean) just above 0.1, where the direct deviance formula cancels.
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(1000)), static_cast<RealType>(800)),
+      static_cast<RealType>(-25.746507512332073098754568741464577L),
+         tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(poisson_distribution<RealType>(static_cast<RealType>(100000)), static_cast<RealType>(80000)),
+      static_cast<RealType>(-2155.07972539491888743157625548588799L),
+         tolerance);
+
+  // Cases below require around 15+ significant decimal digits to represent
+  // k / mean meaningfully, so skip for float (double has digits10 == 15).
+  if (std::numeric_limits<RealType>::digits10 >= 15)
+  {
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(1000000)), // mean 1000000.
+        static_cast<RealType>(1300000)),
+        static_cast<RealType>(-41081.501683746894),
+           tolerance);
+
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(1e8)), // mean 1e8.
+        static_cast<RealType>(8e7)),
+        static_cast<RealType>(-2148525.91257035),
+           tolerance);
+
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(1e10)), // mean 1e10.
+        static_cast<RealType>(105e9)),
+        static_cast<RealType>(-151894402015.7727),
+           tolerance);
+
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(1e15)), // mean 1e15.
+        static_cast<RealType>(8e14)), // |v| > 0.1 boundary
+        static_cast<RealType>(-21485158948650.273),
+           tolerance);
+
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(1e15)), // mean 1e15.
+        static_cast<RealType>(12e14)), // |v| < 0.1 boundary
+        static_cast<RealType>(-18785868152763.832),
+           tolerance);
+
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(1e16)), // mean 1e16.
+        static_cast<RealType>(1e16)), // old formula returns 0.0 here
+        static_cast<RealType>(-19.339619277157038),
+           tolerance);
+
+    BOOST_CHECK_CLOSE(
+       logpdf(poisson_distribution<RealType>(static_cast<RealType>(5e15)), // mean 5e15.
+        static_cast<RealType>(5e15)),
+        static_cast<RealType>(-18.993045686877064),
+           tolerance);
+  }
+#endif
+
   // CDF
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
@@ -548,6 +642,25 @@ void test_spots(RealType)
 
 //
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](RealType a, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(entropy(poisson_distribution<RealType>(a)), h, tol);
+   };
+   check(static_cast<RealType>(0.000000000931322574615478515625L), static_cast<RealType>(2.02976310785125299271835483166940706968350387e-8L));
+   check(static_cast<RealType>(0.5L), static_cast<RealType>(0.927637467495797374138068936899758116118148866L));
+   check(static_cast<RealType>(3.0L), static_cast<RealType>(1.93147019814856893392042987412783405314140353L));
+   check(static_cast<RealType>(25.0L), static_cast<RealType>(3.02497273773302415344140301558325418820378384L));
+   check(static_cast<RealType>(1000.0L), static_cast<RealType>(4.87273279764285064619835761815381105954325099L));
+   check(static_cast<RealType>(1000000.0L), static_cast<RealType>(8.32669372885343479378152621018059002320536981L));
+   check(static_cast<RealType>(1000000000000.0L), static_cast<RealType>(15.2344490911688635125549450895118028854152286L));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
   // Check that can construct normal distribution using the two convenience methods:
@@ -651,21 +764,25 @@ BOOST_AUTO_TEST_CASE( test_main )
    // (Parameter value, arbitrarily zero, only communicates the floating-point type).
 #ifdef TEST_POISSON
   test_spots(0.0F); // Test float.
+  test_entropy(0.0F);
 #endif
 #ifdef TEST_DOUBLE
   test_spots(0.0); // Test double.
+  test_entropy(0.0);
 #endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   if (std::numeric_limits<long double>::digits10 > std::numeric_limits<double>::digits10)
   { // long double is better than double (so not MSVC where they are same).
 #ifdef TEST_LDOUBLE
      test_spots(0.0L); // Test long double.
+     test_entropy(0.0L);
 #endif
   }
 
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #ifdef TEST_REAL_CONCEPT
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  test_entropy(boost::math::concepts::real_concept(0.));
 #endif
 #endif
 #endif

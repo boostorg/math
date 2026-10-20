@@ -127,47 +127,47 @@ template <class Policy>
 inline mpfr::mpreal modf(const mpfr::mpreal& v, long long* ipart, const Policy& pol)
 {
    *ipart = lltrunc(v, pol);
-   return v - boost::math::tools::real_cast<mpfr::mpreal>(*ipart);
+   return v - BOOST_MATH_NAMESPACE::tools::real_cast<mpfr::mpreal>(*ipart);
 }
 template <class Policy>
 inline int iround(mpfr::mpreal const& x, const Policy& pol)
 {
-   return boost::math::tools::real_cast<int>(boost::math::round(x, pol));
+   return BOOST_MATH_NAMESPACE::tools::real_cast<int>(BOOST_MATH_NAMESPACE::round(x, pol));
 }
 
 template <class Policy>
 inline long lround(mpfr::mpreal const& x, const Policy& pol)
 {
-   return boost::math::tools::real_cast<long>(boost::math::round(x, pol));
+   return BOOST_MATH_NAMESPACE::tools::real_cast<long>(BOOST_MATH_NAMESPACE::round(x, pol));
 }
 
 template <class Policy>
 inline long long llround(mpfr::mpreal const& x, const Policy& pol)
 {
-   return boost::math::tools::real_cast<long long>(boost::math::round(x, pol));
+   return BOOST_MATH_NAMESPACE::tools::real_cast<long long>(BOOST_MATH_NAMESPACE::round(x, pol));
 }
 
 template <class Policy>
 inline int itrunc(mpfr::mpreal const& x, const Policy& pol)
 {
-   return boost::math::tools::real_cast<int>(boost::math::trunc(x, pol));
+   return BOOST_MATH_NAMESPACE::tools::real_cast<int>(BOOST_MATH_NAMESPACE::trunc(x, pol));
 }
 
 template <class Policy>
 inline long ltrunc(mpfr::mpreal const& x, const Policy& pol)
 {
-   return boost::math::tools::real_cast<long>(boost::math::trunc(x, pol));
+   return BOOST_MATH_NAMESPACE::tools::real_cast<long>(BOOST_MATH_NAMESPACE::trunc(x, pol));
 }
 
 template <class Policy>
 inline long long lltrunc(mpfr::mpreal const& x, const Policy& pol)
 {
-   return boost::math::tools::real_cast<long long>(boost::math::trunc(x, pol));
+   return BOOST_MATH_NAMESPACE::tools::real_cast<long long>(BOOST_MATH_NAMESPACE::trunc(x, pol));
 }
 
 }
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
 #if defined(__GNUC__) && (__GNUC__ < 4)
    using ::iround;
@@ -393,7 +393,7 @@ inline mpfr::mpreal log_min_value<mpfr::mpreal>(BOOST_MATH_EXPLICIT_TEMPLATE_TYP
 template <>
 inline mpfr::mpreal epsilon<mpfr::mpreal>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpfr::mpreal))
 {
-   return ldexp(mpfr::mpreal(1), 1-boost::math::policies::digits<mpfr::mpreal, boost::math::policies::policy<> >());
+   return ldexp(mpfr::mpreal(1), 1-BOOST_MATH_NAMESPACE::policies::digits<mpfr::mpreal, BOOST_MATH_NAMESPACE::policies::policy<> >());
 }
 
 } // namespace tools
@@ -808,7 +808,7 @@ inline mpfr::mpreal bessel_i0(mpfr::mpreal x)
     mpfr::mpreal value, factor, r;
 
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
+    using namespace BOOST_MATH_NAMESPACE::tools;
 
     if (x < 0)
     {
@@ -883,7 +883,7 @@ inline mpfr::mpreal bessel_i1(mpfr::mpreal x)
     mpfr::mpreal value, factor, r, w;
 
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
+    using namespace BOOST_MATH_NAMESPACE::tools;
 
     w = abs(x);
     if (x == 0)
@@ -913,9 +913,7 @@ inline mpfr::mpreal bessel_i1(mpfr::mpreal x)
 }
 
 } // namespace detail
-} // namespace math
-
-}
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_MPLFR_BINDINGS_HPP
 

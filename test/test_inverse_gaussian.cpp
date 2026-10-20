@@ -173,7 +173,34 @@ void test_spots(RealType)
     static_cast<RealType>(10-3), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(dist),
     static_cast<RealType>(10), tolerance);
+  //
+  // Far left tail, where Phi(-b) in the second term underflowed to a subnormal and lost most of its digits.
+  // The cdf is conditioned to ~lambda / 2x = 600 eps here.  Value from Arb, doubles only:
+  //
+  BOOST_IF_CONSTEXPR (std::is_same<RealType, double>::value)
+  {
+     typedef boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promote;
+     BOOST_CHECK_CLOSE_FRACTION(cdf(inverse_gaussian_distribution<RealType, no_promote>(1, 128.331518555765), RealType(0.10592537251772893)), RealType(1.166199182184273491e-212), 1000 * std::numeric_limits<RealType>::epsilon());
+  }
 } // template <class RealType>void test_spots(RealType)
+
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](RealType a, RealType b, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(entropy(inverse_gaussian_distribution<RealType>(a, b)), h, tol);
+   };
+   check(static_cast<RealType>(1.0L), static_cast<RealType>(1.0L), static_cast<RealType>(0.876945607872338864734587249887507731429511511L));
+   check(static_cast<RealType>(2.0L), static_cast<RealType>(0.25L), static_cast<RealType>(1.14047831735744598636464486736437321653394965L));
+   check(static_cast<RealType>(0.5L), static_cast<RealType>(8.0L), static_cast<RealType>(-0.705997065541163057743050284110759942046857868L));
+   check(static_cast<RealType>(1.0L), static_cast<RealType>(0.00000095367431640625L), static_cast<RealType>(-10.5384996985259774833274273221877458085646934L));
+   check(static_cast<RealType>(1.0L), static_cast<RealType>(1000000.0L), static_cast<RealType>(-5.48881749577708931064864406514859998012941543L));
+   check(static_cast<RealType>(1000.0L), static_cast<RealType>(1000000000.0L), static_cast<RealType>(1.41893778320504774140533029890449264267388904L));
+}
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
@@ -373,11 +400,15 @@ BOOST_AUTO_TEST_CASE( test_main )
     // Basic sanity-check spot values for all floating-point types..
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
+  test_entropy(0.0F);
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
+  test_entropy(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
+  test_entropy(0.0L);
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  test_entropy(boost::math::concepts::real_concept(0.));
 #endif
 #else
   std::cout << "<note>The long double tests have been disabled on this platform "
@@ -387,6 +418,16 @@ BOOST_AUTO_TEST_CASE( test_main )
 #endif
   /*      */
   
+  // Large shape: independent high-precision values from the defining CDF.
+  check_inverse_gaussian(1., 1000., 1.,
+    0.506306255528466690646614735956978724498991, 0.493693744471533309353385264043021275501009, tolfeweps);
+  check_inverse_gaussian(1., 1000., 0.96875,
+    0.161492549505796665675678816590357590761845, 0.838507450494203334324321183409642409238155, tolfeweps);
+  check_inverse_gaussian(1., 1000., 1.03125,
+    0.838681329955945237527053545092684829137562, 0.161318670044054762472946454907315170862438, tolfeweps);
+  // The CDF rounds to one here, but its complement is still representable.
+  BOOST_CHECK_CLOSE_FRACTION(cdf(complement(inverse_gaussian_distribution<double>(1, 1000), 1.5)),
+    1.580094156944363444323823384185312e-38, 100 * tolfeweps);
 } // BOOST_AUTO_TEST_CASE( test_main )
 
 /*
@@ -395,5 +436,3 @@ Output:
 
 
 */
-
-

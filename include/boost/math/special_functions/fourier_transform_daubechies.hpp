@@ -8,16 +8,18 @@
 
 #ifndef BOOST_MATH_SPECIAL_FOURIER_TRANSFORM_DAUBECHIES_HPP
 #define BOOST_MATH_SPECIAL_FOURIER_TRANSFORM_DAUBECHIES_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <cmath>
 #include <complex>
 #include <iostream>
 #include <limits>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/estrin.hpp>
 
-namespace boost::math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 namespace detail {
 
@@ -183,13 +185,13 @@ template <typename Real, unsigned N> constexpr std::array<Real, N> ft_daubechies
  * See more discusion near equation 6.1.1,
  * as well as efficiency gains from equation 7.1.4.
  */
-template <class Real, unsigned p> std::complex<Real> fourier_transform_daubechies_scaling(Real omega) {
+BOOST_MATH_EXPORT template <class Real, unsigned p> std::complex<Real> fourier_transform_daubechies_scaling(Real omega) {
   // This arg promotion is kinda sad, but IMO the accuracy is not good enough in
   // float precision using this method. Requesting a better algorithm!
   if constexpr (std::is_same_v<Real, float>) {
     return static_cast<std::complex<float>>(fourier_transform_daubechies_scaling<double, p>(static_cast<double>(omega)));
   }
-  using boost::math::constants::one_div_root_two_pi;
+  using BOOST_MATH_NAMESPACE::constants::one_div_root_two_pi;
   using std::abs;
   using std::exp;
   using std::norm;
@@ -214,7 +216,7 @@ template <class Real, unsigned p> std::complex<Real> fourier_transform_daubechie
   do {
     std::complex<Real> arg{0, xi};
     auto z = exp(arg);
-    phi *= boost::math::tools::evaluate_polynomial_estrin(lxi, z);
+    phi *= BOOST_MATH_NAMESPACE::tools::evaluate_polynomial_estrin(lxi, z);
     xi /= 2;
   } while (abs(xi) > std::numeric_limits<Real>::epsilon());
   std::complex<Real> arg{0, omega};
@@ -224,7 +226,7 @@ template <class Real, unsigned p> std::complex<Real> fourier_transform_daubechie
   return phi * static_cast<std::complex<Real>>(pow(prefactor, p));
 }
 
-template <class Real, unsigned p> std::complex<Real> fourier_transform_daubechies_wavelet(Real omega) {
+BOOST_MATH_EXPORT template <class Real, unsigned p> std::complex<Real> fourier_transform_daubechies_wavelet(Real omega) {
   // See Daubechies, 10 Lectures on Wavelets, page 193, unlabelled equation in Theorem 6.3.6:
   // 𝓕[ψ](ω) = -exp(-iω/2)m₀(ω/2 + π)^{*}𝓕[𝜙](ω/2)
   if constexpr (std::is_same_v<Real, float>) {
@@ -240,9 +242,9 @@ template <class Real, unsigned p> std::complex<Real> fourier_transform_daubechie
   auto z = phase; // strange coincidence.
   //auto z = exp(std::complex<Real>(0, -omega/2 - boost::math::constants::pi<Real>()));
   auto constexpr lxi = detail::ft_daubechies_scaling_polynomial_coefficients<Real, p>();
-  auto m0 = std::complex<Real>(pow((Real(1) + z)/Real(2), p))*boost::math::tools::evaluate_polynomial_estrin(lxi, z);
+  auto m0 = std::complex<Real>(pow((Real(1) + z)/Real(2), p))*BOOST_MATH_NAMESPACE::tools::evaluate_polynomial_estrin(lxi, z);
   return Fphi*std::conj(m0)*phase;
 }
 
-} // namespace boost::math
+BOOST_MATH_NAMESPACE_END
 #endif

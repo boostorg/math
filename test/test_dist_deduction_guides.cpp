@@ -19,6 +19,7 @@
 #include <boost/math/distributions/extreme_value.hpp>
 #include <boost/math/distributions/fisher_f.hpp>
 #include <boost/math/distributions/gamma.hpp>
+#include <boost/math/distributions/generalized_extreme_value.hpp>
 #include <boost/math/distributions/geometric.hpp>
 //#include <boost/math/distributions/hyperexponential.hpp>
 //#include <boost/math/distributions/hypergeometric.hpp>
@@ -83,6 +84,10 @@ int main()
 
    test_deduction_guide<gamma_distribution>(1);
    test_deduction_guide<gamma_distribution>(1, 1);
+
+   test_deduction_guide<generalized_extreme_value_distribution>(0);
+   test_deduction_guide<generalized_extreme_value_distribution>(0, 1);
+   test_deduction_guide<generalized_extreme_value_distribution>(0, 1, 0);
 
    test_deduction_guide<geometric_distribution>(1);
 

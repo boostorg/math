@@ -19,17 +19,14 @@
 // using boost::math::complement; // will be needed by users who want complement,
 // but NOT placed here to avoid putting it in global scope.
 
-namespace boost
-{
-  namespace math
-  {
+BOOST_MATH_NAMESPACE_BEGIN
     // Function to find location of random variable z
     // to give probability p (given scale)
     // Applies to normal, lognormal, extreme value, Cauchy, (and symmetrical triangular),
     // distributions that have scale.
     // BOOST_STATIC_ASSERTs, see below, are used to enforce this.
 
-    template <class Dist, class Policy>
+    BOOST_MATH_EXPORT template <class Dist, class Policy>
     inline
       typename Dist::value_type find_scale( // For example, normal mean.
       typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
@@ -39,29 +36,29 @@ namespace boost
       const Policy& pol 
       )
     {
-      static_assert(::boost::math::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
-      static_assert(::boost::math::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution."); 
+      static_assert(::BOOST_MATH_NAMESPACE::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
+      static_assert(::BOOST_MATH_NAMESPACE::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution."); 
       static const char* function = "boost::math::find_scale<Dist, Policy>(%1%, %1%, %1%, Policy)";
 
-      if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(p) || (p < 0) || (p > 1))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "Probability parameter was %1%, but must be >= 0 and <= 1!", p, pol);
       }
-      if(!(boost::math::isfinite)(z))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(z))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "find_scale z parameter was %1%, but must be finite!", z, pol);
       }
-      if(!(boost::math::isfinite)(location))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(location))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "find_scale location parameter was %1%, but must be finite!", location, pol);
       }
 
       //cout << "z " << z << ", p " << p << ",  quantile(Dist(), p) "
-      //<< quantile(Dist(), p) << ", z - mean " << z - location 
-      //<<", sd " << (z - location)  / quantile(Dist(), p) << endl;
+      // << quantile(Dist(), p) << ", z - mean " << z - location
+      // <<", sd " << (z - location)  / quantile(Dist(), p) << endl;
 
       //quantile(N01, 0.001) -3.09023
       //quantile(N01, 0.01) -2.32635
@@ -85,7 +82,7 @@ namespace boost
       return result;
     } // template <class Dist, class Policy> find_scale
 
-    template <class Dist>
+    BOOST_MATH_EXPORT template <class Dist>
     inline // with default policy.
       typename Dist::value_type find_scale( // For example, normal mean.
       typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
@@ -96,7 +93,7 @@ namespace boost
       return (find_scale<Dist>(z, p, location, policies::policy<>()));
     } // find_scale
 
-    template <class Dist, class Real1, class Real2, class Real3, class Policy>
+    BOOST_MATH_EXPORT template <class Dist, class Real1, class Real2, class Real3, class Policy>
     inline typename Dist::value_type find_scale(
       complemented4_type<Real1, Real2, Real3, Policy> const& c)
     {
@@ -107,26 +104,26 @@ namespace boost
       //  << quantile(Dist(), c.param1) //q
       //  << endl;
 
-      static_assert(::boost::math::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
-      static_assert(::boost::math::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution."); 
+      static_assert(::BOOST_MATH_NAMESPACE::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
+      static_assert(::BOOST_MATH_NAMESPACE::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution."); 
       static const char* function = "boost::math::find_scale<Dist, Policy>(complement(%1%, %1%, %1%, Policy))";
 
       // Checks on arguments, as not complemented version,
       // Explicit policy.
       typename Dist::value_type q = c.param1;
-      if(!(boost::math::isfinite)(q) || (q < 0) || (q > 1))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(q) || (q < 0) || (q > 1))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "Probability parameter was %1%, but must be >= 0 and <= 1!", q, c.param3);
       }
       typename Dist::value_type z = c.dist;
-      if(!(boost::math::isfinite)(z))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(z))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "find_scale z parameter was %1%, but must be finite!", z, c.param3);
       }
       typename Dist::value_type location = c.param2;
-      if(!(boost::math::isfinite)(location))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(location))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "find_scale location parameter was %1%, but must be finite!", location, c.param3);
@@ -146,7 +143,7 @@ namespace boost
     // So the user can start from the complement q = (1 - p) of the probability p,
     // for example, s = find_scale<normal>(complement(z, q, l));
 
-    template <class Dist, class Real1, class Real2, class Real3>
+    BOOST_MATH_EXPORT template <class Dist, class Real1, class Real2, class Real3>
     inline typename Dist::value_type find_scale(
       complemented3_type<Real1, Real2, Real3> const& c)
     {
@@ -157,26 +154,26 @@ namespace boost
       //  << quantile(Dist(), c.param1) //q
       //  << endl;
 
-      static_assert(::boost::math::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
-      static_assert(::boost::math::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution.");  
+      static_assert(::BOOST_MATH_NAMESPACE::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
+      static_assert(::BOOST_MATH_NAMESPACE::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution.");  
       static const char* function = "boost::math::find_scale<Dist, Policy>(complement(%1%, %1%, %1%, Policy))";
 
       // Checks on arguments, as not complemented version,
       // default policy policies::policy<>().
       typename Dist::value_type q = c.param1;
-      if(!(boost::math::isfinite)(q) || (q < 0) || (q > 1))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(q) || (q < 0) || (q > 1))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "Probability parameter was %1%, but must be >= 0 and <= 1!", q, policies::policy<>());
       }
       typename Dist::value_type z = c.dist;
-      if(!(boost::math::isfinite)(z))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(z))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "find_scale z parameter was %1%, but must be finite!", z, policies::policy<>());
       }
       typename Dist::value_type location = c.param2;
-      if(!(boost::math::isfinite)(location))
+      if(!(BOOST_MATH_NAMESPACE::isfinite)(location))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "find_scale location parameter was %1%, but must be finite!", location, policies::policy<>());
@@ -194,7 +191,6 @@ namespace boost
       return result;
     } // template <class Dist, class Real1, class Real2, class Real3> typename Dist::value_type find_scale
 
-  } // namespace boost
-} // namespace math
+  BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_STATS_FIND_SCALE_HPP

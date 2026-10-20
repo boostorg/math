@@ -11,13 +11,13 @@
 #include <boost/math/special_functions/round.hpp>
 #include "c_policy.hpp"
 
-namespace boost{ namespace math{ namespace tr1{
+BOOST_MATH_NAMESPACE_BEGIN namespace tr1{
 
 extern "C" long long BOOST_MATH_TR1_DECL boost_llroundl BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(long double x) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::llround BOOST_MATH_PREVENT_MACRO_SUBSTITUTION(x);
 }
 
-}}}
+} BOOST_MATH_NAMESPACE_END
 
 

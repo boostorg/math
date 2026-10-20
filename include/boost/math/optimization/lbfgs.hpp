@@ -7,13 +7,16 @@
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
 #include <boost/math/optimization/detail/gradient_opt_base.hpp>
 #include <boost/math/optimization/detail/rdiff_optimization_policies.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
+#endif
 
 #include <boost/math/optimization/detail/line_search_policies.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <deque>
+#endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {
 
 /** @brief> Helper struct for L-BFGS
@@ -35,7 +38,7 @@ namespace optimization {
  *  pages 176-180
  *  algorithms 7.4/7.5
  *  */
-template<typename RealType>
+BOOST_MATH_EXPORT template<typename RealType>
 struct lbfgs_optimizer_state
 {
   size_t m = 10; // default history length
@@ -96,19 +99,19 @@ struct lbfgs_optimizer_state
 /** @brief> helper update for l-bfgs
  * x +=  alpha  * search direction
  * */
-template<typename RealType>
+BOOST_MATH_EXPORT template<typename RealType>
 struct lbfgs_update_policy
 {
   template<typename ArgumentType,
            typename = typename std::enable_if<
-             boost::math::differentiation::reverse_mode::detail::is_expression<
+             BOOST_MATH_NAMESPACE::differentiation::reverse_mode::detail::is_expression<
                ArgumentType>::value>::type>
   void operator()(ArgumentType& x, RealType pk, RealType alpha)
   {
       x.get_value() += alpha * pk;
   }
   template<typename ArgumentType,
-           typename std::enable_if<!boost::math::differentiation::reverse_mode::
+           typename std::enable_if<!BOOST_MATH_NAMESPACE::differentiation::reverse_mode::
                                      detail::is_expression<ArgumentType>::value,
                                    int>::type = 0>
   void operator()(ArgumentType& x, RealType pk, RealType alpha)
@@ -264,7 +267,7 @@ public:
   }
 };
 
-template<class Objective, typename ArgumentContainer>
+BOOST_MATH_EXPORT template<class Objective, typename ArgumentContainer>
 auto
 make_lbfgs(Objective&& obj, ArgumentContainer& x, std::size_t m = 10)
 {
@@ -286,7 +289,7 @@ make_lbfgs(Objective&& obj, ArgumentContainer& x, std::size_t m = 10)
         strong_wolfe_line_search_policy<RealType>{});
 }
 
-template<class Objective,
+BOOST_MATH_EXPORT template<class Objective,
          typename ArgumentContainer,
          class InitializationPolicy>
 auto
@@ -314,7 +317,7 @@ make_lbfgs(Objective&& obj,
     strong_wolfe_line_search_policy<RealType>{});
 }
 
-template<class Objective,
+BOOST_MATH_EXPORT template<class Objective,
          typename ArgumentContainer,
          class InitializationPolicy,
          class LineSearchPolicy>
@@ -344,7 +347,7 @@ make_lbfgs(Objective&& obj,
     std::forward<LineSearchPolicy>(lsp));
 }
 
-template<class Objective,
+BOOST_MATH_EXPORT template<class Objective,
          typename ArgumentContainer,
          class InitializationPolicy,
          class FunctionEvalPolicy,
@@ -377,6 +380,5 @@ make_lbfgs(Objective&& obj,
 }
 
 } // namespace optimization
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

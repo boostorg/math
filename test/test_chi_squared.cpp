@@ -597,6 +597,24 @@ void test_spots(RealType T)
    }
 } // template <class RealType>void test_spots(RealType)
 
+template <class RealType>
+void test_entropy(RealType)
+{
+   // Reference values from mpmath at 60 digits: closed forms, or -sum p log(p) for the discrete
+   // distributions, which have none. Parameters are exact in every type.
+   RealType tol = 16 * boost::math::tools::epsilon<RealType>();
+   auto check = [&](RealType a, RealType h)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(entropy(chi_squared_distribution<RealType>(a)), h, tol);
+   };
+   check(static_cast<RealType>(0.5L), static_cast<RealType>(-0.93942044477417628927930504789461881902455563L));
+   check(static_cast<RealType>(3.0L), static_cast<RealType>(2.05411995593541182679220184217590713942022721L));
+   check(static_cast<RealType>(10.0L), static_cast<RealType>(2.84673033718068903815688874975150836778479511L));
+   check(static_cast<RealType>(30.0L), static_cast<RealType>(3.4435151000475149854299635042609921451141595L));
+   check(static_cast<RealType>(1000000.0L), static_cast<RealType>(8.67326673579978244845403140563239537184530854L));
+   check(static_cast<RealType>(1000000000000.0L), static_cast<RealType>(15.5810226814482528339302275252408911694168676L));
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
   BOOST_MATH_CONTROL_FP;
@@ -608,11 +626,15 @@ BOOST_AUTO_TEST_CASE( test_main )
 
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float.
+  test_entropy(0.0F);
   test_spots(0.0); // Test double.
+  test_entropy(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
+  test_entropy(0.0L);
 #if !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  test_entropy(boost::math::concepts::real_concept(0.));
 #endif
 #endif
 } // BOOST_AUTO_TEST_CASE( test_main )

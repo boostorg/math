@@ -8,11 +8,10 @@
 #include <boost/math/optimization/detail/gradient_opt_base.hpp>
 #include <boost/math/optimization/detail/rdiff_optimization_policies.hpp>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {
 
-template<typename RealType>
+BOOST_MATH_EXPORT template<typename RealType>
 struct gradient_descent_update_policy
 {
   RealType lr_;
@@ -21,14 +20,14 @@ struct gradient_descent_update_policy
 
   template<typename ArgumentType,
            typename = typename std::enable_if<
-             boost::math::differentiation::reverse_mode::detail::is_expression<
+             BOOST_MATH_NAMESPACE::differentiation::reverse_mode::detail::is_expression<
                ArgumentType>::value>::type>
   void operator()(ArgumentType& x, RealType& g)
   {
     x.get_value() -= lr_ * g;
   }
   template<typename ArgumentType,
-           typename std::enable_if<!boost::math::differentiation::reverse_mode::
+           typename std::enable_if<!BOOST_MATH_NAMESPACE::differentiation::reverse_mode::
                                      detail::is_expression<ArgumentType>::value,
                                    int>::type = 0>
   void operator()(ArgumentType& x, RealType& g) const
@@ -124,7 +123,7 @@ public:
  *      custom learning rate
 */
 
-template<class Objective, typename ArgumentContainer, typename RealType>
+BOOST_MATH_EXPORT template<class Objective, typename ArgumentContainer, typename RealType>
 auto
 make_gradient_descent(Objective&& obj,
                       ArgumentContainer& x,
@@ -144,7 +143,7 @@ make_gradient_descent(Objective&& obj,
     gradient_descent_update_policy<RealType>(lr));
 }
 
-template<class Objective,
+BOOST_MATH_EXPORT template<class Objective,
          typename ArgumentContainer,
          typename RealType,
          class InitializationPolicy>
@@ -168,7 +167,7 @@ make_gradient_descent(Objective&& obj,
     gradient_descent_update_policy<RealType>(lr));
 }
 
-template<typename ArgumentContainer,
+BOOST_MATH_EXPORT template<typename ArgumentContainer,
          typename RealType,
          class Objective,
          class InitializationPolicy,
@@ -197,6 +196,5 @@ make_gradient_descent(Objective&& obj,
 }
 
 } // namespace optimization
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif

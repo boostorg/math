@@ -10,57 +10,20 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <vector>
+#endif
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/quadrature/detail/quadrature_constant.hpp>
 
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
 
-namespace boost { namespace math{ namespace quadrature{ namespace detail{
-
-template <class T>
-struct gauss_constant_category
-{
-   static const unsigned value =
-      (std::numeric_limits<T>::is_specialized == 0) ? 999 :
-      (std::numeric_limits<T>::radix == 2) ?
-      (
-#ifdef BOOST_HAS_FLOAT128
-         (std::numeric_limits<T>::digits <= 113) && std::is_constructible<T, __float128>::value ? 0 :
-#else
-         (std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits) && std::is_constructible<T, long double>::value ? 0 :
-#endif
-         (std::numeric_limits<T>::digits10 <= 110) && std::is_constructible<T, const char*>::value ? 4 : 999
-      ) : (std::numeric_limits<T>::digits10 <= 110) && std::is_constructible<T, const char*>::value ? 4 : 999;
-   
-   using storage_type =
-      std::conditional_t<(std::numeric_limits<T>::is_specialized == 0), T,
-         std::conditional_t<(std::numeric_limits<T>::radix == 2),
-            std::conditional_t< ((std::numeric_limits<T>::digits <= std::numeric_limits<float>::digits) && std::is_constructible<T, float>::value),
-               float,
-               std::conditional_t<((std::numeric_limits<T>::digits <= std::numeric_limits<double>::digits) && std::is_constructible<T, double>::value),
-                  double,
-                  std::conditional_t<((std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits) && std::is_constructible<T, long double>::value),
-                     long double,
-#ifdef BOOST_HAS_FLOAT128
-                     std::conditional_t<((std::numeric_limits<T>::digits <= 113) && std::is_constructible<T, __float128>::value),
-                        __float128,
-                        T
-                     >
-                  >
-#else
-                     T
-                  >
-#endif
-               >
-            >, T
-         >
-      >;
-};
+BOOST_MATH_NAMESPACE_BEGIN namespace quadrature{ namespace detail {
 
 #ifndef BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND
 
@@ -73,7 +36,7 @@ class gauss_detail
       for (unsigned i = 0; i < abscissa().size(); ++i)
       {
          Real x = abscissa()[i];
-         Real p = boost::math::legendre_p_prime(N, x);
+         Real p = BOOST_MATH_NAMESPACE::legendre_p_prime(N, x);
          result[i] = 2 / ((1 - x * x) * p * p);
       }
       return result;
@@ -81,7 +44,7 @@ class gauss_detail
 public:
    static const std::vector<Real>& abscissa()
    {
-      static std::vector<Real> data = boost::math::legendre_p_zeros<Real>(N);
+      static std::vector<Real> data = BOOST_MATH_NAMESPACE::legendre_p_zeros<Real>(N);
       return data;
    }
    static const std::vector<Real>& weights()
@@ -101,7 +64,7 @@ class gauss_detail;
 template <class T>
 class gauss_detail<T, 7, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 4> const & abscissa()
    {
@@ -128,7 +91,7 @@ public:
 template <class T>
 class gauss_detail<T, 7, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 4> const & abscissa()
    {
@@ -181,7 +144,7 @@ public:
 template <class T>
 class gauss_detail<T, 10, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 5> const & abscissa()
    {
@@ -210,7 +173,7 @@ public:
 template <class T>
 class gauss_detail<T, 10, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 5> const & abscissa()
    {
@@ -268,7 +231,7 @@ public:
 template <class T>
 class gauss_detail<T, 15, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 8> const & abscissa()
    {
@@ -303,7 +266,7 @@ public:
 template <class T>
 class gauss_detail<T, 15, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 8> const & abscissa()
    {
@@ -373,7 +336,7 @@ public:
 template <class T>
 class gauss_detail<T, 20, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 10> const & abscissa()
    {
@@ -412,7 +375,7 @@ public:
 template <class T>
 class gauss_detail<T, 20, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 10> const & abscissa()
    {
@@ -490,7 +453,7 @@ public:
 template <class T>
 class gauss_detail<T, 25, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 13> const & abscissa()
    {
@@ -535,7 +498,7 @@ public:
 template <class T>
 class gauss_detail<T, 25, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 13> const & abscissa()
    {
@@ -626,7 +589,7 @@ public:
 template <class T>
 class gauss_detail<T, 30, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 15> const & abscissa()
    {
@@ -675,7 +638,7 @@ public:
 template <class T>
 class gauss_detail<T, 30, 0>
 {
-   using storage_type = typename gauss_constant_category<T>::storage_type;
+   using storage_type = typename quadrature_constant_category<T>::storage_type;
 public:
    static std::array<storage_type, 15> const & abscissa()
    {
@@ -771,10 +734,10 @@ public:
 
 }
 
-template <class Real, unsigned N, class Policy = boost::math::policies::policy<> >
-class gauss : public detail::gauss_detail<Real, N, detail::gauss_constant_category<Real>::value>
+BOOST_MATH_EXPORT template <class Real, unsigned N, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
+class gauss : public detail::gauss_detail<Real, N, detail::quadrature_constant_category<Real>::value>
 {
-   typedef detail::gauss_detail<Real, N, detail::gauss_constant_category<Real>::value> base;
+   typedef detail::gauss_detail<Real, N, detail::quadrature_constant_category<Real>::value> base;
 public:
 
    template <class F>
@@ -812,7 +775,7 @@ public:
    {
       typedef decltype(f(a)) K;
       static const char* function = "boost::math::quadrature::gauss<%1%>::integrate(f, %1%, %1%)";
-      if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
+      if (!(BOOST_MATH_NAMESPACE::isnan)(a) && !(BOOST_MATH_NAMESPACE::isnan)(b))
       {
          // Infinite limits:
          Real min_inf = -tools::max_value<Real>();
@@ -829,7 +792,7 @@ public:
          }
 
          // Right limit is infinite:
-         if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (b >= tools::max_value<Real>()))
          {
             auto u = [&](const Real& t)->K
             {
@@ -846,7 +809,7 @@ public:
             return Q;
          }
 
-         if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(b) && (a <= -tools::max_value<Real>()))
          {
             auto v = [&](const Real& t)->K
             {
@@ -863,7 +826,7 @@ public:
             return Q;
          }
 
-         if ((boost::math::isfinite)(a) && (boost::math::isfinite)(b))
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (BOOST_MATH_NAMESPACE::isfinite)(b))
          {
             if (a == b)
             {
@@ -891,11 +854,134 @@ public:
       }
       return static_cast<K>(policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy()));
    }
+
+   // Explicit zero and norm for vector- and matrix-valued integrands.
+   // The original overloads above retain their existing behavior.
+   template <class F, class Norm>
+   static auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* pL1 = nullptr)
+      ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
+   {
+      typedef decltype(f(Real(0))) K;
+      static_assert(!std::is_integral<K>::value,
+                   "The return type cannot be integral.");
+      unsigned non_zero_start = 1;
+      K result = zero;
+      if (N & 1) {
+         result = f(Real(0)) * static_cast<Real>(base::weights()[0]);
+      }
+      else {
+         result = zero;
+         non_zero_start = 0;
+      }
+      Real L1 = static_cast<Real>(norm(result));
+      for (unsigned i = non_zero_start; i < base::abscissa().size(); ++i)
+      {
+         K fp = f(static_cast<Real>(base::abscissa()[i]));
+         K fm = f(static_cast<Real>(-base::abscissa()[i]));
+         result += (fp + fm) * static_cast<Real>(base::weights()[i]);
+         L1 += (static_cast<Real>(norm(fp)) + static_cast<Real>(norm(fm))) * static_cast<Real>(base::weights()[i]);
+      }
+      if (pL1)
+         *pL1 = L1;
+      return result;
+   }
+   template <class F, class Norm>
+   static auto integrate(F f, Real a, Real b, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* pL1 = nullptr)
+      ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
+   {
+      typedef decltype(f(a)) K;
+      static const char* function = "boost::math::quadrature::gauss<%1%>::integrate(f, %1%, %1%)";
+      if (!(BOOST_MATH_NAMESPACE::isnan)(a) && !(BOOST_MATH_NAMESPACE::isnan)(b))
+      {
+         // Infinite limits:
+         Real min_inf = -tools::max_value<Real>();
+         if ((a <= min_inf) && (b >= tools::max_value<Real>()))
+         {
+            auto u = [&](const Real& t)->K
+            {
+               Real t_sq = t*t;
+               Real inv = 1 / (1 - t_sq);
+               K res = f(t*inv)*(1 + t_sq)*inv*inv;
+               return res;
+            };
+            return integrate(u, zero, norm, pL1);
+         }
+
+         // Right limit is infinite:
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (b >= tools::max_value<Real>()))
+         {
+            auto u = [&](const Real& t)->K
+            {
+               Real z = 1 / (t + 1);
+               Real arg = 2 * z + a - 1;
+               K res = f(arg)*z*z;
+               return res;
+            };
+            K Q = Real(2) * integrate(u, zero, norm, pL1);
+            if (pL1)
+            {
+               *pL1 *= 2;
+            }
+            return Q;
+         }
+
+         if ((BOOST_MATH_NAMESPACE::isfinite)(b) && (a <= -tools::max_value<Real>()))
+         {
+            auto v = [&](const Real& t)->K
+            {
+               Real z = 1 / (t + 1);
+               Real arg = 2 * z - 1;
+               K res = f(b - arg) * z * z;
+               return res;
+            };
+            K Q = Real(2) * integrate(v, zero, norm, pL1);
+            if (pL1)
+            {
+               *pL1 *= 2;
+            }
+            return Q;
+         }
+
+         if ((BOOST_MATH_NAMESPACE::isfinite)(a) && (BOOST_MATH_NAMESPACE::isfinite)(b))
+         {
+            if (a == b)
+            {
+               if (pL1)
+                  *pL1 = Real(0);
+               return zero;
+            }
+            if (b < a)
+            {
+               return -integrate(f, b, a, zero, norm, pL1);
+            }
+            Real avg = (a + b)*constants::half<Real>();
+            Real scale = (b - a)*constants::half<Real>();
+
+            auto u = [&](Real z)->K
+            {
+               return f(avg + scale*z);
+            };
+            K Q = scale*integrate(u, zero, norm, pL1);
+
+            if (pL1)
+            {
+               *pL1 *= scale;
+            }
+            return Q;
+         }
+      }
+      // Preserve the scalar error policy, including non-throwing policies,
+      // and use scalar multiplication to produce a result with the right shape.
+      Real error = policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy());
+      if (pL1)
+         *pL1 = error;
+      K result = zero * error;
+      return result;
+   }
 };
 
 } // namespace quadrature
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #ifdef _MSC_VER
 #pragma warning(pop)

@@ -15,7 +15,7 @@
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_0F1_bessel.hpp>
 
-namespace boost { namespace math { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
 
    template <class T>
@@ -71,8 +71,10 @@ namespace boost { namespace math { namespace detail {
          // Series is alternating and divergent, need to do something else here,
          // Bessel function relation is much more accurate, unless |b| is similarly
          // large to |z|, otherwise the CF formula suffers from cancellation when
-         // the result would be very small.
-         if (fabs(z / b) > 4)
+         // the result would be very small.  For positive b the CF's error grows rapidly
+         // once |z/b| > 2, but for b > max_factorial the Bessel relation needs lgamma and
+         // is only accurate to a few hundred eps.
+         if (fabs(z / b) > (((b > 0) && (b <= BOOST_MATH_NAMESPACE::max_factorial<T>::value)) ? 2 : 4))
             return hypergeometric_0F1_bessel(b, z, pol);
          return hypergeometric_0F1_cf_imp(b, z, pol, function);
       }
@@ -84,7 +86,7 @@ namespace boost { namespace math { namespace detail {
 
 } // namespace detail
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type hypergeometric_0F1(T1 b, T2 z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -104,13 +106,13 @@ inline typename tools::promote_args<T1, T2>::type hypergeometric_0F1(T1 b, T2 z,
       "boost::math::hypergeometric_0F1<%1%>(%1%,%1%)");
 }
 
-template <class T1, class T2>
+BOOST_MATH_EXPORT template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type hypergeometric_0F1(T1 b, T2 z)
 {
    return hypergeometric_0F1(b, z, policies::policy<>());
 }
 
 
-} } // namespace boost::math
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_HPP

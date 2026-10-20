@@ -16,25 +16,23 @@
 
 #include <cuda/std/array>
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 using cuda::std::array;
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #else
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
+#endif
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
 using std::array;
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_ENABLE_CUDA
 

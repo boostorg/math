@@ -11,139 +11,77 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/distributions/detail/hypergeometric_pdf.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
-template <class T>
-inline std::uint64_t round_x_from_p(std::uint64_t x, T p, T cum, T fudge_factor, std::uint64_t lbound, std::uint64_t /*ubound*/, const policies::discrete_quantile<policies::integer_round_down>&)
+//
+// The result of summing the pdf up to p (or down to q = 1 - p):
+//
+//   up:        the smallest x with cdf(x) >= p, by the running sum,
+//   nearest:   up or up - 1, whichever p is nearer to in a linear
+//              interpolation of the cdf between them,
+//   ambiguous: the running sum at up or up - 1 is within rounding error of
+//              p, so the comparison with p must be made with cdf() itself.
+//
+// c says whether the caller's probability is q (the complement) or p.
+//
+struct hypergeometric_quantile_result
 {
-   if((p < cum * fudge_factor) && (x != lbound))
-   {
-      BOOST_MATH_INSTRUMENT_VARIABLE(x-1);
-      return --x;
-   }
-   return x;
-}
-
-template <class T>
-inline std::uint64_t round_x_from_p(std::uint64_t x, T p, T cum, T fudge_factor, std::uint64_t /*lbound*/, std::uint64_t ubound, const policies::discrete_quantile<policies::integer_round_up>&)
-{
-   if((cum < p * fudge_factor) && (x != ubound))
-   {
-      BOOST_MATH_INSTRUMENT_VARIABLE(x+1);
-      return ++x;
-   }
-   return x;
-}
-
-template <class T>
-inline std::uint64_t round_x_from_p(std::uint64_t x, T p, T cum, T fudge_factor, std::uint64_t lbound, std::uint64_t ubound, const policies::discrete_quantile<policies::integer_round_inwards>&)
-{
-   if(p >= 0.5)
-      return round_x_from_p(x, p, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_down>());
-   return round_x_from_p(x, p, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_up>());
-}
-
-template <class T>
-inline std::uint64_t round_x_from_p(std::uint64_t x, T p, T cum, T fudge_factor, std::uint64_t lbound, std::uint64_t ubound, const policies::discrete_quantile<policies::integer_round_outwards>&)
-{
-   if(p >= 0.5)
-      return round_x_from_p(x, p, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_up>());
-   return round_x_from_p(x, p, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_down>());
-}
-
-template <class T>
-inline std::uint64_t round_x_from_p(std::uint64_t x, T /*p*/, T /*cum*/, T /*fudge_factor*/, std::uint64_t /*lbound*/, std::uint64_t /*ubound*/, const policies::discrete_quantile<policies::integer_round_nearest>&)
-{
-   return x;
-}
-
-template <class T>
-inline std::uint64_t round_x_from_q(std::uint64_t x, T q, T cum, T fudge_factor, std::uint64_t lbound, std::uint64_t /*ubound*/, const policies::discrete_quantile<policies::integer_round_down>&)
-{
-   if((q * fudge_factor > cum) && (x != lbound))
-   {
-      BOOST_MATH_INSTRUMENT_VARIABLE(x-1);
-      return --x;
-   }
-   return x;
-}
-
-template <class T>
-inline std::uint64_t round_x_from_q(std::uint64_t x, T q, T cum, T fudge_factor, std::uint64_t /*lbound*/, std::uint64_t ubound, const policies::discrete_quantile<policies::integer_round_up>&)
-{
-   if((q < cum * fudge_factor) && (x != ubound))
-   {
-      BOOST_MATH_INSTRUMENT_VARIABLE(x+1);
-      return ++x;
-   }
-   return x;
-}
-
-template <class T>
-inline std::uint64_t round_x_from_q(std::uint64_t x, T q, T cum, T fudge_factor, std::uint64_t lbound, std::uint64_t ubound, const policies::discrete_quantile<policies::integer_round_inwards>&)
-{
-   if(q < 0.5)
-      return round_x_from_q(x, q, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_down>());
-   return round_x_from_q(x, q, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_up>());
-}
-
-template <class T>
-inline std::uint64_t round_x_from_q(std::uint64_t x, T q, T cum, T fudge_factor, std::uint64_t lbound, std::uint64_t ubound, const policies::discrete_quantile<policies::integer_round_outwards>&)
-{
-   if(q >= 0.5)
-      return round_x_from_q(x, q, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_down>());
-   return round_x_from_q(x, q, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_up>());
-}
-
-template <class T>
-inline std::uint64_t round_x_from_q(std::uint64_t x, T /*q*/, T /*cum*/, T /*fudge_factor*/, std::uint64_t /*lbound*/, std::uint64_t /*ubound*/, const policies::discrete_quantile<policies::integer_round_nearest>&)
-{
-   return x;
-}
+   std::uint64_t up;
+   std::uint64_t nearest;
+   bool ambiguous;
+};
 
 template <class T, class Policy>
-std::uint64_t hypergeometric_quantile_imp(T p, T q, std::uint64_t r, std::uint64_t n, std::uint64_t N, const Policy& pol)
+hypergeometric_quantile_result hypergeometric_quantile_imp(T p, T q, bool c, T caller_epsilon, std::uint64_t r, std::uint64_t n, std::uint64_t N, const Policy& pol)
 {
 #ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable:4267)
 #endif
-   typedef typename Policy::discrete_quantile_type discrete_quantile_type;
    BOOST_MATH_STD_USING
    BOOST_FPU_EXCEPTION_GUARD
-   T result;
-   T fudge_factor = 1 + tools::epsilon<T>() * ((N <= boost::math::prime(boost::math::max_prime - 1)) ? 50 : 2 * N);
-   std::uint64_t base = static_cast<std::uint64_t>((std::max)(0, static_cast<int>(n + r) - static_cast<int>(N)));
-   std::uint64_t lim = (std::min)(r, n);
+   // How far (relatively) the running sum may be from cdf(): the error of
+   // each, doubled.  cdf() is rounded to the caller's type, which may be
+   // narrower than T (float is evaluated in double):
+   const T eps = (std::max)(tools::epsilon<T>(), caller_epsilon);
+   const T fudge = eps * ((N <= BOOST_MATH_NAMESPACE::prime(BOOST_MATH_NAMESPACE::max_prime - 1)) ? 100 : 4 * N);
+   // The caller compares with p if c is false, else with q.  When we search
+   // with the other one, 1 - p or 1 - q and the cdf near 1 it is compared
+   // with are only known to within a few epsilon absolutely:
+   const T converted = 4 * eps;
+   const std::uint64_t base = static_cast<std::uint64_t>((std::max)(0, static_cast<int>(n + r) - static_cast<int>(N)));
+   const std::uint64_t lim = (std::min)(r, n);
+   hypergeometric_quantile_result res;
 
    BOOST_MATH_INSTRUMENT_VARIABLE(p);
    BOOST_MATH_INSTRUMENT_VARIABLE(q);
    BOOST_MATH_INSTRUMENT_VARIABLE(r);
    BOOST_MATH_INSTRUMENT_VARIABLE(n);
    BOOST_MATH_INSTRUMENT_VARIABLE(N);
-   BOOST_MATH_INSTRUMENT_VARIABLE(fudge_factor);
    BOOST_MATH_INSTRUMENT_VARIABLE(base);
    BOOST_MATH_INSTRUMENT_VARIABLE(lim);
 
    if(p <= 0.5)
    {
+      //
+      // Sum the cdf upwards: cum = cdf(x), prev = cdf(x - 1).
+      //
       std::uint64_t x = base;
-      result = hypergeometric_pdf<T>(x, r, n, N, pol);
-      T diff = result;
+      T diff = hypergeometric_pdf<T>(x, r, n, N, pol);
       if (diff == 0)
       {
          ++x;
          // We want to skip through x values as fast as we can until we start getting non-zero values,
          // otherwise we're just making lots of expensive PDF calls:
-         T log_pdf = boost::math::lgamma(static_cast<T>(n + 1), pol)
-            + boost::math::lgamma(static_cast<T>(r + 1), pol)
-            + boost::math::lgamma(static_cast<T>(N - n + 1), pol)
-            + boost::math::lgamma(static_cast<T>(N - r + 1), pol)
-            - boost::math::lgamma(static_cast<T>(N + 1), pol)
-            - boost::math::lgamma(static_cast<T>(x + 1), pol)
-            - boost::math::lgamma(static_cast<T>(n - x + 1), pol)
-            - boost::math::lgamma(static_cast<T>(r - x + 1), pol)
-            - boost::math::lgamma(static_cast<T>(N - n - r + x + 1), pol);
+         T log_pdf = BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(n + 1), pol)
+            + BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(r + 1), pol)
+            + BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N - n + 1), pol)
+            + BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N - r + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(x + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(n - x + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(r - x + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N - n - r + x + 1), pol);
          while (log_pdf < tools::log_min_value<T>())
          {
             log_pdf += -log(static_cast<T>(x + 1)) + log(static_cast<T>(n - x)) + log(static_cast<T>(r - x)) - log(static_cast<T>(N - n - r + x + 1));
@@ -153,45 +91,47 @@ std::uint64_t hypergeometric_quantile_imp(T p, T q, std::uint64_t r, std::uint64
          // roundoff errors, get a fresh PDF calculation before proceeding:
          diff = hypergeometric_pdf<T>(x, r, n, N, pol);
       }
-      while(result < p)
+      T cum = diff;
+      T prev = 0;
+      while((cum < p) && (x < lim))
       {
          diff = (diff > tools::min_value<T>() * 8)
             ? T(n - x) * T(r - x) * diff / (T(x + 1) * T(N + x + 1 - n - r))
             : hypergeometric_pdf<T>(x + 1, r, n, N, pol);
-         if(result + diff / 2 > p)
-            break;
          ++x;
-         result += diff;
-#ifdef BOOST_MATH_INSTRUMENT
-         if(diff != 0)
-         {
-            BOOST_MATH_INSTRUMENT_VARIABLE(x);
-            BOOST_MATH_INSTRUMENT_VARIABLE(diff);
-            BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         }
-#endif
+         prev = cum;
+         cum += diff;
+         BOOST_MATH_INSTRUMENT_VARIABLE(x);
+         BOOST_MATH_INSTRUMENT_VARIABLE(cum);
       }
-      return round_x_from_p(x, p, result, fudge_factor, base, lim, discrete_quantile_type());
+      res.up = x;
+      res.nearest = ((x != base) && (p < (prev + cum) / 2)) ? x - 1 : x;
+      const T slack = p * fudge + (c ? converted : T(0));
+      res.ambiguous = (cum < p) || (cum - p <= slack) || ((x != base) && (p - prev <= slack));
    }
    else
    {
+      //
+      // Sum the complement downwards: cum = cdf(complement(x)),
+      // next = cdf(complement(x - 1)), and up is the smallest x with
+      // cum <= q.
+      //
       std::uint64_t x = lim;
-      result = 0;
       T diff = hypergeometric_pdf<T>(x, r, n, N, pol);
       if (diff == 0)
       {
          // We want to skip through x values as fast as we can until we start getting non-zero values,
          // otherwise we're just making lots of expensive PDF calls:
          --x;
-         T log_pdf = boost::math::lgamma(static_cast<T>(n + 1), pol)
-            + boost::math::lgamma(static_cast<T>(r + 1), pol)
-            + boost::math::lgamma(static_cast<T>(N - n + 1), pol)
-            + boost::math::lgamma(static_cast<T>(N - r + 1), pol)
-            - boost::math::lgamma(static_cast<T>(N + 1), pol)
-            - boost::math::lgamma(static_cast<T>(x + 1), pol)
-            - boost::math::lgamma(static_cast<T>(n - x + 1), pol)
-            - boost::math::lgamma(static_cast<T>(r - x + 1), pol)
-            - boost::math::lgamma(static_cast<T>(N - n - r + x + 1), pol);
+         T log_pdf = BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(n + 1), pol)
+            + BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(r + 1), pol)
+            + BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N - n + 1), pol)
+            + BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N - r + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(x + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(n - x + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(r - x + 1), pol)
+            - BOOST_MATH_NAMESPACE::lgamma(static_cast<T>(N - n - r + x + 1), pol);
          while (log_pdf < tools::log_min_value<T>())
          {
             log_pdf += log(static_cast<T>(x)) - log(static_cast<T>(n - x + 1)) - log(static_cast<T>(r - x + 1)) + log(static_cast<T>(N - n - r + x));
@@ -201,31 +141,33 @@ std::uint64_t hypergeometric_quantile_imp(T p, T q, std::uint64_t r, std::uint64
          // roundoff errors, get a fresh PDF calculation before proceeding:
          diff = hypergeometric_pdf<T>(x, r, n, N, pol);
       }
-      while(result + diff / 2 < q)
+      // diff is pdf(x), so cdf(complement(x - 1)) = cum + diff:
+      T cum = 0;
+      while((cum + diff <= q) && (x > base))
       {
-         result += diff;
+         cum += diff;
          diff = (diff > tools::min_value<T>() * 8)
             ? x * T(N + x - n - r) * diff / (T(1 + n - x) * T(1 + r - x))
             : hypergeometric_pdf<T>(x - 1, r, n, N, pol);
          --x;
-#ifdef BOOST_MATH_INSTRUMENT
-         if(diff != 0)
-         {
-            BOOST_MATH_INSTRUMENT_VARIABLE(x);
-            BOOST_MATH_INSTRUMENT_VARIABLE(diff);
-            BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         }
-#endif
+         BOOST_MATH_INSTRUMENT_VARIABLE(x);
+         BOOST_MATH_INSTRUMENT_VARIABLE(cum);
       }
-      return round_x_from_q(x, q, result, fudge_factor, base, lim, discrete_quantile_type());
+      const T next = cum + diff;
+      res.up = x;
+      // In terms of p, x - 1 is nearer when p < cdf(x - 1) + pdf(x) / 2:
+      res.nearest = ((x != base) && (q > cum + diff / 2)) ? x - 1 : x;
+      const T slack = q * fudge + (c ? T(0) : converted);
+      res.ambiguous = (q - cum <= slack) || ((x != base) && (next - q <= slack));
    }
+   return res;
 #ifdef _MSC_VER
 #  pragma warning(pop)
 #endif
 }
 
 template <class T, class Policy>
-inline std::uint64_t hypergeometric_quantile(T p, T q, std::uint64_t r, std::uint64_t n, std::uint64_t N, const Policy&)
+inline hypergeometric_quantile_result hypergeometric_quantile(T p, T q, bool c, std::uint64_t r, std::uint64_t n, std::uint64_t N, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T>::type result_type;
@@ -236,10 +178,10 @@ inline std::uint64_t hypergeometric_quantile(T p, T q, std::uint64_t r, std::uin
       policies::promote_double<false>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   return detail::hypergeometric_quantile_imp<value_type>(p, q, r, n, N, forwarding_policy());
+   return detail::hypergeometric_quantile_imp<value_type>(p, q, c, value_type(tools::epsilon<result_type>()), r, n, N, forwarding_policy());
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif
 

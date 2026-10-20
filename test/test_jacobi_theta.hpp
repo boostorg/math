@@ -698,8 +698,77 @@ inline void test_laplace_transforms(RealType s, RealType integration_eps, RealTy
             l/sqrt(s)*cosh(beta*sqrt(s))/sinh(l*sqrt(s)),
             result_eps);
 
-    // TODO - DLMF defines two additional relations for theta2 and theta3, but
-    // these do not match the computed values at all.
+    // DLMF 20.10.6 and 20.10.7 give the theta2 and theta3 transforms; the
+    // equivalent identities in the (z, tau) parameterization, with theta2 and
+    // theta3m1 covered, are checked in test_laplace_transforms_in_z below.
+}
+
+// Laplace transforms in tau at fixed z, for all four functions.
+//
+// Integrating the Fourier series (DLMF 20.2.1 to 20.2.4) term by term with
+//
+//     int_0^inf exp(-a tau) exp(-pi tau m^2) dtau = 1 / (a + pi m^2)
+//
+// and summing the classical partial fractions
+//
+//     sum_{n>=0} (-1)^n sin((2n+1)x) / ((2n+1)^2 + c^2) = (pi/4c) sinh(c x) sech(pi c/2),        |x| < pi/2
+//     sum_{n>=0} cos((2n+1)x) / ((2n+1)^2 + c^2)        = (pi/4c) sinh(c(pi/2 - x)) sech(pi c/2),  0 < x < pi
+//     sum_{n>=1} cos(2nx) / (n^2 + c^2)                 = (pi/2c) cosh(c(pi - 2x)) csch(pi c) - 1/(2c^2),  0 <= x <= pi
+//
+// gives, with c = sqrt(a/pi) and s = sqrt(a pi),
+//
+//     int_0^inf exp(-a tau) theta1(z | i tau) dtau   = sqrt(pi/a) sinh(2 c z) sech(s),           |z| < pi/2
+//     int_0^inf exp(-a tau) theta2(z | i tau) dtau   = sqrt(pi/a) sinh(c (pi - 2 z)) sech(s),    0 < z < pi
+//     int_0^inf exp(-a tau) theta3m1(z | i tau) dtau = sqrt(pi/a) cosh(c (pi - 2 z)) csch(s) - 1/a,  0 <= z <= pi
+//     int_0^inf exp(-a tau) theta4m1(z | i tau) dtau = sqrt(pi/a) cosh(2 c z) csch(s) - 1/a,      |z| <= pi/2
+//
+// The integrals run through both the tau < 1 (imaginary transformation) and
+// tau >= 1 (direct series) branches, so this checks that they agree with each
+// other and that the small-z, small-tau regime of theta1 is accurate.
+//
+// The quadrature error is relative to the L1 norm of the integrand, and the
+// two "m1" closed forms subtract 1/a from a quantity of similar size, so the
+// tolerance is scaled by (L1 + 1/a) rather than by the result itself.
+template <typename RealType>
+inline void test_laplace_transforms_in_z(RealType a, RealType z, RealType integration_eps, RealType result_eps) {
+    using namespace boost::math;
+    BOOST_MATH_STD_USING
+
+    boost::math::quadrature::exp_sinh<RealType> integrator;
+
+    const RealType pi = constants::pi<RealType>();
+    const RealType c = sqrt(a / pi);
+    const RealType s = sqrt(a * pi);
+    const RealType scale = sqrt(pi / a);
+
+    auto check = [&](const RealType& computed, const RealType& expected, const RealType& tolerance)
+    {
+        BOOST_CHECK_MESSAGE(abs(computed - expected) <= tolerance,
+            "a = " << a << ", z = " << z << ": computed " << computed
+            << " vs expected " << expected << ", tolerance " << tolerance);
+    };
+
+    RealType error, L1;
+
+    if (abs(z) < pi / 2) {
+        auto f1 = [&](RealType t) { return exp(-a * t) * jacobi_theta1tau(z, t); };
+        RealType Q1 = integrator.integrate(f1, integration_eps, &error, &L1);
+        check(Q1, scale * sinh(2 * c * z) / cosh(s), result_eps * L1);
+
+        auto f4 = [&](RealType t) { return exp(-a * t) * jacobi_theta4m1tau(z, t); };
+        RealType Q4 = integrator.integrate(f4, integration_eps, &error, &L1);
+        check(Q4, scale * cosh(2 * c * z) / sinh(s) - 1 / a, result_eps * (L1 + 1 / a));
+    }
+
+    if (z > 0 && z < pi) {
+        auto f2 = [&](RealType t) { return exp(-a * t) * jacobi_theta2tau(z, t); };
+        RealType Q2 = integrator.integrate(f2, integration_eps, &error, &L1);
+        check(Q2, scale * sinh(c * (pi - 2 * z)) / cosh(s), result_eps * L1);
+
+        auto f3 = [&](RealType t) { return exp(-a * t) * jacobi_theta3m1tau(z, t); };
+        RealType Q3 = integrator.integrate(f3, integration_eps, &error, &L1);
+        check(Q3, scale * cosh(c * (pi - 2 * z)) / sinh(s) - 1 / a, result_eps * (L1 + 1 / a));
+    }
 }
 
 template <typename RealType>

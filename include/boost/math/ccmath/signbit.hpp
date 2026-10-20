@@ -12,14 +12,18 @@
 #error "The header <boost/math/signbit.hpp> can only be used in C++17 and later."
 #endif
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cstdint>
+#endif
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/abs.hpp>
 
 #ifdef __has_include
 #  if __has_include(<bit>)
+#ifndef BOOST_MATH_BUILD_MODULE
 #    include <bit>
+#endif
 #    if __cpp_lib_bit_cast >= 201806L
 #      define BOOST_MATH_BIT_CAST(T, x) std::bit_cast<T>(x)
 #    endif
@@ -49,7 +53,7 @@ ccmath_signbit_test.cpp:32:19: error: static_assert expression is not an integra
 #  undef BOOST_MATH_BIT_CAST
 #endif
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail {
 
@@ -165,8 +169,8 @@ constexpr bool signbit_impl(T arg)
     #endif
     else
     {
-        BOOST_MATH_ASSERT_MSG(!boost::math::ccmath::isnan(arg), "NAN is not supported with this type or platform");
-        BOOST_MATH_ASSERT_MSG(boost::math::ccmath::abs(arg) != 0, "Signed 0 is not support with this type or platform");
+        BOOST_MATH_ASSERT_MSG(!BOOST_MATH_NAMESPACE::ccmath::isnan(arg), "NAN is not supported with this type or platform");
+        BOOST_MATH_ASSERT_MSG(BOOST_MATH_NAMESPACE::ccmath::abs(arg) != 0, "Signed 0 is not support with this type or platform");
 
         return arg < static_cast<T>(0);
     }
@@ -182,8 +186,8 @@ constexpr bool signbit_impl(T arg)
 template <typename T>
 constexpr bool signbit_impl(T arg)
 {
-    BOOST_MATH_ASSERT_MSG(!boost::math::ccmath::isnan(arg), "NAN is not supported without __builtin_bit_cast or std::bit_cast");
-    BOOST_MATH_ASSERT_MSG(boost::math::ccmath::abs(arg) != 0, "Signed 0 is not support without __builtin_bit_cast or std::bit_cast");
+    BOOST_MATH_ASSERT_MSG(!BOOST_MATH_NAMESPACE::ccmath::isnan(arg), "NAN is not supported without __builtin_bit_cast or std::bit_cast");
+    BOOST_MATH_ASSERT_MSG(BOOST_MATH_NAMESPACE::ccmath::abs(arg) != 0, "Signed 0 is not support without __builtin_bit_cast or std::bit_cast");
 
     return arg < static_cast<T>(0);
 }
@@ -193,12 +197,12 @@ constexpr bool signbit_impl(T arg)
 }
 
 // Return value: true if arg is negative, false if arg is 0, NAN, or positive
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 constexpr bool signbit(Real arg)
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
     {
-        return boost::math::ccmath::detail::signbit_impl(arg);
+        return BOOST_MATH_NAMESPACE::ccmath::detail::signbit_impl(arg);
     }
     else
     {
@@ -207,12 +211,12 @@ constexpr bool signbit(Real arg)
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 constexpr bool signbit(Z arg)
 {
-    return boost::math::ccmath::signbit(static_cast<double>(arg));
+    return BOOST_MATH_NAMESPACE::ccmath::signbit(static_cast<double>(arg));
 }
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_SIGNBIT_HPP

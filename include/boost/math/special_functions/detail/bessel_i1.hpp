@@ -40,20 +40,20 @@
 // minimax rational approximations on intervals, see
 // Blair and Edwards, Chalk River Report AECL-4928, 1974
 
-namespace boost { namespace math { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <typename T>
 BOOST_MATH_GPU_ENABLED T bessel_i1(const T& x);
 
 template <typename T, int N>
-BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T&, const boost::math::integral_constant<int, N>&)
+BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T&, const BOOST_MATH_NAMESPACE::integral_constant<int, N>&)
 {
    BOOST_MATH_ASSERT(0);
    return 0;
 }
 
 template <typename T>
-BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_constant<int, 24>&)
+BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 24>&)
 {
    BOOST_MATH_STD_USING
       if(x < 7.75)
@@ -71,8 +71,8 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
             1.331933703e-12f
          };
          T a = x * x / 4;
-         T Q[3] = { 1, 0.5f, boost::math::tools::evaluate_polynomial(P, a) };
-         return x * boost::math::tools::evaluate_polynomial(Q, a) / 2;
+         T Q[3] = { 1, 0.5f, BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, a) };
+         return x * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, a) / 2;
       }
       else
       {
@@ -87,14 +87,14 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
             -1.47148600683672014e-01f
          };
          T ex = exp(x / 2);
-         T result = ex * boost::math::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
+         T result = ex * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
          result *= ex;
          return result;
       }
 }
 
 template <typename T>
-BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_constant<int, 53>&)
+BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 53>&)
 {
    BOOST_MATH_STD_USING
    if(x < 7.75)
@@ -119,8 +119,8 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
          1.332898928162290861e-23
       };
       T a = x * x / 4;
-      T Q[3] = { 1, 0.5f, boost::math::tools::evaluate_polynomial(P, a) };
-      return x * boost::math::tools::evaluate_polynomial(Q, a) / 2;
+      T Q[3] = { 1, 0.5f, BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, a) };
+      return x * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, a) / 2;
    }
    else if(x < 500)
    {
@@ -151,7 +151,7 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
          3.146401654361325073e+15,
          -2.213318202179221945e+15
       };
-      return exp(x) * boost::math::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
+      return exp(x) * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
    }
    else
    {
@@ -165,14 +165,14 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
          -5.843630344778927582e-02
       };
       T ex = exp(x / 2);
-      T result = ex * boost::math::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
+      T result = ex * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
       result *= ex;
       return result;
    }
 }
 
 template <typename T>
-BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_constant<int, 64>&)
+BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 64>&)
 {
    BOOST_MATH_STD_USING
       if(x < 7.75)
@@ -198,8 +198,8 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
             BOOST_MATH_BIG_CONSTANT(T, 64, 1.95294659305369207813486871e-28) 
          };
          T a = x * x / 4;
-         T Q[3] = { 1, 0.5f, boost::math::tools::evaluate_polynomial(P, a) };
-         return x * boost::math::tools::evaluate_polynomial(Q, a) / 2;
+         T Q[3] = { 1, 0.5f, BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, a) };
+         return x * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, a) / 2;
       }
       else if(x < 20)
       {
@@ -231,7 +231,7 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
             BOOST_MATH_BIG_CONSTANT(T, 64, -5.02808138522587680348583e+14),
             BOOST_MATH_BIG_CONSTANT(T, 64, 2.85505477056514919387171e+14)
          };
-         return exp(x) * boost::math::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
+         return exp(x) * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
       }
       else if(x < 100)
       {
@@ -256,7 +256,7 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
             BOOST_MATH_BIG_CONSTANT(T, 64, 9.98109660274422449523837e+03),
             BOOST_MATH_BIG_CONSTANT(T, 64, -3.74438822767781410362757e+04)
          };
-         return exp(x) * boost::math::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
+         return exp(x) * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
       }
       else
       {
@@ -274,14 +274,14 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
             BOOST_MATH_BIG_CONSTANT(T, 64, -9.17266479586791298924367e-01)
          };
          T ex = exp(x / 2);
-         T result = ex * boost::math::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
+         T result = ex * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
          result *= ex;
          return result;
       }
 }
 
 template <typename T>
-BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_constant<int, 113>&)
+BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 113>&)
 {
    BOOST_MATH_STD_USING
    if(x < 7.75)
@@ -315,8 +315,8 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
          BOOST_MATH_BIG_CONSTANT(T, 113, 8.2335693685833531118863552173880047183822e-47)
       };
       T a = x * x / 4;
-      T Q[3] = { 1, 0.5f, boost::math::tools::evaluate_polynomial(P, a) };
-      return x * boost::math::tools::evaluate_polynomial(Q, a) / 2;
+      T Q[3] = { 1, 0.5f, BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, a) };
+      return x * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, a) / 2;
    }
    else if(x < 11)
    {
@@ -351,8 +351,8 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
          BOOST_MATH_BIG_CONSTANT(T, 113, 1.407918492276267527897751358794783640e-46)
       };
       T a = x * x / 4;
-      T Q[3] = { 1, 0.5f, boost::math::tools::evaluate_polynomial(P, a) };
-      return x * boost::math::tools::evaluate_polynomial(Q, a) / 2;
+      T Q[3] = { 1, 0.5f, BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, a) };
+      return x * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, a) / 2;
    }
    else if(x < 15)
    {
@@ -387,8 +387,8 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
          BOOST_MATH_BIG_CONSTANT(T, 113, 6.732372906742845717148185173723304360e-52)
       };
       T a = x * x / 4;
-      T Q[3] = { 1, 0.5f, boost::math::tools::evaluate_polynomial(P, a) };
-      return x * boost::math::tools::evaluate_polynomial(Q, a) / 2;
+      T Q[3] = { 1, 0.5f, BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, a) };
+      return x * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(Q, a) / 2;
    }
    else if(x < 20)
    {
@@ -419,7 +419,7 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
          BOOST_MATH_BIG_CONSTANT(T, 113, 3.669871448568623680543943144842394531e+18),
          BOOST_MATH_BIG_CONSTANT(T, 113, -2.813923031370708069940575240509912588e+18)
       };
-      return exp(x) * boost::math::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
+      return exp(x) * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
    }
    else if(x < 35)
    {
@@ -454,7 +454,7 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
          BOOST_MATH_BIG_CONSTANT(T, 113, -2.249149337812510200795436107962504749e+22),
          BOOST_MATH_BIG_CONSTANT(T, 113, 2.101619088427348382058085685849420866e+22)
       };
-      return exp(x) * boost::math::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
+      return exp(x) * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
    }
    else if(x < 100)
    {
@@ -484,7 +484,7 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
          BOOST_MATH_BIG_CONSTANT(T, 113, 1.396791306321498426110315039064592443e+12),
          BOOST_MATH_BIG_CONSTANT(T, 113, -4.217617301585849875301440316301068439e+12)
       };
-      return exp(x) * boost::math::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
+      return exp(x) * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
    }
    else
    {
@@ -510,23 +510,23 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
          BOOST_MATH_BIG_CONSTANT(T, 113, -6.7008089049178178697338128837158732831105e+05)
       };
       T ex = exp(x / 2);
-      T result = ex * boost::math::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
+      T result = ex * BOOST_MATH_NAMESPACE::tools::evaluate_polynomial(P, T(1 / x)) / sqrt(x);
       result *= ex;
       return result;
    }
 }
 
 template <typename T>
-BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_constant<int, 0>&)
+BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const BOOST_MATH_NAMESPACE::integral_constant<int, 0>&)
 {
-   if(boost::math::tools::digits<T>() <= 24)
-      return bessel_i1_imp(x, boost::math::integral_constant<int, 24>());
-   else if(boost::math::tools::digits<T>() <= 53)
-      return bessel_i1_imp(x, boost::math::integral_constant<int, 53>());
-   else if(boost::math::tools::digits<T>() <= 64)
-      return bessel_i1_imp(x, boost::math::integral_constant<int, 64>());
-   else if(boost::math::tools::digits<T>() <= 113)
-      return bessel_i1_imp(x, boost::math::integral_constant<int, 113>());
+   if(BOOST_MATH_NAMESPACE::tools::digits<T>() <= 24)
+      return bessel_i1_imp(x, BOOST_MATH_NAMESPACE::integral_constant<int, 24>());
+   else if(BOOST_MATH_NAMESPACE::tools::digits<T>() <= 53)
+      return bessel_i1_imp(x, BOOST_MATH_NAMESPACE::integral_constant<int, 53>());
+   else if(BOOST_MATH_NAMESPACE::tools::digits<T>() <= 64)
+      return bessel_i1_imp(x, BOOST_MATH_NAMESPACE::integral_constant<int, 64>());
+   else if(BOOST_MATH_NAMESPACE::tools::digits<T>() <= 113)
+      return bessel_i1_imp(x, BOOST_MATH_NAMESPACE::integral_constant<int, 113>());
    BOOST_MATH_ASSERT(0);
    return 0;
 }
@@ -534,23 +534,23 @@ BOOST_MATH_GPU_ENABLED T bessel_i1_imp(const T& x, const boost::math::integral_c
 template <typename T>
 BOOST_MATH_GPU_ENABLED inline T bessel_i1(const T& x)
 {
-   typedef boost::math::integral_constant<int,
-      ((boost::math::numeric_limits<T>::digits == 0) || (boost::math::numeric_limits<T>::radix != 2)) ?
+   typedef BOOST_MATH_NAMESPACE::integral_constant<int,
+      ((BOOST_MATH_NAMESPACE::numeric_limits<T>::digits == 0) || (BOOST_MATH_NAMESPACE::numeric_limits<T>::radix != 2)) ?
       0 :
-      boost::math::numeric_limits<T>::digits <= 24 ?
+      BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 24 ?
       24 :
-      boost::math::numeric_limits<T>::digits <= 53 ?
+      BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 53 ?
       53 :
-      boost::math::numeric_limits<T>::digits <= 64 ?
+      BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 64 ?
       64 :
-      boost::math::numeric_limits<T>::digits <= 113 ?
+      BOOST_MATH_NAMESPACE::numeric_limits<T>::digits <= 113 ?
       113 : -1
    > tag_type;
 
    return bessel_i1_imp(x, tag_type());
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_BESSEL_I1_HPP
 

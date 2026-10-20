@@ -15,9 +15,11 @@
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/special_functions/laguerre.hpp>
 #include <boost/math/special_functions/hermite.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/tools/compensated_arithmetic.hpp>
 #include <boost/math/tools/fraction.hpp>
 
-namespace boost { namespace math { namespace detail {
+BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
    template <class T>
    struct hypergeometric_2F0_cf
@@ -46,7 +48,7 @@ namespace boost { namespace math { namespace detail {
    template <class T, class Policy>
    T hypergeometric_2F0_cf_imp(T a1, T a2, T z, const Policy& pol, const char* function)
    {
-      using namespace boost::math;
+      using namespace BOOST_MATH_NAMESPACE;
       hypergeometric_2F0_cf<T> evaluator(a1, a2, z);
       std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
       T cf = tools::continued_fraction_b(evaluator, policies::get_epsilon<T, Policy>(), max_iter);
@@ -54,6 +56,57 @@ namespace boost { namespace math { namespace detail {
       return cf;
    }
 
+
+   //
+   // 2F0(-n, b; z) for b > 0 and z > 0, where the series alternates and cancels badly.  Instead use the recurrence
+   // g[k+1] = (1 - (k + b) z) g[k] + k z g[k-1], with g[0] = 1 and g[1] = 1 - b z.  Where g is close to the
+   // minimal solution of the recurrence its rounding errors grow, so as in laguerre.hpp we find the rounding error
+   // of each step almost exactly, and carry it forward with the same recurrence.  The result is then correctly
+   // rounded unless the uncorrected recurrence was out by more than a few percent, which only happens for n > 50
+   // and n z between about 1 and 20, and there we raise an evaluation_error rather than return a wrong value.
+   //
+   template <class T, class Policy>
+   T hypergeometric_2F0_neg_int_recurrence(unsigned n, const T& b, const T& z, const Policy& pol, const char* function)
+   {
+      BOOST_MATH_STD_USING
+      two_product<T> product;
+      // g1 + e1 = 1 - b z exactly:
+      T bz, rbz;
+      product(b, z, bz, rbz);
+      T g1 = 1 - bz;
+      T e1 = two_sum_error(T(1), T(-bz), g1) - rbz;
+      T g0 = 1;
+      T e0 = 0;
+      for (unsigned k = 1; k < n; ++k)
+      {
+         // a + ea = 1 - (k + b) z and c + ec = k z exactly:
+         T u = k + b;
+         T eu = two_sum_error(T(k), b, u);
+         T v, rv;
+         product(u, z, v, rv);
+         rv += eu * z;
+         T a = 1 - v;
+         T ea = two_sum_error(T(1), T(-v), a) - rv;
+         T c, ec;
+         product(T(k), z, c, ec);
+         // s1 + r1 = a g1, s2 + r2 = c g0 and d + ed = s1 + s2 exactly:
+         T s1, r1, s2, r2;
+         product(a, g1, s1, r1);
+         product(c, g0, s2, r2);
+         T d = s1 + s2;
+         T ed = two_sum_error(s1, s2, d);
+         T e2 = a * e1 + c * e0 + ed + r1 + r2 + ea * g1 + ec * g0;
+         g0 = g1;
+         g1 = d;
+         e0 = e1;
+         e1 = e2;
+      }
+      if (!(BOOST_MATH_NAMESPACE::isfinite)(g1))
+         return BOOST_MATH_NAMESPACE::policies::raise_overflow_error<T>(function, nullptr, pol);
+      if (!(fabs(e1) < fabs(g1) / 32))
+         return BOOST_MATH_NAMESPACE::policies::raise_evaluation_error<T>(function, "The recurrence loses too many digits to give an accurate result, last value was %1%", T(g1 + e1), pol);
+      return g1 + e1;
+   }
 
    template <class T, class Policy>
    inline T hypergeometric_2F0_imp(T a1, T a2, const T& z, const Policy& pol, bool asymptotic = false)
@@ -73,7 +126,7 @@ namespace boost { namespace math { namespace detail {
       bool is_a2_integer = (a2 == floor(a2));
 
       if (!asymptotic && !is_a1_integer && !is_a2_integer)
-         return boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
+         return BOOST_MATH_NAMESPACE::policies::raise_overflow_error<T>(function, nullptr, pol);
       if (!is_a1_integer || (a1 > 0))
       {
          swap(a1, a2);
@@ -83,7 +136,7 @@ namespace boost { namespace math { namespace detail {
       // At this point a1 must be a negative integer:
       //
       if(!asymptotic && (!is_a1_integer || (a1 > 0)))
-         return boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
+         return BOOST_MATH_NAMESPACE::policies::raise_overflow_error<T>(function, nullptr, pol);
       //
       // Special cases first:
       //
@@ -92,31 +145,34 @@ namespace boost { namespace math { namespace detail {
       if ((a1 == a2 - 0.5f) && (z < 0))
       {
          // http://functions.wolfram.com/07.31.03.0083.01
-         int n = static_cast<int>(static_cast<std::uintmax_t>(boost::math::lltrunc(-2 * a1)));
+         int n = static_cast<int>(static_cast<std::uintmax_t>(BOOST_MATH_NAMESPACE::lltrunc(-2 * a1)));
          T smz = sqrt(-z);
-         return static_cast<T>(pow(2 / smz, T(-n)) * boost::math::hermite(n, 1 / smz, pol));  // Warning suppression: integer power returns at least a double
+         return static_cast<T>(pow(2 / smz, T(-n)) * BOOST_MATH_NAMESPACE::hermite(n, 1 / smz, pol));  // Warning suppression: integer power returns at least a double
       }
 
       if (is_a1_integer && is_a2_integer)
       {
          if ((a1 < 1) && (a2 <= a1))
          {
-            const unsigned int n = static_cast<unsigned int>(static_cast<std::uintmax_t>(boost::math::lltrunc(-a1)));
-            const unsigned int m = static_cast<unsigned int>(static_cast<std::uintmax_t>(boost::math::lltrunc(-a2 - n)));
+            const unsigned int n = static_cast<unsigned int>(static_cast<std::uintmax_t>(BOOST_MATH_NAMESPACE::lltrunc(-a1)));
+            const unsigned int m = static_cast<unsigned int>(static_cast<std::uintmax_t>(BOOST_MATH_NAMESPACE::lltrunc(-a2 - n)));
 
-            return (pow(z, T(n)) * boost::math::factorial<T>(n, pol)) *
-               boost::math::laguerre(n, m, -(1 / z), pol);
+            return (pow(z, T(n)) * BOOST_MATH_NAMESPACE::factorial<T>(n, pol)) *
+               BOOST_MATH_NAMESPACE::laguerre(n, m, -(1 / z), pol);
          }
          else if ((a2 < 1) && (a1 <= a2))
          {
             // function is symmetric for a1 and a2
-            const unsigned int n = static_cast<unsigned int>(static_cast<std::uintmax_t>(boost::math::lltrunc(-a2)));
-            const unsigned int m = static_cast<unsigned int>(static_cast<std::uintmax_t>(boost::math::lltrunc(-a1 - n)));
+            const unsigned int n = static_cast<unsigned int>(static_cast<std::uintmax_t>(BOOST_MATH_NAMESPACE::lltrunc(-a2)));
+            const unsigned int m = static_cast<unsigned int>(static_cast<std::uintmax_t>(BOOST_MATH_NAMESPACE::lltrunc(-a1 - n)));
 
-            return (pow(z, T(n)) * boost::math::factorial<T>(n, pol)) *
-               boost::math::laguerre(n, m, -(1 / z), pol);
+            return (pow(z, T(n)) * BOOST_MATH_NAMESPACE::factorial<T>(n, pol)) *
+               BOOST_MATH_NAMESPACE::laguerre(n, m, -(1 / z), pol);
          }
       }
+
+      if ((a2 > 0) && (z > 0))
+         return hypergeometric_2F0_neg_int_recurrence(static_cast<unsigned>(BOOST_MATH_NAMESPACE::lltrunc(-a1)), a2, z, pol, function);
 
       if ((a1 * a2 * z < 0) && (a2 < -5) && (fabs(a1 * a2 * z) > 0.5))
       {
@@ -130,7 +186,7 @@ namespace boost { namespace math { namespace detail {
 
 } // namespace detail
 
-template <class T1, class T2, class T3, class Policy>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3, class Policy>
 inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_2F0(T1 a1, T2 a2, T3 z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -151,13 +207,13 @@ inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_2F0(T1 a1, 
       "boost::math::hypergeometric_2F0<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T1, class T2, class T3>
+BOOST_MATH_EXPORT template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_2F0(T1 a1, T2 a2, T3 z)
 {
    return hypergeometric_2F0(a1, a2, z, policies::policy<>());
 }
 
 
-  } } // namespace boost::math
+  BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_HPP

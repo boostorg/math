@@ -19,7 +19,7 @@
 //
 
 
-  namespace boost { namespace math { namespace detail {
+  BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
      template <class T>
      struct hypergeometric_1F1_cf_func
@@ -39,12 +39,12 @@
      T hypergeometric_1F1_cf(const T& a, const T& b, const T& z, const Policy& pol, const char* function)
      {
         hypergeometric_1F1_cf_func<T> func(a, b, z);
-        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        T result = boost::math::tools::continued_fraction_a(func, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>(function, max_iter, pol);
+        std::uintmax_t max_iter = BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>();
+        T result = BOOST_MATH_NAMESPACE::tools::continued_fraction_a(func, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
+        BOOST_MATH_NAMESPACE::policies::check_series_iterations<T>(function, max_iter, pol);
         return 1 + a * z / (b * (1 + result));
      }
 
-  } } } // namespaces
+  } BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_1F1_BESSEL_HPP

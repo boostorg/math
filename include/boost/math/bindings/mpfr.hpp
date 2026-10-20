@@ -107,7 +107,7 @@ template <class Policy>
 inline mpfr_class modf(const mpfr_class& v, long long* ipart, const Policy& pol)
 {
    *ipart = lltrunc(v, pol);
-   return v - boost::math::tools::real_cast<mpfr_class>(*ipart);
+   return v - BOOST_MATH_NAMESPACE::tools::real_cast<mpfr_class>(*ipart);
 }
 template <class T, class U, class Policy>
 inline mpfr_class modf(const __gmp_expr<T,U>& v, long long* ipart, const Policy& pol)
@@ -118,7 +118,7 @@ inline mpfr_class modf(const __gmp_expr<T,U>& v, long long* ipart, const Policy&
 template <class Policy>
 inline int iround(mpfr_class const& x, const Policy&)
 {
-   return boost::math::tools::real_cast<int>(boost::math::round(x, typename boost::math::policies::normalise<Policy, boost::math::policies::rounding_error< boost::math::policies::throw_on_error> >::type()));
+   return BOOST_MATH_NAMESPACE::tools::real_cast<int>(BOOST_MATH_NAMESPACE::round(x, typename BOOST_MATH_NAMESPACE::policies::normalise<Policy, BOOST_MATH_NAMESPACE::policies::rounding_error< BOOST_MATH_NAMESPACE::policies::throw_on_error> >::type()));
 }
 template <class T, class U, class Policy>
 inline int iround(__gmp_expr<T,U> const& x, const Policy& pol)
@@ -129,7 +129,7 @@ inline int iround(__gmp_expr<T,U> const& x, const Policy& pol)
 template <class Policy>
 inline long lround(mpfr_class const& x, const Policy&)
 {
-   return boost::math::tools::real_cast<long>(boost::math::round(x, typename boost::math::policies::normalise<Policy, boost::math::policies::rounding_error< boost::math::policies::throw_on_error> >::type()));
+   return BOOST_MATH_NAMESPACE::tools::real_cast<long>(BOOST_MATH_NAMESPACE::round(x, typename BOOST_MATH_NAMESPACE::policies::normalise<Policy, BOOST_MATH_NAMESPACE::policies::rounding_error< BOOST_MATH_NAMESPACE::policies::throw_on_error> >::type()));
 }
 template <class T, class U, class Policy>
 inline long lround(__gmp_expr<T,U> const& x, const Policy& pol)
@@ -140,7 +140,7 @@ inline long lround(__gmp_expr<T,U> const& x, const Policy& pol)
 template <class Policy>
 inline long long llround(mpfr_class const& x, const Policy&)
 {
-   return boost::math::tools::real_cast<long long>(boost::math::round(x, typename boost::math::policies::normalise<Policy, boost::math::policies::rounding_error< boost::math::policies::throw_on_error> >::type()));
+   return BOOST_MATH_NAMESPACE::tools::real_cast<long long>(BOOST_MATH_NAMESPACE::round(x, typename BOOST_MATH_NAMESPACE::policies::normalise<Policy, BOOST_MATH_NAMESPACE::policies::rounding_error< BOOST_MATH_NAMESPACE::policies::throw_on_error> >::type()));
 }
 template <class T, class U, class Policy>
 inline long long llround(__gmp_expr<T,U> const& x, const Policy& pol)
@@ -151,7 +151,7 @@ inline long long llround(__gmp_expr<T,U> const& x, const Policy& pol)
 template <class Policy>
 inline int itrunc(mpfr_class const& x, const Policy&)
 {
-   return boost::math::tools::real_cast<int>(boost::math::trunc(x, typename boost::math::policies::normalise<Policy, boost::math::policies::rounding_error< boost::math::policies::throw_on_error> >::type()));
+   return BOOST_MATH_NAMESPACE::tools::real_cast<int>(BOOST_MATH_NAMESPACE::trunc(x, typename BOOST_MATH_NAMESPACE::policies::normalise<Policy, BOOST_MATH_NAMESPACE::policies::rounding_error< BOOST_MATH_NAMESPACE::policies::throw_on_error> >::type()));
 }
 template <class T, class U, class Policy>
 inline int itrunc(__gmp_expr<T,U> const& x, const Policy& pol)
@@ -162,7 +162,7 @@ inline int itrunc(__gmp_expr<T,U> const& x, const Policy& pol)
 template <class Policy>
 inline long ltrunc(mpfr_class const& x, const Policy&)
 {
-   return boost::math::tools::real_cast<long>(boost::math::trunc(x, typename boost::math::policies::normalise<Policy, boost::math::policies::rounding_error< boost::math::policies::throw_on_error> >::type()));
+   return BOOST_MATH_NAMESPACE::tools::real_cast<long>(BOOST_MATH_NAMESPACE::trunc(x, typename BOOST_MATH_NAMESPACE::policies::normalise<Policy, BOOST_MATH_NAMESPACE::policies::rounding_error< BOOST_MATH_NAMESPACE::policies::throw_on_error> >::type()));
 }
 template <class T, class U, class Policy>
 inline long ltrunc(__gmp_expr<T,U> const& x, const Policy& pol)
@@ -173,7 +173,7 @@ inline long ltrunc(__gmp_expr<T,U> const& x, const Policy& pol)
 template <class Policy>
 inline long long lltrunc(mpfr_class const& x, const Policy&)
 {
-   return boost::math::tools::real_cast<long long>(boost::math::trunc(x, typename boost::math::policies::normalise<Policy, boost::math::policies::rounding_error< boost::math::policies::throw_on_error> >::type()));
+   return BOOST_MATH_NAMESPACE::tools::real_cast<long long>(BOOST_MATH_NAMESPACE::trunc(x, typename BOOST_MATH_NAMESPACE::policies::normalise<Policy, BOOST_MATH_NAMESPACE::policies::rounding_error< BOOST_MATH_NAMESPACE::policies::throw_on_error> >::type()));
 }
 template <class T, class U, class Policy>
 inline long long lltrunc(__gmp_expr<T,U> const& x, const Policy& pol)
@@ -188,7 +188,9 @@ namespace boost{
 #endif
    template<> struct std::is_convertible<long long, mpfr_class> : public std::integral_constant<bool, false>{};
 
-namespace math{
+}
+
+BOOST_MATH_NAMESPACE_BEGIN
 
 #if defined(__GNUC__) && (__GNUC__ < 4)
    using ::iround;
@@ -433,7 +435,7 @@ inline mpfr_class log_min_value<mpfr_class>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SP
 template <>
 inline mpfr_class epsilon<mpfr_class>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpfr_class))
 {
-   return ldexp(mpfr_class(1), 1-boost::math::policies::digits<mpfr_class, boost::math::policies::policy<> >());
+   return ldexp(mpfr_class(1), 1-BOOST_MATH_NAMESPACE::policies::digits<mpfr_class, BOOST_MATH_NAMESPACE::policies::policy<> >());
 }
 
 } // namespace tools
@@ -858,7 +860,7 @@ inline mpfr_class bessel_i0(mpfr_class x)
     mpfr_class value, factor, r;
 
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
+    using namespace BOOST_MATH_NAMESPACE::tools;
 
     if (x < 0)
     {
@@ -933,7 +935,7 @@ inline mpfr_class bessel_i1(mpfr_class x)
     mpfr_class value, factor, r, w;
 
     BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
+    using namespace BOOST_MATH_NAMESPACE::tools;
 
     w = abs(x);
     if (x == 0)
@@ -964,7 +966,9 @@ inline mpfr_class bessel_i1(mpfr_class x)
 
 } // namespace detail
 
-}
+BOOST_MATH_NAMESPACE_END
+
+namespace boost{
 
 template<> struct std::is_convertible<long double, mpfr_class> : public std::false_type{};
 

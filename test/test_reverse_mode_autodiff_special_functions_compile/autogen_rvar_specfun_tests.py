@@ -6,7 +6,7 @@
 # (See accompanying file LICENSE_1_0.txt or copy at
 #           https://www.boost.org/LICENSE_1_0.txt)
 #
-import sys, os, subprocess
+import sys, os, subprocess, shutil, tempfile
 import logging
 import re
 from pathlib import Path
@@ -71,11 +71,12 @@ def generate_boost_test(func_sig,
     #include <boost/math/tools/workaround.hpp>
     #include <cmath>
     
-    BOOST_AUTO_TEST_SUITE(test_{func_name}_compiles)
+    namespace test_{func_name}_compiles {{
     
     using namespace rdiff;
     
-    BOOST_AUTO_TEST_CASE_TEMPLATE(test_{func_name}, T, {type_str})
+    template <typename T>
+    void test_{func_name}()
     {{
         RandomSample<T> rng{{ {min_val}, {max_val} }};
         T               x = rng.next();
@@ -83,9 +84,15 @@ def generate_boost_test(func_sig,
         rvar<T, 1> x_ad = x;
         auto y = boost::math::{func_sig.replace("arg", "x_ad")};
         auto y_expect = boost::math::{func_sig.replace("arg", "x")};
-        BOOST_CHECK_CLOSE(y.item(), y_expect, 1000*boost_close_tol<T>());
+        CHECK_RELATIVE_ERROR(y.item(), y_expect, 1000*boost_close_tol<T>() / 100);
     }}
-    BOOST_AUTO_TEST_SUITE_END()
+    }} // namespace test_{func_name}_compiles
+    
+    int main()
+    {{
+        mp11::mp_for_each<mp11::mp_transform<mp11::mp_identity, {type_str}>>([](auto t) {{ test_{func_name}_compiles::test_{func_name}<typename decltype(t)::type>(); }});
+        return boost::math::test::report_errors();
+    }}
     """
     cpp_file_sig = f"test_reverse_mode_autodiff_{func_name}_compile_test_ET_{et_str}_{type_str}.cpp"
     cpp_file_loc = f"{cpp_file_dir}/{cpp_file_sig}"
@@ -98,7 +105,7 @@ def compile_cpp_file(filename):
     file_name_no_ext = base_file_name.split(".")[0]
     program_name = f"/tmp/{file_name_no_ext}"
     clean_up_command = f"rm {program_name}"
-    compile_command = f"{CC} -o {program_name} {CPPFLAGS} {INCLUDE_FLAGS} -lboost_unit_test_framework {filename}"
+    compile_command = f"{CC} -o {program_name} {CPPFLAGS} {INCLUDE_FLAGS} {filename}"
     
     logger.info("cleaning up old executable")
     result_clean_up = subprocess.run(clean_up_command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -114,6 +121,32 @@ def compile_cpp_file(filename):
         logger2.error(f"{result_compile.stderr}")
         return program_name, False
     
+def check_and_keep(filename, group, jam_compile_commands):
+    """Compile and run a generated test.  If it passes, copy it into `group`
+    and list it in the Jamfile; otherwise make sure no stale copy is left in
+    the repository.  Returns (compiles, runs) as table strings ("N/A" if the
+    test did not compile)."""
+    base_file_name = os.path.basename(filename)
+    repo_file = f"{group}/{base_file_name}"
+    program_name, compiles = compile_cpp_file(filename)
+    runs = "N/A"
+    if compiles:
+        run_info = subprocess.run(f"{program_name}",shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        if not run_info.returncode:
+            logger.info(f"{filename} ran successfully")
+            runs = "True"
+        else:
+            logger.error(f"{filename} failed to run")
+            runs = "False"
+    if runs == "True":
+        if not os.path.exists(group):
+            os.makedirs(group)
+        shutil.copyfile(filename, repo_file)
+        jam_compile_commands.write(f"        [ run test_reverse_mode_autodiff_special_functions_compile/{repo_file} ]\n")
+    elif os.path.exists(repo_file):
+        os.remove(repo_file)
+    return str(compiles), runs
+
 if __name__=="__main__":
     bin_floats="bin_float_types"
     mp_type="multiprecision_float_types"
@@ -123,6 +156,7 @@ if __name__=="__main__":
         "mp_types" : mp_type
         }
 
+    scratch_dir = tempfile.mkdtemp()
     compile_table_file = open(COMPILATION_TABLE, "w")
     jam_compile_commands = open(JAM_COMPILE_COMMANDS_OUT,"w")
     jam_compile_commands.write("test-suite autodiff-long-running-tests\n")
@@ -135,88 +169,29 @@ if __name__=="__main__":
                 split_str = line.split("\t")
                 group, func_sig, minval, maxval = split_str[0], split_str[1], split_str[2], split_str[3]
                 func_name = func_sig.split("(")[0] 
-                if not os.path.exists(group):
-                    os.makedirs(group)
-                filename_et_on_cpp = generate_boost_test(func_sig, "ON", floats_to_test["cpp_types"], minval, maxval, group)
-                filename_et_off_cpp = generate_boost_test(func_sig, "OFF", floats_to_test["cpp_types"], minval, maxval, group)
-                filename_et_on_mp = generate_boost_test(func_sig, "ON", floats_to_test["mp_types"], minval, maxval, group)
-                filename_et_off_mp = generate_boost_test(func_sig, "OFF", floats_to_test["mp_types"], minval, maxval, group)
-        
-                et_on_cpp_program, et_on_cpp_compiles = compile_cpp_file(filename_et_on_cpp)
-                et_off_cpp_program, et_off_cpp_compiles = compile_cpp_file(filename_et_off_cpp)
-                et_on_mp_program, et_on_mp_compiles = compile_cpp_file(filename_et_on_mp)
-                et_off_mp_program, et_off_mp_compiles = compile_cpp_file(filename_et_off_mp)
-                
-                et_on_cpp_runs = "N/A"
-                et_off_cpp_runs = "N/A"
-                et_on_mp_runs = "N/A"
-                et_off_mp_runs = "N/A"
-                
-                if et_on_cpp_compiles:
-                    run_info = subprocess.run(f"{et_on_cpp_program}",shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-                    if not run_info.returncode:
-                        logger.info(f"{filename_et_on_cpp} ran successfully")
-                        et_on_cpp_runs = "True"
-                        jam_compile_commands.write(f"        [ run test_reverse_mode_autodiff_special_functions_compile/{filename_et_on_cpp} ]\n")
-                    else:
-                        logger.error(f"{filename_et_on_cpp} failed to run")
-                        et_on_cpp_runs = "False"
-                        jam_compile_commands.write(f"        [ run-fail test_reverse_mode_autodiff_special_functions_compile/{filename_et_on_cpp} ]\n")
-                else:
-                    jam_compile_commands.write(f"        [ compile-fail test_reverse_mode_autodiff_special_functions_compile/{filename_et_on_cpp} ]\n")
-                    
-                if et_off_cpp_compiles:
-                    run_info = subprocess.run(f"{et_off_cpp_program}",shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-                    if not run_info.returncode:
-                        logger.info(f"{filename_et_off_cpp} ran successfully")
-                        et_off_cpp_runs = "True"
-                        jam_compile_commands.write(f"        [ run test_reverse_mode_autodiff_special_functions_compile/{filename_et_off_cpp} ]\n")
-                    if not run_info.returncode:
-                        logger.error(f"{filename_et_off_cpp} failed to run")
-                        et_off_cpp_runs = "False"
-                        jam_compile_commands.write(f"        [ run-fail test_reverse_mode_autodiff_special_functions_compile/{filename_et_off_cpp} ]\n")
-                else:
-                    jam_compile_commands.write(f"        [ compile-fail test_reverse_mode_autodiff_special_functions_compile/{filename_et_off_cpp} ]\n")
-                
-                if et_on_mp_compiles:
-                    run_info = subprocess.run(f"{et_on_mp_program}",shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-                    if not run_info.returncode:
-                        logger.info(f"{filename_et_on_mp} ran successfully")
-                        et_on_mp_runs = True
-                        jam_compile_commands.write(f"        [ run test_reverse_mode_autodiff_special_functions_compile/{filename_et_on_mp} ]\n")
-                    else:
-                        logger.info(f"{filename_et_on_mp} failed to run")
-                        et_on_mp_runs = False
-                        jam_compile_commands.write(f"        [ run-fail test_reverse_mode_autodiff_special_functions_compile/{filename_et_on_mp} ]\n")
-                else:
-                    jam_compile_commands.write(f"        [ compile-fail test_reverse_mode_autodiff_special_functions_compile/{filename_et_on_mp} ]\n")
-                    
-                if et_off_mp_compiles:
-                    run_info = subprocess.run(f"{et_off_mp_program}",shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-                    if not run_info.returncode:
-                        logger.info(f"{filename_et_off_mp} ran successfully")
-                        et_off_mp_runs = True
-                        jam_compile_commands.write(f"        [ run test_reverse_mode_autodiff_special_functions_compile/{filename_et_off_mp} ]\n")
-                    if not run_info.returncode:
-                        logger.error(f"{filename_et_off_mp} failed to run")
-                        et_off_mp_runs = False
-                        jam_compile_commands.write(f"        [ run-fail test_reverse_mode_autodiff_special_functions_compile/{filename_et_off_mp} ]\n")
-                else:
-                    jam_compile_commands.write(f"        [ compile-fail test_reverse_mode_autodiff_special_functions_compile/{filename_et_off_mp} ]\n")
-                works_with_mp = et_on_mp_compiles and et_on_mp_runs and et_off_mp_compiles and et_off_mp_runs
-                works_with_mp_str = ""
-                if works_with_mp:
-                    works_with_mp_str = "True"
-                else:
-                    works_with_mp = "False"
-                    
-                compile_table_file.write(f"[[{func_name}]\t[{et_on_cpp_compiles}]\t[{et_on_cpp_runs}]\t[{et_off_cpp_compiles}]\t[{et_off_cpp_runs}]\t[{works_with_mp}]\t[N/A]]\n")
+                # Generate into a scratch directory; only tests that compile and
+                # pass are copied into the repository and listed in the Jamfile.
+                filename_et_on_cpp = generate_boost_test(func_sig, "ON", floats_to_test["cpp_types"], minval, maxval, scratch_dir)
+                filename_et_off_cpp = generate_boost_test(func_sig, "OFF", floats_to_test["cpp_types"], minval, maxval, scratch_dir)
+                filename_et_on_mp = generate_boost_test(func_sig, "ON", floats_to_test["mp_types"], minval, maxval, scratch_dir)
+                filename_et_off_mp = generate_boost_test(func_sig, "OFF", floats_to_test["mp_types"], minval, maxval, scratch_dir)
+
+                et_on_cpp_compiles, et_on_cpp_runs = check_and_keep(filename_et_on_cpp, group, jam_compile_commands)
+                et_off_cpp_compiles, et_off_cpp_runs = check_and_keep(filename_et_off_cpp, group, jam_compile_commands)
+                et_on_mp_compiles, et_on_mp_runs = check_and_keep(filename_et_on_mp, group, jam_compile_commands)
+                et_off_mp_compiles, et_off_mp_runs = check_and_keep(filename_et_off_mp, group, jam_compile_commands)
+
+                works_with_mp = et_on_mp_runs == "True" and et_off_mp_runs == "True"
+                works_with_mp_str = "True" if works_with_mp else "False"
+
+                compile_table_file.write(f"[[{func_name}]\t[{et_on_cpp_compiles}]\t[{et_on_cpp_runs}]\t[{et_off_cpp_compiles}]\t[{et_off_cpp_runs}]\t[{works_with_mp_str}]\t[N/A]]\n")
     compile_table_file.write(
         """]"""
         )
     jam_compile_commands.write("    ;")
     compile_table_file.close()
     jam_compile_commands.close()
+    shutil.rmtree(scratch_dir)
     
     
     

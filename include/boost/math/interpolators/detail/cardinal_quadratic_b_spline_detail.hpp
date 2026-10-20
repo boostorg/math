@@ -6,11 +6,15 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_CARDINAL_QUADRATIC_B_SPLINE_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_CARDINAL_QUADRATIC_B_SPLINE_DETAIL_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <cmath>
 #include <stdexcept>
+#endif
 
-namespace boost{ namespace math{ namespace interpolators{ namespace detail{
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN namespace interpolators{ namespace detail{
 
 template <class Real>
 Real b2_spline(Real x) {
@@ -204,5 +208,5 @@ private:
     Real m_t0;
 };
 
-}}}}
+}} BOOST_MATH_NAMESPACE_END
 #endif

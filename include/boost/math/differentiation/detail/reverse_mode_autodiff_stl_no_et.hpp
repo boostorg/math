@@ -6,8 +6,7 @@
 #define REVERSE_MODE_AUTODIFF_STL_NO_ET_HPP
 
 #include <boost/math/differentiation/detail/reverse_mode_autodiff_stl_expressions.hpp>
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 namespace differentiation {
 namespace reverse_mode {
 
@@ -260,7 +259,6 @@ rvar<RealType, DerivativeOrder> atanh(const expression<RealType, DerivativeOrder
 }
 } // namespace reverse_mode
 } // namespace differentiation
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif

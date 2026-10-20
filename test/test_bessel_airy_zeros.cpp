@@ -140,7 +140,23 @@ void test_bessel_zeros(RealType)
   // class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class boost::math::evaluation_error> >:
   // Error in function boost::math::bessel_jy<double>(double,double): Order of Bessel function is too large to evaluate: got 3.4028234663852886e+038
 
-  BOOST_MATH_CHECK_THROW(cyl_bessel_j_zero(boost::math::tools::max_value<RealType>(), 1), boost::math::evaluation_error);
+  // Whether this overflows internally depends on how double is evaluated: with double promoted
+  // to long double, or on arm64 where an intermediate overflows, it throws, but with unpromoted SSE2 double
+  // on x86 the correctly rounded answer (which is max_value itself) is returned.
+  BOOST_IF_CONSTEXPR (std::is_same<RealType, double>::value && !BOOST_MATH_PROMOTE_DOUBLE_POLICY)
+  {
+    try
+    {
+      BOOST_CHECK(cyl_bessel_j_zero(boost::math::tools::max_value<RealType>(), 1) > boost::math::tools::max_value<RealType>() / 2);
+    }
+    catch (const boost::math::evaluation_error&)
+    {
+    }
+  }
+  else
+  {
+    BOOST_MATH_CHECK_THROW(cyl_bessel_j_zero(boost::math::tools::max_value<RealType>(), 1), boost::math::evaluation_error);
+  }
 
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(boost::math::tools::min_value<RealType>(), 1),
     static_cast<RealType>(2.4048255576957727686216318793264546431242449091460L), tolerance);

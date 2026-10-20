@@ -329,5 +329,167 @@ void test_spots(T)
          static_cast<T>(1.0e13L),
          static_cast<T>(0.995L)),
       static_cast<T>(0.0099010703473402885173268397418009652L), 5e-10);
+   //
+   // min(a, b) == 1000 exactly used to fall between two strict comparisons
+   // when selecting the initial guess, so that no guess was set at all:
+   // https://github.com/boostorg/math/issues/1511
+   //
+   // The generic (non-Lanczos) code used by real_concept is far less
+   // accurate for arguments this large, whatever the value of min(a, b),
+   // so only the built-in floating point types get the usual tolerance:
+   //
+   T tolerance_1511 = tolerance * (boost::is_floating_point<T>::value ? 1 : 100000000);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(
+         static_cast<T>(1000),
+         static_cast<T>(1.0e9L),
+         static_cast<T>(0.025L)),
+      static_cast<T>(9.389721085563963404180136990833102726849528911e-7L), tolerance_1511);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(
+         static_cast<T>(1.0e9L),
+         static_cast<T>(1000),
+         static_cast<T>(0.975L)),
+      static_cast<T>(0.999999061027891443603659581986300916689727315L), tolerance_1511);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibetac_inv(
+         static_cast<T>(1000),
+         static_cast<T>(1.0e9L),
+         static_cast<T>(0.975L)),
+      static_cast<T>(9.389721085563963404180136990833102726849528911e-7L), tolerance_1511);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(
+         static_cast<T>(1000),
+         static_cast<T>(1.0e9L),
+         static_cast<T>(0.5L)),
+      static_cast<T>(9.996656874277116690802174656563429711990058656e-7L), tolerance_1511);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(
+         static_cast<T>(1000),
+         static_cast<T>(2.0e7L),
+         static_cast<T>(0.025L)),
+      static_cast<T>(4.694637640096960118983038721439854358366856456e-5L), tolerance_1511);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(
+         static_cast<T>(1000),
+         static_cast<T>(1.0e12L),
+         static_cast<T>(0.025L)),
+      static_cast<T>(9.389730174978430291685459639013695242587542550e-10L), tolerance_1511);
+   //
+   // The same case with promotion to a wider type switched off, so that it is
+   // exercised in the working precision on every platform: with promotion to
+   // an 80-bit long double the iteration could recover from the missing guess.
+   //
+   {
+      boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> > no_promotion;
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(1000), static_cast<T>(1.0e9L), static_cast<T>(0.025L), no_promotion),
+         static_cast<T>(9.389721085563963404180136990833102726849528911e-7L), tolerance_1511);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(1.0e9L), static_cast<T>(1000), static_cast<T>(0.975L), no_promotion),
+         static_cast<T>(0.999999061027891443603659581986300916689727315L), tolerance_1511);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(1000), static_cast<T>(2.0e7L), static_cast<T>(0.025L), no_promotion),
+         static_cast<T>(4.694637640096960118983038721439854358366856456e-5L), tolerance_1511);
+   }
+   //
+   // For large a and b, the power terms (x^a)(y^b)/B(a, b) in ibeta lost about
+   // eps max(a, b) min(x, y) in the bases of the exponents. Where the compiler
+   // contracts x b - y a into an fma, that was a relative error of 1e-11 here,
+   // and the inverse converged to the root of the inaccurate function:
+   //
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(static_cast<T>(1.0e5L), static_cast<T>(1.0e7L), static_cast<T>(0.5L)),
+      static_cast<T>(0.009900957749257592174244117422247546495548854468L), tolerance_1511);
+   {
+      boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> > no_promotion;
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(1.0e5L), static_cast<T>(1.0e7L), static_cast<T>(0.5L), no_promotion),
+         static_cast<T>(0.009900957749257592174244117422247546495548854468L), tolerance_1511);
+   }
+   //
+   // The second derivative handed to the root finder had the wrong sign
+   // whenever the target was p rather than q.  Check it against cases with
+   // simple closed forms: I_x(2, 1) = x^2 and I_x(2, 3) = 6x^2 - 8x^3 + 3x^4.
+   //
+   {
+      typedef boost::math::policies::policy<> pol_type;
+      boost::math::detail::ibeta_roots<T, pol_type> r1(static_cast<T>(2), static_cast<T>(1), static_cast<T>(0.5), false);
+      boost::math::detail::ibeta_roots<T, pol_type> r1c(static_cast<T>(2), static_cast<T>(1), static_cast<T>(0.5), true);
+      BOOST_CHECK_CLOSE(boost::math::get<1>(r1(static_cast<T>(0.25))), static_cast<T>(0.5), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::get<2>(r1(static_cast<T>(0.25))), static_cast<T>(2), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::get<1>(r1c(static_cast<T>(0.25))), static_cast<T>(-0.5), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::get<2>(r1c(static_cast<T>(0.25))), static_cast<T>(-2), tolerance);
+      boost::math::detail::ibeta_roots<T, pol_type> r2(static_cast<T>(2), static_cast<T>(3), static_cast<T>(0.5), false);
+      boost::math::detail::ibeta_roots<T, pol_type> r2c(static_cast<T>(2), static_cast<T>(3), static_cast<T>(0.5), true);
+      BOOST_CHECK_CLOSE(boost::math::get<1>(r2(static_cast<T>(0.25))), static_cast<T>(1.6875), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::get<2>(r2(static_cast<T>(0.25))), static_cast<T>(2.25), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::get<1>(r2c(static_cast<T>(0.25))), static_cast<T>(-1.6875), tolerance);
+      BOOST_CHECK_CLOSE(boost::math::get<2>(r2c(static_cast<T>(0.25))), static_cast<T>(-2.25), tolerance);
+   }
+   //
+   // With that sign wrong, Halley iteration was only second order, which left
+   // errors of tens to hundreds of ulps for large a and b whenever the evaluation
+   // was not promoted to a wider type.  These points were among the worst:
+   //
+   if (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::digits == std::numeric_limits<double>::digits))
+   {
+      boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promotion;
+      T tol = boost::math::tools::epsilon<T>() * 2000;   // 20 eps as a percentage
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(2000), static_cast<T>(1.0e9), static_cast<T>(0.006940925861941986), no_promotion),
+         static_cast<T>(1.891653812057568512817838421240351406e-06L), tol);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(1000), static_cast<T>(1.0e9), static_cast<T>(0.006940925861941986), no_promotion),
+         static_cast<T>(9.238836420371353708007156030941301367e-07L), tol);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(40), static_cast<T>(80), static_cast<T>(0.05189222238401044), no_promotion),
+         static_cast<T>(2.651352194946371952577010439645915240e-01L), tol);
+   }
+   //
+   // Far out in the lower tail the asymptotic starting guesses are poor, and
+   // the iteration could run out of steps before reaching the root.  The start
+   // now comes from the power series there.  Reference values are from the
+   // finite sum for integer a in exact decimal arithmetic.
+   //
+   if (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::min_exponent10 < -260))
+   {
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(2), static_cast<T>(4), static_cast<T>(1e-100L)),
+         static_cast<T>(3.1622776601683793319988935444327185337196e-51L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(3), static_cast<T>(3), static_cast<T>(1e-200L)),
+         static_cast<T>(1.0e-67L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(10), static_cast<T>(10000), static_cast<T>(1e-250L)),
+         static_cast<T>(4.5266918634202858901451019656158915843844e-29L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(static_cast<T>(5), static_cast<T>(1.0e6L), static_cast<T>(1e-150L)),
+         static_cast<T>(2.6051658743682083165731837839652844149311e-36L), tolerance);
+      BOOST_CHECK_EQUAL(
+         ::boost::math::ibetac_inv(static_cast<T>(4), static_cast<T>(2), static_cast<T>(1e-100L)),
+         static_cast<T>(1));
+   }
+   //
+   // a == b and p == 1/2: the root is exactly the inflection point, which was also the upper
+   // bound of the search, and the root finder only crept up on it, to ~sqrt(eps).  For real_concept ibeta itself
+   // is ~7 eps out at x = 1/2, which the inverse divides by the density there; with a 113-bit long double
+   // (aarch64 Linux) real_concept's inverse at a = b = 1.0002 was measured 109 eps out:
+   //
+   T inflection_tolerance = (std::is_same<T, boost::math::concepts::real_concept>::value ? (boost::math::tools::digits<T>() > 64 ? 160 : 64) : 8) * boost::math::tools::epsilon<T>();
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(1.0002383038393605L), T(1.0002383038393605L), T(0.5)), T(0.5), inflection_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(0.36209832717702123L), T(0.36209832717702123L), T(0.5)), T(0.5), inflection_tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(2.495355969835936L), T(2.495355969835936L), T(0.5)), T(0.5), inflection_tolerance);
+   //
+   // Near the mean ibeta used to sidestep to a series that lost up to 250 eps, which the inverses inherited.
+   // Reference values from a 100-digit evaluation, doubles only:
+   //
+   BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+   {
+      typedef boost::math::policies::policy<boost::math::policies::promote_double<false> > no_promote;
+      T fine_tolerance = boost::math::tools::epsilon<T>() * 4;
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibeta_inv(T(26.915348039269173), T(31.260793671239576), T(0.5), no_promote()), static_cast<T>(0.462221785758236606742689160666476137835L), fine_tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::ibetac_inv(T(30.902954325135934), T(305.49211132155142), T(0.025), no_promote()), static_cast<T>(0.1248965682964306624656343882252054888054L), fine_tolerance);
+   }
 }
 

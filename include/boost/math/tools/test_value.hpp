@@ -30,8 +30,10 @@
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/lexical_cast.hpp>
 #endif
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <limits>
 #include <type_traits>
+#endif
 
 #ifdef BOOST_MATH_INSTRUMENT_CREATE_TEST_VALUE
 // global int create_type(0); must be defined before including this file.
@@ -87,6 +89,7 @@ inline T create_test_value(largest_float, const char* str, const std::false_type
   create_type = 3;
 #endif
 #if defined(BOOST_MATH_STANDALONE)
+  static_cast<void>(str);
   static_assert(sizeof(T) == 0, "Can not create a test value using lexical cast of string in standalone mode");
   return T();
 #else

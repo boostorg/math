@@ -211,6 +211,19 @@
           and 0.4*D for Halley or Shröder iteration, where D is <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">digits</span></code>.
         </li>
 <li class="listitem">
+          Out-of-bounds steps are assumed to have the root between the current guess
+          and the bound they crossed. If <span class="emphasis"><em>f(x)</em></span> is not monotone
+          between the guess and the root (for example there is a local extremum in
+          the way) that assumption fails, and the iteration can end up at the bound
+          without <span class="emphasis"><em>f(x)</em></span> ever changing sign. The implementation
+          attempts to detect this case: if the result has collapsed onto one end
+          of [min, max], <span class="emphasis"><em>f(x)</em></span> never changed sign, and <span class="emphasis"><em>f(x)</em></span>
+          at that end does not look like a root, an <a class="link" href="error_handling.html#math_toolkit.error_handling.evaluation_error">evaluation_error</a>
+          is raised rather than returning the bound. The detection is heuristic,
+          so the best defence is a good initial guess, or a range [min, max] on which
+          <span class="emphasis"><em>f(x)</em></span> is monotone.
+        </li>
+<li class="listitem">
           If you need some diagnostic output to see what is going on, you can <code class="computeroutput"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_INSTRUMENT</span></code>
           before the <code class="computeroutput"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">roots</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>, and also ensure that display of all
           the significant digits with <code class="computeroutput"> <span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">digits10</span><span class="special">)</span></code>: or even possibly significant digits with

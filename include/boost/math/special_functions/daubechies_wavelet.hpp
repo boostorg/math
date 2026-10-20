@@ -7,12 +7,14 @@
 
 #ifndef BOOST_MATH_SPECIAL_DAUBECHIES_WAVELET_HPP
 #define BOOST_MATH_SPECIAL_DAUBECHIES_WAVELET_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <vector>
 #include <array>
 #include <cmath>
 #include <thread>
 #include <future>
 #include <iostream>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
@@ -29,9 +31,9 @@
 #endif
 #endif
 
-namespace boost::math {
+BOOST_MATH_NAMESPACE_BEGIN
 
-   template<class Real, int p, int order>
+   BOOST_MATH_EXPORT template<class Real, int p, int order>
    std::vector<Real> daubechies_wavelet_dyadic_grid(int64_t j_max)
    {
       if (j_max == 0)
@@ -41,8 +43,8 @@ namespace boost::math {
       auto phijk = daubechies_scaling_dyadic_grid<Real, p, order>(j_max - 1);
       //psi_j[l] = psi(-p+1 + l/2^j) = \sum_{k=0}^{2p-1} (-1)^k c_k \phi(1-2p+k + l/2^{j-1})
       //For derivatives just map c_k -> 2^order c_k.
-      auto d = boost::math::filters::daubechies_scaling_filter<Real, p>();
-      Real scale = boost::math::constants::root_two<Real>() * (1 << order);
+      auto d = BOOST_MATH_NAMESPACE::filters::daubechies_scaling_filter<Real, p>();
+      Real scale = BOOST_MATH_NAMESPACE::constants::root_two<Real>() * (1 << order);
       for (size_t i = 0; i < d.size(); ++i)
       {
          d[i] *= scale;
@@ -75,7 +77,7 @@ namespace boost::math {
    }
 
 
-   template<class Real, int p>
+   BOOST_MATH_EXPORT template<class Real, int p>
    class daubechies_wavelet {
       //
       // Some type manipulation so we know the type of the interpolator, and the vector type it requires:
@@ -261,6 +263,6 @@ namespace boost::math {
       std::shared_ptr<interpolator_type> m_interpolator;
    };
 
-}
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SPECIAL_DAUBECHIES_WAVELET_HPP

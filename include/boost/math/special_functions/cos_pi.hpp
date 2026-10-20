@@ -15,15 +15,17 @@
 
 #ifndef BOOST_MATH_HAS_NVRTC
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <limits>
+#endif
 #include <boost/math/tools/numeric_limits.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/constants/constants.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T cos_pi_imp(T x, const Policy&)
@@ -39,7 +41,7 @@ BOOST_MATH_GPU_ENABLED T cos_pi_imp(T x, const Policy&)
       x = -x;
    }
    T rem = floor(x);
-   if(abs(floor(rem/2)*2 - rem) > boost::math::numeric_limits<T>::epsilon())
+   if(abs(floor(rem/2)*2 - rem) > BOOST_MATH_NAMESPACE::numeric_limits<T>::epsilon())
    {
       invert = !invert;
    }
@@ -64,7 +66,7 @@ BOOST_MATH_GPU_ENABLED T cos_pi_imp(T x, const Policy&)
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_EXPORT template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cos_pi(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -78,24 +80,22 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cos_pi(T x, 
       // We want to ignore overflows since the result is in [-1,1] and the 
       // check slows the code down considerably.
       policies::overflow_error<policies::ignore_error> >::type forwarding_policy;
-   return policies::checked_narrowing_cast<result_type, forwarding_policy>(boost::math::detail::cos_pi_imp<value_type>(x, forwarding_policy()), "cos_pi");
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(BOOST_MATH_NAMESPACE::detail::cos_pi_imp<value_type>(x, forwarding_policy()), "cos_pi");
 }
 
-template <class T>
+BOOST_MATH_EXPORT template <class T>
 BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type cos_pi(T x)
 {
-   return boost::math::cos_pi(x, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::cos_pi(x, policies::policy<>());
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #else // Special handling for NVRTC
 
-namespace boost {
-namespace math {
+BOOST_MATH_NAMESPACE_BEGIN
 
-template <typename T>
+BOOST_MATH_EXPORT template <typename T>
 BOOST_MATH_GPU_ENABLED auto cos_pi(T x)
 {
    return ::cospi(x);
@@ -107,20 +107,19 @@ BOOST_MATH_GPU_ENABLED auto cos_pi(float x)
    return ::cospif(x);
 }
 
-template <typename T, typename Policy>
+BOOST_MATH_EXPORT template <typename T, typename Policy>
 BOOST_MATH_GPU_ENABLED auto cos_pi(T x, const Policy&)
 {
    return ::cospi(x);
 }
 
-template <typename Policy>
+BOOST_MATH_EXPORT template <typename Policy>
 BOOST_MATH_GPU_ENABLED auto cos_pi(float x, const Policy&)
 {
    return ::cospif(x);
 }
 
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_HAS_NVRTC
 

@@ -85,6 +85,53 @@ so it can be effectively computed via Gaussian quadrature using the following co
     Complex W = integrator.integrate(lw, (Real) 0, pi<Real>());
 
 
+[heading Vector- and matrix-valued integrands]
+
+Additional overloads accept an explicit additive identity and a scalar-valued norm:
+
+    template <class F, class Norm>
+    static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm,
+                          Real* pL1 = nullptr) -> decltype(f(Real(0)));
+
+    template <class F, class Norm>
+    static auto integrate(F f, Real a, Real b,
+                          const decltype(f(Real(0)))& zero, Norm norm,
+                          Real* pL1 = nullptr) -> decltype(f(Real(0)));
+
+These overloads participate in overload resolution only when `norm(f(Real(0)))`
+is convertible to `Real` by an explicit cast. Existing overloads are unchanged.
+
+The integrand must return a concrete value type supporting addition, addition
+assignment, unary negation, and multiplication by `Real` on either side.
+All returned values and `zero` must have compatible dimensions. In particular,
+return an owning matrix rather than an unevaluated expression referencing temporaries.
+`norm` must return a nonnegative scalar norm convertible to `Real`.
+If requested, `pL1` receives the quadrature approximation to the integral of
+`norm(f(x))` over the interval in increasing order. This is not an error estimate.
+
+For example, with Eigen available:
+
+    using Matrix = Eigen::Matrix<std::complex<double>, 2, 2>;
+    Matrix zero = Matrix::Zero();
+    auto f = [](double x) -> Matrix {
+        Matrix result;
+        result << x, 0., 0., x*x;
+        return result;
+    };
+    auto norm = [](const Matrix& m) { return m.norm(); };
+    Matrix result = boost::math::quadrature::gauss<double, 10>::integrate(
+        f, 0., 1., zero, norm);
+
+The explicit zero also allows dynamically sized matrices: initialize it with the required dimensions.
+For equal bounds the supplied zero is returned, `*pL1` is set to zero if requested,
+and the integrand is not evaluated.
+
+Invalid bounds invoke the existing scalar domain-error policy. If that policy
+returns a scalar error value instead of throwing, the result is `zero` multiplied
+by that value, and `*pL1` receives that value if requested. For floating-point Eigen
+matrices and the ignore-error policy, this produces a matrix of NaNs with the
+supplied dimensions. Custom value types must support this multiplication too.
+
 [heading Choosing the number of points]
 
 Internally class `gauss` has pre-computed tables of abscissa and weights for 7, 15, 20, 25 and 30 points at up to 100-decimal

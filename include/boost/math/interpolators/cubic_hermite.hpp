@@ -6,21 +6,27 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_CUBIC_HERMITE_HPP
 #define BOOST_MATH_INTERPOLATORS_CUBIC_HERMITE_HPP
-#include <memory>
-#include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
-#include <cstdint>
 
-namespace boost {
-namespace math {
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <memory>
+#endif
+#include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <cstdint>
+#endif
+#include <boost/math/policies/error_handling.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN
 namespace interpolators {
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer, class Policy = policies::policy<>>
 class cubic_hermite {
 public:
     using Real = typename RandomAccessContainer::value_type;
 
     cubic_hermite(RandomAccessContainer && x, RandomAccessContainer && y, RandomAccessContainer && dydx) 
-    : impl_(std::make_shared<detail::cubic_hermite_detail<RandomAccessContainer>>(std::move(x), std::move(y), std::move(dydx)))
+    : impl_(std::make_shared<detail::cubic_hermite_detail<RandomAccessContainer, Policy>>(std::move(x), std::move(y), std::move(dydx)))
     {}
 
     inline Real operator()(Real x) const {
@@ -44,6 +50,7 @@ public:
 
     std::int64_t bytes() const
     {
+        if ( ! valid()) return 0;
         return impl_->bytes() + sizeof(impl_);
     }
 
@@ -52,17 +59,25 @@ public:
         return impl_->domain();
     }
 
+    bool valid() const {
+        return impl_->valid();
+    }
+
+    std::string const& error_msg() const {
+        return impl_->error_msg();
+    }
+
 private:
-    std::shared_ptr<detail::cubic_hermite_detail<RandomAccessContainer>> impl_;
+    std::shared_ptr<detail::cubic_hermite_detail<RandomAccessContainer, Policy>> impl_;
 };
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer, class Policy = policies::policy<>>
 class cardinal_cubic_hermite {
 public:
     using Real = typename RandomAccessContainer::value_type;
 
     cardinal_cubic_hermite(RandomAccessContainer && y, RandomAccessContainer && dydx, Real x0, Real dx) 
-    : impl_(std::make_shared<detail::cardinal_cubic_hermite_detail<RandomAccessContainer>>(std::move(y), std::move(dydx), x0, dx))
+    : impl_(std::make_shared<detail::cardinal_cubic_hermite_detail<RandomAccessContainer, Policy>>(std::move(y), std::move(dydx), x0, dx))
     {}
 
     inline Real operator()(Real x) const
@@ -83,6 +98,7 @@ public:
 
     std::int64_t bytes() const
     {
+        if ( ! valid()) return 0;
         return impl_->bytes() + sizeof(impl_);
     }
 
@@ -91,19 +107,27 @@ public:
         return impl_->domain();
     }
 
+    bool valid() const {
+        return impl_->valid();
+    }
+
+    std::string const& error_msg() const {
+        return impl_->error_msg();
+    }
+
 private:
-    std::shared_ptr<detail::cardinal_cubic_hermite_detail<RandomAccessContainer>> impl_;
+    std::shared_ptr<detail::cardinal_cubic_hermite_detail<RandomAccessContainer, Policy>> impl_;
 };
 
 
-template<class RandomAccessContainer>
+BOOST_MATH_EXPORT template<class RandomAccessContainer, class Policy = policies::policy<>>
 class cardinal_cubic_hermite_aos {
 public:
     using Point = typename RandomAccessContainer::value_type;
     using Real = typename Point::value_type;
 
     cardinal_cubic_hermite_aos(RandomAccessContainer && data, Real x0, Real dx) 
-    : impl_(std::make_shared<detail::cardinal_cubic_hermite_detail_aos<RandomAccessContainer>>(std::move(data), x0, dx))
+    : impl_(std::make_shared<detail::cardinal_cubic_hermite_detail_aos<RandomAccessContainer, Policy>>(std::move(data), x0, dx))
     {}
 
     inline Real operator()(Real x) const
@@ -124,6 +148,7 @@ public:
 
     std::int64_t bytes() const
     {
+        if ( ! valid()) return 0;
         return impl_->bytes() + sizeof(impl_);
     }
 
@@ -132,11 +157,18 @@ public:
         return impl_->domain();
     }
 
+    bool valid() const {
+        return impl_->valid();
+    }
+
+    std::string const& error_msg() const {
+        return impl_->error_msg();
+    }
+
 private:
-    std::shared_ptr<detail::cardinal_cubic_hermite_detail_aos<RandomAccessContainer>> impl_;
+    std::shared_ptr<detail::cardinal_cubic_hermite_detail_aos<RandomAccessContainer, Policy>> impl_;
 };
 
 }
-}
-}
+BOOST_MATH_NAMESPACE_END
 #endif

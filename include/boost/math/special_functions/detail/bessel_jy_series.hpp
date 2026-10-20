@@ -14,7 +14,7 @@
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/cstdint.hpp>
 
-namespace boost { namespace math { namespace detail{
+BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 
 template <class T, class Policy>
 struct bessel_j_small_z_series_term
@@ -54,20 +54,20 @@ BOOST_MATH_GPU_ENABLED inline T bessel_j_small_z_series(T v, T x, const Policy& 
    T prefix;
    if(v < max_factorial<T>::value)
    {
-      prefix = pow(x / 2, v) / boost::math::tgamma(v+1, pol);
+      prefix = pow(x / 2, v) / BOOST_MATH_NAMESPACE::tgamma(v+1, pol);
    }
    else
    {
-      prefix = v * log(x / 2) - boost::math::lgamma(v+1, pol);
+      prefix = v * log(x / 2) - BOOST_MATH_NAMESPACE::lgamma(v+1, pol);
       prefix = exp(prefix);
    }
    if(0 == prefix)
       return prefix;
 
    bessel_j_small_z_series_term<T, Policy> s(v, x);
-   boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 
-   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+   T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
 
    policies::check_series_iterations<T>("boost::math::bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
    return prefix * result;
@@ -149,7 +149,7 @@ BOOST_MATH_GPU_ENABLED inline T bessel_y_small_z_series(T v, T x, T* pscale, con
 
    if(!need_logs)
    {
-      gam = boost::math::tgamma(v, pol);
+      gam = BOOST_MATH_NAMESPACE::tgamma(v, pol);
       p = pow(x / 2, v);
       if(tools::max_value<T>() * p < gam)
       {
@@ -167,7 +167,7 @@ BOOST_MATH_GPU_ENABLED inline T bessel_y_small_z_series(T v, T x, T* pscale, con
    }
    else
    {
-      gam = boost::math::lgamma(v, pol);
+      gam = BOOST_MATH_NAMESPACE::lgamma(v, pol);
       p = v * p;
       prefix = gam - log(constants::pi<T>()) - p;
       if(tools::log_max_value<T>() < prefix)
@@ -182,28 +182,28 @@ BOOST_MATH_GPU_ENABLED inline T bessel_y_small_z_series(T v, T x, T* pscale, con
       prefix = -exp(prefix);
    }
    bessel_y_small_z_series_term_a<T, Policy> s(v, x);
-   boost::math::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    *pscale = scale;
 
-   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+   T result = BOOST_MATH_NAMESPACE::tools::sum_series(s, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
 
    policies::check_series_iterations<T>("boost::math::bessel_y_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
    result *= prefix;
 
    if(!need_logs)
    {
-      prefix = boost::math::tgamma(-v, pol) * boost::math::cos_pi(v, pol) * p / constants::pi<T>();
+      prefix = BOOST_MATH_NAMESPACE::tgamma(-v, pol) * BOOST_MATH_NAMESPACE::cos_pi(v, pol) * p / constants::pi<T>();
    }
    else
    {
       int sgn {};
-      prefix = boost::math::lgamma(-v, &sgn, pol) + p;
+      prefix = BOOST_MATH_NAMESPACE::lgamma(-v, &sgn, pol) + p;
       prefix = exp(prefix) * sgn / constants::pi<T>();
    }
    bessel_y_small_z_series_term_b<T, Policy> s2(v, x);
    max_iter = policies::get_max_series_iterations<Policy>();
 
-   T b = boost::math::tools::sum_series(s2, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+   T b = BOOST_MATH_NAMESPACE::tools::sum_series(s2, BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>(), max_iter);
 
    result -= scale * prefix * b;
    return result;
@@ -245,7 +245,7 @@ BOOST_MATH_GPU_ENABLED T bessel_yn_small_z(int n, T z, T* scale, const Policy& p
       auto p = static_cast<T>(pow(z / 2, n));
       #endif
       
-      T result = -((boost::math::factorial<T>(static_cast<unsigned>(n - 1), pol) / constants::pi<T>()));
+      T result = -((BOOST_MATH_NAMESPACE::factorial<T>(static_cast<unsigned>(n - 1), pol) / constants::pi<T>()));
       if(p * tools::max_value<T>() < fabs(result))
       {
          T div = tools::max_value<T>() / 8;
@@ -261,7 +261,7 @@ BOOST_MATH_GPU_ENABLED T bessel_yn_small_z(int n, T z, T* scale, const Policy& p
    }
 }
 
-}}} // namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_BESSEL_JN_SERIES_HPP
 

@@ -10,7 +10,6 @@
 name: codecov
 
 on:
-  pull_request:
   push:
     branches:
       - master
@@ -20,6 +19,11 @@ on:
       - fix/**
       - pr/**
 
+# A new push to a branch (develop, or a PR's) cancels that branch's older runs of this workflow:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 env:
   GIT_FETCH_JOBS: 8
   NET_RETRY_COUNT: 5
@@ -28,6 +32,9 @@ env:
   B2_LINK: shared
   LCOV_BRANCH_COVERAGE: 0
   CODECOV_NAME: Github Actions
+  # The contraction flags of the other CI jobs. Coverage builds are debug (-O0), where gcc does not
+  # fuse anyway, but this keeps the configuration the same.
+  B2_CXXFLAGS: -mfma -ffp-contract=fast
 
 jobs:
   posix:
@@ -57,7 +64,7 @@ jobs:
               compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'test_reverse_mode_autodiff' }
           - { name: Collect coverage gradient-optimizers, coverage: yes,
               compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'gradient_based_optimizers' }
-    timeout-minutes: 360
+    timeout-minutes: 180
     runs-on: ${{matrix.os}}
     container: ${{matrix.container}}
     env: {B2_USE_CCACHE: 0}

@@ -7,10 +7,11 @@
 #define BOOST_MATH_OPTIMIZATION_DETAIL_LINE_SEARCH_POLICIES_HPP
 
 #include <boost/math/optimization/detail/differentiable_opt_utilties.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <vector>
-namespace boost {
-namespace math {
+#endif
+BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {
 
 /**
@@ -53,7 +54,7 @@ public:
            class ArgumentContainer>
   RealType operator()(Objective& objective,
                       ObjectiveEvalPolicy& obj_eval,
-                      GradientEvalPolicy& grad_eval,
+                      GradientEvalPolicy& /*grad_eval*/,
                       ArgumentContainer& x,
                       const std::vector<RealType>& g,
                       const std::vector<RealType>& p,
@@ -201,6 +202,5 @@ private:
 };
 
 } // namespace optimization
-} // namespace math
-} // namespace boost
+BOOST_MATH_NAMESPACE_END
 #endif // LINE_SEARCH_POLICIES_HPP

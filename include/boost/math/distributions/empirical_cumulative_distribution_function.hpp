@@ -5,11 +5,13 @@
 
 #ifndef BOOST_MATH_DISTRIBUTIONS_EMPIRICAL_CUMULATIVE_DISTRIBUTION_FUNCTION_HPP
 #define BOOST_MATH_DISTRIBUTIONS_EMPIRICAL_CUMULATIVE_DISTRIBUTION_FUNCTION_HPP
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
 #include <type_traits>
 #include <utility>
+#endif
 
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE
@@ -19,7 +21,9 @@
 #endif
 #endif
 
-namespace boost { namespace math{
+#include <boost/math/tools/config.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN
 
 template<class RandomAccessContainer>
 class empirical_cumulative_distribution_function {
@@ -69,5 +73,5 @@ private:
     RandomAccessContainer m_v;
 };
 
-}}
+BOOST_MATH_NAMESPACE_END
 #endif

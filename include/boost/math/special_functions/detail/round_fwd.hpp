@@ -16,71 +16,67 @@
 #pragma once
 #endif
 
-namespace boost
-{
-   namespace math
-   { 
+BOOST_MATH_NAMESPACE_BEGIN
 
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED typename tools::promote_args<T>::type trunc(const T& v);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED int itrunc(const T& v, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED int itrunc(const T& v);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED long ltrunc(const T& v, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED long ltrunc(const T& v);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED long long lltrunc(const T& v, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED long long lltrunc(const T& v);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED typename tools::promote_args<T>::type round(const T& v, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED typename tools::promote_args<T>::type round(const T& v);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED int iround(const T& v, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED int iround(const T& v);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED long lround(const T& v, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED long lround(const T& v);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED long long llround(const T& v, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED long long llround(const T& v);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED T modf(const T& v, T* ipart, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED T modf(const T& v, T* ipart);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED T modf(const T& v, int* ipart, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED T modf(const T& v, int* ipart);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED T modf(const T& v, long* ipart, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED T modf(const T& v, long* ipart);
-   template <class T, class Policy>
+   BOOST_MATH_EXPORT template <class T, class Policy>
    BOOST_MATH_GPU_ENABLED T modf(const T& v, long long* ipart, const Policy& pol);
-   template <class T>
+   BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED T modf(const T& v, long long* ipart);
-   }
-}
+   BOOST_MATH_NAMESPACE_END
 
 #undef BOOST_MATH_STD_USING
 #define BOOST_MATH_STD_USING BOOST_MATH_STD_USING_CORE\
-   using boost::math::round;\
-   using boost::math::iround;\
-   using boost::math::lround;\
-   using boost::math::trunc;\
-   using boost::math::itrunc;\
-   using boost::math::ltrunc;\
-   using boost::math::modf;
+   using BOOST_MATH_NAMESPACE::round;\
+   using BOOST_MATH_NAMESPACE::iround;\
+   using BOOST_MATH_NAMESPACE::lround;\
+   using BOOST_MATH_NAMESPACE::trunc;\
+   using BOOST_MATH_NAMESPACE::itrunc;\
+   using BOOST_MATH_NAMESPACE::ltrunc;\
+   using BOOST_MATH_NAMESPACE::modf;
 
 
 #endif // BOOST_MATH_SPECIAL_ROUND_FWD_HPP

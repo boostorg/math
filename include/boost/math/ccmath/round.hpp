@@ -6,7 +6,9 @@
 #ifndef BOOST_MATH_CCMATH_ROUND_HPP
 #define BOOST_MATH_CCMATH_ROUND_HPP
 
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <stdexcept>
+#endif
 #include <boost/math/ccmath/detail/config.hpp>
 
 #ifdef BOOST_MATH_NO_CCMATH
@@ -18,7 +20,7 @@
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/modf.hpp>
 
-namespace boost::math::ccmath {
+BOOST_MATH_NAMESPACE_BEGIN namespace ccmath {
 
 namespace detail {
 
@@ -28,14 +30,14 @@ template <typename T>
 inline constexpr T round_impl(T arg) noexcept
 {
     T iptr = 0;
-    const T x = boost::math::ccmath::modf(arg, &iptr);
+    const T x = BOOST_MATH_NAMESPACE::ccmath::modf(arg, &iptr);
     constexpr T half = T(1)/2;
 
     if(x >= half && iptr >= 0)
     {
         return iptr + 1;
     }
-    else if(boost::math::ccmath::abs(x) >= half && iptr <= 0)
+    else if(BOOST_MATH_NAMESPACE::ccmath::abs(x) >= half && iptr <= 0)
     {
         return iptr - 1;
     }
@@ -69,15 +71,15 @@ inline constexpr ReturnType int_round_impl(T arg)
 
 } // Namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr Real round(Real arg) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
     {
-        return boost::math::ccmath::abs(arg) == Real(0) ? arg :
-               boost::math::ccmath::isinf(arg) ? arg :
-               boost::math::ccmath::isnan(arg) ? arg :
-               boost::math::ccmath::detail::round_impl(arg);
+        return BOOST_MATH_NAMESPACE::ccmath::abs(arg) == Real(0) ? arg :
+               BOOST_MATH_NAMESPACE::ccmath::isinf(arg) ? arg :
+               BOOST_MATH_NAMESPACE::ccmath::isnan(arg) ? arg :
+               BOOST_MATH_NAMESPACE::ccmath::detail::round_impl(arg);
     }
     else
     {
@@ -86,33 +88,33 @@ inline constexpr Real round(Real arg) noexcept
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr double round(Z arg) noexcept
 {
-    return boost::math::ccmath::round(static_cast<double>(arg));
+    return BOOST_MATH_NAMESPACE::ccmath::round(static_cast<double>(arg));
 }
 
 inline constexpr float roundf(float arg) noexcept
 {
-    return boost::math::ccmath::round(arg);
+    return BOOST_MATH_NAMESPACE::ccmath::round(arg);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline constexpr long double roundl(long double arg) noexcept
 {
-    return boost::math::ccmath::round(arg);
+    return BOOST_MATH_NAMESPACE::ccmath::round(arg);
 }
 #endif
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr long lround(Real arg)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
     {
-        return boost::math::ccmath::abs(arg) == Real(0) ? 0l :
-               boost::math::ccmath::isinf(arg) ? 0l :
-               boost::math::ccmath::isnan(arg) ? 0l :
-               boost::math::ccmath::detail::int_round_impl<long>(arg);
+        return BOOST_MATH_NAMESPACE::ccmath::abs(arg) == Real(0) ? 0l :
+               BOOST_MATH_NAMESPACE::ccmath::isinf(arg) ? 0l :
+               BOOST_MATH_NAMESPACE::ccmath::isnan(arg) ? 0l :
+               BOOST_MATH_NAMESPACE::ccmath::detail::int_round_impl<long>(arg);
     }
     else
     {
@@ -121,33 +123,33 @@ inline constexpr long lround(Real arg)
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr long lround(Z arg)
 {
-    return boost::math::ccmath::lround(static_cast<double>(arg));
+    return BOOST_MATH_NAMESPACE::ccmath::lround(static_cast<double>(arg));
 }
 
 inline constexpr long lroundf(float arg)
 {
-    return boost::math::ccmath::lround(arg);
+    return BOOST_MATH_NAMESPACE::ccmath::lround(arg);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline constexpr long lroundl(long double arg)
 {
-    return boost::math::ccmath::lround(arg);
+    return BOOST_MATH_NAMESPACE::ccmath::lround(arg);
 }
 #endif
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
+BOOST_MATH_EXPORT template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr long long llround(Real arg)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
     {
-        return boost::math::ccmath::abs(arg) == Real(0) ? 0ll :
-               boost::math::ccmath::isinf(arg) ? 0ll :
-               boost::math::ccmath::isnan(arg) ? 0ll :
-               boost::math::ccmath::detail::int_round_impl<long long>(arg);
+        return BOOST_MATH_NAMESPACE::ccmath::abs(arg) == Real(0) ? 0ll :
+               BOOST_MATH_NAMESPACE::ccmath::isinf(arg) ? 0ll :
+               BOOST_MATH_NAMESPACE::ccmath::isnan(arg) ? 0ll :
+               BOOST_MATH_NAMESPACE::ccmath::detail::int_round_impl<long long>(arg);
     }
     else
     {
@@ -156,24 +158,24 @@ inline constexpr long long llround(Real arg)
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
+BOOST_MATH_EXPORT template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr long llround(Z arg)
 {
-    return boost::math::ccmath::llround(static_cast<double>(arg));
+    return BOOST_MATH_NAMESPACE::ccmath::llround(static_cast<double>(arg));
 }
 
 inline constexpr long long llroundf(float arg)
 {
-    return boost::math::ccmath::llround(arg);
+    return BOOST_MATH_NAMESPACE::ccmath::llround(arg);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline constexpr long long llroundl(long double arg)
 {
-    return boost::math::ccmath::llround(arg);
+    return BOOST_MATH_NAMESPACE::ccmath::llround(arg);
 }
 #endif
 
-} // Namespaces
+} BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_CCMATH_ROUND_HPP

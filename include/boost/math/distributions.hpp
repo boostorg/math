@@ -23,6 +23,7 @@
 #include <boost/math/distributions/extreme_value.hpp>
 #include <boost/math/distributions/fisher_f.hpp>
 #include <boost/math/distributions/gamma.hpp>
+#include <boost/math/distributions/generalized_extreme_value.hpp>
 #include <boost/math/distributions/geometric.hpp>
 #include <boost/math/distributions/holtsmark.hpp>
 #include <boost/math/distributions/hyperexponential.hpp>
@@ -50,6 +51,7 @@
 #include <boost/math/distributions/students_t.hpp>
 #include <boost/math/distributions/triangular.hpp>
 #include <boost/math/distributions/uniform.hpp>
+#include <boost/math/distributions/von_mises.hpp>
 #include <boost/math/distributions/weibull.hpp>
 #include <boost/math/distributions/find_scale.hpp>
 #include <boost/math/distributions/find_location.hpp>

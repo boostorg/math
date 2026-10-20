@@ -127,15 +127,19 @@
 
         </p></blockquote></div>
 <p>
-        Accuracy tends to degenerate near <span class="emphasis"><em>q</em></span>=1 (small τ).
+        Accuracy degrades gently as <span class="emphasis"><em>q</em></span> approaches 1 (small τ),
+        where the rounding of log(<span class="emphasis"><em>q</em></span>) is amplified by the size
+        of the exponents in the transformed series; the τ parameterization does not
+        have this problem.
       </p>
 <h5>
 <a name="math_toolkit.jacobi_theta.jacobi_theta4.h3"></a>
         <span class="phrase"><a name="math_toolkit.jacobi_theta.jacobi_theta4.implementation"></a></span><a class="link" href="jacobi_theta4.html#math_toolkit.jacobi_theta.jacobi_theta4.implementation">Implementation</a>
       </h5>
 <p>
-        The <span class="emphasis"><em>q</em></span> parameterization is implemented using the τ parameterization,
-        where τ=-log(<span class="emphasis"><em>q</em></span>)/π.
+        When <span class="emphasis"><em>q</em></span> &lt; exp(-π) the series above is summed directly
+        in <span class="emphasis"><em>q</em></span>. Otherwise the <span class="emphasis"><em>q</em></span> parameterization
+        is implemented using the τ parameterization, where τ=-log(<span class="emphasis"><em>q</em></span>)/π.
       </p>
 <p>
         If τ is greater than or equal to 1, the summation above is used as-is. However

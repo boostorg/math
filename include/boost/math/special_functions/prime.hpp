@@ -10,10 +10,12 @@
 
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <cstdint>
+#endif
 
-namespace boost{ namespace math{
+BOOST_MATH_NAMESPACE_BEGIN
 
    //
    // See https://github.com/boostorg/math/issues/923 for the reasons behind using struct's here:
@@ -2406,7 +2408,7 @@ constexpr std::array<std::uint16_t, 3458> prime_data_imp<b>::a3;
 
    using prime_data = prime_data_imp<true>;
 
-   template <class Policy>
+   BOOST_MATH_EXPORT template <class Policy>
    BOOST_MATH_CONSTEXPR_TABLE_FUNCTION std::uint32_t prime(unsigned n, const Policy& pol)
    {
 
@@ -2416,18 +2418,18 @@ constexpr std::array<std::uint16_t, 3458> prime_data_imp<b>::a3;
          return prime_data::a2[n - prime_data::b1 - 1];
       if(n >= prime_data::b3)
       {
-         return boost::math::policies::raise_domain_error<std::uint32_t>("boost::math::prime<%1%>", "Argument n out of range: got %1%", n, pol);
+         return BOOST_MATH_NAMESPACE::policies::raise_domain_error<std::uint32_t>("boost::math::prime<%1%>", "Argument n out of range: got %1%", n, pol);
       }
       return static_cast<std::uint32_t>(prime_data::a3[n - prime_data::b2 - 1]) + 0xFFFFu;
    }
 
    inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION std::uint32_t prime(unsigned n)
    {
-      return boost::math::prime(n, boost::math::policies::policy<>());
+      return BOOST_MATH_NAMESPACE::prime(n, BOOST_MATH_NAMESPACE::policies::policy<>());
    }
 
-   static const unsigned max_prime = 9999;
+   BOOST_MATH_EXPORT BOOST_MATH_INLINE_CONSTEXPR unsigned max_prime = 9999;
 
-}} // namespace boost and math
+BOOST_MATH_NAMESPACE_END
 
 #endif // BOOST_MATH_SF_PRIME_HPP
