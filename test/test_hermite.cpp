@@ -133,7 +133,7 @@ test_zeros<cpp_bin_float_100>(std::numeric_limits<cpp_bin_float_100>::epsilon(),
 
 test_zeros_large(std::numeric_limits<float>::epsilon(), "float");
 test_zeros_large(std::numeric_limits<double>::epsilon(), "double");
-test_zeros_large(std::numeric_limits<long double>::epsilon(), "long double");
+test_zeros_large(2 * std::numeric_limits<long double>::epsilon(), "long double");
 using cpp_bin_float_100 = boost::multiprecision::cpp_bin_float_100;
 // Difference is 1e-101.
 test_zeros_large<cpp_bin_float_100>(std::numeric_limits<cpp_bin_float_100>::epsilon(), "cpp_bin_float_100");

@@ -118,7 +118,7 @@ public:
       return a(k) * x * p + b(k) * p_previous;
    }
 
-   Real derivative(const Real& x, const Real& p, const Real& p_previous) const
+   Real derivative(const Real&, const Real&, const Real& p_previous) const
    {
       return derivative_scale * p_previous;
    }
