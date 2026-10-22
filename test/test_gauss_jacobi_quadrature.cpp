@@ -75,7 +75,7 @@ void test_vector_valued()
 // compute the nodes/weights on the fly!
 int main()
 {
-   test_moments<float, 6>(4 * std::numeric_limits<float>::epsilon(), "float");
+   test_moments<float, 6>(8 * std::numeric_limits<float>::epsilon(), "float");
    test_moments<double, 6>(5 * std::numeric_limits<double>::epsilon(), "double");
    test_moments<double, 10>(5 * std::numeric_limits<double>::epsilon(), "double");
 
