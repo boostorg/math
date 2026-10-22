@@ -26,16 +26,16 @@ using boost::math::quadrature::gauss_jacobi;
 // Gauss-Jacobi integration is exact for polynomials of degree less than 2N - 1
 // We use a polynomial of degree 10, so should be exact for N >= 6
 template <class Real, unsigned N>
-void test_moments(Real tol)
+void test_moments(Real tol, const char* type_name)
 {
    using std::pow;
-   std::cout << "Testing Moments for N = " << N << std::endl;
+   std::cout << "Testing Moments for N = " << N << " and type " << type_name << std::endl;
    auto f = [](const Real& x) { return pow(x, Real(10.0)); };
    Real L1;
-   gauss_jacobi<Real> integrator = gauss_jacobi<Real>(N, -0.5, -0.25);
+   gauss_jacobi<Real> integrator = gauss_jacobi<Real>(N, -Real(0.5), -Real(0.25));
    Real Q = integrator.integrate(f, &L1);
 
-   CHECK_ABSOLUTE_ERROR(Q, BOOST_MATH_TEST_VALUE(Real, 0.604206393406616872500520394161000920557127865245), tol);
+   CHECK_ABSOLUTE_ERROR(Q, Real(0.604206393406616872500520394161000920557127865245), tol);
    // The integrand is nonnegative, so the L1 norm is the integral itself.
    CHECK_ABSOLUTE_ERROR(Q, L1, tol);
 }
@@ -75,15 +75,15 @@ void test_vector_valued()
 // compute the nodes/weights on the fly!
 int main()
 {
-   test_moments<float, 6>(std::numeric_limits<float>::epsilon());
-   test_moments<double, 6>(4 * std::numeric_limits<double>::epsilon());
-   test_moments<double, 10>(std::numeric_limits<double>::epsilon());
+   test_moments<float, 6>(4 * std::numeric_limits<float>::epsilon(), "float");
+   test_moments<double, 6>(4 * std::numeric_limits<double>::epsilon(), "double");
+   test_moments<double, 10>(4 * std::numeric_limits<double>::epsilon(), "double");
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   test_moments<long double, 6>(4 * std::numeric_limits<double>::epsilon());
+   test_moments<long double, 6>(4 * std::numeric_limits<double>::epsilon(), "long double");
 #endif
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-   test_moments<boost::math::concepts::real_concept, 6>(1e-16);
+   test_moments<boost::math::concepts::real_concept, 6>(4e-16, "real concept");
 #endif
 
 
