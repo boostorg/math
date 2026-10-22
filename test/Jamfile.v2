@@ -1153,8 +1153,10 @@ test-suite interpolators :
    [ run test_differential_evolution.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_jso.cpp : : : <toolset>clang:<cxxflags>-fno-fast-math <toolset>gcc:<cxxflags>-fno-fast-math <toolset>msvc:<cxxflags>"/fp:precise" [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_random_search.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run test_multilevel_coordinate_search.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_cma_es.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
    [ compile compile_test/test_random_search_incl.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ compile compile_test/test_multilevel_coordinate_search_incl.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ compile compile_test/test_differential_evolution_incl.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ compile compile_test/test_jso_incl.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
 ;

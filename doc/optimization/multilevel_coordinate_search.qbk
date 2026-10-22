@@ -1,0 +1,153 @@
+[/
+Copyright (c) 2026 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:multilevel_coordinate_search Multilevel Coordinate Search]
+
+[heading Synopsis]
+
+``
+    #include <boost/math/optimization/multilevel_coordinate_search.hpp>
+
+    namespace boost::math::optimization {
+
+    template <typename ArgumentContainer> struct multilevel_coordinate_search_parameters {
+        using Real = typename ArgumentContainer::value_type;
+        ArgumentContainer lower_bounds;
+        ArgumentContainer upper_bounds;
+        ArgumentContainer const * initial_guess = nullptr;
+        size_t max_function_calls = 0;
+        size_t max_level = 0;
+        bool local_search = true;
+        size_t max_local_search_steps = 50;
+        size_t line_search_points = 15;
+    };
+
+    template <typename ArgumentContainer>
+    void validate_multilevel_coordinate_search_parameters(multilevel_coordinate_search_parameters<ArgumentContainer> const &params);
+
+    template <typename ArgumentContainer, class Func>
+    ArgumentContainer multilevel_coordinate_search(const Func cost_function,
+                                                   multilevel_coordinate_search_parameters<ArgumentContainer> const &params,
+                                                   std::invoke_result_t<Func, ArgumentContainer> target_value
+                                                     = std::numeric_limits<std::invoke_result_t<Func, ArgumentContainer>>::quiet_NaN(),
+                                                   std::atomic<bool> *cancellation = nullptr,
+                                                   std::atomic<std::invoke_result_t<Func, ArgumentContainer>> *current_minimum_cost = nullptr,
+                                                   std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr);
+
+    } // namespaces
+``
+
+The `multilevel_coordinate_search` function searches for a global minimum of a function on a box,
+using the multilevel coordinate search (MCS) algorithm of Huyer and Neumaier.
+MCS splits the box into smaller boxes along one coordinate at a time, each with a base point at which the function has been evaluated.
+Every box has a level, which measures how often it has been split; a sweep through the levels splits the box with the smallest function value on each level,
+so that large unexplored boxes (global search) and boxes with small function values (local search) are both refined.
+Boxes that reach the maximum level start local searches, which build quadratic models of the function by coordinate searches and minimize them over the box.
+
+Unlike differential evolution, jSO, random search, and CMA-ES, MCS is deterministic: it needs no random number generator and always makes the same function calls.
+It is single-threaded, and is at its best on smooth functions in a modest number of dimensions, where it often finds the global minimum in a few hundred function calls.
+
+
+[heading Parameters]
+
+* `lower_bounds`: A container representing the lower bounds of the optimization space along each dimension.
+    The `.size()` of the bounds should return the dimension of the problem.
+* `upper_bounds`: A container representing the upper bounds of the optimization space along each dimension.
+    It should have the same size as `lower_bounds`, and each element must be strictly greater than the corresponding element of `lower_bounds`.
+* `initial_guess`: An optional point in the box which is used as the base point of the initial box.
+    It is the first point evaluated. Defaults to the midpoint of the box.
+* `max_function_calls`: Defaults to 1000 times the dimension.
+* `max_level`: The number of levels /s/[sub max]; boxes that reach this level are no longer split.
+    Defaults to 5/n/ + 10, where /n/ is the dimension, as in Section 7.3 of the paper. It must not be 1.
+* `local_search`: Whether to start local searches from the boxes that reach the maximum level. Defaults to true.
+* `max_local_search_steps`: The maximum number of iterations of each local search. Defaults to 50.
+* `line_search_points`: The maximum number of function values in a single line search of the local search. Defaults to 15, and must be at least 3.
+
+`validate_multilevel_coordinate_search_parameters` throws a `std::domain_error` if the bounds or initial guess are invalid,
+and a `std::invalid_argument` if `max_level` or `line_search_points` is out of range.
+`multilevel_coordinate_search` calls it before the first function evaluation.
+
+[heading The function]
+
+``
+template <typename ArgumentContainer, class Func>
+ArgumentContainer multilevel_coordinate_search(const Func cost_function,
+                                               multilevel_coordinate_search_parameters<ArgumentContainer> const &params,
+                                               std::invoke_result_t<Func, ArgumentContainer> target_value
+                                                 = std::numeric_limits<std::invoke_result_t<Func, ArgumentContainer>>::quiet_NaN(),
+                                               std::atomic<bool> *cancellation = nullptr,
+                                               std::atomic<std::invoke_result_t<Func, ArgumentContainer>> *current_minimum_cost = nullptr,
+                                               std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr)
+``
+
+Parameters:
+
+* `cost_function`: The cost function to be minimized. A NaN return value is treated as +[infin].
+* `params`: The parameters to the algorithm as described above.
+* `target_value`: An optional value that, if reached, stops the optimization.
+    This is the most robust way to terminate the calculation, but in most cases the optimal value of the cost function is unknown.
+        If it is, use it! Physical considerations can often be used to find optimal values for cost functions.
+* `cancellation`: An optional atomic boolean to allow the user to stop the computation and gracefully return the best result found up to that point.
+    It is checked before every function call.
+* `current_minimum_cost`: An optional atomic variable to store the current minimum cost during optimization.
+    This allows developers to (e.g.) plot the progress of the minimization over time and in conjunction with the `cancellation` argument allow halting the computation when the progress stagnates.
+* `queries`: An optional vector to store intermediate results during optimization.
+    This is useful for debugging and perhaps volume rendering of the objective function after the calculation is complete.
+
+Returns:
+
+The `ArgumentContainer` corresponding to the minimum cost found by the optimization.
+
+[heading Termination]
+
+As in the paper, there is no convergence criterion.
+The computation stops when the `target_value` is reached, when `max_function_calls` calls have been made, when `cancellation` is set,
+or when every box has reached `max_level`.
+In practice the budget is usually what stops it, so if the minimum value is known, pass it as `target_value`.
+
+[heading Implementation notes]
+
+The global part (the initialization procedure, splitting by rank and by expected gain, and the sweeps through the levels) follows Sections 3 and 4 of the paper,
+and the local search and the "shopping basket" of local minimizers follow Section 5.
+There are two departures from the paper in the local search:
+the univariate line searches are our own (extrapolation until the best point is bracketed, then safeguarded parabolic interpolation) rather than the authors' `gls`,
+and the quadratic models are minimized over the box by a small bound-constrained quadratic minimizer
+(sweeps of exact coordinate minimization, each followed by a Newton step on the free variables via a Cholesky factorization,
+or a step along a direction of negative curvature when the factorization fails) rather than MINQ.
+Like MINQ, it finds a local minimizer of a possibly indefinite quadratic.
+
+[h4:examples Examples]
+
+The six-hump camel function, one of the Dixon-Szego test functions of the paper, has two global minima with value -1.0316284534898774 on the box \[-3, 3\]×\[-2, 2\]:
+
+``
+#include <boost/math/optimization/multilevel_coordinate_search.hpp>
+#include <array>
+#include <iostream>
+
+int main() {
+    using boost::math::optimization::multilevel_coordinate_search;
+    using boost::math::optimization::multilevel_coordinate_search_parameters;
+    using ArgType = std::array<double, 2>;
+    auto camel = [](ArgType const & v) {
+        double x = v[0];
+        double y = v[1];
+        return (4 - 2.1*x*x + x*x*x*x/3)*x*x + x*y + (-4 + 4*y*y)*y*y;
+    };
+    multilevel_coordinate_search_parameters<ArgType> params;
+    params.lower_bounds = {-3, -2};
+    params.upper_bounds = {3, 2};
+    auto x = multilevel_coordinate_search(camel, params);
+    std::cout << "f(" << x[0] << ", " << x[1] << ") = " << camel(x) << "\n";
+}
+``
+
+[h4:references References]
+
+* W. Huyer and A. Neumaier, ['Global optimization by multilevel coordinate search.] Journal of Global Optimization, vol. 14, pp. 331-355, 1999, doi: 10.1023/A:1008382309369. [@https://arnold-neumaier.at/ms/mcs.pdf Preprint].
+
+[endsect] [/section:multilevel_coordinate_search]

@@ -2,8 +2,8 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 //
-// The derivative-free optimizers (differential_evolution, jso, random_search, and cma_es where Eigen is found) on
-// std::vector<double>,
+// The derivative-free optimizers (differential_evolution, jso, random_search, multilevel_coordinate_search, and cma_es
+// where Eigen is found) on std::vector<double>,
 // minimizing a Python callable f(x) -> float over the box [lower_bounds, upper_bounds]. Each returns the
 // best argument found. The C++ calls f from its own worker threads, so the GIL is released for the run and
 // taken for each call; an exception raised by f cancels the run and is re-raised when it returns.
@@ -14,6 +14,7 @@
 
 #include <boost/math/optimization/differential_evolution.hpp>
 #include <boost/math/optimization/jso.hpp>
+#include <boost/math/optimization/multilevel_coordinate_search.hpp>
 #include <boost/math/optimization/random_search.hpp>
 #if __has_include(<Eigen/Dense>)
 #include <boost/math/optimization/cma_es.hpp>
@@ -169,6 +170,27 @@ void bind_optimization(nb::module_& m)
    }, arg("f"), arg("lower_bounds"), arg("upper_bounds"), arg("initial_guess") = nb::none(), arg("max_function_calls") = 10000,
       arg("threads") = 1u, arg("target_value") = no_target, arg("seed") = 0,
       "optimization::random_search: the best argument found in the box");
+
+   m.def("multilevel_coordinate_search", [](nb::callable f, vector lower_bounds, vector upper_bounds,
+                                            std::optional<vector> initial_guess, std::size_t max_function_calls,
+                                            std::size_t max_level, bool local_search, std::size_t max_local_search_steps,
+                                            std::size_t line_search_points, double target_value) {
+      check_bounds(lower_bounds, upper_bounds, "multilevel_coordinate_search");
+      bo::multilevel_coordinate_search_parameters<vector> params;
+      params.lower_bounds = std::move(lower_bounds);
+      params.upper_bounds = std::move(upper_bounds);
+      params.initial_guess = initial_guess ? &*initial_guess : nullptr;
+      params.max_function_calls = max_function_calls;
+      params.max_level = max_level;
+      params.local_search = local_search;
+      params.max_local_search_steps = max_local_search_steps;
+      params.line_search_points = line_search_points;
+      python_cost cost(f);
+      return run_released(cost, [&] { return bo::multilevel_coordinate_search(std::cref(cost), params, target_value, cost.cancellation()); });
+   }, arg("f"), arg("lower_bounds"), arg("upper_bounds"), arg("initial_guess") = nb::none(), arg("max_function_calls") = 0,
+      arg("max_level") = 0, arg("local_search") = true, arg("max_local_search_steps") = 50, arg("line_search_points") = 15,
+      arg("target_value") = no_target,
+      "optimization::multilevel_coordinate_search: the argument in the box that minimizes f (0 means the defaults from the paper)");
 
 #ifdef BOOST_MATH_NB_HAS_CMA_ES
    m.def("cma_es", [](nb::callable f, vector lower_bounds, vector upper_bounds, std::optional<vector> initial_guess,
