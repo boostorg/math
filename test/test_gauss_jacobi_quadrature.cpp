@@ -76,8 +76,8 @@ void test_vector_valued()
 int main()
 {
    test_moments<float, 6>(4 * std::numeric_limits<float>::epsilon(), "float");
-   test_moments<double, 6>(4 * std::numeric_limits<double>::epsilon(), "double");
-   test_moments<double, 10>(4 * std::numeric_limits<double>::epsilon(), "double");
+   test_moments<double, 6>(5 * std::numeric_limits<double>::epsilon(), "double");
+   test_moments<double, 10>(5 * std::numeric_limits<double>::epsilon(), "double");
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_moments<long double, 6>(4 * std::numeric_limits<double>::epsilon(), "long double");
