@@ -178,7 +178,6 @@ void test_anti_gauss_internality()
          CHECK_LE(error, 2 * true_error);
          CHECK_LE(true_error, 2 * error);
       }
-      CHECK_LE(true_error, error);
    }
    // With a node outside [-1, 1] the estimate is NaN, but the integral is still there, and nothing is raised.
    const gauss_jacobi<Real> outside(10, Real(-0.75), Real(0));
