@@ -156,6 +156,29 @@ private:
             return family.upper_bound();
          }
 
+         // Replaces r.p, and for the Gauss rule r.p_previous and r.p_prime, with values to about twice the working
+         // precision where the family can provide them; returns false where it cannot.
+         template <class F = Family>
+         auto compensated(const Real& z, recurrence& r, int) const -> decltype(std::declval<const F&>().compensated_value(z, 0u, false, r.p), bool())
+         {
+            Real p_previous;
+            const Real p = family.compensated_value(z, N, anti, p_previous);
+            if (!(BOOST_MATH_NAMESPACE::isfinite)(p) || !(BOOST_MATH_NAMESPACE::isfinite)(p_previous))
+               return false;
+            r.p = p;
+            if (!anti)
+            {
+               r.p_previous = p_previous;
+               r.p_prime = family.derivative(z, p, p_previous);
+            }
+            return true;
+         }
+
+         bool compensated(const Real&, recurrence&, long) const
+         {
+            return false;
+         }
+
          Real area() const
          {
             return family.area();
@@ -265,6 +288,21 @@ private:
             r = evaluate(z);
             if (converged)
                break;
+         }
+         // Halley's method has the zero of p_N as rounded; where the family can evaluate p_N more accurately,
+         // Newton's method on that value finds the zero itself, and the weight uses those values too.
+         if (evaluate.compensated(z, r, 0))
+         {
+            for (int i = 0; i < 2; ++i)
+            {
+               // Not the bracket: it came from the signs of the rounded p_N, which are wrong this close to the zero.
+               const Real next = z - r.p / r.p_prime;
+               if (!(abs(next - z) <= sqrt(tools::epsilon<Real>()) * abs(z)) || (next == z))
+                  break;
+               z = next;
+               r = evaluate(z);
+               evaluate.compensated(z, r, 0);
+            }
          }
          x[num_roots - t] = z;
          w[num_roots - t] = evaluate.weight(z, r);

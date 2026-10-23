@@ -54,8 +54,8 @@ void test_tables_match_on_demand()
    CHECK_EQUAL(table::abscissa().size(), on_demand::abscissa().size());
    for (unsigned i = 0; i < table::abscissa().size(); ++i)
    {
-      CHECK_ULP_CLOSE(static_cast<Real>(table::abscissa()[i]), on_demand::abscissa()[i], 10);
-      CHECK_ULP_CLOSE(static_cast<Real>(table::weights()[i]), on_demand::weights()[i], 32);
+      CHECK_ULP_CLOSE(static_cast<Real>(table::abscissa()[i]), on_demand::abscissa()[i], 2);
+      CHECK_ULP_CLOSE(static_cast<Real>(table::weights()[i]), on_demand::weights()[i], 8);
    }
 }
 
@@ -337,10 +337,9 @@ int main()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_error_estimate<long double, 15>();
 #endif
-   // For alpha near -1 the smallest abscissa, and so the largest weight, is less accurate.
    for (double alpha : { -0.9, -0.5, 0.5, 2.5 })
    {
-      const double tol = alpha < 0 ? 64 : 16;
+      const double tol = 4;
       test_alpha<double, 2>(alpha, tol);
       test_alpha<double, 5>(alpha, tol);
       test_alpha<double, 12>(alpha, tol);
@@ -348,7 +347,7 @@ int main()
       test_alpha<double, 30>(alpha, tol);
    }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   test_alpha<long double, 12>(-0.5L, 64);
+   test_alpha<long double, 12>(-0.5L, 4);
 #endif
    test_alpha_domain();
 

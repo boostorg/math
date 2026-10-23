@@ -202,7 +202,45 @@ public:
    Real next(const Real& x, const Real& p, const Real& p_previous, unsigned k) const
    {
       const Real degree = static_cast<Real>(k);
-      return ((Real(2) * degree + 1 + alpha - x) * p - (degree + alpha) * p_previous) / (degree + 1);
+      // x enters as x p, not through 2k + 1 + alpha - x, which would round away the low bits of the small zeros.
+      return ((Real(2) * degree + 1 + alpha) * p - (degree + alpha) * p_previous - x * p) / (degree + 1);
+   }
+
+   // p_n(x), or Laurie's p~_n(x) with the coefficient of p_{n-2} doubled in the last step, to about twice the
+   // working precision: each step carries the rounding errors of its products, sums and quotient forward (a
+   // compensated recurrence). Near the small zeros the terms of the recurrence are about n times p_n, so in
+   // working precision those zeros, and the weights from p_{n-1} there, are only good to about n eps / x.
+   Real compensated_value(const Real& x, unsigned n, bool anti, Real& previous) const
+   {
+      const BOOST_MATH_NAMESPACE::detail::two_product<Real> product;
+      Real p = p0(), e = 0, p_previous = 0, e_previous = 0;
+      for (unsigned k = 0; k < n; ++k)
+      {
+         const Real c = (anti && (k + 1 == n)) ? Real(2) : Real(1);
+         const Real d = static_cast<Real>(k + 1);
+         const Real a = static_cast<Real>(2 * k + 1) + alpha;
+         const Real ea = BOOST_MATH_NAMESPACE::detail::two_sum_error(static_cast<Real>(2 * k + 1), alpha, a);
+         Real b = static_cast<Real>(k) + alpha;
+         const Real eb = c * BOOST_MATH_NAMESPACE::detail::two_sum_error(static_cast<Real>(k), alpha, b);
+         b *= c;
+         Real ap, eap, bp, ebp, xp, exp;
+         product(a, p, ap, eap);
+         product(b, p_previous, bp, ebp);
+         product(x, p, xp, exp);
+         const Real s1 = ap - bp;
+         const Real s = s1 - xp;
+         const Real err = BOOST_MATH_NAMESPACE::detail::two_sum_error(ap, -bp, s1) + BOOST_MATH_NAMESPACE::detail::two_sum_error(s1, -xp, s)
+            + eap - ebp - exp + (a - x) * e + ea * p - b * e_previous - eb * p_previous;
+         const Real q = s / d;
+         Real qd, eqd;
+         product(q, d, qd, eqd);
+         p_previous = p;
+         e_previous = e;
+         p = q;
+         e = (((s - qd) - eqd) + err) / d;
+      }
+      previous = p_previous + e_previous;
+      return p + e;
    }
 
    Real slope(unsigned k) const
