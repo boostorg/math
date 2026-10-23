@@ -537,10 +537,12 @@ public:
       static_assert(!std::is_integral<K>::value,
                     "The return type cannot be integral, it must be either a real or complex floating point type.");
       using std::abs;
-      // NaN abscissas: the recurrence overflowed Real, or the constructor rejected alpha.
-      Real nan;
-      if (detail::overflowed(abscissa_vals, "boost::math::quadrature::gauss_laguerre<%1%>::integrate", pL1, &nan, Policy()))
+      // The constructor has already raised the domain error for an invalid alpha.
+      Real nan = std::numeric_limits<Real>::quiet_NaN();
+      if (!(alpha > -1) || detail::overflowed(abscissa_vals, "boost::math::quadrature::gauss_laguerre<%1%>::integrate", pL1, &nan, Policy()))
       {
+         if (pL1)
+            *pL1 = nan;
          if (error)
             *error = nan;
          return static_cast<K>(nan);
@@ -567,10 +569,12 @@ public:
    {
       using K = decltype(f(Real(0)));
       static_assert(!std::is_integral<K>::value, "The return type cannot be integral.");
-      // NaN abscissas: the recurrence overflowed Real, or the constructor rejected alpha.
-      Real nan;
-      if (detail::overflowed(abscissa_vals, "boost::math::quadrature::gauss_laguerre<%1%>::integrate", pL1, &nan, Policy()))
+      // The constructor has already raised the domain error for an invalid alpha.
+      Real nan = std::numeric_limits<Real>::quiet_NaN();
+      if (!(alpha > -1) || detail::overflowed(abscissa_vals, "boost::math::quadrature::gauss_laguerre<%1%>::integrate", pL1, &nan, Policy()))
       {
+         if (pL1)
+            *pL1 = nan;
          if (error)
             *error = nan;
          K result = zero * nan;
