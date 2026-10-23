@@ -12,6 +12,7 @@
 #include <atomic>
 #endif
 #include <boost/math/optimization/detail/common.hpp>
+#include <boost/math/tools/assert.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <cmath>
@@ -263,8 +264,22 @@ public:
   using Real = typename ArgumentContainer::value_type;
   using ResultType = std::invoke_result_t<Func, ArgumentContainer>;
 
-  // A box B[x, y] (Section 3) with base point x and opposite point y.
+  // A box as stored: instead of its bounds, its history (Section 4), so that the storage is proportional to the number
+  // of function calls. That is its parent, the coordinate i it was split along, and the ith coordinates of its base
+  // point x and opposite point y and of its xi1, df1, xi2, df2 below. The root is box 0.
   struct box {
+    size_t parent;
+    size_t i;
+    Real x;
+    Real y;
+    Real f;
+    // 0 for a box that has been split:
+    size_t level;
+    Real xi1, df1, xi2, df2;
+  };
+
+  // A box B[x, y] (Section 3) with base point x and opposite point y, as load() recovers it from its history.
+  struct explicit_box {
     std::vector<Real> x;
     std::vector<Real> y;
     Real f;
@@ -308,7 +323,7 @@ public:
       }
       l0_[i] = static_cast<size_t>(std::find(list.begin(), list.end(), x0[i]) - list.begin());
     }
-    box root;
+    explicit_box &root = root_;
     root.x = x0;
     // The best point stays x0 if the run is over before f is ever called:
     xbest_ = x0;
@@ -321,9 +336,10 @@ public:
     root.splits.assign(n_, 0);
     root.xi1.assign(n_, std::numeric_limits<Real>::quiet_NaN());
     root.df1 = root.xi2 = root.df2 = root.xi1;
-    boxes_.push_back(std::move(root));
+    boxes_.push_back(box{0, 0, 0, 0, root.f, root.level, 0, 0, 0, 0});
     size_t current = 0;
     for (size_t i = 0; i < n_ && !done(); ++i) {
+      load(current);
       init_f_[i] = split_by_list(current, i, &current);
     }
     if (!done()) {
@@ -387,6 +403,25 @@ public:
   }
 
   std::vector<box> const &boxes() const { return boxes_; }
+  // Box b with its bounds, recovered by going back in its history: the last split along each coordinate gives the data
+  // of that coordinate, and the coordinates never split keep those of the root. It takes one step per split in the
+  // history of the box, so fewer than n + s_max.
+  void recover(size_t b, explicit_box &out) const {
+    out = root_;
+    out.f = boxes_[b].f;
+    out.level = boxes_[b].level;
+    for (size_t k = b; k != 0; k = boxes_[k].parent) {
+      box const &B = boxes_[k];
+      if (out.splits[B.i]++ == 0) {
+        out.x[B.i] = B.x;
+        out.y[B.i] = B.y;
+        out.xi1[B.i] = B.xi1;
+        out.df1[B.i] = B.df1;
+        out.xi2[B.i] = B.xi2;
+        out.df2[B.i] = B.df2;
+      }
+    }
+  }
   // The local minimizers found by local search (the shopping basket of Section 5.4):
   std::vector<std::pair<std::vector<Real>, Real>> const &basket() const { return basket_; }
   std::vector<Real> const &best_point() const { return xbest_; }
@@ -501,64 +536,69 @@ private:
     std::push_heap(heaps_[boxes_[b].level].begin(), heaps_[boxes_[b].level].end(), box_greater{this});
   }
 
+  // Recovers box b into box_, the box being split.
+  explicit_box const &load(size_t b) {
+    recover(b, box_);
+    loaded_ = b;
+    return box_;
+  }
+
   // A child of box `parent` split along coordinate i, with base point coordinate xi (value f), the other end `end` of
   // its ith interval, and the points `others` (coordinate, value) of this split, nearest first. The differences kept
   // for the other coordinates stay relative to the base points they were measured from: the model is separable.
+  // The parent is box_.
   size_t add_child(size_t parent, size_t i, Real xi, Real f, Real end, size_t level,
                    std::vector<std::pair<Real, Real>> others) {
-    box child = boxes_[parent];
-    child.x[i] = xi;
-    child.f = f;
-    child.y[i] = end;
-    child.level = (std::min)(level, smax_);
-    ++child.splits[i];
+    BOOST_MATH_ASSERT(loaded_ == parent);
+    box child{parent, i, xi, end, f, (std::min)(level, smax_), box_.xi1[i], box_.df1[i], box_.xi2[i], box_.df2[i]};
     // The two points closest in the history, other than the base point:
     using std::abs;
     using std::isnan;
-    if (!isnan(boxes_[parent].xi1[i])) {
-      others.emplace_back(boxes_[parent].xi1[i], boxes_[parent].f + boxes_[parent].df1[i]);
+    if (!isnan(box_.xi1[i])) {
+      others.emplace_back(box_.xi1[i], box_.f + box_.df1[i]);
     }
-    if (!isnan(boxes_[parent].xi2[i])) {
-      others.emplace_back(boxes_[parent].xi2[i], boxes_[parent].f + boxes_[parent].df2[i]);
+    if (!isnan(box_.xi2[i])) {
+      others.emplace_back(box_.xi2[i], box_.f + box_.df2[i]);
     }
     std::stable_sort(others.begin(), others.end(),
                      [&](auto const &a, auto const &b) { return abs(a.first - xi) < abs(b.first - xi); });
     size_t k = 0;
     for (auto const &o : others) {
-      if (o.first == xi || (k == 1 && o.first == child.xi1[i])) {
+      if (o.first == xi || (k == 1 && o.first == child.xi1)) {
         continue;
       }
-      (k == 0 ? child.xi1[i] : child.xi2[i]) = o.first;
-      (k == 0 ? child.df1[i] : child.df2[i]) = o.second - f;
+      (k == 0 ? child.xi1 : child.xi2) = o.first;
+      (k == 0 ? child.df1 : child.df2) = o.second - f;
       if (++k == 2) {
         break;
       }
     }
-    boxes_.push_back(std::move(child));
+    boxes_.push_back(child);
     return boxes_.size() - 1;
   }
 
   // Splits box b along coordinate i (never split before) at the initialization list and the golden section points
   // between them (Section 3). Returns the function values at the list. When `current` is given (the initialization
-  // procedure), it receives the child to split next, and that child is not pushed.
+  // procedure), it receives the child to split next, and that child is not pushed. Box b is box_.
   std::vector<Real> split_by_list(size_t b, size_t i, size_t *current = nullptr) {
+    BOOST_MATH_ASSERT(loaded_ == b);
     auto const &a = init_list_[i];
     size_t const L = a.size();
     std::vector<Real> f(L);
-    std::vector<Real> x = boxes_[b].x;
+    x_ = box_.x;
     for (size_t l = 0; l < L; ++l) {
       if (l == l0_[i]) {
-        f[l] = boxes_[b].f;
+        f[l] = box_.f;
       }
       else {
-        x[i] = a[l];
-        f[l] = evaluate(x);
+        x_[i] = a[l];
+        f[l] = evaluate(x_);
       }
     }
     if (done()) {
       return f;
     }
-    size_t const s = boxes_[b].level;
+    size_t const s = box_.level;
     boxes_[b].level = 0;
     auto others = [&](size_t l) {
       std::vector<std::pair<Real, Real>> o;
@@ -637,10 +677,11 @@ private:
   }
 
   // Splits box b along coordinate i at z (new value fz) and at the golden section point between x_i and z, giving
-  // two parts, or three when z != y_i (Sections 4.1 and 4.2).
+  // two parts, or three when z != y_i (Sections 4.1 and 4.2). Box b is box_.
   void split_at(size_t b, size_t i, Real z, Real fz, bool by_rank) {
+    BOOST_MATH_ASSERT(loaded_ == b);
     using std::abs;
-    box const &B = boxes_[b];
+    explicit_box const &B = box_;
     Real const xi = B.x[i];
     Real const yi = B.y[i];
     Real const f = B.f;
@@ -672,7 +713,7 @@ private:
   void process(size_t b) {
     using std::abs;
     using std::isfinite;
-    box const &B = boxes_[b];
+    explicit_box const &B = load(b);
     size_t const s = B.level;
     size_t const m = *std::min_element(B.splits.begin(), B.splits.end());
     if (s > 2 * n_ * (m + 1)) {
@@ -688,9 +729,9 @@ private:
         return;
       }
       Real const z = B.x[i] + 2 * (subint(B.x[i], B.y[i]) - B.x[i]) / 3;
-      std::vector<Real> x = B.x;
-      x[i] = z;
-      Real const fz = evaluate(x);
+      x_ = B.x;
+      x_[i] = z;
+      Real const fz = evaluate(x_);
       if (!done()) {
         split_at(b, i, z, fz, true);
       }
@@ -737,9 +778,9 @@ private:
         split_by_list(b, i);
         return;
       }
-      std::vector<Real> x = B.x;
-      x[i] = z;
-      Real const fz = evaluate(x);
+      x_ = B.x;
+      x_[i] = z;
+      Real const fz = evaluate(x_);
       if (!done()) {
         split_at(b, i, z, fz, false);
       }
@@ -1214,7 +1255,7 @@ private:
   void shopping_basket() {
     std::vector<std::pair<std::vector<Real>, Real>> candidates;
     for (size_t b : candidates_) {
-      candidates.emplace_back(boxes_[b].x, boxes_[b].f);
+      candidates.emplace_back(load(b).x, boxes_[b].f);
     }
     std::stable_sort(candidates.begin(), candidates.end(),
                      [](auto const &a, auto const &b) { return a.second < b.second; });
@@ -1313,6 +1354,11 @@ private:
   // rank_[i] = 0 for the coordinate with the highest variability (pi_i - 1 in the paper):
   std::vector<size_t> rank_;
   std::vector<box> boxes_;
+  // The root as an explicit box, and the box being split, as load() recovered it from box loaded_:
+  explicit_box root_, box_;
+  size_t loaded_ = 0;
+  // Scratch space for the points to evaluate:
+  std::vector<Real> x_;
   // The non-split boxes of each level below s_max, as min-heaps on f:
   std::vector<std::vector<size_t>> heaps_;
   // Boxes that reached level s_max in this sweep:

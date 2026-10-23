@@ -119,6 +119,9 @@ and the quadratic models are minimized over the box by a small bound-constrained
 (sweeps of exact coordinate minimization, each followed by a Newton step on the free variables via a Cholesky factorization,
 or a step along a direction of negative curvature when the factorization fails) rather than MINQ.
 Like MINQ, it finds a local minimizer of a possibly indefinite quadratic.
+As in Section 4 of the paper, each box stores its history (its parent, the splitting index and the new values along it) rather than its bounds,
+so the memory used is proportional to the number of function calls, not to the number of calls times the dimension;
+the bounds and the data for the separable quadratic model are recovered by going back through the ancestors of the box when it is split or starts a local search.
 
 [h4:examples Examples]
 
