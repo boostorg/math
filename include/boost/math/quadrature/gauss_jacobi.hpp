@@ -113,19 +113,10 @@ class gauss_jacobi : public detail::gauss_jacobi_detail<Real, detail::quadrature
       return error;
    }
 
-   // Half the difference between the Gauss result and the anti-Gauss rule, which takes N + 1 more evaluations of f.
    template <class F, class K, class Norm>
    Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm) const
    {
-      Real nan;
-      if (detail::overflowed(this->anti_gauss_abscissa(), "boost::math::quadrature::gauss_jacobi<%1%>::integrate", static_cast<Real*>(nullptr), &nan, Policy()))
-         return nan;
-      for (unsigned i = 0; i < this->anti_gauss_abscissa().size(); ++i)
-      {
-         anti_result += f(this->anti_gauss_abscissa()[i]) * this->anti_gauss_weights()[i];
-      }
-      // Rounding makes the difference meaningless below a few ulps of L1, and aliasing can make it exactly zero.
-      return (std::max)(static_cast<Real>(norm(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
+      return detail::anti_gauss_error(f, this->anti_gauss_abscissa(), this->anti_gauss_weights(), false, anti_result, result, L1, norm, "boost::math::quadrature::gauss_jacobi<%1%>::integrate", Policy());
    }
 
 public:

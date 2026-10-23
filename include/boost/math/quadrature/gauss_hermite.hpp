@@ -365,27 +365,10 @@ class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::quadr
       return value;
    }
 
-   // Half the difference between the Gauss result and the anti-Gauss rule, which takes N + 1 more evaluations of f.
    template <class F, class K, class Norm>
    static Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm)
    {
-      Real nan;
-      if (detail::overflowed(anti_gauss().abscissa(), "boost::math::quadrature::gauss_hermite<%1%>::integrate", static_cast<Real*>(nullptr), &nan, Policy()))
-         return nan;
-      const auto& anti = anti_gauss();
-      // N + 1 points: the middle one is at 0 when N is even.
-      unsigned non_zero_start = 0;
-      if (!(N & 1))
-      {
-         anti_result = f(Real(0)) * anti.weights()[0];
-         non_zero_start = 1;
-      }
-      for (unsigned i = non_zero_start; i < anti.abscissa().size(); ++i)
-      {
-         anti_result += (f(anti.abscissa()[i]) + f(-anti.abscissa()[i])) * anti.weights()[i];
-      }
-      // Rounding makes the difference meaningless below a few ulps of L1, and aliasing can make it exactly zero.
-      return (std::max)(static_cast<Real>(norm(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
+      return detail::anti_gauss_error(f, anti_gauss().abscissa(), anti_gauss().weights(), true, anti_result, result, L1, norm, "boost::math::quadrature::gauss_hermite<%1%>::integrate", Policy());
    }
 
 public:

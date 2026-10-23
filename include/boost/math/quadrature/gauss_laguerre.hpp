@@ -455,19 +455,10 @@ class gauss_laguerre : public detail::gauss_laguerre_detail<Real, N, detail::qua
    std::vector<Real> anti_abscissa_vals;
    std::vector<Real> anti_weight_vals;
 
-   // Half the difference between the Gauss result and the anti-Gauss rule, which takes N + 1 more evaluations of f.
    template <class F, class K, class Norm>
    Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm) const
    {
-      Real nan;
-      if (detail::overflowed(anti_abscissa_vals, "boost::math::quadrature::gauss_laguerre<%1%>::integrate", static_cast<Real*>(nullptr), &nan, Policy()))
-         return nan;
-      for (unsigned i = 0; i < anti_abscissa_vals.size(); ++i)
-      {
-         anti_result += f(anti_abscissa_vals[i]) * anti_weight_vals[i];
-      }
-      // Rounding makes the difference meaningless below a few ulps of L1, and aliasing can make it exactly zero.
-      return (std::max)(static_cast<Real>(norm(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
+      return detail::anti_gauss_error(f, anti_abscissa_vals, anti_weight_vals, false, anti_result, result, L1, norm, "boost::math::quadrature::gauss_laguerre<%1%>::integrate", Policy());
    }
 
 public:

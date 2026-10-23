@@ -8,6 +8,7 @@
 #define BOOST_MATH_QUADRATURE_DETAIL_QUADRATURE_CONSTANT_HPP
 
 #ifndef BOOST_MATH_BUILD_MODULE
+#include <algorithm>
 #include <limits>
 #include <type_traits>
 #endif
@@ -68,6 +69,24 @@ bool overflowed(const RandomAccessContainer& abscissa, const char* function, Rea
       return true;
    }
    return false;
+}
+
+// Half the difference between the Gauss result and Laurie's anti-Gauss rule, which takes N + 1 more evaluations of f.
+// A symmetric rule stores the nonnegative abscissas only.
+template <class F, class RandomAccessContainer, class K, class Real, class Norm, class Policy>
+Real anti_gauss_error(F& f, const RandomAccessContainer& abscissa, const RandomAccessContainer& weights, bool symmetric,
+                      K anti_result, const K& result, Real L1, Norm norm, const char* function, const Policy& pol)
+{
+   Real nan;
+   if (overflowed(abscissa, function, static_cast<Real*>(nullptr), &nan, pol))
+      return nan;
+   for (unsigned i = 0; i < abscissa.size(); ++i)
+   {
+      Real x = abscissa[i];
+      anti_result += (symmetric && x != 0 ? f(x) + f(-x) : f(x)) * static_cast<Real>(weights[i]);
+   }
+   // Rounding makes the difference meaningless below a few ulps of L1, and aliasing can make it exactly zero.
+   return (std::max)(static_cast<Real>(norm(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
 }
 
 } // namespace detail
