@@ -21,6 +21,7 @@
 #include <array>
 #include <cmath>
 #include <limits>
+#include <memory>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -446,19 +447,37 @@ template <class Real, unsigned N, class Policy = BOOST_MATH_NAMESPACE::policies:
 class gauss_laguerre : public detail::gauss_laguerre_detail<Real, N, detail::quadrature_constant_category<Real>::value>
 {
    using base = detail::gauss_laguerre_detail<Real, N, detail::quadrature_constant_category<Real>::value>;
+   using family = BOOST_MATH_NAMESPACE::detail::laguerre_family<Real>;
+   using polynomial = BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, family>;
 
-   // Laurie's anti-Gauss rule with N + 1 points, computed the first time an error estimate is requested.
-   // Its nodes are all positive (Laurie 1996, Theorem 2).
-   static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::laguerre_family<Real>>& anti_gauss()
+   Real alpha;
+   std::vector<Real> abscissa_vals;
+   std::vector<Real> weight_vals;
+   std::shared_ptr<const polynomial> anti;
+
+   // Laurie's anti-Gauss rule with N + 1 points, computed the first time an error estimate is requested,
+   // and cached for alpha = 0. Its nodes are all positive (Laurie 1996, Theorem 2).
+   const polynomial& anti_gauss()
    {
-      static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::laguerre_family<Real>> value(N + 1, BOOST_MATH_NAMESPACE::detail::laguerre_family<Real>(N + 1), true);
-      BOOST_MATH_ASSERT(!(value.abscissa()[0] <= 0));
-      return value;
+      if (!anti)
+      {
+         if (alpha == 0)
+         {
+            static const std::shared_ptr<const polynomial> cached = std::make_shared<const polynomial>(N + 1, family(N + 1), true);
+            anti = cached;
+         }
+         else
+         {
+            anti = std::make_shared<const polynomial>(N + 1, family(N + 1, alpha), true);
+         }
+         BOOST_MATH_ASSERT(!(anti->abscissa()[0] <= 0));
+      }
+      return *anti;
    }
 
    // Half the difference between the Gauss result and the anti-Gauss rule, which takes N + 1 more evaluations of f.
    template <class F, class K, class Norm>
-   static Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm)
+   Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm)
    {
       Real nan;
       if (detail::overflowed(anti_gauss().abscissa(), "boost::math::quadrature::gauss_laguerre<%1%>::integrate", static_cast<Real*>(nullptr), &nan, Policy()))
@@ -472,9 +491,45 @@ class gauss_laguerre : public detail::gauss_laguerre_detail<Real, N, detail::qua
    }
 
 public:
-   // Integrates f(x) exp(-x) over the real line.
+   // The rule for x^alpha exp(-x); alpha = 0 uses the tables, or computes the rule once and caches it.
+   explicit gauss_laguerre(Real alpha_ = 0) : alpha(alpha_)
+   {
+      if (!(alpha > -1) || !(BOOST_MATH_NAMESPACE::isfinite)(alpha))
+      {
+         alpha = policies::raise_domain_error("boost::math::quadrature::gauss_laguerre<%1%>::gauss_laguerre",
+            "The parameter alpha must be finite and > -1, but got %1%.", alpha_, Policy());
+         abscissa_vals.assign(N, std::numeric_limits<Real>::quiet_NaN());
+         weight_vals.assign(N, std::numeric_limits<Real>::quiet_NaN());
+      }
+      else if (alpha == 0)
+      {
+         for (unsigned i = 0; i < base::abscissa().size(); ++i)
+         {
+            abscissa_vals.push_back(static_cast<Real>(base::abscissa()[i]));
+            weight_vals.push_back(static_cast<Real>(base::weights()[i]));
+         }
+      }
+      else
+      {
+         const polynomial rule(N, family(N, alpha));
+         abscissa_vals = rule.abscissa();
+         weight_vals = rule.weights();
+      }
+   }
+
+   const std::vector<Real>& abscissa() const
+   {
+      return abscissa_vals;
+   }
+
+   const std::vector<Real>& weights() const
+   {
+      return weight_vals;
+   }
+
+   // Integrates f(x) x^alpha exp(-x) over [0, infinity).
    template <class F>
-   static auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
+   auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
       // In many math texts, K represents the field of real or complex numbers.
       // Too bad we can't put blackboard bold into C++ source!
@@ -482,8 +537,9 @@ public:
       static_assert(!std::is_integral<K>::value,
                     "The return type cannot be integral, it must be either a real or complex floating point type.");
       using std::abs;
+      // NaN abscissas: the recurrence overflowed Real, or the constructor rejected alpha.
       Real nan;
-      if (detail::overflowed(base::abscissa(), "boost::math::quadrature::gauss_laguerre<%1%>::integrate", pL1, &nan, Policy()))
+      if (detail::overflowed(abscissa_vals, "boost::math::quadrature::gauss_laguerre<%1%>::integrate", pL1, &nan, Policy()))
       {
          if (error)
             *error = nan;
@@ -491,11 +547,11 @@ public:
       }
       K result = Real(0);
       Real L1 = abs(result);
-      for (unsigned i = 0; i < base::abscissa().size(); ++i)
+      for (unsigned i = 0; i < abscissa_vals.size(); ++i)
       {
-         K fp = f(static_cast<Real>(base::abscissa()[i]));
-         result += fp * static_cast<Real>(base::weights()[i]);
-         L1 += abs(fp) * static_cast<Real>(base::weights()[i]);
+         K fp = f(abscissa_vals[i]);
+         result += fp * weight_vals[i];
+         L1 += abs(fp) * weight_vals[i];
       }
       if (pL1)
          *pL1 = L1;
@@ -506,13 +562,14 @@ public:
 
    // Explicit zero and norm for vector- and matrix-valued integrands.
    template <class F, class Norm>
-   static auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr)
+   auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr)
       ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
    {
       using K = decltype(f(Real(0)));
       static_assert(!std::is_integral<K>::value, "The return type cannot be integral.");
+      // NaN abscissas: the recurrence overflowed Real, or the constructor rejected alpha.
       Real nan;
-      if (detail::overflowed(base::abscissa(), "boost::math::quadrature::gauss_laguerre<%1%>::integrate", pL1, &nan, Policy()))
+      if (detail::overflowed(abscissa_vals, "boost::math::quadrature::gauss_laguerre<%1%>::integrate", pL1, &nan, Policy()))
       {
          if (error)
             *error = nan;
@@ -521,11 +578,11 @@ public:
       }
       K result = zero;
       Real L1 = static_cast<Real>(norm(result));
-      for (unsigned i = 0; i < base::abscissa().size(); ++i)
+      for (unsigned i = 0; i < abscissa_vals.size(); ++i)
       {
-         K fp = f(static_cast<Real>(base::abscissa()[i]));
-         result += fp * static_cast<Real>(base::weights()[i]);
-         L1 += static_cast<Real>(norm(fp)) * static_cast<Real>(base::weights()[i]);
+         K fp = f(abscissa_vals[i]);
+         result += fp * weight_vals[i];
+         L1 += static_cast<Real>(norm(fp)) * weight_vals[i];
       }
       if (pL1)
          *pL1 = L1;

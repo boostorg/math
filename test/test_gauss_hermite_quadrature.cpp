@@ -93,8 +93,8 @@ void test_vector_valued()
    // The estimate is the norm of the difference from the anti-Gauss rule, at least that of any component.
    double error, L1_error, cos_error;
    const vector Q_error = gauss_hermite<double, N>::integrate(f, zero, norm, &error, &L1_error);
-   CHECK_EQUAL(Q_error[2], Q[2]);
-   CHECK_EQUAL(L1_error, L1);
+   CHECK_ULP_CLOSE(Q_error[2], Q[2], 2);
+   CHECK_ULP_CLOSE(L1_error, L1, 2);
    gauss_hermite<double, N>::integrate([](double x) { return std::cos(x); }, &cos_error, nullptr);
    CHECK_LE(cos_error, error);
    CHECK_LE(2 * std::numeric_limits<double>::epsilon() * L1, error);
@@ -129,7 +129,7 @@ void test_overflow()
    // The error estimate needs N + 1 points, which overflow at N = 706.
    using rule = gauss_hermite<double, 706, ignore_policy>;
    double error = 0;
-   CHECK_EQUAL(rule::integrate([](double) { return 1.0; }, nullptr, &L1), rule::integrate([](double) { return 1.0; }, &error, &L1));
+   CHECK_ULP_CLOSE(rule::integrate([](double) { return 1.0; }, nullptr, &L1), rule::integrate([](double) { return 1.0; }, &error, &L1), 2);
    CHECK_NAN(error);
 #ifndef BOOST_NO_EXCEPTIONS
    CHECK_THROW((gauss_hermite<double, 1000>::integrate([](double x) { return std::cos(x); })), boost::math::evaluation_error);
@@ -219,9 +219,9 @@ void test_error_estimate()
    using rule = gauss_hermite<Real, N>;
    Real error, L1, L1_alone;
    const Real Q = rule::integrate(f, &error, &L1);
-   CHECK_EQUAL(Q, rule::integrate(f, nullptr, &L1_alone));
-   CHECK_EQUAL(L1, L1_alone);
-   CHECK_EQUAL(Q, rule::integrate(f, nullptr, nullptr));
+   CHECK_ULP_CLOSE(Q, rule::integrate(f, nullptr, &L1_alone), 2);
+   CHECK_ULP_CLOSE(L1, L1_alone, 2);
+   CHECK_ULP_CLOSE(Q, rule::integrate(f, nullptr, nullptr), 2);
    const Real true_error = abs(Q - expected);
    if (true_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
    {

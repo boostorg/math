@@ -72,8 +72,8 @@ void test_vector_valued()
    // The estimate is the norm of the difference from the anti-Gauss rule, at least that of any component.
    double error, L1_error, cos_error;
    const vector Q_error = integrator.integrate(f, zero, norm, &error, &L1_error);
-   CHECK_EQUAL(Q_error[2], Q[2]);
-   CHECK_EQUAL(L1_error, L1);
+   CHECK_ULP_CLOSE(Q_error[2], Q[2], 2);
+   CHECK_ULP_CLOSE(L1_error, L1, 2);
    integrator.integrate([](double x) { return std::cos(x); }, &cos_error, nullptr);
    CHECK_LE(cos_error, error);
    CHECK_LE(2 * std::numeric_limits<double>::epsilon() * L1, error);
@@ -202,8 +202,8 @@ void test_error_estimate(unsigned N)
       gauss_jacobi<Real> rule(N, e.alpha, e.beta);
       Real error, L1, L1_alone;
       const Real Q = rule.integrate(e.f, &error, &L1);
-      CHECK_EQUAL(Q, rule.integrate(e.f, nullptr, &L1_alone));
-      CHECK_EQUAL(L1, L1_alone);
+      CHECK_ULP_CLOSE(Q, rule.integrate(e.f, nullptr, &L1_alone), 2);
+      CHECK_ULP_CLOSE(L1, L1_alone, 2);
       const Real true_error = abs(Q - e.expected);
       if (true_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
       {

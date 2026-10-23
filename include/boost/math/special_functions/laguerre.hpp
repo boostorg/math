@@ -16,6 +16,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/detail/orthogonal_polynomial.hpp>
+#include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/tools/compensated_arithmetic.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
@@ -159,11 +160,12 @@ inline typename laguerre_result<T1, T2>::type
 
 namespace detail{
 
+// The generalized Laguerre polynomials L_n^(alpha), orthogonal for x^alpha exp(-x) on [0, infinity).
 template <class Real>
 class laguerre_family
 {
 public:
-   laguerre_family(unsigned n) : N(n) {}
+   laguerre_family(unsigned n, Real alpha_ = 0) : N(n), alpha(alpha_) {}
 
    Real p0() const
    {
@@ -176,10 +178,10 @@ public:
    }
 
    Real upper_bound() const
-   { // See https://mathoverflow.net/questions/251607/zeroes-of-laguerre-polynomials
+   {  // Gershgorin's theorem for the Jacobi matrix, diagonal 2k + alpha + 1 and off-diagonal sqrt(k (k + alpha)),
+      // bounds the zeros by 4N + 2 alpha; (3 + sqrt 2) N + 3 alpha + 3 also covers the anti-Gauss rule.
       using std::sqrt;
-      const Real degree = static_cast<Real>(N);
-      return degree + (degree - 1) * sqrt(degree) + 1;
+      return (3 + sqrt(Real(2))) * static_cast<Real>(N) + 3 * alpha + 3;
    }
 
    unsigned num_roots() const
@@ -189,7 +191,7 @@ public:
 
    Real area() const
    {
-      return 1;
+      return BOOST_MATH_NAMESPACE::tgamma(alpha + 1);
    }
 
    unsigned weight_multiplicity(unsigned) const
@@ -200,7 +202,7 @@ public:
    Real next(const Real& x, const Real& p, const Real& p_previous, unsigned k) const
    {
       const Real degree = static_cast<Real>(k);
-      return ((Real(2) * degree + 1 - x) * p - degree * p_previous) / (degree + 1);
+      return ((Real(2) * degree + 1 + alpha - x) * p - (degree + alpha) * p_previous) / (degree + 1);
    }
 
    Real slope(unsigned k) const
@@ -210,21 +212,21 @@ public:
 
    Real derivative(const Real& x, const Real& p, const Real& p_previous) const
    {
-      return static_cast<Real>(N) / x * (p - p_previous);
+      return (static_cast<Real>(N) * p - (static_cast<Real>(N) + alpha) * p_previous) / x;
    }
 
    Real second_derivative(const Real& x, const Real& p, const Real& p_prime) const
    {
-      return ((x - 1) * p_prime - static_cast<Real>(N) * p) / x;
+      return ((x - alpha - 1) * p_prime - static_cast<Real>(N) * p) / x;
    }
 
    Real second_derivative_ratio(const Real& x, const Real& p, const Real& p_prime) const
    {
-      return (x - 1) / x - static_cast<Real>(N) / x * p / p_prime;
+      return (x - alpha - 1) / x - static_cast<Real>(N) / x * p / p_prime;
    }
 
    Real weight(const Real& x, const Real& p, const Real& p_prime) const
-   {
+   {  // Up to the factor Gamma(N + alpha + 1) / N!, which the scaling to area() supplies.
       Real delta = -p / p_prime;
       Real p_prime_at_root = p_prime + second_derivative(x, p, p_prime) * delta;
       return Real(1) / (p_prime_at_root * p_prime_at_root) / x;
@@ -232,6 +234,7 @@ public:
 
 private:
    unsigned N;
+   Real alpha;
 };
 }
 
