@@ -56,15 +56,18 @@ public:
       polynomial value(N, family);
       abscissa_vals = value.abscissa();
       weight_vals = value.weights();
-      // Laurie 1996, Theorem 3: the anti-Gauss rule has a node outside (-1, 1) when alpha or beta is below -1/2
-      // and N is large, and for some N when it is near -1/2.
+      // Laurie 1996, Theorem 3: the anti-Gauss rule has a node outside [-1, 1] when alpha or beta is below -1/2
+      // and N is large, and for some N when it is near -1/2. At -1/2 it can have nodes on -1 and 1.
       anti_gauss_internal = polynomial::anti_gauss_is_internal(N + 1, family, Real(1)) && polynomial::anti_gauss_is_internal(N + 1, family, Real(-1));
       // Laurie's anti-Gauss rule with N + 1 points, for the error estimate.
       if (anti_gauss_internal)
       {
-         polynomial anti(N + 1, BOOST_MATH_NAMESPACE::detail::jacobi_family<Real>(N + 1, alpha, beta), true);
+         polynomial anti(N + 1, BOOST_MATH_NAMESPACE::detail::jacobi_family<Real>(N + 1, alpha, beta, true), true);
          anti_abscissa_vals = anti.abscissa();
          anti_weight_vals = anti.weights();
+         // Nodes on the endpoints come out a few eps either side.
+         for (Real& x : anti_abscissa_vals)
+            x = (std::min)((std::max)(x, Real(-1)), Real(1));
       }
     }
    const std::vector<Real>& abscissa() const
@@ -99,15 +102,13 @@ protected:
 template <class Real, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
 class gauss_jacobi : public detail::gauss_jacobi_detail<Real, detail::quadrature_constant_category<Real>::value>
 {
-   // Without an internal anti-Gauss rule there is no estimate, rather than evaluate f outside [-1, 1].
+   // When the anti-Gauss rule has a node outside [-1, 1], the error estimate is NaN rather than evaluate f there;
+   // the integral itself is unaffected.
    Real* estimable(Real* error) const
    {
       if (error && !this->anti_gauss_is_internal())
       {
-         *error = policies::raise_evaluation_error(
-            "boost::math::quadrature::gauss_jacobi<%1%>::integrate",
-            "The anti-Gauss rule for the error estimate has a node on or outside [-1, 1] for these alpha, beta and points.",
-            std::numeric_limits<Real>::quiet_NaN(), Policy());
+         *error = std::numeric_limits<Real>::quiet_NaN();
          return nullptr;
       }
       return error;

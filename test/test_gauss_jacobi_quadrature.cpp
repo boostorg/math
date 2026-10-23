@@ -13,6 +13,7 @@
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/gauss_jacobi.hpp>
+#include <boost/math/special_functions/bessel.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
 #include <boost/math/special_functions/factorials.hpp>
@@ -129,10 +130,11 @@ void test_anti_gauss(unsigned N, Real alpha, Real beta)
 }
 
 // Laurie 1996, Theorem 3: the anti-Gauss rule is internal iff both of these are nonnegative. Zero puts a node on an
-// endpoint, which the rule rejects too.
+// endpoint, where f is still defined.
 template <class Real>
 void test_anti_gauss_internality()
 {
+   using std::abs;
    using family = boost::math::detail::jacobi_family<Real>;
    using polynomial = boost::math::detail::orthogonal_polynomial<Real, family>;
    const Real parameters[] = { -0.75, -0.55, -0.5, -0.25, 0, 0.5, 3 };
@@ -145,8 +147,8 @@ void test_anti_gauss_internality()
             const Real right = (2 * a + 1) * n * n + (2 * a + 1) * (a + b + 1) * n + (a + 1) * (a + b) * (a + b + 1) / 2;
             const Real left = (2 * b + 1) * n * n + (2 * b + 1) * (a + b + 1) * n + (b + 1) * (a + b) * (a + b + 1) / 2;
             const family f(n + 1, a, b);
-            CHECK_EQUAL(polynomial::anti_gauss_is_internal(n + 1, f, Real(1)), right > 0);
-            CHECK_EQUAL(polynomial::anti_gauss_is_internal(n + 1, f, Real(-1)), left > 0);
+            CHECK_EQUAL(polynomial::anti_gauss_is_internal(n + 1, f, Real(1)), right >= 0);
+            CHECK_EQUAL(polynomial::anti_gauss_is_internal(n + 1, f, Real(-1)), left >= 0);
          }
       }
    }
@@ -158,23 +160,33 @@ void test_anti_gauss_internality()
    };
    for (unsigned n = 1; n <= 200; n += 7)
    {
-      CHECK_EQUAL(internal(n, Real(-0.5), Real(-0.5)), false);
+      CHECK_EQUAL(internal(n, Real(-0.5), Real(-0.5)), true);
       CHECK_EQUAL(internal(n, Real(0), Real(0)), true);
       CHECK_EQUAL(internal(n, Real(0.5), Real(0.5)), true);
       CHECK_EQUAL(internal(n, Real(-0.75), Real(0)), false);
    }
-   // Without an internal anti-Gauss rule there is no estimate, but still an integral.
-   using ignore_policy = boost::math::policies::policy<boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
-   gauss_jacobi<Real, ignore_policy> chebyshev(10, Real(-0.5), Real(-0.5));
+   // Chebyshev weights: the anti-Gauss rule is Gauss-Lobatto, with nodes cos(k pi / (N + 1)), so f is evaluated at +-1.
+   // The integral of cos(x) / sqrt(1 - x^2) is pi J0(1).
+   for (unsigned N : { 4u, 6u, 10u, 40u })
+   {
+      const gauss_jacobi<Real> chebyshev(N, Real(-0.5), Real(-0.5));
+      Real error, L1;
+      const Real Q = chebyshev.integrate([](const Real& x) { using std::cos; return cos(x); }, &error, &L1);
+      const Real true_error = abs(Q - boost::math::constants::pi<Real>() * boost::math::cyl_bessel_j(0, Real(1)));
+      if (true_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
+      {
+         CHECK_LE(error, 2 * true_error);
+         CHECK_LE(true_error, 2 * error);
+      }
+      CHECK_LE(true_error, error);
+   }
+   // With a node outside [-1, 1] the estimate is NaN, but the integral is still there, and nothing is raised.
+   const gauss_jacobi<Real> outside(10, Real(-0.75), Real(0));
    auto f = [](const Real& x) { return x * x; };
    Real error = 0;
-   CHECK_ULP_CLOSE(boost::math::constants::half_pi<Real>(), chebyshev.integrate(f, &error, nullptr), 8);
+   const Real Q = outside.integrate(f, &error, nullptr);
    CHECK_NAN(error);
-#ifndef BOOST_NO_EXCEPTIONS
-   gauss_jacobi<Real> throwing(10, Real(-0.5), Real(-0.5));
-   CHECK_THROW(throwing.integrate(f, &error, nullptr), boost::math::evaluation_error);
-   CHECK_ULP_CLOSE(boost::math::constants::half_pi<Real>(), throwing.integrate(f, nullptr, nullptr), 8);
-#endif
+   CHECK_ULP_CLOSE(outside.integrate(f), Q, 0);
 }
 
 // For smooth f the estimate is close to the true error until that reaches rounding.

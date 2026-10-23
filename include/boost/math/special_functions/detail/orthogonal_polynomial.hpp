@@ -38,8 +38,8 @@ public:
    }
 
    // Laurie 1996, Theorem 1: the anti-Gauss rule with n nodes has no node at or beyond the end e of the support
-   // iff p~_n(e) has the sign of p_n(e), with p~_n defined as in strum_counter. Ask for a margin, so that
-   // nodes on the endpoint, which Chebyshev weights put there exactly, fail despite rounding.
+   // iff p~_n(e) has the sign of p_n(e), with p~_n defined as in strum_counter. Allow a margin, so that nodes
+   // on the endpoint, which Chebyshev weights put there exactly, pass despite rounding; f is defined there.
    static bool anti_gauss_is_internal(unsigned n, const Family& family, const Real& e)
    {
       Real p = family.p0();
@@ -50,7 +50,7 @@ public:
          p_previous = p;
          p = p_next;
       }
-      return family.next(e, p, 2 * p_previous, n - 1) / family.next(e, p, p_previous, n - 1) > 4 * n * tools::epsilon<Real>();
+      return family.next(e, p, 2 * p_previous, n - 1) / family.next(e, p, p_previous, n - 1) > -4 * static_cast<Real>(n) * tools::epsilon<Real>();
    }
 
    const std::vector<Real>& abscissa() const
@@ -190,15 +190,15 @@ private:
          bool anti;
    };
 
-   // The nonnegative zeros of the orthogonal polynomial H_N, in increasing order, and their weights.
-   // Everything is evaluated with the orthonormal recurrence
-   // whose values stay representable long after H_N itself overflows. Evaluating the polynomial from its monomial
+   // The zeros of the orthogonal polynomial p_N, in increasing order, and their weights; the nonnegative ones only
+   // for a family symmetric about 0. Everything is evaluated with the family's recurrence, whose values stay
+   // representable long after the monomial coefficients of p_N overflow. Evaluating the polynomial from those
    // coefficients instead would be hopelessly ill-conditioned.
    //
    // By Sturm's theorem for orthogonal polynomials, the number of sign changes in p_0(x), ..., p_N(x)
    // changes by one at each zero of p_N. Its direction depends on the family. Bisecting on that count
    // isolates each zero, and Halley's method then converges to it inside its bracket. Asymptotic initial guesses alone are not enough:
-   // for N = 215, even Halley's method from those of Numerical Recipes' gauher finds the wrong zero.
+   // for Hermite with N = 215, even Halley's method from those of Numerical Recipes' gauher finds the wrong zero.
    std::pair<std::vector<Real>, std::vector<Real> > calculate_values(const Family& family)
    {
       if (N == 0)
@@ -267,7 +267,7 @@ private:
             }
          }
          // Halley's method, falling back to bisection whenever a step would leave the bracket.
-         // With u = p/p' and v = p''/p' = 2z - 2N u, the step is u/(1 - uv/2); the ratios cannot
+         // With u = p/p' and v = p''/p' from the family, the step is u/(1 - uv/2); the ratios cannot
          // overflow even where p'^2 would.
          const bool lower_negative = evaluate(low).p < 0;
          Real z = (low + high) / 2;

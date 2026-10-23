@@ -1425,7 +1425,7 @@ test-suite autodiff :
 
 test-suite test_reverse_mode_autodiff
     :
-        [ run test_reverse_mode_autodiff_flat_linear_allocator.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+        [ run test_reverse_mode_autodiff_flat_linear_allocator.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
         [ run test_reverse_mode_autodiff_constructors.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
         [ run test_reverse_mode_autodiff_comparison_operators.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
         [ run test_reverse_mode_autodiff_stl_support.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
@@ -1435,9 +1435,9 @@ test-suite test_reverse_mode_autodiff
 
 test-suite gradient_based_optimizers
     :
-        [ run test_gradient_descent_optimizer.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
-        [ run test_nesterov_optimizer.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
-        [ run test_lbfgs.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+        [ run test_gradient_descent_optimizer.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
+        [ run test_nesterov_optimizer.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
+        [ run test_lbfgs.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
     ;
 # BEGIN AUTODIFF LONG RUNNING TESTS
 test-suite autodiff-long-running-tests

@@ -59,7 +59,7 @@ void test_tables_match_on_demand()
    }
 }
 
-// Integral of exp(ix) exp(-x) over the real line is (0.5, 0.5).
+// Integral of exp(ix) exp(-x) over [0, infinity) is (0.5, 0.5).
 template <class Complex, unsigned N>
 void test_complex(typename Complex::value_type tol)
 {

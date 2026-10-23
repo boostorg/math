@@ -149,7 +149,7 @@ void test_zero_special_case()
 int main()
 {
     #ifdef __STDCPP_FLOAT32_T__
-
+    
     test_symmetry<std::float32_t>();
     test_derivative<std::float32_t>();
 
@@ -159,7 +159,7 @@ int main()
     test_derivative<float>();
 
     #endif
-
+    
     #ifdef __STDCPP_FLOAT64_T__
 
     test_to_quadratic<std::float64_t>();
@@ -175,19 +175,19 @@ int main()
     #endif
 
     #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-
+    
     test_to_quadratic<long double>();
     test_symmetry<long double>();
     test_derivative<long double>();
-
+    
     #endif
 
     #ifdef BOOST_HAS_FLOAT128
-
+    
     test_to_quadratic<boost::multiprecision::float128>();
     test_symmetry<boost::multiprecision::float128>();
     test_derivative<boost::multiprecision::float128>();
-
+    
     #endif
 
     test_zeros(2*std::numeric_limits<float>::epsilon(), "float");

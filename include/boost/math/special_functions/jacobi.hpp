@@ -79,7 +79,9 @@ template <class Real>
 class jacobi_family
 {
 public:
-   jacobi_family(unsigned n, Real alpha_, Real beta_) : N(n), alpha(alpha_), beta(beta_) {}
+   // The anti-Gauss rule can have nodes outside [-1, 1], but within 3/2: doubling the last coefficient b_n <= 1
+   // of the Jacobi matrix, whose norm is at most 1, moves its eigenvalues by at most (sqrt(2) - 1) sqrt(b_n).
+   jacobi_family(unsigned n, Real alpha_, Real beta_, bool anti_gauss_ = false) : N(n), alpha(alpha_), beta(beta_), anti_gauss(anti_gauss_) {}
 
    Real p0() const
    {
@@ -88,12 +90,12 @@ public:
 
    Real lower_bound() const
    {
-      return -1;
+      return anti_gauss ? Real(-1.5) : Real(-1);
    }
 
    Real upper_bound() const
    {
-      return 1;
+      return anti_gauss ? Real(1.5) : Real(1);
    }
 
    unsigned num_roots() const
@@ -182,6 +184,7 @@ private:
    unsigned N;
    Real alpha;
    Real beta;
+   bool anti_gauss;
 };
 }
 

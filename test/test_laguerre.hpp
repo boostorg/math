@@ -47,8 +47,8 @@ void do_test_laguerre2(const T& data, const char* type_name, const char* test_na
    // test laguerre against data:
    //
    result = boost::math::tools::test_hetero<Real>(
-      data,
-      bind_func_int1<Real>(funcp, 0, 1),
+      data, 
+      bind_func_int1<Real>(funcp, 0, 1), 
       extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "laguerre(n, x)", test_name);
 
@@ -80,8 +80,8 @@ void do_test_laguerre3(const T& data, const char* type_name, const char* test_na
    // test laguerre against data:
    //
    result = boost::math::tools::test_hetero<Real>(
-      data,
-      bind_func_int2<Real>(funcp, 0, 1, 2),
+      data, 
+      bind_func_int2<Real>(funcp, 0, 1, 2), 
       extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "laguerre(n, m, x)", test_name);
    std::cout << std::endl;
@@ -96,7 +96,7 @@ void test_laguerre(T, const char* name)
    //
    // The contents are as follows, each row of data contains
    // three items, input value a, input value b and erf(a, b):
-   //
+   // 
 #  include "laguerre2.ipp"
 
    do_test_laguerre2<T>(laguerre2, name, "Laguerre Polynomials");

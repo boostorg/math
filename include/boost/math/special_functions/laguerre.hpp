@@ -23,7 +23,7 @@ BOOST_MATH_NAMESPACE_BEGIN
 
 // Recurrence relation for Laguerre polynomials:
 BOOST_MATH_EXPORT template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type
+inline typename tools::promote_args<T1, T2, T3>::type  
    laguerre_next(unsigned n, T1 x, T2 Ln, T3 Lnm1)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
@@ -79,7 +79,7 @@ T laguerre_imp(unsigned n, T x)
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type
+inline typename tools::promote_args<T>::type 
 laguerre(unsigned n, T x, const Policy&, const std::true_type&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -88,7 +88,7 @@ laguerre(unsigned n, T x, const Policy&, const std::true_type&)
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type
+inline typename tools::promote_args<T>::type 
    laguerre(unsigned n, unsigned m, T x, const std::false_type&)
 {
    return BOOST_MATH_NAMESPACE::laguerre(n, m, x, policies::policy<>());
@@ -97,7 +97,7 @@ inline typename tools::promote_args<T>::type
 } // namespace detail
 
 BOOST_MATH_EXPORT template <class T>
-inline typename tools::promote_args<T>::type
+inline typename tools::promote_args<T>::type 
    laguerre(unsigned n, T x)
 {
    return laguerre(n, x, policies::policy<>());
@@ -105,7 +105,7 @@ inline typename tools::promote_args<T>::type
 
 // Recurrence for associated polynomials:
 BOOST_MATH_EXPORT template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type
+inline typename tools::promote_args<T1, T2, T3>::type  
    laguerre_next(unsigned n, unsigned l, T1 x, T2 Pl, T3 Plm1)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
@@ -122,7 +122,7 @@ T laguerre_imp(unsigned n, unsigned m, T x, const Policy& pol)
       return BOOST_MATH_NAMESPACE::laguerre(n, x, pol);
 
    T p0 = 1;
-
+   
    if(n == 0)
       return p0;
 
@@ -142,7 +142,7 @@ T laguerre_imp(unsigned n, unsigned m, T x, const Policy& pol)
 }
 
 BOOST_MATH_EXPORT template <class T, class Policy>
-inline typename tools::promote_args<T>::type
+inline typename tools::promote_args<T>::type 
    laguerre(unsigned n, unsigned m, T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -151,7 +151,7 @@ inline typename tools::promote_args<T>::type
 }
 
 BOOST_MATH_EXPORT template <class T1, class T2>
-inline typename laguerre_result<T1, T2>::type
+inline typename laguerre_result<T1, T2>::type 
    laguerre(unsigned n, T1 m, T2 x)
 {
    typedef typename policies::is_policy<T2>::type tag_type;
