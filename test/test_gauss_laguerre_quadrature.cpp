@@ -113,9 +113,103 @@ void test_overflow()
    CHECK_EQUAL(Q.size(), std::size_t(2));
    CHECK_NAN(Q[0]);
    CHECK_NAN(Q[1]);
+   double error = 0;
+   gauss_laguerre<double, 1000, ignore_policy>::integrate([](double x) { return std::cos(x); }, &error, nullptr);
+   CHECK_NAN(error);
 #ifndef BOOST_NO_EXCEPTIONS
    CHECK_THROW((gauss_laguerre<double, 1000>::integrate([](double x) { return std::cos(x); })), boost::math::evaluation_error);
 #endif
+}
+
+// The anti-Gauss rule is the Gauss rule of 2I - G_N, so on polynomials of degree 2N + 1 its error is that of G_N
+// with the opposite sign. Its N + 1 abscissas interlace those of G_N and are positive (Laurie 1996, Theorem 2),
+// and its weights are positive and sum to 1.
+template <class Real>
+void test_anti_gauss(unsigned N)
+{
+   using std::abs;
+   const boost::math::detail::orthogonal_polynomial<Real, boost::math::detail::laguerre_family<Real> > gauss(N);
+   const boost::math::detail::orthogonal_polynomial<Real, boost::math::detail::laguerre_family<Real> > anti(N + 1, boost::math::detail::laguerre_family<Real>(N + 1), true);
+   const std::vector<Real>& x = anti.abscissa();
+   const std::vector<Real>& w = anti.weights();
+   CHECK_EQUAL(x.size(), static_cast<std::size_t>(N + 1));
+   CHECK_LE(std::numeric_limits<Real>::min(), x[0]);
+   Real sum = 0;
+   for (std::size_t i = 0; i < x.size(); ++i)
+   {
+      CHECK_LE(Real(0), w[i]);
+      sum += w[i];
+   }
+   CHECK_ULP_CLOSE(Real(1), sum, 8);
+   for (std::size_t i = 0; i < N; ++i)
+   {
+      CHECK_LE(x[i], gauss.abscissa()[i]);
+      CHECK_LE(gauss.abscissa()[i], x[i + 1]);
+   }
+   // p = sum c_k L_k with arbitrary c_k, k <= 2N + 1, whose integral is c_0 by orthogonality. The error of G_N
+   // on L_2N is 1 / binomial(2N, N), so this only constrains the rule for small N; rounding grows with N.
+   std::vector<Real> c(2 * N + 2);
+   for (unsigned k = 0; k < c.size(); ++k)
+   {
+      c[k] = Real((k * 7919) % 17) / 8 - 1;
+   }
+   const Real exact = c[0];
+   auto p = [&c](const Real& t)
+   {
+      Real r = c[0], L = 1, L_previous = 0;
+      for (unsigned k = 1; k < c.size(); ++k)
+      {
+         Real L_next = ((2 * k - 1 - t) * L - (k - 1) * L_previous) / k;
+         L_previous = L;
+         L = L_next;
+         r += c[k] * L;
+      }
+      return r;
+   };
+   Real gauss_result = 0, anti_result = 0, L1 = 0;
+   for (std::size_t i = 0; i < N; ++i)
+   {
+      gauss_result += gauss.weights()[i] * p(gauss.abscissa()[i]);
+      L1 += gauss.weights()[i] * abs(p(gauss.abscissa()[i]));
+   }
+   for (std::size_t i = 0; i < x.size(); ++i)
+   {
+      anti_result += w[i] * p(x[i]);
+      L1 += w[i] * abs(p(x[i]));
+   }
+   CHECK_ABSOLUTE_ERROR(Real(0), (exact - gauss_result) + (exact - anti_result), (N + 8) * std::numeric_limits<Real>::epsilon() * L1);
+}
+
+// For smooth f the estimate is close to the true error until that reaches rounding.
+template <class Real, unsigned N>
+void test_error_estimate()
+{
+   using std::abs;
+   using std::cos;
+   using std::sqrt;
+   using rule = gauss_laguerre<Real, N>;
+   auto f = [](const Real& x) { return cos(x); };
+   Real error, L1, L1_alone;
+   const Real Q = rule::integrate(f, &error, &L1);
+   CHECK_EQUAL(Q, rule::integrate(f, &L1_alone));
+   CHECK_EQUAL(L1, L1_alone);
+   CHECK_EQUAL(Q, rule::integrate(f, nullptr, nullptr));
+   const Real true_error = abs(Q - Real(0.5));
+   if (true_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
+   {
+      CHECK_LE(error, 2 * true_error);
+      CHECK_LE(true_error, 2 * error);
+   }
+   CHECK_LE(2 * std::numeric_limits<Real>::epsilon() * L1, error);
+   // The integral of exp(-x) / (1 + x) is the Gompertz constant; the pole at -1 makes the error fall slowly.
+   const Real Qg = rule::integrate([](const Real& x) { return 1 / (1 + x); }, &error, nullptr);
+   const Real true_error_g = abs(Qg - static_cast<Real>(0.5963473623231940743410784993692793760742L));
+   CHECK_LE(error, 2 * true_error_g);
+   CHECK_LE(true_error_g, 2 * error);
+   const Real Qh = rule::integrate([](const Real& x) { return sqrt(1 + x); }, &error, nullptr);
+   const Real true_error_h = abs(Qh - static_cast<Real>(1.378936078070656053021675619957108958174L));
+   CHECK_LE(error, 2 * true_error_h);
+   CHECK_LE(true_error_h, 2 * error);
 }
 
 template <class Real>
@@ -172,6 +266,23 @@ int main()
    test_large_N<190>();
 
    test_overflow();
+
+   for (unsigned n = 1; n <= 50; ++n)
+   {
+      test_anti_gauss<double>(n);
+   }
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   test_anti_gauss<long double>(7);
+   test_anti_gauss<long double>(20);
+#endif
+   test_error_estimate<double, 2>();
+   test_error_estimate<double, 5>();
+   test_error_estimate<double, 10>();
+   test_error_estimate<double, 20>();
+   test_error_estimate<double, 40>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   test_error_estimate<long double, 15>();
+#endif
 
    return boost::math::test::report_errors();
 }

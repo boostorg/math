@@ -116,7 +116,7 @@ public:
    {  // See https://dlmf.nist.gov/18.9
       if (k == 0)
       {
-         return ((alpha - beta) + (alpha + beta + 2) * x) / 2;
+         return ((alpha - beta) + (alpha + beta + 2) * x) / 2 * p;
       }
 
       const Real degree = static_cast<Real>(k);
@@ -127,6 +127,17 @@ public:
       const Real second = 2 * (degree + alpha) * (degree + beta) * (twice_degree_sum + 2) * p_previous;
       const Real denominator = 2 * (degree + 1) * (degree + sum + 1) * twice_degree_sum;
       return (first - second) / denominator;
+   }
+
+   Real slope(unsigned k) const
+   {  // The coefficient of x p in next()
+      const Real degree = static_cast<Real>(k);
+      const Real sum = alpha + beta;
+      if (k == 0)
+      {
+         return (sum + 2) / 2;
+      }
+      return (2 * degree + sum + 1) * (2 * degree + sum + 2) / (2 * (degree + 1) * (degree + sum + 1));
    }
 
    Real derivative(const Real& x, const Real& p, const Real& p_previous) const

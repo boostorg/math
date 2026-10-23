@@ -23,6 +23,9 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
       template <class F>
       static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
 
+      template <class F>
+      static auto integrate(F f, Real* error, Real* pL1)->decltype(std::declval<F>()(std::declval<Real>()));
+
       template <class F, class Norm>
       static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm,
                             Real* pL1 = nullptr) -> decltype(f(Real(0)));
@@ -40,9 +43,10 @@ using /Points/ evaluations of /f/, where the abscissas /x[sub i]/ are the zeros 
 The rule is exact when /f/ is a polynomial of degree at most 2/Points/ - 1.
 Note that the weight function exp(-/x/[super 2]) is not part of /f/: pass only the factor that multiplies it.
 
-Like [link math_toolkit.gauss `gauss`], this is a "one shot" non-adaptive routine.
-It obtains no estimate of the error, and is intended for smooth /f/ that grow no faster than a polynomial,
+Like [link math_toolkit.gauss `gauss`], this is a "one shot" non-adaptive routine,
+intended for smooth /f/ that grow no faster than a polynomial,
 such as expectations of smooth functions of a normally distributed variable.
+It can optionally estimate its error, at the cost of /Points/ + 1 more evaluations of /f/.
 
    static const RandomAccessContainer& abscissa();
    static const RandomAccessContainer& weights();
@@ -56,6 +60,22 @@ the rule is symmetric about zero.
 Integrates /f/(/x/) exp(-/x/[super 2]) over the real line, and optionally sets `*pL1` to the corresponding integral of |/f/|.
 If that is substantially larger than the absolute value of the result, then the sum was ill-conditioned.
 /f/ may return a real or complex value.
+
+   template <class F>
+   static auto integrate(F f, Real* error, Real* pL1)->decltype(std::declval<F>()(std::declval<Real>()));
+
+Returns the same value, and if `error` is not null also sets `*error` to an estimate of its absolute error.
+This is |/A/(/f/) - /G/(/f/)|/2, where /G/ is the /Points/-point Gauss rule and /A/ is Laurie's anti-Gauss rule:
+the rule with /Points/ + 1 nodes whose error on every polynomial of degree up to 2/Points/ + 1 is exactly that of /G/ with the opposite sign.
+Its nodes interlace the Gauss nodes and its weights are positive.
+It is the Gauss rule of the same recurrence with its last coefficient doubled, so it is computed (the first time it is needed, then cached)
+by the same method as the Gauss rule.
+For smooth /f/ the estimate is typically within a few percent of the true error, until that error reaches rounding;
+it is not a bound, and integrands that alias onto the null space of /A/ - /G/ can fool it.
+It is never smaller than 2[epsilon] times the L1 norm.
+The value returned is still that of the Gauss rule. The average (/G/ + /A/)/2 is exact for polynomials of degree 2/Points/ + 1,
+and is usually more accurate, but its error has no estimate.
+The estimate uses /Points/ + 1 points, so it overflows for one fewer point than `integrate` does.
 
    template <class F, class Norm>
    static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm,
@@ -101,5 +121,6 @@ and is easily modified for other numbers of points.
 
 * G. H. Golub and J. H. Welsch, ['Calculation of Gauss quadrature rules], Mathematics of Computation 23 (1969), 221-230.
 * W. Gautschi, ['Orthogonal Polynomials: Computation and Approximation], Oxford University Press, 2004.
+* D. P. Laurie, ['Anti-Gaussian quadrature formulas], Mathematics of Computation 65 (1996), no. 214, 739-747, [@https://doi.org/10.1090/S0025-5718-96-00713-2 doi:10.1090/S0025-5718-96-00713-2].
 
 [endsect] [/section:gauss_hermite Gauss-Hermite quadrature]

@@ -447,6 +447,15 @@ class gauss_laguerre : public detail::gauss_laguerre_detail<Real, N, detail::qua
 {
    using base = detail::gauss_laguerre_detail<Real, N, detail::quadrature_constant_category<Real>::value>;
 
+   // Laurie's anti-Gauss rule with N + 1 points, computed the first time an error estimate is requested.
+   // Its nodes are all positive (Laurie 1996, Theorem 2).
+   static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::laguerre_family<Real>>& anti_gauss()
+   {
+      static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::laguerre_family<Real>> value(N + 1, BOOST_MATH_NAMESPACE::detail::laguerre_family<Real>(N + 1), true);
+      BOOST_MATH_ASSERT(!(value.abscissa()[0] <= 0));
+      return value;
+   }
+
 public:
    // Integrates f(x) exp(-x) over the real line.
    template <class F>
@@ -474,6 +483,32 @@ public:
       }
       if (pL1)
          *pL1 = L1;
+      return result;
+   }
+
+   // Also sets *error to half the difference from Laurie's anti-Gauss rule, which takes N + 1 more evaluations of f.
+   template <class F>
+   static auto integrate(F f, Real* error, Real* pL1)->decltype(std::declval<F>()(std::declval<Real>()))
+   {
+      using K = decltype(f(Real(0)));
+      using std::abs;
+      Real L1;
+      K result = integrate(f, &L1);
+      if (pL1)
+         *pL1 = L1;
+      if (!error)
+         return result;
+      const char* function = "boost::math::quadrature::gauss_laguerre<%1%>::integrate";
+      if (detail::overflowed(base::abscissa(), function, nullptr, error, Policy()) || detail::overflowed(anti_gauss().abscissa(), function, nullptr, error, Policy()))
+         return result;
+      const auto& anti = anti_gauss();
+      K anti_result = Real(0);
+      for (unsigned i = 0; i < anti.abscissa().size(); ++i)
+      {
+         anti_result += f(anti.abscissa()[i]) * anti.weights()[i];
+      }
+      // Rounding makes the difference meaningless below a few ulps of L1, and aliasing can make it exactly zero.
+      *error = (std::max)(static_cast<Real>(abs(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
       return result;
    }
 

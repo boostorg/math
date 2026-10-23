@@ -118,9 +118,115 @@ void test_overflow()
    CHECK_EQUAL(Q.size(), std::size_t(2));
    CHECK_NAN(Q[0]);
    CHECK_NAN(Q[1]);
+   // The error estimate needs N + 1 points, which overflow at N = 706.
+   using rule = gauss_hermite<double, 706, ignore_policy>;
+   double error = 0;
+   CHECK_EQUAL(rule::integrate([](double) { return 1.0; }, &L1), rule::integrate([](double) { return 1.0; }, &error, &L1));
+   CHECK_NAN(error);
 #ifndef BOOST_NO_EXCEPTIONS
    CHECK_THROW((gauss_hermite<double, 1000>::integrate([](double x) { return std::cos(x); })), boost::math::evaluation_error);
+   CHECK_THROW((gauss_hermite<double, 706>::integrate([](double) { return 1.0; }, &error, nullptr)), boost::math::evaluation_error);
 #endif
+}
+
+// Laurie's anti-Gauss rule with N + 1 points, which the error estimate uses, as a whole rule rather than its nonnegative half.
+template <class Real, unsigned N>
+std::pair<std::vector<Real>, std::vector<Real> > anti_gauss()
+{
+   boost::math::detail::orthogonal_polynomial<Real, boost::math::detail::hermite_family<Real> > rule(N + 1, boost::math::detail::hermite_family<Real>(N + 1), true);
+   std::vector<Real> x, w;
+   for (std::size_t i = rule.abscissa().size(); i-- > 0;)
+   {
+      if (rule.abscissa()[i] != 0)
+      {
+         x.push_back(-rule.abscissa()[i]);
+         w.push_back(rule.weights()[i]);
+      }
+   }
+   x.insert(x.end(), rule.abscissa().begin(), rule.abscissa().end());
+   w.insert(w.end(), rule.weights().begin(), rule.weights().end());
+   return std::make_pair(x, w);
+}
+
+// The anti-Gauss rule is the Gauss rule of 2I - G_N, so on polynomials of degree 2N + 1 its error is that of G_N
+// with the opposite sign; it interlaces G_N, and its weights are positive and sum to sqrt(pi).
+template <class Real, unsigned N>
+void test_anti_gauss()
+{
+   using std::abs;
+   const auto anti = anti_gauss<Real, N>();
+   CHECK_EQUAL(anti.first.size(), static_cast<std::size_t>(N + 1));
+   Real sum = 0;
+   for (std::size_t i = 0; i < anti.first.size(); ++i)
+   {
+      CHECK_LE(Real(0), anti.second[i]);
+      sum += anti.second[i];
+   }
+   CHECK_ULP_CLOSE(boost::math::constants::root_pi<Real>(), sum, 8);
+   // xi_1 < x_1 < xi_2 < ... < x_N < xi_{N+1}, with x the nonnegative Gauss abscissas mirrored.
+   const auto& half = gauss_hermite<Real, N>::abscissa();
+   for (std::size_t i = 0; i < half.size(); ++i)
+   {
+      const Real x = static_cast<Real>(half[i]);
+      const std::size_t j = N / 2 + i;
+      CHECK_LE(anti.first[j], x);
+      CHECK_LE(x, anti.first[j + 1]);
+      CHECK_LE(anti.first[N - j - 1], -x);
+      CHECK_LE(-x, anti.first[N - j]);
+   }
+   // p(x) = sum c_k x^k with arbitrary c_k, k <= 2N + 1, whose integral is sum c_{2k} Gamma(k + 1/2).
+   std::vector<Real> c(2 * N + 2);
+   Real exact = 0;
+   Real moment = boost::math::constants::root_pi<Real>();
+   for (unsigned k = 0; k < c.size(); ++k)
+   {
+      c[k] = Real((k * 7919) % 17) / 8 - 1;
+      if (k % 2 == 0)
+      {
+         exact += c[k] * moment;
+         moment *= Real(k + 1) / 2;
+      }
+   }
+   auto p = [&c](const Real& x) { Real r = 0; for (std::size_t k = c.size(); k-- > 0;) r = r * x + c[k]; return r; };
+   Real L1;
+   const Real gauss = gauss_hermite<Real, N>::integrate(p, &L1);
+   Real anti_result = 0;
+   for (std::size_t i = 0; i < anti.first.size(); ++i)
+   {
+      anti_result += anti.second[i] * p(anti.first[i]);
+      L1 += anti.second[i] * abs(p(anti.first[i]));
+   }
+   CHECK_ABSOLUTE_ERROR(Real(0), (exact - gauss) + (exact - anti_result), (N + 8) * std::numeric_limits<Real>::epsilon() * L1);
+}
+
+// For smooth f the estimate is close to the true error until that reaches rounding.
+template <class Real, unsigned N>
+void test_error_estimate()
+{
+   using std::abs;
+   using std::cos;
+   using std::exp;
+   const Real expected = boost::math::constants::root_pi<Real>() * exp(-Real(1) / 4);
+   auto f = [](const Real& x) { return cos(x); };
+   using rule = gauss_hermite<Real, N>;
+   Real error, L1, L1_alone;
+   const Real Q = rule::integrate(f, &error, &L1);
+   CHECK_EQUAL(Q, rule::integrate(f, &L1_alone));
+   CHECK_EQUAL(L1, L1_alone);
+   CHECK_EQUAL(Q, rule::integrate(f, nullptr, nullptr));
+   const Real true_error = abs(Q - expected);
+   if (true_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
+   {
+      CHECK_LE(error, 2 * true_error);
+      CHECK_LE(true_error, 2 * error);
+   }
+   CHECK_LE(2 * std::numeric_limits<Real>::epsilon() * L1, error);
+   // 1/(1 + x^2) has poles at +-i, so the error falls slowly.
+   auto g = [](const Real& x) { return 1 / (1 + x * x); };
+   const Real Qg = rule::integrate(g, &error, nullptr);
+   const Real true_error_g = abs(Qg - static_cast<Real>(1.343293421646735170437123594410589778323L));
+   CHECK_LE(error, 2 * true_error_g);
+   CHECK_LE(true_error_g, 2 * error);
 }
 
 template <class Real>
@@ -172,6 +278,24 @@ int main()
    test_large_N<500>();
    test_large_N<706>();
    test_overflow();
+
+   test_anti_gauss<double, 1>();
+   test_anti_gauss<double, 2>();
+   test_anti_gauss<double, 5>();
+   test_anti_gauss<double, 10>();
+   test_anti_gauss<double, 15>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   test_anti_gauss<long double, 6>();
+   test_anti_gauss<long double, 11>();
+#endif
+   test_error_estimate<double, 2>();
+   test_error_estimate<double, 5>();
+   test_error_estimate<double, 8>();
+   test_error_estimate<double, 20>();
+   test_error_estimate<double, 40>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   test_error_estimate<long double, 9>();
+#endif
 
    return boost::math::test::report_errors();
 }

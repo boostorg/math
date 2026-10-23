@@ -118,6 +118,11 @@ public:
       return a(k) * x * p + b(k) * p_previous;
    }
 
+   Real slope(unsigned k) const
+   {  // The coefficient of x p in next()
+      return a(k);
+   }
+
    Real derivative(const Real&, const Real&, const Real& p_previous) const
    {
       return derivative_scale * p_previous;

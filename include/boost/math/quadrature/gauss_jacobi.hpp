@@ -45,13 +45,20 @@ class gauss_jacobi_detail
    Real beta;
    std::vector<Real> abscissa_vals;
    std::vector<Real> weight_vals;
+   bool anti_gauss_internal;
+   std::vector<Real> anti_abscissa_vals;
+   std::vector<Real> anti_weight_vals;
+   using polynomial = BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::jacobi_family<Real> >;
 public:
    gauss_jacobi_detail(unsigned N_, Real alpha_, Real beta_) : N(N_), alpha(alpha_), beta(beta_)
    {
       BOOST_MATH_NAMESPACE::detail::jacobi_family<Real> family(N, alpha, beta);
-      BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::jacobi_family<Real> > value(N, family);
+      polynomial value(N, family);
       abscissa_vals = value.abscissa();
       weight_vals = value.weights();
+      // Laurie 1996, Theorem 3: the anti-Gauss rule has a node outside (-1, 1) when alpha or beta is below -1/2
+      // and N is large, and for some N when it is near -1/2.
+      anti_gauss_internal = polynomial::anti_gauss_is_internal(N + 1, family, Real(1)) && polynomial::anti_gauss_is_internal(N + 1, family, Real(-1));
     }
    const std::vector<Real>& abscissa()
    {
@@ -61,6 +68,29 @@ public:
    const std::vector<Real>& weights()
    {
       return weight_vals;
+   }
+
+   bool anti_gauss_is_internal() const
+   {
+      return anti_gauss_internal;
+   }
+
+   // Laurie's anti-Gauss rule with N + 1 points, computed the first time an error estimate is requested.
+   const std::vector<Real>& anti_gauss_abscissa()
+   {
+      if (anti_abscissa_vals.empty())
+      {
+         polynomial value(N + 1, BOOST_MATH_NAMESPACE::detail::jacobi_family<Real>(N + 1, alpha, beta), true);
+         anti_abscissa_vals = value.abscissa();
+         anti_weight_vals = value.weights();
+      }
+      return anti_abscissa_vals;
+   }
+
+   const std::vector<Real>& anti_gauss_weights()
+   {
+      anti_gauss_abscissa();
+      return anti_weight_vals;
    }
 };
 
@@ -99,6 +129,40 @@ public:
       }
       if (pL1)
          *pL1 = L1;
+      return result;
+   }
+
+   // Also sets *error to half the difference from Laurie's anti-Gauss rule, which takes N + 1 more evaluations of f.
+   // If that rule has a node on or outside [-1, 1], there is no estimate, which is an evaluation error.
+   template <class F>
+   auto integrate(F f, Real* error, Real* pL1)->decltype(std::declval<F>()(std::declval<Real>()))
+   {
+      using K = decltype(f(Real(0)));
+      using std::abs;
+      if (error && !this->anti_gauss_is_internal())
+      {
+         *error = policies::raise_evaluation_error(
+            "boost::math::quadrature::gauss_jacobi<%1%>::integrate",
+            "The anti-Gauss rule for the error estimate has a node on or outside [-1, 1] for these alpha, beta and points.",
+            std::numeric_limits<Real>::quiet_NaN(), Policy());
+         error = nullptr;
+      }
+      Real L1;
+      K result = integrate(f, &L1);
+      if (pL1)
+         *pL1 = L1;
+      if (!error)
+         return result;
+      const char* function = "boost::math::quadrature::gauss_jacobi<%1%>::integrate";
+      if (detail::overflowed(this->abscissa(), function, nullptr, error, Policy()) || detail::overflowed(this->anti_gauss_abscissa(), function, nullptr, error, Policy()))
+         return result;
+      K anti_result = Real(0);
+      for (unsigned i = 0; i < this->anti_gauss_abscissa().size(); ++i)
+      {
+         anti_result += f(this->anti_gauss_abscissa()[i]) * this->anti_gauss_weights()[i];
+      }
+      // Rounding makes the difference meaningless below a few ulps of L1, and aliasing can make it exactly zero.
+      *error = (std::max)(static_cast<Real>(abs(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
       return result;
    }
 

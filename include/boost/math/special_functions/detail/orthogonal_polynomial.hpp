@@ -31,10 +31,28 @@ public:
       values = calculate_values(Family(N));
    }
 
-   orthogonal_polynomial(unsigned n, const Family& family) : N(n)
+   // With anti_gauss, Laurie's anti-Gauss rule with n nodes, the companion of the (n - 1)-point Gauss rule.
+   orthogonal_polynomial(unsigned n, const Family& family, bool anti_gauss = false) : N(n), anti(anti_gauss)
    {
       values = calculate_values(family);
    }
+
+   // Laurie 1996, Theorem 1: the anti-Gauss rule with n nodes has no node at or beyond the end e of the support
+   // iff p~_n(e) has the sign of p_n(e), with p~_n defined as in strum_counter. Ask for a margin, so that
+   // nodes on the endpoint, which Chebyshev weights put there exactly, fail despite rounding.
+   static bool anti_gauss_is_internal(unsigned n, const Family& family, const Real& e)
+   {
+      Real p = family.p0();
+      Real p_previous = 0;
+      for (unsigned k = 0; k + 1 < n; ++k)
+      {
+         Real p_next = family.next(e, p, p_previous, k);
+         p_previous = p;
+         p = p_next;
+      }
+      return family.next(e, p, 2 * p_previous, n - 1) / family.next(e, p, p_previous, n - 1) > 4 * n * tools::epsilon<Real>();
+   }
+
    const std::vector<Real>& abscissa() const
    {
       return values.first;
@@ -46,28 +64,47 @@ public:
 
 private:
    unsigned N;
+   bool anti = false;
    std::pair<std::vector<Real>, std::vector<Real> > values;
    struct recurrence
    {
       Real p;
       Real p_prime;
       unsigned sign_changes;
+      Real p_previous;
+      Real p_prime_previous;
+      Real p_double_prime;
    };
 
    class strum_counter
    {
       public:
-         strum_counter(unsigned n, const Family& family_) : N(n), family(family_) {}
+         strum_counter(unsigned n, const Family& family_, bool anti_) : N(n), family(family_), anti(anti_) {}
 
          recurrence operator()(const Real& x) const
          {
             Real p = family.p0();
             Real p_previous = 0;
+            // p~_N satisfies no differential equation, so differentiate the recurrence instead.
+            Real p_prime = 0, p_prime_previous = 0, p_double_prime = 0, p_double_prime_previous = 0;
             bool last_negative = false;
             unsigned sign_changes = 0;
             for (unsigned k = 0; k < N; ++k)
             {
-               Real p_next = family.next(x, p, p_previous, k);
+               // Laurie's anti-Gauss rule is the Gauss rule of the same recurrence with the coefficient of p_{N-2}
+               // in its last step doubled: p~_N = p_N - b_{N-1} p_{N-2} in monic form. The Sturm count still holds.
+               const Real c = (anti && (k + 1 == N)) ? Real(2) : Real(1);
+               Real p_next = family.next(x, p, c * p_previous, k);
+               if (anti)
+               {
+                  const Real slope = family.slope(k);
+                  Real p_double_prime_next = family.next(x, p_double_prime, c * p_double_prime_previous, k) + 2 * slope * p_prime;
+                  Real p_prime_next = family.next(x, p_prime, c * p_prime_previous, k) + slope * p;
+                  p_double_prime_previous = p_double_prime;
+                  p_double_prime = p_double_prime_next;
+                  p_prime_previous = p_prime;
+                  p_prime = p_prime_next;
+               }
                p_previous = p;
                p = p_next;
                // A zero p_k(x) lies between values of opposite sign, so skipping it keeps the count right.
@@ -77,17 +114,26 @@ private:
                   last_negative = !last_negative;
                }
             }
-            return recurrence{ p, family.derivative(x, p, p_previous), sign_changes };
+            if (anti)
+               return recurrence{ p, p_prime, sign_changes, p_previous, p_prime_previous, p_double_prime };
+            return recurrence{ p, family.derivative(x, p, p_previous), sign_changes, p_previous, 0, 0 };
          }
 
-         Real second_derivative_ratio(const Real& x, const Real& p, const Real& p_prime) const
+         Real second_derivative_ratio(const Real& x, const recurrence& r) const
          {
-            return family.second_derivative_ratio(x, p, p_prime);
+            return anti ? r.p_double_prime / r.p_prime : family.second_derivative_ratio(x, r.p, r.p_prime);
          }
 
-         Real weight(const Real& z, const Real& p, const Real& p_prime) const
+         Real weight(const Real& z, const recurrence& r) const
          {
-            return family.weight(z, p, p_prime);
+            // The anti-Gauss rule is the Gauss rule of the functional 2I - G_{N-1}, so for monic P its weights are
+            // 2 ||P_{N-1}||^2 / (P_{N-1} P~'_N). The family's normalization changes them by a constant factor,
+            // which the scaling to area() below removes. Like the family weights, evaluate them at the exact zero
+            // to first order: near the ends of the interval they are sensitive to the rounding of z.
+            if (!anti)
+               return family.weight(z, r.p, r.p_prime);
+            const Real delta = -r.p / r.p_prime;
+            return 1 / ((r.p_previous + r.p_prime_previous * delta) * (r.p_prime + r.p_double_prime * delta));
          }
 
          unsigned num_roots() const
@@ -118,6 +164,7 @@ private:
       private:
          unsigned N;
          Family family;
+         bool anti;
    };
 
    // The nonnegative zeros of the orthogonal polynomial H_N, in increasing order, and their weights.
@@ -141,7 +188,7 @@ private:
       }
       using std::abs;
       using std::sqrt;
-      const strum_counter evaluate(N, family);
+      const strum_counter evaluate(N, family, anti);
 
       const unsigned num_roots = evaluate.num_roots();
       unsigned interior_roots = num_roots;
@@ -164,7 +211,7 @@ private:
       if (bottom.p == 0)
       {
          x[0] = lower;
-         w[0] = evaluate.weight(lower, bottom.p, bottom.p_prime);
+         w[0] = evaluate.weight(lower, bottom);
          interior_roots--;
       }
       // Need to know whether the number of sign changes increases or decreases with x, to know which direction to bisect.
@@ -209,7 +256,7 @@ private:
             else
                high = z;
             Real u = r.p / r.p_prime;
-            Real v = evaluate.second_derivative_ratio(z, r.p, r.p_prime);
+            Real v = evaluate.second_derivative_ratio(z, r);
             Real next = z - u / (1 - u * v / 2);
             if (!((next > low) && (next < high)))
                next = (low + high) / 2;
@@ -220,7 +267,7 @@ private:
                break;
          }
          x[num_roots - t] = z;
-         w[num_roots - t] = evaluate.weight(z, r.p, r.p_prime);
+         w[num_roots - t] = evaluate.weight(z, r);
          upper = low;
       }
       // Every node runs through the same rounded coefficients a and b, so the weights share a relative error

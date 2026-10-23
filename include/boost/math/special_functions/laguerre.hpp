@@ -203,6 +203,11 @@ public:
       return ((Real(2) * degree + 1 - x) * p - degree * p_previous) / (degree + 1);
    }
 
+   Real slope(unsigned k) const
+   {  // The coefficient of x p in next()
+      return -1 / static_cast<Real>(k + 1);
+   }
+
    Real derivative(const Real& x, const Real& p, const Real& p_previous) const
    {
       return static_cast<Real>(N) / x * (p - p_previous);
