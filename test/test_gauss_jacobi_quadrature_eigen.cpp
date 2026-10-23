@@ -29,7 +29,11 @@ void test_matrix(const Matrix& zero)
    // Against 1 -> 16/15, x -> 0, x^2 -> 16/105, odd powers are 0.
    double L1;
    gauss_jacobi<double> integrator(N, 2.0, 2.0);
-   Matrix Q = integrator.integrate(f, zero, norm, &L1);
+   Matrix Q = integrator.integrate(f, zero, norm, nullptr, &L1);
+   // The integrand is a polynomial that both rules integrate exactly, so the estimate is rounding.
+   double error;
+   integrator.integrate(f, zero, norm, &error, nullptr);
+   CHECK_LE(error, 64 * std::numeric_limits<double>::epsilon() * L1);
    CHECK_EQUAL(Q.rows(), Eigen::Index(2));
    CHECK_EQUAL(Q.cols(), Eigen::Index(2));
 

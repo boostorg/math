@@ -33,7 +33,7 @@ void test_moments(Real tol, const char* type_name)
    auto f = [](const Real& x) { return pow(x, Real(10.0)); };
    Real L1;
    gauss_jacobi<Real> integrator = gauss_jacobi<Real>(N, -Real(0.5), -Real(0.25));
-   Real Q = integrator.integrate(f, &L1);
+   Real Q = integrator.integrate(f, nullptr, &L1);
 
    CHECK_ABSOLUTE_ERROR(Q, Real(0.604206393406616872500520394161000920557127865245), tol);
    // The integrand is nonnegative, so the L1 norm is the integral itself.
@@ -64,11 +64,19 @@ void test_vector_valued()
    auto f = [](double x) { return vector{1.0, x * x, std::cos(x)}; };
    double L1;
    gauss_jacobi<double> integrator = gauss_jacobi<double>(N, 1.0, 1.0);
-   vector Q = integrator.integrate(f, zero, norm, &L1);
+   vector Q = integrator.integrate(f, zero, norm, nullptr, &L1);
    CHECK_ULP_CLOSE(4.0 / 3.0, Q[0], 10);
    CHECK_ULP_CLOSE(4.0 / 15.0, Q[1], 20);
    CHECK_ULP_CLOSE(4.0 * sin(1.0) - 4.0 * cos(1.0), Q[2], 16);
    CHECK_LE(norm(Q), L1);
+   // The estimate is the norm of the difference from the anti-Gauss rule, at least that of any component.
+   double error, L1_error, cos_error;
+   const vector Q_error = integrator.integrate(f, zero, norm, &error, &L1_error);
+   CHECK_EQUAL(Q_error[2], Q[2]);
+   CHECK_EQUAL(L1_error, L1);
+   integrator.integrate([](double x) { return std::cos(x); }, &cos_error, nullptr);
+   CHECK_LE(cos_error, error);
+   CHECK_LE(2 * std::numeric_limits<double>::epsilon() * L1, error);
 }
 
 // The anti-Gauss rule is the Gauss rule of 2I - G_N, so on polynomials of degree 2N + 1 its error is that of G_N
@@ -79,10 +87,11 @@ void test_anti_gauss(unsigned N, Real alpha, Real beta)
 {
    using std::abs;
    using std::pow;
+   using family = boost::math::detail::jacobi_family<Real>;
    gauss_jacobi<Real> rule(N, alpha, beta);
-   CHECK_EQUAL(rule.anti_gauss_is_internal(), true);
-   const std::vector<Real>& x = rule.anti_gauss_abscissa();
-   const std::vector<Real>& w = rule.anti_gauss_weights();
+   const boost::math::detail::orthogonal_polynomial<Real, family> anti(N + 1, family(N + 1, alpha, beta), true);
+   const std::vector<Real>& x = anti.abscissa();
+   const std::vector<Real>& w = anti.weights();
    CHECK_EQUAL(x.size(), static_cast<std::size_t>(N + 1));
    CHECK_LE(Real(-1), x[0]);
    CHECK_LE(x[N], Real(1));
@@ -109,7 +118,7 @@ void test_anti_gauss(unsigned N, Real alpha, Real beta)
    }
    auto p = [&c](const Real& t) { Real r = 0; for (std::size_t k = c.size(); k-- > 0;) r = r * (1 + t) + c[k]; return r; };
    Real L1;
-   const Real gauss = rule.integrate(p, &L1);
+   const Real gauss = rule.integrate(p, nullptr, &L1);
    Real anti_result = 0;
    for (std::size_t i = 0; i < x.size(); ++i)
    {
@@ -142,12 +151,17 @@ void test_anti_gauss_internality()
       }
    }
    // Chebyshev weights of the first kind put anti-Gauss nodes exactly on +-1.
+   auto internal = [](unsigned n, Real a, Real b)
+   {
+      const family f(n + 1, a, b);
+      return polynomial::anti_gauss_is_internal(n + 1, f, Real(1)) && polynomial::anti_gauss_is_internal(n + 1, f, Real(-1));
+   };
    for (unsigned n = 1; n <= 200; n += 7)
    {
-      CHECK_EQUAL(gauss_jacobi<Real>(n, Real(-0.5), Real(-0.5)).anti_gauss_is_internal(), false);
-      CHECK_EQUAL(gauss_jacobi<Real>(n, Real(0), Real(0)).anti_gauss_is_internal(), true);
-      CHECK_EQUAL(gauss_jacobi<Real>(n, Real(0.5), Real(0.5)).anti_gauss_is_internal(), true);
-      CHECK_EQUAL(gauss_jacobi<Real>(n, Real(-0.75), Real(0)).anti_gauss_is_internal(), false);
+      CHECK_EQUAL(internal(n, Real(-0.5), Real(-0.5)), false);
+      CHECK_EQUAL(internal(n, Real(0), Real(0)), true);
+      CHECK_EQUAL(internal(n, Real(0.5), Real(0.5)), true);
+      CHECK_EQUAL(internal(n, Real(-0.75), Real(0)), false);
    }
    // Without an internal anti-Gauss rule there is no estimate, but still an integral.
    using ignore_policy = boost::math::policies::policy<boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
@@ -188,7 +202,7 @@ void test_error_estimate(unsigned N)
       gauss_jacobi<Real> rule(N, e.alpha, e.beta);
       Real error, L1, L1_alone;
       const Real Q = rule.integrate(e.f, &error, &L1);
-      CHECK_EQUAL(Q, rule.integrate(e.f, &L1_alone));
+      CHECK_EQUAL(Q, rule.integrate(e.f, nullptr, &L1_alone));
       CHECK_EQUAL(L1, L1_alone);
       const Real true_error = abs(Q - e.expected);
       if (true_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)

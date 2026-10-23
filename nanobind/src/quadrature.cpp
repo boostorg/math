@@ -67,11 +67,11 @@ std::tuple<double, double, double> gauss_kronrod_n(scalar_function const& f, dou
 }
 
 template <unsigned N>
-std::pair<double, double> gauss_hermite_n(scalar_function const& f)
+std::tuple<double, double, double> gauss_hermite_n(scalar_function const& f)
 {
-   double L1 = 0;
-   double Q = bq::gauss_hermite<double, N>::integrate(f, &L1);
-   return {Q, L1};
+   double error = 0, L1 = 0;
+   double Q = bq::gauss_hermite<double, N>::integrate(f, &error, &L1);
+   return {Q, error, L1};
 }
 
 [[noreturn]] void bad_points(char const* name, char const* allowed, unsigned points)
@@ -156,7 +156,7 @@ void bind_quadrature(nb::module_& m)
       case 30: return gauss_hermite_n<30>(g);
       default: bad_points("gauss_hermite", "7, 10, 15, 20, 30", points);
       }
-   }, arg("f"), arg("points") = 10u, "quadrature::gauss_hermite<double, points>: (integral of exp(-x^2) f(x) over the real line, L1 norm)");
+   }, arg("f"), arg("points") = 10u, "quadrature::gauss_hermite<double, points>: (integral of exp(-x^2) f(x) over the real line, error estimate, L1 norm)");
 
    m.def("ooura_fourier_sin", [](nb::callable f, double omega, double tolerance, std::size_t levels) {
       bq::ooura_fourier_sin<double> integrator(tolerance, levels);

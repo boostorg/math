@@ -21,14 +21,11 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
       static const RandomAccessContainer& weights();
 
       template <class F>
-      static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
-
-      template <class F>
-      static auto integrate(F f, Real* error, Real* pL1)->decltype(std::declval<F>()(std::declval<Real>()));
+      static auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
 
       template <class F, class Norm>
       static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm,
-                            Real* pL1 = nullptr) -> decltype(f(Real(0)));
+                            Real* error = nullptr, Real* pL1 = nullptr) -> decltype(f(Real(0)));
    };
 
    }}} // namespaces
@@ -55,16 +52,14 @@ These provide direct access to the abscissas and weights. Only the nonnegative a
 the rule is symmetric about zero.
 
    template <class F>
-   static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
+   static auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
 
-Integrates /f/(/x/) exp(-/x/[super 2]) over the real line, and optionally sets `*pL1` to the corresponding integral of |/f/|.
+Integrates /f/(/x/) exp(-/x/[super 2]) over the real line. /f/ may return a real or complex value.
+
+If `pL1` is not null, `*pL1` is set to the corresponding integral of |/f/|.
 If that is substantially larger than the absolute value of the result, then the sum was ill-conditioned.
-/f/ may return a real or complex value.
 
-   template <class F>
-   static auto integrate(F f, Real* error, Real* pL1)->decltype(std::declval<F>()(std::declval<Real>()));
-
-Returns the same value, and if `error` is not null also sets `*error` to an estimate of its absolute error.
+If `error` is not null, `*error` is set to an estimate of the absolute error, at the cost of /Points/ + 1 more evaluations of /f/.
 This is |/A/(/f/) - /G/(/f/)|/2, where /G/ is the /Points/-point Gauss rule and /A/ is Laurie's anti-Gauss rule:
 the rule with /Points/ + 1 nodes whose error on every polynomial of degree up to 2/Points/ + 1 is exactly that of /G/ with the opposite sign.
 Its nodes interlace the Gauss nodes and its weights are positive.
@@ -75,14 +70,15 @@ it is not a bound, and integrands that alias onto the null space of /A/ - /G/ ca
 It is never smaller than 2[epsilon] times the L1 norm.
 The value returned is still that of the Gauss rule. The average (/G/ + /A/)/2 is exact for polynomials of degree 2/Points/ + 1,
 and is usually more accurate, but its error has no estimate.
-The estimate uses /Points/ + 1 points, so it overflows for one fewer point than `integrate` does.
+The estimate uses /Points/ + 1 points, so it overflows for one fewer point than the integral does.
 
    template <class F, class Norm>
    static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm,
-                         Real* pL1 = nullptr) -> decltype(f(Real(0)));
+                         Real* error = nullptr, Real* pL1 = nullptr) -> decltype(f(Real(0)));
 
 As for [link math_toolkit.gauss `gauss`], this overload handles vector- and matrix-valued integrands:
 `zero` is the additive identity of the returned type, and `norm` returns a nonnegative scalar convertible to `Real`.
+The L1 norm and the error estimate are measured with `norm`.
 
 [heading Example]
 
@@ -98,7 +94,10 @@ so, for example, E\[cos /X/\] = exp(-[sigma][super 2]/2) cos [mu] is computed by
    double mu = 0.5;
    double sigma = 2;
    auto g = [&](double x) { return std::cos(mu + root_two<double>() * sigma * x); };
-   double expectation = gauss_hermite<double, 30>::integrate(g) / root_pi<double>();
+   double error;
+   double expectation = gauss_hermite<double, 30>::integrate(g, &error) / root_pi<double>();
+
+and `error / root_pi<double>()`, about 3e-16, estimates its error.
 
 [heading Choosing the number of points]
 

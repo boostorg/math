@@ -456,10 +456,25 @@ class gauss_laguerre : public detail::gauss_laguerre_detail<Real, N, detail::qua
       return value;
    }
 
+   // Half the difference between the Gauss result and the anti-Gauss rule, which takes N + 1 more evaluations of f.
+   template <class F, class K, class Norm>
+   static Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm)
+   {
+      Real nan;
+      if (detail::overflowed(anti_gauss().abscissa(), "boost::math::quadrature::gauss_laguerre<%1%>::integrate", static_cast<Real*>(nullptr), &nan, Policy()))
+         return nan;
+      for (unsigned i = 0; i < anti_gauss().abscissa().size(); ++i)
+      {
+         anti_result += f(anti_gauss().abscissa()[i]) * anti_gauss().weights()[i];
+      }
+      // Rounding makes the difference meaningless below a few ulps of L1, and aliasing can make it exactly zero.
+      return (std::max)(static_cast<Real>(norm(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
+   }
+
 public:
    // Integrates f(x) exp(-x) over the real line.
    template <class F>
-   static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
+   static auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
       // In many math texts, K represents the field of real or complex numbers.
       // Too bad we can't put blackboard bold into C++ source!
@@ -467,11 +482,12 @@ public:
       static_assert(!std::is_integral<K>::value,
                     "The return type cannot be integral, it must be either a real or complex floating point type.");
       using std::abs;
-      const char* function = "boost::math::quadrature::gauss_hermite<%1>::integrate";
-      Real error;
-      if (detail::overflowed(base::abscissa(), function, pL1, &error, Policy()))
+      Real nan;
+      if (detail::overflowed(base::abscissa(), "boost::math::quadrature::gauss_laguerre<%1%>::integrate", pL1, &nan, Policy()))
       {
-         return static_cast<K>(error);
+         if (error)
+            *error = nan;
+         return static_cast<K>(nan);
       }
       K result = Real(0);
       Real L1 = abs(result);
@@ -483,47 +499,24 @@ public:
       }
       if (pL1)
          *pL1 = L1;
-      return result;
-   }
-
-   // Also sets *error to half the difference from Laurie's anti-Gauss rule, which takes N + 1 more evaluations of f.
-   template <class F>
-   static auto integrate(F f, Real* error, Real* pL1)->decltype(std::declval<F>()(std::declval<Real>()))
-   {
-      using K = decltype(f(Real(0)));
-      using std::abs;
-      Real L1;
-      K result = integrate(f, &L1);
-      if (pL1)
-         *pL1 = L1;
-      if (!error)
-         return result;
-      const char* function = "boost::math::quadrature::gauss_laguerre<%1%>::integrate";
-      if (detail::overflowed(base::abscissa(), function, nullptr, error, Policy()) || detail::overflowed(anti_gauss().abscissa(), function, nullptr, error, Policy()))
-         return result;
-      const auto& anti = anti_gauss();
-      K anti_result = Real(0);
-      for (unsigned i = 0; i < anti.abscissa().size(); ++i)
-      {
-         anti_result += f(anti.abscissa()[i]) * anti.weights()[i];
-      }
-      // Rounding makes the difference meaningless below a few ulps of L1, and aliasing can make it exactly zero.
-      *error = (std::max)(static_cast<Real>(abs(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
+      if (error)
+         *error = anti_gauss_error(f, K(Real(0)), result, L1, [](const K& z) { using std::abs; return abs(z); });
       return result;
    }
 
    // Explicit zero and norm for vector- and matrix-valued integrands.
    template <class F, class Norm>
-   static auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* pL1 = nullptr)
+   static auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr)
       ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
    {
       using K = decltype(f(Real(0)));
       static_assert(!std::is_integral<K>::value, "The return type cannot be integral.");
-      const char* function = "boost::math::quadrature::gauss_laguerre<%1>::integrate";
-      Real error;
-      if (detail::overflowed(base::abscissa(), function, pL1, &error, Policy()))
+      Real nan;
+      if (detail::overflowed(base::abscissa(), "boost::math::quadrature::gauss_laguerre<%1%>::integrate", pL1, &nan, Policy()))
       {
-         K result = zero * error;
+         if (error)
+            *error = nan;
+         K result = zero * nan;
          return result;
       }
       K result = zero;
@@ -536,6 +529,8 @@ public:
       }
       if (pL1)
          *pL1 = L1;
+      if (error)
+         *error = anti_gauss_error(f, zero, result, L1, norm);
       return result;
    }
 };

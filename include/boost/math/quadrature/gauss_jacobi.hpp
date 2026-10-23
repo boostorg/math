@@ -70,6 +70,7 @@ public:
       return weight_vals;
    }
 
+protected:
    bool anti_gauss_is_internal() const
    {
       return anti_gauss_internal;
@@ -99,13 +100,41 @@ public:
 template <class Real, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
 class gauss_jacobi : public detail::gauss_jacobi_detail<Real, detail::quadrature_constant_category<Real>::value>
 {
+   // Without an internal anti-Gauss rule there is no estimate, rather than evaluate f outside [-1, 1].
+   Real* estimable(Real* error)
+   {
+      if (error && !this->anti_gauss_is_internal())
+      {
+         *error = policies::raise_evaluation_error(
+            "boost::math::quadrature::gauss_jacobi<%1%>::integrate",
+            "The anti-Gauss rule for the error estimate has a node on or outside [-1, 1] for these alpha, beta and points.",
+            std::numeric_limits<Real>::quiet_NaN(), Policy());
+         return nullptr;
+      }
+      return error;
+   }
+
+   // Half the difference between the Gauss result and the anti-Gauss rule, which takes N + 1 more evaluations of f.
+   template <class F, class K, class Norm>
+   Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm)
+   {
+      Real nan;
+      if (detail::overflowed(this->anti_gauss_abscissa(), "boost::math::quadrature::gauss_jacobi<%1%>::integrate", static_cast<Real*>(nullptr), &nan, Policy()))
+         return nan;
+      for (unsigned i = 0; i < this->anti_gauss_abscissa().size(); ++i)
+      {
+         anti_result += f(this->anti_gauss_abscissa()[i]) * this->anti_gauss_weights()[i];
+      }
+      // Rounding makes the difference meaningless below a few ulps of L1, and aliasing can make it exactly zero.
+      return (std::max)(static_cast<Real>(norm(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
+   }
 
 public:
    gauss_jacobi(unsigned N_, Real alpha_, Real beta_) : detail::gauss_jacobi_detail<Real, detail::quadrature_constant_category<Real>::value>(N_, alpha_, beta_) {}
 
    // Integrates f(x) (1 - x)^alpha * (1 + x)^beta over [-1, 1].
    template <class F>
-   auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
+   auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
       // In many math texts, K represents the field of real or complex numbers.
       // Too bad we can't put blackboard bold into C++ source!
@@ -113,11 +142,13 @@ public:
       static_assert(!std::is_integral<K>::value,
                     "The return type cannot be integral, it must be either a real or complex floating point type.");
       using std::abs;
-      const char* function = "boost::math::quadrature::gauss_jacobi<%1>::integrate";
-      Real error;
-      if (detail::overflowed(this->abscissa(), function, pL1, &error, Policy()))
+      error = estimable(error);
+      Real nan;
+      if (detail::overflowed(this->abscissa(), "boost::math::quadrature::gauss_jacobi<%1%>::integrate", pL1, &nan, Policy()))
       {
-         return static_cast<K>(error);
+         if (error)
+            *error = nan;
+         return static_cast<K>(nan);
       }
       K result = Real(0);
       Real L1 = abs(result);
@@ -129,55 +160,25 @@ public:
       }
       if (pL1)
          *pL1 = L1;
-      return result;
-   }
-
-   // Also sets *error to half the difference from Laurie's anti-Gauss rule, which takes N + 1 more evaluations of f.
-   // If that rule has a node on or outside [-1, 1], there is no estimate, which is an evaluation error.
-   template <class F>
-   auto integrate(F f, Real* error, Real* pL1)->decltype(std::declval<F>()(std::declval<Real>()))
-   {
-      using K = decltype(f(Real(0)));
-      using std::abs;
-      if (error && !this->anti_gauss_is_internal())
-      {
-         *error = policies::raise_evaluation_error(
-            "boost::math::quadrature::gauss_jacobi<%1%>::integrate",
-            "The anti-Gauss rule for the error estimate has a node on or outside [-1, 1] for these alpha, beta and points.",
-            std::numeric_limits<Real>::quiet_NaN(), Policy());
-         error = nullptr;
-      }
-      Real L1;
-      K result = integrate(f, &L1);
-      if (pL1)
-         *pL1 = L1;
-      if (!error)
-         return result;
-      const char* function = "boost::math::quadrature::gauss_jacobi<%1%>::integrate";
-      if (detail::overflowed(this->abscissa(), function, nullptr, error, Policy()) || detail::overflowed(this->anti_gauss_abscissa(), function, nullptr, error, Policy()))
-         return result;
-      K anti_result = Real(0);
-      for (unsigned i = 0; i < this->anti_gauss_abscissa().size(); ++i)
-      {
-         anti_result += f(this->anti_gauss_abscissa()[i]) * this->anti_gauss_weights()[i];
-      }
-      // Rounding makes the difference meaningless below a few ulps of L1, and aliasing can make it exactly zero.
-      *error = (std::max)(static_cast<Real>(abs(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
+      if (error)
+         *error = anti_gauss_error(f, K(Real(0)), result, L1, [](const K& z) { using std::abs; return abs(z); });
       return result;
    }
 
    // Explicit zero and norm for vector- and matrix-valued integrands.
    template <class F, class Norm>
-   auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* pL1 = nullptr)
+   auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr)
       ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
    {
       using K = decltype(f(Real(0)));
       static_assert(!std::is_integral<K>::value, "The return type cannot be integral.");
-      const char* function = "boost::math::quadrature::gauss_jacobi<%1>::integrate";
-      Real error;
-      if (detail::overflowed(this->abscissa(), function, pL1, &error, Policy()))
+      error = estimable(error);
+      Real nan;
+      if (detail::overflowed(this->abscissa(), "boost::math::quadrature::gauss_jacobi<%1%>::integrate", pL1, &nan, Policy()))
       {
-         K result = zero * error;
+         if (error)
+            *error = nan;
+         K result = zero * nan;
          return result;
       }
       K result = zero;
@@ -190,6 +191,8 @@ public:
       }
       if (pL1)
          *pL1 = L1;
+      if (error)
+         *error = anti_gauss_error(f, zero, result, L1, norm);
       return result;
    }
 };

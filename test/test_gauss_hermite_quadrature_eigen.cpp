@@ -30,7 +30,11 @@ void test_matrix(const Matrix& zero)
    // Against exp(-x^2): 1 -> sqrt(pi), x^2 -> sqrt(pi)/2, odd powers -> 0.
    const double root_pi = boost::math::constants::root_pi<double>();
    double L1;
-   Matrix Q = gauss_hermite<double, N>::integrate(f, zero, norm, &L1);
+   Matrix Q = gauss_hermite<double, N>::integrate(f, zero, norm, nullptr, &L1);
+   // The integrand is a polynomial that both rules integrate exactly, so the estimate is rounding.
+   double error;
+   gauss_hermite<double, N>::integrate(f, zero, norm, &error, nullptr);
+   CHECK_LE(error, 64 * std::numeric_limits<double>::epsilon() * L1);
    CHECK_EQUAL(Q.rows(), Eigen::Index(2));
    CHECK_EQUAL(Q.cols(), Eigen::Index(2));
    CHECK_ULP_CLOSE(root_pi, Q(0, 0).real(), 4);

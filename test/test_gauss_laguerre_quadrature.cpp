@@ -37,7 +37,7 @@ void test_moments()
       expected = (k == 0) ? Real(1) : boost::math::factorial<Real>(k);
       auto even = [k](const Real& x) { Real r = 1; for (unsigned j = 0; j < k; ++j) r *= x; return r; };
       Real L1;
-      Real Q = gauss_laguerre<Real, N>::integrate(even, &L1);
+      Real Q = gauss_laguerre<Real, N>::integrate(even, nullptr, &L1);
       std::cout << std::setprecision(17) << expected << " " << Q << " " << L1 << std::endl;
       CHECK_ULP_CLOSE(expected, Q, 16 * (k + 1));
       // The integrand is nonnegative, so the L1 norm is the integral itself.
@@ -81,11 +81,19 @@ void test_vector_valued()
    auto norm = [](const vector& v) { return std::sqrt((v * v).sum()); };
    auto f = [](double x) { return vector{1.0, x * x, std::cos(x)}; };
    double L1;
-   vector Q = gauss_laguerre<double, N>::integrate(f, zero, norm, &L1);
+   vector Q = gauss_laguerre<double, N>::integrate(f, zero, norm, nullptr, &L1);
    CHECK_ULP_CLOSE(1.0, Q[0], 10);
    CHECK_ULP_CLOSE(2.0, Q[1], 20);
    CHECK_ULP_CLOSE(0.5, Q[2], 16);
    CHECK_LE(norm(Q), L1);
+   // The estimate is the norm of the difference from the anti-Gauss rule, at least that of any component.
+   double error, L1_error, cos_error;
+   const vector Q_error = gauss_laguerre<double, N>::integrate(f, zero, norm, &error, &L1_error);
+   CHECK_EQUAL(Q_error[2], Q[2]);
+   CHECK_EQUAL(L1_error, L1);
+   gauss_laguerre<double, N>::integrate([](double x) { return std::cos(x); }, &cos_error, nullptr);
+   CHECK_LE(cos_error, error);
+   CHECK_LE(2 * std::numeric_limits<double>::epsilon() * L1, error);
 }
 
 // Evaluating L_N directly overflows long before these N; the orthonormal recurrence does not.
@@ -105,7 +113,7 @@ void test_overflow()
 {
    using ignore_policy = boost::math::policies::policy<boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
    double L1 = 0;
-   CHECK_NAN((gauss_laguerre<double, 1000, ignore_policy>::integrate([](double x) { return std::cos(x); }, &L1)));
+   CHECK_NAN((gauss_laguerre<double, 1000, ignore_policy>::integrate([](double x) { return std::cos(x); }, nullptr, &L1)));
    CHECK_NAN(L1);
    using vector = std::valarray<double>;
    vector Q = gauss_laguerre<double, 1000, ignore_policy>::integrate([](double x) { return vector{1.0, x}; }, vector(0.0, 2),
@@ -191,7 +199,7 @@ void test_error_estimate()
    auto f = [](const Real& x) { return cos(x); };
    Real error, L1, L1_alone;
    const Real Q = rule::integrate(f, &error, &L1);
-   CHECK_EQUAL(Q, rule::integrate(f, &L1_alone));
+   CHECK_EQUAL(Q, rule::integrate(f, nullptr, &L1_alone));
    CHECK_EQUAL(L1, L1_alone);
    CHECK_EQUAL(Q, rule::integrate(f, nullptr, nullptr));
    const Real true_error = abs(Q - Real(0.5));
