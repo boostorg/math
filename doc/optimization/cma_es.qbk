@@ -40,6 +40,8 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 The `cma_es` optimizer searches for a global minimum of a function.
 Our implementation attempts to follow "The CMA evolution strategy: A tutorial" exactly.
+Each sample is projected onto the bounds before the cost function is called, so the cost function is only evaluated inside the box,
+and the mean of the search distribution is kept inside the box as well.
 
 
 [heading Parameters]
