@@ -214,6 +214,7 @@ extern "C++" {
 #include <boost/math/optimization/multilevel_coordinate_search.hpp>
 #include <boost/math/optimization/nesterov.hpp>
 #include <boost/math/optimization/random_search.hpp>
+#include <boost/math/optimization/turbo.hpp>
 
 // Differentiation. finite_difference and lanczos_smoothing must precede
 // autodiff: their unqualified detail:: references become ambiguous once

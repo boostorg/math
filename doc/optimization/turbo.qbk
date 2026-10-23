@@ -1,0 +1,195 @@
+[/
+Copyright (c) 2026 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:turbo Trust Region Bayesian Optimization]
+
+[heading Synopsis]
+
+``
+    #include <boost/math/optimization/turbo.hpp>
+
+    namespace boost::math::optimization {
+
+    template <typename ArgumentContainer> struct turbo_parameters {
+        using Real = typename ArgumentContainer::value_type;
+        ArgumentContainer lower_bounds;
+        ArgumentContainer upper_bounds;
+        ArgumentContainer const * initial_guess = nullptr;
+        size_t max_function_calls = 0;
+        size_t initial_points = 0;
+        size_t batch_size = 1;
+        size_t candidates = 0;
+        size_t max_training_points = 200;
+        size_t hyperparameter_steps = 50;
+    };
+
+    template <typename ArgumentContainer>
+    void validate_turbo_parameters(turbo_parameters<ArgumentContainer> const &params);
+
+    template <typename ArgumentContainer, class Func, class URBG>
+    ArgumentContainer turbo(const Func cost_function,
+                            turbo_parameters<ArgumentContainer> const &params,
+                            URBG &gen,
+                            std::invoke_result_t<Func, ArgumentContainer> target_value
+                              = std::numeric_limits<std::invoke_result_t<Func, ArgumentContainer>>::quiet_NaN(),
+                            std::atomic<bool> *cancellation = nullptr,
+                            std::atomic<std::invoke_result_t<Func, ArgumentContainer>> *current_minimum_cost = nullptr,
+                            std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr);
+
+    } // namespaces
+``
+
+The `turbo` function searches for a global minimum of a function on a box with TuRBO-1, the trust region Bayesian optimization algorithm of Eriksson, Pearce, Gardner, Turner and Poloczek.
+It is meant for expensive functions: it spends milliseconds of its own time per function call, so that it can spend as few calls as possible.
+
+TuRBO fits a Gaussian process (an ARD Matérn-5/2 kernel with a constant mean and a noise term) to the points it has evaluated,
+but uses it only in a /trust region/: a box centred at the best point found so far, stretched along each coordinate in proportion to the lengthscale the Gaussian process learned for it.
+Each new point is the minimizer, over a few hundred candidate points in the trust region, of a random function drawn from the posterior (Thompson sampling).
+The trust region doubles in size after three batches in a row that improve on its best point, and halves after ⌈max(4, /n/)\/ /q/⌉ batches in a row that do not, where /q/ is the batch size;
+when it becomes too small, TuRBO forgets it and starts again from a new random design, so that the search as a whole is global.
+
+TuRBO is a good choice when each function call takes much longer than a few milliseconds and the budget is a few hundred to a few thousand calls.
+It finds good values quickly, but it does not converge to high accuracy:
+the trust region never gets smaller than 2[super -7] of the box, and the Gaussian process treats differences in function values smaller than its noise level as noise.
+For cheap functions, or when the minimum is needed to many digits, multilevel coordinate search, differential evolution, jSO or CMA-ES are better choices,
+or the result of TuRBO can be polished by a local method.
+
+[heading Parameters]
+
+* `lower_bounds`: A container representing the lower bounds of the optimization space along each dimension.
+    The `.size()` of the bounds should return the dimension of the problem.
+* `upper_bounds`: A container representing the upper bounds of the optimization space along each dimension.
+    It should have the same size as `lower_bounds`, and each element must be strictly greater than the corresponding element of `lower_bounds`.
+* `initial_guess`: An optional point in the box. It is the first function call, in place of the first point of the first random design.
+* `max_function_calls`: Defaults to 100 times the dimension.
+* `initial_points`: The number of points of the random (Latin hypercube) design that starts each trust region. Defaults to twice the dimension.
+* `batch_size`: The number of points /q/ proposed at a time, from independent Thompson samples of the same Gaussian process. Defaults to 1.
+    The points of a batch could be evaluated in parallel, but `turbo` itself evaluates them one after the other.
+* `candidates`: The number of candidate points in the trust region at which each Thompson sample is drawn.
+    Defaults to min(100/n/, 1000). It must be at least `batch_size`.
+* `max_training_points`: The Gaussian process is fitted to at most this many points of the current trust region, those nearest its centre. Defaults to 200.
+* `hyperparameter_steps`: The number of steps of the Adam optimizer on the log marginal likelihood each time the Gaussian process is fitted. Defaults to 50.
+
+`validate_turbo_parameters` throws a `std::domain_error` if the bounds or initial guess are invalid,
+and a `std::invalid_argument` if `batch_size`, `candidates` or `max_training_points` is out of range.
+`turbo` calls it before the first function evaluation.
+
+[heading The function]
+
+``
+template <typename ArgumentContainer, class Func, class URBG>
+ArgumentContainer turbo(const Func cost_function,
+                        turbo_parameters<ArgumentContainer> const &params,
+                        URBG &gen,
+                        std::invoke_result_t<Func, ArgumentContainer> target_value
+                          = std::numeric_limits<std::invoke_result_t<Func, ArgumentContainer>>::quiet_NaN(),
+                        std::atomic<bool> *cancellation = nullptr,
+                        std::atomic<std::invoke_result_t<Func, ArgumentContainer>> *current_minimum_cost = nullptr,
+                        std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr)
+``
+
+Parameters:
+
+* `cost_function`: The cost function to be minimized. A NaN return value is treated as +[infin].
+* `params`: The parameters to the algorithm as described above.
+* `gen`: A uniform random bit generator, like `std::mt19937_64`.
+* `target_value`: An optional value that, if reached, stops the optimization.
+    This is the most robust way to terminate the calculation, but in most cases the optimal value of the cost function is unknown.
+        If it is, use it! Physical considerations can often be used to find optimal values for cost functions.
+* `cancellation`: An optional atomic boolean to allow the user to stop the computation and gracefully return the best result found up to that point.
+    It is checked before every function call.
+* `current_minimum_cost`: An optional atomic variable to store the current minimum cost during optimization.
+    This allows developers to (e.g.) plot the progress of the minimization over time and in conjunction with the `cancellation` argument allow halting the computation when the progress stagnates.
+* `queries`: An optional vector to store intermediate results during optimization.
+    This is useful for debugging and perhaps volume rendering of the objective function after the calculation is complete.
+
+Returns:
+
+The `ArgumentContainer` corresponding to the minimum cost found by the optimization.
+If the computation is cancelled before the first function call, it is the midpoint of the box (or the initial guess).
+
+[heading Termination]
+
+As in the paper, there is no convergence criterion: TuRBO restarts until it is stopped.
+The computation stops when the `target_value` is reached, when `max_function_calls` calls have been made, or when `cancellation` is set.
+These are checked before every call, even in the middle of a batch, so `max_function_calls` is never exceeded.
+
+[heading Cost]
+
+Each iteration fits the Gaussian process, with `hyperparameter_steps` Cholesky factorizations and inverses of an /N/ x /N/ matrix,
+where /N/ is the number of training points, and draws the Thompson samples, with a Cholesky factorization of the /M/ x /M/ posterior covariance of the /M/ candidates.
+That is O(`hyperparameter_steps` /N/[super 3] + /M/[super 3] + /M/[super 2]/N/) operations per iteration.
+A trust region lasts about 25/n/ function calls, so /N/ reaches the default cap of 200 only for /n/ of about 8 or more.
+On an Apple M1 Pro core, an iteration with the default parameters takes about 1 ms for /n/ = 2, 4 ms for /n/ = 4, 8 ms for /n/ = 5, 12 ms for /n/ = 6, and 85 ms for /n/ = 10.
+Setting `max_training_points` to 100 and `candidates` to 500 brings the last down to about 15 ms.
+All of the linear algebra is hand-rolled, and done in double precision whatever the `Real` type of the arguments.
+
+[heading Implementation notes]
+
+The trust region, its update rules, the Thompson sampling, the Gaussian process and the restarts follow Section 2 of the paper and its supplement,
+and the parameters follow the authors' code ([@https://github.com/uber-research/TuRBO github.com/uber-research/TuRBO], `turbo_1.py` and `gp.py`) where the two differ.
+Each Gaussian process fit starts from the same hyperparameters (lengthscales 0.5, output scale 1, noise variance 0.005, mean 0),
+and runs 50 steps of Adam with learning rate 0.1 on the negative log marginal likelihood, with analytic gradients,
+over hyperparameters mapped to the real line by scaled sigmoids onto the intervals \[0.005, 2\] (lengthscales), \[0.05, 20\] (output scale) and \[0.0005, 0.2\] (noise variance), as GPyTorch does.
+The inputs are scaled to the unit cube, and the function values standardized by their median and standard deviation.
+The departures from the paper and the authors' code are:
+
+* The failure tolerance is ⌈max(4, /n/)\/ /q/⌉, the noise variance bound 0.2, and a success an improvement by more than 10[super -3] times the magnitude of the best value in the trust region,
+    as in the authors' code. The paper has ⌈/n/\/ /q/⌉, 0.1, and any improvement.
+* The candidates are a random Latin hypercube in the trust region rather than a scrambled Sobol sequence, with each coordinate of each candidate kept at the centre of the trust region except with probability min(20\/n, 1), as in the paper.
+    A candidate with no perturbed coordinate gets one, chosen from all /n/ coordinates (the authors' code never chooses the last).
+* The default number of candidates is min(100/n/, 1000), not min(100/n/, 5000).
+    The joint posterior sample is exact, by a Cholesky factorization of the candidates' covariance, which costs /M/[super 3]/3 operations;
+    the authors' code also uses a Cholesky factorization up to 2000 candidates, and an approximate (Lanczos) factorization above that.
+* The Gaussian process is fitted to at most `max_training_points` points of the trust region, those nearest its centre; the authors' code uses all of them.
+    The cap rarely matters below 8 dimensions, where trust regions do not last that long, and it bounds the cost of a fit, which grows as the cube of the number of points.
+* Values that are +[infin] (or NaN) are replaced, in the training set, by the largest finite value in it. If there is none, the batch is taken at random from the candidates.
+* The initial guess, if any, replaces the first point of the first design.
+* If the run stops in the middle of a batch, the trust region is not updated.
+
+Only TuRBO-1, with a single trust region, is implemented; TuRBO-/m/ maintains /m/ trust regions and allocates each batch among them.
+The paper's choice of centre for noisy functions (the point with the smallest posterior mean) is not implemented: the centre is always the best point evaluated, as in the authors' code.
+
+[h4:examples Examples]
+
+The Branin function has three global minima with value 0.397887 on the box \[-5, 10\]×\[0, 15\]:
+
+``
+#include <boost/math/optimization/turbo.hpp>
+#include <array>
+#include <cmath>
+#include <iostream>
+#include <random>
+
+int main() {
+    using boost::math::optimization::turbo;
+    using boost::math::optimization::turbo_parameters;
+    using ArgType = std::array<double, 2>;
+    auto branin = [](ArgType const & v) {
+        double const pi = 3.14159265358979323846;
+        double x = v[0];
+        double y = v[1];
+        double t = y - 5.1/(4*pi*pi)*x*x + 5*x/pi - 6;
+        return t*t + 10*(1 - 1/(8*pi))*std::cos(x) + 10;
+    };
+    turbo_parameters<ArgType> params;
+    params.lower_bounds = {-5, 0};
+    params.upper_bounds = {10, 15};
+    params.max_function_calls = 200;
+    std::mt19937_64 gen(42);
+    auto x = turbo(branin, params, gen);
+    std::cout << "f(" << x[0] << ", " << x[1] << ") = " << branin(x) << "\n";
+}
+``
+
+After 200 calls the value is typically within a few times 10[super -4] of the minimum: over 30 seeds, the median distance was 3.7×10[super -4] and the largest 1.7×10[super -3].
+
+[h4:references References]
+
+* D. Eriksson, M. Pearce, J. Gardner, R. D. Turner and M. Poloczek, ['Scalable global optimization via local Bayesian optimization.] Advances in Neural Information Processing Systems 32 (NeurIPS 2019). [@https://arxiv.org/abs/1910.01739 arXiv:1910.01739].
+
+[endsect] [/section:turbo]
