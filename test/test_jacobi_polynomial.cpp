@@ -134,12 +134,10 @@ void test_zero_special_case()
    CHECK_THROW(boost::math::jacobi_zeros<T>(10, 1, -1), std::domain_error);
    CHECK_THROW(boost::math::jacobi_zeros<T>(10, std::numeric_limits<T>::quiet_NaN(), 1), std::domain_error);
    CHECK_THROW(boost::math::jacobi_zeros<T>(10, 1, std::numeric_limits<T>::quiet_NaN()), std::domain_error);
-   CHECK_THROW(boost::math::jacobi_zeros<T>(std::numeric_limits<unsigned>::quiet_NaN(), 1, 1), std::domain_error);
 
    using ignore_policy = boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error>,
                                                        boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
    CHECK_NAN((boost::math::jacobi_zeros<T, ignore_policy>(0, 1, 1)[0]));
-   CHECK_NAN((boost::math::jacobi_zeros<T, ignore_policy>(std::numeric_limits<unsigned>::quiet_NaN(), 1, 1)[0]));
 
    std::vector<T> zeros = boost::math::jacobi_zeros<T>(1, 0, 0);
    CHECK_EQUAL(zeros.size(), static_cast<std::size_t>(1));
@@ -149,7 +147,7 @@ void test_zero_special_case()
 int main()
 {
     #ifdef __STDCPP_FLOAT32_T__
-    
+
     test_symmetry<std::float32_t>();
     test_derivative<std::float32_t>();
 
@@ -159,7 +157,7 @@ int main()
     test_derivative<float>();
 
     #endif
-    
+
     #ifdef __STDCPP_FLOAT64_T__
 
     test_to_quadratic<std::float64_t>();
@@ -175,19 +173,19 @@ int main()
     #endif
 
     #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    
+
     test_to_quadratic<long double>();
     test_symmetry<long double>();
     test_derivative<long double>();
-    
+
     #endif
 
     #ifdef BOOST_HAS_FLOAT128
-    
+
     test_to_quadratic<boost::multiprecision::float128>();
     test_symmetry<boost::multiprecision::float128>();
     test_derivative<boost::multiprecision::float128>();
-    
+
     #endif
 
     test_zeros(2*std::numeric_limits<float>::epsilon(), "float");

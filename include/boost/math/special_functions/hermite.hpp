@@ -27,7 +27,7 @@ BOOST_MATH_NAMESPACE_BEGIN
 
 // Recurrence relation for Hermite polynomials:
 BOOST_MATH_EXPORT template <class T1, class T2, class T3>
-BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2, T3>::type 
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2, T3>::type
    hermite_next(unsigned n, T1 x, T2 Hn, T3 Hnm1)
 {
    using promoted_type = tools::promote_args_t<T1, T2, T3>;
@@ -156,7 +156,7 @@ private:
 } // namespace detail
 
 BOOST_MATH_EXPORT template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type 
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    hermite(unsigned n, T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -165,7 +165,7 @@ BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
 }
 
 BOOST_MATH_EXPORT template <class T>
-BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type 
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
    hermite(unsigned n, T x)
 {
    return BOOST_MATH_NAMESPACE::hermite(n, x, policies::policy<>());
@@ -175,11 +175,6 @@ BOOST_MATH_EXPORT template <class T, class Policy = BOOST_MATH_NAMESPACE::polici
 inline std::vector<T> hermite_zeros(unsigned n)
 {
    static const char* function = "boost::math::hermite_zeros(unsigned %1%)";
-   if ((!(BOOST_MATH_NAMESPACE::isfinite)(n)))
-   {
-      policies::raise_domain_error(function, "The argument n to the hermite_zeros function must be finite (got n=%1%).", n, Policy());
-      return { std::numeric_limits<T>::quiet_NaN() };
-   }
    if (n == 0)
    {
       policies::raise_domain_error(function, "Hermite polynomial has no roots for n = 0.", n, Policy());

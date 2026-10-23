@@ -47,8 +47,8 @@ void do_test_laguerre2(const T& data, const char* type_name, const char* test_na
    // test laguerre against data:
    //
    result = boost::math::tools::test_hetero<Real>(
-      data, 
-      bind_func_int1<Real>(funcp, 0, 1), 
+      data,
+      bind_func_int1<Real>(funcp, 0, 1),
       extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "laguerre(n, x)", test_name);
 
@@ -80,8 +80,8 @@ void do_test_laguerre3(const T& data, const char* type_name, const char* test_na
    // test laguerre against data:
    //
    result = boost::math::tools::test_hetero<Real>(
-      data, 
-      bind_func_int2<Real>(funcp, 0, 1, 2), 
+      data,
+      bind_func_int2<Real>(funcp, 0, 1, 2),
       extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "laguerre(n, m, x)", test_name);
    std::cout << std::endl;
@@ -96,7 +96,7 @@ void test_laguerre(T, const char* name)
    //
    // The contents are as follows, each row of data contains
    // three items, input value a, input value b and erf(a, b):
-   // 
+   //
 #  include "laguerre2.ipp"
 
    do_test_laguerre2<T>(laguerre2, name, "Laguerre Polynomials");
@@ -231,12 +231,10 @@ void test_zero_special_case()
    std::cout << "Testing special cases for zeros" << std::endl;
 
    BOOST_CHECK_THROW(boost::math::laguerre_zeros<T>(0), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::laguerre_zeros<T>(std::numeric_limits<unsigned>::quiet_NaN()), std::domain_error);
 
    using ignore_policy = boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error>,
                                                        boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
    CHECK_NAN((boost::math::laguerre_zeros<T, ignore_policy>(0)[0]));
-   CHECK_NAN((boost::math::laguerre_zeros<T, ignore_policy>(std::numeric_limits<unsigned>::quiet_NaN())[0]));
 
    std::vector<T> zeros = boost::math::laguerre_zeros<T>(1);
    BOOST_CHECK(zeros.size() == 1);

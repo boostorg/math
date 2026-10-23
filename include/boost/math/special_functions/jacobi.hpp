@@ -192,11 +192,6 @@ BOOST_MATH_EXPORT template <class T, class Policy = BOOST_MATH_NAMESPACE::polici
 inline std::vector<T> jacobi_zeros(unsigned n, T alpha, T beta)
 {
    static const char* function = "boost::math::jacobi_zeros(unsigned %1%)";
-   if ((!(BOOST_MATH_NAMESPACE::isfinite)(n)))
-   {
-      policies::raise_domain_error(function, "The argument n to the jacobi_zeros function must be finite (got n=%1%).", n, Policy());
-      return { std::numeric_limits<T>::quiet_NaN() };
-   }
    if ((alpha <= -1) || (beta <=-1))
    {
       policies::raise_domain_error(function, "Parameters alpha and beta must be > -1.", n, Policy());
