@@ -358,20 +358,6 @@ class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::quadr
 {
    using base = detail::gauss_hermite_detail<Real, N, detail::quadrature_constant_category<Real>::value>;
 
-   // Abscissas computed on demand are NaN when the recurrence overflows Real.
-   static bool overflowed()
-   {
-      return !(BOOST_MATH_NAMESPACE::isfinite)(static_cast<Real>(base::abscissa().back()));
-   }
-
-   static Real overflow_error()
-   {
-      return policies::raise_evaluation_error(
-         "boost::math::quadrature::gauss_hermite<%1%>::integrate",
-         "The Hermite recurrence overflows with this many points; use fewer points or a type with a wider exponent range.",
-         std::numeric_limits<Real>::quiet_NaN(), Policy());
-   }
-
 public:
    // Integrates f(x) exp(-x^2) over the real line.
    template <class F>
@@ -383,11 +369,11 @@ public:
       static_assert(!std::is_integral<K>::value,
                     "The return type cannot be integral, it must be either a real or complex floating point type.");
       using std::abs;
-      if (overflowed())
+
+      const char* function = "boost::math::quadrature::gauss_hermite<%1>::integrate";
+      Real error;
+      if (detail::overflowed(base::abscissa(), function, pL1, &error, Policy()))
       {
-         Real error = overflow_error();
-         if (pL1)
-            *pL1 = error;
          return static_cast<K>(error);
       }
       unsigned non_zero_start = 1;
@@ -420,13 +406,11 @@ public:
    {
       using K = decltype(f(Real(0)));
       static_assert(!std::is_integral<K>::value, "The return type cannot be integral.");
-      if (overflowed())
+
+      const char* function = "boost::math::quadrature::gauss_hermite<%1>::integrate";
+      Real error;
+      if (detail::overflowed(base::abscissa(), function, pL1, &error, Policy()))
       {
-         // Preserve the scalar error policy, including non-throwing policies,
-         // and use scalar multiplication to produce a result with the right shape.
-         Real error = overflow_error();
-         if (pL1)
-            *pL1 = error;
          K result = zero * error;
          return result;
       }

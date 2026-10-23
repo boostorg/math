@@ -69,19 +69,6 @@ public:
 template <class Real, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
 class gauss_jacobi : public detail::gauss_jacobi_detail<Real, detail::quadrature_constant_category<Real>::value>
 {
-   // Abscissas computed on demand are NaN when the recurrence overflows Real.
-   bool overflowed()
-   {
-      return !(BOOST_MATH_NAMESPACE::isfinite)(static_cast<Real>(this->abscissa().back()));
-   }
-
-   Real overflow_error()
-   {
-      return policies::raise_evaluation_error(
-         "boost::math::quadrature::gauss_jacobi<%1%>::integrate",
-         "The Jacobi recurrence overflows with this many points; use fewer points or a type with a wider exponent range.",
-         std::numeric_limits<Real>::quiet_NaN(), Policy());
-   }
 
 public:
    gauss_jacobi(unsigned N_, Real alpha_, Real beta_) : detail::gauss_jacobi_detail<Real, detail::quadrature_constant_category<Real>::value>(N_, alpha_, beta_) {}
@@ -96,11 +83,10 @@ public:
       static_assert(!std::is_integral<K>::value,
                     "The return type cannot be integral, it must be either a real or complex floating point type.");
       using std::abs;
-      if (overflowed())
+      const char* function = "boost::math::quadrature::gauss_jacobi<%1>::integrate";
+      Real error;
+      if (detail::overflowed(this->abscissa(), function, pL1, &error, Policy()))
       {
-         Real error = overflow_error();
-         if (pL1)
-            *pL1 = error;
          return static_cast<K>(error);
       }
       K result = Real(0);
@@ -123,13 +109,10 @@ public:
    {
       using K = decltype(f(Real(0)));
       static_assert(!std::is_integral<K>::value, "The return type cannot be integral.");
-      if (overflowed())
+      const char* function = "boost::math::quadrature::gauss_jacobi<%1>::integrate";
+      Real error;
+      if (detail::overflowed(this->abscissa(), function, pL1, &error, Policy()))
       {
-         // Preserve the scalar error policy, including non-throwing policies,
-         // and use scalar multiplication to produce a result with the right shape.
-         Real error = overflow_error();
-         if (pL1)
-            *pL1 = error;
          K result = zero * error;
          return result;
       }

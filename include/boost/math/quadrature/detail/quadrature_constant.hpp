@@ -54,6 +54,22 @@ struct quadrature_constant_category
       >;
 };
 
+template<typename RandomAccessContainer, typename Real, typename Policy>
+bool overflowed(const RandomAccessContainer& abscissa, const char* function, Real* pL1, Real* error, const Policy& pol)
+{
+   if (!(BOOST_MATH_NAMESPACE::isfinite)(static_cast<Real>(abscissa.back())))
+   {
+      *error = policies::raise_evaluation_error(
+               function,
+               "The recurrence relation overflows with this many points; use fewer points or a type with a wider exponent range.",
+               std::numeric_limits<Real>::quiet_NaN(), pol);
+      if (pL1)
+         *pL1 = *error;
+      return true;
+   }
+   return false;
+}
+
 } // namespace detail
 } // namespace quadrature
 BOOST_MATH_NAMESPACE_END
