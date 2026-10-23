@@ -278,7 +278,7 @@ def test_array_matches_scalar(case):
 SIEVE = {"prime_sieve", "prime_range", "prime_count", "polynomial_roots", "polynomial_roots_aberth", "polynomial_roots_companion_matrix"}
 QUADRATURE = {"tanh_sinh", "exp_sinh", "sinh_sinh", "trapezoidal", "gauss", "gauss_kronrod", "gauss_hermite",
               "ooura_fourier_sin", "ooura_fourier_cos", "van_den_bos_unit_square"}
-OPTIMIZATION = {"differential_evolution", "jso", "random_search", "cma_es"}
+OPTIMIZATION = {"differential_evolution", "jso", "random_search", "multilevel_coordinate_search", "cma_es"}
 
 
 def test_every_function_has_a_case():
@@ -292,7 +292,7 @@ def test_optimization():
         return (x[0] - 1) ** 2 + (x[1] + 2) ** 2
     lo, hi = [-5.0, -5.0], [5.0, 5.0]
     runs = [bm.differential_evolution(f, lo, hi, population=50, max_generations=200, threads=4), bm.jso(f, lo, hi),
-            bm.random_search(f, lo, hi, max_function_calls=20000)]
+            bm.random_search(f, lo, hi, max_function_calls=20000), bm.multilevel_coordinate_search(f, lo, hi)]
     if hasattr(bm, "cma_es"):  # Only where Eigen was found.
         runs.append(bm.cma_es(f, lo, hi, max_generations=200))
     for x in runs:

@@ -1,0 +1,21 @@
+//  Copyright Nick Thompson 2026.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//
+// Basic sanity check that header
+// #includes all the files that it needs to.
+//
+#include <boost/math/optimization/multilevel_coordinate_search.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
+
+void compile_and_link_test()
+{
+    auto func = [](std::vector<double> const & v) { return v[0]*v[0]; };
+    boost::math::optimization::multilevel_coordinate_search_parameters<std::vector<double>> params;
+    auto v = boost::math::optimization::multilevel_coordinate_search(func, params);
+}
