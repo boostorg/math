@@ -219,9 +219,9 @@ public:
          const Real c = (anti && (k + 1 == n)) ? Real(2) : Real(1);
          const Real d = static_cast<Real>(k + 1);
          const Real a = static_cast<Real>(2 * k + 1) + alpha;
-         const Real ea = BOOST_MATH_NAMESPACE::detail::two_sum_error(static_cast<Real>(2 * k + 1), alpha, a);
+         const Real ea = BOOST_MATH_NAMESPACE::detail::two_sum_error<Real>(static_cast<Real>(2 * k + 1), alpha, a);
          Real b = static_cast<Real>(k) + alpha;
-         const Real eb = c * BOOST_MATH_NAMESPACE::detail::two_sum_error(static_cast<Real>(k), alpha, b);
+         const Real eb = c * BOOST_MATH_NAMESPACE::detail::two_sum_error<Real>(static_cast<Real>(k), alpha, b);
          b *= c;
          Real ap, eap, bp, ebp, xp, exp;
          product(a, p, ap, eap);
@@ -229,7 +229,7 @@ public:
          product(x, p, xp, exp);
          const Real s1 = ap - bp;
          const Real s = s1 - xp;
-         const Real err = BOOST_MATH_NAMESPACE::detail::two_sum_error(ap, -bp, s1) + BOOST_MATH_NAMESPACE::detail::two_sum_error(s1, -xp, s)
+         const Real err = BOOST_MATH_NAMESPACE::detail::two_sum_error<Real>(ap, -bp, s1) + BOOST_MATH_NAMESPACE::detail::two_sum_error<Real>(s1, -xp, s)
             + eap - ebp - exp + (a - x) * e + ea * p - b * e_previous - eb * p_previous;
          const Real q = s / d;
          Real qd, eqd;
