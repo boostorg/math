@@ -203,13 +203,15 @@ extern "C++" {
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/statistics/z_test.hpp>
 
-// Optimization (cma_es is excluded: it requires Eigen)
+// Optimization
+#include <boost/math/optimization/cma_es.hpp>
 #include <boost/math/optimization/differential_evolution.hpp>
 #include <boost/math/optimization/gradient_descent.hpp>
 #include <boost/math/optimization/gradient_optimizers.hpp>
 #include <boost/math/optimization/jso.hpp>
 #include <boost/math/optimization/lbfgs.hpp>
 #include <boost/math/optimization/minimizer.hpp>
+#include <boost/math/optimization/multilevel_coordinate_search.hpp>
 #include <boost/math/optimization/nesterov.hpp>
 #include <boost/math/optimization/random_search.hpp>
 

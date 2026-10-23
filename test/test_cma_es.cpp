@@ -5,14 +5,22 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <boost/math/optimization/cma_es.hpp>
+#else
+import boost.math;
+#endif
+
 #include "math_unit_test.hpp"
 #include "test_functions_for_optimization.hpp"
-#include <boost/math/optimization/cma_es.hpp>
+#ifndef BOOST_MATH_BUILD_MODULE
 #include <array>
 #include <algorithm>
 #include <cmath>
 #include <random>
 #include <limits>
+#include <vector>
+#endif
 
 using std::abs;
 using boost::math::optimization::cma_es;
@@ -53,8 +61,9 @@ template <class Real> void test_ackley() {
   CHECK_EQUAL(local_minima[1], Real(0));
   CHECK_LE(size_t(1), queries.size());
   for (auto const & q : queries) {
+    // Not exact: with -ffp-contract=fast, ackley can be fused differently where it is inlined.
     auto expected = ackley<Real>(q.first);
-    CHECK_EQUAL(expected, q.second);
+    CHECK_ULP_CLOSE(expected, q.second, 4);
   }
 }
 
@@ -146,6 +155,111 @@ void test_beale() {
   CHECK_ABSOLUTE_ERROR(Real(1)/Real(2), local_minima[1], Real(0.1));
 }
 
+// The unconstrained minimum of the quadratic is outside the bounds,
+// and the constrained minimum on [1, 2]^4 is at (1, 1, 1, 1):
+template<typename Real>
+void test_bounds() {
+  std::cout << "Testing that CMA-ES respects the bounds . . .\n";
+  using ArgType = std::vector<Real>;
+  auto params = cma_es_parameters<ArgType>();
+  params.lower_bounds.resize(4, Real(1));
+  params.upper_bounds.resize(4, Real(2));
+  params.max_generations = 200;
+  std::mt19937_64 gen(12345);
+  size_t calls = 0;
+  size_t out_of_bounds_calls = 0;
+  auto f = [&](ArgType const & x) {
+    ++calls;
+    for (size_t i = 0; i < x.size(); ++i) {
+      if (!(params.lower_bounds[i] <= x[i] && x[i] <= params.upper_bounds[i])) {
+        ++out_of_bounds_calls;
+        break;
+      }
+    }
+    auto y = x;
+    return quadratic(y);
+  };
+  auto local_minima = cma_es(f, params, gen);
+  CHECK_LE(size_t(1), calls);
+  CHECK_EQUAL(out_of_bounds_calls, size_t(0));
+  for (auto x : local_minima) {
+    CHECK_ABSOLUTE_ERROR(Real(1), x, Real(0.01));
+  }
+}
+
+#ifndef BOOST_MATH_BUILD_MODULE
+// detail::symmetric_eigendecomposition is not exported from the module.
+template<typename Real>
+void check_symmetric_eigendecomposition(std::vector<Real> const & C, size_t n) {
+  using boost::math::optimization::detail::symmetric_eigendecomposition;
+  std::vector<Real> B;
+  std::vector<Real> D;
+  CHECK_EQUAL(symmetric_eigendecomposition(C, n, B, D), true);
+  // The residuals are computed in long double, so that they measure the error of the decomposition:
+  long double C_norm_sq = 0;
+  long double residual_sq = 0;
+  long double orthogonality_sq = 0;
+  for (size_t i = 0; i < n; ++i) {
+    for (size_t j = 0; j < n; ++j) {
+      C_norm_sq += static_cast<long double>(C[i*n + j])*C[i*n + j];
+      long double CB = -static_cast<long double>(B[i*n + j])*D[j];
+      long double BTB = (i == j) ? -1 : 0;
+      for (size_t k = 0; k < n; ++k) {
+        CB += static_cast<long double>(C[i*n + k])*B[k*n + j];
+        BTB += static_cast<long double>(B[k*n + i])*B[k*n + j];
+      }
+      residual_sq += CB*CB;
+      orthogonality_sq += BTB*BTB;
+    }
+  }
+  const long double tol = (2*n + 8)*static_cast<long double>(std::numeric_limits<Real>::epsilon());
+  CHECK_LE(std::sqrt(residual_sq/C_norm_sq), tol);
+  CHECK_LE(std::sqrt(orthogonality_sq), tol);
+}
+
+template<typename Real>
+void test_symmetric_eigendecomposition() {
+  std::cout << "Testing the symmetric eigendecomposition used by CMA-ES . . .\n";
+  std::mt19937_64 gen(12345);
+  std::normal_distribution<Real> dis(0, 1);
+  for (size_t n : {1, 2, 3, 10, 50}) {
+    // G G^T + nI is symmetric positive definite:
+    std::vector<Real> G(n*n);
+    for (auto & g : G) {
+      g = dis(gen);
+    }
+    std::vector<Real> C(n*n, Real(0));
+    for (size_t i = 0; i < n; ++i) {
+      for (size_t j = 0; j < n; ++j) {
+        for (size_t k = 0; k < n; ++k) {
+          C[i*n + j] += G[i*n + k]*G[j*n + k];
+        }
+      }
+      C[i*n + i] += static_cast<Real>(n);
+    }
+    check_symmetric_eigendecomposition(C, n);
+    // A diagonal matrix:
+    std::vector<Real> diagonal(n*n, Real(0));
+    for (size_t i = 0; i < n; ++i) {
+      diagonal[i*n + i] = static_cast<Real>(i + 1);
+    }
+    check_symmetric_eigendecomposition(diagonal, n);
+    // I + uu^T has the eigenvalue 1 repeated n - 1 times:
+    std::vector<Real> u(n);
+    for (auto & ui : u) {
+      ui = dis(gen);
+    }
+    std::vector<Real> repeated(n*n);
+    for (size_t i = 0; i < n; ++i) {
+      for (size_t j = 0; j < n; ++j) {
+        repeated[i*n + j] = (i == j ? Real(1) : Real(0)) + u[i]*u[j];
+      }
+    }
+    check_symmetric_eigendecomposition(repeated, n);
+  }
+}
+#endif
+
 int main() {
 #if (defined(__clang__) || defined(_MSC_VER))
   test_ackley<float>();
@@ -156,5 +270,11 @@ int main() {
   test_beale<double>();
 #endif
   test_sphere();
+  test_bounds<float>();
+  test_bounds<double>();
+#ifndef BOOST_MATH_BUILD_MODULE
+  test_symmetric_eigendecomposition<float>();
+  test_symmetric_eigendecomposition<double>();
+#endif
   return boost::math::test::report_errors();
 }

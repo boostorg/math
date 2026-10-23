@@ -19,11 +19,6 @@
 #endif
 #include <boost/math/optimization/detail/common.hpp>
 #include <boost/math/tools/assert.hpp>
-#if __has_include(<Eigen/Dense>)
-#include <Eigen/Dense>
-#else
-#error "CMA-ES requires Eigen."
-#endif
 
 // Follows the notation in:
 // https://arxiv.org/pdf/1604.00772.pdf
@@ -39,6 +34,224 @@
 #endif
 
 BOOST_MATH_NAMESPACE_BEGIN namespace optimization {
+
+namespace detail {
+
+// Computes A = V diag(eigenvalues) V^T for a symmetric n x n matrix A stored row-major,
+// by Householder tridiagonalization followed by the implicit QL algorithm;
+// see Wilkinson & Reinsch, Handbook for Automatic Computation, Vol. II (tred2 and tql2),
+// and Golub & Van Loan, Matrix Computations, 4th ed., Section 8.3.
+// V is returned row-major, with the eigenvectors as its columns.
+// Returns false if some eigenvalue did not converge within max_iterations QL iterations.
+template <typename Real>
+bool symmetric_eigendecomposition(std::vector<Real> A, size_t n, std::vector<Real> &V, std::vector<Real> &eigenvalues, size_t max_iterations = 30) {
+  using std::abs;
+  using std::hypot;
+  using std::sqrt;
+  using std::max;
+  V = std::move(A);
+  std::vector<Real> &d = eigenvalues;
+  d.resize(n);
+  std::vector<Real> e(n, Real(0));
+  // Householder reduction to tridiagonal form; d is the diagonal and e the subdiagonal:
+  for (size_t j = 0; j < n; ++j) {
+    d[j] = V[(n - 1)*n + j];
+  }
+  for (size_t i = n - 1; i > 0; --i) {
+    Real scale = 0;
+    Real h = 0;
+    for (size_t k = 0; k < i; ++k) {
+      scale += abs(d[k]);
+    }
+    if (scale == 0) {
+      e[i] = d[i - 1];
+      for (size_t j = 0; j < i; ++j) {
+        d[j] = V[(i - 1)*n + j];
+        V[i*n + j] = 0;
+        V[j*n + i] = 0;
+      }
+    }
+    else {
+      for (size_t k = 0; k < i; ++k) {
+        d[k] /= scale;
+        h += d[k]*d[k];
+      }
+      Real f = d[i - 1];
+      Real g = sqrt(h);
+      if (f > 0) {
+        g = -g;
+      }
+      e[i] = scale*g;
+      h -= f*g;
+      d[i - 1] = f - g;
+      for (size_t j = 0; j < i; ++j) {
+        e[j] = 0;
+      }
+      for (size_t j = 0; j < i; ++j) {
+        f = d[j];
+        V[j*n + i] = f;
+        g = e[j] + V[j*n + j]*f;
+        for (size_t k = j + 1; k < i; ++k) {
+          g += V[k*n + j]*d[k];
+          e[k] += V[k*n + j]*f;
+        }
+        e[j] = g;
+      }
+      f = 0;
+      for (size_t j = 0; j < i; ++j) {
+        e[j] /= h;
+        f += e[j]*d[j];
+      }
+      const Real hh = f/(h + h);
+      for (size_t j = 0; j < i; ++j) {
+        e[j] -= hh*d[j];
+      }
+      for (size_t j = 0; j < i; ++j) {
+        f = d[j];
+        g = e[j];
+        for (size_t k = j; k < i; ++k) {
+          V[k*n + j] -= f*e[k] + g*d[k];
+        }
+        d[j] = V[(i - 1)*n + j];
+        V[i*n + j] = 0;
+      }
+    }
+    d[i] = h;
+  }
+  // Accumulate the transformations:
+  for (size_t i = 0; i + 1 < n; ++i) {
+    V[(n - 1)*n + i] = V[i*n + i];
+    V[i*n + i] = 1;
+    const Real h = d[i + 1];
+    if (h != 0) {
+      for (size_t k = 0; k <= i; ++k) {
+        d[k] = V[k*n + i + 1]/h;
+      }
+      for (size_t j = 0; j <= i; ++j) {
+        Real g = 0;
+        for (size_t k = 0; k <= i; ++k) {
+          g += V[k*n + i + 1]*V[k*n + j];
+        }
+        for (size_t k = 0; k <= i; ++k) {
+          V[k*n + j] -= g*d[k];
+        }
+      }
+    }
+    for (size_t k = 0; k <= i; ++k) {
+      V[k*n + i + 1] = 0;
+    }
+  }
+  for (size_t j = 0; j < n; ++j) {
+    d[j] = V[(n - 1)*n + j];
+    V[(n - 1)*n + j] = 0;
+  }
+  V[(n - 1)*n + n - 1] = 1;
+  // The QL rotations act on columns of V, so apply them to the rows of V^T, which are contiguous:
+  for (size_t i = 0; i < n; ++i) {
+    for (size_t j = 0; j < i; ++j) {
+      std::swap(V[i*n + j], V[j*n + i]);
+    }
+  }
+  // Implicit QL iterations on the tridiagonal matrix:
+  for (size_t i = 1; i < n; ++i) {
+    e[i - 1] = e[i];
+  }
+  e[n - 1] = 0;
+  Real f = 0;
+  Real tst1 = 0;
+  const Real eps = std::numeric_limits<Real>::epsilon();
+  for (size_t l = 0; l < n; ++l) {
+    // Find a small subdiagonal element:
+    tst1 = (max)(tst1, abs(d[l]) + abs(e[l]));
+    size_t m = l;
+    while (m < n - 1 && !(abs(e[m]) <= eps*tst1)) {
+      ++m;
+    }
+    // If m == l, d[l] is already an eigenvalue; otherwise, iterate:
+    size_t iterations = 0;
+    while (m > l && abs(e[l]) > eps*tst1) {
+      if (iterations++ == max_iterations) {
+        break;
+      }
+      // Compute the implicit shift:
+      Real g = d[l];
+      Real p = (d[l + 1] - g)/(2*e[l]);
+      Real r = hypot(p, Real(1));
+      if (p < 0) {
+        r = -r;
+      }
+      d[l] = e[l]/(p + r);
+      d[l + 1] = e[l]*(p + r);
+      const Real dl1 = d[l + 1];
+      Real h = g - d[l];
+      for (size_t i = l + 2; i < n; ++i) {
+        d[i] -= h;
+      }
+      f += h;
+      p = d[m];
+      Real c = 1;
+      Real c2 = c;
+      Real c3 = c;
+      const Real el1 = e[l + 1];
+      Real s = 0;
+      Real s2 = 0;
+      for (size_t i = m; i-- > l;) {
+        c3 = c2;
+        c2 = c;
+        s2 = s;
+        g = c*e[i];
+        h = c*p;
+        r = hypot(p, e[i]);
+        e[i + 1] = s*r;
+        s = e[i]/r;
+        c = p/r;
+        p = c*d[i] - s*g;
+        d[i + 1] = h + s*(c*g + s*d[i]);
+        for (size_t k = 0; k < n; ++k) {
+          h = V[(i + 1)*n + k];
+          V[(i + 1)*n + k] = s*V[i*n + k] + c*h;
+          V[i*n + k] = c*V[i*n + k] - s*h;
+        }
+      }
+      p = -s*s2*c3*el1*e[l]/dl1;
+      e[l] = s*p;
+      d[l] = c*p;
+    }
+    if (iterations > max_iterations) {
+      return false;
+    }
+    d[l] += f;
+    e[l] = 0;
+  }
+  for (size_t i = 0; i < n; ++i) {
+    for (size_t j = 0; j < i; ++j) {
+      std::swap(V[i*n + j], V[j*n + i]);
+    }
+  }
+  return true;
+}
+
+// y = Mx, or y = M^{T}x if transpose is true, for the n x n matrix M stored row-major.
+// Both accumulate along the rows of M, so the inner loop is over contiguous memory:
+template <typename Real>
+void matrix_vector_product(std::vector<Real> const &M, std::vector<Real> const &x, std::vector<Real> &y, bool transpose = false) {
+  const size_t n = x.size();
+  for (size_t i = 0; i < n; ++i) {
+    y[i] = 0;
+  }
+  for (size_t i = 0; i < n; ++i) {
+    for (size_t j = 0; j < n; ++j) {
+      if (transpose) {
+        y[j] += M[i*n + j]*x[i];
+      }
+      else {
+        y[i] += M[i*n + j]*x[j];
+      }
+    }
+  }
+}
+
+} // namespace detail
 
 BOOST_MATH_EXPORT template <typename ArgumentContainer> struct cma_es_parameters {
   using Real = typename ArgumentContainer::value_type;
@@ -117,9 +330,9 @@ ArgumentContainer cma_es(
   std::atomic<ResultType> lowest_cost = std::numeric_limits<ResultType>::infinity();
   ArgumentContainer best_vector;
   // p_{c} := evolution path, equation (24) of the arxiv review:
-  Eigen::Vector<DimensionlessReal, Eigen::Dynamic> p_c(n);
+  std::vector<DimensionlessReal> p_c(n);
   // p_{\sigma} := conjugate evolution path, equation (31) of the arxiv review:
-  Eigen::Vector<DimensionlessReal, Eigen::Dynamic> p_sigma(n);
+  std::vector<DimensionlessReal> p_sigma(n);
   if constexpr (detail::has_resize_v<ArgumentContainer>) {
     best_vector.resize(n, std::numeric_limits<Real>::quiet_NaN());
   }
@@ -183,7 +396,11 @@ ArgumentContainer cma_es(
     weights[i] = min_alpha*w_prime[i]/abs(negative_weight_sum);
   }
   // mu:= number of parents, lambda := number of offspring.
-  Eigen::Matrix<DimensionlessReal, Eigen::Dynamic, Eigen::Dynamic> C = Eigen::Matrix<DimensionlessReal, Eigen::Dynamic, Eigen::Dynamic>::Identity(n, n);
+  // C, and B below, are stored row-major:
+  std::vector<DimensionlessReal> C(n*n, DimensionlessReal(0));
+  for (size_t i = 0; i < n; ++i) {
+    C[i*n + i] = 1;
+  }
   ArgumentContainer mean_vector;
   // See the footnote in Figure 6 of the arxiv review:
   // We should consider the more robust initialization described there. . . 
@@ -223,11 +440,13 @@ ArgumentContainer cma_es(
 #endif
   size_t generation = 0;
 
-  std::vector<Eigen::Vector<DimensionlessReal, Eigen::Dynamic>> ys(params.population_size);
+  std::vector<std::vector<DimensionlessReal>> ys(params.population_size);
   std::vector<ArgumentContainer> xs(params.population_size);
   std::vector<ResultType> costs(params.population_size, std::numeric_limits<ResultType>::quiet_NaN());
-  Eigen::Vector<DimensionlessReal, Eigen::Dynamic> weighted_avg_y(n);
-  Eigen::Vector<DimensionlessReal, Eigen::Dynamic> z(n);
+  std::vector<DimensionlessReal> weighted_avg_y(n);
+  std::vector<DimensionlessReal> z(n);
+  std::vector<DimensionlessReal> B;
+  std::vector<DimensionlessReal> D;
   if constexpr (detail::has_resize_v<ArgumentContainer>) {
     for (auto & x : xs) {
       x.resize(n, std::numeric_limits<Real>::quiet_NaN());
@@ -247,24 +466,29 @@ ArgumentContainer cma_es(
     // max(1, floor(1/(10n(c_1+c_mu)))) generations."
     // Note that sigma can be dimensionless, in which case C carries the units.
     // This is a weird decision-we're not gonna do that!
-    Eigen::SelfAdjointEigenSolver<Eigen::Matrix<DimensionlessReal, Eigen::Dynamic, Eigen::Dynamic>> eigensolver(C);
-    if (eigensolver.info() != Eigen::Success) {
+    if (!detail::symmetric_eigendecomposition(C, n, B, D)) {
       std::ostringstream oss;
       oss << __FILE__ << ":" << __LINE__ << ":" << __func__;
       oss << ": Could not decompose the covariance matrix as BDB^{T}.";
       throw std::logic_error(oss.str());
     }
-    Eigen::Matrix<DimensionlessReal, Eigen::Dynamic, Eigen::Dynamic> B = eigensolver.eigenvectors();
-    // Eigen returns D^2, in the notation of the survey:
-    auto D = eigensolver.eigenvalues();
-    // So make it better:
+    // The eigenvalues are D^2, in the notation of the survey:
     for (auto & d : D) {
-      if (d <= 0 || isnan(d)) {
+      if (d <= 0 || !isfinite(d)) {
         std::ostringstream oss;
         oss << __FILE__ << ":" << __LINE__ << ":" << __func__;
         oss << ": The covariance matrix is not positive definite. This breaks the evolution path computation downstream.\n";
-        oss << "C=\n" << C << "\n";
-        oss << "Eigenvalues: " << D;
+        oss << "C=\n";
+        for (size_t i = 0; i < n; ++i) {
+          for (size_t j = 0; j < n; ++j) {
+            oss << C[i*n + j] << " ";
+          }
+          oss << "\n";
+        }
+        oss << "Eigenvalues: ";
+        for (auto & e : D) {
+          oss << e << " ";
+        }
         throw std::domain_error(oss.str());
       }
       d = sqrt(d);
@@ -282,15 +506,20 @@ ArgumentContainer cma_es(
         for (size_t i = 0; i < n; ++i) {
           z[i] = dis(gen);
         }
-        Eigen::Vector<DimensionlessReal, Eigen::Dynamic> Dz(n);
         for (size_t i = 0; i < n; ++i) {
-          Dz[i] = D[i]*z[i];
+          z[i] *= D[i];
         }
-        y = B*Dz;
+        detail::matrix_vector_product(B, z, y);
         for (size_t i = 0; i < n; ++i) {
           BOOST_MATH_ASSERT(!isnan(mean_vector[i]));
           BOOST_MATH_ASSERT(!isnan(y[i]));
           x[i] = mean_vector[i] + sigma*y[i]; // equation (40) of Figure 6.
+          // Repair by projecting onto the bounds, and update with the repaired step;
+          // see "Boundaries and constraints" in Appendix B of the arxiv review:
+          if (x[i] < params.lower_bounds[i] || x[i] > params.upper_bounds[i]) {
+            x[i] = (max)(params.lower_bounds[i], (min)(params.upper_bounds[i], x[i]));
+            y[i] = (x[i] - mean_vector[i])/sigma;
+          }
         }
         costs[k] = cost_function(x);
         if (resample_counter++ == 50) {
@@ -335,14 +564,24 @@ ArgumentContainer cma_es(
     }
     // Equation (42), Figure 6:
     for (size_t j = 0; j < n; ++j) {
+      const Real previous_mean = mean_vector[j];
       mean_vector[j] = mean_vector[j] + c_m*sigma*weighted_avg_y[j];
+      // For c_m <= 1, the new mean is a convex combination of the old mean and points in the bounds,
+      // so it can only leave the bounds by roundoff or if c_m > 1. Then project it,
+      // and give the evolution paths the step that the mean actually took:
+      if (mean_vector[j] < params.lower_bounds[j] || mean_vector[j] > params.upper_bounds[j]) {
+        mean_vector[j] = (max)(params.lower_bounds[j], (min)(params.upper_bounds[j], mean_vector[j]));
+        weighted_avg_y[j] = (mean_vector[j] - previous_mean)/(c_m*sigma);
+      }
     }
     // Equation (43), Figure 6: Start with C^{-1/2}<y>_{w}
-    Eigen::Vector<DimensionlessReal, Eigen::Dynamic> inv_D_B_transpose_y = B.transpose()*weighted_avg_y;
-    for (long j = 0; j < inv_D_B_transpose_y.size(); ++j) {
+    std::vector<DimensionlessReal> inv_D_B_transpose_y(n);
+    detail::matrix_vector_product(B, weighted_avg_y, inv_D_B_transpose_y, true);
+    for (size_t j = 0; j < n; ++j) {
       inv_D_B_transpose_y[j] /= D[j];
     }
-    Eigen::Vector<DimensionlessReal, Eigen::Dynamic> C_inv_sqrt_y_avg = B*inv_D_B_transpose_y;
+    std::vector<DimensionlessReal> C_inv_sqrt_y_avg(n);
+    detail::matrix_vector_product(B, inv_D_B_transpose_y, C_inv_sqrt_y_avg);
     // Equation (43), Figure 6:
     DimensionlessReal p_sigma_norm = 0;
     for (size_t j = 0; j < n; ++j) {
@@ -361,7 +600,9 @@ ArgumentContainer cma_es(
       h_sigma = 1;
     }
     // Equation (45), Figure 6:
-    p_c = (1-c_c)*p_c + h_sigma*sqrt(c_c*(2-c_c)*mu_eff)*weighted_avg_y;
+    for (size_t j = 0; j < n; ++j) {
+      p_c[j] = (1-c_c)*p_c[j] + h_sigma*sqrt(c_c*(2-c_c)*mu_eff)*weighted_avg_y[j];
+    }
     DimensionlessReal delta_h_sigma = (1-h_sigma)*c_c*(2-c_c);
     DimensionlessReal weight_sum = 0;
     for (auto & w : weights) {
@@ -369,21 +610,42 @@ ArgumentContainer cma_es(
     }
     // Equation (47), Figure 6:
     DimensionlessReal K = (1 + c_1*delta_h_sigma - c_1 - c_mu*weight_sum);
-    // Can these operations be sped up using `.selfadjointView<Eigen::Upper>`?
-    // Maybe: A.selfadjointView<Eigen::Lower>().rankUpdate(p_c, c_1);?
-    C = K*C + c_1*p_c*p_c.transpose();
+    // C is symmetric, so only its upper triangle is updated, and then copied to the lower triangle:
+    auto add_outer_product = [&](DimensionlessReal alpha, std::vector<DimensionlessReal> const & v) {
+      for (size_t r = 0; r < n; ++r) {
+        for (size_t c = r; c < n; ++c) {
+          C[r*n + c] += alpha*v[r]*v[c];
+        }
+      }
+    };
+    for (auto & c : C) {
+      c *= K;
+    }
+    add_outer_product(c_1, p_c);
     // Incorporate positive weights of Equation (46):
     for (size_t i = 0; i < params.population_size/2; ++i) {
-      C += c_mu*weights[i]*ys[indices[i]]*ys[indices[i]].transpose();
+      add_outer_product(c_mu*weights[i], ys[indices[i]]);
     }
+    std::vector<DimensionlessReal> D_inv_BTy(n);
     for (size_t i = params.population_size/2; i < params.population_size; ++i) {
-      Eigen::Vector<DimensionlessReal, Eigen::Dynamic> D_inv_BTy = B.transpose()*ys[indices[i]];
+      auto const & y = ys[indices[i]];
+      detail::matrix_vector_product(B, y, D_inv_BTy, true);
+      DimensionlessReal squared_norm = 0;
       for (size_t j = 0; j < n; ++j) {
         D_inv_BTy[j] /= D[j];
+        squared_norm += D_inv_BTy[j]*D_inv_BTy[j];
       }
-      DimensionlessReal squared_norm = D_inv_BTy.squaredNorm();
+      // A repaired step can be exactly zero:
+      if (squared_norm == 0) {
+        continue;
+      }
       DimensionlessReal K2 = c_mu*weights[i]/squared_norm;
-      C += K2*ys[indices[i]]*ys[indices[i]].transpose();
+      add_outer_product(K2, y);
+    }
+    for (size_t r = 0; r < n; ++r) {
+      for (size_t c = 0; c < r; ++c) {
+        C[r*n + c] = C[c*n + r];
+      }
     }
   } while (generation++ < params.max_generations);
 

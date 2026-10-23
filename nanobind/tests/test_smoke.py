@@ -292,9 +292,8 @@ def test_optimization():
         return (x[0] - 1) ** 2 + (x[1] + 2) ** 2
     lo, hi = [-5.0, -5.0], [5.0, 5.0]
     runs = [bm.differential_evolution(f, lo, hi, population=50, max_generations=200, threads=4), bm.jso(f, lo, hi),
-            bm.random_search(f, lo, hi, max_function_calls=20000), bm.multilevel_coordinate_search(f, lo, hi)]
-    if hasattr(bm, "cma_es"):  # Only where Eigen was found.
-        runs.append(bm.cma_es(f, lo, hi, max_generations=200))
+            bm.random_search(f, lo, hi, max_function_calls=20000), bm.multilevel_coordinate_search(f, lo, hi),
+            bm.cma_es(f, lo, hi, max_generations=200)]
     for x in runs:
         assert f(x) < 1e-2
     def bad(x):
