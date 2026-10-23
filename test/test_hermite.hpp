@@ -173,7 +173,9 @@ void test_zero_special_case()
    std::cout << "Testing special cases for zeros" << std::endl;
 
 #ifndef BOOST_NO_EXCEPTIONS
-   BOOST_CHECK_THROW(boost::math::hermite_zeros<T>(0), std::domain_error);
+   using throw_policy = boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::throw_on_error>,
+                                                      boost::math::policies::evaluation_error<boost::math::policies::throw_on_error> >;
+   BOOST_CHECK_THROW((boost::math::hermite_zeros<T, throw_policy>(0)), std::domain_error);
 #endif
 
    using ignore_policy = boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error>,
@@ -186,7 +188,7 @@ void test_zero_special_case()
 
    // Past N = 706 in double the recurrence overflows, which must be reported through the policy.
 #ifndef BOOST_NO_EXCEPTIONS
-   BOOST_CHECK_THROW(boost::math::hermite_zeros<T>(1000), boost::math::evaluation_error);
+   BOOST_CHECK_THROW((boost::math::hermite_zeros<T, throw_policy>(1000)), boost::math::evaluation_error);
 #endif
 
    std::vector<T> roots = boost::math::hermite_zeros<T, ignore_policy>(1000);
