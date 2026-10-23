@@ -88,7 +88,7 @@ void test_anti_gauss(unsigned N, Real alpha, Real beta)
    using std::abs;
    using std::pow;
    using family = boost::math::detail::jacobi_family<Real>;
-   gauss_jacobi<Real> rule(N, alpha, beta);
+   const gauss_jacobi<Real> rule(N, alpha, beta);
    const boost::math::detail::orthogonal_polynomial<Real, family> anti(N + 1, family(N + 1, alpha, beta), true);
    const std::vector<Real>& x = anti.abscissa();
    const std::vector<Real>& w = anti.weights();

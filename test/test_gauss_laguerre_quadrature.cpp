@@ -229,7 +229,7 @@ void test_alpha(Real alpha, Real moment_tol)
    using std::abs;
    using std::cos;
    using std::pow;
-   gauss_laguerre<Real, N> rule(alpha);
+   const gauss_laguerre<Real, N> rule(alpha);
    for (unsigned k = 0; k < 2 * N; ++k)
    {
       Real L1;

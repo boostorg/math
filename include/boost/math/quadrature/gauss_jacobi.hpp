@@ -59,13 +59,20 @@ public:
       // Laurie 1996, Theorem 3: the anti-Gauss rule has a node outside (-1, 1) when alpha or beta is below -1/2
       // and N is large, and for some N when it is near -1/2.
       anti_gauss_internal = polynomial::anti_gauss_is_internal(N + 1, family, Real(1)) && polynomial::anti_gauss_is_internal(N + 1, family, Real(-1));
+      // Laurie's anti-Gauss rule with N + 1 points, for the error estimate.
+      if (anti_gauss_internal)
+      {
+         polynomial anti(N + 1, BOOST_MATH_NAMESPACE::detail::jacobi_family<Real>(N + 1, alpha, beta), true);
+         anti_abscissa_vals = anti.abscissa();
+         anti_weight_vals = anti.weights();
+      }
     }
-   const std::vector<Real>& abscissa()
+   const std::vector<Real>& abscissa() const
    {
       return abscissa_vals;
    }
 
-   const std::vector<Real>& weights()
+   const std::vector<Real>& weights() const
    {
       return weight_vals;
    }
@@ -76,21 +83,13 @@ protected:
       return anti_gauss_internal;
    }
 
-   // Laurie's anti-Gauss rule with N + 1 points, computed the first time an error estimate is requested.
-   const std::vector<Real>& anti_gauss_abscissa()
+   const std::vector<Real>& anti_gauss_abscissa() const
    {
-      if (anti_abscissa_vals.empty())
-      {
-         polynomial value(N + 1, BOOST_MATH_NAMESPACE::detail::jacobi_family<Real>(N + 1, alpha, beta), true);
-         anti_abscissa_vals = value.abscissa();
-         anti_weight_vals = value.weights();
-      }
       return anti_abscissa_vals;
    }
 
-   const std::vector<Real>& anti_gauss_weights()
+   const std::vector<Real>& anti_gauss_weights() const
    {
-      anti_gauss_abscissa();
       return anti_weight_vals;
    }
 };
@@ -101,7 +100,7 @@ template <class Real, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
 class gauss_jacobi : public detail::gauss_jacobi_detail<Real, detail::quadrature_constant_category<Real>::value>
 {
    // Without an internal anti-Gauss rule there is no estimate, rather than evaluate f outside [-1, 1].
-   Real* estimable(Real* error)
+   Real* estimable(Real* error) const
    {
       if (error && !this->anti_gauss_is_internal())
       {
@@ -116,7 +115,7 @@ class gauss_jacobi : public detail::gauss_jacobi_detail<Real, detail::quadrature
 
    // Half the difference between the Gauss result and the anti-Gauss rule, which takes N + 1 more evaluations of f.
    template <class F, class K, class Norm>
-   Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm)
+   Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm) const
    {
       Real nan;
       if (detail::overflowed(this->anti_gauss_abscissa(), "boost::math::quadrature::gauss_jacobi<%1%>::integrate", static_cast<Real*>(nullptr), &nan, Policy()))
@@ -134,7 +133,7 @@ public:
 
    // Integrates f(x) (1 - x)^alpha * (1 + x)^beta over [-1, 1].
    template <class F>
-   auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
+   auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr) const->decltype(std::declval<F>()(std::declval<Real>()))
    {
       // In many math texts, K represents the field of real or complex numbers.
       // Too bad we can't put blackboard bold into C++ source!
@@ -167,7 +166,7 @@ public:
 
    // Explicit zero and norm for vector- and matrix-valued integrands.
    template <class F, class Norm>
-   auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr)
+   auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr) const
       ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
    {
       using K = decltype(f(Real(0)));

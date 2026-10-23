@@ -21,7 +21,6 @@
 #include <array>
 #include <cmath>
 #include <limits>
-#include <memory>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -453,38 +452,19 @@ class gauss_laguerre : public detail::gauss_laguerre_detail<Real, N, detail::qua
    Real alpha;
    std::vector<Real> abscissa_vals;
    std::vector<Real> weight_vals;
-   std::shared_ptr<const polynomial> anti;
-
-   // Laurie's anti-Gauss rule with N + 1 points, computed the first time an error estimate is requested,
-   // and cached for alpha = 0. Its nodes are all positive (Laurie 1996, Theorem 2).
-   const polynomial& anti_gauss()
-   {
-      if (!anti)
-      {
-         if (alpha == 0)
-         {
-            static const std::shared_ptr<const polynomial> cached = std::make_shared<const polynomial>(N + 1, family(N + 1), true);
-            anti = cached;
-         }
-         else
-         {
-            anti = std::make_shared<const polynomial>(N + 1, family(N + 1, alpha), true);
-         }
-         BOOST_MATH_ASSERT(!(anti->abscissa()[0] <= 0));
-      }
-      return *anti;
-   }
+   std::vector<Real> anti_abscissa_vals;
+   std::vector<Real> anti_weight_vals;
 
    // Half the difference between the Gauss result and the anti-Gauss rule, which takes N + 1 more evaluations of f.
    template <class F, class K, class Norm>
-   Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm)
+   Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm) const
    {
       Real nan;
-      if (detail::overflowed(anti_gauss().abscissa(), "boost::math::quadrature::gauss_laguerre<%1%>::integrate", static_cast<Real*>(nullptr), &nan, Policy()))
+      if (detail::overflowed(anti_abscissa_vals, "boost::math::quadrature::gauss_laguerre<%1%>::integrate", static_cast<Real*>(nullptr), &nan, Policy()))
          return nan;
-      for (unsigned i = 0; i < anti_gauss().abscissa().size(); ++i)
+      for (unsigned i = 0; i < anti_abscissa_vals.size(); ++i)
       {
-         anti_result += f(anti_gauss().abscissa()[i]) * anti_gauss().weights()[i];
+         anti_result += f(anti_abscissa_vals[i]) * anti_weight_vals[i];
       }
       // Rounding makes the difference meaningless below a few ulps of L1, and aliasing can make it exactly zero.
       return (std::max)(static_cast<Real>(norm(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
@@ -500,6 +480,8 @@ public:
             "The parameter alpha must be finite and > -1, but got %1%.", alpha_, Policy());
          abscissa_vals.assign(N, std::numeric_limits<Real>::quiet_NaN());
          weight_vals.assign(N, std::numeric_limits<Real>::quiet_NaN());
+         anti_abscissa_vals.assign(N + 1, std::numeric_limits<Real>::quiet_NaN());
+         anti_weight_vals.assign(N + 1, std::numeric_limits<Real>::quiet_NaN());
       }
       else if (alpha == 0)
       {
@@ -508,13 +490,21 @@ public:
             abscissa_vals.push_back(static_cast<Real>(base::abscissa()[i]));
             weight_vals.push_back(static_cast<Real>(base::weights()[i]));
          }
+         static const polynomial anti(N + 1, family(N + 1), true);
+         anti_abscissa_vals = anti.abscissa();
+         anti_weight_vals = anti.weights();
       }
       else
       {
          const polynomial rule(N, family(N, alpha));
          abscissa_vals = rule.abscissa();
          weight_vals = rule.weights();
+         const polynomial anti(N + 1, family(N + 1, alpha), true);
+         anti_abscissa_vals = anti.abscissa();
+         anti_weight_vals = anti.weights();
       }
+      // Laurie's anti-Gauss rule with N + 1 points, for the error estimate. Its nodes are all positive (Laurie 1996, Theorem 2).
+      BOOST_MATH_ASSERT(!(anti_abscissa_vals[0] <= 0));
    }
 
    const std::vector<Real>& abscissa() const
@@ -529,7 +519,7 @@ public:
 
    // Integrates f(x) x^alpha exp(-x) over [0, infinity).
    template <class F>
-   auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
+   auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr) const->decltype(std::declval<F>()(std::declval<Real>()))
    {
       // In many math texts, K represents the field of real or complex numbers.
       // Too bad we can't put blackboard bold into C++ source!
@@ -564,7 +554,7 @@ public:
 
    // Explicit zero and norm for vector- and matrix-valued integrands.
    template <class F, class Norm>
-   auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr)
+   auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr) const
       ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
    {
       using K = decltype(f(Real(0)));
