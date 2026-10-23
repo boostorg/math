@@ -129,12 +129,13 @@ void test_zero_special_case()
 {
    std::cout << "Testing special cases for zeros" << std::endl;
 
+#ifndef BOOST_NO_EXCEPTIONS
    CHECK_THROW(boost::math::jacobi_zeros<T>(0, 1, 1), std::domain_error);
    CHECK_THROW(boost::math::jacobi_zeros<T>(10, -1, 1), std::domain_error);
    CHECK_THROW(boost::math::jacobi_zeros<T>(10, 1, -1), std::domain_error);
    CHECK_THROW(boost::math::jacobi_zeros<T>(10, std::numeric_limits<T>::quiet_NaN(), 1), std::domain_error);
    CHECK_THROW(boost::math::jacobi_zeros<T>(10, 1, std::numeric_limits<T>::quiet_NaN()), std::domain_error);
-
+#endif
    using ignore_policy = boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error>,
                                                        boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
    CHECK_NAN((boost::math::jacobi_zeros<T, ignore_policy>(0, 1, 1)[0]));
