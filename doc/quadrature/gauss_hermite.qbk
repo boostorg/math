@@ -127,7 +127,7 @@ and is easily modified for other numbers of points.
 [heading References]
 
 * G. H. Golub and J. H. Welsch, ['Calculation of Gauss quadrature rules], Mathematics of Computation 23 (1969), 221-230.
-* A. Glaser, X. Liu and V. Rokhlin, ['A fast algorithm for the calculation of the roots of special functions], SIAM Journal on Scientific Computing 29 (2007), 1420-1438.
+* A. Glaser, X. Liu and V. Rokhlin, ['A fast algorithm for the calculation of the roots of special functions], SIAM Journal on Scientific Computing 29 (2007), no. 4, 1420-1438, [@https://doi.org/10.1137/06067016X doi:10.1137/06067016X].
 * W. Gautschi, ['Orthogonal Polynomials: Computation and Approximation], Oxford University Press, 2004.
 * D. P. Laurie, ['Anti-Gaussian quadrature formulas], Mathematics of Computation 65 (1996), no. 214, 739-747, [@https://doi.org/10.1090/S0025-5718-96-00713-2 doi:10.1090/S0025-5718-96-00713-2].
 
