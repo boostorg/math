@@ -277,6 +277,7 @@ def test_array_matches_scalar(case):
 # Not elementwise, so tested on their own below.
 SIEVE = {"prime_sieve", "prime_range", "prime_count", "polynomial_roots", "polynomial_roots_aberth", "polynomial_roots_companion_matrix"}
 QUADRATURE = {"tanh_sinh", "exp_sinh", "sinh_sinh", "trapezoidal", "gauss", "gauss_kronrod", "gauss_hermite",
+              "gauss_laguerre",
               "ooura_fourier_sin", "ooura_fourier_cos", "van_den_bos_unit_square"}
 OPTIMIZATION = {"differential_evolution", "jso", "random_search", "cma_es"}
 
@@ -314,6 +315,8 @@ def test_quadrature():
         (bm.gauss(lambda x: x * x, 0, 1, points=7), 1 / 3),
         (bm.gauss_kronrod(math.sin, 0, math.pi, points=61), 2.0),
         (bm.gauss_hermite(lambda x: x * x), math.sqrt(math.pi) / 2),
+        (bm.gauss_laguerre(lambda x: x * x, alpha=0.5), math.gamma(3.5)),
+        (bm.gauss_jacobi(10, 0.5, -0.5).integrate(lambda x: x * x), math.pi / 2),
         (bm.ooura_fourier_sin(lambda t: 1 / t, 1.0), math.pi / 2),
         (bm.ooura_fourier_cos(lambda t: 1 / (1 + t * t), 1.0), math.pi / (2 * math.e)),
         (bm.van_den_bos_unit_square(lambda x, y: x * y), 0.25),
@@ -469,7 +472,7 @@ TRANSFORMS = {"fft", "real_fft", "dct_ii"}
 
 def test_every_distribution_has_a_case():
     names = {n for n in bm.__all__ if inspect.isclass(getattr(bm, n))}
-    assert names - TRANSFORMS == {c[0] for c in CONTINUOUS + DISCRETE}
+    assert names - TRANSFORMS - {"gauss_jacobi"} == {c[0] for c in CONTINUOUS + DISCRETE}
     assert TRANSFORMS <= names
 
 
