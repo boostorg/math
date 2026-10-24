@@ -26,10 +26,12 @@
 #include <nanobind/stl/pair.h>
 #include <nanobind/stl/tuple.h>
 
+#include <cmath>
 #include <cstddef>
 #include <limits>
 #include <string>
 #include <tuple>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -70,19 +72,20 @@ std::tuple<double, double, double> gauss_kronrod_n(scalar_function const& f, dou
    return {Q, error, L1};
 }
 
-template <unsigned N>
-std::tuple<double, double, double> gauss_hermite_n(scalar_function const& f)
+// (integral, L1 norm) of the Gauss rule, or (integral, error estimate, L1 norm) of the averaged rule.
+template <class Rule>
+std::pair<double, double> gauss_rule_integrate(Rule const& rule, scalar_function const& f)
 {
-   double error = 0, L1 = 0;
-   double Q = bq::gauss_hermite<double, N>::integrate(f, &error, &L1);
-   return {Q, error, L1};
+   double L1 = 0;
+   double Q = rule.integrate(f, &L1);
+   return {Q, L1};
 }
 
-template <unsigned N>
-std::tuple<double, double, double> gauss_laguerre_n(scalar_function const& f, double alpha)
+template <class Rule>
+std::tuple<double, double, double> gauss_rule_integrate_averaged(Rule const& rule, scalar_function const& f)
 {
    double error = 0, L1 = 0;
-   double Q = bq::gauss_laguerre<double, N>(alpha).integrate(f, &error, &L1);
+   double Q = rule.integrate_averaged(f, &error, &L1);
    return {Q, error, L1};
 }
 
@@ -104,9 +107,57 @@ struct py_gauss_jacobi : bq::gauss_jacobi<double>
    py_gauss_jacobi(unsigned n_, double alpha_, double beta_) : bq::gauss_jacobi<double>(n_, alpha_, beta_), n(n_), alpha(alpha_), beta(beta_) {}
 };
 
+// The n-point Gauss rule of a family, computed afresh: (nodes ascending, weights). A symmetric family keeps only
+// its nonnegative nodes, so mirror them.
+template <class Family>
+std::pair<array1d, array1d> gauss_rule(unsigned n, Family const& family, bool symmetric = false)
+{
+   BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<double, Family> rule(n, family);
+   std::vector<double> x = rule.abscissa(), w = rule.weights();
+   if (symmetric)
+   {
+      std::size_t m = x.size(), skip = n % 2;  // An odd rule has 0 once.
+      std::vector<double> xs(n), ws(n);
+      for (std::size_t i = 0; i < m; ++i)
+      {
+         xs[n - m + i] = x[i];
+         ws[n - m + i] = w[i];
+         if (i >= skip)
+         {
+            xs[m - 1 - i] = -x[i];
+            ws[m - 1 - i] = w[i];
+         }
+      }
+      x.swap(xs);
+      w.swap(ws);
+   }
+   return {to_array(x), to_array(w)};
+}
+
+void check_exponent(char const* name, double a)
+{
+   if (!(a > -1) || !std::isfinite(a))
+      throw nb::value_error((std::string(name) + " must be finite and > -1").c_str());
+}
+
 [[noreturn]] void bad_points(char const* name, char const* allowed, unsigned points)
 {
    throw nb::value_error((std::string(name) + ": points must be one of " + allowed + ", got " + std::to_string(points)).c_str());
+}
+
+// fn(std::integral_constant<unsigned, points>()) for the point counts gauss_hermite and gauss_laguerre are bound for.
+template <class Fn>
+auto with_points(char const* name, unsigned points, Fn fn)
+{
+   switch (points)
+   {
+   case 7: return fn(std::integral_constant<unsigned, 7>());
+   case 10: return fn(std::integral_constant<unsigned, 10>());
+   case 15: return fn(std::integral_constant<unsigned, 15>());
+   case 20: return fn(std::integral_constant<unsigned, 20>());
+   case 30: return fn(std::integral_constant<unsigned, 30>());
+   default: bad_points(name, "7, 10, 15, 20, 30", points);
+   }
 }
 
 }  // namespace
@@ -176,41 +227,42 @@ void bind_quadrature(nb::module_& m)
       "quadrature::gauss_kronrod<double, points>: (integral, error estimate, L1 norm), adaptive");
 
    m.def("gauss_hermite", [](nb::callable f, unsigned points) {
-      scalar_function g{f};
-      switch (points)
-      {
-      case 7: return gauss_hermite_n<7>(g);
-      case 10: return gauss_hermite_n<10>(g);
-      case 15: return gauss_hermite_n<15>(g);
-      case 20: return gauss_hermite_n<20>(g);
-      case 30: return gauss_hermite_n<30>(g);
-      default: bad_points("gauss_hermite", "7, 10, 15, 20, 30", points);
-      }
-   }, arg("f"), arg("points") = 10u, "quadrature::gauss_hermite<double, points>: (integral of exp(-x^2) f(x) over the real line, error estimate, L1 norm)");
+      return with_points("gauss_hermite", points, [g = scalar_function{f}](auto n) {
+         return gauss_rule_integrate(bq::gauss_hermite<double, decltype(n)::value>(), g);
+      });
+   }, arg("f"), arg("points") = 10u, "quadrature::gauss_hermite<double, points>: (integral of exp(-x^2) f(x) over the real line, L1 norm)");
+
+   m.def("gauss_hermite_averaged", [](nb::callable f, unsigned points) {
+      return with_points("gauss_hermite_averaged", points, [g = scalar_function{f}](auto n) {
+         return gauss_rule_integrate_averaged(bq::gauss_hermite<double, decltype(n)::value>(), g);
+      });
+   }, arg("f"), arg("points") = 10u,
+      "quadrature::gauss_hermite<double, points>::integrate_averaged: (Laurie's averaged-rule integral, error estimate, L1 norm)");
 
    m.def("gauss_laguerre", [](nb::callable f, unsigned points, double alpha) {
-      scalar_function g{f};
-      switch (points)
-      {
-      case 7: return gauss_laguerre_n<7>(g, alpha);
-      case 10: return gauss_laguerre_n<10>(g, alpha);
-      case 15: return gauss_laguerre_n<15>(g, alpha);
-      case 20: return gauss_laguerre_n<20>(g, alpha);
-      case 30: return gauss_laguerre_n<30>(g, alpha);
-      default: bad_points("gauss_laguerre", "7, 10, 15, 20, 30", points);
-      }
+      return with_points("gauss_laguerre", points, [g = scalar_function{f}, alpha](auto n) {
+         return gauss_rule_integrate(bq::gauss_laguerre<double, decltype(n)::value>(alpha), g);
+      });
    }, arg("f"), arg("points") = 10u, arg("alpha") = 0.0,
-      "quadrature::gauss_laguerre<double, points>(alpha): (integral of x^alpha exp(-x) f(x) over [0, inf), error estimate, L1 norm)");
+      "quadrature::gauss_laguerre<double, points>(alpha): (integral of x^alpha exp(-x) f(x) over [0, inf), L1 norm)");
+
+   m.def("gauss_laguerre_averaged", [](nb::callable f, unsigned points, double alpha) {
+      return with_points("gauss_laguerre_averaged", points, [g = scalar_function{f}, alpha](auto n) {
+         return gauss_rule_integrate_averaged(bq::gauss_laguerre<double, decltype(n)::value>(alpha), g);
+      });
+   }, arg("f"), arg("points") = 10u, arg("alpha") = 0.0,
+      "quadrature::gauss_laguerre<double, points>(alpha).integrate_averaged: (Laurie's averaged-rule integral, error estimate, L1 norm)");
 
    nb::class_<py_gauss_jacobi>(m, "gauss_jacobi",
       "quadrature::gauss_jacobi<double>(n, alpha, beta): the n-point rule for (1 - x)^alpha (1 + x)^beta on [-1, 1], "
       "and Laurie's (n + 1)-point anti-Gauss rule")
       .def(nb::init<unsigned, double, double>(), arg("n"), arg("alpha"), arg("beta"))
       .def("integrate", [](py_gauss_jacobi const& rule, nb::callable f) {
-         double error = 0, L1 = 0;
-         double Q = rule.integrate(scalar_function{f}, &error, &L1);
-         return std::make_tuple(Q, error, L1);
-      }, arg("f"), "(integral, error estimate, L1 norm); the estimate is NaN when anti_gauss_is_internal is False")
+         return gauss_rule_integrate(rule, scalar_function{f});
+      }, arg("f"), "(integral, L1 norm)")
+      .def("integrate_averaged", [](py_gauss_jacobi const& rule, nb::callable f) {
+         return gauss_rule_integrate_averaged(rule, scalar_function{f});
+      }, arg("f"), "(Laurie's averaged-rule integral, error estimate, L1 norm); raises when anti_gauss_is_internal is False")
       .def_ro("n", &py_gauss_jacobi::n)
       .def_ro("alpha", &py_gauss_jacobi::alpha)
       .def_ro("beta", &py_gauss_jacobi::beta)
@@ -224,6 +276,22 @@ void bind_quadrature(nb::module_& m)
          return "gauss_jacobi(n=" + std::to_string(rule.n) + ", alpha=" + nb::cast<std::string>(nb::repr(nb::float_(rule.alpha)))
             + ", beta=" + nb::cast<std::string>(nb::repr(nb::float_(rule.beta))) + ")";
       });
+
+   m.def("gauss_hermite_rule", [](unsigned n) {
+      return gauss_rule(n, BOOST_MATH_NAMESPACE::detail::hermite_family<double>(n), true);
+   }, arg("n"), nb::rv_policy::move, "(nodes, weights) of the n-point rule for exp(-x^2), computed on each call; as numpy's hermgauss");
+
+   m.def("gauss_laguerre_rule", [](unsigned n, double alpha) {
+      check_exponent("alpha", alpha);
+      return gauss_rule(n, BOOST_MATH_NAMESPACE::detail::laguerre_family<double>(n, alpha));
+   }, arg("n"), arg("alpha") = 0.0, nb::rv_policy::move, "(nodes, weights) of the n-point rule for x^alpha exp(-x), computed on each call");
+
+   m.def("gauss_jacobi_rule", [](unsigned n, double alpha, double beta) {
+      check_exponent("alpha", alpha);
+      check_exponent("beta", beta);
+      return gauss_rule(n, BOOST_MATH_NAMESPACE::detail::jacobi_family<double>(n, alpha, beta));
+   }, arg("n"), arg("alpha"), arg("beta"), nb::rv_policy::move,
+      "(nodes, weights) of the n-point rule for (1 - x)^alpha (1 + x)^beta, computed on each call, without the anti-Gauss rule");
 
    m.def("ooura_fourier_sin", [](nb::callable f, double omega, double tolerance, std::size_t levels) {
       bq::ooura_fourier_sin<double> integrator(tolerance, levels);
