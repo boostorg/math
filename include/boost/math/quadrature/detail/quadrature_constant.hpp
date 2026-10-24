@@ -8,8 +8,14 @@
 #define BOOST_MATH_QUADRATURE_DETAIL_QUADRATURE_CONSTANT_HPP
 
 #ifndef BOOST_MATH_BUILD_MODULE
+#include <algorithm>
 #include <limits>
+#include <memory>
 #include <type_traits>
+#include <vector>
+#ifdef BOOST_MATH_HAS_THREADS
+#include <mutex>
+#endif
 #endif
 
 BOOST_MATH_NAMESPACE_BEGIN namespace quadrature{ namespace detail {
@@ -53,6 +59,90 @@ struct quadrature_constant_category
          >
       >;
 };
+
+template<typename RandomAccessContainer, typename Real, typename Policy>
+bool overflowed(const RandomAccessContainer& abscissa, const char* function, Real* pL1, Real* error, const Policy& pol)
+{
+   if (!(BOOST_MATH_NAMESPACE::isfinite)(static_cast<Real>(abscissa.back())))
+   {
+      *error = policies::raise_evaluation_error(
+               function,
+               "The recurrence relation overflows with this many points; use fewer points or a type with a wider exponent range.",
+               std::numeric_limits<Real>::quiet_NaN(), pol);
+      if (pL1)
+         *pL1 = *error;
+      return true;
+   }
+   return false;
+}
+
+// A rule built by the first call of get(build), which fills its abscissa x and weights w; copies share it.
+template <class Real>
+class lazy_rule
+{
+   struct rule
+   {
+#ifdef BOOST_MATH_HAS_THREADS
+      std::once_flag once;
+#else
+      bool built = false;
+#endif
+      std::vector<Real> x, w;
+   };
+   std::shared_ptr<rule> r = std::make_shared<rule>();
+
+public:
+   template <class Build>
+   const rule& get(Build build) const
+   {
+#ifdef BOOST_MATH_HAS_THREADS
+      std::call_once(r->once, [&] { build(r->x, r->w); });
+#else
+      if (!r->built)
+      {
+         build(r->x, r->w);
+         r->built = true;
+      }
+#endif
+      return *r;
+   }
+};
+
+// The averaged rule (G + A) / 2, exact for polynomials of degree 2N + 1. Half the difference is set as its error;
+// it bounds the error when G and A bracket the integral. L1 goes in as that of G and comes out as that of the average.
+template <class F, class RandomAccessContainer, class K, class Real, class Norm, class Policy>
+K anti_gauss_average(F& f, const RandomAccessContainer& abscissa, const RandomAccessContainer& weights, bool symmetric,
+                     K anti_result, const K& result, Real& L1, Norm norm, Real* error, const char* function, const Policy& pol)
+{
+   Real nan;
+   if (!(BOOST_MATH_NAMESPACE::isfinite)(L1) || overflowed(abscissa, function, static_cast<Real*>(nullptr), &nan, pol))
+   {
+      L1 = std::numeric_limits<Real>::quiet_NaN();
+      if (error)
+         *error = L1;
+      return anti_result * L1;
+   }
+   Real anti_L1 = 0;
+   for (unsigned i = 0; i < abscissa.size(); ++i)
+   {
+      Real x = abscissa[i];
+      K fx = f(x);
+      Real n = static_cast<Real>(norm(fx));
+      if (symmetric && x != 0)
+      {
+         K fmx = f(-x);
+         n += static_cast<Real>(norm(fmx));
+         fx += fmx;
+      }
+      anti_result += fx * static_cast<Real>(weights[i]);
+      anti_L1 += n * static_cast<Real>(weights[i]);
+   }
+   L1 = (L1 + anti_L1) / 2;
+   if (error)
+      *error = (std::max)(static_cast<Real>(norm(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
+   anti_result += result;
+   return anti_result * Real(0.5);
+}
 
 } // namespace detail
 } // namespace quadrature

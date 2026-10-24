@@ -34,6 +34,165 @@
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/quadrature/detail/quadrature_constant.hpp>
+#include <boost/math/special_functions/detail/orthogonal_polynomial.hpp>
+
+BOOST_MATH_NAMESPACE_BEGIN namespace detail {
+
+template <class Real>
+class hermite_family
+{
+public:
+   hermite_family(unsigned n) : N(n), a_values(N), b_values(N)
+   {
+      using std::sqrt;
+      for (unsigned k = 0; k < N; ++k)
+      {
+         a_values[k] = sqrt(Real(2) / Real(k + 1));
+         b_values[k] = -sqrt(Real(k) / Real(k + 1));
+      }
+      p0_value = 1 / sqrt(sqrt(BOOST_MATH_NAMESPACE::constants::pi<Real>()));
+      derivative_scale = sqrt(Real(2) * Real(N));
+   }
+
+   const Real& a(unsigned k) const
+   {
+      return a_values[k];
+   }
+
+   const Real& b(unsigned k) const
+   {
+      return b_values[k];
+   }
+
+   const Real& p0() const
+   {
+      return p0_value;
+   }
+
+   unsigned num_roots() const
+   {  // Need to account for odd N having root at 0
+      return N / 2 + N % 2;
+   }
+
+   Real lower_bound() const
+   {
+      return 0;
+   }
+
+   Real upper_bound() const
+   {
+      using std::sqrt;
+      return sqrt(Real(2) * Real(N) + Real(2));
+   }
+
+   Real area() const
+   {
+      return BOOST_MATH_NAMESPACE::constants::root_pi<Real>();
+   }
+
+   unsigned weight_multiplicity(unsigned i) const
+   {
+      return (N % 2 && i == 0) ? 1 : 2;
+   }
+
+   Real next(const Real& x, const Real& p, const Real& p_previous, unsigned k) const
+   {
+      return a(k) * x * p + b(k) * p_previous;
+   }
+
+   Real slope(unsigned k) const
+   {  // The coefficient of x p in next()
+      return a(k);
+   }
+
+   Real derivative(const Real&, const Real&, const Real& p_previous) const
+   {
+      return derivative_scale * p_previous;
+   }
+
+   Real second_derivative(const Real& x, const Real& p, const Real& p_prime) const
+   {
+      return Real(2) * x * p_prime - Real(2) * Real(N) * p;
+   }
+
+   Real second_derivative_ratio(const Real& x, const Real& p, const Real& p_prime) const
+   {
+      return Real(2) * x - Real(2) * Real(N) * p / p_prime;
+   }
+
+   Real weight(const Real& z, const Real& p, const Real& p_prime) const
+   {
+      Real delta = -p / p_prime;
+      Real p_prime_at_root = p_prime + second_derivative(z, p, p_prime) * delta;
+      return Real(2) / (p_prime_at_root * p_prime_at_root);
+   }
+
+   // For glaser_liu_rokhlin: u = exp(-x^2 / 2) p_N satisfies u'' + (2N + 1 - x^2) u = 0; the coefficients of
+   // s(t + h) = 1 and g(t + h) as polynomials in h. Its solutions are entire.
+   static constexpr unsigned ends = 0;
+
+   void normal_form(const double_word_arithmetic<Real>& dw, const double_word<Real>& t, double_word<Real> (&s)[5], double_word<Real> (&g)[3], unsigned m) const
+   {
+      s[0] = double_word<Real>{ Real(1), Real(0) };
+      g[0] = dw.add(dw.negate(dw.multiply(t, t)), Real(2) * Real(m) + 1);
+      g[1] = double_word<Real>{ -2 * t.hi, -2 * t.lo };
+      g[2] = double_word<Real>{ Real(-1), Real(0) };
+   }
+
+   Real singular_distance(const Real&) const
+   {
+      return tools::max_value<Real>();
+   }
+
+   Real weight_function(const double_word<Real>& z) const
+   {
+      using std::exp;
+      const double_word<Real> square = double_word_arithmetic<Real>().multiply(z, z);
+      return exp(-square.hi) * (1 - square.lo);
+   }
+
+   Real sturm_liouville(const double_word<Real>&) const
+   {
+      return 1;
+   }
+
+   // p_N = (A x + B) p_{N-1} - C p_{N-2}: A = sqrt(2 / N), B = 0, and C_2 = -2 C = -2 sqrt((N - 1) / N), in double words.
+   void anti_gauss_recurrence(const double_word_arithmetic<Real>& dw, double_word<Real>& A, double_word<Real>& B, double_word<Real>& C2) const
+   {
+      A = square_root(dw, dw.divide(double_word<Real>{ Real(2), Real(0) }, Real(N)));
+      B = double_word<Real>{ Real(0), Real(0) };
+      const double_word<Real> C = square_root(dw, dw.divide(double_word<Real>{ Real(N - 1), Real(0) }, Real(N)));
+      C2 = double_word<Real>{ -2 * C.hi, -2 * C.lo };
+   }
+
+   // One step of Newton's method for the square root, in double words.
+   static double_word<Real> square_root(const double_word_arithmetic<Real>& dw, const double_word<Real>& x)
+   {
+      using std::sqrt;
+      const Real root = sqrt(x.hi);
+      Real p, e;
+      two_product<Real>()(root, root, p, e);
+      return dw.add(double_word<Real>{ root, Real(0) }, (((x.hi - p) - e) + x.lo) / (2 * root));
+   }
+
+   // For the anti-Gauss polynomial: p_{N-1}(0) / p_{N-2}'(0) = -1 / sqrt(2 (N - 1)) or p_{N-1}'(0) / p_{N-2}(0) = sqrt(2 (N - 1)),
+   // from p_k' = sqrt(2 k) p_{k-1} and p_{N-1}(0) = b(N - 2) p_{N-3}(0).
+   double_word<Real> anti_gauss_ratio(const double_word_arithmetic<Real>& dw, unsigned) const
+   {
+      const double_word<Real> r = square_root(dw, double_word<Real>{ 2 * Real(N - 1), Real(0) });
+      return (N - 1) % 2 ? r : dw.divide(double_word<Real>{ Real(-1), Real(0) }, r);
+   }
+
+private:
+   unsigned N;
+   std::vector<Real> a_values;
+   std::vector<Real> b_values;
+   Real p0_value;
+   Real derivative_scale;
+};
+
+} // namespace detail
+BOOST_MATH_NAMESPACE_END
 
 BOOST_MATH_NAMESPACE_BEGIN namespace quadrature { namespace detail {
 
@@ -44,179 +203,21 @@ class gauss_hermite_detail
 {
    static_assert(N > 0, "Gauss-Hermite quadrature needs at least one point.");
 
-   // The nonnegative zeros of the Hermite polynomial H_N, in increasing order, and their weights.
-   // Everything is evaluated with the orthonormal recurrence
-   //    p_0 = pi^(-1/4),  p_{k+1} = x sqrt(2/(k+1)) p_k - sqrt(k/(k+1)) p_{k-1},
-   // whose values stay representable long after H_N itself overflows. Then p_N' = sqrt(2N) p_{N-1},
-   // p_N'' = 2x p_N' - 2N p_N, and the weight is 2/p_N'(x)^2. Evaluating H_N from its monomial
-   // coefficients instead would be hopelessly ill-conditioned: the largest zero of H_100 has
-   // condition number ~1e13.
-   //
-   // By Sturm's theorem for orthogonal polynomials, the number of sign changes in p_0(x), ..., p_N(x)
-   // is the number of zeros of p_N above x. Bisecting on that count isolates each zero, and Halley's
-   // method then converges to it inside its bracket. Asymptotic initial guesses alone are not enough:
-   // for N = 215, even Halley's method from those of Numerical Recipes' gauher finds the wrong zero.
-   struct recurrence
+   static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::hermite_family<Real>>& polynomial()
    {
-      Real p;
-      Real p_prime;
-      unsigned zeros_above;
-   };
-
-   class orthonormal_hermite
-   {
-   public:
-      orthonormal_hermite() : a(N), b(N)
-      {
-         using std::sqrt;
-         for (unsigned k = 0; k < N; ++k)
-         {
-            a[k] = sqrt(Real(2) / Real(k + 1));
-            b[k] = sqrt(Real(k) / Real(k + 1));
-         }
-         p0 = 1 / sqrt(sqrt(BOOST_MATH_NAMESPACE::constants::pi<Real>()));
-         derivative_scale = sqrt(Real(2 * N));
-      }
-
-      recurrence operator()(const Real& x) const
-      {
-         Real p = p0;
-         Real p_previous = 0;
-         bool last_negative = false;
-         unsigned sign_changes = 0;
-         for (unsigned k = 0; k < N; ++k)
-         {
-            Real p_next = x * a[k] * p - b[k] * p_previous;
-            p_previous = p;
-            p = p_next;
-            // A zero p_k(x) lies between values of opposite sign, so skipping it keeps the count right.
-            if ((p != 0) && ((p < 0) != last_negative))
-            {
-               ++sign_changes;
-               last_negative = !last_negative;
-            }
-         }
-         return recurrence{ p, derivative_scale * p_previous, sign_changes };
-      }
-
-   private:
-      std::vector<Real> a;
-      std::vector<Real> b;
-      Real p0;
-      Real derivative_scale;
-   };
-
-   // The weight is 2/p_N'(x)^2 at the exact zero, but d(log w)/dx is about -4x, so evaluating it at
-   // the rounded zero z costs far more accuracy than the rounding itself. Use p'' to move p' to the
-   // exact zero, which lies a Newton step delta = -p/p' away.
-   static Real weight(const Real& z, const recurrence& r)
-   {
-      Real delta = -r.p / r.p_prime;
-      Real p_prime = r.p_prime + (2 * z * r.p_prime - 2 * Real(N) * r.p) * delta;
-      return 2 / (p_prime * p_prime);
-   }
-
-   static std::pair<std::vector<Real>, std::vector<Real> > calculate_values()
-   {
-      using std::abs;
-      using std::sqrt;
-      const unsigned positive_zeros = N / 2;
-      const unsigned offset = N & 1;
-      std::vector<Real> x(positive_zeros + offset), w(positive_zeros + offset);
-      const orthonormal_hermite evaluate;
-      // All zeros lie below sqrt(2N + 1), so none lie above `upper`. Every p_k grows with x beyond
-      // its zeros, so if the recurrence overflows anywhere we need it, it overflows here: report
-      // that with NaNs, which gauss_hermite turns into an evaluation error.
-      Real upper = sqrt(Real(2 * N + 2));
-      recurrence top = evaluate(upper);
-      if (!(BOOST_MATH_NAMESPACE::isfinite)(top.p) || !(BOOST_MATH_NAMESPACE::isfinite)(top.p_prime))
-      {
-         std::fill(x.begin(), x.end(), std::numeric_limits<Real>::quiet_NaN());
-         std::fill(w.begin(), w.end(), std::numeric_limits<Real>::quiet_NaN());
-         return std::make_pair(x, w);
-      }
-      if (offset)
-      {
-         w[0] = weight(Real(0), evaluate(Real(0)));
-      }
-      // Find the zeros from the largest down: after each one, `upper` is a point with exactly t - 1
-      // zeros above it.
-      for (unsigned t = 1; t <= positive_zeros; ++t)
-      {
-         Real lower = 0;
-         Real high = upper;
-         for (int i = 0; i < tools::digits<Real>(); ++i)
-         {
-            Real mid = (lower + high) / 2;
-            unsigned above = evaluate(mid).zeros_above;
-            if (above >= t)
-               lower = mid;
-            else
-               high = mid;
-            if (above == t)
-               break;
-         }
-         // Halley's method, falling back to bisection whenever a step would leave the bracket.
-         // With u = p/p' and v = p''/p' = 2z - 2N u, the step is u/(1 - uv/2); the ratios cannot
-         // overflow even where p'^2 would.
-         const bool lower_negative = evaluate(lower).p < 0;
-         Real z = (lower + high) / 2;
-         recurrence r = evaluate(z);
-         for (int i = 0; (r.p != 0) && (i < 4 * tools::digits<Real>()); ++i)
-         {
-            if ((r.p < 0) == lower_negative)
-               lower = z;
-            else
-               high = z;
-            Real u = r.p / r.p_prime;
-            Real v = 2 * z - 2 * Real(N) * u;
-            Real next = z - u / (1 - u * v / 2);
-            if (!((next > lower) && (next < high)))
-               next = (lower + high) / 2;
-            const bool converged = abs(next - z) <= 2 * tools::epsilon<Real>() * abs(next);
-            z = next;
-            r = evaluate(z);
-            if (converged)
-               break;
-         }
-         x[positive_zeros + offset - t] = z;
-         w[positive_zeros + offset - t] = weight(z, r);
-         upper = lower;
-      }
-      // Every node runs through the same rounded coefficients a and b, so the weights share a relative error
-      // of a few eps that grows with N (against 50 digits: -5 eps at N = 200, -10 at 500); exact coefficients
-      // remove it only with the recurrence in twice the precision. The exact weights sum to sqrt(pi), the
-      // integral of exp(-x^2), so scale them to that: weights with relative errors e_i then have e_i - e, e
-      // their weighted mean, plus two roundings. That removes the shared part, which is what integrals of
-      // smooth functions see, and moves no weight by more than |e| <= max |e_i|; measured, both the largest and
-      // the mean |e_i| fall for N = 200, 500 and 706. Sum from the smallest weight, with Neumaier's compensation:
-      BOOST_MATH_NAMESPACE::detail::compensated_sum<Real> sum;
-      for (std::size_t i = w.size(); i-- > 0;)
-      {
-         sum.add((offset && (i == 0)) ? w[i] : Real(2 * w[i]));
-      }
-      const Real scale = BOOST_MATH_NAMESPACE::constants::root_pi<Real>() / sum.value();
-      for (Real& weight_i : w)
-      {
-         weight_i *= scale;
-      }
-      return std::make_pair(x, w);
-   }
-
-   static const std::pair<std::vector<Real>, std::vector<Real> >& values()
-   {
-      static const std::pair<std::vector<Real>, std::vector<Real> > data = calculate_values();
-      return data;
+      static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::hermite_family<Real>> value(N);
+      return value;
    }
 
 public:
    static const std::vector<Real>& abscissa()
    {
-      return values().first;
+      return polynomial().abscissa();
    }
+
    static const std::vector<Real>& weights()
    {
-      return values().second;
+      return polynomial().weights();
    }
 };
 
@@ -516,18 +517,17 @@ class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::quadr
 {
    using base = detail::gauss_hermite_detail<Real, N, detail::quadrature_constant_category<Real>::value>;
 
-   // Abscissas computed on demand are NaN when the recurrence overflows Real.
-   static bool overflowed()
+   // Laurie's anti-Gauss rule with N + 1 points, computed the first time integrate_averaged is called.
+   static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::hermite_family<Real>>& anti_gauss()
    {
-      return !(BOOST_MATH_NAMESPACE::isfinite)(static_cast<Real>(base::abscissa().back()));
+      static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::hermite_family<Real>> value(N + 1, BOOST_MATH_NAMESPACE::detail::hermite_family<Real>(N + 1), true);
+      return value;
    }
 
-   static Real overflow_error()
+   template <class F, class K, class Norm>
+   static K anti_gauss_average(F& f, K zero, const K& result, Real& L1, Norm norm, Real* error)
    {
-      return policies::raise_evaluation_error(
-         "boost::math::quadrature::gauss_hermite<%1%>::integrate",
-         "The Hermite recurrence overflows with this many points; use fewer points or a type with a wider exponent range.",
-         std::numeric_limits<Real>::quiet_NaN(), Policy());
+      return detail::anti_gauss_average(f, anti_gauss().abscissa(), anti_gauss().weights(), true, zero, result, L1, norm, error, "boost::math::quadrature::gauss_hermite<%1%>::integrate_averaged", Policy());
    }
 
 public:
@@ -541,12 +541,10 @@ public:
       static_assert(!std::is_integral<K>::value,
                     "The return type cannot be integral, it must be either a real or complex floating point type.");
       using std::abs;
-      if (overflowed())
+      Real nan;
+      if (detail::overflowed(base::abscissa(), "boost::math::quadrature::gauss_hermite<%1%>::integrate", pL1, &nan, Policy()))
       {
-         Real error = overflow_error();
-         if (pL1)
-            *pL1 = error;
-         return static_cast<K>(error);
+         return static_cast<K>(nan);
       }
       unsigned non_zero_start = 1;
       K result = Real(0);
@@ -578,14 +576,10 @@ public:
    {
       using K = decltype(f(Real(0)));
       static_assert(!std::is_integral<K>::value, "The return type cannot be integral.");
-      if (overflowed())
+      Real nan;
+      if (detail::overflowed(base::abscissa(), "boost::math::quadrature::gauss_hermite<%1%>::integrate", pL1, &nan, Policy()))
       {
-         // Preserve the scalar error policy, including non-throwing policies,
-         // and use scalar multiplication to produce a result with the right shape.
-         Real error = overflow_error();
-         if (pL1)
-            *pL1 = error;
-         K result = zero * error;
+         K result = zero * nan;
          return result;
       }
       unsigned non_zero_start = 1;
@@ -606,6 +600,31 @@ public:
          result += (fp + fm) * static_cast<Real>(base::weights()[i]);
          L1 += (static_cast<Real>(norm(fp)) + static_cast<Real>(norm(fm))) * static_cast<Real>(base::weights()[i]);
       }
+      if (pL1)
+         *pL1 = L1;
+      return result;
+   }
+   // Laurie's averaged rule (G + A) / 2: N + 1 more evaluations of f than integrate, exact for polynomials of degree
+   // 2N + 1. The error is half the difference of G and A, a bound on the error when they bracket the integral.
+   template <class F>
+   static auto integrate_averaged(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
+   {
+      using K = decltype(f(Real(0)));
+      Real L1;
+      K result = integrate(f, &L1);
+      result = anti_gauss_average(f, K(Real(0)), result, L1, [](const K& z) { using std::abs; return abs(z); }, error);
+      if (pL1)
+         *pL1 = L1;
+      return result;
+   }
+
+   template <class F, class Norm>
+   static auto integrate_averaged(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr)
+      ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
+   {
+      Real L1;
+      auto result = integrate(f, zero, norm, &L1);
+      result = anti_gauss_average(f, zero, result, L1, norm, error);
       if (pL1)
          *pL1 = L1;
       return result;

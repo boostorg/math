@@ -1289,6 +1289,12 @@ test-suite quadrature :
    [ run test_gauss_hermite_quadrature.cpp : : : $(float128_type) [ requires cxx17_if_constexpr ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
    [ run test_gauss_hermite_quadrature_eigen.cpp : : : [ requires cxx17_if_constexpr ]
      [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
+   [ run test_gauss_laguerre_quadrature.cpp : : : $(float128_type) [ requires cxx17_if_constexpr ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+   [ run test_gauss_laguerre_quadrature_eigen.cpp : : : [ requires cxx17_if_constexpr ]
+     [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
+   [ run test_gauss_jacobi_quadrature.cpp : : : $(float128_type) [ requires cxx17_if_constexpr ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+   [ run test_gauss_jacobi_quadrature_eigen.cpp : : : [ requires cxx17_if_constexpr ]
+     [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
 
    [ run test_naive_monte_carlo.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=1  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
