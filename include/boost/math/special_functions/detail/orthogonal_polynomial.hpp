@@ -219,7 +219,7 @@ private:
       // The ratios r_k = c_{k+1} / c_k of the coefficients of each y in v: the terms t_k = c_k v^k are summed from them,
       // as the coefficients themselves fall out of range long before the terms do at the outer zeros.
       std::vector<word> r[2];
-      auto ratio = [&](unsigned i, std::size_t k) -> const word&
+      auto ratio = [&](unsigned i, std::size_t k) -> word
       {
          while (r[i].size() <= k)
             r[i].push_back(family.series_ratio(dw, static_cast<unsigned>(r[i].size()), end, u[i].degree));
