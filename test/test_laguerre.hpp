@@ -240,11 +240,11 @@ void test_zero_special_case()
    BOOST_CHECK(zeros.size() == 1);
    BOOST_CHECK(zeros[0] == static_cast<T>(1));
 
+   // Past N = 326 the recurrence overflows in double at the upper bound, but the differential equation does not.
    unsigned N = 500;
-   BOOST_CHECK_THROW(boost::math::laguerre_zeros<T>(N), boost::math::evaluation_error);
-
-   std::vector<T> roots = boost::math::laguerre_zeros<T, ignore_policy>(N);
+   std::vector<T> roots = boost::math::laguerre_zeros<T>(N);
    BOOST_CHECK(roots.size() == N);
-   CHECK_NAN(roots[0]);
+   BOOST_CHECK_CLOSE_FRACTION(roots[0], static_cast<T>(0.002888705186086824862795805), 2 * std::numeric_limits<T>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(roots[N - 1], static_cast<T>(1955.441463024363294960181), 2 * std::numeric_limits<T>::epsilon());
 
 }

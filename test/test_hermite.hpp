@@ -122,9 +122,10 @@ void test_zeros(T tol, const char* t)
 
    // Values calculated via Mathematica to 115 digits of precision. There are analytic
    // forms for n=5, but we use the Mathematica values to avoid any possible errors in the analytic forms.
-   BOOST_CHECK(roots[0] == static_cast<T>(0.0));
-   BOOST_CHECK_CLOSE_FRACTION(roots[1], BOOST_MATH_TEST_VALUE(T, 0.958572464613818507112770593892988318186088855258188531586143507302496033429132943021604997827459024608627911920236), tol);
-   BOOST_CHECK_CLOSE_FRACTION(roots[2], BOOST_MATH_TEST_VALUE(T, 2.020182870456085632928724088144645147052232147465047392683263162405991380184033204210731765879926476113524974944731), tol);
+   BOOST_CHECK(roots.size() == n);
+   BOOST_CHECK(roots[2] == static_cast<T>(0.0));
+   BOOST_CHECK_CLOSE_FRACTION(roots[3], BOOST_MATH_TEST_VALUE(T, 0.958572464613818507112770593892988318186088855258188531586143507302496033429132943021604997827459024608627911920236), tol);
+   BOOST_CHECK_CLOSE_FRACTION(roots[4], BOOST_MATH_TEST_VALUE(T, 2.020182870456085632928724088144645147052232147465047392683263162405991380184033204210731765879926476113524974944731), tol);
 }
 
 template <class T>
@@ -134,9 +135,9 @@ void test_zeros_large(T tol, const char* t)
 
    unsigned n = 51;
    std::vector<T> roots = boost::math::hermite_zeros<T>(n);
-   BOOST_CHECK(roots[0] == static_cast<T>(0.0));
-   BOOST_CHECK_CLOSE_FRACTION(roots[1], BOOST_MATH_TEST_VALUE(T, 0.309591040937240381743948191151561479623957390823503743440212146918027604219155638736760608256983544297164436410560), tol);
-   BOOST_CHECK_CLOSE_FRACTION(roots[2], BOOST_MATH_TEST_VALUE(T, 0.619470849747152643678094222038018479995571650371683666801895611074480999643845365550174850892603373156948236224257), tol);
+   BOOST_CHECK(roots[25] == static_cast<T>(0.0));
+   BOOST_CHECK_CLOSE_FRACTION(roots[26], BOOST_MATH_TEST_VALUE(T, 0.309591040937240381743948191151561479623957390823503743440212146918027604219155638736760608256983544297164436410560), tol);
+   BOOST_CHECK_CLOSE_FRACTION(roots[27], BOOST_MATH_TEST_VALUE(T, 0.619470849747152643678094222038018479995571650371683666801895611074480999643845365550174850892603373156948236224257), tol);
 }
 
 template <class T>
@@ -151,17 +152,20 @@ void test_zeros_accuracy(T tol, const char* t)
    for (unsigned n = 6; n < 10; ++n)
    {
       std::vector<T> zeros = boost::math::hermite_zeros<T>(n);
+      BOOST_CHECK(zeros.size() == n);
+      for (unsigned i = 0; i < n; ++i)
+      {
+         BOOST_CHECK(zeros[i] == -zeros[n - 1 - i]);
+      }
       if (n & 1)
       {
-         BOOST_CHECK(zeros.size() == (n-1)/2 +1);
-         BOOST_CHECK_SMALL(zeros[0], tol);
+         BOOST_CHECK_SMALL(zeros[n / 2], tol);
       }
       else
       {
-         // Zero is not a zero of the odd hermite polynomials
-         BOOST_CHECK(zeros.size() == n/2);
-         BOOST_CHECK(zeros[0] > 0);
-         BOOST_CHECK_SMALL(boost::math::hermite(n, zeros[0]), 2000 * tol);
+         // Zero is not a zero of the even hermite polynomials
+         BOOST_CHECK(zeros[n / 2] > 0);
+         BOOST_CHECK_SMALL(boost::math::hermite(n, zeros[n / 2]), 2000 * tol);
       }
    }
    return;
@@ -186,13 +190,10 @@ void test_zero_special_case()
    BOOST_CHECK(zeros.size() == 1);
    BOOST_CHECK(zeros[0] == static_cast<T>(0.0));
 
-   // Past N = 706 in double the recurrence overflows, which must be reported through the policy.
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-   BOOST_CHECK_THROW((boost::math::hermite_zeros<T, throw_policy>(1000)), boost::math::evaluation_error);
-#endif
-
-   std::vector<T> roots = boost::math::hermite_zeros<T, ignore_policy>(1000);
-   BOOST_CHECK(roots.size() == 500);
-   CHECK_NAN(roots[0]);
+   // Past N = 706 the recurrence overflows in double, but the differential equation does not.
+   std::vector<T> roots = boost::math::hermite_zeros<T>(1000);
+   BOOST_CHECK(roots.size() == 1000);
+   BOOST_CHECK_CLOSE_FRACTION(roots[500], static_cast<T>(0.03511529734232677), 2 * std::numeric_limits<T>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(roots[999], static_cast<T>(44.209152497996398), 2 * std::numeric_limits<T>::epsilon());
 
 }

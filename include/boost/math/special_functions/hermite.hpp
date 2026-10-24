@@ -13,21 +13,23 @@
 #pragma once
 #endif
 
-#ifndef BOOST_MATH_BUILD_MODULE
-#include <vector>
-#endif
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#ifndef BOOST_MATH_HAS_NVRTC
+#ifndef BOOST_MATH_BUILD_MODULE
+#include <vector>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/orthogonal_polynomial.hpp>
+#endif
 
 BOOST_MATH_NAMESPACE_BEGIN
 
 // Recurrence relation for Hermite polynomials:
 BOOST_MATH_EXPORT template <class T1, class T2, class T3>
-BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2, T3>::type
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T1, T2, T3>::type 
    hermite_next(unsigned n, T1 x, T2 Hn, T3 Hnm1)
 {
    using promoted_type = tools::promote_args_t<T1, T2, T3>;
@@ -56,6 +58,27 @@ BOOST_MATH_GPU_ENABLED T hermite_imp(unsigned n, T x)
    }
    return p1;
 }
+
+} // namespace detail
+
+BOOST_MATH_EXPORT template <class T, class Policy>
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type 
+   hermite(unsigned n, T x, const Policy&)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::hermite_imp(n, static_cast<value_type>(x)), "boost::math::hermite<%1%>(unsigned, %1%)");
+}
+
+BOOST_MATH_EXPORT template <class T>
+BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type 
+   hermite(unsigned n, T x)
+{
+   return BOOST_MATH_NAMESPACE::hermite(n, x, policies::policy<>());
+}
+
+#ifndef BOOST_MATH_HAS_NVRTC
+namespace detail {
 
 template <class Real>
 class hermite_family
@@ -100,6 +123,7 @@ public:
 
    Real upper_bound() const
    {
+      using std::sqrt;
       return sqrt(Real(2) * Real(N) + Real(2));
    }
 
@@ -145,6 +169,62 @@ public:
       return Real(2) / (p_prime_at_root * p_prime_at_root);
    }
 
+   // For glaser_liu_rokhlin: u = exp(-x^2 / 2) p_N satisfies u'' + (2N + 1 - x^2) u = 0; the coefficients of
+   // s(t + h) = 1 and g(t + h) as polynomials in h. Its solutions are entire.
+   static constexpr unsigned ends = 0;
+
+   void normal_form(const double_word_arithmetic<Real>& dw, const double_word<Real>& t, double_word<Real> (&s)[5], double_word<Real> (&g)[3], unsigned m) const
+   {
+      s[0] = double_word<Real>{ Real(1), Real(0) };
+      g[0] = dw.add(dw.negate(dw.multiply(t, t)), Real(2) * Real(m) + 1);
+      g[1] = double_word<Real>{ -2 * t.hi, -2 * t.lo };
+      g[2] = double_word<Real>{ Real(-1), Real(0) };
+   }
+
+   Real singular_distance(const Real&) const
+   {
+      return tools::max_value<Real>();
+   }
+
+   Real weight_function(const double_word<Real>& z) const
+   {
+      using std::exp;
+      const double_word<Real> square = double_word_arithmetic<Real>().multiply(z, z);
+      return exp(-square.hi) * (1 - square.lo);
+   }
+
+   Real sturm_liouville(const double_word<Real>&) const
+   {
+      return 1;
+   }
+
+   // p_N = (A x + B) p_{N-1} - C p_{N-2}: A = sqrt(2 / N), B = 0, and C_2 = -2 C = -2 sqrt((N - 1) / N), in double words.
+   void anti_gauss_recurrence(const double_word_arithmetic<Real>& dw, double_word<Real>& A, double_word<Real>& B, double_word<Real>& C2) const
+   {
+      A = square_root(dw, dw.divide(double_word<Real>{ Real(2), Real(0) }, Real(N)));
+      B = double_word<Real>{ Real(0), Real(0) };
+      const double_word<Real> C = square_root(dw, dw.divide(double_word<Real>{ Real(N - 1), Real(0) }, Real(N)));
+      C2 = double_word<Real>{ -2 * C.hi, -2 * C.lo };
+   }
+
+   // One step of Newton's method for the square root, in double words.
+   static double_word<Real> square_root(const double_word_arithmetic<Real>& dw, const double_word<Real>& x)
+   {
+      using std::sqrt;
+      const Real root = sqrt(x.hi);
+      Real p, e;
+      two_product<Real>()(root, root, p, e);
+      return dw.add(double_word<Real>{ root, Real(0) }, (((x.hi - p) - e) + x.lo) / (2 * root));
+   }
+
+   // For the anti-Gauss polynomial: p_{N-1}(0) / p_{N-2}'(0) = -1 / sqrt(2 (N - 1)) or p_{N-1}'(0) / p_{N-2}(0) = sqrt(2 (N - 1)),
+   // from p_k' = sqrt(2 k) p_{k-1} and p_{N-1}(0) = b(N - 2) p_{N-3}(0).
+   double_word<Real> anti_gauss_ratio(const double_word_arithmetic<Real>& dw, unsigned) const
+   {
+      const double_word<Real> r = square_root(dw, double_word<Real>{ 2 * Real(N - 1), Real(0) });
+      return (N - 1) % 2 ? r : dw.divide(double_word<Real>{ Real(-1), Real(0) }, r);
+   }
+
 private:
    unsigned N;
    std::vector<Real> a_values;
@@ -155,22 +235,7 @@ private:
 
 } // namespace detail
 
-BOOST_MATH_EXPORT template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
-   hermite(unsigned n, T x, const Policy&)
-{
-   typedef typename tools::promote_args<T>::type result_type;
-   typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::hermite_imp(n, static_cast<value_type>(x)), "boost::math::hermite<%1%>(unsigned, %1%)");
-}
-
-BOOST_MATH_EXPORT template <class T>
-BOOST_MATH_GPU_ENABLED inline typename tools::promote_args<T>::type
-   hermite(unsigned n, T x)
-{
-   return BOOST_MATH_NAMESPACE::hermite(n, x, policies::policy<>());
-}
-
+// All n zeros of H_n, in increasing order.
 BOOST_MATH_EXPORT template <class T, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
 inline std::vector<T> hermite_zeros(unsigned n)
 {
@@ -184,19 +249,17 @@ inline std::vector<T> hermite_zeros(unsigned n)
    {
       return { static_cast<T>(0) };
    }
-   detail::orthogonal_polynomial<T, detail::hermite_family<T> > evaluate(n);
-   std::vector<T> roots = evaluate.abscissa();
-
-   if (!(BOOST_MATH_NAMESPACE::isfinite)(roots[0]))
+   // The nonnegative zeros; the rest are their negatives.
+   const std::vector<T> nonnegative = detail::polynomial_zeros<T>(n, detail::hermite_family<T>(n), function, Policy());
+   std::vector<T> roots(n);
+   for (unsigned i = 0; i < nonnegative.size(); ++i)
    {
-      // In this case, the recurrence has overflowed and returned NaNs. Throw evaluation error
-      // or return vector of nans.
-      policies::raise_evaluation_error(function, "End points of the interval is not finite. Probably due to n being too large.", n, Policy());
-      return roots;
+      roots[(n - 1) / 2 - i] = -nonnegative[i];
+      roots[n / 2 + i] = nonnegative[i];
    }
-
    return roots;
 }
+#endif // BOOST_MATH_HAS_NVRTC
 
 BOOST_MATH_NAMESPACE_END
 

@@ -6,10 +6,10 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "math_unit_test.hpp"
+#include "gauss_quadrature_test_helpers.hpp"
 #include <cmath>
 #include <complex>
 #include <limits>
-#include <valarray>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/gauss_hermite.hpp>
@@ -79,27 +79,8 @@ void test_complex(std::size_t ulps, typename Complex::value_type imaginary_tol)
 template <unsigned N>
 void test_vector_valued()
 {
-   using vector = std::valarray<double>;
-   const vector zero(0.0, 3);
-   auto norm = [](const vector& v) { return std::sqrt((v * v).sum()); };
-   auto f = [](double x) { return vector{1.0, x * x, std::cos(x)}; };
-   double L1;
-   vector Q = gauss_hermite<double, N>::integrate(f, zero, norm, &L1);
    const double root_pi = boost::math::constants::root_pi<double>();
-   CHECK_ULP_CLOSE(root_pi, Q[0], 4);
-   CHECK_ULP_CLOSE(root_pi / 2, Q[1], 4);
-   CHECK_ULP_CLOSE(root_pi * std::exp(-0.25), Q[2], 16);
-   CHECK_LE(norm(Q), L1);
-   // The error is the norm of half the difference from the anti-Gauss rule, at least that of any component.
-   double error, L1_averaged, cos_error;
-   const vector Q_averaged = gauss_hermite<double, N>::integrate_averaged(f, zero, norm, &error, &L1_averaged);
-   CHECK_ULP_CLOSE(root_pi, Q_averaged[0], 4);
-   CHECK_ULP_CLOSE(root_pi / 2, Q_averaged[1], 4);
-   CHECK_ABSOLUTE_ERROR(root_pi * std::exp(-0.25), Q_averaged[2], error);
-   CHECK_LE(norm(Q_averaged), L1_averaged);
-   gauss_hermite<double, N>::integrate_averaged([](double x) { return std::cos(x); }, &cos_error);
-   CHECK_LE(cos_error, error);
-   CHECK_LE(2 * std::numeric_limits<double>::epsilon() * L1_averaged, error);
+   check_vector_valued(gauss_hermite<double, N>(), root_pi, root_pi / 2, root_pi * std::exp(-0.25), 4, 4);
 }
 
 // Evaluating H_N directly overflows long before these N; the orthonormal recurrence does not.
@@ -115,30 +96,17 @@ void test_large_N()
    CHECK_ULP_CLOSE(root_pi * std::exp(-0.25), rule::integrate([](double x) { return std::cos(x); }), 16);
 }
 
-// Past N = 706 in double the recurrence overflows, which must be reported through the policy.
+// Past N = 706 the recurrence overflows in double, but the differential equation does not: neither rule overflows.
 void test_overflow()
 {
-   using ignore_policy = boost::math::policies::policy<boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
-   double L1 = 0;
-   CHECK_NAN((gauss_hermite<double, 1000, ignore_policy>::integrate([](double x) { return std::cos(x); }, &L1)));
-   CHECK_NAN(L1);
-   using vector = std::valarray<double>;
-   vector Q = gauss_hermite<double, 1000, ignore_policy>::integrate([](double x) { return vector{1.0, x}; }, vector(0.0, 2),
-                                                                    [](const vector& v) { return std::sqrt((v * v).sum()); });
-   CHECK_EQUAL(Q.size(), std::size_t(2));
-   CHECK_NAN(Q[0]);
-   CHECK_NAN(Q[1]);
-   // The averaged rule needs N + 1 points, which overflow at N = 706.
-   using rule = gauss_hermite<double, 706, ignore_policy>;
-   double error = 0;
-   CHECK_ULP_CLOSE(boost::math::constants::root_pi<double>(), rule::integrate([](double) { return 1.0; }), 16);
-   CHECK_NAN(rule::integrate_averaged([](double) { return 1.0; }, &error, &L1));
-   CHECK_NAN(error);
-   CHECK_NAN(L1);
-#ifndef BOOST_NO_EXCEPTIONS
-   CHECK_THROW((gauss_hermite<double, 1000>::integrate([](double x) { return std::cos(x); })), boost::math::evaluation_error);
-   CHECK_THROW((gauss_hermite<double, 706>::integrate_averaged([](double) { return 1.0; })), boost::math::evaluation_error);
-#endif
+   const double root_pi = boost::math::constants::root_pi<double>();
+   double L1 = 0, error = 0;
+   const double Q = gauss_hermite<double, 1000>::integrate([](double x) { return std::cos(x); }, &L1);
+   CHECK_ULP_CLOSE(root_pi * std::exp(-0.25), Q, 16);
+   CHECK_LE(Q, L1);
+   CHECK_LE(L1, root_pi);
+   CHECK_ULP_CLOSE(root_pi * std::exp(-0.25), (gauss_hermite<double, 1000>::integrate_averaged([](double x) { return std::cos(x); }, &error, &L1)), 16);
+   CHECK_LE(error, 64 * std::numeric_limits<double>::epsilon());
 }
 
 // Laurie's anti-Gauss rule with N + 1 points, which the error estimate uses, as a whole rule rather than its nonnegative half.
@@ -211,32 +179,18 @@ void test_anti_gauss()
    CHECK_ABSOLUTE_ERROR(Real(0), (exact - gauss) + (exact - anti_result), (N + 8) * std::numeric_limits<Real>::epsilon() * L1);
 }
 
-// For smooth f, G and A bracket the integral, so the error bounds that of the average and is close to that of G
-// until it reaches rounding.
 template <class Real, unsigned N>
 void test_error_estimate()
 {
    using std::abs;
    using std::cos;
    using std::exp;
-   const Real expected = boost::math::constants::root_pi<Real>() * exp(-Real(1) / 4);
-   auto f = [](const Real& x) { return cos(x); };
    using rule = gauss_hermite<Real, N>;
-   Real error, L1;
-   const Real Q = rule::integrate_averaged(f, &error, &L1);
-   const Real gauss_error = abs(rule::integrate(f) - expected);
-   CHECK_LE(abs(Q), L1);
-   CHECK_LE(abs(Q - expected), error);
-   CHECK_LE(abs(Q - expected), gauss_error + 2 * std::numeric_limits<Real>::epsilon() * L1);
-   if (gauss_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
-   {
-      CHECK_LE(error, 2 * gauss_error);
-      CHECK_LE(gauss_error, 2 * error);
-   }
-   CHECK_LE(2 * std::numeric_limits<Real>::epsilon() * L1, error);
+   check_error_estimate(rule(), [](const Real& x) { return cos(x); }, boost::math::constants::root_pi<Real>() * exp(-Real(1) / 4));
    // 1/(1 + x^2) has poles at +-i, so the error falls slowly.
    auto g = [](const Real& x) { return 1 / (1 + x * x); };
    const Real exact_g = static_cast<Real>(1.343293421646735170437123594410589778323L);
+   Real error;
    const Real Qg = rule::integrate_averaged(g, &error);
    const Real gauss_error_g = abs(rule::integrate(g) - exact_g);
    CHECK_LE(abs(Qg - exact_g), error);

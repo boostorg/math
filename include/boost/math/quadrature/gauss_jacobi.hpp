@@ -46,8 +46,7 @@ class gauss_jacobi_detail
    std::vector<Real> abscissa_vals;
    std::vector<Real> weight_vals;
    bool anti_gauss_internal;
-   std::vector<Real> anti_abscissa_vals;
-   std::vector<Real> anti_weight_vals;
+   lazy_rule<Real> anti;
    using polynomial = BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::jacobi_family<Real> >;
 public:
    gauss_jacobi_detail(unsigned N_, Real alpha_, Real beta_) : N(N_), alpha(alpha_), beta(beta_)
@@ -67,16 +66,6 @@ public:
       // Laurie 1996, Theorem 3: the anti-Gauss rule has a node outside [-1, 1] when alpha or beta is below -1/2
       // and N is large, and for some N when it is near -1/2. At -1/2 it can have nodes on -1 and 1.
       anti_gauss_internal = polynomial::anti_gauss_is_internal(N + 1, family, Real(1)) && polynomial::anti_gauss_is_internal(N + 1, family, Real(-1));
-      // Laurie's anti-Gauss rule with N + 1 points, for integrate_averaged.
-      if (anti_gauss_internal)
-      {
-         polynomial anti(N + 1, BOOST_MATH_NAMESPACE::detail::jacobi_family<Real>(N + 1, alpha, beta, true), true);
-         anti_abscissa_vals = anti.abscissa();
-         anti_weight_vals = anti.weights();
-         // Nodes on the endpoints come out a few eps either side.
-         for (Real& x : anti_abscissa_vals)
-            x = (std::min)((std::max)(x, Real(-1)), Real(1));
-      }
     }
    const std::vector<Real>& abscissa() const
    {
@@ -93,20 +82,36 @@ public:
       return anti_gauss_internal;
    }
 
+   // Laurie's anti-Gauss rule with N + 1 points, for integrate_averaged; empty unless it is internal.
    const std::vector<Real>& anti_gauss_abscissa() const
    {
-      return anti_abscissa_vals;
+      return anti_gauss().x;
    }
 
    const std::vector<Real>& anti_gauss_weights() const
    {
-      return anti_weight_vals;
+      return anti_gauss().w;
    }
 
 protected:
+   const auto& anti_gauss() const
+   {
+      return anti.get([this](std::vector<Real>& x, std::vector<Real>& w)
+      {
+         if (!anti_gauss_internal)
+            return;
+         const polynomial rule(N + 1, BOOST_MATH_NAMESPACE::detail::jacobi_family<Real>(N + 1, alpha, beta, true), true);
+         x = rule.abscissa();
+         w = rule.weights();
+         // Nodes on the endpoints come out a few eps either side.
+         for (Real& z : x)
+            z = (std::min)((std::max)(z, Real(-1)), Real(1));
+      });
+   }
+
    bool in_domain() const
    {
-      return alpha > -1 && beta > -1 && (BOOST_MATH_NAMESPACE::isfinite)(alpha) && (BOOST_MATH_NAMESPACE::isfinite)(beta);
+      return N > 0 && alpha > -1 && beta > -1 && (BOOST_MATH_NAMESPACE::isfinite)(alpha) && (BOOST_MATH_NAMESPACE::isfinite)(beta);
    }
 };
 
@@ -133,6 +138,11 @@ class gauss_jacobi : public detail::gauss_jacobi_detail<Real, detail::quadrature
 public:
    gauss_jacobi(unsigned N_, Real alpha_, Real beta_) : detail::gauss_jacobi_detail<Real, detail::quadrature_constant_category<Real>::value>(N_, alpha_, beta_)
    {
+      if (N_ == 0)
+      {
+         policies::raise_domain_error("boost::math::quadrature::gauss_jacobi<%1%>::gauss_jacobi",
+            "The number of points must be > 0, but got %1%.", Real(0), Policy());
+      }
       if (!(alpha_ > -1) || !(BOOST_MATH_NAMESPACE::isfinite)(alpha_))
       {
          policies::raise_domain_error("boost::math::quadrature::gauss_jacobi<%1%>::gauss_jacobi",
@@ -149,30 +159,8 @@ public:
    template <class F>
    auto integrate(F f, Real* pL1 = nullptr) const->decltype(std::declval<F>()(std::declval<Real>()))
    {
-      // In many math texts, K represents the field of real or complex numbers.
-      // Too bad we can't put blackboard bold into C++ source!
       using K = decltype(f(Real(0)));
-      static_assert(!std::is_integral<K>::value,
-                    "The return type cannot be integral, it must be either a real or complex floating point type.");
-      using std::abs;
-      Real nan = std::numeric_limits<Real>::quiet_NaN();
-      if (!this->in_domain() || detail::overflowed(this->abscissa(), "boost::math::quadrature::gauss_jacobi<%1%>::integrate", pL1, &nan, Policy()))
-      {
-         if (pL1)
-            *pL1 = nan;
-         return static_cast<K>(nan);
-      }
-      K result = Real(0);
-      Real L1 = abs(result);
-      for (unsigned i = 0; i < this->abscissa().size(); ++i)
-      {
-         K fp = f(static_cast<Real>(this->abscissa()[i]));
-         result += fp * static_cast<Real>(this->weights()[i]);
-         L1 += abs(fp) * static_cast<Real>(this->weights()[i]);
-      }
-      if (pL1)
-         *pL1 = L1;
-      return result;
+      return integrate(f, K(Real(0)), [](const K& z) { using std::abs; return abs(z); }, pL1);
    }
 
    // Explicit zero and norm for vector- and matrix-valued integrands.
@@ -181,7 +169,8 @@ public:
       ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
    {
       using K = decltype(f(Real(0)));
-      static_assert(!std::is_integral<K>::value, "The return type cannot be integral.");
+      static_assert(!std::is_integral<K>::value,
+                    "The return type cannot be integral, it must be either a real or complex floating point type.");
       Real nan = std::numeric_limits<Real>::quiet_NaN();
       if (!this->in_domain() || detail::overflowed(this->abscissa(), "boost::math::quadrature::gauss_jacobi<%1%>::integrate", pL1, &nan, Policy()))
       {
@@ -208,12 +197,7 @@ public:
    auto integrate_averaged(F f, Real* error = nullptr, Real* pL1 = nullptr) const->decltype(std::declval<F>()(std::declval<Real>()))
    {
       using K = decltype(f(Real(0)));
-      Real L1;
-      K result = integrate(f, &L1);
-      result = anti_gauss_average(f, K(Real(0)), result, L1, [](const K& z) { using std::abs; return abs(z); }, error);
-      if (pL1)
-         *pL1 = L1;
-      return result;
+      return integrate_averaged(f, K(Real(0)), [](const K& z) { using std::abs; return abs(z); }, error, pL1);
    }
 
    template <class F, class Norm>

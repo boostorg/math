@@ -10,7 +10,12 @@
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <limits>
+#include <memory>
 #include <type_traits>
+#include <vector>
+#ifdef BOOST_MATH_HAS_THREADS
+#include <mutex>
+#endif
 #endif
 
 BOOST_MATH_NAMESPACE_BEGIN namespace quadrature{ namespace detail {
@@ -70,6 +75,38 @@ bool overflowed(const RandomAccessContainer& abscissa, const char* function, Rea
    }
    return false;
 }
+
+// A rule built by the first call of get(build), which fills its abscissa x and weights w; copies share it.
+template <class Real>
+class lazy_rule
+{
+   struct rule
+   {
+#ifdef BOOST_MATH_HAS_THREADS
+      std::once_flag once;
+#else
+      bool built = false;
+#endif
+      std::vector<Real> x, w;
+   };
+   std::shared_ptr<rule> r = std::make_shared<rule>();
+
+public:
+   template <class Build>
+   const rule& get(Build build) const
+   {
+#ifdef BOOST_MATH_HAS_THREADS
+      std::call_once(r->once, [&] { build(r->x, r->w); });
+#else
+      if (!r->built)
+      {
+         build(r->x, r->w);
+         r->built = true;
+      }
+#endif
+      return *r;
+   }
+};
 
 // The averaged rule (G + A) / 2, exact for polynomials of degree 2N + 1. Half the difference is set as its error;
 // it bounds the error when G and A bracket the integral. L1 goes in as that of G and comes out as that of the average.

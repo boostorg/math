@@ -17,6 +17,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/detail/orthogonal_polynomial.hpp>
 #include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/digamma.hpp>
 #include <boost/math/tools/compensated_arithmetic.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
@@ -189,9 +190,11 @@ public:
       return N;
    }
 
+   // Gamma(alpha + 1), with the rounding error e of alpha + 1 = s + e to first order: Gamma(s) (1 + psi(s) e).
    Real area() const
    {
-      return BOOST_MATH_NAMESPACE::tgamma(alpha + 1);
+      const Real s = alpha + 1;
+      return BOOST_MATH_NAMESPACE::tgamma(s) * (1 + BOOST_MATH_NAMESPACE::digamma(s) * BOOST_MATH_NAMESPACE::detail::two_sum_error(alpha, Real(1), s));
    }
 
    unsigned weight_multiplicity(unsigned) const
@@ -270,6 +273,89 @@ public:
       return Real(1) / (p_prime_at_root * p_prime_at_root) / x;
    }
 
+   // For glaser_liu_rokhlin: u = x^((alpha + 1) / 2) exp(-x / 2) p_N satisfies x^2 u'' + g(x) u = 0 with
+   // g = (1 - alpha^2) / 4 + (N + (alpha + 1) / 2) x - x^2 / 4; the coefficients of s(t + h) and g(t + h) in h.
+   static constexpr unsigned ends = 1;
+
+   void normal_form(const double_word_arithmetic<Real>& dw, const double_word<Real>& t, double_word<Real> (&s)[5], double_word<Real> (&g)[3], unsigned m) const
+   {
+      using word = double_word<Real>;
+      const word c = dw.add(word{ Real(m), Real(0) }, dw.divide(dw.two_sum(alpha, Real(1)), Real(2)));
+      const word a = dw.divide(dw.add(dw.negate(dw.multiply(word{ alpha, Real(0) }, alpha)), Real(1)), Real(4));
+      const word square = dw.multiply(t, t);
+      s[0] = square;
+      s[1] = word{ 2 * t.hi, 2 * t.lo };
+      s[2] = word{ Real(1), Real(0) };
+      g[0] = dw.add(dw.add(word{ -square.hi / 4, -square.lo / 4 }, dw.multiply(c, t)), a);
+      g[1] = dw.add(c, word{ -t.hi / 2, -t.lo / 2 });
+      g[2] = word{ Real(-0.25), Real(0) };
+   }
+
+   Real singular_distance(const Real& x) const
+   {
+      return x;
+   }
+
+   // x^alpha exp(-x) at z = hi + lo; past where exp(-x) alone underflows, the square of its square root.
+   Real weight_function(const double_word<Real>& z) const
+   {
+      using std::exp;
+      using std::pow;
+      const Real correction = 1 + (alpha / z.hi - 1) * z.lo;
+      if (z.hi < -tools::log_min_value<Real>() / 2)
+         return pow(z.hi, alpha) * exp(-z.hi) * correction;
+      const Real root = pow(z.hi, alpha / 2) * exp(-z.hi / 2);
+      return root * root * correction;
+   }
+
+   // L_N^alpha(lambda w) = L_N^alpha(0) sum_k c_k w^k with c_0 = 1, lambda a power of 2 near 1 / (4N), so that the
+   // smallest zero is at w of order 1 (Gatteschi: x_1 ~ j_{alpha,1}^2 / (4N + 2 alpha + 2)).
+   Real series_origin(unsigned) const
+   {
+      return 0;
+   }
+
+   Real series_step(unsigned) const
+   {
+      using std::frexp;
+      using std::ldexp;
+      int exponent;
+      frexp(4 * Real(N) + 2 * alpha + 2, &exponent);
+      return ldexp(Real(1), -exponent);
+   }
+
+   double_word<Real> series_ratio(const double_word_arithmetic<Real>& dw, unsigned k, unsigned end, unsigned m) const
+   {  // c_{k+1} / c_k = lambda (k - m) / ((k + 1) (k + 1 + alpha)) for L_m^alpha
+      const double_word<Real> denominator = dw.multiply(dw.two_sum(Real(k + 1), alpha), Real(k + 1));
+      return dw.divide(double_word<Real>{ (Real(k) - Real(m)) * series_step(end), Real(0) }, denominator);
+   }
+
+   // L_N = (A x + B) L_{N-1} - C L_{N-2} with A = -1 / N, B = (2N - 1 + alpha) / N, C = (N - 1 + alpha) / N; C_2 = -2 C.
+   void anti_gauss_recurrence(const double_word_arithmetic<Real>& dw, double_word<Real>& A, double_word<Real>& B, double_word<Real>& C2) const
+   {
+      A = dw.divide(double_word<Real>{ Real(-1), Real(0) }, Real(N));
+      B = dw.divide(dw.two_sum(2 * Real(N) - 1, alpha), Real(N));
+      C2 = dw.divide(dw.two_sum(-2 * Real(N - 1), -2 * alpha), Real(N));
+   }
+
+   // L_{N-1}^alpha(0) / L_{N-2}^alpha(0) = (N - 1 + alpha) / (N - 1)
+   double_word<Real> anti_gauss_ratio(const double_word_arithmetic<Real>& dw, unsigned) const
+   {
+      return dw.divide(dw.two_sum(Real(N - 1), alpha), Real(N - 1));
+   }
+
+   // sigma' / sigma = (alpha + 1) / (2 x) - 1 / 2
+   double_word<Real> scale_log_derivative(const double_word_arithmetic<Real>& dw, const double_word<Real>& x) const
+   {
+      return dw.add(dw.divide(dw.two_sum(alpha, Real(1)), double_word<Real>{ 2 * x.hi, 2 * x.lo }), Real(-0.5));
+   }
+
+   // The leading coefficient x of the Sturm-Liouville form (x^(alpha + 1) exp(-x) p')' = -N x^alpha exp(-x) p.
+   Real sturm_liouville(const double_word<Real>& z) const
+   {
+      return z.hi + z.lo;
+   }
+
 private:
    unsigned N;
    Real alpha;
@@ -289,19 +375,7 @@ inline std::vector<T> laguerre_zeros(unsigned n)
    {
       return { static_cast<T>(1) };
    }
-
-   detail::orthogonal_polynomial<T, detail::laguerre_family<T> > evaluate(n);
-   std::vector<T> roots = evaluate.abscissa();
-
-   if (!(BOOST_MATH_NAMESPACE::isfinite)(roots[0]))
-   {
-      // In this case, the recurrence has overflowed and returned NaNs. Throw evaluation error
-      // or return vector of nans.
-      policies::raise_evaluation_error(function, "End points of the interval is not finite. Probably due to n being too large.", n, Policy());
-      return roots;
-   }
-
-   return roots;
+   return detail::polynomial_zeros<T>(n, detail::laguerre_family<T>(n), function, Policy());
 }
 
 BOOST_MATH_NAMESPACE_END

@@ -5,10 +5,10 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "math_unit_test.hpp"
+#include "gauss_quadrature_test_helpers.hpp"
 #include <cmath>
 #include <complex>
 #include <limits>
-#include <valarray>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/gauss_laguerre.hpp>
@@ -55,7 +55,8 @@ void test_tables_match_on_demand()
    for (unsigned i = 0; i < table::abscissa().size(); ++i)
    {
       CHECK_ULP_CLOSE(static_cast<Real>(table::abscissa()[i]), on_demand::abscissa()[i], 2);
-      CHECK_ULP_CLOSE(static_cast<Real>(table::weights()[i]), on_demand::weights()[i], 8);
+      // cpp_bin_float's exp, which the weights computed on demand take at the nodes, is out by 4 ulps at x = 19.
+      CHECK_ULP_CLOSE(static_cast<Real>(table::weights()[i]), on_demand::weights()[i], 16);
    }
 }
 
@@ -76,26 +77,7 @@ void test_complex(typename Complex::value_type tol)
 template <unsigned N>
 void test_vector_valued()
 {
-   using vector = std::valarray<double>;
-   const vector zero(0.0, 3);
-   auto norm = [](const vector& v) { return std::sqrt((v * v).sum()); };
-   auto f = [](double x) { return vector{1.0, x * x, std::cos(x)}; };
-   double L1;
-   vector Q = gauss_laguerre<double, N>().integrate(f, zero, norm, &L1);
-   CHECK_ULP_CLOSE(1.0, Q[0], 10);
-   CHECK_ULP_CLOSE(2.0, Q[1], 20);
-   CHECK_ULP_CLOSE(0.5, Q[2], 16);
-   CHECK_LE(norm(Q), L1);
-   // The error is the norm of half the difference from the anti-Gauss rule, at least that of any component.
-   double error, L1_averaged, cos_error;
-   const vector Q_averaged = gauss_laguerre<double, N>().integrate_averaged(f, zero, norm, &error, &L1_averaged);
-   CHECK_ULP_CLOSE(1.0, Q_averaged[0], 10);
-   CHECK_ULP_CLOSE(2.0, Q_averaged[1], 20);
-   CHECK_ABSOLUTE_ERROR(0.5, Q_averaged[2], error);
-   CHECK_LE(norm(Q_averaged), L1_averaged);
-   gauss_laguerre<double, N>().integrate_averaged([](double x) { return std::cos(x); }, &cos_error);
-   CHECK_LE(cos_error, error);
-   CHECK_LE(2 * std::numeric_limits<double>::epsilon() * L1_averaged, error);
+   check_vector_valued(gauss_laguerre<double, N>(), 1.0, 2.0, 0.5, 10, 20);
 }
 
 // Evaluating L_N directly overflows long before these N; the orthonormal recurrence does not.
@@ -110,26 +92,14 @@ void test_large_N()
    CHECK_ULP_CLOSE(0.5, rule().integrate([](double x) { return std::cos(x); }), 52);
 }
 
-// Past N = 706 in double the recurrence overflows, which must be reported through the policy.
+// Past N = 326 the recurrence overflows in double. The Gauss rule comes from the differential equation, which does not,
+// Past N = 326 the recurrence overflows in double, but the differential equation does not: neither rule overflows.
 void test_overflow()
 {
-   using ignore_policy = boost::math::policies::policy<boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
-   double L1 = 0;
-   CHECK_NAN((gauss_laguerre<double, 1000, ignore_policy>().integrate([](double x) { return std::cos(x); }, &L1)));
-   CHECK_NAN(L1);
-   using vector = std::valarray<double>;
-   vector Q = gauss_laguerre<double, 1000, ignore_policy>().integrate([](double x) { return vector{1.0, x}; }, vector(0.0, 2),
-                                                                    [](const vector& v) { return std::sqrt((v * v).sum()); });
-   CHECK_EQUAL(Q.size(), std::size_t(2));
-   CHECK_NAN(Q[0]);
-   CHECK_NAN(Q[1]);
-   double error = 0;
-   CHECK_NAN((gauss_laguerre<double, 1000, ignore_policy>().integrate_averaged([](double x) { return std::cos(x); }, &error, &L1)));
-   CHECK_NAN(error);
-   CHECK_NAN(L1);
-#ifndef BOOST_NO_EXCEPTIONS
-   CHECK_THROW((gauss_laguerre<double, 1000>().integrate([](double x) { return std::cos(x); })), boost::math::evaluation_error);
-#endif
+   double L1 = 0, error = 0;
+   CHECK_ULP_CLOSE(0.5, (gauss_laguerre<double, 1000>().integrate([](double x) { return std::cos(x); }, &L1)), 64);
+   CHECK_ULP_CLOSE(0.5, (gauss_laguerre<double, 1000>().integrate_averaged([](double x) { return std::cos(x); }, &error, &L1)), 64);
+   CHECK_LE(error, 64 * std::numeric_limits<double>::epsilon());
 }
 
 // The anti-Gauss rule is the Gauss rule of 2I - G_N, so on polynomials of degree 2N + 1 its error is that of G_N
@@ -192,36 +162,15 @@ void test_anti_gauss(unsigned N, Real alpha = 0)
    CHECK_ABSOLUTE_ERROR(Real(0), (exact - gauss_result) + (exact - anti_result), (N + 8) * std::numeric_limits<Real>::epsilon() * L1);
 }
 
-// For smooth f, G and A bracket the integral, so the error bounds that of the average and is close to that of G
-// until it reaches rounding.
-template <class Real, unsigned N, class F>
-void check_error_estimate(F f, const Real& exact)
-{
-   using std::abs;
-   using rule = gauss_laguerre<Real, N>;
-   Real error, L1;
-   const Real Q = rule().integrate_averaged(f, &error, &L1);
-   const Real gauss_error = abs(rule().integrate(f) - exact);
-   CHECK_LE(abs(Q), L1);
-   CHECK_LE(abs(Q - exact), error);
-   CHECK_LE(abs(Q - exact), gauss_error + 2 * std::numeric_limits<Real>::epsilon() * L1);
-   if (gauss_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
-   {
-      CHECK_LE(error, 2 * gauss_error);
-      CHECK_LE(gauss_error, 2 * error);
-   }
-   CHECK_LE(2 * std::numeric_limits<Real>::epsilon() * L1, error);
-}
-
 template <class Real, unsigned N>
 void test_error_estimate()
 {
    using std::cos;
    using std::sqrt;
-   check_error_estimate<Real, N>([](const Real& x) { return cos(x); }, Real(0.5));
+   check_error_estimate(gauss_laguerre<Real, N>(), [](const Real& x) { return cos(x); }, Real(0.5));
    // The integral of exp(-x) / (1 + x) is the Gompertz constant; the pole at -1 makes the error fall slowly.
-   check_error_estimate<Real, N>([](const Real& x) { return 1 / (1 + x); }, static_cast<Real>(0.5963473623231940743410784993692793760742L));
-   check_error_estimate<Real, N>([](const Real& x) { return sqrt(1 + x); }, static_cast<Real>(1.378936078070656053021675619957108958174L));
+   check_error_estimate(gauss_laguerre<Real, N>(), [](const Real& x) { return 1 / (1 + x); }, static_cast<Real>(0.5963473623231940743410784993692793760742L));
+   check_error_estimate(gauss_laguerre<Real, N>(), [](const Real& x) { return sqrt(1 + x); }, static_cast<Real>(1.378936078070656053021675619957108958174L));
 }
 
 // The rule for x^alpha exp(-x) integrates x^k exactly for k <= 2N - 1, giving Gamma(k + alpha + 1), and its error

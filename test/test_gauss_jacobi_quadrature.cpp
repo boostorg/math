@@ -5,10 +5,10 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "math_unit_test.hpp"
+#include "gauss_quadrature_test_helpers.hpp"
 #include <cmath>
 #include <complex>
 #include <limits>
-#include <valarray>
 #include <boost/math/tools/test_value.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -59,27 +59,7 @@ void test_complex(typename Complex::value_type tol)
 template <unsigned N>
 void test_vector_valued()
 {
-   using vector = std::valarray<double>;
-   const vector zero(0.0, 3);
-   auto norm = [](const vector& v) { return std::sqrt((v * v).sum()); };
-   auto f = [](double x) { return vector{1.0, x * x, std::cos(x)}; };
-   double L1;
-   gauss_jacobi<double> integrator = gauss_jacobi<double>(N, 1.0, 1.0);
-   vector Q = integrator.integrate(f, zero, norm, &L1);
-   CHECK_ULP_CLOSE(4.0 / 3.0, Q[0], 10);
-   CHECK_ULP_CLOSE(4.0 / 15.0, Q[1], 20);
-   CHECK_ULP_CLOSE(4.0 * sin(1.0) - 4.0 * cos(1.0), Q[2], 16);
-   CHECK_LE(norm(Q), L1);
-   // The error is the norm of half the difference from the anti-Gauss rule, at least that of any component.
-   double error, L1_averaged, cos_error;
-   const vector Q_averaged = integrator.integrate_averaged(f, zero, norm, &error, &L1_averaged);
-   CHECK_ULP_CLOSE(4.0 / 3.0, Q_averaged[0], 10);
-   CHECK_ULP_CLOSE(4.0 / 15.0, Q_averaged[1], 20);
-   CHECK_ABSOLUTE_ERROR(4.0 * sin(1.0) - 4.0 * cos(1.0), Q_averaged[2], error);
-   CHECK_LE(norm(Q_averaged), L1_averaged);
-   integrator.integrate_averaged([](double x) { return std::cos(x); }, &cos_error);
-   CHECK_LE(cos_error, error);
-   CHECK_LE(2 * std::numeric_limits<double>::epsilon() * L1_averaged, error);
+   check_vector_valued(gauss_jacobi<double>(N, 1.0, 1.0), 4.0 / 3.0, 4.0 / 15.0, 4.0 * sin(1.0) - 4.0 * cos(1.0), 10, 20);
 }
 
 // The anti-Gauss rule is the Gauss rule of 2I - G_N, so on polynomials of degree 2N + 1 its error is that of G_N
@@ -193,12 +173,9 @@ void test_anti_gauss_internality()
    CHECK_ULP_CLOSE(4 * pow(Real(2), Real(0.25)), outside.integrate([](const Real&) { return Real(1); }), 16);
 }
 
-// For smooth f, G and A bracket the integral, so the error bounds that of the average and is close to that of G
-// until it reaches rounding.
 template <class Real>
 void test_error_estimate(unsigned N)
 {
-   using std::abs;
    using std::cos;
    using std::exp;
    struct example
@@ -214,23 +191,9 @@ void test_error_estimate(unsigned N)
       { Real(0.3), Real(-0.4), [](const Real& x) { return exp(x); }, static_cast<Real>(2.113791650902447106944400891924615994062L) },
       { Real(0), Real(0), [](const Real& x) { return 1 / (2 - x); }, static_cast<Real>(1.098612288668109691395245236922525704647L) },
    };
+   // Once converged, rounding in the nodes and weights can exceed the 2 eps L1 floor of the error.
    for (const example& e : examples)
-   {
-      gauss_jacobi<Real> rule(N, e.alpha, e.beta);
-      Real error, L1;
-      const Real Q = rule.integrate_averaged(e.f, &error, &L1);
-      const Real gauss_error = abs(rule.integrate(e.f) - e.expected);
-      CHECK_LE(abs(Q), L1);
-      // Once converged, rounding in the nodes and weights can exceed the 2 eps L1 floor of the error.
-      CHECK_LE(abs(Q - e.expected), error + 4 * std::numeric_limits<Real>::epsilon() * L1);
-      CHECK_LE(abs(Q - e.expected), gauss_error + 2 * std::numeric_limits<Real>::epsilon() * L1);
-      if (gauss_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
-      {
-         CHECK_LE(error, 2 * gauss_error);
-         CHECK_LE(gauss_error, 2 * error);
-      }
-      CHECK_LE(2 * std::numeric_limits<Real>::epsilon() * L1, error);
-   }
+      check_error_estimate(gauss_jacobi<Real>(N, e.alpha, e.beta), e.f, e.expected, Real(4));
 }
 
 // No higher precision because it takes a long time because it has to
@@ -250,6 +213,10 @@ void test_parameter_domain()
       CHECK_THROW((gauss_jacobi<double>(5, 0, bad)), std::domain_error);
 #endif
    }
+   CHECK_NAN((gauss_jacobi<double, ignore_policy>(0, 0.5, 0.5).integrate_averaged([](double x) { return x; })));
+#ifndef BOOST_NO_EXCEPTIONS
+   CHECK_THROW((gauss_jacobi<double>(0, 0.5, 0.5)), std::domain_error);
+#endif
    // No averaged rule without an internal anti-Gauss rule.
    using ignore_evaluation = boost::math::policies::policy<boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
    const gauss_jacobi<double, ignore_evaluation> external(10, -0.9, -0.9);
