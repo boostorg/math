@@ -70,15 +70,15 @@ template <class T>
 class two_product
 {
 public:
-   two_product() : splitter(0)
+   two_product() : fused(is_fused()), splitter(0)
    {
       BOOST_MATH_STD_USING
-      if (!is_fused())
+      if (!fused)
          splitter = ldexp(T(1), (tools::digits<T>() + 1) / 2) + 1;
    }
    void operator()(const T& a, const T& b, T& p, T& e) const
    {
-      if (is_fused())
+      if (fused)
          two_product_fma::evaluate(a, b, T(0), p, 0);
       else
          p = a * b;
@@ -87,7 +87,7 @@ public:
    // The rounding error of ab = fl(a b): a b = ab + error(a, b, ab) exactly.
    T error(const T& a, const T& b, const T& ab) const
    {
-      if (is_fused())
+      if (fused)
       {
          T e;
          two_product_fma::evaluate(a, b, T(-ab), e, 0);
@@ -119,6 +119,7 @@ private:
       }();
       return result;
    }
+   bool fused;
    T splitter;
 };
 
@@ -148,6 +149,101 @@ BOOST_MATH_GPU_ENABLED inline T two_sum_error(T a, T b, T s)
    T bb = s - a;
    return (a - (s - bb)) + (b - bb);
 }
+
+#ifndef BOOST_MATH_HAS_NVRTC
+
+//
+// Double-word numbers hi + lo, |lo| <= ulp(hi) / 2, and the "sloppy" arithmetic of Dekker (1971) on them (see Joldes,
+// Muller & Popescu 2017): its error is about u^2 times the operands, u the unit roundoff, rather than times the result,
+// which is as good as twice the working precision wherever the operands are not much larger than the result.
+//
+template <class T>
+struct double_word
+{
+   T hi;
+   T lo;
+};
+
+template <class T>
+class double_word_arithmetic
+{
+public:
+   using value_type = double_word<T>;
+   // a + b when |a| >= |b| or a = 0.
+   static value_type fast_two_sum(const T& a, const T& b)
+   {
+      const T s = a + b;
+      return value_type{ s, b - (s - a) };
+   }
+   static value_type two_sum(const T& a, const T& b)
+   {
+      const T s = a + b;
+      return value_type{ s, two_sum_error(a, b, s) };
+   }
+   static value_type negate(const value_type& a)
+   {
+      return value_type{ -a.hi, -a.lo };
+   }
+   static value_type add(const value_type& a, const value_type& b)
+   {
+      const value_type s = two_sum(a.hi, b.hi);
+      return fast_two_sum(s.hi, s.lo + (a.lo + b.lo));
+   }
+   static value_type add(const value_type& a, const T& b)
+   {
+      const value_type s = two_sum(a.hi, b);
+      return fast_two_sum(s.hi, s.lo + a.lo);
+   }
+   value_type multiply(const value_type& a, const value_type& b) const
+   {
+      T p, e;
+      product(a.hi, b.hi, p, e);
+      return fast_two_sum(p, e + (a.hi * b.lo + a.lo * b.hi));
+   }
+   value_type multiply(const value_type& a, const T& b) const
+   {
+      T p, e;
+      product(a.hi, b, p, e);
+      return fast_two_sum(p, e + a.lo * b);
+   }
+   value_type divide(const value_type& a, const T& b) const
+   {
+      const T q = a.hi / b;
+      T p, e;
+      product(q, b, p, e);
+      return fast_two_sum(q, (((a.hi - p) - e) + a.lo) / b);
+   }
+   value_type divide(const value_type& a, const value_type& b) const
+   {
+      const T q = a.hi / b.hi;
+      const value_type r = add(a, negate(multiply(b, q)));
+      return fast_two_sum(q, r.hi / b.hi);
+   }
+   // s + e += a b, gathering the rounding errors in e unnormalized, so that only s = s + fl(a b) is a dependency between
+   // consecutive calls (as in Ogita, Rump & Oishi's Dot2).
+   void multiply_add(T& s, T& e, const value_type& a, const value_type& b) const
+   {
+      T p, pe;
+      product(a.hi, b.hi, p, pe);
+      const T sum = s + p;
+      e += two_sum_error(s, p, sum) + (pe + (a.hi * b.lo + a.lo * b.hi));
+      s = sum;
+   }
+   // One step s + e = (s + e) x + a of compensated Horner (Graillat, Langlois & Louvet 2005): the corrections e follow
+   // their own recurrence, off the dependency chain of s.
+   void horner_step(T& s, T& e, const T& x, const value_type& a) const
+   {
+      T p, pe;
+      product(s, x, p, pe);
+      const T sum = p + a.hi;
+      e = e * x + (two_sum_error(p, a.hi, sum) + (pe + a.lo));
+      s = sum;
+   }
+private:
+   two_product<T> product;
+};
+
+#endif // BOOST_MATH_HAS_NVRTC
 
 //
 // Neumaier's compensated sum: sum + comp carries the total to about one rounding, however many terms are added.

@@ -277,6 +277,7 @@ def test_array_matches_scalar(case):
 # Not elementwise, so tested on their own below.
 SIEVE = {"prime_sieve", "prime_range", "prime_count", "polynomial_roots", "polynomial_roots_aberth", "polynomial_roots_companion_matrix"}
 QUADRATURE = {"tanh_sinh", "exp_sinh", "sinh_sinh", "trapezoidal", "gauss", "gauss_kronrod", "gauss_hermite",
+              "gauss_laguerre", "gauss_hermite_averaged", "gauss_laguerre_averaged", "gauss_hermite_rule", "gauss_laguerre_rule", "gauss_jacobi_rule",
               "ooura_fourier_sin", "ooura_fourier_cos", "van_den_bos_unit_square"}
 OPTIMIZATION = {"differential_evolution", "jso", "random_search", "multilevel_coordinate_search", "cma_es"}
 
@@ -305,6 +306,9 @@ def test_optimization():
 
 
 def test_quadrature():
+    def second_moment(rule):
+        x, w = rule
+        return (w @ x**2,)
     cases = [
         (bm.tanh_sinh(lambda x: 1 / math.sqrt(x), 0, 1), 2.0),
         (bm.exp_sinh(lambda x: math.exp(-x)), 1.0),
@@ -313,6 +317,14 @@ def test_quadrature():
         (bm.gauss(lambda x: x * x, 0, 1, points=7), 1 / 3),
         (bm.gauss_kronrod(math.sin, 0, math.pi, points=61), 2.0),
         (bm.gauss_hermite(lambda x: x * x), math.sqrt(math.pi) / 2),
+        (bm.gauss_laguerre(lambda x: x * x, alpha=0.5), math.gamma(3.5)),
+        (bm.gauss_jacobi(10, 0.5, -0.5).integrate(lambda x: x * x), math.pi / 2),
+        (bm.gauss_hermite_averaged(lambda x: x * x), math.sqrt(math.pi) / 2),
+        (bm.gauss_laguerre_averaged(lambda x: x * x, alpha=0.5), math.gamma(3.5)),
+        (bm.gauss_jacobi(10, 0.5, -0.5).integrate_averaged(lambda x: x * x), math.pi / 2),
+        (second_moment(bm.gauss_hermite_rule(5)), math.sqrt(math.pi) / 2),
+        (second_moment(bm.gauss_laguerre_rule(5, alpha=0.5)), math.gamma(3.5)),
+        (second_moment(bm.gauss_jacobi_rule(5, 0.5, -0.5)), math.pi / 2),
         (bm.ooura_fourier_sin(lambda t: 1 / t, 1.0), math.pi / 2),
         (bm.ooura_fourier_cos(lambda t: 1 / (1 + t * t), 1.0), math.pi / (2 * math.e)),
         (bm.van_den_bos_unit_square(lambda x, y: x * y), 0.25),
@@ -321,6 +333,12 @@ def test_quadrature():
         assert math.isclose(result[0], exact, rel_tol=1e-12)
     with pytest.raises(ValueError):
         bm.gauss(math.sin, 0, 1, points=8)
+    # (integral, L1) from the Gauss rule; (integral, error, L1) from the averaged rule, whose error bounds its own.
+    assert len(bm.gauss_hermite(math.cos)) == 2
+    Q, error, L1 = bm.gauss_hermite_averaged(math.cos, points=7)
+    assert abs(Q - math.sqrt(math.pi) * math.exp(-0.25)) <= error < 1e-6
+    with pytest.raises(RuntimeError):
+        bm.gauss_jacobi(10, -0.9, -0.9).integrate_averaged(math.cos)
     with pytest.raises(ZeroDivisionError):
         bm.tanh_sinh(lambda x: 1 / 0, 0, 1)
 
@@ -468,7 +486,7 @@ TRANSFORMS = {"fft", "real_fft", "dct_ii"}
 
 def test_every_distribution_has_a_case():
     names = {n for n in bm.__all__ if inspect.isclass(getattr(bm, n))}
-    assert names - TRANSFORMS == {c[0] for c in CONTINUOUS + DISCRETE}
+    assert names - TRANSFORMS - {"gauss_jacobi"} == {c[0] for c in CONTINUOUS + DISCRETE}
     assert TRANSFORMS <= names
 
 

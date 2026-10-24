@@ -3,12 +3,14 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <limits>
 // The test data contains overflows, which the test expects to come back as infinities, as in the
 // test_instances library (which is compiled with this policy).  The headers are included here as well,
 // so the policy has to agree with the library's to avoid two different definitions of the same functions:
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #include <pch_light.hpp>
 #include "test_laguerre.hpp"
+#include <boost/multiprecision/cpp_bin_float.hpp>
 
 //
 // DESCRIPTION:
@@ -187,6 +189,29 @@ BOOST_AUTO_TEST_CASE( test_main )
       "to pass.</note>" << std::endl;
 #endif
    
+test_zeros(2*std::numeric_limits<float>::epsilon(), "float");
+test_zeros(std::numeric_limits<double>::epsilon(), "double");
+test_zeros(2*std::numeric_limits<long double>::epsilon(), "long double");
+using cpp_bin_float_100 = boost::multiprecision::cpp_bin_float_100;
+test_zeros<cpp_bin_float_100>(std::numeric_limits<cpp_bin_float_100>::epsilon(), "cpp_bin_float_100");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+   test_zeros(boost::math::concepts::real_concept(1e-15), "real_concept");
+#endif
+
+test_zeros_large(15 * std::numeric_limits<float>::epsilon(), "float");
+test_zeros_large(15 * std::numeric_limits<double>::epsilon(), "double");
+test_zeros_large(50 * std::numeric_limits<long double>::epsilon(), "long double");
+using cpp_bin_float_100 = boost::multiprecision::cpp_bin_float_100;
+// Difference is 1e-101.
+test_zeros_large<cpp_bin_float_100>( 100 * std::numeric_limits<cpp_bin_float_100>::epsilon(), "cpp_bin_float_100");
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+   test_zeros_large(boost::math::concepts::real_concept(1e-14), "real_concept");
+#endif
+
+test_zero_special_case<double>();
+test_zeros_accuracy(std::numeric_limits<double>::epsilon(), "double");
+
 }
 
 

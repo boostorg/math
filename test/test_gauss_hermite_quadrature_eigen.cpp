@@ -5,6 +5,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "math_unit_test.hpp"
+#include "gauss_quadrature_test_helpers.hpp"
 #include <complex>
 #include <limits>
 #include <Eigen/Dense>
@@ -13,26 +14,12 @@
 
 using boost::math::quadrature::gauss_hermite;
 
-// Return concrete Eigen matrices so the test does not rely on the lifetime
-// of expression-template temporaries. Supply a shaped zero and a scalar norm.
 template <class Matrix, unsigned N>
 void test_matrix(const Matrix& zero)
 {
-   const auto norm = [](const Matrix& m) { return m.norm(); };
-   const auto f = [&zero](double x) -> Matrix {
-      Matrix result = zero;
-      result(0, 0) = {1, x * x};
-      result(0, 1) = {x, 2 * x};
-      result(1, 0) = {-x * x, x};
-      result(1, 1) = {x * x * x, -1};
-      return result;
-   };
    // Against exp(-x^2): 1 -> sqrt(pi), x^2 -> sqrt(pi)/2, odd powers -> 0.
    const double root_pi = boost::math::constants::root_pi<double>();
-   double L1;
-   Matrix Q = gauss_hermite<double, N>::integrate(f, zero, norm, &L1);
-   CHECK_EQUAL(Q.rows(), Eigen::Index(2));
-   CHECK_EQUAL(Q.cols(), Eigen::Index(2));
+   const Matrix Q = integrate_matrix(gauss_hermite<double, N>(), zero);
    CHECK_ULP_CLOSE(root_pi, Q(0, 0).real(), 4);
    CHECK_ULP_CLOSE(root_pi / 2, Q(0, 0).imag(), 4);
    CHECK_EQUAL(Q(0, 1), std::complex<double>(0, 0));
@@ -40,7 +27,6 @@ void test_matrix(const Matrix& zero)
    CHECK_EQUAL(Q(1, 0).imag(), 0.0);
    CHECK_EQUAL(Q(1, 1).real(), 0.0);
    CHECK_ULP_CLOSE(-root_pi, Q(1, 1).imag(), 4);
-   CHECK_LE(norm(Q), L1);
 }
 
 int main()

@@ -13,7 +13,11 @@
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #endif
 
+#include <limits>
 #include "test_hermite.hpp"
+#ifndef BOOST_MATH_ENABLE_SYCL
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#endif
 
 //
 // DESCRIPTION:
@@ -119,6 +123,34 @@ BOOST_AUTO_TEST_CASE( test_main )
       "to pass.</note>" << std::endl;
 #endif
    
+test_zeros(std::numeric_limits<float>::epsilon(), "float");
+test_zeros(std::numeric_limits<double>::epsilon(), "double");
+#ifndef BOOST_MATH_ENABLE_SYCL
+// The compensated sums are SYCL_EXTERNAL, and SYCL devices have no long double fabs.
+test_zeros(std::numeric_limits<long double>::epsilon(), "long double");
+using cpp_bin_float_100 = boost::multiprecision::cpp_bin_float_100;
+// Checked by hand that they line up exactly to 100 digits!
+test_zeros<cpp_bin_float_100>(std::numeric_limits<cpp_bin_float_100>::epsilon(), "cpp_bin_float_100");
+#endif
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+   test_zeros(boost::math::concepts::real_concept(1e-15), "real_concept");
+#endif
+
+test_zeros_large(std::numeric_limits<float>::epsilon(), "float");
+test_zeros_large(std::numeric_limits<double>::epsilon(), "double");
+#ifndef BOOST_MATH_ENABLE_SYCL
+test_zeros_large(2 * std::numeric_limits<long double>::epsilon(), "long double");
+using cpp_bin_float_100 = boost::multiprecision::cpp_bin_float_100;
+// Difference is 1e-101.
+test_zeros_large<cpp_bin_float_100>(std::numeric_limits<cpp_bin_float_100>::epsilon(), "cpp_bin_float_100");
+#endif
+
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+   test_zeros_large(boost::math::concepts::real_concept(1e-15), "real_concept");
+#endif
+
+test_zeros_accuracy(std::numeric_limits<double>::epsilon(), "double");
+test_zero_special_case<double>();
 }
 
 

@@ -24,8 +24,14 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
       static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
 
       template <class F, class Norm>
-      static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm,
-                            Real* pL1 = nullptr) -> decltype(f(Real(0)));
+      static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm, Real* pL1 = nullptr) -> decltype(f(Real(0)));
+
+      template <class F>
+      static auto integrate_averaged(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
+
+      template <class F, class Norm>
+      static auto integrate_averaged(F f, const decltype(f(Real(0)))& zero, Norm norm,
+                                     Real* error = nullptr, Real* pL1 = nullptr) -> decltype(f(Real(0)));
    };
 
    }}} // namespaces
@@ -40,9 +46,10 @@ using /Points/ evaluations of /f/, where the abscissas /x[sub i]/ are the zeros 
 The rule is exact when /f/ is a polynomial of degree at most 2/Points/ - 1.
 Note that the weight function exp(-/x/[super 2]) is not part of /f/: pass only the factor that multiplies it.
 
-Like [link math_toolkit.gauss `gauss`], this is a "one shot" non-adaptive routine.
-It obtains no estimate of the error, and is intended for smooth /f/ that grow no faster than a polynomial,
+Like [link math_toolkit.gauss `gauss`], this is a "one shot" non-adaptive routine,
+intended for smooth /f/ that grow no faster than a polynomial,
 such as expectations of smooth functions of a normally distributed variable.
+For /Points/ + 1 more evaluations of /f/, `integrate_averaged` is exact to higher degree and estimates its error.
 
    static const RandomAccessContainer& abscissa();
    static const RandomAccessContainer& weights();
@@ -53,16 +60,35 @@ the rule is symmetric about zero.
    template <class F>
    static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
 
-Integrates /f/(/x/) exp(-/x/[super 2]) over the real line, and optionally sets `*pL1` to the corresponding integral of |/f/|.
+Integrates /f/(/x/) exp(-/x/[super 2]) over the real line with the /Points/-point Gauss rule /G/. /f/ may return a real or complex value.
+
+If `pL1` is not null, `*pL1` is set to the corresponding integral of |/f/|.
 If that is substantially larger than the absolute value of the result, then the sum was ill-conditioned.
-/f/ may return a real or complex value.
 
    template <class F, class Norm>
-   static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm,
-                         Real* pL1 = nullptr) -> decltype(f(Real(0)));
+   static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm, Real* pL1 = nullptr) -> decltype(f(Real(0)));
 
 As for [link math_toolkit.gauss `gauss`], this overload handles vector- and matrix-valued integrands:
 `zero` is the additive identity of the returned type, and `norm` returns a nonnegative scalar convertible to `Real`.
+The L1 norm is measured with `norm`.
+
+   template <class F>
+   static auto integrate_averaged(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
+
+   template <class F, class Norm>
+   static auto integrate_averaged(F f, const decltype(f(Real(0)))& zero, Norm norm,
+                                  Real* error = nullptr, Real* pL1 = nullptr) -> decltype(f(Real(0)));
+
+Returns Laurie's averaged rule (/G/(/f/) + /A/(/f/))/2, at the cost of /Points/ + 1 more evaluations of /f/.
+/A/ is the anti-Gauss rule: the rule with /Points/ + 1 nodes whose error on every polynomial of degree up to 2/Points/ + 1
+is exactly that of /G/ with the opposite sign, so the average is exact for polynomials of degree 2/Points/ + 1.
+Its nodes interlace the Gauss nodes and its weights are positive; it is computed the first time it is needed, then cached.
+
+If `error` is not null, `*error` is set to |/A/(/f/) - /G/(/f/)|/2, but never less than 2[epsilon] times the L1 norm.
+When /G/ and /A/ bracket the integral, as they do for smooth /f/ once the error falls steadily with /Points/, this bounds the error of the average;
+it is then also within a few percent of the error of /G/.
+Otherwise it is a heuristic, and integrands that alias onto the null space of /A/ - /G/ can fool it.
+If `pL1` is not null, `*pL1` is set to the L1 norm of the averaged rule, measured with `norm` in the second overload.
 
 [heading Example]
 
@@ -78,19 +104,20 @@ so, for example, E\[cos /X/\] = exp(-[sigma][super 2]/2) cos [mu] is computed by
    double mu = 0.5;
    double sigma = 2;
    auto g = [&](double x) { return std::cos(mu + root_two<double>() * sigma * x); };
-   double expectation = gauss_hermite<double, 30>::integrate(g) / root_pi<double>();
+   double error;
+   double expectation = gauss_hermite<double, 30>::integrate_averaged(g, &error) / root_pi<double>();
+
+and `error / root_pi<double>()`, about 3e-16, estimates its error.
 
 [heading Choosing the number of points]
 
 `gauss_hermite` has pre-computed tables of abscissas and weights for 7, 10 and 15 points, at up to 110 decimal digits of precision.
 For other numbers of points, or higher precision types, the abscissas and weights are computed the first time they are needed and then cached.
-Each zero is isolated by bisection with a Sturm sequence, then refined with Halley's method, all evaluated
-with the three-term recurrence for orthonormal Hermite polynomials.
-In double precision the computed abscissas are within a few ulps of the correctly rounded values and the weights within about one hundred,
-for up to at least 200 points.
-
-In double precision the recurrence overflows for more than 706 points (the outer weights underflow long before that).
-`integrate` then raises an __evaluation_error through the /Policy/; if the policy does not throw, the result is a NaN.
+They are found in O(/Points/) operations by following the differential equation of the Hermite functions
+from zero to zero in twice the working precision (Glaser, Liu and Rokhlin), so there is no limit from the overflow of the polynomials,
+though the outer weights underflow; in double precision the abscissas are within an ulp and the weights within a few.
+If the rule cannot be computed, `integrate` and `integrate_averaged` raise an __evaluation_error through the /Policy/;
+if the policy does not throw, the result is a NaN.
 
 As with `gauss`, defining `BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND` turns any combination of type and number of points without
 pre-computed values into a compile-time error.
@@ -100,6 +127,8 @@ and is easily modified for other numbers of points.
 [heading References]
 
 * G. H. Golub and J. H. Welsch, ['Calculation of Gauss quadrature rules], Mathematics of Computation 23 (1969), 221-230.
+* A. Glaser, X. Liu and V. Rokhlin, ['A fast algorithm for the calculation of the roots of special functions], SIAM Journal on Scientific Computing 29 (2007), no. 4, 1420-1438, [@https://doi.org/10.1137/06067016X doi:10.1137/06067016X].
 * W. Gautschi, ['Orthogonal Polynomials: Computation and Approximation], Oxford University Press, 2004.
+* D. P. Laurie, ['Anti-Gaussian quadrature formulas], Mathematics of Computation 65 (1996), no. 214, 739-747, [@https://doi.org/10.1090/S0025-5718-96-00713-2 doi:10.1090/S0025-5718-96-00713-2].
 
 [endsect] [/section:gauss_hermite Gauss-Hermite quadrature]
