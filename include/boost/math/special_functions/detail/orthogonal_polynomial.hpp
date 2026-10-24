@@ -892,16 +892,6 @@ private:
    }
 };
 
-// The zeros of p_n; NaNs, after an evaluation error raised through the policy, where the recurrence overflows.
-template <class T, class Family, class Policy>
-std::vector<T> polynomial_zeros(unsigned n, const Family& family, const char* function, const Policy& pol)
-{
-   std::vector<T> roots = orthogonal_polynomial<T, Family>(n, family).abscissa();
-   if (!(BOOST_MATH_NAMESPACE::isfinite)(roots[0]))
-      policies::raise_evaluation_error(function, "The zeros are not finite, probably because n is too large.", n, pol);
-   return roots;
-}
-
 } // namespace detail
 BOOST_MATH_NAMESPACE_END
 

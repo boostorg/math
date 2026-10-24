@@ -13,6 +13,7 @@
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/gauss_jacobi.hpp>
+#include <boost/math/special_functions/jacobi.hpp>
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
@@ -198,6 +199,27 @@ void test_error_estimate(unsigned N)
 
 // No higher precision because it takes a long time because it has to
 // compute the nodes/weights on the fly!
+// The root finder's derivative of P_n from P_n and P_{n-1}, against jacobi_derivative.
+void test_family_derivative()
+{
+    for (unsigned n : {1u, 2u, 7u, 30u}) {
+        for (double alpha : {-0.5, 0.0, 0.5, 2.0}) {
+            for (double beta : {-0.5, 0.0, 1.0}) {
+                const boost::math::detail::jacobi_family<double> family(n, alpha, beta);
+                for (double x : {-0.9, -0.3, 0.0, 0.4, 0.95}) {
+                    const double p = boost::math::jacobi(n, alpha, beta, x);
+                    const double p_previous = boost::math::jacobi(n - 1, alpha, beta, x);
+                    // The two terms of the identity cancel, so the tolerance scales with their size, not the result's.
+                    const double terms = (std::abs(n * (alpha - beta - (2 * n + alpha + beta) * x) * p) +
+                                          std::abs(2 * (n + alpha) * (n + beta) * p_previous)) / ((2 * n + alpha + beta) * (1 - x * x));
+                    CHECK_ABSOLUTE_ERROR(boost::math::jacobi_derivative(n, alpha, beta, x, 1), family.derivative(x, p, p_previous),
+                                         64 * std::numeric_limits<double>::epsilon() * (1 + terms));
+                }
+            }
+        }
+    }
+}
+
 void test_parameter_domain()
 {
    using ignore_policy = boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error> >;
@@ -258,6 +280,7 @@ int main()
 #endif
    test_anti_gauss_internality<double>();
    test_parameter_domain();
+   test_family_derivative();
    for (unsigned n : { 2u, 3u, 5u, 8u, 12u, 20u })
    {
       test_error_estimate<double>(n);
