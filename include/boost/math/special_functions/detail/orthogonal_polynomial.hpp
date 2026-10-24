@@ -144,6 +144,7 @@ private:
    // The weight at a zero z of F, where u and u' are known.
    Real weight(const word& z) const
    {
+      BOOST_MATH_STD_USING
       const Real F_prime = A.hi * u[0].u.hi + factor(z).hi * u[0].u_prime.hi + C2.hi * u[1].u_prime.hi;
       // The anti-Gauss weights share the sign of a constant factor.
       return anti ? family.weight_function(z) * family.sturm_liouville(z) / abs(u[0].u.hi * F_prime)
@@ -284,7 +285,9 @@ private:
          // cancel, as for the anti-Gauss rule; Newton's method finishes.
          for (int iteration = 0, close = 0; (iteration < 100) && (close < (anti ? 1 : 2)); ++iteration)
          {
-            if (!evaluate_series(v, anti))
+            // Just past a zero, where v starts, the terms of F cancel, and the steps need it to a few digits whatever the
+            // precision: in float they would jump past the next zero. Use double words where those digits are lost.
+            if (!evaluate_series(v, anti) || (!anti && (iteration == 0) && !(magnitude * eps <= abs(F[0].hi) / 65536) && !evaluate_series(v, true)))
                return !zeros.empty();
             if (F[0].hi == 0)
                break;

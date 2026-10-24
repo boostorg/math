@@ -111,8 +111,11 @@ void test_family_derivative()
                 for (double x : {-0.9, -0.3, 0.0, 0.4, 0.95}) {
                     const double p = boost::math::jacobi(n, alpha, beta, x);
                     const double p_previous = boost::math::jacobi(n - 1, alpha, beta, x);
+                    // The two terms of the identity cancel, so the tolerance scales with their size, not the result's.
+                    const double terms = (std::abs(n * (alpha - beta - (2 * n + alpha + beta) * x) * p) +
+                                          std::abs(2 * (n + alpha) * (n + beta) * p_previous)) / ((2 * n + alpha + beta) * (1 - x * x));
                     CHECK_ABSOLUTE_ERROR(jacobi_derivative(n, alpha, beta, x, 1), family.derivative(x, p, p_previous),
-                                         64 * std::numeric_limits<double>::epsilon() * (1 + std::abs(jacobi_derivative(n, alpha, beta, x, 1))));
+                                         64 * std::numeric_limits<double>::epsilon() * (1 + terms));
                 }
             }
         }
