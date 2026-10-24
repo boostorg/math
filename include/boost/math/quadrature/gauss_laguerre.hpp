@@ -508,6 +508,17 @@ public:
       return weight_vals;
    }
 
+   // Laurie's anti-Gauss rule with N + 1 points.
+   const std::vector<Real>& anti_gauss_abscissa() const
+   {
+      return anti_abscissa_vals;
+   }
+
+   const std::vector<Real>& anti_gauss_weights() const
+   {
+      return anti_weight_vals;
+   }
+
    // Integrates f(x) x^alpha exp(-x) over [0, infinity).
    template <class F>
    auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr) const->decltype(std::declval<F>()(std::declval<Real>()))

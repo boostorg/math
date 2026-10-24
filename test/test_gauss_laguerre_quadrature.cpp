@@ -249,6 +249,20 @@ void test_alpha(Real alpha, Real moment_tol)
    CHECK_LE(2 * std::numeric_limits<Real>::epsilon() * L1, error);
 }
 
+template <unsigned N>
+void test_anti_gauss_accessors(double alpha)
+{
+   using family = boost::math::detail::laguerre_family<double>;
+   const gauss_laguerre<double, N> rule(alpha);
+   const boost::math::detail::orthogonal_polynomial<double, family> anti(N + 1, family(N + 1, alpha), true);
+   CHECK_EQUAL(rule.anti_gauss_abscissa().size(), static_cast<std::size_t>(N + 1));
+   for (unsigned i = 0; i <= N; ++i)
+   {
+      CHECK_EQUAL(anti.abscissa()[i], rule.anti_gauss_abscissa()[i]);
+      CHECK_EQUAL(anti.weights()[i], rule.anti_gauss_weights()[i]);
+   }
+}
+
 void test_alpha_domain()
 {
    using ignore_policy = boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error> >;
@@ -350,6 +364,8 @@ int main()
    test_alpha<long double, 12>(-0.5L, 4);
 #endif
    test_alpha_domain();
+   test_anti_gauss_accessors<7>(0);
+   test_anti_gauss_accessors<10>(0.5);
 
    return boost::math::test::report_errors();
 }

@@ -52,6 +52,14 @@ class gauss_jacobi_detail
 public:
    gauss_jacobi_detail(unsigned N_, Real alpha_, Real beta_) : N(N_), alpha(alpha_), beta(beta_)
    {
+      // gauss_jacobi raises the domain error.
+      if (!in_domain())
+      {
+         abscissa_vals.assign(N, std::numeric_limits<Real>::quiet_NaN());
+         weight_vals.assign(N, std::numeric_limits<Real>::quiet_NaN());
+         anti_gauss_internal = false;
+         return;
+      }
       BOOST_MATH_NAMESPACE::detail::jacobi_family<Real> family(N, alpha, beta);
       polynomial value(N, family);
       abscissa_vals = value.abscissa();
@@ -94,6 +102,12 @@ public:
    {
       return anti_weight_vals;
    }
+
+protected:
+   bool in_domain() const
+   {
+      return alpha > -1 && beta > -1 && (BOOST_MATH_NAMESPACE::isfinite)(alpha) && (BOOST_MATH_NAMESPACE::isfinite)(beta);
+   }
 };
 
 } // namespace detail
@@ -120,7 +134,19 @@ class gauss_jacobi : public detail::gauss_jacobi_detail<Real, detail::quadrature
    }
 
 public:
-   gauss_jacobi(unsigned N_, Real alpha_, Real beta_) : detail::gauss_jacobi_detail<Real, detail::quadrature_constant_category<Real>::value>(N_, alpha_, beta_) {}
+   gauss_jacobi(unsigned N_, Real alpha_, Real beta_) : detail::gauss_jacobi_detail<Real, detail::quadrature_constant_category<Real>::value>(N_, alpha_, beta_)
+   {
+      if (!(alpha_ > -1) || !(BOOST_MATH_NAMESPACE::isfinite)(alpha_))
+      {
+         policies::raise_domain_error("boost::math::quadrature::gauss_jacobi<%1%>::gauss_jacobi",
+            "The parameter alpha must be finite and > -1, but got %1%.", alpha_, Policy());
+      }
+      if (!(beta_ > -1) || !(BOOST_MATH_NAMESPACE::isfinite)(beta_))
+      {
+         policies::raise_domain_error("boost::math::quadrature::gauss_jacobi<%1%>::gauss_jacobi",
+            "The parameter beta must be finite and > -1, but got %1%.", beta_, Policy());
+      }
+   }
 
    // Integrates f(x) (1 - x)^alpha * (1 + x)^beta over [-1, 1].
    template <class F>
@@ -133,9 +159,11 @@ public:
                     "The return type cannot be integral, it must be either a real or complex floating point type.");
       using std::abs;
       error = estimable(error);
-      Real nan;
-      if (detail::overflowed(this->abscissa(), "boost::math::quadrature::gauss_jacobi<%1%>::integrate", pL1, &nan, Policy()))
+      Real nan = std::numeric_limits<Real>::quiet_NaN();
+      if (!this->in_domain() || detail::overflowed(this->abscissa(), "boost::math::quadrature::gauss_jacobi<%1%>::integrate", pL1, &nan, Policy()))
       {
+         if (pL1)
+            *pL1 = nan;
          if (error)
             *error = nan;
          return static_cast<K>(nan);
@@ -163,9 +191,11 @@ public:
       using K = decltype(f(Real(0)));
       static_assert(!std::is_integral<K>::value, "The return type cannot be integral.");
       error = estimable(error);
-      Real nan;
-      if (detail::overflowed(this->abscissa(), "boost::math::quadrature::gauss_jacobi<%1%>::integrate", pL1, &nan, Policy()))
+      Real nan = std::numeric_limits<Real>::quiet_NaN();
+      if (!this->in_domain() || detail::overflowed(this->abscissa(), "boost::math::quadrature::gauss_jacobi<%1%>::integrate", pL1, &nan, Policy()))
       {
+         if (pL1)
+            *pL1 = nan;
          if (error)
             *error = nan;
          K result = zero * nan;

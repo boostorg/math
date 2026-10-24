@@ -226,6 +226,22 @@ void test_error_estimate(unsigned N)
 
 // No higher precision because it takes a long time because it has to
 // compute the nodes/weights on the fly!
+void test_parameter_domain()
+{
+   using ignore_policy = boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error> >;
+   for (double bad : { -1.0, -2.0, std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity() })
+   {
+      double error = 0;
+      CHECK_NAN((gauss_jacobi<double, ignore_policy>(5, bad, 0).integrate([](double x) { return x; }, &error, nullptr)));
+      CHECK_NAN(error);
+      CHECK_NAN((gauss_jacobi<double, ignore_policy>(5, 0, bad).integrate([](double x) { return x; })));
+#ifndef BOOST_NO_EXCEPTIONS
+      CHECK_THROW((gauss_jacobi<double>(5, bad, 0)), std::domain_error);
+      CHECK_THROW((gauss_jacobi<double>(5, 0, bad)), std::domain_error);
+#endif
+   }
+}
+
 int main()
 {
    test_moments<float, 6>(8 * std::numeric_limits<float>::epsilon(), "float");
@@ -256,6 +272,7 @@ int main()
    test_anti_gauss<long double>(9, 0.25, -0.25);
 #endif
    test_anti_gauss_internality<double>();
+   test_parameter_domain();
    for (unsigned n : { 2u, 3u, 5u, 8u, 12u, 20u })
    {
       test_error_estimate<double>(n);
