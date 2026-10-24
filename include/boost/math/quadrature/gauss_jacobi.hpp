@@ -67,7 +67,7 @@ public:
       // Laurie 1996, Theorem 3: the anti-Gauss rule has a node outside [-1, 1] when alpha or beta is below -1/2
       // and N is large, and for some N when it is near -1/2. At -1/2 it can have nodes on -1 and 1.
       anti_gauss_internal = polynomial::anti_gauss_is_internal(N + 1, family, Real(1)) && polynomial::anti_gauss_is_internal(N + 1, family, Real(-1));
-      // Laurie's anti-Gauss rule with N + 1 points, for the error estimate.
+      // Laurie's anti-Gauss rule with N + 1 points, for integrate_averaged.
       if (anti_gauss_internal)
       {
          polynomial anti(N + 1, BOOST_MATH_NAMESPACE::detail::jacobi_family<Real>(N + 1, alpha, beta, true), true);
@@ -115,22 +115,19 @@ protected:
 template <class Real, class Policy = BOOST_MATH_NAMESPACE::policies::policy<> >
 class gauss_jacobi : public detail::gauss_jacobi_detail<Real, detail::quadrature_constant_category<Real>::value>
 {
-   // When the anti-Gauss rule has a node outside [-1, 1], the error estimate is NaN rather than evaluate f there;
-   // the integral itself is unaffected.
-   Real* estimable(Real* error) const
-   {
-      if (error && !this->anti_gauss_is_internal())
-      {
-         *error = std::numeric_limits<Real>::quiet_NaN();
-         return nullptr;
-      }
-      return error;
-   }
-
    template <class F, class K, class Norm>
-   Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm) const
+   K anti_gauss_average(F& f, K zero, const K& result, Real& L1, Norm norm, Real* error) const
    {
-      return detail::anti_gauss_error(f, this->anti_gauss_abscissa(), this->anti_gauss_weights(), false, anti_result, result, L1, norm, "boost::math::quadrature::gauss_jacobi<%1%>::integrate", Policy());
+      if (this->in_domain() && !this->anti_gauss_is_internal())
+      {
+         L1 = policies::raise_evaluation_error("boost::math::quadrature::gauss_jacobi<%1%>::integrate_averaged",
+            "The anti-Gauss rule has a node outside [-1, 1] for these alpha and beta, so there is no averaged rule.",
+            std::numeric_limits<Real>::quiet_NaN(), Policy());
+         if (error)
+            *error = L1;
+         return zero * L1;
+      }
+      return detail::anti_gauss_average(f, this->anti_gauss_abscissa(), this->anti_gauss_weights(), false, zero, result, L1, norm, error, "boost::math::quadrature::gauss_jacobi<%1%>::integrate_averaged", Policy());
    }
 
 public:
@@ -150,7 +147,7 @@ public:
 
    // Integrates f(x) (1 - x)^alpha * (1 + x)^beta over [-1, 1].
    template <class F>
-   auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr) const->decltype(std::declval<F>()(std::declval<Real>()))
+   auto integrate(F f, Real* pL1 = nullptr) const->decltype(std::declval<F>()(std::declval<Real>()))
    {
       // In many math texts, K represents the field of real or complex numbers.
       // Too bad we can't put blackboard bold into C++ source!
@@ -158,14 +155,11 @@ public:
       static_assert(!std::is_integral<K>::value,
                     "The return type cannot be integral, it must be either a real or complex floating point type.");
       using std::abs;
-      error = estimable(error);
       Real nan = std::numeric_limits<Real>::quiet_NaN();
       if (!this->in_domain() || detail::overflowed(this->abscissa(), "boost::math::quadrature::gauss_jacobi<%1%>::integrate", pL1, &nan, Policy()))
       {
          if (pL1)
             *pL1 = nan;
-         if (error)
-            *error = nan;
          return static_cast<K>(nan);
       }
       K result = Real(0);
@@ -178,26 +172,21 @@ public:
       }
       if (pL1)
          *pL1 = L1;
-      if (error)
-         *error = anti_gauss_error(f, K(Real(0)), result, L1, [](const K& z) { using std::abs; return abs(z); });
       return result;
    }
 
    // Explicit zero and norm for vector- and matrix-valued integrands.
    template <class F, class Norm>
-   auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr) const
+   auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* pL1 = nullptr) const
       ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
    {
       using K = decltype(f(Real(0)));
       static_assert(!std::is_integral<K>::value, "The return type cannot be integral.");
-      error = estimable(error);
       Real nan = std::numeric_limits<Real>::quiet_NaN();
       if (!this->in_domain() || detail::overflowed(this->abscissa(), "boost::math::quadrature::gauss_jacobi<%1%>::integrate", pL1, &nan, Policy()))
       {
          if (pL1)
             *pL1 = nan;
-         if (error)
-            *error = nan;
          K result = zero * nan;
          return result;
       }
@@ -211,8 +200,31 @@ public:
       }
       if (pL1)
          *pL1 = L1;
-      if (error)
-         *error = anti_gauss_error(f, zero, result, L1, norm);
+      return result;
+   }
+   // Laurie's averaged rule (G + A) / 2: N + 1 more evaluations of f than integrate, exact for polynomials of degree
+   // 2N + 1. The error is half the difference of G and A, a bound on the error when they bracket the integral.
+   template <class F>
+   auto integrate_averaged(F f, Real* error = nullptr, Real* pL1 = nullptr) const->decltype(std::declval<F>()(std::declval<Real>()))
+   {
+      using K = decltype(f(Real(0)));
+      Real L1;
+      K result = integrate(f, &L1);
+      result = anti_gauss_average(f, K(Real(0)), result, L1, [](const K& z) { using std::abs; return abs(z); }, error);
+      if (pL1)
+         *pL1 = L1;
+      return result;
+   }
+
+   template <class F, class Norm>
+   auto integrate_averaged(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr) const
+      ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
+   {
+      Real L1;
+      auto result = integrate(f, zero, norm, &L1);
+      result = anti_gauss_average(f, zero, result, L1, norm, error);
+      if (pL1)
+         *pL1 = L1;
       return result;
    }
 };

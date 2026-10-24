@@ -21,11 +21,17 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
       static const RandomAccessContainer& weights();
 
       template <class F>
-      static auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
+      static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
 
       template <class F, class Norm>
-      static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm,
-                            Real* error = nullptr, Real* pL1 = nullptr) -> decltype(f(Real(0)));
+      static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm, Real* pL1 = nullptr) -> decltype(f(Real(0)));
+
+      template <class F>
+      static auto integrate_averaged(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
+
+      template <class F, class Norm>
+      static auto integrate_averaged(F f, const decltype(f(Real(0)))& zero, Norm norm,
+                                     Real* error = nullptr, Real* pL1 = nullptr) -> decltype(f(Real(0)));
    };
 
    }}} // namespaces
@@ -43,7 +49,7 @@ Note that the weight function exp(-/x/[super 2]) is not part of /f/: pass only t
 Like [link math_toolkit.gauss `gauss`], this is a "one shot" non-adaptive routine,
 intended for smooth /f/ that grow no faster than a polynomial,
 such as expectations of smooth functions of a normally distributed variable.
-It can optionally estimate its error, at the cost of /Points/ + 1 more evaluations of /f/.
+For /Points/ + 1 more evaluations of /f/, `integrate_averaged` is exact to higher degree and estimates its error.
 
    static const RandomAccessContainer& abscissa();
    static const RandomAccessContainer& weights();
@@ -52,33 +58,40 @@ These provide direct access to the abscissas and weights. Only the nonnegative a
 the rule is symmetric about zero.
 
    template <class F>
-   static auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
+   static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
 
-Integrates /f/(/x/) exp(-/x/[super 2]) over the real line. /f/ may return a real or complex value.
+Integrates /f/(/x/) exp(-/x/[super 2]) over the real line with the /Points/-point Gauss rule /G/. /f/ may return a real or complex value.
 
 If `pL1` is not null, `*pL1` is set to the corresponding integral of |/f/|.
 If that is substantially larger than the absolute value of the result, then the sum was ill-conditioned.
 
-If `error` is not null, `*error` is set to an estimate of the absolute error, at the cost of /Points/ + 1 more evaluations of /f/.
-This is |/A/(/f/) - /G/(/f/)|/2, where /G/ is the /Points/-point Gauss rule and /A/ is Laurie's anti-Gauss rule:
-the rule with /Points/ + 1 nodes whose error on every polynomial of degree up to 2/Points/ + 1 is exactly that of /G/ with the opposite sign.
-Its nodes interlace the Gauss nodes and its weights are positive.
-It is the Gauss rule of the same recurrence with its last coefficient doubled, so it is computed (the first time it is needed, then cached)
-by the same method as the Gauss rule.
-For smooth /f/ the estimate is typically within a few percent of the true error, until that error reaches rounding;
-it is not a bound, and integrands that alias onto the null space of /A/ - /G/ can fool it.
-It is never smaller than 2[epsilon] times the L1 norm.
-The value returned is still that of the Gauss rule. The average (/G/ + /A/)/2 is exact for polynomials of degree 2/Points/ + 1,
-and is usually more accurate, but its error has no estimate.
-The estimate uses /Points/ + 1 points, so it overflows for one fewer point than the integral does.
-
    template <class F, class Norm>
-   static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm,
-                         Real* error = nullptr, Real* pL1 = nullptr) -> decltype(f(Real(0)));
+   static auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm, Real* pL1 = nullptr) -> decltype(f(Real(0)));
 
 As for [link math_toolkit.gauss `gauss`], this overload handles vector- and matrix-valued integrands:
 `zero` is the additive identity of the returned type, and `norm` returns a nonnegative scalar convertible to `Real`.
-The L1 norm and the error estimate are measured with `norm`.
+The L1 norm is measured with `norm`.
+
+   template <class F>
+   static auto integrate_averaged(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()));
+
+   template <class F, class Norm>
+   static auto integrate_averaged(F f, const decltype(f(Real(0)))& zero, Norm norm,
+                                  Real* error = nullptr, Real* pL1 = nullptr) -> decltype(f(Real(0)));
+
+Returns Laurie's averaged rule (/G/(/f/) + /A/(/f/))/2, at the cost of /Points/ + 1 more evaluations of /f/.
+/A/ is the anti-Gauss rule: the rule with /Points/ + 1 nodes whose error on every polynomial of degree up to 2/Points/ + 1
+is exactly that of /G/ with the opposite sign, so the average is exact for polynomials of degree 2/Points/ + 1.
+Its nodes interlace the Gauss nodes and its weights are positive.
+It is the Gauss rule of the same recurrence with its last coefficient doubled, so it is computed (the first time it is needed, then cached)
+by the same method as the Gauss rule.
+
+If `error` is not null, `*error` is set to |/A/(/f/) - /G/(/f/)|/2, but never less than 2[epsilon] times the L1 norm.
+When /G/ and /A/ bracket the integral, as they do for smooth /f/ once the error falls steadily with /Points/, this bounds the error of the average;
+it is then also within a few percent of the error of /G/.
+Otherwise it is a heuristic, and integrands that alias onto the null space of /A/ - /G/ can fool it.
+If `pL1` is not null, `*pL1` is set to the L1 norm of the averaged rule, measured with `norm` in the second overload.
+The averaged rule uses /Points/ + 1 points, so it overflows for one fewer point than `integrate` does.
 
 [heading Example]
 
@@ -95,7 +108,7 @@ so, for example, E\[cos /X/\] = exp(-[sigma][super 2]/2) cos [mu] is computed by
    double sigma = 2;
    auto g = [&](double x) { return std::cos(mu + root_two<double>() * sigma * x); };
    double error;
-   double expectation = gauss_hermite<double, 30>::integrate(g, &error) / root_pi<double>();
+   double expectation = gauss_hermite<double, 30>::integrate_averaged(g, &error) / root_pi<double>();
 
 and `error / root_pi<double>()`, about 3e-16, estimates its error.
 
@@ -109,7 +122,7 @@ In double precision the computed abscissas are within a few ulps of the correctl
 for up to at least 200 points.
 
 In double precision the recurrence overflows for more than 706 points (the outer weights underflow long before that).
-`integrate` then raises an __evaluation_error through the /Policy/; if the policy does not throw, the result is a NaN.
+`integrate` and `integrate_averaged` then raise an __evaluation_error through the /Policy/; if the policy does not throw, the result is a NaN.
 
 As with `gauss`, defining `BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND` turns any combination of type and number of points without
 pre-computed values into a compile-time error.

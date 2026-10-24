@@ -34,7 +34,7 @@ void test_moments(Real tol, const char* type_name)
    auto f = [](const Real& x) { return pow(x, Real(10.0)); };
    Real L1;
    gauss_jacobi<Real> integrator = gauss_jacobi<Real>(N, -Real(0.5), -Real(0.25));
-   Real Q = integrator.integrate(f, nullptr, &L1);
+   Real Q = integrator.integrate(f, &L1);
 
    CHECK_ABSOLUTE_ERROR(Q, Real(0.604206393406616872500520394161000920557127865245), tol);
    // The integrand is nonnegative, so the L1 norm is the integral itself.
@@ -65,19 +65,21 @@ void test_vector_valued()
    auto f = [](double x) { return vector{1.0, x * x, std::cos(x)}; };
    double L1;
    gauss_jacobi<double> integrator = gauss_jacobi<double>(N, 1.0, 1.0);
-   vector Q = integrator.integrate(f, zero, norm, nullptr, &L1);
+   vector Q = integrator.integrate(f, zero, norm, &L1);
    CHECK_ULP_CLOSE(4.0 / 3.0, Q[0], 10);
    CHECK_ULP_CLOSE(4.0 / 15.0, Q[1], 20);
    CHECK_ULP_CLOSE(4.0 * sin(1.0) - 4.0 * cos(1.0), Q[2], 16);
    CHECK_LE(norm(Q), L1);
-   // The estimate is the norm of the difference from the anti-Gauss rule, at least that of any component.
-   double error, L1_error, cos_error;
-   const vector Q_error = integrator.integrate(f, zero, norm, &error, &L1_error);
-   CHECK_ULP_CLOSE(Q_error[2], Q[2], 2);
-   CHECK_ULP_CLOSE(L1_error, L1, 2);
-   integrator.integrate([](double x) { return std::cos(x); }, &cos_error, nullptr);
+   // The error is the norm of half the difference from the anti-Gauss rule, at least that of any component.
+   double error, L1_averaged, cos_error;
+   const vector Q_averaged = integrator.integrate_averaged(f, zero, norm, &error, &L1_averaged);
+   CHECK_ULP_CLOSE(4.0 / 3.0, Q_averaged[0], 10);
+   CHECK_ULP_CLOSE(4.0 / 15.0, Q_averaged[1], 20);
+   CHECK_ABSOLUTE_ERROR(4.0 * sin(1.0) - 4.0 * cos(1.0), Q_averaged[2], error);
+   CHECK_LE(norm(Q_averaged), L1_averaged);
+   integrator.integrate_averaged([](double x) { return std::cos(x); }, &cos_error);
    CHECK_LE(cos_error, error);
-   CHECK_LE(2 * std::numeric_limits<double>::epsilon() * L1, error);
+   CHECK_LE(2 * std::numeric_limits<double>::epsilon() * L1_averaged, error);
 }
 
 // The anti-Gauss rule is the Gauss rule of 2I - G_N, so on polynomials of degree 2N + 1 its error is that of G_N
@@ -118,7 +120,7 @@ void test_anti_gauss(unsigned N, Real alpha, Real beta)
    }
    auto p = [&c](const Real& t) { Real r = 0; for (std::size_t k = c.size(); k-- > 0;) r = r * (1 + t) + c[k]; return r; };
    Real L1;
-   const Real gauss = rule.integrate(p, nullptr, &L1);
+   const Real gauss = rule.integrate(p, &L1);
    Real anti_result = 0;
    for (std::size_t i = 0; i < x.size(); ++i)
    {
@@ -126,6 +128,10 @@ void test_anti_gauss(unsigned N, Real alpha, Real beta)
       L1 += w[i] * abs(p(x[i]));
    }
    CHECK_ABSOLUTE_ERROR(Real(0), (exact - gauss) + (exact - anti_result), (N + 8) * std::numeric_limits<Real>::epsilon() * L1);
+   // So the averaged rule is exact on p, and integrate_averaged is (G + A) / 2.
+   const Real averaged = rule.integrate_averaged(p);
+   CHECK_ABSOLUTE_ERROR(exact, averaged, (N + 8) * std::numeric_limits<Real>::epsilon() * L1);
+   CHECK_ABSOLUTE_ERROR((gauss + anti_result) / 2, averaged, 4 * std::numeric_limits<Real>::epsilon() * L1);
 }
 
 // Laurie 1996, Theorem 3: the anti-Gauss rule is internal iff both of these are nonnegative. Zero puts a node on an
@@ -169,25 +175,26 @@ void test_anti_gauss_internality()
    for (unsigned N : { 4u, 6u, 10u, 40u })
    {
       const gauss_jacobi<Real> chebyshev(N, Real(-0.5), Real(-0.5));
+      auto f = [](const Real& x) { using std::cos; return cos(x); };
+      const Real exact = boost::math::constants::pi<Real>() * boost::math::cyl_bessel_j(0, Real(1));
       Real error, L1;
-      const Real Q = chebyshev.integrate([](const Real& x) { using std::cos; return cos(x); }, &error, &L1);
-      const Real true_error = abs(Q - boost::math::constants::pi<Real>() * boost::math::cyl_bessel_j(0, Real(1)));
-      if (true_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
+      const Real Q = chebyshev.integrate_averaged(f, &error, &L1);
+      const Real gauss_error = abs(chebyshev.integrate(f) - exact);
+      CHECK_LE(abs(Q - exact), error);
+      if (gauss_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
       {
-         CHECK_LE(error, 2 * true_error);
-         CHECK_LE(true_error, 2 * error);
+         CHECK_LE(error, 2 * gauss_error);
+         CHECK_LE(gauss_error, 2 * error);
       }
    }
-   // With a node outside [-1, 1] the estimate is NaN, but the integral is still there, and nothing is raised.
+   // With a node outside [-1, 1] there is no averaged rule, but integrate is unaffected and raises nothing.
+   // The integral of (1 - x)^(-3/4) is 4 2^(1/4).
    const gauss_jacobi<Real> outside(10, Real(-0.75), Real(0));
-   auto f = [](const Real& x) { return x * x; };
-   Real error = 0;
-   const Real Q = outside.integrate(f, &error, nullptr);
-   CHECK_NAN(error);
-   CHECK_ULP_CLOSE(outside.integrate(f), Q, 0);
+   CHECK_ULP_CLOSE(4 * pow(Real(2), Real(0.25)), outside.integrate([](const Real&) { return Real(1); }), 16);
 }
 
-// For smooth f the estimate is close to the true error until that reaches rounding.
+// For smooth f, G and A bracket the integral, so the error bounds that of the average and is close to that of G
+// until it reaches rounding.
 template <class Real>
 void test_error_estimate(unsigned N)
 {
@@ -210,15 +217,17 @@ void test_error_estimate(unsigned N)
    for (const example& e : examples)
    {
       gauss_jacobi<Real> rule(N, e.alpha, e.beta);
-      Real error, L1, L1_alone;
-      const Real Q = rule.integrate(e.f, &error, &L1);
-      CHECK_ULP_CLOSE(Q, rule.integrate(e.f, nullptr, &L1_alone), 2);
-      CHECK_ULP_CLOSE(L1, L1_alone, 2);
-      const Real true_error = abs(Q - e.expected);
-      if (true_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
+      Real error, L1;
+      const Real Q = rule.integrate_averaged(e.f, &error, &L1);
+      const Real gauss_error = abs(rule.integrate(e.f) - e.expected);
+      CHECK_LE(abs(Q), L1);
+      // Once converged, rounding in the nodes and weights can exceed the 2 eps L1 floor of the error.
+      CHECK_LE(abs(Q - e.expected), error + 4 * std::numeric_limits<Real>::epsilon() * L1);
+      CHECK_LE(abs(Q - e.expected), gauss_error + 2 * std::numeric_limits<Real>::epsilon() * L1);
+      if (gauss_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
       {
-         CHECK_LE(error, 2 * true_error);
-         CHECK_LE(true_error, 2 * error);
+         CHECK_LE(error, 2 * gauss_error);
+         CHECK_LE(gauss_error, 2 * error);
       }
       CHECK_LE(2 * std::numeric_limits<Real>::epsilon() * L1, error);
    }
@@ -232,7 +241,8 @@ void test_parameter_domain()
    for (double bad : { -1.0, -2.0, std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity() })
    {
       double error = 0;
-      CHECK_NAN((gauss_jacobi<double, ignore_policy>(5, bad, 0).integrate([](double x) { return x; }, &error, nullptr)));
+      CHECK_NAN((gauss_jacobi<double, ignore_policy>(5, bad, 0).integrate([](double x) { return x; })));
+      CHECK_NAN((gauss_jacobi<double, ignore_policy>(5, bad, 0).integrate_averaged([](double x) { return x; }, &error)));
       CHECK_NAN(error);
       CHECK_NAN((gauss_jacobi<double, ignore_policy>(5, 0, bad).integrate([](double x) { return x; })));
 #ifndef BOOST_NO_EXCEPTIONS
@@ -240,6 +250,14 @@ void test_parameter_domain()
       CHECK_THROW((gauss_jacobi<double>(5, 0, bad)), std::domain_error);
 #endif
    }
+   // No averaged rule without an internal anti-Gauss rule.
+   using ignore_evaluation = boost::math::policies::policy<boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
+   const gauss_jacobi<double, ignore_evaluation> external(10, -0.9, -0.9);
+   CHECK_EQUAL(false, external.anti_gauss_is_internal());
+   CHECK_NAN(external.integrate_averaged([](double x) { return x; }));
+#ifndef BOOST_NO_EXCEPTIONS
+   CHECK_THROW((gauss_jacobi<double>(10, -0.9, -0.9).integrate_averaged([](double x) { return x; })), boost::math::evaluation_error);
+#endif
 }
 
 int main()

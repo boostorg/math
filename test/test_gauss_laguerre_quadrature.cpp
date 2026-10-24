@@ -37,7 +37,7 @@ void test_moments()
       expected = (k == 0) ? Real(1) : boost::math::factorial<Real>(k);
       auto even = [k](const Real& x) { Real r = 1; for (unsigned j = 0; j < k; ++j) r *= x; return r; };
       Real L1;
-      Real Q = gauss_laguerre<Real, N>().integrate(even, nullptr, &L1);
+      Real Q = gauss_laguerre<Real, N>().integrate(even, &L1);
       std::cout << std::setprecision(17) << expected << " " << Q << " " << L1 << std::endl;
       CHECK_ULP_CLOSE(expected, Q, 16 * (k + 1));
       // The integrand is nonnegative, so the L1 norm is the integral itself.
@@ -81,19 +81,21 @@ void test_vector_valued()
    auto norm = [](const vector& v) { return std::sqrt((v * v).sum()); };
    auto f = [](double x) { return vector{1.0, x * x, std::cos(x)}; };
    double L1;
-   vector Q = gauss_laguerre<double, N>().integrate(f, zero, norm, nullptr, &L1);
+   vector Q = gauss_laguerre<double, N>().integrate(f, zero, norm, &L1);
    CHECK_ULP_CLOSE(1.0, Q[0], 10);
    CHECK_ULP_CLOSE(2.0, Q[1], 20);
    CHECK_ULP_CLOSE(0.5, Q[2], 16);
    CHECK_LE(norm(Q), L1);
-   // The estimate is the norm of the difference from the anti-Gauss rule, at least that of any component.
-   double error, L1_error, cos_error;
-   const vector Q_error = gauss_laguerre<double, N>().integrate(f, zero, norm, &error, &L1_error);
-   CHECK_ULP_CLOSE(Q_error[2], Q[2], 2);
-   CHECK_ULP_CLOSE(L1_error, L1, 2);
-   gauss_laguerre<double, N>().integrate([](double x) { return std::cos(x); }, &cos_error, nullptr);
+   // The error is the norm of half the difference from the anti-Gauss rule, at least that of any component.
+   double error, L1_averaged, cos_error;
+   const vector Q_averaged = gauss_laguerre<double, N>().integrate_averaged(f, zero, norm, &error, &L1_averaged);
+   CHECK_ULP_CLOSE(1.0, Q_averaged[0], 10);
+   CHECK_ULP_CLOSE(2.0, Q_averaged[1], 20);
+   CHECK_ABSOLUTE_ERROR(0.5, Q_averaged[2], error);
+   CHECK_LE(norm(Q_averaged), L1_averaged);
+   gauss_laguerre<double, N>().integrate_averaged([](double x) { return std::cos(x); }, &cos_error);
    CHECK_LE(cos_error, error);
-   CHECK_LE(2 * std::numeric_limits<double>::epsilon() * L1, error);
+   CHECK_LE(2 * std::numeric_limits<double>::epsilon() * L1_averaged, error);
 }
 
 // Evaluating L_N directly overflows long before these N; the orthonormal recurrence does not.
@@ -113,7 +115,7 @@ void test_overflow()
 {
    using ignore_policy = boost::math::policies::policy<boost::math::policies::evaluation_error<boost::math::policies::ignore_error> >;
    double L1 = 0;
-   CHECK_NAN((gauss_laguerre<double, 1000, ignore_policy>().integrate([](double x) { return std::cos(x); }, nullptr, &L1)));
+   CHECK_NAN((gauss_laguerre<double, 1000, ignore_policy>().integrate([](double x) { return std::cos(x); }, &L1)));
    CHECK_NAN(L1);
    using vector = std::valarray<double>;
    vector Q = gauss_laguerre<double, 1000, ignore_policy>().integrate([](double x) { return vector{1.0, x}; }, vector(0.0, 2),
@@ -122,8 +124,9 @@ void test_overflow()
    CHECK_NAN(Q[0]);
    CHECK_NAN(Q[1]);
    double error = 0;
-   gauss_laguerre<double, 1000, ignore_policy>().integrate([](double x) { return std::cos(x); }, &error, nullptr);
+   CHECK_NAN((gauss_laguerre<double, 1000, ignore_policy>().integrate_averaged([](double x) { return std::cos(x); }, &error, &L1)));
    CHECK_NAN(error);
+   CHECK_NAN(L1);
 #ifndef BOOST_NO_EXCEPTIONS
    CHECK_THROW((gauss_laguerre<double, 1000>().integrate([](double x) { return std::cos(x); })), boost::math::evaluation_error);
 #endif
@@ -189,36 +192,36 @@ void test_anti_gauss(unsigned N, Real alpha = 0)
    CHECK_ABSOLUTE_ERROR(Real(0), (exact - gauss_result) + (exact - anti_result), (N + 8) * std::numeric_limits<Real>::epsilon() * L1);
 }
 
-// For smooth f the estimate is close to the true error until that reaches rounding.
+// For smooth f, G and A bracket the integral, so the error bounds that of the average and is close to that of G
+// until it reaches rounding.
+template <class Real, unsigned N, class F>
+void check_error_estimate(F f, const Real& exact)
+{
+   using std::abs;
+   using rule = gauss_laguerre<Real, N>;
+   Real error, L1;
+   const Real Q = rule().integrate_averaged(f, &error, &L1);
+   const Real gauss_error = abs(rule().integrate(f) - exact);
+   CHECK_LE(abs(Q), L1);
+   CHECK_LE(abs(Q - exact), error);
+   CHECK_LE(abs(Q - exact), gauss_error + 2 * std::numeric_limits<Real>::epsilon() * L1);
+   if (gauss_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
+   {
+      CHECK_LE(error, 2 * gauss_error);
+      CHECK_LE(gauss_error, 2 * error);
+   }
+   CHECK_LE(2 * std::numeric_limits<Real>::epsilon() * L1, error);
+}
+
 template <class Real, unsigned N>
 void test_error_estimate()
 {
-   using std::abs;
    using std::cos;
    using std::sqrt;
-   using rule = gauss_laguerre<Real, N>;
-   auto f = [](const Real& x) { return cos(x); };
-   Real error, L1, L1_alone;
-   const Real Q = rule().integrate(f, &error, &L1);
-   CHECK_ULP_CLOSE(Q, rule().integrate(f, nullptr, &L1_alone), 2);
-   CHECK_ULP_CLOSE(L1, L1_alone, 2);
-   CHECK_ULP_CLOSE(Q, rule().integrate(f, nullptr, nullptr), 2);
-   const Real true_error = abs(Q - Real(0.5));
-   if (true_error > 1000 * std::numeric_limits<Real>::epsilon() * L1)
-   {
-      CHECK_LE(error, 2 * true_error);
-      CHECK_LE(true_error, 2 * error);
-   }
-   CHECK_LE(2 * std::numeric_limits<Real>::epsilon() * L1, error);
+   check_error_estimate<Real, N>([](const Real& x) { return cos(x); }, Real(0.5));
    // The integral of exp(-x) / (1 + x) is the Gompertz constant; the pole at -1 makes the error fall slowly.
-   const Real Qg = rule().integrate([](const Real& x) { return 1 / (1 + x); }, &error, nullptr);
-   const Real true_error_g = abs(Qg - static_cast<Real>(0.5963473623231940743410784993692793760742L));
-   CHECK_LE(error, 2 * true_error_g);
-   CHECK_LE(true_error_g, 2 * error);
-   const Real Qh = rule().integrate([](const Real& x) { return sqrt(1 + x); }, &error, nullptr);
-   const Real true_error_h = abs(Qh - static_cast<Real>(1.378936078070656053021675619957108958174L));
-   CHECK_LE(error, 2 * true_error_h);
-   CHECK_LE(true_error_h, 2 * error);
+   check_error_estimate<Real, N>([](const Real& x) { return 1 / (1 + x); }, static_cast<Real>(0.5963473623231940743410784993692793760742L));
+   check_error_estimate<Real, N>([](const Real& x) { return sqrt(1 + x); }, static_cast<Real>(1.378936078070656053021675619957108958174L));
 }
 
 // The rule for x^alpha exp(-x) integrates x^k exactly for k <= 2N - 1, giving Gamma(k + alpha + 1), and its error
@@ -233,18 +236,20 @@ void test_alpha(Real alpha, Real moment_tol)
    for (unsigned k = 0; k < 2 * N; ++k)
    {
       Real L1;
-      const Real Q = rule.integrate([k](const Real& x) { return pow(x, Real(k)); }, nullptr, &L1);
+      const Real Q = rule.integrate([k](const Real& x) { return pow(x, Real(k)); }, &L1);
       CHECK_ULP_CLOSE(boost::math::tgamma(k + alpha + 1), Q, static_cast<int>(moment_tol * (k + 1)));
    }
    Real error, L1;
-   const Real Q = rule.integrate([](const Real& x) { return cos(x); }, &error, &L1);
+   const Real Q = rule.integrate_averaged([](const Real& x) { return cos(x); }, &error, &L1);
    const Real expected = boost::math::tgamma(alpha + 1) * cos((alpha + 1) * boost::math::constants::pi<Real>() / 4) / pow(Real(2), (alpha + 1) / 2);
-   const Real true_error = abs(Q - expected);
-   // For fewer points the estimate is preasymptotic: 8 times the error for N = 2 and alpha = 2.5.
-   if ((N >= 12) && (true_error > 1000 * std::numeric_limits<Real>::epsilon() * L1))
+   const Real gauss_error = abs(rule.integrate([](const Real& x) { return cos(x); }) - expected);
+   // For fewer points the estimate is preasymptotic: 8 times the error for N = 2 and alpha = 2.5, and G and A
+   // need not bracket the integral.
+   if ((N >= 12) && (gauss_error > 1000 * std::numeric_limits<Real>::epsilon() * L1))
    {
-      CHECK_LE(error, 2 * true_error);
-      CHECK_LE(true_error, 2 * error);
+      CHECK_LE(abs(Q - expected), error);
+      CHECK_LE(error, 2 * gauss_error);
+      CHECK_LE(gauss_error, 2 * error);
    }
    CHECK_LE(2 * std::numeric_limits<Real>::epsilon() * L1, error);
 }
@@ -261,6 +266,9 @@ void test_anti_gauss_accessors(double alpha)
       CHECK_EQUAL(anti.abscissa()[i], rule.anti_gauss_abscissa()[i]);
       CHECK_EQUAL(anti.weights()[i], rule.anti_gauss_weights()[i]);
    }
+   // The averaged rule is exact on x^(2N + 1), whose integral is Gamma(2N + 2 + alpha).
+   auto f = [](double x) { return std::pow(x, 2 * N + 1); };
+   CHECK_ULP_CLOSE(boost::math::tgamma(2 * N + 2 + alpha), rule.integrate_averaged(f), 64);
 }
 
 void test_alpha_domain()
@@ -269,7 +277,8 @@ void test_alpha_domain()
    for (double alpha : { -1.0, -2.0, std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity() })
    {
       double error = 0;
-      CHECK_NAN((gauss_laguerre<double, 5, ignore_policy>(alpha).integrate([](double x) { return x; }, &error, nullptr)));
+      CHECK_NAN((gauss_laguerre<double, 5, ignore_policy>(alpha).integrate([](double x) { return x; })));
+      CHECK_NAN((gauss_laguerre<double, 5, ignore_policy>(alpha).integrate_averaged([](double x) { return x; }, &error)));
       CHECK_NAN(error);
 #ifndef BOOST_NO_EXCEPTIONS
       CHECK_THROW((gauss_laguerre<double, 5>(alpha)), std::domain_error);

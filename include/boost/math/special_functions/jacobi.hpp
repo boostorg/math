@@ -155,7 +155,7 @@ public:
          return -p * degree * (degree + sum + 1) / (2 * (beta + 1));
       }
       return (degree * (alpha - beta - (2 * degree + sum) * x) * p +
-         2 * (degree + alpha) * (degree + beta) * p_previous) / (1 - x * x);
+         2 * (degree + alpha) * (degree + beta) * p_previous) / ((2 * degree + sum) * (1 - x * x));
    }
 
    Real second_derivative(const Real& x, const Real& p, const Real& p_prime) const

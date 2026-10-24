@@ -358,7 +358,7 @@ class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::quadr
 {
    using base = detail::gauss_hermite_detail<Real, N, detail::quadrature_constant_category<Real>::value>;
 
-   // Laurie's anti-Gauss rule with N + 1 points, computed the first time an error estimate is requested.
+   // Laurie's anti-Gauss rule with N + 1 points, computed the first time integrate_averaged is called.
    static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::hermite_family<Real>>& anti_gauss()
    {
       static const BOOST_MATH_NAMESPACE::detail::orthogonal_polynomial<Real, BOOST_MATH_NAMESPACE::detail::hermite_family<Real>> value(N + 1, BOOST_MATH_NAMESPACE::detail::hermite_family<Real>(N + 1), true);
@@ -366,15 +366,15 @@ class gauss_hermite : public detail::gauss_hermite_detail<Real, N, detail::quadr
    }
 
    template <class F, class K, class Norm>
-   static Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm)
+   static K anti_gauss_average(F& f, K zero, const K& result, Real& L1, Norm norm, Real* error)
    {
-      return detail::anti_gauss_error(f, anti_gauss().abscissa(), anti_gauss().weights(), true, anti_result, result, L1, norm, "boost::math::quadrature::gauss_hermite<%1%>::integrate", Policy());
+      return detail::anti_gauss_average(f, anti_gauss().abscissa(), anti_gauss().weights(), true, zero, result, L1, norm, error, "boost::math::quadrature::gauss_hermite<%1%>::integrate_averaged", Policy());
    }
 
 public:
    // Integrates f(x) exp(-x^2) over the real line.
    template <class F>
-   static auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
+   static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
       // In many math texts, K represents the field of real or complex numbers.
       // Too bad we can't put blackboard bold into C++ source!
@@ -385,8 +385,6 @@ public:
       Real nan;
       if (detail::overflowed(base::abscissa(), "boost::math::quadrature::gauss_hermite<%1%>::integrate", pL1, &nan, Policy()))
       {
-         if (error)
-            *error = nan;
          return static_cast<K>(nan);
       }
       unsigned non_zero_start = 1;
@@ -409,14 +407,12 @@ public:
       }
       if (pL1)
          *pL1 = L1;
-      if (error)
-         *error = anti_gauss_error(f, K(Real(0)), result, L1, [](const K& z) { using std::abs; return abs(z); });
       return result;
    }
 
    // Explicit zero and norm for vector- and matrix-valued integrands.
    template <class F, class Norm>
-   static auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr)
+   static auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* pL1 = nullptr)
       ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
    {
       using K = decltype(f(Real(0)));
@@ -424,8 +420,6 @@ public:
       Real nan;
       if (detail::overflowed(base::abscissa(), "boost::math::quadrature::gauss_hermite<%1%>::integrate", pL1, &nan, Policy()))
       {
-         if (error)
-            *error = nan;
          K result = zero * nan;
          return result;
       }
@@ -449,8 +443,31 @@ public:
       }
       if (pL1)
          *pL1 = L1;
-      if (error)
-         *error = anti_gauss_error(f, zero, result, L1, norm);
+      return result;
+   }
+   // Laurie's averaged rule (G + A) / 2: N + 1 more evaluations of f than integrate, exact for polynomials of degree
+   // 2N + 1. The error is half the difference of G and A, a bound on the error when they bracket the integral.
+   template <class F>
+   static auto integrate_averaged(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
+   {
+      using K = decltype(f(Real(0)));
+      Real L1;
+      K result = integrate(f, &L1);
+      result = anti_gauss_average(f, K(Real(0)), result, L1, [](const K& z) { using std::abs; return abs(z); }, error);
+      if (pL1)
+         *pL1 = L1;
+      return result;
+   }
+
+   template <class F, class Norm>
+   static auto integrate_averaged(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr)
+      ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
+   {
+      Real L1;
+      auto result = integrate(f, zero, norm, &L1);
+      result = anti_gauss_average(f, zero, result, L1, norm, error);
+      if (pL1)
+         *pL1 = L1;
       return result;
    }
 };

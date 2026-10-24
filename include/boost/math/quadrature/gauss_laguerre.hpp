@@ -456,9 +456,9 @@ class gauss_laguerre : public detail::gauss_laguerre_detail<Real, N, detail::qua
    std::vector<Real> anti_weight_vals;
 
    template <class F, class K, class Norm>
-   Real anti_gauss_error(F& f, K anti_result, const K& result, Real L1, Norm norm) const
+   K anti_gauss_average(F& f, K zero, const K& result, Real& L1, Norm norm, Real* error) const
    {
-      return detail::anti_gauss_error(f, anti_abscissa_vals, anti_weight_vals, false, anti_result, result, L1, norm, "boost::math::quadrature::gauss_laguerre<%1%>::integrate", Policy());
+      return detail::anti_gauss_average(f, anti_abscissa_vals, anti_weight_vals, false, zero, result, L1, norm, error, "boost::math::quadrature::gauss_laguerre<%1%>::integrate_averaged", Policy());
    }
 
 public:
@@ -494,7 +494,7 @@ public:
          anti_abscissa_vals = anti.abscissa();
          anti_weight_vals = anti.weights();
       }
-      // Laurie's anti-Gauss rule with N + 1 points, for the error estimate. Its nodes are all positive (Laurie 1996, Theorem 2).
+      // Laurie's anti-Gauss rule with N + 1 points, for integrate_averaged. Its nodes are all positive (Laurie 1996, Theorem 2).
       BOOST_MATH_ASSERT(!(anti_abscissa_vals[0] <= 0));
    }
 
@@ -521,7 +521,7 @@ public:
 
    // Integrates f(x) x^alpha exp(-x) over [0, infinity).
    template <class F>
-   auto integrate(F f, Real* error = nullptr, Real* pL1 = nullptr) const->decltype(std::declval<F>()(std::declval<Real>()))
+   auto integrate(F f, Real* pL1 = nullptr) const->decltype(std::declval<F>()(std::declval<Real>()))
    {
       // In many math texts, K represents the field of real or complex numbers.
       // Too bad we can't put blackboard bold into C++ source!
@@ -535,8 +535,6 @@ public:
       {
          if (pL1)
             *pL1 = nan;
-         if (error)
-            *error = nan;
          return static_cast<K>(nan);
       }
       K result = Real(0);
@@ -549,14 +547,12 @@ public:
       }
       if (pL1)
          *pL1 = L1;
-      if (error)
-         *error = anti_gauss_error(f, K(Real(0)), result, L1, [](const K& z) { using std::abs; return abs(z); });
       return result;
    }
 
    // Explicit zero and norm for vector- and matrix-valued integrands.
    template <class F, class Norm>
-   auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr) const
+   auto integrate(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* pL1 = nullptr) const
       ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
    {
       using K = decltype(f(Real(0)));
@@ -567,8 +563,6 @@ public:
       {
          if (pL1)
             *pL1 = nan;
-         if (error)
-            *error = nan;
          K result = zero * nan;
          return result;
       }
@@ -582,8 +576,31 @@ public:
       }
       if (pL1)
          *pL1 = L1;
-      if (error)
-         *error = anti_gauss_error(f, zero, result, L1, norm);
+      return result;
+   }
+   // Laurie's averaged rule (G + A) / 2: N + 1 more evaluations of f than integrate, exact for polynomials of degree
+   // 2N + 1. The error is half the difference of G and A, a bound on the error when they bracket the integral.
+   template <class F>
+   auto integrate_averaged(F f, Real* error = nullptr, Real* pL1 = nullptr) const->decltype(std::declval<F>()(std::declval<Real>()))
+   {
+      using K = decltype(f(Real(0)));
+      Real L1;
+      K result = integrate(f, &L1);
+      result = anti_gauss_average(f, K(Real(0)), result, L1, [](const K& z) { using std::abs; return abs(z); }, error);
+      if (pL1)
+         *pL1 = L1;
+      return result;
+   }
+
+   template <class F, class Norm>
+   auto integrate_averaged(F f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error = nullptr, Real* pL1 = nullptr) const
+      ->decltype(static_cast<Real>(norm(f(Real(0)))), f(Real(0)))
+   {
+      Real L1;
+      auto result = integrate(f, zero, norm, &L1);
+      result = anti_gauss_average(f, zero, result, L1, norm, error);
+      if (pL1)
+         *pL1 = L1;
       return result;
    }
 };

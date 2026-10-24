@@ -101,6 +101,24 @@ void test_derivative()
     }
 }
 
+// The root finder's derivative of P_n from P_n and P_{n-1}, against jacobi_derivative.
+void test_family_derivative()
+{
+    for (unsigned n : {1u, 2u, 7u, 30u}) {
+        for (double alpha : {-0.5, 0.0, 0.5, 2.0}) {
+            for (double beta : {-0.5, 0.0, 1.0}) {
+                const boost::math::detail::jacobi_family<double> family(n, alpha, beta);
+                for (double x : {-0.9, -0.3, 0.0, 0.4, 0.95}) {
+                    const double p = boost::math::jacobi(n, alpha, beta, x);
+                    const double p_previous = boost::math::jacobi(n - 1, alpha, beta, x);
+                    CHECK_ABSOLUTE_ERROR(jacobi_derivative(n, alpha, beta, x, 1), family.derivative(x, p, p_previous),
+                                         64 * std::numeric_limits<double>::epsilon() * (1 + std::abs(jacobi_derivative(n, alpha, beta, x, 1))));
+                }
+            }
+        }
+    }
+}
+
 template <class T>
 void test_zeros(T tol, const char* t)
 {
@@ -170,6 +188,7 @@ int main()
     test_to_quadratic<double>();
     test_symmetry<double>();
     test_derivative<double>();
+    test_family_derivative();
 
     #endif
 

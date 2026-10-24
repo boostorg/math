@@ -71,22 +71,40 @@ bool overflowed(const RandomAccessContainer& abscissa, const char* function, Rea
    return false;
 }
 
-// Half the difference between the Gauss result and Laurie's anti-Gauss rule, which takes N + 1 more evaluations of f.
-// A symmetric rule stores the nonnegative abscissas only.
+// The averaged rule (G + A) / 2, exact for polynomials of degree 2N + 1. Half the difference is set as its error;
+// it bounds the error when G and A bracket the integral. L1 goes in as that of G and comes out as that of the average.
 template <class F, class RandomAccessContainer, class K, class Real, class Norm, class Policy>
-Real anti_gauss_error(F& f, const RandomAccessContainer& abscissa, const RandomAccessContainer& weights, bool symmetric,
-                      K anti_result, const K& result, Real L1, Norm norm, const char* function, const Policy& pol)
+K anti_gauss_average(F& f, const RandomAccessContainer& abscissa, const RandomAccessContainer& weights, bool symmetric,
+                     K anti_result, const K& result, Real& L1, Norm norm, Real* error, const char* function, const Policy& pol)
 {
    Real nan;
-   if (overflowed(abscissa, function, static_cast<Real*>(nullptr), &nan, pol))
-      return nan;
+   if (!(BOOST_MATH_NAMESPACE::isfinite)(L1) || overflowed(abscissa, function, static_cast<Real*>(nullptr), &nan, pol))
+   {
+      L1 = std::numeric_limits<Real>::quiet_NaN();
+      if (error)
+         *error = L1;
+      return anti_result * L1;
+   }
+   Real anti_L1 = 0;
    for (unsigned i = 0; i < abscissa.size(); ++i)
    {
       Real x = abscissa[i];
-      anti_result += (symmetric && x != 0 ? f(x) + f(-x) : f(x)) * static_cast<Real>(weights[i]);
+      K fx = f(x);
+      Real n = static_cast<Real>(norm(fx));
+      if (symmetric && x != 0)
+      {
+         K fmx = f(-x);
+         n += static_cast<Real>(norm(fmx));
+         fx += fmx;
+      }
+      anti_result += fx * static_cast<Real>(weights[i]);
+      anti_L1 += n * static_cast<Real>(weights[i]);
    }
-   // Rounding makes the difference meaningless below a few ulps of L1, and aliasing can make it exactly zero.
-   return (std::max)(static_cast<Real>(norm(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
+   L1 = (L1 + anti_L1) / 2;
+   if (error)
+      *error = (std::max)(static_cast<Real>(norm(anti_result - result)) / 2, 2 * tools::epsilon<Real>() * L1);
+   anti_result += result;
+   return anti_result * Real(0.5);
 }
 
 } // namespace detail
