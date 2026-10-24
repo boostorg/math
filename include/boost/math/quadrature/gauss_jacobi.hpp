@@ -80,7 +80,6 @@ public:
       return weight_vals;
    }
 
-protected:
    bool anti_gauss_is_internal() const
    {
       return anti_gauss_internal;

@@ -88,11 +88,10 @@ void test_anti_gauss(unsigned N, Real alpha, Real beta)
 {
    using std::abs;
    using std::pow;
-   using family = boost::math::detail::jacobi_family<Real>;
    const gauss_jacobi<Real> rule(N, alpha, beta);
-   const boost::math::detail::orthogonal_polynomial<Real, family> anti(N + 1, family(N + 1, alpha, beta), true);
-   const std::vector<Real>& x = anti.abscissa();
-   const std::vector<Real>& w = anti.weights();
+   CHECK_EQUAL(true, rule.anti_gauss_is_internal());
+   const std::vector<Real>& x = rule.anti_gauss_abscissa();
+   const std::vector<Real>& w = rule.anti_gauss_weights();
    CHECK_EQUAL(x.size(), static_cast<std::size_t>(N + 1));
    CHECK_LE(Real(-1), x[0]);
    CHECK_LE(x[N], Real(1));
