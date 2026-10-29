@@ -278,7 +278,7 @@ def test_array_matches_scalar(case):
 SIEVE = {"prime_sieve", "prime_range", "prime_count", "polynomial_roots", "polynomial_roots_aberth", "polynomial_roots_companion_matrix"}
 QUADRATURE = {"tanh_sinh", "exp_sinh", "sinh_sinh", "trapezoidal", "gauss", "gauss_kronrod", "gauss_hermite",
               "gauss_laguerre", "gauss_hermite_averaged", "gauss_laguerre_averaged", "gauss_hermite_rule", "gauss_laguerre_rule", "gauss_jacobi_rule",
-              "ooura_fourier_sin", "ooura_fourier_cos", "van_den_bos_unit_square"}
+              "ooura_fourier_sin", "ooura_fourier_cos", "van_den_bos_unit_square", "sparse_grid"}
 OPTIMIZATION = {"differential_evolution", "jso", "random_search", "multilevel_coordinate_search", "cma_es"}
 
 
@@ -325,6 +325,17 @@ def test_quadrature():
         (second_moment(bm.gauss_hermite_rule(5)), math.sqrt(math.pi) / 2),
         (second_moment(bm.gauss_laguerre_rule(5, alpha=0.5)), math.gamma(3.5)),
         (second_moment(bm.gauss_jacobi_rule(5, 0.5, -0.5)), math.pi / 2),
+        (bm.leja_legendre().integrate(lambda x: x * x), 2 / 3),
+        (bm.leja_hermite().integrate(lambda x: x * x), math.sqrt(math.pi) / 2),
+        (bm.leja_legendre().integrate(math.exp), math.e - 1 / math.e),
+        (bm.leja_hermite().integrate(math.cos), math.sqrt(math.pi) * math.exp(-0.25)),
+        (bm.leja_laguerre().integrate(lambda x: x * x), 2),
+        (bm.leja_laguerre(alpha=0.5).integrate(lambda x: 1.0), math.sqrt(math.pi) / 2),
+        (bm.leja_jacobi(alpha=-0.5, beta=-0.5).integrate(lambda x: x * x), math.pi / 2),
+        (bm.leja_legendre().integrate(math.exp, -2, 5), math.exp(5) - math.exp(-2)),
+        (bm.leja_legendre().integrate(lambda x: x, 2, 0, tolerance=1e-12), -2),
+        # (4 - x)^alpha (x - 1)^beta over [1, 4]: 3^(alpha + beta + 1) B(alpha + 1, beta + 1).
+        (bm.leja_jacobi(alpha=0.5, beta=-0.25).integrate(lambda x: 1.0, 1, 4), 3 ** 1.25 * math.gamma(1.5) * math.gamma(0.75) / math.gamma(2.25)),
         (bm.ooura_fourier_sin(lambda t: 1 / t, 1.0), math.pi / 2),
         (bm.ooura_fourier_cos(lambda t: 1 / (1 + t * t), 1.0), math.pi / (2 * math.e)),
         (bm.van_den_bos_unit_square(lambda x, y: x * y), 0.25),
@@ -339,6 +350,43 @@ def test_quadrature():
     assert abs(Q - math.sqrt(math.pi) * math.exp(-0.25)) <= error < 1e-6
     with pytest.raises(RuntimeError):
         bm.gauss_jacobi(10, -0.9, -0.9).integrate_averaged(math.cos)
+    rule = bm.leja_legendre()
+    assert len(rule.weights(n=5)) == 5 and len(rule.abscissa) == 5 and rule.abscissa[0] == 0.0
+    with pytest.raises(ValueError):
+        rule.weights(n=rule.max_points + 1)
+    with pytest.raises(TypeError):
+        rule.integrate(math.cos, 5)
+    assert rule.integrate(math.cos, 1, 1) == (0, 0, 0)
+    with pytest.raises(ValueError):
+        rule.integrate(math.cos, 0, math.inf)
+    with pytest.raises(TypeError):
+        bm.leja_hermite().integrate(math.cos, 0, 1)
+    # The box [0, 1] x [-1, 2] x [3, 5], from lists or arrays.
+    box = (math.exp(0.5) - 1) * 2 * (math.exp(1) - math.exp(-2)) * 4 * (math.exp(1.25) - math.exp(0.75))
+    for a, b in [([0, -1, 3], [1, 2, 5]), (np.array([0.0, -1, 3]), np.array([1.0, 2, 5]))]:
+        Q, error, L1 = bm.sparse_grid(lambda x: math.exp(x[0] / 2 - x[1] + x[2] / 4), a, b, rule=rule, max_calls=100000)
+        assert abs(Q - box) <= max(error, 1e-13 * L1) <= 1.5e-8 * L1
+    with pytest.raises(ValueError):
+        bm.sparse_grid(lambda x: 1.0, [0, 0], [1], rule=rule, max_calls=100)
+    with pytest.raises(TypeError):
+        bm.sparse_grid(lambda x: 1.0, [0], [1], rule=bm.leja_hermite(), max_calls=100)
+    Q, error, L1 = bm.sparse_grid(lambda x: math.exp(x[0] + x[1] / 2), rule=bm.leja_legendre(), dimension=2, max_calls=1000)
+    assert abs(Q - (math.e - 1 / math.e) * 2 * (math.exp(0.5) - math.exp(-0.5))) <= max(error, 1e-14) <= 1e-7 * L1
+    Q, error, L1 = bm.sparse_grid(lambda x: x[2] ** 2, rule=bm.leja_hermite(), dimension=3, max_calls=1000)
+    assert abs(Q - math.pi ** 1.5 / 2) < 1e-13
+    Q, error, L1 = bm.sparse_grid(lambda x: x[0] * x[1], rule=bm.leja_laguerre(), dimension=2, max_calls=1000)
+    assert abs(Q - 1) < 1e-13
+    # 0 at the first point and on the axes through it.
+    Q, error, L1 = bm.sparse_grid(lambda x: x[0] ** 2 * x[1] ** 2, [-1, -1], [1, 1], rule=rule)
+    assert abs(Q - 4 / 9) < 1e-13
+    Q, error, L1 = bm.sparse_grid(lambda x: x[0] ** 2 * x[1] ** 2, rule=bm.leja_hermite(), dimension=2)
+    assert abs(Q - math.pi / 4) < 1e-13
+    with pytest.raises(ValueError):
+        bm.leja_jacobi(alpha=-1, beta=0)
+    with pytest.raises(ValueError):
+        bm.leja_laguerre(alpha=math.inf)
+    with pytest.raises(ValueError):
+        bm.leja_jacobi(alpha=math.inf, beta=0)
     with pytest.raises(ZeroDivisionError):
         bm.tanh_sinh(lambda x: 1 / 0, 0, 1)
 
@@ -486,7 +534,7 @@ TRANSFORMS = {"fft", "real_fft", "dct_ii"}
 
 def test_every_distribution_has_a_case():
     names = {n for n in bm.__all__ if inspect.isclass(getattr(bm, n))}
-    assert names - TRANSFORMS - {"gauss_jacobi"} == {c[0] for c in CONTINUOUS + DISCRETE}
+    assert names - TRANSFORMS - {"gauss_jacobi", "leja_legendre", "leja_hermite", "leja_laguerre", "leja_jacobi"} == {c[0] for c in CONTINUOUS + DISCRETE}
     assert TRANSFORMS <= names
 
 
