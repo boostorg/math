@@ -38,7 +38,7 @@ template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T airy_ai_zero_value(const Policy& pol)
 {
    BOOST_MATH_STD_USING
-   BOOST_MATH_IF_CONSTEXPR(airy_has_exact_zero_values<T>())
+   if (airy_has_exact_zero_values<T>())
       return BOOST_MATH_BIG_CONSTANT(T, 390, 0.355028053887817239260063186004183176397979174199177240583326510300810042450126712957174246054040271688420448730349495840);
    else
       return 1 / (pow(T(3), constants::twothirds<T>()) * BOOST_MATH_NAMESPACE::tgamma(constants::twothirds<T>(), pol));
@@ -48,7 +48,7 @@ template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T airy_bi_zero_value(const Policy& pol)
 {
    BOOST_MATH_STD_USING
-   BOOST_MATH_IF_CONSTEXPR(airy_has_exact_zero_values<T>())
+   if (airy_has_exact_zero_values<T>())
       return BOOST_MATH_BIG_CONSTANT(T, 390, 0.614926627446000735150922369093613553594728188648596505040878753014296519305520640529387343345267569240728438782242516725);
    else
       return 1 / (sqrt(BOOST_MATH_NAMESPACE::cbrt(T(3), pol)) * BOOST_MATH_NAMESPACE::tgamma(constants::twothirds<T>(), pol));
@@ -59,7 +59,7 @@ template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T airy_ai_prime_zero_value(const Policy& pol)
 {
    BOOST_MATH_STD_USING
-   BOOST_MATH_IF_CONSTEXPR(airy_has_exact_zero_values<T>())
+   if (airy_has_exact_zero_values<T>())
       return BOOST_MATH_BIG_CONSTANT(T, 390, 0.258819403792806798405183560189203963479091138354934582210001813856102772676790280654196405827275384313371193211789133381);
    else
       return 1 / (BOOST_MATH_NAMESPACE::cbrt(T(3), pol) * BOOST_MATH_NAMESPACE::tgamma(constants::third<T>(), pol));
@@ -69,7 +69,7 @@ template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T airy_bi_prime_zero_value(const Policy& pol)
 {
    BOOST_MATH_STD_USING
-   BOOST_MATH_IF_CONSTEXPR(airy_has_exact_zero_values<T>())
+   if (airy_has_exact_zero_values<T>())
       return BOOST_MATH_BIG_CONSTANT(T, 390, 0.448288357353826357914823710398828390866226799212262061082808778372330755009780647185046574400736362878496329249031699774);
    else
       return sqrt(BOOST_MATH_NAMESPACE::cbrt(T(3), pol)) / BOOST_MATH_NAMESPACE::tgamma(constants::third<T>(), pol);
