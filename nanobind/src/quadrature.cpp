@@ -15,8 +15,10 @@
 #include <boost/math/quadrature/gauss_jacobi.hpp>
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 #include <boost/math/quadrature/gauss_laguerre.hpp>
+#include <boost/math/quadrature/leja.hpp>
 #include <boost/math/quadrature/ooura_fourier_integrals.hpp>
 #include <boost/math/quadrature/sinh_sinh.hpp>
+#include <boost/math/quadrature/sparse_grid.hpp>
 #include <boost/math/quadrature/tanh_sinh.hpp>
 #include <boost/math/quadrature/trapezoidal.hpp>
 #include <boost/math/quadrature/van_den_bos_unit_square.hpp>
@@ -132,6 +134,40 @@ std::pair<array1d, array1d> gauss_rule(unsigned n, Family const& family, bool sy
       w.swap(ws);
    }
    return {to_array(x), to_array(w)};
+}
+
+// A nested Leja rule: integrate(f, n) applies the n-point rule, integrate_adaptive adds points until the tolerance.
+template <class Rule>
+nb::class_<Rule> bind_leja(nb::module_& m, char const* name, char const* doc)
+{
+   return nb::class_<Rule>(m, name, doc)
+      .def("integrate", [](Rule const& rule, nb::callable f, unsigned n) {
+         double L1 = 0;
+         double Q = rule.integrate(scalar_function{f}, n, &L1);
+         return std::make_pair(Q, L1);
+      }, nb::arg("f"), nb::kw_only(), nb::arg("n"), "(integral by the n-point rule, L1 norm)")
+      .def("integrate_adaptive", [](Rule const& rule, nb::callable f, double tolerance) {
+         double error = 0, L1 = 0;
+         double Q = rule.integrate(scalar_function{f}, tolerance, &error, &L1);
+         return std::make_tuple(Q, error, L1);
+      }, nb::arg("f"), nb::kw_only(), nb::arg("tolerance") = root_eps, "(integral, error estimate, L1 norm), adding one point at a time")
+      .def_prop_ro("max_points", [](Rule const&) { return Rule::max_points(); })
+      .def_prop_ro("abscissa", [](Rule const& rule) { return to_array(rule.abscissa()); }, nb::rv_policy::move, "the points computed so far, in the order chosen")
+      .def("weights", [](Rule const& rule, unsigned n) { return to_array(rule.weights(n)); }, nb::kw_only(), nb::arg("n"), nb::rv_policy::move,
+         "the weights of the n-point rule, whose points are abscissa[:n]");
+}
+
+// sparse_grid(f, rule=..., ...), one overload per rule.
+template <class Rule>
+void bind_sparse_grid(nb::module_& m)
+{
+   m.def("sparse_grid", [](nb::callable f, Rule const& rule, unsigned dimension, std::size_t max_calls, double tolerance) {
+      double error = 0, L1 = 0;
+      double Q = bq::sparse_grid([&f](std::vector<double> const& x) { return nb::cast<double>(f(to_array(x))); },
+                                 rule, dimension, max_calls, tolerance, &error, &L1);
+      return std::make_tuple(Q, error, L1);
+   }, nb::arg("f"), nb::kw_only(), nb::arg("rule"), nb::arg("dimension"), nb::arg("max_calls"), nb::arg("tolerance") = root_eps,
+      "(integral, error estimate, L1) by the dimension-adaptive sparse grid of the rule; f takes a 1D array");
 }
 
 void check_exponent(char const* name, double a)
@@ -276,6 +312,28 @@ void bind_quadrature(nb::module_& m)
          return "gauss_jacobi(n=" + std::to_string(rule.n) + ", alpha=" + nb::cast<std::string>(nb::repr(nb::float_(rule.alpha)))
             + ", beta=" + nb::cast<std::string>(nb::repr(nb::float_(rule.beta))) + ")";
       });
+
+   bind_leja<bq::leja_legendre<double>>(m, "leja_legendre", "quadrature::leja_legendre<double>(): nested Leja rules on [-1, 1]")
+      .def(nb::init<>());
+   bind_leja<bq::leja_hermite<double>>(m, "leja_hermite", "quadrature::leja_hermite<double>(): nested Leja rules for exp(-x^2) on the real line")
+      .def(nb::init<>());
+   bind_leja<bq::leja_laguerre<double>>(m, "leja_laguerre",
+      "quadrature::leja_laguerre<double>(alpha): nested Leja rules for x^alpha exp(-x) on [0, inf)")
+      .def("__init__", [](bq::leja_laguerre<double>* rule, double alpha) {
+         check_exponent("alpha", alpha);
+         new (rule) bq::leja_laguerre<double>(alpha);
+      }, nb::kw_only(), nb::arg("alpha") = 0.0);
+   bind_leja<bq::leja_jacobi<double>>(m, "leja_jacobi",
+      "quadrature::leja_jacobi<double>(alpha, beta): nested Leja rules for (1 - x)^alpha (1 + x)^beta on [-1, 1]")
+      .def("__init__", [](bq::leja_jacobi<double>* rule, double alpha, double beta) {
+         check_exponent("alpha", alpha);
+         check_exponent("beta", beta);
+         new (rule) bq::leja_jacobi<double>(alpha, beta);
+      }, nb::kw_only(), nb::arg("alpha"), nb::arg("beta"));
+   bind_sparse_grid<bq::leja_legendre<double>>(m);
+   bind_sparse_grid<bq::leja_hermite<double>>(m);
+   bind_sparse_grid<bq::leja_laguerre<double>>(m);
+   bind_sparse_grid<bq::leja_jacobi<double>>(m);
 
    m.def("gauss_hermite_rule", [](unsigned n) {
       return gauss_rule(n, BOOST_MATH_NAMESPACE::detail::hermite_family<double>(n), true);
