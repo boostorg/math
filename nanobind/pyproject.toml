@@ -1,0 +1,18 @@
+# pip wheel --no-deps -w dist nanobind, from the root of a Boost.Math checkout; see CMakeLists.txt.
+[build-system]
+requires = ["scikit-build-core>=0.10", "nanobind>=2.0"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "boost-math"
+version = "0.0.1"
+description = "Python bindings for Boost.Math (development build)"
+license = { text = "BSL-1.0" }
+requires-python = ">=3.12"
+dependencies = ["numpy"]
+
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+wheel.packages = []
+# One abi3 wheel for every Python >= 3.12.
+wheel.py-api = "cp312"

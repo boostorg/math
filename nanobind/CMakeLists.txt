@@ -5,6 +5,7 @@
 # Dev-only nanobind layer, not built by CI. Usage (venv with nanobind numpy mpmath pytest):
 #   cmake -S nanobind -B build-nb -G Ninja -DPython_EXECUTABLE=venv/bin/python && cmake --build build-nb
 #   PYTHONPATH=build-nb venv/bin/python -m pytest nanobind/tests
+# A wheel, from a checkout (an sdist would lack ../include): pip wheel --no-deps -w dist nanobind
 
 cmake_minimum_required(VERSION 3.18)
 project(boost_math_nanobind LANGUAGES CXX)
@@ -17,8 +18,9 @@ endif()
 # Same optimisation level as CI.
 set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
-find_package(Python 3.9 REQUIRED COMPONENTS Interpreter Development.Module)
-if(NOT nanobind_DIR)
+find_package(Python 3.12 REQUIRED COMPONENTS Interpreter Development.Module OPTIONAL_COMPONENTS Development.SABIModule)
+# scikit-build-core puts nanobind on the prefix path itself.
+if(NOT nanobind_DIR AND NOT SKBUILD)
   # -I: don't let this directory (also called nanobind) shadow the package.
   execute_process(
     COMMAND "${Python_EXECUTABLE}" -I -m nanobind --cmake_dir
@@ -48,7 +50,7 @@ set(BOOST_MATH_NB_SOURCES
   src/polynomial_roots.cpp
 )
 
-nanobind_add_module(_ext NOMINSIZE ${BOOST_MATH_NB_SOURCES})
+nanobind_add_module(_ext NOMINSIZE STABLE_ABI ${BOOST_MATH_NB_SOURCES})
 target_include_directories(_ext PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../include" "${CMAKE_CURRENT_SOURCE_DIR}/src")
 target_compile_definitions(_ext PRIVATE BOOST_MATH_STANDALONE)
 # Optional: boost.math.ulps needs Boost.Multiprecision (standalone, which needs Boost.Config) and zlib. Only the
@@ -69,6 +71,7 @@ if(BOOST_MATH_NB_MULTIPRECISION_INCLUDE AND BOOST_MATH_NB_CONFIG_INCLUDE AND ZLI
     COMPILE_DEFINITIONS BOOST_MP_STANDALONE)
   set_source_files_properties(src/module.cpp PROPERTIES COMPILE_DEFINITIONS BMPY_HAVE_ULPS)
   target_link_libraries(_ext PRIVATE ZLIB::ZLIB)
+  install(FILES boost/math/ulps.py DESTINATION boost/math)
 else()
   message(STATUS "boost.math.ulps disabled: needs Boost.Multiprecision, Boost.Config and zlib "
                  "(set BOOST_MATH_NB_MULTIPRECISION_INCLUDE and BOOST_MATH_NB_CONFIG_INCLUDE)")
@@ -85,3 +88,5 @@ add_custom_target(boost_math_py ALL
   COMMAND "${CMAKE_COMMAND}" -E make_directory "${pkg_dir}"
   COMMAND "${CMAKE_COMMAND}" -E copy_if_different
           "${CMAKE_CURRENT_SOURCE_DIR}/boost/math/__init__.py" "${CMAKE_CURRENT_SOURCE_DIR}/boost/math/ulps.py" "${pkg_dir}")
+install(TARGETS _ext LIBRARY DESTINATION boost/math)
+install(FILES boost/math/__init__.py DESTINATION boost/math)
