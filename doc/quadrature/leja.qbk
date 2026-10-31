@@ -1,0 +1,169 @@
+[/
+Copyright (c) 2026 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:leja Leja quadrature]
+
+[heading Synopsis]
+
+`#include <boost/math/quadrature/leja.hpp>`
+
+   namespace boost{ namespace math{ namespace quadrature{
+
+   template <class Real, class ``__Policy`` = boost::math::policies::policy<> >
+   class leja_legendre  // the integral of f over [-1, 1]
+   {
+   public:
+      leja_legendre();
+
+      const std::vector<Real>& abscissa() const;
+      const std::vector<Real>& weights(unsigned n) const;
+      static constexpr unsigned max_points();
+
+      template <class F, class Integer>  // Integer: any integral type
+      auto integrate(F f, Integer n, Real* L1 = nullptr) const -> decltype(f(Real(0)));
+
+      template <class F>
+      auto integrate(F f, Real tolerance = tools::root_epsilon<Real>(),
+                     Real* error = nullptr, Real* L1 = nullptr) const -> decltype(f(Real(0)));
+   };
+
+   template <class Real, class ``__Policy`` = boost::math::policies::policy<> >
+   class leja_hermite;  // the integral of f(x) exp(-x[super 2]) over the real line, with the same members
+
+   // The integral of f(x) x[super alpha] exp(-x) over \[0, [infin]), alpha > -1; as leja_legendre, with the constructor
+   //    explicit leja_laguerre(Real alpha = 0);
+   template <class Real, class ``__Policy`` = boost::math::policies::policy<> >
+   class leja_laguerre;
+
+   // The integral of f(x) (1 - x)[super alpha] (1 + x)[super beta] over \[-1, 1\], alpha, beta > -1, with the constructor
+   //    leja_jacobi(Real alpha, Real beta);
+   template <class Real, class ``__Policy`` = boost::math::policies::policy<> >
+   class leja_jacobi;
+
+   }}} // namespaces
+
+[heading Description]
+
+A weighted Leja sequence is built greedily: each new point maximizes [radic]/w/ times the product of its distances to the points
+already chosen (Leja; Narayan and Jakeman). `leja_legendre` has the Legendre weight /w/(/x/) = 1 on \[-1, 1\], which gives
+the classical Leja points, here in the order 0, -1, 1; `leja_hermite` has /w/(/x/) = exp(-/x/[super 2]), `leja_laguerre`
+/w/(/x/) = /x/[super [alpha]] exp(-/x/) on \[0, [infin]), and `leja_jacobi` /w/(/x/) = (1 - /x/)[super [alpha]] (1 + /x/)[super [beta]] on \[-1, 1\].
+All start from the mean of /w/, so that the one-point rule is the one-point Gauss rule, exact to degree 1, the natural first level
+of a sparse grid. Where an exponent is negative, [radic]/w/ has no maximum, and the points are chosen as if it were 0; the weights
+are those of /w/. `leja_jacobi` with [alpha] = [beta] = 0 has the points of `leja_legendre`.
+The constructors raise a __domain_error unless the exponents are > -1.
+The /n/-point rule uses the first /n/ points and has the weights that make it exact for polynomials of degree /n/ - 1.
+
+The rules are nested: going from /n/ to /n/ + 1 points costs one more evaluation of /f/, where a Gauss rule must start again.
+This makes them the usual building block of sparse grids, and lets the adaptive `integrate` add one point at a time.
+The price is degree: a Leja rule with /n/ points is exact to degree /n/ - 1, a Gauss rule to 2/n/ - 1.
+
+The points and weights are computed when they are first needed, up to `max_points()`: 1023 for the built-in floating point
+types and 127 for others. `weights(n)` returns the /n/ weights of the /n/-point rule, computing it and any smaller ones first,
+and raises a __domain_error unless 1 [le] /n/ [le] `max_points()`. `abscissa()` returns the points computed so far, in
+the order they were chosen. All members are `const` and safe to call from several threads, which share what any of them
+computes, as `tanh_sinh` does; points that another thread is computing read as NaN until it is done.
+`example/leja_parallel_assembly.cpp` assembles the Hamiltonian of the anharmonic oscillator /x/[super 4] in 60 Hermite functions
+on all cores with one `leja_legendre`, in agreement with the exact entries to 2[epsilon] times the largest: 0.21 s on one core
+of an Apple M-series and 0.026 s on ten, once the rule has its points.
+`leja_hermite` suits expectations over a normal distribution, such as the mean of the logistic function of /X/ ~ N(1, 1):
+
+   leja_hermite<double> rule;
+   double error;
+   double mean = rule.integrate([](double x) { return 1 / (1 + std::exp(-1 - std::sqrt(2.0) * x)); }, 1e-10, &error)
+               / std::sqrt(boost::math::constants::pi<double>());
+
+takes 105 points for 0.69673467014367874, within 4.6[times]10[super -15] of the true value; the estimate of its error, `error` divided by [radic][pi], is 5.6[times]10[super -12].
+
+When several points maximize the product to within rounding, the leftmost is taken; in the tests float, double, long double and
+`cpp_bin_float_50` choose the same points. Some weights are negative, but not by much: up to 100 points the sum of |/w[sub i]/|
+is at most 1.32 times the total mass for the exponents tried, but 2.44 times for [alpha] = -0.9, [beta] = 1/2.
+
+`integrate(f, n, L1)` applies the /n/-point rule. /f/ may return a real or complex value, or a vector of them: any type with `operator[]`
+and `size()`, such as `std::array` or `std::vector`, whose values all have the same size. A vector is integrated componentwise, and
+|/y/| below is its max norm. If `L1` is not null, `*L1` is set to [sum] |/w[sub i]/| |/f/(/x[sub i]/)|.
+`leja_legendre` evaluates /f/ at the endpoints [plusminus]1, and `leja_laguerre` and `leja_jacobi` at an end of the support where the exponent is [le] 0.
+
+`integrate(f, tolerance, error, L1)` evaluates /f/ once at each point in turn, until /n/ [ge] 4 and
+|/Q[sub m]/ - /Q[sub m - max(1, m/4)]/| [le] `tolerance` * /L1/ for every /m/ from /n/ - /n//4 to /n/, where /Q[sub n]/ is the /n/-point rule.
+If `error` is not null, `*error` is set to the largest of those differences; the estimate is a heuristic.
+If `max_points()` is reached first, its result is returned with its error estimate, as `tanh_sinh` does; no error is raised.
+
+[heading Accuracy and cost]
+
+The rules up to /N/ points take O(/N/[super 3]) operations: about 1 ms for 64 points, 6 ms for 128,
+0.4 s for 512 and 2.8 s for 1023 in double precision, and 2.4 s for 127 in `cpp_bin_float_50`; an integrand that the adaptive
+rule cannot converge costs that much once.
+The weights solve a well-conditioned linear system in the orthonormal polynomials, refined once with a compensated residual:
+the rules integrate /x/[super /k/] to within 20 /n/ [epsilon] [sum] |/w[sub i]/ /x[sub i]/[super /k/]|.
+A bounded sum of |/w[sub i]/| does not help integrands that grow like exp(/x/[super 2]) against `leja_hermite`, such as products of Hermite polynomials
+of high degree: /L1/ is 10[super 19] times the integral of /h/[sub 40][super 2]. Integrate such products with their Gaussian over
+a finite interval instead, as the example does.
+
+[heading References]
+
+* F. Leja, ['Sur certaines suites liées aux ensembles plans et leur application à la représentation conforme], Annales Polonici Mathematici 4 (1957), 8-13.
+* L. Reichel, ['Newton interpolation at Leja points], BIT 30 (1990), 332-346, [@https://doi.org/10.1007/BF02017352 doi:10.1007/BF02017352].
+* A. Narayan and J. D. Jakeman, ['Adaptive Leja sparse grid constructions for stochastic collocation and high-dimensional approximation], SIAM Journal on Scientific Computing 36 (2014), no. 6, A2952-A2983, [@https://doi.org/10.1137/140966368 doi:10.1137/140966368].
+
+[endsect] [/section:leja Leja quadrature]
+
+[section:sparse_grid Sparse grids]
+
+[heading Synopsis]
+
+`#include <boost/math/quadrature/sparse_grid.hpp>`
+
+   namespace boost{ namespace math{ namespace quadrature{
+
+   // Rule: leja_legendre<Real>, leja_hermite<Real>, leja_laguerre<Real> or leja_jacobi<Real>, Real = typename Rule::value_type; f(const std::vector<Real>& x), or f(x) with x a std::array<Real, N>, Eigen::VectorXd or other container with operator[] and size().
+   template <class F, class Rule>
+   auto sparse_grid(F f, const Rule& rule, unsigned dimension, std::size_t max_calls,
+                    Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr)
+      -> decltype(f(x));
+
+   }}} // namespaces
+
+[heading Description]
+
+`sparse_grid` integrates /f/ over \[-1, 1\][super /d/] with `leja_legendre`, or /f/(/x/) exp(-|/x/|[super 2]) over the whole space
+with `leja_hermite`, or against the product of the weights of `leja_laguerre` or `leja_jacobi`, by the dimension-adaptive sparse grid of Gerstner and Griebel. Coordinate /i/ at level /k[sub i]/ uses the
+first 2/k[sub i]/ - 1 points of the rule, and the grid is the sum of the tensor products of differences of consecutive levels
+over a set of multi-indices /k/. The set grows where these contributions are largest, so the grid spends its points on the
+coordinates, and the interactions between them, that matter. Exact integrals of products of polynomials of degree 2/k[sub i]/ - 2
+need only the multi-index /k/ and those below it, and a function of a few coordinates costs little more than in those dimensions.
+
+The levels add two points at a time, not one: for an even /f/ such as /x/[super 2] the rules with one and two points agree, and a
+zero difference would stop the refinement of that coordinate. For the same reason, when the error estimate (the sum of the
+norms of the contributions not yet refined) falls below `tolerance` * /L1/, every such contribution is refined once more,
+and the result is accepted only if the estimate is still below the tolerance. Interactions that vanish on the axes through the first
+point, the mean of the weight, can still be missed, such as /x/[sub 1][super 2] /x/[sub 2][super 2] with `leja_legendre`. /L1/ is the grid's estimate of the integral of |/f/| times the
+weight, the scale of the tolerance; before the grid has converged it can be far off, even negative. It is not a condition
+number: the sparse grid's weights have mixed signs, and the sum of |/w[sub i] f/(/x[sub i]/)| can be much larger.
+If `error` or `L1` are not null they are set to these. The grid computes the points of `rule` it needs, and keeps them there for the next call.
+
+`max_calls` bounds the number of evaluations of /f/: a refinement that would exceed it is not made, and the result has an
+error estimate above the tolerance. A contribution that would need more points than that in a coordinate is not refined
+further, and its norm stays in the error estimate;
+if the calls run out during the final refinements the error estimate is NaN. No error is raised. A __domain_error is
+raised if `dimension` or `max_calls` is zero, or if /f/ takes a fixed-size container whose size is not `dimension`. /f/ may return a real or complex value or a vector of them, as for the
+one-dimensional rules; a vector is integrated componentwise, and its error estimate and /L1/ use the max norm.
+
+The bookkeeping costs under 2 microseconds per evaluation of /f/ in double precision on Genz's test integrands, more where
+the levels are high, so a sparse grid pays off when /f/ costs more than that. On Genz's test integrands, with 10[super 4] calls or more, it beats
+quasi-Monte Carlo (Boost.Random's Sobol' sequence) by orders of magnitude up to four dimensions; in eight it still wins for
+entire functions such as cos(0.7 + [sum] /c[sub i] x[sub i]/), but not for peaked ones such as Genz's product peak and Gaussian,
+and in sixteen quasi-Monte Carlo is better unless /f/ depends mostly on a few coordinates. For integrands with kinks, such as
+exp(-[sum] /c[sub i]/|/x[sub i]/ - /u[sub i]/|), quasi-Monte Carlo is better in any dimension, and the error estimate, a heuristic
+as for the one-dimensional rule, can be too small.
+
+[heading References]
+
+* T. Gerstner and M. Griebel, ['Dimension-adaptive tensor-product quadrature], Computing 71 (2003), 65-87, [@https://doi.org/10.1007/s00607-003-0015-5 doi:10.1007/s00607-003-0015-5].
+* A. Narayan and J. D. Jakeman, as above.
+
+[endsect] [/section:sparse_grid Sparse grids]
