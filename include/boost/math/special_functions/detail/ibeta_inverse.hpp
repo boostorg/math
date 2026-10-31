@@ -485,23 +485,13 @@ private:
 // to be good, which is the case far out in the lower tail.
 //
 template <class T, class Policy>
-BOOST_MATH_GPU_ENABLED bool ibeta_inv_small_x_estimate(T a, T b, T p, T* px, const Policy& pol)
+BOOST_MATH_GPU_ENABLED bool ibeta_inv_small_x_estimate(T a, T b, T p, T* px, const Policy&)
 {
    BOOST_MATH_STD_USING
 
-   T bet = 0;
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-   try
-#endif
-   {
-      bet = BOOST_MATH_NAMESPACE::beta(a, b, pol);
-   }
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-   catch (const std::overflow_error&)
-   {
-      return false;
-   }
-#endif
+   // An overflowing beta is handled below, so don't let it report an overflow:
+   typedef typename policies::normalise<Policy, policies::overflow_error<policies::ignore_error> >::type overflow_ignore_policy;
+   T bet = BOOST_MATH_NAMESPACE::beta(a, b, overflow_ignore_policy());
    if(!(bet > tools::min_value<T>()) || !(BOOST_MATH_NAMESPACE::isfinite)(bet))
       return false;
    //
@@ -522,6 +512,9 @@ template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
 {
    BOOST_MATH_STD_USING  // For ADL of math functions.
+
+   // The calls to beta below handle overflow themselves, so stop them reporting it:
+   typedef typename policies::normalise<Policy, policies::overflow_error<policies::ignore_error> >::type overflow_ignore_policy;
 
    //
    // The flag invert is set to true if we swap a for b and p for q,
@@ -715,24 +708,9 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
             T bet = 0;
             if (b < 2)
             {
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-               try
-#endif
-               {
-                  bet = BOOST_MATH_NAMESPACE::beta(a, b, pol);
-
-                  typedef typename Policy::overflow_error_type overflow_type;
-
-                  BOOST_MATH_IF_CONSTEXPR(overflow_type::value != BOOST_MATH_NAMESPACE::policies::throw_on_error)
-                     if(bet > tools::max_value<T>())
-                        bet = tools::max_value<T>();
-               }
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-               catch (const std::overflow_error&)
-               {
+               bet = BOOST_MATH_NAMESPACE::beta(a, b, overflow_ignore_policy());
+               if(bet > tools::max_value<T>())
                   bet = tools::max_value<T>();
-               }
-#endif
             }
             if(bet != 0)
             {
@@ -792,21 +770,9 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
       // The call to beta may overflow, plus the alternative using lgamma may do the same
       // if T is a type where 1/T is infinite for small values (denorms for example).
       //
-      T bet = 0;
+      T bet = BOOST_MATH_NAMESPACE::beta(a, b, overflow_ignore_policy());
       T xg;
-      bool overflow = false;
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-      try {
-#endif
-         bet = BOOST_MATH_NAMESPACE::beta(a, b, pol);
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-      }
-      catch (const std::runtime_error&)
-      {
-         overflow = true;
-      }
-#endif
-      if (overflow || !(BOOST_MATH_NAMESPACE::isfinite)(bet))
+      if (!(BOOST_MATH_NAMESPACE::isfinite)(bet))
       {
          xg = exp((BOOST_MATH_NAMESPACE::lgamma(a + 1, pol) + BOOST_MATH_NAMESPACE::lgamma(b, pol) - BOOST_MATH_NAMESPACE::lgamma(a + b, pol) + log(p)) / a);
          if (xg > 2 / tools::epsilon<T>())
@@ -928,20 +894,9 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
       }
       else if(pow(p, 1/a) < 0.5)
       {
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-         try 
-         {
-#endif
-            x = pow(p * a * BOOST_MATH_NAMESPACE::beta(a, b, pol), 1 / a);
-            if ((x > 1) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
-               x = 1;
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-         }
-         catch (const std::overflow_error&)
-         {
+         x = pow(p * a * BOOST_MATH_NAMESPACE::beta(a, b, overflow_ignore_policy()), 1 / a);
+         if ((x > 1) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
             x = 1;
-         }
-#endif
          if(x == 0)
             x = BOOST_MATH_NAMESPACE::tools::min_value<T>();
          y = 1 - x;
@@ -949,20 +904,9 @@ BOOST_MATH_GPU_ENABLED T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T*
       else /*if(pow(q, 1/b) < 0.1)*/
       {
          // model a distorted quarter circle:
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-         try 
-         {
-#endif
-            y = pow(1 - pow(p, b * BOOST_MATH_NAMESPACE::beta(a, b, pol)), 1/b);
-            if ((y > 1) || !(BOOST_MATH_NAMESPACE::isfinite)(y))
-               y = 1;
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-         }
-         catch (const std::overflow_error&)
-         {
+         y = pow(1 - pow(p, b * BOOST_MATH_NAMESPACE::beta(a, b, overflow_ignore_policy())), 1/b);
+         if ((y > 1) || !(BOOST_MATH_NAMESPACE::isfinite)(y))
             y = 1;
-         }
-#endif
          if(y == 0)
             y = BOOST_MATH_NAMESPACE::tools::min_value<T>();
          x = 1 - y;

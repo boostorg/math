@@ -7,6 +7,7 @@
 
 #include "math_unit_test.hpp"
 #include <boost/math/tools/engel_expansion.hpp>
+#include <sstream>
 #include <boost/core/demangle.hpp>
 #include <boost/math/constants/constants.hpp>
 #ifdef BOOST_HAS_FLOAT128
@@ -80,6 +81,10 @@ void test_well_known()
 
 int main()
 {
+    std::ostringstream oss;
+    oss << engel_expansion<double>(0.375);
+    CHECK_EQUAL(std::string("{3, 8}"), oss.str());
+
     test_rationals<float>();
     test_rationals<double>();
     test_rationals<long double>();

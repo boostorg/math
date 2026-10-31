@@ -128,6 +128,17 @@ void test_cancel_and_restart()
 }
 
 template<class Real>
+void test_zero_threads_and_bad_bounds()
+{
+    auto g = [](std::vector<Real> const & x)->Real { return x[0]; };
+    vector<pair<Real, Real>> bounds{{ Real(0), Real(1)}};
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 1e-2, false, 0, 1);
+    CHECK_ABSOLUTE_ERROR(Real(0.5), mc.integrate().get(), Real(0.05));
+    bounds[0] = { Real(1), Real(0) };
+    CHECK_THROW((naive_monte_carlo<Real, decltype(g)>(g, bounds, (Real) 1e-2, false, 1, 1)), std::domain_error);
+}
+
+template<class Real>
 void test_finite_singular_boundary()
 {
     std::cout << "Testing that finite singular boundaries work on naive Monte-Carlo integration on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
@@ -431,6 +442,7 @@ void naive_monte_carlo_test()
     test_finite_singular_boundary<double>();
     test_finite_singular_boundary<float>();
 #endif
+    test_zero_threads_and_bad_bounds<double>();
 
 #endif
 #if !defined(TEST) || TEST == 2

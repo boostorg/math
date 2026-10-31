@@ -129,7 +129,7 @@ auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
 BOOST_MATH_EXPORT template<class Container>
 inline auto hoyer_sparsity(Container const & v)
 {
-    return BOOST_MATH_NAMESPACE::statistics::hoyer_sparsity(v.cbegin(), v.cend());
+    return BOOST_MATH_NAMESPACE::statistics::hoyer_sparsity(std::cbegin(v), std::cend(v));
 }
 
 
@@ -205,7 +205,7 @@ auto oracle_snr(Container const & signal, Container const & noisy_signal)
 BOOST_MATH_EXPORT template<class Container>
 auto mean_invariant_oracle_snr(Container const & signal, Container const & noisy_signal)
 {
-    using Real = typename Container::value_type;
+    using Real = typename std::conditional<std::is_integral<typename Container::value_type>::value, double, typename Container::value_type>::type;
     BOOST_MATH_ASSERT_MSG(signal.size() == noisy_signal.size(), "Signal and noisy signal must be have the same number of elements.");
 
     Real mu = BOOST_MATH_NAMESPACE::statistics::mean(signal);
@@ -330,7 +330,7 @@ auto m2m4_snr_estimator(ForwardIterator first, ForwardIterator last, decltype(*f
 BOOST_MATH_EXPORT template<class Container>
 inline auto m2m4_snr_estimator(Container const & noisy_signal,  typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimated_noise_kurtosis=3)
 {
-    return m2m4_snr_estimator(noisy_signal.cbegin(), noisy_signal.cend(), estimated_signal_kurtosis, estimated_noise_kurtosis);
+    return m2m4_snr_estimator(std::cbegin(noisy_signal), std::cend(noisy_signal), estimated_signal_kurtosis, estimated_noise_kurtosis);
 }
 
 BOOST_MATH_EXPORT template<class ForwardIterator>

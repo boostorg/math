@@ -165,9 +165,9 @@ BOOST_MATH_NAMESPACE_BEGIN
         constexpr auto function = "boost::math::negative_binomial<%1%>::find_lower_bound_on_p";
         RealType result = 0;  // of error checks.
         RealType failures = trials - successes;
-        if(false == detail::check_probability(function, alpha, &result, Policy())
+        if(!(detail::check_probability(function, alpha, &result, Policy())
           && negative_binomial_detail::check_dist_and_k(
-          function, successes, RealType(0), failures, &result, Policy()))
+          function, successes, RealType(0), failures, &result, Policy())))
         {
           return result;
         }
@@ -190,9 +190,9 @@ BOOST_MATH_NAMESPACE_BEGIN
         constexpr auto function = "boost::math::negative_binomial<%1%>::find_upper_bound_on_p";
         RealType result = 0;  // of error checks.
         RealType failures = trials - successes;
-        if(false == negative_binomial_detail::check_dist_and_k(
+        if(!(negative_binomial_detail::check_dist_and_k(
           function, successes, RealType(0), failures, &result, Policy())
-          && detail::check_probability(function, alpha, &result, Policy()))
+          && detail::check_probability(function, alpha, &result, Policy())))
         {
           return result;
         }
@@ -221,9 +221,9 @@ BOOST_MATH_NAMESPACE_BEGIN
         constexpr auto function = "boost::math::negative_binomial<%1%>::find_minimum_number_of_trials";
         // Error checks:
         RealType result = 0;
-        if(false == negative_binomial_detail::check_dist_and_k(
+        if(!(negative_binomial_detail::check_dist_and_k(
           function, RealType(1), p, k, &result, Policy())
-          && detail::check_probability(function, alpha, &result, Policy()))
+          && detail::check_probability(function, alpha, &result, Policy())))
         { return result; }
 
         result = ibeta_inva(k + 1, p, alpha, Policy());  // returns n - k
@@ -238,9 +238,9 @@ BOOST_MATH_NAMESPACE_BEGIN
         constexpr auto function = "boost::math::negative_binomial<%1%>::find_maximum_number_of_trials";
         // Error checks:
         RealType result = 0;
-        if(false == negative_binomial_detail::check_dist_and_k(
+        if(!(negative_binomial_detail::check_dist_and_k(
           function, RealType(1), p, k, &result, Policy())
-          &&  detail::check_probability(function, alpha, &result, Policy()))
+          &&  detail::check_probability(function, alpha, &result, Policy())))
         { return result; }
 
         result = ibetac_inva(k + 1, p, alpha, Policy());  // returns n - k

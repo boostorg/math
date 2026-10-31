@@ -18,7 +18,7 @@
         Real khinchin_geometric_mean() const;
 
         template<typename T, typename Z_>
-        friend std::ostream& operator<<(std::ostream& out, centered_continued_fraction<T, Z_>& ccf);
+        friend std::ostream& operator<<(std::ostream& out, const centered_continued_fraction<T, Z_>& ccf);
     };
     }
 

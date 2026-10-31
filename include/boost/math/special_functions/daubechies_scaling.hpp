@@ -232,6 +232,7 @@ struct null_interpolator
     {
         return 1;
     }
+    int64_t bytes() const { return sizeof(*this); }
 };
 
 } // namespace detail
@@ -266,7 +267,7 @@ public:
         static_assert(p > 0, "Daubechies scaling functions must have at least 1 vanishing moment.");
         if constexpr (p == 1)
         {
-            return;
+            m_interpolator = std::make_shared<detail::null_interpolator>();
         }
         else {
             if (grid_refinements < 0)

@@ -951,7 +951,7 @@ BOOST_MATH_NAMESPACE_BEGIN
             try
             {
 #endif
-               return T4_mp(h, a, pol);
+               return T4_mp(h, a, forwarding_policy());
 #ifndef BOOST_MATH_NO_EXCEPTIONS
             }
             catch(const BOOST_MATH_NAMESPACE::evaluation_error&){}  // T4 may fail and throw, that's OK

@@ -92,7 +92,7 @@ public:
     }
 
     template<typename T, typename Z2>
-    friend std::ostream& operator<<(std::ostream& out, engel_expansion<T, Z2>& eng);
+    friend std::ostream& operator<<(std::ostream& out, const engel_expansion<T, Z2>& eng);
 
 private:
     Real x_;
@@ -101,7 +101,7 @@ private:
 
 
 BOOST_MATH_EXPORT template<typename Real, typename Z2>
-std::ostream& operator<<(std::ostream& out, engel_expansion<Real, Z2>& engel)
+std::ostream& operator<<(std::ostream& out, const engel_expansion<Real, Z2>& engel)
 {
     constexpr const int p = std::numeric_limits<Real>::max_digits10;
     if constexpr (p == 2147483647)

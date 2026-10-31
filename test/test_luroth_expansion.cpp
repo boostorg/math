@@ -7,6 +7,7 @@
 
 #include "math_unit_test.hpp"
 #include <boost/math/tools/luroth_expansion.hpp>
+#include <sstream>
 #include <boost/math/constants/constants.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #ifdef BOOST_HAS_FLOAT128
@@ -77,6 +78,10 @@ void test_halves()
 
 int main()
 {
+    std::ostringstream oss;
+    oss << luroth_expansion<double>(0.375);
+    CHECK_EQUAL(std::string("((0; 2, 3))"), oss.str());
+
     test_integral<float>();
     test_integral<double>();
     test_integral<long double>();

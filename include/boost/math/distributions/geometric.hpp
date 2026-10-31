@@ -142,9 +142,9 @@ BOOST_MATH_NAMESPACE_BEGIN
         RealType result = 0;  // of error checks.
         RealType successes = 1;
         RealType failures = trials - successes;
-        if(false == detail::check_probability(function, alpha, &result, Policy())
+        if(false == (detail::check_probability(function, alpha, &result, Policy())
           && geometric_detail::check_dist_and_k(
-          function, RealType(0), failures, &result, Policy()))
+          function, RealType(0), failures, &result, Policy())))
         {
           return result;
         }
@@ -167,9 +167,9 @@ BOOST_MATH_NAMESPACE_BEGIN
         RealType result = 0;  // of error checks.
         RealType successes = 1;
         RealType failures = trials - successes;
-        if(false == geometric_detail::check_dist_and_k(
+        if(false == (geometric_detail::check_dist_and_k(
           function, RealType(0), failures, &result, Policy())
-          && detail::check_probability(function, alpha, &result, Policy()))
+          && detail::check_probability(function, alpha, &result, Policy())))
         {
           return result;
         }
@@ -199,9 +199,9 @@ BOOST_MATH_NAMESPACE_BEGIN
         constexpr auto function = "boost::math::geometric<%1%>::find_minimum_number_of_trials";
         // Error checks:
         RealType result = 0;
-        if(false == geometric_detail::check_dist_and_k(
+        if(false == (geometric_detail::check_dist_and_k(
           function, p, k, &result, Policy())
-          && detail::check_probability(function, alpha, &result, Policy()))
+          && detail::check_probability(function, alpha, &result, Policy())))
         {
           return result;
         }
@@ -217,9 +217,9 @@ BOOST_MATH_NAMESPACE_BEGIN
         constexpr auto function = "boost::math::geometric<%1%>::find_maximum_number_of_trials";
         // Error checks:
         RealType result = 0;
-        if(false == geometric_detail::check_dist_and_k(
+        if(false == (geometric_detail::check_dist_and_k(
           function, p, k, &result, Policy())
-          &&  detail::check_probability(function, alpha, &result, Policy()))
+          &&  detail::check_probability(function, alpha, &result, Policy())))
         {
           return result;
         }

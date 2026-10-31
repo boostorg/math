@@ -29,9 +29,9 @@ BOOST_MATH_NAMESPACE_BEGIN
     BOOST_MATH_EXPORT template <class Dist, class Policy>
     inline
       typename Dist::value_type find_scale( // For example, normal mean.
-      typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
-      // For example, a nominal minimum acceptable weight z, so that p * 100 % are > z
-      typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% > z.
+      typename Dist::value_type z, // location of random variable z to give probability, P(X <= z) == p.
+      // For example, a nominal minimum acceptable weight z, so that p * 100 % are <= z
+      typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% <= z.
       typename Dist::value_type location, // location parameter, for example, normal distribution mean.
       const Policy& pol 
       )
@@ -85,9 +85,9 @@ BOOST_MATH_NAMESPACE_BEGIN
     BOOST_MATH_EXPORT template <class Dist>
     inline // with default policy.
       typename Dist::value_type find_scale( // For example, normal mean.
-      typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
-      // For example, a nominal minimum acceptable z, so that p * 100 % are > z
-      typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% > z.
+      typename Dist::value_type z, // location of random variable z to give probability, P(X <= z) == p.
+      // For example, a nominal minimum acceptable z, so that p * 100 % are <= z
+      typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% <= z.
       typename Dist::value_type location) // location parameter, for example, mean.
     { // Forward to find_scale using the default policy.
       return (find_scale<Dist>(z, p, location, policies::policy<>()));

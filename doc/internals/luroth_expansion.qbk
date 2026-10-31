@@ -20,7 +20,7 @@
         Real digit_geometric_mean() const;
 
         template<typename T, typename Z_>
-        friend std::ostream& operator<<(std::ostream& out, luroth_expansion<T, Z_>& luroth);
+        friend std::ostream& operator<<(std::ostream& out, const luroth_expansion<T, Z_>& luroth);
     };
     }
 

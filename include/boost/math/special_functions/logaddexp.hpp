@@ -23,11 +23,11 @@ Real logaddexp(Real x1, Real x2) noexcept
     // Validate inputs first
     if (!(BOOST_MATH_NAMESPACE::isfinite)(x1))
     {
-        return x1;
+        return x1 < 0 ? x2 : x1;
     }
     else if (!(BOOST_MATH_NAMESPACE::isfinite)(x2))
     {
-        return x2;
+        return x2 < 0 ? x1 : x2;
     }
 
     const Real temp = x1 - x2;

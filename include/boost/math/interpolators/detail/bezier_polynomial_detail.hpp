@@ -9,7 +9,7 @@
 
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <stdexcept>
-#include <iostream>
+#include <sstream>
 #include <string>
 #include <limits>
 #endif
@@ -61,13 +61,9 @@ public:
     inline Point operator()(Real t) const
     {
         if (t < 0 || t > 1) {
-            std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n";
-            std::cerr << "Querying the Bezier curve interpolator at t = " << t << " is not allowed; t in [0,1] is required.\n";
-            Point p;
-            for (Z i = 0; i < p.size(); ++i) {
-                p[i] = std::numeric_limits<Real>::quiet_NaN();
-            }
-            return p;
+            std::ostringstream oss;
+            oss << "Querying the Bezier curve interpolator at t = " << t << " is not allowed; t in [0,1] is required.";
+            throw std::domain_error(oss.str());
         }
 
         auto & scratch_space = get_bezier_storage<RandomAccessContainer>(control_points_.size() - 1);
@@ -82,6 +78,11 @@ public:
     }
 
     Point prime(Real t) {
+        if (t < 0 || t > 1) {
+            std::ostringstream oss;
+            oss << "Querying the Bezier curve derivative at t = " << t << " is not allowed; t in [0,1] is required.";
+            throw std::domain_error(oss.str());
+        }
         auto & scratch_space = get_bezier_storage<RandomAccessContainer>(control_points_.size() - 1);
         for (Z i = 0; i < control_points_.size() - 1; ++i) {
             for (Z j = 0; j < control_points_[0].size(); ++j) {
@@ -99,9 +100,7 @@ public:
     void edit_control_point(Point const & p, Z index)
     {
         if (index >= control_points_.size()) {
-            std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n";
-            std::cerr << "Attempting to edit a control point outside the bounds of the container; requested edit of index " << index << ", but there are only " << control_points_.size() << " control points.\n";
-            return;
+            throw std::domain_error("Attempting to edit a control point outside the bounds of the container; requested edit of index " + std::to_string(index) + ", but there are only " + std::to_string(control_points_.size()) + " control points.");
         }
         control_points_[index] = p;
     }

@@ -138,7 +138,7 @@ public:
     }
     
     template<typename T, typename Z2>
-    friend std::ostream& operator<<(std::ostream& out, centered_continued_fraction<T, Z2>& ccf);
+    friend std::ostream& operator<<(std::ostream& out, const centered_continued_fraction<T, Z2>& ccf);
 
 private:
     const Real x_;
@@ -147,7 +147,7 @@ private:
 
 
 BOOST_MATH_EXPORT template<typename Real, typename Z2>
-std::ostream& operator<<(std::ostream& out, centered_continued_fraction<Real, Z2>& scf) {
+std::ostream& operator<<(std::ostream& out, const centered_continued_fraction<Real, Z2>& scf) {
     constexpr const int p = std::numeric_limits<Real>::max_digits10;
     if constexpr (p == 2147483647)
     {

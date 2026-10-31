@@ -28,9 +28,9 @@ BOOST_MATH_NAMESPACE_BEGIN
     BOOST_MATH_EXPORT template <class Dist, class Policy>
     inline
       typename Dist::value_type find_location( // For example, normal mean.
-      typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
-      // For example, a nominal minimum acceptable z, so that p * 100 % are > z
-      typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% > z.
+      typename Dist::value_type z, // location of random variable z to give probability, P(X <= z) == p.
+      // For example, a nominal minimum acceptable z, so that p * 100 % are <= z
+      typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% <= z.
       typename Dist::value_type scale, // scale parameter, for example, normal standard deviation.
       const Policy& pol 
       )
@@ -63,9 +63,9 @@ BOOST_MATH_NAMESPACE_BEGIN
     BOOST_MATH_EXPORT template <class Dist>
     inline // with default policy.
       typename Dist::value_type find_location( // For example, normal mean.
-      typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
-      // For example, a nominal minimum acceptable z, so that p * 100 % are > z
-      typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% > z.
+      typename Dist::value_type z, // location of random variable z to give probability, P(X <= z) == p.
+      // For example, a nominal minimum acceptable z, so that p * 100 % are <= z
+      typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% <= z.
       typename Dist::value_type scale) // scale parameter, for example, normal standard deviation.
     { // Forward to find_location with default policy.
        return (find_location<Dist>(z, p, scale, policies::policy<>()));
@@ -99,7 +99,7 @@ BOOST_MATH_NAMESPACE_BEGIN
        return result;
       }
        // cout << "z " << c.dist << ", quantile (Dist(), " << c.param1 << ") * scale " << c.param2 << endl;
-       return z - quantile(Dist(), p) * scale;
+       return z - quantile(complement(Dist(), p)) * scale;
     } // find_location complement
 
 
@@ -128,7 +128,7 @@ BOOST_MATH_NAMESPACE_BEGIN
        return result;
       }
        // cout << "z " << c.dist << ", quantile (Dist(), " << c.param1 << ") * scale " << c.param2 << endl;
-       return z - quantile(Dist(), p) * scale;
+       return z - quantile(complement(Dist(), p)) * scale;
     } // find_location complement
 
   BOOST_MATH_NAMESPACE_END

@@ -135,6 +135,10 @@ void test_interpolation_condition_std_array()
         CHECK_ULP_CLOSE(y_copy[i][0], z[0], 2);
         CHECK_ULP_CLOSE(y_copy[i][1], z[1], 2);
     }
+
+    using vbr = boost::math::interpolators::vector_barycentric_rational<std::vector<Real>, std::vector<std::array<Real, 2>>>;
+    CHECK_THROW(vbr(std::vector<Real>{0, 1, 2}, std::vector<std::array<Real, 2>>(3), 3), std::domain_error);
+    CHECK_THROW(vbr(std::vector<Real>{0, 1, 2}, std::vector<std::array<Real, 2>>(2), 1), std::domain_error);
 }
 
 

@@ -185,9 +185,37 @@ public:
         return dydx;
     }
 
-    inline Real double_prime(Real) const
+    Real double_prime(Real x) const
     {
-        return std::numeric_limits<Real>::quiet_NaN();
+        if  (x < x_[0] || x > x_.back())
+        {
+            std::ostringstream oss;
+            oss.precision(std::numeric_limits<Real>::digits10+3);
+            oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
+                << x_[0] << ", " << x_.back() << "]";
+            throw std::domain_error(oss.str());
+        }
+        if (x == x_.back())
+        {
+            return d2ydx2_.back();
+        }
+
+        auto it = std::upper_bound(x_.begin(), x_.end(), x);
+        auto i = std::distance(x_.begin(), it) -1;
+        Real x0 = *(it-1);
+        Real dx = *it - x0;
+        Real t = (x-x0)/dx;
+        Real t2 = t*t;
+        // As in cardinal_septic_hermite_detail::unchecked_double_prime, with unscaled derivatives:
+        Real z0 = 420*t2*(1 + t*(-4 + t*(5 - 2*t)));
+        Real z1 = 60*t2*(-4 + t*(15 + t*(-18 + 7*t)));
+        Real z2 = 60*t2*(-3 + t*(13 + t*(-17 + 7*t)));
+        Real z3 = (1 + t2*(-60 + t*(200 + t*(-225 + 84*t))));
+        Real z4 = t2*(30 + t*(-140 + t*(195 - 84*t)));
+        Real z5 = t*(1 + t*(-8 + t*(20 + t*(-20 + 7*t))));
+        Real z6 = t2*(-2 + t*(10 + t*(-15 + 7*t)));
+
+        return (z0*(y_[i+1] - y_[i])/dx + z1*dydx_[i] + z2*dydx_[i+1])/dx + z3*d2ydx2_[i] + z4*d2ydx2_[i+1] + (z5*d3ydx3_[i] + z6*d3ydx3_[i+1])*dx;
     }
 
     friend std::ostream& operator<<(std::ostream & os, const septic_hermite_detail & m)

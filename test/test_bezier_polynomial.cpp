@@ -53,6 +53,10 @@ void test_linear()
     bp.edit_control_point(endpoint, 1);
     CHECK_ULP_CLOSE(endpoint[0], bp(1)[0], 3);
     CHECK_ULP_CLOSE(endpoint[1], bp(1)[1], 3);
+    CHECK_THROW(bp(Real(1.5)), std::domain_error);
+    CHECK_THROW(bp(Real(-0.5)), std::domain_error);
+    CHECK_THROW(bp.prime(Real(1.5)), std::domain_error);
+    CHECK_THROW(bp.edit_control_point(endpoint, 2), std::domain_error);
 
 }
 

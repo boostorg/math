@@ -77,6 +77,7 @@
               // Exceptions are off if we get here, just fill the cache with NaN's and we'll let this method fail and fallback later:
               std::fill(bessel_cache.begin(), bessel_cache.end(), std::numeric_limits<T>::quiet_NaN());
               cache_offset = -cache_size;
+              log_scale = 0;
               return;
            }
            if ((fabs(term * bessel_cache[cache_size - 1]) < tools::min_value<T>() / (tools::epsilon<T>() * tools::epsilon<T>())) || !(BOOST_MATH_NAMESPACE::isfinite)(term) || (!std::numeric_limits<T>::has_infinity && (fabs(term) > tools::max_value<T>())))
@@ -360,11 +361,21 @@
         if(b == 2 * a)
            return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scale);
 
+        //
+        // Overflow and evaluation errors below are recovered from by other methods,
+        // so they must not reach the user's error handler, whatever the policy:
+        //
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+        typedef typename policies::normalise<Policy, policies::overflow_error<policies::ignore_error>, policies::evaluation_error<policies::throw_on_error> >::type inner_policy;
+#else
+        typedef typename policies::normalise<Policy, policies::overflow_error<policies::ignore_error>, policies::evaluation_error<policies::ignore_error> >::type inner_policy;
+#endif
+        inner_policy inner_pol;
 #ifndef BOOST_MATH_NO_EXCEPTIONS
         try
 #endif
         {
-           prefix = BOOST_MATH_NAMESPACE::tgamma(b, pol);
+           prefix = BOOST_MATH_NAMESPACE::tgamma(b, inner_pol);
            prefix *= exp(z / 2);
         }
 #ifndef BOOST_MATH_NO_EXCEPTIONS
@@ -389,7 +400,7 @@
         try
 #endif
         {
-           hypergeometric_1F1_AS_13_3_7_tricomi_series<T, Policy> s(a, b, z, pol);
+           hypergeometric_1F1_AS_13_3_7_tricomi_series<T, inner_policy> s(a, b, z, inner_pol);
            series_scale = s.scale();
            log_scale += s.scale();
 #ifndef BOOST_MATH_NO_EXCEPTIONS

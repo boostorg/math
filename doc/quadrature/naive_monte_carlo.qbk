@@ -113,6 +113,7 @@ This is also where the number of threads can be set, for instance
     naive_monte_carlo<double, decltype(g)> mc(g, bounds, error_goal, true, std::thread::hardware_concurrency() - 1);
 
 might be more appropriate for running on a user's hardware (the default taking all the threads).
+A thread count of zero is treated as one.
 The call to `integrate()` does not return the value of the integral, but rather a `std::future<Real>`.
 This allows us to do progress reporting from the master thread via
 

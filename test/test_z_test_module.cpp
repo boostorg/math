@@ -22,26 +22,26 @@ import boost.math;
 #endif
 #include "math_unit_test.hpp"
 
-// Summary-statistic overload: statistic = (sample_mean - assumed_mean) / (sample_variance / sqrt(n)).
+// Summary-statistic overload: statistic = (sample_mean - assumed_mean) / sqrt(sample_variance / n).
 template <typename Real>
 void test_one_sample_z()
 {
-    // Equal means give a zero statistic; the resulting p-value underflows to zero.
+    // Equal means give a zero statistic and a two-sided p-value of 1.
     std::pair<Real, Real> temp {boost::math::statistics::one_sample_z_test(static_cast<Real>(10), static_cast<Real>(2), static_cast<Real>(100), static_cast<Real>(10))};
     Real computed_statistic {std::get<0>(temp)};
     Real computed_pvalue {std::get<1>(temp)};
     CHECK_ULP_CLOSE(static_cast<Real>(0), computed_statistic, 5);
-    CHECK_MOLLIFIED_CLOSE(static_cast<Real>(0), computed_pvalue, 5 * std::numeric_limits<Real>::epsilon());
+    CHECK_ULP_CLOSE(static_cast<Real>(1), computed_pvalue, 5);
 
-    // (10 - 5) / (2 / sqrt(100)) = 25.
+    // (10 - 5) / sqrt(2 / 100) = 25 sqrt(2).
     temp = boost::math::statistics::one_sample_z_test(static_cast<Real>(10), static_cast<Real>(2), static_cast<Real>(100), static_cast<Real>(5));
     Real computed_statistic_2 {std::get<0>(temp)};
-    CHECK_ULP_CLOSE(static_cast<Real>(25), computed_statistic_2, 5);
+    CHECK_ULP_CLOSE(25 * std::sqrt(static_cast<Real>(2)), computed_statistic_2, 5);
 
-    // (1/2 - 1/3) / (10 / sqrt(100)) = 1/6.
+    // (1/2 - 1/3) / sqrt(10 / 100) = sqrt(10) / 6.
     temp = boost::math::statistics::one_sample_z_test(static_cast<Real>(1) / 2, static_cast<Real>(10), static_cast<Real>(100), static_cast<Real>(1) / 3);
     Real computed_statistic_3 {std::get<0>(temp)};
-    CHECK_ULP_CLOSE(static_cast<Real>(1) / 6, computed_statistic_3, 5);
+    CHECK_ULP_CLOSE(std::sqrt(static_cast<Real>(10)) / 6, computed_statistic_3, 5);
 }
 
 // Container overload: two unit-shifted samples of equal variance give a statistic of exactly 1.
@@ -55,7 +55,8 @@ void test_two_sample_z()
     Real computed_statistic {std::get<0>(temp)};
     Real computed_pvalue {std::get<1>(temp)};
     CHECK_ULP_CLOSE(static_cast<Real>(1), computed_statistic, 5);
-    CHECK_MOLLIFIED_CLOSE(static_cast<Real>(0), computed_pvalue, std::sqrt(std::numeric_limits<Real>::epsilon()));
+    // erfc(1 / sqrt(2)), the two-sided standard normal p-value of 1.
+    CHECK_ULP_CLOSE(static_cast<Real>(0.31731050786291410), computed_pvalue, 5);
 }
 
 int main()

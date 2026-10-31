@@ -54,7 +54,7 @@ A basic usage is demonstrated below:
     // Interpolate at t = 0.1:
     std::array<double, 3> point = bp(0.1);
 
-The support of the interpolant is [0,1], and an error message will be written if attempting to evaluate the polynomial outside of these bounds.
+The support of the interpolant is [0,1], and a `std::domain_error` is thrown if attempting to evaluate the polynomial outside of these bounds.
 At least two points must be passed; creating a polynomial of degree 1.
 
 Control points may be modified via `edit_control_point`, for example:
