@@ -13,14 +13,19 @@ import math
 import os
 import re
 import shutil
+import struct
 import subprocess
 import tempfile
+import zlib
 
 from . import _ext
 
 
 class Svg:
-    """An SVG: str() is its text, summary the C++ summary(); shown inline in Jupyter."""
+    """An SVG: str() is its text, summary the C++ summary(); shown inline in Jupyter.
+
+    https://www.boost.org/doc/libs/release/libs/math/doc/html/math_toolkit/ulps_plots.html
+    """
 
     def __init__(self, text, summary):
         self.text = text
@@ -38,9 +43,22 @@ class Svg:
         return path
 
 
+def _png(rgb, width, height):
+    """8-bit RGB pixels, row-major from the top row, as a PNG with one IDAT; the C++ side embeds it in its SVGs."""
+    stride = 3 * width
+    raw = b"".join(b"\0" + rgb[stride * j:stride * (j + 1)] for j in range(height))  # filter: none
+
+    def chunk(kind, data):
+        return struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data))
+
+    # 8 bits, RGB, deflate, adaptive filtering, no interlace:
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b""))
+
+
 def _name(f):
     if not hasattr(_ext, "_ulps_plot"):
-        raise RuntimeError("boost.math.ulps was built without Boost.Multiprecision or zlib; see nanobind/CMakeLists.txt")
+        raise RuntimeError("boost.math.ulps was built without Boost.Multiprecision; see nanobind/CMakeLists.txt")
     if isinstance(f, str):
         return f
     if getattr(_ext, getattr(f, "__name__", ""), None) is not f:
@@ -81,7 +99,10 @@ def _run(fn, reference, threads):
 def plot(f, a, b, *, samples=10000, log_x=False, title=None, reference=None, clip=None, show_function=False,
          threads=0):
     """The ulps plot of f on [a, b]; threads=0 uses them all. reference= an mpmath-based callable replaces
-    the cpp_bin_float_50 reference, and runs on one thread."""
+    the cpp_bin_float_50 reference, and runs on one thread.
+
+    https://www.boost.org/doc/libs/release/libs/math/doc/html/math_toolkit/ulps_plots.html
+    """
     name = _name(f)
     svg, summary = _run(lambda ref, th: _ext._ulps_plot(name, a, b, samples, log_x, name if title is None else title, ref,
                                                         clip or -1, show_function, th), reference, threads)
@@ -90,7 +111,10 @@ def plot(f, a, b, *, samples=10000, log_x=False, title=None, reference=None, cli
 
 def heatmap(f, x_range, y_range, *, width=800, height=500, log_x=False, log_y=False, title=None, x_label="x",
             y_label="y", log_scale=False, clip=None, reference=None, show_function=False, threads=0):
-    """The ulps heatmap of f(x, y) over x_range by y_range: (ulps, ulps/envelope), two Svgs. reference= as for plot."""
+    """The ulps heatmap of f(x, y) over x_range by y_range: (ulps, ulps/envelope), two Svgs. reference= as for plot.
+
+    https://www.boost.org/doc/libs/release/libs/math/doc/html/math_toolkit/ulps_plots.html
+    """
     name = _name(f)
     ulps, envelope, summary = _run(
         lambda ref, th: _ext._ulps_heatmap(name, *x_range, *y_range, width, height, log_x, log_y,
@@ -106,7 +130,10 @@ def _chrome():
 
 
 def render_to_png(svg, path, *, width=None, height=None):
-    """Renders an Svg (or SVG text) to a PNG with headless Chrome, or cairosvg. Returns path."""
+    """Renders an Svg (or SVG text) to a PNG with headless Chrome, or cairosvg. Returns path.
+
+    https://www.boost.org/doc/libs/release/libs/math/doc/html/math_toolkit/ulps_plots.html
+    """
     text = str(svg)
     size = lambda attr: int(float(re.search(r"<svg[^>]*?\b" + attr + r"=['\"]([0-9.]+)", text).group(1)))
     width = width or size("width")

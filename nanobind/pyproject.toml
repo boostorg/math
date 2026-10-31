@@ -1,18 +1,53 @@
-# pip wheel --no-deps -w dist nanobind, from the root of a Boost.Math checkout; see CMakeLists.txt.
+# pip wheel --no-deps -w dist ./nanobind, from the root of a Boost.Math checkout; see CMakeLists.txt.
 [build-system]
-requires = ["scikit-build-core>=0.10", "nanobind>=2.0"]
+requires = ["scikit-build-core>=1.0", "nanobind>=2.0"]
 build-backend = "scikit_build_core.build"
 
 [project]
 name = "boost-math"
 version = "0.0.1"
-description = "Python bindings for Boost.Math (development build)"
-license = { text = "BSL-1.0" }
+description = "Python bindings for Boost.Math: special functions, distributions, quadrature and more"
+readme = "README.md"
+# The license file is ../LICENSE, which CMakeLists.txt installs into the wheel's dist-info.
+license = "BSL-1.0"
 requires-python = ">=3.12"
-dependencies = ["numpy"]
+# NumPy 2's promotion rules (NEP 50), which the scalar fast path of src/vectorize.hpp assumes.
+dependencies = ["numpy>=2"]
+keywords = ["special functions", "statistics", "distributions", "quadrature", "optimization", "numerical analysis"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: C++",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+[project.urls]
+Homepage = "https://www.boost.org/libs/math"
+Documentation = "https://www.boost.org/doc/libs/release/libs/math/"
+Source = "https://github.com/boostorg/math"
+Issues = "https://github.com/boostorg/math/issues"
 
 [tool.scikit-build]
 minimum-version = "build-system.requires"
 wheel.packages = []
 # One abi3 wheel for every Python >= 3.12.
 wheel.py-api = "cp312"
+# The oldest macOS for arm64, rather than the build machine's: scikit-build-core tags the wheel to match.
+cmake.define.CMAKE_OSX_DEPLOYMENT_TARGET = "11.0"
+
+# For .github/workflows/wheels.yml, run from a directory holding the math, multiprecision and config checkouts.
+[tool.cibuildwheel]
+build = "cp312-*"
+# musllinux: inverse_gaussian quantile gets a NaN gamma_p_inv guess under musl libm (not reproduced elsewhere yet).
+skip = "*-musllinux*"
+build-verbosity = 1
+test-requires = ["numpy", "mpmath", "pytest", "scipy"]
+test-command = "pytest {package}/tests"
+linux.archs = ["native"]
+windows.archs = ["AMD64"]
+# The same target as cmake.define above, for cibuildwheel's own checks (x86_64 too).
+macos.environment = { MACOSX_DEPLOYMENT_TARGET = "11.0" }

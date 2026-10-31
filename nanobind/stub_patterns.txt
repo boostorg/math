@@ -1,0 +1,103 @@
+# Copyright 2026 Nick Thompson
+# Distributed under the Boost Software License, Version 1.0.
+# https://www.boost.org/LICENSE_1_0.txt
+#
+# nanobind.stubgen patterns (CMakeLists.txt): the result named tuples as typing.NamedTuple, and the nan in defaults.
+
+^boost\.math\.(optimize|statistics)\.__prefix__$:
+    \from math import nan
+
+^boost\.math\.quadrature\.QuadratureResult$:
+    \from typing import NamedTuple
+    class QuadratureResult(NamedTuple):
+        \doc
+        value: float
+        error: float
+        l1_norm: float
+
+^boost\.math\.quadrature\.GaussResult$:
+    \from typing import NamedTuple
+    class GaussResult(NamedTuple):
+        \doc
+        value: float
+        l1_norm: float
+
+^boost\.math\.quadrature\.OouraResult$:
+    \from typing import NamedTuple
+    class OouraResult(NamedTuple):
+        \doc
+        value: float
+        error: float
+
+^boost\.math\.quadrature\.naive_monte_carlo_result$:
+    \from typing import NamedTuple
+    class naive_monte_carlo_result(NamedTuple):
+        value: float
+        error: float
+        calls: int
+
+^boost\.math\.optimize\.OptimizeResult$:
+    \from typing import Any, NamedTuple
+    class OptimizeResult(NamedTuple):
+        \doc
+        x: Any
+        fun: float
+        nfev: int
+        nit: int | None = None
+        converged: bool | None = None
+
+^boost\.math\.roots\.RootResult$:
+    \from typing import NamedTuple
+    class RootResult(NamedTuple):
+        \doc
+        root: float
+        lower: float
+        upper: float
+        iterations: int
+
+^boost\.math\.roots\.NewtonResult$:
+    \from typing import NamedTuple
+    class NewtonResult(NamedTuple):
+        \doc
+        root: float
+        iterations: int
+
+^boost\.math\.statistics\.TestResult$:
+    \from typing import NamedTuple
+    class TestResult(NamedTuple):
+        statistic: float
+        pvalue: float
+
+^boost\.math\.statistics\.MeanVariance$:
+    \from typing import NamedTuple
+    class MeanVariance(NamedTuple):
+        mean: float
+        sample_variance: float
+
+^boost\.math\.statistics\.Moments$:
+    \from typing import NamedTuple
+    class Moments(NamedTuple):
+        mean: float
+        m2: float
+        m3: float
+        m4: float
+
+^boost\.math\.statistics\.MeansCovariance$:
+    \from typing import NamedTuple
+    class MeansCovariance(NamedTuple):
+        mean_x: float
+        mean_y: float
+        covariance: float
+
+^boost\.math\.statistics\.LinearFit$:
+    \from typing import NamedTuple
+    class LinearFit(NamedTuple):
+        intercept: float
+        slope: float
+
+^boost\.math\.statistics\.LinearFitR2$:
+    \from typing import NamedTuple
+    class LinearFitR2(NamedTuple):
+        intercept: float
+        slope: float
+        r_squared: float
