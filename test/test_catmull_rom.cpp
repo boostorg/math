@@ -98,8 +98,8 @@ void test_linear()
     s = cr.parameter_at_point(3);
     CHECK_ULP_CLOSE(3, s, 4);
 
-    // Test that the function is linear on the interval [1,2]:
-    for (double s = 1; s < 2; s += 0.01)
+    // Test that the function is linear on the interval [0,3], end segments included:
+    for (double s = 0; s < 3; s += 0.01)
     {
         auto p = cr(s);
         CHECK_ULP_CLOSE(Real(s), p[0], 4);
@@ -111,7 +111,7 @@ void test_linear()
         CHECK_ABSOLUTE_ERROR(0, tangent[1], tol);
         CHECK_ABSOLUTE_ERROR(0, tangent[2], tol);
     }
-
+    CHECK_ULP_CLOSE(1, cr.prime(cr.max_parameter())[0], 8);
 }
 
 template<class Real>

@@ -75,28 +75,11 @@ The default is open, but this can be easily changed:
 
 In either case, evaluating the interpolator at /s=0/ returns the first point in the list.
 
-If the curve is open, then the first and last segments may have strange behavior.
-The traditional solution is to prepend a carefully selected control point to the data so that the first data segment (second interpolator segment) has reasonable tangent vectors, and simply ignore the first interpolator segment.
-A control point is appended to the data using similar criteria.
-However, we recommend not going through this effort until it proves to be necessary: For most use-cases, the curve is good enough without prepending and appending control points, and responsible selection of non-data control points is difficult.
+Closed curves wrap around.
+Open curves use the reflected ghost points /2p[sub 0] - p[sub 1]/ and /2p[sub n-1] - p[sub n-2]/,
+so the tangent at each end point is parallel to the chord to its neighbour.
 
-Inside `catmull_rom`, the curve is represented as closed.
-This is because an open Catmull-Rom curve is /implicitly closed/, but the closing point is the zero vector.
-There is no reason to suppose that the zero vector is a better closing point than the endpoint (or any other point, for that matter),
-so traditionally Catmull-Rom splines leave the segment between the first and second point undefined,
-as well as the segment between the second-to-last and last point.
-We find this property of the traditional implementation of Catmull-Rom splines annoying and confusing to the user.
-Hence internally, we close the curve so that the first and last segments are defined.
-Of course, this causes the /tangent/ vectors to the first and last points to be bizarre.
-This is a "pick your poison" design decision-either the curve cannot interpolate in its first and last segments,
-or the tangents along the first and last segments are meaningless.
-In the vast majority of cases, this will be no problem to the user.
-However, if it becomes a problem, then the user should add one extra point in a position they believe is reasonable and close the curve.
-
-Since the routine internally represents the curve as closed,
-a question arises: Why does the user have to specify if the curve is open or closed?
-The answer is that the parameterization is chosen by the routine,
-so it is of interest to the user to understand the values where a meaningful result is returned.
+The parameterization is chosen by the routine, so it is of interest to the user to understand the values where a meaningful result is returned.
 
     Real max_s = cr.max_parameter();
 

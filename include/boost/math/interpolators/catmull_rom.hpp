@@ -111,10 +111,20 @@ catmull_rom<Point, RandomAccessContainer>::catmull_rom(RandomAccessContainer&& p
     m_pnts.resize(num_pnts+3);
     //std::cout << "Number of points now = " << m_pnts.size() << "\n";
 
-    m_pnts[num_pnts+1] = m_pnts[0];
-    m_pnts[num_pnts+2] = m_pnts[1];
+    // The ghost points: a closed curve wraps around, an open one reflects its end points, so its ends stay local.
+    auto reflect = [](const Point& p, const Point& q) {
+        using std_workaround::size;
+        Point r = p;
+        for (std::size_t j = 0; j < size(p); ++j)
+        {
+            r[j] = 2 * p[j] - q[j];
+        }
+        return r;
+    };
+    m_pnts[num_pnts+1] = closed ? m_pnts[0] : reflect(m_pnts[num_pnts-1], m_pnts[num_pnts-2]);
+    m_pnts[num_pnts+2] = closed ? m_pnts[1] : reflect(m_pnts[num_pnts+1], m_pnts[num_pnts-1]);
 
-    auto tmp = m_pnts[num_pnts-1];
+    auto tmp = closed ? m_pnts[num_pnts-1] : reflect(m_pnts[0], m_pnts[1]);
     for (auto i = num_pnts; i > 0; --i)
     {
         m_pnts[i] = m_pnts[i - 1];
@@ -122,7 +132,7 @@ catmull_rom<Point, RandomAccessContainer>::catmull_rom(RandomAccessContainer&& p
     m_pnts[0] = tmp;
 
     m_s[0] = -detail::alpha_distance<Point>(m_pnts[0], m_pnts[1], alpha);
-    if (abs(m_s[0]) < std::numeric_limits<typename Point::value_type>::epsilon())
+    if (closed && abs(m_s[0]) < std::numeric_limits<typename Point::value_type>::epsilon())
     {
         throw std::domain_error("The first and last point should not be the same.\n");
     }
