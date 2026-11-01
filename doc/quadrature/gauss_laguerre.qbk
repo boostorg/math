@@ -1,0 +1,151 @@
+[/
+Copyright (c) 2026 Jacob Hass
+Copyright (c) 2026 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:gauss_laguerre Gauss-Laguerre quadrature]
+
+[heading Synopsis]
+
+`#include <boost/math/quadrature/gauss_laguerre.hpp>`
+
+   namespace boost{ namespace math{ namespace quadrature{
+
+   template <class Real, unsigned Points, class ``__Policy`` = boost::math::policies::policy<> >
+   class gauss_laguerre
+   {
+   public:
+      explicit gauss_laguerre(Real alpha = 0);
+
+      const std::vector<Real>& abscissa() const;
+      const std::vector<Real>& weights() const;
+      const std::vector<Real>& anti_gauss_abscissa() const;
+      const std::vector<Real>& anti_gauss_weights() const;
+
+      template <class F>
+      auto integrate(F f, Real* pL1 = nullptr) const -> decltype(std::declval<F>()(std::declval<Real>()));
+
+      template <class F, class Norm>
+      auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm, Real* pL1 = nullptr) const -> decltype(f(Real(0)));
+
+      template <class F>
+      auto integrate_averaged(F f, Real* error = nullptr, Real* pL1 = nullptr) const -> decltype(std::declval<F>()(std::declval<Real>()));
+
+      template <class F, class Norm>
+      auto integrate_averaged(F f, const decltype(f(Real(0)))& zero, Norm norm,
+                              Real* error = nullptr, Real* pL1 = nullptr) const -> decltype(f(Real(0)));
+   };
+
+   }}} // namespaces
+
+[heading Description]
+
+The `gauss_laguerre` class template computes
+
+[expression ['[int][sub 0][super [infin]] f(x) x[super [alpha]] e[super -x] dx [approx] [sum][sub i] w[sub i] f(x[sub i])]]
+
+using /Points/ evaluations of /f/, where the abscissas /x/[sub i] are the zeros of the generalized Laguerre polynomial
+/L/[sub /Points/][super ([alpha])], which [link math_toolkit.sf_poly.laguerre `laguerre_zeros`] also returns.
+The rule is exact when /f/ is a polynomial of degree at most 2['Points] - 1.
+Note that the weight function /x/[super [alpha]] exp(-/x/) is not part of /f/: pass only the factor that multiplies it.
+This is what makes the rule effective for integrands with an integrable singularity /x/[super [alpha]] at the origin.
+
+Like [link math_toolkit.gauss `gauss`], this is a "one shot" non-adaptive routine,
+intended for smooth /f/ that grow no faster than a polynomial,
+such as moments and Laplace transforms of smooth functions, or expectations under a gamma distribution.
+For /Points/ + 1 more evaluations of /f/, `integrate_averaged` is exact to higher degree and estimates its error.
+/Points/ must be at least 2.
+
+   explicit gauss_laguerre(Real alpha = 0);
+
+Constructs the rule for the weight function /x/[super [alpha]] exp(-/x/), which requires [alpha] to be finite and greater than -1:
+otherwise the constructor raises a __domain_error through the /Policy/.
+If the policy does not throw, the abscissas and weights are NaN, and so is every integral.
+For [alpha] = 0 the rule is shared by all objects of the same type: it comes from the pre-computed tables or is computed once and cached.
+For other values of [alpha] the constructor computes the rule.
+
+   const std::vector<Real>& abscissa() const;
+   const std::vector<Real>& weights() const;
+
+These provide direct access to the abscissas, all positive and in increasing order, and their weights.
+
+   const std::vector<Real>& anti_gauss_abscissa() const;
+   const std::vector<Real>& anti_gauss_weights() const;
+
+These provide direct access to the nodes and weights of the anti-Gauss rule /A/ of `integrate_averaged`, described below.
+It is computed the first time it is needed, then cached.
+
+   template <class F>
+   auto integrate(F f, Real* pL1 = nullptr) const -> decltype(std::declval<F>()(std::declval<Real>()));
+
+Integrates /f/(/x/) /x/[super [alpha]] exp(-/x/) over \[0, [infin]) with the /Points/-point Gauss rule /G/. /f/ may return a real or complex value.
+
+If `pL1` is not null, `*pL1` is set to the corresponding integral of |/f/|.
+If that is substantially larger than the absolute value of the result, then the sum was ill-conditioned.
+
+   template <class F, class Norm>
+   auto integrate(F f, const decltype(f(Real(0)))& zero, Norm norm, Real* pL1 = nullptr) const -> decltype(f(Real(0)));
+
+As for [link math_toolkit.gauss `gauss`], this overload handles vector- and matrix-valued integrands:
+`zero` is the additive identity of the returned type, and `norm` returns a nonnegative scalar convertible to `Real`.
+The L1 norm is measured with `norm`.
+
+   template <class F>
+   auto integrate_averaged(F f, Real* error = nullptr, Real* pL1 = nullptr) const -> decltype(std::declval<F>()(std::declval<Real>()));
+
+   template <class F, class Norm>
+   auto integrate_averaged(F f, const decltype(f(Real(0)))& zero, Norm norm,
+                           Real* error = nullptr, Real* pL1 = nullptr) const -> decltype(f(Real(0)));
+
+Returns Laurie's averaged rule (/G/(/f/) + /A/(/f/))/2, at the cost of /Points/ + 1 more evaluations of /f/.
+/A/ is the anti-Gauss rule: the rule with /Points/ + 1 nodes whose error on every polynomial of degree up to 2['Points] + 1
+is exactly that of /G/ with the opposite sign, so the average is exact for polynomials of degree 2['Points] + 1.
+Its nodes interlace the Gauss nodes, all of them are positive, and its weights are positive.
+
+If `error` is not null, `*error` is set to |/A/(/f/) - /G/(/f/)|/2, but never less than 2[epsilon] times the L1 norm.
+When /G/ and /A/ bracket the integral, as they do for smooth /f/ once the error falls steadily with /Points/, this bounds the error of the average;
+it is then also close to the error of /G/.
+Otherwise it is a heuristic, and integrands that alias onto the null space of /A/ - /G/ can fool it.
+If `pL1` is not null, `*pL1` is set to the L1 norm of the averaged rule, measured with `norm` in the second overload.
+
+[heading Example]
+
+The integral
+
+[expression ['[int][sub 0][super [infin]] x[super -1/2] e[super -x] cos(x) dx = [Gamma](1/2) cos([pi]/8) / 2[super 1/4]]]
+
+has a singularity at the origin, which the weight function absorbs with [alpha] = -1/2:
+
+   using boost::math::quadrature::gauss_laguerre;
+   gauss_laguerre<double, 30> rule(-0.5);
+   double error;
+   double I = rule.integrate_averaged([](double x) { return std::cos(x); }, &error);
+
+`I` is the exact value rounded to double precision, and `error` is about 7e-16.
+With 15 points the error of `I` is 9e-13, and `error`, 9e-12, bounds it.
+
+[heading Choosing the number of points]
+
+`gauss_laguerre` has pre-computed tables of abscissas and weights for [alpha] = 0 and 7, 10 and 15 points, at up to 110 decimal digits of precision.
+For other numbers of points, or higher precision types, or [alpha] [ne] 0, the abscissas and weights are computed:
+they are found in O(/Points/) operations by following the differential equation of the Laguerre functions
+from zero to zero in twice the working precision (Glaser, Liu and Rokhlin); the weights of the largest abscissas underflow for large /Points/.
+Where that method cannot vouch for a zero, the rule comes from the three-term recurrence instead, which overflows for large /Points/ combined with
+large [alpha] (in `double`, for example 2000 points and [alpha] = 50).
+If the rule cannot be computed, `integrate` and `integrate_averaged` raise an __evaluation_error through the /Policy/;
+if the policy does not throw, the result is a NaN.
+
+As with `gauss`, defining `BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND` turns any combination of type and number of points without
+pre-computed values into a compile-time error.
+
+[heading References]
+
+* G. H. Golub and J. H. Welsch, ['Calculation of Gauss quadrature rules], Mathematics of Computation 23 (1969), 221-230.
+* A. Glaser, X. Liu and V. Rokhlin, ['A fast algorithm for the calculation of the roots of special functions], SIAM Journal on Scientific Computing 29 (2007), no. 4, 1420-1438, [@https://doi.org/10.1137/06067016X doi:10.1137/06067016X].
+* W. Gautschi, ['Orthogonal Polynomials: Computation and Approximation], Oxford University Press, 2004.
+* D. P. Laurie, ['Anti-Gaussian quadrature formulas], Mathematics of Computation 65 (1996), no. 214, 739-747, [@https://doi.org/10.1090/S0025-5718-96-00713-2 doi:10.1090/S0025-5718-96-00713-2].
+
+[endsect] [/section:gauss_laguerre Gauss-Laguerre quadrature]

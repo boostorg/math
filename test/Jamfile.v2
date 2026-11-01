@@ -552,6 +552,7 @@ test-suite special_fun :
    [ run test_instantiate3.cpp ]
    [ run test_jacobi.cpp pch_light /boost/test//boost_unit_test_framework  ]
    [ run test_laguerre.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
+   [ run test_orthogonal_polynomial_zeros.cpp ]
 
    [ run test_lambert_w.cpp  ]
    [ run test_lambert_w.cpp : : : <define>BOOST_MATH_TEST_MULTIPRECISION=1  $(float128_type) [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : test_lambert_w_multiprecision_1 ]

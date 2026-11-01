@@ -16,6 +16,12 @@
    
    template <class T1, class T2, class T3>
    BOOST_MATH_GPU_ENABLED ``__sf_result`` hermite_next(unsigned n, T1 x, T2 Hn, T3 Hnm1);
+
+   template <class T>
+   std::vector<T> hermite_zeros(unsigned n);
+
+   template <class T, class ``__Policy``>
+   std::vector<T> hermite_zeros(unsigned n, const ``__Policy``&);
       
    }} // namespaces
 
@@ -68,6 +74,17 @@ Formally the arguments are:
 [[Hn][The value of the polynomial evaluated at degree /n/.]]
 [[Hnm1][The value of the polynomial evaluated at degree /n-1/.]]
 ]
+
+`hermite_zeros` returns the zeros of /H/[sub /n/].
+As /H/[sub /n/] is even or odd, only the nonnegative zeros are returned, in increasing order: the others are their negatives,
+and for odd /n/ the first zero is 0. For /n/ = 0 the result is empty.
+As for `legendre_p_zeros`, the template argument is mandatory.
+These are the abscissas of the [link math_toolkit.gauss_hermite Gauss-Hermite quadrature] rule.
+
+The zeros are found in O(/n/) operations by following the differential equation of the Hermite functions
+from zero to zero in twice the working precision (Glaser, Liu and Rokhlin), so there is no limit on /n/ from the overflow of the polynomials.
+In our tests against high-precision values they are correctly rounded in `float`, `double` and 50-digit precision.
+These functions are not available on the GPU.
    
 [h4 Accuracy]
 

@@ -17,6 +17,12 @@ from boost.math import constants, differentiation, expansions, quadrature
 def test_special_functions():
     assert bm.logsumexp(np.array([[1.0, 2.0], [3.0, 800.0]])) == pytest.approx(800) and bm.logsumexp([]) == -math.inf
     np.testing.assert_allclose(bm.legendre_p_zeros(5), np.polynomial.legendre.leggauss(5)[0][2:], atol=1e-15)
+    np.testing.assert_allclose(bm.hermite_zeros(6), np.polynomial.hermite.hermgauss(6)[0][3:], rtol=1e-14)
+    np.testing.assert_allclose(bm.laguerre_zeros(6), np.polynomial.laguerre.laggauss(6)[0], rtol=1e-14)
+    np.testing.assert_array_equal(bm.laguerre_zeros(5, 0.5), quadrature.gauss_laguerre_rule(5, 0.5)[0])
+    np.testing.assert_allclose(bm.jacobi_zeros(5, -0.5, -0.5), np.cos(np.arange(9, 0, -2) * np.pi / 10), atol=1e-15)
+    with pytest.raises(ValueError):
+        bm.jacobi_zeros(3, 0.5, -1.0)
     assert bm.jacobi_double_prime(4, 0.5, 0.25, 0.3) == pytest.approx(float(mp.diff(lambda t: mp.jacobi(4, 0.5, 0.25, t), 0.3, 2)))
     np.testing.assert_allclose(bm.cardinal_b_spline(3, [0.0, 1.0, 2.0]), [2 / 3, 1 / 6, 0], atol=1e-15)
     assert bm.cardinal_b_spline_prime(3, 1.0) == pytest.approx(-0.5) and bm.cardinal_b_spline_double_prime(3, 1.0) == pytest.approx(1)
