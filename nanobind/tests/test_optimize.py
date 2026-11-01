@@ -23,14 +23,15 @@ def quadratic_gradient(x):
 
 def test_derivative_free_results():
     lo, hi = [-5.0, -5.0], [5.0, 5.0]
-    for r in [o.random_search(quadratic, lo, hi, max_function_calls=500, threads=2), o.turbo(quadratic, lo, hi, max_function_calls=40)]:
+    for r in [o.random_search(quadratic, lo, hi, max_function_calls=500, threads=2), o.turbo(quadratic, lo, hi, max_function_calls=40),
+              o.dycors(quadratic, lo, hi, max_function_calls=40)]:
         assert type(r) is o.OptimizeResult and isinstance(r.x, np.ndarray)
         assert r.fun == quadratic(r.x) and r.nfev > 0 and r.nit is None and r.converged is None
     with pytest.raises(TypeError):
         o.turbo(f=quadratic, lower_bounds=lo, upper_bounds=hi)
 
 
-@pytest.mark.parametrize("name", ["differential_evolution", "jso", "random_search", "multilevel_coordinate_search", "cma_es", "turbo"])
+@pytest.mark.parametrize("name", ["differential_evolution", "jso", "random_search", "multilevel_coordinate_search", "cma_es", "turbo", "dycors"])
 def test_callback_errors_propagate(name):
     # Including from the worker threads, where threads= is taken.
     kw = {"threads": 2} if "threads=" in getattr(o, name).__doc__.splitlines()[0] else {}
@@ -38,6 +39,18 @@ def test_callback_errors_propagate(name):
         getattr(o, name)(lambda x: 1 / 0, [-1.0], [1.0], **kw)
     with pytest.raises(TypeError):
         getattr(o, name)(lambda x: "abc", [-1.0], [1.0], **kw)
+
+
+def test_dycors():
+    # The random sequence of a seed depends on the C++ standard library; over 100 seeds the error is below 2e-3.
+    r = o.dycors(quadratic, [-5.0, -5.0], [5.0, 5.0], max_function_calls=100, seed=3)
+    assert np.allclose(r.x, [1, -2], atol=0.1) and r.nfev == 100
+    assert np.array_equal(o.dycors(quadratic, [-5.0, -5.0], [5.0, 5.0], max_function_calls=50, seed=3).x,
+                          o.dycors(quadratic, [-5.0, -5.0], [5.0, 5.0], max_function_calls=50, seed=3).x)
+    assert o.dycors(quadratic, [-5.0, -5.0], [5.0, 5.0], target_value=1.0).fun <= 1.0
+    for bad in [{"initial_points": 3}, {"max_function_calls": 5}]:
+        with pytest.raises(ValueError):
+            o.dycors(quadratic, [-5.0, -5.0], [5.0, 5.0], **bad)
 
 
 @pytest.mark.parametrize("name", ["gradient_descent", "nesterov", "lbfgs"])

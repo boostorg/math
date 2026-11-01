@@ -1,0 +1,217 @@
+[/
+Copyright (c) 2026 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:dycors Dynamic Coordinate Search with Radial Basis Functions]
+
+[heading Synopsis]
+
+``
+    #include <boost/math/optimization/dycors.hpp>
+
+    namespace boost::math::optimization {
+
+    template <typename ArgumentContainer> struct dycors_parameters {
+        using Real = typename ArgumentContainer::value_type;
+        ArgumentContainer lower_bounds;
+        ArgumentContainer upper_bounds;
+        ArgumentContainer const * initial_guess = nullptr;
+        size_t max_function_calls = 0;
+        size_t initial_points = 0;
+        size_t candidates = 0;
+    };
+
+    template <typename ArgumentContainer>
+    void validate_dycors_parameters(dycors_parameters<ArgumentContainer> const &params);
+
+    template <typename ArgumentContainer, class Func, class URBG>
+    ArgumentContainer dycors(const Func cost_function,
+                             dycors_parameters<ArgumentContainer> const &params,
+                             URBG &gen,
+                             std::invoke_result_t<Func, ArgumentContainer> target_value
+                               = std::numeric_limits<std::invoke_result_t<Func, ArgumentContainer>>::quiet_NaN(),
+                             std::atomic<bool> *cancellation = nullptr,
+                             std::atomic<std::invoke_result_t<Func, ArgumentContainer>> *current_minimum_cost = nullptr,
+                             std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr);
+
+    } // namespaces
+``
+
+The `dycors` function searches for a global minimum of a function on a box with DYCORS (DYnamic COordinate search using Response Surface models),
+the method of Regis and Shoemaker, in its DYCORS-LMSRBF form.
+Like [link math_toolkit.turbo TuRBO], it is meant for expensive functions and budgets of a few hundred to a few thousand calls,
+but it was designed for many dimensions, from tens to hundreds.
+
+DYCORS fits a cubic radial basis function surrogate with a linear tail, s(/x/) = [sum][sub /k/] λ[sub /k/] |/x/ - /x/[sub /k/]|[super 3] + /a/[sub 0] + /a/[super T] /x/,
+to all the points it has evaluated, starting from a symmetric Latin hypercube design of 2(/d/ + 1) points.
+Each iteration perturbs the best point found so far into a few thousand candidate points, and evaluates the candidate that is best by a weighted combination of
+its (scaled) surrogate value and its (scaled) distance to the points already evaluated, with the weight on the surrogate cycling through 0.3, 0.5, 0.8 and 0.95.
+The candidates differ from the best point in only some of their coordinates: each coordinate is perturbed with probability
+
+[expression /p/(/n/) = min(20\/ /d/, 1) (1 - ln(/n/ - /n/[sub 0] + 1) \/ ln(/N/ - /n/[sub 0]))]
+
+where /n/ is the number of calls so far, /n/[sub 0] the size of the initial design and /N/ the budget, and at least one coordinate is always perturbed.
+In high dimensions, this keeps the search local even with large steps, and it focuses on fewer coordinates as the budget runs out.
+The perturbations are normal with standard deviation σ, in units of the sides of the box.
+σ starts at 0.2, doubles after three improvements in a row, and halves (down to 0.2 × 2[super -6]) after max(/d/, 5) calls in a row that do not improve on the best value.
+
+DYCORS is a local search with a global model: it has no restarts, and it converges to a local minimum.
+In the comparison below, in 30 dimensions it is about as good as TuRBO on Ackley, a little better on Rastrigin and a little worse on Levy and Rosenbrock, at a thirtieth of the cost per call or less,
+and much better on Ackley and Rosenbrock in 10 dimensions, but it stops in a local minimum of Rastrigin and Levy in 10 dimensions where TuRBO, which restarts, keeps improving.
+Multilevel coordinate search, which is deterministic and spends a microsecond per call, is competitive with both at this budget,
+helped on Levy and Rosenbrock by its first point, the centre of the box, which is already a good one.
+For cheap functions, multilevel coordinate search, differential evolution, jSO or CMA-ES are better choices.
+
+[heading Parameters]
+
+* `lower_bounds`: A container representing the lower bounds of the optimization space along each dimension.
+    The `.size()` of the bounds should return the dimension of the problem.
+* `upper_bounds`: A container representing the upper bounds of the optimization space along each dimension.
+    It should have the same size as `lower_bounds`, and each element must be strictly greater than the corresponding element of `lower_bounds`.
+* `initial_guess`: An optional point in the box. It is the first function call, exactly as given, in addition to the initial design.
+* `max_function_calls`: The budget /N/. Defaults to 100 times the dimension. The probability /p/(/n/) above depends on it, so it is part of the algorithm, not just a stopping criterion.
+* `initial_points`: The number /n/[sub 0] of points of the symmetric Latin hypercube design that starts the search. Defaults to 2(/d/ + 1). It must be at least 2/d/, and at most `max_function_calls` if that is set.
+* `candidates`: The number of candidate points per iteration. Defaults to min(100/d/, 5000).
+
+`validate_dycors_parameters` throws a `std::domain_error` if the bounds or initial guess are invalid,
+and a `std::invalid_argument` if `initial_points` is out of range.
+`dycors` calls it before the first function evaluation.
+
+[heading The function]
+
+``
+template <typename ArgumentContainer, class Func, class URBG>
+ArgumentContainer dycors(const Func cost_function,
+                         dycors_parameters<ArgumentContainer> const &params,
+                         URBG &gen,
+                         std::invoke_result_t<Func, ArgumentContainer> target_value
+                           = std::numeric_limits<std::invoke_result_t<Func, ArgumentContainer>>::quiet_NaN(),
+                         std::atomic<bool> *cancellation = nullptr,
+                         std::atomic<std::invoke_result_t<Func, ArgumentContainer>> *current_minimum_cost = nullptr,
+                         std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr)
+``
+
+Parameters:
+
+* `cost_function`: The cost function to be minimized. A NaN return value is treated as +[infin].
+* `params`: The parameters to the algorithm as described above.
+* `gen`: A uniform random bit generator, like `std::mt19937_64`.
+* `target_value`: An optional value that, if reached, stops the optimization.
+    This is the most robust way to terminate the calculation, but in most cases the optimal value of the cost function is unknown.
+        If it is, use it! Physical considerations can often be used to find optimal values for cost functions.
+* `cancellation`: An optional atomic boolean to allow the user to stop the computation and gracefully return the best result found up to that point.
+    It is checked before every function call.
+* `current_minimum_cost`: An optional atomic variable to store the current minimum cost during optimization.
+    This allows developers to (e.g.) plot the progress of the minimization over time and in conjunction with the `cancellation` argument allow halting the computation when the progress stagnates.
+* `queries`: An optional vector to store intermediate results during optimization.
+    This is useful for debugging and perhaps volume rendering of the objective function after the calculation is complete.
+
+Returns:
+
+The `ArgumentContainer` corresponding to the minimum cost found by the optimization.
+If the computation is cancelled before the first function call, it is the midpoint of the box (or the initial guess).
+
+[heading Termination]
+
+As in the paper, there is no convergence criterion.
+The computation stops when the `target_value` is reached, when `max_function_calls` calls have been made, or when `cancellation` is set.
+These are checked before every call.
+
+[heading Cost]
+
+Each iteration solves for the surrogate's coefficients in O(/N/[super 2]) operations, where /N/ is the number of points evaluated,
+draws the /M/ candidates in O(/Md/), and evaluates the surrogate and the distances at them in O(/MNk/),
+where /k/ is the average number of coordinates a candidate perturbs: the squared distances from the best point are computed once per iteration,
+and a candidate only corrects them in its perturbed coordinates.
+With the defaults, on an Apple M1 Pro core, a call costs on average 0.36 ms in 10 dimensions, 1.4 ms in 30 dimensions and 3.1 ms in 100 dimensions over a budget of 500 calls,
+on a cheap function (`reporting/performance/dycors_performance.cpp`). (TuRBO, with its defaults, costs 45 ms and 90 ms per call in 10 and 30 dimensions.)
+The points, the factor of the interpolation system and the candidates take O(/N/[super 2] + (/N/ + /M/)/d/) memory, with /N/ the budget.
+All of the linear algebra is hand-rolled, and done in double precision whatever the `Real` type of the arguments.
+
+[heading Implementation notes]
+
+The algorithm and its parameters follow Section 3 of the paper, except for these deliberate differences:
+
+* The box is scaled to the unit cube, so that the step sizes are in units of each side of the box rather than of its shortest side.
+* As in Regis and Shoemaker (2007), the function values above their median are replaced by the median when the surrogate is fitted,
+    which keeps a few large values from making it oscillate.
+* σ never exceeds 1, the side of the unit cube; the paper has no cap.
+* A success, for the counters, is an improvement on the best value by more than 10[super -3] times its magnitude, as in TuRBO; the paper counts any decrease.
+* The probability /p/(/n/) never falls below 1\/ /d/.
+
+The details that the paper leaves open are:
+
+* Values that are +[infin] (or NaN) are replaced, when the surrogate is fitted, by the largest finite value, or by 0 if there is none.
+* As in the paper, candidates that leave the box are reflected at its faces until they are inside.
+* The interpolation system of a cubic radial basis function with a linear tail is indefinite.
+    It is reduced to a positive definite one on all but /d/ + 1 of the points (a set that determines linear polynomials, chosen from the initial design),
+    whose Cholesky factor grows by one row for each new point. A new point that is numerically a repeat of one already in the surrogate is left out of it.
+* The initial guess, if any, is evaluated before the initial design, which is redrawn until it determines a linear polynomial;
+    /n/[sub 0] in /p/(/n/) counts both.
+
+Only DYCORS-LMSRBF is implemented, not DYCORS-DDS, and only one point is evaluated per iteration.
+
+[h4:examples Examples]
+
+``
+#include <boost/math/optimization/dycors.hpp>
+#include <cmath>
+#include <iostream>
+#include <random>
+#include <vector>
+
+int main() {
+    using boost::math::optimization::dycors;
+    using boost::math::optimization::dycors_parameters;
+    using ArgType = std::vector<double>;
+    // The Ackley function in 10 dimensions, with its minimum 0 at the origin:
+    auto ackley = [](ArgType const & x) {
+        double const pi = 3.14159265358979323846;
+        double a = 0;
+        double b = 0;
+        for (double t : x) {
+            a += t*t;
+            b += std::cos(2*pi*t);
+        }
+        return -20*std::exp(-0.2*std::sqrt(a/10)) - std::exp(b/10) + 20 + std::exp(1.0);
+    };
+    dycors_parameters<ArgType> params;
+    params.lower_bounds.assign(10, -15);
+    params.upper_bounds.assign(10, 20);
+    params.max_function_calls = 500;
+    std::mt19937_64 gen(42);
+    auto x = dycors(ackley, params, gen);
+    std::cout << "f(x) = " << ackley(x) << "\n";
+}
+``
+
+With seed 42 the value is 5.4×10[super -4]. Over 30 other seeds, 23 runs reached values between 1.3×10[super -4] and 2.0×10[super -3], and the other 7 stopped in local minima with values between 1.6 and 2.6:
+DYCORS has no restarts, so a run that has settled in a local minimum stays there.
+
+[h4:comparison Comparison]
+
+The median, over 20 seeds, of the best value found in 500 calls by DYCORS, TuRBO, multilevel coordinate search (MCS, which is deterministic, so one run), CMA-ES and random search, all with their default parameters,
+on the Ackley (\[-15, 20\][super /d/]), Rastrigin (\[-4, 5\][super /d/]), Rosenbrock (\[-5, 10\][super /d/]) and Levy (\[-5, 5\][super /d/]) functions, whose minimum is 0:
+
+[table
+[[Function] [Dimension] [DYCORS] [TuRBO] [MCS] [CMA-ES] [random search]]
+[[Ackley] [10] [3.3×10[super -4]] [1.2] [1.7×10[super -7]] [2.9] [15]]
+[[Rastrigin] [10] [30] [20] [40] [59] [87]]
+[[Rosenbrock] [10] [7.1] [53] [0.22] [87] [3.6×10[super 4]]]
+[[Levy] [10] [1.3] [0.50] [0.72] [0.27] [5.1]]
+[[Ackley] [30] [3.2] [3.2] [2.5] [9.8] [17]]
+[[Rastrigin] [30] [97] [106] [144] [284] [366]]
+[[Rosenbrock] [30] [9.8×10[super 2]] [4.3×10[super 2]] [8.1×10[super 3]] [2.1×10[super 4]] [9.0×10[super 5]]]
+[[Levy] [30] [3.1] [2.3] [2.7] [8.2] [35]]
+]
+
+[h4:references References]
+
+* R. G. Regis and C. A. Shoemaker, ['Combining radial basis function surrogates and dynamic coordinate search in high-dimensional expensive black-box optimization.] Engineering Optimization 45(5), 529--555 (2013). [@https://doi.org/10.1080/0305215X.2012.687731 doi:10.1080/0305215X.2012.687731].
+* R. G. Regis and C. A. Shoemaker, ['A stochastic radial basis function method for the global optimization of expensive functions.] INFORMS Journal on Computing 19(4), 497--509 (2007).
+* K. Q. Ye, W. Li and A. Sudjianto, ['Algorithmic construction of optimal symmetric Latin hypercube designs.] Journal of Statistical Planning and Inference 90(1), 145--159 (2000).
+
+[endsect] [/section:dycors]

@@ -206,6 +206,7 @@ extern "C++" {
 // Optimization
 #include <boost/math/optimization/cma_es.hpp>
 #include <boost/math/optimization/differential_evolution.hpp>
+#include <boost/math/optimization/dycors.hpp>
 #include <boost/math/optimization/gradient_descent.hpp>
 #include <boost/math/optimization/gradient_optimizers.hpp>
 #include <boost/math/optimization/jso.hpp>
