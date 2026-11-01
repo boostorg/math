@@ -5,13 +5,12 @@
 # The boost-math wheels (nanobind/): one abi3 wheel per platform, each tested, uploaded as artifacts.
 # The cibuildwheel options are in nanobind/pyproject.toml.
 name: Wheels
+# Only after a merge (or by hand), to spare CI: include/ is in the paths because a header fix changes the wheel.
 on:
   workflow_dispatch:
-  pull_request:
-    paths: [ 'nanobind/**', '.github/workflows/wheels.yml' ]
   push:
     branches: [ master, develop ]
-    paths: [ 'nanobind/**', '.github/workflows/wheels.yml' ]
+    paths: [ 'include/**', 'nanobind/**', '.github/workflows/wheels.yml' ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}

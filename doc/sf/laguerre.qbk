@@ -26,6 +26,12 @@
    template <class T1, class T2, class T3>
    ``__sf_result`` laguerre_next(unsigned n, unsigned m, T1 x, T2 Ln, T3 Lnm1);
 
+   template <class T>
+   std::vector<T> laguerre_zeros(unsigned n, T alpha = 0);
+
+   template <class T, class ``__Policy``>
+   std::vector<T> laguerre_zeros(unsigned n, T alpha, const ``__Policy``&);
+
    
    }} // namespaces
    
@@ -118,6 +124,20 @@ Formally the arguments are:
 [[Ln][The value of the polynomial evaluated at degree /n/.]]
 [[Lnm1][The value of the polynomial evaluated at degree /n-1/.]]
 ]
+
+`laguerre_zeros` returns the /n/ zeros of the generalized Laguerre polynomial /L/[sub /n/][super ([alpha])], in increasing order;
+they are all positive. For /n/ = 0 the result is empty.
+/L/[sub /n/][super ([alpha])] is orthogonal for the weight /x/[super [alpha]] e[super -/x/] on \[0, [infin]),
+and for integer [alpha] = /m/ it is the associated polynomial `laguerre(n, m, x)` above.
+[alpha] must be finite and greater than -1, otherwise the result is a vector of /n/ values returned by __domain_error.
+The type /T/ must be a floating-point type: write `laguerre_zeros<double>(n)` or `laguerre_zeros(n, 0.5)`.
+These are the abscissas of the [link math_toolkit.gauss_laguerre Gauss-Laguerre quadrature] rule.
+
+The zeros are found in O(/n/) operations by following the differential equation of the Laguerre functions
+from zero to zero in twice the working precision (Glaser, Liu and Rokhlin).
+Where that cannot vouch for a zero, the zeros come from the three-term recurrence instead, which overflows for large /n/ combined with
+large [alpha] (in `double`, for example /n/ = 2000 and [alpha] = 50): the result is then a vector of values returned by __evaluation_error.
+In our tests against high-precision values they are correctly rounded in `float`, `double` and 50-digit precision.
    
 [h4 Accuracy]
 

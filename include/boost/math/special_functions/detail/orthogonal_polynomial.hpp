@@ -437,7 +437,7 @@ private:
          Real sum = 0, error = 0;
          for (unsigned i = (std::min)(2u, m) + 1; i-- > 0;)
             dw.multiply_add(sum, error, gt[i], a[m - i]);
-         for (unsigned i = (std::min)(s_degree, m + 2); i >= 1; --i)
+         for (unsigned i = (std::min)(unsigned(s_degree), m + 2); i >= 1; --i) // not by reference: C++14 has no definition
             dw.multiply_add(sum, error, st[i], b[m + 2 - i]);
          // Left unnormalized, which the products above take in their stride, to keep the renormalizations off the
          // dependency chain from one coefficient to the next.
@@ -891,6 +891,30 @@ private:
       return std::make_pair(x, w);
    }
 };
+
+// The family without the normalization of its weights, which the zeros do not need and which can overflow.
+template <class Real, class Family>
+struct zeros_family : Family
+{
+   explicit zeros_family(const Family& family) : Family(family) {}
+   Real area() const
+   {
+      return 1;
+   }
+};
+
+// The zeros of p_n for hermite_zeros, laguerre_zeros and jacobi_zeros, computed in the family's type Real.
+template <class T, class Real, class Family, class Policy>
+std::vector<T> orthogonal_polynomial_zeros(unsigned n, const Family& family, const char* function, const Policy& pol)
+{
+   if (n == 0)
+      return std::vector<T>(); // p_0 = 1 has no zeros
+   const orthogonal_polynomial<Real, zeros_family<Real, Family>, Policy> p(n, zeros_family<Real, Family>(family));
+   if (!std::all_of(p.abscissa().begin(), p.abscissa().end(), [](const Real& x) { return (BOOST_MATH_NAMESPACE::isfinite)(x); }))
+      return std::vector<T>(p.abscissa().size(), policies::raise_evaluation_error(function,
+         "The recurrence relation overflows for this n; use a type with a wider exponent range.", std::numeric_limits<T>::quiet_NaN(), pol));
+   return std::vector<T>(p.abscissa().begin(), p.abscissa().end());
+}
 
 } // namespace detail
 BOOST_MATH_NAMESPACE_END

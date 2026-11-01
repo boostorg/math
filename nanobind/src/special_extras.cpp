@@ -10,7 +10,9 @@
 #include <boost/math/special_functions/chebyshev.hpp>
 #include <boost/math/special_functions/chebyshev_transform.hpp>
 #include <boost/math/special_functions/fourier_transform_daubechies.hpp>
+#include <boost/math/special_functions/hermite.hpp>
 #include <boost/math/special_functions/jacobi.hpp>
+#include <boost/math/special_functions/laguerre.hpp>
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/special_functions/legendre_stieltjes.hpp>
 #include <boost/math/special_functions/logsumexp.hpp>
@@ -69,6 +71,24 @@ void bmpy::bind_special_extras(nb::module_& m) {
       return vector_to_array(std::move(z));
    }, nb::sig("def legendre_p_zeros(l, /)"),
       "The nonnegative zeros of the Legendre polynomial P_l, increasing; the others are their negatives." BMPY_URL("sf_poly/legendre"));
+
+   auto zeros = [](auto compute) {
+      std::vector<double> z;
+      {
+         nb::gil_scoped_release release;
+         z = compute();
+      }
+      return vector_to_array(std::move(z));
+   };
+   m.def("hermite_zeros", [zeros](unsigned n) { return zeros([&] { return bm::hermite_zeros<double>(n); }); },
+      nb::sig("def hermite_zeros(n, /)"),
+      "The nonnegative zeros of the Hermite polynomial H_n, increasing; the others are their negatives." BMPY_URL("sf_poly/hermite"));
+   m.def("laguerre_zeros", [zeros](unsigned n, double alpha) { return zeros([&] { return bm::laguerre_zeros<double>(n, alpha); }); },
+      nb::arg("n"), nb::arg("alpha") = 0.0,
+      "The zeros of the generalized Laguerre polynomial L_n^alpha, alpha > -1, increasing." BMPY_URL("sf_poly/laguerre"));
+   m.def("jacobi_zeros", [zeros](unsigned n, double alpha, double beta) { return zeros([&] { return bm::jacobi_zeros<double>(n, alpha, beta); }); },
+      nb::arg("n"), nb::arg("alpha"), nb::arg("beta"),
+      "The zeros of the Jacobi polynomial P_n^(alpha, beta), alpha, beta > -1, increasing." BMPY_URL("sf_poly/jacobi"));
 
    bmpy::def_vec<Int<unsigned>, Real, Real, Real>(
        m, "jacobi_double_prime", []<class T>(unsigned n, T a, T b, T x) { return bm::jacobi_double_prime(n, a, b, x); },
