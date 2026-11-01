@@ -15,6 +15,9 @@
 
 #if !defined(BOOST_MATH_BUILD_MODULE) && !defined(BOOST_MATH_HAS_NVRTC)
 #include <cmath>
+#if defined(__wasm_relaxed_simd__)
+#include <wasm_simd128.h>
+#endif
 #endif
 
 //
@@ -55,6 +58,20 @@ inline bool evaluate(const T&, const T&, const T&, T&, long)
 {
    return false;
 }
+#if defined(__wasm_relaxed_simd__)
+// WebAssembly has no scalar fma, so std::fma is a software routine.  The relaxed multiply-add runs on the
+// hardware fma where there is one, and is otherwise unfused, which two_product's probe catches.
+inline bool evaluate(const float& a, const float& b, const float& c, float& result, int)
+{
+   result = wasm_f32x4_extract_lane(wasm_f32x4_relaxed_madd(wasm_f32x4_splat(a), wasm_f32x4_splat(b), wasm_f32x4_splat(c)), 0);
+   return true;
+}
+inline bool evaluate(const double& a, const double& b, const double& c, double& result, int)
+{
+   result = wasm_f64x2_extract_lane(wasm_f64x2_relaxed_madd(wasm_f64x2_splat(a), wasm_f64x2_splat(b), wasm_f64x2_splat(c)), 0);
+   return true;
+}
+#endif
 } // namespace two_product_fma
 
 //
