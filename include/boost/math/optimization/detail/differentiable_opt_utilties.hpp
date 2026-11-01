@@ -7,6 +7,7 @@
 #include <boost/math/differentiation/autodiff_reverse.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
+#include <numeric>
 #include <random>
 #include <type_traits>
 #include <vector>

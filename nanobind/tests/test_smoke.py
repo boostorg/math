@@ -5,6 +5,8 @@
 
 import inspect
 import math
+import pathlib
+import re
 import warnings
 
 import mpmath as mp
@@ -74,7 +76,6 @@ CASES = [
     ("ligamma", (2.5, 1.5), lambda a, z: mp.log(mp.gammainc(a, z))),
     ("ligamma_lower", (2.5, 1.5), lambda a, z: mp.log(mp.gammainc(a, 0, z))),
     ("factorial", (10,), mp.factorial),
-    ("unchecked_factorial", (10,), mp.factorial),
     ("double_factorial", (9,), fac2),
     ("rising_factorial", (2.5, 4), mp.rf),
     ("falling_factorial", (6.5, 3), mp.ff),
@@ -274,21 +275,24 @@ def test_array_matches_scalar(case):
     assert np.all(got == want)
 
 
-# Not elementwise, so tested on their own below.
-SIEVE = {"prime_sieve", "prime_range", "prime_count", "polynomial_roots", "polynomial_roots_aberth", "polynomial_roots_companion_matrix"}
-QUADRATURE = {"tanh_sinh", "exp_sinh", "sinh_sinh", "trapezoidal", "gauss", "gauss_kronrod", "gauss_hermite",
-              "gauss_laguerre", "gauss_hermite_averaged", "gauss_laguerre_averaged", "gauss_hermite_rule", "gauss_laguerre_rule", "gauss_jacobi_rule",
-              "ooura_fourier_sin", "ooura_fourier_cos", "van_den_bos_unit_square", "sparse_grid"}
-OPTIMIZATION = {"differential_evolution", "jso", "random_search", "multilevel_coordinate_search", "cma_es"}
-
-
 def test_every_function_has_a_case():
-    names = {n for n in bm.__all__ if not inspect.isclass(getattr(bm, n))}
-    covered = {c[0] for c in CASES} | SIEVE | QUADRATURE | OPTIMIZATION
-    assert names - covered == set()
+    # Outside CASES, each public name but the constants and the result records is called by name in some test file.
+    tests = "".join(p.read_text() for p in pathlib.Path(__file__).parent.glob("test_*.py"))
+    modules = [bm] + [getattr(bm, n) for n in bm.__all__ if inspect.ismodule(getattr(bm, n)) and n != "constants"]
+    names = {n for m in modules for n in getattr(m, "__all__", dir(m)) if not n.startswith("_")
+             and not (inspect.isclass(getattr(m, n)) and issubclass(getattr(m, n), tuple))}
+    assert {n for n in names - {c[0] for c in CASES} if not re.search(rf"\b{n}\b", tests)} == set()
+
+
+def test_submodule_imports():
+    import boost.math.distributions as d
+    from boost.math.quadrature import tanh_sinh
+    assert d is bm.distributions and d.normal_distribution.__module__ == "boost.math.distributions"
+    assert tanh_sinh is bm.quadrature.tanh_sinh
 
 
 def test_optimization():
+    from boost.math import optimize as bm  # the functions moved to submodules
     def f(x):
         return (x[0] - 1) ** 2 + (x[1] + 2) ** 2
     lo, hi = [-5.0, -5.0], [5.0, 5.0]
@@ -296,7 +300,7 @@ def test_optimization():
             bm.random_search(f, lo, hi, max_function_calls=20000), bm.multilevel_coordinate_search(f, lo, hi),
             bm.cma_es(f, lo, hi, max_generations=200)]
     for x in runs:
-        assert f(x) < 1e-2
+        assert f(x.x) < 1e-2
     def bad(x):
         raise RuntimeError("boom")
     with pytest.raises(RuntimeError):
@@ -306,6 +310,7 @@ def test_optimization():
 
 
 def test_quadrature():
+    from boost.math import quadrature as bm  # the functions moved to submodules
     def second_moment(rule):
         x, w = rule
         return (w @ x**2,)
@@ -479,6 +484,68 @@ def test_array_errors_warn_and_give_nan():
     assert "2 of 3" in str(w[0].message)
 
 
+def test_errstate():
+    x = np.array([-1.0, 200.0, 3.0])
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        with pytest.raises(RuntimeWarning, match="domain error in 1 of 3"):
+            bm.tgamma(x)
+        with bm.errstate(domain="ignore"):
+            got = bm.tgamma(x)
+            assert math.isnan(bm.tgamma(-1.0))
+    # Overflows give a signed infinity, and are ignored for arrays by default.
+    assert np.isnan(got[0]) and got[1] == math.inf and got[2] == 2
+    assert bm.tgamma(np.array([-1e-320]))[0] == -math.inf
+    with bm.errstate(all="raise"):
+        with pytest.raises(OverflowError):
+            bm.tgamma(np.array([200.0]))
+    with bm.errstate(overflow="warn"), pytest.warns(RuntimeWarning, match="overflow"):
+        bm.tgamma(np.array([200.0]))
+    # A 'warn' category warns before a 'raise' category raises.
+    with bm.errstate(domain="warn", overflow="raise"), pytest.warns(RuntimeWarning, match="domain error in 1 of 2"):
+        with pytest.raises(OverflowError):
+            bm.tgamma(np.array([-1.0, 200.0]))
+    assert bm.geterr() == {"domain": "default", "overflow": "default", "evaluation": "default"}
+    with pytest.raises(ValueError):
+        bm.seterr(domain="loud")
+    dist = bm.distributions.cauchy_distribution()
+    with bm.errstate(domain="ignore"):
+        assert math.isnan(dist.mean()) and math.isnan(dist.cdf(np.array(math.nan)))
+
+
+def test_numpy_scalars():
+    assert type(bm.tgamma(np.float64(2.5))) is np.float64 and type(bm.tgamma(2.5)) is float
+    assert type(bm.tgamma(np.int64(3))) is np.float64 and bm.tgamma(np.int64(3)) == 2
+    assert type(bm.legendre_p(np.int32(2), 0.5)) is np.float64 and type(bm.prime(np.int64(3))) is np.uint64
+    assert type(bm.gamma_p(np.float32(2), 1.5)) is np.float32
+    assert type(bm.distributions.normal_distribution().cdf(np.float64(0.5))) is np.float64
+    with pytest.raises(ValueError):
+        bm.tgamma(np.float64(-1))
+
+
+def test_threads():
+    x = np.linspace(0.5, 20, 100001).reshape(11, -1)[:, ::3]
+    want = bm.tgamma(x)
+    assert np.array_equal(bm.tgamma(x, threads=4), want) and np.array_equal(bm.tgamma(x, threads=0), want)
+    dist = bm.distributions.normal_distribution()
+    assert np.array_equal(dist.cdf(x, threads=3), dist.cdf(x))
+    x[3, 7] = x[9, 5] = -1.0
+    with pytest.warns(RuntimeWarning, match="2 of"):
+        assert np.isnan(bm.tgamma(x, threads=4)).sum() == 2
+    with pytest.raises(ValueError):
+        bm.tgamma(x, threads=-1)
+    with pytest.raises(TypeError):
+        bm.erf(x, 4)  # threads is keyword-only
+
+
+def test_fft():
+    f = bm.fft.fft(8)
+    assert repr(f) == "fft(n=8)" and repr(bm.fft.real_fft(8)) == "real_fft(n=8)" and repr(bm.fft.dct_ii(4)) == "dct_ii(n=4)"
+    x = np.arange(8)
+    assert np.allclose(f.transform(x), np.fft.fft(x)) and np.allclose(f.inverse_transform(x * 1.0), np.fft.ifft(x))
+    assert np.allclose(bm.fft.real_fft(8).transform(x * 1.0), np.fft.rfft(x))
+
+
 # --- distributions ----------------------------------------------------------
 
 CONTINUOUS = [
@@ -533,15 +600,15 @@ TRANSFORMS = {"fft", "real_fft", "dct_ii"}
 
 
 def test_every_distribution_has_a_case():
-    names = {n for n in bm.__all__ if inspect.isclass(getattr(bm, n))}
-    assert names - TRANSFORMS - {"gauss_jacobi", "leja_legendre", "leja_hermite", "leja_laguerre", "leja_jacobi"} == {c[0] for c in CONTINUOUS + DISCRETE}
+    names = {n for n in dir(bm.distributions) + dir(bm.fft) if not n.startswith("_")}
+    assert names - TRANSFORMS - {"empirical_cumulative_distribution_function", "find_location", "find_scale"} == {c[0] for c in CONTINUOUS + DISCRETE}
     assert TRANSFORMS <= names
 
 
 @pytest.mark.parametrize("case", CONTINUOUS, ids=lambda c: c[0])
 def test_continuous_distribution(case):
     name, params = case
-    dist = getattr(bm, name)(*params)
+    dist = getattr(bm.distributions, name)(*params)
     p = np.array([0.1, 0.5, 0.9])
     x = dist.quantile(p)
     assert np.allclose(dist.cdf(x), p, rtol=1e-9)
@@ -562,7 +629,7 @@ def test_continuous_distribution(case):
 @pytest.mark.parametrize("case", DISCRETE, ids=lambda c: c[0])
 def test_discrete_distribution(case):
     name, params = case
-    dist = getattr(bm, name)(*params)
+    dist = getattr(bm.distributions, name)(*params)
     k = np.arange(0.0, 2.0 if name == "bernoulli_distribution" else 4.0)
     assert np.allclose(np.cumsum(dist.pdf(k)), dist.cdf(k), rtol=1e-12)
     assert np.allclose(dist.cdf(k) + dist.cdf_complement(k), 1, rtol=1e-12)
@@ -575,10 +642,10 @@ def test_discrete_distribution(case):
 def test_distribution_repr(case):
     # The repr names the constructor's arguments, each a property, and rebuilds the distribution.
     name, params = case
-    dist = getattr(bm, name)(*params)
+    dist = getattr(bm.distributions, name)(*params)
     r = repr(dist)
     assert r.startswith(name + "(")
-    again = eval(r, vars(bm))
+    again = eval(r, vars(bm.distributions))
     assert repr(again) == r
     assert np.allclose(again.cdf(dist.quantile(0.3)), 0.3, rtol=1e-12) or name in {c[0] for c in DISCRETE}
     for i, value in enumerate(params):
@@ -589,13 +656,54 @@ def test_distribution_repr(case):
 
 
 def test_normal_against_mpmath():
-    dist = bm.normal_distribution(1.0, 2.0)
+    dist = bm.distributions.normal_distribution(1.0, 2.0)
     for x in (-3.0, 0.5, 4.0):
         assert close(dist.cdf(x), mp.ncdf(x, 1, 2))
         assert close(dist.pdf(x), mp.npdf(x, 1, 2))
     assert dist.mean() == 1.0 and dist.standard_deviation() == 2.0
 
 
+def test_distribution_eq_hash_and_parameters():
+    d = bm.distributions
+    assert d.normal_distribution(1, 2) == d.normal_distribution(1.0, 2.0) != d.normal_distribution(1, 3)
+    assert d.normal_distribution() != d.logistic_distribution(0, 1)
+    h = d.hyperexponential_distribution([0.3, 0.7], [1.0, 3.0])
+    assert len({d.normal_distribution(), d.normal_distribution(), h, d.hyperexponential_distribution([0.3, 0.7], [1.0, 3.0])}) == 2
+    with pytest.raises(TypeError, match="parameters must be scalars"):
+        d.normal_distribution(np.array([1.0, 2.0]))
+    with pytest.raises(ValueError):
+        d.normal_distribution(0, -1)
+
+
 def test_undefined_moment_raises():
     with pytest.raises(ValueError):
-        bm.cauchy_distribution().mean()
+        bm.distributions.cauchy_distribution().mean()
+
+
+def test_every_public_callable_is_documented():
+    import types
+
+    modules = [bm] + [m for m in vars(bm._ext).values() if isinstance(m, types.ModuleType)]
+    if hasattr(bm._ext, "_ulps_plot"):
+        from boost.math import ulps
+        modules.append(ulps)
+    missing = []
+    for module in modules:
+        for name in getattr(module, "__all__", None) or [n for n in dir(module) if not n.startswith("_")]:
+            f = getattr(module, name)
+            # Result records (named tuples) are documented by the functions that return them.
+            if isinstance(f, types.ModuleType) or not callable(f) or (isinstance(f, type) and issubclass(f, tuple)):
+                continue
+            doc = f.__doc__ or ""
+            if "https://www.boost.org/doc/libs/" not in doc or "boost::math::" in doc:
+                missing.append(module.__name__ + "." + name)
+    assert not missing, missing
+
+
+def test_nonfinite_inputs_that_used_to_hang_or_crash():
+    # A NaN rounded to an integer raises; it once became a loop count.
+    with pytest.raises(ValueError):
+        bm.hypergeometric_1F1(0.5, 0.5, math.nan)
+    assert math.isnan(bm.jacobi_sn(math.nan, 0.5))
+    with pytest.raises(ValueError):
+        bm.statistics.mode([1.0, math.nan])

@@ -38,15 +38,21 @@ void bind_polynomial_roots(nb::module_& m)
          roots = bm::tools::polynomial_roots(a);
       }
       return to_array(std::move(roots));
-   }, nb::arg("coefficients"), "boost::math::tools::polynomial_roots; coefficients a_0, a_1, ..., a_n");
+   }, nb::arg("coefficients"),
+      "The n complex roots of a_0 + a_1 x + ... + a_n x^n, given the coefficients in increasing order (the reverse of "
+      "numpy.roots)." BMPY_URL("polynomial_roots"));
    m.def("polynomial_roots_aberth", [](std::vector<double> a) {
+      if (a.empty())
+         throw nb::value_error("polynomial_roots_aberth: no coefficients");
       std::vector<C> roots;
       {
          nb::gil_scoped_release release;
          roots = bm::tools::polynomial_roots_detail::aberth(std::vector<C>(a.begin(), a.end()));
       }
       return to_array(std::move(roots));
-   }, nb::arg("coefficients"), "polynomial_roots_detail::aberth: the global fallback, for comparison");
+   }, nb::arg("coefficients"),
+      "The roots by the Aberth-Ehrlich iteration alone, the fallback of polynomial_roots, for comparison; coefficients "
+      "in increasing order." BMPY_URL("polynomial_roots"));
    m.def("polynomial_roots_companion_matrix", [](std::vector<double> a) {
       std::vector<C> roots;
       {
@@ -54,7 +60,9 @@ void bind_polynomial_roots(nb::module_& m)
          roots = bm::tools::polynomial_roots_companion_matrix(a);
       }
       return to_array(std::move(roots));
-   }, nb::arg("coefficients"), "tools::polynomial_roots_companion_matrix: companion QR of Aurentz, Mach, Vandebril and Watkins");
+   }, nb::arg("coefficients"),
+      "The roots as the eigenvalues of the companion matrix, by the QR algorithm of Aurentz, Mach, Vandebril and "
+      "Watkins; coefficients in increasing order." BMPY_URL("polynomial_roots"));
 }
 
 }  // namespace bmpy

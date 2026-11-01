@@ -8,9 +8,6 @@
 #include <boost/math/tools/ulps_heatmap.hpp>
 #include <boost/math/tools/ulps_plot.hpp>
 
-#include <zlib.h>
-
-#include <cstdint>
 #include <limits>
 #include <memory>
 #include <mutex>
@@ -52,42 +49,13 @@ auto const& lookup(Map const& m, std::string const& name) {
    return it->second;
 }
 
-// An RGB8 PNG: one IDAT, deflated by zlib.
+// An RGB8 PNG, by boost.math.ulps._png with Python's zlib, so that the module links no zlib of its own.
 std::vector<unsigned char> encode_png(std::vector<unsigned char> const& rgb, std::size_t width, std::size_t height) {
-   std::vector<unsigned char> raw;
-   raw.reserve((3 * width + 1) * height);
-   for (std::size_t j = 0; j < height; ++j) {
-      raw.push_back(0);  // filter: none
-      raw.insert(raw.end(), rgb.begin() + 3 * width * j, rgb.begin() + 3 * width * (j + 1));
-   }
-   uLongf size = compressBound(static_cast<uLong>(raw.size()));
-   std::vector<unsigned char> deflated(size);
-   if (compress2(deflated.data(), &size, raw.data(), static_cast<uLong>(raw.size()), Z_DEFAULT_COMPRESSION) != Z_OK) {
-      throw std::runtime_error("zlib: compress2 failed");
-   }
-   deflated.resize(size);
-
-   std::vector<unsigned char> png = {0x89, 'P', 'N', 'G', '\r', '\n', 0x1a, '\n'};
-   auto be32 = [](std::vector<unsigned char>& v, std::uint32_t n) {
-      for (int s = 24; s >= 0; s -= 8) {
-         v.push_back(static_cast<unsigned char>(n >> s));
-      }
-   };
-   auto chunk = [&](char const* type, std::vector<unsigned char> const& data) {
-      be32(png, static_cast<std::uint32_t>(data.size()));
-      std::size_t const start = png.size();
-      png.insert(png.end(), type, type + 4);
-      png.insert(png.end(), data.begin(), data.end());
-      be32(png, static_cast<std::uint32_t>(crc32(0, png.data() + start, static_cast<uInt>(png.size() - start))));
-   };
-   std::vector<unsigned char> header;
-   be32(header, static_cast<std::uint32_t>(width));
-   be32(header, static_cast<std::uint32_t>(height));
-   header.insert(header.end(), {8, 2, 0, 0, 0});  // 8 bits, RGB, deflate, adaptive filtering, no interlace
-   chunk("IHDR", header);
-   chunk("IDAT", deflated);
-   chunk("IEND", {});
-   return png;
+   nb::gil_scoped_acquire acquire;
+   auto png = nb::cast<nb::bytes>(
+       nb::module_::import_("boost.math.ulps").attr("_png")(nb::bytes(rgb.data(), rgb.size()), width, height));
+   auto const* p = reinterpret_cast<unsigned char const*>(png.c_str());
+   return {p, p + png.size()};
 }
 
 // A Python reference, called one at a time: not merely one holder of the GIL at a time, since the interpreter switches

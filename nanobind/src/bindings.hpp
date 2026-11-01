@@ -9,6 +9,7 @@
 
 namespace bmpy {
 
+void bind_errors(nb::module_& m);
 void bind_gamma(nb::module_& m);
 void bind_beta(nb::module_& m);
 void bind_erf_expint_zeta(nb::module_& m);
@@ -26,6 +27,15 @@ void bind_fft(nb::module_& m);
 void bind_quadrature(nb::module_& m);
 void bind_optimization(nb::module_& m);
 void bind_polynomial_roots(nb::module_& m);
+void bind_roots(nb::module_& m);
+void bind_statistics(nb::module_& m);
+void bind_interpolators(nb::module_& m);
+void bind_special_extras(nb::module_& m);
+void bind_daubechies(nb::module_& m);
+void bind_constants(nb::module_& m);
+void bind_differentiation(nb::module_& m);
+void bind_expansions(nb::module_& m);
+void bind_naive_monte_carlo(nb::module_& m);
 // Only with Boost.Multiprecision and zlib; see CMakeLists.txt.
 void bind_ulps(nb::module_& m);
 

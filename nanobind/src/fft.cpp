@@ -4,7 +4,8 @@
 //
 // tools::fft<std::complex<double>>, tools::real_fft<std::complex<double>> and the DCT-II behind
 // chebyshev_transform (detail::dct_ii<double>), as classes. Arrays must be 1-D, C-contiguous NumPy arrays of
-// exactly the right dtype and length (writable for the in-place methods); anything else raises ValueError.
+// exactly the right dtype and length (writable for the in-place methods); anything else raises ValueError,
+// except that fft.transform and inverse_transform convert real and integer arrays to complex128.
 // Transforms release the GIL. Each object owns its workspace, so a mutex keeps two threads from using one
 // object at the same time.
 
@@ -93,6 +94,15 @@ struct py_fft
    array1d<C> out_of_place(nb::handle x, bool inverse)
    {
       std::size_t n = f.size();
+      // Real and integer arrays are transformed as complex128, as by np.fft.
+      nb::object converted;
+      nb::module_ np = nb::module_::import_("numpy");
+      std::string kind = nb::isinstance(x, np.attr("ndarray")) ? nb::cast<std::string>(x.attr("dtype").attr("kind")) : "";
+      if (kind.size() == 1 && std::string("biuf").find(kind) != std::string::npos)
+      {
+         converted = np.attr("asarray")(x, np.attr("complex128"));
+         x = converted;
+      }
       C const* in = checked_data<C>(x, n, false, inverse ? "inverse_transform" : "transform");
       C* out;
       array1d<C> result = new_array<C>(n, &out);
@@ -188,11 +198,14 @@ void check_length(std::size_t n)
 void bind_fft(nb::module_& m)
 {
    nb::class_<py_fft>(m, "fft",
-                      "Discrete Fourier transform of length n, X[k] = sum_j x[j] exp(-2 pi i j k/n), on complex128 arrays; "
-                      "the inverse divides by n.")
+                      "Discrete Fourier transform of length n, X[k] = sum_j x[j] exp(-2 pi i j k/n), on complex128 arrays "
+                      "(real input is converted for the out-of-place transforms); the inverse divides by n.\n\n"
+                      "As numpy.fft.fft, but planned once for the length n and reusable.\n\n"
+                      "https://www.boost.org/doc/libs/release/libs/math/doc/html/math_toolkit/fft.html")
       .def("__init__", [](py_fft* self, std::size_t n) { check_length(n); new (self) py_fft(n); }, nb::arg("n"))
       .def_prop_ro("size", [](py_fft& self) { return self.f.size(); })
       .def("__len__", [](py_fft& self) { return self.f.size(); })
+      .def("__repr__", [](py_fft& self) { return "fft(n=" + std::to_string(self.f.size()) + ")"; })
       .def("transform", [](py_fft& self, nb::handle x) { return self.out_of_place(x, false); }, nb::arg("x"),
            "Returns the transform of x as a new array.")
       .def("inverse_transform", [](py_fft& self, nb::handle x) { return self.out_of_place(x, true); }, nb::arg("x"),
@@ -203,18 +216,24 @@ void bind_fft(nb::module_& m)
            "Replaces x (writable, contiguous) with its inverse transform.");
 
    nb::class_<py_real_fft>(m, "real_fft",
-                           "Transform of n float64 samples: returns X[0], ..., X[n/2] (complex128); the rest are conj(X[n-k]).")
+                           "Transform of n float64 samples: returns X[0], ..., X[n/2] (complex128); the rest are conj(X[n-k]).\n\n"
+                           "As numpy.fft.rfft.\n\n"
+                           "https://www.boost.org/doc/libs/release/libs/math/doc/html/math_toolkit/fft.html")
       .def("__init__", [](py_real_fft* self, std::size_t n) { check_length(n); new (self) py_real_fft(n); }, nb::arg("n"))
       .def_prop_ro("size", [](py_real_fft& self) { return self.n; })
       .def("__len__", [](py_real_fft& self) { return self.n; })
+      .def("__repr__", [](py_real_fft& self) { return "real_fft(n=" + std::to_string(self.n) + ")"; })
       .def("transform", &py_real_fft::transform, nb::arg("x"));
 
    nb::class_<py_dct_ii>(m, "dct_ii",
                          "DCT-II with FFTW's REDFT10 normalisation, y[k] = 2 sum_j x[j] cos(pi k (2j+1)/(2n)), on float64 arrays "
-                         "(the transform behind chebyshev_transform).")
+                         "(the transform behind chebyshev_transform).\n\n"
+                         "As scipy.fft.dct(x, type=2), which uses the same scaling.\n\n"
+                         "https://www.boost.org/doc/libs/release/libs/math/doc/html/math_toolkit/fft.html")
       .def("__init__", [](py_dct_ii* self, std::size_t n) { check_length(n); new (self) py_dct_ii(n); }, nb::arg("n"))
       .def_prop_ro("size", [](py_dct_ii& self) { return self.n; })
       .def("__len__", [](py_dct_ii& self) { return self.n; })
+      .def("__repr__", [](py_dct_ii& self) { return "dct_ii(n=" + std::to_string(self.n) + ")"; })
       .def("transform", &py_dct_ii::transform, nb::arg("x"))
       .def("transform_in_place", &py_dct_ii::transform_in_place, nb::arg("x"));
 }
