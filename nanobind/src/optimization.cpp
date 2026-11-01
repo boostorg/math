@@ -13,6 +13,7 @@
 
 #include <boost/math/optimization/cma_es.hpp>
 #include <boost/math/optimization/differential_evolution.hpp>
+#include <boost/math/optimization/dycors.hpp>
 #include <boost/math/optimization/jso.hpp>
 #include <boost/math/optimization/minimizer.hpp>
 #include <boost/math/optimization/multilevel_coordinate_search.hpp>
@@ -318,6 +319,27 @@ void bind_optimization(nb::module_& m)
               "batch_size=1, candidates=0, max_training_points=200, hyperparameter_steps=50, target_value=nan, seed=0)"),
       "Minimizes an expensive f over the box by TuRBO, trust-region Bayesian optimization; 0 means the defaults."
       BMPY_URL("turbo"));
+
+   m.def("dycors", [](nb::callable f, vector lower_bounds, vector upper_bounds, std::optional<vector> initial_guess,
+                      std::size_t max_function_calls, std::size_t initial_points, std::size_t candidates, double target_value,
+                      std::uint64_t seed) {
+      check_bounds(lower_bounds, upper_bounds, "dycors");
+      bo::dycors_parameters<vector> params;
+      params.lower_bounds = std::move(lower_bounds);
+      params.upper_bounds = std::move(upper_bounds);
+      params.initial_guess = initial_guess ? &*initial_guess : nullptr;
+      params.max_function_calls = max_function_calls;
+      params.initial_points = initial_points;
+      params.candidates = candidates;
+      python_cost cost(f);
+      std::mt19937_64 gen(seed);
+      return run_released(cost, [&] { return bo::dycors(std::cref(cost), params, gen, target_value, cost.cancellation()); });
+   }, arg(), arg(), arg(), nb::kw_only(), arg("initial_guess") = nb::none(), arg("max_function_calls") = 0,
+      arg("initial_points") = 0, arg("candidates") = 0, arg("target_value") = no_target, arg("seed") = 0,
+      nb::sig("def dycors(f, lower_bounds, upper_bounds, /, *, initial_guess=None, max_function_calls=0, initial_points=0, "
+              "candidates=0, target_value=nan, seed=0)"),
+      "Minimizes an expensive f over the box by DYCORS, a radial basis function surrogate with dynamic coordinate "
+      "search; 0 means the defaults." BMPY_URL("dycors"));
 
    m.def("cma_es", [](nb::callable f, vector lower_bounds, vector upper_bounds, std::optional<vector> initial_guess,
                       std::size_t max_generations, std::size_t population_size, double learning_rate, double target_value,
