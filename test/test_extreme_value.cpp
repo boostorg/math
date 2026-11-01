@@ -328,6 +328,9 @@ void test_spots(RealType)
       static_cast<RealType>(-1000)),              // x
       static_cast<RealType>(0),                // probability.
       tolerance); // %
+   // logcdf(complement) for large x, where log1p(-exp(-exp(-x))) overflowed; value from mpmath:
+   BOOST_CHECK_CLOSE_FRACTION(logcdf(complement(extreme_value_distribution<RealType>(0, 1), static_cast<RealType>(40))), static_cast<RealType>(-40.00000000000000000212417712764579449691L), 100 * boost::math::tools::epsilon<RealType>());
+   BOOST_CHECK_CLOSE_FRACTION(logcdf(complement(extreme_value_distribution<RealType>(0, 1), static_cast<RealType>(800))), static_cast<RealType>(-800), 100 * boost::math::tools::epsilon<RealType>());
 
 } // template <class RealType>void test_spots(RealType)
 

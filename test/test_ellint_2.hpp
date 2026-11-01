@@ -188,6 +188,10 @@ void test_spots(T, const char* type_name)
     BOOST_CHECK_THROW(boost::math::ellint_2(T(1.5)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::ellint_2(T(-1.5)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::ellint_2(T(1.5), T(1.5)), std::domain_error);
+    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+    {
+       BOOST_CHECK_THROW(boost::math::ellint_2(std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+    }
     #endif
 }
 

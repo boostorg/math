@@ -91,6 +91,7 @@ void test_spots(T z, const char* type_name)
    z = -1;
    if (std::numeric_limits<T>::has_infinity)
    {
+      BOOST_CHECK_THROW(boost::math::hypergeometric_2F0(-std::numeric_limits<T>::infinity(), a2, T(0.5), boost::math::policies::make_policy(boost::math::policies::rounding_error<boost::math::policies::ignore_error>())), std::domain_error);
       BOOST_CHECK((boost::math::isinf)(boost::math::hypergeometric_2F0(a1, a2, z)));
       z = 1;
       BOOST_CHECK((boost::math::isinf)(boost::math::hypergeometric_2F0(a1, a2, z)));

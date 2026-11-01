@@ -486,7 +486,7 @@ void test_spots(RealType /*T*/, const char* type_name)
    BOOST_CHECK_CLOSE(skewness(d), static_cast<RealType>(0.04883307102295208473290291018936563084537649911337978351L), tolerance);
    // https://www.wolframalpha.com/input/?i=N%5Bkurtosis%5Bhypergeometricdistribution%28200%2C50%2C500%29%5D%2C+55%5D+
    // N[kurtosis[hypergeometricdistribution(200,50,500)], 55] = 2.969174035736058474901169623721804275002985337280263464
-   BOOST_CHECK_CLOSE(kurtosis_excess(d), static_cast<RealType>(2.969174035736058474901169623721804275002985337280263464L), tolerance);
+   BOOST_CHECK_CLOSE(kurtosis(d), static_cast<RealType>(2.969174035736058474901169623721804275002985337280263464L), tolerance);
    BOOST_CHECK_CLOSE(kurtosis(d), kurtosis_excess(d) + 3, tolerance);
    BOOST_CHECK_EQUAL(quantile(d, 0.5f), median(d));
 

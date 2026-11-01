@@ -199,6 +199,14 @@ void test_spots(T, const char* t)
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, -2, static_cast<T>(0.5)), static_cast<T>(0.09375L), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, -2, static_cast<T>(1)), static_cast<T>(0), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, -2, static_cast<T>(0)), static_cast<T>(0.125), tolerance);
+   BOOST_IF_CONSTEXPR(std::numeric_limits<T>::max_exponent10 > 300)
+   {
+      // (l-|m|)!/(l+|m|)! underflows although P_l^m does not (#1606):
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(100, -90, static_cast<T>(0.5)), static_cast<T>(5.248805528165793692622985463794903013233e-175L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(98, -93, static_cast<T>(-0.0390625)), static_cast<T>(-1.079660896313249042910117325536990856857e-177L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(97, -84, static_cast<T>(-0.4375)), static_cast<T>(-1.577257387397217635640271216735650613972e-162L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(300, -120, static_cast<T>(0.25)), static_cast<T>(5.998422560497363882623251809115908447560e-298L), tolerance);
+   }
    //
    // Coverage:
    //

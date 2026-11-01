@@ -145,7 +145,9 @@ BOOST_MATH_GPU_ENABLED inline RealType pdf(const gamma_distribution<RealType, Po
 
    if(x == 0)
    {
-      return 0;
+      if(shape < 1)
+         return policies::raise_overflow_error<RealType>(function, 0, Policy());  // The density is infinite at 0
+      return shape == 1 ? RealType(1 / scale) : RealType(0);
    }
    result = gamma_p_derivative(shape, x / scale, Policy()) / scale;
    return result;
@@ -170,7 +172,9 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const gamma_distribution<RealType,
 
    if(x == 0)
    {
-      return BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN();
+      if(k < 1)
+         return policies::raise_overflow_error<RealType>(function, 0, Policy());  // The density is infinite at 0
+      return k == 1 ? -log(theta) : result;
    }
 
    result = -k*log(theta) + (k-1)*log(x) - lgamma(k) - (x/theta);

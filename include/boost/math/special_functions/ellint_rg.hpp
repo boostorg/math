@@ -26,7 +26,7 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail{
       BOOST_MATH_STD_USING
       constexpr auto function = "boost::math::ellint_rf<%1%>(%1%,%1%,%1%)";
 
-      if(x < 0 || y < 0 || z < 0)
+      if(!(x >= 0 && y >= 0 && z >= 0))
       {
          return policies::raise_domain_error<T>(function, "domain error, all arguments must be non-negative, only sensible result is %1%.", BOOST_MATH_NAMESPACE::numeric_limits<T>::quiet_NaN(), pol);
       }

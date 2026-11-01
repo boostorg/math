@@ -1167,3 +1167,33 @@ jobs:
           cd ../boost-root/__build__
           cmake --build . --target tests
           ctest --output-on-failure --no-tests=error
+  docs:
+    # Builds the documentation the way the superproject does, when the docs or the files they import change:
+    runs-on: ubuntu-latest
+    container: cppalliance/boost_superproject_build:24.04-v4
+    timeout-minutes: 240
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 3
+      - name: Git safe.directory
+        run: git status || git config --system --add safe.directory "$GITHUB_WORKSPACE"
+      - uses: dorny/paths-filter@v4
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'doc/**'
+              - 'example/**'
+              - 'reporting/**'
+              - 'tools/**'
+      - if: steps.changes.outputs.src == 'true'
+        name: Build docs
+        run: |
+          set -xe
+          curl --retry-all-errors --connect-timeout 15 -sSL --retry 5 -o linuxdocs.sh https://raw.githubusercontent.com/boostorg/release-tools/refs/heads/master/build_docs/linuxdocs.sh
+          chmod 755 linuxdocs.sh
+          ./linuxdocs.sh --skip-packages

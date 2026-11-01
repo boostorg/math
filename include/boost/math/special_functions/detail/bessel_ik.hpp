@@ -299,6 +299,40 @@ BOOST_MATH_GPU_ENABLED int CF2_ik(T v, T x, T* Kv, T* Kv1, T* Kv_scaled, T* Kv1_
     return 0;
 }
 
+// Returns a * 2^e2 * exp(z), or sets *overflow.  exp(z) is split into 2^j equal factors
+// exp(z / 2^j) that are each representable, and the binary exponent is spread over them
+// so no partial product leaves range.
+template <typename T>
+BOOST_MATH_GPU_ENABLED T bessel_ik_ldexp_exp(T a, int e2, T z, bool* overflow)
+{
+   BOOST_MATH_STD_USING
+   int e_rem = 0;
+   T result = frexp(a, &e_rem);
+   e_rem += e2;
+   T zr = z;
+   int parts = 1;
+   while (fabs(zr) > -tools::log_min_value<T>())
+   {
+      zr /= 2;
+      parts *= 2;
+   }
+   const T factor = exp(zr);
+   *overflow = false;
+   for (int i = 0; i < parts; ++i)
+   {
+      const int e_i = e_rem / (parts - i);
+      e_rem -= e_i;
+      const T term = ldexp(factor, e_i);
+      if (fabs(result) > tools::max_value<T>() / term)
+      {
+         *overflow = true;
+         break;
+      }
+      result *= term;
+   }
+   return result;
+}
+
 enum{
    need_i = 1,
    need_k = 2
@@ -327,6 +361,11 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
 
     constexpr auto function = "boost::math::bessel_ik<%1%>(%1%,%1%)";
 
+    if ((BOOST_MATH_NAMESPACE::isnan)(v) || (BOOST_MATH_NAMESPACE::isnan)(x))
+    {
+        *result_I = *result_K = policies::raise_domain_error<T>(function, "The order v and the argument x must not be NaN.", x, pol);
+        return 1;
+    }
     if (v < 0)
     {
         reflect = true;
@@ -368,7 +407,7 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
        }
        BOOST_MATH_INSTRUMENT_VARIABLE(Ku);
        BOOST_MATH_INSTRUMENT_VARIABLE(Ku1);
-       use_scaled_k = ((kind & need_i) == 0) && (x > 2) && ((Ku < tools::min_value<T>()) || (Ku1 < tools::min_value<T>()));
+       use_scaled_k = (x > 2) && ((Ku < tools::min_value<T>()) || (Ku1 < tools::min_value<T>()));
        prev = use_scaled_k ? Ku_scaled : Ku;
        current = use_scaled_k ? Ku1_scaled : Ku1;
        for (k = 1; k <= n; k++)                   // forward recurrence for K
@@ -431,7 +470,19 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
           else
           {
              CF1_ik(v, x, &fv, pol);                         // continued fraction CF1_ik
-             Iv = scale * W / (Kv * fv + Kv1);                  // Wronskian relation
+             // Normalise scaled K so the Wronskian can neither overflow nor underflow:
+             int e2 = 0;
+             if (use_scaled_k)
+                (void)frexp(Kv1, &e2);
+             Iv = scale * W / (ldexp(Kv, -e2) * fv + ldexp(Kv1, -e2));  // Wronskian relation
+             if (use_scaled_k)
+             {
+                // Kv and Kv1 hold exp(x) * K / 2^exp2_scale
+                bool overflow = false;
+                Iv = bessel_ik_ldexp_exp(Iv, -exp2_scale - e2, x, &overflow);
+                if (overflow)
+                   Iv = policies::raise_overflow_error<T>(function, nullptr, pol);
+             }
           }
        }
        else
@@ -442,9 +493,12 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
         BOOST_MATH_ASSERT(fabs(v - n - u) < tools::forth_root_epsilon<T>());
         T z = (u + n % 2);
         T fact = (2 / pi<T>()) * (BOOST_MATH_NAMESPACE::sin_pi(z, pol) * Kv);
+        bool overflow = false;
+        if (use_scaled_k)
+           fact = bessel_ik_ldexp_exp(fact, exp2_scale, T(-x), &overflow);
         if(fact == 0)
            *result_I = Iv;
-        else if(tools::max_value<T>() * scale < fact)
+        else if(overflow || (tools::max_value<T>() * scale < fact))
            *result_I = (org_kind & need_i) ? T(sign(fact) * scale_sign * policies::raise_overflow_error<T>(function, nullptr, pol)) : T(0);
         else
          *result_I = Iv + fact / scale;   // reflection formula
@@ -456,34 +510,8 @@ BOOST_MATH_GPU_ENABLED int bessel_ik(T v, T x, T* result_I, T* result_K, int kin
     if (use_scaled_k)
     {
        // Kv currently holds exp(x) * K_v(x) / 2^exp2_scale
-       int e2 = 0;
-       const T m = frexp(Kv, &e2);
-       exp2_scale += e2;
-       // Split exp(-x) into 2^j equal factors exp(-x / 2^j) that are each representable,
-       // and spread the binary exponent over them so no partial product leaves range.
-       T xr = x;
-       int parts = 1;
-       while (-xr < tools::log_min_value<T>())
-       {
-          xr /= 2;
-          parts *= 2;
-       }
-       const T factor = exp(-xr);
-       T result = m;
-       int e_rem = exp2_scale;
        bool overflow = false;
-       for (int i = 0; i < parts; ++i)
-       {
-          const int e_i = e_rem / (parts - i);
-          e_rem -= e_i;
-          const T term = ldexp(factor, e_i);
-          if (result > tools::max_value<T>() / term)
-          {
-             overflow = true;
-             break;
-          }
-          result *= term;
-       }
+       const T result = bessel_ik_ldexp_exp(Kv, exp2_scale, T(-x), &overflow);
        *result_K = overflow ? ((org_kind & need_k) ? policies::raise_overflow_error<T>(function, nullptr, pol) : T(0)) : result;
     }
     else if(tools::max_value<T>() * scale < Kv)

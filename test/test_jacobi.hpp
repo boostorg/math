@@ -218,6 +218,10 @@ void test_spots(T, const char* type_name)
     BOOST_CHECK_THROW(boost::math::jacobi_sc(T(-0.5), T(0.5)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::jacobi_sd(T(-0.5), T(0.5)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::jacobi_sn(T(-0.5), T(0.5)), std::domain_error);
+    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+    {
+       BOOST_CHECK_THROW(boost::math::jacobi_sn(std::numeric_limits<T>::quiet_NaN(), T(0.5)), std::domain_error);
+    }
 #else
     BOOST_CHECK((boost::math::isnan)(boost::math::jacobi_cd(T(-0.5), T(0.5))));
     BOOST_CHECK((boost::math::isnan)(boost::math::jacobi_cn(T(-0.5), T(0.5))));

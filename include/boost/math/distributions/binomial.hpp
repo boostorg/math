@@ -736,8 +736,9 @@ BOOST_MATH_NAMESPACE_BEGIN
          BOOST_MATH_STD_USING // ADL of std functions.
          RealType p = dist.success_fraction();
          RealType n = dist.trials();
-         // Wikipedia says one of floor(np) -1, floor (np), floor(np) +1
-         return floor(p * n); // Chose the middle value.
+         // Every median is floor(np) or ceil(np) (Kaas and Buhrman, 1980):
+         RealType m = floor(p * n);
+         return cdf(dist, m) < 0.5f ? m + 1 : m;
       }
 
       BOOST_MATH_EXPORT template <class RealType, class Policy>

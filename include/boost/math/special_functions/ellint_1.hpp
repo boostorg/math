@@ -166,7 +166,7 @@ BOOST_MATH_GPU_ENABLED T ellint_k_imp(T k, const Policy& pol, T one_minus_k2)
 
     constexpr auto function = "boost::math::ellint_k<%1%>(%1%)";
 
-    if (abs(k) > 1)
+    if (!(abs(k) <= 1))
     {
        return policies::raise_domain_error<T>(function, "Got k = %1%, function requires |k| <= 1", k, pol);
     }
@@ -211,7 +211,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
 
    T m = k * k;
 
-   switch (static_cast<int>(m * 20))
+   switch (m < 1 ? static_cast<int>(m * 20) : 20)
    {
    case 0:
    case 1:
@@ -483,7 +483,7 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T ellint_k_imp(T k, const Policy& 
    using namespace BOOST_MATH_NAMESPACE::tools;
 
    T m = k * k;
-   switch (static_cast<int>(m * 20))
+   switch (m < 1 ? static_cast<int>(m * 20) : 20)
    {
    case 0:
    case 1:

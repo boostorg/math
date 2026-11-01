@@ -22,19 +22,6 @@
 #endif
 #endif
 
-BOOST_MATH_NAMESPACE_BEGIN namespace statistics { namespace detail {
-
-struct pair_equal
-{
-    template <typename T1, typename T2>
-    bool operator()(const std::pair<T1, T2>& a, const std::pair<T1, T2>& b) const
-    {
-        return a.first == b.first;
-    }
-};
-
-}} BOOST_MATH_NAMESPACE_END
-
 #ifndef BOOST_MATH_EXEC_COMPATIBLE
 
 BOOST_MATH_NAMESPACE_BEGIN namespace statistics { namespace detail {
@@ -55,19 +42,16 @@ auto rank(ForwardIterator first, ForwardIterator last) -> std::vector<std::size_
 
     std::sort(rank_vector.begin(), rank_vector.end());
 
-    // Remove duplicates
-    rank_vector.erase(std::unique(rank_vector.begin(), rank_vector.end(), pair_equal()), rank_vector.end());
-    elements = rank_vector.size();
-
-    std::pair<T, std::size_t> rank;
+    // Tied values all get the largest rank of their run, i.e. result[i] + 1 = #{j : y_j <= y_i}.
+    std::size_t rank = 0;
     std::vector<std::size_t> result(elements);
-    for (i = 0; i < elements; ++i)
+    for (i = elements; i-- > 0;)
     {
-        if (rank_vector[i].first != rank.first)
+        if (i + 1 == elements || rank_vector[i].first != rank_vector[i + 1].first)
         {
-            rank = std::make_pair(rank_vector[i].first, i);
+            rank = i;
         }
-        result[rank_vector[i].second] = rank.second;
+        result[rank_vector[i].second] = rank;
     }
 
     return result;
@@ -101,19 +85,16 @@ auto rank(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 
     std::sort(exec, rank_vector.begin(), rank_vector.end());
 
-    // Remove duplicates
-    rank_vector.erase(std::unique(exec, rank_vector.begin(), rank_vector.end(), pair_equal()), rank_vector.end());
-    elements = rank_vector.size();
-
-    std::pair<T, std::size_t> rank;
+    // Tied values all get the largest rank of their run, i.e. result[i] + 1 = #{j : y_j <= y_i}.
+    std::size_t rank = 0;
     std::vector<std::size_t> result(elements);
-    for (i = 0; i < elements; ++i)
+    for (i = elements; i-- > 0;)
     {
-        if (rank_vector[i].first != rank.first)
+        if (i + 1 == elements || rank_vector[i].first != rank_vector[i + 1].first)
         {
-            rank = std::make_pair(rank_vector[i].first, i);
+            rank = i;
         }
-        result[rank_vector[i].second] = rank.second;
+        result[rank_vector[i].second] = rank;
     }
 
     return result;

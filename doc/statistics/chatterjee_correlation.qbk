@@ -62,6 +62,8 @@ The implementation follows [@https://arxiv.org/pdf/1909.10140.pdf Chatterjee's p
 
 The function expects at least two samples, a non-constant vector Y, and the same number of X's as Y's.
 If Y is constant, the result is a quiet NaN.
+If there are ties in the values of Y, Chatterjee's general formula 1 - n[sum]|r[sub i+1] - r[sub i]| / (2[sum]l[sub i](n - l[sub i])) is used,
+where r[sub i] is the number of j with Y[sub j] <= Y[sub i] and l[sub i] the number with Y[sub j] >= Y[sub i].
 The data set must be sorted by X values.
 If there are ties in the values of X, then the statistic is random due to the random breaking of ties.
 Of course, random numbers are not used internally, but the result is not guaranteed to be identical on different systems.
@@ -143,6 +145,7 @@ order 1/n. Use `chatterjee_correlation` when the original coefficient is require
 The function expects at least two samples, a non-constant vector Y, the same number of X's as Y's, and
 1 <= M <= n.
 If Y is constant, the result is a quiet NaN.
+If there are ties in the values of Y, R[sub i] is the number of j with Y[sub j] <= Y[sub i]; the normalisation above assumes no ties.
 The data set must be sorted by X values.
 If there are ties in the values of X, then the statistic is random due to the random breaking of ties.
 

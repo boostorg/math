@@ -25,9 +25,48 @@ bool comparator(Real r1, Real r2) {
 
 template<typename Real>
 std::array<Real, 4> polish_and_sort(Real a, Real b, Real c, Real d, Real e, std::array<Real, 4>& roots) {
-    // Polish the roots with a Halley iterate.
     using std::fma;
     using std::abs;
+    // As in cubic_roots, recover the smaller roots by dividing out the largest, if
+    // that loses no real roots and its real roots solve the quartic to rounding
+    // error, or the smaller roots found before don't:
+    std::size_t k = 0;
+    for (std::size_t i = 1; i < 4; ++i) {
+        if (abs(roots[i]) > abs(roots[k]) || (BOOST_MATH_NAMESPACE::isnan)(roots[k])) {
+            k = i;
+        }
+    }
+    Real r0 = roots[k];
+    if ((BOOST_MATH_NAMESPACE::isnan)(r0)) {
+        // No real root was found, but one root may dominate the others, and then it is near -b/a:
+        r0 = -b/a;
+        for (int i = 0; i < 8; ++i) {
+            r0 -= fma(fma(fma(fma(a, r0, b), r0, c), r0, d), r0, e)/fma(fma(fma(4*a, r0, 3*b), r0, 2*c), r0, d);
+        }
+    }
+    if (abs(r0) > 0 && abs(a) > (std::numeric_limits<Real>::min)()) {
+        Real delta = -e/r0;
+        Real gamma = (delta - d)/r0;
+        Real beta = (gamma - c)/r0;
+        if (abs(a*r0*r0*r0) < abs(delta)) {
+            beta = fma(a, r0, b);
+            gamma = fma(beta, r0, c);
+            delta = fma(gamma, r0, d);
+        }
+        auto cbrts = cubic_roots(a, beta, gamma, delta);
+        auto real = [](auto const& v) { return std::count_if(v.begin(), v.end(), [](Real x) { return !(BOOST_MATH_NAMESPACE::isnan)(x); }); };
+        auto solves = [&](Real x) {
+            Real s = (((abs(a) * abs(x) + abs(b)) * abs(x) + abs(c)) * abs(x) + abs(d)) * abs(x) + abs(e);
+            return (BOOST_MATH_NAMESPACE::isnan)(x) || abs(fma(fma(fma(fma(a, x, b), x, c), x, d), x, e)) <= 32 * std::numeric_limits<Real>::epsilon() * s;
+        };
+        auto others = roots;
+        others[k] = std::numeric_limits<Real>::quiet_NaN();
+        bool found = !(BOOST_MATH_NAMESPACE::isnan)(roots[k]) || ((BOOST_MATH_NAMESPACE::isfinite)(r0) && solves(r0));
+        if (found && ((real(cbrts) >= real(others) && std::all_of(cbrts.begin(), cbrts.end(), solves)) || !std::all_of(others.begin(), others.end(), solves))) {
+            roots = {r0, cbrts[0], cbrts[1], cbrts[2]};
+        }
+    }
+    // Polish the roots with a Halley iterate.
     for (auto &r : roots) {
         Real df = fma(4*a, r, 3*b);
         df = fma(df, r, 2*c);
@@ -133,7 +172,7 @@ std::array<Real, 4> quartic_roots(Real a, Real b, Real c, Real d, Real e) {
     }
     // No real roots:
     if (largest_root <= 0) {
-      return roots;
+      return detail::polish_and_sort(a, b, c, d, e, roots);
     }
     Real s = sqrt(largest_root);
     // s is nonzero, because we took care of the biquadratic case.

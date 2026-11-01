@@ -32,9 +32,9 @@ public:
         static const char* function = "boost::math::interpolators::makima::makima";
         using std::isnan;
         using std::abs;
-        if (x.size() < 4)
+        if (x.size() < 4 || x.size() != y.size())
         {
-            error_msg_ = "Must be at least four data points.";
+            error_msg_ = "Must be at least four data points, with the same number of ordinates as abscissas.";
             BOOST_MATH_NAMESPACE::policies::raise_domain_error(function, error_msg_.c_str(), false, Policy());
             valid_ = false;
             return;

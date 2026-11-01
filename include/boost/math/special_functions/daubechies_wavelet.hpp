@@ -206,9 +206,9 @@ BOOST_MATH_NAMESPACE_BEGIN
 
       inline Real operator()(Real x) const
       {
-         if (x <= -p + 1 || x >= p)
+         if (!(x > -p + 1 && x < p))
          {
-            return 0;
+            return (BOOST_MATH_NAMESPACE::isnan)(x) ? x : Real(0);
          }
 
          if constexpr (p == 1)
@@ -232,9 +232,9 @@ BOOST_MATH_NAMESPACE_BEGIN
       inline Real prime(Real x) const
       {
          static_assert(p > 2, "The 3-vanishing moment Daubechies wavelet is the first which is continuously differentiable.");
-         if (x <= -p + 1 || x >= p)
+         if (!(x > -p + 1 && x < p))
          {
-            return 0;
+            return (BOOST_MATH_NAMESPACE::isnan)(x) ? x : Real(0);
          }
          return m_interpolator->prime(x);
       }
@@ -242,9 +242,9 @@ BOOST_MATH_NAMESPACE_BEGIN
       inline Real double_prime(Real x) const
       {
          static_assert(p >= 6, "Second derivatives of Daubechies wavelets require at least 6 vanishing moments.");
-         if (x <= -p + 1 || x >= p)
+         if (!(x > -p + 1 && x < p))
          {
-            return Real(0);
+            return (BOOST_MATH_NAMESPACE::isnan)(x) ? x : Real(0);
          }
          return m_interpolator->double_prime(x);
       }

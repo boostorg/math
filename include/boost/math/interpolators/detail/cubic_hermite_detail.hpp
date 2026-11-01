@@ -97,7 +97,7 @@ public:
         if ( ! valid_) return std::numeric_limits<Real>::quiet_NaN();
 
         static const char* function = "boost::math::interpolators::detail::cubic_hermite_detail::operator()";
-        if  (x < x_[0] || x > x_.back())
+        if  (!(x >= x_[0] && x <= x_.back()))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
@@ -135,7 +135,7 @@ public:
         if ( ! valid_) return std::numeric_limits<Real>::quiet_NaN();
 
         static const char* function = "boost::math::interpolators::detail::cubic_hermite_detail::prime";
-        if  (x < x_[0] || x > x_.back())
+        if  (!(x >= x_[0] && x <= x_.back()))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
@@ -263,7 +263,7 @@ public:
         if ( ! valid_) return std::numeric_limits<Real>::quiet_NaN();
 
         const Real xf = x0_ + (y_.size()-1)/inv_dx_;
-        if  (x < x0_ || x > xf)
+        if  (!(x >= x0_ && x <= xf))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
@@ -301,7 +301,7 @@ public:
         if ( ! valid_) return std::numeric_limits<Real>::quiet_NaN();
         static const char* function = "boost::math::interpolators::detail::cardinal_cubic_hermite_detail::prime";
         const Real xf = x0_ + (y_.size()-1)/inv_dx_;
-        if  (x < x0_ || x > xf)
+        if  (!(x >= x0_ && x <= xf))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
@@ -417,7 +417,7 @@ public:
 
         static const char* function = "boost::math::interpolators::detail::cardinal_cubic_hermite_detail_aos::operator()";
         const Real xf = x0_ + (dat_.size()-1)/inv_dx_;
-        if  (x < x0_ || x > xf)
+        if  (!(x >= x0_ && x <= xf))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
@@ -464,7 +464,7 @@ public:
 
         static const char* function = "boost::math::interpolators::detail::cardinal_cubic_hermite_detail_aos::prime";
         const Real xf = x0_ + (dat_.size()-1)/inv_dx_;
-        if  (x < x0_ || x > xf)
+        if  (!(x >= x0_ && x <= xf))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);

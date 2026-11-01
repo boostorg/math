@@ -247,6 +247,11 @@ void test_bessel(T, const char* name)
     BOOST_CHECK_THROW(boost::math::cyl_neumann(T(0.2), T(-1)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_neumann(T(2), T(0)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::sph_neumann(2, T(-2)), std::domain_error);
+    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+    {
+       BOOST_CHECK_THROW(boost::math::cyl_neumann(T(0), std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+       BOOST_CHECK_THROW(boost::math::cyl_neumann(T(2.5), std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+    }
     #endif
 #if LDBL_MAX_EXP > 1024
     if (std::numeric_limits<T>::max_exponent > 1024)

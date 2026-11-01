@@ -274,6 +274,8 @@ void test_spots(RealType T)
       ::boost::math::entropy(rayleigh_distribution<RealType>(2)),
       expected_entropy,
          tolerance* 100);
+   // logcdf for small x, where log1p(-exp(-x^2/2)) cancels; value from mpmath:
+   BOOST_CHECK_CLOSE_FRACTION(logcdf(rayleigh_distribution<RealType>(1), static_cast<RealType>(1e-6L)), static_cast<RealType>(-28.32416829648874351763312956725388039262L), 100 * boost::math::tools::epsilon<RealType>());
    return;
 
 } // template <class RealType>void test_spots(RealType)

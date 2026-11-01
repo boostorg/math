@@ -183,6 +183,10 @@ void test_bessel(T, const char* name)
     //
     #ifndef BOOST_MATH_NO_EXCEPTIONS
     BOOST_CHECK_THROW(boost::math::cyl_bessel_i(T(-2.5), T(-2.5)), std::domain_error);
+    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+    {
+       BOOST_CHECK_THROW(boost::math::cyl_bessel_i(T(2.5), std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+    }
     #endif
 
     BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(0), T(0)), T(1));
@@ -194,6 +198,7 @@ void test_bessel(T, const char* name)
        BOOST_IF_CONSTEXPR(std::numeric_limits<T>::max_exponent < 11356)
        {
           BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(0.25), T(8000)), std::numeric_limits<T>::infinity());
+          BOOST_CHECK_EQUAL(boost::math::cyl_bessel_i(T(4180.75), T(5917.5)), std::numeric_limits<T>::infinity());
        }
        else BOOST_IF_CONSTEXPR(std::numeric_limits<T>::max_exponent10 < 9200)
        {
@@ -220,6 +225,12 @@ void test_bessel(T, const char* name)
           tolerance *= 4; // multiprecision type.
        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(0, T(700)), SC_(1.5295933476718737363162072288904508649662689614661164851272e302), tolerance);
        BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(1, T(600)), SC_(6.1411813450668919369004006361519512681603654557478168763761e258), tolerance);
+       // K_u(x) underflows for x > 708, so the Wronskian must use scaled K (#1606):
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(T(400), T(720)), SC_(5.247610687480169709847507849029951063253e263), tolerance);
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(T(1000), T(800)), SC_(1.785000651355468195695060736675941047407e99), tolerance);
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(T(8000), T(5000)), SC_(2.123103016038539755253471101937202009565e-245), tolerance);
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(T(-1500.5), T(800)), SC_(2.382859500499757224253035050603121005377e163), tolerance);
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(T(1423.0625), T(1315.75)), SC_(1.075930354926578883329989217782054656833e260), tolerance);
     }
     else BOOST_IF_CONSTEXPR(std::numeric_limits<T>::is_specialized)
     {

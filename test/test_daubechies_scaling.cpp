@@ -526,6 +526,12 @@ int main()
     boost::math::daubechies_scaling<double, 1> haar;
     CHECK_EQUAL(1.0, haar(0.5));
     CHECK_TRUE(haar.bytes() > 0);
+    const double nan = std::numeric_limits<double>::quiet_NaN();
+    CHECK_NAN(haar(nan));
+    boost::math::daubechies_scaling<double, 6> phi;
+    CHECK_NAN(phi(nan));
+    CHECK_NAN(phi.prime(nan));
+    CHECK_NAN(phi.double_prime(nan));
 
     #ifndef __MINGW32__
     boost::hana::for_each(std::make_index_sequence<18>(), [&](auto i){

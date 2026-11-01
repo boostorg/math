@@ -216,7 +216,8 @@ both forwards and backwards until sufficient precision has been achieved.  It
 should be noted that recurrence in the forwards direction of P[sub a](x) is
 numerically unstable.  However, since we always start /after/ the largest
 term in the series, numeric instability is introduced more slowly than the
-series converges.
+series converges.  Far in the left tail, where the starting term underflows,
+Ding's series is used instead, scaled so that its first term does not underflow.
 
 Computation of the complement of the CDF uses an extension of Krishnamoorthy's
 method, given that:
@@ -239,8 +240,8 @@ For small values of the
 non-centrality parameter the relation in terms of __cyl_bessel_i
 is used.  However, this method fails for large values of the
 non-centrality parameter, so in that case the infinite sum is
-evaluated using the method of Benton and Krishnamoorthy, and
-the usual recurrence relations for successive terms.
+evaluated using the method of Benton and Krishnamoorthy, starting
+from the largest term, and the usual recurrence relations for successive terms.
 
 The quantile functions are computed by numeric inversion of the CDF.
 An improve starting guess is from

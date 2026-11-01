@@ -405,6 +405,9 @@ void test_spots(RealType T)
       BOOST_CHECK((boost::math::isnan)(mean(ignore_error_exponential(static_cast<RealType>(-1)))));
       BOOST_CHECK((boost::math::isnan)(standard_deviation(ignore_error_exponential(static_cast<RealType>(-1)))));
    }
+   // logcdf for small x, where log1p(-exp(-x)) cancels; values from mpmath:
+   BOOST_CHECK_CLOSE_FRACTION(logcdf(exponential_distribution<RealType>(1), static_cast<RealType>(1e-12L)), static_cast<RealType>(-27.63102111592904820821589741454570382455L), 100 * boost::math::tools::epsilon<RealType>());
+   BOOST_CHECK_CLOSE_FRACTION(logcdf(exponential_distribution<RealType>(1), static_cast<RealType>(1e-20L)), static_cast<RealType>(-46.05170185988091368036482909368728415202L), 100 * boost::math::tools::epsilon<RealType>());
 } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_main )

@@ -251,7 +251,7 @@ public:
         // Assuming we compute f(t)sin(wt) for many different omega, this gives some
         // a posteriori ability to choose a refinement level that is roughly appropriate.
         size_t i = starting_level_;
-        do {
+        for (; i < big_nodes_.size(); ++i) {
             Real I0 = estimate_integral(f, omega, i);
 #ifdef BOOST_MATH_INSTRUMENT_OOURA
             print_ooura_estimate(i, I0, I1, omega);
@@ -263,7 +263,7 @@ public:
                 return {I0/omega, absolute_error_estimate/scale};
             }
             I1 = I0;
-        } while(++i < big_nodes_.size());
+        }
 
         // We've used up all our precomputed levels.
         // Now we need to add more.
@@ -511,7 +511,7 @@ public:
         Real absolute_error_estimate = std::numeric_limits<Real>::quiet_NaN();
         Real scale = std::numeric_limits<Real>::quiet_NaN();
         size_t i = starting_level_;
-        do {
+        for (; i < big_nodes_.size(); ++i) {
             Real I0 = estimate_integral(f, omega, i);
 #ifdef BOOST_MATH_INSTRUMENT_OOURA
             print_ooura_estimate(i, I0, I1, omega);
@@ -523,7 +523,7 @@ public:
                 return {I0/omega, absolute_error_estimate/scale};
             }
             I1 = I0;
-        } while(++i < big_nodes_.size());
+        }
 
         size_t max_additional_levels = 4;
         while (big_nodes_.size() < requested_levels_ + max_additional_levels) {

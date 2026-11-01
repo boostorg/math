@@ -9,6 +9,7 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/assert.hpp>
+#include <boost/math/tools/throw_exception.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <tuple>
 #include <iterator>
@@ -362,6 +363,19 @@ ReturnType gini_coefficient_parallel_impl(ExecutionPolicy&&, ForwardIterator fir
 }
 
 #endif // BOOST_MATH_HAS_THREADS
+
+// NaN never compares equal (and can not be sorted), so data containing one have no mode:
+template<typename ForwardIterator>
+bool mode_has_nan(ForwardIterator first, ForwardIterator last)
+{
+    using Z = typename std::iterator_traits<ForwardIterator>::value_type;
+    if (std::any_of(first, last, [](const Z& z) { return !(z == z); }))
+    {
+        BOOST_MATH_THROW_EXCEPTION(std::domain_error("The mode is undefined for data containing a NaN."))
+        return true;
+    }
+    return false;
+}
 
 template<typename ForwardIterator, typename OutputIterator>
 OutputIterator mode_impl(ForwardIterator first, ForwardIterator last, OutputIterator output)

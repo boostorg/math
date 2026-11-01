@@ -275,6 +275,12 @@ void test_bessel(T, const char* name)
     BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j(T(-2.5), T(0)), std::domain_error);
     BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j(T(-2.5), T(-2)), std::domain_error);
     BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j(T(2.5), T(-2)), std::domain_error);
+    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+    {
+       BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j(T(0), std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+       BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j(T(2.5), std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+       BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j(std::numeric_limits<T>::quiet_NaN(), T(0.5)), std::domain_error);
+    }
 
     //
     // special cases for code coverage:

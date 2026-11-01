@@ -186,7 +186,8 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const exponential_distribution<Rea
       return result;
    if(0 == detail::verify_exp_x(function, x, &result, Policy()))
       return result;
-   result = BOOST_MATH_NAMESPACE::log1p(-exp(-x * lambda), Policy());
+   RealType t = x * lambda;
+   result = (t > 0) && (t < 0.5f) ? log(-BOOST_MATH_NAMESPACE::expm1(-t, Policy())) : BOOST_MATH_NAMESPACE::log1p(-exp(-t), Policy());
 
    return result;
 } // cdf

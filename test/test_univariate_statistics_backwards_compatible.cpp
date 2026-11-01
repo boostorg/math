@@ -931,6 +931,17 @@ void test_interquartile_range()
     BOOST_TEST_EQ(iqr, 6);
 }
 
+void test_mode_nan()
+{
+    // NaN never compares equal, so it can not be counted:
+    std::vector<double> v {1.0, std::numeric_limits<double>::quiet_NaN()};
+    BOOST_TEST_THROWS(boost::math::statistics::mode(v), std::domain_error);
+    v = {2.0, 1.0, std::numeric_limits<double>::quiet_NaN()};
+    BOOST_TEST_THROWS(boost::math::statistics::mode(v), std::domain_error);
+    v = {std::numeric_limits<double>::quiet_NaN(), 1.0, 1.0};
+    BOOST_TEST_THROWS(boost::math::statistics::mode(v.cbegin(), v.cend()), std::domain_error);
+}
+
 template<class Z>
 void test_mode()
 {
@@ -1089,6 +1100,7 @@ int main()
     test_interquartile_range<double>();
     test_interquartile_range<cpp_bin_float_50>();
 
+    test_mode_nan();
     test_mode<int>();
     test_mode<int32_t>();
     test_mode<int64_t>();

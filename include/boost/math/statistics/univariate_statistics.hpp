@@ -646,6 +646,10 @@ inline auto interquartile_range(RandomAccessContainer & v)
 BOOST_MATH_EXPORT template<class ExecutionPolicy, class ForwardIterator, class OutputIterator>
 inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
+    if(detail::mode_has_nan(first, last))
+    {
+        return output;
+    }
     if(!std::is_sorted(exec, first, last))
     {
         if constexpr (detail::is_sortable_iterator<ForwardIterator>::value)
@@ -1164,6 +1168,10 @@ BOOST_MATH_EXPORT template<class ForwardIterator, class OutputIterator,
     enable_if_t<detail::is_sortable_iterator<ForwardIterator>::value, bool> = true>
 inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
+    if(detail::mode_has_nan(first, last))
+    {
+        return output;
+    }
     if(!std::is_sorted(first, last))
     {
         std::sort(first, last);
@@ -1176,6 +1184,10 @@ BOOST_MATH_EXPORT template<class ForwardIterator, class OutputIterator,
     enable_if_t<!detail::is_sortable_iterator<ForwardIterator>::value, bool> = true>
 inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
+    if(detail::mode_has_nan(first, last))
+    {
+        return output;
+    }
     if(!std::is_sorted(first, last))
     {
         BOOST_MATH_ASSERT_MSG(false, "Data must be sorted for mode calculation");
@@ -1194,11 +1206,6 @@ BOOST_MATH_EXPORT template<class ForwardIterator, typename Real = typename std::
     enable_if_t<detail::is_sortable_iterator<ForwardIterator>::value, bool> = true>
 inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
 {
-    if (!std::is_sorted(first, last))
-    {
-        std::sort(first, last);
-    }
-
     std::list<Real> modes;
     mode(first, last, std::inserter(modes, modes.begin()));
     return modes;

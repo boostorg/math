@@ -801,6 +801,8 @@ if(std::numeric_limits<RealType>::is_specialized)
     tolerance);
   }
     //geometric::find_upper_bound_on_p(k, alpha);
+  // logcdf for small p, where log1p(-(1 - p)^(k+1)) cancels; value from mpmath:
+  BOOST_CHECK_CLOSE_FRACTION(logcdf(geometric_distribution<RealType>(static_cast<RealType>(1e-12L)), static_cast<RealType>(3)), static_cast<RealType>(-26.24472675481015758938143333829601735494L), 100 * boost::math::tools::epsilon<RealType>());
    return;
 } // template <class RealType> void test_spots(RealType) // Any floating-point type RealType.
 

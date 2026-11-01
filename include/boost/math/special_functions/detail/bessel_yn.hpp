@@ -36,7 +36,7 @@ BOOST_MATH_GPU_ENABLED T bessel_yn(int n, T x, const Policy& pol)
     {
        return -policies::raise_overflow_error<T>(function, nullptr, pol);
     }
-    if (x <= 0)
+    if (!(x > 0))
     {
        return policies::raise_domain_error<T>(function, "Got x = %1%, but x must be > 0, complex result not supported.", x, pol);
     }

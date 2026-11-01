@@ -131,6 +131,16 @@ void test_spots(T, const char* t)
    //
    T tolerance = boost::math::tools::epsilon<T>() * 100;
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_r(3, 2, static_cast<T>(0.5), static_cast<T>(0)), static_cast<T>(0.2061460599687871330692286791802688341213L), tolerance);
+   // (n-m)!/(n+m)! underflows and P_n^m overflows at moderate degree (#1606):
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_r(90, 90, static_cast<T>(1.125), static_cast<T>(0.25)), static_cast<T>(-7.716720860684212081522559221026226224245e-5L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_i(150, 75, static_cast<T>(1.125), static_cast<T>(0.25)), static_cast<T>(-0.02903693669592330942078135983915646100092L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_r(200, 140, static_cast<T>(1.859375), static_cast<T>(0.25)), static_cast<T>(0.3549142971686119037129159044278292016603L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_r(200, 200, static_cast<T>(1.125), static_cast<T>(0.25)), static_cast<T>(1.270195279765184572886661648246109533677e-9L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_r(300, -90, static_cast<T>(1.40625), static_cast<T>(0.25)), static_cast<T>(-0.2865853899607074019472366785952343719849L), tolerance);
+   // and at an EGM2008-sized order sin^m(theta) = 2^m 0.5^m, where 0.5^1100 underflows (value from mpmath):
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_r(1100, 1100, boost::math::constants::half_pi<T>(), static_cast<T>(0)), static_cast<T>(1.726015827973302460006412724096951815062L), tolerance);
+   // sin^135(theta) underflows; the result amplifies the rounding of sin(theta) 135 times:
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_r(400, 135, static_cast<T>(0.00390625), static_cast<T>(0)), static_cast<T>(-8.319638271848857025866382064552644921266e-246L), tolerance * 5);
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_r(20, 10, static_cast<T>(0.75), static_cast<T>(-0.25)), static_cast<T>(0.06197787102219208244041677775577045124092L), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_i(20, 10, static_cast<T>(0.75), static_cast<T>(-0.25)), static_cast<T>(0.04629885158895932341185988759669916977920L), tolerance);
 

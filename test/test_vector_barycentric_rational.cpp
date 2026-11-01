@@ -338,6 +338,40 @@ void test_constant_high_order()
 
 
 template<class Real>
+void test_prime_near_node()
+{
+    std::cout << "Testing the derivative a few ulps from a node on std::array vectors of type "
+              << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::vector<Real> t(20);
+    std::vector<std::array<Real, 2>> y(20);
+    for (size_t i = 0; i < t.size(); ++i)
+    {
+        t[i] = 1 + Real(i)/19;
+        y[i] = {std::exp(t[i]), 1/t[i]};
+    }
+    std::vector<Real> t_copy = t;
+    boost::math::interpolators::vector_barycentric_rational<decltype(t), decltype(y)> interpolator(std::move(t), std::move(y), 3);
+    Real tol = 1000*numeric_limits<Real>::epsilon();
+    for (size_t i : {size_t(0), size_t(7), size_t(19)})
+    {
+        std::array<Real, 2> expected = interpolator.prime(t_copy[i]);
+        Real up = t_copy[i];
+        Real down = t_copy[i];
+        for (int j = 0; j < 64; ++j)
+        {
+            up = std::nextafter(up, Real(3));
+            down = std::nextafter(down, Real(0));
+            for (Real s : {up, down})
+            {
+                std::array<Real, 2> computed = interpolator.prime(s);
+                CHECK_ABSOLUTE_ERROR(expected[0], computed[0], tol*abs(expected[0]));
+                CHECK_ABSOLUTE_ERROR(expected[1], computed[1], tol*abs(expected[1]));
+            }
+        }
+    }
+}
+
+template<class Real>
 void test_weights()
 {
     std::cout << "Testing weights are calculated correctly using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
@@ -389,6 +423,7 @@ void vector_barycentric_rational()
     test_interpolation_condition_std_array<std::float64_t>();
     test_interpolation_condition_high_order<std::float64_t>();
     test_agreement_with_1d<std::float64_t>();
+    test_prime_near_node<std::float64_t>();
 
     #else
 
@@ -401,6 +436,7 @@ void vector_barycentric_rational()
     test_interpolation_condition_std_array<double>();
     test_interpolation_condition_high_order<double>();
     test_agreement_with_1d<double>();
+    test_prime_near_node<double>();
 
     #endif
 }

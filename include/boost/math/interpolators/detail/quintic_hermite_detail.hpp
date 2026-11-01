@@ -71,7 +71,7 @@ public:
 
     inline Real operator()(Real x) const
     {
-        if  (x < x_[0] || x > x_.back())
+        if  (!(x >= x_[0] && x <= x_.back()))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
@@ -114,7 +114,7 @@ public:
 
     inline Real prime(Real x) const
     {
-        if  (x < x_[0] || x > x_.back())
+        if  (!(x >= x_[0] && x <= x_.back()))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
@@ -156,7 +156,7 @@ public:
 
     inline Real double_prime(Real x) const
     {
-        if  (x < x_[0] || x > x_.back())
+        if  (!(x >= x_[0] && x <= x_.back()))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
@@ -260,7 +260,7 @@ public:
     inline Real operator()(Real x) const
     {
         const Real xf = x0_ + (y_.size()-1)/inv_dx_;
-        if  (x < x0_ || x > xf)
+        if  (!(x >= x0_ && x <= xf))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
@@ -306,7 +306,7 @@ public:
     inline Real prime(Real x) const
     {
         const Real xf = x0_ + (y_.size()-1)/inv_dx_;
-        if  (x < x0_ || x > xf)
+        if  (!(x >= x0_ && x <= xf))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
@@ -357,7 +357,7 @@ public:
     inline Real double_prime(Real x) const
     {
         const Real xf = x0_ + (y_.size()-1)/inv_dx_;
-        if  (x < x0_ || x > xf) {
+        if  (!(x >= x0_ && x <= xf)) {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
@@ -450,7 +450,7 @@ public:
     inline Real operator()(Real x) const
     {
         const Real xf = x0_ + (data_.size()-1)/inv_dx_;
-        if  (x < x0_ || x > xf)
+        if  (!(x >= x0_ && x <= xf))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
@@ -494,7 +494,7 @@ public:
     inline Real prime(Real x) const
     {
         const Real xf = x0_ + (data_.size()-1)/inv_dx_;
-        if  (x < x0_ || x > xf)
+        if  (!(x >= x0_ && x <= xf))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
@@ -546,7 +546,7 @@ public:
     inline Real double_prime(Real x) const
     {
         const Real xf = x0_ + (data_.size()-1)/inv_dx_;
-        if  (x < x0_ || x > xf)
+        if  (!(x >= x0_ && x <= xf))
         {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);

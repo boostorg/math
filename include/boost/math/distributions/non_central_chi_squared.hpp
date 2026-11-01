@@ -148,14 +148,22 @@ BOOST_MATH_NAMESPACE_BEGIN
             BOOST_MATH_STD_USING
             // Special case:
             if(x == 0)
-               return 0;
+               return init_sum;
             T tk = BOOST_MATH_NAMESPACE::gamma_p_derivative(f/2 + 1, x/2, pol);
             T lambda = theta / 2;
             T vk = exp(-lambda);
+            // If the first term underflows, sum the series scaled by exp(lambda) and remove that
+            // factor in steps of at most exp(cap), each time vk exceeds exp(cap):
+            bool scaled = vk * tk < tools::min_value<T>();
+            T scale = scaled ? lambda : T(0);
+            const T cap = tools::log_max_value<T>() / 2;
+            const T big = scaled ? T(exp(cap)) : T(0);
+            if(scaled)
+               vk = 1;
             T uk = vk;
-            T sum = init_sum + tk * vk;
+            T sum = (scaled ? T(0) : init_sum) + tk * vk;
             if(sum == 0)
-               return sum;
+               return init_sum;
 
             BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
             T errtol = BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>();
@@ -170,13 +178,26 @@ BOOST_MATH_NAMESPACE_BEGIN
                lterm = term;
                term = vk * tk;
                sum += term;
-               if((fabs(term / sum) < errtol) && (term <= lterm))
+               if((vk > big) && (scale > 0))
+               {
+                  T c = scale < cap ? scale : cap;
+                  T s = exp(-c);
+                  scale -= c;
+                  uk *= s;
+                  vk *= s;
+                  term *= s;
+                  lterm *= s;
+                  sum *= s;
+               }
+               if(((sum == 0) || (fabs(term / sum) < errtol)) && (term <= lterm))
                   break;
             }
             //Error check:
             if(static_cast<BOOST_MATH_NAMESPACE::uintmax_t>(i) >= max_iter)
                return policies::raise_evaluation_error("cdf(non_central_chi_squared_distribution<%1%>, %1%)", "Series did not converge, closest value was %1%", sum, pol); // LCOV_EXCL_LINE
-            return sum;
+            for(; scale > 0; scale -= cap)
+               sum *= exp(-(scale < cap ? scale : cap));
+            return scaled ? T(init_sum + sum) : sum;
          }
 
 
@@ -199,7 +220,7 @@ BOOST_MATH_NAMESPACE_BEGIN
             BOOST_MATH_STD_USING
             // Special case:
             if(y == 0)
-               return 0;
+               return init_sum;
             BOOST_MATH_NAMESPACE::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
             T errtol = BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>();
             T errorf(0), errorb(0);
@@ -230,6 +251,12 @@ BOOST_MATH_NAMESPACE_BEGIN
             T xtermf = BOOST_MATH_NAMESPACE::gamma_p_derivative(a, x, pol);
             // Backwards gamma function recursion term:
             T xtermb = xtermf * x / a;
+            // Far in the left tail the starting term underflows; Ding's forward sum still works there, unless
+            // the Chernoff bound at t = 1/2, log P(X <= y) <= y/2 - lambda/4 - n log(2)/2, shows the cdf underflows
+            // too (Ding's sum would take O(lambda) terms):
+            if(poiskf * gamkf < tools::min_value<T>())
+               return x - del / 2 - n * constants::ln_two<T>() / 2 < tools::log_min_value<T>()
+                  ? init_sum : non_central_chi_square_p_ding(y, n, lambda, pol, init_sum);
             T sum = init_sum + poiskf * gamkf;
             if(sum == 0)
                return sum;
@@ -290,7 +317,9 @@ BOOST_MATH_NAMESPACE_BEGIN
             T n2 = n / 2;
             T l2 = lambda / 2;
             T sum = 0;
-            long long k = lltrunc(l2);
+            // Start at the largest term, where (k + 1)(n2 + k) = l2 x2, unless the Poisson mode comes first:
+            T km = (sqrt((n2 - 1) * (n2 - 1) + 4 * l2 * x2) - n2 - 1) / 2;
+            long long k = km < 0 ? 0 : lltrunc(km < l2 ? km : l2);
             T pois = gamma_p_derivative(static_cast<T>(k + 1), l2, pol) * gamma_p_derivative(static_cast<T>(n2 + k), x2);
             if(pois == 0)
                return 0;
@@ -520,7 +549,7 @@ BOOST_MATH_NAMESPACE_BEGIN
 
          // Special case:
          if(x == 0)
-            return 0;
+            return k == 2 ? static_cast<RealType>(exp(-l / 2) / 2) : RealType(0);
          if(l > 50)
          {
             r = non_central_chi_square_pdf(static_cast<value_type>(x), k, l, forwarding_policy());

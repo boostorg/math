@@ -312,10 +312,25 @@ T legendre_p_imp(int l, int m, T x, T sin_theta_power, const Policy& pol)
    {
       return pow((1 - x * x) / 4, T(l) / 2) / BOOST_MATH_NAMESPACE::tgamma<T>(l + 1, pol);
    }
-   if(m < 0)
+   if((m < 0) && ((l + m < 0) || (l - m <= static_cast<int>(max_factorial<T>::value))))
    {
       int sign = (m&1) ? -1 : 1;
       return sign * BOOST_MATH_NAMESPACE::tgamma_ratio(static_cast<T>(l+m+1), static_cast<T>(l+1-m), pol) * legendre_p_imp(l, -m, x, sin_theta_power, pol);
+   }
+   if(m < 0)
+   {
+      // (l-|m|)!/(l+|m|)! may underflow and P_l^|m| overflow although their product
+      // does neither, so recur in l on P_l^m itself, starting from P_|m|^m:
+      if(BOOST_MATH_NAMESPACE::lgamma(T(1 - m), pol) > tools::log_max_value<T>())
+         return 0; // |P_l^m| <= 1/sqrt((2|m|)!) underflows
+      T p0 = pow((1 - x * x) / 4, T(-m) / 2) / BOOST_MATH_NAMESPACE::tgamma<T>(1 - m, pol);
+      T p1 = x * p0;
+      for(int n = 1 - m; n < l; ++n)
+      {
+         std::swap(p0, p1);
+         p1 = ((2 * n + 1) * x * p0 - (n + m) * p1) / (n + 1 - m);
+      }
+      return p1;
    }
    // Special cases:
    if(m > l)

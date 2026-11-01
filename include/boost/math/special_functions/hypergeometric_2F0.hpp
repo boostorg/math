@@ -122,6 +122,9 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
       if (z == 0)
          return 1;
 
+      if (!(BOOST_MATH_NAMESPACE::isfinite)(a1) || !(BOOST_MATH_NAMESPACE::isfinite)(a2))
+         return BOOST_MATH_NAMESPACE::policies::raise_domain_error<T>(function, "Parameters a1 and a2 must be finite, got %1%.", (BOOST_MATH_NAMESPACE::isfinite)(a1) ? a2 : a1, pol);
+
       bool is_a1_integer = (a1 == floor(a1));
       bool is_a2_integer = (a2 == floor(a2));
 

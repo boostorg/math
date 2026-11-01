@@ -87,9 +87,10 @@ std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
     Real r = d / a;
     Real Q = (p * p - 3 * q) / 9;
     Real R = (2 * p * p * p - 9 * p * q + 27 * r) / 54;
-    if (R * R < Q * Q * Q) {
+    Real arg = R * R - Q * Q * Q;
+    if (arg < 0) {
         Real rtQ = sqrt(Q);
-        Real theta = acos(R / (Q * rtQ)) / 3;
+        Real theta = acos(std::clamp(Real(R / (Q * rtQ)), Real(-1), Real(1))) / 3;
         Real st = sin(theta);
         Real ct = cos(theta);
         roots[0] = -2 * rtQ * ct - p / 3;
@@ -103,7 +104,6 @@ std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
         // branch, and we have 3 real roots, two are a double root. Take
         // (x+1)^2(x-2) = x^3 - 3x -2 as an example. This clearly has a double
         // root at x = -1, and it gets sent into this branch.
-        Real arg = R * R - Q * Q * Q;
         Real A = (R >= 0 ? -1 : 1) * cbrt(abs(R) + sqrt(arg));
         Real B = 0;
         if (A != 0) {
@@ -117,6 +117,36 @@ std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
             roots[1] = -A - p / 3;
             roots[2] = -A - p / 3;
         }
+    }
+    // When the root magnitudes are far apart, the smaller roots found above can be
+    // wrong or missing, so recover them from the quadratic left by dividing out the
+    // largest root, deflating from the end that is stable for it. If the smaller roots
+    // found above don't solve the cubic to rounding error, take the quadratic's instead:
+    std::size_t k = 0;
+    for (std::size_t i = 1; i < 3; ++i) {
+        if (abs(roots[i]) > abs(roots[k])) {
+            k = i;
+        }
+    }
+    Real r0 = roots[k];
+    Real g = -d / r0;
+    Real beta = (g - c) / r0;
+    if (abs(a * r0 * r0) < abs(g)) {
+        beta = fma(a, r0, b);
+        g = fma(beta, r0, c);
+    }
+    auto [x1, x2] = quadratic_roots(a, beta, g);
+    auto solves = [&](Real x) {
+        Real s = ((abs(a) * abs(x) + abs(b)) * abs(x) + abs(c)) * abs(x) + abs(d);
+        return abs(fma(fma(fma(a, x, b), x, c), x, d)) <= 32 * std::numeric_limits<Real>::epsilon() * s;
+    };
+    bool found = !(BOOST_MATH_NAMESPACE::isnan)(roots[1]) && solves(roots[(k + 1) % 3]) && solves(roots[(k + 2) % 3]);
+    if ((BOOST_MATH_NAMESPACE::isnan)(x1) && !found && abs(beta * beta - 4 * a * g) <= 32 * std::numeric_limits<Real>::epsilon() * (beta * beta + abs(4 * a * g))) {
+        // Rounding made a nearly double root complex:
+        x1 = x2 = -beta / (2 * a);
+    }
+    if (!found && ((solves(x1) && solves(x2)) || !(BOOST_MATH_NAMESPACE::isnan)(roots[1]))) {
+        roots = {r0, x1, x2};
     }
     // Root polishing:
     for (auto &r : roots) {

@@ -277,6 +277,10 @@ BOOST_MATH_GPU_ENABLED inline T cyl_bessel_k_imp(T v, T x, const bessel_no_int_t
       return (v == 0) ? policies::raise_overflow_error<T>(function, nullptr, pol)
          : policies::raise_domain_error<T>(function, "Got x = %1%, but we need x > 0", x, pol);
    }
+   if((BOOST_MATH_NAMESPACE::isinf)(v))
+   {
+      return policies::raise_overflow_error<T>(function, nullptr, pol);
+   }
    T result_I, result_K; // LCOV_EXCL_LINE
    bessel_ik(v, x, &result_I, &result_K, need_k, pol);
    return result_K;
@@ -286,7 +290,7 @@ template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline T cyl_bessel_k_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& pol)
 {
    BOOST_MATH_STD_USING
-   if((floor(v) == v))
+   if((floor(v) == v) && !(BOOST_MATH_NAMESPACE::isinf)(v))
    {
       return bessel_kn(itrunc(v), x, pol);
    }

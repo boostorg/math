@@ -90,6 +90,13 @@ void test_airy(T, const char* name)
    const unsigned row = boost::math::tools::digits<T>() <= 24 ? 0 : boost::math::tools::digits<T>() <= 53 ? 1 : 2;
    BOOST_CHECK_CLOSE_FRACTION(tiny_data[row][1], boost::math::airy_ai(tiny_data[row][0]), 4 * boost::math::tools::epsilon<T>());
    BOOST_CHECK_CLOSE_FRACTION(tiny_data[row][2], boost::math::airy_bi(tiny_data[row][0]), 4 * boost::math::tools::epsilon<T>());
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+   BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+   {
+      BOOST_CHECK_THROW(boost::math::airy_ai(std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+      BOOST_CHECK_THROW(boost::math::airy_bi_prime(std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+   }
+#endif
 }
 
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT

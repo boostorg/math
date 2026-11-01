@@ -101,6 +101,13 @@ void test_constant()
         thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
     }
 
+    Real nan = std::numeric_limits<Real>::quiet_NaN();
+    CHECK_THROW(sh(nan), std::domain_error);
+    CHECK_THROW(sh.prime(nan), std::domain_error);
+    CHECK_THROW(csh(nan), std::domain_error);
+    CHECK_THROW(csh.double_prime(nan), std::domain_error);
+    CHECK_THROW(csh_aos(nan), std::domain_error);
+    CHECK_THROW(csh_aos.prime(nan), std::domain_error);
 }
 
 

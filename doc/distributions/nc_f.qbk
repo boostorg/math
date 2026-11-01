@@ -164,6 +164,7 @@ and
 [role serif_italic Q[sub p][super -1](v1\/2, v2\/2; [lambda])]
 
 is the noncentral beta quantile.
+For p > 1/2 the quantile from the complement of 1-p is used instead.
 
 ]]
 [[quantile
@@ -181,7 +182,9 @@ and
 
 [role serif_italic QC[sub q][super -1](v1\/2, v2\/2; [lambda])]
 
-is the noncentral beta quantile from the complement.]]
+is the noncentral beta quantile from the complement.
+When bx > 1/2 the result is refined by root finding on the F scale,
+since bx \/ (1-bx) loses relative accuracy as bx approaches 1.]]
 [[mean][[role serif_italic v2 * (v1 + l) \/ (v1 * (v2 - 2))]]]
 [[mode][By numeric maximalisation of the PDF.]]
 [[variance][Refer to, [@http://mathworld.wolfram.com/NoncentralF-Distribution.html

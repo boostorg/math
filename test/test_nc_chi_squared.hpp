@@ -267,6 +267,29 @@ void test_spots(RealType)
       kurtosis_excess(dist)
       , static_cast<RealType>(0.65625), tol2);
 
+   // At x = 0 the complement is 1, and the pdf is finite and nonzero for 2 degrees of freedom:
+   BOOST_CHECK_EQUAL(cdf(complement(boost::math::non_central_chi_squared_distribution<RealType>(2, 1), RealType(0))), RealType(1));
+   BOOST_CHECK_EQUAL(cdf(complement(boost::math::non_central_chi_squared_distribution<RealType>(4, 300), RealType(0))), RealType(1));
+   BOOST_CHECK_CLOSE(pdf(boost::math::non_central_chi_squared_distribution<RealType>(2, 1), RealType(0)), static_cast<RealType>(0.303265329856316711801899767495590226721L), tolerance);
+   // Left tail with a large non-centrality, where the starting term of the series underflowed (values from mpmath):
+   if(boost::math::tools::log_min_value<RealType>() < -300)
+   {
+      BOOST_CHECK_CLOSE(cdf(boost::math::non_central_chi_squared_distribution<RealType>(10, 500), RealType(10)), static_cast<RealType>(2.382976828836108515602863e-86L), tolerance * 10);
+      BOOST_CHECK_CLOSE(pdf(boost::math::non_central_chi_squared_distribution<RealType>(10, 500), RealType(10)), static_cast<RealType>(7.810182969898017933702867e-86L), tolerance * 10);
+      BOOST_CHECK_CLOSE(cdf(boost::math::non_central_chi_squared_distribution<RealType>(10, 1000), RealType(95)), static_cast<RealType>(1.051957005939669897829297e-108L), tolerance * 10);
+      BOOST_CHECK_CLOSE(pdf(boost::math::non_central_chi_squared_distribution<RealType>(10, 1000), RealType(95)), static_cast<RealType>(1.208099617276002298511109e-108L), tolerance * 10);
+      BOOST_CHECK_CLOSE(cdf(boost::math::non_central_chi_squared_distribution<RealType>(10, 2000), RealType(300)), static_cast<RealType>(1.839315321580636606836199e-167L), tolerance * 10);
+      BOOST_CHECK_CLOSE(cdf(boost::math::non_central_chi_squared_distribution<RealType>(10, 1370), RealType(200)), static_cast<RealType>(5.731262406335756538952819e-118L), tolerance * 10);
+      BOOST_CHECK_CLOSE(cdf(boost::math::non_central_chi_squared_distribution<RealType>(10, 1400), RealType(160)), static_cast<RealType>(7.401568245473788292262227e-138L), tolerance * 10);
+   }
+   // In float without promotion that series is rescaled, which underflowed (values from mpmath):
+   if(std::is_same<RealType, float>::value)
+   {
+      typedef boost::math::non_central_chi_squared_distribution<RealType, boost::math::policies::policy<boost::math::policies::promote_float<false> > > float_dist;
+      BOOST_CHECK_CLOSE(cdf(float_dist(4, 180), RealType(100)), static_cast<RealType>(1.95844149561156179384642e-4L), tolerance * 10);
+      BOOST_CHECK_CLOSE(cdf(float_dist(4, 400), RealType(100)), static_cast<RealType>(2.649544238058302129691826e-24L), tolerance * 10);
+   }
+
    // Error handling checks:
    check_out_of_range<boost::math::non_central_chi_squared_distribution<RealType> >(1, 1);
    BOOST_MATH_CHECK_THROW(pdf(boost::math::non_central_chi_squared_distribution<RealType>(0, 1), 0), std::domain_error);

@@ -279,7 +279,9 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const complemented2_type<extreme_v
    if(0 == detail::check_x(function, c.param, &result, Policy()))
       return result;
 
-   result = log1p(-exp(-exp((a-c.param)/b)), Policy());
+   RealType z = (a-c.param)/b;
+   RealType t = exp(z);
+   result = t < tools::epsilon<RealType>() ? z : t < 0.5f ? log(-BOOST_MATH_NAMESPACE::expm1(-t, Policy())) : log1p(-exp(-t), Policy());
 
    return result;
 }

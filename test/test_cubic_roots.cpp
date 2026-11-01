@@ -170,6 +170,40 @@ void test_ill_conditioned() {
     return;
 }
 
+void test_spread_roots() {
+    // Well-conditioned small roots used to be wrong or missing when the root
+    // magnitudes are far apart (#747, #757): {a, b, c, d, roots...}
+    std::array<double, 7> cases[] = {
+        {1, -10000000.75, 7500000.125, -1250000, 0.25, 0.5, 1e7},
+        {1, -100000000.75, 75000000.125, -12500000, 0.25, 0.5, 1e8},
+        {1, -100000003, 300000002, -200000000, 1, 2, 1e8},
+        {1, -1e20, 3e20, -2e20, 1, 2, 1e20},
+        {1e-20, 1, -3, 2, -1e20, 1, 2}};
+    for (auto const& p : cases) {
+        auto roots = cubic_roots(p[0], p[1], p[2], p[3]);
+        for (size_t i = 0; i < 3; ++i) {
+            CHECK_LE(abs(roots[i] - p[i + 4]), 16 * std::numeric_limits<double>::epsilon() * abs(p[i + 4]));
+        }
+    }
+    // A complex pair stays complex: (x-1e8)(x^2+1), (x-1e8)(x^2-2x+1+1e-6), and
+    // a cubic with roots near -8.27e8 and 1.1125 +- 0.173i which used to give 1.1125 twice:
+    std::array<double, 5> complex_cases[] = {
+        {1, -1e8, 1, -1e8, 1e8},
+        {1, -100000002.0, 200000001.000001, -100000099.99999999, 1e8},
+        {1, 827484607.3699986, -1841168022.7717326, 1048914926.565393, -827484609.5950165}};
+    for (auto const& p : complex_cases) {
+        auto roots = cubic_roots(p[0], p[1], p[2], p[3]);
+        CHECK_ULP_CLOSE(p[4], roots[0], 16);
+        CHECK_NAN(roots[1]);
+        CHECK_NAN(roots[2]);
+    }
+    // But a real pair that rounding makes complex, -0.1 +- 9.35e-10, is kept as a double root:
+    auto roots = cubic_roots(1.0, -10008.8, -2001.7900000000002, -100.09000000000002);
+    CHECK_LE(abs(roots[0] + 0.1), 1e-8);
+    CHECK_LE(abs(roots[1] + 0.1), 1e-8);
+    CHECK_ULP_CLOSE(10009.0, roots[2], 16);
+}
+
 int main() {
     test_zero_coefficients<float>();
     test_zero_coefficients<double>();
@@ -177,6 +211,7 @@ int main() {
     test_zero_coefficients<long double>();
 #endif
     test_ill_conditioned();
+    test_spread_roots();
 #ifdef BOOST_HAS_FLOAT128
     // For some reason, the quadmath is way less accurate than the
     // float/double/long double:

@@ -17,6 +17,7 @@
 #include <boost/math/distributions/non_central_chi_squared.hpp>
 #include <boost/math/distributions/chi_squared.hpp>
 #include <boost/math/distributions/detail/generic_mode.hpp>
+#include <boost/math/distributions/detail/generic_quantile.hpp>
 #include <boost/math/special_functions/pow.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/policies/policy.hpp>
@@ -587,7 +588,7 @@ BOOST_MATH_NAMESPACE_BEGIN
             /
             ((-8 + m) * (-6 + m) * BOOST_MATH_NAMESPACE::pow<2>(n * (-2 + m + n)
             + 2 * (-2 + m + n) * l + l2));
-            return result;
+            return result - 3;
       } // kurtosis_excess
 
       BOOST_MATH_EXPORT template <class RealType, class Policy>
@@ -701,6 +702,8 @@ BOOST_MATH_NAMESPACE_BEGIN
       BOOST_MATH_EXPORT template <class RealType, class Policy>
       BOOST_MATH_GPU_ENABLED inline RealType quantile(const non_central_f_distribution<RealType, Policy>& dist, const RealType& p)
       { // Quantile (or Percent Point) function.
+         if(p > 0.5f)
+            return quantile(complement(dist, RealType(1 - p))); // keeps the relative accuracy of the upper tail
          RealType alpha = dist.degrees_of_freedom1() / 2;
          RealType beta = dist.degrees_of_freedom2() / 2;
          RealType x = quantile(BOOST_MATH_NAMESPACE::non_central_beta_distribution<RealType, Policy>(alpha, beta, dist.non_centrality()), p);
@@ -718,12 +721,9 @@ BOOST_MATH_NAMESPACE_BEGIN
          RealType alpha = c.dist.degrees_of_freedom1() / 2;
          RealType beta = c.dist.degrees_of_freedom2() / 2;
          RealType x = quantile(complement(BOOST_MATH_NAMESPACE::non_central_beta_distribution<RealType, Policy>(alpha, beta, c.dist.non_centrality()), c.param));
-         if(x == 1)
-            return policies::raise_overflow_error<RealType>(
-               "quantile(complement(const non_central_f_distribution<%1%>&, %1%))",
-               "Result of non central F quantile is too large to represent.",
-               Policy());
-         return (x / (1 - x)) * (c.dist.degrees_of_freedom2() / c.dist.degrees_of_freedom1());
+         RealType r = (x == 1 ? 2 / tools::epsilon<RealType>() : x / (1 - x)) * (c.dist.degrees_of_freedom2() / c.dist.degrees_of_freedom1());
+         // x / (1 - x) loses relative accuracy as x -> 1, so refine on the F scale:
+         return x > 0.5f ? detail::generic_quantile(c.dist, c.param, r, true, "quantile(complement(const non_central_f_distribution<%1%>&, %1%))") : r;
       } // quantile complement.
    BOOST_MATH_NAMESPACE_END
 

@@ -246,6 +246,13 @@ void test_spots(RealType)
    BOOST_MATH_CHECK_THROW(boost::math::gamma_distribution<RealType>(1, 0), std::domain_error);
    BOOST_MATH_CHECK_THROW(boost::math::gamma_distribution<RealType>(1, -1), std::domain_error);
 
+   // At x = 0 the density is infinite for shape < 1, 1 / scale for shape 1, and 0 for shape > 1:
+   using throw_on_overflow = boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::throw_on_error>>;
+   BOOST_CHECK_EQUAL(pdf(boost::math::gamma_distribution<RealType>(1, 2), RealType(0)), RealType(0.5f));
+   BOOST_CHECK_CLOSE(logpdf(boost::math::gamma_distribution<RealType>(1, 2), RealType(0)), -log(RealType(2)), tolerance);
+   BOOST_CHECK_EQUAL(logpdf(boost::math::gamma_distribution<RealType>(3, 1), RealType(0)), -std::numeric_limits<RealType>::infinity());
+   BOOST_MATH_CHECK_THROW(pdf(boost::math::gamma_distribution<RealType, throw_on_overflow>(RealType(0.5), 1), RealType(0)), std::overflow_error);
+   BOOST_MATH_CHECK_THROW(logpdf(boost::math::gamma_distribution<RealType, throw_on_overflow>(RealType(0.5), 1), RealType(0)), std::overflow_error);
 } // template <class RealType>void test_spots(RealType)
 
 template <class RealType>
