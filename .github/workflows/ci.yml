@@ -1167,6 +1167,23 @@ jobs:
           cd ../boost-root/__build__
           cmake --build . --target tests
           ctest --output-on-failure --no-tests=error
+  wasm:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: mymindstorm/setup-emsdk@v16
+        with:
+          version: 6.0.13
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Build and smoke test, without and with relaxed SIMD
+        run: |
+          for simd in OFF ON; do
+            emcmake cmake -S wasm -B build-wasm-$simd -DBOOST_MATH_WASM_RELAXED_SIMD=$simd
+            cmake --build build-wasm-$simd
+            BOOST_MATH_WASM=build-wasm-$simd/boost_math.mjs node --test wasm/test/smoke.mjs
+          done
   docs:
     # Builds the documentation the way the superproject does, when the docs or the files they import change:
     runs-on: ubuntu-latest
