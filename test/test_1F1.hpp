@@ -9,20 +9,11 @@
 #include <type_traits>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
-#include <boost/math/tools/stats.hpp>
 #include <boost/math/tools/test_value.hpp>
-#include <boost/math/tools/test.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
-#include <boost/array.hpp>
-#include "functor.hpp"
-
-#include "handle_test_result.hpp"
-#include "table_type.hpp"
+#include <boost/math/special_functions/relative_difference.hpp>
+#include "math_unit_test.hpp"
 
 #include <boost/math/special_functions/hypergeometric_1F1.hpp>
 #include <boost/math/quadrature/exp_sinh.hpp>
@@ -31,32 +22,43 @@
 #pragma warning(disable:4127)
 #endif
 
+// The largest relative error, in epsilon, allowed for each type and group of test data:
+std::uintmax_t max_error(const std::string& type_name, const std::string& test_name);
+
+// Checks every row {a, b, z, f(a, b, z)} of the data, and prints each row that fails:
+template <class Real, class T, class F>
+void test_1F1_data(const T& data, const char* type_name, const char* function_name, const char* test_name, F f)
+{
+   std::cout << "Testing " << test_name << " with type " << type_name << "\n";
+   const std::uintmax_t bound = max_error(type_name, test_name);
+   for (unsigned i = 0; i < data.size(); ++i)
+   {
+      const Real a = Real(data[i][0]), b = Real(data[i][1]), z = Real(data[i][2]), expected = Real(data[i][3]);
+      Real computed = 0, err = 0;
+      try
+      {
+         computed = f(a, b, z);
+         err = boost::math::relative_difference(computed, expected) / boost::math::tools::epsilon<Real>();
+      }
+      catch (const std::exception& e)
+      {
+         std::cerr << e.what() << "\n";
+         err = boost::math::tools::max_value<Real>();
+      }
+      if (!(err <= bound))
+      {
+         std::cerr << std::setprecision(std::numeric_limits<Real>::max_digits10) << "\033[0;31mError in " << test_name << " at row " << i << ":\033[0m\n  "
+                   << function_name << "(" << a << ", " << b << ", " << z << ")\n  Expected: " << expected << "\n  Computed: " << computed
+                   << std::setprecision(4) << "\n  Relative error: " << err << " epsilon, which exceeds " << bound << "\n";
+         ++boost::math::test::detail::global_error_count();
+      }
+   }
+}
+
 template <class Real, class T>
 void do_test_1F1(const T& data, const char* type_name, const char* test_name)
 {
-   typedef Real                   value_type;
-
-   typedef value_type(*pg)(value_type, value_type, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
-   pg funcp = boost::math::hypergeometric_0F1<value_type, value_type>;
-#else
-   pg funcp = boost::math::hypergeometric_1F1;
-#endif
-
-   boost::math::tools::test_result<value_type> result;
-
-   std::cout << "Testing " << test_name << " with type " << type_name
-      << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-
-   //
-   // test hypergeometric_2F0 against data:
-   //
-   result = boost::math::tools::test_hetero<Real>(
-      data,
-      bind_func<Real>(funcp, 0, 1, 2),
-      extract_result<Real>(3));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric_1F1", test_name);
-   std::cout << std::endl;
+   test_1F1_data<Real>(data, type_name, "hypergeometric_1F1", test_name, [](Real a, Real b, Real z) { return boost::math::hypergeometric_1F1(a, b, z); });
 }
 
 #ifndef SC_
@@ -116,47 +118,47 @@ void test_spots5(T, const char* type_name)
    // b = 2a
    T computed = hypergeometric_1F1(T(-12.25), T(2 * -12.25), T(6.75));
    T expected = BOOST_MATH_TEST_VALUE(T, 22.995348157760091167706081204212893687052775606591209203948675272473773725021024450870565197330528784707135828761);
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol / 100);
    computed = hypergeometric_1F1(T(12.25), T(2 * 12.25), T(6.75));
    expected = BOOST_MATH_TEST_VALUE(T, 36.47281964229300610642392880149257389834650024065756742702265701321933782423217084029882132197130099355867287657);
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol / 100);
    computed = hypergeometric_1F1(T(-11), T(-12), T(6.75));
    expected = BOOST_MATH_TEST_VALUE(T, 376.3166426246459656334542608880377435064935064935064935064935064935064935064935064935064935064935064935064935064);
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol / 100);
    computed = hypergeometric_1F1(T(-2), T(-12), T(6.75));
    expected = BOOST_MATH_TEST_VALUE(T, 2.470170454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545);
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol / 100);
    computed = hypergeometric_1F1(T(-224), T(-1205), T(6.75));
    expected = BOOST_MATH_TEST_VALUE(T, 3.497033449657595724636676193024114597507981035316405619832857546161530808157860391434240068189887198094611519953);
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol / 100);
    computed = hypergeometric_1F1(T(0.5), T(-1205.5), T(-6.75));
    expected = BOOST_MATH_TEST_VALUE(T, 1.00281149043026925155096279505879868076290060374397866773878698584557482321961231721407215665017657501846692575);
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol / 100);
    computed = hypergeometric_1F1(T(-0.5), T(-1205.5), T(-6.75));
    expected = BOOST_MATH_TEST_VALUE(T, 0.99719639844965644594352920596780535220516138060108955206195178371227403775248888108818326220977962797312690);
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol / 100);
    computed = hypergeometric_1F1(T(-12), T(16.25), T(1043.75));
    expected = BOOST_MATH_TEST_VALUE(T, 1.26527673505477678311707565502355407505496430400394171269315320194708537626079491650410923064978320042481912e20);
-   BOOST_CHECK_CLOSE(computed, expected, tol * 3);
+   CHECK_RELATIVE_ERROR(computed, expected, (tol * 3) / 100);
 
    computed = hypergeometric_1F1(T(3.5), T(3.5), T(36.25));
    expected = exp(T(36.25));
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol / 100);
    computed = hypergeometric_1F1(T(-3.5), T(-3.5), T(36.25));
    expected = exp(T(36.25));
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol / 100);
    computed = hypergeometric_1F1(T(1), T(2), T(36.25));
    expected = boost::math::expm1(T(36.25)) / T(36.25);
-   BOOST_CHECK_CLOSE(computed, expected, tol * 3);
+   CHECK_RELATIVE_ERROR(computed, expected, (tol * 3) / 100);
    computed = hypergeometric_1F1(T(10.25), T(9.25), T(36.25));
    expected = exp(T(36.25)) * (T(9.25) + T(36.25)) / T(9.25);
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol / 100);
    computed = hypergeometric_1F1(T(-10.25), T(-11.25), T(36.25));
    expected = exp(T(36.25)) * (T(-11.25) + T(36.25)) / T(-11.25);
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol / 100);
    computed = hypergeometric_1F1(T(-10.25), T(-11.25), T(-36.25));
    expected = exp(T(-36.25)) * (T(-11.25) + T(-36.25)) / T(-11.25);
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol / 100);
 }
 
 template <class T>
@@ -418,14 +420,14 @@ void test_spots6(T, const char* type_name)
       for (unsigned i = 0; i < hypergeometric_1F1_big_bugs.size(); ++i)
       {
          T val = boost::math::hypergeometric_1F1(hypergeometric_1F1_big_bugs[i][0], hypergeometric_1F1_big_bugs[i][1], hypergeometric_1F1_big_bugs[i][2]);
-         BOOST_CHECK((boost::math::isinf)(val));
+         CHECK_TRUE((boost::math::isinf)(val));
       }
       // https://github.com/boostorg/math/issues/1288
-      BOOST_CHECK_EQUAL(boost::math::hypergeometric_1F1(SC_(2.0), SC_(3.0), SC_(1e30)),
-          (std::numeric_limits<double>::infinity)());
+      CHECK_EQUAL(boost::math::hypergeometric_1F1(SC_(2.0), SC_(3.0), SC_(1e30)),
+          static_cast<T>((std::numeric_limits<double>::infinity)()));
       // This is the largest log_hypergeometric_1F1 we can currently compute, beyond this the fix for the above
       // bug causes premature overflow.  However, there is no easy fix and Wolfram also fails in this case.  It's **hard** :(
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::log_hypergeometric_1F1(SC_(2.0), SC_(3.0), static_cast<T>((std::numeric_limits<std::int64_t>::max)())),
+      CHECK_RELATIVE_ERROR(boost::math::log_hypergeometric_1F1(SC_(2.0), SC_(3.0), static_cast<T>((std::numeric_limits<std::int64_t>::max)())),
           SC_(9223372036854775765.02487480528339082), boost::math::tools::epsilon<T>() * 10);
    }
 }
@@ -441,28 +443,47 @@ void test_spots7(T, const char* type_name)
 template <class T>
 void test_spots8(T, const char* /*type_name*/)
 {
-   BOOST_CHECK_THROW(boost::math::hypergeometric_1F1(static_cast<T>(2), static_cast<T>(-100), static_cast<T>(0.5)), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::hypergeometric_1F1(static_cast<T>(-100.1), static_cast<T>(-100), static_cast<T>(0.5)), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::hypergeometric_1F1(static_cast<T>(-102), static_cast<T>(-100), static_cast<T>(0.5)), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::hypergeometric_1F1(static_cast<T>(-50.25), static_cast<T>(-100), static_cast<T>(0.5)), std::domain_error);
+   CHECK_THROW(boost::math::hypergeometric_1F1(static_cast<T>(2), static_cast<T>(-100), static_cast<T>(0.5)), std::domain_error);
+   CHECK_THROW(boost::math::hypergeometric_1F1(static_cast<T>(-100.1), static_cast<T>(-100), static_cast<T>(0.5)), std::domain_error);
+   CHECK_THROW(boost::math::hypergeometric_1F1(static_cast<T>(-102), static_cast<T>(-100), static_cast<T>(0.5)), std::domain_error);
+   CHECK_THROW(boost::math::hypergeometric_1F1(static_cast<T>(-50.25), static_cast<T>(-100), static_cast<T>(0.5)), std::domain_error);
+   BOOST_MATH_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+   {
+      CHECK_THROW(boost::math::hypergeometric_1F1(static_cast<T>(0.5), static_cast<T>(0.5), std::numeric_limits<T>::quiet_NaN(), boost::math::policies::make_policy(boost::math::policies::rounding_error<boost::math::policies::ignore_error>())), std::domain_error);
+      CHECK_THROW(boost::math::hypergeometric_1F1(std::numeric_limits<T>::quiet_NaN(), static_cast<T>(2.5), static_cast<T>(0.5)), std::domain_error);
+   }
 }
 
 template <class T>
-void test_spots9(T, const char* type_name)
+void test_spots9(T, const char* /*type_name*/)
 {
    //
    // Values from Arb: the Bessel function series (A&S 13.3.6) used when b - a is small relative to b
    // was normalised using a Bessel I that is ill-conditioned, and used rounded orders.
    // The inputs are exactly representable doubles, so we only test double, without promotion to long double:
    //
-   BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
+   BOOST_MATH_IF_CONSTEXPR (std::is_same<T, double>::value)
    {
       typedef boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> > no_promote;
       T tol = boost::math::tools::epsilon<T>() * 20;
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_1F1(T(2.5), T(2.6467452353166792), T(2.1236045729111082), no_promote()), static_cast<T>(7.6229969267684479172456450199096452234456372656741L), tol);
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_1F1(T(2.5), T(3.1), T(7.0), no_promote()), static_cast<T>(496.01424503510156054820225283083574607375L), tol);
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_1F1(T(0.3), T(5.0), T(-1.7), no_promote()), static_cast<T>(0.91381409350285664938172257296860111244081L), tol);
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_1F1(T(0.3), T(10.0), T(-3.0), no_promote()), static_cast<T>(0.92338769146325315656055820506546991002123L), tol);
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(2.5), T(2.6467452353166792), T(2.1236045729111082), no_promote()), static_cast<T>(7.6229969267684479172456450199096452234456372656741L), tol);
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(2.5), T(3.1), T(7.0), no_promote()), static_cast<T>(496.01424503510156054820225283083574607375L), tol);
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(0.3), T(5.0), T(-1.7), no_promote()), static_cast<T>(0.91381409350285664938172257296860111244081L), tol);
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(0.3), T(10.0), T(-3.0), no_promote()), static_cast<T>(0.92338769146325315656055820506546991002123L), tol);
+      //
+      // Large a > 0 with -1 <= z < 0 skipped Kummer's relation, and small a with b < 0 used divergent methods:
+      //
+      tol = boost::math::tools::epsilon<T>() * 1000;
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(100), T(0.5), T(-1)), static_cast<T>(0.2659966033026632933861566238429096269590L), tol);
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(200), T(1.5), T(-1)), static_cast<T>(0.001053483932215813112718570686400446474779L), tol);
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(200), T(1.5), T(-0.7)), static_cast<T>(-0.02979671349901175508218832383082628073219L), tol);
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(-0.005), T(-60.5), T(-72.6)), static_cast<T>(0.9903536958707053015581819009132866586996L), tol);
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(0.0036217622185194015), T(-120.28473944493321), T(-214.6553303843217)), static_cast<T>(1.010033927027611716284822729277417452159L), tol);
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(0.018611403952825685), T(-123.40257784808058), T(39.29325579008062)), static_cast<T>(1245168.262451092462377607298829805818658L), tol);
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(0.0005), T(-87.5), T(-39.8)), static_cast<T>(1.000305497200328984737934752224857704106L), tol);
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(0.005), T(-86.9975), T(-72.6)), static_cast<T>(0.9214985044940041244102952161716158234796L), tol);
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(-0.41), T(-195.25), T(-147.3)), static_cast<T>(0.5586304868778600332395728636347768886287L), tol);
+      CHECK_RELATIVE_ERROR(boost::math::hypergeometric_1F1(T(0.36), T(-107.3), T(25.75)), static_cast<T>(0.9255669001813889278207929205128016940463L), tol);
    }
 }
 
@@ -513,7 +534,7 @@ void test_hypergeometric_mellin_transform()
    Real expected = tgamma(b)*tgamma(lambda)*tgamma(a - lambda) / (tgamma(a)*tgamma(b - lambda));
 
    Real tol = boost::math::tools::epsilon<Real>() * 5;
-   BOOST_CHECK_CLOSE_FRACTION(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol);
 }
 
 
@@ -538,5 +559,5 @@ void test_hypergeometric_laplace_transform()
    Real expected = tgamma(b) / (pow(z, b)*pow(1 - 1 / z, a));
 
    Real tol = boost::math::tools::epsilon<Real>() * 200;
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   CHECK_RELATIVE_ERROR(computed, expected, tol / 100);
 }

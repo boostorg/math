@@ -197,6 +197,7 @@ void test_haar_wavelet()
         CHECK_EQUAL(Real(1), psi(std::nextafter(Real(0.5), Real(0))));
         CHECK_EQUAL(Real(-1), psi(std::nextafter(Real(0.5), Real(1))));
         CHECK_TRUE(psi.bytes() > 0);
+        CHECK_NAN(psi(std::numeric_limits<Real>::quiet_NaN()));
     }
     CHECK_THROW((boost::math::daubechies_wavelet<Real, 1>(0)), std::domain_error);
 }
@@ -209,6 +210,11 @@ int main()
       test_haar_wavelet<float>();
       test_haar_wavelet<double>();
       test_exact_value<double>();
+      boost::math::daubechies_wavelet<double, 6> psi;
+      const double nan = std::numeric_limits<double>::quiet_NaN();
+      CHECK_NAN(psi(nan));
+      CHECK_NAN(psi.prime(nan));
+      CHECK_NAN(psi.double_prime(nan));
 
       boost::hana::for_each(std::make_index_sequence<17>(), [&](auto i) {
          test_quadratures<float, i + 3>();

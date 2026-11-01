@@ -34,6 +34,8 @@ BOOST_MATH_GPU_ENABLED T bessel_jn(int n, T x, const Policy& pol)
 
     BOOST_MATH_STD_USING
 
+    if ((BOOST_MATH_NAMESPACE::isnan)(x))
+        return policies::raise_domain_error<T>("boost::math::bessel_jn<%1%>(%1%,%1%)", "Got x = %1%, but x must not be NaN.", x, pol);
     //
     // Reflection has to come first:
     //

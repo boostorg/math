@@ -293,7 +293,13 @@ void test_spots(RealType, const char* name = nullptr)
    // kurtosis excess:
    BOOST_CHECK_CLOSE(
       kurtosis_excess(dist)
-      , static_cast<RealType>(13.225781681053154767604638331440974359675882226873L), tol2);
+      , static_cast<RealType>(10.225781681053154767604638331440974359675882226873L), tol2);
+   // The pdf at 0 is finite and nonzero for df1 = 2:
+   BOOST_CHECK_CLOSE(pdf(boost::math::non_central_f_distribution<RealType>(2, 5, 1), RealType(0)), exp(RealType(-0.5f)), tolerance);
+   // Upper tail quantiles near 2 / q; y / (1 - y) on the non-central beta quantile lost the relative accuracy (values from mpmath):
+   BOOST_CHECK_CLOSE(quantile(complement(boost::math::non_central_f_distribution<RealType>(1, 2, 1), ldexp(RealType(1), -40))), static_cast<RealType>(2199023255549.500000000000037895612573941L), tolerance);
+   BOOST_CHECK_CLOSE(quantile(complement(boost::math::non_central_f_distribution<RealType>(1, 2, 1), ldexp(RealType(1), -56))), static_cast<RealType>(144115188075855869.5000000000000000005782L), tolerance);
+   BOOST_CHECK_CLOSE(quantile(boost::math::non_central_f_distribution<RealType>(1, 2, 1), 1 - ldexp(RealType(1), -20)), static_cast<RealType>(2097149.5000000397365056415613080455L), tolerance);
 
    // Error handling checks:
    check_out_of_range<boost::math::non_central_f_distribution<RealType> >(1, 1, 1);

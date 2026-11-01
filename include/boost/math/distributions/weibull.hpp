@@ -231,7 +231,8 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const weibull_distribution<RealTyp
    if(false == detail::check_weibull_x(function, x, &result, Policy()))
       return result;
 
-   result = log1p(-exp(-pow(x / scale, shape)), Policy());
+   RealType t = pow(x / scale, shape);
+   result = (t > 0) && (t < 0.5f) ? log(-BOOST_MATH_NAMESPACE::expm1(-t, Policy())) : log1p(-exp(-t), Policy());
 
    return result;
 }

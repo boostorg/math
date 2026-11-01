@@ -47,10 +47,10 @@ public:
             z -= 1;
         }
 
-        if (!isfinite(y))
+        // A non-finite sum means x is on a node, unless an ordinate is non-finite:
+        if (!isfinite(y) && floor(x) == x && x >= 0 && x < static_cast<Real>(m_y.size()))
         {
-            BOOST_MATH_ASSERT_MSG(floor(x) == ceil(x), "Floor and ceiling should be equal.\n");
-            auto i = static_cast<size_t>(floor(x));
+            auto i = static_cast<size_t>(x);
             if (i & 1)
             {
                 return -m_y[i];
@@ -67,7 +67,7 @@ public:
         using std::ceil;
 
         Real x = (t - m_t0)/m_h;
-        if (ceil(x) == x) {
+        if (ceil(x) == x && isfinite(x)) {
             Real s = 0;
             auto j = static_cast<long>(x);
             auto n = static_cast<long>(m_y.size());

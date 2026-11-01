@@ -208,7 +208,7 @@ BOOST_MATH_GPU_ENABLED inline RealType logpdf(const inverse_gaussian_distributio
 
    if (x == 0)
    {
-     return BOOST_MATH_NAMESPACE::numeric_limits<RealType>::quiet_NaN(); // Convenient, even if not defined mathematically. log(0)
+     return result; // log(0)
    }
 
    const RealType two_pi = BOOST_MATH_NAMESPACE::constants::two_pi<RealType>();
@@ -351,7 +351,7 @@ namespace detail
       // V Seshadri, Inverse Gaussian distribution (1998) ISBN 0387 98618 9, page 6.
  
       normal_distribution<RealType, no_overthrow_policy> n01;
-      x = mu * exp(quantile(n01, p) / sqrt(phi) - 1/(2 * phi));
+      x = mu * exp((p < q ? quantile(n01, p) : quantile(complement(n01, q))) / sqrt(phi) - 1/(2 * phi));
      }
     else
     {
@@ -364,6 +364,8 @@ namespace detail
        RealType theta = v / m;
        gamma_distribution<RealType> n01(k, theta);
        x = p < q ? quantile(n01, p) : quantile(complement(n01, q));
+       if (x == 0)
+          x = lambda; // The gamma guess underflowed, and the bracketing can not move away from 0.
     }
     return x;
   }  // guess_ig

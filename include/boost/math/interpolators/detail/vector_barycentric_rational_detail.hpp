@@ -144,12 +144,36 @@ template<class TimeContainer, class SpaceContainer>
 void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_prime(typename SpaceContainer::value_type& x, typename SpaceContainer::value_type& dxdt, typename TimeContainer::value_type t) const
 {
     this->operator()(x, t);
+    // rk = r(t) - y_k, for the node k nearest t, in a form that does not cancel near t_k:
+    size_t nearest = std::lower_bound(t_.begin(), t_.end(), t) - t_.begin();
+    if (nearest == t_.size() || (nearest > 0 && t - t_[nearest-1] < t_[nearest] - t))
+    {
+        --nearest;
+    }
     Point numerator;
+    Point rk;
     for (decltype(x.size()) i = 0; i < x.size(); ++i)
     {
         numerator[i] = 0;
+        rk[i] = 0;
     }
     Real denominator = 0;
+    if (t != t_[nearest])
+    {
+        for (decltype(t_.size()) i = 0; i < t_.size(); ++i)
+        {
+            Real tw = w_[i]/(t - t_[i]);
+            for (decltype(rk.size()) j = 0; j < rk.size(); ++j)
+            {
+                rk[j] += tw*(y_[i][j] - y_[nearest][j]);
+            }
+            denominator += tw;
+        }
+        for (decltype(rk.size()) j = 0; j < rk.size(); ++j)
+        {
+            rk[j] /= denominator;
+        }
+    }
     for(decltype(t_.size()) i = 0; i < t_.size(); ++i)
     {
         if (t == t_[i])
@@ -181,13 +205,12 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_p
         Point diff;
         for (decltype(diff.size()) j = 0; j < diff.size(); ++j)
         {
-            diff[j] = (x[j] - y_[i][j])/(t-t_[i]);
+            diff[j] = (rk[j] + (y_[nearest][j] - y_[i][j]))/(t-t_[i]);
         }
         for (decltype(diff.size()) j = 0; j < diff.size(); ++j)
         {
             numerator[j] += tw*diff[j];
         }
-        denominator += tw;
     }
 
     for (decltype(dxdt.size()) j = 0; j < dxdt.size(); ++j)

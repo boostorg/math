@@ -186,7 +186,8 @@ BOOST_MATH_GPU_ENABLED inline RealType logcdf(const rayleigh_distribution<RealTy
    {
       return -BOOST_MATH_NAMESPACE::numeric_limits<RealType>::infinity();
    }
-   result = log1p(-exp(-x * x / ( 2 * sigma * sigma)), Policy());   
+   RealType t = x * x / (2 * sigma * sigma);
+   result = (t > 0) && (t < 0.5f) ? log(-BOOST_MATH_NAMESPACE::expm1(-t, Policy())) : log1p(-exp(-t), Policy());
    return result;
 } // logcdf
 

@@ -712,6 +712,23 @@ void test_failures()
    // With a good guess the same functions still find the root:
    BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::newton_raphson_iterate(quartic, 0.9, 0.1, 1.1, 52), 1.0, 4 * std::numeric_limits<double>::epsilon());
    BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::halley_iterate(quartic2, 0.9, 0.1, 1.1, 52), 1.0, 4 * std::numeric_limits<double>::epsilon());
+   // The first step leaves the range; bracketing towards max (min) used to divide
+   // a negative (positive) guess towards 0, never crossing it, and return a
+   // non-root after max_iter:
+   auto exp2 = [](double x) { return std::make_tuple(std::exp(x) - 2, std::exp(x), std::exp(x)); };
+   auto exp2_reflected = [](double x) { return std::make_tuple(std::exp(-x) - 2, -std::exp(-x), std::exp(-x)); };
+   const double eps4 = 4 * std::numeric_limits<double>::epsilon();
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::schroder_iterate(exp2, -20.0, -30.0, 10.0, 52, max_iter = 200), std::log(2.0), eps4);
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::schroder_iterate(exp2_reflected, 20.0, -10.0, 30.0, 52, max_iter = 200), -std::log(2.0), eps4);
+   // and a zero guess never moved:
+   auto exp100 = [](double x) { return std::make_tuple(std::exp(x) - 100, std::exp(x), std::exp(x)); };
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::schroder_iterate(exp100, 0.0, -1.0, 10.0, 52, max_iter = 200), std::log(100.0), eps4);
+   auto exp100_reflected = [](double x) { return std::make_tuple(std::exp(-x) - 100, -std::exp(-x), std::exp(-x)); };
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::schroder_iterate(exp100_reflected, 0.0, -10.0, 1.0, 52, max_iter = 200), -std::log(100.0), eps4);
+   // and min == 0, which gave frexp(guess / min) an infinite argument:
+   auto inv2 = [](double x) { return std::make_tuple(1 - 1e-60 / (x * x), 2e-60 / (x * x * x), -6e-60 / (x * x * x * x)); };
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::schroder_iterate(inv2, 0.5, 0.0, 1.0, 52, max_iter = 200), 1e-30, eps4);
+   BOOST_CHECK_CLOSE_FRACTION(boost::math::tools::halley_iterate(inv2, 0.5, 0.0, 1.0, 52, max_iter = 200), 1e-30, eps4);
    // A genuine root at an end of the range is still accepted.  The root must
    // be exactly representable: with x^2 - 0.01 on [0.1, 1], f(0.1) rounds to
    // a positive value without FMA, so there is no root in the range at all.

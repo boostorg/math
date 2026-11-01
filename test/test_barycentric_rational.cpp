@@ -203,6 +203,35 @@ void test_runge()
 }
 
 template<class Real>
+void test_prime_near_node()
+{
+    std::cout << "Testing the derivative a few ulps from a node on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    // (r(x) - y_i)/(x - x_i) used to cancel catastrophically here: prime(x[7] + 1e-16) was -2.
+    std::vector<Real> x(20);
+    std::vector<Real> y(20);
+    for (size_t i = 0; i < x.size(); ++i)
+    {
+        x[i] = 1 + Real(i)/19;
+        y[i] = std::exp(x[i]);
+    }
+    boost::math::interpolators::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size(), 3);
+    Real tol = 1000*numeric_limits<Real>::epsilon();
+    for (size_t i : {size_t(0), size_t(7), size_t(19)})
+    {
+        Real expected = interpolator.prime(x[i]);
+        Real up = x[i];
+        Real down = x[i];
+        for (int j = 0; j < 64; ++j)
+        {
+            up = std::nextafter(up, Real(3));
+            down = std::nextafter(down, Real(0));
+            CHECK_ABSOLUTE_ERROR(expected, interpolator.prime(up), tol*expected);
+            CHECK_ABSOLUTE_ERROR(expected, interpolator.prime(down), tol*expected);
+        }
+    }
+}
+
+template<class Real>
 void test_weights()
 {
     std::cout << "Testing weights are calculated correctly using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
@@ -289,6 +318,7 @@ void barycentric_rational()
     test_interpolation_condition<std::float64_t>();
     test_interpolation_condition_high_order<std::float64_t>();
     test_runge<std::float64_t>();
+    test_prime_near_node<std::float64_t>();
     
     #else
     
@@ -298,6 +328,7 @@ void barycentric_rational()
     test_interpolation_condition<double>();
     test_interpolation_condition_high_order<double>();
     test_runge<double>();
+    test_prime_near_node<double>();
     
     #endif
 

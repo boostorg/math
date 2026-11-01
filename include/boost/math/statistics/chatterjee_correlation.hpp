@@ -53,6 +53,31 @@ std::size_t chatterjee_transform(BDIter begin, BDIter end)
     return sum;
 }
 
+// 6 sum_i l_i (n - l_i) / n, with l_i = #{j : Y_j >= Y_i}, from the general formula (ties allowed) of
+// Chatterjee (2021); it is n^2 - 1 if there are no ties.
+template <typename ReturnType>
+ReturnType chatterjee_denominator(const std::vector<std::size_t>& rank_vector)
+{
+    const std::size_t n = rank_vector.size();
+    // ties[r] is the number of Y_i with rank r, all of which have l_i = n - r - 1 + ties[r]:
+    std::vector<std::size_t> ties(n);
+    for (std::size_t r : rank_vector)
+    {
+        ++ties[r];
+    }
+    if (std::all_of(ties.begin(), ties.end(), [](std::size_t t) { return t == 1; }))
+    {
+        return static_cast<ReturnType>(n * n - 1);
+    }
+    ReturnType sum = 0;
+    for (std::size_t r = 0; r < n; ++r)
+    {
+        const std::size_t l = n - r - 1 + ties[r];
+        sum += static_cast<ReturnType>(ties[r]) * static_cast<ReturnType>(l) * static_cast<ReturnType>(n - l);
+    }
+    return 6 * sum / static_cast<ReturnType>(n);
+}
+
 template <typename ReturnType, typename ForwardIterator>
 ReturnType chatterjee_correlation_seq_impl(ForwardIterator u_begin, ForwardIterator u_end, ForwardIterator v_begin, ForwardIterator v_end)
 {
@@ -64,7 +89,7 @@ ReturnType chatterjee_correlation_seq_impl(ForwardIterator u_begin, ForwardItera
 
     std::size_t sum = chatterjee_transform(rank_vector.begin(), rank_vector.end());
 
-    ReturnType result = static_cast<ReturnType>(1) - (static_cast<ReturnType>(3 * sum) / static_cast<ReturnType>(rank_vector.size() * rank_vector.size() - 1));
+    ReturnType result = static_cast<ReturnType>(1) - (static_cast<ReturnType>(3 * sum) / chatterjee_denominator<ReturnType>(rank_vector));
 
     // If the result is 1 then Y is constant and all the elements must be ties
     if (abs(result - static_cast<ReturnType>(1)) < std::numeric_limits<ReturnType>::epsilon())
@@ -140,8 +165,6 @@ ReturnType chatterjee_correlation_mnn_seq_impl(ForwardIterator u_begin, ForwardI
     BOOST_MATH_ASSERT_MSG(M <= n, "The number of right nearest neighbours M must not exceed the number of samples");
 
     // If Y is constant the statistic is undefined (Y must be non-constant); return a quiet NaN.
-    // This is checked on the input directly: rank() collapses tied values, so a constant Y would
-    // otherwise reduce the effective sample size to one.
     if (v_begin != v_end)
     {
         using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -219,7 +242,7 @@ ReturnType chatterjee_correlation_par_impl(ExecutionPolicy&& exec, ForwardIterat
         sum += future_manager[i].get();
     }
 
-    ReturnType result = static_cast<ReturnType>(1) - (static_cast<ReturnType>(3 * sum) / static_cast<ReturnType>(rank_vector.size() * rank_vector.size() - 1));
+    ReturnType result = static_cast<ReturnType>(1) - (static_cast<ReturnType>(3 * sum) / chatterjee_denominator<ReturnType>(rank_vector));
 
     // If the result is 1 then Y is constant and all the elements must be ties
     if (abs(result - static_cast<ReturnType>(1)) < std::numeric_limits<ReturnType>::epsilon())
@@ -242,8 +265,6 @@ ReturnType chatterjee_correlation_mnn_par_impl(ExecutionPolicy&& exec, ForwardIt
     BOOST_MATH_ASSERT_MSG(M <= n, "The number of right nearest neighbours M must not exceed the number of samples");
 
     // If Y is constant the statistic is undefined (Y must be non-constant); return a quiet NaN.
-    // This is checked on the input directly: rank() collapses tied values, so a constant Y would
-    // otherwise reduce the effective sample size to one.
     if (v_begin != v_end)
     {
         using value_type = typename std::iterator_traits<ForwardIterator>::value_type;

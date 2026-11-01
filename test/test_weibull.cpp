@@ -413,6 +413,8 @@ void test_spots(RealType)
    BOOST_CHECK_EQUAL(pdf(dist, 0), exp(-pow(RealType(0) / RealType(3), RealType(2))) * pow(RealType(0), RealType(1)) * RealType(2) / RealType(3));
    BOOST_CHECK_EQUAL(pdf(weibull_distribution<RealType>(1, 3), 0), exp(-pow(RealType(0) / RealType(3), RealType(1))) * pow(RealType(0), RealType(0)) * RealType(1) / RealType(3));
    BOOST_MATH_CHECK_THROW(pdf(weibull_distribution<RealType>(0.5, 3), 0), std::overflow_error);
+   // logcdf for small x, where log1p(-exp(-(x/scale)^shape)) cancels; value from mpmath:
+   BOOST_CHECK_CLOSE_FRACTION(logcdf(weibull_distribution<RealType>(2, 1), static_cast<RealType>(1e-6L)), static_cast<RealType>(-27.63102111592904820821589741454570382455L), 100 * boost::math::tools::epsilon<RealType>());
 
    check_out_of_range<weibull_distribution<RealType> >(1, 1);
 } // template <class RealType>void test_spots(RealType)

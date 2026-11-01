@@ -66,6 +66,9 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
       if ((b <= 0) && (b == floor(b)))
          return policies::raise_pole_error<T>(function, "Evaluation of 0f1 with nonpositive integer b = %1%.", b, pol);
 
+      // For b < -5 the alternating series cancels badly once 2 sqrt(-z) > 0.75 |b|, the Bessel relation does not:
+      if ((b < -5) && (z < -b * b / 7))
+         return hypergeometric_0F1_bessel(b, z, pol);
       if (z < -5 && b > -5)
       {
          // Series is alternating and divergent, need to do something else here,

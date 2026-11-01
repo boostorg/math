@@ -51,6 +51,10 @@ BOOST_MATH_CUDA_ENABLED T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol
 
    constexpr auto function = "boost::math::ellint_3<%1%>(%1%,%1%,%1%)";
 
+   if ((BOOST_MATH_NAMESPACE::isnan)(phi))
+   {
+      return policies::raise_domain_error<T>(function, "Got phi = %1%, but phi must not be NaN.", phi, pol);
+   }
 
    T sphi = sin(fabs(phi));
    T result = 0;

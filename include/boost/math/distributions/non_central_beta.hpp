@@ -553,8 +553,10 @@ BOOST_MATH_NAMESPACE_BEGIN
             //
             // Special cases:
             //
-            if((x == 0) || (y == 0))
-               return 0;
+            if(x == 0)
+               return a == 1 ? T(b * exp(-lam / 2)) : T(0);
+            if(y == 0)
+               return b == 1 ? T(a + lam / 2) : T(0);
             //
             // Variables come first:
             //

@@ -89,6 +89,16 @@ void test_spots()
     // All ties will yield quiet NaN
     y = {1, 1, 1, 1};
     CHECK_NAN(chatterjee_correlation(x, y));
+
+    // Ties in Y use Chatterjee's general formula, 1 - n sum |r_{i+1} - r_i| / (2 sum l_i (n - l_i)),
+    // with r_i = #{j : Y_j <= Y_i} and l_i = #{j : Y_j >= Y_i}; here 1 - 8*6/(2*80) = 7/10:
+    x = {0, 1, 2, 3, 4, 5, 6, 7};
+    y = {0, 0, 1, 1, 2, 2, 3, 3};
+    CHECK_ULP_CLOSE(chatterjee_correlation(x, y), Real(7)/10, 2);
+    // Runs of unequal length: 1 - 6*3/(2*25) = 16/25
+    x = {0, 1, 2, 3, 4, 5};
+    y = {0, 0, 0, 1, 2, 2};
+    CHECK_ULP_CLOSE(chatterjee_correlation(x, y), Real(16)/25, 2);
 }
 
 // Closed forms for the M-NN statistic xi_{n,M} of Lin and Han (2021), Remark 2.5.
@@ -143,6 +153,11 @@ void test_mnn_spots()
     // Constant Y yields quiet NaN.
     y = {1, 1, 1, 1};
     CHECK_NAN(chatterjee_correlation_mnn(x, y, 2));
+
+    // Ties in Y, with R_i = #{j : Y_j <= Y_i}: -2 + 6*80 / (9 * 17.5) = 22/21
+    x = {0, 1, 2, 3, 4, 5, 6, 7};
+    y = {0, 0, 1, 1, 2, 2, 3, 3};
+    CHECK_ULP_CLOSE(chatterjee_correlation_mnn(x, y, 2), Real(22)/21, 4);
 }
 
 template <typename Real>

@@ -173,6 +173,14 @@ void test_spots(RealType)
     static_cast<RealType>(10-3), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(dist),
     static_cast<RealType>(10), tolerance);
+  BOOST_CHECK_EQUAL(logpdf(dist, RealType(0)), -std::numeric_limits<RealType>::infinity());
+  // Quantiles whose starting guess was 0 (small lambda / mean) or infinite (q = 1 - p rounding to 1); values from mpmath:
+  BOOST_CHECK_CLOSE_FRACTION(quantile(inverse_gaussian_distribution<RealType>(static_cast<RealType>(0.01L), static_cast<RealType>(0.001L)), static_cast<RealType>(0.01L)),
+    static_cast<RealType>(0.000146795836387365384165140453016L), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(median(inverse_gaussian_distribution<RealType>(static_cast<RealType>(0.0001L), static_cast<RealType>(0.00001L))),
+    static_cast<RealType>(0.0000178501011853206805818283972317L), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(inverse_gaussian_distribution<RealType>(static_cast<RealType>(0.1L), static_cast<RealType>(0.3L)), static_cast<RealType>(1e-30L))),
+    static_cast<RealType>(4.37197676271920987027907830009L), tolerance);
   //
   // Far left tail, where Phi(-b) in the second term underflowed to a subnormal and lost most of its digits.
   // The cdf is conditioned to ~lambda / 2x = 600 eps here.  Value from Arb, doubles only:

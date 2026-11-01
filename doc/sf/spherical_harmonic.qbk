@@ -111,9 +111,8 @@ All values are in units of epsilon.
 
 [table_spherical_harmonic_i]
 
-Note that the worst errors occur when the degree increases, values greater than
-~120 are very unlikely to produce sensible results, especially 
-when the order is also large.  Further the relative errors
+Note that the worst errors occur when the degree increases, as the result becomes
+more sensitive to the rounding of cos([theta]).  Further the relative errors
 are likely to grow arbitrarily large when the function is very close to a root.
 
 [h4 Testing]
@@ -133,6 +132,9 @@ without roundoff error using ['x = cos(theta)], and
 ['1-x[super 2] = sin[super 2](theta)]).  The limiting factor in the error
 rates for these functions is the need to calculate values near the roots
 of the associated Legendre functions.
+When ['n + |m|] is too large for ['(n+|m|)!] to be representable, the
+normalised function ['sqrt((2n+1)(n-m)!/(4[pi](n+m)!)) P[sub n][super m](x)]
+is computed directly by its three term recurrence in /n/.
 
 [endsect] [/section:beta_function The Beta Function]
 [/ 

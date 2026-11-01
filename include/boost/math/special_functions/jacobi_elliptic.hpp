@@ -37,7 +37,7 @@ template <class T, class Policy>
 T jacobi_imp(const T& x, const T& k, T* cn, T* dn, const Policy& pol, const char* function)
 {
    BOOST_MATH_STD_USING
-   if(k < 0)
+   if(!(k >= 0))
    {
       return *dn = *cn = policies::raise_domain_error<T>(function, "Modulus k must be positive but got %1%.", k, pol);
    }

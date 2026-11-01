@@ -47,6 +47,9 @@ void test_constant()
         CHECK_ULP_CLOSE(Real(0), qh.prime(t), 24);
         CHECK_ULP_CLOSE(Real(0), qh.double_prime(t), 24);
     }
+
+    CHECK_THROW(qh(std::numeric_limits<Real>::quiet_NaN()), std::domain_error);
+    CHECK_THROW(qh.double_prime(std::numeric_limits<Real>::quiet_NaN()), std::domain_error);
 }
 
 
@@ -310,6 +313,12 @@ void test_cardinal_constant()
         tlo = boost::math::nextafter(tlo, (std::numeric_limits<Real>::max)());
         thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
     }
+
+    Real nan = std::numeric_limits<Real>::quiet_NaN();
+    CHECK_THROW(qh(nan), std::domain_error);
+    CHECK_THROW(qh.prime(nan), std::domain_error);
+    CHECK_THROW(qh_aos(nan), std::domain_error);
+    CHECK_THROW(qh_aos.double_prime(nan), std::domain_error);
 }
 
 

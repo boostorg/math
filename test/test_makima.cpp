@@ -169,6 +169,13 @@ void test_interpolation_condition()
 
     }
 }
+void test_errors()
+{
+    // Fewer ordinates than abscissas:
+    std::vector<double> x{0, 1, 2, 3, 4};
+    std::vector<double> y{1, 2};
+    CHECK_THROW(makima<std::vector<double>>(std::move(x), std::move(y)), std::domain_error);
+}
 
 int main()
 {
@@ -202,6 +209,7 @@ int main()
     test_constant<float128>();
     test_linear<float128>();
 #endif
+    test_errors();
 #endif
     return boost::math::test::report_errors();
 }

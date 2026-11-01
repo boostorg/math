@@ -320,6 +320,17 @@ void test_nodes()
     }
 }
 
+void test_zero_levels()
+{
+    // With no precomputed levels, integrate() must add the levels it needs:
+    ooura_fourier_cos<double> cos_integrator(1e-8, 0);
+    auto p = cos_integrator.integrate([](double t) { return 1 / (1 + t * t); }, 1.0);
+    CHECK_ABSOLUTE_ERROR(pi<double>() / (2 * std::exp(1.0)), p.first, 1e-12);
+    ooura_fourier_sin<double> sin_integrator(1e-8, 0);
+    p = sin_integrator.integrate([](double t) { return 1 / t; }, 1.0);
+    CHECK_ABSOLUTE_ERROR(pi<double>() / 2, p.first, 1e-12);
+}
+
 
 int main()
 {
@@ -362,6 +373,8 @@ int main()
     test_double_osc<double>();
     // Takes too long!
     //test_double_osc<long double>();
+
+    test_zero_levels();
 
     // This test should be last:
     test_nodes<float>();

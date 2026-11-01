@@ -264,6 +264,11 @@ BOOST_MATH_NAMESPACE_BEGIN
       template <typename T, typename Policy>
       BOOST_MATH_GPU_ENABLED int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
       {
+         if ((BOOST_MATH_NAMESPACE::isnan)(v) || (BOOST_MATH_NAMESPACE::isnan)(x))
+         {
+            *J = *Y = policies::raise_domain_error<T>("boost::math::bessel_jy<%1%>(%1%,%1%)", "The order v and the argument x must not be NaN.", x, pol);
+            return 1;
+         }
          BOOST_MATH_ASSERT(x >= 0);
 
          T u, Jv, Ju, Yv, Yv1, Yu, Yu1(0), fv, fu;

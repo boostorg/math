@@ -8,19 +8,10 @@
 
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
-#include <boost/math/tools/stats.hpp>
-#include <boost/math/tools/test.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
-#include <boost/array.hpp>
-#include "functor.hpp"
-
-#include "handle_test_result.hpp"
-#include "table_type.hpp"
+#include <boost/math/special_functions/relative_difference.hpp>
+#include "math_unit_test.hpp"
 
 #include <boost/math/special_functions/hypergeometric_1F1.hpp>
 #include <boost/math/quadrature/exp_sinh.hpp>
@@ -29,32 +20,43 @@
 #pragma warning(disable:4127)
 #endif
 
+// The largest relative error, in epsilon, allowed for each type and group of test data:
+std::uintmax_t max_error(const std::string& type_name, const std::string& test_name);
+
+// Checks every row {a, b, z, f(a, b, z)} of the data, and prints each row that fails:
+template <class Real, class T, class F>
+void test_1F1_data(const T& data, const char* type_name, const char* function_name, const char* test_name, F f)
+{
+   std::cout << "Testing " << test_name << " with type " << type_name << "\n";
+   const std::uintmax_t bound = max_error(type_name, test_name);
+   for (unsigned i = 0; i < data.size(); ++i)
+   {
+      const Real a = Real(data[i][0]), b = Real(data[i][1]), z = Real(data[i][2]), expected = Real(data[i][3]);
+      Real computed = 0, err = 0;
+      try
+      {
+         computed = f(a, b, z);
+         err = boost::math::relative_difference(computed, expected) / boost::math::tools::epsilon<Real>();
+      }
+      catch (const std::exception& e)
+      {
+         std::cerr << e.what() << "\n";
+         err = boost::math::tools::max_value<Real>();
+      }
+      if (!(err <= bound))
+      {
+         std::cerr << std::setprecision(std::numeric_limits<Real>::max_digits10) << "\033[0;31mError in " << test_name << " at row " << i << ":\033[0m\n  "
+                   << function_name << "(" << a << ", " << b << ", " << z << ")\n  Expected: " << expected << "\n  Computed: " << computed
+                   << std::setprecision(4) << "\n  Relative error: " << err << " epsilon, which exceeds " << bound << "\n";
+         ++boost::math::test::detail::global_error_count();
+      }
+   }
+}
+
 template <class Real, class T>
 void do_test_1F1(const T& data, const char* type_name, const char* test_name)
 {
-   typedef Real                   value_type;
-
-   typedef value_type(*pg)(value_type, value_type, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
-   pg funcp = boost::math::log_hypergeometric_1F1<value_type, value_type>;
-#else
-   pg funcp = boost::math::log_hypergeometric_1F1;
-#endif
-
-   boost::math::tools::test_result<value_type> result;
-
-   std::cout << "Testing " << test_name << " with type " << type_name
-      << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-
-   //
-   // test hypergeometric_2F0 against data:
-   //
-   result = boost::math::tools::test_hetero<Real>(
-      data,
-      bind_func<Real>(funcp, 0, 1, 2),
-      extract_result<Real>(3));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "log_hypergeometric_1F1", test_name);
-   std::cout << std::endl;
+   test_1F1_data<Real>(data, type_name, "log_hypergeometric_1F1", test_name, [](Real a, Real b, Real z) { return boost::math::log_hypergeometric_1F1(a, b, z); });
 }
 
 #ifndef SC_
@@ -86,7 +88,7 @@ void test_sign(T, const char* /*type_name*/)
    {
       int s;
       boost::math::log_hypergeometric_1F1(hypergeometric_1F1_small_random[i][0], hypergeometric_1F1_small_random[i][1], hypergeometric_1F1_small_random[i][2], &s);
-      BOOST_CHECK_EQUAL(s, boost::math::sign(hypergeometric_1F1_small_random[i][3]));
+      CHECK_EQUAL(s, boost::math::sign(hypergeometric_1F1_small_random[i][3]));
    }
 }
 

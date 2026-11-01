@@ -47,6 +47,7 @@
 #include <boost/math/tools/roots.hpp> // for root finding.
 #include <boost/math/distributions/detail/inv_discrete_quantile.hpp>
 #include <boost/math/special_functions/log1p.hpp>
+#include <boost/math/special_functions/expm1.hpp>
 
 #if defined (BOOST_MSVC)
 #  pragma warning(push)
@@ -403,7 +404,7 @@ BOOST_MATH_NAMESPACE_BEGIN
       //RealType probability = 1 - std::pow(q, k+1);
 
       RealType z = BOOST_MATH_NAMESPACE::log1p(-p, Policy()) * (k + 1);
-      return log1p(-exp(z), Policy());
+      return (z < 0) && (z > -0.5f) ? log(-BOOST_MATH_NAMESPACE::expm1(z, Policy())) : log1p(-exp(z), Policy());
     } // logcdf Cumulative Distribution Function geometric.
 
     BOOST_MATH_EXPORT template <class RealType, class Policy>

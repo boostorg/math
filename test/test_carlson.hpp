@@ -282,6 +282,10 @@ void t12(T, const char* type_name)
    BOOST_CHECK_THROW(boost::math::ellint_rd(T(1), T(-1), T(2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::ellint_rd(T(1), T(2), T(0)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::ellint_rd(T(0), T(0), T(2)), std::domain_error);
+   BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+   {
+      BOOST_CHECK_THROW(boost::math::ellint_rg(T(0.5), std::numeric_limits<T>::quiet_NaN(), T(0.5)), std::domain_error);
+   }
    BOOST_CHECK_EQUAL(boost::math::ellint_rd(T(0.5), T(0), T(0.75)), boost::math::ellint_rd(T(0), T(0.5), T(0.75)));
 }
 

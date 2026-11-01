@@ -38,6 +38,45 @@ inline T spherical_harmonic_prefix(unsigned n, unsigned m, T theta, const Policy
    T sin_theta = sin(theta);
    T x = cos(theta);
 
+   if(n + m > max_factorial<T>::value)
+   {
+      // (n-m)!/(n+m)! may underflow and P_n^m overflow, so recur in l on the
+      // normalised sqrt((2l+1)/(4pi) (l-m)!/(l+m)!) P_l^m, starting from l = m.
+      // sin^m(theta) may underflow too, so p0 and p1 are scaled by 2^-e2:
+      int e2 = 0;
+      const T s = frexp(fabs(sin_theta), &e2);
+      e2 *= static_cast<int>(m);
+      T p0 = sqrt((2 * m + 1) * BOOST_MATH_NAMESPACE::tgamma_delta_ratio(T(m) + 0.5f, T(0.5f), pol) / (4 * constants::pi<T>() * constants::root_pi<T>()));
+      if(m & 1)
+         p0 = -p0;
+      for(unsigned k = 0; k < m; k += 64)
+      {
+         // s^m in pieces of at most s^64 >= 2^-64, moving the exponent of each into e2:
+         int e = 0;
+         p0 = frexp(p0 * pow(s, T((std::min)(m - k, 64u))), &e);
+         e2 += e;
+      }
+      T a_prev = sqrt(T(2 * m + 3));
+      T p1 = a_prev * x * p0;
+      for(unsigned l = m + 2; l <= n; ++l)
+      {
+         const T a = sqrt((4 * T(l) * l - 1) / ((T(l) - m) * (T(l) + m)));
+         std::swap(p0, p1);
+         p1 = a * (x * p0 - p1 / a_prev);
+         a_prev = a;
+         if((e2 < 0) && (fabs(p1) > 1))
+         {
+            int e = 0;
+            (void)frexp(p1, &e);
+            e = (std::min)(e, -e2);
+            p0 = ldexp(p0, -e);
+            p1 = ldexp(p1, -e);
+            e2 += e;
+         }
+      }
+      return ldexp(n == m ? p0 : p1, e2);
+   }
+
    T leg = detail::legendre_p_imp(n, m, x, static_cast<T>(pow(fabs(sin_theta), T(m))), pol);
    
    T prefix = BOOST_MATH_NAMESPACE::tgamma_delta_ratio(static_cast<T>(n - m + 1), static_cast<T>(2 * m), pol);

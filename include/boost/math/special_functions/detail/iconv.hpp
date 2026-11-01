@@ -19,7 +19,9 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail{
 template <class T, class Policy>
 BOOST_MATH_GPU_ENABLED inline int iconv_imp(T v, Policy const&, BOOST_MATH_NAMESPACE::true_type const&)
 {
-   return static_cast<int>(v);
+   // NaN and values outside the range of int give 0, so that the callers' (v - iconv(v) == 0) tests fail for them:
+   const T limit = static_cast<T>((BOOST_MATH_NAMESPACE::numeric_limits<int>::max)());
+   return (v > -limit && v < limit) ? static_cast<int>(v) : 0;
 }
 
 template <class T, class Policy>

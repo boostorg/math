@@ -843,6 +843,9 @@ void test_spots(RealType T)
       BOOST_CHECK_CLOSE(quantile(dist, 0.0365346), 5101148604445670400, 1e12);
    }
 #endif
+   // The median is floor(np) or ceil(np), whichever has cdf >= 1/2:
+   BOOST_CHECK_EQUAL(median(binomial_distribution<RealType>(10, static_cast<RealType>(0.75))), 8);
+   BOOST_CHECK_EQUAL(median(binomial_distribution<RealType>(10, static_cast<RealType>(0.3))), 3);
 } // template <class RealType>void test_spots(RealType)
 
 template <class RealType>

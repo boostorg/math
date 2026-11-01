@@ -185,5 +185,10 @@ void test_bessel(T, const char* name)
     //
     BOOST_CHECK_THROW(boost::math::cyl_bessel_i_prime(T(2.5), T(-1)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_bessel_i_prime(T(0.25), T(0)), std::domain_error);
+    BOOST_IF_CONSTEXPR (std::numeric_limits<T>::max_exponent10 > 304)
+    {
+       // Scaled K for x > 708 (#1606):
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i_prime(T(-1500.5), T(800)), SC_(-5.065220340644988873332171907226502901785e163), boost::math::tools::epsilon<T>() * 400);
+    }
 }
 

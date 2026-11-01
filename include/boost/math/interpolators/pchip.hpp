@@ -27,11 +27,11 @@ public:
           Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN())
     {
         using std::isnan;
-        if (x.size() < 4)
+        if (x.size() < 4 || x.size() != y.size())
         {
             std::ostringstream oss;
             oss << __FILE__ << ":" << __LINE__ << ":" << __func__;
-            oss << " This interpolator requires at least four data points.";
+            oss << " This interpolator requires at least four data points, with the same number of ordinates as abscissas.";
             error_msg_ = oss.str();
             BOOST_MATH_NAMESPACE::policies::raise_domain_error("boost::math::interpolators::pchip::pchip", error_msg_.c_str(), false, Policy());
             valid_ = false;

@@ -147,6 +147,18 @@ void test_bump()
     }
 }
 
+void test_non_finite()
+{
+    // A non-finite ordinate must not be mistaken for an abscissa on a node:
+    double inf = std::numeric_limits<double>::infinity();
+    std::vector<double> v{0, 1, inf, 3};
+    auto ws = whittaker_shannon<std::vector<double>>(std::move(v), 0.0, 1.0);
+    CHECK_NAN(ws(10.0));
+    CHECK_EQUAL(ws(0.5), -inf);
+    CHECK_EQUAL(ws(1.0), 1.0);
+    CHECK_NAN(ws.prime(inf));
+    CHECK_NAN(ws.prime(-inf));
+}
 
 int main()
 {
@@ -167,6 +179,7 @@ int main()
     test_knots<double>();
     test_bump<double>();
     #endif
+    test_non_finite();
 
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

@@ -367,7 +367,7 @@ BOOST_MATH_NAMESPACE_BEGIN
       RealType result = ((N-1)*N2*((3*m*(N-m)*(n2*(-N)+(n-2)*N2+6*n*(N-n)))/N2-6*n*(N-n)+N*(N+1)))/(m*n*(N-3)*(N-2)*(N-m)*(N-n));
       // Agrees with kurtosis hypergeometric distribution(50,200,500) kurtosis = 2.96917
       // N[kurtosis[hypergeometricdistribution(50,200,500)], 55]  2.969174035736058474901169623721804275002985337280263464
-      return result;
+      return result - 3;
    } // RealType kurtosis_excess(const hypergeometric_distribution<RealType, Policy>& dist)
 
    BOOST_MATH_EXPORT template <class RealType, class Policy>

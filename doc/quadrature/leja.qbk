@@ -62,7 +62,7 @@ The /n/-point rule uses the first /n/ points and has the weights that make it ex
 
 The rules are nested: going from /n/ to /n/ + 1 points costs one more evaluation of /f/, where a Gauss rule must start again.
 This makes them the usual building block of sparse grids, and lets the adaptive `integrate` add one point at a time.
-The price is degree: a Leja rule with /n/ points is exact to degree /n/ - 1, a Gauss rule to 2/n/ - 1.
+The price is degree: a Leja rule with /n/ points is exact to degree /n/ - 1, a Gauss rule to 2['n] - 1.
 
 The points and weights are computed when they are first needed, up to `max_points()`: 1023 for the built-in floating point
 types and 127 for others. `weights(n)` returns the /n/ weights of the /n/-point rule, computing it and any smaller ones first,
@@ -82,12 +82,12 @@ of an Apple M-series and 0.026 s on ten, once the rule has its points.
 takes 105 points for 0.69673467014367874, within 4.6[times]10[super -15] of the true value; the estimate of its error, `error` divided by [radic][pi], is 5.6[times]10[super -12].
 
 When several points maximize the product to within rounding, the leftmost is taken; in the tests float, double, long double and
-`cpp_bin_float_50` choose the same points. Some weights are negative, but not by much: up to 100 points the sum of |/w[sub i]/|
+`cpp_bin_float_50` choose the same points. Some weights are negative, but not by much: up to 100 points the sum of |/w/[sub i]|
 is at most 1.32 times the total mass for the exponents tried, but 2.44 times for [alpha] = -0.9, [beta] = 1/2.
 
 `integrate(f, tolerance, error, L1)` evaluates /f/ once at each point in turn, until /n/ [ge] 4 and
-|/Q[sub m]/ - /Q[sub m - max(1, m/4)]/| [le] `tolerance` * /L1/ for every /m/ from /n/ - /n//4 to /n/, where /Q[sub n]/ is the /n/-point rule
-and /L1/ = [sum] |/w[sub i]/| |/f/(/x[sub i]/)|. If `error` or `L1` are not null they are set to the largest of those differences,
+|/Q/[sub m] - /Q/[sub m - max(1, m/4)]| [le] `tolerance` * /L1/ for every /m/ from /n/ - ['n]\/4 to /n/, where /Q/[sub n] is the /n/-point rule
+and /L1/ = [sum] |/w/[sub i]| |/f/(/x/[sub i])|. If `error` or `L1` are not null they are set to the largest of those differences,
 a heuristic estimate of the error, and to /L1/.
 If `max_points()` is reached first, its result is returned with its error estimate, as `tanh_sinh` does; no error is raised.
 /f/ may return a real or complex value, or a vector of them: any type with `operator[]` and `size()`, such as `std::array` or
@@ -103,9 +103,9 @@ integral over \[/b/, /a/\], with [alpha] still at /b/. Infinite or NaN bounds ra
 The rules up to /N/ points take O(/N/[super 2]) operations: about 0.3 ms for 64 points, 1 ms for 128,
 16 ms for 512 and 60 ms for 1023 in double precision, and 0.4 s for 127 in `cpp_bin_float_50`.
 Each rule follows from the last in Newton form, with the integral of the nodal polynomial from a recurrence carried to twice the
-working precision: the rules integrate /x/[super /k/] to within 20 /n/ [epsilon] [sum] |/w[sub i]/ /x[sub i]/[super /k/]|, and in double
+working precision: the rules integrate /x/[super /k/] to within 20 /n/ [epsilon] [sum] |/w/[sub i] /x/[sub i][super /k/]|, and in double
 precision the weights are within an ulp of the largest weight of the same rules in 50 digits, up to 1023 points.
-A bounded sum of |/w[sub i]/| does not help integrands that grow like exp(/x/[super 2]) against `leja_hermite`, such as products of Hermite polynomials
+A bounded sum of |/w/[sub i]| does not help integrands that grow like exp(/x/[super 2]) against `leja_hermite`, such as products of Hermite polynomials
 of high degree: /L1/ is 10[super 19] times the integral of /h/[sub 40][super 2]. Integrate such products with their Gaussian over
 a finite interval instead, as the example does.
 
@@ -142,10 +142,10 @@ a finite interval instead, as the example does.
 [heading Description]
 
 `sparse_grid` integrates /f/ over \[-1, 1\][super /d/] with `leja_legendre`, or /f/(/x/) exp(-|/x/|[super 2]) over the whole space
-with `leja_hermite`, or against the product of the weights of `leja_laguerre` or `leja_jacobi`, by the dimension-adaptive sparse grid of Gerstner and Griebel. Coordinate /i/ at level /k[sub i]/ uses the
-first 2/k[sub i]/ - 1 points of the rule, and the grid is the sum of the tensor products of differences of consecutive levels
+with `leja_hermite`, or against the product of the weights of `leja_laguerre` or `leja_jacobi`, by the dimension-adaptive sparse grid of Gerstner and Griebel. Coordinate /i/ at level /k/[sub i] uses the
+first 2['k][sub i] - 1 points of the rule, and the grid is the sum of the tensor products of differences of consecutive levels
 over a set of multi-indices /k/. The set grows where these contributions are largest, so the grid spends its points on the
-coordinates, and the interactions between them, that matter. Exact integrals of products of polynomials of degree 2/k[sub i]/ - 2
+coordinates, and the interactions between them, that matter. Exact integrals of products of polynomials of degree 2['k][sub i] - 2
 need only the multi-index /k/ and those below it, and a function of a few coordinates costs little more than in those dimensions.
 
 The levels add two points at a time, not one: for an even /f/ such as /x/[super 2] the rules with one and two points agree, and a
@@ -156,7 +156,7 @@ zero at every point: /x/[sub 1][super 2] /x/[sub 2][super 2], with `leja_legendr
 and on the axes through it. After /d/ + 1 such rounds of refinement with /f/ still zero everywhere, the result is 0 with an error estimate of 0. An interaction of three or more variables
 that vanishes on the planes through the mean can still be missed if /f/ is not zero there, such as 1 + /x/[sub 1][super 2] /x/[sub 2][super 2] /x/[sub 3][super 2]. /L1/ is the grid's estimate of the integral of |/f/| times the
 weight, the scale of the tolerance; before the grid has converged it can be far off, even negative. It is not a condition
-number: the sparse grid's weights have mixed signs, and the sum of |/w[sub i] f/(/x[sub i]/)| can be much larger.
+number: the sparse grid's weights have mixed signs, and the sum of |/w/[sub i] /f/(/x/[sub i])| can be much larger.
 If `error` or `L1` are not null they are set to these. The grid computes the points of `rule` it needs, and keeps them there for the next call.
 
 `max_calls` bounds the number of evaluations of /f/: a refinement that would exceed it is not made, and the result has an
@@ -173,7 +173,7 @@ the levels are high, so a sparse grid pays off when /f/ costs more than that. On
 quasi-Monte Carlo (Boost.Random's Sobol' sequence) by orders of magnitude up to four dimensions; in eight it still wins for
 entire functions such as cos(0.7 + [sum] /c[sub i] x[sub i]/), but not for peaked ones such as Genz's product peak and Gaussian,
 and in sixteen quasi-Monte Carlo is better unless /f/ depends mostly on a few coordinates. For integrands with kinks, such as
-exp(-[sum] /c[sub i]/|/x[sub i]/ - /u[sub i]/|), quasi-Monte Carlo is better in any dimension, and the error estimate, a heuristic
+exp(-[sum] /c/[sub i]|/x/[sub i] - /u/[sub i]|), quasi-Monte Carlo is better in any dimension, and the error estimate, a heuristic
 as for the one-dimensional rule, can be too small.
 
 [heading References]

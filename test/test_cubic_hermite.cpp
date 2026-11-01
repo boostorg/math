@@ -85,6 +85,8 @@ void test_constant()
     circular_hermite_spline.push_back(x.back() + 1, 7, 0);
     CHECK_ULP_CLOSE(Real(0), circular_hermite_spline.prime(x.back()+1), 2);
 
+    CHECK_THROW(hermite_spline(std::numeric_limits<Real>::quiet_NaN()), std::domain_error);
+    CHECK_THROW(hermite_spline.prime(std::numeric_limits<Real>::quiet_NaN()), std::domain_error);
 }
 
 template<typename Real>
@@ -269,6 +271,11 @@ void test_cardinal_constant()
         thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
     }
 
+    Real nan = std::numeric_limits<Real>::quiet_NaN();
+    CHECK_THROW(hermite_spline(nan), std::domain_error);
+    CHECK_THROW(hermite_spline.prime(nan), std::domain_error);
+    CHECK_THROW(hermite_spline_aos(nan), std::domain_error);
+    CHECK_THROW(hermite_spline_aos.prime(nan), std::domain_error);
 }
 
 

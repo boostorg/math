@@ -191,11 +191,17 @@ void test_bessel(T, const char* name)
        BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(T(1), std::numeric_limits<T>::infinity()), T(0));
        BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(T(2), std::numeric_limits<T>::infinity()), T(0));
        BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(T(2.25), std::numeric_limits<T>::infinity()), T(0));
+       // An infinite order must not become a loop count, even when rounding errors are ignored:
+       BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(std::numeric_limits<T>::infinity(), T(0.5), boost::math::policies::make_policy(boost::math::policies::rounding_error<boost::math::policies::ignore_error>())), std::numeric_limits<T>::infinity());
     }
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(1.25), T(0)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(-1.25), T(0)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(-1), T(0)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(1), T(0)), std::domain_error);
+    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+    {
+       BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(2.5), std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+    }
     #endif
 }
 

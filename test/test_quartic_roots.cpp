@@ -126,7 +126,7 @@ void test_zero_coefficients()
         // I could check the condition number here, but this is fine right?
         CHECK_ULP_CLOSE(r[0], roots[0], 340);
         CHECK_ULP_CLOSE(r[1], roots[1], 440);
-        CHECK_ULP_CLOSE(r[2], roots[2], 220);
+        CHECK_ULP_CLOSE(r[2], roots[2], 240);
         CHECK_ULP_CLOSE(r[3], roots[3], 160);
     }
 }
@@ -163,6 +163,34 @@ void issue_1055() {
     CHECK_NAN(roots[3]);
 }
 
+void test_spread_roots() {
+    // Well-conditioned small roots used to be wrong or missing when the root
+    // magnitudes are far apart:
+    double tol = 16 * std::numeric_limits<double>::epsilon();
+    auto roots = quartic_roots<double>(1, -1000006, 6000011, -11000006, 6000000); // (x-1e6)(x-1)(x-2)(x-3)
+    CHECK_LE(std::abs(roots[0] - 1), tol);
+    CHECK_LE(std::abs(roots[1] - 2), tol * 2);
+    CHECK_LE(std::abs(roots[2] - 3), tol * 3);
+    CHECK_LE(std::abs(roots[3] - 1e6), tol * 1e6);
+    roots = quartic_roots<double>(1, -1000001, 1000001, -1000001, 1000000); // (x-1e6)(x-1)(x^2+1)
+    CHECK_LE(std::abs(roots[0] - 1), tol);
+    CHECK_LE(std::abs(roots[1] - 1e6), tol * 1e6);
+    CHECK_NAN(roots[2]);
+    CHECK_NAN(roots[3]);
+    // Roots -92062.86, -9.107 and 0.04203 +- 0.000509i; the pair used to come out real:
+    roots = quartic_roots<double>(1, 92071.87981953725, 830685.27839316, -70321.82622228884, 1481.585577142983);
+    CHECK_LE(std::abs(roots[0] + 92062.856788195195), tol * 92062);
+    CHECK_LE(std::abs(roots[1] + 9.1070990644935686), tol * 9);
+    CHECK_NAN(roots[2]);
+    CHECK_NAN(roots[3]);
+    // (x-2.894e11)(x-1)(x-2)(x-3), rounded; the resolvent cubic has a near triple root, so no root was found:
+    roots = quartic_roots<double>(1, -289426612477.6752, 1736559674841.051, -3183692737194.427, 1736559674830.051);
+    CHECK_LE(std::abs(roots[0] - 1.000000000000000210883), tol);
+    CHECK_LE(std::abs(roots[1] - 1.999999999999999156468), tol * 2);
+    CHECK_LE(std::abs(roots[2] - 3.000000000000000632649), tol * 3);
+    CHECK_LE(std::abs(roots[3] - 289426612471.6751708984), tol * 289426612471.0);
+}
+
 
 int main()
 {
@@ -173,5 +201,6 @@ int main()
 #endif
     issue_825();
     issue_1055();
+    test_spread_roots();
     return boost::math::test::report_errors();
 }

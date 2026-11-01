@@ -391,6 +391,7 @@ Compute the mode(s) of a data set:
     auto list_modes = boost::math::statistics::mode(w);
 
 /Nota bene/: The input data must be sorted in order to pass a forward iterator. If data is not sorted random access iterators are required for a call to `std::sort`.
+Data containing a NaN have no mode, and a `std::domain_error` is thrown.
 
 [heading References]
 

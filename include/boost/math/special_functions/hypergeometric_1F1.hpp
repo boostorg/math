@@ -119,7 +119,7 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
             // OK as long as a > 1 whatever the precision though.
             //
             int domain = hypergeometric_1F1_negative_b_recurrence_region(a, b, z);
-            if ((domain < 0) && ((a > 1) || (BOOST_MATH_NAMESPACE::policies::digits<T, Policy>() <= 64)))
+            if ((domain < 0) && (a > 1))
                return hypergeometric_1F1_from_function_ratio_negative_b(a, b, z, pol, log_scaling);
             else if (domain > 0)
             {
@@ -286,7 +286,7 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
       {
          if (b > 0)
          {
-            return fabs((a + 10) * z / (10 * (b + 10))) < 1;  // Is the 10'th term convergent?
+            return true;  // Also when the 10'th term is still divergent (large a): the methods below fail there
          }
          else
          {
@@ -316,6 +316,9 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
       if ((z == 0) || (a == 0))
          return T(1);
+
+      if (!(BOOST_MATH_NAMESPACE::isfinite)(a) || (BOOST_MATH_NAMESPACE::isnan)(b) || (BOOST_MATH_NAMESPACE::isnan)(z))
+         return policies::raise_domain_error<T>(function, "Arguments must not be NaN and a must be finite, got a = %1%.", a, pol);
 
       // undefined result:
       if (!detail::check_hypergeometric_1F1_parameters(a, b))
@@ -376,7 +379,9 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
          {
             // a is tiny compared to b, and z < 0
             // 13.3.6 appears to be the most efficient and often the most accurate method.
-            T r = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
+            // But for b < -10 the region test misses its divergence as b + n crosses the origin,
+            // while here -z is at most about -b, so the series after Kummer's relation is fine:
+            T r = b < -10 ? hypergeometric_1F1_checked_series_impl(b_minus_a, b, T(-z), pol, log_scaling) : BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
             long long scale = lltrunc(z, pol);
             log_scaling += scale;
             return r * exp(z - scale);
@@ -405,9 +410,10 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
                return tools::apply_recurrence_relation_backward(hypergeometric_1F1_recurrence_small_b_coefficients<T>(a, b, z, 1), 1, first, second);
             }
             //
-            // We've got nothing left but 13.3.6, even though it may be initially divergent:
+            // We've got nothing left but 13.3.6, even though it may be initially divergent,
+            // or for b < -1 the series after Kummer's relation, whose terms change sign at most once:
             //
-            T r = BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
+            T r = b < -1 ? hypergeometric_1F1_checked_series_impl(b_minus_a, b, T(-z), pol, log_scaling) : BOOST_MATH_NAMESPACE::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
             long long scale = lltrunc(z, pol);
             log_scaling += scale;
             return r * exp(z - scale);
@@ -646,7 +652,7 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
          result *= max_scale_factor;
          log_scaling -= max_scaling;
       }
-      while (log_scaling < -max_scaling)
+      while ((log_scaling < -max_scaling) && (result != 0))
       {
          result /= max_scale_factor;
          log_scaling += max_scaling;
@@ -693,7 +699,7 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
          scale -= max_scaling;
          // LCOV_EXCL_STOP
       }
-      while (scale < -max_scaling)
+      while ((scale < -max_scaling) && (result != 0))
       {
          result /= max_scale_factor;
          scale += max_scaling;

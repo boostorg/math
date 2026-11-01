@@ -224,6 +224,10 @@ void test_spots(T, const char* type_name)
     // Special cases, exceptions etc:
     BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(2.1), T(-1), T(0.5)), std::domain_error);
     BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(0.5), T(20), T(1.5)), std::domain_error);
+    BOOST_IF_CONSTEXPR(std::numeric_limits<T>::has_quiet_NaN)
+    {
+       BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(-0.5), T(10), std::numeric_limits<T>::quiet_NaN()), std::domain_error);
+    }
     BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(1.0001), T(-1)), std::domain_error);
     BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(0.5), T(1)), std::domain_error);
     BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(0.5), T(2)), std::domain_error);

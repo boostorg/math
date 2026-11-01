@@ -26,13 +26,20 @@
     const T sqrt_z = sqrt(-z);
     const T bessel_mult = BOOST_MATH_NAMESPACE::cyl_bessel_j(b - 1, 2 * sqrt_z, pol);
 
-    if (b > BOOST_MATH_NAMESPACE::max_factorial<T>::value)
+    if (fabs(b) > BOOST_MATH_NAMESPACE::max_factorial<T>::value)
     {
        const T lsqrt_z = log(sqrt_z);
        const T lsqrt_z_pow_b = (b - 1) * lsqrt_z;
-       T lg = (BOOST_MATH_NAMESPACE::lgamma(b, pol) - lsqrt_z_pow_b);
+       int sign = 1;
+       T lg = (BOOST_MATH_NAMESPACE::lgamma(b, &sign, pol) - lsqrt_z_pow_b);
        lg = exp(lg);
-       return lg * bessel_mult;
+       return sign * lg * bessel_mult;
+    }
+    else if (b < -5)
+    {
+       // Split the power of sqrt(-z) so that it does not overflow when the result does not:
+       const T sqrt_z_pow_b = pow(sqrt_z, (1 - b) / 2);
+       return BOOST_MATH_NAMESPACE::tgamma(b, pol) * sqrt_z_pow_b * bessel_mult * sqrt_z_pow_b;
     }
     else
     {

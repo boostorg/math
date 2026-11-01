@@ -483,45 +483,32 @@ namespace detail {
       // Move guess towards max until we bracket the root, updating min and max as we go:
       //
       int e;
-      frexp(max / guess, &e);
+      frexp(guess != 0 ? T(max / guess) : T(2), &e);
       e = abs(e);
       T guess0 = guess;
       T multiplier = e < 64 ? static_cast<T>(2) : static_cast<T>(ldexp(T(1), e / 32));
       T f_current = f0;
-      if (fabs(min) < fabs(max))
+      while (--count && ((f_current < 0) == (f0 < 0)))
       {
-         while (--count && ((f_current < 0) == (f0 < 0)))
-         {
-            min = guess;
+         min = guess;
+         //
+         // Multiply a positive guess and divide a negative one to head towards max,
+         // jumping across zero when max > 0 as dividing never reaches it:
+         //
+         if (guess > 0)
             guess *= multiplier;
-            if (guess > max)
-            {
-               guess = max;
-               f_current = -f_current;  // There must be a change of sign!
-               break;
-            }
-            multiplier *= e > 1024 ? 8 : 2;
-            unpack_0(f(guess), f_current);
-         }
-      }
-      else
-      {
-         //
-         // If min and max are negative we have to divide to head towards max:
-         //
-         while (--count && ((f_current < 0) == (f0 < 0)))
-         {
-            min = guess;
+         else if (max <= 0)
             guess /= multiplier;
-            if (guess > max)
-            {
-               guess = max;
-               f_current = -f_current;  // There must be a change of sign!
-               break;
-            }
-            multiplier *= e > 1024 ? 8 : 2;
-            unpack_0(f(guess), f_current);
+         else
+            guess = guess < 0 ? T(-guess) : T(max / multiplier);
+         if (guess > max || guess == min)  // Past max, or stuck at zero
+         {
+            guess = max;
+            f_current = -f_current;  // There must be a change of sign!
+            break;
          }
+         multiplier *= e > 1024 ? 8 : 2;
+         unpack_0(f(guess), f_current);
       }
 
       if (count)
@@ -551,46 +538,33 @@ namespace detail {
       // Move guess towards min until we bracket the root, updating min and max as we go:
       //
       int e;
-      frexp(guess / min, &e);
+      frexp(min != 0 ? T(guess / min) : T(2), &e);
       e = abs(e);
       T guess0 = guess;
       T multiplier = e < 64 ? static_cast<T>(2) : static_cast<T>(ldexp(T(1), e / 32));
       T f_current = f0;
 
-      if (fabs(min) < fabs(max))
+      while (--count && ((f_current < 0) == (f0 < 0)))
       {
-         while (--count && ((f_current < 0) == (f0 < 0)))
-         {
-            max = guess;
-            guess /= multiplier;
-            if (guess < min)
-            {
-               guess = min;
-               f_current = -f_current;  // There must be a change of sign!
-               break;
-            }
-            multiplier *= e > 1024 ? 8 : 2;
-            unpack_0(f(guess), f_current);
-         }
-      }
-      else
-      {
+         max = guess;
          //
-         // If min and max are negative we have to multiply to head towards min:
+         // Divide a positive guess and multiply a negative one to head towards min,
+         // jumping across zero when min < 0 as dividing never reaches it:
          //
-         while (--count && ((f_current < 0) == (f0 < 0)))
-         {
-            max = guess;
+         if (guess < 0)
             guess *= multiplier;
-            if (guess < min)
-            {
-               guess = min;
-               f_current = -f_current;  // There must be a change of sign!
-               break;
-            }
-            multiplier *= e > 1024 ? 8 : 2;
-            unpack_0(f(guess), f_current);
+         else if (min >= 0)
+            guess /= multiplier;
+         else
+            guess = guess > 0 ? T(-guess) : T(min / multiplier);
+         if (guess < min || guess == max)  // Past min, or stuck at zero
+         {
+            guess = min;
+            f_current = -f_current;  // There must be a change of sign!
+            break;
          }
+         multiplier *= e > 1024 ? 8 : 2;
+         unpack_0(f(guess), f_current);
       }
 
       if (count)

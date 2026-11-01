@@ -267,6 +267,9 @@ void test_spots(RealType)
    BOOST_MATH_CHECK_THROW(skewness(dist), boost::math::evaluation_error);
    BOOST_MATH_CHECK_THROW(kurtosis(dist), boost::math::evaluation_error);
    BOOST_MATH_CHECK_THROW(kurtosis_excess(dist), boost::math::evaluation_error);
+   // The pdf at the support endpoints is finite and nonzero for alpha = 1 (x = 0) and beta = 1 (x = 1):
+   BOOST_CHECK_CLOSE(pdf(boost::math::non_central_beta_distribution<RealType>(1, 2, 1), RealType(0)), 2 * exp(RealType(-0.5f)), tolerance);
+   BOOST_CHECK_CLOSE(pdf(boost::math::non_central_beta_distribution<RealType>(2, 1, 1), RealType(1)), RealType(2.5f), tolerance);
    //
    // Some special error handling tests, if the non-centrality param is too large
    // then we have no evaluation method and should get a domain_error:
