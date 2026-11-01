@@ -22,17 +22,17 @@ Complement versions are also provided, both with explicit and implicit (default)
 
  template <class Dist, class ``__Policy``> // explicit error handling policy
    typename Dist::value_type find_location( // For example, normal mean.
-   typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
-   // For example, a nominal minimum acceptable z, so that p * 100 % are > z
-   typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% > z.
+   typename Dist::value_type z, // location of random variable z to give probability, P(X <= z) == p.
+   // For example, a nominal minimum acceptable z, so that p * 100 % are <= z
+   typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% <= z.
    typename Dist::value_type scale, // scale parameter, for example, normal standard deviation.
    const ``__Policy``& pol);
 
  template <class Dist>  // with default policy.
    typename Dist::value_type find_location( // For example, normal mean.
-   typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
-   // For example, a nominal minimum acceptable z, so that p * 100 % are > z
-   typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% > z.
+   typename Dist::value_type z, // location of random variable z to give probability, P(X <= z) == p.
+   // For example, a nominal minimum acceptable z, so that p * 100 % are <= z
+   typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% <= z.
    typename Dist::value_type scale); // scale parameter, for example, normal standard deviation.
 
    }} // namespaces
@@ -45,17 +45,17 @@ Complement versions are also provided, both with explicit and implicit (default)
 
  template <class Dist, class ``__Policy``>
    typename Dist::value_type find_scale( // For example, normal mean.
-   typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
-   // For example, a nominal minimum acceptable weight z, so that p * 100 % are > z
-   typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% > z.
+   typename Dist::value_type z, // location of random variable z to give probability, P(X <= z) == p.
+   // For example, a nominal minimum acceptable weight z, so that p * 100 % are <= z
+   typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% <= z.
    typename Dist::value_type location, // location parameter, for example, normal distribution mean.
    const ``__Policy``& pol);
 
   template <class Dist> // with default policy.
     typename Dist::value_type find_scale( // For example, normal mean.
-    typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
-    // For example, a nominal minimum acceptable z, so that p * 100 % are > z
-    typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% > z.
+    typename Dist::value_type z, // location of random variable z to give probability, P(X <= z) == p.
+    // For example, a nominal minimum acceptable z, so that p * 100 % are <= z
+    typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% <= z.
     typename Dist::value_type location) // location parameter, for example, normal distribution mean.
  }} // namespaces
     

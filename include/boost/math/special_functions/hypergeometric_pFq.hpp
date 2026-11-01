@@ -137,6 +137,8 @@ BOOST_MATH_NAMESPACE_BEGIN
 
          Real r, norm;
          std::vector<Real> aa(aj), bb(bj);
+         // Evaluation errors are caught below and retried at higher precision, whatever the user's policy:
+         typedef typename policies::normalise<Policy, policies::evaluation_error<policies::throw_on_error> >::type retry_policy;
          do
          {
             scoped_precision<Real> p(current_precision);
@@ -148,7 +150,7 @@ BOOST_MATH_NAMESPACE_BEGIN
             try
             {
                long long scale = 0;
-               std::pair<Real, Real> rp = BOOST_MATH_NAMESPACE::detail::hypergeometric_pFq_checked_series_impl(aa, bb, z, pol, BOOST_MATH_NAMESPACE::detail::timed_iteration_terminator(BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>(), timeout), scale);
+               std::pair<Real, Real> rp = BOOST_MATH_NAMESPACE::detail::hypergeometric_pFq_checked_series_impl(aa, bb, z, retry_policy(), BOOST_MATH_NAMESPACE::detail::timed_iteration_terminator(BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>(), timeout), scale);
                rp.first *= exp(Real(scale));
                rp.second *= exp(Real(scale));
 

@@ -203,18 +203,12 @@ BOOST_MATH_GPU_ENABLED BOOST_MATH_FORCEINLINE T gamma_imp(T z, const Policy& pol
          return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
       if(z <= -20)
       {
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-         try
-#endif
-         {
-            result = gamma_imp_final(T(-z), pol, l) * sinpx(z);
-         }
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-         catch (const std::overflow_error&)
-         {
+         // tgamma(-z) overflowing means the result underflows, so don't let it report an overflow:
+         typedef typename policies::normalise<Policy, policies::overflow_error<policies::ignore_error> >::type overflow_ignore_policy;
+         result = gamma_imp_final(T(-z), overflow_ignore_policy(), l);
+         if(!(fabs(result) < tools::max_value<T>()))
             return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
-         }
-#endif
+         result *= sinpx(z);
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
          BOOST_MATH_IF_CONSTEXPR(!BOOST_MATH_NAMESPACE::numeric_limits<T>::is_specialized || (BOOST_MATH_NAMESPACE::numeric_limits<T>::digits > 64))
          {
@@ -1654,10 +1648,6 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
             result = pow(x, a) / (a);
          else
          {
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-            try
-            {
-#endif
                #ifdef BOOST_MATH_HAS_NVRTC
                if (BOOST_MATH_NAMESPACE::is_same_v<T, float>)
                {
@@ -1668,15 +1658,10 @@ BOOST_MATH_GPU_ENABLED T gamma_incomplete_imp_final(T a, T x, bool normalised, b
                   result = ::pow(x, a) / ::tgamma(a + 1);
                }
                #else
-               result = pow(x, a) / BOOST_MATH_NAMESPACE::tgamma(a + 1, pol);
+               // If tgamma(a + 1) overflows the result is zero, so don't let it report an overflow:
+               typedef typename policies::normalise<Policy, policies::overflow_error<policies::ignore_error> >::type overflow_ignore_policy;
+               result = pow(x, a) / BOOST_MATH_NAMESPACE::tgamma(a + 1, overflow_ignore_policy());
                #endif
-#ifndef BOOST_MATH_NO_EXCEPTIONS
-            }
-            catch (const std::overflow_error&)
-            {
-               result = 0;
-            }
-#endif
          }
          result *= 1 - a * x / (a + 1);
          if (p_derivative)

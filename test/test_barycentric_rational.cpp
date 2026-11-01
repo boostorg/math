@@ -256,6 +256,11 @@ void test_weights()
 
 void barycentric_rational()
 {
+    using boost::math::interpolators::barycentric_rational;
+    CHECK_THROW(barycentric_rational<double>(std::vector<double>{0, 1, 2}, std::vector<double>{0, 1, 4}, 3), std::domain_error);
+    CHECK_THROW(barycentric_rational<double>(std::vector<double>{0, 1, 2, 3}, std::vector<double>{0, 1, 4}, 1), std::domain_error);
+    CHECK_THROW(barycentric_rational<double>(std::vector<double>{0, std::nan(""), 2}, std::vector<double>{0, 1, 4}, 1), std::domain_error);
+
     // The tests took too long at the higher precisions.
     // They still pass, but the CI system is starting to time out,
     // so I figured it'd be polite to comment out the most expensive tests.

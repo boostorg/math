@@ -15,6 +15,7 @@
 #include <utility> // for std::move
 #include <limits>
 #include <algorithm>
+#include <stdexcept>
 #endif
 #include <boost/math/tools/assert.hpp>
 
@@ -52,8 +53,14 @@ vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::vector_barycentr
     t_ = std::move(t);
     y_ = std::move(y);
 
-    BOOST_MATH_ASSERT_MSG(t_.size() == y_.size(), "There must be the same number of time points as space points.");
-    BOOST_MATH_ASSERT_MSG(approximation_order < y_.size(), "Approximation order must be < data length.");
+    if (t_.size() != y_.size())
+    {
+        throw std::domain_error("There must be the same number of time points as space points.");
+    }
+    if (approximation_order >= y_.size())
+    {
+        throw std::domain_error("Approximation order must be < data length.");
+    }
     for (size_t i = 1; i < t_.size(); ++i)
     {
         BOOST_MATH_ASSERT_MSG(t_[i] - t_[i-1] >  (numeric_limits<typename TimeContainer::value_type>::min)(), "The abscissas must be listed in strictly increasing order t[0] < t[1] < ... < t[n-1].");

@@ -132,11 +132,12 @@ void test_spots(RealType)
   RealType q = 1 - p; // complement.
   // cout << "find_location<normal_distribution<RealType> >(complement(z, q, sd)) = " << endl;
   l = find_location<normal_distribution<RealType> >(complement(z, q, sd, policy<>()));
+  BOOST_CHECK_CLOSE_FRACTION(q, cdf(complement(normal_distribution<RealType>(l, sd), z)), tolerance);
   l = find_location<normal_distribution<RealType> >(complement(z, q, sd));
 
   normal_distribution<RealType> np95pc(l, sd); // Same standard_deviation (scale) but with mean(location) shifted
   //  cout << "Normal distribution with mean = " << l << " has " << "fraction <= " << z << " = "  << cdf(np95pc, z) << endl;
-  BOOST_CHECK_CLOSE_FRACTION(q, cdf(np95pc, z), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(q, cdf(complement(np95pc, z)), tolerance);
 
   // Test NaN handling
   typedef policy<

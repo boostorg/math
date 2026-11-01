@@ -320,6 +320,11 @@ void test_spots(RealType)
   CHECK_THROW(cdf(nb(8, 1.25), static_cast<RealType>(0)), std::domain_error); // Success_fraction > 1!
   CHECK_THROW(quantile(nb(8, -0.25), static_cast<RealType>(0)), std::domain_error); // Negative success_fraction!
   CHECK_THROW(quantile(nb(8, 1.25), static_cast<RealType>(0)), std::domain_error); // Success_fraction > 1!
+  using nbd = negative_binomial_distribution<RealType>;
+  CHECK_THROW(nbd::find_lower_bound_on_p(RealType(9.5), RealType(10), RealType(0.05)), std::domain_error); // Negative failures!
+  CHECK_THROW(nbd::find_upper_bound_on_p(RealType(10), RealType(10), RealType(2)), std::domain_error); // alpha > 1!
+  CHECK_THROW(nbd::find_minimum_number_of_trials(RealType(5), RealType(0.5), RealType(2)), std::domain_error); // alpha > 1!
+  CHECK_THROW(nbd::find_maximum_number_of_trials(RealType(5), RealType(0.5), RealType(-0.5)), std::domain_error); // alpha < 0!
   // End of check throwing 'duff' out-of-domain values.
 
 // The table's SC_ uses BOOST_JOIN, from Boost.Config, which a standalone build doesn't have:

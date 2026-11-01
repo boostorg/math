@@ -111,7 +111,7 @@ public:
     }
     
     template<typename T, typename Z2>
-    friend std::ostream& operator<<(std::ostream& out, luroth_expansion<T, Z2>& scf);
+    friend std::ostream& operator<<(std::ostream& out, const luroth_expansion<T, Z2>& scf);
 
 private:
     const Real x_;
@@ -120,7 +120,7 @@ private:
 
 
 BOOST_MATH_EXPORT template<typename Real, typename Z2>
-std::ostream& operator<<(std::ostream& out, luroth_expansion<Real, Z2>& luroth)
+std::ostream& operator<<(std::ostream& out, const luroth_expansion<Real, Z2>& luroth)
 {
    constexpr const int p = std::numeric_limits<Real>::max_digits10;
    if constexpr (p == 2147483647)

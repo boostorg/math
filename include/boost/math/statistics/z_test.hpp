@@ -24,8 +24,8 @@ ReturnType one_sample_z_test_impl(T sample_mean, T sample_variance, T sample_siz
     using std::sqrt;
     using no_promote_policy = BOOST_MATH_NAMESPACE::policies::policy<BOOST_MATH_NAMESPACE::policies::promote_float<false>, BOOST_MATH_NAMESPACE::policies::promote_double<false>>;
 
-    Real test_statistic = (sample_mean - assumed_mean) / (sample_variance / sqrt(sample_size));
-    auto z = BOOST_MATH_NAMESPACE::normal_distribution<Real, no_promote_policy>(sample_size - 1);
+    Real test_statistic = (sample_mean - assumed_mean) / sqrt(Real(sample_variance) / sample_size);
+    auto z = BOOST_MATH_NAMESPACE::normal_distribution<Real, no_promote_policy>();
     Real pvalue;
     if(test_statistic > 0)
     {
@@ -57,7 +57,7 @@ ReturnType two_sample_z_test_impl(T mean_1, T variance_1, T size_1, T mean_2, T 
     using no_promote_policy = BOOST_MATH_NAMESPACE::policies::policy<BOOST_MATH_NAMESPACE::policies::promote_float<false>, BOOST_MATH_NAMESPACE::policies::promote_double<false>>;
 
     Real test_statistic = (mean_1 - mean_2) / sqrt(variance_1/size_1 + variance_2/size_2);
-    auto z = BOOST_MATH_NAMESPACE::normal_distribution<Real, no_promote_policy>(size_1 + size_2 - 1);
+    auto z = BOOST_MATH_NAMESPACE::normal_distribution<Real, no_promote_policy>();
     Real pvalue;
     if(test_statistic > 0)
     {

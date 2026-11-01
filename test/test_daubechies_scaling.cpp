@@ -523,6 +523,10 @@ void test_explicit_refinement()
 
 int main()
 {
+    boost::math::daubechies_scaling<double, 1> haar;
+    CHECK_EQUAL(1.0, haar(0.5));
+    CHECK_TRUE(haar.bytes() > 0);
+
     #ifndef __MINGW32__
     boost::hana::for_each(std::make_index_sequence<18>(), [&](auto i){
       test_quadratures<float, i+2>();

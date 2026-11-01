@@ -196,6 +196,7 @@ void test_haar_wavelet()
         CHECK_EQUAL(Real(-1), psi(Real(0.75)));
         CHECK_EQUAL(Real(1), psi(std::nextafter(Real(0.5), Real(0))));
         CHECK_EQUAL(Real(-1), psi(std::nextafter(Real(0.5), Real(1))));
+        CHECK_TRUE(psi.bytes() > 0);
     }
     CHECK_THROW((boost::math::daubechies_wavelet<Real, 1>(0)), std::domain_error);
 }

@@ -18,7 +18,7 @@
         std::vector<Z> const & digits() const;
 
         template<typename T, typename Z_>
-        friend std::ostream& operator<<(std::ostream& out, engel_expansion<T, Z>& engel);
+        friend std::ostream& operator<<(std::ostream& out, const engel_expansion<T, Z>& engel);
     };
     }
 

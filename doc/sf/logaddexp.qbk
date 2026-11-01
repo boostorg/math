@@ -38,6 +38,8 @@ The function `logaddexp(x1, x2)` computes log(exp(x1) + exp(x2)).
 The function `logsumexp(x1, x2, ...)` is generalized to compute log(exp(x1) + exp(x2) + ...).
 This function is useful in statistics where the calculated probabilities of events may be so small as to exceed the range of normal floating point numbers. 
 In such cases the logarithm of the calculated probability is stored.
+An argument of -infinity (the logarithm of a zero probability) contributes nothing to the sum,
+and `logsumexp` of an empty range returns -infinity, the logarithm of an empty sum.
 
 
 The use is

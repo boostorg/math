@@ -966,7 +966,7 @@ T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
       try
       {
 #endif
-         int v = itrunc(s);
+         int v = itrunc(s, policies::make_policy(policies::rounding_error<policies::ignore_error>()));
          if(v == s)
          {
             if(v < 0)
@@ -990,7 +990,6 @@ T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
          }
 #ifndef BOOST_MATH_NO_EXCEPTIONS
       }
-      catch(const BOOST_MATH_NAMESPACE::rounding_error&){} // Just fall through, s is too large to round
       catch(const std::overflow_error&){} // LCOV_EXCL_LINE We can only get here for "strange" MP types with small exponents and very large digit counts.
 #endif
    }

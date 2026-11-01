@@ -51,7 +51,7 @@ public:
                       Real error_goal,
                       bool singular = true,
                       std::uint64_t threads = std::thread::hardware_concurrency(),
-                      std::uint64_t seed = 0) noexcept : m_num_threads{threads}, m_seed{seed}, m_volume(1)
+                      std::uint64_t seed = 0) : m_num_threads{threads}, m_seed{seed}, m_volume(1)
     {
         using std::numeric_limits;
         using std::sqrt;
@@ -176,9 +176,9 @@ public:
         Real inv_denom = 1/static_cast<Real>(((gen.max)()-(gen.min)()));
 
         m_num_threads = (std::max)(m_num_threads, static_cast<std::uint64_t>(1));
-        m_thread_calls.reset(new std::atomic<std::uint64_t>[threads]);
-        m_thread_Ss.reset(new std::atomic<Real>[threads]);
-        m_thread_averages.reset(new std::atomic<Real>[threads]);
+        m_thread_calls.reset(new std::atomic<std::uint64_t>[m_num_threads]);
+        m_thread_Ss.reset(new std::atomic<Real>[m_num_threads]);
+        m_thread_averages.reset(new std::atomic<Real>[m_num_threads]);
 
         Real avg = 0;
         for (std::uint64_t i = 0; i < m_num_threads; ++i)

@@ -357,10 +357,10 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const fisher_f_distribution<RealType,
    RealType df2 = dist.degrees_of_freedom2();
    // Error check:
    RealType error_result = 0;
-   if(false == detail::check_df(
+   if(false == (detail::check_df(
          function, df1, &error_result, Policy())
          && detail::check_df(
-         function, df2, &error_result, Policy()))
+         function, df2, &error_result, Policy())))
       return error_result;
 
    if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
@@ -418,10 +418,10 @@ BOOST_MATH_GPU_ENABLED inline RealType cdf(const complemented2_type<fisher_f_dis
    RealType x = c.param;
    // Error check:
    RealType error_result = 0;
-   if(false == detail::check_df(
+   if(false == (detail::check_df(
          function, df1, &error_result, Policy())
          && detail::check_df(
-         function, df2, &error_result, Policy()))
+         function, df2, &error_result, Policy())))
       return error_result;
 
    if((x < 0) || !(BOOST_MATH_NAMESPACE::isfinite)(x))
@@ -521,10 +521,10 @@ BOOST_MATH_GPU_ENABLED inline RealType mean(const fisher_f_distribution<RealType
    RealType df2 = dist.degrees_of_freedom2();
    // Error check:
    RealType error_result = 0;
-   if(false == detail::check_df(
+   if(false == (detail::check_df(
             function, df1, &error_result, Policy())
          && detail::check_df(
-            function, df2, &error_result, Policy()))
+            function, df2, &error_result, Policy())))
       return error_result;
    if(df2 <= 2)
    {
@@ -542,10 +542,10 @@ BOOST_MATH_GPU_ENABLED inline RealType variance(const fisher_f_distribution<Real
    RealType df2 = dist.degrees_of_freedom2();
    // Error check:
    RealType error_result = 0;
-   if(false == detail::check_df(
+   if(false == (detail::check_df(
             function, df1, &error_result, Policy())
          && detail::check_df(
-            function, df2, &error_result, Policy()))
+            function, df2, &error_result, Policy())))
       return error_result;
    if(df2 <= 4)
    {
@@ -563,10 +563,10 @@ BOOST_MATH_GPU_ENABLED inline RealType mode(const fisher_f_distribution<RealType
    RealType df2 = dist.degrees_of_freedom2();
    // Error check:
    RealType error_result = 0;
-   if(false == detail::check_df(
+   if(false == (detail::check_df(
             function, df1, &error_result, Policy())
          && detail::check_df(
-            function, df2, &error_result, Policy()))
+            function, df2, &error_result, Policy())))
       return error_result;
    if(df1 <= 2)
    {
@@ -594,10 +594,10 @@ BOOST_MATH_GPU_ENABLED inline RealType skewness(const fisher_f_distribution<Real
    RealType df2 = dist.degrees_of_freedom2();
    // Error check:
    RealType error_result = 0;
-   if(false == detail::check_df(
+   if(false == (detail::check_df(
             function, df1, &error_result, Policy())
          && detail::check_df(
-            function, df2, &error_result, Policy()))
+            function, df2, &error_result, Policy())))
       return error_result;
    if(df2 <= 6)
    {
@@ -625,10 +625,10 @@ BOOST_MATH_GPU_ENABLED inline RealType kurtosis_excess(const fisher_f_distributi
    RealType df2 = dist.degrees_of_freedom2();
    // Error check:
    RealType error_result = 0;
-   if(false == detail::check_df(
+   if(false == (detail::check_df(
             function, df1, &error_result, Policy())
          && detail::check_df(
-            function, df2, &error_result, Policy()))
+            function, df2, &error_result, Policy())))
       return error_result;
    if(df2 <= 8)
    {

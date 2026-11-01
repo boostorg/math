@@ -22,15 +22,15 @@ void test_one_sample_z()
     Real computed_statistic = std::get<0>(temp);
     Real computed_pvalue = std::get<1>(temp);
     CHECK_ULP_CLOSE(Real(0), computed_statistic, 5);
-    CHECK_MOLLIFIED_CLOSE(Real(0), computed_pvalue, 5*std::numeric_limits<Real>::epsilon());
+    CHECK_ULP_CLOSE(Real(1), computed_pvalue, 5);
 
     temp = boost::math::statistics::one_sample_z_test(Real(10), Real(2), Real(100), Real(5));
     Real computed_statistic_2 = std::get<0>(temp);
-    CHECK_ULP_CLOSE(Real(25), computed_statistic_2, 5);
+    CHECK_ULP_CLOSE(25*sqrt(Real(2)), computed_statistic_2, 5);
 
     temp = boost::math::statistics::one_sample_z_test(Real(1)/2, Real(10), Real(100), Real(1)/3);
     Real computed_statistic_3 = std::get<0>(temp);
-    CHECK_ULP_CLOSE(Real(1)/6, computed_statistic_3, 5);
+    CHECK_ULP_CLOSE(sqrt(Real(10))/6, computed_statistic_3, 5);
 }
 
 template<typename Z>
@@ -40,11 +40,11 @@ void test_integer_one_sample_z()
     double computed_statistic = std::get<0>(temp);
     double computed_pvalue = std::get<1>(temp);
     CHECK_ULP_CLOSE(0.0, computed_statistic, 5);
-    CHECK_MOLLIFIED_CLOSE(0.0, computed_pvalue, 5*std::numeric_limits<double>::epsilon());
+    CHECK_ULP_CLOSE(1.0, computed_pvalue, 5);
 
     temp = boost::math::statistics::one_sample_z_test(Z(10), Z(2), Z(100), Z(5));
     double computed_statistic_2 = std::get<0>(temp);
-    CHECK_ULP_CLOSE(25.0, computed_statistic_2, 5);
+    CHECK_ULP_CLOSE(25*sqrt(2.0), computed_statistic_2, 5);
 }
 
 template<typename Real>
@@ -57,7 +57,7 @@ void test_two_sample_z()
     Real computed_statistic = std::get<0>(temp);
     Real computed_pvalue = std::get<1>(temp);
     CHECK_ULP_CLOSE(Real(1), computed_statistic, 5);
-    CHECK_MOLLIFIED_CLOSE(Real(0), computed_pvalue, sqrt(std::numeric_limits<Real>::epsilon()));
+    CHECK_ULP_CLOSE(boost::math::erfc(1/sqrt(Real(2))), computed_pvalue, 5);
 }
 
 template<typename Z>
@@ -70,7 +70,7 @@ void test_integer_two_sample_z()
     double computed_statistic = std::get<0>(temp);
     double computed_pvalue = std::get<1>(temp);
     CHECK_ULP_CLOSE(1.0, computed_statistic, 5);
-    CHECK_MOLLIFIED_CLOSE(0.0, computed_pvalue, 5*std::numeric_limits<double>::epsilon());
+    CHECK_ULP_CLOSE(0.31731050786291410, computed_pvalue, 5);
 }
 
 int main()

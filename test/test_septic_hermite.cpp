@@ -229,6 +229,7 @@ void test_quadratic()
     {
         CHECK_ULP_CLOSE(t*t/2, sh(t), 100);
         CHECK_ULP_CLOSE(t, sh.prime(t), 32);
+        CHECK_ULP_CLOSE(Real(1), sh.double_prime(t), 150);
     }
 
     boost::random::mt19937 rng;
@@ -340,6 +341,7 @@ void test_cubic()
     {
         CHECK_ULP_CLOSE(t*t*t, sh(t), 151);
         CHECK_ULP_CLOSE(3*t*t, sh.prime(t), 151);
+        CHECK_ULP_CLOSE(6*t, sh.double_prime(t), 50);
     }
 
     Real x0 = 0;
@@ -417,6 +419,7 @@ void test_quartic()
     for (Real t = 1; t <= xmax; t += Real(0.0078125)) {
         CHECK_ULP_CLOSE(t*t*t*t, sh(t), 117);
         CHECK_ULP_CLOSE(4*t*t*t, sh.prime(t), 117);
+        CHECK_ULP_CLOSE(12*t*t, sh.double_prime(t), 50);
     }
 
     y.resize(10);
@@ -503,16 +506,18 @@ void test_cardinal_derivative_scaling()
     for (double dx : {0.125, 2.0})
     {
         std::vector<std::array<double, 4>> data(4);
-        std::vector<double> y(4), dy(4), d2y(4), d3y(4);
+        std::vector<double> xs(4), y(4), dy(4), d2y(4), d3y(4);
         for (size_t i = 0; i < data.size(); ++i)
         {
             double x = -1 + i*dx;
+            xs[i] = x;
             data[i] = {x*x*x, 3*x*x, 6*x, 6};
             y[i] = x*x*x;
             dy[i] = 3*x*x;
             d2y[i] = 6*x;
             d3y[i] = 6;
         }
+        auto h = septic_hermite(std::move(xs), std::vector<double>(y), std::vector<double>(dy), std::vector<double>(d2y), std::vector<double>(d3y));
         auto f = boost::math::interpolators::detail::cardinal_septic_hermite_detail_aos(std::move(data), -1.0, dx);
         auto g = boost::math::interpolators::detail::cardinal_septic_hermite_detail(std::move(y), std::move(dy), std::move(d2y), std::move(d3y), -1.0, dx);
         for (int i = 0; i <= 24; ++i)
@@ -524,6 +529,7 @@ void test_cardinal_derivative_scaling()
             CHECK_MOLLIFIED_CLOSE(x*x*x, g(x), 1e-12);
             CHECK_MOLLIFIED_CLOSE(3*x*x, g.prime(x), 1e-12);
             CHECK_MOLLIFIED_CLOSE(6*x, g.double_prime(x), 1e-12);
+            CHECK_MOLLIFIED_CLOSE(6*x, h.double_prime(x), 1e-12);
         }
     }
 }

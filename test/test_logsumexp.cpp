@@ -78,6 +78,18 @@ void test_overflow()
 }
 
 template <typename Real>
+void test_infinite_and_empty()
+{
+    using boost::math::logsumexp;
+    constexpr Real inf_val = std::numeric_limits<Real>::infinity();
+
+    CHECK_EQUAL(logsumexp(-inf_val, -inf_val, -inf_val), -inf_val);
+    CHECK_EQUAL(logsumexp(inf_val, inf_val, inf_val), inf_val);
+    CHECK_EQUAL(logsumexp(Real(1), -inf_val, -inf_val), Real(1));
+    CHECK_EQUAL(logsumexp(std::vector<Real>{}), -inf_val);
+}
+
+template <typename Real>
 void test_random()
 {
     using std::exp;
@@ -105,6 +117,9 @@ int main (void)
     test_overflow<float>();
     test_overflow<double>();
     test_overflow<long double>();
+
+    test_infinite_and_empty<float>();
+    test_infinite_and_empty<double>();
 
     test_random<float>();
     test_random<double>();

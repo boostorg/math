@@ -29,7 +29,7 @@
      // we require z > 0 and so apply Kummer's relation for z < 0.
      //
      template <class T, class Policy>
-     inline T hypergeometric_1F1_asym_large_z_series(T a, const T& b, T z, const Policy& pol, long long& log_scaling)
+     inline T hypergeometric_1F1_asym_large_z_series(T a, const T& b, T z, const Policy& pol, long long& log_scaling, bool& failed)
      {
         BOOST_MATH_STD_USING
         static const char* function = "boost::math::hypergeometric_1F1_asym_large_z_series<%1%>(%1%, %1%, %1%)";
@@ -93,14 +93,17 @@
            a2_poch += 1;
            if (fabs(sum) * BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>() > fabs(term))
               break;
-           if(fabs(sum) / abs_sum < BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>())
-              return BOOST_MATH_NAMESPACE::policies::raise_evaluation_error<T>(function, "Large-z asymptotic approximation to 1F1 has destroyed all the digits in the result due to cancellation.  Current best guess is %1%", 
-                 prefix * sum, Policy());
-           if(k > BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>())
-              return BOOST_MATH_NAMESPACE::policies::raise_evaluation_error<T>(function, "1F1: Unable to locate solution in a reasonable time:"
-                 " large-z asymptotic approximation.  Current best guess is %1%", prefix * sum, Policy());
-           if((k > 10) && (fabs(term) > fabs(last_term)))
-              return BOOST_MATH_NAMESPACE::policies::raise_evaluation_error<T>(function, "Large-z asymptotic approximation to 1F1 is divergent.  Current best guess is %1%", prefix * sum, Policy());
+           //
+           // Give up if cancellation has destroyed all the digits, or the series is too slow
+           // or divergent, and let the caller try another method:
+           //
+           if((fabs(sum) / abs_sum < BOOST_MATH_NAMESPACE::policies::get_epsilon<T, Policy>())
+              || (k > BOOST_MATH_NAMESPACE::policies::get_max_series_iterations<Policy>())
+              || ((k > 10) && (fabs(term) > fabs(last_term))))
+           {
+              failed = true;
+              return 0;
+           }
         } while (true);
 
         return prefix * sum;

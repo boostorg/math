@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <cmath>
 #include <iterator>
+#include <limits>
 #include <utility>
 #include <algorithm>
 #include <type_traits>
@@ -23,6 +24,10 @@ Real logsumexp(ForwardIterator first, ForwardIterator last)
     using std::exp;
     using std::log1p;
     
+    if (first == last)
+    {
+        return -std::numeric_limits<Real>::infinity();
+    }
     const auto elem = std::max_element(first, last);
     const Real max_val = *elem;
 
@@ -31,7 +36,7 @@ Real logsumexp(ForwardIterator first, ForwardIterator last)
     {
         if (first != elem) 
         {
-            arg += exp(*first - max_val);
+            arg += *first == max_val ? Real(1) : exp(*first - max_val);
         }
 
         ++first;

@@ -38,6 +38,9 @@ void test_four_values()
             CHECK_ULP_CLOSE(value, ub(x, y), 1);
         }
     }
+    CHECK_THROW(ub(x0 + 2*dx, y0), std::domain_error);
+    CHECK_THROW(ub(x0, y0 - dy), std::domain_error);
+    CHECK_THROW(ub(std::numeric_limits<Real>::quiet_NaN(), y0), std::domain_error);
 
     // Now we test the unit square:
     std::random_device rd;

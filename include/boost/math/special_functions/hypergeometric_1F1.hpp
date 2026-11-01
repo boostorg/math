@@ -421,11 +421,14 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
       if (detail::hypergeometric_1F1_asym_region(a, b, z, pol))
       {
          long long saved_scale = log_scaling;
+         bool failed = false;
 #ifndef BOOST_MATH_NO_EXCEPTIONS
          try
 #endif
          {
-            return hypergeometric_1F1_asym_large_z_series(a, b, z, pol, log_scaling);
+            T r = hypergeometric_1F1_asym_large_z_series(a, b, z, pol, log_scaling, failed);
+            if (!failed)
+               return r;
          }
 #ifndef BOOST_MATH_NO_EXCEPTIONS
          catch (const evaluation_error&)

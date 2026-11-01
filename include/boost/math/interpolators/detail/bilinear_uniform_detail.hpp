@@ -9,7 +9,7 @@
 
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <stdexcept>
-#include <iostream>
+#include <sstream>
 #include <string>
 #include <limits>
 #include <cmath>
@@ -64,17 +64,17 @@ public:
     Real operator()(Real x, Real y) const
     {
         using std::floor;
-        if (x > x0_ + (cols_ - 1)*dx_ || x < x0_) {
-            std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n";
-            std::cerr << "Querying the bilinear_uniform interpolator at (x,y) = (" << x << ", " << y << ") is not allowed.\n";
-            std::cerr << "x must lie in the interval [" << x0_ << ", " << x0_ + (cols_ -1)*dx_ << "]\n";
-            return std::numeric_limits<Real>::quiet_NaN();
+        if (!(x >= x0_ && x <= x0_ + (cols_ - 1)*dx_)) {
+            std::ostringstream oss;
+            oss << "Querying the bilinear_uniform interpolator at (x,y) = (" << x << ", " << y << ") is not allowed; "
+                << "x must lie in the interval [" << x0_ << ", " << x0_ + (cols_ -1)*dx_ << "].";
+            throw std::domain_error(oss.str());
         }
-        if (y > y0_ + (rows_ - 1)*dy_ || y < y0_) {
-            std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n";
-            std::cerr << "Querying the bilinear_uniform interpolator at (x,y) = (" << x << ", " << y << ") is not allowed.\n";
-            std::cerr << "y must lie in the interval [" << y0_ << ", " << y0_ + (rows_ -1)*dy_ << "]\n";
-            return std::numeric_limits<Real>::quiet_NaN();
+        if (!(y >= y0_ && y <= y0_ + (rows_ - 1)*dy_)) {
+            std::ostringstream oss;
+            oss << "Querying the bilinear_uniform interpolator at (x,y) = (" << x << ", " << y << ") is not allowed; "
+                << "y must lie in the interval [" << y0_ << ", " << y0_ + (rows_ -1)*dy_ << "].";
+            throw std::domain_error(oss.str());
         }
 
         Real s = (x - x0_)/dx_;

@@ -93,8 +93,21 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x,
 template <class Real>
 barycentric_rational_imp<Real>::barycentric_rational_imp(std::vector<Real>&& x, std::vector<Real>&& y,size_t approximation_order) : m_x(std::move(x)), m_y(std::move(y))
 {
-    BOOST_MATH_ASSERT_MSG(m_x.size() == m_y.size(), "There must be the same number of abscissas and ordinates.");
-    BOOST_MATH_ASSERT_MSG(approximation_order < m_x.size(), "Approximation order must be < data length.");
+    if (m_x.size() != m_y.size())
+    {
+        throw std::domain_error("There must be the same number of abscissas and ordinates.");
+    }
+    if (approximation_order >= m_x.size())
+    {
+        throw std::domain_error("Approximation order must be < data length.");
+    }
+    for (size_t i = 0; i < m_x.size(); ++i)
+    {
+        if (BOOST_MATH_NAMESPACE::isnan(m_x[i]) || BOOST_MATH_NAMESPACE::isnan(m_y[i]))
+        {
+            throw std::domain_error(std::string("x[") + std::to_string(i) + "] or y[" + std::to_string(i) + "] is a NAN");
+        }
+    }
     BOOST_MATH_ASSERT_MSG(std::is_sorted(m_x.begin(), m_x.end()), "The abscissas must be listed in increasing order x[0] < x[1] < ... < x[n-1].");
     calculate_weights(approximation_order);
 }

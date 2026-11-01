@@ -137,7 +137,7 @@ we should not even think of writing `find_location<normal>(z, 1 - p, sd)`,
 but use the complement version, see __why_complements.
 */
   z = 2.;
-  double q = 0.95; // = 1 - p; // complement.
+  double q = 0.95; // complement: fraction > z.
   l = find_location<normal>(complement(z, q, sd));
 
   normal np95pc(l, sd); // Same standard_deviation (scale) but with mean(location) shifted
@@ -167,8 +167,8 @@ Normal distribution with mean = 0, standard deviation 1, has fraction > -2, p = 
 offset location (mean) = 1.09023
 Normal distribution with mean = 1.09023 has fraction <= -2, p = 0.001
 Normal distribution with mean = 1.09023 has fraction > -2, p = 0.999
-Normal distribution with mean = 0.355146 has fraction <= 2 = 0.95
-Normal distribution with mean = 0.355146 has fraction > 2 = 0.05
+Normal distribution with mean = 3.64485 has fraction <= 2 = 0.05
+Normal distribution with mean = 3.64485 has fraction > 2 = 0.95
 ]
 */
 //] [/find_location_example_output]

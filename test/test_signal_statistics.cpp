@@ -12,6 +12,9 @@
 #include <random>
 #include <cmath>
 #include <cfloat>
+#if defined(__cpp_lib_span) || (__cplusplus >= 202002L && __has_include(<span>))
+#include <span>
+#endif
 #include <boost/core/lightweight_test.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -230,6 +233,10 @@ void test_integer_oracle_snr()
     double snr_db = boost::math::statistics::oracle_snr_db(signal, noisy_signal);
     BOOST_TEST(abs(snr - length) < tol);
     BOOST_TEST(abs(snr_db - 10*log10(length)) < tol);
+
+    std::vector<Z> s{1, 2, 3, 4};
+    std::vector<Z> x{3, 2, 3, 4};
+    BOOST_TEST(abs(boost::math::statistics::mean_invariant_oracle_snr(s, x) - 1.25) < tol);
 }
 
 template<class Complex>
@@ -293,6 +300,12 @@ void test_m2m4_snr_estimator()
     }
     auto m2m4_2 = boost::math::statistics::m2m4_snr_estimator(x.begin(), x.end(), ka, kw);
     BOOST_TEST(abs(m2m4 - m2m4_2) < tol);
+
+#ifdef __cpp_lib_span
+    std::span<const Real> sp(x);
+    BOOST_TEST(boost::math::statistics::m2m4_snr_estimator(sp, ka, kw) == m2m4_2);
+    BOOST_TEST(boost::math::statistics::hoyer_sparsity(sp) == boost::math::statistics::hoyer_sparsity(x));
+#endif
 }
 
 int main()

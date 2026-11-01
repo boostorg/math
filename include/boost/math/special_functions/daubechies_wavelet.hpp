@@ -110,7 +110,7 @@ BOOST_MATH_NAMESPACE_BEGIN
          }
          if constexpr (p == 1)
          {
-            return;
+            m_interpolator = std::make_shared<detail::null_interpolator>();
          }
          else
          {

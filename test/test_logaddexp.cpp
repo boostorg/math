@@ -28,6 +28,13 @@ void test()
     CHECK_EQUAL(logaddexp(Real(1), inf_val), inf_val);
     CHECK_EQUAL(logaddexp(inf_val, inf_val), inf_val);
 
+    // -INF
+    CHECK_EQUAL(logaddexp(-inf_val, Real(1)), Real(1));
+    CHECK_EQUAL(logaddexp(Real(1), -inf_val), Real(1));
+    CHECK_EQUAL(logaddexp(-inf_val, inf_val), inf_val);
+    CHECK_EQUAL(logaddexp(-inf_val, -inf_val), -inf_val);
+    CHECK_NAN(logaddexp(-inf_val, nan_val));
+
     // Equal values
     constexpr Real ln2 = boost::math::constants::ln_two<Real>();
     CHECK_ULP_CLOSE(Real(2) + ln2, logaddexp(Real(2), Real(2)), 1);

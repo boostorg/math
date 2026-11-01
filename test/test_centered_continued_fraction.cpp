@@ -7,6 +7,7 @@
 
 #include "math_unit_test.hpp"
 #include <boost/math/tools/centered_continued_fraction.hpp>
+#include <sstream>
 #include <boost/math/constants/constants.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/core/demangle.hpp>
@@ -126,6 +127,10 @@ void test_khinchin()
 
 int main()
 {
+    std::ostringstream oss;
+    oss << centered_continued_fraction<double>(0.375);
+    CHECK_EQUAL(std::string("[0; 3, -3]"), oss.str());
+
     test_integral<float>();
     test_integral<double>();
     test_integral<long double>();

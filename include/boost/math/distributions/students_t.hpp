@@ -548,9 +548,9 @@ BOOST_MATH_GPU_ENABLED RealType students_t_distribution<RealType, Policy>::find_
    // Check for domain errors:
    //
    RealType error_result;
-   if(false == detail::check_probability(
+   if(false == (detail::check_probability(
       function, alpha, &error_result, Policy())
-         && detail::check_probability(function, beta, &error_result, Policy()))
+         && detail::check_probability(function, beta, &error_result, Policy())))
       return error_result;
 
    if(hint <= 0)

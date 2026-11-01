@@ -201,10 +201,10 @@ BOOST_MATH_GPU_ENABLED inline RealType quantile(const inverse_chi_squared_distri
    constexpr auto function = "boost::math::quantile(const inverse_chi_squared_distribution<%1%>&, %1%)";
    // Error check:
    RealType error_result;
-   if(false == detail::check_df(
+   if(false == (detail::check_df(
          function, df, &error_result, Policy())
          && detail::check_probability(
-            function, p, &error_result, Policy()))
+            function, p, &error_result, Policy())))
    {
       return error_result;
    }
