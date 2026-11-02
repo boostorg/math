@@ -9,7 +9,7 @@ This is an early development release; names may change.
 - `boost.math`: the special functions (gamma, beta, erf, Bessel, elliptic, hypergeometric, polynomials, ...), flat
   and elementwise over NumPy arrays; `threads=` splits large arrays across threads (0: all cores).
 - Submodules: `distributions`, `quadrature`, `optimize`, `fft`, `roots`, `statistics`, `interpolators`, `constants`,
-  `differentiation`, `expansions`; `boost.math.ulps` plots the error of a function in ulps.
+  `differentiation`, `expansions`, `filters`; `boost.math.ulps` plots the error of a function in ulps.
 - `errstate`, `seterr`, `geterr`: what domain, overflow and evaluation errors do (raise, warn or ignore).
 - Docstrings link to the Boost.Math documentation; the wheel ships type stubs.
 
