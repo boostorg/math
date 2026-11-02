@@ -21,6 +21,7 @@ Below is a table that summarizes the intended usage patterns of the provided opt
      [[gradient descent] [first] [no] [low] [Smooth, well-scaled objectives] [Baseline method; debugging; when behavior transparency matters]]
      [[nesterov accelerated gradient] [first] [no] [low] [Ill-conditioned or narrow-valley problems] [When plain gradient descent converges slowly or oscillates]]
      [[L-BFGS] [quasi second order] [approximate] [medium] [Smooth, deterministic objectives] [When gradients are reliable and faster convergence is needed]]
+     [[trust-region Newton] [second] [exact, by Hessian-vector products] [medium] [Smooth objectives, including indefinite Hessians] [When few iterations matter more than the cost of each, or near saddles]]
 ]
 
 [h1:table-optimizer-policies Optimizer Policies]
@@ -916,6 +917,119 @@ In this case, gradient descent reaches the maximum number of iterations, and doe
 
 [endsect] [/section:lbfgs]
 
+[section:trust_region_newton Trust-Region Newton]
+[heading Synopsis]
+```
+#include <boost/math/optimization/trust_region_newton.hpp>
+
+namespace boost {
+namespace math {
+namespace optimization {
+
+template<typename ArgumentContainer,
+         typename RealType,
+         class Objective,
+         class InitializationPolicy,
+         class ObjectiveEvalPolicy,
+         class GradEvalPolicy,
+         class HessianVectorPolicy>
+class trust_region_newton
+{
+public:
+  void step();
+  RealType radius() const;
+};
+
+/* x holds rdiff::rvar<RealType, 2> for the default policies */
+template<class Objective,
+         typename ArgumentContainer,
+         class InitializationPolicy = tape_initializer_rvar<RealType, 2>,
+         class FunctionEvalPolicy = reverse_mode_function_eval_policy<RealType, 2>,
+         class GradientEvalPolicy = reverse_mode_gradient_evaluation_policy<RealType, 2>,
+         class HessianVectorPolicy = reverse_mode_hessian_vector_product_policy<RealType>>
+auto make_trust_region_newton(Objective&& obj,
+                              ArgumentContainer& x,
+                              RealType initial_radius = 1,
+                              InitializationPolicy&& ip = InitializationPolicy{},
+                              FunctionEvalPolicy&& fep = FunctionEvalPolicy{},
+                              GradientEvalPolicy&& gep = GradientEvalPolicy{},
+                              HessianVectorPolicy&& hvp = HessianVectorPolicy{});
+
+} // namespace optimization
+} // namespace math
+} // namespace boost
+```
+
+The trust-region Newton method minimizes the quadratic model `m(p) = f + g.p + p.Hp/2` built from the exact Hessian `H`, over a ball `|p| <= radius`, then moves only if the objective agrees with the model. Near a minimum it converges quadratically, and unlike a line search it needs no positive definite Hessian: on negative curvature, at a saddle or a maximum, the step goes to the boundary of the ball along a descent direction.
+
+The variables are `rvar<RealType, 2>`, and the objective is evaluated on them. The Hessian is never formed: each Hessian-vector product is one reverse sweep through the tape that records the gradient, so the memory is that of the tape, and the method suits large `n`.
+
+[heading Algorithm]
+
+At each step:
+
+* Evaluates the gradient `g` at `x`, recording it on the first order tape.
+* Approximately minimizes the model over `|p| <= radius` by the Steihaug-Toint truncated conjugate gradient method (Nocedal and Wright, Algorithm 7.2), stopping at the boundary, on negative curvature, or when the residual is below `min(0.1, sqrt(|g|)) |g|`.
+* Evaluates `f(x + p)`, and the ratio `rho` of the actual to the predicted reduction. The radius becomes `|p|/4` if `rho < 1/4`, and doubles if `rho > 3/4` and the step reached the boundary (Nocedal and Wright, Algorithm 4.1).
+* Accepts the step if `rho > 1e-4`; otherwise `x`, the objective value and the gradient are unchanged. A change in `f` within its rounding error counts as `rho = 1`.
+
+If a constraint policy of `minimize` moves `x`, the next step evaluates there.
+
+A step costs one objective-and-gradient evaluation, two after a rejected step, and one Hessian-vector product per conjugate gradient iteration, at most `n`. Use the default `gradient_norm_convergence_policy` with `minimize`: since a rejected step leaves the objective unchanged, a convergence policy on the change in objective would stop there.
+
+[heading Parameters]
+
+* `Objective&& obj` : objective function to minimize, on `rvar<RealType, 2>`.
+* `ArgumentContainer& x` : variables to optimize over, a container of `rvar<RealType, 2>`. Updated in-place.
+* `RealType initial_radius` : radius of the first trust region, positive and finite, else `std::domain_error` is thrown. Default is 1. It adapts, so it need only be of the right order of magnitude; `radius()` returns the current one.
+* `InitializationPolicy&& ip` : by default `tape_initializer_rvar<RealType, 2>`, which adds checkpoints to the tapes of order 1 and 2.
+* `ObjectiveEvalPolicy&& oep`, `GradEvalPolicy&& gep` : by default `reverse_mode_function_eval_policy<RealType, 2>` and `reverse_mode_gradient_evaluation_policy<RealType, 2>`.
+* `HessianVectorPolicy&& hvp` : `hvp(objective, x, v, Hv)` sets `Hv` to the Hessian at `x` times `v`. It is called only after a gradient evaluation at the same `x`. By default `reverse_mode_hessian_vector_product_policy<RealType>`.
+
+[heading Example]
+```
+#include <boost/math/differentiation/autodiff_reverse.hpp>
+#include <boost/math/optimization/minimizer.hpp>
+#include <boost/math/optimization/trust_region_newton.hpp>
+#include <iostream>
+#include <vector>
+namespace rdiff = boost::math::differentiation::reverse_mode;
+namespace bopt  = boost::math::optimization;
+
+template<class Real>
+Real rosenbrock(std::vector<Real> const& x)
+{
+    Real f = Real(0);
+    for (size_t i = 0; i + 1 < x.size(); ++i) {
+        f += 100 * (x[i + 1] - x[i] * x[i]) * (x[i + 1] - x[i] * x[i]) + (1 - x[i]) * (1 - x[i]);
+    }
+    return f;
+}
+
+int main()
+{
+    using rvar = rdiff::rvar<double, 2>;
+    std::vector<double> x0(10, -1.2);
+    std::vector<rvar> x(x0.begin(), x0.end()); // each element its own variable
+    auto opt = bopt::make_trust_region_newton(&rosenbrock<rvar>, x);
+    auto result = bopt::minimize(opt, bopt::unconstrained_policy<std::vector<rvar>>{},
+                                 bopt::gradient_norm_convergence_policy<double>(1e-10));
+    std::cout << result.num_iter << " steps, f = " << result.objective_value << "\n";
+}
+```
+
+[heading Complexity]
+
+Per step, one gradient evaluation on `rvar<RealType, 2>`, whose tape is many times that of `rvar<RealType, 1>`, and up to `n` Hessian-vector products, each a sweep of that tape. It takes fewer steps than L-BFGS, and converges quadratically at the end, but each step costs more: minimizing the Rosenbrock function from `(-1.2, 1, ...)`, L-BFGS is 3 to 20 times faster in wall time for `n` from 2 to 100 (`reporting/performance/trust_region_newton_performance.cpp`). Prefer it where the Hessian is indefinite, or where steps, not evaluations, are what cost.
+
+[heading References]
+
+* Jorge Nocedal and Stephen J. Wright, ['Numerical Optimization], 2nd Edition, Springer, 2006. Chapters 4 and 7.
+* Trond Steihaug, ['The conjugate gradient method and trust regions in large scale optimization], SIAM Journal on Numerical Analysis 20 (1983), 626-637.
+
+[endsect] [/section:trust_region_newton]
+
+
 [section:minimize minimize]
 [heading Synopsis]
 ```
@@ -1160,12 +1274,12 @@ namespace rdiff = boost::math::differentiation::reverse_mode;
  * @arg objective> objective function to evaluate
  * @arg x> argument list
  */
-template<typename RealType>
+template<typename RealType, std::size_t Order = 1>
 struct reverse_mode_function_eval_policy
 {
   template<typename Objective, class ArgumentContainer>
-  rdiff::rvar<RealType, 1> operator()(Objective&& objective,
-                                      ArgumentContainer& x);
+  rdiff::rvar<RealType, Order> operator()(Objective&& objective,
+                                          ArgumentContainer& x);
 };
 
 /**
@@ -1176,7 +1290,7 @@ struct reverse_mode_function_eval_policy
  *                    done in tandem
  * @arg obj_v> reference to variable inside gradient class
  */
-template<typename RealType>
+template<typename RealType, std::size_t Order = 1>
 struct reverse_mode_gradient_evaluation_policy
 {
   template<class Objective,
@@ -1188,12 +1302,23 @@ struct reverse_mode_gradient_evaluation_policy
                   RealType& obj_v,
                   std::vector<RealType>& g)
 };
+
+/* Hv at the x of the last gradient evaluation with Order = 2 */
+template<typename RealType>
+struct reverse_mode_hessian_vector_product_policy
+{
+  template<class Objective, class ArgumentContainer>
+  void operator()(Objective&& obj_f,
+                  ArgumentContainer& x,
+                  const std::vector<RealType>& v,
+                  std::vector<RealType>& Hv);
+};
  /*
  * init policies
  */
 
 /* default rvar policy */
-template<typename RealType>
+template<typename RealType, std::size_t Order = 1>
 struct tape_initializer_rvar
 {
     template<class ArgumentContainer>
@@ -1251,7 +1376,7 @@ A gradient evaluation policy defines how gradients are computed and extracted in
 template<typename RealType> struct reverse_mode_gradient_evaluation_policy { template<class Objective, class ArgumentContainer, class FunctionEvaluationPolicy> void operator()(Objective&& obj_f, ArgumentContainer& x, FunctionEvaluationPolicy&& f_eval_pol, RealType& obj_v, std::vector<RealType>& g); };
 ```
 
-This policy computes the objective value and gradient using reverse-mode autodiff
+This policy computes the objective value and gradient using reverse-mode autodiff. With `Order = 2` the gradient is itself recorded on the first order tape, for `reverse_mode_hessian_vector_product_policy`, which computes a Hessian-vector product by one reverse sweep of that tape.
 
 [heading Initialization policies]
 
@@ -1264,8 +1389,8 @@ template<typename RealType> struct tape_initializer_rvar { template<class Argume
 ```
 
 This policy: 
-* statically requires `ArgumentContainer::value_type` to be `rdiff::rvar<RealType,1>`,
-* adds a checkpoint to the active reverse-mode tape via `tape.add_checkpoint()`
+* statically requires `ArgumentContainer::value_type` to be `rdiff::rvar<RealType,Order>`,
+* adds a checkpoint to the active reverse-mode tapes of orders 1 to `Order` via `tape.add_checkpoint()`
 
 [heading random_uniform_initializer_rvar]
 

@@ -8,6 +8,7 @@
 #include <boost/math/optimization/gradient_descent.hpp>
 #include <boost/math/optimization/lbfgs.hpp>
 #include <boost/math/optimization/nesterov.hpp>
+#include <boost/math/optimization/trust_region_newton.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN
 namespace optimization {

@@ -303,14 +303,17 @@ public:
         argument_nodes_[static_cast<ptrdiff_t>(arg_id)] = node_ptr;
     }
 
+    static bool is_zero(const RealType &a) { return a == 0; }
+    template<class U>
+    static bool is_zero(const U &) { return false; }
+
     void backward()
     {
         if (!n_) // leaf node
             return;
 
-        using BOOST_MATH_NAMESPACE::differentiation::reverse_mode::fabs;
-        using std::fabs;
-        if (!adjoint_ || fabs(*adjoint_) < 2 * std::numeric_limits<RealType>::epsilon())
+        // A zero adjoint of higher order still carries derivatives: skip only order 1.
+        if (!adjoint_ || is_zero(*adjoint_))
             return;
 
         if (!argument_nodes_) // no arguments

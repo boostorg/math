@@ -66,6 +66,31 @@ def test_gradient_optimizers(name):
         fn(lambda x: 1 / 0, [0.0, 0.0], quadratic_gradient)
 
 
+def test_trust_region_newton():
+    hess = lambda x: np.diag([2.0, 2.0])
+    r = o.trust_region_newton(quadratic, [0.0, 0.0], quadratic_gradient, hess, tolerance=1e-8)
+    assert np.allclose(r.x, [1, -2], atol=1e-8) and r.fun == quadratic(r.x) and r.converged and r.nit <= 3
+    # From Himmelblau's local maximum, to one of its minima.
+    def himmelblau(x):
+        a, b = x[0] ** 2 + x[1] - 11, x[0] + x[1] ** 2 - 7
+        return a * a + b * b, [4 * a * x[0] + 2 * b, 2 * a + 4 * b * x[1]]
+    def himmelblau_hessian(x):
+        a, b = x[0] ** 2 + x[1] - 11, x[0] + x[1] ** 2 - 7
+        return [[12 * x[0] ** 2 + 4 * x[1] - 42, 4 * (x[0] + x[1])], [4 * (x[0] + x[1]), 4 * x[0] + 12 * x[1] ** 2 - 26]]
+    r = o.trust_region_newton(himmelblau, [-0.270845, -0.923039], hess=himmelblau_hessian, initial_radius=0.5, tolerance=1e-10)
+    assert r.converged and r.fun < 1e-20
+    for bad, error in [(lambda x: np.eye(3), ValueError), (lambda x: [1.0, 2.0], TypeError)]:
+        with pytest.raises(error):
+            o.trust_region_newton(quadratic, [0.0, 0.0], quadratic_gradient, bad)
+    for kw in [{}, {"initial_radius": 0.0}, {"initial_radius": math.inf}]:
+        with pytest.raises(ValueError):
+            o.trust_region_newton(quadratic, [0.0, 0.0], quadratic_gradient, **({"hess": hess} if kw else {}), **kw)
+    # A step that raises f measurably, here by 16 at 1e16, is never taken.
+    r = o.trust_region_newton(lambda x: 1e16 + x[0] + 16 * x[0] ** 4, [0.0], lambda x: [1 + 64 * x[0] ** 3],
+                              lambda x: [[192 * x[0] ** 2]], max_iterations=50)
+    assert r.fun <= 1e16
+
+
 def test_brent():
     r = o.brent(math.cos, 0, 6)
     assert abs(r.x - math.pi) < 1e-7 and r.fun == math.cos(r.x) and r.converged and r.nfev == r.nit + 1
