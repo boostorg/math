@@ -71,7 +71,7 @@ void test_spots(T, const char* type_name)
    BOOST_CHECK_THROW(boost::math::hypergeometric_0F1(T(-10), T(-5)), std::domain_error);
 
    //
-   // Values from Arb: the continued fraction used for |z/b| < 4 loses digits as |z/b| increases:
+   // Values from Arb, where the continued fraction once used for |z/b| < 4 lost digits as |z/b| increased:
    //
    BOOST_IF_CONSTEXPR (std::is_same<T, double>::value)
    {
@@ -89,6 +89,18 @@ void test_spots(T, const char* type_name)
       BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(-150.5), T(-50000)), static_cast<T>(-1.463872098467127758538168993280215819310e+91L), tol);
       // exp(lgamma) for |b| > max_factorial loses a few hundred ulps with MSVC's libm:
       BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(-200.5), T(-200000)), static_cast<T>(-1.119363005656145085227991833872469732078e+156L), 10 * tol);
+      // Where the series alternates its terms' rounding errors cost up to 60 eps; 0F1(3/2; z) = sin(2 sqrt(-z)) / (2 sqrt(-z)):
+      tol = 2 * boost::math::tools::epsilon<T>();
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(1.5), T(-3.1499999999999986)), static_cast<T>(-0.1117927716202205161191633358855447348535L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(1.5), T(-4.5625)), static_cast<T>(-0.2117477327821936144114579605653125782379L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(1.5), T(-6)), static_cast<T>(-0.200581048045620369228325235777556671612L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(0.75), T(-4.75)), static_cast<T>(-0.394051887789196798684042414310451499393L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(2), T(-15.3)), static_cast<T>(0.0525796150281729804127141032810451986313L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(-4.5), T(-11.5)), static_cast<T>(6.339952850210798878717766066083538392821L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(-20.25), T(43.9)), static_cast<T>(0.1231032314989133073674518761251670448919L), tol);
+      // Converges in a few terms although b + n < 0 throughout, and overflows to infinity, not NaN:
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::hypergeometric_0F1(T(-1000000.5), T(1)), static_cast<T>(0.9999990000009999995833333749996791665639L), tol);
+      BOOST_CHECK((boost::math::isinf)(boost::math::hypergeometric_0F1(T(-0.5), T(2e5))));
    }
 
    static const std::array<std::array<T, 3>, 50> hypergeometric_0F1_integer_data = { {

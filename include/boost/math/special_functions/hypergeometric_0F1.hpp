@@ -14,6 +14,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_0F1_bessel.hpp>
+#include <boost/math/tools/compensated_arithmetic.hpp>
 
 BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
@@ -53,6 +54,44 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
    }
 
 
+   //
+   // Where the series alternates its largest terms exceed the result by up to about e^(2 sqrt(-z)), which multiplies
+   // their rounding errors.  So carry the terms' errors, and the sum's, found with error-free transforms (which need a
+   // binary type): the error is then about eps^2 times the largest term, plus the final rounding.
+   //
+   template <class T, class Policy>
+   T hypergeometric_0F1_compensated_series(const T& b, const T& z, const Policy& pol, const char* function)
+   {
+      BOOST_MATH_STD_USING
+      two_product<T> product;
+      T term = 1, term_error = 0, sum = 1, sum_error = 0;
+      std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+      std::uintmax_t n = 0;
+      for (; n < max_iter; ++n)
+      {
+         // d + d_error = (b + n)(n + 1) and r + r_error = z / d, to twice the working precision:
+         const T bn = b + n;
+         T d, d_error, rd, rd_error;
+         product(bn, T(n + 1), d, d_error);
+         d_error += two_sum_error(b, T(n), bn) * (n + 1);
+         const T r = z / d;
+         product(r, d, rd, rd_error);
+         const T r_error = (((z - rd) - rd_error) - r * d_error) / d;
+         T next, next_error;
+         product(term, r, next, next_error);
+         term_error = term_error * r + (term * r_error + next_error);
+         term = next;
+         const T s = sum + term;
+         sum_error += two_sum_error(sum, term, s) + term_error;
+         sum = s;
+         if ((fabs(term) <= fabs(sum) * policies::get_epsilon<T, Policy>() / 4) && (fabs(d) > fabs(z)))
+            break;
+      }
+      policies::check_series_iterations<T>(function, n, pol);
+      // The error terms are inf or NaN once a term overflows (or the product splitting does), then the plain sum is all:
+      return (BOOST_MATH_NAMESPACE::isfinite)(sum_error) ? T(sum + sum_error) : sum;
+   }
+
    template <class T, class Policy>
    inline T hypergeometric_0F1_imp(const T& b, const T& z, const Policy& pol)
    {
@@ -69,6 +108,16 @@ BOOST_MATH_NAMESPACE_BEGIN namespace detail {
       // For b < -5 the alternating series cancels badly once 2 sqrt(-z) > 0.75 |b|, the Bessel relation does not:
       if ((b < -5) && (z < -b * b / 7))
          return hypergeometric_0F1_bessel(b, z, pol);
+      if (BOOST_MATH_NAMESPACE::numeric_limits<T>::radix != 10)
+      {
+         // The compensated series loses about e^(2 sqrt(-z)), or only e^(2 |z / b|) where it does not oscillate, of its
+         // doubled precision: keep both below 2^(digits / 2) or so, and use the Bessel relation beyond.
+         if ((z < -T(tools::digits<T>() * tools::digits<T>()) / 16) && (b > -5) && (fabs(z / b) > T(tools::digits<T>()) / 8))
+            return hypergeometric_0F1_bessel(b, z, pol);
+         if ((z < 0) || (b < 0))
+            return hypergeometric_0F1_compensated_series(b, z, pol, function);
+         return detail::hypergeometric_0F1_generic_series(b, z, pol);
+      }
       if (z < -5 && b > -5)
       {
          // Series is alternating and divergent, need to do something else here,
