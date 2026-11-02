@@ -5,7 +5,8 @@ Some  __root_finding_without_derivatives methods are __bisection,
 __bracket_solve, including use of __root_finding_TOMS748.
 
 For __root_finding_with_derivatives the methods of
-__newton, __halley, and __schroder are implemented.
+__newton, __halley, and __schroder are implemented,
+and for systems of equations, [link math_toolkit.multivariate_roots multivariate Newton and Halley].
 
 For locating minima of a function,  a __brent_minima_example is provided.
 
@@ -17,6 +18,7 @@ There are several fully-worked __root_finding_examples, including:
 
 [include roots_without_derivatives.qbk]
 [include roots.qbk]
+[include multivariate_roots.qbk]
 [include cubic_roots.qbk]
 [include quartic_roots.qbk]
 [include polynomial_roots.qbk]

@@ -2,14 +2,15 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 //
-// The iterative root finders of tools/roots.hpp and tools/toms748_solve.hpp on a Python callable, and the
-// closed-form quadratic, cubic and quartic solvers. The callable is called with the GIL held, and an
-// exception it raises propagates. Boost.Math errors (no sign change, roots out of order, ...) follow
+// The iterative root finders of tools/roots.hpp, tools/multivariate_roots.hpp and tools/toms748_solve.hpp on a
+// Python callable, and the closed-form quadratic, cubic and quartic solvers. The callable is called with the GIL
+// held, and an exception it raises propagates. Boost.Math errors (no sign change, roots out of order, ...) follow
 // boost.math.errstate as for a scalar. Tolerances are a number of binary digits, as in Boost.
 
 #include "bindings.hpp"
 
 #include <boost/math/tools/cubic_roots.hpp>
+#include <boost/math/tools/multivariate_roots.hpp>
 #include <boost/math/tools/quartic_roots.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
@@ -23,6 +24,7 @@
 #include <complex>
 #include <cstdint>
 #include <limits>
+#include <string>
 #include <tuple>
 #include <utility>
 #include <vector>
@@ -58,6 +60,44 @@ bt::eps_tolerance<double> tolerance(int digits)
       throw nb::value_error("digits must be positive");
    return bt::eps_tolerance<double>(static_cast<unsigned>(digits));
 }
+
+// f(x) -> (F, J) or (F, J, d2) for the multivariate solvers: F and d2(v) = F''(x)[v, v] of shape (n,), J of shape
+// (n, n), passed on row-major.
+struct py_system
+{
+   nb::callable f;
+   std::size_t n;
+
+   auto operator()(std::vector<double> const& x) const
+   {
+      recording suspended(nullptr);
+      nb::object r = f(vector_to_array(x));
+      std::size_t const n_ = n;
+      // a as a float64 array of shape (n,), or (n, n) when square, flattened row-major.
+      auto shaped = [n_](nb::handle a, bool square, char const* what) {
+         nb::object arr = numpy().attr("asarray")(a, nb::arg("dtype") = numpy().attr("float64"));
+         nb::object shape = arr.attr("shape");
+         bool ok = nb::len(shape) == (square ? 2u : 1u);
+         for (std::size_t i = 0; ok && i < nb::len(shape); ++i)
+            ok = nb::cast<std::size_t>(shape[nb::int_(i)]) == n_;
+         if (!ok)
+         {
+            std::string got = nb::str(shape).c_str();
+            throw nb::value_error((std::string(what) + " has shape " + got + ", expected (" + std::to_string(n_)
+                                   + (square ? ", " + std::to_string(n_) : std::string(",")) + ")").c_str());
+         }
+         return array_to_vector(arr);
+      };
+      nb::object d2 = nb::len(r) > 2 ? nb::object(r[2]) : nb::none();
+      auto second = [d2, shaped](std::vector<double> const& v) {
+         recording inner(nullptr);
+         if (d2.is_none())
+            throw nb::value_error("multivariate_halley: f(x) must return (F, J, d2)");
+         return shaped(d2(vector_to_array(v)), false, "d2(v)");
+      };
+      return std::make_tuple(shaped(r[0], false, "F(x)"), shaped(r[1], true, "J(x)"), second);
+   }
+};
 
 // The real roots, ascending; Boost pads its fixed-size result with NaN.
 template <std::size_t N>
@@ -138,6 +178,26 @@ void bind_roots(nb::module_& m)
       nb::sig("def complex_newton(f, guess, /, *, max_iterations=53) -> complex"),
       "A root of the analytic f near guess by Newton's method; f(z) returns (f(z), f'(z)); nan+nanj if it fails."
       BMPY_URL("roots_deriv"));
+
+   auto def_multivariate = [&](char const* name, auto iterate, char const* sig, char const* doc) {
+      m.def(name, [newton_result, name, iterate](nb::callable f, nb::handle x0, int digits, std::uintmax_t max_iterations) {
+         std::vector<double> x = array_to_vector(x0);
+         if (x.empty())
+            throw nb::value_error((std::string(name) + ": x0 must not be empty").c_str());
+         py_system system{f, x.size()};
+         auto root = solve(name, [&] { return iterate(system, x, digits, max_iterations); });
+         return newton_result(vector_to_array(std::move(root)), max_iterations);
+      }, arg(), arg(), nb::kw_only(), arg("digits") = default_digits, arg("max_iterations") = default_max_iterations,
+         nb::sig(sig), doc);
+   };
+   def_multivariate("multivariate_newton", [](auto&&... a) { return bt::multivariate_newton(a...); },
+      "def multivariate_newton(f, x0, /, *, digits=53, max_iterations=1000) -> NewtonResult",
+      "A root of the system F(x) = 0 near x0 by Newton's method with a line search; f(x) returns (F(x), J(x)), "
+      "arrays of shape (n,) and (n, n), J[i, j] = dF_i/dx_j." BMPY_URL("multivariate_roots"));
+   def_multivariate("multivariate_halley", [](auto&&... a) { return bt::multivariate_halley(a...); },
+      "def multivariate_halley(f, x0, /, *, digits=53, max_iterations=1000) -> NewtonResult",
+      "A root of the system F(x) = 0 near x0 by Cuyt's multivariate Halley method; f(x) returns (F(x), J(x), d2), "
+      "where d2(v) is F''(x)[v, v], the second derivative of F(x + t v) in t at 0." BMPY_URL("multivariate_roots"));
 
    m.def("quadratic_roots", [](double a, double b, double c) {
       auto [x0, x1] = bt::quadratic_roots(a, b, c);

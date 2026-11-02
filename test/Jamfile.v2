@@ -1103,6 +1103,7 @@ test-suite misc :
    [ run test_root_iterations.cpp pch /boost/test//boost_unit_test_framework : : : [ requires cxx11_hdr_tuple ]  ]
    [ run test_root_finding_concepts.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_toms748_solve.cpp pch /boost/test//boost_unit_test_framework  ]
+   [ run test_multivariate_roots.cpp : : : [ requires cxx14_return_type_deduction cxx14_generic_lambdas ] ]
    [ run  compile_test/test_interpolators_cubic_spline_incl.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/test_interpolators_barycentric_rational_incl.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run test_octonion.cpp
@@ -1830,6 +1831,7 @@ test-suite concepts :
    [ compile  compile_test/test_tools_real_cast_inc.cpp   : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/test_tools_remez_inc.cpp   : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/test_tools_roots_inc.cpp   : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ compile  compile_test/test_tools_multivariate_roots_incl.cpp   : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/test_tools_series_inc.cpp   : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/test_tools_solve_inc.cpp   : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/test_tools_stats_inc.cpp   : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
