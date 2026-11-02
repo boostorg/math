@@ -369,12 +369,14 @@ template<typename ForwardIterator>
 bool mode_has_nan(ForwardIterator first, ForwardIterator last)
 {
     using Z = typename std::iterator_traits<ForwardIterator>::value_type;
-    if (std::any_of(first, last, [](const Z& z) { return !(z == z); }))
+    const bool has_nan = std::any_of(first, last, [](const Z& z) { return !(z == z); });
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+    if (has_nan)
     {
         BOOST_MATH_THROW_EXCEPTION(std::domain_error("The mode is undefined for data containing a NaN."))
-        return true;
     }
-    return false;
+#endif
+    return has_nan;
 }
 
 template<typename ForwardIterator, typename OutputIterator>
