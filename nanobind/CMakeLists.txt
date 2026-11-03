@@ -132,4 +132,11 @@ foreach(module _ext distributions quadrature optimize fft roots statistics inter
   list(APPEND stubs "${pkg_dir}/${module}.pyi")
   set(marker "")
 endforeach()
+# filters has a submodule, signals, so its stubs are a package: filters/__init__.pyi and filters/signals.pyi.
+nanobind_add_stub(boost_math_stub_filters_signals MODULE boost.math.filters.signals OUTPUT "${pkg_dir}/filters/signals.pyi"
+  PYTHON_PATH "${CMAKE_CURRENT_BINARY_DIR}" PATTERN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/stub_patterns.txt"
+  DEPENDS _ext boost_math_py)
+list(REMOVE_ITEM stubs "${pkg_dir}/filters.pyi")
 install(FILES ${stubs} DESTINATION boost/math)
+install(FILES "${pkg_dir}/filters.pyi" DESTINATION boost/math/filters RENAME __init__.pyi)
+install(FILES "${pkg_dir}/filters/signals.pyi" DESTINATION boost/math/filters)

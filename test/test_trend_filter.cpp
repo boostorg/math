@@ -317,6 +317,70 @@ void test_cross_validation()
    }
 }
 
+// Doppler scaled to standard deviation 7 plus N(0, 1) noise (Box-Muller).
+std::vector<double> noisy_doppler(std::size_t n, unsigned seed)
+{
+   std::vector<double> f(n);
+   double mean = 0, var = 0;
+   for (std::size_t i = 0; i < n; ++i)
+   {
+      const double t = (double(i) + 0.5) / double(n);
+      f[i] = std::sqrt(t * (1 - t)) * std::sin(2 * 3.141592653589793 * 1.05 / (t + 0.05));
+      mean += f[i];
+   }
+   mean /= double(n);
+   for (double v : f) var += (v - mean) * (v - mean);
+   const double k = 7 / std::sqrt(var / double(n));
+   std::mt19937_64 gen(seed);
+   std::uniform_real_distribution<double> u(0, 1);
+   for (double& v : f)
+   {
+      const double a = u(gen), b = u(gen);
+      v = k * v + std::sqrt(-2 * std::log(1 - a)) * std::cos(2 * 3.141592653589793 * b);
+   }
+   return f;
+}
+
+double objective(const std::vector<double>& y, const std::vector<double>& x, int k, double lambda)
+{
+   double s = 0;
+   for (std::size_t i = 0; i < y.size(); ++i) s += (y[i] - x[i]) * (y[i] - x[i]) / 2;
+   double l1 = 0;
+   for (const double& v : apply_D(x, k)) l1 += std::abs(v);
+   return s + lambda * l1;
+}
+
+// At large lambda and n, z (of size lambda) only determines x = y - D^T z to about eps lambda, and the
+// duality gap cannot reach the tolerance; the interior point method used to stall there (200 iterations,
+// evaluation_error) for this input and n = 9829. It now stops at the precision floor.
+void test_large_lambda()
+{
+   const std::vector<double> y = noisy_doppler(9829, 1);
+   const double lambda = 31622776.601683792; // 10^7.5
+   std::vector<double> x;
+   CHECK_NO_THROW(x = trend_filter(y, 2, lambda));
+   CHECK_LE(objective(y, x, 2, lambda), objective(y, polynomial_fit(y, 2), 2, lambda));
+   for (const double& v : x) CHECK_TRUE(std::isfinite(v));
+}
+
+// For lambda >= lambda_max = ||z||_inf, D^T z = y - p (p the least-squares polynomial), the fit is p exactly.
+void test_lambda_max()
+{
+   const std::vector<double> y = noisy_doppler(200, 2);
+   for (int k = 1; k <= 2; ++k)
+   {
+      const std::vector<double> p = polynomial_fit(y, k);
+      std::vector<double> r(y.size());
+      for (std::size_t i = 0; i < y.size(); ++i) r[i] = y[i] - p[i];
+      const double lmax = boost::math::filters::detail::trend_filter_lambda_max(r, k);
+      const std::vector<double> above = trend_filter(y, k, lmax * 1.001), below = trend_filter(y, k, lmax / 2);
+      for (std::size_t i = 0; i < y.size(); ++i) CHECK_ABSOLUTE_ERROR(p[i], above[i], 1e-12);
+      double d = 0;
+      for (std::size_t i = 0; i < y.size(); ++i) d = (std::max)(d, std::abs(below[i] - p[i]));
+      CHECK_LE(1e-3, d);
+   }
+}
+
 template <class Real>
 void test_errors()
 {
@@ -346,6 +410,8 @@ int main()
    test_equivariance<double>();
    test_cross_validation<float>();
    test_cross_validation<double>();
+   test_large_lambda();
+   test_lambda_max();
 #if !defined(BOOST_MATH_STANDALONE)
    using mp = boost::multiprecision::cpp_bin_float_50;
    test_exact_cases<mp>();

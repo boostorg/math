@@ -172,9 +172,13 @@ struct band_matrix
 // accurately (D x = D y - D D^T z cancels terms of size lambda), so the method also stops when the
 // surrogate gap sum mu .* (-f) is <= tol * scale and a step of at least 1/2 moved x by less than
 // tol * scale in squared norm (Boyd & Vandenberghe, Convex Optimization, 11.7.3).
+// With z of size lambda, x = y - D^T z is only known to about eps lambda, so no representable z has a
+// gap below about eps lambda 4^R sum |z_i|. When that floor exceeds tol * scale (large lambda and n) and
+// the gap has stopped falling (no new minimum in 10 iterations), the method stops once the gap and the
+// surrogate gap are both within it.
 // Returns false, with x filled by the error handler's result, if it fails.
-template <class Real, int R>
-bool trend_filter_pdip(const std::vector<Real>& y, const Real& lambda, const Real& scale, std::vector<Real>& x)
+template <class Real, int R, class Policy>
+bool trend_filter_pdip(const std::vector<Real>& y, const Real& lambda, const Real& scale, std::vector<Real>& x, const Policy& pol)
 {
    using std::abs; using std::sqrt;
    static const char* function = "boost::math::filters::trend_filter<%1%>";
@@ -184,7 +188,7 @@ bool trend_filter_pdip(const std::vector<Real>& y, const Real& lambda, const Rea
    const Real tol = sqrt(eps); // relative duality gap: |x - x*|^2 <= 2 tol scale
    const Real alpha = Real(1) / 100, beta = Real(1) / 2, mu_factor = 2;
    auto fail = [&](const char* message) {
-      x.assign(n, policies::raise_evaluation_error(function, message, lambda, policies::policy<>()));
+      x.assign(n, policies::raise_evaluation_error(function, message, lambda, pol));
       return false;
    };
 
@@ -225,6 +229,7 @@ bool trend_filter_pdip(const std::vector<Real>& y, const Real& lambda, const Rea
    };
 
    Real t = Real(1) / 10000000000, step = (std::numeric_limits<Real>::max)(), dx2 = (std::numeric_limits<Real>::max)();
+   std::vector<Real> gaps;
    for (int it = 0; it < 200; ++it)
    {
       D.apply_transpose(z.data(), DTz.data(), n);
@@ -239,7 +244,13 @@ bool trend_filter_pdip(const std::vector<Real>& y, const Real& lambda, const Rea
       for (std::size_t i = 0; i < n; ++i) dtz2 += DTz[i] * DTz[i];
       // primal objective at x = y - D^T z minus the dual objective
       const Real gap = dtz2 + lambda * p - dual;
-      if (gap <= tol * scale || (eta <= tol * scale && dx2 <= tol * scale && step >= beta && step <= 1))
+      Real zsum = 0;
+      for (std::size_t i = 0; i < m; ++i) zsum += abs(z[i]);
+      const Real gap_floor = eps * lambda * Real(1 << (2 * R)) * zsum;
+      gaps.push_back(gap);
+      const bool stalled = it >= 10 && *std::min_element(gaps.end() - 10, gaps.end()) >= *std::min_element(gaps.begin(), gaps.end() - 10);
+      if (gap <= tol * scale || (eta <= tol * scale && dx2 <= tol * scale && step >= beta && step <= 1)
+          || (stalled && gap_floor > tol * scale && (std::max)(gap, eta) <= tol * scale + gap_floor))
       {
          x.resize(n);
          for (std::size_t i = 0; i < n; ++i) x[i] = y[i] - DTz[i];
@@ -334,10 +345,34 @@ std::vector<Real> polynomial_fit(const std::vector<Real>& y, int k)
    return p;
 }
 
+// lambda_max = ||z||_inf for D^T z = r, r = y minus its least-squares polynomial of degree k: r lies in the
+// range of D^T, so forward substitution solves it exactly (well conditioned, unlike D D^T z = D r). For
+// lambda >= lambda_max the trend filter is that polynomial.
+template <class Real>
+Real trend_filter_lambda_max(const std::vector<Real>& r, int k)
+{
+   using std::abs;
+   const int R = k + 1;
+   Real d[4];
+   long b = 1;
+   for (int j = 0; j <= R; ++j) { d[j] = Real((R - j) % 2 ? -b : b); b = b * (R - j) / (j + 1); }
+   std::vector<Real> z(r.size() - std::size_t(R));
+   Real mx = 0;
+   for (std::size_t i = 0; i < z.size(); ++i)
+   {
+      Real s = r[i];
+      for (int j = 1; j <= R && std::size_t(j) <= i; ++j) s -= d[j] * z[i - std::size_t(j)];
+      z[i] = s / d[0];
+      mx = (std::max)(mx, Real(abs(z[i])));
+   }
+   return mx;
+}
+
 // The fit at fixed k in {0, 1, 2} and lambda >= 0, for y with at least k + 2 points. The degree-k
 // polynomial trend is removed first, so the stopping tolerance is relative to what is left.
-template <class Real>
-std::vector<Real> trend_filter_fit(const std::vector<Real>& y, int k, const Real& lambda)
+// ok: set to false if the interior-point solver failed (the result is then the error handler's).
+template <class Real, class Policy = policies::policy<>>
+std::vector<Real> trend_filter_fit(const std::vector<Real>& y, int k, const Real& lambda, const Policy& pol = Policy(), bool* ok_out = nullptr)
 {
    if (lambda == 0)
       return y;
@@ -347,15 +382,18 @@ std::vector<Real> trend_filter_fit(const std::vector<Real>& y, int k, const Real
    for (std::size_t i = 0; i < y.size(); ++i) { r[i] = y[i] - p[i]; scale += r[i] * r[i]; }
    if (scale == 0)
       return y; // y is a polynomial of degree <= k
+   if (k > 0 && lambda >= trend_filter_lambda_max(r, k))
+      return p;
    bool ok = true;
    if (k == 0)
       trend_filter_tv(r.data(), x.data(), r.size(), lambda);
    else if (k == 1)
-      ok = trend_filter_pdip<Real, 2>(r, lambda, scale, x);
+      ok = trend_filter_pdip<Real, 2>(r, lambda, scale, x, pol);
    else
-      ok = trend_filter_pdip<Real, 3>(r, lambda, scale, x);
+      ok = trend_filter_pdip<Real, 3>(r, lambda, scale, x, pol);
    if (ok)
       for (std::size_t i = 0; i < y.size(); ++i) x[i] += p[i];
+   if (ok_out) *ok_out = ok;
    return x;
 }
 
@@ -398,11 +436,12 @@ Real trend_filter_sigma(const std::vector<Real>& y)
 
 // Even/odd cross-validation over k = 0, 1, 2 and lambda = sigma 10^L (sigma > 0). Per k: 6 values
 // of L equally spaced over [lo_k, hi_k], one step of at most one decade beyond an end if the best is
-// there, then two bisections around the best. The half samples use lambda / 2^(k+1).
-template <class Real>
-std::pair<int, Real> trend_filter_select(const std::vector<Real>& y, const Real& sigma)
+// there, then two bisections around the best. The half samples use lambda / 2^(k+1). Above the lambda at which
+// both halves' fits are polynomials every L gives the same fit, so L is capped there. best_score: the best CV score.
+template <class Real, class Policy = policies::policy<>>
+std::pair<int, Real> trend_filter_select(const std::vector<Real>& y, const Real& sigma, Real* best_score = nullptr, const Policy& pol = Policy())
 {
-   using std::pow;
+   using std::pow; using std::log10;
    const std::size_t he = (y.size() + 1) / 2, ho = y.size() / 2;
    std::vector<Real> ye(he), yo(ho);
    for (std::size_t i = 0; i < y.size(); ++i) (i % 2 ? yo[i / 2] : ye[i / 2]) = y[i];
@@ -411,9 +450,23 @@ std::pair<int, Real> trend_filter_select(const std::vector<Real>& y, const Real&
    for (int k = 0; k <= 2 && ho >= std::size_t(k + 2); ++k)
    {
       const Real lo = Real(-2 + k) / 2, hi = Real(4 + k), coarse = (hi - lo) / 5;
+      // the half-sample lambda above which both halves' fits are polynomials (k = 0: none needed)
+      Real lmax = (std::numeric_limits<Real>::max)();
+      if (k > 0)
+      {
+         lmax = 0;
+         for (const std::vector<Real>* h : {&ye, &yo})
+         {
+            const std::vector<Real> p = polynomial_fit(*h, k);
+            std::vector<Real> r(h->size());
+            for (std::size_t i = 0; i < r.size(); ++i) r[i] = (*h)[i] - p[i];
+            lmax = (std::max)(lmax, trend_filter_lambda_max(r, k));
+         }
+      }
+      const Real Lcap = k > 0 && lmax > 0 ? Real(log10(lmax * Real(2 << k) / sigma)) : (std::numeric_limits<Real>::max)();
       auto score = [&](const Real& L) {
-         const Real lh = sigma * pow(Real(10), L) / Real(2 << k);
-         return cross_validation_score(trend_filter_fit(ye, k, lh), trend_filter_fit(yo, k, lh), ye, yo);
+         const Real lh = (std::min)(Real(sigma * pow(Real(10), L) / Real(2 << k)), lmax);
+         return cross_validation_score(trend_filter_fit(ye, k, lh, pol), trend_filter_fit(yo, k, lh, pol), ye, yo);
       };
       int bg = 0;
       Real bL = hi, bc = (std::numeric_limits<Real>::max)();
@@ -422,7 +475,7 @@ std::pair<int, Real> trend_filter_select(const std::vector<Real>& y, const Real&
          const Real L = hi - g * coarse, c = score(L);
          if (c < bc) { bc = c; bL = L; bg = g; }
       }
-      if (bg == 0 || bg == 5)
+      if ((bg == 0 && hi < Lcap) || bg == 5)
       {
          const Real L = bg == 0 ? hi + (std::min)(coarse, Real(1)) : lo - (std::min)(coarse, Real(1)), c = score(L);
          if (c < bc) { bc = c; bL = L; }
@@ -444,6 +497,7 @@ std::pair<int, Real> trend_filter_select(const std::vector<Real>& y, const Real&
          best = std::make_pair(k, sigma * pow(Real(10), bL));
       }
    }
+   if (best_score) *best_score = best_cv;
    return best;
 }
 

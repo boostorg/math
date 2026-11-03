@@ -1,0 +1,168 @@
+[/
+  Copyright Nick Thompson 2026
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:wavelet_denoise Wavelet Denoising]
+
+[h4 Synopsis]
+
+    #include <boost/math/filters/wavelet_denoise.hpp>
+
+    namespace boost::math::filters {
+
+    // An orthonormal scaling filter with its boundary rows on an interval.
+    template <class Real>
+    class orthogonal_wavelet {
+    public:
+        orthogonal_wavelet();                  // invalid, 0 vanishing moments
+        unsigned vanishing_moments() const;
+    };
+
+    namespace wavelet {
+    template <class Real> orthogonal_wavelet<Real> daubechies(unsigned p);  // p = 2, ..., 10
+    template <class Real> orthogonal_wavelet<Real> symlet(unsigned p);      // p = 2, ..., 10, least asymmetric
+    }
+
+    enum class threshold_rule { wiener, universal_soft, sure, eb_posterior_median };
+
+    // Fixed wavelet and rule; sigma = NaN estimates the noise level.
+    template <class RandomAccessContainer>
+    RandomAccessContainer wavelet_denoise(const RandomAccessContainer& x,
+                                          const orthogonal_wavelet<typename RandomAccessContainer::value_type>& w,
+                                          threshold_rule rule = threshold_rule::wiener,
+                                          typename RandomAccessContainer::value_type sigma = quiet_NaN);
+
+    // Wavelet and rule chosen by cross-validation.
+    template <class RandomAccessContainer>
+    RandomAccessContainer wavelet_denoise(const RandomAccessContainer& x);
+
+    // The coefficients [a_L | d_L | ... | d_1] of x in the basis w, and back; levels: all that n allows by default.
+    template <class RandomAccessContainer>
+    RandomAccessContainer wavelet_transform(const RandomAccessContainer& x,
+                                            const orthogonal_wavelet<typename RandomAccessContainer::value_type>& w,
+                                            std::size_t levels = std::size_t(-1));  // -1: all
+    template <class RandomAccessContainer>
+    RandomAccessContainer inverse_wavelet_transform(const RandomAccessContainer& c,
+                                                    const orthogonal_wavelet<typename RandomAccessContainer::value_type>& w,
+                                                    std::size_t levels = std::size_t(-1));  // -1: all
+
+    // Whichever of wavelet_denoise(x) and trend_filter(x) has the lower cross-validation score.
+    template <class RandomAccessContainer>
+    RandomAccessContainer denoise(const RandomAccessContainer& x);
+
+    } // namespaces
+
+    #include <boost/math/filters/symlets.hpp>
+
+    template <typename Real, unsigned p>
+    constexpr std::array<Real, 2*p> symlet_scaling_filter();   // p = 2, ..., 10
+
+[h4 Description]
+
+Wavelet shrinkage denoises equally spaced samples of a function on an interval: the detail coefficients of the samples
+in an orthonormal wavelet basis are shrunk towards zero, which removes most of the white noise and keeps jumps and kinks.
+The basis is on the interval, not periodized: Daubechies or least-asymmetric rows in the interior, and orthogonal boundary rows,
+fitted to those of Cohen, Daubechies and Vial (1993), for which polynomials of degree below /p/ have no detail coefficients.
+Any /n/ >= 4/p/ - 1 samples work (a level of length /n/[sub /l/] gives [lceil]/n/[sub /l/]\/2[rceil] scaling coefficients); at a level
+of odd length the right edge has /p/ - 1 wavelet rows instead of /p/.
+
+[h4 The transform]
+
+`wavelet_transform(x, w)` returns the coefficients of /x/ in the orthonormal basis /w/ as one vector of the same length,
+coarsest first: \[/a/[sub /L/] | /d/[sub /L/] | /d/[sub /L/-1] | ... | /d/[sub 1]\], where /d/[sub 1] are the finest details.
+Level /l/ takes /n/[sub /l/-1] values to [lceil]/n/[sub /l/-1]\/2[rceil] scaling and [lfloor]/n/[sub /l/-1]\/2[rfloor] wavelet coefficients, /n/[sub 0] = /n/,
+so /d/[sub /l/] is the slice \[/n/[sub /l/], /n/[sub /l/-1]). By default /L/ is as large as /n/ allows, a level running while its input has at least 4/p/ - 1 values:
+/L/ = `std::bit_width((n - 1) / (4*p - 2))` (in Python, `((n - 1) // (4*p - 2)).bit_length()`);
+a smaller `levels` stops early, and `levels = 0` returns /x/. The basis is orthonormal, so the transform preserves energy,
+and `inverse_wavelet_transform(c, w, levels)` with the same `levels` recovers /x/ to a few ulps.
+Multiprecision types work too (tested with `cpp_bin_float_50`), but the filter tables have about 75 significant digits,
+so a wider type is accurate to about 10[super -75], not to its own epsilon.
+
+    auto w = wavelet::symlet<double>(8);
+    std::vector<double> c = wavelet_transform(x, w);       // all levels
+    std::vector<double> c2 = wavelet_transform(x, w, 2);   // the two finest levels: [a_2 | d_2 | d_1]
+    std::vector<double> y = inverse_wavelet_transform(c, w);
+
+[h4 Threshold rules]
+
+The noise level [sigma] is the median absolute value of the finest detail coefficients divided by [Phi][super -1](3/4) = 0.6745, unless it is given.
+Every rule leaves the scaling coefficients alone. With /n/ the number of samples and /d/ the detail coefficients of one level:
+
+* `wiener` (the default): the empirical Wiener filter in the wavelet domain (Ghael, Sayeed and Baraniuk 1997):
+  each detail coefficient is multiplied by [theta][super 2] / ([theta][super 2] + [sigma][super 2]), [theta] the coefficient of a pilot estimate,
+  universal hard thresholding in the first of sym8, db4, sym4 and db2 that differs from /w/ and takes /n/ samples (else /w/ itself).
+  It has the lowest error on most signals: with sym8 on Blocks, Bumps, HeaviSine and Doppler at signal-to-noise ratios 7 and 15, 20-30% below the next best rule.
+* `universal_soft`: soft thresholding at [sigma] [radic](2 ln /n/) (VisuShrink). It removes nearly every detail, which is best for
+  smooth signals (a cubic, say) and up to 12 times worse than `wiener` on signals with jumps or spikes.
+* `sure`: SureShrink (Donoho and Johnstone 1995), soft thresholding at the level's minimizer of Stein's unbiased risk estimate,
+  or at [sigma] [radic](2 ln /m/) for sparse levels.
+* `eb_posterior_median`: the empirical-Bayes posterior median of Johnstone and Silverman (2004, 2005), level by level,
+  with a Laplace prior of fixed scale /a/ = 1/2 (EbayesThresh's default) mixed with an atom at zero; the mixing weight is the marginal maximum-likelihood one,
+  bounded below by the weight whose threshold is the universal one. It matches R's `EbayesThresh` (`ebayesthresh(x, prior = "laplace", a = 0.5)`)
+  to rounding. It adapts to the sparsity of each level.
+
+[h4 Choosing the wavelet and the rule]
+
+The one-argument `wavelet_denoise` chooses among db2, ..., db10, sym4, ..., sym10 (sym2 and sym3 are db2 and db3) and the four rules
+by two-fold cross-validation on the even- and odd-indexed samples (Nason 1996), as `trend_filter` does:
+each half is denoised, the other half is predicted by averaging neighbouring values, and the squared prediction error is minimized.
+With an odd number of samples the even-indexed half has the extra one. Wavelets that do not take both halves are skipped,
+so the cross-validated functions need at least 14 samples.
+
+`denoise` returns whichever of the cross-validated `wavelet_denoise` and the cross-validated `trend_filter`
+has the lower cross-validation score; if the trend filter fails, the wavelet result is returned. Wavelets win on smooth signals with isolated singularities, the trend filter
+on piecewise constant or piecewise linear ones.
+
+    #include <boost/math/filters/wavelet_denoise.hpp>
+    #include <cmath>
+    #include <random>
+    #include <vector>
+
+    using namespace boost::math::filters;
+    std::mt19937_64 gen(42);
+    std::normal_distribution<double> noise(0, 0.1);
+    std::vector<double> y(2048);
+    for (std::size_t i = 0; i < y.size(); ++i) {
+        double t = double(i) / y.size();
+        y[i] = std::sin(4 * M_PI * t) + 2 * t * t + (t > 0.6 ? 0.5 : 0) + noise(gen);
+    }
+    auto x1 = wavelet_denoise(y, wavelet::symlet<double>(8));                 // sym8, Wiener
+    auto x2 = wavelet_denoise(y, wavelet::daubechies<double>(4), threshold_rule::sure, 0.1);
+    auto x3 = wavelet_denoise(y);                                             // wavelet and rule by CV
+    auto x4 = denoise(y);                                                     // wavelet CV or trend filter, by CV score
+
+[h4 Symlets]
+
+`symlet_scaling_filter<Real, p>()` returns the least-asymmetric Daubechies filter with /p/ vanishing moments, with 75 significant digits,
+in the orientation of `daubechies_scaling_filter`. Of the 2[super /k/] spectral factorizations (one root from each reciprocal pair),
+it is the one whose phase is closest to linear in least squares over [0, [pi]]. For /p/ = 7 and 10 this is a different and more symmetric filter than
+PyWavelets' sym7 and sym10; for the other /p/ the filters agree with PyWavelets'. For /p/ = 2, 3 the symlet is the Daubechies filter.
+
+[h4 Errors]
+
+A __domain_error is raised if /p/ is outside [2, 10], if the input has fewer than 4/p/ - 1 samples (14 for the cross-validated
+functions), if [sigma] is negative or infinite, if the rule is unknown, if `levels` exceeds what /n/ allows, or if the wavelet is default-constructed. An __evaluation_error is raised if the boundary rows cannot be generated. When the policy does not throw, the returned container is filled with
+the error handler's result.
+
+[h4 Accuracy and Complexity]
+
+The transform is orthogonal to a few [epsilon] for every family and length. `float` data is processed in `double`, as by `trend_filter`;
+other types are processed natively. The transform costs /O/(/pn/). Boundary rows are generated on first use (about a millisecond in double)
+and kept per wavelet: those of all /n/ = /m/ 2[super /L/] and of the 16 most recently used other parity sequences. The cross-validated
+functions cost about 200 transforms of /n/\/2 samples, plus the trend filter for `denoise`; see `reporting/performance/wavelet_denoise_performance.cpp`.
+
+[heading References]
+
+* A. Cohen, I. Daubechies and P. Vial, ['Wavelets on the interval and fast wavelet transforms], Applied and Computational Harmonic Analysis 1 (1993), 54-81, [@https://doi.org/10.1006/acha.1993.1005 doi:10.1006/acha.1993.1005].
+* I. M. Johnstone and B. W. Silverman, ['Needles and straw in haystacks: empirical Bayes estimates of possibly sparse sequences], Annals of Statistics 32 (2004), 1594-1649, [@https://doi.org/10.1214/009053604000000030 doi:10.1214/009053604000000030].
+* I. M. Johnstone and B. W. Silverman, ['Empirical Bayes selection of wavelet thresholds], Annals of Statistics 33 (2005), 1700-1752, [@https://doi.org/10.1214/009053605000000345 doi:10.1214/009053605000000345].
+* D. L. Donoho and I. M. Johnstone, ['Adapting to unknown smoothness via wavelet shrinkage], Journal of the American Statistical Association 90 (1995), 1200-1224, [@https://doi.org/10.1080/01621459.1995.10476626 doi:10.1080/01621459.1995.10476626].
+* S. G. Chang, B. Yu and M. Vetterli, ['Adaptive wavelet thresholding for image denoising and compression], IEEE Transactions on Image Processing 9 (2000), 1532-1546, [@https://doi.org/10.1109/83.862633 doi:10.1109/83.862633].
+* S. P. Ghael, A. M. Sayeed and R. G. Baraniuk, ['Improved wavelet denoising via empirical Wiener filtering], Proceedings of SPIE 3169 (1997), 389-399, [@https://doi.org/10.1117/12.292799 doi:10.1117/12.292799].
+* G. P. Nason, ['Wavelet shrinkage using cross-validation], Journal of the Royal Statistical Society B 58 (1996), 463-479, [@https://doi.org/10.1111/j.2517-6161.1996.tb02094.x doi:10.1111/j.2517-6161.1996.tb02094.x].
+* I. Daubechies, ['Ten Lectures on Wavelets], SIAM (1992), section 8.1.
+
+[endsect] [/section:wavelet_denoise Wavelet Denoising]

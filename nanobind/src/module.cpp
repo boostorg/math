@@ -74,7 +74,7 @@ NB_MODULE(_ext, m) {
    bmpy::bind_differentiation(differentiation);
    nb::module_ expansions = submodule(m, "expansions", "Continued fractions and other expansions of a float.");
    bmpy::bind_expansions(expansions);
-   nb::module_ filters = submodule(m, "filters", "Filters: trend filtering.");
+   nb::module_ filters = submodule(m, "filters", "Filters: trend filtering and wavelet denoising.");
    bmpy::bind_filters(filters);
 #ifdef BMPY_HAVE_ULPS
    bmpy::bind_ulps(m);
