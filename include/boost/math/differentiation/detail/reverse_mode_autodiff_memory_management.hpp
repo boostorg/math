@@ -214,8 +214,15 @@ class flat_linear_allocator
 public:
   // store vector of unique pointers to arrays
   // to avoid vector reference invalidation
-  using buffer_type = std::array<RealType, buffer_size>;
-  using buffer_ptr = std::unique_ptr<std::array<RealType, buffer_size>>;
+  // Uninitialized storage: elements are constructed by emplace_back. Default-constructing a whole block
+  // would, for the rvar<T, 1> elements of a second-order tape, put buffer_size leaves on the first-order tape.
+  struct buffer_type
+  {
+    alignas(RealType) unsigned char bytes[sizeof(RealType) * buffer_size];
+    RealType& operator[](size_t i) noexcept { return *reinterpret_cast<RealType*>(bytes + sizeof(RealType) * i); }
+    const RealType& operator[](size_t i) const noexcept { return *reinterpret_cast<const RealType*>(bytes + sizeof(RealType) * i); }
+  };
+  using buffer_ptr = std::unique_ptr<buffer_type>;
 
 private:
   std::vector<buffer_ptr> data_;
@@ -241,13 +248,29 @@ public:
   size_t item_id() const noexcept { return total_size_ % buffer_size; }
 
 private:
-  void allocate_buffer()
+  // The storage for element i; blocks are allocated on first use and kept, so a rewound tape reuses them.
+  RealType* slot(size_t i)
   {
-    data_.emplace_back(std::make_unique<buffer_type>());
+    while (i / buffer_size >= data_.size()) {
+      data_.emplace_back(buffer_ptr(new buffer_type));
+    }
+    return &(*data_[i / buffer_size])[i % buffer_size];
+  }
+  // Destroys the elements from n on; their blocks are kept. Checkpoints past n are dropped.
+  void truncate(size_t n)
+  {
+    BOOST_MATH_ASSERT(n <= total_size_);
+    while (!checkpoints_.empty() && checkpoints_.back() > n) {
+      checkpoints_.pop_back();
+    }
+    for (size_t i = n; i < total_size_; ++i) {
+      (*this)[i].~RealType();
+    }
+    total_size_ = n;
   }
 
 public:
-  flat_linear_allocator() { allocate_buffer(); }
+  flat_linear_allocator() { slot(0); }
   flat_linear_allocator(const flat_linear_allocator&) = delete;
   flat_linear_allocator& operator=(const flat_linear_allocator&) = delete;
   flat_linear_allocator(flat_linear_allocator&&) = delete;
@@ -271,15 +294,16 @@ public:
    */
   void clear()
   {
+    destroy_all();
     data_.clear();
     total_size_ = 0;
     checkpoints_.clear();
-    allocate_buffer();
+    slot(0);
   }
 
   // doesn't delete anything, only sets the current index to zero
-  void reset() { total_size_ = 0; }
-  void rewind() { total_size_ = 0; };
+  void reset() { truncate(0); }
+  void rewind() { truncate(0); };
 
   // adds current index as a checkpoint to be able to walk back to
   void add_checkpoint()
@@ -297,10 +321,10 @@ public:
    * */
   void reset_checkpoints() { checkpoints_.clear(); }
 
-  void rewind_to_last_checkpoint() { total_size_ = checkpoints_.back(); }
+  void rewind_to_last_checkpoint() { truncate(checkpoints_.back()); }
   void rewind_to_checkpoint_at(size_t index)
   {
-    total_size_ = checkpoints_[index];
+    truncate(checkpoints_[index]);
   }
 
   void fill(const RealType& val)
@@ -312,34 +336,12 @@ public:
     }
   }
 
-  /** @brief emplaces back object at the end of the
-   * data structure, calls default constructor */
-  iterator emplace_back()
-  {
-    if (item_id() == 0 && total_size_ != 0) {
-      allocate_buffer();
-    }
-    size_t bid = buffer_id();
-    size_t iid = item_id();
-
-    RealType* ptr = &(*data_[bid])[iid];
-    new (ptr) RealType();
-    ++total_size_;
-    return iterator(this, total_size_ - 1);
-  };
-
-  /** @brief, emplaces back object at end of data structure,
+  /** @brief emplaces back object at end of data structure,
    * passes arguments to constructor */
   template<typename... Args>
   iterator emplace_back(Args&&... args)
   {
-    if (item_id() == 0 && total_size_ != 0) {
-      allocate_buffer();
-    }
-    BOOST_MATH_ASSERT(buffer_id() < data_.size());
-    BOOST_MATH_ASSERT(item_id() < buffer_size);
-    RealType* ptr = &(*data_[buffer_id()])[item_id()];
-    new (ptr) RealType(std::forward<Args>(args)...);
+    new (slot(total_size_)) RealType(std::forward<Args>(args)...);
     ++total_size_;
     return iterator(this, total_size_ - 1);
   }
@@ -348,66 +350,18 @@ public:
   template<size_t n>
   iterator emplace_back_n()
   {
-    size_t bid = buffer_id();
-    size_t iid = item_id();
-    if (iid + n < buffer_size) {
-      RealType* ptr = &(*data_[bid])[iid];
-      for (size_t i = 0; i < n; ++i) {
-        new (ptr + i) RealType();
-      }
-      total_size_ += n;
-      return iterator(this, total_size_ - n, total_size_ - n, total_size_);
-    } else {
-      size_t allocs_in_curr_buffer = buffer_size - iid;
-      size_t allocs_in_next_buffer = n - (buffer_size - iid);
-      RealType* ptr = &(*data_[bid])[iid];
-      for (size_t i = 0; i < allocs_in_curr_buffer; ++i) {
-        new (ptr + i) RealType();
-      }
-      allocate_buffer();
-      bid = data_.size() - 1;
-      iid = 0;
-      total_size_ += n;
-
-      RealType* ptr2 = &(*data_[bid])[iid];
-      for (size_t i = 0; i < allocs_in_next_buffer; i++) {
-        new (ptr2 + i) RealType();
-      }
-      return iterator(this, total_size_ - n, total_size_ - n, total_size_);
-    }
+    return emplace_back_n(n);
   }
   /** @brief default constructs n objects at end of
    * data structure, n known at run time
    */
   iterator emplace_back_n(size_t n)
   {
-    size_t bid = buffer_id();
-    size_t iid = item_id();
-    if (iid + n < buffer_size) {
-      RealType* ptr = &(*data_[bid])[iid];
-      for (size_t i = 0; i < n; ++i) {
-        new (ptr + i) RealType();
-      }
-      total_size_ += n;
-      return iterator(this, total_size_ - n, total_size_ - n, total_size_);
-    } else {
-      size_t allocs_in_curr_buffer = buffer_size - iid;
-      size_t allocs_in_next_buffer = n - (buffer_size - iid);
-      RealType* ptr = &(*data_[bid])[iid];
-      for (size_t i = 0; i < allocs_in_curr_buffer; ++i) {
-        new (ptr + i) RealType();
-      }
-      allocate_buffer();
-      bid = data_.size() - 1;
-      iid = 0;
-      total_size_ += n;
-
-      RealType* ptr2 = &(*data_[bid])[iid];
-      for (size_t i = 0; i < allocs_in_next_buffer; i++) {
-        new (ptr2 + i) RealType();
-      }
-      return iterator(this, total_size_ - n, total_size_ - n, total_size_);
+    size_t first = total_size_;
+    for (size_t i = 0; i < n; ++i) {
+      emplace_back();
     }
+    return iterator(this, first, first, total_size_);
   }
 
   /** @brief number of elements */

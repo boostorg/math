@@ -128,10 +128,99 @@ void flat_linear_allocator_test_checkpointing()
   CHECK_EQUAL(float_allocator.capacity(), 2 * buffer_size);
 }
 
+template <class T>
+void flat_linear_allocator_test_block_reuse()
+{
+  constexpr size_t buffer_size = 16;
+  rdiff_detail::flat_linear_allocator<T, buffer_size> a{};
+  // A rewound allocator refills its blocks instead of allocating new ones.
+  for (int cycle = 0; cycle < 4; ++cycle) {
+    if (cycle % 2 == 0) {
+      for (size_t i = 0; i < 2 * buffer_size + 1; ++i) {
+        a.emplace_back(T(i));
+      }
+    } else {
+      auto it = a.emplace_back_n(2 * buffer_size + 1);
+      for (size_t i = 0; i < 2 * buffer_size + 1; ++i) {
+        *(it + i) = T(i);
+      }
+    }
+    CHECK_EQUAL(a.capacity(), 3 * buffer_size);
+    for (size_t i = 0; i < a.size(); ++i) {
+      CHECK_EQUAL(a[i], T(i));
+    }
+    a.rewind();
+  }
+  // emplace_back_n ending on a block boundary allocates no extra block, and can span several blocks.
+  a.clear();
+  a.emplace_back_n(buffer_size);
+  CHECK_EQUAL(a.capacity(), buffer_size);
+  a.emplace_back(T(-1));
+  auto it = a.emplace_back_n(2 * buffer_size + 3);
+  for (size_t i = 0; i < 2 * buffer_size + 3; ++i) {
+    *(it + i) = T(i);
+  }
+  for (size_t i = 0; i < 2 * buffer_size + 3; ++i) {
+    CHECK_EQUAL(a[buffer_size + 1 + i], T(i));
+  }
+  CHECK_EQUAL(a.capacity(), 4 * buffer_size);
+}
+
+struct counted
+{
+  static int live;
+  counted() { ++live; }
+  counted(const counted&) = delete;
+  ~counted() { --live; }
+};
+int counted::live = 0;
+
+// Rewinding destroys the discarded elements, and destruction the rest.
+void flat_linear_allocator_test_destruction()
+{
+  {
+    rdiff_detail::flat_linear_allocator<counted, 16> a{};
+    a.emplace_back_n(20);
+    a.add_checkpoint();
+    a.emplace_back_n(5);
+    a.rewind_to_last_checkpoint();
+    CHECK_EQUAL(counted::live, 20);
+    a.emplace_back_n(7);
+    a.rewind();
+    CHECK_EQUAL(counted::live, 0);
+    a.emplace_back_n(3);
+  }
+  CHECK_EQUAL(counted::live, 0);
+  {
+    rdiff_detail::flat_linear_allocator<counted, 16> a{};
+    a.emplace_back_n(2);
+    a.add_checkpoint();
+    a.emplace_back_n(3);
+    a.add_checkpoint();
+    a.rewind_to_checkpoint_at(0);
+    a.rewind_to_last_checkpoint();
+    CHECK_EQUAL(a.size(), size_t(2));
+    CHECK_EQUAL(counted::live, 2);
+  }
+  CHECK_EQUAL(counted::live, 0);
+}
+
+template <class T>
+void second_order_tape_adds_no_first_order_nodes()
+{
+  auto& tape1 = rdiff::get_active_tape<T, 1>();
+  auto before = tape1.end() - tape1.begin();
+  (void)rdiff::get_active_tape<T, 2>();
+  CHECK_EQUAL(tape1.end() - tape1.begin(), before);
+}
+
 int main()
 {
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { flat_linear_allocator_constructors<typename decltype(t)::type>(); });
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { flat_linear_allocator_test_emplace<typename decltype(t)::type>(); });
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { flat_linear_allocator_test_checkpointing<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, boost::mp11::mp_list<float, double, cpp_bin_float_50>>>([](auto t) { flat_linear_allocator_test_block_reuse<typename decltype(t)::type>(); });
+   flat_linear_allocator_test_destruction();
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, boost::mp11::mp_list<float, double, cpp_bin_float_50>>>([](auto t) { second_order_tape_adds_no_first_order_nodes<typename decltype(t)::type>(); });
    return boost::math::test::report_errors();
 }
