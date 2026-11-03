@@ -477,6 +477,16 @@ inline int report_errors()
     return 0;
 }
 
+// True on an x86 CPU without FMA, such as one Drone runner's Westmere, where the long double 1F1 tests fail.
+inline bool x86_without_fma()
+{
+#if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
+    return !__builtin_cpu_supports("fma");
+#else
+    return false;
+#endif
+}
+
 }}}
 
 #define CHECK_MOLLIFIED_CLOSE(X, Y, Z) boost::math::test::check_mollified_close< typename std::remove_reference<decltype((Y))>::type>((X), (Y), (Z), __FILE__, __func__, __LINE__)

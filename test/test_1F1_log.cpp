@@ -28,7 +28,8 @@ int main()
 #endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #if (!defined(TEST) || (TEST == 4)) && (DBL_MAX_EXP != LDBL_MAX_EXP)
-   test_spots(0.0L, "long double");
+   if (!boost::math::test::x86_without_fma())
+      test_spots(0.0L, "long double");
 #endif
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #if !defined(TEST) || (TEST == 5)
