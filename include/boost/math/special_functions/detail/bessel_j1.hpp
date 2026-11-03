@@ -54,24 +54,24 @@ BOOST_MATH_GPU_ENABLED T bessel_j1(T x)
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.0))
     };
     BOOST_MATH_STATIC const T P2[] = {
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -1.7527881995806511112e+16)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.6608531731299018674e+15)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -3.6658018905416665164e+13)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 3.5580665670910619166e+11)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -1.8113931269860667829e+09)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 5.0793266148011179143e+06)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -7.5023342220781607561e+03)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 4.6179191852758252278e+00))
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.3666474792490377976e-04)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -1.1739337553000980083e-04)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 3.6996819525924818439e-05)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -5.6906830700564396964e-06)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 4.6473431417837220087e-07)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -1.9632314095268544971e-08)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 3.4394092003853731357e-10)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.0))
     };
     BOOST_MATH_STATIC const T Q2[] = {
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.7253905888447681194e+18)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.7128800897135812012e+16)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 8.4899346165481429307e+13)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 2.7622777286244082666e+11)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 6.4872502899596389593e+08)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.1267125065029138050e+06)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.3886978985861357615e+03)),
-         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.0))
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.0)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 2.3784490049134217202e-01)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 2.8072414171777976006e-02)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 2.1546418184570793097e-03)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.1762044285624502458e-04)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 4.6351157514808773819e-06)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.2428400486870120558e-07)),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.7875111602742036406e-09))
     };
     BOOST_MATH_STATIC const T PC[] = {
         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -4.4357578167941278571e+06)),
@@ -114,6 +114,9 @@ BOOST_MATH_GPU_ENABLED T bessel_j1(T x)
     BOOST_MATH_STATIC const T x2  =  static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 7.0155866698156187535e+00));
     BOOST_MATH_STATIC const T x11 =  static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 9.810e+02));
     BOOST_MATH_STATIC const T x12 =  static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -3.2527979248768438556e-04));
+    // x3 = sqrt of the zero of the original P2 near j(1,1)^2 (= j(1,1) to 19 digits), divided out of P2 below
+    BOOST_MATH_STATIC const T x3  =  static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 3.8317059702075123161e+00));
+    BOOST_MATH_STATIC const T x32 =  static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -3.2527979248768386597e-04));
     BOOST_MATH_STATIC const T x21 =  static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.7960e+03));
     BOOST_MATH_STATIC const T x22 =  static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -3.8330184381246462950e-05));
 
@@ -138,10 +141,11 @@ BOOST_MATH_GPU_ENABLED T bessel_j1(T x)
     }
     else if (w <= 8)                  // w in (4, 8]
     {
-        T y = x * x;
+        // The original P2/Q2 in x^2, rewritten exactly (no refit) in t = (x^2 - 40) / 24 in [-1, 1] to avoid cancellation
+        T t = (x * x - 40) / 24;
         BOOST_MATH_ASSERT(sizeof(P2) == sizeof(Q2));
-        r = evaluate_rational(P2, Q2, y);
-        factor = w * (w + x2) * ((w - x21/256) - x22);
+        r = evaluate_rational(P2, Q2, t);
+        factor = w * (w + x2) * ((w - x21/256) - x22) * (w + x3) * ((w - x11/256) - x32);
         value = factor * r;
     }
     else                                // w in (8, \infty)
