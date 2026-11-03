@@ -6,8 +6,9 @@
 // one-dimensional minimizer. Each returns an OptimizeResult. The derivative-free ones search the box
 // [lower_bounds, upper_bounds] and call f from their own worker threads, so the GIL is released for the run and
 // taken for each call; an exception raised by f cancels the run and is re-raised when it returns. The gradient
-// ones (gradient_descent, nesterov, lbfgs) take the gradient from Python, through their policy parameters, in
-// place of the reverse-mode autodiff of the C++ defaults; they run with the GIL held.
+// ones (gradient_descent, nesterov, lbfgs, trust_region_newton) take the gradient, and the Hessian, from Python,
+// through their policy parameters, in place of the reverse-mode autodiff of the C++ defaults; they run with the GIL
+// held.
 
 #include "bindings.hpp"
 
@@ -18,6 +19,7 @@
 #include <boost/math/optimization/minimizer.hpp>
 #include <boost/math/optimization/multilevel_coordinate_search.hpp>
 #include <boost/math/optimization/random_search.hpp>
+#include <boost/math/optimization/trust_region_newton.hpp>
 #include <boost/math/optimization/turbo.hpp>
 #include <boost/math/tools/minima.hpp>
 
@@ -25,6 +27,7 @@
 #include <nanobind/stl/vector.h>
 
 #include <atomic>
+#include <cstring>
 #include <cstdint>
 #include <exception>
 #include <limits>
@@ -184,14 +187,54 @@ struct gradient_policy
    }
 };
 
-// minimize(opt) until the gradient's 2-norm is below tolerance, or max_iterations steps.
+// Hessian-vector products from hess(x), an n x n matrix, evaluated once per x.
+struct hessian_policy
+{
+   nb::object hess;
+   vector x, h;
+
+   void operator()(differentiable*, vector const& x0, vector const& v, vector& hv)
+   {
+      const std::size_t n = x0.size();
+      // Bitwise, so that a NaN argument matches itself.
+      if (h.empty() || std::memcmp(x.data(), x0.data(), n * sizeof(double)) != 0)
+      {
+         nb::object a = numpy().attr("asarray")(hess(vector_to_array(x0)), nb::arg("dtype") = numpy().attr("float64"));
+         auto view = nb::cast<nb::ndarray<const double, nb::ndim<2>, nb::device::cpu>>(a);
+         if (view.shape(0) != n || view.shape(1) != n)
+         {
+            throw nb::value_error("the Hessian must be a square 2D array of the length of x");
+         }
+         h.resize(n * n);
+         for (std::size_t i = 0; i < n; ++i)
+         {
+            for (std::size_t j = 0; j < n; ++j)
+            {
+               h[i * n + j] = view(i, j);
+            }
+         }
+         x = x0;
+      }
+      hv.assign(n, 0.0);
+      for (std::size_t i = 0; i < n; ++i)
+      {
+         for (std::size_t j = 0; j < n; ++j)
+         {
+            hv[i] += h[i * n + j] * v[j];
+         }
+      }
+   }
+};
+
+// minimize(opt) until the gradient's 2-norm is below tolerance, or max_iterations steps. Unless
+// at_x, objective_value() is f before the last step.
 template <class Optimizer>
-nb::object run_gradient(Optimizer& opt, differentiable& d, vector const& x, double tolerance, std::size_t max_iterations)
+nb::object run_gradient(Optimizer& opt, differentiable& d, vector const& x, double tolerance, std::size_t max_iterations,
+                        bool at_x = false)
 {
    auto r = bo::minimize(opt, bo::unconstrained_policy<vector>{}, bo::gradient_norm_convergence_policy<double>(tolerance),
                          bo::max_iter_termination_policy(max_iterations), false);
-   // objective_value() is f before the last step.
-   double fun = d.call(x, nullptr);
+   double fun = at_x ? opt.objective_value() : d.call(x, nullptr);
    return optimize_result(vector_to_array(x), fun, d.nfev, r.num_iter, r.converged);
 }
 
@@ -392,6 +435,23 @@ void bind_optimization(nb::module_& m)
       nb::sig("def lbfgs(f, x0, /, grad=None, *, m=10, tolerance=0.001, max_iterations=100000)"),
       "Minimizes f from x0 by L-BFGS, with memory m and a strong Wolfe line search." BMPY_GRADIENT_DOC
       BMPY_URL("gd_opt/lbfgs"));
+
+   m.def("trust_region_newton", [](nb::callable f, vector x, nb::object grad, nb::object hess, double initial_radius,
+                                   double tolerance, std::size_t max_iterations) {
+      if (hess.is_none())
+      {
+         throw nb::value_error("trust_region_newton: hess is required");
+      }
+      differentiable d{f, grad};
+      auto opt = bo::make_trust_region_newton(&d, x, initial_radius, no_initialization{}, value_policy{}, gradient_policy{},
+                                              hessian_policy{hess, {}, {}});
+      return run_gradient(opt, d, x, tolerance, max_iterations, true);
+   }, arg(), arg(), arg("grad") = nb::none(), arg("hess") = nb::none(), nb::kw_only(), arg("initial_radius") = 1.0,
+      arg("tolerance") = 1e-3, arg("max_iterations") = 100000,
+      nb::sig("def trust_region_newton(f, x0, /, grad=None, hess=None, *, initial_radius=1.0, tolerance=0.001, max_iterations=100000)"),
+      "Minimizes f from x0 by a trust-region Newton method with Steihaug-Toint conjugate gradients; hess(x) is the "
+      "Hessian, a 2D array." BMPY_GRADIENT_DOC
+      BMPY_URL("gd_opt/trust_region_newton"));
 
    m.def("brent", [](nb::callable f, double a, double b, int bits, std::uintmax_t max_iterations) {
       if (!(a < b))

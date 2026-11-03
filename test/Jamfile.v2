@@ -1451,6 +1451,7 @@ test-suite gradient_based_optimizers
         [ run test_gradient_descent_optimizer.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
         [ run test_nesterov_optimizer.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
         [ run test_lbfgs.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
+        [ run test_trust_region_newton.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
     ;
 # BEGIN AUTODIFF LONG RUNNING TESTS
 test-suite autodiff-long-running-tests

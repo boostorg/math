@@ -16,22 +16,36 @@ namespace optimization {
 
 namespace rdiff = BOOST_MATH_NAMESPACE::differentiation::reverse_mode;
 
+/** @brief> applies f to the active tapes of orders Order, Order - 1, ..., 1
+ */
+template<typename RealType, class F>
+void
+for_each_tape(F&&, std::integral_constant<std::size_t, 0>)
+{
+}
+template<typename RealType, class F, std::size_t Order>
+void
+for_each_tape(F&& f, std::integral_constant<std::size_t, Order>)
+{
+  f(rdiff::get_active_tape<RealType, Order>());
+  for_each_tape<RealType>(f, std::integral_constant<std::size_t, Order - 1>{});
+}
 /******************************************************************/
 /**
  * @brief> function evaluation policy for reverse mode autodiff
  * @arg objective> objective function to evaluate
  * @arg x> argument list
  */
-template<typename RealType>
+template<typename RealType, std::size_t Order = 1>
 struct reverse_mode_function_eval_policy
 {
   template<typename Objective, class ArgumentContainer>
-  rdiff::rvar<RealType, 1> operator()(Objective&& objective,
-                                      ArgumentContainer& x)
+  rdiff::rvar<RealType, Order> operator()(Objective&& objective,
+                                          ArgumentContainer& x)
   {
-    auto& tape = rdiff::get_active_tape<RealType, 1>();
-    tape.zero_grad();
-    tape.rewind_to_last_checkpoint();
+    rdiff::get_active_tape<RealType, Order>().zero_grad();
+    for_each_tape<RealType>([](auto& tape) { tape.rewind_to_last_checkpoint(); },
+                            std::integral_constant<std::size_t, Order>{});
 
     return objective(x);
   }
@@ -46,7 +60,7 @@ struct reverse_mode_function_eval_policy
  *                    done in tandem
  * @arg obj_v> reference to variable inside gradient class
  */
-template<typename RealType>
+template<typename RealType, std::size_t Order = 1>
 struct reverse_mode_gradient_evaluation_policy
 {
   template<class Objective,
@@ -59,31 +73,72 @@ struct reverse_mode_gradient_evaluation_policy
                   std::vector<RealType>& g)
   {
     // compute objective via eval policy that takes care of tape
-    rdiff::rvar<RealType, 1> v = f_eval_pol(obj_f, x);
+    rdiff::rvar<RealType, Order> v = f_eval_pol(obj_f, x);
+    // For Order > 1 the adjoints of x are rvars on the rewound lower order
+    // tape: give them fresh nodes before accumulating into them.
+    for (auto& xi : x) {
+      xi.adjoint() = typename std::decay<decltype(xi.adjoint())>::type(RealType(0));
+    }
     v.backward();
     obj_v = v.item();
     g.resize(x.size());
 
     // copy gradients into gradient vector
     for (size_t i = 0; i < x.size(); ++i) {
-      g[i] = x[i].adjoint();
+      g[i] = static_cast<RealType>(x[i].adjoint());
+    }
+  }
+};
+
+/**
+ * @brief> Hessian-vector product policy for reverse mode autodiff
+ *
+ * Computes Hv = H(x) v at the x of the last gradient evaluation by
+ * reverse_mode_gradient_evaluation_policy<RealType, 2>: one reverse sweep of
+ * the first order tape, which records the gradient, seeded with v.
+ */
+template<typename RealType>
+struct reverse_mode_hessian_vector_product_policy
+{
+  template<class Objective, class ArgumentContainer>
+  void operator()(Objective&& /*obj_f*/,
+                  ArgumentContainer& x,
+                  const std::vector<RealType>& v,
+                  std::vector<RealType>& Hv)
+  {
+    // Only the nodes recorded since the evaluation, and the arguments,
+    // take part in the sweep.
+    auto& tape = rdiff::get_active_tape<RealType, 1>();
+    for (auto it = tape.last_checkpoint(); it != tape.end(); ++it) {
+      *it->get_adjoint_ptr() = RealType(0);
+    }
+    for (size_t i = 0; i < x.size(); ++i) {
+      x[i].get_value().adjoint() = RealType(0);
+      x[i].adjoint().adjoint() += v[i];
+    }
+    for (auto it = tape.end(), first = tape.last_checkpoint(); it != first;) {
+      (--it)->backward();
+    }
+    Hv.resize(x.size());
+    for (size_t i = 0; i < x.size(); ++i) {
+      Hv[i] = x[i].get_value().adjoint();
     }
   }
 };
 /******************************************************************
  * init policies
  */
-template<typename RealType>
+template<typename RealType, std::size_t Order = 1>
 struct tape_initializer_rvar
 {
     template<class ArgumentContainer>
     void operator()(ArgumentContainer& /*x*/) const noexcept
     {
         static_assert(std::is_same<typename ArgumentContainer::value_type,
-                                   rdiff::rvar<RealType, 1>>::value,
-                      "ArgumentContainer::value_type must be rdiff::rvar<RealType,1>");
-        auto& tape = rdiff::get_active_tape<RealType, 1>();
-        tape.add_checkpoint();
+                                   rdiff::rvar<RealType, Order>>::value,
+                      "ArgumentContainer::value_type must be rdiff::rvar<RealType,Order>");
+        for_each_tape<RealType>([](auto& tape) { tape.add_checkpoint(); },
+                                std::integral_constant<std::size_t, Order>{});
     }
 };
 
