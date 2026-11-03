@@ -1,0 +1,107 @@
+[/
+  Copyright Nick Thompson 2026
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:trend_filter Trend Filtering]
+
+[h4 Synopsis]
+
+    #include <boost/math/filters/trend_filter.hpp>
+
+    namespace boost::math::filters {
+
+    // The fit at order k in {0, 1, 2} and lambda >= 0.
+    template <class RandomAccessContainer>
+    RandomAccessContainer trend_filter(const RandomAccessContainer& v, int k,
+                                       const typename RandomAccessContainer::value_type& lambda);
+
+    // k and lambda chosen by cross-validation.
+    template <class RandomAccessContainer>
+    RandomAccessContainer trend_filter(const RandomAccessContainer& v);
+
+    } // namespaces
+
+[h4 Description]
+
+Trend filtering denoises equally spaced samples /y/[sub 0], ..., /y/[sub n-1] by solving
+
+[expression ['x = argmin[sub x] [frac12] [sum] (y[sub i] - x[sub i])[super 2] + [lambda] [sum] |(D[super k+1]x)[sub i]|]]
+
+where /D/[super k+1] takes (/k/+1)-th differences. The penalty makes the (/k/+1)-th differences of /x/ sparse,
+so the fit is piecewise polynomial of degree /k/ with knots chosen by the data:
+
+* /k/ = 0: piecewise constant (total-variation denoising), for signals with jumps;
+* /k/ = 1: piecewise linear, for kinks;
+* /k/ = 2: piecewise quadratic, for smooth signals with varying smoothness.
+
+Larger [lambda] gives fewer knots. [lambda] = 0 returns the data, and every [lambda] at or above some [lambda][sub max]
+returns the least-squares fit by a polynomial of degree /k/.
+Unlike splines with fixed knots and other linear smoothers, trend filtering adapts to local smoothness: it attains the
+minimax rate over functions whose /k/-th derivative has bounded variation, which linear smoothers do not (Tibshirani 2014).
+
+The fit is translation equivariant (adding a polynomial of degree at most /k/ to the data adds it to the fit)
+and scale equivariant (scaling the data and [lambda] by /c/ scales the fit by /c/).
+
+[h4 Choosing k and [lambda]]
+
+The one-argument overload chooses /k/ in {0, 1, 2} and [lambda] by two-fold cross-validation on the
+even- and odd-indexed samples (Nason 1996): each half is filtered, the other half is predicted by
+averaging neighbouring fitted values, and the squared prediction error is minimized. [lambda] is
+searched on a logarithmic scale in units of a robust noise estimate (the median absolute deviation of the
+second differences), with a coarse grid of six values per /k/, at most one decade beyond the grid if the best value is at its end,
+and two bisections; the data is then filtered once at the chosen /k/ and [lambda]. If the noise estimate is zero (more than half
+of the second differences are equal, as for noise-free piecewise linear data), the data is returned unchanged.
+With an odd number of samples the even-indexed half has the extra one.
+
+Cross-validation assumes the noise is independent from sample to sample. With correlated noise it
+tends to choose too small a [lambda] and the fit follows the noise.
+
+    #include <boost/math/filters/trend_filter.hpp>
+    #include <cmath>
+    #include <random>
+    #include <vector>
+
+    std::mt19937_64 gen(42);
+    std::normal_distribution<double> noise(0, 0.2);
+    std::vector<double> y(1024);
+    for (std::size_t i = 0; i < y.size(); ++i) {
+        double t = double(i) / y.size();
+        y[i] = (t < 0.5 ? std::abs(t - 0.25) : 0.5 - t) + noise(gen);  // a kink and a jump
+    }
+    // fixed order and lambda:
+    std::vector<double> x1 = boost::math::filters::trend_filter(y, 1, 10.0);
+    // order and lambda by cross-validation:
+    std::vector<double> x = boost::math::filters::trend_filter(y);
+
+[h4 Errors]
+
+A __domain_error is raised if /k/ is not 0, 1 or 2, if [lambda] is negative, infinite or NaN, or if there are
+fewer than /k/ + 2 samples (fewer than 4 for the cross-validated filter). An __evaluation_error is raised
+if the interior-point method fails to converge. When the error policy does not throw, the returned container is filled with
+the error handler's result.
+
+[h4 Algorithms and Complexity]
+
+For /k/ = 0 the fit is computed exactly by Condat's direct algorithm, in /O(n)/ operations in practice.
+For /k/ = 1 and 2 the dual problem, a quadratic program with box constraints, is solved by the primal-dual
+interior-point method of Kim, Koh, Boyd and Gorinevsky (2009). Each iteration is a banded Cholesky
+factorization, /O(n)/, and 20 to 40 iterations are typical. The least-squares polynomial of degree /k/, which
+the penalty does not see, is removed first and added back at the end. The iteration stops when the duality gap is below
+[radic][epsilon] times the sum of squares of what is left. When [lambda] is large, rounding makes the gap impossible to evaluate to that accuracy;
+then the iteration stops when the gap of the barrier problem is below that bound and a step of at least half the Newton step changes the fit by less than it.
+`float` data is filtered in `double`.
+
+The cross-validated filter costs about 60 fits on /n/\/2 samples and one on /n/, so it is also /O(n)/, with a larger constant.
+Timings are measured by `reporting/performance/trend_filter_performance.cpp`.
+
+[heading References]
+
+* R. J. Tibshirani, ['Adaptive piecewise polynomial estimation via trend filtering], Annals of Statistics 42 (2014), 285-323, [@https://doi.org/10.1214/13-AOS1189 doi:10.1214/13-AOS1189].
+* S.-J. Kim, K. Koh, S. Boyd and D. Gorinevsky, ['\u2113[sub 1] trend filtering], SIAM Review 51 (2009), 339-360, [@https://doi.org/10.1137/070690274 doi:10.1137/070690274].
+* L. Condat, ['A direct algorithm for 1-D total variation denoising], IEEE Signal Processing Letters 20 (2013), 1054-1057, [@https://doi.org/10.1109/LSP.2013.2278339 doi:10.1109/LSP.2013.2278339].
+* G. P. Nason, ['Wavelet shrinkage using cross-validation], Journal of the Royal Statistical Society B 58 (1996), 463-479, [@https://doi.org/10.1111/j.2517-6161.1996.tb02094.x doi:10.1111/j.2517-6161.1996.tb02094.x].
+
+[endsect] [/section:trend_filter Trend Filtering]

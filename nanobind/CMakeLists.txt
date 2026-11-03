@@ -60,6 +60,7 @@ set(BOOST_MATH_NB_SOURCES
   src/differentiation.cpp
   src/expansions.cpp
   src/naive_monte_carlo.cpp
+  src/filters.cpp
 )
 
 nanobind_add_module(_ext NOMINSIZE STABLE_ABI ${BOOST_MATH_NB_SOURCES})
@@ -124,7 +125,7 @@ install(FILES boost/math/__init__.py DESTINATION boost/math)
 # sys.modules, so each has its own stubgen run.
 set(marker MARKER_FILE "${pkg_dir}/py.typed")
 set(stubs "${pkg_dir}/py.typed")
-foreach(module _ext distributions quadrature optimize fft roots statistics interpolators constants differentiation expansions)
+foreach(module _ext distributions quadrature optimize fft roots statistics interpolators constants differentiation expansions filters)
   nanobind_add_stub(boost_math_stub_${module} MODULE boost.math.${module} OUTPUT "${pkg_dir}/${module}.pyi" ${marker}
     PYTHON_PATH "${CMAKE_CURRENT_BINARY_DIR}" PATTERN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/stub_patterns.txt"
     DEPENDS _ext boost_math_py)

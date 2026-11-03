@@ -35,6 +35,7 @@ void bind_daubechies(nb::module_& m);
 void bind_constants(nb::module_& m);
 void bind_differentiation(nb::module_& m);
 void bind_expansions(nb::module_& m);
+void bind_filters(nb::module_& m);
 void bind_naive_monte_carlo(nb::module_& m);
 // Only with Boost.Multiprecision and zlib; see CMakeLists.txt.
 void bind_ulps(nb::module_& m);
