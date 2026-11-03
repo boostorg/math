@@ -68,8 +68,11 @@ This occurs only when `b` is an integer <= 0.
 [h4 Implementation]
 
 The function is implemented via its defining series wherever convergent.
+For binary types, where the series alternates (z < 0, or b < 0) the rounding errors of its terms and of their sum
+are carried along with error-free transforms, which bounds the error by about [epsilon][super 2] times the largest term.
+This is used while -z < digits[super 2]/16 or |z/b| < digits/8, and one of the Bessel function relations beyond.
 
-For a divergent series we use the continued fraction as long as the result is not too small:
+For other types, for a divergent series we use the continued fraction as long as the result is not too small:
 
 [equation hyper_0f1_cf]
 
