@@ -152,6 +152,7 @@ extern "C++" {
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/luroth_expansion.hpp>
 #include <boost/math/tools/minima.hpp>
+#include <boost/math/tools/multivariate_roots.hpp>
 #include <boost/math/tools/norms.hpp>
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/math/tools/polynomial_roots.hpp>

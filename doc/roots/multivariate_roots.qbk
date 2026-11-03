@@ -1,0 +1,164 @@
+[section:multivariate_roots Multivariate Newton and Halley]
+
+[import ../../example/multivariate_roots_ellipse.cpp]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/tools/multivariate_roots.hpp>
+``
+
+   namespace boost { namespace math { namespace tools {
+
+   template <class F, class Container>
+   Container multivariate_newton(F f, Container x, int digits);
+
+   template <class F, class Container>
+   Container multivariate_newton(F f, Container x, int digits, std::uintmax_t& max_iter);
+
+   template <class F, class Container>
+   Container multivariate_halley(F f, Container x, int digits);
+
+   template <class F, class Container>
+   Container multivariate_halley(F f, Container x, int digits, std::uintmax_t& max_iter);
+
+   }}} // namespaces boost::math::tools
+
+[h4 Description]
+
+These functions find a root of a system of /n/ equations in /n/ unknowns, [*F](/x/) = 0 with /x/ in ℝ[super /n/],
+starting from the guess `x`.
+They are the multivariate analogues of `newton_raphson_iterate` and `halley_iterate` of __root_finding_with_derivatives.
+
+* `multivariate_newton` solves /J/(/x/)/a/ = −[*F](/x/) for the Newton step /a/, and converges quadratically.
+* `multivariate_halley` is the multivariate Halley method of Cuyt, which converges cubically.
+With the Newton step /a/ and /b/ = /J/[super −1][*F]″(/x/)\[/a/, /a/\], it updates each component as
+
+[expression /x/[sub /i/] ← /x/[sub /i/] + /a/[sub /i/][super 2] \/ (/a/[sub /i/] + /b/[sub /i/]\/2).]
+
+This is the abstract Padé approximant of order (1, 1) to the inverse of [*F], with the vector operations taken componentwise:
+when /n/ = 1 it is Halley's method.
+One LU factorization of /J/ serves both linear solves, and the method needs [*F]″ only along the direction /a/,
+so the /n/[super 3] entries of the second derivative tensor are never formed.
+
+[variablelist Parameters
+[[F f] [A callable that takes a `Container` /x/ and returns a pair or tuple.
+For Newton it holds [*F](/x/) and the Jacobian /J/(/x/), /J/[sub /ij/] = ∂/F/[sub /i/]\/∂/x/[sub /j/].
+For Halley it holds a third element, a callable `d2` with `d2(v)` = [*F]″(/x/)\[/v/, /v/\],
+the second derivative of /t/ ↦ [*F](/x/ + /t v/) at /t/ = 0; Newton ignores a third element, so one callable serves both.
+[*F](/x/) and `d2(v)` may be any containers with `size()` and `operator[]`.
+/J/ may be a container of rows (`std::vector<std::vector<Real>>`, `std::array<std::array<Real, N>, N>`, ...),
+or a row-major array of /n/[super 2] entries (`std::vector<Real>`, `std::array<Real, N*N>`, ...).]]
+[[Container x] [The initial guess, a `std::vector<Real>`, `std::array<Real, N>`, or similar random access container
+of a floating point type, which may be a multiprecision type.]]
+[[int digits] [The desired number of binary digits of precision.]]
+[[uintmax_t& max_iter] [An optional maximum number of iterations; on exit, the number of iterations performed.
+It is the number of factorizations of /J/, and does not count the line search's evaluations of `f`.]]
+]
+
+The iteration stops when the Newton step /a/ satisfies ‖/a/‖[sub ∞] ≤ 2[super 1−digits] ‖/x/‖[sub ∞]
+(the step is then taken), when [*F](/x/) = 0 exactly, or when `max_iter` iterations have been performed.
+It also stops when steps below √ε‖/x/‖[sub ∞] no longer shrink at all, since they are then rounding noise;
+at a multiple root, where the steps shrink by a constant factor, the iteration goes on.
+As for the scalar functions, the tolerance is relative to /x/, so a root at the origin is approached until
+[*F] underflows to zero.
+
+[h4 Globalization]
+
+Far from a root a full Newton step can increase ‖[*F]‖, so both functions minimize ½‖[*F]‖[super 2] along their steps.
+Newton backtracks along /a/ until the Armijo condition ½‖[*F](/x/ + /t a/)‖[super 2] ≤ (1 − 2×10[super −4] /t/)½‖[*F](/x/)‖[super 2] holds,
+choosing each new /t/ from the quadratic through ½‖[*F]‖[super 2] and its slope at /t/ = 0, kept in \[/t/\/10, /t/\/2\].
+Halley tries its full step first, and if that does not decrease ‖[*F]‖ it takes the backtracking Newton step instead.
+A trial point where [*F] is not finite is treated as an increase, so `f` may return infinities or NaNs outside its domain.
+
+The componentwise division can blow up where /a/[sub /i/] + /b/[sub /i/]\/2 is near zero.
+Cuyt and Rall take 0\/0 as 0 (the Halley component is zero when the Newton component is).
+In addition, where /q/ = 1 + /b/[sub /i/]\/(2/a/[sub /i/]) < 1\/2, so that the Halley component points against the Newton
+component or is more than twice as long, the Newton component /a/[sub /i/] is used in its place.
+Near a root /b/ = /O/(‖/a/‖[super 2]) and /q/ → 1, so this does not affect the cubic convergence.
+
+[h4 Errors]
+
+An __evaluation_error is raised through the default policy (and so is thrown by default) when
+
+* the Jacobian is singular: a pivot of its LU factorization with partial pivoting is not above /n/ε times the largest
+entry of its column,
+* no step along the Newton direction decreases ‖[*F]‖, as happens near a local minimum of ‖[*F]‖ that is not a root
+(where /J/ is singular) or when /J/ is wrong,
+* [*F] is not finite at the initial guess, or [*F], /J/ or `d2(v)` has the wrong size.
+
+A domain error is raised when `x` is empty.
+
+When no step decreases ‖[*F]‖ but the Newton step is below ε[super 1\/3]‖/x/‖[sub ∞], `x` is returned without an error:
+at a local minimum of ‖[*F]‖ that is not a root, /J/ is singular and the Newton step large or undefined, whereas a step
+this small is the rounding noise of an accurate /x/, about cond(/J/)ε‖/x/‖, for cond(/J/) up to ε[super −2\/3]
+(10[super 10] in double precision).
+
+With a policy that does not throw, every component of the result is the value returned by the error handler, NaN by default.
+
+[h4 Supplying the derivatives]
+
+[*F]″(/x/)\[/v/, /v/\] is the second derivative of the univariate function /t/ ↦ [*F](/x/ + /t v/) at /t/ = 0,
+so a single second order forward-mode pass of [link math_toolkit.autodiff autodiff] in the one variable /t/ computes it, for any /n/.
+The example [@../../example/multivariate_roots_ellipse.cpp multivariate_roots_ellipse.cpp] finds the point of an ellipse
+closest to a point /q/: at the closest point /p/, /p/ is on the ellipse and /p/ − /q/ is along the normal:
+
+[multivariate_roots_ellipse_system]
+
+The Jacobian is built one column at a time by first order passes along the coordinate directions, and `d2` is a
+second order pass along `v`, computed only when the solver asks for it:
+
+[multivariate_roots_autodiff]
+
+[multivariate_roots_ellipse_solve]
+
+The closure `d2` may capture whatever it needs from the evaluation at /x/; for the Rosenbrock gradient system
+∇((1 − /x/)[super 2] + 100(/y/ − /x/[super 2])[super 2]) = 0, written out by hand,
+
+   auto f = [](std::vector<double> const& x) {
+      double u = x[0], w = x[1];
+      std::vector<double> F{-2 * (1 - u) - 400 * u * (w - u * u), 200 * (w - u * u)};
+      std::vector<std::vector<double>> J{{2 - 400 * (w - u * u) + 800 * u * u, -400 * u}, {-400 * u, 200.0}};
+      auto d2 = [u](std::vector<double> const& v) {
+         return std::vector<double>{-800 * v[0] * v[1] + 2400 * u * v[0] * v[0], -400 * v[0] * v[0]};
+      };
+      return std::make_tuple(F, J, d2);
+   };
+   std::uintmax_t iterations = 1000;
+   auto x = boost::math::tools::multivariate_halley(f, std::vector<double>{-1.2, 1.0}, 53, iterations);
+
+[h4 Performance and caveats]
+
+A Halley iteration costs one more triangular solve and one evaluation of `d2` than a Newton iteration, and saves
+about a third of the iterations near the root; which is faster overall depends on the cost of `f` and `d2`
+relative to the /O/(/n/[super 3]) factorization.
+Far from the root Halley's steps follow curved valleys better: from the classic start (−1.2, 1), Newton with the
+line search needs 253 iterations on the Rosenbrock gradient system, as its straight steps creep along the valley,
+and Halley needs 68.
+
+Newton's method is invariant under affine changes of the variables /x/ ↦ /Ax/; the multivariate Halley method is not,
+because its update divides componentwise. It is invariant under scaling of the individual variables, and, like Newton,
+under any invertible linear change of the equations [*F] ↦ /B/[*F].
+
+The LU factorization is dense; for large sparse systems, solve with a sparse factorization in a loop of your own.
+The line search guarantees that ‖[*F]‖ decreases, not that the root found is the one nearest the guess.
+
+[h4 References]
+
+* A. Cuyt and P. Van der Cruyssen, ['Abstract Padé approximants for the solution of a system of nonlinear equations],
+Computers & Mathematics with Applications 9 (1983) 617–624.
+* A. Cuyt, ['Numerical stability of the Halley-iteration for the solution of a system of nonlinear equations],
+Mathematics of Computation 38 (1982) 171–179.
+* A. A. M. Cuyt and L. B. Rall, ['Computational implementation of the multivariate Halley method for solving
+nonlinear systems of equations], ACM Transactions on Mathematical Software 11 (1985) 20–36.
+* J. E. Dennis and R. B. Schnabel, ['Numerical Methods for Unconstrained Optimization and Nonlinear Equations],
+SIAM (1996), section 6.3.
+
+[endsect] [/section:multivariate_roots Multivariate Newton and Halley]
+
+[/
+  Copyright 2026 Nick Thompson.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
