@@ -33,8 +33,8 @@ BOOST_MATH_EXPORT template<class Real, class Policy = policies::policy<> >
 class exp_sinh
 {
 public:
-   exp_sinh(size_t max_refinements = 9)
-      : m_imp(std::make_shared<detail::exp_sinh_detail<Real, Policy>>(max_refinements)) {}
+   exp_sinh(size_t max_refinements = 9, bool compensated = false)
+      : m_imp(std::make_shared<detail::exp_sinh_detail<Real, Policy>>(max_refinements, compensated)) {}
 
     template<class F>
     auto integrate(const F& f, Real a, Real b, Real tol = BOOST_MATH_NAMESPACE::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const ->decltype(std::declval<F>()(std::declval<Real>()));

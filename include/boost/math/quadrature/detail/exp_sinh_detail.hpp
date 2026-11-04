@@ -20,6 +20,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/tools/atomic.hpp>
+#include <boost/math/tools/compensated_arithmetic.hpp>
 #include <boost/math/tools/config.hpp>
 
 #ifdef BOOST_MATH_HAS_THREADS
@@ -50,14 +51,62 @@ class exp_sinh_detail
 #endif
       0;
 public:
-    exp_sinh_detail(size_t max_refinements);
+    exp_sinh_detail(size_t max_refinements, bool compensated);
 
     template<class F>
-    auto integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels) const ->decltype(std::declval<F>()(std::declval<Real>()));
+    auto integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels) const ->decltype(std::declval<F>()(std::declval<Real>()))
+    {
+       return m_compensated ? integrate(f, error, L1, function, tolerance, levels, std::true_type()) : integrate(f, error, L1, function, tolerance, levels, std::false_type());
+    }
     template<class F, class Norm>
-    auto integrate(const F& f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels) const ->decltype(std::declval<F>()(std::declval<Real>()));
+    auto integrate(const F& f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels) const ->decltype(std::declval<F>()(std::declval<Real>()))
+    {
+       return m_compensated ? integrate(f, zero, norm, error, L1, function, tolerance, levels, std::true_type()) : integrate(f, zero, norm, error, L1, function, tolerance, levels, std::false_type());
+    }
 
 private:
+    template<class F, class C>
+    auto integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels, C) const ->decltype(std::declval<F>()(std::declval<Real>()));
+    template<class F, class Norm, class C>
+    auto integrate(const F& f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels, C) const ->decltype(std::declval<F>()(std::declval<Real>()));
+
+   // With compensation each sum s has a correction word c of type K which accumulates its rounding errors
+   // (componentwise for complex), and the value is s + c. Without, c is empty and these are the plain operations.
+   struct no_correction
+   {
+      template<class T> explicit no_correction(const T&) {}
+   };
+   // s += y*w:
+   template<class K>
+   static void add(K& s, no_correction&, const K& y, const Real& w) { s += y*w; }
+   template<class K>
+   static void add(K& s, K& c, const K& y, const Real& w)
+   {
+      const K x = y*w;
+      const K t = s + x;
+      c += BOOST_MATH_NAMESPACE::detail::two_sum_error(s, x, t);
+      s = t;
+   }
+   // s += t*h for the sum t with correction t_c, and h a power of 2:
+   template<class K>
+   static void add(K& s, no_correction&, const K& t, const no_correction&, const Real& h) { s += t*h; }
+   template<class K>
+   static void add(K& s, K& c, const K& t, const K& t_c, const Real& h)
+   {
+      add(s, c, t, h);
+      c += t_c*h;
+   }
+   static void scale(no_correction&, const Real&) {}
+   template<class K>
+   static void scale(K& c, const Real& h) { c *= h; }
+   template<class K>
+   static K difference(const K& s0, const no_correction&, const K& s1, const no_correction&) { return s0 - s1; }
+   template<class K>
+   static K difference(const K& s0, const K& c0, const K& s1, const K& c1) { return (s0 - s1) + (c0 - c1); }
+   template<class K>
+   static const K& value(const K& s, const no_correction&) { return s; }
+   template<class K>
+   static K value(const K& s, const K& c) { return s + c; }
    const std::vector<Real>& get_abscissa_row(std::size_t n)const
    {
 #if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_MATH_HAS_THREADS)
@@ -140,6 +189,7 @@ private:
     mutable std::vector<std::vector<Real>> m_abscissas;
     mutable std::vector<std::vector<Real>> m_weights;
     std::size_t                       m_max_refinements;
+    bool                              m_compensated;
 #if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_MATH_HAS_THREADS)
     mutable BOOST_MATH_NAMESPACE::detail::atomic_unsigned_type      m_committed_refinements{};
     mutable std::mutex m_mutex;
@@ -149,17 +199,18 @@ private:
 };
 
 template<class Real, class Policy>
-exp_sinh_detail<Real, Policy>::exp_sinh_detail(size_t max_refinements)
+exp_sinh_detail<Real, Policy>::exp_sinh_detail(size_t max_refinements, bool compensated)
    : m_abscissas(max_refinements), m_weights(max_refinements),
-   m_max_refinements(max_refinements)
+   m_max_refinements(max_refinements), m_compensated(compensated)
 {
    init(std::integral_constant<int, initializer_selector>());
 }
 template<class Real, class Policy>
-template<class F>
-auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels) const ->decltype(std::declval<F>()(std::declval<Real>()))
+template<class F, class C>
+auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels, C) const ->decltype(std::declval<F>()(std::declval<Real>()))
 {
     typedef decltype(f(static_cast<Real>(0))) K;
+    typedef typename std::conditional<C::value, K, no_correction>::type K_c;
     using std::abs;
     using std::floor;
     using std::tanh;
@@ -181,12 +232,13 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
     // Get the party started with two estimates of the integral:
     Real min_abscissa{ 0 }, max_abscissa{ BOOST_MATH_NAMESPACE::tools::max_value<Real>() };
     K I0 = 0;
+    K_c I0_c(0);
     Real L1_I0 = 0;
     for(size_t i = 0; i < m_abscissas[0].size(); ++i)
     {
         K y = f(m_abscissas[0][i]);
         K I0_last = I0;
-        I0 += y*m_weights[0][i];
+        add(I0, I0_c, y, m_weights[0][i]);
         L1_I0 += abs(y)*m_weights[0][i];
         if ((I0_last == I0) && (abs(I0) != 0))
         {
@@ -197,6 +249,7 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
 
     //std::cout << "First estimate : " << I0 << std::endl;
     K I1 = I0;
+    K_c I1_c = I0_c;
     Real L1_I1 = L1_I0;
     bool have_first_j = false;
     std::size_t first_j = 0;
@@ -204,7 +257,7 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
     {
         K y = f(m_abscissas[1][i]);
         K I1_last = I1;
-        I1 += y*m_weights[1][i];
+        add(I1, I1_c, y, m_weights[1][i]);
         L1_I1 += abs(y)*m_weights[1][i];
         if (!have_first_j && (I1_last == I1))
         {
@@ -233,20 +286,24 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
     }
 
     I1 *= half<Real>();
+    scale(I1_c, half<Real>());
     L1_I1 *= half<Real>();
-    Real err = abs(I0 - I1);
+    Real err = abs(difference(I0, I0_c, I1, I1_c));
     //std::cout << "Second estimate: " << I1 << " Error estimate at level " << 1 << " = " << err << std::endl;
 
     size_t i = 2;
     for(; i < m_abscissas.size(); ++i)
     {
         I0 = I1;
+        I0_c = I1_c;
         L1_I0 = L1_I1;
 
         I1 = half<Real>()*I0;
+        scale(I1_c, half<Real>());
         L1_I1 = half<Real>()*L1_I0;
         Real h = static_cast<Real>(1)/static_cast<Real>(1 << i);
         K sum = 0;
+        K_c sum_c(0);
         Real absum = 0;
 
         auto abscissas_row = get_abscissa_row(i);
@@ -260,19 +317,19 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         {
             Real x = abscissas_row[j];
             K y = f(x);
-            sum += y*weight_row[j];
+            add(sum, sum_c, y, weight_row[j]);
             Real abterm0 = abs(y)*weight_row[j];
             absum += abterm0;
         }
 
-        I1 += sum*h;
+        add(I1, I1_c, sum, sum_c, h);
         L1_I1 += absum*h;
-        err = abs(I0 - I1);
+        err = abs(difference(I0, I0_c, I1, I1_c));
         //std::cout << "Estimate:        " << I1 << " Error estimate at level " << i  << " = " << err << std::endl;
         // Use L1_I1 here to make it work with both complex and real valued integrands:
         if (!(BOOST_MATH_NAMESPACE::isfinite)(L1_I1))
         {
-            return static_cast<K>(policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and returned %1%. Please ensure your function evaluates to a finite number over its entire domain.", I1, Policy()));
+            return static_cast<K>(policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and returned %1%. Please ensure your function evaluates to a finite number over its entire domain.", value(I1, I1_c), Policy()));
         }
         if (err <= tolerance*L1_I1)
         {
@@ -295,15 +352,16 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
        *levels = i;
     }
 
-    return I1;
+    return value(I1, I1_c);
 }
 
 template<class Real, class Policy>
-template<class F, class Norm>
-auto exp_sinh_detail<Real, Policy>::integrate(const F& f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels) const ->decltype(std::declval<F>()(std::declval<Real>()))
+template<class F, class Norm, class C>
+auto exp_sinh_detail<Real, Policy>::integrate(const F& f, const decltype(std::declval<F>()(std::declval<Real>()))& zero, Norm norm, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels, C) const ->decltype(std::declval<F>()(std::declval<Real>()))
 {
     const auto magnitude = [&](const decltype(std::declval<F>()(std::declval<Real>()))& value) -> Real { return static_cast<Real>(norm(value)); };
     typedef decltype(f(static_cast<Real>(0))) K;
+    typedef typename std::conditional<C::value, K, no_correction>::type K_c;
     using std::abs;
     using std::floor;
     using std::tanh;
@@ -318,12 +376,13 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, const decltype(std::de
     // Get the party started with two estimates of the integral:
     Real min_abscissa{ 0 }, max_abscissa{ BOOST_MATH_NAMESPACE::tools::max_value<Real>() };
     K I0 = zero;
+    K_c I0_c(zero);
     Real L1_I0 = 0;
     for(size_t i = 0; i < m_abscissas[0].size(); ++i)
     {
         K y = f(m_abscissas[0][i]);
         K I0_last = I0;
-        I0 += y*m_weights[0][i];
+        add(I0, I0_c, y, m_weights[0][i]);
         L1_I0 += magnitude(y)*m_weights[0][i];
         if ((magnitude(I0_last - I0) == 0) && (magnitude(I0) != 0))
         {
@@ -334,6 +393,7 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, const decltype(std::de
 
     //std::cout << "First estimate : " << I0 << std::endl;
     K I1 = I0;
+    K_c I1_c = I0_c;
     Real L1_I1 = L1_I0;
     bool have_first_j = false;
     std::size_t first_j = 0;
@@ -341,7 +401,7 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, const decltype(std::de
     {
         K y = f(m_abscissas[1][i]);
         K I1_last = I1;
-        I1 += y*m_weights[1][i];
+        add(I1, I1_c, y, m_weights[1][i]);
         L1_I1 += magnitude(y)*m_weights[1][i];
         if (!have_first_j && (magnitude(I1_last - I1) == 0))
         {
@@ -370,20 +430,24 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, const decltype(std::de
     }
 
     I1 *= half<Real>();
+    scale(I1_c, half<Real>());
     L1_I1 *= half<Real>();
-    Real err = magnitude(I0 - I1);
+    Real err = magnitude(difference(I0, I0_c, I1, I1_c));
     //std::cout << "Second estimate: " << I1 << " Error estimate at level " << 1 << " = " << err << std::endl;
 
     size_t i = 2;
     for(; i < m_abscissas.size(); ++i)
     {
         I0 = I1;
+        I0_c = I1_c;
         L1_I0 = L1_I1;
 
         I1 = half<Real>()*I0;
+        scale(I1_c, half<Real>());
         L1_I1 = half<Real>()*L1_I0;
         Real h = static_cast<Real>(1)/static_cast<Real>(1 << i);
         K sum = zero;
+        K_c sum_c(zero);
         Real absum = 0;
 
         auto abscissas_row = get_abscissa_row(i);
@@ -397,20 +461,20 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, const decltype(std::de
         {
             Real x = abscissas_row[j];
             K y = f(x);
-            sum += y*weight_row[j];
+            add(sum, sum_c, y, weight_row[j]);
             Real abterm0 = magnitude(y)*weight_row[j];
             absum += abterm0;
         }
 
-        I1 += sum*h;
+        add(I1, I1_c, sum, sum_c, h);
         L1_I1 += absum*h;
-        err = magnitude(I0 - I1);
+        err = magnitude(difference(I0, I0_c, I1, I1_c));
         //std::cout << "Estimate:        " << I1 << " Error estimate at level " << i  << " = " << err << std::endl;
         // Use L1_I1 here to make it work with both complex and real valued integrands:
         if (!(BOOST_MATH_NAMESPACE::isfinite)(L1_I1))
         {
             policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and returned %1%. Please ensure your function evaluates to a finite number over its entire domain.", magnitude(I1), Policy());
-            return I1;
+            return value(I1, I1_c);
         }
         if (err <= tolerance*L1_I1)
         {
@@ -433,7 +497,7 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, const decltype(std::de
        *levels = i;
     }
 
-    return I1;
+    return value(I1, I1_c);
 }
 
 
@@ -703,6 +767,7 @@ BOOST_MATH_NAMESPACE_END
 BOOST_MATH_NAMESPACE_BEGIN
 namespace quadrature {
 namespace detail {
+namespace exp_sinh_cuda { // the tables below have the same names as sinh_sinh's
 
 // In the CUDA case we break these down into a series of fixed size arrays and then make a pointer to the arrays
 // We can't use a 2D array because it takes up far too much memory that is primarily wasted space
@@ -2135,6 +2200,8 @@ __device__ auto exp_sinh_integrate_impl(const F& f, Real tolerance, Real* error,
     return I1;
 }
 
+} // namespace exp_sinh_cuda
+using exp_sinh_cuda::exp_sinh_integrate_impl;
 } // namespace detail
 } // namespace quadrature
 BOOST_MATH_NAMESPACE_END
