@@ -92,10 +92,26 @@ laguerre(unsigned n, T x, const Policy&, const std::true_type&)
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type 
-   laguerre(unsigned n, unsigned m, T x, const std::false_type&)
+inline bool negative_order(T m, const std::true_type&)
 {
-   return BOOST_MATH_NAMESPACE::laguerre(n, m, x, policies::policy<>());
+   return m < 0;
+}
+
+template <class T>
+inline bool negative_order(T, const std::false_type&)
+{
+   return false;
+}
+
+template <class T1, class T2>
+inline typename laguerre_result<T1, T2>::type
+   laguerre(unsigned n, T1 m, T2 x, const std::false_type&)
+{
+   // A non-negative integer order is the associated polynomial's m; anything else is a real alpha.
+   using order = typename std::conditional<std::is_integral<T1>::value, unsigned, T1>::type;
+   if(std::is_integral<T1>::value && negative_order(m, std::integral_constant<bool, std::is_signed<T1>::value>()))
+      return BOOST_MATH_NAMESPACE::laguerre(n, static_cast<typename laguerre_result<T1, T2>::type>(m), x, policies::policy<>());
+   return BOOST_MATH_NAMESPACE::laguerre(n, static_cast<order>(m), x, policies::policy<>());
 }
 
 } // namespace detail
@@ -114,44 +130,6 @@ inline typename tools::promote_args<T1, T2, T3>::type
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
    return ((2 * n + l + 1 - result_type(x)) * result_type(Pl) - (n + l) * result_type(Plm1)) / (n+1);
-}
-
-namespace detail{
-// Laguerre Associated Polynomial:
-template <class T, class Policy>
-T laguerre_imp(unsigned n, unsigned m, T x, const Policy& pol)
-{
-   // Special cases:
-   if(m == 0)
-      return BOOST_MATH_NAMESPACE::laguerre(n, x, pol);
-
-   T p0 = 1;
-   
-   if(n == 0)
-      return p0;
-
-   T p1 = m + 1 - x;
-
-   unsigned c = 1;
-
-   while(c < n)
-   {
-      std::swap(p0, p1);
-      p1 = static_cast<T>(laguerre_next(c, m, x, p0, p1));
-      ++c;
-   }
-   return p1;
-}
-
-}
-
-BOOST_MATH_EXPORT template <class T, class Policy>
-inline typename tools::promote_args<T>::type 
-   laguerre(unsigned n, unsigned m, T x, const Policy& pol)
-{
-   typedef typename tools::promote_args<T>::type result_type;
-   typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::laguerre_imp(n, m, static_cast<value_type>(x), pol), "boost::math::laguerre<%1%>(unsigned, unsigned, %1%)");
 }
 
 BOOST_MATH_EXPORT template <class T1, class T2>
@@ -365,6 +343,31 @@ private:
 };
 
 } // namespace detail
+
+// Associated Laguerre polynomials L_n^m(x), by the compensated recurrence of the generalized polynomials.
+BOOST_MATH_EXPORT template <class T, class Policy>
+inline typename tools::promote_args<T>::type 
+   laguerre(unsigned n, unsigned m, T x, const Policy& pol)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   if(m == 0)
+      return BOOST_MATH_NAMESPACE::laguerre(n, x, pol);
+   value_type previous;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::laguerre_family<value_type>(n, static_cast<value_type>(m)).compensated_value(static_cast<value_type>(x), n, false, previous), "boost::math::laguerre<%1%>(unsigned, unsigned, %1%)");
+}
+
+// Generalized Laguerre polynomials L_n^alpha(x) for real alpha; an integer alpha gives the associated polynomials.
+BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
+inline typename std::enable_if<!std::is_integral<T1>::value, typename tools::promote_args<T1, T2>::type>::type
+   laguerre(unsigned n, T1 alpha, T2 x, const Policy&)
+{
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<Policy, policies::promote_float<false>, policies::promote_double<false>>::type forwarding_policy;
+   value_type previous;
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::laguerre_family<value_type>(n, static_cast<value_type>(alpha)).compensated_value(static_cast<value_type>(x), n, false, previous), "boost::math::laguerre<%1%>(unsigned, %1%, %1%)");
+}
 
 // The zeros of the generalized Laguerre polynomial L_n^alpha, in increasing order.
 BOOST_MATH_EXPORT template <class T, class Policy>
