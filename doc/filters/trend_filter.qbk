@@ -92,6 +92,11 @@ factorization, /O(n)/, and 20 to 40 iterations are typical. The least-squares po
 the penalty does not see, is removed first and added back at the end. The iteration stops when the duality gap is below
 [radic][epsilon] times the sum of squares of what is left. When [lambda] is large, rounding makes the gap impossible to evaluate to that accuracy;
 then the iteration stops when the gap of the barrier problem is below that bound and a step of at least half the Newton step changes the fit by less than it.
+For large [lambda] and /n/ even that is out of reach: the dual variables are of size [lambda], so the fit is only determined to about
+[epsilon][lambda], and the gap has a floor of about [epsilon][lambda] 4[super /k/+1] [sum] |/z/[sub i]|. When the gap stops falling above that floor,
+the iteration stops once the gap and the barrier gap are both within it.
+For [lambda] at or above [lambda][sub max] = ||/z/||[sub [infin]], /D/[super T]/z/ = /y/ - /p/ (/p/ the least-squares polynomial, found by forward substitution),
+the polynomial is returned directly.
 `float` data is filtered in `double`.
 
 The cross-validated filter costs about 60 fits on /n/\/2 samples and one on /n/, so it is also /O(n)/, with a larger constant.

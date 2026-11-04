@@ -26,6 +26,7 @@ template <typename Real, unsigned p>
 constexpr std::array<Real, 2*p> daubechies_scaling_filter()
 {
     static_assert(p < 20, "Filter coefficients only implemented up to 19.");
+    static_assert(std::numeric_limits<Real>::radix == 2, "The filter tables need a binary type: BOOST_MATH_BIG_CONSTANT reads numeric_limits<Real>::digits as bits, so a decimal type such as cpp_dec_float would silently get double precision.");
     if constexpr (p == 1) {
        return {BOOST_MATH_BIG_CONSTANT(Real, std::numeric_limits<Real>::digits, 0.70710678118654752440084436210484903928483593768847403658833986899536623923), BOOST_MATH_BIG_CONSTANT(Real, std::numeric_limits<Real>::digits, 0.70710678118654752440084436210484903928483593768847403658833986899536623923) };
     }
