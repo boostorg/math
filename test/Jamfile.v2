@@ -148,6 +148,7 @@ test-suite special_fun :
    [ run test_hypot.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework ]
    [ run test_pow.cpp /boost/test//boost_unit_test_framework ]
    [ run test_pow1p.cpp ]
+   [ run test_spheroidal.cpp ]
    [ run test_logaddexp.cpp /boost/test//boost_unit_test_framework ]
    [ run test_logsumexp.cpp /boost/test//boost_unit_test_framework : : : [ requires cxx11_hdr_initializer_list cxx11_variadic_templates ] ]
    [ run test_ccmath_sqrt.cpp /boost/test//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] $(float128_type) ]
@@ -1743,6 +1744,7 @@ test-suite concepts :
 
    [ run  compile_test/test_sf_1f0_incl.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/test_sf_0f1_incl.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ run  compile_test/test_sf_spheroidal_incl.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/test_sf_2f0_incl.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/test_sf_1f1_incl.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/test_sf_pfq_incl.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
