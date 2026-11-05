@@ -65,6 +65,7 @@
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/math/special_functions/sinhc.hpp>
 #include <boost/math/special_functions/spherical_harmonic.hpp>
+#include <boost/math/special_functions/spheroidal.hpp>
 #include <boost/math/special_functions/sqrt1pm1.hpp>
 #include <boost/math/special_functions/zeta.hpp>
 #include <boost/math/special_functions/modf.hpp>
