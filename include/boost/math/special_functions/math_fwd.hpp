@@ -337,19 +337,24 @@ BOOST_MATH_NAMESPACE_BEGIN // Math functions (in roughly alphabetic order).
    tools::promote_args_t<T>
       laguerre(unsigned n, unsigned m, T x, const Policy& pol);
 
+   // laguerre(n, x, pol), laguerre(n, m, x) with an integer order m, or laguerre(n, alpha, x) with a real alpha.
    template <class T1, class T2>
    struct laguerre_result
    {
       using type = typename std::conditional<
          policies::is_policy<T2>::value,
          typename tools::promote_args<T1>::type,
-         typename tools::promote_args<T2>::type
+         typename std::conditional<std::is_integral<T1>::value, tools::promote_args<T2>, tools::promote_args<T1, T2>>::type::type
       >::type;
    };
 
    BOOST_MATH_EXPORT template <class T1, class T2>
    typename laguerre_result<T1, T2>::type
       laguerre(unsigned n, T1 m, T2 x);
+
+   BOOST_MATH_EXPORT template <class T1, class T2, class Policy>
+   typename std::enable_if<!std::is_integral<T1>::value, tools::promote_args_t<T1, T2>>::type
+      laguerre(unsigned n, T1 alpha, T2 x, const Policy& pol);
 
    BOOST_MATH_EXPORT template <class T>
    BOOST_MATH_GPU_ENABLED tools::promote_args_t<T>

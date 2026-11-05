@@ -552,6 +552,7 @@ test-suite special_fun :
    [ run test_instantiate3.cpp ]
    [ run test_jacobi.cpp pch_light /boost/test//boost_unit_test_framework  ]
    [ run test_laguerre.cpp test_instances//test_instances pch_light /boost/test//boost_unit_test_framework  ]
+   [ run test_generalized_laguerre.cpp ]
    [ run test_orthogonal_polynomial_zeros.cpp ]
 
    [ run test_lambert_w.cpp  ]
