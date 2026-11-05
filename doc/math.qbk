@@ -690,6 +690,9 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [/Airy Functions]
 [include sf/airy.qbk]
 
+[/Struve Functions]
+[include sf/struve.qbk]
+
 [section:ellint Elliptic Integrals]
 [include sf/ellint_introduction.qbk]
 [include sf/ellint_carlson.qbk]

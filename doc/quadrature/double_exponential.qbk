@@ -45,7 +45,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     class exp_sinh
     {
     public:
-        exp_sinh(size_t max_refinements = 9);
+        exp_sinh(size_t max_refinements = 9, bool compensated = false);
 
         template<class F>
         auto integrate(const F f, Real a, Real b,
@@ -322,7 +322,7 @@ which we can directly code up as:
     class exp_sinh
     {
     public:
-        exp_sinh(size_t max_refinements = 9);
+        exp_sinh(size_t max_refinements = 9, bool compensated = false);
 
         template<class F>
         auto integrate(const F f, Real a, Real b,
@@ -351,6 +351,12 @@ For half-infinite intervals, the `exp-sinh` quadrature is provided:
 The native integration range of this integrator is (0, [infin]), but we also support /(a, [infin]), (-[infin], 0)/ and /(-[infin], b)/ via argument transformations.
 
 Endpoint singularities and complex-valued integrands are supported by `exp-sinh`.
+
+Passing `compensated = true` to the constructor accumulates the quadrature sums with compensated (two-sum) summation,
+carried across the refinement levels.  This removes most of the rounding error of the summation itself, which helps when
+the integrand has cancellation (the L1 norm is large compared to the integral) or the tolerance is tight: errors of
+several ulps typically drop to about one.  It is off by default since it makes the integration 5-30% slower, and it does
+nothing about error in the evaluation of the integrand.
 
 For example, the modified Bessel function K can be represented via:
 

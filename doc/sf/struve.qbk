@@ -1,0 +1,130 @@
+[/
+  Copyright Nick Thompson 2026
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:struve Struve Functions]
+
+[h4 Synopsis]
+
+    #include <boost/math/special_functions/struve.hpp>
+
+    namespace boost { namespace math {
+
+    // Struve function H_nu(x):
+    template <class T1, class T2>
+    ``__sf_result`` struve_h(T1 nu, T2 x, ``__sf_result``* derivative = nullptr);
+    template <class T1, class T2, class ``__Policy``>
+    ``__sf_result`` struve_h(T1 nu, T2 x, ``__sf_result``* derivative, const ``__Policy``&);
+    template <class T1, class T2, class ``__Policy``>
+    ``__sf_result`` struve_h(T1 nu, T2 x, const ``__Policy``&);
+
+    // Modified Struve function L_nu(x):
+    template <class T1, class T2>
+    ``__sf_result`` struve_l(T1 nu, T2 x, ``__sf_result``* derivative = nullptr);
+    template <class T1, class T2, class ``__Policy``>
+    ``__sf_result`` struve_l(T1 nu, T2 x, ``__sf_result``* derivative, const ``__Policy``&);
+    template <class T1, class T2, class ``__Policy``>
+    ``__sf_result`` struve_l(T1 nu, T2 x, const ``__Policy``&);
+
+    }} // namespaces
+
+[h4 Description]
+
+The Struve function and the modified Struve function of real order [nu] are
+
+[expression H[sub [nu]](x) = [sum][sub k=0][super [infin]] (-1)[super k] (x/2)[super 2k+[nu]+1] / ([Gamma](k + 3/2) [Gamma](k + [nu] + 3/2)),]
+
+[expression L[sub [nu]](x) = [sum][sub k=0][super [infin]] (x/2)[super 2k+[nu]+1] / ([Gamma](k + 3/2) [Gamma](k + [nu] + 3/2))]
+
+([@https://dlmf.nist.gov/11.2 DLMF 11.2.1, 11.2.2]). They are particular solutions of the inhomogeneous Bessel
+and modified Bessel equations, and appear in acoustics (the radiation impedance of a piston), hydrodynamics and optics.
+When `derivative` is not null it receives the derivative with respect to /x/, computed alongside the value.
+
+    double d;
+    double h = boost::math::struve_h(0.0, 1.0, &d);   // H_0(1) = 0.568656627048287951..., H_0'(1) = 0.438162436165636944...
+    double l = boost::math::struve_l(1.0, 2.5);       // L_1(2.5) = 1.988030772235941619...
+
+[h4 Domain]
+
+Both functions are defined for /x/ [ge] 0 and every real order. For negative /x/ they are real only for integer orders,
+where H[sub n](-x) = (-1)[super n+1] H[sub n](x) and likewise for L; for other orders a negative /x/ is a __domain_error,
+as are infinite or NaN arguments.
+
+At /x/ = 0 both functions are 0 for [nu] > -1 and 2/[pi] for [nu] = -1. For [nu] < -1 they are infinite (the
+first term of the series is (x/2)[super [nu]+1] / ([Gamma](3/2) [Gamma]([nu] + 3/2))), and the result is an __overflow_error
+with the sign of 1/[Gamma]([nu] + 3/2), except at [nu] = -3/2, -5/2, ..., where H[sub -n-1/2] = (-1)[super n] J[sub n+1/2] and
+L[sub -n-1/2] = I[sub n+1/2] vanish. The derivative at 0 is 2/[pi] for [nu] = 0, 0 for [nu] > 0, [nu] = -1 and [nu] = -3/2, -5/2, ...,
+and infinite otherwise.
+
+L[sub [nu]](x) grows like e[super x], and overflows double near /x/ = 710; that is reported as an __overflow_error.
+H[sub [nu]](x) behaves like (x/2)[super [nu]-1] / ([radic][pi] [Gamma]([nu] + 1/2)) at large /x/ and stays representable in double
+over the tested range. The implementation has been tested for -20 [le] [nu] [le] 100 and 0 [le] /x/ [le] 10[super 4];
+it works for larger |[nu]| as well, more slowly (negative orders and the series cost about one term per unit of |[nu]|)
+and, above [nu] = 170 in double, where [Gamma] overflows and the prefactor is formed from __lgamma, less accurately.
+
+[h4 Accuracy]
+
+The errors below are measured in double against the power series evaluated in MPFR at the exact double arguments,
+with enough precision to absorb its cancellation (about 1.44 /x/ extra bits), and checked at a second precision;
+reporting/accuracy/struve_reference.jl generates the test values the same way in Julia. Errors are given in units of
+the conditioning envelope max(1/2, |x f'(x)/f(x)|/2) ulps, the error committed by rounding /x/ alone, and in ulps.
+Grids are uniform in [nu] and logarithmic in /x/.
+
+[table
+[[Function] [Region] [worst error / envelope] [worst error, ulps] [points outside the envelope]]
+[[H] [5 [le] [nu] [le] 100, 0.01 [le] x [le] 300] [2.1] [19 (where the condition number is 23)] [0.2%]]
+[[H] [-20 [le] [nu] [le] 100, 100 [le] x [le] 10[super 4]] [1.2] [2] [0.3%]]
+[[H] [-20 [le] [nu] [le] 100, 0.01 [le] x [le] 0.5] [4.0] [2] [2%]]
+[[H] [-2 [le] [nu] [le] 12, 0.5 [le] x [le] 60] [17] [9] [15%]]
+[[H] [-20 [le] [nu] [le] -1, 0.3 [le] x [le] 200] [10] [5] [10%]]
+[[L] [-20 [le] [nu] [le] 100, 0.01 [le] x [le] 700] [3.5] [2] [1%]]
+]
+
+The "outside" points are almost all where the condition number is below 1 and the envelope is half an ulp, which only a
+correctly rounded function would meet; the errors there are a few ulps. The larger errors of H for small orders and moderate /x/
+(the fourth and fifth rows) come from __cyl_neumann: where H[sub [nu]] = K[sub [nu]] + Y[sub [nu]] and |Y| is comparable to |H|,
+the error of H is that of Y[sub [nu]], which is up to about 13 ulps for negative non-integer orders and 7 ulps for Y[sub 0] and Y[sub 1];
+K[sub [nu]] itself is accurate to an ulp or two.
+
+Near [nu] = 1/2 the Struve function has near-double zeros: H[sub 1/2](x) = [radic](2/([pi]x)) (1 - cos x) touches 0 at x = 2[pi]k.
+At [nu] = 1/2 exactly the closed form is used, with 1 - cos x = 2 sin[super 2](x/2), and is accurate everywhere. For orders within
+a few hundredths of 1/2, K and Y cancel near those minima while the condition number there is small; the error reaches
+about 150 ulps (9 times the envelope) at [nu] = 0.504, /x/ = 19.
+
+The derivatives are generally accurate to a few ulps where they are well conditioned. With `cpp_bin_float_50` the
+errors are within a few tens of [epsilon] times the condition number; float is computed in double and rounded.
+
+[h4 Implementation]
+
+The methods, in the order they are tried:
+
+* The power series ([@https://dlmf.nist.gov/11.2.E1 11.2.1], [@https://dlmf.nist.gov/11.2.E2 11.2.2]), with the derivative
+term by term, wherever the sum of the absolute values of its terms is at most 4 max(|f|, |x f'|). For L that is everywhere
+outside the large-/x/ region below; for H, small /x/ (relative to [radic][nu] for large orders).
+* For H with [nu] [ge] -1/2 below the first zero of J[sub [nu]+1/2], the Neumann series in J[sub [nu]+1/2+k]
+([@https://dlmf.nist.gov/11.4.E18 11.4.18]), whose terms are all positive there. The Bessel functions come from Miller's
+backward recurrence, normalized by [@https://dlmf.nist.gov/10.23.E15 10.23.15].
+* Otherwise H[sub [nu]] = K[sub [nu]] + Y[sub [nu]], with Y from __cyl_neumann and K from its large-/x/ expansion
+[@https://dlmf.nist.gov/11.6.E1 11.6.1] when that converges to a rounding error, and else from
+[@https://dlmf.nist.gov/11.5.E2 11.5.2],
+K[sub [nu]](x) = (x/2)[super [nu]-1] / ([radic][pi] [Gamma]([nu] + 1/2)) [int][sub 0][super [infin]] e[super -s] (1 + s[super 2]/x[super 2])[super [nu]-1/2] ds,
+by [link math_toolkit.double_exponential.de_exp_sinh exp_sinh] quadrature with compensated summation. Both sides are entire in [nu], so this holds for negative orders too.
+* For L at large /x/, L[sub [nu]] = I[sub [nu]] + M[sub [nu]], with I from __cyl_bessel_i and M from
+[@https://dlmf.nist.gov/11.6.E2 11.6.2], where the exponentially small ambiguity of that expansion (multiples of K[sub [nu]]) is below the rounding error.
+
+The prefactors (x/2)[super [nu]+c] / [Gamma]([nu] + d) are formed from __tgamma1pm1 and the exact factors [nu] + d + i in
+double-word arithmetic, with the rounding errors of [nu] + c and [nu] + d carried to first order.
+
+In double on an Apple M-series core (reporting/performance/struve_performance.cpp), the power series and the large-/x/
+expansions take about 0.1 [mu]s, the Neumann series about 1 [mu]s and the integral about 3 [mu]s, against 16 ns for __cyl_neumann;
+the derivative costs little more than the value.
+
+[h4 References]
+
+* NIST Digital Library of Mathematical Functions, [@https://dlmf.nist.gov/11 Chapter 11].
+* F. W. J. Olver, ['Asymptotics and Special Functions], Academic Press, 1974 (Miller's algorithm and its error test).
+
+[endsect] [/section:struve Struve Functions]

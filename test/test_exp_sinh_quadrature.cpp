@@ -594,6 +594,18 @@ void test_non_central_t()
    CHECK_ULP_CLOSE(expected, integral, 200);
 }
 
+template <class Real>
+void test_compensated()
+{
+   std::cout << "Testing compensated summation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+   // Uncompensated, these are up to 4 and 5 ulps off:
+   exp_sinh<Real> integrator(9, true);
+   Real tol = 4 * std::numeric_limits<Real>::epsilon();
+   auto f = [](Real x) { return (1 - 2 * x * x) * exp(-x * x) + exp(-x) / 8; };
+   CHECK_ULP_CLOSE(Real(1) / 8, integrator.integrate(f, tol), 2);
+   auto g = [](Real x) { return exp(-x) / sqrt(x); };
+   CHECK_ULP_CLOSE(root_pi<Real>(), integrator.integrate(g, tol), 2);
+}
 
 void exp_sinh_quadrature_test()
 {
@@ -635,12 +647,14 @@ void exp_sinh_quadrature_test()
     test_nr_examples<std::float64_t>();
     test_crc<std::float64_t>();
     test_non_central_t<std::float64_t>();
+    test_compensated<std::float64_t>();
 #else
     test_left_limit_infinite<double>();
     test_right_limit_infinite<double>();
     test_nr_examples<double>();
     test_crc<double>();
     test_non_central_t<double>();
+    test_compensated<double>();
 #endif
 
 #endif
@@ -676,6 +690,7 @@ void exp_sinh_quadrature_test()
     test_right_limit_infinite<boost::multiprecision::cpp_bin_float_50>();
     test_nr_examples<boost::multiprecision::cpp_bin_float_50>();
     test_crc<boost::multiprecision::cpp_bin_float_50>();
+    test_compensated<boost::multiprecision::cpp_bin_float_50>();
 #endif
 #if defined(TEST7) && defined(BOOST_MATH_RUN_MP_TESTS)
     test_left_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
