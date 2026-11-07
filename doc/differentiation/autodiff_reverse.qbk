@@ -174,6 +174,8 @@ Some key points about reverse mode automatic differentiation:
 
 3. While reverse mode is fast for computing the gradient, it has to store all the intermediate values from the forward pass to be used during the backward pass. This can be a significant memory overhead, especially for deep networks or complex functions.
 
+4. A copy of an `rvar` shares its node on the tape, even after one of them is assigned a new number, so derivatives with respect to the two are added together. So `std::vector<rvar<double, 1>> x(n, rvar<double, 1>(0))` holds one variable n times. Write `std::vector<rvar<double, 1>> x(n)`, or assign each element a new `rvar`, to get n independent variables.
+
 [h1:overloaded-functions List of overloaded functions]
 [table
     [[Function] [argument types]              [implementation]        [return type]         [left derivative] [right derivative]]
