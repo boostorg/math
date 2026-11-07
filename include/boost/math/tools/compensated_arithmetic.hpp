@@ -101,8 +101,9 @@ public:
 private:
    void split(const T& t, T& hi, T& lo) const
    {
-      T g = splitter * t;
-      hi = g - (g - t);
+      const T g = splitter * t;
+      const T d = g - t;   // named, as expression templates would evaluate g - (g - t) as g - g + t
+      hi = g - d;
       lo = t - hi;
    }
    static bool is_fused()
@@ -146,8 +147,12 @@ inline T difference_of_products(const T& a, const T& b, const T& c, const T& d)
 template <class T>
 BOOST_MATH_GPU_ENABLED inline T two_sum_error(T a, T b, T s)
 {
-   T bb = s - a;
-   return (a - (s - bb)) + (b - bb);
+   // Each difference named: expression templates would otherwise reassociate them, and the error would be lost.
+   const T bb = s - a;
+   const T aa = s - bb;
+   const T da = a - aa;
+   const T db = b - bb;
+   return da + db;
 }
 
 #ifndef BOOST_MATH_HAS_NVRTC
@@ -173,7 +178,8 @@ public:
    static value_type fast_two_sum(const T& a, const T& b)
    {
       const T s = a + b;
-      return value_type{ s, b - (s - a) };
+      const T d = s - a;   // named, as for two_sum_error
+      return value_type{ s, b - d };
    }
    static value_type two_sum(const T& a, const T& b)
    {
