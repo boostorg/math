@@ -68,6 +68,7 @@
 #include <boost/math/special_functions/spheroidal.hpp>
 #include <boost/math/special_functions/sqrt1pm1.hpp>
 #include <boost/math/special_functions/struve.hpp>
+#include <boost/math/special_functions/fresnel.hpp>
 #include <boost/math/special_functions/zeta.hpp>
 #include <boost/math/special_functions/modf.hpp>
 #include <boost/math/special_functions/round.hpp>

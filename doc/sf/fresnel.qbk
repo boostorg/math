@@ -1,0 +1,99 @@
+[/
+  Copyright Nick Thompson 2026
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:fresnel Fresnel Integrals]
+
+[h4 Synopsis]
+
+    #include <boost/math/special_functions/fresnel.hpp>
+
+    namespace boost { namespace math {
+
+    template <class T>
+    ``__sf_result`` fresnel_c(T x);
+    template <class T, class ``__Policy``>
+    ``__sf_result`` fresnel_c(T x, const ``__Policy``&);
+
+    template <class T>
+    ``__sf_result`` fresnel_s(T x);
+    template <class T, class ``__Policy``>
+    ``__sf_result`` fresnel_s(T x, const ``__Policy``&);
+
+    // C(x) + i S(x):
+    template <class T>
+    ``['complex-type]`` fresnel_cis(T x);
+    template <class T, class ``__Policy``>
+    ``['complex-type]`` fresnel_cis(T x, const ``__Policy``&);
+
+    }} // namespaces
+
+[h4 Description]
+
+The Fresnel integrals are
+
+[expression C(x) = [int][sub 0][super x] cos([pi]t[super 2]/2) dt,  S(x) = [int][sub 0][super x] sin([pi]t[super 2]/2) dt]
+
+([@https://dlmf.nist.gov/7.2.iii DLMF 7.2.7, 7.2.8]), the normalization of Abramowitz and Stegun, Mathematica, SciPy and
+mpmath, in which both tend to 1/2 as /x/ [rarr] [infin]. The curve (C(x), S(x)) is the Euler (Cornu) spiral.
+`fresnel_cis` returns C(x) + i S(x) = [int][sub 0][super x] cis([pi]t[super 2]/2) dt, cis = cos + i sin, for the cost of one of
+them: `std::complex<__sf_result>` for float, double and long double, and Boost.Multiprecision's matching complex type
+otherwise, whose header must then be included: `cpp_complex_50` for `cpp_bin_float_50`, from
+`<boost/multiprecision/cpp_complex.hpp>` (likewise `<boost/multiprecision/complex128.hpp>`, `<boost/multiprecision/mpc.hpp>`).
+
+    double c = boost::math::fresnel_c(1.0);                // 0.779893400376822829...
+    std::complex<double> z = boost::math::fresnel_cis(1.0); // (0.779893400376822829..., 0.438259147390354766...)
+
+[h4 Domain]
+
+All real /x/. Both functions are odd, and C([plusminus][infin]) = S([plusminus][infin]) = [plusminus]1/2 exactly. A NaN
+argument is a __domain_error.
+
+[h4 Accuracy]
+
+Relative errors in units of [epsilon], against mpmath at 80 digits at the exact arguments, 20 000 points uniform on
+\[0, 12\] and log-uniform on \[10[super -6], 10[super 9]\] (5 000 points for `cpp_bin_float_50`). By default float is evaluated in double;
+the second float row is evaluated in float (`promote_float<false>`).
+
+[table
+[[Type] [Series, [pi]x[super 2]/2 [le] p/10] [Continued fraction] [Asymptotic, x > [epsilon][super -1/2]]]
+[[float] [0.50] [0.50] [0.08]]
+[[float, in float] [0.50] [0.75] [0.50]]
+[[double] [0.50] [0.69] [0.50]]
+[[cpp_bin_float_50] [0.49] [0.64] [0.51]]
+]
+
+(p is the number of bits of the type; the series covers x [le] 1.84 in double.) That is correctly rounded or nearly so
+everywhere; the largest errors, just above the switch to the continued fraction, are below one ulp.
+
+[h4 Implementation]
+
+With [theta] = [pi]x[super 2]/2 and /p/ bits of precision:
+
+* For [theta] [le] p/10, the Maclaurin series of C + iS = x [sum][sub k] (i[theta])[super k] / (k! (2k + 1)), by Horner's rule in
+[theta][super 2] in double-word arithmetic. Its terms add up to about e[super [theta]] / (2[theta]) times the result, and
+[theta] itself must be known to more than working precision, since C' = cos([theta]) amplifies its error by x[super 2]/2; so
+x[super 2] is formed exactly and [pi] is carried as hi + sin(hi).
+* Otherwise C = 1/2 + f sin [theta] - g cos [theta] and S = 1/2 - f cos [theta] - g sin [theta]
+([@https://dlmf.nist.gov/7.5 DLMF 7.5.3, 7.5.4]). The auxiliary functions are smooth: g + i f = x / (1 - 2i[theta] - 1[sdot]2 / (5 - 2i[theta] - 3[sdot]4 / (9 - 2i[theta] - ...))),
+the even part of Laplace's continued fraction for erfc((1 - i)[radic][pi] x / 2) ([@https://dlmf.nist.gov/7.9.E2 DLMF 7.9.2]),
+evaluated backwards from a depth of max(0.11 p[super 2]/[theta], p / (1.6 log[sub 2] [theta])) + 2 terms (measured) and
+finished in double-word arithmetic. For x > [epsilon][super -1/2], f = 1/([pi]x) and g = 1/([pi][super 2]x[super 3]).
+* The phase is exact: x[super 2]/2 = h + l with h reduced mod 2 exactly, sin and cos of [pi]h from [link math_toolkit.powers.sin_pi sin_pi] and [link math_toolkit.powers.cos_pi cos_pi],
+and l added by the angle-addition formulas; for x [ge] 2/[epsilon], x is an even integer and the phase is 0.
+* Of `fresnel_c` and `fresnel_s`, only the result asked for is narrowed to the result type, so that the other cannot raise
+an underflow or overflow error.
+
+For types whose precision is set at run time, such as `mpfr_float`, everything that depends on the precision is
+recomputed at the current precision on each call.
+
+[h4 References]
+
+* NIST Digital Library of Mathematical Functions, [@https://dlmf.nist.gov/7 Chapter 7].
+* W. J. Cody, ['Chebyshev approximations for the Fresnel integrals], Math. Comp. 22 (1968) 450[ndash]453, gives
+rational approximations of the same auxiliary functions for float and double.
+
+[endsect] [/section:fresnel Fresnel Integrals]

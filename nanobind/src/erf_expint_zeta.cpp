@@ -4,6 +4,7 @@
 
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/special_functions/expint.hpp>
+#include <boost/math/special_functions/fresnel.hpp>
 #include <boost/math/special_functions/zeta.hpp>
 #include <boost/math/special_functions/owens_t.hpp>
 #include <boost/math/special_functions/lambert_w.hpp>
@@ -17,6 +18,9 @@ void bmpy::bind_erf_expint_zeta(nb::module_& m) {
       BMPY_URL("sf_erf/error_function"));
    BMPY_R1(erf_inv, "p", "The z with erf(z) = p, for p in [−1, 1]." BMPY_URL("sf_erf/error_inv"));
    BMPY_R1(erfc_inv, "q", "The z with erfc(z) = q, for q in [0, 2]." BMPY_URL("sf_erf/error_inv"));
+   BMPY_R1(fresnel_c, "x", "The Fresnel integral C(x) = ∫₀^x cos(πt²/2) dt; as scipy.special.fresnel(x)[1]." BMPY_URL("fresnel"));
+   BMPY_R1(fresnel_s, "x", "The Fresnel integral S(x) = ∫₀^x sin(πt²/2) dt; as scipy.special.fresnel(x)[0]." BMPY_URL("fresnel"));
+   BMPY_R1(fresnel_cis, "x", "C(x) + i S(x) = ∫₀^x e^(iπt²/2) dt, complex." BMPY_URL("fresnel"));
    BMPY_R1(expint, "z", "The exponential integral Ei(z); as scipy.special.expi(z)." BMPY_URL("expint/expint_i"));
    BMPY_I1R1(expint, unsigned, "n", "z", "The exponential integral Eₙ(z) = ∫₁^∞ e^(−zt)/tⁿ dt; as scipy.special.expn(n, z)."
       BMPY_URL("expint/expint_n"));
