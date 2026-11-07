@@ -197,13 +197,13 @@ Container multivariate_root_finder(F& f, Container x, int digits, std::uintmax_t
    Real const noise = cbrt(eps);
    Real const armijo = Real(1) / 10000;
 
-   std::vector<Real> lu(n * n), colmax(n);
+   std::vector<Real> lu(n * n), colmax(n), g(n);
    std::vector<std::size_t> piv(n);
    Container fx(x), a(x), b(x), xt(x);
    // F into fx, J into lu, |F|^2/2 into phi, or infinity if F has a non-finite entry, and whether F = 0 exactly into
    // zero (phi can underflow). False if F or J has the wrong shape.
    // Every trial point is unpacked, so fx and lu hold the accepted point's values only once it is accepted; within an
-   // iteration only the steps a and b, already solved for, are used.
+   // iteration only a, b and g, already computed, are used.
    bool zero = false;
    auto unpack = [&](R const& r, Real& phi) {
       auto const& Fv = std::get<0>(r);
@@ -232,6 +232,25 @@ Container multivariate_root_finder(F& f, Container x, int digits, std::uintmax_t
       return fail(x, function, "F is not finite at the initial guess");
    while (max_iter < limit && !zero)
    {
+      // The gradient g = J^T F of |F|^2/2, and the Cauchy step -(|g|^2/|Jg|^2) g, the least |F + J p| along -g,
+      // before the LU overwrites J.
+      Real gg = 0, jgjg = 0;
+      for (std::size_t j = 0; j < n; ++j)
+      {
+         g[j] = 0;
+         for (std::size_t i = 0; i < n; ++i)
+            g[j] += lu[i * n + j] * fx[i];
+         gg += g[j] * g[j];
+      }
+      for (std::size_t i = 0; i < n; ++i)
+      {
+         Real jg = 0;
+         for (std::size_t j = 0; j < n; ++j)
+            jg += lu[i * n + j] * g[j];
+         jgjg += jg * jg;
+      }
+      Real const cauchy = gg / jgjg;
+      Real const cnorm = cauchy * inf_norm(g);
       if (!lu_factor(lu, piv, colmax, n))
          return fail(x, function, "The Jacobian is singular");
       for (std::size_t i = 0; i < n; ++i)
@@ -269,7 +288,7 @@ Container multivariate_root_finder(F& f, Container x, int digits, std::uintmax_t
             std::unique_ptr<R> rt(new R(f(xt)));
             if (!unpack(*rt, phit))
                return fail(x, function, "F(x) must have x.size() entries and J(x) x.size() rows of x.size()");
-            if (phit <= (1 - 2 * armijo) * phi)
+            if (phit < (1 - 2 * armijo) * phi || phit == 0)
             {
                x = xt;
                r = std::move(rt);
@@ -279,7 +298,11 @@ Container multivariate_root_finder(F& f, Container x, int digits, std::uintmax_t
          }
       }
       // Backtrack along the Newton step until |F|^2/2 decreases enough. On the line x + t a, |F|^2/2 has
-      // slope -2 phi at t = 0; minimize the quadratic through that and the last trial, kept in [t/10, t/2].
+      // slope g^T a at t = 0, -2 phi for the Newton step; minimize the quadratic through that and the last trial,
+      // kept in [t/10, t/2]. As in a dogleg step, once t a is shorter than the Cauchy step, restart along that.
+      Real slope = -2 * phi;
+      Real pnorm = anorm;
+      bool steep = false;
       Real t = 1;
       for (;;)
       {
@@ -288,30 +311,40 @@ Container multivariate_root_finder(F& f, Container x, int digits, std::uintmax_t
          std::unique_ptr<R> rt(new R(f(xt)));
          if (!unpack(*rt, phit))
             return fail(x, function, "F(x) must have x.size() entries and J(x) x.size() rows of x.size()");
-         if (phit <= (1 - 2 * armijo * t) * phi)
+         // Strict, so that a step too short to change |F| is not accepted; phit = 0 is a decrease unless phi underflows.
+         if (phit < phi + armijo * t * slope || phit == 0)
          {
             x = xt;
             r = std::move(rt);
             phi = phit;
             break;
          }
-         if (t * anorm <= tol * xnorm || t < eps)
+         if (t * pnorm <= tol * xnorm || t < eps)
          {
             // At a local minimum of |F| that is not a root J is singular, so the Newton step is large or undefined.
             // A step below eps^(1/3) |x| that cannot decrease |F| is instead the rounding noise of an accurate x,
             // about cond(J) eps |x|, for cond(J) up to eps^(-2/3), 1e10 in double.
             if (anorm <= noise * xnorm)
                return x;
-            return fail(x, function, "No step along the Newton direction decreases |F|: x is near a local minimum of |F| that is not a root, or J is wrong");
+            return fail(x, function, "The line search cannot decrease |F|: x is near a local minimum of |F| that is not a root, or J is wrong");
          }
          Real s = t / 10;
          if (phit != std::numeric_limits<Real>::infinity())
          {
-            Real const curvature = phit - phi + 2 * phi * t;
+            Real const curvature = phit - phi - slope * t;
             if (curvature > 0)
-               s = phi * t * t / curvature;
+               s = -slope * t * t / (2 * curvature);
          }
          t = (std::min)((std::max)(s, t / 10), t / 2);
+         if (!steep && t * anorm < cnorm && (BOOST_MATH_NAMESPACE::isfinite)(cnorm))
+         {
+            steep = true;
+            for (std::size_t i = 0; i < n; ++i)
+               a[i] = -cauchy * g[i];
+            slope = -cauchy * gg;
+            pnorm = cnorm;
+            t = 1;
+         }
       }
    }
    return x;
