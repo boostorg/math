@@ -94,6 +94,20 @@ auto squares(std::vector<Real> const& x)
    return std::make_tuple(F, J, d2);
 }
 
+// Freudenstein and Roth (More, Garbow and Hillstrom 1981, #2), root (5, 4). J depends only on y and is singular on the
+// lines y = (2 +- sqrt(22))/3; |F| has a local minimum near (11.4128, -0.8968), with |F| = 6.9989.
+template <class Real>
+auto freudenstein_roth(std::array<Real, 2> const& x)
+{
+   Real const y = x[1];
+   std::array<Real, 2> F{-13 + x[0] + ((5 - y) * y - 2) * y, -29 + x[0] + ((y + 1) * y - 14) * y};
+   std::array<std::array<Real, 2>, 2> J{{{1, 10 * y - 3 * y * y - 2}, {1, 3 * y * y + 2 * y - 14}}};
+   auto d2 = [y](std::array<Real, 2> const& v) {
+      return std::array<Real, 2>{(10 - 6 * y) * v[1] * v[1], (6 * y + 2) * v[1] * v[1]};
+   };
+   return std::make_tuple(F, J, d2);
+}
+
 template <class Real>
 Real residual(std::vector<Real> const& F)
 {
@@ -205,6 +219,27 @@ void test_singular()
       return std::make_pair(std::array<Real, 1>{x[0] * x[0] + 1}, std::array<Real, 1>{2 * x[0]});
    };
    CHECK_THROW(multivariate_newton(g, std::array<Real, 1>{1}, digits), boost::math::evaluation_error);
+}
+
+// Near the singular line the Newton step is almost orthogonal to the gradient of |F|^2/2; the iteration must not creep
+// along the line to max_iter.
+template <class Real>
+void test_freudenstein_roth()
+{
+   int const digits = std::numeric_limits<Real>::digits;
+   auto f = [](std::array<Real, 2> const& x) { return freudenstein_roth(x); };
+   for (bool halley : {false, true})
+   {
+      for (auto const& x0 : std::vector<std::array<Real, 2>>{{15, -2}, {Real(9.15), Real(-0.8964)}, {Real(0.5), -2}})
+      {
+         std::uintmax_t iters = 1000;
+         CHECK_THROW(halley ? multivariate_halley(f, x0, digits, iters) : multivariate_newton(f, x0, digits, iters), boost::math::evaluation_error);
+         CHECK_LE(iters, std::uintmax_t(100));
+      }
+      auto x = halley ? multivariate_halley(f, std::array<Real, 2>{6, 3}, digits) : multivariate_newton(f, std::array<Real, 2>{6, 3}, digits);
+      CHECK_ULP_CLOSE(Real(5), x[0], 2);
+      CHECK_ULP_CLOSE(Real(4), x[1], 2);
+   }
 }
 
 // The max-norm errors of the iterates from (2.5, 0.5) on circle_line, the 0th to the 7th.
@@ -378,6 +413,8 @@ int main()
    test_powell_badly_scaled<double>();
    test_singular<float>();
    test_singular<double>();
+   test_freudenstein_roth<float>();
+   test_freudenstein_roth<double>();
    test_convergence_order<float>();
    test_convergence_order<double>();
    test_convergence_order_multiprecision();

@@ -66,8 +66,12 @@ As for the scalar functions, the tolerance is relative to /x/, so a root at the 
 [h4 Globalization]
 
 Far from a root a full Newton step can increase ‖[*F]‖, so both functions minimize ½‖[*F]‖[super 2] along their steps.
-Newton backtracks along /a/ until the Armijo condition ½‖[*F](/x/ + /t a/)‖[super 2] ≤ (1 − 2×10[super −4] /t/)½‖[*F](/x/)‖[super 2] holds,
+Newton backtracks along /a/ until the Armijo condition ½‖[*F](/x/ + /t a/)‖[super 2] < (1 − 2×10[super −4] /t/)½‖[*F](/x/)‖[super 2] holds,
 choosing each new /t/ from the quadratic through ½‖[*F]‖[super 2] and its slope at /t/ = 0, kept in \[/t/\/10, /t/\/2\].
+Near a singular /J/ the Newton step can be almost orthogonal to the gradient /g/ = /J/[super T][*F] of ½‖[*F]‖[super 2],
+and be cut back so far that ‖[*F]‖ barely decreases. As in Powell's dogleg method, once /t a/ is shorter than the Cauchy step
+−(‖/g/‖[super 2]\/‖/Jg/‖[super 2])/g/, the least of ‖[*F] + /J p/‖ along −/g/, the search backtracks along the Cauchy step /p/
+instead, with ½‖[*F](/x/)‖[super 2] + 10[super −4]/t g/[super T]/p/ on the right of the Armijo condition.
 Halley tries its full step first, and if that does not decrease ‖[*F]‖ it takes the backtracking Newton step instead.
 A trial point where [*F] is not finite is treated as an increase, so `f` may return infinities or NaNs outside its domain.
 
@@ -83,7 +87,7 @@ An __evaluation_error is raised through the default policy (and so is thrown by 
 
 * the Jacobian is singular: a pivot of its LU factorization with partial pivoting is not above /n/ε times the largest
 entry of its column,
-* no step along the Newton direction decreases ‖[*F]‖, as happens near a local minimum of ‖[*F]‖ that is not a root
+* the line search cannot decrease ‖[*F]‖, as happens near a local minimum of ‖[*F]‖ that is not a root
 (where /J/ is singular) or when /J/ is wrong,
 * [*F] is not finite at the initial guess, or [*F], /J/ or `d2(v)` has the wrong size.
 
