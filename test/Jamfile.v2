@@ -1123,6 +1123,7 @@ test-suite misc :
    [ run test_ulp.cpp /boost/test//boost_unit_test_framework ]
    [ run git_issue_1419.cpp ]
    [ run git_issue_1621.cpp ]
+   [ run git_issue_1637.cpp ]
    [ compile-fail git_issue_1421.cpp ]
 
 #   [ run __temporary_test.cpp test_instances//test_instances : : : <test-info>always_show_run_output <pch>off ]
