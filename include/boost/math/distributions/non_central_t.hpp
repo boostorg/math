@@ -259,14 +259,37 @@ BOOST_MATH_NAMESPACE_BEGIN
             //
             T hi = (sqrt(t2 * delta * delta - 2 * (v + t2) * log(eps)) - t * delta) / (v + t2);
             T result;
+            // The default tolerance of sqrt(epsilon) leaves errors of 1e-12 or so, which is more than the series:
+            T tol = pow(eps, T(2) / 3);
             if (v < 2)
             {
                //
-               // The integrand is singular at zero (for v < 1) or has a singular derivative there,
-               // and is otherwise wide, so tanh-sinh quadrature is the right tool:
+               // For v < 1 the integrand has an s^(v-1) singularity at zero which, for small v, holds nearly
+               // all of the mass: the integral of s^(v-1) over [0, h] is h^v / v, so the fraction
+               // of it lying below the smallest abscissa s_min that quadrature can reach is of order
+               // s_min^v.  With v = 0.001 half of the mass is below 1e-300, and is silently lost
+               // if we integrate as is.  So integrate by parts to remove the singularity: with
+               // G(s) = exp(-v (s^2 - 1) / 2) Phi(-(t s + delta)), which is decreasing,
                //
-               result = quadrature::tanh_sinh<T, Policy>().integrate(integrand, T(0), hi);
-               return result * 2 * half_v * gamma_p_derivative(half_v, half_v, pol);
+               //   v * Integral[s^(v-1) G(s), 0, hi] = hi^v G(hi) + Integral[s^v (-G'(s)), 0, hi]
+               //
+               // where every term is positive and the new integrand is bounded.  It is wide and has
+               // a singular derivative at zero, so tanh-sinh quadrature is the right tool,
+               // see https://github.com/boostorg/math/issues/1637
+               //
+               auto G = [&](T s) -> T
+                  {
+                     return exp(-half_v * (s * s - 1)) * BOOST_MATH_NAMESPACE::erfc((t * s + delta) / constants::root_two<T>(), pol) / 2;
+                  };
+               auto integrand_by_parts = [&](T s) -> T
+                  {
+                     T a = t * s + delta;
+                     // -G'(s) = v s G(s) + t exp(-v (s^2 - 1) / 2) phi(t s + delta):
+                     return pow(s, v) * (v * s * G(s) + t * exp(-half_v * (s * s - 1) - a * a / 2) / constants::root_two_pi<T>());
+                  };
+               result = pow(hi, v) * G(hi) + quadrature::tanh_sinh<T, Policy>().integrate(integrand_by_parts, T(0), hi, tol);
+               // The normalisation constant of 2 (v/2)^(v/2) e^(-v/2) / Gamma(v/2), divided by v:
+               return result * gamma_p_derivative(half_v, half_v, pol);
             }
             //
             // Otherwise estimate the mode m and the width of the window around it from the Gaussian
@@ -278,8 +301,6 @@ BOOST_MATH_NAMESPACE_BEGIN
             using integrator = quadrature::gauss_kronrod<T, 15, Policy>;
             if (m + w > hi)
                hi = m + w;
-            // The default tolerance of sqrt(epsilon) leaves errors of 1e-12 or so, which is more than the series:
-            T tol = pow(eps, T(2) / 3);
             result = integrator::integrate(integrand, m, hi, 15, tol);
             if (m > w)
                result += integrator::integrate(integrand, m - w, m, 15, tol);
