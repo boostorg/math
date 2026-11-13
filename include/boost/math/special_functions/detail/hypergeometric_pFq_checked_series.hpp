@@ -298,13 +298,19 @@
         //std::cout << "local_scaling = " << local_scaling << std::endl;
         //std::cout << "Norm result = " << std::setprecision(35) << boost::multiprecision::mpfr_float_50(result) * exp(boost::multiprecision::mpfr_float_50(local_scaling)) << std::endl;
         //
-        // We have to be careful when one of the b's crosses the origin:
+        // Return straight away when the policy doesn't throw: crossover_locations below only has room for
+        // BOOST_MATH_PFQ_MAX_B_TERMS entries.
         //
         if(bj.size() > BOOST_MATH_PFQ_MAX_B_TERMS)
-           policies::raise_domain_error<Real>("boost::math::hypergeometric_pFq<%1%>(Seq, Seq, %1%)",
+        {
+           result = policies::raise_domain_error<Real>("boost::math::hypergeometric_pFq<%1%>(Seq, Seq, %1%)",
               "The number of b terms must be less than the value of BOOST_MATH_PFQ_MAX_B_TERMS (" BOOST_MATH_STRINGIZE(BOOST_MATH_PFQ_MAX_B_TERMS)  "), but got %1%.",
               Real(bj.size()), pol);
-
+           return std::make_pair(result, result);
+        }
+        //
+        // We have to be careful when one of the b's crosses the origin:
+        //
         unsigned crossover_locations[BOOST_MATH_PFQ_MAX_B_TERMS];
 
         unsigned N_crossovers = set_crossover_locations(aj, bj, z, crossover_locations);
