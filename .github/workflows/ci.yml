@@ -459,6 +459,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-24.04
+          - os: ubuntu-26.04
 
     runs-on: ${{matrix.os}}
 
@@ -513,7 +514,11 @@ jobs:
             cxxflags: -mfma -ffp-contract=fast -O2
           - os: ubuntu-24.04
             cxxflags: -mfma -ffp-contract=fast -O2
+          - os: ubuntu-26.04
+            cxxflags: -mfma -ffp-contract=fast -O2
           - os: macos-15
+            cxxflags: -ffp-contract=fast -O2
+          - os: macos-26
             cxxflags: -ffp-contract=fast -O2
 
     runs-on: ${{matrix.os}}
@@ -641,6 +646,7 @@ jobs:
       matrix:
         include:
           - os: macos-15
+          - os: macos-26
 
     runs-on: ${{matrix.os}}
 

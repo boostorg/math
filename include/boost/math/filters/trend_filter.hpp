@@ -177,6 +177,14 @@ struct band_matrix
 // the gap has stopped falling (no new minimum in 10 iterations), the method stops once the gap and the
 // surrogate gap are both within it.
 // Returns false, with x filled by the error handler's result, if it fails.
+//
+// GCC 15 at -O3 sees a path where m = n - R wraps and warns about the vector allocations below;
+// that path is unreachable because the callers guarantee n > R.
+#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ >= 7
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Walloc-size-larger-than="
+#endif
+
 template <class Real, int R, class Policy>
 bool trend_filter_pdip(const std::vector<Real>& y, const Real& lambda, const Real& scale, std::vector<Real>& x, const Policy& pol)
 {
@@ -308,6 +316,9 @@ bool trend_filter_pdip(const std::vector<Real>& y, const Real& lambda, const Rea
    }
    return fail("No convergence in 200 interior-point iterations at lambda = %1%.");
 }
+#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ >= 7
+#  pragma GCC diagnostic pop
+#endif
 
 // The least-squares fit of y by polynomials of degree <= k (modified Gram-Schmidt, twice, on
 // monomials in t in [-1, 1]). D^(k+1) annihilates it, so the trend filter of y is this fit plus
