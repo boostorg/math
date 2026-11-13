@@ -21,6 +21,15 @@
 
   BOOST_MATH_NAMESPACE_BEGIN namespace detail {
 
+     // GCC 15 at -O2 follows std::sort into its introsort partition path, which only runs for
+     // more than 16 elements, and warns that it indexes past the end of crossover_locations.
+     // That path is unreachable: the 1F1 branch sorts at most 4 locations, and the general branch
+     // relies on the caller's check that bj.size() <= BOOST_MATH_PFQ_MAX_B_TERMS.
+#if defined(__GNUC__) && !defined(__clang__)
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
+
      template <class Seq, class Real>
      unsigned set_crossover_locations(const Seq& aj, const Seq& bj, const Real& z, unsigned int* crossover_locations)
      {
@@ -120,6 +129,10 @@
         }
         return N_terms;
      }
+
+#if defined(__GNUC__) && !defined(__clang__)
+#  pragma GCC diagnostic pop
+#endif
 
      template <class Seq, class Real, class Policy, class Terminal>
      std::pair<Real, Real> hypergeometric_pFq_checked_series_impl(const Seq& aj, const Seq& bj, const Real& z, const Policy& pol, const Terminal& termination, long long& log_scale)
