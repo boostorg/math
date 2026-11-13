@@ -1,0 +1,177 @@
+[/
+Copyright (c) 2026 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:nsga2 NSGA-II: Multiobjective Optimization]
+
+[heading Synopsis]
+
+``
+    #include <boost/math/optimization/nsga2.hpp>
+
+    namespace boost::math::optimization {
+
+    template <typename ArgumentContainer> struct nsga2_parameters {
+        using Real = typename ArgumentContainer::value_type;
+        using DimensionlessReal = decltype(Real()/Real());
+        ArgumentContainer lower_bounds;
+        ArgumentContainer upper_bounds;
+        size_t population_size = 100;
+        size_t max_generations = 250;
+        DimensionlessReal crossover_probability = 0.9;
+        DimensionlessReal crossover_distribution_index = 15;
+        DimensionlessReal mutation_probability = std::numeric_limits<DimensionlessReal>::quiet_NaN();
+        DimensionlessReal mutation_distribution_index = 20;
+        std::vector<ArgumentContainer> const * initial_population = nullptr;
+        unsigned threads = std::thread::hardware_concurrency();
+    };
+
+    template <typename ArgumentContainer>
+    void validate_nsga2_parameters(nsga2_parameters<ArgumentContainer> const &params);
+
+    template <typename ArgumentContainer, typename ObjectiveContainer, class URBG = std::mt19937_64>
+    class nsga2_optimizer {
+    public:
+        nsga2_optimizer(nsga2_parameters<ArgumentContainer> const &params, URBG gen);
+        std::vector<ArgumentContainer> const &ask();
+        void tell(std::vector<ObjectiveContainer> values);
+        std::vector<std::pair<ArgumentContainer, ObjectiveContainer>> front() const;
+        std::vector<ArgumentContainer> const &population() const;
+        std::vector<ObjectiveContainer> const &objectives() const;
+        std::vector<size_t> const &ranks() const;
+    };
+
+    template <typename ArgumentContainer, class Func, class URBG>
+    std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>>
+    nsga2(const Func objectives,
+          nsga2_parameters<ArgumentContainer> const &params,
+          URBG &gen,
+          std::atomic<bool> *cancellation = nullptr,
+          std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr);
+
+    } // namespaces
+``
+
+The function `nsga2`, and the class `nsga2_optimizer`, minimize several objectives at once over a box, by the elitist nondominated sorting genetic algorithm of Deb, Pratap, Agarwal and Meyarivan.
+
+A point /x/ ['dominates] a point /y/ if no objective is larger at /x/ than at /y/, and at least one is smaller.
+The points that no other point dominates are the Pareto set, and their objectives are the Pareto front: along it, one objective is only improved at the cost of another.
+NSGA-II returns a finite set of points, none dominating another, which approximates the Pareto front and is spread along it.
+
+Each generation, parents are chosen by binary tournaments, and their children are made by simulated binary crossover and polynomial mutation, both of which keep to the bounds.
+A child which is a copy of a parent, or of another child, is replaced by a new one, unless a generation has already made `population_size` copies.
+Parents and children are then sorted into fronts: the points that nothing dominates, the points that only those dominate, and so on.
+The next generation is filled front by front; of the last front that does not fit, the members with the largest ['crowding distance], which are those with the most room between their neighbours on the front, are kept.
+
+[heading Parameters]
+
+* `lower_bounds`, `upper_bounds`: The box in which the minimization is done. All bounds must be finite.
+* `population_size`: The number of points in each generation, and the most that can be returned. At least 4.
+* `max_generations`: The number of generations of children. The objectives are evaluated `population_size * (max_generations + 1)` times.
+* `crossover_probability`: The probability that a pair of parents is crossed rather than copied.
+* `crossover_distribution_index`: The [eta][sub c] of simulated binary crossover. The larger it is, the closer the children are to their parents.
+* `mutation_probability`: The probability that a variable of a child is mutated. The default, NaN, is one over the number of variables.
+* `mutation_distribution_index`: The [eta][sub m] of polynomial mutation. The larger it is, the smaller the mutations.
+* `initial_population`: An optional list of at most `population_size` points in the bounds, which start the first generation; the rest of it is uniformly distributed in the box.
+* `threads`: The number of threads which evaluate the objectives. If the objectives are not threadsafe, set this to 1.
+
+The defaults are those in common use for the algorithm, and are a good place to start.
+
+[heading The function]
+
+Parameters:
+
+* `objectives`: A function of an `ArgumentContainer` which returns a container of the objectives, such as a `std::array<double, 2>` or a `std::vector<double>`. Every objective is minimized; to maximize one, return its negative. The number of objectives is the size of the container, which must be the same, and not zero, at every call.
+* `params`: The parameters to the algorithm as described above.
+* `gen`: A uniform random bit generator, like `std::mt19937_64`.
+* `cancellation`: An optional atomic boolean to allow the user to stop the computation and gracefully return the points found up to then.
+    N.B.: Cancellation is not immediate; the in-progress generation finishes.
+* `queries`: An optional vector to store each point evaluated, with its objectives, generation by generation, in the order of the population.
+    It is written to on the calling thread without a lock, so do not read it from another thread before `nsga2` returns; to follow a run, use `nsga2_optimizer`.
+
+Returns:
+
+The members of the last generation which no other member dominates, as pairs of the argument and its objectives, in lexicographic order of the objectives.
+For two objectives, that is from the least value of the first objective to the least value of the second.
+Members whose objectives are equal are returned once, so there are between 1 and `population_size` pairs.
+
+A point at which an objective is NaN is dominated by every point at which none is.
+Such a point is only returned if an objective is NaN at every member of the last generation.
+
+All random numbers are drawn from `gen` on the calling thread, and only the objectives are evaluated in parallel, so for a given state of `gen` the result does not depend on the number of threads.
+As with [link math_toolkit.differential_evolution differential evolution], the threads are worth their overhead once an evaluation of the objectives takes more than about a microsecond.
+
+[heading Ask and tell]
+
+The class `nsga2_optimizer` is the algorithm without the evaluation of the objectives, which is left to the caller: in one batch on a GPU or an FPGA, on a cluster, or however else they are to be had.
+
+* `ask()` returns the points to evaluate: first the initial population, then the children of each generation, `population_size` at a time.
+    It returns the same points until their objectives are told, after which they are no longer valid: copy what is needed of them before `tell`.
+* `tell(values)` takes the objectives of those points, in their order, and selects the next generation.
+    It throws `std::domain_error` if no points were asked for, or if their number or the number of objectives is wrong.
+* `front()` is what `nsga2` returns: the nondominated members so far. It is empty before the first `tell`.
+* `population()`, `objectives()` and `ranks()` are the whole population after the last `tell`: its `population_size` members, their objectives, and the front each is in, 0 being the nondominated one.
+
+``
+    nsga2_optimizer<ArgType, std::array<double, 2>> optimizer(params, std::mt19937_64(12345));
+    for (size_t generation = 0; generation <= 250; ++generation) {
+        auto const &points = optimizer.ask();
+        std::vector<std::array<double, 2>> values = evaluate_all(points);
+        optimizer.tell(std::move(values));
+        // optimizer.front() can be looked at, saved, or tested for convergence here.
+    }
+``
+
+The optimizer keeps its own copy of the generator, so it is the whole state of a run.
+If `URBG` is a reference type, such as `std::mt19937_64&`, it uses the caller's generator instead, which must outlive it.
+The caller's loop decides when to stop, so `max_generations` and `threads` are not used.
+The function `nsga2` is this loop with the objectives evaluated on `threads` threads, and for the same state of `gen` gives the same front.
+
+[h4:examples Examples]
+
+Schaffer's problem asks for /x/ to be close to both 0 and 2.
+The Pareto set is the interval between them:
+
+``
+    using ArgType = std::array<double, 1>;
+    auto objectives = [](ArgType const &x) {
+        return std::array<double, 2>{x[0] * x[0], (x[0] - 2) * (x[0] - 2)};
+    };
+    nsga2_parameters<ArgType> params;
+    params.lower_bounds = {-10};
+    params.upper_bounds = {10};
+    std::mt19937_64 gen(12345);
+    auto front = nsga2(objectives, params, gen);
+    for (auto const &[x, f] : front) {
+        std::cout << x[0] << ": " << f[0] << ", " << f[1] << "\n";
+    }
+``
+
+More examples and API use cases can be studied in [@../../test/test_nsga2.cpp test_nsga2.cpp].
+
+[h5:caveats Caveats]
+
+NSGA-II is appropriate for two or three objectives.
+With more, almost every point of a population is nondominated, so the sort no longer separates good points from bad, and the crowding distance is a poor measure of how well a front of three or more dimensions is covered.
+Methods which use reference directions, such as NSGA-III, are preferable there.
+
+The arguments are less accurate than the objectives: a point at a distance [delta] from the Pareto set can be worse by only [delta][super 2] in every objective, which a finite population rarely resolves.
+A larger population brings the arguments closer.
+
+Constraints other than the bounds are not supported.
+Unlike the other optimizers, `nsga2` compares arguments and objectives with `==`, and iterates over the objectives, so both containers need `operator==` and the objectives `begin()` and `end()`.
+
+The algorithm needs many evaluations: tens of thousands is typical.
+The sort compares every pair among the parents and children, so each generation costs a multiple of the square of `population_size` beyond the evaluations.
+
+[h4:references References]
+
+* K. Deb, A. Pratap, S. Agarwal and T. Meyarivan, ['A fast and elitist multiobjective genetic algorithm: NSGA-II.] IEEE Transactions on Evolutionary Computation, vol. 6, no. 2, pp. 182-197, April 2002, doi: 10.1109/4235.996017.
+* K. Deb and R. B. Agrawal, ['Simulated binary crossover for continuous search space.] Complex Systems, vol. 9, no. 2, pp. 115-148, 1995.
+* K. Deb and M. Goyal, ['A combined genetic adaptive search (GeneAS) for engineering design.] Computer Science and Informatics, vol. 26, no. 4, pp. 30-45, 1996.
+* K. Deb and H. Jain, ['An evolutionary many-objective optimization algorithm using reference-point-based nondominated sorting approach, part I: solving problems with box constraints.] IEEE Transactions on Evolutionary Computation, vol. 18, no. 4, pp. 577-601, August 2014, doi: 10.1109/TEVC.2013.2281535.
+
+[endsect] [/section:nsga2 NSGA-II: Multiobjective Optimization]
