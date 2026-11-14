@@ -14,7 +14,12 @@ import boost.math;
 #include "math_unit_test.hpp"
 #include "test_functions_for_optimization.hpp"
 #ifndef BOOST_MATH_BUILD_MODULE
+#include <atomic>
+#include <mutex>
 #include <random>
+#include <set>
+#include <stdexcept>
+#include <thread>
 #include <limits>
 #endif
 using boost::math::optimization::random_search;
@@ -164,6 +169,56 @@ void test_beale() {
   CHECK_ABSOLUTE_ERROR(Real(1)/Real(2), local_minima[1], Real(0.1));
 }
 
+// With one thread the caller does the work, and an exception thrown by the cost function on any worker reaches the caller.
+void test_serial_path_and_exceptions() {
+  std::cout << "Testing the serial path and exception propagation of random search . . .\n";
+  using ArgType = std::vector<double>;
+  auto rs_params = random_search_parameters<ArgType>();
+  rs_params.lower_bounds.resize(3, -1);
+  rs_params.upper_bounds.resize(3, 1);
+  rs_params.max_function_calls = 2000;
+  for (unsigned threads : {1u, 2u, 5u}) {
+    rs_params.threads = threads;
+    std::mutex mt;
+    std::set<std::thread::id> ids;
+    auto cost = [&](ArgType const &x) {
+      std::scoped_lock lock(mt);
+      ids.insert(std::this_thread::get_id());
+      return x[0] * x[0] + x[1] * x[1] + x[2] * x[2];
+    };
+    std::mt19937_64 gen(2718);
+    std::vector<std::pair<ArgType, double>> queries;
+    auto x = random_search(cost, rs_params, gen, std::numeric_limits<double>::quiet_NaN(), nullptr, nullptr, &queries);
+    // With more threads the others may have used up the calls before the caller begins:
+    CHECK_TRUE(threads > 1 || ids.count(std::this_thread::get_id()) == 1);
+    CHECK_LE(ids.size(), size_t(threads));
+    CHECK_GE(queries.size(), rs_params.max_function_calls);
+    if (threads == 1) {
+      // The same seed gives the same points, on the calling thread only:
+      CHECK_EQUAL(ids.size(), size_t(1));
+      gen.seed(2718);
+      std::mt19937_64 worker(gen());
+      std::uniform_real_distribution<double> unif01(0.0, 1.0);
+      CHECK_EQUAL(queries.size(), rs_params.max_function_calls);
+      for (auto const &q : queries) {
+        for (size_t i = 0; i < 3; ++i) {
+          CHECK_EQUAL(q.first[i], -1 + 2 * unif01(worker));
+        }
+      }
+    }
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+    std::atomic<int> calls{0};
+    auto throwing = [&calls](ArgType const &x) -> double {
+      if (++calls > 100) {
+        throw std::runtime_error("cost");
+      }
+      return x[0];
+    };
+    CHECK_THROW(random_search(throwing, rs_params, gen), std::runtime_error);
+#endif
+  }
+}
+
 int main() {
 #if defined(__clang__) || defined(_MSC_VER)
   test_ackley<float>();
@@ -174,5 +229,6 @@ int main() {
   test_beale<double>();
 #endif
   test_sphere();
+  test_serial_path_and_exceptions();
   return boost::math::test::report_errors();
 }

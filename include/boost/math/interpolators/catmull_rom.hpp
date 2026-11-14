@@ -161,7 +161,9 @@ template<class Point, class RandomAccessContainer >
 Point catmull_rom<Point, RandomAccessContainer>::operator()(const typename Point::value_type s) const
 {
     using std_workaround::size;
-    if (s < 0 || s > m_max_s)
+    // Written so that a NaN is rejected. The locals below are copies of a point so that they have its size,
+    // which a default-constructed std::vector does not.
+    if (!(s >= 0 && s <= m_max_s))
     {
         throw std::domain_error("Parameter outside bounds.");
     }
@@ -181,20 +183,20 @@ Point catmull_rom<Point, RandomAccessContainer>::operator()(const typename Point
     }
     typename Point::value_type s3s = m_s[ip2] - s;
 
-    Point A1_or_A3;
+    Point A1_or_A3 = m_pnts[0];
     typename Point::value_type denom = 1/(m_s[i] - m_s[i-1]);
     for(size_t j = 0; j < size(m_pnts[0]); ++j)
     {
         A1_or_A3[j] = denom*(s1s*m_pnts[i-1][j] - s0s*m_pnts[i][j]);
     }
 
-    Point A2_or_B2;
+    Point A2_or_B2 = m_pnts[0];
     for(size_t j = 0; j < size(m_pnts[0]); ++j)
     {
         A2_or_B2[j] = denom21*(s2s*m_pnts[i][j] - s1s*m_pnts[i+1][j]);
     }
 
-    Point B1_or_C;
+    Point B1_or_C = m_pnts[0];
     denom = 1/(m_s[i+1] - m_s[i-1]);
     for(size_t j = 0; j < size(m_pnts[0]); ++j)
     {
@@ -207,7 +209,7 @@ Point catmull_rom<Point, RandomAccessContainer>::operator()(const typename Point
         A1_or_A3[j] = denom*(s3s*m_pnts[i+1][j] - s2s*m_pnts[ip2][j]);
     }
 
-    Point B2;
+    Point B2 = m_pnts[0];
     denom = 1/(m_s[ip2] - m_s[i]);
     for(size_t j = 0; j < size(m_pnts[0]); ++j)
     {
@@ -228,14 +230,14 @@ Point catmull_rom<Point, RandomAccessContainer>::prime(const typename Point::val
     using std_workaround::size;
     // https://math.stackexchange.com/questions/843595/how-can-i-calculate-the-derivative-of-a-catmull-rom-spline-with-nonuniform-param
     // http://denkovacs.com/2016/02/catmull-rom-spline-derivatives/
-    if (s < 0 || s > m_max_s)
+    if (!(s >= 0 && s <= m_max_s))
     {
         throw std::domain_error("Parameter outside bounds.\n");
     }
     auto it = std::upper_bound(m_s.begin(), m_s.end(), s);
     //Now *it >= s. We want the index such that m_s[i] <= s < m_s[i+1]:
     size_t i = std::distance(m_s.begin(), it - 1);
-    Point A1;
+    Point A1 = m_pnts[0];
     typename Point::value_type denom = 1/(m_s[i] - m_s[i-1]);
     typename Point::value_type k1 = (m_s[i]-s)*denom;
     typename Point::value_type k2 = (s - m_s[i-1])*denom;
@@ -244,13 +246,13 @@ Point catmull_rom<Point, RandomAccessContainer>::prime(const typename Point::val
         A1[j] = k1*m_pnts[i-1][j] + k2*m_pnts[i][j];
     }
 
-    Point A1p;
+    Point A1p = m_pnts[0];
     for (size_t j = 0; j < size(m_pnts[0]); ++j)
     {
         A1p[j] = denom*(m_pnts[i][j] - m_pnts[i-1][j]);
     }
 
-    Point A2;
+    Point A2 = m_pnts[0];
     denom = 1/(m_s[i+1] - m_s[i]);
     k1 = (m_s[i+1]-s)*denom;
     k2 = (s - m_s[i])*denom;
@@ -259,20 +261,20 @@ Point catmull_rom<Point, RandomAccessContainer>::prime(const typename Point::val
         A2[j] = k1*m_pnts[i][j] + k2*m_pnts[i+1][j];
     }
 
-    Point A2p;
+    Point A2p = m_pnts[0];
     for (size_t j = 0; j < size(m_pnts[0]); ++j)
     {
         A2p[j] = denom*(m_pnts[i+1][j] - m_pnts[i][j]);
     }
 
 
-    Point B1;
+    Point B1 = m_pnts[0];
     for (size_t j = 0; j < size(m_pnts[0]); ++j)
     {
         B1[j] = k1*A1[j] + k2*A2[j];
     }
 
-    Point A3;
+    Point A3 = m_pnts[0];
     denom = 1/(m_s[i+2] - m_s[i+1]);
     k1 = (m_s[i+2]-s)*denom;
     k2 = (s - m_s[i+1])*denom;
@@ -281,13 +283,13 @@ Point catmull_rom<Point, RandomAccessContainer>::prime(const typename Point::val
         A3[j] = k1*m_pnts[i+1][j] + k2*m_pnts[i+2][j];
     }
 
-    Point A3p;
+    Point A3p = m_pnts[0];
     for (size_t j = 0; j < size(m_pnts[0]); ++j)
     {
         A3p[j] = denom*(m_pnts[i+2][j] - m_pnts[i+1][j]);
     }
 
-    Point B2;
+    Point B2 = m_pnts[0];
     denom = 1/(m_s[i+2] - m_s[i]);
     k1 = (m_s[i+2]-s)*denom;
     k2 = (s - m_s[i])*denom;
@@ -296,21 +298,21 @@ Point catmull_rom<Point, RandomAccessContainer>::prime(const typename Point::val
         B2[j] = k1*A2[j] + k2*A3[j];
     }
 
-    Point B1p;
+    Point B1p = m_pnts[0];
     denom = 1/(m_s[i+1] - m_s[i-1]);
     for (size_t j = 0; j < size(m_pnts[0]); ++j)
     {
         B1p[j] = denom*(A2[j] - A1[j] + (m_s[i+1]- s)*A1p[j] + (s-m_s[i-1])*A2p[j]);
     }
 
-    Point B2p;
+    Point B2p = m_pnts[0];
     denom = 1/(m_s[i+2] - m_s[i]);
     for (size_t j = 0; j < size(m_pnts[0]); ++j)
     {
         B2p[j] = denom*(A3[j] - A2[j] + (m_s[i+2] - s)*A2p[j] + (s - m_s[i])*A3p[j]);
     }
 
-    Point Cp;
+    Point Cp = m_pnts[0];
     denom = 1/(m_s[i+1] - m_s[i]);
     for (size_t j = 0; j < size(m_pnts[0]); ++j)
     {

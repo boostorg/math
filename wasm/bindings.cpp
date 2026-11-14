@@ -2,41 +2,27 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 //
-// Embind bindings for the WebAssembly build. Without wasm exceptions a throw aborts the module, so errors
-// return NaN or infinity, as JavaScript's Math does. Doubles stay doubles: long double is software quad here.
+// Embind bindings for the WebAssembly build: special functions, distributions and FFTs.
 
-#define BOOST_MATH_DOMAIN_ERROR_POLICY errno_on_error
-#define BOOST_MATH_POLE_ERROR_POLICY ignore_error
-#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
-#define BOOST_MATH_EVALUATION_ERROR_POLICY ignore_error
-#define BOOST_MATH_ROUNDING_ERROR_POLICY ignore_error
-#define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
-#define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
+#include "bindings.hpp"
 
 #include <boost/math/distributions.hpp>
 #include <boost/math/special_functions.hpp>
+#include <boost/math/special_functions/spheroidal.hpp>
+#include <boost/math/special_functions/struve.hpp>
 #include <boost/math/tools/fft.hpp>
 
-#include <emscripten/bind.h>
-
-#include <cerrno>
-#include <cmath>
-#include <complex>
 #include <limits>
-#include <string>
-#include <vector>
-
-namespace bm = boost::math;
-using namespace emscripten;
+#include <type_traits>
 
 // f(a..., x) for each x of an array, returned as a Float64Array: one call from JavaScript instead of one per x.
 template <class F, class... A>
 val map_last(F f, const val& xs, A... a)
 {
-   std::vector<double> x = convertJSArrayToNumberVector<double>(xs);
+   std::vector<double> x = numbers(xs);
    for (double& v : x)
       v = f(a..., v);
-   return val(typed_memory_view(x.size(), x.data())).call<val>("slice");
+   return to_js(x);
 }
 
 // An integer order or degree n of type I: NaN unless n is an integer that I can hold.
@@ -57,6 +43,31 @@ double with_order(double n, F f)
 #define FN(f, I) function(#f, +[](double n, double x) { return with_order<I>(n, [x](I k) { return bm::f(k, x); }); }); \
    function(#f "_array", +[](double n, const val& x) { \
       return map_last([](double n, double v) { return with_order<I>(n, [v](I k) { return bm::f(k, v); }); }, x, n); })
+
+// Struve functions f(v, x), with f_prime the derivative in x (the C++ derivative pointer).
+#define STRUVE(f) F2(f); \
+   function(#f "_prime", +[](double v, double x) { double d = NAN; bm::f(v, x, &d); return d; }); \
+   function(#f "_prime_array", +[](double v, const val& x) { \
+      return map_last([](double v, double x) { double d = NAN; bm::f(v, x, &d); return d; }, x, v); })
+
+// Spheroidal wave functions f(n, m, c, x), with f_prime the derivative in x (the C++ derivative pointer).
+#define SPHEROIDAL(f) \
+   function(#f, +[](double n, double m, double c, double x) { \
+      return with_order<unsigned>(n, [&](unsigned k) { return with_order<unsigned>(m, [&](unsigned j) { return bm::f(k, j, c, x); }); }); }); \
+   function(#f "_prime", +[](double n, double m, double c, double x) { \
+      return with_order<unsigned>(n, [&](unsigned k) { return with_order<unsigned>(m, [&](unsigned j) { double d = NAN; bm::f(k, j, c, x, &d); return d; }); }); }); \
+   function(#f "_array", +[](double n, double m, double c, const val& x) { \
+      return map_last([](double n, double m, double c, double v) { \
+         return with_order<unsigned>(n, [&](unsigned k) { return with_order<unsigned>(m, [&](unsigned j) { return bm::f(k, j, c, v); }); }); }, x, n, m, c); }); \
+   function(#f "_prime_array", +[](double n, double m, double c, const val& x) { \
+      return map_last([](double n, double m, double c, double v) { \
+         return with_order<unsigned>(n, [&](unsigned k) { return with_order<unsigned>(m, [&](unsigned j) { double d = NAN; bm::f(k, j, c, v, &d); return d; }); }); }, x, n, m, c); })
+#define SPHEROIDAL_EIGENVALUE(f) \
+   function(#f, +[](double n, double m, double c) { \
+      return with_order<unsigned>(n, [&](unsigned k) { return with_order<unsigned>(m, [&](unsigned j) { return bm::f(k, j, c); }); }); }); \
+   function(#f "_array", +[](double n, double m, const val& c) { \
+      return map_last([](double n, double m, double v) { \
+         return with_order<unsigned>(n, [&](unsigned k) { return with_order<unsigned>(m, [&](unsigned j) { return bm::f(k, j, v); }); }); }, c, n, m); })
 
 // Only the constructor checks the parameters, so remember whether it set errno, and give NaN for everything
 // about an invalid distribution: mean(geometric_distribution(2.2)) would otherwise be -0.55.
@@ -85,12 +96,16 @@ template <class D, class... Params>
 void distribution(const char* name)
 {
    using C = checked<D>;
+   // pdf(x) and pdf_array(xs), and so on.
+#define AT(f, e) function(f, +[](const C& c, double x) { return c.valid ? double(e) : NAN; }) \
+      .function(f "_array", +[](const C& c, const val& xs) { return map_last([&c](double x) { return c.valid ? double(e) : NAN; }, xs); })
    class_<C>(name)
       .constructor(&make<D, Params...>)
-      .function("pdf", +[](const C& c, double x) { return c.valid ? pdf(c.d, x) : NAN; })
-      .function("cdf", +[](const C& c, double x) { return c.valid ? cdf(c.d, x) : NAN; })
-      .function("ccdf", +[](const C& c, double x) { return c.valid ? cdf(complement(c.d, x)) : NAN; })
-      .function("quantile", +[](const C& c, double p) { return c.valid ? quantile(c.d, p) : NAN; })
+      .AT("pdf", pdf(c.d, x))
+      .AT("cdf", cdf(c.d, x))
+      .AT("ccdf", cdf(complement(c.d, x)))
+      .AT("quantile", quantile(c.d, x))
+#undef AT
       .function("mean", +[](const C& c) { return c.valid ? mean(c.d) : NAN; })
       .function("variance", +[](const C& c) { return c.valid ? variance(c.d) : NAN; })
       .function("entropy", +[](const C& c) { return c.valid ? entropy_of(c.d, 0) : NAN; })
@@ -101,25 +116,11 @@ void distribution(const char* name)
       });
 }
 
-// The FFTs throw for bad lengths, which would abort the module, so check first and throw a JavaScript RangeError.
-[[noreturn]] void range_error(const char* what)
-{
-   val::global("RangeError").new_(std::string(what)).throw_();
-   __builtin_unreachable();
-}
-
 std::size_t length(double n)
 {
    if (!(n >= 1 && n <= (1 << 24) && n == std::trunc(n)))
       range_error("The length must be an integer in [1, 2^24].");
    return static_cast<std::size_t>(n);
-}
-
-using cplx = std::complex<double>;
-
-val to_js(std::vector<cplx>& z)
-{
-   return val(typed_memory_view(2 * z.size(), reinterpret_cast<double*>(z.data()))).call<val>("slice");
 }
 
 // Complex data are interleaved (re, im) Float64Arrays.
@@ -128,7 +129,7 @@ struct fft
    explicit fft(double n) : f(length(n)), z(f.size()) {}
    val run(const val& x, bool inverse)
    {
-      std::vector<double> v = convertJSArrayToNumberVector<double>(x);
+      std::vector<double> v = numbers(x);
       if (v.size() != 2 * z.size())
          range_error("The input must hold 2n numbers.");
       for (std::size_t k = 0; k < z.size(); ++k)
@@ -146,7 +147,7 @@ struct real_fft
    explicit real_fft(double n) : f(length(n)), z(f.size() / 2 + 1) {}
    val transform(const val& x)
    {
-      std::vector<double> v = convertJSArrayToNumberVector<double>(x);
+      std::vector<double> v = numbers(x);
       if (v.size() != f.size())
          range_error("The input must hold n numbers.");
       f.transform(v, z);
@@ -155,6 +156,81 @@ struct real_fft
    bm::tools::real_fft<cplx> f;
    std::vector<cplx> z;
 };
+
+// Transforms each lane along one axis of a C-order array with the given shape, whose elements are In (double or
+// cplx). make(n) gives the transform of one lane of length n, a function from std::vector<In> to std::vector<Out>.
+template <class In, class Make>
+val along_axis(const val& x, const val& shape, double axis, Make make)
+{
+   std::vector<double> v = numbers(x);
+   std::vector<double> s = numbers(shape);
+   const double d = double(s.size());
+   if (!(axis == std::trunc(axis) && axis >= -d && axis < d))
+      range_error("The axis must be an integer in [-ndim, ndim).");
+   const std::size_t a = std::size_t(axis < 0 ? axis + d : axis);
+   double before = 1, after = 1;
+   for (std::size_t i = 0; i < s.size(); ++i)
+   {
+      if (!(s[i] >= 1 && s[i] == std::trunc(s[i])))
+         range_error("The shape must hold positive integers.");
+      if (i != a)
+         (i < a ? before : after) *= s[i];
+   }
+   if (before * s[a] * after * (sizeof(In) / sizeof(double)) != double(v.size()))
+      range_error(sizeof(In) == sizeof(double) ? "The data must hold product(shape) numbers."
+                                               : "The data must hold 2 product(shape) numbers.");
+   const std::size_t outer = std::size_t(before), n = length(s[a]), inner = std::size_t(after);
+   auto t = make(n);
+   const In* in = reinterpret_cast<const In*>(v.data());
+   std::vector<In> lane(n);
+   std::vector<std::decay_t<decltype(t(lane)[0])>> out;
+   for (std::size_t o = 0; o < outer; ++o)
+      for (std::size_t i = 0; i < inner; ++i)
+      {
+         for (std::size_t j = 0; j < n; ++j)
+            lane[j] = in[(o * n + j) * inner + i];
+         const auto& y = t(lane);
+         out.resize(outer * y.size() * inner);
+         for (std::size_t k = 0; k < y.size(); ++k)
+            out[(o * y.size() + k) * inner + i] = y[k];
+      }
+   return to_js(out);
+}
+
+val fft_axis(const val& x, const val& shape, double axis, bool inverse)
+{
+   return along_axis<cplx>(x, shape, axis, [inverse](std::size_t n) {
+      return [f = bm::tools::fft<cplx>(n), inverse](std::vector<cplx>& z) mutable -> std::vector<cplx>& {
+         inverse ? f.inverse_transform(z) : f.transform(z);
+         return z;
+      };
+   });
+}
+
+val real_fft_axis(const val& x, const val& shape, double axis)
+{
+   return along_axis<double>(x, shape, axis, [](std::size_t n) {
+      return [f = bm::tools::real_fft<cplx>(n), z = std::vector<cplx>(n / 2 + 1)](std::vector<double>& v) mutable -> std::vector<cplx>& {
+         f.transform(v, z);
+         return z;
+      };
+   });
+}
+
+// P[k] = c |X[k]|^2 / n^2 for k = 0, ..., n/2, with c = 1 at k = 0 and the Nyquist k = n/2 and c = 2 otherwise:
+// sum P = mean(x^2), and A cos(2 pi k j / n) gives P[k] = A^2 / 2.
+val power_spectrum_axis(const val& x, const val& shape, double axis)
+{
+   return along_axis<double>(x, shape, axis, [](std::size_t n) {
+      return [f = bm::tools::real_fft<cplx>(n), z = std::vector<cplx>(n / 2 + 1), p = std::vector<double>(n / 2 + 1), n](
+                std::vector<double>& v) mutable -> std::vector<double>& {
+         f.transform(v, z);
+         for (std::size_t k = 0; k < z.size(); ++k)
+            p[k] = (k == 0 || 2 * k == n ? 1 : 2) * std::norm(z[k]) / (double(n) * double(n));
+         return p;
+      };
+   });
+}
 
 EMSCRIPTEN_BINDINGS(boost_math)
 {
@@ -173,6 +249,20 @@ EMSCRIPTEN_BINDINGS(boost_math)
    F2(hypergeometric_0F1); F3(hypergeometric_1F1); F3(hypergeometric_2F0);
    F2(jacobi_sn); F2(jacobi_cn); F2(jacobi_dn); F2(jacobi_zeta); F2(heuman_lambda); F1(ellint_d); F2(ellint_d);
    F2(jacobi_theta1); F2(jacobi_theta2); F2(jacobi_theta3); F2(jacobi_theta4);
+   SPHEROIDAL_EIGENVALUE(prolate_spheroidal_eigenvalue); SPHEROIDAL_EIGENVALUE(oblate_spheroidal_eigenvalue);
+   SPHEROIDAL(prolate_spheroidal_angular); SPHEROIDAL(oblate_spheroidal_angular);
+   SPHEROIDAL(prolate_spheroidal_radial_1); SPHEROIDAL(prolate_spheroidal_radial_2);
+   SPHEROIDAL(oblate_spheroidal_radial_1); SPHEROIDAL(oblate_spheroidal_radial_2);
+   STRUVE(struve_h); STRUVE(struve_l);
+   // Fresnel C(x) and S(x); fresnel_cis gives both, [C, S], for the cost of one, and fresnel_cis_array interleaves them.
+   F1(fresnel_c); F1(fresnel_s);
+   function("fresnel_cis", +[](double x) { std::vector<cplx> z{bm::fresnel_cis(x)}; return to_js(z); });
+   function("fresnel_cis_array", +[](const val& xs) {
+      std::vector<double> x = numbers(xs);
+      std::vector<cplx> z(x.size());
+      for (std::size_t k = 0; k < x.size(); ++k)
+         z[k] = bm::fresnel_cis(x[k]);
+      return to_js(z); });
    F3(ellint_rf); F3(ellint_rd); F2(ellint_rc); F3(ellint_rg);
    F2(cyl_bessel_j_prime); F2(cyl_neumann_prime); F2(cyl_bessel_i_prime); F2(cyl_bessel_k_prime);
    // Zeros are numbered m = 1, 2, ...; the order n of gegenbauer and spherical_harmonic_* comes first.
@@ -231,4 +321,11 @@ EMSCRIPTEN_BINDINGS(boost_math)
       .function("transform", +[](fft& f, const val& x) { return f.run(x, false); })
       .function("inverse_transform", +[](fft& f, const val& x) { return f.run(x, true); });
    class_<real_fft>("real_fft").constructor<double>().function("transform", &real_fft::transform);
+   for (const char* name : {"new fft", "fft.transform", "fft.inverse_transform", "new real_fft", "real_fft.transform"})
+      throws(name);
+   entry("fft_axis", +[](const val& x, const val& shape, double axis) { return fft_axis(x, shape, axis, false); });
+   entry("inverse_fft_axis", +[](const val& x, const val& shape, double axis) { return fft_axis(x, shape, axis, true); });
+   entry("real_fft_axis", &real_fft_axis);
+   entry("power_spectrum_axis", &power_spectrum_axis);
+   entry("power_spectrum", +[](const val& x) { return power_spectrum_axis(x, val::array(std::vector<double>{x["length"].as<double>()}), 0); });
 }

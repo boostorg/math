@@ -403,6 +403,39 @@ void test_random_access_container()
     CHECK_ABSOLUTE_ERROR(p1[2], p[2], Real(tol*abs(p1[2])));
 }
 
+// Points whose size is known only at run time, and a NaN parameter, which used to pass the bounds check.
+void test_vector_points_and_nan_parameter()
+{
+    using P = std::vector<double>;
+    using A = std::array<double, 3>;
+    std::vector<P> v{{0, 0, 1}, {1, 1, 2}, {2, 0, 4}, {1, -1, 8}, {0.5, -3, 16}};
+    std::vector<A> a{{0, 0, 1}, {1, 1, 2}, {2, 0, 4}, {1, -1, 8}, {0.5, -3, 16}};
+    for (bool closed : {false, true})
+    {
+        catmull_rom<P> cv(std::vector<P>(v), closed);
+        catmull_rom<A> ca(std::vector<A>(a), closed);
+        CHECK_EQUAL(ca.max_parameter(), cv.max_parameter());
+        for (double s = 0; s <= cv.max_parameter(); s += cv.max_parameter() / 37)
+        {
+            const P p = cv(s), dp = cv.prime(s);
+            const A q = ca(s), dq = ca.prime(s);
+            CHECK_EQUAL(size_t(3), p.size());
+            CHECK_EQUAL(size_t(3), dp.size());
+            for (size_t j = 0; j < 3 && j < p.size() && j < dp.size(); ++j)
+            {
+                CHECK_ABSOLUTE_ERROR(q[j], p[j], 1e-13);
+                CHECK_ABSOLUTE_ERROR(dq[j], dp[j], 1e-11);
+            }
+        }
+        const double nan = std::numeric_limits<double>::quiet_NaN();
+        CHECK_THROW(ca(nan), std::domain_error);
+        CHECK_THROW(ca.prime(nan), std::domain_error);
+        CHECK_THROW(cv(nan), std::domain_error);
+        CHECK_THROW(ca(-1.0), std::domain_error);
+        CHECK_THROW(ca(2 * ca.max_parameter()), std::domain_error);
+    }
+}
+
 void catmull_rom_test()
 {
 #if !defined(TEST) || (TEST == 1)
@@ -432,6 +465,8 @@ void catmull_rom_test()
 #endif
 
 #if !defined(TEST) || (TEST == 2)
+
+    test_vector_points_and_nan_parameter();
 
     #ifdef __STDCPP_FLOAT64_T__
     test_helix<std::float64_t>();

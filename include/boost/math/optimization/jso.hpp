@@ -88,6 +88,14 @@ void validate_jso_parameters(jso_parameters<ArgumentContainer> &jso_params) {
         << jso_params.initial_population_size << ".";
     throw std::invalid_argument(oss.str());
   }
+  // The initial population is always evaluated, and the fraction p of the best individuals
+  // that the mutation chooses from reaches zero at twice the budget:
+  if (jso_params.max_function_evaluations < jso_params.initial_population_size) {
+    oss << __FILE__ << ":" << __LINE__ << ":" << __func__;
+    oss << ": max_function_evaluations (" << jso_params.max_function_evaluations
+        << ") must be at least the initial population size (" << jso_params.initial_population_size << ").";
+    throw std::invalid_argument(oss.str());
+  }
   if (jso_params.threads > jso_params.initial_population_size) {
     oss << __FILE__ << ":" << __LINE__ << ":" << __func__;
     oss << ": There must be more individuals in the population than threads.";
