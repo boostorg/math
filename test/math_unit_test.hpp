@@ -425,12 +425,12 @@ bool check_equal(Real x, Real y, char const * filename, char const * function, i
 }
 
 
-inline bool check_true(bool condition, char const * filename, char const * function, int line)
+inline bool check_true(bool condition, char const * filename, char const * function, int line, char const * expression = "")
 {
   if (!condition) {
     std::ios_base::fmtflags f( std::cerr.flags() );
     std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << "\n";
-    std::cerr << "\033[0m  Boolean condition is not satisfied:\n";
+    std::cerr << "\033[0m  Boolean condition is not satisfied: " << expression << "\n";
     std::cerr.flags(f);
     ++detail::global_error_count();
     return false;
@@ -507,7 +507,7 @@ inline bool x86_without_fma()
 
 #define CHECK_ABSOLUTE_ERROR(X, Y, Z) boost::math::test::check_absolute_error((X), (Y), (Z), __FILE__, __func__, __LINE__)
 
-#define CHECK_TRUE(X) boost::math::test::check_true((X), __FILE__, __func__, __LINE__)
+#define CHECK_TRUE(X) boost::math::test::check_true((X), __FILE__, __func__, __LINE__, #X)
 
 // Without exceptions (GPU and SYCL builds, -fno-exceptions) errors don't throw, so there is nothing to check;
 // as BOOST_MATH_CHECK_THROW does there, the expressions aren't evaluated.

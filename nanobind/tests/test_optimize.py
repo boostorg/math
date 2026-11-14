@@ -31,7 +31,7 @@ def test_derivative_free_results():
         o.turbo(f=quadratic, lower_bounds=lo, upper_bounds=hi)
 
 
-@pytest.mark.parametrize("name", ["differential_evolution", "jso", "random_search", "multilevel_coordinate_search", "cma_es", "turbo", "dycors"])
+@pytest.mark.parametrize("name", ["differential_evolution", "jso", "random_search", "multilevel_coordinate_search", "cma_es", "turbo", "dycors", "nsga2"])
 def test_callback_errors_propagate(name):
     # Including from the worker threads, where threads= is taken.
     kw = {"threads": 2} if "threads=" in getattr(o, name).__doc__.splitlines()[0] else {}
@@ -51,6 +51,57 @@ def test_dycors():
     for bad in [{"initial_points": 3}, {"max_function_calls": 5}]:
         with pytest.raises(ValueError):
             o.dycors(quadratic, [-5.0, -5.0], [5.0, 5.0], **bad)
+
+
+def test_nsga2():
+    # Schaffer's problem, whose Pareto set is 0 <= x <= 2.
+    def f(x):
+        return [x[0] ** 2, (x[0] - 2) ** 2]
+    x, y = o.nsga2(f, [-10.0], [10.0], population_size=40, max_generations=40, seed=3)
+    assert x.shape == (len(y), 1) and y.shape[1] == 2 and 20 <= len(y) <= 40
+    assert np.all((x > -0.05) & (x < 2.05)) and np.array_equal(y, [f(t) for t in x])
+    assert np.all(np.diff(y[:, 0]) > 0) and np.all(np.diff(y[:, 1]) < 0)
+    for threads in [1, 3]:
+        assert np.array_equal(o.nsga2(f, [-10.0], [10.0], max_generations=5, seed=3, threads=threads)[1],
+                              o.nsga2(f, [-10.0], [10.0], max_generations=5, seed=3)[1])
+    for bad in [{"population_size": 3}, {"crossover_probability": 2.0}, {"threads": 0}]:
+        with pytest.raises(ValueError):
+            o.nsga2(f, [-10.0], [10.0], **bad)
+    with pytest.raises(ValueError):
+        o.nsga2(lambda x: [], [-10.0], [10.0])
+
+
+def test_nsga2_optimizer():
+    def f(x):
+        return np.stack([x[:, 0] ** 2, (x[:, 0] - 2) ** 2], axis=1)
+    opt = o.nsga2_optimizer([-10.0], [10.0], population_size=40, seed=3)
+    with pytest.raises(ValueError):
+        opt.tell(np.zeros((40, 2)))
+    for _ in range(41):
+        x = opt.ask()
+        assert x.shape == (40, 1) and np.array_equal(x, opt.ask())
+        opt.tell(f(x))
+    x, y = opt.front()
+    assert np.array_equal(y, f(x)) and np.all((x > -0.05) & (x < 2.05))
+    px, py, rank = opt.population()
+    assert px.shape == (40, 1) and np.array_equal(py, f(px)) and np.all(np.diff(rank) >= 0) and np.sum(rank == 0) >= len(x)
+    # The same run as the function, which evaluates one point at a time:
+    assert np.array_equal(x, o.nsga2(lambda t: [t[0] ** 2, (t[0] - 2) ** 2], [-10.0], [10.0], population_size=40, max_generations=40, seed=3)[0])
+    with pytest.raises(ValueError):
+        opt.ask()
+        opt.tell(np.zeros((39, 2)))
+    with pytest.raises(ValueError):
+        o.nsga2_optimizer([-10.0], [10.0], population_size=3)
+    # A warm start: the rows given come first in the first generation, and a run from the front stays on it.
+    warm = o.nsga2_optimizer([-10.0], [10.0], population_size=40, seed=4, initial_population=x[:10])
+    assert np.array_equal(warm.ask()[:10], x[:10])
+    xw = o.nsga2(lambda t: [t[0] ** 2, (t[0] - 2) ** 2], [-10.0], [10.0], population_size=40, max_generations=1, initial_population=x)[0]
+    assert np.all((xw > -0.05) & (xw < 2.05))
+    for bad in [[[11.0]], np.zeros((41, 1)), [[0.0, 0.0]]]:
+        with pytest.raises(ValueError):
+            o.nsga2_optimizer([-10.0], [10.0], population_size=40, initial_population=bad)
+        with pytest.raises(ValueError):
+            o.nsga2(lambda t: [t[0], -t[0]], [-10.0], [10.0], population_size=40, initial_population=bad)
 
 
 @pytest.mark.parametrize("name", ["gradient_descent", "nesterov", "lbfgs"])

@@ -18,6 +18,7 @@
 #include <boost/math/optimization/jso.hpp>
 #include <boost/math/optimization/minimizer.hpp>
 #include <boost/math/optimization/multilevel_coordinate_search.hpp>
+#include <boost/math/optimization/nsga2.hpp>
 #include <boost/math/optimization/random_search.hpp>
 #include <boost/math/optimization/trust_region_newton.hpp>
 #include <boost/math/optimization/turbo.hpp>
@@ -54,19 +55,26 @@ class python_cost
 public:
    explicit python_cost(nb::callable f) : f_(std::move(f)) {}
 
-   double operator()(vector const& x) const
+   double operator()(vector const& x) const { return call(x, std::numeric_limits<double>::infinity()); }
+
+   // f(x) as an R, or `failed` once f has raised.
+   template <class R>
+   R call(vector const& x, R failed) const
    {
       if (cancel_.load())
       {
-         return std::numeric_limits<double>::infinity();
+         return failed;
       }
       nb::gil_scoped_acquire acquire;
       try
       {
-         double v = nb::cast<double>(f_(vector_to_array(x)));
+         R v = nb::cast<R>(f_(vector_to_array(x)));
          // The GIL serializes these.
          ++calls_;
-         best_ = v < best_ ? v : best_;
+         if constexpr (std::is_same_v<R, double>)
+         {
+            best_ = v < best_ ? v : best_;
+         }
          return v;
       }
       catch (...)
@@ -78,7 +86,7 @@ public:
             error_ = std::current_exception();
          }
          cancel_.store(true);
-         return std::numeric_limits<double>::infinity();
+         return failed;
       }
    }
 
@@ -105,12 +113,51 @@ private:
    mutable double best_ = std::numeric_limits<double>::infinity();
 };
 
+// Vectors as the rows of an array.
+nb::object rows(std::vector<vector> const& v)
+{
+   nb::list x;
+   for (auto const& row : v)
+   {
+      x.append(vector_to_array(row));
+   }
+   return numpy().attr("array")(x);
+}
+
+// A front as (x, f): the points, one per row, and their objectives.
+nb::object front_arrays(std::vector<std::pair<vector, vector>> const& front)
+{
+   std::vector<vector> x, y;
+   for (auto const& p : front)
+   {
+      x.push_back(p.first);
+      y.push_back(p.second);
+   }
+   return nb::make_tuple(rows(x), rows(y));
+}
+
 void check_bounds(vector const& lower, vector const& upper, char const* name)
 {
    if (lower.size() != upper.size() || lower.empty())
    {
       throw nb::value_error((std::string(name) + ": lower_bounds and upper_bounds must be non-empty and the same length").c_str());
    }
+}
+
+bo::nsga2_parameters<vector> nsga2_params(char const* name, vector lower_bounds, vector upper_bounds, std::size_t population_size,
+                                         double crossover_probability, double crossover_distribution_index,
+                                         double mutation_probability, double mutation_distribution_index)
+{
+   check_bounds(lower_bounds, upper_bounds, name);
+   bo::nsga2_parameters<vector> params;
+   params.lower_bounds = std::move(lower_bounds);
+   params.upper_bounds = std::move(upper_bounds);
+   params.population_size = population_size;
+   params.crossover_probability = crossover_probability;
+   params.crossover_distribution_index = crossover_distribution_index;
+   params.mutation_probability = mutation_probability;
+   params.mutation_distribution_index = mutation_distribution_index;
+   return params;
 }
 
 // Runs the optimizer with the GIL released, then re-raises the first exception from the cost function.
@@ -383,6 +430,71 @@ void bind_optimization(nb::module_& m)
               "candidates=0, target_value=nan, seed=0)"),
       "Minimizes an expensive f over the box by DYCORS, a radial basis function surrogate with dynamic coordinate "
       "search; 0 means the defaults." BMPY_URL("dycors"));
+
+   m.def("nsga2", [](nb::callable f, vector lower_bounds, vector upper_bounds,
+                     std::optional<std::vector<vector>> initial_population, std::size_t population_size,
+                     std::size_t max_generations, double crossover_probability, double crossover_distribution_index,
+                     double mutation_probability, double mutation_distribution_index, unsigned threads, std::uint64_t seed) {
+      auto params = nsga2_params("nsga2", std::move(lower_bounds), std::move(upper_bounds), population_size, crossover_probability,
+                                 crossover_distribution_index, mutation_probability, mutation_distribution_index);
+      params.initial_population = initial_population ? &*initial_population : nullptr;
+      params.max_generations = max_generations;
+      params.threads = threads;
+      python_cost cost(std::move(f));
+      std::mt19937_64 gen(seed);
+      std::vector<std::pair<vector, vector>> front;
+      try
+      {
+         nb::gil_scoped_release release;
+         front = bo::nsga2([&](vector const& x) { return cost.call(x, vector()); }, params, gen);
+      }
+      catch (std::domain_error const&)
+      {
+         // The empty vector an exception of f leaves is not a valid set of objectives.
+         cost.rethrow();
+         throw;
+      }
+      return front_arrays(front);
+   }, arg(), arg(), arg(), nb::kw_only(), arg("initial_population") = nb::none(), arg("population_size") = 100,
+      arg("max_generations") = 250,
+      arg("crossover_probability") = 0.9, arg("crossover_distribution_index") = 15.0, arg("mutation_probability") = no_target,
+      arg("mutation_distribution_index") = 20.0, arg("threads") = 1u, arg("seed") = 0,
+      nb::sig("def nsga2(f, lower_bounds, upper_bounds, /, *, initial_population=None, population_size=100, max_generations=250, crossover_probability=0.9, "
+              "crossover_distribution_index=15.0, mutation_probability=nan, mutation_distribution_index=20.0, threads=1, seed=0)"),
+      "Minimizes every component of f(x), a sequence of floats, over the box by the genetic algorithm NSGA-II. Returns "
+      "(x, f): the nondominated points found, one per row, and their objectives. A mutation_probability of nan is 1/len(x); "
+      "the rows of initial_population, at most population_size of them, start the first generation."
+      BMPY_URL("nsga2"));
+
+   using nsga2_optimizer = bo::nsga2_optimizer<vector, vector>;
+   nb::class_<nsga2_optimizer>(m, "nsga2_optimizer",
+      "NSGA-II in ask and tell form, for objectives evaluated in batches: ask() returns the points to evaluate, one per "
+      "row, tell(f) takes their objectives, one row per point, and front() returns (x, f), the nondominated points so far. "
+      "The rows of initial_population, at most population_size of them, start the first generation."
+      BMPY_URL("nsga2"))
+      .def("__init__", [](nsga2_optimizer* self, vector lower_bounds, vector upper_bounds,
+                          std::optional<std::vector<vector>> initial_population, std::size_t population_size,
+                          double crossover_probability, double crossover_distribution_index, double mutation_probability,
+                          double mutation_distribution_index, std::uint64_t seed) {
+         auto params = nsga2_params("nsga2_optimizer", std::move(lower_bounds), std::move(upper_bounds), population_size,
+                                    crossover_probability, crossover_distribution_index, mutation_probability,
+                                    mutation_distribution_index);
+         params.initial_population = initial_population ? &*initial_population : nullptr;
+         new (self) nsga2_optimizer(params, std::mt19937_64(seed));
+      }, arg("lower_bounds"), arg("upper_bounds"), nb::kw_only(), arg("initial_population") = nb::none(),
+         arg("population_size") = 100,
+         arg("crossover_probability") = 0.9, arg("crossover_distribution_index") = 15.0,
+         arg("mutation_probability") = no_target, arg("mutation_distribution_index") = 20.0, arg("seed") = 0)
+      .def("ask", [](nsga2_optimizer& self) { return rows(self.ask()); },
+           "The points to evaluate, one per row; the same points until tell is called.")
+      .def("tell", [](nsga2_optimizer& self, std::vector<vector> f) { self.tell(std::move(f)); }, arg("f"),
+           "Takes the objectives of the points last asked for, one row per point.")
+      .def("front", [](nsga2_optimizer const& self) { return front_arrays(self.front()); },
+           "(x, f): the nondominated points so far, one per row, and their objectives.")
+      .def("population", [](nsga2_optimizer const& self) {
+         return nb::make_tuple(rows(self.population()), rows(self.objectives()), numpy().attr("array")(self.ranks()));
+      }, "(x, f, rank): the whole population, one member per row, their objectives, and the front each is in (0: nondominated). "
+         "Empty, as front() is, until the first tell.");
 
    m.def("cma_es", [](nb::callable f, vector lower_bounds, vector upper_bounds, std::optional<vector> initial_guess,
                       std::size_t max_generations, std::size_t population_size, double learning_rate, double target_value,
