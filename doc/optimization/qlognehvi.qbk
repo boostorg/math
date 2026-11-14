@@ -1,0 +1,173 @@
+[/
+Copyright (c) 2026 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:qlognehvi qLogNEHVI: Multiobjective Bayesian Optimization]
+
+[heading Synopsis]
+
+``
+    #include <boost/math/optimization/qlognehvi.hpp>
+
+    namespace boost::math::optimization {
+
+    template <typename ArgumentContainer> struct qlognehvi_parameters {
+        ArgumentContainer lower_bounds;
+        ArgumentContainer upper_bounds;
+        size_t initial_samples = 0;
+        size_t batch_size = 1;
+        size_t max_evaluations = 100;
+        size_t mc_samples = 64;
+        size_t restarts = 4;
+        size_t raw_samples = 128;
+        std::vector<double> reference_point;
+        std::vector<ArgumentContainer> const * initial_population = nullptr;
+        unsigned threads = std::thread::hardware_concurrency();
+    };
+
+    template <typename ArgumentContainer>
+    void validate_qlognehvi_parameters(qlognehvi_parameters<ArgumentContainer> const &params);
+
+    template <typename ArgumentContainer, typename ObjectiveContainer, class URBG = std::mt19937_64>
+    class qlognehvi_optimizer {
+    public:
+        qlognehvi_optimizer(qlognehvi_parameters<ArgumentContainer> const &params, URBG gen);
+        std::vector<ArgumentContainer> const &ask();
+        std::vector<ArgumentContainer> const &ask(size_t count);
+        void tell(std::vector<ObjectiveContainer> values);
+        std::vector<std::pair<ArgumentContainer, ObjectiveContainer>> front() const;
+        std::vector<ArgumentContainer> const &points() const;
+        std::vector<ObjectiveContainer> const &objectives() const;
+        std::vector<double> const &reference_point() const;
+    };
+
+    template <typename ArgumentContainer, class Func, class URBG>
+    std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>>
+    qlognehvi(const Func objectives,
+              qlognehvi_parameters<ArgumentContainer> const &params,
+              URBG &gen,
+              std::atomic<bool> *cancellation = nullptr,
+              std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr);
+
+    } // namespaces
+``
+
+The function `qlognehvi`, and the class `qlognehvi_optimizer`, minimize several expensive objectives at once over a box, in tens to hundreds of evaluations, by Bayesian optimization with the parallel noisy expected hypervolume improvement of Daulton, Balandat and Bakshy, in the logarithmic form of Ament et al.
+
+As for [link math_toolkit.nsga2 NSGA-II], the result is a set of points none of which dominates another, which approximates the Pareto front.
+The ['hypervolume] of such a set is the volume of the region that its points dominate, below a ['reference point] which bounds the objectives of interest from above; the larger it is, the closer the set is to the front and the better it covers it.
+
+After an initial design, each iteration fits a Gaussian process to each objective, on the points evaluated so far.
+The next point is the one which is expected to add the most to the hypervolume: the maximizer of the ['acquisition function], the logarithm of the average, over joint samples of the Gaussian processes, of the hypervolume that the point's sampled objectives add to that of the front of the same sample.
+The front itself is sampled, not taken from the data, which is what makes the method sound for noisy objectives; the region which each sampled front does not dominate is cut into boxes once, so that an evaluation of the acquisition function is a sum over boxes.
+A batch of `batch_size` points is chosen one point after the other, each sample being extended by its values at the points already chosen, so that the points of a batch do not crowd together.
+The logarithm, and the smooth approximations inside it, keep the gradient useful where no improvement is expected, which is nearly everywhere; the acquisition function is maximized by a quasi-Newton method from several starting points.
+
+The models, defaults and details follow [@https://botorch.org BoTorch] (`qLogNoisyExpectedHypervolumeImprovement` with `SingleTaskGP`).
+On the problems of the ZDT and DTLZ families, and those of Kursawe and of Fonseca and Fleming, the hypervolume after 200 evaluations is comparable to that which BoTorch reaches.
+
+[heading Parameters]
+
+* `lower_bounds`, `upper_bounds`: The box in which the minimization is done. All bounds must be finite.
+* `initial_samples`: The number of points of the initial design, a Latin hypercube. The default, 0, is 2(/d/ + 1) for /d/ variables.
+* `batch_size`: The number of points proposed for each fit of the models. Larger batches are cheaper per point, and can be evaluated in parallel; batches of one use every evaluation as soon as it is known. On our test problems batches of five did as well as batches of one.
+* `max_evaluations`: The number of evaluations of the objectives by `qlognehvi`, the initial design included.
+* `mc_samples`: The number of joint samples of the models over which the hypervolume improvement is averaged. The cost of proposing a point is proportional to it.
+* `restarts`, `raw_samples`: The acquisition function is maximized by L-BFGS from `restarts` of `raw_samples` random points, chosen with a preference for those where it is large.
+* `reference_point`: An upper bound for each objective; only points which are below it in every objective count for anything. If it is empty, it is the largest value of each objective over the initial design, plus a tenth of the range of the objective there, which keeps the whole front in view. Give one to spend the evaluations on a part of the front.
+* `initial_population`: An optional list of points in the bounds which are evaluated first, in place of as many points of the Latin hypercube; if there are more than `initial_samples`, they are the whole initial design.
+* `threads`: The number of threads which fit the models, maximize the acquisition function and, in `qlognehvi`, evaluate the objectives. If the objectives are not threadsafe, use `qlognehvi_optimizer` and evaluate them yourself.
+
+[heading The function]
+
+Parameters:
+
+* `objectives`: A function of an `ArgumentContainer` which returns a container of the objectives, such as a `std::array<double, 2>` or a `std::vector<double>`. Every objective is minimized; to maximize one, return its negative. There must be the same number of objectives, at least two, at every call.
+* `params`: The parameters to the algorithm as described above.
+* `gen`: A uniform random bit generator, like `std::mt19937_64`.
+* `cancellation`: An optional atomic boolean to allow the user to stop the computation and gracefully return the points found up to then.
+    N.B.: Cancellation is not immediate; the in-progress batch finishes.
+* `queries`: An optional vector to store each point evaluated, with its objectives, in order.
+    It is written to on the calling thread without a lock, so do not read it from another thread before `qlognehvi` returns; to follow a run, use `qlognehvi_optimizer`.
+
+Returns:
+
+Of all the points evaluated, those whose objectives are finite and which no other dominates, as pairs of the argument and its objectives, in lexicographic order of the objectives.
+Points whose objectives are equal are returned once.
+
+An objective may be NaN or infinite at some points.
+For the models, it then has the largest finite value seen so far of that objective, so that the neighbourhood is avoided; such a point is never returned.
+While an objective has had no finite value, the points proposed are uniformly distributed in the box.
+
+All random numbers are drawn from `gen` on the calling thread, so for a given state of `gen` the result does not depend on the number of threads.
+
+[heading Ask and tell]
+
+The class `qlognehvi_optimizer` is the algorithm without the evaluation of the objectives, which is left to the caller.
+
+* `ask()` returns the points to evaluate: first the initial design, then `batch_size` points at a time; `ask(count)` returns a batch of `count` points instead.
+    Either returns the same points until their objectives are told, after which they are no longer valid: copy what is needed of them before `tell`.
+* `tell(values)` takes the objectives of those points, in their order.
+    It throws `std::domain_error` if no points were asked for, if their number is wrong, or if the number of objectives is less than two or not that of earlier calls or of the reference point.
+* `front()` is what `qlognehvi` returns: the nondominated points so far. It is empty before the first `tell`.
+* `points()` and `objectives()` are everything told so far, in order, and `reference_point()` the reference point, which is empty until it is known.
+
+``
+    qlognehvi_optimizer<ArgType, std::array<double, 2>> optimizer(params, std::mt19937_64(12345));
+    while (optimizer.points().size() < 100) {
+        auto const &points = optimizer.ask();
+        std::vector<std::array<double, 2>> values = evaluate_all(points);
+        optimizer.tell(std::move(values));
+    }
+    auto front = optimizer.front();
+``
+
+The optimizer keeps its own copy of the generator, unless `URBG` is a reference type, such as `std::mt19937_64&`, in which case it uses the caller's, which must outlive it.
+The caller's loop decides when to stop, so `max_evaluations` is not used.
+
+[h4:examples Examples]
+
+``
+    using ArgType = std::vector<double>;
+    auto objectives = [](ArgType const &x) { return simulate(x); };  // minutes per call
+    qlognehvi_parameters<ArgType> params;
+    params.lower_bounds.assign(6, 0.0);
+    params.upper_bounds.assign(6, 1.0);
+    params.batch_size = 4;
+    params.max_evaluations = 120;
+    std::mt19937_64 gen(12345);
+    auto front = qlognehvi(objectives, params, gen);
+``
+
+More examples and API use cases can be studied in [@../../test/test_qlognehvi.cpp test_qlognehvi.cpp].
+
+[h4:nsga2 When to use it rather than NSGA-II]
+
+Use it when the objectives are expensive, so that there can only be a few hundred evaluations.
+The cost of proposing a batch grows with the cube of the number of evaluations, through the fits of the models, and steeply with the number of objectives, through the number of boxes; with thousands of cheap evaluations, NSGA-II is the better choice.
+
+[h5:caveats Caveats]
+
+The models are smooth and have one lengthscale for each variable.
+An objective with many local minima at a scale which the evaluations cannot resolve is seen as noise.
+
+If the objectives of interest are known, give the reference point.
+
+The fit of the models has local optima, and which of them is found matters to the points proposed. This implementation follows the path of the optimizer that BoTorch uses for as long as it can, and usually ends where it does, but not always. To save time, four fits in five start from the hyperparameters of the fit before, unless that ends with a greater loss than it had; fits which always start there are much faster still, but the points proposed were clearly worse on some of our test problems.
+
+The objectives are modelled independently of one another, and constraints other than the bounds are not supported.
+Like `nsga2`, `qlognehvi` compares objectives with `==` and iterates over them, so their container needs `operator==`, `begin()` and `end()`.
+
+[h4:references References]
+
+* S. Daulton, M. Balandat and E. Bakshy, ['Parallel Bayesian optimization of multiple noisy objectives with expected hypervolume improvement.] Advances in Neural Information Processing Systems 34, 2021.
+* S. Daulton, M. Balandat and E. Bakshy, ['Differentiable expected hypervolume improvement for parallel multi-objective Bayesian optimization.] Advances in Neural Information Processing Systems 33, 2020.
+* S. Ament, S. Daulton, D. Eriksson, M. Balandat and E. Bakshy, ['Unexpected improvements to expected improvement for Bayesian optimization.] Advances in Neural Information Processing Systems 36, 2023.
+* C. Hvarfner, E. O. Hellsten and L. Nardi, ['Vanilla Bayesian optimization performs great in high dimensions.] Proceedings of the 41st International Conference on Machine Learning, 2024.
+* R. Lacour, K. Klamroth and C. M. Fonseca, ['A box decomposition algorithm to compute the hypervolume indicator.] Computers & Operations Research, vol. 79, pp. 347-360, 2017.
+* M. Balandat, B. Karrer, D. R. Jiang, S. Daulton, B. Letham, A. G. Wilson and E. Bakshy, ['BoTorch: a framework for efficient Monte-Carlo Bayesian optimization.] Advances in Neural Information Processing Systems 33, 2020.
+
+[endsect] [/section:qlognehvi qLogNEHVI: Multiobjective Bayesian Optimization]
