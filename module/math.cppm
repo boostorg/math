@@ -217,6 +217,7 @@ extern "C++" {
 #include <boost/math/optimization/nesterov.hpp>
 #include <boost/math/optimization/nsga2.hpp>
 #include <boost/math/optimization/qlognehvi.hpp>
+#include <boost/math/optimization/pareto_polish.hpp>
 #include <boost/math/optimization/random_search.hpp>
 #include <boost/math/optimization/trust_region_newton.hpp>
 #include <boost/math/optimization/turbo.hpp>

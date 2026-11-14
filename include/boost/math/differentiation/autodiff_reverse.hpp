@@ -214,6 +214,14 @@ public:
         derivatives_.rewind_to_last_checkpoint();
         argument_nodes_.rewind_to_last_checkpoint();
     };
+    // Rewinds to the last checkpoint, and removes it: the tape is as it was when that checkpoint was added.
+    void pop_checkpoint()
+    {
+        gradient_nodes_.pop_checkpoint();
+        adjoints_.pop_checkpoint();
+        derivatives_.pop_checkpoint();
+        argument_nodes_.pop_checkpoint();
+    }
     void rewind_to_checkpoint_at(size_t index) // index is "checkpoint" index. so
                                                // order which checkpoint was set
     {

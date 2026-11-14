@@ -1,0 +1,291 @@
+[/
+Copyright (c) 2026 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:pareto_polish Polishing and Refining a Pareto Front with Derivatives]
+
+[heading Synopsis]
+
+``
+    #include <boost/math/optimization/pareto_polish.hpp>
+
+    namespace boost::math::optimization {
+
+    template <typename ArgumentContainer> struct pareto_polish_parameters {
+        using Real = typename ArgumentContainer::value_type;
+        ArgumentContainer lower_bounds;
+        ArgumentContainer upper_bounds;
+        Real tolerance = sqrt(std::numeric_limits<Real>::epsilon());
+        size_t max_iterations = 100;
+        Real refinement_tolerance = 0.01;
+        size_t max_new_points = 1000;
+        Real max_edge_length = std::numeric_limits<Real>::infinity();
+        Real end_perturbation = 0.01;
+        size_t corrector_dimension_limit = 100;
+        bool curvature_diagnostic = false;
+        unsigned threads = 1;
+    };
+
+    enum class pareto_polish_termination { stationarity_tolerance, no_acceptable_step, iteration_cap, non_finite };
+
+    constexpr size_t pareto_polish_created = static_cast<size_t>(-1);
+
+    template <typename ArgumentContainer, typename ObjectiveContainer> struct pareto_polish_point {
+        ArgumentContainer x;
+        ObjectiveContainer f;
+        Real weak_kkt_residual, linearized_nonworsening_gain;
+        std::vector<Real> multipliers;
+        pareto_polish_termination termination;
+        size_t origin;
+        size_t objective_evaluations, jacobian_evaluations, hvp_evaluations;
+        size_t corrector_steps, corrector_fallbacks;
+        Real least_reduced_curvature;
+        bool jacobian_from_inside;
+    };
+
+    enum class pareto_polish_cell_class { convex, concave, mixed, gap, unresolved, boundary };
+
+    template <typename Real> struct pareto_polish_cell {
+        std::vector<size_t> vertices;
+        Real error, dominance_bound;
+        pareto_polish_cell_class kind;
+        bool bound_under_convexity;
+        std::vector<Real> multipliers;
+    };
+
+    enum class pareto_polish_status { discovered_cells_resolved, cells_unresolved, budget_exhausted, no_cells,
+                                      not_refined };
+
+    template <typename ArgumentContainer, typename ObjectiveContainer> struct pareto_polish_result {
+        std::vector<pareto_polish_point<ArgumentContainer, ObjectiveContainer>> points;
+        std::vector<pareto_polish_cell<Real>> cells;
+        pareto_polish_status status;
+        Real achieved_tolerance;
+        size_t gap_cells, unresolved_cells, boundary_cells;
+        size_t new_points;
+        size_t polished_inputs, dominated_inputs;
+        std::vector<Real> ranges, chart_direction;
+        size_t objective_evaluations, jacobian_evaluations, hvp_evaluations;
+        // size(), operator[], begin() and end() are those of points.
+    };
+
+    enum class pareto_polish_event_kind { start, achievement_step, nonworsening_step, end_extension, refinement, removed,
+                                          round, cell, corrector_step, corrector_fallback };
+
+    enum class pareto_polish_fallback : size_t { products_not_finite, no_step, no_predicted_decrease, rejected };
+
+    template <typename Real> struct pareto_polish_event {
+        pareto_polish_event_kind kind;
+        size_t point, first, second;
+        std::vector<Real> x, f;
+        size_t objective_evaluations, jacobian_evaluations;
+        pareto_polish_cell_class cell_class;
+        Real error;
+        size_t hvp_evaluations;
+        size_t third; // the third corner of a triangle, or pareto_polish_created
+        std::vector<Real> multipliers; // of a cell
+    };
+
+    struct pareto_polish_no_hvp {};                   // first order only
+    struct pareto_polish_jacobian_difference_hvp {};  // products by differences of the Jacobian policy
+    template <typename Real> struct pareto_polish_reverse_mode_hvp_policy;
+
+    template <class Func, typename ArgumentContainer, typename ObjectiveContainer,
+              class JacobianPolicy = pareto_polish_reverse_mode_policy<typename ArgumentContainer::value_type>,
+              class HvpPolicy = pareto_polish_no_hvp>
+    pareto_polish_result<ArgumentContainer, ObjectiveContainer>
+    pareto_polish(const Func objectives,
+                  std::vector<std::pair<ArgumentContainer, ObjectiveContainer>> const &front,
+                  pareto_polish_parameters<ArgumentContainer> const &params,
+                  JacobianPolicy policy = JacobianPolicy(),
+                  std::vector<pareto_polish_event<typename ArgumentContainer::value_type>> *trace = nullptr,
+                  HvpPolicy hvp = HvpPolicy());
+
+    } // namespaces
+``
+
+The function `pareto_polish` takes a front as [link math_toolkit.nsga2 `nsga2`] returns it, moves each of its points toward the Pareto set with the derivatives of the objectives, and adds points until the front between neighbouring points is determined, to a tolerance, by the points and the tangents of the front at them.
+A population method leaves its points at some distance [delta] from the Pareto set, because that costs only [delta][super 2] in the objectives; a few steps with derivatives remove it.
+The result holds the points, the cells between them with an error for each, and a status.
+The method is local: it says what it found about the part of the front which the given points lead to, and nothing about any other part.
+
+[heading The guarantee]
+
+Of the points whose objectives are finite, those of the result are mutually nondominated, and every one of the front is weakly dominated by a point of the result: each objective of that point, as evaluated, is less than or equal to its own.
+This holds by construction. A point of the front is moved only by steps after which every objective, evaluated, is at most what it was at the start; and a point is left out of the result only if another dominates it or has the same objectives, in which case that one, or one which dominates it in turn, is returned.
+[*A point of the front with an objective which is not finite (a NaN or an infinity) is outside this guarantee]: it is returned as it was given, with its `x`, its objectives, its `origin` and the termination `non_finite`; it is not evaluated or moved, it is compared with no other point, and it takes no part in the cells or the ranges. Nothing dominates a NaN and a NaN dominates nothing, so no statement of dominance can be made of it.
+The `origin` of a returned point is the index of the point of the front it came from, or `pareto_polish_created`.
+The function throws for invalid parameters, among them a point of the front outside the bounds, and passes on what the objectives and the policies throw.
+
+[heading Parameters]
+
+* `lower_bounds`, `upper_bounds`: the box; the same as was given to the optimizer which produced the front. Both must be finite: a variable without a bound is not supported.
+* `tolerance`: the polish of a point stops where its steps become shorter than this allows; see `termination` below for what exactly is tested.
+* `max_iterations`: the number of accepted steps per point. Zero: no step is taken, and the points are measured as they are (their termination is `iteration_cap`).
+* `refinement_tolerance`: the criterion of the refinement, see below. Zero turns the refinement off.
+* `max_new_points`: a guard on the cost of the refinement, not its criterion. If it ends the refinement the status is `budget_exhausted`, and `achieved_tolerance` is what was reached.
+* `max_edge_length`: a cell longer than this, in objectives divided by their ranges, is divided whatever its error. The default is no limit. Set it to ask for a least density of points, or where the front may have pieces which the given points do not show (see the caveats). It must be at least a quarter of `refinement_tolerance` for two objectives and twice it for more, or the function throws: a new point is not kept within an eighth of the tolerance (the tolerance, for more than two objectives) of another, so a shorter cell could not be divided.
+* `end_perturbation`: see below.
+* `threads`: the points are independent, and are polished on this many threads, of which the calling thread is one: with one thread, the default, none is started, so the function also runs where there are no threads. The result does not depend on the number of threads.
+
+The objectives are called with an `ArgumentContainer` and return a container of values, as for `nsga2`.
+With the default policy they are also called with a `std::vector<rvar<Real, 1>>`, of [link math_toolkit.autodiff_reverse reverse mode] variables, so they must be generic in their argument:
+
+    auto objectives = [](auto const &x) { return zdt(x, 1); };
+    auto front = nsga2(objectives, nsga2_params, gen);
+    pareto_polish_parameters<std::vector<double>> params;
+    params.lower_bounds = nsga2_params.lower_bounds;
+    params.upper_bounds = nsga2_params.upper_bounds;
+    auto polished = pareto_polish(objectives, front, params);
+    if (polished.status != pareto_polish_status::discovered_cells_resolved) { /* see below */ }
+
+A known Jacobian is given by a policy, called as `policy(objectives, x, values, J)` with `x` a `std::vector<Real>`, which fills the values of the objectives and the row-major Jacobian `J[i * x.size() + j]`.
+The calling thread works with one copy of the policy for the whole call, and every other thread with a copy of its own, made when it starts.
+
+The default policy, and `pareto_polish_reverse_mode_hvp_policy` below, record on the reverse mode tapes of the thread which calls them, so with these the calling thread's tapes are used. What is on them before the call stays and can be used after it: the policies set a checkpoint, record their arguments after it, never sweep or rewind what is before it, and when `pareto_polish` returns or throws they have taken their recordings and checkpoints off again (`release()`, which is also called on the calling thread's copy of a policy of your own if it has that member), so that the tapes are as they were. The one exception is the adjoints of earlier recordings of second order, which the second order policy sets to zero as `zero_grad()` does. As with the other reverse mode policies, the objectives must not use a variable recorded before the call which depends on their argument. A copy of one of these policies starts with no arguments recorded, so a policy which the caller has used on one thread can be passed to `pareto_polish` or to another thread.
+If `trace` is given, every accepted step (with the evaluations, Jacobians and Hessian-vector products of its point so far), new point and removal is appended to it in order, and at each round of the refinement the cells as they then are (an event `round`, then one `cell` for each, with the numbers of its points, its class, its error and its multipliers). With more than one thread the events of different points are not in order of time.
+
+[heading The polish]
+
+Each point decreases max[sub i] (f[sub i](x) - a[sub i])/r[sub i], the scalarization of Pascoletti and Serafini with the reference point a and the direction r (it is also the achievement function of Wierzbicki), where a is its objectives at the start and r the ranges of the objectives over the front: it moves along a ray in the space of the objectives, parallel to those of the other points, so that the points keep their places along the front.
+This function is zero at the start, so that f [le] a wherever it has decreased.
+The step minimizes a linearization of it with a proximal term over the box, as in the steepest descent of Fliege and Svaiter, which is a small quadratic program in as many multipliers as there are objectives, solved through its dual.
+Where the ray leaves the image of the box before it meets the front, and at the end, a second kind of step decreases the sum of the objectives, divided by their ranges, with none of them increasing. Where one objective is stationary on its own (as on a face of the box on which it is least) such a step can leave that face, or lie on the boundary of its cone, so that no length of it is acceptable; the step which decreases the other objectives alike, with the variables on the bounds held there, is then tried under the same test. It takes a point which is only weakly Pareto optimal to the front. A step which the bounds cut to the one tried before it is not tried again: the lengths are halved until the step changes, and twelve more are then tried.
+The first step length is that of Barzilai and Borwein, and variables which a step puts on a bound stay there while the rest of the step is shortened.
+Where the Jacobian is not finite at a point on the boundary of the box, as for the square root of a variable at zero, that of a point 10[super -8] of the box inside is used for the step, which is accepted by the values of the objectives as any other. Such a point has `jacobian_from_inside` set, as that Jacobian is not its own.
+
+[heading The refinement]
+
+First the ends of the front are sought: from its best point in each objective, that objective alone is decreased.
+If that does not move, it is tried again from a point moved the fraction `end_perturbation` of the box inside the bounds, since the derivative of an objective can vanish on them.
+All that follows is in objectives divided by their ranges over the points which would be returned at that moment, those with finite objectives which no other point dominates; a point of the front which another dominates after the polish does not count. The ranges are taken again at every round of the refinement, and the residuals and tangents of the points with them when they have changed, so that the `ranges` of the result are those of the points returned, and `refinement_tolerance`, the errors of the cells and the residuals of the points are relative to them.
+
+[*Two objectives.] The cells are the segments between neighbours along the front, and each has two errors.
+
+The first needs no assumption on the shape of the front. For a cell with ends a and b, a to the left, a point whose first objective lies between those of a and b either dominates one of them, or is dominated by one of them, or lies in the box \[a[sub 1], b[sub 1]\] [times] \[b[sub 2], a[sub 2]\]. The largest distance of that box from the chord ab is that of its corners, the product of its sides divided by the length L of the chord, and is returned as `dominance_bound`. It is at most L/2. It bounds the distance from the chord of every point of the Pareto front between a and b if a and b are themselves on that front, which the routine cannot know: they are stationary points.
+
+The second is that of the Sandwich algorithm of Burkard, Hamacher and Rote for the approximation of a convex function.
+The multipliers [lambda] of a polished point are a normal of the tangent of the front there, so the number g[sub ab] = [lambda][sub a][cdot](f[sub b] - f[sub a])/|[lambda][sub a]| is the height of b above the tangent at a.
+If the front between a and b is connected and convex it lies below the chord and above the two tangents, in a triangle whose height over the chord is g[sub ab] g[sub ba] / (L sin([alpha] + [beta])), where [alpha] and [beta] are the angles of the tangents with the chord and sin([alpha] + [beta]) is the cross product of the two unit normals. A concave front lies in the same triangle on the other side of the chord, with both heights negative.
+The points are stationary only to a tolerance, so a tangent may cut into the front. For this each tangent is moved away from the chord by an allowance e[sub a] = [rho][sub a] |x[sub a] - x[sub b]| / |[lambda][sub a]|, where [rho][sub a] is the weak residual of a for the multipliers [lambda][sub a] and the distance is that of the two ends in the domain, and the error of the cell is
+
+[expression (|g[sub ab]| + e[sub a]) (|g[sub ba]| + e[sub b]) / (L sin([alpha] + [beta]))]
+
+or the depth below the chord of either moved tangent at the far end of the cell, (|g[sub ab]| + e[sub a])/cos [alpha], or the `dominance_bound`, whichever is least.
+The allowance is what the tangent can be wrong by under two further assumptions: that the part of the Pareto set whose image is the front between a and b is no farther from x[sub a] than x[sub b] is, and that along the segments from x[sub a] to its points the weighted sum [lambda][sub a][cdot]f is convex (for a concave cell: concave, and those points have the variables on their bounds which x[sub a] has). Then that sum changes by no less than -[rho][sub a] |x[sub a] - x[sub b]| from x[sub a], which is the statement that the front does not pass below the moved tangent.
+
+`bound_under_convexity` is set, and `error` is this second error, only if all of the following hold; otherwise `error` is the `dominance_bound`.
+
+* The cell is `convex` (g[sub ab] [ge] -e[sub a] and g[sub ba] [ge] -e[sub b]) or `concave` (both at most the allowances), not `mixed`.
+* Both ends are stationary: the residual [rho] of each, defined below, is at most 200 `tolerance` + 8 [radic][epsilon] G, where [epsilon] is the precision of the type and G the larger of the two residuals of the single objectives (the multipliers (1, 0) and (0, 1)). The first term is twice the hundred tolerances at which the second kind of step stops; the second is what the rounding of a Jacobian of that size leaves of a residual which should be zero, and it is what admits a point where the gradients are large. This [rho] is not required to be below `tolerance`: whatever it is, the cell is charged for it through the allowance.
+* Neither end has `jacobian_from_inside` set.
+* The nearest cells on either side which are not within their allowances of being straight are of the same class. Where a convex cell meets a concave one the curvature changes sign in one of the two or between them, and the triangle of the cell with the change in it is no bound. This classification by the side of the tangents on which the neighbours lie is that of Lee, Jackson, Galindo and Adjiman.
+
+Where the multipliers of a point are not unique, as at a kink of the front, at its ends, and where a variable is on its bound, they form an interval, and each of the two cells at the point takes the tangent which faces it, the one sided derivative of the Sandwich algorithm. The interval is that of the multipliers whose residual is at most twice the least plus a rounding allowance, and the residual at its ends is the [rho] of the allowance.
+
+A cell is resolved when its `error` is at most `refinement_tolerance` and its length at most `max_edge_length`. A cell which is not is given a new point (see below). If no point comes to lie between its ends, a local search moves each end into the cell: from the left end the second objective is decreased with the first kept below that of the right end, in steps which change no variable by more than a twentieth of the largest difference of the two ends in a variable (a radius which is made smaller when the line search fails), and then from the right end the first with the second kept below that of the left end. After that the cell is one of three things.
+
+* `gap`, a presumed gap: both searches stopped at a stationary point of their problem, so that locally the front ends on both sides. Stationary means that the step of the search's own scalarization over the whole box, without the radius, is within the tolerance, and that the point's `weak_kkt_residual` confirms it. A search which stops because its line search fails, or at its radius, or at the cap on its steps, has not shown this. These are counted in `gap_cells` and not divided again. [*A gap is a presumption]: Lee, Jackson, Galindo and Adjiman discard a part of the space of the objectives only after a subproblem over it has been solved globally (their Theorem 4.2), which a local search does not do. What is known without assumption is the `dominance_bound` of the cell, which is its `error`; for a gap between two pieces which end at the same height, as those of ZDT3 do, it is small.
+* `unresolved`: one of the searches did not converge, and the cell between the points which the searches reached is above the tolerance. It is not divided again; `unresolved_cells` counts these, and the status is then not `discovered_cells_resolved`.
+* Resolved after all: the searches brought the ends so close in one objective that the `dominance_bound` of the cell between them is within the tolerance. That needs no presumption, and the cell is then an ordinary one, of the class which its tangents give it.
+
+The class `mixed` also stands for a cell with an end at which no finite Jacobian was found.
+
+[*Three objectives.] The cells are triangles. Points which are mutually nondominated never differ by a multiple of a vector r with positive entries, so they are a graph over the plane orthogonal to any such r: y(u) = u + g(u) r. For r the function takes the mean of the unit normals of the points (their multipliers), in objectives divided by their ranges; it is returned as `chart_direction`. The points are projected along r and their projections are triangulated (the Delaunay triangulation, by the method of Bowyer and Watson). A cell of three corners is such a triangle; its `vertices` are three indices.
+
+Let L be the affine function through the heights g of the three corners of a triangle S, and t[sub i] the tangent function at corner i, which its multipliers give. If g is convex over S then max[sub i] t[sub i] [le] g [le] L there, and
+
+  E = max[sub u in S] (L(u) - max[sub i] (t[sub i](u) - e[sub i]))
+
+bounds L - g over all of S, not only at a point; for a concave g the two envelopes change places. The e[sub i] are the allowances for the stationarity of the corners, as for two objectives. L - t[sub i] is affine with the values A[sub ij] at the corners (the height of corner j over the tangent plane of corner i, along r), so E is the largest over the triangle of the least of three affine functions: the value of the matrix game of A, which is among a few candidates (the corners, the points of the edges where two of the functions are equal, and the point where all three are). What is taken for E is not the largest value found at these but the least of the upper bounds which the same candidates give for the other player of the game (the largest entry of p A over mixtures p of the rows): the two agree at the value of the game, and the upper one stays a bound whatever rounding makes of the candidates. The `error` of the cell is E times the cosine of the angle between r and the normal of the triangle: the distance from the plane of the triangle of the farthest point between it and the tangent planes, which does not depend on r where the triangle is small. For two objectives the same construction gives the triangle between the chord and the two tangents. A cell is convex if every corner is on or above the tangent plane of every other, within the allowances, concave if on or below, and mixed otherwise.
+
+`bound_under_convexity` is set for a triangle if it is convex or concave, no triangle with which it shares an edge is of the other kind, and each corner is stationary (as for two objectives), has its own Jacobian, is not a corner of the front (below), and has a normal which is not within three degrees of orthogonal to r. Then, [*if the front over the triangle is a convex (concave) graph through its corners and their tangent planes are those of the front], no point of the front over the triangle along r is farther than `error` from the plane of the triangle. The assumptions are those listed for two objectives, with one more: the triangle must be over the front, which a triangle between two pieces of a front, or outside a boundary which is not convex, is not. Every other triangle reports `dominance_bound` as its `error`: a point over the triangle which no corner dominates and which dominates no corner is within that of its plane, with no convexity; it is of the order of the size of the triangle and not of its square, so such cells are refined until they are small. (A triangle with a corner whose only multipliers are those of a single objective keeps the envelope with the tangent planes of its other corners, as an estimate.)
+
+On the boundary of the front, where a variable is on a bound, and at its corners the multipliers are not unique: the Jacobian on the variables off the bounds has rank less than two. They fill a segment of the simplex, whose direction is read off the singular value decomposition of that Jacobian (the combination of its two last left singular vectors whose entries sum to zero); the ends of the segment, as far as the weak residual stays below the level at which a point counts as stationary, are kept, and each triangle takes at each corner the tangent plane which is lowest at its centre, the one which faces it. A point where the multipliers fill more than a segment is a corner of the front; the cells at it are no bounds.
+
+A triangle above the tolerance, or with an edge longer than a quarter of the range, is divided: first by the polish of the point of the domain with the weights of the point where E is attained (the middle of the longest edge for a sliver, lower than a twentieth of its longest edge); then, if that left the triangle as it was, by a search towards that point of the triangle along r. If this second search stops at a stationary point of its scalarization which is not on its line, or which another point dominates, the line does not meet the front: the triangle is given the kind `boundary`, [*presumed outside the front] (an estimate, as a gap is for two objectives), and so is every triangle whose centre is within it. A triangle which is still there after both searches, with nothing to show it outside, is `unresolved` if it is above the tolerance or longer than `max_edge_length`; one which is within the tolerance and only longer than the quarter of the range stays as it is.
+
+The edges with a triangle on one side only (or a triangle presumed outside on the other) are returned as cells with two corners and the kind `boundary`: there the part of the front which was found ends. They are not refined across. A point is sought between the ends of each: by the polish of their midpoint in the domain, then by a search along r towards a target a quarter of the length of the edge beyond its middle. The distance of what is found from the edge is the `error` of the edge, an estimate of how far the boundary of the front is from it, and a quarter of it is the estimate for the two edges which the point makes of it. Where the second search stops at a stationary point on the side of the triangle, farther from the edge than the tolerance, the front ends before the edge: the triangle of the edge and that point is presumed outside, and the edges from the point take its place. An edge above the tolerance after both searches, with nothing of the kind found, is `unresolved`.
+
+[*How many points.] A smooth piece of a front of three objectives needs a number of points proportional to 1/[epsilon] for the tolerance [epsilon] (triangles of diameter h have errors of order h[super 2]); for m objectives the power is (m - 1)/2. As the error is the distance to the tangent planes, which for a smooth front is twice the distance to the front, about twice the points of the best triangulation are used. On three test problems with a hundred points given (squared distances to three sites; the same with one distance in a stretched metric, which has a curved Pareto set; and DTLZ2) a tolerance of a hundredth of the ranges took 260 to 340 points and three thousandths 590 to 750; a thousandth took 1300 to 1700, which the default of `max_new_points`, a thousand, does not allow (the status is then `budget_exhausted`). In 264 runs on these problems every one of the 265,000 triangles which were flagged as bounds had the front within its `error`; the front was at half of it in the median, and at most at 99.96% of it. At the three larger tolerances the status was `discovered_cells_resolved` in all 66 runs of the first problem, in 63 of the third, and in 21 of the second with steps of first order, all 66 with the corrector of second order.
+
+[*Limitations.] Nothing is known of pieces of the front which no point is on, nor of the front beyond the edges of kind `boundary` other than by the estimate above. The triangulation is of the projections, which can be slivers where points are nearly on one line; a sliver above the tolerance whose new points repeat its corners ends `unresolved`. The searches along r are polishes like any other: where the Pareto set is curved the first order steps may not converge within `max_iterations`, and cells then end `unresolved` which the corrector of second order resolves (on the second test problem below, about half of the runs against all of them, at a third of the cost). A front whose normals turn far from r (by more than about 87 degrees) has cells which are no bounds there. Building the cells costs O(N[super 2]) operations for N points in each round. Where there is no triangle (two points, or all of them on one line of the chart to rounding) the cells are the edges of four or more objectives, below, with estimates. A point whose projection repeats that of another to rounding is in no triangle; the edge to the nearest point which is in one is then returned as `unresolved`.
+
+[*Four or more objectives.] The cells are for now the edges between Gabriel neighbours (no third point in the ball on the edge between them), the error of an edge is the smaller of the two distances of its ends from the tangent plane of the other (the larger if they differ in sign, the length of the edge if a tangent plane is missing), and an edge above the tolerance, or longer than a quarter of the range, gets one new point. [*These errors are estimates]: an edge says nothing of the interior of the cells between the edges, `bound_under_convexity` is never set and `dominance_bound` is NaN. An edge whose new point did not divide it is `unresolved`; there are no gaps.
+
+[*The new points.] The new point of a cell is the polish of the midpoint of its two ends in the domain: it moves along the ray through its own image, and is kept if no point dominates it and it is not within an eighth of the tolerance (the tolerance, for three or more objectives) of another.
+
+The hypervolume of the points themselves is not what the tolerance controls: a front of two objectives which is determined to one percent by twenty points still has a staircase between them.
+
+[heading What the results mean]
+
+The `status` is about the cells which the routine made, and about nothing else.
+
+* `discovered_cells_resolved`: every cell is resolved, or is a presumed gap or a triangle presumed outside the front. This does not say that the front is known to the tolerance: a part of it which no returned point is on is not looked for, an inflection inside a cell whose ends do not show it makes the error of a bound too small, and a presumed gap may not be one.
+* `cells_unresolved`: as above but for `unresolved_cells` cells, which are listed in `cells`.
+* `budget_exhausted`: `max_new_points` ended the refinement with cells above the tolerance.
+* `no_cells`: fewer than two points with finite objectives were left, so there is no cell: the front, as far as found, is one point, or there is none.
+* `not_refined`: `refinement_tolerance` is zero. The cells of the polished points are returned with their errors, and are not divided.
+
+`achieved_tolerance` is the largest `error` of a cell which is neither a presumed gap nor of the kind `boundary`, whatever the status. The cells of the kind `boundary` are left out because their errors are of another kind: that of a triangle presumed outside the front is its `dominance_bound`, which no tolerance is asked of, and that of an edge is an estimate of how far the boundary of the front is from it, which is half the length of the edge until a search has measured it. They are in `cells`, and `boundary_cells` counts them; an edge whose estimate stays above the tolerance after its searches is `unresolved`, and is counted in `achieved_tolerance`.
+
+The `termination` of a point says why its polish stopped.
+
+* `stationarity_tolerance`: the step of the first kind, for the point's own scalarization, was no longer than `tolerance` times its step length, or the first kind found no acceptable step and the step of the second kind was no longer than a hundred times `tolerance` times its step length. Both are steps over the whole box (not over the radius of a search into a cell), in objectives divided by the ranges in use at that time. Either makes the `weak_kkt_residual` at most a hundred times `tolerance` in those ranges, and the termination is reported only if that also holds of the `weak_kkt_residual` of the result, in the ranges of the result.
+* `no_acceptable_step`: it stopped short of that. The line searches of both kinds found no step which keeps the guarantee, as happens where the decrease which a step promises is below the rounding of the objectives; or the steps were short only because a variable is within rounding of its bound without being on it, or only in the ranges of an earlier round.
+* `iteration_cap`: `max_iterations` steps were accepted.
+* `non_finite`: the objectives of the point are not finite (see the guarantee), or no finite Jacobian was found at it or just inside the bounds from it.
+
+`polished_inputs` is the number of points of the given front whose polish ended at the stationarity tolerance, and `dominated_inputs` the number of those which are not returned because another point dominates them. A stationary point which is dominated lies on a branch of locally optimal points, so a large fraction is a sign of a front which was not mature or of a Pareto set of several components; it is a diagnostic and certifies neither, nor does zero certify their absence. From twenty generations of `nsga2` on ZDT3 it was about half, from a hundred a twentieth, and on ZDT1 and ZDT2 zero.
+
+The two numbers of a point are for the objectives divided by `ranges`, and both are of first order.
+[*Neither certifies that a point is Pareto optimal, nor bounds its distance to the Pareto set.]
+
+* `weak_kkt_residual` is the norm of the smallest combination [sum] [lambda][sub i] [nabla]f[sub i] with multipliers in the simplex, after the components which point out of the box at an active bound are removed. It is zero at a Pareto optimal point where the objectives are differentiable, and also wherever one objective alone cannot be decreased, and at points which are only locally optimal.
+* `multipliers` are the [lambda] of `weak_kkt_residual`, which sum to one. They are for the objectives divided by `ranges`, so the tangent of the front at a point with the objectives f is the set of y with [sum] [lambda][sub i] (y[sub i] - f[sub i]) / `ranges`[sub i] = 0. Where the multipliers are not unique a point has one of them; the `multipliers` of a cell are, for each of its vertices in turn, those of the tangent which the cell was compared with, the one which faces it. They are zero for a vertex whose tangent was not used, and there are none for a cell without tangents, as an edge of the kind `boundary`.
+* `linearized_nonworsening_gain` is the largest -[sum][sub i] [nabla]f[sub i][cdot]d over directions d of length at most one which stay in the box and have [nabla]f[sub i][cdot]d [le] 0 for every i. It is the residual of the conditions of Kuhn and Tucker with all multipliers positive (the strong conditions, those of proper efficiency): zero means that no direction decreases an objective to first order without increasing another. A positive value does not show that the point can be improved. At the ends of a front, at the minimizer of one objective, and for three or more objectives on the whole boundary of the front, where a multiplier is zero (there it is the length of the gradient of that objective less its part along the others), it is positive at points which are Pareto optimal: for f = (x[super 2], (x - 1)[super 2]) the point x = 0 is optimal, but there the first objective has no slope while the second decreases, so the gain is positive; such a point is efficient but not properly so. No quantity of first order can tell these cases apart: F(t) = (0, -t) and G(t) = (t[super 2], -t) have the same values and derivatives at t = 0, where only G is Pareto optimal.
+[heading The corrector of second order]
+
+The steps above are of first order, and are slow where the Pareto set is curved and the objectives are badly conditioned along it: on a quadratic problem of ten variables whose Pareto set is an arc, a point took about twenty of them.
+If the last argument of `pareto_polish` is a policy for Hessian-vector products, the steps of the first kind are taken, where that pays, by Newton's method on the conditions of Karush, Kuhn and Tucker of
+
+[expression minimize t subject to (f[sub i](x) - a[sub i])/r[sub i] [le] t, lower [le] x [le] upper]
+
+which is the same scalarization, written smoothly (a step of sequential quadratic programming; see Nocedal and Wright). The Hessian of its Lagrangian is W = [Sigma] [lambda][sub i] H[sub i]/r[sub i], with H[sub i] the Hessians of the objectives and [lambda] the multipliers of the first order step; the variables which that step holds on their bounds stay there.
+
+* [*The policies.] `pareto_polish_jacobian_difference_hvp` makes each product from one more Jacobian, by a forward difference of the Jacobian policy within the bounds, and asks nothing more of the objectives; these Jacobians are counted in `jacobian_evaluations`, and the products are good to about the square root of the precision, which is enough for the steps. `pareto_polish_reverse_mode_hvp_policy<Real>` computes them by reverse over reverse autodiff, and calls the objectives with a `std::vector<rvar<Real, 2>>`. Your own policy is called as `policy(objectives, x, weights, directions, products)`, all but the first `std::vector<Real>`, and fills `products` with H v for the Hessian H of [Sigma] `weights[i]` f[sub i] at `x` and each of the vectors v, of the length of `x`, which follow one another in `directions`. It is copied as the Jacobian policy is. The default, `pareto_polish_no_hvp`, is the polish of first order, and nothing about it is changed by this section.
+* [*Its cost.] A model of each H[sub i] costs one product for each free variable. It is therefore asked for only at a point where the first order steps are slow (eight of them have not converged), kept afterwards by symmetric rank one updates from the changes of the gradients, which cost nothing, and handed on: every eighth point of the front, in the order of the first objective, is polished first, each of the others starts with the model of the nearest of those which has one, and a new point of the refinement starts with the models of the ends of its cell, weighted by where between them it starts. A point with a model from elsewhere uses it from its first step. A point which has none, and is not one of those which hand theirs on, asks for the products only after as many first order steps as there would be products. More than `corrector_dimension_limit` free variables: no corrector at that point (the model is dense, and its systems are solved directly).
+* [*The guard.] A trial point of the corrector is accepted by the test of the first order step and no other: it is within the bounds, its objectives are finite and were evaluated, none of them exceeds its value at the start of the point, and the scalarization has decreased enough. So the guarantee above is the same. In addition its model must promise a tenth of the decrease which the model of the first order step promises, so that it is not used where it is the shorter step. If the trial point is not accepted, one more is tried with W shifted to be positive definite; then the first order step is taken for that iteration (`corrector_fallbacks` counts these, and the trace has the reason, a `pareto_polish_fallback` in `first`). After three trial points which were rejected at a point the corrector is not used there again. An indefinite W is not reported: negative curvature of one weighted sum of the objectives is no evidence that a point is not Pareto optimal.
+* [*What it does not change.] The tolerance, the terminations, both residuals, the cells and their errors, and the statuses mean what they did. The points returned differ from those of the first order polish in the last digits or, where a search ends on another piece of a front, in which they are.
+
+Measured over eleven seeds of `nsga2`, with an evaluation of the objectives counted as one, a Jacobian as four and a reverse mode product as eight: on two problems with curved Pareto sets (ten variables and quadratic; twenty-four variables, quartic and not convex) the whole polish and refinement to a tolerance of 10[super -4] cost between 3.1 and 3.5 times less on the first and between 1.5 and 2.2 times less on the second, and with the products by Jacobian differences between 3.7 and 4.3, and 1.8 and 2.4, times less. On the first of them a new point then took about three steps where it had taken about nineteen. On ZDT1 to ZDT3, the problem of Fonseca and Fleming, and two problems of three objectives, where the first order steps are not slow, the cost was the same to within four percent. In time a reverse mode product cost about as much as twenty to thirty evaluations in these runs, not eight, and with it the second of the curved problems took as long as before; with the differences both were faster. Start with `pareto_polish_jacobian_difference_hvp`.
+
+[heading The curvature diagnostic]
+
+With `curvature_diagnostic` set and a policy for the products, each point returned which reached the stationarity tolerance gets `least_reduced_curvature`: the least eigenvalue of W = [Sigma] [lambda][sub i] H[sub i]/r[sub i], at the multipliers of its weak residual and with r the ranges of the result, on the directions u which move no variable that is on a bound and change no objective to first order (J u = 0). It costs one product for each variable which is not on a bound, at every such point, which is why it is off by default.
+
+A necessary condition for the point to be a local minimizer of the weighted sum of the objectives with these multipliers is that this is not negative, and where the multipliers are unique the same is necessary for local Pareto optimality. A negative value therefore flags a saddle of the scalarization: a direction along which no objective changes to first order and their weighted sum decreases to second. [*It is a diagnostic, not a certificate]: a value which is not negative proves nothing, since the condition is necessary and not sufficient, since directions into the box from a bound are left out, and since the multipliers and the point are known only to the tolerance. It is NaN where the test is inconclusive: the point did not reach the tolerance, its Jacobian is that of a point inside, or the Jacobian on the variables off the bounds is not of rank one less than the number of objectives (its singular values above a ten-thousandth of the largest gradient are counted), which is where the multipliers are not unique (the ends of a front, kinks, corners of the box). It is infinite where there is no such direction at all. With the difference policy it is good to about the square root of the precision times the size of W.
+
+[h5:caveats Caveats]
+
+The method is local. From a front which is far from the Pareto set a point can end on a piece which is locally but not globally Pareto optimal, and the refinement does not reach a piece of the Pareto set which none of its points leads to: from twenty generations of `nsga2` on ZDT3 it found two to four of the five pieces, and its status was `discovered_cells_resolved`. There it is better to run the population method for longer first; `dominated_inputs` gives a hint.
+Stationarity is necessary for optimality, not sufficient.
+A point can stop short of stationarity (`no_acceptable_step`, `iteration_cap`); the cells at it are then no bounds.
+For three objectives the number of points grows as the inverse of the tolerance, and `max_new_points` is soon reached. Where the curvature of a front of two objectives changes sign, the cells on both sides are divided down to about twice the tolerance in length, since only the `dominance_bound` holds there.
+The corrector of second order keeps a dense matrix for each objective at each point, so the square of the number of variables times the number of objectives and of points in memory; there is no matrix-free variant yet. Its thresholds (eight steps, every eighth point) were chosen on the problems above.
+At most 10 objectives are supported; the quadratic program enumerates the faces of their simplex.
+The objectives are assumed to be deterministic.
+
+[h4:references References]
+
+* J. Fliege and B. F. Svaiter, ['Steepest descent methods for multicriteria optimization.] Mathematical Methods of Operations Research, vol. 51, pp. 479-494, 2000, doi: 10.1007/s001860000043.
+* A. Pascoletti and P. Serafini, ['Scalarizing vector optimization problems.] Journal of Optimization Theory and Applications, vol. 42, pp. 499-524, 1984, doi: 10.1007/BF00934564.
+* J. Nocedal and S. J. Wright, ['Numerical Optimization], 2nd edition, Springer, 2006, doi: 10.1007/978-0-387-40065-5 (sequential quadratic programming, chapter 18; the symmetric rank one update, chapter 6).
+* J. Barzilai and J. M. Borwein, ['Two-point step size gradient methods.] IMA Journal of Numerical Analysis, vol. 8, pp. 141-148, 1988, doi: 10.1093/imanum/8.1.141.
+* R. E. Burkard, H. W. Hamacher and G. Rote, ['Sandwich approximation of univariate convex functions with an application to separable convex programming.] Naval Research Logistics, vol. 38, pp. 911-924, 1991, doi: 10.1002/nav.3800380609.
+* L. Y. S. Lee, G. Jackson, A. Galindo and C. S. Adjiman, ['A deterministic optimization algorithm for nonconvex and combinatorial bi-objective programming.] arXiv:2410.17190, 2024.
+
+[endsect] [/section:pareto_polish Polishing and Refining a Pareto Front with Derivatives]

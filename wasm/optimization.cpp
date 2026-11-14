@@ -15,6 +15,7 @@
 #include <boost/math/optimization/jso.hpp>
 #include <boost/math/optimization/multilevel_coordinate_search.hpp>
 #include <boost/math/optimization/nsga2.hpp>
+#include <boost/math/optimization/pareto_polish.hpp>
 #include <boost/math/optimization/qlognehvi.hpp>
 #include <boost/math/optimization/random_search.hpp>
 #include <boost/math/optimization/turbo.hpp>
@@ -326,6 +327,102 @@ double hypervolume(const val& points, const val& reference)
 }
 } // namespace qlognehvi_js
 
+// pareto_polish of a front {x, f}, as nsga2 returns it, of a test problem, which the autodiff differentiates. The
+// points come back as {x, f} with the origin (-1: a new point), weak_kkt_residual and multipliers of each; the cells
+// as {vertices, error, kind, bound_under_convexity, multipliers}, the vertices indices into the points; and with the
+// option trace the events, with the names of their kinds and -1 for no point.
+namespace pareto_polish_js
+{
+const char* const classes[] = {"convex", "concave", "mixed", "gap", "unresolved", "boundary"};
+const char* const statuses[] = {"discovered_cells_resolved", "cells_unresolved", "budget_exhausted", "no_cells", "not_refined"};
+const char* const events[] = {"start", "achievement_step", "nonworsening_step", "end_extension", "refinement", "removed", "round", "cell",
+                              "corrector_step", "corrector_fallback"};
+
+double index(std::size_t i) { return i == bo::pareto_polish_created ? -1 : double(i); }
+
+val polish(const val& f, const val& front, const val& lower, const val& upper, const val& opts)
+{
+   const int id = named::find(tp::multiple, f);
+   if (id < 0 || front.typeOf().as<std::string>() != "object" || front.isNull())
+      range_error("pareto_polish takes the name of a test function and a front {x, f}.");
+   options o(opts);
+   bo::pareto_polish_parameters<vec> p;
+   p.lower_bounds = numbers(lower);
+   p.upper_bounds = numbers(upper);
+   p.tolerance = o.real("tolerance", p.tolerance);
+   p.refinement_tolerance = o.real("refinement_tolerance", p.refinement_tolerance);
+   p.max_new_points = o.count("max_new_points", p.max_new_points);
+   const bool second_order = o.flag("second_order"), traced = o.flag("trace");
+   o.done();
+   const std::vector<vec> x = nsga2_js::matrix(front["x"], 0, p.lower_bounds.size()), y = nsga2_js::matrix(front["f"], x.size(), 0);
+   std::vector<std::pair<vec, vec>> points;
+   for (std::size_t i = 0; i < x.size(); ++i)
+   {
+      if (y.size() != x.size() || y[i].size() != named::values(id, x[i]).size())
+         range_error("The front must have the objectives of each of its points.");
+      points.emplace_back(x[i], y[i]);
+   }
+   const auto objectives = [id](const auto& v) { return tp::values(id, v); };
+   std::vector<bo::pareto_polish_event<double>> trace;
+   const auto r = second_order ? bo::pareto_polish(objectives, points, p, {}, traced ? &trace : nullptr, bo::pareto_polish_jacobian_difference_hvp{})
+                               : bo::pareto_polish(objectives, points, p, {}, traced ? &trace : nullptr);
+   std::vector<vec> xs, fs, multipliers;
+   vec origin, residual;
+   for (const auto& q : r)
+   {
+      xs.push_back(q.x);
+      fs.push_back(q.f);
+      multipliers.push_back(q.multipliers);
+      origin.push_back(index(q.origin));
+      residual.push_back(q.weak_kkt_residual);
+   }
+   val cells = val::array(), out = val::object();
+   for (const auto& c : r.cells)
+   {
+      val cell = val::object();
+      cell.set("vertices", to_js(vec(c.vertices.begin(), c.vertices.end())));
+      cell.set("error", c.error);
+      cell.set("kind", std::string(classes[int(c.kind)]));
+      cell.set("bound_under_convexity", c.bound_under_convexity);
+      cell.set("multipliers", to_js(c.multipliers));
+      cells.call<void>("push", cell);
+   }
+   out.set("x", rows(xs));
+   out.set("f", rows(fs));
+   out.set("origin", to_js(origin));
+   out.set("weak_kkt_residual", to_js(residual));
+   out.set("multipliers", rows(multipliers));
+   out.set("cells", cells);
+   out.set("status", std::string(statuses[int(r.status)]));
+   out.set("achieved_tolerance", r.achieved_tolerance);
+   out.set("ranges", to_js(r.ranges));
+   out.set("new_points", double(r.new_points));
+   out.set("objective_evaluations", double(r.objective_evaluations));
+   out.set("jacobian_evaluations", double(r.jacobian_evaluations));
+   if (traced)
+   {
+      val all = val::array();
+      for (const auto& e : trace)
+      {
+         val event = val::object();
+         event.set("kind", std::string(events[int(e.kind)]));
+         event.set("point", index(e.point));
+         event.set("first", index(e.first));
+         event.set("second", index(e.second));
+         event.set("third", index(e.third));
+         event.set("x", to_js(e.x));
+         event.set("f", to_js(e.f));
+         event.set("cell_class", std::string(classes[int(e.cell_class)]));
+         event.set("error", e.error);
+         event.set("multipliers", to_js(e.multipliers));
+         all.call<void>("push", event);
+      }
+      out.set("trace", all);
+   }
+   return out;
+}
+} // namespace pareto_polish_js
+
 // The gradient-based optimizers, one step at a time: arguments(), objective_value() and gradients() are those of the
 // last step, and function_calls() and hessian_vector_products() count from the start. steps(n) takes n steps and
 // returns a row after each, (x_1, ..., x_d, f(x), function calls, Hessian-vector products), end to end. The tapes of
@@ -527,6 +624,8 @@ EMSCRIPTEN_BINDINGS(boost_math_optimization)
    for (const char* name : {"new qlognehvi_optimizer", "qlognehvi_optimizer.ask", "qlognehvi_optimizer.tell"})
       throws(name);
    entry("hypervolume", &qlognehvi_js::hypervolume);
+   entry("pareto_polish", +[](const val& f, const val& front, const val& l, const val& u) { return pareto_polish_js::polish(f, front, l, u, val::undefined()); },
+         &pareto_polish_js::polish);
 
    using gradient::optimizer;
    class_<optimizer>("gradient_optimizer")
