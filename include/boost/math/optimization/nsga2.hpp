@@ -12,6 +12,7 @@
 #include <atomic>
 #endif
 #include <boost/math/optimization/detail/common.hpp>
+#include <boost/math/optimization/detail/parallel_for.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <algorithm>
 #include <cmath>
@@ -35,24 +36,6 @@ BOOST_MATH_NAMESPACE_BEGIN namespace optimization {
 // Unlike the paper, children which duplicate a member of the population are not kept.
 
 namespace detail {
-
-// Does a dominate b, all objectives being minimized? A point with a NaN objective is dominated by every point without.
-BOOST_MATH_TEST_EXPORT template <class ObjectiveContainer>
-bool dominates(ObjectiveContainer const &a, ObjectiveContainer const &b) {
-  using std::isnan;
-  bool better = false;
-  bool worse = false;
-  bool b_is_nan = false;
-  for (size_t m = 0; m < a.size(); ++m) {
-    if (isnan(a[m])) {
-      return false;
-    }
-    b_is_nan = b_is_nan || isnan(b[m]);
-    better = better || a[m] < b[m];
-    worse = worse || a[m] > b[m];
-  }
-  return b_is_nan || (better && !worse);
-}
 
 // The fast nondominated sort of Section III-A: fronts[0] holds the indices of the nondominated points,
 // fronts[1] those dominated only by members of fronts[0], and so on.
@@ -380,11 +363,7 @@ public:
     // There is no ordering NaNs, which are only here if every member has one.
     if (!front.empty() &&
         !std::any_of(front[0].second.begin(), front[0].second.end(), [](auto const &v) { return isnan(v); })) {
-      std::stable_sort(front.begin(), front.end(), [](auto const &a, auto const &b) {
-        return std::lexicographical_compare(a.second.begin(), a.second.end(), b.second.begin(), b.second.end());
-      });
-      auto same = [](auto const &a, auto const &b) { return a.second == b.second; };
-      front.erase(std::unique(front.begin(), front.end(), same), front.end());
+      detail::sort_unique_front(front);
     }
     return front;
   }
@@ -422,21 +401,7 @@ nsga2(const Func objectives, nsga2_parameters<ArgumentContainer> const &params, 
   for (size_t generation = 0;; ++generation) {
     auto const &points = optimizer.ask();
     std::vector<ObjectiveContainer> values(points.size());
-    // The calling thread is one of the workers.
-    const size_t threads = params.threads;
-    auto work = [&](size_t j) {
-      for (size_t i = j; i < points.size(); i += threads) {
-        values[i] = objectives(points[i]);
-      }
-    };
-    std::vector<std::thread> thread_pool;
-    for (size_t j = 1; j < threads; ++j) {
-      thread_pool.emplace_back(work, j);
-    }
-    work(0);
-    for (auto &thread : thread_pool) {
-      thread.join();
-    }
+    detail::parallel_for(points.size(), params.threads, [&](size_t i) { values[i] = objectives(points[i]); });
     for (size_t i = 0; queries && i < points.size(); ++i) {
       queries->emplace_back(points[i], values[i]);
     }

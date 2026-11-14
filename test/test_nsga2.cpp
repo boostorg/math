@@ -453,6 +453,11 @@ void test_nan_and_objective_count() {
   };
   check_front(nsga2(infinite, params, gen), infinite, params);
 
+  // An exception of the objectives reaches the caller from any thread:
+  params.threads = 4;
+  CHECK_THROW(nsga2([](ArgType const &) -> std::vector<double> { throw std::runtime_error("objectives"); }, params, gen),
+              std::runtime_error);
+  params.threads = 1;
   CHECK_THROW(nsga2([](ArgType const &) { return std::vector<double>{}; }, params, gen), std::domain_error);
   CHECK_THROW(nsga2([](ArgType const &x) { return std::vector<double>(x[0] < 0.5 ? 2 : 3, x[1]); }, params, gen),
               std::domain_error);
