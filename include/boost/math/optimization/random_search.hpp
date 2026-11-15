@@ -10,6 +10,7 @@
 #include <boost/math/tools/config.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <atomic>
+#include <exception>
 #include <cmath>
 #include <limits>
 #include <mutex>
@@ -89,9 +90,11 @@ ArgumentContainer random_search(
   std::mutex mt;
   std::vector<std::thread> thread_pool;
   std::atomic<size_t> function_calls = 0;
+  // An exception thrown by a worker is rethrown once all of them have finished:
+  std::exception_ptr error;
   for (unsigned j = 0; j < params.threads; ++j) {
     auto seed = gen();
-    thread_pool.emplace_back([&, seed]() {
+    auto work = [&, seed]() {
       URBG g(seed);
       ArgumentContainer trial_vector;
       // This vector is empty unless the user requests the queries be stored:
@@ -117,14 +120,17 @@ ArgumentContainer random_search(
           continue;
         }
         if (trial_cost < lowest_cost) {
-          lowest_cost = trial_cost;
-          if (current_minimum_cost) {
-            *current_minimum_cost = trial_cost;
-          }
           // We expect to need to acquire this lock with decreasing frequency
           // as the computation proceeds:
           std::scoped_lock lock(mt);
-          best_vector = trial_vector;
+          // Another thread may have found a lower cost in the meantime:
+          if (trial_cost < lowest_cost) {
+            lowest_cost = trial_cost;
+            if (current_minimum_cost) {
+              *current_minimum_cost = trial_cost;
+            }
+            best_vector = trial_vector;
+          }
         }
         if (queries) {
           local_queries.push_back(std::make_pair(trial_vector, trial_cost));
@@ -137,10 +143,38 @@ ArgumentContainer random_search(
         std::scoped_lock lock(mt);
         queries->insert(queries->begin(), local_queries.begin(), local_queries.end());
       }
-    });
+    };
+    auto guarded = [&error, &mt, work]() {
+      try {
+        work();
+      } catch (...) {
+        std::scoped_lock lock(mt);
+        if (!error) {
+          error = std::current_exception();
+        }
+      }
+    };
+    // The calling thread does the work of the last seed, so that one thread starts no other:
+    if (j + 1 < params.threads) {
+      try {
+        thread_pool.emplace_back(guarded);
+      } catch (...) {
+        // No thread could be started: stop those which were, and wait for them.
+        target_attained = true;
+        for (auto &thread : thread_pool) {
+          thread.join();
+        }
+        throw;
+      }
+    } else {
+      guarded();
+    }
   }
   for (auto &thread : thread_pool) {
     thread.join();
+  }
+  if (error) {
+    std::rethrow_exception(error);
   }
   return best_vector;
 }

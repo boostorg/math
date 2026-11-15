@@ -18,12 +18,16 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-add_executable(boost_math bindings.cpp)
+add_executable(boost_math bindings.cpp interpolation_wavelets.cpp optimization.cpp quadrature_roots.cpp statistics_filters.cpp)
 target_include_directories(boost_math PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 target_compile_definitions(boost_math PRIVATE BOOST_MATH_STANDALONE)
-# compensated_arithmetic.hpp's #pragma float_control is unknown to wasm.
-target_compile_options(boost_math PRIVATE -Wno-ignored-pragmas)
-target_link_options(boost_math PRIVATE -lembind -sALLOW_MEMORY_GROWTH)
+# compensated_arithmetic.hpp's #pragma float_control is unknown to wasm. C++ exceptions are WebAssembly exceptions, and
+# post.js makes RangeErrors of them.
+target_compile_options(boost_math PRIVATE -Wno-ignored-pragmas -fwasm-exceptions)
+target_link_options(boost_math PRIVATE -lembind -sALLOW_MEMORY_GROWTH -fwasm-exceptions -sEXPORTED_RUNTIME_METHODS=stackSave,HEAPU8
+  -sDEFAULT_LIBRARY_FUNCS_TO_INCLUDE=$stackSave,$stackRestore,$getCppExceptionTag,$getExceptionMessage,$decrementExceptionRefcount
+  --post-js ${CMAKE_CURRENT_SOURCE_DIR}/post.js)
+set_property(TARGET boost_math APPEND PROPERTY LINK_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/post.js)
 if(BOOST_MATH_WASM_RELAXED_SIMD)
   # The SLP vectorizer's 128-bit code runs slower in V8 than scalar code.
   target_compile_options(boost_math PRIVATE -mrelaxed-simd -fno-slp-vectorize)

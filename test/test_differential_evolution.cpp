@@ -14,7 +14,12 @@ import boost.math;
 #include "math_unit_test.hpp"
 #include "test_functions_for_optimization.hpp"
 #ifndef BOOST_MATH_BUILD_MODULE
+#include <atomic>
+#include <mutex>
 #include <random>
+#include <set>
+#include <stdexcept>
+#include <thread>
 #endif
 
 using boost::math::optimization::differential_evolution;
@@ -206,6 +211,54 @@ void test_beale() {
   CHECK_ABSOLUTE_ERROR(Real(1)/Real(2), local_minima[1], Real(2e-4));
 }
 
+// With one thread the caller does the work, and an exception thrown by the cost function on any worker reaches the caller.
+void test_serial_path_and_exceptions() {
+  std::cout << "Testing the serial path and exception propagation of differential evolution . . .\n";
+  using ArgType = std::vector<double>;
+  auto de_params = differential_evolution_parameters<ArgType>();
+  de_params.lower_bounds.resize(3, -1);
+  de_params.upper_bounds.resize(3, 1);
+  de_params.NP = 16;
+  de_params.max_generations = 20;
+  for (unsigned threads : {1u, 2u, 5u}) {
+    de_params.threads = threads;
+    std::mutex mt;
+    std::set<std::thread::id> ids;
+    auto cost = [&](ArgType const &x) {
+      std::scoped_lock lock(mt);
+      ids.insert(std::this_thread::get_id());
+      return x[0] * x[0] + x[1] * x[1] + x[2] * x[2];
+    };
+    std::mt19937_64 gen(2718);
+    auto x = differential_evolution(cost, de_params, gen);
+    // The calling thread is one of the workers, and the others are started anew for each generation:
+    CHECK_TRUE(ids.count(std::this_thread::get_id()) == 1);
+    if (threads == 1) {
+      CHECK_EQUAL(ids.size(), size_t(1));
+    }
+    // Each worker has its own generator, so a thread count and a seed determine the result:
+    gen.seed(2718);
+    auto y = differential_evolution(cost, de_params, gen);
+    for (size_t i = 0; i < x.size(); ++i) {
+      CHECK_EQUAL(x[i], y[i]);
+    }
+#ifndef BOOST_MATH_NO_EXCEPTIONS
+    // In the initial population, and in a later generation:
+    for (int limit : {5, 100}) {
+      std::atomic<int> calls{0};
+      auto throwing = [&calls, limit](ArgType const &x) -> double {
+        if (++calls > limit) {
+          throw std::runtime_error("cost");
+        }
+        return x[0];
+      };
+      gen.seed(2718);
+      CHECK_THROW(differential_evolution(throwing, de_params, gen), std::runtime_error);
+    }
+#endif
+  }
+}
+
 int main() {
 
 #if defined(__clang__) || defined(_MSC_VER)
@@ -218,5 +271,6 @@ int main() {
 #endif
   test_sphere();
   test_parameter_checks();
+  test_serial_path_and_exceptions();
   return boost::math::test::report_errors();
 }

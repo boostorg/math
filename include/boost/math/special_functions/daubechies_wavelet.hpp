@@ -147,13 +147,13 @@ BOOST_MATH_NAMESPACE_BEGIN
 
             // Compute the refined grid:
             // In fact for float precision I know the grid must be computed in double precision and then cast back down, or else parts of the support are systematically inaccurate.
-            std::future<std::vector<Real>> t0 = std::async(std::launch::async, [&grid_refinements]() {
+            std::future<std::vector<Real>> t0 = detail::daubechies_async([&grid_refinements]() {
                // Computing in higher precision and downcasting is essential for 1ULP evaluation in float precision:
                auto v = daubechies_wavelet_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 0>(grid_refinements);
                return detail::daubechies_eval_type<Real>::vector_cast(v);
                });
             // Compute the derivative of the refined grid:
-            std::future<std::vector<Real>> t1 = std::async(std::launch::async, [&grid_refinements]() {
+            std::future<std::vector<Real>> t1 = detail::daubechies_async([&grid_refinements]() {
                auto v = daubechies_wavelet_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 1>(grid_refinements);
                return detail::daubechies_eval_type<Real>::vector_cast(v);
                });
@@ -162,13 +162,13 @@ BOOST_MATH_NAMESPACE_BEGIN
             std::vector<Real> d2ydx2;
             std::vector<Real> d3ydx3;
             if constexpr (p >= 6) {
-               std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() {
+               std::future<std::vector<Real>> t3 = detail::daubechies_async([&grid_refinements]() {
                   auto v = daubechies_wavelet_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 2>(grid_refinements);
                   return detail::daubechies_eval_type<Real>::vector_cast(v);
                   });
 
                if constexpr (p >= 10) {
-                  std::future<std::vector<Real>> t4 = std::async(std::launch::async, [&grid_refinements]() {
+                  std::future<std::vector<Real>> t4 = detail::daubechies_async([&grid_refinements]() {
                      auto v = daubechies_wavelet_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 3>(grid_refinements);
                      return detail::daubechies_eval_type<Real>::vector_cast(v);
                      });

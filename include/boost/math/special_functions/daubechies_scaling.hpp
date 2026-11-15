@@ -236,6 +236,18 @@ struct null_interpolator
     int64_t bytes() const { return sizeof(*this); }
 };
 
+// The grids of a function and of its derivatives are computed concurrently where a thread can be started,
+// and one after another, when their values are asked for, where not.
+template<class F>
+auto daubechies_async(F f)
+{
+#if defined(BOOST_MATH_HAS_THREADS) && !defined(BOOST_MATH_DISABLE_THREADS) && !(defined(__EMSCRIPTEN__) && !defined(__EMSCRIPTEN_PTHREADS__))
+    return std::async(std::launch::async, f);
+#else
+    return std::async(std::launch::deferred, f);
+#endif
+}
+
 } // namespace detail
 
 BOOST_MATH_EXPORT template<class Real, int p>
@@ -304,13 +316,13 @@ public:
 
             // Compute the refined grid:
             // In fact for float precision I know the grid must be computed in double precision and then cast back down, or else parts of the support are systematically inaccurate.
-            std::future<std::vector<Real>> t0 = std::async(std::launch::async, [&grid_refinements]() {
+            std::future<std::vector<Real>> t0 = detail::daubechies_async([&grid_refinements]() {
                 // Computing in higher precision and downcasting is essential for 1ULP evaluation in float precision:
                 auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 0>(grid_refinements);
                 return detail::daubechies_eval_type<Real>::vector_cast(v);
                 });
             // Compute the derivative of the refined grid:
-            std::future<std::vector<Real>> t1 = std::async(std::launch::async, [&grid_refinements]() {
+            std::future<std::vector<Real>> t1 = detail::daubechies_async([&grid_refinements]() {
                 auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 1>(grid_refinements);
                 return detail::daubechies_eval_type<Real>::vector_cast(v);
                 });
@@ -319,13 +331,13 @@ public:
             std::vector<Real> d2ydx2;
             std::vector<Real> d3ydx3;
             if constexpr (p >= 6) {
-                std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() {
+                std::future<std::vector<Real>> t3 = detail::daubechies_async([&grid_refinements]() {
                 auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 2>(grid_refinements);
                 return detail::daubechies_eval_type<Real>::vector_cast(v);
                 });
 
                 if constexpr (p >= 10) {
-                std::future<std::vector<Real>> t4 = std::async(std::launch::async, [&grid_refinements]() {
+                std::future<std::vector<Real>> t4 = detail::daubechies_async([&grid_refinements]() {
                     auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 3>(grid_refinements);
                     return detail::daubechies_eval_type<Real>::vector_cast(v);
                     });

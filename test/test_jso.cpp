@@ -34,6 +34,33 @@ void test_default_population_with_many_threads() {
   CHECK_GE(jso_params.initial_population_size, jso_params.threads);
 }
 
+// A budget smaller than the initial population used to end in a remainder by zero.
+void test_budget_smaller_than_population() {
+  using ArgType = std::array<double, 2>;
+  auto jso_params = jso_parameters<ArgType>();
+  jso_params.lower_bounds = {-5, -5};
+  jso_params.upper_bounds = {5, 5};
+  jso_params.threads = 1;
+  jso_params.initial_population_size = 30;
+  jso_params.max_function_evaluations = 10;
+  std::mt19937_64 gen(12345);
+  auto f = [](ArgType const &x) { return x[0] * x[0] + x[1] * x[1]; };
+  CHECK_THROW(jso(f, jso_params, gen), std::invalid_argument);
+  // The default population of two variables is 39, and the default budget is larger:
+  jso_params.initial_population_size = 0;
+  jso_params.max_function_evaluations = 38;
+  CHECK_THROW(jso(f, jso_params, gen), std::invalid_argument);
+  jso_params.initial_population_size = 50;
+  jso_params.max_function_evaluations = 0;
+  CHECK_NO_THROW(boost::math::optimization::validate_jso_parameters(jso_params));
+  // One generation after the initial population:
+  jso_params.max_function_evaluations = 50;
+  std::vector<std::pair<ArgType, double>> queries;
+  auto x = jso(f, jso_params, gen, std::numeric_limits<double>::quiet_NaN(), nullptr, nullptr, &queries);
+  CHECK_LE(f(x), 50.0);
+  CHECK_LE(queries.size(), size_t(100));
+}
+
 void test_weighted_lehmer_mean() {
   size_t n = 50;
   std::vector<double> weights(n, 1.0);
@@ -174,5 +201,6 @@ int main() {
   test_beale<double>();
   test_sphere();
   test_weighted_lehmer_mean();
+  test_budget_smaller_than_population();
   return boost::math::test::report_errors();
 }

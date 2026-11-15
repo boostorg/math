@@ -10,6 +10,7 @@
 #include <boost/math/tools/config.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
 #include <atomic>
+#include <exception>
 #endif
 #include <boost/math/optimization/detail/common.hpp>
 #ifndef BOOST_MATH_BUILD_MODULE
@@ -113,15 +114,48 @@ ArgumentContainer differential_evolution(
   // This mutex is only used if the queries are stored:
   std::mutex mt;
 
-  std::vector<std::thread> thread_pool;
   auto const threads = de_params.threads;
-  for (size_t j = 0; j < threads; ++j) {
+  // Runs work(j) for each j < threads, with j = 0 on the calling thread, so that one thread starts no other.
+  // An exception thrown by a worker is rethrown here once all of them have finished.
+  auto run_workers = [&mt, threads](auto const &work) {
+    std::exception_ptr error;
+    auto guarded = [&](size_t j) {
+      try {
+        work(j);
+      } catch (...) {
+        std::scoped_lock lock(mt);
+        if (!error) {
+          error = std::current_exception();
+        }
+      }
+    };
+    std::vector<std::thread> thread_pool;
+    try {
+      for (size_t j = 1; j < threads; ++j) {
+        thread_pool.emplace_back(guarded, j);
+      }
+    } catch (...) {
+      // No thread could be started: wait for those which were.
+      for (auto &thread : thread_pool) {
+        thread.join();
+      }
+      throw;
+    }
+    guarded(0);
+    for (auto &thread : thread_pool) {
+      thread.join();
+    }
+    if (error) {
+      std::rethrow_exception(error);
+    }
+  };
+  {
     // Note that if some members of the population take way longer to compute,
     // then this parallelization strategy is very suboptimal.
     // However, we tried using std::async (which should be robust to this particular problem),
     // but the overhead was just totally unacceptable on ARM Macs (the only platform tested).
     // As the economists say "there are no solutions, only tradeoffs".
-    thread_pool.emplace_back([&, j]() {
+    run_workers([&](size_t j) {
       for (size_t i = j; i < cost.size(); i += threads) {
         cost[i] = cost_function(population[i]);
         if (current_minimum_cost && cost[i] < *current_minimum_cost) {
@@ -136,9 +170,6 @@ ArgumentContainer differential_evolution(
         }
       }
     });
-  }
-  for (auto &thread : thread_pool) {
-    thread.join();
   }
 
   std::vector<ArgumentContainer> trial_vectors(NP);
@@ -161,9 +192,8 @@ ArgumentContainer differential_evolution(
     if (target_attained) {
       break;
     }
-    thread_pool.resize(0);
-    for (size_t j = 0; j < threads; ++j) {
-      thread_pool.emplace_back([&, j]() {
+    {
+      run_workers([&](size_t j) {
         auto& tlg = thread_generators[j];
         uniform_real_distribution<DimensionlessReal> unif01(DimensionlessReal(0), DimensionlessReal(1));
         for (size_t i = j; i < cost.size(); i += threads) {
@@ -222,9 +252,6 @@ ArgumentContainer differential_evolution(
           }
         }
       });
-    }
-    for (auto &thread : thread_pool) {
-      thread.join();
     }
     for (size_t i = 0; i < NP; ++i) {
       if (updated_indices[i]) {
