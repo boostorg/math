@@ -85,8 +85,12 @@ set(BOOST_MATH_MODULE_TESTS
         test_cma_es
         test_multilevel_coordinate_search
         test_turbo
+        test_gaussian_process
+        test_bounded_lbfgs
         test_dycors
         test_nsga2
+        test_hypervolume
+        test_qlognehvi
         test_quaternion_constexpr
         octonion_test_simple
         test_lambert_w_module

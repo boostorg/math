@@ -14,6 +14,7 @@
 #include <stdexcept>
 #include <random>
 #include <type_traits>  // for std::false_type
+#include <vector>
 #endif
 
 #include <boost/math/tools/config.hpp>
@@ -198,6 +199,54 @@ auto weighted_lehmer_mean(RandomAccessContainer const & values, RandomAccessCont
     denominator += tmp;
   }
   return numerator/denominator;
+}
+
+// Does a dominate b, all objectives being minimized? A point with a NaN objective is dominated by every point without.
+BOOST_MATH_TEST_EXPORT template <class ObjectiveContainer>
+bool dominates(ObjectiveContainer const &a, ObjectiveContainer const &b) {
+  using std::isnan;
+  bool better = false;
+  bool worse = false;
+  bool b_is_nan = false;
+  for (size_t m = 0; m < a.size(); ++m) {
+    if (isnan(a[m])) {
+      return false;
+    }
+    b_is_nan = b_is_nan || isnan(b[m]);
+    better = better || a[m] < b[m];
+    worse = worse || a[m] > b[m];
+  }
+  return b_is_nan || (better && !worse);
+}
+
+// Puts (argument, objectives) pairs in lexicographic order of the objectives, and keeps those with equal objectives
+// once.
+template <class Front> void sort_unique_front(Front &front) {
+  std::stable_sort(front.begin(), front.end(), [](auto const &a, auto const &b) {
+    return std::lexicographical_compare(a.second.begin(), a.second.end(), b.second.begin(), b.second.end());
+  });
+  auto same = [](auto const &a, auto const &b) { return a.second == b.second; };
+  front.erase(std::unique(front.begin(), front.end(), same), front.end());
+}
+
+// A random Latin hypercube design of m points in the box [lo, hi] of n dimensions (row-major m x n): one point in
+// each of m equal slices of every coordinate, uniformly distributed within its slice.
+template <class URBG>
+std::vector<double> latin_hypercube(size_t m, size_t n, double const *lo, double const *hi, URBG &gen) {
+  std::uniform_real_distribution<double> unif01(0, 1);
+  std::vector<double> design(m * n);
+  std::vector<size_t> slices(m);
+  for (size_t i = 0; i < n; ++i) {
+    for (size_t k = 0; k < m; ++k) {
+      slices[k] = k;
+    }
+    std::shuffle(slices.begin(), slices.end(), gen);
+    for (size_t k = 0; k < m; ++k) {
+      double const t = (static_cast<double>(slices[k]) + unif01(gen)) / static_cast<double>(m);
+      design[k * n + i] = (std::min)(lo[i] + t * (hi[i] - lo[i]), hi[i]);
+    }
+  }
+  return design;
 }
 
 } BOOST_MATH_NAMESPACE_END // namespace boost::math::optimization::detail
