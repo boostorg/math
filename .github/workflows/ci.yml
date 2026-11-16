@@ -25,9 +25,10 @@ concurrency:
 # FMA in its base instruction set, so macOS drops it). MSVC and clang-cl get /fp:contract (or
 # -ffp-contract=fast) with /arch:AVX2. -O2 rather than b2's default of -O0 because it is what
 # users build with and gcc does not fuse below it, and inlining=on because b2's debug variant
-# otherwise adds -fno-inline. The CMake jobs get the same flags through CXXFLAGS.
+# otherwise adds -fno-inline. No debug symbols: nothing here reads them, and they cost memory and
+# time. The CMake jobs get the same flags through CXXFLAGS.
 env:
-  FMA_B2: cxxflags=-mfma cxxflags=-ffp-contract=fast cxxflags=-O2 inlining=on
+  FMA_B2: cxxflags=-mfma cxxflags=-ffp-contract=fast cxxflags=-O2 inlining=on debug-symbols=off
 
 # b2 -l is no use as a hang detector: on POSIX it is a CPU-time rlimit that kills multithreaded
 # tests, and on Windows it misfires at launch.  So the test jobs have a job-level timeout instead.
@@ -165,7 +166,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 120
     env:
-      FMA_B2: cxxflags=-ffp-contract=fast cxxflags=-O2 inlining=on
+      FMA_B2: cxxflags=-ffp-contract=fast cxxflags=-O2 inlining=on debug-symbols=off
     strategy:
       fail-fast: false
       matrix:
@@ -212,7 +213,7 @@ jobs:
       ARGS: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard }}
       # -mfma brings in AVX. Win64 only aligns the stack to 16 bytes, but gcc emits aligned 32-byte
       # AVX moves for stack objects, which crash (gcc bug 54412). Have the assembler unalign them.
-      FMA_B2: cxxflags=-mfma cxxflags=-ffp-contract=fast cxxflags=-O2 inlining=on cxxflags=-Wa,-muse-unaligned-vector-move
+      FMA_B2: cxxflags=-mfma cxxflags=-ffp-contract=fast cxxflags=-O2 inlining=on debug-symbols=off cxxflags=-Wa,-muse-unaligned-vector-move
     strategy:
       fail-fast: false
       matrix:
@@ -259,7 +260,7 @@ jobs:
     env:
       ARGS: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard }}
       # Optimize like the other jobs (/O2): b2's debug default of /Od makes the tests slow to run.
-      OPT_B2: optimization=speed inlining=on ${{ matrix.contract }}
+      OPT_B2: optimization=speed inlining=on debug-symbols=off ${{ matrix.contract }}
     strategy:
       fail-fast: false
       matrix:
