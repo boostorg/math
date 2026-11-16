@@ -61,7 +61,9 @@ echo "using $TOOLSET : : $COMPILER : <cxxflags>-std=$CXXSTD $OPTIONS $FMA_FLAGS 
 (cd libs/config/test && ../../../b2 print_config_info print_math_info toolset=$TOOLSET)
 # inlining=on: b2's debug variant adds -fno-inline, which is not how users optimize, and clang
 # needs over 6 GB for one multiprecision test that way.
-(cd libs/math/test && ../../../b2 -d0 -j3 toolset=$TOOLSET inlining=on $TEST_SUITE)
+# Debug symbols only where a sanitizer reports file and line with them.
+case "$OPTIONS" in *-fsanitize=*) SYMBOLS=on ;; *) SYMBOLS=off ;; esac
+(cd libs/math/test && ../../../b2 -d0 -j3 toolset=$TOOLSET inlining=on debug-symbols=$SYMBOLS $TEST_SUITE)
 
 echo '==================================> AFTER_SUCCESS'
 
