@@ -7,7 +7,7 @@
 #ifndef BOOST_MATH_OPTIMIZATION_DETAIL_PARETO_POLISH_CORRECTOR_HPP
 #define BOOST_MATH_OPTIMIZATION_DETAIL_PARETO_POLISH_CORRECTOR_HPP
 #include <boost/math/tools/config.hpp>
-#include <boost/math/optimization/cma_es.hpp> // detail::symmetric_eigendecomposition
+#include <boost/math/tools/detail/linear_algebra/symmetric_eigen.hpp>
 #include <boost/math/optimization/detail/pareto_polish_cells.hpp>
 #include <boost/math/optimization/detail/pareto_polish_subproblem.hpp>
 #include <boost/math/optimization/detail/rdiff_optimization_policies.hpp>
@@ -198,7 +198,7 @@ Real pareto_polish_reduced_curvature(std::vector<Real> W, std::vector<Real> G, s
       }
     }
   }
-  if (!symmetric_eigendecomposition(std::move(W), n, Q, eigenvalues)) {
+  if (!tools::detail::symmetric_eigendecomposition(std::move(W), n, Q, eigenvalues)) {
     return std::numeric_limits<Real>::quiet_NaN();
   }
   return scale * *std::min_element(eigenvalues.begin(), eigenvalues.end());

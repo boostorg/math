@@ -14,11 +14,7 @@
 #include <iostream>
 #include <limits>
 
-#ifndef BOOST_MATH_STANDALONE
-#include <boost/endian.hpp>
-#else
 #include <boost/math/tools/config.hpp>
-#endif
 
 #include <boost/math/special_functions/next.hpp>  // for has_denorm_now
 

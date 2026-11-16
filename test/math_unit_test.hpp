@@ -21,6 +21,7 @@ import std;
 #include <iomanip>
 #include <string>
 #include <type_traits>
+#include <typeinfo>
 #endif
 #include <boost/math/tools/assert.hpp>
 // In module mode these declarations come from `import boost.math;`, which the
@@ -35,6 +36,7 @@ import std;
 #  if __has_include(<cxxabi.h>)
 #define BOOST_MATH_HAS_CXX_ABI 1
 #    include <cxxabi.h>
+#    include <cstdlib>
 #  endif
 #endif
 namespace boost { namespace math { namespace  test {
@@ -47,12 +49,15 @@ namespace detail {
 
     inline std::string demangle(char const * name)
     {
-        int status = 0;
-        std::size_t size = 0;
-#if BOOST_MATH_HAS_CXX_ABI
-        std::string s {abi::__cxa_demangle( name, NULL, &size, &status )};
-#else
         std::string s {name};
+#if BOOST_MATH_HAS_CXX_ABI
+        int status = 0;
+        // The buffer is ours to free, and is null if the name could not be demangled:
+        if (char* demangled = abi::__cxa_demangle(name, nullptr, nullptr, &status))
+        {
+            s = demangled;
+            std::free(demangled);
+        }
 #endif
         return s;
     }

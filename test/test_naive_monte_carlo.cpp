@@ -8,7 +8,6 @@
 #include <cmath>
 #include <ostream>
 #include <boost/math/tools/test_value.hpp>
-#include <boost/type_index.hpp>
 
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/naive_monte_carlo.hpp>
@@ -28,7 +27,7 @@ using boost::math::quadrature::naive_monte_carlo;
 template<class Real>
 void test_pi_multithreaded()
 {
-    std::cout << "Testing pi is calculated correctly (multithreaded) using Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing pi is calculated correctly (multithreaded) using Monte-Carlo on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto g = [](std::vector<Real> const & x)->Real {
         Real r = x[0]*x[0]+x[1]*x[1];
         if (r <= 1) {
@@ -54,7 +53,7 @@ void test_pi_multithreaded()
 template<class Real>
 void test_pi()
 {
-    std::cout << "Testing pi is calculated correctly using Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing pi is calculated correctly using Monte-Carlo on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto g = [](std::vector<Real> const & x)->Real
     {
         Real r = x[0]*x[0]+x[1]*x[1];
@@ -84,7 +83,7 @@ void test_pi()
 template<class Real>
 void test_constant()
 {
-    std::cout << "Testing constants are integrated correctly using Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing constants are integrated correctly using Monte-Carlo on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto g = [](std::vector<Real> const &)->Real
     {
       return 1;
@@ -105,7 +104,7 @@ void test_constant()
 template<class Real>
 void test_cancel_and_restart()
 {
-    std::cout << "Testing that cancellation and restarting works on naive Monte-Carlo integration on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that cancellation and restarting works on naive Monte-Carlo integration on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real exact = BOOST_MATH_TEST_VALUE(Real, 1.3932039296856768591842462603255);
     constexpr const Real A = 1.0 / (pi<Real>() * pi<Real>() * pi<Real>());
     auto g = [&](std::vector<Real> const & x)->Real
@@ -141,7 +140,7 @@ void test_zero_threads_and_bad_bounds()
 template<class Real>
 void test_finite_singular_boundary()
 {
-    std::cout << "Testing that finite singular boundaries work on naive Monte-Carlo integration on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that finite singular boundaries work on naive Monte-Carlo integration on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     using std::pow;
     using std::log;
     using std::log1p;
@@ -164,7 +163,7 @@ void test_finite_singular_boundary()
 template<class Real>
 void test_multithreaded_variance()
 {
-    std::cout << "Testing that variance computed by naive Monte-Carlo integration converges to integral formula on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that variance computed by naive Monte-Carlo integration converges to integral formula on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real exact_variance = (Real) 1/(Real) 12;
     auto g = [&](std::vector<Real> const & x)->Real
     {
@@ -182,7 +181,7 @@ void test_multithreaded_variance()
 template<class Real>
 void test_variance()
 {
-    std::cout << "Testing that variance computed by naive Monte-Carlo integration converges to integral formula on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that variance computed by naive Monte-Carlo integration converges to integral formula on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real exact_variance = (Real) 1/(Real) 12;
     auto g = [&](std::vector<Real> const & x)->Real
     {
@@ -200,7 +199,7 @@ void test_variance()
 template<class Real, uint64_t dimension>
 void test_product()
 {
-    std::cout << "Testing that product functions are integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that product functions are integrated correctly by naive Monte-Carlo on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto g = [&](std::vector<Real> const & x)->Real
     {
         Real y = 1;
@@ -229,7 +228,7 @@ void test_product()
 template<class Real, uint64_t dimension>
 void test_alternative_rng_1()
 {
-    std::cout << "Testing that alternative RNGs work correctly using naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that alternative RNGs work correctly using naive Monte-Carlo on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto g = [&](std::vector<Real> const & x)->Real
     {
         Real y = 1;
@@ -272,7 +271,7 @@ void test_alternative_rng_1()
 template<class Real, uint64_t dimension>
 void test_alternative_rng_2()
 {
-    std::cout << "Testing that alternative RNGs work correctly using naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that alternative RNGs work correctly using naive Monte-Carlo on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto g = [&](std::vector<Real> const & x)->Real
     {
         Real y = 1;
@@ -312,7 +311,7 @@ void test_alternative_rng_2()
 template<class Real>
 void test_upper_bound_infinite()
 {
-    std::cout << "Testing that infinite upper bounds are integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that infinite upper bounds are integrated correctly by naive Monte-Carlo on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto g = [](std::vector<Real> const & x)->Real
     {
         return 1.0/(x[0]*x[0] + 1.0);
@@ -332,7 +331,7 @@ void test_upper_bound_infinite()
 template<class Real>
 void test_lower_bound_infinite()
 {
-    std::cout << "Testing that infinite lower bounds are integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that infinite lower bounds are integrated correctly by naive Monte-Carlo on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto g = [](std::vector<Real> const & x)->Real
     {
         return 1.0/(x[0]*x[0] + 1.0);
@@ -353,7 +352,7 @@ void test_lower_bound_infinite()
 template<class Real>
 void test_lower_bound_infinite2()
 {
-    std::cout << "Testing that infinite lower bounds (2) are integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that infinite lower bounds (2) are integrated correctly by naive Monte-Carlo on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto g = [](std::vector<Real> const & x)->Real
     {
         // If x[0] = inf, this should blow up:
@@ -374,7 +373,7 @@ void test_lower_bound_infinite2()
 template<class Real>
 void test_double_infinite()
 {
-    std::cout << "Testing that double infinite bounds are integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that double infinite bounds are integrated correctly by naive Monte-Carlo on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto g = [](std::vector<Real> const & x)->Real
     {
         return 1.0/(x[0]*x[0] + 1.0);
@@ -396,7 +395,7 @@ template<class Real, uint64_t dimension>
 void test_radovic()
 {
     // See: Generalized Halton Sequences in 2008: A Comparative Study, function g1:
-    std::cout << "Testing that the Radovic function is integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that the Radovic function is integrated correctly by naive Monte-Carlo on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     auto g = [](std::vector<Real> const & x)->Real
     {
         using std::abs;

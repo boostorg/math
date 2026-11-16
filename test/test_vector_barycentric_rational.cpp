@@ -8,9 +8,8 @@
 #include <random>
 #include <array>
 #include <Eigen/Dense>
-#include <boost/numeric/ublas/vector.hpp>
+#include <deque>
 #include <boost/random/uniform_real_distribution.hpp>
-#include <boost/type_index.hpp>
 #include <boost/math/interpolators/barycentric_rational.hpp>
 #include <boost/math/interpolators/vector_barycentric_rational.hpp>
 #include "math_unit_test.hpp"
@@ -27,7 +26,7 @@ template<class Real>
 void test_agreement_with_1d()
 {
     std::cout << "Testing with 1D interpolation on type "
-              << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+              << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     std::mt19937 gen(4723);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> t(100);
@@ -77,7 +76,7 @@ template<class Real>
 void test_interpolation_condition_eigen()
 {
     std::cout << "Testing interpolation condition for barycentric interpolation on Eigen vectors of type "
-              << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+              << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     std::mt19937 gen(4723);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> t(100);
@@ -109,7 +108,7 @@ template<class Real>
 void test_interpolation_condition_std_array()
 {
     std::cout << "Testing interpolation condition for barycentric interpolation on std::array vectors of type "
-              << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+              << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     std::mt19937 gen(4723);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> t(100);
@@ -143,14 +142,14 @@ void test_interpolation_condition_std_array()
 
 
 template<class Real>
-void test_interpolation_condition_ublas()
+void test_interpolation_condition_deque()
 {
-    std::cout << "Testing interpolation condition for barycentric interpolation ublas vectors of type "
-              << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing interpolation condition for barycentric interpolation std::deque of type "
+              << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     std::mt19937 gen(4723);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> t(100);
-    std::vector<boost::numeric::ublas::vector<Real>> y(100);
+    std::vector<std::deque<Real>> y(100);
     t[0] = dis(gen);
     y[0].resize(2);
     y[0][0] = dis(gen);
@@ -164,11 +163,11 @@ void test_interpolation_condition_ublas()
     }
 
     std::vector<Real> t_copy = t;
-    std::vector<boost::numeric::ublas::vector<Real>> y_copy = y;
+    std::vector<std::deque<Real>> y_copy = y;
 
     boost::math::interpolators::vector_barycentric_rational<decltype(t), decltype(y)> interpolator(std::move(t), std::move(y));
 
-    boost::numeric::ublas::vector<Real> z(2);
+    std::deque<Real> z(2);
     for (size_t i = 0; i < t_copy.size(); ++i)
     {
         interpolator(z, t_copy[i]);
@@ -180,7 +179,7 @@ void test_interpolation_condition_ublas()
 template<class Real>
 void test_interpolation_condition_high_order()
 {
-    std::cout << "Testing interpolation condition in high order for barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing interpolation condition in high order for barycentric interpolation on type " << boost::math::test::detail::demangle(typeid(Real).name())  << "\n";
     std::mt19937 gen(5);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> t(100);
@@ -213,7 +212,7 @@ template<class Real>
 void test_constant_eigen()
 {
     std::cout << "Testing that constants are interpolated correctly using barycentric interpolation on Eigen vectors of type "
-              << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+              << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
 
     std::mt19937 gen(6);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
@@ -256,7 +255,7 @@ template<class Real>
 void test_constant_std_array()
 {
     std::cout << "Testing that constants are interpolated correctly using barycentric interpolation on std::array vectors of type "
-              << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+              << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
 
     std::mt19937 gen(6);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
@@ -298,7 +297,7 @@ void test_constant_std_array()
 template<class Real>
 void test_constant_high_order()
 {
-    std::cout << "Testing that constants are interpolated correctly using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that constants are interpolated correctly using barycentric interpolation on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
 
     std::mt19937 gen(6);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
@@ -341,7 +340,7 @@ template<class Real>
 void test_prime_near_node()
 {
     std::cout << "Testing the derivative a few ulps from a node on std::array vectors of type "
-              << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+              << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     std::vector<Real> t(20);
     std::vector<std::array<Real, 2>> y(20);
     for (size_t i = 0; i < t.size(); ++i)
@@ -374,7 +373,7 @@ void test_prime_near_node()
 template<class Real>
 void test_weights()
 {
-    std::cout << "Testing weights are calculated correctly using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing weights are calculated correctly using barycentric interpolation on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
 
     std::mt19937 gen(9);
     boost::random::uniform_real_distribution<Real> dis(0.005, 0.01);
@@ -419,7 +418,7 @@ void vector_barycentric_rational()
     test_constant_std_array<std::float64_t>();
     test_constant_high_order<std::float64_t>();
     test_interpolation_condition_eigen<std::float64_t>();
-    test_interpolation_condition_ublas<std::float64_t>();
+    test_interpolation_condition_deque<std::float64_t>();
     test_interpolation_condition_std_array<std::float64_t>();
     test_interpolation_condition_high_order<std::float64_t>();
     test_agreement_with_1d<std::float64_t>();
@@ -432,7 +431,7 @@ void vector_barycentric_rational()
     test_constant_std_array<double>();
     test_constant_high_order<double>();
     test_interpolation_condition_eigen<double>();
-    test_interpolation_condition_ublas<double>();
+    test_interpolation_condition_deque<double>();
     test_interpolation_condition_std_array<double>();
     test_interpolation_condition_high_order<double>();
     test_agreement_with_1d<double>();

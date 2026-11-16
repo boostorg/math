@@ -30,7 +30,6 @@ project
       <link>static
       <toolset>borland:<runtime-link>static
       <define>BOOST_ALL_NO_LIB=1
-      <define>BOOST_UBLAS_UNSUPPORTED_COMPILER=0
       <include>.
       <include>../include_private
       <library>/boost/multiprecision//boost_multiprecision

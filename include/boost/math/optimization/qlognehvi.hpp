@@ -136,7 +136,7 @@ public:
       for (size_t s = 0; s < N; ++s) {
         double const *row = zeta.data() + (k * N + s) * count;
         for (size_t j = first; j < count; ++j) {
-          values_[s][j][k] = gp.conditioning_mean()[j] + dot(L + j * count, row, j + 1);
+          values_[s][j][k] = gp.conditioning_mean()[j] + tools::detail::dot(L + j * count, row, j + 1);
         }
         gp.sample_path(row, a_[k].data() + s * n, w_[k].data() + s * count);
       }
@@ -181,7 +181,7 @@ public:
       }
       ws.sd[k] = sqrt(gp.conditional_variance(x, gradient ? ws.dvar.data() + k * d : nullptr, ws.work, kx));
       for (size_t s = 0; s < N; ++s) {
-        ws.y[s * m + k] = gp.mean() + dot(a_[k].data() + s * n, kx, n) + dot(w_[k].data() + s * nb, kx + n, nb) +
+        ws.y[s * m + k] = gp.mean() + tools::detail::dot(a_[k].data() + s * n, kx, n) + tools::detail::dot(w_[k].data() + s * nb, kx + n, nb) +
                           ws.sd[k] * z_[k * N + s];
       }
     }
@@ -601,7 +601,7 @@ private:
             double const *zeta = normals_.data() + (s * m + k) * N;
             double const *L = models_[k].conditioning_factor().data();
             for (size_t j = 0; j < N; ++j) {
-              double const step = detail::dot(L + j * N, zeta, j + 1);
+              double const step = tools::detail::dot(L + j * N, zeta, j + 1);
               f[j * m + k] = models_[k].conditioning_mean()[j] + step;
               f[(N + j) * m + k] = models_[k].conditioning_mean()[j] - step;
             }

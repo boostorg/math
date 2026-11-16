@@ -4,9 +4,6 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_TEST_MODULE foobar
-#define BOOST_UBLAS_TYPE_CHECK_EPSILON (type_traits<real_type>::type_sqrt (boost::math::tools::epsilon <real_type>()))
-#define BOOST_UBLAS_TYPE_CHECK_MIN (type_traits<real_type>::type_sqrt ( boost::math::tools::min_value<real_type>()))
-#define BOOST_UBLAS_NDEBUG
 
 #include "multiprecision.hpp"
 
@@ -131,7 +128,7 @@ void show(const char*, const char*)
       int prec = 2 + (target_precision * 3010LL)/10000;
       std::cout << std::scientific << std::setprecision(prec);
       set_output_precision(prec);
-      boost::numeric::ublas::vector<mp_type> v = p_remez->zero_points();
+      std::vector<mp_type> v = p_remez->zero_points();
       
       std::cout << "  Zeros = {\n";
       unsigned i;
@@ -257,7 +254,7 @@ void do_test(T, const char* name)
       // (in theory) the largest deviation should occur.  For good
       // measure we'll test at the zeros as well:
       //
-      boost::numeric::ublas::vector<mp_type> 
+      std::vector<mp_type> 
          zeros(p_remez->zero_points()),
          cheb(p_remez->chebyshev_points());
 

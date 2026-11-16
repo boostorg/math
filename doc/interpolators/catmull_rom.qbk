@@ -205,7 +205,7 @@ However, if `v.capacity() < v.size() + 3`, the `realloc` causes a performance pe
 [heading Generic Containers]
 
 The `Point` type may be stored in a different container than `std::vector`.
-For example, here is how to store the points in a Boost.uBLAS vector:
+For example, here is how to store the points in a `std::deque`:
 
     mypoint3d<Real> p0(0.1, 0.2, 0.3);
     mypoint3d<Real> p1(0.2, 0.3, 0.4);
@@ -214,7 +214,7 @@ For example, here is how to store the points in a Boost.uBLAS vector:
     mypoint3d<Real> p4(0.5, 0.6, 0.7);
     mypoint3d<Real> p5(0.6, 0.7, 0.8);
 
-    boost::numeric::ublas::vector<mypoint3d<Real>> u(6);
+    std::deque<mypoint3d<Real>> u(6);
     u[0] = p0;
     u[1] = p1;
     u[2] = p2;

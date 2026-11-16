@@ -11,7 +11,6 @@
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/math/tools/test_value.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/type_index.hpp>
 #include "math_unit_test.hpp"
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1900)
@@ -137,7 +136,7 @@ std::pair<std::vector<std::vector<Real>>, std::vector<std::vector<Real>> > gener
 template<class Real>
 void test_nr_examples()
 {
-    std::cout << "Testing type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real integration_limit = sqrt(boost::math::tools::epsilon<Real>());
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
@@ -191,7 +190,7 @@ void test_nr_examples()
 template<class Real>
 void test_crc()
 {
-    std::cout << "Testing CRC formulas on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing CRC formulas on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real integration_limit = sqrt(boost::math::tools::epsilon<Real>());
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
@@ -231,7 +230,7 @@ template<class Complex>
 void test_dirichlet_eta()
 {
   typedef typename Complex::value_type Real;
-  std::cout << "Testing Dirichlet eta function on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+  std::cout << "Testing Dirichlet eta function on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
   Complex Q;
   const sinh_sinh<Real> integrator(10);
 

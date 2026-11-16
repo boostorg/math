@@ -191,7 +191,7 @@ void test_bounds() {
 // detail::symmetric_eigendecomposition is not exported from the module.
 template<typename Real>
 void check_symmetric_eigendecomposition(std::vector<Real> const & C, size_t n) {
-  using boost::math::optimization::detail::symmetric_eigendecomposition;
+  using boost::math::tools::detail::symmetric_eigendecomposition;
   std::vector<Real> B;
   std::vector<Real> D;
   CHECK_EQUAL(symmetric_eigendecomposition(C, n, B, D), true);

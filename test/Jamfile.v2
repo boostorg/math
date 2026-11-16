@@ -65,7 +65,6 @@ project
       # For simplicities sake, make everything a static lib:
       <link>static
       <define>BOOST_ALL_NO_LIB=1
-      <define>BOOST_UBLAS_UNSUPPORTED_COMPILER=0
       <include>.
       <include>../include_private
       <include>$(ntl-path)/include
@@ -1108,6 +1107,7 @@ test-suite misc :
    [ run test_root_finding_concepts.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_toms748_solve.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_multivariate_roots.cpp : : : [ requires cxx14_return_type_deduction cxx14_generic_lambdas ] ]
+   [ run test_linear_algebra_detail.cpp : : : [ requires cxx14_return_type_deduction cxx14_generic_lambdas ] ]
    [ run  compile_test/test_interpolators_cubic_spline_incl.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/test_interpolators_barycentric_rational_incl.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run test_octonion.cpp

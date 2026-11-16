@@ -16,7 +16,8 @@
 #include <type_traits>
 #include <cstdint>
 #include <boost/core/lightweight_test.hpp>
-#include <boost/numeric/ublas/vector.hpp>
+#include <deque>
+#include <boost/type_traits/is_complex.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -30,7 +31,7 @@ using std::abs;
  * Test checklist:
  * 1) Does it work with multiprecision?
  * 2) Does it work with .cbegin()/.cend() if the data is not altered?
- * 3) Does it work with ublas and std::array? (Checking Eigen and Armadillo will make the CI system really unhappy.)
+ * 3) Does it work with std::deque and std::array? (Checking Eigen and Armadillo will make the CI system really unhappy.)
  * 4) Does it work with std::forward_list if a forward iterator is all that is required?
  * 5) Does it work with complex data if complex data is sensible?
  */
@@ -209,8 +210,8 @@ void test_mean()
     mu = boost::math::statistics::mean(l.begin(), l.end());
     BOOST_TEST(abs(mu - 4) < tol);
 
-    // Does it work with ublas vectors?
-    boost::numeric::ublas::vector<Real> w(7);
+    // Does it work with std::deque?
+    std::deque<Real> w(7);
     for (std::size_t i = 0; i < w.size(); ++i)
     {
         w[i] = Real(i+1);
@@ -576,8 +577,8 @@ void test_median()
     m = boost::math::statistics::median(w);
     BOOST_TEST_EQ(m, 2);
 
-    // Does it work with ublas?
-    boost::numeric::ublas::vector<Real> w1(3);
+    // Does it work with std::deque?
+    std::deque<Real> w1(3);
     w1[0] = 1;
     w1[1] = 2;
     w1[2] = 3;
@@ -635,8 +636,8 @@ void test_median_absolute_deviation()
     m = boost::math::statistics::median_absolute_deviation(w, 0);
     BOOST_TEST_EQ(m, 2);
 
-    // boost.ublas vector?
-    boost::numeric::ublas::vector<Real> u(6);
+    // std::deque?
+    std::deque<Real> u(6);
     u[0] = 1;
     u[1] = 2;
     u[2] = -3;
@@ -694,8 +695,8 @@ void test_median_absolute_deviation()
     m = boost::math::statistics::median_absolute_deviation(w);
     BOOST_TEST_EQ(m, 1);
 
-    // boost.ublas vector?
-    boost::numeric::ublas::vector<Real> u2(6);
+    // std::deque?
+    std::deque<Real> u2(6);
     u2[0] = 1;
     u2[1] = 2;
     u2[2] = -3;
@@ -764,7 +765,7 @@ void test_gini_coefficient()
     gini = boost::math::statistics::gini_coefficient(w);
     BOOST_TEST(abs(gini) < tol);
 
-    boost::numeric::ublas::vector<Real> w1(3);
+    std::deque<Real> w1(3);
     w1[0] = 1;
     w1[1] = 1;
     w1[2] = 1;
@@ -813,7 +814,7 @@ void test_integer_gini_coefficient()
     gini = boost::math::statistics::gini_coefficient(w);
     BOOST_TEST(abs(gini) < tol);
 
-    boost::numeric::ublas::vector<Z> w1(3);
+    std::deque<Z> w1(3);
     w1[0] = 1;
     w1[1] = 1;
     w1[2] = 1;

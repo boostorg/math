@@ -17,7 +17,6 @@
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/type_index.hpp>
 
 #if !defined(TEST1) && !defined(TEST1A) && !defined(TEST2) && !defined(TEST3)
 #  define TEST1
@@ -74,7 +73,7 @@ Real get_termination_condition()
 template<class Real, unsigned Points>
 void test_linear()
 {
-    std::cout << "Testing linear functions are integrated properly by gauss_kronrod on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing linear functions are integrated properly by gauss_kronrod on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real error;
     auto f = [](const Real& x)
     {
@@ -91,7 +90,7 @@ void test_linear()
 template<class Real, unsigned Points>
 void test_quadratic()
 {
-    std::cout << "Testing quadratic functions are integrated properly by gauss-kronrod on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing quadratic functions are integrated properly by gauss-kronrod on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real error;
 
     auto f = [](const Real& x) { return 5*x*x + 7*x + 12; };
@@ -108,7 +107,7 @@ void test_quadratic()
 template<class Real, unsigned Points>
 void test_ca()
 {
-    std::cout << "Testing integration of C(a) on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing integration of C(a) on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real L1;
     Real error;
 
@@ -137,7 +136,7 @@ void test_ca()
 template<class Real, unsigned Points>
 void test_three_quadrature_schemes_examples()
 {
-    std::cout << "Testing integral in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing integral in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real Q;
     Real Q_expected;
 
@@ -171,7 +170,7 @@ void test_three_quadrature_schemes_examples()
 template<class Real, unsigned Points>
 void test_integration_over_real_line()
 {
-    std::cout << "Testing integrals over entire real line in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing integrals over entire real line in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real Q;
     Real Q_expected;
     Real L1;
@@ -196,7 +195,7 @@ void test_integration_over_real_line()
 template<class Real, unsigned Points>
 void test_right_limit_infinite()
 {
-    std::cout << "Testing right limit infinite for Gauss-Kronrod in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing right limit infinite for Gauss-Kronrod in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real Q;
     Real Q_expected;
     Real L1;
@@ -219,7 +218,7 @@ void test_right_limit_infinite()
 template<class Real, unsigned Points>
 void test_left_limit_infinite()
 {
-    std::cout << "Testing left limit infinite for Gauss-Kronrod in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing left limit infinite for Gauss-Kronrod in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     Real Q;
     Real Q_expected;
 

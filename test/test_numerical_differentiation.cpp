@@ -6,7 +6,6 @@
 #include <cmath>
 #include <limits>
 #include <iostream>
-#include <boost/type_index.hpp>
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/bessel_prime.hpp>
 #include <boost/math/special_functions/next.hpp>
@@ -28,7 +27,7 @@ using boost::math::constants::half;
 template<class Real, size_t order>
 void test_order(size_t points_to_test)
 {
-    std::cout << "Testing order " <<  order  << " derivative error estimate on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing order " <<  order  << " derivative error estimate on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     //std::cout << std::fixed << std::scientific;
     auto f = [](Real t) { return boost::math::cyl_bessel_j<Real>(1, t); };
@@ -87,7 +86,7 @@ void test_order(size_t points_to_test)
 template<class Real>
 void test_bessel()
 {
-    std::cout << "Testing numerical derivatives of Bessel's function on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing numerical derivatives of Bessel's function on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
 
     Real eps = std::numeric_limits<Real>::epsilon();
@@ -186,7 +185,7 @@ void test_complex_step()
     using std::complex;
     using std::isfinite;
     using std::isnormal;
-    std::cout << "Testing numerical derivatives of Bessel's function on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing numerical derivatives of Bessel's function on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real x = -100;
     while ( x < 100 )

@@ -33,7 +33,6 @@ project
       <toolset>borland:<runtime-link>static
       <include>../../..
       <define>BOOST_ALL_NO_LIB=1
-      <define>BOOST_UBLAS_UNSUPPORTED_COMPILER=0
       <include>.
       <include>../include_private
       <include>$(gmp_path)
