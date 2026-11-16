@@ -90,6 +90,8 @@
 
       // rewinds tape to last checkpoint set
       void rewind_to_last_checkpoint();
+      // rewinds tape to last checkpoint set, and removes that checkpoint
+      void pop_checkpoint();
       // index is "checkpoint" index. so                                              // order which checkpoint was set
       void rewind_to_checkpoint_at(size_t index);
       // rewind to beginning of graph without clearing the tape

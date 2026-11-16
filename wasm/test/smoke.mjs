@@ -362,6 +362,34 @@ test('nsga2 and qlognehvi', () => {
    [n, q, ...defaults].forEach((o) => o.delete());
 });
 
+test('pareto_polish', () => {
+   const box = [[0, 0, 0], [1, 1, 1]], weakly = (a, b) => a.every((v, i) => v <= b[i]);
+   for (const [name, corners] of [['two_sites', 2], ['three_sites', 3]]) {
+      const front = bm.nsga2(name, ...box, { population_size: 20, max_generations: 10, seed: 1 });
+      for (const second_order of [false, true]) {
+         const r = bm.pareto_polish(name, front, ...box, { refinement_tolerance: 0.05, second_order, trace: true });
+         // Every point of the front is weakly dominated by a point of the result, none of which dominates another.
+         assert.ok(front.f.every((f) => r.f.some((g) => weakly(g, f))) && r.f.every((f, i) => r.f.every((g, j) => i === j || !weakly(g, f))));
+         assert.deepEqual([r.status, r.achieved_tolerance <= 0.05, r.x.length, r.new_points > 0, r.trace.at(-1).kind, r.ranges.length],
+                          ['discovered_cells_resolved', true, r.origin.length, r.origin.includes(-1), 'cell', corners]);
+         assert.ok(r.f.every((f, i) => r.weak_kkt_residual[i] < 1e-6 && weakly(f, bm.test_function(name, r.x[i])) && !(r.origin[i] >= 0 && !weakly(f, front.f[r.origin[i]]))));
+         assert.ok(r.cells.every((c) => c.vertices.length <= corners && c.vertices.every((v) => v < r.x.length) && (c.kind === 'boundary' || (c.kind === 'convex' && c.error <= 0.05))));
+         assert.ok(r.cells.some((c) => c.bound_under_convexity) && r.objective_evaluations > r.jacobian_evaluations);
+         // The tangents of a cell are below every point: the fronts are convex.
+         const above = (l, at, y) => l.reduce((sum, v, i) => sum + v * (y[i] - at[i]) / r.ranges[i], 0);
+         assert.ok(r.multipliers.every((l) => l.length === corners) && r.cells.every((c) => c.multipliers.length % corners === 0 && c.vertices.every((v, k) =>
+            k * corners >= c.multipliers.length || r.f.every((y) => above(c.multipliers.subarray(k * corners, (k + 1) * corners), r.f[v], y) > -1e-8))));
+      }
+   }
+   const front = { x: [[0.5, 0.5], [0.4, 0.6]], f: [[1, 2], [2, 1]] }, two = [[0, 0], [1, 1]];
+   assert.deepEqual([bm.pareto_polish('two_sites', { x: [], f: [] }, ...two).status, bm.pareto_polish('two_sites', front, ...two, { refinement_tolerance: 0 }).trace],
+                    ['no_cells', undefined]);
+   rejects(() => bm.pareto_polish((x) => [x[0], x[1]], front, ...two), () => bm.pareto_polish('rosenbrock', front, ...two), () => bm.pareto_polish('two_sites', 7, ...two),
+           () => bm.pareto_polish('two_sites', front, ...two, { tolerance: -1 }), () => bm.pareto_polish('two_sites', front, ...two, { order: 2 }),
+           () => bm.pareto_polish('two_sites', front, [0.45, 0], [1, 1]), () => bm.pareto_polish('two_sites', { x: front.x, f: [[1, 2]] }, ...two),
+           () => bm.pareto_polish('two_sites', { x: front.x, f: [[1, 2, 3], [2, 1, 3]] }, ...two), () => bm.pareto_polish('three_sites', front, ...two));
+});
+
 // The arguments after the callback of each function that takes one, without options.
 const callers = Object.fromEntries([...rules.map(([rule, [, ...rest]]) => [rule, rest]), ['toms748_solve', [0, 1]], ['bisect', [0, 1]], ['multivariate_newton', [[1, 2]]],
    ['newton_raphson_iterate', [3, 1, 4]], ...[...Object.keys(optimizers), 'nsga2', 'qlognehvi'].map((name) => [name, [lower, upper]])]);

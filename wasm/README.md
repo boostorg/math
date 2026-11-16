@@ -71,15 +71,18 @@ bm.jso(x => f(x), lower, upper, { seed: 1 });                   // {x, value, qu
 bm.nsga2(x => [f1(x), f2(x)], lower, upper, { seed: 1 });       // {x, f}: the Pareto front; nsga2_optimizer has ask and tell
 bm.qlognehvi(x => [f1(x), f2(x)], lower, upper, { seed: 1 });   // the same, for expensive objectives; qlognehvi_optimizer
 bm.hypervolume(front.f, reference);                             // the volume the front dominates, below the reference point
+bm.pareto_polish("zdt1", front, lower, upper);                  // {x, f, origin, cells, status, ...}: the front of a test problem,
+                                                                // polished and refined with derivatives; { refinement_tolerance }
 ```
 
 The options of an optimizer are the members of its parameters in C++ (`max_function_calls`, `NP`, ...) and `seed`,
 `initial_guess` and `target_value`; `queries` holds every evaluation, as rows (x, f(x)) end to end. The module has
 no threads: a long run blocks, so call it from a Worker. An objective can also be the name of a test problem
 (`wasm/test_problems.hpp`), which runs without a callback: `rosenbrock`, `rastrigin`, `ackley`, `himmelblau` and
-`styblinski_tang` of two variables, and `zdt1`, ..., `zdt4`, `zdt6`, `dtlz2`, `fonseca_fleming` and `kursawe` of several
-objectives (`bm.test_function(name, x)` evaluates one). The gradient-based optimizers differentiate the objective by
-reverse-mode autodiff, so they take only those: `bm.lbfgs("rosenbrock", [-1.5, 2])`, and `gradient_descent`,
+`styblinski_tang` of two variables, and `zdt1`, ..., `zdt4`, `zdt6`, `dtlz2`, `fonseca_fleming`, `kursawe`, `two_sites`
+and `three_sites` of several objectives (`bm.test_function(name, x)` evaluates one). The gradient-based optimizers and
+`pareto_polish` differentiate the objective by reverse-mode autodiff, so they take only those:
+`bm.lbfgs("rosenbrock", [-1.5, 2])`, and `gradient_descent`,
 `nesterov` and `trust_region_newton`, give an object with `step()`, `steps(n)`, `arguments()`, `objective_value()`
 and `gradients()`. They share the tapes of the autodiff, so there is one at a time: making another before `delete()`
 is called on the first throws.

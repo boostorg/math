@@ -1313,6 +1313,16 @@ struct reverse_mode_hessian_vector_product_policy
                   const std::vector<RealType>& v,
                   std::vector<RealType>& Hv);
 };
+/* Jacobian of a vector valued objective, row-major in J */
+template<typename RealType>
+struct reverse_mode_jacobian_evaluation_policy
+{
+  template<class Objective, class ArgumentContainer>
+  void operator()(Objective&& obj_f,
+                  ArgumentContainer& x,
+                  std::vector<RealType>& obj_v,
+                  std::vector<RealType>& J);
+};
  /*
  * init policies
  */
@@ -1377,6 +1387,10 @@ template<typename RealType> struct reverse_mode_gradient_evaluation_policy { tem
 ```
 
 This policy computes the objective value and gradient using reverse-mode autodiff. With `Order = 2` the gradient is itself recorded on the first order tape, for `reverse_mode_hessian_vector_product_policy`, which computes a Hessian-vector product by one reverse sweep of that tape.
+
+[heading reverse_mode_jacobian_evaluation_policy]
+
+This policy computes the values and the Jacobian of an objective which returns a container, such as a `std::array` or a `std::vector`, of `rdiff::rvar<RealType, 1>`. The objective is recorded once after the last checkpoint of the tape, and that recording is swept once per output, so that the cost is that of as many gradients as there are outputs. On return `obj_v` holds the `m` values and `J` the `m` by `x.size()` Jacobian, row by row: `J[i * x.size() + j]` is the derivative of output `i` with respect to `x[j]`. Derivatives which are not finite are returned as they are. As for the gradient policy, a checkpoint has to be set after the arguments are created, by `tape_initializer_rvar` or by `add_checkpoint()`; what was recorded before it is not disturbed. Nodes recorded before the checkpoint are not swept, so the objective must not capture a variable recorded before it that depends on `x`. A known Jacobian is supplied by a policy of your own with the same call operator.
 
 [heading Initialization policies]
 

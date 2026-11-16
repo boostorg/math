@@ -21,9 +21,9 @@ namespace test_problems
 {
 // One objective, of two variables. Each is 0 at its minimum, but styblinski_tang: -78.33233140754282.
 const char* const single[] = {"rosenbrock", "rastrigin", "ackley", "himmelblau", "styblinski_tang"};
-// Several objectives: two, and dtlz2 three. The zdt and dtlz2 are posed on [0, 1]^n, fonseca_fleming on [-4, 4]^n
-// and kursawe on [-5, 5]^3.
-const char* const multiple[] = {"zdt1", "zdt2", "zdt3", "zdt4", "zdt6", "dtlz2", "fonseca_fleming", "kursawe"};
+// Several objectives: two, and dtlz2 and three_sites three. The zdt, dtlz2 and the sites are posed on [0, 1]^n,
+// fonseca_fleming on [-4, 4]^n and kursawe on [-5, 5]^3.
+const char* const multiple[] = {"zdt1", "zdt2", "zdt3", "zdt4", "zdt6", "dtlz2", "fonseca_fleming", "kursawe", "two_sites", "three_sites"};
 
 // The index of a name, or -1.
 template <class Names>
@@ -140,14 +140,41 @@ std::vector<typename X::value_type> kursawe(const X& x)
    return {f1, f2};
 }
 
+// The squared distances to two sites, the second in a metric with the weights 1, 5, 9, ...: the Pareto set is an arc
+// between the sites, and the front is convex.
+template <class X>
+std::vector<typename X::value_type> two_sites(const X& x)
+{
+   typename X::value_type f1 = 0, f2 = 0;
+   for (std::size_t k = 0; k < x.size(); ++k)
+   {
+      const double a = 0.3 + 0.05 * double(k % 5), b = 0.75 - 0.07 * double(k % 4);
+      f1 += (x[k] - a) * (x[k] - a);
+      f2 += double(1 + 4 * k) * (x[k] - b) * (x[k] - b);
+   }
+   return {f1, f2};
+}
+
+// The squared distances to three sites, of three variables: the Pareto set is their triangle.
+template <class X>
+std::vector<typename X::value_type> three_sites(const X& x)
+{
+   using Real = typename X::value_type;
+   static const double sites[3][3] = {{0.15, 0.2, 0.25}, {0.85, 0.3, 0.4}, {0.4, 0.8, 0.85}};
+   std::vector<Real> f;
+   for (const auto& a : sites)
+      f.push_back(Real((x[0] - a[0]) * (x[0] - a[0]) + (x[1] - a[1]) * (x[1] - a[1]) + (x[2] - a[2]) * (x[2] - a[2])));
+   return f;
+}
+
 // The objectives of multiple[id] at x, which needs at least variables(id) variables.
-inline std::size_t variables(int id) { return id == 5 ? 3 : 2; }
+inline std::size_t variables(int id) { return id == 5 || id == 9 ? 3 : 2; }
 
 template <class X>
 std::vector<typename X::value_type> values(int id, const X& x)
 {
    static const int zdts[] = {1, 2, 3, 4, 6};
-   return id < 5 ? zdt(x, zdts[id]) : id == 5 ? dtlz2(x) : id == 6 ? fonseca_fleming(x) : kursawe(x);
+   return id < 5 ? zdt(x, zdts[id]) : id == 5 ? dtlz2(x) : id == 6 ? fonseca_fleming(x) : id == 7 ? kursawe(x) : id == 8 ? two_sites(x) : three_sites(x);
 }
 } // namespace test_problems
 

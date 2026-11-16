@@ -322,6 +322,14 @@ public:
   void reset_checkpoints() { checkpoints_.clear(); }
 
   void rewind_to_last_checkpoint() { truncate(checkpoints_.back()); }
+  // Rewinds to the last checkpoint, and removes it. Nothing if there is none.
+  void pop_checkpoint()
+  {
+    if (!checkpoints_.empty()) {
+      rewind_to_last_checkpoint();
+      checkpoints_.pop_back();
+    }
+  }
   void rewind_to_checkpoint_at(size_t index)
   {
     truncate(checkpoints_[index]);

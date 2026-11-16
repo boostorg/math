@@ -125,6 +125,49 @@ struct reverse_mode_hessian_vector_product_policy
     }
   }
 };
+/**
+ * @brief> Jacobian evaluation policy for reverse mode autodiff
+ *
+ * Records the vector valued objective once, after the last checkpoint, then
+ * sweeps that recording once per output. J is row-major, y.size() by
+ * x.size(); derivatives which are not finite are passed on as they are.
+ * Nodes recorded before the checkpoint are not swept, so the objective must
+ * not capture a variable recorded before it that depends on x.
+ */
+template<typename RealType>
+struct reverse_mode_jacobian_evaluation_policy
+{
+  template<class Objective, class ArgumentContainer>
+  void operator()(Objective&& obj_f,
+                  ArgumentContainer& x,
+                  std::vector<RealType>& obj_v,
+                  std::vector<RealType>& J)
+  {
+    auto& tape = rdiff::get_active_tape<RealType, 1>();
+    tape.rewind_to_last_checkpoint();
+    auto y = obj_f(x);
+    obj_v.clear();
+    J.clear();
+    for (auto& yi : y) {
+      // Only the nodes recorded since the checkpoint, and the arguments,
+      // take part in the sweep.
+      for (auto it = tape.last_checkpoint(); it != tape.end(); ++it) {
+        *it->get_adjoint_ptr() = RealType(0);
+      }
+      for (auto& xj : x) {
+        xj.adjoint() = RealType(0);
+      }
+      yi.adjoint() = RealType(1);
+      for (auto it = tape.end(), first = tape.last_checkpoint(); it != first;) {
+        (--it)->backward();
+      }
+      obj_v.push_back(yi.item());
+      for (auto& xj : x) {
+        J.push_back(xj.adjoint());
+      }
+    }
+  }
+};
 /******************************************************************
  * init policies
  */

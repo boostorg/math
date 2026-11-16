@@ -1185,6 +1185,7 @@ test-suite interpolators :
    [ compile compile_test/test_dycors_incl.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ compile compile_test/test_nsga2_incl.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ compile compile_test/test_qlognehvi_incl.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ compile compile_test/test_pareto_polish_incl.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ compile compile_test/test_differential_evolution_incl.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ compile compile_test/test_jso_incl.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
 ;
@@ -1471,6 +1472,8 @@ test-suite gradient_based_optimizers
         [ run test_nesterov_optimizer.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
         [ run test_lbfgs.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ] 
         [ run test_trust_region_newton.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+        [ run test_reverse_mode_jacobian_policy.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+        [ run test_pareto_polish.cpp : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ requires cxx17_if_constexpr cxx17_std_apply ] ]
     ;
 # BEGIN AUTODIFF LONG RUNNING TESTS
 test-suite autodiff-long-running-tests
