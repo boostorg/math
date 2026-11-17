@@ -262,6 +262,28 @@ void multiplication_assignment() {
 }
 
 template <class T>
+void mixed_order_assignment() {
+  // *= and -= with a right-hand side of a different order, but the same depth.
+  const auto a = make_fvar<T, 2>(T(1.5));  // 1.5 + e
+  const auto b = make_fvar<T, 3>(T(2));    // 2 + e
+  // (1.5 + e)(2 + e) = 3 + 3.5 e + e^2, truncated to the order of the left-hand side.
+  auto p = a;
+  p *= b;
+  const auto q = a * b;
+  CHECK_EQUAL(p.derivative(0), T(3));
+  CHECK_EQUAL(p.derivative(1), T(3.5));
+  CHECK_EQUAL(p.derivative(2), T(2));
+  for (auto i : boost::irange(3))
+    CHECK_EQUAL(p.derivative(i), q.derivative(i));
+  // The left-hand side has the higher order: only the coefficients both sides have are subtracted.
+  auto c = make_fvar<T, 3>(T(5));  // 5 + e
+  c -= a;
+  CHECK_EQUAL(c.derivative(0), T(3.5));
+  for (auto i : boost::irange(1, 4))
+    CHECK_EQUAL(c.derivative(i), T(0));
+}
+
+template <class T>
 void division_assignment() {
   constexpr std::size_t m = 3;
   constexpr std::size_t n = 4;
@@ -729,6 +751,7 @@ int main()
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { addition_assignment<typename decltype(t)::type>(); });
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { subtraction_assignment<typename decltype(t)::type>(); });
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { multiplication_assignment<typename decltype(t)::type>(); });
+   boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { mixed_order_assignment<typename decltype(t)::type>(); });
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { division_assignment<typename decltype(t)::type>(); });
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { unary_signs<typename decltype(t)::type>(); });
    boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, all_float_types>>([](auto t) { cast_double<typename decltype(t)::type>(); });

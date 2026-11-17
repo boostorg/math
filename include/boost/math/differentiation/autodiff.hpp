@@ -727,7 +727,7 @@ fvar<RealType, Order>& fvar<RealType, Order>::operator+=(root_type const& ca) {
 template <typename RealType, size_t Order>
 template <typename RealType2, size_t Order2>
 fvar<RealType, Order>& fvar<RealType, Order>::operator-=(fvar<RealType2, Order2> const& cr) {
-  for (size_t i = 0; i <= Order; ++i)
+  for (size_t i = 0; i <= (std::min)(Order, Order2); ++i)
     v[i] -= cr.v[i];
   return *this;
 }
@@ -744,8 +744,9 @@ fvar<RealType, Order>& fvar<RealType, Order>::operator*=(fvar<RealType2, Order2>
   using diff_t = typename std::array<RealType, Order + 1>::difference_type;
   promote<RealType, RealType2> const zero(0);
   BOOST_MATH_IF_CONSTEXPR (Order <= Order2)
+    // v[j] = sum_{k=0}^{j} v[k] * cr.v[j-k]; cr.v.crbegin() + (Order2 - j) points at cr.v[j].
     for (size_t i = 0, j = Order; i <= Order; ++i, --j)
-      v[j] = std::inner_product(v.cbegin(), v.cend() - diff_t(i), cr.v.crbegin() + diff_t(i), zero);
+      v[j] = std::inner_product(v.cbegin(), v.cend() - diff_t(i), cr.v.crbegin() + diff_t(Order2 - j), zero);
   else {
     for (size_t i = 0, j = Order; i <= Order - Order2; ++i, --j)
       v[j] = std::inner_product(cr.v.cbegin(), cr.v.cend(), v.crbegin() + diff_t(i), zero);
