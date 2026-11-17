@@ -9,7 +9,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
+#include <type_traits>
 #include <array>
 #include "functor.hpp"
 

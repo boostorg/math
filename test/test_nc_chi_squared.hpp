@@ -12,7 +12,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/distributions/non_central_chi_squared.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
+#include <type_traits>
 #include <array>
 #include "functor.hpp"
 
@@ -126,7 +126,7 @@ void test_spots(RealType)
    //
    if(boost::math::tools::digits<RealType>() < 50)
       tolerance *= 50;
-   if(boost::is_floating_point<RealType>::value != 1)
+   if(std::is_floating_point<RealType>::value != 1)
       tolerance *= 20; // real_concept special functions are less accurate
 
    std::cout << "Tolerance = " << tolerance << "%." << std::endl;
@@ -377,7 +377,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
    // Tests with type real_concept take rather too long to run, so
    // for now we'll disable them:
    //
-   if(!boost::is_floating_point<value_type>::value)
+   if(!std::is_floating_point<value_type>::value)
       return;
 
    std::cout << "Testing: " << type_name << " quantile sanity check, with tests " << test << std::endl;

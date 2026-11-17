@@ -22,9 +22,7 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-#include <boost/type_traits/is_floating_point.hpp>
-#include <boost/type_traits/is_convertible.hpp>
-#include <boost/type_traits/integral_constant.hpp>
+#include <type_traits>
 #ifndef BOOST_NO_CXX11_HDR_RANDOM
 #include <random>
 namespace random_ns = std;
@@ -554,8 +552,8 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
          BOOST_MATH_ASSERT(arg1.n1 < arg1.n2);
 
          typedef float random_type;
-         typedef typename boost::mpl::if_<
-            ::boost::is_floating_point<T>,
+         typedef typename std::conditional<
+            std::is_floating_point<T>::value,
             T, long double>::type power_type;
 
          random_ns::mt19937 rnd;

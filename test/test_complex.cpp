@@ -6,9 +6,6 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
-#include <boost/mpl/if.hpp>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/complex.hpp>
 

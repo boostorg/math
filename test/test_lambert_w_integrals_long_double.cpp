@@ -16,7 +16,6 @@
 #include "math_unit_test.hpp"
 
 #include <array>
-#include <boost/type_traits/is_constructible.hpp>
 #include <boost/math/special_functions/fpclassify.hpp> // isnan, isfinite.
 #include <boost/math/special_functions/next.hpp> // float_next, float_prior
 using boost::math::float_next;

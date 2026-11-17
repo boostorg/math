@@ -15,7 +15,7 @@
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/tools/test.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
+#include <type_traits>
 #include <array>
 #include "functor.hpp"
 
@@ -230,7 +230,7 @@ void test_spots(T, const char* t)
    // expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 100 *
-      (boost::is_floating_point<T>::value ? 5 : 10);
+      (std::is_floating_point<T>::value ? 5 : 10);
    BOOST_CHECK_CLOSE(::boost::math::acosh(static_cast<T>(262145)/262144L), static_cast<T>(0.00276213498595136093375633956331651432309750291610866833462649L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::acosh(static_cast<T>(2)), static_cast<T>(1.31695789692481670862504634730796844402698197146751647976847L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::acosh(static_cast<T>(40)), static_cast<T>(4.38187034804006698696313269586603717076961771721038534547948L), tolerance);

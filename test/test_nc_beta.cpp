@@ -181,7 +181,7 @@ void test_spot(
    // Sanity checking using the naive PDF calculation above fails at
    // float precision:
    //
-   if(!boost::is_same<float, RealType>::value)
+   if(!std::is_same<float, RealType>::value)
    {
       BOOST_CHECK_CLOSE(
          pdf(dist, cs), naive_pdf(dist.alpha(), dist.beta(), ncp, cs), tol);

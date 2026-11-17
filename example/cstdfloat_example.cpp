@@ -279,8 +279,8 @@ BOOST_FLOAT128_C(123.4567890123456789012345678901234567890) = 123.45678901234567
   // One can compare typedefs (but, of course, only those that are defined for the platform in use.)
   std::cout.setf(std::ios::boolalpha);
   std::cout << "double, double: " << std::is_same<double, double>::value << std::endl;
-  bool b = boost::is_same<boost::floatmax_t, boost::float64_t>::value;
-  std::cout << "boost::is_same<boost::floatmax_t, boost::float64_t>::value; " << b << std::endl;
+  bool b = std::is_same<boost::floatmax_t, boost::float64_t>::value;
+  std::cout << "std::is_same<boost::floatmax_t, boost::float64_t>::value; " << b << std::endl;
   std::cout << "floatmax_t, float64_t: "
     << std::is_same<boost::floatmax_t, boost::float64_t>::value << std::endl;
 
@@ -364,7 +364,7 @@ GCC 4.8.1 with quadmath
  significand_bits (including one implicit bit)113, exponent_bits 15, sign_bits 1
  bits = 128
  double, double: true
- boost::is_same<boost::floatmax_t, boost::float64_t>::value; false
+ std::is_same<boost::floatmax_t, boost::float64_t>::value; false
  floatmax_t, float64_t: false
  128 bits.
 
@@ -424,7 +424,7 @@ floatmax_t 113 bits
 significand_bits (including one implicit bit)113, exponent_bits 15, sign_bits 1
 bits = 128
 double, double: true
-boost::is_same<boost::floatmax_t, boost::float64_t>::value; false
+std::is_same<boost::floatmax_t, boost::float64_t>::value; false
 floatmax_t, float64_t: false
 128 bits.
 
@@ -477,7 +477,7 @@ floatmax_t, float64_t: false
  1>  significand_bits (including one implicit bit)53, exponent_bits 11, sign_bits 1
  1>  bits = 64
  1>  double, double: true
- 1>  boost::is_same<boost::floatmax_t, boost::float64_t>::value; true
+ 1>  std::is_same<boost::floatmax_t, boost::float64_t>::value; true
  1>  floatmax_t, float64_t: true
  1>  64 bits.
 ] [/cstdfloat_output]

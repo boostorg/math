@@ -13,7 +13,7 @@
 #include <boost/math/tools/stats.hpp>
 #include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/constants/constants.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
+#include <type_traits>
 #include <array>
 #include "functor.hpp"
 
@@ -571,7 +571,7 @@ void test_spots(T, const char* name)
       // and by up to 1e-11 where the compiler contracts x b - y a into an fma.
       // The generic (non-Lanczos) code used by real_concept is far less accurate here.
       //
-      T tolerance_large = tolerance * (boost::is_floating_point<T>::value ? 1 : 100000000);
+      T tolerance_large = tolerance * (std::is_floating_point<T>::value ? 1 : 100000000);
       BOOST_CHECK_CLOSE(
          ::boost::math::ibeta(static_cast<T>(1.0e5L), static_cast<T>(2.5e7L), static_cast<T>(4158) / 1048576),
          static_cast<T>(0.06845490339638190702573107740432918859230714009L), tolerance_large);

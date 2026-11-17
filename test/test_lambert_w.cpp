@@ -40,7 +40,7 @@
 
 #include <array>
 #include <boost/lexical_cast.hpp>
-#include <boost/type_traits/is_constructible.hpp>
+#include <type_traits>
 
 #ifdef BOOST_MATH_TEST_MULTIPRECISION
 #include <boost/multiprecision/cpp_dec_float.hpp> // boost::multiprecision::cpp_dec_float_50

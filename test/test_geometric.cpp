@@ -105,7 +105,7 @@ void test_spot( // Test a single spot value against 'known good' values.
     {
       // Just check quantile is very small:
       if((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent)
-        && (boost::is_floating_point<RealType>::value))
+        && (std::is_floating_point<RealType>::value))
       {
         // Limit where this is checked: if exponent range is very large we may
         // run out of iterations in our root finding algorithm.
@@ -121,7 +121,7 @@ void test_spot( // Test a single spot value against 'known good' values.
     {
       // Just check quantile is very small:
       if((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent)
-        && (boost::is_floating_point<RealType>::value))
+        && (std::is_floating_point<RealType>::value))
       {
         // Limit where this is checked: if exponent range is very large we may
         // run out of iterations in our root finding algorithm.

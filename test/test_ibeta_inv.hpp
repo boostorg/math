@@ -14,7 +14,7 @@
 #include <boost/math/tools/stats.hpp>
 #include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/constants/constants.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
+#include <type_traits>
 #include <array>
 #include "functor.hpp"
 
@@ -338,7 +338,7 @@ void test_spots(T)
    // accurate for arguments this large, whatever the value of min(a, b),
    // so only the built-in floating point types get the usual tolerance:
    //
-   T tolerance_1511 = tolerance * (boost::is_floating_point<T>::value ? 1 : 100000000);
+   T tolerance_1511 = tolerance * (std::is_floating_point<T>::value ? 1 : 100000000);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta_inv(
          static_cast<T>(1000),

@@ -15,7 +15,7 @@
 #include <boost/math/tools/stats.hpp>
 #include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/constants/constants.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
+#include <type_traits>
 #include <array>
 #include "functor.hpp"
 
@@ -201,7 +201,7 @@ void test_beta(T, const char* name)
 #endif
 
 #if !defined(TEST_REAL_CONCEPT) || defined(FULL_TEST) || (TEST_DATA == 4)
-   if(boost::is_floating_point<T>::value){
+   if(std::is_floating_point<T>::value){
    //
    // This accuracy test is normally only enabled for "real"
    // floating point types and not for class real_concept.

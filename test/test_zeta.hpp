@@ -12,7 +12,7 @@
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/tools/test.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
+#include <type_traits>
 #include <array>
 #include "functor.hpp"
 
@@ -90,7 +90,7 @@ void test_spots(T, const char* t)
    //
    BOOST_MATH_STD_USING
    T tolerance = boost::math::tools::epsilon<T>() * 100 *
-      (boost::is_floating_point<T>::value ? 5 : 10);
+      (std::is_floating_point<T>::value ? 5 : 10);
    // An extra fudge factor for real_concept which has a less accurate tgamma:
    T tolerance_tgamma_extra = std::numeric_limits<T>::is_specialized ? 1 : 10;
 

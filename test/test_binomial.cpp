@@ -74,7 +74,7 @@ void test_spot(
       else
       {
          // Just check quantile is very small:
-         if((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent) && (boost::is_floating_point<RealType>::value))
+         if((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent) && (std::is_floating_point<RealType>::value))
          {
             // Limit where this is checked: if exponent range is very large we may
             // run out of iterations in our root finding algorithm.
@@ -89,7 +89,7 @@ void test_spot(
       else
       {
          // Just check quantile is very small:
-         if((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent) && (boost::is_floating_point<RealType>::value))
+         if((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent) && (std::is_floating_point<RealType>::value))
          {
             // Limit where this is checked: if exponent range is very large we may
             // run out of iterations in our root finding algorithm.
@@ -746,7 +746,7 @@ void test_spots(RealType T)
   {
      using namespace boost::math::policies;
      RealType tol = boost::math::tools::epsilon<RealType>() * 500;
-     if(!boost::is_floating_point<RealType>::value)
+     if(!std::is_floating_point<RealType>::value)
         tol *= 10;  // no lanczos approximation implies less accuracy
      RealType x;
 #if !defined(TEST_ROUNDING) || (TEST_ROUNDING == 1)
