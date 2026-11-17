@@ -8,7 +8,7 @@
 
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <array>
-#include <boost/chrono.hpp>
+#include <chrono>
 #include <boost/regex.hpp>
 #include <iostream>
 #include <iomanip>
@@ -101,7 +101,7 @@ double exec_timed_test(Func f)
    double t = 0;
    unsigned repeats = 1;
    do{
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
 
       for(unsigned count = 0; count < repeats; ++count)
       {
@@ -109,7 +109,7 @@ double exec_timed_test(Func f)
             sum += f(*i);
       }
 
-      t = boost::chrono::duration_cast<boost::chrono::duration<double>>(w.elapsed()).count();
+      t = std::chrono::duration_cast<std::chrono::duration<double>>(w.elapsed()).count();
       if(t < 0.5)
          repeats *= 2;
    } while(t < 0.5);

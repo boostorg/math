@@ -33,175 +33,175 @@ struct tester
    }
    double test_add()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for(unsigned i = 0; i < b.size(); ++i)
             a[i] = b[i] + c[i];
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_subtract()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for(unsigned i = 0; i < b.size(); ++i)
             a[i] = b[i] - c[i];
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_add_int()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for(unsigned i = 0; i < b.size(); ++i)
             a[i] = b[i] + 1;
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_subtract_int()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for(unsigned i = 0; i < b.size(); ++i)
             a[i] = b[i] - 1;
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_multiply()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for(unsigned k = 0; k < b.size(); ++k)
             a[k] = b[k] * c[k];
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_multiply_int()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for(unsigned i = 0; i < b.size(); ++i)
             a[i] = b[i] * 3;
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_divide()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for(unsigned i = 0; i < b.size(); ++i)
             a[i] = b[i] / small[i];
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_divide_int()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for(unsigned i = 0; i < b.size(); ++i)
             a[i] = b[i] / 3;
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_gcd()
    {
       using boost::integer::gcd;
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for(unsigned i = 0; i < b.size(); ++i)
             a[i] = gcd(b[i], c[i]);
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
 
    double test_inplace_add()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for (unsigned i = 0; i < b.size(); ++i)
             b[i] += c[i];
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_inplace_subtract()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for (unsigned i = 0; i < b.size(); ++i)
             b[i] -= c[i];
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_inplace_add_int()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for (unsigned i = 0; i < b.size(); ++i)
             b[i] += 1;
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_inplace_subtract_int()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for (unsigned i = 0; i < b.size(); ++i)
             b[i] -= 1;
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_inplace_multiply()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for (unsigned k = 0; k < b.size(); ++k)
             b[k] *= c[k];
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_inplace_multiply_int()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for (unsigned i = 0; i < b.size(); ++i)
             b[i] *= 3;
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_inplace_divide()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for (unsigned i = 0; i < b.size(); ++i)
             a[i] /= small[i];
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
    double test_inplace_divide_int()
    {
-      stopwatch<boost::chrono::high_resolution_clock> w;
+      stopwatch<std::chrono::steady_clock> w;
       for (unsigned repeats = 0; repeats < max_reps; ++repeats)
       {
          for (unsigned i = 0; i < b.size(); ++i)
             b[i] /= 3;
       }
-      return boost::chrono::duration_cast<boost::chrono::duration<double> >(w.elapsed()).count();
+      return std::chrono::duration_cast<std::chrono::duration<double> >(w.elapsed()).count();
    }
 private:
    T generate_random(bool issmall)

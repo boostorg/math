@@ -17,10 +17,10 @@ The 'exact' answer was computed using a 100 decimal digit type:
 
    cpp_bin_float_100 full_answer ("3.036588971875662519420809578505669635581453977248111123242141654169177268411884961770250390838097895");
 
-Times were measured using  __boost_timer using `class cpu_timer`.
+Times were measured using `std::chrono::steady_clock`.
 
 * ['Its] is the number of iterations taken to find the root.
-* ['Times] is the CPU time-taken in arbitrary units.
+* ['Times] is the time taken in arbitrary units.
 * ['Norm] is a normalized time, in comparison to the quickest algorithm (with value 1.00).
 * ['Dis] is the distance from the nearest representation of the 'exact' root in bits.
 Distance from the 'exact' answer is measured by using function __float_distance.
@@ -32,7 +32,7 @@ It does allow us to investigate some of the factors controlling efficiency that 
 more complex functions.
 
 The program used was [@ ../../example/root_finding_algorithms.cpp root_finding_algorithms.cpp].
-100000 evaluations of each floating-point type and algorithm were used and the CPU times were
+100000 evaluations of each floating-point type and algorithm were used and the times were
 judged from repeat runs to have an uncertainty of 10 %.  Comparing MSVC for `double` and `long double`
 (which are identical on this platform) may give a guide to uncertainty of timing.
 

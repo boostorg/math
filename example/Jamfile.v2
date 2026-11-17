@@ -155,9 +155,9 @@ test-suite examples :
    [ compile leja_parallel_assembly.cpp : [ requires cxx17_if_constexpr cxx11_hdr_thread ] [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
 ;
 
-run root_elliptic_finding.cpp /boost/timer : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ;
-run root_finding_algorithms.cpp /boost/timer : : : release <link>static  [ requires cxx11_hdr_tuple cxx11_unified_initialization_syntax ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ;
-run root_n_finding_algorithms.cpp /boost/timer : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ;
+run root_elliptic_finding.cpp : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] ;
+run root_finding_algorithms.cpp : : : release <link>static  [ requires cxx11_hdr_tuple cxx11_unified_initialization_syntax ] ;
+run root_n_finding_algorithms.cpp : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] ;
 
 explicit root_elliptic_finding  ;
 explicit root_finding_algorithms  ;

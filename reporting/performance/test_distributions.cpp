@@ -105,7 +105,7 @@ public:
          unsigned data_size;
          do{
             data_size = 0;
-            stopwatch<boost::chrono::high_resolution_clock> w;
+            stopwatch<std::chrono::steady_clock> w;
 
             for(unsigned count = 0; count < repeats; ++count)
             {
@@ -120,7 +120,7 @@ public:
                }
             }
 
-            t = boost::chrono::duration_cast<boost::chrono::duration<double>>(w.elapsed()).count();
+            t = std::chrono::duration_cast<std::chrono::duration<double>>(w.elapsed()).count();
             if(t < 0.5)
                repeats *= 2;
          } while(t < 0.5);

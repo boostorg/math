@@ -34,8 +34,7 @@
 using boost::multiprecision::cpp_bin_float_100;
 using boost::multiprecision::cpp_bin_float_50;
 
-#include <boost/timer/timer.hpp>
-#include <boost/system/error_code.hpp>
+#include <chrono>
 #include <boost/preprocessor/stringize.hpp>
 
 // STL
@@ -223,7 +222,7 @@ T elliptic_root_noderiv(T radius, T arc)
 template <class T = double>
 struct elliptic_root_functor_1deriv
 { // Functor also returning 1st derivative.
-   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(std::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    elliptic_root_functor_1deriv(T const& arc, T const& radius) : m_arc(arc), m_radius(radius)
    { // Constructor just stores value a to find root of.
@@ -259,7 +258,7 @@ T elliptic_root_1deriv(T radius, T arc)
    using namespace std;  // Help ADL of std functions.
    using namespace boost::math::tools; // For newton_raphson_iterate.
 
-   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(std::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    T guess = sqrt(arc * arc / 16 - radius * radius);
    T min = 0;   // Minimum possible value is zero.
@@ -283,7 +282,7 @@ T elliptic_root_1deriv(T radius, T arc)
 template <class T = double>
 struct elliptic_root_functor_2deriv
 { // Functor returning both 1st and 2nd derivatives.
-   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(std::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    elliptic_root_functor_2deriv(T const& arc, T const& radius) : m_arc(arc), m_radius(radius) {}
    std::tuple<T, T, T> operator()(T const& x)
@@ -317,7 +316,7 @@ T elliptic_root_2deriv(T radius, T arc)
    using namespace std;                // Help ADL of std functions.
    using namespace boost::math::tools; // For halley_iterate.
 
-   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(std::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    T guess = sqrt(arc * arc / 16 - radius * radius);
    T min = 0;                                   // Minimum possible value is zero.
@@ -344,7 +343,7 @@ T elliptic_root_2deriv_s(T arc, T radius)
   using namespace std;  // Help ADL of std functions.
   using namespace boost::math::tools; // For schroder_iterate.
 
-  static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+  static_assert(std::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
   T guess = sqrt(arc * arc / 16 - radius * radius);
   T min = 0; // Minimum possible value is zero.
@@ -472,32 +471,24 @@ int test_root(cpp_bin_float_100 big_radius, cpp_bin_float_100 big_arc, cpp_bin_f
   T sum = 0;
   T ans = static_cast<T>(answer);
 
-  using boost::timer::nanosecond_type;
-  using boost::timer::cpu_times;
-  using boost::timer::cpu_timer;
-
   long eval_count = std::is_floating_point<T>::value ? 1000000 : 10000; // To give a sufficiently stable timing for the fast built-in types,
   // This takes an inconveniently long time for multiprecision cpp_bin_float_50 etc  types.
 
-  cpu_times now; // Holds wall, user and system times.
-
   { // Evaluate times etc for each algorithm.
     //algorithm_names.push_back("TOMS748"); // 
-    cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
-    ti.start();
+    const auto start = std::chrono::steady_clock::now();
     for(long i = eval_count; i >= 0; --i)
     {
       result = elliptic_root_noderiv(radius, arc); // 
       sum += result;
     }
-    now = ti.elapsed();
-    int time = static_cast<int>(now.user / eval_count);
-    root_infos[type_no].times.push_back(time); // CPU time taken.
+    const auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
+    int time = static_cast<int>(now / eval_count);
+    root_infos[type_no].times.push_back(time); // Time taken.
     if (time < root_infos[type_no].min_time)
     {
       root_infos[type_no].min_time = time;
     }
-    ti.stop();
     long int distance = static_cast<int>(boost::math::float_distance<T>(result, ans));
     root_infos[type_no].distances.push_back(distance);
     root_infos[type_no].iterations.push_back(iters); // 
@@ -505,22 +496,20 @@ int test_root(cpp_bin_float_100 big_radius, cpp_bin_float_100 big_arc, cpp_bin_f
   }
   {
     // algorithm_names.push_back("Newton"); // algorithm
-    cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
-    ti.start();
+    const auto start = std::chrono::steady_clock::now();
     for(long i = eval_count; i >= 0; --i)
     {
       result = elliptic_root_1deriv(radius, arc); // 
       sum += result;
     }
-    now = ti.elapsed();
-    int time = static_cast<int>(now.user / eval_count);
-    root_infos[type_no].times.push_back(time); // CPU time taken.
+    const auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
+    int time = static_cast<int>(now / eval_count);
+    root_infos[type_no].times.push_back(time); // Time taken.
     if (time < root_infos[type_no].min_time)
     {
       root_infos[type_no].min_time = time;
     }
 
-    ti.stop();
     long int distance = static_cast<int>(boost::math::float_distance<T>(result, ans));
     root_infos[type_no].distances.push_back(distance);
     root_infos[type_no].iterations.push_back(iters); //
@@ -528,17 +517,15 @@ int test_root(cpp_bin_float_100 big_radius, cpp_bin_float_100 big_arc, cpp_bin_f
   }
   {
     //algorithm_names.push_back("Halley"); // algorithm
-    cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
-    ti.start();
+    const auto start = std::chrono::steady_clock::now();
     for(long i = eval_count; i >= 0; --i)
     {
       result = elliptic_root_2deriv(radius, arc); // 
       sum += result;
     }
-    now = ti.elapsed();
-    int time = static_cast<int>(now.user / eval_count);
-    root_infos[type_no].times.push_back(time); // CPU time taken.
-    ti.stop();
+    const auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
+    int time = static_cast<int>(now / eval_count);
+    root_infos[type_no].times.push_back(time); // Time taken.
     if (time < root_infos[type_no].min_time)
     {
       root_infos[type_no].min_time = time;
@@ -550,21 +537,19 @@ int test_root(cpp_bin_float_100 big_radius, cpp_bin_float_100 big_arc, cpp_bin_f
   }
   {
     // algorithm_names.push_back("Schr'''&#xf6;'''der"); // algorithm
-    cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
-    ti.start();
+    const auto start = std::chrono::steady_clock::now();
     for(long i = eval_count; i >= 0; --i)
     {
       result = elliptic_root_2deriv_s(arc, radius); // 
       sum += result;
     }
-    now = ti.elapsed();
-    int time = static_cast<int>(now.user / eval_count);
-    root_infos[type_no].times.push_back(time); // CPU time taken.
+    const auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
+    int time = static_cast<int>(now / eval_count);
+    root_infos[type_no].times.push_back(time); // Time taken.
     if (time < root_infos[type_no].min_time)
     {
       root_infos[type_no].min_time = time;
     }
-    ti.stop();
     long int distance = static_cast<int>(boost::math::float_distance<T>(result, ans));
     root_infos[type_no].distances.push_back(distance);
     root_infos[type_no].iterations.push_back(iters); // 

@@ -17,7 +17,7 @@
 #include <boost/lexical_cast.hpp>
 #include <array>
 #include <boost/random.hpp>
-#include <boost/chrono.hpp>
+#include <chrono>
 
 //
 // Define MP_TYPE
@@ -4768,7 +4768,7 @@ T get_max_error(const lanczos_info<T>& dat, R, double* time = nullptr)
 
    lanczos_rational<R> rational(dat);
 
-   stopwatch<boost::chrono::high_resolution_clock> w;
+   stopwatch<std::chrono::steady_clock> w;
 
    for(unsigned i = 0; i < tests.size(); ++i)
    {
@@ -4786,7 +4786,7 @@ T get_max_error(const lanczos_info<T>& dat, R, double* time = nullptr)
    }
 
    if (time)
-      * time = boost::chrono::duration_cast<boost::chrono::duration<double>>(w.elapsed()).count();
+      * time = std::chrono::duration_cast<std::chrono::duration<double>>(w.elapsed()).count();
 
    return max_error;
 }
@@ -4802,7 +4802,7 @@ T get_max_error_sterling(double* time = nullptr)
 
    T max_err = 0;
 
-   stopwatch<boost::chrono::high_resolution_clock> w;
+   stopwatch<std::chrono::steady_clock> w;
 
    for (unsigned i = 0; i < tests.size(); ++i)
    {
@@ -4815,7 +4815,7 @@ T get_max_error_sterling(double* time = nullptr)
    }
 
    if(time)
-      *time = boost::chrono::duration_cast<boost::chrono::duration<double>>(w.elapsed()).count();
+      *time = std::chrono::duration_cast<std::chrono::duration<double>>(w.elapsed()).count();
 
    return max_err;
 }

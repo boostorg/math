@@ -39,8 +39,7 @@
 using boost::multiprecision::cpp_bin_float_100;
 using boost::multiprecision::cpp_bin_float_50;
 
-#include <boost/timer/timer.hpp>
-#include <boost/system/error_code.hpp>
+#include <chrono>
 #include <boost/multiprecision/cpp_bin_float/io.hpp>
 #include <boost/preprocessor/stringize.hpp>
 
@@ -377,11 +376,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
   T ans = static_cast<T>(answer);
   int algo = 0; // Count of algorithms used.
  
-  using boost::timer::nanosecond_type;
-  using boost::timer::cpu_times;
-  using boost::timer::cpu_timer;
 
-  cpu_times now; // Holds wall, user and system times.
   T sum = 0;
 
   // std::cbrt is much the fastest, but not useful for this comparison because it only handles fundamental types.
@@ -436,18 +431,16 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
   {
     //algorithm_names.push_back("boost::math::cbrt"); // .
     result = 0;
-    cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
-    ti.start();
+    const auto start = std::chrono::steady_clock::now();
     for (long i = 0; i < count; ++i)
     {
       result = boost::math::cbrt(to_root); // 
       sum += result;
     }
-    now = ti.elapsed();
+    const auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
 
-    long time = static_cast<long>(now.user/1000); // convert nanoseconds to microseconds (assuming this is resolution).
-    root_infos[type_no].times.push_back(time); // CPU time taken.
-    ti.stop();
+    long time = static_cast<long>(now/1000); // convert nanoseconds to microseconds (assuming this is resolution).
+    root_infos[type_no].times.push_back(time); // Time taken.
     if (time < root_infos[type_no].min_time)
     {
       root_infos[type_no].min_time = time;
@@ -459,22 +452,20 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
   }
   {
     //algorithm_names.push_back("TOMS748"); // 
-    cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
-    ti.start();
+    const auto start = std::chrono::steady_clock::now();
     for (long i = 0; i < count; ++i)
     {
       result = cbrt_noderiv<T>(to_root); // 
       sum += result;
     }
-    now = ti.elapsed();
+    const auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
 //    int time = static_cast<int>(now.user / count);
-    long time = static_cast<long>(now.user/1000);
-    root_infos[type_no].times.push_back(time); // CPU time taken.
+    long time = static_cast<long>(now/1000);
+    root_infos[type_no].times.push_back(time); // Time taken.
     if (time < root_infos[type_no].min_time)
     {
       root_infos[type_no].min_time = time;
     }
-    ti.stop();
     long int distance = static_cast<int>(boost::math::float_distance<T>(result, ans));
     root_infos[type_no].distances.push_back(distance);
     root_infos[type_no].iterations.push_back(iters); // 
@@ -482,23 +473,21 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
   }
   {
    // algorithm_names.push_back("Newton"); // algorithm
-    cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
-    ti.start();
+    const auto start = std::chrono::steady_clock::now();
     for (long i = 0; i < count; ++i)
     {
       result = cbrt_deriv(to_root); // 
       sum += result;
     }
-    now = ti.elapsed();
+    const auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
 //    int time = static_cast<int>(now.user / count);
-    long time = static_cast<long>(now.user/1000);
-    root_infos[type_no].times.push_back(time); // CPU time taken.
+    long time = static_cast<long>(now/1000);
+    root_infos[type_no].times.push_back(time); // Time taken.
     if (time < root_infos[type_no].min_time)
     {
       root_infos[type_no].min_time = time;
     }
 
-    ti.stop();
     long int distance = static_cast<int>(boost::math::float_distance<T>(result, ans));
     root_infos[type_no].distances.push_back(distance);
     root_infos[type_no].iterations.push_back(iters); //
@@ -506,18 +495,16 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
   }
   {
   //algorithm_names.push_back("Halley"); // algorithm
-    cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
-    ti.start();
+    const auto start = std::chrono::steady_clock::now();
     for (long i = 0; i < count; ++i)
     {
       result = cbrt_2deriv(to_root); // 
       sum += result;
     }
-    now = ti.elapsed(); 
+    const auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
 //    int time = static_cast<int>(now.user / count);
-    long time = static_cast<long>(now.user/1000);
-    root_infos[type_no].times.push_back(time); // CPU time taken.
-    ti.stop();
+    long time = static_cast<long>(now/1000);
+    root_infos[type_no].times.push_back(time); // Time taken.
     if (time < root_infos[type_no].min_time)
     {
       root_infos[type_no].min_time = time;
@@ -530,22 +517,20 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
 
   {
    // algorithm_names.push_back("Shroeder"); // algorithm
-    cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
-    ti.start();
+    const auto start = std::chrono::steady_clock::now();
     for (long i = 0; i < count; ++i)
     {
       result = cbrt_2deriv_s(to_root); // 
       sum += result;
     }
-    now = ti.elapsed();
+    const auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
 //    int time = static_cast<int>(now.user / count);
-    long time = static_cast<long>(now.user/1000);
-    root_infos[type_no].times.push_back(time); // CPU time taken.
+    long time = static_cast<long>(now/1000);
+    root_infos[type_no].times.push_back(time); // Time taken.
     if (time < root_infos[type_no].min_time)
     {
       root_infos[type_no].min_time = time;
     }
-    ti.stop();
     long int distance = static_cast<int>(boost::math::float_distance<T>(result, ans));
     root_infos[type_no].distances.push_back(distance);
     root_infos[type_no].iterations.push_back(iters); // 
