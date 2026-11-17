@@ -28,7 +28,8 @@ using termination = pareto_polish_termination;
 using event_kind = pareto_polish_event_kind;
 
 // Where there are no threads, as in WebAssembly without pthreads, the same paths run on the calling thread.
-#if defined(__EMSCRIPTEN__) && !defined(__EMSCRIPTEN_PTHREADS__)
+// So they do on MinGW, where destroying the thread_local reverse mode tape of a worker corrupts the heap.
+#if (defined(__EMSCRIPTEN__) && !defined(__EMSCRIPTEN_PTHREADS__)) || defined(BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES)
 const unsigned several_threads = 1;
 #else
 const unsigned several_threads = 3;

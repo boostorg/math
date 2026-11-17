@@ -128,30 +128,17 @@ void test_atap_examples()
     //auto f4 = [](Real x) { return 1/(1+1000*(x+half<Real>())*(x+half<Real>())) + 1/sqrt(1+1000*(x-Real(1)/Real(2))*(x-Real(1)/Real(2)));};
     Real a = -1;
     Real b = 1;
-    chebyshev_transform<Real> cheb1(f1, a, b, tol);
-    chebyshev_transform<Real> cheb2(f2, a, b, tol);
+    // f1 and f2 are not differentiable, so the series never reaches tol and the error is that of
+    // truncating it at the maximum length, here 2^17 terms, whatever the precision of the type.
+    chebyshev_transform<Real> cheb1(f1, a, b, tol, 10);
+    chebyshev_transform<Real> cheb2(f2, a, b, tol, 10);
     //chebyshev_transform<Real> cheb3(f3, a, b, tol);
 
     Real x = a;
     while (x < b)
     {
-        // f1 and f2 are not differentiable; standard convergence rate theorems don't apply.
-        // Basically, the max refinements are always hit; so the error is not related to the precision of the type.
-        Real acceptable_error = sqrt(tol);
-        Real acceptable_error_2 = 9e-4;
-        // The error is that of truncating the series of a discontinuous function (about 1/n at the
-        // maximum length n = 2^24), so it does not shrink with the precision beyond that of long double.
-        if (std::is_same<Real, long double>::value || std::numeric_limits<Real>::digits > 64)
-        {
-            acceptable_error = 1.6e-5;
-        }
-        if (std::is_same<Real, double>::value)
-        {
-            acceptable_error *= 500;
-        }
-        CHECK_ABSOLUTE_ERROR(f1(x), cheb1(x), acceptable_error);
-
-        CHECK_ABSOLUTE_ERROR(f2(x), cheb2(x), acceptable_error_2);
+        CHECK_ABSOLUTE_ERROR(f1(x), cheb1(x), Real(2e-3));
+        CHECK_ABSOLUTE_ERROR(f2(x), cheb2(x), Real(3e-3));
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
 }
@@ -225,13 +212,17 @@ void test_dct_ii()
       CHECK_EQUAL(z == y, true);
       // y[k] = 2 sum_j x[j] cos(pi k (2j+1)/(2n)); the error bound is normwise, like the FFT's.
       Real scale = 0;
-      std::vector<cpp_bin_float_50> ref(n);
+      std::vector<cpp_bin_float_50> ref(n), c(4 * n);
+      for (std::size_t m = 0; m < 4 * n; ++m)
+      {
+         c[m] = boost::math::cos_pi(cpp_bin_float_50(m) / (2 * n));
+      }
       for (std::size_t k = 0; k < n; ++k)
       {
          cpp_bin_float_50 sum = 0;
          for (std::size_t j = 0; j < n; ++j)
          {
-            sum += cpp_bin_float_50(x[j]) * boost::math::cos_pi(cpp_bin_float_50((2 * j + 1) * k) / (2 * n));
+            sum += cpp_bin_float_50(x[j]) * c[(2 * j + 1) * k % (4 * n)];
          }
          ref[k] = 2 * sum;
          scale = (std::max)(scale, static_cast<Real>(abs(ref[k])));
@@ -276,7 +267,7 @@ int main()
 #endif
 #endif
 #ifdef TEST5
-    // The atap examples are not smooth, so they run to the maximum length (2^23 points); too slow in software arithmetic.
+    // The atap examples run to 2^17 points; too slow in software arithmetic.
     using boost::multiprecision::cpp_bin_float_50;
     test_chebyshev_chebyshev_transform<cpp_bin_float_50>();
     test_sin_chebyshev_transform<cpp_bin_float_50>();
