@@ -37,7 +37,7 @@ double exec_timed_test_foo(Func f, const Table& data, double min_elapsed = 0.5)
     double t = 0;
     unsigned repeats = 1;
     typename Table::value_type::first_type sum{0};
-    stopwatch<boost::chrono::high_resolution_clock> w;
+    stopwatch<std::chrono::steady_clock> w;
     do
     {
        for(unsigned count = 0; count < repeats; ++count)
@@ -46,7 +46,7 @@ double exec_timed_test_foo(Func f, const Table& data, double min_elapsed = 0.5)
             sum += f(data[n].first, data[n].second);
        }
 
-        t = boost::chrono::duration_cast<boost::chrono::duration<double>>(w.elapsed()).count();
+        t = std::chrono::duration_cast<std::chrono::duration<double>>(w.elapsed()).count();
         if(t < min_elapsed)
             repeats *= 2;
     }

@@ -35,8 +35,7 @@
 using boost::multiprecision::cpp_bin_float_100;
 using boost::multiprecision::cpp_bin_float_50;
 
-#include <boost/timer/timer.hpp>
-#include <boost/system/error_code.hpp>
+#include <chrono>
 #include <boost/preprocessor/stringize.hpp>
 
 // STL
@@ -223,7 +222,7 @@ T nth_root_noderiv(T x)
 template <int N, class T = double>
 struct nth_root_functor_1deriv
 { // Functor also returning 1st derivative.
-  static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+  static_assert(std::is_integral<T>::value == false, "Only floating-point type types can be used!");
   static_assert((N > 0) == true, "root N must be > 0!");
 
   nth_root_functor_1deriv(T const& to_find_root_of) : a(to_find_root_of)
@@ -246,7 +245,7 @@ T nth_root_1deriv(T x)
   using namespace std;  // Help ADL of std functions.
   using namespace boost::math::tools; // For newton_raphson_iterate.
 
-  static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+  static_assert(std::is_integral<T>::value == false, "Only floating-point type types can be used!");
   static_assert((N > 0) == true, "root N must be > 0!");
   static_assert((N > 1000) == false, "root N is too big!");
 
@@ -272,7 +271,7 @@ T nth_root_1deriv(T x)
 template <int N, class T = double>
 struct nth_root_functor_2deriv
 { // Functor returning both 1st and 2nd derivatives.
-  static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+  static_assert(std::is_integral<T>::value == false, "Only floating-point type types can be used!");
   static_assert((N > 0) == true, "root N must be > 0!");
 
   nth_root_functor_2deriv(T const& to_find_root_of) : a(to_find_root_of)
@@ -298,7 +297,7 @@ T nth_root_2deriv(T x)
   using namespace std;  // Help ADL of std functions.
   using namespace boost::math::tools; // For halley_iterate.
 
-  static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+  static_assert(std::is_integral<T>::value == false, "Only floating-point type types can be used!");
   static_assert((N > 0) == true, "root N must be > 0!");
   static_assert((N > 1000) == false, "root N is too big!");
 
@@ -327,7 +326,7 @@ T nth_root_2deriv_s(T x)
   using namespace std;  // Help ADL of std functions.
   using namespace boost::math::tools; // For schroder_iterate.
 
-  static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+  static_assert(std::is_integral<T>::value == false, "Only floating-point type types can be used!");
   static_assert((N > 0) == true, "root N must be > 0!");
   static_assert((N > 1000) == false, "root N is too big!");
 
@@ -459,33 +458,26 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
   T sum = 0;
   T ans = static_cast<T>(answer);
 
-  using boost::timer::nanosecond_type;
-  using boost::timer::cpu_times;
-  using boost::timer::cpu_timer;
 
   int eval_count = std::is_floating_point<T>::value ? 10000000 : 100000; // To give a sufficiently stable timing for the fast built-in types,
   //int eval_count = 1000000; // To give a sufficiently stable timing for the fast built-in types,
   // This takes an inconveniently long time for multiprecision cpp_bin_float_50 etc  types.
 
-  cpu_times now; // Holds wall, user and system times.
-
   { // Evaluate times etc for each algorithm.
     //algorithm_names.push_back("TOMS748"); // 
-    cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
-    ti.start();
+    const auto start = std::chrono::steady_clock::now();
     for (long i = 0; i < eval_count; ++i)
     {
       result = nth_root_noderiv<N, T>(to_root); // 
       sum += result;
     }
-    now = ti.elapsed();
-    int time = static_cast<int>(now.user / eval_count);
-    root_infos[type_no].times.push_back(time); // CPU time taken.
+    const auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
+    int time = static_cast<int>(now / eval_count);
+    root_infos[type_no].times.push_back(time); // Time taken.
     if (time < root_infos[type_no].min_time)
     {
       root_infos[type_no].min_time = time;
     }
-    ti.stop();
     long int distance = static_cast<int>(boost::math::float_distance<T>(result, ans));
     root_infos[type_no].distances.push_back(distance);
     root_infos[type_no].iterations.push_back(iters); // 
@@ -493,22 +485,20 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
   }
   {
     // algorithm_names.push_back("Newton"); // algorithm
-    cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
-    ti.start();
+    const auto start = std::chrono::steady_clock::now();
     for (long i = 0; i < eval_count; ++i)
     {
       result = nth_root_1deriv<N, T>(to_root); // 
       sum += result;
     }
-    now = ti.elapsed();
-    int time = static_cast<int>(now.user / eval_count);
-    root_infos[type_no].times.push_back(time); // CPU time taken.
+    const auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
+    int time = static_cast<int>(now / eval_count);
+    root_infos[type_no].times.push_back(time); // Time taken.
     if (time < root_infos[type_no].min_time)
     {
       root_infos[type_no].min_time = time;
     }
 
-    ti.stop();
     long int distance = static_cast<int>(boost::math::float_distance<T>(result, ans));
     root_infos[type_no].distances.push_back(distance);
     root_infos[type_no].iterations.push_back(iters); //
@@ -516,17 +506,15 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
   }
   {
     //algorithm_names.push_back("Halley"); // algorithm
-    cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
-    ti.start();
+    const auto start = std::chrono::steady_clock::now();
     for (long i = 0; i < eval_count; ++i)
     {
       result = nth_root_2deriv<N>(to_root); // 
       sum += result;
     }
-    now = ti.elapsed();
-    int time = static_cast<int>(now.user / eval_count);
-    root_infos[type_no].times.push_back(time); // CPU time taken.
-    ti.stop();
+    const auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
+    int time = static_cast<int>(now / eval_count);
+    root_infos[type_no].times.push_back(time); // Time taken.
     if (time < root_infos[type_no].min_time)
     {
       root_infos[type_no].min_time = time;
@@ -538,21 +526,19 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
   }
   {
     // algorithm_names.push_back("Schroder"); // algorithm
-    cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
-    ti.start();
+    const auto start = std::chrono::steady_clock::now();
     for (long i = 0; i < eval_count; ++i)
     {
       result = nth_root_2deriv_s<N>(to_root); // 
       sum += result;
     }
-    now = ti.elapsed();
-    int time = static_cast<int>(now.user / eval_count);
-    root_infos[type_no].times.push_back(time); // CPU time taken.
+    const auto now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
+    int time = static_cast<int>(now / eval_count);
+    root_infos[type_no].times.push_back(time); // Time taken.
     if (time < root_infos[type_no].min_time)
     {
       root_infos[type_no].min_time = time;
     }
-    ti.stop();
     long int distance = static_cast<int>(boost::math::float_distance<T>(result, ans));
     root_infos[type_no].distances.push_back(distance);
     root_infos[type_no].iterations.push_back(iters); // 
