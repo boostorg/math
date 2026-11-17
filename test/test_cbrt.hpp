@@ -11,7 +11,7 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/tools/stats.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include "functor.hpp"
 

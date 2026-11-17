@@ -22,7 +22,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/test/results_collector.hpp>
 #include <boost/test/unit_test.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include <boost/type_index.hpp>
 #include "table_type.hpp"
 #include <iostream>

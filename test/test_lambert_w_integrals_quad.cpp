@@ -15,7 +15,7 @@
 // Boost macros
 #include "math_unit_test.hpp"
 
-#include <boost/array.hpp>
+#include <array>
 #include <boost/type_traits/is_constructible.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 using boost::multiprecision::cpp_bin_float_quad;

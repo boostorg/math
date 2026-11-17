@@ -14,7 +14,7 @@
 #include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"

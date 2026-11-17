@@ -22,7 +22,6 @@
    using std::endl;
    using std::setprecision;
 
-#include <boost/array.hpp>
 #include "functor.hpp"
 #include "handle_test_result.hpp"
 #include "table_type.hpp"

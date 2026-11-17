@@ -15,7 +15,7 @@
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include <boost/random.hpp>
 #include <boost/chrono.hpp>
 

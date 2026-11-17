@@ -36,7 +36,7 @@ using boost::math::owens_t;
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
-#include <boost/array.hpp>
+#include <array>
 
 #include "handle_test_result.hpp"
 #include "table_type.hpp"

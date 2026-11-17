@@ -130,7 +130,7 @@ described in fairly abstract terms: give me N points distributed like /this/ etc
 and computes how ever many output points have been requested, these are stored
 in a sorted container.
 * Routines to iterate over the test_data container and output the data in either
-csv format, or as C++ source code (as a table using Boost.Array).
+csv format, or as C++ source code (as a table using std::array).
 
 [h5 Example 1: Output Data for Graph Plotting]
 

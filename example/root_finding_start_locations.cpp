@@ -12,7 +12,7 @@
 
 #include <boost/cstdlib.hpp>
 #include <boost/config.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/special_functions/ellint_1.hpp>
 #include <boost/math/special_functions/ellint_2.hpp>

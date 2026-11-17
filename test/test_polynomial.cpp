@@ -4,7 +4,6 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/config.hpp>
-#include <boost/array.hpp>
 #include <boost/math/tools/polynomial.hpp>
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/integer/common_factor_rt.hpp>

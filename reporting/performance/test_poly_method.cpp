@@ -7,7 +7,7 @@
 #  pragma warning (disable : 4224)
 #endif
 
-#include <boost/array.hpp>
+#include <array>
 #include <boost/lexical_cast.hpp>
 #include "../../test/table_type.hpp"
 #include "table_helper.hpp"

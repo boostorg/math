@@ -14,7 +14,8 @@
 
 #include <boost/cstdlib.hpp>
 #include <boost/config.hpp>
-#include <boost/array.hpp>
+#include <array>
+#include <iterator>
 #include "table_type.hpp"
 // Copy of i:\modular-boost\libs\math\test\table_type.hpp
 // #include "handle_test_result.hpp"

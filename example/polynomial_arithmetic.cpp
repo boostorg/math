@@ -17,7 +17,7 @@
 #include <boost/math/tools/polynomial.hpp>
 //] [polynomial_arithmetic_0
 
-#include <boost/array.hpp>
+#include <array>
 #include <boost/lexical_cast.hpp>
 #include <boost/math/tools/assert.hpp>
 

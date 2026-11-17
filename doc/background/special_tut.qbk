@@ -256,7 +256,7 @@ definition for the SC_ macro:
    #include <boost/math/special_functions/my_special.hpp>
    // We need std::array for our test data, plus a few headers from
    // libs/math/test that contain our testing machinery:
-   #include <boost/array.hpp>
+   #include <array>
    #include "functor.hpp"
    #include "handle_test_result.hpp"
    #include "table_type.hpp"
@@ -344,7 +344,7 @@ Now we just need to write the test driver program, at it's most basic it looks s
    #include <boost/math/tools/test.hpp>
    #include <boost/math/tools/stats.hpp>
    #include <boost/type_traits.hpp>
-   #include <boost/array.hpp>
+   #include <array>
    #include "functor.hpp"
 
    #include "handle_test_result.hpp"
@@ -457,7 +457,7 @@ We can make these changes by changing the list of includes from:
    #include <boost/math/tools/test.hpp>
    #include <boost/math/tools/stats.hpp>
    #include <boost/type_traits.hpp>
-   #include <boost/array.hpp>
+   #include <array>
    #include "functor.hpp"
 
    #include "handle_test_result.hpp"

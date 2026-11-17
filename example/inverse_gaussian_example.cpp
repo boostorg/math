@@ -42,7 +42,7 @@ First we need some includes to access the normal distribution
 #include <boost/math/distributions/normal.hpp> // for normal_distribution
 using boost::math::normal; // typedef provides default type is double.
 
-#include <boost/array.hpp>
+#include <array>
 using std::array;
 
 #include <iostream>

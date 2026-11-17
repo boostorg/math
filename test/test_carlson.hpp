@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/ellint_rj.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include <boost/random.hpp>
 #include "functor.hpp"
 
