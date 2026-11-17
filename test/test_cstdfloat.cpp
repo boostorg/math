@@ -25,7 +25,6 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
-#include <boost/scoped_array.hpp>
 
 //
 // We need to define an iostream operator for __float128 in order to

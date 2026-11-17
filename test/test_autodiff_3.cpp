@@ -4,7 +4,6 @@
 //           https://www.boost.org/LICENSE_1_0.txt)
 
 #include "test_autodiff.hpp"
-#include <boost/utility/identity_type.hpp>
 #include <boost/math/tools/test_value.hpp>
 
 
@@ -112,7 +111,7 @@ void sinh_and_cosh() {
   auto c = cosh(x);
   CHECK_RELATIVE_ERROR(s.derivative(0u), sinh(static_cast<T>(x)), (eps) / 100);
   CHECK_RELATIVE_ERROR(c.derivative(0u), cosh(static_cast<T>(x)), (eps) / 100);
-  for (auto i : boost::irange(m + 1)) {
+  for (unsigned i = 0; i <= m; ++i) {
     CHECK_RELATIVE_ERROR(s.derivative(i), static_cast<T>(i % 2 == 1 ? c : s), (eps) / 100);
     CHECK_RELATIVE_ERROR(c.derivative(i), static_cast<T>(i % 2 == 1 ? s : c), (eps) / 100);
   }
@@ -138,7 +137,7 @@ void tanh_test() {
   constexpr std::size_t m = 5;
   auto x = make_fvar<T, m>(cx);
   auto t = tanh(x);
-  for (auto i : boost::irange(tanh_derivatives.size())) {
+  for (std::size_t i = 0; i < tanh_derivatives.size(); ++i) {
     // A warning only, as in the original Boost.Test BOOST_TEST_WARN:
     if (!isNearZero(t.derivative(i) - tanh_derivatives[i])) {
       std::cout << "Warning: tanh derivative " << i << " is not near zero." << std::endl;
@@ -245,7 +244,7 @@ void lambert_w0_test() {
        BOOST_MATH_TEST_VALUE(T, -0.5905839053125614593682763387470654123192290838719517)}};
   auto x = make_fvar<T, m>(cx);
   auto y = lambert_w0(x);
-  for (auto i : boost::irange(m + 1)) {
+  for (unsigned i = 0; i <= m; ++i) {
     const T answer = answers[i];
     CHECK_RELATIVE_ERROR(y.derivative(i), answer, (eps) / 100);
   }
@@ -278,7 +277,7 @@ void digamma_test() {
     ,BOOST_MATH_TEST_VALUE(T, -21.4366066287129906188428320541054572790340793874298)}};
   auto x = make_fvar<T, m>(cx);
   auto y = digamma(x);
-  for (auto i : boost::irange(m + 1)) {
+  for (unsigned i = 0; i <= m; ++i) {
     const T answer = answers[i];
     CHECK_RELATIVE_ERROR(y.derivative(i), answer, (eps) / 100);
   }
@@ -304,7 +303,7 @@ void lgamma_test() {
     ,BOOST_MATH_TEST_VALUE(T, 6.536422382626807143525565747764891144367614117601463)}};
   auto x = make_fvar<T, m>(cx);
   auto y = lgamma(x);
-  for (auto i : boost::irange(m + 1)) {
+  for (unsigned i = 0; i <= m; ++i) {
     const T answer = answers[i];
     CHECK_RELATIVE_ERROR(y.derivative(i), answer, (eps) / 100);
   }
@@ -330,7 +329,7 @@ void tgamma_test() {
     ,BOOST_MATH_TEST_VALUE(T, 222.0936743583156040996433943128676567542497584689499)}};
   auto x = make_fvar<T, m>(cx);
   auto y = tgamma(x);
-  for (auto i : boost::irange(m + 1)) {
+  for (unsigned i = 0; i <= m; ++i) {
     const T answer = answers[i];
     CHECK_RELATIVE_ERROR(y.derivative(i), answer, (eps) / 100);
   }
@@ -357,7 +356,7 @@ void tgamma2_test() {
     ,BOOST_MATH_TEST_VALUE(T, 1.114762466163487983067783853825224537320312784955935e10)}};
   auto x = make_fvar<T, m>(cx);
   auto y = tgamma(x);
-  for (auto i : boost::irange(m + 1)) {
+  for (unsigned i = 0; i <= m; ++i) {
     const T answer = answers[i];
     CHECK_RELATIVE_ERROR(y.derivative(i), answer, (eps) / 100);
   }

@@ -10,8 +10,7 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/operation.hpp>
-#include <boost/cstdint.hpp>
-#include <boost/bind.hpp>
+#include <cstdint>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <boost/lexical_cast.hpp>

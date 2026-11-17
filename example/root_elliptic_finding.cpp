@@ -14,7 +14,7 @@
 // and comments, don't change any of the special comment mark-ups!
 // This program also writes files in Quickbook tables mark-up format.
 
-#include <boost/cstdlib.hpp>
+#include <cstdlib>
 #include <boost/config.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/special_functions/ellint_1.hpp>
@@ -848,12 +848,12 @@ int main()
     // Output tables for some roots at less accuracy.
     //roots_tables(full_value, 0.75);
 
-    return boost::exit_success;
+    return EXIT_SUCCESS;
   }
   catch (std::exception const& ex)
   {
     std::cout << "exception thrown: " << ex.what() << std::endl;
-    return boost::exit_failure;
+    return EXIT_FAILURE;
   }
 } // int main()
 

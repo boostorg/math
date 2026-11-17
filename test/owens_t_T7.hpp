@@ -19,8 +19,6 @@
 #include <boost/math/special_functions/owens_t.hpp>
 #include <vector>
 #include <algorithm> // std::sort
-#include <boost/bind.hpp>
-#include <boost/bind/placeholders.hpp>
 
 namespace boost
 {
@@ -133,7 +131,7 @@ namespace boost
         }
 
         std::sort(ndx_4_sorted_data.begin(), ndx_4_sorted_data.end(),
-                  boost::bind(owens_t_sort_proxy<typename std::vector<RealType>::size_type, RealType>, _1, _2, &memory[0]));
+                  [&memory](unsigned n1, unsigned n2) { return owens_t_sort_proxy(n1, n2, &memory[0]); });
 
         val = memory[ndx_4_sorted_data[0]];
         for(unsigned i = 1; i != memory.size(); i++)

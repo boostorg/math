@@ -13,7 +13,7 @@
 #include <boost/math/special_functions/next.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/core/lightweight_test.hpp>
 #include <array>
 #include <iostream>
 #include <sstream>

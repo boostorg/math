@@ -20,11 +20,7 @@
 
 #include <algorithm>
 
-#if    defined(__GNUC__) && (__GNUC__ < 3)
-#include <boost/limits.hpp>
-#else
 #include <limits>
-#endif
 
 #include <stdexcept>
 #include <string>

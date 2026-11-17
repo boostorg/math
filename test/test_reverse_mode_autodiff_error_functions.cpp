@@ -4,7 +4,6 @@
 //           https://www.boost.org/LICENSE_1_0.txt)
 #include "test_autodiff_reverse.hpp"
 #include <boost/math/tools/test_value.hpp>
-#include <boost/utility/identity_type.hpp>
 #include <cmath>
 
 using namespace rdiff;

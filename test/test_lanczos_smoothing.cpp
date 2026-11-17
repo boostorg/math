@@ -6,7 +6,6 @@
  */
 #include <random>
 #include <array>
-#include <boost/range.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/differentiation/lanczos_smoothing.hpp>
@@ -649,8 +648,15 @@ void test_data_representations()
         CHECK_ULP_CLOSE(9, dwdt[i], 300);
     }
 
-    auto v1 = boost::make_iterator_range(v.begin(), v.end());
-    auto v2 = boost::make_iterator_range(dvdt.begin(), dvdt.end());
+    struct view
+    {
+        typedef Real value_type;
+        std::array<Real, 500>& a;
+        size_t size() const { return a.size(); }
+        Real& operator[](size_t i) const { return a[i]; }
+    };
+    view v1{v};
+    view v2{dvdt};
     lanczos(v1, v2);
 
     for(size_t i = 0; i < v2.size(); ++i)

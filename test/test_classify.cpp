@@ -6,7 +6,7 @@
 
 #include <cmath>
 #include <math.h>
-#include <boost/limits.hpp>
+#include <limits>
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/math/concepts/real_concept.hpp>
 #endif

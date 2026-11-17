@@ -14,19 +14,19 @@ void constructors() {
   constexpr std::size_t n = 4;
   // Verify value-initialized instance has all 0 entries.
   const autodiff_fvar<T, m> empty1 = autodiff_fvar<T, m>();
-  for (auto i : boost::irange(m + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
     CHECK_EQUAL(empty1.derivative(i), static_cast<T>(0));
   }
   const auto empty2 = autodiff_fvar<T, m, n>();
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       CHECK_EQUAL(empty2.derivative(i, j), static_cast<T>(0));
     }
   }
   // Single variable
   const T cx = 10;
   const auto x = make_fvar<T, m>(cx);
-  for (auto i : boost::irange(m + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
     if (i == 0u) {
       CHECK_EQUAL(x.derivative(i), cx);
     } else if (i == 1) {
@@ -36,7 +36,7 @@ void constructors() {
     }
   }
   const autodiff_fvar<T, n> xn = x;
-  for (auto i : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= n; ++i) {
     if (i == 0) {
       CHECK_EQUAL(xn.derivative(i), cx);
     } else if (i == 1) {
@@ -48,8 +48,8 @@ void constructors() {
   // Second independent variable
   const T cy = 100;
   const auto y = make_fvar<T, m, n>(cy);
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       if (i == 0 && j == 0) {
         CHECK_EQUAL(y.derivative(i, j), cy);
       } else if (i == 0 && j == 1) {
@@ -89,8 +89,8 @@ void assignment() {
   auto x = make_fvar<T, m>(cx);
   empty = static_cast<decltype(empty)>(
       x); // Test static_cast of single-variable to double-variable type.
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       if (i == 0 && j == 0) {
         CHECK_EQUAL(empty.derivative(i, j), cx);
       } else if (i == 1 && j == 0) {
@@ -102,8 +102,8 @@ void assignment() {
   }
   auto y = make_fvar<T, m, n>(cy);
   empty = y; // default assignment operator
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       if (i == 0 && j == 0) {
         CHECK_EQUAL(empty.derivative(i, j), cy);
       } else if (i == 0 && j == 1) {
@@ -114,8 +114,8 @@ void assignment() {
     }
   }
   empty = cx; // set a constant
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       if (i == 0 && j == 0) {
         CHECK_EQUAL(empty.derivative(i, j), cx);
       } else {
@@ -148,8 +148,8 @@ void addition_assignment() {
   // Single variable
   const auto x = make_fvar<T, m>(cx);
   sum += x;
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       if (i == 0 && j == 0) {
         CHECK_EQUAL(sum.derivative(i, j), cx);
       } else if (i == 1 && j == 0) {
@@ -163,8 +163,8 @@ void addition_assignment() {
   const T cy = 11;
   sum = 0;
   sum += cy;
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       if (i == 0 && j == 0) {
         CHECK_EQUAL(sum.derivative(i, j), cy);
       } else {
@@ -183,8 +183,8 @@ void subtraction_assignment() {
   // Single variable
   const auto x = make_fvar<T, m>(cx);
   sum -= x;
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       if (i == 0 && j == 0) {
         CHECK_EQUAL(sum.derivative(i, j), -cx);
       } else if (i == 1 && j == 0) {
@@ -198,8 +198,8 @@ void subtraction_assignment() {
   const T cy = 11;
   sum = 0;
   sum -= cy;
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       if (i == 0 && j == 0) {
         CHECK_EQUAL(sum.derivative(i, j), -cy);
       } else {
@@ -220,8 +220,8 @@ void multiplication_assignment() {
   // Single variable
   auto x = make_fvar<T, m>(cx);
   product *= x;
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       if (i == 0 && j == 0) {
         CHECK_EQUAL(product.derivative(i, j), cx);
       } else if (i == 1 && j == 0) {
@@ -235,8 +235,8 @@ void multiplication_assignment() {
   const T cy = 11;
   product = 1;
   product *= cy;
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       if (i == 0 && j == 0) {
         CHECK_EQUAL(product.derivative(i, j), cy);
       } else {
@@ -248,7 +248,7 @@ void multiplication_assignment() {
   x = make_fvar<T, m>(T(0.0));
   x *= std::numeric_limits<T>::infinity();
   // std::cout << "x = " << x << std::endl;
-  for (auto i : boost::irange(m + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
     if (i == 0) {
       CHECK_TRUE(boost::math::isnan(static_cast<T>(x))); // Correct
       // BOOST_CHECK_EQUAL(x.derivative(i) == 0.0); // Wrong. See
@@ -273,13 +273,13 @@ void mixed_order_assignment() {
   CHECK_EQUAL(p.derivative(0), T(3));
   CHECK_EQUAL(p.derivative(1), T(3.5));
   CHECK_EQUAL(p.derivative(2), T(2));
-  for (auto i : boost::irange(3))
+  for (int i = 0; i < 3; ++i)
     CHECK_EQUAL(p.derivative(i), q.derivative(i));
   // The left-hand side has the higher order: only the coefficients both sides have are subtracted.
   auto c = make_fvar<T, 3>(T(5));  // 5 + e
   c -= a;
   CHECK_EQUAL(c.derivative(0), T(3.5));
-  for (auto i : boost::irange(1, 4))
+  for (int i = 1; i < 4; ++i)
     CHECK_EQUAL(c.derivative(i), T(0));
 }
 
@@ -296,8 +296,8 @@ void division_assignment() {
   CHECK_EQUAL(quotient.derivative(1, 0), static_cast<T>(-1 / pow(cx, 2)));
   CHECK_EQUAL(quotient.derivative(2, 0), static_cast<T>(2 / pow(cx, 3)));
   CHECK_EQUAL(quotient.derivative(3, 0), static_cast<T>(-6 / pow(cx, 4)));
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(std::size_t(1), n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 1; j <= n; ++j) {
       CHECK_EQUAL(quotient.derivative(i, j), T(0));
     }
   }
@@ -305,8 +305,8 @@ void division_assignment() {
   const T cy = 32;
   quotient = 1;
   quotient /= cy;
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       if (i == 0 && j == 0) {
         CHECK_EQUAL(quotient.derivative(i, j), 1 / cy);
       } else {
@@ -325,8 +325,8 @@ void unary_signs() {
   // Single variable
   const auto x = make_fvar<T, m>(cx);
   lhs = static_cast<decltype(lhs)>(-x);
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       if (i == 0 && j == 0) {
         CHECK_EQUAL(lhs.derivative(i, j), -cx);
       } else if (i == 1 && j == 0) {
@@ -337,8 +337,8 @@ void unary_signs() {
     }
   }
   lhs = static_cast<decltype(lhs)>(+x);
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       if (i == 0 && j == 0) {
         CHECK_EQUAL(lhs.derivative(i, j), cx);
       } else if (i == 1 && j == 0) {
@@ -394,7 +394,7 @@ void power8() {
   x *= x;
   x *= x;
   const T power_factorial = boost::math::factorial<T>(n);
-  for (auto i : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= n; ++i) {
     CHECK_RELATIVE_ERROR(
         static_cast<T>(x.derivative(i)),
         static_cast<T>(power_factorial /
@@ -404,7 +404,7 @@ void power8() {
   x = make_fvar<T, n>(ca);
   // Test operator*()
   x = x * x * x * x * x * x * x * x;
-  for (auto i : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= n; ++i) {
     CHECK_RELATIVE_ERROR(
         static_cast<T>(x.derivative(i)),
         static_cast<T>(power_factorial /
@@ -445,8 +445,8 @@ void dim1and2_multiplication() {
   CHECK_EQUAL(y.derivative(0, 1), cx);
   CHECK_EQUAL(y.derivative(1, 0), cy);
   CHECK_EQUAL(y.derivative(1, 1), T(1));
-  for (auto i : boost::irange(std::size_t(1), m)) {
-    for (auto j : boost::irange(std::size_t(1), n)) {
+  for (std::size_t i = 1; i < m; ++i) {
+    for (std::size_t j = 1; j < n; ++j) {
       if (i == 1 && j == 1) {
         CHECK_EQUAL(y.derivative(i, j), T(1));
       } else {
@@ -533,8 +533,8 @@ void dim2_multiplication_and_subtraction() {
   CHECK_EQUAL(z.derivative(0, 4), T(0));
   CHECK_EQUAL(z.derivative(1, 0), 2 * cx);
   CHECK_EQUAL(z.derivative(2, 0), T(2));
-  for (auto i : boost::irange(std::size_t(1), m + 1)) {
-    for (auto j : boost::irange(std::size_t(1), n + 1)) {
+  for (std::size_t i = 1; i <= m; ++i) {
+    for (std::size_t j = 1; j <= n; ++j) {
       CHECK_EQUAL(z.derivative(i, j), T(0));
     }
   }
@@ -552,7 +552,7 @@ void inverse() {
   CHECK_EQUAL(xinv.derivative(3), static_cast<T>(-6 / pow(cx, 4)));
   const auto zero = make_fvar<T, m>(0);
   const auto inf = zero.inverse();
-  for (auto i : boost::irange(m + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
     CHECK_EQUAL(inf.derivative(i),
                       (i % 2 == 1 ? -1 : 1) *
                           std::numeric_limits<T>::infinity());
@@ -583,7 +583,7 @@ void division() {
   CHECK_EQUAL(z.derivative(2, 2), static_cast<T>(2 * (6) * pow(cy, -4)));
   CHECK_EQUAL(z.derivative(2, 3), static_cast<T>(2 * (-24) * pow(cy, -5)));
   CHECK_EQUAL(z.derivative(2, 4), static_cast<T>(2 * (120) * pow(cy, -6)));
-  for (auto j : boost::irange(n + 1)) {
+  for (std::size_t j = 0; j <= n; ++j) {
     CHECK_EQUAL(z.derivative(3, j), static_cast<T>(0.0));
   }
 
@@ -600,8 +600,8 @@ void division() {
   CHECK_EQUAL(z2.derivative(0, 2), static_cast<T>(2 * cx / pow(cy, 3)));
   CHECK_EQUAL(z2.derivative(0, 3), static_cast<T>(-6 * cx / pow(cy, 4)));
   CHECK_EQUAL(z2.derivative(0, 4), static_cast<T>(24 * cx / pow(cy, 5)));
-  for (auto i : boost::irange(std::size_t(1), m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 1; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       CHECK_EQUAL(z2.derivative(i, j), static_cast<T>(0.0));
     }
   }
@@ -615,8 +615,8 @@ void division() {
   CHECK_EQUAL(z3.derivative(2, 1), static_cast<T>(2 / pow(cx, 3)));
   CHECK_EQUAL(z3.derivative(3, 0), static_cast<T>(-6 * cy / pow(cx, 4)));
   CHECK_EQUAL(z3.derivative(3, 1), static_cast<T>(-6 / pow(cx, 4)));
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(std::size_t(2), n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 2; j <= n; ++j) {
       CHECK_EQUAL(z3.derivative(i, j), static_cast<T>(0.0));
     }
   }
@@ -716,7 +716,7 @@ void fabs_test() {
   CHECK_EQUAL(a.derivative(3), T(0));
   const auto zero = make_fvar<T, m>(0);
   a = fabs(zero);
-  for (auto i : boost::irange(m + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
     CHECK_EQUAL(a.derivative(i), T(0));
   }
 }
@@ -735,7 +735,7 @@ void ceil_and_floor() {
     auto f = floor(x);
     CHECK_EQUAL(c.derivative(0), ceil(test));
     CHECK_EQUAL(f.derivative(0), floor(test));
-    for (auto i : boost::irange(std::size_t(1), m + 1)) {
+    for (std::size_t i = 1; i <= m; ++i) {
       CHECK_EQUAL(c.derivative(i), T(0));
       CHECK_EQUAL(f.derivative(i), T(0));
     }

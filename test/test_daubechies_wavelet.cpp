@@ -12,7 +12,6 @@
 #include <iostream>
 #include <random>
 #include <cmath>
-#include <boost/assert.hpp>
 #include <boost/core/demangle.hpp>
 #include <boost/hana/for_each.hpp>
 #include <boost/hana/ext/std/integer_sequence.hpp>

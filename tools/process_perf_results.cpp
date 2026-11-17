@@ -9,7 +9,7 @@
 #include <iostream>
 #include <boost/regex.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/format.hpp>
+#include <cstdio>
 #include <boost/math/special_functions.hpp>
 
 std::map<std::string, double> results;
@@ -110,7 +110,9 @@ int main(int argc, const char* argv[])
             newstr += "..[para ";
             if(r < 1.01)
                newstr += "*";
-            newstr += (boost::format("%.2f") % r).str();
+            char buf[400];
+            std::snprintf(buf, sizeof(buf), "%.2f", r);
+            newstr += buf;
             if(r < 1.01)
                newstr += "*";
             if(extra_text.find(item) != extra_text.end())
@@ -118,7 +120,8 @@ int main(int argc, const char* argv[])
                newstr += extra_text[item];
             }
             newstr += "][para (";
-            newstr += (boost::format("%.3e") % results[item]).str();
+            std::snprintf(buf, sizeof(buf), "%.3e", results[item]);
+            newstr += buf;
             newstr += "s)]]";
          }
          else

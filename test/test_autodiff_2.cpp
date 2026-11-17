@@ -29,7 +29,7 @@ void exp_test() {
   const T cx = 2;
   const auto x = make_fvar<T, m>(cx);
   auto y = exp(x);
-  for (auto i : boost::irange(m + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
     // std::cout.precision(100);
     // std::cout << "y.derivative("<<i<<") = " << y.derivative(i) << ",
     // std::exp(cx) = " << std::exp(cx) << std::endl;
@@ -59,22 +59,22 @@ void pow() {
   CHECK_EQUAL(z0.derivative(5u), static_cast<T>(0u));
   auto z1 = pow(cx, y);
   CHECK_RELATIVE_ERROR(z1.derivative(0u, 0u), pow(cx, cy), (eps) / 100);
-  for (auto j : boost::irange(std::size_t(1), n + 1)) {
+  for (std::size_t j = 1; j <= n; ++j) {
     CHECK_RELATIVE_ERROR(z1.derivative(0u, j), pow(log(cx), T(j)) * pow(cx, cy), (eps) / 100);
   }
 
-  for (auto i : boost::irange(std::size_t(1), m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 1; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       CHECK_EQUAL(z1.derivative(i, j), static_cast<T>(0));
     }
   }
 
   const auto z2 = pow(x, y);
 
-  for (auto j : boost::irange(n + 1)) {
+  for (std::size_t j = 0; j <= n; ++j) {
     CHECK_RELATIVE_ERROR(z2.derivative(0u, j), pow(cx, cy) * pow(log(cx), T(j)), (eps) / 100);
   }
-  for (auto j : boost::irange(n + 1)) {
+  for (std::size_t j = 0; j <= n; ++j) {
     CHECK_RELATIVE_ERROR(z2.derivative(1u, j),
                       pow(cx, cy - 1) * pow(log(cx), T(static_cast<int>(j) - 1)) *
                           (cy * log(cx) + j), (eps) / 100);
@@ -82,7 +82,7 @@ void pow() {
   CHECK_RELATIVE_ERROR(z2.derivative(2u, 0u), pow(cx, cy - 2) * cy * (cy - 1), (eps) / 100);
   CHECK_RELATIVE_ERROR(z2.derivative(2u, 1u),
                     pow(cx, cy - 2) * (cy * (cy - 1) * log(cx) + 2 * cy - 1), (eps) / 100);
-  for (auto j : boost::irange(std::size_t(2u), n + 1)) {
+  for (std::size_t j = 2; j <= n; ++j) {
     CHECK_RELATIVE_ERROR(z2.derivative(2u, j),
                       pow(cx, cy - 2) * pow(log(cx), T(j - 2)) *
                           (j * (2 * cy - 1) * log(cx) + (j - 1) * j +
@@ -230,8 +230,8 @@ void pow2() {
                       (45 * pow(ln_two<T>(), (T)5)) / 32) /
                      (4 * root_two<T>()))};
   std::size_t k = 0;
-  for (auto i : boost::irange(m + 1)) {
-    for (auto j : boost::irange(n + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
+    for (std::size_t j = 0; j <= n; ++j) {
       CHECK_RELATIVE_ERROR(z.derivative(i, j), mathematica[k++], (eps) / 100);
     }
   }
@@ -263,7 +263,7 @@ void sqrt_test() {
   y = sqrt(x);
   // std::cout << "sqrt(0) = " << y << std::endl; // (0,inf,-inf,inf,-inf,inf)
   CHECK_EQUAL(y.derivative(0u), static_cast<T>(0));
-  for (auto i : boost::irange(std::size_t(1), m + 1)) {
+  for (std::size_t i = 1; i <= m; ++i) {
     CHECK_EQUAL(y.derivative(i), (i % 2 == 1 ? 1 : -1) *
                                            std::numeric_limits<T>::infinity());
   }
@@ -293,7 +293,7 @@ void log_test() {
   y = log(x);
   // std::cout << "log(0) = " << y << std::endl; // log(0) =
   // depth(1)(-inf,inf,-inf,inf,-inf,inf)
-  for (auto i : boost::irange(m + 1)) {
+  for (std::size_t i = 0; i <= m; ++i) {
     CHECK_EQUAL(y.derivative(i), (i % 2 == 1 ? 1 : -1) *
                                            std::numeric_limits<T>::infinity());
   }
@@ -316,14 +316,14 @@ void ylogx() {
   CHECK_EQUAL(z.derivative(0u, 2u), static_cast<T>(0));
   CHECK_EQUAL(z.derivative(0u, 3u), static_cast<T>(0));
   CHECK_EQUAL(z.derivative(0u, 4u), static_cast<T>(0));
-  for (auto i : boost::irange(1u, static_cast<unsigned>(m + 1))) {
+  for (unsigned i = 1u; i < static_cast<unsigned>(m + 1); ++i) {
     CHECK_RELATIVE_ERROR(z.derivative(i, 0u),
                       pow(-1, i - 1) * boost::math::factorial<T>(i - 1) * cy /
                           pow(cx, T(i)), (eps) / 100);
     CHECK_RELATIVE_ERROR(
         z.derivative(i, 1u),
         pow(T(-1), T(i - 1)) * boost::math::factorial<T>(i - 1) / pow(cx, T(i)), (eps) / 100);
-    for (auto j : boost::irange(std::size_t(2), n + 1)) {
+    for (std::size_t j = 2; j <= n; ++j) {
       CHECK_EQUAL(z.derivative(i, j), static_cast<T>(0u));
     }
   }
@@ -543,8 +543,7 @@ void atan2_function() {
   test_detail::RandomSample<T> x_sampler{-2000, 2000};
   test_detail::RandomSample<T> y_sampler{-2000, 2000};
 
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     auto y = y_sampler.next();
 
