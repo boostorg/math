@@ -14,7 +14,7 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/distributions/non_central_beta.hpp> 
 #include <boost/math/distributions/poisson.hpp> 
-#include <boost/type_traits/is_floating_point.hpp>
+#include <type_traits>
 #include <array>
 #include "functor.hpp"
 
@@ -108,7 +108,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
    // Tests with type real_concept take rather too long to run, so
    // for now we'll disable them:
    //
-   if(!boost::is_floating_point<value_type>::value)
+   if(!std::is_floating_point<value_type>::value)
       return;
 
    std::cout << "Testing: " << type_name << " quantile sanity check, with tests " << test << std::endl;
@@ -134,7 +134,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
       // Test case 493 fails at float precision: not enough bits to get
       // us back where we started:
       //
-      if((i == 493) && boost::is_same<float, value_type>::value)
+      if((i == 493) && std::is_same<float, value_type>::value)
          continue;
 
       if(data[i][4] == 0)

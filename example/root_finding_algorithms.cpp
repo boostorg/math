@@ -208,7 +208,7 @@ T cbrt_noderiv(T x)
     guess = ldexp((T)1., exponent / 3); // Rough guess is to divide the exponent by three.
   }
   else
-  { // (boost::is_class<T>)
+  { // (std::is_class<T>)
     double dx = static_cast<double>(x);
     guess = boost::math::cbrt<T>(dx); // Get guess using double.
   }

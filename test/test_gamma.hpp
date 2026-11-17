@@ -14,7 +14,7 @@
 #include <boost/math/tools/stats.hpp>
 #include "../include_private/boost/math/tools/test.hpp"
 #include <boost/math/constants/constants.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
+#include <type_traits>
 #include <array>
 #include "functor.hpp"
 
@@ -166,7 +166,7 @@ void test_spots(T, const char* name)
    //
    // Extra tolerance for real_concept checks which use less accurate code:
    //
-   T extra_tol = boost::is_floating_point<T>::value ? 1 : 20;
+   T extra_tol = std::is_floating_point<T>::value ? 1 : 20;
 
    BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(3.5)), static_cast<T>(3.3233509704478425511840640312646472177454052302295L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.125)), static_cast<T>(7.5339415987976119046992298412151336246104195881491L), tolerance);

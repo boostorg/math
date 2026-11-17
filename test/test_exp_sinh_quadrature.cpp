@@ -18,7 +18,6 @@
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sinc.hpp>
-#include <boost/type_traits/is_class.hpp>
 #include <boost/type_index.hpp>
 #include "math_unit_test.hpp"
 

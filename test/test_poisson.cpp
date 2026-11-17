@@ -586,7 +586,7 @@ void test_spots(RealType)
      typedef policy<discrete_quantile<integer_round_inwards> > P5;
      typedef policy<discrete_quantile<integer_round_nearest> > P6;
      RealType tol = boost::math::tools::epsilon<RealType>() * 20;
-     if(!boost::is_floating_point<RealType>::value)
+     if(!std::is_floating_point<RealType>::value)
         tol *= 7;
      //
      // Check full real value first:

@@ -387,7 +387,7 @@ void test_spots(RealType)
          static_cast<RealType>(1.42262528146180931868169289781115099L),    // t.
          tolerance);
 
-      if(boost::is_floating_point<RealType>::value)
+      if(std::is_floating_point<RealType>::value)
       {
          BOOST_CHECK_CLOSE(boost::math::cdf(
             students_t_distribution<RealType>(1e30f), 

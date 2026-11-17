@@ -13,7 +13,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/test.hpp>
 #include <boost/math/tools/stats.hpp>
-#include <boost/type_traits.hpp>
+#include <type_traits>
 #include <array>
 #include "functor.hpp"
 

@@ -269,7 +269,7 @@ void test_spots(T)
 
    tolerance = boost::math::tools::epsilon<T>() * 100 * 20;  // 20 eps as a percent.
    unsigned i = boost::math::max_factorial<T>::value;
-   if((boost::is_floating_point<T>::value) && (sizeof(T) <= sizeof(double)))
+   if((std::is_floating_point<T>::value) && (sizeof(T) <= sizeof(double)))
    {
       // Without Lanczos support, tgamma isn't accurate enough for this test:
       BOOST_CHECK_CLOSE(

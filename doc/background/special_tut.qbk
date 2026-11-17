@@ -343,7 +343,7 @@ Now we just need to write the test driver program, at it's most basic it looks s
    #include <boost/math/special_functions/math_fwd.hpp>
    #include <boost/math/tools/test.hpp>
    #include <boost/math/tools/stats.hpp>
-   #include <boost/type_traits.hpp>
+   #include <type_traits>
    #include <array>
    #include "functor.hpp"
 
@@ -456,7 +456,7 @@ We can make these changes by changing the list of includes from:
    #include <boost/math/special_functions/math_fwd.hpp>
    #include <boost/math/tools/test.hpp>
    #include <boost/math/tools/stats.hpp>
-   #include <boost/type_traits.hpp>
+   #include <type_traits>
    #include <array>
    #include "functor.hpp"
 

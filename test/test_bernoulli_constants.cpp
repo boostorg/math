@@ -193,7 +193,7 @@ void test(const char* name)
    //
    // Some spot tests for things that should throw exceptions:
    //
-   static unsigned overflow_index = boost::is_same<T, boost::math::concepts::real_concept>::value ?
+   static unsigned overflow_index = std::is_same<T, boost::math::concepts::real_concept>::value ?
       boost::math::max_bernoulli_b2n<long double>::value + 5 : boost::math::max_bernoulli_b2n<T>::value + 5;
 #ifndef BOOST_NO_EXCEPTIONS
    BOOST_MATH_CHECK_THROW(boost::math::bernoulli_b2n<T>(overflow_index, boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::throw_on_error>())), std::overflow_error);

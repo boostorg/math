@@ -432,7 +432,7 @@ void test_spots(RealType /*T*/, const char* type_name)
    do_test_hypergeometric<T>(hypergeometric_test_data, type_name, "Mathematica data");
 
 #include "hypergeometric_dist_data2.ipp"
-   if(boost::is_floating_point<RealType>::value)
+   if(std::is_floating_point<RealType>::value)
    {
       //
       // Don't test this for real_concept: it's too slow!!!
@@ -441,7 +441,7 @@ void test_spots(RealType /*T*/, const char* type_name)
    }
 
    do_test_hypergeometric_quantile<T>(hypergeometric_test_data, type_name, "Mathematica data");
-   if(boost::is_floating_point<RealType>::value)
+   if(std::is_floating_point<RealType>::value)
    {
       //
       // Don't test this for real_concept: it's too slow!!!

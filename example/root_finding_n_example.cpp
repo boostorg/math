@@ -43,7 +43,7 @@ using std::numeric_limits;
 template <int N, class T = double>
 struct nth_functor_2deriv
 { // Functor returning both 1st and 2nd derivatives.
-  static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+  static_assert(std::is_integral<T>::value == false, "Only floating-point type types can be used!");
   static_assert((N > 0) == true, "root N must be > 0!");
 
   nth_functor_2deriv(T const& to_find_root_of) : a(to_find_root_of)
@@ -91,7 +91,7 @@ T nth_2deriv(T x)
   using namespace std;  // Help ADL of std functions.
   using namespace boost::math::tools; // For halley_iterate.
 
-  static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+  static_assert(std::is_integral<T>::value == false, "Only floating-point type types can be used!");
   static_assert((N > 0) == true, "root N must be > 0!");
   static_assert((N > 1000) == false, "root N is too big!");
 

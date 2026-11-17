@@ -237,7 +237,7 @@ void test_spot(
     {
       // Just check quantile is very small:
       if ((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent)
-        && (boost::is_floating_point<RealType>::value))
+        && (std::is_floating_point<RealType>::value))
       {
         // Limit where this is checked: if exponent range is very large we may
         // run out of iterations in our root finding algorithm.
@@ -250,7 +250,7 @@ void test_spot(
     }
     else
     {  // Just check quantile is very small:
-      if ((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent) && (boost::is_floating_point<RealType>::value))
+      if ((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent) && (std::is_floating_point<RealType>::value))
       { // Limit where this is checked: if exponent range is very large we may
         // run out of iterations in our root finding algorithm.
         BOOST_CHECK(quantile(complement(anarcsine, Q)) < boost::math::tools::epsilon<RealType>() * 10);
