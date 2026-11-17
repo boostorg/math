@@ -8,7 +8,7 @@
 #endif
 
 #include <boost/math/special_functions/bessel.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include <boost/lexical_cast.hpp>
 #include "../../test/table_type.hpp"
 #include "table_helper.hpp"

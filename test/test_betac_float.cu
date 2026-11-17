@@ -12,7 +12,7 @@
 #include <vector>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include "cuda_managed_ptr.hpp"
 #include "stopwatch.hpp"
 

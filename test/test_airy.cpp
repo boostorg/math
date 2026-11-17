@@ -23,7 +23,7 @@
 #ifndef BOOST_MATH_HAS_GPU_SUPPORT
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #endif
-#include <boost/array.hpp>
+#include <array>
 #include <iostream>
 #include <iomanip>
 

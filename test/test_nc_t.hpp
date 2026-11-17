@@ -13,7 +13,7 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/distributions/non_central_t.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include "functor.hpp"
 #include "test_out_of_range.hpp"
 

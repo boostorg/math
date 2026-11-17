@@ -30,7 +30,7 @@
 // Boost macros
 #include "math_unit_test.hpp"
 
-#include <boost/array.hpp>
+#include <array>
 #include <boost/type_traits/is_constructible.hpp>
 
 #ifdef BOOST_MATH_TEST_MULTIPRECISION

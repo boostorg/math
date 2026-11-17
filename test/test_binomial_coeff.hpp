@@ -13,7 +13,7 @@
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/test.hpp>
 #include "functor.hpp"
-#include <boost/array.hpp>
+#include <array>
 #include <iostream>
 #include <iomanip>
 

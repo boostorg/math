@@ -21,7 +21,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/ellint_2.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"

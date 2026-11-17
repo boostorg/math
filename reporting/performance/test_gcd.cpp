@@ -12,7 +12,7 @@
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/integer.hpp>
 #include <boost/random.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include <iostream>
 #include <algorithm>
 #include <numeric>

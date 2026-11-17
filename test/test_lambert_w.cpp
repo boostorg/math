@@ -38,7 +38,7 @@
 
 #include "math_unit_test.hpp"
 
-#include <boost/array.hpp>
+#include <array>
 #include <boost/lexical_cast.hpp>
 #include <boost/type_traits/is_constructible.hpp>
 

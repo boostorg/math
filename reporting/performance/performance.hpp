@@ -7,7 +7,7 @@
 #define PERFORMANCE_HPP
 
 #include <boost/math/special_functions/relative_difference.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include <boost/chrono.hpp>
 #include <boost/regex.hpp>
 #include <iostream>

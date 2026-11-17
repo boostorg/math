@@ -28,7 +28,7 @@
 // Boost macros
 #include "math_unit_test.hpp"
 
-#include <boost/array.hpp>
+#include <array>
 #include <boost/type_traits/is_constructible.hpp>
 
 #include <boost/multiprecision/float128.hpp>

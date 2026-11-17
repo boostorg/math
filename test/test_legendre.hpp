@@ -16,7 +16,7 @@
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include <boost/type_index.hpp>
 #include "functor.hpp"
 

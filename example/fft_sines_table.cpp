@@ -47,7 +47,7 @@ To use Boost.Multiprecision's high-precision floating-point types and constants,
 // using boost::multiprecision::cpp_bin_float_50;
 // using boost::multiprecision::cpp_bin_float_quad;
 
-#include <boost/array.hpp> // or <array> for std::array
+#include <array>
 
 #include <iostream>
 #include <limits>

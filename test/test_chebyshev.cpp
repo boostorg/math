@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/chebyshev.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include "math_unit_test.hpp"
 
 using boost::multiprecision::cpp_bin_float_quad;
