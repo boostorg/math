@@ -18,8 +18,7 @@ void binomial_hpp() {
   test_detail::RandomSample<unsigned> n_sampler{0u, 30u};
   test_detail::RandomSample<unsigned> r_sampler{0u, 30u};
 
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto n = n_sampler.next();
     auto r = n == 0 ? 0 : (min)(r_sampler.next(), n - 1);
 
@@ -39,8 +38,7 @@ void cbrt_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{-2000, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     CHECK_RELATIVE_ERROR(boost::math::cbrt(make_fvar<T, m>(x)).derivative(0u),
                       boost::math::cbrt(x), (50 * test_constants::pct_epsilon()) / 100);
@@ -55,8 +53,7 @@ void chebyshev_hpp() {
   {
     test_detail::RandomSample<unsigned> n_sampler{0u, 10u};
     test_detail::RandomSample<T> x_sampler{-2, 2};
-    for (auto i : boost::irange(test_constants::n_samples)) {
-      std::ignore = i;
+    for (int i = 0; i < test_constants::n_samples; ++i) {
       auto n = n_sampler.next();
       auto x = x_sampler.next();
       CHECK_RELATIVE_ERROR(
@@ -96,8 +93,7 @@ void cospi_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{-2000, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     CHECK_RELATIVE_ERROR(boost::math::cos_pi(make_fvar<T, m>(x)).derivative(0u),
                       boost::math::cos_pi(x), (test_constants::pct_epsilon()) / 100);
@@ -113,8 +109,7 @@ void digamma_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{-1, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = nextafter(x_sampler.next(), ((std::numeric_limits<T>::max))());
     auto autodiff_v = boost::math::digamma(make_fvar<T, m>(x));
     auto anchor_v = boost::math::digamma(x);

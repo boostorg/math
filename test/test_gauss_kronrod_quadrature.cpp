@@ -6,7 +6,6 @@
 
 #include <complex>
 #include <boost/config.hpp>
-#include <boost/detail/workaround.hpp>
 #include "math_unit_test.hpp"
 
 #if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_TRAILING_RESULT_TYPES) && !defined(BOOST_NO_SFINAE_EXPR)

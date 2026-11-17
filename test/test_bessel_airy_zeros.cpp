@@ -15,7 +15,7 @@
 //#include <pch_light.hpp> // commented out during testing.
 
 //#include <boost/math/special_functions/math_fwd.hpp>
-#include <boost/cstdint.hpp>
+#include <cstdint>
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/airy.hpp>
 #include <boost/math/tools/test.hpp>

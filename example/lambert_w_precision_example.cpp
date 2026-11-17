@@ -9,7 +9,6 @@
 // #define BOOST_MATH_INSTRUMENT_LAMBERT_W  // #define only for (much) diagnostic output.
 
 #include <boost/config.hpp> // for BOOST_PLATFORM, BOOST_COMPILER,  BOOST_STDLIB ...
-#include <boost/version.hpp>   // for BOOST_MSVC versions.
 #include <boost/math/constants/constants.hpp> // For exp_minus_one == 3.67879441171442321595523770161460867e-01.
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/special_functions/next.hpp>  // for float_distance.

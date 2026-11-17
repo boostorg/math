@@ -12,7 +12,7 @@ void hermite_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{-1, 1};
-  for (auto i : boost::irange(3u)) {
+  for (unsigned i = 0; i < 3u; ++i) {
     auto x = x_sampler.next();
     auto autodiff_v = boost::math::hermite(i, make_fvar<T, m>(x));
     auto anchor_v = boost::math::hermite(i, x);
@@ -27,8 +27,7 @@ void heuman_lambda_hpp() {
   test_detail::RandomSample<T> x_sampler{-1, 1};
   test_detail::RandomSample<T> phi_sampler{-boost::math::constants::two_pi<T>(),
                                            boost::math::constants::two_pi<T>()};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     auto phi = phi_sampler.next();
     auto autodiff_v =
@@ -44,8 +43,7 @@ void hypot_hpp() {
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{-2000, 2000};
   test_detail::RandomSample<T> y_sampler{-2000, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     auto y = y_sampler.next();
     auto autodiff_v =
@@ -61,8 +59,7 @@ void jacobi_elliptic_hpp() {
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> k_sampler{0, 1};
   test_detail::RandomSample<T> theta_sampler{-100, 100};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto k = k_sampler.next();
     auto theta = theta_sampler.next();
     CHECK_TRUE(isNearZero(
@@ -123,8 +120,7 @@ void jacobi_zeta_hpp() {
   test_detail::RandomSample<T> x_sampler{-1, 1};
   test_detail::RandomSample<T> phi_sampler{-boost::math::constants::two_pi<T>(),
                                            boost::math::constants::two_pi<T>()};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     auto phi = phi_sampler.next();
     CHECK_TRUE(isNearZero(
@@ -174,8 +170,7 @@ void lambert_w_hpp() {
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{static_cast<T>(-1 / std::exp(-1)),
                                          ((std::numeric_limits<T>::max))()};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     {
       auto x_ = (min<T>)(static_cast<T>(((max<promoted_t>))(
@@ -218,8 +213,7 @@ void log1p_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{-1, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     CHECK_TRUE(
         isNearZero(log1p(make_fvar<T, m>(x)).derivative(0u) - log1p(x)));
@@ -237,7 +231,7 @@ void next_hpp() {
 
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
-  for (auto i : boost::irange(test_constants::n_samples)) {
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     const auto j = static_cast<T>(i);
     auto fvar_j = make_fvar<T, m>(j);
     CHECK_TRUE(isNearZero(float_next(fvar_j).derivative(0u) - float_next(j)));
@@ -304,8 +298,7 @@ void owens_t_hpp() {
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> h_sampler{-2000, 2000};
   test_detail::RandomSample<T> a_sampler{-2000, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto h = h_sampler.next();
     auto a = a_sampler.next();
     auto autodiff_v =
@@ -320,7 +313,7 @@ template <class T>
 void pow_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
-  for (auto i : boost::irange(10)) {
+  for (int i = 0; i < 10; ++i) {
     CHECK_RELATIVE_ERROR(
         boost::math::pow<0>(make_fvar<T, m>(static_cast<T>(i))).derivative(0u),
         boost::math::pow<0>(static_cast<T>(i)), (test_constants::pct_epsilon()) / 100);
@@ -359,7 +352,7 @@ void polygamma_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{0, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     try {
       auto autodiff_v = boost::math::polygamma(i, make_fvar<T, m>(x));
@@ -399,8 +392,7 @@ void powm1_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{0, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = ((max))(x_sampler.next(),
                      boost::math::nextafter(static_cast<T>(0),
                                             ((std::numeric_limits<T>::max))()));
@@ -422,8 +414,7 @@ void sin_pi_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{-2000, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     CHECK_TRUE(
         isNearZero(boost::math::sin_pi(make_fvar<T, m>(x)).derivative(0u) -
@@ -436,8 +427,7 @@ void sinhc_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{ -80, 80 };
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     if (x != 0) {
       auto autodiff_v = boost::math::sinhc_pi(make_fvar<T, m>(x));
@@ -456,8 +446,7 @@ void spherical_harmonic_hpp() {
   test_detail::RandomSample<T> phi_sampler{0,
                                            boost::math::constants::two_pi<T>()};
   test_detail::RandomSample<int> r_sampler{0, test_constants::n_samples};
-  for (auto n : boost::irange(
-           1u, static_cast<unsigned>(test_constants::n_samples) + 1u)) {
+  for (unsigned n = 1u; n < static_cast<unsigned>(test_constants::n_samples) + 1u; ++n) {
     auto theta = theta_sampler.next();
     auto phi = phi_sampler.next();
     auto r = (std::min)(static_cast<int>(n) - 1, r_sampler.next());
@@ -492,8 +481,7 @@ void sqrt1pm1_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{-1, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     CHECK_TRUE(
         isNearZero(boost::math::sqrt1pm1(make_fvar<T, m>(x)).derivative(0u) -
@@ -506,8 +494,7 @@ void trigamma_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{0, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     CHECK_TRUE(
         isNearZero(boost::math::trigamma(make_fvar<T, m>(x)).derivative(0u) -

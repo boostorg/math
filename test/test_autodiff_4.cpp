@@ -90,8 +90,7 @@ void acosh_hpp() {
   static constexpr auto m = test_constants::order;
 
   test_detail::RandomSample<T> x_sampler{1, 100};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     auto autodiff_v = acosh(make_fvar<T, m>(x));
     auto anchor_v = acosh(x);
@@ -106,8 +105,7 @@ void asinh_hpp() {
   static constexpr auto m = test_constants::order;
 
   test_detail::RandomSample<T> x_sampler{-100, 100};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
 
     auto autodiff_v = asinh(make_fvar<T, m>(x));
@@ -126,8 +124,7 @@ void atanh_hpp() {
   static constexpr auto m = test_constants::order;
 
   test_detail::RandomSample<T> x_sampler{-1, 1};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = nextafter(x_sampler.next(), T(0));
 
     auto autodiff_v = atanh(make_fvar<T, m>(x));
@@ -154,8 +151,7 @@ void atan_hpp() {
   static constexpr auto m = test_constants::order;
 
   test_detail::RandomSample<T> x_sampler{-1, 1};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = T(1);
     while (fpclassify(T(fabs(x) - 1)) == FP_ZERO) {
       x = x_sampler.next();
@@ -175,7 +171,7 @@ void bernoulli_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
 
-  for (auto i : boost::irange(test_constants::n_samples)) {
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     {
       auto autodiff_v = boost::math::bernoulli_b2n<autodiff_fvar<T, m>>(i);
       auto anchor_v = boost::math::bernoulli_b2n<T>(i);

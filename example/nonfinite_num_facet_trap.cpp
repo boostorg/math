@@ -30,7 +30,6 @@ but may suit some applications.
 // assumes C++ exceptions enabled /EHsc
 #endif
 
-#include <boost/cstdint.hpp>
 #include <boost/math/special_functions/nonfinite_num_facets.hpp>
 
 #include <iostream>

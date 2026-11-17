@@ -10,7 +10,6 @@
 //! \brief quadrature tests that cover the whole range of the Lambert W0 function.
 
 #include <boost/config.hpp>   // for BOOST_MSVC definition etc.
-#include <boost/version.hpp>   // for BOOST_MSVC versions.
 
 // Boost macros
 #include "math_unit_test.hpp"

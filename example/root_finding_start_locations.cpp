@@ -10,7 +10,7 @@
 // and comments, don't change any of the special comment mark-ups!
 // This program also writes files in Quickbook tables mark-up format.
 
-#include <boost/cstdlib.hpp>
+#include <cstdlib>
 #include <boost/config.hpp>
 #include <array>
 #include <boost/math/tools/roots.hpp>
@@ -438,12 +438,12 @@ int main()
          << "][" << elliptic_root_2deriv_s(radius_a, arc_length, radius_b + radius_b)
          << "][" << elliptic_root_2deriv_s(radius_a, arc_length, radius_b + radius_b * 5) << "]]\n]\n\n";
 
-      return boost::exit_success;
+      return EXIT_SUCCESS;
    }
    catch(std::exception ex)
    {
       std::cout << "exception thrown: " << ex.what() << std::endl;
-      return boost::exit_failure;
+      return EXIT_FAILURE;
    }
 } // int main()
 

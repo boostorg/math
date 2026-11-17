@@ -18,8 +18,7 @@ void ellint_1_hpp() {
   test_detail::RandomSample<T> k_sampler{T{-1}, T{1}};
   test_detail::RandomSample<T> phi_sampler{-boost::math::constants::two_pi<T>(),
                                            boost::math::constants::two_pi<T>()};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto k = k_sampler.next();
     auto phi = phi_sampler.next();
     CHECK_RELATIVE_ERROR(boost::math::ellint_1(make_fvar<T, m>(k)).derivative(0u),
@@ -38,8 +37,7 @@ void ellint_2_hpp() {
   test_detail::RandomSample<T> k_sampler{-1, 1};
   test_detail::RandomSample<T> phi_sampler{-boost::math::constants::two_pi<T>(),
                                            boost::math::constants::two_pi<T>()};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto k = k_sampler.next();
     auto phi = phi_sampler.next();
     CHECK_RELATIVE_ERROR(boost::math::ellint_2(make_fvar<T, m>(k)).derivative(0u),
@@ -67,8 +65,7 @@ void ellint_3_hpp() {
   test_detail::RandomSample<T> n_sampler{-2000, 2000};
   test_detail::RandomSample<T> phi_sampler{-boost::math::constants::two_pi<T>(),
                                            boost::math::constants::two_pi<T>()};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto k = k_sampler.next();
     auto phi = phi_sampler.next();
     auto n = (min)((min)(n_sampler.next(), T(1) / (sin(phi) * sin(phi))),
@@ -88,8 +85,7 @@ void ellint_d_hpp() {
   test_detail::RandomSample<T> k_sampler{-1, 1};
   test_detail::RandomSample<T> phi_sampler{-boost::math::constants::two_pi<T>(),
                                            boost::math::constants::two_pi<T>()};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto k = k_sampler.next();
     auto phi = phi_sampler.next();
     CHECK_RELATIVE_ERROR(boost::math::ellint_d(make_fvar<T, m>(k)).derivative(0u),
@@ -116,8 +112,7 @@ void ellint_rf_hpp() {
   test_detail::RandomSample<T> x_sampler{0, 2000};
   test_detail::RandomSample<T> y_sampler{0, 2000};
   test_detail::RandomSample<T> z_sampler{0, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = nextafter(x_sampler.next(), ((std::numeric_limits<T>::max))());
     auto y = nextafter(y_sampler.next(), ((std::numeric_limits<T>::max))());
     auto z = nextafter(z_sampler.next(), ((std::numeric_limits<T>::max))());
@@ -145,8 +140,7 @@ void ellint_rc_hpp() {
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{0, 2000};
   test_detail::RandomSample<T> y_sampler{0, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     auto y = T(0);
     while (fpclassify(T(y)) == FP_ZERO) {
@@ -182,8 +176,7 @@ void ellint_rj_hpp() {
   test_detail::RandomSample<T> z_sampler{0, 2000};
   test_detail::RandomSample<T> p_sampler{-2000, 2000};
 
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     auto y = (x != 0 ? 1 : 0) + y_sampler.next();
     auto z = ((x == 0 || y == 0) ? 1 : 0) + z_sampler.next();
@@ -209,8 +202,7 @@ void ellint_rd_hpp() {
   test_detail::RandomSample<T> x_sampler{0, 2000};
   test_detail::RandomSample<T> y_sampler{0, 2000};
   test_detail::RandomSample<T> z_sampler{0, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
     auto y = (x == 0 ? 1 : 0) + y_sampler.next();
     auto z = z_sampler.next();
@@ -234,8 +226,7 @@ void ellint_rg_hpp() {
   test_detail::RandomSample<T> y_sampler{0, 2000};
   test_detail::RandomSample<T> z_sampler{0, 2000};
 
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = nextafter(x_sampler.next(), ((std::numeric_limits<T>::max))());
     auto y = nextafter(y_sampler.next(), ((std::numeric_limits<T>::max))());
     auto z = z_sampler.next();
@@ -252,8 +243,7 @@ void erf_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{-2000, 2000};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
+  for (int i = 0; i < test_constants::n_samples; ++i) {
     auto x = x_sampler.next();
 
     CHECK_TRUE(isNearZero(erf(make_fvar<T, m>(x)).derivative(0u) -
@@ -268,8 +258,7 @@ void expint_hpp() {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
   test_detail::RandomSample<T> x_sampler{1, 83};
-  for (auto n :
-       boost::irange(1u, static_cast<unsigned>(test_constants::n_samples))) {
+  for (unsigned n = 1u; n < static_cast<unsigned>(test_constants::n_samples); ++n) {
     auto x = x_sampler.next();
     CHECK_RELATIVE_ERROR(boost::math::expint(n, make_fvar<T, m>(x)).derivative(0u),
                       boost::math::expint(n, x), (200 * test_constants::pct_epsilon()) / 100);

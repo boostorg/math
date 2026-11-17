@@ -25,7 +25,6 @@
 #endif // #ifdef #ifdef BOOST_MATH_TEST_FLOAT128
 // Needs gnu++17 for BOOST_HAS_FLOAT128
 #include <boost/config.hpp>   // for BOOST_MSVC definition etc.
-#include <boost/version.hpp>   // for BOOST_MSVC versions.
 
 // Boost macros
 #include "math_unit_test.hpp"

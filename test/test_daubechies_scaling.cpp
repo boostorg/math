@@ -11,7 +11,7 @@
 #include <iomanip>
 #include <iostream>
 #include <random>
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/core/demangle.hpp>
 #include <boost/hana/for_each.hpp>
 #include <boost/hana/ext/std/integer_sequence.hpp>
@@ -249,7 +249,7 @@ void test_dyadic_grid()
     {
         auto phijk = boost::math::daubechies_scaling_dyadic_grid<Real, i+2, 0>(0);
         auto phik = boost::math::detail::daubechies_scaling_integer_grid<Real, i+2, 0>();
-        BOOST_ASSERT(phik.size() == phijk.size());
+        BOOST_MATH_ASSERT(phik.size() == phijk.size());
 
         for (size_t k = 0; k < phik.size(); ++k)
         {

@@ -14,8 +14,8 @@
 #include <boost/math/tools/minima.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/polynomial.hpp>
-#include <boost/function/function1.hpp>
-#include <boost/scoped_array.hpp>
+#include <functional>
+#include <memory>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/policy.hpp>
 
@@ -31,7 +31,7 @@ namespace detail{
 template <class T>
 struct remez_error_function
 {
-   typedef boost::function1<T, T const &> function_type;
+   typedef std::function<T(T const &)> function_type;
 public:
    remez_error_function(
       function_type f_, 
@@ -104,7 +104,7 @@ template <class T>
 class remez_minimax
 {
 public:
-   typedef boost::function1<T, T const &> function_type;
+   typedef std::function<T(T const &)> function_type;
    typedef boost::numeric::ublas::vector<T> vector_type;
    typedef boost::numeric::ublas::matrix<T> matrix_type;
 
@@ -637,7 +637,7 @@ T remez_minimax<T>::iterate()
 template <class T>
 polynomial<T> remez_minimax<T>::numerator()const
 {
-   boost::scoped_array<T> a(new T[orderN + 1]);
+   std::unique_ptr<T[]> a(new T[orderN + 1]);
    if(pinned)
       a[0] = 0;
    unsigned terms = pinned ? orderN : orderN + 1;
@@ -651,7 +651,7 @@ polynomial<T> remez_minimax<T>::denominator()const
 {
    unsigned terms = orderD + 1;
    unsigned offsetD = pinned ? orderN : (orderN + 1);
-   boost::scoped_array<T> a(new T[terms]);
+   std::unique_ptr<T[]> a(new T[terms]);
    a[0] = 1;
    for(unsigned i = 0; i < orderD; ++i)
       a[i+1] = solution[i + offsetD];

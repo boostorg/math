@@ -17,7 +17,7 @@ achieves a specific value.
 */
 
 #include <boost/math/interpolators/barycentric_rational.hpp>
-#include <boost/range/adaptors.hpp>
+#include <vector>
 #include <boost/math/tools/roots.hpp>
 
 int main()
@@ -74,8 +74,12 @@ int main()
 
     // Let's discover the abscissa that will generate a potential of exactly 3.0,
     // start by creating 2 ranges for the x and y values:
-    auto x_range = boost::adaptors::keys(r);
-    auto y_range = boost::adaptors::values(r);
+    std::vector<double> x_range, y_range;
+    for (auto const& p : r)
+    {
+        x_range.push_back(p.first);
+        y_range.push_back(p.second);
+    }
     boost::math::interpolators::barycentric_rational<double> b(x_range.begin(), x_range.end(), y_range.begin());
     //
     // We'll use a lambda expression to provide the functor to our root finder, since we want

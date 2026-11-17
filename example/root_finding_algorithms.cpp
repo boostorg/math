@@ -12,7 +12,7 @@
 
 // root_finding_algorithms.cpp
 
-#include <boost/cstdlib.hpp>
+#include <cstdlib>
 #include <boost/config.hpp>
 #include <array>
 #include <iterator>
@@ -665,7 +665,7 @@ int main()
     { // Failed to open.
       std::cout << " Open file " << filename << " for output failed!" << std::endl;
       std::cout << "error" << errno << std::endl;
-      return boost::exit_failure;
+      return EXIT_FAILURE;
     }
 
     fout <<
@@ -710,12 +710,12 @@ int main()
     table_root_info(full_value, full_answer);
 
 
-    return boost::exit_success;
+    return EXIT_SUCCESS;
   }
   catch (std::exception const& ex)
   {
     std::cout << "exception thrown: " << ex.what() << std::endl;
-    return boost::exit_failure;
+    return EXIT_FAILURE;
   }
 } // int main()
 
