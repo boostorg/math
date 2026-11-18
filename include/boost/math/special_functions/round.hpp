@@ -101,7 +101,7 @@ BOOST_MATH_GPU_ENABLED inline tools::promote_args_t<T> round(const T& v)
 // https://stackoverflow.com/questions/27442885/syntax-error-with-stdnumeric-limitsmax
 //
 BOOST_MATH_EXPORT template <class T, class Policy>
-inline int iround(const T& v, const Policy& pol)
+BOOST_MATH_GPU_ENABLED inline int iround(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
