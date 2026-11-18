@@ -10,9 +10,6 @@
 #include <boost/test/results_collector.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
-#include <boost/tuple/tuple.hpp>
-#include <boost/fusion/include/tuple.hpp>
-#include <boost/fusion/include/std_pair.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
 #include <tuple>
 
@@ -59,26 +56,6 @@ struct cbtr_functor_2b
 private:
    double m_target;
 };
-struct cbtr_functor_2c
-{
-   cbtr_functor_2c(double x) : m_target(x) {}
-   boost::tuple<double, double> operator()(double x)
-   {
-      return boost::tuple<double, double>(x * x * x - m_target, 3 * x * x);
-   }
-private:
-   double m_target;
-};
-struct cbtr_functor_2d
-{
-   cbtr_functor_2d(double x) : m_target(x) {}
-   boost::fusion::tuple<double, double> operator()(double x)
-   {
-      return boost::fusion::tuple<double, double>(x * x * x - m_target, 3 * x * x);
-   }
-private:
-   double m_target;
-};
 
 struct cbtr_functor_3b
 {
@@ -91,27 +68,11 @@ private:
    double m_target;
 };
 
-struct cbtr_functor_3c
-{
-   cbtr_functor_3c(double x) : m_target(x) {}
-   boost::tuple<double, double, double> operator()(double x)
-   {
-      return boost::tuple<double, double, double>(x * x * x - m_target, 3 * x * x, 6 * x);
-   }
-private:
-   double m_target;
-};
-struct cbtr_functor_3d
-{
-   cbtr_functor_3d(double x) : m_target(x) {}
-   boost::fusion::tuple<double, double, double> operator()(double x)
-   {
-      return boost::fusion::tuple<double, double, double>(x * x * x - m_target, 3 * x * x, 6 * x);
-   }
-private:
-   double m_target;
-};
-
+// Any type with a get<N> found by argument dependent lookup will do:
+namespace user {
+struct triple { double v[3]; };
+template <std::size_t N> double get(const triple& t) { return t.v[N]; }
+}
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
@@ -166,8 +127,6 @@ BOOST_AUTO_TEST_CASE( test_main )
 
    cbtr_functor_2a f2(x);
    cbtr_functor_2b f3(x);
-   cbtr_functor_2c f4(x);
-   cbtr_functor_2d f5(x);
 
    //
    // Binary Functors - newton_raphson_iterate - test each possible tuple type:
@@ -176,10 +135,6 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
    result = boost::math::tools::newton_raphson_iterate(f3, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::newton_raphson_iterate(f4, x, 0.0, x, std::numeric_limits<double>::digits - 1);
-   BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::newton_raphson_iterate(f5, x, 0.0, x, std::numeric_limits<double>::digits - 1);
-   BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
    //
    // And again but with lambdas:
    //
@@ -187,40 +142,22 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
    result = boost::math::tools::newton_raphson_iterate([x](double z){ return std::make_tuple(z * z * z - x, 3 * z * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::newton_raphson_iterate([x](double z){ return boost::tuple<double, double>(z * z * z - x, 3 * z * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
-   BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::newton_raphson_iterate([x](double z){ return boost::fusion::tuple<double, double>(z * z * z - x, 3 * z * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
+   result = boost::math::tools::newton_raphson_iterate([x](double z){ return user::triple{{z * z * z - x, 3 * z * z, 6 * z}}; }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
    cbtr_functor_3b f6(x);
-   cbtr_functor_3c f7(x);
-   cbtr_functor_3d f8(x);
 
    //
    // Ternary functors:
    //
    result = boost::math::tools::halley_iterate(f6, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::halley_iterate(f7, x, 0.0, x, std::numeric_limits<double>::digits - 1);
-   BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::halley_iterate(f8, x, 0.0, x, std::numeric_limits<double>::digits - 1);
-   BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
    result = boost::math::tools::halley_iterate([x](double z){ return std::make_tuple(z * z * z - x, 3 * z * z, 6 * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
-   BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::halley_iterate([x](double z){ return boost::tuple<double, double, double>(z * z * z - x, 3 * z * z, 6 * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
-   BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::halley_iterate([x](double z){ return boost::fusion::tuple<double, double, double>(z * z * z - x, 3 * z * z, 6 * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
    result = boost::math::tools::schroder_iterate(f6, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::schroder_iterate(f7, x, 0.0, x, std::numeric_limits<double>::digits - 1);
-   BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::schroder_iterate(f8, x, 0.0, x, std::numeric_limits<double>::digits - 1);
-   BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
    result = boost::math::tools::schroder_iterate([x](double z){ return std::make_tuple(z * z * z - x, 3 * z * z, 6 * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::schroder_iterate([x](double z){ return boost::tuple<double, double, double>(z * z * z - x, 3 * z * z, 6 * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
-   BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::schroder_iterate([x](double z){ return boost::fusion::tuple<double, double, double>(z * z * z - x, 3 * z * z, 6 * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
+   result = boost::math::tools::halley_iterate([x](double z){ return user::triple{{z * z * z - x, 3 * z * z, 6 * z}}; }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
 } // BOOST_AUTO_TEST_CASE( test_main )
 
