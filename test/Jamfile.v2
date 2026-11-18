@@ -657,48 +657,7 @@ test-suite distribution_tests :
    [ run test_gamma_dist.cpp pch /boost/test//boost_unit_test_framework  ]
    [ run test_geometric.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_hyperexponential_dist.cpp /boost/test//boost_unit_test_framework ]
-   [ run test_hypergeometric_dist.cpp /boost/test//boost_unit_test_framework
-        : # command line
-        : # input files
-        : # requirements
-          <define>TEST_QUANT=0
-          <toolset>intel:<pch>off
-        : test_hypergeometric_dist0  ]
-   [ run test_hypergeometric_dist.cpp /boost/test//boost_unit_test_framework
-        : # command line
-        : # input files
-        : # requirements
-          <define>TEST_QUANT=1
-          <toolset>intel:<pch>off
-        : test_hypergeometric_dist1  ]
-   [ run test_hypergeometric_dist.cpp /boost/test//boost_unit_test_framework
-        : # command line
-        : # input files
-        : # requirements
-          <define>TEST_QUANT=2
-          <toolset>intel:<pch>off
-        : test_hypergeometric_dist2  ]
-   [ run test_hypergeometric_dist.cpp /boost/test//boost_unit_test_framework
-        : # command line
-        : # input files
-        : # requirements
-          <define>TEST_QUANT=3
-          <toolset>intel:<pch>off
-        : test_hypergeometric_dist3  ]
-   [ run test_hypergeometric_dist.cpp /boost/test//boost_unit_test_framework
-        : # command line
-        : # input files
-        : # requirements
-          <define>TEST_QUANT=4
-          <toolset>intel:<pch>off
-        : test_hypergeometric_dist4  ]
-   [ run test_hypergeometric_dist.cpp /boost/test//boost_unit_test_framework
-        : # command line
-        : # input files
-        : # requirements
-          <define>TEST_QUANT=5
-          <toolset>intel:<pch>off
-        : test_hypergeometric_dist5  ]
+   [ run test_hypergeometric_dist.cpp ]
    [ run test_inverse_chi_squared_distribution.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_inverse_gamma_distribution.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_inverse_gaussian.cpp /boost/test//boost_unit_test_framework  ]
