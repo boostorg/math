@@ -20,6 +20,7 @@ using auto-index ;
 project
     : requirements
       <include>../../include_private
+      <cxxstd>17
     ;
 
 if $(is_unix)
@@ -81,42 +82,42 @@ rule all-tests {
      local result ;
      for local source in [ glob test*.cpp ]
      {
-         result += [ run $(source) /boost/system//boost_system /boost/filesystem//boost_filesystem /boost/test//boost_unit_test_framework /boost/interprocess//boost_interprocess /boost/multiprecision//boost_multiprecision /boost/type_index//boost_type_index quadmath mpfr
+         result += [ run $(source) /boost/test//boost_unit_test_framework /boost/interprocess//boost_interprocess /boost/multiprecision//boost_multiprecision /boost/type_index//boost_type_index quadmath mpfr
          : : :
           [ check-target-builds has_gsl : <define>ALWAYS_TEST_DOUBLE : ]
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS) ]
          ;
-         result += [ run $(source) /boost/system//boost_system /boost/filesystem//boost_filesystem /boost/test//boost_unit_test_framework  /boost/interprocess//boost_interprocess /boost/multiprecision//boost_multiprecision /boost/type_index//boost_type_index quadmath mpfr
+         result += [ run $(source) /boost/test//boost_unit_test_framework  /boost/interprocess//boost_interprocess /boost/multiprecision//boost_multiprecision /boost/type_index//boost_type_index quadmath mpfr
          : : : [ check-target-builds has_cxx17_cmath : <define>TEST_CXX17_CMATH : <build>no ]
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS)
           : $(source:B)_cxx17_cmath ]
          ;
-         result += [ run $(source) /boost/system//boost_system /boost/filesystem//boost_filesystem /boost/test//boost_unit_test_framework  /boost/interprocess//boost_interprocess /boost/multiprecision//boost_multiprecision /boost/type_index//boost_type_index quadmath mpfr
+         result += [ run $(source) /boost/test//boost_unit_test_framework  /boost/interprocess//boost_interprocess /boost/multiprecision//boost_multiprecision /boost/type_index//boost_type_index quadmath mpfr
          : : : [ check-target-builds has_c99_cmath : <define>TEST_C99 : <build>no ]
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS)
           : $(source:B)_c99 ]
          ;
-         result += [ run $(source) /boost/system//boost_system /boost/filesystem//boost_filesystem /boost/test//boost_unit_test_framework /boost/interprocess//boost_interprocess /boost/multiprecision//boost_multiprecision /boost/type_index//boost_type_index gsl gslcblas
+         result += [ run $(source) /boost/test//boost_unit_test_framework /boost/interprocess//boost_interprocess /boost/multiprecision//boost_multiprecision /boost/type_index//boost_type_index gsl gslcblas
          : : : [ check-target-builds has_gsl : <define>TEST_GSL : <build>no ]
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS)
           : $(source:B)_gsl ]
          ;
-         result += [ run $(source) /boost/system//boost_system /boost/filesystem//boost_filesystem /boost/test//boost_unit_test_framework /boost/interprocess//boost_interprocess /boost/multiprecision//boost_multiprecision /boost/type_index//boost_type_index Rmath
+         result += [ run $(source) /boost/test//boost_unit_test_framework /boost/interprocess//boost_interprocess /boost/multiprecision//boost_multiprecision /boost/type_index//boost_type_index Rmath
          : : : [ check-target-builds has_rmath : <define>TEST_RMATH : <build>no ]
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS)
           : $(source:B)_rmath ]
          ;
-         result += [ run $(source) /boost/system//boost_system /boost/filesystem//boost_filesystem /boost/test//boost_unit_test_framework /boost/interprocess//boost_interprocess /boost/multiprecision//boost_multiprecision /boost/type_index//boost_type_index cephes_double
+         result += [ run $(source) /boost/test//boost_unit_test_framework /boost/interprocess//boost_interprocess /boost/multiprecision//boost_multiprecision /boost/type_index//boost_type_index cephes_double
          : : : [ check-target-builds $(here)/third_party/cephes_double/acosh.c : <define>TEST_CEPHES <source>cephes_double : <build>no ]
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
