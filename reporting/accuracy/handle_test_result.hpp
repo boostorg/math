@@ -11,8 +11,8 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/regex.hpp>
 #include <boost/test/test_tools.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
+#include <filesystem>
+#include <fstream>
 #include <boost/interprocess/sync/named_mutex.hpp>
 #include <boost/interprocess/sync/scoped_lock.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -30,7 +30,7 @@ inline std::string sanitize_string(const std::string& s)
 }
 
 static std::string content;
-boost::filesystem::path path_to_content;
+std::filesystem::path path_to_content;
 
 struct content_loader
 {
@@ -38,14 +38,14 @@ struct content_loader
    boost::interprocess::scoped_lock<boost::interprocess::named_mutex> lock;
    content_loader() : mu(boost::interprocess::open_or_create, "handle_test_result"), lock(mu)
    {
-      boost::filesystem::path p(__FILE__);
+      std::filesystem::path p(__FILE__);
       p = p.parent_path();
       p /= "doc";
       p /= "accuracy_tables.qbk";
       path_to_content = p;
-      if(boost::filesystem::exists(p))
+      if(std::filesystem::exists(p))
       {
-         boost::filesystem::ifstream is(p);
+         std::ifstream is(p);
          if(is.good())
          {
             do
@@ -59,7 +59,7 @@ struct content_loader
    }
    ~content_loader()
    {
-      boost::filesystem::ofstream os(path_to_content);
+      std::ofstream os(path_to_content);
       os << content;
    }
    void instantiate()const
