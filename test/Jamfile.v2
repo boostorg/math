@@ -617,83 +617,34 @@ test-suite distribution_tests :
    [ run test_mapairy.cpp : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
    [ run test_bernoulli.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_beta_dist.cpp /boost/test//boost_unit_test_framework  ]
-   [ run test_binomial.cpp  /boost/test//boost_unit_test_framework
+   [ run test_binomial.cpp
         : # command line
         : # input files
         : # requirements
           <define>TEST_FLOAT
           <toolset>intel:<pch>off
         : test_binomial_float  ]
-   [ run test_binomial.cpp  /boost/test//boost_unit_test_framework
+   [ run test_binomial.cpp
         : # command line
         : # input files
         : # requirements
           <define>TEST_DOUBLE
           <toolset>intel:<pch>off
         : test_binomial_double  ]
-   [ run test_binomial.cpp  /boost/test//boost_unit_test_framework
+   [ run test_binomial.cpp
         : # command line
         : # input files
         : # requirements
           <define>TEST_LDOUBLE
           <toolset>intel:<pch>off
         : test_binomial_long_double  ]
-   [ run test_binomial.cpp  /boost/test//boost_unit_test_framework
+   [ run test_binomial.cpp
         : # command line
         : # input files
         : # requirements
           <define>TEST_REAL_CONCEPT
-          <define>TEST_ROUNDING=0
           <toolset>intel:<pch>off
-        : test_binomial_real_concept0  ]
-   [ run test_binomial.cpp  /boost/test//boost_unit_test_framework
-        : # command line
-        : # input files
-        : # requirements
-          <define>TEST_REAL_CONCEPT
-          <define>TEST_ROUNDING=1
-          <toolset>intel:<pch>off
-        : test_binomial_real_concept1  ]
-   [ run test_binomial.cpp  /boost/test//boost_unit_test_framework
-        : # command line
-        : # input files
-        : # requirements
-          <define>TEST_REAL_CONCEPT
-          <define>TEST_ROUNDING=2
-          <toolset>intel:<pch>off
-        : test_binomial_real_concept2  ]
-   [ run test_binomial.cpp  /boost/test//boost_unit_test_framework
-        : # command line
-        : # input files
-        : # requirements
-          <define>TEST_REAL_CONCEPT
-          <define>TEST_ROUNDING=3
-          <toolset>intel:<pch>off
-        : test_binomial_real_concept3  ]
-   [ run test_binomial.cpp  /boost/test//boost_unit_test_framework
-        : # command line
-        : # input files
-        : # requirements
-          <define>TEST_REAL_CONCEPT
-          <define>TEST_ROUNDING=4
-          <toolset>intel:<pch>off
-        : test_binomial_real_concept4  ]
-   [ run test_binomial.cpp  /boost/test//boost_unit_test_framework
-        : # command line
-        : # input files
-        : # requirements
-          <define>TEST_REAL_CONCEPT
-          <define>TEST_ROUNDING=5
-          <toolset>intel:<pch>off
-        : test_binomial_real_concept5  ]
-   [ run test_binomial.cpp  /boost/test//boost_unit_test_framework
-        : # command line
-        : # input files
-        : # requirements
-          <define>TEST_REAL_CONCEPT
-          <define>TEST_ROUNDING=6
-          <toolset>intel:<pch>off
-        : test_binomial_real_concept6  ]
+        : test_binomial_real_concept  ]
    [ run test_cauchy.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_chi_squared.cpp /boost/test//boost_unit_test_framework  ]
    [ run test_dist_overloads.cpp /boost/test//boost_unit_test_framework  ]
